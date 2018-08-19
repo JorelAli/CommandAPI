@@ -15,6 +15,9 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 
 ## Super basic usage (Version 1.0)
 
+* Download the [latest release](https://github.com/JorelAli/1.13-Command-API/releases/latest) and add it to your build path
+* Add the plugin as a dependent in the plugin.yml (`depend: [CommandAPI]`)
+* (Make sure the CommandAPI.jar file is included in the plugins folder when running any servers)
 * Create a new instance of the CommandAPI
   ```java
   CommandAPI commandRegister = new CommandAPI();
