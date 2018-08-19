@@ -31,6 +31,37 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 
 For an example of this in action, view the [example class](https://github.com/JorelAli/1.13-Command-API/blob/master/1.13CommandAPI/src/io/github/jorelali/commandapi/Example.java)!
 
+## Examples!
+
+Multiple arguments with separate outcomes:
+```java
+// /walkspeed <speed>
+// /walkspeed <speed> <target>
+
+CommandAPI commandRegister = new CommandAPI();
+
+LinkedHashMap<String, ArgumentType> arguments = new LinkedHashMap<>();
+arguments.put("speed", ArgumentType.FLOAT);
+
+commandRegister.register("walkspeed", arguments, (sender, args) -> {
+  //Sender check 
+  if(sender instanceof Player) {
+    Player player = (Player) sender;
+    player.setWalkSpeed((float) args[0]);
+  } else {
+    sender.sendMessage("You must be a player to use this command");
+  }
+});
+
+//Adding a new argument, as an additional command to the previous
+arguments.put("target", ArgumentType.STRING);
+
+commandRegister.register("walkspeed", arguments, (sender, args) -> {
+  //Get target
+  Bukkit.getPlayer((String) args[1]).setWalkSpeed((float) args[0]);
+});
+```
+
 ## Known issues
 - Permissions do not exist yet (Easily implemented, haven't gotten round to it yet)
 
