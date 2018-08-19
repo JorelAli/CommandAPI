@@ -4,7 +4,3 @@ version: 1.0
 description: Allows access to Minecraft 1.13s new command api
 author: Skepter
 website: http://jorelali.github.io/
-
-commands:
-  alpha:
-    description: none
