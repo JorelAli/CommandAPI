@@ -9,8 +9,30 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 @SuppressWarnings("unchecked")
 public enum ArgumentType {
 
-	STRING(StringArgumentType.word(), String.class), INTEGER(IntegerArgumentType.integer(), int.class), FLOAT(FloatArgumentType.floatArg(), float.class),
-	DOUBLE(DoubleArgumentType.doubleArg(), double.class), BOOLEAN(BoolArgumentType.bool(), boolean.class);
+	/**
+	 * A String type argument (valid for one word)
+	 */
+	STRING(StringArgumentType.word(), String.class), 
+	
+	/**
+	 * A whole number 
+	 */
+	INTEGER(IntegerArgumentType.integer(), int.class),
+	
+	/**
+	 * A floating point number
+	 */
+	FLOAT(FloatArgumentType.floatArg(), float.class),
+	
+	/**
+	 * A decimal number
+	 */
+	DOUBLE(DoubleArgumentType.doubleArg(), double.class), 
+	
+	/**
+	 * A boolean value of true or false
+	 */
+	BOOLEAN(BoolArgumentType.bool(), boolean.class);
 	
 	/*
 	 * TODO (v1.1): Ranged primitives (e.g. 2 to 10)
@@ -29,16 +51,22 @@ public enum ArgumentType {
 	private com.mojang.brigadier.arguments.ArgumentType<?> type;
 	private Class<?> primitive;
 	
-	<T, V> ArgumentType(com.mojang.brigadier.arguments.ArgumentType<T> type, Class<V> primitive) {
+	private <T, V> ArgumentType(com.mojang.brigadier.arguments.ArgumentType<T> type, Class<V> primitive) {
 		this.type = type;
 		this.primitive = primitive;
 	}
 	
-	public <T> com.mojang.brigadier.arguments.ArgumentType<T> getRawType() {
+	/**
+	 * Returns the brigadier equivalent argument type
+	 */
+	protected <T> com.mojang.brigadier.arguments.ArgumentType<T> getRawType() {
 		return (com.mojang.brigadier.arguments.ArgumentType<T>) type;
 	}
 	
-	public <V> Class<V> getPrimitiveType() {
+	/**
+	 * Returns the class of the primitive type that this enum represents
+	 */
+	protected <V> Class<V> getPrimitiveType() {
 		return (Class<V>) primitive;
 	}
 	

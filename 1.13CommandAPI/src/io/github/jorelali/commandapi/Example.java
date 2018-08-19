@@ -2,13 +2,11 @@ package io.github.jorelali.commandapi;
 
 import java.util.LinkedHashMap;
 
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import io.github.jorelali.commandapi.api.ArgumentType;
 import io.github.jorelali.commandapi.api.CommandAPI;
-import io.github.jorelali.commandapi.api.CommandExecutor;
 
 /**
  * An example class showing how to register commands with the CommandAPI

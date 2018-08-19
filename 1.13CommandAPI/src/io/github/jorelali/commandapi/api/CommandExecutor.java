@@ -5,6 +5,16 @@ import org.bukkit.command.CommandSender;
 @FunctionalInterface
 public interface CommandExecutor {
 
-	void run(CommandSender sender, Object[] args); 
-	
+	/**
+	 * The code to run when this command is performed
+	 * 
+	 * @param sender
+	 *            The sender of this command (a player, the console etc.)
+	 * @param args
+	 *            The arguments given to this command. The objects are
+	 *            determined by the hashmap of arguments IN THE ORDER of
+	 *            insertion into the hashmap
+	 */
+	void run(CommandSender sender, Object[] args);
+
 }
