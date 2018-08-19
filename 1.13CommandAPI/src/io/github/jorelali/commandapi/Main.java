@@ -19,6 +19,7 @@ public class Main extends JavaPlugin  {
 	public void onEnable() {
 		
 		//Class used to manage command registration
+		//TODO: Make this static?
 		CommandAPI commandRegister = new CommandAPI();
 		
 		//Creating a list of arguments
@@ -36,6 +37,7 @@ public class Main extends JavaPlugin  {
 		
 		//Registering same command with different args
 		arguments = new LinkedHashMap<>();
+		//TODO: test if this REQUIRES no spaces or not
 		arguments.put("speed", ArgumentType.FLOAT);
 		
 		commandRegister.register("flyspeed", arguments, (sender, args) -> {
