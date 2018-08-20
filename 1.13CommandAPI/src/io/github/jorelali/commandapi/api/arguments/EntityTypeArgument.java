@@ -2,20 +2,21 @@ package io.github.jorelali.commandapi.api.arguments;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.bukkit.entity.EntityType;
+
 import com.mojang.brigadier.arguments.ArgumentType;
 
 @SuppressWarnings("unchecked")
-public class _VEC3ARG implements Argument {
+public class EntityTypeArgument implements Argument {
 
 	com.mojang.brigadier.arguments.ArgumentType<?> rawType;
 	
 	/**
-	 * A complex argument of any NMS type
+	 * An EntityType argument. Represents the type of an Entity
 	 */
-	public _VEC3ARG() {
+	public EntityTypeArgument() {
 		try {
-			
-			rawType = (ArgumentType<?>) ArgumentUtil.getNMS("ArgumentVec3").getDeclaredMethod("a").invoke(null);
+			rawType = (ArgumentType<?>) ArgumentUtil.getNMS("ArgumentEntity").getDeclaredMethod("a").invoke(null);
 		} catch (IllegalAccessException | ClassNotFoundException | IllegalArgumentException | SecurityException | InvocationTargetException | NoSuchMethodException e) {
 			e.printStackTrace();
 		}
@@ -28,7 +29,7 @@ public class _VEC3ARG implements Argument {
 
 	@Override
 	public <V> Class<V> getPrimitiveType() {
-		return null;
+		return (Class<V>) EntityType.class;
 	}
 
 	@Override

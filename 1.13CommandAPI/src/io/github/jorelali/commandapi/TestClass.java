@@ -3,6 +3,10 @@ package io.github.jorelali.commandapi;
 import java.util.LinkedHashMap;
 
 import org.bukkit.Particle;
+import org.bukkit.craftbukkit.v1_13_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_13_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_13_R1.util.CraftChatMessage;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,10 +19,11 @@ import io.github.jorelali.commandapi.api.arguments.IntegerArgument;
 import io.github.jorelali.commandapi.api.arguments.ItemStackArgument;
 import io.github.jorelali.commandapi.api.arguments.ParticleArgument;
 import io.github.jorelali.commandapi.api.arguments.PotionEffectArgument;
-import io.github.jorelali.commandapi.api.arguments._ENTITYARG;
+import io.github.jorelali.commandapi.api.arguments.EntityTypeArgument;
 import io.github.jorelali.commandapi.api.arguments._TestArgument;
 import io.github.jorelali.commandapi.api.arguments._TestArgument2;
-import io.github.jorelali.commandapi.api.arguments._VEC3ARG;
+import net.minecraft.server.v1_13_R1.BlockPosition;
+import io.github.jorelali.commandapi.api.arguments.LocationArgument;
 
 public class TestClass extends JavaPlugin  {
 			
@@ -50,16 +55,20 @@ public class TestClass extends JavaPlugin  {
 		
 		/**
 		 * List of arguments:
-		 * Argument			COMPLETION	TEST STATUS
-		 * ----------------------------------------
-		 * Particles 		COMPLETE	TESTED
+		 * Argument			COMPLETION	TEST STATUS		ISSUES
+		 * ---------------------------------------------------	
+		 * Particles 		COMPLETE	TESTED		
 		 * Potion Effects	COMPLETE	TESTED
-		 * ChatColor
-		 * Enchanting
-		 * Entity types
+		 * ChatColor		COMPLETE
+		 * Enchanting		COMPLETE
+		 * Entity types		COMPLETE
 		 * Players
-		 * Locations
+		 * Locations		COMPLETE					Assumes sender is player
 		 */
+		
+		//EntityType
+		
+		
 		
 		
 		//ArgumentEnchantment

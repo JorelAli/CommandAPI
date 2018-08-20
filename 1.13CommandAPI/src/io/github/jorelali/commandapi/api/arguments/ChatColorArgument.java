@@ -2,20 +2,22 @@ package io.github.jorelali.commandapi.api.arguments;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.bukkit.ChatColor;
+
 import com.mojang.brigadier.arguments.ArgumentType;
 
 @SuppressWarnings("unchecked")
-public class _ENTITYARG implements Argument {
+public class ChatColorArgument implements Argument {
 
 	com.mojang.brigadier.arguments.ArgumentType<?> rawType;
 	
 	/**
-	 * A complex argument of any NMS type
+	 * A ChatColor argument. Represents a color or formatting for chat
 	 */
-	public _ENTITYARG() {
+	public ChatColorArgument() {
 		try {
 			
-			rawType = (ArgumentType<?>) ArgumentUtil.getNMS("ArgumentEntity").getDeclaredMethod("a").invoke(null);
+			rawType = (ArgumentType<?>) ArgumentUtil.getNMS("ArgumentChatFormat").getDeclaredMethod("a").invoke(null);
 		} catch (IllegalAccessException | ClassNotFoundException | IllegalArgumentException | SecurityException | InvocationTargetException | NoSuchMethodException e) {
 			e.printStackTrace();
 		}
@@ -28,7 +30,7 @@ public class _ENTITYARG implements Argument {
 
 	@Override
 	public <V> Class<V> getPrimitiveType() {
-		return null;
+		return (Class<V>) ChatColor.class;
 	}
 
 	@Override

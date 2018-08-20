@@ -10,8 +10,13 @@ import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
@@ -22,9 +27,13 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 
 import io.github.jorelali.commandapi.api.arguments.Argument;
+import io.github.jorelali.commandapi.api.arguments.ChatColorArgument;
+import io.github.jorelali.commandapi.api.arguments.EnchantmentArgument;
 import io.github.jorelali.commandapi.api.arguments.ItemStackArgument;
+import io.github.jorelali.commandapi.api.arguments.LocationArgument;
 import io.github.jorelali.commandapi.api.arguments.ParticleArgument;
 import io.github.jorelali.commandapi.api.arguments.PotionEffectArgument;
+import io.github.jorelali.commandapi.api.arguments.EntityTypeArgument;
 
 //Only uses reflection for NMS
 @SuppressWarnings({"rawtypes", "unchecked"})
@@ -117,6 +126,43 @@ public final class SemiReflector {
 							Object mobEffect = getNMSClass("ArgumentMobEffect").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
 							arr[count] = (PotionEffectType) craftPotionType.newInstance(mobEffect);
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException e) {
+							e.printStackTrace();
+						}
+					} else if(entry.getValue() instanceof ChatColorArgument) {
+						try {
+							Method getColor = getOBCClass("util.CraftChatMessage").getDeclaredMethod("getColor", getNMSClass("EnumChatFormat"));
+							Object enumChatFormat = getNMSClass("ArgumentChatFormat").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+							arr[count] = (ChatColor) getColor.invoke(null, enumChatFormat);
+						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+							e.printStackTrace();
+						}
+					} else if(entry.getValue() instanceof EnchantmentArgument) {
+						try {
+							Constructor craftEnchant = getOBCClass("enchantments.CraftEnchantment").getConstructor(getNMSClass("Enchantment"));
+							Object nmsEnchantment = getNMSClass("ArgumentEnchantment").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+							arr[count] = (Enchantment) craftEnchant.newInstance(nmsEnchantment);
+						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException e) {
+							e.printStackTrace();
+						}
+					} else if(entry.getValue() instanceof LocationArgument) {
+						try {
+							Object vec3D = getNMSClass("ArgumentVec3").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+							double x = vec3D.getClass().getDeclaredField("x").getDouble(vec3D);
+							double y = vec3D.getClass().getDeclaredField("y").getDouble(vec3D);
+							double z = vec3D.getClass().getDeclaredField("z").getDouble(vec3D);
+							arr[count] = new Location(((Player) sender).getWorld(), x, y, z);
+						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchFieldException e) {
+							e.printStackTrace();
+						}
+					} else if(entry.getValue() instanceof EntityTypeArgument) {
+						try {
+							
+							Object minecraftKey = getNMSClass("ArgumentEntitySummon").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+							Object entity = getNMSClass("EntityTypes").getDeclaredMethod("a", getNMSClass("World"), getNMSClass("MinecraftKey")).invoke(null, null, minecraftKey);
+							Object craftEntity = entity.getClass().getDeclaredMethod("getBukkitEntity").invoke(entity);
+							
+							arr[count] = (Entity) craftEntity;
+						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 							e.printStackTrace();
 						}
 					}
