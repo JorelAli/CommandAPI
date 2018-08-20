@@ -4,8 +4,6 @@ import org.bukkit.inventory.ItemStack;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 
-import io.github.jorelali.commandapi.api.SemiReflector;
-
 @SuppressWarnings("unchecked")
 public class ItemStackArgument implements Argument {
 
@@ -16,12 +14,13 @@ public class ItemStackArgument implements Argument {
 	 */
 	
 	/**
-	 * An ItemStack argument
+	 * An ItemStack argument. Always returns an itemstack of size 1
 	 */
 	public ItemStackArgument() {
 		try {
-			rawType = (ArgumentType<?>) SemiReflector.getNMSClass("ArgumentItemStack").newInstance();
-		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+			
+			rawType = (ArgumentType<?>) ArgumentUtil.getNMS("ArgumentItemStack").newInstance();
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | IllegalArgumentException | SecurityException e) {
 			e.printStackTrace();
 		}
 	}

@@ -23,7 +23,7 @@ import io.github.jorelali.commandapi.api.arguments.ItemStackArgument;
 
 //Only uses reflection for NMS
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class SemiReflector {
+public final class SemiReflector {
 	
 	//OBC
 	private String obcPackageName = null;
@@ -163,7 +163,7 @@ public class SemiReflector {
 		
 	/** Retrieves a net.minecraft.server class by using the dynamic package from
 	 * the dedicated server */
-	public static Class<?> getNMSClass(final String className) throws ClassNotFoundException {
+	private Class<?> getNMSClass(final String className) throws ClassNotFoundException {
 		return (Class.forName(SemiReflector.packageName + "." + className));
 	}
 	

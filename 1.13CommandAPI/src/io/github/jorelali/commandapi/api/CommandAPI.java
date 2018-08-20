@@ -10,6 +10,7 @@ import io.github.jorelali.commandapi.api.arguments.Argument;
  */
 public class CommandAPI {
 
+	//Static instance of CommandAPI
 	private static CommandAPI instance;
 	
 	public static CommandAPI getInstance() {
