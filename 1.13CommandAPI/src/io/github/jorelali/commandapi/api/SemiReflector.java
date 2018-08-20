@@ -31,12 +31,12 @@ import com.mojang.brigadier.context.CommandContext;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.ChatColorArgument;
 import io.github.jorelali.commandapi.api.arguments.EnchantmentArgument;
+import io.github.jorelali.commandapi.api.arguments.EntityTypeArgument;
 import io.github.jorelali.commandapi.api.arguments.ItemStackArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationArgument;
 import io.github.jorelali.commandapi.api.arguments.ParticleArgument;
 import io.github.jorelali.commandapi.api.arguments.PlayerArgument;
 import io.github.jorelali.commandapi.api.arguments.PotionEffectArgument;
-import io.github.jorelali.commandapi.api.arguments.EntityTypeArgument;
 
 //Only uses reflection for NMS
 @SuppressWarnings({"rawtypes", "unchecked"})
@@ -51,7 +51,7 @@ public final class SemiReflector {
 	private Object cDispatcher;
 
 	//DEBUG mode
-	private static final boolean DEBUG = false;
+	private static final boolean DEBUG = true;
 	
 	protected SemiReflector() throws ClassNotFoundException {
 		
@@ -76,11 +76,9 @@ public final class SemiReflector {
 		
 	}
 	
-	//Builds our NMS command using the given arguments for this method, then registers it
-	protected void register(String commandName, final LinkedHashMap<String, Argument> args, CommandExecutor executor) throws Exception {
-		
+	private Command generateCommand(String commandName, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
 		//Generate our command from executor
-		Command command = (cmdCtx) -> {
+		return (cmdCtx) -> {
 			
 			//Get the CommandSender via NMS
 			CommandSender sender = null;
@@ -187,7 +185,12 @@ public final class SemiReflector {
 			executor.run(sender, arr);
 			return 1;
 		};
+	}
+	
+	//Builds our NMS command using the given arguments for this method, then registers it
+	protected void register(String commandName, final LinkedHashMap<String, Argument> args, CommandExecutor executor) throws Exception {
 		
+		Command command = generateCommand(commandName, args, executor);
 				
 		/*
 		 * The innermost argument needs to be connected to the executor.
@@ -224,7 +227,7 @@ public final class SemiReflector {
 			
 			getNMSClass("CommandDispatcher").getDeclaredMethod("a", File.class).invoke(this.cDispatcher, file);
 		}
-	}
+	}	
 		
 	//Registers a LiteralArgumentBuilder for a command name
 	private LiteralArgumentBuilder<?> reflectCommandDispatcherCommandName(String commandName) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
@@ -246,5 +249,6 @@ public final class SemiReflector {
 	private Class<?> getOBCClass(final String className) throws ClassNotFoundException {
 		return (Class.forName(obcPackageName + "." + className));
 	}
+
 	
 }

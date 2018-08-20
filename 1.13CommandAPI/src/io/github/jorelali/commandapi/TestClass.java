@@ -24,12 +24,14 @@ public class TestClass extends JavaPlugin  {
 	@Override
 	public void onEnable() {
 		try {
-			playerTest();
+			//playerTest();
+	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 	}
+	
 	
 	public void playerTest() throws Exception {
 		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
@@ -53,7 +55,8 @@ public class TestClass extends JavaPlugin  {
 		 * Entity types		COMPLETE
 		 * Players			COMPLETE
 		 * Locations		COMPLETE					Assumes sender is player
-		 * Enums
+		 * 
+		 * Enums			DROPPED
 		 */
 		
 		//EntityType
