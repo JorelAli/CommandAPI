@@ -39,18 +39,30 @@ public class TestClass extends JavaPlugin  {
 	
 	public void playerTest() throws Exception {
 		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-		//TODO: same name, diofferent argument
 		
 //		Field f = PotionEffectType.class.getDeclaredField("byName");
 //		f.setAccessible(true);
 //		Map<String, PotionEffectType> byName = (Map<String, PotionEffectType>) f.get(null);
 //		byName.forEach((a, b) -> System.out.println(a));
 		
-		arguments.put("potionEffect", new PotionEffectArgument());
-		arguments.put("particle", new ParticleArgument());
+		//arguments.put("a b c", new PotionEffectArgument());
+		//arguments.put("particle", new ParticleArgument());
+		
+		/**
+		 * List of arguments:
+		 * Argument			COMPLETION	TEST STATUS
+		 * ----------------------------------------
+		 * Particles 		COMPLETE	TESTED
+		 * Potion Effects	COMPLETE	TESTED
+		 * ChatColor
+		 * Enchanting
+		 * Entity types
+		 * Players
+		 * Locations
+		 */
+		
 		
 		//ArgumentEnchantment
-//		arguments.put("effect", new _TestArgument("ArgumentMobEffect")); //potion effect
 //		arguments.put("chatColor", new _TestArgument2("ArgumentChatFormat")); //chat color
 //		arguments.put("spawn", new _TestArgument("ArgumentEntitySummon")); //?!
 //		arguments.put("entity", new _ENTITYARG()); //FIX 

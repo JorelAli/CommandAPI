@@ -53,7 +53,7 @@ public class CommandAPI {
 	 *            The code to run when this command is performed
 	 */
 	public void register(String commandName, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
-
+		
 		try {
 			reflector.register(commandName, args, executor);
 		} catch (Exception e) {
