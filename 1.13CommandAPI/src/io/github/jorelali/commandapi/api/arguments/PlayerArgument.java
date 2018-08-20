@@ -1,21 +1,20 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.entity.Player;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 
 @SuppressWarnings("unchecked")
-public class ItemStackArgument implements Argument {
+public class PlayerArgument implements Argument {
 
 	com.mojang.brigadier.arguments.ArgumentType<?> rawType;
-
+	
 	/**
-	 * An ItemStack argument. Always returns an itemstack of size 1
+	 * A Player argument. Produces a single player, regardless of whether @a, @p, @r or @e is used.
 	 */
-	public ItemStackArgument() {
+	public PlayerArgument() {
 		try {
-			
-			rawType = (ArgumentType<?>) ArgumentUtil.getNMS("ArgumentItemStack").newInstance();
+			rawType = (ArgumentType<?>) ArgumentUtil.getNMS("ArgumentProfile").newInstance();
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | IllegalArgumentException | SecurityException e) {
 			e.printStackTrace();
 		}
@@ -28,7 +27,7 @@ public class ItemStackArgument implements Argument {
 
 	@Override
 	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) ItemStack.class;
+		return (Class<V>) Player.class;
 	}
 
 	@Override

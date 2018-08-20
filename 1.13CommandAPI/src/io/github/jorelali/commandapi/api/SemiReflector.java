@@ -6,8 +6,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -32,6 +34,7 @@ import io.github.jorelali.commandapi.api.arguments.EnchantmentArgument;
 import io.github.jorelali.commandapi.api.arguments.ItemStackArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationArgument;
 import io.github.jorelali.commandapi.api.arguments.ParticleArgument;
+import io.github.jorelali.commandapi.api.arguments.PlayerArgument;
 import io.github.jorelali.commandapi.api.arguments.PotionEffectArgument;
 import io.github.jorelali.commandapi.api.arguments.EntityTypeArgument;
 
@@ -165,11 +168,16 @@ public final class SemiReflector {
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 							e.printStackTrace();
 						}
-					}
-					//ArgumentItemStack.a(cmdCtx, "item").a(0, false);
-					//Otherwise, deal with ItemStack (for example)
-					//cmdCtx.getArgument(entry.getKey(), arg1)
-					//ItemStack is = CraftItemStack.asBukkitCopy(ArgumentItemStack.a(cmdCtx, "item").a((int) cmdCtx.getArgument("amount", int.class), false));
+					} else if(entry.getValue() instanceof PlayerArgument) {
+						try {
+							Collection<?> collectionOfPlayers = (Collection<?>) getNMSClass("ArgumentProfile").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+							Object first = collectionOfPlayers.iterator().next();
+							UUID uuid = (UUID) first.getClass().getDeclaredMethod("getId").invoke(first);
+							arr[count] = Bukkit.getPlayer(uuid);
+						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+							e.printStackTrace();
+						}
+					} 
 				}
 				
 				count++;
