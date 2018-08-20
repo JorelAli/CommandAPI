@@ -9,6 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Particle;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
@@ -20,6 +21,7 @@ import com.mojang.brigadier.context.CommandContext;
 
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.ItemStackArgument;
+import io.github.jorelali.commandapi.api.arguments.ParticleArgument;
 
 //Only uses reflection for NMS
 @SuppressWarnings({"rawtypes", "unchecked"})
@@ -97,7 +99,15 @@ public final class SemiReflector {
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 							e.printStackTrace();
 						}
-						//CraftItemStack.asBukkitCopy(null);
+					} else if(entry.getValue() instanceof ParticleArgument) {
+						try {
+							//Particle Bukkit Particle from NMS
+							Method toBukkit = getOBCClass("CraftParticle").getDeclaredMethod("toBukkit", getNMSClass("ParticleParam"));
+							Object particleParam = getNMSClass("ArgumentParticle").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+							arr[count] = (Particle) toBukkit.invoke(null, particleParam);
+						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+							e.printStackTrace();
+						}
 					}
 					//ArgumentItemStack.a(cmdCtx, "item").a(0, false);
 					//Otherwise, deal with ItemStack (for example)

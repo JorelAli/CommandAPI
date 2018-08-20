@@ -21,6 +21,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import net.minecraft.server.v1_13_R1.ArgumentItemStack;
+import net.minecraft.server.v1_13_R1.ArgumentProfile;
 import net.minecraft.server.v1_13_R1.CommandDispatcher;
 import net.minecraft.server.v1_13_R1.CommandListenerWrapper;
 import net.minecraft.server.v1_13_R1.MinecraftServer;
@@ -180,6 +181,18 @@ public class Main_OLD extends JavaPlugin implements Listener {
 										
 										return 1;
 									}))));
+		
+		z.register(CommandDispatcher.a("zettp")
+				.then(CommandDispatcher.a("player", ArgumentProfile.a())
+						.executes((cmdCtx) -> {
+							ArgumentProfile.a(cmdCtx, "player");
+							ItemStack is = CraftItemStack.asBukkitCopy(ArgumentItemStack.a(cmdCtx, "item")
+									.a(cmdCtx.getArgument("amount", int.class), false));
+
+							((Player) cmdCtx.getSource().getBukkitSender()).getInventory().addItem(is);
+
+							return 1;
+						})));
 	}
 
 }

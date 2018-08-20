@@ -2,11 +2,8 @@ package io.github.jorelali.commandapi;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import io.github.jorelali.commandapi.api.CommandAPI;
-
 public class Main extends JavaPlugin {
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void onEnable() {
 		//Nothing required here, just need
