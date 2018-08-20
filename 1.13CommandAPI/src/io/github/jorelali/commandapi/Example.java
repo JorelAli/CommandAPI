@@ -5,8 +5,9 @@ import java.util.LinkedHashMap;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import io.github.jorelali.commandapi.api.ArgumentType_OLD;
 import io.github.jorelali.commandapi.api.CommandAPI;
+import io.github.jorelali.commandapi.api.arguments.Argument;
+import io.github.jorelali.commandapi.api.arguments.BooleanArgument;
 
 /**
  * An example class showing how to register commands with the CommandAPI
@@ -20,19 +21,16 @@ public class Example extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		
-		//Instance of commandRegister
-		CommandAPI commandRegister = new CommandAPI();
-		
 		//LinkedHashMap to store arguments for the command
-		LinkedHashMap<String, ArgumentType_OLD> arguments = new LinkedHashMap<>();
+		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 		
 		//Our syntax requires a boolean value of true or false.
 		//We'll put "status" as our description for this command
-		arguments.put("status", ArgumentType_OLD.BOOLEAN);
+		arguments.put("status", new BooleanArgument());
 		
 		//Register our command, god, with the arguments and a CommandExecutor which
 		//determines what happens when the command is run
-		commandRegister.register("god", arguments, (sender, args) -> {
+		CommandAPI.getInstance().register("god", arguments, (sender, args) -> {
 			
 			//Checking if the sender of the command is a player
 			if(sender instanceof Player) {

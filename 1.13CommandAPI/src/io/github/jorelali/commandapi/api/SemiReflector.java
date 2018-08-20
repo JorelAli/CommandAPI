@@ -3,17 +3,20 @@ package io.github.jorelali.commandapi.api;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.ItemStack;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
 
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.ItemStackArgument;
@@ -21,6 +24,9 @@ import io.github.jorelali.commandapi.api.arguments.ItemStackArgument;
 //Only uses reflection for NMS
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class SemiReflector {
+	
+	//OBC
+	private String obcPackageName = null;
 	
 	//NMS variables
 	private static String packageName = null;
@@ -41,6 +47,7 @@ public class SemiReflector {
 			//Setup NMS
 			Object server = Bukkit.getServer().getClass().getDeclaredMethod("getServer").invoke(Bukkit.getServer());
 			SemiReflector.packageName = server.getClass().getPackage().getName();
+			obcPackageName = Bukkit.getServer().getClass().getPackage().getName();
 			this.cDispatcher = getNMSClass("MinecraftServer").getDeclaredField("commandDispatcher").get(server);
 						
 			//This is our "z"
@@ -77,13 +84,25 @@ public class SemiReflector {
 				if(entry.getValue().isSimple()) {
 					arr[count] = cmdCtx.getArgument(entry.getKey(), entry.getValue().getPrimitiveType());
 				} else {
+					
+					//Deal with complex argument types
+					
 					if(entry.getValue() instanceof ItemStackArgument) {
-						
+						try {
+							//Parse Bukkit ItemStack from NMS 
+							Method asBukkitCopy = getOBCClass("inventory.CraftItemStack").getDeclaredMethod("asBukkitCopy", getNMSClass("ItemStack"));
+							Object argumentIS = getNMSClass("ArgumentItemStack").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+							Object nmsIS = argumentIS.getClass().getDeclaredMethod("a", int.class, boolean.class).invoke(argumentIS, 1, false);
+							arr[count] = (ItemStack) asBukkitCopy.invoke(null, nmsIS);
+						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+							e.printStackTrace();
+						}
+						//CraftItemStack.asBukkitCopy(null);
 					}
 					//ArgumentItemStack.a(cmdCtx, "item").a(0, false);
 					//Otherwise, deal with ItemStack (for example)
 					//cmdCtx.getArgument(entry.getKey(), arg1)
-					//ItemStack is = CraftItemStack.asBukkitCopy(ArgumentItemStack.a(cmdCtx, "item").a(cmdCtx.getArgument("amount", int.class), false));
+					//ItemStack is = CraftItemStack.asBukkitCopy(ArgumentItemStack.a(cmdCtx, "item").a((int) cmdCtx.getArgument("amount", int.class), false));
 				}
 				
 				count++;
@@ -146,6 +165,11 @@ public class SemiReflector {
 	 * the dedicated server */
 	public static Class<?> getNMSClass(final String className) throws ClassNotFoundException {
 		return (Class.forName(SemiReflector.packageName + "." + className));
+	}
+	
+	/** Retrieves a craftbukkit class */
+	private Class<?> getOBCClass(final String className) throws ClassNotFoundException {
+		return (Class.forName(obcPackageName + "." + className));
 	}
 	
 }

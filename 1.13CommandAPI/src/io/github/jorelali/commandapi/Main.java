@@ -6,6 +6,7 @@ import io.github.jorelali.commandapi.api.CommandAPI;
 
 public class Main extends JavaPlugin {
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onEnable() {
 		//Instantiate the CommandAPI

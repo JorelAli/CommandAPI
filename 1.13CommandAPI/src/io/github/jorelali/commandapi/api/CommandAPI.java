@@ -18,10 +18,11 @@ public class CommandAPI {
 	
 	private SemiReflector reflector;
 
+	
 	/**
-	 * Creates a new instance of the CommandAPI (This tends to be rather
-	 * performance heavy as of version 1.0)
+	 * Deprecated as of version 1.1 - use CommandAPI.getInstance() instead
 	 */
+	@Deprecated
 	public CommandAPI() {
 		if(instance == null) {
 			instance = this;
