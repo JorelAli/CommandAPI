@@ -2,12 +2,20 @@ package io.github.jorelali.commandapi.api;
 
 import java.util.LinkedHashMap;
 
+import io.github.jorelali.commandapi.api.arguments.Argument;
+
 /**
  * Class to register commands with the 1.13 command UI
  *
  */
 public class CommandAPI {
 
+	private static CommandAPI instance;
+	
+	public static CommandAPI getInstance() {
+		return instance;
+	}	
+	
 	private SemiReflector reflector;
 
 	/**
@@ -15,6 +23,12 @@ public class CommandAPI {
 	 * performance heavy as of version 1.0)
 	 */
 	public CommandAPI() {
+		if(instance == null) {
+			instance = this;
+		} else {
+			throw new RuntimeException("CommandAPI cannot be instantiated twice"); //Don't need to re-instantiate CommandAPI
+		}
+		
 		try {
 			this.reflector = new SemiReflector();
 		} catch (ClassNotFoundException e) {
@@ -34,7 +48,7 @@ public class CommandAPI {
 	 * @param executor
 	 *            The code to run when this command is performed
 	 */
-	public void register(String commandName, final LinkedHashMap<String, ArgumentType_OLD> args, CommandExecutor executor) {
+	public void register(String commandName, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
 
 		try {
 			reflector.register(commandName, args, executor);

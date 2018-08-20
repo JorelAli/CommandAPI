@@ -15,6 +15,9 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 
+import io.github.jorelali.commandapi.api.arguments.Argument;
+import io.github.jorelali.commandapi.api.arguments.ItemStackArgument;
+
 //Only uses reflection for NMS
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class SemiReflector {
@@ -50,7 +53,7 @@ public class SemiReflector {
 	}
 	
 	//Builds our NMS command using the given arguments for this method, then registers it
-	protected void register(String commandName, final LinkedHashMap<String, ArgumentType_OLD> args, CommandExecutor executor) throws Exception {
+	protected void register(String commandName, final LinkedHashMap<String, Argument> args, CommandExecutor executor) throws Exception {
 		
 		//Generate our command from executor
 		Command command = (cmdCtx) -> {
@@ -69,8 +72,20 @@ public class SemiReflector {
 			
 			//Populate array
 			int count = 0;
-			for(Entry<String, ArgumentType_OLD> entry : args.entrySet()) {
-				arr[count] = cmdCtx.getArgument(entry.getKey(), entry.getValue().getPrimitiveType());
+			for(Entry<String, Argument> entry : args.entrySet()) {
+				//If primitive (and simple), parse as normal
+				if(entry.getValue().isSimple()) {
+					arr[count] = cmdCtx.getArgument(entry.getKey(), entry.getValue().getPrimitiveType());
+				} else {
+					if(entry.getValue() instanceof ItemStackArgument) {
+						
+					}
+					//ArgumentItemStack.a(cmdCtx, "item").a(0, false);
+					//Otherwise, deal with ItemStack (for example)
+					//cmdCtx.getArgument(entry.getKey(), arg1)
+					//ItemStack is = CraftItemStack.asBukkitCopy(ArgumentItemStack.a(cmdCtx, "item").a(cmdCtx.getArgument("amount", int.class), false));
+				}
+				
 				count++;
 			}
 			
