@@ -9,8 +9,6 @@ public class Main extends JavaPlugin {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onEnable() {
-		//Instantiate the CommandAPI
-		new CommandAPI();
 		//Nothing required here, just need
 		//to state that this is a plugin so
 		//other plugins can depend on it

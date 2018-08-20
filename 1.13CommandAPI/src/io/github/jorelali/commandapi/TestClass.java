@@ -10,7 +10,7 @@ import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.BooleanArgument;
 import io.github.jorelali.commandapi.api.arguments.FloatArgument;
 
-public class Main_2 extends JavaPlugin  {
+public class TestClass extends JavaPlugin  {
 			
 	/**
 	 * TODO: Add ALIASES!
@@ -21,16 +21,14 @@ public class Main_2 extends JavaPlugin  {
 	public void onEnable() {
 		
 		//Class used to manage command registration
-		//TODO: Make this static?
-		CommandAPI commandRegister = new CommandAPI();
-		
+		//TODO: Make this static?		
 		//Creating a list of arguments
 		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 		arguments.put("speed", new FloatArgument()); //"speed" is just a description of what the argument is
 		arguments.put("output", new BooleanArgument());
 		
 		//Register the command
-		commandRegister.register("flyspeed", arguments, (sender, args) -> {
+		CommandAPI.getInstance().register("flyspeed", arguments, (sender, args) -> {
 			((Player) sender).setFlySpeed((float) args[0]);
 			if((boolean) args[1]) {
 				System.out.println("yay!");
@@ -42,7 +40,7 @@ public class Main_2 extends JavaPlugin  {
 		//TODO: test if this REQUIRES no spaces or not
 		arguments.put("speed", new FloatArgument());
 		
-		commandRegister.register("flyspeed", arguments, (sender, args) -> {
+		CommandAPI.getInstance().register("flyspeed", arguments, (sender, args) -> {
 			((Player) sender).setFlySpeed((float) args[0]);
 			});
 		

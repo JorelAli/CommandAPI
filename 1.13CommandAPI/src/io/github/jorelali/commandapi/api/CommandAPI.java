@@ -13,12 +13,14 @@ public class CommandAPI {
 	private static CommandAPI instance;
 	
 	public static CommandAPI getInstance() {
+		if(instance == null) {
+			new CommandAPI();
+		}
 		return instance;
 	}	
 	
 	private SemiReflector reflector;
 
-	
 	/**
 	 * Deprecated as of version 1.1 - use CommandAPI.getInstance() instead
 	 */
