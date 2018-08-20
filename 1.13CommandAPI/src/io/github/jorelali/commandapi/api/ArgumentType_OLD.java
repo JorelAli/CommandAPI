@@ -7,7 +7,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 
 @SuppressWarnings("unchecked")
-public enum ArgumentType {
+public enum ArgumentType_OLD {
 
 	/**
 	 * A String type argument (valid for one word)
@@ -51,7 +51,7 @@ public enum ArgumentType {
 	private com.mojang.brigadier.arguments.ArgumentType<?> type;
 	private Class<?> primitive;
 	
-	private <T, V> ArgumentType(com.mojang.brigadier.arguments.ArgumentType<T> type, Class<V> primitive) {
+	private <T, V> ArgumentType_OLD(com.mojang.brigadier.arguments.ArgumentType<T> type, Class<V> primitive) {
 		this.type = type;
 		this.primitive = primitive;
 	}

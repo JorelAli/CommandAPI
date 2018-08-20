@@ -20,7 +20,7 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 public class SemiReflector {
 	
 	//NMS variables
-	private String packageName = null;
+	private static String packageName = null;
 	private CommandDispatcher dispatcher;
 	private Object cDispatcher;
 
@@ -37,7 +37,7 @@ public class SemiReflector {
 		try {
 			//Setup NMS
 			Object server = Bukkit.getServer().getClass().getDeclaredMethod("getServer").invoke(Bukkit.getServer());
-			this.packageName = server.getClass().getPackage().getName();
+			SemiReflector.packageName = server.getClass().getPackage().getName();
 			this.cDispatcher = getNMSClass("MinecraftServer").getDeclaredField("commandDispatcher").get(server);
 						
 			//This is our "z"
@@ -50,7 +50,7 @@ public class SemiReflector {
 	}
 	
 	//Builds our NMS command using the given arguments for this method, then registers it
-	protected void register(String commandName, final LinkedHashMap<String, ArgumentType> args, CommandExecutor executor) throws Exception {
+	protected void register(String commandName, final LinkedHashMap<String, ArgumentType_OLD> args, CommandExecutor executor) throws Exception {
 		
 		//Generate our command from executor
 		Command command = (cmdCtx) -> {
@@ -69,7 +69,7 @@ public class SemiReflector {
 			
 			//Populate array
 			int count = 0;
-			for(Entry<String, ArgumentType> entry : args.entrySet()) {
+			for(Entry<String, ArgumentType_OLD> entry : args.entrySet()) {
 				arr[count] = cmdCtx.getArgument(entry.getKey(), entry.getValue().getPrimitiveType());
 				count++;
 			}
@@ -129,8 +129,8 @@ public class SemiReflector {
 		
 	/** Retrieves a net.minecraft.server class by using the dynamic package from
 	 * the dedicated server */
-	private Class<?> getNMSClass(final String className) throws ClassNotFoundException {
-		return (Class.forName(this.packageName + "." + className));
+	public static Class<?> getNMSClass(final String className) throws ClassNotFoundException {
+		return (Class.forName(SemiReflector.packageName + "." + className));
 	}
 	
 }

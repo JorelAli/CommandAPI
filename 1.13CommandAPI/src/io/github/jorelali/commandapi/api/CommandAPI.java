@@ -34,7 +34,7 @@ public class CommandAPI {
 	 * @param executor
 	 *            The code to run when this command is performed
 	 */
-	public void register(String commandName, final LinkedHashMap<String, ArgumentType> args, CommandExecutor executor) {
+	public void register(String commandName, final LinkedHashMap<String, ArgumentType_OLD> args, CommandExecutor executor) {
 
 		try {
 			reflector.register(commandName, args, executor);

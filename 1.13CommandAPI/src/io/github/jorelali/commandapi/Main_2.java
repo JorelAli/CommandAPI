@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import io.github.jorelali.commandapi.api.ArgumentType;
+import io.github.jorelali.commandapi.api.ArgumentType_OLD;
 import io.github.jorelali.commandapi.api.CommandAPI;
 
 public class Main_2 extends JavaPlugin  {
@@ -23,9 +23,9 @@ public class Main_2 extends JavaPlugin  {
 		CommandAPI commandRegister = new CommandAPI();
 		
 		//Creating a list of arguments
-		LinkedHashMap<String, ArgumentType> arguments = new LinkedHashMap<>();
-		arguments.put("speed", ArgumentType.FLOAT); //"speed" is just a description of what the argument is
-		arguments.put("output", ArgumentType.BOOLEAN);
+		LinkedHashMap<String, ArgumentType_OLD> arguments = new LinkedHashMap<>();
+		arguments.put("speed", ArgumentType_OLD.FLOAT); //"speed" is just a description of what the argument is
+		arguments.put("output", ArgumentType_OLD.BOOLEAN);
 		
 		//Register the command
 		commandRegister.register("flyspeed", arguments, (sender, args) -> {
@@ -38,7 +38,7 @@ public class Main_2 extends JavaPlugin  {
 		//Registering same command with different args
 		arguments = new LinkedHashMap<>();
 		//TODO: test if this REQUIRES no spaces or not
-		arguments.put("speed", ArgumentType.FLOAT);
+		arguments.put("speed", ArgumentType_OLD.FLOAT);
 		
 		commandRegister.register("flyspeed", arguments, (sender, args) -> {
 			((Player) sender).setFlySpeed((float) args[0]);
