@@ -13,9 +13,9 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 - Arguments can now be represented as [primitive data types](https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html) as opposed to Strings
 - Arguments require a description to identify them
 
-## Super basic usage (Version 1.0)
+## Super basic usage (Version 1.0 ONLY)
 
-* Download the [latest release](https://github.com/JorelAli/1.13-Command-API/releases/latest) and add it to your build path
+* Download [version 1.0](https://github.com/JorelAli/1.13-Command-API/releases/tag/v1.0) and add it to your build path
 * Add the plugin as a dependent in the plugin.yml (`depend: [CommandAPI]`)
 * (Make sure the CommandAPI.jar file is included in the plugins folder when running any servers)
 * Create a new instance of the CommandAPI
@@ -32,9 +32,9 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
   commandRegister.register("COMMAND_NAME", arguments, (sender, args) -> {/* Command execution goes here */});
   ```
 
-For an example of this in action, view the [example class](https://github.com/JorelAli/1.13-Command-API/blob/master/1.13CommandAPI/src/io/github/jorelali/commandapi/Example.java)!
+For an example of this in action, view the [example class](https://github.com/JorelAli/1.13-Command-API/blob/v1.0/1.13CommandAPI/src/io/github/jorelali/commandapi/Example.java)!
 
-## Examples!
+## Examples (Version 1.0 ONLY)!
 
 Multiple arguments with separate outcomes:
 ```java
