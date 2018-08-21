@@ -15,4 +15,4 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 
 ## Usage
 
-Check out the [documentation for v1.1](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.1%20Documentation.md)
+Check out the [latest documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.2%20Documentation.md)
