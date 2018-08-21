@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -29,6 +30,7 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
+import io.github.jorelali.commandapi.api.CommandPermission.PermissionNode;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.ChatColorArgument;
 import io.github.jorelali.commandapi.api.arguments.EnchantmentArgument;
@@ -192,11 +194,46 @@ public final class SemiReflector {
 		};
 	}
 	
+	private Predicate generatePermissions(CommandPermission permissions) {
+		return (cmdSender) -> {
+			
+        	//Generate CommandSender object
+			CommandSender sender = null;
+			try {
+				Object entity = cmdSender.getClass().getDeclaredMethod("g").invoke(cmdSender);
+	        	sender = (CommandSender) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(entity);
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+					| NoSuchMethodException | SecurityException | ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+
+        	if(permissions.getPermissions() != null) {
+        		//If they don't have one of the required permissions, return false
+        		for(String permission : permissions.getPermissions()) {
+        			if(!sender.hasPermission(permission)) {
+        				return false;
+        			}
+        		}
+        		//Else return true
+        		return true;
+        	} else {
+        		//If they're op
+        		if(permissions.getPermissionNode().equals(PermissionNode.OP)) {
+        			return sender.isOp();
+        		} else {
+        			//PermissionNode = NONE, implies true
+        			return true;
+        		}
+        	}
+        };
+	}
+	
 	//Builds our NMS command using the given arguments for this method, then registers it
-	protected void register(String commandName, String[] aliases, final LinkedHashMap<String, Argument> args, CommandExecutor executor) throws Exception {
+	protected void register(String commandName, CommandPermission permissions, String[] aliases, final LinkedHashMap<String, Argument> args, CommandExecutor executor) throws Exception {
 		
 		Command command = generateCommand(commandName, args, executor);
-				
+		Predicate permission = generatePermissions(permissions);
+		
 		/*
 		 * The innermost argument needs to be connected to the executor.
 		 * Then that argument needs to be connected to the previous argument
@@ -216,14 +253,14 @@ public final class SemiReflector {
         RequiredArgumentBuilder outer = inner;
         for(int i = keys.size() - 2; i >= 0; i--) {
         	outer = reflectCommandDispatcherArgument(keys.get(i), args.get(keys.get(i)).getRawType()).then(outer);
-        }
-
+        }        
+        
         //Link command name to first argument and register        
-        LiteralCommandNode resultantNode = this.dispatcher.register(reflectCommandDispatcherCommandName(commandName).then(outer));
+        LiteralCommandNode resultantNode = this.dispatcher.register((LiteralArgumentBuilder) reflectCommandDispatcherCommandName(commandName).requires(permission).then(outer));
         
         //Register aliases
         for(String str : aliases) {
-        	this.dispatcher.register(reflectCommandDispatcherCommandName(str).redirect(resultantNode));
+        	this.dispatcher.register((LiteralArgumentBuilder) reflectCommandDispatcherCommandName(str).requires(permission).redirect(resultantNode));
         }
         
 		

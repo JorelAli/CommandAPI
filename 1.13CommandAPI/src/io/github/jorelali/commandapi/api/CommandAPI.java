@@ -52,8 +52,8 @@ public class CommandAPI {
 	 * @param executor
 	 *            The code to run when this command is performed
 	 */
-	public void register(String commandName, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
-		register(commandName, new String[0], args, executor);
+	public void register(String commandName, CommandPermission permissions, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
+		register(commandName, permissions, new String[0], args, executor);
 	}
 	
 	/**
@@ -68,9 +68,9 @@ public class CommandAPI {
 	 * @param executor
 	 *            The code to run when this command is performed
 	 */
-	public void register(String commandName, String[] aliases, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
+	public void register(String commandName, CommandPermission permissions, String[] aliases, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
 		try {
-			reflector.register(commandName, aliases, args, executor);
+			reflector.register(commandName, permissions, aliases, args, executor);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

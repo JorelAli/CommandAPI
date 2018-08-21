@@ -9,6 +9,8 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import io.github.jorelali.commandapi.api.CommandAPI;
+import io.github.jorelali.commandapi.api.CommandPermission;
+import io.github.jorelali.commandapi.api.CommandPermission.PermissionNode;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.EntityTypeArgument;
 import io.github.jorelali.commandapi.api.arguments.IntegerArgument;
@@ -87,7 +89,7 @@ public class TestClass extends JavaPlugin  {
 		//arguments.put("particle", new _TestArgument("ArgumentParticle"));  //ACCEPTED COMPLETE
 		
 		//Register the command
-		CommandAPI.getInstance().register("ztp", arguments, (sender, args) -> {
+		CommandAPI.getInstance().register("ztp", new CommandPermission(PermissionNode.OP), new String[] {"arctp"}, arguments, (sender, args) -> {
 			Player player = (Player) sender;
 			player.getWorld().spawnEntity(player.getLocation(), (EntityType) args[0]);
 			//((Player) args[0]).setGameMode(GameMode.SURVIVAL);
@@ -96,22 +98,22 @@ public class TestClass extends JavaPlugin  {
 		
 	}
 	
-	public void registerGiveCmd() {
-		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-		arguments.put("item", new ItemStackArgument()); 
-		
-		//Register the command
-		CommandAPI.getInstance().register("gimme", arguments, (sender, args) -> {
-			((ItemStack) args[0]).getType();
-			((Player) sender).getInventory().addItem((ItemStack) args[0]);
-			});
-		
-		arguments.put("amount", new IntegerArgument(1, 64)); 
-		CommandAPI.getInstance().register("gimme", arguments, (sender, args) -> {
-			ItemStack is = (ItemStack) args[0];
-			is.setAmount((int) args[1]);
-			((Player) sender).getInventory().addItem(is);
-			});
-	}
+//	public void registerGiveCmd() {
+//		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+//		arguments.put("item", new ItemStackArgument()); 
+//		
+//		//Register the command
+//		CommandAPI.getInstance().register("gimme", arguments, (sender, args) -> {
+//			((ItemStack) args[0]).getType();
+//			((Player) sender).getInventory().addItem((ItemStack) args[0]);
+//			});
+//		
+//		arguments.put("amount", new IntegerArgument(1, 64)); 
+//		CommandAPI.getInstance().register("gimme", arguments, (sender, args) -> {
+//			ItemStack is = (ItemStack) args[0];
+//			is.setAmount((int) args[1]);
+//			((Player) sender).getInventory().addItem(is);
+//			});
+//	}
 	
 }
