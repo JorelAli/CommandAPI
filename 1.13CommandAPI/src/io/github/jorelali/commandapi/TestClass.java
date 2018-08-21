@@ -2,8 +2,6 @@ package io.github.jorelali.commandapi;
 
 import java.util.LinkedHashMap;
 
-import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -14,9 +12,6 @@ import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.EntityTypeArgument;
 import io.github.jorelali.commandapi.api.arguments.IntegerArgument;
 import io.github.jorelali.commandapi.api.arguments.ItemStackArgument;
-import io.github.jorelali.commandapi.api.arguments.LocationArgument;
-import io.github.jorelali.commandapi.api.arguments.PlayerArgument;
-import net.minecraft.server.v1_13_R1.EntityPig;
 
 public class TestClass extends JavaPlugin  {
 			
