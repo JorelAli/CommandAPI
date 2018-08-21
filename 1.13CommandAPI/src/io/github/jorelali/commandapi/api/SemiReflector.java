@@ -215,7 +215,6 @@ public final class SemiReflector {
 
         //Link command name to first argument
 		this.dispatcher.register(reflectCommandDispatcherCommandName(commandName).then(outer));
-		
 		//Produce the commandDispatch.json file for debug purposes
 		if(DEBUG) {
 			File file = new File("commandDispatch.json");

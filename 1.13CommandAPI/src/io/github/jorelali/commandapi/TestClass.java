@@ -1,5 +1,6 @@
 package io.github.jorelali.commandapi;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 
 import org.bukkit.Particle;
@@ -13,6 +14,9 @@ import io.github.jorelali.commandapi.api.CommandAPI;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.IntegerArgument;
 import io.github.jorelali.commandapi.api.arguments.ItemStackArgument;
+import net.minecraft.server.v1_13_R1.ArgumentRegistry;
+import net.minecraft.server.v1_13_R1.ArgumentSerializerVoid;
+import net.minecraft.server.v1_13_R1.MinecraftKey;
 
 public class TestClass extends JavaPlugin  {
 			
@@ -21,17 +25,17 @@ public class TestClass extends JavaPlugin  {
 	 */
 	
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onEnable() {
 		try {
+			
 			//playerTest();
-	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 	}
-	
 	
 	public void playerTest() throws Exception {
 		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
@@ -60,6 +64,8 @@ public class TestClass extends JavaPlugin  {
 		 */
 		
 		//EntityType
+		
+		
 		
 		
 		
