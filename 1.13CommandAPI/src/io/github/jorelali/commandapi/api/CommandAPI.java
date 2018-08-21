@@ -2,6 +2,7 @@ package io.github.jorelali.commandapi.api;
 
 import java.util.LinkedHashMap;
 
+import io.github.jorelali.commandapi.api.CommandPermission.PermissionNode;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 
 /**
@@ -39,34 +40,46 @@ public class CommandAPI {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Registers a command
+	 * @param commandName The name of the command
+	 * @param args The mapping of arguments for the command
+	 * @param executor The command executor
+	 */
+	public void register(String commandName, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
+		register(commandName, new CommandPermission(PermissionNode.NONE), args, executor);
+	}	
 
 	/**
-	 * Register a new command
-	 * 
-	 * @param commandName
-	 *            The name of the command to register (e.g. "god"). A forward
-	 *            slash is not needed
-	 * @param args
-	 *            The mapping of argument descriptions to argument types, in the
-	 *            order of execution.
-	 * @param executor
-	 *            The code to run when this command is performed
+	 * Registers a command with aliases
+	 * @param commandName The name of the command
+	 * @param aliases The array of aliases which also run this command
+	 * @param args The mapping of arguments for the command
+	 * @param executor The command executor
+	 */
+	public void register(String commandName, String[] aliases, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
+		register(commandName, new CommandPermission(PermissionNode.NONE), aliases, args, executor);
+	}
+	
+	/**
+	 * Registers a command with permissions
+	 * @param commandName The name of the command
+	 * @param permissions The permissions required to run this command
+	 * @param args The mapping of arguments for the command
+	 * @param executor The command executor
 	 */
 	public void register(String commandName, CommandPermission permissions, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
 		register(commandName, permissions, new String[0], args, executor);
 	}
-	
+
 	/**
-	 * Register a new command
-	 * 
-	 * @param commandName
-	 *            The name of the command to register (e.g. "god"). A forward
-	 *            slash is not needed
-	 * @param args
-	 *            The mapping of argument descriptions to argument types, in the
-	 *            order of execution.
-	 * @param executor
-	 *            The code to run when this command is performed
+	 * Registers a command with permissions and aliases
+	 * @param commandName The name of the command
+	 * @param permissions The permissions required to run this command
+	 * @param aliases The array of aliases which also run this command
+	 * @param args The mapping of arguments for the command
+	 * @param executor The command executor
 	 */
 	public void register(String commandName, CommandPermission permissions, String[] aliases, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
 		try {
