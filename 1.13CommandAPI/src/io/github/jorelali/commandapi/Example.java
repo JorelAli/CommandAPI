@@ -6,8 +6,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import io.github.jorelali.commandapi.api.CommandAPI;
-import io.github.jorelali.commandapi.api.CommandPermission;
-import io.github.jorelali.commandapi.api.CommandPermission.PermissionNode;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.BooleanArgument;
 
@@ -32,7 +30,7 @@ public class Example extends JavaPlugin {
 		
 		//Register our command, god, with the arguments and a CommandExecutor which
 		//determines what happens when the command is run
-		CommandAPI.getInstance().register("god", new CommandPermission(PermissionNode.NONE), arguments, (sender, args) -> {
+		CommandAPI.getInstance().register("god", arguments, (sender, args) -> {
 			
 			//Checking if the sender of the command is a player
 			if(sender instanceof Player) {

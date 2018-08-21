@@ -263,25 +263,6 @@ public final class SemiReflector {
         	this.dispatcher.register((LiteralArgumentBuilder) reflectCommandDispatcherCommandName(str).requires(permission).redirect(resultantNode));
         }
         
-		
-		/**
-		 * TODO: Aliases:
-		 */
-		
-		//move reflectCommandDispatcherCommandName(commandName).then(outer) to separate variable and redirect
-		
-		//reflectCommandDispatcherCommandName("newCmd").redirect(/* reflectCommandDispatcherCommandName(commandName).then(outer) */);
-		
-		
-		/*
-		 * With permission support:
-		 * reflectCmd("a").requires -> (predicate).then(rest of everything)
-		 * reflectCmd("a").requires -> (predicate).redirect(location)
-		 */
-		// END OF TEST ALIAS CODE
-		
-		
-		
 		//Produce the commandDispatch.json file for debug purposes
 		if(DEBUG) {
 			File file = new File("commandDispatch.json");

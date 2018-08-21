@@ -6,7 +6,15 @@ public class CommandPermission {
 	private PermissionNode permissionNode;
 	
 	public enum PermissionNode {
-		OP, NONE;
+		/**
+		 * A player that has to be an operator to run a command
+		 */
+		OP, 
+		
+		/**
+		 * Command can be run with no permissions
+		 */
+		NONE;
 	}
 	
 	/**
