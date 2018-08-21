@@ -16,7 +16,7 @@ public class EntityTypeArgument implements Argument {
 	 */
 	public EntityTypeArgument() {
 		try {
-			rawType = (ArgumentType<?>) ArgumentUtil.getNMS("ArgumentEntity").getDeclaredMethod("a").invoke(null);
+			rawType = (ArgumentType<?>) ArgumentUtil.getNMS("ArgumentEntitySummon").getDeclaredMethod("a").invoke(null);
 		} catch (IllegalAccessException | ClassNotFoundException | IllegalArgumentException | SecurityException | InvocationTargetException | NoSuchMethodException e) {
 			e.printStackTrace();
 		}

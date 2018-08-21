@@ -16,8 +16,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_13_R1.CraftWorld;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
@@ -37,6 +38,10 @@ import io.github.jorelali.commandapi.api.arguments.LocationArgument;
 import io.github.jorelali.commandapi.api.arguments.ParticleArgument;
 import io.github.jorelali.commandapi.api.arguments.PlayerArgument;
 import io.github.jorelali.commandapi.api.arguments.PotionEffectArgument;
+import net.minecraft.server.v1_13_R1.ArgumentEntitySummon;
+import net.minecraft.server.v1_13_R1.EntityTypes;
+import net.minecraft.server.v1_13_R1.MinecraftKey;
+import net.minecraft.server.v1_13_R1.World;
 
 //Only uses reflection for NMS
 @SuppressWarnings({"rawtypes", "unchecked"})
@@ -157,13 +162,17 @@ public final class SemiReflector {
 						}
 					} else if(entry.getValue() instanceof EntityTypeArgument) {
 						try {
-							
 							Object minecraftKey = getNMSClass("ArgumentEntitySummon").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-							Object entity = getNMSClass("EntityTypes").getDeclaredMethod("a", getNMSClass("World"), getNMSClass("MinecraftKey")).invoke(null, null, minecraftKey);
-							Object craftEntity = entity.getClass().getDeclaredMethod("getBukkitEntity").invoke(entity);
 							
-							arr[count] = (Entity) craftEntity;
-						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+							Object craftWorld = getOBCClass("CraftWorld").cast(((Player)sender).getWorld());
+							Object handle = craftWorld.getClass().getDeclaredMethod("getHandle").invoke(craftWorld);
+							Object minecraftWorld = getNMSClass("World").cast(handle);
+							
+							Object entity = getNMSClass("EntityTypes").getDeclaredMethod("a", getNMSClass("World"), getNMSClass("MinecraftKey")).invoke(null, minecraftWorld, minecraftKey);
+							Object entityCasted = getNMSClass("Entity").cast(entity);
+							Object bukkitEntity = getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(entityCasted);
+							arr[count] = (EntityType) bukkitEntity.getClass().getDeclaredMethod("getType").invoke(bukkitEntity);
+						} catch (Exception e) {
 							e.printStackTrace();
 						}
 					} else if(entry.getValue() instanceof PlayerArgument) {

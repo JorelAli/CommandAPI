@@ -1,22 +1,22 @@
 package io.github.jorelali.commandapi;
 
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 
-import org.bukkit.Particle;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import io.github.jorelali.commandapi.api.CommandAPI;
 import io.github.jorelali.commandapi.api.arguments.Argument;
+import io.github.jorelali.commandapi.api.arguments.EntityTypeArgument;
 import io.github.jorelali.commandapi.api.arguments.IntegerArgument;
 import io.github.jorelali.commandapi.api.arguments.ItemStackArgument;
-import net.minecraft.server.v1_13_R1.ArgumentRegistry;
-import net.minecraft.server.v1_13_R1.ArgumentSerializerVoid;
-import net.minecraft.server.v1_13_R1.MinecraftKey;
+import io.github.jorelali.commandapi.api.arguments.LocationArgument;
+import io.github.jorelali.commandapi.api.arguments.PlayerArgument;
+import net.minecraft.server.v1_13_R1.EntityPig;
 
 public class TestClass extends JavaPlugin  {
 			
@@ -25,12 +25,11 @@ public class TestClass extends JavaPlugin  {
 	 */
 	
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public void onEnable() {
 		try {
 			
-			//playerTest();
+			playerTest();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -54,18 +53,20 @@ public class TestClass extends JavaPlugin  {
 		 * ---------------------------------------------------	
 		 * Particles 		COMPLETE	TESTED		
 		 * Potion Effects	COMPLETE	TESTED
-		 * ChatColor		COMPLETE
-		 * Enchanting		COMPLETE
-		 * Entity types		COMPLETE
-		 * Players			COMPLETE
-		 * Locations		COMPLETE					Assumes sender is player
-		 * 
+		 * ChatColor		COMPLETE	TESTED
+		 * Enchanting		COMPLETE	TESTED
+		 * Entity types		COMPLETE	TESTED
+		 * Players			COMPLETE	TESTED
+		 * Locations		COMPLETE	TESTED			Assumes sender is player
 		 * Enums			DROPPED
 		 */
 		
 		//EntityType
 		
 		
+		arguments.put("entity", new EntityTypeArgument());
+		//arguments.put("player", new PlayerArgument());
+		//arguments.put("loc", new LocationArgument());
 		
 		
 		
@@ -84,8 +85,9 @@ public class TestClass extends JavaPlugin  {
 		//Register the command
 		CommandAPI.getInstance().register("ztp", arguments, (sender, args) -> {
 			Player player = (Player) sender;
-			player.addPotionEffect(new PotionEffect((PotionEffectType) args[0], 10000, 2));
-			player.getLocation().getWorld().spawnParticle((Particle) args[1], player.getLocation(), 50);
+			player.getWorld().spawnEntity(player.getLocation(), (EntityType) args[0]);
+			//((Player) args[0]).setGameMode(GameMode.SURVIVAL);
+			//player.teleport((Location) args[1]);
 			});
 		
 	}
