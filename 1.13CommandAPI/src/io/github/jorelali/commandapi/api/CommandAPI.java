@@ -53,11 +53,7 @@ public class CommandAPI {
 	 *            The code to run when this command is performed
 	 */
 	public void register(String commandName, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
-		try {
-			reflector.register(commandName, args, executor);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		register(commandName, new String[0], args, executor);
 	}
 	
 	/**
@@ -74,7 +70,7 @@ public class CommandAPI {
 	 */
 	public void register(String commandName, String[] aliases, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
 		try {
-			reflector.register(commandName, args, executor);
+			reflector.register(commandName, aliases, args, executor);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

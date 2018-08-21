@@ -27,6 +27,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.ChatColorArgument;
@@ -192,7 +193,7 @@ public final class SemiReflector {
 	}
 	
 	//Builds our NMS command using the given arguments for this method, then registers it
-	protected void register(String commandName, final LinkedHashMap<String, Argument> args, CommandExecutor executor) throws Exception {
+	protected void register(String commandName, String[] aliases, final LinkedHashMap<String, Argument> args, CommandExecutor executor) throws Exception {
 		
 		Command command = generateCommand(commandName, args, executor);
 				
@@ -217,8 +218,14 @@ public final class SemiReflector {
         	outer = reflectCommandDispatcherArgument(keys.get(i), args.get(keys.get(i)).getRawType()).then(outer);
         }
 
-        //Link command name to first argument
-		this.dispatcher.register(reflectCommandDispatcherCommandName(commandName).then(outer));
+        //Link command name to first argument and register        
+        LiteralCommandNode resultantNode = this.dispatcher.register(reflectCommandDispatcherCommandName(commandName).then(outer));
+        
+        //Register aliases
+        for(String str : aliases) {
+        	this.dispatcher.register(reflectCommandDispatcherCommandName(str).redirect(resultantNode));
+        }
+        
 		
 		/**
 		 * TODO: Aliases:

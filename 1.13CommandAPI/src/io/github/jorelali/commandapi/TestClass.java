@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import io.github.jorelali.commandapi.api.CommandAPI;
