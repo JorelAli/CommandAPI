@@ -59,4 +59,24 @@ public class CommandAPI {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Register a new command
+	 * 
+	 * @param commandName
+	 *            The name of the command to register (e.g. "god"). A forward
+	 *            slash is not needed
+	 * @param args
+	 *            The mapping of argument descriptions to argument types, in the
+	 *            order of execution.
+	 * @param executor
+	 *            The code to run when this command is performed
+	 */
+	public void register(String commandName, String[] aliases, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
+		try {
+			reflector.register(commandName, args, executor);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

@@ -31,6 +31,14 @@ public class TestClass extends JavaPlugin  {
 		
 	}
 	
+	/**
+	 * List of things to do!
+	 * Thing			COMPLETION	TEST STATUS		ISSUES
+	 * ---------------------------------------------------	
+	 * Permissions
+	 * Aliases		
+	 */
+	
 	public void playerTest() throws Exception {
 		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 		
