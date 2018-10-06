@@ -267,10 +267,12 @@ public final class SemiReflector {
         	//Generate CommandSender object
 			CommandSender sender = null;
 			try {
-				Object entity = cmdSender.getClass().getDeclaredMethod("g").invoke(cmdSender);
-	        	sender = (CommandSender) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(entity);
+				sender = (CommandSender) cmdSender.getClass().getDeclaredMethod("getBukkitSender").invoke(cmdSender);
+				//Object entity = cmdSender.getClass().getDeclaredMethod("f").invoke(cmdSender);
+				//sender = (CommandSender) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(entity);
+				
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
-					| NoSuchMethodException | SecurityException | ClassNotFoundException e) {
+					| NoSuchMethodException | SecurityException e) {
 				e.printStackTrace();
 			}
 
