@@ -29,6 +29,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import io.github.jorelali.commandapi.api.CommandPermission.PermissionNode;
@@ -196,31 +197,56 @@ public final class SemiReflector {
 							switch(argument.getEntitySelector()) {
 								case MANY_ENTITIES:
 								default:
-									Collection<?> collectionOfEntities = (Collection<?>) getNMSClass("ArgumentEntity").getDeclaredMethod("c", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-									Collection<Entity> entities = new ArrayList<>();
-									for(Object nmsEntity : collectionOfEntities) {
-										entities.add((Entity) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(nmsEntity));
+									try {
+										Collection<?> collectionOfEntities = (Collection<?>) getNMSClass("ArgumentEntity").getDeclaredMethod("c", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+										Collection<Entity> entities = new ArrayList<>();
+										for(Object nmsEntity : collectionOfEntities) {
+											entities.add((Entity) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(nmsEntity));
+										}
+										arr[count] = entities; 
 									}
-									arr[count] = entities;
+									catch(InvocationTargetException e) {
+										if(e.getCause() instanceof CommandSyntaxException) {
+											arr[count] = (Collection<Entity>) new ArrayList<Entity>(); 
+										}
+									}
 									break;
 								case MANY_PLAYERS:
-									Collection<?> collectionOfPlayers = (Collection<?>) getNMSClass("ArgumentEntity").getDeclaredMethod("d", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-									Collection<Player> players = new ArrayList<>();
-									for(Object nmsPlayer : collectionOfPlayers) {
-										players.add((Player) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(nmsPlayer));
+									try {
+										Collection<?> collectionOfPlayers = (Collection<?>) getNMSClass("ArgumentEntity").getDeclaredMethod("d", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+										Collection<Player> players = new ArrayList<>();
+										for(Object nmsPlayer : collectionOfPlayers) {
+											players.add((Player) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(nmsPlayer));
+										}
+										arr[count] = players;
+									} catch(InvocationTargetException e) {
+										if(e.getCause() instanceof CommandSyntaxException) {
+											arr[count] = (Collection<Player>) new ArrayList<Player>(); 
+										}
 									}
-									arr[count] = players;
 									break;
 								case ONE_ENTITY:
-									Object entity = (Object) getNMSClass("ArgumentEntity").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-									arr[count] = (Entity) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(entity);
+									try {
+										Object entity = (Object) getNMSClass("ArgumentEntity").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+										arr[count] = (Entity) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(entity);
+									} catch(InvocationTargetException e) {
+										if(e.getCause() instanceof CommandSyntaxException) {
+											throw (CommandSyntaxException) e.getCause();
+										}
+									}
 									break;
 								case ONE_PLAYER:
-									Object player = (Object) getNMSClass("ArgumentEntity").getDeclaredMethod("e", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-									arr[count] = (Player) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(player);
+									try {
+										Object player = (Object) getNMSClass("ArgumentEntity").getDeclaredMethod("e", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+										arr[count] = (Player) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(player);
+									} catch(InvocationTargetException e) {
+										if(e.getCause() instanceof CommandSyntaxException) {
+											throw (CommandSyntaxException) e.getCause();
+										}
+									}
 									break;								
 							}
-						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException e) {
 							e.printStackTrace();
 						}
 					} 
