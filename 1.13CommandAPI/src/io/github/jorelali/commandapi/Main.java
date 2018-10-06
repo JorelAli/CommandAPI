@@ -14,35 +14,41 @@ import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.Entity
 
 public class Main extends JavaPlugin {
 
+	final static private boolean TEST = false;
+	
 	@Override
 	public void onEnable() {
 		//Nothing required here, just need
 		//to state that this is a plugin so
 		//other plugins can depend on it
 		
-		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-		arguments.put("player", new EntitySelectorArgument(EntitySelector.ONE_PLAYER));
-		CommandAPI.getInstance().register("apioneplayer", arguments, (sender, args) -> {
-			((Player) args[0]).sendMessage("hello");
-		});
+		if(TEST) {
 		
-		arguments = new LinkedHashMap<>();
-		arguments.put("players", new EntitySelectorArgument(EntitySelector.MANY_PLAYERS));
-		CommandAPI.getInstance().register("apimanyplayers", arguments, (sender, args) -> {
-			((Collection<Player>) args[0]).forEach(p -> p.sendMessage("hi"));
-		});
+			LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+			arguments.put("player", new EntitySelectorArgument(EntitySelector.ONE_PLAYER));
+			CommandAPI.getInstance().register("apioneplayer", arguments, (sender, args) -> {
+				((Player) args[0]).sendMessage("hello");
+			});
+			
+			arguments = new LinkedHashMap<>();
+			arguments.put("players", new EntitySelectorArgument(EntitySelector.MANY_PLAYERS));
+			CommandAPI.getInstance().register("apimanyplayers", arguments, (sender, args) -> {
+				((Collection<Player>) args[0]).forEach(p -> p.sendMessage("hi"));
+			});
+			
+			arguments = new LinkedHashMap<>();
+			arguments.put("entity", new EntitySelectorArgument(EntitySelector.ONE_ENTITY));
+			CommandAPI.getInstance().register("apioneentity", arguments, (sender, args) -> {
+				((Entity) args[0]).remove();
+			});
+			
+			arguments = new LinkedHashMap<>();
+			arguments.put("entities", new EntitySelectorArgument(EntitySelector.MANY_ENTITIES));
+			CommandAPI.getInstance().register("apimanyentities", arguments, (sender, args) -> {
+				((Collection<Entity>) args[0]).forEach(e -> e.remove());
+			});
 		
-		arguments = new LinkedHashMap<>();
-		arguments.put("entity", new EntitySelectorArgument(EntitySelector.ONE_ENTITY));
-		CommandAPI.getInstance().register("apioneentity", arguments, (sender, args) -> {
-			((Entity) args[0]).remove();
-		});
-		
-		arguments = new LinkedHashMap<>();
-		arguments.put("entities", new EntitySelectorArgument(EntitySelector.MANY_ENTITIES));
-		CommandAPI.getInstance().register("apimanyentities", arguments, (sender, args) -> {
-			((Collection<Entity>) args[0]).forEach(e -> e.remove());
-		});
+		}
 	}
 	
 }
