@@ -18,6 +18,7 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -34,6 +35,7 @@ import io.github.jorelali.commandapi.api.CommandPermission.PermissionNode;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.ChatColorArgument;
 import io.github.jorelali.commandapi.api.arguments.EnchantmentArgument;
+import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument;
 import io.github.jorelali.commandapi.api.arguments.EntityTypeArgument;
 import io.github.jorelali.commandapi.api.arguments.ItemStackArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationArgument;
@@ -179,6 +181,45 @@ public final class SemiReflector {
 							Object first = collectionOfPlayers.iterator().next();
 							UUID uuid = (UUID) first.getClass().getDeclaredMethod("getId").invoke(first);
 							arr[count] = Bukkit.getPlayer(uuid);
+						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+							e.printStackTrace();
+						}
+					} else if(entry.getValue() instanceof EntitySelectorArgument) {
+						try {
+							/*
+							 * single entity -> a
+							 * many entities -> c (b if exception on empty)
+							 * single player -> e
+							 * many players  -> d (f if exception on empty)
+							 */
+							EntitySelectorArgument argument = (EntitySelectorArgument) entry.getValue();
+							switch(argument.getEntitySelector()) {
+								case MANY_ENTITIES:
+								default:
+									Collection<?> collectionOfEntities = (Collection<?>) getNMSClass("ArgumentEntity").getDeclaredMethod("c", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+									Collection<Entity> entities = new ArrayList<>();
+									for(Object nmsEntity : collectionOfEntities) {
+										entities.add((Entity) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(nmsEntity));
+									}
+									arr[count] = entities;
+									break;
+								case MANY_PLAYERS:
+									Collection<?> collectionOfPlayers = (Collection<?>) getNMSClass("ArgumentEntity").getDeclaredMethod("d", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+									Collection<Player> players = new ArrayList<>();
+									for(Object nmsPlayer : collectionOfPlayers) {
+										players.add((Player) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(nmsPlayer));
+									}
+									arr[count] = players;
+									break;
+								case ONE_ENTITY:
+									Object entity = (Object) getNMSClass("ArgumentEntity").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+									arr[count] = (Entity) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(entity);
+									break;
+								case ONE_PLAYER:
+									Object player = (Object) getNMSClass("ArgumentEntity").getDeclaredMethod("e", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+									arr[count] = (Player) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(player);
+									break;								
+							}
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 							e.printStackTrace();
 						}
