@@ -32,5 +32,8 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 - Arguments require a description to identify them
 
 ## Usage
-
-Check out the [latest documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.2%20Documentation.md)
+Click the link below for the relevant documentation:
+* CommandAPI Version 1.0 [documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.0%20Documentation.md)
+* CommandAPI Version 1.1 [documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.1%20Documentation.md)
+* CommandAPI Version 1.2 [documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.2%20Documentation.md)
+* Master branch [documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.3%20Documentation.md)
