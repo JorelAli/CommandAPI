@@ -16,6 +16,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.World;
+import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -94,7 +96,7 @@ public final class SemiReflector {
 					| NoSuchMethodException | SecurityException | ClassNotFoundException e) {
 				e.printStackTrace();
 			}
-
+			
 			//Array for arguments for executor
 			Object[] arr = new Object[args.size()];
 			
@@ -157,15 +159,16 @@ public final class SemiReflector {
 							double x = vec3D.getClass().getDeclaredField("x").getDouble(vec3D);
 							double y = vec3D.getClass().getDeclaredField("y").getDouble(vec3D);
 							double z = vec3D.getClass().getDeclaredField("z").getDouble(vec3D);
-							arr[count] = new Location(((Player) sender).getWorld(), x, y, z);
+							World world = sender instanceof BlockCommandSender ? ((BlockCommandSender) sender).getBlock().getWorld() : ((Entity) sender).getWorld();
+							arr[count] = new Location(world, x, y, z);
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchFieldException e) {
 							e.printStackTrace();
 						}
 					} else if(entry.getValue() instanceof EntityTypeArgument) {
 						try {
 							Object minecraftKey = getNMSClass("ArgumentEntitySummon").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-							
-							Object craftWorld = getOBCClass("CraftWorld").cast(((Player)sender).getWorld());
+							World world = sender instanceof BlockCommandSender ? ((BlockCommandSender) sender).getBlock().getWorld() : ((Entity) sender).getWorld();
+							Object craftWorld = getOBCClass("CraftWorld").cast(world);
 							Object handle = craftWorld.getClass().getDeclaredMethod("getHandle").invoke(craftWorld);
 							Object minecraftWorld = getNMSClass("World").cast(handle);
 							

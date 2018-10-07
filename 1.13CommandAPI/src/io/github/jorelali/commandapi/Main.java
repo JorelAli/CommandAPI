@@ -3,6 +3,8 @@ package io.github.jorelali.commandapi;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -11,6 +13,7 @@ import io.github.jorelali.commandapi.api.CommandAPI;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
+import io.github.jorelali.commandapi.api.arguments.LocationArgument;
 
 public class Main extends JavaPlugin {
 
@@ -48,6 +51,12 @@ public class Main extends JavaPlugin {
 				((Collection<Entity>) args[0]).forEach(e -> e.remove());
 			});
 		
+			arguments.clear();
+			arguments.put("location", new LocationArgument());
+			CommandAPI.getInstance().register("setcustloc", arguments, (sender, args) -> {
+				Location loc = (Location) args[0];
+				loc.getBlock().setType(Material.GOLD_BLOCK);
+			});
 		}
 	}
 	
