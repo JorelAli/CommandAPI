@@ -315,25 +315,36 @@ public final class SemiReflector {
 		 * CommandName -> Args1 -> Args2 -> ... -> ArgsN -> Executor
 		 */
 		
-		//List of keys for reverse iteration
-        ArrayList<String> keys = new ArrayList<>(args.keySet());
+		if(args.isEmpty()) {
+			//Link command name to the executor
+	        LiteralCommandNode resultantNode = this.dispatcher.register((LiteralArgumentBuilder) reflectCommandDispatcherCommandName(commandName).requires(permission).executes(command));
+	        
+	        //Register aliases
+	        for(String str : aliases) {
+	        	this.dispatcher.register((LiteralArgumentBuilder) reflectCommandDispatcherCommandName(str).requires(permission).redirect(resultantNode));
+	        }
+		} else {
+			//List of keys for reverse iteration
+	        ArrayList<String> keys = new ArrayList<>(args.keySet());
 
-        //Link the last element to the executor
-        RequiredArgumentBuilder inner = reflectCommandDispatcherArgument(keys.get(keys.size() - 1), args.get(keys.get(keys.size() - 1)).getRawType()).executes(command);
+	        //Link the last element to the executor
+	        RequiredArgumentBuilder inner = reflectCommandDispatcherArgument(keys.get(keys.size() - 1), args.get(keys.get(keys.size() - 1)).getRawType()).executes(command);
 
-        //Link everything else up, except the first
-        RequiredArgumentBuilder outer = inner;
-        for(int i = keys.size() - 2; i >= 0; i--) {
-        	outer = reflectCommandDispatcherArgument(keys.get(i), args.get(keys.get(i)).getRawType()).then(outer);
-        }        
-        
-        //Link command name to first argument and register        
-        LiteralCommandNode resultantNode = this.dispatcher.register((LiteralArgumentBuilder) reflectCommandDispatcherCommandName(commandName).requires(permission).then(outer));
-        
-        //Register aliases
-        for(String str : aliases) {
-        	this.dispatcher.register((LiteralArgumentBuilder) reflectCommandDispatcherCommandName(str).requires(permission).redirect(resultantNode));
-        }
+	        //Link everything else up, except the first
+	        RequiredArgumentBuilder outer = inner;
+	        for(int i = keys.size() - 2; i >= 0; i--) {
+	        	outer = reflectCommandDispatcherArgument(keys.get(i), args.get(keys.get(i)).getRawType()).then(outer);
+	        }        
+	        
+	        //Link command name to first argument and register        
+	        LiteralCommandNode resultantNode = this.dispatcher.register((LiteralArgumentBuilder) reflectCommandDispatcherCommandName(commandName).requires(permission).then(outer));
+	        
+	        //Register aliases
+	        for(String str : aliases) {
+	        	this.dispatcher.register((LiteralArgumentBuilder) reflectCommandDispatcherCommandName(str).requires(permission).redirect(resultantNode));
+	        }
+		}
+		
         
 		//Produce the commandDispatch.json file for debug purposes
 		if(DEBUG) {

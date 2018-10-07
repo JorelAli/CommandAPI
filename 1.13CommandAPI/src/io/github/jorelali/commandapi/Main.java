@@ -3,6 +3,7 @@ package io.github.jorelali.commandapi;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -56,6 +57,15 @@ public class Main extends JavaPlugin {
 			CommandAPI.getInstance().register("setcustloc", arguments, (sender, args) -> {
 				Location loc = (Location) args[0];
 				loc.getBlock().setType(Material.GOLD_BLOCK);
+			});
+			
+			arguments.clear();
+			CommandAPI.getInstance().register("noarg", arguments, (sender, args) -> {
+				Bukkit.broadcastMessage("woop");
+			});
+			
+			CommandAPI.getInstance().register("noarg2", null, (sender, args) -> {
+				Bukkit.broadcastMessage("woop2");
 			});
 		}
 	}

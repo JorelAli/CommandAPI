@@ -81,8 +81,11 @@ public class CommandAPI {
 	 * @param args The mapping of arguments for the command
 	 * @param executor The command executor
 	 */
-	public void register(String commandName, CommandPermission permissions, String[] aliases, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
+	public void register(String commandName, CommandPermission permissions, String[] aliases, LinkedHashMap<String, Argument> args, CommandExecutor executor) {
 		try {
+			if(args == null) {
+				args = new LinkedHashMap<>();
+			}
 			reflector.register(commandName, permissions, aliases, args, executor);
 		} catch (Exception e) {
 			e.printStackTrace();
