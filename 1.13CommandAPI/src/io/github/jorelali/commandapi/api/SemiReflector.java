@@ -2,9 +2,12 @@ package io.github.jorelali.commandapi.api;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.annotation.Native;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -19,6 +22,7 @@ import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -84,26 +88,87 @@ public final class SemiReflector {
 		
 	}
 	
+//	private CommandSender reconstruct(CommandContext cmdCtx) {
+//		
+//		cmdCtx.getSource();
+//		//Base = ACTUAL COMMAND SENDER.
+//		ProxiedCommandSender s = null;
+//		ProxiedNativeCommandSender z = null;
+//		//Plan: Create a new proxied command sender.
+//		
+//		Object a = (arg) -> {
+//			return ((CommandListenerWrapper) arg.getSource())
+//					.a(((CommandListenerWrapper) arg.getSource()).getServer().a(DimensionManager.THE_END));
+//		}
+//		
+//		
+//		
+//		return null;
+//		
+//	}
+	
 	private Command generateCommand(String commandName, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
 		//Generate our command from executor
 		return (cmdCtx) -> {
 			
-			System.out.println(cmdCtx.getChild().getSource());
+			/*
+			 * Finding out the type of S, in cmdCtx. 
+			 */
+			//System.out.println(cmdCtx.getSource().getClass());
+			
+			
+			
+			
+//			@Nullable
+//			public Entity f() {
+//				return this.k;
+//			}
+			
+			
+			
+//			try {
+////				
+////				Field f = cmdCtx.getClass().getDeclaredField("source");
+////				f.setAccessible(true);
+////				ParameterizedType type = (ParameterizedType) f.getGenericType();
+////				System.out.println("type args: " + (Class<?>) type.getActualTypeArguments()[0]);
+//			} catch (NoSuchFieldException | SecurityException e1) {
+//				System.out.println("Error trying to reflect type args");
+//			}
+
+			
+			//System.out.println(cmdCtx.getChild().getSource());
 			
 			//Get the CommandSender via NMS
 			CommandSender sender = null;
 			
-			CommandSender alt = null;
 			try {
 				sender = (CommandSender) getNMSClass("CommandListenerWrapper").getDeclaredMethod("getBukkitSender").invoke(cmdCtx.getSource());
-				if(cmdCtx.getChild() != null) {
-					alt = (CommandSender) getNMSClass("CommandListenerWrapper").getDeclaredMethod("getBukkitSender").invoke(cmdCtx.getChild().getSource());
-					System.out.println("altClass: " + alt.getClass().getName());
-				}
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
 					| NoSuchMethodException | SecurityException | ClassNotFoundException e) {
 				e.printStackTrace();
 			}
+			
+			try {
+				Object proxyEntity = cmdCtx.getSource().getClass().getDeclaredMethod("f").invoke(cmdCtx.getSource());
+				
+				if(proxyEntity != null) {
+					CommandSender proxy = (CommandSender) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(proxyEntity);
+					
+					Class proxyClass = getOBCClass("command.ProxiedNativeCommandSender");
+					Constructor proxyConstructor = proxyClass.getConstructor(getNMSClass("CommandListenerWrapper"), CommandSender.class, CommandSender.class);
+					Object proxyInstance = proxyConstructor.newInstance(cmdCtx.getSource(), sender, proxy);
+					sender = (ProxiedCommandSender) proxyInstance;
+				}
+				
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+					| NoSuchMethodException | SecurityException | ClassNotFoundException | InstantiationException e1) {
+				System.out.println("Reflection err");
+				e1.printStackTrace(System.out);
+			}
+			
+			
+			
 			
 			//Array for arguments for executor
 			Object[] arr = new Object[args.size()];

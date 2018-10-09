@@ -6,7 +6,10 @@ import java.util.LinkedHashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -71,6 +74,17 @@ public class Main extends JavaPlugin {
 			CommandAPI.getInstance().register("custexec", null, (sender, args) -> {
 				System.out.println(sender.getClass());
 			});
+			
+			CommandAPI.getInstance().register("custkill", null, (sender, args) -> {
+				if(sender instanceof ProxiedCommandSender) {
+					CommandSender callee = ((ProxiedCommandSender) sender).getCallee();
+					if(callee instanceof LivingEntity) {
+						((LivingEntity) callee).setHealth(0);
+					}
+				}
+				
+			});
+						
 		}
 	}
 	
