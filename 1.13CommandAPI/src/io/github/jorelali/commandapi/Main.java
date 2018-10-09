@@ -18,7 +18,7 @@ import io.github.jorelali.commandapi.api.arguments.LocationArgument;
 
 public class Main extends JavaPlugin {
 
-	final static private boolean TEST = false;
+	final static private boolean TEST = true;
 	
 	@Override
 	public void onEnable() {
@@ -66,6 +66,10 @@ public class Main extends JavaPlugin {
 			
 			CommandAPI.getInstance().register("noarg2", null, (sender, args) -> {
 				Bukkit.broadcastMessage("woop2");
+			});
+			
+			CommandAPI.getInstance().register("custexec", null, (sender, args) -> {
+				System.out.println(sender.getClass());
 			});
 		}
 	}

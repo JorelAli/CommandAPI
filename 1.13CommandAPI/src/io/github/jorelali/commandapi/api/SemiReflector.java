@@ -88,10 +88,18 @@ public final class SemiReflector {
 		//Generate our command from executor
 		return (cmdCtx) -> {
 			
+			System.out.println(cmdCtx.getChild().getSource());
+			
 			//Get the CommandSender via NMS
 			CommandSender sender = null;
+			
+			CommandSender alt = null;
 			try {
 				sender = (CommandSender) getNMSClass("CommandListenerWrapper").getDeclaredMethod("getBukkitSender").invoke(cmdCtx.getSource());
+				if(cmdCtx.getChild() != null) {
+					alt = (CommandSender) getNMSClass("CommandListenerWrapper").getDeclaredMethod("getBukkitSender").invoke(cmdCtx.getChild().getSource());
+					System.out.println("altClass: " + alt.getClass().getName());
+				}
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
 					| NoSuchMethodException | SecurityException | ClassNotFoundException e) {
 				e.printStackTrace();
