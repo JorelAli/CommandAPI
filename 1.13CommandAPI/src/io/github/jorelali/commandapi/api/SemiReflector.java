@@ -19,6 +19,7 @@ import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -84,19 +85,56 @@ public final class SemiReflector {
 		
 	}
 	
+	//Returns the world in which a command sender is from
+	private World getCommandSenderWorld(CommandSender sender) {
+		if(sender instanceof BlockCommandSender) {
+			return ((BlockCommandSender) sender).getBlock().getWorld();
+		} else if(sender instanceof ProxiedCommandSender) {
+			CommandSender callee = ((ProxiedCommandSender) sender).getCallee();
+			if(callee instanceof Entity) {
+				return ((Entity) callee).getWorld();
+			} else {
+				return null;
+			}
+		} else if(sender instanceof Entity) {
+			return ((Entity) sender).getWorld();
+		} else {
+			return null;
+		}
+	}
+	
 	private Command generateCommand(String commandName, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
 		//Generate our command from executor
 		return (cmdCtx) -> {
-			
+
 			//Get the CommandSender via NMS
 			CommandSender sender = null;
+			
 			try {
 				sender = (CommandSender) getNMSClass("CommandListenerWrapper").getDeclaredMethod("getBukkitSender").invoke(cmdCtx.getSource());
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
 					| NoSuchMethodException | SecurityException | ClassNotFoundException e) {
-				e.printStackTrace();
+				e.printStackTrace(System.out);
 			}
 			
+			//Handle proxied command senders via /execute as [Proxy]
+			try {
+				Object proxyEntity = cmdCtx.getSource().getClass().getDeclaredMethod("f").invoke(cmdCtx.getSource());
+				
+				if(proxyEntity != null) {
+					CommandSender proxy = (CommandSender) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(proxyEntity);
+					
+					Class proxyClass = getOBCClass("command.ProxiedNativeCommandSender");
+					Constructor proxyConstructor = proxyClass.getConstructor(getNMSClass("CommandListenerWrapper"), CommandSender.class, CommandSender.class);
+					Object proxyInstance = proxyConstructor.newInstance(cmdCtx.getSource(), sender, proxy);
+					sender = (ProxiedCommandSender) proxyInstance;
+				}
+				
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+					| NoSuchMethodException | SecurityException | ClassNotFoundException | InstantiationException e1) {
+				e1.printStackTrace(System.out);
+			}
+						
 			//Array for arguments for executor
 			Object[] arr = new Object[args.size()];
 			
@@ -159,7 +197,7 @@ public final class SemiReflector {
 							double x = vec3D.getClass().getDeclaredField("x").getDouble(vec3D);
 							double y = vec3D.getClass().getDeclaredField("y").getDouble(vec3D);
 							double z = vec3D.getClass().getDeclaredField("z").getDouble(vec3D);
-							World world = sender instanceof BlockCommandSender ? ((BlockCommandSender) sender).getBlock().getWorld() : ((Entity) sender).getWorld();
+							World world = getCommandSenderWorld(sender);
 							arr[count] = new Location(world, x, y, z);
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchFieldException e) {
 							e.printStackTrace();
@@ -167,7 +205,7 @@ public final class SemiReflector {
 					} else if(entry.getValue() instanceof EntityTypeArgument) {
 						try {
 							Object minecraftKey = getNMSClass("ArgumentEntitySummon").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-							World world = sender instanceof BlockCommandSender ? ((BlockCommandSender) sender).getBlock().getWorld() : ((Entity) sender).getWorld();
+							World world = getCommandSenderWorld(sender);
 							Object craftWorld = getOBCClass("CraftWorld").cast(world);
 							Object handle = craftWorld.getClass().getDeclaredMethod("getHandle").invoke(craftWorld);
 							Object minecraftWorld = getNMSClass("World").cast(handle);
