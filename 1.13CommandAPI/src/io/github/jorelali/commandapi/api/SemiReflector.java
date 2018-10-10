@@ -42,6 +42,7 @@ import io.github.jorelali.commandapi.api.arguments.EnchantmentArgument;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument;
 import io.github.jorelali.commandapi.api.arguments.EntityTypeArgument;
 import io.github.jorelali.commandapi.api.arguments.ItemStackArgument;
+import io.github.jorelali.commandapi.api.arguments.LiteralArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationArgument;
 import io.github.jorelali.commandapi.api.arguments.ParticleArgument;
 import io.github.jorelali.commandapi.api.arguments.PlayerArgument;
@@ -145,6 +146,13 @@ public final class SemiReflector {
 				if(entry.getValue().isSimple()) {
 					arr[count] = cmdCtx.getArgument(entry.getKey(), entry.getValue().getPrimitiveType());
 				} else {
+					
+					//Deal with literal arguments
+					if(entry.getValue() instanceof LiteralArgument) {
+						//Do some stuff here
+						LiteralArgument arg = (LiteralArgument) entry.getValue();
+						arr[count] = arg.getLiteral();
+					} else 
 					
 					//Deal with complex argument types
 					
