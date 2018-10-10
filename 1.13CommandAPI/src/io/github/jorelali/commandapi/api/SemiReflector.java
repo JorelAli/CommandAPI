@@ -29,6 +29,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -149,14 +150,10 @@ public final class SemiReflector {
 					
 					//Deal with literal arguments
 					if(entry.getValue() instanceof LiteralArgument) {
-						//Do some stuff here
 						LiteralArgument arg = (LiteralArgument) entry.getValue();
+						System.out.println(arg.getLiteral());
 						arr[count] = arg.getLiteral();
-					} else 
-					
-					//Deal with complex argument types
-					
-					if(entry.getValue() instanceof ItemStackArgument) {
+					} else if(entry.getValue() instanceof ItemStackArgument) {
 						try {
 							//Parse Bukkit ItemStack from NMS 
 							Method asBukkitCopy = getOBCClass("inventory.CraftItemStack").getDeclaredMethod("asBukkitCopy", getNMSClass("ItemStack"));
@@ -374,12 +371,25 @@ public final class SemiReflector {
 	        ArrayList<String> keys = new ArrayList<>(args.keySet());
 
 	        //Link the last element to the executor
-	        RequiredArgumentBuilder inner = reflectCommandDispatcherArgument(keys.get(keys.size() - 1), args.get(keys.get(keys.size() - 1)).getRawType()).executes(command);
+	        ArgumentBuilder inner;
+	        Argument innerArg = args.get(keys.get(keys.size() - 1));
+	        if(innerArg instanceof LiteralArgument) {
+	        	LiteralArgumentBuilder literalBuilder = ((LiteralArgument) innerArg).getLiteralArgumentBuilder();
+	        	inner = literalBuilder.executes(command);
+	        } else {
+	        	inner = reflectCommandDispatcherArgument(keys.get(keys.size() - 1), innerArg.getRawType()).executes(command);
+	        }
 
 	        //Link everything else up, except the first
-	        RequiredArgumentBuilder outer = inner;
+	        ArgumentBuilder outer = inner;
 	        for(int i = keys.size() - 2; i >= 0; i--) {
-	        	outer = reflectCommandDispatcherArgument(keys.get(i), args.get(keys.get(i)).getRawType()).then(outer);
+	        	Argument outerArg = args.get(keys.get(i));
+	        	if(outerArg instanceof LiteralArgument) {
+	        		LiteralArgumentBuilder literalBuilder = ((LiteralArgument) outerArg).getLiteralArgumentBuilder();
+	        		outer = literalBuilder.then(outer);
+	        	} else {
+	        		outer = reflectCommandDispatcherArgument(keys.get(i), outerArg.getRawType()).then(outer);
+	        	}
 	        }        
 	        
 	        //Link command name to first argument and register        

@@ -16,6 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import io.github.jorelali.commandapi.api.CommandAPI;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument;
+import io.github.jorelali.commandapi.api.arguments.LiteralArgument;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
 import io.github.jorelali.commandapi.api.arguments.LocationArgument;
 
@@ -82,7 +83,22 @@ public class Main extends JavaPlugin {
 						((LivingEntity) callee).setHealth(0);
 					}
 				}
-				
+			});
+			
+			arguments.clear();
+			arguments.put("gamemode", new LiteralArgument("creative"));
+			System.out.println("registering custGMc");
+			CommandAPI.getInstance().register("custgm", arguments, (sender, args) -> {
+				System.out.println(args.length);
+				System.out.println(args[0]);
+				sender.sendMessage("set gamemode to " + args[0]);
+			});
+			
+			arguments.clear();
+			arguments.put("gamemode", new LiteralArgument("survival"));
+			System.out.println("registering custGMs");
+			CommandAPI.getInstance().register("custgm", arguments, (sender, args) -> {
+				sender.sendMessage("set gamemode to " + args[0]);
 			});
 						
 		}

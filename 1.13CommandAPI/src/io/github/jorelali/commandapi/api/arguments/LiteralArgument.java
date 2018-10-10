@@ -1,32 +1,28 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import java.lang.reflect.InvocationTargetException;
-
-import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 @SuppressWarnings("unchecked")
 public class LiteralArgument implements Argument {
 
-	com.mojang.brigadier.arguments.ArgumentType<?> rawType;
 	String literal;
 	
 	/**
 	 * A literal argument. Only takes one string value which cannot be modified 
 	 */
 	public LiteralArgument(final String literal) {
-		try {
-			this.literal = literal;
-			//rawType = LiteralArgumentBuilder.literal(literal);
-			//LiteralArgumentBuilder.literal(s)
-			rawType = (ArgumentType<?>) ArgumentUtil.getNMS("ArgumentEnchantment").getDeclaredMethod("a").invoke(null);
-		} catch (IllegalAccessException | ClassNotFoundException | IllegalArgumentException | SecurityException | InvocationTargetException | NoSuchMethodException e) {
-			e.printStackTrace();
-		}
+		this.literal = literal;
 	}
 	
 	@Override
 	public <T> com.mojang.brigadier.arguments.ArgumentType<T> getRawType() {
-		return (com.mojang.brigadier.arguments.ArgumentType<T>) rawType;
+		/*
+		 * The literal argument builder is NOT technically an argument.
+		 * Therefore, it doesn't have an ArgumentType.
+		 * 
+		 * This is a wrapper for the object "LiteralArgumentBuilder<>"
+		 */
+		return null;
 	}
 
 	@Override
@@ -36,6 +32,10 @@ public class LiteralArgument implements Argument {
 
 	public String getLiteral() {
 		return literal;
+	}
+	
+	public LiteralArgumentBuilder<?> getLiteralArgumentBuilder() {
+		return (LiteralArgumentBuilder<?>) LiteralArgumentBuilder.literal(literal);
 	}
 	
 	@Override
