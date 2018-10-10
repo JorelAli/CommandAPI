@@ -86,20 +86,18 @@ public class Main extends JavaPlugin {
 			});
 			
 			arguments.clear();
-			arguments.put("gamemode", new LiteralArgument("creative"));
-			System.out.println("registering custGMc");
+			arguments.put("gamemode", new LiteralArgument("survival"));
 			CommandAPI.getInstance().register("custgm", arguments, (sender, args) -> {
-				System.out.println(args.length);
-				System.out.println(args[0]);
 				sender.sendMessage("set gamemode to " + args[0]);
 			});
 			
+			//For some arbitrary reason, this command takes all precedence over the first one...
 			arguments.clear();
-			arguments.put("gamemode", new LiteralArgument("survival"));
-			System.out.println("registering custGMs");
+			arguments.put("gamemode2", new LiteralArgument("creative"));
 			CommandAPI.getInstance().register("custgm", arguments, (sender, args) -> {
 				sender.sendMessage("set gamemode to " + args[0]);
 			});
+		
 						
 		}
 	}

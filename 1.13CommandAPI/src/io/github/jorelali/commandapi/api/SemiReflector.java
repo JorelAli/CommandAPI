@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -106,9 +107,30 @@ public final class SemiReflector {
 	}
 	
 	private Command generateCommand(String commandName, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
+		
+		if(DEBUG) {
+			System.out.println("Generating command for registration");
+			for(String key : args.keySet()) {
+				System.out.println(key + ": " + args.get(key).getClass().getName());
+				if(args.get(key) instanceof LiteralArgument) {
+					System.out.println("Stored literal: " + ((LiteralArgument )args.get(key)).getLiteral());
+				}
+			}
+		}
+		
+		//literals from args
+		final List<String> literals = new ArrayList<>();
+		for(String key : args.keySet()) {
+			if(args.get(key) instanceof LiteralArgument) {
+				literals.add(((LiteralArgument) args.get(key)).getLiteral());
+			}
+		}
+		
 		//Generate our command from executor
 		return (cmdCtx) -> {
 
+			List<String> newLiterals = new ArrayList<>(literals);
+			
 			//Get the CommandSender via NMS
 			CommandSender sender = null;
 			
@@ -151,7 +173,8 @@ public final class SemiReflector {
 					//Deal with literal arguments
 					if(entry.getValue() instanceof LiteralArgument) {
 						LiteralArgument arg = (LiteralArgument) entry.getValue();
-						System.out.println(arg.getLiteral());
+						System.out.println("literal value @ runtime: " + arg.getLiteral());
+						System.out.println("Value of literal list @ runtime: " + newLiterals.get(count));
 						arr[count] = arg.getLiteral();
 					} else if(entry.getValue() instanceof ItemStackArgument) {
 						try {
@@ -374,8 +397,7 @@ public final class SemiReflector {
 	        ArgumentBuilder inner;
 	        Argument innerArg = args.get(keys.get(keys.size() - 1));
 	        if(innerArg instanceof LiteralArgument) {
-	        	LiteralArgumentBuilder literalBuilder = ((LiteralArgument) innerArg).getLiteralArgumentBuilder();
-	        	inner = literalBuilder.executes(command);
+	        	inner = ((LiteralArgument) innerArg).getLiteralArgumentBuilder().executes(command);
 	        } else {
 	        	inner = reflectCommandDispatcherArgument(keys.get(keys.size() - 1), innerArg.getRawType()).executes(command);
 	        }
@@ -385,8 +407,7 @@ public final class SemiReflector {
 	        for(int i = keys.size() - 2; i >= 0; i--) {
 	        	Argument outerArg = args.get(keys.get(i));
 	        	if(outerArg instanceof LiteralArgument) {
-	        		LiteralArgumentBuilder literalBuilder = ((LiteralArgument) outerArg).getLiteralArgumentBuilder();
-	        		outer = literalBuilder.then(outer);
+	        		outer = ((LiteralArgument) outerArg).getLiteralArgumentBuilder().then(outer);
 	        	} else {
 	        		outer = reflectCommandDispatcherArgument(keys.get(i), outerArg.getRawType()).then(outer);
 	        	}
