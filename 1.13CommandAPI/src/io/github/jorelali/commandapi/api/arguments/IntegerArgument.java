@@ -2,6 +2,8 @@ package io.github.jorelali.commandapi.api.arguments;
 
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 
+import io.github.jorelali.commandapi.api.exceptions.InvalidRangeException;
+
 @SuppressWarnings("unchecked")
 public class IntegerArgument implements Argument {
 
@@ -28,6 +30,9 @@ public class IntegerArgument implements Argument {
 	 * @param max The maximum value this argument can take (inclusive)
 	 */
 	public IntegerArgument(int min, int max) {
+		if(max < min) {
+			throw new InvalidRangeException();
+		}
 		rawType = IntegerArgumentType.integer(min, max);
 	}
 	

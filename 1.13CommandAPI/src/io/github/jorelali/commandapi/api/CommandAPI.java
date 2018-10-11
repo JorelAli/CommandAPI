@@ -4,6 +4,8 @@ import java.util.LinkedHashMap;
 
 import io.github.jorelali.commandapi.api.CommandPermission.PermissionNode;
 import io.github.jorelali.commandapi.api.arguments.Argument;
+import io.github.jorelali.commandapi.api.arguments.GreedyStringArgument;
+import io.github.jorelali.commandapi.api.exceptions.GreedyStringException;
 
 /**
  * Class to register commands with the 1.13 command UI
@@ -85,6 +87,18 @@ public class CommandAPI {
 		try {
 			if(args == null) {
 				args = new LinkedHashMap<>();
+			}
+			//if args contains a GreedyString && args.getLast != GreedyString
+			long numGreedyArgs = args.values().stream().filter(arg -> arg instanceof GreedyStringArgument).count();
+			if(numGreedyArgs >= 1) {
+				//A GreedyString has been found
+				if(!(args.values().toArray(new Argument[args.size()])[args.size() - 1] instanceof GreedyStringArgument)) {
+					throw new GreedyStringException();
+				}
+				
+				if(numGreedyArgs > 1) {
+					throw new GreedyStringException();
+				}
 			}
 			reflector.register(commandName, permissions, aliases, args, executor);
 		} catch (Exception e) {

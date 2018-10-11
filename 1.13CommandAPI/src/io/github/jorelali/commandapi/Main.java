@@ -1,6 +1,16 @@
 package io.github.jorelali.commandapi;
 
+import java.util.LinkedHashMap;
+
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import io.github.jorelali.commandapi.api.CommandAPI;
+import io.github.jorelali.commandapi.api.arguments.Argument;
+import io.github.jorelali.commandapi.api.arguments.GreedyStringArgument;
+import io.github.jorelali.commandapi.api.arguments.PlayerArgument;
+import io.github.jorelali.commandapi.api.arguments.StringArgument;
+import io.github.jorelali.commandapi.api.arguments.TextArgument;
 
 public class Main extends JavaPlugin {
 
@@ -11,6 +21,28 @@ public class Main extends JavaPlugin {
 		//Nothing required here, just need
 		//to state that this is a plugin so
 		//other plugins can depend on it
+		
+		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+		arguments.put("target", new PlayerArgument());
+		arguments.put("message", new GreedyStringArgument());
+		CommandAPI.getInstance().register("custmsg", arguments, (sender, args) -> {
+			((Player) args[0]).sendMessage((String) args[1]);
+		});
+		
+		arguments = new LinkedHashMap<>();
+		arguments.put("target", new PlayerArgument());
+		arguments.put("message", new StringArgument());
+		CommandAPI.getInstance().register("custmsg2", arguments, (sender, args) -> {
+			((Player) args[0]).sendMessage((String) args[1]);
+		});
+		
+		arguments = new LinkedHashMap<>();
+		arguments.put("target", new PlayerArgument());
+		arguments.put("message", new TextArgument());
+		CommandAPI.getInstance().register("custmsg3", arguments, (sender, args) -> {
+			((Player) args[0]).sendMessage((String) args[1]);
+		});
+		
 		
 //HashMap<String, GameMode> gamemodes = new HashMap<>();
 //gamemodes.put("adventure", GameMode.ADVENTURE);
@@ -33,7 +65,7 @@ public class Main extends JavaPlugin {
 //		
 //			LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 //			arguments.put("player", new EntitySelectorArgument(EntitySelector.ONE_PLAYER));
-//			CommandAPI.getInstance().register("apioneplayer", arguments, (sender, args) -> {
+//			CommandAPI.)getInstance().register("apioneplayer", arguments, (sender, args) -> {
 //				((Player) args[0]).sendMessage("hello");
 //			});
 //			

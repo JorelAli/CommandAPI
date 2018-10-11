@@ -1,5 +1,7 @@
 package io.github.jorelali.commandapi.api.arguments;
 
+import io.github.jorelali.commandapi.api.exceptions.BadLiteralException;
+
 @SuppressWarnings("unchecked")
 public class LiteralArgument implements Argument {
 
@@ -9,6 +11,12 @@ public class LiteralArgument implements Argument {
 	 * A literal argument. Only takes one string value which cannot be modified 
 	 */
 	public LiteralArgument(final String literal) {
+		if(literal == null) {
+			throw new BadLiteralException(true);
+		}
+		if(literal.isEmpty()) {
+			throw new BadLiteralException(false);
+		}
 		this.literal = literal;
 	}
 	

@@ -2,6 +2,8 @@ package io.github.jorelali.commandapi.api.arguments;
 
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 
+import io.github.jorelali.commandapi.api.exceptions.InvalidRangeException;
+
 @SuppressWarnings("unchecked")
 public class DoubleArgument implements Argument {
 
@@ -28,6 +30,9 @@ public class DoubleArgument implements Argument {
 	 * @param max The maximum value this argument can take (inclusive)
 	 */
 	public DoubleArgument(int min, int max) {
+		if(max < min) {
+			throw new InvalidRangeException();
+		}
 		rawType = DoubleArgumentType.doubleArg(min, max);
 	}
 	
