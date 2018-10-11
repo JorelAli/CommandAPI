@@ -121,6 +121,25 @@ public class Main extends JavaPlugin {
 			CommandAPI.getInstance().register("custitem", arguments, (sender, args) -> {
 				sender.sendMessage("Gave you a gold");
 			});
+			
+			arguments.clear();
+			arguments.put("item", new LiteralArgument("gold"));
+			arguments.put("item", new LiteralArgument("silver"));
+			CommandAPI.getInstance().register("custitem2", arguments, (sender, args) -> {
+				sender.sendMessage("Executed successfully");
+			});
+			
+			arguments.clear();
+			arguments.put("item", new LiteralArgument("gold"));
+			CommandAPI.getInstance().register("custitem", arguments, (sender, args) -> {
+				sender.sendMessage("Executed successfully");
+			});
+			
+			arguments.clear();
+			arguments.put("item", new LiteralArgument("silver"));
+			CommandAPI.getInstance().register("custitem", arguments, (sender, args) -> {
+				sender.sendMessage("Executed successfully");
+			});
 		}
 	}
 	
