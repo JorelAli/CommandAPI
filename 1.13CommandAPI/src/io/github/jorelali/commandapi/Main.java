@@ -12,6 +12,23 @@ public class Main extends JavaPlugin {
 		//to state that this is a plugin so
 		//other plugins can depend on it
 		
+//HashMap<String, GameMode> gamemodes = new HashMap<>();
+//gamemodes.put("adventure", GameMode.ADVENTURE);
+//gamemodes.put("creative", GameMode.CREATIVE);
+//gamemodes.put("spectator", GameMode.SPECTATOR);
+//gamemodes.put("survival", GameMode.SURVIVAL);
+//
+//for(String key : gamemodes.keySet()) {
+//	LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+//	arguments.put(key, new LiteralArgument(key));
+//	CommandAPI.getInstance().register("gamemode2", arguments, (sender, args) -> {
+//	    if(sender instanceof Player) {
+//	        Player player = (Player) sender;
+//	        player.setGameMode(gamemodes.get(key));
+//	    }
+//	});
+//}
+		
 //		if(TEST) {
 //		
 //			LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
