@@ -123,7 +123,6 @@ public final class SemiReflector {
 			
 			//Handle proxied command senders via /execute as [Proxy]
 			try {
-				//TODO: Fix everything being a proxy!
 				Object proxyEntity = cmdCtx.getSource().getClass().getDeclaredMethod("f").invoke(cmdCtx.getSource());
 				
 				if(proxyEntity != null) {

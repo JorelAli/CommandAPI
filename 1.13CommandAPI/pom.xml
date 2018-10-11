@@ -6,7 +6,7 @@
 
     <groupId>io.github.jorelali</groupId>
     <artifactId>commandapi</artifactId>
-    <version>1.2</version>
+    <version>1.3</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -80,6 +80,10 @@
                     <compilerArgs>
                         <arg>-Xlint</arg>
                     </compilerArgs>
+                    <excludes>
+	                    <exclude>**/Example.java</exclude>
+	                    <exclude>**/ExampleEntitySelector.java</exclude>
+	                </excludes>
                 </configuration>
             </plugin>
             <plugin>
