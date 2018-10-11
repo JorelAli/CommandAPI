@@ -108,28 +108,25 @@ public final class SemiReflector {
 	
 	private Command generateCommand(String commandName, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
 		
-		if(DEBUG) {
-			System.out.println("Generating command for registration");
-			for(String key : args.keySet()) {
-				System.out.println(key + ": " + args.get(key).getClass().getName());
-				if(args.get(key) instanceof LiteralArgument) {
-					System.out.println("Stored literal: " + ((LiteralArgument )args.get(key)).getLiteral());
-				}
-			}
-		}
+//		if(DEBUG) {
+//			System.out.println("Generating command for registration");
+//			for(String key : args.keySet()) {
+//				System.out.println(key + ": " + args.get(key).getClass().getName());
+//				if(args.get(key) instanceof LiteralArgument) {
+//					System.out.println("Stored literal: " + ((LiteralArgument )args.get(key)).getLiteral());
+//				}
+//			}
+//		}
 		
-		//literals from args
-		final List<String> literals = new ArrayList<>();
-		for(String key : args.keySet()) {
-			if(args.get(key) instanceof LiteralArgument) {
-				literals.add(((LiteralArgument) args.get(key)).getLiteral());
-			}
-		}
+		//Arguments (required for literals)
+//		final List<Argument> literals = new ArrayList<>();
+//		for(String key : args.keySet())
+//			literals.add(args.get(key));
 		
 		//Generate our command from executor
 		return (cmdCtx) -> {
 
-			List<String> newLiterals = new ArrayList<>(literals);
+			//List<Argument> newLiterals = new ArrayList<>(literals);
 			
 			//Get the CommandSender via NMS
 			CommandSender sender = null;
@@ -172,10 +169,11 @@ public final class SemiReflector {
 					
 					//Deal with literal arguments
 					if(entry.getValue() instanceof LiteralArgument) {
-						LiteralArgument arg = (LiteralArgument) entry.getValue();
-						System.out.println("literal value @ runtime: " + arg.getLiteral());
-						System.out.println("Value of literal list @ runtime: " + newLiterals.get(count));
-						arr[count] = arg.getLiteral();
+//						System.out.println(newLiterals);
+//						arr[count] = ((LiteralArgument) newLiterals.get(count)).getLiteral();
+						
+						//Literally, do nothing. (Other than increment count)
+						arr[count] = null;
 					} else if(entry.getValue() instanceof ItemStackArgument) {
 						try {
 							//Parse Bukkit ItemStack from NMS 

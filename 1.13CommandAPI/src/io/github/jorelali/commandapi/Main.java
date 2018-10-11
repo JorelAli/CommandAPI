@@ -18,6 +18,7 @@ import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument;
 import io.github.jorelali.commandapi.api.arguments.LiteralArgument;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
+import io.github.jorelali.commandapi.api.arguments.IntegerArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationArgument;
 
 public class Main extends JavaPlugin {
@@ -97,8 +98,29 @@ public class Main extends JavaPlugin {
 			CommandAPI.getInstance().register("custgm", arguments, (sender, args) -> {
 				sender.sendMessage("set gamemode to " + args[0]);
 			});
+			
+			//derpy /item command
+			
 		
-						
+			arguments.clear();
+			arguments.put("item", new LiteralArgument("silver"));
+			arguments.put("amount", new IntegerArgument(0, 64));
+			CommandAPI.getInstance().register("custitem", arguments, (sender, args) -> {
+				sender.sendMessage("Gave you a silver");
+			});
+			
+			arguments.clear();
+			arguments.put("amount", new IntegerArgument(0, 64));
+			arguments.put("item", new LiteralArgument("bronze"));
+			CommandAPI.getInstance().register("custitem", arguments, (sender, args) -> {
+				sender.sendMessage("Gave you a bronze");
+			});
+				
+			arguments.clear();
+			arguments.put("item", new LiteralArgument("gold"));
+			CommandAPI.getInstance().register("custitem", arguments, (sender, args) -> {
+				sender.sendMessage("Gave you a gold");
+			});
 		}
 	}
 	
