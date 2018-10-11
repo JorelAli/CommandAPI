@@ -57,14 +57,14 @@ public class Main extends JavaPlugin {
 				((Collection<Entity>) args[0]).forEach(e -> e.remove());
 			});
 		
-			arguments.clear();
+			arguments = new LinkedHashMap<>();
 			arguments.put("location", new LocationArgument());
 			CommandAPI.getInstance().register("setcustloc", arguments, (sender, args) -> {
 				Location loc = (Location) args[0];
 				loc.getBlock().setType(Material.GOLD_BLOCK);
 			});
 			
-			arguments.clear();
+			arguments = new LinkedHashMap<>();
 			CommandAPI.getInstance().register("noarg", arguments, (sender, args) -> {
 				Bukkit.broadcastMessage("woop");
 			});
@@ -86,14 +86,14 @@ public class Main extends JavaPlugin {
 				}
 			});
 			
-			arguments.clear();
+			arguments = new LinkedHashMap<>();
 			arguments.put("gamemode", new LiteralArgument("survival"));
 			CommandAPI.getInstance().register("custgm", arguments, (sender, args) -> {
 				sender.sendMessage("set gamemode to " + args[0]);
 			});
 			
 			//For some arbitrary reason, this command takes all precedence over the first one...
-			arguments.clear();
+			arguments = new LinkedHashMap<>();
 			arguments.put("gamemode2", new LiteralArgument("creative"));
 			CommandAPI.getInstance().register("custgm", arguments, (sender, args) -> {
 				sender.sendMessage("set gamemode to " + args[0]);
@@ -102,43 +102,65 @@ public class Main extends JavaPlugin {
 			//derpy /item command
 			
 		
-			arguments.clear();
+			arguments = new LinkedHashMap<>();
 			arguments.put("item", new LiteralArgument("silver"));
 			arguments.put("amount", new IntegerArgument(0, 64));
 			CommandAPI.getInstance().register("custitem", arguments, (sender, args) -> {
 				sender.sendMessage("Gave you a silver");
 			});
 			
-			arguments.clear();
+			arguments = new LinkedHashMap<>();
 			arguments.put("amount", new IntegerArgument(0, 64));
 			arguments.put("item", new LiteralArgument("bronze"));
 			CommandAPI.getInstance().register("custitem", arguments, (sender, args) -> {
 				sender.sendMessage("Gave you a bronze");
 			});
 				
-			arguments.clear();
+			arguments = new LinkedHashMap<>();
 			arguments.put("item", new LiteralArgument("gold"));
 			CommandAPI.getInstance().register("custitem", arguments, (sender, args) -> {
 				sender.sendMessage("Gave you a gold");
 			});
 			
-			arguments.clear();
-			arguments.put("item", new LiteralArgument("gold"));
+//			arguments = new LinkedHashMap<>();
+//			arguments.put("item", new LiteralArgument("gold"));
+//			arguments.put("item2", new LiteralArgument("silver"));
+//			CommandAPI.getInstance().register("custitem2", arguments, (sender, args) -> {
+//				sender.sendMessage("Executed successfully");
+//			});
+//			
+//			arguments = new LinkedHashMap<>();
+//			arguments.put("item", new LiteralArgument("gold"));
+//			CommandAPI.getInstance().register("custitem2", arguments, (sender, args) -> {
+//				sender.sendMessage("Executed successfully");
+//			});
+			
+			arguments = new LinkedHashMap<>();
 			arguments.put("item", new LiteralArgument("silver"));
 			CommandAPI.getInstance().register("custitem2", arguments, (sender, args) -> {
 				sender.sendMessage("Executed successfully");
 			});
 			
-			arguments.clear();
-			arguments.put("item", new LiteralArgument("gold"));
-			CommandAPI.getInstance().register("custitem", arguments, (sender, args) -> {
+			arguments = new LinkedHashMap<>();
+			arguments.put("item", new LiteralArgument("myitem"));
+			arguments.put("amount", new IntegerArgument());
+			CommandAPI.getInstance().register("custitem3", arguments, (sender, args) -> {
+				sender.sendMessage("Executed successfully, with amount " + args[0]);
+			});
+			
+			arguments = new LinkedHashMap<>();
+			arguments.put("item", new LiteralArgument("a"));
+			arguments.put("item2", new LiteralArgument("b"));
+			CommandAPI.getInstance().register("custitem4", arguments, (sender, args) -> {
 				sender.sendMessage("Executed successfully");
 			});
 			
-			arguments.clear();
-			arguments.put("item", new LiteralArgument("silver"));
-			CommandAPI.getInstance().register("custitem", arguments, (sender, args) -> {
-				sender.sendMessage("Executed successfully");
+			arguments = new LinkedHashMap<>();
+			arguments.put("item", new LiteralArgument("myitem"));
+			arguments.put("itemAmount", new IntegerArgument());
+			CommandAPI.getInstance().register("custitem5", arguments, (sender, args) -> {
+				System.out.println(args);
+				sender.sendMessage("Executed successfully, with amount " + args.toString());
 			});
 		}
 	}

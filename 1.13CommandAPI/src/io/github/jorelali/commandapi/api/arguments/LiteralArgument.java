@@ -1,7 +1,5 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-
 @SuppressWarnings("unchecked")
 public class LiteralArgument implements Argument {
 
@@ -32,10 +30,6 @@ public class LiteralArgument implements Argument {
 
 	public String getLiteral() {
 		return literal;
-	}
-	
-	public LiteralArgumentBuilder<?> getLiteralArgumentBuilder() {
-		return (LiteralArgumentBuilder<?>) LiteralArgumentBuilder.literal(literal);
 	}
 	
 	@Override

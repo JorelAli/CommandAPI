@@ -106,27 +106,10 @@ public final class SemiReflector {
 		}
 	}
 	
-	private Command generateCommand(String commandName, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
-		
-//		if(DEBUG) {
-//			System.out.println("Generating command for registration");
-//			for(String key : args.keySet()) {
-//				System.out.println(key + ": " + args.get(key).getClass().getName());
-//				if(args.get(key) instanceof LiteralArgument) {
-//					System.out.println("Stored literal: " + ((LiteralArgument )args.get(key)).getLiteral());
-//				}
-//			}
-//		}
-		
-		//Arguments (required for literals)
-//		final List<Argument> literals = new ArrayList<>();
-//		for(String key : args.keySet())
-//			literals.add(args.get(key));
+	private Command generateCommand(String commandName, LinkedHashMap<String, Argument> args, CommandExecutor executor) {
 		
 		//Generate our command from executor
 		return (cmdCtx) -> {
-
-			//List<Argument> newLiterals = new ArrayList<>(literals);
 			
 			//Get the CommandSender via NMS
 			CommandSender sender = null;
@@ -140,6 +123,7 @@ public final class SemiReflector {
 			
 			//Handle proxied command senders via /execute as [Proxy]
 			try {
+				//TODO: Fix everything being a proxy!
 				Object proxyEntity = cmdCtx.getSource().getClass().getDeclaredMethod("f").invoke(cmdCtx.getSource());
 				
 				if(proxyEntity != null) {
@@ -157,30 +141,27 @@ public final class SemiReflector {
 			}
 						
 			//Array for arguments for executor
-			Object[] arr = new Object[args.size()];
+			List<Object> argList = new ArrayList<>();
+			//Object[] arr = new Object[args.size()];
 			
 			//Populate array
 			int count = 0;
 			for(Entry<String, Argument> entry : args.entrySet()) {
 				//If primitive (and simple), parse as normal
 				if(entry.getValue().isSimple()) {
-					arr[count] = cmdCtx.getArgument(entry.getKey(), entry.getValue().getPrimitiveType());
+					argList.add(cmdCtx.getArgument(entry.getKey(), entry.getValue().getPrimitiveType()));
+//					arr[count] = cmdCtx.getArgument(entry.getKey(), entry.getValue().getPrimitiveType());
 				} else {
 					
-					//Deal with literal arguments
-					if(entry.getValue() instanceof LiteralArgument) {
-//						System.out.println(newLiterals);
-//						arr[count] = ((LiteralArgument) newLiterals.get(count)).getLiteral();
-						
-						//Literally, do nothing. (Other than increment count)
-						arr[count] = null;
-					} else if(entry.getValue() instanceof ItemStackArgument) {
+					//Deal with those complex arguments
+					if(entry.getValue() instanceof ItemStackArgument) {
 						try {
 							//Parse Bukkit ItemStack from NMS 
 							Method asBukkitCopy = getOBCClass("inventory.CraftItemStack").getDeclaredMethod("asBukkitCopy", getNMSClass("ItemStack"));
 							Object argumentIS = getNMSClass("ArgumentItemStack").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
 							Object nmsIS = argumentIS.getClass().getDeclaredMethod("a", int.class, boolean.class).invoke(argumentIS, 1, false);
-							arr[count] = (ItemStack) asBukkitCopy.invoke(null, nmsIS);
+							argList.add((ItemStack) asBukkitCopy.invoke(null, nmsIS));
+//							arr[count] = (ItemStack) asBukkitCopy.invoke(null, nmsIS);
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 							e.printStackTrace();
 						}
@@ -189,7 +170,8 @@ public final class SemiReflector {
 							//Particle Bukkit Particle from NMS
 							Method toBukkit = getOBCClass("CraftParticle").getDeclaredMethod("toBukkit", getNMSClass("ParticleParam"));
 							Object particleParam = getNMSClass("ArgumentParticle").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-							arr[count] = (Particle) toBukkit.invoke(null, particleParam);
+							argList.add((Particle) toBukkit.invoke(null, particleParam));
+//							arr[count] = (Particle) toBukkit.invoke(null, particleParam);
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 							e.printStackTrace();
 						}
@@ -197,7 +179,8 @@ public final class SemiReflector {
 						try {
 							Constructor craftPotionType = getOBCClass("potion.CraftPotionEffectType").getConstructor(getNMSClass("MobEffectList"));
 							Object mobEffect = getNMSClass("ArgumentMobEffect").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-							arr[count] = (PotionEffectType) craftPotionType.newInstance(mobEffect);
+							argList.add((PotionEffectType) craftPotionType.newInstance(mobEffect));
+//							arr[count] = (PotionEffectType) craftPotionType.newInstance(mobEffect);
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException e) {
 							e.printStackTrace();
 						}
@@ -205,7 +188,8 @@ public final class SemiReflector {
 						try {
 							Method getColor = getOBCClass("util.CraftChatMessage").getDeclaredMethod("getColor", getNMSClass("EnumChatFormat"));
 							Object enumChatFormat = getNMSClass("ArgumentChatFormat").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-							arr[count] = (ChatColor) getColor.invoke(null, enumChatFormat);
+							argList.add((ChatColor) getColor.invoke(null, enumChatFormat));
+//							arr[count] = (ChatColor) getColor.invoke(null, enumChatFormat);
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 							e.printStackTrace();
 						}
@@ -213,7 +197,8 @@ public final class SemiReflector {
 						try {
 							Constructor craftEnchant = getOBCClass("enchantments.CraftEnchantment").getConstructor(getNMSClass("Enchantment"));
 							Object nmsEnchantment = getNMSClass("ArgumentEnchantment").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-							arr[count] = (Enchantment) craftEnchant.newInstance(nmsEnchantment);
+							argList.add((Enchantment) craftEnchant.newInstance(nmsEnchantment));
+//							arr[count] = (Enchantment) craftEnchant.newInstance(nmsEnchantment);
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException e) {
 							e.printStackTrace();
 						}
@@ -224,7 +209,8 @@ public final class SemiReflector {
 							double y = vec3D.getClass().getDeclaredField("y").getDouble(vec3D);
 							double z = vec3D.getClass().getDeclaredField("z").getDouble(vec3D);
 							World world = getCommandSenderWorld(sender);
-							arr[count] = new Location(world, x, y, z);
+							argList.add(new Location(world, x, y, z));
+//							arr[count] = new Location(world, x, y, z);
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchFieldException e) {
 							e.printStackTrace();
 						}
@@ -239,7 +225,8 @@ public final class SemiReflector {
 							Object entity = getNMSClass("EntityTypes").getDeclaredMethod("a", getNMSClass("World"), getNMSClass("MinecraftKey")).invoke(null, minecraftWorld, minecraftKey);
 							Object entityCasted = getNMSClass("Entity").cast(entity);
 							Object bukkitEntity = getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(entityCasted);
-							arr[count] = (EntityType) bukkitEntity.getClass().getDeclaredMethod("getType").invoke(bukkitEntity);
+							argList.add((EntityType) bukkitEntity.getClass().getDeclaredMethod("getType").invoke(bukkitEntity));
+//							arr[count] = (EntityType) bukkitEntity.getClass().getDeclaredMethod("getType").invoke(bukkitEntity);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -248,7 +235,8 @@ public final class SemiReflector {
 							Collection<?> collectionOfPlayers = (Collection<?>) getNMSClass("ArgumentProfile").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
 							Object first = collectionOfPlayers.iterator().next();
 							UUID uuid = (UUID) first.getClass().getDeclaredMethod("getId").invoke(first);
-							arr[count] = Bukkit.getPlayer(uuid);
+							argList.add(Bukkit.getPlayer(uuid));
+//							arr[count] = Bukkit.getPlayer(uuid);
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 							e.printStackTrace();
 						}
@@ -270,11 +258,13 @@ public final class SemiReflector {
 										for(Object nmsEntity : collectionOfEntities) {
 											entities.add((Entity) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(nmsEntity));
 										}
-										arr[count] = entities; 
+										argList.add(entities);
+//										arr[count] = entities; 
 									}
 									catch(InvocationTargetException e) {
 										if(e.getCause() instanceof CommandSyntaxException) {
-											arr[count] = (Collection<Entity>) new ArrayList<Entity>(); 
+											argList.add((Collection<Entity>) new ArrayList<Entity>());
+//											arr[count] = (Collection<Entity>) new ArrayList<Entity>(); 
 										}
 									}
 									break;
@@ -285,17 +275,20 @@ public final class SemiReflector {
 										for(Object nmsPlayer : collectionOfPlayers) {
 											players.add((Player) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(nmsPlayer));
 										}
-										arr[count] = players;
+										argList.add(players);
+//										arr[count] = players;
 									} catch(InvocationTargetException e) {
 										if(e.getCause() instanceof CommandSyntaxException) {
-											arr[count] = (Collection<Player>) new ArrayList<Player>(); 
+											argList.add((Collection<Player>) new ArrayList<Player>());
+//											arr[count] = (Collection<Player>) new ArrayList<Player>(); 
 										}
 									}
 									break;
 								case ONE_ENTITY:
 									try {
 										Object entity = (Object) getNMSClass("ArgumentEntity").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-										arr[count] = (Entity) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(entity);
+										argList.add((Entity) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(entity));
+//										arr[count] = (Entity) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(entity);
 									} catch(InvocationTargetException e) {
 										if(e.getCause() instanceof CommandSyntaxException) {
 											throw (CommandSyntaxException) e.getCause();
@@ -305,7 +298,8 @@ public final class SemiReflector {
 								case ONE_PLAYER:
 									try {
 										Object player = (Object) getNMSClass("ArgumentEntity").getDeclaredMethod("e", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-										arr[count] = (Player) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(player);
+										argList.add((Player) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(player));
+//										arr[count] = (Player) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(player);
 									} catch(InvocationTargetException e) {
 										if(e.getCause() instanceof CommandSyntaxException) {
 											throw (CommandSyntaxException) e.getCause();
@@ -323,7 +317,7 @@ public final class SemiReflector {
 			}
 			
 			//Run the code from executor and return
-			executor.run(sender, arr);
+			executor.run(sender, argList.toArray(new Object[argList.size()]));
 			return 1;
 		};
 	}
@@ -381,11 +375,11 @@ public final class SemiReflector {
 		
 		if(args.isEmpty()) {
 			//Link command name to the executor
-	        LiteralCommandNode resultantNode = this.dispatcher.register((LiteralArgumentBuilder) reflectCommandDispatcherCommandName(commandName).requires(permission).executes(command));
+	        LiteralCommandNode resultantNode = this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(commandName).requires(permission).executes(command));
 	        
 	        //Register aliases
 	        for(String str : aliases) {
-	        	this.dispatcher.register((LiteralArgumentBuilder) reflectCommandDispatcherCommandName(str).requires(permission).redirect(resultantNode));
+	        	this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(str).requires(permission).redirect(resultantNode));
 	        }
 		} else {
 			//List of keys for reverse iteration
@@ -395,9 +389,10 @@ public final class SemiReflector {
 	        ArgumentBuilder inner;
 	        Argument innerArg = args.get(keys.get(keys.size() - 1));
 	        if(innerArg instanceof LiteralArgument) {
-	        	inner = ((LiteralArgument) innerArg).getLiteralArgumentBuilder().executes(command);
+	        	String str = ((LiteralArgument) innerArg).getLiteral();
+	        	inner = getLiteralArgumentBuilder(str).executes(command);
 	        } else {
-	        	inner = reflectCommandDispatcherArgument(keys.get(keys.size() - 1), innerArg.getRawType()).executes(command);
+	        	inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType()).executes(command);
 	        }
 
 	        //Link everything else up, except the first
@@ -405,18 +400,19 @@ public final class SemiReflector {
 	        for(int i = keys.size() - 2; i >= 0; i--) {
 	        	Argument outerArg = args.get(keys.get(i));
 	        	if(outerArg instanceof LiteralArgument) {
-	        		outer = ((LiteralArgument) outerArg).getLiteralArgumentBuilder().then(outer);
+	        		String str = ((LiteralArgument) outerArg).getLiteral();
+	        		outer = getLiteralArgumentBuilder(str).then(outer);
 	        	} else {
-	        		outer = reflectCommandDispatcherArgument(keys.get(i), outerArg.getRawType()).then(outer);
+	        		outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType()).then(outer);
 	        	}
 	        }        
 	        
 	        //Link command name to first argument and register        
-	        LiteralCommandNode resultantNode = this.dispatcher.register((LiteralArgumentBuilder) reflectCommandDispatcherCommandName(commandName).requires(permission).then(outer));
+	        LiteralCommandNode resultantNode = this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(commandName).requires(permission).then(outer));
 	        
 	        //Register aliases
 	        for(String str : aliases) {
-	        	this.dispatcher.register((LiteralArgumentBuilder) reflectCommandDispatcherCommandName(str).requires(permission).redirect(resultantNode));
+	        	this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(str).requires(permission).redirect(resultantNode));
 	        }
 		}
 		
@@ -435,14 +431,12 @@ public final class SemiReflector {
 	}	
 		
 	//Registers a LiteralArgumentBuilder for a command name
-	private LiteralArgumentBuilder<?> reflectCommandDispatcherCommandName(String commandName) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
-		//return (LiteralArgumentBuilder) getNMSClass("CommandDispatcher").getDeclaredMethod("a", String.class).invoke(null, commandName);
+	private LiteralArgumentBuilder<?> getLiteralArgumentBuilder(String commandName) {
 		return LiteralArgumentBuilder.literal(commandName);
 	}
 	
 	//Registers a RequiredArgumentBuilder for an argument
-	private <T> RequiredArgumentBuilder<?, T> reflectCommandDispatcherArgument(String argumentName, com.mojang.brigadier.arguments.ArgumentType<T> type) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
-		//return (RequiredArgumentBuilder<?, T>) getNMSClass("CommandDispatcher").getDeclaredMethod("a", String.class, com.mojang.brigadier.arguments.ArgumentType.class).invoke(null, argumentName, type);
+	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, com.mojang.brigadier.arguments.ArgumentType<T> type){
 		return RequiredArgumentBuilder.argument(argumentName, type);
 	}
 		
