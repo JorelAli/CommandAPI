@@ -49,6 +49,7 @@ import io.github.jorelali.commandapi.api.arguments.LocationArgument;
 import io.github.jorelali.commandapi.api.arguments.ParticleArgument;
 import io.github.jorelali.commandapi.api.arguments.PlayerArgument;
 import io.github.jorelali.commandapi.api.arguments.PotionEffectArgument;
+import io.github.jorelali.commandapi.api.exceptions.CantFindPlayerException;
 
 //Only uses reflection for NMS
 @SuppressWarnings({"rawtypes", "unchecked"})
@@ -83,7 +84,7 @@ public final class SemiReflector {
 			this.dispatcher = (CommandDispatcher) getNMSClass("CommandDispatcher").getDeclaredMethod("a").invoke(cDispatcher); 
 
 		} catch(Exception e) {
-			e.printStackTrace();
+			e.printStackTrace(System.out);
 		}
 		
 	}
@@ -163,7 +164,7 @@ public final class SemiReflector {
 							argList.add((ItemStack) asBukkitCopy.invoke(null, nmsIS));
 //							arr[count] = (ItemStack) asBukkitCopy.invoke(null, nmsIS);
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-							e.printStackTrace();
+							e.printStackTrace(System.out);
 						}
 					} else if(entry.getValue() instanceof ParticleArgument) {
 						try {
@@ -173,7 +174,7 @@ public final class SemiReflector {
 							argList.add((Particle) toBukkit.invoke(null, particleParam));
 //							arr[count] = (Particle) toBukkit.invoke(null, particleParam);
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-							e.printStackTrace();
+							e.printStackTrace(System.out);
 						}
 					} else if(entry.getValue() instanceof PotionEffectArgument) {
 						try {
@@ -182,7 +183,7 @@ public final class SemiReflector {
 							argList.add((PotionEffectType) craftPotionType.newInstance(mobEffect));
 //							arr[count] = (PotionEffectType) craftPotionType.newInstance(mobEffect);
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException e) {
-							e.printStackTrace();
+							e.printStackTrace(System.out);
 						}
 					} else if(entry.getValue() instanceof ChatColorArgument) {
 						try {
@@ -191,7 +192,7 @@ public final class SemiReflector {
 							argList.add((ChatColor) getColor.invoke(null, enumChatFormat));
 //							arr[count] = (ChatColor) getColor.invoke(null, enumChatFormat);
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-							e.printStackTrace();
+							e.printStackTrace(System.out);
 						}
 					} else if(entry.getValue() instanceof EnchantmentArgument) {
 						try {
@@ -200,7 +201,7 @@ public final class SemiReflector {
 							argList.add((Enchantment) craftEnchant.newInstance(nmsEnchantment));
 //							arr[count] = (Enchantment) craftEnchant.newInstance(nmsEnchantment);
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException e) {
-							e.printStackTrace();
+							e.printStackTrace(System.out);
 						}
 					} else if(entry.getValue() instanceof LocationArgument) {
 						try {
@@ -212,7 +213,7 @@ public final class SemiReflector {
 							argList.add(new Location(world, x, y, z));
 //							arr[count] = new Location(world, x, y, z);
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchFieldException e) {
-							e.printStackTrace();
+							e.printStackTrace(System.out);
 						}
 					} else if(entry.getValue() instanceof EntityTypeArgument) {
 						try {
@@ -228,17 +229,21 @@ public final class SemiReflector {
 							argList.add((EntityType) bukkitEntity.getClass().getDeclaredMethod("getType").invoke(bukkitEntity));
 //							arr[count] = (EntityType) bukkitEntity.getClass().getDeclaredMethod("getType").invoke(bukkitEntity);
 						} catch (Exception e) {
-							e.printStackTrace();
+							e.printStackTrace(System.out);
 						}
 					} else if(entry.getValue() instanceof PlayerArgument) {
 						try {
 							Collection<?> collectionOfPlayers = (Collection<?>) getNMSClass("ArgumentProfile").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
 							Object first = collectionOfPlayers.iterator().next();
 							UUID uuid = (UUID) first.getClass().getDeclaredMethod("getId").invoke(first);
-							argList.add(Bukkit.getPlayer(uuid));
+							Player target = Bukkit.getPlayer(uuid);
+							if(target == null) {
+								throw new CantFindPlayerException((String) first.getClass().getDeclaredMethod("getName").invoke(first));
+							}
+							argList.add(target);
 //							arr[count] = Bukkit.getPlayer(uuid);
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-							e.printStackTrace();
+							e.printStackTrace(System.out);
 						}
 					} else if(entry.getValue() instanceof EntitySelectorArgument) {
 						try {
@@ -308,7 +313,7 @@ public final class SemiReflector {
 									break;								
 							}
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException e) {
-							e.printStackTrace();
+							e.printStackTrace(System.out);
 						}
 					} 
 				}
@@ -332,7 +337,7 @@ public final class SemiReflector {
 				
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
 					| NoSuchMethodException | SecurityException e) {
-				e.printStackTrace();
+				e.printStackTrace(System.out);
 			}
 
         	if(permissions.getPermissions() != null) {
@@ -421,7 +426,7 @@ public final class SemiReflector {
 			try {
 				file.createNewFile();
 			} catch (IOException e) {
-				e.printStackTrace();
+				e.printStackTrace(System.out);
 			}
 			
 			getNMSClass("CommandDispatcher").getDeclaredMethod("a", File.class).invoke(this.cDispatcher, file);
