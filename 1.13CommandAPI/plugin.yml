@@ -1,6 +1,6 @@
 name: CommandAPI
 main: io.github.jorelali.commandapi.Main
 version: 1.3
-description: Allows access to Minecraft 1.13s new command ui api
+description: An API to use Minecraft 1.13s new command UI
 author: Skepter
 website: http://jorelali.github.io/
