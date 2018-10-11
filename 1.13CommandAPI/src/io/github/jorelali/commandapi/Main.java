@@ -23,7 +23,7 @@ import io.github.jorelali.commandapi.api.arguments.LocationArgument;
 
 public class Main extends JavaPlugin {
 
-	final static private boolean TEST = true;
+	final static private boolean TEST = false;
 	
 	@Override
 	public void onEnable() {

@@ -63,7 +63,7 @@ public final class SemiReflector {
 	private Object cDispatcher;
 
 	//DEBUG mode
-	private static final boolean DEBUG = true;
+	private static final boolean DEBUG = false;
 	
 	protected SemiReflector() throws ClassNotFoundException {
 		
@@ -129,10 +129,12 @@ public final class SemiReflector {
 				if(proxyEntity != null) {
 					CommandSender proxy = (CommandSender) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(proxyEntity);
 					
-					Class proxyClass = getOBCClass("command.ProxiedNativeCommandSender");
-					Constructor proxyConstructor = proxyClass.getConstructor(getNMSClass("CommandListenerWrapper"), CommandSender.class, CommandSender.class);
-					Object proxyInstance = proxyConstructor.newInstance(cmdCtx.getSource(), sender, proxy);
-					sender = (ProxiedCommandSender) proxyInstance;
+					if(!proxy.equals(sender)) {
+						Class proxyClass = getOBCClass("command.ProxiedNativeCommandSender");
+						Constructor proxyConstructor = proxyClass.getConstructor(getNMSClass("CommandListenerWrapper"), CommandSender.class, CommandSender.class);
+						Object proxyInstance = proxyConstructor.newInstance(cmdCtx.getSource(), sender, proxy);
+						sender = (ProxiedCommandSender) proxyInstance;
+					}
 				}
 				
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
@@ -145,7 +147,6 @@ public final class SemiReflector {
 			//Object[] arr = new Object[args.size()];
 			
 			//Populate array
-			int count = 0;
 			for(Entry<String, Argument> entry : args.entrySet()) {
 				//If primitive (and simple), parse as normal
 				if(entry.getValue().isSimple()) {
@@ -312,8 +313,6 @@ public final class SemiReflector {
 						}
 					} 
 				}
-				
-				count++;
 			}
 			
 			//Run the code from executor and return
