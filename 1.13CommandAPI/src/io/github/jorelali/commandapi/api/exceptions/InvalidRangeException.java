@@ -1,5 +1,6 @@
 package io.github.jorelali.commandapi.api.exceptions;
 
+@SuppressWarnings("serial")
 public class InvalidRangeException extends RuntimeException {
 	
 	@Override

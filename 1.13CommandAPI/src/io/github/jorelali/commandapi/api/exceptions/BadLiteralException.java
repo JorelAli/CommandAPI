@@ -1,5 +1,6 @@
 package io.github.jorelali.commandapi.api.exceptions;
 
+@SuppressWarnings("serial")
 public class BadLiteralException extends RuntimeException {
 	
 	private boolean isNull;

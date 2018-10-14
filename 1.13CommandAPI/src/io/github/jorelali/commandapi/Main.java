@@ -1,16 +1,6 @@
 package io.github.jorelali.commandapi;
 
-import java.util.LinkedHashMap;
-
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import io.github.jorelali.commandapi.api.CommandAPI;
-import io.github.jorelali.commandapi.api.arguments.Argument;
-import io.github.jorelali.commandapi.api.arguments.GreedyStringArgument;
-import io.github.jorelali.commandapi.api.arguments.PlayerArgument;
-import io.github.jorelali.commandapi.api.arguments.StringArgument;
-import io.github.jorelali.commandapi.api.arguments.TextArgument;
 
 public class Main extends JavaPlugin {
 
@@ -22,26 +12,71 @@ public class Main extends JavaPlugin {
 		//to state that this is a plugin so
 		//other plugins can depend on it
 		
-		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-		arguments.put("target", new PlayerArgument());
-		arguments.put("message", new GreedyStringArgument());
-		CommandAPI.getInstance().register("custmsg", arguments, (sender, args) -> {
-			((Player) args[0]).sendMessage((String) args[1]);
-		});
+		/////// EVERYTHING BELOW HERE IS COMMENTED AND DOESN'T AFFECT COMPILATION AT ALL>.
 		
-		arguments = new LinkedHashMap<>();
-		arguments.put("target", new PlayerArgument());
-		arguments.put("message", new StringArgument());
-		CommandAPI.getInstance().register("custmsg2", arguments, (sender, args) -> {
-			((Player) args[0]).sendMessage((String) args[1]);
-		});
+//		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+//		CommandAPI.getInstance().register("trample", new CommandPermission("wikiop.general.trampling"), arguments, (sender, args) -> {
+//			if (sender instanceof Player) {
+//				Player player = (Player) sender;
+//				player.sendMessage("Triggered the command");
+//			}
+//		});
+//		
+//		//arguments = new LinkedHashMap<>();
+//		arguments.put("thing", new BooleanArgument());
+//		CommandAPI.getInstance().register("trample", new CommandPermission("wikiop.general.trampling"), arguments, (sender, args) -> {
+//			if (sender instanceof Player) {
+//				Player player = (Player) sender;
+//				player.sendMessage("Triggered the command again with boolean");
+//			}
+//		});
 		
-		arguments = new LinkedHashMap<>();
-		arguments.put("target", new PlayerArgument());
-		arguments.put("message", new TextArgument());
-		CommandAPI.getInstance().register("custmsg3", arguments, (sender, args) -> {
-			((Player) args[0]).sendMessage((String) args[1]);
-		});
+//		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+//		arguments.put("target", new PlayerArgument());
+//		arguments.put("message", new GreedyStringArgument());
+//		CommandAPI.getInstance().register("custmsg", arguments, (sender, args) -> {
+//			((Player) args[0]).sendMessage((String) args[1]);
+//		});
+//		
+//		arguments = new LinkedHashMap<>();
+//		arguments.put("target", new PlayerArgument());
+//		arguments.put("message", new StringArgument());
+//		CommandAPI.getInstance().register("custmsg2", arguments, (sender, args) -> {
+//			((Player) args[0]).sendMessage((String) args[1]);
+//		});
+//		
+//		arguments = new LinkedHashMap<>();
+//		arguments.put("target", new PlayerArgument());
+//		arguments.put("message", new TextArgument());
+//		CommandAPI.getInstance().register("custmsg3", arguments, (sender, args) -> {
+//			((Player) args[0]).sendMessage((String) args[1]);
+//		});
+//		
+//		arguments = new LinkedHashMap<>();
+//		arguments.put("literal", new LiteralArgument("group"));
+//		arguments.put("group", new StringArgument());
+//		arguments.put("users", new LiteralArgument("users"));
+//		CommandAPI.getInstance().register("pex", arguments, (sender, args) -> {
+//			sender.sendMessage("groups");
+//		});
+//		
+//		arguments = new LinkedHashMap<>();
+//		arguments.put("literal", new LiteralArgument("group"));
+//		arguments.put("group", new StringArgument());
+//		arguments.put("user", new LiteralArgument("user"));
+//		arguments.put("add", new LiteralArgument("add"));
+//		CommandAPI.getInstance().register("pex", arguments, (sender, args) -> {
+//			sender.sendMessage("add user");
+//		});
+//		
+//		arguments = new LinkedHashMap<>();
+//		arguments.put("literal", new LiteralArgument("group"));
+//		arguments.put("group", new StringArgument());
+//		arguments.put("user", new LiteralArgument("user"));
+//		arguments.put("rem", new LiteralArgument("rem"));
+//		CommandAPI.getInstance().register("pex", arguments, (sender, args) -> {
+//			sender.sendMessage("rem user");
+//		});
 		
 		
 //HashMap<String, GameMode> gamemodes = new HashMap<>();

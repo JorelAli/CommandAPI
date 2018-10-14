@@ -88,11 +88,16 @@ public class CommandAPI {
 			if(args == null) {
 				args = new LinkedHashMap<>();
 			}
+			
+			//Make a local copy of args to deal with
+			@SuppressWarnings("unchecked")
+			LinkedHashMap<String, Argument> copyOfArgs = (LinkedHashMap<String, Argument>) args.clone();
+			
 			//if args contains a GreedyString && args.getLast != GreedyString
-			long numGreedyArgs = args.values().stream().filter(arg -> arg instanceof GreedyStringArgument).count();
+			long numGreedyArgs = copyOfArgs.values().stream().filter(arg -> arg instanceof GreedyStringArgument).count();
 			if(numGreedyArgs >= 1) {
 				//A GreedyString has been found
-				if(!(args.values().toArray(new Argument[args.size()])[args.size() - 1] instanceof GreedyStringArgument)) {
+				if(!(copyOfArgs.values().toArray(new Argument[copyOfArgs.size()])[copyOfArgs.size() - 1] instanceof GreedyStringArgument)) {
 					throw new GreedyStringException();
 				}
 				
@@ -100,7 +105,7 @@ public class CommandAPI {
 					throw new GreedyStringException();
 				}
 			}
-			reflector.register(commandName, permissions, aliases, args, executor);
+			reflector.register(commandName, permissions, aliases, copyOfArgs, executor);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
