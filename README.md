@@ -37,3 +37,4 @@ Click the link below for the relevant documentation:
 * CommandAPI Version 1.1 [documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.1%20Documentation.md)
 * CommandAPI Version 1.2 [documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.2%20Documentation.md)
 * CommandAPI Version 1.3 [documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.3%20Documentation.md)
+* CommandAPI Version 1.4 [documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.4%20Documentation.md)

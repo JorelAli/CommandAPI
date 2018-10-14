@@ -1,6 +1,18 @@
 package io.github.jorelali.commandapi;
 
+import java.util.LinkedHashMap;
+
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import io.github.jorelali.commandapi.api.CommandAPI;
+import io.github.jorelali.commandapi.api.arguments.Argument;
+import io.github.jorelali.commandapi.api.arguments.GreedyStringArgument;
+import io.github.jorelali.commandapi.api.arguments.PlayerArgument;
+import io.github.jorelali.commandapi.api.arguments.StringArgument;
+import io.github.jorelali.commandapi.api.arguments.TextArgument;
+import net.md_5.bungee.api.chat.BaseComponent;
 
 public class Main extends JavaPlugin {
 
@@ -31,12 +43,18 @@ public class Main extends JavaPlugin {
 //			}
 //		});
 		
-//		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-//		arguments.put("target", new PlayerArgument());
-//		arguments.put("message", new GreedyStringArgument());
-//		CommandAPI.getInstance().register("custmsg", arguments, (sender, args) -> {
-//			((Player) args[0]).sendMessage((String) args[1]);
-//		});
+		
+//		BaseComponent b;
+//		//b.
+//		BookMeta m = null;
+//		m.spigot().addPage(null);
+//		
+//LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+//arguments.put("target", new PlayerArgument());
+//arguments.put("message", new GreedyStringArgument());
+//CommandAPI.getInstance().register("custmsg", arguments, (sender, args) -> {
+//	((Player) args[0]).sendMessage((String) args[1]);
+//});
 //		
 //		arguments = new LinkedHashMap<>();
 //		arguments.put("target", new PlayerArgument());
