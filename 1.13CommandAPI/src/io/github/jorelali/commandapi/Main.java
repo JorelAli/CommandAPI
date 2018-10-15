@@ -1,10 +1,21 @@
 package io.github.jorelali.commandapi;
 
+import java.util.LinkedHashMap;
+
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import io.github.jorelali.commandapi.api.CommandAPI;
+import io.github.jorelali.commandapi.api.CommandPermission;
+import io.github.jorelali.commandapi.api.arguments.Argument;
+import io.github.jorelali.commandapi.api.arguments.ChatComponentArgument;
+import net.md_5.bungee.api.chat.BaseComponent;
 
 public class Main extends JavaPlugin {
 
 	//final static private boolean TEST = false;
+	
+	
 	
 	@Override
 	public void onEnable() {
@@ -31,6 +42,50 @@ public class Main extends JavaPlugin {
 //			}
 //		});
 		
+		
+		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+		arguments.put("rawText", new ChatComponentArgument());
+		CommandAPI.getInstance().register("veryraw", arguments, (sender, args) -> {
+			if (sender instanceof Player) {
+				Player player = (Player) sender;
+				player.sendMessage("Triggered the command");
+				BaseComponent[] arr = (BaseComponent[]) args[0];
+				player.spigot().sendMessage(arr);
+			}
+		});
+		
+//		String packageName = null;
+//		
+//		try {
+//			packageName = Bukkit.getServer().getClass().getDeclaredMethod("getServer").invoke(Bukkit.getServer()).getClass().getPackage().getName();
+//		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
+//				| SecurityException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		try {
+//			Class chatSerializer = Class.forName(packageName + "." + "IChatBaseComponent$ChatSerializer");//IChatBaseComponent.ChatSerializer
+//			Method m = chatSerializer.getDeclaredMethod("a", Class.forName(packageName + "." + "IChatBaseComponent"));
+//		//blah de blah	Object o = m.invoke(null, "{\"text\":\"Hi there!\",\"bold\":true}"); //returns String
+//			Object yo = ComponentSerializer.parse((String) o);
+//			
+//			Bukkit.getPlayer("Skepter").spigot().sendMessage((BaseComponent) yo);
+//			System.out.println("woop woop!");
+//			//m.invoke(null, "h");
+//		} catch (ClassNotFoundException | SecurityException | NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		
+//		Class<?> getNMS(String className) throws ClassNotFoundException {
+//			return (Class.forName(packageName + "." + className));
+//		}
+//		
+		//BookMeta m = null;
+		//m.spigot().addPage(null);
+		
+		//Convert from ICHAT TO BASECOMPONENT[]
+		//ComponentSerializer.parse(IChatBaseComponent.ChatSerializer.a(pages.get(page - 1)));
 		
 //		BaseComponent b;
 //		//b.

@@ -40,6 +40,7 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.github.jorelali.commandapi.api.CommandPermission.PermissionNode;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.ChatColorArgument;
+import io.github.jorelali.commandapi.api.arguments.ChatComponentArgument;
 import io.github.jorelali.commandapi.api.arguments.EnchantmentArgument;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument;
 import io.github.jorelali.commandapi.api.arguments.EntityTypeArgument;
@@ -50,6 +51,8 @@ import io.github.jorelali.commandapi.api.arguments.ParticleArgument;
 import io.github.jorelali.commandapi.api.arguments.PlayerArgument;
 import io.github.jorelali.commandapi.api.arguments.PotionEffectArgument;
 import io.github.jorelali.commandapi.api.exceptions.CantFindPlayerException;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 
 //Only uses reflection for NMS
 @SuppressWarnings({"rawtypes", "unchecked"})
@@ -315,7 +318,18 @@ public final class SemiReflector {
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException e) {
 							e.printStackTrace(System.out);
 						}
-					} 
+					} else if(entry.getValue() instanceof ChatComponentArgument) {
+						try {
+							Class chatSerializer = getNMSClass("IChatBaseComponent$ChatSerializer");
+							Method m = chatSerializer.getDeclaredMethod("a", getNMSClass("IChatBaseComponent"));
+							Object iChatBaseComponent = getNMSClass("ArgumentChatComponent").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+							Object resultantString = m.invoke(null, iChatBaseComponent);
+							BaseComponent[] components = ComponentSerializer.parse((String) resultantString);
+							argList.add((BaseComponent[]) components);
+						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+							e.printStackTrace(System.out);
+						}
+					}
 				}
 			}
 			
