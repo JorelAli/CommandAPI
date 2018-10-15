@@ -147,14 +147,12 @@ public final class SemiReflector {
 						
 			//Array for arguments for executor
 			List<Object> argList = new ArrayList<>();
-			//Object[] arr = new Object[args.size()];
 			
 			//Populate array
 			for(Entry<String, Argument> entry : args.entrySet()) {
 				//If primitive (and simple), parse as normal
 				if(entry.getValue().isSimple()) {
 					argList.add(cmdCtx.getArgument(entry.getKey(), entry.getValue().getPrimitiveType()));
-//					arr[count] = cmdCtx.getArgument(entry.getKey(), entry.getValue().getPrimitiveType());
 				} else {
 					
 					//Deal with those complex arguments
@@ -165,7 +163,6 @@ public final class SemiReflector {
 							Object argumentIS = getNMSClass("ArgumentItemStack").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
 							Object nmsIS = argumentIS.getClass().getDeclaredMethod("a", int.class, boolean.class).invoke(argumentIS, 1, false);
 							argList.add((ItemStack) asBukkitCopy.invoke(null, nmsIS));
-//							arr[count] = (ItemStack) asBukkitCopy.invoke(null, nmsIS);
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 							e.printStackTrace(System.out);
 						}
@@ -175,7 +172,6 @@ public final class SemiReflector {
 							Method toBukkit = getOBCClass("CraftParticle").getDeclaredMethod("toBukkit", getNMSClass("ParticleParam"));
 							Object particleParam = getNMSClass("ArgumentParticle").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
 							argList.add((Particle) toBukkit.invoke(null, particleParam));
-//							arr[count] = (Particle) toBukkit.invoke(null, particleParam);
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 							e.printStackTrace(System.out);
 						}
@@ -184,7 +180,6 @@ public final class SemiReflector {
 							Constructor craftPotionType = getOBCClass("potion.CraftPotionEffectType").getConstructor(getNMSClass("MobEffectList"));
 							Object mobEffect = getNMSClass("ArgumentMobEffect").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
 							argList.add((PotionEffectType) craftPotionType.newInstance(mobEffect));
-//							arr[count] = (PotionEffectType) craftPotionType.newInstance(mobEffect);
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException e) {
 							e.printStackTrace(System.out);
 						}
@@ -193,7 +188,6 @@ public final class SemiReflector {
 							Method getColor = getOBCClass("util.CraftChatMessage").getDeclaredMethod("getColor", getNMSClass("EnumChatFormat"));
 							Object enumChatFormat = getNMSClass("ArgumentChatFormat").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
 							argList.add((ChatColor) getColor.invoke(null, enumChatFormat));
-//							arr[count] = (ChatColor) getColor.invoke(null, enumChatFormat);
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 							e.printStackTrace(System.out);
 						}
@@ -202,7 +196,6 @@ public final class SemiReflector {
 							Constructor craftEnchant = getOBCClass("enchantments.CraftEnchantment").getConstructor(getNMSClass("Enchantment"));
 							Object nmsEnchantment = getNMSClass("ArgumentEnchantment").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
 							argList.add((Enchantment) craftEnchant.newInstance(nmsEnchantment));
-//							arr[count] = (Enchantment) craftEnchant.newInstance(nmsEnchantment);
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException e) {
 							e.printStackTrace(System.out);
 						}
@@ -214,7 +207,6 @@ public final class SemiReflector {
 							double z = vec3D.getClass().getDeclaredField("z").getDouble(vec3D);
 							World world = getCommandSenderWorld(sender);
 							argList.add(new Location(world, x, y, z));
-//							arr[count] = new Location(world, x, y, z);
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchFieldException e) {
 							e.printStackTrace(System.out);
 						}
@@ -230,7 +222,6 @@ public final class SemiReflector {
 							Object entityCasted = getNMSClass("Entity").cast(entity);
 							Object bukkitEntity = getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(entityCasted);
 							argList.add((EntityType) bukkitEntity.getClass().getDeclaredMethod("getType").invoke(bukkitEntity));
-//							arr[count] = (EntityType) bukkitEntity.getClass().getDeclaredMethod("getType").invoke(bukkitEntity);
 						} catch (Exception e) {
 							e.printStackTrace(System.out);
 						}
@@ -244,7 +235,6 @@ public final class SemiReflector {
 								throw new CantFindPlayerException((String) first.getClass().getDeclaredMethod("getName").invoke(first));
 							}
 							argList.add(target);
-//							arr[count] = Bukkit.getPlayer(uuid);
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 							e.printStackTrace(System.out);
 						}
@@ -267,12 +257,10 @@ public final class SemiReflector {
 											entities.add((Entity) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(nmsEntity));
 										}
 										argList.add(entities);
-//										arr[count] = entities; 
 									}
 									catch(InvocationTargetException e) {
 										if(e.getCause() instanceof CommandSyntaxException) {
 											argList.add((Collection<Entity>) new ArrayList<Entity>());
-//											arr[count] = (Collection<Entity>) new ArrayList<Entity>(); 
 										}
 									}
 									break;
@@ -284,11 +272,9 @@ public final class SemiReflector {
 											players.add((Player) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(nmsPlayer));
 										}
 										argList.add(players);
-//										arr[count] = players;
 									} catch(InvocationTargetException e) {
 										if(e.getCause() instanceof CommandSyntaxException) {
 											argList.add((Collection<Player>) new ArrayList<Player>());
-//											arr[count] = (Collection<Player>) new ArrayList<Player>(); 
 										}
 									}
 									break;
@@ -296,7 +282,6 @@ public final class SemiReflector {
 									try {
 										Object entity = (Object) getNMSClass("ArgumentEntity").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
 										argList.add((Entity) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(entity));
-//										arr[count] = (Entity) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(entity);
 									} catch(InvocationTargetException e) {
 										if(e.getCause() instanceof CommandSyntaxException) {
 											throw (CommandSyntaxException) e.getCause();
@@ -307,7 +292,6 @@ public final class SemiReflector {
 									try {
 										Object player = (Object) getNMSClass("ArgumentEntity").getDeclaredMethod("e", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
 										argList.add((Player) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(player));
-//										arr[count] = (Player) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(player);
 									} catch(InvocationTargetException e) {
 										if(e.getCause() instanceof CommandSyntaxException) {
 											throw (CommandSyntaxException) e.getCause();
@@ -320,10 +304,12 @@ public final class SemiReflector {
 						}
 					} else if(entry.getValue() instanceof ChatComponentArgument) {
 						try {
+							//Invokes public String IChatBaseComponent.ChatSerializer.a(IChatComponent c);
 							Class chatSerializer = getNMSClass("IChatBaseComponent$ChatSerializer");
 							Method m = chatSerializer.getDeclaredMethod("a", getNMSClass("IChatBaseComponent"));
 							Object iChatBaseComponent = getNMSClass("ArgumentChatComponent").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
 							Object resultantString = m.invoke(null, iChatBaseComponent);
+							//Convert to spigot thing
 							BaseComponent[] components = ComponentSerializer.parse((String) resultantString);
 							argList.add((BaseComponent[]) components);
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {

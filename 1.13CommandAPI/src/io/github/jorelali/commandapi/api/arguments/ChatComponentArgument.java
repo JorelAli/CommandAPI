@@ -8,26 +8,26 @@ import com.mojang.brigadier.arguments.ArgumentType;
 
 import net.md_5.bungee.api.chat.BaseComponent;
 
+
 @SuppressWarnings("unchecked")
 public class ChatComponentArgument implements Argument {
 
 	com.mojang.brigadier.arguments.ArgumentType<?> rawType;
 	
 	/**
-	 * A ChatComponent argument. Represents some sort of chat related thing which only exists in Spigot
-	 * 
+	 * A ChatComponent argument. Represents raw JSON text, used in Book MetaData, Chat and other various areas of Minecraft
+	 * @see <a href="https://minecraft.gamepedia.com/Commands#Raw_JSON_text">Raw JSON text</a>
 	 */
 	public ChatComponentArgument() {
 		
 		try {
 			Class.forName("org.spigotmc.SpigotConfig");
 		} catch(ClassNotFoundException e) {
-			Bukkit.getLogger().warning("Spigot is not supportedby this server. ChatComponentArgument cannot be used!");
+			Bukkit.getLogger().severe("Spigot is not supported by this server. ChatComponentArgument cannot be used!");
 			e.printStackTrace();
 		}
 		
 		try {
-			
 			rawType = (ArgumentType<?>) ArgumentUtil.getNMS("ArgumentChatComponent").getDeclaredMethod("a").invoke(null);
 		} catch (IllegalAccessException | ClassNotFoundException | IllegalArgumentException | SecurityException | InvocationTargetException | NoSuchMethodException e) {
 			e.printStackTrace();

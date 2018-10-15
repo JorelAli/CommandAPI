@@ -1,15 +1,6 @@
 package io.github.jorelali.commandapi;
 
-import java.util.LinkedHashMap;
-
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import io.github.jorelali.commandapi.api.CommandAPI;
-import io.github.jorelali.commandapi.api.CommandPermission;
-import io.github.jorelali.commandapi.api.arguments.Argument;
-import io.github.jorelali.commandapi.api.arguments.ChatComponentArgument;
-import net.md_5.bungee.api.chat.BaseComponent;
 
 public class Main extends JavaPlugin {
 
@@ -43,16 +34,15 @@ public class Main extends JavaPlugin {
 //		});
 		
 		
-		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-		arguments.put("rawText", new ChatComponentArgument());
-		CommandAPI.getInstance().register("veryraw", arguments, (sender, args) -> {
-			if (sender instanceof Player) {
-				Player player = (Player) sender;
-				player.sendMessage("Triggered the command");
-				BaseComponent[] arr = (BaseComponent[]) args[0];
-				player.spigot().sendMessage(arr);
-			}
-		});
+//		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+//		arguments.put("rawText", new ChatComponentArgument());
+//		CommandAPI.getInstance().register("veryraw", arguments, (sender, args) -> {
+//			if (sender instanceof Player) {
+//				Player player = (Player) sender;
+//				BaseComponent[] arr = (BaseComponent[]) args[0];
+//				player.spigot().sendMessage(arr);
+//			}
+//		});
 		
 //		String packageName = null;
 //		
@@ -73,7 +63,6 @@ public class Main extends JavaPlugin {
 //			System.out.println("woop woop!");
 //			//m.invoke(null, "h");
 //		} catch (ClassNotFoundException | SecurityException | NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-//			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
 		
