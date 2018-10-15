@@ -1,0 +1,1 @@
+mvn install:install-file -DgroupId=io.github.jorelali -DartifactId=commandapi -Dversion=1.4 -Dfile=../target/CommandAPI_1.4_20181015-011053.jar -Dpackaging=jar -DgeneratePom=true -DlocalRepositoryPath=.  -DcreateChecksum=true
