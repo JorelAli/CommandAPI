@@ -12,7 +12,7 @@ public class LocationArgument implements Argument {
 	com.mojang.brigadier.arguments.ArgumentType<?> rawType;
 	
 	/**
-	 * A complex argument of any NMS type
+	 * A Location argument. Represents Minecraft locations
 	 */
 	public LocationArgument() {
 		try {
