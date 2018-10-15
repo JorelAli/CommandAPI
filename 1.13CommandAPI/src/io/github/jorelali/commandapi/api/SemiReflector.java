@@ -3,12 +3,15 @@ package io.github.jorelali.commandapi.api;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -35,8 +38,10 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
+import io.github.jorelali.commandapi.Main;
 import io.github.jorelali.commandapi.api.CommandPermission.PermissionNode;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.ChatColorArgument;
@@ -57,6 +62,10 @@ import net.md_5.bungee.chat.ComponentSerializer;
 //Only uses reflection for NMS
 @SuppressWarnings({"rawtypes", "unchecked"})
 public final class SemiReflector {
+	
+	private Map<String, Class<?>> NMSClasses;
+	private Map<Class<?>, Method> methods;
+	
 	
 	//OBC
 	private String obcPackageName = null;
@@ -81,6 +90,11 @@ public final class SemiReflector {
 			Object server = Bukkit.getServer().getClass().getDeclaredMethod("getServer").invoke(Bukkit.getServer());
 			SemiReflector.packageName = server.getClass().getPackage().getName();
 			obcPackageName = Bukkit.getServer().getClass().getPackage().getName();
+			
+			//Everything from this line will use getNMSClass(), so we initialize our cache here
+			NMSClasses = new HashMap<>();
+			methods = new HashMap<>();
+			
 			this.cDispatcher = getNMSClass("MinecraftServer").getDeclaredField("commandDispatcher").get(server);
 						
 			//This is our "z"
@@ -90,6 +104,19 @@ public final class SemiReflector {
 			e.printStackTrace(System.out);
 		}
 		
+	}
+	
+	public void unregister(String commandName) {
+		try {
+			Field children = CommandNode.class.getDeclaredField("children");
+			children.setAccessible(true);
+			
+			Map<String, CommandNode<?>> c = (Map<String, CommandNode<?>>) children.get(dispatcher.getRoot());
+			c.remove(commandName);
+			Main.getLog().info("Unregistering " + commandName);
+		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	//Returns the world in which a command sender is from
@@ -119,9 +146,9 @@ public final class SemiReflector {
 			CommandSender sender = null;
 			
 			try {
-				sender = (CommandSender) getNMSClass("CommandListenerWrapper").getDeclaredMethod("getBukkitSender").invoke(cmdCtx.getSource());
+				sender = (CommandSender) getMethod(getNMSClass("CommandListenerWrapper"), "getBukkitSender").invoke(cmdCtx.getSource());//getNMSClass("CommandListenerWrapper").getDeclaredMethod("getBukkitSender").invoke(cmdCtx.getSource());
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
-					| NoSuchMethodException | SecurityException | ClassNotFoundException e) {
+					| SecurityException e) {
 				e.printStackTrace(System.out);
 			}
 			
@@ -207,7 +234,7 @@ public final class SemiReflector {
 							double z = vec3D.getClass().getDeclaredField("z").getDouble(vec3D);
 							World world = getCommandSenderWorld(sender);
 							argList.add(new Location(world, x, y, z));
-						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchFieldException e) {
+						} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchFieldException e) {
 							e.printStackTrace(System.out);
 						}
 					} else if(entry.getValue() instanceof EntityTypeArgument) {
@@ -235,7 +262,7 @@ public final class SemiReflector {
 								throw new CantFindPlayerException((String) first.getClass().getDeclaredMethod("getName").invoke(first));
 							}
 							argList.add(target);
-						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+						} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 							e.printStackTrace(System.out);
 						}
 					} else if(entry.getValue() instanceof EntitySelectorArgument) {
@@ -299,7 +326,7 @@ public final class SemiReflector {
 									}
 									break;								
 							}
-						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException e) {
+						} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException e) {
 							e.printStackTrace(System.out);
 						}
 					} else if(entry.getValue() instanceof ChatComponentArgument) {
@@ -312,7 +339,7 @@ public final class SemiReflector {
 							//Convert to spigot thing
 							BaseComponent[] components = ComponentSerializer.parse((String) resultantString);
 							argList.add((BaseComponent[]) components);
-						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+						} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 							e.printStackTrace(System.out);
 						}
 					}
@@ -363,7 +390,7 @@ public final class SemiReflector {
 	
 	//Builds our NMS command using the given arguments for this method, then registers it
 	protected void register(String commandName, CommandPermission permissions, String[] aliases, final LinkedHashMap<String, Argument> args, CommandExecutor executor) throws Exception {
-		
+		Main.getLog().info("Registering command " + commandName);
 		Command command = generateCommand(commandName, args, executor);
 		Predicate permission = generatePermissions(permissions);
 		
@@ -445,8 +472,26 @@ public final class SemiReflector {
 		
 	/** Retrieves a net.minecraft.server class by using the dynamic package from
 	 * the dedicated server */
-	private Class<?> getNMSClass(final String className) throws ClassNotFoundException {
-		return (Class.forName(SemiReflector.packageName + "." + className));
+	private Class<?> getNMSClass(final String className) {
+		return NMSClasses.computeIfAbsent(className, k -> {
+			try {
+				return (Class.forName(SemiReflector.packageName + "." + className));
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+			return null;
+		});
+	}
+	
+	private Method getMethod(Class<?> c, String name, Class<?>... parameterTypes) {
+		return methods.computeIfAbsent(c, k -> {
+			try {
+				return k.getDeclaredMethod(name, parameterTypes);
+			} catch (NoSuchMethodException | SecurityException e) {
+				e.printStackTrace();
+			}
+			return null;
+		});
 	}
 	
 	/** Retrieves a craftbukkit class */

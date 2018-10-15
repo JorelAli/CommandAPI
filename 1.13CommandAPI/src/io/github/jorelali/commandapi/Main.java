@@ -1,12 +1,25 @@
 package io.github.jorelali.commandapi;
 
+import java.util.LinkedHashMap;
+import java.util.logging.Logger;
+
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import io.github.jorelali.commandapi.api.CommandAPI;
+import io.github.jorelali.commandapi.api.CommandPermission;
+import io.github.jorelali.commandapi.api.arguments.Argument;
+import io.github.jorelali.commandapi.api.arguments.BooleanArgument;
 
 public class Main extends JavaPlugin {
 
 	//final static private boolean TEST = false;
 	
+	private static Logger logger = JavaPlugin.getPlugin(Main.class).getLogger();
 	
+	public static Logger getLog() {
+		return logger;
+	}
 	
 	@Override
 	public void onEnable() {
@@ -16,22 +29,26 @@ public class Main extends JavaPlugin {
 		
 		/////// EVERYTHING BELOW HERE IS COMMENTED AND DOESN'T AFFECT COMPILATION AT ALL>.
 		
-//		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-//		CommandAPI.getInstance().register("trample", new CommandPermission("wikiop.general.trampling"), arguments, (sender, args) -> {
-//			if (sender instanceof Player) {
-//				Player player = (Player) sender;
-//				player.sendMessage("Triggered the command");
-//			}
-//		});
-//		
-//		//arguments = new LinkedHashMap<>();
-//		arguments.put("thing", new BooleanArgument());
-//		CommandAPI.getInstance().register("trample", new CommandPermission("wikiop.general.trampling"), arguments, (sender, args) -> {
-//			if (sender instanceof Player) {
-//				Player player = (Player) sender;
-//				player.sendMessage("Triggered the command again with boolean");
-//			}
-//		});
+		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+		CommandAPI.getInstance().register("trample", new CommandPermission("wikiop.general.trampling"), arguments, (sender, args) -> {
+			if (sender instanceof Player) {
+				Player player = (Player) sender;
+				player.sendMessage("Triggered the command");
+			}
+		});
+		
+		//arguments = new LinkedHashMap<>();
+		arguments.put("thing", new BooleanArgument());
+		CommandAPI.getInstance().register("trample", new CommandPermission("wikiop.general.trampling"), arguments, (sender, args) -> {
+			if (sender instanceof Player) {
+				Player player = (Player) sender;
+				player.sendMessage("Triggered the command again with boolean");
+			}
+		});
+		
+		
+		CommandAPI.getInstance().unregister("gamemode");
+		
 		
 		
 //		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();

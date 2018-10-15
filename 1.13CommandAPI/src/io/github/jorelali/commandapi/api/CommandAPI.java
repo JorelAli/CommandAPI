@@ -43,6 +43,10 @@ public class CommandAPI {
 		}
 	}
 	
+	public void unregister(String command) {
+		reflector.unregister(command);
+	}
+	
 	/**
 	 * Registers a command
 	 * @param commandName The name of the command
