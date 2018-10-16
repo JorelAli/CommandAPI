@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 
+import io.github.jorelali.commandapi.api.exceptions.SpigotNotFoundException;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 
@@ -25,8 +26,7 @@ public class ChatComponentArgument implements Argument {
 			Bukkit.getServer().getName();
 			Class.forName("org.spigotmc.SpigotConfig");
 		} catch(ClassNotFoundException e) {
-			Bukkit.getLogger().severe("Spigot is not supported by this server. ChatComponentArgument cannot be used!");
-			e.printStackTrace();
+			throw new SpigotNotFoundException(this.getClass());
 		}
 		
 		try {
