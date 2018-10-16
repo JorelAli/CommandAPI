@@ -77,7 +77,7 @@ public final class SemiReflector {
 	private Object cDispatcher;
 
 	//DEBUG mode
-	private static final boolean DEBUG = false;
+	private static final boolean DEBUG = true;
 	
 	protected SemiReflector() throws ClassNotFoundException {
 		
@@ -98,7 +98,7 @@ public final class SemiReflector {
 			methods = new HashMap<>();
 			fields = new HashMap<>();
 			
-			this.cDispatcher = getNMSClass("MinecraftServer").getDeclaredField("commandDispatcher").get(server);
+			this.cDispatcher = getField(getNMSClass("MinecraftServer"), "commandDispatcher").get(server);
 						
 			//This is our "z"
 			this.dispatcher = (CommandDispatcher) getNMSClass("CommandDispatcher").getDeclaredMethod("a").invoke(cDispatcher); 
@@ -112,7 +112,6 @@ public final class SemiReflector {
 	public void unregister(String commandName) {
 		try {
 			Field children = getField(CommandNode.class, "children");
-			children.setAccessible(true);
 			
 			Map<String, CommandNode<?>> c = (Map<String, CommandNode<?>>) children.get(dispatcher.getRoot());
 			c.remove(commandName);
@@ -244,7 +243,7 @@ public final class SemiReflector {
 							double z = getField(vec3D.getClass(),"z").getDouble(vec3D);
 							World world = getCommandSenderWorld(sender);
 							argList.add(new Location(world, x, y, z));
-						} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchFieldException e) {
+						} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 							e.printStackTrace(System.out);
 						}
 					} else if(entry.getValue() instanceof EntityTypeArgument) {

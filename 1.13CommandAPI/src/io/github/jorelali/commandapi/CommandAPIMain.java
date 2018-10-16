@@ -89,14 +89,15 @@ public class CommandAPIMain extends JavaPlugin {
 			}
 		});
 		
-		
-		CommandAPI.getInstance().unregister("gamemode");
-		
 		arguments = new LinkedHashMap<>();
 		arguments.put("a", new ChatColorArgument());
-		CommandAPI.getInstance().register("test", arguments, (sender, args) -> {
+		CommandAPI.getInstance().register("mytestcmd", arguments, (sender, args) -> {
 			System.out.println("woop");
 		});
+
+		CommandAPI.getInstance().unregister("gamemode");
+		
+		
 		
 		
 //		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
