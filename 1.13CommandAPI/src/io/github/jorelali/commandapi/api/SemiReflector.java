@@ -41,7 +41,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
-import io.github.jorelali.commandapi.Main;
+import io.github.jorelali.commandapi.CommandAPIMain;
 import io.github.jorelali.commandapi.api.CommandPermission.PermissionNode;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.ChatColorArgument;
@@ -113,7 +113,7 @@ public final class SemiReflector {
 			
 			Map<String, CommandNode<?>> c = (Map<String, CommandNode<?>>) children.get(dispatcher.getRoot());
 			c.remove(commandName);
-			Main.getLog().info("Unregistering " + commandName);
+			CommandAPIMain.getLog().info("Unregistering " + commandName);
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
@@ -390,7 +390,7 @@ public final class SemiReflector {
 	
 	//Builds our NMS command using the given arguments for this method, then registers it
 	protected void register(String commandName, CommandPermission permissions, String[] aliases, final LinkedHashMap<String, Argument> args, CommandExecutor executor) throws Exception {
-		Main.getLog().info("Registering command " + commandName);
+		CommandAPIMain.getLog().info("Registering command " + commandName);
 		Command command = generateCommand(commandName, args, executor);
 		Predicate permission = generatePermissions(permissions);
 		

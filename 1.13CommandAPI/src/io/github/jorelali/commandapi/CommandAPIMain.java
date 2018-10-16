@@ -3,6 +3,7 @@ package io.github.jorelali.commandapi;
 import java.util.LinkedHashMap;
 import java.util.logging.Logger;
 
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -11,33 +12,54 @@ import io.github.jorelali.commandapi.api.CommandPermission;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.BooleanArgument;
 
-public class Main extends JavaPlugin {
-
-	//final static private boolean TEST = false;
+public class CommandAPIMain extends JavaPlugin {
 	
-	private static Logger logger = JavaPlugin.getPlugin(Main.class).getLogger();
+	private static Logger logger = JavaPlugin.getPlugin(CommandAPIMain.class).getLogger();
 	
 	public static Logger getLog() {
 		return logger;
 	}
 	
-	public static void getServerType() {
+	/** 
+	 * Configuration wrapper class.
+	 * The config.yml file used by the CommandAPI is only ever read from,
+	 * nothing is ever written to it. Due to that, that's why there's only
+	 * ever getter methods.
+	 */
+	class Config {
 		
+		private boolean verboseOutput;
+		
+		public Config(FileConfiguration fileConfig) {
+			verboseOutput = fileConfig.getBoolean("verbose-outputs");
+		}
+		
+		public boolean getVerboseOutput() {
+			return verboseOutput;
+		}
+		
+	}
+
+	private static Config config;
+
+	//Gets the instance of Config
+	public static Config getConfiguration() {
+		return config;
+	}
+	
+	
+	@Override
+	public void onLoad() {
+		saveDefaultConfig();
+		CommandAPIMain.config = new Config(getConfig());
 	}
 	
 	@Override
 	public void onEnable() {
 		
-		saveDefaultConfig();
 		
-		switch(getConfig().getString("server-type")) {
-			case "bukkit":
-				//blah
-				break;
-			case "spigot":
-				//blah
-				break;
-		}
+		
+		
 		
 		
 		
