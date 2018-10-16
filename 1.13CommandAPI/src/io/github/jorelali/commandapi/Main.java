@@ -21,8 +21,27 @@ public class Main extends JavaPlugin {
 		return logger;
 	}
 	
+	public static void getServerType() {
+		
+	}
+	
 	@Override
 	public void onEnable() {
+		
+		saveDefaultConfig();
+		
+		switch(getConfig().getString("server-type")) {
+			case "bukkit":
+				//blah
+				break;
+			case "spigot":
+				//blah
+				break;
+		}
+		
+		
+		
+		
 		//Nothing required here, just need
 		//to state that this is a plugin so
 		//other plugins can depend on it

@@ -473,24 +473,35 @@ public final class SemiReflector {
 	/** Retrieves a net.minecraft.server class by using the dynamic package from
 	 * the dedicated server */
 	private Class<?> getNMSClass(final String className) {
-		return NMSClasses.computeIfAbsent(className, k -> {
+		return NMSClasses.computeIfAbsent(className, key -> {
 			try {
-				return (Class.forName(SemiReflector.packageName + "." + className));
+				return (Class.forName(SemiReflector.packageName + "." + key));
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
+				return null;
 			}
-			return null;
 		});
 	}
 	
-	private Method getMethod(Class<?> c, String name, Class<?>... parameterTypes) {
-		return methods.computeIfAbsent(c, k -> {
+	private Method getMethod(Class<?> clazz, String name) {
+		return methods.computeIfAbsent(clazz, key -> {
 			try {
-				return k.getDeclaredMethod(name, parameterTypes);
+				return key.getDeclaredMethod(name);
 			} catch (NoSuchMethodException | SecurityException e) {
 				e.printStackTrace();
+				return null;
 			}
-			return null;
+		});
+	}
+	
+	private Method getMethod(Class<?> clazz, String name, Class<?>... parameterTypes) {
+		return methods.computeIfAbsent(clazz, key -> {
+			try {
+				return key.getDeclaredMethod(name, parameterTypes);
+			} catch (NoSuchMethodException | SecurityException e) {
+				e.printStackTrace();
+				return null;
+			}
 		});
 	}
 	
