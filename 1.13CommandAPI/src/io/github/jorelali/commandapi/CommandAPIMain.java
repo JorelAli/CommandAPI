@@ -11,10 +11,11 @@ import io.github.jorelali.commandapi.api.CommandAPI;
 import io.github.jorelali.commandapi.api.CommandPermission;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.BooleanArgument;
+import io.github.jorelali.commandapi.api.arguments.ChatColorArgument;
 
 public class CommandAPIMain extends JavaPlugin {
 	
-	private static Logger logger = JavaPlugin.getPlugin(CommandAPIMain.class).getLogger();
+	private static Logger logger;
 	
 	public static Logger getLog() {
 		return logger;
@@ -26,7 +27,7 @@ public class CommandAPIMain extends JavaPlugin {
 	 * nothing is ever written to it. Due to that, that's why there's only
 	 * ever getter methods.
 	 */
-	class Config {
+	public class Config {
 		
 		private boolean verboseOutput;
 		
@@ -34,7 +35,7 @@ public class CommandAPIMain extends JavaPlugin {
 			verboseOutput = fileConfig.getBoolean("verbose-outputs");
 		}
 		
-		public boolean getVerboseOutput() {
+		public boolean hasVerboseOutput() {
 			return verboseOutput;
 		}
 		
@@ -52,6 +53,7 @@ public class CommandAPIMain extends JavaPlugin {
 	public void onLoad() {
 		saveDefaultConfig();
 		CommandAPIMain.config = new Config(getConfig());
+		logger = getLogger();
 	}
 	
 	@Override
@@ -90,6 +92,11 @@ public class CommandAPIMain extends JavaPlugin {
 		
 		CommandAPI.getInstance().unregister("gamemode");
 		
+		arguments = new LinkedHashMap<>();
+		arguments.put("a", new ChatColorArgument());
+		CommandAPI.getInstance().register("test", arguments, (sender, args) -> {
+			System.out.println("woop");
+		});
 		
 		
 //		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();

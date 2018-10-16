@@ -64,8 +64,9 @@ import net.md_5.bungee.chat.ComponentSerializer;
 public final class SemiReflector {
 	
 	private Map<String, Class<?>> NMSClasses;
+	private Map<String, Class<?>> OBCClasses;
 	private Map<Class<?>, Method> methods;
-	
+	private Map<Class<?>, Field> fields;
 	
 	//OBC
 	private String obcPackageName = null;
@@ -93,7 +94,9 @@ public final class SemiReflector {
 			
 			//Everything from this line will use getNMSClass(), so we initialize our cache here
 			NMSClasses = new HashMap<>();
+			OBCClasses = new HashMap<>();
 			methods = new HashMap<>();
+			fields = new HashMap<>();
 			
 			this.cDispatcher = getNMSClass("MinecraftServer").getDeclaredField("commandDispatcher").get(server);
 						
@@ -108,13 +111,16 @@ public final class SemiReflector {
 	
 	public void unregister(String commandName) {
 		try {
-			Field children = CommandNode.class.getDeclaredField("children");
+			Field children = getField(CommandNode.class, "children");
 			children.setAccessible(true);
 			
 			Map<String, CommandNode<?>> c = (Map<String, CommandNode<?>>) children.get(dispatcher.getRoot());
 			c.remove(commandName);
-			CommandAPIMain.getLog().info("Unregistering " + commandName);
-		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+			
+			if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
+				CommandAPIMain.getLog().info("Unregistering /" + commandName);
+			}
+		} catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
 	}
@@ -154,10 +160,14 @@ public final class SemiReflector {
 			
 			//Handle proxied command senders via /execute as [Proxy]
 			try {
-				Object proxyEntity = cmdCtx.getSource().getClass().getDeclaredMethod("f").invoke(cmdCtx.getSource());
-				
+				Object proxyEntity = getMethod(cmdCtx.getSource().getClass(), "f").invoke(cmdCtx.getSource());
 				if(proxyEntity != null) {
-					CommandSender proxy = (CommandSender) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(proxyEntity);
+					CommandSender proxy;
+					if(proxyEntity instanceof CommandSender) {
+						proxy = (CommandSender) proxyEntity;
+					} else {
+						proxy = (CommandSender) getMethod(getNMSClass("Entity"), "getBukkitEntity").invoke(proxyEntity);
+					}
 					
 					if(!proxy.equals(sender)) {
 						Class proxyClass = getOBCClass("command.ProxiedNativeCommandSender");
@@ -186,83 +196,83 @@ public final class SemiReflector {
 					if(entry.getValue() instanceof ItemStackArgument) {
 						try {
 							//Parse Bukkit ItemStack from NMS 
-							Method asBukkitCopy = getOBCClass("inventory.CraftItemStack").getDeclaredMethod("asBukkitCopy", getNMSClass("ItemStack"));
-							Object argumentIS = getNMSClass("ArgumentItemStack").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-							Object nmsIS = argumentIS.getClass().getDeclaredMethod("a", int.class, boolean.class).invoke(argumentIS, 1, false);
+							Method asBukkitCopy = getMethod(getOBCClass("inventory.CraftItemStack"), "asBukkitCopy", getNMSClass("ItemStack"));
+							Object argumentIS = getMethod(getNMSClass("ArgumentItemStack"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+							Object nmsIS = getMethod(argumentIS.getClass(), "a", int.class, boolean.class).invoke(argumentIS, 1, false);
 							argList.add((ItemStack) asBukkitCopy.invoke(null, nmsIS));
-						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+						} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 							e.printStackTrace(System.out);
 						}
 					} else if(entry.getValue() instanceof ParticleArgument) {
 						try {
 							//Particle Bukkit Particle from NMS
-							Method toBukkit = getOBCClass("CraftParticle").getDeclaredMethod("toBukkit", getNMSClass("ParticleParam"));
-							Object particleParam = getNMSClass("ArgumentParticle").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+							Method toBukkit = getMethod(getOBCClass("CraftParticle"), "toBukkit", getNMSClass("ParticleParam"));
+							Object particleParam = getMethod(getNMSClass("ArgumentParticle"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
 							argList.add((Particle) toBukkit.invoke(null, particleParam));
-						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+						} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 							e.printStackTrace(System.out);
 						}
 					} else if(entry.getValue() instanceof PotionEffectArgument) {
 						try {
 							Constructor craftPotionType = getOBCClass("potion.CraftPotionEffectType").getConstructor(getNMSClass("MobEffectList"));
-							Object mobEffect = getNMSClass("ArgumentMobEffect").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+							Object mobEffect = getMethod(getNMSClass("ArgumentMobEffect"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
 							argList.add((PotionEffectType) craftPotionType.newInstance(mobEffect));
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException e) {
 							e.printStackTrace(System.out);
 						}
 					} else if(entry.getValue() instanceof ChatColorArgument) {
 						try {
-							Method getColor = getOBCClass("util.CraftChatMessage").getDeclaredMethod("getColor", getNMSClass("EnumChatFormat"));
-							Object enumChatFormat = getNMSClass("ArgumentChatFormat").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+							Method getColor = getMethod(getOBCClass("util.CraftChatMessage"), "getColor", getNMSClass("EnumChatFormat"));
+							Object enumChatFormat = getMethod(getNMSClass("ArgumentChatFormat"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
 							argList.add((ChatColor) getColor.invoke(null, enumChatFormat));
-						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+						} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 							e.printStackTrace(System.out);
 						}
 					} else if(entry.getValue() instanceof EnchantmentArgument) {
 						try {
 							Constructor craftEnchant = getOBCClass("enchantments.CraftEnchantment").getConstructor(getNMSClass("Enchantment"));
-							Object nmsEnchantment = getNMSClass("ArgumentEnchantment").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+							Object nmsEnchantment = getMethod(getNMSClass("ArgumentEnchantment"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
 							argList.add((Enchantment) craftEnchant.newInstance(nmsEnchantment));
 						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException e) {
 							e.printStackTrace(System.out);
 						}
 					} else if(entry.getValue() instanceof LocationArgument) {
 						try {
-							Object vec3D = getNMSClass("ArgumentVec3").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-							double x = vec3D.getClass().getDeclaredField("x").getDouble(vec3D);
-							double y = vec3D.getClass().getDeclaredField("y").getDouble(vec3D);
-							double z = vec3D.getClass().getDeclaredField("z").getDouble(vec3D);
+							Object vec3D = getMethod(getNMSClass("ArgumentVec3"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+							double x = getField(vec3D.getClass(), "x").getDouble(vec3D);
+							double y = getField(vec3D.getClass(), "y").getDouble(vec3D);
+							double z = getField(vec3D.getClass(),"z").getDouble(vec3D);
 							World world = getCommandSenderWorld(sender);
 							argList.add(new Location(world, x, y, z));
-						} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchFieldException e) {
+						} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchFieldException e) {
 							e.printStackTrace(System.out);
 						}
 					} else if(entry.getValue() instanceof EntityTypeArgument) {
 						try {
-							Object minecraftKey = getNMSClass("ArgumentEntitySummon").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+							Object minecraftKey = getMethod(getNMSClass("ArgumentEntitySummon"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
 							World world = getCommandSenderWorld(sender);
 							Object craftWorld = getOBCClass("CraftWorld").cast(world);
-							Object handle = craftWorld.getClass().getDeclaredMethod("getHandle").invoke(craftWorld);
+							Object handle = getMethod(craftWorld.getClass(), "getHandle").invoke(craftWorld);
 							Object minecraftWorld = getNMSClass("World").cast(handle);
 							
-							Object entity = getNMSClass("EntityTypes").getDeclaredMethod("a", getNMSClass("World"), getNMSClass("MinecraftKey")).invoke(null, minecraftWorld, minecraftKey);
+							Object entity = getMethod(getNMSClass("EntityTypes"), "a", getNMSClass("World"), getNMSClass("MinecraftKey")).invoke(null, minecraftWorld, minecraftKey);
 							Object entityCasted = getNMSClass("Entity").cast(entity);
-							Object bukkitEntity = getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(entityCasted);
+							Object bukkitEntity = getMethod(getNMSClass("Entity"), "getBukkitEntity").invoke(entityCasted);
 							argList.add((EntityType) bukkitEntity.getClass().getDeclaredMethod("getType").invoke(bukkitEntity));
 						} catch (Exception e) {
 							e.printStackTrace(System.out);
 						}
 					} else if(entry.getValue() instanceof PlayerArgument) {
 						try {
-							Collection<?> collectionOfPlayers = (Collection<?>) getNMSClass("ArgumentProfile").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+							Collection<?> collectionOfPlayers = (Collection<?>) getMethod(getNMSClass("ArgumentProfile"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
 							Object first = collectionOfPlayers.iterator().next();
-							UUID uuid = (UUID) first.getClass().getDeclaredMethod("getId").invoke(first);
+							UUID uuid = (UUID) getMethod(first.getClass(), "getId").invoke(first);
 							Player target = Bukkit.getPlayer(uuid);
 							if(target == null) {
-								throw new CantFindPlayerException((String) first.getClass().getDeclaredMethod("getName").invoke(first));
+								throw new CantFindPlayerException((String) getMethod(first.getClass(), "getName").invoke(first));
 							}
 							argList.add(target);
-						} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+						} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 							e.printStackTrace(System.out);
 						}
 					} else if(entry.getValue() instanceof EntitySelectorArgument) {
@@ -278,10 +288,10 @@ public final class SemiReflector {
 								case MANY_ENTITIES:
 								default:
 									try {
-										Collection<?> collectionOfEntities = (Collection<?>) getNMSClass("ArgumentEntity").getDeclaredMethod("c", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+										Collection<?> collectionOfEntities = (Collection<?>) getMethod(getNMSClass("ArgumentEntity"), "c", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
 										Collection<Entity> entities = new ArrayList<>();
 										for(Object nmsEntity : collectionOfEntities) {
-											entities.add((Entity) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(nmsEntity));
+											entities.add((Entity) getMethod(getNMSClass("Entity"), "getBukkitEntity").invoke(nmsEntity));
 										}
 										argList.add(entities);
 									}
@@ -293,10 +303,10 @@ public final class SemiReflector {
 									break;
 								case MANY_PLAYERS:
 									try {
-										Collection<?> collectionOfPlayers = (Collection<?>) getNMSClass("ArgumentEntity").getDeclaredMethod("d", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+										Collection<?> collectionOfPlayers = (Collection<?>) getMethod(getNMSClass("ArgumentEntity"), "d", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
 										Collection<Player> players = new ArrayList<>();
 										for(Object nmsPlayer : collectionOfPlayers) {
-											players.add((Player) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(nmsPlayer));
+											players.add((Player) getMethod(getNMSClass("Entity"), "getBukkitEntity").invoke(nmsPlayer));
 										}
 										argList.add(players);
 									} catch(InvocationTargetException e) {
@@ -307,8 +317,8 @@ public final class SemiReflector {
 									break;
 								case ONE_ENTITY:
 									try {
-										Object entity = (Object) getNMSClass("ArgumentEntity").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-										argList.add((Entity) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(entity));
+										Object entity = (Object) getMethod(getNMSClass("ArgumentEntity"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+										argList.add((Entity) getMethod(getNMSClass("Entity"), "getBukkitEntity").invoke(entity));
 									} catch(InvocationTargetException e) {
 										if(e.getCause() instanceof CommandSyntaxException) {
 											throw (CommandSyntaxException) e.getCause();
@@ -317,8 +327,8 @@ public final class SemiReflector {
 									break;
 								case ONE_PLAYER:
 									try {
-										Object player = (Object) getNMSClass("ArgumentEntity").getDeclaredMethod("e", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-										argList.add((Player) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(player));
+										Object player = (Object) getMethod(getNMSClass("ArgumentEntity"), "e", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+										argList.add((Player) getMethod(getNMSClass("Entity"), "getBukkitEntity").invoke(player));
 									} catch(InvocationTargetException e) {
 										if(e.getCause() instanceof CommandSyntaxException) {
 											throw (CommandSyntaxException) e.getCause();
@@ -326,20 +336,20 @@ public final class SemiReflector {
 									}
 									break;								
 							}
-						} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException e) {
+						} catch (SecurityException | IllegalAccessException | IllegalArgumentException e) {
 							e.printStackTrace(System.out);
 						}
 					} else if(entry.getValue() instanceof ChatComponentArgument) {
 						try {
 							//Invokes public String IChatBaseComponent.ChatSerializer.a(IChatComponent c);
 							Class chatSerializer = getNMSClass("IChatBaseComponent$ChatSerializer");
-							Method m = chatSerializer.getDeclaredMethod("a", getNMSClass("IChatBaseComponent"));
-							Object iChatBaseComponent = getNMSClass("ArgumentChatComponent").getDeclaredMethod("a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+							Method m = getMethod(chatSerializer, "a", getNMSClass("IChatBaseComponent"));
+							Object iChatBaseComponent = getMethod(getNMSClass("ArgumentChatComponent"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
 							Object resultantString = m.invoke(null, iChatBaseComponent);
 							//Convert to spigot thing
 							BaseComponent[] components = ComponentSerializer.parse((String) resultantString);
 							argList.add((BaseComponent[]) components);
-						} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+						} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 							e.printStackTrace(System.out);
 						}
 					}
@@ -358,12 +368,12 @@ public final class SemiReflector {
         	//Generate CommandSender object
 			CommandSender sender = null;
 			try {
-				sender = (CommandSender) cmdSender.getClass().getDeclaredMethod("getBukkitSender").invoke(cmdSender);
+				sender = (CommandSender) getMethod(cmdSender.getClass(), "getBukkitSender").invoke(cmdSender);
 				//Object entity = cmdSender.getClass().getDeclaredMethod("f").invoke(cmdSender);
 				//sender = (CommandSender) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(entity);
 				
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
-					| NoSuchMethodException | SecurityException e) {
+					| SecurityException e) {
 				e.printStackTrace(System.out);
 			}
 
@@ -390,7 +400,13 @@ public final class SemiReflector {
 	
 	//Builds our NMS command using the given arguments for this method, then registers it
 	protected void register(String commandName, CommandPermission permissions, String[] aliases, final LinkedHashMap<String, Argument> args, CommandExecutor executor) throws Exception {
-		CommandAPIMain.getLog().info("Registering command " + commandName);
+		if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
+			//Create a list of argument names
+			StringBuilder builder = new StringBuilder();
+			args.values().forEach(arg -> builder.append("<").append(arg.getClass().getSimpleName()).append("> "));
+			CommandAPIMain.getLog().info("Registering command /" + commandName + " " + builder.toString());
+		}
+		
 		Command command = generateCommand(commandName, args, executor);
 		Predicate permission = generatePermissions(permissions);
 		
@@ -505,9 +521,29 @@ public final class SemiReflector {
 		});
 	}
 	
+	private Field getField(Class<?> clazz, String name) {
+		return fields.computeIfAbsent(clazz, key -> {
+			try {
+				Field field = key.getDeclaredField(name);
+				field.setAccessible(true);
+				return field;
+			} catch (SecurityException | NoSuchFieldException e) {
+				e.printStackTrace();
+				return null;
+			}
+		});
+	}
+	
 	/** Retrieves a craftbukkit class */
 	private Class<?> getOBCClass(final String className) throws ClassNotFoundException {
-		return (Class.forName(obcPackageName + "." + className));
+		return OBCClasses.computeIfAbsent(className, key -> {
+			try {
+				return (Class.forName(obcPackageName + "." + className));
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+				return null;
+			}
+		});
 	}
 
 	
