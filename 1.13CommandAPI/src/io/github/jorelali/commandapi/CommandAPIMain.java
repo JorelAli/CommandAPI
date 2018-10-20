@@ -17,6 +17,7 @@ import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.ChatComponentArgument;
 import io.github.jorelali.commandapi.api.arguments.IntegerArgument;
 import io.github.jorelali.commandapi.api.arguments.LiteralArgument;
+import io.github.jorelali.commandapi.api.arguments.SuggestedStringArg;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 public class CommandAPIMain extends JavaPlugin {
@@ -153,6 +154,16 @@ public class CommandAPIMain extends JavaPlugin {
 							break;
 					}
 					player.setGameMode(targetGM);
+				}
+			});
+			
+			//Tests SuggestedStringArguments
+			arguments.clear();
+			arguments.put("test", new SuggestedStringArg());
+			CommandAPI.getInstance().register("suggest", arguments, (sender, args) -> {
+				if (sender instanceof Player) {
+					Player player = (Player) sender;
+					player.sendMessage((String) args[0]);
 				}
 			});
 		}

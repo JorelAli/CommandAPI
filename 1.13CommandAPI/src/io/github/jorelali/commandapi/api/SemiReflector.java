@@ -38,6 +38,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
@@ -55,6 +56,7 @@ import io.github.jorelali.commandapi.api.arguments.LocationArgument;
 import io.github.jorelali.commandapi.api.arguments.ParticleArgument;
 import io.github.jorelali.commandapi.api.arguments.PlayerArgument;
 import io.github.jorelali.commandapi.api.arguments.PotionEffectArgument;
+import io.github.jorelali.commandapi.api.arguments.SuggestedStringArg;
 import io.github.jorelali.commandapi.api.exceptions.CantFindPlayerException;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
@@ -439,7 +441,10 @@ public final class SemiReflector {
 	        	String str = ((LiteralArgument) innerArg).getLiteral();
 	        	inner = getLiteralArgumentBuilder(str).executes(command);
 	        } else {
-	        	inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType()).executes(command);
+	        	if(innerArg instanceof SuggestedStringArg) {
+	        		inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), generateSuggestions(new String[] {"hello", "world"})).executes(command);
+        		} else 
+        			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType()).executes(command);
 	        }
 
 	        //Link everything else up, except the first
@@ -450,7 +455,10 @@ public final class SemiReflector {
 	        		String str = ((LiteralArgument) outerArg).getLiteral();
 	        		outer = getLiteralArgumentBuilder(str).then(outer);
 	        	} else {
-	        		outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType()).then(outer);
+	        		if(outerArg instanceof SuggestedStringArg) {
+	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), generateSuggestions(new String[] {"hello", "world"})).then(outer);
+	        		} else 
+	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType()).then(outer);
 	        	}
 	        }        
 	        
@@ -485,6 +493,21 @@ public final class SemiReflector {
 	//Registers a RequiredArgumentBuilder for an argument
 	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, com.mojang.brigadier.arguments.ArgumentType<T> type){
 		return RequiredArgumentBuilder.argument(argumentName, type);
+	}
+	
+	private SuggestionProvider generateSuggestions(String[] arr) {		
+		return (context, builder) -> {
+			for(String str : arr) {
+				builder = builder.suggest(str);
+			}
+			
+			return builder.buildFuture();
+			};
+	}
+	
+	//Registers a RequiredArgumentBuilder for an argument
+	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, com.mojang.brigadier.arguments.ArgumentType<T> type, SuggestionProvider<Object> provider){
+		return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
 	}
 		
 	/** Retrieves a net.minecraft.server class by using the dynamic package from
