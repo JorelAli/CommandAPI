@@ -5,13 +5,17 @@ import java.util.LinkedHashMap;
 import java.util.logging.Logger;
 
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import io.github.jorelali.commandapi.api.CommandAPI;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.ChatComponentArgument;
+import io.github.jorelali.commandapi.api.arguments.IntegerArgument;
 import io.github.jorelali.commandapi.api.arguments.LiteralArgument;
 import net.md_5.bungee.api.chat.BaseComponent;
 
@@ -92,12 +96,22 @@ public class CommandAPIMain extends JavaPlugin {
 				}
 			});
 			
-			/* TESTING TODO LIST:
-			 * ChatComponentArgument compatibility with books
-			 */
-			
-			//BookMeta m = null;
-			//m.spigot().addPage(null);
+			//Tests ChatComponentArgument compatibility with books
+			arguments.clear();
+			arguments.put("contents", new ChatComponentArgument());
+			CommandAPI.getInstance().register("tobook", arguments, (sender, args) -> {
+				if (sender instanceof Player) {
+					Player player = (Player) sender;
+					BaseComponent[] arr = (BaseComponent[]) args[0];
+					
+					ItemStack is = new ItemStack(Material.WRITTEN_BOOK);
+					BookMeta meta = (BookMeta) is.getItemMeta(); 
+					meta.spigot().addPage(arr);
+					is.setItemMeta(meta);
+					
+					player.getInventory().addItem(is);
+				}
+			});
 
 			//Test gamemode command literals
 			HashMap<String, GameMode> gamemodes = new HashMap<>();
@@ -109,13 +123,38 @@ public class CommandAPIMain extends JavaPlugin {
 			for (String key : gamemodes.keySet()) {
 				LinkedHashMap<String, Argument> myArgs = new LinkedHashMap<>();
 				myArgs.put(key, new LiteralArgument(key));
-				CommandAPI.getInstance().register("gamemode2", myArgs, (sender, args) -> {
+				CommandAPI.getInstance().register("gamemode", new String[] {"gm"}, myArgs, (sender, args) -> {
 					if (sender instanceof Player) {
 						Player player = (Player) sender;
 						player.setGameMode(gamemodes.get(key));
 					}
 				});
 			}
+			
+			arguments.clear();
+			arguments.put("id", new IntegerArgument(0, 3));
+			CommandAPI.getInstance().register("gamemode", new String[] {"gm"}, arguments, (sender, args) -> {
+				if (sender instanceof Player) {
+					Player player = (Player) sender;
+					GameMode targetGM = null;
+					switch((int) args[0]) {
+						default:
+						case 0:
+							targetGM = GameMode.SURVIVAL;
+							break;
+						case 1:
+							targetGM = GameMode.CREATIVE;
+							break;
+						case 2:
+							targetGM = GameMode.ADVENTURE;
+							break;
+						case 3:
+							targetGM = GameMode.SPECTATOR;
+							break;
+					}
+					player.setGameMode(targetGM);
+				}
+			});
 		}
 	}
 	

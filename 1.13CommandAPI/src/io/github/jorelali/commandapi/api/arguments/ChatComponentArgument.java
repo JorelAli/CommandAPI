@@ -21,9 +21,7 @@ public class ChatComponentArgument implements Argument {
 	 */
 	public ChatComponentArgument() {
 		
-		//TODO: Remove this pointless reflection and use the server name instead
 		try {
-			Bukkit.getServer().getName();
 			Class.forName("org.spigotmc.SpigotConfig");
 		} catch(ClassNotFoundException e) {
 			throw new SpigotNotFoundException(this.getClass());
