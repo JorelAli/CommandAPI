@@ -1,8 +1,11 @@
 package io.github.jorelali.commandapi;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -17,7 +20,7 @@ import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.ChatComponentArgument;
 import io.github.jorelali.commandapi.api.arguments.IntegerArgument;
 import io.github.jorelali.commandapi.api.arguments.LiteralArgument;
-import io.github.jorelali.commandapi.api.arguments.SuggestedStringArg;
+import io.github.jorelali.commandapi.api.arguments.SuggestedStringArgument;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 public class CommandAPIMain extends JavaPlugin {
@@ -159,7 +162,8 @@ public class CommandAPIMain extends JavaPlugin {
 			
 			//Tests SuggestedStringArguments
 			arguments.clear();
-			arguments.put("test", new SuggestedStringArg());
+			List<String> strList = Arrays.stream(Material.values()).map(element -> element.name()).collect(Collectors.toList());
+			arguments.put("test", new SuggestedStringArgument(strList));
 			CommandAPI.getInstance().register("suggest", arguments, (sender, args) -> {
 				if (sender instanceof Player) {
 					Player player = (Player) sender;
