@@ -75,9 +75,6 @@ public final class SemiReflector {
 	private static String packageName = null;
 	private CommandDispatcher dispatcher;
 	private Object cDispatcher;
-
-	//DEBUG mode
-	private static final boolean DEBUG = true;
 	
 	protected SemiReflector() throws ClassNotFoundException {
 		
@@ -468,8 +465,8 @@ public final class SemiReflector {
 		
         
 		//Produce the commandDispatch.json file for debug purposes
-		if(DEBUG) {
-			File file = new File("commandDispatch.json");
+		if(CommandAPIMain.getConfiguration().willCreateDispatcherFile()) {
+			File file = new File("command_registration.json");
 			try {
 				file.createNewFile();
 			} catch (IOException e) {
