@@ -356,7 +356,12 @@ public final class SemiReflector {
 			}
 			
 			//Run the code from executor and return
-			executor.run(sender, argList.toArray(new Object[argList.size()]));
+			try {
+				executor.run(sender, argList.toArray(new Object[argList.size()]));
+			} catch (Exception e) {
+				e.printStackTrace(System.out);
+				return 0;
+			}
 			return 1;
 		};
 	}
