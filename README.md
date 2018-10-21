@@ -2,7 +2,7 @@
 An API to use the new command UI introduced in Minecraft 1.13
 
 ## Purpose
-This project provides an API to help Bukkit/Spigot developers use the new Minecraft 1.13 command UI.
+This project provides an API to help Bukkit/Spigot developers use the new Minecraft 1.13 command UI. (Read about its creation in my [blog post](https://jorelali.github.io/blog/Creating-the-CommandAPI/)!)
 
 ![commandUI](https://i.imgur.com/aTJa77G.gif "commandUI")
 
