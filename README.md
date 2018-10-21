@@ -31,11 +31,45 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
   ```
 - Arguments require a description to identify them
 
-## Usage
-Click the link below for the relevant documentation:
-* CommandAPI Version 1.0 [documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.0%20Documentation.md)
-* CommandAPI Version 1.1 [documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.1%20Documentation.md)
-* CommandAPI Version 1.2 [documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.2%20Documentation.md)
-* CommandAPI Version 1.3 [documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.3%20Documentation.md)
-* CommandAPI Version 1.4 [documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.4%20Documentation.md)
-* CommandAPI Version 1.5 [documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.5%20Documentation.md)
+## Downloads & Documentation (includes usage for server owners)
+
+| Version | Direct download                                              | Documentation                                                |
+| ------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 1.0     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.0/CommandAPI.jar) | [Version 1.0 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.0%20Documentation.md) |
+| 1.1     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.1/CommandAPI.jar) | [Version 1.1 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.1%20Documentation.md) |
+| 1.2     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.2/CommandAPI.jar) | [Version 1.2 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.2%20Documentation.md) |
+| 1.3     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.3/CommandAPI.jar) | [Version 1.3 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.3%20Documentation.md) |
+| 1.4     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.4/CommandAPI.jar) | [Version 1.4 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.4%20Documentation.md) |
+| 1.5     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.5/CommandAPI.jar) | [Version 1.5 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.5%20Documentation.md) |
+
+## Changelog
+
+* Version 1.5
+  * Adds ChatComponentArgument to handle raw JSON
+  * Adds SuggestedStringArgument to suggest strings
+  * Adds config file
+  * Fix bug where command errors weren't being thrown
+  * Improved performance by caching NMS
+* Version 1.4
+  * Fix critical bug where arguments weren't being handled properly
+  * Adds GreedyStringArgument
+  * Adds various Exception classes
+* Version 1.3
+  * Migrate to Maven
+  * Remove unnecessary reflection
+  * Adds EntitySelectorArgument
+  * Adds LiteralArgument
+  * Adds support for ProxiedCommandSender
+* Version 1.2
+  * Adds TextArgument
+* Version 1.1
+  * Adds PlayerArgument
+  * Adds ParticleArgument
+  * Adds ChatColorArgument
+  * Adds EnchantmentArgument
+  * Adds LocationArgument
+  * Adds EntityTypeArgument
+  * Adds permissions support
+  * Adds alias support
+* Version 1.0
+  * Initial release
