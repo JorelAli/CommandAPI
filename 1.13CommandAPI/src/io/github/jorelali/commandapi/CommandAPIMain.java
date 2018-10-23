@@ -10,13 +10,15 @@ import java.util.stream.Collectors;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import io.github.jorelali.commandapi.api.CommandAPI;
-import io.github.jorelali.commandapi.api.arguments.ArgCustFunc;
+import io.github.jorelali.commandapi.api.FunctionWrapper;
+import io.github.jorelali.commandapi.api.arguments.FunctionArgument;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.ChatComponentArgument;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument;
@@ -192,9 +194,11 @@ public class CommandAPIMain extends JavaPlugin {
 			});
 			
 			arguments.clear();
-			arguments.put("yes", new ArgCustFunc());
+			arguments.put("yes", new FunctionArgument());
+			arguments.put("target", new EntitySelectorArgument(EntitySelector.ONE_ENTITY));
 			CommandAPI.getInstance().register("run", arguments, (sender, args) -> {
-				
+				FunctionWrapper func = (FunctionWrapper) args[0];
+				func.runAs((Entity) args[1]);
 			});
 
 		}

@@ -5,15 +5,17 @@ import java.util.Collection;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 
+import io.github.jorelali.commandapi.api.FunctionWrapper;
+
 @SuppressWarnings("unchecked")
-public class ArgCustFunc implements Argument {
+public class FunctionArgument implements Argument {
 
 	com.mojang.brigadier.arguments.ArgumentType<?> rawType;
 	
 	/**
-	 * A ???
+	 * A Minecraft 1.12 function
 	 */
-	public ArgCustFunc() {
+	public FunctionArgument() {
 		try {
 			rawType = (ArgumentType<?>) ArgumentUtil.getNMS("ArgumentTag").getDeclaredMethod("a").invoke(null);
 		} catch (IllegalAccessException | ClassNotFoundException | IllegalArgumentException | SecurityException | InvocationTargetException | NoSuchMethodException e) {
@@ -28,7 +30,7 @@ public class ArgCustFunc implements Argument {
 
 	@Override
 	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) Collection.class;
+		return (Class<V>) FunctionWrapper.class;
 	}
 
 	@Override
