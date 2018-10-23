@@ -94,7 +94,7 @@ public class CommandAPIMain extends JavaPlugin {
 			//Test ChatComponentArgument
 			LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 			arguments.put("rawText", new ChatComponentArgument());
-			CommandAPI.getInstance().register("veryraw", arguments, (sender, args) -> {
+			CommandAPI.getInstance().register("raw", arguments, (sender, args) -> {
 				sender.sendMessage("a");
 //				if (sender instanceof Player) {
 //					Player player = (Player) sender;
@@ -177,7 +177,7 @@ public class CommandAPIMain extends JavaPlugin {
 			//Tests target entities
 			arguments.clear();
 			arguments.put("target", new EntitySelectorArgument(EntitySelector.MANY_ENTITIES));
-			CommandAPI.getInstance().register("die", arguments, (sender, args) -> {
+			CommandAPI.getInstance().register("aaa", arguments, (sender, args) -> {
 				System.out.println(args[0]);
 			});
 		}
