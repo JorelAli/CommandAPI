@@ -16,6 +16,7 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import io.github.jorelali.commandapi.api.CommandAPI;
+import io.github.jorelali.commandapi.api.arguments.ArgCustFunc;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.ChatComponentArgument;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument;
@@ -23,6 +24,7 @@ import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.Entity
 import io.github.jorelali.commandapi.api.arguments.IntegerArgument;
 import io.github.jorelali.commandapi.api.arguments.LiteralArgument;
 import io.github.jorelali.commandapi.api.arguments.SuggestedStringArgument;
+import io.github.jorelali.commandapi.api.arguments.TextArgument;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 public class CommandAPIMain extends JavaPlugin {
@@ -180,6 +182,21 @@ public class CommandAPIMain extends JavaPlugin {
 			CommandAPI.getInstance().register("aaa", arguments, (sender, args) -> {
 				System.out.println(args[0]);
 			});
+
+			//Tests target entities
+			arguments.clear();
+			arguments.put("target", new EntitySelectorArgument(EntitySelector.MANY_PLAYERS));
+			arguments.put("b", new TextArgument());
+			CommandAPI.getInstance().register("aaa", arguments, (sender, args) -> {
+				System.out.println(args[0]);
+			});
+			
+			arguments.clear();
+			arguments.put("yes", new ArgCustFunc());
+			CommandAPI.getInstance().register("run", arguments, (sender, args) -> {
+				
+			});
+
 		}
 	}
 	

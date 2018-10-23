@@ -9,6 +9,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,7 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import io.github.jorelali.commandapi.CommandAPIMain;
 import io.github.jorelali.commandapi.api.CommandPermission.PermissionNode;
+import io.github.jorelali.commandapi.api.arguments.ArgCustFunc;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.ChatColorArgument;
 import io.github.jorelali.commandapi.api.arguments.ChatComponentArgument;
@@ -377,6 +379,40 @@ public final class SemiReflector {
 						} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 							e.printStackTrace(System.out);
 						}
+					} else if(entry.getValue() instanceof ArgCustFunc) {
+						try {
+							//Collection<CustomFunction>
+							Collection<?> customFuncList = (Collection<?>) getMethod(getNMSClass("ArgumentTag"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+							int i = 0;
+
+							
+							//Like seriously, what IS THIS CODE?!
+							Object arg = cmdCtx.getSource();
+							Object custFunc;
+							
+							//CustomFunction arg3;
+							Object serv = getMethod(getNMSClass("CommandListenerWrapper"), "getServer").invoke(arg);
+							Object funcData = getMethod(getNMSClass("MinecraftServer"), "getFunctionData").invoke(serv);
+							Method a = getMethod(getNMSClass("CustomFunctionData"), "a", getNMSClass("CustomFunction"), getNMSClass("CommandListenerWrapper"));
+							
+							Object argA = getMethod(getNMSClass("CommandListenerWrapper"), "a").invoke(arg);
+							Object argB = getMethod(getNMSClass("CommandListenerWrapper"), "b", int.class).invoke(argA, 2);
+							
+							
+							for (Iterator it = customFuncList.iterator(); it.hasNext(); i += /*arg.getServer().getFunctionData().a(custFunc, arg.a().b(2))*/ (int) a.invoke(funcData, custFunc, argB)) {
+								custFunc = it.next();
+								//arg3 = (CustomFunction) it.next();
+							}
+
+//							if (customFuncList.size() == 1) {
+//								arg.sendMessage(new ChatMessage("commands.function.success.single", new Object[]{Integer.valueOf(i), ((CustomFunction) customFuncList.iterator().next()).a()}), true);
+//							} else {
+//								arg.sendMessage(new ChatMessage("commands.function.success.multiple", new Object[]{Integer.valueOf(i), Integer.valueOf(customFuncList.size())}), true);
+//							}
+
+						} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+							e.printStackTrace(System.out);
+						}
 					}
 				}
 			}
@@ -428,6 +464,15 @@ public final class SemiReflector {
         };
 	}
 	
+	private SuggestionProvider getFunctions() {
+		try {
+			return (SuggestionProvider) getField(getNMSClass("CommandFunction"), "a").get(null);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	//Builds our NMS command using the given arguments for this method, then registers it
 	protected void register(String commandName, CommandPermission permissions, String[] aliases, final LinkedHashMap<String, Argument> args, CommandExecutor executor) throws Exception {
 		if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
@@ -470,6 +515,8 @@ public final class SemiReflector {
 	        } else {
 	        	if(innerArg instanceof SuggestedStringArgument) {
 	        		inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), ((SuggestedStringArgument) innerArg).getSuggestions()).executes(command);
+        		} else if(innerArg instanceof ArgCustFunc) {
+        			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), getFunctions()).executes(command);
         		} else { 
         			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType()).executes(command);
         		}
@@ -485,6 +532,8 @@ public final class SemiReflector {
 	        	} else {
 	        		if(outerArg instanceof SuggestedStringArgument) {
 	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), ((SuggestedStringArgument) outerArg).getSuggestions()).then(outer);
+	        		} else if(outerArg instanceof ArgCustFunc) {
+	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), getFunctions()).then(outer);
 	        		} else {
 	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType()).then(outer);
 	        		}
@@ -535,6 +584,11 @@ public final class SemiReflector {
 			};
 		return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
 	}
+	
+	//Registers a RequiredArgumentBuilder for an argument
+		private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, com.mojang.brigadier.arguments.ArgumentType<T> type, SuggestionProvider provider){
+			return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
+		}
 		
 	/** Retrieves a net.minecraft.server class by using the dynamic package from
 	 * the dedicated server */
