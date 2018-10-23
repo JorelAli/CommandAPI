@@ -2,23 +2,22 @@ package io.github.jorelali.commandapi.api.arguments;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.bukkit.ChatColor;
+import org.bukkit.advancement.Advancement;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 
 @SuppressWarnings("unchecked")
-public class ChatColorArgument implements Argument {
+public class AdvancementArgument implements Argument {
 
 	com.mojang.brigadier.arguments.ArgumentType<?> rawType;
 	
 	/**
-	 * A ChatColor argument. Represents a color or formatting for chat
+	 * An EntityType argument. Represents the type of an Entity
 	 */
-	public ChatColorArgument() {
+	public AdvancementArgument() {
 		try {
-			
-			rawType = (ArgumentType<?>) ArgumentUtil.getMethod(ArgumentUtil.getNMS("ArgumentChatFormat"), "a").invoke(null);
-		} catch (IllegalAccessException | ClassNotFoundException | IllegalArgumentException | SecurityException | InvocationTargetException e) {
+			rawType = (ArgumentType<?>) ArgumentUtil.getNMS("ArgumentMinecraftKeyRegistered").getDeclaredMethod("a").invoke(null);
+		} catch (IllegalAccessException | ClassNotFoundException | IllegalArgumentException | SecurityException | InvocationTargetException | NoSuchMethodException e) {
 			e.printStackTrace();
 		}
 	}
@@ -30,7 +29,7 @@ public class ChatColorArgument implements Argument {
 
 	@Override
 	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) ChatColor.class;
+		return (Class<V>) Advancement.class;
 	}
 
 	@Override

@@ -3,12 +3,14 @@ package io.github.jorelali.commandapi.api;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import org.bukkit.Keyed;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
 
 /**
  * A wrapper class for Minecraft 1.12's functions
  */
-public class FunctionWrapper {	
+public class FunctionWrapper implements Keyed {	
 	
 	//Converts a Bukkit Entity to a Minecraft Entity to a CommandListenerWrapper
 	@FunctionalInterface
@@ -30,14 +32,6 @@ public class FunctionWrapper {
 		this.funcData = funcData;
 		this.custFunc = custFunc;
 		this.argB = argB;
-	}
-
-	/**
-	 * Gets the name of this function
-	 * @return Name of the function, for example namespace:func
-	 */
-	public String getName() {
-		return minecraftKey;
 	}
 	
 	/**
@@ -61,6 +55,12 @@ public class FunctionWrapper {
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public NamespacedKey getKey() {
+		return new NamespacedKey(minecraftKey.split(":")[0], minecraftKey.split(":")[1]);
 	}
 	
 }
