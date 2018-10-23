@@ -61,10 +61,19 @@ import io.github.jorelali.commandapi.api.exceptions.CantFindPlayerException;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 
-//Only uses reflection for NMS
 @SuppressWarnings({"rawtypes", "unchecked"})
+/**
+ * Class to access the main methods in NMS. The wrapper's
+ * implementations occur here.
+ */
 public final class SemiReflector {
 	
+	/*
+	 * Class to store cached methods and fields 
+	 * 
+	 * This is required because each
+	 * key is made up of a class and a field or method name
+	 */
 	class ClassCache {
 		
 		private Class<?> clazz;
@@ -84,6 +93,7 @@ public final class SemiReflector {
 		}
 	}
 	
+	//Cache maps
 	private Map<String, Class<?>> NMSClasses;
 	private Map<String, Class<?>> OBCClasses;
 	private Map<ClassCache, Method> methods;

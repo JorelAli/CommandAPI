@@ -16,6 +16,10 @@ public class CommandAPI {
 	//Static instance of CommandAPI
 	private static CommandAPI instance;
 	
+	/**
+	 * An instance of the CommandAPI, used to register and unregister commands
+	 * @return An instance of the CommandAPI
+	 */
 	public static CommandAPI getInstance() {
 		if(instance == null) {
 			new CommandAPI();
@@ -25,17 +29,14 @@ public class CommandAPI {
 	
 	private SemiReflector reflector;
 
-	/**
-	 * Deprecated as of version 1.1 - use CommandAPI.getInstance() instead
-	 */
-	@Deprecated
-	public CommandAPI() {
+	protected CommandAPI() {
 		if(instance == null) {
 			instance = this;
 		} else {
 			throw new RuntimeException("CommandAPI cannot be instantiated twice"); //Don't need to re-instantiate CommandAPI
 		}
 		
+		//Only ever called once
 		try {
 			this.reflector = new SemiReflector();
 		} catch (ClassNotFoundException e) {
@@ -43,6 +44,10 @@ public class CommandAPI {
 		}
 	}
 	
+	/**
+	 * Unregisters a command
+	 * @param command The name of the command to unregister
+	 */
 	public void unregister(String command) {
 		reflector.unregister(command);
 	}
