@@ -32,17 +32,27 @@ public class FunctionWrapper {
 		this.argB = argB;
 	}
 
+	/**
+	 * Gets the name of this function
+	 * @return Name of the function, for example namespace:func
+	 */
 	public String getName() {
 		return minecraftKey;
 	}
 	
+	/**
+	 * Executes this function as the executor of the command
+	 */
 	public void run() {
 		run(argB);
 	}
 	
+	/**
+	 * Executes this function as an entity
+	 * @param e The entity to perform the function
+	 */
 	public void runAs(Entity e) {
-		Object o = mapper.convert(e);
-		run(o);
+		run(mapper.convert(e));
 	}
 	
 	private void run(Object clw) {

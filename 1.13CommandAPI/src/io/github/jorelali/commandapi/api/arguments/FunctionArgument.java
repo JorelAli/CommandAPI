@@ -1,7 +1,6 @@
 package io.github.jorelali.commandapi.api.arguments;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 
