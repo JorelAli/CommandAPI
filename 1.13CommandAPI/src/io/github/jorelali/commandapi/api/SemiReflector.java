@@ -9,7 +9,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,13 +44,13 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import io.github.jorelali.commandapi.CommandAPIMain;
 import io.github.jorelali.commandapi.api.CommandPermission.PermissionNode;
-import io.github.jorelali.commandapi.api.arguments.FunctionArgument;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.ChatColorArgument;
 import io.github.jorelali.commandapi.api.arguments.ChatComponentArgument;
 import io.github.jorelali.commandapi.api.arguments.EnchantmentArgument;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument;
 import io.github.jorelali.commandapi.api.arguments.EntityTypeArgument;
+import io.github.jorelali.commandapi.api.arguments.FunctionArgument;
 import io.github.jorelali.commandapi.api.arguments.ItemStackArgument;
 import io.github.jorelali.commandapi.api.arguments.LiteralArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationArgument;
@@ -380,35 +379,34 @@ public final class SemiReflector {
 							e.printStackTrace(System.out);
 						}
 					} else if(entry.getValue() instanceof FunctionArgument) {
-						try {
-							//Collection<CustomFunction>
-							 
+						try {				 
 							Collection<?> customFuncList = (Collection<?>) getMethod(getNMSClass("ArgumentTag"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-							
-							//Only deal with 1 command for now, good grief man, tags are too complicated
-							
-							
 
+							//Get first CustomFunction from the list.
+							Object clw = cmdCtx.getSource();
+							Object customFunction = customFuncList.iterator().next();
 							
-							//Like seriously, what IS THIS CODE?!
-							Object arg = cmdCtx.getSource();
-							Object custFunc = customFuncList.iterator().next();
+							//Retrieve CustomFunctionData from main server
+							Object minecraftServer = getMethod(getNMSClass("CommandListenerWrapper"), "getServer").invoke(clw);
+							Object customFunctionData = getMethod(getNMSClass("MinecraftServer"), "getFunctionData").invoke(minecraftServer);
 							
-							//CustomFunction arg3;
-							Object serv = getMethod(getNMSClass("CommandListenerWrapper"), "getServer").invoke(arg);
-							Object funcData = getMethod(getNMSClass("MinecraftServer"), "getFunctionData").invoke(serv);
+							//Method which invokes the function
 							Method invoker = getMethod(getNMSClass("CustomFunctionData"), "a", getNMSClass("CustomFunction"), getNMSClass("CommandListenerWrapper"));
 							
-							Object argA = getMethod(getNMSClass("CommandListenerWrapper"), "a").invoke(arg);
-							Object argB = getMethod(getNMSClass("CommandListenerWrapper"), "b", int.class).invoke(argA, 2);
+							//Get right correct CommandListenerWrapper to execute this command
+							Object clwA = getMethod(getNMSClass("CommandListenerWrapper"), "a").invoke(clw);
+							Object commandListenerWrapper = getMethod(getNMSClass("CommandListenerWrapper"), "b", int.class).invoke(clwA, 2);
 														
-							Object minecraftKey = getMethod(getNMSClass("CustomFunction"), "a").invoke(custFunc);
+							//Parse the name of the MinecraftKey
+							Object minecraftKey = getMethod(getNMSClass("CustomFunction"), "a").invoke(customFunction);
 							String key = (String) getMethod(getNMSClass("MinecraftKey"), "toString").invoke(minecraftKey);
-							FunctionWrapper wrapper = new FunctionWrapper(key, invoker, funcData, custFunc, argB, e -> {
-								
+							
+							//Create wrapper and implement a function to map Bukkit Entities to NMS CommandListenerWrappers
+							FunctionWrapper wrapper = new FunctionWrapper(key, invoker, customFunctionData, customFunction, commandListenerWrapper, e -> {
+								//Mapper function
 								try {
 									Object nmsEntity = getMethod(getOBCClass("entity.CraftEntity"), "getHandle").invoke(e);
-									return getMethod(getNMSClass("CommandListenerWrapper"), "a", getNMSClass("Entity")).invoke(arg, nmsEntity);
+									return getMethod(getNMSClass("CommandListenerWrapper"), "a", getNMSClass("Entity")).invoke(clw, nmsEntity);
 								} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
 										| ClassNotFoundException e1) {
 									e1.printStackTrace();
@@ -417,26 +415,8 @@ public final class SemiReflector {
 								return null;
 							});
 							
+							//Add and finish.
 							argList.add(wrapper);
-							
-//							Iterator it = customFuncList.iterator();
-//							while(it.hasNext()) {
-//								custFunc = it.next();
-//								
-//								System.out.println(key);
-//							}
-							
-//							
-//							for (Iterator it = customFuncList.iterator(); it.hasNext(); i += /*arg.getServer().getFunctionData().a(custFunc, arg.a().b(2))*/ (int) a.invoke(funcData, custFunc, argB)) {
-//								custFunc = it.next();
-//								//arg3 = (CustomFunction) it.next();
-//							}
-
-//							if (customFuncList.size() == 1) {
-//								arg.sendMessage(new ChatMessage("commands.function.success.single", new Object[]{Integer.valueOf(i), ((CustomFunction) customFuncList.iterator().next()).a()}), true);
-//							} else {
-//								arg.sendMessage(new ChatMessage("commands.function.success.multiple", new Object[]{Integer.valueOf(i), Integer.valueOf(customFuncList.size())}), true);
-//							}
 
 						} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 							e.printStackTrace(System.out);
