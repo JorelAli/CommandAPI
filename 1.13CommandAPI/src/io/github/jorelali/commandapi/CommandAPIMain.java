@@ -18,6 +18,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import io.github.jorelali.commandapi.api.CommandAPI;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.ChatComponentArgument;
+import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument;
+import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
 import io.github.jorelali.commandapi.api.arguments.IntegerArgument;
 import io.github.jorelali.commandapi.api.arguments.LiteralArgument;
 import io.github.jorelali.commandapi.api.arguments.SuggestedStringArgument;
@@ -93,11 +95,12 @@ public class CommandAPIMain extends JavaPlugin {
 			LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 			arguments.put("rawText", new ChatComponentArgument());
 			CommandAPI.getInstance().register("veryraw", arguments, (sender, args) -> {
-				if (sender instanceof Player) {
-					Player player = (Player) sender;
-					BaseComponent[] arr = (BaseComponent[]) args[0];
-					player.spigot().sendMessage(arr);
-				}
+				sender.sendMessage("a");
+//				if (sender instanceof Player) {
+//					Player player = (Player) sender;
+//					BaseComponent[] arr = (BaseComponent[]) args[0];
+//					player.spigot().sendMessage(arr);
+//				}
 			});
 			
 			//Tests ChatComponentArgument compatibility with books
@@ -169,6 +172,13 @@ public class CommandAPIMain extends JavaPlugin {
 					Player player = (Player) sender;
 					player.sendMessage((String) args[0]);
 				}
+			});
+			
+			//Tests target entities
+			arguments.clear();
+			arguments.put("target", new EntitySelectorArgument(EntitySelector.MANY_ENTITIES));
+			CommandAPI.getInstance().register("die", arguments, (sender, args) -> {
+				System.out.println(args[0]);
 			});
 		}
 	}

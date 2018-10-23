@@ -65,10 +65,29 @@ import net.md_5.bungee.chat.ComponentSerializer;
 @SuppressWarnings({"rawtypes", "unchecked"})
 public final class SemiReflector {
 	
+	class ClassCache {
+		
+		private Class<?> clazz;
+		private String nameame;
+		
+		public ClassCache(Class<?> clazz, String name) {
+			this.clazz = clazz;
+			this.nameame = name;
+		}
+		
+		public Class<?> getClazz() {
+			return clazz;
+		}
+		
+		public String getName() {
+			return nameame;
+		}
+	}
+	
 	private Map<String, Class<?>> NMSClasses;
 	private Map<String, Class<?>> OBCClasses;
-	private Map<Class<?>, Method> methods;
-	private Map<Class<?>, Field> fields;
+	private Map<ClassCache, Method> methods;
+	private Map<ClassCache, Field> fields;
 	
 	//OBC
 	private String obcPackageName = null;
@@ -99,7 +118,6 @@ public final class SemiReflector {
 			
 			this.cDispatcher = getField(getNMSClass("MinecraftServer"), "commandDispatcher").get(server);
 						
-			//This is our "z"
 			this.dispatcher = (CommandDispatcher) getNMSClass("CommandDispatcher").getDeclaredMethod("a").invoke(cDispatcher); 
 
 		} catch(Exception e) {
@@ -149,6 +167,54 @@ public final class SemiReflector {
 			//Get the CommandSender via NMS
 			CommandSender sender = null;
 			
+			/*
+			 * ProxiedCommandSender:
+			 * callee - the thing calling the command unwillingly (e.g. a chicken)
+			 * caller - the thing which literally typed the command (e.g. commandblock/console)
+			 */
+			
+			//Parse all information about the CommandListenerWrapper to fix issue 20 - https://github.com/JorelAli/1.13-Command-API/issues/20
+			if(CommandAPIMain.getConfiguration().runTestCode()) {
+				try {
+					/*
+					 * Methods to explore:
+					 * getName()
+					 * f(), g(), h() (try and use the CommandSyntaxException to your advantage)
+					 * base (getBukkitSender?)
+					 */
+					Class clw = getNMSClass("CommandListenerWrapper");
+					
+//					System.out.println("CLW(?): " + cmdCtx.getSource().getClass().getName());
+					
+					Object base = clw.getDeclaredField("base").get(cmdCtx.getSource());
+					System.out.println("ICommandListener (base): " + base.getClass().getName());
+					
+					//THIS SHOULD BE THE CALLER
+					Object baseBukkitSender = clw.getDeclaredMethod("getBukkitSender").invoke(cmdCtx.getSource());
+					System.out.println("(Bukkit base): " + baseBukkitSender.getClass().getName());
+					
+//					Object getName = clw.getDeclaredMethod("getName").invoke(cmdCtx.getSource());
+//					System.out.println("getName: " + getName);
+					
+					Object f = clw.getDeclaredMethod("f").invoke(cmdCtx.getSource());
+					System.out.println("f (@Nullable Entity) [proxyEntity]: " + f.getClass().getName());
+					
+					
+					Object fBukkit = getMethod(getNMSClass("Entity"), "getBukkitEntity").invoke(f);
+					System.out.println("fBukkit [bukkitProxyEntity]: " + fBukkit.getClass().getName());
+//					Object g = clw.getDeclaredMethod("g").invoke(cmdCtx.getSource());
+//					System.out.println("g (Entity): " + g.getClass().getName());
+//					
+//					Object h = clw.getDeclaredMethod("h").invoke(cmdCtx.getSource());
+//					System.out.println("h (Player): " + h.getClass().getName());
+					System.out.println(" - ");
+				} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException
+						| SecurityException | InvocationTargetException | NoSuchMethodException e) {
+					System.out.println("Err:");
+					e.printStackTrace(System.out);
+				}				
+			}
+			
 			try {
 				sender = (CommandSender) getMethod(getNMSClass("CommandListenerWrapper"), "getBukkitSender").invoke(cmdCtx.getSource());//getNMSClass("CommandListenerWrapper").getDeclaredMethod("getBukkitSender").invoke(cmdCtx.getSource());
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
@@ -158,17 +224,28 @@ public final class SemiReflector {
 			
 			//Handle proxied command senders via /execute as [Proxy]
 			try {
-				Object proxyEntity = getMethod(cmdCtx.getSource().getClass(), "f").invoke(cmdCtx.getSource());
+				Object proxyEntity = getMethod(getNMSClass("CommandListenerWrapper"), "f").invoke(cmdCtx.getSource());
+				
+				if(CommandAPIMain.getConfiguration().runTestCode()) {
+					System.out.println("--- Generating ProxiedCommandSender ---");
+					if(proxyEntity == null) {
+						System.out.println("proxyEntity is null");
+					} 
+					System.out.println("proxyEntity (f): " + proxyEntity.getClass().getName());
+					System.out.println("proxyEntity instanceof NMSEntity? " + (getNMSClass("Entity").isInstance(proxyEntity)));
+					System.out.println("---------------------------------");
+				}
+				
+				//Parse the Entity (callee) from the CLW.
+				
 				if(proxyEntity != null) {
-					CommandSender proxy;
-					if(proxyEntity instanceof CommandSender) {
-						proxy = (CommandSender) proxyEntity;
-					} else {
-						proxy = (CommandSender) getMethod(getNMSClass("Entity"), "getBukkitEntity").invoke(proxyEntity);
-					}
+					//Force proxyEntity to be a NMS Entity object
+					Object bukkitProxyEntity = getMethod(getNMSClass("Entity"), "getBukkitEntity").invoke(getNMSClass("Entity").cast(proxyEntity));
+					CommandSender proxy  = (CommandSender) bukkitProxyEntity;
 					
 					if(!proxy.equals(sender)) {
-						Class proxyClass = getOBCClass("command.ProxiedNativeCommandSender");
+						Class proxyClass = getOBCClass("command.ProxiedNativeCommandSender"); 
+						//ProxiedNativeCommandSender(CommandListenerWrapper orig, CommandSender caller, CommandSender callee)
 						Constructor proxyConstructor = proxyClass.getConstructor(getNMSClass("CommandListenerWrapper"), CommandSender.class, CommandSender.class);
 						Object proxyInstance = proxyConstructor.newInstance(cmdCtx.getSource(), sender, proxy);
 						sender = (ProxiedCommandSender) proxyInstance;
@@ -178,6 +255,18 @@ public final class SemiReflector {
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
 					| NoSuchMethodException | SecurityException | ClassNotFoundException | InstantiationException e1) {
 				e1.printStackTrace(System.out);
+			}
+			
+			if(CommandAPIMain.getConfiguration().runTestCode()) {
+				System.out.println("--- Constructed CommandSender ---");
+				System.out.println("CommandSender object: " + sender.getClass().getName());
+				if(sender instanceof ProxiedCommandSender) {
+					ProxiedCommandSender p = (ProxiedCommandSender) sender;
+					System.out.println("Caller (e.g. console): " + p.getCaller().getClass().getName());
+					System.out.println("Callee (e.g. chicken): " + p.getCallee().getClass().getName());
+				}
+				
+				System.out.println("---------------------------------");
 			}
 						
 			//Array for arguments for executor
@@ -483,7 +572,7 @@ public final class SemiReflector {
 				e.printStackTrace(System.out);
 			}
 			
-			getNMSClass("CommandDispatcher").getDeclaredMethod("a", File.class).invoke(this.cDispatcher, file);
+			getMethod(getNMSClass("CommandDispatcher"), "a", File.class).invoke(this.cDispatcher, file);
 		}
 	}	
 		
@@ -523,38 +612,52 @@ public final class SemiReflector {
 	}
 	
 	private Method getMethod(Class<?> clazz, String name) {
-		return methods.computeIfAbsent(clazz, key -> {
+		ClassCache key = new ClassCache(clazz, name);
+		if(methods.containsKey(key)) {
+			return methods.get(key);
+		} else {
+			Method result = null;
 			try {
-				return key.getDeclaredMethod(name);
+				result = clazz.getDeclaredMethod(name);
 			} catch (NoSuchMethodException | SecurityException e) {
 				e.printStackTrace();
-				return null;
 			}
-		});
+			methods.put(key, result);
+			return result;
+		}
 	}
 	
 	private Method getMethod(Class<?> clazz, String name, Class<?>... parameterTypes) {
-		return methods.computeIfAbsent(clazz, key -> {
+		ClassCache key = new ClassCache(clazz, name);
+		if(methods.containsKey(key)) {
+			return methods.get(key);
+		} else {
+			Method result = null;
 			try {
-				return key.getDeclaredMethod(name, parameterTypes);
+				result = clazz.getDeclaredMethod(name, parameterTypes);
 			} catch (NoSuchMethodException | SecurityException e) {
 				e.printStackTrace();
-				return null;
 			}
-		});
+			methods.put(key, result);
+			return result;
+		}
 	}
 	
 	private Field getField(Class<?> clazz, String name) {
-		return fields.computeIfAbsent(clazz, key -> {
+		ClassCache key = new ClassCache(clazz, name);
+		if(fields.containsKey(key)) {
+			return fields.get(key);
+		} else {
+			Field result = null;
 			try {
-				Field field = key.getDeclaredField(name);
-				field.setAccessible(true);
-				return field;
-			} catch (SecurityException | NoSuchFieldException e) {
+				result = clazz.getDeclaredField(name);
+			} catch (NoSuchFieldException | SecurityException e) {
 				e.printStackTrace();
-				return null;
 			}
-		});
+			result.setAccessible(true);
+			fields.put(key, result);
+			return result;
+		}
 	}
 	
 	/** Retrieves a craftbukkit class */
