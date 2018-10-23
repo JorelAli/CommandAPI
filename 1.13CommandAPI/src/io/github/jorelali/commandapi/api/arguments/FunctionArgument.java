@@ -29,7 +29,7 @@ public class FunctionArgument implements Argument {
 
 	@Override
 	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) FunctionWrapper.class;
+		return (Class<V>) FunctionWrapper[].class;
 	}
 
 	@Override

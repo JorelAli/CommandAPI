@@ -201,7 +201,7 @@ public class CommandAPIMain extends JavaPlugin {
 			});
 			arguments.put("target", new EntitySelectorArgument(EntitySelector.ONE_ENTITY));
 			CommandAPI.getInstance().register("run", arguments, (sender, args) -> {
-				FunctionWrapper func = (FunctionWrapper) args[0];
+				FunctionWrapper func = ((FunctionWrapper[]) args[0])[0];
 				func.runAs((Entity) args[1]);
 			});
 
