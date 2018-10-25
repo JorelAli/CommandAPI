@@ -12,6 +12,7 @@ public final class ArgumentUtil {
 
 	private static String packageName;
 	
+	//Cons: contains lots of duplicates from SemiReflector...
 	private static Map<String, Class<?>> NMSClasses;
 	private static Map<ClassCache, Method> methods;
 

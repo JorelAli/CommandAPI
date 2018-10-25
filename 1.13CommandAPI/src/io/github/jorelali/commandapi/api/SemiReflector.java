@@ -22,6 +22,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.World;
+import org.bukkit.advancement.Advancement;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ProxiedCommandSender;
@@ -30,6 +31,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.potion.PotionEffectType;
 
 import com.mojang.brigadier.Command;
@@ -45,6 +47,7 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import io.github.jorelali.commandapi.CommandAPIMain;
 import io.github.jorelali.commandapi.api.CommandPermission.PermissionNode;
+import io.github.jorelali.commandapi.api.arguments.AdvancementArgument;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.ChatColorArgument;
 import io.github.jorelali.commandapi.api.arguments.ChatComponentArgument;
@@ -58,6 +61,7 @@ import io.github.jorelali.commandapi.api.arguments.LocationArgument;
 import io.github.jorelali.commandapi.api.arguments.ParticleArgument;
 import io.github.jorelali.commandapi.api.arguments.PlayerArgument;
 import io.github.jorelali.commandapi.api.arguments.PotionEffectArgument;
+import io.github.jorelali.commandapi.api.arguments.RecipeArgument;
 import io.github.jorelali.commandapi.api.arguments.SuggestedStringArgument;
 import io.github.jorelali.commandapi.api.exceptions.CantFindPlayerException;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -351,6 +355,22 @@ public final class SemiReflector {
 							//Convert to spigot thing
 							BaseComponent[] components = ComponentSerializer.parse((String) resultantString);
 							argList.add((BaseComponent[]) components);
+						} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+							e.printStackTrace(System.out);
+						}
+					} else if(entry.getValue() instanceof AdvancementArgument) {
+						try {
+							Object nmsAdvancement = getMethod(getNMSClass("ArgumentMinecraftKeyRegistered"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+							Object bukkitAdvancement = getField(getNMSClass("Advancement"), "bukkit").get(nmsAdvancement);
+							argList.add((Advancement) bukkitAdvancement);
+						} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+							e.printStackTrace(System.out);
+						}
+					} else if(entry.getValue() instanceof RecipeArgument) {
+						try {
+							Object nmsIRecipe = getMethod(getNMSClass("ArgumentMinecraftKeyRegistered"), "b", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+							Object bukkitRecipe = getMethod(getNMSClass("IRecipe"), "toBukkitRecipe").invoke(nmsIRecipe);
+							argList.add((Recipe) bukkitRecipe);
 						} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 							e.printStackTrace(System.out);
 						}

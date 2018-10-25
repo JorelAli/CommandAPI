@@ -2,19 +2,19 @@ package io.github.jorelali.commandapi.api.arguments;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.bukkit.advancement.Advancement;
+import org.bukkit.inventory.Recipe;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 
 @SuppressWarnings("unchecked")
-public class AdvancementArgument implements Argument {
+public class RecipeArgument implements Argument {
 
 	com.mojang.brigadier.arguments.ArgumentType<?> rawType;
 	
 	/**
-	 * An Advancement Argument. Represents a Bukkit Argument
+	 * A recipe argument. Represents a Bukkit registered recipe for an item
 	 */
-	public AdvancementArgument() {
+	public RecipeArgument() {
 		try {
 			rawType = (ArgumentType<?>) ArgumentUtil.getNMS("ArgumentMinecraftKeyRegistered").getDeclaredMethod("a").invoke(null);
 		} catch (IllegalAccessException | ClassNotFoundException | IllegalArgumentException | SecurityException | InvocationTargetException | NoSuchMethodException e) {
@@ -29,7 +29,7 @@ public class AdvancementArgument implements Argument {
 
 	@Override
 	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) Advancement.class;
+		return (Class<V>) Recipe.class;
 	}
 
 	@Override
