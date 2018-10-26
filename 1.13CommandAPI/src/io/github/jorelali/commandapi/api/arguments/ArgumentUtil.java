@@ -2,6 +2,7 @@ package io.github.jorelali.commandapi.api.arguments;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
@@ -18,6 +19,8 @@ public final class ArgumentUtil {
 
 	
 	static {
+		NMSClasses = new HashMap<>();
+		methods = new HashMap<>();
 		try {
 			ArgumentUtil.packageName = Bukkit.getServer().getClass().getDeclaredMethod("getServer").invoke(Bukkit.getServer()).getClass().getPackage().getName();
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
