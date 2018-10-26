@@ -27,7 +27,6 @@ import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
 import io.github.jorelali.commandapi.api.arguments.FunctionArgument;
 import io.github.jorelali.commandapi.api.arguments.IntegerArgument;
-import io.github.jorelali.commandapi.api.arguments.LegacyArgument;
 import io.github.jorelali.commandapi.api.arguments.LiteralArgument;
 import io.github.jorelali.commandapi.api.arguments.RecipeArgument;
 import io.github.jorelali.commandapi.api.arguments.SuggestedStringArgument;
@@ -229,14 +228,6 @@ public class CommandAPIMain extends JavaPlugin {
 			CommandAPI.getInstance().register("rec", arguments, (sender, args) -> {
 				Recipe recipe = (Recipe) args[0];
 				System.out.println("Recipe creates " + recipe.getResult().getType().name());
-			});
-			
-			//TODO: LegacyArg no suggestions
-			arguments.clear();
-			arguments.put("myarg", new LegacyArgument());
-			CommandAPI.getInstance().register("legacyarg", arguments, (sender, args) -> {
-				String str = (String) args[0];
-				System.out.println(str);
 			});
 		}
 	}

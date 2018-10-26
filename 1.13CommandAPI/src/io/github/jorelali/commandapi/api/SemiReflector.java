@@ -371,7 +371,12 @@ public final class SemiReflector {
 							Object nmsIRecipe = getMethod(getNMSClass("ArgumentMinecraftKeyRegistered"), "b", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
 							Object bukkitRecipe = getMethod(getNMSClass("IRecipe"), "toBukkitRecipe").invoke(nmsIRecipe);
 							argList.add((Recipe) bukkitRecipe);
-						} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+						} catch(InvocationTargetException ex) {
+							if(ex.getTargetException() instanceof CommandSyntaxException) {
+								CommandSyntaxException csEx = (CommandSyntaxException) ex.getTargetException();
+								sender.sendMessage(csEx.getMessage());
+							}
+						} catch (IllegalAccessException | IllegalArgumentException e) {
 							e.printStackTrace(System.out);
 						}
 					} else if(entry.getValue() instanceof FunctionArgument) {
@@ -532,7 +537,10 @@ public final class SemiReflector {
 	        		inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), ((SuggestedStringArgument) innerArg).getSuggestions()).executes(command);
         		} else if(innerArg instanceof FunctionArgument) {
         			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), getFunctions()).executes(command);
-        		} else { 
+        		} else if(innerArg instanceof RecipeArgument) {
+        			SuggestionProvider recipes = (SuggestionProvider) getField(getNMSClass("CompletionProviders"), "b").get(null);
+        			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), recipes).executes(command);
+        		}  else { 
         			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType()).executes(command);
         		}
 	        }
@@ -549,6 +557,9 @@ public final class SemiReflector {
 	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), ((SuggestedStringArgument) outerArg).getSuggestions()).then(outer);
 	        		} else if(outerArg instanceof FunctionArgument) {
 	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), getFunctions()).then(outer);
+	        		} else if(outerArg instanceof RecipeArgument) {
+	        			SuggestionProvider recipes = (SuggestionProvider) getField(getNMSClass("CompletionProviders"), "b").get(null);
+	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), recipes).then(outer);
 	        		} else {
 	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType()).then(outer);
 	        		}
