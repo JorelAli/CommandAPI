@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -19,6 +21,7 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import io.github.jorelali.commandapi.api.CommandAPI;
+import io.github.jorelali.commandapi.api.Converter;
 import io.github.jorelali.commandapi.api.FunctionWrapper;
 import io.github.jorelali.commandapi.api.arguments.AdvancementArgument;
 import io.github.jorelali.commandapi.api.arguments.Argument;
@@ -28,6 +31,7 @@ import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.Entity
 import io.github.jorelali.commandapi.api.arguments.FunctionArgument;
 import io.github.jorelali.commandapi.api.arguments.IntegerArgument;
 import io.github.jorelali.commandapi.api.arguments.LiteralArgument;
+import io.github.jorelali.commandapi.api.arguments.LocationArgument;
 import io.github.jorelali.commandapi.api.arguments.RecipeArgument;
 import io.github.jorelali.commandapi.api.arguments.SuggestedStringArgument;
 import io.github.jorelali.commandapi.api.arguments.TextArgument;
@@ -229,6 +233,29 @@ public class CommandAPIMain extends JavaPlugin {
 				Recipe recipe = (Recipe) args[0];
 				System.out.println("Recipe creates " + recipe.getResult().getType().name());
 			});
+			
+			arguments.clear();
+			arguments.put("loc", new LocationArgument());
+			CommandAPI.getInstance().register("myloc", arguments, (sender, args) -> {
+				Location loc = (Location) args[0];
+				sender.sendMessage("Location argument: (" + loc.getBlockX() + " " + loc.getBlockY() + " " +  loc.getBlockZ() + ")");
+				
+				Location currentLoc = ((Player) sender).getLocation();
+				sender.sendMessage("Current location: (" + currentLoc.getBlockX() + " " + currentLoc.getBlockY() + " " +  currentLoc.getBlockZ() + ")");
+				sender.sendMessage(" ");
+			});
+			
+			////////////////////////////////////////////////////////////////////////////////////////////
+			// Converter Test
+			
+			System.out.println("Converting BareEssentials");
+			try {
+				Converter.convert(Bukkit.getPluginManager().getPlugin("bE"));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			////////////////////////////////////////////////////////////////////////////////////////////
 		}
 	}
 	

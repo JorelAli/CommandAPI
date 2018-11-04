@@ -15,6 +15,14 @@ public class FunctionWrapper implements Keyed {
 	//Converts a Bukkit Entity to a Minecraft Entity to a CommandListenerWrapper
 	@FunctionalInterface
 	interface EntityMapper {
+		
+		/* In Reflection, where clw is the instance of a CommandListenerWrapper:
+		    e -> {
+				Object nmsEntity = getMethod(getOBCClass("entity.CraftEntity"), "getHandle").invoke(e);
+				return getMethod(getNMSClass("CommandListenerWrapper"), "a", getNMSClass("Entity")).invoke(clw, nmsEntity);
+			}
+		 */
+		
 		Object convert(Entity entity);
 	}
 	
@@ -25,6 +33,15 @@ public class FunctionWrapper implements Keyed {
 	private Object custFunc;
 	private Object argB;
 	
+	/**
+	 * Creates a FunctionWrapper
+	 * @param minecraftKey - The MinecraftKey which is used to reference this function
+	 * @param invoker A method which, when invoked, runs the function
+	 * @param funcData The NMS CustomFunctionData object (From MinecraftServer)
+	 * @param custFunc A CustomFunction which contains the information about the function
+	 * @param argB the instance of the CommandListenerWrapper which executed this command
+	 * @param mapper A function which maps a Bukkit Entity into a Minecraft Entity
+	 */
 	protected FunctionWrapper(String minecraftKey, Method invoker, Object funcData, Object custFunc, Object argB, EntityMapper mapper) {
 		this.minecraftKey = minecraftKey;
 		this.invoker = invoker;
@@ -57,6 +74,11 @@ public class FunctionWrapper implements Keyed {
 		}
 	}
 
+	/*
+	 * Deprecated due to the fact that plugins should not use this constructor.
+	 * I'm using this constructor because it's significantly less performance heavy
+	 * than using reflection
+	 */
 	@SuppressWarnings("deprecation")
 	@Override
 	public NamespacedKey getKey() {
