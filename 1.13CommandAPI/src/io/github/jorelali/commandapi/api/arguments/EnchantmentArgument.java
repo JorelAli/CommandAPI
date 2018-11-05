@@ -1,10 +1,8 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.bukkit.enchantments.Enchantment;
 
-import com.mojang.brigadier.arguments.ArgumentType;
+import io.github.jorelali.commandapi.api.SemiReflector;
 
 @SuppressWarnings("unchecked")
 public class EnchantmentArgument implements Argument {
@@ -15,12 +13,7 @@ public class EnchantmentArgument implements Argument {
 	 * An Enchantment argument. Represents an enchantment for items 
 	 */
 	public EnchantmentArgument() {
-		try {
-			
-			rawType = (ArgumentType<?>) ArgumentUtil.getNMS("ArgumentEnchantment").getDeclaredMethod("a").invoke(null);
-		} catch (IllegalAccessException | ClassNotFoundException | IllegalArgumentException | SecurityException | InvocationTargetException | NoSuchMethodException e) {
-			e.printStackTrace();
-		}
+		rawType = SemiReflector.getNMSArgumentInstance("ArgumentEnchantment");
 	}
 	
 	@Override

@@ -22,9 +22,9 @@ public class ExampleEntitySelector extends JavaPlugin {
 	 * /cust1 [player]
 	 * 
 	 * Example command usage:
-	 * /destroy @e[type=cow]						<<-- Kills all cows
-	 * /destroy @e[type=pig,limit=10,sort=furthest] <<-- Kills the furthest 10 pigs
-	 * /cust1 @r									<<-- Sends "hello" to a random player
+	 * /destroy @e[type=cow]						- Kills all cows
+	 * /destroy @e[type=pig,limit=10,sort=furthest] - Kills the furthest 10 pigs
+	 * /cust1 @r									- Sends "hello" to a random player
 	 */
 	
 	@Override

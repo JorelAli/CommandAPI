@@ -1,10 +1,7 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import java.lang.reflect.InvocationTargetException;
-
-import com.mojang.brigadier.arguments.ArgumentType;
-
 import io.github.jorelali.commandapi.api.FunctionWrapper;
+import io.github.jorelali.commandapi.api.SemiReflector;
 
 @SuppressWarnings("unchecked")
 public class FunctionArgument implements Argument {
@@ -15,11 +12,7 @@ public class FunctionArgument implements Argument {
 	 * A Minecraft 1.12 function
 	 */
 	public FunctionArgument() {
-		try {
-			rawType = (ArgumentType<?>) ArgumentUtil.getNMS("ArgumentTag").getDeclaredMethod("a").invoke(null);
-		} catch (IllegalAccessException | ClassNotFoundException | IllegalArgumentException | SecurityException | InvocationTargetException | NoSuchMethodException e) {
-			e.printStackTrace();
-		}
+		rawType = SemiReflector.getNMSArgumentInstance("ArgumentTag");
 	}
 	
 	@Override

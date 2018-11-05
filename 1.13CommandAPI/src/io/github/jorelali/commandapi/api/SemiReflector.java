@@ -36,6 +36,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
@@ -75,10 +76,10 @@ import net.md_5.bungee.chat.ComponentSerializer;
 public final class SemiReflector {
 	
 	//Cache maps
-	private Map<String, Class<?>> NMSClasses;
-	private Map<String, Class<?>> OBCClasses;
-	private Map<ClassCache, Method> methods;
-	private Map<ClassCache, Field> fields;
+	private static Map<String, Class<?>> NMSClasses;
+	private static Map<String, Class<?>> OBCClasses;
+	private static Map<ClassCache, Method> methods;
+	private static Map<ClassCache, Field> fields;
 	
 	//OBC
 	private String obcPackageName = null;
@@ -619,14 +620,16 @@ public final class SemiReflector {
 	/** Retrieves a net.minecraft.server class by using the dynamic package from
 	 * the dedicated server */
 	private Class<?> getNMSClass(final String className) {
-		return NMSClasses.computeIfAbsent(className, key -> {
+		if(NMSClasses.containsKey(className)) {
+			return NMSClasses.get(className);
+		} else {
 			try {
-				return (Class.forName(SemiReflector.packageName + "." + key));
+				return (Class.forName(SemiReflector.packageName + "." + className));
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 				return null;
 			}
-		});
+		}
 	}
 	
 	private Method getMethod(Class<?> clazz, String name) {
@@ -690,5 +693,53 @@ public final class SemiReflector {
 		});
 	}
 
+	/**
+	 * Gets an instance of an NMS argument. Used in Arguments classes
+	 */
+	public static ArgumentType<?> getNMSArgumentInstance(String nmsClassName) {
+		return getNMSArgumentInstance(nmsClassName, "a");		
+	}
+	
+	public static ArgumentType<?> getNMSArgumentInstance(String nmsClassName, String methodName) {
+		//Get class
+		Class<?> clazz;
+		
+		if(NMSClasses.containsKey(nmsClassName)) {
+			clazz = NMSClasses.get(nmsClassName);
+		} else {
+			try {
+				clazz = (Class.forName(SemiReflector.packageName + "." + nmsClassName));
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+				clazz = null;
+			}
+		}
+		
+		//Create key
+		ClassCache key = new ClassCache(clazz, methodName);
+		
+		//Check for key and invoke
+		if(methods.containsKey(key)) {
+			try {
+				return (ArgumentType<?>) methods.get(key).invoke(null);
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			}
+		} else {
+			//Get method and invoke
+			Method result = null;
+			try {
+				result = clazz.getDeclaredMethod(methodName);
+			} catch (NoSuchMethodException | SecurityException e) {
+				e.printStackTrace();
+			}
+			methods.put(key, result);
+			try {
+				return (ArgumentType<?>) result.invoke(null);
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;		
+	}
 	
 }

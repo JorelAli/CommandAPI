@@ -1,10 +1,8 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.bukkit.ChatColor;
 
-import com.mojang.brigadier.arguments.ArgumentType;
+import io.github.jorelali.commandapi.api.SemiReflector;
 
 @SuppressWarnings("unchecked")
 public class ChatColorArgument implements Argument {
@@ -15,12 +13,7 @@ public class ChatColorArgument implements Argument {
 	 * A ChatColor argument. Represents a color or formatting for chat
 	 */
 	public ChatColorArgument() {
-		try {
-			
-			rawType = (ArgumentType<?>) ArgumentUtil.getMethod(ArgumentUtil.getNMS("ArgumentChatFormat"), "a").invoke(null);
-		} catch (IllegalAccessException | ClassNotFoundException | IllegalArgumentException | SecurityException | InvocationTargetException e) {
-			e.printStackTrace();
-		}
+		rawType = SemiReflector.getNMSArgumentInstance("ArgumentChatFormat");
 	}
 	
 	@Override

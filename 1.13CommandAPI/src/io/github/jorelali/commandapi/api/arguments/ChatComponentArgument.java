@@ -1,9 +1,6 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import java.lang.reflect.InvocationTargetException;
-
-import com.mojang.brigadier.arguments.ArgumentType;
-
+import io.github.jorelali.commandapi.api.SemiReflector;
 import io.github.jorelali.commandapi.api.exceptions.SpigotNotFoundException;
 import net.md_5.bungee.api.chat.BaseComponent;
 
@@ -25,11 +22,7 @@ public class ChatComponentArgument implements Argument {
 			throw new SpigotNotFoundException(this.getClass());
 		}
 		
-		try {
-			rawType = (ArgumentType<?>) ArgumentUtil.getNMS("ArgumentChatComponent").getDeclaredMethod("a").invoke(null);
-		} catch (IllegalAccessException | ClassNotFoundException | IllegalArgumentException | SecurityException | InvocationTargetException | NoSuchMethodException e) {
-			e.printStackTrace();
-		}
+		rawType = SemiReflector.getNMSArgumentInstance("ArgumentChatComponent");
 	}
 	
 	@Override

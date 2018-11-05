@@ -1,10 +1,8 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.bukkit.Location;
 
-import com.mojang.brigadier.arguments.ArgumentType;
+import io.github.jorelali.commandapi.api.SemiReflector;
 
 @SuppressWarnings("unchecked")
 public class LocationArgument implements Argument {
@@ -15,12 +13,7 @@ public class LocationArgument implements Argument {
 	 * A Location argument. Represents Minecraft locations
 	 */
 	public LocationArgument() {
-		try {
-			
-			rawType = (ArgumentType<?>) ArgumentUtil.getNMS("ArgumentVec3").getDeclaredMethod("a").invoke(null);
-		} catch (IllegalAccessException | ClassNotFoundException | IllegalArgumentException | SecurityException | InvocationTargetException | NoSuchMethodException e) {
-			e.printStackTrace();
-		}
+		rawType = SemiReflector.getNMSArgumentInstance("ArgumentVec3");
 	}
 	
 	@Override

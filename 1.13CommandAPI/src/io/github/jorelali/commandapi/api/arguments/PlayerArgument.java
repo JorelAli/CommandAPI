@@ -2,7 +2,7 @@ package io.github.jorelali.commandapi.api.arguments;
 
 import org.bukkit.entity.Player;
 
-import com.mojang.brigadier.arguments.ArgumentType;
+import io.github.jorelali.commandapi.api.SemiReflector;
 
 @SuppressWarnings("unchecked")
 public class PlayerArgument implements Argument {
@@ -13,11 +13,7 @@ public class PlayerArgument implements Argument {
 	 * A Player argument. Produces a single player, regardless of whether @a, @p, @r or @e is used.
 	 */
 	public PlayerArgument() {
-		try {
-			rawType = (ArgumentType<?>) ArgumentUtil.getNMS("ArgumentProfile").newInstance();
-		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | IllegalArgumentException | SecurityException e) {
-			e.printStackTrace();
-		}
+		rawType = SemiReflector.getNMSArgumentInstance("ArgumentProfile");
 	}
 	
 	@Override

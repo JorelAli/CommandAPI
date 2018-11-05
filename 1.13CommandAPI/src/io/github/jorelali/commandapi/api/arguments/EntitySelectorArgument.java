@@ -1,12 +1,11 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import com.mojang.brigadier.arguments.ArgumentType;
+import io.github.jorelali.commandapi.api.SemiReflector;
 
 @SuppressWarnings("unchecked")
 public class EntitySelectorArgument implements Argument {
@@ -58,11 +57,7 @@ public class EntitySelectorArgument implements Argument {
 	public EntitySelectorArgument(EntitySelector selector) {
 		this.selector = selector;
 		
-		try {
-			rawType = (ArgumentType<?>) ArgumentUtil.getNMS("ArgumentEntity").getDeclaredMethod(selector.getNMSFunction()).invoke(null);
-		} catch (IllegalAccessException | ClassNotFoundException | IllegalArgumentException | SecurityException | InvocationTargetException | NoSuchMethodException e) {
-			e.printStackTrace();
-		}
+		rawType = SemiReflector.getNMSArgumentInstance("ArgumentEntity", selector.getNMSFunction());
 	}
 	
 	@Override

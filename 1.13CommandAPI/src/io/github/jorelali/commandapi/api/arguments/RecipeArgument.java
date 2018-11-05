@@ -1,10 +1,8 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.bukkit.inventory.Recipe;
 
-import com.mojang.brigadier.arguments.ArgumentType;
+import io.github.jorelali.commandapi.api.SemiReflector;
 
 @SuppressWarnings("unchecked")
 public class RecipeArgument implements Argument {
@@ -15,11 +13,7 @@ public class RecipeArgument implements Argument {
 	 * A recipe argument. Represents a Bukkit registered recipe for an item
 	 */
 	public RecipeArgument() {
-		try {
-			rawType = (ArgumentType<?>) ArgumentUtil.getNMS("ArgumentMinecraftKeyRegistered").getDeclaredMethod("a").invoke(null);
-		} catch (IllegalAccessException | ClassNotFoundException | IllegalArgumentException | SecurityException | InvocationTargetException | NoSuchMethodException e) {
-			e.printStackTrace();
-		}
+		rawType = SemiReflector.getNMSArgumentInstance("ArgumentMinecraftKeyRegistered");
 	}
 	
 	@Override

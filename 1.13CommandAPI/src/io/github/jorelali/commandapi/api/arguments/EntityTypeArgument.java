@@ -1,10 +1,8 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.bukkit.entity.EntityType;
 
-import com.mojang.brigadier.arguments.ArgumentType;
+import io.github.jorelali.commandapi.api.SemiReflector;
 
 @SuppressWarnings("unchecked")
 public class EntityTypeArgument implements Argument {
@@ -15,11 +13,7 @@ public class EntityTypeArgument implements Argument {
 	 * An EntityType argument. Represents the type of an Entity
 	 */
 	public EntityTypeArgument() {
-		try {
-			rawType = (ArgumentType<?>) ArgumentUtil.getNMS("ArgumentEntitySummon").getDeclaredMethod("a").invoke(null);
-		} catch (IllegalAccessException | ClassNotFoundException | IllegalArgumentException | SecurityException | InvocationTargetException | NoSuchMethodException e) {
-			e.printStackTrace();
-		}
+		rawType = SemiReflector.getNMSArgumentInstance("ArgumentEntitySummon");
 	}
 	
 	@Override

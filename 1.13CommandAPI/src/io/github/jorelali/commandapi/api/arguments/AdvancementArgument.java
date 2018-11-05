@@ -1,10 +1,8 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.bukkit.advancement.Advancement;
 
-import com.mojang.brigadier.arguments.ArgumentType;
+import io.github.jorelali.commandapi.api.SemiReflector;
 
 @SuppressWarnings("unchecked")
 public class AdvancementArgument implements Argument {
@@ -15,11 +13,7 @@ public class AdvancementArgument implements Argument {
 	 * An Advancement Argument. Represents a Bukkit Argument
 	 */
 	public AdvancementArgument() {
-		try {
-			rawType = (ArgumentType<?>) ArgumentUtil.getNMS("ArgumentMinecraftKeyRegistered").getDeclaredMethod("a").invoke(null);
-		} catch (IllegalAccessException | ClassNotFoundException | IllegalArgumentException | SecurityException | InvocationTargetException | NoSuchMethodException e) {
-			e.printStackTrace();
-		}
+		rawType = SemiReflector.getNMSArgumentInstance("ArgumentMinecraftKeyRegistered");
 	}
 	
 	@Override

@@ -1,10 +1,8 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.bukkit.potion.PotionEffectType;
 
-import com.mojang.brigadier.arguments.ArgumentType;
+import io.github.jorelali.commandapi.api.SemiReflector;
 
 @SuppressWarnings("unchecked")
 public class PotionEffectArgument implements Argument {
@@ -15,12 +13,7 @@ public class PotionEffectArgument implements Argument {
 	 * A PotionEffect argument. Represents status/potion effects 
 	 */
 	public PotionEffectArgument() {
-		try {
-			
-			rawType = (ArgumentType<?>) ArgumentUtil.getNMS("ArgumentMobEffect").getDeclaredMethod("a").invoke(null);
-		} catch (IllegalAccessException | ClassNotFoundException | IllegalArgumentException | SecurityException | InvocationTargetException | NoSuchMethodException e) {
-			e.printStackTrace();
-		}
+		rawType = SemiReflector.getNMSArgumentInstance("ArgumentMobEffect");
 	}
 	
 	@Override

@@ -12,6 +12,8 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.advancement.Advancement;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -19,6 +21,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 
 import io.github.jorelali.commandapi.api.CommandAPI;
 import io.github.jorelali.commandapi.api.Converter;
@@ -256,6 +259,27 @@ public class CommandAPIMain extends JavaPlugin {
 			}
 			
 			////////////////////////////////////////////////////////////////////////////////////////////
+
+			arguments.clear();
+	        arguments.put("motion", new LocationArgument());
+
+	        CommandAPI.getInstance().register("motion", arguments, (sender, args) -> {
+	            CommandSender callee = sender;
+
+	            //when using execute, differentiate sender and caller
+	            if (sender instanceof ProxiedCommandSender) {
+	                callee = ((ProxiedCommandSender) sender).getCallee();
+	                sender = ((ProxiedCommandSender) sender).getCaller();
+	            }
+
+	            if (callee instanceof Entity) {
+	                Entity entity = (Entity) callee;
+	                Location loc1 = (Location) args[0];
+	                Location loc2 = entity.getLocation();
+	                sender.sendMessage("Location argument: (" + loc1.getBlockX() + " " + loc1.getBlockY() + " " +  loc1.getBlockZ() + ")");
+	                sender.sendMessage("Current location: (" + loc2.getBlockX() + " " + loc2.getBlockY() + " " +  loc2.getBlockZ() + ")");
+	            }
+	        });
 		}
 	}
 	
