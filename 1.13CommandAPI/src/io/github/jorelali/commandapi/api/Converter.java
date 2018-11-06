@@ -21,14 +21,7 @@ public class Converter {
 		Set<String> commands = p.getDescription().getCommands().keySet();
 		JavaPlugin plugin = (JavaPlugin) p;
 		
-		//Get command map
-		//Field f = Bukkit.getServer().getClass().getDeclaredField("commandMap");
-		//f.setAccessible(true);
-		//CommandMap commandMap = (CommandMap) f.get(Bukkit.getServer());
-		
 		for(String cmdName : commands) {
-			//boolean result = plugin.getCommand(str).unregister(commandMap);
-			//System.out.println("Unregistered command " + str + " " + (result ? "successfully" : "unsuccessfully"));
 			
 			LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 			
@@ -36,16 +29,14 @@ public class Converter {
 			
 			//Register the command twice: once for no arguments and once for any number of arguments
 			CommandAPI.getInstance().register(cmdName, arguments, (sender, args) -> {
-				plugin.getCommand(cmdName).execute(sender, cmdName, ((String) args[0]).split(" "));
+				plugin.getCommand(cmdName).execute(sender, cmdName, new String[0]);
 			});
 			arguments.put("args", new GreedyStringArgument());
 			CommandAPI.getInstance().register(cmdName, arguments, (sender, args) -> {
 				plugin.getCommand(cmdName).execute(sender, cmdName, ((String) args[0]).split(" "));
 			});
 			
-		}			
-		
-		
+		}
 	}
 	
 	

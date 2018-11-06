@@ -11,22 +11,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.advancement.Advancement;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.Vector;
 
 import io.github.jorelali.commandapi.api.CommandAPI;
 import io.github.jorelali.commandapi.api.Converter;
 import io.github.jorelali.commandapi.api.FunctionWrapper;
-import io.github.jorelali.commandapi.api.arguments.AdvancementArgument;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.ChatComponentArgument;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument;
@@ -35,7 +31,6 @@ import io.github.jorelali.commandapi.api.arguments.FunctionArgument;
 import io.github.jorelali.commandapi.api.arguments.IntegerArgument;
 import io.github.jorelali.commandapi.api.arguments.LiteralArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationArgument;
-import io.github.jorelali.commandapi.api.arguments.RecipeArgument;
 import io.github.jorelali.commandapi.api.arguments.SuggestedStringArgument;
 import io.github.jorelali.commandapi.api.arguments.TextArgument;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -218,24 +213,6 @@ public class CommandAPIMain extends JavaPlugin {
 
 			//TODO: Test tags (groups of functions)
 			//Test goes here
-			
-			
-			//TODO: Test AdvancementArguments
-			arguments.clear();
-			arguments.put("advancement", new AdvancementArgument());
-			CommandAPI.getInstance().register("adv", arguments, (sender, args) -> {
-				Advancement advancement = (Advancement) args[0];
-				System.out.println("Criteria for " + advancement.getKey().toString());
-				advancement.getCriteria().forEach(System.out::println);
-			});
-			
-			//TODO: Test RecipeArguments
-			arguments.clear();
-			arguments.put("recipe", new RecipeArgument());
-			CommandAPI.getInstance().register("rec", arguments, (sender, args) -> {
-				Recipe recipe = (Recipe) args[0];
-				System.out.println("Recipe creates " + recipe.getResult().getType().name());
-			});
 			
 			arguments.clear();
 			arguments.put("loc", new LocationArgument());
