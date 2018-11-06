@@ -1,3 +1,2 @@
 verbose-outputs: true
 create-dispatcher-json: true
-test-code: false
