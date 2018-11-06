@@ -268,11 +268,13 @@ public class CommandAPIMain extends JavaPlugin {
 		        });
 	        }, 20L);
 	        
-	        Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
-	        	System.out.println("unregisteringgamemode1");
-				//Test command unregistration
-				CommandAPI.getInstance().unregister("gamemode");;
-	        }, 20L);
+	        CommandAPI.getInstance().unregister("gamemode", true);
+	        
+//	        Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+//	        	System.out.println("unregisteringgamemode1");//
+//				//Test command unregistration
+//				CommandAPI.getInstance().unregister("gamemode", true);
+//	        }, 20L);
 	        
 		}
 	}

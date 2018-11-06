@@ -114,13 +114,19 @@ public final class SemiReflector {
 		
 	}
 	
-	public void unregister(String commandName) {
+	public void unregister(String commandName, boolean force) {
 		try {
 			Field children = getField(CommandNode.class, "children");
 			
 			Map<String, CommandNode<?>> c = (Map<String, CommandNode<?>>) children.get(dispatcher.getRoot());
-			c.remove(commandName);
 			
+			if(force) {
+				c.remove("minecraft:" + commandName);
+				c.remove("bukkit:" + commandName);
+				c.remove("spigot:" + commandName);
+			}
+			c.remove(commandName);
+						
 			if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
 				CommandAPIMain.getLog().info("Unregistering /" + commandName);
 			}

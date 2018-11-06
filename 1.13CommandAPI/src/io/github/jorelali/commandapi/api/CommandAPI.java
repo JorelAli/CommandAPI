@@ -52,7 +52,18 @@ public class CommandAPI {
 	 * @param command The name of the command to unregister
 	 */
 	public void unregister(String command) {
-		reflector.unregister(command);
+		reflector.unregister(command, false);
+	}
+	
+	/**
+	 * Unregisters a command, by force (removes all instances of that command)
+	 * @param command The name of the command to unregister
+	 */
+	public void unregister(String command, boolean force) {
+		if(!canRegister) {
+			CommandAPIMain.getLog().warning("Unexpected unregistering of /" + command + ", as server is loaded! Unregistering anyway, but this can lead to unstable results!");
+		}
+		reflector.unregister(command, force);
 	}
 	
 	/**
@@ -97,7 +108,8 @@ public class CommandAPI {
 	 */
 	public void register(String commandName, CommandPermission permissions, String[] aliases, LinkedHashMap<String, Argument> args, CommandExecutor executor) {
 		if(!canRegister) {
-			CommandAPIMain.getLog().warning("Cannot register command /" + commandName + ", because server has finished loading!");
+			CommandAPIMain.getLog().severe("Cannot register command /" + commandName + ", because server has finished loading!");
+			return;
 		}
 		try {
 			if(args == null) {
