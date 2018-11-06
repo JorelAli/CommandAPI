@@ -92,6 +92,8 @@ public class CommandAPIMain extends JavaPlugin {
 		saveDefaultConfig();
 		CommandAPIMain.config = new Config(getConfig());
 		logger = getLogger();
+		//Instantiate CommandAPI
+		CommandAPI.getInstance();
 	}
 	
 	@Override
@@ -100,9 +102,6 @@ public class CommandAPIMain extends JavaPlugin {
 		Bukkit.getScheduler().scheduleSyncDelayedTask(JavaPlugin.getPlugin(CommandAPIMain.class), () -> CommandAPI.canRegister = false, 0L);
 		
 		if(config.runTestCode()) {
-
-			//Test command unregistration
-			CommandAPI.getInstance().unregister("gamemode");
 
 			//Test ChatComponentArgument
 			LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
@@ -267,6 +266,12 @@ public class CommandAPIMain extends JavaPlugin {
 		        CommandAPI.getInstance().register("mycmd1", arguments, (sender, args) -> {
 		        	System.out.println("yay");
 		        });
+	        }, 20L);
+	        
+	        Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+	        	System.out.println("unregisteringgamemode1");
+				//Test command unregistration
+				CommandAPI.getInstance().unregister("gamemode");;
 	        }, 20L);
 	        
 		}
