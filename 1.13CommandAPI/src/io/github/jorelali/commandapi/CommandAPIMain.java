@@ -92,11 +92,13 @@ public class CommandAPIMain extends JavaPlugin {
 		saveDefaultConfig();
 		CommandAPIMain.config = new Config(getConfig());
 		logger = getLogger();
-		Converter.scheduleConversion(this);
 	}
 	
 	@Override
 	public void onEnable() {
+		//Prevent command registration after server has loaded
+		Bukkit.getScheduler().scheduleSyncDelayedTask(JavaPlugin.getPlugin(CommandAPIMain.class), () -> CommandAPI.canRegister = false, 0L);
+		
 		if(config.runTestCode()) {
 
 			//Test command unregistration
@@ -258,6 +260,15 @@ public class CommandAPIMain extends JavaPlugin {
 	                sender.sendMessage("Current location: (" + loc2.getBlockX() + " " + loc2.getBlockY() + " " +  loc2.getBlockZ() + ")");
 	            }
 	        });
+	        
+	        Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+	        	System.out.println("registering mycmd1");
+	        	arguments.clear();
+		        CommandAPI.getInstance().register("mycmd1", arguments, (sender, args) -> {
+		        	System.out.println("yay");
+		        });
+	        }, 20L);
+	        
 		}
 	}
 	

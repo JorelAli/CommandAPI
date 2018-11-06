@@ -2,6 +2,7 @@ package io.github.jorelali.commandapi.api;
 
 import java.util.LinkedHashMap;
 
+import io.github.jorelali.commandapi.CommandAPIMain;
 import io.github.jorelali.commandapi.api.CommandPermission.PermissionNode;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.GreedyStringArgument;
@@ -15,6 +16,8 @@ public class CommandAPI {
 
 	//Static instance of CommandAPI
 	private static CommandAPI instance;
+	
+	public static boolean canRegister = true;
 	
 	/**
 	 * An instance of the CommandAPI, used to register and unregister commands
@@ -93,6 +96,9 @@ public class CommandAPI {
 	 * @param executor The command executor
 	 */
 	public void register(String commandName, CommandPermission permissions, String[] aliases, LinkedHashMap<String, Argument> args, CommandExecutor executor) {
+		if(!canRegister) {
+			CommandAPIMain.getLog().warning("Cannot register command /" + commandName + ", because server has finished loading!");
+		}
 		try {
 			if(args == null) {
 				args = new LinkedHashMap<>();
