@@ -92,6 +92,7 @@ public class CommandAPIMain extends JavaPlugin {
 		saveDefaultConfig();
 		CommandAPIMain.config = new Config(getConfig());
 		logger = getLogger();
+		Converter.scheduleConversion(this);
 	}
 	
 	@Override
