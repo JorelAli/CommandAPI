@@ -9,7 +9,9 @@ public class FunctionArgument implements Argument {
 	com.mojang.brigadier.arguments.ArgumentType<?> rawType;
 	
 	/**
-	 * A Minecraft 1.12 function
+	 * A Minecraft 1.12 function. Plugin commands which plan to be used INSIDE
+	 * a function MUST be registered in the onLoad() method of your plugin, NOT
+	 * in the onEnable() method!
 	 */
 	public FunctionArgument() {
 		rawType = SemiReflector.getNMSArgumentInstance("ArgumentTag");
