@@ -17,6 +17,10 @@ import io.github.jorelali.commandapi.api.arguments.GreedyStringArgument;
  */
 public class Converter {
 
+	/**
+	 * Convert all commands stated in Plugin's plugin.yml file into CommandAPI-compatible commands
+	 * @param p The plugin which commands are to be converted
+	 */
 	public static void convert(Plugin p) {
 		Set<String> commands = p.getDescription().getCommands().keySet();
 		JavaPlugin plugin = (JavaPlugin) p;
@@ -26,6 +30,11 @@ public class Converter {
 		}
 	}
 	
+	/**
+	 * Convert a command stated in Plugin's plugin.yml file into CommandAPI-compatible commands
+	 * @param p The plugin where the command is registered
+	 * @param cmdName The command to convert
+	 */
 	public static void convert(Plugin p, String cmdName) {
 		JavaPlugin plugin = (JavaPlugin) p;
 		convertPluginCommand(plugin, cmdName);
