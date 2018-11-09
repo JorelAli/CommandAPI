@@ -1,5 +1,7 @@
 package io.github.jorelali.commandapi.api;
 
+import java.util.Arrays;
+
 public class CommandPermission {
 
 	private String[] permissions;
@@ -48,6 +50,18 @@ public class CommandPermission {
 	
 	protected PermissionNode getPermissionNode() {
 		return permissionNode;
+	}
+	
+	@Override
+	public String toString() {
+		if(permissionNode != null) {
+			if(permissionNode == PermissionNode.OP)
+				return "OP";
+			else
+				return "NONE";
+		} else {
+			return Arrays.toString(permissions);
+		}
 	}
 	
 }
