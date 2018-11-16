@@ -49,6 +49,7 @@ import io.github.jorelali.commandapi.api.CommandPermission.PermissionNode;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.ChatColorArgument;
 import io.github.jorelali.commandapi.api.arguments.ChatComponentArgument;
+import io.github.jorelali.commandapi.api.arguments.DynamicSuggestedStringArgument;
 import io.github.jorelali.commandapi.api.arguments.EnchantmentArgument;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument;
 import io.github.jorelali.commandapi.api.arguments.EntityTypeArgument;
@@ -519,6 +520,8 @@ public final class SemiReflector {
 	        		inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), ((SuggestedStringArgument) innerArg).getSuggestions()).executes(command);
         		} else if(innerArg instanceof FunctionArgument) {
         			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), getFunctions()).executes(command);
+				} else if(innerArg instanceof DynamicSuggestedStringArgument) {
+        			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), ((DynamicSuggestedStringArgument) innerArg).getDynamicSuggestions()).executes(command);
 				} else {
 					inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType()).executes(command);
 				}
@@ -536,7 +539,9 @@ public final class SemiReflector {
 	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), ((SuggestedStringArgument) outerArg).getSuggestions()).then(outer);
 	        		} else if(outerArg instanceof FunctionArgument) {
 	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), getFunctions()).then(outer);
-	        		} else {
+	        		} else if(innerArg instanceof DynamicSuggestedStringArgument) {
+	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), ((DynamicSuggestedStringArgument) outerArg).getDynamicSuggestions()).then(outer);
+					} else {
 	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType()).then(outer);
 	        		}
 	        	}
@@ -588,9 +593,9 @@ public final class SemiReflector {
 	}
 	
 	//Registers a RequiredArgumentBuilder for an argument
-		private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, com.mojang.brigadier.arguments.ArgumentType<T> type, SuggestionProvider provider){
-			return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
-		}
+	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, com.mojang.brigadier.arguments.ArgumentType<T> type, SuggestionProvider provider){
+		return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
+	}
 		
 	/** Retrieves a net.minecraft.server class by using the dynamic package from
 	 * the dedicated server */
