@@ -154,7 +154,7 @@ public final class SemiReflector {
 		}
 	}
 	
-	private Command generateCommand(String commandName, LinkedHashMap<String, Argument> args, CommandExecutor executor) {
+	private Command generateCommand(String commandName, LinkedHashMap<String, Argument> args, CustomCommandExecutor executor) {
 		
 		//Generate our command from executor
 		return (cmdCtx) -> {
@@ -420,14 +420,25 @@ public final class SemiReflector {
 				}
 			}
 			
-			//Run the code from executor and return
-			try {
-				executor.run(sender, argList.toArray(new Object[argList.size()]));
-			} catch (Exception e) {
-				e.printStackTrace(System.out);
-				return 0;
+			//Parse executor type
+			if(executor.hasResults()) {
+				//Run resulting executor
+				try {
+					return executor.getResultingEx().run(sender, argList.toArray(new Object[argList.size()]));
+				} catch (Exception e) {
+					e.printStackTrace(System.out);
+					return 0;
+				}
+			} else {
+				//Run normal executor
+				try {
+					executor.getEx().run(sender, argList.toArray(new Object[argList.size()]));
+					return 1;
+				} catch (Exception e) {
+					e.printStackTrace(System.out);
+					return 0;
+				}
 			}
-			return 1;
 		};
 	}
 	
@@ -477,7 +488,7 @@ public final class SemiReflector {
 	}
 	
 	//Builds our NMS command using the given arguments for this method, then registers it
-	protected void register(String commandName, CommandPermission permissions, String[] aliases, final LinkedHashMap<String, Argument> args, CommandExecutor executor) throws Exception {
+	protected void register(String commandName, CommandPermission permissions, String[] aliases, final LinkedHashMap<String, Argument> args, CustomCommandExecutor executor) throws Exception {
 		if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
 			//Create a list of argument names
 			StringBuilder builder = new StringBuilder();

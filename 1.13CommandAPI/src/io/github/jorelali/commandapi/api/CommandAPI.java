@@ -13,7 +13,7 @@ import io.github.jorelali.commandapi.api.exceptions.GreedyStringException;
  *
  */
 public class CommandAPI {
-
+	
 	//Static instance of CommandAPI
 	private static CommandAPI instance;
 	
@@ -66,6 +66,8 @@ public class CommandAPI {
 		reflector.unregister(command, force);
 	}
 	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * Registers a command
 	 * @param commandName The name of the command
@@ -107,6 +109,58 @@ public class CommandAPI {
 	 * @param executor The command executor
 	 */
 	public void register(String commandName, CommandPermission permissions, String[] aliases, LinkedHashMap<String, Argument> args, CommandExecutor executor) {
+		register(commandName, permissions, aliases, args, new CustomCommandExecutor(executor, null));
+	}
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Registers a command
+	 * @param commandName The name of the command
+	 * @param args The mapping of arguments for the command
+	 * @param executor The command executor
+	 */
+	public void register(String commandName, final LinkedHashMap<String, Argument> args, ResultingCommandExecutor executor) {
+		register(commandName, new CommandPermission(PermissionNode.NONE), args, executor);
+	}	
+
+	/**
+	 * Registers a command with aliases
+	 * @param commandName The name of the command
+	 * @param aliases The array of aliases which also run this command
+	 * @param args The mapping of arguments for the command
+	 * @param executor The command executor
+	 */
+	public void register(String commandName, String[] aliases, final LinkedHashMap<String, Argument> args, ResultingCommandExecutor executor) {
+		register(commandName, new CommandPermission(PermissionNode.NONE), aliases, args, executor);
+	}
+	
+	/**
+	 * Registers a command with permissions
+	 * @param commandName The name of the command
+	 * @param permissions The permissions required to run this command
+	 * @param args The mapping of arguments for the command
+	 * @param executor The command executor
+	 */
+	public void register(String commandName, CommandPermission permissions, final LinkedHashMap<String, Argument> args, ResultingCommandExecutor executor) {
+		register(commandName, permissions, new String[0], args, executor);
+	}
+
+	/**
+	 * Registers a command with permissions and aliases
+	 * @param commandName The name of the command
+	 * @param permissions The permissions required to run this command
+	 * @param aliases The array of aliases which also run this command
+	 * @param args The mapping of arguments for the command
+	 * @param executor The command executor
+	 */
+	public void register(String commandName, CommandPermission permissions, String[] aliases, LinkedHashMap<String, Argument> args, ResultingCommandExecutor executor) {
+		register(commandName, permissions, aliases, args, new CustomCommandExecutor(null, executor));
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private void register(String commandName, CommandPermission permissions, String[] aliases, LinkedHashMap<String, Argument> args, CustomCommandExecutor executor) {
 		if(!canRegister) {
 			CommandAPIMain.getLog().severe("Cannot register command /" + commandName + ", because server has finished loading!");
 			return;
