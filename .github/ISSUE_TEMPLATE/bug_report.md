@@ -11,7 +11,7 @@ A clear and concise description of what the bug is.
 This code reproduces the behavior:
 ```java
 LinkedHashMap<String, Argument> args = new LinkedHashMap<>();
-CommandAPI.getInstance().register("library", args, (sender, args) -> {
+CommandAPI.getInstance().register("mycmd", args, (sender, args) -> {
     //blah
 });
 ```
