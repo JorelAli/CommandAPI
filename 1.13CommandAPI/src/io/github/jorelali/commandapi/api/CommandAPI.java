@@ -2,6 +2,10 @@ package io.github.jorelali.commandapi.api;
 
 import java.util.LinkedHashMap;
 
+import com.mojang.brigadier.LiteralMessage;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+
 import io.github.jorelali.commandapi.CommandAPIMain;
 import io.github.jorelali.commandapi.api.CommandPermission.PermissionNode;
 import io.github.jorelali.commandapi.api.arguments.Argument;
@@ -18,6 +22,15 @@ public class CommandAPI {
 	private static CommandAPI instance;
 	
 	public static boolean canRegister = true;
+	
+	/**
+	 * Forces a command to return a success value of 0
+	 * @param message Description of the error message
+	 * @throws CommandSyntaxException
+	 */
+	public static void fail(String message) throws CommandSyntaxException {
+		throw new SimpleCommandExceptionType(new LiteralMessage(message)).create();
+	}
 	
 	/**
 	 * An instance of the CommandAPI, used to register and unregister commands

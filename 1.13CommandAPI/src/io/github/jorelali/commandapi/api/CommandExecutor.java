@@ -2,6 +2,8 @@ package io.github.jorelali.commandapi.api;
 
 import org.bukkit.command.CommandSender;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 @FunctionalInterface
 public interface CommandExecutor {
 
@@ -15,6 +17,6 @@ public interface CommandExecutor {
 	 *            determined by the hashmap of arguments IN THE ORDER of
 	 *            insertion into the hashmap
 	 */
-	void run(CommandSender sender, Object[] args);
+	void run(CommandSender sender, Object[] args) throws CommandSyntaxException;
 
 }

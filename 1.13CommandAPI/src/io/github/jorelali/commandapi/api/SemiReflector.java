@@ -154,7 +154,7 @@ public final class SemiReflector {
 		}
 	}
 	
-	private Command generateCommand(String commandName, LinkedHashMap<String, Argument> args, CustomCommandExecutor executor) {
+	private Command generateCommand(String commandName, LinkedHashMap<String, Argument> args, CustomCommandExecutor executor) throws CommandSyntaxException {
 		
 		//Generate our command from executor
 		return (cmdCtx) -> {
@@ -425,6 +425,8 @@ public final class SemiReflector {
 				//Run resulting executor
 				try {
 					return executor.getResultingEx().run(sender, argList.toArray(new Object[argList.size()]));
+				} catch (CommandSyntaxException e) {
+					throw e;
 				} catch (Exception e) {
 					e.printStackTrace(System.out);
 					return 0;
@@ -433,7 +435,9 @@ public final class SemiReflector {
 				//Run normal executor
 				try {
 					executor.getEx().run(sender, argList.toArray(new Object[argList.size()]));
-					return 1;
+					return 0;
+				} catch (CommandSyntaxException e) {
+					throw e;
 				} catch (Exception e) {
 					e.printStackTrace(System.out);
 					return 0;
