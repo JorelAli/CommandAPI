@@ -619,7 +619,6 @@ public final class SemiReflector {
 	//Registers a RequiredArgumentBuilder for an argument
 	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, com.mojang.brigadier.arguments.ArgumentType<T> type, String[] suggestions){
 		SuggestionProvider provider = (context, builder) -> {
-			System.out.println(Arrays.deepToString(suggestions));
 			//NMS' ICompletionProvider.a()
 			String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
 
