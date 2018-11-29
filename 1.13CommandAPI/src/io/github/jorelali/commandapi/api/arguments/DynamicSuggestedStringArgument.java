@@ -1,7 +1,6 @@
 package io.github.jorelali.commandapi.api.arguments;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.suggestion.SuggestionProvider;
 
 @SuppressWarnings("unchecked")
 public class DynamicSuggestedStringArgument implements Argument {
@@ -37,12 +36,7 @@ public class DynamicSuggestedStringArgument implements Argument {
 		return true;
 	}
 	
-	public SuggestionProvider<?> getDynamicSuggestions() {
-		return (context, builder) -> {
-			for(String str : suggestions.getSuggestions()) {
-				builder = builder.suggest(str);
-			}
-			return builder.buildFuture();
-		};
+	public DynamicSuggestions getDynamicSuggestions() {
+		return suggestions;
 	}
 }

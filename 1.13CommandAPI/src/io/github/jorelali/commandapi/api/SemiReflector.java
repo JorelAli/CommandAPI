@@ -7,11 +7,13 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
@@ -50,6 +52,7 @@ import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.ChatColorArgument;
 import io.github.jorelali.commandapi.api.arguments.ChatComponentArgument;
 import io.github.jorelali.commandapi.api.arguments.DynamicSuggestedStringArgument;
+import io.github.jorelali.commandapi.api.arguments.DynamicSuggestedStringArgument.DynamicSuggestions;
 import io.github.jorelali.commandapi.api.arguments.EnchantmentArgument;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument;
 import io.github.jorelali.commandapi.api.arguments.EntityTypeArgument;
@@ -584,7 +587,7 @@ public final class SemiReflector {
 			getMethod(getNMSClass("CommandDispatcher"), "a", File.class).invoke(this.cDispatcher, file);
 		}
 	}	
-		
+
 	//Registers a LiteralArgumentBuilder for a command name
 	private LiteralArgumentBuilder<?> getLiteralArgumentBuilder(String commandName) {
 		return LiteralArgumentBuilder.literal(commandName);
@@ -595,15 +598,40 @@ public final class SemiReflector {
 		return RequiredArgumentBuilder.argument(argumentName, type);
 	}
 	
+	
+	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, com.mojang.brigadier.arguments.ArgumentType<T> type, DynamicSuggestions dynamicSuggestions) {
+		SuggestionProvider provider = (context, builder) -> {
+			//NMS' ICompletionProvider.a()
+			String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
+			String[] suggestions = dynamicSuggestions.getSuggestions();
+			for (int i = 0; i < suggestions.length; i++) {
+				String str = suggestions[i];
+				if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
+					builder.suggest(str);
+				}
+			}
+
+			return builder.buildFuture();
+		};
+		return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
+	}
+	
 	//Registers a RequiredArgumentBuilder for an argument
 	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, com.mojang.brigadier.arguments.ArgumentType<T> type, String[] suggestions){
 		SuggestionProvider provider = (context, builder) -> {
-			for(String str : suggestions) {
-				builder = builder.suggest(str);
+			System.out.println(Arrays.deepToString(suggestions));
+			//NMS' ICompletionProvider.a()
+			String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
+
+			for (int i = 0; i < suggestions.length; i++) {
+				String str = suggestions[i];
+				if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
+					builder.suggest(str);
+				}
 			}
-			
+
 			return builder.buildFuture();
-			};
+		};
 		return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
 	}
 	
