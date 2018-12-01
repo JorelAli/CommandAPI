@@ -104,7 +104,9 @@ public final class SemiReflector {
 			permissionsToFix.forEach((cmdName, perm) -> {
 				
 				if(perm.equals(CommandPermission.NONE)) {
-					System.out.println("Registering no permission for " + cmdName);
+					if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
+						CommandAPIMain.getLog().info("Linking permission NONE -> " + cmdName);
+					}
 					if(vcw.isInstance(knownCommands.get(cmdName))) {
 						knownCommands.get(cmdName).setPermission("");
 					}
@@ -113,7 +115,9 @@ public final class SemiReflector {
 					}
 				} else {
 					if(perm.getPermission() != null) {
-						System.out.println("Registering permission " + perm.getPermission() + " for cmd: " + cmdName);
+						if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
+							CommandAPIMain.getLog().info("Linking permission " + perm.getPermission() + " -> " + cmdName);
+						}
 						if(vcw.isInstance(knownCommands.get(cmdName))) {
 							knownCommands.get(cmdName).setPermission(perm.getPermission());
 						}
@@ -121,7 +125,6 @@ public final class SemiReflector {
 							knownCommands.get(cmdName).setPermission(perm.getPermission());
 						}
 					} else {
-						System.out.println(perm.toString() + " for " + cmdName);
 					}
 				}
 				
