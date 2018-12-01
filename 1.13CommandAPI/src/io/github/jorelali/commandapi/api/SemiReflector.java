@@ -66,6 +66,7 @@ import io.github.jorelali.commandapi.api.arguments.PlayerArgument;
 import io.github.jorelali.commandapi.api.arguments.PotionEffectArgument;
 import io.github.jorelali.commandapi.api.arguments.SuggestedStringArgument;
 import io.github.jorelali.commandapi.api.exceptions.CantFindPlayerException;
+import io.github.jorelali.commandapi.api.exceptions.ConflictingPermissionsException;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 
@@ -75,9 +76,7 @@ import net.md_5.bungee.chat.ComponentSerializer;
  * implementations occur here.
  */
 public final class SemiReflector {
-	
-	//protected Set<String> permsToRemove;
-	
+		
 	//TODO: Error here where two commands (e.g. /library and /library) overwrite one another!!!
 	private Map<String, CommandPermission> permissionsToFix;
 
@@ -95,7 +94,7 @@ public final class SemiReflector {
 	private CommandDispatcher dispatcher;
 	private Object cDispatcher;
 	
-	public void fix() {
+	public void fixPermissions() {
 		try {
 			
 			//SimpleCommandMap map = (SimpleCommandMap) getOBCClass("CraftServer").getDeclaredMethod("getCommandMap").invoke(Bukkit.getServer());
@@ -155,7 +154,6 @@ public final class SemiReflector {
 			OBCClasses = new HashMap<>();
 			methods = new HashMap<>();
 			fields = new HashMap<>();
-			//permsToRemove = new HashSet<>();
 			permissionsToFix = new HashMap<>();
 			
 			this.cDispatcher = getField(getNMSClass("MinecraftServer"), "commandDispatcher").get(server);
@@ -503,12 +501,22 @@ public final class SemiReflector {
 	
 	private Predicate generatePermissions(String commandName, CommandPermission permission) {
 		
-		//add to a list to fix this
-		permissionsToFix.put(commandName.toLowerCase(), permission);
+		//First check for the situation where a user might register the same command (or subcommand)
+		//under a different permission. Since this is not permitted, we must prevent this.
+		if(permissionsToFix.containsKey(commandName.toLowerCase())) {
+			if(!permissionsToFix.get(commandName.toLowerCase()).equals(permission)) {
+				throw new ConflictingPermissionsException(commandName, permissionsToFix.get(commandName.toLowerCase()), permission);
+			}
+		} else {
+			//add to a list to fix this
+			permissionsToFix.put(commandName.toLowerCase(), permission);
+		}
 		
+		//Register it to the Bukkit permissions registry
 		if(permission.getPermission() != null) {
-			//Add the permission to the Bukkit permission registry
-			Bukkit.getPluginManager().addPermission(new Permission(permission.getPermission()));
+			if(!Bukkit.getPluginManager().getPermissions().contains(new Permission(permission.getPermission()))) {
+				Bukkit.getPluginManager().addPermission(new Permission(permission.getPermission()));
+			}
 		}
 		
 		return (cmdSender) -> {

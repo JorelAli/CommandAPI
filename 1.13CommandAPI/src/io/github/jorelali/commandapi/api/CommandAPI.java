@@ -46,7 +46,7 @@ public class CommandAPI {
 	 * See @ Org.bukkit.command.Command.class line 119
 	 */
 	public static void fixPermissions() {
-		reflector.fix();
+		reflector.fixPermissions();
 	}
 	
 	private static SemiReflector reflector;
