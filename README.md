@@ -42,14 +42,17 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 | 1.4     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.4/CommandAPI.jar) | [Version 1.4 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.4%20Documentation.md) |
 | 1.5     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.5/CommandAPI.jar) | [Version 1.5 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.5%20Documentation.md) |
 | 1.6     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.6/CommandAPI.jar) | [Version 1.6 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.6%20Documentation.md) |
-| 1.7     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.7/CommandAPI.jar) | [Version 1.7 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.7%20Documentation.md) |
+| 1.7.1     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.7.1/CommandAPI.jar) | [Version 1.7 & 1.7.1 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.7%20Documentation.md) |
 
 ## Changelog
 
+* Version 1.7.1
+  * Fix a bug with permission checks. Other than that, it's the same as 1.7 (in terms of documentation)
 * Version 1.7
   * Adds DynamicSuggestedStringArguments for dynamically updating suggestions
   * Adds support for `success` and `result` values for `/execute store`
   * Overhaul permissions system so it works properly
+  * **Note: This version is incompatible with pre-1.7 version CommandAPI plugins**
 * Version 1.6
   * Adds FunctionArguments to handle Minecraft functions
   * Remove useless test code
