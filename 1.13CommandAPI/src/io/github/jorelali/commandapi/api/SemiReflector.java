@@ -519,9 +519,9 @@ public final class SemiReflector {
 		
 		//Register it to the Bukkit permissions registry
 		if(permission.getPermission() != null) {
-			if(!Bukkit.getPluginManager().getPermissions().contains(new Permission(permission.getPermission()))) {
+			try {
 				Bukkit.getPluginManager().addPermission(new Permission(permission.getPermission()));
-			}
+			} catch(IllegalArgumentException e) {}
 		}
 		
 		return (cmdSender) -> {
