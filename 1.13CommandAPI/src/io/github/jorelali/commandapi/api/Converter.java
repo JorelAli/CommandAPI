@@ -8,7 +8,6 @@ import java.util.Set;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import io.github.jorelali.commandapi.api.CommandPermission.PermissionNode;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.GreedyStringArgument;
 
@@ -62,9 +61,9 @@ public class Converter {
 		CommandPermission permissionNode = null;
 		String permission = (String) cmdData.get("permission");
 		if(permission == null) {
-			permissionNode = new CommandPermission(PermissionNode.NONE);
+			permissionNode = CommandPermission.NONE;
 		} else {
-			permissionNode = new CommandPermission(permission);
+			permissionNode = CommandPermission.fromString(permission);
 		}
 		
 		

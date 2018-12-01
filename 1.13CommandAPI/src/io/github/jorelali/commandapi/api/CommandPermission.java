@@ -1,13 +1,19 @@
 package io.github.jorelali.commandapi.api;
 
-import java.util.Arrays;
-
 public class CommandPermission {
 
-	private String[] permissions;
+	public static CommandPermission OP = new CommandPermission(PermissionNode.OP);
+	
+	public static CommandPermission NONE = new CommandPermission(PermissionNode.NONE);
+	
+	public static CommandPermission fromString(String permission) {
+		return new CommandPermission(permission);
+	}
+
+	private String permission;
 	private PermissionNode permissionNode;
 	
-	public enum PermissionNode {
+	protected enum PermissionNode {
 		/**
 		 * A player that has to be an operator to run a command
 		 */
@@ -23,33 +29,26 @@ public class CommandPermission {
 	 * Represents a single permission required to execute a command
 	 * @param permission The permission node the sender requires to run this command
 	 */
-	public CommandPermission(String permission) {
-		this.permissions = new String[] {permission};
-	}
-	
-	/**
-	 * Represents multiple permission nodes that are required to execute a command 
-	 * @param permissions The array of permission nodes the sender requires to run this command
-	 */
-	public CommandPermission(String... permissions) {
-		this.permissions = permissions;
+	private CommandPermission(String permission) {
+		this.permission = permission;
+		this.permissionNode = null;
 	}
 	
 	/**
 	 * Represents either no permission or OP status in order to run a command
 	 * @param permission The enumerated type of what permission is required to run this command
 	 */
-	public CommandPermission(PermissionNode permission) {
-		this.permissions = null;
+	private CommandPermission(PermissionNode permission) {
+		this.permission = null;
 		this.permissionNode = permission;
 	}
 	
-	protected String[] getPermissions() {
-		return this.permissions;
+	protected String getPermission() {
+		return this.permission;
 	}
 	
 	protected PermissionNode getPermissionNode() {
-		return permissionNode;
+		return this.permissionNode;
 	}
 	
 	@Override
@@ -60,7 +59,7 @@ public class CommandPermission {
 			else
 				return "NONE";
 		} else {
-			return Arrays.toString(permissions);
+			return permission;
 		}
 	}
 	

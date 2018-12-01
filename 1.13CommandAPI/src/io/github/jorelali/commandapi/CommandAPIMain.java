@@ -64,7 +64,10 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		//Prevent command registration after server has loaded
-		Bukkit.getScheduler().scheduleSyncDelayedTask(JavaPlugin.getPlugin(CommandAPIMain.class), () -> CommandAPI.canRegister = false, 0L);
+		Bukkit.getScheduler().scheduleSyncDelayedTask(JavaPlugin.getPlugin(CommandAPIMain.class), () -> {
+			CommandAPI.canRegister = false;
+			CommandAPI.fixPermissions();
+		}, 0L);
 	}
 	
 }

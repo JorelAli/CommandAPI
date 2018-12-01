@@ -7,15 +7,16 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
 
@@ -27,11 +28,13 @@ import org.bukkit.World;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ProxiedCommandSender;
+import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.permissions.Permission;
 import org.bukkit.potion.PotionEffectType;
 
 import com.mojang.brigadier.Command;
@@ -75,6 +78,9 @@ import net.md_5.bungee.chat.ComponentSerializer;
  */
 public final class SemiReflector {
 	
+	//protected Set<String> permsToRemove;
+	private Map<String, String> permissionsToFix;
+
 	//Cache maps
 	private static Map<String, Class<?>> NMSClasses;
 	private static Map<String, Class<?>> OBCClasses;
@@ -88,6 +94,30 @@ public final class SemiReflector {
 	private static String packageName = null;
 	private CommandDispatcher dispatcher;
 	private Object cDispatcher;
+	
+	public void fix() {
+		try {
+			
+			//SimpleCommandMap map = (SimpleCommandMap) getOBCClass("CraftServer").getDeclaredMethod("getCommandMap").invoke(Bukkit.getServer());
+			SimpleCommandMap map = (SimpleCommandMap) getMethod(getOBCClass("CraftServer"), "getCommandMap").invoke(Bukkit.getServer());
+			//Field f = SimpleCommandMap.class.getDeclaredField("knownCommands");
+			Field f = getField(SimpleCommandMap.class, "knownCommands");
+			Map<String, org.bukkit.command.Command> knownCommands = (Map<String, org.bukkit.command.Command>) f.get(map);
+			
+			Class vcw = getOBCClass("command.VanillaCommandWrapper");
+			
+			permissionsToFix.forEach((k, v) -> {
+				if(vcw.isInstance(knownCommands.get(k))) {
+					knownCommands.get(k).setPermission(v);
+				}
+				if(vcw.isInstance(knownCommands.get("minecraft:" + k))) {
+					knownCommands.get(k).setPermission(v);
+				}
+			});
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	protected SemiReflector() throws ClassNotFoundException {
 		
@@ -107,6 +137,8 @@ public final class SemiReflector {
 			OBCClasses = new HashMap<>();
 			methods = new HashMap<>();
 			fields = new HashMap<>();
+			//permsToRemove = new HashSet<>();
+			permissionsToFix = new HashMap<>();
 			
 			this.cDispatcher = getField(getNMSClass("MinecraftServer"), "commandDispatcher").get(server);
 						
@@ -123,6 +155,8 @@ public final class SemiReflector {
 			Field children = getField(CommandNode.class, "children");
 			
 			Map<String, CommandNode<?>> c = (Map<String, CommandNode<?>>) children.get(dispatcher.getRoot());
+		
+			//TODO: True force would look through all keys for anything containing the <anything>:commandName<nothing here> and remove it
 			
 			if(force) {
 				c.remove("minecraft:" + commandName);
@@ -449,33 +483,34 @@ public final class SemiReflector {
 		};
 	}
 	
-	private Predicate generatePermissions(CommandPermission permissions) {
+	private Predicate generatePermissions(String commandName, CommandPermission permission) {
+		
+		if(permission.getPermission() != null) {
+			
+			//add to a list to fix this
+			permissionsToFix.put(commandName.toLowerCase(), permission.getPermission());
+			
+			//Add the permission to the Bukkit permission registry
+			Bukkit.getPluginManager().addPermission(new Permission(permission.getPermission()));
+		}
+		
 		return (cmdSender) -> {
 			
         	//Generate CommandSender object
 			CommandSender sender = null;
 			try {
 				sender = (CommandSender) getMethod(cmdSender.getClass(), "getBukkitSender").invoke(cmdSender);
-				//Object entity = cmdSender.getClass().getDeclaredMethod("f").invoke(cmdSender);
-				//sender = (CommandSender) getNMSClass("Entity").getDeclaredMethod("getBukkitEntity").invoke(entity);
 				
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
 					| SecurityException e) {
 				e.printStackTrace(System.out);
 			}
-
-        	if(permissions.getPermissions() != null) {
-        		//If they don't have one of the required permissions, return false
-        		for(String permission : permissions.getPermissions()) {
-        			if(!sender.hasPermission(permission)) {
-        				return false;
-        			}
-        		}
-        		//Else return true
-        		return true;
+			
+        	if(permission.getPermission() != null) {
+        		return sender.hasPermission(permission.getPermission());
         	} else {
         		//If they're op
-        		if(permissions.getPermissionNode().equals(PermissionNode.OP)) {
+        		if(permission.getPermissionNode().equals(PermissionNode.OP)) {
         			return sender.isOp();
         		} else {
         			//PermissionNode = NONE, implies true
@@ -504,7 +539,8 @@ public final class SemiReflector {
 		}
 		
 		Command command = generateCommand(commandName, args, executor);
-		Predicate permission = generatePermissions(permissions);
+		Predicate permission = generatePermissions(commandName, permissions);
+		//Predicate permission = (a) -> {return true;};
 		
 		/*
 		 * The innermost argument needs to be connected to the executor.

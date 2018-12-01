@@ -7,7 +7,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
 import io.github.jorelali.commandapi.CommandAPIMain;
-import io.github.jorelali.commandapi.api.CommandPermission.PermissionNode;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.GreedyStringArgument;
 import io.github.jorelali.commandapi.api.exceptions.GreedyStringException;
@@ -43,7 +42,14 @@ public class CommandAPI {
 		return instance;
 	}	
 	
-	private SemiReflector reflector;
+	/**
+	 * See @ Org.bukkit.command.Command.class line 119
+	 */
+	public static void fixPermissions() {
+		reflector.fix();
+	}
+	
+	private static SemiReflector reflector;
 
 	protected CommandAPI() {
 		if(instance == null) {
@@ -54,7 +60,7 @@ public class CommandAPI {
 		
 		//Only ever called once
 		try {
-			this.reflector = new SemiReflector();
+			CommandAPI.reflector = new SemiReflector();			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -88,7 +94,7 @@ public class CommandAPI {
 	 * @param executor The command executor
 	 */
 	public void register(String commandName, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
-		register(commandName, new CommandPermission(PermissionNode.NONE), args, executor);
+		register(commandName, CommandPermission.NONE, args, executor);
 	}	
 
 	/**
@@ -99,7 +105,7 @@ public class CommandAPI {
 	 * @param executor The command executor
 	 */
 	public void register(String commandName, String[] aliases, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
-		register(commandName, new CommandPermission(PermissionNode.NONE), aliases, args, executor);
+		register(commandName, CommandPermission.NONE, aliases, args, executor);
 	}
 	
 	/**
@@ -134,7 +140,7 @@ public class CommandAPI {
 	 * @param executor The command executor
 	 */
 	public void register(String commandName, final LinkedHashMap<String, Argument> args, ResultingCommandExecutor executor) {
-		register(commandName, new CommandPermission(PermissionNode.NONE), args, executor);
+		register(commandName, CommandPermission.NONE, args, executor);
 	}	
 
 	/**
@@ -145,7 +151,7 @@ public class CommandAPI {
 	 * @param executor The command executor
 	 */
 	public void register(String commandName, String[] aliases, final LinkedHashMap<String, Argument> args, ResultingCommandExecutor executor) {
-		register(commandName, new CommandPermission(PermissionNode.NONE), aliases, args, executor);
+		register(commandName, CommandPermission.NONE, aliases, args, executor);
 	}
 	
 	/**
