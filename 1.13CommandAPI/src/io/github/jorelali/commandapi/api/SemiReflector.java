@@ -9,14 +9,12 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
 
@@ -79,7 +77,9 @@ import net.md_5.bungee.chat.ComponentSerializer;
 public final class SemiReflector {
 	
 	//protected Set<String> permsToRemove;
-	private Map<String, String> permissionsToFix;
+	
+	//TODO: Error here where two commands (e.g. /library and /library) overwrite one another!!!
+	private Map<String, CommandPermission> permissionsToFix;
 
 	//Cache maps
 	private static Map<String, Class<?>> NMSClasses;
@@ -106,13 +106,31 @@ public final class SemiReflector {
 			
 			Class vcw = getOBCClass("command.VanillaCommandWrapper");
 			
-			permissionsToFix.forEach((k, v) -> {
-				if(vcw.isInstance(knownCommands.get(k))) {
-					knownCommands.get(k).setPermission(v);
+			permissionsToFix.forEach((cmdName, perm) -> {
+				
+				if(perm.equals(CommandPermission.NONE)) {
+					System.out.println("Registering no permission for " + cmdName);
+					if(vcw.isInstance(knownCommands.get(cmdName))) {
+						knownCommands.get(cmdName).setPermission("");
+					}
+					if(vcw.isInstance(knownCommands.get("minecraft:" + cmdName))) {
+						knownCommands.get(cmdName).setPermission("");
+					}
+				} else {
+					if(perm.getPermission() != null) {
+						System.out.println("Registering permission " + perm.getPermission() + " for cmd: " + cmdName);
+						if(vcw.isInstance(knownCommands.get(cmdName))) {
+							knownCommands.get(cmdName).setPermission(perm.getPermission());
+						}
+						if(vcw.isInstance(knownCommands.get("minecraft:" + cmdName))) {
+							knownCommands.get(cmdName).setPermission(perm.getPermission());
+						}
+					} else {
+						System.out.println(perm.toString() + " for " + cmdName);
+					}
 				}
-				if(vcw.isInstance(knownCommands.get("minecraft:" + k))) {
-					knownCommands.get(k).setPermission(v);
-				}
+				
+				
 			});
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | ClassNotFoundException e) {
 			e.printStackTrace();
@@ -485,11 +503,10 @@ public final class SemiReflector {
 	
 	private Predicate generatePermissions(String commandName, CommandPermission permission) {
 		
+		//add to a list to fix this
+		permissionsToFix.put(commandName.toLowerCase(), permission);
+		
 		if(permission.getPermission() != null) {
-			
-			//add to a list to fix this
-			permissionsToFix.put(commandName.toLowerCase(), permission.getPermission());
-			
 			//Add the permission to the Bukkit permission registry
 			Bukkit.getPluginManager().addPermission(new Permission(permission.getPermission()));
 		}

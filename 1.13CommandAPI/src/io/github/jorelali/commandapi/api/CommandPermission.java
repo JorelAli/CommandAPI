@@ -36,11 +36,11 @@ public class CommandPermission {
 	
 	/**
 	 * Represents either no permission or OP status in order to run a command
-	 * @param permission The enumerated type of what permission is required to run this command
+	 * @param permissionNode The enumerated type of what permission is required to run this command
 	 */
-	private CommandPermission(PermissionNode permission) {
+	private CommandPermission(PermissionNode permissionNode) {
 		this.permission = null;
-		this.permissionNode = permission;
+		this.permissionNode = permissionNode;
 	}
 	
 	protected String getPermission() {
