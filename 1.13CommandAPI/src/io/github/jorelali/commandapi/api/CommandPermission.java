@@ -2,6 +2,25 @@ package io.github.jorelali.commandapi.api;
 
 public class CommandPermission {
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CommandPermission other = (CommandPermission) obj;
+		if (permission == null) {
+			if (other.permission != null)
+				return false;
+		} else if (!permission.equals(other.permission))
+			return false;
+		if (permissionNode != other.permissionNode)
+			return false;
+		return true;
+	}
+
 	public static CommandPermission OP = new CommandPermission(PermissionNode.OP);
 	
 	public static CommandPermission NONE = new CommandPermission(PermissionNode.NONE);
