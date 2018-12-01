@@ -47,7 +47,6 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
-import io.github.jorelali.commandapi.CommandAPIMain;
 import io.github.jorelali.commandapi.api.CommandPermission.PermissionNode;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.ChatColorArgument;
@@ -77,7 +76,6 @@ import net.md_5.bungee.chat.ComponentSerializer;
  */
 public final class SemiReflector {
 		
-	//TODO: Error here where two commands (e.g. /library and /library) overwrite one another!!!
 	private Map<String, CommandPermission> permissionsToFix;
 
 	//Cache maps
@@ -94,12 +92,10 @@ public final class SemiReflector {
 	private CommandDispatcher dispatcher;
 	private Object cDispatcher;
 	
-	public void fixPermissions() {
+	protected void fixPermissions() {
 		try {
 			
-			//SimpleCommandMap map = (SimpleCommandMap) getOBCClass("CraftServer").getDeclaredMethod("getCommandMap").invoke(Bukkit.getServer());
 			SimpleCommandMap map = (SimpleCommandMap) getMethod(getOBCClass("CraftServer"), "getCommandMap").invoke(Bukkit.getServer());
-			//Field f = SimpleCommandMap.class.getDeclaredField("knownCommands");
 			Field f = getField(SimpleCommandMap.class, "knownCommands");
 			Map<String, org.bukkit.command.Command> knownCommands = (Map<String, org.bukkit.command.Command>) f.get(map);
 			
@@ -166,18 +162,24 @@ public final class SemiReflector {
 		
 	}
 	
-	public void unregister(String commandName, boolean force) {
+	protected void unregister(String commandName, boolean force) {
 		try {
 			Field children = getField(CommandNode.class, "children");
 			
 			Map<String, CommandNode<?>> c = (Map<String, CommandNode<?>>) children.get(dispatcher.getRoot());
-		
-			//TODO: True force would look through all keys for anything containing the <anything>:commandName<nothing here> and remove it
-			
+					
 			if(force) {
-				c.remove("minecraft:" + commandName);
-				c.remove("bukkit:" + commandName);
-				c.remove("spigot:" + commandName);
+				List<String> keysToRemove = new ArrayList<>();
+				for(String key : c.keySet()) {
+					if(key.contains(":")) {
+						if(key.split(":")[1].equalsIgnoreCase(commandName)) {
+							keysToRemove.add(key);
+						}
+					}
+				}
+				for(String key : keysToRemove) {
+					c.remove(key);
+				}
 			}
 			c.remove(commandName);
 						

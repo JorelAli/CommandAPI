@@ -1,12 +1,10 @@
-package io.github.jorelali.commandapi;
+package io.github.jorelali.commandapi.api;
 
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import io.github.jorelali.commandapi.api.CommandAPI;
 
 public class CommandAPIMain extends JavaPlugin {
 	
@@ -66,6 +64,8 @@ public class CommandAPIMain extends JavaPlugin {
 		//Prevent command registration after server has loaded
 		Bukkit.getScheduler().scheduleSyncDelayedTask(JavaPlugin.getPlugin(CommandAPIMain.class), () -> {
 			CommandAPI.canRegister = false;
+			
+			//Sort out permissions after the server has finished registering them all
 			CommandAPI.fixPermissions();
 		}, 0L);
 	}

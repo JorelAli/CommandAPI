@@ -6,7 +6,6 @@ import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
-import io.github.jorelali.commandapi.CommandAPIMain;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.GreedyStringArgument;
 import io.github.jorelali.commandapi.api.exceptions.GreedyStringException;
@@ -20,7 +19,8 @@ public class CommandAPI {
 	//Static instance of CommandAPI
 	private static CommandAPI instance;
 	
-	public static boolean canRegister = true;
+	protected static boolean canRegister = true;
+	private static SemiReflector reflector;
 	
 	/**
 	 * Forces a command to return a success value of 0
@@ -42,14 +42,11 @@ public class CommandAPI {
 		return instance;
 	}	
 	
-	/**
-	 * See @ Org.bukkit.command.Command.class line 119
-	 */
-	public static void fixPermissions() {
+	//Fixes all broken permissions
+	protected static void fixPermissions() {
 		reflector.fixPermissions();
 	}
 	
-	private static SemiReflector reflector;
 
 	protected CommandAPI() {
 		if(instance == null) {
