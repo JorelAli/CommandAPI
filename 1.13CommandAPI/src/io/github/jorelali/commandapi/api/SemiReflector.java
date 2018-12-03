@@ -493,7 +493,7 @@ public final class SemiReflector {
 				//Run normal executor
 				try {
 					executor.getEx().run(sender, argList.toArray(new Object[argList.size()]));
-					return 0;
+					return 1;
 				} catch (CommandSyntaxException e) {
 					throw e;
 				} catch (Exception e) {
