@@ -623,7 +623,7 @@ public final class SemiReflector {
 	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), ((SuggestedStringArgument) outerArg).getSuggestions()).then(outer);
 	        		} else if(outerArg instanceof FunctionArgument) {
 	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), getFunctions()).then(outer);
-	        		} else if(innerArg instanceof DynamicSuggestedStringArgument) {
+	        		} else if(outerArg instanceof DynamicSuggestedStringArgument) {
 	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), ((DynamicSuggestedStringArgument) outerArg).getDynamicSuggestions()).then(outer);
 					} else {
 	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType()).then(outer);
