@@ -44,6 +44,7 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
@@ -607,7 +608,7 @@ public final class SemiReflector {
 				} else if(innerArg instanceof DynamicSuggestedStringArgument) {
         			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), ((DynamicSuggestedStringArgument) innerArg).getDynamicSuggestions()).executes(command);
 				} else {
-					inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType()).executes(command);
+					inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), permissions).executes(command);
 				}
 	        }
 
@@ -626,7 +627,7 @@ public final class SemiReflector {
 	        		} else if(outerArg instanceof DynamicSuggestedStringArgument) {
 	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), ((DynamicSuggestedStringArgument) outerArg).getDynamicSuggestions()).then(outer);
 					} else {
-	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType()).then(outer);
+	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), permissions).then(outer);
 	        		}
 	        	}
 	        }        
@@ -660,8 +661,56 @@ public final class SemiReflector {
 	}
 	
 	//Registers a RequiredArgumentBuilder for an argument
-	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, com.mojang.brigadier.arguments.ArgumentType<T> type){
-		return RequiredArgumentBuilder.argument(argumentName, type);
+	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, com.mojang.brigadier.arguments.ArgumentType<T> type, CommandPermission permission) {
+		/*
+		 * if (customSuggestions == null) {
+            return type.listSuggestions(context, builder);
+        } else {
+            return customSuggestions.getSuggestions(context, builder);
+        }
+		 */
+		
+		//User requires no perms, so they can see everything
+		if(permission.equals(CommandPermission.NONE)) {
+			return RequiredArgumentBuilder.argument(argumentName, type);
+		} else {
+			
+			if(permission.equals(CommandPermission.OP)) {
+				SuggestionProvider provider = (context, builder) -> {
+					CommandSender sender = null;
+					
+					try {
+						sender = (CommandSender) getMethod(getNMSClass("CommandListenerWrapper"), "getBukkitSender").invoke(context.getSource());
+					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+							| SecurityException e) {
+						e.printStackTrace(System.out);
+					}
+					if(sender.isOp()) {
+						return type.listSuggestions(context, builder); 
+					} else {
+						return Suggestions.empty();
+					}
+				};
+				return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
+			} else {
+				SuggestionProvider provider = (context, builder) -> {
+					CommandSender sender = null;
+					
+					try {
+						sender = (CommandSender) getMethod(getNMSClass("CommandListenerWrapper"), "getBukkitSender").invoke(context.getSource());
+					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+							| SecurityException e) {
+						e.printStackTrace(System.out);
+					}
+					if(sender.hasPermission(permission.getPermission())) {
+						return type.listSuggestions(context, builder); 
+					} else {
+						return Suggestions.empty();
+					}
+				};
+				return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
+			}
+		}		
 	}
 	
 	
