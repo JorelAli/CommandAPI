@@ -1,10 +1,14 @@
 package io.github.jorelali.commandapi.api;
 
+import java.util.LinkedHashMap;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import io.github.jorelali.commandapi.api.arguments.Argument;
+import io.github.jorelali.commandapi.api.arguments.SuggestedStringArgument;
 
 public class CommandAPIMain extends JavaPlugin {
 	
@@ -68,6 +72,22 @@ public class CommandAPIMain extends JavaPlugin {
 			//Sort out permissions after the server has finished registering them all
 			CommandAPI.fixPermissions();
 		}, 0L);
+		
+		//Test repo, I can do what I want
+		
+		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+		
+		//User requires the "custompermission" permission to run this command
+		CommandAPI.getInstance().register("permissiontest", CommandPermission.fromString("custompermission"), arguments, (sender, args) -> {
+			sender.sendMessage("test1 success!");
+		});
+		
+		arguments.put("values", new SuggestedStringArgument("hello", "world"));
+		//User MUST have "custompermission2" in order to /SEE/ this command, regardless if they have "custompermission"
+		CommandAPI.getInstance().register("permissiontest", CommandPermission.fromString("custompermission2"), arguments, (sender, args) -> {
+			sender.sendMessage("test2 success!");
+		});
+		
 	}
 	
 }

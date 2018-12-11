@@ -66,7 +66,6 @@ import io.github.jorelali.commandapi.api.arguments.PlayerArgument;
 import io.github.jorelali.commandapi.api.arguments.PotionEffectArgument;
 import io.github.jorelali.commandapi.api.arguments.SuggestedStringArgument;
 import io.github.jorelali.commandapi.api.exceptions.CantFindPlayerException;
-import io.github.jorelali.commandapi.api.exceptions.ConflictingPermissionsException;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 
@@ -108,6 +107,12 @@ public final class SemiReflector {
 					if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
 						CommandAPIMain.getLog().info("Linking permission NONE -> " + cmdName);
 					}
+					/*
+					 * org.bukkit.command.Command.testPermissionSilent() ->
+					 * if ((permission == null) || (permission.length() == 0)) {
+				     *     return true;
+				     * }
+					 */
 					if(vcw.isInstance(knownCommands.get(cmdName))) {
 						knownCommands.get(cmdName).setPermission("");
 					}
@@ -509,19 +514,30 @@ public final class SemiReflector {
 		
 		//First check for the situation where a user might register the same command (or subcommand)
 		//under a different permission. Since this is not permitted, we must prevent this.
+		
+		//TODO: Sort this out at some point in time
 		if(permissionsToFix.containsKey(commandName.toLowerCase())) {
+			//ignore it. Only the parent must have this level of power
+			
+			//HENCE: we take the PARENT permission:
 			if(!permissionsToFix.get(commandName.toLowerCase()).equals(permission)) {
-				throw new ConflictingPermissionsException(commandName, permissionsToFix.get(commandName.toLowerCase()), permission);
+				permission = permissionsToFix.get(commandName.toLowerCase());
 			}
+			
+//			if(!permissionsToFix.get(commandName.toLowerCase()).equals(permission)) {
+//				throw new ConflictingPermissionsException(commandName, permissionsToFix.get(commandName.toLowerCase()), permission);
+//			}
 		} else {
 			//add to a list to fix this
 			permissionsToFix.put(commandName.toLowerCase(), permission);
 		}
 		
+		CommandPermission finalPermission = permission;
+		
 		//Register it to the Bukkit permissions registry
-		if(permission.getPermission() != null) {
+		if(finalPermission.getPermission() != null) {
 			try {
-				Bukkit.getPluginManager().addPermission(new Permission(permission.getPermission()));
+				Bukkit.getPluginManager().addPermission(new Permission(finalPermission.getPermission()));
 			} catch(IllegalArgumentException e) {}
 		}
 		
@@ -537,11 +553,11 @@ public final class SemiReflector {
 				e.printStackTrace(System.out);
 			}
 			
-        	if(permission.getPermission() != null) {
-        		return sender.hasPermission(permission.getPermission());
+        	if(finalPermission.getPermission() != null) {
+        		return sender.hasPermission(finalPermission.getPermission());
         	} else {
         		//If they're op
-        		if(permission.getPermissionNode().equals(PermissionNode.OP)) {
+        		if(finalPermission.getPermissionNode().equals(PermissionNode.OP)) {
         			return sender.isOp();
         		} else {
         			//PermissionNode = NONE, implies true
@@ -602,7 +618,7 @@ public final class SemiReflector {
 	        	inner = getLiteralArgumentBuilder(str).executes(command);
 	        } else {
 	        	if(innerArg instanceof SuggestedStringArgument) {
-	        		inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), ((SuggestedStringArgument) innerArg).getSuggestions()).executes(command);
+	        		inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), ((SuggestedStringArgument) innerArg).getSuggestions(), permissions).executes(command);
         		} else if(innerArg instanceof FunctionArgument) {
         			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), getFunctions()).executes(command);
 				} else if(innerArg instanceof DynamicSuggestedStringArgument) {
@@ -621,7 +637,7 @@ public final class SemiReflector {
 	        		outer = getLiteralArgumentBuilder(str).then(outer);
 	        	} else {
 	        		if(outerArg instanceof SuggestedStringArgument) {
-	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), ((SuggestedStringArgument) outerArg).getSuggestions()).then(outer);
+	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), ((SuggestedStringArgument) outerArg).getSuggestions(), permissions).then(outer);
 	        		} else if(outerArg instanceof FunctionArgument) {
 	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), getFunctions()).then(outer);
 	        		} else if(outerArg instanceof DynamicSuggestedStringArgument) {
@@ -732,21 +748,83 @@ public final class SemiReflector {
 	}
 	
 	//Registers a RequiredArgumentBuilder for an argument
-	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, com.mojang.brigadier.arguments.ArgumentType<T> type, String[] suggestions){
-		SuggestionProvider provider = (context, builder) -> {
-			//NMS' ICompletionProvider.a()
-			String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
+	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, com.mojang.brigadier.arguments.ArgumentType<T> type, String[] suggestions, CommandPermission permission){
+		
+		if(permission.equals(CommandPermission.NONE)) {
+			SuggestionProvider provider = (context, builder) -> {
+				//NMS' ICompletionProvider.a()
+				String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
 
-			for (int i = 0; i < suggestions.length; i++) {
-				String str = suggestions[i];
-				if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
-					builder.suggest(str);
+				for (int i = 0; i < suggestions.length; i++) {
+					String str = suggestions[i];
+					if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
+						builder.suggest(str);
+					}
 				}
-			}
 
-			return builder.buildFuture();
-		};
-		return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
+				return builder.buildFuture();
+			};
+			return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
+		} else {
+			
+			if(permission.equals(CommandPermission.OP)) {
+				SuggestionProvider provider = (context, builder) -> {
+					CommandSender sender = null;
+					
+					try {
+						sender = (CommandSender) getMethod(getNMSClass("CommandListenerWrapper"), "getBukkitSender").invoke(context.getSource());
+					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+							| SecurityException e) {
+						e.printStackTrace(System.out);
+					}
+					if(sender.isOp()) {
+						
+						//NMS' ICompletionProvider.a()
+						String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
+
+						for (int i = 0; i < suggestions.length; i++) {
+							String str = suggestions[i];
+							if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
+								builder.suggest(str);
+							}
+						}
+
+						return builder.buildFuture();
+					} else {
+						return Suggestions.empty();
+					}
+				};
+				return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
+			} else {
+				SuggestionProvider provider = (context, builder) -> {
+					CommandSender sender = null;
+					
+					try {
+						sender = (CommandSender) getMethod(getNMSClass("CommandListenerWrapper"), "getBukkitSender").invoke(context.getSource());
+					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+							| SecurityException e) {
+						e.printStackTrace(System.out);
+					}
+					if(sender.hasPermission(permission.getPermission())) {
+						//NMS' ICompletionProvider.a()
+						String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
+
+						for (int i = 0; i < suggestions.length; i++) {
+							String str = suggestions[i];
+							if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
+								builder.suggest(str);
+							}
+						}
+
+						return builder.buildFuture();
+					} else {
+						return Suggestions.empty();
+					}
+				};
+				return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
+			}
+		}
+		//return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
 	}
 	
 	//Registers a RequiredArgumentBuilder for an argument
