@@ -681,35 +681,34 @@ public final class SemiReflector {
 		ARGUMENT, STRING_ARR, DYN_SUG;
 	}
 	
+	private CommandSender getCommandSender(CommandContext context) {
+		CommandSender sender = null;
+		try {
+			sender = (CommandSender) getMethod(getNMSClass("CommandListenerWrapper"), "getBukkitSender").invoke(context.getSource());
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException e) {
+			e.printStackTrace(System.out);
+		}
+		return sender;
+	}
+	
+	/*
+	 * Yes, there's a TONNE of copy and paste in this method, but because
+	 * it's inside a lambda, I believe it's best to leave it like that.
+	 * (Despite how messy it is)
+	 */
 	public <T> SuggestionProvider generateSuggestionProvider(CommandPermission permission, Object suggestions, SuggestionType suggestionType) {
 		
-		//Since we don't know the type of suggestions, we'll parse it as an Object at runtime
-		com.mojang.brigadier.arguments.ArgumentType<T> type = null;
-		String[] stringArr = null;
-		DynamicSuggestions dynamicSuggestions = null;
-		
-		switch(suggestionType) {
-			case ARGUMENT:
-				type = (com.mojang.brigadier.arguments.ArgumentType<T>) suggestions;
-				break;
-			case DYN_SUG:
-				dynamicSuggestions = (DynamicSuggestions) suggestions;
-				break;
-			case STRING_ARR:
-				stringArr = (String[]) suggestions;
-				break;
-		}
-		
-		//Permission checks
 		if(permission.equals(CommandPermission.NONE)) {
 			//Default suggestion type - no permission checks required
 			switch(suggestionType) {
 				case ARGUMENT:
+					com.mojang.brigadier.arguments.ArgumentType<T> type = (com.mojang.brigadier.arguments.ArgumentType<T>) suggestions;
 					//No suggestions required, return default suggestions
 					return (context, builder) -> {
-						type.listSuggestions(context, builder);
+						return type.listSuggestions(context, builder);
 					};
 				case STRING_ARR:
+					String[] stringArr = (String[]) suggestions;
 					//Use NMS ICompletionProvider.a() on suggestions
 					return (context, builder) -> {
 						String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
@@ -722,6 +721,7 @@ public final class SemiReflector {
 						return builder.buildFuture();
 					};
 				case DYN_SUG:
+					DynamicSuggestions dynamicSuggestions = (DynamicSuggestions) suggestions;
 					//Use NMS ICompletionProvider.a() on DynSuggestions
 					return (context, builder) -> {
 						String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
@@ -737,7 +737,55 @@ public final class SemiReflector {
 					};
 			}
 		} else if(permission.equals(CommandPermission.OP)) {
-			//TODO:
+			//Operator suggestion type - an instance of a player is required
+			switch(suggestionType) {
+				case ARGUMENT:
+					com.mojang.brigadier.arguments.ArgumentType<T> type = (com.mojang.brigadier.arguments.ArgumentType<T>) suggestions;
+					//No suggestions required, return default suggestions
+					return (context, builder) -> {
+						if(getCommandSender(context).isOp()) {
+							return type.listSuggestions(context, builder); 
+						} else {
+							return Suggestions.empty();
+						}
+					};
+				case STRING_ARR:
+					String[] stringArr = (String[]) suggestions;
+					//Use NMS ICompletionProvider.a() on suggestions
+					return (context, builder) -> {
+						String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
+						for (int i = 0; i < stringArr.length; i++) {
+							String str = stringArr[i];
+							if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
+								builder.suggest(str);
+							}
+						}
+						if(getCommandSender(context).isOp()) {
+							return builder.buildFuture();
+						} else {
+							return Suggestions.empty();
+						}
+					};
+				case DYN_SUG:
+					DynamicSuggestions dynamicSuggestions = (DynamicSuggestions) suggestions;
+					//Use NMS ICompletionProvider.a() on DynSuggestions
+					return (context, builder) -> {
+						String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
+						//NEED to make sure that getSuggestions() is invoked INSIDE the SuggestionProvider
+						String[] sug = dynamicSuggestions.getSuggestions();
+						for (int i = 0; i < sug.length; i++) {
+							String str = sug[i];
+							if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
+								builder.suggest(str);
+							}
+						}
+						if(getCommandSender(context).isOp()) {
+							return builder.buildFuture();
+						} else {
+							return Suggestions.empty();
+						}
+					};
+			}
 		} else {
 			
 			
