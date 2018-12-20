@@ -74,20 +74,26 @@ public class CommandAPIMain extends JavaPlugin {
 		}, 0L);
 		
 		//Test repo, I can do what I want
-		
+
 		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-		
+
 		//User requires the "custompermission" permission to run this command
 		CommandAPI.getInstance().register("permissiontest", CommandPermission.fromString("custompermission"), arguments, (sender, args) -> {
 			sender.sendMessage("test1 success!");
 		});
-		
+
 		arguments.put("values", new SuggestedStringArgument("hello", "world"));
 		//User MUST have "custompermission2" in order to /SEE/ this command, regardless if they have "custompermission"
 		CommandAPI.getInstance().register("permissiontest", CommandPermission.fromString("custompermission2"), arguments, (sender, args) -> {
 			sender.sendMessage("test2 success!");
 		});
 		
+		arguments.put("moreVals", new SuggestedStringArgument("foo", "bar", "baz"));
+		//User MUST have "custompermission2" in order to /SEE/ this command, regardless if they have "custompermission"
+		CommandAPI.getInstance().register("permissiontest", CommandPermission.fromString("custompermission3"), arguments, (sender, args) -> {
+			sender.sendMessage("test3 success!");
+		});
+
 	}
 	
 }

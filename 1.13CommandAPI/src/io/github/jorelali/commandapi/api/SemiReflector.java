@@ -92,55 +92,6 @@ public final class SemiReflector {
 	private CommandDispatcher dispatcher;
 	private Object cDispatcher;
 	
-	protected void fixPermissions() {
-		try {
-			
-			SimpleCommandMap map = (SimpleCommandMap) getMethod(getOBCClass("CraftServer"), "getCommandMap").invoke(Bukkit.getServer());
-			Field f = getField(SimpleCommandMap.class, "knownCommands");
-			Map<String, org.bukkit.command.Command> knownCommands = (Map<String, org.bukkit.command.Command>) f.get(map);
-			
-			Class vcw = getOBCClass("command.VanillaCommandWrapper");
-			
-			permissionsToFix.forEach((cmdName, perm) -> {
-				
-				if(perm.equals(CommandPermission.NONE)) {
-					if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
-						CommandAPIMain.getLog().info("Linking permission NONE -> " + cmdName);
-					}
-					/*
-					 * org.bukkit.command.Command.testPermissionSilent() ->
-					 * if ((permission == null) || (permission.length() == 0)) {
-				     *     return true;
-				     * }
-					 */
-					if(vcw.isInstance(knownCommands.get(cmdName))) {
-						knownCommands.get(cmdName).setPermission("");
-					}
-					if(vcw.isInstance(knownCommands.get("minecraft:" + cmdName))) {
-						knownCommands.get(cmdName).setPermission("");
-					}
-				} else {
-					if(perm.getPermission() != null) {
-						if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
-							CommandAPIMain.getLog().info("Linking permission " + perm.getPermission() + " -> " + cmdName);
-						}
-						if(vcw.isInstance(knownCommands.get(cmdName))) {
-							knownCommands.get(cmdName).setPermission(perm.getPermission());
-						}
-						if(vcw.isInstance(knownCommands.get("minecraft:" + cmdName))) {
-							knownCommands.get(cmdName).setPermission(perm.getPermission());
-						}
-					} else {
-					}
-				}
-				
-				
-			});
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	protected SemiReflector() throws ClassNotFoundException {
 		
 		//Package checks
@@ -567,6 +518,55 @@ public final class SemiReflector {
         };
 	}
 	
+	protected void fixPermissions() {
+		try {
+			
+			SimpleCommandMap map = (SimpleCommandMap) getMethod(getOBCClass("CraftServer"), "getCommandMap").invoke(Bukkit.getServer());
+			Field f = getField(SimpleCommandMap.class, "knownCommands");
+			Map<String, org.bukkit.command.Command> knownCommands = (Map<String, org.bukkit.command.Command>) f.get(map);
+			
+			Class vcw = getOBCClass("command.VanillaCommandWrapper");
+			
+			permissionsToFix.forEach((cmdName, perm) -> {
+				
+				if(perm.equals(CommandPermission.NONE)) {
+					if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
+						CommandAPIMain.getLog().info("Linking permission NONE -> " + cmdName);
+					}
+					/*
+					 * org.bukkit.command.Command.testPermissionSilent() ->
+					 * if ((permission == null) || (permission.length() == 0)) {
+				     *     return true;
+				     * }
+					 */
+					if(vcw.isInstance(knownCommands.get(cmdName))) {
+						knownCommands.get(cmdName).setPermission("");
+					}
+					if(vcw.isInstance(knownCommands.get("minecraft:" + cmdName))) {
+						knownCommands.get(cmdName).setPermission("");
+					}
+				} else {
+					if(perm.getPermission() != null) {
+						if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
+							CommandAPIMain.getLog().info("Linking permission " + perm.getPermission() + " -> " + cmdName);
+						}
+						if(vcw.isInstance(knownCommands.get(cmdName))) {
+							knownCommands.get(cmdName).setPermission(perm.getPermission());
+						}
+						if(vcw.isInstance(knownCommands.get("minecraft:" + cmdName))) {
+							knownCommands.get(cmdName).setPermission(perm.getPermission());
+						}
+					} else {
+					}
+				}
+				
+				
+			});
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private SuggestionProvider getFunctions() {
 		try {
 			return (SuggestionProvider) getField(getNMSClass("CommandFunction"), "a").get(null);
@@ -671,6 +671,164 @@ public final class SemiReflector {
 		}
 	}	
 
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
+	// SECTION: Argument Builders                                                                       //
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	//Creates the SuggestionProvider, given specific permissions
+	
+	private enum SuggestionType {
+		ARGUMENT, STRING_ARR, DYN_SUG;
+	}
+	
+	public <T> SuggestionProvider generateSuggestionProvider(CommandPermission permission, Object suggestions, SuggestionType suggestionType) {
+		
+		//Since we don't know the type of suggestions, we'll parse it as an Object at runtime
+		com.mojang.brigadier.arguments.ArgumentType<T> type = null;
+		String[] stringArr = null;
+		DynamicSuggestions dynamicSuggestions = null;
+		
+		switch(suggestionType) {
+			case ARGUMENT:
+				type = (com.mojang.brigadier.arguments.ArgumentType<T>) suggestions;
+				break;
+			case DYN_SUG:
+				dynamicSuggestions = (DynamicSuggestions) suggestions;
+				break;
+			case STRING_ARR:
+				stringArr = (String[]) suggestions;
+				break;
+		}
+		
+		//Permission checks
+		if(permission.equals(CommandPermission.NONE)) {
+			//Default suggestion type - no permission checks required
+			switch(suggestionType) {
+				case ARGUMENT:
+					//No suggestions required, return default suggestions
+					return (context, builder) -> {
+						type.listSuggestions(context, builder);
+					};
+				case STRING_ARR:
+					//Use NMS ICompletionProvider.a() on suggestions
+					return (context, builder) -> {
+						String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
+						for (int i = 0; i < stringArr.length; i++) {
+							String str = stringArr[i];
+							if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
+								builder.suggest(str);
+							}
+						}
+						return builder.buildFuture();
+					};
+				case DYN_SUG:
+					//Use NMS ICompletionProvider.a() on DynSuggestions
+					return (context, builder) -> {
+						String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
+						//NEED to make sure that getSuggestions() is invoked INSIDE the SuggestionProvider
+						String[] sug = dynamicSuggestions.getSuggestions();
+						for (int i = 0; i < sug.length; i++) {
+							String str = sug[i];
+							if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
+								builder.suggest(str);
+							}
+						}
+						return builder.buildFuture();
+					};
+			}
+		} else if(permission.equals(CommandPermission.OP)) {
+			//TODO:
+		} else {
+			
+			
+			
+			
+			//TODO:
+		}
+//		
+//		
+//		if(permission.equals(CommandPermission.NONE)) {
+//			SuggestionProvider provider = (context, builder) -> {
+//				//NMS' ICompletionProvider.a()
+//				String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
+//
+//				for (int i = 0; i < suggestions.length; i++) {
+//					String str = suggestions[i];
+//					if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
+//						builder.suggest(str);
+//					}
+//				}
+//
+//				return builder.buildFuture();
+//			};
+//			return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
+//		} else {
+//			
+//			if(permission.equals(CommandPermission.OP)) {
+//				SuggestionProvider provider = (context, builder) -> {
+//					CommandSender sender = null;
+//					
+//					try {
+//						sender = (CommandSender) getMethod(getNMSClass("CommandListenerWrapper"), "getBukkitSender").invoke(context.getSource());
+//					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+//							| SecurityException e) {
+//						e.printStackTrace(System.out);
+//					}
+//					if(sender.isOp()) {
+//						
+//						//NMS' ICompletionProvider.a()
+//						String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
+//
+//						for (int i = 0; i < suggestions.length; i++) {
+//							String str = suggestions[i];
+//							if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
+//								builder.suggest(str);
+//							}
+//						}
+//
+//						return builder.buildFuture();
+//					} else {
+//						return Suggestions.empty();
+//					}
+//				};
+//				return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
+//			} else {
+//				SuggestionProvider provider = (context, builder) -> {
+//					CommandSender sender = null;
+//					
+//					try {
+//						sender = (CommandSender) getMethod(getNMSClass("CommandListenerWrapper"), "getBukkitSender").invoke(context.getSource());
+//					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+//							| SecurityException e) {
+//						e.printStackTrace(System.out);
+//					}
+//					if(sender.hasPermission(permission.getPermission())) {
+//						//NMS' ICompletionProvider.a()
+//						String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
+//
+//						for (int i = 0; i < suggestions.length; i++) {
+//							String str = suggestions[i];
+//							if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
+//								builder.suggest(str);
+//							}
+//						}
+//
+//						return builder.buildFuture();
+//					} else {
+//						return Suggestions.empty();
+//					}
+//				};
+//				return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
+//			}
+//		}
+		
+		
+		
+		//TODO:
+		return null;
+		
+	}
+	
 	//Registers a LiteralArgumentBuilder for a command name
 	private LiteralArgumentBuilder<?> getLiteralArgumentBuilder(String commandName) {
 		return LiteralArgumentBuilder.literal(commandName);
@@ -832,6 +990,10 @@ public final class SemiReflector {
 		return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
 	}
 		
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
+	// SECTION: Reflection                                                                              //
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/** Retrieves a net.minecraft.server class by using the dynamic package from
 	 * the dedicated server */
 	private Class<?> getNMSClass(final String className) {
