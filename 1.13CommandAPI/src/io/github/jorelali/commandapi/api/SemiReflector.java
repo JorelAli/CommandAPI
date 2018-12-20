@@ -48,7 +48,6 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
-import io.github.jorelali.commandapi.api.CommandPermission.PermissionNode;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.ChatColorArgument;
 import io.github.jorelali.commandapi.api.arguments.ChatComponentArgument;
@@ -122,6 +121,7 @@ public final class SemiReflector {
 		
 	}
 	
+	//Unregister a command
 	protected void unregister(String commandName, boolean force) {
 		try {
 			Field children = getField(CommandNode.class, "children");
@@ -169,6 +169,7 @@ public final class SemiReflector {
 		}
 	}
 	
+	//Used in the register() method to generate the command to actually be registered
 	private Command generateCommand(String commandName, LinkedHashMap<String, Argument> args, CustomCommandExecutor executor) throws CommandSyntaxException {
 		
 		//Generate our command from executor
@@ -461,25 +462,34 @@ public final class SemiReflector {
 		};
 	}
 	
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
+	// SECTION: Permissions                                                                             //
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private Predicate generatePermissions(String commandName, CommandPermission permission) {
 		
-		//First check for the situation where a user might register the same command (or subcommand)
-		//under a different permission. Since this is not permitted, we must prevent this.
-		
-		//TODO: Sort this out at some point in time
+		//If we've already registered a permission, set it to the "parent" permission.
+		/*
+		 * This permission generation setup ONLY works iff:
+		 * - You register the parent permission node FIRST.
+		 * - Example:
+		 * 	 /mycmd			- permission node my.perm
+		 *   /mycmd <arg>	- permission node my.perm.other
+		 *   
+		 * the my.perm.other permission node is revoked for the COMMAND REGISTRATION, however:
+		 * - The permission node IS REGISTERED.
+		 * - The permission node, if used for an argument (as in this case), will be used for
+		 * 	 suggestions for said argument
+		 */
 		if(permissionsToFix.containsKey(commandName.toLowerCase())) {
-			//ignore it. Only the parent must have this level of power
-			
-			//HENCE: we take the PARENT permission:
 			if(!permissionsToFix.get(commandName.toLowerCase()).equals(permission)) {
 				permission = permissionsToFix.get(commandName.toLowerCase());
 			}
-			
 //			if(!permissionsToFix.get(commandName.toLowerCase()).equals(permission)) {
 //				throw new ConflictingPermissionsException(commandName, permissionsToFix.get(commandName.toLowerCase()), permission);
 //			}
 		} else {
-			//add to a list to fix this
+			//Add permission to a list to fix conflicts with minecraft:permissions
 			permissionsToFix.put(commandName.toLowerCase(), permission);
 		}
 		
@@ -498,23 +508,17 @@ public final class SemiReflector {
 			CommandSender sender = null;
 			try {
 				sender = (CommandSender) getMethod(cmdSender.getClass(), "getBukkitSender").invoke(cmdSender);
-				
-			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
-					| SecurityException e) {
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException e) {
 				e.printStackTrace(System.out);
 			}
 			
-        	if(finalPermission.getPermission() != null) {
-        		return sender.hasPermission(finalPermission.getPermission());
-        	} else {
-        		//If they're op
-        		if(finalPermission.getPermissionNode().equals(PermissionNode.OP)) {
-        			return sender.isOp();
-        		} else {
-        			//PermissionNode = NONE, implies true
-        			return true;
-        		}
-        	}
+			if(finalPermission.equals(CommandPermission.NONE)) {
+				return true;
+			} else if(finalPermission.equals(CommandPermission.OP)) {
+				return sender.isOp();
+			} else {
+				return sender.hasPermission(finalPermission.getPermission());
+			}
         };
 	}
 	
@@ -647,7 +651,6 @@ public final class SemiReflector {
 	        	this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(str).requires(permission).redirect(resultantNode));
 	        }
 		}
-		
         
 		//Produce the commandDispatch.json file for debug purposes
 		if(CommandAPIMain.getConfiguration().willCreateDispatcherFile()) {
