@@ -9,6 +9,7 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.GreedyStringArgument;
 import io.github.jorelali.commandapi.api.exceptions.GreedyStringException;
+import io.github.jorelali.commandapi.api.exceptions.InvalidCommandNameException;
 
 /**
  * Class to register commands with the 1.13 command UI
@@ -182,6 +183,12 @@ public class CommandAPI {
 			return;
 		}
 		try {
+			
+			//Sanitize commandNames
+			if(commandName.length() == 0 || commandName == null) {
+				throw new InvalidCommandNameException(commandName);
+			}
+			
 			if(args == null) {
 				args = new LinkedHashMap<>();
 			}
