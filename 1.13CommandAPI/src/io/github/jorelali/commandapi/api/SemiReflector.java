@@ -16,6 +16,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
 import org.bukkit.Bukkit;
@@ -45,6 +46,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
@@ -683,6 +685,18 @@ public final class SemiReflector {
 		return sender;
 	}
 	
+	//NMS ICompletionProvider.a()
+	private CompletableFuture<Suggestions> getSuggestionsBuilder(SuggestionsBuilder builder, String[] array) {
+		String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
+		for (int i = 0; i < array.length; i++) {
+			String str = array[i];
+			if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
+				builder.suggest(str);
+			}
+		}
+		return builder.buildFuture();
+	}
+	
 	/**
 	 * Yes, there's a TONNE of copy and paste in this method, but because
 	 * it's inside a lambda, I believe it's best to leave it like that.
@@ -705,29 +719,13 @@ public final class SemiReflector {
 					String[] stringArr = (String[]) suggestions;
 					//Use NMS ICompletionProvider.a() on suggestions
 					return (context, builder) -> {
-						String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
-						for (int i = 0; i < stringArr.length; i++) {
-							String str = stringArr[i];
-							if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
-								builder.suggest(str);
-							}
-						}
-						return builder.buildFuture();
+						return getSuggestionsBuilder(builder, stringArr);
 					};
 				case DYN_SUG:
 					DynamicSuggestions dynamicSuggestions = (DynamicSuggestions) suggestions;
 					//Use NMS ICompletionProvider.a() on DynSuggestions
 					return (context, builder) -> {
-						String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
-						//NEED to make sure that getSuggestions() is invoked INSIDE the SuggestionProvider
-						String[] sug = dynamicSuggestions.getSuggestions();
-						for (int i = 0; i < sug.length; i++) {
-							String str = sug[i];
-							if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
-								builder.suggest(str);
-							}
-						}
-						return builder.buildFuture();
+						return getSuggestionsBuilder(builder, dynamicSuggestions.getSuggestions());
 					};
 			}
 		} else if(permission.equals(CommandPermission.OP)) {
@@ -747,15 +745,8 @@ public final class SemiReflector {
 					String[] stringArr = (String[]) suggestions;
 					//Use NMS ICompletionProvider.a() on suggestions
 					return (context, builder) -> {
-						String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
-						for (int i = 0; i < stringArr.length; i++) {
-							String str = stringArr[i];
-							if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
-								builder.suggest(str);
-							}
-						}
 						if(getCommandSender(context).isOp()) {
-							return builder.buildFuture();
+							return getSuggestionsBuilder(builder, stringArr);
 						} else {
 							return Suggestions.empty();
 						}
@@ -764,17 +755,8 @@ public final class SemiReflector {
 					DynamicSuggestions dynamicSuggestions = (DynamicSuggestions) suggestions;
 					//Use NMS ICompletionProvider.a() on DynSuggestions
 					return (context, builder) -> {
-						String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
-						//NEED to make sure that getSuggestions() is invoked INSIDE the SuggestionProvider
-						String[] sug = dynamicSuggestions.getSuggestions();
-						for (int i = 0; i < sug.length; i++) {
-							String str = sug[i];
-							if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
-								builder.suggest(str);
-							}
-						}
 						if(getCommandSender(context).isOp()) {
-							return builder.buildFuture();
+							return getSuggestionsBuilder(builder, dynamicSuggestions.getSuggestions());
 						} else {
 							return Suggestions.empty();
 						}
@@ -797,15 +779,8 @@ public final class SemiReflector {
 					String[] stringArr = (String[]) suggestions;
 					//Use NMS ICompletionProvider.a() on suggestions
 					return (context, builder) -> {
-						String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
-						for (int i = 0; i < stringArr.length; i++) {
-							String str = stringArr[i];
-							if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
-								builder.suggest(str);
-							}
-						}
 						if(getCommandSender(context).hasPermission(permission.getPermission())) {
-							return builder.buildFuture();
+							return getSuggestionsBuilder(builder, stringArr);
 						} else {
 							return Suggestions.empty();
 						}
@@ -814,17 +789,8 @@ public final class SemiReflector {
 					DynamicSuggestions dynamicSuggestions = (DynamicSuggestions) suggestions;
 					//Use NMS ICompletionProvider.a() on DynSuggestions
 					return (context, builder) -> {
-						String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
-						//NEED to make sure that getSuggestions() is invoked INSIDE the SuggestionProvider
-						String[] sug = dynamicSuggestions.getSuggestions();
-						for (int i = 0; i < sug.length; i++) {
-							String str = sug[i];
-							if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
-								builder.suggest(str);
-							}
-						}
 						if(getCommandSender(context).hasPermission(permission.getPermission())) {
-							return builder.buildFuture();
+							return getSuggestionsBuilder(builder, dynamicSuggestions.getSuggestions());
 						} else {
 							return Suggestions.empty();
 						}
