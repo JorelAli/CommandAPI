@@ -567,15 +567,6 @@ public final class SemiReflector {
 		}
 	}
 	
-	private SuggestionProvider getFunctions() {
-		try {
-			return (SuggestionProvider) getField(getNMSClass("CommandFunction"), "a").get(null);
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
 	//Builds our NMS command using the given arguments for this method, then registers it
 	protected void register(String commandName, CommandPermission permissions, String[] aliases, final LinkedHashMap<String, Argument> args, CustomCommandExecutor executor) throws Exception {
 		if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
@@ -618,11 +609,11 @@ public final class SemiReflector {
 	        	inner = getLiteralArgumentBuilder(str).executes(command);
 	        } else {
 	        	if(innerArg instanceof SuggestedStringArgument) {
-	        		inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), ((SuggestedStringArgument) innerArg).getSuggestions(), permissions).executes(command);
+	        		inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), (SuggestedStringArgument) innerArg, permissions).executes(command);
         		} else if(innerArg instanceof FunctionArgument) {
-        			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), getFunctions()).executes(command);
+        			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), getFunctionsSuggestionProvider()).executes(command);
 				} else if(innerArg instanceof DynamicSuggestedStringArgument) {
-        			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), ((DynamicSuggestedStringArgument) innerArg).getDynamicSuggestions()).executes(command);
+        			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), (DynamicSuggestedStringArgument) innerArg, permissions).executes(command);
 				} else {
 					inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), permissions).executes(command);
 				}
@@ -637,11 +628,11 @@ public final class SemiReflector {
 	        		outer = getLiteralArgumentBuilder(str).then(outer);
 	        	} else {
 	        		if(outerArg instanceof SuggestedStringArgument) {
-	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), ((SuggestedStringArgument) outerArg).getSuggestions(), permissions).then(outer);
+	        			outer = getRequiredArgumentBuilder(keys.get(i), (SuggestedStringArgument) outerArg, permissions).then(outer);
 	        		} else if(outerArg instanceof FunctionArgument) {
-	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), getFunctions()).then(outer);
+	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), getFunctionsSuggestionProvider()).then(outer);
 	        		} else if(outerArg instanceof DynamicSuggestedStringArgument) {
-	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), ((DynamicSuggestedStringArgument) outerArg).getDynamicSuggestions()).then(outer);
+	        			outer = getRequiredArgumentBuilder(keys.get(i), (DynamicSuggestedStringArgument) outerArg, permissions).then(outer);
 					} else {
 	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), permissions).then(outer);
 	        		}
@@ -672,11 +663,9 @@ public final class SemiReflector {
 	}	
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
-	// SECTION: Argument Builders                                                                       //
+	// SECTION: SuggestionProviders                                                                     //
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	//Creates the SuggestionProvider, given specific permissions
-	
+		
 	private enum SuggestionType {
 		ARGUMENT, STRING_ARR, DYN_SUG;
 	}
@@ -691,10 +680,12 @@ public final class SemiReflector {
 		return sender;
 	}
 	
-	/*
+	/**
 	 * Yes, there's a TONNE of copy and paste in this method, but because
 	 * it's inside a lambda, I believe it's best to leave it like that.
 	 * (Despite how messy it is)
+	 * 
+	 * @param suggestions - a String[], DynamicSuggestions or brigadier ArgumentType
 	 */
 	public <T> SuggestionProvider generateSuggestionProvider(CommandPermission permission, Object suggestions, SuggestionType suggestionType) {
 		
@@ -737,7 +728,7 @@ public final class SemiReflector {
 					};
 			}
 		} else if(permission.equals(CommandPermission.OP)) {
-			//Operator suggestion type - an instance of a player is required
+			//Operator suggestion type - an instance of a sender is required
 			switch(suggestionType) {
 				case ARGUMENT:
 					com.mojang.brigadier.arguments.ArgumentType<T> type = (com.mojang.brigadier.arguments.ArgumentType<T>) suggestions;
@@ -787,253 +778,98 @@ public final class SemiReflector {
 					};
 			}
 		} else {
-			
-			
-			
-			
-			//TODO:
+			//Specific permission suggestion type - an instance of a sender is required
+			switch(suggestionType) {
+				case ARGUMENT:
+					com.mojang.brigadier.arguments.ArgumentType<T> type = (com.mojang.brigadier.arguments.ArgumentType<T>) suggestions;
+					//No suggestions required, return default suggestions
+					return (context, builder) -> {
+						if(getCommandSender(context).hasPermission(permission.getPermission())) {
+							return type.listSuggestions(context, builder); 
+						} else {
+							return Suggestions.empty();
+						}
+					};
+				case STRING_ARR:
+					String[] stringArr = (String[]) suggestions;
+					//Use NMS ICompletionProvider.a() on suggestions
+					return (context, builder) -> {
+						String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
+						for (int i = 0; i < stringArr.length; i++) {
+							String str = stringArr[i];
+							if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
+								builder.suggest(str);
+							}
+						}
+						if(getCommandSender(context).hasPermission(permission.getPermission())) {
+							return builder.buildFuture();
+						} else {
+							return Suggestions.empty();
+						}
+					};
+				case DYN_SUG:
+					DynamicSuggestions dynamicSuggestions = (DynamicSuggestions) suggestions;
+					//Use NMS ICompletionProvider.a() on DynSuggestions
+					return (context, builder) -> {
+						String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
+						//NEED to make sure that getSuggestions() is invoked INSIDE the SuggestionProvider
+						String[] sug = dynamicSuggestions.getSuggestions();
+						for (int i = 0; i < sug.length; i++) {
+							String str = sug[i];
+							if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
+								builder.suggest(str);
+							}
+						}
+						if(getCommandSender(context).hasPermission(permission.getPermission())) {
+							return builder.buildFuture();
+						} else {
+							return Suggestions.empty();
+						}
+					};
+			}
 		}
-//		
-//		
-//		if(permission.equals(CommandPermission.NONE)) {
-//			SuggestionProvider provider = (context, builder) -> {
-//				//NMS' ICompletionProvider.a()
-//				String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
-//
-//				for (int i = 0; i < suggestions.length; i++) {
-//					String str = suggestions[i];
-//					if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
-//						builder.suggest(str);
-//					}
-//				}
-//
-//				return builder.buildFuture();
-//			};
-//			return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
-//		} else {
-//			
-//			if(permission.equals(CommandPermission.OP)) {
-//				SuggestionProvider provider = (context, builder) -> {
-//					CommandSender sender = null;
-//					
-//					try {
-//						sender = (CommandSender) getMethod(getNMSClass("CommandListenerWrapper"), "getBukkitSender").invoke(context.getSource());
-//					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
-//							| SecurityException e) {
-//						e.printStackTrace(System.out);
-//					}
-//					if(sender.isOp()) {
-//						
-//						//NMS' ICompletionProvider.a()
-//						String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
-//
-//						for (int i = 0; i < suggestions.length; i++) {
-//							String str = suggestions[i];
-//							if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
-//								builder.suggest(str);
-//							}
-//						}
-//
-//						return builder.buildFuture();
-//					} else {
-//						return Suggestions.empty();
-//					}
-//				};
-//				return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
-//			} else {
-//				SuggestionProvider provider = (context, builder) -> {
-//					CommandSender sender = null;
-//					
-//					try {
-//						sender = (CommandSender) getMethod(getNMSClass("CommandListenerWrapper"), "getBukkitSender").invoke(context.getSource());
-//					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
-//							| SecurityException e) {
-//						e.printStackTrace(System.out);
-//					}
-//					if(sender.hasPermission(permission.getPermission())) {
-//						//NMS' ICompletionProvider.a()
-//						String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
-//
-//						for (int i = 0; i < suggestions.length; i++) {
-//							String str = suggestions[i];
-//							if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
-//								builder.suggest(str);
-//							}
-//						}
-//
-//						return builder.buildFuture();
-//					} else {
-//						return Suggestions.empty();
-//					}
-//				};
-//				return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
-//			}
-//		}
 		
-		
-		
-		//TODO:
-		return null;
-		
+		//This case should never occur!
+		return (context, builder) -> Suggestions.empty();
 	}
 	
-	//Registers a LiteralArgumentBuilder for a command name
+	private SuggestionProvider getFunctionsSuggestionProvider() {
+		try {
+			return (SuggestionProvider) getField(getNMSClass("CommandFunction"), "a").get(null);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
+	// SECTION: Argument Builders                                                                       //
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	//Gets a LiteralArgumentBuilder for a command name
 	private LiteralArgumentBuilder<?> getLiteralArgumentBuilder(String commandName) {
 		return LiteralArgumentBuilder.literal(commandName);
 	}
 	
-	//Registers a RequiredArgumentBuilder for an argument
+	//Gets a RequiredArgumentBuilder for an argument
 	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, com.mojang.brigadier.arguments.ArgumentType<T> type, CommandPermission permission) {
-		/*
-		 * if (customSuggestions == null) {
-            return type.listSuggestions(context, builder);
-        } else {
-            return customSuggestions.getSuggestions(context, builder);
-        }
-		 */
-		
-		//User requires no perms, so they can see everything
-		if(permission.equals(CommandPermission.NONE)) {
-			return RequiredArgumentBuilder.argument(argumentName, type);
-		} else {
-			
-			if(permission.equals(CommandPermission.OP)) {
-				SuggestionProvider provider = (context, builder) -> {
-					CommandSender sender = null;
-					
-					try {
-						sender = (CommandSender) getMethod(getNMSClass("CommandListenerWrapper"), "getBukkitSender").invoke(context.getSource());
-					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
-							| SecurityException e) {
-						e.printStackTrace(System.out);
-					}
-					if(sender.isOp()) {
-						return type.listSuggestions(context, builder); 
-					} else {
-						return Suggestions.empty();
-					}
-				};
-				return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
-			} else {
-				SuggestionProvider provider = (context, builder) -> {
-					CommandSender sender = null;
-					
-					try {
-						sender = (CommandSender) getMethod(getNMSClass("CommandListenerWrapper"), "getBukkitSender").invoke(context.getSource());
-					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
-							| SecurityException e) {
-						e.printStackTrace(System.out);
-					}
-					if(sender.hasPermission(permission.getPermission())) {
-						return type.listSuggestions(context, builder); 
-					} else {
-						return Suggestions.empty();
-					}
-				};
-				return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
-			}
-		}		
-	}
-	
-	
-	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, com.mojang.brigadier.arguments.ArgumentType<T> type, DynamicSuggestions dynamicSuggestions) {
-		SuggestionProvider provider = (context, builder) -> {
-			//NMS' ICompletionProvider.a()
-			String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
-			String[] suggestions = dynamicSuggestions.getSuggestions();
-			for (int i = 0; i < suggestions.length; i++) {
-				String str = suggestions[i];
-				if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
-					builder.suggest(str);
-				}
-			}
-
-			return builder.buildFuture();
-		};
+		SuggestionProvider provider = generateSuggestionProvider(permission, type, SuggestionType.ARGUMENT);
 		return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
 	}
 	
-	//Registers a RequiredArgumentBuilder for an argument
-	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, com.mojang.brigadier.arguments.ArgumentType<T> type, String[] suggestions, CommandPermission permission){
-		
-		if(permission.equals(CommandPermission.NONE)) {
-			SuggestionProvider provider = (context, builder) -> {
-				//NMS' ICompletionProvider.a()
-				String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
-
-				for (int i = 0; i < suggestions.length; i++) {
-					String str = suggestions[i];
-					if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
-						builder.suggest(str);
-					}
-				}
-
-				return builder.buildFuture();
-			};
-			return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
-		} else {
-			
-			if(permission.equals(CommandPermission.OP)) {
-				SuggestionProvider provider = (context, builder) -> {
-					CommandSender sender = null;
-					
-					try {
-						sender = (CommandSender) getMethod(getNMSClass("CommandListenerWrapper"), "getBukkitSender").invoke(context.getSource());
-					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
-							| SecurityException e) {
-						e.printStackTrace(System.out);
-					}
-					if(sender.isOp()) {
-						
-						//NMS' ICompletionProvider.a()
-						String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
-
-						for (int i = 0; i < suggestions.length; i++) {
-							String str = suggestions[i];
-							if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
-								builder.suggest(str);
-							}
-						}
-
-						return builder.buildFuture();
-					} else {
-						return Suggestions.empty();
-					}
-				};
-				return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
-			} else {
-				SuggestionProvider provider = (context, builder) -> {
-					CommandSender sender = null;
-					
-					try {
-						sender = (CommandSender) getMethod(getNMSClass("CommandListenerWrapper"), "getBukkitSender").invoke(context.getSource());
-					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
-							| SecurityException e) {
-						e.printStackTrace(System.out);
-					}
-					if(sender.hasPermission(permission.getPermission())) {
-						//NMS' ICompletionProvider.a()
-						String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
-
-						for (int i = 0; i < suggestions.length; i++) {
-							String str = suggestions[i];
-							if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
-								builder.suggest(str);
-							}
-						}
-
-						return builder.buildFuture();
-					} else {
-						return Suggestions.empty();
-					}
-				};
-				return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
-			}
-		}
-		//return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
+	//Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
+	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, DynamicSuggestedStringArgument type, CommandPermission permission) {
+		SuggestionProvider provider = generateSuggestionProvider(permission, type.getDynamicSuggestions(), SuggestionType.DYN_SUG);
+		return RequiredArgumentBuilder.argument(argumentName, type.getRawType()).suggests(provider);
 	}
 	
-	//Registers a RequiredArgumentBuilder for an argument
+	//Gets a RequiredArgumentBuilder for a SuggestedStringArgument
+	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, SuggestedStringArgument type, CommandPermission permission){
+		SuggestionProvider provider = generateSuggestionProvider(permission, type.getSuggestions(), SuggestionType.STRING_ARR);
+		return RequiredArgumentBuilder.argument(argumentName, type.getRawType()).suggests(provider);
+	}
+	
+	//Gets a RequiredArgumentBuilder for an argument, given a SuggestionProvider
 	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, com.mojang.brigadier.arguments.ArgumentType<T> type, SuggestionProvider provider){
 		return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
 	}
