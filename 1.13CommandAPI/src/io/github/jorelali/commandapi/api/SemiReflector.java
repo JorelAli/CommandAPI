@@ -832,7 +832,7 @@ public final class SemiReflector {
 	//Gets a RequiredArgumentBuilder for an argument
 	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, com.mojang.brigadier.arguments.ArgumentType<T> type, CommandPermission permission) {
 		SuggestionProvider provider = generateSuggestionProvider(permission, type, SuggestionType.ARGUMENT);
-		return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
+		return RequiredArgumentBuilder.argument(argumentName, type);//.suggests(provider);
 	}
 	
 	//Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
@@ -854,10 +854,11 @@ public final class SemiReflector {
 	
 	//Gets a RequiredArgumentBuilder for an argument, given that said argument uses OverrideableSuggestions
 	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilderWithOverride(String argumentName, Argument type, CommandPermission permission){
-		if(((OverrideableSuggestions) type).getOverriddenSuggestions() == null) {
+		String[] newSuggestions = ((OverrideableSuggestions) type).getOverriddenSuggestions();
+		if(newSuggestions == null || newSuggestions.length == 0) {
 			return getRequiredArgumentBuilder(argumentName, type.getRawType(), permission);
 		} else {
-			SuggestionProvider provider = generateSuggestionProvider(permission, ((OverrideableSuggestions) type).getOverriddenSuggestions(), SuggestionType.STRING_ARR);
+			SuggestionProvider provider = generateSuggestionProvider(permission, newSuggestions, SuggestionType.STRING_ARR);
 			return RequiredArgumentBuilder.argument(argumentName, type.getRawType()).suggests(provider);
 		}
 		
