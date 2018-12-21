@@ -5,7 +5,7 @@ import com.mojang.brigadier.arguments.FloatArgumentType;
 import io.github.jorelali.commandapi.api.exceptions.InvalidRangeException;
 
 @SuppressWarnings("unchecked")
-public class FloatArgument implements Argument {
+public class FloatArgument implements Argument, OverrideableSuggestions {
 
 	com.mojang.brigadier.arguments.ArgumentType<?> rawType;
 	
@@ -49,5 +49,18 @@ public class FloatArgument implements Argument {
 	@Override
 	public boolean isSimple() {
 		return true;
+	}
+	
+	private String[] suggestions;
+	
+	@Override
+	public FloatArgument overrideSuggestions(String... suggestions) {
+		this.suggestions = suggestions;
+		return this;
+	}
+	
+	@Override
+	public String[] getOverriddenSuggestions() {
+		return suggestions;
 	}
 }

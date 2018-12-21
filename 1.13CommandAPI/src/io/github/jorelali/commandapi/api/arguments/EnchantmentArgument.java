@@ -5,7 +5,7 @@ import org.bukkit.enchantments.Enchantment;
 import io.github.jorelali.commandapi.api.SemiReflector;
 
 @SuppressWarnings("unchecked")
-public class EnchantmentArgument implements Argument {
+public class EnchantmentArgument implements Argument, OverrideableSuggestions {
 
 	com.mojang.brigadier.arguments.ArgumentType<?> rawType;
 	
@@ -29,5 +29,18 @@ public class EnchantmentArgument implements Argument {
 	@Override
 	public boolean isSimple() {
 		return false;
+	}
+	
+	private String[] suggestions;
+	
+	@Override
+	public EnchantmentArgument overrideSuggestions(String... suggestions) {
+		this.suggestions = suggestions;
+		return this;
+	}
+	
+	@Override
+	public String[] getOverriddenSuggestions() {
+		return suggestions;
 	}
 }

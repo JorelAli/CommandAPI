@@ -5,7 +5,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import io.github.jorelali.commandapi.api.exceptions.InvalidRangeException;
 
 @SuppressWarnings("unchecked")
-public class IntegerArgument implements Argument {
+public class IntegerArgument implements Argument, OverrideableSuggestions {
 
 	com.mojang.brigadier.arguments.ArgumentType<?> rawType;
 	
@@ -51,4 +51,17 @@ public class IntegerArgument implements Argument {
 		return true;
 	}
 
+	private String[] suggestions;
+	
+	@Override
+	public IntegerArgument overrideSuggestions(String... suggestions) {
+		this.suggestions = suggestions;
+		return this;
+	}
+	
+	@Override
+	public String[] getOverriddenSuggestions() {
+		return suggestions;
+	}
+	
 }

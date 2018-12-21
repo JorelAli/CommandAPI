@@ -3,7 +3,7 @@ package io.github.jorelali.commandapi.api.arguments;
 import com.mojang.brigadier.arguments.StringArgumentType;
 
 @SuppressWarnings("unchecked")
-public class StringArgument implements Argument {
+public class StringArgument implements Argument, OverrideableSuggestions {
 
 	com.mojang.brigadier.arguments.ArgumentType<?> rawType;
 	
@@ -27,5 +27,18 @@ public class StringArgument implements Argument {
 	@Override
 	public boolean isSimple() {
 		return true;
+	}
+	
+	private String[] suggestions;
+	
+	@Override
+	public StringArgument overrideSuggestions(String... suggestions) {
+		this.suggestions = suggestions;
+		return this;
+	}
+	
+	@Override
+	public String[] getOverriddenSuggestions() {
+		return suggestions;
 	}
 }

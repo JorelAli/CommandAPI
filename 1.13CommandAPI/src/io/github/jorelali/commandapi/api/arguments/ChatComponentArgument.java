@@ -6,7 +6,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 
 
 @SuppressWarnings("unchecked")
-public class ChatComponentArgument implements Argument {
+public class ChatComponentArgument implements Argument, OverrideableSuggestions {
 
 	com.mojang.brigadier.arguments.ArgumentType<?> rawType;
 	
@@ -38,5 +38,18 @@ public class ChatComponentArgument implements Argument {
 	@Override
 	public boolean isSimple() {
 		return false;
+	}
+	
+	private String[] suggestions;
+	
+	@Override
+	public ChatComponentArgument overrideSuggestions(String... suggestions) {
+		this.suggestions = suggestions;
+		return this;
+	}
+	
+	@Override
+	public String[] getOverriddenSuggestions() {
+		return suggestions;
 	}
 }

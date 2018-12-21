@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import io.github.jorelali.commandapi.api.SemiReflector;
 
 @SuppressWarnings("unchecked")
-public class EntitySelectorArgument implements Argument {
+public class EntitySelectorArgument implements Argument, OverrideableSuggestions {
 
 	/*
 	 * a = true false -> only one ENTITY is allowed
@@ -86,5 +86,18 @@ public class EntitySelectorArgument implements Argument {
 	
 	public EntitySelector getEntitySelector() {
 		return selector;
+	}
+	
+	private String[] suggestions;
+	
+	@Override
+	public EntitySelectorArgument overrideSuggestions(String... suggestions) {
+		this.suggestions = suggestions;
+		return this;
+	}
+	
+	@Override
+	public String[] getOverriddenSuggestions() {
+		return suggestions;
 	}
 }

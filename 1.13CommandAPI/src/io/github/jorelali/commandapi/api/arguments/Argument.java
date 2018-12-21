@@ -17,5 +17,5 @@ public interface Argument {
 	 * @return Whether this argument is a simple argument
 	 */
 	public boolean isSimple();
-	
+		
 }

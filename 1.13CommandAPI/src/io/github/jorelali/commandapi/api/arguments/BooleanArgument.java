@@ -3,7 +3,7 @@ package io.github.jorelali.commandapi.api.arguments;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 
 @SuppressWarnings("unchecked")
-public class BooleanArgument implements Argument {
+public class BooleanArgument implements Argument, OverrideableSuggestions {
 
 	com.mojang.brigadier.arguments.ArgumentType<?> rawType;
 	
@@ -26,6 +26,19 @@ public class BooleanArgument implements Argument {
 	@Override
 	public boolean isSimple() {
 		return true;
+	}
+	
+	private String[] suggestions;
+	
+	@Override
+	public BooleanArgument overrideSuggestions(String... suggestions) {
+		this.suggestions = suggestions;
+		return this;
+	}
+	
+	@Override
+	public String[] getOverriddenSuggestions() {
+		return suggestions;
 	}
 
 }

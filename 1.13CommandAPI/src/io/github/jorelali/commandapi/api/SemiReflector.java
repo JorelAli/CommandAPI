@@ -62,6 +62,7 @@ import io.github.jorelali.commandapi.api.arguments.FunctionArgument;
 import io.github.jorelali.commandapi.api.arguments.ItemStackArgument;
 import io.github.jorelali.commandapi.api.arguments.LiteralArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationArgument;
+import io.github.jorelali.commandapi.api.arguments.OverrideableSuggestions;
 import io.github.jorelali.commandapi.api.arguments.ParticleArgument;
 import io.github.jorelali.commandapi.api.arguments.PlayerArgument;
 import io.github.jorelali.commandapi.api.arguments.PotionEffectArgument;
@@ -617,11 +618,15 @@ public final class SemiReflector {
 	        	if(innerArg instanceof SuggestedStringArgument) {
 	        		inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), (SuggestedStringArgument) innerArg, permissions).executes(command);
         		} else if(innerArg instanceof FunctionArgument) {
-        			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), getFunctionsSuggestionProvider()).executes(command);
+        			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), getFunctionsSuggestionProvider(), permissions).executes(command);
 				} else if(innerArg instanceof DynamicSuggestedStringArgument) {
         			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), (DynamicSuggestedStringArgument) innerArg, permissions).executes(command);
 				} else {
-					inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), permissions).executes(command);
+					if(innerArg instanceof OverrideableSuggestions) {
+						inner = getRequiredArgumentBuilderWithOverride(keys.get(keys.size() - 1), innerArg, permissions).executes(command);
+					} else {
+						inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), permissions).executes(command);
+					}
 				}
 	        }
 
@@ -636,11 +641,15 @@ public final class SemiReflector {
 	        		if(outerArg instanceof SuggestedStringArgument) {
 	        			outer = getRequiredArgumentBuilder(keys.get(i), (SuggestedStringArgument) outerArg, permissions).then(outer);
 	        		} else if(outerArg instanceof FunctionArgument) {
-	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), getFunctionsSuggestionProvider()).then(outer);
+	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), getFunctionsSuggestionProvider(), permissions).then(outer);
 	        		} else if(outerArg instanceof DynamicSuggestedStringArgument) {
 	        			outer = getRequiredArgumentBuilder(keys.get(i), (DynamicSuggestedStringArgument) outerArg, permissions).then(outer);
 					} else {
-	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), permissions).then(outer);
+						if(outerArg instanceof OverrideableSuggestions) {
+							outer = getRequiredArgumentBuilderWithOverride(keys.get(i), outerArg, permissions).then(outer);
+						} else {
+							outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), permissions).then(outer);
+						}
 	        		}
 	        	}
 	        }        
@@ -839,8 +848,19 @@ public final class SemiReflector {
 	}
 	
 	//Gets a RequiredArgumentBuilder for an argument, given a SuggestionProvider
-	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, com.mojang.brigadier.arguments.ArgumentType<T> type, SuggestionProvider provider){
+	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, com.mojang.brigadier.arguments.ArgumentType<T> type, SuggestionProvider provider, CommandPermission permissions){
 		return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
+	}
+	
+	//Gets a RequiredArgumentBuilder for an argument, given that said argument uses OverrideableSuggestions
+	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilderWithOverride(String argumentName, Argument type, CommandPermission permission){
+		if(((OverrideableSuggestions) type).getOverriddenSuggestions() == null) {
+			return getRequiredArgumentBuilder(argumentName, type.getRawType(), permission);
+		} else {
+			SuggestionProvider provider = generateSuggestionProvider(permission, ((OverrideableSuggestions) type).getOverriddenSuggestions(), SuggestionType.STRING_ARR);
+			return RequiredArgumentBuilder.argument(argumentName, type.getRawType()).suggests(provider);
+		}
+		
 	}
 		
 	//////////////////////////////////////////////////////////////////////////////////////////////////////

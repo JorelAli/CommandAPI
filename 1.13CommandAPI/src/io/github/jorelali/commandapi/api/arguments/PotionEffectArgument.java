@@ -5,7 +5,7 @@ import org.bukkit.potion.PotionEffectType;
 import io.github.jorelali.commandapi.api.SemiReflector;
 
 @SuppressWarnings("unchecked")
-public class PotionEffectArgument implements Argument {
+public class PotionEffectArgument implements Argument, OverrideableSuggestions {
 
 	com.mojang.brigadier.arguments.ArgumentType<?> rawType;
 	
@@ -29,5 +29,18 @@ public class PotionEffectArgument implements Argument {
 	@Override
 	public boolean isSimple() {
 		return false;
+	}
+	
+	private String[] suggestions;
+	
+	@Override
+	public PotionEffectArgument overrideSuggestions(String... suggestions) {
+		this.suggestions = suggestions;
+		return this;
+	}
+	
+	@Override
+	public String[] getOverriddenSuggestions() {
+		return suggestions;
 	}
 }

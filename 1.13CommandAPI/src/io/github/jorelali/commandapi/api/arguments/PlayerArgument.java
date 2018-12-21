@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import io.github.jorelali.commandapi.api.SemiReflector;
 
 @SuppressWarnings("unchecked")
-public class PlayerArgument implements Argument {
+public class PlayerArgument implements Argument, OverrideableSuggestions {
 
 	com.mojang.brigadier.arguments.ArgumentType<?> rawType;
 	
@@ -29,5 +29,18 @@ public class PlayerArgument implements Argument {
 	@Override
 	public boolean isSimple() {
 		return false;
+	}
+	
+	private String[] suggestions;
+	
+	@Override
+	public PlayerArgument overrideSuggestions(String... suggestions) {
+		this.suggestions = suggestions;
+		return this;
+	}
+	
+	@Override
+	public String[] getOverriddenSuggestions() {
+		return suggestions;
 	}
 }
