@@ -38,12 +38,15 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.context.StringRange;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.Suggestion;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
@@ -699,16 +702,24 @@ public final class SemiReflector {
 	}
 	
 	//NMS ICompletionProvider.a()
-	private CompletableFuture<Suggestions> getSuggestionsBuilder(SuggestionsBuilder builder, String[] array) {
+	private CompletableFuture<Suggestions> getSuggestionsBuilder(SuggestionsBuilder builder, String[] array, String tooltip) {
 		String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
 		for (int i = 0; i < array.length; i++) {
 			String str = array[i];
 			if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
-				builder.suggest(str);
+				builder.suggest(str, new LiteralMessage(tooltip));
 			}
 		}
 		return builder.buildFuture();
 	}
+	
+//	private void a() {
+	//TODO:
+//		SuggestionsBuilder z;
+//		List<Suggestion> arr = new ArrayList<>();
+//		arr.add(new Suggestion(StringRange.at(0), ))
+//		new Suggestions(StringRange.at(0), arr);
+//	}
 	
 	/**
 	 * Yes, there's a TONNE of copy and paste in this method, but because
@@ -717,7 +728,7 @@ public final class SemiReflector {
 	 * 
 	 * @param suggestions - a String[], DynamicSuggestions or brigadier ArgumentType
 	 */
-	private <T> SuggestionProvider generateSuggestionProvider(CommandPermission permission, Object suggestions, SuggestionType suggestionType) {
+	private <T> SuggestionProvider generateSuggestionProvider(CommandPermission permission, Object suggestions, SuggestionType suggestionType, String tooltip) {
 		
 		if(permission.equals(CommandPermission.NONE)) {
 			//Default suggestion type - no permission checks required
@@ -732,13 +743,13 @@ public final class SemiReflector {
 					String[] stringArr = (String[]) suggestions;
 					//Use NMS ICompletionProvider.a() on suggestions
 					return (context, builder) -> {
-						return getSuggestionsBuilder(builder, stringArr);
+						return getSuggestionsBuilder(builder, stringArr, tooltip);
 					};
 				case DYN_SUG:
 					DynamicSuggestions dynamicSuggestions = (DynamicSuggestions) suggestions;
 					//Use NMS ICompletionProvider.a() on DynSuggestions
 					return (context, builder) -> {
-						return getSuggestionsBuilder(builder, dynamicSuggestions.getSuggestions());
+						return getSuggestionsBuilder(builder, dynamicSuggestions.getSuggestions(), tooltip);
 					};
 			}
 		} else if(permission.equals(CommandPermission.OP)) {
@@ -759,7 +770,7 @@ public final class SemiReflector {
 					//Use NMS ICompletionProvider.a() on suggestions
 					return (context, builder) -> {
 						if(getCommandSender(context).isOp()) {
-							return getSuggestionsBuilder(builder, stringArr);
+							return getSuggestionsBuilder(builder, stringArr, tooltip);
 						} else {
 							return Suggestions.empty();
 						}
@@ -769,7 +780,7 @@ public final class SemiReflector {
 					//Use NMS ICompletionProvider.a() on DynSuggestions
 					return (context, builder) -> {
 						if(getCommandSender(context).isOp()) {
-							return getSuggestionsBuilder(builder, dynamicSuggestions.getSuggestions());
+							return getSuggestionsBuilder(builder, dynamicSuggestions.getSuggestions(), tooltip);
 						} else {
 							return Suggestions.empty();
 						}
@@ -793,7 +804,7 @@ public final class SemiReflector {
 					//Use NMS ICompletionProvider.a() on suggestions
 					return (context, builder) -> {
 						if(getCommandSender(context).hasPermission(permission.getPermission())) {
-							return getSuggestionsBuilder(builder, stringArr);
+							return getSuggestionsBuilder(builder, stringArr, tooltip);
 						} else {
 							return Suggestions.empty();
 						}
@@ -803,7 +814,7 @@ public final class SemiReflector {
 					//Use NMS ICompletionProvider.a() on DynSuggestions
 					return (context, builder) -> {
 						if(getCommandSender(context).hasPermission(permission.getPermission())) {
-							return getSuggestionsBuilder(builder, dynamicSuggestions.getSuggestions());
+							return getSuggestionsBuilder(builder, dynamicSuggestions.getSuggestions(), tooltip);
 						} else {
 							return Suggestions.empty();
 						}
@@ -824,9 +835,9 @@ public final class SemiReflector {
 					Object FunctionData = getMethod(getNMSClass("MinecraftServer"), "getFunctionData").invoke(NMSServer);
 					Object Tags = getMethod(getNMSClass("CustomFunctionData"), "g").invoke(FunctionData);
 					Object MinecraftKeys = getMethod(getNMSClass("Tags"), "a").invoke(Tags);
-					getMethod(getNMSClass("ICompletionProvider"), "a", Iterable.class, SuggestionsBuilder.class, String.class).invoke(MinecraftKeys, builder, "#");
+					getMethod(getNMSClass("ICompletionProvider"), "a", Iterable.class, SuggestionsBuilder.class, String.class).invoke(null, MinecraftKeys, builder, "#");
 					Map m = (Map) getMethod(getNMSClass("CustomFunctionData"), "c").invoke(FunctionData);
-					return (CompletableFuture<Suggestions>) getMethod(getNMSClass("ICompletionProvider"), "a", Iterable.class, SuggestionsBuilder.class).invoke(m.keySet(), builder);
+					return (CompletableFuture<Suggestions>) getMethod(getNMSClass("ICompletionProvider"), "a", Iterable.class, SuggestionsBuilder.class).invoke(null, m.keySet(), builder);
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 					e.printStackTrace();
 					return Suggestions.empty();
@@ -841,9 +852,9 @@ public final class SemiReflector {
 						Object FunctionData = getMethod(getNMSClass("MinecraftServer"), "getFunctionData").invoke(NMSServer);
 						Object Tags = getMethod(getNMSClass("CustomFunctionData"), "g").invoke(FunctionData);
 						Object MinecraftKeys = getMethod(getNMSClass("Tags"), "a").invoke(Tags);
-						getMethod(getNMSClass("ICompletionProvider"), "a", Iterable.class, SuggestionsBuilder.class, String.class).invoke(MinecraftKeys, builder, "#");
+						getMethod(getNMSClass("ICompletionProvider"), "a", Iterable.class, SuggestionsBuilder.class, String.class).invoke(null, MinecraftKeys, builder, "#");
 						Map m = (Map) getMethod(getNMSClass("CustomFunctionData"), "c").invoke(FunctionData);
-						return (CompletableFuture<Suggestions>) getMethod(getNMSClass("ICompletionProvider"), "a", Iterable.class, SuggestionsBuilder.class).invoke(m.keySet(), builder);
+						return (CompletableFuture<Suggestions>) getMethod(getNMSClass("ICompletionProvider"), "a", Iterable.class, SuggestionsBuilder.class).invoke(null, m.keySet(), builder);
 					} else {
 						return Suggestions.empty();
 					}
@@ -861,9 +872,9 @@ public final class SemiReflector {
 						Object FunctionData = getMethod(getNMSClass("MinecraftServer"), "getFunctionData").invoke(NMSServer);
 						Object Tags = getMethod(getNMSClass("CustomFunctionData"), "g").invoke(FunctionData);
 						Object MinecraftKeys = getMethod(getNMSClass("Tags"), "a").invoke(Tags);
-						getMethod(getNMSClass("ICompletionProvider"), "a", Iterable.class, SuggestionsBuilder.class, String.class).invoke(MinecraftKeys, builder, "#");
+						getMethod(getNMSClass("ICompletionProvider"), "a", Iterable.class, SuggestionsBuilder.class, String.class).invoke(null, MinecraftKeys, builder, "#");
 						Map m = (Map) getMethod(getNMSClass("CustomFunctionData"), "c").invoke(FunctionData);
-						return (CompletableFuture<Suggestions>) getMethod(getNMSClass("ICompletionProvider"), "a", Iterable.class, SuggestionsBuilder.class).invoke(m.keySet(), builder);
+						return (CompletableFuture<Suggestions>) getMethod(getNMSClass("ICompletionProvider"), "a", Iterable.class, SuggestionsBuilder.class).invoke(null, m.keySet(), builder);
 					} else {
 						return Suggestions.empty();
 					}
@@ -879,17 +890,6 @@ public final class SemiReflector {
 	// SECTION: Argument Builders                                                                       //
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	
-//	public static final SuggestionProvider<CommandListenerWrapper> a = (arg, arg0) -> {
-//		CustomFunctionData arg1 = ((CommandListenerWrapper) arg.getSource()).getServer().getFunctionData();
-//		ICompletionProvider.a(arg1.g().a(), arg0, "#");
-//		return ICompletionProvider.a(arg1.c().keySet(), arg0);
-//	};
-	
-	//////////////////////////////////////////////////////////////////////////////////////////////////////
-	// SECTION: Argument Builders                                                                       //
-	//////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	//Gets a LiteralArgumentBuilder for a command name
 	private LiteralArgumentBuilder<?> getLiteralArgumentBuilder(String commandName) {
 		return LiteralArgumentBuilder.literal(commandName);
@@ -897,19 +897,21 @@ public final class SemiReflector {
 	
 	//Gets a RequiredArgumentBuilder for an argument
 	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, com.mojang.brigadier.arguments.ArgumentType<T> type, CommandPermission permission) {
-		SuggestionProvider provider = generateSuggestionProvider(permission, type, SuggestionType.ARGUMENT);
-		return RequiredArgumentBuilder.argument(argumentName, type);//.suggests(provider);
+		SuggestionProvider provider = generateSuggestionProvider(permission, type, SuggestionType.ARGUMENT, argumentName);
+		
+
+		return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
 	}
 	
 	//Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
 	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, DynamicSuggestedStringArgument type, CommandPermission permission) {
-		SuggestionProvider provider = generateSuggestionProvider(permission, type.getDynamicSuggestions(), SuggestionType.DYN_SUG);
+		SuggestionProvider provider = generateSuggestionProvider(permission, type.getDynamicSuggestions(), SuggestionType.DYN_SUG, argumentName);
 		return RequiredArgumentBuilder.argument(argumentName, type.getRawType()).suggests(provider);
 	}
 	
 	//Gets a RequiredArgumentBuilder for a SuggestedStringArgument
 	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, SuggestedStringArgument type, CommandPermission permission){
-		SuggestionProvider provider = generateSuggestionProvider(permission, type.getSuggestions(), SuggestionType.STRING_ARR);
+		SuggestionProvider provider = generateSuggestionProvider(permission, type.getSuggestions(), SuggestionType.STRING_ARR, argumentName);
 		return RequiredArgumentBuilder.argument(argumentName, type.getRawType()).suggests(provider);
 	}
 	
@@ -924,17 +926,12 @@ public final class SemiReflector {
 		if(newSuggestions == null || newSuggestions.length == 0) {
 			return getRequiredArgumentBuilder(argumentName, type.getRawType(), permission);
 		} else {
-			SuggestionProvider provider = generateSuggestionProvider(permission, newSuggestions, SuggestionType.STRING_ARR);
+			SuggestionProvider provider = generateSuggestionProvider(permission, newSuggestions, SuggestionType.STRING_ARR, argumentName);
 			return RequiredArgumentBuilder.argument(argumentName, type.getRawType()).suggests(provider);
 		}
 		
 	}
 	
-	//////////////////////////////////////////////////////////////////////////////////////////////////////
-	// SECTION: Reflection                                                                              //
-	//////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-		
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	// SECTION: Reflection                                                                              //
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
