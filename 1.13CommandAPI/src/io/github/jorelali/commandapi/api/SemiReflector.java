@@ -36,6 +36,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 import org.bukkit.potion.PotionEffectType;
 
+import com.google.common.collect.Lists;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.LiteralMessage;
@@ -46,7 +47,6 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.context.StringRange;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.suggestion.Suggestion;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
@@ -702,12 +702,12 @@ public final class SemiReflector {
 	}
 	
 	//NMS ICompletionProvider.a()
-	private CompletableFuture<Suggestions> getSuggestionsBuilder(SuggestionsBuilder builder, String[] array, String tooltip) {
+	private CompletableFuture<Suggestions> getSuggestionsBuilder(SuggestionsBuilder builder, String[] array) {
 		String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
 		for (int i = 0; i < array.length; i++) {
 			String str = array[i];
 			if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
-				builder.suggest(str, new LiteralMessage(tooltip));
+				builder.suggest(str);
 			}
 		}
 		return builder.buildFuture();
@@ -728,7 +728,7 @@ public final class SemiReflector {
 	 * 
 	 * @param suggestions - a String[], DynamicSuggestions or brigadier ArgumentType
 	 */
-	private <T> SuggestionProvider generateSuggestionProvider(CommandPermission permission, Object suggestions, SuggestionType suggestionType, String tooltip) {
+	private <T> SuggestionProvider generateSuggestionProvider(CommandPermission permission, Object suggestions, SuggestionType suggestionType) {
 		
 		if(permission.equals(CommandPermission.NONE)) {
 			//Default suggestion type - no permission checks required
@@ -737,19 +737,23 @@ public final class SemiReflector {
 					com.mojang.brigadier.arguments.ArgumentType<T> type = (com.mojang.brigadier.arguments.ArgumentType<T>) suggestions;
 					//No suggestions required, return default suggestions
 					return (context, builder) -> {
-						return type.listSuggestions(context, builder);
+						builder.suggest("", new LiteralMessage("hello!!"));
+						
+						System.out.println(new Suggestions(StringRange.at(0), Lists.newArrayList()));
+						System.out.println(builder.build());
+						return builder.buildFuture();//type.listSuggestions(context, builder);
 					};
 				case STRING_ARR:
 					String[] stringArr = (String[]) suggestions;
 					//Use NMS ICompletionProvider.a() on suggestions
 					return (context, builder) -> {
-						return getSuggestionsBuilder(builder, stringArr, tooltip);
+						return getSuggestionsBuilder(builder, stringArr);
 					};
 				case DYN_SUG:
 					DynamicSuggestions dynamicSuggestions = (DynamicSuggestions) suggestions;
 					//Use NMS ICompletionProvider.a() on DynSuggestions
 					return (context, builder) -> {
-						return getSuggestionsBuilder(builder, dynamicSuggestions.getSuggestions(), tooltip);
+						return getSuggestionsBuilder(builder, dynamicSuggestions.getSuggestions());
 					};
 			}
 		} else if(permission.equals(CommandPermission.OP)) {
@@ -770,7 +774,7 @@ public final class SemiReflector {
 					//Use NMS ICompletionProvider.a() on suggestions
 					return (context, builder) -> {
 						if(getCommandSender(context).isOp()) {
-							return getSuggestionsBuilder(builder, stringArr, tooltip);
+							return getSuggestionsBuilder(builder, stringArr);
 						} else {
 							return Suggestions.empty();
 						}
@@ -780,7 +784,7 @@ public final class SemiReflector {
 					//Use NMS ICompletionProvider.a() on DynSuggestions
 					return (context, builder) -> {
 						if(getCommandSender(context).isOp()) {
-							return getSuggestionsBuilder(builder, dynamicSuggestions.getSuggestions(), tooltip);
+							return getSuggestionsBuilder(builder, dynamicSuggestions.getSuggestions());
 						} else {
 							return Suggestions.empty();
 						}
@@ -804,7 +808,7 @@ public final class SemiReflector {
 					//Use NMS ICompletionProvider.a() on suggestions
 					return (context, builder) -> {
 						if(getCommandSender(context).hasPermission(permission.getPermission())) {
-							return getSuggestionsBuilder(builder, stringArr, tooltip);
+							return getSuggestionsBuilder(builder, stringArr);
 						} else {
 							return Suggestions.empty();
 						}
@@ -814,7 +818,7 @@ public final class SemiReflector {
 					//Use NMS ICompletionProvider.a() on DynSuggestions
 					return (context, builder) -> {
 						if(getCommandSender(context).hasPermission(permission.getPermission())) {
-							return getSuggestionsBuilder(builder, dynamicSuggestions.getSuggestions(), tooltip);
+							return getSuggestionsBuilder(builder, dynamicSuggestions.getSuggestions());
 						} else {
 							return Suggestions.empty();
 						}
@@ -897,7 +901,7 @@ public final class SemiReflector {
 	
 	//Gets a RequiredArgumentBuilder for an argument
 	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, com.mojang.brigadier.arguments.ArgumentType<T> type, CommandPermission permission) {
-		SuggestionProvider provider = generateSuggestionProvider(permission, type, SuggestionType.ARGUMENT, argumentName);
+		SuggestionProvider provider = generateSuggestionProvider(permission, type, SuggestionType.ARGUMENT);
 		
 
 		return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
@@ -905,13 +909,13 @@ public final class SemiReflector {
 	
 	//Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
 	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, DynamicSuggestedStringArgument type, CommandPermission permission) {
-		SuggestionProvider provider = generateSuggestionProvider(permission, type.getDynamicSuggestions(), SuggestionType.DYN_SUG, argumentName);
+		SuggestionProvider provider = generateSuggestionProvider(permission, type.getDynamicSuggestions(), SuggestionType.DYN_SUG);
 		return RequiredArgumentBuilder.argument(argumentName, type.getRawType()).suggests(provider);
 	}
 	
 	//Gets a RequiredArgumentBuilder for a SuggestedStringArgument
 	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, SuggestedStringArgument type, CommandPermission permission){
-		SuggestionProvider provider = generateSuggestionProvider(permission, type.getSuggestions(), SuggestionType.STRING_ARR, argumentName);
+		SuggestionProvider provider = generateSuggestionProvider(permission, type.getSuggestions(), SuggestionType.STRING_ARR);
 		return RequiredArgumentBuilder.argument(argumentName, type.getRawType()).suggests(provider);
 	}
 	
@@ -926,7 +930,7 @@ public final class SemiReflector {
 		if(newSuggestions == null || newSuggestions.length == 0) {
 			return getRequiredArgumentBuilder(argumentName, type.getRawType(), permission);
 		} else {
-			SuggestionProvider provider = generateSuggestionProvider(permission, newSuggestions, SuggestionType.STRING_ARR, argumentName);
+			SuggestionProvider provider = generateSuggestionProvider(permission, newSuggestions, SuggestionType.STRING_ARR);
 			return RequiredArgumentBuilder.argument(argumentName, type.getRawType()).suggests(provider);
 		}
 		
