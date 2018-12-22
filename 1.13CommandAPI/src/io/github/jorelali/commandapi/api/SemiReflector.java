@@ -662,6 +662,8 @@ public final class SemiReflector {
 	        }        
 	        
 	        //Link command name to first argument and register        
+	        
+	        //TODO: What is requires(permission) is DIFFERENT FOR DIFFERENT ARGUMENTS?!???????!!!!!!
 	        LiteralCommandNode resultantNode = this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(commandName).requires(permission).then(outer));
 	        
 	        //Register aliases
