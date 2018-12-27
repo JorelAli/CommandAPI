@@ -60,8 +60,10 @@ import io.github.jorelali.commandapi.api.arguments.DynamicSuggestedStringArgumen
 import io.github.jorelali.commandapi.api.arguments.DynamicSuggestedStringArgument.DynamicSuggestions;
 import io.github.jorelali.commandapi.api.arguments.EnchantmentArgument;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument;
+import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
 import io.github.jorelali.commandapi.api.arguments.EntityTypeArgument;
 import io.github.jorelali.commandapi.api.arguments.FunctionArgument;
+import io.github.jorelali.commandapi.api.arguments.IntegerArgument;
 import io.github.jorelali.commandapi.api.arguments.ItemStackArgument;
 import io.github.jorelali.commandapi.api.arguments.LiteralArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationArgument;
@@ -193,7 +195,9 @@ public final class SemiReflector {
 			
 			//Handle proxied command senders via /execute as [Proxy]
 			try {
-				Object proxyEntity = getMethod(getNMSClass("CommandListenerWrapper"), "f").invoke(cmdCtx.getSource());
+				//getMethod(getNMSClass("CommandListenerWrapper"), "f").invoke(cmdCtx.getSource()); -> getMethod(getNMSClass("CommandListenerWrapper"), "getEntity").invoke(cmdCtx.getSource());
+				//Both of these return field CommandListenerWrapper.k
+				Object proxyEntity = getField(getNMSClass("CommandListenerWrapper"), "k").get(cmdCtx.getSource());
 					
 				if(proxyEntity != null) {
 					//Force proxyEntity to be a NMS Entity object
@@ -663,7 +667,137 @@ public final class SemiReflector {
 	        
 	        //Link command name to first argument and register        
 	        
-	        //TODO: What is requires(permission) is DIFFERENT FOR DIFFERENT ARGUMENTS?!???????!!!!!!
+	        //TODO: What if requires(permission) is DIFFERENT FOR DIFFERENT ARGUMENTS?!???????!!!!!!
+	        LiteralCommandNode resultantNode = this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(commandName).requires(permission).then(outer));
+	        
+	        //Register aliases
+	        for(String str : aliases) {
+	        	this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(str).requires(permission).redirect(resultantNode));
+	        }
+		}
+        
+		//Produce the commandDispatch.json file for debug purposes
+		if(CommandAPIMain.getConfiguration().willCreateDispatcherFile()) {
+			File file = new File("command_registration.json");
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace(System.out);
+			}
+			
+			getMethod(getNMSClass("CommandDispatcher"), "a", File.class).invoke(this.cDispatcher, file);
+		}
+	}	
+	
+	
+	
+	//Test method to explore the ability to modify the permissions for arguments
+	protected void testRegister(String commandName, CommandPermission permissions, String[] aliases, CustomCommandExecutor executor) throws Exception {
+		
+		/*
+		 * Developer's Note:
+		 * The test is simple. Say we have a command:
+		 * /mytestcommand <target> <integer> <material (itemstack)>
+		 * 
+		 * This then has the assigned permissions:
+		 * <target> 	-> mytestcmdperm1
+		 * <integer>  	-> mytestcmdperm2
+		 * <material>  	-> mytestcmdperm3
+		 */
+		
+		LinkedHashMap<String, Argument> args = new LinkedHashMap<>();
+		args.put("target", new EntitySelectorArgument(EntitySelector.ONE_ENTITY));
+		args.put("integer", new IntegerArgument());
+		args.put("material", new ItemStackArgument());
+		
+		if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
+			//Create a list of argument names
+			StringBuilder builder = new StringBuilder();
+			args.values().forEach(arg -> builder.append("<").append(arg.getClass().getSimpleName()).append("> "));
+			CommandAPIMain.getLog().info("Registering TEST command /" + commandName + " " + builder.toString());
+		}
+		
+		Command command = generateCommand(commandName, args, executor);
+		Predicate permission = generatePermissions(commandName, permissions);
+		//Predicate permission = (a) -> {return true;};
+		
+		/*
+		 * The innermost argument needs to be connected to the executor.
+		 * Then that argument needs to be connected to the previous argument
+		 * etc.
+		 * Then the first argument needs to be connected to the command name
+		 * 
+		 * CommandName -> Args1 -> Args2 -> ... -> ArgsN -> Executor
+		 */
+		
+		
+		
+		
+		if(args.isEmpty()) {
+			//Link command name to the executor
+	        LiteralCommandNode resultantNode = this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(commandName).requires(permission).executes(command));
+	        
+	        //Register aliases
+	        for(String str : aliases) {
+	        	this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(str).requires(permission).redirect(resultantNode));
+	        }
+		} else {
+			//List of keys for reverse iteration
+	        ArrayList<String> keys = new ArrayList<>(args.keySet());
+
+	        //Link the last element to the executor
+	        ArgumentBuilder inner;
+	        Argument innerArg = args.get(keys.get(keys.size() - 1));
+	        if(innerArg instanceof LiteralArgument) {
+	        	String str = ((LiteralArgument) innerArg).getLiteral();
+	        	inner = getLiteralArgumentBuilder(str).executes(command);
+	        } else {
+	        	if(innerArg instanceof SuggestedStringArgument) {
+	        		inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), (SuggestedStringArgument) innerArg, permissions).executes(command);
+        		} else if(innerArg instanceof FunctionArgument) {
+        			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), getFunctionsSuggestionProvider(permissions)).executes(command);
+				} else if(innerArg instanceof DynamicSuggestedStringArgument) {
+        			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), (DynamicSuggestedStringArgument) innerArg, permissions).executes(command);
+				} else {
+					if(innerArg instanceof OverrideableSuggestions) {
+						inner = getRequiredArgumentBuilderWithOverride(keys.get(keys.size() - 1), innerArg, permissions).executes(command);
+					} else {
+						//It's basically all about this code here
+						inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), permissions).requires(
+								z -> {return true;}
+								).executes(command);
+					}
+				}
+	        }
+
+	        //Link everything else up, except the first
+	        ArgumentBuilder outer = inner;
+	        for(int i = keys.size() - 2; i >= 0; i--) {
+	        	Argument outerArg = args.get(keys.get(i));
+	        	if(outerArg instanceof LiteralArgument) {
+	        		String str = ((LiteralArgument) outerArg).getLiteral();
+	        		outer = getLiteralArgumentBuilder(str).then(outer);
+	        	} else {
+	        		if(outerArg instanceof SuggestedStringArgument) {
+	        			outer = getRequiredArgumentBuilder(keys.get(i), (SuggestedStringArgument) outerArg, permissions).then(outer);
+	        		} else if(outerArg instanceof FunctionArgument) {
+	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), getFunctionsSuggestionProvider(permissions)).then(outer);
+	        		} else if(outerArg instanceof DynamicSuggestedStringArgument) {
+	        			outer = getRequiredArgumentBuilder(keys.get(i), (DynamicSuggestedStringArgument) outerArg, permissions).then(outer);
+					} else {
+						if(outerArg instanceof OverrideableSuggestions) {
+							outer = getRequiredArgumentBuilderWithOverride(keys.get(i), outerArg, permissions).then(outer);
+						} else {
+							//It's basically all about this other code code here
+							outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), permissions).then(outer);
+						}
+	        		}
+	        	}
+	        }        
+	        
+	        //Link command name to first argument and register        
+	        
+	        //TODO: What if requires(permission) is DIFFERENT FOR DIFFERENT ARGUMENTS?!???????!!!!!!
 	        LiteralCommandNode resultantNode = this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(commandName).requires(permission).then(outer));
 	        
 	        //Register aliases
@@ -714,15 +848,7 @@ public final class SemiReflector {
 		}
 		return builder.buildFuture();
 	}
-	
-//	private void a() {
-	//TODO:
-//		SuggestionsBuilder z;
-//		List<Suggestion> arr = new ArrayList<>();
-//		arr.add(new Suggestion(StringRange.at(0), ))
-//		new Suggestions(StringRange.at(0), arr);
-//	}
-	
+
 	/**
 	 * Yes, there's a TONNE of copy and paste in this method, but because
 	 * it's inside a lambda, I believe it's best to leave it like that.
