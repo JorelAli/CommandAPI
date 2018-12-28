@@ -43,9 +43,18 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 | 1.5     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.5/CommandAPI.jar) | [Version 1.5 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.5%20Documentation.md) |
 | 1.6     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.6/CommandAPI.jar) | [Version 1.6 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.6%20Documentation.md) |
 | 1.7.2     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.7.2/CommandAPI.jar) | [Version 1.7 - 1.7.2 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.7%20Documentation.md) |
+| 1.8.1 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.8.1/CommandAPI.jar) | [Version 1.8 - 1.8.1 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.8%20Documentation.md) |
 
 ## Changelog
 
+* Version 1.8.1
+  * Fix permissions for argument from 1.8
+  * Neaten up logging with verbose outputs
+* Version 1.8
+  * Fix bugs where DynamicSuggestedArguments don't work as the last argument
+  * Fix support for latest spigot version
+  * Adds permissions for arguments
+  * Adds support to override suggestions for arguments
 * Version 1.7.2
   * Fix a bug where default return value was 0 instead of 1, causing issues with commandblocks
 * Version 1.7.1

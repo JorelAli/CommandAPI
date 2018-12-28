@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
@@ -77,7 +78,7 @@ import net.md_5.bungee.chat.ComponentSerializer;
  */
 public final class SemiReflector {
 		
-	private Map<String, CommandPermission> permissionsToFix;
+	private TreeMap<String, CommandPermission> permissionsToFix;
 
 	//Cache maps
 	private static Map<String, Class<?>> NMSClasses;
@@ -111,7 +112,7 @@ public final class SemiReflector {
 			OBCClasses = new HashMap<>();
 			methods = new HashMap<>();
 			fields = new HashMap<>();
-			permissionsToFix = new HashMap<>();
+			permissionsToFix = new TreeMap<>();
 			
 			this.cDispatcher = getField(getNMSClass("MinecraftServer"), "commandDispatcher").get(server);
 						
@@ -146,7 +147,7 @@ public final class SemiReflector {
 			c.remove(commandName);
 						
 			if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
-				CommandAPIMain.getLog().info("Unregistering /" + commandName);
+				CommandAPIMain.getLog().info("Unregistering command /" + commandName);
 			}
 		} catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
@@ -531,11 +532,13 @@ public final class SemiReflector {
 			
 			Class vcw = getOBCClass("command.VanillaCommandWrapper");
 			
+			CommandAPIMain.getLog().info("Linking permissions to commands:");
+			
 			permissionsToFix.forEach((cmdName, perm) -> {
 				
 				if(perm.equals(CommandPermission.NONE)) {
 					if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
-						CommandAPIMain.getLog().info("Linking permission NONE -> " + cmdName);
+						CommandAPIMain.getLog().info("NONE -> /" + cmdName);
 					}
 					/*
 					 * org.bukkit.command.Command.testPermissionSilent() ->
@@ -552,7 +555,7 @@ public final class SemiReflector {
 				} else {
 					if(perm.getPermission() != null) {
 						if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
-							CommandAPIMain.getLog().info("Linking permission " + perm.getPermission() + " -> " + cmdName);
+							CommandAPIMain.getLog().info(perm.getPermission() + " -> /" + cmdName);
 						}
 						if(vcw.isInstance(knownCommands.get(cmdName))) {
 							knownCommands.get(cmdName).setPermission(perm.getPermission());
@@ -617,16 +620,16 @@ public final class SemiReflector {
 	        	inner = getLiteralArgumentBuilderArgument(str, innerArg.getArgumentPermission()).executes(command);
 	        } else {
 	        	if(innerArg instanceof SuggestedStringArgument) {
-	        		inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), (SuggestedStringArgument) innerArg, permissions).executes(command);
+	        		inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), (SuggestedStringArgument) innerArg, innerArg.getArgumentPermission()).executes(command);
         		} else if(innerArg instanceof FunctionArgument) {
-        			inner = getRequiredArgumentBuilderForFunctions(keys.get(keys.size() - 1), innerArg.getRawType(), permissions).executes(command);
+        			inner = getRequiredArgumentBuilderForFunctions(keys.get(keys.size() - 1), innerArg.getRawType(), innerArg.getArgumentPermission()).executes(command);
 				} else if(innerArg instanceof DynamicSuggestedStringArgument) {
-        			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), (DynamicSuggestedStringArgument) innerArg, permissions).executes(command);
+        			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), (DynamicSuggestedStringArgument) innerArg, innerArg.getArgumentPermission()).executes(command);
 				} else {
 					if(innerArg instanceof OverrideableSuggestions) {
-						inner = getRequiredArgumentBuilderWithOverride(keys.get(keys.size() - 1), innerArg, permissions).executes(command);
+						inner = getRequiredArgumentBuilderWithOverride(keys.get(keys.size() - 1), innerArg, innerArg.getArgumentPermission()).executes(command);
 					} else {
-						inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), permissions).executes(command);
+						inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), innerArg.getArgumentPermission()).executes(command);
 					}
 				}
 	        }
@@ -640,16 +643,16 @@ public final class SemiReflector {
 	        		outer = getLiteralArgumentBuilderArgument(str, outerArg.getArgumentPermission()).then(outer);
 	        	} else {
 	        		if(outerArg instanceof SuggestedStringArgument) {
-	        			outer = getRequiredArgumentBuilder(keys.get(i), (SuggestedStringArgument) outerArg, permissions).then(outer);
+	        			outer = getRequiredArgumentBuilder(keys.get(i), (SuggestedStringArgument) outerArg, outerArg.getArgumentPermission()).then(outer);
 	        		} else if(outerArg instanceof FunctionArgument) {
-	        			outer = getRequiredArgumentBuilderForFunctions(keys.get(i), outerArg.getRawType(), permissions).then(outer);
+	        			outer = getRequiredArgumentBuilderForFunctions(keys.get(i), outerArg.getRawType(), outerArg.getArgumentPermission()).then(outer);
 	        		} else if(outerArg instanceof DynamicSuggestedStringArgument) {
-	        			outer = getRequiredArgumentBuilder(keys.get(i), (DynamicSuggestedStringArgument) outerArg, permissions).then(outer);
+	        			outer = getRequiredArgumentBuilder(keys.get(i), (DynamicSuggestedStringArgument) outerArg, outerArg.getArgumentPermission()).then(outer);
 					} else {
 						if(outerArg instanceof OverrideableSuggestions) {
-							outer = getRequiredArgumentBuilderWithOverride(keys.get(i), outerArg, permissions).then(outer);
+							outer = getRequiredArgumentBuilderWithOverride(keys.get(i), outerArg, outerArg.getArgumentPermission()).then(outer);
 						} else {
-							outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), permissions).then(outer);
+							outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), outerArg.getArgumentPermission()).then(outer);
 						}
 	        		}
 	        	}
