@@ -5,7 +5,7 @@ import io.github.jorelali.commandapi.api.FunctionWrapper;
 import io.github.jorelali.commandapi.api.SemiReflector;
 
 @SuppressWarnings("unchecked")
-public class FunctionArgument implements Argument, OverrideableSuggestions {
+public class FunctionArgument implements Argument {
 
 	com.mojang.brigadier.arguments.ArgumentType<?> rawType;
 	
@@ -31,19 +31,6 @@ public class FunctionArgument implements Argument, OverrideableSuggestions {
 	@Override
 	public boolean isSimple() {
 		return false;
-	}
-	
-	private String[] suggestions;
-	
-	@Override
-	public FunctionArgument overrideSuggestions(String... suggestions) {
-		this.suggestions = suggestions;
-		return this;
-	}
-	
-	@Override
-	public String[] getOverriddenSuggestions() {
-		return suggestions;
 	}
 	
 	private CommandPermission permission = CommandPermission.NONE;

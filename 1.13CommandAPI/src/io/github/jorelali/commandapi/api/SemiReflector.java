@@ -36,16 +36,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 import org.bukkit.potion.PotionEffectType;
 
-import com.google.common.collect.Lists;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.context.StringRange;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
@@ -57,13 +54,10 @@ import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.ChatColorArgument;
 import io.github.jorelali.commandapi.api.arguments.ChatComponentArgument;
 import io.github.jorelali.commandapi.api.arguments.DynamicSuggestedStringArgument;
-import io.github.jorelali.commandapi.api.arguments.DynamicSuggestedStringArgument.DynamicSuggestions;
 import io.github.jorelali.commandapi.api.arguments.EnchantmentArgument;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument;
-import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
 import io.github.jorelali.commandapi.api.arguments.EntityTypeArgument;
 import io.github.jorelali.commandapi.api.arguments.FunctionArgument;
-import io.github.jorelali.commandapi.api.arguments.IntegerArgument;
 import io.github.jorelali.commandapi.api.arguments.ItemStackArgument;
 import io.github.jorelali.commandapi.api.arguments.LiteralArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationArgument;
@@ -512,24 +506,20 @@ public final class SemiReflector {
 			} catch(IllegalArgumentException e) {}
 		}
 		
-		return (cmdSender) -> {
-			
-        	//Generate CommandSender object
-			CommandSender sender = null;
-			try {
-				sender = (CommandSender) getMethod(cmdSender.getClass(), "getBukkitSender").invoke(cmdSender);
-			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException e) {
-				e.printStackTrace(System.out);
-			}
-			
-			if(finalPermission.equals(CommandPermission.NONE)) {
-				return true;
-			} else if(finalPermission.equals(CommandPermission.OP)) {
-				return sender.isOp();
-			} else {
-				return sender.hasPermission(finalPermission.getPermission());
-			}
+		return (clw) -> {
+			return permissionCheck(getCommandSender(clw), finalPermission);
         };
+	}
+	
+	//Checks if a CommandSender has permission permission from CommandPermission permission
+	private boolean permissionCheck(CommandSender sender, CommandPermission permission) {
+		if(permission.equals(CommandPermission.NONE)) {
+			return true;
+		} else if(permission.equals(CommandPermission.OP)) {
+			return sender.isOp();
+		} else {
+			return sender.hasPermission(permission.getPermission());
+		}
 	}
 	
 	protected void fixPermissions() {
@@ -624,12 +614,12 @@ public final class SemiReflector {
 	        Argument innerArg = args.get(keys.get(keys.size() - 1));
 	        if(innerArg instanceof LiteralArgument) {
 	        	String str = ((LiteralArgument) innerArg).getLiteral();
-	        	inner = getLiteralArgumentBuilder(str).executes(command);
+	        	inner = getLiteralArgumentBuilderArgument(str, innerArg.getArgumentPermission()).executes(command);
 	        } else {
 	        	if(innerArg instanceof SuggestedStringArgument) {
 	        		inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), (SuggestedStringArgument) innerArg, permissions).executes(command);
         		} else if(innerArg instanceof FunctionArgument) {
-        			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), getFunctionsSuggestionProvider(permissions)).executes(command);
+        			inner = getRequiredArgumentBuilderForFunctions(keys.get(keys.size() - 1), innerArg.getRawType(), permissions).executes(command);
 				} else if(innerArg instanceof DynamicSuggestedStringArgument) {
         			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), (DynamicSuggestedStringArgument) innerArg, permissions).executes(command);
 				} else {
@@ -647,12 +637,12 @@ public final class SemiReflector {
 	        	Argument outerArg = args.get(keys.get(i));
 	        	if(outerArg instanceof LiteralArgument) {
 	        		String str = ((LiteralArgument) outerArg).getLiteral();
-	        		outer = getLiteralArgumentBuilder(str).then(outer);
+	        		outer = getLiteralArgumentBuilderArgument(str, outerArg.getArgumentPermission()).then(outer);
 	        	} else {
 	        		if(outerArg instanceof SuggestedStringArgument) {
 	        			outer = getRequiredArgumentBuilder(keys.get(i), (SuggestedStringArgument) outerArg, permissions).then(outer);
 	        		} else if(outerArg instanceof FunctionArgument) {
-	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), getFunctionsSuggestionProvider(permissions)).then(outer);
+	        			outer = getRequiredArgumentBuilderForFunctions(keys.get(i), outerArg.getRawType(), permissions).then(outer);
 	        		} else if(outerArg instanceof DynamicSuggestedStringArgument) {
 	        			outer = getRequiredArgumentBuilder(keys.get(i), (DynamicSuggestedStringArgument) outerArg, permissions).then(outer);
 					} else {
@@ -689,176 +679,14 @@ public final class SemiReflector {
 		}
 	}	
 	
-	
-	
-	//Test method to explore the ability to modify the permissions for arguments
-	protected void testRegister() throws Exception {
-		
-		
-		
-		/*
-		 * Developer's Note:
-		 * The test is simple. Say we have a command:
-		 * /mytestcommand <target> <integer> <material (itemstack)>
-		 * 
-		 * This then has the assigned permissions:
-		 * <target> 	-> mytestcmdperm1
-		 * <integer>  	-> mytestcmdperm2
-		 * <material>  	-> mytestcmdperm3
-		 */
-		
-		String commandName = "mytestcommand";
-		CustomCommandExecutor executor = new CustomCommandExecutor((sender, args) -> {System.out.println("");}, null);
-		
-		LinkedHashMap<String, Argument> args = new LinkedHashMap<>();
-		//args.put("target", new EntitySelectorArgument(EntitySelector.ONE_ENTITY));
-		args.put("literalarg", new LiteralArgument("literal"));
-		//args.put("material", new ItemStackArgument());
-		
-		if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
-			//Create a list of argument names
-			StringBuilder builder = new StringBuilder();
-			args.values().forEach(arg -> builder.append("<").append(arg.getClass().getSimpleName()).append("> "));
-			CommandAPIMain.getLog().info("Registering TEST command /" + commandName + " " + builder.toString());
-		}
-		
-		Command command = generateCommand(commandName, args, executor);
-		Predicate permission = generatePermissions(commandName, CommandPermission.fromString("mytestcmdperm"));
-		//Predicate permission = (a) -> {return true;};
-		
-		/*
-		 * The innermost argument needs to be connected to the executor.
-		 * Then that argument needs to be connected to the previous argument
-		 * etc.
-		 * Then the first argument needs to be connected to the command name
-		 * 
-		 * CommandName -> Args1 -> Args2 -> ... -> ArgsN -> Executor
-		 */
-		
-		//List of keys for reverse iteration
-        ArrayList<String> keys = new ArrayList<>(args.keySet());
-
-        //Link the last element to the executor
-        ArgumentBuilder inner;
-        Argument innerArg = args.get(keys.get(keys.size() - 1));
-        if(innerArg instanceof LiteralArgument) {
-        	String str = ((LiteralArgument) innerArg).getLiteral();
-        	inner = getLiteralArgumentBuilder(str).requires(clw -> {
-				//Get the CommandSender via NMS
-				CommandSender sender = null;
-				
-				try {
-					sender = (CommandSender) getMethod(getNMSClass("CommandListenerWrapper"), "getBukkitSender").invoke(clw);
-				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
-						| SecurityException e) {
-					e.printStackTrace(System.out);
-				}
-				return sender.hasPermission("mytestcmdperm3");
-				
-			}).executes(command);
-        } else {
-	
-			//It's basically all about this code here
-			
-			inner = RequiredArgumentBuilder.argument(keys.get(keys.size() - 1), innerArg.getRawType()).requires(clw -> {
-				//Get the CommandSender via NMS
-				CommandSender sender = null;
-				
-				try {
-					sender = (CommandSender) getMethod(getNMSClass("CommandListenerWrapper"), "getBukkitSender").invoke(clw);
-				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
-						| SecurityException e) {
-					e.printStackTrace(System.out);
-				}
-				return sender.hasPermission("mytestcmdperm3");
-				
-			}).executes(command);
-        }
-
-        //Link everything else up, except the first
-        ArgumentBuilder outer = inner;
-//        for(int i = keys.size() - 2; i >= 0; i--) {
-//        	Argument outerArg = args.get(keys.get(i));
-//        	if(outerArg instanceof LiteralArgument) {
-//        		String str = ((LiteralArgument) outerArg).getLiteral();
-//        		outer = getLiteralArgumentBuilder(str).then(outer);
-//        	} else {
-//        		
-//        		
-//        		if(keys.get(i).equals("integer")) {
-//        			inner = RequiredArgumentBuilder.argument(keys.get(i), outerArg.getRawType()).requires(clw -> {
-//        				//Get the CommandSender via NMS
-//        				CommandSender sender = null;
-//        				
-//        				try {
-//        					sender = (CommandSender) getMethod(getNMSClass("CommandListenerWrapper"), "getBukkitSender").invoke(clw);
-//        				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
-//        						| SecurityException e) {
-//        					e.printStackTrace(System.out);
-//        				}
-//        				return sender.hasPermission("mytestcmdperm2");
-//        				
-//        			}).executes(command);
-//        		} else if(keys.get(i).equals("target")) {
-//        			inner = RequiredArgumentBuilder.argument(keys.get(i), outerArg.getRawType()).requires(clw -> {
-//        				//Get the CommandSender via NMS
-//        				CommandSender sender = null;
-//        				
-//        				try {
-//        					sender = (CommandSender) getMethod(getNMSClass("CommandListenerWrapper"), "getBukkitSender").invoke(clw);
-//        				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
-//        						| SecurityException e) {
-//        					e.printStackTrace(System.out);
-//        				}
-//        				return sender.hasPermission("mytestcmdperm1");
-//        				
-//        			}).executes(command);
-//        		} else {
-//        			System.out.println("Error in command building");
-//        		}
-//        		
-//        		
-//        		
-//        		
-//        	}
-//        }        
-//        
-        //Link command name to first argument and register        
-        
-        //TODO: What if requires(permission) is DIFFERENT FOR DIFFERENT ARGUMENTS?!???????!!!!!!
-        LiteralCommandNode resultantNode = this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(commandName).requires(permission).then(outer));
-        
-        //Register aliases
-//        for(String str : aliases) {
-//        	this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(str).requires(permission).redirect(resultantNode));
-//        }
-//	
-        
-		//Produce the commandDispatch.json file for debug purposes
-		if(CommandAPIMain.getConfiguration().willCreateDispatcherFile()) {
-			File file = new File("command_registration.json");
-			try {
-				file.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace(System.out);
-			}
-			
-			getMethod(getNMSClass("CommandDispatcher"), "a", File.class).invoke(this.cDispatcher, file);
-		}
-	}	
-
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	// SECTION: SuggestionProviders                                                                     //
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-	private enum SuggestionType {
-		ARGUMENT, STRING_ARR, DYN_SUG;
-	}
-	
-	private CommandSender getCommandSender(CommandContext context) {
+				
+	private CommandSender getCommandSender(Object clw) {
 		CommandSender sender = null;
 		try {
-			sender = (CommandSender) getMethod(getNMSClass("CommandListenerWrapper"), "getBukkitSender").invoke(context.getSource());
+			sender = (CommandSender) getMethod(getNMSClass("CommandListenerWrapper"), "getBukkitSender").invoke(clw);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException e) {
 			e.printStackTrace(System.out);
 		}
@@ -876,176 +704,7 @@ public final class SemiReflector {
 		}
 		return builder.buildFuture();
 	}
-
-	/**
-	 * Yes, there's a TONNE of copy and paste in this method, but because
-	 * it's inside a lambda, I believe it's best to leave it like that.
-	 * (Despite how messy it is)
-	 * 
-	 * @param suggestions - a String[], DynamicSuggestions or brigadier ArgumentType
-	 */
-	private <T> SuggestionProvider generateSuggestionProvider(CommandPermission permission, Object suggestions, SuggestionType suggestionType) {
-		
-		if(permission.equals(CommandPermission.NONE)) {
-			//Default suggestion type - no permission checks required
-			switch(suggestionType) {
-				case ARGUMENT:
-					com.mojang.brigadier.arguments.ArgumentType<T> type = (com.mojang.brigadier.arguments.ArgumentType<T>) suggestions;
-					//No suggestions required, return default suggestions
-					return (context, builder) -> {
-						builder.suggest("", new LiteralMessage("hello!!"));
-						
-						System.out.println(new Suggestions(StringRange.at(0), Lists.newArrayList()));
-						System.out.println(builder.build());
-						return builder.buildFuture();//type.listSuggestions(context, builder);
-					};
-				case STRING_ARR:
-					String[] stringArr = (String[]) suggestions;
-					//Use NMS ICompletionProvider.a() on suggestions
-					return (context, builder) -> {
-						return getSuggestionsBuilder(builder, stringArr);
-					};
-				case DYN_SUG:
-					DynamicSuggestions dynamicSuggestions = (DynamicSuggestions) suggestions;
-					//Use NMS ICompletionProvider.a() on DynSuggestions
-					return (context, builder) -> {
-						return getSuggestionsBuilder(builder, dynamicSuggestions.getSuggestions());
-					};
-			}
-		} else if(permission.equals(CommandPermission.OP)) {
-			//Operator suggestion type - an instance of a sender is required
-			switch(suggestionType) {
-				case ARGUMENT:
-					com.mojang.brigadier.arguments.ArgumentType<T> type = (com.mojang.brigadier.arguments.ArgumentType<T>) suggestions;
-					//No suggestions required, return default suggestions
-					return (context, builder) -> {
-						if(getCommandSender(context).isOp()) {
-							return type.listSuggestions(context, builder); 
-						} else {
-							return Suggestions.empty();
-						}
-					};
-				case STRING_ARR:
-					String[] stringArr = (String[]) suggestions;
-					//Use NMS ICompletionProvider.a() on suggestions
-					return (context, builder) -> {
-						if(getCommandSender(context).isOp()) {
-							return getSuggestionsBuilder(builder, stringArr);
-						} else {
-							return Suggestions.empty();
-						}
-					};
-				case DYN_SUG:
-					DynamicSuggestions dynamicSuggestions = (DynamicSuggestions) suggestions;
-					//Use NMS ICompletionProvider.a() on DynSuggestions
-					return (context, builder) -> {
-						if(getCommandSender(context).isOp()) {
-							return getSuggestionsBuilder(builder, dynamicSuggestions.getSuggestions());
-						} else {
-							return Suggestions.empty();
-						}
-					};
-			}
-		} else {
-			//Specific permission suggestion type - an instance of a sender is required
-			switch(suggestionType) {
-				case ARGUMENT:
-					com.mojang.brigadier.arguments.ArgumentType<T> type = (com.mojang.brigadier.arguments.ArgumentType<T>) suggestions;
-					//No suggestions required, return default suggestions
-					return (context, builder) -> {
-						if(getCommandSender(context).hasPermission(permission.getPermission())) {
-							return type.listSuggestions(context, builder); 
-						} else {
-							return Suggestions.empty();
-						}
-					};
-				case STRING_ARR:
-					String[] stringArr = (String[]) suggestions;
-					//Use NMS ICompletionProvider.a() on suggestions
-					return (context, builder) -> {
-						if(getCommandSender(context).hasPermission(permission.getPermission())) {
-							return getSuggestionsBuilder(builder, stringArr);
-						} else {
-							return Suggestions.empty();
-						}
-					};
-				case DYN_SUG:
-					DynamicSuggestions dynamicSuggestions = (DynamicSuggestions) suggestions;
-					//Use NMS ICompletionProvider.a() on DynSuggestions
-					return (context, builder) -> {
-						if(getCommandSender(context).hasPermission(permission.getPermission())) {
-							return getSuggestionsBuilder(builder, dynamicSuggestions.getSuggestions());
-						} else {
-							return Suggestions.empty();
-						}
-					};
-			}
-		}
-		
-		//This case should never occur!
-		return (context, builder) -> Suggestions.empty();
-	}
-		
-	private SuggestionProvider getFunctionsSuggestionProvider(CommandPermission permission) {
-		if(permission.equals(CommandPermission.NONE)) {
-			return (context, builder) -> {
-				try {
-					//CommandFunction.a:
-					Object NMSServer = getMethod(getNMSClass("CommandListenerWrapper"), "getServer").invoke(context.getSource());
-					Object FunctionData = getMethod(getNMSClass("MinecraftServer"), "getFunctionData").invoke(NMSServer);
-					Object Tags = getMethod(getNMSClass("CustomFunctionData"), "g").invoke(FunctionData);
-					Object MinecraftKeys = getMethod(getNMSClass("Tags"), "a").invoke(Tags);
-					getMethod(getNMSClass("ICompletionProvider"), "a", Iterable.class, SuggestionsBuilder.class, String.class).invoke(null, MinecraftKeys, builder, "#");
-					Map m = (Map) getMethod(getNMSClass("CustomFunctionData"), "c").invoke(FunctionData);
-					return (CompletableFuture<Suggestions>) getMethod(getNMSClass("ICompletionProvider"), "a", Iterable.class, SuggestionsBuilder.class).invoke(null, m.keySet(), builder);
-				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					e.printStackTrace();
-					return Suggestions.empty();
-				}
-			};
-		} else if(permission.equals(CommandPermission.OP)) {
-			return (context, builder) -> {
-				try {
-					if(getCommandSender(context).isOp()) {
-						//CommandFunction.a:
-						Object NMSServer = getMethod(getNMSClass("CommandListenerWrapper"), "getServer").invoke(context.getSource());
-						Object FunctionData = getMethod(getNMSClass("MinecraftServer"), "getFunctionData").invoke(NMSServer);
-						Object Tags = getMethod(getNMSClass("CustomFunctionData"), "g").invoke(FunctionData);
-						Object MinecraftKeys = getMethod(getNMSClass("Tags"), "a").invoke(Tags);
-						getMethod(getNMSClass("ICompletionProvider"), "a", Iterable.class, SuggestionsBuilder.class, String.class).invoke(null, MinecraftKeys, builder, "#");
-						Map m = (Map) getMethod(getNMSClass("CustomFunctionData"), "c").invoke(FunctionData);
-						return (CompletableFuture<Suggestions>) getMethod(getNMSClass("ICompletionProvider"), "a", Iterable.class, SuggestionsBuilder.class).invoke(null, m.keySet(), builder);
-					} else {
-						return Suggestions.empty();
-					}
-				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					e.printStackTrace();
-					return Suggestions.empty();
-				}
-			};
-		} else {
-			return (context, builder) -> {
-				try {
-					if(getCommandSender(context).hasPermission(permission.getPermission())) {
-						//CommandFunction.a:
-						Object NMSServer = getMethod(getNMSClass("CommandListenerWrapper"), "getServer").invoke(context.getSource());
-						Object FunctionData = getMethod(getNMSClass("MinecraftServer"), "getFunctionData").invoke(NMSServer);
-						Object Tags = getMethod(getNMSClass("CustomFunctionData"), "g").invoke(FunctionData);
-						Object MinecraftKeys = getMethod(getNMSClass("Tags"), "a").invoke(Tags);
-						getMethod(getNMSClass("ICompletionProvider"), "a", Iterable.class, SuggestionsBuilder.class, String.class).invoke(null, MinecraftKeys, builder, "#");
-						Map m = (Map) getMethod(getNMSClass("CustomFunctionData"), "c").invoke(FunctionData);
-						return (CompletableFuture<Suggestions>) getMethod(getNMSClass("ICompletionProvider"), "a", Iterable.class, SuggestionsBuilder.class).invoke(null, m.keySet(), builder);
-					} else {
-						return Suggestions.empty();
-					}
-				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					e.printStackTrace();
-					return Suggestions.empty();
-				}
-			};
-		}
-	}
-	
+			
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	// SECTION: Argument Builders                                                                       //
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1055,29 +714,66 @@ public final class SemiReflector {
 		return LiteralArgumentBuilder.literal(commandName);
 	}
 	
+	private LiteralArgumentBuilder<?> getLiteralArgumentBuilderArgument(String commandName, CommandPermission permission) {
+		return LiteralArgumentBuilder.literal(commandName).requires(clw -> {
+			return permissionCheck(getCommandSender(clw), permission);
+		});
+	}
+	
 	//Gets a RequiredArgumentBuilder for an argument
 	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, com.mojang.brigadier.arguments.ArgumentType<T> type, CommandPermission permission) {
-		SuggestionProvider provider = generateSuggestionProvider(permission, type, SuggestionType.ARGUMENT);
-		
-
-		return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
+		return RequiredArgumentBuilder.argument(argumentName, type).requires(clw -> {
+			return permissionCheck(getCommandSender(clw), permission);
+		});
 	}
 	
 	//Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
 	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, DynamicSuggestedStringArgument type, CommandPermission permission) {
-		SuggestionProvider provider = generateSuggestionProvider(permission, type.getDynamicSuggestions(), SuggestionType.DYN_SUG);
-		return RequiredArgumentBuilder.argument(argumentName, type.getRawType()).suggests(provider);
+		
+		//Use NMS ICompletionProvider.a() on DynSuggestions
+		SuggestionProvider provider = (context, builder) -> {
+			return getSuggestionsBuilder(builder, type.getDynamicSuggestions().getSuggestions());
+		};
+		
+		return RequiredArgumentBuilder.argument(argumentName, type.getRawType()).requires(clw -> {
+			return permissionCheck(getCommandSender(clw), permission);
+		}).suggests(provider);
 	}
 	
 	//Gets a RequiredArgumentBuilder for a SuggestedStringArgument
 	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, SuggestedStringArgument type, CommandPermission permission){
-		SuggestionProvider provider = generateSuggestionProvider(permission, type.getSuggestions(), SuggestionType.STRING_ARR);
-		return RequiredArgumentBuilder.argument(argumentName, type.getRawType()).suggests(provider);
+		//Use NMS ICompletionProvider.a() on SuggestedString
+		SuggestionProvider provider = (context, builder) -> {
+			return getSuggestionsBuilder(builder, type.getSuggestions());
+		};
+		
+		return RequiredArgumentBuilder.argument(argumentName, type.getRawType()).requires(clw -> {
+			return permissionCheck(getCommandSender(clw), permission);
+		}).suggests(provider);
 	}
 	
 	//Gets a RequiredArgumentBuilder for an argument, given a SuggestionProvider
-	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, com.mojang.brigadier.arguments.ArgumentType<T> type, SuggestionProvider provider){
-		return RequiredArgumentBuilder.argument(argumentName, type).suggests(provider);
+	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilderForFunctions(String argumentName, com.mojang.brigadier.arguments.ArgumentType<T> type, CommandPermission permission){
+		
+		SuggestionProvider provider = (context, builder) -> {
+			try {
+				//CommandFunction.a:
+				Object NMSServer = getMethod(getNMSClass("CommandListenerWrapper"), "getServer").invoke(context.getSource());
+				Object FunctionData = getMethod(getNMSClass("MinecraftServer"), "getFunctionData").invoke(NMSServer);
+				Object Tags = getMethod(getNMSClass("CustomFunctionData"), "g").invoke(FunctionData);
+				Object MinecraftKeys = getMethod(getNMSClass("Tags"), "a").invoke(Tags);
+				getMethod(getNMSClass("ICompletionProvider"), "a", Iterable.class, SuggestionsBuilder.class, String.class).invoke(null, MinecraftKeys, builder, "#");
+				Map m = (Map) getMethod(getNMSClass("CustomFunctionData"), "c").invoke(FunctionData);
+				return (CompletableFuture<Suggestions>) getMethod(getNMSClass("ICompletionProvider"), "a", Iterable.class, SuggestionsBuilder.class).invoke(null, m.keySet(), builder);
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				e.printStackTrace();
+				return Suggestions.empty();
+			}
+		};
+		
+		return RequiredArgumentBuilder.argument(argumentName, type).requires(clw -> {
+			return permissionCheck(getCommandSender(clw), permission);
+		}).suggests(provider);
 	}
 	
 	//Gets a RequiredArgumentBuilder for an argument, given that said argument uses OverrideableSuggestions
@@ -1086,8 +782,15 @@ public final class SemiReflector {
 		if(newSuggestions == null || newSuggestions.length == 0) {
 			return getRequiredArgumentBuilder(argumentName, type.getRawType(), permission);
 		} else {
-			SuggestionProvider provider = generateSuggestionProvider(permission, newSuggestions, SuggestionType.STRING_ARR);
-			return RequiredArgumentBuilder.argument(argumentName, type.getRawType()).suggests(provider);
+			
+			//Use NMS ICompletionProvider.a() on newSuggestions
+			SuggestionProvider provider = (context, builder) -> {
+				return getSuggestionsBuilder(builder, newSuggestions);
+			};
+			
+			return RequiredArgumentBuilder.argument(argumentName, type.getRawType()).requires(clw -> {
+				return permissionCheck(getCommandSender(clw), permission);
+			}).suggests(provider);
 		}
 		
 	}
