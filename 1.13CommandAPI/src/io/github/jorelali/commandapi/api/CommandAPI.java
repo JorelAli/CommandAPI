@@ -214,13 +214,4 @@ public class CommandAPI {
 			e.printStackTrace();
 		}
 	}
-	
-	public void z() {
-		try {
-			reflector.testRegister();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 }
