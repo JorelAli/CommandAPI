@@ -9,11 +9,11 @@ package io.github.jorelali.commandapi.api;
 public class ClassCache {
 
 	private Class<?> clazz;
-	private String nameame;
+	private String name;
 
 	public ClassCache(Class<?> clazz, String name) {
 		this.clazz = clazz;
-		this.nameame = name;
+		this.name = name;
 	}
 
 	public Class<?> getClazz() {
@@ -21,6 +21,6 @@ public class ClassCache {
 	}
 
 	public String getName() {
-		return nameame;
+		return name;
 	}
 }
