@@ -2,6 +2,7 @@ package io.github.jorelali.commandapi.api.arguments;
 
 import org.bukkit.entity.Player;
 
+import io.github.jorelali.commandapi.api.CommandPermission;
 import io.github.jorelali.commandapi.api.SemiReflector;
 
 @SuppressWarnings("unchecked")
@@ -42,5 +43,18 @@ public class PlayerArgument implements Argument, OverrideableSuggestions {
 	@Override
 	public String[] getOverriddenSuggestions() {
 		return suggestions;
+	}
+	
+	private CommandPermission permission = CommandPermission.NONE;
+	
+	@Override
+	public PlayerArgument withPermission(CommandPermission permission) {
+		this.permission = permission;
+		return this;
+	}
+
+	@Override
+	public CommandPermission getArgumentPermission() {
+		return permission;
 	}
 }

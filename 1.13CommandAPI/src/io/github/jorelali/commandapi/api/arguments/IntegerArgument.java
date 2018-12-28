@@ -2,6 +2,7 @@ package io.github.jorelali.commandapi.api.arguments;
 
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 
+import io.github.jorelali.commandapi.api.CommandPermission;
 import io.github.jorelali.commandapi.api.exceptions.InvalidRangeException;
 
 @SuppressWarnings("unchecked")
@@ -62,6 +63,19 @@ public class IntegerArgument implements Argument, OverrideableSuggestions {
 	@Override
 	public String[] getOverriddenSuggestions() {
 		return suggestions;
+	}
+	
+	private CommandPermission permission = CommandPermission.NONE;
+	
+	@Override
+	public IntegerArgument withPermission(CommandPermission permission) {
+		this.permission = permission;
+		return this;
+	}
+
+	@Override
+	public CommandPermission getArgumentPermission() {
+		return permission;
 	}
 	
 }

@@ -2,6 +2,8 @@ package io.github.jorelali.commandapi.api.arguments;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 
+import io.github.jorelali.commandapi.api.CommandPermission;
+
 @SuppressWarnings("unchecked")
 public class DynamicSuggestedStringArgument implements Argument {
 
@@ -38,5 +40,18 @@ public class DynamicSuggestedStringArgument implements Argument {
 	
 	public DynamicSuggestions getDynamicSuggestions() {
 		return suggestions;
+	}
+	
+	private CommandPermission permission = CommandPermission.NONE;
+	
+	@Override
+	public DynamicSuggestedStringArgument withPermission(CommandPermission permission) {
+		this.permission = permission;
+		return this;
+	}
+
+	@Override
+	public CommandPermission getArgumentPermission() {
+		return permission;
 	}
 }

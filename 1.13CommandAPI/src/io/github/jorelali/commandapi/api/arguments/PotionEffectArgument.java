@@ -2,6 +2,7 @@ package io.github.jorelali.commandapi.api.arguments;
 
 import org.bukkit.potion.PotionEffectType;
 
+import io.github.jorelali.commandapi.api.CommandPermission;
 import io.github.jorelali.commandapi.api.SemiReflector;
 
 @SuppressWarnings("unchecked")
@@ -42,5 +43,18 @@ public class PotionEffectArgument implements Argument, OverrideableSuggestions {
 	@Override
 	public String[] getOverriddenSuggestions() {
 		return suggestions;
+	}
+	
+	private CommandPermission permission = CommandPermission.NONE;
+	
+	@Override
+	public PotionEffectArgument withPermission(CommandPermission permission) {
+		this.permission = permission;
+		return this;
+	}
+
+	@Override
+	public CommandPermission getArgumentPermission() {
+		return permission;
 	}
 }

@@ -1,5 +1,7 @@
 package io.github.jorelali.commandapi.api.arguments;
 
+import io.github.jorelali.commandapi.api.CommandPermission;
+
 public interface Argument {
 		
 	/**
@@ -17,5 +19,9 @@ public interface Argument {
 	 * @return Whether this argument is a simple argument
 	 */
 	public boolean isSimple();
+	
+	public <T extends Argument> T withPermission(CommandPermission permission);
+	
+	public CommandPermission getArgumentPermission();
 		
 }

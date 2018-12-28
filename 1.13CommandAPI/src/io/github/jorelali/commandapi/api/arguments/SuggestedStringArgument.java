@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 
+import io.github.jorelali.commandapi.api.CommandPermission;
+
 @SuppressWarnings("unchecked")
 public class SuggestedStringArgument implements Argument {
 
@@ -39,5 +41,18 @@ public class SuggestedStringArgument implements Argument {
 	
 	public String[] getSuggestions() {
 		return suggestions;
+	}
+	
+	private CommandPermission permission = CommandPermission.NONE;
+	
+	@Override
+	public SuggestedStringArgument withPermission(CommandPermission permission) {
+		this.permission = permission;
+		return this;
+	}
+
+	@Override
+	public CommandPermission getArgumentPermission() {
+		return permission;
 	}
 }

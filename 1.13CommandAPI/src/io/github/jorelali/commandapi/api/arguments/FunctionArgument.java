@@ -1,5 +1,6 @@
 package io.github.jorelali.commandapi.api.arguments;
 
+import io.github.jorelali.commandapi.api.CommandPermission;
 import io.github.jorelali.commandapi.api.FunctionWrapper;
 import io.github.jorelali.commandapi.api.SemiReflector;
 
@@ -43,5 +44,18 @@ public class FunctionArgument implements Argument, OverrideableSuggestions {
 	@Override
 	public String[] getOverriddenSuggestions() {
 		return suggestions;
+	}
+	
+	private CommandPermission permission = CommandPermission.NONE;
+	
+	@Override
+	public FunctionArgument withPermission(CommandPermission permission) {
+		this.permission = permission;
+		return this;
+	}
+
+	@Override
+	public CommandPermission getArgumentPermission() {
+		return permission;
 	}
 }

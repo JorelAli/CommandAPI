@@ -1,5 +1,6 @@
 package io.github.jorelali.commandapi.api.arguments;
 
+import io.github.jorelali.commandapi.api.CommandPermission;
 import io.github.jorelali.commandapi.api.exceptions.BadLiteralException;
 
 @SuppressWarnings("unchecked")
@@ -43,5 +44,18 @@ public class LiteralArgument implements Argument {
 	@Override
 	public boolean isSimple() {
 		return false;
+	}
+	
+	private CommandPermission permission = CommandPermission.NONE;
+	
+	@Override
+	public LiteralArgument withPermission(CommandPermission permission) {
+		this.permission = permission;
+		return this;
+	}
+
+	@Override
+	public CommandPermission getArgumentPermission() {
+		return permission;
 	}
 }

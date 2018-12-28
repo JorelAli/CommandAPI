@@ -712,8 +712,8 @@ public final class SemiReflector {
 		
 		LinkedHashMap<String, Argument> args = new LinkedHashMap<>();
 		//args.put("target", new EntitySelectorArgument(EntitySelector.ONE_ENTITY));
-		//args.put("integer", new IntegerArgument());
-		args.put("material", new ItemStackArgument());
+		args.put("literalarg", new LiteralArgument("literal"));
+		//args.put("material", new ItemStackArgument());
 		
 		if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
 			//Create a list of argument names
@@ -743,7 +743,19 @@ public final class SemiReflector {
         Argument innerArg = args.get(keys.get(keys.size() - 1));
         if(innerArg instanceof LiteralArgument) {
         	String str = ((LiteralArgument) innerArg).getLiteral();
-        	inner = getLiteralArgumentBuilder(str).executes(command);
+        	inner = getLiteralArgumentBuilder(str).requires(clw -> {
+				//Get the CommandSender via NMS
+				CommandSender sender = null;
+				
+				try {
+					sender = (CommandSender) getMethod(getNMSClass("CommandListenerWrapper"), "getBukkitSender").invoke(clw);
+				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+						| SecurityException e) {
+					e.printStackTrace(System.out);
+				}
+				return sender.hasPermission("mytestcmdperm3");
+				
+			}).executes(command);
         } else {
 	
 			//It's basically all about this code here

@@ -1,5 +1,6 @@
 package io.github.jorelali.commandapi.api.arguments;
 
+import io.github.jorelali.commandapi.api.CommandPermission;
 import io.github.jorelali.commandapi.api.SemiReflector;
 import io.github.jorelali.commandapi.api.exceptions.SpigotNotFoundException;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -51,5 +52,18 @@ public class ChatComponentArgument implements Argument, OverrideableSuggestions 
 	@Override
 	public String[] getOverriddenSuggestions() {
 		return suggestions;
+	}
+
+	private CommandPermission permission = CommandPermission.NONE;
+	
+	@Override
+	public ChatComponentArgument withPermission(CommandPermission permission) {
+		this.permission = permission;
+		return this;
+	}
+
+	@Override
+	public CommandPermission getArgumentPermission() {
+		return permission;
 	}
 }

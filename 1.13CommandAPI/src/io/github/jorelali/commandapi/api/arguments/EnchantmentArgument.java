@@ -2,6 +2,7 @@ package io.github.jorelali.commandapi.api.arguments;
 
 import org.bukkit.enchantments.Enchantment;
 
+import io.github.jorelali.commandapi.api.CommandPermission;
 import io.github.jorelali.commandapi.api.SemiReflector;
 
 @SuppressWarnings("unchecked")
@@ -42,5 +43,18 @@ public class EnchantmentArgument implements Argument, OverrideableSuggestions {
 	@Override
 	public String[] getOverriddenSuggestions() {
 		return suggestions;
+	}
+	
+	private CommandPermission permission = CommandPermission.NONE;
+	
+	@Override
+	public EnchantmentArgument withPermission(CommandPermission permission) {
+		this.permission = permission;
+		return this;
+	}
+
+	@Override
+	public CommandPermission getArgumentPermission() {
+		return permission;
 	}
 }
