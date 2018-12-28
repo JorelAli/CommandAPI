@@ -692,7 +692,9 @@ public final class SemiReflector {
 	
 	
 	//Test method to explore the ability to modify the permissions for arguments
-	protected void testRegister(String commandName, CommandPermission permissions, String[] aliases, CustomCommandExecutor executor) throws Exception {
+	protected void testRegister() throws Exception {
+		
+		
 		
 		/*
 		 * Developer's Note:
@@ -705,9 +707,12 @@ public final class SemiReflector {
 		 * <material>  	-> mytestcmdperm3
 		 */
 		
+		String commandName = "mytestcommand";
+		CustomCommandExecutor executor = new CustomCommandExecutor((sender, args) -> {System.out.println("");}, null);
+		
 		LinkedHashMap<String, Argument> args = new LinkedHashMap<>();
-		args.put("target", new EntitySelectorArgument(EntitySelector.ONE_ENTITY));
-		args.put("integer", new IntegerArgument());
+		//args.put("target", new EntitySelectorArgument(EntitySelector.ONE_ENTITY));
+		//args.put("integer", new IntegerArgument());
 		args.put("material", new ItemStackArgument());
 		
 		if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
@@ -718,7 +723,7 @@ public final class SemiReflector {
 		}
 		
 		Command command = generateCommand(commandName, args, executor);
-		Predicate permission = generatePermissions(commandName, permissions);
+		Predicate permission = generatePermissions(commandName, CommandPermission.fromString("mytestcmdperm"));
 		//Predicate permission = (a) -> {return true;};
 		
 		/*
@@ -730,81 +735,92 @@ public final class SemiReflector {
 		 * CommandName -> Args1 -> Args2 -> ... -> ArgsN -> Executor
 		 */
 		
-		
-		
-		
-		if(args.isEmpty()) {
-			//Link command name to the executor
-	        LiteralCommandNode resultantNode = this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(commandName).requires(permission).executes(command));
-	        
-	        //Register aliases
-	        for(String str : aliases) {
-	        	this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(str).requires(permission).redirect(resultantNode));
-	        }
-		} else {
-			//List of keys for reverse iteration
-	        ArrayList<String> keys = new ArrayList<>(args.keySet());
+		//List of keys for reverse iteration
+        ArrayList<String> keys = new ArrayList<>(args.keySet());
 
-	        //Link the last element to the executor
-	        ArgumentBuilder inner;
-	        Argument innerArg = args.get(keys.get(keys.size() - 1));
-	        if(innerArg instanceof LiteralArgument) {
-	        	String str = ((LiteralArgument) innerArg).getLiteral();
-	        	inner = getLiteralArgumentBuilder(str).executes(command);
-	        } else {
-	        	if(innerArg instanceof SuggestedStringArgument) {
-	        		inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), (SuggestedStringArgument) innerArg, permissions).executes(command);
-        		} else if(innerArg instanceof FunctionArgument) {
-        			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), getFunctionsSuggestionProvider(permissions)).executes(command);
-				} else if(innerArg instanceof DynamicSuggestedStringArgument) {
-        			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), (DynamicSuggestedStringArgument) innerArg, permissions).executes(command);
-				} else {
-					if(innerArg instanceof OverrideableSuggestions) {
-						inner = getRequiredArgumentBuilderWithOverride(keys.get(keys.size() - 1), innerArg, permissions).executes(command);
-					} else {
-						//It's basically all about this code here
-						inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), permissions).requires(
-								z -> {return true;}
-								).executes(command);
-					}
+        //Link the last element to the executor
+        ArgumentBuilder inner;
+        Argument innerArg = args.get(keys.get(keys.size() - 1));
+        if(innerArg instanceof LiteralArgument) {
+        	String str = ((LiteralArgument) innerArg).getLiteral();
+        	inner = getLiteralArgumentBuilder(str).executes(command);
+        } else {
+	
+			//It's basically all about this code here
+			
+			inner = RequiredArgumentBuilder.argument(keys.get(keys.size() - 1), innerArg.getRawType()).requires(clw -> {
+				//Get the CommandSender via NMS
+				CommandSender sender = null;
+				
+				try {
+					sender = (CommandSender) getMethod(getNMSClass("CommandListenerWrapper"), "getBukkitSender").invoke(clw);
+				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+						| SecurityException e) {
+					e.printStackTrace(System.out);
 				}
-	        }
+				return sender.hasPermission("mytestcmdperm3");
+				
+			}).executes(command);
+        }
 
-	        //Link everything else up, except the first
-	        ArgumentBuilder outer = inner;
-	        for(int i = keys.size() - 2; i >= 0; i--) {
-	        	Argument outerArg = args.get(keys.get(i));
-	        	if(outerArg instanceof LiteralArgument) {
-	        		String str = ((LiteralArgument) outerArg).getLiteral();
-	        		outer = getLiteralArgumentBuilder(str).then(outer);
-	        	} else {
-	        		if(outerArg instanceof SuggestedStringArgument) {
-	        			outer = getRequiredArgumentBuilder(keys.get(i), (SuggestedStringArgument) outerArg, permissions).then(outer);
-	        		} else if(outerArg instanceof FunctionArgument) {
-	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), getFunctionsSuggestionProvider(permissions)).then(outer);
-	        		} else if(outerArg instanceof DynamicSuggestedStringArgument) {
-	        			outer = getRequiredArgumentBuilder(keys.get(i), (DynamicSuggestedStringArgument) outerArg, permissions).then(outer);
-					} else {
-						if(outerArg instanceof OverrideableSuggestions) {
-							outer = getRequiredArgumentBuilderWithOverride(keys.get(i), outerArg, permissions).then(outer);
-						} else {
-							//It's basically all about this other code code here
-							outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), permissions).then(outer);
-						}
-	        		}
-	        	}
-	        }        
-	        
-	        //Link command name to first argument and register        
-	        
-	        //TODO: What if requires(permission) is DIFFERENT FOR DIFFERENT ARGUMENTS?!???????!!!!!!
-	        LiteralCommandNode resultantNode = this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(commandName).requires(permission).then(outer));
-	        
-	        //Register aliases
-	        for(String str : aliases) {
-	        	this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(str).requires(permission).redirect(resultantNode));
-	        }
-		}
+        //Link everything else up, except the first
+        ArgumentBuilder outer = inner;
+//        for(int i = keys.size() - 2; i >= 0; i--) {
+//        	Argument outerArg = args.get(keys.get(i));
+//        	if(outerArg instanceof LiteralArgument) {
+//        		String str = ((LiteralArgument) outerArg).getLiteral();
+//        		outer = getLiteralArgumentBuilder(str).then(outer);
+//        	} else {
+//        		
+//        		
+//        		if(keys.get(i).equals("integer")) {
+//        			inner = RequiredArgumentBuilder.argument(keys.get(i), outerArg.getRawType()).requires(clw -> {
+//        				//Get the CommandSender via NMS
+//        				CommandSender sender = null;
+//        				
+//        				try {
+//        					sender = (CommandSender) getMethod(getNMSClass("CommandListenerWrapper"), "getBukkitSender").invoke(clw);
+//        				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+//        						| SecurityException e) {
+//        					e.printStackTrace(System.out);
+//        				}
+//        				return sender.hasPermission("mytestcmdperm2");
+//        				
+//        			}).executes(command);
+//        		} else if(keys.get(i).equals("target")) {
+//        			inner = RequiredArgumentBuilder.argument(keys.get(i), outerArg.getRawType()).requires(clw -> {
+//        				//Get the CommandSender via NMS
+//        				CommandSender sender = null;
+//        				
+//        				try {
+//        					sender = (CommandSender) getMethod(getNMSClass("CommandListenerWrapper"), "getBukkitSender").invoke(clw);
+//        				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+//        						| SecurityException e) {
+//        					e.printStackTrace(System.out);
+//        				}
+//        				return sender.hasPermission("mytestcmdperm1");
+//        				
+//        			}).executes(command);
+//        		} else {
+//        			System.out.println("Error in command building");
+//        		}
+//        		
+//        		
+//        		
+//        		
+//        	}
+//        }        
+//        
+        //Link command name to first argument and register        
+        
+        //TODO: What if requires(permission) is DIFFERENT FOR DIFFERENT ARGUMENTS?!???????!!!!!!
+        LiteralCommandNode resultantNode = this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(commandName).requires(permission).then(outer));
+        
+        //Register aliases
+//        for(String str : aliases) {
+//        	this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(str).requires(permission).redirect(resultantNode));
+//        }
+//	
         
 		//Produce the commandDispatch.json file for debug purposes
 		if(CommandAPIMain.getConfiguration().willCreateDispatcherFile()) {
