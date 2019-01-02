@@ -63,6 +63,7 @@ import io.github.jorelali.commandapi.api.arguments.FunctionArgument;
 import io.github.jorelali.commandapi.api.arguments.ItemStackArgument;
 import io.github.jorelali.commandapi.api.arguments.LiteralArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationArgument;
+import io.github.jorelali.commandapi.api.arguments.LocationArgument.LocationType;
 import io.github.jorelali.commandapi.api.arguments.OverrideableSuggestions;
 import io.github.jorelali.commandapi.api.arguments.ParticleArgument;
 import io.github.jorelali.commandapi.api.arguments.PlayerArgument;
@@ -268,15 +269,33 @@ public final class SemiReflector {
 							e.printStackTrace(System.out);
 						}
 					} else if(entry.getValue() instanceof LocationArgument) {
-						try {
-							Object vec3D = getMethod(getNMSClass("ArgumentVec3"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-							double x = getField(vec3D.getClass(), "x").getDouble(vec3D);
-							double y = getField(vec3D.getClass(), "y").getDouble(vec3D);
-							double z = getField(vec3D.getClass(),"z").getDouble(vec3D);
-							World world = getCommandSenderWorld(sender);
-							argList.add(new Location(world, x, y, z));
-						} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-							e.printStackTrace(System.out);
+						
+						LocationType locationType = ((LocationArgument) entry.getValue()).getLocationType();
+						switch(locationType) {
+							case BLOCK_POSITION:
+								try {
+									Object blockPosition = getMethod(getNMSClass("ArgumentPosition"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+									int x = (int) getMethod(getNMSClass("BaseBlockPosition"), "getX").invoke(blockPosition);
+									int y = (int) getMethod(getNMSClass("BaseBlockPosition"), "getY").invoke(blockPosition);
+									int z = (int) getMethod(getNMSClass("BaseBlockPosition"), "getZ").invoke(blockPosition);
+									World world = getCommandSenderWorld(sender);
+									argList.add(new Location(world, x, y, z));
+								} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+									e.printStackTrace(System.out);
+								}
+								break;
+							case PRECISE_POSITION:
+								try {
+									Object vec3D = getMethod(getNMSClass("ArgumentVec3"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+									double x = getField(vec3D.getClass(), "x").getDouble(vec3D);
+									double y = getField(vec3D.getClass(), "y").getDouble(vec3D);
+									double z = getField(vec3D.getClass(),"z").getDouble(vec3D);
+									World world = getCommandSenderWorld(sender);
+									argList.add(new Location(world, x, y, z));
+								} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+									e.printStackTrace(System.out);
+								}
+								break;
 						}
 					} else if(entry.getValue() instanceof EntityTypeArgument) {
 						try {
