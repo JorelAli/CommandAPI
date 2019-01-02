@@ -45,6 +45,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
@@ -67,7 +68,6 @@ import io.github.jorelali.commandapi.api.arguments.ParticleArgument;
 import io.github.jorelali.commandapi.api.arguments.PlayerArgument;
 import io.github.jorelali.commandapi.api.arguments.PotionEffectArgument;
 import io.github.jorelali.commandapi.api.arguments.SuggestedStringArgument;
-import io.github.jorelali.commandapi.api.exceptions.CantFindPlayerException;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 
@@ -300,7 +300,7 @@ public final class SemiReflector {
 							UUID uuid = (UUID) getMethod(first.getClass(), "getId").invoke(first);
 							Player target = Bukkit.getPlayer(uuid);
 							if(target == null) {
-								throw new CantFindPlayerException((String) getMethod(first.getClass(), "getName").invoke(first));
+								throw ((SimpleCommandExceptionType) getField(getNMSClass("ArgumentProfile"), "a").get(null)).create();
 							}
 							argList.add(target);
 						} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
