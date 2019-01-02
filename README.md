@@ -43,10 +43,13 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 | 1.5     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.5/CommandAPI.jar) | [Version 1.5 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.5%20Documentation.md) |
 | 1.6     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.6/CommandAPI.jar) | [Version 1.6 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.6%20Documentation.md) |
 | 1.7.2     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.7.2/CommandAPI.jar) | [Version 1.7 - 1.7.2 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.7%20Documentation.md) |
-| 1.8.1 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.8.1/CommandAPI.jar) | [Version 1.8 - 1.8.1 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.8%20Documentation.md) |
+| 1.8.2 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.8.2/CommandAPI.jar) | [Version 1.8 - 1.8.2 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.8%20Documentation.md) |
 
 ## Changelog
 
+* Version 1.8.2
+  * Fix bug with PlayerArgument when player cannot be found
+  * Adds LocationArgument options for block precision or exact precision
 * Version 1.8.1
   * Fix permissions for argument from 1.8
   * Neaten up logging with verbose outputs
