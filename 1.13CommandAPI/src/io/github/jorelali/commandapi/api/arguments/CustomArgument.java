@@ -52,7 +52,6 @@ public class CustomArgument<S> implements Argument, OverrideableSuggestions {
 		}
 	}
 	
-	private Class<S> clazz;
 	private Function<String, S> parser;
 	private Predicate<String> predicate;
 	private MessageBuilder builder;
@@ -60,8 +59,7 @@ public class CustomArgument<S> implements Argument, OverrideableSuggestions {
 	/**
 	 * A Custom argument.
 	 */
-	public CustomArgument(Class<S> clazz, Function<String, S> parser, Predicate<String> predicate, MessageBuilder builder) {
-		this.clazz = clazz;
+	public CustomArgument(Function<String, S> parser, Predicate<String> predicate, MessageBuilder builder) {
 		this.parser = parser;
 		this.predicate = predicate;
 		this.builder = builder;
@@ -70,15 +68,17 @@ public class CustomArgument<S> implements Argument, OverrideableSuggestions {
 	/**
 	 * A Custom argument.
 	 */
-	public CustomArgument(Class<S> clazz, Function<String, S> parser, Predicate<String> predicate) {
-		this(clazz, parser, predicate, new MessageBuilder("Error in command syntax: ").appendArgInput().appendHere());
+	public CustomArgument(Function<String, S> parser, Predicate<String> predicate) {
+		//TODO: Fix this ... say something like...
+		//MessageBuilder.(Error in cmd syntax).appendFullInput.AtIndexOf(argInput + argInput.length).appendHere().truncateEverythingElse
+		this(parser, predicate, new MessageBuilder("Error in command syntax: ").appendArgInput().appendHere());
 	}
 	
 	/**
 	 * A Custom argument.
 	 */
-	public CustomArgument(Class<S> clazz, Function<String, S> parser) {
-		this(clazz, parser, (input) -> true);
+	public CustomArgument(Function<String, S> parser) {
+		this(parser, (input) -> true);
 	}
 	
 	@Override
@@ -88,7 +88,7 @@ public class CustomArgument<S> implements Argument, OverrideableSuggestions {
 
 	@Override
 	public Class<S> getPrimitiveType() {
-		return clazz;
+		return null;
 	}
 
 	@Override

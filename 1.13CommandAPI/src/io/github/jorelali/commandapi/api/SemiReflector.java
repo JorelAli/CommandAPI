@@ -465,7 +465,7 @@ public final class SemiReflector {
 							String errorMsg = arg.getErrorMessage().toString().replace("%input%", result).replace("%finput%", cmdCtx.getInput()).replace("%here%", "<--[HERE]");
 							throw new SimpleCommandExceptionType(() -> {return errorMsg;}).create();
 						} else {
-							argList.add(arg.getPrimitiveType().cast(arg.getParser().apply(result)));
+							argList.add(arg.getParser().apply(result));
 						}
 						
 					}
