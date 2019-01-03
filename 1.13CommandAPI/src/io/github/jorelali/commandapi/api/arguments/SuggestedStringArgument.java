@@ -6,7 +6,13 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 
 import io.github.jorelali.commandapi.api.CommandPermission;
 
+/**
+ * Deprecated as of 1.9, due to implementation of OverrideableSuggestions. Use <br>
+ * <code>new StringArgument().overrideSuggestions(String...)</code><br>
+ * instead
+ */
 @SuppressWarnings("unchecked")
+@Deprecated
 public class SuggestedStringArgument implements Argument {
 
 	com.mojang.brigadier.arguments.ArgumentType<?> rawType;
