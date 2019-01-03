@@ -133,4 +133,11 @@ public class CustomArgument<S> implements Argument, OverrideableSuggestions {
 	public String[] getOverriddenSuggestions() {
 		return suggestions;
 	}
+	
+	/*
+	 * TODO: 
+	 * - Add DynamicArguments
+	 * - Add documentation to constructor, getParser(), getPredicate etc... methods
+	 * 
+	 */
 }
