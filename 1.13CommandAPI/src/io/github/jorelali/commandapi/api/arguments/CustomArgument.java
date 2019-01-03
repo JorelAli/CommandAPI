@@ -67,6 +67,20 @@ public class CustomArgument<S> implements Argument, OverrideableSuggestions {
 		this.builder = builder;
 	}
 	
+	/**
+	 * A Custom argument.
+	 */
+	public CustomArgument(Class<S> clazz, Function<String, S> parser, Predicate<String> predicate) {
+		this(clazz, parser, predicate, new MessageBuilder("Error in command syntax: ").appendArgInput().appendHere());
+	}
+	
+	/**
+	 * A Custom argument.
+	 */
+	public CustomArgument(Class<S> clazz, Function<String, S> parser) {
+		this(clazz, parser, (input) -> true);
+	}
+	
 	@Override
 	public <T> com.mojang.brigadier.arguments.ArgumentType<T> getRawType() {
 		return (com.mojang.brigadier.arguments.ArgumentType<T>) StringArgumentType.string();
