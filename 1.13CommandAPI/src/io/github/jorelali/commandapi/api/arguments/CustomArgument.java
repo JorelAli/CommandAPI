@@ -1,15 +1,19 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import java.util.function.Function;
-import java.util.function.Predicate;
-
+import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
 import io.github.jorelali.commandapi.api.CommandPermission;
 
 @SuppressWarnings("unchecked")
 public class CustomArgument<S> implements Argument, OverrideableSuggestions {
 
+	/**
+	 * MessageBuilder used for generating fancy error messages for CustomArguments
+	 */
 	public static class MessageBuilder {
 		StringBuilder builder;
 		
@@ -52,33 +56,55 @@ public class CustomArgument<S> implements Argument, OverrideableSuggestions {
 		}
 	}
 	
-	private Function<String, S> parser;
-	private Predicate<String> predicate;
-	private MessageBuilder builder;
+	@SuppressWarnings("serial")
+	public static class CustomArgumentException extends Exception {
+
+		final String errorMessage;
+		final MessageBuilder errorMessageBuilder;
+		
+		public CustomArgumentException(String errorMessage) {
+			this.errorMessage = errorMessage;
+			this.errorMessageBuilder = null;
+		}
+		
+		public CustomArgumentException(MessageBuilder errorMessage) {
+			this.errorMessage = null;
+			this.errorMessageBuilder = errorMessage;
+		}
+		
+		public CommandSyntaxException toCommandSyntax(String result, @SuppressWarnings("rawtypes") CommandContext cmdCtx) {
+			if(errorMessage == null) {
+				//Deal with MessageBuilder
+				String errorMsg = errorMessageBuilder.toString().replace("%input%", result).replace("%finput%", cmdCtx.getInput()).replace("%here%", "<--[HERE]");
+				return new SimpleCommandExceptionType(() -> {return errorMsg;}).create();
+			} else {
+				//Deal with String
+				return new SimpleCommandExceptionType(new LiteralMessage(errorMessage)).create();
+			}
+		}
+		
+	}
+	
+	@FunctionalInterface
+	public static interface CustomArgumentFunction<I, O> {
+		public O apply(I i) throws CustomArgumentException;
+	}
+	
+	public static void throwError(String errorMessage) throws CustomArgumentException {
+		throw new CustomArgumentException(errorMessage);
+	}
+	
+	public static void throwError(MessageBuilder errorMessage) throws CustomArgumentException {
+		throw new CustomArgumentException(errorMessage);
+	}
+	
+	private CustomArgumentFunction<String, S> parser;
 	
 	/**
 	 * A Custom argument.
 	 */
-	public CustomArgument(Function<String, S> parser, Predicate<String> predicate, MessageBuilder builder) {
+	public CustomArgument(CustomArgumentFunction<String, S> parser) {
 		this.parser = parser;
-		this.predicate = predicate;
-		this.builder = builder;
-	}
-	
-	/**
-	 * A Custom argument.
-	 */
-	public CustomArgument(Function<String, S> parser, Predicate<String> predicate) {
-		//TODO: Fix this ... say something like...
-		//MessageBuilder.(Error in cmd syntax).appendFullInput.AtIndexOf(argInput + argInput.length).appendHere().truncateEverythingElse
-		this(parser, predicate, new MessageBuilder("Error in command syntax: ").appendArgInput().appendHere());
-	}
-	
-	/**
-	 * A Custom argument.
-	 */
-	public CustomArgument(Function<String, S> parser) {
-		this(parser, (input) -> true);
 	}
 	
 	@Override
@@ -96,16 +122,8 @@ public class CustomArgument<S> implements Argument, OverrideableSuggestions {
 		return false;
 	}
 	
-	public Function<String, S> getParser() {
+	public CustomArgumentFunction<String, S> getParser() {
 		return parser;
-	}
-	
-	public Predicate<String> getPredicate() {
-		return predicate;
-	}
-	
-	public MessageBuilder getErrorMessage() {
-		return builder;
 	}
 	
 	private CommandPermission permission = CommandPermission.NONE;

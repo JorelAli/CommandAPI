@@ -56,6 +56,8 @@ import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.ChatColorArgument;
 import io.github.jorelali.commandapi.api.arguments.ChatComponentArgument;
 import io.github.jorelali.commandapi.api.arguments.CustomArgument;
+import io.github.jorelali.commandapi.api.arguments.CustomArgument.CustomArgumentException;
+import io.github.jorelali.commandapi.api.arguments.CustomArgument.MessageBuilder;
 import io.github.jorelali.commandapi.api.arguments.DynamicSuggestedStringArgument;
 import io.github.jorelali.commandapi.api.arguments.EnchantmentArgument;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument;
@@ -74,7 +76,7 @@ import io.github.jorelali.commandapi.api.arguments.SuggestedStringArgument;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({"rawtypes", "unchecked", "deprecation"})
 /**
  * Class to access the main methods in NMS. The wrapper's
  * implementations occur here.
@@ -461,13 +463,16 @@ public final class SemiReflector {
 					} else if(entry.getValue() instanceof CustomArgument) {
 						CustomArgument arg = (CustomArgument) entry.getValue();
 						String result = (String) cmdCtx.getArgument(entry.getKey(), String.class);
-						if(!arg.getPredicate().test(result)) {
-							String errorMsg = arg.getErrorMessage().toString().replace("%input%", result).replace("%finput%", cmdCtx.getInput()).replace("%here%", "<--[HERE]");
-							throw new SimpleCommandExceptionType(() -> {return errorMsg;}).create();
-						} else {
+						try {
 							argList.add(arg.getParser().apply(result));
+						} catch(CustomArgumentException e) {
+							throw e.toCommandSyntax(result, cmdCtx);
+						} catch(RuntimeException e) {
+							String errorMsg = new MessageBuilder("Error in executing command /")
+									.appendFullInput().append(" - ").appendArgInput().appendHere().toString()
+									.replace("%input%", result).replace("%finput%", cmdCtx.getInput()).replace("%here%", "<--[HERE]");
+							throw new SimpleCommandExceptionType(() -> {return errorMsg;}).create();
 						}
-						
 					}
 				}
 			}
