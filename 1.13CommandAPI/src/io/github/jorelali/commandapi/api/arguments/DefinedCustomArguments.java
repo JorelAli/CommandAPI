@@ -43,6 +43,13 @@ public class DefinedCustomArguments {
 	 */
 	
 	public static CustomArgument<Sound> soundArgument() {
+		
+		
+		return new CustomArgument<Sound>((input) -> {
+			
+			return null;
+		}, true);
+		
 		//TODO: Use NMS here because it's way more reliable than the Sound enum:
 		
 		/*
@@ -53,7 +60,6 @@ public class DefinedCustomArguments {
 			 * guarantee values will not be removed from this Enum. As such, you should not
 			 * depend on the ordinal values of this class.
 		 */
-		return null;
 	}
 	
 }

@@ -784,23 +784,9 @@ public final class SemiReflector {
 			return getSuggestionsBuilder(builder, type.getDynamicSuggestions().getSuggestions());
 		};
 		
-		return RequiredArgumentBuilder.argument(argumentName, type.getRawType()).requires(clw -> {
-			return permissionCheck(getCommandSender(clw), permission);
-		}).suggests(provider);
+		return getRequiredArgumentBuilder(argumentName, type.getRawType(), permission, provider);
 	}
-	
-	//Gets a RequiredArgumentBuilder for a SuggestedStringArgument
-//	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, SuggestedStringArgument type, CommandPermission permission){
-//		//Use NMS ICompletionProvider.a() on SuggestedString
-//		SuggestionProvider provider = (context, builder) -> {
-//			return getSuggestionsBuilder(builder, type.getSuggestions());
-//		};
-//		
-//		return RequiredArgumentBuilder.argument(argumentName, type.getRawType()).requires(clw -> {
-//			return permissionCheck(getCommandSender(clw), permission);
-//		}).suggests(provider);
-//	}
-	
+		
 	//Gets a RequiredArgumentBuilder for an argument, given a SuggestionProvider
 	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilderForFunctions(String argumentName, ArgumentType<T> type, CommandPermission permission){
 		
@@ -820,6 +806,11 @@ public final class SemiReflector {
 			}
 		};
 		
+		return getRequiredArgumentBuilder(argumentName, type, permission, provider);
+	}
+	
+	//Gets a RequiredArgumentBuilder for an argument, given a SuggestionProvider
+	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, ArgumentType<T> type, CommandPermission permission, SuggestionProvider provider){
 		return RequiredArgumentBuilder.argument(argumentName, type).requires(clw -> {
 			return permissionCheck(getCommandSender(clw), permission);
 		}).suggests(provider);
