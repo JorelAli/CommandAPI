@@ -58,6 +58,8 @@ import io.github.jorelali.commandapi.api.arguments.ChatComponentArgument;
 import io.github.jorelali.commandapi.api.arguments.CustomArgument;
 import io.github.jorelali.commandapi.api.arguments.CustomArgument.CustomArgumentException;
 import io.github.jorelali.commandapi.api.arguments.CustomArgument.MessageBuilder;
+import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument;
+import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
 import io.github.jorelali.commandapi.api.arguments.DynamicSuggestedStringArgument;
 import io.github.jorelali.commandapi.api.arguments.EnchantmentArgument;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument;
@@ -67,6 +69,7 @@ import io.github.jorelali.commandapi.api.arguments.ItemStackArgument;
 import io.github.jorelali.commandapi.api.arguments.LiteralArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationArgument.LocationType;
+import io.github.jorelali.commandapi.api.arguments.LootTableArgument;
 import io.github.jorelali.commandapi.api.arguments.OverrideableSuggestions;
 import io.github.jorelali.commandapi.api.arguments.ParticleArgument;
 import io.github.jorelali.commandapi.api.arguments.PlayerArgument;
@@ -479,6 +482,22 @@ public final class SemiReflector {
 									.replace("%input%", result).replace("%finput%", cmdCtx.getInput());
 							throw new SimpleCommandExceptionType(() -> {return errorMsg;}).create();
 						}
+					} else if(entry.getValue() instanceof LootTableArgument) {
+						
+						
+						
+						CustomArgument arg = (CustomArgument) entry.getValue();
+						String result = (String) cmdCtx.getArgument(entry.getKey(), String.class);
+						try {
+							argList.add(arg.getParser().apply(result));
+						} catch(CustomArgumentException e) {
+							throw e.toCommandSyntax(result, cmdCtx);
+						} catch(Exception e) {
+							String errorMsg = new MessageBuilder("Error in executing command ")
+									.appendFullInput().append(" - ").appendArgInput().appendHere().toString()
+									.replace("%input%", result).replace("%finput%", cmdCtx.getInput());
+							throw new SimpleCommandExceptionType(() -> {return errorMsg;}).create();
+						}
 					}
 				}
 			}
@@ -666,22 +685,25 @@ public final class SemiReflector {
 
 	        //Link the last element to the executor
 	        ArgumentBuilder inner;
-	        Argument innerArg = args.get(keys.get(keys.size() - 1));
-	        if(innerArg instanceof LiteralArgument) {
-	        	String str = ((LiteralArgument) innerArg).getLiteral();
-	        	inner = getLiteralArgumentBuilderArgument(str, innerArg.getArgumentPermission()).executes(command);
-	        } else {
-	        	if(innerArg instanceof FunctionArgument) {
-        			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), innerArg.getArgumentPermission(), ReflectedSuggestionProviders.FUNCTION).executes(command);
-				} else if(innerArg instanceof DynamicSuggestedStringArgument) {
-        			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), (DynamicSuggestedStringArgument) innerArg, innerArg.getArgumentPermission()).executes(command);
-				} else {
-					if(innerArg instanceof OverrideableSuggestions) {
-						inner = getRequiredArgumentBuilderWithOverride(keys.get(keys.size() - 1), innerArg, innerArg.getArgumentPermission()).executes(command);
+	        //New scope used here to prevent innerArg accidentally being used below
+	        {
+		        Argument innerArg = args.get(keys.get(keys.size() - 1));
+		        if(innerArg instanceof LiteralArgument) {
+		        	String str = ((LiteralArgument) innerArg).getLiteral();
+		        	inner = getLiteralArgumentBuilderArgument(str, innerArg.getArgumentPermission()).executes(command);
+		        } else {
+		        	if(innerArg instanceof CustomProvidedArgument) {
+	        			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), innerArg.getArgumentPermission(), ((CustomProvidedArgument) innerArg).getSuggestionProvider()).executes(command);
+					} else if(innerArg instanceof DynamicSuggestedStringArgument) {
+	        			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), (DynamicSuggestedStringArgument) innerArg, innerArg.getArgumentPermission()).executes(command);
 					} else {
-						inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), innerArg.getArgumentPermission()).executes(command);
+						if(innerArg instanceof OverrideableSuggestions) {
+							inner = getRequiredArgumentBuilderWithOverride(keys.get(keys.size() - 1), innerArg, innerArg.getArgumentPermission()).executes(command);
+						} else {
+							inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), innerArg.getArgumentPermission()).executes(command);
+						}
 					}
-				}
+		        }
 	        }
 
 	        //Link everything else up, except the first
@@ -692,11 +714,8 @@ public final class SemiReflector {
 	        		String str = ((LiteralArgument) outerArg).getLiteral();
 	        		outer = getLiteralArgumentBuilderArgument(str, outerArg.getArgumentPermission()).then(outer);
 	        	} else {
-//	        		if(outerArg instanceof SuggestedStringArgument) {
-//	        			outer = getRequiredArgumentBuilder(keys.get(i), (SuggestedStringArgument) outerArg, outerArg.getArgumentPermission()).then(outer);
-//	        		} else 
-	        		if(outerArg instanceof FunctionArgument) {
-	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), outerArg.getArgumentPermission(), ReflectedSuggestionProviders.FUNCTION).then(outer);
+	        		if(outerArg instanceof CustomProvidedArgument) {
+	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), outerArg.getArgumentPermission(), ((CustomProvidedArgument) outerArg).getSuggestionProvider()).then(outer);
 	        		} else if(outerArg instanceof DynamicSuggestedStringArgument) {
 	        			outer = getRequiredArgumentBuilder(keys.get(i), (DynamicSuggestedStringArgument) outerArg, outerArg.getArgumentPermission()).then(outer);
 					}  else {
@@ -757,11 +776,7 @@ public final class SemiReflector {
 		return builder.buildFuture();
 	}
 	
-	private enum ReflectedSuggestionProviders {
-		FUNCTION, RECIPES, SOUNDS, ADVANCEMENTS, LOOT_TABLES;
-	}
-	
-	private SuggestionProvider getSuggestionProvider(ReflectedSuggestionProviders provider) {
+	private SuggestionProvider getSuggestionProvider(SuggestionProviders provider) {
 		switch(provider) {
 			case FUNCTION:
 				return (context, builder) -> {
@@ -870,7 +885,7 @@ public final class SemiReflector {
 	}
 		
 	//Gets a RequiredArgumentBuilder for an argument, given a SuggestionProvider
-	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, ArgumentType<T> type, CommandPermission permission, ReflectedSuggestionProviders provider){
+	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, ArgumentType<T> type, CommandPermission permission, SuggestionProviders provider){
 		return getRequiredArgumentBuilder(argumentName, type, permission, getSuggestionProvider(provider));
 	}
 	
