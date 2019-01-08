@@ -12,39 +12,75 @@ import io.github.jorelali.commandapi.api.CommandPermission;
 public class CustomArgument<S> implements Argument, OverrideableSuggestions {
 
 	/**
-	 * MessageBuilder used for generating fancy error messages for CustomArguments
+	 * MessageBuilder is used to create error messages for invalid argument inputs
 	 */
 	public static class MessageBuilder {
 		StringBuilder builder;
 		
+		/**
+		 * Create a blank message
+		 */
 		public MessageBuilder() {
 			builder = new StringBuilder();
 		}
 		
+		/**
+		 * Create a message with an input string
+		 * @param str The string to start the message with
+		 */
 		public MessageBuilder(String str) {
 			builder = new StringBuilder(str);
 		}
 		
+		/**
+		 * Appends the argument input that the CommandSender used in this command.<br>
+		 * For example, if <code>/foo bar</code> was executed and an error occurs
+		 * with the CustomArgument <code>bar</code>, then the arg input will append
+		 * <code>bar</code> to the end of the message.<br><br> This input is determined
+		 * at runtime, and is stored as <code>%input%</code> until executed 
+		 * @return A reference to this object
+		 */
 		public MessageBuilder appendArgInput() {
 			builder.append("%input%");
 			return this;
 		}
 		
+		/**
+		 * Appends the whole input that the CommandSender used in this command.<br>
+		 * For example, if <code>/foo bar</code> was executed, then <code>foo bar</code> will be
+		 * appended to the end of the message.<br><br> This input is determined
+		 * at runtime, and is stored as <code>%finput%</code> until executed 
+		 * @return A reference to this object
+		 */
 		public MessageBuilder appendFullInput() {
 			builder.append("%finput%");
 			return this;
 		}
 		
+		/**
+		 * Appends <code><--[HERE]</code> to the end of the message
+		 * @return A reference to this object
+		 */
 		public MessageBuilder appendHere() {
-			builder.append("%here%");
+			builder.append("<--[HERE]");
 			return this;
 		}
 		
+		/**
+		 * Appends a string to the end of this message
+		 * @param str The string to append to the end of this message
+		 * @return A reference to this object
+		 */
 		public MessageBuilder append(String str) {
 			builder.append(str);
 			return this;
 		}
 		
+		/**
+		 * Appends an object to the end of this message
+		 * @param obj The object to append to the end of this message
+		 * @return A reference to this object
+		 */
 		public MessageBuilder append(Object obj) {
 			builder.append(obj);
 			return this;
@@ -62,20 +98,20 @@ public class CustomArgument<S> implements Argument, OverrideableSuggestions {
 		final String errorMessage;
 		final MessageBuilder errorMessageBuilder;
 		
-		public CustomArgumentException(String errorMessage) {
+		private CustomArgumentException(String errorMessage) {
 			this.errorMessage = errorMessage;
 			this.errorMessageBuilder = null;
 		}
 		
-		public CustomArgumentException(MessageBuilder errorMessage) {
+		private CustomArgumentException(MessageBuilder errorMessage) {
 			this.errorMessage = null;
 			this.errorMessageBuilder = errorMessage;
 		}
 		
-		public CommandSyntaxException toCommandSyntax(String result, @SuppressWarnings("rawtypes") CommandContext cmdCtx) {
+		public CommandSyntaxException toCommandSyntax(String result, CommandContext<?> cmdCtx) {
 			if(errorMessage == null) {
 				//Deal with MessageBuilder
-				String errorMsg = errorMessageBuilder.toString().replace("%input%", result).replace("%finput%", cmdCtx.getInput()).replace("%here%", "<--[HERE]");
+				String errorMsg = errorMessageBuilder.toString().replace("%input%", result).replace("%finput%", cmdCtx.getInput());
 				return new SimpleCommandExceptionType(() -> {return errorMsg;}).create();
 			} else {
 				//Deal with String
@@ -90,10 +126,24 @@ public class CustomArgument<S> implements Argument, OverrideableSuggestions {
 		public O apply(I i) throws CustomArgumentException;
 	}
 	
+	/**
+	 * Throws an error to be handled by the command execution handler. When this error
+	 * is thrown, the original command is <i>not</i> executed and the provided error message
+	 * is displayed to the CommandSender
+	 * @param errorMessage The error message to display to the CommandSender
+	 * @throws CustomArgumentException An exception that is handled internally
+	 */
 	public static void throwError(String errorMessage) throws CustomArgumentException {
 		throw new CustomArgumentException(errorMessage);
 	}
 	
+	/**
+	 * Throws an error to be handled by the command execution handler. When this error
+	 * is thrown, the original command is <i>not</i> executed and the provided error message
+	 * is displayed to the CommandSender
+	 * @param errorMessage The error message to display to the CommandSender
+	 * @throws CustomArgumentException An exception that is handled internally
+	 */
 	public static void throwError(MessageBuilder errorMessage) throws CustomArgumentException {
 		throw new CustomArgumentException(errorMessage);
 	}
@@ -101,7 +151,12 @@ public class CustomArgument<S> implements Argument, OverrideableSuggestions {
 	private CustomArgumentFunction<String, S> parser;
 	
 	/**
-	 * A Custom argument.
+	 * Creates a CustomArgument with a valid parser
+	 * 
+	 * @param parser
+	 *            A CustomArgumentFunction that maps a String to the object of your choice.
+	 *            The String input is the text that the CommandSender inputs for
+	 *            this argument
 	 */
 	public CustomArgument(CustomArgumentFunction<String, S> parser) {
 		this.parser = parser;
@@ -151,11 +206,4 @@ public class CustomArgument<S> implements Argument, OverrideableSuggestions {
 	public String[] getOverriddenSuggestions() {
 		return suggestions;
 	}
-	
-	/*
-	 * TODO: 
-	 * - Add DynamicArguments
-	 * - Add documentation to constructor, getParser(), getPredicate etc... methods
-	 * 
-	 */
 }

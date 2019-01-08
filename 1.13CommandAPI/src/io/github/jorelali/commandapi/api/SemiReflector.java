@@ -470,7 +470,7 @@ public final class SemiReflector {
 						} catch(RuntimeException e) {
 							String errorMsg = new MessageBuilder("Error in executing command /")
 									.appendFullInput().append(" - ").appendArgInput().appendHere().toString()
-									.replace("%input%", result).replace("%finput%", cmdCtx.getInput()).replace("%here%", "<--[HERE]");
+									.replace("%input%", result).replace("%finput%", cmdCtx.getInput());
 							throw new SimpleCommandExceptionType(() -> {return errorMsg;}).create();
 						}
 					}
