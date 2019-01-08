@@ -1,5 +1,7 @@
 package io.github.jorelali.commandapi.api.arguments;
 
+import com.mojang.brigadier.arguments.ArgumentType;
+
 import io.github.jorelali.commandapi.api.CommandPermission;
 
 public interface Argument {
@@ -7,7 +9,7 @@ public interface Argument {
 	/**
 	 * Returns the brigadier equivalent argument type
 	 */
-	public <T> com.mojang.brigadier.arguments.ArgumentType<T> getRawType();
+	public <T> ArgumentType<T> getRawType();
 	
 	/**
 	 * Returns the class of the primitive type that this enum represents

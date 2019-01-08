@@ -1,6 +1,7 @@
 package io.github.jorelali.commandapi.api.arguments;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
@@ -31,6 +32,28 @@ public class DefinedCustomArguments {
 				return scoreboard.getTeam(input);
 			}
 		}).overrideSuggestions(scoreboard.getTeams().stream().map(o -> o.getName()).toArray(String[]::new));
+	}
+	
+	/*
+	 * TODO:
+	 * LootTables
+	 * Advancements
+	 * Recipes
+	 * Sounds
+	 */
+	
+	public static CustomArgument<Sound> soundArgument() {
+		//TODO: Use NMS here because it's way more reliable than the Sound enum:
+		
+		/*
+		 * As stated in the Sound enum documentation:
+		 *  
+		 *   * WARNING: At any time, sounds may be added/removed from this Enum or even
+			 * MineCraft itself! There is no guarantee the sounds will play. There is no
+			 * guarantee values will not be removed from this Enum. As such, you should not
+			 * depend on the ordinal values of this class.
+		 */
+		return null;
 	}
 	
 }

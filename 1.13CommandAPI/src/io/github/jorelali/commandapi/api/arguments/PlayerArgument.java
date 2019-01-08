@@ -2,13 +2,15 @@ package io.github.jorelali.commandapi.api.arguments;
 
 import org.bukkit.entity.Player;
 
+import com.mojang.brigadier.arguments.ArgumentType;
+
 import io.github.jorelali.commandapi.api.CommandPermission;
 import io.github.jorelali.commandapi.api.SemiReflector;
 
 @SuppressWarnings("unchecked")
 public class PlayerArgument implements Argument, OverrideableSuggestions {
 
-	com.mojang.brigadier.arguments.ArgumentType<?> rawType;
+	ArgumentType<?> rawType;
 	
 	/**
 	 * A Player argument. Produces a single player, regardless of whether @a, @p, @r or @e is used.
@@ -18,8 +20,8 @@ public class PlayerArgument implements Argument, OverrideableSuggestions {
 	}
 	
 	@Override
-	public <T> com.mojang.brigadier.arguments.ArgumentType<T> getRawType() {
-		return (com.mojang.brigadier.arguments.ArgumentType<T>) rawType;
+	public <T> ArgumentType<T> getRawType() {
+		return (ArgumentType<T>) rawType;
 	}
 
 	@Override

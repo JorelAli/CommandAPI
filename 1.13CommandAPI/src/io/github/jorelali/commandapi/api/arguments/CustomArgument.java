@@ -1,12 +1,14 @@
 package io.github.jorelali.commandapi.api.arguments;
 
 import com.mojang.brigadier.LiteralMessage;
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
 import io.github.jorelali.commandapi.api.CommandPermission;
+import io.github.jorelali.commandapi.api.SemiReflector;
 
 @SuppressWarnings("unchecked")
 public class CustomArgument<S> implements Argument, OverrideableSuggestions {
@@ -149,6 +151,21 @@ public class CustomArgument<S> implements Argument, OverrideableSuggestions {
 	}
 	
 	private CustomArgumentFunction<String, S> parser;
+	private boolean keyed;
+	
+	/**
+	 * Creates a CustomArgument with a valid parser, defaults to non-keyed argument
+	 * 
+	 * @param parser
+	 *            A CustomArgumentFunction that maps a String to the object of your choice.
+	 *            The String input is the text that the CommandSender inputs for
+	 *            this argument
+	 *            
+	 * @see #CustomArgument(CustomArgumentFunction, boolean)
+	 */
+	public CustomArgument(CustomArgumentFunction<String, S> parser) {
+		this(parser, false);
+	}
 	
 	/**
 	 * Creates a CustomArgument with a valid parser
@@ -157,14 +174,22 @@ public class CustomArgument<S> implements Argument, OverrideableSuggestions {
 	 *            A CustomArgumentFunction that maps a String to the object of your choice.
 	 *            The String input is the text that the CommandSender inputs for
 	 *            this argument
+	 * @param keyed Whether this argument can accept Minecraft's <code>NamespacedKey</code> as
+	 * valid arguments
 	 */
-	public CustomArgument(CustomArgumentFunction<String, S> parser) {
+	public CustomArgument(CustomArgumentFunction<String, S> parser, boolean keyed) {
 		this.parser = parser;
+		this.keyed = keyed;
 	}
 	
 	@Override
-	public <T> com.mojang.brigadier.arguments.ArgumentType<T> getRawType() {
-		return (com.mojang.brigadier.arguments.ArgumentType<T>) StringArgumentType.string();
+	public <T> ArgumentType<T> getRawType() {
+		if(keyed) {
+			return (ArgumentType<T>) SemiReflector.getNMSArgumentInstance("ArgumentMinecraftKeyRegistered");
+		} else {
+			return (ArgumentType<T>) StringArgumentType.string();
+		}
+		
 	}
 
 	@Override

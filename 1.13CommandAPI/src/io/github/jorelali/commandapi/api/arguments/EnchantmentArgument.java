@@ -2,13 +2,15 @@ package io.github.jorelali.commandapi.api.arguments;
 
 import org.bukkit.enchantments.Enchantment;
 
+import com.mojang.brigadier.arguments.ArgumentType;
+
 import io.github.jorelali.commandapi.api.CommandPermission;
 import io.github.jorelali.commandapi.api.SemiReflector;
 
 @SuppressWarnings("unchecked")
 public class EnchantmentArgument implements Argument, OverrideableSuggestions {
 
-	com.mojang.brigadier.arguments.ArgumentType<?> rawType;
+	ArgumentType<?> rawType;
 	
 	/**
 	 * An Enchantment argument. Represents an enchantment for items 
@@ -18,8 +20,8 @@ public class EnchantmentArgument implements Argument, OverrideableSuggestions {
 	}
 	
 	@Override
-	public <T> com.mojang.brigadier.arguments.ArgumentType<T> getRawType() {
-		return (com.mojang.brigadier.arguments.ArgumentType<T>) rawType;
+	public <T> ArgumentType<T> getRawType() {
+		return (ArgumentType<T>) rawType;
 	}
 
 	@Override

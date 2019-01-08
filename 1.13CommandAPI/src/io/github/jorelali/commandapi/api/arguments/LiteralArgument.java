@@ -1,5 +1,7 @@
 package io.github.jorelali.commandapi.api.arguments;
 
+import com.mojang.brigadier.arguments.ArgumentType;
+
 import io.github.jorelali.commandapi.api.CommandPermission;
 import io.github.jorelali.commandapi.api.exceptions.BadLiteralException;
 
@@ -22,7 +24,7 @@ public class LiteralArgument implements Argument {
 	}
 	
 	@Override
-	public <T> com.mojang.brigadier.arguments.ArgumentType<T> getRawType() {
+	public <T> ArgumentType<T> getRawType() {
 		/*
 		 * The literal argument builder is NOT technically an argument.
 		 * Therefore, it doesn't have an ArgumentType.

@@ -1,5 +1,7 @@
 package io.github.jorelali.commandapi.api.arguments;
 
+import com.mojang.brigadier.arguments.ArgumentType;
+
 import io.github.jorelali.commandapi.api.CommandPermission;
 import io.github.jorelali.commandapi.api.FunctionWrapper;
 import io.github.jorelali.commandapi.api.SemiReflector;
@@ -7,7 +9,7 @@ import io.github.jorelali.commandapi.api.SemiReflector;
 @SuppressWarnings("unchecked")
 public class FunctionArgument implements Argument {
 
-	com.mojang.brigadier.arguments.ArgumentType<?> rawType;
+	ArgumentType<?> rawType;
 	
 	/**
 	 * A Minecraft 1.12 function. Plugin commands which plan to be used INSIDE
@@ -19,8 +21,8 @@ public class FunctionArgument implements Argument {
 	}
 	
 	@Override
-	public <T> com.mojang.brigadier.arguments.ArgumentType<T> getRawType() {
-		return (com.mojang.brigadier.arguments.ArgumentType<T>) rawType;
+	public <T> ArgumentType<T> getRawType() {
+		return (ArgumentType<T>) rawType;
 	}
 
 	@Override

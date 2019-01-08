@@ -770,7 +770,7 @@ public final class SemiReflector {
 	}
 	
 	//Gets a RequiredArgumentBuilder for an argument
-	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, com.mojang.brigadier.arguments.ArgumentType<T> type, CommandPermission permission) {
+	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, ArgumentType<T> type, CommandPermission permission) {
 		return RequiredArgumentBuilder.argument(argumentName, type).requires(clw -> {
 			return permissionCheck(getCommandSender(clw), permission);
 		});
@@ -802,7 +802,7 @@ public final class SemiReflector {
 //	}
 	
 	//Gets a RequiredArgumentBuilder for an argument, given a SuggestionProvider
-	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilderForFunctions(String argumentName, com.mojang.brigadier.arguments.ArgumentType<T> type, CommandPermission permission){
+	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilderForFunctions(String argumentName, ArgumentType<T> type, CommandPermission permission){
 		
 		SuggestionProvider provider = (context, builder) -> {
 			try {

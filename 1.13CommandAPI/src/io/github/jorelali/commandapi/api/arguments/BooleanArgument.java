@@ -1,5 +1,6 @@
 package io.github.jorelali.commandapi.api.arguments;
 
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 
 import io.github.jorelali.commandapi.api.CommandPermission;
@@ -7,7 +8,7 @@ import io.github.jorelali.commandapi.api.CommandPermission;
 @SuppressWarnings("unchecked")
 public class BooleanArgument implements Argument, OverrideableSuggestions {
 
-	com.mojang.brigadier.arguments.ArgumentType<?> rawType;
+	ArgumentType<?> rawType;
 	
 	/**
 	 * An Boolean argument
@@ -16,8 +17,8 @@ public class BooleanArgument implements Argument, OverrideableSuggestions {
 		rawType = BoolArgumentType.bool();
 	}
 	@Override
-	public <T> com.mojang.brigadier.arguments.ArgumentType<T> getRawType() {
-		return (com.mojang.brigadier.arguments.ArgumentType<T>) rawType;
+	public <T> ArgumentType<T> getRawType() {
+		return (ArgumentType<T>) rawType;
 	}
 
 	@Override
