@@ -467,8 +467,8 @@ public final class SemiReflector {
 							argList.add(arg.getParser().apply(result));
 						} catch(CustomArgumentException e) {
 							throw e.toCommandSyntax(result, cmdCtx);
-						} catch(RuntimeException e) {
-							String errorMsg = new MessageBuilder("Error in executing command /")
+						} catch(Exception e) {
+							String errorMsg = new MessageBuilder("Error in executing command ")
 									.appendFullInput().append(" - ").appendArgInput().appendHere().toString()
 									.replace("%input%", result).replace("%finput%", cmdCtx.getInput());
 							throw new SimpleCommandExceptionType(() -> {return errorMsg;}).create();
