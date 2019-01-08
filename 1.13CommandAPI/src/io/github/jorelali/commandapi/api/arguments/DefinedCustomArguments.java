@@ -6,6 +6,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
+import io.github.jorelali.commandapi.api.SemiReflector.ReflectedSuggestionProviders;
 import io.github.jorelali.commandapi.api.arguments.CustomArgument.MessageBuilder;
 
 public class DefinedCustomArguments {
@@ -34,6 +35,22 @@ public class DefinedCustomArguments {
 		}).overrideSuggestions(scoreboard.getTeams().stream().map(o -> o.getName()).toArray(String[]::new));
 	}
 	
+	public static class KeyedCustomArgument<S> extends CustomArgument<S> {
+		
+		private ReflectedSuggestionProviders provider;
+		
+		public KeyedCustomArgument(CustomArgumentFunction<String, S> parser, ReflectedSuggestionProviders provider) {
+			super(parser, true);
+			this.provider = provider;
+		}
+		
+		public ReflectedSuggestionProviders getProvider() {
+			return provider;
+		}
+		
+	}
+	
+	
 	/*
 	 * TODO:
 	 * LootTables
@@ -45,10 +62,10 @@ public class DefinedCustomArguments {
 	public static CustomArgument<Sound> soundArgument() {
 		
 		
-		return new CustomArgument<Sound>((input) -> {
+		return new KeyedCustomArgument<Sound>((input) -> {
 			
 			return null;
-		}, true);
+		}, ReflectedSuggestionProviders.SOUNDS);
 		
 		//TODO: Use NMS here because it's way more reliable than the Sound enum:
 		

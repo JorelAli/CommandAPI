@@ -34,8 +34,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.loot.LootTable;
-import org.bukkit.loot.LootTables;
 import org.bukkit.permissions.Permission;
 import org.bukkit.potion.PotionEffectType;
 
@@ -60,6 +58,7 @@ import io.github.jorelali.commandapi.api.arguments.ChatComponentArgument;
 import io.github.jorelali.commandapi.api.arguments.CustomArgument;
 import io.github.jorelali.commandapi.api.arguments.CustomArgument.CustomArgumentException;
 import io.github.jorelali.commandapi.api.arguments.CustomArgument.MessageBuilder;
+import io.github.jorelali.commandapi.api.arguments.DefinedCustomArguments.KeyedCustomArgument;
 import io.github.jorelali.commandapi.api.arguments.DynamicSuggestedStringArgument;
 import io.github.jorelali.commandapi.api.arguments.EnchantmentArgument;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument;
@@ -463,6 +462,12 @@ public final class SemiReflector {
 							e.printStackTrace(System.out);
 						}
 					} else if(entry.getValue() instanceof CustomArgument) {
+						
+						//TODO: Put a check here for if it's keyed or not. If it is, then you have to handle that.
+						//Result is not a entry.getKey(), String.class -> NMS MinecraftKeyRegistered.class thing
+						//
+						
+						
 						CustomArgument arg = (CustomArgument) entry.getValue();
 						String result = (String) cmdCtx.getArgument(entry.getKey(), String.class);
 						try {
@@ -671,8 +676,12 @@ public final class SemiReflector {
 //	        		inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), (SuggestedStringArgument) innerArg, innerArg.getArgumentPermission()).executes(command);
 //        		} else 
         		if(innerArg instanceof FunctionArgument) {
-        			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), innerArg.getArgumentPermission(), SuggestionProviders.FUNCTION).executes(command);
+        			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), innerArg.getArgumentPermission(), ReflectedSuggestionProviders.FUNCTION).executes(command);
 				} else if(innerArg instanceof DynamicSuggestedStringArgument) {
+        			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), (DynamicSuggestedStringArgument) innerArg, innerArg.getArgumentPermission()).executes(command);
+				} else if(innerArg instanceof KeyedCustomArgument) {
+					//deal with it.
+					//TODO
         			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), (DynamicSuggestedStringArgument) innerArg, innerArg.getArgumentPermission()).executes(command);
 				} else {
 					if(innerArg instanceof OverrideableSuggestions) {
@@ -695,8 +704,11 @@ public final class SemiReflector {
 //	        			outer = getRequiredArgumentBuilder(keys.get(i), (SuggestedStringArgument) outerArg, outerArg.getArgumentPermission()).then(outer);
 //	        		} else 
 	        		if(outerArg instanceof FunctionArgument) {
-	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), outerArg.getArgumentPermission(), SuggestionProviders.FUNCTION).then(outer);
+	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), outerArg.getArgumentPermission(), ReflectedSuggestionProviders.FUNCTION).then(outer);
 	        		} else if(outerArg instanceof DynamicSuggestedStringArgument) {
+	        			outer = getRequiredArgumentBuilder(keys.get(i), (DynamicSuggestedStringArgument) outerArg, outerArg.getArgumentPermission()).then(outer);
+					} else if(outerArg instanceof KeyedCustomArgument) {
+						//TODO
 	        			outer = getRequiredArgumentBuilder(keys.get(i), (DynamicSuggestedStringArgument) outerArg, outerArg.getArgumentPermission()).then(outer);
 					} else {
 						if(outerArg instanceof OverrideableSuggestions) {
@@ -756,11 +768,11 @@ public final class SemiReflector {
 		return builder.buildFuture();
 	}
 	
-	private enum SuggestionProviders {
+	public enum ReflectedSuggestionProviders {
 		FUNCTION, RECIPES, SOUNDS, ADVANCEMENTS, LOOT_TABLES;
 	}
 	
-	private SuggestionProvider getSuggestionProvider(SuggestionProviders provider) {
+	private SuggestionProvider getSuggestionProvider(ReflectedSuggestionProviders provider) {
 		switch(provider) {
 			case FUNCTION:
 				return (context, builder) -> {
@@ -859,7 +871,7 @@ public final class SemiReflector {
 	}
 		
 	//Gets a RequiredArgumentBuilder for an argument, given a SuggestionProvider
-	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, ArgumentType<T> type, CommandPermission permission, SuggestionProviders provider){
+	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, ArgumentType<T> type, CommandPermission permission, ReflectedSuggestionProviders provider){
 		return getRequiredArgumentBuilder(argumentName, type, permission, getSuggestionProvider(provider));
 	}
 	
