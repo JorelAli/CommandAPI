@@ -755,7 +755,7 @@ public final class SemiReflector {
 	}
 	
 	private enum SuggestionProviders {
-		FUNCTION;
+		FUNCTION, RECIPES, SOUNDS, ADVANCEMENTS, LOOTTABLES;
 	}
 	
 	private SuggestionProvider getSuggestionProvider(SuggestionProviders provider) {
@@ -776,11 +776,42 @@ public final class SemiReflector {
 						return Suggestions.empty();
 					}
 				};
-			default:
-				/*
-				 * CompletionProviders.b/c/d
-				 */
-				return null;
+			case RECIPES:
+				try {
+					return (SuggestionProvider<?>) getField(getNMSClass("CompletionProviders"), "b").get(null);
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+					e.printStackTrace();
+					return (context, builder) -> Suggestions.empty();
+				}
+			case SOUNDS:
+				try {
+					return (SuggestionProvider<?>) getField(getNMSClass("CompletionProviders"), "c").get(null);
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+					e.printStackTrace();
+					return (context, builder) -> Suggestions.empty();
+				}
+			case ADVANCEMENTS:
+				try {
+					return (SuggestionProvider<?>) getField(getNMSClass("CommandAdvancement"), "a").get(null);
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+					e.printStackTrace();
+					return (context, builder) -> Suggestions.empty();
+				}
+			case LOOTTABLES:
+				return (context, builder) -> {
+					Object NMSServer;
+					try {
+						NMSServer = getMethod(getNMSClass("CommandListenerWrapper"), "getServer").invoke(context.getSource());
+						Object lootTableRegistry = getMethod(getNMSClass("MinecraftServer"), "getLootTableRegistry").invoke(NMSServer);
+						Map<?, ?> lootTables = (Map<?, ?>) getField(getNMSClass("LootTableRegistry"), "e").get(lootTableRegistry);
+						return (CompletableFuture<Suggestions>) getMethod(getNMSClass("ICompletionProvider"), "a", Iterable.class, SuggestionsBuilder.class).invoke(null, lootTables.keySet(), builder);
+						//Object lootTable = getMethod(getNMSClass("LootTableRegistry"), "getLootTable").invoke(lootTableRegistry, args)
+					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+						e.printStackTrace();
+						return Suggestions.empty();
+					}
+				};			default:
+				return (context, builder) -> Suggestions.empty();
 		}
 	}
 	
