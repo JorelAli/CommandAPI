@@ -23,6 +23,7 @@ import java.util.function.Predicate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.command.BlockCommandSender;
@@ -34,6 +35,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.loot.LootTable;
 import org.bukkit.permissions.Permission;
 import org.bukkit.potion.PotionEffectType;
 
@@ -464,12 +466,6 @@ public final class SemiReflector {
 							e.printStackTrace(System.out);
 						}
 					} else if(entry.getValue() instanceof CustomArgument) {
-						
-						//TODO: Put a check here for if it's keyed or not. If it is, then you have to handle that.
-						//Result is not a entry.getKey(), String.class -> NMS MinecraftKeyRegistered.class thing
-						//
-						
-						
 						CustomArgument arg = (CustomArgument) entry.getValue();
 						String result = (String) cmdCtx.getArgument(entry.getKey(), String.class);
 						try {
@@ -483,20 +479,23 @@ public final class SemiReflector {
 							throw new SimpleCommandExceptionType(() -> {return errorMsg;}).create();
 						}
 					} else if(entry.getValue() instanceof LootTableArgument) {
-						
-						
-						
-						CustomArgument arg = (CustomArgument) entry.getValue();
-						String result = (String) cmdCtx.getArgument(entry.getKey(), String.class);
 						try {
-							argList.add(arg.getParser().apply(result));
-						} catch(CustomArgumentException e) {
-							throw e.toCommandSyntax(result, cmdCtx);
-						} catch(Exception e) {
-							String errorMsg = new MessageBuilder("Error in executing command ")
-									.appendFullInput().append(" - ").appendArgInput().appendHere().toString()
-									.replace("%input%", result).replace("%finput%", cmdCtx.getInput());
-							throw new SimpleCommandExceptionType(() -> {return errorMsg;}).create();
+							//Get namespaced key
+							Object minecraftKey = getMethod(getNMSClass("ArgumentMinecraftKeyRegistered"), "c", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+							String namespace = (String) getMethod(getNMSClass("MinecraftKey"), "b").invoke(minecraftKey);
+							String key = (String) getMethod(getNMSClass("MinecraftKey"), "getKey").invoke(minecraftKey);
+							NamespacedKey nameSpacedKey = new NamespacedKey(namespace, key);
+							
+							//Get loot table
+							Object NMSServer = getMethod(getNMSClass("CommandListenerWrapper"), "getServer").invoke(cmdCtx.getSource());
+							Object lootTableRegistry = getMethod(getNMSClass("MinecraftServer"), "getLootTableRegistry").invoke(NMSServer);
+							Object nmsLootTable = getMethod(getNMSClass("LootTableRegistry"), "getLootTable").invoke(lootTableRegistry, minecraftKey);
+
+							LootTable lootTable = (LootTable) getOBCClass("CraftLootTable").getConstructor(NamespacedKey.class, getNMSClass("LootTable")).newInstance(nameSpacedKey, nmsLootTable);
+							
+							argList.add(lootTable);
+						} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException | NoSuchMethodException | SecurityException | ClassNotFoundException e1) {
+							e1.printStackTrace(System.out);
 						}
 					}
 				}
@@ -817,25 +816,16 @@ public final class SemiReflector {
 				}
 			case LOOT_TABLES:
 				return (context, builder) -> {
-					Object NMSServer;
 					try {
-						NMSServer = getMethod(getNMSClass("CommandListenerWrapper"), "getServer").invoke(context.getSource());
+						Object NMSServer = getMethod(getNMSClass("CommandListenerWrapper"), "getServer").invoke(context.getSource());
 						Object lootTableRegistry = getMethod(getNMSClass("MinecraftServer"), "getLootTableRegistry").invoke(NMSServer);
 						Map<?, ?> lootTables = (Map<?, ?>) getField(getNMSClass("LootTableRegistry"), "e").get(lootTableRegistry);
 						return (CompletableFuture<Suggestions>) getMethod(getNMSClass("ICompletionProvider"), "a", Iterable.class, SuggestionsBuilder.class).invoke(null, lootTables.keySet(), builder);
-						//Object lootTable = getMethod(getNMSClass("LootTableRegistry"), "getLootTable").invoke(lootTableRegistry, args)
 					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 						e.printStackTrace();
 						return Suggestions.empty();
 					}
 				};		
-				
-				/*
-				 * public CraftLootTable(NamespacedKey key, net.minecraft.server.v1_13_R2.LootTable handle) {
-					this.handle = handle;
-					this.key = key;
-				}
-				 */
 			default:
 				return (context, builder) -> Suggestions.empty();
 		}
