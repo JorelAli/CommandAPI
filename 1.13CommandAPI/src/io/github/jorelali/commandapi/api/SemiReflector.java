@@ -58,7 +58,6 @@ import io.github.jorelali.commandapi.api.arguments.ChatComponentArgument;
 import io.github.jorelali.commandapi.api.arguments.CustomArgument;
 import io.github.jorelali.commandapi.api.arguments.CustomArgument.CustomArgumentException;
 import io.github.jorelali.commandapi.api.arguments.CustomArgument.MessageBuilder;
-import io.github.jorelali.commandapi.api.arguments.DefinedCustomArguments.KeyedCustomArgument;
 import io.github.jorelali.commandapi.api.arguments.DynamicSuggestedStringArgument;
 import io.github.jorelali.commandapi.api.arguments.EnchantmentArgument;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument;
@@ -672,16 +671,9 @@ public final class SemiReflector {
 	        	String str = ((LiteralArgument) innerArg).getLiteral();
 	        	inner = getLiteralArgumentBuilderArgument(str, innerArg.getArgumentPermission()).executes(command);
 	        } else {
-//	        	if(innerArg instanceof SuggestedStringArgument) {
-//	        		inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), (SuggestedStringArgument) innerArg, innerArg.getArgumentPermission()).executes(command);
-//        		} else 
-        		if(innerArg instanceof FunctionArgument) {
+	        	if(innerArg instanceof FunctionArgument) {
         			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), innerArg.getArgumentPermission(), ReflectedSuggestionProviders.FUNCTION).executes(command);
 				} else if(innerArg instanceof DynamicSuggestedStringArgument) {
-        			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), (DynamicSuggestedStringArgument) innerArg, innerArg.getArgumentPermission()).executes(command);
-				} else if(innerArg instanceof KeyedCustomArgument) {
-					//deal with it.
-					//TODO
         			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), (DynamicSuggestedStringArgument) innerArg, innerArg.getArgumentPermission()).executes(command);
 				} else {
 					if(innerArg instanceof OverrideableSuggestions) {
@@ -707,10 +699,7 @@ public final class SemiReflector {
 	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), outerArg.getArgumentPermission(), ReflectedSuggestionProviders.FUNCTION).then(outer);
 	        		} else if(outerArg instanceof DynamicSuggestedStringArgument) {
 	        			outer = getRequiredArgumentBuilder(keys.get(i), (DynamicSuggestedStringArgument) outerArg, outerArg.getArgumentPermission()).then(outer);
-					} else if(outerArg instanceof KeyedCustomArgument) {
-						//TODO
-	        			outer = getRequiredArgumentBuilder(keys.get(i), (DynamicSuggestedStringArgument) outerArg, outerArg.getArgumentPermission()).then(outer);
-					} else {
+					}  else {
 						if(outerArg instanceof OverrideableSuggestions) {
 							outer = getRequiredArgumentBuilderWithOverride(keys.get(i), outerArg, outerArg.getArgumentPermission()).then(outer);
 						} else {
@@ -745,7 +734,7 @@ public final class SemiReflector {
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	// SECTION: SuggestionProviders                                                                     //
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
-				
+
 	private CommandSender getCommandSender(Object clw) {
 		CommandSender sender = null;
 		try {
@@ -768,7 +757,7 @@ public final class SemiReflector {
 		return builder.buildFuture();
 	}
 	
-	public enum ReflectedSuggestionProviders {
+	private enum ReflectedSuggestionProviders {
 		FUNCTION, RECIPES, SOUNDS, ADVANCEMENTS, LOOT_TABLES;
 	}
 	
