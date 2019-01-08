@@ -34,6 +34,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.loot.LootTable;
+import org.bukkit.loot.LootTables;
 import org.bukkit.permissions.Permission;
 import org.bukkit.potion.PotionEffectType;
 
@@ -755,7 +757,7 @@ public final class SemiReflector {
 	}
 	
 	private enum SuggestionProviders {
-		FUNCTION, RECIPES, SOUNDS, ADVANCEMENTS, LOOTTABLES;
+		FUNCTION, RECIPES, SOUNDS, ADVANCEMENTS, LOOT_TABLES;
 	}
 	
 	private SuggestionProvider getSuggestionProvider(SuggestionProviders provider) {
@@ -797,7 +799,7 @@ public final class SemiReflector {
 					e.printStackTrace();
 					return (context, builder) -> Suggestions.empty();
 				}
-			case LOOTTABLES:
+			case LOOT_TABLES:
 				return (context, builder) -> {
 					Object NMSServer;
 					try {
@@ -810,7 +812,15 @@ public final class SemiReflector {
 						e.printStackTrace();
 						return Suggestions.empty();
 					}
-				};			default:
+				};		
+				
+				/*
+				 * public CraftLootTable(NamespacedKey key, net.minecraft.server.v1_13_R2.LootTable handle) {
+					this.handle = handle;
+					this.key = key;
+				}
+				 */
+			default:
 				return (context, builder) -> Suggestions.empty();
 		}
 	}
