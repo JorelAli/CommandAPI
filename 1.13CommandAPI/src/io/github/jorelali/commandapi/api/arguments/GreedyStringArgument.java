@@ -10,7 +10,7 @@ public class GreedyStringArgument implements Argument, OverrideableSuggestions {
 	com.mojang.brigadier.arguments.ArgumentType<?> rawType;
 	
 	/**
-	 * A string argument for one word
+	 * A string argument for a string of any length
 	 */
 	public GreedyStringArgument() {
 		rawType = StringArgumentType.greedyString();
