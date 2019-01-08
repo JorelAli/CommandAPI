@@ -851,10 +851,20 @@ public final class SemiReflector {
 	//Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
 	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, DynamicSuggestedStringArgument type, CommandPermission permission) {
 		
-		//Use NMS ICompletionProvider.a() on DynSuggestions
-		SuggestionProvider provider = (context, builder) -> {
-			return getSuggestionsBuilder(builder, type.getDynamicSuggestions().getSuggestions());
-		};
+		SuggestionProvider provider = null;
+		
+		if(type.getDynamicSuggestions() == null) {
+			//withCS
+			provider = (context, builder) -> {
+				return getSuggestionsBuilder(builder, type.getDynamicSuggestionsWithCommandSender().getSuggestions(getCommandSender(context.getSource())));
+			};
+		} else if(type.getDynamicSuggestionsWithCommandSender() == null) {
+			provider = (context, builder) -> {
+				return getSuggestionsBuilder(builder, type.getDynamicSuggestions().getSuggestions());
+			};
+		} else {
+			throw new RuntimeException("Invalid DynamicSuggestedStringArgument found!");
+		}
 		
 		return getRequiredArgumentBuilder(argumentName, type.getRawType(), permission, provider);
 	}
