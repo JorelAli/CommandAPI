@@ -736,6 +736,15 @@ public final class SemiReflector {
 	        }
 		}
         
+		//Try moving all aliases down here, regardless of whether they have 1 or less arguments
+		//Think about it - tp command redirects to teleport
+		//not tp <args> redirect to teleport <args>
+		//If args are redirected, this could override original redirects anyway.
+		/*
+		for Str str : aliases:
+			register str (redirect to) -> whatever we're about to register right now?
+		*/
+		
 		//Produce the commandDispatch.json file for debug purposes
 		if(CommandAPIMain.getConfiguration().willCreateDispatcherFile()) {
 			File file = new File("command_registration.json");
