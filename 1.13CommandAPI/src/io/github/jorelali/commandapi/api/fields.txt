@@ -1,0 +1,13 @@
+getField(getNMSClass("MinecraftServer"), "commandDispatcher");
+getField(CommandNode.class, "children");
+getField(getNMSClass("CommandListenerWrapper"), "k");
+getField(vec3D.getClass(), "x").getDouble(vec3D);
+getField(vec3D.getClass(), "y").getDouble(vec3D);
+getField(vec3D.getClass(),"z").getDouble(vec3D);
+getField(getNMSClass("ArgumentProfile"), "a");
+getField(SimpleCommandMap.class, "knownCommands");
+getField(getNMSClass("CompletionProviders"), "b");
+getField(getNMSClass("CompletionProviders"), "c");
+getField(getNMSClass("CommandAdvancement"), "a");
+getField(getNMSClass("LootTableRegistry"), "e");
+getField(Class<?> clazz, String name) {

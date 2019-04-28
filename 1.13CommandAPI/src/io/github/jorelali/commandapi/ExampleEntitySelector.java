@@ -42,6 +42,7 @@ public class ExampleEntitySelector extends JavaPlugin {
 				Player player = (Player) sender;
 				
 				//The MANY_ENTITIES selector (as declared in its JavaDocs) returns a Collection<Entity>
+				@SuppressWarnings("unchecked")
 				Collection<Entity> entities = (Collection<Entity>) args[0]; 
 				player.sendMessage("killed " + entities.size() + " entities");
 				for(Entity e : entities) {

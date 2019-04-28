@@ -14,7 +14,7 @@
         <maven.build.timestamp.format>yyyyMMdd-HHmmss</maven.build.timestamp.format>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <minecraft.server.version>1.13.2-R0.1-SNAPSHOT</minecraft.server.version>
+        <minecraft.server.version>1.14-R0.1-SNAPSHOT</minecraft.server.version>
     </properties>
 
     <repositories>
@@ -39,7 +39,7 @@
         <dependency>
             <groupId>com.mojang</groupId>
             <artifactId>brigadier</artifactId>
-            <version>1.0.15</version>
+            <version>1.0.17</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

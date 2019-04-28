@@ -294,7 +294,7 @@ public final class SemiReflector {
 								}
 								break;
 							case PRECISE_POSITION:
-								try {
+								try {	 	
 									Object vec3D = getMethod(getNMSClass("ArgumentVec3"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
 									double x = getField(vec3D.getClass(), "x").getDouble(vec3D);
 									double y = getField(vec3D.getClass(), "y").getDouble(vec3D);
@@ -401,8 +401,7 @@ public final class SemiReflector {
 					} else if(entry.getValue() instanceof ChatComponentArgument) {
 						try {
 							//Invokes public String IChatBaseComponent.ChatSerializer.a(IChatComponent c);
-							Class chatSerializer = getNMSClass("IChatBaseComponent$ChatSerializer");
-							Method m = getMethod(chatSerializer, "a", getNMSClass("IChatBaseComponent"));
+							Method m = getMethod(getNMSClass("IChatBaseComponent$ChatSerializer"), "a", getNMSClass("IChatBaseComponent"));
 							Object iChatBaseComponent = getMethod(getNMSClass("ArgumentChatComponent"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
 							Object resultantString = m.invoke(null, iChatBaseComponent);
 							//Convert to spigot thing
@@ -659,15 +658,12 @@ public final class SemiReflector {
 		 * 
 		 * CommandName -> Args1 -> Args2 -> ... -> ArgsN -> Executor
 		 */
-		
+
+		LiteralCommandNode resultantNode;
 		if(args.isEmpty()) {
 			//Link command name to the executor
-	        LiteralCommandNode resultantNode = this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(commandName).requires(permission).executes(command));
-	        
-	        //Register aliases
-	        for(String str : aliases) {
-	        	this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(str).requires(permission).redirect(resultantNode));
-	        }
+	        resultantNode = this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(commandName).requires(permission).executes(command));
+
 		} else {
 			
 			//Replace SSA with StringArg
@@ -728,13 +724,17 @@ public final class SemiReflector {
 	        }        
 	        
 	        //Link command name to first argument and register        
-	        LiteralCommandNode resultantNode = this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(commandName).requires(permission).then(outer));
-	        
-	        //Register aliases
-	        for(String str : aliases) {
-	        	this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(str).requires(permission).redirect(resultantNode));
-	        }
+			resultantNode = this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(commandName).requires(permission).then(outer));
+
 		}
+
+		//Register aliases
+	    for(String str : aliases) {
+	    	if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
+				CommandAPIMain.getLog().info("Registering alias /" + str + " -> " + resultantNode.getName());
+			}
+	      	this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(str).requires(permission).redirect(resultantNode));
+	    }
         
 		//Try moving all aliases down here, regardless of whether they have 1 or less arguments
 		//Think about it - tp command redirects to teleport
