@@ -11,6 +11,10 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 
+import net.minecraft.server.v1_14_R1.Entity;
+import net.minecraft.server.v1_14_R1.EntityTypes;
+import net.minecraft.server.v1_14_R1.World;
+
 public final class CompatibilityCheck {
 
 	private static String packageName;
@@ -87,6 +91,22 @@ public final class CompatibilityCheck {
 		getMethod(getNMSClass("ArgumentEntitySummon"), "a", CommandContext.class, String.class);
 		getMethod(getOBCClass("CraftWorld").getClass(), "getHandle");
 		getMethod(getNMSClass("EntityTypes"), "a", getNMSClass("World"), getNMSClass("MinecraftKey")); //XXX Broken
+		/**
+		 * 	@Nullable
+			public static Entity a(World world, MinecraftKey minecraftkey) {
+				return a(world, (EntityTypes) IRegistry.ENTITY_TYPE.get(minecraftkey));
+			}
+			
+			->	aZ = b<T>
+			 	public static interface b<T extends Entity> {
+					public T create(EntityTypes<T> var1, World var2);
+				}
+				
+				@Nullable
+				public T a(World world) {
+					return this.aZ.create(this, world);
+				}
+		 */
 		getMethod(getNMSClass("Entity"), "getBukkitEntity");
 		getMethod(getNMSClass("ArgumentProfile"), "a", CommandContext.class, String.class);
 		/*
@@ -122,10 +142,22 @@ public final class CompatibilityCheck {
 		getMethod(getNMSClass("MinecraftKey"), "b");
 		getMethod(getNMSClass("MinecraftKey"), "getKey");
 		getMethod(getNMSClass("CommandListenerWrapper"), "getServer");
-		getMethod(getNMSClass("MinecraftServer"), "getLootTableRegistry"); //XXX broken
+		//getLootTableRegistry
+		getMethod(getNMSClass("MinecraftServer"), "getLootTableRegistry"); //XXX broken???
 		getMethod(getNMSClass("LootTableRegistry"), "getLootTable");
 		getMethod(getOBCClass("CraftServer"), "getCommandMap");
-		getMethod(getNMSClass("CommandDispatcher"), "a", File.class); ///XXX Broken
+		getMethod(getNMSClass("CommandDispatcher"), "a", File.class); ///XXX Broken. Method has been removed.
+		/*
+		 * 	public void a(File file) {
+				try {
+					Files.write((new GsonBuilder()).setPrettyPrinting().create()
+							.toJson(ArgumentRegistry.a(this.b, this.b.getRoot())), file, StandardCharsets.UTF_8);
+				} catch (IOException var3) {
+					a.error("Couldn't write out command tree!", var3);
+				}
+		
+			}
+		 */
 		getMethod(getNMSClass("CommandListenerWrapper"), "getBukkitSender");
 		getMethod(getNMSClass("CommandListenerWrapper"), "getServer");
 		getMethod(getNMSClass("MinecraftServer"), "getFunctionData");
