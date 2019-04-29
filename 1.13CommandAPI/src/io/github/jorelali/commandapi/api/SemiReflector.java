@@ -6,6 +6,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -38,7 +39,12 @@ import org.bukkit.loot.LootTable;
 import org.bukkit.permissions.Permission;
 import org.bukkit.potion.PotionEffectType;
 
+import com.google.common.io.Files;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+
 import com.mojang.authlib.GameProfile;
+
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -92,7 +98,7 @@ public final class SemiReflector {
 	//NMS variables
 	private static String packageName = null;
 	private CommandDispatcher dispatcher;
-	private Object cDispatcher;
+	private Object nmsCommandDispatcher;
 	
 	private int version = 13;
 	
@@ -118,9 +124,9 @@ public final class SemiReflector {
 			fields = new HashMap<>();
 			permissionsToFix = new TreeMap<>();
 			
-			this.cDispatcher = getField(getNMSClass("MinecraftServer"), "commandDispatcher").get(server);
+			this.nmsCommandDispatcher = getField(getNMSClass("MinecraftServer"), "commandDispatcher").get(server);
 						
-			this.dispatcher = (CommandDispatcher) getNMSClass("CommandDispatcher").getDeclaredMethod("a").invoke(cDispatcher); 
+			this.dispatcher = (CommandDispatcher) getNMSClass("CommandDispatcher").getDeclaredMethod("a").invoke(nmsCommandDispatcher); 
 
 		} catch(Exception e) {
 			e.printStackTrace(System.out);
@@ -789,7 +795,20 @@ public final class SemiReflector {
 				e.printStackTrace(System.out);
 			}
 			
-			getMethod(getNMSClass("CommandDispatcher"), "a", File.class).invoke(this.cDispatcher, file);
+			switch(version) {
+				case 13:
+					getMethod(getNMSClass("CommandDispatcher"), "a", File.class).invoke(this.nmsCommandDispatcher, file);
+					break;
+				case 14:
+					try {
+						Method jsonObject = getMethod(getNMSClass("ArgumentRegistry"), "a", CommandDispatcher.class, CommandNode.class);
+						JsonObject result = (JsonObject) jsonObject.invoke(null, dispatcher, dispatcher.getRoot());
+						Files.write((new GsonBuilder()).setPrettyPrinting().create().toJson(result), file, StandardCharsets.UTF_8);
+					} catch (IOException e) {
+						e.printStackTrace(System.out);
+					}
+					break;
+			}
 		}
 	}	
 	
