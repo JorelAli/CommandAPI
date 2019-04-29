@@ -440,7 +440,7 @@ public final class SemiReflector {
 								//Parse Bukkit ItemStack from NMS 
 								Method asBukkitCopy = getMethod(getOBCClass("inventory.CraftItemStack"), "asBukkitCopy", getNMSClass("ItemStack"));
 								Object argumentIS = getMethod(getNMSClass("ArgumentItemStack"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-								Object nmsIS = getMethod(argumentIS.getClass(), "a", int.class, boolean.class).invoke(argumentIS, 1, false);
+								Object nmsIS = getMethod(getNMSClass("ArgumentPredicateItemStack"), "a", int.class, boolean.class).invoke(argumentIS, 1, false);
 								argList.add((ItemStack) asBukkitCopy.invoke(null, nmsIS));
 							} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 								e.printStackTrace(System.out);
