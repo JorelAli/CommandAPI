@@ -16,7 +16,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
@@ -39,6 +38,7 @@ import org.bukkit.loot.LootTable;
 import org.bukkit.permissions.Permission;
 import org.bukkit.potion.PotionEffectType;
 
+import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -342,7 +342,7 @@ public final class SemiReflector {
 								Object minecraftKey = getMethod(getNMSClass("ArgumentEntitySummon"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
 								World world = getCommandSenderWorld(sender);
 								Object craftWorld = getOBCClass("CraftWorld").cast(world);
-								Object handle = getMethod(craftWorld.getClass(), "getHandle").invoke(craftWorld);
+								Object handle = getMethod(getOBCClass("CraftWorld"), "getHandle").invoke(craftWorld);
 								Object minecraftWorld = getNMSClass("World").cast(handle);
 								
 								Object entity;
@@ -466,9 +466,9 @@ public final class SemiReflector {
 								case PRECISE_POSITION:
 									try {	 	
 										Object vec3D = getMethod(getNMSClass("ArgumentVec3"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-										double x = getField(vec3D.getClass(), "x").getDouble(vec3D);
-										double y = getField(vec3D.getClass(), "y").getDouble(vec3D);
-										double z = getField(vec3D.getClass(),"z").getDouble(vec3D);
+										double x = getField(getNMSClass("Vec3D"), "x").getDouble(vec3D);
+										double y = getField(getNMSClass("Vec3D"), "y").getDouble(vec3D);
+										double z = getField(getNMSClass("Vec3D"),"z").getDouble(vec3D);
 										World world = getCommandSenderWorld(sender);
 										argList.add(new Location(world, x, y, z));
 									} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
@@ -509,10 +509,9 @@ public final class SemiReflector {
 							break;
 						case PLAYER:
 							try {
-								Collection<?> collectionOfPlayers = (Collection<?>) getMethod(getNMSClass("ArgumentProfile"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-								Object first = collectionOfPlayers.iterator().next();
-								UUID uuid = (UUID) getMethod(first.getClass(), "getId").invoke(first);
-								Player target = Bukkit.getPlayer(uuid);
+								Collection<GameProfile> collectionOfPlayers = (Collection<GameProfile>) getMethod(getNMSClass("ArgumentProfile"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+								GameProfile first = collectionOfPlayers.iterator().next();
+								Player target = Bukkit.getPlayer(first.getId());
 								if(target == null) {
 									throw ((SimpleCommandExceptionType) getField(getNMSClass("ArgumentProfile"), "a").get(null)).create();
 								}
