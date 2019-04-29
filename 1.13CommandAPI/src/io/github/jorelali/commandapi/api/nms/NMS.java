@@ -1,6 +1,7 @@
 package io.github.jorelali.commandapi.api.nms;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -65,7 +66,7 @@ public interface NMS {
 	
 	public PotionEffectType getPotionEffect(CommandContext<?> cmdCtx, String str) throws CommandSyntaxException;
 	
-	public void createDispatcherFile(Object server, File file);
+	public void createDispatcherFile(Object server, File file, CommandDispatcher<?> dispatcher) throws IOException;
 	
 	public SuggestionProvider<?> getSuggestionProvider(SuggestionProviders provider);
 	

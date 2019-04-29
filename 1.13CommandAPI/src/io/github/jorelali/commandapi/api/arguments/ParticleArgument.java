@@ -5,7 +5,7 @@ import org.bukkit.Particle;
 import com.mojang.brigadier.arguments.ArgumentType;
 
 import io.github.jorelali.commandapi.api.CommandPermission;
-import io.github.jorelali.commandapi.api.SemiReflector;
+import io.github.jorelali.commandapi.api.CommandAPIHandler;
 
 @SuppressWarnings("unchecked")
 public class ParticleArgument implements Argument, OverrideableSuggestions {
@@ -16,7 +16,7 @@ public class ParticleArgument implements Argument, OverrideableSuggestions {
 	 * A Particle argument. Represents Minecraft particles
 	 */
 	public ParticleArgument() {
-		rawType = SemiReflector.getNMS()._ArgumentParticle();
+		rawType = CommandAPIHandler.getNMS()._ArgumentParticle();
 	}
 	
 	@Override

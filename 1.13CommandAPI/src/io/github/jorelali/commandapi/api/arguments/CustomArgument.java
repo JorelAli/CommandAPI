@@ -8,7 +8,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
 import io.github.jorelali.commandapi.api.CommandPermission;
-import io.github.jorelali.commandapi.api.SemiReflector;
+import io.github.jorelali.commandapi.api.CommandAPIHandler;
 
 @SuppressWarnings("unchecked")
 public class CustomArgument<S> implements Argument, OverrideableSuggestions {
@@ -185,7 +185,7 @@ public class CustomArgument<S> implements Argument, OverrideableSuggestions {
 	@Override
 	public <T> ArgumentType<T> getRawType() {
 		if(keyed) {
-			return (ArgumentType<T>) SemiReflector.getNMS()._ArgumentMinecraftKeyRegistered();
+			return (ArgumentType<T>) CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered();
 		} else {
 			return (ArgumentType<T>) StringArgumentType.string();
 		}

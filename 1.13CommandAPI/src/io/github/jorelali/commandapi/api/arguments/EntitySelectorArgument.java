@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import com.mojang.brigadier.arguments.ArgumentType;
 
 import io.github.jorelali.commandapi.api.CommandPermission;
-import io.github.jorelali.commandapi.api.SemiReflector;
+import io.github.jorelali.commandapi.api.CommandAPIHandler;
 
 @SuppressWarnings("unchecked")
 public class EntitySelectorArgument implements Argument, OverrideableSuggestions {
@@ -50,7 +50,7 @@ public class EntitySelectorArgument implements Argument, OverrideableSuggestions
 	public EntitySelectorArgument(EntitySelector selector) {
 		this.selector = selector;
 		
-		rawType = SemiReflector.getNMS()._ArgumentEntity(selector);
+		rawType = CommandAPIHandler.getNMS()._ArgumentEntity(selector);
 	}
 	
 	@Override

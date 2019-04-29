@@ -5,7 +5,7 @@ import org.bukkit.Location;
 import com.mojang.brigadier.arguments.ArgumentType;
 
 import io.github.jorelali.commandapi.api.CommandPermission;
-import io.github.jorelali.commandapi.api.SemiReflector;
+import io.github.jorelali.commandapi.api.CommandAPIHandler;
 
 @SuppressWarnings("unchecked")
 public class LocationArgument implements Argument, OverrideableSuggestions {
@@ -38,10 +38,10 @@ public class LocationArgument implements Argument, OverrideableSuggestions {
 		locationType = type;
 		switch(type) {
 			case BLOCK_POSITION:
-				rawType = SemiReflector.getNMS()._ArgumentPosition();
+				rawType = CommandAPIHandler.getNMS()._ArgumentPosition();
 				break;
 			case PRECISE_POSITION:
-				rawType = SemiReflector.getNMS()._ArgumentVec3();
+				rawType = CommandAPIHandler.getNMS()._ArgumentVec3();
 				break;
 		}
 	}

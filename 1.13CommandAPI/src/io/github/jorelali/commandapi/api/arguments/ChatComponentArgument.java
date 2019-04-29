@@ -3,7 +3,7 @@ package io.github.jorelali.commandapi.api.arguments;
 import com.mojang.brigadier.arguments.ArgumentType;
 
 import io.github.jorelali.commandapi.api.CommandPermission;
-import io.github.jorelali.commandapi.api.SemiReflector;
+import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.exceptions.SpigotNotFoundException;
 import net.md_5.bungee.api.chat.BaseComponent;
 
@@ -25,7 +25,7 @@ public class ChatComponentArgument implements Argument, OverrideableSuggestions 
 			throw new SpigotNotFoundException(this.getClass());
 		}
 		
-		rawType = SemiReflector.getNMS()._ArgumentChatComponent();
+		rawType = CommandAPIHandler.getNMS()._ArgumentChatComponent();
 	}
 	
 	@Override

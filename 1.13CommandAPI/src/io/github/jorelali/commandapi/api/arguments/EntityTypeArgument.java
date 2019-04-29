@@ -5,7 +5,7 @@ import org.bukkit.entity.EntityType;
 import com.mojang.brigadier.arguments.ArgumentType;
 
 import io.github.jorelali.commandapi.api.CommandPermission;
-import io.github.jorelali.commandapi.api.SemiReflector;
+import io.github.jorelali.commandapi.api.CommandAPIHandler;
 
 @SuppressWarnings("unchecked")
 public class EntityTypeArgument implements Argument, OverrideableSuggestions {
@@ -16,7 +16,7 @@ public class EntityTypeArgument implements Argument, OverrideableSuggestions {
 	 * An EntityType argument. Represents the type of an Entity
 	 */
 	public EntityTypeArgument() {
-		rawType = SemiReflector.getNMS()._ArgumentEntitySummon();
+		rawType = CommandAPIHandler.getNMS()._ArgumentEntitySummon();
 	}
 	
 	@Override

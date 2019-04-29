@@ -49,13 +49,14 @@ import io.github.jorelali.commandapi.api.arguments.StringArgument;
 import io.github.jorelali.commandapi.api.arguments.SuggestedStringArgument;
 import io.github.jorelali.commandapi.api.nms.NMS;
 import io.github.jorelali.commandapi.api.nms.NMS_1_13_R2;
+import io.github.jorelali.commandapi.api.nms.NMS_1_14_R1;
 
 @SuppressWarnings({"rawtypes", "unchecked", "deprecation"})
 /**
  * Class to access the main methods in NMS. The wrapper's
  * implementations occur here.
  */
-public final class SemiReflector {
+public final class CommandAPIHandler {
 		
 	private TreeMap<String, CommandPermission> permissionsToFix;
 
@@ -67,13 +68,13 @@ public final class SemiReflector {
 	private CommandDispatcher dispatcher;
 	
 	private int version;
-	private String versionStr; //Just in case (v1_13_R2 or v1_14_R1)
+//	private String versionStr; //Just in case (v1_13_R2 or v1_14_R1)
 	
 	private static NMS nms;
 	private Object nmsServer;
 	public static NMS getNMS() { return nms; }
 	
-	protected SemiReflector() throws ClassNotFoundException {
+	protected CommandAPIHandler() throws ClassNotFoundException {
 		
 		//Package checks
 		if(Package.getPackage("com.mojang.brigadier") == null) {
@@ -83,17 +84,17 @@ public final class SemiReflector {
 		try {
 			//Setup NMS
 			this.nmsServer = Bukkit.getServer().getClass().getDeclaredMethod("getServer").invoke(Bukkit.getServer());
-			SemiReflector.packageName = nmsServer.getClass().getPackage().getName();
-			//net.minecraft.server.v1_13_R2.MinecraftServer
+			CommandAPIHandler.packageName = nmsServer.getClass().getPackage().getName();
+
 			version = Integer.parseInt(packageName.substring(24, 26));
-			versionStr = packageName.split("\\Q.\\E")[3];
+//			versionStr = packageName.split("\\Q.\\E")[3];
 			
 			switch(version) {
 				case 13:
 					nms = new NMS_1_13_R2();
 					break;
 				case 14:
-					//nms =
+					nms = new NMS_1_14_R1();
 					break;
 			}
 			
@@ -472,21 +473,7 @@ public final class SemiReflector {
 				e.printStackTrace(System.out);
 			}
 			
-			nms.createDispatcherFile(nmsServer, file);
-//			switch(version) {
-//				case 13:
-//					getMethod(getNMSClass("CommandDispatcher"), "a", File.class).invoke(this.nmsCommandDispatcher, file);
-//					break;
-//				case 14:
-//					try {
-//						Method jsonObject = getMethod(getNMSClass("ArgumentRegistry"), "a", CommandDispatcher.class, CommandNode.class);
-//						JsonObject result = (JsonObject) jsonObject.invoke(null, dispatcher, dispatcher.getRoot());
-//						Files.write((new GsonBuilder()).setPrettyPrinting().create().toJson(result), file, StandardCharsets.UTF_8);
-//					} catch (IOException e) {
-//						e.printStackTrace(System.out);
-//					}
-//					break;
-//			}
+			nms.createDispatcherFile(nmsServer, file, dispatcher);
 		}
 	}	
 	

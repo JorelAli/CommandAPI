@@ -5,7 +5,7 @@ import org.bukkit.enchantments.Enchantment;
 import com.mojang.brigadier.arguments.ArgumentType;
 
 import io.github.jorelali.commandapi.api.CommandPermission;
-import io.github.jorelali.commandapi.api.SemiReflector;
+import io.github.jorelali.commandapi.api.CommandAPIHandler;
 
 @SuppressWarnings("unchecked")
 public class EnchantmentArgument implements Argument, OverrideableSuggestions {
@@ -16,7 +16,7 @@ public class EnchantmentArgument implements Argument, OverrideableSuggestions {
 	 * An Enchantment argument. Represents an enchantment for items 
 	 */
 	public EnchantmentArgument() {
-		rawType = SemiReflector.getNMS()._ArgumentEnchantment();
+		rawType = CommandAPIHandler.getNMS()._ArgumentEnchantment();
 	}
 	
 	@Override

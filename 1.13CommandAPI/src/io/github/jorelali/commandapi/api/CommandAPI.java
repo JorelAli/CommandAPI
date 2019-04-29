@@ -21,7 +21,7 @@ public class CommandAPI {
 	private static CommandAPI instance;
 	
 	protected static boolean canRegister = true;
-	private static SemiReflector reflector;
+	private static CommandAPIHandler reflector;
 	
 	/**
 	 * Forces a command to return a success value of 0
@@ -58,7 +58,7 @@ public class CommandAPI {
 		
 		//Only ever called once
 		try {
-			CommandAPI.reflector = new SemiReflector();			
+			CommandAPI.reflector = new CommandAPIHandler();			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}

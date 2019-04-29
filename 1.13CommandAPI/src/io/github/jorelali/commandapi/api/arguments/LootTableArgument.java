@@ -5,7 +5,7 @@ import org.bukkit.loot.LootTable;
 import com.mojang.brigadier.arguments.ArgumentType;
 
 import io.github.jorelali.commandapi.api.CommandPermission;
-import io.github.jorelali.commandapi.api.SemiReflector;
+import io.github.jorelali.commandapi.api.CommandAPIHandler;
 
 @SuppressWarnings("unchecked")
 public class LootTableArgument implements Argument, CustomProvidedArgument {
@@ -13,7 +13,7 @@ public class LootTableArgument implements Argument, CustomProvidedArgument {
 	ArgumentType<?> rawType;
 	
 	public LootTableArgument() {
-		rawType = SemiReflector.getNMS()._ArgumentMinecraftKeyRegistered();
+		rawType = CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered();
 	}
 	
 	@Override

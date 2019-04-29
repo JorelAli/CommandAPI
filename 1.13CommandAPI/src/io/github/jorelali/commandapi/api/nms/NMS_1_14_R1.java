@@ -1,6 +1,8 @@
 package io.github.jorelali.commandapi.api.nms;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -16,17 +18,17 @@ import org.bukkit.Particle;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.craftbukkit.v1_13_R2.CraftLootTable;
-import org.bukkit.craftbukkit.v1_13_R2.CraftParticle;
-import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_13_R2.command.ProxiedNativeCommandSender;
-import org.bukkit.craftbukkit.v1_13_R2.command.VanillaCommandWrapper;
-import org.bukkit.craftbukkit.v1_13_R2.enchantments.CraftEnchantment;
-import org.bukkit.craftbukkit.v1_13_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_13_R2.potion.CraftPotionEffectType;
-import org.bukkit.craftbukkit.v1_13_R2.util.CraftChatMessage;
+import org.bukkit.craftbukkit.v1_14_R1.CraftLootTable;
+import org.bukkit.craftbukkit.v1_14_R1.CraftParticle;
+import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_14_R1.command.ProxiedNativeCommandSender;
+import org.bukkit.craftbukkit.v1_14_R1.command.VanillaCommandWrapper;
+import org.bukkit.craftbukkit.v1_14_R1.enchantments.CraftEnchantment;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_14_R1.potion.CraftPotionEffectType;
+import org.bukkit.craftbukkit.v1_14_R1.util.CraftChatMessage;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -34,6 +36,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
 
+import com.google.common.io.Files;
+import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -49,36 +53,37 @@ import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.Entity
 import io.github.jorelali.commandapi.api.arguments.LocationArgument.LocationType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
-import net.minecraft.server.v1_13_R2.Advancement;
-import net.minecraft.server.v1_13_R2.ArgumentChatComponent;
-import net.minecraft.server.v1_13_R2.ArgumentChatFormat;
-import net.minecraft.server.v1_13_R2.ArgumentEnchantment;
-import net.minecraft.server.v1_13_R2.ArgumentEntity;
-import net.minecraft.server.v1_13_R2.ArgumentEntitySummon;
-import net.minecraft.server.v1_13_R2.ArgumentItemStack;
-import net.minecraft.server.v1_13_R2.ArgumentMinecraftKeyRegistered;
-import net.minecraft.server.v1_13_R2.ArgumentMobEffect;
-import net.minecraft.server.v1_13_R2.ArgumentParticle;
-import net.minecraft.server.v1_13_R2.ArgumentPosition;
-import net.minecraft.server.v1_13_R2.ArgumentProfile;
-import net.minecraft.server.v1_13_R2.ArgumentTag;
-import net.minecraft.server.v1_13_R2.ArgumentVec3;
-import net.minecraft.server.v1_13_R2.BlockPosition;
-import net.minecraft.server.v1_13_R2.CommandListenerWrapper;
-import net.minecraft.server.v1_13_R2.CompletionProviders;
-import net.minecraft.server.v1_13_R2.CustomFunction;
-import net.minecraft.server.v1_13_R2.CustomFunctionData;
-import net.minecraft.server.v1_13_R2.Entity;
-import net.minecraft.server.v1_13_R2.EntityTypes;
-import net.minecraft.server.v1_13_R2.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_13_R2.ICompletionProvider;
-import net.minecraft.server.v1_13_R2.LootTableRegistry;
-import net.minecraft.server.v1_13_R2.MinecraftKey;
-import net.minecraft.server.v1_13_R2.MinecraftServer;
-import net.minecraft.server.v1_13_R2.Vec3D;
+import net.minecraft.server.v1_14_R1.Advancement;
+import net.minecraft.server.v1_14_R1.ArgumentChatComponent;
+import net.minecraft.server.v1_14_R1.ArgumentChatFormat;
+import net.minecraft.server.v1_14_R1.ArgumentEnchantment;
+import net.minecraft.server.v1_14_R1.ArgumentEntity;
+import net.minecraft.server.v1_14_R1.ArgumentEntitySummon;
+import net.minecraft.server.v1_14_R1.ArgumentItemStack;
+import net.minecraft.server.v1_14_R1.ArgumentMinecraftKeyRegistered;
+import net.minecraft.server.v1_14_R1.ArgumentMobEffect;
+import net.minecraft.server.v1_14_R1.ArgumentParticle;
+import net.minecraft.server.v1_14_R1.ArgumentPosition;
+import net.minecraft.server.v1_14_R1.ArgumentProfile;
+import net.minecraft.server.v1_14_R1.ArgumentRegistry;
+import net.minecraft.server.v1_14_R1.ArgumentTag;
+import net.minecraft.server.v1_14_R1.ArgumentVec3;
+import net.minecraft.server.v1_14_R1.BlockPosition;
+import net.minecraft.server.v1_14_R1.CommandListenerWrapper;
+import net.minecraft.server.v1_14_R1.CompletionProviders;
+import net.minecraft.server.v1_14_R1.CustomFunction;
+import net.minecraft.server.v1_14_R1.CustomFunctionData;
+import net.minecraft.server.v1_14_R1.Entity;
+import net.minecraft.server.v1_14_R1.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_14_R1.ICompletionProvider;
+import net.minecraft.server.v1_14_R1.IRegistry;
+import net.minecraft.server.v1_14_R1.LootTableRegistry;
+import net.minecraft.server.v1_14_R1.MinecraftKey;
+import net.minecraft.server.v1_14_R1.MinecraftServer;
+import net.minecraft.server.v1_14_R1.Vec3D;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
-public class NMS_1_13_R2 implements NMS {
+public class NMS_1_14_R1 implements NMS {
 	
 	private CommandListenerWrapper getCLW(CommandContext cmdCtx) {
 		return (CommandListenerWrapper) cmdCtx.getSource();
@@ -129,8 +134,8 @@ public class NMS_1_13_R2 implements NMS {
 	}
 
 	@Override
-	public void createDispatcherFile(Object server, File file, CommandDispatcher dispatcher) {
-		((MinecraftServer) server).commandDispatcher.a(file);
+	public void createDispatcherFile(Object server, File file, CommandDispatcher dispatcher) throws IOException {
+		Files.write((new GsonBuilder()).setPrettyPrinting().create().toJson(ArgumentRegistry.a(dispatcher, dispatcher.getRoot())), file, StandardCharsets.UTF_8);
 	}
 
 	@Override
@@ -199,7 +204,7 @@ public class NMS_1_13_R2 implements NMS {
 	public CommandSender getSenderForCommand(CommandContext cmdCtx) {
 		CommandSender sender = getCLW(cmdCtx).getBukkitSender();
 		
-		Entity proxyEntity = getCLW(cmdCtx).f();
+		Entity proxyEntity = getCLW(cmdCtx).getEntity();
 		if(proxyEntity != null) {
 			CommandSender proxy = ((Entity) proxyEntity).getBukkitEntity();
 			
@@ -256,7 +261,7 @@ public class NMS_1_13_R2 implements NMS {
 
 	@Override
 	public EntityType getEntityType(CommandContext cmdCtx, String str, CommandSender sender) throws CommandSyntaxException {
-		Entity entity = EntityTypes.a(((CraftWorld) getCommandSenderWorld(sender)).getHandle(), ArgumentEntitySummon.a(cmdCtx, str));
+		Entity entity = IRegistry.ENTITY_TYPE.get(ArgumentEntitySummon.a(cmdCtx, str)).a(((CraftWorld) getCommandSenderWorld(sender)).getHandle());
 		return entity.getBukkitEntity().getType();
 	}
 
@@ -267,7 +272,7 @@ public class NMS_1_13_R2 implements NMS {
 		String namespace = minecraftKey.b();
 		String key = minecraftKey.getKey();
 		
-		net.minecraft.server.v1_13_R2.LootTable lootTable = getCLW(cmdCtx).getServer().getLootTableRegistry().getLootTable(minecraftKey);
+		net.minecraft.server.v1_14_R1.LootTable lootTable = getCLW(cmdCtx).getServer().getLootTableRegistry().getLootTable(minecraftKey);
 		return new CraftLootTable(new NamespacedKey(namespace, key), lootTable);
 	}
 
@@ -340,7 +345,7 @@ public class NMS_1_13_R2 implements NMS {
 	public ArgumentType _ArgumentEntity(EntitySelector selector) {
 		switch(selector) {
 			case MANY_ENTITIES:
-				return ArgumentEntity.b();
+				return ArgumentEntity.multipleEntities();
 			case MANY_PLAYERS:
 				return ArgumentEntity.d();
 			case ONE_ENTITY:

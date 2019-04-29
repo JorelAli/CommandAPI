@@ -5,7 +5,7 @@ import org.bukkit.inventory.ItemStack;
 import com.mojang.brigadier.arguments.ArgumentType;
 
 import io.github.jorelali.commandapi.api.CommandPermission;
-import io.github.jorelali.commandapi.api.SemiReflector;
+import io.github.jorelali.commandapi.api.CommandAPIHandler;
 
 @SuppressWarnings("unchecked")
 public class ItemStackArgument implements Argument, OverrideableSuggestions {
@@ -16,7 +16,7 @@ public class ItemStackArgument implements Argument, OverrideableSuggestions {
 	 * An ItemStack argument. Always returns an itemstack of size 1
 	 */
 	public ItemStackArgument() {
-		rawType = SemiReflector.getNMS()._ArgumentItemStack();
+		rawType = CommandAPIHandler.getNMS()._ArgumentItemStack();
 	}
 	
 	@Override
