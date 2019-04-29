@@ -1,44 +1,57 @@
 package io.github.jorelali.commandapi.api.nms;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.craftbukkit.v1_13_R2.CraftLootTable;
 import org.bukkit.craftbukkit.v1_13_R2.CraftParticle;
+import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_13_R2.command.ProxiedNativeCommandSender;
+import org.bukkit.craftbukkit.v1_13_R2.command.VanillaCommandWrapper;
 import org.bukkit.craftbukkit.v1_13_R2.enchantments.CraftEnchantment;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_13_R2.potion.CraftPotionEffectType;
 import org.bukkit.craftbukkit.v1_13_R2.util.CraftChatMessage;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 
 import io.github.jorelali.commandapi.api.FunctionWrapper;
 import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
+import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
 import io.github.jorelali.commandapi.api.arguments.LocationArgument.LocationType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.server.v1_13_R2.ArgumentChatComponent;
 import net.minecraft.server.v1_13_R2.ArgumentChatFormat;
 import net.minecraft.server.v1_13_R2.ArgumentEnchantment;
+import net.minecraft.server.v1_13_R2.ArgumentEntity;
+import net.minecraft.server.v1_13_R2.ArgumentEntitySummon;
 import net.minecraft.server.v1_13_R2.ArgumentItemStack;
+import net.minecraft.server.v1_13_R2.ArgumentMinecraftKeyRegistered;
 import net.minecraft.server.v1_13_R2.ArgumentMobEffect;
 import net.minecraft.server.v1_13_R2.ArgumentParticle;
 import net.minecraft.server.v1_13_R2.ArgumentPosition;
@@ -51,8 +64,10 @@ import net.minecraft.server.v1_13_R2.CompletionProviders;
 import net.minecraft.server.v1_13_R2.CustomFunction;
 import net.minecraft.server.v1_13_R2.CustomFunctionData;
 import net.minecraft.server.v1_13_R2.Entity;
+import net.minecraft.server.v1_13_R2.EntityTypes;
 import net.minecraft.server.v1_13_R2.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_13_R2.ICompletionProvider;
+import net.minecraft.server.v1_13_R2.MinecraftKey;
 import net.minecraft.server.v1_13_R2.MinecraftServer;
 import net.minecraft.server.v1_13_R2.Vec3D;
 
@@ -205,6 +220,56 @@ public class NMS_1_13_R2 implements NMS {
 		} else {
 			return target;
 		}
+	}
+
+	@Override
+	public Object getEntitySelector(CommandContext cmdCtx, String str, EntitySelector selector) throws CommandSyntaxException {
+		switch(selector) {
+			case MANY_ENTITIES:
+				try {
+					return ArgumentEntity.c(cmdCtx, str).stream().map(entity -> (org.bukkit.entity.Entity) ((Entity) entity).getBukkitEntity()).collect(Collectors.toList());
+				} catch(CommandSyntaxException e) {
+					return new ArrayList<org.bukkit.entity.Entity>();
+				}
+			case MANY_PLAYERS:
+				try {
+					return ArgumentEntity.d(cmdCtx, str).stream().map(player -> (Player) ((Entity) player).getBukkitEntity()).collect(Collectors.toList());
+				} catch(CommandSyntaxException e) {
+					return new ArrayList<Player>();
+				}
+			case ONE_ENTITY:
+				return (org.bukkit.entity.Entity) ArgumentEntity.a(cmdCtx, str).getBukkitEntity();
+			case ONE_PLAYER:
+				return (Player) ArgumentEntity.e(cmdCtx, str).getBukkitEntity();
+		}
+		return null;
+	}
+
+	@Override
+	public EntityType getEntityType(CommandContext cmdCtx, String str, CommandSender sender) throws CommandSyntaxException {
+		Entity entity = EntityTypes.a(((CraftWorld) getCommandSenderWorld(sender)).getHandle(), ArgumentEntitySummon.a(cmdCtx, str));
+		return entity.getBukkitEntity().getType();
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public LootTable getLootTable(CommandContext cmdCtx, String str) {
+		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.c(cmdCtx, str);
+		String namespace = minecraftKey.b();
+		String key = minecraftKey.getKey();
+		
+		net.minecraft.server.v1_13_R2.LootTable lootTable = getCLW(cmdCtx).getServer().getLootTableRegistry().getLootTable(minecraftKey);
+		return new CraftLootTable(new NamespacedKey(namespace, key), lootTable);
+	}
+
+	@Override
+	public SimpleCommandMap getSimpleCommandMap() {
+		return ((CraftServer) Bukkit.getServer()).getCommandMap();
+	}
+
+	@Override
+	public boolean isVanillaCommandWrapper(Command command) {
+		return command instanceof VanillaCommandWrapper;
 	}
 
 }

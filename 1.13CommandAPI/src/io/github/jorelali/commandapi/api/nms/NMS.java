@@ -7,12 +7,16 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.command.BlockCommandSender;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ProxiedCommandSender;
+import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
 
 import com.mojang.brigadier.CommandDispatcher;
@@ -22,6 +26,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 
 import io.github.jorelali.commandapi.api.FunctionWrapper;
 import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
+import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
 import io.github.jorelali.commandapi.api.arguments.LocationArgument.LocationType;
 import net.md_5.bungee.api.chat.BaseComponent;
 
@@ -75,4 +80,14 @@ public interface NMS {
 	public CommandSender getCommandSenderForCLW(Object clw);
 	
 	public Player getPlayer(CommandContext cmdCtx, String str) throws CommandSyntaxException;
+	
+	public Object getEntitySelector(CommandContext cmdCtx, String str, EntitySelector selector) throws CommandSyntaxException;
+
+	public EntityType getEntityType(CommandContext cmdCtx, String str, CommandSender sender) throws CommandSyntaxException;
+	
+	public LootTable getLootTable(CommandContext cmdCtx, String str);
+	
+	public SimpleCommandMap getSimpleCommandMap();
+	
+	public boolean isVanillaCommandWrapper(Command command);
 }

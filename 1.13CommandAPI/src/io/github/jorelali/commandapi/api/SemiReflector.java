@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -18,24 +16,16 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
 import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
-import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.loot.LootTable;
 import org.bukkit.permissions.Permission;
 
-import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
@@ -71,18 +61,11 @@ public final class SemiReflector {
 	private TreeMap<String, CommandPermission> permissionsToFix;
 
 	//Cache maps
-	private static Map<String, Class<?>> NMSClasses;
-	private static Map<String, Class<?>> OBCClasses;
-	private static Map<ClassCache, Method> methods;
 	private static Map<ClassCache, Field> fields;
-	
-	//OBC
-	private String obcPackageName = null;
-	
+		
 	//NMS variables
 	private static String packageName = null;
 	private CommandDispatcher dispatcher;
-	private Object nmsCommandDispatcher;
 	
 	private int version;
 	private String versionStr; //Just in case (v1_13_R2 or v1_14_R1)
@@ -103,7 +86,6 @@ public final class SemiReflector {
 			//net.minecraft.server.v1_13_R2.MinecraftServer
 			version = Integer.parseInt(packageName.substring(24, 26));
 			versionStr = packageName.split("\\Q.\\E")[3];
-			obcPackageName = Bukkit.getServer().getClass().getPackage().getName();
 			
 			switch(version) {
 				case 13:
@@ -115,14 +97,9 @@ public final class SemiReflector {
 			}
 			
 			//Everything from this line will use getNMSClass(), so we initialize our cache here
-			NMSClasses = new HashMap<>();
-			OBCClasses = new HashMap<>();
-			methods = new HashMap<>();
 			fields = new HashMap<>();
 			permissionsToFix = new TreeMap<>();
-			
-			this.nmsCommandDispatcher = nms.getNMSCommandDispatcher(server);
-						
+									
 			this.dispatcher = nms.getDispatcher(server); 
 
 		} catch(Exception e) {
@@ -206,112 +183,11 @@ public final class SemiReflector {
 							argList.add(nms.getEnchantment(cmdCtx, entry.getKey()));
 							break;
 						case ENTITY_SELECTOR:
-							try {
-								/*
-								 * single entity -> a
-								 * many entities -> c (b if exception on empty)
-								 * single player -> e
-								 * many players  -> d (f if exception on empty)
-								 */
-								EntitySelectorArgument argument = (EntitySelectorArgument) entry.getValue();
-								switch(argument.getEntitySelector()) {
-									case MANY_ENTITIES:
-									default:
-										try {
-											Collection<?> collectionOfEntities = (Collection<?>) getMethod(getNMSClass("ArgumentEntity"), "c", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-											Collection<Entity> entities = new ArrayList<>();
-											for(Object nmsEntity : collectionOfEntities) {
-												entities.add((Entity) getMethod(getNMSClass("Entity"), "getBukkitEntity").invoke(nmsEntity));
-											}
-											argList.add(entities);
-										}
-										catch(InvocationTargetException e) {
-											if(e.getCause() instanceof CommandSyntaxException) {
-												argList.add((Collection<Entity>) new ArrayList<Entity>());
-											}
-										}
-										break;
-									case MANY_PLAYERS:
-										try {
-											Collection<?> collectionOfPlayers = (Collection<?>) getMethod(getNMSClass("ArgumentEntity"), "d", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-											Collection<Player> players = new ArrayList<>();
-											for(Object nmsPlayer : collectionOfPlayers) {
-												players.add((Player) getMethod(getNMSClass("Entity"), "getBukkitEntity").invoke(nmsPlayer));
-											}
-											argList.add(players);
-										} catch(InvocationTargetException e) {
-											if(e.getCause() instanceof CommandSyntaxException) {
-												argList.add((Collection<Player>) new ArrayList<Player>());
-											}
-										}
-										break;
-									case ONE_ENTITY:
-										try {
-											Object entity = (Object) getMethod(getNMSClass("ArgumentEntity"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-											argList.add((Entity) getMethod(getNMSClass("Entity"), "getBukkitEntity").invoke(entity));
-										} catch(InvocationTargetException e) {
-											if(e.getCause() instanceof CommandSyntaxException) {
-												throw (CommandSyntaxException) e.getCause();
-											}
-										}
-										break;
-									case ONE_PLAYER:
-										try {
-											Object player = (Object) getMethod(getNMSClass("ArgumentEntity"), "e", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-											argList.add((Player) getMethod(getNMSClass("Entity"), "getBukkitEntity").invoke(player));
-										} catch(InvocationTargetException e) {
-											if(e.getCause() instanceof CommandSyntaxException) {
-												throw (CommandSyntaxException) e.getCause();
-											}
-										}
-										break;								
-								}
-							} catch (SecurityException | IllegalAccessException | IllegalArgumentException e) {
-								e.printStackTrace(System.out);
-							}
+							EntitySelectorArgument argument = (EntitySelectorArgument) entry.getValue();
+							argList.add(nms.getEntitySelector(cmdCtx, entry.getKey(), argument.getEntitySelector()));
 							break;
 						case ENTITY_TYPE:
-							try {
-								Object minecraftKey = getMethod(getNMSClass("ArgumentEntitySummon"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-								World world = getCommandSenderWorld(sender);
-								Object craftWorld = getOBCClass("CraftWorld").cast(world);
-								Object handle = getMethod(getOBCClass("CraftWorld"), "getHandle").invoke(craftWorld);
-								Object minecraftWorld = getNMSClass("World").cast(handle);
-								
-								Object entity;
-								switch(version) {
-									case 13:
-										entity = getMethod(getNMSClass("EntityTypes"), "a", getNMSClass("World"), getNMSClass("MinecraftKey")).invoke(null, minecraftWorld, minecraftKey);
-										break;
-									case 14:
-										entity = null;
-										/**
-										 * 	@Nullable
-											public static Entity a(World world, MinecraftKey minecraftkey) {
-												return a(world, (EntityTypes) IRegistry.ENTITY_TYPE.get(minecraftkey));
-											}
-											
-											->	aZ = b<T>
-											 	public static interface b<T extends Entity> {
-													public T create(EntityTypes<T> var1, World var2);
-												}
-												
-												@Nullable
-												public T a(World world) {
-													return this.aZ.create(this, world);
-												}
-										 */
-										break;
-									default:
-										entity = null;
-										break;
-								}
-								Object entityCasted = getNMSClass("Entity").cast(entity);
-								Object bukkitEntity = getMethod(getNMSClass("Entity"), "getBukkitEntity").invoke(entityCasted);
-								argList.add((EntityType) bukkitEntity.getClass().getDeclaredMethod("getType").invoke(bukkitEntity));
-							} catch (Exception e) {
-								e.printStackTrace(System.out);
-							}
+							argList.add(nms.getEntityType(cmdCtx, entry.getKey(), sender));
 							break;
 						case FUNCTION:
 							argList.add(nms.getFunction(cmdCtx, entry.getKey()));
@@ -326,24 +202,7 @@ public final class SemiReflector {
 							argList.add(nms.getLocation(cmdCtx, entry.getKey(), locationType, sender));
 							break;
 						case LOOT_TABLE:
-							try {
-								//Get namespaced key
-								Object minecraftKey = getMethod(getNMSClass("ArgumentMinecraftKeyRegistered"), "c", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-								String namespace = (String) getMethod(getNMSClass("MinecraftKey"), "b").invoke(minecraftKey);
-								String key = (String) getMethod(getNMSClass("MinecraftKey"), "getKey").invoke(minecraftKey);
-								NamespacedKey nameSpacedKey = new NamespacedKey(namespace, key);
-								
-								//Get loot table
-								Object NMSServer = getMethod(getNMSClass("CommandListenerWrapper"), "getServer").invoke(cmdCtx.getSource());
-								Object lootTableRegistry = getMethod(getNMSClass("MinecraftServer"), "getLootTableRegistry").invoke(NMSServer);
-								Object nmsLootTable = getMethod(getNMSClass("LootTableRegistry"), "getLootTable").invoke(lootTableRegistry, minecraftKey);
-
-								LootTable lootTable = (LootTable) getOBCClass("CraftLootTable").getConstructor(NamespacedKey.class, getNMSClass("LootTable")).newInstance(nameSpacedKey, nmsLootTable);
-								
-								argList.add(lootTable);
-							} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException | NoSuchMethodException | SecurityException | ClassNotFoundException e1) {
-								e1.printStackTrace(System.out);
-							}
+							argList.add(nms.getLootTable(cmdCtx, entry.getKey()));
 							break;
 						case PARTICLE:
 							argList.add(nms.getParticle(cmdCtx, entry.getKey()));
@@ -442,15 +301,13 @@ public final class SemiReflector {
 		}
 	}
 	
-	protected void fixPermissions() {
+	protected void fixPermissions() throws InvocationTargetException {
 		try {
 			
-			SimpleCommandMap map = (SimpleCommandMap) getMethod(getOBCClass("CraftServer"), "getCommandMap").invoke(Bukkit.getServer());
+			SimpleCommandMap map = nms.getSimpleCommandMap();
 			Field f = getField(SimpleCommandMap.class, "knownCommands");
 			Map<String, org.bukkit.command.Command> knownCommands = (Map<String, org.bukkit.command.Command>) f.get(map);
-			
-			Class vcw = getOBCClass("command.VanillaCommandWrapper");
-			
+						
 			CommandAPIMain.getLog().info("Linking permissions to commands:");
 			
 			permissionsToFix.forEach((cmdName, perm) -> {
@@ -465,10 +322,10 @@ public final class SemiReflector {
 				     *     return true;
 				     * }
 					 */
-					if(vcw.isInstance(knownCommands.get(cmdName))) {
+					if(nms.isVanillaCommandWrapper(knownCommands.get(cmdName))) {
 						knownCommands.get(cmdName).setPermission("");
 					}
-					if(vcw.isInstance(knownCommands.get("minecraft:" + cmdName))) {
+					if(nms.isVanillaCommandWrapper(knownCommands.get("minecraft:" + cmdName))) {
 						knownCommands.get(cmdName).setPermission("");
 					}
 				} else {
@@ -476,10 +333,10 @@ public final class SemiReflector {
 						if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
 							CommandAPIMain.getLog().info(perm.getPermission() + " -> /" + cmdName);
 						}
-						if(vcw.isInstance(knownCommands.get(cmdName))) {
+						if(nms.isVanillaCommandWrapper(knownCommands.get(cmdName))) {
 							knownCommands.get(cmdName).setPermission(perm.getPermission());
 						}
-						if(vcw.isInstance(knownCommands.get("minecraft:" + cmdName))) {
+						if(nms.isVanillaCommandWrapper(knownCommands.get("minecraft:" + cmdName))) {
 							knownCommands.get(cmdName).setPermission(perm.getPermission());
 						}
 					} else {
@@ -488,7 +345,7 @@ public final class SemiReflector {
 				
 				
 			});
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | ClassNotFoundException e) {
+		} catch (IllegalAccessException | IllegalArgumentException e) {
 			e.printStackTrace();
 		}
 	}
