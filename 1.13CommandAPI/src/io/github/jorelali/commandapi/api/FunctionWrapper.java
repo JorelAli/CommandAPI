@@ -2,10 +2,16 @@ package io.github.jorelali.commandapi.api;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.function.ToIntBiFunction;
 
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
+
+import io.github.jorelali.commandapi.api.FunctionWrapper.EntityMapper;
+import net.minecraft.server.v1_13_R2.CommandListenerWrapper;
+import net.minecraft.server.v1_13_R2.CustomFunction;
+import net.minecraft.server.v1_13_R2.CustomFunctionData;
 
 /**
  * A wrapper class for Minecraft 1.12's functions
@@ -14,7 +20,7 @@ public class FunctionWrapper implements Keyed {
 	
 	//Converts a Bukkit Entity to a Minecraft Entity to a CommandListenerWrapper
 	@FunctionalInterface
-	interface EntityMapper {
+	public interface EntityMapper {
 		
 		/* In Reflection, where clw is the instance of a CommandListenerWrapper:
 		    e -> {
@@ -42,7 +48,7 @@ public class FunctionWrapper implements Keyed {
 	 * @param argB the instance of the CommandListenerWrapper which executed this command
 	 * @param mapper A function which maps a Bukkit Entity into a Minecraft Entity
 	 */
-	protected FunctionWrapper(String minecraftKey, Method invoker, Object funcData, Object custFunc, Object argB, EntityMapper mapper) {
+	public FunctionWrapper(String minecraftKey, Method invoker, Object funcData, Object custFunc, Object argB, EntityMapper mapper) {
 		this.minecraftKey = minecraftKey;
 		this.invoker = invoker;
 		this.mapper = mapper;
@@ -51,6 +57,19 @@ public class FunctionWrapper implements Keyed {
 		this.argB = argB;
 	}
 	
+	private ToIntBiFunction<Object, Object> tibfInvoker;
+	
+	public FunctionWrapper(String string, ToIntBiFunction<CustomFunction, CommandListenerWrapper> invoker2,
+			CustomFunctionData customFunctionData, CustomFunction customFunction,
+			CommandListenerWrapper commandListenerWrapper, EntityMapper mapper2) {
+		this.minecraftKey = string;
+		this.tibfInvoker = invoker2;
+		this.mapper = customFunctionData;
+		this.funcData = customFunction;
+		this.custFunc = custFunc;
+		this.argB = commandListenerWrapper;
+	}
+
 	/**
 	 * Executes this function as the executor of the command
 	 */
@@ -67,11 +86,7 @@ public class FunctionWrapper implements Keyed {
 	}
 	
 	private void run(Object clw) {
-		try {
-			invoker.invoke(funcData, custFunc, clw);
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
-		}
+		tibfInvoker.applyAsInt(custFunc, clw);
 	}
 
 	/*
