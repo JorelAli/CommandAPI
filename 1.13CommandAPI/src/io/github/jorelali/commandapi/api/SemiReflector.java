@@ -100,7 +100,8 @@ public final class SemiReflector {
 	private CommandDispatcher dispatcher;
 	private Object nmsCommandDispatcher;
 	
-	private int version = 13;
+	private int version;
+	private String versionStr; //Just in case (v1_13_R2 or v1_14_R1)
 	
 	protected SemiReflector() throws ClassNotFoundException {
 		
@@ -115,6 +116,7 @@ public final class SemiReflector {
 			SemiReflector.packageName = server.getClass().getPackage().getName();
 			//net.minecraft.server.v1_13_R2.MinecraftServer
 			version = Integer.parseInt(packageName.substring(24, 26));
+			versionStr = packageName.split("\\Q.\\E")[3];
 			obcPackageName = Bukkit.getServer().getClass().getPackage().getName();
 			
 			//Everything from this line will use getNMSClass(), so we initialize our cache here
