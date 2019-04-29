@@ -25,5 +25,7 @@ public interface Argument {
 	public <T extends Argument> T withPermission(CommandPermission permission);
 	
 	public CommandPermission getArgumentPermission();
+	
+	public CommandAPIArgumentType getArgumentType();
 		
 }

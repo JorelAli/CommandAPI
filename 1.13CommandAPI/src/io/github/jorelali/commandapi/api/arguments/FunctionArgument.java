@@ -52,4 +52,9 @@ public class FunctionArgument implements Argument, CustomProvidedArgument {
 	public SuggestionProviders getSuggestionProvider() {
 		return SuggestionProviders.FUNCTION;
 	}
+	
+	@Override
+	public CommandAPIArgumentType getArgumentType() {
+		return CommandAPIArgumentType.FUNCTION;
+	}
 }

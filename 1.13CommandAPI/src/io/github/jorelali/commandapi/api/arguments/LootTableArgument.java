@@ -48,4 +48,9 @@ public class LootTableArgument implements Argument, CustomProvidedArgument {
 	public SuggestionProviders getSuggestionProvider() {
 		return SuggestionProviders.LOOT_TABLES;
 	}
+	
+	@Override
+	public CommandAPIArgumentType getArgumentType() {
+		return CommandAPIArgumentType.LOOT_TABLE;
+	}
 }

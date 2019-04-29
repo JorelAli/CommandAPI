@@ -55,27 +55,17 @@ import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import io.github.jorelali.commandapi.api.arguments.Argument;
-import io.github.jorelali.commandapi.api.arguments.ChatColorArgument;
-import io.github.jorelali.commandapi.api.arguments.ChatComponentArgument;
 import io.github.jorelali.commandapi.api.arguments.CustomArgument;
 import io.github.jorelali.commandapi.api.arguments.CustomArgument.CustomArgumentException;
 import io.github.jorelali.commandapi.api.arguments.CustomArgument.MessageBuilder;
 import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument;
 import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
 import io.github.jorelali.commandapi.api.arguments.DynamicSuggestedStringArgument;
-import io.github.jorelali.commandapi.api.arguments.EnchantmentArgument;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument;
-import io.github.jorelali.commandapi.api.arguments.EntityTypeArgument;
-import io.github.jorelali.commandapi.api.arguments.FunctionArgument;
-import io.github.jorelali.commandapi.api.arguments.ItemStackArgument;
 import io.github.jorelali.commandapi.api.arguments.LiteralArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationArgument.LocationType;
-import io.github.jorelali.commandapi.api.arguments.LootTableArgument;
 import io.github.jorelali.commandapi.api.arguments.OverrideableSuggestions;
-import io.github.jorelali.commandapi.api.arguments.ParticleArgument;
-import io.github.jorelali.commandapi.api.arguments.PlayerArgument;
-import io.github.jorelali.commandapi.api.arguments.PotionEffectArgument;
 import io.github.jorelali.commandapi.api.arguments.StringArgument;
 import io.github.jorelali.commandapi.api.arguments.SuggestedStringArgument;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -104,6 +94,8 @@ public final class SemiReflector {
 	private CommandDispatcher dispatcher;
 	private Object cDispatcher;
 	
+	private int version = 13;
+	
 	protected SemiReflector() throws ClassNotFoundException {
 		
 		//Package checks
@@ -115,6 +107,8 @@ public final class SemiReflector {
 			//Setup NMS
 			Object server = Bukkit.getServer().getClass().getDeclaredMethod("getServer").invoke(Bukkit.getServer());
 			SemiReflector.packageName = server.getClass().getPackage().getName();
+			//net.minecraft.server.v1_13_R2.MinecraftServer
+			version = Integer.parseInt(packageName.substring(24, 26));
 			obcPackageName = Bukkit.getServer().getClass().getPackage().getName();
 			
 			//Everything from this line will use getNMSClass(), so we initialize our cache here
@@ -232,270 +226,312 @@ public final class SemiReflector {
 				if(entry.getValue().isSimple()) {
 					argList.add(cmdCtx.getArgument(entry.getKey(), entry.getValue().getPrimitiveType()));
 				} else {
-					
-					//Deal with those complex arguments
-					if(entry.getValue() instanceof ItemStackArgument) {
-						try {
-							//Parse Bukkit ItemStack from NMS 
-							Method asBukkitCopy = getMethod(getOBCClass("inventory.CraftItemStack"), "asBukkitCopy", getNMSClass("ItemStack"));
-							Object argumentIS = getMethod(getNMSClass("ArgumentItemStack"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-							Object nmsIS = getMethod(argumentIS.getClass(), "a", int.class, boolean.class).invoke(argumentIS, 1, false);
-							argList.add((ItemStack) asBukkitCopy.invoke(null, nmsIS));
-						} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-							e.printStackTrace(System.out);
-						}
-					} else if(entry.getValue() instanceof ParticleArgument) {
-						try {
-							//Particle Bukkit Particle from NMS
-							Method toBukkit = getMethod(getOBCClass("CraftParticle"), "toBukkit", getNMSClass("ParticleParam"));
-							Object particleParam = getMethod(getNMSClass("ArgumentParticle"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-							argList.add((Particle) toBukkit.invoke(null, particleParam));
-						} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-							e.printStackTrace(System.out);
-						}
-					} else if(entry.getValue() instanceof PotionEffectArgument) {
-						try {
-							Constructor craftPotionType = getOBCClass("potion.CraftPotionEffectType").getConstructor(getNMSClass("MobEffectList"));
-							Object mobEffect = getMethod(getNMSClass("ArgumentMobEffect"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-							argList.add((PotionEffectType) craftPotionType.newInstance(mobEffect));
-						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException e) {
-							e.printStackTrace(System.out);
-						}
-					} else if(entry.getValue() instanceof ChatColorArgument) {
-						try {
-							Method getColor = getMethod(getOBCClass("util.CraftChatMessage"), "getColor", getNMSClass("EnumChatFormat"));
-							Object enumChatFormat = getMethod(getNMSClass("ArgumentChatFormat"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-							argList.add((ChatColor) getColor.invoke(null, enumChatFormat));
-						} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-							e.printStackTrace(System.out);
-						}
-					} else if(entry.getValue() instanceof EnchantmentArgument) {
-						try {
-							Constructor craftEnchant = getOBCClass("enchantments.CraftEnchantment").getConstructor(getNMSClass("Enchantment"));
-							Object nmsEnchantment = getMethod(getNMSClass("ArgumentEnchantment"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-							argList.add((Enchantment) craftEnchant.newInstance(nmsEnchantment));
-						} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException e) {
-							e.printStackTrace(System.out);
-						}
-					} else if(entry.getValue() instanceof LocationArgument) {
-						
-						LocationType locationType = ((LocationArgument) entry.getValue()).getLocationType();
-						switch(locationType) {
-							case BLOCK_POSITION:
-								try {
-									Object blockPosition = getMethod(getNMSClass("ArgumentPosition"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-									int x = (int) getMethod(getNMSClass("BaseBlockPosition"), "getX").invoke(blockPosition);
-									int y = (int) getMethod(getNMSClass("BaseBlockPosition"), "getY").invoke(blockPosition);
-									int z = (int) getMethod(getNMSClass("BaseBlockPosition"), "getZ").invoke(blockPosition);
-									World world = getCommandSenderWorld(sender);
-									argList.add(new Location(world, x, y, z));
-								} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-									e.printStackTrace(System.out);
-								}
-								break;
-							case PRECISE_POSITION:
-								try {	 	
-									Object vec3D = getMethod(getNMSClass("ArgumentVec3"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-									double x = getField(vec3D.getClass(), "x").getDouble(vec3D);
-									double y = getField(vec3D.getClass(), "y").getDouble(vec3D);
-									double z = getField(vec3D.getClass(),"z").getDouble(vec3D);
-									World world = getCommandSenderWorld(sender);
-									argList.add(new Location(world, x, y, z));
-								} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-									e.printStackTrace(System.out);
-								}
-								break;
-						}
-					} else if(entry.getValue() instanceof EntityTypeArgument) {
-						try {
-							Object minecraftKey = getMethod(getNMSClass("ArgumentEntitySummon"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-							World world = getCommandSenderWorld(sender);
-							Object craftWorld = getOBCClass("CraftWorld").cast(world);
-							Object handle = getMethod(craftWorld.getClass(), "getHandle").invoke(craftWorld);
-							Object minecraftWorld = getNMSClass("World").cast(handle);
-							
-							Object entity = getMethod(getNMSClass("EntityTypes"), "a", getNMSClass("World"), getNMSClass("MinecraftKey")).invoke(null, minecraftWorld, minecraftKey);
-							Object entityCasted = getNMSClass("Entity").cast(entity);
-							Object bukkitEntity = getMethod(getNMSClass("Entity"), "getBukkitEntity").invoke(entityCasted);
-							argList.add((EntityType) bukkitEntity.getClass().getDeclaredMethod("getType").invoke(bukkitEntity));
-						} catch (Exception e) {
-							e.printStackTrace(System.out);
-						}
-					} else if(entry.getValue() instanceof PlayerArgument) {
-						try {
-							Collection<?> collectionOfPlayers = (Collection<?>) getMethod(getNMSClass("ArgumentProfile"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-							Object first = collectionOfPlayers.iterator().next();
-							UUID uuid = (UUID) getMethod(first.getClass(), "getId").invoke(first);
-							Player target = Bukkit.getPlayer(uuid);
-							if(target == null) {
-								throw ((SimpleCommandExceptionType) getField(getNMSClass("ArgumentProfile"), "a").get(null)).create();
+					switch(entry.getValue().getArgumentType()) {
+						case CHATCOLOR:
+							try {
+								Method getColor = getMethod(getOBCClass("util.CraftChatMessage"), "getColor", getNMSClass("EnumChatFormat"));
+								Object enumChatFormat = getMethod(getNMSClass("ArgumentChatFormat"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+								argList.add((ChatColor) getColor.invoke(null, enumChatFormat));
+							} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+								e.printStackTrace(System.out);
 							}
-							argList.add(target);
-						} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-							e.printStackTrace(System.out);
-						}
-					} else if(entry.getValue() instanceof EntitySelectorArgument) {
-						try {
-							/*
-							 * single entity -> a
-							 * many entities -> c (b if exception on empty)
-							 * single player -> e
-							 * many players  -> d (f if exception on empty)
-							 */
-							EntitySelectorArgument argument = (EntitySelectorArgument) entry.getValue();
-							switch(argument.getEntitySelector()) {
-								case MANY_ENTITIES:
-								default:
-									try {
-										Collection<?> collectionOfEntities = (Collection<?>) getMethod(getNMSClass("ArgumentEntity"), "c", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-										Collection<Entity> entities = new ArrayList<>();
-										for(Object nmsEntity : collectionOfEntities) {
-											entities.add((Entity) getMethod(getNMSClass("Entity"), "getBukkitEntity").invoke(nmsEntity));
-										}
-										argList.add(entities);
-									}
-									catch(InvocationTargetException e) {
-										if(e.getCause() instanceof CommandSyntaxException) {
-											argList.add((Collection<Entity>) new ArrayList<Entity>());
-										}
-									}
-									break;
-								case MANY_PLAYERS:
-									try {
-										Collection<?> collectionOfPlayers = (Collection<?>) getMethod(getNMSClass("ArgumentEntity"), "d", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-										Collection<Player> players = new ArrayList<>();
-										for(Object nmsPlayer : collectionOfPlayers) {
-											players.add((Player) getMethod(getNMSClass("Entity"), "getBukkitEntity").invoke(nmsPlayer));
-										}
-										argList.add(players);
-									} catch(InvocationTargetException e) {
-										if(e.getCause() instanceof CommandSyntaxException) {
-											argList.add((Collection<Player>) new ArrayList<Player>());
-										}
-									}
-									break;
-								case ONE_ENTITY:
-									try {
-										Object entity = (Object) getMethod(getNMSClass("ArgumentEntity"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-										argList.add((Entity) getMethod(getNMSClass("Entity"), "getBukkitEntity").invoke(entity));
-									} catch(InvocationTargetException e) {
-										if(e.getCause() instanceof CommandSyntaxException) {
-											throw (CommandSyntaxException) e.getCause();
-										}
-									}
-									break;
-								case ONE_PLAYER:
-									try {
-										Object player = (Object) getMethod(getNMSClass("ArgumentEntity"), "e", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-										argList.add((Player) getMethod(getNMSClass("Entity"), "getBukkitEntity").invoke(player));
-									} catch(InvocationTargetException e) {
-										if(e.getCause() instanceof CommandSyntaxException) {
-											throw (CommandSyntaxException) e.getCause();
-										}
-									}
-									break;								
+							break;
+						case CHAT_COMPONENT:
+							try {
+								//Invokes public String IChatBaseComponent.ChatSerializer.a(IChatComponent c);
+								Method m = getMethod(getNMSClass("IChatBaseComponent$ChatSerializer"), "a", getNMSClass("IChatBaseComponent"));
+								Object iChatBaseComponent = getMethod(getNMSClass("ArgumentChatComponent"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+								Object resultantString = m.invoke(null, iChatBaseComponent);
+								//Convert to spigot thing
+								BaseComponent[] components = ComponentSerializer.parse((String) resultantString);
+								argList.add((BaseComponent[]) components);
+							} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+								e.printStackTrace(System.out);
 							}
-						} catch (SecurityException | IllegalAccessException | IllegalArgumentException e) {
-							e.printStackTrace(System.out);
-						}
-					} else if(entry.getValue() instanceof ChatComponentArgument) {
-						try {
-							//Invokes public String IChatBaseComponent.ChatSerializer.a(IChatComponent c);
-							Method m = getMethod(getNMSClass("IChatBaseComponent$ChatSerializer"), "a", getNMSClass("IChatBaseComponent"));
-							Object iChatBaseComponent = getMethod(getNMSClass("ArgumentChatComponent"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-							Object resultantString = m.invoke(null, iChatBaseComponent);
-							//Convert to spigot thing
-							BaseComponent[] components = ComponentSerializer.parse((String) resultantString);
-							argList.add((BaseComponent[]) components);
-						} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-							e.printStackTrace(System.out);
-						}
-					} else if(entry.getValue() instanceof FunctionArgument) {
-						try {				 
-							Collection<?> customFuncList = (Collection<?>) getMethod(getNMSClass("ArgumentTag"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-							
-							//Adds support for Tags
-							FunctionWrapper[] result = new FunctionWrapper[customFuncList.size()];
-							
-							//Get first CustomFunction from the list.
-							Object clw = cmdCtx.getSource();
-							//Object customFunction = customFuncList.iterator().next();
-							
-							//Retrieve CustomFunctionData from main server
-							Object minecraftServer = getMethod(getNMSClass("CommandListenerWrapper"), "getServer").invoke(clw);
-							Object customFunctionData = getMethod(getNMSClass("MinecraftServer"), "getFunctionData").invoke(minecraftServer);
-							
-							//Method which invokes the function
-							Method invoker = getMethod(getNMSClass("CustomFunctionData"), "a", getNMSClass("CustomFunction"), getNMSClass("CommandListenerWrapper"));
-							
-							//Get right correct CommandListenerWrapper to execute this command
-							Object clwA = getMethod(getNMSClass("CommandListenerWrapper"), "a").invoke(clw);
-							Object commandListenerWrapper = getMethod(getNMSClass("CommandListenerWrapper"), "b", int.class).invoke(clwA, 2);
-										
-							int count = 0;
-							Iterator<?> it = customFuncList.iterator();
-							while(it.hasNext()) {
-								Object customFunction = it.next();
+							break;
+						case CUSTOM:
+							CustomArgument arg = (CustomArgument) entry.getValue();
+							String customresult = (String) cmdCtx.getArgument(entry.getKey(), String.class);
+							try {
+								argList.add(arg.getParser().apply(customresult));
+							} catch(CustomArgumentException e) {
+								throw e.toCommandSyntax(customresult, cmdCtx);
+							} catch(Exception e) {
+								String errorMsg = new MessageBuilder("Error in executing command ")
+										.appendFullInput().append(" - ").appendArgInput().appendHere().toString()
+										.replace("%input%", customresult).replace("%finput%", cmdCtx.getInput());
+								throw new SimpleCommandExceptionType(() -> {return errorMsg;}).create();
+							}
+							break;
+						case ENCHANTMENT:
+							try {
+								Constructor craftEnchant = getOBCClass("enchantments.CraftEnchantment").getConstructor(getNMSClass("Enchantment"));
+								Object nmsEnchantment = getMethod(getNMSClass("ArgumentEnchantment"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+								argList.add((Enchantment) craftEnchant.newInstance(nmsEnchantment));
+							} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException e) {
+								e.printStackTrace(System.out);
+							}
+							break;
+						case ENTITY_SELECTOR:
+							try {
+								/*
+								 * single entity -> a
+								 * many entities -> c (b if exception on empty)
+								 * single player -> e
+								 * many players  -> d (f if exception on empty)
+								 */
+								EntitySelectorArgument argument = (EntitySelectorArgument) entry.getValue();
+								switch(argument.getEntitySelector()) {
+									case MANY_ENTITIES:
+									default:
+										try {
+											Collection<?> collectionOfEntities = (Collection<?>) getMethod(getNMSClass("ArgumentEntity"), "c", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+											Collection<Entity> entities = new ArrayList<>();
+											for(Object nmsEntity : collectionOfEntities) {
+												entities.add((Entity) getMethod(getNMSClass("Entity"), "getBukkitEntity").invoke(nmsEntity));
+											}
+											argList.add(entities);
+										}
+										catch(InvocationTargetException e) {
+											if(e.getCause() instanceof CommandSyntaxException) {
+												argList.add((Collection<Entity>) new ArrayList<Entity>());
+											}
+										}
+										break;
+									case MANY_PLAYERS:
+										try {
+											Collection<?> collectionOfPlayers = (Collection<?>) getMethod(getNMSClass("ArgumentEntity"), "d", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+											Collection<Player> players = new ArrayList<>();
+											for(Object nmsPlayer : collectionOfPlayers) {
+												players.add((Player) getMethod(getNMSClass("Entity"), "getBukkitEntity").invoke(nmsPlayer));
+											}
+											argList.add(players);
+										} catch(InvocationTargetException e) {
+											if(e.getCause() instanceof CommandSyntaxException) {
+												argList.add((Collection<Player>) new ArrayList<Player>());
+											}
+										}
+										break;
+									case ONE_ENTITY:
+										try {
+											Object entity = (Object) getMethod(getNMSClass("ArgumentEntity"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+											argList.add((Entity) getMethod(getNMSClass("Entity"), "getBukkitEntity").invoke(entity));
+										} catch(InvocationTargetException e) {
+											if(e.getCause() instanceof CommandSyntaxException) {
+												throw (CommandSyntaxException) e.getCause();
+											}
+										}
+										break;
+									case ONE_PLAYER:
+										try {
+											Object player = (Object) getMethod(getNMSClass("ArgumentEntity"), "e", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+											argList.add((Player) getMethod(getNMSClass("Entity"), "getBukkitEntity").invoke(player));
+										} catch(InvocationTargetException e) {
+											if(e.getCause() instanceof CommandSyntaxException) {
+												throw (CommandSyntaxException) e.getCause();
+											}
+										}
+										break;								
+								}
+							} catch (SecurityException | IllegalAccessException | IllegalArgumentException e) {
+								e.printStackTrace(System.out);
+							}
+							break;
+						case ENTITY_TYPE:
+							try {
+								Object minecraftKey = getMethod(getNMSClass("ArgumentEntitySummon"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+								World world = getCommandSenderWorld(sender);
+								Object craftWorld = getOBCClass("CraftWorld").cast(world);
+								Object handle = getMethod(craftWorld.getClass(), "getHandle").invoke(craftWorld);
+								Object minecraftWorld = getNMSClass("World").cast(handle);
 								
-								//Parse the name of the MinecraftKey
-								Object minecraftKey = getMethod(getNMSClass("CustomFunction"), "a").invoke(customFunction);
-								String key = (String) getMethod(getNMSClass("MinecraftKey"), "toString").invoke(minecraftKey);
+								Object entity;
+								switch(version) {
+									case 13:
+										entity = getMethod(getNMSClass("EntityTypes"), "a", getNMSClass("World"), getNMSClass("MinecraftKey")).invoke(null, minecraftWorld, minecraftKey);
+										break;
+									case 14:
+										entity = null;
+										/**
+										 * 	@Nullable
+											public static Entity a(World world, MinecraftKey minecraftkey) {
+												return a(world, (EntityTypes) IRegistry.ENTITY_TYPE.get(minecraftkey));
+											}
+											
+											->	aZ = b<T>
+											 	public static interface b<T extends Entity> {
+													public T create(EntityTypes<T> var1, World var2);
+												}
+												
+												@Nullable
+												public T a(World world) {
+													return this.aZ.create(this, world);
+												}
+										 */
+										break;
+									default:
+										entity = null;
+										break;
+								}
+								Object entityCasted = getNMSClass("Entity").cast(entity);
+								Object bukkitEntity = getMethod(getNMSClass("Entity"), "getBukkitEntity").invoke(entityCasted);
+								argList.add((EntityType) bukkitEntity.getClass().getDeclaredMethod("getType").invoke(bukkitEntity));
+							} catch (Exception e) {
+								e.printStackTrace(System.out);
+							}
+							break;
+						case FUNCTION:
+							try {				 
+								Collection<?> customFuncList = (Collection<?>) getMethod(getNMSClass("ArgumentTag"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
 								
-								//Create wrapper and implement a function to map Bukkit Entities to NMS CommandListenerWrappers
-								FunctionWrapper wrapper = new FunctionWrapper(key, invoker, customFunctionData, customFunction, commandListenerWrapper, e -> {
-									//Mapper function
-									try {
-										Object nmsEntity = getMethod(getOBCClass("entity.CraftEntity"), "getHandle").invoke(e);
-										return getMethod(getNMSClass("CommandListenerWrapper"), "a", getNMSClass("Entity")).invoke(clw, nmsEntity);
-									} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
-											| ClassNotFoundException e1) {
-										e1.printStackTrace();
-									}
+								//Adds support for Tags
+								FunctionWrapper[] result = new FunctionWrapper[customFuncList.size()];
+								
+								//Get first CustomFunction from the list.
+								Object clw = cmdCtx.getSource();
+								//Object customFunction = customFuncList.iterator().next();
+								
+								//Retrieve CustomFunctionData from main server
+								Object minecraftServer = getMethod(getNMSClass("CommandListenerWrapper"), "getServer").invoke(clw);
+								Object customFunctionData = getMethod(getNMSClass("MinecraftServer"), "getFunctionData").invoke(minecraftServer);
+								
+								//Method which invokes the function
+								Method invoker = getMethod(getNMSClass("CustomFunctionData"), "a", getNMSClass("CustomFunction"), getNMSClass("CommandListenerWrapper"));
+								
+								//Get right correct CommandListenerWrapper to execute this command
+								Object clwA = getMethod(getNMSClass("CommandListenerWrapper"), "a").invoke(clw);
+								Object commandListenerWrapper = getMethod(getNMSClass("CommandListenerWrapper"), "b", int.class).invoke(clwA, 2);
+											
+								int count = 0;
+								Iterator<?> it = customFuncList.iterator();
+								while(it.hasNext()) {
+									Object customFunction = it.next();
 									
-									return null;
-								});
-								result[count] = wrapper;
-								count++;
+									//Parse the name of the MinecraftKey
+									Object minecraftKey = getMethod(getNMSClass("CustomFunction"), "a").invoke(customFunction);
+									String key = (String) getMethod(getNMSClass("MinecraftKey"), "toString").invoke(minecraftKey);
+									
+									//Create wrapper and implement a function to map Bukkit Entities to NMS CommandListenerWrappers
+									FunctionWrapper wrapper = new FunctionWrapper(key, invoker, customFunctionData, customFunction, commandListenerWrapper, e -> {
+										//Mapper function
+										try {
+											Object nmsEntity = getMethod(getOBCClass("entity.CraftEntity"), "getHandle").invoke(e);
+											return getMethod(getNMSClass("CommandListenerWrapper"), "a", getNMSClass("Entity")).invoke(clw, nmsEntity);
+										} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+												| ClassNotFoundException e1) {
+											e1.printStackTrace();
+										}
+										
+										return null;
+									});
+									result[count] = wrapper;
+									count++;
+								}
+								
+								//Add and finish.
+								argList.add(result);
+
+							} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+								e.printStackTrace(System.out);
 							}
-							
-							//Add and finish.
-							argList.add(result);
+							break;
+						case ITEMSTACK:
+							try {
+								//Parse Bukkit ItemStack from NMS 
+								Method asBukkitCopy = getMethod(getOBCClass("inventory.CraftItemStack"), "asBukkitCopy", getNMSClass("ItemStack"));
+								Object argumentIS = getMethod(getNMSClass("ArgumentItemStack"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+								Object nmsIS = getMethod(argumentIS.getClass(), "a", int.class, boolean.class).invoke(argumentIS, 1, false);
+								argList.add((ItemStack) asBukkitCopy.invoke(null, nmsIS));
+							} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+								e.printStackTrace(System.out);
+							}
+							break;
+						case LITERAL:
+							break;
+						case LOCATION:
+							LocationType locationType = ((LocationArgument) entry.getValue()).getLocationType();
+							switch(locationType) {
+								case BLOCK_POSITION:
+									try {
+										Object blockPosition = getMethod(getNMSClass("ArgumentPosition"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+										int x = (int) getMethod(getNMSClass("BaseBlockPosition"), "getX").invoke(blockPosition);
+										int y = (int) getMethod(getNMSClass("BaseBlockPosition"), "getY").invoke(blockPosition);
+										int z = (int) getMethod(getNMSClass("BaseBlockPosition"), "getZ").invoke(blockPosition);
+										World world = getCommandSenderWorld(sender);
+										argList.add(new Location(world, x, y, z));
+									} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+										e.printStackTrace(System.out);
+									}
+									break;
+								case PRECISE_POSITION:
+									try {	 	
+										Object vec3D = getMethod(getNMSClass("ArgumentVec3"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+										double x = getField(vec3D.getClass(), "x").getDouble(vec3D);
+										double y = getField(vec3D.getClass(), "y").getDouble(vec3D);
+										double z = getField(vec3D.getClass(),"z").getDouble(vec3D);
+										World world = getCommandSenderWorld(sender);
+										argList.add(new Location(world, x, y, z));
+									} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+										e.printStackTrace(System.out);
+									}
+									break;
+							}
+							break;
+						case LOOT_TABLE:
+							try {
+								//Get namespaced key
+								Object minecraftKey = getMethod(getNMSClass("ArgumentMinecraftKeyRegistered"), "c", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+								String namespace = (String) getMethod(getNMSClass("MinecraftKey"), "b").invoke(minecraftKey);
+								String key = (String) getMethod(getNMSClass("MinecraftKey"), "getKey").invoke(minecraftKey);
+								NamespacedKey nameSpacedKey = new NamespacedKey(namespace, key);
+								
+								//Get loot table
+								Object NMSServer = getMethod(getNMSClass("CommandListenerWrapper"), "getServer").invoke(cmdCtx.getSource());
+								Object lootTableRegistry = getMethod(getNMSClass("MinecraftServer"), "getLootTableRegistry").invoke(NMSServer);
+								Object nmsLootTable = getMethod(getNMSClass("LootTableRegistry"), "getLootTable").invoke(lootTableRegistry, minecraftKey);
 
-						} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-							e.printStackTrace(System.out);
-						}
-					} else if(entry.getValue() instanceof CustomArgument) {
-						CustomArgument arg = (CustomArgument) entry.getValue();
-						String result = (String) cmdCtx.getArgument(entry.getKey(), String.class);
-						try {
-							argList.add(arg.getParser().apply(result));
-						} catch(CustomArgumentException e) {
-							throw e.toCommandSyntax(result, cmdCtx);
-						} catch(Exception e) {
-							String errorMsg = new MessageBuilder("Error in executing command ")
-									.appendFullInput().append(" - ").appendArgInput().appendHere().toString()
-									.replace("%input%", result).replace("%finput%", cmdCtx.getInput());
-							throw new SimpleCommandExceptionType(() -> {return errorMsg;}).create();
-						}
-					} else if(entry.getValue() instanceof LootTableArgument) {
-						try {
-							//Get namespaced key
-							Object minecraftKey = getMethod(getNMSClass("ArgumentMinecraftKeyRegistered"), "c", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
-							String namespace = (String) getMethod(getNMSClass("MinecraftKey"), "b").invoke(minecraftKey);
-							String key = (String) getMethod(getNMSClass("MinecraftKey"), "getKey").invoke(minecraftKey);
-							NamespacedKey nameSpacedKey = new NamespacedKey(namespace, key);
-							
-							//Get loot table
-							Object NMSServer = getMethod(getNMSClass("CommandListenerWrapper"), "getServer").invoke(cmdCtx.getSource());
-							Object lootTableRegistry = getMethod(getNMSClass("MinecraftServer"), "getLootTableRegistry").invoke(NMSServer);
-							Object nmsLootTable = getMethod(getNMSClass("LootTableRegistry"), "getLootTable").invoke(lootTableRegistry, minecraftKey);
-
-							LootTable lootTable = (LootTable) getOBCClass("CraftLootTable").getConstructor(NamespacedKey.class, getNMSClass("LootTable")).newInstance(nameSpacedKey, nmsLootTable);
-							
-							argList.add(lootTable);
-						} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException | NoSuchMethodException | SecurityException | ClassNotFoundException e1) {
-							e1.printStackTrace(System.out);
-						}
+								LootTable lootTable = (LootTable) getOBCClass("CraftLootTable").getConstructor(NamespacedKey.class, getNMSClass("LootTable")).newInstance(nameSpacedKey, nmsLootTable);
+								
+								argList.add(lootTable);
+							} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException | NoSuchMethodException | SecurityException | ClassNotFoundException e1) {
+								e1.printStackTrace(System.out);
+							}
+							break;
+						case PARTICLE:
+							try {
+								//Particle Bukkit Particle from NMS
+								Method toBukkit = getMethod(getOBCClass("CraftParticle"), "toBukkit", getNMSClass("ParticleParam"));
+								Object particleParam = getMethod(getNMSClass("ArgumentParticle"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+								argList.add((Particle) toBukkit.invoke(null, particleParam));
+							} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+								e.printStackTrace(System.out);
+							}
+							break;
+						case PLAYER:
+							try {
+								Collection<?> collectionOfPlayers = (Collection<?>) getMethod(getNMSClass("ArgumentProfile"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+								Object first = collectionOfPlayers.iterator().next();
+								UUID uuid = (UUID) getMethod(first.getClass(), "getId").invoke(first);
+								Player target = Bukkit.getPlayer(uuid);
+								if(target == null) {
+									throw ((SimpleCommandExceptionType) getField(getNMSClass("ArgumentProfile"), "a").get(null)).create();
+								}
+								argList.add(target);
+							} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+								e.printStackTrace(System.out);
+							}
+							break;
+						case POTION_EFFECT:
+							try {
+								Constructor craftPotionType = getOBCClass("potion.CraftPotionEffectType").getConstructor(getNMSClass("MobEffectList"));
+								Object mobEffect = getMethod(getNMSClass("ArgumentMobEffect"), "a", CommandContext.class, String.class).invoke(null, cmdCtx, entry.getKey());
+								argList.add((PotionEffectType) craftPotionType.newInstance(mobEffect));
+							} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException e) {
+								e.printStackTrace(System.out);
+							}
+							break;
+						case SIMPLE_TYPE:
+							break;
 					}
 				}
 			}

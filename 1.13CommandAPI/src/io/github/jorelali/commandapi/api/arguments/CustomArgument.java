@@ -231,4 +231,9 @@ public class CustomArgument<S> implements Argument, OverrideableSuggestions {
 	public String[] getOverriddenSuggestions() {
 		return suggestions;
 	}
+
+	@Override
+	public CommandAPIArgumentType getArgumentType() {
+		return CommandAPIArgumentType.CUSTOM;
+	}
 }

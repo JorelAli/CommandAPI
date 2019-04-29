@@ -62,4 +62,9 @@ public class SuggestedStringArgument implements Argument {
 	public CommandPermission getArgumentPermission() {
 		return permission;
 	}
+	
+	@Override
+	public CommandAPIArgumentType getArgumentType() {
+		return CommandAPIArgumentType.SIMPLE_TYPE;
+	}
 }

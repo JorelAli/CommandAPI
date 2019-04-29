@@ -79,4 +79,9 @@ public class IntegerArgument implements Argument, OverrideableSuggestions {
 		return permission;
 	}
 	
+	@Override
+	public CommandAPIArgumentType getArgumentType() {
+		return CommandAPIArgumentType.SIMPLE_TYPE;
+	}
+	
 }

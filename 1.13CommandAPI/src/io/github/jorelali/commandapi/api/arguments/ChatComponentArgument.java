@@ -68,4 +68,9 @@ public class ChatComponentArgument implements Argument, OverrideableSuggestions 
 	public CommandPermission getArgumentPermission() {
 		return permission;
 	}
+	
+	@Override
+	public CommandAPIArgumentType getArgumentType() {
+		return CommandAPIArgumentType.CHAT_COMPONENT;
+	}
 }

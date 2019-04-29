@@ -11,10 +11,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 
-import net.minecraft.server.v1_14_R1.Entity;
-import net.minecraft.server.v1_14_R1.EntityTypes;
-import net.minecraft.server.v1_14_R1.World;
-
 public final class CompatibilityCheck {
 
 	private static String packageName;

@@ -116,4 +116,9 @@ public class EntitySelectorArgument implements Argument, OverrideableSuggestions
 	public CommandPermission getArgumentPermission() {
 		return permission;
 	}
+
+	@Override
+	public CommandAPIArgumentType getArgumentType() {
+		return CommandAPIArgumentType.ENTITY_SELECTOR;
+	}
 }

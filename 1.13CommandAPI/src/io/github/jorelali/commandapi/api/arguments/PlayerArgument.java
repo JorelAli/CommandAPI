@@ -59,4 +59,9 @@ public class PlayerArgument implements Argument, OverrideableSuggestions {
 	public CommandPermission getArgumentPermission() {
 		return permission;
 	}
+	
+	@Override
+	public CommandAPIArgumentType getArgumentType() {
+		return CommandAPIArgumentType.PLAYER;
+	}
 }

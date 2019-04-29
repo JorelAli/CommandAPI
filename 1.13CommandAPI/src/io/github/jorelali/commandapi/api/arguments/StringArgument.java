@@ -57,4 +57,9 @@ public class StringArgument implements Argument, OverrideableSuggestions {
 	public CommandPermission getArgumentPermission() {
 		return permission;
 	}
+	
+	@Override
+	public CommandAPIArgumentType getArgumentType() {
+		return CommandAPIArgumentType.SIMPLE_TYPE;
+	}
 }
