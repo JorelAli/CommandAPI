@@ -16,7 +16,7 @@ public class ItemStackArgument implements Argument, OverrideableSuggestions {
 	 * An ItemStack argument. Always returns an itemstack of size 1
 	 */
 	public ItemStackArgument() {
-		rawType = SemiReflector.getNMSArgumentInstance("ArgumentItemStack");
+		rawType = SemiReflector.getNMS()._ArgumentItemStack();
 	}
 	
 	@Override

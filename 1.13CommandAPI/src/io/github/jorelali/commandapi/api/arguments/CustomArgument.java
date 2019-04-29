@@ -185,7 +185,7 @@ public class CustomArgument<S> implements Argument, OverrideableSuggestions {
 	@Override
 	public <T> ArgumentType<T> getRawType() {
 		if(keyed) {
-			return (ArgumentType<T>) SemiReflector.getNMSArgumentInstance("ArgumentMinecraftKeyRegistered");
+			return (ArgumentType<T>) SemiReflector.getNMS()._ArgumentMinecraftKeyRegistered();
 		} else {
 			return (ArgumentType<T>) StringArgumentType.string();
 		}

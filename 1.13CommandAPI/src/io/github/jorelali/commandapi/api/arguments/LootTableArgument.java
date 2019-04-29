@@ -13,7 +13,7 @@ public class LootTableArgument implements Argument, CustomProvidedArgument {
 	ArgumentType<?> rawType;
 	
 	public LootTableArgument() {
-		rawType = SemiReflector.getNMSArgumentInstance("ArgumentMinecraftKeyRegistered");
+		rawType = SemiReflector.getNMS()._ArgumentMinecraftKeyRegistered();
 	}
 	
 	@Override

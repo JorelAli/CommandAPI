@@ -1,17 +1,10 @@
 package io.github.jorelali.commandapi.api;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.function.ToIntBiFunction;
 
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
-
-import io.github.jorelali.commandapi.api.FunctionWrapper.EntityMapper;
-import net.minecraft.server.v1_13_R2.CommandListenerWrapper;
-import net.minecraft.server.v1_13_R2.CustomFunction;
-import net.minecraft.server.v1_13_R2.CustomFunctionData;
 
 /**
  * A wrapper class for Minecraft 1.12's functions
@@ -32,12 +25,12 @@ public class FunctionWrapper implements Keyed {
 		Object convert(Entity entity);
 	}
 	
-	private String minecraftKey;
-	private EntityMapper mapper;
-	private Method invoker;
-	private Object funcData;
-	private Object custFunc;
-	private Object argB;
+//	private String minecraftKey;
+//	private EntityMapper mapper;
+//	private Method invoker;
+//	private Object funcData;
+//	private Object custFunc;
+//	private Object argB;
 	
 	/**
 	 * Creates a FunctionWrapper
@@ -48,26 +41,28 @@ public class FunctionWrapper implements Keyed {
 	 * @param argB the instance of the CommandListenerWrapper which executed this command
 	 * @param mapper A function which maps a Bukkit Entity into a Minecraft Entity
 	 */
-	public FunctionWrapper(String minecraftKey, Method invoker, Object funcData, Object custFunc, Object argB, EntityMapper mapper) {
+//	public FunctionWrapper(String minecraftKey, Method invoker, Object funcData, Object custFunc, Object argB, EntityMapper mapper) {
+//		this.minecraftKey = minecraftKey;
+//		this.invoker = invoker;
+//		this.mapper = mapper;
+//		this.funcData = funcData;
+//		this.custFunc = custFunc;
+//		this.argB = argB;
+//	}
+	
+	private final NamespacedKey minecraftKey;
+	private final ToIntBiFunction<Object, Object> tibfInvoker;
+	private final Object custFunc;
+	private final Object argB;
+	private final EntityMapper mapper;
+	
+	@SuppressWarnings("unchecked")
+	public FunctionWrapper(NamespacedKey minecraftKey, @SuppressWarnings("rawtypes") ToIntBiFunction invoker, Object custFunc, Object argB, EntityMapper mapper) {
 		this.minecraftKey = minecraftKey;
-		this.invoker = invoker;
-		this.mapper = mapper;
-		this.funcData = funcData;
+		this.tibfInvoker = invoker;
 		this.custFunc = custFunc;
 		this.argB = argB;
-	}
-	
-	private ToIntBiFunction<Object, Object> tibfInvoker;
-	
-	public FunctionWrapper(String string, ToIntBiFunction<CustomFunction, CommandListenerWrapper> invoker2,
-			CustomFunctionData customFunctionData, CustomFunction customFunction,
-			CommandListenerWrapper commandListenerWrapper, EntityMapper mapper2) {
-		this.minecraftKey = string;
-		this.tibfInvoker = invoker2;
-		this.mapper = customFunctionData;
-		this.funcData = customFunction;
-		this.custFunc = custFunc;
-		this.argB = commandListenerWrapper;
+		this.mapper = mapper;
 	}
 
 	/**
@@ -89,15 +84,9 @@ public class FunctionWrapper implements Keyed {
 		tibfInvoker.applyAsInt(custFunc, clw);
 	}
 
-	/*
-	 * Deprecated due to the fact that plugins should not use this constructor.
-	 * I'm using this constructor because it's significantly less performance heavy
-	 * than using reflection
-	 */
-	@SuppressWarnings("deprecation")
 	@Override
 	public NamespacedKey getKey() {
-		return new NamespacedKey(minecraftKey.split(":")[0], minecraftKey.split(":")[1]);
+		return minecraftKey;
 	}
 	
 }

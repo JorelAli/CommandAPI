@@ -16,7 +16,7 @@ public class ParticleArgument implements Argument, OverrideableSuggestions {
 	 * A Particle argument. Represents Minecraft particles
 	 */
 	public ParticleArgument() {
-		rawType = SemiReflector.getNMSArgumentInstance("ArgumentParticle");
+		rawType = SemiReflector.getNMS()._ArgumentParticle();
 	}
 	
 	@Override

@@ -23,32 +23,22 @@ public class EntitySelectorArgument implements Argument, OverrideableSuggestions
 		/**
 		 * A single entity. Returns a Bukkit Entity
 		 */
-		ONE_ENTITY("a"),
+		ONE_ENTITY,
 		
 		/**
 		 * A single player. Returns a Bukkit Player
 		 */
-		ONE_PLAYER("c"),
+		ONE_PLAYER,
 		
 		/**
 		 * Many entities. Returns a Collection of Entities
 		 */
-		MANY_ENTITIES("b"),
+		MANY_ENTITIES,
 		
 		/**
 		 * Many players. Returns a Collection of Players
 		 */
-		MANY_PLAYERS("d");
-		
-		private String function;
-		
-		EntitySelector(String nmsFunction) {
-			this.function = nmsFunction;
-		}
-		
-		private String getNMSFunction() {
-			return function;
-		}
+		MANY_PLAYERS;
 	}
 	
 	ArgumentType<?> rawType;
@@ -60,7 +50,7 @@ public class EntitySelectorArgument implements Argument, OverrideableSuggestions
 	public EntitySelectorArgument(EntitySelector selector) {
 		this.selector = selector;
 		
-		rawType = SemiReflector.getNMSArgumentInstance("ArgumentEntity", selector.getNMSFunction());
+		rawType = SemiReflector.getNMS()._ArgumentEntity(selector);
 	}
 	
 	@Override

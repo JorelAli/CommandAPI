@@ -16,7 +16,7 @@ public class PotionEffectArgument implements Argument, OverrideableSuggestions {
 	 * A PotionEffect argument. Represents status/potion effects 
 	 */
 	public PotionEffectArgument() {
-		rawType = SemiReflector.getNMSArgumentInstance("ArgumentMobEffect");
+		rawType = SemiReflector.getNMS()._ArgumentMobEffect();
 	}
 	
 	@Override

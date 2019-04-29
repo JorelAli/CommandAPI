@@ -3,7 +3,6 @@ package io.github.jorelali.commandapi.api;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -70,7 +69,9 @@ public final class SemiReflector {
 	private int version;
 	private String versionStr; //Just in case (v1_13_R2 or v1_14_R1)
 	
-	private NMS nms;
+	private static NMS nms;
+	private Object nmsServer;
+	public static NMS getNMS() { return nms; }
 	
 	protected SemiReflector() throws ClassNotFoundException {
 		
@@ -81,8 +82,8 @@ public final class SemiReflector {
 		
 		try {
 			//Setup NMS
-			Object server = Bukkit.getServer().getClass().getDeclaredMethod("getServer").invoke(Bukkit.getServer());
-			SemiReflector.packageName = server.getClass().getPackage().getName();
+			this.nmsServer = Bukkit.getServer().getClass().getDeclaredMethod("getServer").invoke(Bukkit.getServer());
+			SemiReflector.packageName = nmsServer.getClass().getPackage().getName();
 			//net.minecraft.server.v1_13_R2.MinecraftServer
 			version = Integer.parseInt(packageName.substring(24, 26));
 			versionStr = packageName.split("\\Q.\\E")[3];
@@ -100,7 +101,7 @@ public final class SemiReflector {
 			fields = new HashMap<>();
 			permissionsToFix = new TreeMap<>();
 									
-			this.dispatcher = nms.getDispatcher(server); 
+			this.dispatcher = nms.getDispatcher(nmsServer); 
 
 		} catch(Exception e) {
 			e.printStackTrace(System.out);
@@ -301,7 +302,7 @@ public final class SemiReflector {
 		}
 	}
 	
-	protected void fixPermissions() throws InvocationTargetException {
+	protected void fixPermissions() {
 		try {
 			
 			SimpleCommandMap map = nms.getSimpleCommandMap();
@@ -471,7 +472,7 @@ public final class SemiReflector {
 				e.printStackTrace(System.out);
 			}
 			
-			nms.createDispatcherFile(file);
+			nms.createDispatcherFile(nmsServer, file);
 //			switch(version) {
 //				case 13:
 //					getMethod(getNMSClass("CommandDispatcher"), "a", File.class).invoke(this.nmsCommandDispatcher, file);
@@ -587,7 +588,7 @@ public final class SemiReflector {
 		
 	}
 	
-	private Field getField(Class<?> clazz, String name) {
+	public static Field getField(Class<?> clazz, String name) {
 		ClassCache key = new ClassCache(clazz, name);
 		if(fields.containsKey(key)) {
 			return fields.get(key);

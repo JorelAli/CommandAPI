@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.function.ToIntBiFunction;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
@@ -34,17 +36,20 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 
 import io.github.jorelali.commandapi.api.FunctionWrapper;
+import io.github.jorelali.commandapi.api.SemiReflector;
 import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
 import io.github.jorelali.commandapi.api.arguments.LocationArgument.LocationType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
+import net.minecraft.server.v1_13_R2.Advancement;
 import net.minecraft.server.v1_13_R2.ArgumentChatComponent;
 import net.minecraft.server.v1_13_R2.ArgumentChatFormat;
 import net.minecraft.server.v1_13_R2.ArgumentEnchantment;
@@ -67,6 +72,7 @@ import net.minecraft.server.v1_13_R2.Entity;
 import net.minecraft.server.v1_13_R2.EntityTypes;
 import net.minecraft.server.v1_13_R2.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_13_R2.ICompletionProvider;
+import net.minecraft.server.v1_13_R2.LootTableRegistry;
 import net.minecraft.server.v1_13_R2.MinecraftKey;
 import net.minecraft.server.v1_13_R2.MinecraftServer;
 import net.minecraft.server.v1_13_R2.Vec3D;
@@ -123,9 +129,8 @@ public class NMS_1_13_R2 implements NMS {
 	}
 
 	@Override
-	public void createDispatcherFile(File file) {
-		//TODO
-		//getMethod(getNMSClass("CommandDispatcher"), "a", File.class).invoke(this.nmsCommandDispatcher, file);
+	public void createDispatcherFile(Object server, File file) {
+		((MinecraftServer) server).commandDispatcher.a(file);
 	}
 
 	@Override
@@ -142,14 +147,20 @@ public class NMS_1_13_R2 implements NMS {
 			case SOUNDS:
 				return CompletionProviders.c;
 			case ADVANCEMENTS:
-				//TODO;
-				//return CommandAdvancement.a;
-				return null;
+				return (cmdCtx, builder) -> {
+					Collection<Advancement> advancements = ((CommandListenerWrapper) cmdCtx.getSource()).getServer().getAdvancementData().b();
+					return ICompletionProvider.a(advancements.stream().map(Advancement::getName), builder);
+				};
 			case LOOT_TABLES:
-				//TODO;
-				return (context, builder) -> {
-					getCLW(context).getServer().getLootTableRegistry();//.e
-					return ICompletionProvider.a((Iterable) null, builder);
+					return (context, builder) -> {
+					try {
+						Map<MinecraftKey, LootTable> map = (Map<MinecraftKey, LootTable>) SemiReflector.getField(LootTableRegistry.class, "e").get(getCLW(context).getServer().getLootTableRegistry());
+						return ICompletionProvider.a((Iterable) map.keySet(), builder);
+					} catch (IllegalArgumentException | IllegalAccessException e) {
+						e.printStackTrace();
+					}
+					return Suggestions.empty();
+					
 				};		
 			default:
 				return (context, builder) -> Suggestions.empty();
@@ -169,9 +180,12 @@ public class NMS_1_13_R2 implements NMS {
 		Iterator<CustomFunction> it = customFuncList.iterator();
 		while(it.hasNext()) {
 			CustomFunction customFunction = it.next();
+			@SuppressWarnings("deprecation")
+			NamespacedKey minecraftKey = new NamespacedKey(customFunction.a().b(), customFunction.a().getKey());
+			ToIntBiFunction<CustomFunction, CommandListenerWrapper> obj = customFunctionData::a;
 			
-			FunctionWrapper wrapper = new FunctionWrapper(customFunction.a().toString(), customFunctionData::a, customFunctionData, customFunction, commandListenerWrapper, e -> {
-				return getCLW(cmdCtx).a(((CraftEntity) e).getHandle());
+			FunctionWrapper wrapper = new FunctionWrapper(minecraftKey, obj, customFunction, commandListenerWrapper, e -> {
+				return (Object) getCLW(cmdCtx).a(((CraftEntity) e).getHandle());
 			});
 			
 			result[count] = wrapper;
@@ -195,11 +209,6 @@ public class NMS_1_13_R2 implements NMS {
 		}
 		
 		return sender;
-	}
-
-	@Override
-	public Object getNMSCommandDispatcher(Object server) {
-		return ((MinecraftServer) server).commandDispatcher;
 	}
 
 	@Override
@@ -270,6 +279,81 @@ public class NMS_1_13_R2 implements NMS {
 	@Override
 	public boolean isVanillaCommandWrapper(Command command) {
 		return command instanceof VanillaCommandWrapper;
+	}
+
+	@Override
+	public ArgumentType _ArgumentChatFormat() {
+		return ArgumentChatFormat.a();
+	}
+
+	@Override
+	public ArgumentType _ArgumentChatComponent() {
+		return ArgumentChatComponent.a();
+	}
+
+	@Override
+	public ArgumentType _ArgumentMinecraftKeyRegistered() {
+		return ArgumentMinecraftKeyRegistered.a();
+	}
+
+	@Override
+	public ArgumentType _ArgumentMobEffect() {
+		return ArgumentMobEffect.a();
+	}
+
+	@Override
+	public ArgumentType _ArgumentProfile() {
+		return ArgumentProfile.a();
+	}
+
+	@Override
+	public ArgumentType _ArgumentParticle() {
+		return ArgumentParticle.a();
+	}
+
+	@Override
+	public ArgumentType _ArgumentPosition() {
+		return ArgumentPosition.a();
+	}
+
+	@Override
+	public ArgumentType _ArgumentVec3() {
+		return ArgumentVec3.a();
+	}
+
+	@Override
+	public ArgumentType _ArgumentItemStack() {
+		return ArgumentItemStack.a();
+	}
+
+	@Override
+	public ArgumentType _ArgumentTag() {
+		return ArgumentTag.a();
+	}
+
+	@Override
+	public ArgumentType _ArgumentEntitySummon() {
+		return ArgumentEntitySummon.a();
+	}
+
+	@Override
+	public ArgumentType _ArgumentEntity(EntitySelector selector) {
+		switch(selector) {
+			case MANY_ENTITIES:
+				return ArgumentEntity.b();
+			case MANY_PLAYERS:
+				return ArgumentEntity.d();
+			case ONE_ENTITY:
+				return ArgumentEntity.a();
+			case ONE_PLAYER:
+				return ArgumentEntity.c();
+		}
+		return null;
+	}
+
+	@Override
+	public ArgumentType _ArgumentEnchantment() {
+		return ArgumentEnchantment.a();
 	}
 
 }

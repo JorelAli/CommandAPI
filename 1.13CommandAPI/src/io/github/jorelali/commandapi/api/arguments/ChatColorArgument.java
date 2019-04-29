@@ -16,7 +16,7 @@ public class ChatColorArgument implements Argument, OverrideableSuggestions {
 	 * A ChatColor argument. Represents a color or formatting for chat
 	 */
 	public ChatColorArgument() {
-		rawType = SemiReflector.getNMSArgumentInstance("ArgumentChatFormat");
+		rawType = SemiReflector.getNMS()._ArgumentChatFormat();
 	}
 	
 	@Override

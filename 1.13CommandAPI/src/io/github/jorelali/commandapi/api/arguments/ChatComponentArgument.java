@@ -25,7 +25,7 @@ public class ChatComponentArgument implements Argument, OverrideableSuggestions 
 			throw new SpigotNotFoundException(this.getClass());
 		}
 		
-		rawType = SemiReflector.getNMSArgumentInstance("ArgumentChatComponent");
+		rawType = SemiReflector.getNMS()._ArgumentChatComponent();
 	}
 	
 	@Override

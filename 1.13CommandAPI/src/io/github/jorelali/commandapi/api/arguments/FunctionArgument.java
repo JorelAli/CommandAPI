@@ -17,7 +17,7 @@ public class FunctionArgument implements Argument, CustomProvidedArgument {
 	 * in the onEnable() method!
 	 */
 	public FunctionArgument() {
-		rawType = SemiReflector.getNMSArgumentInstance("ArgumentTag");
+		rawType = SemiReflector.getNMS()._ArgumentTag();
 	}
 	
 	@Override

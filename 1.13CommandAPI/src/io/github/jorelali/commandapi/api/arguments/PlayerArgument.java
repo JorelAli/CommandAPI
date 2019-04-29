@@ -16,7 +16,7 @@ public class PlayerArgument implements Argument, OverrideableSuggestions {
 	 * A Player argument. Produces a single player, regardless of whether @a, @p, @r or @e is used.
 	 */
 	public PlayerArgument() {
-		rawType = SemiReflector.getNMSArgumentInstance("ArgumentProfile");
+		rawType = SemiReflector.getNMS()._ArgumentProfile();
 	}
 	
 	@Override

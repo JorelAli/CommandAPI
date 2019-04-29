@@ -16,7 +16,7 @@ public class EnchantmentArgument implements Argument, OverrideableSuggestions {
 	 * An Enchantment argument. Represents an enchantment for items 
 	 */
 	public EnchantmentArgument() {
-		rawType = SemiReflector.getNMSArgumentInstance("ArgumentEnchantment");
+		rawType = SemiReflector.getNMS()._ArgumentEnchantment();
 	}
 	
 	@Override

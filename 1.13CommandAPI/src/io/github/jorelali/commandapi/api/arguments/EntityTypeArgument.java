@@ -16,7 +16,7 @@ public class EntityTypeArgument implements Argument, OverrideableSuggestions {
 	 * An EntityType argument. Represents the type of an Entity
 	 */
 	public EntityTypeArgument() {
-		rawType = SemiReflector.getNMSArgumentInstance("ArgumentEntitySummon");
+		rawType = SemiReflector.getNMS()._ArgumentEntitySummon();
 	}
 	
 	@Override
