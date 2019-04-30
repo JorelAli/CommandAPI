@@ -165,12 +165,26 @@ arguments.put(&quot;arg0&quot;, new StringArgument());
 arguments.put(&quot;arg1&quot;, new PotionEffectArgument());
 arguments.put(&quot;arg2&quot;, new LocationArgument());
 
-commandRegister.register(&quot;cmd&quot;, arguments, (sender, args) -&gt; {
+CommandAPI.getInstance().register(&quot;cmd&quot;, arguments, (sender, args) -&gt; {
     String stringArg = (String) args[0];
     PotionEffectType potionArg = (PotionEffectType) args[1];
     Location locationArg = (Location) args[2];
 });
 </code></pre>
+<a class="header" href="arguments.html#arguments-with-overrideable-suggestions" id="arguments-with-overrideable-suggestions"><h2>Arguments with overrideable suggestions</h2></a>
+<p>Some arguments have a feature allowing you to override the list of suggestions they provide. For example, say you have a plugin which has a &quot;friend list&quot; for players. If you want to say, teleport to a friend in that list, you could use a <code>PlayerArgument</code>, which has the list of suggestions overridden with the list of friends that that player has.</p>
+<pre><code class="language-java">String[] friends = //Some String array populated with friends
+
+LinkedHashMap&lt;String, ArgumentType&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;friend&quot;, new PlayerArgument().overrideSuggestions(friends));
+
+CommandAPI.getInstance().register(&quot;friendtp&quot;, arguments, (sender, args) -&gt; {
+    Player target = (Player) args[0];
+    Player player = (Player) sender;
+    player.teleport(target);
+});
+</code></pre>
+<p>To override suggestions, use the <code>overrideSuggestions()</code> method and provide a String array of suggestions that will be shown when the user types their command.</p>
 
                     </main>
 

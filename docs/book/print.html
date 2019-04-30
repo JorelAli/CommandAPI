@@ -258,15 +258,54 @@ arguments.put(&quot;arg0&quot;, new StringArgument());
 arguments.put(&quot;arg1&quot;, new PotionEffectArgument());
 arguments.put(&quot;arg2&quot;, new LocationArgument());
 
-commandRegister.register(&quot;cmd&quot;, arguments, (sender, args) -&gt; {
+CommandAPI.getInstance().register(&quot;cmd&quot;, arguments, (sender, args) -&gt; {
     String stringArg = (String) args[0];
     PotionEffectType potionArg = (PotionEffectType) args[1];
     Location locationArg = (Location) args[2];
 });
 </code></pre>
+<a class="header" href="print.html#arguments-with-overrideable-suggestions" id="arguments-with-overrideable-suggestions"><h2>Arguments with overrideable suggestions</h2></a>
+<p>Some arguments have a feature allowing you to override the list of suggestions they provide. For example, say you have a plugin which has a &quot;friend list&quot; for players. If you want to say, teleport to a friend in that list, you could use a <code>PlayerArgument</code>, which has the list of suggestions overridden with the list of friends that that player has.</p>
+<pre><code class="language-java">String[] friends = //Some String array populated with friends
+
+LinkedHashMap&lt;String, ArgumentType&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;friend&quot;, new PlayerArgument().overrideSuggestions(friends));
+
+CommandAPI.getInstance().register(&quot;friendtp&quot;, arguments, (sender, args) -&gt; {
+    Player target = (Player) args[0];
+    Player player = (Player) sender;
+    player.teleport(target);
+});
+</code></pre>
+<p>To override suggestions, use the <code>overrideSuggestions()</code> method and provide a String array of suggestions that will be shown when the user types their command.</p>
 <a class="header" href="print.html#primitive-arguments" id="primitive-arguments"><h1>Primitive arguments</h1></a>
-<p>Boolean argument,</p>
-<p>ranged arguments</p>
+<a class="header" href="print.html#boolean-arguments" id="boolean-arguments"><h2>Boolean arguments</h2></a>
+<p>The <code>BooleanArgument</code> class represents boolean values <code>true</code> and <code>false</code>.</p>
+<a class="header" href="print.html#example---config-editing-plugin" id="example---config-editing-plugin"><h3>Example - Config editing plugin</h3></a>
+<pre><code class="language-java">String[] configKeys = getConfig().getKeys(true).toArray(new String[getConfig().getKeys(true).size()]);
+
+LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;config-key&quot;, new TextArgument().overrideSuggestions(configKeys));
+arguments.put(&quot;value&quot;, new BooleanArgument());
+
+CommandAPI.getInstance().register(&quot;editconfig&quot;, arguments, (sender, args) -&gt; {
+    getConfig().set((String) args[0], (boolean) args[1]);
+});
+</code></pre>
+<a class="header" href="print.html#numerical-arguments" id="numerical-arguments"><h2>Numerical arguments</h2></a>
+<p>Numbers are represented using the designated number classes:</p>
+<table><thead><tr><th> Class </th><th> Description </th></tr></thead><tbody>
+<tr><td> <code>IntegerArgument</code> </td><td> Whole numbers </td></tr>
+<tr><td> <code>DoubleArgument</code> </td><td> Double precision floating point numbers </td></tr>
+<tr><td> <code>FloatArgument</code> </td><td> Single precision floating point numbers </td></tr>
+</tbody></table>
+<p>Each numerical argument can have ranges applied to them, which restricts the user to only entering numbers from within a certain range. This is done using the constructor, and the range specified:</p>
+<table><thead><tr><th> Constructor </th><th> Description </th></tr></thead><tbody>
+<tr><td> <code>new IntegerArgument()</code> </td><td> Any range </td></tr>
+<tr><td> <code>new IntegerArgument(2)</code> </td><td> Values greater than <em>or equal to</em> 2 </td></tr>
+<tr><td> <code>new IntegerArgument(2, 10)</code> </td><td> Values greater than or equal to 2 and less than or equal to 10 </td></tr>
+</tbody></table>
+<p>Each range is <em>inclusive</em>, so it includes the number given to it.</p>
 
                     </main>
 
