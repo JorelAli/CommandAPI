@@ -36,23 +36,40 @@
             <version>${minecraft.server.version}</version>
             <scope>provided</scope>
         </dependency>
-        <!-- {"artifact": {"path": "com/mojang/brigadier/1.0.17/brigadier-1.0.17.jar", "sha1": "c6b7dc51dd44379cc751b7504816006e9be4b1e6", "size": 77392, "url": "https://libraries.minecraft.net/com/mojang/brigadier/1.0.17/brigadier-1.0.17.jar"}}, "name": "com.mojang:brigadier:1.0.17"} -->
         <dependency>
             <groupId>com.mojang</groupId>
             <artifactId>brigadier</artifactId>
             <version>1.0.17</version>
             <scope>provided</scope>
         </dependency>
-        <!-- {"artifact": {"path": "com/mojang/authlib/1.5.25/authlib-1.5.25.jar", "sha1": "9834cdf236c22e84b946bba989e2f94ef5897c3c", "size": 65621, "url": "https://libraries.minecraft.net/com/mojang/authlib/1.5.25/authlib-1.5.25.jar"}}, "name": "com.mojang:authlib:1.5.25"} -->
         <dependency>
             <groupId>com.mojang</groupId>
             <artifactId>authlib</artifactId>
             <version>1.5.25</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot-server-1.13.2</artifactId>
+			<version>1.13.2</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/spigotlibs/spigot-1.13.2-R0.1-SNAPSHOT.jar</systemPath>
+			<type>jar</type>
+  			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot-server-1.14</artifactId>
+			<version>1.14</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/spigotlibs/spigot-1.14-R0.1-SNAPSHOT.jar</systemPath>
+			<type>jar</type>
+  			<optional>true</optional>
+		</dependency>
     </dependencies>
 
     <build>
+        <defaultGoal>clean install</defaultGoal>
         <finalName>CommandAPI_${project.version}_${maven.build.timestamp}</finalName>
         <sourceDirectory>src</sourceDirectory>
         <resources>
