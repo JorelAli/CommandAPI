@@ -44,9 +44,19 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 | 1.6     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.6/CommandAPI.jar) | [Version 1.6 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.6%20Documentation.md) |
 | 1.7.2     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.7.2/CommandAPI.jar) | [Version 1.7 - 1.7.2 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.7%20Documentation.md) |
 | 1.8.2 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.8.2/CommandAPI.jar) | [Version 1.8 - 1.8.2 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.8%20Documentation.md) |
+| 2.0 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.0/CommandAPI.jar)  | [Version 2.0 documentation](https://jorelali.github.io/1.13-Command-API/) |
 
 ## Changelog
 
+* Version 2.0
+  * Compatibility for 1.14
+  * Major overhaul of the CommandAPI's internals - greatly improves performance
+  * Deprecates SuggestedStringArgument, adding overrideSuggestions as an alternative for any argument type 
+  * Adds CustomArguments, allowing you to create your own ... custom arguments
+  * Excludes dependencies from final jar (#40)
+  * Adds DefinedCustomArguments - CustomArguments that have been created by yours truly
+  * DynamicSuggestedArguments now have access to the CommandSender (#41)
+  * Adds Loot Table support
 * Version 1.8.2
   * Fix bug with PlayerArgument when player cannot be found
   * Adds LocationArgument options for block precision or exact precision
