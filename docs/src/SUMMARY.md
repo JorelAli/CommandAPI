@@ -5,3 +5,4 @@
 - [Command registration](./commandregistration.md)
 - [Arguments](./arguments.md)
   - [Primitive arguments](./primitivearguments.md)
+  - [Location argument](./locationargument.md)
