@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Installation for server owners - 1.13CommandAPI Documentation</title>
+        <title>Arguments - 1.13CommandAPI Documentation</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -69,7 +69,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="installation.html" class="active"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Quickstart guide</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="arguments.html"><strong aria-hidden="true">4.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">4.1.</strong> Primitive arguments</a></li></ol></li></ol>
+            <ol class="chapter"><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Quickstart guide</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="arguments.html" class="active"><strong aria-hidden="true">4.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">4.1.</strong> Primitive arguments</a></li></ol></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -133,31 +133,57 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="installation.html#installation-for-server-owners" id="installation-for-server-owners"><h1>Installation (For server owners)</h1></a>
-<ul>
-<li>Download the v1.8.2 CommandAPI.jar from the download page <a href="https://github.com/JorelAli/1.13-Command-API/releases/tag/v1.8.2">here</a></li>
-<li>Place the CommandAPI.jar file in your server's <code>plugins/</code> folder</li>
-<li>That's it!</li>
-</ul>
-<a class="header" href="installation.html#configuring-the-commandapi" id="configuring-the-commandapi"><h2>Configuring the CommandAPI</h2></a>
-<p>The CommandAPI can be configured in the <code>plugins/CommandAPI/config.yml</code> file.</p>
-<p>The default <code>config.yml</code> settings are as follows:</p>
-<pre><code class="language-yaml">verbose-outputs: true
-create-dispatcher-json: true
+                        <a class="header" href="arguments.html#arguments" id="arguments"><h1>Arguments</h1></a>
+<p>Arguments are found in the <code>io.github.jorelali.commandapi.api.arguments</code> package.</p>
+<table><thead><tr><th align="center">          Argument class          </th><th align="center">                          Data type                           </th><th align="center">                      Description                       </th></tr></thead><tbody>
+<tr><td align="center">        <code>BooleanArgument</code>         </td><td align="center">                          <code>boolean</code>                           </td><td align="center">                                                        </td></tr>
+<tr><td align="center">       <code>ChatColorArgument</code>        </td><td align="center">                         <code>ChatColor</code>                          </td><td align="center">                                                        </td></tr>
+<tr><td align="center">     <code>ChatComponentArgument</code>      </td><td align="center">                      <code>BaseComponent[]</code>                       </td><td align="center">                 Formatted chat object                  </td></tr>
+<tr><td align="center">         <code>DoubleArgument</code>         </td><td align="center">                           <code>double</code>                           </td><td align="center">                                                        </td></tr>
+<tr><td align="center"> <code>DynamicSuggestedStringArgument</code> </td><td align="center">                           <code>String</code>                           </td><td align="center">       Suggested string using a supplier function       </td></tr>
+<tr><td align="center">      <code>EnchantmentArgument</code>      </td><td align="center">                        <code>Enchantment</code>                         </td><td align="center">                                                        </td></tr>
+<tr><td align="center">    <code>EntitySelectorArgument</code>     </td><td align="center"> <code>Entity</code>, <code>Player</code>, <code>Collection&lt;Entity&gt;</code>, <code>Collection&lt;Player&gt;</code> </td><td align="center">      Selects an entity (similar to <code>@a</code> or <code>@p</code>)       </td></tr>
+<tr><td align="center">      <code>EntityTypeArgument</code>       </td><td align="center">                         <code>EntityType</code>                         </td><td align="center">          Selects a type of entity (e.g. Pig)           </td></tr>
+<tr><td align="center">         <code>FloatArgument</code>         </td><td align="center">                           <code>float</code>                            </td><td align="center">                                                        </td></tr>
+<tr><td align="center">       <code>FunctionArgument</code>        </td><td align="center">                     <code>FunctionWrapper[]</code>                      </td><td align="center">     A declared Minecraft function from a data pack     </td></tr>
+<tr><td align="center">     <code>GreedyStringArgument</code>      </td><td align="center">                           <code>String</code>                           </td><td align="center">                 A string of any length                 </td></tr>
+<tr><td align="center">        <code>IntegerArgument</code>        </td><td align="center">                            <code>int</code>                             </td><td align="center">                                                        </td></tr>
+<tr><td align="center">       <code>ItemStackArgument</code>       </td><td align="center">                         <code>ItemStack</code>                          </td><td align="center">          Returns an <code>ItemStack</code> with amount 1          </td></tr>
+<tr><td align="center">        <code>LiteralArgument</code>        </td><td align="center">                             N/A                              </td><td align="center">          A predefined hardcoded argument name          </td></tr>
+<tr><td align="center">       <code>LocationArgument</code>        </td><td align="center">                          <code>Location</code>                          </td><td align="center">                                                        </td></tr>
+<tr><td align="center">       <code>ParticleArgument</code>        </td><td align="center">                          <code>Particle</code>                          </td><td align="center">                                                        </td></tr>
+<tr><td align="center">         <code>PlayerArgument</code>         </td><td align="center">                           <code>Player</code>                           </td><td align="center"> Similar to EntitySelector, but always returns 1 player </td></tr>
+<tr><td align="center">     <code>PotionEffectArgument</code>      </td><td align="center">                      <code>PotionEffectType</code>                      </td><td align="center">                                                        </td></tr>
+<tr><td align="center">         <code>StringArgument</code>         </td><td align="center">                           <code>String</code>                           </td><td align="center">              String consisting of 1 word               </td></tr>
+<tr><td align="center">    <code>SuggestedStringArgument</code>     </td><td align="center">                           <code>String</code>                           </td><td align="center">          A list of suggested one word strings          </td></tr>
+<tr><td align="center">          <code>TextArgument</code>          </td><td align="center">                           <code>String</code>                           </td><td align="center">      String which can have spaces (used for text)      </td></tr>
+</tbody></table>
+<a class="header" href="arguments.html#argument-casting" id="argument-casting"><h2>Argument Casting</h2></a>
+<p>To access arguments, they are casted in the order of declaration.</p>
+<pre><code class="language-java">LinkedHashMap&lt;String, ArgumentType&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;arg0&quot;, new StringArgument());
+arguments.put(&quot;arg1&quot;, new PotionEffectArgument());
+arguments.put(&quot;arg2&quot;, new LocationArgument());
+
+commandRegister.register(&quot;cmd&quot;, arguments, (sender, args) -&gt; {
+    String stringArg = (String) args[0];
+    PotionEffectType potionArg = (PotionEffectType) args[1];
+    Location locationArg = (Location) args[2];
+});
 </code></pre>
-<ul>
-<li><code>verbose-outputs</code> - Outputs command registration and unregistration logs in the console</li>
-<li><code>create-dispatcher-json</code> - Creates a <code>command_registration.json</code> file showing the mapping of registered commands</li>
-</ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
+                            <a rel="prev" href="commandregistration.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
 
                         
-                            <a rel="next" href="quickstart.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="primitivearguments.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -169,9 +195,13 @@ create-dispatcher-json: true
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
+                    <a href="commandregistration.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
 
                 
-                    <a href="quickstart.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="primitivearguments.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 

@@ -69,7 +69,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Quickstart guide</a></li></ol>
+            <ol class="chapter"><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Quickstart guide</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="arguments.html"><strong aria-hidden="true">4.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">4.1.</strong> Primitive arguments</a></li></ol></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -199,6 +199,74 @@ args.put(&quot;time&quot;, new IntegerArgument());
 </code></pre>
 </li>
 </ul>
+<a class="header" href="print.html#command-registration" id="command-registration"><h1>Command registration</h1></a>
+<a class="header" href="print.html#command-registration-1" id="command-registration-1"><h2>Command registration</h2></a>
+<table><thead><tr><th> CommandRegistration method                                   </th><th> Outcome                                                   </th></tr></thead><tbody>
+<tr><td> <code>CommandAPI.getInstance().register(String, LinkedHashMap, CommandExecutor)</code> </td><td> Basic command registration                                </td></tr>
+<tr><td> <code>CommandAPI.getInstance().register(String, String[], LinkedHashMap, CommandExecutor)</code> </td><td> Register command with an array of aliases                 </td></tr>
+<tr><td> <code>CommandAPI.getInstance().register(String, CommandPermission, LinkedHashMap, CommandExecutor)</code> </td><td> Register command which need certain permissions           </td></tr>
+<tr><td> <code>CommandAPI.getInstance().register(String, CommandPermission, String[], LinkedHashMap, CommandExecutor)</code> </td><td> Register command with aliases and permission requirements </td></tr>
+</tbody></table>
+<p>To see more about <code>CommandPermission</code>, check out the link <a href="https://github.com/JorelAli/1.13-Command-API/blob/master/v1.8%20Documentation.md#commandexecutor">here</a></p>
+<p>To see more about <code>CommandExecutor</code>, check out the link <a href="https://github.com/JorelAli/1.13-Command-API/blob/master/v1.8%20Documentation.md#commandexecutor">here</a></p>
+<a class="header" href="print.html#command-loading-order" id="command-loading-order"><h3>Command loading order</h3></a>
+<p><strong>Commands must be registered before the server finishes loading</strong>. The CommandAPI will prevent command registration after the server has loaded.</p>
+<table><thead><tr><th> When to load               </th><th> What to do                                                   </th></tr></thead><tbody>
+<tr><td> Plugin <code>onLoad()</code> method   </td><td> Register commands to be used in Minecraft functions (see Function section for more info) </td></tr>
+<tr><td> Plugin <code>onEnable()</code> method </td><td> Register regular commands                                    </td></tr>
+</tbody></table>
+<a class="header" href="print.html#command-unregistration" id="command-unregistration"><h3>Command unregistration</h3></a>
+<p>The CommandAPI has support to unregister commands completely from Minecraft's command list. This includes Minecraft built in commands!</p>
+<table><thead><tr><th> Method                                                       </th><th> Result                                                       </th></tr></thead><tbody>
+<tr><td> <code>CommandAPI.getInstance().unregister(String cmd)</code>            </td><td> Unregisters a command from the game                          </td></tr>
+<tr><td> <code>CommandAPI.getInstance().unregister(String cmd, boolean force)</code> </td><td> Unregisters a command from the game by force. This includes <code>/minecraft:cmd</code>, <code>/bukkit:cmd</code> and <code>/spigot:cmd</code> commands as well. </td></tr>
+</tbody></table>
+<p><strong>Example:</strong></p>
+<table><thead><tr><th> Method                                                  </th><th> Outcome                                                      </th></tr></thead><tbody>
+<tr><td> <code>CommandAPI.getInstance().unregister(&quot;gamemode&quot;)</code>       </td><td> Unregisters the <code>/gamemode</code> command from the game            </td></tr>
+<tr><td> <code>CommandAPI.getInstance().unregister(&quot;gamemode&quot;, true)</code> </td><td> Force unregisters all <code>/gamemode</code> commands from all plugins, Minecraft, Bukkit and Spigot. This includes <code>/minecraft:gamemode</code>, in addition to any other plugins which register <code>/gamemode</code> </td></tr>
+</tbody></table>
+<a class="header" href="print.html#arguments" id="arguments"><h1>Arguments</h1></a>
+<p>Arguments are found in the <code>io.github.jorelali.commandapi.api.arguments</code> package.</p>
+<table><thead><tr><th align="center">          Argument class          </th><th align="center">                          Data type                           </th><th align="center">                      Description                       </th></tr></thead><tbody>
+<tr><td align="center">        <code>BooleanArgument</code>         </td><td align="center">                          <code>boolean</code>                           </td><td align="center">                                                        </td></tr>
+<tr><td align="center">       <code>ChatColorArgument</code>        </td><td align="center">                         <code>ChatColor</code>                          </td><td align="center">                                                        </td></tr>
+<tr><td align="center">     <code>ChatComponentArgument</code>      </td><td align="center">                      <code>BaseComponent[]</code>                       </td><td align="center">                 Formatted chat object                  </td></tr>
+<tr><td align="center">         <code>DoubleArgument</code>         </td><td align="center">                           <code>double</code>                           </td><td align="center">                                                        </td></tr>
+<tr><td align="center"> <code>DynamicSuggestedStringArgument</code> </td><td align="center">                           <code>String</code>                           </td><td align="center">       Suggested string using a supplier function       </td></tr>
+<tr><td align="center">      <code>EnchantmentArgument</code>      </td><td align="center">                        <code>Enchantment</code>                         </td><td align="center">                                                        </td></tr>
+<tr><td align="center">    <code>EntitySelectorArgument</code>     </td><td align="center"> <code>Entity</code>, <code>Player</code>, <code>Collection&lt;Entity&gt;</code>, <code>Collection&lt;Player&gt;</code> </td><td align="center">      Selects an entity (similar to <code>@a</code> or <code>@p</code>)       </td></tr>
+<tr><td align="center">      <code>EntityTypeArgument</code>       </td><td align="center">                         <code>EntityType</code>                         </td><td align="center">          Selects a type of entity (e.g. Pig)           </td></tr>
+<tr><td align="center">         <code>FloatArgument</code>         </td><td align="center">                           <code>float</code>                            </td><td align="center">                                                        </td></tr>
+<tr><td align="center">       <code>FunctionArgument</code>        </td><td align="center">                     <code>FunctionWrapper[]</code>                      </td><td align="center">     A declared Minecraft function from a data pack     </td></tr>
+<tr><td align="center">     <code>GreedyStringArgument</code>      </td><td align="center">                           <code>String</code>                           </td><td align="center">                 A string of any length                 </td></tr>
+<tr><td align="center">        <code>IntegerArgument</code>        </td><td align="center">                            <code>int</code>                             </td><td align="center">                                                        </td></tr>
+<tr><td align="center">       <code>ItemStackArgument</code>       </td><td align="center">                         <code>ItemStack</code>                          </td><td align="center">          Returns an <code>ItemStack</code> with amount 1          </td></tr>
+<tr><td align="center">        <code>LiteralArgument</code>        </td><td align="center">                             N/A                              </td><td align="center">          A predefined hardcoded argument name          </td></tr>
+<tr><td align="center">       <code>LocationArgument</code>        </td><td align="center">                          <code>Location</code>                          </td><td align="center">                                                        </td></tr>
+<tr><td align="center">       <code>ParticleArgument</code>        </td><td align="center">                          <code>Particle</code>                          </td><td align="center">                                                        </td></tr>
+<tr><td align="center">         <code>PlayerArgument</code>         </td><td align="center">                           <code>Player</code>                           </td><td align="center"> Similar to EntitySelector, but always returns 1 player </td></tr>
+<tr><td align="center">     <code>PotionEffectArgument</code>      </td><td align="center">                      <code>PotionEffectType</code>                      </td><td align="center">                                                        </td></tr>
+<tr><td align="center">         <code>StringArgument</code>         </td><td align="center">                           <code>String</code>                           </td><td align="center">              String consisting of 1 word               </td></tr>
+<tr><td align="center">    <code>SuggestedStringArgument</code>     </td><td align="center">                           <code>String</code>                           </td><td align="center">          A list of suggested one word strings          </td></tr>
+<tr><td align="center">          <code>TextArgument</code>          </td><td align="center">                           <code>String</code>                           </td><td align="center">      String which can have spaces (used for text)      </td></tr>
+</tbody></table>
+<a class="header" href="print.html#argument-casting" id="argument-casting"><h2>Argument Casting</h2></a>
+<p>To access arguments, they are casted in the order of declaration.</p>
+<pre><code class="language-java">LinkedHashMap&lt;String, ArgumentType&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;arg0&quot;, new StringArgument());
+arguments.put(&quot;arg1&quot;, new PotionEffectArgument());
+arguments.put(&quot;arg2&quot;, new LocationArgument());
+
+commandRegister.register(&quot;cmd&quot;, arguments, (sender, args) -&gt; {
+    String stringArg = (String) args[0];
+    PotionEffectType potionArg = (PotionEffectType) args[1];
+    Location locationArg = (Location) args[2];
+});
+</code></pre>
+<a class="header" href="print.html#primitive-arguments" id="primitive-arguments"><h1>Primitive arguments</h1></a>
+<p>Boolean argument,</p>
+<p>ranged arguments</p>
 
                     </main>
 
