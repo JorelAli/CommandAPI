@@ -8,3 +8,4 @@
   - [Location argument](./locationargument.md)
   - [Chat arguments](./chatarguments.md)
   - [String arguments](./stringarguments.md)
+  - [Entity & player arguments](./entityarguments.md)

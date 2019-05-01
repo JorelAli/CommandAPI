@@ -1,6 +1,6 @@
 # String arguments
 
-## String arguments
+## String argument
 
 The `StringArgument` class is used to represent a single word. These words **can only contain alphanumeric characters (A-Z, a-z and 0-9), and the underscore character**.
 
@@ -24,7 +24,7 @@ yesn't
 
 * Entering Strings to identify offline players
 
-## Text arguments
+## Text argument
 
 The `TextArgument` acts similar to any String in Java. These can be single words, like to the `StringArgument`, or have additional characters (e.g. spaces, symbols) **if surrounded by quotes**. To type quotation marks, you can use `\"` (as similar to Java) to escape these special characters.
 
@@ -50,7 +50,7 @@ hello world
 - A command to edit the contents on a sign
 - Any command that may require multiple text arguments
 
-## Greedy string arguments
+## Greedy string argument
 
 The `GreedyStringArgument` takes the `TextArgument` a step further. **Any characters and symbols are allowed** and quotation marks are not required. **However, the `GreedyStringArgument` uses the entirety of the argument array from its position**.
 
