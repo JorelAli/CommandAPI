@@ -7,3 +7,4 @@
   - [Primitive arguments](./primitivearguments.md)
   - [Location argument](./locationargument.md)
   - [Chat arguments](./chatarguments.md)
+  - [String arguments](./stringarguments.md)
