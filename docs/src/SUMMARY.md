@@ -6,3 +6,4 @@
 - [Arguments](./arguments.md)
   - [Primitive arguments](./primitivearguments.md)
   - [Location argument](./locationargument.md)
+  - [Chat arguments](./chatarguments.md)
