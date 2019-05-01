@@ -69,7 +69,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Quickstart guide</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="arguments.html"><strong aria-hidden="true">4.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">4.1.</strong> Primitive arguments</a></li></ol></li></ol>
+            <ol class="chapter"><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Quickstart guide</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="arguments.html"><strong aria-hidden="true">4.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">4.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">4.2.</strong> Location argument</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">4.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">4.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">4.5.</strong> Entity &amp; player arguments</a></li></ol></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -306,6 +306,162 @@ CommandAPI.getInstance().register(&quot;editconfig&quot;, arguments, (sender, ar
 <tr><td> <code>new IntegerArgument(2, 10)</code> </td><td> Values greater than or equal to 2 and less than or equal to 10 </td></tr>
 </tbody></table>
 <p>Each range is <em>inclusive</em>, so it includes the number given to it.</p>
+<a class="header" href="print.html#location-argument" id="location-argument"><h1>Location argument</h1></a>
+<p>The <code>LocationArgument</code> class is used to specify a location in the <em>command sender's current world</em>. This allows the user to enter three numbers as coordinates, or use relative coordinates (i.e. the <code>~</code> and <code>^</code> operators)</p>
+<p>The <code>LocationArgument</code> constructor requires a <code>LocationType</code>, which specifies the type of location that is accepted by the command.</p>
+<a class="header" href="print.html#locationtypeblock_position" id="locationtypeblock_position"><h3><code>LocationType.BLOCK_POSITION</code></h3></a>
+<p>Integer block coordinates. The suggested location is the coordinates of block you are looking at when you type the command.
+<img src="https://user-images.githubusercontent.com/42968178/50574833-92ef9e00-0df0-11e9-9ae5-59235b1bb8cb.png" alt="BLOCK_POSITION" /></p>
+<a class="header" href="print.html#locationtypeprecise_position" id="locationtypeprecise_position"><h3><code>LocationType.PRECISE_POSITION</code></h3></a>
+<p>Exact coordinates. The suggested location is the exact coordinates of where your cursor is pointing at when you type the command.
+<img src="https://user-images.githubusercontent.com/42968178/50574841-b6b2e400-0df0-11e9-9003-481b139d190f.png" alt="PRECISE_POSITION" /></p>
+<p><strong>By default, the <code>LocationArgument</code> will use <code>PRECISE_POSITION</code></strong>.</p>
+<a class="header" href="print.html#example---break-block-by-coordinates-command" id="example---break-block-by-coordinates-command"><h3>Example - Break block by coordinates command</h3></a>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+
+//We want to target blocks in particular, so use BLOCK_POSITION
+arguments.put(&quot;block&quot;, new LocationArgument(LocationType.BLOCK_POSITION));
+
+CommandAPI.getInstance().register(&quot;break&quot;, arguments, (sender, args) -&gt; {
+    ((Location) args[0]).getBlock().setType(Material.AIR);
+});
+</code></pre>
+<a class="header" href="print.html#chat-arguments" id="chat-arguments"><h1>Chat arguments</h1></a>
+<a class="header" href="print.html#chat-color-argument" id="chat-color-argument"><h2>Chat color argument</h2></a>
+<p>The <code>ChatColorArgument</code> class is used to represent a given chat color (e.g. red or green)</p>
+<a class="header" href="print.html#example---username-color-changing-plugin" id="example---username-color-changing-plugin"><h3>Example - Username color changing plugin</h3></a>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;chatcolor&quot;, new ChatColorArgument());
+
+CommandAPI.getInstance().register(&quot;namecolor&quot;, arguments, (sender, args) -&gt; {
+    Player player = (Player) sender;
+    ChatColor color = (ChatColor) args[0];
+    player.setDisplayName(color + player.getDisplayName());
+});
+</code></pre>
+<a class="header" href="print.html#chat-component-argument" id="chat-component-argument"><h2>Chat component argument</h2></a>
+<p><strong>The <code>ChatComponentArgument</code> class requires a Spigot/PaperSpigot server in order to function - it will NOT work on a CraftBukkit server (Throws a <code>SpigotNotFoundException</code>)</strong></p>
+<p>The <code>ChatComponentArgument</code> class accepts raw JSON as valid input. This is converted into Spigot's <code>BaseComponent[]</code> which can be used for books and raw messages. You can read more about raw JSON <a href="https://minecraft.gamepedia.com/Commands#Raw_JSON_text">here</a>.</p>
+<a class="header" href="print.html#example---book-made-from-raw-json" id="example---book-made-from-raw-json"><h3>Example - Book made from raw JSON</h3></a>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;contents&quot;, new ChatComponentArgument());
+
+CommandAPI.getInstance().register(&quot;makebook&quot;, arguments, (sender, args) -&gt; {
+    if (sender instanceof Player) {
+        Player player = (Player) sender;
+        BaseComponent[] arr = (BaseComponent[]) args[0];
+        
+        //Create book
+        ItemStack is = new ItemStack(Material.WRITTEN_BOOK);
+        BookMeta meta = (BookMeta) is.getItemMeta(); 
+        meta.spigot().addPage(arr);
+        is.setItemMeta(meta);
+        
+        //Give player the book
+        player.getInventory().addItem(is);
+    }
+});
+</code></pre>
+<a class="header" href="print.html#string-arguments" id="string-arguments"><h1>String arguments</h1></a>
+<a class="header" href="print.html#string-argument" id="string-argument"><h2>String argument</h2></a>
+<p>The <code>StringArgument</code> class is used to represent a single word. These words <strong>can only contain alphanumeric characters (A-Z, a-z and 0-9), and the underscore character</strong>.</p>
+<p>Accepted <code>StringArgument</code> values:</p>
+<pre><code>Hello
+123
+hello123
+Hello_world
+</code></pre>
+<p>Rejected <code>StringArgument</code> values:</p>
+<pre><code>hello@email.com
+yesn't
+</code></pre>
+<a class="header" href="print.html#potential-uses-for-string-arguments" id="potential-uses-for-string-arguments"><h3>Potential uses for string arguments</h3></a>
+<ul>
+<li>Entering Strings to identify offline players</li>
+</ul>
+<a class="header" href="print.html#text-argument" id="text-argument"><h2>Text argument</h2></a>
+<p>The <code>TextArgument</code> acts similar to any String in Java. These can be single words, like to the <code>StringArgument</code>, or have additional characters (e.g. spaces, symbols) <strong>if surrounded by quotes</strong>. To type quotation marks, you can use <code>\&quot;</code> (as similar to Java) to escape these special characters.</p>
+<p>Accepted <code>TextArgument</code> values:</p>
+<pre><code>hello
+&quot;hello world!&quot;
+&quot;hello@gmail.com&quot;
+&quot;this has \&quot; &lt;&lt;-- speech marks! &quot;
+</code></pre>
+<p>Rejected <code>TextArgument</code> values:</p>
+<pre><code>hello world
+私
+&quot;speech marks: &quot;&quot;
+</code></pre>
+<a class="header" href="print.html#potential-uses-for-text-arguments" id="potential-uses-for-text-arguments"><h3>Potential uses for text arguments</h3></a>
+<ul>
+<li>A command to edit the contents on a sign</li>
+<li>Any command that may require multiple text arguments</li>
+</ul>
+<a class="header" href="print.html#greedy-string-argument" id="greedy-string-argument"><h2>Greedy string argument</h2></a>
+<p>The <code>GreedyStringArgument</code> takes the <code>TextArgument</code> a step further. <strong>Any characters and symbols are allowed</strong> and quotation marks are not required. <strong>However, the <code>GreedyStringArgument</code> uses the entirety of the argument array from its position</strong>.</p>
+<a class="header" href="print.html#example---messaging-command" id="example---messaging-command"><h3>Example - Messaging command</h3></a>
+<p>Say we have a command <code>/msg &lt;target&gt; &lt;message&gt;</code></p>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;target&quot;, new PlayerArgument());
+arguments.put(&quot;message&quot;, new GreedyStringArgument());
+
+CommandAPI.getInstance().register(&quot;msg&quot;, arguments, (sender, args) -&gt; {
+    ((Player) args[0]).sendMessage((String) args[1]);
+});
+</code></pre>
+<p>Any text entered after the <code>&lt;target&gt;</code> argument would be sent to the player. For example, the command could be used as follows:</p>
+<pre><code>/msg Skepter This is some incredibly long string with &quot;symbols&quot; and $p3c!aL characters~
+</code></pre>
+<p>Due to the fact that <strong>the <code>GreedyStringArgument</code> has no terminator</strong> (it has infinite length), <strong>a <code>GreedyStringArgument</code> must be defined at the end of the <code>LinkedHashMap</code></strong> (otherwise the CommandAPI will throw a <code>GreedyStringException</code>)</p>
+<p>For example, if the syntax was<code>/msg &lt;message&gt; &lt;target&gt;</code>, it would not be able to determine where the message ends and the <code>&lt;target&gt;</code> argument begins.</p>
+<a class="header" href="print.html#potential-uses-for-greedy-strings" id="potential-uses-for-greedy-strings"><h3>Potential uses for greedy strings</h3></a>
+<ul>
+<li>A messaging/whisper command</li>
+<li>A mailing command</li>
+<li>Any command involving lots of text, such as a book writing command</li>
+<li>Any command which involves an unreasonable/unknown amount of arguments</li>
+<li>Any command where you want to parse arguments similar to how regular Bukkit would</li>
+</ul>
+<a class="header" href="print.html#entity--player-arguments" id="entity--player-arguments"><h1>Entity &amp; player arguments</h1></a>
+<a class="header" href="print.html#entity-selector-arguments" id="entity-selector-arguments"><h2>Entity Selector Arguments</h2></a>
+<p>Minecraft's <a href="https://minecraft.gamepedia.com/Commands#Target_selectors">target selectors</a> (e.g. <code>@a</code> or <code>@e</code>) are implemented using the <code>EntitySelectorArgument</code> class. This allows you to select specific entities based on certain attributes.</p>
+<p>The <code>EntitySelectorArgument</code> constructor requires an <code>EntitySelector</code> argument to determine what type of data to return. There are 4 types of entity selections which are available:</p>
+<ul>
+<li><code>EntitySelector.ONE_ENTITY</code> - A single entity, which returns a <code>Entity</code> object.</li>
+<li><code>EntitySelector.MANY_ENTITIES</code>  - A collection of many entities, which returns a <code>Collection&lt;Entity&gt;</code> object.</li>
+<li><code>EntitySelector.ONE_PLAYER</code> - A single player, which returns a <code>Player</code> object.</li>
+<li><code>EntitySelector.MANY_PLAYERS</code> - A collection of players, which returns a <code>Collection&lt;Player&gt;</code> object.</li>
+</ul>
+<p>The return type is the type to be cast when retrieved from the <code>Object[] args</code> in the command declaration.</p>
+<a class="header" href="print.html#example---kill-entities-command" id="example---kill-entities-command"><h3>Example - Kill entities command</h3></a>
+<pre><code class="language-java">//LinkedHashMap to store arguments for the command
+LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+
+//Using a collective entity selector to select multiple entities
+arguments.put(&quot;entities&quot;, new EntitySelectorArgument(EntitySelector.MANY_ENTITIES));
+
+CommandAPI.getInstance().register(&quot;kill&quot;, arguments, (sender, args) -&gt; {
+    
+    //Parse the argument as a collection of entities (as stated above in the documentation)
+    Collection&lt;Entity&gt; entities = (Collection&lt;Entity&gt;) args[0];
+    sender.sendMessage(&quot;killed &quot; + entities.size() + &quot;entities&quot;);
+    for(Entity e : entity)
+        e.remove();
+});
+</code></pre>
+<p>Example command usage for the above code would be:</p>
+<ul>
+<li>Kill all cows:
+<pre><code>/kill @e[type=cow]
+</code></pre>
+</li>
+<li>Kill the 10 furthest pigs from the command sender:
+<pre><code>/kill @e[type=pig,limit=10,sort=furthest]
+</code></pre>
+</li>
+</ul>
+<a class="header" href="print.html#player-arguments" id="player-arguments"><h2>Player arguments</h2></a>
+<p>The <code>PlayerArgument</code> class is very similar to <code>EntitySelectorArgument</code>, except it's specifically for <strong>one</strong> player. It also allows you to select a player based on their UUID.</p>
 
                     </main>
 

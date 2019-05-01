@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Command registration - 1.13CommandAPI Documentation</title>
+        <title>Chat arguments - 1.13CommandAPI Documentation</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -69,7 +69,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Quickstart guide</a></li><li><a href="commandregistration.html" class="active"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="arguments.html"><strong aria-hidden="true">4.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">4.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">4.2.</strong> Location argument</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">4.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">4.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">4.5.</strong> Entity &amp; player arguments</a></li></ol></li></ol>
+            <ol class="chapter"><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Quickstart guide</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="arguments.html"><strong aria-hidden="true">4.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">4.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">4.2.</strong> Location argument</a></li><li><a href="chatarguments.html" class="active"><strong aria-hidden="true">4.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">4.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">4.5.</strong> Entity &amp; player arguments</a></li></ol></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -133,46 +133,55 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="commandregistration.html#command-registration" id="command-registration"><h1>Command registration</h1></a>
-<a class="header" href="commandregistration.html#command-registration-1" id="command-registration-1"><h2>Command registration</h2></a>
-<table><thead><tr><th> CommandRegistration method                                   </th><th> Outcome                                                   </th></tr></thead><tbody>
-<tr><td> <code>CommandAPI.getInstance().register(String, LinkedHashMap, CommandExecutor)</code> </td><td> Basic command registration                                </td></tr>
-<tr><td> <code>CommandAPI.getInstance().register(String, String[], LinkedHashMap, CommandExecutor)</code> </td><td> Register command with an array of aliases                 </td></tr>
-<tr><td> <code>CommandAPI.getInstance().register(String, CommandPermission, LinkedHashMap, CommandExecutor)</code> </td><td> Register command which need certain permissions           </td></tr>
-<tr><td> <code>CommandAPI.getInstance().register(String, CommandPermission, String[], LinkedHashMap, CommandExecutor)</code> </td><td> Register command with aliases and permission requirements </td></tr>
-</tbody></table>
-<p>To see more about <code>CommandPermission</code>, check out the link <a href="https://github.com/JorelAli/1.13-Command-API/blob/master/v1.8%20Documentation.md#commandexecutor">here</a></p>
-<p>To see more about <code>CommandExecutor</code>, check out the link <a href="https://github.com/JorelAli/1.13-Command-API/blob/master/v1.8%20Documentation.md#commandexecutor">here</a></p>
-<a class="header" href="commandregistration.html#command-loading-order" id="command-loading-order"><h3>Command loading order</h3></a>
-<p><strong>Commands must be registered before the server finishes loading</strong>. The CommandAPI will prevent command registration after the server has loaded.</p>
-<table><thead><tr><th> When to load               </th><th> What to do                                                   </th></tr></thead><tbody>
-<tr><td> Plugin <code>onLoad()</code> method   </td><td> Register commands to be used in Minecraft functions (see Function section for more info) </td></tr>
-<tr><td> Plugin <code>onEnable()</code> method </td><td> Register regular commands                                    </td></tr>
-</tbody></table>
-<a class="header" href="commandregistration.html#command-unregistration" id="command-unregistration"><h3>Command unregistration</h3></a>
-<p>The CommandAPI has support to unregister commands completely from Minecraft's command list. This includes Minecraft built in commands!</p>
-<table><thead><tr><th> Method                                                       </th><th> Result                                                       </th></tr></thead><tbody>
-<tr><td> <code>CommandAPI.getInstance().unregister(String cmd)</code>            </td><td> Unregisters a command from the game                          </td></tr>
-<tr><td> <code>CommandAPI.getInstance().unregister(String cmd, boolean force)</code> </td><td> Unregisters a command from the game by force. This includes <code>/minecraft:cmd</code>, <code>/bukkit:cmd</code> and <code>/spigot:cmd</code> commands as well. </td></tr>
-</tbody></table>
-<p><strong>Example:</strong></p>
-<table><thead><tr><th> Method                                                  </th><th> Outcome                                                      </th></tr></thead><tbody>
-<tr><td> <code>CommandAPI.getInstance().unregister(&quot;gamemode&quot;)</code>       </td><td> Unregisters the <code>/gamemode</code> command from the game            </td></tr>
-<tr><td> <code>CommandAPI.getInstance().unregister(&quot;gamemode&quot;, true)</code> </td><td> Force unregisters all <code>/gamemode</code> commands from all plugins, Minecraft, Bukkit and Spigot. This includes <code>/minecraft:gamemode</code>, in addition to any other plugins which register <code>/gamemode</code> </td></tr>
-</tbody></table>
+                        <a class="header" href="chatarguments.html#chat-arguments" id="chat-arguments"><h1>Chat arguments</h1></a>
+<a class="header" href="chatarguments.html#chat-color-argument" id="chat-color-argument"><h2>Chat color argument</h2></a>
+<p>The <code>ChatColorArgument</code> class is used to represent a given chat color (e.g. red or green)</p>
+<a class="header" href="chatarguments.html#example---username-color-changing-plugin" id="example---username-color-changing-plugin"><h3>Example - Username color changing plugin</h3></a>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;chatcolor&quot;, new ChatColorArgument());
+
+CommandAPI.getInstance().register(&quot;namecolor&quot;, arguments, (sender, args) -&gt; {
+    Player player = (Player) sender;
+    ChatColor color = (ChatColor) args[0];
+    player.setDisplayName(color + player.getDisplayName());
+});
+</code></pre>
+<a class="header" href="chatarguments.html#chat-component-argument" id="chat-component-argument"><h2>Chat component argument</h2></a>
+<p><strong>The <code>ChatComponentArgument</code> class requires a Spigot/PaperSpigot server in order to function - it will NOT work on a CraftBukkit server (Throws a <code>SpigotNotFoundException</code>)</strong></p>
+<p>The <code>ChatComponentArgument</code> class accepts raw JSON as valid input. This is converted into Spigot's <code>BaseComponent[]</code> which can be used for books and raw messages. You can read more about raw JSON <a href="https://minecraft.gamepedia.com/Commands#Raw_JSON_text">here</a>.</p>
+<a class="header" href="chatarguments.html#example---book-made-from-raw-json" id="example---book-made-from-raw-json"><h3>Example - Book made from raw JSON</h3></a>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;contents&quot;, new ChatComponentArgument());
+
+CommandAPI.getInstance().register(&quot;makebook&quot;, arguments, (sender, args) -&gt; {
+    if (sender instanceof Player) {
+        Player player = (Player) sender;
+        BaseComponent[] arr = (BaseComponent[]) args[0];
+        
+        //Create book
+        ItemStack is = new ItemStack(Material.WRITTEN_BOOK);
+        BookMeta meta = (BookMeta) is.getItemMeta(); 
+        meta.spigot().addPage(arr);
+        is.setItemMeta(meta);
+        
+        //Give player the book
+        player.getInventory().addItem(is);
+    }
+});
+</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="quickstart.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="locationargument.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
                         
-                            <a rel="next" href="arguments.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="stringarguments.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -184,13 +193,13 @@
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="quickstart.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a href="locationargument.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a href="arguments.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="stringarguments.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 

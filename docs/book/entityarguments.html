@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Command registration - 1.13CommandAPI Documentation</title>
+        <title>Entity &amp; player arguments - 1.13CommandAPI Documentation</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -69,7 +69,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Quickstart guide</a></li><li><a href="commandregistration.html" class="active"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="arguments.html"><strong aria-hidden="true">4.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">4.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">4.2.</strong> Location argument</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">4.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">4.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">4.5.</strong> Entity &amp; player arguments</a></li></ol></li></ol>
+            <ol class="chapter"><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Quickstart guide</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="arguments.html"><strong aria-hidden="true">4.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">4.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">4.2.</strong> Location argument</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">4.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">4.4.</strong> String arguments</a></li><li><a href="entityarguments.html" class="active"><strong aria-hidden="true">4.5.</strong> Entity &amp; player arguments</a></li></ol></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -133,48 +133,57 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="commandregistration.html#command-registration" id="command-registration"><h1>Command registration</h1></a>
-<a class="header" href="commandregistration.html#command-registration-1" id="command-registration-1"><h2>Command registration</h2></a>
-<table><thead><tr><th> CommandRegistration method                                   </th><th> Outcome                                                   </th></tr></thead><tbody>
-<tr><td> <code>CommandAPI.getInstance().register(String, LinkedHashMap, CommandExecutor)</code> </td><td> Basic command registration                                </td></tr>
-<tr><td> <code>CommandAPI.getInstance().register(String, String[], LinkedHashMap, CommandExecutor)</code> </td><td> Register command with an array of aliases                 </td></tr>
-<tr><td> <code>CommandAPI.getInstance().register(String, CommandPermission, LinkedHashMap, CommandExecutor)</code> </td><td> Register command which need certain permissions           </td></tr>
-<tr><td> <code>CommandAPI.getInstance().register(String, CommandPermission, String[], LinkedHashMap, CommandExecutor)</code> </td><td> Register command with aliases and permission requirements </td></tr>
-</tbody></table>
-<p>To see more about <code>CommandPermission</code>, check out the link <a href="https://github.com/JorelAli/1.13-Command-API/blob/master/v1.8%20Documentation.md#commandexecutor">here</a></p>
-<p>To see more about <code>CommandExecutor</code>, check out the link <a href="https://github.com/JorelAli/1.13-Command-API/blob/master/v1.8%20Documentation.md#commandexecutor">here</a></p>
-<a class="header" href="commandregistration.html#command-loading-order" id="command-loading-order"><h3>Command loading order</h3></a>
-<p><strong>Commands must be registered before the server finishes loading</strong>. The CommandAPI will prevent command registration after the server has loaded.</p>
-<table><thead><tr><th> When to load               </th><th> What to do                                                   </th></tr></thead><tbody>
-<tr><td> Plugin <code>onLoad()</code> method   </td><td> Register commands to be used in Minecraft functions (see Function section for more info) </td></tr>
-<tr><td> Plugin <code>onEnable()</code> method </td><td> Register regular commands                                    </td></tr>
-</tbody></table>
-<a class="header" href="commandregistration.html#command-unregistration" id="command-unregistration"><h3>Command unregistration</h3></a>
-<p>The CommandAPI has support to unregister commands completely from Minecraft's command list. This includes Minecraft built in commands!</p>
-<table><thead><tr><th> Method                                                       </th><th> Result                                                       </th></tr></thead><tbody>
-<tr><td> <code>CommandAPI.getInstance().unregister(String cmd)</code>            </td><td> Unregisters a command from the game                          </td></tr>
-<tr><td> <code>CommandAPI.getInstance().unregister(String cmd, boolean force)</code> </td><td> Unregisters a command from the game by force. This includes <code>/minecraft:cmd</code>, <code>/bukkit:cmd</code> and <code>/spigot:cmd</code> commands as well. </td></tr>
-</tbody></table>
-<p><strong>Example:</strong></p>
-<table><thead><tr><th> Method                                                  </th><th> Outcome                                                      </th></tr></thead><tbody>
-<tr><td> <code>CommandAPI.getInstance().unregister(&quot;gamemode&quot;)</code>       </td><td> Unregisters the <code>/gamemode</code> command from the game            </td></tr>
-<tr><td> <code>CommandAPI.getInstance().unregister(&quot;gamemode&quot;, true)</code> </td><td> Force unregisters all <code>/gamemode</code> commands from all plugins, Minecraft, Bukkit and Spigot. This includes <code>/minecraft:gamemode</code>, in addition to any other plugins which register <code>/gamemode</code> </td></tr>
-</tbody></table>
+                        <a class="header" href="entityarguments.html#entity--player-arguments" id="entity--player-arguments"><h1>Entity &amp; player arguments</h1></a>
+<a class="header" href="entityarguments.html#entity-selector-arguments" id="entity-selector-arguments"><h2>Entity Selector Arguments</h2></a>
+<p>Minecraft's <a href="https://minecraft.gamepedia.com/Commands#Target_selectors">target selectors</a> (e.g. <code>@a</code> or <code>@e</code>) are implemented using the <code>EntitySelectorArgument</code> class. This allows you to select specific entities based on certain attributes.</p>
+<p>The <code>EntitySelectorArgument</code> constructor requires an <code>EntitySelector</code> argument to determine what type of data to return. There are 4 types of entity selections which are available:</p>
+<ul>
+<li><code>EntitySelector.ONE_ENTITY</code> - A single entity, which returns a <code>Entity</code> object.</li>
+<li><code>EntitySelector.MANY_ENTITIES</code>  - A collection of many entities, which returns a <code>Collection&lt;Entity&gt;</code> object.</li>
+<li><code>EntitySelector.ONE_PLAYER</code> - A single player, which returns a <code>Player</code> object.</li>
+<li><code>EntitySelector.MANY_PLAYERS</code> - A collection of players, which returns a <code>Collection&lt;Player&gt;</code> object.</li>
+</ul>
+<p>The return type is the type to be cast when retrieved from the <code>Object[] args</code> in the command declaration.</p>
+<a class="header" href="entityarguments.html#example---kill-entities-command" id="example---kill-entities-command"><h3>Example - Kill entities command</h3></a>
+<pre><code class="language-java">//LinkedHashMap to store arguments for the command
+LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+
+//Using a collective entity selector to select multiple entities
+arguments.put(&quot;entities&quot;, new EntitySelectorArgument(EntitySelector.MANY_ENTITIES));
+
+CommandAPI.getInstance().register(&quot;kill&quot;, arguments, (sender, args) -&gt; {
+    
+    //Parse the argument as a collection of entities (as stated above in the documentation)
+    Collection&lt;Entity&gt; entities = (Collection&lt;Entity&gt;) args[0];
+    sender.sendMessage(&quot;killed &quot; + entities.size() + &quot;entities&quot;);
+    for(Entity e : entity)
+        e.remove();
+});
+</code></pre>
+<p>Example command usage for the above code would be:</p>
+<ul>
+<li>Kill all cows:
+<pre><code>/kill @e[type=cow]
+</code></pre>
+</li>
+<li>Kill the 10 furthest pigs from the command sender:
+<pre><code>/kill @e[type=pig,limit=10,sort=furthest]
+</code></pre>
+</li>
+</ul>
+<a class="header" href="entityarguments.html#player-arguments" id="player-arguments"><h2>Player arguments</h2></a>
+<p>The <code>PlayerArgument</code> class is very similar to <code>EntitySelectorArgument</code>, except it's specifically for <strong>one</strong> player. It also allows you to select a player based on their UUID.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="quickstart.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="stringarguments.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
-                        
-                            <a rel="next" href="arguments.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
                         
 
                         <div style="clear: both"></div>
@@ -184,15 +193,11 @@
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="quickstart.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a href="stringarguments.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
-                
-                    <a href="arguments.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
-                    </a>
                 
             </nav>
 

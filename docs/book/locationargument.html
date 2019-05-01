@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Command registration - 1.13CommandAPI Documentation</title>
+        <title>Location argument - 1.13CommandAPI Documentation</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -69,7 +69,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Quickstart guide</a></li><li><a href="commandregistration.html" class="active"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="arguments.html"><strong aria-hidden="true">4.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">4.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">4.2.</strong> Location argument</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">4.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">4.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">4.5.</strong> Entity &amp; player arguments</a></li></ol></li></ol>
+            <ol class="chapter"><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Quickstart guide</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="arguments.html"><strong aria-hidden="true">4.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">4.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html" class="active"><strong aria-hidden="true">4.2.</strong> Location argument</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">4.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">4.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">4.5.</strong> Entity &amp; player arguments</a></li></ol></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -133,46 +133,39 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="commandregistration.html#command-registration" id="command-registration"><h1>Command registration</h1></a>
-<a class="header" href="commandregistration.html#command-registration-1" id="command-registration-1"><h2>Command registration</h2></a>
-<table><thead><tr><th> CommandRegistration method                                   </th><th> Outcome                                                   </th></tr></thead><tbody>
-<tr><td> <code>CommandAPI.getInstance().register(String, LinkedHashMap, CommandExecutor)</code> </td><td> Basic command registration                                </td></tr>
-<tr><td> <code>CommandAPI.getInstance().register(String, String[], LinkedHashMap, CommandExecutor)</code> </td><td> Register command with an array of aliases                 </td></tr>
-<tr><td> <code>CommandAPI.getInstance().register(String, CommandPermission, LinkedHashMap, CommandExecutor)</code> </td><td> Register command which need certain permissions           </td></tr>
-<tr><td> <code>CommandAPI.getInstance().register(String, CommandPermission, String[], LinkedHashMap, CommandExecutor)</code> </td><td> Register command with aliases and permission requirements </td></tr>
-</tbody></table>
-<p>To see more about <code>CommandPermission</code>, check out the link <a href="https://github.com/JorelAli/1.13-Command-API/blob/master/v1.8%20Documentation.md#commandexecutor">here</a></p>
-<p>To see more about <code>CommandExecutor</code>, check out the link <a href="https://github.com/JorelAli/1.13-Command-API/blob/master/v1.8%20Documentation.md#commandexecutor">here</a></p>
-<a class="header" href="commandregistration.html#command-loading-order" id="command-loading-order"><h3>Command loading order</h3></a>
-<p><strong>Commands must be registered before the server finishes loading</strong>. The CommandAPI will prevent command registration after the server has loaded.</p>
-<table><thead><tr><th> When to load               </th><th> What to do                                                   </th></tr></thead><tbody>
-<tr><td> Plugin <code>onLoad()</code> method   </td><td> Register commands to be used in Minecraft functions (see Function section for more info) </td></tr>
-<tr><td> Plugin <code>onEnable()</code> method </td><td> Register regular commands                                    </td></tr>
-</tbody></table>
-<a class="header" href="commandregistration.html#command-unregistration" id="command-unregistration"><h3>Command unregistration</h3></a>
-<p>The CommandAPI has support to unregister commands completely from Minecraft's command list. This includes Minecraft built in commands!</p>
-<table><thead><tr><th> Method                                                       </th><th> Result                                                       </th></tr></thead><tbody>
-<tr><td> <code>CommandAPI.getInstance().unregister(String cmd)</code>            </td><td> Unregisters a command from the game                          </td></tr>
-<tr><td> <code>CommandAPI.getInstance().unregister(String cmd, boolean force)</code> </td><td> Unregisters a command from the game by force. This includes <code>/minecraft:cmd</code>, <code>/bukkit:cmd</code> and <code>/spigot:cmd</code> commands as well. </td></tr>
-</tbody></table>
-<p><strong>Example:</strong></p>
-<table><thead><tr><th> Method                                                  </th><th> Outcome                                                      </th></tr></thead><tbody>
-<tr><td> <code>CommandAPI.getInstance().unregister(&quot;gamemode&quot;)</code>       </td><td> Unregisters the <code>/gamemode</code> command from the game            </td></tr>
-<tr><td> <code>CommandAPI.getInstance().unregister(&quot;gamemode&quot;, true)</code> </td><td> Force unregisters all <code>/gamemode</code> commands from all plugins, Minecraft, Bukkit and Spigot. This includes <code>/minecraft:gamemode</code>, in addition to any other plugins which register <code>/gamemode</code> </td></tr>
-</tbody></table>
+                        <a class="header" href="locationargument.html#location-argument" id="location-argument"><h1>Location argument</h1></a>
+<p>The <code>LocationArgument</code> class is used to specify a location in the <em>command sender's current world</em>. This allows the user to enter three numbers as coordinates, or use relative coordinates (i.e. the <code>~</code> and <code>^</code> operators)</p>
+<p>The <code>LocationArgument</code> constructor requires a <code>LocationType</code>, which specifies the type of location that is accepted by the command.</p>
+<a class="header" href="locationargument.html#locationtypeblock_position" id="locationtypeblock_position"><h3><code>LocationType.BLOCK_POSITION</code></h3></a>
+<p>Integer block coordinates. The suggested location is the coordinates of block you are looking at when you type the command.
+<img src="https://user-images.githubusercontent.com/42968178/50574833-92ef9e00-0df0-11e9-9ae5-59235b1bb8cb.png" alt="BLOCK_POSITION" /></p>
+<a class="header" href="locationargument.html#locationtypeprecise_position" id="locationtypeprecise_position"><h3><code>LocationType.PRECISE_POSITION</code></h3></a>
+<p>Exact coordinates. The suggested location is the exact coordinates of where your cursor is pointing at when you type the command.
+<img src="https://user-images.githubusercontent.com/42968178/50574841-b6b2e400-0df0-11e9-9003-481b139d190f.png" alt="PRECISE_POSITION" /></p>
+<p><strong>By default, the <code>LocationArgument</code> will use <code>PRECISE_POSITION</code></strong>.</p>
+<a class="header" href="locationargument.html#example---break-block-by-coordinates-command" id="example---break-block-by-coordinates-command"><h3>Example - Break block by coordinates command</h3></a>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+
+//We want to target blocks in particular, so use BLOCK_POSITION
+arguments.put(&quot;block&quot;, new LocationArgument(LocationType.BLOCK_POSITION));
+
+CommandAPI.getInstance().register(&quot;break&quot;, arguments, (sender, args) -&gt; {
+    ((Location) args[0]).getBlock().setType(Material.AIR);
+});
+</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="quickstart.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="primitivearguments.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
                         
-                            <a rel="next" href="arguments.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="chatarguments.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -184,13 +177,13 @@
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="quickstart.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a href="primitivearguments.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a href="arguments.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="chatarguments.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
