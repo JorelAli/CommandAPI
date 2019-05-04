@@ -33,7 +33,7 @@
 
 ## Starting template
 
-* Generate a `LinkedHashMap<String, Argument>` to store your arguments for your command. The insertion order IS IMPORTANT.
+* Generate a `LinkedHashMap<String, Argument>` to store your arguments for your command. **The insertion order is important.**
 
   ```java
   LinkedHashMap<String, Argument> args = new LinkedHashMap<>();

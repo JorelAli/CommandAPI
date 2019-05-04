@@ -1,5 +1,9 @@
 # Arguments
 
+TODO: Write about declaration of functions (linkedhashmap etc.), the naming convention (it doesn't matter, but has to be unique)
+
+## List of arguments
+
 Arguments are found in the `io.github.jorelali.commandapi.api.arguments` package.
 
 |          Argument class          |                          Data type                           |                      Description                       |
