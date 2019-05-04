@@ -44,7 +44,12 @@ CommandAPI.getInstance().register("cmd", arguments, (sender, args) -> {
 ```
 ## Arguments with overrideable suggestions
 
-Some arguments have a feature allowing you to override the list of suggestions they provide. For example, say you have a plugin which has a "friend list" for players. If you want to say, teleport to a friend in that list, you could use a `PlayerArgument`, which has the list of suggestions overridden with the list of friends that that player has.
+Some arguments have a feature allowing you to override the list of suggestions they provide. This is achieved by using `.overrideSuggestions(String[])` on an instance of an argument, with the String array consisting of suggestions that will be shown to the user whilst they type their command. It's been designed such that this returns the same argument so it can be used inline (handy, eh?)
+
+
+### Example - Friend list by overriding suggestions
+
+Say you have a plugin which has a "friend list" for players. If you want to teleport to a friend in that list, you could use a `PlayerArgument`, which has the list of suggestions overridden with the list of friends that that player has.
 
 ```java
 String[] friends = //Some String array populated with friends
@@ -58,5 +63,3 @@ CommandAPI.getInstance().register("friendtp", arguments, (sender, args) -> {
 	player.teleport(target);
 });
 ```
-
-To override suggestions, use the `overrideSuggestions()` method and provide a String array of suggestions that will be shown when the user types their command.
