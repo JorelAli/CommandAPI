@@ -11,5 +11,7 @@
   - [String arguments](./stringarguments.md)
   - [Entity & player arguments](./entityarguments.md)
   - [Custom arguments](./customarguments.md)
-- [Functions & Function arguments](./functions.md)
+- [Functions & Tags](./functions.md)
+  - [Setting up functions & tags](./functionsetup.md)
+  - [The FunctionWrapper class](./functionwrapper.md)
   - [Function arguments](./functionarguments.md)
