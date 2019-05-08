@@ -34,7 +34,6 @@ public class Main extends JavaPlugin {
 
 
 
-
 ## The function argument
 
 By far, the most complicated argument that exists in the CommandAPI. The `FunctionArgument` class is used to execute Minecraft's [functions](https://minecraft.gamepedia.com/Function_(Java_Edition)). When a user passes a function argument, the CommandAPI will look up the function and return a `FunctionWrapper[]`, which is also included with the CommandAPI. This is a list of all functions which were retrieved by the user - either an array containing a single function or an array containing a list of functions (for example, from a [tag](https://minecraft.gamepedia.com/Function_(Java_Edition)#Tags))
