@@ -18,7 +18,14 @@ CommandAPI.getInstance().register("namecolor", arguments, (sender, args) -> {
 ```
 ## Chat component argument
 
-**The `ChatComponentArgument` class requires a Spigot/PaperSpigot server in order to function - it will NOT work on a CraftBukkit server (Throws a `SpigotNotFoundException`)**
+> **Developer's Note:**
+>
+> The `ChatComponentArgument` class is dependent on a Spigot based server. This means that the `ChatComponentArgument` will not work on a non-Spigot based server, such as CraftBukkit. If you use this class on a non-Spigot based server, it will throw a `SpigotNotFoundException`
+> 
+> Spigot based servers include, but are not limited to:
+> * Spigot
+> * PaperSpigot
+> * TacoSpigot
 
 The `ChatComponentArgument` class accepts raw JSON as valid input. This is converted into Spigot's `BaseComponent[]` which can be used for books and raw messages. You can read more about raw JSON [here](https://minecraft.gamepedia.com/Commands#Raw_JSON_text).
 
