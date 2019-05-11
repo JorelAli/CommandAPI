@@ -4,6 +4,9 @@ about: Create a report to help us improve
 
 ---
 
+**CommandAPI version**
+The version of the CommandAPI that has caused this bug
+
 **Describe the bug**
 A clear and concise description of what the bug is.
 
