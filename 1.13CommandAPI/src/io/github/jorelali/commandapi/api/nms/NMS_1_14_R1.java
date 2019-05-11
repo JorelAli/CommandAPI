@@ -217,7 +217,7 @@ public class NMS_1_14_R1 implements NMS {
 	}
 
 	@Override
-	public CommandDispatcher getDispatcher(Object server) {
+	public CommandDispatcher getBrigadierDispatcher(Object server) {
 		return ((MinecraftServer) server).commandDispatcher.a();
 	}
 

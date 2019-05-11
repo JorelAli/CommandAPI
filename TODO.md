@@ -17,6 +17,12 @@
 
 ## Coding side
 
-* ~Move creation of JSON file to within the CommandAPI directory~
+* ~~Move creation of JSON file to within the CommandAPI directory~~
 
 ## Other 
+
+* Clean up project - remove old example .java files, remove Main.java.old
+
+## Future goals
+
+* static constructor for CommandAPI?

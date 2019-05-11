@@ -39,12 +39,7 @@ public interface NMS {
 		if(sender instanceof BlockCommandSender) {
 			return ((BlockCommandSender) sender).getBlock().getWorld();
 		} else if(sender instanceof ProxiedCommandSender) {
-			CommandSender callee = ((ProxiedCommandSender) sender).getCallee();
-			if(callee instanceof Entity) {
-				return ((Entity) callee).getWorld();
-			} else {
-				return null;
-			}
+			return getCommandSenderWorld(((ProxiedCommandSender) sender).getCallee());
 		} else if(sender instanceof Entity) {
 			return ((Entity) sender).getWorld();
 		} else {
@@ -52,44 +47,33 @@ public interface NMS {
 		}
 	}
 	
-	public ChatColor getChatColor(CommandContext<?> cmdCtx, String str);
-	
-	public BaseComponent[] getChatComponent(CommandContext<?> cmdCtx, String str);
-	
-	public Enchantment getEnchantment(CommandContext<?> cmdCtx, String str);
-	
-	public ItemStack getItemStack(CommandContext<?> cmdCtx, String str) throws CommandSyntaxException;
-	
-	public Location getLocation(CommandContext<?> cmdCtx, String str, LocationType locationType, CommandSender sender) throws CommandSyntaxException;
-	
-	public Particle getParticle(CommandContext<?> cmdCtx, String str);
-	
-	public PotionEffectType getPotionEffect(CommandContext<?> cmdCtx, String str) throws CommandSyntaxException;
+	//Argument implementations
+	public ChatColor 			getChatColor(CommandContext<?> cmdCtx, String str);
+	public BaseComponent[] 		getChatComponent(CommandContext<?> cmdCtx, String str);
+	public Enchantment 			getEnchantment(CommandContext<?> cmdCtx, String str);
+	public ItemStack 			getItemStack(CommandContext<?> cmdCtx, String str) throws CommandSyntaxException;
+	public Location 			getLocation(CommandContext<?> cmdCtx, String str, LocationType locationType, CommandSender sender) throws CommandSyntaxException;
+	public Particle 			getParticle(CommandContext<?> cmdCtx, String str);
+	public PotionEffectType 	getPotionEffect(CommandContext<?> cmdCtx, String str) throws CommandSyntaxException;
+	public FunctionWrapper[] 	getFunction(CommandContext<?> cmdCtx, String str) throws CommandSyntaxException;
+	public Player 				getPlayer(CommandContext<?> cmdCtx, String str) throws CommandSyntaxException;
+	public Object 				getEntitySelector(CommandContext<?> cmdCtx, String str, EntitySelector selector) throws CommandSyntaxException;
+	public EntityType 			getEntityType(CommandContext<?> cmdCtx, String str, CommandSender sender) throws CommandSyntaxException;
+	public LootTable 			getLootTable(CommandContext<?> cmdCtx, String str);
 	
 	public void createDispatcherFile(Object server, File file, CommandDispatcher<?> dispatcher) throws IOException;
 	
 	public SuggestionProvider<?> getSuggestionProvider(SuggestionProviders provider);
 	
-	public FunctionWrapper[] getFunction(CommandContext<?> cmdCtx, String str) throws CommandSyntaxException;
-
 	public CommandSender getSenderForCommand(CommandContext<?> cmdCtx);
-
-	public CommandDispatcher<?> getDispatcher(Object server);
-
 	public CommandSender getCommandSenderForCLW(Object clw);
-	
-	public Player getPlayer(CommandContext<?> cmdCtx, String str) throws CommandSyntaxException;
-	
-	public Object getEntitySelector(CommandContext<?> cmdCtx, String str, EntitySelector selector) throws CommandSyntaxException;
 
-	public EntityType getEntityType(CommandContext<?> cmdCtx, String str, CommandSender sender) throws CommandSyntaxException;
-	
-	public LootTable getLootTable(CommandContext<?> cmdCtx, String str);
-	
+	public CommandDispatcher<?> getBrigadierDispatcher(Object server);
+
+	public boolean isVanillaCommandWrapper(Command command);
 	public SimpleCommandMap getSimpleCommandMap();
 	
-	public boolean isVanillaCommandWrapper(Command command);
-	
+	//Argument types
 	public ArgumentType<?> _ArgumentChatFormat();
 	public ArgumentType<?> _ArgumentChatComponent();
 	public ArgumentType<?> _ArgumentMinecraftKeyRegistered();

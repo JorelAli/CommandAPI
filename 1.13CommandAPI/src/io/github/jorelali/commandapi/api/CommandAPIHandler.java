@@ -102,7 +102,7 @@ public final class CommandAPIHandler {
 			fields = new HashMap<>();
 			permissionsToFix = new TreeMap<>();
 									
-			this.dispatcher = nms.getDispatcher(nmsServer); 
+			this.dispatcher = nms.getBrigadierDispatcher(nmsServer); 
 
 		} catch(Exception e) {
 			e.printStackTrace(System.out);
