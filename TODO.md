@@ -17,6 +17,6 @@
 
 ## Coding side
 
-* Move creation of JSON file to within the CommandAPI directory
+* ~Move creation of JSON file to within the CommandAPI directory~
 
 ## Other 

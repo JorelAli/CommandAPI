@@ -1,5 +1,6 @@
 package io.github.jorelali.commandapi.api;
 
+import java.io.File;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
@@ -43,18 +44,24 @@ public class CommandAPIMain extends JavaPlugin {
 	}
 
 	private static Config config;
+	private static File dispatcherFile;
 
 	//Gets the instance of Config
-	public static Config getConfiguration() {
+	protected static Config getConfiguration() {
 		return config;
 	}
 	
+	protected static File getDispatcherFile() {
+		return dispatcherFile;
+	}
 	
 	@Override
 	public void onLoad() {
 		saveDefaultConfig();
 		CommandAPIMain.config = new Config(getConfig());
+		CommandAPIMain.dispatcherFile = new File(getDataFolder(), "command_registration.json");
 		logger = getLogger();
+		
 		//Instantiate CommandAPI
 		CommandAPI.getInstance();
 	}

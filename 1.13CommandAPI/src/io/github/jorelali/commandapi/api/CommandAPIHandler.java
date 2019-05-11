@@ -466,7 +466,7 @@ public final class CommandAPIHandler {
 		
 		//Produce the commandDispatch.json file for debug purposes
 		if(CommandAPIMain.getConfiguration().willCreateDispatcherFile()) {
-			File file = new File("command_registration.json");
+			File file = CommandAPIMain.getDispatcherFile();
 			try {
 				file.createNewFile();
 			} catch (IOException e) {
