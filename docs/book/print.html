@@ -69,7 +69,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="arguments.html"><strong aria-hidden="true">4.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">4.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">4.2.</strong> Location arguments</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">4.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">4.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">4.5.</strong> Entity &amp; player arguments</a></li><li><a href="customarguments.html"><strong aria-hidden="true">4.6.</strong> Custom arguments</a></li><li><a href="literalarguments.html"><strong aria-hidden="true">4.7.</strong> Literal arguments</a></li></ol></li><li><a href="functions.html"><strong aria-hidden="true">5.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li><a href="functionsetup.html"><strong aria-hidden="true">5.1.</strong> Setting up functions &amp; tags</a></li><li><a href="functionwrapper.html"><strong aria-hidden="true">5.2.</strong> The FunctionWrapper class</a></li><li><a href="functionarguments.html"><strong aria-hidden="true">5.3.</strong> Function arguments</a></li></ol></li><li><a href="permissions.html"><strong aria-hidden="true">6.</strong> Permissions</a></li></ol>
+            <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="arguments.html"><strong aria-hidden="true">4.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">4.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">4.2.</strong> Location arguments</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">4.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">4.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">4.5.</strong> Entity &amp; player arguments</a></li><li><a href="literalarguments.html"><strong aria-hidden="true">4.6.</strong> Literal arguments</a></li><li><a href="dynsugargs.html"><strong aria-hidden="true">4.7.</strong> Dynamically suggested arguments</a></li><li><a href="customarguments.html"><strong aria-hidden="true">4.8.</strong> Custom arguments</a></li></ol></li><li><a href="functions.html"><strong aria-hidden="true">5.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li><a href="functionsetup.html"><strong aria-hidden="true">5.1.</strong> Setting up functions &amp; tags</a></li><li><a href="functionwrapper.html"><strong aria-hidden="true">5.2.</strong> The FunctionWrapper class</a></li><li><a href="functionarguments.html"><strong aria-hidden="true">5.3.</strong> Function arguments</a></li></ol></li><li><a href="permissions.html"><strong aria-hidden="true">6.</strong> Permissions</a></li><li class="affix"><a href="faq.html">FAQ</a></li><li class="affix"><a href="afterword.html">Afterword</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -514,8 +514,6 @@ CommandAPI.getInstance().register(&quot;spawnmob&quot;, arguments, (sender, args
     }
 });
 </code></pre>
-<a class="header" href="print.html#custom-arguments" id="custom-arguments"><h1>Custom arguments</h1></a>
-<p>oh boy.</p>
 <a class="header" href="print.html#literal-arguments" id="literal-arguments"><h1>Literal arguments</h1></a>
 <p>Literal arguments are used to represent &quot;forced options&quot; for a command. For instance, take Minecraft's <code>/gamemode</code> command. The syntax consists of the following:</p>
 <pre><code>/gamemode &lt;mode&gt; [player]
@@ -598,6 +596,59 @@ for(String key : gamemodes.keySet()) {
 <p><strong>Developer's Note:</strong></p>
 <p>Take care when using literal arguments. If your list of arguments is exceptionally large, or contains many nested arguments, the server may be unable to send the command information to the client. If many command argument choices are required, consider using a <code>StringArgument</code> and using <code>.overrideSuggestions()</code> to create your own list of required arguments.</p>
 </blockquote>
+<a class="header" href="print.html#dynamically-suggested-arguments" id="dynamically-suggested-arguments"><h1>Dynamically suggested arguments</h1></a>
+<p>Dynamically suggested arguments lets you provide a function to generate arguments dynamically. This is achieved using the <code>DynamicSuggestedStringArgument</code> class, which has two constuctor formats:</p>
+<pre><code class="language-java">//Constructor requires a function which returns a String[]
+new DynamicSuggestedStringArgument(() -&gt; return new String[]);
+
+//Constructor requires a function which returns a String[] and receives a sender input
+new DynamicSuggestedStringArgument((sender) -&gt; return new String[]);
+</code></pre>
+<a class="header" href="print.html#example---friend-command-with-dynamic-suggestions" id="example---friend-command-with-dynamic-suggestions"><h2>Example - Friend command with dynamic suggestions</h2></a>
+<pre><code>/friend &lt;player&gt;       - Adds a player as a friend
+/msgf   &lt;player&gt; &lt;msg&gt; - Message a friend
+</code></pre>
+<pre><code class="language-java">//Global mapping of a player to a list of their friends
+final Map&lt;String, List&lt;String&gt;&gt; friends = new ArrayList&lt;&gt;();
+
+//Register /friend command
+LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;friend&quot;, new PlayerArgument());
+
+CommandAPI.getInstance().register(&quot;friend&quot;, arguments, (sender, args) -&gt; {
+    
+    //Get list of friends from the sender
+    List&lt;String&gt; senderFriends;
+
+    if(friends.containsKey(sender.getName())) {
+        senderFriends = friends.get(sender.getName());
+    } else {
+        senderFriends = new ArrayList&lt;&gt;(); 
+    }
+
+    //Add friend to the global map
+    senderFriends.put(((Player) args[0]).getName());
+    friends.put(sender.getName(), senderFriends);
+});
+
+//Register /msgf command
+arguments.clear();
+
+/* Use a DynamicSuggestedStringArgument which consists of the names of
+ * friends for that player. Don't forget that this returns a String */
+arguments.put(&quot;friend&quot;, new DynamicSuggestedStringArgument((sender) -&gt; {
+    List&lt;String&gt; senderFriends = friends.get(sender.getName());
+    return senderFriends.toArray(new String[senderFriends.size()]);
+}));
+
+arguments.put(&quot;message&quot;, new GreedyStringArgument());
+
+CommandAPI.getInstance().register(&quot;msgf&quot;, arguments, (sender, args) -&gt; {
+    Bukkit.getPlayer((String) args[0]).sendMessage((String) args[1]);
+});
+</code></pre>
+<a class="header" href="print.html#custom-arguments" id="custom-arguments"><h1>Custom arguments</h1></a>
+<p>oh boy.</p>
 <a class="header" href="print.html#functions" id="functions"><h1>Functions</h1></a>
 <p>The CommandAPI has support to use Minecraft's <a href="https://minecraft.gamepedia.com/Function_(Java_Edtion)">functions</a> within your plugins. This is handled by using a class provided by the CommandAPI called <code>FunctionWrapper</code>, which allows you to execute functions. The CommandAPI also provides support to let you run your own commands within Minecraft function files.</p>
 <a class="header" href="print.html#using-custom-commands-in-functions" id="using-custom-commands-in-functions"><h2>Using custom commands in functions</h2></a>
@@ -773,6 +824,24 @@ CommandAPI.getInstance().register(&quot;kill&quot;, arguments, (sender, args) -&
 <p><strong>Developer's Note:</strong></p>
 <p>As you can see, there are multiple ways of applying permissions to commands with arguments. In the /god command shown above, the permission was applied to the whole command. In the /kill command shown above, the permission was applied to the argument.</p>
 <p>There's not really much difference between the two methods, but I personally would use argument permissions with <code>.withPermission()</code> as it has greater control over arguments.</p>
+</blockquote>
+<a class="header" href="print.html#faq-frequently-asked-questions" id="faq-frequently-asked-questions"><h1>FAQ <em>(Frequently Asked Questions)</em></h1></a>
+<p>None! There are no frequently asked questions!</p>
+<p><em>(If you feel like something should be here, feel free to open an issue on the CommandAPI's <a href="https://github.com/JorelAli/1.13-Command-API/issues">GitHub page</a>)</em></p>
+<a class="header" href="print.html#afterword" id="afterword"><h1>Afterword</h1></a>
+<blockquote>
+<p><strong>Developer's Note:</strong></p>
+<p>Congratulations on making it to the end of the documentation! I hope it was easy to understand everything ... I feel like it's a bit content heavy.</p>
+<p>This project is by far my most worked on and probably the project I'm most proud of. You can read about the creation of the CommandAPI in my blog post <a href="https://www.jorelsblog.co.uk/Creating-the-CommandAPI/">here</a>.</p>
+<p>I'd like to give credit to all of the people that have opened issues on GitHub, that have truly made it what it is now. In particular, I'd like to thank:</p>
+<ul>
+<li><strong>Combustible</strong> - My #1 supporter who motivated me to keep this project alive after its release</li>
+<li><strong>DerpNerb</strong> - Giving me the idea to change this to a Maven project has made the CommandAPI that much more accessible for everyone</li>
+<li><strong>Draycia</strong> - Suggesting that I put CommandSender objects inside DynamicSuggestedStringArguments allow that argument to be that much more powerful</li>
+<li><strong>HielkeMinecraft</strong> - Improving the LocationArgument class, adding results and successes for commandsd and being a great debugger in general</li>
+</ul>
+<p>I never really expected more than 5 or so people to use this API, so it was truly an exciting time creating this for everyone - seeing everyone's responses, issues and problems helped me keep going.</p>
+<p>In short, thank you, and everyone else that helped make the commandAPI what it is.</p>
 </blockquote>
 
                     </main>

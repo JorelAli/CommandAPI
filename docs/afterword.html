@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Command registration - 1.13 CommandAPI Documentation v2.0</title>
+        <title>Afterword - 1.13 CommandAPI Documentation v2.0</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -69,7 +69,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li><a href="commandregistration.html" class="active"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="arguments.html"><strong aria-hidden="true">4.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">4.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">4.2.</strong> Location arguments</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">4.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">4.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">4.5.</strong> Entity &amp; player arguments</a></li><li><a href="literalarguments.html"><strong aria-hidden="true">4.6.</strong> Literal arguments</a></li><li><a href="dynsugargs.html"><strong aria-hidden="true">4.7.</strong> Dynamically suggested arguments</a></li><li><a href="customarguments.html"><strong aria-hidden="true">4.8.</strong> Custom arguments</a></li></ol></li><li><a href="functions.html"><strong aria-hidden="true">5.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li><a href="functionsetup.html"><strong aria-hidden="true">5.1.</strong> Setting up functions &amp; tags</a></li><li><a href="functionwrapper.html"><strong aria-hidden="true">5.2.</strong> The FunctionWrapper class</a></li><li><a href="functionarguments.html"><strong aria-hidden="true">5.3.</strong> Function arguments</a></li></ol></li><li><a href="permissions.html"><strong aria-hidden="true">6.</strong> Permissions</a></li><li class="affix"><a href="faq.html">FAQ</a></li><li class="affix"><a href="afterword.html">Afterword</a></li></ol>
+            <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="arguments.html"><strong aria-hidden="true">4.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">4.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">4.2.</strong> Location arguments</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">4.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">4.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">4.5.</strong> Entity &amp; player arguments</a></li><li><a href="literalarguments.html"><strong aria-hidden="true">4.6.</strong> Literal arguments</a></li><li><a href="dynsugargs.html"><strong aria-hidden="true">4.7.</strong> Dynamically suggested arguments</a></li><li><a href="customarguments.html"><strong aria-hidden="true">4.8.</strong> Custom arguments</a></li></ol></li><li><a href="functions.html"><strong aria-hidden="true">5.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li><a href="functionsetup.html"><strong aria-hidden="true">5.1.</strong> Setting up functions &amp; tags</a></li><li><a href="functionwrapper.html"><strong aria-hidden="true">5.2.</strong> The FunctionWrapper class</a></li><li><a href="functionarguments.html"><strong aria-hidden="true">5.3.</strong> Function arguments</a></li></ol></li><li><a href="permissions.html"><strong aria-hidden="true">6.</strong> Permissions</a></li><li class="affix"><a href="faq.html">FAQ</a></li><li class="affix"><a href="afterword.html" class="active">Afterword</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -133,48 +133,32 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="commandregistration.html#command-registration" id="command-registration"><h1>Command registration</h1></a>
-<a class="header" href="commandregistration.html#command-registration-1" id="command-registration-1"><h2>Command registration</h2></a>
-<table><thead><tr><th> CommandRegistration method                                   </th><th> Outcome                                                   </th></tr></thead><tbody>
-<tr><td> <code>CommandAPI.getInstance().register(String, LinkedHashMap, CommandExecutor)</code> </td><td> Basic command registration                                </td></tr>
-<tr><td> <code>CommandAPI.getInstance().register(String, String[], LinkedHashMap, CommandExecutor)</code> </td><td> Register command with an array of aliases                 </td></tr>
-<tr><td> <code>CommandAPI.getInstance().register(String, CommandPermission, LinkedHashMap, CommandExecutor)</code> </td><td> Register command which need certain permissions           </td></tr>
-<tr><td> <code>CommandAPI.getInstance().register(String, CommandPermission, String[], LinkedHashMap, CommandExecutor)</code> </td><td> Register command with aliases and permission requirements </td></tr>
-</tbody></table>
-<p>To see more about <code>CommandPermission</code>, check out the link <a href="https://github.com/JorelAli/1.13-Command-API/blob/master/v1.8%20Documentation.md#commandexecutor">here</a></p>
-<p>To see more about <code>CommandExecutor</code>, check out the link <a href="https://github.com/JorelAli/1.13-Command-API/blob/master/v1.8%20Documentation.md#commandexecutor">here</a></p>
-<a class="header" href="commandregistration.html#command-loading-order" id="command-loading-order"><h3>Command loading order</h3></a>
-<p><strong>Commands must be registered before the server finishes loading</strong>. The CommandAPI will prevent command registration after the server has loaded.</p>
-<table><thead><tr><th> When to load               </th><th> What to do                                                   </th></tr></thead><tbody>
-<tr><td> Plugin <code>onLoad()</code> method   </td><td> Register commands to be used in Minecraft functions (see Function section for more info) </td></tr>
-<tr><td> Plugin <code>onEnable()</code> method </td><td> Register regular commands                                    </td></tr>
-</tbody></table>
-<a class="header" href="commandregistration.html#command-unregistration" id="command-unregistration"><h3>Command unregistration</h3></a>
-<p>The CommandAPI has support to unregister commands completely from Minecraft's command list. This includes Minecraft built in commands!</p>
-<table><thead><tr><th> Method                                                       </th><th> Result                                                       </th></tr></thead><tbody>
-<tr><td> <code>CommandAPI.getInstance().unregister(String cmd)</code>            </td><td> Unregisters a command from the game                          </td></tr>
-<tr><td> <code>CommandAPI.getInstance().unregister(String cmd, boolean force)</code> </td><td> Unregisters a command from the game by force. This includes <code>/minecraft:cmd</code>, <code>/bukkit:cmd</code> and <code>/spigot:cmd</code> commands as well. </td></tr>
-</tbody></table>
-<p><strong>Example:</strong></p>
-<table><thead><tr><th> Method                                                  </th><th> Outcome                                                      </th></tr></thead><tbody>
-<tr><td> <code>CommandAPI.getInstance().unregister(&quot;gamemode&quot;)</code>       </td><td> Unregisters the <code>/gamemode</code> command from the game            </td></tr>
-<tr><td> <code>CommandAPI.getInstance().unregister(&quot;gamemode&quot;, true)</code> </td><td> Force unregisters all <code>/gamemode</code> commands from all plugins, Minecraft, Bukkit and Spigot. This includes <code>/minecraft:gamemode</code>, in addition to any other plugins which register <code>/gamemode</code> </td></tr>
-</tbody></table>
+                        <a class="header" href="afterword.html#afterword" id="afterword"><h1>Afterword</h1></a>
+<blockquote>
+<p><strong>Developer's Note:</strong></p>
+<p>Congratulations on making it to the end of the documentation! I hope it was easy to understand everything ... I feel like it's a bit content heavy.</p>
+<p>This project is by far my most worked on and probably the project I'm most proud of. You can read about the creation of the CommandAPI in my blog post <a href="https://www.jorelsblog.co.uk/Creating-the-CommandAPI/">here</a>.</p>
+<p>I'd like to give credit to all of the people that have opened issues on GitHub, that have truly made it what it is now. In particular, I'd like to thank:</p>
+<ul>
+<li><strong>Combustible</strong> - My #1 supporter who motivated me to keep this project alive after its release</li>
+<li><strong>DerpNerb</strong> - Giving me the idea to change this to a Maven project has made the CommandAPI that much more accessible for everyone</li>
+<li><strong>Draycia</strong> - Suggesting that I put CommandSender objects inside DynamicSuggestedStringArguments allow that argument to be that much more powerful</li>
+<li><strong>HielkeMinecraft</strong> - Improving the LocationArgument class, adding results and successes for commandsd and being a great debugger in general</li>
+</ul>
+<p>I never really expected more than 5 or so people to use this API, so it was truly an exciting time creating this for everyone - seeing everyone's responses, issues and problems helped me keep going.</p>
+<p>In short, thank you, and everyone else that helped make the commandAPI what it is.</p>
+</blockquote>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="quickstart.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="faq.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
-                        
-                            <a rel="next" href="arguments.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
                         
 
                         <div style="clear: both"></div>
@@ -184,15 +168,11 @@
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="quickstart.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a href="faq.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
-                
-                    <a href="arguments.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
-                    </a>
                 
             </nav>
 

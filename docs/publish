@@ -1,2 +1,2 @@
 #!/bin/sh
-cp -r book/* .
+cp -rf book/* .
