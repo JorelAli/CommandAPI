@@ -18,3 +18,7 @@
   - [The FunctionWrapper class](./functionwrapper.md)
   - [Function arguments](./functionarguments.md)
 - [Permissions](./permissions.md)
+
+[FAQ](./faq.md)
+
+[Afterword](./afterword.md)
