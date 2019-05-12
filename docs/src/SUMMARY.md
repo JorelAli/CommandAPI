@@ -16,3 +16,4 @@
   - [Setting up functions & tags](./functionsetup.md)
   - [The FunctionWrapper class](./functionwrapper.md)
   - [Function arguments](./functionarguments.md)
+- [Permissions](./permissions.md)
