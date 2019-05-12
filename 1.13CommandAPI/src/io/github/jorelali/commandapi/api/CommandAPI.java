@@ -50,7 +50,7 @@ public class CommandAPI {
 
 	static {
 		if(CommandAPI.instance == null) {
-			CommandAPI.instance = this;
+			CommandAPI.instance = new CommandAPI();
 		}
 
 		try {

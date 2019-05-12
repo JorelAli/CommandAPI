@@ -119,13 +119,14 @@ public final class CommandAPIHandler {
 					
 			if(force) {
 				List<String> keysToRemove = new ArrayList<>();
-				for(String key : c.keySet()) {
-					if(key.contains(":")) {
-						if(key.split(":")[1].equalsIgnoreCase(commandName)) {
-							keysToRemove.add(key);
-						}
-					}
-				}
+				c.keySet().stream().filter(s -> s.contains(":")).filter(s -> s.split(":")[1].equalsIgnoreCase(commandName)).forEach(keysToRemove::add);
+//				for(String key : c.keySet()) {
+//					if(key.contains(":")) {
+//						if(key.split(":")[1].equalsIgnoreCase(commandName)) {
+//							keysToRemove.add(key);
+//						}
+//					}
+//				}
 				for(String key : keysToRemove) {
 					c.remove(key);
 				}
