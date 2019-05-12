@@ -1,6 +1,6 @@
 # Installation (For server owners)
 
-* Download the v1.8.2 CommandAPI.jar from the download page [here](https://github.com/JorelAli/1.13-Command-API/releases/tag/v1.8.2)
+* Download the latest CommandAPI.jar from the download page [here](https://github.com/JorelAli/1.13-Command-API/releases/latest)
 * Place the CommandAPI.jar file in your server's `plugins/` folder
 * That's it!
 

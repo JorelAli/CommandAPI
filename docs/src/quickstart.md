@@ -1,16 +1,20 @@
-# Quickstart 
+# Setting up your development environment
 
-## Adding the CommandAPI to your project
+To use the CommandAPI in your plugins, there are two methods of adding it to your development environment:
 
-### Manually using the .jar
+## Manually using the .jar
 
-- Download the v1.8.2 CommandAPI.jar from the download page [here](https://github.com/JorelAli/1.13-Command-API/releases/tag/v1.8.2)
+- Download the latest CommandAPI.jar from the download page [here](https://github.com/JorelAli/1.13-Command-API/releases/latest)
 - Add the CommandAPI.jar file to your project/environment's build path
 - Add the plugin as a dependent in the plugin.yml (`depend: [CommandAPI]`)
 
-### Using Maven
+## Using Maven (recommended)
 
-* Add the maven repository:
+> **Developer's Note:**
+>
+> If you've never used maven before, I highly recommend it! It makes it easier to keep your code updated with the latest dependency updates. For information on how to set up a plugin using maven, you can read [Bukkit's plugin tutorial](https://bukkit.gamepedia.com/Plugin_Tutorial).
+
+* Add the maven repository to your `pom.xml` file:
 
   ```
   <repository>
@@ -19,34 +23,16 @@
   </repository>
   ```
 
-* Add the dependency:
+* Add the dependency to your `pom.xml`:
 
   ```
   <dependency>
       <groupId>io.github.jorelali</groupId>
       <artifactId>commandapi</artifactId>
-      <version>1.8.2</version>
+      <version>VERSION</version>
   </dependency>
   ```
+  A list of version numbers can be found [here](https://github.com/JorelAli/1.13-Command-API/tree/mvn-repo/1.13CommandAPI/io/github/jorelali/commandapi).
+  For example, if you wanted to use version 2.0, you would use `<version>2.0</version>`
 
 * Add the plugin as a dependent in the plugin.yml (`depend: [CommandAPI]`)
-
-## Starting template
-
-* Generate a `LinkedHashMap<String, Argument>` to store your arguments for your command. **The insertion order is important.**
-
-  ```java
-  LinkedHashMap<String, Argument> args = new LinkedHashMap<>();
-  args.put("time", new IntegerArgument());
-  ```
-
-* Register your command using the CommandAPI instance
-
-  ```java
-  CommandAPI.getInstance().register("mycommand", arguments, (sender, args) -> {
-      if(sender instanceof Player) {
-       	Player player = (Player) sender;
-          player.getWorld().setTime((int) args[0]);
-      }
-  });
-  ```
