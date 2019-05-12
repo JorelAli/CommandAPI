@@ -124,8 +124,8 @@ public class CustomArgument<S> implements Argument, OverrideableSuggestions {
 	}
 	
 	@FunctionalInterface
-	public static interface CustomArgumentFunction<I, O> {
-		public O apply(I i) throws CustomArgumentException;
+	public static interface CustomArgumentFunction<S> {
+		public S apply(String input) throws CustomArgumentException;
 	}
 	
 	/**
@@ -150,7 +150,7 @@ public class CustomArgument<S> implements Argument, OverrideableSuggestions {
 		throw new CustomArgumentException(errorMessage);
 	}
 	
-	private CustomArgumentFunction<String, S> parser;
+	private CustomArgumentFunction<S> parser;
 	private boolean keyed;
 	
 	/**
@@ -163,7 +163,7 @@ public class CustomArgument<S> implements Argument, OverrideableSuggestions {
 	 *            
 	 * @see #CustomArgument(CustomArgumentFunction, boolean)
 	 */
-	public CustomArgument(CustomArgumentFunction<String, S> parser) {
+	public CustomArgument(CustomArgumentFunction<S> parser) {
 		this(parser, false);
 	}
 	
@@ -177,7 +177,7 @@ public class CustomArgument<S> implements Argument, OverrideableSuggestions {
 	 * @param keyed Whether this argument can accept Minecraft's <code>NamespacedKey</code> as
 	 * valid arguments
 	 */
-	public CustomArgument(CustomArgumentFunction<String, S> parser, boolean keyed) {
+	public CustomArgument(CustomArgumentFunction<S> parser, boolean keyed) {
 		this.parser = parser;
 		this.keyed = keyed;
 	}
@@ -202,7 +202,7 @@ public class CustomArgument<S> implements Argument, OverrideableSuggestions {
 		return false;
 	}
 	
-	public CustomArgumentFunction<String, S> getParser() {
+	public CustomArgumentFunction<S> getParser() {
 		return parser;
 	}
 	

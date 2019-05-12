@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>String arguments - 1.13 CommandAPI Documentation v2.0</title>
+        <title>Literal arguments - 1.13 CommandAPI Documentation v2.0</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -69,7 +69,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="arguments.html"><strong aria-hidden="true">4.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">4.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">4.2.</strong> Location arguments</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">4.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html" class="active"><strong aria-hidden="true">4.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">4.5.</strong> Entity &amp; player arguments</a></li><li><a href="customarguments.html"><strong aria-hidden="true">4.6.</strong> Custom arguments</a></li><li><a href="literalarguments.html"><strong aria-hidden="true">4.7.</strong> Literal arguments</a></li></ol></li><li><a href="functions.html"><strong aria-hidden="true">5.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li><a href="functionsetup.html"><strong aria-hidden="true">5.1.</strong> Setting up functions &amp; tags</a></li><li><a href="functionwrapper.html"><strong aria-hidden="true">5.2.</strong> The FunctionWrapper class</a></li><li><a href="functionarguments.html"><strong aria-hidden="true">5.3.</strong> Function arguments</a></li></ol></li><li><a href="permissions.html"><strong aria-hidden="true">6.</strong> Permissions</a></li></ol>
+            <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="arguments.html"><strong aria-hidden="true">4.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">4.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">4.2.</strong> Location arguments</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">4.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">4.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">4.5.</strong> Entity &amp; player arguments</a></li><li><a href="customarguments.html"><strong aria-hidden="true">4.6.</strong> Custom arguments</a></li><li><a href="literalarguments.html" class="active"><strong aria-hidden="true">4.7.</strong> Literal arguments</a></li></ol></li><li><a href="functions.html"><strong aria-hidden="true">5.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li><a href="functionsetup.html"><strong aria-hidden="true">5.1.</strong> Setting up functions &amp; tags</a></li><li><a href="functionwrapper.html"><strong aria-hidden="true">5.2.</strong> The FunctionWrapper class</a></li><li><a href="functionarguments.html"><strong aria-hidden="true">5.3.</strong> Function arguments</a></li></ol></li><li><a href="permissions.html"><strong aria-hidden="true">6.</strong> Permissions</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -133,79 +133,101 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="stringarguments.html#string-arguments" id="string-arguments"><h1>String arguments</h1></a>
-<a class="header" href="stringarguments.html#string-argument" id="string-argument"><h2>String argument</h2></a>
-<p>The <code>StringArgument</code> class is used to represent a single word. These words <strong>can only contain alphanumeric characters (A-Z, a-z and 0-9), and the underscore character</strong>.</p>
-<p>Accepted <code>StringArgument</code> values:</p>
-<pre><code>Hello
-123
-hello123
-Hello_world
+                        <a class="header" href="literalarguments.html#literal-arguments" id="literal-arguments"><h1>Literal arguments</h1></a>
+<p>Literal arguments are used to represent &quot;forced options&quot; for a command. For instance, take Minecraft's <code>/gamemode</code> command. The syntax consists of the following:</p>
+<pre><code>/gamemode &lt;mode&gt; [player]
 </code></pre>
-<p>Rejected <code>StringArgument</code> values:</p>
-<pre><code>hello@email.com
-yesn't
+<p>It consists of a gamemode, followed by an optional player argument. The list of gamemodes are as follows:</p>
+<pre><code>/gamemode survival 
+/gamemode creative
+/gamemode adventure
+/gamemode spectator
 </code></pre>
-<a class="header" href="stringarguments.html#potential-uses-for-string-arguments" id="potential-uses-for-string-arguments"><h3>Potential uses for string arguments</h3></a>
-<ul>
-<li>Entering Strings to identify offline players</li>
-</ul>
-<a class="header" href="stringarguments.html#text-argument" id="text-argument"><h2>Text argument</h2></a>
-<p>The <code>TextArgument</code> acts similar to any String in Java. These can be single words, like to the <code>StringArgument</code>, or have additional characters (e.g. spaces, symbols) <strong>if surrounded by quotes</strong>. To type quotation marks, you can use <code>\&quot;</code> (as similar to Java) to escape these special characters.</p>
-<p>Accepted <code>TextArgument</code> values:</p>
-<pre><code>hello
-&quot;hello world!&quot;
-&quot;hello@gmail.com&quot;
-&quot;this has \&quot; &lt;&lt;-- speech marks! &quot;
-</code></pre>
-<p>Rejected <code>TextArgument</code> values:</p>
-<pre><code>hello world
-私
-&quot;speech marks: &quot;&quot;
-</code></pre>
-<a class="header" href="stringarguments.html#potential-uses-for-text-arguments" id="potential-uses-for-text-arguments"><h3>Potential uses for text arguments</h3></a>
-<ul>
-<li>A command to edit the contents on a sign</li>
-<li>Any command that may require multiple text arguments</li>
-</ul>
-<a class="header" href="stringarguments.html#greedy-string-argument" id="greedy-string-argument"><h2>Greedy string argument</h2></a>
-<p>The <code>GreedyStringArgument</code> takes the <code>TextArgument</code> a step further. <strong>Any characters and symbols are allowed</strong> and quotation marks are not required. <strong>However, the <code>GreedyStringArgument</code> uses the entirety of the argument array from its position</strong>.</p>
-<a class="header" href="stringarguments.html#example---messaging-command" id="example---messaging-command"><h3>Example - Messaging command</h3></a>
-<p>Say we have a command <code>/msg &lt;target&gt; &lt;message&gt;</code></p>
+<p>Unlike regular commands (as those implemented by Bukkit for example), these four options are &quot;hardcoded&quot; - they're not &quot;suggestions&quot;. The user can <em>only</em> enter one of these four examples, no other values are allowed.</p>
+<a class="header" href="literalarguments.html#literal-arguments-vs-regular-arguments" id="literal-arguments-vs-regular-arguments"><h2>Literal arguments vs regular arguments</h2></a>
+<p>Unlike regular arguments that are shown in this chapter, the literal argument is <em>technically</em> not an argument. Due to this fact, the literal argument is <strong>not</strong> present in the <code>args[]</code> for the command declaration.</p>
+<a class="header" href="literalarguments.html#example---literal-arguments-and-regular-arguments" id="example---literal-arguments-and-regular-arguments"><h3>Example - Literal arguments and regular arguments</h3></a>
 <pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;target&quot;, new PlayerArgument());
-arguments.put(&quot;message&quot;, new GreedyStringArgument());
+arguments.put(&quot;literal&quot;, new LiteralArgument(&quot;hello&quot;));
+arguments.put(&quot;text&quot;, new TextArgument());
 
-CommandAPI.getInstance().register(&quot;msg&quot;, arguments, (sender, args) -&gt; {
-    ((Player) args[0]).sendMessage((String) args[1]);
+CommandAPI.getInstance().register(&quot;mycommand&quot;, arguments, (sender, args) -&gt; {
+    /* This gives the variable &quot;text&quot; the contents of the 
+     * TextArgument, and not the literal &quot;hello&quot; */
+    String text = (String) args[0];
 });
 </code></pre>
-<p>Any text entered after the <code>&lt;target&gt;</code> argument would be sent to the player. For example, the command could be used as follows:</p>
-<pre><code>/msg Skepter This is some incredibly long string with &quot;symbols&quot; and $p3c!aL characters~
+<p>As you can see from this example, when you retrieve <code>args[0]</code>, it returns the value of the <code>TextArgument</code> instead of the <code>LiteralArgument</code></p>
+<a class="header" href="literalarguments.html#example---gamemode-command-using-literal-arguments" id="example---gamemode-command-using-literal-arguments"><h2>Example - Gamemode command using literal arguments</h2></a>
+<p>This is a demonstration of how you could create a command similar to Minecraft's <code>/gamemode</code> command by using literal arguments. To do this, we are effectively registering 4 separate commands, each called <code>/gamemode</code>, but with different literal arguments.</p>
+<pre><code class="language-java">//Create a map of gamemode names to their respective objects
+HashMap&lt;String, GameMode&gt; gamemodes = new HashMap&lt;&gt;();
+gamemodes.put(&quot;adventure&quot;, GameMode.ADVENTURE);
+gamemodes.put(&quot;creative&quot;, GameMode.CREATIVE);
+gamemodes.put(&quot;spectator&quot;, GameMode.SPECTATOR);
+gamemodes.put(&quot;survival&quot;, GameMode.SURVIVAL);
+
+//Iterate over the map
+for(String key : gamemodes.keySet()) {
+    
+    //Create our arguments as usual, using the LiteralArgument for the name of the gamemode
+    LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+    arguments.put(key, new LiteralArgument(key));
+    
+    //Register the command as usual
+    CommandAPI.getInstance().register(&quot;gamemode&quot;, arguments, (sender, args) -&gt; {
+        if(sender instanceof Player) {
+            Player player = (Player) sender;
+            
+            //Retrieve the object from the map via the key and NOT the args[]
+            player.setGameMode(gamemodes.get(key));
+        }
+    });
+}
 </code></pre>
-<p>Due to the fact that <strong>the <code>GreedyStringArgument</code> has no terminator</strong> (it has infinite length), <strong>a <code>GreedyStringArgument</code> must be defined at the end of the <code>LinkedHashMap</code></strong> (otherwise the CommandAPI will throw a <code>GreedyStringException</code>)</p>
-<p>For example, if the syntax was<code>/msg &lt;message&gt; &lt;target&gt;</code>, it would not be able to determine where the message ends and the <code>&lt;target&gt;</code> argument begins.</p>
-<a class="header" href="stringarguments.html#potential-uses-for-greedy-strings" id="potential-uses-for-greedy-strings"><h3>Potential uses for greedy strings</h3></a>
-<ul>
-<li>A messaging/whisper command</li>
-<li>A mailing command</li>
-<li>Any command involving lots of text, such as a book writing command</li>
-<li>Any command which involves an unreasonable/unknown amount of arguments</li>
-<li>Any command where you want to parse arguments similar to how regular Bukkit would</li>
-</ul>
+<a class="header" href="literalarguments.html#literal-argument-warnings" id="literal-argument-warnings"><h2>Literal argument warnings</h2></a>
+<p>Literal arguments require a string in the constructor. If the literal is an empty String or is null, the CommandAPI will throw a <code>BadLiteralException</code>.</p>
+<p>Because literal arguments are <em>&quot;hardcoded&quot;</em>, each literal is effectively mapped to a single command. This is shown when using the configuration option <code>create-dispatcher-json: true</code> which shows the JSON result of registered commands. For instance, take the <code>/defaultgamemode</code> command:</p>
+<pre><code class="language-json">&quot;defaultgamemode&quot;: {
+    &quot;type&quot;: &quot;literal&quot;,
+    &quot;children&quot;: {
+        &quot;adventure&quot;: {
+            &quot;type&quot;: &quot;literal&quot;,
+            &quot;executable&quot;: true
+        },
+        &quot;creative&quot;: {
+            &quot;type&quot;: &quot;literal&quot;,
+            &quot;executable&quot;: true
+        },
+        &quot;spectator&quot;: {
+            &quot;type&quot;: &quot;literal&quot;,
+            &quot;executable&quot;: true
+        },
+        &quot;survival&quot;: {
+            &quot;type&quot;: &quot;literal&quot;,
+            &quot;executable&quot;: true
+        }
+    }
+},
+</code></pre>
+<p>Each option produces a new &quot;command&quot; in the tree of commands. This means that having exceptionally large lists of literals, or nested literals (e.g. <code>/command &lt;literal1&gt; &lt;literal2&gt;</code>) can cause very large trees which cannot be sent to the clients <em>(it can cause clients to crash)</em>.</p>
+<blockquote>
+<p><strong>Developer's Note:</strong></p>
+<p>Take care when using literal arguments. If your list of arguments is exceptionally large, or contains many nested arguments, the server may be unable to send the command information to the client. If many command argument choices are required, consider using a <code>StringArgument</code> and using <code>.overrideSuggestions()</code> to create your own list of required arguments.</p>
+</blockquote>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="chatarguments.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="customarguments.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
                         
-                            <a rel="next" href="entityarguments.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="functions.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -217,13 +239,13 @@ CommandAPI.getInstance().register(&quot;msg&quot;, arguments, (sender, args) -&g
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="chatarguments.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a href="customarguments.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a href="entityarguments.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="functions.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 

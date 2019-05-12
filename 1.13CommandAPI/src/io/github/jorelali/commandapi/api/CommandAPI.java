@@ -37,19 +37,31 @@ public class CommandAPI {
 	 * @return An instance of the CommandAPI
 	 */
 	public static CommandAPI getInstance() {
-		if(instance == null) {
+	/*	if(instance == null) {
 			new CommandAPI();
-		}
-		return instance;
+		}*/
+		return CommandAPI.instance;
 	}	
 	
 	//Fixes all broken permissions
 	protected static void fixPermissions() {
 		reflector.fixPermissions();
 	}
-	
 
-	protected CommandAPI() {
+	static {
+		if(CommandAPI.instance == null) {
+			CommandAPI.instance = this;
+		}
+
+		try {
+			CommandAPI.reflector = new CommandAPIHandler();			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	/*protected CommandAPI() {
 		if(instance == null) {
 			instance = this;
 		} else {
@@ -62,7 +74,7 @@ public class CommandAPI {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 	
 	/**
 	 * Unregisters a command

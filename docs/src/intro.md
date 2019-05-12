@@ -22,7 +22,7 @@ In addition to this, command declarations are sent to each client using the [Com
 
 ## How this documentation works
 
-This documentation is split into the major sections that build up the CommandAPI. It's been designed in such a way that it should be easy to find exactly what you want to help you get started with the CommandAPI, how it's structured and how to make effective use of it. Each step of the way, the documentation will include examples which showcase how to use the CommandAPI _(and may even inspire you to create projects of your own)_.
+This documentation is split into the major sections that build up the CommandAPI. It's been designed in such a way that it should be easy to find exactly what you want to help you get started with the CommandAPI, how it's structured and how to make effective use of it. Each step of the way, the documentation will include examples which showcase how to use the CommandAPI. 
 
 You can use the side bar on the left to access the various sections of the documentation and can change the theme to your liking using the paintbrush icon in the top left corner. 
 

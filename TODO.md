@@ -6,8 +6,8 @@
 * Write about that the type to cast it declared as stated in the documentation so people who know what type to cast their args as
 * CustomArgs
 * overriding args?
-* arg permissions
-* permissions
+* ~~arg permissions~~
+* ~~permissions~~
 * executors (returning and non-returning)
 * proxied senders
 * command converter
