@@ -2,6 +2,15 @@
 
 Custom arguments are arguably the most powerful argument that the CommandAPI offers. This argument is used to represent any String, or Minecraft key _(Something of the form `String:String`, such as `minecraft:diamond`)_
 
+In order to specify which type of custom argument is being used, the additional flag `keyed` can be added by, instead of using the default constructor which requires a lambda, you use the alternate constructor which requires a lambda, followed by `true`, which represents a Minecraft key input.
+
+```java
+new CustomArgument<T>((input) -> { 
+	/* Code which handles input */ 
+	return //Some object of type T;
+}, true);
+```
+
 The custom argument requires the type of the target object that the custom argument will return when parsing the arguments for a command. For instance, if you have a `CustomArgument<Player>`, then when parsing the arguments for the command, you would cast to a Player object: `(Player) args[n]`.
 
 ## Example - Scoreboard objectives as a custom argument
@@ -34,11 +43,11 @@ private CustomArgument<Objective> objectiveArgument() {
 
 From the code above, it uses the `CustomArgument.throwError` function which throws an error to the command sender if the command that they input is invalid. The `throwError` function can accept one of two parameters:
 
-```java
+```javaHookedUpHentai
 CustomArgument.throwError(String message)
 CustomArgument.throwError(MessageBuilder message)
 ```
-
+ 
 ## Message Builders
 
 The `MessageBuilder` class is a class to easily create messages to describe errors when a sender sends a command which does not meet the expected syntax for an argument. It acts in a similar way to a `StringBuilder`, where you can append content to the end of a String.
@@ -54,11 +63,9 @@ The following methods are as follows:
 
 ### Example - Message builder for invalid objective argument
 
-See the code above:
+See the code above, which uses the following code snippet:
 
 ```java
-//Creates a MessageBuilder object that handles an invalid objective. See the code above for more context.
+//Creates a MessageBuilder object that handles an invalid objective. 
 new MessageBuilder("Unknown objective: ").appendArgInput();
 ```
-
-**TODO: Write about the MessageBuilder, the throwException's two methods, the CustomArgument constructor using Keyed**
