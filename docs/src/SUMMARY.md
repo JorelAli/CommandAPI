@@ -19,6 +19,8 @@
   - [Function arguments](./functionarguments.md)
 - [Permissions](./permissions.md)
 
+[Troubleshooting](./troubleshooting.md)
+
 [FAQ](./faq.md)
 
 [Afterword](./afterword.md)
