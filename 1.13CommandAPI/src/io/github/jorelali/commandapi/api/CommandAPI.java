@@ -21,7 +21,7 @@ public class CommandAPI {
 	private static CommandAPI instance;
 	
 	protected static boolean canRegister = true;
-	private static CommandAPIHandler reflector;
+	private static CommandAPIHandler handler;
 	
 	/**
 	 * Forces a command to return a success value of 0
@@ -45,7 +45,7 @@ public class CommandAPI {
 	
 	//Fixes all broken permissions
 	protected static void fixPermissions() {
-		reflector.fixPermissions();
+		handler.fixPermissions();
 	}
 
 	static {
@@ -54,7 +54,7 @@ public class CommandAPI {
 		}
 
 		try {
-			CommandAPI.reflector = new CommandAPIHandler();			
+			CommandAPI.handler = new CommandAPIHandler();			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -81,7 +81,7 @@ public class CommandAPI {
 	 * @param command The name of the command to unregister
 	 */
 	public void unregister(String command) {
-		reflector.unregister(command, false);
+		handler.unregister(command, false);
 	}
 	
 	/**
@@ -92,7 +92,7 @@ public class CommandAPI {
 		if(!canRegister) {
 			CommandAPIMain.getLog().warning("Unexpected unregistering of /" + command + ", as server is loaded! Unregistering anyway, but this can lead to unstable results!");
 		}
-		reflector.unregister(command, force);
+		handler.unregister(command, force);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -221,7 +221,7 @@ public class CommandAPI {
 					throw new GreedyStringException();
 				}
 			}
-			reflector.register(commandName, permissions, aliases, copyOfArgs, executor);
+			handler.register(commandName, permissions, aliases, copyOfArgs, executor);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

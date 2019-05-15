@@ -3,6 +3,7 @@ package io.github.jorelali.commandapi.api;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -13,6 +14,8 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -67,12 +70,51 @@ public final class CommandAPIHandler {
 	private static String packageName = null;
 	private CommandDispatcher dispatcher;
 	
-	private int version;
 //	private String versionStr; //Just in case (v1_13_R2 or v1_14_R1)
 	
 	private static NMS nms;
 	private Object nmsServer;
 	public static NMS getNMS() { return nms; }
+	
+	private class Version {
+		private int primaryVersion;
+		private int rev;
+		
+		public Version(String version) {
+			
+			Matcher vMatcher = Pattern.compile("(?<=v\\d+_)\\d+").matcher(version);
+			if(vMatcher.find()) {
+				this.primaryVersion = Integer.parseInt(vMatcher.group());
+			}
+			
+			Matcher revMatcher = Pattern.compile("(?<=R).+").matcher(version);
+			if(revMatcher.find()) {
+				this.rev = Integer.parseInt(revMatcher.group());
+			}
+		}
+		
+		@Override
+		public String toString() {
+			return "Version " + primaryVersion + " rev " + rev;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Version other = (Version) obj;
+
+			if (primaryVersion != other.primaryVersion)
+				return false;
+			if (rev != other.rev)
+				return false;
+			return true;
+		}
+	}
 	
 	protected CommandAPIHandler() throws ClassNotFoundException {
 		
@@ -81,16 +123,24 @@ public final class CommandAPIHandler {
 			throw new ClassNotFoundException("Cannot hook into Brigadier (Are you running Minecraft 1.13 or above?)");
 		}
 		
-		try {
 			//Setup NMS
-			this.nmsServer = Bukkit.getServer().getClass().getDeclaredMethod("getServer").invoke(Bukkit.getServer());
+			try {
+				this.nmsServer = Bukkit.getServer().getClass().getDeclaredMethod("getServer").invoke(Bukkit.getServer());
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+					| NoSuchMethodException | SecurityException e) {
+				e.printStackTrace();
+			}
 			CommandAPIHandler.packageName = nmsServer.getClass().getPackage().getName();
-
-			version = Integer.parseInt(packageName.substring(24, 26));
-//			versionStr = packageName.split("\\Q.\\E")[3];
 			
-			switch(version) {
+			//Handle versioning
+			Version version = new Version(packageName.split("\\Q.\\E")[3]);
+			UnsupportedClassVersionError versionError = new UnsupportedClassVersionError("This version of Minecraft is unsupported: " + version);
+			
+			switch(version.primaryVersion) {
 				case 13:
+					if(version.rev != 2) {
+						throw versionError;
+					}
 					//Compatible with Minecraft 1.13.2
 					nms = new NMS_1_13_R2();
 					break;
@@ -98,6 +148,12 @@ public final class CommandAPIHandler {
 					//Compatible with Minecraft 1.14, 1.14.1
 					nms = new NMS_1_14_R1();
 					break;
+				default:
+					throw versionError;
+			}
+			
+			if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
+				CommandAPIMain.getLog().info("Hooked into NMS " + version);
 			}
 			
 			//Everything from this line will use getNMSClass(), so we initialize our cache here
@@ -105,11 +161,6 @@ public final class CommandAPIHandler {
 			permissionsToFix = new TreeMap<>();
 									
 			this.dispatcher = nms.getBrigadierDispatcher(nmsServer); 
-
-		} catch(Exception e) {
-			e.printStackTrace(System.out);
-		}
-		
 	}
 	
 	//Unregister a command
