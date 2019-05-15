@@ -76,14 +76,9 @@ public final class CommandAPIHandler {
 	private Object nmsServer;
 	public static NMS getNMS() { return nms; }
 	
-	static class Version {
-		int primaryVersion;
-		int rev;
-		
-		public Version(int primary, int rev) {
-			this.primaryVersion = primary;
-			this.rev = rev;
-		}
+	private class Version {
+		private int primaryVersion;
+		private int rev;
 		
 		public Version(String version) {
 			
