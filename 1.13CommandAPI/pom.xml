@@ -30,6 +30,7 @@
     </repositories>
 
     <dependencies>
+    	<!-- Regular libraries -->
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
@@ -48,6 +49,8 @@
             <version>1.5.25</version>
             <scope>provided</scope>
         </dependency>
+        
+        <!-- Spigot jars for version independence -->
         <dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-server-1.13.2</artifactId>
@@ -63,6 +66,15 @@
 			<version>1.14</version>
 			<scope>system</scope>
 			<systemPath>${basedir}/spigotlibs/spigot-1.14-R0.1-SNAPSHOT.jar</systemPath>
+			<type>jar</type>
+  			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot-server-1.14.1</artifactId>
+			<version>1.14.1</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/spigotlibs/spigot-1.14.1-R0.1-SNAPSHOT.jar</systemPath>
 			<type>jar</type>
   			<optional>true</optional>
 		</dependency>

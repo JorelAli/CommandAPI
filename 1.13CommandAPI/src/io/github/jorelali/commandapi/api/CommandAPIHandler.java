@@ -91,9 +91,11 @@ public final class CommandAPIHandler {
 			
 			switch(version) {
 				case 13:
+					//Compatible with Minecraft 1.13.2
 					nms = new NMS_1_13_R2();
 					break;
 				case 14:
+					//Compatible with Minecraft 1.14, 1.14.1
 					nms = new NMS_1_14_R1();
 					break;
 			}
