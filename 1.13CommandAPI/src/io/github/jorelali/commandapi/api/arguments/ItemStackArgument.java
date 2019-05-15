@@ -4,8 +4,8 @@ import org.bukkit.inventory.ItemStack;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 
-import io.github.jorelali.commandapi.api.CommandPermission;
 import io.github.jorelali.commandapi.api.CommandAPIHandler;
+import io.github.jorelali.commandapi.api.CommandPermission;
 
 @SuppressWarnings("unchecked")
 public class ItemStackArgument implements Argument, OverrideableSuggestions {

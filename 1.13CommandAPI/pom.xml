@@ -78,12 +78,21 @@
 			<type>jar</type>
   			<optional>true</optional>
 		</dependency>
+		
+		<!-- Testing -->
+		<dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.3.1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
         <defaultGoal>clean install</defaultGoal>
         <finalName>CommandAPI_${project.version}_${maven.build.timestamp}</finalName>
         <sourceDirectory>src</sourceDirectory>
+        <testSourceDirectory>test</testSourceDirectory>
         <resources>
             <resource>
             <directory>.</directory>
@@ -110,6 +119,11 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.7.0</version>
                 </plugin>
+                <plugin>
+	                <groupId>org.apache.maven.plugins</groupId>
+	                <artifactId>maven-surefire-plugin</artifactId>
+	                <version>2.22.0</version>
+	            </plugin>
             </plugins>
         </pluginManagement>
         <plugins>

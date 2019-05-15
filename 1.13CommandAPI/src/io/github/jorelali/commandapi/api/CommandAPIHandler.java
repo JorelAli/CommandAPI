@@ -76,16 +76,18 @@ public final class CommandAPIHandler {
 	private Object nmsServer;
 	public static NMS getNMS() { return nms; }
 	
-	private class Version {
-		private int primaryVersion;
-		private int rev;
+	static class Version {
+		int primaryVersion;
+		int rev;
+		
+		public Version(int primary, int rev) {
+			this.primaryVersion = primary;
+			this.rev = rev;
+		}
 		
 		public Version(String version) {
 			
-			Matcher vMatcher = Pattern.compile("(?<=v\\d+_)\\d+").matcher(version);
-			if(vMatcher.find()) {
-				this.primaryVersion = Integer.parseInt(vMatcher.group());
-			}
+			this.primaryVersion = Integer.parseInt(version.split("_")[1]);
 			
 			Matcher revMatcher = Pattern.compile("(?<=R).+").matcher(version);
 			if(revMatcher.find()) {

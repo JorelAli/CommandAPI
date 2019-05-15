@@ -4,8 +4,8 @@ import org.bukkit.Location;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 
-import io.github.jorelali.commandapi.api.CommandPermission;
 import io.github.jorelali.commandapi.api.CommandAPIHandler;
+import io.github.jorelali.commandapi.api.CommandPermission;
 
 @SuppressWarnings("unchecked")
 public class LocationArgument implements Argument, OverrideableSuggestions {
