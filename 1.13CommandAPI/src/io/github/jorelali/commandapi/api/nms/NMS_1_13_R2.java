@@ -199,7 +199,7 @@ public class NMS_1_13_R2 implements NMS {
 	public CommandSender getSenderForCommand(CommandContext cmdCtx) {
 		CommandSender sender = getCLW(cmdCtx).getBukkitSender();
 		
-		Entity proxyEntity = getCLW(cmdCtx).f();
+		Entity proxyEntity = getCLW(cmdCtx).getEntity();
 		if(proxyEntity != null) {
 			CommandSender proxy = ((Entity) proxyEntity).getBukkitEntity();
 			

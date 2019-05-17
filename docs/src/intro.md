@@ -18,8 +18,6 @@ The CommandAPI does not follow the "standard" method of registering commands. In
 * Commands do not need to be declared in the `plugin.yml` file
 * Commands are not "linked" to a certain plugin. In other words, you cannot look up which commands are registered by which plugin.
 
-In addition to this, command declarations are sent to each client using the [Command Data](https://wiki.vg/Command_Data) packet. This means that commands using copious amounts of `LiteralArgument`s are highly discouraged, as this can cause clients to crash whilst joining the server. You can find out more about this quirk and how to avoid this in the `LiteralArgument` page TODO: fill this section.
-
 ## How this documentation works
 
 This documentation is split into the major sections that build up the CommandAPI. It's been designed in such a way that it should be easy to find exactly what you want to help you get started with the CommandAPI, how it's structured and how to make effective use of it. Each step of the way, the documentation will include examples which showcase how to use the CommandAPI. 

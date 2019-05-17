@@ -69,7 +69,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="arguments.html"><strong aria-hidden="true">4.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">4.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">4.2.</strong> Location arguments</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">4.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">4.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">4.5.</strong> Entity &amp; player arguments</a></li><li><a href="literalarguments.html"><strong aria-hidden="true">4.6.</strong> Literal arguments</a></li><li><a href="dynsugargs.html"><strong aria-hidden="true">4.7.</strong> Dynamically suggested arguments</a></li><li><a href="customarguments.html"><strong aria-hidden="true">4.8.</strong> Custom arguments</a></li></ol></li><li><a href="functions.html"><strong aria-hidden="true">5.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li><a href="functionsetup.html"><strong aria-hidden="true">5.1.</strong> Setting up functions &amp; tags</a></li><li><a href="functionwrapper.html"><strong aria-hidden="true">5.2.</strong> The FunctionWrapper class</a></li><li><a href="functionarguments.html"><strong aria-hidden="true">5.3.</strong> Function arguments</a></li></ol></li><li><a href="permissions.html"><strong aria-hidden="true">6.</strong> Permissions</a></li><li class="affix"><a href="faq.html">FAQ</a></li><li class="affix"><a href="afterword.html">Afterword</a></li></ol>
+            <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="commandexecutors.html"><strong aria-hidden="true">4.</strong> Command executors</a></li><li><a href="arguments.html"><strong aria-hidden="true">5.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">5.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">5.2.</strong> Location arguments</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">5.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">5.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">5.5.</strong> Entity &amp; player arguments</a></li><li><a href="literalarguments.html"><strong aria-hidden="true">5.6.</strong> Literal arguments</a></li><li><a href="dynsugargs.html"><strong aria-hidden="true">5.7.</strong> Dynamically suggested arguments</a></li><li><a href="customarguments.html"><strong aria-hidden="true">5.8.</strong> Custom arguments</a></li></ol></li><li><a href="functions.html"><strong aria-hidden="true">6.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li><a href="functionsetup.html"><strong aria-hidden="true">6.1.</strong> Setting up functions &amp; tags</a></li><li><a href="functionwrapper.html"><strong aria-hidden="true">6.2.</strong> The FunctionWrapper class</a></li><li><a href="functionarguments.html"><strong aria-hidden="true">6.3.</strong> Function arguments</a></li></ol></li><li><a href="permissions.html"><strong aria-hidden="true">7.</strong> Permissions</a></li><li class="affix"><a href="troubleshooting.html">Troubleshooting</a></li><li class="affix"><a href="faq.html">FAQ</a></li><li class="affix"><a href="afterword.html">Afterword</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -151,7 +151,6 @@
 <li>Commands do not need to be declared in the <code>plugin.yml</code> file</li>
 <li>Commands are not &quot;linked&quot; to a certain plugin. In other words, you cannot look up which commands are registered by which plugin.</li>
 </ul>
-<p>In addition to this, command declarations are sent to each client using the <a href="https://wiki.vg/Command_Data">Command Data</a> packet. This means that commands using copious amounts of <code>LiteralArgument</code>s are highly discouraged, as this can cause clients to crash whilst joining the server. You can find out more about this quirk and how to avoid this in the <code>LiteralArgument</code> page TODO: fill this section.</p>
 <a class="header" href="print.html#how-this-documentation-works" id="how-this-documentation-works"><h2>How this documentation works</h2></a>
 <p>This documentation is split into the major sections that build up the CommandAPI. It's been designed in such a way that it should be easy to find exactly what you want to help you get started with the CommandAPI, how it's structured and how to make effective use of it. Each step of the way, the documentation will include examples which showcase how to use the CommandAPI.</p>
 <p>You can use the side bar on the left to access the various sections of the documentation and can change the theme to your liking using the paintbrush icon in the top left corner.</p>
@@ -247,6 +246,12 @@ For example, if you wanted to use version 2.0, you would use <code>&lt;version&g
 <tr><td> <code>CommandAPI.getInstance().unregister(&quot;gamemode&quot;)</code>       </td><td> Unregisters the <code>/gamemode</code> command from the game            </td></tr>
 <tr><td> <code>CommandAPI.getInstance().unregister(&quot;gamemode&quot;, true)</code> </td><td> Force unregisters all <code>/gamemode</code> commands from all plugins, Minecraft, Bukkit and Spigot. This includes <code>/minecraft:gamemode</code>, in addition to any other plugins which register <code>/gamemode</code> </td></tr>
 </tbody></table>
+<a class="header" href="print.html#command-executors" id="command-executors"><h1>Command executors</h1></a>
+<p>The CommandAPI provides two separate command executors which are lambdas which execute the code you want when a command is called. These are the classes <code>CommandExecutor</code>, which just runs the contents of a command, and <code>ResultingCommandExecutor</code> that returns an integral <em>(whole number)</em> result.</p>
+<a class="header" href="print.html#todo-write-about-commandexecutors-here" id="todo-write-about-commandexecutors-here"><h2>TODO: Write about CommandExecutors here</h2></a>
+<a class="header" href="print.html#resulting-command-executors" id="resulting-command-executors"><h2>Resulting Command Executors</h2></a>
+<p>The resulting command executor takes advantage of Minecraft's command implementation to return results which can be used for future commands. This result can be used with the <code>/execute store result ...</code> command</p>
+<p>//TODO: Write about the CommandAPI.fail() method</p>
 <a class="header" href="print.html#arguments" id="arguments"><h1>Arguments</h1></a>
 <p>TODO: Write about declaration of functions (linkedhashmap etc.), the naming convention (it doesn't matter, but has to be unique)</p>
 <a class="header" href="print.html#list-of-arguments" id="list-of-arguments"><h2>List of arguments</h2></a>
@@ -873,6 +878,32 @@ CommandAPI.getInstance().register(&quot;kill&quot;, arguments, (sender, args) -&
 <p><strong>Developer's Note:</strong></p>
 <p>As you can see, there are multiple ways of applying permissions to commands with arguments. In the /god command shown above, the permission was applied to the whole command. In the /kill command shown above, the permission was applied to the argument.</p>
 <p>There's not really much difference between the two methods, but I personally would use argument permissions with <code>.withPermission()</code> as it has greater control over arguments.</p>
+</blockquote>
+<a class="header" href="print.html#troubleshooting" id="troubleshooting"><h1>Troubleshooting</h1></a>
+<p>This section basically summarizes the list of things that <em>could</em> go wrong with the CommandAPI and how to mitigate these circumstances.</p>
+<a class="header" href="print.html#serverplugin-reloading" id="serverplugin-reloading"><h2>Server/Plugin reloading</h2></a>
+<p>Due to the implementation of the CommandAPI, the CommandAPI does <strong>not</strong> support plugin reloading for plugins that use the CommandAPI. This includes, but is not limited to:</p>
+<ul>
+<li>The <code>/reload</code> command which reloads all plugins on the server</li>
+<li>Plugin reloading plugins, such as <a href="https://dev.bukkit.org/projects/plugman">PlugMan</a></li>
+<li>Any form of plugin enabling/disabling process for plugins which register commands via the CommandAPI</li>
+</ul>
+<blockquote>
+<p><strong>Developer's Note:</strong></p>
+<p>Plugin reloading gets very complicated with respect to the CommandAPI. Since the loading sequence of Minecraft commands is so picky, reloading the CommandAPI or a plugin which registers commands can cause commands to be re-registered. This can lead to very odd effects, such as command collisions <em>(commands just don't work)</em>, to duplicate commands being registered under different namespaces <em>(e.g. plugins are registered under Bukkit as well as Minecraft)</em>. These effects are not &quot;100% guaranteed&quot; and have only been seen during dodgy tests. In short, <strong>do not enable or reload plugins</strong>, and <strong>absolutely do not reload the server with <code>/reload</code></strong></p>
+</blockquote>
+<a class="header" href="print.html#players-cannot-connecttimeout-when-joining" id="players-cannot-connecttimeout-when-joining"><h2>Players cannot connect/timeout when joining</h2></a>
+<p>If players cannot connect, this could be due to the size of the command data packet. To see the resultant packet being sent to players when they log in, enable the <code>create-dispatcher-json: true</code> setting and view the file size of the resultant file. If the file size is abnormally large <em>(Over 2MB is considered very large)</em>, consider reducing the number of <code>LiteralArguments</code> which your plugin uses.</p>
+<a class="header" href="print.html#the-server-just-hangsslows-down-on-my-paperspigot-server" id="the-server-just-hangsslows-down-on-my-paperspigot-server"><h2>The server just hangs/slows down on my PaperSpigot server</h2></a>
+<p>Officially, the CommandAPI does <em>not</em> really support PaperSpigot. As PaperSpigot is a fork of Spigot, it just assumes that it'll work on PaperSpigot if it works on Spigot.</p>
+<blockquote>
+<p><strong>Developer's Note:</strong></p>
+<p>There's a few things I personally don't like about PaperSpigot:</p>
+<ul>
+<li><a href="https://paper.readthedocs.io/en/stable/about/faq.html#what-can-i-do-with-paper">Their developer documentation is non-existant</a></li>
+<li><a href="https://papermc.io/javadocs/paper/1.13/overview-summary.html">Their JavaDocs</a> are very... lacking of documentation</li>
+<li>I personally think it's harder to keep track of new changes between Minecraft upgrades for PaperSpigot compared to Spigot's BuildTools</li>
+</ul>
 </blockquote>
 <a class="header" href="print.html#faq-frequently-asked-questions" id="faq-frequently-asked-questions"><h1>FAQ <em>(Frequently Asked Questions)</em></h1></a>
 <p>None! There are no frequently asked questions!</p>

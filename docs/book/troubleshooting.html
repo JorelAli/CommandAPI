@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Primitive arguments - 1.13 CommandAPI Documentation v2.0</title>
+        <title>Troubleshooting - 1.13 CommandAPI Documentation v2.0</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -69,7 +69,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="commandexecutors.html"><strong aria-hidden="true">4.</strong> Command executors</a></li><li><a href="arguments.html"><strong aria-hidden="true">5.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html" class="active"><strong aria-hidden="true">5.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">5.2.</strong> Location arguments</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">5.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">5.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">5.5.</strong> Entity &amp; player arguments</a></li><li><a href="literalarguments.html"><strong aria-hidden="true">5.6.</strong> Literal arguments</a></li><li><a href="dynsugargs.html"><strong aria-hidden="true">5.7.</strong> Dynamically suggested arguments</a></li><li><a href="customarguments.html"><strong aria-hidden="true">5.8.</strong> Custom arguments</a></li></ol></li><li><a href="functions.html"><strong aria-hidden="true">6.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li><a href="functionsetup.html"><strong aria-hidden="true">6.1.</strong> Setting up functions &amp; tags</a></li><li><a href="functionwrapper.html"><strong aria-hidden="true">6.2.</strong> The FunctionWrapper class</a></li><li><a href="functionarguments.html"><strong aria-hidden="true">6.3.</strong> Function arguments</a></li></ol></li><li><a href="permissions.html"><strong aria-hidden="true">7.</strong> Permissions</a></li><li class="affix"><a href="troubleshooting.html">Troubleshooting</a></li><li class="affix"><a href="faq.html">FAQ</a></li><li class="affix"><a href="afterword.html">Afterword</a></li></ol>
+            <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="commandexecutors.html"><strong aria-hidden="true">4.</strong> Command executors</a></li><li><a href="arguments.html"><strong aria-hidden="true">5.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">5.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">5.2.</strong> Location arguments</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">5.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">5.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">5.5.</strong> Entity &amp; player arguments</a></li><li><a href="literalarguments.html"><strong aria-hidden="true">5.6.</strong> Literal arguments</a></li><li><a href="dynsugargs.html"><strong aria-hidden="true">5.7.</strong> Dynamically suggested arguments</a></li><li><a href="customarguments.html"><strong aria-hidden="true">5.8.</strong> Custom arguments</a></li></ol></li><li><a href="functions.html"><strong aria-hidden="true">6.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li><a href="functionsetup.html"><strong aria-hidden="true">6.1.</strong> Setting up functions &amp; tags</a></li><li><a href="functionwrapper.html"><strong aria-hidden="true">6.2.</strong> The FunctionWrapper class</a></li><li><a href="functionarguments.html"><strong aria-hidden="true">6.3.</strong> Function arguments</a></li></ol></li><li><a href="permissions.html"><strong aria-hidden="true">7.</strong> Permissions</a></li><li class="affix"><a href="troubleshooting.html" class="active">Troubleshooting</a></li><li class="affix"><a href="faq.html">FAQ</a></li><li class="affix"><a href="afterword.html">Afterword</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -133,47 +133,45 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="primitivearguments.html#primitive-arguments" id="primitive-arguments"><h1>Primitive arguments</h1></a>
-<a class="header" href="primitivearguments.html#boolean-arguments" id="boolean-arguments"><h2>Boolean arguments</h2></a>
-<p>The <code>BooleanArgument</code> class represents boolean values <code>true</code> and <code>false</code>.</p>
-<a class="header" href="primitivearguments.html#example---config-editing-plugin" id="example---config-editing-plugin"><h3>Example - Config editing plugin</h3></a>
-<pre><code class="language-java">String[] configKeys = getConfig().getKeys(true).toArray(new String[getConfig().getKeys(true).size()]);
-
-LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;config-key&quot;, new TextArgument().overrideSuggestions(configKeys));
-arguments.put(&quot;value&quot;, new BooleanArgument());
-
-CommandAPI.getInstance().register(&quot;editconfig&quot;, arguments, (sender, args) -&gt; {
-    getConfig().set((String) args[0], (boolean) args[1]);
-});
-</code></pre>
-<a class="header" href="primitivearguments.html#numerical-arguments" id="numerical-arguments"><h2>Numerical arguments</h2></a>
-<p>Numbers are represented using the designated number classes:</p>
-<table><thead><tr><th> Class </th><th> Description </th></tr></thead><tbody>
-<tr><td> <code>IntegerArgument</code> </td><td> Whole numbers </td></tr>
-<tr><td> <code>DoubleArgument</code> </td><td> Double precision floating point numbers </td></tr>
-<tr><td> <code>FloatArgument</code> </td><td> Single precision floating point numbers </td></tr>
-</tbody></table>
-<p>Each numerical argument can have ranges applied to them, which restricts the user to only entering numbers from within a certain range. This is done using the constructor, and the range specified:</p>
-<table><thead><tr><th> Constructor </th><th> Description </th></tr></thead><tbody>
-<tr><td> <code>new IntegerArgument()</code> </td><td> Any range </td></tr>
-<tr><td> <code>new IntegerArgument(2)</code> </td><td> Values greater than <em>or equal to</em> 2 </td></tr>
-<tr><td> <code>new IntegerArgument(2, 10)</code> </td><td> Values greater than or equal to 2 and less than or equal to 10 </td></tr>
-</tbody></table>
-<p>Each range is <em>inclusive</em>, so it includes the number given to it.</p>
+                        <a class="header" href="troubleshooting.html#troubleshooting" id="troubleshooting"><h1>Troubleshooting</h1></a>
+<p>This section basically summarizes the list of things that <em>could</em> go wrong with the CommandAPI and how to mitigate these circumstances.</p>
+<a class="header" href="troubleshooting.html#serverplugin-reloading" id="serverplugin-reloading"><h2>Server/Plugin reloading</h2></a>
+<p>Due to the implementation of the CommandAPI, the CommandAPI does <strong>not</strong> support plugin reloading for plugins that use the CommandAPI. This includes, but is not limited to:</p>
+<ul>
+<li>The <code>/reload</code> command which reloads all plugins on the server</li>
+<li>Plugin reloading plugins, such as <a href="https://dev.bukkit.org/projects/plugman">PlugMan</a></li>
+<li>Any form of plugin enabling/disabling process for plugins which register commands via the CommandAPI</li>
+</ul>
+<blockquote>
+<p><strong>Developer's Note:</strong></p>
+<p>Plugin reloading gets very complicated with respect to the CommandAPI. Since the loading sequence of Minecraft commands is so picky, reloading the CommandAPI or a plugin which registers commands can cause commands to be re-registered. This can lead to very odd effects, such as command collisions <em>(commands just don't work)</em>, to duplicate commands being registered under different namespaces <em>(e.g. plugins are registered under Bukkit as well as Minecraft)</em>. These effects are not &quot;100% guaranteed&quot; and have only been seen during dodgy tests. In short, <strong>do not enable or reload plugins</strong>, and <strong>absolutely do not reload the server with <code>/reload</code></strong></p>
+</blockquote>
+<a class="header" href="troubleshooting.html#players-cannot-connecttimeout-when-joining" id="players-cannot-connecttimeout-when-joining"><h2>Players cannot connect/timeout when joining</h2></a>
+<p>If players cannot connect, this could be due to the size of the command data packet. To see the resultant packet being sent to players when they log in, enable the <code>create-dispatcher-json: true</code> setting and view the file size of the resultant file. If the file size is abnormally large <em>(Over 2MB is considered very large)</em>, consider reducing the number of <code>LiteralArguments</code> which your plugin uses.</p>
+<a class="header" href="troubleshooting.html#the-server-just-hangsslows-down-on-my-paperspigot-server" id="the-server-just-hangsslows-down-on-my-paperspigot-server"><h2>The server just hangs/slows down on my PaperSpigot server</h2></a>
+<p>Officially, the CommandAPI does <em>not</em> really support PaperSpigot. As PaperSpigot is a fork of Spigot, it just assumes that it'll work on PaperSpigot if it works on Spigot.</p>
+<blockquote>
+<p><strong>Developer's Note:</strong></p>
+<p>There's a few things I personally don't like about PaperSpigot:</p>
+<ul>
+<li><a href="https://paper.readthedocs.io/en/stable/about/faq.html#what-can-i-do-with-paper">Their developer documentation is non-existant</a></li>
+<li><a href="https://papermc.io/javadocs/paper/1.13/overview-summary.html">Their JavaDocs</a> are very... lacking of documentation</li>
+<li>I personally think it's harder to keep track of new changes between Minecraft upgrades for PaperSpigot compared to Spigot's BuildTools</li>
+</ul>
+</blockquote>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="arguments.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="permissions.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
                         
-                            <a rel="next" href="locationargument.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="faq.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -185,13 +183,13 @@ CommandAPI.getInstance().register(&quot;editconfig&quot;, arguments, (sender, ar
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="arguments.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a href="permissions.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a href="locationargument.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="faq.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
