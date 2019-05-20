@@ -14,7 +14,7 @@
 * command registration & unregistration
 * ~~maybe some sort of summary for "important things to note"~~
 * ALIASES!!!
-* ~~dynsyg_arg~~
+* dynsyg_arg - write more documentation - it seems a little sparse at the moment
 
 ## Coding side
 

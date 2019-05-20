@@ -68,4 +68,4 @@ CommandAPI.getInstance().register("gamemode", arguments, (sender, args) -> {
 
 > **Developer's Note:**
 >
-> plz no.
+> Command unregistration, although powerful, is highly unrecommended. It 
