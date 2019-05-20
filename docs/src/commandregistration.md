@@ -68,4 +68,6 @@ CommandAPI.getInstance().register("gamemode", arguments, (sender, args) -> {
 
 > **Developer's Note:**
 >
-> Command unregistration, although powerful, is highly unrecommended. It 
+> Command unregistration, although powerful, is highly unrecommended. It is the CommandAPI's most "dangerous" feature as it can cause unexpected sideffects, such as command blocks executing commands you wouldn't expect them to. In almost every case, I'd recommend just creating a new command instead of unregistering one to replace it.
+>
+> For instance, instead of unregistering `/gamemode`, you could register a command `/gm` or `/customgamemode`.

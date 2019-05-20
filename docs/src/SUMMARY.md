@@ -19,9 +19,8 @@
   - [The FunctionWrapper class](./functionwrapper.md)
   - [Function arguments](./functionarguments.md)
 - [Permissions](./permissions.md)
+- [Command conversion](./conversion.md)
 
 [Troubleshooting](./troubleshooting.md)
-
-[FAQ](./faq.md)
 
 [Afterword](./afterword.md)

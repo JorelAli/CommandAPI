@@ -9,12 +9,13 @@
 * ~~arg permissions~~
 * ~~permissions~~
 * executors (returning and non-returning)
-* proxied senders
-* command converter
-* command registration & unregistration
+  * proxied senders
+* ~~command converter~~
+* ~~command registration & unregistration~~
 * ~~maybe some sort of summary for "important things to note"~~
 * ALIASES!!!
 * dynsyg_arg - write more documentation - it seems a little sparse at the moment
+* Something something pictures/gifs of usage??
 
 ## Coding side
 
