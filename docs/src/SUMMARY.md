@@ -5,6 +5,8 @@
 - [Setting up your development environment](./quickstart.md)
 - [Command registration](./commandregistration.md)
 - [Command executors](./commandexecutors.md)
+  - [Proxied commandsenders](./proxysender.md)
+  - [Resulting command executors](./resultingcommandexecutors.md)
 - [Arguments](./arguments.md)
   - [Primitive arguments](./primitivearguments.md)
   - [Location arguments](./locationargument.md)

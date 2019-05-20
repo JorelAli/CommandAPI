@@ -1,15 +1,26 @@
-# Installation (For server owners)
+# Installation
 
-* Download the latest CommandAPI.jar from the download page [here](https://github.com/JorelAli/1.13-Command-API/releases/latest)
-* Place the CommandAPI.jar file in your server's `plugins/` folder
-* That's it!
+Installing the CommandAPI is easy! Just download the CommandAPI.jar file and place it in your server's `plugins/` folder!
+
+<br>
+
+<a href="https://github.com/JorelAli/1.13-Command-API/releases/download/v1.8.2/CommandAPI.jar" style="
+background-color:#EB7035;
+border-radius:3px;
+color:#ffffff;
+display:block;
+line-height:44px;
+text-align:center;
+width:50%;
+margin-left:auto;
+margin-right: auto;">Download latest CommandAPI.jar</a>
 
 ## Configuring the CommandAPI
 
 The CommandAPI can be configured in the `plugins/CommandAPI/config.yml` file.
 
 The default `config.yml` settings are as follows:
- 
+
 ```yaml
 verbose-outputs: true
 create-dispatcher-json: true
