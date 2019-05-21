@@ -69,7 +69,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="arguments.html"><strong aria-hidden="true">4.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">4.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">4.2.</strong> Location arguments</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">4.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">4.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">4.5.</strong> Entity &amp; player arguments</a></li><li><a href="literalarguments.html"><strong aria-hidden="true">4.6.</strong> Literal arguments</a></li><li><a href="dynsugargs.html" class="active"><strong aria-hidden="true">4.7.</strong> Dynamically suggested arguments</a></li><li><a href="customarguments.html"><strong aria-hidden="true">4.8.</strong> Custom arguments</a></li></ol></li><li><a href="functions.html"><strong aria-hidden="true">5.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li><a href="functionsetup.html"><strong aria-hidden="true">5.1.</strong> Setting up functions &amp; tags</a></li><li><a href="functionwrapper.html"><strong aria-hidden="true">5.2.</strong> The FunctionWrapper class</a></li><li><a href="functionarguments.html"><strong aria-hidden="true">5.3.</strong> Function arguments</a></li></ol></li><li><a href="permissions.html"><strong aria-hidden="true">6.</strong> Permissions</a></li><li class="affix"><a href="faq.html">FAQ</a></li><li class="affix"><a href="afterword.html">Afterword</a></li></ol>
+            <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="commandexecutors.html"><strong aria-hidden="true">4.</strong> Command executors</a></li><li><ol class="section"><li><a href="proxysender.html"><strong aria-hidden="true">4.1.</strong> Proxied commandsenders</a></li><li><a href="resultingcommandexecutors.html"><strong aria-hidden="true">4.2.</strong> Resulting command executors</a></li></ol></li><li><a href="arguments.html"><strong aria-hidden="true">5.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">5.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">5.2.</strong> Location arguments</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">5.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">5.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">5.5.</strong> Entity &amp; player arguments</a></li><li><a href="literalarguments.html"><strong aria-hidden="true">5.6.</strong> Literal arguments</a></li><li><a href="dynsugargs.html" class="active"><strong aria-hidden="true">5.7.</strong> Dynamically suggested arguments</a></li><li><a href="customarguments.html"><strong aria-hidden="true">5.8.</strong> Custom arguments</a></li></ol></li><li><a href="functions.html"><strong aria-hidden="true">6.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li><a href="functionsetup.html"><strong aria-hidden="true">6.1.</strong> Setting up functions &amp; tags</a></li><li><a href="functionwrapper.html"><strong aria-hidden="true">6.2.</strong> The FunctionWrapper class</a></li><li><a href="functionarguments.html"><strong aria-hidden="true">6.3.</strong> Function arguments</a></li></ol></li><li><a href="permissions.html"><strong aria-hidden="true">7.</strong> Permissions</a></li><li><a href="aliases.html"><strong aria-hidden="true">8.</strong> Aliases</a></li><li><a href="conversion.html"><strong aria-hidden="true">9.</strong> Command conversion</a></li><li class="affix"><a href="troubleshooting.html">Troubleshooting</a></li><li class="affix"><a href="afterword.html">Afterword</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -141,7 +141,9 @@ new DynamicSuggestedStringArgument(() -&gt; return new String[]);
 //Constructor requires a function which returns a String[] and receives a sender input
 new DynamicSuggestedStringArgument((sender) -&gt; return new String[]);
 </code></pre>
+<p>The first one simply lets you return a list of strings as suggestions. Whenever a player begins typing a command, a packet is sent to the server and it will return the list of suggestions <em>(similar to tab completion)</em>. The second constructor allows you to also use the command sender as an input <em>(of type <code>CommandSender</code>)</em>, which can be used for more intricate suggestions.</p>
 <a class="header" href="dynsugargs.html#example---friend-command-with-dynamic-suggestions" id="example---friend-command-with-dynamic-suggestions"><h2>Example - Friend command with dynamic suggestions</h2></a>
+<p>Say we want a plugin which is a friend system. The friend system allows you to add friends and when you've made a friend, you can message them.</p>
 <pre><code>/friend &lt;player&gt;       - Adds a player as a friend
 /msgf   &lt;player&gt; &lt;msg&gt; - Message a friend
 </code></pre>
@@ -181,9 +183,16 @@ arguments.put(&quot;friend&quot;, new DynamicSuggestedStringArgument((sender) -&
 arguments.put(&quot;message&quot;, new GreedyStringArgument());
 
 CommandAPI.getInstance().register(&quot;msgf&quot;, arguments, (sender, args) -&gt; {
-    Bukkit.getPlayer((String) args[0]).sendMessage((String) args[1]);
+    //Parse the target player from the String, failing if it can't find that player
+    Player target = Bukkit.getPlayer((String) args[0]);
+    if(target == null) {
+        CommandAPI.fail(&quot;Couldn't find that player!&quot;);
+    } else {
+        target.sendMessage((String) args[1]);
+    }
 });
 </code></pre>
+<p>A thing to note from the code above: The DynamicSuggestedStringArgument is a <em>String</em> argument, meaning that the resulting type is a <em>String</em>. Despite the fact that we want a player object, the CommandAPI only lets you make dynamic suggestions for Strings. Therefore, it <em>could</em> fail in this situation (if the target player isn't found), and we have to handle that case on our own. If we had used a <code>PlayerArgument</code>, that argument would automatically fail due to the implementation of the player argument.</p>
 
                     </main>
 

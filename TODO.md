@@ -2,8 +2,8 @@
 
 ## Documentation side
 
-* Write about how you need to cast arguments - perhaps put this in the Arguments section. 
-* Write about that the type to cast it declared as stated in the documentation so people who know what type to cast their args as
+* ~~Write about how you need to cast arguments - perhaps put this in the Arguments section. ~~
+* ~~Write about that the type to cast it declared as stated in the documentation so people who know what type to cast their args as~~
 * ~~CustomArgs~~
 * ~~overriding args?~~
 * ~~arg permissions~~
@@ -13,7 +13,7 @@
 * ~~command converter~~
 * ~~command registration & unregistration~~
 * ~~maybe some sort of summary for "important things to note"~~
-* ALIASES!!!
+* ~~ALIASES!!!~~
 * ~~dynsyg_arg - write more documentation - it seems a little sparse at the moment~~
 * Something something pictures/gifs of usage??
 * ~~If you wanna report bugs or issues or enhancements, send them over to the github page~~

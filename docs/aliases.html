@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Entity &amp; player arguments - 1.13 CommandAPI Documentation v2.0</title>
+        <title>Aliases - 1.13 CommandAPI Documentation v2.0</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -69,7 +69,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="commandexecutors.html"><strong aria-hidden="true">4.</strong> Command executors</a></li><li><ol class="section"><li><a href="proxysender.html"><strong aria-hidden="true">4.1.</strong> Proxied commandsenders</a></li><li><a href="resultingcommandexecutors.html"><strong aria-hidden="true">4.2.</strong> Resulting command executors</a></li></ol></li><li><a href="arguments.html"><strong aria-hidden="true">5.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">5.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">5.2.</strong> Location arguments</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">5.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">5.4.</strong> String arguments</a></li><li><a href="entityarguments.html" class="active"><strong aria-hidden="true">5.5.</strong> Entity &amp; player arguments</a></li><li><a href="literalarguments.html"><strong aria-hidden="true">5.6.</strong> Literal arguments</a></li><li><a href="dynsugargs.html"><strong aria-hidden="true">5.7.</strong> Dynamically suggested arguments</a></li><li><a href="customarguments.html"><strong aria-hidden="true">5.8.</strong> Custom arguments</a></li></ol></li><li><a href="functions.html"><strong aria-hidden="true">6.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li><a href="functionsetup.html"><strong aria-hidden="true">6.1.</strong> Setting up functions &amp; tags</a></li><li><a href="functionwrapper.html"><strong aria-hidden="true">6.2.</strong> The FunctionWrapper class</a></li><li><a href="functionarguments.html"><strong aria-hidden="true">6.3.</strong> Function arguments</a></li></ol></li><li><a href="permissions.html"><strong aria-hidden="true">7.</strong> Permissions</a></li><li><a href="aliases.html"><strong aria-hidden="true">8.</strong> Aliases</a></li><li><a href="conversion.html"><strong aria-hidden="true">9.</strong> Command conversion</a></li><li class="affix"><a href="troubleshooting.html">Troubleshooting</a></li><li class="affix"><a href="afterword.html">Afterword</a></li></ol>
+            <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="commandexecutors.html"><strong aria-hidden="true">4.</strong> Command executors</a></li><li><ol class="section"><li><a href="proxysender.html"><strong aria-hidden="true">4.1.</strong> Proxied commandsenders</a></li><li><a href="resultingcommandexecutors.html"><strong aria-hidden="true">4.2.</strong> Resulting command executors</a></li></ol></li><li><a href="arguments.html"><strong aria-hidden="true">5.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">5.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">5.2.</strong> Location arguments</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">5.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">5.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">5.5.</strong> Entity &amp; player arguments</a></li><li><a href="literalarguments.html"><strong aria-hidden="true">5.6.</strong> Literal arguments</a></li><li><a href="dynsugargs.html"><strong aria-hidden="true">5.7.</strong> Dynamically suggested arguments</a></li><li><a href="customarguments.html"><strong aria-hidden="true">5.8.</strong> Custom arguments</a></li></ol></li><li><a href="functions.html"><strong aria-hidden="true">6.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li><a href="functionsetup.html"><strong aria-hidden="true">6.1.</strong> Setting up functions &amp; tags</a></li><li><a href="functionwrapper.html"><strong aria-hidden="true">6.2.</strong> The FunctionWrapper class</a></li><li><a href="functionarguments.html"><strong aria-hidden="true">6.3.</strong> Function arguments</a></li></ol></li><li><a href="permissions.html"><strong aria-hidden="true">7.</strong> Permissions</a></li><li><a href="aliases.html" class="active"><strong aria-hidden="true">8.</strong> Aliases</a></li><li><a href="conversion.html"><strong aria-hidden="true">9.</strong> Command conversion</a></li><li class="affix"><a href="troubleshooting.html">Troubleshooting</a></li><li class="affix"><a href="afterword.html">Afterword</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -133,78 +133,35 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="entityarguments.html#entity--player-arguments" id="entity--player-arguments"><h1>Entity &amp; player arguments</h1></a>
-<a class="header" href="entityarguments.html#entity-selector-argument" id="entity-selector-argument"><h2>Entity selector argument</h2></a>
-<p>Minecraft's <a href="https://minecraft.gamepedia.com/Commands#Target_selectors">target selectors</a> (e.g. <code>@a</code> or <code>@e</code>) are implemented using the <code>EntitySelectorArgument</code> class. This allows you to select specific entities based on certain attributes.</p>
-<p>The <code>EntitySelectorArgument</code> constructor requires an <code>EntitySelector</code> argument to determine what type of data to return. There are 4 types of entity selections which are available:</p>
-<ul>
-<li><code>EntitySelector.ONE_ENTITY</code> - A single entity, which returns a <code>Entity</code> object.</li>
-<li><code>EntitySelector.MANY_ENTITIES</code>  - A collection of many entities, which returns a <code>Collection&lt;Entity&gt;</code> object.</li>
-<li><code>EntitySelector.ONE_PLAYER</code> - A single player, which returns a <code>Player</code> object.</li>
-<li><code>EntitySelector.MANY_PLAYERS</code> - A collection of players, which returns a <code>Collection&lt;Player&gt;</code> object.</li>
-</ul>
-<p>The return type is the type to be cast when retrieved from the <code>Object[] args</code> in the command declaration.</p>
-<a class="header" href="entityarguments.html#example---kill-entities-command" id="example---kill-entities-command"><h3>Example - Kill entities command</h3></a>
-<pre><code class="language-java">//LinkedHashMap to store arguments for the command
-LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-
-//Using a collective entity selector to select multiple entities
-arguments.put(&quot;entities&quot;, new EntitySelectorArgument(EntitySelector.MANY_ENTITIES));
-
-CommandAPI.getInstance().register(&quot;kill&quot;, arguments, (sender, args) -&gt; {
-    
-    //Parse the argument as a collection of entities (as stated above in the documentation)
-    Collection&lt;Entity&gt; entities = (Collection&lt;Entity&gt;) args[0];
-    sender.sendMessage(&quot;killed &quot; + entities.size() + &quot;entities&quot;);
-    for(Entity e : entity)
-        e.remove();
-});
+                        <a class="header" href="aliases.html#aliases" id="aliases"><h1>Aliases</h1></a>
+<p>Aliases let you create aliases for commands. They are simply added at command regisration time by using either of the following methods:</p>
+<pre><code class="language-java">CommandAPI.getInstance().register(String, String[], LinkedHashMap, CommandExecutor);
+CommandAPI.getInstance().register(String, CommandPermission, String[], LinkedHashMap, CommandExecutor);
 </code></pre>
-<p>Example command usage for the above code would be:</p>
-<ul>
-<li>Kill all cows:
-<pre><code>/kill @e[type=cow]
-</code></pre>
-</li>
-<li>Kill the 10 furthest pigs from the command sender:
-<pre><code>/kill @e[type=pig,limit=10,sort=furthest]
-</code></pre>
-</li>
-</ul>
-<a class="header" href="entityarguments.html#player-argument" id="player-argument"><h2>Player argument</h2></a>
-<p>The <code>PlayerArgument</code> class is very similar <em>(almost identical)</em> to <code>EntitySelectorArgument</code>, with the EntitySelector <code>ONE_PLAYER</code>. It also allows you to select a player based on their UUID.</p>
-<blockquote>
-<p><strong>Developer's Note:</strong></p>
-<p>I've not tested the <code>PlayerArgument</code> enough to recommend using it over the <code>EntitySelectorArgument(EntitySelector.ONE_PLAYER)</code>. There may be other advantages to using this than the regular EntitySelectorArgument, but as of writing this documentation, I know not of the advantages nor disadvantages to using this argument type. Internally, the <code>PlayerArgument</code> uses the <code>GameProfile</code> class from Mojang's authlib, which may be able to retrieve offline players (untested).</p>
-</blockquote>
-<a class="header" href="entityarguments.html#entity-type-argument" id="entity-type-argument"><h2>Entity type argument</h2></a>
-<p>The <code>EntityTypeArgument</code> class is used to retrieve a type of entity as defined in the <a href="https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html"><code>EntityType</code></a> enum. In other words, this is an entity type, for example a pig or a zombie.</p>
-<a class="header" href="entityarguments.html#example---spawning-entities" id="example---spawning-entities"><h3>Example - Spawning entities</h3></a>
+<p>The <code>String[]</code> represents a list of aliases which can be used to execute a command.</p>
+<a class="header" href="aliases.html#example---using-aliases-for-gamemode" id="example---using-aliases-for-gamemode"><h2>Example - Using aliases for /gamemode</h2></a>
 <pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+//populate arguments here
 
-arguments.put(&quot;entity&quot;, new EntityTypeArgument());
-arguments.put(&quot;amount&quot;, new IntegerArgument(1, 100)); //Prevent spawning too many entities
-
-CommandAPI.getInstance().register(&quot;spawnmob&quot;, arguments, (sender, args) -&gt; {
-    Player player = (Player) sender;
-    for(int i = 0; i &lt; (int) args[1]; i++) {
-        player.getWorld().spawnEntity(player.getLocation(), (EntityType) args[0]);
-    }
+CommandAPI.getInstance().register(&quot;gamemode&quot;, new String[] {&quot;gm&quot;}, arguments, (sender, args) -&gt; {
+    //Handle gamemode command here
 });
 </code></pre>
+<a class="header" href="aliases.html#the-alias-bug" id="the-alias-bug"><h2>The alias bug</h2></a>
+<p>As of time of writing this documentation (v2.0), there is a bug with aliases, where aliases with no arguments causes an error. You can read more about the bug <a href="https://github.com/JorelAli/1.13-Command-API/issues/43">here</a>.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="stringarguments.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="permissions.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
                         
-                            <a rel="next" href="literalarguments.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="conversion.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -216,13 +173,13 @@ CommandAPI.getInstance().register(&quot;spawnmob&quot;, arguments, (sender, args
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="stringarguments.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a href="permissions.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a href="literalarguments.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="conversion.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 

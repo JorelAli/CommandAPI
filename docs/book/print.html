@@ -69,7 +69,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="commandexecutors.html"><strong aria-hidden="true">4.</strong> Command executors</a></li><li><ol class="section"><li><a href="proxysender.html"><strong aria-hidden="true">4.1.</strong> Proxied commandsenders</a></li><li><a href="resultingcommandexecutors.html"><strong aria-hidden="true">4.2.</strong> Resulting command executors</a></li></ol></li><li><a href="arguments.html"><strong aria-hidden="true">5.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">5.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">5.2.</strong> Location arguments</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">5.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">5.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">5.5.</strong> Entity &amp; player arguments</a></li><li><a href="literalarguments.html"><strong aria-hidden="true">5.6.</strong> Literal arguments</a></li><li><a href="dynsugargs.html"><strong aria-hidden="true">5.7.</strong> Dynamically suggested arguments</a></li><li><a href="customarguments.html"><strong aria-hidden="true">5.8.</strong> Custom arguments</a></li></ol></li><li><a href="functions.html"><strong aria-hidden="true">6.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li><a href="functionsetup.html"><strong aria-hidden="true">6.1.</strong> Setting up functions &amp; tags</a></li><li><a href="functionwrapper.html"><strong aria-hidden="true">6.2.</strong> The FunctionWrapper class</a></li><li><a href="functionarguments.html"><strong aria-hidden="true">6.3.</strong> Function arguments</a></li></ol></li><li><a href="permissions.html"><strong aria-hidden="true">7.</strong> Permissions</a></li><li><a href="conversion.html"><strong aria-hidden="true">8.</strong> Command conversion</a></li><li class="affix"><a href="troubleshooting.html">Troubleshooting</a></li><li class="affix"><a href="afterword.html">Afterword</a></li></ol>
+            <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="commandexecutors.html"><strong aria-hidden="true">4.</strong> Command executors</a></li><li><ol class="section"><li><a href="proxysender.html"><strong aria-hidden="true">4.1.</strong> Proxied commandsenders</a></li><li><a href="resultingcommandexecutors.html"><strong aria-hidden="true">4.2.</strong> Resulting command executors</a></li></ol></li><li><a href="arguments.html"><strong aria-hidden="true">5.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">5.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">5.2.</strong> Location arguments</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">5.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">5.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">5.5.</strong> Entity &amp; player arguments</a></li><li><a href="literalarguments.html"><strong aria-hidden="true">5.6.</strong> Literal arguments</a></li><li><a href="dynsugargs.html"><strong aria-hidden="true">5.7.</strong> Dynamically suggested arguments</a></li><li><a href="customarguments.html"><strong aria-hidden="true">5.8.</strong> Custom arguments</a></li></ol></li><li><a href="functions.html"><strong aria-hidden="true">6.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li><a href="functionsetup.html"><strong aria-hidden="true">6.1.</strong> Setting up functions &amp; tags</a></li><li><a href="functionwrapper.html"><strong aria-hidden="true">6.2.</strong> The FunctionWrapper class</a></li><li><a href="functionarguments.html"><strong aria-hidden="true">6.3.</strong> Function arguments</a></li></ol></li><li><a href="permissions.html"><strong aria-hidden="true">7.</strong> Permissions</a></li><li><a href="aliases.html"><strong aria-hidden="true">8.</strong> Aliases</a></li><li><a href="conversion.html"><strong aria-hidden="true">9.</strong> Command conversion</a></li><li class="affix"><a href="troubleshooting.html">Troubleshooting</a></li><li class="affix"><a href="afterword.html">Afterword</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -161,8 +161,8 @@
 <li><strong>1.8 → 2.0</strong>
 <ul>
 <li><strong><a href="./arguments.html#arguments-with-overrideable-suggestions">Click here</a></strong> - Deprecated <code>SuggestedStringArgument</code>, use <code>.overrideSuggestions()</code> instead</li>
-<li><strong>Chapter TODO</strong> - <code>CustomArgument</code> page</li>
-<li><strong>Chapter TODO</strong> - The <code>DynamicSuggestedArgument</code> now has access to the <code>CommandSender</code> object</li>
+<li><strong><a href="./customarguments.md">Click here</a></strong> - Adds a new argument, the <code>CustomArgument</code></li>
+<li><strong><a href="./dynsugargs.md">Click here</a></strong> - The <code>DynamicSuggestedArgument</code> now has access to the <code>CommandSender</code> object</li>
 </ul>
 </li>
 </ul>
@@ -415,7 +415,38 @@ CommandAPI.getInstance().register(&quot;givereward&quot;, arguments, (sender, ar
 <pre><code>/execute if score SomePlayer randVal matches 1 run givereward SomePlayer
 </code></pre>
 <a class="header" href="print.html#arguments" id="arguments"><h1>Arguments</h1></a>
-<p>TODO: Write about declaration of functions (linkedhashmap etc.), the naming convention (it doesn't matter, but has to be unique)</p>
+<p>Arguments in the CommandAPI are registered by using a <code>LinkedHashMap&lt;String, Argument&gt;</code> object. There are two things you need to keep in mind when creating arguments:</p>
+<ul>
+<li>The order which they will be used</li>
+<li>The type of each argument</li>
+</ul>
+<p>By definition of a LinkedHashMap, the order of the elements inserted into it are preserved, meaning the order you add arguments to the LinkedHashMap will be the resulting order of which arguments are presented to the user when they run that command.</p>
+<p>Adding arguments for registration is simple:</p>
+<pre><code class="language-java">//Create LinkedHashMap
+LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+
+//Add an argument called &quot;target&quot;, which is a PlayerArgument
+arguments.put(&quot;target&quot;, new PlayerArgument());
+</code></pre>
+<p>The String value isn't <em>too</em> important - it's sole purpose is to make it easier for you to read and understand.</p>
+<blockquote>
+<p><strong>Developer's Note:</strong></p>
+<p>Not really - I explain the purpose for the String value in Section 3 - Command registration</p>
+</blockquote>
+<a class="header" href="print.html#argument-casting" id="argument-casting"><h2>Argument Casting</h2></a>
+<p>To access arguments, they have to be casted to the type that the argument represents. The order of the arguments in the <code>args[]</code> is the same as the order in which the arguments were declared.</p>
+<pre><code class="language-java">LinkedHashMap&lt;String, ArgumentType&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;arg0&quot;, new StringArgument());
+arguments.put(&quot;arg1&quot;, new PotionEffectArgument());
+arguments.put(&quot;arg2&quot;, new LocationArgument());
+
+CommandAPI.getInstance().register(&quot;cmd&quot;, arguments, (sender, args) -&gt; {
+    String stringArg = (String) args[0];
+    PotionEffectType potionArg = (PotionEffectType) args[1];
+    Location locationArg = (Location) args[2];
+});
+</code></pre>
+<p>The types of the arguments declared by the CommandAPI are all listed below:</p>
 <a class="header" href="print.html#list-of-arguments" id="list-of-arguments"><h2>List of arguments</h2></a>
 <p>Arguments are found in the <code>io.github.jorelali.commandapi.api.arguments</code> package.</p>
 <table><thead><tr><th align="center">          Argument class          </th><th align="center">                          Data type                           </th><th align="center">                      Description                       </th></tr></thead><tbody>
@@ -441,19 +472,6 @@ CommandAPI.getInstance().register(&quot;givereward&quot;, arguments, (sender, ar
 <tr><td align="center">    <code>SuggestedStringArgument</code>     </td><td align="center">                           <code>String</code>                           </td><td align="center">          A list of suggested one word strings          </td></tr>
 <tr><td align="center">          <code>TextArgument</code>          </td><td align="center">                           <code>String</code>                           </td><td align="center">      String which can have spaces (used for text)      </td></tr>
 </tbody></table>
-<a class="header" href="print.html#argument-casting" id="argument-casting"><h2>Argument Casting</h2></a>
-<p>To access arguments, they are casted in the order of declaration.</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, ArgumentType&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;arg0&quot;, new StringArgument());
-arguments.put(&quot;arg1&quot;, new PotionEffectArgument());
-arguments.put(&quot;arg2&quot;, new LocationArgument());
-
-CommandAPI.getInstance().register(&quot;cmd&quot;, arguments, (sender, args) -&gt; {
-    String stringArg = (String) args[0];
-    PotionEffectType potionArg = (PotionEffectType) args[1];
-    Location locationArg = (Location) args[2];
-});
-</code></pre>
 <a class="header" href="print.html#arguments-with-overrideable-suggestions" id="arguments-with-overrideable-suggestions"><h2>Arguments with overrideable suggestions</h2></a>
 <p>Some arguments have a feature allowing you to override the list of suggestions they provide. This is achieved by using <code>.overrideSuggestions(String[])</code> on an instance of an argument, with the String array consisting of suggestions that will be shown to the user whilst they type their command. It's been designed such that this returns the same argument so it can be used inline (handy, eh?)</p>
 <a class="header" href="print.html#example---friend-list-by-overriding-suggestions" id="example---friend-list-by-overriding-suggestions"><h3>Example - Friend list by overriding suggestions</h3></a>
@@ -874,6 +892,12 @@ CustomArgument.throwError(MessageBuilder message)
 <pre><code class="language-java">//Creates a MessageBuilder object that handles an invalid objective. 
 new MessageBuilder(&quot;Unknown objective: &quot;).appendArgInput();
 </code></pre>
+<a class="header" href="print.html#defined-custom-arguments" id="defined-custom-arguments"><h2>Defined custom arguments</h2></a>
+<p>The CommandAPI has a few custom arguments which have been predefined, in the <code>DefinedCustomArguments</code> class. The methods are as follows:</p>
+<pre><code class="language-java">DefinedCustomArguments.objectiveArgument(); //CustomArgument&lt;Objective&gt;
+DefinedCustomArguments.teamArgument();      //CustomArgument&lt;Team&gt;
+</code></pre>
+<p>These are included to help reduce the amount of code required if you were to implement custom arguments for the types stated above.</p>
 <a class="header" href="print.html#functions" id="functions"><h1>Functions</h1></a>
 <p>The CommandAPI has support to use Minecraft's <a href="https://minecraft.gamepedia.com/Function_(Java_Edtion)">functions</a> within your plugins. This is handled by using a class provided by the CommandAPI called <code>FunctionWrapper</code>, which allows you to execute functions. The CommandAPI also provides support to let you run your own commands within Minecraft function files.</p>
 <a class="header" href="print.html#using-custom-commands-in-functions" id="using-custom-commands-in-functions"><h2>Using custom commands in functions</h2></a>
@@ -1050,6 +1074,22 @@ CommandAPI.getInstance().register(&quot;kill&quot;, arguments, (sender, args) -&
 <p>As you can see, there are multiple ways of applying permissions to commands with arguments. In the /god command shown above, the permission was applied to the whole command. In the /kill command shown above, the permission was applied to the argument.</p>
 <p>There's not really much difference between the two methods, but I personally would use argument permissions with <code>.withPermission()</code> as it has greater control over arguments.</p>
 </blockquote>
+<a class="header" href="print.html#aliases" id="aliases"><h1>Aliases</h1></a>
+<p>Aliases let you create aliases for commands. They are simply added at command regisration time by using either of the following methods:</p>
+<pre><code class="language-java">CommandAPI.getInstance().register(String, String[], LinkedHashMap, CommandExecutor);
+CommandAPI.getInstance().register(String, CommandPermission, String[], LinkedHashMap, CommandExecutor);
+</code></pre>
+<p>The <code>String[]</code> represents a list of aliases which can be used to execute a command.</p>
+<a class="header" href="print.html#example---using-aliases-for-gamemode" id="example---using-aliases-for-gamemode"><h2>Example - Using aliases for /gamemode</h2></a>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+//populate arguments here
+
+CommandAPI.getInstance().register(&quot;gamemode&quot;, new String[] {&quot;gm&quot;}, arguments, (sender, args) -&gt; {
+    //Handle gamemode command here
+});
+</code></pre>
+<a class="header" href="print.html#the-alias-bug" id="the-alias-bug"><h2>The alias bug</h2></a>
+<p>As of time of writing this documentation (v2.0), there is a bug with aliases, where aliases with no arguments causes an error. You can read more about the bug <a href="https://github.com/JorelAli/1.13-Command-API/issues/43">here</a>.</p>
 <a class="header" href="print.html#command-conversion" id="command-conversion"><h1>Command conversion</h1></a>
 <p>Since the CommandAPI is used to register commands as a vanilla Minecraft command, you may want to use other plugins that are not written with the CommandAPI. For instance, if you want to include a command from a plugin which doesn't use the CommandAPI in a commandblock, <em>(such as the <code>/execute</code> command)</em>, you can use the CommandAPI's command conversion system.</p>
 <blockquote>
