@@ -4,8 +4,8 @@ import org.bukkit.ChatColor;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 
+import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
-import io.github.jorelali.commandapi.api.SemiReflector;
 
 @SuppressWarnings("unchecked")
 public class ChatColorArgument implements Argument, OverrideableSuggestions {
@@ -16,7 +16,7 @@ public class ChatColorArgument implements Argument, OverrideableSuggestions {
 	 * A ChatColor argument. Represents a color or formatting for chat
 	 */
 	public ChatColorArgument() {
-		rawType = SemiReflector.getNMSArgumentInstance("ArgumentChatFormat");
+		rawType = CommandAPIHandler.getNMS()._ArgumentChatFormat();
 	}
 	
 	@Override

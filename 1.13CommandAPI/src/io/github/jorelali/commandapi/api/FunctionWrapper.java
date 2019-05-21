@@ -1,7 +1,7 @@
 package io.github.jorelali.commandapi.api;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.util.function.Function;
+import java.util.function.ToIntBiFunction;
 
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
@@ -12,50 +12,35 @@ import org.bukkit.entity.Entity;
  */
 public class FunctionWrapper implements Keyed {	
 	
-	//Converts a Bukkit Entity to a Minecraft Entity to a CommandListenerWrapper
-	@FunctionalInterface
-	interface EntityMapper {
-		
-		/* In Reflection, where clw is the instance of a CommandListenerWrapper:
-		    e -> {
-				Object nmsEntity = getMethod(getOBCClass("entity.CraftEntity"), "getHandle").invoke(e);
-				return getMethod(getNMSClass("CommandListenerWrapper"), "a", getNMSClass("Entity")).invoke(clw, nmsEntity);
-			}
-		 */
-		
-		Object convert(Entity entity);
-	}
-	
-	private String minecraftKey;
-	private EntityMapper mapper;
-	private Method invoker;
-	private Object funcData;
-	private Object custFunc;
-	private Object argB;
+	private final NamespacedKey minecraftKey;
+	private final ToIntBiFunction<Object, Object> functionExecutor; //What the function does
+	private final Object customFunction; //The function to actually run
+	private final Object commandListenerWrapper;
+	private final Function<Entity, Object> mapper;
 	
 	/**
 	 * Creates a FunctionWrapper
 	 * @param minecraftKey - The MinecraftKey which is used to reference this function
 	 * @param invoker A method which, when invoked, runs the function
 	 * @param funcData The NMS CustomFunctionData object (From MinecraftServer)
-	 * @param custFunc A CustomFunction which contains the information about the function
-	 * @param argB the instance of the CommandListenerWrapper which executed this command
+	 * @param customFunction A CustomFunction which contains the information about the function
+	 * @param commandListenerWrapper the instance of the CommandListenerWrapper which executed this command
 	 * @param mapper A function which maps a Bukkit Entity into a Minecraft Entity
 	 */
-	protected FunctionWrapper(String minecraftKey, Method invoker, Object funcData, Object custFunc, Object argB, EntityMapper mapper) {
+	@SuppressWarnings("unchecked")
+	public FunctionWrapper(NamespacedKey minecraftKey, @SuppressWarnings("rawtypes") ToIntBiFunction invoker, Object custFunc, Object argB, Function<Entity, Object> mapper) {
 		this.minecraftKey = minecraftKey;
-		this.invoker = invoker;
+		this.functionExecutor = invoker;
+		this.customFunction = custFunc;
+		this.commandListenerWrapper = argB;
 		this.mapper = mapper;
-		this.funcData = funcData;
-		this.custFunc = custFunc;
-		this.argB = argB;
 	}
-	
+
 	/**
 	 * Executes this function as the executor of the command
 	 */
 	public void run() {
-		run(argB);
+		run(commandListenerWrapper);
 	}
 	
 	/**
@@ -63,26 +48,16 @@ public class FunctionWrapper implements Keyed {
 	 * @param e The entity to perform the function
 	 */
 	public void runAs(Entity e) {
-		run(mapper.convert(e));
+		run(mapper.apply(e));
 	}
 	
 	private void run(Object clw) {
-		try {
-			invoker.invoke(funcData, custFunc, clw);
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
-		}
+		functionExecutor.applyAsInt(customFunction, clw);
 	}
 
-	/*
-	 * Deprecated due to the fact that plugins should not use this constructor.
-	 * I'm using this constructor because it's significantly less performance heavy
-	 * than using reflection
-	 */
-	@SuppressWarnings("deprecation")
 	@Override
 	public NamespacedKey getKey() {
-		return new NamespacedKey(minecraftKey.split(":")[0], minecraftKey.split(":")[1]);
+		return minecraftKey;
 	}
 	
 }

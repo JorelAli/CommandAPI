@@ -1,6 +1,7 @@
-/bin/
-/libs/
-/.classpath
-/.project
-/.settings
+bin
+libs
+.classpath
+.project
+.settings
 target
+spigotlibs

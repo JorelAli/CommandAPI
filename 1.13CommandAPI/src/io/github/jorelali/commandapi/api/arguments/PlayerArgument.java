@@ -4,8 +4,8 @@ import org.bukkit.entity.Player;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 
+import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
-import io.github.jorelali.commandapi.api.SemiReflector;
 
 @SuppressWarnings("unchecked")
 public class PlayerArgument implements Argument, OverrideableSuggestions {
@@ -16,7 +16,7 @@ public class PlayerArgument implements Argument, OverrideableSuggestions {
 	 * A Player argument. Produces a single player, regardless of whether @a, @p, @r or @e is used.
 	 */
 	public PlayerArgument() {
-		rawType = SemiReflector.getNMSArgumentInstance("ArgumentProfile");
+		rawType = CommandAPIHandler.getNMS()._ArgumentProfile();
 	}
 	
 	@Override

@@ -4,8 +4,8 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 
+import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
-import io.github.jorelali.commandapi.api.SemiReflector;
 
 @SuppressWarnings("unchecked")
 public class PotionEffectArgument implements Argument, OverrideableSuggestions {
@@ -16,7 +16,7 @@ public class PotionEffectArgument implements Argument, OverrideableSuggestions {
 	 * A PotionEffect argument. Represents status/potion effects 
 	 */
 	public PotionEffectArgument() {
-		rawType = SemiReflector.getNMSArgumentInstance("ArgumentMobEffect");
+		rawType = CommandAPIHandler.getNMS()._ArgumentMobEffect();
 	}
 	
 	@Override
