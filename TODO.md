@@ -1,5 +1,10 @@
 # TODO
 
+## Everything else  
+* Update README.md
+* Build a new version (Changed plugin.yml to 2.0)
+* Update the link to the download in the documentation for when 2.0 is released
+
 ## Documentation side
 
 * ~~Write about how you need to cast arguments - perhaps put this in the Arguments section. ~~

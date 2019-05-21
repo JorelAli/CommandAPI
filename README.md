@@ -2,34 +2,17 @@
 An API to use the new command UI introduced in Minecraft 1.13
 
 ## Purpose
-This project provides an API to help Bukkit/Spigot developers use the new Minecraft 1.13 command UI. (Read about its creation in my [blog post](https://jorelali.github.io/blog/Creating-the-CommandAPI/)!)
+This project provides an API to help Bukkit/Spigot developers use the new Minecraft 1.13 command UI, which includes:
+
+* **Better commands** - Prevent players from running invalid commands, so developers don't have to deal with it on their side
+* **Better arguments** - Easily switch from Location arguments to raw JSON, with error checks all the way
+* **Support for Minecraft's `/execute` command** - Allow your command to be executed using Minecraft's built in `/execute` command
+* **Support for Minecraft's functions** - Allow your command to be executed from Minecraft's functions and tags
+* **Support for proxied command senders** - Want to run your command as a chicken? Now you can using `/execute as ... run command`
+* **No plugin.yml registration** - Commands don't need to be registered in the `plugin.yml` file anymore
+* **No dependencies** - You don't need to import Brigadier to use the CommandAPI
 
 ![commandUI](https://i.imgur.com/aTJa77G.gif "commandUI")
-
-## Basic principles (and changes between this API compared to normal command registration)
-- Commands are registered using the command registration system for default Minecraft commands. These are sent to the player in a [special packet](https://wiki.vg/Command_Data).
-- Commands registered using this Command API do not need to be stated in the plugin.yml (neither do they need a registered CommandExecutor)
-- This may be less compatible with plugins which lookup commands from other plugins
-  For example, say we make a plugin with this api, called _MyCustomPlugin_. Say another plugin, _PluginLookup_ tries to find the commands registered under _MyCustomPlugin_ (either by viewing the plugin.yml or commandMap via reflection), it would not return any results.
-- Arguments are represented as their respective data types as opposed to Strings
-  ```java
-  //Instead of 
-  onCommand(CommandSender sender, Command command, String label, String[] args) {
-  	try {
-		int i = Integer.parseInt(args[0]);
-		//Do something with this number
-	catch(NumberFormatException e) {
-		//Do something with the fact this isn't a number...
-	}
-  }
-  
-  //You can now do
-  CommandAPI.getInstance().register("mycommand", arguments, (sender, args) -> {
-	int i = (int) args[0];
-    //Do something with this number
-  });
-  ```
-- Arguments require a description to identify them
 
 ## Downloads & Documentation (includes usage for server owners)
 
