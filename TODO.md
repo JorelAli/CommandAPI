@@ -16,6 +16,7 @@
 * ALIASES!!!
 * dynsyg_arg - write more documentation - it seems a little sparse at the moment
 * Something something pictures/gifs of usage??
+* If you wanna report bugs or issues or enhancements, send them over to the github page
 
 ## Coding side
 

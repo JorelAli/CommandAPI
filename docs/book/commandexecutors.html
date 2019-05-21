@@ -139,7 +139,7 @@
                         <a class="header" href="#command-executors" id="command-executors"><h1>Command executors</h1></a>
 <blockquote>
 <p><strong>Developer's Note:</strong></p>
-<p>This section can be a little bit difficult to follow. If you only want the bare basic features <em>(executes a command)</em>, read the section below on <em>Normal command executors</em> - this behaves almost identical to regular command registration in Bukkit.</p>
+<p>This section can be a little bit difficult to follow. If you only want the bare basic features <em>(executes a command)</em>, read the section below on <em>Normal command executors</em> - this behaves very similar to the <code>onCommand</code> method in Bukkit.</p>
 </blockquote>
 <hr />
 <p>The CommandAPI provides two separate command executors which are lambdas which execute the code you want when a command is called. These are the classes <code>CommandExecutor</code> <em>(Not to be confused with Bukkit's <code>CommandExecutor</code> class)</em>, which just runs the contents of a command, and <code>ResultingCommandExecutor</code> that returns an integral <em>(whole number)</em> result.</p>
@@ -155,6 +155,38 @@
 </code></pre>
 <p>With normal command executors, these do not need to return anything. By default, this will return a <em>success value</em> of 1 if it runs successfully, and a <em>success value</em> of 0 if it runs unsuccessfully, either by throwing an exception <em>(RuntimeException)</em> or by forcing the command to fail.</p>
 <a class="header" href="#forcing-commands-to-fail" id="forcing-commands-to-fail"><h2>Forcing commands to fail</h2></a>
+<p>Sometimes, you want your command to fail on purpose. This is basically the way to &quot;gracefully&quot; handle errors in your command execution. This is performed using the following method:</p>
+<pre><code class="language-java">CommandAPI.fail(&quot;Error message goes here&quot;);
+</code></pre>
+<p>When the CommandAPI calls the fail method, it will cause the command to return a <em>success value</em> of 0, to indicate failure.</p>
+<a class="header" href="#example---command-failing-for-element-not-in-a-list" id="example---command-failing-for-element-not-in-a-list"><h3>Example - Command failing for element not in a list</h3></a>
+<p>Say we have some list, <code>List&lt;String&gt;</code> containing a bunch of fruit and the player can choose from it. In order to do that, we can use a <code>StringArgument</code> and suggest it to the player using <code>.overrideSuggestions(String[])</code>. However, because this only lists <em>suggestions</em> to the player, it does <strong>not</strong> stop the player from entering an option that isn't on the list of suggestions.</p>
+<p>Therefore, to gracefully handle this with a proper error message, we use <code>CommandAPI.fail(String)</code> with a meaningful error message which is displayed to the user.</p>
+<pre><code class="language-java">//Array of fruit
+List&lt;String&gt; fruit = new ArrayList&lt;&gt;();
+fruit.add(&quot;banana&quot;);
+fruit.add(&quot;apple&quot;);
+fruit.add(&quot;orange&quot;);
+
+//Argument accepting a String, suggested with the list of fruit
+LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;item&quot;, new StringArgument().overrideSuggestions(fruit.toArray(new String[fruit.size()])));
+
+//Register the command
+CommandAPI.getInstance().register(&quot;getfruit&quot;, arguments, (sender, args) -&gt; {
+    String inputFruit = (String) args[0];
+    if(fruit.contains(inputFruit)) {
+        //Do something with inputFruit
+    } else {
+        //The player's input is not in the list of fruit
+        CommandAPI.fail(&quot;That fruit doesn't exist!&quot;);
+    }
+});
+</code></pre>
+<blockquote>
+<p><strong>Developer's Note:</strong></p>
+<p>In general, it's a good idea to handle unexpected cases with the <code>CommandAPI.fail()</code> method. Most arguments used by the CommandAPI will have their own builtin failsafe system <em>(e.g. the <code>EntitySelectorArgument</code> will not execute the command executor if it fails to find an entity)</em>, so this feature is for those extra cases.</p>
+</blockquote>
 
                     </main>
 
