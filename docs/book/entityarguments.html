@@ -9,18 +9,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <base href="">
 
-        <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="book.css">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
-        <!-- Highlight.js Stylesheets -->
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
@@ -29,11 +28,9 @@
         
 
         
+
     </head>
     <body class="light">
-        <!-- Provide site root to javascript -->
-        <script type="text/javascript">var path_to_root = "";</script>
-
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script type="text/javascript">
             try {
@@ -136,8 +133,8 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="#entity--player-arguments" id="entity--player-arguments"><h1>Entity &amp; player arguments</h1></a>
-<a class="header" href="#entity-selector-argument" id="entity-selector-argument"><h2>Entity selector argument</h2></a>
+                        <a class="header" href="entityarguments.html#entity--player-arguments" id="entity--player-arguments"><h1>Entity &amp; player arguments</h1></a>
+<a class="header" href="entityarguments.html#entity-selector-argument" id="entity-selector-argument"><h2>Entity selector argument</h2></a>
 <p>Minecraft's <a href="https://minecraft.gamepedia.com/Commands#Target_selectors">target selectors</a> (e.g. <code>@a</code> or <code>@e</code>) are implemented using the <code>EntitySelectorArgument</code> class. This allows you to select specific entities based on certain attributes.</p>
 <p>The <code>EntitySelectorArgument</code> constructor requires an <code>EntitySelector</code> argument to determine what type of data to return. There are 4 types of entity selections which are available:</p>
 <ul>
@@ -147,7 +144,7 @@
 <li><code>EntitySelector.MANY_PLAYERS</code> - A collection of players, which returns a <code>Collection&lt;Player&gt;</code> object.</li>
 </ul>
 <p>The return type is the type to be cast when retrieved from the <code>Object[] args</code> in the command declaration.</p>
-<a class="header" href="#example---kill-entities-command" id="example---kill-entities-command"><h3>Example - Kill entities command</h3></a>
+<a class="header" href="entityarguments.html#example---kill-entities-command" id="example---kill-entities-command"><h3>Example - Kill entities command</h3></a>
 <pre><code class="language-java">//LinkedHashMap to store arguments for the command
 LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 
@@ -174,15 +171,15 @@ CommandAPI.getInstance().register(&quot;kill&quot;, arguments, (sender, args) -&
 </code></pre>
 </li>
 </ul>
-<a class="header" href="#player-argument" id="player-argument"><h2>Player argument</h2></a>
+<a class="header" href="entityarguments.html#player-argument" id="player-argument"><h2>Player argument</h2></a>
 <p>The <code>PlayerArgument</code> class is very similar <em>(almost identical)</em> to <code>EntitySelectorArgument</code>, with the EntitySelector <code>ONE_PLAYER</code>. It also allows you to select a player based on their UUID.</p>
 <blockquote>
 <p><strong>Developer's Note:</strong></p>
 <p>I've not tested the <code>PlayerArgument</code> enough to recommend using it over the <code>EntitySelectorArgument(EntitySelector.ONE_PLAYER)</code>. There may be other advantages to using this than the regular EntitySelectorArgument, but as of writing this documentation, I know not of the advantages nor disadvantages to using this argument type. Internally, the <code>PlayerArgument</code> uses the <code>GameProfile</code> class from Mojang's authlib, which may be able to retrieve offline players (untested).</p>
 </blockquote>
-<a class="header" href="#entity-type-argument" id="entity-type-argument"><h2>Entity type argument</h2></a>
+<a class="header" href="entityarguments.html#entity-type-argument" id="entity-type-argument"><h2>Entity type argument</h2></a>
 <p>The <code>EntityTypeArgument</code> class is used to retrieve a type of entity as defined in the <a href="https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html"><code>EntityType</code></a> enum. In other words, this is an entity type, for example a pig or a zombie.</p>
-<a class="header" href="#example---spawning-entities" id="example---spawning-entities"><h3>Example - Spawning entities</h3></a>
+<a class="header" href="entityarguments.html#example---spawning-entities" id="example---spawning-entities"><h3>Example - Spawning entities</h3></a>
 <pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 
 arguments.put(&quot;entity&quot;, new EntityTypeArgument());
@@ -254,6 +251,9 @@ CommandAPI.getInstance().register(&quot;spawnmob&quot;, arguments, (sender, args
 
         
 
+        
+        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
+        
         
         <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>

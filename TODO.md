@@ -8,8 +8,8 @@
 * ~~overriding args?~~
 * ~~arg permissions~~
 * ~~permissions~~
-* executors (returning and non-returning)
-  * proxied senders
+* ~~executors (returning and non-returning)~~
+  * ~~proxied senders~~
 * ~~command converter~~
 * ~~command registration & unregistration~~
 * ~~maybe some sort of summary for "important things to note"~~

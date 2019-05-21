@@ -9,18 +9,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <base href="">
 
-        <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="book.css">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
-        <!-- Highlight.js Stylesheets -->
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
@@ -29,11 +28,9 @@
         
 
         
+
     </head>
     <body class="light">
-        <!-- Provide site root to javascript -->
-        <script type="text/javascript">var path_to_root = "";</script>
-
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script type="text/javascript">
             try {
@@ -136,10 +133,44 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="#resulting-command-executors" id="resulting-command-executors"><h1>Resulting command executors</h1></a>
-<a class="header" href="#resulting-command-executors-1" id="resulting-command-executors-1"><h2>Resulting Command Executors</h2></a>
-<p>The resulting command executor takes advantage of Minecraft's command implementation to return results which can be used for future commands. This result can be used with the <code>/execute store result ...</code> command</p>
-<p>//TODO: Write about the CommandAPI.fail() method</p>
+                        <a class="header" href="resultingcommandexecutors.html#resulting-command-executors" id="resulting-command-executors"><h1>Resulting command executors</h1></a>
+<p>Resulting command executors are very similar to normal command executors, the only difference is that they can return an integer <em>result value</em>.</p>
+<pre><code class="language-java">(sender, args) -&gt; {
+    //Code here
+    return /*some integer here*/ ;
+};
+</code></pre>
+<a class="header" href="resultingcommandexecutors.html#example---random-number-result-command" id="example---random-number-result-command"><h2>Example - Random number result command</h2></a>
+<p>Say we want a command that returns a random number as a result. This can then be used by vanilla Minecraft's <code>/execute store result ...</code> command, which can be used for other command block chains.</p>
+<pre><code class="language-java">CommandAPI.getInstance().register(&quot;randnum&quot;, new LinkedHashMap&lt;String, Argument&gt;(), (sender, args) -&gt; {
+    return new Random().nextInt();
+});
+</code></pre>
+<p>This returns a success value of 1 <em>(Because no errors or <code>CommandAPI.fail(String)</code> was thrown)</em> and a return value of a random number.</p>
+<a class="header" href="resultingcommandexecutors.html#example---lootbox-system-with-execute-command" id="example---lootbox-system-with-execute-command"><h2>Example - Lootbox system with <code>/execute</code> command</h2></a>
+<p>We can store state using <code>/execute store</code> and we can perform conditional checks using <code>/execute if</code>. By combining these, we can create a system which can be used with commandblocks to say, give players random lootboxes and redeem them.</p>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+
+//Register random number generator command from 1 to 99 (inclusive)
+CommandAPI.getInstance().register(&quot;randomnumber&quot;, arguments, (sender, args) -&gt; {
+    return ThreadLocalRandom.current().nextInt(1, 100); //Returns random number from 1 &lt;= x &lt; 100
+});
+
+//Register reward giving system for a target player
+arguments.put(&quot;target&quot;, new EntitySelectorArgument(EntitySelector.ONE_PLAYER));
+
+CommandAPI.getInstance().register(&quot;givereward&quot;, arguments, (sender, args) -&gt; {
+    Player player = (Player) args[0];
+    player.getInventory().addItem(new ItemStack(Material.DIAMOND, 64));
+    Bukkit.broadcastMessage(player.getName() + &quot; won a rare 64 diamonds from a loot box!&quot;);
+}
+</code></pre>
+<p>Store a random number under the scoreboard score <code>randVal</code> for a player called <code>SomePlayer</code>, by executing the command /randomnumber</p>
+<pre><code>/execute store success score SomePlayer randVal run randomnumber
+</code></pre>
+<p>Check if the random number is equal to 1 (say we have some plugin which gives a reward to a player that happened to get a 1 from a random number command, thus giving them a 1/99 chance of winning)</p>
+<pre><code>/execute if score SomePlayer randVal matches 1 run givereward SomePlayer
+</code></pre>
 
                     </main>
 
@@ -199,6 +230,9 @@
 
         
 
+        
+        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
+        
         
         <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
