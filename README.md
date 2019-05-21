@@ -4,13 +4,13 @@ An API to use the new command UI introduced in Minecraft 1.13
 ## Purpose
 This project provides an API to help Bukkit/Spigot developers use the new Minecraft 1.13 command UI, which includes:
 
-* **Better commands** - Prevent players from running invalid commands, so developers don't have to deal with it on their side
+* **Better commands** - Prevent players from running invalid commands, making it easier for developers
 * **Better arguments** - Easily switch from Location arguments to raw JSON, with error checks all the way
-* **Support for Minecraft's `/execute` command** - Allow your command to be executed using Minecraft's built in `/execute` command
+* **Support for the `/execute` command** - Let your command to be executed by the built in `/execute` command
 * **Support for Minecraft's functions** - Allow your command to be executed from Minecraft's functions and tags
-* **Support for proxied command senders** - Want to run your command as a chicken? Now you can using `/execute as ... run command`
+* **Support for proxied command senders** - Run your command as other entities using `/execute as ... run command`
 * **No plugin.yml registration** - Commands don't need to be registered in the `plugin.yml` file anymore
-* **No dependencies** - You don't need to import Brigadier to use the CommandAPI
+* **No dependencies** - You don't need to import Brigadier in your projects to use the CommandAPI
 
 ![commandUI](https://i.imgur.com/aTJa77G.gif "commandUI")
 
