@@ -69,3 +69,14 @@ See the code above, which uses the following code snippet:
 //Creates a MessageBuilder object that handles an invalid objective. 
 new MessageBuilder("Unknown objective: ").appendArgInput();
 ```
+
+## Defined custom arguments
+
+The CommandAPI has a few custom arguments which have been predefined, in the `DefinedCustomArguments` class. The methods are as follows:
+
+```java
+DefinedCustomArguments.objectiveArgument(); //CustomArgument<Objective>
+DefinedCustomArguments.teamArgument();      //CustomArgument<Team>
+```
+
+These are included to help reduce the amount of code required if you were to implement custom arguments for the types stated above.

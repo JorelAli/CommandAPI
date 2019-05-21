@@ -21,6 +21,7 @@
   - [The FunctionWrapper class](./functionwrapper.md)
   - [Function arguments](./functionarguments.md)
 - [Permissions](./permissions.md)
+- [Aliases](./aliases.md)
 - [Command conversion](./conversion.md)
 
 [Troubleshooting](./troubleshooting.md)

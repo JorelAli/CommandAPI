@@ -1,6 +1,46 @@
 # Arguments
 
-TODO: Write about declaration of functions (linkedhashmap etc.), the naming convention (it doesn't matter, but has to be unique)
+Arguments in the CommandAPI are registered by using a `LinkedHashMap<String, Argument>` object. There are two things you need to keep in mind when creating arguments:
+
+* The order which they will be used
+* The type of each argument
+
+By definition of a LinkedHashMap, the order of the elements inserted into it are preserved, meaning the order you add arguments to the LinkedHashMap will be the resulting order of which arguments are presented to the user when they run that command.
+
+Adding arguments for registration is simple:
+
+```java
+//Create LinkedHashMap
+LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+
+//Add an argument called "target", which is a PlayerArgument
+arguments.put("target", new PlayerArgument());
+```
+
+The String value isn't _too_ important - it's sole purpose is to make it easier for you to read and understand.
+
+> **Developer's Note:** 
+>
+> Not really - I explain the purpose for the String value in Section 3 - Command registration
+
+## Argument Casting
+
+To access arguments, they have to be casted to the type that the argument represents. The order of the arguments in the `args[]` is the same as the order in which the arguments were declared.
+
+```java
+LinkedHashMap<String, ArgumentType> arguments = new LinkedHashMap<>();
+arguments.put("arg0", new StringArgument());
+arguments.put("arg1", new PotionEffectArgument());
+arguments.put("arg2", new LocationArgument());
+
+CommandAPI.getInstance().register("cmd", arguments, (sender, args) -> {
+	String stringArg = (String) args[0];
+	PotionEffectType potionArg = (PotionEffectType) args[1];
+	Location locationArg = (Location) args[2];
+});
+```
+
+The types of the arguments declared by the CommandAPI are all listed below:
 
 ## List of arguments
 
@@ -30,22 +70,6 @@ Arguments are found in the `io.github.jorelali.commandapi.api.arguments` package
 |    `SuggestedStringArgument`     |                           `String`                           |          A list of suggested one word strings          |
 |          `TextArgument`          |                           `String`                           |      String which can have spaces (used for text)      |
 
-## Argument Casting
-
-To access arguments, they are casted in the order of declaration.
-
-```java
-LinkedHashMap<String, ArgumentType> arguments = new LinkedHashMap<>();
-arguments.put("arg0", new StringArgument());
-arguments.put("arg1", new PotionEffectArgument());
-arguments.put("arg2", new LocationArgument());
-
-CommandAPI.getInstance().register("cmd", arguments, (sender, args) -> {
-	String stringArg = (String) args[0];
-	PotionEffectType potionArg = (PotionEffectType) args[1];
-	Location locationArg = (Location) args[2];
-});
-```
 ## Arguments with overrideable suggestions
 
 Some arguments have a feature allowing you to override the list of suggestions they provide. This is achieved by using `.overrideSuggestions(String[])` on an instance of an argument, with the String array consisting of suggestions that will be shown to the user whilst they type their command. It's been designed such that this returns the same argument so it can be used inline (handy, eh?)
