@@ -9,17 +9,18 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-        <base href="">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
 
-        <link rel="stylesheet" href="book.css">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
-        <link rel="shortcut icon" href="favicon.png">
-
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-
+        <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
@@ -28,9 +29,11 @@
         
 
         
-
     </head>
     <body class="light">
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">var path_to_root = "";</script>
+
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script type="text/javascript">
             try {
@@ -133,10 +136,10 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="installation.html#installation" id="installation"><h1>Installation</h1></a>
+                        <a class="header" href="#installation" id="installation"><h1>Installation</h1></a>
 <p>Installing the CommandAPI is easy! Just download the CommandAPI.jar file and place it in your server's <code>plugins/</code> folder!</p>
 <p><br></p>
-<p><a href="https://github.com/JorelAli/1.13-Command-API/releases/download/v1.8.2/CommandAPI.jar" style="
+<p><a href="https://github.com/JorelAli/1.13-Command-API/releases/download/v2.0/CommandAPI.jar" style="
 background-color:#EB7035;
 border-radius:3px;
 color:#ffffff;
@@ -146,7 +149,7 @@ text-align:center;
 width:50%;
 margin-left:auto;
 margin-right: auto;">Download latest CommandAPI.jar</a></p>
-<a class="header" href="installation.html#configuring-the-commandapi" id="configuring-the-commandapi"><h2>Configuring the CommandAPI</h2></a>
+<a class="header" href="#configuring-the-commandapi" id="configuring-the-commandapi"><h2>Configuring the CommandAPI</h2></a>
 <p>The CommandAPI can be configured in the <code>plugins/CommandAPI/config.yml</code> file.</p>
 <p>The default <code>config.yml</code> settings are as follows:</p>
 <pre><code class="language-yaml">verbose-outputs: true
@@ -195,29 +198,11 @@ create-dispatcher-json: true
         </div>
 
         
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3001");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload(true); // force reload from server (not from cache)
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
-        
 
         
 
         
 
-        
-        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
-        
         
         <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>

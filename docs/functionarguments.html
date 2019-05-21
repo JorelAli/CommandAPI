@@ -9,17 +9,18 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-        <base href="">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
 
-        <link rel="stylesheet" href="book.css">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
-        <link rel="shortcut icon" href="favicon.png">
-
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-
+        <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
@@ -28,9 +29,11 @@
         
 
         
-
     </head>
     <body class="light">
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">var path_to_root = "";</script>
+
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script type="text/javascript">
             try {
@@ -133,10 +136,10 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="functionarguments.html#function-arguments" id="function-arguments"><h1>Function arguments</h1></a>
+                        <a class="header" href="#function-arguments" id="function-arguments"><h1>Function arguments</h1></a>
 <p>The <code>FunctionArgument</code> class is used to represent a function or a tag in Minecraft. When retrieving an instance of the argument, it will return a <code>FunctionWrapper[]</code>, where each <code>FunctionWrapper</code> consists of a Minecraft function.</p>
 <p>Therefore, if a user supplies a single function, the <code>FunctionWrapper[]</code> will be of size 1, and if the user supplies a tag which can consist of multiple functions, the <code>FunctionWrapper[]</code> will consist of the array of functions as declared by that tag.</p>
-<a class="header" href="functionarguments.html#example---minecrafts-function-command" id="example---minecrafts-function-command"><h2>Example - Minecraft's /function command</h2></a>
+<a class="header" href="#example---minecrafts-function-command" id="example---minecrafts-function-command"><h2>Example - Minecraft's /function command</h2></a>
 <p>Here, we implement Minecraft's <code>/function</code> command which is used to execute a function.</p>
 <pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 arguments.put(&quot;function&quot;, new FunctionArgument());
@@ -190,29 +193,11 @@ CommandAPI.getInstance().register(&quot;runfunction&quot;, arguments, (sender, a
         </div>
 
         
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3001");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload(true); // force reload from server (not from cache)
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
-        
 
         
 
         
 
-        
-        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
-        
         
         <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
