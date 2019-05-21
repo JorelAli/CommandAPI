@@ -14,7 +14,7 @@
 * ~~command registration & unregistration~~
 * ~~maybe some sort of summary for "important things to note"~~
 * ALIASES!!!
-* dynsyg_arg - write more documentation - it seems a little sparse at the moment
+* ~~dynsyg_arg - write more documentation - it seems a little sparse at the moment~~
 * Something something pictures/gifs of usage??
 * ~~If you wanna report bugs or issues or enhancements, send them over to the github page~~
 

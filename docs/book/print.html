@@ -771,7 +771,9 @@ new DynamicSuggestedStringArgument(() -&gt; return new String[]);
 //Constructor requires a function which returns a String[] and receives a sender input
 new DynamicSuggestedStringArgument((sender) -&gt; return new String[]);
 </code></pre>
+<p>The first one simply lets you return a list of strings as suggestions. Whenever a player begins typing a command, a packet is sent to the server and it will return the list of suggestions <em>(similar to tab completion)</em>. The second constructor allows you to also use the command sender as an input <em>(of type <code>CommandSender</code>)</em>, which can be used for more intricate suggestions.</p>
 <a class="header" href="print.html#example---friend-command-with-dynamic-suggestions" id="example---friend-command-with-dynamic-suggestions"><h2>Example - Friend command with dynamic suggestions</h2></a>
+<p>Say we want a plugin which is a friend system. The friend system allows you to add friends and when you've made a friend, you can message them.</p>
 <pre><code>/friend &lt;player&gt;       - Adds a player as a friend
 /msgf   &lt;player&gt; &lt;msg&gt; - Message a friend
 </code></pre>
@@ -811,9 +813,16 @@ arguments.put(&quot;friend&quot;, new DynamicSuggestedStringArgument((sender) -&
 arguments.put(&quot;message&quot;, new GreedyStringArgument());
 
 CommandAPI.getInstance().register(&quot;msgf&quot;, arguments, (sender, args) -&gt; {
-    Bukkit.getPlayer((String) args[0]).sendMessage((String) args[1]);
+    //Parse the target player from the String, failing if it can't find that player
+    Player target = Bukkit.getPlayer((String) args[0]);
+    if(target == null) {
+        CommandAPI.fail(&quot;Couldn't find that player!&quot;);
+    } else {
+        target.sendMessage((String) args[1]);
+    }
 });
 </code></pre>
+<p>A thing to note from the code above: The DynamicSuggestedStringArgument is a <em>String</em> argument, meaning that the resulting type is a <em>String</em>. Despite the fact that we want a player object, the CommandAPI only lets you make dynamic suggestions for Strings. Therefore, it <em>could</em> fail in this situation (if the target player isn't found), and we have to handle that case on our own. If we had used a <code>PlayerArgument</code>, that argument would automatically fail due to the implementation of the player argument.</p>
 <a class="header" href="print.html#custom-arguments" id="custom-arguments"><h1>Custom arguments</h1></a>
 <p>Custom arguments are arguably the most powerful argument that the CommandAPI offers. This argument is used to represent any String, or Minecraft key <em>(Something of the form <code>String:String</code>, such as <code>minecraft:diamond</code>)</em></p>
 <p>In order to specify which type of custom argument is being used, the additional flag <code>keyed</code> can be added by, instead of using the default constructor which requires a lambda, you use the alternate constructor which requires a lambda, followed by <code>true</code>, which represents a Minecraft key input.</p>
