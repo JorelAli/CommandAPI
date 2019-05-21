@@ -30,8 +30,6 @@ Officially, the CommandAPI does _not_ really support PaperSpigot. As PaperSpigot
 > * [Their JavaDocs](https://papermc.io/javadocs/paper/1.13/overview-summary.html) are very... lacking of documentation
 > * I personally think it's harder to keep track of new changes between Minecraft upgrades for PaperSpigot compared to Spigot's BuildTools
 
-
-
 ## Command conversion throws a `NullPointerException`
 
 This is likely caused by the fact that the plugin you want to convert hasn't been loaded yet. Ensure that it loads before your plugin by adding the following to the target plugin's `plugin.yml` file:
@@ -39,3 +37,7 @@ This is likely caused by the fact that the plugin you want to convert hasn't bee
 ```yaml
 loadbefore: [YourPlugin, CommandAPI]
 ```
+
+## My issue isn't on here, what do I do?!
+
+If you've found a bug that isn't solvable here, submit a bug report on [the CommandAPI's issues page](https://github.com/JorelAli/1.13-Command-API/issues/new/choose) and I'll try my best to resolve the issue!
