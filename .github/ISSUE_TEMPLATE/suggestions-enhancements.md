@@ -1,6 +1,9 @@
 ---
 name: Suggestions/Enhancements
 about: Suggest a new feature or enhancement for the CommandAPI
+title: ''
+labels: enhancement
+assignees: ''
 
 ---
 
