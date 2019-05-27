@@ -2,7 +2,7 @@ package io.github.jorelali.commandapi.api;
 
 import org.bukkit.command.CommandSender;
 
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import io.github.jorelali.commandapi.api.exceptions.WrapperCommandSyntaxException;
 
 @FunctionalInterface
 public interface ResultingCommandExecutor {
@@ -17,6 +17,6 @@ public interface ResultingCommandExecutor {
 	 *            determined by the hashmap of arguments IN THE ORDER of
 	 *            insertion into the hashmap
 	 */
-	int run(CommandSender sender, Object[] args) throws CommandSyntaxException;
+	int run(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException;
 
 }

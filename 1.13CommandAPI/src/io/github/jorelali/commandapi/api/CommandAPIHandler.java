@@ -50,6 +50,7 @@ import io.github.jorelali.commandapi.api.arguments.LocationArgument.LocationType
 import io.github.jorelali.commandapi.api.arguments.OverrideableSuggestions;
 import io.github.jorelali.commandapi.api.arguments.StringArgument;
 import io.github.jorelali.commandapi.api.arguments.SuggestedStringArgument;
+import io.github.jorelali.commandapi.api.exceptions.WrapperCommandSyntaxException;
 import io.github.jorelali.commandapi.api.nms.NMS;
 import io.github.jorelali.commandapi.api.nms.NMS_1_13_R2;
 import io.github.jorelali.commandapi.api.nms.NMS_1_14_R1;
@@ -277,8 +278,8 @@ public final class CommandAPIHandler {
 				//Run resulting executor
 				try {
 					return executor.getResultingEx().run(sender, argList.toArray(new Object[argList.size()]));
-				} catch (CommandSyntaxException e) {
-					throw e;
+				} catch (WrapperCommandSyntaxException e) {
+					throw e.getException();
 				} catch (Exception e) {
 					e.printStackTrace(System.out);
 					return 0;
@@ -288,8 +289,8 @@ public final class CommandAPIHandler {
 				try {
 					executor.getEx().run(sender, argList.toArray(new Object[argList.size()]));
 					return 1;
-				} catch (CommandSyntaxException e) {
-					throw e;
+				} catch (WrapperCommandSyntaxException e) {
+					throw e.getException();
 				} catch (Exception e) {
 					e.printStackTrace(System.out);
 					return 0;

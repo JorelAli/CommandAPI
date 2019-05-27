@@ -10,6 +10,7 @@ import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.GreedyStringArgument;
 import io.github.jorelali.commandapi.api.exceptions.GreedyStringException;
 import io.github.jorelali.commandapi.api.exceptions.InvalidCommandNameException;
+import io.github.jorelali.commandapi.api.exceptions.WrapperCommandSyntaxException;
 
 /**
  * Class to register commands with the 1.13 command UI
@@ -28,8 +29,8 @@ public class CommandAPI {
 	 * @param message Description of the error message
 	 * @throws CommandSyntaxException
 	 */
-	public static void fail(String message) throws CommandSyntaxException {
-		throw new SimpleCommandExceptionType(new LiteralMessage(message)).create();
+	public static void fail(String message) throws WrapperCommandSyntaxException {
+		throw new WrapperCommandSyntaxException(new SimpleCommandExceptionType(new LiteralMessage(message)).create());
 	}
 	
 	/**
