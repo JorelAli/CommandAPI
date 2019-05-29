@@ -1,3 +1,4 @@
+#!/bin/sh
 echo "Enter the version (For example, 1.7): "
 read version
 perl -p -i -e "s|<version>dev</version>|<version>$version</version>|g" ./pom.xml
