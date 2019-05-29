@@ -9,18 +9,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <base href="">
 
-        <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="book.css">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
-        <!-- Highlight.js Stylesheets -->
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
@@ -29,11 +28,9 @@
         
 
         
+
     </head>
     <body class="light">
-        <!-- Provide site root to javascript -->
-        <script type="text/javascript">var path_to_root = "";</script>
-
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script type="text/javascript">
             try {
@@ -136,7 +133,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="#arguments" id="arguments"><h1>Arguments</h1></a>
+                        <a class="header" href="arguments.html#arguments" id="arguments"><h1>Arguments</h1></a>
 <p>Arguments in the CommandAPI are registered by using a <code>LinkedHashMap&lt;String, Argument&gt;</code> object. There are two things you need to keep in mind when creating arguments:</p>
 <ul>
 <li>The order which they will be used</li>
@@ -155,7 +152,7 @@ arguments.put(&quot;target&quot;, new PlayerArgument());
 <p><strong>Developer's Note:</strong></p>
 <p>Not really - I explain the purpose for the String value in Section 3 - Command registration</p>
 </blockquote>
-<a class="header" href="#argument-casting" id="argument-casting"><h2>Argument Casting</h2></a>
+<a class="header" href="arguments.html#argument-casting" id="argument-casting"><h2>Argument Casting</h2></a>
 <p>To access arguments, they have to be casted to the type that the argument represents. The order of the arguments in the <code>args[]</code> is the same as the order in which the arguments were declared.</p>
 <pre><code class="language-java">LinkedHashMap&lt;String, ArgumentType&gt; arguments = new LinkedHashMap&lt;&gt;();
 arguments.put(&quot;arg0&quot;, new StringArgument());
@@ -169,7 +166,7 @@ CommandAPI.getInstance().register(&quot;cmd&quot;, arguments, (sender, args) -&g
 });
 </code></pre>
 <p>The types of the arguments declared by the CommandAPI are all listed below:</p>
-<a class="header" href="#list-of-arguments" id="list-of-arguments"><h2>List of arguments</h2></a>
+<a class="header" href="arguments.html#list-of-arguments" id="list-of-arguments"><h2>List of arguments</h2></a>
 <p>Arguments are found in the <code>io.github.jorelali.commandapi.api.arguments</code> package.</p>
 <table><thead><tr><th align="center">          Argument class          </th><th align="center">                          Data type                           </th><th align="center">                      Description                       </th></tr></thead><tbody>
 <tr><td align="center">        <code>BooleanArgument</code>         </td><td align="center">                          <code>boolean</code>                           </td><td align="center">                                                        </td></tr>
@@ -194,9 +191,9 @@ CommandAPI.getInstance().register(&quot;cmd&quot;, arguments, (sender, args) -&g
 <tr><td align="center">    <code>SuggestedStringArgument</code>     </td><td align="center">                           <code>String</code>                           </td><td align="center">          A list of suggested one word strings          </td></tr>
 <tr><td align="center">          <code>TextArgument</code>          </td><td align="center">                           <code>String</code>                           </td><td align="center">      String which can have spaces (used for text)      </td></tr>
 </tbody></table>
-<a class="header" href="#arguments-with-overrideable-suggestions" id="arguments-with-overrideable-suggestions"><h2>Arguments with overrideable suggestions</h2></a>
+<a class="header" href="arguments.html#arguments-with-overrideable-suggestions" id="arguments-with-overrideable-suggestions"><h2>Arguments with overrideable suggestions</h2></a>
 <p>Some arguments have a feature allowing you to override the list of suggestions they provide. This is achieved by using <code>.overrideSuggestions(String[])</code> on an instance of an argument, with the String array consisting of suggestions that will be shown to the user whilst they type their command. It's been designed such that this returns the same argument so it can be used inline (handy, eh?)</p>
-<a class="header" href="#example---friend-list-by-overriding-suggestions" id="example---friend-list-by-overriding-suggestions"><h3>Example - Friend list by overriding suggestions</h3></a>
+<a class="header" href="arguments.html#example---friend-list-by-overriding-suggestions" id="example---friend-list-by-overriding-suggestions"><h3>Example - Friend list by overriding suggestions</h3></a>
 <p>Say you have a plugin which has a &quot;friend list&quot; for players. If you want to teleport to a friend in that list, you could use a <code>PlayerArgument</code>, which has the list of suggestions overridden with the list of friends that that player has.</p>
 <pre><code class="language-java">String[] friends = //Some String array populated with friends
 
@@ -253,6 +250,9 @@ CommandAPI.getInstance().register(&quot;friendtp&quot;, arguments, (sender, args
 
         
 
+        
+        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
+        
         
         <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
