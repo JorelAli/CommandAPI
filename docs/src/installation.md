@@ -4,7 +4,7 @@ Installing the CommandAPI is easy! Just download the CommandAPI.jar file and pla
 
 <br>
 
-<a href="https://github.com/JorelAli/1.13-Command-API/releases/download/v2.0.1/CommandAPI.jar" style="
+<a href="https://github.com/JorelAli/1.13-Command-API/releases/latest/download/CommandAPI.jar" style="
 background-color:#EB7035;
 border-radius:3px;
 color:#ffffff;

@@ -36,3 +36,29 @@ To use the CommandAPI in your plugins, there are two methods of adding it to you
   For example, if you wanted to use version 2.0, you would use `<version>2.0</version>`
 
 * Add the plugin as a dependent in the plugin.yml (`depend: [CommandAPI]`)
+
+## Using Gradle
+
+* Add the repository to your `build.gradle` file:
+
+  ```
+  repositories {
+      maven {
+          name = 'mccommandapi'
+          url = 'https://raw.githubusercontent.com/JorelAli/1.13-Command-API/mvn-repo/1.13CommandAPI/'
+      }
+  }
+  ```
+
+* Add the dependency to your list of dependencies in your `build.gradle` file:
+
+  ```
+  dependencies {
+      compile "io.github.jorelali:commandapi:VERSION"
+  }
+  ```
+
+  A list of version numbers can be found [here](https://github.com/JorelAli/1.13-Command-API/tree/mvn-repo/1.13CommandAPI/io/github/jorelali/commandapi).
+  For example, if you wanted to use version 2.0, you would use `compile "io.github.jorelali:commandapi:2.0"`
+
+* Add the plugin as a dependent in the plugin.yml (`depend: [CommandAPI]`)

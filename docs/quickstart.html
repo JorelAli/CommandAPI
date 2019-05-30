@@ -170,6 +170,31 @@ For example, if you wanted to use version 2.0, you would use <code>&lt;version&g
 <p>Add the plugin as a dependent in the plugin.yml (<code>depend: [CommandAPI]</code>)</p>
 </li>
 </ul>
+<a class="header" href="quickstart.html#using-gradle" id="using-gradle"><h2>Using Gradle</h2></a>
+<ul>
+<li>
+<p>Add the repository to your <code>build.gradle</code> file:</p>
+<pre><code>repositories {
+    maven {
+        name = 'mccommandapi'
+        url = 'https://raw.githubusercontent.com/JorelAli/1.13-Command-API/mvn-repo/1.13CommandAPI/'
+    }
+}
+</code></pre>
+</li>
+<li>
+<p>Add the dependency to your list of dependencies in your <code>build.gradle</code> file:</p>
+<pre><code>dependencies {
+    compile &quot;io.github.jorelali:commandapi:VERSION&quot;
+}
+</code></pre>
+<p>A list of version numbers can be found <a href="https://github.com/JorelAli/1.13-Command-API/tree/mvn-repo/1.13CommandAPI/io/github/jorelali/commandapi">here</a>.
+For example, if you wanted to use version 2.0, you would use <code>compile &quot;io.github.jorelali:commandapi:2.0&quot;</code></p>
+</li>
+<li>
+<p>Add the plugin as a dependent in the plugin.yml (<code>depend: [CommandAPI]</code>)</p>
+</li>
+</ul>
 
                     </main>
 
