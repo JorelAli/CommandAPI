@@ -2,7 +2,7 @@
 name: Documentation amendment
 about: 'Report documentation errata '
 title: "[Documentation Error]"
-labels: ''
+labels: documentation
 assignees: ''
 
 ---
