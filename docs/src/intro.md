@@ -32,5 +32,5 @@ Whenever a new version comes out, ensure you keep up to date on the latest chang
 
 - **1.8 → 2.0**
   - **[Click here](./arguments.html#arguments-with-overrideable-suggestions)** - Deprecated `SuggestedStringArgument`, use `.overrideSuggestions()` instead
-  - **[Click here](./customarguments.md)** - Adds a new argument, the `CustomArgument` 
-  - **[Click here](./dynsugargs.md)** - The `DynamicSuggestedArgument` now has access to the `CommandSender` object
+  - **[Click here](./customarguments.html)** - Adds a new argument, the `CustomArgument` 
+  - **[Click here](./dynsugargs.html)** - The `DynamicSuggestedArgument` now has access to the `CommandSender` object
