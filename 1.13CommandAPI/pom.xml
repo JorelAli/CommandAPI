@@ -56,7 +56,7 @@
 			<artifactId>spigot-server-1.13.2</artifactId>
 			<version>1.13.2</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/spigotlibs/spigot-1.13.2-R0.1-SNAPSHOT.jar</systemPath>
+			<systemPath>${basedir}/spigotlibs/spigot-1.13.2.jar</systemPath>
 			<type>jar</type>
   			<optional>true</optional>
 		</dependency>
@@ -65,7 +65,7 @@
 			<artifactId>spigot-server-1.14</artifactId>
 			<version>1.14</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/spigotlibs/spigot-1.14-R0.1-SNAPSHOT.jar</systemPath>
+			<systemPath>${basedir}/spigotlibs/spigot-1.14.jar</systemPath>
 			<type>jar</type>
   			<optional>true</optional>
 		</dependency>
@@ -74,7 +74,7 @@
 			<artifactId>spigot-server-1.14.1</artifactId>
 			<version>1.14.1</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/spigotlibs/spigot-1.14.1-R0.1-SNAPSHOT.jar</systemPath>
+			<systemPath>${basedir}/spigotlibs/spigot-1.14.1.jar</systemPath>
 			<type>jar</type>
   			<optional>true</optional>
 		</dependency>
