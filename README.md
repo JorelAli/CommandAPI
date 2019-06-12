@@ -30,6 +30,42 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 | 1.1     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.1/CommandAPI.jar) | [Version 1.1 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.1%20Documentation.md) |
 | 1.0     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.0/CommandAPI.jar) | [Version 1.0 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.0%20Documentation.md) |
 
+## Building the CommandAPI
+
+### Building the CommandAPI
+
+* Clone the repository using the command below or your preferred method
+
+  ```
+  git clone https://github.com/JorelAli/1.13-Command-API.git
+  ```
+
+* Go into the `1.13CommandAPI` folder
+
+* Ensure you have the required spigot libraries (see below)
+
+* Run `mvn clean install`
+
+### Spigot Libraries
+
+To build the CommandAPI, a copy of the required Spigot.jar libraries are required for the following versions of Minecraft:
+
+* 1.13.2
+* 1.14
+* 1.14.2
+
+To download these easily:
+
+* Download the `BuildTools.jar` file from [here](https://hub.spigotmc.org/jenkins/job/BuildTools/) and place it in a separate directory
+
+* Copy the `downloadSpigot.sh` file from this repository into the same directory as the `BuildTools.jar` file
+
+* Run the `downloadSpigot.sh` file using `./downloadSpigot.sh` 
+
+  > If you are using Windows, it might not be able to run this command. Using Git Bash (assuming you have `git` installed) allows you to run this file
+
+* Copy the `spigotlibs/` folder into the same directory as the `pom.xml` file (This should be inside the `1.13CommandAPI` folder)
+
 ## Changelog
 
 * Version 2.0
