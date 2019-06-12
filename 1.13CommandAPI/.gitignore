@@ -4,4 +4,4 @@ libs
 .project
 .settings
 target
-spigotlibs
+spigotlibs/*
