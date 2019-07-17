@@ -9,17 +9,18 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-        <base href="">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
 
-        <link rel="stylesheet" href="book.css">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
-        <link rel="shortcut icon" href="favicon.png">
-
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-
+        <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
@@ -28,9 +29,11 @@
         
 
         
-
     </head>
     <body class="light">
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">var path_to_root = "";</script>
+
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script type="text/javascript">
             try {
@@ -133,7 +136,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="literalarguments.html#literal-arguments" id="literal-arguments"><h1>Literal arguments</h1></a>
+                        <a class="header" href="#literal-arguments" id="literal-arguments"><h1>Literal arguments</h1></a>
 <p>Literal arguments are used to represent &quot;forced options&quot; for a command. For instance, take Minecraft's <code>/gamemode</code> command. The syntax consists of the following:</p>
 <pre><code>/gamemode &lt;mode&gt; [player]
 </code></pre>
@@ -144,9 +147,9 @@
 /gamemode spectator
 </code></pre>
 <p>Unlike regular commands (as those implemented by Bukkit for example), these four options are &quot;hardcoded&quot; - they're not &quot;suggestions&quot;. The user can <em>only</em> enter one of these four examples, no other values are allowed.</p>
-<a class="header" href="literalarguments.html#literal-arguments-vs-regular-arguments" id="literal-arguments-vs-regular-arguments"><h2>Literal arguments vs regular arguments</h2></a>
+<a class="header" href="#literal-arguments-vs-regular-arguments" id="literal-arguments-vs-regular-arguments"><h2>Literal arguments vs regular arguments</h2></a>
 <p>Unlike regular arguments that are shown in this chapter, the literal argument is <em>technically</em> not an argument. Due to this fact, the literal argument is <strong>not</strong> present in the <code>args[]</code> for the command declaration.</p>
-<a class="header" href="literalarguments.html#example---literal-arguments-and-regular-arguments" id="example---literal-arguments-and-regular-arguments"><h3>Example - Literal arguments and regular arguments</h3></a>
+<a class="header" href="#example---literal-arguments-and-regular-arguments" id="example---literal-arguments-and-regular-arguments"><h3>Example - Literal arguments and regular arguments</h3></a>
 <pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 arguments.put(&quot;literal&quot;, new LiteralArgument(&quot;hello&quot;));
 arguments.put(&quot;text&quot;, new TextArgument());
@@ -158,7 +161,7 @@ CommandAPI.getInstance().register(&quot;mycommand&quot;, arguments, (sender, arg
 });
 </code></pre>
 <p>As you can see from this example, when you retrieve <code>args[0]</code>, it returns the value of the <code>TextArgument</code> instead of the <code>LiteralArgument</code></p>
-<a class="header" href="literalarguments.html#example---gamemode-command-using-literal-arguments" id="example---gamemode-command-using-literal-arguments"><h2>Example - Gamemode command using literal arguments</h2></a>
+<a class="header" href="#example---gamemode-command-using-literal-arguments" id="example---gamemode-command-using-literal-arguments"><h2>Example - Gamemode command using literal arguments</h2></a>
 <p>This is a demonstration of how you could create a command similar to Minecraft's <code>/gamemode</code> command by using literal arguments. To do this, we are effectively registering 4 separate commands, each called <code>/gamemode</code>, but with different literal arguments.</p>
 <pre><code class="language-java">//Create a map of gamemode names to their respective objects
 HashMap&lt;String, GameMode&gt; gamemodes = new HashMap&lt;&gt;();
@@ -185,7 +188,7 @@ for(String key : gamemodes.keySet()) {
     });
 }
 </code></pre>
-<a class="header" href="literalarguments.html#literal-argument-warnings" id="literal-argument-warnings"><h2>Literal argument warnings</h2></a>
+<a class="header" href="#literal-argument-warnings" id="literal-argument-warnings"><h2>Literal argument warnings</h2></a>
 <p>Literal arguments require a string in the constructor. If the literal is an empty String or is null, the CommandAPI will throw a <code>BadLiteralException</code>.</p>
 <p>Because literal arguments are <em>&quot;hardcoded&quot;</em>, each literal is effectively mapped to a single command. This is shown when using the configuration option <code>create-dispatcher-json: true</code> which shows the JSON result of registered commands. For instance, take the <code>/defaultgamemode</code> command:</p>
 <pre><code class="language-json">&quot;defaultgamemode&quot;: {
@@ -259,9 +262,6 @@ for(String key : gamemodes.keySet()) {
 
         
 
-        
-        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
-        
         
         <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>

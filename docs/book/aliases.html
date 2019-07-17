@@ -9,17 +9,18 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-        <base href="">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
 
-        <link rel="stylesheet" href="book.css">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
-        <link rel="shortcut icon" href="favicon.png">
-
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-
+        <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
@@ -28,9 +29,11 @@
         
 
         
-
     </head>
     <body class="light">
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">var path_to_root = "";</script>
+
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script type="text/javascript">
             try {
@@ -133,13 +136,13 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="aliases.html#aliases" id="aliases"><h1>Aliases</h1></a>
+                        <a class="header" href="#aliases" id="aliases"><h1>Aliases</h1></a>
 <p>Aliases let you create aliases for commands. They are simply added at command regisration time by using either of the following methods:</p>
 <pre><code class="language-java">CommandAPI.getInstance().register(String, String[], LinkedHashMap, CommandExecutor);
 CommandAPI.getInstance().register(String, CommandPermission, String[], LinkedHashMap, CommandExecutor);
 </code></pre>
 <p>The <code>String[]</code> represents a list of aliases which can be used to execute a command.</p>
-<a class="header" href="aliases.html#example---using-aliases-for-gamemode" id="example---using-aliases-for-gamemode"><h2>Example - Using aliases for /gamemode</h2></a>
+<a class="header" href="#example---using-aliases-for-gamemode" id="example---using-aliases-for-gamemode"><h2>Example - Using aliases for /gamemode</h2></a>
 <pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 //populate arguments here
 
@@ -147,7 +150,7 @@ CommandAPI.getInstance().register(&quot;gamemode&quot;, new String[] {&quot;gm&q
     //Handle gamemode command here
 });
 </code></pre>
-<a class="header" href="aliases.html#the-alias-bug" id="the-alias-bug"><h2>The alias bug</h2></a>
+<a class="header" href="#the-alias-bug" id="the-alias-bug"><h2>The alias bug</h2></a>
 <p>As of time of writing this documentation (v2.0), there is a bug with aliases, where aliases with no arguments causes an error. You can read more about the bug <a href="https://github.com/JorelAli/1.13-Command-API/issues/43">here</a>.</p>
 
                     </main>
@@ -193,9 +196,6 @@ CommandAPI.getInstance().register(&quot;gamemode&quot;, new String[] {&quot;gm&q
 
         
 
-        
-        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
-        
         
         <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>

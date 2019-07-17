@@ -9,17 +9,18 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-        <base href="">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
 
-        <link rel="stylesheet" href="book.css">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
-        <link rel="shortcut icon" href="favicon.png">
-
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-
+        <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
@@ -28,9 +29,11 @@
         
 
         
-
     </head>
     <body class="light">
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">var path_to_root = "";</script>
+
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script type="text/javascript">
             try {
@@ -133,7 +136,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="commandregistration.html#command-registration" id="command-registration"><h1>Command registration</h1></a>
+                        <a class="header" href="#command-registration" id="command-registration"><h1>Command registration</h1></a>
 <p>To register commands with the CommandAPI, there are several methods which can be used, depending on whether you want your command to have aliases or permissions in order to run it.</p>
 <table><thead><tr><th> CommandRegistration method                                   </th><th> Outcome                                                   </th></tr></thead><tbody>
 <tr><td> <code>CommandAPI.getInstance().register(String, LinkedHashMap, CommandExecutor)</code> </td><td> Basic command registration                                </td></tr>
@@ -164,19 +167,19 @@
 <p><code>CommandPermission</code> - The required permission to execute a command. (See the section on permissions).</p>
 </li>
 </ul>
-<a class="header" href="commandregistration.html#command-loading-order" id="command-loading-order"><h2>Command loading order</h2></a>
+<a class="header" href="#command-loading-order" id="command-loading-order"><h2>Command loading order</h2></a>
 <p>In order to register commands properly, <strong>commands must be registered before the server finishes loading</strong>. The CommandAPI will prevent command registration after the server has loaded. This basically means that all command registration must occur during a plugin's <code>onLoad()</code> or <code>onEnable()</code> method. With the CommandAPI, depending on which of these functions you load your commands is crutial if your plugin is used with Minecraft's functions.</p>
 <table><thead><tr><th> When to load        </th><th> What to do                                                                               </th></tr></thead><tbody>
 <tr><td> <code>onLoad()</code> method   </td><td> Register commands to be used in Minecraft functions (see Function section for more info) </td></tr>
 <tr><td> <code>onEnable()</code> method </td><td> Register regular commands                                                                </td></tr>
 </tbody></table>
-<a class="header" href="commandregistration.html#command-unregistration" id="command-unregistration"><h2>Command unregistration</h2></a>
+<a class="header" href="#command-unregistration" id="command-unregistration"><h2>Command unregistration</h2></a>
 <p>The CommandAPI has support to unregister commands completely from Minecraft's command list. This includes Minecraft built in commands!</p>
 <table><thead><tr><th> Method                                                       </th><th> Result                                                       </th></tr></thead><tbody>
 <tr><td> <code>CommandAPI.getInstance().unregister(String cmd)</code>            </td><td> Unregisters a command from the game                          </td></tr>
 <tr><td> <code>CommandAPI.getInstance().unregister(String cmd, boolean force)</code> </td><td> Attempts to unregister a command from the game by force. This includes <code>/minecraft:cmd</code>, <code>/bukkit:cmd</code> and <code>/spigot:cmd</code> commands as well. </td></tr>
 </tbody></table>
-<a class="header" href="commandregistration.html#example---replacing-minecrafts-gamemode-command" id="example---replacing-minecrafts-gamemode-command"><h3>Example - Replacing Minecraft's <code>/gamemode</code> command</h3></a>
+<a class="header" href="#example---replacing-minecrafts-gamemode-command" id="example---replacing-minecrafts-gamemode-command"><h3>Example - Replacing Minecraft's <code>/gamemode</code> command</h3></a>
 <p>To replace a command, we can first unregister it and then register our implementation of that command.</p>
 <pre><code class="language-java">//Unregister the gamemode command from the server (by force)
 CommandAPI.getInstance().unregister(&quot;gamemode&quot;, true);
@@ -240,9 +243,6 @@ CommandAPI.getInstance().register(&quot;gamemode&quot;, arguments, (sender, args
 
         
 
-        
-        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
-        
         
         <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
