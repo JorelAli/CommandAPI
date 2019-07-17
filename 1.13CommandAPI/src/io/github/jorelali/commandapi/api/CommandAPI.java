@@ -1,6 +1,7 @@
 package io.github.jorelali.commandapi.api;
 
 import java.util.LinkedHashMap;
+import java.util.function.Supplier;
 
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -27,10 +28,19 @@ public class CommandAPI {
 	/**
 	 * Forces a command to return a success value of 0
 	 * @param message Description of the error message
-	 * @throws CommandSyntaxException
+	 * @throws WrapperCommandSyntaxException
 	 */
 	public static void fail(String message) throws WrapperCommandSyntaxException {
 		throw new WrapperCommandSyntaxException(new SimpleCommandExceptionType(new LiteralMessage(message)).create());
+	}
+	
+	/**
+	 * Forces a command to return a success value of 0
+	 * @param message Description of the error message, as a String supplier
+	 * @throws WrapperCommandSyntaxException
+	 */
+	public static void fail(Supplier<String> message) throws WrapperCommandSyntaxException {
+		throw new WrapperCommandSyntaxException(new SimpleCommandExceptionType(new LiteralMessage(message.get())).create());
 	}
 	
 	/**
