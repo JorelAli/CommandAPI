@@ -52,7 +52,7 @@ To build the CommandAPI, a copy of the required Spigot.jar libraries are require
 
 * 1.13.2
 * 1.14
-* 1.14.2
+* 1.14.1
 
 To download these easily:
 
