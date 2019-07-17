@@ -37,6 +37,7 @@ import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import io.github.jorelali.commandapi.api.arguments.Argument;
+import io.github.jorelali.commandapi.api.arguments.CommandAPIArgumentType;
 import io.github.jorelali.commandapi.api.arguments.CustomArgument;
 import io.github.jorelali.commandapi.api.arguments.CustomArgument.CustomArgumentException;
 import io.github.jorelali.commandapi.api.arguments.CustomArgument.MessageBuilder;
@@ -434,6 +435,14 @@ public final class CommandAPIHandler {
 		if(args.isEmpty()) {
 			//Link command name to the executor
 	        resultantNode = this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(commandName).requires(permission).executes(command));
+	        
+	        //Register aliases
+		    for(String alias : aliases) {
+		    	if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
+					CommandAPIMain.getLog().info("Registering alias /" + alias + " -> " + resultantNode.getName());
+				}
+		      	this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(alias).requires(permission).executes(command));
+		    }
 
 		} else {
 			
@@ -496,26 +505,17 @@ public final class CommandAPIHandler {
 	        
 	        //Link command name to first argument and register        
 			resultantNode = this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(commandName).requires(permission).then(outer));
+			
+			//Register aliases
+		    for(String alias : aliases) {
+		    	if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
+					CommandAPIMain.getLog().info("Registering alias /" + alias + " -> " + resultantNode.getName());
+				}
+		      	this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(alias).requires(permission).redirect(resultantNode));
+		    }
 
 		}
 
-		//Register aliases
-	    for(String str : aliases) {
-	    	if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
-				CommandAPIMain.getLog().info("Registering alias /" + str + " -> " + resultantNode.getName());
-			}
-	      	this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(str).requires(permission).redirect(resultantNode));
-	    }
-        
-		//Try moving all aliases down here, regardless of whether they have 1 or less arguments
-		//Think about it - tp command redirects to teleport
-		//not tp <args> redirect to teleport <args>
-		//If args are redirected, this could override original redirects anyway.
-		/*
-		for Str str : aliases:
-			register str (redirect to) -> whatever we're about to register right now?
-		*/
-		
 		//Produce the commandDispatch.json file for debug purposes
 		if(CommandAPIMain.getConfiguration().willCreateDispatcherFile()) {
 			File file = CommandAPIMain.getDispatcherFile();

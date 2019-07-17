@@ -1,5 +1,5 @@
 # TODO
 
-## Things to do after releasing
+## Things to do after releasing 2.1
 
-* README documentation on how to build the CommandAPI for yourself
+* Test new alias code for bug #43

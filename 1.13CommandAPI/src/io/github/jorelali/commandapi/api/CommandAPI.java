@@ -71,21 +71,6 @@ public class CommandAPI {
 		}
 
 	}
-
-	/*protected CommandAPI() {
-		if(instance == null) {
-			instance = this;
-		} else {
-			throw new RuntimeException("CommandAPI cannot be instantiated twice"); //Don't need to re-instantiate CommandAPI
-		}
-		
-		//Only ever called once
-		try {
-			CommandAPI.reflector = new CommandAPIHandler();			
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-	}*/
 	
 	/**
 	 * Unregisters a command
