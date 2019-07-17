@@ -196,7 +196,7 @@ public final class CommandAPIHandler {
 	
 	
 	//Used in the register() method to generate the command to actually be registered
-	private Command generateCommand(String commandName, LinkedHashMap<String, Argument> args, CustomCommandExecutor executor) throws CommandSyntaxException {
+	private Command generateCommand(LinkedHashMap<String, Argument> args, CustomCommandExecutor executor) throws CommandSyntaxException {
 		
 		//Generate our command from executor
 		return (cmdCtx) -> {
@@ -418,7 +418,7 @@ public final class CommandAPIHandler {
 			CommandAPIMain.getLog().info("Registering command /" + commandName + " " + builder.toString());
 		}
 		
-		Command command = generateCommand(commandName, args, executor);
+		Command command = generateCommand(args, executor);
 		Predicate permission = generatePermissions(commandName, permissions);
 		//Predicate permission = (a) -> {return true;};
 		
