@@ -69,15 +69,6 @@
 			<type>jar</type>
   			<optional>true</optional>
 		</dependency>
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot-server-1.14.1</artifactId>
-			<version>1.14.1</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/spigotlibs/spigot-1.14.1.jar</systemPath>
-			<type>jar</type>
-  			<optional>true</optional>
-		</dependency>
     </dependencies>
 
     <build>

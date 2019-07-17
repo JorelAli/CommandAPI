@@ -9,15 +9,9 @@ if [ -f ./BuildTools.jar ]; then
 		echo "Building Spigot 1.14"
 		java -jar BuildTools.jar --rev 1.14
 	fi
-
-	if [ ! -f ./spigot-1.14.1.jar ]; then
-		echo "Building Spigot 1.14.1"
-		java -jar BuildTools.jar --rev 1.14.1
-	fi
 fi
 echo "Copying files to ./spigotlibs"
 mkdir spigotlibs
 cp ./spigot-1.13.2.jar spigotlibs
 cp ./spigot-1.14.jar spigotlibs
-cp ./spigot-1.14.1.jar spigotlibs
 echo "Done!"
