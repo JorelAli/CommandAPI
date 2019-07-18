@@ -47,6 +47,8 @@ public interface NMS {
 		}
 	}
 	
+	public String[] compatibleVersions(); //e.g. ["1.14.1", "1.14.2"]
+	
 	//Argument implementations
 	public ChatColor 			getChatColor(CommandContext<?> cmdCtx, String str);
 	public BaseComponent[] 		getChatComponent(CommandContext<?> cmdCtx, String str);

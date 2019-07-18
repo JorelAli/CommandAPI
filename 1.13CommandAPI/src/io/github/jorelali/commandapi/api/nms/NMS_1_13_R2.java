@@ -356,4 +356,9 @@ public class NMS_1_13_R2 implements NMS {
 		return ArgumentEnchantment.a();
 	}
 
+	@Override
+	public String[] compatibleVersions() {
+		return new String[] {"1.13.2"};
+	}
+
 }

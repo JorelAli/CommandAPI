@@ -4,7 +4,6 @@ import java.util.LinkedHashMap;
 import java.util.function.Supplier;
 
 import com.mojang.brigadier.LiteralMessage;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
 import io.github.jorelali.commandapi.api.arguments.Argument;
@@ -48,9 +47,6 @@ public class CommandAPI {
 	 * @return An instance of the CommandAPI
 	 */
 	public static CommandAPI getInstance() {
-	/*	if(instance == null) {
-			new CommandAPI();
-		}*/
 		return CommandAPI.instance;
 	}	
 	
@@ -69,7 +65,6 @@ public class CommandAPI {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-
 	}
 	
 	/**
@@ -197,13 +192,9 @@ public class CommandAPI {
 				throw new InvalidCommandNameException(commandName);
 			}
 			
-			if(args == null) {
-				args = new LinkedHashMap<>();
-			}
-			
 			//Make a local copy of args to deal with
 			@SuppressWarnings("unchecked")
-			LinkedHashMap<String, Argument> copyOfArgs = (LinkedHashMap<String, Argument>) args.clone();
+			LinkedHashMap<String, Argument> copyOfArgs = args == null ? new LinkedHashMap<>() : (LinkedHashMap<String, Argument>) args.clone();
 			
 			//if args contains a GreedyString && args.getLast != GreedyString
 			long numGreedyArgs = copyOfArgs.values().stream().filter(arg -> arg instanceof GreedyStringArgument).count();
