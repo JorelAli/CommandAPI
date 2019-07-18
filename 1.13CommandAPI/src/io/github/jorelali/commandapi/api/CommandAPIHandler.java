@@ -37,7 +37,6 @@ import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import io.github.jorelali.commandapi.api.arguments.Argument;
-import io.github.jorelali.commandapi.api.arguments.CommandAPIArgumentType;
 import io.github.jorelali.commandapi.api.arguments.CustomArgument;
 import io.github.jorelali.commandapi.api.arguments.CustomArgument.CustomArgumentException;
 import io.github.jorelali.commandapi.api.arguments.CustomArgument.MessageBuilder;
@@ -419,7 +418,7 @@ public final class CommandAPIHandler {
 		}
 		
 		Command command = generateCommand(args, executor);
-		Predicate permission = generatePermissions(commandName, permissions);
+		//Predicate permission = generatePermissions(commandName, permissions);
 		//Predicate permission = (a) -> {return true;};
 		
 		/*
@@ -434,14 +433,14 @@ public final class CommandAPIHandler {
 		LiteralCommandNode resultantNode;
 		if(args.isEmpty()) {
 			//Link command name to the executor
-	        resultantNode = this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(commandName).requires(permission).executes(command));
+	        resultantNode = this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(commandName).requires(generatePermissions(commandName, permissions)).executes(command));
 	        
 	        //Register aliases
 		    for(String alias : aliases) {
 		    	if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
 					CommandAPIMain.getLog().info("Registering alias /" + alias + " -> " + resultantNode.getName());
 				}
-		      	this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(alias).requires(permission).executes(command));
+		      	this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(alias).requires(generatePermissions(alias, permissions)).executes(command));
 		    }
 
 		} else {
@@ -504,14 +503,14 @@ public final class CommandAPIHandler {
 	        }        
 	        
 	        //Link command name to first argument and register        
-			resultantNode = this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(commandName).requires(permission).then(outer));
+			resultantNode = this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(commandName).requires(generatePermissions(commandName, permissions)).then(outer));
 			
 			//Register aliases
 		    for(String alias : aliases) {
 		    	if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
 					CommandAPIMain.getLog().info("Registering alias /" + alias + " -> " + resultantNode.getName());
 				}
-		      	this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(alias).requires(permission).redirect(resultantNode));
+		      	this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(alias).requires(generatePermissions(alias, permissions)).then(outer));
 		    }
 
 		}
