@@ -12,19 +12,15 @@ To register commands with the CommandAPI, there are several methods which can be
 The following fields are as follows:
 
 * `String` - The command name
-  
+
   The first argument represents the command name which will be registered. For instance, to register the command `/god`, you would use the following:
-  
+
   ```java
   CommandAPI.getInstance().register("god", ...);
   ```
 * `LinkedHashMap<String, Argument>` - The list of arguments 
 
-  The CommandAPI requires a list of arguments which are used for the command. The argument map consists of a key which is a String descriptor (it can basically be anything, this is for your own readability and to make the code easier to understand), and a value which is an instance of an argument (See the section on arguments). This list of arguments is interpreted in the _order that arguments are added to the LinkedHashMap_.
-  
-  > **Developer's Note:**
-  >
-  > The String key isn't "technically" for readability purposes. Internally, Minecraft requires a String which is used to uniquely identify the argument and for internal processing. I chose to leave the String key in the CommandAPI (as opposed to just using a regular LinkedList) as it provides much more readability for you, the developer and helps keep track of what content each argument contains.
+  The CommandAPI requires a list of arguments which are used for the command. The argument map consists of a key which is the tooltip that is displayed as a prompt to users entering commands, and a value which is an instance of an argument (See the section on arguments). This list of arguments is interpreted in the _order that arguments are added to the LinkedHashMap_.
 
 * `String[]` - An array of aliases that the command can be run via 
 * `CommandPermission` - The required permission to execute a command. (See the section on permissions).

@@ -17,11 +17,7 @@ LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 arguments.put("target", new PlayerArgument());
 ```
 
-The String value isn't _too_ important - it's sole purpose is to make it easier for you to read and understand.
-
-> **Developer's Note:** 
->
-> Not really - I explain the purpose for the String value in Section 3 - Command registration
+The String value is the tooltip that is shown to a player when they are entering the command.
 
 ## Argument Casting
 
