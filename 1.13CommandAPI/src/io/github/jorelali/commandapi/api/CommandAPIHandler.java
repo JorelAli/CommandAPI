@@ -456,6 +456,7 @@ public final class CommandAPIHandler {
 		        	inner = getLiteralArgumentBuilderArgument(str, innerArg.getArgumentPermission()).executes(command);
 		        } else {
 		        	if(innerArg instanceof CustomProvidedArgument) {
+		        		//TODO: CustomProvidedArgument is an interface that exists, BUT IS NEVER USED?!
 	        			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), innerArg.getArgumentPermission(), ((CustomProvidedArgument) innerArg).getSuggestionProvider()).executes(command);
 					} else if(innerArg instanceof DynamicSuggestedStringArgument) {
 	        			inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), (DynamicSuggestedStringArgument) innerArg, innerArg.getArgumentPermission()).executes(command);
@@ -478,6 +479,7 @@ public final class CommandAPIHandler {
 	        		outer = getLiteralArgumentBuilderArgument(str, outerArg.getArgumentPermission()).then(outer);
 	        	} else {
 	        		if(outerArg instanceof CustomProvidedArgument) {
+	        			//TODO: CustomProvidedArgument is an interface that exists, BUT IS NEVER USED?!
 	        			outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), outerArg.getArgumentPermission(), ((CustomProvidedArgument) outerArg).getSuggestionProvider()).then(outer);
 	        		} else if(outerArg instanceof DynamicSuggestedStringArgument) {
 	        			outer = getRequiredArgumentBuilder(keys.get(i), (DynamicSuggestedStringArgument) outerArg, outerArg.getArgumentPermission()).then(outer);

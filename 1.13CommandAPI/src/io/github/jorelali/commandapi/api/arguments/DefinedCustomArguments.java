@@ -33,6 +33,26 @@ public class DefinedCustomArguments {
 		}).overrideSuggestions(scoreboard.getTeams().stream().map(o -> o.getName()).toArray(String[]::new));
 	}
 	
+//	public static CustomArgument<Sound> soundArgument() {
+//		Map<String, CraftSound> map = new HashMap<>(); 
+//		Arrays.stream(CraftSound.values()).forEach(val -> {
+//			map.put(val2Str(val), val);
+//		});
+//		return new CustomArgument<Sound>((input) -> {
+//			return Sound.valueOf(map.get(input).name());
+//		}).overrideSuggestions(map.keySet().toArray(new String[map.size()]));
+//	}
+//	
+//	static String val2Str(CraftSound s) {
+//		try {
+//			return (String) CommandAPIHandler.getField(CraftSound.class, "minecraftKey").get(s);
+//		} catch (IllegalArgumentException | IllegalAccessException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		return null;
+//	}
+	
 	
 	/*
 	 * TODO: implemented separately and not in here
