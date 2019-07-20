@@ -6,6 +6,7 @@ import java.io.IOException;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
@@ -121,6 +122,7 @@ public interface NMS {
 	public Object 				getEntitySelector(CommandContext<?> cmdCtx, String str, EntitySelector selector) throws CommandSyntaxException;
 	public EntityType 			getEntityType(CommandContext<?> cmdCtx, String str, CommandSender sender) throws CommandSyntaxException;
 	public LootTable 			getLootTable(CommandContext<?> cmdCtx, String str);
+	public Sound getSound(CommandContext<?> cmdCtx, String key);
 	
 	//Argument types
 	public ArgumentType<?> _ArgumentChatFormat();
@@ -136,4 +138,5 @@ public interface NMS {
 	public ArgumentType<?> _ArgumentEntitySummon();
 	public ArgumentType<?> _ArgumentEntity(EntitySelector selector);
 	public ArgumentType<?> _ArgumentEnchantment();
+
 }
