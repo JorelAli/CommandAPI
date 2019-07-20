@@ -89,6 +89,12 @@ import net.minecraft.server.v1_14_R1.Vec3D;
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class NMS_1_14_R1 implements NMS {
 	
+	private String version;
+	
+	public NMS_1_14_R1(String hoVersion) {
+		this.version = hoVersion;
+	}
+
 	private CommandListenerWrapper getCLW(CommandContext cmdCtx) {
 		return (CommandListenerWrapper) cmdCtx.getSource();
 	}
@@ -161,16 +167,34 @@ public class NMS_1_14_R1 implements NMS {
 					return ICompletionProvider.a(advancements.stream().map(Advancement::getName), builder);
 				};
 			case LOOT_TABLES:
-					return (context, builder) -> {
-					try {
-						Map<MinecraftKey, LootTable> map = (Map<MinecraftKey, LootTable>) CommandAPIHandler.getField(LootTableRegistry.class, "e").get(getCLW(context).getServer().getLootTableRegistry());
-						return ICompletionProvider.a((Iterable) map.keySet(), builder);
-					} catch (IllegalArgumentException | IllegalAccessException e) {
-						e.printStackTrace();
-					}
-					return Suggestions.empty();
-					
-				};		
+				switch(version) {
+					case "1.14":
+						return (context, builder) -> {
+							try {
+								Map<MinecraftKey, LootTable> map = (Map<MinecraftKey, LootTable>) CommandAPIHandler.getField(LootTableRegistry.class, "e").get(getCLW(context).getServer().getLootTableRegistry());
+								return ICompletionProvider.a((Iterable) map.keySet(), builder);
+							} catch (IllegalArgumentException | IllegalAccessException e) {
+								e.printStackTrace();
+							}
+							return Suggestions.empty();
+						};		
+					case "1.14.1":
+						break;
+					case "1.14.2":
+						break;
+					case "1.14.3":
+						//You've literally gotta be kidding me that this is a thing
+						return (context, builder) -> {
+							try {
+								Map<MinecraftKey, LootTable> map = (Map<MinecraftKey, LootTable>) CommandAPIHandler.getField(LootTableRegistry.class, "c").get(getCLW(context).getServer().getLootTableRegistry());
+								return ICompletionProvider.a((Iterable) map.keySet(), builder);
+							} catch (IllegalArgumentException | IllegalAccessException e) {
+								e.printStackTrace();
+							}
+							return Suggestions.empty();
+						};		
+				}
+				
 			default:
 				return (context, builder) -> Suggestions.empty();
 		}

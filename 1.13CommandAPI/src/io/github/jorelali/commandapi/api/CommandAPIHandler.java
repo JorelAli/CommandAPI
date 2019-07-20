@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -79,11 +78,10 @@ public final class CommandAPIHandler {
 	public static NMS getNMS() { return nms; }
 	
 	private class Version {
-		private int primaryVersion;
-		private int rev;
+		private int primaryVersion; //e.g. 14
+		private int rev; //e.g. 1
 		
 		public Version(String version) {
-			
 			this.primaryVersion = Integer.parseInt(version.split("_")[1]);
 			
 			Matcher revMatcher = Pattern.compile("(?<=R).+").matcher(version);
@@ -131,6 +129,15 @@ public final class CommandAPIHandler {
 		}
 		CommandAPIHandler.packageName = nmsServer.getClass().getPackage().getName();
 		
+		//Load higher order versioning
+		String hoVersion = null;
+		try {
+			hoVersion = (String) Class.forName(packageName + ".MinecraftServer").getDeclaredMethod("getVersion").invoke(nmsServer);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
+				| SecurityException e) {
+			CommandAPIMain.getLog().severe("Failed to load higher order versioning system!");
+		}
+		
 		//Handle versioning
 		Version version = new Version(packageName.split("\\Q.\\E")[3]);
 		UnsupportedClassVersionError versionError = new UnsupportedClassVersionError("This version of Minecraft is unsupported: " + version);
@@ -145,7 +152,7 @@ public final class CommandAPIHandler {
 				break;
 			case 14:
 				//Compatible with Minecraft 1.14, 1.14.1, 1.14.2, 1.14.3
-				nms = new NMS_1_14_R1();
+				nms = new NMS_1_14_R1(hoVersion);
 				break;
 			default:
 				throw versionError;
@@ -153,9 +160,7 @@ public final class CommandAPIHandler {
 		
 		//Log successful hooks
 		if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
-			String compatibleVersions = Arrays.toString(nms.compatibleVersions());
-			compatibleVersions = compatibleVersions.substring(1, compatibleVersions.length() - 1);
-			CommandAPIMain.getLog().info("Hooked into NMS " + version + " (compatible with " + compatibleVersions + ")");
+			CommandAPIMain.getLog().info("Hooked into NMS " + version);
 		}
 		
 		//Everything from this line will use getNMSClass(), so we initialize our cache here
