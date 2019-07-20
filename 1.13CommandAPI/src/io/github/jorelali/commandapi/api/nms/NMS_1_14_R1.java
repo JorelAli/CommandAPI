@@ -174,6 +174,7 @@ public class NMS_1_14_R1 implements NMS {
 							methodName = "b";
 							break;
 						case "1.14.3":
+						case "1.14.4":
 							methodName = "a";
 							break;
 					}
