@@ -7,6 +7,7 @@
 * Document SoundArgument
 * Document AdvancementArgument
 * Document RecipeArgument
+* Update arguments.md with new list of arguments
 
 Bunch of code to help with documenting:
 

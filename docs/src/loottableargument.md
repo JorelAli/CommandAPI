@@ -1,0 +1,1 @@
+# LootTable argument
