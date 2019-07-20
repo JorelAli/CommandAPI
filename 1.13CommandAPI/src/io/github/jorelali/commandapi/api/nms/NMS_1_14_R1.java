@@ -169,6 +169,8 @@ public class NMS_1_14_R1 implements NMS {
 			case LOOT_TABLES:
 				switch(version) {
 					case "1.14":
+					case "1.14.1":
+					case "1.14.2":
 						return (context, builder) -> {
 							try {
 								Map<MinecraftKey, LootTable> map = (Map<MinecraftKey, LootTable>) CommandAPIHandler.getField(LootTableRegistry.class, "e").get(getCLW(context).getServer().getLootTableRegistry());
@@ -178,11 +180,8 @@ public class NMS_1_14_R1 implements NMS {
 							}
 							return Suggestions.empty();
 						};		
-					case "1.14.1":
-						break;
-					case "1.14.2":
-						break;
 					case "1.14.3":
+					case "1.14.4":
 						//You've literally gotta be kidding me that this is a thing
 						return (context, builder) -> {
 							try {

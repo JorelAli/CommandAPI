@@ -71,10 +71,37 @@
 		</dependency>
 		<dependency>
 			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot-server-1.14.1</artifactId>
+			<version>1.14.1</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/spigotlibs/spigot-1.14.1.jar</systemPath>
+			<type>jar</type>
+  			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot-server-1.14.2</artifactId>
+			<version>1.14.2</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/spigotlibs/spigot-1.14.2.jar</systemPath>
+			<type>jar</type>
+  			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-server-1.14.3</artifactId>
 			<version>1.14.3</version>
 			<scope>system</scope>
 			<systemPath>${basedir}/spigotlibs/spigot-1.14.3.jar</systemPath>
+			<type>jar</type>
+  			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot-server-1.14.4</artifactId>
+			<version>1.14.4</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/spigotlibs/spigot-1.14.4.jar</systemPath>
 			<type>jar</type>
   			<optional>true</optional>
 		</dependency>
