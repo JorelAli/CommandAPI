@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -66,6 +67,7 @@ public final class CommandAPIHandler {
 
 	//Cache maps
 	private static Map<ClassCache, Field> fields;
+	private static Map<ClassCache, Method> methods;
 		
 	//NMS variables
 	private static String packageName = null;
@@ -130,13 +132,13 @@ public final class CommandAPIHandler {
 		CommandAPIHandler.packageName = nmsServer.getClass().getPackage().getName();
 		
 		//Load higher order versioning
-//		String hoVersion = null;
-//		try {
-//			hoVersion = (String) Class.forName(packageName + ".MinecraftServer").getDeclaredMethod("getVersion").invoke(nmsServer);
-//		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
-//				| SecurityException e) {
-//			CommandAPIMain.getLog().severe("Failed to load higher order versioning system!");
-//		}
+		String hoVersion = null;
+		try {
+			hoVersion = (String) Class.forName(packageName + ".MinecraftServer").getDeclaredMethod("getVersion").invoke(nmsServer);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
+				| SecurityException e) {
+			CommandAPIMain.getLog().severe("Failed to load higher order versioning system!");
+		}
 		
 		//Handle versioning
 		Version version = new Version(packageName.split("\\Q.\\E")[3]);
@@ -152,7 +154,7 @@ public final class CommandAPIHandler {
 				break;
 			case 14:
 				//Compatible with Minecraft 1.14, 1.14.1, 1.14.2, 1.14.3
-				nms = new NMS_1_14_R1();
+				nms = new NMS_1_14_R1(hoVersion);
 				break;
 			default:
 				throw versionError;
@@ -165,6 +167,7 @@ public final class CommandAPIHandler {
 		
 		//Everything from this line will use getNMSClass(), so we initialize our cache here
 		fields = new HashMap<>();
+		methods = new HashMap<>();
 		permissionsToFix = new TreeMap<>();
 								
 		this.dispatcher = nms.getBrigadierDispatcher(nmsServer); 
@@ -214,6 +217,9 @@ public final class CommandAPIHandler {
 					argList.add(cmdCtx.getArgument(entry.getKey(), entry.getValue().getPrimitiveType()));
 				} else {
 					switch(entry.getValue().getArgumentType()) {
+						case ADVANCEMENT:
+							argList.add(nms.getAdvancement(cmdCtx, entry.getKey()));
+							break;
 						case CHATCOLOR:
 							argList.add(nms.getChatColor(cmdCtx, entry.getKey()));
 							break;
@@ -631,6 +637,24 @@ public final class CommandAPIHandler {
 			}
 			result.setAccessible(true);
 			fields.put(key, result);
+			return result;
+		}
+	}
+	
+	//Gets a field using reflection and caches it
+	public static Method getMethod(Class<?> clazz, String name) {
+		ClassCache key = new ClassCache(clazz, name);
+		if(methods.containsKey(key)) {
+			return methods.get(key);
+		} else {
+			Method result = null;
+			try {
+				result = clazz.getDeclaredMethod(name);
+			} catch (SecurityException | NoSuchMethodException e) {
+				e.printStackTrace();
+			}
+			result.setAccessible(true);
+			methods.put(key, result);
 			return result;
 		}
 	}

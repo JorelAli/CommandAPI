@@ -288,6 +288,11 @@ public class NMS_1_13_R2 implements NMS {
 		});
 		return Sound.valueOf(map.get(minecraftKey.getKey()).name());
 	}
+	
+	@Override
+	public org.bukkit.advancement.Advancement getAdvancement(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		return ArgumentMinecraftKeyRegistered.a(cmdCtx, key).bukkit;
+	}
 
 	@Override
 	public SimpleCommandMap getSimpleCommandMap() {

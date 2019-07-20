@@ -2,6 +2,7 @@ package io.github.jorelali.commandapi.api.nms;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,6 +59,7 @@ import io.github.jorelali.commandapi.api.arguments.LocationArgument.LocationType
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.server.v1_14_R1.Advancement;
+import net.minecraft.server.v1_14_R1.AdvancementDataWorld;
 import net.minecraft.server.v1_14_R1.ArgumentChatComponent;
 import net.minecraft.server.v1_14_R1.ArgumentChatFormat;
 import net.minecraft.server.v1_14_R1.ArgumentEnchantment;
@@ -89,6 +91,12 @@ import net.minecraft.server.v1_14_R1.Vec3D;
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class NMS_1_14_R1 implements NMS {
 	
+	String version;
+	
+	public NMS_1_14_R1(String hoVersion) {
+		this.version = hoVersion;
+	}
+
 	private CommandListenerWrapper getCLW(CommandContext cmdCtx) {
 		return (CommandListenerWrapper) cmdCtx.getSource();
 	}
@@ -157,7 +165,27 @@ public class NMS_1_14_R1 implements NMS {
 				return CompletionProviders.c;
 			case ADVANCEMENTS:
 				return (cmdCtx, builder) -> {
-					Collection<Advancement> advancements = ((CommandListenerWrapper) cmdCtx.getSource()).getServer().getAdvancementData().b();
+				
+					String methodName = null;
+					switch(version) {
+						case "1.14":
+						case "1.14.1":
+						case "1.14.2":
+							methodName = "b";
+							break;
+						case "1.14.3":
+							methodName = "a";
+							break;
+					}
+					
+					Collection<Advancement> advancements = new ArrayList<>();
+					try {
+						advancements = (Collection<Advancement>) CommandAPIHandler.getMethod(AdvancementDataWorld.class, methodName)
+								.invoke(((CommandListenerWrapper) cmdCtx.getSource()).getServer().getAdvancementData());
+					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+						e.printStackTrace();
+					}
+					
 					return ICompletionProvider.a(advancements.stream().map(Advancement::getName), builder);
 				};
 			case LOOT_TABLES:
@@ -288,6 +316,11 @@ public class NMS_1_14_R1 implements NMS {
 		return Sound.valueOf(map.get(minecraftKey.getKey()).name());
 	}
 
+	@Override
+	public org.bukkit.advancement.Advancement getAdvancement(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		return ArgumentMinecraftKeyRegistered.a(cmdCtx, key).bukkit;
+	}
+	
 	@Override
 	public SimpleCommandMap getSimpleCommandMap() {
 		return ((CraftServer) Bukkit.getServer()).getCommandMap();
