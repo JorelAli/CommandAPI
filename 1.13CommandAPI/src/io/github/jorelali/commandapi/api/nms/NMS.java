@@ -19,6 +19,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
 
@@ -125,7 +126,8 @@ public interface NMS {
 	public LootTable 			getLootTable(CommandContext<?> cmdCtx, String str);
 	public Sound                getSound(CommandContext<?> cmdCtx, String key);
 	public Advancement          getAdvancement(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
-	
+	public Recipe               getRecipe(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
+
 	//Argument types
 	public ArgumentType<?> _ArgumentChatFormat();
 	public ArgumentType<?> _ArgumentChatComponent();
@@ -140,6 +142,7 @@ public interface NMS {
 	public ArgumentType<?> _ArgumentEntitySummon();
 	public ArgumentType<?> _ArgumentEntity(EntitySelector selector);
 	public ArgumentType<?> _ArgumentEnchantment();
+
 
 
 }

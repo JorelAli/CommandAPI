@@ -35,6 +35,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
 
@@ -292,6 +293,11 @@ public class NMS_1_13_R2 implements NMS {
 	@Override
 	public org.bukkit.advancement.Advancement getAdvancement(CommandContext cmdCtx, String key) throws CommandSyntaxException {
 		return ArgumentMinecraftKeyRegistered.a(cmdCtx, key).bukkit;
+	}
+	
+	@Override
+	public Recipe getRecipe(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		return ArgumentMinecraftKeyRegistered.b(cmdCtx, key).toBukkitRecipe();
 	}
 
 	@Override

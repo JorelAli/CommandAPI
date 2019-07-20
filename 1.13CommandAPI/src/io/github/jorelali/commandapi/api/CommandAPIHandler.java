@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -162,7 +163,9 @@ public final class CommandAPIHandler {
 		
 		//Log successful hooks
 		if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
-			CommandAPIMain.getLog().info("Hooked into NMS " + version);
+			String compatibleVersions = Arrays.toString(nms.compatibleVersions());
+			compatibleVersions = compatibleVersions.substring(1, compatibleVersions.length() - 1);
+			CommandAPIMain.getLog().info("Hooked into NMS " + version + " (compatible with " + compatibleVersions + ")");
 		}
 		
 		//Everything from this line will use getNMSClass(), so we initialize our cache here
@@ -273,6 +276,9 @@ public final class CommandAPIHandler {
 							break;
 						case POTION_EFFECT:
 							argList.add(nms.getPotionEffect(cmdCtx, entry.getKey()));
+							break;
+						case RECIPE:
+							argList.add(nms.getRecipe(cmdCtx, entry.getKey()));
 							break;
 						case SIMPLE_TYPE:
 							break;

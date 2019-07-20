@@ -35,8 +35,6 @@ public class DefinedCustomArguments {
 	
 	/*
 	 * TODO: implemented separately and not in here
-	 * LootTables
-	 * Advancements
 	 * Recipes
 	 */
 	

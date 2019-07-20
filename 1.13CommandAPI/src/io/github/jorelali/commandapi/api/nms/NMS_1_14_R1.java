@@ -38,6 +38,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
 
@@ -323,6 +324,11 @@ public class NMS_1_14_R1 implements NMS {
 	}
 	
 	@Override
+	public Recipe getRecipe(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		return ArgumentMinecraftKeyRegistered.b(cmdCtx, key).toBukkitRecipe();
+	}
+	
+	@Override
 	public SimpleCommandMap getSimpleCommandMap() {
 		return ((CraftServer) Bukkit.getServer()).getCommandMap();
 	}
@@ -409,7 +415,7 @@ public class NMS_1_14_R1 implements NMS {
 
 	@Override
 	public String[] compatibleVersions() {
-		return new String[] {"1.14", "1.14.1", "1.14.2", "1.14.3"};
+		return new String[] {"1.14", "1.14.1", "1.14.2", "1.14.3", "1.14.4"};
 	}
 
 }
