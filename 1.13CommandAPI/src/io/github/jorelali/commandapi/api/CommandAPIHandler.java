@@ -130,13 +130,13 @@ public final class CommandAPIHandler {
 		CommandAPIHandler.packageName = nmsServer.getClass().getPackage().getName();
 		
 		//Load higher order versioning
-		String hoVersion = null;
-		try {
-			hoVersion = (String) Class.forName(packageName + ".MinecraftServer").getDeclaredMethod("getVersion").invoke(nmsServer);
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
-				| SecurityException e) {
-			CommandAPIMain.getLog().severe("Failed to load higher order versioning system!");
-		}
+//		String hoVersion = null;
+//		try {
+//			hoVersion = (String) Class.forName(packageName + ".MinecraftServer").getDeclaredMethod("getVersion").invoke(nmsServer);
+//		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
+//				| SecurityException e) {
+//			CommandAPIMain.getLog().severe("Failed to load higher order versioning system!");
+//		}
 		
 		//Handle versioning
 		Version version = new Version(packageName.split("\\Q.\\E")[3]);
@@ -152,7 +152,7 @@ public final class CommandAPIHandler {
 				break;
 			case 14:
 				//Compatible with Minecraft 1.14, 1.14.1, 1.14.2, 1.14.3
-				nms = new NMS_1_14_R1(hoVersion);
+				nms = new NMS_1_14_R1();
 				break;
 			default:
 				throw versionError;

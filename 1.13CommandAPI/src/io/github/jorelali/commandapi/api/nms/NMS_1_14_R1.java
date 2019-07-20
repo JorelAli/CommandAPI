@@ -89,12 +89,6 @@ import net.minecraft.server.v1_14_R1.Vec3D;
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class NMS_1_14_R1 implements NMS {
 	
-	private String version;
-	
-	public NMS_1_14_R1(String hoVersion) {
-		this.version = hoVersion;
-	}
-
 	private CommandListenerWrapper getCLW(CommandContext cmdCtx) {
 		return (CommandListenerWrapper) cmdCtx.getSource();
 	}
