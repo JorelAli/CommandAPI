@@ -929,9 +929,10 @@ DefinedCustomArguments.teamArgument();      //CustomArgument&lt;Team&gt;
 <p><strong>Developer's Note:</strong></p>
 <p>As with any future bug, if you notice that a technical argument does not work with a specific version of Minecraft <em>(1.13.2+)</em>, I'd be grateful if you could submit a bug report on <a href="https://github.com/JorelAli/1.13-Command-API/issues/new/choose">the CommandAPI's issues page</a> and I'll try to fix it as soon as I can!</p>
 </blockquote>
+<p>Technical arguments are also compatible with data packs which allow you to add additional content to the game. In particular, Advancements, Loot Tables and Recipes are supported to allow extra interaction between Bukkit and data packs.</p>
 <a class="header" href="#sound-argument" id="sound-argument"><h1>Sound argument</h1></a>
 <p>The <code>SoundArgument</code> class allows a command sender to retrieve the Bukkit <code>Sound</code> object to represent in-game sound effects (such as mob sounds or ambient sound effects), as well as in-game music.</p>
-<a class="header" href="#example---playing-sound-to-yourself" id="example---playing-sound-to-yourself"><h3>Example - Playing sound to yourself</h3></a>
+<a class="header" href="#example---playing-sound-to-yourself" id="example---playing-sound-to-yourself"><h2>Example - Playing sound to yourself</h2></a>
 <pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 arguments.put(&quot;sound&quot;, new SoundArgument());
 
@@ -942,6 +943,20 @@ CommandAPI.getInstance().register(&quot;sound&quot;, arguments, (sender, args) -
 });
 </code></pre>
 <a class="header" href="#advancement-argument" id="advancement-argument"><h1>Advancement argument</h1></a>
+<p>The <code>AdvancementArgument</code> class is used to represent Bukkit <code>Advancement</code> objects. This can be used to get the advancement progress for a player and a specific advancement, as well as awarding advancements programmatically.</p>
+<a class="header" href="#example---awarding-an-advancement-to-a-player" id="example---awarding-an-advancement-to-a-player"><h2>Example - Awarding an advancement to a player</h2></a>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;advancement&quot;, new AdvancementArgument());
+
+CommandAPI.getInstance().register(&quot;giveadvancement&quot;, arguments, (sender, args) -&gt; {
+    Advancement advancement = (Advancement) a[0];
+    Player player = (Player) sender;
+    
+    advancement.getCriteria().forEach(criteria -&gt; {
+        player.getAdvancementProgress(advancement).awardCriteria(criteria);
+    });
+});
+</code></pre>
 <a class="header" href="#recipe-argument" id="recipe-argument"><h1>Recipe argument</h1></a>
 <a class="header" href="#loottable-argument" id="loottable-argument"><h1>LootTable argument</h1></a>
 <a class="header" href="#functions" id="functions"><h1>Functions</h1></a>

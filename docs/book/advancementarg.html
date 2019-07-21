@@ -137,6 +137,20 @@
                 <div id="content" class="content">
                     <main>
                         <a class="header" href="#advancement-argument" id="advancement-argument"><h1>Advancement argument</h1></a>
+<p>The <code>AdvancementArgument</code> class is used to represent Bukkit <code>Advancement</code> objects. This can be used to get the advancement progress for a player and a specific advancement, as well as awarding advancements programmatically.</p>
+<a class="header" href="#example---awarding-an-advancement-to-a-player" id="example---awarding-an-advancement-to-a-player"><h2>Example - Awarding an advancement to a player</h2></a>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;advancement&quot;, new AdvancementArgument());
+
+CommandAPI.getInstance().register(&quot;giveadvancement&quot;, arguments, (sender, args) -&gt; {
+    Advancement advancement = (Advancement) a[0];
+    Player player = (Player) sender;
+    
+    advancement.getCriteria().forEach(criteria -&gt; {
+        player.getAdvancementProgress(advancement).awardCriteria(criteria);
+    });
+});
+</code></pre>
 
                     </main>
 

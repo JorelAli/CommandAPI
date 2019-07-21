@@ -8,3 +8,4 @@ Based on the nature of technical arguments, **these are unlikely to survive Mine
 >
 > As with any future bug, if you notice that a technical argument does not work with a specific version of Minecraft _(1.13.2+)_, I'd be grateful if you could submit a bug report on [the CommandAPI's issues page](https://github.com/JorelAli/1.13-Command-API/issues/new/choose) and I'll try to fix it as soon as I can!
 
+Technical arguments are also compatible with data packs which allow you to add additional content to the game. In particular, Advancements, Loot Tables and Recipes are supported to allow extra interaction between Bukkit and data packs.

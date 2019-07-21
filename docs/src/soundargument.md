@@ -2,7 +2,7 @@
 
 The `SoundArgument` class allows a command sender to retrieve the Bukkit `Sound` object to represent in-game sound effects (such as mob sounds or ambient sound effects), as well as in-game music.
 
-### Example - Playing sound to yourself
+## Example - Playing sound to yourself
 
 ```java
 LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
