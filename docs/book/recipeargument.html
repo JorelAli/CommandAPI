@@ -137,6 +137,18 @@
                 <div id="content" class="content">
                     <main>
                         <a class="header" href="#recipe-argument" id="recipe-argument"><h1>Recipe argument</h1></a>
+<p>The <code>RecipeArgument</code> class lets you retrieve Bukkit's <code>Recipe</code> object.</p>
+<a class="header" href="#example---giving-the-result-of-a-recipe" id="example---giving-the-result-of-a-recipe"><h2>Example - Giving the result of a recipe</h2></a>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;recipe&quot;, new RecipeArgument());
+
+CommandAPI.getInstance().register(&quot;giverecipe&quot;, arguments, (sender, args) -&gt; {
+    Recipe recipe = (Recipe) args[0];
+    Player player = (Player) sender;        
+
+    player.getInventory().addItem(recipe.getResult());
+});
+</code></pre>
 
                     </main>
 

@@ -143,7 +143,7 @@
 arguments.put(&quot;advancement&quot;, new AdvancementArgument());
 
 CommandAPI.getInstance().register(&quot;giveadvancement&quot;, arguments, (sender, args) -&gt; {
-    Advancement advancement = (Advancement) a[0];
+    Advancement advancement = (Advancement) args[0];
     Player player = (Player) sender;
     
     advancement.getCriteria().forEach(criteria -&gt; {

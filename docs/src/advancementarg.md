@@ -9,7 +9,7 @@ LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 arguments.put("advancement", new AdvancementArgument());
 
 CommandAPI.getInstance().register("giveadvancement", arguments, (sender, args) -> {
-    Advancement advancement = (Advancement) a[0];
+    Advancement advancement = (Advancement) args[0];
     Player player = (Player) sender;
     
     advancement.getCriteria().forEach(criteria -> {
