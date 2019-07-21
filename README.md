@@ -52,7 +52,16 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 To build the CommandAPI, a copy of the required Spigot.jar libraries are required for the following versions of Minecraft:
 
 * 1.13.2
+
 * 1.14
+
+* 1.14.1
+
+* 1.14.2
+
+* 1.14.3
+
+* 1.14.4
 
 To download these easily:
 
