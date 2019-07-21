@@ -474,6 +474,7 @@ CommandAPI.getInstance().register(&quot;cmd&quot;, arguments, (sender, args) -&g
 <a class="header" href="#list-of-arguments" id="list-of-arguments"><h2>List of arguments</h2></a>
 <p>Arguments are found in the <code>io.github.jorelali.commandapi.api.arguments</code> package.</p>
 <table><thead><tr><th align="center">          Argument class          </th><th align="center">                          Data type                           </th><th align="center">                      Description                       </th></tr></thead><tbody>
+<tr><td align="center">      <code>AdvancementArgument</code>       </td><td align="center">                        <code>Advancement</code>                         </td><td align="center">                                                        </td></tr>
 <tr><td align="center">        <code>BooleanArgument</code>         </td><td align="center">                          <code>boolean</code>                           </td><td align="center">                                                        </td></tr>
 <tr><td align="center">       <code>ChatColorArgument</code>        </td><td align="center">                         <code>ChatColor</code>                          </td><td align="center">                                                        </td></tr>
 <tr><td align="center">     <code>ChatComponentArgument</code>      </td><td align="center">                      <code>BaseComponent[]</code>                       </td><td align="center">                 Formatted chat object                  </td></tr>
@@ -489,9 +490,12 @@ CommandAPI.getInstance().register(&quot;cmd&quot;, arguments, (sender, args) -&g
 <tr><td align="center">       <code>ItemStackArgument</code>       </td><td align="center">                         <code>ItemStack</code>                          </td><td align="center">          Returns an <code>ItemStack</code> with amount 1          </td></tr>
 <tr><td align="center">        <code>LiteralArgument</code>        </td><td align="center">                             N/A                              </td><td align="center">          A predefined hardcoded argument name          </td></tr>
 <tr><td align="center">       <code>LocationArgument</code>        </td><td align="center">                          <code>Location</code>                          </td><td align="center">                                                        </td></tr>
+<tr><td align="center">       <code>LootTableArgument</code>        </td><td align="center">                         <code>LootTable</code>                          </td><td align="center">                                                        </td></tr>
 <tr><td align="center">       <code>ParticleArgument</code>        </td><td align="center">                          <code>Particle</code>                          </td><td align="center">                                                        </td></tr>
 <tr><td align="center">         <code>PlayerArgument</code>         </td><td align="center">                           <code>Player</code>                           </td><td align="center"> Similar to EntitySelector, but always returns 1 player </td></tr>
 <tr><td align="center">     <code>PotionEffectArgument</code>      </td><td align="center">                      <code>PotionEffectType</code>                      </td><td align="center">                                                        </td></tr>
+<tr><td align="center">         <code>RecipeArgument</code>         </td><td align="center">                           <code>Recipe</code>                           </td><td align="center">                                                        </td></tr>
+<tr><td align="center">         <code>SoundArgument</code>          </td><td align="center">                           <code>Sound</code>                            </td><td align="center">                                                        </td></tr>
 <tr><td align="center">         <code>StringArgument</code>         </td><td align="center">                           <code>String</code>                           </td><td align="center">              String consisting of 1 word               </td></tr>
 <tr><td align="center">    <code>SuggestedStringArgument</code>     </td><td align="center">                           <code>String</code>                           </td><td align="center">          A list of suggested one word strings          </td></tr>
 <tr><td align="center">          <code>TextArgument</code>          </td><td align="center">                           <code>String</code>                           </td><td align="center">      String which can have spaces (used for text)      </td></tr>
@@ -971,6 +975,23 @@ CommandAPI.getInstance().register(&quot;giverecipe&quot;, arguments, (sender, ar
 });
 </code></pre>
 <a class="header" href="#loottable-argument" id="loottable-argument"><h1>LootTable argument</h1></a>
+<p>The <code>LootTableArgument</code> class can be used to get a Bukkit <code>LootTable</code> object.</p>
+<a class="header" href="#example---_ツ_" id="example---_ツ_"><h2>Example - ¯\_(ツ)_/¯</h2></a>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;loottable&quot;, new LootTableArgument());
+
+CommandAPI.getInstance().register(&quot;giveloottable&quot;, arguments, (sender, args) -&gt; {
+    LootTable lootTable = (LootTable) args[0];
+    Player player = (Player) sender;
+    
+    LootContext context = /* Some generated LootContext relating to the lootTable*/
+    lootTable.fillInventory(player.getInventory(), new Random(), context);
+}); 
+</code></pre>
+<blockquote>
+<p><strong>Developer's Note:</strong></p>
+<p>Honestly, I've not managed to get a successful example of using a <code>LootTable</code> in practice, due to being unable to generate a suitable <code>LootContext</code>. If you believe you can supply a suitable example for this page, feel free to send an example <a href="https://github.com/JorelAli/1.13-Command-API/issues/new/choose">on the CommandAPI issues page</a>.</p>
+</blockquote>
 <a class="header" href="#functions" id="functions"><h1>Functions</h1></a>
 <p>The CommandAPI has support to use Minecraft's <a href="https://minecraft.gamepedia.com/Function_(Java_Edtion)">functions</a> within your plugins. This is handled by using a class provided by the CommandAPI called <code>FunctionWrapper</code>, which allows you to execute functions. The CommandAPI also provides support to let you run your own commands within Minecraft function files.</p>
 <a class="header" href="#using-custom-commands-in-functions" id="using-custom-commands-in-functions"><h2>Using custom commands in functions</h2></a>
@@ -1161,8 +1182,6 @@ CommandAPI.getInstance().register(&quot;gamemode&quot;, new String[] {&quot;gm&q
     //Handle gamemode command here
 });
 </code></pre>
-<a class="header" href="#the-alias-bug" id="the-alias-bug"><h2>The alias bug</h2></a>
-<p>As of time of writing this documentation (v2.0), there is a bug with aliases, where aliases with no arguments causes an error. You can read more about the bug <a href="https://github.com/JorelAli/1.13-Command-API/issues/43">here</a>.</p>
 <a class="header" href="#command-conversion" id="command-conversion"><h1>Command conversion</h1></a>
 <p>Since the CommandAPI is used to register commands as a vanilla Minecraft command, you may want to use other plugins that are not written with the CommandAPI. For instance, if you want to include a command from a plugin which doesn't use the CommandAPI in a commandblock, <em>(such as the <code>/execute</code> command)</em>, you can use the CommandAPI's command conversion system.</p>
 <blockquote>
@@ -1220,6 +1239,8 @@ commands:
 <p>This is likely caused by the fact that the plugin you want to convert hasn't been loaded yet. Ensure that it loads before your plugin by adding the following to the target plugin's <code>plugin.yml</code> file:</p>
 <pre><code class="language-yaml">loadbefore: [YourPlugin, CommandAPI]
 </code></pre>
+<a class="header" href="#aliases-dont-work-properly-it-says-unknown-command" id="aliases-dont-work-properly-it-says-unknown-command"><h2>Aliases don't work properly (It says unknown command)</h2></a>
+<p>This is a persistent bug which has been resolved in version 2.1+ of the CommandAPI.</p>
 <a class="header" href="#my-issue-isnt-on-here-what-do-i-do" id="my-issue-isnt-on-here-what-do-i-do"><h2>My issue isn't on here, what do I do?!</h2></a>
 <p>If you've found a bug that isn't solvable here, submit a bug report on <a href="https://github.com/JorelAli/1.13-Command-API/issues/new/choose">the CommandAPI's issues page</a> and I'll try my best to resolve the issue!</p>
 <a class="header" href="#afterword" id="afterword"><h1>Afterword</h1></a>

@@ -137,6 +137,23 @@
                 <div id="content" class="content">
                     <main>
                         <a class="header" href="#loottable-argument" id="loottable-argument"><h1>LootTable argument</h1></a>
+<p>The <code>LootTableArgument</code> class can be used to get a Bukkit <code>LootTable</code> object.</p>
+<a class="header" href="#example---_ツ_" id="example---_ツ_"><h2>Example - ¯\_(ツ)_/¯</h2></a>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;loottable&quot;, new LootTableArgument());
+
+CommandAPI.getInstance().register(&quot;giveloottable&quot;, arguments, (sender, args) -&gt; {
+    LootTable lootTable = (LootTable) args[0];
+    Player player = (Player) sender;
+    
+    LootContext context = /* Some generated LootContext relating to the lootTable*/
+    lootTable.fillInventory(player.getInventory(), new Random(), context);
+}); 
+</code></pre>
+<blockquote>
+<p><strong>Developer's Note:</strong></p>
+<p>Honestly, I've not managed to get a successful example of using a <code>LootTable</code> in practice, due to being unable to generate a suitable <code>LootContext</code>. If you believe you can supply a suitable example for this page, feel free to send an example <a href="https://github.com/JorelAli/1.13-Command-API/issues/new/choose">on the CommandAPI issues page</a>.</p>
+</blockquote>
 
                     </main>
 

@@ -44,6 +44,7 @@ Arguments are found in the `io.github.jorelali.commandapi.api.arguments` package
 
 |          Argument class          |                          Data type                           |                      Description                       |
 | :------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------: |
+|      `AdvancementArgument`       |                        `Advancement`                         |                                                        |
 |        `BooleanArgument`         |                          `boolean`                           |                                                        |
 |       `ChatColorArgument`        |                         `ChatColor`                          |                                                        |
 |     `ChatComponentArgument`      |                      `BaseComponent[]`                       |                 Formatted chat object                  |
@@ -59,9 +60,12 @@ Arguments are found in the `io.github.jorelali.commandapi.api.arguments` package
 |       ` ItemStackArgument`       |                         `ItemStack`                          |          Returns an `ItemStack` with amount 1          |
 |        ` LiteralArgument`        |                             N/A                              |          A predefined hardcoded argument name          |
 |       ` LocationArgument`        |                          `Location`                          |                                                        |
+|       `LootTableArgument`        |                         `LootTable`                          |                                                        |
 |       ` ParticleArgument`        |                          `Particle`                          |                                                        |
 |         `PlayerArgument`         |                           `Player`                           | Similar to EntitySelector, but always returns 1 player |
 |     ` PotionEffectArgument`      |                      `PotionEffectType`                      |                                                        |
+|         `RecipeArgument`         |                           `Recipe`                           |                                                        |
+|         `SoundArgument`          |                           `Sound`                            |                                                        |
 |         `StringArgument`         |                           `String`                           |              String consisting of 1 word               |
 |    `SuggestedStringArgument`     |                           `String`                           |          A list of suggested one word strings          |
 |          `TextArgument`          |                           `String`                           |      String which can have spaces (used for text)      |

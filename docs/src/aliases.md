@@ -19,7 +19,3 @@ CommandAPI.getInstance().register("gamemode", new String[] {"gm"}, arguments, (s
 	//Handle gamemode command here
 });
 ```
-
-## The alias bug
-
-As of time of writing this documentation (v2.0), there is a bug with aliases, where aliases with no arguments causes an error. You can read more about the bug [here](https://github.com/JorelAli/1.13-Command-API/issues/43).
