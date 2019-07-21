@@ -30,6 +30,10 @@ Using the search icon in the top left corner, typing "Example" will show a list 
 
 Whenever a new version comes out, ensure you keep up to date on the latest changes to the documentation (You can view the documentation version at the top of the page). This changelog gives a brief overview of the changes to pages that were made in the transition to releases.
 
+- **2.0 → 2.1**
+  - **[Click here](./commandregistration.html#command-registration)** - Include information about tooltips
+  - **[Click here](./technicalargs.html)** - Adds information on technical arguments
+  - **[Click here](./quickstart.html#using-maven-recommended)** - Improve documentation for adding dependencies and repositories to the `pom.xml` file
 - **1.8 → 2.0**
   - **[Click here](./arguments.html#arguments-with-overrideable-suggestions)** - Deprecated `SuggestedStringArgument`, use `.overrideSuggestions()` instead
   - **[Click here](./customarguments.html)** - Adds a new argument, the `CustomArgument` 

@@ -17,20 +17,24 @@ To use the CommandAPI in your plugins, there are two methods of adding it to you
 * Add the maven repository to your `pom.xml` file:
 
   ```
-  <repository>
-      <id>mccommandapi</id>
-      <url>https://raw.githubusercontent.com/JorelAli/1.13-Command-API/mvn-repo/1.13CommandAPI/</url>
-  </repository>
+  <repositories>
+      <repository>
+          <id>mccommandapi</id>
+          <url>https://raw.githubusercontent.com/JorelAli/1.13-Command-API/mvn-repo/1.13CommandAPI/</url>
+      </repository>
+  </repositories>
   ```
 
 * Add the dependency to your `pom.xml`:
 
   ```
-  <dependency>
-      <groupId>io.github.jorelali</groupId>
-      <artifactId>commandapi</artifactId>
-      <version>VERSION</version>
-  </dependency>
+  <dependencies>
+      <dependency>
+          <groupId>io.github.jorelali</groupId>
+          <artifactId>commandapi</artifactId>
+          <version>VERSION</version>
+      </dependency>
+  </dependencies>
   ```
   A list of version numbers can be found [here](https://github.com/JorelAli/1.13-Command-API/tree/mvn-repo/1.13CommandAPI/io/github/jorelali/commandapi).
   For example, if you wanted to use version 2.0, you would use `<version>2.0</version>`

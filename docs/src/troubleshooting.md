@@ -38,6 +38,10 @@ This is likely caused by the fact that the plugin you want to convert hasn't bee
 loadbefore: [YourPlugin, CommandAPI]
 ```
 
+## Aliases don't work properly (It says unknown command)
+
+This is a persistent bug which has been resolved in version 2.1+ of the CommandAPI.
+
 ## My issue isn't on here, what do I do?!
 
 If you've found a bug that isn't solvable here, submit a bug report on [the CommandAPI's issues page](https://github.com/JorelAli/1.13-Command-API/issues/new/choose) and I'll try my best to resolve the issue!

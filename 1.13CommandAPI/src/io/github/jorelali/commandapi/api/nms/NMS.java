@@ -6,7 +6,9 @@ import java.io.IOException;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.advancement.Advancement;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -17,6 +19,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
 
@@ -47,6 +50,67 @@ public interface NMS {
 		}
 	}
 	
+	/**
+	 * A String array of Minecraft versions that this NMS implementation
+	 * is compatible with. For example, ["1.14", "1.14.1", "1.14.2", "1.14.3"]
+	 * @return A String array of compatible Minecraft versions
+	 */
+	public String[] compatibleVersions();
+	
+	/**
+	 * Creates a JSON file that describes the hierarchical structure of
+	 * the commands that have been registered by the server.
+	 * @param server The NMS MinecraftServer instance
+	 * @param file The JSON file to write to
+	 * @param dispatcher The Brigadier CommandDispatcher
+	 * @throws IOException When the file fails to be written to
+	 */
+	public void createDispatcherFile(Object server, File file, CommandDispatcher<?> dispatcher) throws IOException;
+	
+	/**
+	 * Retrieve a specific NMS implemented SuggestionProvider
+	 * @param provider The SuggestionProvider type to retrieve
+	 * @return A SuggestionProvider that matches the SuggestionProviders input
+	 */
+	public SuggestionProvider<?> getSuggestionProvider(SuggestionProviders provider);
+	
+	/**
+	 * Retrieves a CommandSender, given some CommandContext. This
+	 * method should handle Proxied CommandSenders for entities
+	 * if a Proxy is being used.
+	 * @param cmdCtx The CommandContext for a given command
+	 * @return A CommandSender instance (such as a ProxiedNativeCommandSender or Player)
+	 */
+	public CommandSender getSenderForCommand(CommandContext<?> cmdCtx);
+	
+	/**
+	 * Returns a CommandSender of a given CommandListenerWrapper object
+	 * @param clw The CommandListenerWrapper object
+	 * @return A CommandSender (not proxied) from the command listener wrapper
+	 */
+	public CommandSender getCommandSenderForCLW(Object clw);
+
+	/**
+	 * Given the MinecraftServer instance, returns the Brigadier
+	 * CommandDispatcher from the NMS CommandDispatcher
+	 * @param server The NMS MinecraftServer instance
+	 * @return A Brigadier CommandDispatcher
+	 */
+	public CommandDispatcher<?> getBrigadierDispatcher(Object server);
+
+	/**
+	 * Checks if a Command is an instance of the OBC VanillaCommandWrapper
+	 * @param command The Command to check
+	 * @return true if Command is an instance of VanillaCommandWrapper
+	 */
+	public boolean isVanillaCommandWrapper(Command command);
+	
+	/**
+	 * Returns the Server's internal (OBC) CommandMap
+	 * @return A SimpleCommandMap from the OBC server
+	 */
+	public SimpleCommandMap getSimpleCommandMap();
+	
 	//Argument implementations
 	public ChatColor 			getChatColor(CommandContext<?> cmdCtx, String str);
 	public BaseComponent[] 		getChatComponent(CommandContext<?> cmdCtx, String str);
@@ -60,19 +124,10 @@ public interface NMS {
 	public Object 				getEntitySelector(CommandContext<?> cmdCtx, String str, EntitySelector selector) throws CommandSyntaxException;
 	public EntityType 			getEntityType(CommandContext<?> cmdCtx, String str, CommandSender sender) throws CommandSyntaxException;
 	public LootTable 			getLootTable(CommandContext<?> cmdCtx, String str);
-	
-	public void createDispatcherFile(Object server, File file, CommandDispatcher<?> dispatcher) throws IOException;
-	
-	public SuggestionProvider<?> getSuggestionProvider(SuggestionProviders provider);
-	
-	public CommandSender getSenderForCommand(CommandContext<?> cmdCtx);
-	public CommandSender getCommandSenderForCLW(Object clw);
+	public Sound                getSound(CommandContext<?> cmdCtx, String key);
+	public Advancement          getAdvancement(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
+	public Recipe               getRecipe(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 
-	public CommandDispatcher<?> getBrigadierDispatcher(Object server);
-
-	public boolean isVanillaCommandWrapper(Command command);
-	public SimpleCommandMap getSimpleCommandMap();
-	
 	//Argument types
 	public ArgumentType<?> _ArgumentChatFormat();
 	public ArgumentType<?> _ArgumentChatComponent();
@@ -87,4 +142,7 @@ public interface NMS {
 	public ArgumentType<?> _ArgumentEntitySummon();
 	public ArgumentType<?> _ArgumentEntity(EntitySelector selector);
 	public ArgumentType<?> _ArgumentEnchantment();
+
+
+
 }

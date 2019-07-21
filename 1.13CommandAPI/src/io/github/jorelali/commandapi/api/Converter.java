@@ -70,7 +70,6 @@ public class Converter {
 		//Arguments (none)
 		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 		
-		//TODO: Bug here where aliases don't work properly with 0 arguments
 		CommandAPI.getInstance().register(commandName, permissionNode, aliases, arguments, (sender, args) -> {
 			plugin.getCommand(commandName).execute(sender, commandName, new String[0]);
 		});

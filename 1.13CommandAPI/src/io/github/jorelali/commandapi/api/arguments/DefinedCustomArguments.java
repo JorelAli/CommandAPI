@@ -33,13 +33,9 @@ public class DefinedCustomArguments {
 		}).overrideSuggestions(scoreboard.getTeams().stream().map(o -> o.getName()).toArray(String[]::new));
 	}
 	
-	
 	/*
 	 * TODO: implemented separately and not in here
-	 * LootTables
-	 * Advancements
 	 * Recipes
-	 * Sounds
 	 */
 	
 }

@@ -3,23 +3,24 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Resulting command executors - 1.13 CommandAPI Documentation v2.0</title>
+        <title>Resulting command executors - 1.13 CommandAPI Documentation v2.1</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-        <base href="">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
 
-        <link rel="stylesheet" href="book.css">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
-        <link rel="shortcut icon" href="favicon.png">
-
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-
+        <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
@@ -28,9 +29,11 @@
         
 
         
-
     </head>
     <body class="light">
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">var path_to_root = "";</script>
+
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script type="text/javascript">
             try {
@@ -69,7 +72,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="commandexecutors.html"><strong aria-hidden="true">4.</strong> Command executors</a></li><li><ol class="section"><li><a href="proxysender.html"><strong aria-hidden="true">4.1.</strong> Proxied commandsenders</a></li><li><a href="resultingcommandexecutors.html" class="active"><strong aria-hidden="true">4.2.</strong> Resulting command executors</a></li></ol></li><li><a href="arguments.html"><strong aria-hidden="true">5.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">5.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">5.2.</strong> Location arguments</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">5.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">5.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">5.5.</strong> Entity &amp; player arguments</a></li><li><a href="literalarguments.html"><strong aria-hidden="true">5.6.</strong> Literal arguments</a></li><li><a href="dynsugargs.html"><strong aria-hidden="true">5.7.</strong> Dynamically suggested arguments</a></li><li><a href="customarguments.html"><strong aria-hidden="true">5.8.</strong> Custom arguments</a></li></ol></li><li><a href="functions.html"><strong aria-hidden="true">6.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li><a href="functionsetup.html"><strong aria-hidden="true">6.1.</strong> Setting up functions &amp; tags</a></li><li><a href="functionwrapper.html"><strong aria-hidden="true">6.2.</strong> The FunctionWrapper class</a></li><li><a href="functionarguments.html"><strong aria-hidden="true">6.3.</strong> Function arguments</a></li></ol></li><li><a href="permissions.html"><strong aria-hidden="true">7.</strong> Permissions</a></li><li><a href="aliases.html"><strong aria-hidden="true">8.</strong> Aliases</a></li><li><a href="conversion.html"><strong aria-hidden="true">9.</strong> Command conversion</a></li><li class="affix"><a href="troubleshooting.html">Troubleshooting</a></li><li class="affix"><a href="afterword.html">Afterword</a></li></ol>
+            <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="commandexecutors.html"><strong aria-hidden="true">4.</strong> Command executors</a></li><li><ol class="section"><li><a href="proxysender.html"><strong aria-hidden="true">4.1.</strong> Proxied commandsenders</a></li><li><a href="resultingcommandexecutors.html" class="active"><strong aria-hidden="true">4.2.</strong> Resulting command executors</a></li></ol></li><li><a href="arguments.html"><strong aria-hidden="true">5.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">5.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">5.2.</strong> Location arguments</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">5.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">5.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">5.5.</strong> Entity &amp; player arguments</a></li><li><a href="literalarguments.html"><strong aria-hidden="true">5.6.</strong> Literal arguments</a></li><li><a href="dynsugargs.html"><strong aria-hidden="true">5.7.</strong> Dynamically suggested arguments</a></li><li><a href="customarguments.html"><strong aria-hidden="true">5.8.</strong> Custom arguments</a></li><li><a href="technicalargs.html"><strong aria-hidden="true">5.9.</strong> Technical arguments</a></li><li><ol class="section"><li><a href="soundargument.html"><strong aria-hidden="true">5.9.1.</strong> Sound argument</a></li><li><a href="advancementarg.html"><strong aria-hidden="true">5.9.2.</strong> Advancement argument</a></li><li><a href="recipeargument.html"><strong aria-hidden="true">5.9.3.</strong> Recipe argument</a></li><li><a href="loottableargument.html"><strong aria-hidden="true">5.9.4.</strong> LootTable argument</a></li></ol></li></ol></li><li><a href="functions.html"><strong aria-hidden="true">6.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li><a href="functionsetup.html"><strong aria-hidden="true">6.1.</strong> Setting up functions &amp; tags</a></li><li><a href="functionwrapper.html"><strong aria-hidden="true">6.2.</strong> The FunctionWrapper class</a></li><li><a href="functionarguments.html"><strong aria-hidden="true">6.3.</strong> Function arguments</a></li></ol></li><li><a href="permissions.html"><strong aria-hidden="true">7.</strong> Permissions</a></li><li><a href="aliases.html"><strong aria-hidden="true">8.</strong> Aliases</a></li><li><a href="conversion.html"><strong aria-hidden="true">9.</strong> Command conversion</a></li><li class="affix"><a href="troubleshooting.html">Troubleshooting</a></li><li class="affix"><a href="afterword.html">Afterword</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -99,7 +102,7 @@
                             
                         </div>
 
-                        <h1 class="menu-title">1.13 CommandAPI Documentation v2.0</h1> 
+                        <h1 class="menu-title">1.13 CommandAPI Documentation v2.1</h1> 
 
                         <div class="right-buttons">
                             <a href="print.html" title="Print this book" aria-label="Print this book">
@@ -133,21 +136,21 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="resultingcommandexecutors.html#resulting-command-executors" id="resulting-command-executors"><h1>Resulting command executors</h1></a>
+                        <a class="header" href="#resulting-command-executors" id="resulting-command-executors"><h1>Resulting command executors</h1></a>
 <p>Resulting command executors are very similar to normal command executors, the only difference is that they can return an integer <em>result value</em>.</p>
 <pre><code class="language-java">(sender, args) -&gt; {
     //Code here
     return /*some integer here*/ ;
 };
 </code></pre>
-<a class="header" href="resultingcommandexecutors.html#example---random-number-result-command" id="example---random-number-result-command"><h2>Example - Random number result command</h2></a>
+<a class="header" href="#example---random-number-result-command" id="example---random-number-result-command"><h2>Example - Random number result command</h2></a>
 <p>Say we want a command that returns a random number as a result. This can then be used by vanilla Minecraft's <code>/execute store result ...</code> command, which can be used for other command block chains.</p>
 <pre><code class="language-java">CommandAPI.getInstance().register(&quot;randnum&quot;, new LinkedHashMap&lt;String, Argument&gt;(), (sender, args) -&gt; {
     return new Random().nextInt();
 });
 </code></pre>
 <p>This returns a success value of 1 <em>(Because no errors or <code>CommandAPI.fail(String)</code> was thrown)</em> and a return value of a random number.</p>
-<a class="header" href="resultingcommandexecutors.html#example---lootbox-system-with-execute-command" id="example---lootbox-system-with-execute-command"><h2>Example - Lootbox system with <code>/execute</code> command</h2></a>
+<a class="header" href="#example---lootbox-system-with-execute-command" id="example---lootbox-system-with-execute-command"><h2>Example - Lootbox system with <code>/execute</code> command</h2></a>
 <p>We can store state using <code>/execute store</code> and we can perform conditional checks using <code>/execute if</code>. By combining these, we can create a system which can be used with commandblocks to say, give players random lootboxes and redeem them.</p>
 <pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 
@@ -215,9 +218,6 @@ CommandAPI.getInstance().register(&quot;givereward&quot;, arguments, (sender, ar
 
         
 
-        
-        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
-        
         
         <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>

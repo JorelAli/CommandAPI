@@ -3,7 +3,6 @@ package io.github.jorelali.commandapi.api;
 import java.util.LinkedHashMap;
 
 import com.mojang.brigadier.LiteralMessage;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
 import io.github.jorelali.commandapi.api.arguments.Argument;
@@ -27,7 +26,7 @@ public class CommandAPI {
 	/**
 	 * Forces a command to return a success value of 0
 	 * @param message Description of the error message
-	 * @throws CommandSyntaxException
+	 * @throws WrapperCommandSyntaxException
 	 */
 	public static void fail(String message) throws WrapperCommandSyntaxException {
 		throw new WrapperCommandSyntaxException(new SimpleCommandExceptionType(new LiteralMessage(message)).create());
@@ -38,9 +37,6 @@ public class CommandAPI {
 	 * @return An instance of the CommandAPI
 	 */
 	public static CommandAPI getInstance() {
-	/*	if(instance == null) {
-			new CommandAPI();
-		}*/
 		return CommandAPI.instance;
 	}	
 	
@@ -59,23 +55,7 @@ public class CommandAPI {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-
 	}
-
-	/*protected CommandAPI() {
-		if(instance == null) {
-			instance = this;
-		} else {
-			throw new RuntimeException("CommandAPI cannot be instantiated twice"); //Don't need to re-instantiate CommandAPI
-		}
-		
-		//Only ever called once
-		try {
-			CommandAPI.reflector = new CommandAPIHandler();			
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-	}*/
 	
 	/**
 	 * Unregisters a command
@@ -202,13 +182,9 @@ public class CommandAPI {
 				throw new InvalidCommandNameException(commandName);
 			}
 			
-			if(args == null) {
-				args = new LinkedHashMap<>();
-			}
-			
 			//Make a local copy of args to deal with
 			@SuppressWarnings("unchecked")
-			LinkedHashMap<String, Argument> copyOfArgs = (LinkedHashMap<String, Argument>) args.clone();
+			LinkedHashMap<String, Argument> copyOfArgs = args == null ? new LinkedHashMap<>() : (LinkedHashMap<String, Argument>) args.clone();
 			
 			//if args contains a GreedyString && args.getLast != GreedyString
 			long numGreedyArgs = copyOfArgs.values().stream().filter(arg -> arg instanceof GreedyStringArgument).count();

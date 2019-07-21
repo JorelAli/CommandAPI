@@ -2,7 +2,9 @@ package io.github.jorelali.commandapi.api.nms;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.function.ToIntBiFunction;
@@ -13,12 +15,14 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.v1_13_R2.CraftLootTable;
 import org.bukkit.craftbukkit.v1_13_R2.CraftParticle;
 import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_13_R2.CraftSound;
 import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_13_R2.command.ProxiedNativeCommandSender;
 import org.bukkit.craftbukkit.v1_13_R2.command.VanillaCommandWrapper;
@@ -31,6 +35,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
 
@@ -270,6 +275,30 @@ public class NMS_1_13_R2 implements NMS {
 		net.minecraft.server.v1_13_R2.LootTable lootTable = getCLW(cmdCtx).getServer().getLootTableRegistry().getLootTable(minecraftKey);
 		return new CraftLootTable(new NamespacedKey(namespace, key), lootTable);
 	}
+	
+	@Override
+	public Sound getSound(CommandContext cmdCtx, String key) {
+		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.c(cmdCtx, key);
+		Map<String, CraftSound> map = new HashMap<>(); 
+		Arrays.stream(CraftSound.values()).forEach(val -> {
+			try {
+				map.put((String) CommandAPIHandler.getField(CraftSound.class, "minecraftKey").get(val), val);
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		});
+		return Sound.valueOf(map.get(minecraftKey.getKey()).name());
+	}
+	
+	@Override
+	public org.bukkit.advancement.Advancement getAdvancement(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		return ArgumentMinecraftKeyRegistered.a(cmdCtx, key).bukkit;
+	}
+	
+	@Override
+	public Recipe getRecipe(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		return ArgumentMinecraftKeyRegistered.b(cmdCtx, key).toBukkitRecipe();
+	}
 
 	@Override
 	public SimpleCommandMap getSimpleCommandMap() {
@@ -354,6 +383,11 @@ public class NMS_1_13_R2 implements NMS {
 	@Override
 	public ArgumentType _ArgumentEnchantment() {
 		return ArgumentEnchantment.a();
+	}
+
+	@Override
+	public String[] compatibleVersions() {
+		return new String[] {"1.13.2"};
 	}
 
 }

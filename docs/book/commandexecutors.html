@@ -3,23 +3,24 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Command executors - 1.13 CommandAPI Documentation v2.0</title>
+        <title>Command executors - 1.13 CommandAPI Documentation v2.1</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-        <base href="">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
 
-        <link rel="stylesheet" href="book.css">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
-        <link rel="shortcut icon" href="favicon.png">
-
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-
+        <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
@@ -28,9 +29,11 @@
         
 
         
-
     </head>
     <body class="light">
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">var path_to_root = "";</script>
+
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script type="text/javascript">
             try {
@@ -69,7 +72,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="commandexecutors.html" class="active"><strong aria-hidden="true">4.</strong> Command executors</a></li><li><ol class="section"><li><a href="proxysender.html"><strong aria-hidden="true">4.1.</strong> Proxied commandsenders</a></li><li><a href="resultingcommandexecutors.html"><strong aria-hidden="true">4.2.</strong> Resulting command executors</a></li></ol></li><li><a href="arguments.html"><strong aria-hidden="true">5.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">5.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">5.2.</strong> Location arguments</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">5.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">5.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">5.5.</strong> Entity &amp; player arguments</a></li><li><a href="literalarguments.html"><strong aria-hidden="true">5.6.</strong> Literal arguments</a></li><li><a href="dynsugargs.html"><strong aria-hidden="true">5.7.</strong> Dynamically suggested arguments</a></li><li><a href="customarguments.html"><strong aria-hidden="true">5.8.</strong> Custom arguments</a></li></ol></li><li><a href="functions.html"><strong aria-hidden="true">6.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li><a href="functionsetup.html"><strong aria-hidden="true">6.1.</strong> Setting up functions &amp; tags</a></li><li><a href="functionwrapper.html"><strong aria-hidden="true">6.2.</strong> The FunctionWrapper class</a></li><li><a href="functionarguments.html"><strong aria-hidden="true">6.3.</strong> Function arguments</a></li></ol></li><li><a href="permissions.html"><strong aria-hidden="true">7.</strong> Permissions</a></li><li><a href="aliases.html"><strong aria-hidden="true">8.</strong> Aliases</a></li><li><a href="conversion.html"><strong aria-hidden="true">9.</strong> Command conversion</a></li><li class="affix"><a href="troubleshooting.html">Troubleshooting</a></li><li class="affix"><a href="afterword.html">Afterword</a></li></ol>
+            <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="commandexecutors.html" class="active"><strong aria-hidden="true">4.</strong> Command executors</a></li><li><ol class="section"><li><a href="proxysender.html"><strong aria-hidden="true">4.1.</strong> Proxied commandsenders</a></li><li><a href="resultingcommandexecutors.html"><strong aria-hidden="true">4.2.</strong> Resulting command executors</a></li></ol></li><li><a href="arguments.html"><strong aria-hidden="true">5.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">5.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">5.2.</strong> Location arguments</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">5.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">5.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">5.5.</strong> Entity &amp; player arguments</a></li><li><a href="literalarguments.html"><strong aria-hidden="true">5.6.</strong> Literal arguments</a></li><li><a href="dynsugargs.html"><strong aria-hidden="true">5.7.</strong> Dynamically suggested arguments</a></li><li><a href="customarguments.html"><strong aria-hidden="true">5.8.</strong> Custom arguments</a></li><li><a href="technicalargs.html"><strong aria-hidden="true">5.9.</strong> Technical arguments</a></li><li><ol class="section"><li><a href="soundargument.html"><strong aria-hidden="true">5.9.1.</strong> Sound argument</a></li><li><a href="advancementarg.html"><strong aria-hidden="true">5.9.2.</strong> Advancement argument</a></li><li><a href="recipeargument.html"><strong aria-hidden="true">5.9.3.</strong> Recipe argument</a></li><li><a href="loottableargument.html"><strong aria-hidden="true">5.9.4.</strong> LootTable argument</a></li></ol></li></ol></li><li><a href="functions.html"><strong aria-hidden="true">6.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li><a href="functionsetup.html"><strong aria-hidden="true">6.1.</strong> Setting up functions &amp; tags</a></li><li><a href="functionwrapper.html"><strong aria-hidden="true">6.2.</strong> The FunctionWrapper class</a></li><li><a href="functionarguments.html"><strong aria-hidden="true">6.3.</strong> Function arguments</a></li></ol></li><li><a href="permissions.html"><strong aria-hidden="true">7.</strong> Permissions</a></li><li><a href="aliases.html"><strong aria-hidden="true">8.</strong> Aliases</a></li><li><a href="conversion.html"><strong aria-hidden="true">9.</strong> Command conversion</a></li><li class="affix"><a href="troubleshooting.html">Troubleshooting</a></li><li class="affix"><a href="afterword.html">Afterword</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -99,7 +102,7 @@
                             
                         </div>
 
-                        <h1 class="menu-title">1.13 CommandAPI Documentation v2.0</h1> 
+                        <h1 class="menu-title">1.13 CommandAPI Documentation v2.1</h1> 
 
                         <div class="right-buttons">
                             <a href="print.html" title="Print this book" aria-label="Print this book">
@@ -133,7 +136,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="commandexecutors.html#command-executors" id="command-executors"><h1>Command executors</h1></a>
+                        <a class="header" href="#command-executors" id="command-executors"><h1>Command executors</h1></a>
 <blockquote>
 <p><strong>Developer's Note:</strong></p>
 <p>This section can be a little bit difficult to follow. If you only want the bare basic features <em>(executes a command)</em>, read the section below on <em>Normal command executors</em> - this behaves very similar to the <code>onCommand</code> method in Bukkit.</p>
@@ -144,19 +147,19 @@
 <p><strong>Developer's Note:</strong></p>
 <p>In general, you need not focus too much on what type of command executor to implement. If you know for certain that you're going to be using your command with command blocks, just ensure you return an integer at the end of your declared command executor. Java will infer the type <em>(whether it's a CommandExecutor or ResultingCommandExecutor)</em> automatically, so feel free to return an integer or not.</p>
 </blockquote>
-<a class="header" href="commandexecutors.html#normal-command-executors" id="normal-command-executors"><h2>Normal command executors</h2></a>
+<a class="header" href="#normal-command-executors" id="normal-command-executors"><h2>Normal command executors</h2></a>
 <p>Command executors are of the following format, where <code>sender</code> is a <a href="https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/command/CommandSender.html"><code>CommandSender</code></a>, and <code>args</code> is an <code>Object[]</code>, which represents arguments which are parsed by the CommandAPI.</p>
 <pre><code class="language-java">(sender, args) -&gt; {
   //Code here  
 };
 </code></pre>
 <p>With normal command executors, these do not need to return anything. By default, this will return a <em>success value</em> of 1 if it runs successfully, and a <em>success value</em> of 0 if it runs unsuccessfully, either by throwing an exception <em>(RuntimeException)</em> or by forcing the command to fail.</p>
-<a class="header" href="commandexecutors.html#forcing-commands-to-fail" id="forcing-commands-to-fail"><h2>Forcing commands to fail</h2></a>
+<a class="header" href="#forcing-commands-to-fail" id="forcing-commands-to-fail"><h2>Forcing commands to fail</h2></a>
 <p>Sometimes, you want your command to fail on purpose. This is basically the way to &quot;gracefully&quot; handle errors in your command execution. This is performed using the following method:</p>
 <pre><code class="language-java">CommandAPI.fail(&quot;Error message goes here&quot;);
 </code></pre>
 <p>When the CommandAPI calls the fail method, it will cause the command to return a <em>success value</em> of 0, to indicate failure.</p>
-<a class="header" href="commandexecutors.html#example---command-failing-for-element-not-in-a-list" id="example---command-failing-for-element-not-in-a-list"><h3>Example - Command failing for element not in a list</h3></a>
+<a class="header" href="#example---command-failing-for-element-not-in-a-list" id="example---command-failing-for-element-not-in-a-list"><h3>Example - Command failing for element not in a list</h3></a>
 <p>Say we have some list, <code>List&lt;String&gt;</code> containing a bunch of fruit and the player can choose from it. In order to do that, we can use a <code>StringArgument</code> and suggest it to the player using <code>.overrideSuggestions(String[])</code>. However, because this only lists <em>suggestions</em> to the player, it does <strong>not</strong> stop the player from entering an option that isn't on the list of suggestions.</p>
 <p>Therefore, to gracefully handle this with a proper error message, we use <code>CommandAPI.fail(String)</code> with a meaningful error message which is displayed to the user.</p>
 <pre><code class="language-java">//Array of fruit
@@ -228,9 +231,6 @@ CommandAPI.getInstance().register(&quot;getfruit&quot;, arguments, (sender, args
 
         
 
-        
-        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
-        
         
         <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>

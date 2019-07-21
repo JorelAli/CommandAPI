@@ -18,6 +18,7 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 
 | Version | Direct download                                              | Documentation                                                |
 | ------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 2.1 |  | [Version 2.1 documentation](https://jorelali.github.io/1.13-Command-API/) |
 | 2.0.1 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.0.1/CommandAPI.jar)  | [Version 2.0 documentation](https://jorelali.github.io/1.13-Command-API/) |
 | 2.0 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.0/CommandAPI.jar)  | [Version 2.0 documentation](https://jorelali.github.io/1.13-Command-API/) |
 | 1.8.2 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.8.2/CommandAPI.jar) | [Version 1.8 - 1.8.2 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/v1.8%20Documentation.md) |
@@ -51,8 +52,16 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 To build the CommandAPI, a copy of the required Spigot.jar libraries are required for the following versions of Minecraft:
 
 * 1.13.2
+
 * 1.14
+
+* 1.14.1
+
 * 1.14.2
+
+* 1.14.3
+
+* 1.14.4
 
 To download these easily:
 
@@ -68,6 +77,17 @@ To download these easily:
 
 ## Changelog
 
+* Version 2.1
+  * Adds RecipeArgument
+  * Adds SoundArgument
+  * Adds AdvancementArgument
+  * Adds LootTableArgument
+  * Adds support for 1.14.3 and 1.14.4
+  * Fixes bug where aliases weren't registering properly (#43)
+  * Fix documentation for tooltips
+  * Improve documentation for dependencies and repositories
+* Version 2.0.1
+  * Fix a bug where Brigadier was required as a dependency to build plugins
 * Version 2.0
   * Compatibility for 1.14
   * Major overhaul of the CommandAPI's internals - greatly improves performance

@@ -3,23 +3,24 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Command registration - 1.13 CommandAPI Documentation v2.0</title>
+        <title>Command registration - 1.13 CommandAPI Documentation v2.1</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-        <base href="">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
 
-        <link rel="stylesheet" href="book.css">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
-        <link rel="shortcut icon" href="favicon.png">
-
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-
+        <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
@@ -28,9 +29,11 @@
         
 
         
-
     </head>
     <body class="light">
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">var path_to_root = "";</script>
+
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script type="text/javascript">
             try {
@@ -69,7 +72,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li><a href="commandregistration.html" class="active"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="commandexecutors.html"><strong aria-hidden="true">4.</strong> Command executors</a></li><li><ol class="section"><li><a href="proxysender.html"><strong aria-hidden="true">4.1.</strong> Proxied commandsenders</a></li><li><a href="resultingcommandexecutors.html"><strong aria-hidden="true">4.2.</strong> Resulting command executors</a></li></ol></li><li><a href="arguments.html"><strong aria-hidden="true">5.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">5.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">5.2.</strong> Location arguments</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">5.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">5.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">5.5.</strong> Entity &amp; player arguments</a></li><li><a href="literalarguments.html"><strong aria-hidden="true">5.6.</strong> Literal arguments</a></li><li><a href="dynsugargs.html"><strong aria-hidden="true">5.7.</strong> Dynamically suggested arguments</a></li><li><a href="customarguments.html"><strong aria-hidden="true">5.8.</strong> Custom arguments</a></li></ol></li><li><a href="functions.html"><strong aria-hidden="true">6.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li><a href="functionsetup.html"><strong aria-hidden="true">6.1.</strong> Setting up functions &amp; tags</a></li><li><a href="functionwrapper.html"><strong aria-hidden="true">6.2.</strong> The FunctionWrapper class</a></li><li><a href="functionarguments.html"><strong aria-hidden="true">6.3.</strong> Function arguments</a></li></ol></li><li><a href="permissions.html"><strong aria-hidden="true">7.</strong> Permissions</a></li><li><a href="aliases.html"><strong aria-hidden="true">8.</strong> Aliases</a></li><li><a href="conversion.html"><strong aria-hidden="true">9.</strong> Command conversion</a></li><li class="affix"><a href="troubleshooting.html">Troubleshooting</a></li><li class="affix"><a href="afterword.html">Afterword</a></li></ol>
+            <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li><a href="commandregistration.html" class="active"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="commandexecutors.html"><strong aria-hidden="true">4.</strong> Command executors</a></li><li><ol class="section"><li><a href="proxysender.html"><strong aria-hidden="true">4.1.</strong> Proxied commandsenders</a></li><li><a href="resultingcommandexecutors.html"><strong aria-hidden="true">4.2.</strong> Resulting command executors</a></li></ol></li><li><a href="arguments.html"><strong aria-hidden="true">5.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">5.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">5.2.</strong> Location arguments</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">5.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">5.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">5.5.</strong> Entity &amp; player arguments</a></li><li><a href="literalarguments.html"><strong aria-hidden="true">5.6.</strong> Literal arguments</a></li><li><a href="dynsugargs.html"><strong aria-hidden="true">5.7.</strong> Dynamically suggested arguments</a></li><li><a href="customarguments.html"><strong aria-hidden="true">5.8.</strong> Custom arguments</a></li><li><a href="technicalargs.html"><strong aria-hidden="true">5.9.</strong> Technical arguments</a></li><li><ol class="section"><li><a href="soundargument.html"><strong aria-hidden="true">5.9.1.</strong> Sound argument</a></li><li><a href="advancementarg.html"><strong aria-hidden="true">5.9.2.</strong> Advancement argument</a></li><li><a href="recipeargument.html"><strong aria-hidden="true">5.9.3.</strong> Recipe argument</a></li><li><a href="loottableargument.html"><strong aria-hidden="true">5.9.4.</strong> LootTable argument</a></li></ol></li></ol></li><li><a href="functions.html"><strong aria-hidden="true">6.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li><a href="functionsetup.html"><strong aria-hidden="true">6.1.</strong> Setting up functions &amp; tags</a></li><li><a href="functionwrapper.html"><strong aria-hidden="true">6.2.</strong> The FunctionWrapper class</a></li><li><a href="functionarguments.html"><strong aria-hidden="true">6.3.</strong> Function arguments</a></li></ol></li><li><a href="permissions.html"><strong aria-hidden="true">7.</strong> Permissions</a></li><li><a href="aliases.html"><strong aria-hidden="true">8.</strong> Aliases</a></li><li><a href="conversion.html"><strong aria-hidden="true">9.</strong> Command conversion</a></li><li class="affix"><a href="troubleshooting.html">Troubleshooting</a></li><li class="affix"><a href="afterword.html">Afterword</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -99,7 +102,7 @@
                             
                         </div>
 
-                        <h1 class="menu-title">1.13 CommandAPI Documentation v2.0</h1> 
+                        <h1 class="menu-title">1.13 CommandAPI Documentation v2.1</h1> 
 
                         <div class="right-buttons">
                             <a href="print.html" title="Print this book" aria-label="Print this book">
@@ -133,7 +136,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="commandregistration.html#command-registration" id="command-registration"><h1>Command registration</h1></a>
+                        <a class="header" href="#command-registration" id="command-registration"><h1>Command registration</h1></a>
 <p>To register commands with the CommandAPI, there are several methods which can be used, depending on whether you want your command to have aliases or permissions in order to run it.</p>
 <table><thead><tr><th> CommandRegistration method                                   </th><th> Outcome                                                   </th></tr></thead><tbody>
 <tr><td> <code>CommandAPI.getInstance().register(String, LinkedHashMap, CommandExecutor)</code> </td><td> Basic command registration                                </td></tr>
@@ -151,11 +154,7 @@
 </li>
 <li>
 <p><code>LinkedHashMap&lt;String, Argument&gt;</code> - The list of arguments</p>
-<p>The CommandAPI requires a list of arguments which are used for the command. The argument map consists of a key which is a String descriptor (it can basically be anything, this is for your own readability and to make the code easier to understand), and a value which is an instance of an argument (See the section on arguments). This list of arguments is interpreted in the <em>order that arguments are added to the LinkedHashMap</em>.</p>
-<blockquote>
-<p><strong>Developer's Note:</strong></p>
-<p>The String key isn't &quot;technically&quot; for readability purposes. Internally, Minecraft requires a String which is used to uniquely identify the argument and for internal processing. I chose to leave the String key in the CommandAPI (as opposed to just using a regular LinkedList) as it provides much more readability for you, the developer and helps keep track of what content each argument contains.</p>
-</blockquote>
+<p>The CommandAPI requires a list of arguments which are used for the command. The argument map consists of a key which is the tooltip that is displayed as a prompt to users entering commands, and a value which is an instance of an argument (See the section on arguments). This list of arguments is interpreted in the <em>order that arguments are added to the LinkedHashMap</em>.</p>
 </li>
 <li>
 <p><code>String[]</code> - An array of aliases that the command can be run via</p>
@@ -164,19 +163,19 @@
 <p><code>CommandPermission</code> - The required permission to execute a command. (See the section on permissions).</p>
 </li>
 </ul>
-<a class="header" href="commandregistration.html#command-loading-order" id="command-loading-order"><h2>Command loading order</h2></a>
+<a class="header" href="#command-loading-order" id="command-loading-order"><h2>Command loading order</h2></a>
 <p>In order to register commands properly, <strong>commands must be registered before the server finishes loading</strong>. The CommandAPI will prevent command registration after the server has loaded. This basically means that all command registration must occur during a plugin's <code>onLoad()</code> or <code>onEnable()</code> method. With the CommandAPI, depending on which of these functions you load your commands is crutial if your plugin is used with Minecraft's functions.</p>
 <table><thead><tr><th> When to load        </th><th> What to do                                                                               </th></tr></thead><tbody>
 <tr><td> <code>onLoad()</code> method   </td><td> Register commands to be used in Minecraft functions (see Function section for more info) </td></tr>
 <tr><td> <code>onEnable()</code> method </td><td> Register regular commands                                                                </td></tr>
 </tbody></table>
-<a class="header" href="commandregistration.html#command-unregistration" id="command-unregistration"><h2>Command unregistration</h2></a>
+<a class="header" href="#command-unregistration" id="command-unregistration"><h2>Command unregistration</h2></a>
 <p>The CommandAPI has support to unregister commands completely from Minecraft's command list. This includes Minecraft built in commands!</p>
 <table><thead><tr><th> Method                                                       </th><th> Result                                                       </th></tr></thead><tbody>
 <tr><td> <code>CommandAPI.getInstance().unregister(String cmd)</code>            </td><td> Unregisters a command from the game                          </td></tr>
 <tr><td> <code>CommandAPI.getInstance().unregister(String cmd, boolean force)</code> </td><td> Attempts to unregister a command from the game by force. This includes <code>/minecraft:cmd</code>, <code>/bukkit:cmd</code> and <code>/spigot:cmd</code> commands as well. </td></tr>
 </tbody></table>
-<a class="header" href="commandregistration.html#example---replacing-minecrafts-gamemode-command" id="example---replacing-minecrafts-gamemode-command"><h3>Example - Replacing Minecraft's <code>/gamemode</code> command</h3></a>
+<a class="header" href="#example---replacing-minecrafts-gamemode-command" id="example---replacing-minecrafts-gamemode-command"><h3>Example - Replacing Minecraft's <code>/gamemode</code> command</h3></a>
 <p>To replace a command, we can first unregister it and then register our implementation of that command.</p>
 <pre><code class="language-java">//Unregister the gamemode command from the server (by force)
 CommandAPI.getInstance().unregister(&quot;gamemode&quot;, true);
@@ -240,9 +239,6 @@ CommandAPI.getInstance().register(&quot;gamemode&quot;, arguments, (sender, args
 
         
 
-        
-        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
-        
         
         <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>

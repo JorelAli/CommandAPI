@@ -1,5 +1,10 @@
 # TODO
 
-## Things to do after releasing
+## Things to do before releasing 2.1
 
-* README documentation on how to build the CommandAPI for yourself
+* Adds download for README
+
+## Things to do after releasing 2.1
+
+* Create trailer?
+* Tick of issues
