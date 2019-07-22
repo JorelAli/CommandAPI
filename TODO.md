@@ -1,10 +1,8 @@
 # TODO
 
-## Things to do before releasing 2.1
+## Trailer design - things to showcase:
 
-* Adds download for README
-
-## Things to do after releasing 2.1
-
-* Create trailer?
-* Tick of issues
+* Custom error messages?
+* Integer boundaries
+* Proxied senders
+  * Say we have some command that makes an entity say something in chat, then blow up or something
