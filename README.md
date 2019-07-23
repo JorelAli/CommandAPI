@@ -12,13 +12,13 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 
   ![better arguments](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/images/explode.gif)
 
-* **Support for the `/execute` command** - Let your command to be executed by the built in `/execute` command
-
-* **Support for Minecraft's functions** - Allow your command to be executed from Minecraft's functions and tags
-
 * **Support for proxied command senders** - Run your command as other entities using `/execute as ... run command`
 
   ![proxied senders](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/images/selfdestruct.gif)
+
+* **Support for the `/execute` command** - Let your command to be executed by the built in `/execute` command
+
+* **Support for Minecraft's functions** - Allow your command to be executed from Minecraft's functions and tags
 
 * **No plugin.yml registration** - Commands don't need to be registered in the `plugin.yml` file anymore
 
