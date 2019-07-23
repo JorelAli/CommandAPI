@@ -22,10 +22,6 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 
 * **No dependencies** - You don't need to import Brigadier in your projects to use the CommandAPI
 
-<p align="center">
-  <img src="https://i.imgur.com/aTJa77G.gif">
-</p>
-
 ## Downloads & Documentation (includes usage for server owners)
 
 | Version | Direct download                                              | Documentation                                                |
