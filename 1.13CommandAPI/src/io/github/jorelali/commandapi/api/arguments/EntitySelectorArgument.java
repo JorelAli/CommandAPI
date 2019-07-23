@@ -1,14 +1,12 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import java.util.Collection;
-
+import com.mojang.brigadier.arguments.ArgumentType;
+import io.github.jorelali.commandapi.api.CommandAPIHandler;
+import io.github.jorelali.commandapi.api.CommandPermission;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import com.mojang.brigadier.arguments.ArgumentType;
-
-import io.github.jorelali.commandapi.api.CommandAPIHandler;
-import io.github.jorelali.commandapi.api.CommandPermission;
+import java.util.Collection;
 
 @SuppressWarnings("unchecked")
 public class EntitySelectorArgument implements Argument, OverrideableSuggestions {

@@ -1,11 +1,9 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import org.bukkit.entity.Player;
-
 import com.mojang.brigadier.arguments.ArgumentType;
-
 import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
+import org.bukkit.entity.Player;
 
 @SuppressWarnings("unchecked")
 public class PlayerArgument implements Argument, OverrideableSuggestions {

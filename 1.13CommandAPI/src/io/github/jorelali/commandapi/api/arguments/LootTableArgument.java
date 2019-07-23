@@ -1,11 +1,9 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import org.bukkit.loot.LootTable;
-
 import com.mojang.brigadier.arguments.ArgumentType;
-
 import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
+import org.bukkit.loot.LootTable;
 
 @SuppressWarnings("unchecked")
 public class LootTableArgument implements Argument, CustomProvidedArgument {

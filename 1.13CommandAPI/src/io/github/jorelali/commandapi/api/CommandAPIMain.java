@@ -1,11 +1,11 @@
 package io.github.jorelali.commandapi.api;
 
-import java.io.File;
-import java.util.logging.Logger;
-
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.util.logging.Logger;
 
 public class CommandAPIMain extends JavaPlugin {
 	

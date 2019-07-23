@@ -1,11 +1,10 @@
 package io.github.jorelali.commandapi.api.arguments;
 
+import io.github.jorelali.commandapi.api.arguments.CustomArgument.MessageBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
-
-import io.github.jorelali.commandapi.api.arguments.CustomArgument.MessageBuilder;
 
 public class DefinedCustomArguments {
 	

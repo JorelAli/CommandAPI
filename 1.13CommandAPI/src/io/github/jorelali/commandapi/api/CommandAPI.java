@@ -1,15 +1,14 @@
 package io.github.jorelali.commandapi.api;
 
-import java.util.LinkedHashMap;
-
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.GreedyStringArgument;
 import io.github.jorelali.commandapi.api.exceptions.GreedyStringException;
 import io.github.jorelali.commandapi.api.exceptions.InvalidCommandNameException;
 import io.github.jorelali.commandapi.api.exceptions.WrapperCommandSyntaxException;
+
+import java.util.LinkedHashMap;
 
 /**
  * Class to register commands with the 1.13 command UI

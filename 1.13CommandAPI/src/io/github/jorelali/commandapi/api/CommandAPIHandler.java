@@ -1,29 +1,5 @@
 package io.github.jorelali.commandapi.api;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TreeMap;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Predicate;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.permissions.Permission;
-
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -37,25 +13,31 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-
-import io.github.jorelali.commandapi.api.arguments.Argument;
-import io.github.jorelali.commandapi.api.arguments.CustomArgument;
+import io.github.jorelali.commandapi.api.arguments.*;
 import io.github.jorelali.commandapi.api.arguments.CustomArgument.CustomArgumentException;
 import io.github.jorelali.commandapi.api.arguments.CustomArgument.MessageBuilder;
-import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument;
 import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
-import io.github.jorelali.commandapi.api.arguments.DynamicSuggestedStringArgument;
-import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument;
-import io.github.jorelali.commandapi.api.arguments.LiteralArgument;
-import io.github.jorelali.commandapi.api.arguments.LocationArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationArgument.LocationType;
-import io.github.jorelali.commandapi.api.arguments.OverrideableSuggestions;
-import io.github.jorelali.commandapi.api.arguments.StringArgument;
-import io.github.jorelali.commandapi.api.arguments.SuggestedStringArgument;
 import io.github.jorelali.commandapi.api.exceptions.WrapperCommandSyntaxException;
 import io.github.jorelali.commandapi.api.nms.NMS;
 import io.github.jorelali.commandapi.api.nms.NMS_1_13_R2;
 import io.github.jorelali.commandapi.api.nms.NMS_1_14_R1;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.permissions.Permission;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @SuppressWarnings({"rawtypes", "unchecked", "deprecation"})
 /**

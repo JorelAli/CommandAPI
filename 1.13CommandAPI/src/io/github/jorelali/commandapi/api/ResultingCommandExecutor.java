@@ -1,8 +1,7 @@
 package io.github.jorelali.commandapi.api;
 
-import org.bukkit.command.CommandSender;
-
 import io.github.jorelali.commandapi.api.exceptions.WrapperCommandSyntaxException;
+import org.bukkit.command.CommandSender;
 
 @FunctionalInterface
 public interface ResultingCommandExecutor {

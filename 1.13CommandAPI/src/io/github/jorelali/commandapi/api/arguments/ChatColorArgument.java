@@ -1,11 +1,9 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import org.bukkit.ChatColor;
-
 import com.mojang.brigadier.arguments.ArgumentType;
-
 import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
+import org.bukkit.ChatColor;
 
 @SuppressWarnings("unchecked")
 public class ChatColorArgument implements Argument, OverrideableSuggestions {

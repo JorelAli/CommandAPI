@@ -1,11 +1,9 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import org.bukkit.enchantments.Enchantment;
-
 import com.mojang.brigadier.arguments.ArgumentType;
-
 import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
+import org.bukkit.enchantments.Enchantment;
 
 @SuppressWarnings("unchecked")
 public class EnchantmentArgument implements Argument, OverrideableSuggestions {

@@ -1,11 +1,10 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import java.util.List;
-
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
-
 import io.github.jorelali.commandapi.api.CommandPermission;
+
+import java.util.List;
 
 /**
  * Deprecated as of 1.9, due to implementation of OverrideableSuggestions. Use <br>

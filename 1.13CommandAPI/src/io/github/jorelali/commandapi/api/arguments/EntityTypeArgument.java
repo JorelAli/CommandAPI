@@ -1,11 +1,9 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import org.bukkit.entity.EntityType;
-
 import com.mojang.brigadier.arguments.ArgumentType;
-
 import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
+import org.bukkit.entity.EntityType;
 
 @SuppressWarnings("unchecked")
 public class EntityTypeArgument implements Argument, OverrideableSuggestions {

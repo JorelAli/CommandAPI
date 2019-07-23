@@ -1,11 +1,11 @@
 package io.github.jorelali.commandapi.api;
 
-import java.util.function.Function;
-import java.util.function.ToIntBiFunction;
-
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
+
+import java.util.function.Function;
+import java.util.function.ToIntBiFunction;
 
 /**
  * A wrapper class for Minecraft 1.12's functions
