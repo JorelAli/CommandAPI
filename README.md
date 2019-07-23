@@ -8,7 +8,7 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 
   ![better commands](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/images/printnumber.gif)
 
-* **Better arguments** - Easily switch from Location arguments to raw JSON, with error checks all the way
+* **Better arguments** - Easily switch from Location arguments to raw JSON, fully supported with built-in error checking
 
   ![better arguments](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/images/explode.gif)
 
