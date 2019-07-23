@@ -53,7 +53,7 @@ public class Converter {
 		} else if(aliasObj instanceof List) {
 			@SuppressWarnings("unchecked")
 			List<String> list = (List<String>) aliasObj;
-			aliases = list.toArray(new String[list.size()]);
+			aliases = list.toArray(new String[0]);
 		}
 		 
 		//Convert YAML to CommandPermission
