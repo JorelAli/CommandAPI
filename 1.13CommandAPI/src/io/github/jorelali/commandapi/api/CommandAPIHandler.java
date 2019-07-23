@@ -504,7 +504,7 @@ public final class CommandAPIHandler {
 			
 			nms.createDispatcherFile(nmsServer, file, dispatcher);
 		}
-	}	
+	}
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	// SECTION: SuggestionProviders                                                                     //
