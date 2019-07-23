@@ -10,6 +10,8 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 
 * **Better arguments** - Easily switch from Location arguments to raw JSON, with error checks all the way
 
+  ![better arguments](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/images/explode.gif)
+
 * **Support for the `/execute` command** - Let your command to be executed by the built in `/execute` command
 
 * **Support for Minecraft's functions** - Allow your command to be executed from Minecraft's functions and tags
