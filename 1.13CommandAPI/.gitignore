@@ -6,3 +6,4 @@ libs
 target
 spigotlibs/*
 .idea/
+*.iml
