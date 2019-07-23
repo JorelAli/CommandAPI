@@ -6,7 +6,7 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 
 * **Better commands** - Prevent players from running invalid commands, making it easier for developers
 
-  ![better commands]()
+  ![better commands](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/images/printnumber.gif)
 
 * **Better arguments** - Easily switch from Location arguments to raw JSON, with error checks all the way
 
@@ -15,7 +15,7 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 * **Support for Minecraft's functions** - Allow your command to be executed from Minecraft's functions and tags
 
 * **Support for proxied command senders** - Run your command as other entities using `/execute as ... run command`
-  ![proxied senders]()
+  ![proxied senders](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/images/selfdestruct.gif)
 
 * **No plugin.yml registration** - Commands don't need to be registered in the `plugin.yml` file anymore
 
