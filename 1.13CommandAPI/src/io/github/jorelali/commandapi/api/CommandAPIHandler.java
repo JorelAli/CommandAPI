@@ -6,7 +6,6 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
@@ -40,10 +39,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @SuppressWarnings({"rawtypes", "unchecked", "deprecation"})
-/**
- * Class to access the main methods in NMS. The wrapper's
- * implementations occur here.
- */
 public final class CommandAPIHandler {
 		
 	private TreeMap<String, CommandPermission> permissionsToFix;
@@ -55,18 +50,16 @@ public final class CommandAPIHandler {
 	//NMS variables
 	private static String packageName = null;
 	private CommandDispatcher dispatcher;
-	
-//	private String versionStr; //Just in case (v1_13_R2 or v1_14_R1)
-	
+
 	private static NMS nms;
 	private Object nmsServer;
 	public static NMS getNMS() { return nms; }
 	
-	private class Version {
+	private static class Version {
 		private int primaryVersion; //e.g. 14
 		private int rev; //e.g. 1
 		
-		public Version(String version) {
+		Version(String version) {
 			this.primaryVersion = Integer.parseInt(version.split("_")[1]);
 			
 			Matcher revMatcher = Pattern.compile("(?<=R).+").matcher(version);
@@ -92,9 +85,7 @@ public final class CommandAPIHandler {
 
 			if (primaryVersion != other.primaryVersion)
 				return false;
-			if (rev != other.rev)
-				return false;
-			return true;
+			return rev == other.rev;
 		}
 	}
 	
@@ -112,6 +103,7 @@ public final class CommandAPIHandler {
 				| NoSuchMethodException | SecurityException e) {
 			CommandAPIMain.getLog().severe("Unable to hook into NMS properly!");
 		}
+		assert nmsServer != null;
 		CommandAPIHandler.packageName = nmsServer.getClass().getPackage().getName();
 		
 		//Load higher order versioning
@@ -159,7 +151,7 @@ public final class CommandAPIHandler {
 	}
 	
 	//Unregister a command
-	protected void unregister(String commandName, boolean force) {
+	void unregister(String commandName, boolean force) {
 		try {
 			if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
 				CommandAPIMain.getLog().info("Unregistering command /" + commandName);
@@ -184,7 +176,7 @@ public final class CommandAPIHandler {
 	}
 		
 	//Used in the register() method to generate the command to actually be registered
-	private Command generateCommand(LinkedHashMap<String, Argument> args, CustomCommandExecutor executor) throws CommandSyntaxException {
+	private Command generateCommand(LinkedHashMap<String, Argument> args, CustomCommandExecutor executor) {
 		
 		//Generate our command from executor
 		return (cmdCtx) -> {
@@ -222,7 +214,7 @@ public final class CommandAPIHandler {
 								String errorMsg = new MessageBuilder("Error in executing command ")
 										.appendFullInput().append(" - ").appendArgInput().appendHere().toString()
 										.replace("%input%", customresult).replace("%finput%", cmdCtx.getInput());
-								throw new SimpleCommandExceptionType(() -> {return errorMsg;}).create();
+								throw new SimpleCommandExceptionType(() -> errorMsg).create();
 							}
 							break;
 						case ENCHANTMENT:
@@ -240,8 +232,6 @@ public final class CommandAPIHandler {
 							break;
 						case ITEMSTACK:
 							argList.add(nms.getItemStack(cmdCtx, entry.getKey()));
-							break;
-						case LITERAL:
 							break;
 						case LOCATION:
 							LocationType locationType = ((LocationArgument) entry.getValue()).getLocationType();
@@ -262,8 +252,6 @@ public final class CommandAPIHandler {
 						case RECIPE:
 							argList.add(nms.getRecipe(cmdCtx, entry.getKey()));
 							break;
-						case SIMPLE_TYPE:
-							break;
 						case SOUND:
 							argList.add(nms.getSound(cmdCtx, entry.getKey()));
 							break;
@@ -277,7 +265,7 @@ public final class CommandAPIHandler {
 			if(executor.hasResults()) {
 				//Run resulting executor
 				try {
-					return executor.getResultingEx().run(sender, argList.toArray(new Object[argList.size()]));
+					return executor.getResultingEx().run(sender, argList.toArray(new Object[0]));
 				} catch (WrapperCommandSyntaxException e) {
 					throw e.getException();
 				} catch (Exception e) {
@@ -287,7 +275,7 @@ public final class CommandAPIHandler {
 			} else {
 				//Run normal executor
 				try {
-					executor.getEx().run(sender, argList.toArray(new Object[argList.size()]));
+					executor.getEx().run(sender, argList.toArray(new Object[0]));
 					return 1;
 				} catch (WrapperCommandSyntaxException e) {
 					throw e.getException();
@@ -333,12 +321,10 @@ public final class CommandAPIHandler {
 		if(finalPermission.getPermission() != null) {
 			try {
 				Bukkit.getPluginManager().addPermission(new Permission(finalPermission.getPermission()));
-			} catch(IllegalArgumentException e) {}
+			} catch(IllegalArgumentException ignored) {}
 		}
 		
-		return (clw) -> {
-			return permissionCheck(nms.getCommandSenderForCLW(clw), finalPermission);
-        };
+		return (clw) -> permissionCheck(nms.getCommandSenderForCLW(clw), finalPermission);
 	}
 	
 	//Checks if a CommandSender has permission permission from CommandPermission permission
@@ -352,7 +338,7 @@ public final class CommandAPIHandler {
 		}
 	}
 	
-	protected void fixPermissions() {
+	void fixPermissions() {
 		/* Makes permission checks more "Bukkit" like and less "Vanilla Minecraft" like */
 		try {
 			
@@ -387,9 +373,8 @@ public final class CommandAPIHandler {
 						if(nms.isVanillaCommandWrapper(knownCommands.get("minecraft:" + cmdName))) {
 							knownCommands.get(cmdName).setPermission(perm.getPermission());
 						}
-					} else {
-						//Dafaq?
 					}
+
 				}
 				
 				
@@ -404,7 +389,7 @@ public final class CommandAPIHandler {
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	//Builds our NMS command using the given arguments for this method, then registers it
-	protected void register(String commandName, CommandPermission permissions, String[] aliases, final LinkedHashMap<String, Argument> args, CustomCommandExecutor executor) throws Exception {
+	void register(String commandName, CommandPermission permissions, String[] aliases, final LinkedHashMap<String, Argument> args, CustomCommandExecutor executor) throws Exception {
 		if(CommandAPIMain.getConfiguration().hasVerboseOutput()) {
 			//Create a list of argument names
 			StringBuilder builder = new StringBuilder();
@@ -528,15 +513,14 @@ public final class CommandAPIHandler {
 	//NMS ICompletionProvider.a()
 	private CompletableFuture<Suggestions> getSuggestionsBuilder(SuggestionsBuilder builder, String[] array) {
 		String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
-		for (int i = 0; i < array.length; i++) {
-			String str = array[i];
+		for (String str : array) {
 			if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
 				builder.suggest(str);
 			}
 		}
 		return builder.buildFuture();
 	}
-		
+
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	// SECTION: Argument Builders                                                                       //
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -547,39 +531,35 @@ public final class CommandAPIHandler {
 	}
 	
 	private LiteralArgumentBuilder<?> getLiteralArgumentBuilderArgument(String commandName, CommandPermission permission) {
-		return LiteralArgumentBuilder.literal(commandName).requires(clw -> {
-			return permissionCheck(nms.getCommandSenderForCLW(clw), permission);
-		});
+		return LiteralArgumentBuilder.literal(commandName).requires(clw ->
+			permissionCheck(nms.getCommandSenderForCLW(clw), permission));
 	}
 	
 	//Gets a RequiredArgumentBuilder for an argument
 	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, ArgumentType<T> type, CommandPermission permission) {
-		return RequiredArgumentBuilder.argument(argumentName, type).requires(clw -> {
-			return permissionCheck(nms.getCommandSenderForCLW(clw), permission);
-		});
+		return RequiredArgumentBuilder.argument(argumentName, type).requires(clw ->
+			permissionCheck(nms.getCommandSenderForCLW(clw), permission));
 	}
 	
 	//Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
 	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, DynamicSuggestedStringArgument type, CommandPermission permission) {
 		
-		SuggestionProvider provider = null;
+		SuggestionProvider provider;
 		
 		if(type.getDynamicSuggestions() == null) {
 			//withCS
-			provider = (context, builder) -> {
-				return getSuggestionsBuilder(builder, type.getDynamicSuggestionsWithCommandSender().getSuggestions(nms.getCommandSenderForCLW(context.getSource())));
-			};
+			provider = (context, builder) ->
+				getSuggestionsBuilder(builder, type.getDynamicSuggestionsWithCommandSender().getSuggestions(nms.getCommandSenderForCLW(context.getSource())));
 		} else if(type.getDynamicSuggestionsWithCommandSender() == null) {
-			provider = (context, builder) -> {
-				return getSuggestionsBuilder(builder, type.getDynamicSuggestions().getSuggestions());
-			};
+			provider = (context, builder) ->
+				getSuggestionsBuilder(builder, type.getDynamicSuggestions().getSuggestions());
 		} else {
 			throw new RuntimeException("Invalid DynamicSuggestedStringArgument found!");
 		}
 		
 		return getRequiredArgumentBuilder(argumentName, type.getRawType(), permission, provider);
 	}
-		
+
 	//Gets a RequiredArgumentBuilder for an argument, given a SuggestionProvider
 	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, ArgumentType<T> type, CommandPermission permission, SuggestionProviders provider){
 		return getRequiredArgumentBuilder(argumentName, type, permission, nms.getSuggestionProvider(provider));
@@ -600,13 +580,10 @@ public final class CommandAPIHandler {
 		} else {
 			
 			//Use NMS ICompletionProvider.a() on newSuggestions
-			SuggestionProvider provider = (context, builder) -> {
-				return getSuggestionsBuilder(builder, newSuggestions);
-			};
+			SuggestionProvider provider = (context, builder) -> getSuggestionsBuilder(builder, newSuggestions);
 			
-			return RequiredArgumentBuilder.argument(argumentName, type.getRawType()).requires(clw -> {
-				return permissionCheck(nms.getCommandSenderForCLW(clw), permission);
-			}).suggests(provider);
+			return RequiredArgumentBuilder.argument(argumentName, type.getRawType()).requires(clw ->
+				permissionCheck(nms.getCommandSenderForCLW(clw), permission)).suggests(provider);
 		}
 		
 	}
@@ -623,6 +600,7 @@ public final class CommandAPIHandler {
 			} catch (NoSuchFieldException | SecurityException e) {
 				e.printStackTrace();
 			}
+			assert result != null;
 			result.setAccessible(true);
 			fields.put(key, result);
 			return result;

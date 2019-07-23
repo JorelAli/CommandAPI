@@ -2,43 +2,41 @@ package io.github.jorelali.commandapi.api;
 
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.GreedyStringArgument;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * 'Simple' conversion of Plugin commands
  */
 public class Converter {
 
+	private final JavaPlugin plugin;
+
+	public Converter(JavaPlugin plugin) {
+		this.plugin = plugin;
+	}
+
 	/**
 	 * Convert all commands stated in Plugin's plugin.yml file into CommandAPI-compatible commands
-	 * @param p The plugin which commands are to be converted
 	 */
-	public static void convert(Plugin p) {
-		Set<String> commands = p.getDescription().getCommands().keySet();
-		JavaPlugin plugin = (JavaPlugin) p;
-		
-		for(String cmdName : commands) {
-			convertPluginCommand(plugin, cmdName);
+	public void convert() {
+		for(String cmdName : plugin.getDescription().getCommands().keySet()) {
+			convertPluginCommand(cmdName);
 		}
 	}
 	
 	/**
 	 * Convert a command stated in Plugin's plugin.yml file into CommandAPI-compatible commands
-	 * @param p The plugin where the command is registered
 	 * @param cmdName The command to convert
 	 */
-	public static void convert(Plugin p, String cmdName) {
-		JavaPlugin plugin = (JavaPlugin) p;
-		convertPluginCommand(plugin, cmdName);
+	public void convert(String cmdName) {
+		convertPluginCommand(cmdName);
 	}
 	
-	private static void convertPluginCommand(JavaPlugin plugin, String commandName) {
+	private void convertPluginCommand(String commandName) {
 		
 		/* Parse the commands */
 		Map<String, Object> cmdData = plugin.getDescription().getCommands().get(commandName);
