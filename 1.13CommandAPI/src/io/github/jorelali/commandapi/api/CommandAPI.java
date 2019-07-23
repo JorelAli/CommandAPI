@@ -19,7 +19,7 @@ public class CommandAPI {
 	//Static instance of CommandAPI
 	private static CommandAPI instance;
 	
-	protected static boolean canRegister = true;
+	static boolean canRegister = true;
 	private static CommandAPIHandler handler;
 	
 	/**
@@ -40,14 +40,12 @@ public class CommandAPI {
 	}	
 	
 	//Fixes all broken permissions
-	protected static void fixPermissions() {
+	static void fixPermissions() {
 		handler.fixPermissions();
 	}
 
 	static {
-		if(CommandAPI.instance == null) {
-			CommandAPI.instance = new CommandAPI();
-		}
+		CommandAPI.instance = new CommandAPI();
 
 		try {
 			CommandAPI.handler = new CommandAPIHandler();			
@@ -177,7 +175,7 @@ public class CommandAPI {
 		try {
 			
 			//Sanitize commandNames
-			if(commandName.length() == 0 || commandName == null) {
+			if(commandName.length() == 0) {
 				throw new InvalidCommandNameException(commandName);
 			}
 			
@@ -189,7 +187,7 @@ public class CommandAPI {
 			long numGreedyArgs = copyOfArgs.values().stream().filter(arg -> arg instanceof GreedyStringArgument).count();
 			if(numGreedyArgs >= 1) {
 				//A GreedyString has been found
-				if(!(copyOfArgs.values().toArray(new Argument[copyOfArgs.size()])[copyOfArgs.size() - 1] instanceof GreedyStringArgument)) {
+				if(!(copyOfArgs.values().toArray(new Argument[0])[copyOfArgs.size() - 1] instanceof GreedyStringArgument)) {
 					throw new GreedyStringException();
 				}
 				
