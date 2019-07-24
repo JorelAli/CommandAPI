@@ -52,6 +52,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 
+import io.github.jorelali.annotationtest.SafeReflection;
 import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.FunctionWrapper;
 import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
@@ -151,6 +152,10 @@ public class NMS_1_14_R1 implements NMS {
 		Files.write((new GsonBuilder()).setPrettyPrinting().create().toJson(ArgumentRegistry.a(dispatcher, dispatcher.getRoot())), file, StandardCharsets.UTF_8);
 	}
 
+	@SafeReflection(target = AdvancementDataWorld.class, method = "b", versions = {"1.14", "1.14.1", "1.14.2"})
+	@SafeReflection(target = AdvancementDataWorld.class, method = "a", versions = {"1.14.3", "1.14.4"})
+	Collection<Advancement> advancements;
+	
 	@Override
 	public SuggestionProvider getSuggestionProvider(SuggestionProviders provider) {
 		switch(provider) {
@@ -180,7 +185,7 @@ public class NMS_1_14_R1 implements NMS {
 							break;
 					}
 					
-					Collection<Advancement> advancements = new ArrayList<>();
+					advancements = new ArrayList<>();
 					try {
 						advancements = (Collection<Advancement>) CommandAPIHandler.getMethod(AdvancementDataWorld.class, methodName)
 								.invoke(((CommandListenerWrapper) cmdCtx.getSource()).getServer().getAdvancementData());

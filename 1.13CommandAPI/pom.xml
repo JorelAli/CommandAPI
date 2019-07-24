@@ -105,6 +105,13 @@
 			<type>jar</type>
   			<optional>true</optional>
 		</dependency>
+		
+		<dependency>
+			<groupId>AnnotationTest</groupId>
+			<artifactId>AnnotationTest</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
     </dependencies>
 
     <build>
@@ -156,6 +163,13 @@
 	                    <exclude>**/Example.java</exclude>
 	                    <exclude>**/ExampleEntitySelector.java</exclude>
 	                </excludes>
+	                
+	                <annotationProcessors>
+						<annotationProcessor>
+							io.github.jorelali.annotationtest.MyProcessor
+						</annotationProcessor>
+					</annotationProcessors>
+					
                 </configuration>
             </plugin>
             <plugin>
