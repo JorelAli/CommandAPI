@@ -107,8 +107,8 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>AnnotationTest</groupId>
-			<artifactId>AnnotationTest</artifactId>
+			<groupId>io.github.jorelali</groupId>
+			<artifactId>commandapi-safereflection</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
