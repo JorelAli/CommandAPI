@@ -166,7 +166,7 @@
 	                
 	                <annotationProcessors>
 						<annotationProcessor>
-							io.github.jorelali.annotationtest.MyProcessor
+							io.github.jorelali.commandapi.safereflection.SafeReflectionProcessor
 						</annotationProcessor>
 					</annotationProcessors>
 					
