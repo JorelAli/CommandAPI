@@ -56,12 +56,15 @@ import io.github.jorelali.commandapi.api.exceptions.WrapperCommandSyntaxExceptio
 import io.github.jorelali.commandapi.api.nms.NMS;
 import io.github.jorelali.commandapi.api.nms.NMS_1_13_R2;
 import io.github.jorelali.commandapi.api.nms.NMS_1_14_R1;
+import io.github.jorelali.commandapi.safereflection.SafeReflection;
 
 @SuppressWarnings({"rawtypes", "unchecked", "deprecation"})
 /**
  * Class to access the main methods in NMS. The wrapper's
  * implementations occur here.
  */
+@SafeReflection(target = SimpleCommandMap.class, field = "knownCommands", versions = {"1.13.2", "1.14", "1.14.1", "1.14.2", "1.14.3", "1.14.4"})
+@SafeReflection(target = CommandNode.class, field = "children", versions = {"1.13.2", "1.14", "1.14.1", "1.14.2", "1.14.3", "1.14.4"})
 public final class CommandAPIHandler {
 		
 	private TreeMap<String, CommandPermission> permissionsToFix;
