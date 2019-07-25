@@ -27,6 +27,10 @@
             <name>Minecraft Libraries</name>
             <url>https://libraries.minecraft.net</url>
         </repository>
+	        <repository>
+	        <id>mccommandapi</id>
+	        <url>https://raw.githubusercontent.com/JorelAli/1.13-Command-API/mvn-repo/1.13CommandAPI/</url>
+	    </repository>
     </repositories>
 
     <dependencies>
@@ -49,6 +53,11 @@
             <version>1.5.25</version>
             <scope>provided</scope>
         </dependency>
+		<dependency>
+			<groupId>io.github.jorelali</groupId>
+			<artifactId>commandapi-safereflection</artifactId>
+			<version>1.0</version>
+		</dependency>
         
         <!-- Spigot jars for version independence -->
         <dependency>
@@ -105,13 +114,6 @@
 			<type>jar</type>
   			<optional>true</optional>
 		</dependency>
-		
-		<dependency>
-			<groupId>io.github.jorelali</groupId>
-			<artifactId>commandapi-safereflection</artifactId>
-			<version>1.0</version>
-		</dependency>
-
     </dependencies>
 
     <build>
