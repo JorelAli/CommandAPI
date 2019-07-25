@@ -52,6 +52,7 @@ import io.github.jorelali.commandapi.api.FunctionWrapper;
 import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
 import io.github.jorelali.commandapi.api.arguments.LocationArgument.LocationType;
+import io.github.jorelali.commandapi.safereflection.SafeReflection;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.server.v1_13_R2.Advancement;
@@ -83,6 +84,8 @@ import net.minecraft.server.v1_13_R2.MinecraftServer;
 import net.minecraft.server.v1_13_R2.Vec3D;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
+@SafeReflection(target = CraftSound.class, field = "minecraftKey", versions = "1.13.2")
+@SafeReflection(target = LootTableRegistry.class, field = "e", versions = "1.13.2")
 public class NMS_1_13_R2 implements NMS {
 	
 	private CommandListenerWrapper getCLW(CommandContext cmdCtx) {

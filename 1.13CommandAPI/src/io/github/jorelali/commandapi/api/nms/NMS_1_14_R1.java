@@ -91,6 +91,9 @@ import net.minecraft.server.v1_14_R1.MinecraftServer;
 import net.minecraft.server.v1_14_R1.Vec3D;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
+@SafeReflection(target = AdvancementDataWorld.class, method = "b", versions = {"1.14", "1.14.1", "1.14.2"})
+@SafeReflection(target = AdvancementDataWorld.class, method = "a", versions = {"1.14.3", "1.14.4"})
+@SafeReflection(target = CraftSound.class, field = "minecraftKey", versions = {"1.14", "1.14.1", "1.14.2", "1.14.3", "1.14.4"})
 public class NMS_1_14_R1 implements NMS {
 	
 	String version;
@@ -152,10 +155,6 @@ public class NMS_1_14_R1 implements NMS {
 		Files.write((new GsonBuilder()).setPrettyPrinting().create().toJson(ArgumentRegistry.a(dispatcher, dispatcher.getRoot())), file, StandardCharsets.UTF_8);
 	}
 
-	@SafeReflection(target = AdvancementDataWorld.class, method = "b", versions = {"1.14", "1.14.1", "1.14.2"})
-	@SafeReflection(target = AdvancementDataWorld.class, method = "a", versions = {"1.14.3", "1.14.4"})
-	Collection<Advancement> advancements;
-	
 	@Override
 	public SuggestionProvider getSuggestionProvider(SuggestionProviders provider) {
 		switch(provider) {
@@ -185,7 +184,7 @@ public class NMS_1_14_R1 implements NMS {
 							break;
 					}
 					
-					advancements = new ArrayList<>();
+					Collection<Advancement> advancements = new ArrayList<>();
 					try {
 						advancements = (Collection<Advancement>) CommandAPIHandler.getMethod(AdvancementDataWorld.class, methodName)
 								.invoke(((CommandListenerWrapper) cmdCtx.getSource()).getServer().getAdvancementData());
