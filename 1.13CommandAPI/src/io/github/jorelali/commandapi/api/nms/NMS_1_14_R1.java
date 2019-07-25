@@ -38,19 +38,62 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
-import java.util.function.ToIntBiFunction;
-import java.util.stream.Collectors;
+import com.google.common.io.Files;
+import com.google.gson.GsonBuilder;
+import com.mojang.authlib.GameProfile;
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.mojang.brigadier.suggestion.Suggestions;
+
+import io.github.jorelali.commandapi.api.CommandAPIHandler;
+import io.github.jorelali.commandapi.api.FunctionWrapper;
+import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
+import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
+import io.github.jorelali.commandapi.api.arguments.LocationArgument.LocationType;
+import io.github.jorelali.commandapi.safereflection.SafeReflection;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
+import net.minecraft.server.v1_14_R1.Advancement;
+import net.minecraft.server.v1_14_R1.AdvancementDataWorld;
+import net.minecraft.server.v1_14_R1.ArgumentChatComponent;
+import net.minecraft.server.v1_14_R1.ArgumentChatFormat;
+import net.minecraft.server.v1_14_R1.ArgumentEnchantment;
+import net.minecraft.server.v1_14_R1.ArgumentEntity;
+import net.minecraft.server.v1_14_R1.ArgumentEntitySummon;
+import net.minecraft.server.v1_14_R1.ArgumentItemStack;
+import net.minecraft.server.v1_14_R1.ArgumentMinecraftKeyRegistered;
+import net.minecraft.server.v1_14_R1.ArgumentMobEffect;
+import net.minecraft.server.v1_14_R1.ArgumentParticle;
+import net.minecraft.server.v1_14_R1.ArgumentPosition;
+import net.minecraft.server.v1_14_R1.ArgumentProfile;
+import net.minecraft.server.v1_14_R1.ArgumentRegistry;
+import net.minecraft.server.v1_14_R1.ArgumentTag;
+import net.minecraft.server.v1_14_R1.ArgumentVec3;
+import net.minecraft.server.v1_14_R1.BlockPosition;
+import net.minecraft.server.v1_14_R1.CommandListenerWrapper;
+import net.minecraft.server.v1_14_R1.CompletionProviders;
+import net.minecraft.server.v1_14_R1.CustomFunction;
+import net.minecraft.server.v1_14_R1.CustomFunctionData;
+import net.minecraft.server.v1_14_R1.Entity;
+import net.minecraft.server.v1_14_R1.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_14_R1.ICompletionProvider;
+import net.minecraft.server.v1_14_R1.IRegistry;
+import net.minecraft.server.v1_14_R1.LootTableRegistry;
+import net.minecraft.server.v1_14_R1.MinecraftKey;
+import net.minecraft.server.v1_14_R1.MinecraftServer;
+import net.minecraft.server.v1_14_R1.Vec3D;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
+@SafeReflection(target = AdvancementDataWorld.class, method = "b", versions = {"1.14", "1.14.1", "1.14.2"})
+@SafeReflection(target = AdvancementDataWorld.class, method = "a", versions = {"1.14.3", "1.14.4"})
+@SafeReflection(target = CraftSound.class, field = "minecraftKey", versions = {"1.14", "1.14.1", "1.14.2", "1.14.3", "1.14.4"})
 public class NMS_1_14_R1 implements NMS {
-	
+
 	String version;
-	
+
 	public NMS_1_14_R1(String hoVersion) {
 		this.version = hoVersion;
 	}
@@ -123,7 +166,7 @@ public class NMS_1_14_R1 implements NMS {
 				return CompletionProviders.c;
 			case ADVANCEMENTS:
 				return (cmdCtx, builder) -> {
-				
+
 					String methodName = null;
 					switch(version) {
 						case "1.14":
@@ -136,7 +179,7 @@ public class NMS_1_14_R1 implements NMS {
 							methodName = "a";
 							break;
 					}
-					
+
 					Collection<Advancement> advancements = new ArrayList<>();
 					try {
 						advancements = (Collection<Advancement>) CommandAPIHandler.getMethod(AdvancementDataWorld.class, methodName)
@@ -144,14 +187,14 @@ public class NMS_1_14_R1 implements NMS {
 					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 						e.printStackTrace();
 					}
-					
+
 					return ICompletionProvider.a(advancements.stream().map(Advancement::getName), builder);
 				};
 			case LOOT_TABLES:
 				return (context, builder) -> {
 					LootTableRegistry lootTables = getCLW(context).getServer().getLootTableRegistry();
 					return ICompletionProvider.a(lootTables.a(), builder);
-				};				
+				};
 			default:
 				return (context, builder) -> Suggestions.empty();
 		}
@@ -160,12 +203,12 @@ public class NMS_1_14_R1 implements NMS {
 	@Override
 	public FunctionWrapper[] getFunction(CommandContext cmdCtx, String str) throws CommandSyntaxException {
 		Collection<CustomFunction> customFuncList = ArgumentTag.a(cmdCtx, str);
-		
+
 		FunctionWrapper[] result = new FunctionWrapper[customFuncList.size()];
-		
+
 		CustomFunctionData customFunctionData = getCLW(cmdCtx).getServer().getFunctionData();
 		CommandListenerWrapper commandListenerWrapper = getCLW(cmdCtx).a().b(2);
-		
+
 		int count = 0;
 		Iterator<CustomFunction> it = customFuncList.iterator();
 		while(it.hasNext()) {
@@ -173,31 +216,31 @@ public class NMS_1_14_R1 implements NMS {
 			@SuppressWarnings("deprecation")
 			NamespacedKey minecraftKey = new NamespacedKey(customFunction.a().b(), customFunction.a().getKey());
 			ToIntBiFunction<CustomFunction, CommandListenerWrapper> obj = customFunctionData::a;
-			
+
 			FunctionWrapper wrapper = new FunctionWrapper(minecraftKey, obj, customFunction, commandListenerWrapper, e -> {
 				return (Object) getCLW(cmdCtx).a(((CraftEntity) e).getHandle());
 			});
-			
+
 			result[count] = wrapper;
 			count++;
 		}
-		
+
 		return result;
 	}
 
 	@Override
 	public CommandSender getSenderForCommand(CommandContext cmdCtx) {
 		CommandSender sender = getCLW(cmdCtx).getBukkitSender();
-		
+
 		Entity proxyEntity = getCLW(cmdCtx).getEntity();
 		if(proxyEntity != null) {
 			CommandSender proxy = ((Entity) proxyEntity).getBukkitEntity();
-			
+
 			if(!proxy.equals(sender)) {
 				sender = new ProxiedNativeCommandSender(getCLW(cmdCtx), sender, proxy);
 			}
 		}
-		
+
 		return sender;
 	}
 
@@ -256,15 +299,15 @@ public class NMS_1_14_R1 implements NMS {
 		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.c(cmdCtx, str);
 		String namespace = minecraftKey.b();
 		String key = minecraftKey.getKey();
-		
+
 		net.minecraft.server.v1_14_R1.LootTable lootTable = getCLW(cmdCtx).getServer().getLootTableRegistry().getLootTable(minecraftKey);
 		return new CraftLootTable(new NamespacedKey(namespace, key), lootTable);
 	}
-	
+
 	@Override
 	public Sound getSound(CommandContext cmdCtx, String key) {
 		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.c(cmdCtx, key);
-		Map<String, CraftSound> map = new HashMap<>(); 
+		Map<String, CraftSound> map = new HashMap<>();
 		Arrays.stream(CraftSound.values()).forEach(val -> {
 			try {
 				map.put((String) CommandAPIHandler.getField(CraftSound.class, "minecraftKey").get(val), val);
@@ -279,12 +322,12 @@ public class NMS_1_14_R1 implements NMS {
 	public org.bukkit.advancement.Advancement getAdvancement(CommandContext cmdCtx, String key) throws CommandSyntaxException {
 		return ArgumentMinecraftKeyRegistered.a(cmdCtx, key).bukkit;
 	}
-	
+
 	@Override
 	public Recipe getRecipe(CommandContext cmdCtx, String key) throws CommandSyntaxException {
 		return ArgumentMinecraftKeyRegistered.b(cmdCtx, key).toBukkitRecipe();
 	}
-	
+
 	@Override
 	public SimpleCommandMap getSimpleCommandMap() {
 		return ((CraftServer) Bukkit.getServer()).getCommandMap();
