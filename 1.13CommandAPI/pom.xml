@@ -109,7 +109,7 @@
 		<dependency>
 			<groupId>io.github.jorelali</groupId>
 			<artifactId>commandapi-safereflection</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>1.0</version>
 		</dependency>
 
     </dependencies>
