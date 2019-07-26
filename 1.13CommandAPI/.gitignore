@@ -5,3 +5,5 @@ libs
 .settings
 target
 spigotlibs/*
+.idea/
+*.iml
