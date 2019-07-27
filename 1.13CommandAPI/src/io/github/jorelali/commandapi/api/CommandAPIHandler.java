@@ -54,8 +54,10 @@ import io.github.jorelali.commandapi.api.arguments.StringArgument;
 import io.github.jorelali.commandapi.api.arguments.SuggestedStringArgument;
 import io.github.jorelali.commandapi.api.exceptions.WrapperCommandSyntaxException;
 import io.github.jorelali.commandapi.api.nms.NMS;
+import io.github.jorelali.commandapi.api.nms.NMS_1_13_R1;
 import io.github.jorelali.commandapi.api.nms.NMS_1_13_R2;
 import io.github.jorelali.commandapi.api.nms.NMS_1_14_R1;
+import io.github.jorelali.commandapi.safereflection.ReflectionType;
 import io.github.jorelali.commandapi.safereflection.SafeReflection;
 
 @SuppressWarnings({"rawtypes", "unchecked", "deprecation"})
@@ -63,8 +65,8 @@ import io.github.jorelali.commandapi.safereflection.SafeReflection;
  * Class to access the main methods in NMS. The wrapper's
  * implementations occur here.
  */
-@SafeReflection(target = SimpleCommandMap.class, field = "knownCommands", versions = {"1.13.2", "1.14", "1.14.1", "1.14.2", "1.14.3", "1.14.4"})
-@SafeReflection(target = CommandNode.class, field = "children", versions = {"1.13.2", "1.14", "1.14.1", "1.14.2", "1.14.3", "1.14.4"})
+@SafeReflection(target = SimpleCommandMap.class, type = ReflectionType.FIELD, name = "knownCommands", returnType = Map.class, versions = {"1.13.2", "1.14", "1.14.1", "1.14.2", "1.14.3", "1.14.4"})
+@SafeReflection(target = CommandNode.class, type = ReflectionType.FIELD, name = "children", returnType = Map.class, versions = {"1.13.2", "1.14", "1.14.1", "1.14.2", "1.14.3", "1.14.4"})
 public final class CommandAPIHandler {
 		
 	private TreeMap<String, CommandPermission> permissionsToFix;
@@ -150,11 +152,16 @@ public final class CommandAPIHandler {
 		
 		switch(version.primaryVersion) {
 			case 13:
-				if(version.rev != 2) {
-					throw versionError;
+				switch(version.rev) {
+					case 1:
+						//Compatible with Minecraft 1.13
+						nms = new NMS_1_13_R1();
+						break;
+					case 2:
+						//Compatible with Minecraft 1.13.1, 1.13.2
+						nms = new NMS_1_13_R2(hoVersion);
+						break;
 				}
-				//Compatible with Minecraft 1.13.2
-				nms = new NMS_1_13_R2();
 				break;
 			case 14:
 				//Compatible with Minecraft 1.14, 1.14.1, 1.14.2, 1.14.3

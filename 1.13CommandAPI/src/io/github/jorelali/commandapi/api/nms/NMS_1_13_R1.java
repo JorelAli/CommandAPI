@@ -1,7 +1,6 @@
 package io.github.jorelali.commandapi.api.nms;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -20,18 +19,18 @@ import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.craftbukkit.v1_13_R2.CraftLootTable;
-import org.bukkit.craftbukkit.v1_13_R2.CraftParticle;
-import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_13_R2.CraftSound;
-import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_13_R2.command.ProxiedNativeCommandSender;
-import org.bukkit.craftbukkit.v1_13_R2.command.VanillaCommandWrapper;
-import org.bukkit.craftbukkit.v1_13_R2.enchantments.CraftEnchantment;
-import org.bukkit.craftbukkit.v1_13_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_13_R2.potion.CraftPotionEffectType;
-import org.bukkit.craftbukkit.v1_13_R2.util.CraftChatMessage;
+import org.bukkit.craftbukkit.v1_13_R1.CraftLootTable;
+import org.bukkit.craftbukkit.v1_13_R1.CraftParticle;
+import org.bukkit.craftbukkit.v1_13_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_13_R1.CraftSound;
+import org.bukkit.craftbukkit.v1_13_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_13_R1.command.ProxiedNativeCommandSender;
+import org.bukkit.craftbukkit.v1_13_R1.command.VanillaCommandWrapper;
+import org.bukkit.craftbukkit.v1_13_R1.enchantments.CraftEnchantment;
+import org.bukkit.craftbukkit.v1_13_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_13_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_13_R1.potion.CraftPotionEffectType;
+import org.bukkit.craftbukkit.v1_13_R1.util.CraftChatMessage;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -57,47 +56,38 @@ import io.github.jorelali.commandapi.safereflection.ReflectionType;
 import io.github.jorelali.commandapi.safereflection.SafeReflection;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
-import net.minecraft.server.v1_13_R2.Advancement;
-import net.minecraft.server.v1_13_R2.ArgumentChatComponent;
-import net.minecraft.server.v1_13_R2.ArgumentChatFormat;
-import net.minecraft.server.v1_13_R2.ArgumentEnchantment;
-import net.minecraft.server.v1_13_R2.ArgumentEntity;
-import net.minecraft.server.v1_13_R2.ArgumentEntitySummon;
-import net.minecraft.server.v1_13_R2.ArgumentItemStack;
-import net.minecraft.server.v1_13_R2.ArgumentMinecraftKeyRegistered;
-import net.minecraft.server.v1_13_R2.ArgumentMobEffect;
-import net.minecraft.server.v1_13_R2.ArgumentParticle;
-import net.minecraft.server.v1_13_R2.ArgumentPosition;
-import net.minecraft.server.v1_13_R2.ArgumentProfile;
-import net.minecraft.server.v1_13_R2.ArgumentTag;
-import net.minecraft.server.v1_13_R2.ArgumentVec3;
-import net.minecraft.server.v1_13_R2.BlockPosition;
-import net.minecraft.server.v1_13_R2.CommandListenerWrapper;
-import net.minecraft.server.v1_13_R2.CompletionProviders;
-import net.minecraft.server.v1_13_R2.CustomFunction;
-import net.minecraft.server.v1_13_R2.CustomFunctionData;
-import net.minecraft.server.v1_13_R2.Entity;
-import net.minecraft.server.v1_13_R2.EntityTypes;
-import net.minecraft.server.v1_13_R2.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_13_R2.ICompletionProvider;
-import net.minecraft.server.v1_13_R2.LootTableRegistry;
-import net.minecraft.server.v1_13_R2.MinecraftKey;
-import net.minecraft.server.v1_13_R2.MinecraftServer;
-import net.minecraft.server.v1_13_R2.Vec3D;
+import net.minecraft.server.v1_13_R1.Advancement;
+import net.minecraft.server.v1_13_R1.ArgumentChatComponent;
+import net.minecraft.server.v1_13_R1.ArgumentChatFormat;
+import net.minecraft.server.v1_13_R1.ArgumentEnchantment;
+import net.minecraft.server.v1_13_R1.ArgumentEntity;
+import net.minecraft.server.v1_13_R1.ArgumentEntitySummon;
+import net.minecraft.server.v1_13_R1.ArgumentItemStack;
+import net.minecraft.server.v1_13_R1.ArgumentMinecraftKeyRegistered;
+import net.minecraft.server.v1_13_R1.ArgumentMobEffect;
+import net.minecraft.server.v1_13_R1.ArgumentParticle;
+import net.minecraft.server.v1_13_R1.ArgumentPosition;
+import net.minecraft.server.v1_13_R1.ArgumentProfile;
+import net.minecraft.server.v1_13_R1.ArgumentTag;
+import net.minecraft.server.v1_13_R1.ArgumentVec3;
+import net.minecraft.server.v1_13_R1.BlockPosition;
+import net.minecraft.server.v1_13_R1.CommandListenerWrapper;
+import net.minecraft.server.v1_13_R1.CompletionProviders;
+import net.minecraft.server.v1_13_R1.CustomFunction;
+import net.minecraft.server.v1_13_R1.CustomFunctionData;
+import net.minecraft.server.v1_13_R1.Entity;
+import net.minecraft.server.v1_13_R1.EntityTypes;
+import net.minecraft.server.v1_13_R1.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_13_R1.ICompletionProvider;
+import net.minecraft.server.v1_13_R1.LootTableRegistry;
+import net.minecraft.server.v1_13_R1.MinecraftKey;
+import net.minecraft.server.v1_13_R1.MinecraftServer;
+import net.minecraft.server.v1_13_R1.Vec3D;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
-@SafeReflection(type = ReflectionType.FIELD, target = CraftSound.class, name = "minecraftKey", returnType = String.class, versions = {"1.13.1", "1.13.2"})
-@SafeReflection(type = ReflectionType.FIELD, target = LootTableRegistry.class, name = "e", returnType = Map.class, versions = {"1.13.1", "1.13.2"})
-
-@SafeReflection(type = ReflectionType.METHOD, target = CommandListenerWrapper.class, name = "f", returnType = Entity.class, versions = "1.13.1")
-@SafeReflection(type = ReflectionType.METHOD, target = CommandListenerWrapper.class, name = "getEntity", returnType = Entity.class, versions = "1.13.2")
-public class NMS_1_13_R2 implements NMS {
-	
-	private String version;
-
-	public NMS_1_13_R2(String hoVersion) {
-		this.version = hoVersion;
-	}
+@SafeReflection(type = ReflectionType.FIELD, target = CraftSound.class, name = "minecraftKey", returnType = String.class, versions = "1.13")
+@SafeReflection(type = ReflectionType.FIELD, target = LootTableRegistry.class, name = "e", returnType = Map.class, versions = "1.13")
+public class NMS_1_13_R1 implements NMS {
 	
 	private CommandListenerWrapper getCLW(CommandContext cmdCtx) {
 		return (CommandListenerWrapper) cmdCtx.getSource();
@@ -168,12 +158,12 @@ public class NMS_1_13_R2 implements NMS {
 			case ADVANCEMENTS:
 				return (cmdCtx, builder) -> {
 					Collection<Advancement> advancements = ((CommandListenerWrapper) cmdCtx.getSource()).getServer().getAdvancementData().b();
-					return ICompletionProvider.a(advancements.stream().map(Advancement::getName), builder);
+					return ICompletionProvider.a(advancements.stream().map(Advancement::getName)::iterator, builder);
 				};
 			case LOOT_TABLES:
 					return (context, builder) -> {
 					try {
-						Map<MinecraftKey, LootTable> map = (Map<MinecraftKey, LootTable>) CommandAPIHandler.getField(LootTableRegistry.class, "e").get(getCLW(context).getServer().getLootTableRegistry());
+						Map<MinecraftKey, LootTable> map = (Map<MinecraftKey, LootTable>) CommandAPIHandler.getField(LootTableRegistry.class, "e").get(getCLW(context).getServer().aP());
 						return ICompletionProvider.a((Iterable) map.keySet(), builder);
 					} catch (IllegalArgumentException | IllegalAccessException e) {
 						e.printStackTrace();
@@ -218,22 +208,7 @@ public class NMS_1_13_R2 implements NMS {
 	public CommandSender getSenderForCommand(CommandContext cmdCtx) {
 		CommandSender sender = getCLW(cmdCtx).getBukkitSender();
 		
-		String methodName = null;
-		switch(version) {
-			case "1.13.1":
-				methodName = "f";
-				break;
-			case "1.13.2":
-				methodName = "getEntity";
-				break;
-		}
-		
-		Entity proxyEntity = null;
-		try {
-			proxyEntity = (Entity) CommandAPIHandler.getMethod(CommandListenerWrapper.class, methodName).invoke(getCLW(cmdCtx));
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
-		}
+		Entity proxyEntity = getCLW(cmdCtx).f();
 		if(proxyEntity != null) {
 			CommandSender proxy = ((Entity) proxyEntity).getBukkitEntity();
 			
@@ -301,7 +276,7 @@ public class NMS_1_13_R2 implements NMS {
 		String namespace = minecraftKey.b();
 		String key = minecraftKey.getKey();
 		
-		net.minecraft.server.v1_13_R2.LootTable lootTable = getCLW(cmdCtx).getServer().getLootTableRegistry().getLootTable(minecraftKey);
+		net.minecraft.server.v1_13_R1.LootTable lootTable = getCLW(cmdCtx).getServer().aP().a(minecraftKey);
 		return new CraftLootTable(new NamespacedKey(namespace, key), lootTable);
 	}
 	

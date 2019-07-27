@@ -57,6 +57,7 @@ import io.github.jorelali.commandapi.api.FunctionWrapper;
 import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
 import io.github.jorelali.commandapi.api.arguments.LocationArgument.LocationType;
+import io.github.jorelali.commandapi.safereflection.ReflectionType;
 import io.github.jorelali.commandapi.safereflection.SafeReflection;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
@@ -91,9 +92,10 @@ import net.minecraft.server.v1_14_R1.MinecraftServer;
 import net.minecraft.server.v1_14_R1.Vec3D;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
-@SafeReflection(target = AdvancementDataWorld.class, method = "b", versions = {"1.14", "1.14.1", "1.14.2"})
-@SafeReflection(target = AdvancementDataWorld.class, method = "a", versions = {"1.14.3", "1.14.4"})
-@SafeReflection(target = CraftSound.class, field = "minecraftKey", versions = {"1.14", "1.14.1", "1.14.2", "1.14.3", "1.14.4"})
+@SafeReflection(type = ReflectionType.METHOD, target = AdvancementDataWorld.class, name = "a", returnType = Collection.class, versions = {"1.14.3", "1.14.4"})
+@SafeReflection(type = ReflectionType.METHOD, target = AdvancementDataWorld.class, name = "b", returnType = Collection.class, versions = {"1.14", "1.14.1", "1.14.2"})
+
+@SafeReflection(type = ReflectionType.FIELD, target = CraftSound.class, name = "minecraftKey", returnType = String.class, versions = {"1.14", "1.14.1", "1.14.2", "1.14.3", "1.14.4"})
 public class NMS_1_14_R1 implements NMS {
 	
 	String version;
