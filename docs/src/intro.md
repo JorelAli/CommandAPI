@@ -28,7 +28,7 @@ Using the search icon in the top left corner, typing "Example" will show a list 
 
 ## Documentation changelog
 
-Whenever a new version comes out, ensure you keep up to date on the latest changes to the documentation (You can view the documentation version at the top of the page). This changelog gives a brief overview of the changes to pages that were made in the transition to releases.
+Whenever a new version of the CommandAPI comes out, the version number changes _(as you'd expect)_. In the same manner, if any changes to the documentation were made, the documentation version number changes. Ensure you keep up to date on the latest changes to the documentation (You can view the documentation version at the top of the page) when new versions of the CommandAPI are released. This changelog below gives a brief overview of the changes to pages that were made between each version of the documentation, as only the latest version of the documentation is hosted online.
 
 - **2.0 → 2.1**
   - **[Click here](./commandregistration.html#command-registration)** - Include information about tooltips
