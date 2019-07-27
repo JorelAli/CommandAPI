@@ -96,7 +96,7 @@ To download these easily:
   * Adds AdvancementArgument
   * Adds LootTableArgument
   * Adds support for 1.14.3 and 1.14.4
-  * Fixes bug where aliases weren't registering properly (#43)
+  * Fixes bug where aliases weren't registering properly ([#43](https://github.com/JorelAli/1.13-Command-API/issues/43))
   * Fix documentation for tooltips
   * Improve documentation for dependencies and repositories
 * Version 2.0.1
@@ -106,9 +106,9 @@ To download these easily:
   * Major overhaul of the CommandAPI's internals - greatly improves performance
   * Deprecates SuggestedStringArgument, adding overrideSuggestions as an alternative for any argument type 
   * Adds CustomArguments, allowing you to create your own ... custom arguments
-  * Excludes dependencies from final jar (#40)
+  * Excludes dependencies from final jar ([#40](https://github.com/JorelAli/1.13-Command-API/issues/40))
   * Adds DefinedCustomArguments - CustomArguments that have been created by yours truly
-  * DynamicSuggestedArguments now have access to the CommandSender (#41)
+  * DynamicSuggestedArguments now have access to the CommandSender ([#41](https://github.com/JorelAli/1.13-Command-API/issues/41))
   * Adds Loot Table support
 * Version 1.8.2
   * Fix bug with PlayerArgument when player cannot be found
