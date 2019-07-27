@@ -54,6 +54,7 @@ import io.github.jorelali.commandapi.api.arguments.StringArgument;
 import io.github.jorelali.commandapi.api.arguments.SuggestedStringArgument;
 import io.github.jorelali.commandapi.api.exceptions.WrapperCommandSyntaxException;
 import io.github.jorelali.commandapi.api.nms.NMS;
+import io.github.jorelali.commandapi.api.nms.NMS_1_13_R1;
 import io.github.jorelali.commandapi.api.nms.NMS_1_13_R2;
 import io.github.jorelali.commandapi.api.nms.NMS_1_14_R1;
 import io.github.jorelali.commandapi.safereflection.SafeReflection;
@@ -150,11 +151,16 @@ public final class CommandAPIHandler {
 		
 		switch(version.primaryVersion) {
 			case 13:
-				if(version.rev != 2) {
-					throw versionError;
+				switch(version.rev) {
+					case 1:
+						//Compatible with Minecraft 1.13
+						nms = new NMS_1_13_R1();
+						break;
+					case 2:
+						//Compatible with Minecraft 1.13.1, 1.13.2
+						nms = new NMS_1_13_R2(hoVersion);
+						break;
 				}
-				//Compatible with Minecraft 1.13.2
-				nms = new NMS_1_13_R2();
 				break;
 			case 14:
 				//Compatible with Minecraft 1.14, 1.14.1, 1.14.2, 1.14.3

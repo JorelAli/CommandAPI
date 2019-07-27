@@ -6,7 +6,7 @@
 
     <groupId>io.github.jorelali</groupId>
     <artifactId>commandapi</artifactId>
-    <version>2.1</version>
+    <version>2.2</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -60,6 +60,25 @@
 		</dependency>
         
         <!-- Spigot jars for version independence -->
+       
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot-server-1.13</artifactId>
+			<version>1.13</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/spigotlibs/spigot-1.13.jar</systemPath>
+			<type>jar</type>
+  			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot-server-1.13.1</artifactId>
+			<version>1.13.1</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/spigotlibs/spigot-1.13.1.jar</systemPath>
+			<type>jar</type>
+  			<optional>true</optional>
+		</dependency>
         <dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-server-1.13.2</artifactId>
