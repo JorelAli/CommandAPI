@@ -11,7 +11,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.build.timestamp.format>yyyyMMdd-HHmmss</maven.build.timestamp.format>
+        <maven.build.timestamp.format>dd_MMM_yyyy_(hh-mm-ssa)</maven.build.timestamp.format>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <minecraft.server.version>1.14-R0.1-SNAPSHOT</minecraft.server.version>
@@ -59,7 +59,7 @@
 			<version>2.0</version>
 		</dependency>
         
-        <!-- Spigot jars for version independence -->
+        <!-- Spigot jars for multiple version support -->
        
 		<dependency>
 			<groupId>org.spigotmc</groupId>
@@ -137,7 +137,7 @@
 
     <build>
         <defaultGoal>clean install</defaultGoal>
-        <finalName>CommandAPI_${project.version}_${maven.build.timestamp}</finalName>
+        <finalName>CommandAPIv${project.version}_${maven.build.timestamp}</finalName>
         <sourceDirectory>src</sourceDirectory>
         <resources>
             <resource>
@@ -180,10 +180,6 @@
                     <compilerArgs>
                         <arg>-Xlint</arg>
                     </compilerArgs>
-                    <excludes>
-	                    <exclude>**/Example.java</exclude>
-	                    <exclude>**/ExampleEntitySelector.java</exclude>
-	                </excludes>
 	                
 	                <annotationProcessors>
 						<annotationProcessor>
