@@ -7,9 +7,9 @@ public interface OverrideableSuggestions {
 	 * @param suggestions The string array to override suggestions with
 	 * @return The argument
 	 */
-	public <T extends Argument> T overrideSuggestions(String... suggestions);
+	<T extends Argument> T overrideSuggestions(String... suggestions);
 		
-	public default String[] getOverriddenSuggestions() {
+	default String[] getOverriddenSuggestions() {
 		return null;
 	}
 }

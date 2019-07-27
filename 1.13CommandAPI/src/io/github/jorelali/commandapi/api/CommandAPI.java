@@ -178,7 +178,7 @@ public class CommandAPI {
 		try {
 			
 			//Sanitize commandNames
-			if(commandName.length() == 0 || commandName == null) {
+			if(commandName == null || commandName.length() == 0) {
 				throw new InvalidCommandNameException(commandName);
 			}
 			

@@ -3,7 +3,6 @@ package io.github.jorelali.commandapi.api;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,15 +17,10 @@ public class Converter {
 
 	/**
 	 * Convert all commands stated in Plugin's plugin.yml file into CommandAPI-compatible commands
-	 * @param p The plugin which commands are to be converted
+	 * @param plugin The plugin which commands are to be converted
 	 */
-	public static void convert(Plugin p) {
-		Set<String> commands = p.getDescription().getCommands().keySet();
-		JavaPlugin plugin = (JavaPlugin) p;
-		
-		for(String cmdName : commands) {
-			convertPluginCommand(plugin, cmdName);
-		}
+	public static void convert(Plugin plugin) {
+		plugin.getDescription().getCommands().keySet().forEach(commandName -> convertPluginCommand((JavaPlugin) plugin, commandName));
 	}
 	
 	/**
@@ -54,7 +48,7 @@ public class Converter {
 		} else if(aliasObj instanceof List) {
 			@SuppressWarnings("unchecked")
 			List<String> list = (List<String>) aliasObj;
-			aliases = list.toArray(new String[list.size()]);
+			aliases = list.toArray(new String[0]);
 		}
 		 
 		//Convert YAML to CommandPermission

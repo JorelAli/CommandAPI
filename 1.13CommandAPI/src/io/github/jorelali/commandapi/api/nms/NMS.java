@@ -55,7 +55,7 @@ public interface NMS {
 	 * is compatible with. For example, ["1.14", "1.14.1", "1.14.2", "1.14.3"]
 	 * @return A String array of compatible Minecraft versions
 	 */
-	public String[] compatibleVersions();
+	String[] compatibleVersions();
 	
 	/**
 	 * Creates a JSON file that describes the hierarchical structure of
@@ -65,14 +65,14 @@ public interface NMS {
 	 * @param dispatcher The Brigadier CommandDispatcher
 	 * @throws IOException When the file fails to be written to
 	 */
-	public void createDispatcherFile(Object server, File file, CommandDispatcher<?> dispatcher) throws IOException;
+	void createDispatcherFile(Object server, File file, CommandDispatcher<?> dispatcher) throws IOException;
 	
 	/**
 	 * Retrieve a specific NMS implemented SuggestionProvider
 	 * @param provider The SuggestionProvider type to retrieve
 	 * @return A SuggestionProvider that matches the SuggestionProviders input
 	 */
-	public SuggestionProvider<?> getSuggestionProvider(SuggestionProviders provider);
+	SuggestionProvider<?> getSuggestionProvider(SuggestionProviders provider);
 	
 	/**
 	 * Retrieves a CommandSender, given some CommandContext. This
@@ -81,14 +81,14 @@ public interface NMS {
 	 * @param cmdCtx The CommandContext for a given command
 	 * @return A CommandSender instance (such as a ProxiedNativeCommandSender or Player)
 	 */
-	public CommandSender getSenderForCommand(CommandContext<?> cmdCtx);
+	CommandSender getSenderForCommand(CommandContext<?> cmdCtx);
 	
 	/**
 	 * Returns a CommandSender of a given CommandListenerWrapper object
 	 * @param clw The CommandListenerWrapper object
 	 * @return A CommandSender (not proxied) from the command listener wrapper
 	 */
-	public CommandSender getCommandSenderForCLW(Object clw);
+	CommandSender getCommandSenderForCLW(Object clw);
 
 	/**
 	 * Given the MinecraftServer instance, returns the Brigadier
@@ -96,52 +96,52 @@ public interface NMS {
 	 * @param server The NMS MinecraftServer instance
 	 * @return A Brigadier CommandDispatcher
 	 */
-	public CommandDispatcher<?> getBrigadierDispatcher(Object server);
+	CommandDispatcher<?> getBrigadierDispatcher(Object server);
 
 	/**
 	 * Checks if a Command is an instance of the OBC VanillaCommandWrapper
 	 * @param command The Command to check
 	 * @return true if Command is an instance of VanillaCommandWrapper
 	 */
-	public boolean isVanillaCommandWrapper(Command command);
+	boolean isVanillaCommandWrapper(Command command);
 	
 	/**
 	 * Returns the Server's internal (OBC) CommandMap
 	 * @return A SimpleCommandMap from the OBC server
 	 */
-	public SimpleCommandMap getSimpleCommandMap();
+	SimpleCommandMap getSimpleCommandMap();
 	
 	//Argument implementations
-	public ChatColor 			getChatColor(CommandContext<?> cmdCtx, String str);
-	public BaseComponent[] 		getChatComponent(CommandContext<?> cmdCtx, String str);
-	public Enchantment 			getEnchantment(CommandContext<?> cmdCtx, String str);
-	public ItemStack 			getItemStack(CommandContext<?> cmdCtx, String str) throws CommandSyntaxException;
-	public Location 			getLocation(CommandContext<?> cmdCtx, String str, LocationType locationType, CommandSender sender) throws CommandSyntaxException;
-	public Particle 			getParticle(CommandContext<?> cmdCtx, String str);
-	public PotionEffectType 	getPotionEffect(CommandContext<?> cmdCtx, String str) throws CommandSyntaxException;
-	public FunctionWrapper[] 	getFunction(CommandContext<?> cmdCtx, String str) throws CommandSyntaxException;
-	public Player 				getPlayer(CommandContext<?> cmdCtx, String str) throws CommandSyntaxException;
-	public Object 				getEntitySelector(CommandContext<?> cmdCtx, String str, EntitySelector selector) throws CommandSyntaxException;
-	public EntityType 			getEntityType(CommandContext<?> cmdCtx, String str, CommandSender sender) throws CommandSyntaxException;
-	public LootTable 			getLootTable(CommandContext<?> cmdCtx, String str);
-	public Sound                getSound(CommandContext<?> cmdCtx, String key);
-	public Advancement          getAdvancement(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
-	public Recipe               getRecipe(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
+	ChatColor 			getChatColor(CommandContext<?> cmdCtx, String str);
+	BaseComponent[] 		getChatComponent(CommandContext<?> cmdCtx, String str);
+	Enchantment 			getEnchantment(CommandContext<?> cmdCtx, String str);
+	ItemStack 			getItemStack(CommandContext<?> cmdCtx, String str) throws CommandSyntaxException;
+	Location 			getLocation(CommandContext<?> cmdCtx, String str, LocationType locationType, CommandSender sender) throws CommandSyntaxException;
+	Particle 			getParticle(CommandContext<?> cmdCtx, String str);
+	PotionEffectType 	getPotionEffect(CommandContext<?> cmdCtx, String str) throws CommandSyntaxException;
+	FunctionWrapper[] 	getFunction(CommandContext<?> cmdCtx, String str) throws CommandSyntaxException;
+	Player 				getPlayer(CommandContext<?> cmdCtx, String str) throws CommandSyntaxException;
+	Object 				getEntitySelector(CommandContext<?> cmdCtx, String str, EntitySelector selector) throws CommandSyntaxException;
+	EntityType 			getEntityType(CommandContext<?> cmdCtx, String str, CommandSender sender) throws CommandSyntaxException;
+	LootTable 			getLootTable(CommandContext<?> cmdCtx, String str);
+	Sound                getSound(CommandContext<?> cmdCtx, String key);
+	Advancement          getAdvancement(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
+	Recipe               getRecipe(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 
 	//Argument types
-	public ArgumentType<?> _ArgumentChatFormat();
-	public ArgumentType<?> _ArgumentChatComponent();
-	public ArgumentType<?> _ArgumentMinecraftKeyRegistered();
-	public ArgumentType<?> _ArgumentMobEffect();
-	public ArgumentType<?> _ArgumentProfile();
-	public ArgumentType<?> _ArgumentParticle();
-	public ArgumentType<?> _ArgumentPosition();
-	public ArgumentType<?> _ArgumentVec3();
-	public ArgumentType<?> _ArgumentItemStack();
-	public ArgumentType<?> _ArgumentTag();
-	public ArgumentType<?> _ArgumentEntitySummon();
-	public ArgumentType<?> _ArgumentEntity(EntitySelector selector);
-	public ArgumentType<?> _ArgumentEnchantment();
+	ArgumentType<?> _ArgumentChatFormat();
+	ArgumentType<?> _ArgumentChatComponent();
+	ArgumentType<?> _ArgumentMinecraftKeyRegistered();
+	ArgumentType<?> _ArgumentMobEffect();
+	ArgumentType<?> _ArgumentProfile();
+	ArgumentType<?> _ArgumentParticle();
+	ArgumentType<?> _ArgumentPosition();
+	ArgumentType<?> _ArgumentVec3();
+	ArgumentType<?> _ArgumentItemStack();
+	ArgumentType<?> _ArgumentTag();
+	ArgumentType<?> _ArgumentEntitySummon();
+	ArgumentType<?> _ArgumentEntity(EntitySelector selector);
+	ArgumentType<?> _ArgumentEnchantment();
 
 
 
