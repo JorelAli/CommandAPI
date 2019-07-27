@@ -28,9 +28,10 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 
 | Version | Direct download                                              | Documentation                                                |
 | ------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 2.2 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.2/CommandAPI.jar) | [Version 2.1 documentation](https://jorelali.github.io/1.13-Command-API/) |
 | 2.1 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.1/CommandAPI.jar) | [Version 2.1 documentation](https://jorelali.github.io/1.13-Command-API/) |
-| 2.0.1 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.0.1/CommandAPI.jar)  | [Version 2.0 documentation](https://jorelali.github.io/1.13-Command-API/) |
-| 2.0 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.0/CommandAPI.jar)  | [Version 2.0 documentation](https://jorelali.github.io/1.13-Command-API/) |
+| 2.0.1 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.0.1/CommandAPI.jar)  | [Version 2.0+ documentation](https://jorelali.github.io/1.13-Command-API/) |
+| 2.0 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.0/CommandAPI.jar)  | [Version 2.0+ documentation](https://jorelali.github.io/1.13-Command-API/) |
 | 1.8.2 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.8.2/CommandAPI.jar) | [Version 1.8 - 1.8.2 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/docs/olddocs/v1.8%20Documentation.md) |
 | 1.7.2     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.7.2/CommandAPI.jar) | [Version 1.7 - 1.7.2 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/docs/olddocs/v1.7%20Documentation.md) |
 | 1.6     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.6/CommandAPI.jar) | [Version 1.6 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/docs/olddocs/v1.6%20Documentation.md) |
@@ -61,16 +62,13 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 
 To build the CommandAPI, a copy of the required Spigot.jar libraries are required for the following versions of Minecraft:
 
+* 1.13
+* 1.13.1
 * 1.13.2
-
 * 1.14
-
 * 1.14.1
-
 * 1.14.2
-
 * 1.14.3
-
 * 1.14.4
 
 To download these easily:
@@ -87,6 +85,11 @@ To download these easily:
 
 ## Changelog
 
+* Version 2.2
+  * Adds support for Minecraft 1.13 and 1.13.1 _(Funny isn't it? It's called the 1.13 CommandAPI but never supported Minecraft 1.13 until now)_
+  * Improves support for different versions
+  * Adds pointless witty comments into changelog notes
+  * Adds [1.13-Command-API-SafeReflection library](https://github.com/JorelAli/1.13-Command-API-SafeReflection) to greatly improve reliability of reflection calls
 * Version 2.1
   * Adds RecipeArgument
   * Adds SoundArgument
