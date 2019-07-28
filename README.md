@@ -97,6 +97,34 @@ There are various methods of acquiring the required Spigot.jar server jar files:
 * Download the required versions from [getbukkit.org](https://getbukkit.org/download/spigot)
 * Copy them into a folder called `spigotlibs` in the same directory as the `pom.xml` file (This should be inside the `1.13CommandAPI` folder)
 
+#### Directory structure
+
+This is what your directory structure should look like _(so you know where to put the spigot jars)_:
+
+```
+1.13CommandAPI/
+├── .git/
+├── .github/
+├── 1.13CommandAPI/
+│   ├── spigotlibs/
+│   │   ├── spigot-1.13.jar
+│   │   ├── spigot-1.13.1.jar
+│   │   ├── spigot-1.13.2.jar
+│   │   ├── ...
+│   │   └── spigot-1.14.4.jar
+│   ├── src/
+│   │   └── ...
+│   ├── .gitignore
+│   ├── config.yml
+│   ├── plugin.yml
+│   └── pom.xml
+├── docs/
+├── images/
+├── downloadSpigot.sh
+├── LICENSE
+└── README.md
+```
+
 -----
 
 ## Changelog
