@@ -30,8 +30,8 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 | ------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | 2.2 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.2/CommandAPI.jar) | [Version 2.1 documentation](https://jorelali.github.io/1.13-Command-API/) |
 | 2.1 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.1/CommandAPI.jar) | [Version 2.1 documentation](https://jorelali.github.io/1.13-Command-API/) |
-| 2.0.1 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.0.1/CommandAPI.jar)  | [Version 2.0+ documentation](https://jorelali.github.io/1.13-Command-API/) |
-| 2.0 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.0/CommandAPI.jar)  | [Version 2.0+ documentation](https://jorelali.github.io/1.13-Command-API/) |
+| 2.0.1 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.0.1/CommandAPI.jar)  | [Version 2.0 documentation](https://jorelali.github.io/1.13-Command-API/) |
+| 2.0 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.0/CommandAPI.jar)  | [Version 2.0 documentation](https://jorelali.github.io/1.13-Command-API/) |
 | 1.8.2 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.8.2/CommandAPI.jar) | [Version 1.8 - 1.8.2 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/docs/olddocs/v1.8%20Documentation.md) |
 | 1.7.2     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.7.2/CommandAPI.jar) | [Version 1.7 - 1.7.2 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/docs/olddocs/v1.7%20Documentation.md) |
 | 1.6     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.6/CommandAPI.jar) | [Version 1.6 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/docs/olddocs/v1.6%20Documentation.md) |
@@ -42,9 +42,11 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 | 1.1     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.1/CommandAPI.jar) | [Version 1.1 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/docs/olddocs/v1.1%20Documentation.md) |
 | 1.0     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.0/CommandAPI.jar) | [Version 1.0 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/docs/olddocs/v1.0%20Documentation.md) |
 
+-----
+
 ## Building the CommandAPI
 
-### Building the CommandAPI
+The CommandAPI can be built easily, but requires copies of the Spigot server jars to be present locally on your machine. This is due to the SafeReflection library which performs extra checks at compile time _(and depends on spigot jar files being present)_.
 
 * Clone the repository using the command below or your preferred method
 
@@ -54,24 +56,25 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 
 * Go into the `1.13CommandAPI` folder
 
-* Ensure you have the required spigot libraries (see below)
+* Ensure you have the required spigot server jars (see below)
 
 * Run `mvn clean install`
 
 ### Spigot Libraries
 
-To build the CommandAPI, a copy of the required Spigot.jar libraries are required for the following versions of Minecraft:
+To build the CommandAPI, copies of the Spigot.jar servers are required for the following versions of Minecraft:
 
-* 1.13
-* 1.13.1
-* 1.13.2
-* 1.14
-* 1.14.1
-* 1.14.2
-* 1.14.3
-* 1.14.4
+| 1.13 versions | 1.14 versions |
+| ------------- | ------------- |
+| 1.13          | 1.14          |
+| 1.13.1        | 1.14.1        |
+| 1.13.2        | 1.14.2        |
+|               | 1.14.3        |
+|               | 1.14.4        |
 
-To download these easily:
+There are various methods of acquiring the required Spigot.jar server jar files:
+
+#### Building them using _BuildTools_ + downloadSpigot.sh (Recommended)
 
 * Download the `BuildTools.jar` file from [here](https://hub.spigotmc.org/jenkins/job/BuildTools/) and place it in a separate directory
 
@@ -81,7 +84,20 @@ To download these easily:
 
   > If you are using Windows, it might not be able to run this command. Using Git Bash (assuming you have `git` installed) allows you to run this file
 
-* Copy the `spigotlibs/` folder into the same directory as the `pom.xml` file (This should be inside the `1.13CommandAPI` folder)
+* Copy the `spigotlibs` folder into the same directory as the `pom.xml` file (This should be inside the `1.13CommandAPI` folder)
+
+#### Building them using _BuildTools_ + manual command line (Recommended)
+
+- Download the `BuildTools.jar` file from [here](https://hub.spigotmc.org/jenkins/job/BuildTools/) and place it in a separate directory
+- Use the command `java -jar BuildTools.jar --rev <VERSION>` to download the specific version of the Spigot.jar you need. For example, to download Spigot for 1.14.4, use `java -jar BuildTools.jar --rev 1.14.4`
+- Copy the spigot jar files into a folder called `spigotlibs` in the same directory as the `pom.xml` file (This should be inside the `1.13CommandAPI` folder)
+
+#### Downloading them from another source
+
+* Download the required versions from [getbukkit.org](https://getbukkit.org/download/spigot)
+* Copy them into a folder called `spigotlibs` in the same directory as the `pom.xml` file (This should be inside the `1.13CommandAPI` folder)
+
+-----
 
 ## Changelog
 
