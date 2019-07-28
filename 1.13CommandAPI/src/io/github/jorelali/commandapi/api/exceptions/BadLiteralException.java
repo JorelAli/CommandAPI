@@ -1,7 +1,8 @@
 package io.github.jorelali.commandapi.api.exceptions;
 
-@SuppressWarnings("serial")
 public class BadLiteralException extends RuntimeException {
+	
+	private static final long serialVersionUID = -8349408884121946716L;
 	
 	private boolean isNull;
 	

@@ -2,8 +2,9 @@ package io.github.jorelali.commandapi.api.exceptions;
 
 import io.github.jorelali.commandapi.api.CommandPermission;
 
-@SuppressWarnings("serial")
 public class ConflictingPermissionsException extends RuntimeException {
+	
+	private static final long serialVersionUID = -2536362507823934739L;
 	
 	private String command;
 	private CommandPermission currentPermission;

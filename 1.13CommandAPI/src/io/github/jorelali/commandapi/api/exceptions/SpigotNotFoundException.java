@@ -1,8 +1,9 @@
 package io.github.jorelali.commandapi.api.exceptions;
 
-@SuppressWarnings("serial")
 public class SpigotNotFoundException extends RuntimeException {
-		
+	
+	private static final long serialVersionUID = 1422616815449211841L;
+	
 	private String className;
 	public SpigotNotFoundException(Class<?> c) {
 		className = c.getName();

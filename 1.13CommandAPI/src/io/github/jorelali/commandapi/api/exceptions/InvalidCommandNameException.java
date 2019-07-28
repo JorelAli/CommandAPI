@@ -1,7 +1,8 @@
 package io.github.jorelali.commandapi.api.exceptions;
 
-@SuppressWarnings("serial")
 public class InvalidCommandNameException extends RuntimeException {
+	
+	private static final long serialVersionUID = -813921221648908805L;
 	
 	private String commandName;
 	
