@@ -19,10 +19,6 @@
 
     <repositories>
         <repository>
-            <id>spigotmc-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
-        <repository>
             <id>minecraft-libraries</id>
             <name>Minecraft Libraries</name>
             <url>https://libraries.minecraft.net</url>
@@ -31,6 +27,10 @@
 	        <id>mccommandapi</id>
 	        <url>https://raw.githubusercontent.com/JorelAli/1.13-Command-API/mvn-repo/1.13CommandAPI/</url>
 	    </repository>
+        <repository>
+            <id>nms-repo</id>
+            <url>https://repo.codemc.org/repository/nms/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -60,79 +60,22 @@
 		</dependency>
         
         <!-- Spigot jars for multiple version support -->
-       
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot-server-1.13</artifactId>
-			<version>1.13</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/spigotlibs/spigot-1.13.jar</systemPath>
-			<type>jar</type>
-  			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot-server-1.13.1</artifactId>
-			<version>1.13.1</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/spigotlibs/spigot-1.13.1.jar</systemPath>
-			<type>jar</type>
-  			<optional>true</optional>
-		</dependency>
+
         <dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot-server-1.13.2</artifactId>
-			<version>1.13.2</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/spigotlibs/spigot-1.13.2.jar</systemPath>
-			<type>jar</type>
-  			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot-server-1.14</artifactId>
-			<version>1.14</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/spigotlibs/spigot-1.14.jar</systemPath>
-			<type>jar</type>
-  			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot-server-1.14.1</artifactId>
-			<version>1.14.1</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/spigotlibs/spigot-1.14.1.jar</systemPath>
-			<type>jar</type>
-  			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot-server-1.14.2</artifactId>
-			<version>1.14.2</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/spigotlibs/spigot-1.14.2.jar</systemPath>
-			<type>jar</type>
-  			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot-server-1.14.3</artifactId>
-			<version>1.14.3</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/spigotlibs/spigot-1.14.3.jar</systemPath>
-			<type>jar</type>
-  			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot-server-1.14.4</artifactId>
-			<version>1.14.4</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/spigotlibs/spigot-1.14.4.jar</systemPath>
-			<type>jar</type>
-  			<optional>true</optional>
-		</dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>1.13-R0.1-20190527.160257-2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>1.13.2-R0.1-20190715.162126-52</version>
+        </dependency>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>1.14-R0.1-20190722.062331-33</version>
+        </dependency>
     </dependencies>
 
     <build>
