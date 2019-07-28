@@ -391,7 +391,7 @@ public class NMS_1_13_R1 implements NMS {
 
 	@Override
 	public String[] compatibleVersions() {
-		return new String[] {"1.13.2"};
+		return new String[] {"1.13"};
 	}
 
 }
