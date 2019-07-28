@@ -22,7 +22,7 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 
 * **No plugin.yml registration** - Commands don't need to be registered in the `plugin.yml` file anymore
 
-* **No dependencies** - You don't need to import Brigadier in your projects to use the CommandAPI
+* **No other dependencies** - You don't need to import Brigadier in your projects to use the CommandAPI
 
 ## Downloads & Documentation (includes usage for server owners)
 
