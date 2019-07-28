@@ -64,13 +64,10 @@ The CommandAPI can be built easily, but requires copies of the Spigot server jar
 
 To build the CommandAPI, copies of the Spigot.jar servers are required for the following versions of Minecraft:
 
-| 1.13 versions | 1.14 versions |
-| ------------- | ------------- |
-| 1.13          | 1.14          |
-| 1.13.1        | 1.14.1        |
-| 1.13.2        | 1.14.2        |
-|               | 1.14.3        |
-|               | 1.14.4        |
+|                   |      |        |        |        |        |
+| ----------------- | ---- | ------ | ------ | ------ | ------ |
+| **1.13 versions** | 1.13 | 1.13.1 | 1.13.2 |        |        |
+| **1.14 versions** | 1.14 | 1.14.1 | 1.14.2 | 1.14.3 | 1.14.4 |
 
 There are various methods of acquiring the required Spigot.jar server jar files:
 
