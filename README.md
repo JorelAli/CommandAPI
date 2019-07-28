@@ -54,7 +54,7 @@ The CommandAPI can be built easily, but requires copies of the Spigot server jar
   git clone https://github.com/JorelAli/1.13-Command-API.git
   ```
 
-* Go into the `1.13CommandAPI` folder
+* Go into the folder named `1.13CommandAPI` _(Not to be confused with the folder named `1.13-Command-API`, which is what is cloned)_
 
 * Ensure you have the required spigot server jars (see below)
 
@@ -99,7 +99,7 @@ There are various methods of acquiring the required Spigot.jar server jar files:
 This is what your directory structure should look like _(so you know where to put the spigot jars)_:
 
 ```
-1.13CommandAPI/
+1.13-Command-API/
 ├── .git/
 ├── .github/
 ├── 1.13CommandAPI/
