@@ -71,17 +71,21 @@ To build the CommandAPI, copies of the Spigot.jar servers are required for the f
 
 There are various methods of acquiring the required Spigot.jar server jar files:
 
-#### Building them using _BuildTools_ + downloadSpigot.sh (Recommended)
+#### Building them using _BuildTools_ + downloadSpigot file (Recommended)
 
 * Download the `BuildTools.jar` file from [here](https://hub.spigotmc.org/jenkins/job/BuildTools/) and place it in a separate directory
-
-* Copy the `downloadSpigot.sh` file from this repository into the same directory as the `BuildTools.jar` file
-
-* Run the `downloadSpigot.sh` file using `./downloadSpigot.sh` 
-
-  > If you are using Windows, it might not be able to run this command. Using Git Bash (assuming you have `git` installed) allows you to run this file
-
+* If on Windows:
+  * Download the `downloadSpigot.bat` file from this repository [(or just right click here, save as...)](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.bat)
+  * Copy the `downloadSpigot.bat` file into the same directory as the `BuildTools.jar` file
+  * Double click on the `downloadSpigot.bat` file to run it
+* If on Linux/MacOS:
+  * If on linux/mac, download the `downloadSpigot.sh` file from this repository [(or just right click here, save as...)](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.sh)
+  * Copy the `downloadSpigot.sh` file into the same directory as the `BuildTools.jar` file
+  * Open up a terminal in your folder and make the `downloadSpigot.sh` file executable by using `chmod u+x ./downloadSpigot.sh`
+  * Run the `downloadSpigot` file using `./downloadSpigot.sh` 
 * Copy the `spigotlibs` folder into the same directory as the `pom.xml` file (This should be inside the `1.13CommandAPI` folder)
+
+> **Note:** Sometimes, the `downloadSpigot` file doesn't work because of incompatibilities with cloning certain files it needs. If for any reason, downloadSpigot stops working, delete the directories created (BuildData, Bukkit, CraftBukkit, Spigot and work) and re-run the downloadSpigot file.
 
 #### Building them using _BuildTools_ + manual command line (Recommended)
 

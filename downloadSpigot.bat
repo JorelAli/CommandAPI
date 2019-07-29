@@ -1,3 +1,4 @@
+@echo off
 if exist BuildTools.jar (
 	mkdir spigotlibs
 	if not exist spigot-1.13.jar echo Building Spigot 1.13 && java -jar BuildTools.jar --rev 1.13
@@ -21,4 +22,5 @@ if exist BuildTools.jar (
 	copy spigot-1.14.4.jar spigotlibs
 	
 	echo Done!
-)
+	pause
+) else (echo BuildTool.jar not found! && pause)
