@@ -257,7 +257,11 @@ public class NMS_1_14_R1 implements NMS {
 
 	@Override
 	public CommandSender getCommandSenderForCLW(Object clw) {
-		return ((CommandListenerWrapper) clw).getBukkitSender();
+		try {
+			return ((CommandListenerWrapper) clw).getBukkitSender();
+		} catch(UnsupportedOperationException e) {
+			return null;
+		}
 	}
 
 	@Override

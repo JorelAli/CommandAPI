@@ -371,6 +371,9 @@ public final class CommandAPIHandler {
 	
 	//Checks if a CommandSender has permission permission from CommandPermission permission
 	private boolean permissionCheck(CommandSender sender, CommandPermission permission) {
+		if(sender == null) {
+			return true;
+		}
 		if(permission.equals(CommandPermission.NONE)) {
 			return true;
 		} else if(permission.equals(CommandPermission.OP)) {
