@@ -382,12 +382,11 @@ public final class CommandAPIHandler {
 		} else {
 			if(sender instanceof Player) {
 				Player p = (Player) sender;
-				boolean result = CommandAPIMain.vaultPerm().playerHas(
+				return CommandAPIMain.vault().playerHas(
 					p.getWorld().getName(), 
 					Bukkit.getOfflinePlayer(p.getUniqueId()), 
 					permission.getPermission()
 				);
-				return result;
 			} else {
 				return sender.hasPermission(permission.getPermission());
 			}

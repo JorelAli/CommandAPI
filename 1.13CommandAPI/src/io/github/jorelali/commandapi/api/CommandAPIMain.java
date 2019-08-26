@@ -48,6 +48,7 @@ public class CommandAPIMain extends JavaPlugin {
 
 	private static Config config;
 	private static File dispatcherFile;
+	private static Permission perms = null;
 
 	//Gets the instance of Config
 	protected static Config getConfiguration() {
@@ -58,8 +59,9 @@ public class CommandAPIMain extends JavaPlugin {
 		return dispatcherFile;
 	}
 	
-	private static Permission perms = null;
-	protected static Permission vaultPerm() { return perms; }
+	protected static Permission vault() { 
+		return perms; 
+	}
 	
 	@Override
 	public void onLoad() {
@@ -87,7 +89,7 @@ public class CommandAPIMain extends JavaPlugin {
         if(perms == null) {
         	logger.warning("Could not hook into Vault dependency, permissions won't work otherwise!");
         } else {
-        	logger.info("Hooked successfully into Vault, " + perms.getName());
+        	logger.info("Hooked successfully into Vault, using " + perms.getName());
         }
 	}
 	
