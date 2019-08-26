@@ -10,6 +10,9 @@ assignees: ''
 **CommandAPI version**
 The version of the CommandAPI that has caused this bug
 
+**Minecraft version**
+What version of Minecraft you're using (e.g. 1.14.4)
+
 **Describe the bug**
 A clear and concise description of what the bug is.
 
