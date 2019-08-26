@@ -35,7 +35,7 @@ public class FunctionArgument implements Argument, CustomProvidedArgument {
 		return false;
 	}
 	
-	private CommandPermission permission = CommandPermission.NONE;
+	private CommandPermission permission = null;
 	
 	@Override
 	public FunctionArgument withPermission(CommandPermission permission) {

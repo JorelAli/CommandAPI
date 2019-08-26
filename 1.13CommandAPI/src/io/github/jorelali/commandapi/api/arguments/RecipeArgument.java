@@ -31,7 +31,7 @@ public class RecipeArgument implements Argument, CustomProvidedArgument {
 		return false;
 	}
 	
-	private CommandPermission permission = CommandPermission.NONE;
+	private CommandPermission permission = null;
 	
 	@Override
 	public RecipeArgument withPermission(CommandPermission permission) {

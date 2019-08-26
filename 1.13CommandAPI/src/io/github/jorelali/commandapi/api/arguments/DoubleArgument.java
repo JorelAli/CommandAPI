@@ -66,7 +66,7 @@ public class DoubleArgument implements Argument, OverrideableSuggestions {
 		return suggestions;
 	}
 	
-	private CommandPermission permission = CommandPermission.NONE;
+	private CommandPermission permission = null;
 	
 	@Override
 	public DoubleArgument withPermission(CommandPermission permission) {

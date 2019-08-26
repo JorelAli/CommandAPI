@@ -56,7 +56,7 @@ public class ChatComponentArgument implements Argument, OverrideableSuggestions 
 		return suggestions;
 	}
 
-	private CommandPermission permission = CommandPermission.NONE;
+	private CommandPermission permission = null;
 	
 	@Override
 	public ChatComponentArgument withPermission(CommandPermission permission) {

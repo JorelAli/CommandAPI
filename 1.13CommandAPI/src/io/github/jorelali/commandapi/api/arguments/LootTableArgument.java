@@ -31,7 +31,7 @@ public class LootTableArgument implements Argument, CustomProvidedArgument {
 		return false;
 	}
 	
-	private CommandPermission permission = CommandPermission.NONE;
+	private CommandPermission permission = null;
 	
 	@Override
 	public LootTableArgument withPermission(CommandPermission permission) {

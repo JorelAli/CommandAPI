@@ -31,7 +31,7 @@ public class AdvancementArgument implements Argument, CustomProvidedArgument {
 		return false;
 	}
 	
-	private CommandPermission permission = CommandPermission.NONE;
+	private CommandPermission permission = null;
 	
 	@Override
 	public AdvancementArgument withPermission(CommandPermission permission) {

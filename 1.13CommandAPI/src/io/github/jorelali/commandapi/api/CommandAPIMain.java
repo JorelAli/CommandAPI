@@ -5,7 +5,10 @@ import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import net.milkbowl.vault.permission.Permission;
 
 public class CommandAPIMain extends JavaPlugin {
 	
@@ -55,6 +58,9 @@ public class CommandAPIMain extends JavaPlugin {
 		return dispatcherFile;
 	}
 	
+	private static Permission perms = null;
+	protected static Permission vaultPerm() { return perms; }
+	
 	@Override
 	public void onLoad() {
 		saveDefaultConfig();
@@ -75,6 +81,14 @@ public class CommandAPIMain extends JavaPlugin {
 			//Sort out permissions after the server has finished registering them all
 			CommandAPI.fixPermissions();
 		}, 0L);
+		
+        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+        CommandAPIMain.perms = rsp.getProvider();
+        if(perms == null) {
+        	logger.warning("Could not hook into Vault dependency, permissions won't work otherwise!");
+        } else {
+        	logger.info("Hooked successfully into Vault, " + perms.getName());
+        }
 	}
 	
 }

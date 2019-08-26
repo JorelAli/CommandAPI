@@ -1,6 +1,7 @@
 package io.github.jorelali.commandapi.api;
 
 import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
@@ -198,6 +199,14 @@ public class CommandAPI {
 					throw new GreedyStringException();
 				}
 			}
+			
+			//Reassign permissions to arguments if not declared
+			for(Entry<String, Argument> entry : copyOfArgs.entrySet()) {
+				if(entry.getValue().getArgumentPermission() == null) {
+					entry.setValue(entry.getValue().withPermission(permissions));
+				}
+			}
+			
 			handler.register(commandName, permissions, aliases, copyOfArgs, executor);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -94,7 +94,7 @@ public class EntitySelectorArgument implements Argument, OverrideableSuggestions
 		return suggestions;
 	}
 	
-	private CommandPermission permission = CommandPermission.NONE;
+	private CommandPermission permission = null;
 	
 	@Override
 	public EntitySelectorArgument withPermission(CommandPermission permission) {

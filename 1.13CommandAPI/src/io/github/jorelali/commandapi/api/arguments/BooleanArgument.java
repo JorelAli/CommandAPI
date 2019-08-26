@@ -44,7 +44,7 @@ public class BooleanArgument implements Argument, OverrideableSuggestions {
 		return suggestions;
 	}
 	
-	private CommandPermission permission = CommandPermission.NONE;
+	private CommandPermission permission = null;
 	
 	@Override
 	public BooleanArgument withPermission(CommandPermission permission) {

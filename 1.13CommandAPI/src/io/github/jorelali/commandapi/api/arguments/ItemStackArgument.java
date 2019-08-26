@@ -47,7 +47,7 @@ public class ItemStackArgument implements Argument, OverrideableSuggestions {
 		return suggestions;
 	}
 	
-	private CommandPermission permission = CommandPermission.NONE;
+	private CommandPermission permission = null;
 	
 	@Override
 	public ItemStackArgument withPermission(CommandPermission permission) {

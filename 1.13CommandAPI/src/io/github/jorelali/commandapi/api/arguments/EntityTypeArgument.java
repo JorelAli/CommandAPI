@@ -47,7 +47,7 @@ public class EntityTypeArgument implements Argument, OverrideableSuggestions {
 		return suggestions;
 	}
 	
-	private CommandPermission permission = CommandPermission.NONE;
+	private CommandPermission permission = null;
 	
 	@Override
 	public EntityTypeArgument withPermission(CommandPermission permission) {

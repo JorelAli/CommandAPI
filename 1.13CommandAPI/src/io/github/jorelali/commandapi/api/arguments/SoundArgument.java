@@ -31,7 +31,7 @@ public class SoundArgument implements Argument, CustomProvidedArgument {
 		return false;
 	}
 	
-	private CommandPermission permission = CommandPermission.NONE;
+	private CommandPermission permission = null;
 	
 	@Override
 	public SoundArgument withPermission(CommandPermission permission) {

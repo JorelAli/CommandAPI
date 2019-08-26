@@ -47,7 +47,7 @@ public class ParticleArgument implements Argument, OverrideableSuggestions {
 		return suggestions;
 	}
 	
-	private CommandPermission permission = CommandPermission.NONE;
+	private CommandPermission permission = null;
 	
 	@Override
 	public ParticleArgument withPermission(CommandPermission permission) {

@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
 import com.mojang.brigadier.Command;
@@ -355,7 +356,7 @@ public final class CommandAPIHandler {
 			permissionsToFix.put(commandName.toLowerCase(), permission);
 		}
 		
-		CommandPermission finalPermission = permission;
+		final CommandPermission finalPermission = permission;
 		
 		//Register it to the Bukkit permissions registry
 		if(finalPermission.getPermission() != null) {
@@ -363,7 +364,7 @@ public final class CommandAPIHandler {
 				Bukkit.getPluginManager().addPermission(new Permission(finalPermission.getPermission()));
 			} catch(IllegalArgumentException e) {}
 		}
-		
+				
 		return (clw) -> {
 			return permissionCheck(nms.getCommandSenderForCLW(clw), finalPermission);
         };
@@ -379,7 +380,17 @@ public final class CommandAPIHandler {
 		} else if(permission.equals(CommandPermission.OP)) {
 			return sender.isOp();
 		} else {
-			return sender.hasPermission(permission.getPermission());
+			if(sender instanceof Player) {
+				Player p = (Player) sender;
+				boolean result = CommandAPIMain.vaultPerm().playerHas(
+					p.getWorld().getName(), 
+					Bukkit.getOfflinePlayer(p.getUniqueId()), 
+					permission.getPermission()
+				);
+				return result;
+			} else {
+				return sender.hasPermission(permission.getPermission());
+			}
 		}
 	}
 	

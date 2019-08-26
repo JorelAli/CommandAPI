@@ -206,7 +206,7 @@ public class CustomArgument<S> implements Argument, OverrideableSuggestions {
 		return parser;
 	}
 	
-	private CommandPermission permission = CommandPermission.NONE;
+	private CommandPermission permission = null;
 	
 	@Override
 	public CustomArgument<S> withPermission(CommandPermission permission) {

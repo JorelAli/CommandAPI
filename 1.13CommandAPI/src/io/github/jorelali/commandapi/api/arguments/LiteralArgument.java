@@ -48,7 +48,7 @@ public class LiteralArgument implements Argument {
 		return false;
 	}
 	
-	private CommandPermission permission = CommandPermission.NONE;
+	private CommandPermission permission = null;
 	
 	@Override
 	public LiteralArgument withPermission(CommandPermission permission) {

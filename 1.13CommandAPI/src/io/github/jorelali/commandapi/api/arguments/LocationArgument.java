@@ -80,7 +80,7 @@ public class LocationArgument implements Argument, OverrideableSuggestions {
 		return suggestions;
 	}
 	
-	private CommandPermission permission = CommandPermission.NONE;
+	private CommandPermission permission = null;
 	
 	@Override
 	public LocationArgument withPermission(CommandPermission permission) {

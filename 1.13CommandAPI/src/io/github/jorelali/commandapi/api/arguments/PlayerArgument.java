@@ -47,7 +47,7 @@ public class PlayerArgument implements Argument, OverrideableSuggestions {
 		return suggestions;
 	}
 	
-	private CommandPermission permission = CommandPermission.NONE;
+	private CommandPermission permission = null;
 	
 	@Override
 	public PlayerArgument withPermission(CommandPermission permission) {

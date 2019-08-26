@@ -45,7 +45,7 @@ public class GreedyStringArgument implements Argument, OverrideableSuggestions {
 		return suggestions;
 	}
 	
-	private CommandPermission permission = CommandPermission.NONE;
+	private CommandPermission permission = null;
 	
 	@Override
 	public GreedyStringArgument withPermission(CommandPermission permission) {

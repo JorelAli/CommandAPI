@@ -50,7 +50,7 @@ public class SuggestedStringArgument implements Argument {
 		return suggestions;
 	}
 	
-	private CommandPermission permission = CommandPermission.NONE;
+	private CommandPermission permission = null;
 	
 	@Override
 	public SuggestedStringArgument withPermission(CommandPermission permission) {

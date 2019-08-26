@@ -47,7 +47,7 @@ public class ChatColorArgument implements Argument, OverrideableSuggestions {
 		return suggestions;
 	}
 	
-	private CommandPermission permission = CommandPermission.NONE;
+	private CommandPermission permission = null;
 	
 	@Override
 	public ChatColorArgument withPermission(CommandPermission permission) {

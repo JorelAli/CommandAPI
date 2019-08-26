@@ -65,7 +65,7 @@ public class DynamicSuggestedStringArgument implements Argument {
 		return suggestionsWithCS;
 	}
 	
-	private CommandPermission permission = CommandPermission.NONE;
+	private CommandPermission permission = null;
 	
 	@Override
 	public DynamicSuggestedStringArgument withPermission(CommandPermission permission) {
