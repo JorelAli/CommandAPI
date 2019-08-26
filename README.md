@@ -28,6 +28,7 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 
 | Version | Direct download                                              | Documentation                                                |
 | ------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 2.3 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.3/CommandAPI.jar) | [Version 2.1 documentation](https://jorelali.github.io/1.13-Command-API/) |
 | 2.2 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.2/CommandAPI.jar) | [Version 2.1 documentation](https://jorelali.github.io/1.13-Command-API/) |
 | 2.1 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.1/CommandAPI.jar) | [Version 2.1 documentation](https://jorelali.github.io/1.13-Command-API/) |
 | 2.0.1 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.0.1/CommandAPI.jar)  | [Version 2.0 documentation](https://jorelali.github.io/1.13-Command-API/) |
