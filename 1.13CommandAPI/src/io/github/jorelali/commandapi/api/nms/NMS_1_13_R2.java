@@ -29,6 +29,7 @@ import org.bukkit.craftbukkit.v1_13_R2.command.ProxiedNativeCommandSender;
 import org.bukkit.craftbukkit.v1_13_R2.command.VanillaCommandWrapper;
 import org.bukkit.craftbukkit.v1_13_R2.enchantments.CraftEnchantment;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_13_R2.potion.CraftPotionEffectType;
 import org.bukkit.craftbukkit.v1_13_R2.util.CraftChatMessage;
@@ -417,6 +418,14 @@ public class NMS_1_13_R2 implements NMS {
 	@Override
 	public String[] compatibleVersions() {
 		return new String[] {"1.13.1", "1.13.2"};
+	}
+
+	@Override
+	public void resendPackets(Player player) {
+		CraftPlayer craftPlayer = (CraftPlayer) player;
+		CraftServer craftServer = (CraftServer) Bukkit.getServer();
+		net.minecraft.server.v1_13_R2.CommandDispatcher nmsDispatcher = craftServer.getServer().commandDispatcher;
+		nmsDispatcher.a(craftPlayer.getHandle());
 	}
 
 }

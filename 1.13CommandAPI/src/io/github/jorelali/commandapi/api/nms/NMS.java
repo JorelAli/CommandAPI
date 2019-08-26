@@ -51,6 +51,12 @@ public interface NMS {
 	}
 	
 	/**
+	 * Resends the command dispatcher's set of commands to a player.
+	 * @param player
+	 */
+	void resendPackets(Player player);
+	
+	/**
 	 * A String array of Minecraft versions that this NMS implementation
 	 * is compatible with. For example, ["1.14", "1.14.1", "1.14.2", "1.14.3"]
 	 * @return A String array of compatible Minecraft versions

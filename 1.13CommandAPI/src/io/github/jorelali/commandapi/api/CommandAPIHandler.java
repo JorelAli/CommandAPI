@@ -22,7 +22,6 @@ import java.util.regex.Pattern;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
 import com.mojang.brigadier.Command;
@@ -380,16 +379,7 @@ public final class CommandAPIHandler {
 		} else if(permission.equals(CommandPermission.OP)) {
 			return sender.isOp();
 		} else {
-			if(sender instanceof Player) {
-				Player p = (Player) sender;
-				return CommandAPIMain.vault().playerHas(
-					p.getWorld().getName(), 
-					Bukkit.getOfflinePlayer(p.getUniqueId()), 
-					permission.getPermission()
-				);
-			} else {
-				return sender.hasPermission(permission.getPermission());
-			}
+			return sender.hasPermission(permission.getPermission());			
 		}
 	}
 	
