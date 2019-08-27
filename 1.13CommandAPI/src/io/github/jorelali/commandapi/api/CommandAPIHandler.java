@@ -333,6 +333,9 @@ public final class CommandAPIHandler {
 						case ROTATION:
 							argList.add(nms.getRotation(cmdCtx, entry.getKey()));
 							break;
+						case AXIS:
+							argList.add(nms.getAxis(cmdCtx, entry.getKey()));
+							break;
 					}
 				}
 			}

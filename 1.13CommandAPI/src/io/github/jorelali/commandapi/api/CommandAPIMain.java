@@ -1,9 +1,11 @@
 package io.github.jorelali.commandapi.api;
 
 import java.io.File;
+import java.util.EnumSet;
 import java.util.LinkedHashMap;
 import java.util.logging.Logger;
 
+import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World.Environment;
@@ -15,6 +17,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import io.github.jorelali.commandapi.api.arguments.Argument;
+import io.github.jorelali.commandapi.api.arguments.AxisArgument;
 import io.github.jorelali.commandapi.api.arguments.EnvironmentArgument;
 import io.github.jorelali.commandapi.api.arguments.FloatRangeArgument;
 import io.github.jorelali.commandapi.api.arguments.IntegerRangeArgument;
@@ -157,6 +160,14 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         CommandAPI.getInstance().register("rot", args, (s, a) -> {
         	Rotation r = (Rotation) a[0];
         	System.out.println(r.getPitch() + ", " + r.getYaw());
+        });
+        
+        args.clear();
+        args.put("axes", new AxisArgument());
+        
+        CommandAPI.getInstance().register("axes", args, (s, a) -> {
+        	EnumSet<Axis> r = (EnumSet<Axis>) a[0];
+        	System.out.println(r);
         });
         
 	}

@@ -2,7 +2,9 @@ package io.github.jorelali.commandapi.api.nms;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.EnumSet;
 
+import org.bukkit.Axis;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -145,7 +147,8 @@ public interface NMS {
 	FloatRange        getFloatRange(CommandContext<?> cmdCtx, String key);
 	Environment       getDimension(CommandContext<?> cmdCtx, String key);
 	Rotation          getRotation(CommandContext<?> cmdCtx, String key);
-
+	EnumSet<Axis>     getAxis(CommandContext<?> cmdCtx, String key);
+	
 	//Argument types
 	ArgumentType<?> _ArgumentChatFormat();
 	ArgumentType<?> _ArgumentChatComponent();
@@ -167,5 +170,9 @@ public interface NMS {
 	ArgumentType<?> _ArgumentTime();
 	ArgumentType<?> _ArgumentVec2();
 	ArgumentType<?> _ArgumentVec3();
+
+	ArgumentType<?> _ArgumentAxis();
+
+	
 
 }

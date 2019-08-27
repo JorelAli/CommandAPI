@@ -7,12 +7,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.function.ToIntBiFunction;
 import java.util.stream.Collectors;
 
+import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -82,6 +84,7 @@ import net.minecraft.server.v1_14_R1.ArgumentPosition;
 import net.minecraft.server.v1_14_R1.ArgumentProfile;
 import net.minecraft.server.v1_14_R1.ArgumentRegistry;
 import net.minecraft.server.v1_14_R1.ArgumentRotation;
+import net.minecraft.server.v1_14_R1.ArgumentRotationAxis;
 import net.minecraft.server.v1_14_R1.ArgumentTag;
 import net.minecraft.server.v1_14_R1.ArgumentTime;
 import net.minecraft.server.v1_14_R1.ArgumentVec2;
@@ -97,6 +100,7 @@ import net.minecraft.server.v1_14_R1.CustomFunction;
 import net.minecraft.server.v1_14_R1.CustomFunctionData;
 import net.minecraft.server.v1_14_R1.DimensionManager;
 import net.minecraft.server.v1_14_R1.Entity;
+import net.minecraft.server.v1_14_R1.EnumDirection.EnumAxis;
 import net.minecraft.server.v1_14_R1.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_14_R1.ICompletionProvider;
 import net.minecraft.server.v1_14_R1.IRegistry;
@@ -537,6 +541,31 @@ public class NMS_1_14_R1 implements NMS {
 	@Override
 	public ArgumentType<?> _ArgumentRotation() {
 		return ArgumentRotation.a();
+	}
+
+	@Override
+	public EnumSet<Axis> getAxis(CommandContext cmdCtx, String key) {
+		EnumSet<Axis> set = EnumSet.noneOf(Axis.class);
+		EnumSet<EnumAxis> parsedEnumSet = ArgumentRotationAxis.a(cmdCtx, key);
+		for(EnumAxis element : parsedEnumSet) {
+			switch(element) {
+				case X:
+					set.add(Axis.X);
+					break;
+				case Y:
+					set.add(Axis.Y);
+					break;
+				case Z:
+					set.add(Axis.Z);
+					break;				
+			}
+		}
+		return set;
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentAxis() {
+		return ArgumentRotationAxis.a();
 	}
 
 }
