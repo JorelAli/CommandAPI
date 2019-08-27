@@ -13,6 +13,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import io.github.jorelali.commandapi.api.arguments.Argument;
+import io.github.jorelali.commandapi.api.arguments.Location2DArgument;
+import io.github.jorelali.commandapi.api.arguments.LocationType;
 import io.github.jorelali.commandapi.api.arguments.TimeArgument;
 
 public class CommandAPIMain extends JavaPlugin implements Listener {
@@ -90,6 +92,20 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         args.put("time", new TimeArgument());
         
         CommandAPI.getInstance().register("tim", args, (s, a) -> {
+        	System.out.println(a[0]);
+        });
+        
+        args.clear();
+        args.put("2d", new Location2DArgument(LocationType.BLOCK_POSITION));
+        
+        CommandAPI.getInstance().register("2dblock", args, (s, a) -> {
+        	System.out.println(a[0]);
+        });
+        
+        args.clear();
+        args.put("2d", new Location2DArgument(LocationType.PRECISE_POSITION));
+        
+        CommandAPI.getInstance().register("2dprecise", args, (s, a) -> {
         	System.out.println(a[0]);
         });
 	}

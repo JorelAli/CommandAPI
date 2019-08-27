@@ -47,8 +47,9 @@ import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.Sugges
 import io.github.jorelali.commandapi.api.arguments.DynamicSuggestedStringArgument;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument;
 import io.github.jorelali.commandapi.api.arguments.LiteralArgument;
+import io.github.jorelali.commandapi.api.arguments.Location2DArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationArgument;
-import io.github.jorelali.commandapi.api.arguments.LocationArgument.LocationType;
+import io.github.jorelali.commandapi.api.arguments.LocationType;
 import io.github.jorelali.commandapi.api.arguments.OverrideableSuggestions;
 import io.github.jorelali.commandapi.api.arguments.StringArgument;
 import io.github.jorelali.commandapi.api.arguments.SuggestedStringArgument;
@@ -297,6 +298,10 @@ public final class CommandAPIHandler {
 							break;
 						case TIME:
 							argList.add(nms.getTime(cmdCtx, entry.getKey()));
+							break;
+						case LOCATION2D:
+							LocationType locationType2d = ((Location2DArgument) entry.getValue()).getLocationType();
+							argList.add(nms.getLocation2D(cmdCtx, entry.getKey(), locationType2d, sender));
 							break;
 					}
 				}

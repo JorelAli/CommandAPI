@@ -53,7 +53,7 @@ import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.FunctionWrapper;
 import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
-import io.github.jorelali.commandapi.api.arguments.LocationArgument.LocationType;
+import io.github.jorelali.commandapi.api.arguments.LocationType;
 import io.github.jorelali.commandapi.api.exceptions.TimeArgumentException;
 import io.github.jorelali.commandapi.safereflection.ReflectionType;
 import io.github.jorelali.commandapi.safereflection.SafeReflection;
@@ -86,6 +86,9 @@ import net.minecraft.server.v1_13_R2.LootTableRegistry;
 import net.minecraft.server.v1_13_R2.MinecraftKey;
 import net.minecraft.server.v1_13_R2.MinecraftServer;
 import net.minecraft.server.v1_13_R2.Vec3D;
+import net.minecraft.server.v1_13_R2.ArgumentVec2;
+import net.minecraft.server.v1_13_R2.ArgumentVec2I;
+import net.minecraft.server.v1_13_R2.Vec2F;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 @SafeReflection(type = ReflectionType.FIELD, target = CraftSound.class, name = "minecraftKey", returnType = String.class, versions = {"1.13.1", "1.13.2"})
@@ -437,6 +440,29 @@ public class NMS_1_13_R2 implements NMS {
 	@Override
 	public Object getTime(CommandContext<?> cmdCtx, String key) {
 		throw new TimeArgumentException();
+	}
+	
+	@Override
+	public ArgumentType<?> _ArgumentVec2() {
+		return ArgumentVec2.a();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentPosition2D() {
+		return ArgumentVec2I.a();
+	}
+
+	@Override
+	public Object getLocation2D(CommandContext cmdCtx, String key, LocationType locationType2d, CommandSender sender) throws CommandSyntaxException {
+		switch(locationType2d) {
+			case BLOCK_POSITION:
+				ArgumentVec2I.a blockPos = ArgumentVec2I.a(cmdCtx, key);
+				return new Location(getCommandSenderWorld(sender), blockPos.a, 0, blockPos.b);
+			case PRECISE_POSITION:
+				Vec2F vecPos = ArgumentVec2.a(cmdCtx, key);
+				return new Location(getCommandSenderWorld(sender), vecPos.i, 0, vecPos.j);
+		}
+		return null;
 	}
 
 }

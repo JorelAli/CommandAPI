@@ -57,7 +57,7 @@ import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.FunctionWrapper;
 import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
-import io.github.jorelali.commandapi.api.arguments.LocationArgument.LocationType;
+import io.github.jorelali.commandapi.api.arguments.LocationType;
 import io.github.jorelali.commandapi.safereflection.ReflectionType;
 import io.github.jorelali.commandapi.safereflection.SafeReflection;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -78,8 +78,11 @@ import net.minecraft.server.v1_14_R1.ArgumentProfile;
 import net.minecraft.server.v1_14_R1.ArgumentRegistry;
 import net.minecraft.server.v1_14_R1.ArgumentTag;
 import net.minecraft.server.v1_14_R1.ArgumentTime;
+import net.minecraft.server.v1_14_R1.ArgumentVec2;
+import net.minecraft.server.v1_14_R1.ArgumentVec2I;
 import net.minecraft.server.v1_14_R1.ArgumentVec3;
 import net.minecraft.server.v1_14_R1.BlockPosition;
+import net.minecraft.server.v1_14_R1.BlockPosition2D;
 import net.minecraft.server.v1_14_R1.CommandListenerWrapper;
 import net.minecraft.server.v1_14_R1.CompletionProviders;
 import net.minecraft.server.v1_14_R1.CustomFunction;
@@ -91,6 +94,7 @@ import net.minecraft.server.v1_14_R1.IRegistry;
 import net.minecraft.server.v1_14_R1.LootTableRegistry;
 import net.minecraft.server.v1_14_R1.MinecraftKey;
 import net.minecraft.server.v1_14_R1.MinecraftServer;
+import net.minecraft.server.v1_14_R1.Vec2F;
 import net.minecraft.server.v1_14_R1.Vec3D;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
@@ -445,12 +449,30 @@ public class NMS_1_14_R1 implements NMS {
 
 	@Override
 	public Object getTime(CommandContext<?> cmdCtx, String key) {
-		// TODO Auto-generated method stubreturn new CraftPotionEffectType(ArgumentMobEffect.a(cmdCtx, str));
-//		ArgumentTime.a(cmdCtx, str);
-		
 		return cmdCtx.getArgument(key, Integer.class);
-		
-		
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentVec2() {
+		return ArgumentVec2.a();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentPosition2D() {
+		return ArgumentVec2I.a();
+	}
+
+	@Override
+	public Object getLocation2D(CommandContext cmdCtx, String key, LocationType locationType2d, CommandSender sender) throws CommandSyntaxException {
+		switch(locationType2d) {
+			case BLOCK_POSITION:
+				BlockPosition2D blockPos = ArgumentVec2I.a(cmdCtx, key);
+				return new Location(getCommandSenderWorld(sender), blockPos.a, 0, blockPos.b);
+			case PRECISE_POSITION:
+				Vec2F vecPos = ArgumentVec2.a(cmdCtx, key);
+				return new Location(getCommandSenderWorld(sender), vecPos.i, 0, vecPos.j);
+		}
+		return null;
 	}
 
 }

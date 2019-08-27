@@ -32,7 +32,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import io.github.jorelali.commandapi.api.FunctionWrapper;
 import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
-import io.github.jorelali.commandapi.api.arguments.LocationArgument.LocationType;
+import io.github.jorelali.commandapi.api.arguments.LocationType;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 public interface NMS {
@@ -152,6 +152,12 @@ public interface NMS {
 	ArgumentType<?> _ArgumentTime();
 
 	Object getTime(CommandContext<?> cmdCtx, String key);
+
+	ArgumentType<?> _ArgumentVec2();
+
+	ArgumentType<?> _ArgumentPosition2D();
+
+	Object getLocation2D(CommandContext<?> cmdCtx, String key, LocationType locationType2d, CommandSender sender) throws CommandSyntaxException;
 
 
 

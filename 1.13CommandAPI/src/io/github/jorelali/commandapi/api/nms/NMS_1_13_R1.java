@@ -52,7 +52,7 @@ import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.FunctionWrapper;
 import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
-import io.github.jorelali.commandapi.api.arguments.LocationArgument.LocationType;
+import io.github.jorelali.commandapi.api.arguments.LocationType;
 import io.github.jorelali.commandapi.api.exceptions.TimeArgumentException;
 import io.github.jorelali.commandapi.safereflection.ReflectionType;
 import io.github.jorelali.commandapi.safereflection.SafeReflection;
@@ -85,6 +85,8 @@ import net.minecraft.server.v1_13_R1.LootTableRegistry;
 import net.minecraft.server.v1_13_R1.MinecraftKey;
 import net.minecraft.server.v1_13_R1.MinecraftServer;
 import net.minecraft.server.v1_13_R1.Vec3D;
+import net.minecraft.server.v1_13_R1.ArgumentVec2;
+import net.minecraft.server.v1_13_R1.Vec2F;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 @SafeReflection(type = ReflectionType.FIELD, target = CraftSound.class, name = "minecraftKey", returnType = String.class, versions = "1.13")
@@ -412,6 +414,22 @@ public class NMS_1_13_R1 implements NMS {
 	@Override
 	public Object getTime(CommandContext<?> cmdCtx, String key) {
 		throw new TimeArgumentException();
+	}
+	
+	@Override
+	public ArgumentType<?> _ArgumentVec2() {
+		return ArgumentVec2.a();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentPosition2D() {
+		return ArgumentVec2.a();
+	}
+
+	@Override
+	public Object getLocation2D(CommandContext cmdCtx, String key, LocationType locationType2d, CommandSender sender) throws CommandSyntaxException {
+		Vec2F vecPos = ArgumentVec2.a(cmdCtx, key);
+		return new Location(getCommandSenderWorld(sender), vecPos.i, 0, vecPos.j);
 	}
 	
 }
