@@ -428,8 +428,17 @@ public class NMS_1_13_R1 implements NMS {
 
 	@Override
 	public Object getLocation2D(CommandContext cmdCtx, String key, LocationType locationType2d, CommandSender sender) throws CommandSyntaxException {
-		Vec2F vecPos = ArgumentVec2.a(cmdCtx, key);
-		return new Location(getCommandSenderWorld(sender), vecPos.i, 0, vecPos.j);
+		switch(locationType2d) {
+			case BLOCK_POSITION: {
+				Vec2F vecPos = ArgumentVec2.a(cmdCtx, key);
+				return new Location(getCommandSenderWorld(sender), Math.round(vecPos.i), 0, Math.round(vecPos.j));
+			}
+			case PRECISE_POSITION: {
+				Vec2F vecPos = ArgumentVec2.a(cmdCtx, key);
+				return new Location(getCommandSenderWorld(sender), vecPos.i, 0, vecPos.j);
+			}
+		}
+		return null;
 	}
 	
 }
