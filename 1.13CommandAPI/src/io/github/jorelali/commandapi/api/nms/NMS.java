@@ -26,6 +26,7 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Team;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -181,6 +182,10 @@ public interface NMS {
 	ArgumentType<?> _ArgumentScoreboardSlot();
 
 	DisplaySlot getScoreboardSlot(CommandContext<?> cmdCtx, String key);
+
+	ArgumentType<?> _ArgumentScoreboardTeam();
+
+	Team getTeam(CommandContext<?> cmdCtx, String key, CommandSender sender) throws CommandSyntaxException;
 
 	
 

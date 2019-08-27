@@ -16,12 +16,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.server.TabCompleteEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.AxisArgument;
+import io.github.jorelali.commandapi.api.arguments.DisplaySlotArgument;
 import io.github.jorelali.commandapi.api.arguments.EnvironmentArgument;
 import io.github.jorelali.commandapi.api.arguments.FloatRangeArgument;
 import io.github.jorelali.commandapi.api.arguments.IntegerRangeArgument;
@@ -192,6 +192,20 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         	} catch(Exception e) {}
         });
         
+        args.clear();
+        args.put("displaySlot", new DisplaySlotArgument());
+        
+        CommandAPI.getInstance().register("displaySlot", args, (s, a) -> {
+        	System.out.println(a[0]);
+        });
+        
+        /*
+         * Testing to do:
+         * - TeamArgument    
+         * 
+         * Other stuff to do:
+         * - Make display slots have colors~
+         */
 	}
 	
 }

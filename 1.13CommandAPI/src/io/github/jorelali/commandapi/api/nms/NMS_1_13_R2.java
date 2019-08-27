@@ -44,6 +44,8 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
@@ -95,6 +97,7 @@ import net.minecraft.server.v1_13_R2.DimensionManager;
 import net.minecraft.server.v1_13_R2.Entity;
 import net.minecraft.server.v1_13_R2.EntityTypes;
 import net.minecraft.server.v1_13_R2.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_13_R2.ArgumentScoreboardTeam;
 import net.minecraft.server.v1_13_R2.ArgumentScoreboardSlot;
 import net.minecraft.server.v1_13_R2.ArgumentInventorySlot;
 import net.minecraft.server.v1_13_R2.ArgumentRotationAxis;
@@ -585,6 +588,17 @@ public class NMS_1_13_R2 implements NMS {
 			case 2: return DisplaySlot.BELOW_NAME;
 		}
 		return null;
+	}
+	
+	@Override
+	public ArgumentType<?> _ArgumentScoreboardTeam() {
+		return ArgumentScoreboardTeam.a();
+	}
+
+	@Override
+	public Team getTeam(CommandContext cmdCtx, String key, CommandSender sender) throws CommandSyntaxException {
+		Scoreboard board = sender instanceof Player ? ((Player)sender).getScoreboard() : Bukkit.getScoreboardManager().getMainScoreboard();
+		return board.getTeam(ArgumentScoreboardTeam.a(cmdCtx, key).getName());
 	}
 
 }

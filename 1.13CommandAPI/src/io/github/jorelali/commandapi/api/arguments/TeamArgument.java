@@ -1,6 +1,6 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Team;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 
@@ -8,15 +8,15 @@ import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
 
 @SuppressWarnings("unchecked")
-public class DisplaySlotArgument implements Argument, OverrideableSuggestions {
+public class TeamArgument implements Argument, OverrideableSuggestions {
 
 	ArgumentType<?> rawType;
 	
 	/**
-	 * A Rotation argument. Represents pitch and yaw
+	 * A Team argument. Represents a scoreboard Team
 	 */
-	public DisplaySlotArgument() {
-		rawType = CommandAPIHandler.getNMS()._ArgumentScoreboardSlot();
+	public TeamArgument() {
+		rawType = CommandAPIHandler.getNMS()._ArgumentScoreboardTeam();
 	}
 	
 	@Override
@@ -26,7 +26,7 @@ public class DisplaySlotArgument implements Argument, OverrideableSuggestions {
 
 	@Override
 	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) DisplaySlot.class;
+		return (Class<V>) Team.class;
 	}
 
 	@Override
@@ -34,10 +34,10 @@ public class DisplaySlotArgument implements Argument, OverrideableSuggestions {
 		return false;
 	}
 	
-	private String[] suggestions = new String[] {"list", "sidebar", "belowName"};
+	private String[] suggestions;
 	
 	@Override
-	public DisplaySlotArgument overrideSuggestions(String... suggestions) {
+	public TeamArgument overrideSuggestions(String... suggestions) {
 		this.suggestions = suggestions;
 		return this;
 	}
@@ -50,7 +50,7 @@ public class DisplaySlotArgument implements Argument, OverrideableSuggestions {
 	private CommandPermission permission = null;
 	
 	@Override
-	public DisplaySlotArgument withPermission(CommandPermission permission) {
+	public TeamArgument withPermission(CommandPermission permission) {
 		this.permission = permission;
 		return this;
 	}
@@ -62,6 +62,6 @@ public class DisplaySlotArgument implements Argument, OverrideableSuggestions {
 	
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.SCOREBOARD_SLOT;
+		return CommandAPIArgumentType.TEAM;
 	}
 }

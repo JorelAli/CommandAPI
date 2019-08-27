@@ -340,6 +340,9 @@ public final class CommandAPIHandler {
 						case SCOREBOARD_SLOT:
 							argList.add(nms.getScoreboardSlot(cmdCtx, entry.getKey()));
 							break;
+						case TEAM:
+							argList.add(nms.getTeam(cmdCtx, entry.getKey(), sender));
+							break;
 					}
 				}
 			}
