@@ -1,4 +1,4 @@
-package io.github.jorelali.commandapi.api;
+package io.github.jorelali.commandapi.api.wrappers;
 
 public class FloatRange {
 

@@ -4,7 +4,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
 
 import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
-import io.github.jorelali.commandapi.api.Location2D;
+import io.github.jorelali.commandapi.api.wrappers.Location2D;
 
 @SuppressWarnings("unchecked")
 public class Location2DArgument implements Argument, OverrideableSuggestions {

@@ -122,6 +122,24 @@ public final class CommandAPIHandler {
 		}
 	}
 	
+	/**
+	 * Class to store cached methods and fields 
+	 * 
+	 * This is required because each
+	 * key is made up of a class and a field or method name
+	 */
+	@SuppressWarnings("unused")
+	private static class ClassCache {
+
+		private final Class<?> clazz;
+		private final String name;
+
+		public ClassCache(Class<?> clazz, String name) {
+			this.clazz = clazz;
+			this.name = name;
+		}
+	}
+	
 	protected CommandAPIHandler() throws ClassNotFoundException {
 		
 		//Package checks

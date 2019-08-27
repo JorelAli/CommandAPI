@@ -55,10 +55,10 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 
 import io.github.jorelali.commandapi.api.CommandAPIHandler;
-import io.github.jorelali.commandapi.api.FunctionWrapper;
-import io.github.jorelali.commandapi.api.Location2D;
 import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
+import io.github.jorelali.commandapi.api.wrappers.FunctionWrapper;
+import io.github.jorelali.commandapi.api.wrappers.Location2D;
 import io.github.jorelali.commandapi.api.arguments.LocationType;
 import io.github.jorelali.commandapi.safereflection.ReflectionType;
 import io.github.jorelali.commandapi.safereflection.SafeReflection;
@@ -488,11 +488,11 @@ public class NMS_1_14_R1 implements NMS {
 	}
 
 	@Override
-	public io.github.jorelali.commandapi.api.IntegerRange getIntRange(CommandContext cmdCtx, String key) {
+	public io.github.jorelali.commandapi.api.wrappers.IntegerRange getIntRange(CommandContext cmdCtx, String key) {
 		IntegerRange range = ArgumentCriterionValue.b.a(cmdCtx, key);
 		int low = range.a() == null ? Integer.MIN_VALUE : range.a();
 		int high = range.b() == null ? Integer.MAX_VALUE : range.b();
-		return new io.github.jorelali.commandapi.api.IntegerRange(low, high);
+		return new io.github.jorelali.commandapi.api.wrappers.IntegerRange(low, high);
 	}
 
 	@Override
@@ -501,11 +501,11 @@ public class NMS_1_14_R1 implements NMS {
 	}
 
 	@Override
-	public io.github.jorelali.commandapi.api.FloatRange getFloatRange(CommandContext<?> cmdCtx, String key) {
+	public io.github.jorelali.commandapi.api.wrappers.FloatRange getFloatRange(CommandContext<?> cmdCtx, String key) {
 		FloatRange range = cmdCtx.getArgument(key, FloatRange.class);
 		float low = range.a() == null ? -Float.MAX_VALUE : range.a();
 		float high = range.b() == null ? Float.MAX_VALUE : range.b();
-		return new io.github.jorelali.commandapi.api.FloatRange(low, high);
+		return new io.github.jorelali.commandapi.api.wrappers.FloatRange(low, high);
 	}
 
 	@Override

@@ -4,7 +4,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
 
 import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
-import io.github.jorelali.commandapi.api.FunctionWrapper;
+import io.github.jorelali.commandapi.api.wrappers.FunctionWrapper;
 
 @SuppressWarnings("unchecked")
 public class FunctionArgument implements Argument, CustomProvidedArgument {

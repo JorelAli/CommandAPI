@@ -4,7 +4,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
 
 import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
-import io.github.jorelali.commandapi.api.IntegerRange;
+import io.github.jorelali.commandapi.api.wrappers.IntegerRange;
 
 @SuppressWarnings("unchecked")
 public class IntegerRangeArgument implements Argument, OverrideableSuggestions {

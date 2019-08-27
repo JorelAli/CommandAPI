@@ -1,4 +1,4 @@
-package io.github.jorelali.commandapi.api;
+package io.github.jorelali.commandapi.api.wrappers;
 
 import java.util.function.Function;
 import java.util.function.ToIntBiFunction;

@@ -30,12 +30,12 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 
-import io.github.jorelali.commandapi.api.FloatRange;
-import io.github.jorelali.commandapi.api.FunctionWrapper;
-import io.github.jorelali.commandapi.api.IntegerRange;
-import io.github.jorelali.commandapi.api.Location2D;
 import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
+import io.github.jorelali.commandapi.api.wrappers.FloatRange;
+import io.github.jorelali.commandapi.api.wrappers.FunctionWrapper;
+import io.github.jorelali.commandapi.api.wrappers.IntegerRange;
+import io.github.jorelali.commandapi.api.wrappers.Location2D;
 import io.github.jorelali.commandapi.api.arguments.LocationType;
 import net.md_5.bungee.api.chat.BaseComponent;
 

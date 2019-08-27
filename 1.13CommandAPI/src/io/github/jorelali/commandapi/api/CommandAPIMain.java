@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
@@ -22,6 +21,8 @@ import io.github.jorelali.commandapi.api.arguments.IntegerRangeArgument;
 import io.github.jorelali.commandapi.api.arguments.Location2DArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationType;
 import io.github.jorelali.commandapi.api.arguments.TimeArgument;
+import io.github.jorelali.commandapi.api.wrappers.FloatRange;
+import io.github.jorelali.commandapi.api.wrappers.IntegerRange;
 
 public class CommandAPIMain extends JavaPlugin implements Listener {
 	
@@ -148,16 +149,6 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         	System.out.println(r);
         });
         
-        class z extends Location {
-
-			public z(World world, double x, double y, double z) {
-				super(world, x, y, z);
-				// TODO Auto-generated constructor stub
-			}
-        	
-        }
-        
-        a(new z(null, 0, 0, 0));
 	}
 	
 	void a(Location a) {

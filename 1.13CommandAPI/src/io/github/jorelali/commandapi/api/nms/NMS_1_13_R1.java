@@ -50,15 +50,15 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 
 import io.github.jorelali.commandapi.api.CommandAPIHandler;
-import io.github.jorelali.commandapi.api.FloatRange;
-import io.github.jorelali.commandapi.api.FunctionWrapper;
-import io.github.jorelali.commandapi.api.IntegerRange;
-import io.github.jorelali.commandapi.api.Location2D;
 import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
 import io.github.jorelali.commandapi.api.arguments.LocationType;
 import io.github.jorelali.commandapi.api.exceptions.EnvironmentException;
 import io.github.jorelali.commandapi.api.exceptions.TimeArgumentException;
+import io.github.jorelali.commandapi.api.wrappers.FloatRange;
+import io.github.jorelali.commandapi.api.wrappers.FunctionWrapper;
+import io.github.jorelali.commandapi.api.wrappers.IntegerRange;
+import io.github.jorelali.commandapi.api.wrappers.Location2D;
 import io.github.jorelali.commandapi.safereflection.ReflectionType;
 import io.github.jorelali.commandapi.safereflection.SafeReflection;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -458,7 +458,7 @@ public class NMS_1_13_R1 implements NMS {
 		net.minecraft.server.v1_13_R1.CriterionConditionValue.d range = ArgumentCriterionValue.b.a(cmdCtx, key);
 		int low = range.a() == null ? Integer.MIN_VALUE : range.a();
 		int high = range.b() == null ? Integer.MAX_VALUE : range.b();
-		return new io.github.jorelali.commandapi.api.IntegerRange(low, high);
+		return new io.github.jorelali.commandapi.api.wrappers.IntegerRange(low, high);
 	}
 	
 	@Override
@@ -471,7 +471,7 @@ public class NMS_1_13_R1 implements NMS {
 		CriterionConditionValue.c range = cmdCtx.getArgument(key, CriterionConditionValue.c.class);
 		float low = range.a() == null ? -Float.MAX_VALUE : range.a();
 		float high = range.b() == null ? Float.MAX_VALUE : range.b();
-		return new io.github.jorelali.commandapi.api.FloatRange(low, high);
+		return new io.github.jorelali.commandapi.api.wrappers.FloatRange(low, high);
 	}
 
 	@Override

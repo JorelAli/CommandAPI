@@ -4,7 +4,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
 
 import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
-import io.github.jorelali.commandapi.api.FloatRange;
+import io.github.jorelali.commandapi.api.wrappers.FloatRange;
 
 @SuppressWarnings("unchecked")
 public class FloatRangeArgument implements Argument, OverrideableSuggestions {
