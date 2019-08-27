@@ -80,6 +80,7 @@ import net.minecraft.server.v1_13_R1.CustomFunctionData;
 import net.minecraft.server.v1_13_R1.Entity;
 import net.minecraft.server.v1_13_R1.EntityTypes;
 import net.minecraft.server.v1_13_R1.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_13_R1.CriterionConditionValue;
 import net.minecraft.server.v1_13_R1.ArgumentCriterionValue;
 import net.minecraft.server.v1_13_R1.ICompletionProvider;
 import net.minecraft.server.v1_13_R1.LootTableRegistry;
@@ -453,6 +454,19 @@ public class NMS_1_13_R1 implements NMS {
 		int low = range.a() == null ? Integer.MIN_VALUE : range.a();
 		int high = range.b() == null ? Integer.MAX_VALUE : range.b();
 		return new io.github.jorelali.commandapi.api.IntegerRange(low, high);
+	}
+	
+	@Override
+	public ArgumentType<?> _ArgumentFloatRange() {
+		return new ArgumentCriterionValue.a();
+	}
+
+	@Override
+	public Object getFloatRange(CommandContext<?> cmdCtx, String key) {
+		CriterionConditionValue.c range = cmdCtx.getArgument(key, CriterionConditionValue.c.class);
+		float low = range.a() == null ? -Float.MAX_VALUE : range.a();
+		float high = range.b() == null ? Float.MAX_VALUE : range.b();
+		return new io.github.jorelali.commandapi.api.FloatRange(low, high);
 	}
 	
 }

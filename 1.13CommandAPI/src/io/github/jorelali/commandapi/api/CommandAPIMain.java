@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import io.github.jorelali.commandapi.api.arguments.Argument;
+import io.github.jorelali.commandapi.api.arguments.FloatRangeArgument;
 import io.github.jorelali.commandapi.api.arguments.IntegerRangeArgument;
 import io.github.jorelali.commandapi.api.arguments.Location2DArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationType;
@@ -122,6 +123,15 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         
         CommandAPI.getInstance().register("range", args, (s, a) -> {
         	IntegerRange r = (IntegerRange) a[0];
+        	System.out.println(r.getLowerBound());
+        	System.out.println(r.getUpperBound());
+        });
+        
+        args.clear();
+        args.put("frange", new FloatRangeArgument());
+        
+        CommandAPI.getInstance().register("frange", args, (s, a) -> {
+        	FloatRange r = (FloatRange) a[0];
         	System.out.println(r.getLowerBound());
         	System.out.println(r.getUpperBound());
         });

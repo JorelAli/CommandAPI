@@ -306,6 +306,9 @@ public final class CommandAPIHandler {
 						case INT_RANGE:
 							argList.add(nms.getIntRange(cmdCtx, entry.getKey()));
 							break;
+						case FLOAT_RANGE:
+							argList.add(nms.getFloatRange(cmdCtx, entry.getKey()));
+							break;
 					}
 				}
 			}

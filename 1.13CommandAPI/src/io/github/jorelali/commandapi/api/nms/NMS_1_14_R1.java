@@ -86,6 +86,7 @@ import net.minecraft.server.v1_14_R1.BlockPosition;
 import net.minecraft.server.v1_14_R1.BlockPosition2D;
 import net.minecraft.server.v1_14_R1.CommandListenerWrapper;
 import net.minecraft.server.v1_14_R1.CompletionProviders;
+import net.minecraft.server.v1_14_R1.CriterionConditionValue.FloatRange;
 import net.minecraft.server.v1_14_R1.CriterionConditionValue.IntegerRange;
 import net.minecraft.server.v1_14_R1.CustomFunction;
 import net.minecraft.server.v1_14_R1.CustomFunctionData;
@@ -489,8 +490,18 @@ public class NMS_1_14_R1 implements NMS {
 		int high = range.b() == null ? Integer.MAX_VALUE : range.b();
 		return new io.github.jorelali.commandapi.api.IntegerRange(low, high);
 	}
-	
-	//a("int_range", b.class, new net.minecraft.server.v1_14_R1.ArgumentCriterionValue.b.a());
-	//a("float_range", net.minecraft.server.v1_14_R1.ArgumentCriterionValue.a.class, new net.minecraft.server.v1_14_R1.ArgumentCriterionValue.a.a());
+
+	@Override
+	public ArgumentType<?> _ArgumentFloatRange() {
+		return new ArgumentCriterionValue.a();
+	}
+
+	@Override
+	public Object getFloatRange(CommandContext<?> cmdCtx, String key) {
+		FloatRange range = cmdCtx.getArgument(key, FloatRange.class);
+		float low = range.a() == null ? -Float.MAX_VALUE : range.a();
+		float high = range.b() == null ? Float.MAX_VALUE : range.b();
+		return new io.github.jorelali.commandapi.api.FloatRange(low, high);
+	}
 
 }

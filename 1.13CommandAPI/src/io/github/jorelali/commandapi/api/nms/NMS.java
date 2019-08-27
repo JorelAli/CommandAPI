@@ -163,6 +163,10 @@ public interface NMS {
 
 	Object getIntRange(CommandContext<?> cmdCtx, String key);
 
+	ArgumentType<?> _ArgumentFloatRange();
+
+	Object getFloatRange(CommandContext<?> cmdCtx, String key);
+
 
 
 }
