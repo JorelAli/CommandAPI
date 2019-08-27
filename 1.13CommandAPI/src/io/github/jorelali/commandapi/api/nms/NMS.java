@@ -149,6 +149,10 @@ public interface NMS {
 	ArgumentType<?> _ArgumentEntity(EntitySelector selector);
 	ArgumentType<?> _ArgumentEnchantment();
 
+	ArgumentType<?> _ArgumentTime();
+
+	Object getTime(CommandContext<?> cmdCtx, String key);
+
 
 
 }

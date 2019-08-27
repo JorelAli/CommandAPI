@@ -1,6 +1,7 @@
 package io.github.jorelali.commandapi.api;
 
 import java.io.File;
+import java.util.LinkedHashMap;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
@@ -10,6 +11,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import io.github.jorelali.commandapi.api.arguments.Argument;
+import io.github.jorelali.commandapi.api.arguments.TimeArgument;
 
 public class CommandAPIMain extends JavaPlugin implements Listener {
 	
@@ -81,6 +85,13 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 		}, 0L);
         
         getServer().getPluginManager().registerEvents(this, this);
+        
+        LinkedHashMap<String, Argument> args = new LinkedHashMap<>();
+        args.put("time", new TimeArgument());
+        
+        CommandAPI.getInstance().register("tim", args, (s, a) -> {
+        	System.out.println(a[0]);
+        });
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR)

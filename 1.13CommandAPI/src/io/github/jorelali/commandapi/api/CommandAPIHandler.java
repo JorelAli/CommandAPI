@@ -295,7 +295,8 @@ public final class CommandAPIHandler {
 						case SOUND:
 							argList.add(nms.getSound(cmdCtx, entry.getKey()));
 							break;
-						default:
+						case TIME:
+							argList.add(nms.getTime(cmdCtx, entry.getKey()));
 							break;
 					}
 				}

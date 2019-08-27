@@ -77,6 +77,7 @@ import net.minecraft.server.v1_14_R1.ArgumentPosition;
 import net.minecraft.server.v1_14_R1.ArgumentProfile;
 import net.minecraft.server.v1_14_R1.ArgumentRegistry;
 import net.minecraft.server.v1_14_R1.ArgumentTag;
+import net.minecraft.server.v1_14_R1.ArgumentTime;
 import net.minecraft.server.v1_14_R1.ArgumentVec3;
 import net.minecraft.server.v1_14_R1.BlockPosition;
 import net.minecraft.server.v1_14_R1.CommandListenerWrapper;
@@ -435,6 +436,21 @@ public class NMS_1_14_R1 implements NMS {
 		CraftServer craftServer = (CraftServer) Bukkit.getServer();
 		net.minecraft.server.v1_14_R1.CommandDispatcher nmsDispatcher = craftServer.getServer().commandDispatcher;
 		nmsDispatcher.a(craftPlayer.getHandle());
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentTime() {
+		return ArgumentTime.a();
+	}
+
+	@Override
+	public Object getTime(CommandContext<?> cmdCtx, String key) {
+		// TODO Auto-generated method stubreturn new CraftPotionEffectType(ArgumentMobEffect.a(cmdCtx, str));
+//		ArgumentTime.a(cmdCtx, str);
+		
+		return cmdCtx.getArgument(key, Integer.class);
+		
+		
 	}
 
 }

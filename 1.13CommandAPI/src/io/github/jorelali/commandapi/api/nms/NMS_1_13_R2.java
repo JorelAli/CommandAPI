@@ -54,6 +54,7 @@ import io.github.jorelali.commandapi.api.FunctionWrapper;
 import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
 import io.github.jorelali.commandapi.api.arguments.LocationArgument.LocationType;
+import io.github.jorelali.commandapi.api.exceptions.TimeArgumentException;
 import io.github.jorelali.commandapi.safereflection.ReflectionType;
 import io.github.jorelali.commandapi.safereflection.SafeReflection;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -426,6 +427,16 @@ public class NMS_1_13_R2 implements NMS {
 		CraftServer craftServer = (CraftServer) Bukkit.getServer();
 		net.minecraft.server.v1_13_R2.CommandDispatcher nmsDispatcher = craftServer.getServer().commandDispatcher;
 		nmsDispatcher.a(craftPlayer.getHandle());
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentTime() {
+		throw new TimeArgumentException();
+	}
+
+	@Override
+	public Object getTime(CommandContext<?> cmdCtx, String key) {
+		throw new TimeArgumentException();
 	}
 
 }
