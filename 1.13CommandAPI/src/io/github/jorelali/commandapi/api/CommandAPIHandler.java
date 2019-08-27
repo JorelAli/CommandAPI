@@ -303,6 +303,9 @@ public final class CommandAPIHandler {
 							LocationType locationType2d = ((Location2DArgument) entry.getValue()).getLocationType();
 							argList.add(nms.getLocation2D(cmdCtx, entry.getKey(), locationType2d, sender));
 							break;
+						case INT_RANGE:
+							argList.add(nms.getIntRange(cmdCtx, entry.getKey()));
+							break;
 					}
 				}
 			}

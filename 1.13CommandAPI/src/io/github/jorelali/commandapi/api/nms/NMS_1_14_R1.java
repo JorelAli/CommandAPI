@@ -66,6 +66,7 @@ import net.minecraft.server.v1_14_R1.Advancement;
 import net.minecraft.server.v1_14_R1.AdvancementDataWorld;
 import net.minecraft.server.v1_14_R1.ArgumentChatComponent;
 import net.minecraft.server.v1_14_R1.ArgumentChatFormat;
+import net.minecraft.server.v1_14_R1.ArgumentCriterionValue;
 import net.minecraft.server.v1_14_R1.ArgumentEnchantment;
 import net.minecraft.server.v1_14_R1.ArgumentEntity;
 import net.minecraft.server.v1_14_R1.ArgumentEntitySummon;
@@ -85,6 +86,7 @@ import net.minecraft.server.v1_14_R1.BlockPosition;
 import net.minecraft.server.v1_14_R1.BlockPosition2D;
 import net.minecraft.server.v1_14_R1.CommandListenerWrapper;
 import net.minecraft.server.v1_14_R1.CompletionProviders;
+import net.minecraft.server.v1_14_R1.CriterionConditionValue.IntegerRange;
 import net.minecraft.server.v1_14_R1.CustomFunction;
 import net.minecraft.server.v1_14_R1.CustomFunctionData;
 import net.minecraft.server.v1_14_R1.Entity;
@@ -474,5 +476,21 @@ public class NMS_1_14_R1 implements NMS {
 		}
 		return null;
 	}
+
+	@Override
+	public ArgumentType<?> _ArgumentIntRange() {
+		return new ArgumentCriterionValue.b();
+	}
+
+	@Override
+	public Object getIntRange(CommandContext cmdCtx, String key) {
+		IntegerRange range = ArgumentCriterionValue.b.a(cmdCtx, key);
+		int low = range.a() == null ? Integer.MIN_VALUE : range.a();
+		int high = range.b() == null ? Integer.MAX_VALUE : range.b();
+		return new io.github.jorelali.commandapi.api.IntegerRange(low, high);
+	}
+	
+	//a("int_range", b.class, new net.minecraft.server.v1_14_R1.ArgumentCriterionValue.b.a());
+	//a("float_range", net.minecraft.server.v1_14_R1.ArgumentCriterionValue.a.class, new net.minecraft.server.v1_14_R1.ArgumentCriterionValue.a.a());
 
 }

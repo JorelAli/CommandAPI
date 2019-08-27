@@ -80,6 +80,7 @@ import net.minecraft.server.v1_13_R1.CustomFunctionData;
 import net.minecraft.server.v1_13_R1.Entity;
 import net.minecraft.server.v1_13_R1.EntityTypes;
 import net.minecraft.server.v1_13_R1.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_13_R1.ArgumentCriterionValue;
 import net.minecraft.server.v1_13_R1.ICompletionProvider;
 import net.minecraft.server.v1_13_R1.LootTableRegistry;
 import net.minecraft.server.v1_13_R1.MinecraftKey;
@@ -439,6 +440,19 @@ public class NMS_1_13_R1 implements NMS {
 			}
 		}
 		return null;
+	}
+	
+	@Override
+	public ArgumentType<?> _ArgumentIntRange() {
+		return new ArgumentCriterionValue.b();
+	}
+
+	@Override
+	public Object getIntRange(CommandContext cmdCtx, String key) {
+		net.minecraft.server.v1_13_R1.CriterionConditionValue.d range = ArgumentCriterionValue.b.a(cmdCtx, key);
+		int low = range.a() == null ? Integer.MIN_VALUE : range.a();
+		int high = range.b() == null ? Integer.MAX_VALUE : range.b();
+		return new io.github.jorelali.commandapi.api.IntegerRange(low, high);
 	}
 	
 }

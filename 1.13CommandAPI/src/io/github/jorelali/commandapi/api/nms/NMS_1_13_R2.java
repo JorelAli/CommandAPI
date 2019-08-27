@@ -62,6 +62,7 @@ import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.server.v1_13_R2.Advancement;
 import net.minecraft.server.v1_13_R2.ArgumentChatComponent;
 import net.minecraft.server.v1_13_R2.ArgumentChatFormat;
+import net.minecraft.server.v1_13_R2.ArgumentCriterionValue;
 import net.minecraft.server.v1_13_R2.ArgumentEnchantment;
 import net.minecraft.server.v1_13_R2.ArgumentEntity;
 import net.minecraft.server.v1_13_R2.ArgumentEntitySummon;
@@ -72,6 +73,8 @@ import net.minecraft.server.v1_13_R2.ArgumentParticle;
 import net.minecraft.server.v1_13_R2.ArgumentPosition;
 import net.minecraft.server.v1_13_R2.ArgumentProfile;
 import net.minecraft.server.v1_13_R2.ArgumentTag;
+import net.minecraft.server.v1_13_R2.ArgumentVec2;
+import net.minecraft.server.v1_13_R2.ArgumentVec2I;
 import net.minecraft.server.v1_13_R2.ArgumentVec3;
 import net.minecraft.server.v1_13_R2.BlockPosition;
 import net.minecraft.server.v1_13_R2.CommandListenerWrapper;
@@ -85,10 +88,8 @@ import net.minecraft.server.v1_13_R2.ICompletionProvider;
 import net.minecraft.server.v1_13_R2.LootTableRegistry;
 import net.minecraft.server.v1_13_R2.MinecraftKey;
 import net.minecraft.server.v1_13_R2.MinecraftServer;
-import net.minecraft.server.v1_13_R2.Vec3D;
-import net.minecraft.server.v1_13_R2.ArgumentVec2;
-import net.minecraft.server.v1_13_R2.ArgumentVec2I;
 import net.minecraft.server.v1_13_R2.Vec2F;
+import net.minecraft.server.v1_13_R2.Vec3D;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 @SafeReflection(type = ReflectionType.FIELD, target = CraftSound.class, name = "minecraftKey", returnType = String.class, versions = {"1.13.1", "1.13.2"})
@@ -463,6 +464,19 @@ public class NMS_1_13_R2 implements NMS {
 				return new Location(getCommandSenderWorld(sender), vecPos.i, 0, vecPos.j);
 		}
 		return null;
+	}
+	
+	@Override
+	public ArgumentType<?> _ArgumentIntRange() {
+		return new ArgumentCriterionValue.b();
+	}
+
+	@Override
+	public Object getIntRange(CommandContext cmdCtx, String key) {
+		net.minecraft.server.v1_13_R2.CriterionConditionValue.d range = ArgumentCriterionValue.b.a(cmdCtx, key);
+		int low = range.a() == null ? Integer.MIN_VALUE : range.a();
+		int high = range.b() == null ? Integer.MAX_VALUE : range.b();
+		return new io.github.jorelali.commandapi.api.IntegerRange(low, high);
 	}
 
 }

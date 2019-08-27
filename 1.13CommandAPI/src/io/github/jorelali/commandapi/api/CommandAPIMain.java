@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import io.github.jorelali.commandapi.api.arguments.Argument;
+import io.github.jorelali.commandapi.api.arguments.IntegerRangeArgument;
 import io.github.jorelali.commandapi.api.arguments.Location2DArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationType;
 import io.github.jorelali.commandapi.api.arguments.TimeArgument;
@@ -65,6 +66,11 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 		return dispatcherFile;
 	}
 	
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onPlayerJoin(PlayerJoinEvent e) {
+		CommandAPIHandler.getNMS().resendPackets(e.getPlayer());
+	}
+	
 	@Override
 	public void onLoad() {
 		saveDefaultConfig();
@@ -88,6 +94,8 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         
         getServer().getPluginManager().registerEvents(this, this);
         
+        //Testing all happens below here
+        
         LinkedHashMap<String, Argument> args = new LinkedHashMap<>();
         args.put("time", new TimeArgument());
         
@@ -108,11 +116,15 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         CommandAPI.getInstance().register("2dprecise", args, (s, a) -> {
         	System.out.println(a[0]);
         });
-	}
-	
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPlayerJoin(PlayerJoinEvent e) {
-		CommandAPIHandler.getNMS().resendPackets(e.getPlayer());
+        
+        args.clear();
+        args.put("range", new IntegerRangeArgument());
+        
+        CommandAPI.getInstance().register("range", args, (s, a) -> {
+        	IntegerRange r = (IntegerRange) a[0];
+        	System.out.println(r.getLowerBound());
+        	System.out.println(r.getUpperBound());
+        });
 	}
 	
 }

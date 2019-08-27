@@ -159,6 +159,10 @@ public interface NMS {
 
 	Object getLocation2D(CommandContext<?> cmdCtx, String key, LocationType locationType2d, CommandSender sender) throws CommandSyntaxException;
 
+	ArgumentType<?> _ArgumentIntRange();
+
+	Object getIntRange(CommandContext<?> cmdCtx, String key);
+
 
 
 }
