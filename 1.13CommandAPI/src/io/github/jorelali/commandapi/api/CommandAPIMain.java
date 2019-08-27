@@ -201,7 +201,8 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         
         /*
          * Testing to do:
-         * - TeamArgument    
+         * - TeamArgument   
+         * - Objective Criteria 
          * 
          * Other stuff to do:
          * - Make display slots have colors~

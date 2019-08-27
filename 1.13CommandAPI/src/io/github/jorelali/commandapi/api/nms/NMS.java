@@ -187,6 +187,10 @@ public interface NMS {
 
 	Team getTeam(CommandContext<?> cmdCtx, String key, CommandSender sender) throws CommandSyntaxException;
 
+	ArgumentType<?> _ArgumentScoreboardCriteria();
+
+	String getObjectiveCriteria(CommandContext<?> cmdCtx, String key);
+
 	
 
 }

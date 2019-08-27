@@ -97,6 +97,7 @@ import net.minecraft.server.v1_13_R2.DimensionManager;
 import net.minecraft.server.v1_13_R2.Entity;
 import net.minecraft.server.v1_13_R2.EntityTypes;
 import net.minecraft.server.v1_13_R2.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_13_R2.ArgumentScoreboardCriteria;
 import net.minecraft.server.v1_13_R2.ArgumentScoreboardTeam;
 import net.minecraft.server.v1_13_R2.ArgumentScoreboardSlot;
 import net.minecraft.server.v1_13_R2.ArgumentInventorySlot;
@@ -599,6 +600,16 @@ public class NMS_1_13_R2 implements NMS {
 	public Team getTeam(CommandContext cmdCtx, String key, CommandSender sender) throws CommandSyntaxException {
 		Scoreboard board = sender instanceof Player ? ((Player)sender).getScoreboard() : Bukkit.getScoreboardManager().getMainScoreboard();
 		return board.getTeam(ArgumentScoreboardTeam.a(cmdCtx, key).getName());
+	}
+	
+	@Override
+	public ArgumentType<?> _ArgumentScoreboardCriteria() {
+		return ArgumentScoreboardCriteria.a();
+	}
+
+	@Override
+	public String getObjectiveCriteria(CommandContext cmdCtx, String key) {
+		return ArgumentScoreboardCriteria.a(cmdCtx, key).getName();
 	}
 
 }

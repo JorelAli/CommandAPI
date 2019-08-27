@@ -89,6 +89,7 @@ import net.minecraft.server.v1_14_R1.ArgumentProfile;
 import net.minecraft.server.v1_14_R1.ArgumentRegistry;
 import net.minecraft.server.v1_14_R1.ArgumentRotation;
 import net.minecraft.server.v1_14_R1.ArgumentRotationAxis;
+import net.minecraft.server.v1_14_R1.ArgumentScoreboardCriteria;
 import net.minecraft.server.v1_14_R1.ArgumentScoreboardSlot;
 import net.minecraft.server.v1_14_R1.ArgumentScoreboardTeam;
 import net.minecraft.server.v1_14_R1.ArgumentTag;
@@ -608,6 +609,16 @@ public class NMS_1_14_R1 implements NMS {
 	public Team getTeam(CommandContext cmdCtx, String key, CommandSender sender) throws CommandSyntaxException {
 		Scoreboard board = sender instanceof Player ? ((Player)sender).getScoreboard() : Bukkit.getScoreboardManager().getMainScoreboard();
 		return board.getTeam(ArgumentScoreboardTeam.a(cmdCtx, key).getName());
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentScoreboardCriteria() {
+		return ArgumentScoreboardCriteria.a();
+	}
+
+	@Override
+	public String getObjectiveCriteria(CommandContext cmdCtx, String key) {
+		return ArgumentScoreboardCriteria.a(cmdCtx, key).getName();
 	}
 
 }
