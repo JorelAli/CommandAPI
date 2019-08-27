@@ -32,11 +32,12 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 
 import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
+import io.github.jorelali.commandapi.api.arguments.LocationType;
 import io.github.jorelali.commandapi.api.wrappers.FloatRange;
 import io.github.jorelali.commandapi.api.wrappers.FunctionWrapper;
 import io.github.jorelali.commandapi.api.wrappers.IntegerRange;
 import io.github.jorelali.commandapi.api.wrappers.Location2D;
-import io.github.jorelali.commandapi.api.arguments.LocationType;
+import io.github.jorelali.commandapi.api.wrappers.Rotation;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 public interface NMS {
@@ -143,6 +144,7 @@ public interface NMS {
 	IntegerRange      getIntRange(CommandContext<?> cmdCtx, String key);
 	FloatRange        getFloatRange(CommandContext<?> cmdCtx, String key);
 	Environment       getDimension(CommandContext<?> cmdCtx, String key);
+	Rotation          getRotation(CommandContext<?> cmdCtx, String key);
 
 	//Argument types
 	ArgumentType<?> _ArgumentChatFormat();
@@ -159,15 +161,11 @@ public interface NMS {
 	ArgumentType<?> _ArgumentParticle();
 	ArgumentType<?> _ArgumentPosition();
 	ArgumentType<?> _ArgumentPosition2D();
-	ArgumentType<?> _ArgumentVec3();
+	ArgumentType<?> _ArgumentRotation();
 	ArgumentType<?> _ArgumentItemStack();
 	ArgumentType<?> _ArgumentTag();
 	ArgumentType<?> _ArgumentTime();
 	ArgumentType<?> _ArgumentVec2();
-
-	
-	
-
-
+	ArgumentType<?> _ArgumentVec3();
 
 }

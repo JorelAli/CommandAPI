@@ -57,9 +57,10 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
+import io.github.jorelali.commandapi.api.arguments.LocationType;
 import io.github.jorelali.commandapi.api.wrappers.FunctionWrapper;
 import io.github.jorelali.commandapi.api.wrappers.Location2D;
-import io.github.jorelali.commandapi.api.arguments.LocationType;
+import io.github.jorelali.commandapi.api.wrappers.Rotation;
 import io.github.jorelali.commandapi.safereflection.ReflectionType;
 import io.github.jorelali.commandapi.safereflection.SafeReflection;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -80,6 +81,7 @@ import net.minecraft.server.v1_14_R1.ArgumentParticle;
 import net.minecraft.server.v1_14_R1.ArgumentPosition;
 import net.minecraft.server.v1_14_R1.ArgumentProfile;
 import net.minecraft.server.v1_14_R1.ArgumentRegistry;
+import net.minecraft.server.v1_14_R1.ArgumentRotation;
 import net.minecraft.server.v1_14_R1.ArgumentTag;
 import net.minecraft.server.v1_14_R1.ArgumentTime;
 import net.minecraft.server.v1_14_R1.ArgumentVec2;
@@ -98,6 +100,7 @@ import net.minecraft.server.v1_14_R1.Entity;
 import net.minecraft.server.v1_14_R1.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_14_R1.ICompletionProvider;
 import net.minecraft.server.v1_14_R1.IRegistry;
+import net.minecraft.server.v1_14_R1.IVectorPosition;
 import net.minecraft.server.v1_14_R1.LootTableRegistry;
 import net.minecraft.server.v1_14_R1.MinecraftKey;
 import net.minecraft.server.v1_14_R1.MinecraftServer;
@@ -522,6 +525,18 @@ public class NMS_1_14_R1 implements NMS {
 	@Override
 	public ArgumentType<?> _ArgumentDimension() {
 		return ArgumentDimension.a();
+	}
+
+	@Override
+	public Rotation getRotation(CommandContext cmdCtx, String key) {
+		IVectorPosition pos = ArgumentRotation.a(cmdCtx, key);
+		Vec2F vec = pos.b(getCLW(cmdCtx));
+		return new Rotation(vec.i, vec.j);
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentRotation() {
+		return ArgumentRotation.a();
 	}
 
 }

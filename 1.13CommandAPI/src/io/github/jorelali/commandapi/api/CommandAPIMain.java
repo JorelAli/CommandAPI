@@ -20,9 +20,11 @@ import io.github.jorelali.commandapi.api.arguments.FloatRangeArgument;
 import io.github.jorelali.commandapi.api.arguments.IntegerRangeArgument;
 import io.github.jorelali.commandapi.api.arguments.Location2DArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationType;
+import io.github.jorelali.commandapi.api.arguments.RotationArgument;
 import io.github.jorelali.commandapi.api.arguments.TimeArgument;
 import io.github.jorelali.commandapi.api.wrappers.FloatRange;
 import io.github.jorelali.commandapi.api.wrappers.IntegerRange;
+import io.github.jorelali.commandapi.api.wrappers.Rotation;
 
 public class CommandAPIMain extends JavaPlugin implements Listener {
 	
@@ -147,6 +149,14 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         CommandAPI.getInstance().register("dim", args, (s, a) -> {
         	Environment r = (Environment) a[0];
         	System.out.println(r);
+        });
+        
+        args.clear();
+        args.put("rot", new RotationArgument());
+        
+        CommandAPI.getInstance().register("rot", args, (s, a) -> {
+        	Rotation r = (Rotation) a[0];
+        	System.out.println(r.getPitch() + ", " + r.getYaw());
         });
         
 	}

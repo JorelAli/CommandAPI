@@ -12,14 +12,14 @@ public class Location2DArgument implements Argument, OverrideableSuggestions {
 	ArgumentType<?> rawType;
 	
 	/**
-	 * A Location argument. Represents Minecraft locations
+	 * A Location argument. Represents Minecraft locations in 2D space
 	 */
 	public Location2DArgument() {
 		this(LocationType.PRECISE_POSITION);
 	}
 	
 	/**
-	 * A Location argument. Represents Minecraft locations
+	 * A Location argument. Represents Minecraft locations in 2D space
 	 */
 	public Location2DArgument(LocationType type) {
 		locationType = type;

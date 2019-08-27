@@ -330,6 +330,9 @@ public final class CommandAPIHandler {
 						case ENVIRONMENT:
 							argList.add(nms.getDimension(cmdCtx, entry.getKey()));
 							break;
+						case ROTATION:
+							argList.add(nms.getRotation(cmdCtx, entry.getKey()));
+							break;
 					}
 				}
 			}

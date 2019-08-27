@@ -59,6 +59,7 @@ import io.github.jorelali.commandapi.api.wrappers.FloatRange;
 import io.github.jorelali.commandapi.api.wrappers.FunctionWrapper;
 import io.github.jorelali.commandapi.api.wrappers.IntegerRange;
 import io.github.jorelali.commandapi.api.wrappers.Location2D;
+import io.github.jorelali.commandapi.api.wrappers.Rotation;
 import io.github.jorelali.commandapi.safereflection.ReflectionType;
 import io.github.jorelali.commandapi.safereflection.SafeReflection;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -91,6 +92,8 @@ import net.minecraft.server.v1_13_R2.DimensionManager;
 import net.minecraft.server.v1_13_R2.Entity;
 import net.minecraft.server.v1_13_R2.EntityTypes;
 import net.minecraft.server.v1_13_R2.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_13_R2.ArgumentRotation;
+import net.minecraft.server.v1_13_R2.IVectorPosition;
 import net.minecraft.server.v1_13_R2.ICompletionProvider;
 import net.minecraft.server.v1_13_R2.LootTableRegistry;
 import net.minecraft.server.v1_13_R2.MinecraftKey;
@@ -513,6 +516,18 @@ public class NMS_1_13_R2 implements NMS {
 	@Override
 	public ArgumentType<?> _ArgumentDimension() {
 		return ArgumentDimension.a();
+	}
+
+	@Override
+	public Rotation getRotation(CommandContext cmdCtx, String key) {
+		IVectorPosition pos = ArgumentRotation.a(cmdCtx, key);
+		Vec2F vec = pos.b(getCLW(cmdCtx));
+		return new Rotation(vec.i, vec.j);
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentRotation() {
+		return ArgumentRotation.a();
 	}
 
 }
