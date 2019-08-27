@@ -51,8 +51,6 @@ import io.github.jorelali.commandapi.api.arguments.Location2DArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationType;
 import io.github.jorelali.commandapi.api.arguments.OverrideableSuggestions;
-import io.github.jorelali.commandapi.api.arguments.StringArgument;
-import io.github.jorelali.commandapi.api.arguments.SuggestedStringArgument;
 import io.github.jorelali.commandapi.api.exceptions.WrapperCommandSyntaxException;
 import io.github.jorelali.commandapi.api.nms.NMS;
 import io.github.jorelali.commandapi.api.nms.NMS_1_13_R1;
@@ -509,16 +507,7 @@ public final class CommandAPIHandler {
 		      	this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(alias).requires(generatePermissions(alias, permissions)).executes(command));
 		    }
 
-		} else {
-			
-			//Replace SSA with StringArg
-			for(Entry<String, Argument> entry : ((LinkedHashMap<String, Argument>) args.clone()).entrySet()) { 
-				if(entry.getValue() instanceof SuggestedStringArgument) {
-					CommandAPIMain.getLog().warning("Command /" + commandName + " uses a SuggestedStringArgument. These are deprecated as of 1.9. Consider using StringArgument().overrideSuggestions(...)");
-					SuggestedStringArgument ssa = (SuggestedStringArgument) entry.getValue();
-					args.put(entry.getKey(), new StringArgument().overrideSuggestions(ssa.getSuggestions()));
-				}
-			}
+		} else {	
 			
 			//List of keys for reverse iteration
 	        ArrayList<String> keys = new ArrayList<>(args.keySet());
