@@ -2,8 +2,8 @@ package io.github.jorelali.commandapi.api;
 
 public class IntegerRange {
 
-	private int low;
-	private int high;
+	private final int low;
+	private final int high;
 	
 	public IntegerRange(int low, int high) {
 		this.low = low;

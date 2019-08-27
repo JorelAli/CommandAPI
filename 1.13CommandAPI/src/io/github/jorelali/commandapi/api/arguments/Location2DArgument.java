@@ -1,11 +1,10 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import org.bukkit.Location;
-
 import com.mojang.brigadier.arguments.ArgumentType;
 
 import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
+import io.github.jorelali.commandapi.api.Location2D;
 
 @SuppressWarnings("unchecked")
 public class Location2DArgument implements Argument, OverrideableSuggestions {
@@ -43,7 +42,7 @@ public class Location2DArgument implements Argument, OverrideableSuggestions {
 
 	@Override
 	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) Location.class;
+		return (Class<V>) Location2D.class;
 	}
 
 	@Override

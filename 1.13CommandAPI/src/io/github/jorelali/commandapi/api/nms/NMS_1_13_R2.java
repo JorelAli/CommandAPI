@@ -54,6 +54,7 @@ import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.FloatRange;
 import io.github.jorelali.commandapi.api.FunctionWrapper;
 import io.github.jorelali.commandapi.api.IntegerRange;
+import io.github.jorelali.commandapi.api.Location2D;
 import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
 import io.github.jorelali.commandapi.api.arguments.LocationType;
@@ -66,6 +67,7 @@ import net.minecraft.server.v1_13_R2.Advancement;
 import net.minecraft.server.v1_13_R2.ArgumentChatComponent;
 import net.minecraft.server.v1_13_R2.ArgumentChatFormat;
 import net.minecraft.server.v1_13_R2.ArgumentCriterionValue;
+import net.minecraft.server.v1_13_R2.ArgumentDimension;
 import net.minecraft.server.v1_13_R2.ArgumentEnchantment;
 import net.minecraft.server.v1_13_R2.ArgumentEntity;
 import net.minecraft.server.v1_13_R2.ArgumentEntitySummon;
@@ -85,11 +87,10 @@ import net.minecraft.server.v1_13_R2.CompletionProviders;
 import net.minecraft.server.v1_13_R2.CriterionConditionValue;
 import net.minecraft.server.v1_13_R2.CustomFunction;
 import net.minecraft.server.v1_13_R2.CustomFunctionData;
+import net.minecraft.server.v1_13_R2.DimensionManager;
 import net.minecraft.server.v1_13_R2.Entity;
 import net.minecraft.server.v1_13_R2.EntityTypes;
 import net.minecraft.server.v1_13_R2.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_13_R2.ArgumentDimension;
-import net.minecraft.server.v1_13_R2.DimensionManager;
 import net.minecraft.server.v1_13_R2.ICompletionProvider;
 import net.minecraft.server.v1_13_R2.LootTableRegistry;
 import net.minecraft.server.v1_13_R2.MinecraftKey;
@@ -460,14 +461,14 @@ public class NMS_1_13_R2 implements NMS {
 	}
 
 	@Override
-	public Location getLocation2D(CommandContext cmdCtx, String key, LocationType locationType2d, CommandSender sender) throws CommandSyntaxException {
+	public Location2D getLocation2D(CommandContext cmdCtx, String key, LocationType locationType2d, CommandSender sender) throws CommandSyntaxException {
 		switch(locationType2d) {
 			case BLOCK_POSITION:
 				ArgumentVec2I.a blockPos = ArgumentVec2I.a(cmdCtx, key);
-				return new Location(getCommandSenderWorld(sender), blockPos.a, 0, blockPos.b);
+				return new Location2D(getCommandSenderWorld(sender), blockPos.a, blockPos.b);
 			case PRECISE_POSITION:
 				Vec2F vecPos = ArgumentVec2.a(cmdCtx, key);
-				return new Location(getCommandSenderWorld(sender), vecPos.i, 0, vecPos.j);
+				return new Location2D(getCommandSenderWorld(sender), vecPos.i, vecPos.j);
 		}
 		return null;
 	}

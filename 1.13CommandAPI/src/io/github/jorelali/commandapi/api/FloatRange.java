@@ -2,8 +2,8 @@ package io.github.jorelali.commandapi.api;
 
 public class FloatRange {
 
-	private float low;
-	private float high;
+	private final float low;
+	private final float high;
 	
 	public FloatRange(float low, float high) {
 		this.low = low;

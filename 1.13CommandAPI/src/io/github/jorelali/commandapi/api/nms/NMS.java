@@ -33,6 +33,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import io.github.jorelali.commandapi.api.FloatRange;
 import io.github.jorelali.commandapi.api.FunctionWrapper;
 import io.github.jorelali.commandapi.api.IntegerRange;
+import io.github.jorelali.commandapi.api.Location2D;
 import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
 import io.github.jorelali.commandapi.api.arguments.LocationType;
@@ -130,7 +131,7 @@ public interface NMS {
     EntityType        getEntityType(CommandContext<?> cmdCtx, String str, CommandSender sender) throws CommandSyntaxException;
     Advancement       getAdvancement(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
     Recipe            getRecipe(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException; 
-	Location          getLocation2D(CommandContext<?> cmdCtx, String key, LocationType locationType2d, CommandSender sender) throws CommandSyntaxException;
+	Location2D        getLocation2D(CommandContext<?> cmdCtx, String key, LocationType locationType2d, CommandSender sender) throws CommandSyntaxException;
     
     ChatColor         getChatColor(CommandContext<?> cmdCtx, String str);
     BaseComponent[]   getChatComponent(CommandContext<?> cmdCtx, String str);

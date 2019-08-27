@@ -53,6 +53,7 @@ import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.FloatRange;
 import io.github.jorelali.commandapi.api.FunctionWrapper;
 import io.github.jorelali.commandapi.api.IntegerRange;
+import io.github.jorelali.commandapi.api.Location2D;
 import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
 import io.github.jorelali.commandapi.api.arguments.LocationType;
@@ -433,15 +434,15 @@ public class NMS_1_13_R1 implements NMS {
 	}
 
 	@Override
-	public Location getLocation2D(CommandContext cmdCtx, String key, LocationType locationType2d, CommandSender sender) throws CommandSyntaxException {
+	public Location2D getLocation2D(CommandContext cmdCtx, String key, LocationType locationType2d, CommandSender sender) throws CommandSyntaxException {
 		switch(locationType2d) {
 			case BLOCK_POSITION: {
 				Vec2F vecPos = ArgumentVec2.a(cmdCtx, key);
-				return new Location(getCommandSenderWorld(sender), Math.round(vecPos.i), 0, Math.round(vecPos.j));
+				return new Location2D(getCommandSenderWorld(sender), Math.round(vecPos.i), Math.round(vecPos.j));
 			}
 			case PRECISE_POSITION: {
 				Vec2F vecPos = ArgumentVec2.a(cmdCtx, key);
-				return new Location(getCommandSenderWorld(sender), vecPos.i, 0, vecPos.j);
+				return new Location2D(getCommandSenderWorld(sender), vecPos.i, vecPos.j);
 			}
 		}
 		return null;
