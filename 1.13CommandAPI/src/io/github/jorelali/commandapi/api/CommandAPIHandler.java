@@ -299,7 +299,7 @@ public final class CommandAPIHandler {
 						case TIME:
 							argList.add(nms.getTime(cmdCtx, entry.getKey()));
 							break;
-						case LOCATION2D:
+						case LOCATION_2D:
 							LocationType locationType2d = ((Location2DArgument) entry.getValue()).getLocationType();
 							argList.add(nms.getLocation2D(cmdCtx, entry.getKey(), locationType2d, sender));
 							break;
@@ -308,6 +308,9 @@ public final class CommandAPIHandler {
 							break;
 						case FLOAT_RANGE:
 							argList.add(nms.getFloatRange(cmdCtx, entry.getKey()));
+							break;
+						case ENVIRONMENT:
+							argList.add(nms.getDimension(cmdCtx, entry.getKey()));
 							break;
 					}
 				}

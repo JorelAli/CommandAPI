@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
@@ -29,7 +30,9 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 
+import io.github.jorelali.commandapi.api.FloatRange;
 import io.github.jorelali.commandapi.api.FunctionWrapper;
+import io.github.jorelali.commandapi.api.IntegerRange;
 import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
 import io.github.jorelali.commandapi.api.arguments.LocationType;
@@ -118,54 +121,51 @@ public interface NMS {
 	SimpleCommandMap getSimpleCommandMap();
 	
 	//Argument implementations
-	ChatColor 			getChatColor(CommandContext<?> cmdCtx, String str);
-	BaseComponent[] 		getChatComponent(CommandContext<?> cmdCtx, String str);
-	Enchantment 			getEnchantment(CommandContext<?> cmdCtx, String str);
-	ItemStack 			getItemStack(CommandContext<?> cmdCtx, String str) throws CommandSyntaxException;
-	Location 			getLocation(CommandContext<?> cmdCtx, String str, LocationType locationType, CommandSender sender) throws CommandSyntaxException;
-	Particle 			getParticle(CommandContext<?> cmdCtx, String str);
-	PotionEffectType 	getPotionEffect(CommandContext<?> cmdCtx, String str) throws CommandSyntaxException;
-	FunctionWrapper[] 	getFunction(CommandContext<?> cmdCtx, String str) throws CommandSyntaxException;
-	Player 				getPlayer(CommandContext<?> cmdCtx, String str) throws CommandSyntaxException;
-	Object 				getEntitySelector(CommandContext<?> cmdCtx, String str, EntitySelector selector) throws CommandSyntaxException;
-	EntityType 			getEntityType(CommandContext<?> cmdCtx, String str, CommandSender sender) throws CommandSyntaxException;
-	LootTable 			getLootTable(CommandContext<?> cmdCtx, String str);
-	Sound                getSound(CommandContext<?> cmdCtx, String key);
-	Advancement          getAdvancement(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
-	Recipe               getRecipe(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
+    ItemStack         getItemStack(CommandContext<?> cmdCtx, String str) throws CommandSyntaxException;
+    Location          getLocation(CommandContext<?> cmdCtx, String str, LocationType locationType, CommandSender sender) throws CommandSyntaxException;
+    PotionEffectType  getPotionEffect(CommandContext<?> cmdCtx, String str) throws CommandSyntaxException;
+    FunctionWrapper[] getFunction(CommandContext<?> cmdCtx, String str) throws CommandSyntaxException;
+    Player            getPlayer(CommandContext<?> cmdCtx, String str) throws CommandSyntaxException;
+    Object            getEntitySelector(CommandContext<?> cmdCtx, String str, EntitySelector selector) throws CommandSyntaxException;
+    EntityType        getEntityType(CommandContext<?> cmdCtx, String str, CommandSender sender) throws CommandSyntaxException;
+    Advancement       getAdvancement(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
+    Recipe            getRecipe(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException; 
+	Location          getLocation2D(CommandContext<?> cmdCtx, String key, LocationType locationType2d, CommandSender sender) throws CommandSyntaxException;
+    
+    ChatColor         getChatColor(CommandContext<?> cmdCtx, String str);
+    BaseComponent[]   getChatComponent(CommandContext<?> cmdCtx, String str);
+    Enchantment       getEnchantment(CommandContext<?> cmdCtx, String str);
+    Particle          getParticle(CommandContext<?> cmdCtx, String str);
+    LootTable         getLootTable(CommandContext<?> cmdCtx, String str);
+    Sound             getSound(CommandContext<?> cmdCtx, String key);
+	int               getTime(CommandContext<?> cmdCtx, String key);
+	IntegerRange      getIntRange(CommandContext<?> cmdCtx, String key);
+	FloatRange        getFloatRange(CommandContext<?> cmdCtx, String key);
+	Environment       getDimension(CommandContext<?> cmdCtx, String key);
 
 	//Argument types
 	ArgumentType<?> _ArgumentChatFormat();
 	ArgumentType<?> _ArgumentChatComponent();
+	ArgumentType<?> _ArgumentDimension();
+	ArgumentType<?> _ArgumentEntitySummon();
+	ArgumentType<?> _ArgumentEntity(EntitySelector selector);
+	ArgumentType<?> _ArgumentEnchantment();
+	ArgumentType<?> _ArgumentFloatRange();
+	ArgumentType<?> _ArgumentIntRange();
 	ArgumentType<?> _ArgumentMinecraftKeyRegistered();
 	ArgumentType<?> _ArgumentMobEffect();
 	ArgumentType<?> _ArgumentProfile();
 	ArgumentType<?> _ArgumentParticle();
 	ArgumentType<?> _ArgumentPosition();
+	ArgumentType<?> _ArgumentPosition2D();
 	ArgumentType<?> _ArgumentVec3();
 	ArgumentType<?> _ArgumentItemStack();
 	ArgumentType<?> _ArgumentTag();
-	ArgumentType<?> _ArgumentEntitySummon();
-	ArgumentType<?> _ArgumentEntity(EntitySelector selector);
-	ArgumentType<?> _ArgumentEnchantment();
-
 	ArgumentType<?> _ArgumentTime();
-
-	Object getTime(CommandContext<?> cmdCtx, String key);
-
 	ArgumentType<?> _ArgumentVec2();
 
-	ArgumentType<?> _ArgumentPosition2D();
-
-	Object getLocation2D(CommandContext<?> cmdCtx, String key, LocationType locationType2d, CommandSender sender) throws CommandSyntaxException;
-
-	ArgumentType<?> _ArgumentIntRange();
-
-	Object getIntRange(CommandContext<?> cmdCtx, String key);
-
-	ArgumentType<?> _ArgumentFloatRange();
-
-	Object getFloatRange(CommandContext<?> cmdCtx, String key);
+	
+	
 
 
 

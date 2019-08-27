@@ -5,6 +5,9 @@ import java.util.LinkedHashMap;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -13,6 +16,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import io.github.jorelali.commandapi.api.arguments.Argument;
+import io.github.jorelali.commandapi.api.arguments.EnvironmentArgument;
 import io.github.jorelali.commandapi.api.arguments.FloatRangeArgument;
 import io.github.jorelali.commandapi.api.arguments.IntegerRangeArgument;
 import io.github.jorelali.commandapi.api.arguments.Location2DArgument;
@@ -135,6 +139,29 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         	System.out.println(r.getLowerBound());
         	System.out.println(r.getUpperBound());
         });
+        
+        args.clear();
+        args.put("dim", new EnvironmentArgument());
+        
+        CommandAPI.getInstance().register("dim", args, (s, a) -> {
+        	Environment r = (Environment) a[0];
+        	System.out.println(r);
+        });
+        
+        class z extends Location {
+
+			public z(World world, double x, double y, double z) {
+				super(world, x, y, z);
+				// TODO Auto-generated constructor stub
+			}
+        	
+        }
+        
+        a(new z(null, 0, 0, 0));
+	}
+	
+	void a(Location a) {
+		
 	}
 	
 }

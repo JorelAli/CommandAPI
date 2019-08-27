@@ -19,6 +19,7 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.World.Environment;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
@@ -67,6 +68,7 @@ import net.minecraft.server.v1_14_R1.AdvancementDataWorld;
 import net.minecraft.server.v1_14_R1.ArgumentChatComponent;
 import net.minecraft.server.v1_14_R1.ArgumentChatFormat;
 import net.minecraft.server.v1_14_R1.ArgumentCriterionValue;
+import net.minecraft.server.v1_14_R1.ArgumentDimension;
 import net.minecraft.server.v1_14_R1.ArgumentEnchantment;
 import net.minecraft.server.v1_14_R1.ArgumentEntity;
 import net.minecraft.server.v1_14_R1.ArgumentEntitySummon;
@@ -90,6 +92,7 @@ import net.minecraft.server.v1_14_R1.CriterionConditionValue.FloatRange;
 import net.minecraft.server.v1_14_R1.CriterionConditionValue.IntegerRange;
 import net.minecraft.server.v1_14_R1.CustomFunction;
 import net.minecraft.server.v1_14_R1.CustomFunctionData;
+import net.minecraft.server.v1_14_R1.DimensionManager;
 import net.minecraft.server.v1_14_R1.Entity;
 import net.minecraft.server.v1_14_R1.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_14_R1.ICompletionProvider;
@@ -451,7 +454,7 @@ public class NMS_1_14_R1 implements NMS {
 	}
 
 	@Override
-	public Object getTime(CommandContext<?> cmdCtx, String key) {
+	public int getTime(CommandContext<?> cmdCtx, String key) {
 		return cmdCtx.getArgument(key, Integer.class);
 	}
 
@@ -466,7 +469,7 @@ public class NMS_1_14_R1 implements NMS {
 	}
 
 	@Override
-	public Object getLocation2D(CommandContext cmdCtx, String key, LocationType locationType2d, CommandSender sender) throws CommandSyntaxException {
+	public Location getLocation2D(CommandContext cmdCtx, String key, LocationType locationType2d, CommandSender sender) throws CommandSyntaxException {
 		switch(locationType2d) {
 			case BLOCK_POSITION:
 				BlockPosition2D blockPos = ArgumentVec2I.a(cmdCtx, key);
@@ -484,7 +487,7 @@ public class NMS_1_14_R1 implements NMS {
 	}
 
 	@Override
-	public Object getIntRange(CommandContext cmdCtx, String key) {
+	public io.github.jorelali.commandapi.api.IntegerRange getIntRange(CommandContext cmdCtx, String key) {
 		IntegerRange range = ArgumentCriterionValue.b.a(cmdCtx, key);
 		int low = range.a() == null ? Integer.MIN_VALUE : range.a();
 		int high = range.b() == null ? Integer.MAX_VALUE : range.b();
@@ -497,11 +500,27 @@ public class NMS_1_14_R1 implements NMS {
 	}
 
 	@Override
-	public Object getFloatRange(CommandContext<?> cmdCtx, String key) {
+	public io.github.jorelali.commandapi.api.FloatRange getFloatRange(CommandContext<?> cmdCtx, String key) {
 		FloatRange range = cmdCtx.getArgument(key, FloatRange.class);
 		float low = range.a() == null ? -Float.MAX_VALUE : range.a();
 		float high = range.b() == null ? Float.MAX_VALUE : range.b();
 		return new io.github.jorelali.commandapi.api.FloatRange(low, high);
+	}
+
+	@Override
+	public Environment getDimension(CommandContext cmdCtx, String key) {
+		DimensionManager manager = ArgumentDimension.a(cmdCtx, key);
+		switch(manager.getDimensionID()) {
+			case 0: return Environment.NORMAL;
+			case -1: return Environment.NETHER;
+			case 1: return Environment.THE_END;
+		}
+		return null;
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentDimension() {
+		return ArgumentDimension.a();
 	}
 
 }
