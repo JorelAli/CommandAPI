@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World.Environment;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -17,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.server.TabCompleteEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -192,10 +192,6 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         	} catch(Exception e) {}
         });
         
-	}
-	
-	void a(Location a) {
-		
 	}
 	
 }

@@ -42,6 +42,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.DisplaySlot;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
@@ -88,6 +89,7 @@ import net.minecraft.server.v1_13_R1.CustomFunctionData;
 import net.minecraft.server.v1_13_R1.Entity;
 import net.minecraft.server.v1_13_R1.EntityTypes;
 import net.minecraft.server.v1_13_R1.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_13_R1.ArgumentScoreboardSlot;
 import net.minecraft.server.v1_13_R1.ArgumentInventorySlot;
 import net.minecraft.server.v1_13_R1.ArgumentRotationAxis;
 import net.minecraft.server.v1_13_R1.EnumDirection.EnumAxis;
@@ -537,6 +539,21 @@ public class NMS_1_13_R1 implements NMS {
 	@Override
 	public int getItemSlot(CommandContext cmdCtx, String key) {
 		return ArgumentInventorySlot.a(cmdCtx, key);
+	}
+	
+	@Override
+	public ArgumentType<?> _ArgumentScoreboardSlot() {
+		return ArgumentScoreboardSlot.a();
+	}
+
+	@Override
+	public DisplaySlot getScoreboardSlot(CommandContext cmdCtx, String key) {
+		switch(ArgumentScoreboardSlot.a(cmdCtx, key)) {
+			case 0: return DisplaySlot.PLAYER_LIST;
+			case 1: return DisplaySlot.SIDEBAR;
+			case 2: return DisplaySlot.BELOW_NAME;
+		}
+		return null;
 	}
 	
 }

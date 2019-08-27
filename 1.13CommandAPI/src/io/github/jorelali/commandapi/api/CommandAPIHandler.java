@@ -59,7 +59,7 @@ import io.github.jorelali.commandapi.api.nms.NMS_1_14_R1;
 import io.github.jorelali.commandapi.safereflection.ReflectionType;
 import io.github.jorelali.commandapi.safereflection.SafeReflection;
 
-@SuppressWarnings({"rawtypes", "unchecked", "deprecation"})
+@SuppressWarnings({"rawtypes", "unchecked"})
 /**
  * Class to access the main methods in NMS. The wrapper's
  * implementations occur here.
@@ -336,6 +336,9 @@ public final class CommandAPIHandler {
 							break;
 						case ITEM_SLOT:
 							argList.add(nms.getItemSlot(cmdCtx, entry.getKey()));
+							break;
+						case SCOREBOARD_SLOT:
+							argList.add(nms.getScoreboardSlot(cmdCtx, entry.getKey()));
 							break;
 					}
 				}
