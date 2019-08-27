@@ -336,6 +336,9 @@ public final class CommandAPIHandler {
 						case AXIS:
 							argList.add(nms.getAxis(cmdCtx, entry.getKey()));
 							break;
+						case ITEM_SLOT:
+							argList.add(nms.getItemSlot(cmdCtx, entry.getKey()));
+							break;
 					}
 				}
 			}

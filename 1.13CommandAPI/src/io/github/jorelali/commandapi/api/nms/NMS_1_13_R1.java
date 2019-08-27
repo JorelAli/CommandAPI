@@ -88,6 +88,7 @@ import net.minecraft.server.v1_13_R1.CustomFunctionData;
 import net.minecraft.server.v1_13_R1.Entity;
 import net.minecraft.server.v1_13_R1.EntityTypes;
 import net.minecraft.server.v1_13_R1.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_13_R1.ArgumentInventorySlot;
 import net.minecraft.server.v1_13_R1.ArgumentRotationAxis;
 import net.minecraft.server.v1_13_R1.EnumDirection.EnumAxis;
 import net.minecraft.server.v1_13_R1.ArgumentRotation;
@@ -526,6 +527,16 @@ public class NMS_1_13_R1 implements NMS {
 	@Override
 	public ArgumentType<?> _ArgumentAxis() {
 		return ArgumentRotationAxis.a();
+	}
+	
+	@Override
+	public ArgumentType<?> _ArgumentItemSlot() {
+		return ArgumentInventorySlot.a();
+	}
+
+	@Override
+	public int getItemSlot(CommandContext cmdCtx, String key) {
+		return ArgumentInventorySlot.a(cmdCtx, key);
 	}
 	
 }

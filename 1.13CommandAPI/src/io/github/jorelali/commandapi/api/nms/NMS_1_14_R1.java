@@ -76,6 +76,7 @@ import net.minecraft.server.v1_14_R1.ArgumentDimension;
 import net.minecraft.server.v1_14_R1.ArgumentEnchantment;
 import net.minecraft.server.v1_14_R1.ArgumentEntity;
 import net.minecraft.server.v1_14_R1.ArgumentEntitySummon;
+import net.minecraft.server.v1_14_R1.ArgumentInventorySlot;
 import net.minecraft.server.v1_14_R1.ArgumentItemStack;
 import net.minecraft.server.v1_14_R1.ArgumentMinecraftKeyRegistered;
 import net.minecraft.server.v1_14_R1.ArgumentMobEffect;
@@ -566,6 +567,16 @@ public class NMS_1_14_R1 implements NMS {
 	@Override
 	public ArgumentType<?> _ArgumentAxis() {
 		return ArgumentRotationAxis.a();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentItemSlot() {
+		return ArgumentInventorySlot.a();
+	}
+
+	@Override
+	public int getItemSlot(CommandContext cmdCtx, String key) {
+		return ArgumentInventorySlot.a(cmdCtx, key);
 	}
 
 }

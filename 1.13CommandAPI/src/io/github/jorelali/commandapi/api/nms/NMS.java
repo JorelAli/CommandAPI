@@ -173,6 +173,10 @@ public interface NMS {
 
 	ArgumentType<?> _ArgumentAxis();
 
+	ArgumentType<?> _ArgumentItemSlot();
+
+	int getItemSlot(CommandContext<?> cmdCtx, String key);
+
 	
 
 }
