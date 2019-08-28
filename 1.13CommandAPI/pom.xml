@@ -31,8 +31,9 @@
 	        <url>https://raw.githubusercontent.com/JorelAli/1.13-Command-API/mvn-repo/1.13CommandAPI/</url>
 	    </repository>
 		<repository>
-			<id>jitpack.io</id>
-			<url>https://jitpack.io</url>
+			<id>codemc-repo</id>
+			<url>https://repo.codemc.org/repository/maven-public/</url>
+			<layout>default</layout>
 		</repository>
     </repositories>
 
@@ -62,11 +63,10 @@
 			<version>2.0</version>
 		</dependency>
 		<dependency>
-	        <groupId>com.github.MilkBowl</groupId>
-	        <artifactId>VaultAPI</artifactId>
-	        <version>1.7</version>
-	        <scope>provided</scope>
-	    </dependency>
+			<groupId>de.tr7zw</groupId>
+			<artifactId>item-nbt-api-plugin</artifactId>
+			<version>2.0.0</version>
+		</dependency>
         
         <!-- Spigot jars for multiple version support -->
        

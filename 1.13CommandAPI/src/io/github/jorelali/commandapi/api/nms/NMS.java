@@ -35,6 +35,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 
+import de.tr7zw.nbtapi.NBTContainer;
 import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
 import io.github.jorelali.commandapi.api.arguments.LocationType;
@@ -155,6 +156,7 @@ public interface NMS {
 	IntegerRange       getIntRange(CommandContext<?> cmdCtx, String key);
 	int                getItemSlot(CommandContext<?> cmdCtx, String key);
 	LootTable          getLootTable(CommandContext<?> cmdCtx, String key);
+	NBTContainer       getNBTCompound(CommandContext<?> cmdCtx, String key);
 	String             getObjectiveCriteria(CommandContext<?> cmdCtx, String key);
 	Particle           getParticle(CommandContext<?> cmdCtx, String key);
 	Rotation           getRotation(CommandContext<?> cmdCtx, String key);
@@ -177,6 +179,7 @@ public interface NMS {
 	ArgumentType<?> _ArgumentItemStack();
 	ArgumentType<?> _ArgumentMinecraftKeyRegistered();
 	ArgumentType<?> _ArgumentMobEffect();
+	ArgumentType<?> _ArgumentNBTCompound();
 	ArgumentType<?> _ArgumentProfile();
 	ArgumentType<?> _ArgumentParticle();
 	ArgumentType<?> _ArgumentPosition();
@@ -191,5 +194,7 @@ public interface NMS {
 	ArgumentType<?> _ArgumentTime();
 	ArgumentType<?> _ArgumentVec2();
 	ArgumentType<?> _ArgumentVec3();
+
+
 
 }

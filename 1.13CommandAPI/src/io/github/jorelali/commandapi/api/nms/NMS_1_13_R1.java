@@ -54,6 +54,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 
+import de.tr7zw.nbtapi.NBTContainer;
 import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
@@ -104,6 +105,7 @@ import net.minecraft.server.v1_13_R1.Entity;
 import net.minecraft.server.v1_13_R1.EntityTypes;
 import net.minecraft.server.v1_13_R1.EnumDirection.EnumAxis;
 import net.minecraft.server.v1_13_R1.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_13_R1.ArgumentNBTTag;
 import net.minecraft.server.v1_13_R1.ICompletionProvider;
 import net.minecraft.server.v1_13_R1.IVectorPosition;
 import net.minecraft.server.v1_13_R1.LootTableRegistry;
@@ -616,5 +618,14 @@ public class NMS_1_13_R1 implements NMS {
 	public String getScoreHolderSingle(CommandContext cmdCtx, String key) throws CommandSyntaxException {
 		return ArgumentScoreholder.a(cmdCtx, key);
 	}
-	
+
+	@Override
+	public NBTContainer getNBTCompound(CommandContext<?> cmdCtx, String key) {
+		return new NBTContainer(ArgumentNBTTag.a(cmdCtx, key));
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentNBTCompound() {
+		return ArgumentNBTTag.a();
+	}
 }

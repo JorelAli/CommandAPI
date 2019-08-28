@@ -21,6 +21,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import de.tr7zw.nbtapi.NBTContainer;
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.AxisArgument;
 import io.github.jorelali.commandapi.api.arguments.ChatArgument;
@@ -31,11 +32,12 @@ import io.github.jorelali.commandapi.api.arguments.IntegerRangeArgument;
 import io.github.jorelali.commandapi.api.arguments.ItemSlotArgument;
 import io.github.jorelali.commandapi.api.arguments.Location2DArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationType;
+import io.github.jorelali.commandapi.api.arguments.NBTCompoundArgument;
 import io.github.jorelali.commandapi.api.arguments.RotationArgument;
 import io.github.jorelali.commandapi.api.arguments.ScoreHolderArgument;
+import io.github.jorelali.commandapi.api.arguments.ScoreHolderArgument.ScoreHolderType;
 import io.github.jorelali.commandapi.api.arguments.ScoreboardSlotArgument;
 import io.github.jorelali.commandapi.api.arguments.TimeArgument;
-import io.github.jorelali.commandapi.api.arguments.ScoreHolderArgument.ScoreHolderType;
 import io.github.jorelali.commandapi.api.wrappers.FloatRange;
 import io.github.jorelali.commandapi.api.wrappers.IntegerRange;
 import io.github.jorelali.commandapi.api.wrappers.Rotation;
@@ -220,7 +222,11 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         CommandAPI.getInstance().register("chat", args, (s, a) -> {
         	BaseComponent[] aa = (BaseComponent[]) a[0];
         	System.out.println(Arrays.deepToString(aa));
-        	s.spigot().sendMessage(aa);
+        	try {
+        		s.spigot().sendMessage(aa);
+        	} catch(Exception e) {
+        		System.out.println("Whoopsy");
+        	}
         });
         
         args.clear();
@@ -239,6 +245,17 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         	String strs = (String) a[0];
         	System.out.println(strs);
         });
+        
+        args.clear();
+        args.put("nbt", new NBTCompoundArgument());
+        
+        CommandAPI.getInstance().register("nbt", args, (s, a) -> {
+        	NBTContainer strs = (NBTContainer) a[0];
+        	System.out.println(strs);
+        });
+        
+//        new NBTContainer("").
+//        new NBTContainer("").get;
         
         /*
          * Testing to do:

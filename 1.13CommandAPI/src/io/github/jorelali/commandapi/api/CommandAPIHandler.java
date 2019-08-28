@@ -196,6 +196,16 @@ public final class CommandAPIHandler {
 			CommandAPIMain.getLog().info("Hooked into NMS " + version + " (compatible with " + compatibleVersions + ")");
 		}
 		
+		//Checks other dependencies
+		if(Bukkit.getPluginManager().getPlugin("NBTAPI") != null) {
+			CommandAPIMain.getLog().info("Hooked into the NBTAPI successfully.");
+		}
+		
+		try {
+			Class.forName("org.spigotmc.SpigotConfig");
+			CommandAPIMain.getLog().info("Hooked into Spigot successfully for Chat/ChatComponents");
+		} catch(ClassNotFoundException e) {}
+		
 		//Everything from this line will use getNMSClass(), so we initialize our cache here
 		fields = new HashMap<>();
 		methods = new HashMap<>();
@@ -358,6 +368,9 @@ public final class CommandAPIHandler {
 							argList.add(scoreHolderArgument.isSingle() 
 									? nms.getScoreHolderSingle(cmdCtx, entry.getKey()) 
 									: nms.getScoreHolderMultiple(cmdCtx, entry.getKey()));
+							break;
+						case NBT_COMPOUND:
+							argList.add(nms.getNBTCompound(cmdCtx, entry.getKey()));
 							break;
 					}
 				}
