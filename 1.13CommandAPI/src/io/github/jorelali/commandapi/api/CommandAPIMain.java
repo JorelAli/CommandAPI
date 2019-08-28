@@ -2,6 +2,7 @@ package io.github.jorelali.commandapi.api;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.LinkedHashMap;
 import java.util.logging.Logger;
@@ -21,7 +22,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.AxisArgument;
-import io.github.jorelali.commandapi.api.arguments.ScoreboardSlotArgument;
+import io.github.jorelali.commandapi.api.arguments.ChatArgument;
+import io.github.jorelali.commandapi.api.arguments.ChatComponentArgument;
 import io.github.jorelali.commandapi.api.arguments.EnvironmentArgument;
 import io.github.jorelali.commandapi.api.arguments.FloatRangeArgument;
 import io.github.jorelali.commandapi.api.arguments.IntegerRangeArgument;
@@ -29,10 +31,12 @@ import io.github.jorelali.commandapi.api.arguments.ItemSlotArgument;
 import io.github.jorelali.commandapi.api.arguments.Location2DArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationType;
 import io.github.jorelali.commandapi.api.arguments.RotationArgument;
+import io.github.jorelali.commandapi.api.arguments.ScoreboardSlotArgument;
 import io.github.jorelali.commandapi.api.arguments.TimeArgument;
 import io.github.jorelali.commandapi.api.wrappers.FloatRange;
 import io.github.jorelali.commandapi.api.wrappers.IntegerRange;
 import io.github.jorelali.commandapi.api.wrappers.Rotation;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.server.v1_14_R1.ArgumentInventorySlot;
 
 public class CommandAPIMain extends JavaPlugin implements Listener {
@@ -197,6 +201,23 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         
         CommandAPI.getInstance().register("displaySlot", args, (s, a) -> {
         	System.out.println(a[0]);
+        });
+        
+        args.clear();
+        args.put("comp", new ChatComponentArgument());
+        
+        CommandAPI.getInstance().register("comp", args, (s, a) -> {
+        	BaseComponent[] aa = (BaseComponent[]) a[0];
+        	System.out.println(Arrays.deepToString(aa));
+        });
+        
+        args.clear();
+        args.put("chat", new ChatArgument());
+        
+        CommandAPI.getInstance().register("chat", args, (s, a) -> {
+        	BaseComponent[] aa = (BaseComponent[]) a[0];
+        	System.out.println(Arrays.deepToString(aa));
+        	s.spigot().sendMessage(aa);
         });
         
         /*

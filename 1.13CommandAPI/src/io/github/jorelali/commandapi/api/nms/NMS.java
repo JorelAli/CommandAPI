@@ -196,6 +196,10 @@ public interface NMS {
 
 	Objective getObjective(CommandContext<?> cmdCtx, String key, CommandSender sender) throws IllegalArgumentException, CommandSyntaxException;
 
+	ArgumentType<?> _ArgumentChat();
+
+	BaseComponent[] getChat(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
+
 	
 
 }

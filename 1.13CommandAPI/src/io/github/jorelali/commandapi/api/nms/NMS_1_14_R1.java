@@ -73,6 +73,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.server.v1_14_R1.Advancement;
 import net.minecraft.server.v1_14_R1.AdvancementDataWorld;
+import net.minecraft.server.v1_14_R1.ArgumentChat;
 import net.minecraft.server.v1_14_R1.ArgumentChatComponent;
 import net.minecraft.server.v1_14_R1.ArgumentChatFormat;
 import net.minecraft.server.v1_14_R1.ArgumentCriterionValue;
@@ -145,7 +146,7 @@ public class NMS_1_14_R1 implements NMS {
 	@Override
 	public BaseComponent[] getChatComponent(CommandContext cmdCtx, String str) {
 		String resultantString = ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, str));
-		return ComponentSerializer.parse((String) resultantString);
+		return ComponentSerializer.parse(resultantString);
 	}
 
 	@Override
@@ -627,6 +628,17 @@ public class NMS_1_14_R1 implements NMS {
 	public Objective getObjective(CommandContext cmdCtx, String key, CommandSender sender) throws IllegalArgumentException, CommandSyntaxException {
 		Scoreboard board = sender instanceof Player ? ((Player)sender).getScoreboard() : Bukkit.getScoreboardManager().getMainScoreboard();
 		return board.getObjective(ArgumentScoreboardObjective.a(cmdCtx, key).getName());
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentChat() {
+		return ArgumentChat.a();
+	}
+
+	@Override
+	public BaseComponent[] getChat(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		String resultantString = ChatSerializer.a(ArgumentChat.a(cmdCtx, key));
+		return ComponentSerializer.parse(resultantString);
 	}
 
 }

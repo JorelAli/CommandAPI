@@ -103,6 +103,7 @@ import net.minecraft.server.v1_13_R1.Entity;
 import net.minecraft.server.v1_13_R1.EntityTypes;
 import net.minecraft.server.v1_13_R1.EnumDirection.EnumAxis;
 import net.minecraft.server.v1_13_R1.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_13_R1.ArgumentChat;
 import net.minecraft.server.v1_13_R1.ICompletionProvider;
 import net.minecraft.server.v1_13_R1.IVectorPosition;
 import net.minecraft.server.v1_13_R1.LootTableRegistry;
@@ -587,6 +588,17 @@ public class NMS_1_13_R1 implements NMS {
 	public Objective getObjective(CommandContext cmdCtx, String key, CommandSender sender) throws IllegalArgumentException, CommandSyntaxException {
 		Scoreboard board = sender instanceof Player ? ((Player)sender).getScoreboard() : Bukkit.getScoreboardManager().getMainScoreboard();
 		return board.getObjective(ArgumentScoreboardObjective.a(cmdCtx, key).getName());
+	}
+	
+	@Override
+	public ArgumentType<?> _ArgumentChat() {
+		return ArgumentChat.a();
+	}
+
+	@Override
+	public BaseComponent[] getChat(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		String resultantString = ChatSerializer.a(ArgumentChat.a(cmdCtx, key));
+		return ComponentSerializer.parse(resultantString);
 	}
 	
 }

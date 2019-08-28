@@ -106,6 +106,7 @@ import net.minecraft.server.v1_13_R2.Entity;
 import net.minecraft.server.v1_13_R2.EntityTypes;
 import net.minecraft.server.v1_13_R2.EnumDirection.EnumAxis;
 import net.minecraft.server.v1_13_R2.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_13_R2.ArgumentChat;
 import net.minecraft.server.v1_13_R2.ICompletionProvider;
 import net.minecraft.server.v1_13_R2.IVectorPosition;
 import net.minecraft.server.v1_13_R2.LootTableRegistry;
@@ -620,4 +621,15 @@ public class NMS_1_13_R2 implements NMS {
 		return board.getObjective(ArgumentScoreboardObjective.a(cmdCtx, key).getName());
 	}
 
+	@Override
+	public ArgumentType<?> _ArgumentChat() {
+		return ArgumentChat.a();
+	}
+
+	@Override
+	public BaseComponent[] getChat(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		String resultantString = ChatSerializer.a(ArgumentChat.a(cmdCtx, key));
+		return ComponentSerializer.parse(resultantString);
+	}
+	
 }

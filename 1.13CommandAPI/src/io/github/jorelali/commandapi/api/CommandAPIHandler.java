@@ -349,6 +349,9 @@ public final class CommandAPIHandler {
 						case OBJECTIVE:
 							argList.add(nms.getObjective(cmdCtx, entry.getKey(), sender));
 							break;
+						case CHAT:
+							argList.add(nms.getChat(cmdCtx, entry.getKey()));
+							break;
 					}
 				}
 			}

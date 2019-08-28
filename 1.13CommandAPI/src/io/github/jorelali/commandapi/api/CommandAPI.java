@@ -7,8 +7,9 @@ import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
 import io.github.jorelali.commandapi.api.arguments.Argument;
+import io.github.jorelali.commandapi.api.arguments.GreedyArgument;
 import io.github.jorelali.commandapi.api.arguments.GreedyStringArgument;
-import io.github.jorelali.commandapi.api.exceptions.GreedyStringException;
+import io.github.jorelali.commandapi.api.exceptions.GreedyArgumentException;
 import io.github.jorelali.commandapi.api.exceptions.InvalidCommandNameException;
 import io.github.jorelali.commandapi.api.exceptions.WrapperCommandSyntaxException;
 
@@ -188,15 +189,15 @@ public class CommandAPI {
 			LinkedHashMap<String, Argument> copyOfArgs = args == null ? new LinkedHashMap<>() : (LinkedHashMap<String, Argument>) args.clone();
 			
 			//if args contains a GreedyString && args.getLast != GreedyString
-			long numGreedyArgs = copyOfArgs.values().stream().filter(arg -> arg instanceof GreedyStringArgument).count();
+			long numGreedyArgs = copyOfArgs.values().stream().filter(arg -> arg instanceof GreedyArgument).count();
 			if(numGreedyArgs >= 1) {
 				//A GreedyString has been found
-				if(!(copyOfArgs.values().toArray(new Argument[copyOfArgs.size()])[copyOfArgs.size() - 1] instanceof GreedyStringArgument)) {
-					throw new GreedyStringException();
+				if(!(copyOfArgs.values().toArray(new Argument[copyOfArgs.size()])[copyOfArgs.size() - 1] instanceof GreedyArgument)) {
+					throw new GreedyArgumentException();
 				}
 				
 				if(numGreedyArgs > 1) {
-					throw new GreedyStringException();
+					throw new GreedyArgumentException();
 				}
 			}
 			
