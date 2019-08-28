@@ -33,4 +33,7 @@
 
 [Troubleshooting](./troubleshooting.md)
 
+-----
+
 [Afterword](./afterword.md)
+

@@ -22,7 +22,7 @@ yesn't
 
 ### Potential uses for string arguments
 
-* Entering Strings to identify offline players
+* Entering strings to identify offline players
 
 ## Text argument
 
@@ -52,7 +52,15 @@ hello world
 
 ## Greedy string argument
 
-The `GreedyStringArgument` takes the `TextArgument` a step further. **Any characters and symbols are allowed** and quotation marks are not required. **However, the `GreedyStringArgument` uses the entirety of the argument array from its position**.
+> **Greedy Arguments:**
+>
+> The `GreedyStringArgument`, similar to the `ChatArgument` uses the entire argument array from its current position. This means that it never ends, therefore if it is used, it must be the last element of your `LinkedHashMap` of arguments.
+>
+> For example, if you have a command `/msg <message> <target>`, it would not be able to determine where the message ends and the `<target>` argument begins.
+>
+> If a `GreedyStringArgument` or `ChatArgument` is not declared at the end of the `LinkedHashMap` of arguments, or multiple of these arguments are used in the same `LinkedHashMap`, the CommandAPI throws a `GreedyArgumentException`.
+
+The `GreedyStringArgument` takes the `TextArgument` a step further. **Any characters and symbols are allowed** and quotation marks are not required.
 
 ### Example - Messaging command
 
@@ -75,7 +83,7 @@ Any text entered after the `<target>` argument would be sent to the player. For 
 ```
 
 
-Due to the fact that **the `GreedyStringArgument` has no terminator** (it has infinite length), **a `GreedyStringArgument` must be defined at the end of the `LinkedHashMap`** (otherwise the CommandAPI will throw a `GreedyArgumentException`)
+
 
 For example, if the syntax was`/msg <message> <target>`, it would not be able to determine where the message ends and the `<target>` argument begins.
 
