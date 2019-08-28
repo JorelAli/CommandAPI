@@ -75,7 +75,7 @@ Any text entered after the `<target>` argument would be sent to the player. For 
 ```
 
 
-Due to the fact that **the `GreedyStringArgument` has no terminator** (it has infinite length), **a `GreedyStringArgument` must be defined at the end of the `LinkedHashMap`** (otherwise the CommandAPI will throw a `GreedyStringException`)
+Due to the fact that **the `GreedyStringArgument` has no terminator** (it has infinite length), **a `GreedyStringArgument` must be defined at the end of the `LinkedHashMap`** (otherwise the CommandAPI will throw a `GreedyArgumentException`)
 
 For example, if the syntax was`/msg <message> <target>`, it would not be able to determine where the message ends and the `<target>` argument begins.
 

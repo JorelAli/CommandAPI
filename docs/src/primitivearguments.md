@@ -24,7 +24,8 @@ Numbers are represented using the designated number classes:
 
 | Class | Description |
 | ----- | ----------- |
-| `IntegerArgument` | Whole numbers |
+| `IntegerArgument` | Whole numbers between `Integer.MIN_VALUE` and `Integer.MAX_VALUE` |
+| `LongArgument` | Whole numbers between `Long.MIN_VALUE` and `Long.MAX_VALUE` |
 | `DoubleArgument` | Double precision floating point numbers |
 | `FloatArgument` | Single precision floating point numbers |
 

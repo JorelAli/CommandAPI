@@ -67,7 +67,6 @@ Arguments are found in the `io.github.jorelali.commandapi.api.arguments` package
 |         `RecipeArgument`         |                           `Recipe`                           |                                                        |
 |         `SoundArgument`          |                           `Sound`                            |                                                        |
 |         `StringArgument`         |                           `String`                           |              String consisting of 1 word               |
-|    `SuggestedStringArgument`     |                           `String`                           |          A list of suggested one word strings          |
 |          `TextArgument`          |                           `String`                           |      String which can have spaces (used for text)      |
 
 ## Arguments with overrideable suggestions

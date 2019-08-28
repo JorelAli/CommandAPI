@@ -153,7 +153,8 @@ CommandAPI.getInstance().register(&quot;editconfig&quot;, arguments, (sender, ar
 <a class="header" href="#numerical-arguments" id="numerical-arguments"><h2>Numerical arguments</h2></a>
 <p>Numbers are represented using the designated number classes:</p>
 <table><thead><tr><th> Class </th><th> Description </th></tr></thead><tbody>
-<tr><td> <code>IntegerArgument</code> </td><td> Whole numbers </td></tr>
+<tr><td> <code>IntegerArgument</code> </td><td> Whole numbers between <code>Integer.MIN_VALUE</code> and <code>Integer.MAX_VALUE</code> </td></tr>
+<tr><td> <code>LongArgument</code> </td><td> Whole numbers between <code>Long.MIN_VALUE</code> and <code>Long.MAX_VALUE</code> </td></tr>
 <tr><td> <code>DoubleArgument</code> </td><td> Double precision floating point numbers </td></tr>
 <tr><td> <code>FloatArgument</code> </td><td> Single precision floating point numbers </td></tr>
 </tbody></table>

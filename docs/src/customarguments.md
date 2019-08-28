@@ -47,7 +47,7 @@ From the code above, it uses the `CustomArgument.throwError` function which thro
 CustomArgument.throwError(String message)
 CustomArgument.throwError(MessageBuilder message)
 ```
- 
+
 ## Message Builders
 
 The `MessageBuilder` class is a class to easily create messages to describe errors when a sender sends a command which does not meet the expected syntax for an argument. It acts in a similar way to a `StringBuilder`, where you can append content to the end of a String.
@@ -58,8 +58,8 @@ The following methods are as follows:
 | ------ | ----------- |
 | `appendArgInput()` | Appends the argument that failed that the sender submitted to the end of the builder. E.g. `/foo bar` will append `bar` |
 | `appendFullInput()` | Appends the full command that a sender submitted to the end of the builder. E.g. `/foo bar` will append `foo bar` |
-| `appendHere()` | Appends the text `<--[HERE]` to the end of the builder | 
-| `append(Object)`| Appends the object to the end of the builder | 
+| `appendHere()` | Appends the text `<--[HERE]` to the end of the builder |
+| `append(Object)`| Appends the object to the end of the builder |
 
 ### Example - Message builder for invalid objective argument
 
@@ -69,14 +69,3 @@ See the code above, which uses the following code snippet:
 //Creates a MessageBuilder object that handles an invalid objective. 
 new MessageBuilder("Unknown objective: ").appendArgInput();
 ```
-
-## Defined custom arguments
-
-The CommandAPI has a few custom arguments which have been predefined, in the `DefinedCustomArguments` class. The methods are as follows:
-
-```java
-DefinedCustomArguments.objectiveArgument(); //CustomArgument<Objective>
-DefinedCustomArguments.teamArgument();      //CustomArgument<Team>
-```
-
-These are included to help reduce the amount of code required if you were to implement custom arguments for the types stated above.

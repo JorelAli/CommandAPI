@@ -58,7 +58,7 @@ To reduce redundancies, the CommandAPI removed a few classes:
 
 | Removed class                           | Alternative                                                  |
 | --------------------------------------- | ------------------------------------------------------------ |
-| `SuggestedStringArgument`               | Use `.overrideSuggestions(String[])` for the relevant argument, as described [here](https://jorelali.github.io/1.13-Command-API/arguments.html#arguments-with-overrideable-suggestions) |
+| `SuggestedStringArgument`               | Use `.overrideSuggestions(String[])` for the relevant argument, as described [here](./arguments.html#arguments-with-overrideable-suggestions) |
 | `DefinedCustomArguments` for Objectives | Use `ObjectiveArgument`                                      |
 | `DefinedCustomArguments` for Teams      | Use `TeamArgument`                                           |
 

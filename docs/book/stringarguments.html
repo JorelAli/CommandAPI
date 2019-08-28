@@ -186,7 +186,7 @@ CommandAPI.getInstance().register(&quot;msg&quot;, arguments, (sender, args) -&g
 <p>Any text entered after the <code>&lt;target&gt;</code> argument would be sent to the player. For example, the command could be used as follows:</p>
 <pre><code>/msg Skepter This is some incredibly long string with &quot;symbols&quot; and $p3c!aL characters~
 </code></pre>
-<p>Due to the fact that <strong>the <code>GreedyStringArgument</code> has no terminator</strong> (it has infinite length), <strong>a <code>GreedyStringArgument</code> must be defined at the end of the <code>LinkedHashMap</code></strong> (otherwise the CommandAPI will throw a <code>GreedyStringException</code>)</p>
+<p>Due to the fact that <strong>the <code>GreedyStringArgument</code> has no terminator</strong> (it has infinite length), <strong>a <code>GreedyStringArgument</code> must be defined at the end of the <code>LinkedHashMap</code></strong> (otherwise the CommandAPI will throw a <code>GreedyArgumentException</code>)</p>
 <p>For example, if the syntax was<code>/msg &lt;message&gt; &lt;target&gt;</code>, it would not be able to determine where the message ends and the <code>&lt;target&gt;</code> argument begins.</p>
 <a class="header" href="#potential-uses-for-greedy-strings" id="potential-uses-for-greedy-strings"><h3>Potential uses for greedy strings</h3></a>
 <ul>

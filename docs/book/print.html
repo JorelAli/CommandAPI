@@ -504,7 +504,6 @@ CommandAPI.getInstance().register(&quot;cmd&quot;, arguments, (sender, args) -&g
 <tr><td align="center">         <code>RecipeArgument</code>         </td><td align="center">                           <code>Recipe</code>                           </td><td align="center">                                                        </td></tr>
 <tr><td align="center">         <code>SoundArgument</code>          </td><td align="center">                           <code>Sound</code>                            </td><td align="center">                                                        </td></tr>
 <tr><td align="center">         <code>StringArgument</code>         </td><td align="center">                           <code>String</code>                           </td><td align="center">              String consisting of 1 word               </td></tr>
-<tr><td align="center">    <code>SuggestedStringArgument</code>     </td><td align="center">                           <code>String</code>                           </td><td align="center">          A list of suggested one word strings          </td></tr>
 <tr><td align="center">          <code>TextArgument</code>          </td><td align="center">                           <code>String</code>                           </td><td align="center">      String which can have spaces (used for text)      </td></tr>
 </tbody></table>
 <a class="header" href="#arguments-with-overrideable-suggestions" id="arguments-with-overrideable-suggestions"><h2>Arguments with overrideable suggestions</h2></a>
@@ -539,7 +538,8 @@ CommandAPI.getInstance().register(&quot;editconfig&quot;, arguments, (sender, ar
 <a class="header" href="#numerical-arguments" id="numerical-arguments"><h2>Numerical arguments</h2></a>
 <p>Numbers are represented using the designated number classes:</p>
 <table><thead><tr><th> Class </th><th> Description </th></tr></thead><tbody>
-<tr><td> <code>IntegerArgument</code> </td><td> Whole numbers </td></tr>
+<tr><td> <code>IntegerArgument</code> </td><td> Whole numbers between <code>Integer.MIN_VALUE</code> and <code>Integer.MAX_VALUE</code> </td></tr>
+<tr><td> <code>LongArgument</code> </td><td> Whole numbers between <code>Long.MIN_VALUE</code> and <code>Long.MAX_VALUE</code> </td></tr>
 <tr><td> <code>DoubleArgument</code> </td><td> Double precision floating point numbers </td></tr>
 <tr><td> <code>FloatArgument</code> </td><td> Single precision floating point numbers </td></tr>
 </tbody></table>
@@ -665,7 +665,7 @@ CommandAPI.getInstance().register(&quot;msg&quot;, arguments, (sender, args) -&g
 <p>Any text entered after the <code>&lt;target&gt;</code> argument would be sent to the player. For example, the command could be used as follows:</p>
 <pre><code>/msg Skepter This is some incredibly long string with &quot;symbols&quot; and $p3c!aL characters~
 </code></pre>
-<p>Due to the fact that <strong>the <code>GreedyStringArgument</code> has no terminator</strong> (it has infinite length), <strong>a <code>GreedyStringArgument</code> must be defined at the end of the <code>LinkedHashMap</code></strong> (otherwise the CommandAPI will throw a <code>GreedyStringException</code>)</p>
+<p>Due to the fact that <strong>the <code>GreedyStringArgument</code> has no terminator</strong> (it has infinite length), <strong>a <code>GreedyStringArgument</code> must be defined at the end of the <code>LinkedHashMap</code></strong> (otherwise the CommandAPI will throw a <code>GreedyArgumentException</code>)</p>
 <p>For example, if the syntax was<code>/msg &lt;message&gt; &lt;target&gt;</code>, it would not be able to determine where the message ends and the <code>&lt;target&gt;</code> argument begins.</p>
 <a class="header" href="#potential-uses-for-greedy-strings" id="potential-uses-for-greedy-strings"><h3>Potential uses for greedy strings</h3></a>
 <ul>
@@ -927,12 +927,6 @@ CustomArgument.throwError(MessageBuilder message)
 <pre><code class="language-java">//Creates a MessageBuilder object that handles an invalid objective. 
 new MessageBuilder(&quot;Unknown objective: &quot;).appendArgInput();
 </code></pre>
-<a class="header" href="#defined-custom-arguments" id="defined-custom-arguments"><h2>Defined custom arguments</h2></a>
-<p>The CommandAPI has a few custom arguments which have been predefined, in the <code>DefinedCustomArguments</code> class. The methods are as follows:</p>
-<pre><code class="language-java">DefinedCustomArguments.objectiveArgument(); //CustomArgument&lt;Objective&gt;
-DefinedCustomArguments.teamArgument();      //CustomArgument&lt;Team&gt;
-</code></pre>
-<p>These are included to help reduce the amount of code required if you were to implement custom arguments for the types stated above.</p>
 <a class="header" href="#technical-arguments" id="technical-arguments"><h1>Technical arguments</h1></a>
 <p>As of version 2.1, the CommandAPI has additional support for <em>technical arguments</em>. These consist of Minecraft &quot;Keyed&quot; arguments <em>(something that takes the form of <code>String:String</code>, such as <code>minecraft:diamond</code>)</em>.</p>
 <p>Based on the nature of technical arguments, <strong>these are unlikely to survive Minecraft updates</strong> and support for these will be implemented as soon as possible when new Minecraft updates are released. <em>(For example, advancement arguments are compatible with Minecraft 1.14, 1.14.1 and 1.14.2, but required a rewrite to enable support for 1.14.3+)</em></p>
@@ -1261,7 +1255,7 @@ CommandAPI.getInstance().register(&quot;myCommand&quot;, arguments, (sender, arg
 <a class="header" href="#removed-classes--alternatives" id="removed-classes--alternatives"><h3>Removed classes &amp; Alternatives</h3></a>
 <p>To reduce redundancies, the CommandAPI removed a few classes:</p>
 <table><thead><tr><th> Removed class                           </th><th> Alternative                                                  </th></tr></thead><tbody>
-<tr><td> <code>SuggestedStringArgument</code>               </td><td> Use <code>.overrideSuggestions(String[])</code> for the relevant argument, as described <a href="https://jorelali.github.io/1.13-Command-API/arguments.html#arguments-with-overrideable-suggestions">here</a> </td></tr>
+<tr><td> <code>SuggestedStringArgument</code>               </td><td> Use <code>.overrideSuggestions(String[])</code> for the relevant argument, as described <a href="./arguments.html#arguments-with-overrideable-suggestions">here</a> </td></tr>
 <tr><td> <code>DefinedCustomArguments</code> for Objectives </td><td> Use <code>ObjectiveArgument</code>                                      </td></tr>
 <tr><td> <code>DefinedCustomArguments</code> for Teams      </td><td> Use <code>TeamArgument</code>                                           </td></tr>
 </tbody></table>
