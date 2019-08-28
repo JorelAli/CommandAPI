@@ -6,7 +6,6 @@
 
     <groupId>io.github.jorelali</groupId>
     <artifactId>commandapi</artifactId>
-    <version>2.3</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -224,4 +223,5 @@
             </plugin>
         </plugins>
     </build>
+    <version>3.0</version>
 </project>
