@@ -29,6 +29,8 @@
 - [Aliases](./aliases.md)
 - [Command conversion](./conversion.md)
 
+[Upgrading guide](./upgrading.md)
+
 [Troubleshooting](./troubleshooting.md)
 
 [Afterword](./afterword.md)

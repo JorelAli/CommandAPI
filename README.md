@@ -28,6 +28,7 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 
 | Version | Direct download                                              | Documentation                                                |
 | ------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 3.0 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v3.0/CommandAPI.jar) | [Version 3.0 documentation](https://jorelali.github.io/1.13-Command-API/) |
 | 2.3 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.3/CommandAPI.jar) | [Version 2.1 documentation](https://jorelali.github.io/1.13-Command-API/) |
 | 2.2 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.2/CommandAPI.jar) | [Version 2.1 documentation](https://jorelali.github.io/1.13-Command-API/) |
 | 2.1 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.1/CommandAPI.jar) | [Version 2.1 documentation](https://jorelali.github.io/1.13-Command-API/) |
@@ -131,6 +132,23 @@ This is what your directory structure should look like _(so you know where to pu
 
 ## Changelog
 
+* Version 3.0
+  * **Note: This version is incompatible with pre 3.0 versions CommandAPI plugins (See documentation for more information)**
+  * Adds Time argument
+  * Adds IntegerRange and FloatRange arguments
+  * Adds 2D location arguments
+  * Adds NBT arguments
+  * Adds environment arguments
+  * Adds rotation arguments
+  * Adds item slot arguments
+  * Adds axes (swizzle) argument
+  * Adds scoreboard slot arguments
+  * Adds scoreholder arguments
+  * Adds team arguments
+  * Adds objective and objective criteria arguments
+  * Adds chat arguments
+  * Removes defined custom arguments
+  * Removes suggested string arguments
 * Version 2.2
   * Adds support for Minecraft 1.13 and 1.13.1 _(Funny isn't it? It's called the 1.13 CommandAPI but never supported Minecraft 1.13 until now)_
   * Improves support for different versions

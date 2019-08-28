@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>The FunctionWrapper class - 1.13 CommandAPI Documentation v3.0</title>
+        <title>Upgrading guide - 1.13 CommandAPI Documentation v3.0</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -72,7 +72,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="commandexecutors.html"><strong aria-hidden="true">4.</strong> Command executors</a></li><li><ol class="section"><li><a href="proxysender.html"><strong aria-hidden="true">4.1.</strong> Proxied commandsenders</a></li><li><a href="resultingcommandexecutors.html"><strong aria-hidden="true">4.2.</strong> Resulting command executors</a></li></ol></li><li><a href="arguments.html"><strong aria-hidden="true">5.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">5.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">5.2.</strong> Location arguments</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">5.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">5.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">5.5.</strong> Entity &amp; player arguments</a></li><li><a href="literalarguments.html"><strong aria-hidden="true">5.6.</strong> Literal arguments</a></li><li><a href="dynsugargs.html"><strong aria-hidden="true">5.7.</strong> Dynamically suggested arguments</a></li><li><a href="customarguments.html"><strong aria-hidden="true">5.8.</strong> Custom arguments</a></li><li><a href="technicalargs.html"><strong aria-hidden="true">5.9.</strong> Technical arguments</a></li><li><ol class="section"><li><a href="soundargument.html"><strong aria-hidden="true">5.9.1.</strong> Sound argument</a></li><li><a href="advancementarg.html"><strong aria-hidden="true">5.9.2.</strong> Advancement argument</a></li><li><a href="recipeargument.html"><strong aria-hidden="true">5.9.3.</strong> Recipe argument</a></li><li><a href="loottableargument.html"><strong aria-hidden="true">5.9.4.</strong> LootTable argument</a></li></ol></li></ol></li><li><a href="functions.html"><strong aria-hidden="true">6.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li><a href="functionsetup.html"><strong aria-hidden="true">6.1.</strong> Setting up functions &amp; tags</a></li><li><a href="functionwrapper.html" class="active"><strong aria-hidden="true">6.2.</strong> The FunctionWrapper class</a></li><li><a href="functionarguments.html"><strong aria-hidden="true">6.3.</strong> Function arguments</a></li></ol></li><li><a href="permissions.html"><strong aria-hidden="true">7.</strong> Permissions</a></li><li><a href="aliases.html"><strong aria-hidden="true">8.</strong> Aliases</a></li><li><a href="conversion.html"><strong aria-hidden="true">9.</strong> Command conversion</a></li><li class="affix"><a href="upgrading.html">Upgrading guide</a></li><li class="affix"><a href="troubleshooting.html">Troubleshooting</a></li><li class="affix"><a href="afterword.html">Afterword</a></li></ol>
+            <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="commandexecutors.html"><strong aria-hidden="true">4.</strong> Command executors</a></li><li><ol class="section"><li><a href="proxysender.html"><strong aria-hidden="true">4.1.</strong> Proxied commandsenders</a></li><li><a href="resultingcommandexecutors.html"><strong aria-hidden="true">4.2.</strong> Resulting command executors</a></li></ol></li><li><a href="arguments.html"><strong aria-hidden="true">5.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">5.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">5.2.</strong> Location arguments</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">5.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">5.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">5.5.</strong> Entity &amp; player arguments</a></li><li><a href="literalarguments.html"><strong aria-hidden="true">5.6.</strong> Literal arguments</a></li><li><a href="dynsugargs.html"><strong aria-hidden="true">5.7.</strong> Dynamically suggested arguments</a></li><li><a href="customarguments.html"><strong aria-hidden="true">5.8.</strong> Custom arguments</a></li><li><a href="technicalargs.html"><strong aria-hidden="true">5.9.</strong> Technical arguments</a></li><li><ol class="section"><li><a href="soundargument.html"><strong aria-hidden="true">5.9.1.</strong> Sound argument</a></li><li><a href="advancementarg.html"><strong aria-hidden="true">5.9.2.</strong> Advancement argument</a></li><li><a href="recipeargument.html"><strong aria-hidden="true">5.9.3.</strong> Recipe argument</a></li><li><a href="loottableargument.html"><strong aria-hidden="true">5.9.4.</strong> LootTable argument</a></li></ol></li></ol></li><li><a href="functions.html"><strong aria-hidden="true">6.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li><a href="functionsetup.html"><strong aria-hidden="true">6.1.</strong> Setting up functions &amp; tags</a></li><li><a href="functionwrapper.html"><strong aria-hidden="true">6.2.</strong> The FunctionWrapper class</a></li><li><a href="functionarguments.html"><strong aria-hidden="true">6.3.</strong> Function arguments</a></li></ol></li><li><a href="permissions.html"><strong aria-hidden="true">7.</strong> Permissions</a></li><li><a href="aliases.html"><strong aria-hidden="true">8.</strong> Aliases</a></li><li><a href="conversion.html"><strong aria-hidden="true">9.</strong> Command conversion</a></li><li class="affix"><a href="upgrading.html" class="active">Upgrading guide</a></li><li class="affix"><a href="troubleshooting.html">Troubleshooting</a></li><li class="affix"><a href="afterword.html">Afterword</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -136,28 +136,68 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="#the-functionwrapper" id="the-functionwrapper"><h1>The FunctionWrapper</h1></a>
-<p>The CommandAPI includes the <code>FunctionWrapper</code> class which is a wrapper for Minecraft's functions. It allows you to execute the commands that are represented by the respective <code>.mcfunction</code> file. There most important thing to note with the <code>FunctionWrapper</code>, and that it <em>does not &quot;store&quot; the functions inside it</em>, instead it just <em>stores what the function does</em>. In other words, you cannot &quot;extract&quot; the list of commands from a <code>FunctionWrapper</code> object.</p>
-<a class="header" href="#functionwrapper-methods" id="functionwrapper-methods"><h2>FunctionWrapper methods</h2></a>
-<p>The <code>FunctionWrapper</code> class consists of two methods:</p>
-<table><thead><tr><th> Method            </th><th> Result on execution                                  </th></tr></thead><tbody>
-<tr><td> <code>run()</code>           </td><td> Executes the Minecraft function                      </td></tr>
-<tr><td> <code>runAs(Entity)</code>   </td><td> Executes the Minecraft function as a specific Entity </td></tr>
+                        <a class="header" href="#upgrading-guide" id="upgrading-guide"><h1>Upgrading guide</h1></a>
+<a class="header" href="#from-version-23-to-30" id="from-version-23-to-30"><h2>From version 2.3 to 3.0</h2></a>
+<p>The CommandAPI's upgrade from version 2.3 to 3.0 is very intense and various refactoring operations took place, which means that plugins that implement the CommandAPI version 2.3 or below are likely not to work.</p>
+<a class="header" href="#imports--renaming" id="imports--renaming"><h3>Imports &amp; Renaming</h3></a>
+<p>Various imports have been moved around for sake of readability and keeping the CommandAPI more organized. The following imports are all preceded with the CommandAPI package name <code>io.github.jorelali.commandapi.api</code>:</p>
+<table><thead><tr><th> Pre 3.0 import                            </th><th> 3.0 import                           </th></tr></thead><tbody>
+<tr><td> <code>FunctionWrapper</code>                         </td><td> <code>wrappers.FunctionWrapper</code>           </td></tr>
+<tr><td> <code>exceptions.GreedyStringException</code>        </td><td> <code>exceptions.GreedyArgumentException</code> </td></tr>
+<tr><td> <code>arguments.LocationArgument.LocationType</code> </td><td> <code>arguments.LocationType</code>             </td></tr>
 </tbody></table>
-<p>The <code>FunctionWrapper</code> also implements the <code>Keyed</code> interface, allowing you to retrieve the NamespacedKey for this function using <code>getKey()</code>.</p>
+<p>For example, if you had the following code before:</p>
+<pre><code class="language-java">import io.github.jorelali.commandapi.api.FunctionWrapper;
+import io.github.jorelali.commandapi.api.CommandAPI;
+import io.github.jorelali.commandapi.api.arguments.Argument;
+
+// ...
+
+LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;function&quot;, new FunctionWrapper());
+
+CommandAPI.getInstance().register(&quot;myCommand&quot;, arguments, (sender, args) -&gt; {
+    // ...
+});
+
+// ...
+</code></pre>
+<p>You would need to change the import according to the table above:</p>
+<pre><code class="language-java">import io.github.jorelali.commandapi.api.wrappers.FunctionWrapper;
+import io.github.jorelali.commandapi.api.CommandAPI;
+import io.github.jorelali.commandapi.api.arguments.Argument;
+
+// ...
+
+LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;function&quot;, new FunctionWrapper());
+
+CommandAPI.getInstance().register(&quot;myCommand&quot;, arguments, (sender, args) -&gt; {
+    // ...
+});
+
+// ...
+</code></pre>
+<a class="header" href="#removed-classes--alternatives" id="removed-classes--alternatives"><h3>Removed classes &amp; Alternatives</h3></a>
+<p>To reduce redundancies, the CommandAPI removed a few classes:</p>
+<table><thead><tr><th> Removed class                           </th><th> Alternative                                                  </th></tr></thead><tbody>
+<tr><td> <code>SuggestedStringArgument</code>               </td><td> Use <code>.overrideSuggestions(String[])</code> for the relevant argument, as described <a href="https://jorelali.github.io/1.13-Command-API/arguments.html#arguments-with-overrideable-suggestions">here</a> </td></tr>
+<tr><td> <code>DefinedCustomArguments</code> for Objectives </td><td> Use <code>ObjectiveArgument</code>                                      </td></tr>
+<tr><td> <code>DefinedCustomArguments</code> for Teams      </td><td> Use <code>TeamArgument</code>                                           </td></tr>
+</tbody></table>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="functionsetup.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="conversion.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
                         
-                            <a rel="next" href="functionarguments.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="troubleshooting.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -169,13 +209,13 @@
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="functionsetup.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a href="conversion.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a href="functionarguments.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="troubleshooting.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
