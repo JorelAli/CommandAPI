@@ -8,7 +8,6 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.GreedyArgument;
-import io.github.jorelali.commandapi.api.arguments.GreedyStringArgument;
 import io.github.jorelali.commandapi.api.exceptions.GreedyArgumentException;
 import io.github.jorelali.commandapi.api.exceptions.InvalidCommandNameException;
 import io.github.jorelali.commandapi.api.exceptions.WrapperCommandSyntaxException;

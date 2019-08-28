@@ -127,40 +127,51 @@ public interface NMS {
 	 */
 	SimpleCommandMap getSimpleCommandMap();
 	
-	//Argument implementations
-    ItemStack         getItemStack(CommandContext<?> cmdCtx, String str) throws CommandSyntaxException;
-    Location          getLocation(CommandContext<?> cmdCtx, String str, LocationType locationType, CommandSender sender) throws CommandSyntaxException;
-    PotionEffectType  getPotionEffect(CommandContext<?> cmdCtx, String str) throws CommandSyntaxException;
-    FunctionWrapper[] getFunction(CommandContext<?> cmdCtx, String str) throws CommandSyntaxException;
-    Player            getPlayer(CommandContext<?> cmdCtx, String str) throws CommandSyntaxException;
-    Object            getEntitySelector(CommandContext<?> cmdCtx, String str, EntitySelector selector) throws CommandSyntaxException;
-    EntityType        getEntityType(CommandContext<?> cmdCtx, String str, CommandSender sender) throws CommandSyntaxException;
+	/** Argument implementations with CommandSyntaxExceptions */
     Advancement       getAdvancement(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
-    Recipe            getRecipe(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException; 
+	BaseComponent[]   getChat(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;	
+    ItemStack         getItemStack(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
+    Object            getEntitySelector(CommandContext<?> cmdCtx, String key, EntitySelector selector) throws CommandSyntaxException;
+    EntityType        getEntityType(CommandContext<?> cmdCtx, String key, CommandSender sender) throws CommandSyntaxException;
+    FunctionWrapper[] getFunction(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
+    Location          getLocation(CommandContext<?> cmdCtx, String key, LocationType locationType, CommandSender sender) throws CommandSyntaxException;
 	Location2D        getLocation2D(CommandContext<?> cmdCtx, String key, LocationType locationType2d, CommandSender sender) throws CommandSyntaxException;
-    
-    ChatColor         getChatColor(CommandContext<?> cmdCtx, String str);
-    BaseComponent[]   getChatComponent(CommandContext<?> cmdCtx, String str);
-    Enchantment       getEnchantment(CommandContext<?> cmdCtx, String str);
-    Particle          getParticle(CommandContext<?> cmdCtx, String str);
-    LootTable         getLootTable(CommandContext<?> cmdCtx, String str);
+	Objective         getObjective(CommandContext<?> cmdCtx, String key, CommandSender sender) throws IllegalArgumentException, CommandSyntaxException;
+    Player            getPlayer(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
+    PotionEffectType  getPotionEffect(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
+    Recipe            getRecipe(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException; 
+	Team              getTeam(CommandContext<?> cmdCtx, String key, CommandSender sender) throws CommandSyntaxException;
+
+	/** Argument implementations without CommandSyntaxExceptions */
+	EnumSet<Axis>     getAxis(CommandContext<?> cmdCtx, String key);
+    ChatColor         getChatColor(CommandContext<?> cmdCtx, String key);
+    BaseComponent[]   getChatComponent(CommandContext<?> cmdCtx, String key);
+	Environment       getDimension(CommandContext<?> cmdCtx, String key);
+    Enchantment       getEnchantment(CommandContext<?> cmdCtx, String key);
+	FloatRange        getFloatRange(CommandContext<?> cmdCtx, String key);
+	IntegerRange      getIntRange(CommandContext<?> cmdCtx, String key);
+	int               getItemSlot(CommandContext<?> cmdCtx, String key);
+    LootTable         getLootTable(CommandContext<?> cmdCtx, String key);
+	String            getObjectiveCriteria(CommandContext<?> cmdCtx, String key);
+    Particle          getParticle(CommandContext<?> cmdCtx, String key);
+	Rotation          getRotation(CommandContext<?> cmdCtx, String key);
+	ScoreboardSlot    getScoreboardSlot(CommandContext<?> cmdCtx, String key);
     Sound             getSound(CommandContext<?> cmdCtx, String key);
 	int               getTime(CommandContext<?> cmdCtx, String key);
-	IntegerRange      getIntRange(CommandContext<?> cmdCtx, String key);
-	FloatRange        getFloatRange(CommandContext<?> cmdCtx, String key);
-	Environment       getDimension(CommandContext<?> cmdCtx, String key);
-	Rotation          getRotation(CommandContext<?> cmdCtx, String key);
-	EnumSet<Axis>     getAxis(CommandContext<?> cmdCtx, String key);
-	
-	//Argument types
+
+	/** Argument types */
+	ArgumentType<?> _ArgumentAxis();
+	ArgumentType<?> _ArgumentChat();
 	ArgumentType<?> _ArgumentChatFormat();
 	ArgumentType<?> _ArgumentChatComponent();
 	ArgumentType<?> _ArgumentDimension();
-	ArgumentType<?> _ArgumentEntitySummon();
 	ArgumentType<?> _ArgumentEntity(EntitySelector selector);
+	ArgumentType<?> _ArgumentEntitySummon();
 	ArgumentType<?> _ArgumentEnchantment();
 	ArgumentType<?> _ArgumentFloatRange();
 	ArgumentType<?> _ArgumentIntRange();
+	ArgumentType<?> _ArgumentItemSlot();
+	ArgumentType<?> _ArgumentItemStack();
 	ArgumentType<?> _ArgumentMinecraftKeyRegistered();
 	ArgumentType<?> _ArgumentMobEffect();
 	ArgumentType<?> _ArgumentProfile();
@@ -168,38 +179,14 @@ public interface NMS {
 	ArgumentType<?> _ArgumentPosition();
 	ArgumentType<?> _ArgumentPosition2D();
 	ArgumentType<?> _ArgumentRotation();
-	ArgumentType<?> _ArgumentItemStack();
+	ArgumentType<?> _ArgumentScoreboardCriteria();
+	ArgumentType<?> _ArgumentScoreboardObjective();
+	ArgumentType<?> _ArgumentScoreboardSlot();
+	ArgumentType<?> _ArgumentScoreboardTeam();
 	ArgumentType<?> _ArgumentTag();
 	ArgumentType<?> _ArgumentTime();
 	ArgumentType<?> _ArgumentVec2();
 	ArgumentType<?> _ArgumentVec3();
-
-	ArgumentType<?> _ArgumentAxis();
-
-	ArgumentType<?> _ArgumentItemSlot();
-
-	int getItemSlot(CommandContext<?> cmdCtx, String key);
-
-	ArgumentType<?> _ArgumentScoreboardSlot();
-
-	ScoreboardSlot getScoreboardSlot(CommandContext<?> cmdCtx, String key);
-
-	ArgumentType<?> _ArgumentScoreboardTeam();
-
-	Team getTeam(CommandContext<?> cmdCtx, String key, CommandSender sender) throws CommandSyntaxException;
-
-	ArgumentType<?> _ArgumentScoreboardCriteria();
-
-	String getObjectiveCriteria(CommandContext<?> cmdCtx, String key);
-
-	ArgumentType<?> _ArgumentScoreboardObjective();
-
-	Objective getObjective(CommandContext<?> cmdCtx, String key, CommandSender sender) throws IllegalArgumentException, CommandSyntaxException;
-
-	ArgumentType<?> _ArgumentChat();
-
-	BaseComponent[] getChat(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
-
 	
 
 }
