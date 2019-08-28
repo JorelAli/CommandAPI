@@ -42,3 +42,4 @@ List of things to document
 - Things that weren't documented before but need to be:
   - [ ] InvalidRangeException, for int,long,float,double arguments with ranges
 - Update afterword
+- Examples: https://github.com/JorelAli/1.13-Command-API/issues/69#issuecomment-525350311
