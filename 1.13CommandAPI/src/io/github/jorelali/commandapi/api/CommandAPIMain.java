@@ -254,6 +254,14 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         	System.out.println(strs);
         });
         
+		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+		arguments.put("message", new ChatArgument());
+		
+		CommandAPI.getInstance().register("personalmsg", arguments, (sender, args) -> {
+			BaseComponent[] message = (BaseComponent[]) args[0];
+			Bukkit.getServer().spigot().broadcast(message);
+		});
+        
 //        new NBTContainer("").
 //        new NBTContainer("").get;
         

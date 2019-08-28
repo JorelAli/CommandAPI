@@ -88,3 +88,24 @@ CommandAPI.getInstance().register("makebook", arguments, (sender, args) -> {
 
 ## Chat argument
 
+> **Developer's Note:**
+>
+> The `ChatArgument` class is an argument similar to the [`GreedyStringArgument`](./stringarguments.html#greedy-string-argument), in the sense that it has no terminator and must be defined at the end of your `LinkedHashMap` of arguments.
+
+The `ChatArgument` is basically identical to the `GreedyStringArgument`, with the added functionality of enabling _entity selectors_, such as `@e`, `@p` and so on. The `ChatArgument` also returns a `BaseComponent[]`, similar to the `ChatComponentArgument`.
+
+### Example - Sending personalized messages to players
+
+```java
+LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+arguments.put("message", new ChatArgument());
+
+CommandAPI.getInstance().register("personalmsg", arguments, (sender, args) -> {
+	BaseComponent[] message = (BaseComponent[]) args[0];
+    
+    //Broadcast the message to everyone on the server
+	Bukkit.getServer().spigot().broadcast(message);
+});
+```
+
+If a player were to type `/personalmsg hello @p`, with players Jim and James on the server, Jim would receive the message `hello Jim`, and James would receive the message `hello James`.

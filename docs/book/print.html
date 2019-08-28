@@ -645,6 +645,23 @@ CommandAPI.getInstance().register(&quot;makebook&quot;, arguments, (sender, args
 });
 </code></pre>
 <a class="header" href="#chat-argument" id="chat-argument"><h2>Chat argument</h2></a>
+<blockquote>
+<p><strong>Developer's Note:</strong></p>
+<p>The <code>ChatArgument</code> class is an argument similar to the <a href="./stringarguments.html#greedy-string-argument"><code>GreedyStringArgument</code></a>, in the sense that it has no terminator and must be defined at the end of your <code>LinkedHashMap</code> of arguments.</p>
+</blockquote>
+<p>The <code>ChatArgument</code> is basically identical to the <code>GreedyStringArgument</code>, with the added functionality of enabling <em>entity selectors</em>, such as <code>@e</code>, <code>@p</code> and so on. The <code>ChatArgument</code> also returns a <code>BaseComponent[]</code>, similar to the <code>ChatComponentArgument</code>.</p>
+<a class="header" href="#example---sending-personalized-messages-to-players" id="example---sending-personalized-messages-to-players"><h3>Example - Sending personalized messages to players</h3></a>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;message&quot;, new ChatArgument());
+
+CommandAPI.getInstance().register(&quot;personalmsg&quot;, arguments, (sender, args) -&gt; {
+    BaseComponent[] message = (BaseComponent[]) args[0];
+    
+    //Broadcast the message to everyone on the server
+    Bukkit.getServer().spigot().broadcast(message);
+});
+</code></pre>
+<p>If a player were to type <code>/personalmsg hello @p</code>, with players Jim and James on the server, Jim would receive the message <code>hello Jim</code>, and James would receive the message <code>hello James</code>.</p>
 <a class="header" href="#string-arguments" id="string-arguments"><h1>String arguments</h1></a>
 <a class="header" href="#string-argument" id="string-argument"><h2>String argument</h2></a>
 <p>The <code>StringArgument</code> class is used to represent a single word. These words <strong>can only contain alphanumeric characters (A-Z, a-z and 0-9), and the underscore character</strong>.</p>
