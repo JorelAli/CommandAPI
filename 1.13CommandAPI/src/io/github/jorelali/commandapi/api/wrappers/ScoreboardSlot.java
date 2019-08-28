@@ -11,15 +11,14 @@ public class ScoreboardSlot {
 	public ScoreboardSlot(int i) {
 		//Initialize displaySlot
 		switch(i) {
-			default:
 			case 0: displaySlot = DisplaySlot.PLAYER_LIST; break;
 			case 1: displaySlot = DisplaySlot.SIDEBAR; break;
 			case 2: displaySlot = DisplaySlot.BELOW_NAME; break;
+			default: displaySlot = DisplaySlot.PLAYER_LIST; break;
 		}
 		
 		//Initialize teamColor
 		switch(i) {
-			default: teamColor = null; break;
 			case 3: teamColor = ChatColor.BLACK; break;
 			case 4: teamColor = ChatColor.DARK_BLUE; break;
 			case 5: teamColor = ChatColor.DARK_GREEN; break;
@@ -36,6 +35,7 @@ public class ScoreboardSlot {
 			case 16: teamColor = ChatColor.LIGHT_PURPLE; break;
 			case 17: teamColor = ChatColor.YELLOW; break;
 			case 18: teamColor = ChatColor.WHITE; break;
+			default: teamColor = null; break;
 		}
 	}
 	
