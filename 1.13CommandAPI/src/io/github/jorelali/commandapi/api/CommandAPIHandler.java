@@ -346,6 +346,9 @@ public final class CommandAPIHandler {
 						case OBJECTIVE_CRITERIA:
 							argList.add(nms.getObjectiveCriteria(cmdCtx, entry.getKey()));
 							break;
+						case OBJECTIVE:
+							argList.add(nms.getObjective(cmdCtx, entry.getKey(), sender));
+							break;
 					}
 				}
 			}

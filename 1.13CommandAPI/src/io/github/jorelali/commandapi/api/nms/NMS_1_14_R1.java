@@ -46,6 +46,7 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
@@ -90,6 +91,7 @@ import net.minecraft.server.v1_14_R1.ArgumentRegistry;
 import net.minecraft.server.v1_14_R1.ArgumentRotation;
 import net.minecraft.server.v1_14_R1.ArgumentRotationAxis;
 import net.minecraft.server.v1_14_R1.ArgumentScoreboardCriteria;
+import net.minecraft.server.v1_14_R1.ArgumentScoreboardObjective;
 import net.minecraft.server.v1_14_R1.ArgumentScoreboardSlot;
 import net.minecraft.server.v1_14_R1.ArgumentScoreboardTeam;
 import net.minecraft.server.v1_14_R1.ArgumentTag;
@@ -619,6 +621,17 @@ public class NMS_1_14_R1 implements NMS {
 	@Override
 	public String getObjectiveCriteria(CommandContext cmdCtx, String key) {
 		return ArgumentScoreboardCriteria.a(cmdCtx, key).getName();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentScoreboardObjective() {
+		return ArgumentScoreboardObjective.a();
+	}
+
+	@Override
+	public Objective getObjective(CommandContext cmdCtx, String key, CommandSender sender) throws IllegalArgumentException, CommandSyntaxException {
+		Scoreboard board = sender instanceof Player ? ((Player)sender).getScoreboard() : Bukkit.getScoreboardManager().getMainScoreboard();
+		return board.getObjective(ArgumentScoreboardObjective.a(cmdCtx, key).getName());
 	}
 
 }

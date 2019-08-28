@@ -26,6 +26,7 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Team;
 
 import com.mojang.brigadier.CommandDispatcher;
@@ -190,6 +191,10 @@ public interface NMS {
 	ArgumentType<?> _ArgumentScoreboardCriteria();
 
 	String getObjectiveCriteria(CommandContext<?> cmdCtx, String key);
+
+	ArgumentType<?> _ArgumentScoreboardObjective();
+
+	Objective getObjective(CommandContext<?> cmdCtx, String key, CommandSender sender) throws IllegalArgumentException, CommandSyntaxException;
 
 	
 
