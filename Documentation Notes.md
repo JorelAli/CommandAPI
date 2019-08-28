@@ -12,6 +12,7 @@ List of things to document
 - New arguments:
   - [ ] ChatArgument
     - [ ] Note about spigot dependency
+    - [ ] Note about "Raw JSON text"
   - [ ] EnvironmentArgument
     - [ ] EnvironmentException - EnvironmentArgument only compatible with 1.13.1+
   - [ ] Ranged arguments:
