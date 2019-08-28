@@ -43,7 +43,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
@@ -66,6 +65,7 @@ import io.github.jorelali.commandapi.api.wrappers.FunctionWrapper;
 import io.github.jorelali.commandapi.api.wrappers.IntegerRange;
 import io.github.jorelali.commandapi.api.wrappers.Location2D;
 import io.github.jorelali.commandapi.api.wrappers.Rotation;
+import io.github.jorelali.commandapi.api.wrappers.ScoreboardSlot;
 import io.github.jorelali.commandapi.safereflection.ReflectionType;
 import io.github.jorelali.commandapi.safereflection.SafeReflection;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -78,12 +78,19 @@ import net.minecraft.server.v1_13_R2.ArgumentDimension;
 import net.minecraft.server.v1_13_R2.ArgumentEnchantment;
 import net.minecraft.server.v1_13_R2.ArgumentEntity;
 import net.minecraft.server.v1_13_R2.ArgumentEntitySummon;
+import net.minecraft.server.v1_13_R2.ArgumentInventorySlot;
 import net.minecraft.server.v1_13_R2.ArgumentItemStack;
 import net.minecraft.server.v1_13_R2.ArgumentMinecraftKeyRegistered;
 import net.minecraft.server.v1_13_R2.ArgumentMobEffect;
 import net.minecraft.server.v1_13_R2.ArgumentParticle;
 import net.minecraft.server.v1_13_R2.ArgumentPosition;
 import net.minecraft.server.v1_13_R2.ArgumentProfile;
+import net.minecraft.server.v1_13_R2.ArgumentRotation;
+import net.minecraft.server.v1_13_R2.ArgumentRotationAxis;
+import net.minecraft.server.v1_13_R2.ArgumentScoreboardCriteria;
+import net.minecraft.server.v1_13_R2.ArgumentScoreboardObjective;
+import net.minecraft.server.v1_13_R2.ArgumentScoreboardSlot;
+import net.minecraft.server.v1_13_R2.ArgumentScoreboardTeam;
 import net.minecraft.server.v1_13_R2.ArgumentTag;
 import net.minecraft.server.v1_13_R2.ArgumentVec2;
 import net.minecraft.server.v1_13_R2.ArgumentVec2I;
@@ -97,17 +104,10 @@ import net.minecraft.server.v1_13_R2.CustomFunctionData;
 import net.minecraft.server.v1_13_R2.DimensionManager;
 import net.minecraft.server.v1_13_R2.Entity;
 import net.minecraft.server.v1_13_R2.EntityTypes;
-import net.minecraft.server.v1_13_R2.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_13_R2.ArgumentScoreboardObjective;
-import net.minecraft.server.v1_13_R2.ArgumentScoreboardCriteria;
-import net.minecraft.server.v1_13_R2.ArgumentScoreboardTeam;
-import net.minecraft.server.v1_13_R2.ArgumentScoreboardSlot;
-import net.minecraft.server.v1_13_R2.ArgumentInventorySlot;
-import net.minecraft.server.v1_13_R2.ArgumentRotationAxis;
 import net.minecraft.server.v1_13_R2.EnumDirection.EnumAxis;
-import net.minecraft.server.v1_13_R2.ArgumentRotation;
-import net.minecraft.server.v1_13_R2.IVectorPosition;
+import net.minecraft.server.v1_13_R2.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_13_R2.ICompletionProvider;
+import net.minecraft.server.v1_13_R2.IVectorPosition;
 import net.minecraft.server.v1_13_R2.LootTableRegistry;
 import net.minecraft.server.v1_13_R2.MinecraftKey;
 import net.minecraft.server.v1_13_R2.MinecraftServer;
@@ -584,13 +584,8 @@ public class NMS_1_13_R2 implements NMS {
 	}
 
 	@Override
-	public DisplaySlot getScoreboardSlot(CommandContext cmdCtx, String key) {
-		switch(ArgumentScoreboardSlot.a(cmdCtx, key)) {
-			case 0: return DisplaySlot.PLAYER_LIST;
-			case 1: return DisplaySlot.SIDEBAR;
-			case 2: return DisplaySlot.BELOW_NAME;
-		}
-		return null;
+	public ScoreboardSlot getScoreboardSlot(CommandContext cmdCtx, String key) {
+		return new ScoreboardSlot(ArgumentScoreboardSlot.a(cmdCtx, key));
 	}
 	
 	@Override

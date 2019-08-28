@@ -45,7 +45,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
@@ -67,6 +66,7 @@ import io.github.jorelali.commandapi.api.arguments.LocationType;
 import io.github.jorelali.commandapi.api.wrappers.FunctionWrapper;
 import io.github.jorelali.commandapi.api.wrappers.Location2D;
 import io.github.jorelali.commandapi.api.wrappers.Rotation;
+import io.github.jorelali.commandapi.api.wrappers.ScoreboardSlot;
 import io.github.jorelali.commandapi.safereflection.ReflectionType;
 import io.github.jorelali.commandapi.safereflection.SafeReflection;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -593,13 +593,8 @@ public class NMS_1_14_R1 implements NMS {
 	}
 
 	@Override
-	public DisplaySlot getScoreboardSlot(CommandContext cmdCtx, String key) {
-		switch(ArgumentScoreboardSlot.a(cmdCtx, key)) {
-			case 0: return DisplaySlot.PLAYER_LIST;
-			case 1: return DisplaySlot.SIDEBAR;
-			case 2: return DisplaySlot.BELOW_NAME;
-		}
-		return null;
+	public ScoreboardSlot getScoreboardSlot(CommandContext cmdCtx, String key) {
+		return new ScoreboardSlot(ArgumentScoreboardSlot.a(cmdCtx, key));
 	}
 
 	@Override

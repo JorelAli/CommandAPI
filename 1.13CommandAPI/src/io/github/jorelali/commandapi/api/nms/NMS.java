@@ -25,7 +25,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Team;
 
@@ -43,6 +42,7 @@ import io.github.jorelali.commandapi.api.wrappers.FunctionWrapper;
 import io.github.jorelali.commandapi.api.wrappers.IntegerRange;
 import io.github.jorelali.commandapi.api.wrappers.Location2D;
 import io.github.jorelali.commandapi.api.wrappers.Rotation;
+import io.github.jorelali.commandapi.api.wrappers.ScoreboardSlot;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 public interface NMS {
@@ -182,7 +182,7 @@ public interface NMS {
 
 	ArgumentType<?> _ArgumentScoreboardSlot();
 
-	DisplaySlot getScoreboardSlot(CommandContext<?> cmdCtx, String key);
+	ScoreboardSlot getScoreboardSlot(CommandContext<?> cmdCtx, String key);
 
 	ArgumentType<?> _ArgumentScoreboardTeam();
 

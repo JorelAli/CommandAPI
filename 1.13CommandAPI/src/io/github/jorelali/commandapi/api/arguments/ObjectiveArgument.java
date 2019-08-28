@@ -1,7 +1,6 @@
 package io.github.jorelali.commandapi.api.arguments;
 
 import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Team;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 

@@ -13,7 +13,7 @@ public class DisplaySlotArgument implements Argument, OverrideableSuggestions {
 	ArgumentType<?> rawType;
 	
 	/**
-	 * A Rotation argument. Represents pitch and yaw
+	 * A Display slot argument. Represents scoreboard slots
 	 */
 	public DisplaySlotArgument() {
 		rawType = CommandAPIHandler.getNMS()._ArgumentScoreboardSlot();
@@ -34,7 +34,7 @@ public class DisplaySlotArgument implements Argument, OverrideableSuggestions {
 		return false;
 	}
 	
-	private String[] suggestions = new String[] {"list", "sidebar", "belowName"};
+	private String[] suggestions;
 	
 	@Override
 	public DisplaySlotArgument overrideSuggestions(String... suggestions) {
