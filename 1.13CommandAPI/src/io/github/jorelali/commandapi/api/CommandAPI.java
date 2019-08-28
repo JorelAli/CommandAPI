@@ -173,11 +173,11 @@ public class CommandAPI {
 	
 	private void register(String commandName, CommandPermission permissions, String[] aliases, LinkedHashMap<String, Argument> args, CustomCommandExecutor executor) {
 		if(!canRegister) {
-			CommandAPIMain.getLog().severe("Cannot register command /" + commandName + ", because server has finished loading!");
+			CommandAPIMain.getLog().severe("Cannot register command /" + commandName + ", because the server has finished loading!");
 			return;
 		}
 		try {
-			
+
 			//Sanitize commandNames
 			if(commandName == null || commandName.length() == 0) {
 				throw new InvalidCommandNameException(commandName);
