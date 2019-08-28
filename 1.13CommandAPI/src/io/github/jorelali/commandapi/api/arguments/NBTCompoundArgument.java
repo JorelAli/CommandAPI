@@ -7,7 +7,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import de.tr7zw.nbtapi.NBTContainer;
 import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
-import io.github.jorelali.commandapi.api.exceptions.NBTNotFoundException;
+import io.github.jorelali.commandapi.api.exceptions.NBTAPINotFoundException;
 
 
 @SuppressWarnings("unchecked")
@@ -21,7 +21,7 @@ public class NBTCompoundArgument implements Argument, OverrideableSuggestions {
 	public NBTCompoundArgument() {
 
 		if(Bukkit.getPluginManager().getPlugin("NBTAPI") == null) {
-			throw new NBTNotFoundException(this.getClass());
+			throw new NBTAPINotFoundException(this.getClass());
 		}
 		
 		rawType = CommandAPIHandler.getNMS()._ArgumentNBTCompound();

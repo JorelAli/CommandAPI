@@ -1,11 +1,11 @@
 package io.github.jorelali.commandapi.api.exceptions;
 
-public class NBTNotFoundException extends RuntimeException {
+public class NBTAPINotFoundException extends RuntimeException {
 	
 	private static final long serialVersionUID = -7437448220422618632L;
 	
 	private String className;
-	public NBTNotFoundException(Class<?> c) {
+	public NBTAPINotFoundException(Class<?> c) {
 		className = c.getName();
 	}
 	
