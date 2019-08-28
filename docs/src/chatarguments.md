@@ -16,18 +16,52 @@ CommandAPI.getInstance().register("namecolor", arguments, (sender, args) -> {
 	player.setDisplayName(color + player.getDisplayName());
 });
 ```
-## Chat component argument
+-----
+
+# Spigot-based chat arguments
 
 > **Developer's Note:**
 >
-> The `ChatComponentArgument` class is dependent on a Spigot based server. This means that the `ChatComponentArgument` will not work on a non-Spigot based server, such as CraftBukkit. If you use this class on a non-Spigot based server, it will throw a `SpigotNotFoundException`
-> 
+> The two following classes, `ChatComponentArgument` and `ChatArgument` depend on a Spigot based server. This means that these arguments will not work on a non-Spigot based server, such as CraftBukkit. If you use this class on a non-Spigot based server, it will throw a `SpigotNotFoundException`
+>
 > Spigot based servers include, but are not limited to:
-> * Spigot
-> * PaperSpigot
-> * TacoSpigot
+> * [Spigot](https://www.spigotmc.org/)
+> * [PaperSpigot](https://papermc.io/)
+> * [TacoSpigot](https://tacospigot.github.io/)
 
-The `ChatComponentArgument` class accepts raw JSON as valid input. This is converted into Spigot's `BaseComponent[]` which can be used for books and raw messages. You can read more about raw JSON [here](https://minecraft.gamepedia.com/Commands#Raw_JSON_text).
+## Chat component argument
+
+The `ChatComponentArgument` class accepts raw chat-based JSON as valid input. Despite being regular JSON, it _must_ conform to the standard declared [here](https://minecraft.gamepedia.com/Commands#Raw_JSON_text), which consists of JSON that has a limited subset of specific keys (In other words, you can have a JSON object that has the key `text`, but not one that has the key `blah`).
+
+This is converted into Spigot's `BaseComponent[]`, which can be used for the following:
+
+- Broadcasting messages to all players on the server using:
+
+  ````java
+  Bukkit.getServer().spigot().broadcast(BaseComponent[]);
+  ````
+
+- Adding and setting pages to books using `BookMeta`:
+
+  ```java
+  BookMeta meta = // ...
+  meta.spigot().addPage(BaseComponent[]);
+  meta.spigot().setPage(int, BaseComponent[]);
+  ```
+
+- Sending messages to `Player` objects:
+
+  ```java
+  Player player = // ...
+  player.spigot().sendMessage(BaseComponent[]);
+  ```
+
+- Sending messages to `CommandSender` objects:
+
+  ```java
+  CommandSender sender = // ...
+  sender.spigot().sendMessage(BaseComponent[]);
+  ```
 
 ### Example - Book made from raw JSON
 
@@ -51,3 +85,6 @@ CommandAPI.getInstance().register("makebook", arguments, (sender, args) -> {
 	}
 });
 ```
+
+## Chat argument
+

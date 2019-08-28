@@ -149,18 +149,47 @@ CommandAPI.getInstance().register(&quot;namecolor&quot;, arguments, (sender, arg
     player.setDisplayName(color + player.getDisplayName());
 });
 </code></pre>
-<a class="header" href="#chat-component-argument" id="chat-component-argument"><h2>Chat component argument</h2></a>
+<hr />
+<a class="header" href="#spigot-based-chat-arguments" id="spigot-based-chat-arguments"><h1>Spigot-based chat arguments</h1></a>
 <blockquote>
 <p><strong>Developer's Note:</strong></p>
-<p>The <code>ChatComponentArgument</code> class is dependent on a Spigot based server. This means that the <code>ChatComponentArgument</code> will not work on a non-Spigot based server, such as CraftBukkit. If you use this class on a non-Spigot based server, it will throw a <code>SpigotNotFoundException</code></p>
+<p>The two following classes, <code>ChatComponentArgument</code> and <code>ChatArgument</code> depend on a Spigot based server. This means that these arguments will not work on a non-Spigot based server, such as CraftBukkit. If you use this class on a non-Spigot based server, it will throw a <code>SpigotNotFoundException</code></p>
 <p>Spigot based servers include, but are not limited to:</p>
 <ul>
-<li>Spigot</li>
-<li>PaperSpigot</li>
-<li>TacoSpigot</li>
+<li><a href="https://www.spigotmc.org/">Spigot</a></li>
+<li><a href="https://papermc.io/">PaperSpigot</a></li>
+<li><a href="https://tacospigot.github.io/">TacoSpigot</a></li>
 </ul>
 </blockquote>
-<p>The <code>ChatComponentArgument</code> class accepts raw JSON as valid input. This is converted into Spigot's <code>BaseComponent[]</code> which can be used for books and raw messages. You can read more about raw JSON <a href="https://minecraft.gamepedia.com/Commands#Raw_JSON_text">here</a>.</p>
+<a class="header" href="#chat-component-argument" id="chat-component-argument"><h2>Chat component argument</h2></a>
+<p>The <code>ChatComponentArgument</code> class accepts raw chat-based JSON as valid input. Despite being regular JSON, it <em>must</em> conform to the standard declared <a href="https://minecraft.gamepedia.com/Commands#Raw_JSON_text">here</a>, which consists of JSON that has a limited subset of specific keys (In other words, you can have a JSON object that has the key <code>text</code>, but not one that has the key <code>blah</code>).</p>
+<p>This is converted into Spigot's <code>BaseComponent[]</code>, which can be used for the following:</p>
+<ul>
+<li>
+<p>Broadcasting messages to all players on the server using:</p>
+<pre><code class="language-java">Bukkit.getServer().spigot().broadcast(BaseComponent[]);
+</code></pre>
+</li>
+<li>
+<p>Adding and setting pages to books using <code>BookMeta</code>:</p>
+<pre><code class="language-java">BookMeta meta = // ...
+meta.spigot().addPage(BaseComponent[]);
+meta.spigot().setPage(int, BaseComponent[]);
+</code></pre>
+</li>
+<li>
+<p>Sending messages to <code>Player</code> objects:</p>
+<pre><code class="language-java">Player player = // ...
+player.spigot().sendMessage(BaseComponent[]);
+</code></pre>
+</li>
+<li>
+<p>Sending messages to <code>CommandSender</code> objects:</p>
+<pre><code class="language-java">CommandSender sender = // ...
+sender.spigot().sendMessage(BaseComponent[]);
+</code></pre>
+</li>
+</ul>
 <a class="header" href="#example---book-made-from-raw-json" id="example---book-made-from-raw-json"><h3>Example - Book made from raw JSON</h3></a>
 <pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 arguments.put(&quot;contents&quot;, new ChatComponentArgument());
@@ -181,6 +210,7 @@ CommandAPI.getInstance().register(&quot;makebook&quot;, arguments, (sender, args
     }
 });
 </code></pre>
+<a class="header" href="#chat-argument" id="chat-argument"><h2>Chat argument</h2></a>
 
                     </main>
 
