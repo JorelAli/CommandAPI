@@ -71,6 +71,7 @@ import io.github.jorelali.commandapi.safereflection.SafeReflection;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.server.v1_13_R2.Advancement;
+import net.minecraft.server.v1_13_R2.ArgumentChat;
 import net.minecraft.server.v1_13_R2.ArgumentChatComponent;
 import net.minecraft.server.v1_13_R2.ArgumentChatFormat;
 import net.minecraft.server.v1_13_R2.ArgumentCriterionValue;
@@ -91,6 +92,7 @@ import net.minecraft.server.v1_13_R2.ArgumentScoreboardCriteria;
 import net.minecraft.server.v1_13_R2.ArgumentScoreboardObjective;
 import net.minecraft.server.v1_13_R2.ArgumentScoreboardSlot;
 import net.minecraft.server.v1_13_R2.ArgumentScoreboardTeam;
+import net.minecraft.server.v1_13_R2.ArgumentScoreholder;
 import net.minecraft.server.v1_13_R2.ArgumentTag;
 import net.minecraft.server.v1_13_R2.ArgumentVec2;
 import net.minecraft.server.v1_13_R2.ArgumentVec2I;
@@ -106,7 +108,6 @@ import net.minecraft.server.v1_13_R2.Entity;
 import net.minecraft.server.v1_13_R2.EntityTypes;
 import net.minecraft.server.v1_13_R2.EnumDirection.EnumAxis;
 import net.minecraft.server.v1_13_R2.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_13_R2.ArgumentChat;
 import net.minecraft.server.v1_13_R2.ICompletionProvider;
 import net.minecraft.server.v1_13_R2.IVectorPosition;
 import net.minecraft.server.v1_13_R2.LootTableRegistry;
@@ -630,6 +631,21 @@ public class NMS_1_13_R2 implements NMS {
 		CraftServer craftServer = (CraftServer) Bukkit.getServer();
 		net.minecraft.server.v1_13_R2.CommandDispatcher nmsDispatcher = craftServer.getServer().commandDispatcher;
 		nmsDispatcher.a(craftPlayer.getHandle());
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentScoreholder(boolean single) {
+		return single ? ArgumentScoreholder.a() : ArgumentScoreholder.b();
+	}
+
+	@Override
+	public Collection<String> getScoreHolderMultiple(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		return ArgumentScoreholder.b(cmdCtx, key);
+	}
+
+	@Override
+	public String getScoreHolderSingle(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		return ArgumentScoreholder.a(cmdCtx, key);
 	}
 	
 }

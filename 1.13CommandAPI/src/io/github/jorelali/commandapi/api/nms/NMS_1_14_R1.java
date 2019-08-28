@@ -95,6 +95,7 @@ import net.minecraft.server.v1_14_R1.ArgumentScoreboardCriteria;
 import net.minecraft.server.v1_14_R1.ArgumentScoreboardObjective;
 import net.minecraft.server.v1_14_R1.ArgumentScoreboardSlot;
 import net.minecraft.server.v1_14_R1.ArgumentScoreboardTeam;
+import net.minecraft.server.v1_14_R1.ArgumentScoreholder;
 import net.minecraft.server.v1_14_R1.ArgumentTag;
 import net.minecraft.server.v1_14_R1.ArgumentTime;
 import net.minecraft.server.v1_14_R1.ArgumentVec2;
@@ -639,6 +640,21 @@ public class NMS_1_14_R1 implements NMS {
 		CraftServer craftServer = (CraftServer) Bukkit.getServer();
 		net.minecraft.server.v1_14_R1.CommandDispatcher nmsDispatcher = craftServer.getServer().commandDispatcher;
 		nmsDispatcher.a(craftPlayer.getHandle());
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentScoreholder(boolean single) {
+		return single ? ArgumentScoreholder.a() : ArgumentScoreholder.b();
+	}
+
+	@Override
+	public Collection<String> getScoreHolderMultiple(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		return ArgumentScoreholder.b(cmdCtx, key);
+	}
+
+	@Override
+	public String getScoreHolderSingle(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		return ArgumentScoreholder.a(cmdCtx, key);
 	}
 
 }

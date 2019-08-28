@@ -3,6 +3,7 @@ package io.github.jorelali.commandapi.api;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.LinkedHashMap;
 import java.util.logging.Logger;
@@ -31,8 +32,10 @@ import io.github.jorelali.commandapi.api.arguments.ItemSlotArgument;
 import io.github.jorelali.commandapi.api.arguments.Location2DArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationType;
 import io.github.jorelali.commandapi.api.arguments.RotationArgument;
+import io.github.jorelali.commandapi.api.arguments.ScoreHolderArgument;
 import io.github.jorelali.commandapi.api.arguments.ScoreboardSlotArgument;
 import io.github.jorelali.commandapi.api.arguments.TimeArgument;
+import io.github.jorelali.commandapi.api.arguments.ScoreHolderArgument.ScoreHolderType;
 import io.github.jorelali.commandapi.api.wrappers.FloatRange;
 import io.github.jorelali.commandapi.api.wrappers.IntegerRange;
 import io.github.jorelali.commandapi.api.wrappers.Rotation;
@@ -218,6 +221,23 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         	BaseComponent[] aa = (BaseComponent[]) a[0];
         	System.out.println(Arrays.deepToString(aa));
         	s.spigot().sendMessage(aa);
+        });
+        
+        args.clear();
+        args.put("holdm", new ScoreHolderArgument(ScoreHolderType.MULTIPLE));
+        
+        CommandAPI.getInstance().register("holdm", args, (s, a) -> {
+        	@SuppressWarnings("unchecked")
+			Collection<String> strs = (Collection<String>) a[0];
+        	System.out.println(strs);
+        });
+        
+        args.clear();
+        args.put("holds", new ScoreHolderArgument(ScoreHolderType.SINGLE));
+        
+        CommandAPI.getInstance().register("holds", args, (s, a) -> {
+        	String strs = (String) a[0];
+        	System.out.println(strs);
         });
         
         /*

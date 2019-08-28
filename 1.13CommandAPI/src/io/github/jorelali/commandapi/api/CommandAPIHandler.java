@@ -51,6 +51,7 @@ import io.github.jorelali.commandapi.api.arguments.Location2DArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationType;
 import io.github.jorelali.commandapi.api.arguments.OverrideableSuggestions;
+import io.github.jorelali.commandapi.api.arguments.ScoreHolderArgument;
 import io.github.jorelali.commandapi.api.exceptions.WrapperCommandSyntaxException;
 import io.github.jorelali.commandapi.api.nms.NMS;
 import io.github.jorelali.commandapi.api.nms.NMS_1_13_R1;
@@ -351,6 +352,12 @@ public final class CommandAPIHandler {
 							break;
 						case CHAT:
 							argList.add(nms.getChat(cmdCtx, entry.getKey()));
+							break;
+						case SCORE_HOLDER:
+							ScoreHolderArgument scoreHolderArgument = (ScoreHolderArgument) entry.getValue();
+							argList.add(scoreHolderArgument.isSingle() 
+									? nms.getScoreHolderSingle(cmdCtx, entry.getKey()) 
+									: nms.getScoreHolderMultiple(cmdCtx, entry.getKey()));
 							break;
 					}
 				}

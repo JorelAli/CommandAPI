@@ -71,6 +71,7 @@ import io.github.jorelali.commandapi.safereflection.SafeReflection;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.server.v1_13_R1.Advancement;
+import net.minecraft.server.v1_13_R1.ArgumentChat;
 import net.minecraft.server.v1_13_R1.ArgumentChatComponent;
 import net.minecraft.server.v1_13_R1.ArgumentChatFormat;
 import net.minecraft.server.v1_13_R1.ArgumentCriterionValue;
@@ -103,7 +104,6 @@ import net.minecraft.server.v1_13_R1.Entity;
 import net.minecraft.server.v1_13_R1.EntityTypes;
 import net.minecraft.server.v1_13_R1.EnumDirection.EnumAxis;
 import net.minecraft.server.v1_13_R1.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_13_R1.ArgumentChat;
 import net.minecraft.server.v1_13_R1.ICompletionProvider;
 import net.minecraft.server.v1_13_R1.IVectorPosition;
 import net.minecraft.server.v1_13_R1.LootTableRegistry;
@@ -111,6 +111,7 @@ import net.minecraft.server.v1_13_R1.MinecraftKey;
 import net.minecraft.server.v1_13_R1.MinecraftServer;
 import net.minecraft.server.v1_13_R1.Vec2F;
 import net.minecraft.server.v1_13_R1.Vec3D;
+import net.minecraft.server.v1_13_R1.ArgumentScoreholder;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 @SafeReflection(type = ReflectionType.FIELD, target = CraftSound.class, name = "minecraftKey", returnType = String.class, versions = "1.13")
@@ -599,6 +600,21 @@ public class NMS_1_13_R1 implements NMS {
 		CraftServer craftServer = (CraftServer) Bukkit.getServer();
 		net.minecraft.server.v1_13_R1.CommandDispatcher nmsDispatcher = craftServer.getServer().commandDispatcher;
 		nmsDispatcher.a(craftPlayer.getHandle());
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentScoreholder(boolean single) {
+		return single ? ArgumentScoreholder.a() : ArgumentScoreholder.b();
+	}
+
+	@Override
+	public Collection<String> getScoreHolderMultiple(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		return ArgumentScoreholder.b(cmdCtx, key);
+	}
+
+	@Override
+	public String getScoreHolderSingle(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		return ArgumentScoreholder.a(cmdCtx, key);
 	}
 	
 }

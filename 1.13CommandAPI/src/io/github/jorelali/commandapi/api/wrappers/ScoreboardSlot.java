@@ -14,7 +14,7 @@ public class ScoreboardSlot {
 			case 0: displaySlot = DisplaySlot.PLAYER_LIST; break;
 			case 1: displaySlot = DisplaySlot.SIDEBAR; break;
 			case 2: displaySlot = DisplaySlot.BELOW_NAME; break;
-			default: displaySlot = DisplaySlot.PLAYER_LIST; break;
+			default: displaySlot = DisplaySlot.SIDEBAR; break;
 		}
 		
 		//Initialize teamColor
