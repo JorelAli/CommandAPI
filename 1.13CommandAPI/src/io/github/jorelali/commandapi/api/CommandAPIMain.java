@@ -21,7 +21,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.AxisArgument;
-import io.github.jorelali.commandapi.api.arguments.DisplaySlotArgument;
+import io.github.jorelali.commandapi.api.arguments.ScoreboardSlotArgument;
 import io.github.jorelali.commandapi.api.arguments.EnvironmentArgument;
 import io.github.jorelali.commandapi.api.arguments.FloatRangeArgument;
 import io.github.jorelali.commandapi.api.arguments.IntegerRangeArgument;
@@ -193,7 +193,7 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         });
         
         args.clear();
-        args.put("displaySlot", new DisplaySlotArgument());
+        args.put("displaySlot", new ScoreboardSlotArgument());
         
         CommandAPI.getInstance().register("displaySlot", args, (s, a) -> {
         	System.out.println(a[0]);
