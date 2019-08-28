@@ -1,20 +1,20 @@
 package io.github.jorelali.commandapi.api.arguments;
 
 import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.arguments.StringArgumentType;
 
+import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
 
 @SuppressWarnings("unchecked")
-public class GreedyStringArgument implements Argument, OverrideableSuggestions, GreedyArgument {
+public class ObjectiveCriteriaArgument implements Argument, OverrideableSuggestions {
 
 	ArgumentType<?> rawType;
 	
 	/**
-	 * A string argument for a string of any length
+	 * An Objective criteria argument. Represents an objective criteria
 	 */
-	public GreedyStringArgument() {
-		rawType = StringArgumentType.greedyString();
+	public ObjectiveCriteriaArgument() {
+		rawType = CommandAPIHandler.getNMS()._ArgumentScoreboardCriteria();
 	}
 	
 	@Override
@@ -29,13 +29,13 @@ public class GreedyStringArgument implements Argument, OverrideableSuggestions, 
 
 	@Override
 	public boolean isSimple() {
-		return true;
+		return false;
 	}
 	
 	private String[] suggestions;
 	
 	@Override
-	public GreedyStringArgument overrideSuggestions(String... suggestions) {
+	public ObjectiveCriteriaArgument overrideSuggestions(String... suggestions) {
 		this.suggestions = suggestions;
 		return this;
 	}
@@ -48,7 +48,7 @@ public class GreedyStringArgument implements Argument, OverrideableSuggestions, 
 	private CommandPermission permission = null;
 	
 	@Override
-	public GreedyStringArgument withPermission(CommandPermission permission) {
+	public ObjectiveCriteriaArgument withPermission(CommandPermission permission) {
 		this.permission = permission;
 		return this;
 	}
@@ -60,6 +60,6 @@ public class GreedyStringArgument implements Argument, OverrideableSuggestions, 
 	
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.SIMPLE_TYPE;
+		return CommandAPIArgumentType.OBJECTIVE_CRITERIA;
 	}
 }

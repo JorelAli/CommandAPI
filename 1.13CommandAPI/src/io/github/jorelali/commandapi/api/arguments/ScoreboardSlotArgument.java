@@ -1,20 +1,21 @@
 package io.github.jorelali.commandapi.api.arguments;
 
 import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.arguments.StringArgumentType;
 
+import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
+import io.github.jorelali.commandapi.api.wrappers.ScoreboardSlot;
 
 @SuppressWarnings("unchecked")
-public class GreedyStringArgument implements Argument, OverrideableSuggestions, GreedyArgument {
+public class ScoreboardSlotArgument implements Argument, OverrideableSuggestions {
 
 	ArgumentType<?> rawType;
 	
 	/**
-	 * A string argument for a string of any length
+	 * A Display slot argument. Represents scoreboard slots
 	 */
-	public GreedyStringArgument() {
-		rawType = StringArgumentType.greedyString();
+	public ScoreboardSlotArgument() {
+		rawType = CommandAPIHandler.getNMS()._ArgumentScoreboardSlot();
 	}
 	
 	@Override
@@ -24,18 +25,18 @@ public class GreedyStringArgument implements Argument, OverrideableSuggestions, 
 
 	@Override
 	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) String.class;
+		return (Class<V>) ScoreboardSlot.class;
 	}
 
 	@Override
 	public boolean isSimple() {
-		return true;
+		return false;
 	}
 	
 	private String[] suggestions;
 	
 	@Override
-	public GreedyStringArgument overrideSuggestions(String... suggestions) {
+	public ScoreboardSlotArgument overrideSuggestions(String... suggestions) {
 		this.suggestions = suggestions;
 		return this;
 	}
@@ -48,7 +49,7 @@ public class GreedyStringArgument implements Argument, OverrideableSuggestions, 
 	private CommandPermission permission = null;
 	
 	@Override
-	public GreedyStringArgument withPermission(CommandPermission permission) {
+	public ScoreboardSlotArgument withPermission(CommandPermission permission) {
 		this.permission = permission;
 		return this;
 	}
@@ -60,6 +61,6 @@ public class GreedyStringArgument implements Argument, OverrideableSuggestions, 
 	
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.SIMPLE_TYPE;
+		return CommandAPIArgumentType.SCOREBOARD_SLOT;
 	}
 }

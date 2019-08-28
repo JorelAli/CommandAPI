@@ -1,20 +1,30 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.arguments.StringArgumentType;
+import org.bukkit.Bukkit;
 
+import com.mojang.brigadier.arguments.ArgumentType;
+
+import de.tr7zw.nbtapi.NBTContainer;
+import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
+import io.github.jorelali.commandapi.api.exceptions.NBTNotFoundException;
+
 
 @SuppressWarnings("unchecked")
-public class GreedyStringArgument implements Argument, OverrideableSuggestions, GreedyArgument {
+public class NBTCompoundArgument implements Argument, OverrideableSuggestions {
 
 	ArgumentType<?> rawType;
 	
 	/**
-	 * A string argument for a string of any length
+	 * An NBT Compound Argument. Represents Minecraft's NBT Compound Tag using the NBT API
 	 */
-	public GreedyStringArgument() {
-		rawType = StringArgumentType.greedyString();
+	public NBTCompoundArgument() {
+
+		if(Bukkit.getPluginManager().getPlugin("NBTAPI") == null) {
+			throw new NBTNotFoundException(this.getClass());
+		}
+		
+		rawType = CommandAPIHandler.getNMS()._ArgumentNBTCompound();
 	}
 	
 	@Override
@@ -24,18 +34,18 @@ public class GreedyStringArgument implements Argument, OverrideableSuggestions, 
 
 	@Override
 	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) String.class;
+		return (Class<V>) NBTContainer.class;
 	}
 
 	@Override
 	public boolean isSimple() {
-		return true;
+		return false;
 	}
 	
 	private String[] suggestions;
 	
 	@Override
-	public GreedyStringArgument overrideSuggestions(String... suggestions) {
+	public NBTCompoundArgument overrideSuggestions(String... suggestions) {
 		this.suggestions = suggestions;
 		return this;
 	}
@@ -44,11 +54,11 @@ public class GreedyStringArgument implements Argument, OverrideableSuggestions, 
 	public String[] getOverriddenSuggestions() {
 		return suggestions;
 	}
-	
+
 	private CommandPermission permission = null;
 	
 	@Override
-	public GreedyStringArgument withPermission(CommandPermission permission) {
+	public NBTCompoundArgument withPermission(CommandPermission permission) {
 		this.permission = permission;
 		return this;
 	}
@@ -60,6 +70,6 @@ public class GreedyStringArgument implements Argument, OverrideableSuggestions, 
 	
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.SIMPLE_TYPE;
+		return CommandAPIArgumentType.NBT_COMPOUND;
 	}
 }

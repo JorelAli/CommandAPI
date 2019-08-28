@@ -47,11 +47,11 @@ import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.Sugges
 import io.github.jorelali.commandapi.api.arguments.DynamicSuggestedStringArgument;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument;
 import io.github.jorelali.commandapi.api.arguments.LiteralArgument;
+import io.github.jorelali.commandapi.api.arguments.Location2DArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationArgument;
-import io.github.jorelali.commandapi.api.arguments.LocationArgument.LocationType;
+import io.github.jorelali.commandapi.api.arguments.LocationType;
 import io.github.jorelali.commandapi.api.arguments.OverrideableSuggestions;
-import io.github.jorelali.commandapi.api.arguments.StringArgument;
-import io.github.jorelali.commandapi.api.arguments.SuggestedStringArgument;
+import io.github.jorelali.commandapi.api.arguments.ScoreHolderArgument;
 import io.github.jorelali.commandapi.api.exceptions.WrapperCommandSyntaxException;
 import io.github.jorelali.commandapi.api.nms.NMS;
 import io.github.jorelali.commandapi.api.nms.NMS_1_13_R1;
@@ -60,7 +60,7 @@ import io.github.jorelali.commandapi.api.nms.NMS_1_14_R1;
 import io.github.jorelali.commandapi.safereflection.ReflectionType;
 import io.github.jorelali.commandapi.safereflection.SafeReflection;
 
-@SuppressWarnings({"rawtypes", "unchecked", "deprecation"})
+@SuppressWarnings({"rawtypes", "unchecked"})
 /**
  * Class to access the main methods in NMS. The wrapper's
  * implementations occur here.
@@ -121,6 +121,24 @@ public final class CommandAPIHandler {
 		}
 	}
 	
+	/**
+	 * Class to store cached methods and fields 
+	 * 
+	 * This is required because each
+	 * key is made up of a class and a field or method name
+	 */
+	@SuppressWarnings("unused")
+	private static class ClassCache {
+
+		private final Class<?> clazz;
+		private final String name;
+
+		public ClassCache(Class<?> clazz, String name) {
+			this.clazz = clazz;
+			this.name = name;
+		}
+	}
+	
 	protected CommandAPIHandler() throws ClassNotFoundException {
 		
 		//Package checks
@@ -177,6 +195,16 @@ public final class CommandAPIHandler {
 			compatibleVersions = compatibleVersions.substring(1, compatibleVersions.length() - 1);
 			CommandAPIMain.getLog().info("Hooked into NMS " + version + " (compatible with " + compatibleVersions + ")");
 		}
+		
+		//Checks other dependencies
+		if(Bukkit.getPluginManager().getPlugin("NBTAPI") != null) {
+			CommandAPIMain.getLog().info("Hooked into the NBTAPI successfully.");
+		}
+		
+		try {
+			Class.forName("org.spigotmc.SpigotConfig");
+			CommandAPIMain.getLog().info("Hooked into Spigot successfully for Chat/ChatComponents");
+		} catch(ClassNotFoundException e) {}
 		
 		//Everything from this line will use getNMSClass(), so we initialize our cache here
 		fields = new HashMap<>();
@@ -295,7 +323,54 @@ public final class CommandAPIHandler {
 						case SOUND:
 							argList.add(nms.getSound(cmdCtx, entry.getKey()));
 							break;
-						default:
+						case TIME:
+							argList.add(nms.getTime(cmdCtx, entry.getKey()));
+							break;
+						case LOCATION_2D:
+							LocationType locationType2d = ((Location2DArgument) entry.getValue()).getLocationType();
+							argList.add(nms.getLocation2D(cmdCtx, entry.getKey(), locationType2d, sender));
+							break;
+						case INT_RANGE:
+							argList.add(nms.getIntRange(cmdCtx, entry.getKey()));
+							break;
+						case FLOAT_RANGE:
+							argList.add(nms.getFloatRange(cmdCtx, entry.getKey()));
+							break;
+						case ENVIRONMENT:
+							argList.add(nms.getDimension(cmdCtx, entry.getKey()));
+							break;
+						case ROTATION:
+							argList.add(nms.getRotation(cmdCtx, entry.getKey()));
+							break;
+						case AXIS:
+							argList.add(nms.getAxis(cmdCtx, entry.getKey()));
+							break;
+						case ITEM_SLOT:
+							argList.add(nms.getItemSlot(cmdCtx, entry.getKey()));
+							break;
+						case SCOREBOARD_SLOT:
+							argList.add(nms.getScoreboardSlot(cmdCtx, entry.getKey()));
+							break;
+						case TEAM:
+							argList.add(nms.getTeam(cmdCtx, entry.getKey(), sender));
+							break;
+						case OBJECTIVE_CRITERIA:
+							argList.add(nms.getObjectiveCriteria(cmdCtx, entry.getKey()));
+							break;
+						case OBJECTIVE:
+							argList.add(nms.getObjective(cmdCtx, entry.getKey(), sender));
+							break;
+						case CHAT:
+							argList.add(nms.getChat(cmdCtx, entry.getKey()));
+							break;
+						case SCORE_HOLDER:
+							ScoreHolderArgument scoreHolderArgument = (ScoreHolderArgument) entry.getValue();
+							argList.add(scoreHolderArgument.isSingle() 
+									? nms.getScoreHolderSingle(cmdCtx, entry.getKey()) 
+									: nms.getScoreHolderMultiple(cmdCtx, entry.getKey()));
+							break;
+						case NBT_COMPOUND:
+							argList.add(nms.getNBTCompound(cmdCtx, entry.getKey()));
 							break;
 					}
 				}
@@ -467,16 +542,7 @@ public final class CommandAPIHandler {
 		      	this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(alias).requires(generatePermissions(alias, permissions)).executes(command));
 		    }
 
-		} else {
-			
-			//Replace SSA with StringArg
-			for(Entry<String, Argument> entry : ((LinkedHashMap<String, Argument>) args.clone()).entrySet()) { 
-				if(entry.getValue() instanceof SuggestedStringArgument) {
-					CommandAPIMain.getLog().warning("Command /" + commandName + " uses a SuggestedStringArgument. These are deprecated as of 1.9. Consider using StringArgument().overrideSuggestions(...)");
-					SuggestedStringArgument ssa = (SuggestedStringArgument) entry.getValue();
-					args.put(entry.getKey(), new StringArgument().overrideSuggestions(ssa.getSuggestions()));
-				}
-			}
+		} else {	
 			
 			//List of keys for reverse iteration
 	        ArrayList<String> keys = new ArrayList<>(args.keySet());

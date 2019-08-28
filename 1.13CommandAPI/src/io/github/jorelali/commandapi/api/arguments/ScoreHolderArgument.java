@@ -1,20 +1,36 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.arguments.StringArgumentType;
+import java.util.Collection;
 
+import com.mojang.brigadier.arguments.ArgumentType;
+
+import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
 
 @SuppressWarnings("unchecked")
-public class GreedyStringArgument implements Argument, OverrideableSuggestions, GreedyArgument {
+public class ScoreHolderArgument implements Argument, OverrideableSuggestions {
 
+	public static enum ScoreHolderType {
+		SINGLE, MULTIPLE;
+	}
+	
 	ArgumentType<?> rawType;
+	private final boolean single;
 	
 	/**
-	 * A string argument for a string of any length
+	 * A Score Holder argument. Represents a collection of score holders
 	 */
-	public GreedyStringArgument() {
-		rawType = StringArgumentType.greedyString();
+	public ScoreHolderArgument(ScoreHolderType type) {
+		if(type == ScoreHolderType.SINGLE) {
+			single = true;
+		} else {
+			single = false;
+		}
+		rawType = CommandAPIHandler.getNMS()._ArgumentScoreholder(single);
+	}
+	
+	public boolean isSingle() {
+		return this.single;
 	}
 	
 	@Override
@@ -24,18 +40,18 @@ public class GreedyStringArgument implements Argument, OverrideableSuggestions, 
 
 	@Override
 	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) String.class;
+		return single ? (Class<V>) String.class : (Class<V>) Collection.class;
 	}
 
 	@Override
 	public boolean isSimple() {
-		return true;
+		return false;
 	}
 	
 	private String[] suggestions;
 	
 	@Override
-	public GreedyStringArgument overrideSuggestions(String... suggestions) {
+	public ScoreHolderArgument overrideSuggestions(String... suggestions) {
 		this.suggestions = suggestions;
 		return this;
 	}
@@ -48,7 +64,7 @@ public class GreedyStringArgument implements Argument, OverrideableSuggestions, 
 	private CommandPermission permission = null;
 	
 	@Override
-	public GreedyStringArgument withPermission(CommandPermission permission) {
+	public ScoreHolderArgument withPermission(CommandPermission permission) {
 		this.permission = permission;
 		return this;
 	}
@@ -60,6 +76,6 @@ public class GreedyStringArgument implements Argument, OverrideableSuggestions, 
 	
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.SIMPLE_TYPE;
+		return CommandAPIArgumentType.SCORE_HOLDER;
 	}
 }

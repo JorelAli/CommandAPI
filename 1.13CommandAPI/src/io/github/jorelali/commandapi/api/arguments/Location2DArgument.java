@@ -1,35 +1,34 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import org.bukkit.Location;
-
 import com.mojang.brigadier.arguments.ArgumentType;
 
 import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
+import io.github.jorelali.commandapi.api.wrappers.Location2D;
 
 @SuppressWarnings("unchecked")
-public class LocationArgument implements Argument, OverrideableSuggestions {
+public class Location2DArgument implements Argument, OverrideableSuggestions {
 	
 	ArgumentType<?> rawType;
 	
 	/**
-	 * A Location argument. Represents Minecraft locations
+	 * A Location argument. Represents Minecraft locations in 2D space
 	 */
-	public LocationArgument() {
+	public Location2DArgument() {
 		this(LocationType.PRECISE_POSITION);
 	}
 	
 	/**
-	 * A Location argument. Represents Minecraft locations
+	 * A Location argument. Represents Minecraft locations in 2D space
 	 */
-	public LocationArgument(LocationType type) {
+	public Location2DArgument(LocationType type) {
 		locationType = type;
 		switch(type) {
 			case BLOCK_POSITION:
-				rawType = CommandAPIHandler.getNMS()._ArgumentPosition();
+				rawType = CommandAPIHandler.getNMS()._ArgumentPosition2D();
 				break;
 			case PRECISE_POSITION:
-				rawType = CommandAPIHandler.getNMS()._ArgumentVec3();
+				rawType = CommandAPIHandler.getNMS()._ArgumentVec2();
 				break;
 		}
 	}
@@ -43,7 +42,7 @@ public class LocationArgument implements Argument, OverrideableSuggestions {
 
 	@Override
 	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) Location.class;
+		return (Class<V>) Location2D.class;
 	}
 
 	@Override
@@ -58,7 +57,7 @@ public class LocationArgument implements Argument, OverrideableSuggestions {
 	private String[] suggestions;
 	
 	@Override
-	public LocationArgument overrideSuggestions(String... suggestions) {
+	public Location2DArgument overrideSuggestions(String... suggestions) {
 		this.suggestions = suggestions;
 		return this;
 	}
@@ -71,7 +70,7 @@ public class LocationArgument implements Argument, OverrideableSuggestions {
 	private CommandPermission permission = null;
 	
 	@Override
-	public LocationArgument withPermission(CommandPermission permission) {
+	public Location2DArgument withPermission(CommandPermission permission) {
 		this.permission = permission;
 		return this;
 	}
@@ -83,6 +82,6 @@ public class LocationArgument implements Argument, OverrideableSuggestions {
 	
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.LOCATION;
+		return CommandAPIArgumentType.LOCATION_2D;
 	}
 }

@@ -9,7 +9,5 @@ public interface OverrideableSuggestions {
 	 */
 	<T extends Argument> T overrideSuggestions(String... suggestions);
 		
-	default String[] getOverriddenSuggestions() {
-		return null;
-	}
+	default String[] getOverriddenSuggestions() { return null; }
 }

@@ -1,20 +1,20 @@
 package io.github.jorelali.commandapi.api.arguments;
 
 import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.arguments.StringArgumentType;
 
+import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
 
 @SuppressWarnings("unchecked")
-public class GreedyStringArgument implements Argument, OverrideableSuggestions, GreedyArgument {
+public class ItemSlotArgument implements Argument, OverrideableSuggestions {
 
 	ArgumentType<?> rawType;
 	
 	/**
-	 * A string argument for a string of any length
+	 * A Rotation argument. Represents pitch and yaw
 	 */
-	public GreedyStringArgument() {
-		rawType = StringArgumentType.greedyString();
+	public ItemSlotArgument() {
+		rawType = CommandAPIHandler.getNMS()._ArgumentItemSlot();
 	}
 	
 	@Override
@@ -24,18 +24,18 @@ public class GreedyStringArgument implements Argument, OverrideableSuggestions, 
 
 	@Override
 	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) String.class;
+		return (Class<V>) Integer.class;
 	}
 
 	@Override
 	public boolean isSimple() {
-		return true;
+		return false;
 	}
 	
 	private String[] suggestions;
 	
 	@Override
-	public GreedyStringArgument overrideSuggestions(String... suggestions) {
+	public ItemSlotArgument overrideSuggestions(String... suggestions) {
 		this.suggestions = suggestions;
 		return this;
 	}
@@ -48,7 +48,7 @@ public class GreedyStringArgument implements Argument, OverrideableSuggestions, 
 	private CommandPermission permission = null;
 	
 	@Override
-	public GreedyStringArgument withPermission(CommandPermission permission) {
+	public ItemSlotArgument withPermission(CommandPermission permission) {
 		this.permission = permission;
 		return this;
 	}
@@ -60,6 +60,6 @@ public class GreedyStringArgument implements Argument, OverrideableSuggestions, 
 	
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.SIMPLE_TYPE;
+		return CommandAPIArgumentType.ITEM_SLOT;
 	}
 }

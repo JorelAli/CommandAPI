@@ -1,15 +1,48 @@
 package io.github.jorelali.commandapi.api;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.LinkedHashMap;
 import java.util.logging.Logger;
 
+import org.bukkit.Axis;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.World.Environment;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import de.tr7zw.nbtapi.NBTContainer;
+import io.github.jorelali.commandapi.api.arguments.Argument;
+import io.github.jorelali.commandapi.api.arguments.AxisArgument;
+import io.github.jorelali.commandapi.api.arguments.ChatArgument;
+import io.github.jorelali.commandapi.api.arguments.ChatComponentArgument;
+import io.github.jorelali.commandapi.api.arguments.EnvironmentArgument;
+import io.github.jorelali.commandapi.api.arguments.FloatRangeArgument;
+import io.github.jorelali.commandapi.api.arguments.IntegerRangeArgument;
+import io.github.jorelali.commandapi.api.arguments.ItemSlotArgument;
+import io.github.jorelali.commandapi.api.arguments.Location2DArgument;
+import io.github.jorelali.commandapi.api.arguments.LocationType;
+import io.github.jorelali.commandapi.api.arguments.NBTCompoundArgument;
+import io.github.jorelali.commandapi.api.arguments.RotationArgument;
+import io.github.jorelali.commandapi.api.arguments.ScoreHolderArgument;
+import io.github.jorelali.commandapi.api.arguments.ScoreHolderArgument.ScoreHolderType;
+import io.github.jorelali.commandapi.api.arguments.ScoreboardSlotArgument;
+import io.github.jorelali.commandapi.api.arguments.TimeArgument;
+import io.github.jorelali.commandapi.api.wrappers.FloatRange;
+import io.github.jorelali.commandapi.api.wrappers.IntegerRange;
+import io.github.jorelali.commandapi.api.wrappers.Rotation;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.minecraft.server.v1_14_R1.ArgumentInventorySlot;
 
 public class CommandAPIMain extends JavaPlugin implements Listener {
 	
@@ -59,6 +92,11 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 		return dispatcherFile;
 	}
 	
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onPlayerJoin(PlayerJoinEvent e) {
+		CommandAPIHandler.getNMS().resendPackets(e.getPlayer());
+	}
+	
 	@Override
 	public void onLoad() {
 		saveDefaultConfig();
@@ -81,11 +119,149 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 		}, 0L);
         
         getServer().getPluginManager().registerEvents(this, this);
-	}
-	
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPlayerJoin(PlayerJoinEvent e) {
-		CommandAPIHandler.getNMS().resendPackets(e.getPlayer());
+        
+        //Testing all happens below here
+        
+        LinkedHashMap<String, Argument> args = new LinkedHashMap<>();
+        args.put("time", new TimeArgument());
+        
+        CommandAPI.getInstance().register("tim", args, (s, a) -> {
+        	System.out.println(a[0]);
+        });
+        
+        args.clear();
+        args.put("2d", new Location2DArgument(LocationType.BLOCK_POSITION));
+        
+        CommandAPI.getInstance().register("2dblock", args, (s, a) -> {
+        	System.out.println(a[0]);
+        });
+        
+        args.clear();
+        args.put("2d", new Location2DArgument(LocationType.PRECISE_POSITION));
+        
+        CommandAPI.getInstance().register("2dprecise", args, (s, a) -> {
+        	System.out.println(a[0]);
+        });
+        
+        args.clear();
+        args.put("range", new IntegerRangeArgument());
+        
+        CommandAPI.getInstance().register("range", args, (s, a) -> {
+        	IntegerRange r = (IntegerRange) a[0];
+        	System.out.println(r.getLowerBound());
+        	System.out.println(r.getUpperBound());
+        });
+        
+        args.clear();
+        args.put("frange", new FloatRangeArgument());
+        
+        CommandAPI.getInstance().register("frange", args, (s, a) -> {
+        	FloatRange r = (FloatRange) a[0];
+        	System.out.println(r.getLowerBound());
+        	System.out.println(r.getUpperBound());
+        });
+        
+        args.clear();
+        args.put("dim", new EnvironmentArgument());
+        
+        CommandAPI.getInstance().register("dim", args, (s, a) -> {
+        	Environment r = (Environment) a[0];
+        	System.out.println(r);
+        });
+        
+        args.clear();
+        args.put("rot", new RotationArgument());
+        
+        CommandAPI.getInstance().register("rot", args, (s, a) -> {
+        	Rotation r = (Rotation) a[0];
+        	System.out.println(r.getPitch() + ", " + r.getYaw());
+        });
+        
+        args.clear();
+        args.put("axes", new AxisArgument());
+        
+        CommandAPI.getInstance().register("axes", args, (s, a) -> {
+        	@SuppressWarnings("unchecked")
+			EnumSet<Axis> r = (EnumSet<Axis>) a[0];
+        	System.out.println(r);
+        });
+        
+        args.clear();
+        args.put("slot", new ItemSlotArgument());
+        
+        CommandAPI.getInstance().register("slot", args, (s, a) -> {
+        	int slot = (int) a[0];
+        	Player player = (Player) s;
+        	player.getInventory().setItem(slot, new ItemStack(Material.DIRT));
+        	
+        	try {
+        		Field f = ArgumentInventorySlot.class.getDeclaredField("c");
+        		f.setAccessible(true);
+        		System.out.println(f.get(null));
+        	} catch(Exception e) {}
+        });
+        
+        args.clear();
+        args.put("displaySlot", new ScoreboardSlotArgument());
+        
+        CommandAPI.getInstance().register("displaySlot", args, (s, a) -> {
+        	System.out.println(a[0]);
+        });
+        
+        args.clear();
+        args.put("comp", new ChatComponentArgument());
+        
+        CommandAPI.getInstance().register("comp", args, (s, a) -> {
+        	BaseComponent[] aa = (BaseComponent[]) a[0];
+        	System.out.println(Arrays.deepToString(aa));
+        });
+        
+        args.clear();
+        args.put("chat", new ChatArgument());
+        
+        CommandAPI.getInstance().register("chat", args, (s, a) -> {
+        	BaseComponent[] aa = (BaseComponent[]) a[0];
+        	System.out.println(Arrays.deepToString(aa));
+        	try {
+        		s.spigot().sendMessage(aa);
+        	} catch(Exception e) {
+        		System.out.println("Whoopsy");
+        	}
+        });
+        
+        args.clear();
+        args.put("holdm", new ScoreHolderArgument(ScoreHolderType.MULTIPLE));
+        
+        CommandAPI.getInstance().register("holdm", args, (s, a) -> {
+        	@SuppressWarnings("unchecked")
+			Collection<String> strs = (Collection<String>) a[0];
+        	System.out.println(strs);
+        });
+        
+        args.clear();
+        args.put("holds", new ScoreHolderArgument(ScoreHolderType.SINGLE));
+        
+        CommandAPI.getInstance().register("holds", args, (s, a) -> {
+        	String strs = (String) a[0];
+        	System.out.println(strs);
+        });
+        
+        args.clear();
+        args.put("nbt", new NBTCompoundArgument());
+        
+        CommandAPI.getInstance().register("nbt", args, (s, a) -> {
+        	NBTContainer strs = (NBTContainer) a[0];
+        	System.out.println(strs);
+        });
+        
+//        new NBTContainer("").
+//        new NBTContainer("").get;
+        
+        /*
+         * Testing to do:
+         * - TeamArgument   
+         * - Objective Criteria 
+         */
 	}
 	
 }

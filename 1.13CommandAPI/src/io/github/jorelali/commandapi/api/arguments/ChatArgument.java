@@ -1,20 +1,30 @@
 package io.github.jorelali.commandapi.api.arguments;
 
 import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.arguments.StringArgumentType;
 
+import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
+import io.github.jorelali.commandapi.api.exceptions.SpigotNotFoundException;
+import net.md_5.bungee.api.chat.BaseComponent;
+
 
 @SuppressWarnings("unchecked")
-public class GreedyStringArgument implements Argument, OverrideableSuggestions, GreedyArgument {
+public class ChatArgument implements Argument, OverrideableSuggestions, GreedyArgument {
 
 	ArgumentType<?> rawType;
 	
 	/**
-	 * A string argument for a string of any length
+	 * A Chat argument. Represents fancy greedy strings that can parse entity selectors
 	 */
-	public GreedyStringArgument() {
-		rawType = StringArgumentType.greedyString();
+	public ChatArgument() {
+		
+		try {
+			Class.forName("org.spigotmc.SpigotConfig");
+		} catch(ClassNotFoundException e) {
+			throw new SpigotNotFoundException(this.getClass());
+		}
+		
+		rawType = CommandAPIHandler.getNMS()._ArgumentChat();
 	}
 	
 	@Override
@@ -24,18 +34,18 @@ public class GreedyStringArgument implements Argument, OverrideableSuggestions, 
 
 	@Override
 	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) String.class;
+		return (Class<V>) BaseComponent[].class;
 	}
 
 	@Override
 	public boolean isSimple() {
-		return true;
+		return false;
 	}
 	
 	private String[] suggestions;
 	
 	@Override
-	public GreedyStringArgument overrideSuggestions(String... suggestions) {
+	public ChatArgument overrideSuggestions(String... suggestions) {
 		this.suggestions = suggestions;
 		return this;
 	}
@@ -44,11 +54,11 @@ public class GreedyStringArgument implements Argument, OverrideableSuggestions, 
 	public String[] getOverriddenSuggestions() {
 		return suggestions;
 	}
-	
+
 	private CommandPermission permission = null;
 	
 	@Override
-	public GreedyStringArgument withPermission(CommandPermission permission) {
+	public ChatArgument withPermission(CommandPermission permission) {
 		this.permission = permission;
 		return this;
 	}
@@ -60,6 +70,6 @@ public class GreedyStringArgument implements Argument, OverrideableSuggestions, 
 	
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.SIMPLE_TYPE;
+		return CommandAPIArgumentType.CHAT;
 	}
 }
