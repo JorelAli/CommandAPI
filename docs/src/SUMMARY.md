@@ -9,6 +9,7 @@
   - [Resulting command executors](./resultingcommandexecutors.md)
 - [Arguments](./arguments.md)
   - [Primitive arguments](./primitivearguments.md)
+  - [Ranged arguments](./rangedarguments.md)
   - [Location arguments](./locationargument.md)
   - [Chat arguments](./chatarguments.md)
   - [String arguments](./stringarguments.md)

@@ -15,10 +15,10 @@ List of things to document
     - [x] Note about "Raw JSON text"
   - [ ] EnvironmentArgument
     - [ ] EnvironmentException - EnvironmentArgument only compatible with 1.13.1+
-  - [ ] Ranged arguments:
-    - [ ] FloatRangeArgument
-    - [ ] IntegerRangeArgument
-    - [ ] Mention how to use various Ranged classes
+  - [x] Ranged arguments:
+    - [x] FloatRangeArgument
+    - [x] IntegerRangeArgument
+    - [x] Mention how to use various Ranged classes
   - [ ] ItemSlotArgument
   - [x] LongArgument
   - [ ] NBTCompoundArgument

@@ -2,16 +2,22 @@ package io.github.jorelali.commandapi.api;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World.Environment;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Chest;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -30,6 +36,7 @@ import io.github.jorelali.commandapi.api.arguments.EnvironmentArgument;
 import io.github.jorelali.commandapi.api.arguments.FloatRangeArgument;
 import io.github.jorelali.commandapi.api.arguments.IntegerRangeArgument;
 import io.github.jorelali.commandapi.api.arguments.ItemSlotArgument;
+import io.github.jorelali.commandapi.api.arguments.ItemStackArgument;
 import io.github.jorelali.commandapi.api.arguments.Location2DArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationType;
 import io.github.jorelali.commandapi.api.arguments.NBTCompoundArgument;
@@ -122,74 +129,74 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         
         //Testing all happens below here
         
-        LinkedHashMap<String, Argument> args = new LinkedHashMap<>();
-        args.put("time", new TimeArgument());
+        LinkedHashMap<String, Argument> args1 = new LinkedHashMap<>();
+        args1.put("time", new TimeArgument());
         
-        CommandAPI.getInstance().register("tim", args, (s, a) -> {
+        CommandAPI.getInstance().register("tim", args1, (s, a) -> {
         	System.out.println(a[0]);
         });
         
-        args.clear();
-        args.put("2d", new Location2DArgument(LocationType.BLOCK_POSITION));
+        args1.clear();
+        args1.put("2d", new Location2DArgument(LocationType.BLOCK_POSITION));
         
-        CommandAPI.getInstance().register("2dblock", args, (s, a) -> {
+        CommandAPI.getInstance().register("2dblock", args1, (s, a) -> {
         	System.out.println(a[0]);
         });
         
-        args.clear();
-        args.put("2d", new Location2DArgument(LocationType.PRECISE_POSITION));
+        args1.clear();
+        args1.put("2d", new Location2DArgument(LocationType.PRECISE_POSITION));
         
-        CommandAPI.getInstance().register("2dprecise", args, (s, a) -> {
+        CommandAPI.getInstance().register("2dprecise", args1, (s, a) -> {
         	System.out.println(a[0]);
         });
         
-        args.clear();
-        args.put("range", new IntegerRangeArgument());
+        args1.clear();
+        args1.put("range", new IntegerRangeArgument());
         
-        CommandAPI.getInstance().register("range", args, (s, a) -> {
+        CommandAPI.getInstance().register("range", args1, (s, a) -> {
         	IntegerRange r = (IntegerRange) a[0];
         	System.out.println(r.getLowerBound());
         	System.out.println(r.getUpperBound());
         });
         
-        args.clear();
-        args.put("frange", new FloatRangeArgument());
+        args1.clear();
+        args1.put("frange", new FloatRangeArgument());
         
-        CommandAPI.getInstance().register("frange", args, (s, a) -> {
+        CommandAPI.getInstance().register("frange", args1, (s, a) -> {
         	FloatRange r = (FloatRange) a[0];
         	System.out.println(r.getLowerBound());
         	System.out.println(r.getUpperBound());
         });
         
-        args.clear();
-        args.put("dim", new EnvironmentArgument());
+        args1.clear();
+        args1.put("dim", new EnvironmentArgument());
         
-        CommandAPI.getInstance().register("dim", args, (s, a) -> {
+        CommandAPI.getInstance().register("dim", args1, (s, a) -> {
         	Environment r = (Environment) a[0];
         	System.out.println(r);
         });
         
-        args.clear();
-        args.put("rot", new RotationArgument());
+        args1.clear();
+        args1.put("rot", new RotationArgument());
         
-        CommandAPI.getInstance().register("rot", args, (s, a) -> {
+        CommandAPI.getInstance().register("rot", args1, (s, a) -> {
         	Rotation r = (Rotation) a[0];
         	System.out.println(r.getPitch() + ", " + r.getYaw());
         });
         
-        args.clear();
-        args.put("axes", new AxisArgument());
+        args1.clear();
+        args1.put("axes", new AxisArgument());
         
-        CommandAPI.getInstance().register("axes", args, (s, a) -> {
+        CommandAPI.getInstance().register("axes", args1, (s, a) -> {
         	@SuppressWarnings("unchecked")
 			EnumSet<Axis> r = (EnumSet<Axis>) a[0];
         	System.out.println(r);
         });
         
-        args.clear();
-        args.put("slot", new ItemSlotArgument());
+        args1.clear();
+        args1.put("slot", new ItemSlotArgument());
         
-        CommandAPI.getInstance().register("slot", args, (s, a) -> {
+        CommandAPI.getInstance().register("slot", args1, (s, a) -> {
         	int slot = (int) a[0];
         	Player player = (Player) s;
         	player.getInventory().setItem(slot, new ItemStack(Material.DIRT));
@@ -201,25 +208,25 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         	} catch(Exception e) {}
         });
         
-        args.clear();
-        args.put("displaySlot", new ScoreboardSlotArgument());
+        args1.clear();
+        args1.put("displaySlot", new ScoreboardSlotArgument());
         
-        CommandAPI.getInstance().register("displaySlot", args, (s, a) -> {
+        CommandAPI.getInstance().register("displaySlot", args1, (s, a) -> {
         	System.out.println(a[0]);
         });
         
-        args.clear();
-        args.put("comp", new ChatComponentArgument());
+        args1.clear();
+        args1.put("comp", new ChatComponentArgument());
         
-        CommandAPI.getInstance().register("comp", args, (s, a) -> {
+        CommandAPI.getInstance().register("comp", args1, (s, a) -> {
         	BaseComponent[] aa = (BaseComponent[]) a[0];
         	System.out.println(Arrays.deepToString(aa));
         });
         
-        args.clear();
-        args.put("chat", new ChatArgument());
+        args1.clear();
+        args1.put("chat", new ChatArgument());
         
-        CommandAPI.getInstance().register("chat", args, (s, a) -> {
+        CommandAPI.getInstance().register("chat", args1, (s, a) -> {
         	BaseComponent[] aa = (BaseComponent[]) a[0];
         	System.out.println(Arrays.deepToString(aa));
         	try {
@@ -229,38 +236,97 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         	}
         });
         
-        args.clear();
-        args.put("holdm", new ScoreHolderArgument(ScoreHolderType.MULTIPLE));
+        args1.clear();
+        args1.put("holdm", new ScoreHolderArgument(ScoreHolderType.MULTIPLE));
         
-        CommandAPI.getInstance().register("holdm", args, (s, a) -> {
+        CommandAPI.getInstance().register("holdm", args1, (s, a) -> {
         	@SuppressWarnings("unchecked")
 			Collection<String> strs = (Collection<String>) a[0];
         	System.out.println(strs);
         });
         
-        args.clear();
-        args.put("holds", new ScoreHolderArgument(ScoreHolderType.SINGLE));
+        args1.clear();
+        args1.put("holds", new ScoreHolderArgument(ScoreHolderType.SINGLE));
         
-        CommandAPI.getInstance().register("holds", args, (s, a) -> {
+        CommandAPI.getInstance().register("holds", args1, (s, a) -> {
         	String strs = (String) a[0];
         	System.out.println(strs);
         });
         
-        args.clear();
-        args.put("nbt", new NBTCompoundArgument());
+        args1.clear();
+        args1.put("nbt", new NBTCompoundArgument());
         
-        CommandAPI.getInstance().register("nbt", args, (s, a) -> {
+        CommandAPI.getInstance().register("nbt", args1, (s, a) -> {
         	NBTContainer strs = (NBTContainer) a[0];
         	System.out.println(strs);
         });
         
-		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-		arguments.put("message", new ChatArgument());
+//		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+//		arguments.put("message", new ChatArgument());
+//		
+//		CommandAPI.getInstance().register("personalmsg", arguments, (sender, args) -> {
+//			BaseComponent[] message = (BaseComponent[]) args[0];
+//			Bukkit.getServer().spigot().broadcast(message);
+//		});
 		
-		CommandAPI.getInstance().register("personalmsg", arguments, (sender, args) -> {
-			BaseComponent[] message = (BaseComponent[]) args[0];
-			Bukkit.getServer().spigot().broadcast(message);
+// Declare our arguments for /searchrange <IntegerRange> <ItemStack>
+LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+arguments.put("range", new IntegerRangeArgument());
+arguments.put("item", new ItemStackArgument());
+
+CommandAPI.getInstance().register("searchrange", arguments, (sender, args) -> {
+	// Retrieve the range from the arguments
+	IntegerRange range = (IntegerRange) args[0];
+	ItemStack itemStack = (ItemStack) args[1];
+	
+	// Inform the sender that they must be a player
+	if(!(sender instanceof Player)) {
+		sender.sendMessage("You must be a player to run this command!");
+		return;
+	}
+	
+	Player player = (Player) sender;
+	
+	// Store the locations of chests with certain items
+	List<Location> locations = new ArrayList<>();
+	
+	// Iterate through all chunks, and then all tile entities within each chunk
+	for(Chunk chunk : player.getWorld().getLoadedChunks()) {
+		for(BlockState blockState : chunk.getTileEntities()) {
+			
+			// The distance between the block and the player
+			int distance = (int) blockState.getLocation().distance(player.getLocation());
+			
+			// Check if the distance is within the specified range 
+			if(range.isInRange(distance)) {
+				
+				// Check if the tile entity is a chest
+				if(blockState instanceof Chest) {
+					Chest chest = (Chest) blockState;
+					
+					// Check if the chest contains the item specified by the player
+					if(chest.getInventory().contains(itemStack.getType())) {
+						locations.add(chest.getLocation());
+					}
+				}
+			}
+			
+		}
+	}
+	
+	// Output the locations of the chests, or whether no chests were found
+	if(locations.isEmpty()) {
+		player.sendMessage("No chests were found");
+	} else {
+		player.sendMessage("Found " + locations.size() + " chests:");
+		locations.forEach(location -> {
+			player.sendMessage("  Found at: " 
+					+ location.getX() + ", " 
+					+ location.getY() + ", " 
+					+ location.getZ());
 		});
+	}
+});
         
 //        new NBTContainer("").
 //        new NBTContainer("").get;
