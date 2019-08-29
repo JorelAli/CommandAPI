@@ -137,6 +137,31 @@
                 <div id="content" class="content">
                     <main>
                         <a class="header" href="#time-argument" id="time-argument"><h1>Time argument</h1></a>
+<p>The <code>TimeArgument</code> class represents in-game time, <em>in the number of in-game ticks</em>. This allows command senders to specify a certain number of ticks in a simpler way, by including the characters <code>d</code> to specify the numbers of days, <code>s</code> to specify the number of seconds or <code>t</code> to specify a number of ticks.</p>
+<p>The CommandAPI converts the inputs provided by the command sender into a number of ticks as an integer.</p>
+<blockquote>
+<p><strong>Developer's Note:</strong></p>
+<p>The <code>TimeArgument</code> provides inputs such as <code>2d</code> (2 in-game days), <code>10s</code> (10 seconds) and <code>20t</code> (20 ticks), but does <strong>not</strong> let you combine them, such as <code>2d10s</code>.</p>
+</blockquote>
+<a class="header" href="#example---displaying-a-server-wide-announcement" id="example---displaying-a-server-wide-announcement"><h2>Example - Displaying a server-wide announcement</h2></a>
+<p>Say we have a command <code>bigmsg</code> that displays a title message to all players for a certain duration:</p>
+<pre><code>/bigmsg &lt;duration&gt; &lt;message&gt;
+</code></pre>
+<pre><code class="language-java">// Declare our arguments
+LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;duration&quot;, new TimeArgument());
+arguments.put(&quot;message&quot;, new GreedyStringArgument());
+
+CommandAPI.getInstance().register(&quot;bigmsg&quot;, arguments, (sender, args) -&gt; {
+    int duration = (int) args[0];
+    String message = (String) args[1];
+    
+    for(Player player : Bukkit.getOnlinePlayers()) {
+        // Display the message to all players, with the default fade in/out times.
+        player.sendTitle(message, &quot;&quot;, 10, duration, 20);
+    }
+});
+</code></pre>
 
                     </main>
 

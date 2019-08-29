@@ -2,23 +2,16 @@ package io.github.jorelali.commandapi.api;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World.Environment;
-import org.bukkit.WorldCreator;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Chest;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,9 +28,9 @@ import io.github.jorelali.commandapi.api.arguments.ChatArgument;
 import io.github.jorelali.commandapi.api.arguments.ChatComponentArgument;
 import io.github.jorelali.commandapi.api.arguments.EnvironmentArgument;
 import io.github.jorelali.commandapi.api.arguments.FloatRangeArgument;
+import io.github.jorelali.commandapi.api.arguments.GreedyStringArgument;
 import io.github.jorelali.commandapi.api.arguments.IntegerRangeArgument;
 import io.github.jorelali.commandapi.api.arguments.ItemSlotArgument;
-import io.github.jorelali.commandapi.api.arguments.ItemStackArgument;
 import io.github.jorelali.commandapi.api.arguments.Location2DArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationType;
 import io.github.jorelali.commandapi.api.arguments.NBTCompoundArgument;
@@ -45,7 +38,6 @@ import io.github.jorelali.commandapi.api.arguments.RotationArgument;
 import io.github.jorelali.commandapi.api.arguments.ScoreHolderArgument;
 import io.github.jorelali.commandapi.api.arguments.ScoreHolderArgument.ScoreHolderType;
 import io.github.jorelali.commandapi.api.arguments.ScoreboardSlotArgument;
-import io.github.jorelali.commandapi.api.arguments.StringArgument;
 import io.github.jorelali.commandapi.api.arguments.TimeArgument;
 import io.github.jorelali.commandapi.api.wrappers.FloatRange;
 import io.github.jorelali.commandapi.api.wrappers.IntegerRange;
@@ -263,16 +255,28 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         	System.out.println(strs);
         });
         
-        LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-        arguments.put("worldname", new StringArgument());
-        arguments.put("type", new EnvironmentArgument());
+LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+arguments.put("duration", new TimeArgument());
+arguments.put("message", new GreedyStringArgument());
+
+CommandAPI.getInstance().register("bigmsg", arguments, (sender, args) -> {
+	int duration = (int) args[0];
+	String message = (String) args[1];
+	for(Player player : Bukkit.getOnlinePlayers()) {
+		player.sendTitle(message, "", 10, duration, 20);
+	}
+});
         
-        CommandAPI.getInstance().register("createworld", arguments, (sender, args) -> {
-        	String worldName = (String) args[0];
-        	Environment environment = (Environment) args[1];
-            Bukkit.getServer().createWorld(new WorldCreator(worldName).environment(environment));
-        	sender.sendMessage("World created!");
-        });
+//LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+//arguments.put("worldname", new StringArgument());
+//arguments.put("type", new EnvironmentArgument());
+//
+//CommandAPI.getInstance().register("createworld", arguments, (sender, args) -> {
+//	String worldName = (String) args[0];
+//	Environment environment = (Environment) args[1];
+//    Bukkit.getServer().createWorld(new WorldCreator(worldName).environment(environment));
+//	sender.sendMessage("World created!");
+//});
         
         
 //		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
@@ -284,63 +288,63 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 //		});
 		
 // Declare our arguments for /searchrange <IntegerRange> <ItemStack>
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("range", new IntegerRangeArgument());
-arguments.put("item", new ItemStackArgument());
-
-CommandAPI.getInstance().register("searchrange", arguments, (sender, args) -> {
-	// Retrieve the range from the arguments
-	IntegerRange range = (IntegerRange) args[0];
-	ItemStack itemStack = (ItemStack) args[1];
-	
-	// Inform the sender that they must be a player
-	if(!(sender instanceof Player)) {
-		sender.sendMessage("You must be a player to run this command!");
-		return;
-	}
-	
-	Player player = (Player) sender;
-	
-	// Store the locations of chests with certain items
-	List<Location> locations = new ArrayList<>();
-	
-	// Iterate through all chunks, and then all tile entities within each chunk
-	for(Chunk chunk : player.getWorld().getLoadedChunks()) {
-		for(BlockState blockState : chunk.getTileEntities()) {
-			
-			// The distance between the block and the player
-			int distance = (int) blockState.getLocation().distance(player.getLocation());
-			
-			// Check if the distance is within the specified range 
-			if(range.isInRange(distance)) {
-				
-				// Check if the tile entity is a chest
-				if(blockState instanceof Chest) {
-					Chest chest = (Chest) blockState;
-					
-					// Check if the chest contains the item specified by the player
-					if(chest.getInventory().contains(itemStack.getType())) {
-						locations.add(chest.getLocation());
-					}
-				}
-			}
-			
-		}
-	}
-	
-	// Output the locations of the chests, or whether no chests were found
-	if(locations.isEmpty()) {
-		player.sendMessage("No chests were found");
-	} else {
-		player.sendMessage("Found " + locations.size() + " chests:");
-		locations.forEach(location -> {
-			player.sendMessage("  Found at: " 
-					+ location.getX() + ", " 
-					+ location.getY() + ", " 
-					+ location.getZ());
-		});
-	}
-});
+//LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+//arguments.put("range", new IntegerRangeArgument());
+//arguments.put("item", new ItemStackArgument());
+//
+//CommandAPI.getInstance().register("searchrange", arguments, (sender, args) -> {
+//	// Retrieve the range from the arguments
+//	IntegerRange range = (IntegerRange) args[0];
+//	ItemStack itemStack = (ItemStack) args[1];
+//	
+//	// Inform the sender that they must be a player
+//	if(!(sender instanceof Player)) {
+//		sender.sendMessage("You must be a player to run this command!");
+//		return;
+//	}
+//	
+//	Player player = (Player) sender;
+//	
+//	// Store the locations of chests with certain items
+//	List<Location> locations = new ArrayList<>();
+//	
+//	// Iterate through all chunks, and then all tile entities within each chunk
+//	for(Chunk chunk : player.getWorld().getLoadedChunks()) {
+//		for(BlockState blockState : chunk.getTileEntities()) {
+//			
+//			// The distance between the block and the player
+//			int distance = (int) blockState.getLocation().distance(player.getLocation());
+//			
+//			// Check if the distance is within the specified range 
+//			if(range.isInRange(distance)) {
+//				
+//				// Check if the tile entity is a chest
+//				if(blockState instanceof Chest) {
+//					Chest chest = (Chest) blockState;
+//					
+//					// Check if the chest contains the item specified by the player
+//					if(chest.getInventory().contains(itemStack.getType())) {
+//						locations.add(chest.getLocation());
+//					}
+//				}
+//			}
+//			
+//		}
+//	}
+//	
+//	// Output the locations of the chests, or whether no chests were found
+//	if(locations.isEmpty()) {
+//		player.sendMessage("No chests were found");
+//	} else {
+//		player.sendMessage("Found " + locations.size() + " chests:");
+//		locations.forEach(location -> {
+//			player.sendMessage("  Found at: " 
+//					+ location.getX() + ", " 
+//					+ location.getY() + ", " 
+//					+ location.getZ());
+//		});
+//	}
+//});
         
 //        new NBTContainer("").
 //        new NBTContainer("").get;
