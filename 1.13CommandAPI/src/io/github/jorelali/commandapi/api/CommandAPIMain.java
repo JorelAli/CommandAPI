@@ -16,6 +16,7 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World.Environment;
+import org.bukkit.WorldCreator;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -44,6 +45,7 @@ import io.github.jorelali.commandapi.api.arguments.RotationArgument;
 import io.github.jorelali.commandapi.api.arguments.ScoreHolderArgument;
 import io.github.jorelali.commandapi.api.arguments.ScoreHolderArgument.ScoreHolderType;
 import io.github.jorelali.commandapi.api.arguments.ScoreboardSlotArgument;
+import io.github.jorelali.commandapi.api.arguments.StringArgument;
 import io.github.jorelali.commandapi.api.arguments.TimeArgument;
 import io.github.jorelali.commandapi.api.wrappers.FloatRange;
 import io.github.jorelali.commandapi.api.wrappers.IntegerRange;
@@ -260,6 +262,18 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         	NBTContainer strs = (NBTContainer) a[0];
         	System.out.println(strs);
         });
+        
+        LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+        arguments.put("worldname", new StringArgument());
+        arguments.put("type", new EnvironmentArgument());
+        
+        CommandAPI.getInstance().register("createworld", arguments, (sender, args) -> {
+        	String worldName = (String) args[0];
+        	Environment environment = (Environment) args[1];
+            Bukkit.getServer().createWorld(new WorldCreator(worldName).environment(environment));
+        	sender.sendMessage("World created!");
+        });
+        
         
 //		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 //		arguments.put("message", new ChatArgument());
