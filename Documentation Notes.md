@@ -13,8 +13,8 @@ List of things to document
   - [x] ChatArgument
     - [x] Note about spigot dependency
     - [x] Note about "Raw JSON text"
-  - [ ] EnvironmentArgument
-    - [ ] EnvironmentException - EnvironmentArgument only compatible with 1.13.1+
+  - [x] EnvironmentArgument
+    - [x] EnvironmentException - EnvironmentArgument only compatible with 1.13.1+
   - [x] Ranged arguments:
     - [x] FloatRangeArgument
     - [x] IntegerRangeArgument
@@ -44,3 +44,7 @@ List of things to document
   - [ ] InvalidRangeException, for int,long,float,double arguments with ranges
 - [x] Update afterword
 - Examples: https://github.com/JorelAli/1.13-Command-API/issues/69#issuecomment-525350311
+
+- Gifs of each argument showcasing what its possibilities are like, similar to:
+
+  ![better arguments](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/images/explode.gif)
