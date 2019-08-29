@@ -108,4 +108,4 @@ CommandAPI.getInstance().register("personalmsg", arguments, (sender, args) -> {
 });
 ```
 
-If a player were to type `/personalmsg hello @p`, with players Jim and James on the server, Jim would receive the message `hello Jim`, and James would receive the message `hello James`.
+If a player "Bob" were to type `/personalmsg hello @p`, with players Jim and James on the server, Jim would receive the message `hello Bob`, and James would also receive the message `hello Bob`.

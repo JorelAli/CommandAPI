@@ -661,7 +661,7 @@ CommandAPI.getInstance().register(&quot;personalmsg&quot;, arguments, (sender, a
     Bukkit.getServer().spigot().broadcast(message);
 });
 </code></pre>
-<p>If a player were to type <code>/personalmsg hello @p</code>, with players Jim and James on the server, Jim would receive the message <code>hello Jim</code>, and James would receive the message <code>hello James</code>.</p>
+<p>If a player &quot;Bob&quot; were to type <code>/personalmsg hello @p</code>, with players Jim and James on the server, Jim would receive the message <code>hello Bob</code>, and James would also receive the message <code>hello Bob</code>.</p>
 <a class="header" href="#string-arguments" id="string-arguments"><h1>String arguments</h1></a>
 <a class="header" href="#string-argument" id="string-argument"><h2>String argument</h2></a>
 <p>The <code>StringArgument</code> class is used to represent a single word. These words <strong>can only contain alphanumeric characters (A-Z, a-z and 0-9), and the underscore character</strong>.</p>
