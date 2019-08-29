@@ -4,7 +4,7 @@ The `EnvironmentArgument` class allows a command sender to refer to a specific w
 
 > **Note:**
 >
-> The `EnvironmentArgument` is only supported for Minecraft versions 1.13.1 and later, meaning it _will not work_ on Minecraft 1.13. This is due to fact that Minecraft added the environment argument in 1.13.1. Attempting to use the `EnvironmentArgument` on Minecraft 1.13 will throw an `EnvironmentException`.
+> The `EnvironmentArgument` is only supported in Minecraft versions 1.13.1 and later, meaning it _will not work_ on Minecraft 1.13. This is due to fact that Minecraft added the environment argument in 1.13.1. Attempting to use the `EnvironmentArgument` on Minecraft 1.13 will throw an `EnvironmentArgumentException`.
 
 ## Example - Creating a new world
 

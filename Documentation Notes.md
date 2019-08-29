@@ -23,8 +23,8 @@ List of things to document
   - [x] LongArgument
   - [ ] NBTCompoundArgument
     - [ ] NBTNotFoundException, and the dependency on the NBTAPI
-  - [ ] TimeArgument
-    - [ ] TimeArgumentException - TimeArgument only compatible with 1.14+
+  - [x] TimeArgument
+    - [x] TimeArgumentException - TimeArgument only compatible with 1.14+
   - [ ] Position based arguments:
     - [ ] Location2DArgument
       - [ ] Mention how to use Location2D, and how it extends Location so can be used wherever location is used
@@ -41,6 +41,7 @@ List of things to document
     - [ ] ObjectiveArgument
     - [ ] ObjectiveCriteriaArgument
 - Things that weren't documented before but need to be:
+
   - [ ] InvalidRangeException, for int,long,float,double arguments with ranges
 - [x] Update afterword
 - Examples: https://github.com/JorelAli/1.13-Command-API/issues/69#issuecomment-525350311

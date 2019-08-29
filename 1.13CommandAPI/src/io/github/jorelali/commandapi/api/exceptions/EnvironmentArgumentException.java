@@ -1,6 +1,6 @@
 package io.github.jorelali.commandapi.api.exceptions;
 
-public class EnvironmentException extends RuntimeException {
+public class EnvironmentArgumentException extends RuntimeException {
 	
 	private static final long serialVersionUID = -833423429832562039L;
 

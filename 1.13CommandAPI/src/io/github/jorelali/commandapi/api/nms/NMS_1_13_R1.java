@@ -59,7 +59,7 @@ import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.EntitySelector;
 import io.github.jorelali.commandapi.api.arguments.LocationType;
-import io.github.jorelali.commandapi.api.exceptions.EnvironmentException;
+import io.github.jorelali.commandapi.api.exceptions.EnvironmentArgumentException;
 import io.github.jorelali.commandapi.api.exceptions.TimeArgumentException;
 import io.github.jorelali.commandapi.api.wrappers.FloatRange;
 import io.github.jorelali.commandapi.api.wrappers.FunctionWrapper;
@@ -142,7 +142,7 @@ public class NMS_1_13_R1 implements NMS {
 
 	@Override
 	public ArgumentType<?> _ArgumentDimension() {
-		throw new EnvironmentException();
+		throw new EnvironmentArgumentException();
 	}
 
 	@Override
@@ -333,7 +333,7 @@ public class NMS_1_13_R1 implements NMS {
 
 	@Override
 	public Environment getDimension(CommandContext<?> cmdCtx, String key) {
-		throw new EnvironmentException();
+		throw new EnvironmentArgumentException();
 	}
 
 	@Override
