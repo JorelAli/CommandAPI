@@ -21,6 +21,12 @@ List of things to document
     - [x] Mention how to use various Ranged classes
   - [ ] ItemSlotArgument
   - [x] LongArgument
+  - [ ] Math operation argument
+    - [ ] All of the technicalities with math operation argument:	
+      - [ ] x < y -> min(x, y)
+      - [ ] x > y -> max(x, y)
+      - [ ] x >< y -> y
+      - [ ] x = y -> y
   - [ ] NBTCompoundArgument
     - [ ] NBTNotFoundException, and the dependency on the NBTAPI
   - [x] TimeArgument
