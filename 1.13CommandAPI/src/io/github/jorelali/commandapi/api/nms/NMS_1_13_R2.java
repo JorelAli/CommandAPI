@@ -9,6 +9,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.function.IntBinaryOperator;
 import java.util.function.ToIntBiFunction;
 import java.util.stream.Collectors;
 
@@ -109,6 +110,8 @@ import net.minecraft.server.v1_13_R2.Entity;
 import net.minecraft.server.v1_13_R2.EntityTypes;
 import net.minecraft.server.v1_13_R2.EnumDirection.EnumAxis;
 import net.minecraft.server.v1_13_R2.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_13_R2.ArgumentMathOperation;
+import net.minecraft.server.v1_13_R2.ScoreboardScore;
 import net.minecraft.server.v1_13_R2.ArgumentNBTTag;
 import net.minecraft.server.v1_13_R2.ICompletionProvider;
 import net.minecraft.server.v1_13_R2.IVectorPosition;
@@ -658,6 +661,37 @@ public class NMS_1_13_R2 implements NMS {
 	@Override
 	public ArgumentType<?> _ArgumentNBTCompound() {
 		return ArgumentNBTTag.a();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentMathOperation() {
+		return ArgumentMathOperation.a();
+	}
+
+	@Override
+	public IntBinaryOperator getMathOperation(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		ArgumentMathOperation.a result = ArgumentMathOperation.a(cmdCtx, key);
+		
+		return new IntBinaryOperator() {
+			
+			@Override
+			public int applyAsInt(int left, int right) {
+				
+				ScoreboardScore int1 = new ScoreboardScore(new net.minecraft.server.v1_13_R2.Scoreboard(), null, null);
+				ScoreboardScore int2 = new ScoreboardScore(new net.minecraft.server.v1_13_R2.Scoreboard(), null, null);
+				
+				int1.setScore(left);
+				int2.setScore(right);
+				
+				try {
+					result.apply(int1, int2);
+				} catch (CommandSyntaxException e) {
+					e.printStackTrace();
+				}
+				
+				return int1.getScore();
+			}
+		};
 	}
 	
 }

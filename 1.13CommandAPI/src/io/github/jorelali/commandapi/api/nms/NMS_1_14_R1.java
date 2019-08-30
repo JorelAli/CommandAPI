@@ -11,6 +11,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.function.IntBinaryOperator;
 import java.util.function.ToIntBiFunction;
 import java.util.stream.Collectors;
 
@@ -84,6 +85,7 @@ import net.minecraft.server.v1_14_R1.ArgumentEntity;
 import net.minecraft.server.v1_14_R1.ArgumentEntitySummon;
 import net.minecraft.server.v1_14_R1.ArgumentInventorySlot;
 import net.minecraft.server.v1_14_R1.ArgumentItemStack;
+import net.minecraft.server.v1_14_R1.ArgumentMathOperation;
 import net.minecraft.server.v1_14_R1.ArgumentMinecraftKeyRegistered;
 import net.minecraft.server.v1_14_R1.ArgumentMobEffect;
 import net.minecraft.server.v1_14_R1.ArgumentNBTTag;
@@ -121,6 +123,7 @@ import net.minecraft.server.v1_14_R1.IVectorPosition;
 import net.minecraft.server.v1_14_R1.LootTableRegistry;
 import net.minecraft.server.v1_14_R1.MinecraftKey;
 import net.minecraft.server.v1_14_R1.MinecraftServer;
+import net.minecraft.server.v1_14_R1.ScoreboardScore;
 import net.minecraft.server.v1_14_R1.Vec2F;
 import net.minecraft.server.v1_14_R1.Vec3D;
 
@@ -667,6 +670,37 @@ public class NMS_1_14_R1 implements NMS {
 	@Override
 	public ArgumentType<?> _ArgumentNBTCompound() {
 		return ArgumentNBTTag.a();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentMathOperation() {
+		return ArgumentMathOperation.a();
+	}
+
+	@Override
+	public IntBinaryOperator getMathOperation(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		ArgumentMathOperation.a result = ArgumentMathOperation.a(cmdCtx, key);
+		
+		return new IntBinaryOperator() {
+			
+			@Override
+			public int applyAsInt(int left, int right) {
+				
+				ScoreboardScore int1 = new ScoreboardScore(new net.minecraft.server.v1_14_R1.Scoreboard(), null, null);
+				ScoreboardScore int2 = new ScoreboardScore(new net.minecraft.server.v1_14_R1.Scoreboard(), null, null);
+				
+				int1.setScore(left);
+				int2.setScore(right);
+				
+				try {
+					result.apply(int1, int2);
+				} catch (CommandSyntaxException e) {
+					e.printStackTrace();
+				}
+				
+				return int1.getScore();
+			}
+		};
 	}
 
 }

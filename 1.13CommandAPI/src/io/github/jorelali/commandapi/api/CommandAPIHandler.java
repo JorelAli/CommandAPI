@@ -372,6 +372,9 @@ public final class CommandAPIHandler {
 						case NBT_COMPOUND:
 							argList.add(nms.getNBTCompound(cmdCtx, entry.getKey()));
 							break;
+						case MATH_OPERATION:
+							argList.add(nms.getMathOperation(cmdCtx, entry.getKey()));
+							break;
 					}
 				}
 			}

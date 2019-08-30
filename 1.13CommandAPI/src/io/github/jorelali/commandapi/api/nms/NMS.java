@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.function.IntBinaryOperator;
 
 import org.bukkit.Axis;
 import org.bukkit.ChatColor;
@@ -194,6 +195,10 @@ public interface NMS {
 	ArgumentType<?> _ArgumentTime();
 	ArgumentType<?> _ArgumentVec2();
 	ArgumentType<?> _ArgumentVec3();
+
+	ArgumentType<?> _ArgumentMathOperation();
+
+	IntBinaryOperator getMathOperation(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 
 
 

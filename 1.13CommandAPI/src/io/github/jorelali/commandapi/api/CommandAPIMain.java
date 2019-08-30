@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.LinkedHashMap;
+import java.util.function.IntBinaryOperator;
 import java.util.logging.Logger;
 
 import org.bukkit.Axis;
@@ -29,10 +30,12 @@ import io.github.jorelali.commandapi.api.arguments.ChatComponentArgument;
 import io.github.jorelali.commandapi.api.arguments.EnvironmentArgument;
 import io.github.jorelali.commandapi.api.arguments.FloatRangeArgument;
 import io.github.jorelali.commandapi.api.arguments.GreedyStringArgument;
+import io.github.jorelali.commandapi.api.arguments.IntegerArgument;
 import io.github.jorelali.commandapi.api.arguments.IntegerRangeArgument;
 import io.github.jorelali.commandapi.api.arguments.ItemSlotArgument;
 import io.github.jorelali.commandapi.api.arguments.Location2DArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationType;
+import io.github.jorelali.commandapi.api.arguments.MathOperationArgument;
 import io.github.jorelali.commandapi.api.arguments.NBTCompoundArgument;
 import io.github.jorelali.commandapi.api.arguments.RotationArgument;
 import io.github.jorelali.commandapi.api.arguments.ScoreHolderArgument;
@@ -255,17 +258,29 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         	System.out.println(strs);
         });
         
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("duration", new TimeArgument());
-arguments.put("message", new GreedyStringArgument());
-
-CommandAPI.getInstance().register("bigmsg", arguments, (sender, args) -> {
-	int duration = (int) args[0];
-	String message = (String) args[1];
-	for(Player player : Bukkit.getOnlinePlayers()) {
-		player.sendTitle(message, "", 10, duration, 20);
-	}
-});
+		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+		arguments.put("duration", new TimeArgument());
+		arguments.put("message", new GreedyStringArgument());
+		
+		CommandAPI.getInstance().register("bigmsg", arguments, (sender, args) -> {
+			int duration = (int) args[0];
+			String message = (String) args[1];
+			for(Player player : Bukkit.getOnlinePlayers()) {
+				player.sendTitle(message, "", 10, duration, 20);
+			}
+		});
+		
+		arguments = new LinkedHashMap<>();
+		arguments.put("int1", new IntegerArgument());
+		arguments.put("operation", new MathOperationArgument());
+		arguments.put("int2", new IntegerArgument());
+		
+		CommandAPI.getInstance().register("calc", arguments, (sender, args) -> {
+			int int1 = (int) args[0];
+			int int2 = (int) args[2];
+			IntBinaryOperator op = (IntBinaryOperator) args[1];
+			sender.sendMessage("=> " + op.applyAsInt(int1, int2));
+		});
         
 //LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 //arguments.put("worldname", new StringArgument());
