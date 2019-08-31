@@ -284,7 +284,7 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 		});
 		
 		arguments = new LinkedHashMap<>();
-		arguments.put("gm", new SuperLiteralArgument(new String[] {"hello", "world", "hi"}));
+		arguments.put("gm", new SuperLiteralArgument(new String[] {"q5wve712341'``''\"\"私#][]#12", "world", "hi"}));
 		
 		CommandAPI.getInstance().register("gm", arguments, (sender, args) -> {
 			System.out.println(args[0]);
