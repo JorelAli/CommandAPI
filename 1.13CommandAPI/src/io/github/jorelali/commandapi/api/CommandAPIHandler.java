@@ -298,6 +298,10 @@ public final class CommandAPIHandler {
 							argList.add(nms.getItemStack(cmdCtx, entry.getKey()));
 							break;
 						case LITERAL:
+							LiteralArgument a = (LiteralArgument) entry.getValue();
+							if(a.isSuper) {
+								argList.add(a.getLiteral());
+							}
 							break;
 						case LOCATION:
 							LocationType locationType = ((LocationArgument) entry.getValue()).getLocationType();
@@ -452,6 +456,7 @@ public final class CommandAPIHandler {
 		if(sender == null) {
 			return true;
 		}
+		if(permission == null) return true; //TODO: FIX THIS
 		if(permission.equals(CommandPermission.NONE)) {
 			return true;
 		} else if(permission.equals(CommandPermission.OP)) {

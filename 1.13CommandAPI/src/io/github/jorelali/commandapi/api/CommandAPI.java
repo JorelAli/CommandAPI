@@ -1,13 +1,19 @@
 package io.github.jorelali.commandapi.api;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
 import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.arguments.GreedyArgument;
+import io.github.jorelali.commandapi.api.arguments.LiteralArgument;
+import io.github.jorelali.commandapi.api.arguments.SuperLiteralArgument;
 import io.github.jorelali.commandapi.api.exceptions.GreedyArgumentException;
 import io.github.jorelali.commandapi.api.exceptions.InvalidCommandNameException;
 import io.github.jorelali.commandapi.api.exceptions.WrapperCommandSyntaxException;
@@ -16,7 +22,7 @@ import io.github.jorelali.commandapi.api.exceptions.WrapperCommandSyntaxExceptio
  * Class to register commands with the 1.13 command UI
  *
  */
-public class CommandAPI {
+public final class CommandAPI {
 	
 	//Static instance of CommandAPI
 	private static CommandAPI instance;
@@ -207,7 +213,49 @@ public class CommandAPI {
 				}
 			}
 			
-			handler.register(commandName, permissions, aliases, copyOfArgs, executor);
+			if(copyOfArgs.values().stream().filter(arg -> arg instanceof SuperLiteralArgument).count() > 0) {
+				Set<LinkedHashMap<String, Argument>> argsSet = new HashSet<>();
+				
+				for(Entry<String, Argument> entry : copyOfArgs.entrySet()) {
+					
+					List<LinkedHashMap<String, Argument>> newArgs = new ArrayList<>();
+					
+					int size = copyOfArgs.values().stream().filter(arg -> arg instanceof SuperLiteralArgument).reduce(0, (acc, arg) -> {
+						return ((SuperLiteralArgument) arg).getLiterals().length;
+					}, (a, b) -> a + b);
+					
+					for(int i = 0; i < size; i++) {
+						newArgs.add(new LinkedHashMap<>());
+					}
+					
+					int index = 0;
+					
+					if(entry.getValue() instanceof SuperLiteralArgument) {
+						
+						SuperLiteralArgument superArg = (SuperLiteralArgument) entry.getValue();
+						for(int i = 0; i < superArg.getLiterals().length; i++) {
+							LiteralArgument litArg = new LiteralArgument(superArg.getLiterals()[i]);
+							litArg.isSuper = true;
+														
+							newArgs.get(index++).put(entry.getKey(), litArg);
+						}
+						index = 0;
+						
+					} else {
+						newArgs.get(index).put(entry.getKey(), entry.getValue());
+					}
+					
+					argsSet.addAll(newArgs);
+				}
+				
+				for(LinkedHashMap<String, Argument> newArg : argsSet) {
+					handler.register(commandName, permissions, aliases, newArg, executor);
+				}
+				
+			} else {
+				handler.register(commandName, permissions, aliases, copyOfArgs, executor);
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

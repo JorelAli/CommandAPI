@@ -41,6 +41,7 @@ import io.github.jorelali.commandapi.api.arguments.RotationArgument;
 import io.github.jorelali.commandapi.api.arguments.ScoreHolderArgument;
 import io.github.jorelali.commandapi.api.arguments.ScoreHolderArgument.ScoreHolderType;
 import io.github.jorelali.commandapi.api.arguments.ScoreboardSlotArgument;
+import io.github.jorelali.commandapi.api.arguments.SuperLiteralArgument;
 import io.github.jorelali.commandapi.api.arguments.TimeArgument;
 import io.github.jorelali.commandapi.api.wrappers.FloatRange;
 import io.github.jorelali.commandapi.api.wrappers.IntegerRange;
@@ -280,6 +281,13 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 			int int2 = (int) args[2];
 			IntBinaryOperator op = (IntBinaryOperator) args[1];
 			sender.sendMessage("=> " + op.applyAsInt(int1, int2));
+		});
+		
+		arguments = new LinkedHashMap<>();
+		arguments.put("gm", new SuperLiteralArgument(new String[] {"hello", "world", "hi"}));
+		
+		CommandAPI.getInstance().register("gm", arguments, (sender, args) -> {
+			System.out.println(args[0]);
 		});
         
 //LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();

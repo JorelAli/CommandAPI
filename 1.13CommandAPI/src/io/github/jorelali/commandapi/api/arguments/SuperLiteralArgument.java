@@ -6,32 +6,25 @@ import io.github.jorelali.commandapi.api.CommandPermission;
 import io.github.jorelali.commandapi.api.exceptions.BadLiteralException;
 
 @SuppressWarnings("unchecked")
-public class LiteralArgument implements Argument {
+public class SuperLiteralArgument implements Argument {
 
-	String literal;
-	public boolean isSuper = false;
+	String[] literals;
 	
 	/**
 	 * A literal argument. Only takes one string value which cannot be modified 
 	 */
-	public LiteralArgument(final String literal) {
-		if(literal == null) {
+	public SuperLiteralArgument(final String[] literals) {
+		if(literals == null) {
 			throw new BadLiteralException(true);
 		}
-		if(literal.isEmpty()) {
+		if(literals.length == 0) {
 			throw new BadLiteralException(false);
 		}
-		this.literal = literal;
+		this.literals = literals;
 	}
 	
 	@Override
 	public <T> ArgumentType<T> getRawType() {
-		/*
-		 * The literal argument builder is NOT technically an argument.
-		 * Therefore, it doesn't have an ArgumentType.
-		 * 
-		 * This is a wrapper for the object "LiteralArgumentBuilder<>"
-		 */
 		return null;
 	}
 
@@ -40,8 +33,8 @@ public class LiteralArgument implements Argument {
 		return (Class<V>) String.class;
 	}
 
-	public String getLiteral() {
-		return literal;
+	public String[] getLiterals() {
+		return literals;
 	}
 	
 	@Override
@@ -52,7 +45,7 @@ public class LiteralArgument implements Argument {
 	private CommandPermission permission = null;
 	
 	@Override
-	public LiteralArgument withPermission(CommandPermission permission) {
+	public SuperLiteralArgument withPermission(CommandPermission permission) {
 		this.permission = permission;
 		return this;
 	}
@@ -64,6 +57,6 @@ public class LiteralArgument implements Argument {
 	
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.LITERAL;
+		return CommandAPIArgumentType.SUPER_LITERAL;
 	}
 }
