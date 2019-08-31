@@ -49,6 +49,10 @@ List of things to document
 - Things that weren't documented before but need to be:
 
   - [ ] InvalidRangeException, for int,long,float,double arguments with ranges
+  - [ ] Update documentation for `LiteralArgument`s, based off of the new research from SuperLiterals:
+    - [ ] They can be "entered", but not accepted _(i.e. pressing the enter button still sends it to the server)_
+    - [ ] Can consist of any non-whitespace character
+    - [ ] **Highly recommend** just using a String argument instead, _(except can't use any non-whitespace character)_.
 - [x] Update afterword
 - Examples: https://github.com/JorelAli/1.13-Command-API/issues/69#issuecomment-525350311
 
