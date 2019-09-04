@@ -34,10 +34,11 @@ List of things to document
   - [ ] Position based arguments:
     - [ ] Location2DArgument
       - [ ] Mention how to use Location2D, and how it extends Location so can be used wherever location is used
-    - [ ] RotationArgument
-      - [ ] Mention of Rotation class
+    - [x] RotationArgument
+      - [x] Mention of Rotation class
+      - [ ] Test the rotation example + give it a name
     - [ ] AxisArgument
-    - [ ] (Move LocationArgument section into "position based" section)
+    - [x] (Move LocationArgument section into "position based" section)
   - [ ] Scoreboard based arguments:
     - [ ] ScoreboardSlotArgument
       - [ ] Extra mention about how to use ScoreboardSlot class
