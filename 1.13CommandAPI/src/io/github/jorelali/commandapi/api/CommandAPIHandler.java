@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -340,6 +342,15 @@ public final class CommandAPIHandler {
 				}
 			} else {
 				//Run normal executor
+				IExecutorN<? extends CommandSender> z = executor.getEx();
+				System.out.println(z.getClass().getDeclaredMethods()[0].getParameterTypes()[0].getName());
+//				for(Type t : z.getClass().getGenericInterfaces()) {
+//					System.out.println("genericInteface: " + t.getTypeName());
+//				}
+//				System.out.println("superClass: " + z.getClass().getGenericSuperclass().getTypeName());
+//				for(TypeVariable v : z.getClass().getTypeParameters()) {
+//					System.out.println("tV: " + v.getName());
+//				}
 				try {
 					IExecutorN<CommandSender> e = (IExecutorN<CommandSender>) executor.getEx();
 					e.run(sender, argList.toArray(new Object[argList.size()]));
