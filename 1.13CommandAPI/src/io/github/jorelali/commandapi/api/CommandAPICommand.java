@@ -3,6 +3,12 @@ package io.github.jorelali.commandapi.api;
 import java.util.LinkedHashMap;
 
 import io.github.jorelali.commandapi.api.arguments.Argument;
+import io.github.jorelali.commandapi.api.executors.CommandExecutor;
+import io.github.jorelali.commandapi.api.executors.EntityCommandExecutor;
+import io.github.jorelali.commandapi.api.executors.EntityResultingCommandExecutor;
+import io.github.jorelali.commandapi.api.executors.PlayerCommandExecutor;
+import io.github.jorelali.commandapi.api.executors.PlayerResultingCommandExecutor;
+import io.github.jorelali.commandapi.api.executors.ResultingCommandExecutor;
 
 public class CommandAPICommand {
 
@@ -31,15 +37,39 @@ public class CommandAPICommand {
 		return this;
 	}
 	
+	// Executors 
+	
 	public CommandAPICommand executes(CommandExecutor executor) {
-		this.executor = new CustomCommandExecutor(executor, null);
+		this.executor = new CustomCommandExecutor(executor);
 		return this;
 	}
 	
 	public CommandAPICommand executes(ResultingCommandExecutor executor) {
-		this.executor = new CustomCommandExecutor(null, executor);
+		this.executor = new CustomCommandExecutor(executor);
 		return this;
 	}
+	
+	public CommandAPICommand executesPlayer(PlayerCommandExecutor executor) {
+		this.executor = new CustomCommandExecutor(executor);
+		return this;
+	}
+	
+	public CommandAPICommand executesPlayer(PlayerResultingCommandExecutor executor) {
+		this.executor = new CustomCommandExecutor(executor);
+		return this;
+	}
+	
+	public CommandAPICommand executesEntity(EntityCommandExecutor executor) {
+		this.executor = new CustomCommandExecutor(executor);
+		return this;
+	}
+	
+	public CommandAPICommand executesEntity(EntityResultingCommandExecutor executor) {
+		this.executor = new CustomCommandExecutor(executor);
+		return this;
+	}
+	
+	// Registration
 	
 	public void register() {
 		if(executor == null) {

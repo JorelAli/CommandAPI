@@ -1,11 +1,11 @@
-package io.github.jorelali.commandapi.api;
+package io.github.jorelali.commandapi.api.executors;
 
-import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import io.github.jorelali.commandapi.api.exceptions.WrapperCommandSyntaxException;
 
 @FunctionalInterface
-public interface CommandExecutor {
+public interface PlayerCommandExecutor extends IExecutorN<Player> {
 
 	/**
 	 * The code to run when this command is performed
@@ -17,6 +17,6 @@ public interface CommandExecutor {
 	 *            determined by the hashmap of arguments IN THE ORDER of
 	 *            insertion into the hashmap
 	 */
-	void run(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException;
+	void run(Player sender, Object[] args) throws WrapperCommandSyntaxException;
 
 }

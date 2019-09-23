@@ -238,6 +238,11 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 			System.out.println(s.getName());
 		}).register();
 		
+		new CommandAPICommand("registry2").executesPlayer((s, a) -> {
+			System.out.println(s.getName());
+			s.getLocation();
+		}).register();
+		
         
 //LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 //arguments.put("worldname", new StringArgument());

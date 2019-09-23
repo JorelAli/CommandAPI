@@ -326,7 +326,7 @@ public final class CommandAPIHandler {
 			if(executor.hasResults()) {
 				//Run resulting executor
 				try {
-					return executor.getResultingEx().run(sender, argList.toArray(new Object[argList.size()]));
+					return executor.getResultingEx().executeWith(sender, argList.toArray(new Object[argList.size()]));
 				} catch (WrapperCommandSyntaxException e) {
 					throw e.getException();
 				} catch (Exception e) {
@@ -336,7 +336,7 @@ public final class CommandAPIHandler {
 			} else {
 				//Run normal executor
 				try {
-					executor.getEx().run(sender, argList.toArray(new Object[argList.size()]));
+					executor.getEx().executeWith(sender, argList.toArray(new Object[argList.size()]));
 					return 1;
 				} catch (WrapperCommandSyntaxException e) {
 					throw e.getException();
