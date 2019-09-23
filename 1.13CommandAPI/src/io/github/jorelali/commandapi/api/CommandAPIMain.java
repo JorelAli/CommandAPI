@@ -233,6 +233,11 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 			IntBinaryOperator op = (IntBinaryOperator) args[1];
 			sender.sendMessage("=> " + op.applyAsInt(int1, int2));
 		});
+		
+		new CommandAPICommand("registry").executes((s, a) -> {
+			System.out.println(s.getName());
+		}).register();
+		
         
 //LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 //arguments.put("worldname", new StringArgument());
