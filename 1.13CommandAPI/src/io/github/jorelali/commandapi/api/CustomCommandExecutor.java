@@ -1,11 +1,21 @@
 package io.github.jorelali.commandapi.api;
 
-class CustomCommandExecutor {
-	private CommandExecutor ex;
-	private ResultingCommandExecutor rEx;
+import org.bukkit.command.CommandSender;
 
-	public CustomCommandExecutor(CommandExecutor ex, ResultingCommandExecutor rEx) {
+import io.github.jorelali.commandapi.api.executors.IExecutorN;
+import io.github.jorelali.commandapi.api.executors.IExecutorR;
+
+class CustomCommandExecutor {
+	private IExecutorN<? extends CommandSender> ex;
+	private IExecutorR<? extends CommandSender> rEx;
+
+	public CustomCommandExecutor(IExecutorN<? extends CommandSender> ex) {
 		this.ex = ex;
+		this.rEx = null;
+	}
+	
+	public CustomCommandExecutor(IExecutorR<? extends CommandSender> rEx) {
+		this.ex = null;
 		this.rEx = rEx;
 	}
 
@@ -13,11 +23,11 @@ class CustomCommandExecutor {
 		return rEx != null;
 	}
 
-	public CommandExecutor getEx() {
+	public IExecutorN<? extends CommandSender> getEx() {
 		return ex;
 	}
 
-	public ResultingCommandExecutor getResultingEx() {
+	public IExecutorR<? extends CommandSender> getResultingEx() {
 		return rEx;
 	}
 }

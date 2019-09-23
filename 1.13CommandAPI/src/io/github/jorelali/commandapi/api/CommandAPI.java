@@ -11,6 +11,8 @@ import io.github.jorelali.commandapi.api.arguments.GreedyArgument;
 import io.github.jorelali.commandapi.api.exceptions.GreedyArgumentException;
 import io.github.jorelali.commandapi.api.exceptions.InvalidCommandNameException;
 import io.github.jorelali.commandapi.api.exceptions.WrapperCommandSyntaxException;
+import io.github.jorelali.commandapi.api.executors.CommandExecutor;
+import io.github.jorelali.commandapi.api.executors.ResultingCommandExecutor;
 
 /**
  * Class to register commands with the 1.13 command UI
@@ -120,7 +122,7 @@ public class CommandAPI {
 	 * @param executor The command executor
 	 */
 	public void register(String commandName, CommandPermission permissions, String[] aliases, LinkedHashMap<String, Argument> args, CommandExecutor executor) {
-		register(commandName, permissions, aliases, args, new CustomCommandExecutor(executor, null));
+		register(commandName, permissions, aliases, args, new CustomCommandExecutor(executor));
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -166,7 +168,7 @@ public class CommandAPI {
 	 * @param executor The command executor
 	 */
 	public void register(String commandName, CommandPermission permissions, String[] aliases, LinkedHashMap<String, Argument> args, ResultingCommandExecutor executor) {
-		register(commandName, permissions, aliases, args, new CustomCommandExecutor(null, executor));
+		register(commandName, permissions, aliases, args, new CustomCommandExecutor(executor));
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

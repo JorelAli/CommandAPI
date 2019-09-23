@@ -53,6 +53,8 @@ import io.github.jorelali.commandapi.api.arguments.LocationType;
 import io.github.jorelali.commandapi.api.arguments.OverrideableSuggestions;
 import io.github.jorelali.commandapi.api.arguments.ScoreHolderArgument;
 import io.github.jorelali.commandapi.api.exceptions.WrapperCommandSyntaxException;
+import io.github.jorelali.commandapi.api.executors.IExecutorN;
+import io.github.jorelali.commandapi.api.executors.IExecutorR;
 import io.github.jorelali.commandapi.api.nms.NMS;
 import io.github.jorelali.commandapi.api.nms.NMS_1_13_R1;
 import io.github.jorelali.commandapi.api.nms.NMS_1_13_R2;
@@ -325,8 +327,11 @@ public final class CommandAPIHandler {
 			//Parse executor type
 			if(executor.hasResults()) {
 				//Run resulting executor
+				//TODO: Add type check for Player, or Entity, or CommandSender
 				try {
-					return executor.getResultingEx().run(sender, argList.toArray(new Object[argList.size()]));
+					IExecutorR<CommandSender> e = (IExecutorR<CommandSender>) executor.getResultingEx();
+					return e.run(sender, argList.toArray(new Object[argList.size()]));
+					//return executor.getResultingEx().run(sender, argList.toArray(new Object[argList.size()]));
 				} catch (WrapperCommandSyntaxException e) {
 					throw e.getException();
 				} catch (Exception e) {
@@ -336,7 +341,9 @@ public final class CommandAPIHandler {
 			} else {
 				//Run normal executor
 				try {
-					executor.getEx().run(sender, argList.toArray(new Object[argList.size()]));
+					IExecutorN<CommandSender> e = (IExecutorN<CommandSender>) executor.getEx();
+					e.run(sender, argList.toArray(new Object[argList.size()]));
+					//executor.getEx().run(sender, argList.toArray(new Object[argList.size()]));
 					return 1;
 				} catch (WrapperCommandSyntaxException e) {
 					throw e.getException();
