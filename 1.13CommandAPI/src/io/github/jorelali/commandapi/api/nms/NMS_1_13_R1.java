@@ -80,10 +80,11 @@ import net.minecraft.server.v1_13_R1.ArgumentCriterionValue;
 import net.minecraft.server.v1_13_R1.ArgumentEnchantment;
 import net.minecraft.server.v1_13_R1.ArgumentEntity;
 import net.minecraft.server.v1_13_R1.ArgumentEntitySummon;
-import net.minecraft.server.v1_13_R1.ArgumentInventorySlot;
 import net.minecraft.server.v1_13_R1.ArgumentItemStack;
+import net.minecraft.server.v1_13_R1.ArgumentMathOperation;
 import net.minecraft.server.v1_13_R1.ArgumentMinecraftKeyRegistered;
 import net.minecraft.server.v1_13_R1.ArgumentMobEffect;
+import net.minecraft.server.v1_13_R1.ArgumentNBTTag;
 import net.minecraft.server.v1_13_R1.ArgumentParticle;
 import net.minecraft.server.v1_13_R1.ArgumentPosition;
 import net.minecraft.server.v1_13_R1.ArgumentProfile;
@@ -93,6 +94,7 @@ import net.minecraft.server.v1_13_R1.ArgumentScoreboardCriteria;
 import net.minecraft.server.v1_13_R1.ArgumentScoreboardObjective;
 import net.minecraft.server.v1_13_R1.ArgumentScoreboardSlot;
 import net.minecraft.server.v1_13_R1.ArgumentScoreboardTeam;
+import net.minecraft.server.v1_13_R1.ArgumentScoreholder;
 import net.minecraft.server.v1_13_R1.ArgumentTag;
 import net.minecraft.server.v1_13_R1.ArgumentVec2;
 import net.minecraft.server.v1_13_R1.ArgumentVec3;
@@ -106,17 +108,14 @@ import net.minecraft.server.v1_13_R1.Entity;
 import net.minecraft.server.v1_13_R1.EntityTypes;
 import net.minecraft.server.v1_13_R1.EnumDirection.EnumAxis;
 import net.minecraft.server.v1_13_R1.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_13_R1.ArgumentMathOperation;
-import net.minecraft.server.v1_13_R1.ScoreboardScore;
-import net.minecraft.server.v1_13_R1.ArgumentNBTTag;
 import net.minecraft.server.v1_13_R1.ICompletionProvider;
 import net.minecraft.server.v1_13_R1.IVectorPosition;
 import net.minecraft.server.v1_13_R1.LootTableRegistry;
 import net.minecraft.server.v1_13_R1.MinecraftKey;
 import net.minecraft.server.v1_13_R1.MinecraftServer;
+import net.minecraft.server.v1_13_R1.ScoreboardScore;
 import net.minecraft.server.v1_13_R1.Vec2F;
 import net.minecraft.server.v1_13_R1.Vec3D;
-import net.minecraft.server.v1_13_R1.ArgumentScoreholder;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 @SafeReflection(type = ReflectionType.FIELD, target = CraftSound.class, name = "minecraftKey", returnType = String.class, versions = "1.13")
@@ -181,11 +180,6 @@ public class NMS_1_13_R1 implements NMS {
 	@Override
 	public ArgumentType<?> _ArgumentIntRange() {
 		return new ArgumentCriterionValue.b();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentItemSlot() {
-		return ArgumentInventorySlot.a();
 	}
 
 	@Override
@@ -415,11 +409,6 @@ public class NMS_1_13_R1 implements NMS {
 		int low = range.a() == null ? Integer.MIN_VALUE : range.a();
 		int high = range.b() == null ? Integer.MAX_VALUE : range.b();
 		return new io.github.jorelali.commandapi.api.wrappers.IntegerRange(low, high);
-	}
-
-	@Override
-	public int getItemSlot(CommandContext cmdCtx, String key) {
-		return ArgumentInventorySlot.a(cmdCtx, key);
 	}
 	
 	@Override

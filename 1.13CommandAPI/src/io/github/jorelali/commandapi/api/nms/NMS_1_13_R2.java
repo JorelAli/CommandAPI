@@ -81,10 +81,11 @@ import net.minecraft.server.v1_13_R2.ArgumentDimension;
 import net.minecraft.server.v1_13_R2.ArgumentEnchantment;
 import net.minecraft.server.v1_13_R2.ArgumentEntity;
 import net.minecraft.server.v1_13_R2.ArgumentEntitySummon;
-import net.minecraft.server.v1_13_R2.ArgumentInventorySlot;
 import net.minecraft.server.v1_13_R2.ArgumentItemStack;
+import net.minecraft.server.v1_13_R2.ArgumentMathOperation;
 import net.minecraft.server.v1_13_R2.ArgumentMinecraftKeyRegistered;
 import net.minecraft.server.v1_13_R2.ArgumentMobEffect;
+import net.minecraft.server.v1_13_R2.ArgumentNBTTag;
 import net.minecraft.server.v1_13_R2.ArgumentParticle;
 import net.minecraft.server.v1_13_R2.ArgumentPosition;
 import net.minecraft.server.v1_13_R2.ArgumentProfile;
@@ -110,14 +111,12 @@ import net.minecraft.server.v1_13_R2.Entity;
 import net.minecraft.server.v1_13_R2.EntityTypes;
 import net.minecraft.server.v1_13_R2.EnumDirection.EnumAxis;
 import net.minecraft.server.v1_13_R2.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_13_R2.ArgumentMathOperation;
-import net.minecraft.server.v1_13_R2.ScoreboardScore;
-import net.minecraft.server.v1_13_R2.ArgumentNBTTag;
 import net.minecraft.server.v1_13_R2.ICompletionProvider;
 import net.minecraft.server.v1_13_R2.IVectorPosition;
 import net.minecraft.server.v1_13_R2.LootTableRegistry;
 import net.minecraft.server.v1_13_R2.MinecraftKey;
 import net.minecraft.server.v1_13_R2.MinecraftServer;
+import net.minecraft.server.v1_13_R2.ScoreboardScore;
 import net.minecraft.server.v1_13_R2.Vec2F;
 import net.minecraft.server.v1_13_R2.Vec3D;
 
@@ -193,11 +192,6 @@ public class NMS_1_13_R2 implements NMS {
 	@Override
 	public ArgumentType<?> _ArgumentIntRange() {
 		return new ArgumentCriterionValue.b();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentItemSlot() {
-		return ArgumentInventorySlot.a();
 	}
 
 	@Override
@@ -433,11 +427,6 @@ public class NMS_1_13_R2 implements NMS {
 		int low = range.a() == null ? Integer.MIN_VALUE : range.a();
 		int high = range.b() == null ? Integer.MAX_VALUE : range.b();
 		return new io.github.jorelali.commandapi.api.wrappers.IntegerRange(low, high);
-	}
-
-	@Override
-	public int getItemSlot(CommandContext cmdCtx, String key) {
-		return ArgumentInventorySlot.a(cmdCtx, key);
 	}
 	
 	@Override

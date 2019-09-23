@@ -1,7 +1,6 @@
 package io.github.jorelali.commandapi.api;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
@@ -11,7 +10,6 @@ import java.util.logging.Logger;
 
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.World.Environment;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -19,7 +17,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.tr7zw.nbtapi.NBTContainer;
@@ -32,7 +29,6 @@ import io.github.jorelali.commandapi.api.arguments.FloatRangeArgument;
 import io.github.jorelali.commandapi.api.arguments.GreedyStringArgument;
 import io.github.jorelali.commandapi.api.arguments.IntegerArgument;
 import io.github.jorelali.commandapi.api.arguments.IntegerRangeArgument;
-import io.github.jorelali.commandapi.api.arguments.ItemSlotArgument;
 import io.github.jorelali.commandapi.api.arguments.Location2DArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationType;
 import io.github.jorelali.commandapi.api.arguments.MathOperationArgument;
@@ -46,7 +42,6 @@ import io.github.jorelali.commandapi.api.wrappers.FloatRange;
 import io.github.jorelali.commandapi.api.wrappers.IntegerRange;
 import io.github.jorelali.commandapi.api.wrappers.Rotation;
 import net.md_5.bungee.api.chat.BaseComponent;
-import net.minecraft.server.v1_14_R1.ArgumentInventorySlot;
 
 public class CommandAPIMain extends JavaPlugin implements Listener {
 	
@@ -160,21 +155,6 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         	@SuppressWarnings("unchecked")
 			EnumSet<Axis> r = (EnumSet<Axis>) a[0];
         	System.out.println(r);
-        });
-        
-        args1.clear();
-        args1.put("slot", new ItemSlotArgument());
-        
-        CommandAPI.getInstance().register("slot", args1, (s, a) -> {
-        	int slot = (int) a[0];
-        	Player player = (Player) s;
-        	player.getInventory().setItem(slot, new ItemStack(Material.DIRT));
-        	
-        	try {
-        		Field f = ArgumentInventorySlot.class.getDeclaredField("c");
-        		f.setAccessible(true);
-        		System.out.println(f.get(null));
-        	} catch(Exception e) {}
         });
         
         args1.clear();

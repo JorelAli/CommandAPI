@@ -155,7 +155,6 @@ public interface NMS {
 	Enchantment        getEnchantment(CommandContext<?> cmdCtx, String key);
 	FloatRange         getFloatRange(CommandContext<?> cmdCtx, String key);
 	IntegerRange       getIntRange(CommandContext<?> cmdCtx, String key);
-	int                getItemSlot(CommandContext<?> cmdCtx, String key);
 	LootTable          getLootTable(CommandContext<?> cmdCtx, String key);
 	NBTContainer       getNBTCompound(CommandContext<?> cmdCtx, String key);
 	String             getObjectiveCriteria(CommandContext<?> cmdCtx, String key);
@@ -176,7 +175,6 @@ public interface NMS {
 	ArgumentType<?> _ArgumentEnchantment();
 	ArgumentType<?> _ArgumentFloatRange();
 	ArgumentType<?> _ArgumentIntRange();
-	ArgumentType<?> _ArgumentItemSlot();
 	ArgumentType<?> _ArgumentItemStack();
 	ArgumentType<?> _ArgumentMinecraftKeyRegistered();
 	ArgumentType<?> _ArgumentMobEffect();
