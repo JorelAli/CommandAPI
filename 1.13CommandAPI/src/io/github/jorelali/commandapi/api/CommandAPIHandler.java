@@ -85,60 +85,6 @@ public final class CommandAPIHandler {
 	private Object nmsServer;
 	public static NMS getNMS() { return nms; }
 	
-	private class Version {
-		private int primaryVersion; //e.g. 14
-		private int rev; //e.g. 1
-		
-		public Version(String version) {
-			this.primaryVersion = Integer.parseInt(version.split("_")[1]);
-			
-			Matcher revMatcher = Pattern.compile("(?<=R).+").matcher(version);
-			if(revMatcher.find()) {
-				this.rev = Integer.parseInt(revMatcher.group());
-			}
-		}
-		
-		@Override
-		public String toString() {
-			return "Version " + primaryVersion + " rev " + rev;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			Version other = (Version) obj;
-
-			if (primaryVersion != other.primaryVersion)
-				return false;
-			if (rev != other.rev)
-				return false;
-			return true;
-		}
-	}
-	
-	/**
-	 * Class to store cached methods and fields 
-	 * 
-	 * This is required because each
-	 * key is made up of a class and a field or method name
-	 */
-	@SuppressWarnings("unused")
-	private static class ClassCache {
-
-		private final Class<?> clazz;
-		private final String name;
-
-		public ClassCache(Class<?> clazz, String name) {
-			this.clazz = clazz;
-			this.name = name;
-		}
-	}
-	
 	protected CommandAPIHandler() throws ClassNotFoundException {
 		
 		//Package checks
@@ -745,6 +691,60 @@ public final class CommandAPIHandler {
 			result.setAccessible(true);
 			methods.put(key, result);
 			return result;
+		}
+	}
+	
+	private class Version {
+		private int primaryVersion; //e.g. 14
+		private int rev; //e.g. 1
+		
+		public Version(String version) {
+			this.primaryVersion = Integer.parseInt(version.split("_")[1]);
+			
+			Matcher revMatcher = Pattern.compile("(?<=R).+").matcher(version);
+			if(revMatcher.find()) {
+				this.rev = Integer.parseInt(revMatcher.group());
+			}
+		}
+		
+		@Override
+		public String toString() {
+			return "Version " + primaryVersion + " rev " + rev;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Version other = (Version) obj;
+
+			if (primaryVersion != other.primaryVersion)
+				return false;
+			if (rev != other.rev)
+				return false;
+			return true;
+		}
+	}
+	
+	/**
+	 * Class to store cached methods and fields 
+	 * 
+	 * This is required because each
+	 * key is made up of a class and a field or method name
+	 */
+	@SuppressWarnings("unused")
+	private static class ClassCache {
+
+		private final Class<?> clazz;
+		private final String name;
+
+		public ClassCache(Class<?> clazz, String name) {
+			this.clazz = clazz;
+			this.name = name;
 		}
 	}
 	

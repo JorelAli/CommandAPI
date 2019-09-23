@@ -9,10 +9,6 @@ import io.github.jorelali.commandapi.api.CommandPermission;
 
 @SuppressWarnings("unchecked")
 public class ScoreHolderArgument implements Argument, OverrideableSuggestions {
-
-	public static enum ScoreHolderType {
-		SINGLE, MULTIPLE;
-	}
 	
 	ArgumentType<?> rawType;
 	private final boolean single;
@@ -77,5 +73,9 @@ public class ScoreHolderArgument implements Argument, OverrideableSuggestions {
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.SCORE_HOLDER;
+	}
+
+	public static enum ScoreHolderType {
+		SINGLE, MULTIPLE;
 	}
 }

@@ -10,16 +10,6 @@ import io.github.jorelali.commandapi.api.CommandPermission;
 @SuppressWarnings("unchecked")
 public class DynamicSuggestedStringArgument implements Argument {
 	
-	@FunctionalInterface
-	public interface DynamicSuggestionsWithCommandSender {
-		String[] getSuggestions(CommandSender sender);
-	}
-	
-	@FunctionalInterface
-	public interface DynamicSuggestions {
-		String[] getSuggestions();
-	} 
-	
 	ArgumentType<?> rawType;
 	private DynamicSuggestions suggestions;
 	private DynamicSuggestionsWithCommandSender suggestionsWithCS;
@@ -82,4 +72,14 @@ public class DynamicSuggestedStringArgument implements Argument {
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.SIMPLE_TYPE;
 	}
+	
+	@FunctionalInterface
+	public interface DynamicSuggestionsWithCommandSender {
+		String[] getSuggestions(CommandSender sender);
+	}
+	
+	@FunctionalInterface
+	public interface DynamicSuggestions {
+		String[] getSuggestions();
+	} 
 }

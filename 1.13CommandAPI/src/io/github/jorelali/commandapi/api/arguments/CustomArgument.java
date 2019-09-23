@@ -12,7 +12,116 @@ import io.github.jorelali.commandapi.api.CommandPermission;
 
 @SuppressWarnings("unchecked")
 public class CustomArgument<S> implements Argument, OverrideableSuggestions {
+	
+	/**
+	 * Throws an error to be handled by the command execution handler. When this error
+	 * is thrown, the original command is <i>not</i> executed and the provided error message
+	 * is displayed to the CommandSender
+	 * @param errorMessage The error message to display to the CommandSender
+	 * @throws CustomArgumentException An exception that is handled internally
+	 */
+	public static void throwError(String errorMessage) throws CustomArgumentException {
+		throw new CustomArgumentException(errorMessage);
+	}
+	
+	/**
+	 * Throws an error to be handled by the command execution handler. When this error
+	 * is thrown, the original command is <i>not</i> executed and the provided error message
+	 * is displayed to the CommandSender
+	 * @param errorMessage The error message to display to the CommandSender
+	 * @throws CustomArgumentException An exception that is handled internally
+	 */
+	public static void throwError(MessageBuilder errorMessage) throws CustomArgumentException {
+		throw new CustomArgumentException(errorMessage);
+	}
+	
+	private CustomArgumentFunction<S> parser;
+	private boolean keyed;
+	
+	/**
+	 * Creates a CustomArgument with a valid parser, defaults to non-keyed argument
+	 * 
+	 * @param parser
+	 *            A CustomArgumentFunction that maps a String to the object of your choice.
+	 *            The String input is the text that the CommandSender inputs for
+	 *            this argument
+	 *            
+	 * @see #CustomArgument(CustomArgumentFunction, boolean)
+	 */
+	public CustomArgument(CustomArgumentFunction<S> parser) {
+		this(parser, false);
+	}
+	
+	/**
+	 * Creates a CustomArgument with a valid parser
+	 * 
+	 * @param parser
+	 *            A CustomArgumentFunction that maps a String to the object of your choice.
+	 *            The String input is the text that the CommandSender inputs for
+	 *            this argument
+	 * @param keyed Whether this argument can accept Minecraft's <code>NamespacedKey</code> as
+	 * valid arguments
+	 */
+	public CustomArgument(CustomArgumentFunction<S> parser, boolean keyed) {
+		this.parser = parser;
+		this.keyed = keyed;
+	}
+	
+	@Override
+	public <T> ArgumentType<T> getRawType() {
+		if(keyed) {
+			return (ArgumentType<T>) CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered();
+		} else {
+			return (ArgumentType<T>) StringArgumentType.string();
+		}
+		
+	}
 
+	@Override
+	public Class<S> getPrimitiveType() {
+		return null;
+	}
+
+	@Override
+	public boolean isSimple() {
+		return false;
+	}
+	
+	public CustomArgumentFunction<S> getParser() {
+		return parser;
+	}
+	
+	private CommandPermission permission = null;
+	
+	@Override
+	public CustomArgument<S> withPermission(CommandPermission permission) {
+		this.permission = permission;
+		return this;
+	}
+
+	@Override
+	public CommandPermission getArgumentPermission() {
+		return permission;
+	}
+	
+	private String[] suggestions;
+	
+	@Override
+	public CustomArgument<S> overrideSuggestions(String... suggestions) {
+		this.suggestions = suggestions;
+		return this;
+	}
+	
+	@Override
+	public String[] getOverriddenSuggestions() {
+		return suggestions;
+	}
+
+	@Override
+	public CommandAPIArgumentType getArgumentType() {
+		return CommandAPIArgumentType.CUSTOM;
+	}
+	
 	/**
 	 * MessageBuilder is used to create error messages for invalid argument inputs
 	 */
@@ -126,114 +235,5 @@ public class CustomArgument<S> implements Argument, OverrideableSuggestions {
 	@FunctionalInterface
 	public static interface CustomArgumentFunction<S> {
 		public S apply(String input) throws CustomArgumentException;
-	}
-	
-	/**
-	 * Throws an error to be handled by the command execution handler. When this error
-	 * is thrown, the original command is <i>not</i> executed and the provided error message
-	 * is displayed to the CommandSender
-	 * @param errorMessage The error message to display to the CommandSender
-	 * @throws CustomArgumentException An exception that is handled internally
-	 */
-	public static void throwError(String errorMessage) throws CustomArgumentException {
-		throw new CustomArgumentException(errorMessage);
-	}
-	
-	/**
-	 * Throws an error to be handled by the command execution handler. When this error
-	 * is thrown, the original command is <i>not</i> executed and the provided error message
-	 * is displayed to the CommandSender
-	 * @param errorMessage The error message to display to the CommandSender
-	 * @throws CustomArgumentException An exception that is handled internally
-	 */
-	public static void throwError(MessageBuilder errorMessage) throws CustomArgumentException {
-		throw new CustomArgumentException(errorMessage);
-	}
-	
-	private CustomArgumentFunction<S> parser;
-	private boolean keyed;
-	
-	/**
-	 * Creates a CustomArgument with a valid parser, defaults to non-keyed argument
-	 * 
-	 * @param parser
-	 *            A CustomArgumentFunction that maps a String to the object of your choice.
-	 *            The String input is the text that the CommandSender inputs for
-	 *            this argument
-	 *            
-	 * @see #CustomArgument(CustomArgumentFunction, boolean)
-	 */
-	public CustomArgument(CustomArgumentFunction<S> parser) {
-		this(parser, false);
-	}
-	
-	/**
-	 * Creates a CustomArgument with a valid parser
-	 * 
-	 * @param parser
-	 *            A CustomArgumentFunction that maps a String to the object of your choice.
-	 *            The String input is the text that the CommandSender inputs for
-	 *            this argument
-	 * @param keyed Whether this argument can accept Minecraft's <code>NamespacedKey</code> as
-	 * valid arguments
-	 */
-	public CustomArgument(CustomArgumentFunction<S> parser, boolean keyed) {
-		this.parser = parser;
-		this.keyed = keyed;
-	}
-	
-	@Override
-	public <T> ArgumentType<T> getRawType() {
-		if(keyed) {
-			return (ArgumentType<T>) CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered();
-		} else {
-			return (ArgumentType<T>) StringArgumentType.string();
-		}
-		
-	}
-
-	@Override
-	public Class<S> getPrimitiveType() {
-		return null;
-	}
-
-	@Override
-	public boolean isSimple() {
-		return false;
-	}
-	
-	public CustomArgumentFunction<S> getParser() {
-		return parser;
-	}
-	
-	private CommandPermission permission = null;
-	
-	@Override
-	public CustomArgument<S> withPermission(CommandPermission permission) {
-		this.permission = permission;
-		return this;
-	}
-
-	@Override
-	public CommandPermission getArgumentPermission() {
-		return permission;
-	}
-	
-	private String[] suggestions;
-	
-	@Override
-	public CustomArgument<S> overrideSuggestions(String... suggestions) {
-		this.suggestions = suggestions;
-		return this;
-	}
-	
-	@Override
-	public String[] getOverriddenSuggestions() {
-		return suggestions;
-	}
-
-	@Override
-	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.CUSTOM;
 	}
 }

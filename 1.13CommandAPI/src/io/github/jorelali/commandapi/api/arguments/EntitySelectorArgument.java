@@ -12,34 +12,6 @@ import io.github.jorelali.commandapi.api.CommandPermission;
 
 @SuppressWarnings("unchecked")
 public class EntitySelectorArgument implements Argument, OverrideableSuggestions {
-
-	/*
-	 * a = true false -> only one ENTITY is allowed
-	 * b = false false -> multiple entities
-	 * c = true true -> only one PLAYER is allowed
-	 * d = false true -> multiple players
-	 */	
-	public enum EntitySelector {
-		/**
-		 * A single entity. Returns a Bukkit Entity
-		 */
-		ONE_ENTITY,
-		
-		/**
-		 * A single player. Returns a Bukkit Player
-		 */
-		ONE_PLAYER,
-		
-		/**
-		 * Many entities. Returns a Collection of Entities
-		 */
-		MANY_ENTITIES,
-		
-		/**
-		 * Many players. Returns a Collection of Players
-		 */
-		MANY_PLAYERS;
-	}
 	
 	ArgumentType<?> rawType;
 	private EntitySelector selector;
@@ -110,5 +82,33 @@ public class EntitySelectorArgument implements Argument, OverrideableSuggestions
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.ENTITY_SELECTOR;
+	}
+	
+	/*
+	 * a = true false -> only one ENTITY is allowed
+	 * b = false false -> multiple entities
+	 * c = true true -> only one PLAYER is allowed
+	 * d = false true -> multiple players
+	 */	
+	public enum EntitySelector {
+		/**
+		 * A single entity. Returns a Bukkit Entity
+		 */
+		ONE_ENTITY,
+		
+		/**
+		 * A single player. Returns a Bukkit Player
+		 */
+		ONE_PLAYER,
+		
+		/**
+		 * Many entities. Returns a Collection of Entities
+		 */
+		MANY_ENTITIES,
+		
+		/**
+		 * Many players. Returns a Collection of Players
+		 */
+		MANY_PLAYERS;
 	}
 }

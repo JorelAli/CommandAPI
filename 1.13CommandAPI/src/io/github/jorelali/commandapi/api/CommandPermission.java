@@ -32,18 +32,6 @@ public class CommandPermission {
 	private String permission;
 	private PermissionNode permissionNode;
 	
-	protected enum PermissionNode {
-		/**
-		 * A player that has to be an operator to run a command
-		 */
-		OP, 
-		
-		/**
-		 * Command can be run with no permissions
-		 */
-		NONE;
-	}
-	
 	/**
 	 * Represents a single permission required to execute a command
 	 * @param permission The permission node the sender requires to run this command
@@ -80,6 +68,18 @@ public class CommandPermission {
 		} else {
 			return permission;
 		}
+	}
+	
+	private enum PermissionNode {
+		/**
+		 * A player that has to be an operator to run a command
+		 */
+		OP, 
+		
+		/**
+		 * Command can be run with no permissions
+		 */
+		NONE;
 	}
 	
 }
