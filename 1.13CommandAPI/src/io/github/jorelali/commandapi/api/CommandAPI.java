@@ -86,6 +86,7 @@ public class CommandAPI {
 	 * @param commandName The name of the command
 	 * @param args The mapping of arguments for the command
 	 * @param executor The command executor
+	 * @deprecated Use new CommandAPICommand class instead to register commands
 	 */
 	@Deprecated
 	public void register(String commandName, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
@@ -98,6 +99,7 @@ public class CommandAPI {
 	 * @param aliases The array of aliases which also run this command
 	 * @param args The mapping of arguments for the command
 	 * @param executor The command executor
+	 * @deprecated Use new CommandAPICommand class instead to register commands
 	 */
 	@Deprecated
 	public void register(String commandName, String[] aliases, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
@@ -110,7 +112,9 @@ public class CommandAPI {
 	 * @param permissions The permissions required to run this command
 	 * @param args The mapping of arguments for the command
 	 * @param executor The command executor
+	 * @deprecated Use new CommandAPICommand class instead to register commands
 	 */
+	@Deprecated
 	public void register(String commandName, CommandPermission permissions, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
 		register(commandName, permissions, new String[0], args, executor);
 	}
@@ -122,7 +126,9 @@ public class CommandAPI {
 	 * @param aliases The array of aliases which also run this command
 	 * @param args The mapping of arguments for the command
 	 * @param executor The command executor
+	 * @deprecated Use new CommandAPICommand class instead to register commands
 	 */
+	@Deprecated
 	public void register(String commandName, CommandPermission permissions, String[] aliases, LinkedHashMap<String, Argument> args, CommandExecutor executor) {
 		register(commandName, permissions, aliases, args, new CustomCommandExecutor(executor));
 	}
@@ -134,7 +140,9 @@ public class CommandAPI {
 	 * @param commandName The name of the command
 	 * @param args The mapping of arguments for the command
 	 * @param executor The command executor
+	 * @deprecated Use new CommandAPICommand class instead to register commands
 	 */
+	@Deprecated
 	public void register(String commandName, final LinkedHashMap<String, Argument> args, ResultingCommandExecutor executor) {
 		register(commandName, CommandPermission.NONE, args, executor);
 	}	
@@ -145,7 +153,9 @@ public class CommandAPI {
 	 * @param aliases The array of aliases which also run this command
 	 * @param args The mapping of arguments for the command
 	 * @param executor The command executor
+	 * @deprecated Use new CommandAPICommand class instead to register commands
 	 */
+	@Deprecated
 	public void register(String commandName, String[] aliases, final LinkedHashMap<String, Argument> args, ResultingCommandExecutor executor) {
 		register(commandName, CommandPermission.NONE, aliases, args, executor);
 	}
@@ -156,7 +166,9 @@ public class CommandAPI {
 	 * @param permissions The permissions required to run this command
 	 * @param args The mapping of arguments for the command
 	 * @param executor The command executor
+	 * @deprecated Use new CommandAPICommand class instead to register commands
 	 */
+	@Deprecated
 	public void register(String commandName, CommandPermission permissions, final LinkedHashMap<String, Argument> args, ResultingCommandExecutor executor) {
 		register(commandName, permissions, new String[0], args, executor);
 	}
@@ -168,7 +180,9 @@ public class CommandAPI {
 	 * @param aliases The array of aliases which also run this command
 	 * @param args The mapping of arguments for the command
 	 * @param executor The command executor
+	 * @deprecated Use new CommandAPICommand class instead to register commands
 	 */
+	@Deprecated
 	public void register(String commandName, CommandPermission permissions, String[] aliases, LinkedHashMap<String, Argument> args, ResultingCommandExecutor executor) {
 		register(commandName, permissions, aliases, args, new CustomCommandExecutor(executor));
 	}
