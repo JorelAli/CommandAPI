@@ -87,6 +87,7 @@ public class CommandAPI {
 	 * @param args The mapping of arguments for the command
 	 * @param executor The command executor
 	 */
+	@Deprecated
 	public void register(String commandName, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
 		register(commandName, CommandPermission.NONE, args, executor);
 	}	
@@ -98,6 +99,7 @@ public class CommandAPI {
 	 * @param args The mapping of arguments for the command
 	 * @param executor The command executor
 	 */
+	@Deprecated
 	public void register(String commandName, String[] aliases, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
 		register(commandName, CommandPermission.NONE, aliases, args, executor);
 	}
