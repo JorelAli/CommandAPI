@@ -67,8 +67,7 @@ public class Converter {
 			.withPermission(permissionNode)
 			.withAliases(aliases)
 			.withArguments(arguments)
-			.executes((sender, args) -> { plugin.getCommand(commandName).execute(sender, commandName, new String[0]); })
-			.register();
+			.executes((sender, args) -> { plugin.getCommand(commandName).execute(sender, commandName, new String[0]); });
 		
 		//Arguments (all)
 		arguments.put("args", new GreedyStringArgument());
@@ -77,8 +76,7 @@ public class Converter {
 			.withPermission(permissionNode)
 			.withAliases(aliases)
 			.withArguments(arguments)
-			.executes((sender, args) -> { plugin.getCommand(commandName).execute(sender, commandName, ((String) args[0]).split(" ")); })
-			.register();
+			.executes((sender, args) -> { plugin.getCommand(commandName).execute(sender, commandName, ((String) args[0]).split(" ")); });
 	}
 	
 }
