@@ -9,6 +9,10 @@
 
 List of things to document
 
+- The importance of using curly braces when registering things in the `.executes` method
+- The deprecation of `.register(...)` and the new method `CommandAPICommand`
+  - `.executesPlayer` and `.executesEntity`
+
 - New arguments:
   - [x] ChatArgument
     - [x] Note about spigot dependency
@@ -19,7 +23,6 @@ List of things to document
     - [x] FloatRangeArgument
     - [x] IntegerRangeArgument
     - [x] Mention how to use various Ranged classes
-  - [ ] ItemSlotArgument
   - [x] LongArgument
   - [ ] Math operation argument
     - [ ] All of the technicalities with math operation argument:	

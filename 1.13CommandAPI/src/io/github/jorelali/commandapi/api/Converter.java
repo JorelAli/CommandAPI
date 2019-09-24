@@ -60,19 +60,25 @@ public class Converter {
 			permissionNode = CommandPermission.fromString(permission);
 		}
 		
-		
 		//Arguments (none)
 		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 		
-		CommandAPI.getInstance().register(commandName, permissionNode, aliases, arguments, (sender, args) -> {
-			plugin.getCommand(commandName).execute(sender, commandName, new String[0]);
-		});
+		new CommandAPICommand(commandName)
+			.withPermission(permissionNode)
+			.withAliases(aliases)
+			.withArguments(arguments)
+			.executes((sender, args) -> { plugin.getCommand(commandName).execute(sender, commandName, new String[0]); })
+			.register();
 		
 		//Arguments (all)
 		arguments.put("args", new GreedyStringArgument());
-		CommandAPI.getInstance().register(commandName, permissionNode, aliases, arguments, (sender, args) -> {
-			plugin.getCommand(commandName).execute(sender, commandName, ((String) args[0]).split(" "));
-		});
+		
+		new CommandAPICommand(commandName)
+			.withPermission(permissionNode)
+			.withAliases(aliases)
+			.withArguments(arguments)
+			.executes((sender, args) -> { plugin.getCommand(commandName).execute(sender, commandName, ((String) args[0]).split(" ")); })
+			.register();
 	}
 	
 }
