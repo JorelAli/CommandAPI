@@ -41,7 +41,7 @@ public class CommandAPICommand {
 	 * @param aliases An array of aliases which can be used to execute this command
 	 * @return This command builder
 	 */
-	public CommandAPICommand withAliases(String[] aliases) {
+	public CommandAPICommand withAliases(String... aliases) {
 		this.aliases = aliases;
 		return this;
 	}
@@ -61,21 +61,19 @@ public class CommandAPICommand {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(CommandSender, Object[]) -> ()</code> that will be executed when the command is run
-	 * @return This command builder
 	 */
-	public CommandAPICommand executes(CommandExecutor executor) {
+	public void executes(CommandExecutor executor) {
 		this.executor = new CustomCommandExecutor(executor);
-		return this;
+		register();
 	}
 	
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(CommandSender, Object[]) -> int</code> that will be executed when the command is run
-	 * @return This command builder
 	 */
-	public CommandAPICommand executes(ResultingCommandExecutor executor) {
+	public void executes(ResultingCommandExecutor executor) {
 		this.executor = new CustomCommandExecutor(executor);
-		return this;
+		register();
 	}
 	
 	// Player command executor
@@ -83,21 +81,19 @@ public class CommandAPICommand {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(Player, Object[]) -> ()</code> that will be executed when the command is run
-	 * @return This command builder
 	 */
-	public CommandAPICommand executesPlayer(PlayerCommandExecutor executor) {
+	public void executesPlayer(PlayerCommandExecutor executor) {
 		this.executor = new CustomCommandExecutor(executor);
-		return this;
+		register();
 	}
 	
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(Player, Object[]) -> int</code> that will be executed when the command is run
-	 * @return This command builder
 	 */
-	public CommandAPICommand executesPlayer(PlayerResultingCommandExecutor executor) {
+	public void executesPlayer(PlayerResultingCommandExecutor executor) {
 		this.executor = new CustomCommandExecutor(executor);
-		return this;
+		register();
 	}
 	
 	// Entity command executor
@@ -105,33 +101,26 @@ public class CommandAPICommand {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(Entity, Object[]) -> ()</code> that will be executed when the command is run
-	 * @return This command builder
 	 */
-	public CommandAPICommand executesEntity(EntityCommandExecutor executor) {
+	public void executesEntity(EntityCommandExecutor executor) {
 		this.executor = new CustomCommandExecutor(executor);
-		return this;
+		register();
 	}
 	
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(Entity, Object[]) -> int</code> that will be executed when the command is run
-	 * @return This command builder
 	 */
-	public CommandAPICommand executesEntity(EntityResultingCommandExecutor executor) {
+	public void executesEntity(EntityResultingCommandExecutor executor) {
 		this.executor = new CustomCommandExecutor(executor);
-		return this;
+		register();
 	}
 	
 	/**
 	 * Registers the command
 	 */
-	public void register() {
-		if(executor == null) {
-			CommandAPIMain.getLog().severe("Failed to register command /" + commandName + " - invalid executor");
-			return;
-		} else {
-			CommandAPI.getInstance().register(commandName, permission, aliases, args, executor);
-		}
+	private void register() {
+		CommandAPI.getInstance().register(commandName, permission, aliases, args, executor);
 	}
 	
 }

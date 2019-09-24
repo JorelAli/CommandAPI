@@ -13,6 +13,8 @@ Various imports have been moved around for sake of readability and keeping the C
 | `FunctionWrapper`                         | `wrappers.FunctionWrapper`           |
 | `exceptions.GreedyStringException`        | `exceptions.GreedyArgumentException` |
 | `arguments.LocationArgument.LocationType` | `arguments.LocationType`             |
+| `CommandExecutor`                         | `executors.CommandExecutor`          |
+| `ResultingCommandExecutor`                | `executors.ResultingCommandExecutor` |
 
 For example, if you had the following code before:
 
@@ -62,3 +64,20 @@ To reduce redundancies, the CommandAPI removed a few classes:
 | `DefinedCustomArguments` for Objectives | Use `ObjectiveArgument`                                      |
 | `DefinedCustomArguments` for Teams      | Use `TeamArgument`                                           |
 
+### Command registration
+
+The way that commands are registered has been completely changed. It is highly recommended to switch to the new system, which is described [here](./commandregistration.html).
+
+The following methods have been deprecated and will be removed in the next major release:
+
+```java
+CommandAPI.getInstance().register(String, LinkedHashMap, CommandExecutor);
+CommandAPI.getInstance().register(String, String[], LinkedHashMap, CommandExecutor);
+CommandAPI.getInstance().register(String, CommandPermission, LinkedHashMap, CommandExecutor);
+CommandAPI.getInstance().register(String, CommandPermission, String[], LinkedHashMap, CommandExecutor);
+
+CommandAPI.getInstance().register(String, LinkedHashMap, ResultingCommandExecutor);
+CommandAPI.getInstance().register(String, String[], LinkedHashMap, ResultingCommandExecutor);
+CommandAPI.getInstance().register(String, CommandPermission, LinkedHashMap, ResultingCommandExecutor);
+CommandAPI.getInstance().register(String, CommandPermission, String[], LinkedHashMap, ResultingCommandExecutor);
+```

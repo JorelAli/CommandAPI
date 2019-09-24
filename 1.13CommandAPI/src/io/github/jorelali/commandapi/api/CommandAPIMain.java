@@ -236,12 +236,26 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 		
 		new CommandAPICommand("registry").executes((s, a) -> {
 			System.out.println(s.getName());
-		}).register();
+		});
 		
 		new CommandAPICommand("registry2").executesPlayer((s, a) -> {
 			System.out.println(s.getName());
 			s.getLocation();
-		}).register();
+		});
+		
+		{
+LinkedHashMap<String, Argument> arguments1 = new LinkedHashMap<>();
+arguments1.put("message", new GreedyStringArgument());
+			
+new CommandAPICommand("broadcastmsg")
+	.withArguments(arguments1)
+	.withAliases("broadcast", "broadcastmessage")
+	.withPermission(CommandPermission.OP)
+	.executes((sender, args) -> {
+		String message = (String) args[0];
+		Bukkit.getServer().broadcastMessage(message);
+	});
+		}
 		
         
 //LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();

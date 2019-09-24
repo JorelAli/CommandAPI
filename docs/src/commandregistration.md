@@ -1,29 +1,52 @@
 # Command registration
 
-To register commands with the CommandAPI, there are several methods which can be used, depending on whether you want your command to have aliases or permissions in order to run it.
+To register commands with the CommandAPI, the `CommandAPICommand` class is used. It follows a builder pattern to improve readability.
 
-| CommandRegistration method                                   | Outcome                                                   |
-| ------------------------------------------------------------ | --------------------------------------------------------- |
-| `CommandAPI.getInstance().register(String, LinkedHashMap, CommandExecutor)` | Basic command registration                                |
-| `CommandAPI.getInstance().register(String, String[], LinkedHashMap, CommandExecutor)` | Register command with an array of aliases                 |
-| `CommandAPI.getInstance().register(String, CommandPermission, LinkedHashMap, CommandExecutor)` | Register command which need certain permissions           |
-| `CommandAPI.getInstance().register(String, CommandPermission, String[], LinkedHashMap, CommandExecutor)` | Register command with aliases and permission requirements |
+I think the easiest way to explain it is with an example:
 
-The following fields are as follows:
+```java
+// Create our arguments
+LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+arguments.put("message", new GreedyStringArgument());
 
-* `String` - The command name
+//Create our command
+new CommandAPICommand("broadcastmsg")
+	.withArguments(arguments)                     // The arguments
+	.withAliases("broadcast", "broadcastmessage") // Command aliases
+	.withPermission(CommandPermission.OP)         // Required permissions
+	.executes((sender, args) -> {
+		String message = (String) args[0];
+		Bukkit.getServer().broadcastMessage(message);
+	});
+```
 
-  The first argument represents the command name which will be registered. For instance, to register the command `/god`, you would use the following:
+- First, we create our arguments. This is described in more detail in [the section on arguments](./arguments.html). 
 
-  ```java
-  CommandAPI.getInstance().register("god", ...);
-  ```
-* `LinkedHashMap<String, Argument>` - The list of arguments 
+- We then create a new `CommandAPICommand`, with the name of the command that the player must enter to run it. 
+- We then add the arguments to the command with `withArguments`.
+- We add an alias "broadcast". This allows the sender to use `/broadcastmsg <message>` or `/broadcast <message>`.
+- We require the sender to be OP by using `withPermission`.
+- Finally, we control what it does using `executes` (this is described in more detail in [the section on command executors](./commandexecutors.html)).
+
+That's it. That's all there is to it. The command is automatically passed to the CommandAPI and is registered once an `.executes` method has been called.
+
+## `CommandAPICommand` methods
+
+The `CommandAPICommand` has various methods, which are outlined below:
+
+- `withPermission(CommandPermission)` - The required permission to execute a command. (See [the section on permissions](permissions.html)).
+
+- `withArguments(LinkedHashMap<String, Argument>)` - The list of arguments
 
   The CommandAPI requires a list of arguments which are used for the command. The argument map consists of a key which is the tooltip that is displayed as a prompt to users entering commands, and a value which is an instance of an argument (See the section on arguments). This list of arguments is interpreted in the _order that arguments are added to the LinkedHashMap_.
 
-* `String[]` - An array of aliases that the command can be run via 
-* `CommandPermission` - The required permission to execute a command. (See the section on permissions).
+- `withAliases(String... args)` - An array of aliases that the command can be run via 
+
+- `executes((sender, args) -> {})` - Executes a command, using the `CommandSender` object
+
+- `executesPlayer((player, args) -> {})` - Executes a command, using the `Player` object
+
+- `executesEntity((entity, args) -> {})` - Executes a command, using the `Entity` object
 
 ## Command loading order
 
@@ -57,9 +80,11 @@ LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
  * using a simple literal argument which allows for /gamemode survival */
 arguments.put("gamemode", new LiteralArgument("survival"));
 
-CommandAPI.getInstance().register("gamemode", arguments, (sender, args) -> {
-	//Implementation of our /gamemode command
-});
+new CommandAPICommand("gamemode")
+    .withArguments(arguments)
+    .executes((sender, args) -> {
+        //Implementation of our /gamemode command
+    });
 ```
 
 > **Developer's Note:**

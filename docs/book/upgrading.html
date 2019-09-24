@@ -145,6 +145,8 @@
 <tr><td> <code>FunctionWrapper</code>                         </td><td> <code>wrappers.FunctionWrapper</code>           </td></tr>
 <tr><td> <code>exceptions.GreedyStringException</code>        </td><td> <code>exceptions.GreedyArgumentException</code> </td></tr>
 <tr><td> <code>arguments.LocationArgument.LocationType</code> </td><td> <code>arguments.LocationType</code>             </td></tr>
+<tr><td> <code>CommandExecutor</code>                         </td><td> <code>executors.CommandExecutor</code>          </td></tr>
+<tr><td> <code>ResultingCommandExecutor</code>                </td><td> <code>executors.ResultingCommandExecutor</code> </td></tr>
 </tbody></table>
 <p>For example, if you had the following code before:</p>
 <pre><code class="language-java">import io.github.jorelali.commandapi.api.FunctionWrapper;
@@ -185,6 +187,19 @@ CommandAPI.getInstance().register(&quot;myCommand&quot;, arguments, (sender, arg
 <tr><td> <code>DefinedCustomArguments</code> for Objectives </td><td> Use <code>ObjectiveArgument</code>                                      </td></tr>
 <tr><td> <code>DefinedCustomArguments</code> for Teams      </td><td> Use <code>TeamArgument</code>                                           </td></tr>
 </tbody></table>
+<a class="header" href="#command-registration" id="command-registration"><h3>Command registration</h3></a>
+<p>The way that commands are registered has been completely changed. It is highly recommended to switch to the new system, which is described <a href="./commandregistration.html">here</a>.</p>
+<p>The following methods have been deprecated and will be removed in the next major release:</p>
+<pre><code class="language-java">CommandAPI.getInstance().register(String, LinkedHashMap, CommandExecutor);
+CommandAPI.getInstance().register(String, String[], LinkedHashMap, CommandExecutor);
+CommandAPI.getInstance().register(String, CommandPermission, LinkedHashMap, CommandExecutor);
+CommandAPI.getInstance().register(String, CommandPermission, String[], LinkedHashMap, CommandExecutor);
+
+CommandAPI.getInstance().register(String, LinkedHashMap, ResultingCommandExecutor);
+CommandAPI.getInstance().register(String, String[], LinkedHashMap, ResultingCommandExecutor);
+CommandAPI.getInstance().register(String, CommandPermission, LinkedHashMap, ResultingCommandExecutor);
+CommandAPI.getInstance().register(String, CommandPermission, String[], LinkedHashMap, ResultingCommandExecutor);
+</code></pre>
 
                     </main>
 

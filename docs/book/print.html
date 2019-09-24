@@ -266,30 +266,64 @@ For example, if you wanted to use version 2.0, you would use <code>compile &quot
 </li>
 </ul>
 <a class="header" href="#command-registration" id="command-registration"><h1>Command registration</h1></a>
-<p>To register commands with the CommandAPI, there are several methods which can be used, depending on whether you want your command to have aliases or permissions in order to run it.</p>
-<table><thead><tr><th> CommandRegistration method                                   </th><th> Outcome                                                   </th></tr></thead><tbody>
-<tr><td> <code>CommandAPI.getInstance().register(String, LinkedHashMap, CommandExecutor)</code> </td><td> Basic command registration                                </td></tr>
-<tr><td> <code>CommandAPI.getInstance().register(String, String[], LinkedHashMap, CommandExecutor)</code> </td><td> Register command with an array of aliases                 </td></tr>
-<tr><td> <code>CommandAPI.getInstance().register(String, CommandPermission, LinkedHashMap, CommandExecutor)</code> </td><td> Register command which need certain permissions           </td></tr>
-<tr><td> <code>CommandAPI.getInstance().register(String, CommandPermission, String[], LinkedHashMap, CommandExecutor)</code> </td><td> Register command with aliases and permission requirements </td></tr>
-</tbody></table>
-<p>The following fields are as follows:</p>
+<p>To register commands with the CommandAPI, the <code>CommandAPICommand</code> class is used. It follows a builder pattern to improve readability.</p>
+<p>I think the easiest way to explain it is with an example:</p>
+<pre><code class="language-java">// Create our arguments
+LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;message&quot;, new GreedyStringArgument());
+
+//Create our command
+new CommandAPICommand(&quot;broadcastmsg&quot;)
+    .withArguments(arguments)                     // The arguments
+    .withAliases(&quot;broadcast&quot;, &quot;broadcastmessage&quot;) // Command aliases
+    .withPermission(CommandPermission.OP)         // Required permissions
+    .executes((sender, args) -&gt; {
+        String message = (String) args[0];
+        Bukkit.getServer().broadcastMessage(message);
+    });
+</code></pre>
 <ul>
 <li>
-<p><code>String</code> - The command name</p>
-<p>The first argument represents the command name which will be registered. For instance, to register the command <code>/god</code>, you would use the following:</p>
-<pre><code class="language-java">CommandAPI.getInstance().register(&quot;god&quot;, ...);
-</code></pre>
+<p>First, we create our arguments. This is described in more detail in <a href="./arguments.html">the section on arguments</a>.</p>
 </li>
 <li>
-<p><code>LinkedHashMap&lt;String, Argument&gt;</code> - The list of arguments</p>
+<p>We then create a new <code>CommandAPICommand</code>, with the name of the command that the player must enter to run it.</p>
+</li>
+<li>
+<p>We then add the arguments to the command with <code>withArguments</code>.</p>
+</li>
+<li>
+<p>We add an alias &quot;broadcast&quot;. This allows the sender to use <code>/broadcastmsg &lt;message&gt;</code> or <code>/broadcast &lt;message&gt;</code>.</p>
+</li>
+<li>
+<p>We require the sender to be OP by using <code>withPermission</code>.</p>
+</li>
+<li>
+<p>Finally, we control what it does using <code>executes</code> (this is described in more detail in <a href="./commandexecutors.html">the section on command executors</a>).</p>
+</li>
+</ul>
+<p>That's it. That's all there is to it. The command is automatically passed to the CommandAPI and is registered once an <code>.executes</code> method has been called.</p>
+<a class="header" href="#commandapicommand-methods" id="commandapicommand-methods"><h2><code>CommandAPICommand</code> methods</h2></a>
+<p>The <code>CommandAPICommand</code> has various methods, which are outlined below:</p>
+<ul>
+<li>
+<p><code>withPermission(CommandPermission)</code> - The required permission to execute a command. (See <a href="permissions.html">the section on permissions</a>).</p>
+</li>
+<li>
+<p><code>withArguments(LinkedHashMap&lt;String, Argument&gt;)</code> - The list of arguments</p>
 <p>The CommandAPI requires a list of arguments which are used for the command. The argument map consists of a key which is the tooltip that is displayed as a prompt to users entering commands, and a value which is an instance of an argument (See the section on arguments). This list of arguments is interpreted in the <em>order that arguments are added to the LinkedHashMap</em>.</p>
 </li>
 <li>
-<p><code>String[]</code> - An array of aliases that the command can be run via</p>
+<p><code>withAliases(String... args)</code> - An array of aliases that the command can be run via</p>
 </li>
 <li>
-<p><code>CommandPermission</code> - The required permission to execute a command. (See the section on permissions).</p>
+<p><code>executes((sender, args) -&gt; {})</code> - Executes a command, using the <code>CommandSender</code> object</p>
+</li>
+<li>
+<p><code>executesPlayer((player, args) -&gt; {})</code> - Executes a command, using the <code>Player</code> object</p>
+</li>
+<li>
+<p><code>executesEntity((entity, args) -&gt; {})</code> - Executes a command, using the <code>Entity</code> object</p>
 </li>
 </ul>
 <a class="header" href="#command-loading-order" id="command-loading-order"><h2>Command loading order</h2></a>
@@ -315,9 +349,11 @@ LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
  * using a simple literal argument which allows for /gamemode survival */
 arguments.put(&quot;gamemode&quot;, new LiteralArgument(&quot;survival&quot;));
 
-CommandAPI.getInstance().register(&quot;gamemode&quot;, arguments, (sender, args) -&gt; {
-    //Implementation of our /gamemode command
-});
+new CommandAPICommand(&quot;gamemode&quot;)
+    .withArguments(arguments)
+    .executes((sender, args) -&gt; {
+        //Implementation of our /gamemode command
+    });
 </code></pre>
 <blockquote>
 <p><strong>Developer's Note:</strong></p>
@@ -1446,6 +1482,8 @@ commands:
 <tr><td> <code>FunctionWrapper</code>                         </td><td> <code>wrappers.FunctionWrapper</code>           </td></tr>
 <tr><td> <code>exceptions.GreedyStringException</code>        </td><td> <code>exceptions.GreedyArgumentException</code> </td></tr>
 <tr><td> <code>arguments.LocationArgument.LocationType</code> </td><td> <code>arguments.LocationType</code>             </td></tr>
+<tr><td> <code>CommandExecutor</code>                         </td><td> <code>executors.CommandExecutor</code>          </td></tr>
+<tr><td> <code>ResultingCommandExecutor</code>                </td><td> <code>executors.ResultingCommandExecutor</code> </td></tr>
 </tbody></table>
 <p>For example, if you had the following code before:</p>
 <pre><code class="language-java">import io.github.jorelali.commandapi.api.FunctionWrapper;
@@ -1486,6 +1524,19 @@ CommandAPI.getInstance().register(&quot;myCommand&quot;, arguments, (sender, arg
 <tr><td> <code>DefinedCustomArguments</code> for Objectives </td><td> Use <code>ObjectiveArgument</code>                                      </td></tr>
 <tr><td> <code>DefinedCustomArguments</code> for Teams      </td><td> Use <code>TeamArgument</code>                                           </td></tr>
 </tbody></table>
+<a class="header" href="#command-registration-1" id="command-registration-1"><h3>Command registration</h3></a>
+<p>The way that commands are registered has been completely changed. It is highly recommended to switch to the new system, which is described <a href="./commandregistration.html">here</a>.</p>
+<p>The following methods have been deprecated and will be removed in the next major release:</p>
+<pre><code class="language-java">CommandAPI.getInstance().register(String, LinkedHashMap, CommandExecutor);
+CommandAPI.getInstance().register(String, String[], LinkedHashMap, CommandExecutor);
+CommandAPI.getInstance().register(String, CommandPermission, LinkedHashMap, CommandExecutor);
+CommandAPI.getInstance().register(String, CommandPermission, String[], LinkedHashMap, CommandExecutor);
+
+CommandAPI.getInstance().register(String, LinkedHashMap, ResultingCommandExecutor);
+CommandAPI.getInstance().register(String, String[], LinkedHashMap, ResultingCommandExecutor);
+CommandAPI.getInstance().register(String, CommandPermission, LinkedHashMap, ResultingCommandExecutor);
+CommandAPI.getInstance().register(String, CommandPermission, String[], LinkedHashMap, ResultingCommandExecutor);
+</code></pre>
 <a class="header" href="#troubleshooting" id="troubleshooting"><h1>Troubleshooting</h1></a>
 <p>This section basically summarizes the list of things that <em>could</em> go wrong with the CommandAPI and how to mitigate these circumstances.</p>
 <a class="header" href="#serverplugin-reloading" id="serverplugin-reloading"><h2>Server/Plugin reloading</h2></a>
