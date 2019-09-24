@@ -61,6 +61,14 @@ public class CommandAPI {
 	}
 	
 	/**
+	 * Determines whether command registration is permitted via the CommandAPI
+	 * @return A boolean representing whether commands can be registered or not.
+	 */
+	public boolean canRegister() {
+		return CommandAPI.canRegister;
+	}
+	
+	/**
 	 * Unregisters a command
 	 * @param command The name of the command to unregister
 	 */
