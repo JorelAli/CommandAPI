@@ -373,7 +373,7 @@ new CommandAPICommand(&quot;gamemode&quot;)
 </ul>
 <blockquote>
 <p><strong>Developer's Note:</strong></p>
-<p>In general, you need not focus too much on what type of command executor to implement. If you know for certain that you're going to be using your command with command blocks, just ensure you return an integer at the end of your declared command executor. Java will infer the type <em>(whether it's a CommandExecutor or ResultingCommandExecutor)</em> automatically, so feel free to return an integer or not.</p>
+<p>In general, you need not focus too much on what type of command executor to implement. If you know for certain that you're going to be using your command with command blocks, and specifically want to state whether a command returns a value, just ensure you return an integer at the end of your declared command executor. Java will infer the type <em>(whether it's a normal command executor or a resulting command executor)</em> automatically, so feel free to return an integer or not.</p>
 </blockquote>
 <p>In addition to these two types of command executors, there are ways to restrict the execution of commands to certain <code>CommandSender</code> subclasses. In other words, you can make commands executable by players in game only for instance.</p>
 <a class="header" href="#normal-command-executors" id="normal-command-executors"><h1>Normal command executors</h1></a>

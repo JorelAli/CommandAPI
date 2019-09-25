@@ -3,6 +3,8 @@ package io.github.jorelali.commandapi.api;
 import java.util.LinkedHashMap;
 
 import io.github.jorelali.commandapi.api.arguments.Argument;
+import io.github.jorelali.commandapi.api.executors.CommandBlockCommandExecutor;
+import io.github.jorelali.commandapi.api.executors.CommandBlockResultingCommandExecutor;
 import io.github.jorelali.commandapi.api.executors.CommandExecutor;
 import io.github.jorelali.commandapi.api.executors.EntityCommandExecutor;
 import io.github.jorelali.commandapi.api.executors.EntityResultingCommandExecutor;
@@ -112,6 +114,26 @@ public class CommandAPICommand {
 	 * @param executor A lambda of type <code>(Entity, Object[]) -> int</code> that will be executed when the command is run
 	 */
 	public void executesEntity(EntityResultingCommandExecutor executor) {
+		this.executor = new CustomCommandExecutor(executor);
+		register();
+	}
+	
+	// Command block command sender
+	
+	/**
+	 * Adds an executor to the current command builder
+	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -> ()</code> that will be executed when the command is run
+	 */
+	public void executesCommandBlock(CommandBlockCommandExecutor executor) {
+		this.executor = new CustomCommandExecutor(executor);
+		register();
+	}
+	
+	/**
+	 * Adds an executor to the current command builder
+	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -> int</code> that will be executed when the command is run
+	 */
+	public void executesCommandBlock(CommandBlockResultingCommandExecutor executor) {
 		this.executor = new CustomCommandExecutor(executor);
 		register();
 	}
