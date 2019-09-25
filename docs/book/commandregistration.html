@@ -196,6 +196,9 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 <li>
 <p><code>executesEntity((entity, args) -&gt; {})</code> - Executes a command, using the <code>Entity</code> object</p>
 </li>
+<li>
+<p><code>executesCommandBlock((cmdblock, args) -&gt; {})</code> - Executes a command, using the <code>BlockCommandSender</code> object</p>
+</li>
 </ul>
 <a class="header" href="#command-loading-order" id="command-loading-order"><h2>Command loading order</h2></a>
 <p>In order to register commands properly, <strong>commands must be registered before the server finishes loading</strong>. The CommandAPI will prevent command registration after the server has loaded. This basically means that all command registration must occur during a plugin's <code>onLoad()</code> or <code>onEnable()</code> method. With the CommandAPI, depending on which of these functions you load your commands is crutial if your plugin is used with Minecraft's functions.</p>

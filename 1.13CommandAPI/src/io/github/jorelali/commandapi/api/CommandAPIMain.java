@@ -96,28 +96,28 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         LinkedHashMap<String, Argument> args1 = new LinkedHashMap<>();
         args1.put("time", new TimeArgument());
         
-        CommandAPI.getInstance().register("tim", args1, (s, a) -> {
+        new CommandAPICommand("tim").withArguments(args1).executes((s, a) -> {
         	System.out.println(a[0]);
         });
         
         args1.clear();
         args1.put("2d", new Location2DArgument(LocationType.BLOCK_POSITION));
         
-        CommandAPI.getInstance().register("2dblock", args1, (s, a) -> {
+        new CommandAPICommand("2dblock").withArguments(args1).executes((s, a) -> {
         	System.out.println(a[0]);
         });
         
         args1.clear();
         args1.put("2d", new Location2DArgument(LocationType.PRECISE_POSITION));
         
-        CommandAPI.getInstance().register("2dprecise", args1, (s, a) -> {
+        new CommandAPICommand("2dprecise").withArguments(args1).executes((s, a) -> {
         	System.out.println(a[0]);
         });
         
         args1.clear();
         args1.put("range", new IntegerRangeArgument());
         
-        CommandAPI.getInstance().register("range", args1, (s, a) -> {
+        new CommandAPICommand("range").withArguments(args1).executes((s, a) -> {
         	IntegerRange r = (IntegerRange) a[0];
         	System.out.println(r.getLowerBound());
         	System.out.println(r.getUpperBound());
@@ -126,7 +126,7 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         args1.clear();
         args1.put("frange", new FloatRangeArgument());
         
-        CommandAPI.getInstance().register("frange", args1, (s, a) -> {
+        new CommandAPICommand("frange").withArguments(args1).executes((s, a) -> {
         	FloatRange r = (FloatRange) a[0];
         	System.out.println(r.getLowerBound());
         	System.out.println(r.getUpperBound());
@@ -135,7 +135,7 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         args1.clear();
         args1.put("dim", new EnvironmentArgument());
         
-        CommandAPI.getInstance().register("dim", args1, (s, a) -> {
+        new CommandAPICommand("dim").withArguments(args1).executes((s, a) -> {
         	Environment r = (Environment) a[0];
         	System.out.println(r);
         });
@@ -143,7 +143,7 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         args1.clear();
         args1.put("rot", new RotationArgument());
         
-        CommandAPI.getInstance().register("rot", args1, (s, a) -> {
+        new CommandAPICommand("rot").withArguments(args1).executes((s, a) -> {
         	Rotation r = (Rotation) a[0];
         	System.out.println(r.getPitch() + ", " + r.getYaw());
         });
@@ -151,7 +151,7 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         args1.clear();
         args1.put("axes", new AxisArgument());
         
-        CommandAPI.getInstance().register("axes", args1, (s, a) -> {
+        new CommandAPICommand("axes").withArguments(args1).executes((s, a) -> {
         	@SuppressWarnings("unchecked")
 			EnumSet<Axis> r = (EnumSet<Axis>) a[0];
         	System.out.println(r);
@@ -160,14 +160,14 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         args1.clear();
         args1.put("displaySlot", new ScoreboardSlotArgument());
         
-        CommandAPI.getInstance().register("displaySlot", args1, (s, a) -> {
+        new CommandAPICommand("displaySlot").withArguments(args1).executes((s, a) -> {
         	System.out.println(a[0]);
         });
         
         args1.clear();
         args1.put("comp", new ChatComponentArgument());
         
-        CommandAPI.getInstance().register("comp", args1, (s, a) -> {
+        new CommandAPICommand("comp").withArguments(args1).executes((s, a) -> {
         	BaseComponent[] aa = (BaseComponent[]) a[0];
         	System.out.println(Arrays.deepToString(aa));
         });
@@ -175,7 +175,7 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         args1.clear();
         args1.put("chat", new ChatArgument());
         
-        CommandAPI.getInstance().register("chat", args1, (s, a) -> {
+        new CommandAPICommand("chat").withArguments(args1).executes((s, a) -> {
         	BaseComponent[] aa = (BaseComponent[]) a[0];
         	System.out.println(Arrays.deepToString(aa));
         	try {
@@ -188,7 +188,7 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         args1.clear();
         args1.put("holdm", new ScoreHolderArgument(ScoreHolderType.MULTIPLE));
         
-        CommandAPI.getInstance().register("holdm", args1, (s, a) -> {
+        new CommandAPICommand("holdm").withArguments(args1).executes((s, a) -> {
         	@SuppressWarnings("unchecked")
 			Collection<String> strs = (Collection<String>) a[0];
         	System.out.println(strs);
@@ -197,7 +197,7 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         args1.clear();
         args1.put("holds", new ScoreHolderArgument(ScoreHolderType.SINGLE));
         
-        CommandAPI.getInstance().register("holds", args1, (s, a) -> {
+        new CommandAPICommand("holds").withArguments(args1).executes((s, a) -> {
         	String strs = (String) a[0];
         	System.out.println(strs);
         });
@@ -205,7 +205,7 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         args1.clear();
         args1.put("nbt", new NBTCompoundArgument());
         
-        CommandAPI.getInstance().register("nbt", args1, (s, a) -> {
+        new CommandAPICommand("nbt").withArguments(args1).executes((s, a) -> {
         	NBTContainer strs = (NBTContainer) a[0];
         	System.out.println(strs);
         });
@@ -214,7 +214,7 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 		arguments.put("duration", new TimeArgument());
 		arguments.put("message", new GreedyStringArgument());
 		
-		CommandAPI.getInstance().register("bigmsg", arguments, (sender, args) -> {
+		new CommandAPICommand("bigmsg").withArguments(arguments).executes((sender, args) -> {
 			int duration = (int) args[0];
 			String message = (String) args[1];
 			for(Player player : Bukkit.getOnlinePlayers()) {
@@ -227,7 +227,7 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 		arguments.put("operation", new MathOperationArgument());
 		arguments.put("int2", new IntegerArgument());
 		
-		CommandAPI.getInstance().register("calc", arguments, (sender, args) -> {
+		new CommandAPICommand("calc").withArguments(arguments).executes((sender, args) -> {
 			int int1 = (int) args[0];
 			int int2 = (int) args[2];
 			IntBinaryOperator op = (IntBinaryOperator) args[1];
@@ -257,12 +257,17 @@ new CommandAPICommand("broadcastmsg")
 	});
 		}
 		
+new CommandAPICommand("suicide")
+	.executesEntity((e, args) -> {
+		
+	});
+		
         
 //LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 //arguments.put("worldname", new StringArgument());
 //arguments.put("type", new EnvironmentArgument());
 //
-//CommandAPI.getInstance().register("createworld", arguments, (sender, args) -> {
+//new CommandAPICommand("createworld", arguments, (sender, args) -> {
 //	String worldName = (String) args[0];
 //	Environment environment = (Environment) args[1];
 //    Bukkit.getServer().createWorld(new WorldCreator(worldName).environment(environment));
@@ -273,7 +278,7 @@ new CommandAPICommand("broadcastmsg")
 //		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 //		arguments.put("message", new ChatArgument());
 //		
-//		CommandAPI.getInstance().register("personalmsg", arguments, (sender, args) -> {
+//		new CommandAPICommand("personalmsg", arguments, (sender, args) -> {
 //			BaseComponent[] message = (BaseComponent[]) args[0];
 //			Bukkit.getServer().spigot().broadcast(message);
 //		});
@@ -283,7 +288,7 @@ new CommandAPICommand("broadcastmsg")
 //arguments.put("range", new IntegerRangeArgument());
 //arguments.put("item", new ItemStackArgument());
 //
-//CommandAPI.getInstance().register("searchrange", arguments, (sender, args) -> {
+//new CommandAPICommand("searchrange", arguments, (sender, args) -> {
 //	// Retrieve the range from the arguments
 //	IntegerRange range = (IntegerRange) args[0];
 //	ItemStack itemStack = (ItemStack) args[1];

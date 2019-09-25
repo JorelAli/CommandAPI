@@ -142,7 +142,51 @@
   //Code here  
 });
 </code></pre>
-<p>With normal command executors, these do not need to return anything. By default, this will return a <em>success value</em> of 1 if it runs successfully, and a <em>success value</em> of 0 if it runs unsuccessfully, either by throwing an exception <em>(RuntimeException)</em> or by forcing the command to fail.</p>
+<p>With normal command executors, these do not need to return anything. By default, this will return a <em>success value</em> of 1 if it runs successfully, and a <em>success value</em> of 0 if it runs unsuccessfully, either by throwing an exception <em>(RuntimeException)</em> or by forcing the command to fail (See the section on <a href="./commandfailures.html">handling command failures</a>.</p>
+<a class="header" href="#example---creating-a-message-broadcasting-system" id="example---creating-a-message-broadcasting-system"><h2>Example - Creating a message broadcasting system</h2></a>
+<pre><code class="language-java">// Create our arguments
+LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;message&quot;, new GreedyStringArgument());
+
+//Create our command
+new CommandAPICommand(&quot;broadcastmsg&quot;)
+    .withArguments(arguments)                     // The arguments
+    .withAliases(&quot;broadcast&quot;, &quot;broadcastmessage&quot;) // Command aliases
+    .withPermission(CommandPermission.OP)         // Required permissions
+    .executes((sender, args) -&gt; {
+        String message = (String) args[0];
+        Bukkit.getServer().broadcastMessage(message);
+    });
+</code></pre>
+<hr />
+<a class="header" href="#restricting-who-can-run-your-command" id="restricting-who-can-run-your-command"><h2>Restricting who can run your command</h2></a>
+<p>The <code>CommandAPICommand</code> has multiple different <code>executes...()</code> methods that can restrict the command sender to any of the following objects:</p>
+<ul>
+<li>
+<p><code>CommandSender</code> - No restriction, players, the console etc. can use this command. This is what Bukkit normally uses.</p>
+</li>
+<li>
+<p><code>Player</code> - Only in-game players can run this command</p>
+</li>
+<li>
+<p><code>Entity</code> - Only entities (therefore, players as well) can run this command</p>
+</li>
+<li>
+<p><code>BlockCommandSender</code> - Only command blocks can run this command</p>
+</li>
+</ul>
+<p>This is done using the respective method:</p>
+<table><thead><tr><th> Restricted sender    </th><th> Method to use             </th></tr></thead><tbody>
+<tr><td> <code>CommandSender</code>      </td><td> <code>.executes()</code>             </td></tr>
+<tr><td> <code>Player</code>             </td><td> <code>.executesPlayer()</code>       </td></tr>
+<tr><td> <code>Entity</code>             </td><td> <code>.executesEntity()</code>       </td></tr>
+<tr><td> <code>BlockCommandSender</code> </td><td> <code>.executesCommandBlock()</code> </td></tr>
+</tbody></table>
+<a class="header" href="#example---a-suicide-command" id="example---a-suicide-command"><h3>Example - A <code>/suicide</code> command</h3></a>
+<p>Say we wanted to create a command <code>/suicide</code>, which kills the player that executes it. Since this command isn't really &quot;designed&quot; for command senders that are not players, we can restrict it so only players can execute this command (meaning that the console and command blocks cannot run this command). Since it's a player, we can use the <code>.executesPlayer()</code> method:</p>
+<pre><code class="language-java">new CommandAPICommand(&quot;suicide&quot;)
+    .executesPlayer((player, args) -&gt; player.setHealth(0));
+</code></pre>
 
                     </main>
 

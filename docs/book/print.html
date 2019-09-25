@@ -325,6 +325,9 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 <li>
 <p><code>executesEntity((entity, args) -&gt; {})</code> - Executes a command, using the <code>Entity</code> object</p>
 </li>
+<li>
+<p><code>executesCommandBlock((cmdblock, args) -&gt; {})</code> - Executes a command, using the <code>BlockCommandSender</code> object</p>
+</li>
 </ul>
 <a class="header" href="#command-loading-order" id="command-loading-order"><h2>Command loading order</h2></a>
 <p>In order to register commands properly, <strong>commands must be registered before the server finishes loading</strong>. The CommandAPI will prevent command registration after the server has loaded. This basically means that all command registration must occur during a plugin's <code>onLoad()</code> or <code>onEnable()</code> method. With the CommandAPI, depending on which of these functions you load your commands is crutial if your plugin is used with Minecraft's functions.</p>
@@ -375,14 +378,58 @@ new CommandAPICommand(&quot;gamemode&quot;)
 <p><strong>Developer's Note:</strong></p>
 <p>In general, you need not focus too much on what type of command executor to implement. If you know for certain that you're going to be using your command with command blocks, and specifically want to state whether a command returns a value, just ensure you return an integer at the end of your declared command executor. Java will infer the type <em>(whether it's a normal command executor or a resulting command executor)</em> automatically, so feel free to return an integer or not.</p>
 </blockquote>
-<p>In addition to these two types of command executors, there are ways to restrict the execution of commands to certain <code>CommandSender</code> subclasses. In other words, you can make commands executable by players in game only for instance.</p>
+<p>In addition to these two types of command executors, there are ways to restrict the execution of commands to certain <code>CommandSender</code> subclasses. In other words, you can make commands executable by players in game only for instance. These restrictions are covered in more detail in <a href="./normalexecutors.html">Normal command executors</a>.</p>
 <a class="header" href="#normal-command-executors" id="normal-command-executors"><h1>Normal command executors</h1></a>
 <p>Command executors are of the following format, where <code>sender</code> is a <a href="https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/command/CommandSender.html"><code>CommandSender</code></a>, and <code>args</code> is an <code>Object[]</code>, which represents arguments which are parsed by the CommandAPI.</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;...&quot;).executes((sender, args) -&gt; {
   //Code here  
 });
 </code></pre>
-<p>With normal command executors, these do not need to return anything. By default, this will return a <em>success value</em> of 1 if it runs successfully, and a <em>success value</em> of 0 if it runs unsuccessfully, either by throwing an exception <em>(RuntimeException)</em> or by forcing the command to fail.</p>
+<p>With normal command executors, these do not need to return anything. By default, this will return a <em>success value</em> of 1 if it runs successfully, and a <em>success value</em> of 0 if it runs unsuccessfully, either by throwing an exception <em>(RuntimeException)</em> or by forcing the command to fail (See the section on <a href="./commandfailures.html">handling command failures</a>.</p>
+<a class="header" href="#example---creating-a-message-broadcasting-system" id="example---creating-a-message-broadcasting-system"><h2>Example - Creating a message broadcasting system</h2></a>
+<pre><code class="language-java">// Create our arguments
+LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;message&quot;, new GreedyStringArgument());
+
+//Create our command
+new CommandAPICommand(&quot;broadcastmsg&quot;)
+    .withArguments(arguments)                     // The arguments
+    .withAliases(&quot;broadcast&quot;, &quot;broadcastmessage&quot;) // Command aliases
+    .withPermission(CommandPermission.OP)         // Required permissions
+    .executes((sender, args) -&gt; {
+        String message = (String) args[0];
+        Bukkit.getServer().broadcastMessage(message);
+    });
+</code></pre>
+<hr />
+<a class="header" href="#restricting-who-can-run-your-command" id="restricting-who-can-run-your-command"><h2>Restricting who can run your command</h2></a>
+<p>The <code>CommandAPICommand</code> has multiple different <code>executes...()</code> methods that can restrict the command sender to any of the following objects:</p>
+<ul>
+<li>
+<p><code>CommandSender</code> - No restriction, players, the console etc. can use this command. This is what Bukkit normally uses.</p>
+</li>
+<li>
+<p><code>Player</code> - Only in-game players can run this command</p>
+</li>
+<li>
+<p><code>Entity</code> - Only entities (therefore, players as well) can run this command</p>
+</li>
+<li>
+<p><code>BlockCommandSender</code> - Only command blocks can run this command</p>
+</li>
+</ul>
+<p>This is done using the respective method:</p>
+<table><thead><tr><th> Restricted sender    </th><th> Method to use             </th></tr></thead><tbody>
+<tr><td> <code>CommandSender</code>      </td><td> <code>.executes()</code>             </td></tr>
+<tr><td> <code>Player</code>             </td><td> <code>.executesPlayer()</code>       </td></tr>
+<tr><td> <code>Entity</code>             </td><td> <code>.executesEntity()</code>       </td></tr>
+<tr><td> <code>BlockCommandSender</code> </td><td> <code>.executesCommandBlock()</code> </td></tr>
+</tbody></table>
+<a class="header" href="#example---a-suicide-command" id="example---a-suicide-command"><h3>Example - A <code>/suicide</code> command</h3></a>
+<p>Say we wanted to create a command <code>/suicide</code>, which kills the player that executes it. Since this command isn't really &quot;designed&quot; for command senders that are not players, we can restrict it so only players can execute this command (meaning that the console and command blocks cannot run this command). Since it's a player, we can use the <code>.executesPlayer()</code> method:</p>
+<pre><code class="language-java">new CommandAPICommand(&quot;suicide&quot;)
+    .executesPlayer((player, args) -&gt; player.setHealth(0));
+</code></pre>
 <a class="header" href="#proxied-commandsenders" id="proxied-commandsenders"><h1>Proxied commandsenders</h1></a>
 <p>The CommandAPI has extra support for vanilla Minecraft's <code>/execute</code> command, by allowing the CommandSender to be an instance of the <code>ProxiedCommandSender</code> class. This allows the CommandSender to contain two extra pieces of information: The &quot;proxied sender&quot; and the original sender.</p>
 <a class="header" href="#example---running-a-command-as-a-chicken" id="example---running-a-command-as-a-chicken"><h2>Example - Running a command as a chicken</h2></a>

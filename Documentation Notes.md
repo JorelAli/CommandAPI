@@ -9,11 +9,9 @@
 
 List of things to document
 
-- The importance of using curly braces when registering things in the `.executes` method
 - The deprecation of `.register(...)` and the new method `CommandAPICommand`
-  
-- `.executesPlayer` and `.executesEntity`
-  
+
+  - `.executesPlayer` and `.executesEntity`
 - Update _all of the examples_ to fit the new registration system
 
 - New arguments:

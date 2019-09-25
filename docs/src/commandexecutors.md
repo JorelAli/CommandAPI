@@ -15,5 +15,5 @@ The CommandAPI provides various command executors which are lambdas which execut
 > 
 > In general, you need not focus too much on what type of command executor to implement. If you know for certain that you're going to be using your command with command blocks, and specifically want to state whether a command returns a value, just ensure you return an integer at the end of your declared command executor. Java will infer the type _(whether it's a normal command executor or a resulting command executor)_ automatically, so feel free to return an integer or not. 
 
-In addition to these two types of command executors, there are ways to restrict the execution of commands to certain `CommandSender` subclasses. In other words, you can make commands executable by players in game only for instance.
+In addition to these two types of command executors, there are ways to restrict the execution of commands to certain `CommandSender` subclasses. In other words, you can make commands executable by players in game only for instance. These restrictions are covered in more detail in [Normal command executors](./normalexecutors.html).
 
