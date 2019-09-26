@@ -1,6 +1,17 @@
 # 1.13-Command-API
 An API to use the new command UI introduced in Minecraft 1.13
 
+> # PSA: v3.0 release date
+> As I'm sure most of you are aware, the CommandAPI v3.0 is under heavy development. An absurd amount of new content is being added, _(in particular, a tonne of new arguments and serious API refactoring)_ and it's unfortunately come to my attention that I'll not be able to meet my intended deadline of releasing this by October.
+> 
+> For now, **v3.0 is officially scheduled for January**. This is mainly due to various events occuring right now (my higher education takes priority over this project), and working on v3.0 the project is a _lot_ more time consuming than I originally expected. **This date is just an estimate** and can change at any time.
+>
+> However, hope is not lost. **I will continue to monitor the issues pages** and respond to them as normal _(within 24 hours)_, but do not expect any code-based progress until about Decemberish.
+>
+> If Minecraft are to release a new version (1.15) before the planned release, I will ensure that a version of the CommandAPI (based on version 2.2) will be released with full compatibility for Minecraft 1.15 as soon as possible.
+>
+> Thanks for all of your support and I hope you'll be understanding of the current situation.
+
 ## Purpose
 This project provides an API to help Bukkit/Spigot developers use the new Minecraft 1.13 command UI, which includes:
 
