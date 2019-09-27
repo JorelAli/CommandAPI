@@ -6,6 +6,16 @@
 
     <groupId>io.github.jorelali</groupId>
     <artifactId>commandapi</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>commandapi-1.14.4</module>
+        <module>commandapi-1.14.3</module>
+        <module>commandapi-1.14</module>
+        <module>commandapi-1.13</module>
+        <module>commandapi-1.13.1</module>
+        <module>commandapi-1.13.2</module>
+        <module>commandapi-core</module>
+    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -26,122 +36,12 @@
             <name>Minecraft Libraries</name>
             <url>https://libraries.minecraft.net</url>
         </repository>
-	        <repository>
-	        <id>mccommandapi</id>
-	        <url>https://raw.githubusercontent.com/JorelAli/1.13-Command-API/mvn-repo/1.13CommandAPI/</url>
-	    </repository>
-		<repository>
-			<id>codemc-repo</id>
-			<url>https://repo.codemc.org/repository/maven-public/</url>
-			<layout>default</layout>
-		</repository>
+        <repository>
+            <id>codemc-repo</id>
+            <url>https://repo.codemc.org/repository/maven-public/</url>
+            <layout>default</layout>
+        </repository>
     </repositories>
-
-    <dependencies>
-    	<!-- Regular libraries -->
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>${minecraft.server.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.mojang</groupId>
-            <artifactId>brigadier</artifactId>
-            <version>1.0.17</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.mojang</groupId>
-            <artifactId>authlib</artifactId>
-            <version>1.5.25</version>
-            <scope>provided</scope>
-        </dependency>
-		<dependency>
-			<groupId>io.github.jorelali</groupId>
-			<artifactId>commandapi-safereflection</artifactId>
-			<version>2.0</version>
-		</dependency>
-		<dependency>
-			<groupId>de.tr7zw</groupId>
-			<artifactId>item-nbt-api-plugin</artifactId>
-			<version>2.1.0</version>
-		</dependency>
-        
-        <!-- Spigot jars for multiple version support -->
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot-server-1.13</artifactId>
-			<version>1.13</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/spigotlibs/spigot-1.13.jar</systemPath>
-			<type>jar</type>
-  			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot-server-1.13.1</artifactId>
-			<version>1.13.1</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/spigotlibs/spigot-1.13.1.jar</systemPath>
-			<type>jar</type>
-  			<optional>true</optional>
-		</dependency>
-        <dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot-server-1.13.2</artifactId>
-			<version>1.13.2</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/spigotlibs/spigot-1.13.2.jar</systemPath>
-			<type>jar</type>
-  			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot-server-1.14</artifactId>
-			<version>1.14</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/spigotlibs/spigot-1.14.jar</systemPath>
-			<type>jar</type>
-  			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot-server-1.14.1</artifactId>
-			<version>1.14.1</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/spigotlibs/spigot-1.14.1.jar</systemPath>
-			<type>jar</type>
-  			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot-server-1.14.2</artifactId>
-			<version>1.14.2</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/spigotlibs/spigot-1.14.2.jar</systemPath>
-			<type>jar</type>
-  			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot-server-1.14.3</artifactId>
-			<version>1.14.3</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/spigotlibs/spigot-1.14.3.jar</systemPath>
-			<type>jar</type>
-  			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot-server-1.14.4</artifactId>
-			<version>1.14.4</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/spigotlibs/spigot-1.14.4.jar</systemPath>
-			<type>jar</type>
-  			<optional>true</optional>
-		</dependency>
-    </dependencies>
 
     <build>
         <defaultGoal>clean install</defaultGoal>
@@ -164,10 +64,10 @@
                     <version>3.7.0</version>
                 </plugin>
                 <plugin>
-	                <groupId>org.apache.maven.plugins</groupId>
-	                <artifactId>maven-surefire-plugin</artifactId>
-	                <version>2.22.0</version>
-	            </plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.22.0</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -178,13 +78,6 @@
                     <compilerArgs>
                         <arg>-Xlint</arg>
                     </compilerArgs>
-	                
-	                <annotationProcessors>
-						<annotationProcessor>
-							io.github.jorelali.commandapi.safereflection.SafeReflectionProcessor
-						</annotationProcessor>
-					</annotationProcessors>
-					
                 </configuration>
             </plugin>
             <plugin>
