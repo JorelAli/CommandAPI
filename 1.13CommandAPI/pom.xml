@@ -69,7 +69,6 @@
 		</dependency>
         
         <!-- Spigot jars for multiple version support -->
-       
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-server-1.13</artifactId>
@@ -147,16 +146,6 @@
     <build>
         <defaultGoal>clean install</defaultGoal>
         <finalName>CommandAPIv${project.version}_${maven.build.timestamp}</finalName>
-        <sourceDirectory>src</sourceDirectory>
-        <resources>
-            <resource>
-            <directory>.</directory>
-            <includes>
-                <include>plugin.yml</include>
-                <include>config.yml</include>
-            </includes>
-            </resource>
-        </resources>
         <pluginManagement>
             <plugins>
                 <plugin>
