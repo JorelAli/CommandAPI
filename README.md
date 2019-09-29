@@ -8,7 +8,7 @@ An API to use the new command UI introduced in Minecraft 1.13
 >
 > However, hope is not lost. **I will continue to monitor the issues pages** and respond to them as normal _(within 24 hours)_, but do not expect any code-based progress until about Decemberish.
 >
-> If Minecraft are to release a new version (1.15) before the planned release, I will ensure that a version of the CommandAPI (based on version 2.2) will be released with full compatibility for Minecraft 1.15 as soon as possible.
+> If Minecraft are to release a new version (1.15) before the planned release, I will ensure that a version of the CommandAPI (based on version 2.3) will be released with full compatibility for Minecraft 1.15 as soon as possible.
 >
 > Thanks for all of your support and I hope you'll be understanding of the current situation.
 
