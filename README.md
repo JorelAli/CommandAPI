@@ -4,7 +4,14 @@ An API to use the new command UI introduced in Minecraft 1.13
 > # PSA: v3.0 release date
 > As I'm sure most of you are aware, the CommandAPI v3.0 is under heavy development. An absurd amount of new content is being added, _(in particular, a tonne of new arguments and serious API refactoring)_ and it's unfortunately come to my attention that I'll not be able to meet my intended deadline of releasing this by October.
 > 
-> For now, **v3.0 is officially scheduled for January**. This is mainly due to various events occuring right now (my higher education takes priority over this project), and working on v3.0 the project is a _lot_ more time consuming than I originally expected. **This date is just an estimate** and can change at any time.
+> For now, **v3.0 is officially scheduled for August 2020**. This is mainly due to various events occuring right now (my higher education takes priority over this project), and working on v3.0 the project is a _lot_ more time consuming than I originally expected. **This date is just an estimate** and can change at any time.
+>
+> | Date                         | Project status                                                             |
+> |------------------------------|----------------------------------------------------------------------------|
+> | October 2019 - December 2019 | On Hold                                                                    |
+> | December 2019 - January 2020 | Work on implementing new features from issues                              |
+> | January 2020 - July 2020     | On Hold                                                                    |
+> | July 2020 - August 2020      | Implementing other final features <br>3.0 documentation write up <br>3.0 release |
 >
 > However, hope is not lost. **I will continue to monitor the issues pages** and respond to them as normal _(within 24 hours)_, but do not expect any code-based progress until about Decemberish.
 >
