@@ -57,6 +57,7 @@ import io.github.jorelali.commandapi.api.nms.NMS;
 import io.github.jorelali.commandapi.api.nms.NMS_1_13_R1;
 import io.github.jorelali.commandapi.api.nms.NMS_1_13_R2;
 import io.github.jorelali.commandapi.api.nms.NMS_1_14_R1;
+import io.github.jorelali.commandapi.api.nms.NMS_1_15_R1;
 import io.github.jorelali.commandapi.safereflection.ReflectionType;
 import io.github.jorelali.commandapi.safereflection.SafeReflection;
 
@@ -65,8 +66,8 @@ import io.github.jorelali.commandapi.safereflection.SafeReflection;
  * Class to access the main methods in NMS. The wrapper's
  * implementations occur here.
  */
-@SafeReflection(target = SimpleCommandMap.class, type = ReflectionType.FIELD, name = "knownCommands", returnType = Map.class, versions = {"1.13.2", "1.14", "1.14.1", "1.14.2", "1.14.3", "1.14.4"})
-@SafeReflection(target = CommandNode.class, type = ReflectionType.FIELD, name = "children", returnType = Map.class, versions = {"1.13.2", "1.14", "1.14.1", "1.14.2", "1.14.3", "1.14.4"})
+@SafeReflection(target = SimpleCommandMap.class, type = ReflectionType.FIELD, name = "knownCommands", returnType = Map.class, versions = {"1.13.2", "1.14", "1.14.1", "1.14.2", "1.14.3", "1.14.4", "1.15"})
+@SafeReflection(target = CommandNode.class, type = ReflectionType.FIELD, name = "children", returnType = Map.class, versions = {"1.13.2", "1.14", "1.14.1", "1.14.2", "1.14.3", "1.14.4", "1.15"})
 public final class CommandAPIHandler {
 		
 	private TreeMap<String, CommandPermission> permissionsToFix;
@@ -166,6 +167,9 @@ public final class CommandAPIHandler {
 			case 14:
 				//Compatible with Minecraft 1.14, 1.14.1, 1.14.2, 1.14.3
 				nms = new NMS_1_14_R1(hoVersion);
+				break;
+			case 15:
+				nms = new NMS_1_15_R1(hoVersion);
 				break;
 			default:
 				throw versionError;

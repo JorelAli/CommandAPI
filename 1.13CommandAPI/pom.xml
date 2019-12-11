@@ -14,7 +14,7 @@
         <maven.build.timestamp.format>dd_MMM_yyyy_(hh-mm-ssa)</maven.build.timestamp.format>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <minecraft.server.version>1.14-R0.1-SNAPSHOT</minecraft.server.version>
+        <minecraft.server.version>1.15-R0.1-SNAPSHOT</minecraft.server.version>
     </properties>
 
     <repositories>
@@ -140,6 +140,15 @@
 			<version>1.14.4</version>
 			<scope>system</scope>
 			<systemPath>${basedir}/spigotlibs/spigot-1.14.4.jar</systemPath>
+			<type>jar</type>
+  			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot-server-1.15</artifactId>
+			<version>1.15</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/spigotlibs/spigot-1.15.jar</systemPath>
 			<type>jar</type>
   			<optional>true</optional>
 		</dependency>
