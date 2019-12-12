@@ -10,7 +10,6 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.function.IntBinaryOperator;
 import java.util.function.ToIntBiFunction;
 import java.util.stream.Collectors;
 
@@ -68,6 +67,7 @@ import io.github.jorelali.commandapi.api.wrappers.FloatRange;
 import io.github.jorelali.commandapi.api.wrappers.FunctionWrapper;
 import io.github.jorelali.commandapi.api.wrappers.IntegerRange;
 import io.github.jorelali.commandapi.api.wrappers.Location2D;
+import io.github.jorelali.commandapi.api.wrappers.MathOperator;
 import io.github.jorelali.commandapi.api.wrappers.Rotation;
 import io.github.jorelali.commandapi.api.wrappers.ScoreboardSlot;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -655,25 +655,36 @@ return board.getObjective(ArgumentScoreboardObjective.a(cmdCtx, key).getName());
 	}
 
 	@Override
-	public IntBinaryOperator getMathOperation(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		ArgumentMathOperation.a result = ArgumentMathOperation.a(cmdCtx, key);
-
-        return (left, right) -> {
-
-            ScoreboardScore int1 = new ScoreboardScore(new net.minecraft.server.v1_15_R1.Scoreboard(), null, null);
-            ScoreboardScore int2 = new ScoreboardScore(new net.minecraft.server.v1_15_R1.Scoreboard(), null, null);
-
-            int1.setScore(left);
-            int2.setScore(right);
-
-            try {
-                result.apply(int1, int2);
-            } catch (CommandSyntaxException e) {
-                e.printStackTrace();
-            }
-
-            return int1.getScore();
-        };
-	}
+    public MathOperator getMathOperation(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+    	ArgumentMathOperation.a result = ArgumentMathOperation.a(cmdCtx, key);
+    	net.minecraft.server.v1_15_R1.Scoreboard board = new net.minecraft.server.v1_15_R1.Scoreboard();
+    	ScoreboardScore tester_left = new ScoreboardScore(board, null, null);
+    	ScoreboardScore tester_right = new ScoreboardScore(board, null, null);
+    	
+    	tester_left.setScore(6);
+    	tester_right.setScore(2);
+    	result.apply(tester_left, tester_right);
+    	
+    	switch (tester_left.getScore()) {
+    		case 8: return MathOperator.ADD;
+    		case 4: return MathOperator.SUBTRACT;
+    		case 12: return MathOperator.MULTIPLY;
+    		case 3: return MathOperator.DIVIDE;
+    		case 0: return MathOperator.MOD;
+    		case 6: return MathOperator.MAX;
+    		
+    		case 2: {
+    			if (tester_right.getScore() == 6)
+    				return MathOperator.SWAP;
+    			tester_left.setScore(2);
+    			tester_right.setScore(6);
+    			result.apply(tester_left, tester_right);
+    			if (tester_left.getScore() == 2)
+    				return MathOperator.MIN;
+    			return MathOperator.ASSIGN;
+    		}
+    	}
+    	return null;
+    }
 
 }

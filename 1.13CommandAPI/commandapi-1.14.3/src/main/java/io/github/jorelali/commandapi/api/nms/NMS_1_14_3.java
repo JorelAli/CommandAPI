@@ -1,5 +1,53 @@
 package io.github.jorelali.commandapi.api.nms;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.function.ToIntBiFunction;
+import java.util.stream.Collectors;
+
+import org.bukkit.Axis;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.World.Environment;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.craftbukkit.v1_14_R1.CraftLootTable;
+import org.bukkit.craftbukkit.v1_14_R1.CraftParticle;
+import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_14_R1.CraftSound;
+import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_14_R1.command.ProxiedNativeCommandSender;
+import org.bukkit.craftbukkit.v1_14_R1.command.VanillaCommandWrapper;
+import org.bukkit.craftbukkit.v1_14_R1.enchantments.CraftEnchantment;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_14_R1.potion.CraftPotionEffectType;
+import org.bukkit.craftbukkit.v1_14_R1.util.CraftChatMessage;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.loot.LootTable;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
+
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
@@ -9,6 +57,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
+
 import de.tr7zw.nbtapi.NBTContainer;
 import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
@@ -16,6 +65,7 @@ import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument.Entity
 import io.github.jorelali.commandapi.api.arguments.LocationType;
 import io.github.jorelali.commandapi.api.wrappers.FunctionWrapper;
 import io.github.jorelali.commandapi.api.wrappers.Location2D;
+import io.github.jorelali.commandapi.api.wrappers.MathOperator;
 import io.github.jorelali.commandapi.api.wrappers.Rotation;
 import io.github.jorelali.commandapi.api.wrappers.ScoreboardSlot;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -71,54 +121,6 @@ import net.minecraft.server.v1_14_R1.MinecraftServer;
 import net.minecraft.server.v1_14_R1.ScoreboardScore;
 import net.minecraft.server.v1_14_R1.Vec2F;
 import net.minecraft.server.v1_14_R1.Vec3D;
-import org.bukkit.Axis;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.World.Environment;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.craftbukkit.v1_14_R1.CraftLootTable;
-import org.bukkit.craftbukkit.v1_14_R1.CraftParticle;
-import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_14_R1.CraftSound;
-import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_14_R1.command.ProxiedNativeCommandSender;
-import org.bukkit.craftbukkit.v1_14_R1.command.VanillaCommandWrapper;
-import org.bukkit.craftbukkit.v1_14_R1.enchantments.CraftEnchantment;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_14_R1.potion.CraftPotionEffectType;
-import org.bukkit.craftbukkit.v1_14_R1.util.CraftChatMessage;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.loot.LootTable;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.function.IntBinaryOperator;
-import java.util.function.ToIntBiFunction;
-import java.util.stream.Collectors;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class NMS_1_14_3 implements NMS {
@@ -645,24 +647,35 @@ public class NMS_1_14_3 implements NMS {
     }
 
     @Override
-    public IntBinaryOperator getMathOperation(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-        ArgumentMathOperation.a result = ArgumentMathOperation.a(cmdCtx, key);
-
-        return (left, right) -> {
-
-            ScoreboardScore int1 = new ScoreboardScore(new net.minecraft.server.v1_14_R1.Scoreboard(), null, null);
-            ScoreboardScore int2 = new ScoreboardScore(new net.minecraft.server.v1_14_R1.Scoreboard(), null, null);
-
-            int1.setScore(left);
-            int2.setScore(right);
-
-            try {
-                result.apply(int1, int2);
-            } catch (CommandSyntaxException e) {
-                e.printStackTrace();
-            }
-
-            return int1.getScore();
-        };
+    public MathOperator getMathOperation(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+    	ArgumentMathOperation.a result = ArgumentMathOperation.a(cmdCtx, key);
+    	net.minecraft.server.v1_14_R1.Scoreboard board = new net.minecraft.server.v1_14_R1.Scoreboard();
+    	ScoreboardScore tester_left = new ScoreboardScore(board, null, null);
+    	ScoreboardScore tester_right = new ScoreboardScore(board, null, null);
+    	
+    	tester_left.setScore(6);
+    	tester_right.setScore(2);
+    	result.apply(tester_left, tester_right);
+    	
+    	switch (tester_left.getScore()) {
+    		case 8: return MathOperator.ADD;
+    		case 4: return MathOperator.SUBTRACT;
+    		case 12: return MathOperator.MULTIPLY;
+    		case 3: return MathOperator.DIVIDE;
+    		case 0: return MathOperator.MOD;
+    		case 6: return MathOperator.MAX;
+    		
+    		case 2: {
+    			if (tester_right.getScore() == 6)
+    				return MathOperator.SWAP;
+    			tester_left.setScore(2);
+    			tester_right.setScore(6);
+    			result.apply(tester_left, tester_right);
+    			if (tester_left.getScore() == 2)
+    				return MathOperator.MIN;
+    			return MathOperator.ASSIGN;
+    		}
+    	}
+    	return null;
     }
 }

@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.EnumSet;
-import java.util.function.IntBinaryOperator;
 
 import org.bukkit.Axis;
 import org.bukkit.ChatColor;
@@ -44,6 +43,7 @@ import io.github.jorelali.commandapi.api.wrappers.FloatRange;
 import io.github.jorelali.commandapi.api.wrappers.FunctionWrapper;
 import io.github.jorelali.commandapi.api.wrappers.IntegerRange;
 import io.github.jorelali.commandapi.api.wrappers.Location2D;
+import io.github.jorelali.commandapi.api.wrappers.MathOperator;
 import io.github.jorelali.commandapi.api.wrappers.Rotation;
 import io.github.jorelali.commandapi.api.wrappers.ScoreboardSlot;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -146,7 +146,7 @@ public interface NMS {
 	Collection<String> getScoreHolderMultiple(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 	String             getScoreHolderSingle(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 	Team               getTeam(CommandContext<?> cmdCtx, String key, CommandSender sender) throws CommandSyntaxException;
-	IntBinaryOperator  getMathOperation(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
+	MathOperator           getMathOperation(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 
 
 	/** Argument implementations without CommandSyntaxExceptions */
