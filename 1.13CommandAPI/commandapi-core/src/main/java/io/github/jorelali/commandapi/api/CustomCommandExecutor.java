@@ -36,6 +36,10 @@ class CustomCommandExecutor {
 		this.rEx.add(rEx);
 	}
 	
+	public boolean isEmpty() {
+		return ex.isEmpty() && rEx.isEmpty();
+	}
+	
 	public int execute(CommandSender sender, Object[] arguments) throws CommandSyntaxException {
 		
 		//Parse executor type

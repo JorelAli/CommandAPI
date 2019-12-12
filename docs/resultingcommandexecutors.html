@@ -3,7 +3,9 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Resulting command executors - 1.13 CommandAPI Documentation v2.1</title>
+        <title>Resulting command executors - 1.13 CommandAPI Documentation v3.0</title>
+        
+
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -32,7 +34,10 @@
     </head>
     <body class="light">
         <!-- Provide site root to javascript -->
-        <script type="text/javascript">var path_to_root = "";</script>
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = "light";
+        </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script type="text/javascript">
@@ -53,8 +58,8 @@
         <!-- Set the theme before any content is loaded, prevents flash -->
         <script type="text/javascript">
             var theme;
-            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
-            if (theme === null || theme === undefined) { theme = 'light'; }
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
             document.body.className = theme;
             document.querySelector('html').className = theme + ' js';
         </script>
@@ -72,7 +77,10 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="commandexecutors.html"><strong aria-hidden="true">4.</strong> Command executors</a></li><li><ol class="section"><li><a href="proxysender.html"><strong aria-hidden="true">4.1.</strong> Proxied commandsenders</a></li><li><a href="resultingcommandexecutors.html" class="active"><strong aria-hidden="true">4.2.</strong> Resulting command executors</a></li></ol></li><li><a href="arguments.html"><strong aria-hidden="true">5.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">5.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">5.2.</strong> Location arguments</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">5.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">5.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">5.5.</strong> Entity &amp; player arguments</a></li><li><a href="literalarguments.html"><strong aria-hidden="true">5.6.</strong> Literal arguments</a></li><li><a href="dynsugargs.html"><strong aria-hidden="true">5.7.</strong> Dynamically suggested arguments</a></li><li><a href="customarguments.html"><strong aria-hidden="true">5.8.</strong> Custom arguments</a></li><li><a href="technicalargs.html"><strong aria-hidden="true">5.9.</strong> Technical arguments</a></li><li><ol class="section"><li><a href="soundargument.html"><strong aria-hidden="true">5.9.1.</strong> Sound argument</a></li><li><a href="advancementarg.html"><strong aria-hidden="true">5.9.2.</strong> Advancement argument</a></li><li><a href="recipeargument.html"><strong aria-hidden="true">5.9.3.</strong> Recipe argument</a></li><li><a href="loottableargument.html"><strong aria-hidden="true">5.9.4.</strong> LootTable argument</a></li></ol></li></ol></li><li><a href="functions.html"><strong aria-hidden="true">6.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li><a href="functionsetup.html"><strong aria-hidden="true">6.1.</strong> Setting up functions &amp; tags</a></li><li><a href="functionwrapper.html"><strong aria-hidden="true">6.2.</strong> The FunctionWrapper class</a></li><li><a href="functionarguments.html"><strong aria-hidden="true">6.3.</strong> Function arguments</a></li></ol></li><li><a href="permissions.html"><strong aria-hidden="true">7.</strong> Permissions</a></li><li><a href="aliases.html"><strong aria-hidden="true">8.</strong> Aliases</a></li><li><a href="conversion.html"><strong aria-hidden="true">9.</strong> Command conversion</a></li><li class="affix"><a href="troubleshooting.html">Troubleshooting</a></li><li class="affix"><a href="afterword.html">Afterword</a></li></ol>
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="commandexecutors.html"><strong aria-hidden="true">4.</strong> Command executors</a></li><li><ol class="section"><li><a href="normalexecutors.html"><strong aria-hidden="true">4.1.</strong> Normal command executors</a></li><li><a href="proxysender.html"><strong aria-hidden="true">4.2.</strong> Proxied commandsenders</a></li><li><a href="resultingcommandexecutors.html" class="active"><strong aria-hidden="true">4.3.</strong> Resulting command executors</a></li><li><a href="commandfailures.html"><strong aria-hidden="true">4.4.</strong> Handling command failures</a></li></ol></li><li><a href="arguments.html"><strong aria-hidden="true">5.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">5.1.</strong> Primitive arguments</a></li><li><a href="rangedarguments.html"><strong aria-hidden="true">5.2.</strong> Ranged arguments</a></li><li><a href="miscargs.html"><strong aria-hidden="true">5.3.</strong> Miscellaneous arguments</a></li><li><ol class="section"><li><a href="environmentargs.html"><strong aria-hidden="true">5.3.1.</strong> Environment argument</a></li><li><a href="itemslotargs.html"><strong aria-hidden="true">5.3.2.</strong> Item slot argument</a></li><li><a href="timeargs.html"><strong aria-hidden="true">5.3.3.</strong> Time argument</a></li></ol></li><li><a href="positionargs.html"><strong aria-hidden="true">5.4.</strong> Position-based arguments</a></li><li><ol class="section"><li><a href="locationargument.html"><strong aria-hidden="true">5.4.1.</strong> Location arguments</a></li><li><a href="rotationargs.html"><strong aria-hidden="true">5.4.2.</strong> Rotation arguments</a></li><li><a href="axisarg.html"><strong aria-hidden="true">5.4.3.</strong> AxisArgument</a></li></ol></li><li><a href="chatarguments.html"><strong aria-hidden="true">5.5.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">5.6.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">5.7.</strong> Entity &amp; player arguments</a></li><li><a href="literalarguments.html"><strong aria-hidden="true">5.8.</strong> Literal arguments</a></li><li><a href="dynsugargs.html"><strong aria-hidden="true">5.9.</strong> Dynamically suggested arguments</a></li><li><a href="customarguments.html"><strong aria-hidden="true">5.10.</strong> Custom arguments</a></li><li><a href="technicalargs.html"><strong aria-hidden="true">5.11.</strong> Technical arguments</a></li><li><ol class="section"><li><a href="soundargument.html"><strong aria-hidden="true">5.11.1.</strong> Sound argument</a></li><li><a href="advancementarg.html"><strong aria-hidden="true">5.11.2.</strong> Advancement argument</a></li><li><a href="recipeargument.html"><strong aria-hidden="true">5.11.3.</strong> Recipe argument</a></li><li><a href="loottableargument.html"><strong aria-hidden="true">5.11.4.</strong> LootTable argument</a></li></ol></li></ol></li><li><a href="functions.html"><strong aria-hidden="true">6.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li><a href="functionsetup.html"><strong aria-hidden="true">6.1.</strong> Setting up functions &amp; tags</a></li><li><a href="functionwrapper.html"><strong aria-hidden="true">6.2.</strong> The FunctionWrapper class</a></li><li><a href="functionarguments.html"><strong aria-hidden="true">6.3.</strong> Function arguments</a></li></ol></li><li><a href="permissions.html"><strong aria-hidden="true">7.</strong> Permissions</a></li><li><a href="aliases.html"><strong aria-hidden="true">8.</strong> Aliases</a></li><li><a href="conversion.html"><strong aria-hidden="true">9.</strong> Command conversion</a></li><li class="affix"><a href="upgrading.html">Upgrading guide</a></li><li class="affix"><a href="troubleshooting.html">Troubleshooting</a></li><li class="spacer"></li><li class="affix"><a href="afterword.html">Afterword</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -89,7 +97,7 @@
                                 <i class="fa fa-paint-brush"></i>
                             </button>
                             <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
                                 <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                                 <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                                 <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
@@ -102,12 +110,13 @@
                             
                         </div>
 
-                        <h1 class="menu-title">1.13 CommandAPI Documentation v2.1</h1> 
+                        <h1 class="menu-title">1.13 CommandAPI Documentation v3.0</h1>
 
                         <div class="right-buttons">
                             <a href="print.html" title="Print this book" aria-label="Print this book">
                                 <i id="print-button" class="fa fa-print"></i>
                             </a>
+                            
                         </div>
                     </div>
                 </div>
@@ -136,36 +145,36 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="#resulting-command-executors" id="resulting-command-executors"><h1>Resulting command executors</h1></a>
+                        <h1><a class="header" href="#resulting-command-executors" id="resulting-command-executors">Resulting command executors</a></h1>
 <p>Resulting command executors are very similar to normal command executors, the only difference is that they can return an integer <em>result value</em>.</p>
 <pre><code class="language-java">(sender, args) -&gt; {
-    //Code here
-    return /*some integer here*/ ;
+	//Code here
+	return /*some integer here*/ ;
 };
 </code></pre>
-<a class="header" href="#example---random-number-result-command" id="example---random-number-result-command"><h2>Example - Random number result command</h2></a>
+<h2><a class="header" href="#example---random-number-result-command" id="example---random-number-result-command">Example - Random number result command</a></h2>
 <p>Say we want a command that returns a random number as a result. This can then be used by vanilla Minecraft's <code>/execute store result ...</code> command, which can be used for other command block chains.</p>
 <pre><code class="language-java">CommandAPI.getInstance().register(&quot;randnum&quot;, new LinkedHashMap&lt;String, Argument&gt;(), (sender, args) -&gt; {
-    return new Random().nextInt();
+	return new Random().nextInt();
 });
 </code></pre>
 <p>This returns a success value of 1 <em>(Because no errors or <code>CommandAPI.fail(String)</code> was thrown)</em> and a return value of a random number.</p>
-<a class="header" href="#example---lootbox-system-with-execute-command" id="example---lootbox-system-with-execute-command"><h2>Example - Lootbox system with <code>/execute</code> command</h2></a>
+<h2><a class="header" href="#example---lootbox-system-with-execute-command" id="example---lootbox-system-with-execute-command">Example - Lootbox system with <code>/execute</code> command</a></h2>
 <p>We can store state using <code>/execute store</code> and we can perform conditional checks using <code>/execute if</code>. By combining these, we can create a system which can be used with commandblocks to say, give players random lootboxes and redeem them.</p>
 <pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 
 //Register random number generator command from 1 to 99 (inclusive)
 CommandAPI.getInstance().register(&quot;randomnumber&quot;, arguments, (sender, args) -&gt; {
-    return ThreadLocalRandom.current().nextInt(1, 100); //Returns random number from 1 &lt;= x &lt; 100
+	return ThreadLocalRandom.current().nextInt(1, 100); //Returns random number from 1 &lt;= x &lt; 100
 });
 
 //Register reward giving system for a target player
 arguments.put(&quot;target&quot;, new EntitySelectorArgument(EntitySelector.ONE_PLAYER));
 
 CommandAPI.getInstance().register(&quot;givereward&quot;, arguments, (sender, args) -&gt; {
-    Player player = (Player) args[0];
-    player.getInventory().addItem(new ItemStack(Material.DIAMOND, 64));
-    Bukkit.broadcastMessage(player.getName() + &quot; won a rare 64 diamonds from a loot box!&quot;);
+	Player player = (Player) args[0];
+	player.getInventory().addItem(new ItemStack(Material.DIAMOND, 64));
+	Bukkit.broadcastMessage(player.getName() + &quot; won a rare 64 diamonds from a loot box!&quot;);
 }
 </code></pre>
 <p>Store a random number under the scoreboard score <code>randVal</code> for a player called <code>SomePlayer</code>, by executing the command /randomnumber</p>
@@ -186,7 +195,7 @@ CommandAPI.getInstance().register(&quot;givereward&quot;, arguments, (sender, ar
                         
 
                         
-                            <a rel="next" href="arguments.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="commandfailures.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -204,7 +213,7 @@ CommandAPI.getInstance().register(&quot;givereward&quot;, arguments, (sender, ar
                 
 
                 
-                    <a href="arguments.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="commandfailures.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
@@ -212,6 +221,21 @@ CommandAPI.getInstance().register(&quot;givereward&quot;, arguments, (sender, ar
 
         </div>
 
+        
+        <!-- Livereload script (if served using the cli tool) -->
+        <script type="text/javascript">
+            var socket = new WebSocket("ws://localhost:3001");
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload(true); // force reload from server (not from cache)
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
         
 
         

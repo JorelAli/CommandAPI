@@ -3,7 +3,9 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>String arguments - 1.13 CommandAPI Documentation v2.1</title>
+        <title>String arguments - 1.13 CommandAPI Documentation v3.0</title>
+        
+
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -32,7 +34,10 @@
     </head>
     <body class="light">
         <!-- Provide site root to javascript -->
-        <script type="text/javascript">var path_to_root = "";</script>
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = "light";
+        </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script type="text/javascript">
@@ -53,8 +58,8 @@
         <!-- Set the theme before any content is loaded, prevents flash -->
         <script type="text/javascript">
             var theme;
-            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
-            if (theme === null || theme === undefined) { theme = 'light'; }
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
             document.body.className = theme;
             document.querySelector('html').className = theme + ' js';
         </script>
@@ -72,7 +77,10 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="commandexecutors.html"><strong aria-hidden="true">4.</strong> Command executors</a></li><li><ol class="section"><li><a href="proxysender.html"><strong aria-hidden="true">4.1.</strong> Proxied commandsenders</a></li><li><a href="resultingcommandexecutors.html"><strong aria-hidden="true">4.2.</strong> Resulting command executors</a></li></ol></li><li><a href="arguments.html"><strong aria-hidden="true">5.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">5.1.</strong> Primitive arguments</a></li><li><a href="locationargument.html"><strong aria-hidden="true">5.2.</strong> Location arguments</a></li><li><a href="chatarguments.html"><strong aria-hidden="true">5.3.</strong> Chat arguments</a></li><li><a href="stringarguments.html" class="active"><strong aria-hidden="true">5.4.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">5.5.</strong> Entity &amp; player arguments</a></li><li><a href="literalarguments.html"><strong aria-hidden="true">5.6.</strong> Literal arguments</a></li><li><a href="dynsugargs.html"><strong aria-hidden="true">5.7.</strong> Dynamically suggested arguments</a></li><li><a href="customarguments.html"><strong aria-hidden="true">5.8.</strong> Custom arguments</a></li><li><a href="technicalargs.html"><strong aria-hidden="true">5.9.</strong> Technical arguments</a></li><li><ol class="section"><li><a href="soundargument.html"><strong aria-hidden="true">5.9.1.</strong> Sound argument</a></li><li><a href="advancementarg.html"><strong aria-hidden="true">5.9.2.</strong> Advancement argument</a></li><li><a href="recipeargument.html"><strong aria-hidden="true">5.9.3.</strong> Recipe argument</a></li><li><a href="loottableargument.html"><strong aria-hidden="true">5.9.4.</strong> LootTable argument</a></li></ol></li></ol></li><li><a href="functions.html"><strong aria-hidden="true">6.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li><a href="functionsetup.html"><strong aria-hidden="true">6.1.</strong> Setting up functions &amp; tags</a></li><li><a href="functionwrapper.html"><strong aria-hidden="true">6.2.</strong> The FunctionWrapper class</a></li><li><a href="functionarguments.html"><strong aria-hidden="true">6.3.</strong> Function arguments</a></li></ol></li><li><a href="permissions.html"><strong aria-hidden="true">7.</strong> Permissions</a></li><li><a href="aliases.html"><strong aria-hidden="true">8.</strong> Aliases</a></li><li><a href="conversion.html"><strong aria-hidden="true">9.</strong> Command conversion</a></li><li class="affix"><a href="troubleshooting.html">Troubleshooting</a></li><li class="affix"><a href="afterword.html">Afterword</a></li></ol>
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="commandexecutors.html"><strong aria-hidden="true">4.</strong> Command executors</a></li><li><ol class="section"><li><a href="normalexecutors.html"><strong aria-hidden="true">4.1.</strong> Normal command executors</a></li><li><a href="proxysender.html"><strong aria-hidden="true">4.2.</strong> Proxied commandsenders</a></li><li><a href="resultingcommandexecutors.html"><strong aria-hidden="true">4.3.</strong> Resulting command executors</a></li><li><a href="commandfailures.html"><strong aria-hidden="true">4.4.</strong> Handling command failures</a></li></ol></li><li><a href="arguments.html"><strong aria-hidden="true">5.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">5.1.</strong> Primitive arguments</a></li><li><a href="rangedarguments.html"><strong aria-hidden="true">5.2.</strong> Ranged arguments</a></li><li><a href="miscargs.html"><strong aria-hidden="true">5.3.</strong> Miscellaneous arguments</a></li><li><ol class="section"><li><a href="environmentargs.html"><strong aria-hidden="true">5.3.1.</strong> Environment argument</a></li><li><a href="itemslotargs.html"><strong aria-hidden="true">5.3.2.</strong> Item slot argument</a></li><li><a href="timeargs.html"><strong aria-hidden="true">5.3.3.</strong> Time argument</a></li></ol></li><li><a href="positionargs.html"><strong aria-hidden="true">5.4.</strong> Position-based arguments</a></li><li><ol class="section"><li><a href="locationargument.html"><strong aria-hidden="true">5.4.1.</strong> Location arguments</a></li><li><a href="rotationargs.html"><strong aria-hidden="true">5.4.2.</strong> Rotation arguments</a></li><li><a href="axisarg.html"><strong aria-hidden="true">5.4.3.</strong> AxisArgument</a></li></ol></li><li><a href="chatarguments.html"><strong aria-hidden="true">5.5.</strong> Chat arguments</a></li><li><a href="stringarguments.html" class="active"><strong aria-hidden="true">5.6.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">5.7.</strong> Entity &amp; player arguments</a></li><li><a href="literalarguments.html"><strong aria-hidden="true">5.8.</strong> Literal arguments</a></li><li><a href="dynsugargs.html"><strong aria-hidden="true">5.9.</strong> Dynamically suggested arguments</a></li><li><a href="customarguments.html"><strong aria-hidden="true">5.10.</strong> Custom arguments</a></li><li><a href="technicalargs.html"><strong aria-hidden="true">5.11.</strong> Technical arguments</a></li><li><ol class="section"><li><a href="soundargument.html"><strong aria-hidden="true">5.11.1.</strong> Sound argument</a></li><li><a href="advancementarg.html"><strong aria-hidden="true">5.11.2.</strong> Advancement argument</a></li><li><a href="recipeargument.html"><strong aria-hidden="true">5.11.3.</strong> Recipe argument</a></li><li><a href="loottableargument.html"><strong aria-hidden="true">5.11.4.</strong> LootTable argument</a></li></ol></li></ol></li><li><a href="functions.html"><strong aria-hidden="true">6.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li><a href="functionsetup.html"><strong aria-hidden="true">6.1.</strong> Setting up functions &amp; tags</a></li><li><a href="functionwrapper.html"><strong aria-hidden="true">6.2.</strong> The FunctionWrapper class</a></li><li><a href="functionarguments.html"><strong aria-hidden="true">6.3.</strong> Function arguments</a></li></ol></li><li><a href="permissions.html"><strong aria-hidden="true">7.</strong> Permissions</a></li><li><a href="aliases.html"><strong aria-hidden="true">8.</strong> Aliases</a></li><li><a href="conversion.html"><strong aria-hidden="true">9.</strong> Command conversion</a></li><li class="affix"><a href="upgrading.html">Upgrading guide</a></li><li class="affix"><a href="troubleshooting.html">Troubleshooting</a></li><li class="spacer"></li><li class="affix"><a href="afterword.html">Afterword</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -89,7 +97,7 @@
                                 <i class="fa fa-paint-brush"></i>
                             </button>
                             <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
                                 <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                                 <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                                 <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
@@ -102,12 +110,13 @@
                             
                         </div>
 
-                        <h1 class="menu-title">1.13 CommandAPI Documentation v2.1</h1> 
+                        <h1 class="menu-title">1.13 CommandAPI Documentation v3.0</h1>
 
                         <div class="right-buttons">
                             <a href="print.html" title="Print this book" aria-label="Print this book">
                                 <i id="print-button" class="fa fa-print"></i>
                             </a>
+                            
                         </div>
                     </div>
                 </div>
@@ -136,8 +145,8 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="#string-arguments" id="string-arguments"><h1>String arguments</h1></a>
-<a class="header" href="#string-argument" id="string-argument"><h2>String argument</h2></a>
+                        <h1><a class="header" href="#string-arguments" id="string-arguments">String arguments</a></h1>
+<h2><a class="header" href="#string-argument" id="string-argument">String argument</a></h2>
 <p>The <code>StringArgument</code> class is used to represent a single word. These words <strong>can only contain alphanumeric characters (A-Z, a-z and 0-9), and the underscore character</strong>.</p>
 <p>Accepted <code>StringArgument</code> values:</p>
 <pre><code>Hello
@@ -149,12 +158,12 @@ Hello_world
 <pre><code>hello@email.com
 yesn't
 </code></pre>
-<a class="header" href="#potential-uses-for-string-arguments" id="potential-uses-for-string-arguments"><h3>Potential uses for string arguments</h3></a>
+<h3><a class="header" href="#potential-uses-for-string-arguments" id="potential-uses-for-string-arguments">Potential uses for string arguments</a></h3>
 <ul>
-<li>Entering Strings to identify offline players</li>
+<li>Entering strings to identify offline players</li>
 </ul>
-<a class="header" href="#text-argument" id="text-argument"><h2>Text argument</h2></a>
-<p>The <code>TextArgument</code> acts similar to any String in Java. These can be single words, like to the <code>StringArgument</code>, or have additional characters (e.g. spaces, symbols) <strong>if surrounded by quotes</strong>. To type quotation marks, you can use <code>\&quot;</code> (as similar to Java) to escape these special characters.</p>
+<h2><a class="header" href="#text-argument" id="text-argument">Text argument</a></h2>
+<p>The <code>TextArgument</code> acts similar to any String in Java. These can be single words, like to the <code>StringArgument</code>, or have additional characters (e.g. spaces, symbols) <strong>if surrounded by quotes</strong>. To type quotation marks, you can use <code>&quot;</code> (as similar to Java) to escape these special characters.</p>
 <p>Accepted <code>TextArgument</code> values:</p>
 <pre><code>hello
 &quot;hello world!&quot;
@@ -166,29 +175,34 @@ yesn't
 私
 &quot;speech marks: &quot;&quot;
 </code></pre>
-<a class="header" href="#potential-uses-for-text-arguments" id="potential-uses-for-text-arguments"><h3>Potential uses for text arguments</h3></a>
+<h3><a class="header" href="#potential-uses-for-text-arguments" id="potential-uses-for-text-arguments">Potential uses for text arguments</a></h3>
 <ul>
 <li>A command to edit the contents on a sign</li>
 <li>Any command that may require multiple text arguments</li>
 </ul>
-<a class="header" href="#greedy-string-argument" id="greedy-string-argument"><h2>Greedy string argument</h2></a>
-<p>The <code>GreedyStringArgument</code> takes the <code>TextArgument</code> a step further. <strong>Any characters and symbols are allowed</strong> and quotation marks are not required. <strong>However, the <code>GreedyStringArgument</code> uses the entirety of the argument array from its position</strong>.</p>
-<a class="header" href="#example---messaging-command" id="example---messaging-command"><h3>Example - Messaging command</h3></a>
+<h2><a class="header" href="#greedy-string-argument" id="greedy-string-argument">Greedy string argument</a></h2>
+<blockquote>
+<p><strong>Greedy Arguments:</strong></p>
+<p>The <code>GreedyStringArgument</code>, similar to the <code>ChatArgument</code> uses the entire argument array from its current position. This means that it never ends, therefore if it is used, it must be the last element of your <code>LinkedHashMap</code> of arguments.</p>
+<p>For example, if you have a command <code>/msg &lt;message&gt; &lt;target&gt;</code>, it would not be able to determine where the message ends and the <code>&lt;target&gt;</code> argument begins.</p>
+<p>If a <code>GreedyStringArgument</code> or <code>ChatArgument</code> is not declared at the end of the <code>LinkedHashMap</code> of arguments, or multiple of these arguments are used in the same <code>LinkedHashMap</code>, the CommandAPI throws a <code>GreedyArgumentException</code>.</p>
+</blockquote>
+<p>The <code>GreedyStringArgument</code> takes the <code>TextArgument</code> a step further. <strong>Any characters and symbols are allowed</strong> and quotation marks are not required.</p>
+<h3><a class="header" href="#example---messaging-command" id="example---messaging-command">Example - Messaging command</a></h3>
 <p>Say we have a command <code>/msg &lt;target&gt; &lt;message&gt;</code></p>
 <pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 arguments.put(&quot;target&quot;, new PlayerArgument());
 arguments.put(&quot;message&quot;, new GreedyStringArgument());
 
 CommandAPI.getInstance().register(&quot;msg&quot;, arguments, (sender, args) -&gt; {
-    ((Player) args[0]).sendMessage((String) args[1]);
+	((Player) args[0]).sendMessage((String) args[1]);
 });
 </code></pre>
 <p>Any text entered after the <code>&lt;target&gt;</code> argument would be sent to the player. For example, the command could be used as follows:</p>
 <pre><code>/msg Skepter This is some incredibly long string with &quot;symbols&quot; and $p3c!aL characters~
 </code></pre>
-<p>Due to the fact that <strong>the <code>GreedyStringArgument</code> has no terminator</strong> (it has infinite length), <strong>a <code>GreedyStringArgument</code> must be defined at the end of the <code>LinkedHashMap</code></strong> (otherwise the CommandAPI will throw a <code>GreedyStringException</code>)</p>
 <p>For example, if the syntax was<code>/msg &lt;message&gt; &lt;target&gt;</code>, it would not be able to determine where the message ends and the <code>&lt;target&gt;</code> argument begins.</p>
-<a class="header" href="#potential-uses-for-greedy-strings" id="potential-uses-for-greedy-strings"><h3>Potential uses for greedy strings</h3></a>
+<h3><a class="header" href="#potential-uses-for-greedy-strings" id="potential-uses-for-greedy-strings">Potential uses for greedy strings</a></h3>
 <ul>
 <li>A messaging/whisper command</li>
 <li>A mailing command</li>
@@ -234,6 +248,21 @@ CommandAPI.getInstance().register(&quot;msg&quot;, arguments, (sender, args) -&g
 
         </div>
 
+        
+        <!-- Livereload script (if served using the cli tool) -->
+        <script type="text/javascript">
+            var socket = new WebSocket("ws://localhost:3001");
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload(true); // force reload from server (not from cache)
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
         
 
         

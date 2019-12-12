@@ -3,6 +3,7 @@ package io.github.jorelali.commandapi.api;
 import java.util.LinkedHashMap;
 
 import io.github.jorelali.commandapi.api.arguments.Argument;
+import io.github.jorelali.commandapi.api.exceptions.EmptyExecutorException;
 import io.github.jorelali.commandapi.api.executors.CommandBlockCommandExecutor;
 import io.github.jorelali.commandapi.api.executors.CommandBlockResultingCommandExecutor;
 import io.github.jorelali.commandapi.api.executors.CommandExecutor;
@@ -164,7 +165,11 @@ public class CommandAPICommand {
 	 * Registers the command
 	 */
 	public void register() {
-		CommandAPI.getInstance().register(commandName, permission, aliases, args, executor);
+		if(this.executor.isEmpty()) {
+			throw new EmptyExecutorException();
+		} else {
+			CommandAPI.getInstance().register(commandName, permission, aliases, args, executor);
+		}
 	}
 	
 }

@@ -1,0 +1,8 @@
+[book]
+authors = ["JorelAli"]
+multilingual = false
+src = "src"
+title = "1.13 CommandAPI Documentation v3.0"
+
+[build]
+build-dir = "./../docs"

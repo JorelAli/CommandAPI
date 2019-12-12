@@ -272,8 +272,14 @@ new CommandAPICommand("broadcastmsg")
 		
 new CommandAPICommand("suicide")
 	.executesEntity((e, args) -> {
-		
+		e.getWorld().createExplosion(e.getLocation(), 4);
+		e.remove();
 	}).register();
+
+new CommandAPICommand("suicide")
+.executesPlayer((e, args) -> {
+	e.setHealth(0);
+}).register();
 		
         
 //LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
