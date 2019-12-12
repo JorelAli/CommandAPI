@@ -22,7 +22,11 @@ public interface IExecutorR<T extends CommandSender> {
 			);
 		}
 	}
+	
+	default ExecutorType getType() {
+		return ExecutorType.ALL;
+	}
 
-	 int run(T sender, Object[] args) throws WrapperCommandSyntaxException;
+	int run(T sender, Object[] args) throws WrapperCommandSyntaxException;
 	
 }

@@ -20,7 +20,7 @@ public class CommandAPICommand {
 	private CommandPermission permission = CommandPermission.NONE;
 	private String[] aliases = new String[0];
 	private LinkedHashMap<String, Argument> args = new LinkedHashMap<>();
-	private CustomCommandExecutor executor = null;
+	private CustomCommandExecutor executor = new CustomCommandExecutor();
 	
 	/**
 	 * Creates a new command builder
@@ -66,18 +66,18 @@ public class CommandAPICommand {
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(CommandSender, Object[]) -> ()</code> that will be executed when the command is run
 	 */
-	public void executes(CommandExecutor executor) {
-		this.executor = new CustomCommandExecutor(executor);
-		register();
+	public CommandAPICommand executes(CommandExecutor executor) {
+		this.executor.addNormalExecutor(executor);
+		return this;
 	}
 	
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(CommandSender, Object[]) -> int</code> that will be executed when the command is run
 	 */
-	public void executes(ResultingCommandExecutor executor) {
-		this.executor = new CustomCommandExecutor(executor);
-		register();
+	public CommandAPICommand executes(ResultingCommandExecutor executor) {
+		this.executor.addResultingExecutor(executor);
+		return this;
 	}
 	
 	// Player command executor
@@ -86,18 +86,18 @@ public class CommandAPICommand {
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(Player, Object[]) -> ()</code> that will be executed when the command is run
 	 */
-	public void executesPlayer(PlayerCommandExecutor executor) {
-		this.executor = new CustomCommandExecutor(executor);
-		register();
+	public CommandAPICommand executesPlayer(PlayerCommandExecutor executor) {
+		this.executor.addNormalExecutor(executor);
+		return this;
 	}
 	
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(Player, Object[]) -> int</code> that will be executed when the command is run
 	 */
-	public void executesPlayer(PlayerResultingCommandExecutor executor) {
-		this.executor = new CustomCommandExecutor(executor);
-		register();
+	public CommandAPICommand executesPlayer(PlayerResultingCommandExecutor executor) {
+		this.executor.addResultingExecutor(executor);
+		return this;
 	}
 	
 	// Entity command executor
@@ -106,18 +106,18 @@ public class CommandAPICommand {
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(Entity, Object[]) -> ()</code> that will be executed when the command is run
 	 */
-	public void executesEntity(EntityCommandExecutor executor) {
-		this.executor = new CustomCommandExecutor(executor);
-		register();
+	public CommandAPICommand executesEntity(EntityCommandExecutor executor) {
+		this.executor.addNormalExecutor(executor);
+		return this;
 	}
 	
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(Entity, Object[]) -> int</code> that will be executed when the command is run
 	 */
-	public void executesEntity(EntityResultingCommandExecutor executor) {
-		this.executor = new CustomCommandExecutor(executor);
-		register();
+	public CommandAPICommand executesEntity(EntityResultingCommandExecutor executor) {
+		this.executor.addResultingExecutor(executor);
+		return this;
 	}
 	
 	// Command block command sender
@@ -126,18 +126,18 @@ public class CommandAPICommand {
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -> ()</code> that will be executed when the command is run
 	 */
-	public void executesCommandBlock(CommandBlockCommandExecutor executor) {
-		this.executor = new CustomCommandExecutor(executor);
-		register();
+	public CommandAPICommand executesCommandBlock(CommandBlockCommandExecutor executor) {
+		this.executor.addNormalExecutor(executor);
+		return this;
 	}
 	
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -> int</code> that will be executed when the command is run
 	 */
-	public void executesCommandBlock(CommandBlockResultingCommandExecutor executor) {
-		this.executor = new CustomCommandExecutor(executor);
-		register();
+	public CommandAPICommand executesCommandBlock(CommandBlockResultingCommandExecutor executor) {
+		this.executor.addResultingExecutor(executor);
+		return this;
 	}
 	
 	// Console command sender
@@ -146,24 +146,24 @@ public class CommandAPICommand {
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -> ()</code> that will be executed when the command is run
 	 */
-	public void executesConsole(ConsoleCommandExecutor executor) {
-		this.executor = new CustomCommandExecutor(executor);
-		register();
+	public CommandAPICommand executesConsole(ConsoleCommandExecutor executor) {
+		this.executor.addNormalExecutor(executor);
+		return this;
 	}
 	
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -> int</code> that will be executed when the command is run
 	 */
-	public void executesConsole(ConsoleResultingCommandExecutor executor) {
-		this.executor = new CustomCommandExecutor(executor);
-		register();
+	public CommandAPICommand executesConsole(ConsoleResultingCommandExecutor executor) {
+		this.executor.addResultingExecutor(executor);
+		return this;
 	}
 	
 	/**
 	 * Registers the command
 	 */
-	private void register() {
+	public void register() {
 		CommandAPI.getInstance().register(commandName, permission, aliases, args, executor);
 	}
 	

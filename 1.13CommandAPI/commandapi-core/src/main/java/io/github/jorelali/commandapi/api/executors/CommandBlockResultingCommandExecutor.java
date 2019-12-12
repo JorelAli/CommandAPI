@@ -19,4 +19,9 @@ public interface CommandBlockResultingCommandExecutor extends IExecutorR<Player>
 	 */
 	int run(Player sender, Object[] args) throws WrapperCommandSyntaxException;
 
+	@Override
+	default ExecutorType getType() {
+		return ExecutorType.BLOCK;
+	}
+	
 }

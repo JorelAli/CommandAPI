@@ -10,10 +10,11 @@ import io.github.jorelali.commandapi.api.exceptions.WrapperCommandSyntaxExceptio
 public interface IExecutorN<T extends CommandSender> {
 	
 	@SuppressWarnings("unchecked")
-	default void executeWith(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
+	default int executeWith(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
 		Class<?> type = this.getClass().getDeclaredMethods()[0].getParameterTypes()[0];
 		if(type.isInstance(sender)) {
 			this.run((T) type.cast(sender), args);
+			return 1;
 		} else {
 			throw new WrapperCommandSyntaxException(
 				new SimpleCommandExceptionType(
@@ -21,6 +22,10 @@ public interface IExecutorN<T extends CommandSender> {
 				).create()
 			);
 		}
+	}
+	
+	default ExecutorType getType() {
+		return ExecutorType.ALL;
 	}
 	
 	void run(T sender, Object[] args) throws WrapperCommandSyntaxException;

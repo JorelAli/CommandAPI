@@ -138,7 +138,9 @@ public class CommandAPI {
 	 */
 	@Deprecated
 	public void register(String commandName, CommandPermission permissions, String[] aliases, LinkedHashMap<String, Argument> args, CommandExecutor executor) {
-		registerD(commandName, permissions, aliases, args, new CustomCommandExecutor(executor));
+		CustomCommandExecutor customExecutor = new CustomCommandExecutor();
+		customExecutor.addNormalExecutor(executor);
+		registerD(commandName, permissions, aliases, args, customExecutor);
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -192,7 +194,9 @@ public class CommandAPI {
 	 */
 	@Deprecated
 	public void register(String commandName, CommandPermission permissions, String[] aliases, LinkedHashMap<String, Argument> args, ResultingCommandExecutor executor) {
-		registerD(commandName, permissions, aliases, args, new CustomCommandExecutor(executor));
+		CustomCommandExecutor customExecutor = new CustomCommandExecutor();
+		customExecutor.addResultingExecutor(executor);
+		registerD(commandName, permissions, aliases, args, customExecutor);
 	}
 	
 	private void registerD(String commandName, CommandPermission permissions, String[] aliases, LinkedHashMap<String, Argument> args, CustomCommandExecutor executor) {

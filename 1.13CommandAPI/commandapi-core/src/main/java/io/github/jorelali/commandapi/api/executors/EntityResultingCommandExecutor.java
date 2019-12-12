@@ -19,4 +19,8 @@ public interface EntityResultingCommandExecutor extends IExecutorR<Entity> {
 	 */
 	int run(Entity sender, Object[] args) throws WrapperCommandSyntaxException;
 
+	@Override
+	default ExecutorType getType() {
+		return ExecutorType.ENTITY;
+	}
 }

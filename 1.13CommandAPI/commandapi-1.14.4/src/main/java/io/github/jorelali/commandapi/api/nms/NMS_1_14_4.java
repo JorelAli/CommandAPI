@@ -122,6 +122,7 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class NMS_1_14_4 implements NMS {
+	
     @Override
     public ArgumentType<?> _ArgumentAxis() {
         return ArgumentRotationAxis.a();

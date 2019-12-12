@@ -98,6 +98,8 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         
         new CommandAPICommand("tim").withArguments(args1).executes((s, a) -> {
         	System.out.println(a[0]);
+        }).executesPlayer((p, a) -> {
+        	System.out.println("b");
         });
         
         args1.clear();

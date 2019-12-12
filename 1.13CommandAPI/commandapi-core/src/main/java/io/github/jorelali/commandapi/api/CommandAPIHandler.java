@@ -27,7 +27,6 @@ import io.github.jorelali.commandapi.api.arguments.LocationArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationType;
 import io.github.jorelali.commandapi.api.arguments.OverrideableSuggestions;
 import io.github.jorelali.commandapi.api.arguments.ScoreHolderArgument;
-import io.github.jorelali.commandapi.api.exceptions.WrapperCommandSyntaxException;
 import io.github.jorelali.commandapi.api.nms.NMS;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -68,8 +67,6 @@ public final class CommandAPIHandler {
     //NMS variables
     private static String packageName = null;
     private CommandDispatcher dispatcher;
-
-//	private String versionStr; //Just in case (v1_13_R2 or v1_14_R1)
 
     private static NMS nms;
     private Object nmsServer;
@@ -325,29 +322,7 @@ public final class CommandAPIHandler {
                 }
             }
 
-            //Parse executor type
-            if (executor.hasResults()) {
-                //Run resulting executor
-                try {
-                    return executor.getResultingEx().executeWith(sender, argList.toArray(new Object[argList.size()]));
-                } catch (WrapperCommandSyntaxException e) {
-                    throw e.getException();
-                } catch (Exception e) {
-                    e.printStackTrace(System.out);
-                    return 0;
-                }
-            } else {
-                //Run normal executor
-                try {
-                    executor.getEx().executeWith(sender, argList.toArray(new Object[argList.size()]));
-                    return 1;
-                } catch (WrapperCommandSyntaxException e) {
-                    throw e.getException();
-                } catch (Exception e) {
-                    e.printStackTrace(System.out);
-                    return 0;
-                }
-            }
+            return executor.execute(sender, argList.toArray(new Object[argList.size()]));
         };
     }
 

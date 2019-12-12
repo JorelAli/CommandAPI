@@ -19,4 +19,8 @@ public interface CommandBlockCommandExecutor extends IExecutorN<BlockCommandSend
 	 */
 	void run(BlockCommandSender sender, Object[] args) throws WrapperCommandSyntaxException;
 
+	@Override
+	default ExecutorType getType() {
+		return ExecutorType.BLOCK;
+	}
 }

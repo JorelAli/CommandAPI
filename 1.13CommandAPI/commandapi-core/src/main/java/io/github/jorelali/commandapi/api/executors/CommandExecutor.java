@@ -19,4 +19,8 @@ public interface CommandExecutor extends IExecutorN<CommandSender> {
 	 */
 	void run(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException;
 
+	@Override
+	default ExecutorType getType() {
+		return ExecutorType.ALL;
+	}
 }

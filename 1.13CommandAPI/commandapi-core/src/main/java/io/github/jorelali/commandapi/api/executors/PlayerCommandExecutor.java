@@ -19,4 +19,8 @@ public interface PlayerCommandExecutor extends IExecutorN<Player> {
 	 */
 	void run(Player sender, Object[] args) throws WrapperCommandSyntaxException;
 
+	@Override
+	default ExecutorType getType() {
+		return ExecutorType.PLAYER;
+	}
 }
