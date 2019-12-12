@@ -64,7 +64,7 @@ import io.github.jorelali.commandapi.api.wrappers.FloatRange;
 import io.github.jorelali.commandapi.api.wrappers.FunctionWrapper;
 import io.github.jorelali.commandapi.api.wrappers.IntegerRange;
 import io.github.jorelali.commandapi.api.wrappers.Location2D;
-import io.github.jorelali.commandapi.api.wrappers.MathOperator;
+import io.github.jorelali.commandapi.api.wrappers.MathOperation;
 import io.github.jorelali.commandapi.api.wrappers.Rotation;
 import io.github.jorelali.commandapi.api.wrappers.ScoreboardSlot;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -644,7 +644,7 @@ public class NMS_1_13_1 implements NMS {
     }
 
     @Override
-    public MathOperator getMathOperation(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+    public MathOperation getMathOperation(CommandContext cmdCtx, String key) throws CommandSyntaxException {
     	ArgumentMathOperation.a result = ArgumentMathOperation.a(cmdCtx, key);
     	net.minecraft.server.v1_13_R2.Scoreboard board = new net.minecraft.server.v1_13_R2.Scoreboard();
     	ScoreboardScore tester_left = new ScoreboardScore(board, null, null);
@@ -655,22 +655,22 @@ public class NMS_1_13_1 implements NMS {
     	result.apply(tester_left, tester_right);
     	
     	switch (tester_left.getScore()) {
-    		case 8: return MathOperator.ADD;
-    		case 4: return MathOperator.SUBTRACT;
-    		case 12: return MathOperator.MULTIPLY;
-    		case 3: return MathOperator.DIVIDE;
-    		case 0: return MathOperator.MOD;
-    		case 6: return MathOperator.MAX;
+    		case 8: return MathOperation.ADD;
+    		case 4: return MathOperation.SUBTRACT;
+    		case 12: return MathOperation.MULTIPLY;
+    		case 3: return MathOperation.DIVIDE;
+    		case 0: return MathOperation.MOD;
+    		case 6: return MathOperation.MAX;
     		
     		case 2: {
     			if (tester_right.getScore() == 6)
-    				return MathOperator.SWAP;
+    				return MathOperation.SWAP;
     			tester_left.setScore(2);
     			tester_right.setScore(6);
     			result.apply(tester_left, tester_right);
     			if (tester_left.getScore() == 2)
-    				return MathOperator.MIN;
-    			return MathOperator.ASSIGN;
+    				return MathOperation.MIN;
+    			return MathOperation.ASSIGN;
     		}
     	}
     	return null;

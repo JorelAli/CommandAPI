@@ -30,6 +30,7 @@ import io.github.jorelali.commandapi.api.arguments.GreedyStringArgument;
 import io.github.jorelali.commandapi.api.arguments.IntegerArgument;
 import io.github.jorelali.commandapi.api.arguments.IntegerRangeArgument;
 import io.github.jorelali.commandapi.api.arguments.Location2DArgument;
+import io.github.jorelali.commandapi.api.arguments.LocationArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationType;
 import io.github.jorelali.commandapi.api.arguments.MathOperationArgument;
 import io.github.jorelali.commandapi.api.arguments.NBTCompoundArgument;
@@ -102,19 +103,29 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         	System.out.println("b");
         });
         
+//        LinkedHashMap<String, Argument> args = new LinkedHashMap<>();
+//        args.put("pos", new LocationArgument());
+//        args.put("block", new BlockStateArgument());
+        
+        new CommandAPICommand("tim").withArguments(args1).executes((s, a) -> {
+        	System.out.println(a[0]);
+        }).executesPlayer((p, a) -> {
+        	System.out.println("b");
+        }).register();
+        
         args1.clear();
         args1.put("2d", new Location2DArgument(LocationType.BLOCK_POSITION));
         
         new CommandAPICommand("2dblock").withArguments(args1).executes((s, a) -> {
         	System.out.println(a[0]);
-        });
+        }).register();
         
         args1.clear();
         args1.put("2d", new Location2DArgument(LocationType.PRECISE_POSITION));
         
         new CommandAPICommand("2dprecise").withArguments(args1).executes((s, a) -> {
         	System.out.println(a[0]);
-        });
+        }).register();
         
         args1.clear();
         args1.put("range", new IntegerRangeArgument());
@@ -123,7 +134,7 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         	IntegerRange r = (IntegerRange) a[0];
         	System.out.println(r.getLowerBound());
         	System.out.println(r.getUpperBound());
-        });
+        }).register();
         
         args1.clear();
         args1.put("frange", new FloatRangeArgument());
@@ -132,7 +143,7 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         	FloatRange r = (FloatRange) a[0];
         	System.out.println(r.getLowerBound());
         	System.out.println(r.getUpperBound());
-        });
+        }).register();
         
         args1.clear();
         args1.put("dim", new EnvironmentArgument());
@@ -140,7 +151,7 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         new CommandAPICommand("dim").withArguments(args1).executes((s, a) -> {
         	Environment r = (Environment) a[0];
         	System.out.println(r);
-        });
+        }).register();
         
         args1.clear();
         args1.put("rot", new RotationArgument());
@@ -148,7 +159,7 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         new CommandAPICommand("rot").withArguments(args1).executes((s, a) -> {
         	Rotation r = (Rotation) a[0];
         	System.out.println(r.getPitch() + ", " + r.getYaw());
-        });
+        }).register();
         
         args1.clear();
         args1.put("axes", new AxisArgument());
@@ -157,14 +168,14 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         	@SuppressWarnings("unchecked")
 			EnumSet<Axis> r = (EnumSet<Axis>) a[0];
         	System.out.println(r);
-        });
+        }).register();
         
         args1.clear();
         args1.put("displaySlot", new ScoreboardSlotArgument());
         
         new CommandAPICommand("displaySlot").withArguments(args1).executes((s, a) -> {
         	System.out.println(a[0]);
-        });
+        }).register();
         
         args1.clear();
         args1.put("comp", new ChatComponentArgument());
@@ -172,7 +183,7 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         new CommandAPICommand("comp").withArguments(args1).executes((s, a) -> {
         	BaseComponent[] aa = (BaseComponent[]) a[0];
         	System.out.println(Arrays.deepToString(aa));
-        });
+        }).register();
         
         args1.clear();
         args1.put("chat", new ChatArgument());
@@ -185,7 +196,7 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         	} catch(Exception e) {
         		System.out.println("Whoopsy");
         	}
-        });
+        }).register();
         
         args1.clear();
         args1.put("holdm", new ScoreHolderArgument(ScoreHolderType.MULTIPLE));
@@ -194,7 +205,7 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         	@SuppressWarnings("unchecked")
 			Collection<String> strs = (Collection<String>) a[0];
         	System.out.println(strs);
-        });
+        }).register();
         
         args1.clear();
         args1.put("holds", new ScoreHolderArgument(ScoreHolderType.SINGLE));
@@ -202,7 +213,7 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         new CommandAPICommand("holds").withArguments(args1).executes((s, a) -> {
         	String strs = (String) a[0];
         	System.out.println(strs);
-        });
+        }).register();
         
         args1.clear();
         args1.put("nbt", new NBTCompoundArgument());
@@ -210,7 +221,7 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         new CommandAPICommand("nbt").withArguments(args1).executes((s, a) -> {
         	NBTContainer strs = (NBTContainer) a[0];
         	System.out.println(strs);
-        });
+        }).register();
         
 		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 		arguments.put("duration", new TimeArgument());
@@ -222,7 +233,7 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 			for(Player player : Bukkit.getOnlinePlayers()) {
 				player.sendTitle(message, "", 10, duration, 20);
 			}
-		});
+		}).register();
 		
 		arguments = new LinkedHashMap<>();
 		arguments.put("int1", new IntegerArgument());
@@ -234,16 +245,16 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 			int int2 = (int) args[2];
 			IntBinaryOperator op = (IntBinaryOperator) args[1];
 			sender.sendMessage("=> " + op.applyAsInt(int1, int2));
-		});
+		}).register();
 		
 		new CommandAPICommand("registry").executes((s, a) -> {
 			System.out.println(s.getName());
-		});
+		}).register();
 		
 		new CommandAPICommand("registry2").executesPlayer((s, a) -> {
 			System.out.println(s.getName());
 			s.getLocation();
-		});
+		}).register();
 		
 		{
 LinkedHashMap<String, Argument> arguments1 = new LinkedHashMap<>();
@@ -256,13 +267,13 @@ new CommandAPICommand("broadcastmsg")
 	.executes((sender, args) -> {
 		String message = (String) args[0];
 		Bukkit.getServer().broadcastMessage(message);
-	});
+	}).register();
 		}
 		
 new CommandAPICommand("suicide")
 	.executesEntity((e, args) -> {
 		
-	});
+	}).register();
 		
         
 //LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
