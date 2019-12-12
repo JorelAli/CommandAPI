@@ -8,6 +8,7 @@
     <artifactId>commandapi</artifactId>
     <packaging>pom</packaging>
     <modules>
+        <module>commandapi-1.15</module>
         <module>commandapi-1.14.4</module>
         <module>commandapi-1.14.3</module>
         <module>commandapi-1.14</module>
@@ -23,7 +24,7 @@
         <maven.build.timestamp.format>dd_MMM_yyyy_(hh-mm-ssa)</maven.build.timestamp.format>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <minecraft.server.version>1.14-R0.1-SNAPSHOT</minecraft.server.version>
+        <minecraft.server.version>1.15-R0.1-SNAPSHOT</minecraft.server.version>
     </properties>
 
     <repositories>
@@ -80,7 +81,7 @@
                     </compilerArgs>
                 </configuration>
             </plugin>
-            <plugin>
+            <!-- <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <executions>
@@ -91,7 +92,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin> -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>

@@ -126,6 +126,9 @@ public final class CommandAPIHandler {
                 case "1.14.4":
                     nms = (NMS) Class.forName("io.github.jorelali.commandapi.api.nms.NMS_1_14_4").newInstance();
                     break;
+                case "1.15":
+                    nms = (NMS) Class.forName("io.github.jorelali.commandapi.api.nms.NMS_1_15").newInstance();
+                    break;
                 default:
                     throw versionError;
             }

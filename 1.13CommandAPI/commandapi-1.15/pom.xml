@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>commandapi-core</artifactId>
+    <artifactId>commandapi-1.15</artifactId>
 
     <dependencies>
         <dependency>
@@ -18,21 +18,10 @@
             <version>1.15-R0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>com.mojang</groupId>
-            <artifactId>brigadier</artifactId>
-            <version>1.0.17</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.mojang</groupId>
-            <artifactId>authlib</artifactId>
-            <version>1.5.25</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.tr7zw</groupId>
-            <artifactId>item-nbt-api-plugin</artifactId>
-            <version>2.1.0</version>
+            <groupId>io.github.jorelali</groupId>
+            <artifactId>commandapi-core</artifactId>
+            <version>3.0</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>
