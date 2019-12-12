@@ -103,7 +103,6 @@ public final class CommandAPIHandler {
 
         //Handle versioning
         Version version = new Version(packageName.split("\\Q.\\E")[3]);
-        UnsupportedClassVersionError versionError = new UnsupportedClassVersionError("This version of Minecraft is unsupported: " + version);
         try {
             switch (hoVersion) {
                 case "1.13":
@@ -130,7 +129,7 @@ public final class CommandAPIHandler {
                     nms = (NMS) Class.forName("io.github.jorelali.commandapi.api.nms.NMS_1_15").newInstance();
                     break;
                 default:
-                    throw versionError;
+                	throw new UnsupportedClassVersionError("This version of Minecraft is unsupported: " + version);
             }
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();

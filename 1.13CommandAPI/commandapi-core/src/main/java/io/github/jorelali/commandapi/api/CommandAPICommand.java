@@ -6,6 +6,8 @@ import io.github.jorelali.commandapi.api.arguments.Argument;
 import io.github.jorelali.commandapi.api.executors.CommandBlockCommandExecutor;
 import io.github.jorelali.commandapi.api.executors.CommandBlockResultingCommandExecutor;
 import io.github.jorelali.commandapi.api.executors.CommandExecutor;
+import io.github.jorelali.commandapi.api.executors.ConsoleCommandExecutor;
+import io.github.jorelali.commandapi.api.executors.ConsoleResultingCommandExecutor;
 import io.github.jorelali.commandapi.api.executors.EntityCommandExecutor;
 import io.github.jorelali.commandapi.api.executors.EntityResultingCommandExecutor;
 import io.github.jorelali.commandapi.api.executors.PlayerCommandExecutor;
@@ -134,6 +136,26 @@ public class CommandAPICommand {
 	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -> int</code> that will be executed when the command is run
 	 */
 	public void executesCommandBlock(CommandBlockResultingCommandExecutor executor) {
+		this.executor = new CustomCommandExecutor(executor);
+		register();
+	}
+	
+	// Console command sender
+	
+	/**
+	 * Adds an executor to the current command builder
+	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -> ()</code> that will be executed when the command is run
+	 */
+	public void executesConsole(ConsoleCommandExecutor executor) {
+		this.executor = new CustomCommandExecutor(executor);
+		register();
+	}
+	
+	/**
+	 * Adds an executor to the current command builder
+	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -> int</code> that will be executed when the command is run
+	 */
+	public void executesConsole(ConsoleResultingCommandExecutor executor) {
 		this.executor = new CustomCommandExecutor(executor);
 		register();
 	}

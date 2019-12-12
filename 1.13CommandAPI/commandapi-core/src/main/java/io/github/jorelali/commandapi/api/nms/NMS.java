@@ -146,6 +146,8 @@ public interface NMS {
 	Collection<String> getScoreHolderMultiple(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 	String             getScoreHolderSingle(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 	Team               getTeam(CommandContext<?> cmdCtx, String key, CommandSender sender) throws CommandSyntaxException;
+	IntBinaryOperator  getMathOperation(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
+
 
 	/** Argument implementations without CommandSyntaxExceptions */
 	EnumSet<Axis>      getAxis(CommandContext<?> cmdCtx, String key);
@@ -193,11 +195,5 @@ public interface NMS {
 	ArgumentType<?> _ArgumentTime();
 	ArgumentType<?> _ArgumentVec2();
 	ArgumentType<?> _ArgumentVec3();
-
 	ArgumentType<?> _ArgumentMathOperation();
-
-	IntBinaryOperator getMathOperation(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
-
-
-
 }
