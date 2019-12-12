@@ -5,7 +5,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import io.github.jorelali.commandapi.api.exceptions.WrapperCommandSyntaxException;
 
 @FunctionalInterface
-public interface ConsoleResultingCommandExecutor extends IExecutorR<ConsoleCommandSender> {
+public interface ConsoleResultingCommandExecutor extends IExecutorResulting<ConsoleCommandSender> {
 
 	/**
 	 * The code to run when this command is performed

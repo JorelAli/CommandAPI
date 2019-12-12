@@ -13,9 +13,9 @@ public class BadLiteralException extends RuntimeException {
 	@Override
     public String getMessage() {
 		if(isNull)
-			return "Cannot create a LiteralArgument with an empty string";
-		else
 			return "Cannot create a LiteralArgument with a null string";
+		else
+			return "Cannot create a LiteralArgument with an empty string";
     }
 	
 }

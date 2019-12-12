@@ -7,13 +7,14 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
 import io.github.jorelali.commandapi.api.exceptions.WrapperCommandSyntaxException;
 
-public interface IExecutorR<T extends CommandSender> {
+public interface IExecutorNormal<T extends CommandSender> {
 	
 	@SuppressWarnings("unchecked")
 	default int executeWith(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
 		Class<?> type = this.getClass().getDeclaredMethods()[0].getParameterTypes()[0];
 		if(type.isInstance(sender)) {
-			return this.run((T) type.cast(sender), args);
+			this.run((T) type.cast(sender), args);
+			return 1;
 		} else {
 			throw new WrapperCommandSyntaxException(
 				new SimpleCommandExceptionType(
@@ -26,7 +27,7 @@ public interface IExecutorR<T extends CommandSender> {
 	default ExecutorType getType() {
 		return ExecutorType.ALL;
 	}
-
-	int run(T sender, Object[] args) throws WrapperCommandSyntaxException;
 	
+	void run(T sender, Object[] args) throws WrapperCommandSyntaxException;
+
 }

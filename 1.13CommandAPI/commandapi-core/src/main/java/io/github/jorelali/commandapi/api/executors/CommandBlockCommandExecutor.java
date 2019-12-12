@@ -5,7 +5,7 @@ import org.bukkit.command.BlockCommandSender;
 import io.github.jorelali.commandapi.api.exceptions.WrapperCommandSyntaxException;
 
 @FunctionalInterface
-public interface CommandBlockCommandExecutor extends IExecutorN<BlockCommandSender> {
+public interface CommandBlockCommandExecutor extends IExecutorNormal<BlockCommandSender> {
 
 	/**
 	 * The code to run when this command is performed

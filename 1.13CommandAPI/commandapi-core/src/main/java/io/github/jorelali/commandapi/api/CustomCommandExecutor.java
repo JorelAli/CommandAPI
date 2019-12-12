@@ -15,24 +15,24 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
 import io.github.jorelali.commandapi.api.exceptions.WrapperCommandSyntaxException;
 import io.github.jorelali.commandapi.api.executors.ExecutorType;
-import io.github.jorelali.commandapi.api.executors.IExecutorN;
-import io.github.jorelali.commandapi.api.executors.IExecutorR;
+import io.github.jorelali.commandapi.api.executors.IExecutorNormal;
+import io.github.jorelali.commandapi.api.executors.IExecutorResulting;
 
 class CustomCommandExecutor {
 	
-	private List<IExecutorN<? extends CommandSender>> ex;
-	private List<IExecutorR<? extends CommandSender>> rEx;
+	private List<IExecutorNormal<? extends CommandSender>> ex;
+	private List<IExecutorResulting<? extends CommandSender>> rEx;
 	
 	public CustomCommandExecutor() {
 		ex = new ArrayList<>();
 		rEx = new ArrayList<>();
 	}
 	
-	public void addNormalExecutor(IExecutorN<? extends CommandSender> ex) {
+	public void addNormalExecutor(IExecutorNormal<? extends CommandSender> ex) {
 		this.ex.add(ex);
 	}
 	
-	public void addResultingExecutor(IExecutorR<? extends CommandSender> rEx) {
+	public void addResultingExecutor(IExecutorResulting<? extends CommandSender> rEx) {
 		this.rEx.add(rEx);
 	}
 	

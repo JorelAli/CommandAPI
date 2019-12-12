@@ -140,7 +140,7 @@ public class CommandAPI {
 	public void register(String commandName, CommandPermission permissions, String[] aliases, LinkedHashMap<String, Argument> args, CommandExecutor executor) {
 		CustomCommandExecutor customExecutor = new CustomCommandExecutor();
 		customExecutor.addNormalExecutor(executor);
-		registerD(commandName, permissions, aliases, args, customExecutor);
+		registerDeprecated(commandName, permissions, aliases, args, customExecutor);
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -196,10 +196,10 @@ public class CommandAPI {
 	public void register(String commandName, CommandPermission permissions, String[] aliases, LinkedHashMap<String, Argument> args, ResultingCommandExecutor executor) {
 		CustomCommandExecutor customExecutor = new CustomCommandExecutor();
 		customExecutor.addResultingExecutor(executor);
-		registerD(commandName, permissions, aliases, args, customExecutor);
+		registerDeprecated(commandName, permissions, aliases, args, customExecutor);
 	}
 	
-	private void registerD(String commandName, CommandPermission permissions, String[] aliases, LinkedHashMap<String, Argument> args, CustomCommandExecutor executor) {
+	private void registerDeprecated(String commandName, CommandPermission permissions, String[] aliases, LinkedHashMap<String, Argument> args, CustomCommandExecutor executor) {
 		CommandAPIMain.getLog().warning("Command /" + commandName + " is being registered with the old register() method. This is deprecated as of 3.0. Consider using the new CommandAPICommand registration system.");
 		register(commandName, permissions, aliases, args, executor);
 	}

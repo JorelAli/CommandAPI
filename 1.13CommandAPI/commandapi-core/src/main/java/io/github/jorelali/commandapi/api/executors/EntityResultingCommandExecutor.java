@@ -5,7 +5,7 @@ import org.bukkit.entity.Entity;
 import io.github.jorelali.commandapi.api.exceptions.WrapperCommandSyntaxException;
 
 @FunctionalInterface
-public interface EntityResultingCommandExecutor extends IExecutorR<Entity> {
+public interface EntityResultingCommandExecutor extends IExecutorResulting<Entity> {
 
 	/**
 	 * The code to run when this command is performed
