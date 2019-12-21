@@ -226,7 +226,7 @@ public class CommandAPI {
 			long numGreedyArgs = copyOfArgs.values().stream().filter(arg -> arg instanceof GreedyArgument).count();
 			if(numGreedyArgs >= 1) {
 				//A GreedyString has been found
-				if(!(copyOfArgs.values().toArray(new Argument[copyOfArgs.size()])[copyOfArgs.size() - 1] instanceof GreedyArgument)) {
+				if(!(copyOfArgs.values().toArray()[copyOfArgs.size() - 1] instanceof GreedyArgument)) {
 					throw new GreedyArgumentException();
 				}
 				

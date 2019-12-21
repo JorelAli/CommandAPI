@@ -326,7 +326,7 @@ public final class CommandAPIHandler {
                 }
             }
 
-            return executor.execute(sender, argList.toArray(new Object[argList.size()]));
+            return executor.execute(sender, argList.toArray());
         };
     }
 
