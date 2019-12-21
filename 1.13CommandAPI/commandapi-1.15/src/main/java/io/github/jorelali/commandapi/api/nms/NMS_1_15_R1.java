@@ -6,7 +6,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
-import java.util.Iterator;
 import java.util.function.ToIntBiFunction;
 import java.util.stream.Collectors;
 
@@ -213,9 +212,8 @@ public class NMS_1_15_R1 implements NMS {
 		CommandListenerWrapper commandListenerWrapper = getCLW(cmdCtx).a().b(2);
 		
 		int count = 0;
-		Iterator<CustomFunction> it = customFuncList.iterator();
-		while(it.hasNext()) {
-			CustomFunction customFunction = it.next();
+		
+		for(CustomFunction customFunction : customFuncList) {
 			@SuppressWarnings("deprecation")
 			NamespacedKey minecraftKey = new NamespacedKey(customFunction.a().getNamespace(), customFunction.a().getKey());
 			ToIntBiFunction<CustomFunction, CommandListenerWrapper> obj = customFunctionData::a;
