@@ -2,82 +2,62 @@
 
 Permissions let you control which players are allowed to execute which commands. This is handled using the `CommandPermission` class, which has the following uses:
 
-* Requires OP to execute a command:
-  ```java
-  CommandPermission.OP
-  ```
-* Anyone can execute a command:
-  ```java
-  CommandPermission.NONE
-  ```
-* Requires a specific permission node to exeucte a command:
-  ```java
-  CommandPermission.fromString("my.permission")
-  ```
+| Permission                                      | What it does                                               |
+| ----------------------------------------------- | ---------------------------------------------------------- |
+| `CommandPermission.OP`                          | Requires OP to execute the command                         |
+| `CommandPermission.NONE`                        | Anyone can execute the command                             |
+| `CommandPermission.fromString("my.permission")` | Requires a specific permission node to execute the command |
 
-## Registering permissions to commands
+In addition to the `CommandPermission` class, there are two different ways to assign permissions (compared to the simple `CommandSender.hasPermission()` method that is provided by Bukkit).
 
-To add a permission to a command, you can use any of the following constructors with a valid `CommandAPI` instance:
+## Adding permissions to commands
 
-```java
-register(String commandName, CommandPermission, LinkedHashMap<String, Argument>, CommandExecutor);
-register(String commandName, CommandPermission, String[] aliases, LinkedHashMap<String, Argument>, CommandExecutor)
-```
+To add a permission to a command, you can use the `withPermission(CommandPermission)` method _when declaring a command_.
 
 ### Example - /god command with permissions
 
+In this example, we register our command such that the player requires the `command.god` permission node in order to run the command.
+
 ```java
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-
-//Register the /god command with the permission node "command.god"
-CommandAPI.getInstance().register("god", CommandPermission.fromString("command.god"), arguments, (sender, args) -> {
-    if(sender instanceof Player) {
-		((Player) sender).setInvulnerable(true);
-	}
-});
-
-//Add a target argument to allow /god <target>
-arguments.put("target", new EntitySelectorArgument(EntitySelector.ONE_PLAYER));
-
-//Require "command.god" permission node to execute /god <target>
-CommandAPI.getInstance().register("god", CommandPermission.fromString("command.god"), arguments, (sender, args) -> {
-	((Player) args[0]).setInvulnerable(true);
-});
+{{ #include examples/7cmdperms.java }}
 ```
 
 ## Registering permissions to arguments
 
-For further fine-tuning of permission management, the CommandAPI allows you to add permissions to individual arguments. This prevents the user from executing a command with a specific argument if they do not have a specific permission.
+For further fine-tuning of permission management, the CommandAPI allows you to add permissions to individual arguments. This prevents the user from executing a command *with a specific argument* if they do not have a specific permission.
 
-This is done by using the `.withPermission(CommandPermission)` method at the end of an argument.
+This is done by using the `withPermission(CommandPermission)` method _at the end of an argument_.
 
 
 If a player does not have the required permission:
 
 * The argument hover text which suggests what the command is will not be shown
 * The player will receive an error if they try to type something in for that argument
-* Suggestions, such as a list of materials or players will not be shown
+* Suggestions, such as a list of materials or players, will not be shown
 
 ### Example - /kill command with argument permissions
 
+For example, say we're registering a command `/kill`:
+
+```
+/kill          - Kills yourself
+/kill <target> - Kills a target player
+```
+
+We first declare the command as normal. Nothing fancy is going on here:
+
 ```java
-LinkedHashMap<String, ArgumentType> arguments = new LinkedHashMap<>();
+{{ #include examples/7argperms1.java }}
+```
 
-//Register /kill command normally. Since no permissions are applied, anyone can run this command
-CommandAPI.getInstance().register("kill", arguments, (sender, args) -> {
-	((Player) sender).setHealth(0);
-});
+Now we declare our command with arguments. We use a `PlayerArgument` and apply the permission _to the argument_. After that, we register our command as normal:
 
-//Adds the OP permission to the "target" argument. The sender requires OP to execute /kill <target>
-arguments.put("target", new PlayerArgument().withPermission(CommandPermission.OP));
-
-CommandAPI.getInstance().register("kill", arguments, (sender, args) -> {
-	((Player) args[0]).setHealth(0);
-});
+```java
+{{ #include examples/7argperms2.java }}
 ```
 
 > **Developer's Note:**
 >
-> As you can see, there are multiple ways of applying permissions to commands with arguments. In the /god command shown above, the permission was applied to the whole command. In the /kill command shown above, the permission was applied to the argument. 
+> As you can see, there are multiple ways of applying permissions to commands with arguments. In the `/god` command shown above, the permission was applied to the whole command. In the `/kill` command shown above, the permission was applied to the argument. 
 >
-> There's not really much difference between the two methods, but I personally would use argument permissions with `.withPermission()` as it has greater control over arguments.
+> There's not really much difference between the two methods, but I personally would use _argument permissions_ as it has greater control over arguments.

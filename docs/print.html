@@ -1437,71 +1437,63 @@ CommandAPI.getInstance().register(&quot;runfunction&quot;, arguments, (sender, a
 </code></pre>
 <h1><a class="header" href="#permissions" id="permissions">Permissions</a></h1>
 <p>Permissions let you control which players are allowed to execute which commands. This is handled using the <code>CommandPermission</code> class, which has the following uses:</p>
-<ul>
-<li>Requires OP to execute a command:
-<pre><code class="language-java">CommandPermission.OP
-</code></pre>
-</li>
-<li>Anyone can execute a command:
-<pre><code class="language-java">CommandPermission.NONE
-</code></pre>
-</li>
-<li>Requires a specific permission node to exeucte a command:
-<pre><code class="language-java">CommandPermission.fromString(&quot;my.permission&quot;)
-</code></pre>
-</li>
-</ul>
-<h2><a class="header" href="#registering-permissions-to-commands" id="registering-permissions-to-commands">Registering permissions to commands</a></h2>
-<p>To add a permission to a command, you can use any of the following constructors with a valid <code>CommandAPI</code> instance:</p>
-<pre><code class="language-java">register(String commandName, CommandPermission, LinkedHashMap&lt;String, Argument&gt;, CommandExecutor);
-register(String commandName, CommandPermission, String[] aliases, LinkedHashMap&lt;String, Argument&gt;, CommandExecutor)
-</code></pre>
+<table><thead><tr><th>Permission</th><th>What it does</th></tr></thead><tbody>
+<tr><td><code>CommandPermission.OP</code></td><td>Requires OP to execute the command</td></tr>
+<tr><td><code>CommandPermission.NONE</code></td><td>Anyone can execute the command</td></tr>
+<tr><td><code>CommandPermission.fromString(&quot;my.permission&quot;)</code></td><td>Requires a specific permission node to execute the command</td></tr>
+</tbody></table>
+<p>In addition to the <code>CommandPermission</code> class, there are two different ways to assign permissions (compared to the simple <code>CommandSender.hasPermission()</code> method that is provided by Bukkit).</p>
+<h2><a class="header" href="#adding-permissions-to-commands" id="adding-permissions-to-commands">Adding permissions to commands</a></h2>
+<p>To add a permission to a command, you can use the <code>withPermission(CommandPermission)</code> method <em>when declaring a command</em>.</p>
 <h3><a class="header" href="#example---god-command-with-permissions" id="example---god-command-with-permissions">Example - /god command with permissions</a></h3>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-
-//Register the /god command with the permission node &quot;command.god&quot;
-CommandAPI.getInstance().register(&quot;god&quot;, CommandPermission.fromString(&quot;command.god&quot;), arguments, (sender, args) -&gt; {
-    if(sender instanceof Player) {
-		((Player) sender).setInvulnerable(true);
-	}
-});
-
-//Add a target argument to allow /god &lt;target&gt;
-arguments.put(&quot;target&quot;, new EntitySelectorArgument(EntitySelector.ONE_PLAYER));
-
-//Require &quot;command.god&quot; permission node to execute /god &lt;target&gt;
-CommandAPI.getInstance().register(&quot;god&quot;, CommandPermission.fromString(&quot;command.god&quot;), arguments, (sender, args) -&gt; {
-	((Player) args[0]).setInvulnerable(true);
-});
+<p>In this example, we register our command such that the player requires the <code>command.god</code> permission node in order to run the command.</p>
+<pre><code class="language-java">// Register the /god command with the permission node &quot;command.god&quot;
+new CommandAPICommand(&quot;god&quot;)
+	.withPermission(CommandPermission.fromString(&quot;command.god&quot;))
+	.executesPlayer((player, args) -&gt; {
+		player.setInvulnerable(true);
+	})
+	.register();
 </code></pre>
 <h2><a class="header" href="#registering-permissions-to-arguments" id="registering-permissions-to-arguments">Registering permissions to arguments</a></h2>
-<p>For further fine-tuning of permission management, the CommandAPI allows you to add permissions to individual arguments. This prevents the user from executing a command with a specific argument if they do not have a specific permission.</p>
-<p>This is done by using the <code>.withPermission(CommandPermission)</code> method at the end of an argument.</p>
+<p>For further fine-tuning of permission management, the CommandAPI allows you to add permissions to individual arguments. This prevents the user from executing a command <em>with a specific argument</em> if they do not have a specific permission.</p>
+<p>This is done by using the <code>withPermission(CommandPermission)</code> method <em>at the end of an argument</em>.</p>
 <p>If a player does not have the required permission:</p>
 <ul>
 <li>The argument hover text which suggests what the command is will not be shown</li>
 <li>The player will receive an error if they try to type something in for that argument</li>
-<li>Suggestions, such as a list of materials or players will not be shown</li>
+<li>Suggestions, such as a list of materials or players, will not be shown</li>
 </ul>
 <h3><a class="header" href="#example---kill-command-with-argument-permissions" id="example---kill-command-with-argument-permissions">Example - /kill command with argument permissions</a></h3>
-<pre><code class="language-java">LinkedHashMap&lt;String, ArgumentType&gt; arguments = new LinkedHashMap&lt;&gt;();
-
-//Register /kill command normally. Since no permissions are applied, anyone can run this command
-CommandAPI.getInstance().register(&quot;kill&quot;, arguments, (sender, args) -&gt; {
-	((Player) sender).setHealth(0);
-});
-
-//Adds the OP permission to the &quot;target&quot; argument. The sender requires OP to execute /kill &lt;target&gt;
+<p>For example, say we're registering a command <code>/kill</code>:</p>
+<pre><code>/kill          - Kills yourself
+/kill &lt;target&gt; - Kills a target player
+</code></pre>
+<p>We first declare the command as normal. Nothing fancy is going on here:</p>
+<pre><code class="language-java">// Register /kill command normally. Since no permissions are applied, anyone can run this command
+new CommandAPICommand(&quot;kill&quot;)
+	.executesPlayer((player, args) -&gt; {
+		player.setHealth(0);
+	})
+	.register();
+</code></pre>
+<p>Now we declare our command with arguments. We use a <code>PlayerArgument</code> and apply the permission <em>to the argument</em>. After that, we register our command as normal:</p>
+<pre><code class="language-java">// Declare our arguments
+LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 arguments.put(&quot;target&quot;, new PlayerArgument().withPermission(CommandPermission.OP));
 
-CommandAPI.getInstance().register(&quot;kill&quot;, arguments, (sender, args) -&gt; {
-	((Player) args[0]).setHealth(0);
-});
+// Adds the OP permission to the &quot;target&quot; argument. The sender requires OP to execute /kill &lt;target&gt;
+new CommandAPICommand(&quot;kill&quot;)
+	.withArguments(arguments)
+	.executesPlayer((player, args) -&gt; {
+		((Player) args[0]).setHealth(0);
+	})
+	.register();
 </code></pre>
 <blockquote>
 <p><strong>Developer's Note:</strong></p>
-<p>As you can see, there are multiple ways of applying permissions to commands with arguments. In the /god command shown above, the permission was applied to the whole command. In the /kill command shown above, the permission was applied to the argument. </p>
-<p>There's not really much difference between the two methods, but I personally would use argument permissions with <code>.withPermission()</code> as it has greater control over arguments.</p>
+<p>As you can see, there are multiple ways of applying permissions to commands with arguments. In the <code>/god</code> command shown above, the permission was applied to the whole command. In the <code>/kill</code> command shown above, the permission was applied to the argument. </p>
+<p>There's not really much difference between the two methods, but I personally would use <em>argument permissions</em> as it has greater control over arguments.</p>
 </blockquote>
 <h1><a class="header" href="#aliases" id="aliases">Aliases</a></h1>
 <p>Aliases for commands can be added by using the <code>withAliases()</code> method when registering a command. Aliases allow you to run the same command with a different 'name' from the original registered command name.</p>
@@ -1642,7 +1634,7 @@ CommandAPI.getInstance().register(String, CommandPermission, String[], LinkedHas
 <p><strong>Developer's Note:</strong></p>
 <p>There's a few things I personally don't like about PaperSpigot:</p>
 <ul>
-<li><a href="https://paper.readthedocs.io/en/stable/about/faq.html#what-can-i-do-with-paper">Their developer documentation is non-existant</a></li>
+<li><a href="https://paper.readthedocs.io/en/latest/about/faq.html#what-can-i-do-with-paper">Their developer documentation is non-existant</a></li>
 <li><a href="https://papermc.io/javadocs/paper/1.13/overview-summary.html">Their JavaDocs</a> are very... lacking of documentation</li>
 <li>I personally think it's harder to keep track of new changes between Minecraft upgrades for PaperSpigot compared to Spigot's BuildTools</li>
 </ul>
@@ -1651,10 +1643,8 @@ CommandAPI.getInstance().register(String, CommandPermission, String[], LinkedHas
 <p>This is likely caused by the fact that the plugin you want to convert hasn't been loaded yet. Ensure that it loads before your plugin by adding the following to the target plugin's <code>plugin.yml</code> file:</p>
 <pre><code class="language-yaml">loadbefore: [YourPlugin, CommandAPI]
 </code></pre>
-<h2><a class="header" href="#aliases-dont-work-properly-it-says-unknown-command" id="aliases-dont-work-properly-it-says-unknown-command">Aliases don't work properly (It says unknown command)</a></h2>
-<p>This is a persistent bug which has been resolved in version 2.1+ of the CommandAPI.</p>
 <h2><a class="header" href="#my-issue-isnt-on-here-what-do-i-do" id="my-issue-isnt-on-here-what-do-i-do">My issue isn't on here, what do I do?!</a></h2>
-<p>If you've found a bug that isn't solvable here, submit a bug report on <a href="https://github.com/JorelAli/1.13-Command-API/issues/new/choose">the CommandAPI's issues page</a> and I'll try my best to resolve the issue!</p>
+<p>If you've found a bug that isn't solved here, submit a bug report on <a href="https://github.com/JorelAli/1.13-Command-API/issues/new/choose">the CommandAPI's issues page</a> and I'll try my best to resolve the issue!</p>
 <h1><a class="header" href="#afterword" id="afterword">Afterword</a></h1>
 <blockquote>
 <p><strong>Developer's Note:</strong></p>
