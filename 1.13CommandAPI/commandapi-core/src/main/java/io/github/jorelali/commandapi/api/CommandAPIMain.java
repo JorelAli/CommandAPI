@@ -58,6 +58,22 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 		}, 0L);
         
         getServer().getPluginManager().registerEvents(this, this);
+        
+        new CommandAPICommand("getpos")
+        	.withAliases("getposition", "getloc", "getlocation", "whereami")
+        	.executesEntity((entity, args) -> {
+        		entity.sendMessage(String.format("You are at %d, %d, %d", 
+        				entity.getLocation().getBlockX(), 
+        				entity.getLocation().getBlockY(), 
+        				entity.getLocation().getBlockZ()));
+        	})
+        	.executesCommandBlock((block, args) -> {
+        		block.sendMessage(String.format("You are at %d, %d, %d", 
+        				block.getBlock().getLocation().getBlockX(), 
+        				block.getBlock().getLocation().getBlockY(), 
+        				block.getBlock().getLocation().getBlockZ()));
+        	})
+        	.register();
 	}
 	
 	/** 

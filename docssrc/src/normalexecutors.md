@@ -3,7 +3,7 @@
 Command executors are of the following format, where `sender` is a [`CommandSender`](https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/command/CommandSender.html), and `args` is an `Object[]`, which represents arguments which are parsed by the CommandAPI.
 
 ```java
-{{#include examples/normalcommandexecutors.java}}
+{{#include examples/4.1normalcommandexecutors.java}}
 ```
 
 With normal command executors, these do not need to return anything. By default, this will return a _success value_ of 1 if it runs successfully, and a _success value_ of 0 if it runs unsuccessfully, either by throwing an exception _(RuntimeException)_ or by forcing the command to fail (See the section on [handling command failures](./commandfailures.html).
@@ -11,7 +11,7 @@ With normal command executors, these do not need to return anything. By default,
 ## Example - Creating a message broadcasting system
 
 ```java
-{{#include examples/messagebroadcast.java}}
+{{#include examples/4.1messagebroadcast.java}}
 ```
 
 -----
@@ -41,7 +41,7 @@ This is done using the respective method:
 Say we wanted to create a command `/suicide`, which kills the player that executes it. Since this command isn't really "designed" for command senders that are not players, we can restrict it so only players can execute this command (meaning that the console and command blocks cannot run this command). Since it's a player, we can use the `.executesPlayer()` method:
 
 ```java
-{{#include examples/suicide.java}}
+{{#include examples/4.1suicide.java}}
 ```
 
 ## Multiple command executor implementations
@@ -53,7 +53,7 @@ Extending on the suicide example above, we could write another implementation fo
 ### Example - A `/suicide` command with different implementations
 
 ```java
-{{#include examples/suicide2.java}}
+{{#include examples/4.1suicide2.java}}
 ```
 
 This saves having to use `instanceof` multiple times to check the type of the `CommandSender`.

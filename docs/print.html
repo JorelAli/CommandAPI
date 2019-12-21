@@ -1504,18 +1504,31 @@ CommandAPI.getInstance().register(&quot;kill&quot;, arguments, (sender, args) -&
 <p>There's not really much difference between the two methods, but I personally would use argument permissions with <code>.withPermission()</code> as it has greater control over arguments.</p>
 </blockquote>
 <h1><a class="header" href="#aliases" id="aliases">Aliases</a></h1>
-<p>Aliases let you create aliases for commands. They are simply added at command regisration time by using either of the following methods:</p>
-<pre><code class="language-java">CommandAPI.getInstance().register(String, String[], LinkedHashMap, CommandExecutor);
-CommandAPI.getInstance().register(String, CommandPermission, String[], LinkedHashMap, CommandExecutor);
-</code></pre>
-<p>The <code>String[]</code> represents a list of aliases which can be used to execute a command.</p>
-<h2><a class="header" href="#example---using-aliases-for-gamemode" id="example---using-aliases-for-gamemode">Example - Using aliases for /gamemode</a></h2>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-//populate arguments here
-
-CommandAPI.getInstance().register(&quot;gamemode&quot;, new String[] {&quot;gm&quot;}, arguments, (sender, args) -&gt; {
-	//Handle gamemode command here
-});
+<p>Aliases for commands can be added by using the <code>withAliases()</code> method when registering a command. Aliases allow you to run the same command with a different 'name' from the original registered command name.</p>
+<h2><a class="header" href="#example---using-aliases-for-getpos" id="example---using-aliases-for-getpos">Example - Using aliases for /getpos</a></h2>
+<p>In this example, we register the command <code>/getpos</code> that returns the command sender's location. We apply the aliases <code>/getposition</code>, <code>/getloc</code>, <code>/getlocation</code> and <code>/whereami</code> as well, using the <code>withAliases()</code> method.</p>
+<pre><code class="language-java">new CommandAPICommand(&quot;getpos&quot;)
+    // Declare your aliases
+    .withAliases(&quot;getposition&quot;, &quot;getloc&quot;, &quot;getlocation&quot;, &quot;whereami&quot;)
+  
+    //Declare your implementation
+    .executesEntity((entity, args) -&gt; {
+        entity.sendMessage(String.format(&quot;You are at %d, %d, %d&quot;, 
+            entity.getLocation().getBlockX(), 
+            entity.getLocation().getBlockY(), 
+            entity.getLocation().getBlockZ())
+        );
+    })
+    .executesCommandBlock((block, args) -&gt; {
+        block.sendMessage(String.format(&quot;You are at %d, %d, %d&quot;, 
+            block.getBlock().getLocation().getBlockX(), 
+            block.getBlock().getLocation().getBlockY(), 
+            block.getBlock().getLocation().getBlockZ())
+        );
+    })
+  
+    //Register the command
+    .register();
 </code></pre>
 <h1><a class="header" href="#command-conversion" id="command-conversion">Command conversion</a></h1>
 <p>Since the CommandAPI is used to register commands as a vanilla Minecraft command, you may want to use other plugins that are not written with the CommandAPI. For instance, if you want to include a command from a plugin which doesn't use the CommandAPI in a commandblock, <em>(such as the <code>/execute</code> command)</em>, you can use the CommandAPI's command conversion system.</p>
@@ -1596,7 +1609,7 @@ CommandAPI.getInstance().register(&quot;myCommand&quot;, arguments, (sender, arg
 <tr><td><code>DefinedCustomArguments</code> for Teams</td><td>Use <code>TeamArgument</code></td></tr>
 </tbody></table>
 <h3><a class="header" href="#command-registration-1" id="command-registration-1">Command registration</a></h3>
-<p>The way that commands are registered has been completely changed. It is highly recommended to switch to the new system, which is described <a href="./commandregistration.html">here</a>.</p>
+<p>The way that commands are registered has been completely changed. It is highly recommended to switch to the new system, which is described <a href="./commandregistration.html"><strong>here</strong></a>.</p>
 <p>The following methods have been deprecated and will be removed in the next major release:</p>
 <pre><code class="language-java">CommandAPI.getInstance().register(String, LinkedHashMap, CommandExecutor);
 CommandAPI.getInstance().register(String, String[], LinkedHashMap, CommandExecutor);

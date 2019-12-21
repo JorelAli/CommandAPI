@@ -1,21 +1,11 @@
 # Aliases
 
-Aliases let you create aliases for commands. They are simply added at command regisration time by using either of the following methods:
+Aliases for commands can be added by using the `withAliases()` method when registering a command. Aliases allow you to run the same command with a different 'name' from the original registered command name.
+
+## Example - Using aliases for /getpos
+
+In this example, we register the command `/getpos` that returns the command sender's location. We apply the aliases `/getposition`, `/getloc`, `/getlocation` and `/whereami` as well, using the `withAliases()` method.
 
 ```java
-CommandAPI.getInstance().register(String, String[], LinkedHashMap, CommandExecutor);
-CommandAPI.getInstance().register(String, CommandPermission, String[], LinkedHashMap, CommandExecutor);
-```
-
-The `String[]` represents a list of aliases which can be used to execute a command.
-
-## Example - Using aliases for /gamemode
-
-```java
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-//populate arguments here
-
-CommandAPI.getInstance().register("gamemode", new String[] {"gm"}, arguments, (sender, args) -> {
-	//Handle gamemode command here
-});
+{{ #include examples/8aliases.java }}
 ```

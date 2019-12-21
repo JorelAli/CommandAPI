@@ -66,7 +66,7 @@ To reduce redundancies, the CommandAPI removed a few classes:
 
 ### Command registration
 
-The way that commands are registered has been completely changed. It is highly recommended to switch to the new system, which is described [here](./commandregistration.html).
+The way that commands are registered has been completely changed. It is highly recommended to switch to the new system, which is described [**here**](./commandregistration.html).
 
 The following methods have been deprecated and will be removed in the next major release:
 

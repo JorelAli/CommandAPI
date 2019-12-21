@@ -5,7 +5,7 @@ To register commands with the CommandAPI, the `CommandAPICommand` class is used.
 I think the easiest way to explain it is with an example:
 
 ```java
-{{#include examples/commandregistration.java}}
+{{#include examples/3commandregistration.java}}
 ```
 
 - First, we create our arguments. This is described in more detail in [the section on arguments](./arguments.html). 
@@ -66,7 +66,7 @@ The CommandAPI has support to unregister commands completely from Minecraft's co
 To replace a command, we can first unregister it and then register our implementation of that command.
 
 ```java
-{{#include examples/replacegamemode.java}}
+{{#include examples/3replacegamemode.java}}
 ```
 
 > **Developer's Note:**
