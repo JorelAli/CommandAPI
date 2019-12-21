@@ -22,7 +22,7 @@ public class FloatArgument implements Argument, OverrideableSuggestions {
 	 * A float argument with a minimum value
 	 * @param min The minimum value this argument can take (inclusive)
 	 */
-	public FloatArgument(int min) {
+	public FloatArgument(float min) {
 		rawType = FloatArgumentType.floatArg(min);
 	}
 	
@@ -31,7 +31,7 @@ public class FloatArgument implements Argument, OverrideableSuggestions {
 	 * @param min The minimum value this argument can take (inclusive)
 	 * @param max The maximum value this argument can take (inclusive)
 	 */
-	public FloatArgument(int min, int max) {
+	public FloatArgument(float min, float max) {
 		if(max < min) {
 			throw new InvalidRangeException();
 		}

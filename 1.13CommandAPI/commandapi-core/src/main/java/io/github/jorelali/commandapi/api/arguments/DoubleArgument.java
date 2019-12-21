@@ -22,7 +22,7 @@ public class DoubleArgument implements Argument, OverrideableSuggestions {
 	 * A double argument with a minimum value
 	 * @param min The minimum value this argument can take (inclusive)
 	 */
-	public DoubleArgument(int min) {
+	public DoubleArgument(double min) {
 		rawType = DoubleArgumentType.doubleArg(min);
 	}
 	
@@ -31,7 +31,7 @@ public class DoubleArgument implements Argument, OverrideableSuggestions {
 	 * @param min The minimum value this argument can take (inclusive)
 	 * @param max The maximum value this argument can take (inclusive)
 	 */
-	public DoubleArgument(int min, int max) {
+	public DoubleArgument(double min, double max) {
 		if(max < min) {
 			throw new InvalidRangeException();
 		}
