@@ -4,12 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.function.ToIntBiFunction;
 import java.util.stream.Collectors;
 
@@ -549,15 +546,16 @@ public class NMS_1_14_3 implements NMS {
     @Override
     public Sound getSound(CommandContext cmdCtx, String key) {
         MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.c(cmdCtx, key);
-        Map<String, CraftSound> map = new HashMap<>();
-        Arrays.stream(CraftSound.values()).forEach(val -> {
-            try {
-                map.put((String) CommandAPIHandler.getField(CraftSound.class, "minecraftKey").get(val), val);
-            } catch (IllegalArgumentException | IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        });
-        return Sound.valueOf(map.get(minecraftKey.getKey()).name());
+		for(CraftSound sound : CraftSound.values()) {
+			try {
+				if(CommandAPIHandler.getField(CraftSound.class, "minecraftKey").get(sound).equals(minecraftKey.getKey())) {
+					return Sound.valueOf(sound.name());
+				}
+			} catch (IllegalArgumentException | IllegalAccessException e1) {
+				e1.printStackTrace();
+			}
+		}
+		return null;
     }
 
     @Override
