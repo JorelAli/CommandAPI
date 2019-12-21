@@ -77,7 +77,8 @@ public final class CommandAPIHandler {
 
     protected CommandAPIHandler() throws ClassNotFoundException {
         //Package checks
-        if (Package.getPackage("com.mojang.brigadier") == null) {
+    	
+        if (this.getClass().getClassLoader().getDefinedPackage("com.mojang.brigadier") == null) {
             throw new ClassNotFoundException("Cannot hook into Brigadier (Are you running Minecraft 1.13 or above?)");
         }
 
@@ -103,32 +104,32 @@ public final class CommandAPIHandler {
         try {
             switch (hoVersion) {
                 case "1.13":
-                    nms = (NMS) Class.forName("io.github.jorelali.commandapi.api.nms.NMS_1_13").newInstance();
+                    nms = (NMS) Class.forName("io.github.jorelali.commandapi.api.nms.NMS_1_13").getDeclaredConstructor().newInstance();
                     break;
                 case "1.13.1":
-                    nms = (NMS) Class.forName("io.github.jorelali.commandapi.api.nms.NMS_1_13_1").newInstance();
+                    nms = (NMS) Class.forName("io.github.jorelali.commandapi.api.nms.NMS_1_13_1").getDeclaredConstructor().newInstance();
                     break;
                 case "1.13.2":
-                    nms = (NMS) Class.forName("io.github.jorelali.commandapi.api.nms.NMS_1_13_2").newInstance();
+                    nms = (NMS) Class.forName("io.github.jorelali.commandapi.api.nms.NMS_1_13_2").getDeclaredConstructor().newInstance();
                     break;
                 case "1.14":
                 case "1.14.1":
                 case "1.14.2":
-                    nms = (NMS) Class.forName("io.github.jorelali.commandapi.api.nms.NMS_1_14").newInstance();
+                    nms = (NMS) Class.forName("io.github.jorelali.commandapi.api.nms.NMS_1_14").getDeclaredConstructor().newInstance();
                     break;
                 case "1.14.3":
-                    nms = (NMS) Class.forName("io.github.jorelali.commandapi.api.nms.NMS_1_14_3").newInstance();
+                    nms = (NMS) Class.forName("io.github.jorelali.commandapi.api.nms.NMS_1_14_3").getDeclaredConstructor().newInstance();
                     break;
                 case "1.14.4":
-                    nms = (NMS) Class.forName("io.github.jorelali.commandapi.api.nms.NMS_1_14_4").newInstance();
+                    nms = (NMS) Class.forName("io.github.jorelali.commandapi.api.nms.NMS_1_14_4").getDeclaredConstructor().newInstance();
                     break;
                 case "1.15":
-                    nms = (NMS) Class.forName("io.github.jorelali.commandapi.api.nms.NMS_1_15").newInstance();
+                    nms = (NMS) Class.forName("io.github.jorelali.commandapi.api.nms.NMS_1_15").getDeclaredConstructor().newInstance();
                     break;
                 default:
                 	throw new UnsupportedClassVersionError("This version of Minecraft is unsupported: " + version);
             }
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
             e.printStackTrace();
         }
 
@@ -142,12 +143,15 @@ public final class CommandAPIHandler {
         //Checks other dependencies
         if (Bukkit.getPluginManager().getPlugin("NBTAPI") != null) {
             CommandAPIMain.getLog().info("Hooked into the NBTAPI successfully.");
+        } else {
+        	CommandAPIMain.getLog().warning("Couldn't hook into the NBTAPI for NBT support. See https://www.spigotmc.org/resources/nbt-api.7939/");
         }
 
         try {
             Class.forName("org.spigotmc.SpigotConfig");
             CommandAPIMain.getLog().info("Hooked into Spigot successfully for Chat/ChatComponents");
         } catch (ClassNotFoundException e) {
+        	CommandAPIMain.getLog().warning("Couldn't hook into Spigot for chat/chatcomponents");
         }
 
         //Everything from this line will use getNMSClass(), so we initialize our cache here
