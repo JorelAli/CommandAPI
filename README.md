@@ -9,7 +9,7 @@ An API to use the new command UI introduced in Minecraft 1.13
 > | Date                         | Project status                                                             |
 > |------------------------------|----------------------------------------------------------------------------|
 > | October 2019 - December 2019 | On Hold                                                                    |
-> | December 2019 - January 2020 | Work on implementing new features from issues <br> Working on 3.0 documentation <br> Mild code refactoring <br> Potentially release 3.0 |
+> | December 2019 - January 2020 | Work on implementing new features from issues <br> Working on 3.0 documentation <br> Mild code refactoring |
 > | January 2020 - July 2020     | On Hold                                                                    |
 > | July 2020 - August 2020      | Implementing other final features <br>3.0 documentation write up <br>3.0 release |
 >
