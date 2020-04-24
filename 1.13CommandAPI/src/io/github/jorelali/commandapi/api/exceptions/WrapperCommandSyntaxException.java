@@ -15,5 +15,10 @@ public class WrapperCommandSyntaxException extends Exception {
 	public CommandSyntaxException getException() {
 		return this.exception;
 	}
+	
+	@Override
+	public String getMessage() {
+		return getException().getMessage();
+	}
 
 }
