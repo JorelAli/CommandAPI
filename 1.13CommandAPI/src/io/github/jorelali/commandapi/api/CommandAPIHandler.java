@@ -66,8 +66,8 @@ import io.github.jorelali.commandapi.safereflection.SafeReflection;
  * Class to access the main methods in NMS. The wrapper's
  * implementations occur here.
  */
-@SafeReflection(target = SimpleCommandMap.class, type = ReflectionType.FIELD, name = "knownCommands", returnType = Map.class, versions = {"1.13.2", "1.14", "1.14.1", "1.14.2", "1.14.3", "1.14.4", "1.15"})
-@SafeReflection(target = CommandNode.class, type = ReflectionType.FIELD, name = "children", returnType = Map.class, versions = {"1.13.2", "1.14", "1.14.1", "1.14.2", "1.14.3", "1.14.4", "1.15"})
+@SafeReflection(target = SimpleCommandMap.class, type = ReflectionType.FIELD, name = "knownCommands", returnType = Map.class, versions = {"1.13.2", "1.14", "1.14.1", "1.14.2", "1.14.3", "1.14.4", "1.15", "1.15.1", "1.15.2"})
+@SafeReflection(target = CommandNode.class, type = ReflectionType.FIELD, name = "children", returnType = Map.class, versions = {"1.13.2", "1.14", "1.14.1", "1.14.2", "1.14.3", "1.14.4", "1.15", "1.15.1", "1.15.2"})
 public final class CommandAPIHandler {
 		
 	private TreeMap<String, CommandPermission> permissionsToFix;
