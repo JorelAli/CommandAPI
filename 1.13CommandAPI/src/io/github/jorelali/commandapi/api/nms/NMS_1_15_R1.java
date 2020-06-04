@@ -91,7 +91,7 @@ import net.minecraft.server.v1_15_R1.MinecraftServer;
 import net.minecraft.server.v1_15_R1.Vec3D;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
-@SafeReflection(type = ReflectionType.FIELD, target = CraftSound.class, name = "minecraftKey", returnType = String.class, versions = {"1.15"})
+@SafeReflection(type = ReflectionType.FIELD, target = CraftSound.class, name = "minecraftKey", returnType = String.class, versions = {"1.15", "1.15.1", "1.15.2"})
 public class NMS_1_15_R1 implements NMS {
 	
 	String version;
