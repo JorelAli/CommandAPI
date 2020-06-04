@@ -11,6 +11,8 @@
 	<classpathentry kind="lib" path="1.13CommandAPI/spigotlibs/spigot-1.14.4.jar"/>
 	<classpathentry kind="lib" path="1.13CommandAPI/spigotlibs/spigot-1.14.jar"/>
 	<classpathentry kind="lib" path="1.13CommandAPI/spigotlibs/spigot-1.15.jar"/>
+	<classpathentry kind="lib" path="1.13CommandAPI/spigotlibs/spigot-1.15.1.jar"/>
+	<classpathentry kind="lib" path="1.13CommandAPI/spigotlibs/spigot-1.15.2.jar"/>
 	<classpathentry kind="lib" path="1.13CommandAPI/target/CommandAPIv3.0_23_Sep_2019_(10-57-26PM)-sources.jar"/>
 	<classpathentry kind="lib" path="1.13CommandAPI/target/CommandAPIv3.0_23_Sep_2019_(10-57-26PM).jar"/>
 	<classpathentry kind="output" path="1.13CommandAPI/target/classes"/>
