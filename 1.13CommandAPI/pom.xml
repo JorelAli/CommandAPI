@@ -163,7 +163,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot-server-1.15,2</artifactId>
+			<artifactId>spigot-server-1.15.2</artifactId>
 			<version>1.15.2</version>
 			<scope>system</scope>
 			<systemPath>${basedir}/spigotlibs/spigot-1.15.2.jar</systemPath>
