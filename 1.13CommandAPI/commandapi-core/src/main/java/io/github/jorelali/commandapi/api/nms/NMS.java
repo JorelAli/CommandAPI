@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.function.Supplier;
 
 import org.bukkit.Axis;
 import org.bukkit.ChatColor;
@@ -131,22 +132,22 @@ public interface NMS {
 	SimpleCommandMap getSimpleCommandMap();
 	
 	/** Argument implementations with CommandSyntaxExceptions */
-	Advancement        getAdvancement(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
-	BaseComponent[]    getChat(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException; 
-	ItemStack          getItemStack(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
-	Object             getEntitySelector(CommandContext<?> cmdCtx, String key, EntitySelector selector) throws CommandSyntaxException;
-	EntityType         getEntityType(CommandContext<?> cmdCtx, String key, CommandSender sender) throws CommandSyntaxException;
-	FunctionWrapper[]  getFunction(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
-	Location           getLocation(CommandContext<?> cmdCtx, String key, LocationType locationType, CommandSender sender) throws CommandSyntaxException;
-	Location2D         getLocation2D(CommandContext<?> cmdCtx, String key, LocationType locationType2d, CommandSender sender) throws CommandSyntaxException;
-	Objective          getObjective(CommandContext<?> cmdCtx, String key, CommandSender sender) throws IllegalArgumentException, CommandSyntaxException;
-	Player             getPlayer(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
-	PotionEffectType   getPotionEffect(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
-	Recipe             getRecipe(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException; 
-	Collection<String> getScoreHolderMultiple(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
-	String             getScoreHolderSingle(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
-	Team               getTeam(CommandContext<?> cmdCtx, String key, CommandSender sender) throws CommandSyntaxException;
-	MathOperation           getMathOperation(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
+	Advancement         getAdvancement(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
+	BaseComponent[]     getChat(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException; 
+	ItemStack           getItemStack(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
+	Object              getEntitySelector(CommandContext<?> cmdCtx, String key, EntitySelector selector) throws CommandSyntaxException;
+	EntityType          getEntityType(CommandContext<?> cmdCtx, String key, CommandSender sender) throws CommandSyntaxException;
+	FunctionWrapper[]   getFunction(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
+	Location            getLocation(CommandContext<?> cmdCtx, String key, LocationType locationType, CommandSender sender) throws CommandSyntaxException;
+	Location2D          getLocation2D(CommandContext<?> cmdCtx, String key, LocationType locationType2d, CommandSender sender) throws CommandSyntaxException;
+	String              getObjective(CommandContext<?> cmdCtx, String key, CommandSender sender) throws IllegalArgumentException, CommandSyntaxException;
+	Player              getPlayer(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
+	PotionEffectType    getPotionEffect(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
+	Recipe              getRecipe(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException; 
+	Collection<String>  getScoreHolderMultiple(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
+	String              getScoreHolderSingle(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
+	String              getTeam(CommandContext<?> cmdCtx, String key, CommandSender sender) throws CommandSyntaxException;
+	MathOperation       getMathOperation(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 
 
 	/** Argument implementations without CommandSyntaxExceptions */

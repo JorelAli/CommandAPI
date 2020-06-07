@@ -30,6 +30,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
@@ -381,9 +382,7 @@ public final class CommandAPIHandler {
 			}
 		}
 
-		return (clw) -> {
-			return permissionCheck(nms.getCommandSenderForCLW(clw), finalPermission);
-		};
+		return (Object clw) -> permissionCheck(nms.getCommandSenderForCLW(clw), finalPermission);
 	}
 
 	// Checks if a CommandSender has permission permission from CommandPermission
@@ -587,25 +586,29 @@ public final class CommandAPIHandler {
 
 	private LiteralArgumentBuilder<?> getLiteralArgumentBuilderArgument(String commandName,
 			CommandPermission permission) {
-		return LiteralArgumentBuilder.literal(commandName).requires(clw -> {
-			return permissionCheck(nms.getCommandSenderForCLW(clw), permission);
-		});
+		return LiteralArgumentBuilder.literal(commandName)
+				.requires(clw -> permissionCheck(nms.getCommandSenderForCLW(clw), permission));
 	}
 
 	// Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
 	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilderDynamic(String argumentName, Argument type,
 			CommandPermission permission) {
-		return getRequiredArgumentBuilderWithProvider(argumentName, type.getRawType(), permission,
-				(context, builder) -> getSuggestionsBuilder(builder,
-						type.getOverriddenSuggestions().apply(nms.getCommandSenderForCLW(context.getSource()))));
+		if(type.getOverriddenSuggestions() == null) {
+			return RequiredArgumentBuilder.argument(argumentName, (ArgumentType<T>) type.getRawType()).requires(clw -> 
+	             permissionCheck(nms.getCommandSenderForCLW(clw), permission)
+	        );
+		} else {
+			return getRequiredArgumentBuilderWithProvider(argumentName, type.getRawType(), permission,
+					(CommandContext context, SuggestionsBuilder builder) -> getSuggestionsBuilder(builder,
+							type.getOverriddenSuggestions().apply(nms.getCommandSenderForCLW(context.getSource()))));
+		}
 	}
 
 	// Gets a RequiredArgumentBuilder for an argument, given a SuggestionProvider
 	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilderWithProvider(String argumentName,
 			ArgumentType<T> type, CommandPermission permission, SuggestionProvider provider) {
-		return RequiredArgumentBuilder.argument(argumentName, type).requires(clw -> {
-			return permissionCheck(nms.getCommandSenderForCLW(clw), permission);
-		}).suggests(provider);
+		return RequiredArgumentBuilder.argument(argumentName, type)
+				.requires(clw -> permissionCheck(nms.getCommandSenderForCLW(clw), permission)).suggests(provider);
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////

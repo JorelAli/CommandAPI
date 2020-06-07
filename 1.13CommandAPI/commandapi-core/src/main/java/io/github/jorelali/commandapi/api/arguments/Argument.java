@@ -33,7 +33,7 @@ public abstract class Argument implements OverrideableSuggestions<Argument> {
 	// Suggestions //
 	/////////////////
 	
-	private Function<CommandSender, String[]> suggestions;
+	private Function<CommandSender, String[]> suggestions = null;
 	
 	@Override
 	public final Argument overrideSuggestions(String... suggestions) {

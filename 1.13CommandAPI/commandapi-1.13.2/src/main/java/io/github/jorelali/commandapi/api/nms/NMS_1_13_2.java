@@ -39,9 +39,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
@@ -461,11 +458,8 @@ public class NMS_1_13_2 implements NMS {
     }
 
     @Override
-    public Objective getObjective(CommandContext cmdCtx, String key, CommandSender sender) throws IllegalArgumentException, CommandSyntaxException {
-        Scoreboard board = sender instanceof Player
-                           ? ((Player) sender).getScoreboard()
-                           : Bukkit.getScoreboardManager().getMainScoreboard();
-        return board.getObjective(ArgumentScoreboardObjective.a(cmdCtx, key).getName());
+    public String getObjective(CommandContext cmdCtx, String key, CommandSender sender) throws IllegalArgumentException, CommandSyntaxException {
+        return ArgumentScoreboardObjective.a(cmdCtx, key).getName();
     }
 
     @Override
@@ -580,11 +574,8 @@ public class NMS_1_13_2 implements NMS {
     }
 
     @Override
-    public Team getTeam(CommandContext cmdCtx, String key, CommandSender sender) throws CommandSyntaxException {
-        Scoreboard board = sender instanceof Player
-                           ? ((Player) sender).getScoreboard()
-                           : Bukkit.getScoreboardManager().getMainScoreboard();
-        return board.getTeam(ArgumentScoreboardTeam.a(cmdCtx, key).getName());
+    public String getTeam(CommandContext cmdCtx, String key, CommandSender sender) throws CommandSyntaxException {
+        return ArgumentScoreboardTeam.a(cmdCtx, key).getName();
     }
 
     @Override
