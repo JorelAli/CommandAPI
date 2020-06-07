@@ -128,6 +128,8 @@ public final class CommandAPIHandler {
                     nms = (NMS) Class.forName("io.github.jorelali.commandapi.api.nms.NMS_1_14_4").getDeclaredConstructor().newInstance();
                     break;
                 case "1.15":
+                case "1.15.1":
+                case "1.15.2":
                     nms = (NMS) Class.forName("io.github.jorelali.commandapi.api.nms.NMS_1_15").getDeclaredConstructor().newInstance();
                     break;
                 default:
