@@ -1,5 +1,7 @@
 package io.github.jorelali.commandapi.api.arguments;
 
+import java.util.function.Function;
+
 import org.bukkit.command.CommandSender;
 
 public interface OverrideableSuggestions<T extends Argument> {
@@ -10,15 +12,6 @@ public interface OverrideableSuggestions<T extends Argument> {
 	 * @return The argument
 	 */
 	T overrideSuggestions(String... suggestions);	
-	T overrideSuggestions(DynamicSuggestions suggestions);
-	default DynamicSuggestions getOverriddenSuggestions() { return null; }
-	
-	default DynamicSuggestions mkSuggestions(String... suggestions) {
-		return (s) -> suggestions;
-	}
-	
-	@FunctionalInterface
-	public interface DynamicSuggestions {
-		String[] getSuggestions(CommandSender sender);
-	}
+	T overrideSuggestions(Function<CommandSender, String[]> suggestions);
+	Function<CommandSender, String[]> getOverriddenSuggestions();
 }

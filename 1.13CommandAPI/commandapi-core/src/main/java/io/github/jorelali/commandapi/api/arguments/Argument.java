@@ -1,5 +1,9 @@
 package io.github.jorelali.commandapi.api.arguments;
 
+import java.util.function.Function;
+
+import org.bukkit.command.CommandSender;
+
 import com.mojang.brigadier.arguments.ArgumentType;
 
 import io.github.jorelali.commandapi.api.CommandPermission;
@@ -29,19 +33,22 @@ public abstract class Argument implements OverrideableSuggestions<Argument> {
 	// Suggestions //
 	/////////////////
 	
-	private DynamicSuggestions suggestions;
+	private Function<CommandSender, String[]> suggestions;
 	
+	@Override
 	public final Argument overrideSuggestions(String... suggestions) {
-		this.suggestions = mkSuggestions(suggestions);
+		this.suggestions = (c) -> suggestions;
 		return this;
 	}
 	
-	public final Argument overrideSuggestions(DynamicSuggestions suggestions) {
+	@Override
+	public final Argument overrideSuggestions(Function<CommandSender, String[]> suggestions) {
 		this.suggestions = suggestions;
 		return this;
 	}
 	
-	public final DynamicSuggestions getOverriddenSuggestions() {
+	@Override
+	public final Function<CommandSender, String[]> getOverriddenSuggestions() {
 		return suggestions;
 	}
 	

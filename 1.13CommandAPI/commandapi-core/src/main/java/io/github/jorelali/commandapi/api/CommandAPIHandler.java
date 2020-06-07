@@ -44,13 +44,11 @@ import io.github.jorelali.commandapi.api.arguments.CustomArgument.CustomArgument
 import io.github.jorelali.commandapi.api.arguments.CustomArgument.MessageBuilder;
 import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument;
 import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
-import io.github.jorelali.commandapi.api.arguments.DynamicSuggestedStringArgument;
 import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument;
 import io.github.jorelali.commandapi.api.arguments.LiteralArgument;
 import io.github.jorelali.commandapi.api.arguments.Location2DArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationArgument;
 import io.github.jorelali.commandapi.api.arguments.LocationType;
-import io.github.jorelali.commandapi.api.arguments.OverrideableSuggestions;
 import io.github.jorelali.commandapi.api.arguments.ScoreHolderArgument;
 import io.github.jorelali.commandapi.api.nms.NMS;
 
@@ -486,15 +484,9 @@ public final class CommandAPIHandler {
                     inner = getLiteralArgumentBuilderArgument(str, innerArg.getArgumentPermission()).executes(command);
                 } else {
                     if (innerArg instanceof CustomProvidedArgument) {
-                        inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), innerArg.getArgumentPermission(), ((CustomProvidedArgument) innerArg).getSuggestionProvider()).executes(command);
-                    } else if (innerArg instanceof DynamicSuggestedStringArgument) {
-                        inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), (DynamicSuggestedStringArgument) innerArg, innerArg.getArgumentPermission()).executes(command);
+                        inner = getRequiredArgumentBuilderWithProvider(keys.get(keys.size() - 1), innerArg.getRawType(), innerArg.getArgumentPermission(), ((CustomProvidedArgument) innerArg).getSuggestionProvider()).executes(command);
                     } else {
-                        if (innerArg instanceof OverrideableSuggestions) {
-                            inner = getRequiredArgumentBuilderWithOverride(keys.get(keys.size() - 1), innerArg, innerArg.getArgumentPermission()).executes(command);
-                        } else {
-                            inner = getRequiredArgumentBuilder(keys.get(keys.size() - 1), innerArg.getRawType(), innerArg.getArgumentPermission()).executes(command);
-                        }
+                        inner = getRequiredArgumentBuilderDynamic(keys.get(keys.size() - 1), innerArg, innerArg.getArgumentPermission()).executes(command);
                     }
                 }
             }
@@ -508,15 +500,9 @@ public final class CommandAPIHandler {
                     outer = getLiteralArgumentBuilderArgument(str, outerArg.getArgumentPermission()).then(outer);
                 } else {
                     if (outerArg instanceof CustomProvidedArgument) {
-                        outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), outerArg.getArgumentPermission(), ((CustomProvidedArgument) outerArg).getSuggestionProvider()).then(outer);
-                    } else if (outerArg instanceof DynamicSuggestedStringArgument) {
-                        outer = getRequiredArgumentBuilder(keys.get(i), (DynamicSuggestedStringArgument) outerArg, outerArg.getArgumentPermission()).then(outer);
+                        outer = getRequiredArgumentBuilderWithProvider(keys.get(i), outerArg.getRawType(), outerArg.getArgumentPermission(), ((CustomProvidedArgument) outerArg).getSuggestionProvider()).then(outer);
                     } else {
-                        if (outerArg instanceof OverrideableSuggestions) {
-                            outer = getRequiredArgumentBuilderWithOverride(keys.get(i), outerArg, outerArg.getArgumentPermission()).then(outer);
-                        } else {
-                            outer = getRequiredArgumentBuilder(keys.get(i), outerArg.getRawType(), outerArg.getArgumentPermission()).then(outer);
-                        }
+                    	outer = getRequiredArgumentBuilderDynamic(keys.get(i), outerArg, outerArg.getArgumentPermission()).then(outer);
                     }
                 }
             }
@@ -577,62 +563,26 @@ public final class CommandAPIHandler {
         });
     }
 
-    //Gets a RequiredArgumentBuilder for an argument
-    private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, ArgumentType<T> type, CommandPermission permission) {
-        return RequiredArgumentBuilder.argument(argumentName, type).requires(clw -> {
-            return permissionCheck(nms.getCommandSenderForCLW(clw), permission);
-        });
-    }
-
     //Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
-    private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, DynamicSuggestedStringArgument type, CommandPermission permission) {
+    private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilderDynamic(String argumentName, Argument type, CommandPermission permission) {
 
-        SuggestionProvider provider = null;
+        SuggestionProvider provider = (context, builder) -> {
+        	return getSuggestionsBuilder(builder, type.getOverriddenSuggestions().apply(nms.getCommandSenderForCLW(context.getSource())));	
+        };
 
-        if (type.getDynamicSuggestions() == null) {
-            //withCS
-            provider = (context, builder) -> {
-                return getSuggestionsBuilder(builder, type.getDynamicSuggestionsWithCommandSender().getSuggestions(nms.getCommandSenderForCLW(context.getSource())));
-            };
-        } else if (type.getDynamicSuggestionsWithCommandSender() == null) {
-            provider = (context, builder) -> {
-                return getSuggestionsBuilder(builder, type.getDynamicSuggestions().getSuggestions());
-            };
-        } else {
-            throw new RuntimeException("Invalid DynamicSuggestedStringArgument found!");
-        }
-
-        return getRequiredArgumentBuilder(argumentName, type.getRawType(), permission, provider);
+        return getRequiredArgumentBuilderWithProvider(argumentName, type.getRawType(), permission, provider);
     }
 
     //Gets a RequiredArgumentBuilder for an argument, given a SuggestionProvider
-    private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, ArgumentType<T> type, CommandPermission permission, SuggestionProviders provider) {
-        return getRequiredArgumentBuilder(argumentName, type, permission, nms.getSuggestionProvider(provider));
+    private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilderWithProvider(String argumentName, ArgumentType<T> type, CommandPermission permission, SuggestionProviders provider) {
+        return getRequiredArgumentBuilderWithProvider(argumentName, type, permission, nms.getSuggestionProvider(provider));
     }
 
     //Gets a RequiredArgumentBuilder for an argument, given a SuggestionProvider
-    private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilder(String argumentName, ArgumentType<T> type, CommandPermission permission, SuggestionProvider provider) {
+    private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilderWithProvider(String argumentName, ArgumentType<T> type, CommandPermission permission, SuggestionProvider provider) {
         return RequiredArgumentBuilder.argument(argumentName, type).requires(clw -> {
             return permissionCheck(nms.getCommandSenderForCLW(clw), permission);
         }).suggests(provider);
-    }
-
-    //Gets a RequiredArgumentBuilder for an argument, given that said argument uses OverrideableSuggestions
-    private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilderWithOverride(String argumentName, Argument type, CommandPermission permission) {
-        String[] newSuggestions = ((OverrideableSuggestions) type).getOverriddenSuggestions();
-        if (newSuggestions == null || newSuggestions.length == 0) {
-            return getRequiredArgumentBuilder(argumentName, type.getRawType(), permission);
-        } else {
-
-            //Use NMS ICompletionProvider.a() on newSuggestions
-            SuggestionProvider provider = (context, builder) -> {
-                return getSuggestionsBuilder(builder, newSuggestions);
-            };
-
-            return RequiredArgumentBuilder.argument(argumentName, type.getRawType()).requires(clw -> {
-                return permissionCheck(nms.getCommandSenderForCLW(clw), permission);
-            }).suggests(provider);
-        }
     }
 
     //Gets a field using reflection and caches it
