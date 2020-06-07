@@ -1,16 +1,13 @@
 package io.github.jorelali.commandapi.api.arguments;
 
 import com.mojang.brigadier.LiteralMessage;
-import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
 import io.github.jorelali.commandapi.api.CommandAPIHandler;
-import io.github.jorelali.commandapi.api.CommandPermission;
 
-@SuppressWarnings("unchecked")
 public class CustomArgument<S> extends Argument {
 	
 	/**
@@ -36,7 +33,6 @@ public class CustomArgument<S> extends Argument {
 	}
 	
 	private CustomArgumentFunction<S> parser;
-	private boolean keyed;
 	
 	/**
 	 * Creates a CustomArgument with a valid parser, defaults to non-keyed argument
@@ -63,18 +59,8 @@ public class CustomArgument<S> extends Argument {
 	 * valid arguments
 	 */
 	public CustomArgument(CustomArgumentFunction<S> parser, boolean keyed) {
+		super(keyed ? CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered() : StringArgumentType.string());
 		this.parser = parser;
-		this.keyed = keyed;
-	}
-	
-	@Override
-	public <T> ArgumentType<T> getRawType() {
-		if(keyed) {
-			return (ArgumentType<T>) CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered();
-		} else {
-			return (ArgumentType<T>) StringArgumentType.string();
-		}
-		
 	}
 
 	@Override
@@ -84,32 +70,6 @@ public class CustomArgument<S> extends Argument {
 	
 	public CustomArgumentFunction<S> getParser() {
 		return parser;
-	}
-	
-	private CommandPermission permission = null;
-	
-	@Override
-	public CustomArgument<S> withPermission(CommandPermission permission) {
-		this.permission = permission;
-		return this;
-	}
-
-	@Override
-	public CommandPermission getArgumentPermission() {
-		return permission;
-	}
-	
-	private String[] suggestions;
-	
-	@Override
-	public CustomArgument<S> overrideSuggestions(String... suggestions) {
-		this.suggestions = suggestions;
-		return this;
-	}
-	
-	@Override
-	public String[] getOverriddenSuggestions() {
-		return suggestions;
 	}
 
 	@Override

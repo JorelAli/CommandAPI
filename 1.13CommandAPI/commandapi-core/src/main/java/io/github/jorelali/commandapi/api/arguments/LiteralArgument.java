@@ -1,19 +1,23 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import com.mojang.brigadier.arguments.ArgumentType;
-
-import io.github.jorelali.commandapi.api.CommandPermission;
 import io.github.jorelali.commandapi.api.exceptions.BadLiteralException;
 
-@SuppressWarnings("unchecked")
-public class LiteralArgument implements Argument {
+public class LiteralArgument extends Argument {
 
-	String literal;
+	private String literal;
 	
 	/**
 	 * A literal argument. Only takes one string value which cannot be modified 
 	 */
 	public LiteralArgument(final String literal) {
+		/*
+		 * The literal argument builder is NOT technically an argument.
+		 * Therefore, it doesn't have an ArgumentType.
+		 * 
+		 * This is a wrapper for the object "LiteralArgumentBuilder<>"
+		 */
+		super(null);
+		
 		if(literal == null) {
 			throw new BadLiteralException(true);
 		}
@@ -23,16 +27,6 @@ public class LiteralArgument implements Argument {
 		this.literal = literal;
 	}
 	
-	@Override
-	public <T> ArgumentType<T> getRawType() {
-		/*
-		 * The literal argument builder is NOT technically an argument.
-		 * Therefore, it doesn't have an ArgumentType.
-		 * 
-		 * This is a wrapper for the object "LiteralArgumentBuilder<>"
-		 */
-		return null;
-	}
 
 	@Override
 	public Class<?> getPrimitiveType() {
@@ -41,24 +35,6 @@ public class LiteralArgument implements Argument {
 
 	public String getLiteral() {
 		return literal;
-	}
-	
-	@Override
-	public boolean isSimple() {
-		return false;
-	}
-	
-	private CommandPermission permission = null;
-	
-	@Override
-	public LiteralArgument withPermission(CommandPermission permission) {
-		this.permission = permission;
-		return this;
-	}
-
-	@Override
-	public CommandPermission getArgumentPermission() {
-		return permission;
 	}
 	
 	@Override

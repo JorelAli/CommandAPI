@@ -1,14 +1,11 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 
 import io.github.jorelali.commandapi.api.exceptions.InvalidRangeException;
 
 public class DoubleArgument extends Argument {
 
-	ArgumentType<?> rawType;
-	
 	/**
 	 * A double argument
 	 */
