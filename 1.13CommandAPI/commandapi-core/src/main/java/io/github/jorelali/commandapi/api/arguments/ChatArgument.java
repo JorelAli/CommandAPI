@@ -1,66 +1,27 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import com.mojang.brigadier.arguments.ArgumentType;
-
 import io.github.jorelali.commandapi.api.CommandAPIHandler;
-import io.github.jorelali.commandapi.api.CommandPermission;
 import io.github.jorelali.commandapi.api.exceptions.SpigotNotFoundException;
 import net.md_5.bungee.api.chat.BaseComponent;
 
-
-@SuppressWarnings("unchecked")
-public class ChatArgument implements Argument, OverrideableSuggestions, GreedyArgument {
-
-	ArgumentType<?> rawType;
+public class ChatArgument extends Argument implements GreedyArgument {
 	
 	/**
 	 * A Chat argument. Represents fancy greedy strings that can parse entity selectors
 	 */
 	public ChatArgument() {
+		super(CommandAPIHandler.getNMS()._ArgumentChat());
 		
 		try {
 			Class.forName("org.spigotmc.SpigotConfig");
 		} catch(ClassNotFoundException e) {
 			throw new SpigotNotFoundException(this.getClass());
 		}
-		
-		rawType = CommandAPIHandler.getNMS()._ArgumentChat();
-	}
-	
-	@Override
-	public <T> ArgumentType<T> getRawType() {
-		return (ArgumentType<T>) rawType;
 	}
 
 	@Override
-	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) BaseComponent[].class;
-	}
-	
-	private String[] suggestions;
-	
-	@Override
-	public ChatArgument overrideSuggestions(String... suggestions) {
-		this.suggestions = suggestions;
-		return this;
-	}
-	
-	@Override
-	public String[] getOverriddenSuggestions() {
-		return suggestions;
-	}
-
-	private CommandPermission permission = null;
-	
-	@Override
-	public ChatArgument withPermission(CommandPermission permission) {
-		this.permission = permission;
-		return this;
-	}
-
-	@Override
-	public CommandPermission getArgumentPermission() {
-		return permission;
+	public Class<?> getPrimitiveType() {
+		return BaseComponent[].class;
 	}
 	
 	@Override

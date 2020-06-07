@@ -7,7 +7,7 @@ import io.github.jorelali.commandapi.api.CommandPermission;
 import io.github.jorelali.commandapi.api.wrappers.FloatRange;
 
 @SuppressWarnings("unchecked")
-public class FloatRangeArgument implements Argument, OverrideableSuggestions {
+public class FloatRangeArgument extends Argument {
 
 	ArgumentType<?> rawType;
 	
@@ -24,8 +24,8 @@ public class FloatRangeArgument implements Argument, OverrideableSuggestions {
 	}
 
 	@Override
-	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) FloatRange.class;
+	public Class<?> getPrimitiveType() {
+		return FloatRange.class;
 	}
 
 	@Override

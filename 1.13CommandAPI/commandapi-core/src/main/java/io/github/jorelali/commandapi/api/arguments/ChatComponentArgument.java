@@ -3,13 +3,11 @@ package io.github.jorelali.commandapi.api.arguments;
 import com.mojang.brigadier.arguments.ArgumentType;
 
 import io.github.jorelali.commandapi.api.CommandAPIHandler;
-import io.github.jorelali.commandapi.api.CommandPermission;
 import io.github.jorelali.commandapi.api.exceptions.SpigotNotFoundException;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 
-@SuppressWarnings("unchecked")
-public class ChatComponentArgument implements Argument, OverrideableSuggestions {
+public class ChatComponentArgument extends Argument {
 
 	ArgumentType<?> rawType;
 	
@@ -18,50 +16,18 @@ public class ChatComponentArgument implements Argument, OverrideableSuggestions 
 	 * @see <a href="https://minecraft.gamepedia.com/Commands#Raw_JSON_text">Raw JSON text</a>
 	 */
 	public ChatComponentArgument() {
+		super(CommandAPIHandler.getNMS()._ArgumentChatComponent());
 		
 		try {
 			Class.forName("org.spigotmc.SpigotConfig");
 		} catch(ClassNotFoundException e) {
 			throw new SpigotNotFoundException(this.getClass());
 		}
-		
-		rawType = CommandAPIHandler.getNMS()._ArgumentChatComponent();
 	}
 	
 	@Override
-	public <T> ArgumentType<T> getRawType() {
-		return (ArgumentType<T>) rawType;
-	}
-
-	@Override
-	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) BaseComponent[].class;
-	}
-	
-	private String[] suggestions;
-	
-	@Override
-	public ChatComponentArgument overrideSuggestions(String... suggestions) {
-		this.suggestions = suggestions;
-		return this;
-	}
-	
-	@Override
-	public String[] getOverriddenSuggestions() {
-		return suggestions;
-	}
-
-	private CommandPermission permission = null;
-	
-	@Override
-	public ChatComponentArgument withPermission(CommandPermission permission) {
-		this.permission = permission;
-		return this;
-	}
-
-	@Override
-	public CommandPermission getArgumentPermission() {
-		return permission;
+	public Class<?> getPrimitiveType() {
+		return BaseComponent[].class;
 	}
 	
 	@Override

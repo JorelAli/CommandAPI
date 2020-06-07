@@ -8,7 +8,7 @@ import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
 
 @SuppressWarnings("unchecked")
-public class ScoreHolderArgument implements Argument, OverrideableSuggestions {
+public class ScoreHolderArgument extends Argument {
 	
 	ArgumentType<?> rawType;
 	private final boolean single;
@@ -35,8 +35,8 @@ public class ScoreHolderArgument implements Argument, OverrideableSuggestions {
 	}
 
 	@Override
-	public <V> Class<V> getPrimitiveType() {
-		return single ? (Class<V>) String.class : (Class<V>) Collection.class;
+	public Class<?> getPrimitiveType() {
+		return single ? String.class : Collection.class;
 	}
 
 	@Override

@@ -3,11 +3,9 @@ package io.github.jorelali.commandapi.api.arguments;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 
-import io.github.jorelali.commandapi.api.CommandPermission;
 import io.github.jorelali.commandapi.api.exceptions.InvalidRangeException;
 
-@SuppressWarnings("unchecked")
-public class DoubleArgument implements Argument, OverrideableSuggestions {
+public class DoubleArgument extends Argument {
 
 	ArgumentType<?> rawType;
 	
@@ -15,7 +13,7 @@ public class DoubleArgument implements Argument, OverrideableSuggestions {
 	 * A double argument
 	 */
 	public DoubleArgument() {
-		rawType = DoubleArgumentType.doubleArg();
+		super(DoubleArgumentType.doubleArg());
 	}
 	
 	/**
@@ -23,7 +21,7 @@ public class DoubleArgument implements Argument, OverrideableSuggestions {
 	 * @param min The minimum value this argument can take (inclusive)
 	 */
 	public DoubleArgument(double min) {
-		rawType = DoubleArgumentType.doubleArg(min);
+		super(DoubleArgumentType.doubleArg(min));
 	}
 	
 	/**
@@ -32,46 +30,15 @@ public class DoubleArgument implements Argument, OverrideableSuggestions {
 	 * @param max The maximum value this argument can take (inclusive)
 	 */
 	public DoubleArgument(double min, double max) {
+		super(DoubleArgumentType.doubleArg(min, max));
 		if(max < min) {
 			throw new InvalidRangeException();
 		}
-		rawType = DoubleArgumentType.doubleArg(min, max);
-	}
-	
-	@Override
-	public <T> ArgumentType<T> getRawType() {
-		return (ArgumentType<T>) rawType;
 	}
 
 	@Override
-	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) double.class;
-	}
-	
-	private String[] suggestions;
-	
-	@Override
-	public DoubleArgument overrideSuggestions(String... suggestions) {
-		this.suggestions = suggestions;
-		return this;
-	}
-	
-	@Override
-	public String[] getOverriddenSuggestions() {
-		return suggestions;
-	}
-	
-	private CommandPermission permission = null;
-	
-	@Override
-	public DoubleArgument withPermission(CommandPermission permission) {
-		this.permission = permission;
-		return this;
-	}
-
-	@Override
-	public CommandPermission getArgumentPermission() {
-		return permission;
+	public Class<?> getPrimitiveType() {
+		return double.class;
 	}
 
 	@Override

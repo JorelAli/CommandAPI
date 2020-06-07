@@ -7,7 +7,7 @@ import io.github.jorelali.commandapi.api.CommandPermission;
 import io.github.jorelali.commandapi.api.wrappers.ScoreboardSlot;
 
 @SuppressWarnings("unchecked")
-public class ScoreboardSlotArgument implements Argument, OverrideableSuggestions {
+public class ScoreboardSlotArgument extends Argument {
 
 	ArgumentType<?> rawType;
 	
@@ -24,8 +24,8 @@ public class ScoreboardSlotArgument implements Argument, OverrideableSuggestions
 	}
 
 	@Override
-	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) ScoreboardSlot.class;
+	public Class<?> getPrimitiveType() {
+		return ScoreboardSlot.class;
 	}
 
 	@Override

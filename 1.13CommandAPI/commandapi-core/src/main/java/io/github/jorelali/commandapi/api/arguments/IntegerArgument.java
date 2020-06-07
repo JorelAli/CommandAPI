@@ -7,7 +7,7 @@ import io.github.jorelali.commandapi.api.CommandPermission;
 import io.github.jorelali.commandapi.api.exceptions.InvalidRangeException;
 
 @SuppressWarnings("unchecked")
-public class IntegerArgument implements Argument, OverrideableSuggestions {
+public class IntegerArgument extends Argument {
 
 	ArgumentType<?> rawType;
 	
@@ -44,8 +44,8 @@ public class IntegerArgument implements Argument, OverrideableSuggestions {
 	}
 
 	@Override
-	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) int.class;
+	public Class<?> getPrimitiveType() {
+		return int.class;
 	}
 	
 	@Override

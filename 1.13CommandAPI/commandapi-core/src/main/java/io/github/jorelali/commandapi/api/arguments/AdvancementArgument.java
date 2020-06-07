@@ -2,45 +2,17 @@ package io.github.jorelali.commandapi.api.arguments;
 
 import org.bukkit.advancement.Advancement;
 
-import com.mojang.brigadier.arguments.ArgumentType;
-
 import io.github.jorelali.commandapi.api.CommandAPIHandler;
-import io.github.jorelali.commandapi.api.CommandPermission;
 
-@SuppressWarnings("unchecked")
-public class AdvancementArgument implements Argument, CustomProvidedArgument {
-	ArgumentType<?> rawType;
+public class AdvancementArgument extends Argument {
 	
 	public AdvancementArgument() {
-		rawType = CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered();
-	}
-	
-	@Override
-	public <T> ArgumentType<T> getRawType() {
-		return (ArgumentType<T>) rawType;
+		super(CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered());
 	}
 
 	@Override
-	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) Advancement.class;
-	}
-	
-	private CommandPermission permission = null;
-	
-	@Override
-	public AdvancementArgument withPermission(CommandPermission permission) {
-		this.permission = permission;
-		return this;
-	}
-
-	@Override
-	public CommandPermission getArgumentPermission() {
-		return permission;
-	}
-
-	@Override
-	public SuggestionProviders getSuggestionProvider() {
-		return SuggestionProviders.ADVANCEMENTS;
+	public Class<?> getPrimitiveType() {
+		return Advancement.class;
 	}
 	
 	@Override

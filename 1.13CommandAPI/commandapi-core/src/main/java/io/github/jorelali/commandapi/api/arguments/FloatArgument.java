@@ -1,21 +1,16 @@
 package io.github.jorelali.commandapi.api.arguments;
 
-import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 
-import io.github.jorelali.commandapi.api.CommandPermission;
 import io.github.jorelali.commandapi.api.exceptions.InvalidRangeException;
 
-@SuppressWarnings("unchecked")
-public class FloatArgument implements Argument, OverrideableSuggestions {
+public class FloatArgument extends Argument {
 
-	ArgumentType<?> rawType;
-	
 	/**
-	 * An float argument
+	 * A float argument
 	 */
 	public FloatArgument() {
-		rawType = FloatArgumentType.floatArg();
+		super(FloatArgumentType.floatArg());
 	}
 	
 	/**
@@ -23,7 +18,7 @@ public class FloatArgument implements Argument, OverrideableSuggestions {
 	 * @param min The minimum value this argument can take (inclusive)
 	 */
 	public FloatArgument(float min) {
-		rawType = FloatArgumentType.floatArg(min);
+		super(FloatArgumentType.floatArg(min));
 	}
 	
 	/**
@@ -32,51 +27,15 @@ public class FloatArgument implements Argument, OverrideableSuggestions {
 	 * @param max The maximum value this argument can take (inclusive)
 	 */
 	public FloatArgument(float min, float max) {
+		super(FloatArgumentType.floatArg(min, max));
 		if(max < min) {
 			throw new InvalidRangeException();
 		}
-		rawType = FloatArgumentType.floatArg(min, max);
-	}
-	
-	@Override
-	public <T> ArgumentType<T> getRawType() {
-		return (ArgumentType<T>) rawType;
 	}
 
 	@Override
-	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) float.class;
-	}
-
-	@Override
-	public boolean isSimple() {
-		return true;
-	}
-	
-	private String[] suggestions;
-	
-	@Override
-	public FloatArgument overrideSuggestions(String... suggestions) {
-		this.suggestions = suggestions;
-		return this;
-	}
-	
-	@Override
-	public String[] getOverriddenSuggestions() {
-		return suggestions;
-	}
-	
-	private CommandPermission permission = null;
-	
-	@Override
-	public FloatArgument withPermission(CommandPermission permission) {
-		this.permission = permission;
-		return this;
-	}
-
-	@Override
-	public CommandPermission getArgumentPermission() {
-		return permission;
+	public Class<?> getPrimitiveType() {
+		return float.class;
 	}
 	
 	@Override

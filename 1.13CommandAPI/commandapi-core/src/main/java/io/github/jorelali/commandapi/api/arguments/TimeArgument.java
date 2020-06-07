@@ -6,7 +6,7 @@ import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
 
 @SuppressWarnings("unchecked")
-public class TimeArgument implements Argument, OverrideableSuggestions {
+public class TimeArgument extends Argument {
 
 	ArgumentType<?> rawType;
 	
@@ -23,8 +23,8 @@ public class TimeArgument implements Argument, OverrideableSuggestions {
 	}
 
 	@Override
-	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) Integer.class;
+	public Class<?> getPrimitiveType() {
+		return Integer.class;
 	}
 
 	@Override

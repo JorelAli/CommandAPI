@@ -6,7 +6,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import io.github.jorelali.commandapi.api.CommandPermission;
 
 @SuppressWarnings("unchecked")
-public class TextArgument implements Argument, OverrideableSuggestions {
+public class TextArgument extends Argument {
 
 	ArgumentType<?> rawType;
 	
@@ -23,8 +23,8 @@ public class TextArgument implements Argument, OverrideableSuggestions {
 	}
 
 	@Override
-	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) String.class;
+	public Class<?> getPrimitiveType() {
+		return String.class;
 	}
 
 	@Override

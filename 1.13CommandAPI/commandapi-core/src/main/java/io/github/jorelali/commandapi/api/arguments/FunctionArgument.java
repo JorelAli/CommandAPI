@@ -26,8 +26,8 @@ public class FunctionArgument implements Argument, CustomProvidedArgument {
 	}
 
 	@Override
-	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) FunctionWrapper[].class;
+	public Class<?> getPrimitiveType() {
+		return FunctionWrapper[].class;
 	}
 
 	@Override

@@ -7,7 +7,7 @@ import io.github.jorelali.commandapi.api.CommandPermission;
 import io.github.jorelali.commandapi.api.wrappers.Location2D;
 
 @SuppressWarnings("unchecked")
-public class Location2DArgument implements Argument, OverrideableSuggestions {
+public class Location2DArgument extends Argument {
 	
 	ArgumentType<?> rawType;
 	
@@ -41,8 +41,8 @@ public class Location2DArgument implements Argument, OverrideableSuggestions {
 	}
 
 	@Override
-	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) Location2D.class;
+	public Class<?> getPrimitiveType() {
+		return Location2D.class;
 	}
 
 	@Override

@@ -11,7 +11,7 @@ import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
 
 @SuppressWarnings("unchecked")
-public class CustomArgument<S> implements Argument, OverrideableSuggestions {
+public class CustomArgument<S> extends Argument {
 	
 	/**
 	 * Throws an error to be handled by the command execution handler. When this error

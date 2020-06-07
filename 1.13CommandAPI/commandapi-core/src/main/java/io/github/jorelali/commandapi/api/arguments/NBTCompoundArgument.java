@@ -11,7 +11,7 @@ import io.github.jorelali.commandapi.api.exceptions.NBTAPINotFoundException;
 
 
 @SuppressWarnings("unchecked")
-public class NBTCompoundArgument implements Argument, OverrideableSuggestions {
+public class NBTCompoundArgument extends Argument {
 
 	ArgumentType<?> rawType;
 	
@@ -33,8 +33,8 @@ public class NBTCompoundArgument implements Argument, OverrideableSuggestions {
 	}
 
 	@Override
-	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) NBTContainer.class;
+	public Class<?> getPrimitiveType() {
+		return NBTContainer.class;
 	}
 
 	@Override

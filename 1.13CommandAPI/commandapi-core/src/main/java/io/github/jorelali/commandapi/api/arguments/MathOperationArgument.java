@@ -8,7 +8,7 @@ import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
 
 @SuppressWarnings("unchecked")
-public class MathOperationArgument implements Argument, OverrideableSuggestions {
+public class MathOperationArgument extends Argument {
 
 	ArgumentType<?> rawType;
 	
@@ -25,8 +25,8 @@ public class MathOperationArgument implements Argument, OverrideableSuggestions 
 	}
 
 	@Override
-	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) IntBinaryOperator.class;
+	public Class<?> getPrimitiveType() {
+		return IntBinaryOperator.class;
 	}
 
 	@Override
