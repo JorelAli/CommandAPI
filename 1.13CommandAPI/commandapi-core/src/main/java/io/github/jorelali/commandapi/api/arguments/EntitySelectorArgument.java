@@ -5,29 +5,18 @@ import java.util.Collection;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import com.mojang.brigadier.arguments.ArgumentType;
-
 import io.github.jorelali.commandapi.api.CommandAPIHandler;
-import io.github.jorelali.commandapi.api.CommandPermission;
 
-@SuppressWarnings("unchecked")
 public class EntitySelectorArgument extends Argument {
 	
-	ArgumentType<?> rawType;
-	private EntitySelector selector;
+	private final EntitySelector selector;
 	
 	/**
 	 * An EntityType argument. Represents an entity specified by a selector
 	 */
 	public EntitySelectorArgument(EntitySelector selector) {
+		super(CommandAPIHandler.getNMS()._ArgumentEntity(selector));
 		this.selector = selector;
-		
-		rawType = CommandAPIHandler.getNMS()._ArgumentEntity(selector);
-	}
-	
-	@Override
-	public <T> ArgumentType<T> getRawType() {
-		return (ArgumentType<T>) rawType;
 	}
 
 	@Override
@@ -46,32 +35,6 @@ public class EntitySelectorArgument extends Argument {
 	
 	public EntitySelector getEntitySelector() {
 		return selector;
-	}
-	
-	private String[] suggestions;
-	
-	@Override
-	public EntitySelectorArgument overrideSuggestions(String... suggestions) {
-		this.suggestions = suggestions;
-		return this;
-	}
-	
-	@Override
-	public String[] getOverriddenSuggestions() {
-		return suggestions;
-	}
-	
-	private CommandPermission permission = null;
-	
-	@Override
-	public EntitySelectorArgument withPermission(CommandPermission permission) {
-		this.permission = permission;
-		return this;
-	}
-
-	@Override
-	public CommandPermission getArgumentPermission() {
-		return permission;
 	}
 
 	@Override

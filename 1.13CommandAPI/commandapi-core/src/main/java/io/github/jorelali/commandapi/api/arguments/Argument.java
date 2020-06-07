@@ -4,7 +4,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
 
 import io.github.jorelali.commandapi.api.CommandPermission;
 
-public abstract class Argument implements OverrideableSuggestions {
+public abstract class Argument implements OverrideableSuggestions<Argument> {
 		
 	
 	public abstract Class<?> getPrimitiveType();

@@ -4,14 +4,13 @@ import com.mojang.brigadier.arguments.LongArgumentType;
 
 import io.github.jorelali.commandapi.api.exceptions.InvalidRangeException;
 
-@SuppressWarnings("unchecked")
 public class LongArgument extends Argument {
 
 	/**
 	 * A long argument
 	 */
 	public LongArgument() {
-		rawType = LongArgumentType.longArg();
+		super(LongArgumentType.longArg());
 	}
 	
 	/**
@@ -19,7 +18,7 @@ public class LongArgument extends Argument {
 	 * @param min The minimum value this argument can take (inclusive)
 	 */
 	public LongArgument(int min) {
-		rawType = LongArgumentType.longArg(min);
+		super(LongArgumentType.longArg(min));
 	}
 	
 	/**
@@ -28,10 +27,10 @@ public class LongArgument extends Argument {
 	 * @param max The maximum value this argument can take (inclusive)
 	 */
 	public LongArgument(int min, int max) {
+		super(LongArgumentType.longArg(min, max));
 		if(max < min) {
 			throw new InvalidRangeException();
 		}
-		rawType = LongArgumentType.longArg(min, max);
 	}
 	
 	@Override
