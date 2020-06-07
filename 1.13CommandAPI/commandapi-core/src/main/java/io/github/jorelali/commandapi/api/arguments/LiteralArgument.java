@@ -35,8 +35,8 @@ public class LiteralArgument implements Argument {
 	}
 
 	@Override
-	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) String.class;
+	public Class<?> getPrimitiveType() {
+		return String.class;
 	}
 
 	public String getLiteral() {

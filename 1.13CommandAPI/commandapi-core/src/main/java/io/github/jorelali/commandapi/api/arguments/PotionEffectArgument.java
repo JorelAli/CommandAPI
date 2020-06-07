@@ -8,7 +8,7 @@ import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
 
 @SuppressWarnings("unchecked")
-public class PotionEffectArgument implements Argument, OverrideableSuggestions {
+public class PotionEffectArgument extends Argument {
 
 	ArgumentType<?> rawType;
 	
@@ -25,8 +25,8 @@ public class PotionEffectArgument implements Argument, OverrideableSuggestions {
 	}
 
 	@Override
-	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) PotionEffectType.class;
+	public Class<?> getPrimitiveType() {
+		return PotionEffectType.class;
 	}
 
 	@Override

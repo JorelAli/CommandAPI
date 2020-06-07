@@ -22,8 +22,8 @@ public class RecipeArgument implements Argument, CustomProvidedArgument {
 	}
 
 	@Override
-	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) LootTable.class;
+	public Class<?> getPrimitiveType() {
+		return LootTable.class;
 	}
 
 	@Override

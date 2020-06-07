@@ -2,57 +2,20 @@ package io.github.jorelali.commandapi.api.arguments;
 
 import org.bukkit.entity.EntityType;
 
-import com.mojang.brigadier.arguments.ArgumentType;
-
 import io.github.jorelali.commandapi.api.CommandAPIHandler;
-import io.github.jorelali.commandapi.api.CommandPermission;
 
-@SuppressWarnings("unchecked")
-public class EntityTypeArgument implements Argument, OverrideableSuggestions {
+public class EntityTypeArgument extends Argument {
 
-	ArgumentType<?> rawType;
-	
 	/**
 	 * An EntityType argument. Represents the type of an Entity
 	 */
 	public EntityTypeArgument() {
-		rawType = CommandAPIHandler.getNMS()._ArgumentEntitySummon();
-	}
-	
-	@Override
-	public <T> ArgumentType<T> getRawType() {
-		return (ArgumentType<T>) rawType;
+		super(CommandAPIHandler.getNMS()._ArgumentEntitySummon());
 	}
 
 	@Override
-	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) EntityType.class;
-	}
-	
-	private String[] suggestions;
-	
-	@Override
-	public EntityTypeArgument overrideSuggestions(String... suggestions) {
-		this.suggestions = suggestions;
-		return this;
-	}
-	
-	@Override
-	public String[] getOverriddenSuggestions() {
-		return suggestions;
-	}
-	
-	private CommandPermission permission = null;
-	
-	@Override
-	public EntityTypeArgument withPermission(CommandPermission permission) {
-		this.permission = permission;
-		return this;
-	}
-
-	@Override
-	public CommandPermission getArgumentPermission() {
-		return permission;
+	public Class<?> getPrimitiveType() {
+		return EntityType.class;
 	}
 
 	@Override

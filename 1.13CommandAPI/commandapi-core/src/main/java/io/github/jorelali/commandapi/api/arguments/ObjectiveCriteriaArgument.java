@@ -6,7 +6,7 @@ import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
 
 @SuppressWarnings("unchecked")
-public class ObjectiveCriteriaArgument implements Argument, OverrideableSuggestions {
+public class ObjectiveCriteriaArgument extends Argument {
 
 	ArgumentType<?> rawType;
 	
@@ -23,8 +23,8 @@ public class ObjectiveCriteriaArgument implements Argument, OverrideableSuggesti
 	}
 
 	@Override
-	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) String.class;
+	public Class<?> getPrimitiveType() {
+		return String.class;
 	}
 
 	@Override

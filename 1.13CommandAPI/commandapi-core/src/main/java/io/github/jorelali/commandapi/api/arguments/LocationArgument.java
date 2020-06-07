@@ -8,7 +8,7 @@ import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
 
 @SuppressWarnings("unchecked")
-public class LocationArgument implements Argument, OverrideableSuggestions {
+public class LocationArgument extends Argument {
 	
 	ArgumentType<?> rawType;
 	
@@ -42,8 +42,8 @@ public class LocationArgument implements Argument, OverrideableSuggestions {
 	}
 
 	@Override
-	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) Location.class;
+	public Class<?> getPrimitiveType() {
+		return Location.class;
 	}
 
 	@Override

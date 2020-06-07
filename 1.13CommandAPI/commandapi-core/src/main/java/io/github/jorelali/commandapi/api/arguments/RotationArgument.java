@@ -7,7 +7,7 @@ import io.github.jorelali.commandapi.api.CommandPermission;
 import io.github.jorelali.commandapi.api.wrappers.Rotation;
 
 @SuppressWarnings("unchecked")
-public class RotationArgument implements Argument, OverrideableSuggestions {
+public class RotationArgument extends Argument {
 
 	ArgumentType<?> rawType;
 	
@@ -24,8 +24,8 @@ public class RotationArgument implements Argument, OverrideableSuggestions {
 	}
 
 	@Override
-	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) Rotation.class;
+	public Class<?> getPrimitiveType() {
+		return Rotation.class;
 	}
 
 	@Override

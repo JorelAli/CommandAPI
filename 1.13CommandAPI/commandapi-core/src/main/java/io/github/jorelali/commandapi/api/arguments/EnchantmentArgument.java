@@ -2,59 +2,22 @@ package io.github.jorelali.commandapi.api.arguments;
 
 import org.bukkit.enchantments.Enchantment;
 
-import com.mojang.brigadier.arguments.ArgumentType;
-
 import io.github.jorelali.commandapi.api.CommandAPIHandler;
-import io.github.jorelali.commandapi.api.CommandPermission;
 
-@SuppressWarnings("unchecked")
-public class EnchantmentArgument implements Argument, OverrideableSuggestions {
-
-	ArgumentType<?> rawType;
+public class EnchantmentArgument extends Argument {
 	
 	/**
 	 * An Enchantment argument. Represents an enchantment for items 
 	 */
 	public EnchantmentArgument() {
-		rawType = CommandAPIHandler.getNMS()._ArgumentEnchantment();
-	}
-	
-	@Override
-	public <T> ArgumentType<T> getRawType() {
-		return (ArgumentType<T>) rawType;
+		super(CommandAPIHandler.getNMS()._ArgumentEnchantment());
 	}
 
 	@Override
-	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) Enchantment.class;
+	public Class<?> getPrimitiveType() {
+		return Enchantment.class;
 	}
 	
-	private String[] suggestions;
-	
-	@Override
-	public EnchantmentArgument overrideSuggestions(String... suggestions) {
-		this.suggestions = suggestions;
-		return this;
-	}
-	
-	@Override
-	public String[] getOverriddenSuggestions() {
-		return suggestions;
-	}
-	
-	private CommandPermission permission = null;
-	
-	@Override
-	public EnchantmentArgument withPermission(CommandPermission permission) {
-		this.permission = permission;
-		return this;
-	}
-
-	@Override
-	public CommandPermission getArgumentPermission() {
-		return permission;
-	}
-
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.ENCHANTMENT;

@@ -23,8 +23,8 @@ public class GreedyStringArgument implements Argument, OverrideableSuggestions, 
 	}
 
 	@Override
-	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) String.class;
+	public Class<?> getPrimitiveType() {
+		return String.class;
 	}
 
 	@Override

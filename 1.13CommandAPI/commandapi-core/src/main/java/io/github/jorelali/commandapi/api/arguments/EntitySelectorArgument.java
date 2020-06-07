@@ -11,7 +11,7 @@ import io.github.jorelali.commandapi.api.CommandAPIHandler;
 import io.github.jorelali.commandapi.api.CommandPermission;
 
 @SuppressWarnings("unchecked")
-public class EntitySelectorArgument implements Argument, OverrideableSuggestions {
+public class EntitySelectorArgument extends Argument {
 	
 	ArgumentType<?> rawType;
 	private EntitySelector selector;
@@ -31,16 +31,16 @@ public class EntitySelectorArgument implements Argument, OverrideableSuggestions
 	}
 
 	@Override
-	public <V> Class<V> getPrimitiveType() {	
+	public Class<?> getPrimitiveType() {	
 		switch(selector) {
 			case MANY_ENTITIES:
 			case MANY_PLAYERS:
 			default:
-				return (Class<V>) Collection.class;
+				return Collection.class;
 			case ONE_ENTITY:
-				return (Class<V>) Entity.class;
+				return Entity.class;
 			case ONE_PLAYER:
-				return (Class<V>) Player.class;
+				return Player.class;
 		}
 	}
 	

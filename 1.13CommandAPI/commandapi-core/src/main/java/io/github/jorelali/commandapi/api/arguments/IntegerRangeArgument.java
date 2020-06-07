@@ -7,7 +7,7 @@ import io.github.jorelali.commandapi.api.CommandPermission;
 import io.github.jorelali.commandapi.api.wrappers.IntegerRange;
 
 @SuppressWarnings("unchecked")
-public class IntegerRangeArgument implements Argument, OverrideableSuggestions {
+public class IntegerRangeArgument extends Argument {
 
 	ArgumentType<?> rawType;
 	
@@ -24,8 +24,8 @@ public class IntegerRangeArgument implements Argument, OverrideableSuggestions {
 	}
 
 	@Override
-	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) IntegerRange.class;
+	public Class<?> getPrimitiveType() {
+		return IntegerRange.class;
 	}
 
 	@Override

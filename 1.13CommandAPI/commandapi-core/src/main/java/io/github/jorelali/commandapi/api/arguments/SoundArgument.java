@@ -22,8 +22,8 @@ public class SoundArgument implements Argument, CustomProvidedArgument {
 	}
 
 	@Override
-	public <V> Class<V> getPrimitiveType() {
-		return (Class<V>) Sound.class;
+	public Class<?> getPrimitiveType() {
+		return Sound.class;
 	}
 
 	@Override

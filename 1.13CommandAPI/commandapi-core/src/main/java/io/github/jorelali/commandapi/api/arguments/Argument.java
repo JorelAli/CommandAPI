@@ -7,17 +7,21 @@ import io.github.jorelali.commandapi.api.CommandPermission;
 public abstract class Argument implements OverrideableSuggestions {
 		
 	
-	public abstract <V> Class<V> getPrimitiveType();
+	public abstract Class<?> getPrimitiveType();
 	public abstract CommandAPIArgumentType getArgumentType();
 	
 	////////////////////////
 	// Raw Argument Types //
 	////////////////////////
 	
-	ArgumentType<?> rawType;
+	private final ArgumentType<?> rawType;
+	
+	protected Argument(ArgumentType<?> rawType) {
+		this.rawType = rawType;
+	}
 	
 	@SuppressWarnings("unchecked")
-	public <T> ArgumentType<T> getRawType() {
+	public final <T> ArgumentType<T> getRawType() {
 		return (ArgumentType<T>) rawType;
 	}
 	
@@ -27,17 +31,17 @@ public abstract class Argument implements OverrideableSuggestions {
 	
 	private DynamicSuggestions suggestions;
 	
-	public Argument overrideSuggestions(String... suggestions) {
+	public final Argument overrideSuggestions(String... suggestions) {
 		this.suggestions = mkSuggestions(suggestions);
 		return this;
 	}
 	
-	public Argument overrideSuggestions(DynamicSuggestions suggestions) {
+	public final Argument overrideSuggestions(DynamicSuggestions suggestions) {
 		this.suggestions = suggestions;
 		return this;
 	}
 	
-	public DynamicSuggestions getOverriddenSuggestions() {
+	public final DynamicSuggestions getOverriddenSuggestions() {
 		return suggestions;
 	}
 	
@@ -47,12 +51,12 @@ public abstract class Argument implements OverrideableSuggestions {
 	
 	private CommandPermission permission = null;
 	
-	public Argument withPermission(CommandPermission permission) {
+	public final Argument withPermission(CommandPermission permission) {
 		this.permission = permission;
 		return this;
 	}
 
-	public CommandPermission getArgumentPermission() {
+	public final CommandPermission getArgumentPermission() {
 		return permission;
 	}
 		
