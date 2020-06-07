@@ -6,6 +6,7 @@ import java.util.List;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -75,6 +76,8 @@ class CustomCommandExecutor {
 			return ex.stream().filter(o -> o.getType() == ExecutorType.CONSOLE).findFirst().get().executeWith(sender, args);
 		} else if(sender instanceof BlockCommandSender && ex.stream().anyMatch(o -> o.getType() == ExecutorType.BLOCK)) {
 			return ex.stream().filter(o -> o.getType() == ExecutorType.BLOCK).findFirst().get().executeWith(sender, args);
+		} else if(sender instanceof ProxiedCommandSender && ex.stream().anyMatch(o -> o.getType() == ExecutorType.PROXY)) {
+			return ex.stream().filter(o -> o.getType() == ExecutorType.PROXY).findFirst().get().executeWith(sender, args);
 		} else if(ex.stream().anyMatch(o -> o.getType() == ExecutorType.ALL)) {
 			return ex.stream().filter(o -> o.getType() == ExecutorType.ALL).findFirst().get().executeWith(sender, args);
 		} else {
@@ -95,6 +98,8 @@ class CustomCommandExecutor {
 			return rEx.stream().filter(o -> o.getType() == ExecutorType.CONSOLE).findFirst().get().executeWith(sender, args);
 		} else if(sender instanceof BlockCommandSender && rEx.stream().anyMatch(o -> o.getType() == ExecutorType.BLOCK)) {
 			return rEx.stream().filter(o -> o.getType() == ExecutorType.BLOCK).findFirst().get().executeWith(sender, args);
+		} else if(sender instanceof ProxiedCommandSender && ex.stream().anyMatch(o -> o.getType() == ExecutorType.PROXY)) {
+			return ex.stream().filter(o -> o.getType() == ExecutorType.PROXY).findFirst().get().executeWith(sender, args);
 		} else if(rEx.stream().anyMatch(o -> o.getType() == ExecutorType.ALL)) {
 			return rEx.stream().filter(o -> o.getType() == ExecutorType.ALL).findFirst().get().executeWith(sender, args);
 		} else {
