@@ -1,22 +1,16 @@
 package io.github.jorelali.commandapi.api.arguments;
 
 import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 
 import io.github.jorelali.commandapi.api.CommandPermission;
 
-public abstract class Argument implements OverrideableSuggestions {
-		
-	
-	public abstract <V> Class<V> getPrimitiveType();
-	public abstract CommandAPIArgumentType getArgumentType();
-	
-	////////////////////////
-	// Raw Argument Types //
-	////////////////////////
-	
+@SuppressWarnings("unchecked")
+public abstract class ZArg implements Argument, OverrideableSuggestions {
+
 	ArgumentType<?> rawType;
 	
-	@SuppressWarnings("unchecked")
+	@Override
 	public <T> ArgumentType<T> getRawType() {
 		return (ArgumentType<T>) rawType;
 	}
@@ -27,16 +21,19 @@ public abstract class Argument implements OverrideableSuggestions {
 	
 	private DynamicSuggestions suggestions;
 	
-	public Argument overrideSuggestions(String... suggestions) {
+	@Override
+	public ZArg overrideSuggestions(String... suggestions) {
 		this.suggestions = mkSuggestions(suggestions);
 		return this;
 	}
 	
-	public Argument overrideSuggestions(DynamicSuggestions suggestions) {
+	@Override
+	public ZArg overrideSuggestions(DynamicSuggestions suggestions) {
 		this.suggestions = suggestions;
 		return this;
 	}
 	
+	@Override
 	public DynamicSuggestions getOverriddenSuggestions() {
 		return suggestions;
 	}
@@ -47,13 +44,14 @@ public abstract class Argument implements OverrideableSuggestions {
 	
 	private CommandPermission permission = null;
 	
-	public Argument withPermission(CommandPermission permission) {
+	@Override
+	public ZArg withPermission(CommandPermission permission) {
 		this.permission = permission;
 		return this;
 	}
 
+	@Override
 	public CommandPermission getArgumentPermission() {
 		return permission;
 	}
-		
 }
