@@ -13,6 +13,8 @@ import io.github.jorelali.commandapi.api.executors.EntityCommandExecutor;
 import io.github.jorelali.commandapi.api.executors.EntityResultingCommandExecutor;
 import io.github.jorelali.commandapi.api.executors.PlayerCommandExecutor;
 import io.github.jorelali.commandapi.api.executors.PlayerResultingCommandExecutor;
+import io.github.jorelali.commandapi.api.executors.ProxyCommandExecutor;
+import io.github.jorelali.commandapi.api.executors.ProxyResultingCommandExecutor;
 import io.github.jorelali.commandapi.api.executors.ResultingCommandExecutor;
 
 public class CommandAPICommand {
@@ -117,6 +119,26 @@ public class CommandAPICommand {
 	 * @param executor A lambda of type <code>(Entity, Object[]) -> int</code> that will be executed when the command is run
 	 */
 	public CommandAPICommand executesEntity(EntityResultingCommandExecutor executor) {
+		this.executor.addResultingExecutor(executor);
+		return this;
+	}
+	
+	// Proxy command executor
+	
+	/**
+	 * Adds an executor to the current command builder
+	 * @param executor A lambda of type <code>(Entity, Object[]) -> ()</code> that will be executed when the command is run
+	 */
+	public CommandAPICommand executesProxy(ProxyCommandExecutor executor) {
+		this.executor.addNormalExecutor(executor);
+		return this;
+	}
+	
+	/**
+	 * Adds an executor to the current command builder
+	 * @param executor A lambda of type <code>(Entity, Object[]) -> int</code> that will be executed when the command is run
+	 */
+	public CommandAPICommand executesProxy(ProxyResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);
 		return this;
 	}
