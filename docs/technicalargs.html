@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js">
+<html lang="en" class="sidebar-visible no-js light">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -32,11 +32,11 @@
 
         
     </head>
-    <body class="light">
+    <body>
         <!-- Provide site root to javascript -->
         <script type="text/javascript">
             var path_to_root = "";
-            var default_theme = "light";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "light";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
@@ -60,8 +60,11 @@
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
-            document.body.className = theme;
-            document.querySelector('html').className = theme + ' js';
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
@@ -77,8 +80,8 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li><a href="commandexecutors.html"><strong aria-hidden="true">4.</strong> Command executors</a></li><li><ol class="section"><li><a href="normalexecutors.html"><strong aria-hidden="true">4.1.</strong> Normal command executors</a></li><li><a href="proxysender.html"><strong aria-hidden="true">4.2.</strong> Proxied commandsenders</a></li><li><a href="resultingcommandexecutors.html"><strong aria-hidden="true">4.3.</strong> Resulting command executors</a></li><li><a href="commandfailures.html"><strong aria-hidden="true">4.4.</strong> Handling command failures</a></li></ol></li><li><a href="arguments.html"><strong aria-hidden="true">5.</strong> Arguments</a></li><li><ol class="section"><li><a href="primitivearguments.html"><strong aria-hidden="true">5.1.</strong> Primitive arguments</a></li><li><a href="rangedarguments.html"><strong aria-hidden="true">5.2.</strong> Ranged arguments</a></li><li><a href="miscargs.html"><strong aria-hidden="true">5.3.</strong> Miscellaneous arguments</a></li><li><ol class="section"><li><a href="environmentargs.html"><strong aria-hidden="true">5.3.1.</strong> Environment argument</a></li><li><a href="itemslotargs.html"><strong aria-hidden="true">5.3.2.</strong> Item slot argument</a></li><li><a href="timeargs.html"><strong aria-hidden="true">5.3.3.</strong> Time argument</a></li></ol></li><li><a href="positionargs.html"><strong aria-hidden="true">5.4.</strong> Position-based arguments</a></li><li><ol class="section"><li><a href="locationargument.html"><strong aria-hidden="true">5.4.1.</strong> Location arguments</a></li><li><a href="rotationargs.html"><strong aria-hidden="true">5.4.2.</strong> Rotation arguments</a></li><li><a href="axisarg.html"><strong aria-hidden="true">5.4.3.</strong> AxisArgument</a></li></ol></li><li><a href="chatarguments.html"><strong aria-hidden="true">5.5.</strong> Chat arguments</a></li><li><a href="stringarguments.html"><strong aria-hidden="true">5.6.</strong> String arguments</a></li><li><a href="entityarguments.html"><strong aria-hidden="true">5.7.</strong> Entity &amp; player arguments</a></li><li><a href="literalarguments.html"><strong aria-hidden="true">5.8.</strong> Literal arguments</a></li><li><a href="dynsugargs.html"><strong aria-hidden="true">5.9.</strong> Dynamically suggested arguments</a></li><li><a href="customarguments.html"><strong aria-hidden="true">5.10.</strong> Custom arguments</a></li><li><a href="technicalargs.html" class="active"><strong aria-hidden="true">5.11.</strong> Technical arguments</a></li><li><ol class="section"><li><a href="soundargument.html"><strong aria-hidden="true">5.11.1.</strong> Sound argument</a></li><li><a href="advancementarg.html"><strong aria-hidden="true">5.11.2.</strong> Advancement argument</a></li><li><a href="recipeargument.html"><strong aria-hidden="true">5.11.3.</strong> Recipe argument</a></li><li><a href="loottableargument.html"><strong aria-hidden="true">5.11.4.</strong> LootTable argument</a></li></ol></li></ol></li><li><a href="functions.html"><strong aria-hidden="true">6.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li><a href="functionsetup.html"><strong aria-hidden="true">6.1.</strong> Setting up functions &amp; tags</a></li><li><a href="functionwrapper.html"><strong aria-hidden="true">6.2.</strong> The FunctionWrapper class</a></li><li><a href="functionarguments.html"><strong aria-hidden="true">6.3.</strong> Function arguments</a></li></ol></li><li><a href="permissions.html"><strong aria-hidden="true">7.</strong> Permissions</a></li><li><a href="aliases.html"><strong aria-hidden="true">8.</strong> Aliases</a></li><li><a href="conversion.html"><strong aria-hidden="true">9.</strong> Command conversion</a></li><li class="affix"><a href="upgrading.html">Upgrading guide</a></li><li class="affix"><a href="troubleshooting.html">Troubleshooting</a></li><li class="spacer"></li><li class="affix"><a href="afterword.html">Afterword</a></li></ol>
+            <div id="sidebar-scrollbox" class="sidebar-scrollbox">
+                <ol class="chapter"><li class="expanded affix "><a href="intro.html">Introduction</a></li><li class="expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li class="expanded "><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li class="expanded "><a href="commandregistration.html"><strong aria-hidden="true">3.</strong> Command registration</a></li><li class="expanded "><a href="commandexecutors.html"><strong aria-hidden="true">4.</strong> Command executors</a></li><li><ol class="section"><li class="expanded "><a href="normalexecutors.html"><strong aria-hidden="true">4.1.</strong> Normal command executors</a></li><li class="expanded "><a href="proxysender.html"><strong aria-hidden="true">4.2.</strong> Proxied commandsenders</a></li><li class="expanded "><a href="resultingcommandexecutors.html"><strong aria-hidden="true">4.3.</strong> Resulting command executors</a></li><li class="expanded "><a href="commandfailures.html"><strong aria-hidden="true">4.4.</strong> Handling command failures</a></li></ol></li><li class="expanded "><a href="arguments.html"><strong aria-hidden="true">5.</strong> Arguments</a></li><li><ol class="section"><li class="expanded "><a href="primitivearguments.html"><strong aria-hidden="true">5.1.</strong> Primitive arguments</a></li><li class="expanded "><a href="rangedarguments.html"><strong aria-hidden="true">5.2.</strong> Ranged arguments</a></li><li class="expanded "><a href="miscargs.html"><strong aria-hidden="true">5.3.</strong> Miscellaneous arguments</a></li><li><ol class="section"><li class="expanded "><a href="environmentargs.html"><strong aria-hidden="true">5.3.1.</strong> Environment argument</a></li><li class="expanded "><a href="itemslotargs.html"><strong aria-hidden="true">5.3.2.</strong> Item slot argument</a></li><li class="expanded "><a href="timeargs.html"><strong aria-hidden="true">5.3.3.</strong> Time argument</a></li></ol></li><li class="expanded "><a href="positionargs.html"><strong aria-hidden="true">5.4.</strong> Position-based arguments</a></li><li><ol class="section"><li class="expanded "><a href="locationargument.html"><strong aria-hidden="true">5.4.1.</strong> Location arguments</a></li><li class="expanded "><a href="rotationargs.html"><strong aria-hidden="true">5.4.2.</strong> Rotation arguments</a></li><li class="expanded "><a href="axisarg.html"><strong aria-hidden="true">5.4.3.</strong> AxisArgument</a></li></ol></li><li class="expanded "><a href="chatarguments.html"><strong aria-hidden="true">5.5.</strong> Chat arguments</a></li><li class="expanded "><a href="stringarguments.html"><strong aria-hidden="true">5.6.</strong> String arguments</a></li><li class="expanded "><a href="entityarguments.html"><strong aria-hidden="true">5.7.</strong> Entity &amp; player arguments</a></li><li class="expanded "><a href="literalarguments.html"><strong aria-hidden="true">5.8.</strong> Literal arguments</a></li><li class="expanded "><a href="dynsugargs.html"><strong aria-hidden="true">5.9.</strong> Dynamically suggested arguments</a></li><li class="expanded "><a href="customarguments.html"><strong aria-hidden="true">5.10.</strong> Custom arguments</a></li><li class="expanded "><a href="technicalargs.html" class="active"><strong aria-hidden="true">5.11.</strong> Technical arguments</a></li><li><ol class="section"><li class="expanded "><a href="soundargument.html"><strong aria-hidden="true">5.11.1.</strong> Sound argument</a></li><li class="expanded "><a href="advancementarg.html"><strong aria-hidden="true">5.11.2.</strong> Advancement argument</a></li><li class="expanded "><a href="recipeargument.html"><strong aria-hidden="true">5.11.3.</strong> Recipe argument</a></li><li class="expanded "><a href="loottableargument.html"><strong aria-hidden="true">5.11.4.</strong> LootTable argument</a></li></ol></li></ol></li><li class="expanded "><a href="functions.html"><strong aria-hidden="true">6.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li class="expanded "><a href="functionsetup.html"><strong aria-hidden="true">6.1.</strong> Setting up functions &amp; tags</a></li><li class="expanded "><a href="functionwrapper.html"><strong aria-hidden="true">6.2.</strong> The FunctionWrapper class</a></li><li class="expanded "><a href="functionarguments.html"><strong aria-hidden="true">6.3.</strong> Function arguments</a></li></ol></li><li class="expanded "><a href="permissions.html"><strong aria-hidden="true">7.</strong> Permissions</a></li><li class="expanded "><a href="aliases.html"><strong aria-hidden="true">8.</strong> Aliases</a></li><li class="expanded "><a href="conversion.html"><strong aria-hidden="true">9.</strong> Command conversion</a></li><li class="expanded affix "><a href="upgrading.html">Upgrading guide</a></li><li class="expanded affix "><a href="troubleshooting.html">Troubleshooting</a></li><li class="spacer"></li><li class="expanded affix "><a href="afterword.html">Afterword</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -208,6 +211,14 @@
         </script>
         
 
+        
+
+        
+        
+        
+        <script type="text/javascript">
+            window.playpen_copyable = true;
+        </script>
         
 
         

@@ -1,38 +1,5 @@
 package io.github.jorelali.commandapi.api;
 
-import com.mojang.brigadier.Command;
-import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.builder.ArgumentBuilder;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.brigadier.suggestion.Suggestions;
-import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import com.mojang.brigadier.tree.CommandNode;
-import com.mojang.brigadier.tree.LiteralCommandNode;
-import io.github.jorelali.commandapi.api.arguments.Argument;
-import io.github.jorelali.commandapi.api.arguments.CustomArgument;
-import io.github.jorelali.commandapi.api.arguments.CustomArgument.CustomArgumentException;
-import io.github.jorelali.commandapi.api.arguments.CustomArgument.MessageBuilder;
-import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument;
-import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
-import io.github.jorelali.commandapi.api.arguments.DynamicSuggestedStringArgument;
-import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument;
-import io.github.jorelali.commandapi.api.arguments.LiteralArgument;
-import io.github.jorelali.commandapi.api.arguments.Location2DArgument;
-import io.github.jorelali.commandapi.api.arguments.LocationArgument;
-import io.github.jorelali.commandapi.api.arguments.LocationType;
-import io.github.jorelali.commandapi.api.arguments.OverrideableSuggestions;
-import io.github.jorelali.commandapi.api.arguments.ScoreHolderArgument;
-import io.github.jorelali.commandapi.api.nms.NMS;
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.permissions.Permission;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -51,6 +18,41 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.permissions.Permission;
+
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import com.mojang.brigadier.tree.CommandNode;
+import com.mojang.brigadier.tree.LiteralCommandNode;
+
+import io.github.jorelali.commandapi.api.arguments.Argument;
+import io.github.jorelali.commandapi.api.arguments.CustomArgument;
+import io.github.jorelali.commandapi.api.arguments.CustomArgument.CustomArgumentException;
+import io.github.jorelali.commandapi.api.arguments.CustomArgument.MessageBuilder;
+import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument;
+import io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders;
+import io.github.jorelali.commandapi.api.arguments.DynamicSuggestedStringArgument;
+import io.github.jorelali.commandapi.api.arguments.EntitySelectorArgument;
+import io.github.jorelali.commandapi.api.arguments.LiteralArgument;
+import io.github.jorelali.commandapi.api.arguments.Location2DArgument;
+import io.github.jorelali.commandapi.api.arguments.LocationArgument;
+import io.github.jorelali.commandapi.api.arguments.LocationType;
+import io.github.jorelali.commandapi.api.arguments.OverrideableSuggestions;
+import io.github.jorelali.commandapi.api.arguments.ScoreHolderArgument;
+import io.github.jorelali.commandapi.api.nms.NMS;
 
 /**
  * Class to access the main methods in NMS. The wrapper's implementations occur
@@ -78,9 +80,11 @@ public final class CommandAPIHandler {
     protected CommandAPIHandler() throws ClassNotFoundException {
         //Package checks
     	
-        if (this.getClass().getClassLoader().getDefinedPackage("com.mojang.brigadier") == null) {
-            throw new ClassNotFoundException("Cannot hook into Brigadier (Are you running Minecraft 1.13 or above?)");
-        }
+    	try {
+    		Class.forName("com.mojang.brigadier.CommandDispatcher");
+    	} catch(ClassNotFoundException e) {
+    		throw new ClassNotFoundException("Cannot hook into Brigadier (Are you running Minecraft 1.13 or above?)");
+    	}
 
         //Setup NMS
         try {

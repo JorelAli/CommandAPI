@@ -44,37 +44,37 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 
 ## Downloads & Documentation (includes usage for server owners)
 
-| Version | Direct download                                              | Documentation                                                |
-| ------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| 3.0 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v3.0/CommandAPI.jar) | [Version 3.0 documentation](https://jorelali.github.io/1.13-Command-API/) |
-| 2.3 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.3/CommandAPI.jar) | [Version 2.1 documentation](https://jorelali.github.io/1.13-Command-API/) |
-| 2.2 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.2/CommandAPI.jar) | [Version 2.1 documentation](https://jorelali.github.io/1.13-Command-API/) |
-| 2.1 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.1/CommandAPI.jar) | [Version 2.1 documentation](https://jorelali.github.io/1.13-Command-API/) |
-| 2.0.1 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.0.1/CommandAPI.jar)  | [Version 2.0 documentation](https://jorelali.github.io/1.13-Command-API/) |
-| 2.0 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.0/CommandAPI.jar)  | [Version 2.0 documentation](https://jorelali.github.io/1.13-Command-API/) |
-| 1.8.2 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.8.2/CommandAPI.jar) | [Version 1.8 - 1.8.2 documentation](./docssrc/olddocs/v1.8%20Documentation.md) |
-| 1.7.2     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.7.2/CommandAPI.jar) | [Version 1.7 - 1.7.2 documentation](./docssrc/olddocs/v1.7%20Documentation.md) |
-| 1.6     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.6/CommandAPI.jar) | [Version 1.6 documentation](./docssrc/olddocs/v1.6%20Documentation.md) |
-| 1.5     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.5/CommandAPI.jar) | [Version 1.5 documentation](./docssrc/olddocs/v1.5%20Documentation.md) |
-| 1.4     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.4/CommandAPI.jar) | [Version 1.4 documentation](./docssrc/olddocs/v1.4%20Documentation.md) |
-| 1.3     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.3/CommandAPI.jar) | [Version 1.3 documentation](./docssrc/olddocs/v1.3%20Documentation.md) |
-| 1.2     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.2/CommandAPI.jar) | [Version 1.2 documentation](./docssrc/olddocs/v1.2%20Documentation.md) |
-| 1.1     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.1/CommandAPI.jar) | [Version 1.1 documentation](./docssrc/olddocs/v1.1%20Documentation.md) |
-| 1.0     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.0/CommandAPI.jar) | [Version 1.0 documentation](./docssrc/olddocs/v1.0%20Documentation.md) |
+| Version | Direct download                                                                                        | Documentation                                                                  |
+| ------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| 3.0     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v3.0/CommandAPI.jar)   | [Version 3.0 documentation](https://jorelali.github.io/1.13-Command-API/)      |
+| 2.3     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.3/CommandAPI.jar)   | [Version 2.1 documentation](https://jorelali.github.io/1.13-Command-API/)      |
+| 2.2     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.2/CommandAPI.jar)   | [Version 2.1 documentation](https://jorelali.github.io/1.13-Command-API/)      |
+| 2.1     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.1/CommandAPI.jar)   | [Version 2.1 documentation](https://jorelali.github.io/1.13-Command-API/)      |
+| 2.0.1   | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.0.1/CommandAPI.jar) | [Version 2.0 documentation](https://jorelali.github.io/1.13-Command-API/)      |
+| 2.0     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.0/CommandAPI.jar)   | [Version 2.0 documentation](https://jorelali.github.io/1.13-Command-API/)      |
+| 1.8.2   | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.8.2/CommandAPI.jar) | [Version 1.8 - 1.8.2 documentation](./docssrc/olddocs/v1.8%20Documentation.md) |
+| 1.7.2   | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.7.2/CommandAPI.jar) | [Version 1.7 - 1.7.2 documentation](./docssrc/olddocs/v1.7%20Documentation.md) |
+| 1.6     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.6/CommandAPI.jar)   | [Version 1.6 documentation](./docssrc/olddocs/v1.6%20Documentation.md)         |
+| 1.5     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.5/CommandAPI.jar)   | [Version 1.5 documentation](./docssrc/olddocs/v1.5%20Documentation.md)         |
+| 1.4     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.4/CommandAPI.jar)   | [Version 1.4 documentation](./docssrc/olddocs/v1.4%20Documentation.md)         |
+| 1.3     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.3/CommandAPI.jar)   | [Version 1.3 documentation](./docssrc/olddocs/v1.3%20Documentation.md)         |
+| 1.2     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.2/CommandAPI.jar)   | [Version 1.2 documentation](./docssrc/olddocs/v1.2%20Documentation.md)         |
+| 1.1     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.1/CommandAPI.jar)   | [Version 1.1 documentation](./docssrc/olddocs/v1.1%20Documentation.md)         |
+| 1.0     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.0/CommandAPI.jar)   | [Version 1.0 documentation](./docssrc/olddocs/v1.0%20Documentation.md)         |
 
 -----
 
 ## Building the CommandAPI
 
-The CommandAPI can be built easily, but requires copies of the Spigot server jars to be present locally on your machine. This is due to the SafeReflection library which performs extra checks at compile time _(and depends on spigot jar files being present)_.
+The CommandAPI can be built easily, but requires copies of the Spigot server jars to be present locally on your machine in order to be compatible with any Minecraft version. The CommandAPI is built using the Maven build tool - if you don't have it, you can download it [here](https://maven.apache.org/download.cgi).
 
-* Clone the repository using the command below or your preferred method
+* Clone the repository using your preferred method, or with the command below:
 
   ```
   git clone https://github.com/JorelAli/1.13-Command-API.git
   ```
 
-* Go into the folder named `1.13CommandAPI` _(Not to be confused with the folder named `1.13-Command-API`, which is what is cloned)_
+* Go into the folder named `1.13CommandAPI` _(Not to be confused with the folder named `1.13-Command-API`, which is what is cloned)_. You want the folder which contains `pom.xml`.
 
 * Ensure you have the required spigot server jars (see below)
 
@@ -84,16 +84,23 @@ The CommandAPI can be built easily, but requires copies of the Spigot server jar
 
 To build the CommandAPI, copies of the Spigot.jar servers are required for the following versions of Minecraft:
 
-|                   |      |        |        |        |        |
-| ----------------- | ---- | ------ | ------ | ------ | ------ |
-| **1.13 versions** | 1.13 | 1.13.1 | 1.13.2 |        |        |
-| **1.14 versions** | 1.14 | 1.14.1 | 1.14.2 | 1.14.3 | 1.14.4 |
+|                   |        |        |        |        |        |
+| ----------------- | ------ | ------ | ------ | ------ | ------ |
+| **1.13 versions** | 1.13   | 1.13.1 | 1.13.2 |        |        |
+| **1.14 versions** | 1.14.2 | 1.14.3 | 1.14.4 |        |        |
+| **1.15 versions** | 1.15.2 |    ?   |        |        |        |
+
+These versions of Minecraft must be installed in your local machine's Maven repository (`~/.m2`). The easiest way to do this is to build them manually using Spigot's BuildTools, as it automatically adds it to the `.m2` local repository folder.
+
 
 There are various methods of acquiring the required Spigot.jar server jar files:
 
 #### Building them using _BuildTools_ + downloadSpigot file (Recommended)
 
 * Download the `BuildTools.jar` file from [here](https://hub.spigotmc.org/jenkins/job/BuildTools/) and place it in a separate directory
+* Download the `downloadSpigot` file from this repository:
+  * If on Windows, use `downloadSpigot.bat`  [(from here)](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.bat)
+  * If on Linux/MacOS, use `downloadSpigot.sh`  [(from here)](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.bat)
 * If on Windows:
   * Download the `downloadSpigot.bat` file from this repository [(or just right click here, save as...)](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.bat)
   * Copy the `downloadSpigot.bat` file into the same directory as the `BuildTools.jar` file
@@ -102,8 +109,7 @@ There are various methods of acquiring the required Spigot.jar server jar files:
   * If on linux/mac, download the `downloadSpigot.sh` file from this repository [(or just right click here, save as...)](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.sh)
   * Copy the `downloadSpigot.sh` file into the same directory as the `BuildTools.jar` file
   * Open up a terminal in your folder and make the `downloadSpigot.sh` file executable by using `chmod u+x ./downloadSpigot.sh`
-  * Run the `downloadSpigot` file using `./downloadSpigot.sh` 
-* Copy the `spigotlibs` folder into the same directory as the `pom.xml` file (This should be inside the `1.13CommandAPI` folder)
+  * Run the `downloadSpigot` file using `./downloadSpigot.sh`
 
 > **Note:** Sometimes, the `downloadSpigot` file doesn't work because of incompatibilities with cloning certain files it needs. If for any reason, downloadSpigot stops working, delete the directories created (BuildData, Bukkit, CraftBukkit, Spigot and work) and re-run the downloadSpigot file.
 
@@ -111,40 +117,6 @@ There are various methods of acquiring the required Spigot.jar server jar files:
 
 - Download the `BuildTools.jar` file from [here](https://hub.spigotmc.org/jenkins/job/BuildTools/) and place it in a separate directory
 - Use the command `java -jar BuildTools.jar --rev <VERSION>` to download the specific version of the Spigot.jar you need. For example, to download Spigot for 1.14.4, use `java -jar BuildTools.jar --rev 1.14.4`
-- Copy the spigot jar files into a folder called `spigotlibs` in the same directory as the `pom.xml` file (This should be inside the `1.13CommandAPI` folder)
-
-#### Downloading them from another source
-
-* Download the required versions from [getbukkit.org](https://getbukkit.org/download/spigot)
-* Copy them into a folder called `spigotlibs` in the same directory as the `pom.xml` file (This should be inside the `1.13CommandAPI` folder)
-
-#### Directory structure
-
-This is what your directory structure should look like _(so you know where to put the spigot jars)_:
-
-```
-1.13-Command-API/
-├── .git/
-├── .github/
-├── 1.13CommandAPI/
-│   ├── spigotlibs/
-│   │   ├── spigot-1.13.jar
-│   │   ├── spigot-1.13.1.jar
-│   │   ├── spigot-1.13.2.jar
-│   │   ├── ...
-│   │   └── spigot-1.14.4.jar
-│   ├── src/
-│   │   └── ...
-│   ├── .gitignore
-│   ├── config.yml
-│   ├── plugin.yml
-│   └── pom.xml
-├── docs/
-├── images/
-├── downloadSpigot.sh
-├── LICENSE
-└── README.md
-```
 
 -----
 

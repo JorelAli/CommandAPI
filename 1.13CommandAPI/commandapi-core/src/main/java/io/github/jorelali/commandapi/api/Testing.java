@@ -45,10 +45,5 @@ new CommandAPICommand("kill")
 
 
 
-
-
-
-
-
 	}
 }

@@ -14,7 +14,7 @@
 > - **[i509VCB](https://github.com/i509VCB)**, who is an absolute genius and a really good bug spotter. They pointed out a severe bug that made libraries depending on the CommandAPI depend on Brigadier; created the documentation for using the CommandAPI with Gradle and suggested using the NBTAPI to include NBT support.
 > - **[Minenash](https://github.com/Minenash)**, who was the driving force for the 3.0 release which adds a plethora of additional arguments. They continued to research, write documentation examples, bug test, code review and basically oversee the project throughout its development.
 > - **[Tinkot](https://github.com/Tinkot)**, who gave a review of the CommandAPI on its spigot page. This motivated me to fix a 6 month old bug. Somehow.
-> - **[ZiluckMichael](https://github.com/ZiluckMichael)**, who truly changed the CommandAPI for the better. Refactored the entire code base to make the CommandAPI much more maintainable, as well as removing a lot of need for unnecessary reflection.
+> - **[ZiluckMichael](https://github.com/ZiluckMichael)**, who truly changed the CommandAPI for the better. Refactored the entire code base to make the CommandAPI much more maintainable, as well as removing a lot of unnecessary reflection.
 >
 > I never really expected more than 5 or so people to use this API, so it was truly an exciting time creating this for everyone - seeing everyone's responses, issues and problems helped me keep going.
 >
