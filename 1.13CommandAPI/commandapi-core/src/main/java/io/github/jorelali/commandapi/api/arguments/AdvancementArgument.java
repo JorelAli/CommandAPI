@@ -24,11 +24,6 @@ public class AdvancementArgument implements Argument, CustomProvidedArgument {
 	public <V> Class<V> getPrimitiveType() {
 		return (Class<V>) Advancement.class;
 	}
-
-	@Override
-	public boolean isSimple() {
-		return false;
-	}
 	
 	private CommandPermission permission = null;
 	

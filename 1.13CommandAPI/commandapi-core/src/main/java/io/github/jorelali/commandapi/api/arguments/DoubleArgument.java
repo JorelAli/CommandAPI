@@ -47,11 +47,6 @@ public class DoubleArgument implements Argument, OverrideableSuggestions {
 	public <V> Class<V> getPrimitiveType() {
 		return (Class<V>) double.class;
 	}
-
-	@Override
-	public boolean isSimple() {
-		return true;
-	}
 	
 	private String[] suggestions;
 	

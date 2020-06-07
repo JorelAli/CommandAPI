@@ -36,11 +36,6 @@ public class ChatArgument implements Argument, OverrideableSuggestions, GreedyAr
 	public <V> Class<V> getPrimitiveType() {
 		return (Class<V>) BaseComponent[].class;
 	}
-
-	@Override
-	public boolean isSimple() {
-		return false;
-	}
 	
 	private String[] suggestions;
 	

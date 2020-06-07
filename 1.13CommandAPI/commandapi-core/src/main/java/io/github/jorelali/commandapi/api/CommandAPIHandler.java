@@ -207,128 +207,124 @@ public final class CommandAPIHandler {
 
             //Populate array
             for (Entry<String, Argument> entry : args.entrySet()) {
-                //If primitive (and simple), parse as normal
-                if (entry.getValue().isSimple()) {
-                    argList.add(cmdCtx.getArgument(entry.getKey(), entry.getValue().getPrimitiveType()));
-                } else {
-                    switch (entry.getValue().getArgumentType()) {
-                        case ADVANCEMENT:
-                            argList.add(nms.getAdvancement(cmdCtx, entry.getKey()));
-                            break;
-                        case CHATCOLOR:
-                            argList.add(nms.getChatColor(cmdCtx, entry.getKey()));
-                            break;
-                        case CHAT_COMPONENT:
-                            argList.add(nms.getChatComponent(cmdCtx, entry.getKey()));
-                            break;
-                        case CUSTOM:
-                            CustomArgument arg = (CustomArgument) entry.getValue();
-                            String customresult = (String) cmdCtx.getArgument(entry.getKey(), String.class);
-                            try {
-                                argList.add(arg.getParser().apply(customresult));
-                            } catch (CustomArgumentException e) {
-                                throw e.toCommandSyntax(customresult, cmdCtx);
-                            } catch (Exception e) {
-                                String errorMsg = new MessageBuilder("Error in executing command ")
-                                        .appendFullInput().append(" - ").appendArgInput().appendHere().toString()
-                                        .replace("%input%", customresult).replace("%finput%", cmdCtx.getInput());
-                                throw new SimpleCommandExceptionType(() -> {
-                                    return errorMsg;
-                                }).create();
-                            }
-                            break;
-                        case ENCHANTMENT:
-                            argList.add(nms.getEnchantment(cmdCtx, entry.getKey()));
-                            break;
-                        case ENTITY_SELECTOR:
-                            EntitySelectorArgument argument = (EntitySelectorArgument) entry.getValue();
-                            argList.add(nms.getEntitySelector(cmdCtx, entry.getKey(), argument.getEntitySelector()));
-                            break;
-                        case ENTITY_TYPE:
-                            argList.add(nms.getEntityType(cmdCtx, entry.getKey(), sender));
-                            break;
-                        case FUNCTION:
-                            argList.add(nms.getFunction(cmdCtx, entry.getKey()));
-                            break;
-                        case ITEMSTACK:
-                            argList.add(nms.getItemStack(cmdCtx, entry.getKey()));
-                            break;
-                        case LITERAL:
-                            break;
-                        case LOCATION:
-                            LocationType locationType = ((LocationArgument) entry.getValue()).getLocationType();
-                            argList.add(nms.getLocation(cmdCtx, entry.getKey(), locationType, sender));
-                            break;
-                        case LOOT_TABLE:
-                            argList.add(nms.getLootTable(cmdCtx, entry.getKey()));
-                            break;
-                        case PARTICLE:
-                            argList.add(nms.getParticle(cmdCtx, entry.getKey()));
-                            break;
-                        case PLAYER:
-                            argList.add(nms.getPlayer(cmdCtx, entry.getKey()));
-                            break;
-                        case POTION_EFFECT:
-                            argList.add(nms.getPotionEffect(cmdCtx, entry.getKey()));
-                            break;
-                        case RECIPE:
-                            argList.add(nms.getRecipe(cmdCtx, entry.getKey()));
-                            break;
-                        case SIMPLE_TYPE:
-                            break;
-                        case SOUND:
-                            argList.add(nms.getSound(cmdCtx, entry.getKey()));
-                            break;
-                        case TIME:
-                            argList.add(nms.getTime(cmdCtx, entry.getKey()));
-                            break;
-                        case LOCATION_2D:
-                            LocationType locationType2d = ((Location2DArgument) entry.getValue()).getLocationType();
-                            argList.add(nms.getLocation2D(cmdCtx, entry.getKey(), locationType2d, sender));
-                            break;
-                        case INT_RANGE:
-                            argList.add(nms.getIntRange(cmdCtx, entry.getKey()));
-                            break;
-                        case FLOAT_RANGE:
-                            argList.add(nms.getFloatRange(cmdCtx, entry.getKey()));
-                            break;
-                        case ENVIRONMENT:
-                            argList.add(nms.getDimension(cmdCtx, entry.getKey()));
-                            break;
-                        case ROTATION:
-                            argList.add(nms.getRotation(cmdCtx, entry.getKey()));
-                            break;
-                        case AXIS:
-                            argList.add(nms.getAxis(cmdCtx, entry.getKey()));
-                            break;
-                        case SCOREBOARD_SLOT:
-                            argList.add(nms.getScoreboardSlot(cmdCtx, entry.getKey()));
-                            break;
-                        case TEAM:
-                            argList.add(nms.getTeam(cmdCtx, entry.getKey(), sender));
-                            break;
-                        case OBJECTIVE_CRITERIA:
-                            argList.add(nms.getObjectiveCriteria(cmdCtx, entry.getKey()));
-                            break;
-                        case OBJECTIVE:
-                            argList.add(nms.getObjective(cmdCtx, entry.getKey(), sender));
-                            break;
-                        case CHAT:
-                            argList.add(nms.getChat(cmdCtx, entry.getKey()));
-                            break;
-                        case SCORE_HOLDER:
-                            ScoreHolderArgument scoreHolderArgument = (ScoreHolderArgument) entry.getValue();
-                            argList.add(scoreHolderArgument.isSingle()
-                                        ? nms.getScoreHolderSingle(cmdCtx, entry.getKey())
-                                        : nms.getScoreHolderMultiple(cmdCtx, entry.getKey()));
-                            break;
-                        case NBT_COMPOUND:
-                            argList.add(nms.getNBTCompound(cmdCtx, entry.getKey()));
-                            break;
-                        case MATH_OPERATION:
-                            argList.add(nms.getMathOperation(cmdCtx, entry.getKey()));
-                            break;
-                    }
+                switch (entry.getValue().getArgumentType()) {
+                    case ADVANCEMENT:
+                        argList.add(nms.getAdvancement(cmdCtx, entry.getKey()));
+                        break;
+                    case CHATCOLOR:
+                        argList.add(nms.getChatColor(cmdCtx, entry.getKey()));
+                        break;
+                    case CHAT_COMPONENT:
+                        argList.add(nms.getChatComponent(cmdCtx, entry.getKey()));
+                        break;
+                    case CUSTOM:
+                        CustomArgument arg = (CustomArgument) entry.getValue();
+                        String customresult = (String) cmdCtx.getArgument(entry.getKey(), String.class);
+                        try {
+                            argList.add(arg.getParser().apply(customresult));
+                        } catch (CustomArgumentException e) {
+                            throw e.toCommandSyntax(customresult, cmdCtx);
+                        } catch (Exception e) {
+                            String errorMsg = new MessageBuilder("Error in executing command ")
+                                    .appendFullInput().append(" - ").appendArgInput().appendHere().toString()
+                                    .replace("%input%", customresult).replace("%finput%", cmdCtx.getInput());
+                            throw new SimpleCommandExceptionType(() -> {
+                                return errorMsg;
+                            }).create();
+                        }
+                        break;
+                    case ENCHANTMENT:
+                        argList.add(nms.getEnchantment(cmdCtx, entry.getKey()));
+                        break;
+                    case ENTITY_SELECTOR:
+                        EntitySelectorArgument argument = (EntitySelectorArgument) entry.getValue();
+                        argList.add(nms.getEntitySelector(cmdCtx, entry.getKey(), argument.getEntitySelector()));
+                        break;
+                    case ENTITY_TYPE:
+                        argList.add(nms.getEntityType(cmdCtx, entry.getKey(), sender));
+                        break;
+                    case FUNCTION:
+                        argList.add(nms.getFunction(cmdCtx, entry.getKey()));
+                        break;
+                    case ITEMSTACK:
+                        argList.add(nms.getItemStack(cmdCtx, entry.getKey()));
+                        break;
+                    case LITERAL:
+                        break;
+                    case LOCATION:
+                        LocationType locationType = ((LocationArgument) entry.getValue()).getLocationType();
+                        argList.add(nms.getLocation(cmdCtx, entry.getKey(), locationType, sender));
+                        break;
+                    case LOOT_TABLE:
+                        argList.add(nms.getLootTable(cmdCtx, entry.getKey()));
+                        break;
+                    case PARTICLE:
+                        argList.add(nms.getParticle(cmdCtx, entry.getKey()));
+                        break;
+                    case PLAYER:
+                        argList.add(nms.getPlayer(cmdCtx, entry.getKey()));
+                        break;
+                    case POTION_EFFECT:
+                        argList.add(nms.getPotionEffect(cmdCtx, entry.getKey()));
+                        break;
+                    case RECIPE:
+                        argList.add(nms.getRecipe(cmdCtx, entry.getKey()));
+                        break;
+                    case SIMPLE_TYPE:
+                    	argList.add(cmdCtx.getArgument(entry.getKey(), entry.getValue().getPrimitiveType()));
+                        break;
+                    case SOUND:
+                        argList.add(nms.getSound(cmdCtx, entry.getKey()));
+                        break;
+                    case TIME:
+                        argList.add(nms.getTime(cmdCtx, entry.getKey()));
+                        break;
+                    case LOCATION_2D:
+                        LocationType locationType2d = ((Location2DArgument) entry.getValue()).getLocationType();
+                        argList.add(nms.getLocation2D(cmdCtx, entry.getKey(), locationType2d, sender));
+                        break;
+                    case INT_RANGE:
+                        argList.add(nms.getIntRange(cmdCtx, entry.getKey()));
+                        break;
+                    case FLOAT_RANGE:
+                        argList.add(nms.getFloatRange(cmdCtx, entry.getKey()));
+                        break;
+                    case ENVIRONMENT:
+                        argList.add(nms.getDimension(cmdCtx, entry.getKey()));
+                        break;
+                    case ROTATION:
+                        argList.add(nms.getRotation(cmdCtx, entry.getKey()));
+                        break;
+                    case AXIS:
+                        argList.add(nms.getAxis(cmdCtx, entry.getKey()));
+                        break;
+                    case SCOREBOARD_SLOT:
+                        argList.add(nms.getScoreboardSlot(cmdCtx, entry.getKey()));
+                        break;
+                    case TEAM:
+                        argList.add(nms.getTeam(cmdCtx, entry.getKey(), sender));
+                        break;
+                    case OBJECTIVE_CRITERIA:
+                        argList.add(nms.getObjectiveCriteria(cmdCtx, entry.getKey()));
+                        break;
+                    case OBJECTIVE:
+                        argList.add(nms.getObjective(cmdCtx, entry.getKey(), sender));
+                        break;
+                    case CHAT:
+                        argList.add(nms.getChat(cmdCtx, entry.getKey()));
+                        break;
+                    case SCORE_HOLDER:
+                        ScoreHolderArgument scoreHolderArgument = (ScoreHolderArgument) entry.getValue();
+                        argList.add(scoreHolderArgument.isSingle()
+                                    ? nms.getScoreHolderSingle(cmdCtx, entry.getKey())
+                                    : nms.getScoreHolderMultiple(cmdCtx, entry.getKey()));
+                        break;
+                    case NBT_COMPOUND:
+                        argList.add(nms.getNBTCompound(cmdCtx, entry.getKey()));
+                        break;
+                    case MATH_OPERATION:
+                        argList.add(nms.getMathOperation(cmdCtx, entry.getKey()));
+                        break;
                 }
             }
 

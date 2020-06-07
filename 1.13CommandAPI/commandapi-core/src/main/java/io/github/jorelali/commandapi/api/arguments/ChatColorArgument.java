@@ -28,11 +28,6 @@ public class ChatColorArgument implements Argument, OverrideableSuggestions {
 	public <V> Class<V> getPrimitiveType() {
 		return (Class<V>) ChatColor.class;
 	}
-
-	@Override
-	public boolean isSimple() {
-		return false;
-	}
 	
 	private String[] suggestions;
 	

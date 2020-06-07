@@ -28,11 +28,6 @@ public class EntityTypeArgument implements Argument, OverrideableSuggestions {
 	public <V> Class<V> getPrimitiveType() {
 		return (Class<V>) EntityType.class;
 	}
-
-	@Override
-	public boolean isSimple() {
-		return false;
-	}
 	
 	private String[] suggestions;
 	

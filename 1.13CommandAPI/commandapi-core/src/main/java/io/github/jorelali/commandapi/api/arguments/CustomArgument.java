@@ -81,11 +81,6 @@ public class CustomArgument<S> implements Argument, OverrideableSuggestions {
 	public Class<S> getPrimitiveType() {
 		return null;
 	}
-
-	@Override
-	public boolean isSimple() {
-		return false;
-	}
 	
 	public CustomArgumentFunction<S> getParser() {
 		return parser;

@@ -26,24 +26,38 @@ public class StringArgument implements Argument, OverrideableSuggestions {
 	public <V> Class<V> getPrimitiveType() {
 		return (Class<V>) String.class;
 	}
-
+	
 	@Override
-	public boolean isSimple() {
-		return true;
+	public CommandAPIArgumentType getArgumentType() {
+		return CommandAPIArgumentType.SIMPLE_TYPE;
 	}
 	
-	private String[] suggestions;
+	/////////////////
+	// Suggestions //
+	/////////////////
+	
+	private DynamicSuggestions suggestions;
 	
 	@Override
 	public StringArgument overrideSuggestions(String... suggestions) {
+		this.suggestions = mkSuggestions(suggestions);
+		return this;
+	}
+	
+	@Override
+	public StringArgument overrideSuggestions(DynamicSuggestions suggestions) {
 		this.suggestions = suggestions;
 		return this;
 	}
 	
 	@Override
-	public String[] getOverriddenSuggestions() {
+	public DynamicSuggestions getOverriddenSuggestions() {
 		return suggestions;
 	}
+	
+	/////////////////
+	// Permissions //
+	/////////////////
 	
 	private CommandPermission permission = null;
 	
@@ -56,10 +70,5 @@ public class StringArgument implements Argument, OverrideableSuggestions {
 	@Override
 	public CommandPermission getArgumentPermission() {
 		return permission;
-	}
-	
-	@Override
-	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.SIMPLE_TYPE;
 	}
 }

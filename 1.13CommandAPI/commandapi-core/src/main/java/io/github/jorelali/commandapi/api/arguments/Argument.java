@@ -16,12 +16,6 @@ public interface Argument {
 	 */
 	<V> Class<V> getPrimitiveType();
 	
-	/**
-	 * Returns whether this argument is a "simple" argument. Simple arguments are primitive data types 
-	 * @return Whether this argument is a simple argument
-	 */
-	boolean isSimple();
-	
 	<T extends Argument> T withPermission(CommandPermission permission);
 	
 	CommandPermission getArgumentPermission();

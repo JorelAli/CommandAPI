@@ -26,11 +26,6 @@ public class BooleanArgument implements Argument, OverrideableSuggestions {
 		return (Class<V>) boolean.class;
 	}
 	
-	@Override
-	public boolean isSimple() {
-		return true;
-	}
-	
 	private String[] suggestions;
 	
 	@Override

@@ -43,11 +43,6 @@ public class EntitySelectorArgument implements Argument, OverrideableSuggestions
 				return (Class<V>) Player.class;
 		}
 	}
-
-	@Override
-	public boolean isSimple() {
-		return false;
-	}
 	
 	public EntitySelector getEntitySelector() {
 		return selector;

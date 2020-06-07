@@ -37,11 +37,6 @@ public class ChatComponentArgument implements Argument, OverrideableSuggestions 
 	public <V> Class<V> getPrimitiveType() {
 		return (Class<V>) BaseComponent[].class;
 	}
-
-	@Override
-	public boolean isSimple() {
-		return false;
-	}
 	
 	private String[] suggestions;
 	

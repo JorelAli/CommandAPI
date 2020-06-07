@@ -28,11 +28,6 @@ public class EnchantmentArgument implements Argument, OverrideableSuggestions {
 	public <V> Class<V> getPrimitiveType() {
 		return (Class<V>) Enchantment.class;
 	}
-
-	@Override
-	public boolean isSimple() {
-		return false;
-	}
 	
 	private String[] suggestions;
 	
