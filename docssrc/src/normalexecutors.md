@@ -22,9 +22,10 @@ The `CommandAPICommand` has multiple different `executes...()` methods that can 
 
 - `CommandSender` - No restriction, players, the console etc. can use this command. This is what Bukkit normally uses.
 - `Player` - Only in-game players can run this command
-
 - `Entity` - Only entities (therefore, players as well) can run this command
 - `BlockCommandSender` - Only command blocks can run this command
+- `ConsoleCommandSender` - Only the console can run this command
+- `ProxiedCommandSender` - Only proxied command senders (e.g. other entities via the `/execute as ...` command)
 
 This is done using the respective method:
 
@@ -34,7 +35,8 @@ This is done using the respective method:
 | `Player`               | `.executesPlayer()`       |
 | `Entity`               | `.executesEntity()`       |
 | `BlockCommandSender`   | `.executesCommandBlock()` |
-| `ConsoleCommandSender` | `executesConsole()`       |
+| `ConsoleCommandSender` | `.executesConsole()`      |
+| `ProxiedCommandSender` | `.executesProxy()`        |
 
 ### Example - A `/suicide` command
 

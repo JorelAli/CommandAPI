@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="sidebar-visible no-js rust">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -36,7 +36,7 @@
         <!-- Provide site root to javascript -->
         <script type="text/javascript">
             var path_to_root = "";
-            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "light";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "rust" : "rust";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
@@ -62,7 +62,7 @@
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
             html.classList.remove('no-js')
-            html.classList.remove('light')
+            html.classList.remove('rust')
             html.classList.add(theme);
             html.classList.add('js');
         </script>
@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div id="sidebar-scrollbox" class="sidebar-scrollbox">
-                <ol class="chapter"><li class="expanded affix "><a href="intro.html">Introduction</a></li><li class="expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li class="expanded "><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li class="expanded "><a href="commandregistration.html" class="active"><strong aria-hidden="true">3.</strong> Command registration</a></li><li class="expanded "><a href="commandexecutors.html"><strong aria-hidden="true">4.</strong> Command executors</a></li><li><ol class="section"><li class="expanded "><a href="normalexecutors.html"><strong aria-hidden="true">4.1.</strong> Normal command executors</a></li><li class="expanded "><a href="proxysender.html"><strong aria-hidden="true">4.2.</strong> Proxied commandsenders</a></li><li class="expanded "><a href="resultingcommandexecutors.html"><strong aria-hidden="true">4.3.</strong> Resulting command executors</a></li><li class="expanded "><a href="commandfailures.html"><strong aria-hidden="true">4.4.</strong> Handling command failures</a></li></ol></li><li class="expanded "><a href="arguments.html"><strong aria-hidden="true">5.</strong> Arguments</a></li><li><ol class="section"><li class="expanded "><a href="primitivearguments.html"><strong aria-hidden="true">5.1.</strong> Primitive arguments</a></li><li class="expanded "><a href="rangedarguments.html"><strong aria-hidden="true">5.2.</strong> Ranged arguments</a></li><li class="expanded "><a href="miscargs.html"><strong aria-hidden="true">5.3.</strong> Miscellaneous arguments</a></li><li><ol class="section"><li class="expanded "><a href="environmentargs.html"><strong aria-hidden="true">5.3.1.</strong> Environment argument</a></li><li class="expanded "><a href="itemslotargs.html"><strong aria-hidden="true">5.3.2.</strong> Item slot argument</a></li><li class="expanded "><a href="timeargs.html"><strong aria-hidden="true">5.3.3.</strong> Time argument</a></li></ol></li><li class="expanded "><a href="positionargs.html"><strong aria-hidden="true">5.4.</strong> Position-based arguments</a></li><li><ol class="section"><li class="expanded "><a href="locationargument.html"><strong aria-hidden="true">5.4.1.</strong> Location arguments</a></li><li class="expanded "><a href="rotationargs.html"><strong aria-hidden="true">5.4.2.</strong> Rotation arguments</a></li><li class="expanded "><a href="axisarg.html"><strong aria-hidden="true">5.4.3.</strong> AxisArgument</a></li></ol></li><li class="expanded "><a href="chatarguments.html"><strong aria-hidden="true">5.5.</strong> Chat arguments</a></li><li class="expanded "><a href="stringarguments.html"><strong aria-hidden="true">5.6.</strong> String arguments</a></li><li class="expanded "><a href="entityarguments.html"><strong aria-hidden="true">5.7.</strong> Entity &amp; player arguments</a></li><li class="expanded "><a href="literalarguments.html"><strong aria-hidden="true">5.8.</strong> Literal arguments</a></li><li class="expanded "><a href="dynsugargs.html"><strong aria-hidden="true">5.9.</strong> Dynamically suggested arguments</a></li><li class="expanded "><a href="customarguments.html"><strong aria-hidden="true">5.10.</strong> Custom arguments</a></li><li class="expanded "><a href="technicalargs.html"><strong aria-hidden="true">5.11.</strong> Technical arguments</a></li><li><ol class="section"><li class="expanded "><a href="soundargument.html"><strong aria-hidden="true">5.11.1.</strong> Sound argument</a></li><li class="expanded "><a href="advancementarg.html"><strong aria-hidden="true">5.11.2.</strong> Advancement argument</a></li><li class="expanded "><a href="recipeargument.html"><strong aria-hidden="true">5.11.3.</strong> Recipe argument</a></li><li class="expanded "><a href="loottableargument.html"><strong aria-hidden="true">5.11.4.</strong> LootTable argument</a></li></ol></li></ol></li><li class="expanded "><a href="functions.html"><strong aria-hidden="true">6.</strong> Functions &amp; Tags</a></li><li><ol class="section"><li class="expanded "><a href="functionsetup.html"><strong aria-hidden="true">6.1.</strong> Setting up functions &amp; tags</a></li><li class="expanded "><a href="functionwrapper.html"><strong aria-hidden="true">6.2.</strong> The FunctionWrapper class</a></li><li class="expanded "><a href="functionarguments.html"><strong aria-hidden="true">6.3.</strong> Function arguments</a></li></ol></li><li class="expanded "><a href="permissions.html"><strong aria-hidden="true">7.</strong> Permissions</a></li><li class="expanded "><a href="aliases.html"><strong aria-hidden="true">8.</strong> Aliases</a></li><li class="expanded "><a href="conversion.html"><strong aria-hidden="true">9.</strong> Command conversion</a></li><li class="expanded affix "><a href="upgrading.html">Upgrading guide</a></li><li class="expanded affix "><a href="troubleshooting.html">Troubleshooting</a></li><li class="spacer"></li><li class="expanded affix "><a href="afterword.html">Afterword</a></li></ol>
+                <ol class="chapter"><li class="affix "><a href="intro.html">Introduction</a></li><li class=""><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation for server owners</a></li><li class=""><a href="quickstart.html"><strong aria-hidden="true">2.</strong> Setting up your development environment</a></li><li class="expanded "><a href="commandregistration.html" class="active"><strong aria-hidden="true">3.</strong> Command registration</a></li><li class=""><a href="commandexecutors.html"><strong aria-hidden="true">4.</strong> Command executors</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class=""><a href="normalexecutors.html"><strong aria-hidden="true">4.1.</strong> Normal command executors</a></li><li class=""><a href="proxysender.html"><strong aria-hidden="true">4.2.</strong> Proxied commandsenders</a></li><li class=""><a href="resultingcommandexecutors.html"><strong aria-hidden="true">4.3.</strong> Resulting command executors</a></li><li class=""><a href="commandfailures.html"><strong aria-hidden="true">4.4.</strong> Handling command failures</a></li></ol></li><li class=""><a href="arguments.html"><strong aria-hidden="true">5.</strong> Arguments</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class=""><a href="primitivearguments.html"><strong aria-hidden="true">5.1.</strong> Primitive arguments</a></li><li class=""><a href="rangedarguments.html"><strong aria-hidden="true">5.2.</strong> Ranged arguments</a></li><li class=""><a href="miscargs.html"><strong aria-hidden="true">5.3.</strong> Miscellaneous arguments</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class=""><a href="environmentargs.html"><strong aria-hidden="true">5.3.1.</strong> Environment argument</a></li><li class=""><a href="itemslotargs.html"><strong aria-hidden="true">5.3.2.</strong> Item slot argument</a></li><li class=""><a href="timeargs.html"><strong aria-hidden="true">5.3.3.</strong> Time argument</a></li></ol></li><li class=""><a href="positionargs.html"><strong aria-hidden="true">5.4.</strong> Position-based arguments</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class=""><a href="locationargument.html"><strong aria-hidden="true">5.4.1.</strong> Location arguments</a></li><li class=""><a href="rotationargs.html"><strong aria-hidden="true">5.4.2.</strong> Rotation arguments</a></li><li class=""><a href="axisarg.html"><strong aria-hidden="true">5.4.3.</strong> AxisArgument</a></li></ol></li><li class=""><a href="chatarguments.html"><strong aria-hidden="true">5.5.</strong> Chat arguments</a></li><li class=""><a href="stringarguments.html"><strong aria-hidden="true">5.6.</strong> String arguments</a></li><li class=""><a href="entityarguments.html"><strong aria-hidden="true">5.7.</strong> Entity &amp; player arguments</a></li><li class=""><a href="literalarguments.html"><strong aria-hidden="true">5.8.</strong> Literal arguments</a></li><li class=""><a href="dynsugargs.html"><strong aria-hidden="true">5.9.</strong> Dynamically suggested arguments</a></li><li class=""><a href="customarguments.html"><strong aria-hidden="true">5.10.</strong> Custom arguments</a></li><li class=""><a href="technicalargs.html"><strong aria-hidden="true">5.11.</strong> Technical arguments</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class=""><a href="soundargument.html"><strong aria-hidden="true">5.11.1.</strong> Sound argument</a></li><li class=""><a href="advancementarg.html"><strong aria-hidden="true">5.11.2.</strong> Advancement argument</a></li><li class=""><a href="recipeargument.html"><strong aria-hidden="true">5.11.3.</strong> Recipe argument</a></li><li class=""><a href="loottableargument.html"><strong aria-hidden="true">5.11.4.</strong> LootTable argument</a></li></ol></li></ol></li><li class=""><a href="functions.html"><strong aria-hidden="true">6.</strong> Functions &amp; Tags</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class=""><a href="functionsetup.html"><strong aria-hidden="true">6.1.</strong> Setting up functions &amp; tags</a></li><li class=""><a href="functionwrapper.html"><strong aria-hidden="true">6.2.</strong> The FunctionWrapper class</a></li><li class=""><a href="functionarguments.html"><strong aria-hidden="true">6.3.</strong> Function arguments</a></li></ol></li><li class=""><a href="permissions.html"><strong aria-hidden="true">7.</strong> Permissions</a></li><li class=""><a href="aliases.html"><strong aria-hidden="true">8.</strong> Aliases</a></li><li class=""><a href="conversion.html"><strong aria-hidden="true">9.</strong> Command conversion</a></li><li class="affix "><a href="upgrading.html">Upgrading guide</a></li><li class="affix "><a href="troubleshooting.html">Troubleshooting</a></li><li class="spacer"></li><li class="affix "><a href="afterword.html">Afterword</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -100,8 +100,8 @@
                                 <i class="fa fa-paint-brush"></i>
                             </button>
                             <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust (default)</button></li>
                                 <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                                 <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
                                 <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
@@ -118,6 +118,10 @@
                         <div class="right-buttons">
                             <a href="print.html" title="Print this book" aria-label="Print this book">
                                 <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                            
+                            <a href="https://github.com/JorelAli/1.13-Command-API" title="Git repository" aria-label="Git repository">
+                                <i id="git-repository-button" class="fa fa-github"></i>
                             </a>
                             
                         </div>
@@ -149,7 +153,7 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#command-registration" id="command-registration">Command registration</a></h1>
-<p>To register commands with the CommandAPI, the <code>CommandAPICommand</code> class is used. It follows a builder pattern to improve readability.</p>
+<p>To register commands with the CommandAPI, we use the <code>CommandAPICommand</code> class. It follows a simple builder pattern to improve readability.</p>
 <p>I think the easiest way to explain it is with an example:</p>
 <pre><code class="language-java">// Create our arguments
 LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
@@ -166,45 +170,47 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 	}).register();
 </code></pre>
 <ul>
-<li>First, we create our arguments. This is described in more detail in <a href="./arguments.html">the section on arguments</a>. </li>
-<li>We then create a new <code>CommandAPICommand</code>, with the name of the command that the player must enter to run it. </li>
+<li>First, we create our arguments for the command. This is described in more detail in <a href="./arguments.html">the section on arguments</a>. </li>
+<li>We then create a new <code>CommandAPICommand</code>, with the name of the command that the sender must enter to run it. </li>
 <li>We then add the arguments to the command with <code>withArguments</code>.</li>
-<li>We add an alias &quot;broadcast&quot;. This allows the sender to use <code>/broadcastmsg &lt;message&gt;</code> or <code>/broadcast &lt;message&gt;</code>.</li>
-<li>We require the sender to be OP by using <code>withPermission</code>.</li>
-<li>We control what it does using <code>executes</code> (this is described in more detail in <a href="./commandexecutors.html">the section on command executors</a>).</li>
+<li>In this example, we add an alias, &quot;broadcast&quot;, to the command. This allows the sender to use either <code>/broadcastmsg &lt;message&gt;</code> or <code>/broadcast &lt;message&gt;</code>.</li>
+<li>By using <code>withPermission</code>, we require the sender to be an OP in order to run the command.</li>
+<li>We control what the command does using <code>executes</code> (this is described in more detail in <a href="./commandexecutors.html">the section on command executors</a>).</li>
 <li>Finally, we register the command to the CommandAPI using <code>register</code>.</li>
 </ul>
+<p>That's it! This simple snippet of code fully registers the command to the server. No hassling with a plugin instance, no messing with <code>plugin.yml</code> files.</p>
 <h2><a class="header" href="#commandapicommand-methods" id="commandapicommand-methods"><code>CommandAPICommand</code> methods</a></h2>
 <p>The <code>CommandAPICommand</code> has various methods, which are outlined below:</p>
-<h4><a class="header" href="#adding-constraints-to-the-command" id="adding-constraints-to-the-command">Adding constraints to the command</a></h4>
+<h4><a class="header" href="#setting-command-properties" id="setting-command-properties">Setting command properties</a></h4>
 <ul>
-<li>
-<p><code>withPermission(CommandPermission)</code> - The required permission to execute a command. (See <a href="permissions.html">the section on permissions</a>).</p>
-</li>
 <li>
 <p><code>withArguments(LinkedHashMap&lt;String, Argument&gt;)</code> - The list of arguments</p>
 <p>The CommandAPI requires a list of arguments which are used for the command. The argument map consists of a key which is the tooltip that is displayed as a prompt to users entering commands, and a value which is an instance of an argument (See the section on arguments). This list of arguments is interpreted in the <em>order that arguments are added to the LinkedHashMap</em>.</p>
 </li>
 <li>
-<p><code>withAliases(String... args)</code> - An array of aliases that the command can be run via </p>
+<p><code>withPermission(CommandPermission)</code> - The required permission to execute a command. (See <a href="permissions.html">the section on permissions</a>).</p>
+</li>
+<li>
+<p><code>withAliases(String... args)</code> - An array of aliases that the command can be run via.</p>
 </li>
 </ul>
 <h4><a class="header" href="#setting-the-commands-executor" id="setting-the-commands-executor">Setting the command's executor</a></h4>
 <ul>
-<li><code>executes((sender, args) -&gt; {})</code> - Executes a command, using the <code>CommandSender</code> object</li>
-<li><code>executesPlayer((player, args) -&gt; {})</code> - Executes a command, using the <code>Player</code> object</li>
-<li><code>executesEntity((entity, args) -&gt; {})</code> - Executes a command, using the <code>Entity</code> object</li>
-<li><code>executesCommandBlock((cmdblock, args) -&gt; {})</code> - Executes a command, using the <code>BlockCommandSender</code> object</li>
-<li><code>executesConsole((console, args) -&gt; {})</code> - Executes a command, using the <code>ConsoleCommandSender</code> object</li>
+<li><code>executes((sender, args) -&gt; {})</code> - Executes a command using the <code>CommandSender</code> object.</li>
+<li><code>executesPlayer((player, args) -&gt; {})</code> - Executes a command using the <code>Player</code> object.</li>
+<li><code>executesEntity((entity, args) -&gt; {})</code> - Executes a command using the <code>Entity</code> object.</li>
+<li><code>executesCommandBlock((cmdblock, args) -&gt; {})</code> - Executes a command using the <code>BlockCommandSender</code> object.</li>
+<li><code>executesConsole((console, args) -&gt; {})</code> - Executes a command using the <code>ConsoleCommandSender</code> object.</li>
+<li><code>executesProxy((proxy, args) -&gt; {})</code> - Executes a command using the <code>ProxiedCommandSender</code> object.</li>
 </ul>
 <h4><a class="header" href="#registering-the-command" id="registering-the-command">Registering the command</a></h4>
 <ul>
-<li><code>register()</code> - Registers the command</li>
+<li><code>register()</code> - Registers the command.</li>
 </ul>
 <h2><a class="header" href="#command-loading-order" id="command-loading-order">Command loading order</a></h2>
-<p>In order to register commands properly, <strong>commands must be registered before the server finishes loading</strong>. The CommandAPI will prevent command registration after the server has loaded. This basically means that all command registration must occur during a plugin's <code>onLoad()</code> or <code>onEnable()</code> method. With the CommandAPI, depending on which of these functions you load your commands is crutial if your plugin is used with Minecraft's functions.</p>
+<p>In order to register commands properly, <strong>commands must be registered before the server finishes loading</strong>. The CommandAPI will prevent command registration after the server has loaded. This basically means that all command registration must occur during a plugin's <code>onLoad()</code> or <code>onEnable()</code> method. With the CommandAPI, depending on whether you use <code>onLoad()</code> or <code>onEnable()</code> to load your commands depends on whether your plugin is used with Minecraft's functions:</p>
 <table><thead><tr><th>When to load</th><th>What to do</th></tr></thead><tbody>
-<tr><td><code>onLoad()</code> method</td><td>Register commands to be used in Minecraft functions (see Function section for more info)</td></tr>
+<tr><td><code>onLoad()</code> method</td><td>Register commands to be used in Minecraft functions (<a href="functions.html">see the Function section for more info</a>)</td></tr>
 <tr><td><code>onEnable()</code> method</td><td>Register regular commands</td></tr>
 </tbody></table>
 <h2><a class="header" href="#command-unregistration" id="command-unregistration">Command unregistration</a></h2>

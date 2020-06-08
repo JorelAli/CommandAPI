@@ -6,3 +6,10 @@ title = "1.13 CommandAPI Documentation v3.0"
 
 [build]
 build-dir = "./../docs"
+
+[output.html]
+git-repository-url = "https://github.com/JorelAli/1.13-Command-API"
+default-theme = "rust"
+
+[output.html.fold]
+enable = true

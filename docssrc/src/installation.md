@@ -1,6 +1,6 @@
 # Installation
 
-Installing the CommandAPI is easy! Just download the CommandAPI.jar file and place it in your server's `plugins/` folder!
+Installing the CommandAPI is easy! Just download the latest `CommandAPI.jar` file using the button below and place it in your server's `plugins/` folder!
 
 <br>
 
@@ -11,7 +11,9 @@ color:#ffffff;
 display:block;
 line-height:44px;
 text-align:center;
-width:50%;
+width:40%;
+margin-top: -30px;
+margin-bottom: -30px;
 margin-left:auto;
 margin-right: auto;">Download latest CommandAPI.jar</a>
 

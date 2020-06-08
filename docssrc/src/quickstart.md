@@ -5,7 +5,9 @@ To use the CommandAPI in your plugins, there are two methods of adding it to you
 ## Manually using the .jar
 
 - Download the latest CommandAPI.jar from the download page [here](https://github.com/JorelAli/1.13-Command-API/releases/latest)
-- Add the CommandAPI.jar file to your project/environment's build path
+- Add the CommandAPI.jar file to your project/environment's build path:
+
+  ![](images/eclipse.jpg)
 - Add the plugin as a dependent in the plugin.yml (`depend: [CommandAPI]`)
 
 ## Using Maven (recommended)
@@ -16,7 +18,7 @@ To use the CommandAPI in your plugins, there are two methods of adding it to you
 
 * Add the maven repository to your `pom.xml` file:
 
-  ```
+  ```xml
   <repositories>
       <repository>
           <id>mccommandapi</id>
@@ -27,7 +29,7 @@ To use the CommandAPI in your plugins, there are two methods of adding it to you
 
 * Add the dependency to your `pom.xml`:
 
-  ```
+  ```xml
   <dependencies>
       <dependency>
           <groupId>io.github.jorelali</groupId>
@@ -45,7 +47,7 @@ To use the CommandAPI in your plugins, there are two methods of adding it to you
 
 * Add the repository to your `build.gradle` file:
 
-  ```
+  ```gradle
   repositories {
       maven {
           name = 'mccommandapi'
@@ -56,7 +58,7 @@ To use the CommandAPI in your plugins, there are two methods of adding it to you
 
 * Add the dependency to your list of dependencies in your `build.gradle` file:
 
-  ```
+  ```gradle
   dependencies {
       compile "io.github.jorelali:commandapi:VERSION"
   }
