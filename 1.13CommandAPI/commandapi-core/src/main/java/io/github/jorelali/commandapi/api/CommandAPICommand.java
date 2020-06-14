@@ -17,6 +17,9 @@ import io.github.jorelali.commandapi.api.executors.ProxyCommandExecutor;
 import io.github.jorelali.commandapi.api.executors.ProxyResultingCommandExecutor;
 import io.github.jorelali.commandapi.api.executors.ResultingCommandExecutor;
 
+/**
+ * A builder used to create commands to be registered by the CommandAPI.
+ */
 public class CommandAPICommand {
 
 	private final String commandName;
@@ -190,7 +193,7 @@ public class CommandAPICommand {
 		if(this.executor.isEmpty()) {
 			throw new EmptyExecutorException();
 		} else {
-			CommandAPI.getInstance().register(commandName, permission, aliases, args, executor);
+			CommandAPI.register(commandName, permission, aliases, args, executor);
 		}
 	}
 	

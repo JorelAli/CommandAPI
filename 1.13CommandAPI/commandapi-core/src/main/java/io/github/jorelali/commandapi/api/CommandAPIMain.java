@@ -42,19 +42,13 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 		CommandAPIMain.config = new Config(getConfig());
 		CommandAPIMain.dispatcherFile = new File(getDataFolder(), "command_registration.json");
 		logger = getLogger();
-		
-		//Instantiate CommandAPI
-		CommandAPI.getInstance();
 	}
 	
 	@Override
 	public void onEnable() {
 		//Prevent command registration after server has loaded
 		Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
-			CommandAPI.canRegister = false;
-			
-			//Sort out permissions after the server has finished registering them all
-			CommandAPI.fixPermissions();
+			CommandAPI.cleanup();
 		}, 0L);
         
         getServer().getPluginManager().registerEvents(this, this);

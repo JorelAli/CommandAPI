@@ -11,8 +11,6 @@ import io.github.jorelali.commandapi.api.arguments.GreedyArgument;
 import io.github.jorelali.commandapi.api.exceptions.GreedyArgumentException;
 import io.github.jorelali.commandapi.api.exceptions.InvalidCommandNameException;
 import io.github.jorelali.commandapi.api.exceptions.WrapperCommandSyntaxException;
-import io.github.jorelali.commandapi.api.executors.CommandExecutor;
-import io.github.jorelali.commandapi.api.executors.ResultingCommandExecutor;
 
 /**
  * Class to register commands with the 1.13 command UI
@@ -20,11 +18,27 @@ import io.github.jorelali.commandapi.api.executors.ResultingCommandExecutor;
  */
 public class CommandAPI {
 	
-	//Static instance of CommandAPI
-	private static CommandAPI instance;
-	
-	protected static boolean canRegister = true;
+	static boolean canRegister = true;
 	private static CommandAPIHandler handler;
+
+	static {
+		try {
+			CommandAPI.handler = new CommandAPIHandler();			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Prevents command registration when the server has finished loading and fixes
+	 * the registration of permissions.
+	 */
+	static void cleanup() {
+		canRegister = false;
+		
+		//Sort out permissions after the server has finished registering them all
+		handler.fixPermissions();
+	}
 	
 	/**
 	 * Forces a command to return a success value of 0
@@ -34,37 +48,12 @@ public class CommandAPI {
 	public static void fail(String message) throws WrapperCommandSyntaxException {
 		throw new WrapperCommandSyntaxException(new SimpleCommandExceptionType(new LiteralMessage(message)).create());
 	}
-	
-	/**
-	 * An instance of the CommandAPI, used to register and unregister commands
-	 * @return An instance of the CommandAPI
-	 */
-	public static CommandAPI getInstance() {
-		return CommandAPI.instance;
-	}	
-	
-	//Fixes all broken permissions
-	protected static void fixPermissions() {
-		handler.fixPermissions();
-	}
 
-	static {
-		if(CommandAPI.instance == null) {
-			CommandAPI.instance = new CommandAPI();
-		}
-
-		try {
-			CommandAPI.handler = new CommandAPIHandler();			
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	/**
 	 * Determines whether command registration is permitted via the CommandAPI
 	 * @return A boolean representing whether commands can be registered or not.
 	 */
-	public boolean canRegister() {
+	public static boolean canRegister() {
 		return CommandAPI.canRegister;
 	}
 	
@@ -72,7 +61,7 @@ public class CommandAPI {
 	 * Unregisters a command
 	 * @param command The name of the command to unregister
 	 */
-	public void unregister(String command) {
+	public static void unregister(String command) {
 		handler.unregister(command, false);
 	}
 	
@@ -80,7 +69,7 @@ public class CommandAPI {
 	 * Unregisters a command, by force (removes all instances of that command)
 	 * @param command The name of the command to unregister
 	 */
-	public void unregister(String command, boolean force) {
+	public static void unregister(String command, boolean force) {
 		if(!canRegister) {
 			CommandAPIMain.getLog().warning("Unexpected unregistering of /" + command + ", as server is loaded! Unregistering anyway, but this can lead to unstable results!");
 		}
@@ -89,124 +78,7 @@ public class CommandAPI {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	/**
-	 * Registers a command
-	 * @param commandName The name of the command
-	 * @param args The mapping of arguments for the command
-	 * @param executor The command executor
-	 * @deprecated Use new CommandAPICommand class instead to register commands
-	 */
-	@Deprecated
-	public void register(String commandName, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
-		register(commandName, CommandPermission.NONE, args, executor);
-	}	
-
-	/**
-	 * Registers a command with aliases
-	 * @param commandName The name of the command
-	 * @param aliases The array of aliases which also run this command
-	 * @param args The mapping of arguments for the command
-	 * @param executor The command executor
-	 * @deprecated Use new CommandAPICommand class instead to register commands
-	 */
-	@Deprecated
-	public void register(String commandName, String[] aliases, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
-		register(commandName, CommandPermission.NONE, aliases, args, executor);
-	}
-	
-	/**
-	 * Registers a command with permissions
-	 * @param commandName The name of the command
-	 * @param permissions The permissions required to run this command
-	 * @param args The mapping of arguments for the command
-	 * @param executor The command executor
-	 * @deprecated Use new CommandAPICommand class instead to register commands
-	 */
-	@Deprecated
-	public void register(String commandName, CommandPermission permissions, final LinkedHashMap<String, Argument> args, CommandExecutor executor) {
-		register(commandName, permissions, new String[0], args, executor);
-	}
-
-	/**
-	 * Registers a command with permissions and aliases
-	 * @param commandName The name of the command
-	 * @param permissions The permissions required to run this command
-	 * @param aliases The array of aliases which also run this command
-	 * @param args The mapping of arguments for the command
-	 * @param executor The command executor
-	 * @deprecated Use new CommandAPICommand class instead to register commands
-	 */
-	@Deprecated
-	public void register(String commandName, CommandPermission permissions, String[] aliases, LinkedHashMap<String, Argument> args, CommandExecutor executor) {
-		CustomCommandExecutor customExecutor = new CustomCommandExecutor();
-		customExecutor.addNormalExecutor(executor);
-		registerDeprecated(commandName, permissions, aliases, args, customExecutor);
-	}
-	
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Registers a command
-	 * @param commandName The name of the command
-	 * @param args The mapping of arguments for the command
-	 * @param executor The command executor
-	 * @deprecated Use new CommandAPICommand class instead to register commands
-	 */
-	@Deprecated
-	public void register(String commandName, final LinkedHashMap<String, Argument> args, ResultingCommandExecutor executor) {
-		register(commandName, CommandPermission.NONE, args, executor);
-	}	
-
-	/**
-	 * Registers a command with aliases
-	 * @param commandName The name of the command
-	 * @param aliases The array of aliases which also run this command
-	 * @param args The mapping of arguments for the command
-	 * @param executor The command executor
-	 * @deprecated Use new CommandAPICommand class instead to register commands
-	 */
-	@Deprecated
-	public void register(String commandName, String[] aliases, final LinkedHashMap<String, Argument> args, ResultingCommandExecutor executor) {
-		register(commandName, CommandPermission.NONE, aliases, args, executor);
-	}
-	
-	/**
-	 * Registers a command with permissions
-	 * @param commandName The name of the command
-	 * @param permissions The permissions required to run this command
-	 * @param args The mapping of arguments for the command
-	 * @param executor The command executor
-	 * @deprecated Use new CommandAPICommand class instead to register commands
-	 */
-	@Deprecated
-	public void register(String commandName, CommandPermission permissions, final LinkedHashMap<String, Argument> args, ResultingCommandExecutor executor) {
-		register(commandName, permissions, new String[0], args, executor);
-	}
-
-	/**
-	 * Registers a command with permissions and aliases
-	 * @param commandName The name of the command
-	 * @param permissions The permissions required to run this command
-	 * @param aliases The array of aliases which also run this command
-	 * @param args The mapping of arguments for the command
-	 * @param executor The command executor
-	 * @deprecated Use new CommandAPICommand class instead to register commands
-	 */
-	@Deprecated
-	public void register(String commandName, CommandPermission permissions, String[] aliases, LinkedHashMap<String, Argument> args, ResultingCommandExecutor executor) {
-		CustomCommandExecutor customExecutor = new CustomCommandExecutor();
-		customExecutor.addResultingExecutor(executor);
-		registerDeprecated(commandName, permissions, aliases, args, customExecutor);
-	}
-	
-	private void registerDeprecated(String commandName, CommandPermission permissions, String[] aliases, LinkedHashMap<String, Argument> args, CustomCommandExecutor executor) {
-		CommandAPIMain.getLog().warning("Command /" + commandName + " is being registered with the old register() method. This is deprecated as of 3.0. Consider using the new CommandAPICommand registration system.");
-		register(commandName, permissions, aliases, args, executor);
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	void register(String commandName, CommandPermission permissions, String[] aliases, LinkedHashMap<String, Argument> args, CustomCommandExecutor executor) {
+	static void register(String commandName, CommandPermission permissions, String[] aliases, LinkedHashMap<String, Argument> args, CustomCommandExecutor executor) {
 		if(!canRegister) {
 			CommandAPIMain.getLog().severe("Cannot register command /" + commandName + ", because the server has finished loading!");
 			return;

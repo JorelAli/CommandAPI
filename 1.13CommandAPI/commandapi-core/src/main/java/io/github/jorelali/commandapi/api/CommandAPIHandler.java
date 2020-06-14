@@ -53,8 +53,10 @@ import io.github.jorelali.commandapi.api.arguments.ScoreHolderArgument;
 import io.github.jorelali.commandapi.api.nms.NMS;
 
 /**
- * Class to access the main methods in NMS. The wrapper's implementations occur
- * here.
+ * Handles the main backend of the CommandAPI. This constructs brigadier Command
+ * objects, applies and generates arguments and handles suggestions. This also
+ * handles permission registration for Bukkit, interactions for NMS and the
+ * registration and unregistration of commands. 
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public final class CommandAPIHandler {
@@ -67,14 +69,26 @@ public final class CommandAPIHandler {
 	// NMS variables
 	private static String packageName = null;
 	private CommandDispatcher dispatcher;
-
 	private static NMS nms;
 	private Object nmsServer;
 
+	/**
+	 * Returns an instance of NMS.
+	 * @return an instance of NMS
+	 */
 	public static NMS getNMS() {
 		return nms;
 	}
 
+	/**
+	 * Initialise the CommandAPIHandler. Hooks into the right version of NMS using
+	 * the different versions, hooks into the NBTAPI if possible and hooks into
+	 * Spigot's API if possible. Also initialises reflection caches and the NMS
+	 * command dispatcher.
+	 * 
+	 * @throws ClassNotFoundException if brigadier is not found or cannot properly
+	 *                                hook into NMS
+	 */
 	protected CommandAPIHandler() throws ClassNotFoundException {
 		// Package checks
 
@@ -179,7 +193,14 @@ public final class CommandAPIHandler {
 		this.dispatcher = nms.getBrigadierDispatcher(nmsServer);
 	}
 
-	// Unregister a command
+	/**
+	 * Unregisters a command from the NMS command graph.
+	 * 
+	 * @param commandName the name of the command to unregister
+	 * @param force       whether the unregistration system should attempt to remove
+	 *                    all instances of the command, regardless of whether they
+	 *                    have been registered by Minecraft, Bukkit or Spigot etc.
+	 */
 	protected void unregister(String commandName, boolean force) {
 		try {
 			if (CommandAPIMain.getConfiguration().hasVerboseOutput()) {
@@ -206,8 +227,13 @@ public final class CommandAPIHandler {
 		}
 	}
 
-	// Used in the register() method to generate the command to actually be
-	// registered
+	/**
+	 * Generates a command to be registered by the CommandAPI.
+	 * @param args set of ordered argument pairs which contain the tooltip text and their argument types 
+	 * @param executor code to be ran when the command is executed
+	 * @return a brigadier command which is registered internally
+	 * @throws CommandSyntaxException if an error occurs when the command is ran
+	 */
 	private Command generateCommand(LinkedHashMap<String, Argument> args, CustomCommandExecutor executor)
 			throws CommandSyntaxException {
 
@@ -225,6 +251,12 @@ public final class CommandAPIHandler {
 				switch (entry.getValue().getArgumentType()) {
 				case ADVANCEMENT:
 					argList.add(nms.getAdvancement(cmdCtx, entry.getKey()));
+					break;
+				case AXIS:
+					argList.add(nms.getAxis(cmdCtx, entry.getKey()));
+					break;				
+				case CHAT:
+					argList.add(nms.getChat(cmdCtx, entry.getKey()));
 					break;
 				case CHATCOLOR:
 					argList.add(nms.getChatColor(cmdCtx, entry.getKey()));
@@ -258,8 +290,17 @@ public final class CommandAPIHandler {
 				case ENTITY_TYPE:
 					argList.add(nms.getEntityType(cmdCtx, entry.getKey(), sender));
 					break;
+				case ENVIRONMENT:
+					argList.add(nms.getDimension(cmdCtx, entry.getKey()));
+					break;
+				case FLOAT_RANGE:
+					argList.add(nms.getFloatRange(cmdCtx, entry.getKey()));
+					break;
 				case FUNCTION:
 					argList.add(nms.getFunction(cmdCtx, entry.getKey()));
+					break;
+				case INT_RANGE:
+					argList.add(nms.getIntRange(cmdCtx, entry.getKey()));
 					break;
 				case ITEMSTACK:
 					argList.add(nms.getItemStack(cmdCtx, entry.getKey()));
@@ -270,8 +311,24 @@ public final class CommandAPIHandler {
 					LocationType locationType = ((LocationArgument) entry.getValue()).getLocationType();
 					argList.add(nms.getLocation(cmdCtx, entry.getKey(), locationType, sender));
 					break;
+				case LOCATION_2D:
+					LocationType locationType2d = ((Location2DArgument) entry.getValue()).getLocationType();
+					argList.add(nms.getLocation2D(cmdCtx, entry.getKey(), locationType2d, sender));
+					break;
 				case LOOT_TABLE:
 					argList.add(nms.getLootTable(cmdCtx, entry.getKey()));
+					break;
+				case MATH_OPERATION:
+					argList.add(nms.getMathOperation(cmdCtx, entry.getKey()));
+					break;
+				case NBT_COMPOUND:
+					argList.add(nms.getNBTCompound(cmdCtx, entry.getKey()));
+					break;
+				case OBJECTIVE:
+					argList.add(nms.getObjective(cmdCtx, entry.getKey(), sender));
+					break;
+				case OBJECTIVE_CRITERIA:
+					argList.add(nms.getObjectiveCriteria(cmdCtx, entry.getKey()));
 					break;
 				case PARTICLE:
 					argList.add(nms.getParticle(cmdCtx, entry.getKey()));
@@ -285,59 +342,28 @@ public final class CommandAPIHandler {
 				case RECIPE:
 					argList.add(nms.getRecipe(cmdCtx, entry.getKey()));
 					break;
-				case SIMPLE_TYPE:
-					argList.add(cmdCtx.getArgument(entry.getKey(), entry.getValue().getPrimitiveType()));
-					break;
-				case SOUND:
-					argList.add(nms.getSound(cmdCtx, entry.getKey()));
-					break;
-				case TIME:
-					argList.add(nms.getTime(cmdCtx, entry.getKey()));
-					break;
-				case LOCATION_2D:
-					LocationType locationType2d = ((Location2DArgument) entry.getValue()).getLocationType();
-					argList.add(nms.getLocation2D(cmdCtx, entry.getKey(), locationType2d, sender));
-					break;
-				case INT_RANGE:
-					argList.add(nms.getIntRange(cmdCtx, entry.getKey()));
-					break;
-				case FLOAT_RANGE:
-					argList.add(nms.getFloatRange(cmdCtx, entry.getKey()));
-					break;
-				case ENVIRONMENT:
-					argList.add(nms.getDimension(cmdCtx, entry.getKey()));
-					break;
 				case ROTATION:
 					argList.add(nms.getRotation(cmdCtx, entry.getKey()));
-					break;
-				case AXIS:
-					argList.add(nms.getAxis(cmdCtx, entry.getKey()));
-					break;
-				case SCOREBOARD_SLOT:
-					argList.add(nms.getScoreboardSlot(cmdCtx, entry.getKey()));
-					break;
-				case TEAM:
-					argList.add(nms.getTeam(cmdCtx, entry.getKey(), sender));
-					break;
-				case OBJECTIVE_CRITERIA:
-					argList.add(nms.getObjectiveCriteria(cmdCtx, entry.getKey()));
-					break;
-				case OBJECTIVE:
-					argList.add(nms.getObjective(cmdCtx, entry.getKey(), sender));
-					break;
-				case CHAT:
-					argList.add(nms.getChat(cmdCtx, entry.getKey()));
 					break;
 				case SCORE_HOLDER:
 					ScoreHolderArgument scoreHolderArgument = (ScoreHolderArgument) entry.getValue();
 					argList.add(scoreHolderArgument.isSingle() ? nms.getScoreHolderSingle(cmdCtx, entry.getKey())
 							: nms.getScoreHolderMultiple(cmdCtx, entry.getKey()));
 					break;
-				case NBT_COMPOUND:
-					argList.add(nms.getNBTCompound(cmdCtx, entry.getKey()));
+				case SCOREBOARD_SLOT:
+					argList.add(nms.getScoreboardSlot(cmdCtx, entry.getKey()));
 					break;
-				case MATH_OPERATION:
-					argList.add(nms.getMathOperation(cmdCtx, entry.getKey()));
+				case SIMPLE_TYPE:
+					argList.add(cmdCtx.getArgument(entry.getKey(), entry.getValue().getPrimitiveType()));
+					break;
+				case SOUND:
+					argList.add(nms.getSound(cmdCtx, entry.getKey()));
+					break;
+				case TEAM:
+					argList.add(nms.getTeam(cmdCtx, entry.getKey(), sender));
+					break;
+				case TIME:
+					argList.add(nms.getTime(cmdCtx, entry.getKey()));
 					break;
 				}
 			}
@@ -385,8 +411,12 @@ public final class CommandAPIHandler {
 		return (Object clw) -> permissionCheck(nms.getCommandSenderForCLW(clw), finalPermission);
 	}
 
-	// Checks if a CommandSender has permission permission from CommandPermission
-	// permission
+	/**
+	 * Checks if a sender has a given permission.
+	 * @param sender the sender to check permissions of
+	 * @param permission the CommandAPI CommandPermission permission to check
+	 * @return true if the sender satisfies the provided permission
+	 */
 	private boolean permissionCheck(CommandSender sender, CommandPermission permission) {
 		if (sender == null) {
 			return true;
@@ -579,11 +609,21 @@ public final class CommandAPIHandler {
 	// SECTION: Argument Builders //
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// Gets a LiteralArgumentBuilder for a command name
+	/**
+	 * Creates a literal for a given name.
+	 * @param commandName the name of the literal to create
+	 * @return a brigadier LiteralArgumentBuilder representing a literal
+	 */
 	private LiteralArgumentBuilder<?> getLiteralArgumentBuilder(String commandName) {
 		return LiteralArgumentBuilder.literal(commandName);
 	}
 
+	/**
+	 * Creates a literal for a given name that requires a specified permission.
+	 * @param commandName the name fo the literal to create
+	 * @param permission the permission required to use this literal
+	 * @return a brigadier LiteralArgumentBuilder representing a literal
+	 */
 	private LiteralArgumentBuilder<?> getLiteralArgumentBuilderArgument(String commandName,
 			CommandPermission permission) {
 		return LiteralArgumentBuilder.literal(commandName)
