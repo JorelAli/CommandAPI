@@ -2,9 +2,8 @@ package io.github.jorelali.commandapi.api.exceptions;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+@SuppressWarnings("serial")
 public class WrapperCommandSyntaxException extends Exception {
-
-	private static final long serialVersionUID = -7854667406738356818L;
 	
 	private CommandSyntaxException exception;
 	

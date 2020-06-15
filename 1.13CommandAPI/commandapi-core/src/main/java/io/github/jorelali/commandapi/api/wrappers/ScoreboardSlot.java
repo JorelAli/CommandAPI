@@ -39,14 +39,26 @@ public class ScoreboardSlot {
 		}
 	}
 	
+	/**
+	 * Gets the display slot of this scoreboard slot.
+	 * @return this scoreboard slot's display slot
+	 */
 	public DisplaySlot getDisplaySlot() {
 		return this.displaySlot;
 	}
 	
+	/**
+	 * Gets the team color of this scoreboard slot.
+	 * @return this scoreboard slot's team color, or null if a team color is not present
+	 */
 	public ChatColor getTeamColor() {
 		return this.teamColor;
 	}
 	
+	/**
+	 * Returns whether this scoreboard slot has a team color.
+	 * @return true if this scoreboard slot has a team color
+	 */
 	public boolean hasTeamColor() {
 		return teamColor != null;
 	}

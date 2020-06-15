@@ -37,15 +37,15 @@ public class FunctionWrapper implements Keyed {
 	}
 
 	/**
-	 * Executes this function as the executor of the command
+	 * Executes this function as the executor of the command.
 	 */
 	public void run() {
 		run(commandListenerWrapper);
 	}
 	
 	/**
-	 * Executes this function as an entity
-	 * @param e The entity to perform the function
+	 * Executes this function as an entity.
+	 * @param e entity to execute this function
 	 */
 	public void runAs(Entity e) {
 		run(mapper.apply(e));

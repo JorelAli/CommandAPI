@@ -32,14 +32,12 @@ public class Location2D extends Location {
 		throw new Location2DException();
 	}
 
+	@SuppressWarnings("serial")
 	class Location2DException extends RuntimeException {
 		
-		private static final long serialVersionUID = 493399606975183058L;
-
-		@Override
-	    public String getMessage() {
-			return "Cannot retrieve Y coordinate of a Location2D object";
-	    }
+		public Location2DException() {
+			super("Cannot retrieve Y coordinate of a Location2D object");
+		}
 		
 	}
 	
