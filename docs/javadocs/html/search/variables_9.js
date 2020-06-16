@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['nbt_5fcompound_636',['NBT_COMPOUND',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_command_a_p_i_argument_type.html#adecc305a4adc6c41f7cd61e7b95ebe63',1,'io::github::jorelali::commandapi::api::arguments::CommandAPIArgumentType']]],
-  ['none_637',['NONE',['../classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1_command_permission.html#aec396fab48c5c66e9abe447920079eb1',1,'io::github::jorelali::commandapi::api::CommandPermission']]]
+  ['nbt_5fcompound_632',['NBT_COMPOUND',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ae8aed802df31abe3b1d38e3e5e753dca',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['none_633',['NONE',['../classdev_1_1jorel_1_1commandapi_1_1_command_permission.html#aae111c318e46d67d06b2613fc642da2b',1,'dev::jorel::commandapi::CommandPermission']]]
 ];

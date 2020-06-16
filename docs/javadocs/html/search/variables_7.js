@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['literal_624',['LITERAL',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_command_a_p_i_argument_type.html#a62ade10f0b2b72d9ee26dd68ba546de4',1,'io::github::jorelali::commandapi::api::arguments::CommandAPIArgumentType']]],
-  ['location_625',['LOCATION',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_command_a_p_i_argument_type.html#a79113604e0f93cb81e64554e7cbbec6d',1,'io::github::jorelali::commandapi::api::arguments::CommandAPIArgumentType']]],
-  ['location_5f2d_626',['LOCATION_2D',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_command_a_p_i_argument_type.html#ad844903b4dbdc2dbf46c63b5326a2e3c',1,'io::github::jorelali::commandapi::api::arguments::CommandAPIArgumentType']]],
-  ['loot_5ftable_627',['LOOT_TABLE',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_command_a_p_i_argument_type.html#a4557f123247c28b36e1acfcb61b748f8',1,'io::github::jorelali::commandapi::api::arguments::CommandAPIArgumentType']]],
-  ['loot_5ftables_628',['LOOT_TABLES',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_custom_provided_argument_1_1_suggestion_providers.html#a97a0cbad0f2329e9e911667c5e965ca7',1,'io::github::jorelali::commandapi::api::arguments::CustomProvidedArgument::SuggestionProviders']]]
+  ['literal_620',['LITERAL',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a7eaf3cce61282d6ae706f2e7c28bfcd7',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['location_621',['LOCATION',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a12e62a2ee9d10f3fd710e0f3217e90ce',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['location_5f2d_622',['LOCATION_2D',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a92fef4ec30c3ea8b8ee1906baa071bd1',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['loot_5ftable_623',['LOOT_TABLE',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a6c31634e42bd1dec9fa3ded4ec443c9a',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['loot_5ftables_624',['LOOT_TABLES',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_provided_argument_1_1_suggestion_providers.html#aadd7bd48546f6e88939a0a3a1acecbe7',1,'dev::jorel::commandapi::arguments::CustomProvidedArgument::SuggestionProviders']]]
 ];

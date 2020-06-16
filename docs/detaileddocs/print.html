@@ -600,7 +600,7 @@ new CommandAPICommand(&quot;cmd&quot;)
     })
 	.register();
 </code></pre>
-<p>The type to cast each argument (declared in the <code>io.github.jorelali.commandapi.api.arguments</code> package) is listed below:</p>
+<p>The type to cast each argument (declared in the <code>dev.jorel.commandapi.arguments</code> package) is listed below:</p>
 <table><thead><tr><th align="right">Argument class</th><th align="left">Data type</th></tr></thead><tbody>
 <tr><td align="right"><code>AdvancementArgument</code></td><td align="left"><code>org.bukkit.advancement.Advancement</code></td></tr>
 <tr><td align="right"><code>AxisArgument</code></td><td align="left"><code>java.util.EnumSet&lt;org.bukkit.Axis&gt;</code></td></tr>
@@ -611,35 +611,35 @@ new CommandAPICommand(&quot;cmd&quot;)
 <tr><td align="right"><code>CustomArgument&lt;S&gt;</code></td><td align="left"><code>S</code></td></tr>
 <tr><td align="right"><code>DoubleArgument</code></td><td align="left"><code>double</code></td></tr>
 <tr><td align="right"><code> EnchantmentArgument</code></td><td align="left"><code>org.bukkit.enchantments.Enchantment</code></td></tr>
-<tr><td align="right"><code> EntitySelectorArgument</code></td><td align="left"><code>Entity</code>, <code>Player</code>, <code>Collection&lt;Entity&gt;</code>, <code>Collection&lt;Player&gt;</code></td></tr>
+<tr><td align="right"><code> EntitySelectorArgument</code></td><td align="left">The cast type changes depending on the input parameter:<br /><ul><li><code>EntitySelector.MANY_ENTITIES</code> - <code>Collection&lt;org.bukkit.entity.Entity&gt;</code></li><br /><li><code>EntitySelector.MANY_PLAYERS</code> - <code>Collection&lt;org.bukkit.entity.Player&gt;</code></li><br /><li><code>EntitySelector.ONE_ENTITY</code> - <code>org.bukkit.entity.Entity</code></li><br /><li><code>EntitySelector.ONE_PLAYER</code> - <code>org.bukkit.entity.Player</code></li></ul></td></tr>
 <tr><td align="right"><code> EntityTypeArgument</code></td><td align="left"><code>org.bukkit.entity.EntityType</code></td></tr>
 <tr><td align="right"><code>EnvironmentArgument</code></td><td align="left"><code>org.bukkit.World.Environment</code></td></tr>
 <tr><td align="right"><code> FloatArgument</code></td><td align="left"><code>float</code></td></tr>
-<tr><td align="right"><code>FloatRangeArgument</code></td><td align="left"><code>io.github.jorelali.commandapi.api.FloatRange</code></td></tr>
-<tr><td align="right"><code> FunctionArgument</code></td><td align="left"><code>io.github.jorelali.commandapi.api.wrappers.FunctionWrapper[]</code></td></tr>
+<tr><td align="right"><code>FloatRangeArgument</code></td><td align="left"><code>dev.jorel.commandapi.wrappers.FloatRange</code></td></tr>
+<tr><td align="right"><code> FunctionArgument</code></td><td align="left"><code>dev.jorel.commandapi.wrappers.FunctionWrapper[]</code></td></tr>
 <tr><td align="right"><code> GreedyStringArgument</code></td><td align="left"><code>String</code></td></tr>
 <tr><td align="right"><code> IntegerArgument</code></td><td align="left"><code>int</code></td></tr>
-<tr><td align="right">integerrange</td><td align="left">??</td></tr>
-<tr><td align="right"><code> ItemStackArgument</code></td><td align="left"><code>ItemStack</code></td></tr>
+<tr><td align="right"><code>IntegerRangeArgument</code></td><td align="left"><code>dev.jorel.commandapi.wrappers.IntegerRange</code></td></tr>
+<tr><td align="right"><code> ItemStackArgument</code></td><td align="left"><code>org.bukkit.inventory.ItemStack</code></td></tr>
 <tr><td align="right"><code> LiteralArgument</code></td><td align="left">N/A</td></tr>
-<tr><td align="right"><code> Location2DArgument</code></td><td align="left"><code>Location2D</code></td></tr>
-<tr><td align="right"><code> LocationArgument</code></td><td align="left"><code>Location</code></td></tr>
-<tr><td align="right">longarg</td><td align="left"><code>long</code></td></tr>
-<tr><td align="right"><code>LootTableArgument</code></td><td align="left"><code>LootTable</code></td></tr>
-<tr><td align="right">mathop</td><td align="left">mathop</td></tr>
-<tr><td align="right">nbt</td><td align="left">nbt</td></tr>
-<tr><td align="right">objective</td><td align="left"></td></tr>
-<tr><td align="right">objectivecriteria</td><td align="left"></td></tr>
-<tr><td align="right"><code> ParticleArgument</code></td><td align="left"><code>Particle</code></td></tr>
-<tr><td align="right"><code>PlayerArgument</code></td><td align="left"><code>Player</code></td></tr>
-<tr><td align="right"><code> PotionEffectArgument</code></td><td align="left"><code>PotionEffectType</code></td></tr>
-<tr><td align="right"><code>RecipeArgument</code></td><td align="left"><code>Recipe</code></td></tr>
-<tr><td align="right">rotation</td><td align="left"></td></tr>
-<tr><td align="right">scoreboardslot</td><td align="left"></td></tr>
-<tr><td align="right"><code>ScoreHolderArgument</code></td><td align="left"><ul><li>If <code>ScoreHolderType.SINGLE</code>: <code>String</code></li><li>If <code>ScoreHolderType.MULTIPLE</code>: <code>Collection&lt;String&gt;</code></li></ul></td></tr>
-<tr><td align="right"><code>SoundArgument</code></td><td align="left"><code>Sound</code></td></tr>
+<tr><td align="right"><code> Location2DArgument</code></td><td align="left"><code>dev.jorel.commandapi.wrappers.Location2D</code></td></tr>
+<tr><td align="right"><code> LocationArgument</code></td><td align="left"><code>org.bukkit.Location</code></td></tr>
+<tr><td align="right"><code>LongArgument</code></td><td align="left"><code>long</code></td></tr>
+<tr><td align="right"><code>LootTableArgument</code></td><td align="left"><code>org.bukkit.loot.LootTable</code></td></tr>
+<tr><td align="right"><code>MathOperationArgument</code></td><td align="left"><code>dev.jorel.commandapi.wrappers.MathOperation</code></td></tr>
+<tr><td align="right"><code>NBTCompoundArgument</code></td><td align="left"><code>de.tr7zw.nbtapi.NBTContainer</code></td></tr>
+<tr><td align="right"><code>ObjectiveArgument</code></td><td align="left"><code>String</code></td></tr>
+<tr><td align="right"><code>ObjectiveCriteriaArgument</code></td><td align="left"><code>String</code></td></tr>
+<tr><td align="right"><code> ParticleArgument</code></td><td align="left"><code>org.bukkit.Particle</code></td></tr>
+<tr><td align="right"><code>PlayerArgument</code></td><td align="left"><code>org.bukkit.entity.Player</code></td></tr>
+<tr><td align="right"><code> PotionEffectArgument</code></td><td align="left"><code>org.bukkit.potion.PotionEffectType</code></td></tr>
+<tr><td align="right"><code>RecipeArgument</code></td><td align="left"><code>org.bukkit.inventory.Recipe</code></td></tr>
+<tr><td align="right"><code>RotationArgument</code></td><td align="left"><code>dev.jorel.commandapi.wrappers.Rotation</code></td></tr>
+<tr><td align="right"><code>ScoreboardSlotArgument</code></td><td align="left"><code>dev.jorel.commandapi.wrappers.ScoreboardSlot</code></td></tr>
+<tr><td align="right"><code>ScoreHolderArgument</code></td><td align="left">The cast type changes depending on the input parameter:<br /><ul><li><code>ScoreHolderType.SINGLE</code> - <code>String</code></li><br /><li><code>ScoreHolderType.MULTIPLE</code> - <code>Collection&lt;String&gt;</code></li></ul></td></tr>
+<tr><td align="right"><code>SoundArgument</code></td><td align="left"><code>org.bukkit.Sound</code></td></tr>
 <tr><td align="right"><code>StringArgument</code></td><td align="left"><code>String</code></td></tr>
-<tr><td align="right"><code>TeamArgument</code></td><td align="left"><code>Team</code></td></tr>
+<tr><td align="right"><code>TeamArgument</code></td><td align="left"><code>String</code></td></tr>
 <tr><td align="right"><code>TextArgument</code></td><td align="left"><code>String</code></td></tr>
 <tr><td align="right"><code>TimeArgument</code></td><td align="left"><code>int</code></td></tr>
 </tbody></table>

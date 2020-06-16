@@ -1,8 +1,7 @@
 package dev.jorel.commandapi.arguments;
 
-import java.util.function.IntBinaryOperator;
-
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.wrappers.MathOperation;
 
 public class MathOperationArgument extends Argument {
 
@@ -15,7 +14,7 @@ public class MathOperationArgument extends Argument {
 	
 	@Override
 	public Class<?> getPrimitiveType() {
-		return IntBinaryOperator.class;
+		return MathOperation.class;
 	}
 	
 	@Override

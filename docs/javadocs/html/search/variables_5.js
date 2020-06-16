@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['float_5frange_620',['FLOAT_RANGE',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_command_a_p_i_argument_type.html#a24d4d5ee6cdcfe5d747b5fb0efc00baa',1,'io::github::jorelali::commandapi::api::arguments::CommandAPIArgumentType']]],
-  ['function_621',['FUNCTION',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_command_a_p_i_argument_type.html#a2d1da2afea98f85a084878d5b2d2c4a9',1,'io.github.jorelali.commandapi.api.arguments.CommandAPIArgumentType.FUNCTION()'],['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_custom_provided_argument_1_1_suggestion_providers.html#a8d0c8d173a8b11dc483988f70e413589',1,'io.github.jorelali.commandapi.api.arguments.CustomProvidedArgument.SuggestionProviders.FUNCTION()']]]
+  ['float_5frange_616',['FLOAT_RANGE',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a004ac2cb4bee537fe8e82217c5ac8677',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['function_617',['FUNCTION',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ad501697b32694925ec869e5467b98178',1,'dev.jorel.commandapi.arguments.CommandAPIArgumentType.FUNCTION()'],['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_provided_argument_1_1_suggestion_providers.html#af92f3d467bbc9ef1f1baf43ed342bf95',1,'dev.jorel.commandapi.arguments.CustomProvidedArgument.SuggestionProviders.FUNCTION()']]]
 ];

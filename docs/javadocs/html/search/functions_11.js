@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['unregister_596',['unregister',['../classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1_command_a_p_i.html#a8192c5eac7c8cbfb025d6b311368626f',1,'io.github.jorelali.commandapi.api.CommandAPI.unregister(String command)'],['../classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1_command_a_p_i.html#ac46a1b4502127a0933762af20dab9fa6',1,'io.github.jorelali.commandapi.api.CommandAPI.unregister(String command, boolean force)']]]
+  ['unregister_592',['unregister',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#af80c6e832cee1fd3e8e7e5ef52f98fb5',1,'dev.jorel.commandapi.CommandAPI.unregister(String command)'],['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a0fbec78135f7187645851ee4e12a74f3',1,'dev.jorel.commandapi.CommandAPI.unregister(String command, boolean force)']]]
 ];

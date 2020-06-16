@@ -1,4 +1,4 @@
 var annotated_dup =
 [
-    [ "io", "namespaceio.html", "namespaceio" ]
+    [ "dev", "namespacedev.html", "namespacedev" ]
 ];

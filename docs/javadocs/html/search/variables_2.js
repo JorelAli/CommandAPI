@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['chat_609',['CHAT',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_command_a_p_i_argument_type.html#a68db5a11a3a4d156358d90719cdb8715',1,'io::github::jorelali::commandapi::api::arguments::CommandAPIArgumentType']]],
-  ['chat_5fcomponent_610',['CHAT_COMPONENT',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_command_a_p_i_argument_type.html#ac272f3b738b74aa0c00eb9a6c765c1b1',1,'io::github::jorelali::commandapi::api::arguments::CommandAPIArgumentType']]],
-  ['chatcolor_611',['CHATCOLOR',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_command_a_p_i_argument_type.html#acad50c42dccdc39ebf1c3867e5bbc5cd',1,'io::github::jorelali::commandapi::api::arguments::CommandAPIArgumentType']]],
-  ['console_612',['CONSOLE',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1executors_1_1_executor_type.html#a54ec2a5d717c705cf5dfe5b865c968ca',1,'io::github::jorelali::commandapi::api::executors::ExecutorType']]],
-  ['custom_613',['CUSTOM',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_command_a_p_i_argument_type.html#a6fc9b8e958b884474ee9f300cb867550',1,'io::github::jorelali::commandapi::api::arguments::CommandAPIArgumentType']]]
+  ['chat_605',['CHAT',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ab2c0100b593092b262b53712279ea6d9',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['chat_5fcomponent_606',['CHAT_COMPONENT',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#afe6d7a47e3e6437e0edc23922c9ca167',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['chatcolor_607',['CHATCOLOR',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a9d6371d2ebffc9a0ef081e7aab36ce28',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['console_608',['CONSOLE',['../enumdev_1_1jorel_1_1commandapi_1_1executors_1_1_executor_type.html#a2f0d60861944f6cd1f6e582dcf2ac74e',1,'dev::jorel::commandapi::executors::ExecutorType']]],
+  ['custom_609',['CUSTOM',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a0df48cab5613278885fd83acc8c21951',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]]
 ];

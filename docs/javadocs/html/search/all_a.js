@@ -1,14 +1,14 @@
 var searchData=
 [
-  ['many_5fentities_198',['MANY_ENTITIES',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html#a78b5a9c2e1cb68e19e2b84c5bd30a1d4',1,'io::github::jorelali::commandapi::api::arguments::EntitySelectorArgument::EntitySelector']]],
-  ['many_5fplayers_199',['MANY_PLAYERS',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html#ac19933c3d0b46ed81659f7e871c57294',1,'io::github::jorelali::commandapi::api::arguments::EntitySelectorArgument::EntitySelector']]],
-  ['math_5foperation_200',['MATH_OPERATION',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_command_a_p_i_argument_type.html#a8474f6b50b552af7f173a25bbd4439f8',1,'io::github::jorelali::commandapi::api::arguments::CommandAPIArgumentType']]],
-  ['mathoperation_201',['MathOperation',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1wrappers_1_1_math_operation.html',1,'io::github::jorelali::commandapi::api::wrappers']]],
-  ['mathoperation_2ejava_202',['MathOperation.java',['../_math_operation_8java.html',1,'']]],
-  ['mathoperationargument_203',['MathOperationArgument',['../classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_math_operation_argument.html',1,'io.github.jorelali.commandapi.api.arguments.MathOperationArgument'],['../classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_math_operation_argument.html#ad1d75b8e96b7e4d7210c9e16be4661f3',1,'io.github.jorelali.commandapi.api.arguments.MathOperationArgument.MathOperationArgument()']]],
-  ['mathoperationargument_2ejava_204',['MathOperationArgument.java',['../_math_operation_argument_8java.html',1,'']]],
-  ['max_205',['MAX',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1wrappers_1_1_math_operation.html#aea7f1f059fca4a432aa797bc3d7ecc23',1,'io::github::jorelali::commandapi::api::wrappers::MathOperation']]],
-  ['min_206',['MIN',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1wrappers_1_1_math_operation.html#a495e4c4196380c8c9bca101d6e28fde8',1,'io::github::jorelali::commandapi::api::wrappers::MathOperation']]],
-  ['mod_207',['MOD',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1wrappers_1_1_math_operation.html#ab66889b6b23cb3fa37f38f30e332b654',1,'io::github::jorelali::commandapi::api::wrappers::MathOperation']]],
-  ['multiply_208',['MULTIPLY',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1wrappers_1_1_math_operation.html#a451c6467a9f147cf7dec73d674fc67c1',1,'io::github::jorelali::commandapi::api::wrappers::MathOperation']]]
+  ['many_5fentities_196',['MANY_ENTITIES',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html#af132746b80dc83b1e403a1b7bb3e5a03',1,'dev::jorel::commandapi::arguments::EntitySelectorArgument::EntitySelector']]],
+  ['many_5fplayers_197',['MANY_PLAYERS',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html#a4978c1626ef8f0916a4dbc67c65cc07f',1,'dev::jorel::commandapi::arguments::EntitySelectorArgument::EntitySelector']]],
+  ['math_5foperation_198',['MATH_OPERATION',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a6f23a91cb6cb79ee28311816d8cf50a8',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['mathoperation_199',['MathOperation',['../enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html',1,'dev::jorel::commandapi::wrappers']]],
+  ['mathoperation_2ejava_200',['MathOperation.java',['../_math_operation_8java.html',1,'']]],
+  ['mathoperationargument_201',['MathOperationArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_math_operation_argument.html',1,'dev.jorel.commandapi.arguments.MathOperationArgument'],['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_math_operation_argument.html#a5542d817bc4c5713573f50d19a035928',1,'dev.jorel.commandapi.arguments.MathOperationArgument.MathOperationArgument()']]],
+  ['mathoperationargument_2ejava_202',['MathOperationArgument.java',['../_math_operation_argument_8java.html',1,'']]],
+  ['max_203',['MAX',['../enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#a6bf4f82cd7b9c0f48210632a72b1b14f',1,'dev::jorel::commandapi::wrappers::MathOperation']]],
+  ['min_204',['MIN',['../enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#a08f95f6a1ab30c9b4a6db85f10579d1a',1,'dev::jorel::commandapi::wrappers::MathOperation']]],
+  ['mod_205',['MOD',['../enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#a719bdc0fd4d38c02b070170d609f4120',1,'dev::jorel::commandapi::wrappers::MathOperation']]],
+  ['multiply_206',['MULTIPLY',['../enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#adf8f8405b1d7667b43072e461b11e4ef',1,'dev::jorel::commandapi::wrappers::MathOperation']]]
 ];

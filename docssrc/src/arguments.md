@@ -27,50 +27,50 @@ To access arguments, they have to be casted to the type that the argument repres
 {{#include examples/5argumentcasting.java}}
 ```
 
-The type to cast each argument (declared in the `io.github.jorelali.commandapi.api.arguments` package) is listed below:
+The type to cast each argument (declared in the `dev.jorel.commandapi.arguments` package) is listed below:
 
-|          Argument class          |                          Data type                             |
-| -------------------------------: | :------------------------------------------------------------- |
-|      `AdvancementArgument`       |                        `org.bukkit.advancement.Advancement`    |
-|      `AxisArgument`       |                        `java.util.EnumSet<org.bukkit.Axis>`                        |
-|        `BooleanArgument`         |                          `boolean`                             |
-|       `ChatArgument`        | `net.md_5.bungee.api.chat.BaseComponent[]`             |
-|       `ChatColorArgument`        |                         `org.bukkit.ChatColor`        |
-|     `ChatComponentArgument`      |        `net.md_5.bungee.api.chat.BaseComponent[]` |
-| `CustomArgument<S>` | `S` |
-|         `DoubleArgument`         |                           `double`                             |
-|      ` EnchantmentArgument`      |               `org.bukkit.enchantments.Enchantment` |
-|    ` EntitySelectorArgument`     | `Entity`, `Player`, `Collection<Entity>`, `Collection<Player>` |
-|      ` EntityTypeArgument`       |                       `org.bukkit.entity.EntityType` |
-| `EnvironmentArgument` | `org.bukkit.World.Environment` |
-|         ` FloatArgument`         |                           `float`                              |
-|`FloatRangeArgument`| `io.github.jorelali.commandapi.api.FloatRange` |
-|       ` FunctionArgument`        | `io.github.jorelali.commandapi.api.wrappers.FunctionWrapper[]` |
-|     ` GreedyStringArgument`      |                           `String`                             |
-|        ` IntegerArgument`        |                            `int`                               |
-|integerrange|??|
-|       ` ItemStackArgument`       |                         `ItemStack`                            |
-|        ` LiteralArgument`        |                             N/A                                |
-|       ` Location2DArgument`        |                          `Location2D`                            |
-|       ` LocationArgument`        |                          `Location`                            |
-|longarg| `long`|
-|       `LootTableArgument`        |                         `LootTable`                            |
-|mathop| mathop|
-|nbt|nbt|
-|objective||
-|objectivecriteria||
-|       ` ParticleArgument`        |                          `Particle`                            |
-|         `PlayerArgument`         |                           `Player`                             |
-|     ` PotionEffectArgument`      |                      `PotionEffectType`                        |
-|         `RecipeArgument`         |                           `Recipe`                             |
-|rotation||
-|scoreboardslot||
-|`ScoreHolderArgument`|<ul><li>If `ScoreHolderType.SINGLE`: `String`</li><li>If `ScoreHolderType.MULTIPLE`: `Collection<String>`</li></ul>|
-|         `SoundArgument`          |                           `Sound`                              |
-|         `StringArgument`         |                           `String`                             |
-|`TeamArgument`|`Team`|
-|          `TextArgument`          |                           `String`                             |
-|`TimeArgument`|`int`|
+|              Argument class | Data type                                                    |
+| --------------------------: | :----------------------------------------------------------- |
+|       `AdvancementArgument` | `org.bukkit.advancement.Advancement`                         |
+|              `AxisArgument` | `java.util.EnumSet<org.bukkit.Axis>`                         |
+|           `BooleanArgument` | `boolean`                                                    |
+|              `ChatArgument` | `net.md_5.bungee.api.chat.BaseComponent[]`                   |
+|         `ChatColorArgument` | `org.bukkit.ChatColor`                                       |
+|     `ChatComponentArgument` | `net.md_5.bungee.api.chat.BaseComponent[]`                   |
+|         `CustomArgument<S>` | `S`                                                          |
+|            `DoubleArgument` | `double`                                                     |
+|      ` EnchantmentArgument` | `org.bukkit.enchantments.Enchantment`                        |
+|   ` EntitySelectorArgument` | The cast type changes depending on the input parameter:<br /><ul><li>`EntitySelector.MANY_ENTITIES` - `Collection<org.bukkit.entity.Entity>`</li><br /><li>`EntitySelector.MANY_PLAYERS` - `Collection<org.bukkit.entity.Player>`</li><br /><li>`EntitySelector.ONE_ENTITY` - `org.bukkit.entity.Entity`</li><br /><li>`EntitySelector.ONE_PLAYER` - `org.bukkit.entity.Player`</li></ul> |
+|       ` EntityTypeArgument` | `org.bukkit.entity.EntityType`                               |
+|       `EnvironmentArgument` | `org.bukkit.World.Environment`                               |
+|            ` FloatArgument` | `float`                                                      |
+|        `FloatRangeArgument` | `dev.jorel.commandapi.wrappers.FloatRange`                   |
+|         ` FunctionArgument` | `dev.jorel.commandapi.wrappers.FunctionWrapper[]`            |
+|     ` GreedyStringArgument` | `String`                                                     |
+|          ` IntegerArgument` | `int`                                                        |
+|      `IntegerRangeArgument` | `dev.jorel.commandapi.wrappers.IntegerRange`                 |
+|        ` ItemStackArgument` | `org.bukkit.inventory.ItemStack`                             |
+|          ` LiteralArgument` | N/A                                                          |
+|       ` Location2DArgument` | `dev.jorel.commandapi.wrappers.Location2D`                   |
+|         ` LocationArgument` | `org.bukkit.Location`                                        |
+|              `LongArgument` | `long`                                                       |
+|         `LootTableArgument` | `org.bukkit.loot.LootTable`                                  |
+|     `MathOperationArgument` | `dev.jorel.commandapi.wrappers.MathOperation`                |
+|       `NBTCompoundArgument` | `de.tr7zw.nbtapi.NBTContainer`                               |
+|         `ObjectiveArgument` | `String`                                                     |
+| `ObjectiveCriteriaArgument` | `String`                                                     |
+|         ` ParticleArgument` | `org.bukkit.Particle`                                        |
+|            `PlayerArgument` | `org.bukkit.entity.Player`                                   |
+|     ` PotionEffectArgument` | `org.bukkit.potion.PotionEffectType`                         |
+|            `RecipeArgument` | `org.bukkit.inventory.Recipe`                                |
+|          `RotationArgument` | `dev.jorel.commandapi.wrappers.Rotation`                     |
+|    `ScoreboardSlotArgument` | `dev.jorel.commandapi.wrappers.ScoreboardSlot`               |
+|       `ScoreHolderArgument` | The cast type changes depending on the input parameter:<br /><ul><li>`ScoreHolderType.SINGLE` - `String`</li><br /><li>`ScoreHolderType.MULTIPLE` - `Collection<String>`</li></ul> |
+|             `SoundArgument` | `org.bukkit.Sound`                                           |
+|            `StringArgument` | `String`                                                     |
+|              `TeamArgument` | `String`                                                     |
+|              `TextArgument` | `String`                                                     |
+|              `TimeArgument` | `int`                                                        |
 
 ## Arguments with overrideable suggestions
 

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['divide_614',['DIVIDE',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1wrappers_1_1_math_operation.html#a39feb1033d045a51595b9d605c7b045b',1,'io::github::jorelali::commandapi::api::wrappers::MathOperation']]]
+  ['divide_610',['DIVIDE',['../enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#ab5473a4927e1025d8d721b4ad306c825',1,'dev::jorel::commandapi::wrappers::MathOperation']]]
 ];

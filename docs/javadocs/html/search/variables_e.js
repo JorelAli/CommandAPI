@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['team_658',['TEAM',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_command_a_p_i_argument_type.html#a0654a99413359973490c72eaa1a4f4df',1,'io::github::jorelali::commandapi::api::arguments::CommandAPIArgumentType']]],
-  ['time_659',['TIME',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_command_a_p_i_argument_type.html#afa9dcd33f917489ae0470ac03f41aafb',1,'io::github::jorelali::commandapi::api::arguments::CommandAPIArgumentType']]]
+  ['team_654',['TEAM',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a72f7cc0043b1a0d16e3e84de02fed00c',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['time_655',['TIME',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ae42327b61e1cc61de34e8f6501ad624c',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]]
 ];

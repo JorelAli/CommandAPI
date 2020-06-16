@@ -1,7 +1,5 @@
 package dev.jorel.commandapi.arguments;
 
-import org.bukkit.scoreboard.Team;
-
 import dev.jorel.commandapi.CommandAPIHandler;
 
 public class TeamArgument extends Argument {
@@ -15,7 +13,7 @@ public class TeamArgument extends Argument {
 
 	@Override
 	public Class<?> getPrimitiveType() {
-		return Team.class;
+		return String.class;
 	}
 	
 	@Override

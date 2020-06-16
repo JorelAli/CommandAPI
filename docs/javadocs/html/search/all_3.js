@@ -1,6 +1,13 @@
 var searchData=
 [
-  ['divide_58',['DIVIDE',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1wrappers_1_1_math_operation.html#a39feb1033d045a51595b9d605c7b045b',1,'io::github::jorelali::commandapi::api::wrappers::MathOperation']]],
-  ['doubleargument_59',['DoubleArgument',['../classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_double_argument.html',1,'io.github.jorelali.commandapi.api.arguments.DoubleArgument'],['../classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_double_argument.html#a0ae1e7461de9dd45eeefa5c70d4f9f58',1,'io.github.jorelali.commandapi.api.arguments.DoubleArgument.DoubleArgument()'],['../classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_double_argument.html#a5e95ce1b86157afefd07b8ec9fe41b25',1,'io.github.jorelali.commandapi.api.arguments.DoubleArgument.DoubleArgument(double min)'],['../classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_double_argument.html#a091269547d8f048ce9fd478f22f1d07b',1,'io.github.jorelali.commandapi.api.arguments.DoubleArgument.DoubleArgument(double min, double max)']]],
-  ['doubleargument_2ejava_60',['DoubleArgument.java',['../_double_argument_8java.html',1,'']]]
+  ['arguments_58',['arguments',['../namespacedev_1_1jorel_1_1commandapi_1_1arguments.html',1,'dev::jorel::commandapi']]],
+  ['commandapi_59',['commandapi',['../namespacedev_1_1jorel_1_1commandapi.html',1,'dev::jorel']]],
+  ['dev_60',['dev',['../namespacedev.html',1,'']]],
+  ['divide_61',['DIVIDE',['../enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#ab5473a4927e1025d8d721b4ad306c825',1,'dev::jorel::commandapi::wrappers::MathOperation']]],
+  ['doubleargument_62',['DoubleArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_double_argument.html',1,'dev.jorel.commandapi.arguments.DoubleArgument'],['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_double_argument.html#a144963475525b9683952096e6c2e204b',1,'dev.jorel.commandapi.arguments.DoubleArgument.DoubleArgument()'],['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_double_argument.html#ac9d80bae7fd8f93b5bbed4888e08dc62',1,'dev.jorel.commandapi.arguments.DoubleArgument.DoubleArgument(double min)'],['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_double_argument.html#aa4a3024b68608454290ba7273cb6060b',1,'dev.jorel.commandapi.arguments.DoubleArgument.DoubleArgument(double min, double max)']]],
+  ['doubleargument_2ejava_63',['DoubleArgument.java',['../_double_argument_8java.html',1,'']]],
+  ['exceptions_64',['exceptions',['../namespacedev_1_1jorel_1_1commandapi_1_1exceptions.html',1,'dev::jorel::commandapi']]],
+  ['executors_65',['executors',['../namespacedev_1_1jorel_1_1commandapi_1_1executors.html',1,'dev::jorel::commandapi']]],
+  ['jorel_66',['jorel',['../namespacedev_1_1jorel.html',1,'dev']]],
+  ['wrappers_67',['wrappers',['../namespacedev_1_1jorel_1_1commandapi_1_1wrappers.html',1,'dev::jorel::commandapi']]]
 ];

@@ -1,10 +1,10 @@
 var searchData=
 [
-  ['score_5fholder_651',['SCORE_HOLDER',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_command_a_p_i_argument_type.html#a62a4cdf2f72d6b7237c5a238e7c251c8',1,'io::github::jorelali::commandapi::api::arguments::CommandAPIArgumentType']]],
-  ['scoreboard_5fslot_652',['SCOREBOARD_SLOT',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_command_a_p_i_argument_type.html#a2e8fc9c69f711cfee7421d5ee6c57dad',1,'io::github::jorelali::commandapi::api::arguments::CommandAPIArgumentType']]],
-  ['simple_5ftype_653',['SIMPLE_TYPE',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_command_a_p_i_argument_type.html#a615fb634639f2923e9e81736845b9d45',1,'io::github::jorelali::commandapi::api::arguments::CommandAPIArgumentType']]],
-  ['sound_654',['SOUND',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_command_a_p_i_argument_type.html#a5dfe9b78f68731af59963097916060c1',1,'io::github::jorelali::commandapi::api::arguments::CommandAPIArgumentType']]],
-  ['sounds_655',['SOUNDS',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_custom_provided_argument_1_1_suggestion_providers.html#a724a4e12b8e56bac1e00ff336093451d',1,'io::github::jorelali::commandapi::api::arguments::CustomProvidedArgument::SuggestionProviders']]],
-  ['subtract_656',['SUBTRACT',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1wrappers_1_1_math_operation.html#afbb371c2f021372dc700c7a06d3ae883',1,'io::github::jorelali::commandapi::api::wrappers::MathOperation']]],
-  ['swap_657',['SWAP',['../enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1wrappers_1_1_math_operation.html#af5428ae1477d66bf0bcb4d6719a8577f',1,'io::github::jorelali::commandapi::api::wrappers::MathOperation']]]
+  ['score_5fholder_647',['SCORE_HOLDER',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a60588e9a9ad67f5f57d8d45a23563693',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['scoreboard_5fslot_648',['SCOREBOARD_SLOT',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a6678226820275646611b86a611fdf560',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['simple_5ftype_649',['SIMPLE_TYPE',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#aba8f3befc75b2a07e195656c8b08e859',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['sound_650',['SOUND',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a50202c583ee37d556add1cf10d2cbf95',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['sounds_651',['SOUNDS',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_provided_argument_1_1_suggestion_providers.html#ab353c71ec5ac6d6cd87b7b606fe5c062',1,'dev::jorel::commandapi::arguments::CustomProvidedArgument::SuggestionProviders']]],
+  ['subtract_652',['SUBTRACT',['../enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#a3e793658a0d29c0f2e754d6eaae96c14',1,'dev::jorel::commandapi::wrappers::MathOperation']]],
+  ['swap_653',['SWAP',['../enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#a4879e5edbacea0f4ff3ec6b9a7cb9113',1,'dev::jorel::commandapi::wrappers::MathOperation']]]
 ];

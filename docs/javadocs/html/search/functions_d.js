@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['particleargument_574',['ParticleArgument',['../classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_particle_argument.html#a101302da57a98248157183473d9e60ea',1,'io::github::jorelali::commandapi::api::arguments::ParticleArgument']]],
-  ['playerargument_575',['PlayerArgument',['../classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_player_argument.html#aaa47808645c11d9555006b78d466bb06',1,'io::github::jorelali::commandapi::api::arguments::PlayerArgument']]],
-  ['potioneffectargument_576',['PotionEffectArgument',['../classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_potion_effect_argument.html#a4d80556d5acb8e41175d19b6e1ab4bff',1,'io::github::jorelali::commandapi::api::arguments::PotionEffectArgument']]]
+  ['particleargument_570',['ParticleArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_particle_argument.html#a7c5d9655a0e9ff553063a323f0fc50f8',1,'dev::jorel::commandapi::arguments::ParticleArgument']]],
+  ['playerargument_571',['PlayerArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_player_argument.html#ae35130934b1fbbde8d2774080b244d8d',1,'dev::jorel::commandapi::arguments::PlayerArgument']]],
+  ['potioneffectargument_572',['PotionEffectArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_potion_effect_argument.html#a1a2ef911b7ff002bbcc10d898157026e',1,'dev::jorel::commandapi::arguments::PotionEffectArgument']]]
 ];

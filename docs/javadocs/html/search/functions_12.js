@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['withaliases_597',['withAliases',['../classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1_command_a_p_i_command.html#a89e5c69abbb2718e1dff716376a73a25',1,'io::github::jorelali::commandapi::api::CommandAPICommand']]],
-  ['witharguments_598',['withArguments',['../classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1_command_a_p_i_command.html#a3112d1e79c82a762b275d36893ca4400',1,'io::github::jorelali::commandapi::api::CommandAPICommand']]],
-  ['withpermission_599',['withPermission',['../classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_argument.html#af88fa45fd650f30b488717b533bb1ebb',1,'io.github.jorelali.commandapi.api.arguments.Argument.withPermission()'],['../classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1_command_a_p_i_command.html#a83c43718d44e66c1cad30525eba92d4e',1,'io.github.jorelali.commandapi.api.CommandAPICommand.withPermission()']]],
-  ['wrappercommandsyntaxexception_600',['WrapperCommandSyntaxException',['../classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1exceptions_1_1_wrapper_command_syntax_exception.html#a5d80f6c287ddbc997fa6a94399bcd52a',1,'io::github::jorelali::commandapi::api::exceptions::WrapperCommandSyntaxException']]]
+  ['withaliases_593',['withAliases',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a4964121c94c4786ecb26e45b13f1ca78',1,'dev::jorel::commandapi::CommandAPICommand']]],
+  ['witharguments_594',['withArguments',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ae332f09db60330118975e36020cce425',1,'dev::jorel::commandapi::CommandAPICommand']]],
+  ['withpermission_595',['withPermission',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a2168e67f0a32516350b6b35ce8569130',1,'dev.jorel.commandapi.arguments.Argument.withPermission()'],['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ae5a4bf1048697f05ab049a7875b95538',1,'dev.jorel.commandapi.CommandAPICommand.withPermission()']]],
+  ['wrappercommandsyntaxexception_596',['WrapperCommandSyntaxException',['../classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_wrapper_command_syntax_exception.html#a0df2879b5a585f267c1fbe3f288066f2',1,'dev::jorel::commandapi::exceptions::WrapperCommandSyntaxException']]]
 ];
