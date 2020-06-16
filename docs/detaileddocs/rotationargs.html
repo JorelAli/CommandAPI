@@ -33,6 +33,9 @@
         
 
         
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
     </head>
     <body>
         <!-- Provide site root to javascript -->
@@ -163,26 +166,30 @@
 <tr><td><code>float getNormalizedPitch()</code></td><td>Returns a player's pitch between -90 and 90 degrees</td></tr>
 <tr><td><code>float getNormalizedYaw()</code></td><td>Returns a player's yaw between -180 and 180 degrees</td></tr>
 </tbody></table>
+<div class="example">
 <h2><a class="header" href="#example-" id="example-">Example: ???</a></h2>
 <pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 arguments.put(&quot;rotation&quot;, new RotationArgument());
 arguments.put(&quot;target&quot;, new PlayerArgument());
 
-CommandAPI.getInstance().register(&quot;rotate&quot;, arguments, (sender, args) -&gt; {
-    Rotation rotation = (Rotation) args[0];
-    Player target = (Player) args[1];
-    
-    Location newLocation = target.getLocation();
-    float newPitch = Location.normalizePitch(newLocation.getPitch() + rotation.getPitch());
-    float newYaw = Location.normalizeYaw(newLocation.getYaw() + rotation.getYaw());
-    
-    newLocation.setPitch(newPitch);
-    newLocation.setYaw(newYaw);
-    
-    target.teleport(newLocation);
-});
-</code></pre>
+new CommandAPICommand(&quot;rotate&quot;)
+    .withArguments(arguments)
+    .executes((sender, args) -&gt; {
+        Rotation rotation = (Rotation) args[0];
+        Player target = (Player) args[1];
 
+        Location newLocation = target.getLocation();
+        float newPitch = Location.normalizePitch(newLocation.getPitch() + rotation.getPitch());
+        float newYaw = Location.normalizeYaw(newLocation.getYaw() + rotation.getYaw());
+
+        newLocation.setPitch(newPitch);
+        newLocation.setYaw(newYaw);
+
+        target.teleport(newLocation);
+    })
+    .register();
+</code></pre>
+</div>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">

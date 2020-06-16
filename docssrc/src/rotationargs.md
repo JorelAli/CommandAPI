@@ -11,6 +11,8 @@ The `RotationArgument` class returns a `Rotation` object, which consists of the 
 | `float getNormalizedPitch()` | Returns a player's pitch between -90 and 90 degrees |
 | `float getNormalizedYaw()`   | Returns a player's yaw between -180 and 180 degrees |
 
+<div class="example">
+
 ## Example: ???
 
 ```java
@@ -18,18 +20,22 @@ LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 arguments.put("rotation", new RotationArgument());
 arguments.put("target", new PlayerArgument());
 
-CommandAPI.getInstance().register("rotate", arguments, (sender, args) -> {
-    Rotation rotation = (Rotation) args[0];
-    Player target = (Player) args[1];
-    
-    Location newLocation = target.getLocation();
-    float newPitch = Location.normalizePitch(newLocation.getPitch() + rotation.getPitch());
-    float newYaw = Location.normalizeYaw(newLocation.getYaw() + rotation.getYaw());
-    
-    newLocation.setPitch(newPitch);
-    newLocation.setYaw(newYaw);
-    
-    target.teleport(newLocation);
-});
+new CommandAPICommand("rotate")
+    .withArguments(arguments)
+    .executes((sender, args) -> {
+        Rotation rotation = (Rotation) args[0];
+        Player target = (Player) args[1];
+
+        Location newLocation = target.getLocation();
+        float newPitch = Location.normalizePitch(newLocation.getPitch() + rotation.getPitch());
+        float newYaw = Location.normalizeYaw(newLocation.getYaw() + rotation.getYaw());
+
+        newLocation.setPitch(newPitch);
+        newLocation.setYaw(newYaw);
+
+        target.teleport(newLocation);
+    })
+    .register();
 ```
 
+</div>

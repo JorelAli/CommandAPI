@@ -51,7 +51,7 @@ public class CommandAPI {
 
 	/**
 	 * Determines whether command registration is permitted via the CommandAPI
-	 * @return A boolean representing whether commands can be registered or not.
+	 * @return true if commands can still be registered
 	 */
 	public static boolean canRegister() {
 		return CommandAPI.canRegister;
@@ -59,7 +59,7 @@ public class CommandAPI {
 	
 	/**
 	 * Unregisters a command
-	 * @param command The name of the command to unregister
+	 * @param command the name of the command to unregister
 	 */
 	public static void unregister(String command) {
 		handler.unregister(command, false);
@@ -67,7 +67,10 @@ public class CommandAPI {
 	
 	/**
 	 * Unregisters a command, by force (removes all instances of that command)
-	 * @param command The name of the command to unregister
+	 * 
+	 * @param command the name of the command to unregister
+	 * @param force   if true, attempt to unregister all instances of the command
+	 *                across all plugins as well as minecraft, bukkit and spigot
 	 */
 	public static void unregister(String command, boolean force) {
 		if(!canRegister) {

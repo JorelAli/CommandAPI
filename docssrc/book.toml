@@ -11,6 +11,7 @@ build-dir = "./../docs/detaileddocs"
 git-repository-url = "https://github.com/JorelAli/1.13-Command-API"
 default-theme = "rust"
 additional-css = ["style.css"]
+mathjax-support = true
 
 [output.html.fold]
 enable = true

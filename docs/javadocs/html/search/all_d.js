@@ -1,23 +1,11 @@
 var searchData=
 [
-  ['package_2dinfo_2ejava_226',['package-info.java',['../package-info_8java.html',1,'']]],
-  ['particle_227',['PARTICLE',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a72c70172767e42477678454eda33e7cb',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
-  ['particleargument_228',['ParticleArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_particle_argument.html',1,'dev.jorel.commandapi.arguments.ParticleArgument'],['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_particle_argument.html#a7c5d9655a0e9ff553063a323f0fc50f8',1,'dev.jorel.commandapi.arguments.ParticleArgument.ParticleArgument()']]],
-  ['particleargument_2ejava_229',['ParticleArgument.java',['../_particle_argument_8java.html',1,'']]],
-  ['player_230',['PLAYER',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ac5739032037514f0aa89935f8d9dd2cc',1,'dev.jorel.commandapi.arguments.CommandAPIArgumentType.PLAYER()'],['../enumdev_1_1jorel_1_1commandapi_1_1executors_1_1_executor_type.html#a52ebde1677f2c3a109bc1aa2407ca1b3',1,'dev.jorel.commandapi.executors.ExecutorType.PLAYER()']]],
-  ['playerargument_231',['PlayerArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_player_argument.html',1,'dev.jorel.commandapi.arguments.PlayerArgument'],['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_player_argument.html#ae35130934b1fbbde8d2774080b244d8d',1,'dev.jorel.commandapi.arguments.PlayerArgument.PlayerArgument()']]],
-  ['playerargument_2ejava_232',['PlayerArgument.java',['../_player_argument_8java.html',1,'']]],
-  ['playercommandexecutor_233',['PlayerCommandExecutor',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_player_command_executor.html',1,'dev::jorel::commandapi::executors']]],
-  ['playercommandexecutor_2ejava_234',['PlayerCommandExecutor.java',['../_player_command_executor_8java.html',1,'']]],
-  ['playerresultingcommandexecutor_235',['PlayerResultingCommandExecutor',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_player_resulting_command_executor.html',1,'dev::jorel::commandapi::executors']]],
-  ['playerresultingcommandexecutor_2ejava_236',['PlayerResultingCommandExecutor.java',['../_player_resulting_command_executor_8java.html',1,'']]],
-  ['potion_5feffect_237',['POTION_EFFECT',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ac83b55db69689cdc2bf9d527394e46be',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
-  ['potioneffectargument_238',['PotionEffectArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_potion_effect_argument.html',1,'dev.jorel.commandapi.arguments.PotionEffectArgument'],['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_potion_effect_argument.html#a1a2ef911b7ff002bbcc10d898157026e',1,'dev.jorel.commandapi.arguments.PotionEffectArgument.PotionEffectArgument()']]],
-  ['potioneffectargument_2ejava_239',['PotionEffectArgument.java',['../_potion_effect_argument_8java.html',1,'']]],
-  ['precise_5fposition_240',['PRECISE_POSITION',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_type.html#ab0a982eafd756b64ffd940da6b306a4e',1,'dev::jorel::commandapi::arguments::LocationType']]],
-  ['proxy_241',['PROXY',['../enumdev_1_1jorel_1_1commandapi_1_1executors_1_1_executor_type.html#a3716b4662b5fdb66c4cd565a59ec7cba',1,'dev::jorel::commandapi::executors::ExecutorType']]],
-  ['proxycommandexecutor_242',['ProxyCommandExecutor',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_command_executor.html',1,'dev::jorel::commandapi::executors']]],
-  ['proxycommandexecutor_2ejava_243',['ProxyCommandExecutor.java',['../_proxy_command_executor_8java.html',1,'']]],
-  ['proxyresultingcommandexecutor_244',['ProxyResultingCommandExecutor',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_resulting_command_executor.html',1,'dev::jorel::commandapi::executors']]],
-  ['proxyresultingcommandexecutor_2ejava_245',['ProxyResultingCommandExecutor.java',['../_proxy_resulting_command_executor_8java.html',1,'']]]
+  ['particleargument_110',['ParticleArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_particle_argument.html',1,'dev.jorel.commandapi.arguments.ParticleArgument'],['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_particle_argument.html#a7c5d9655a0e9ff553063a323f0fc50f8',1,'dev.jorel.commandapi.arguments.ParticleArgument.ParticleArgument()']]],
+  ['playerargument_111',['PlayerArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_player_argument.html',1,'dev.jorel.commandapi.arguments.PlayerArgument'],['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_player_argument.html#ae35130934b1fbbde8d2774080b244d8d',1,'dev.jorel.commandapi.arguments.PlayerArgument.PlayerArgument()']]],
+  ['playercommandexecutor_112',['PlayerCommandExecutor',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_player_command_executor.html',1,'dev::jorel::commandapi::executors']]],
+  ['playerresultingcommandexecutor_113',['PlayerResultingCommandExecutor',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_player_resulting_command_executor.html',1,'dev::jorel::commandapi::executors']]],
+  ['potioneffectargument_114',['PotionEffectArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_potion_effect_argument.html',1,'dev.jorel.commandapi.arguments.PotionEffectArgument'],['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_potion_effect_argument.html#a1a2ef911b7ff002bbcc10d898157026e',1,'dev.jorel.commandapi.arguments.PotionEffectArgument.PotionEffectArgument()']]],
+  ['precise_5fposition_115',['PRECISE_POSITION',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_type.html#ab0a982eafd756b64ffd940da6b306a4e',1,'dev::jorel::commandapi::arguments::LocationType']]],
+  ['proxycommandexecutor_116',['ProxyCommandExecutor',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_command_executor.html',1,'dev::jorel::commandapi::executors']]],
+  ['proxyresultingcommandexecutor_117',['ProxyResultingCommandExecutor',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_resulting_command_executor.html',1,'dev::jorel::commandapi::executors']]]
 ];

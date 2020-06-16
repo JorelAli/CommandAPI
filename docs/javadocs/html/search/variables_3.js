@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['divide_610',['DIVIDE',['../enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#ab5473a4927e1025d8d721b4ad306c825',1,'dev::jorel::commandapi::wrappers::MathOperation']]]
+  ['precise_5fposition_321',['PRECISE_POSITION',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_type.html#ab0a982eafd756b64ffd940da6b306a4e',1,'dev::jorel::commandapi::arguments::LocationType']]]
 ];

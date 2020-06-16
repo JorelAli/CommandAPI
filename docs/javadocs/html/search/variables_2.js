@@ -1,8 +1,5 @@
 var searchData=
 [
-  ['chat_605',['CHAT',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ab2c0100b593092b262b53712279ea6d9',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
-  ['chat_5fcomponent_606',['CHAT_COMPONENT',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#afe6d7a47e3e6437e0edc23922c9ca167',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
-  ['chatcolor_607',['CHATCOLOR',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a9d6371d2ebffc9a0ef081e7aab36ce28',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
-  ['console_608',['CONSOLE',['../enumdev_1_1jorel_1_1commandapi_1_1executors_1_1_executor_type.html#a2f0d60861944f6cd1f6e582dcf2ac74e',1,'dev::jorel::commandapi::executors::ExecutorType']]],
-  ['custom_609',['CUSTOM',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a0df48cab5613278885fd83acc8c21951',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]]
+  ['one_5fentity_319',['ONE_ENTITY',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html#a3a099f0f3ec97300f6f63359f2d66375',1,'dev::jorel::commandapi::arguments::EntitySelectorArgument::EntitySelector']]],
+  ['one_5fplayer_320',['ONE_PLAYER',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html#a3872bc6c82b960b49d2a334b0f61a781',1,'dev::jorel::commandapi::arguments::EntitySelectorArgument::EntitySelector']]]
 ];

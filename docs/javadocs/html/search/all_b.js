@@ -1,9 +1,5 @@
 var searchData=
 [
-  ['nbt_5fcompound_207',['NBT_COMPOUND',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ae8aed802df31abe3b1d38e3e5e753dca',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
-  ['nbtapinotfoundexception_208',['NBTAPINotFoundException',['../classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_n_b_t_a_p_i_not_found_exception.html',1,'dev.jorel.commandapi.exceptions.NBTAPINotFoundException'],['../classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_n_b_t_a_p_i_not_found_exception.html#a5b7db4751b93434825b202912149aff3',1,'dev.jorel.commandapi.exceptions.NBTAPINotFoundException.NBTAPINotFoundException()']]],
-  ['nbtapinotfoundexception_2ejava_209',['NBTAPINotFoundException.java',['../_n_b_t_a_p_i_not_found_exception_8java.html',1,'']]],
-  ['nbtcompoundargument_210',['NBTCompoundArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_n_b_t_compound_argument.html',1,'dev.jorel.commandapi.arguments.NBTCompoundArgument'],['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_n_b_t_compound_argument.html#adec79fcddf19b00b3548e0253fbc1a2d',1,'dev.jorel.commandapi.arguments.NBTCompoundArgument.NBTCompoundArgument()']]],
-  ['nbtcompoundargument_2ejava_211',['NBTCompoundArgument.java',['../_n_b_t_compound_argument_8java.html',1,'']]],
-  ['none_212',['NONE',['../classdev_1_1jorel_1_1commandapi_1_1_command_permission.html#aae111c318e46d67d06b2613fc642da2b',1,'dev::jorel::commandapi::CommandPermission']]]
+  ['nbtapinotfoundexception_101',['NBTAPINotFoundException',['../classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_n_b_t_a_p_i_not_found_exception.html',1,'dev::jorel::commandapi::exceptions']]],
+  ['nbtcompoundargument_102',['NBTCompoundArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_n_b_t_compound_argument.html',1,'dev.jorel.commandapi.arguments.NBTCompoundArgument'],['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_n_b_t_compound_argument.html#adec79fcddf19b00b3548e0253fbc1a2d',1,'dev.jorel.commandapi.arguments.NBTCompoundArgument.NBTCompoundArgument()']]]
 ];

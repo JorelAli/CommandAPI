@@ -97,8 +97,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:abda16ea8c67725c2b51c00d31a7db851"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override the suggestions of this argument with a String array.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_overrideable_suggestions.html#abda16ea8c67725c2b51c00d31a7db851">More...</a><br /></td></tr>
 <tr class="separator:abda16ea8c67725c2b51c00d31a7db851"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2e915f68172a1c7cdabd30d9e33eb91"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_overrideable_suggestions.html#ac2e915f68172a1c7cdabd30d9e33eb91">overrideSuggestions</a> (Function&lt; CommandSender, String[]&gt; suggestions)</td></tr>
+<tr class="memdesc:ac2e915f68172a1c7cdabd30d9e33eb91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override the suggestions of this argument with a function that maps the command sender to a String array.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_overrideable_suggestions.html#ac2e915f68172a1c7cdabd30d9e33eb91">More...</a><br /></td></tr>
 <tr class="separator:ac2e915f68172a1c7cdabd30d9e33eb91"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab304da652f7c0c3ed5055c950bda4c6d"><td class="memItemLeft" align="right" valign="top">Function&lt; CommandSender, String[]&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_overrideable_suggestions.html#ab304da652f7c0c3ed5055c950bda4c6d">getOverriddenSuggestions</a> ()</td></tr>
+<tr class="memdesc:ab304da652f7c0c3ed5055c950bda4c6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a function that maps the command sender to a String array of suggestions for the current command, or <code>null</code> if this is not overridden.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_overrideable_suggestions.html#ab304da652f7c0c3ed5055c950bda4c6d">More...</a><br /></td></tr>
 <tr class="separator:ab304da652f7c0c3ed5055c950bda4c6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -120,6 +122,9 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Returns a function that maps the command sender to a String array of suggestions for the current command, or <code>null</code> if this is not overridden. </p>
+<dl class="section return"><dt>Returns</dt><dd>a function that provides suggestions, or <code>null</code> if there are no overridden suggestions. </dd></dl>
+
 </div>
 </div>
 <a id="ac2e915f68172a1c7cdabd30d9e33eb91"></a>
@@ -137,6 +142,15 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Override the suggestions of this argument with a function that maps the command sender to a String array. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">suggestions</td><td>the function to override suggestions with </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the current argument </dd></dl>
 
 </div>
 </div>
@@ -157,13 +171,14 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Override the suggestions of this argument with a String array. </p>
+<p>Typically, this is the supplier <code>s -&gt; suggestions</code>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">suggestions</td><td>The string array to override suggestions with </td></tr>
+    <tr><td class="paramname">suggestions</td><td>the string array to override suggestions with </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The argument </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the current argument </dd></dl>
 
 </div>
 </div>
@@ -175,8 +190,8 @@ Public Member Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacedev.html">dev</a></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel.html">jorel</a></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi.html">commandapi</a></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1arguments.html">arguments</a></li><li class="navelem"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_overrideable_suggestions.html">OverrideableSuggestions</a></li>
-    <li class="footer">Generated on Tue Jun 16 2020 16:31:15 for 1.13 CommandAPI JavaDocs by
+    <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1arguments.html">arguments</a></li><li class="navelem"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_overrideable_suggestions.html">OverrideableSuggestions</a></li>
+    <li class="footer">Generated on Wed Jun 17 2020 00:26:28 for 1.13 CommandAPI JavaDocs by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

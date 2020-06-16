@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['package_2dinfo_2ejava_464',['package-info.java',['../package-info_8java.html',1,'']]],
+  ['package_2dinfo_2ejava_464',['package-info.java',['../arguments_2package-info_8java.html',1,'(Global Namespace)'],['../exceptions_2package-info_8java.html',1,'(Global Namespace)'],['../executors_2package-info_8java.html',1,'(Global Namespace)'],['../wrappers_2package-info_8java.html',1,'(Global Namespace)']]],
   ['particleargument_2ejava_465',['ParticleArgument.java',['../_particle_argument_8java.html',1,'']]],
   ['playerargument_2ejava_466',['PlayerArgument.java',['../_player_argument_8java.html',1,'']]],
   ['playercommandexecutor_2ejava_467',['PlayerCommandExecutor.java',['../_player_command_executor_8java.html',1,'']]],
