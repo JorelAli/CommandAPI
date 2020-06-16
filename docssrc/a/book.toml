@@ -1,8 +1,0 @@
-[book]
-authors = ["Jorel Ali"]
-language = "en"
-multilingual = false
-src = "src"
-title = "r"
-[output.html]
-theme = "src/theme"
