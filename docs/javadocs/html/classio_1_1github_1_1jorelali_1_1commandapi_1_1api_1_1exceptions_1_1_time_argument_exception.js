@@ -1,0 +1,4 @@
+var classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1exceptions_1_1_time_argument_exception =
+[
+    [ "TimeArgumentException", "classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1exceptions_1_1_time_argument_exception.html#a7f85fa1262bf3b382f309f574d3f1ba7", null ]
+];

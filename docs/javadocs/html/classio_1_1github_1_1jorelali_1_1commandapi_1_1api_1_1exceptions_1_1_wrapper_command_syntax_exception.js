@@ -1,0 +1,5 @@
+var classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1exceptions_1_1_wrapper_command_syntax_exception =
+[
+    [ "WrapperCommandSyntaxException", "classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1exceptions_1_1_wrapper_command_syntax_exception.html#a5d80f6c287ddbc997fa6a94399bcd52a", null ],
+    [ "getException", "classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1exceptions_1_1_wrapper_command_syntax_exception.html#ac8d191e381bfa07a58ec31b198627eb2", null ]
+];

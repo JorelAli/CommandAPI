@@ -1,0 +1,4 @@
+var classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1exceptions_1_1_environment_argument_exception =
+[
+    [ "EnvironmentArgumentException", "classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1exceptions_1_1_environment_argument_exception.html#aa5c93d938380779c0c5a96d5f0a68330", null ]
+];
