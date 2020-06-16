@@ -24,50 +24,53 @@ The String value is the tooltip that is shown to a player when they are entering
 To access arguments, they have to be casted to the type that the argument represents. The order of the arguments in the `args[]` is the same as the order in which the arguments were declared.
 
 ```java
-LinkedHashMap<String, ArgumentType> arguments = new LinkedHashMap<>();
-arguments.put("arg0", new StringArgument());
-arguments.put("arg1", new PotionEffectArgument());
-arguments.put("arg2", new LocationArgument());
-
-CommandAPI.getInstance().register("cmd", arguments, (sender, args) -> {
-	String stringArg = (String) args[0];
-	PotionEffectType potionArg = (PotionEffectType) args[1];
-	Location locationArg = (Location) args[2];
-});
+{{#include examples/5argumentcasting.java}}
 ```
 
-The types of the arguments declared by the CommandAPI are all listed below:
+The type to cast each argument (declared in the `io.github.jorelali.commandapi.api.arguments` package) is listed below:
 
-## List of arguments
-
-Arguments are found in the `io.github.jorelali.commandapi.api.arguments` package.
-
-|          Argument class          |                          Data type                           |                      Description                       |
-| :------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------: |
-|      `AdvancementArgument`       |                        `Advancement`                         |                                                        |
-|        `BooleanArgument`         |                          `boolean`                           |                                                        |
-|       `ChatColorArgument`        |                         `ChatColor`                          |                                                        |
-|     `ChatComponentArgument`      |                      `BaseComponent[]`                       |                 Formatted chat object                  |
-|         `DoubleArgument`         |                           `double`                           |                                                        |
-| `DynamicSuggestedStringArgument` |                           `String`                           |       Suggested string using a supplier function       |
-|      ` EnchantmentArgument`      |                        `Enchantment`                         |                                                        |
-|    ` EntitySelectorArgument`     | `Entity`, `Player`, `Collection<Entity>`, `Collection<Player>` |      Selects an entity (similar to `@a` or `@p`)       |
-|      ` EntityTypeArgument`       |                         `EntityType`                         |          Selects a type of entity (e.g. Pig)           |
-|         ` FloatArgument`         |                           `float`                            |                                                        |
-|       ` FunctionArgument`        |                     `FunctionWrapper[]`                      |     A declared Minecraft function from a data pack     |
-|     ` GreedyStringArgument`      |                           `String`                           |                 A string of any length                 |
-|        ` IntegerArgument`        |                            `int`                             |                                                        |
-|       ` ItemStackArgument`       |                         `ItemStack`                          |          Returns an `ItemStack` with amount 1          |
-|        ` LiteralArgument`        |                             N/A                              |          A predefined hardcoded argument name          |
-|       ` LocationArgument`        |                          `Location`                          |                                                        |
-|       `LootTableArgument`        |                         `LootTable`                          |                                                        |
-|       ` ParticleArgument`        |                          `Particle`                          |                                                        |
-|         `PlayerArgument`         |                           `Player`                           | Similar to EntitySelector, but always returns 1 player |
-|     ` PotionEffectArgument`      |                      `PotionEffectType`                      |                                                        |
-|         `RecipeArgument`         |                           `Recipe`                           |                                                        |
-|         `SoundArgument`          |                           `Sound`                            |                                                        |
-|         `StringArgument`         |                           `String`                           |              String consisting of 1 word               |
-|          `TextArgument`          |                           `String`                           |      String which can have spaces (used for text)      |
+|          Argument class          |                          Data type                             |
+| -------------------------------: | :------------------------------------------------------------- |
+|      `AdvancementArgument`       |                        `org.bukkit.advancement.Advancement`    |
+|      `AxisArgument`       |                        `java.util.EnumSet<org.bukkit.Axis>`                        |
+|        `BooleanArgument`         |                          `boolean`                             |
+|       `ChatArgument`        | `net.md_5.bungee.api.chat.BaseComponent[]`             |
+|       `ChatColorArgument`        |                         `org.bukkit.ChatColor`        |
+|     `ChatComponentArgument`      |        `net.md_5.bungee.api.chat.BaseComponent[]` |
+| `CustomArgument<S>` | `S` |
+|         `DoubleArgument`         |                           `double`                             |
+|      ` EnchantmentArgument`      |               `org.bukkit.enchantments.Enchantment` |
+|    ` EntitySelectorArgument`     | `Entity`, `Player`, `Collection<Entity>`, `Collection<Player>` |
+|      ` EntityTypeArgument`       |                       `org.bukkit.entity.EntityType` |
+| `EnvironmentArgument` | `org.bukkit.World.Environment` |
+|         ` FloatArgument`         |                           `float`                              |
+|`FloatRangeArgument`| `io.github.jorelali.commandapi.api.FloatRange` |
+|       ` FunctionArgument`        | `io.github.jorelali.commandapi.api.wrappers.FunctionWrapper[]` |
+|     ` GreedyStringArgument`      |                           `String`                             |
+|        ` IntegerArgument`        |                            `int`                               |
+|integerrange|??|
+|       ` ItemStackArgument`       |                         `ItemStack`                            |
+|        ` LiteralArgument`        |                             N/A                                |
+|       ` Location2DArgument`        |                          `Location2D`                            |
+|       ` LocationArgument`        |                          `Location`                            |
+|longarg| `long`|
+|       `LootTableArgument`        |                         `LootTable`                            |
+|mathop| mathop|
+|nbt|nbt|
+|objective||
+|objectivecriteria||
+|       ` ParticleArgument`        |                          `Particle`                            |
+|         `PlayerArgument`         |                           `Player`                             |
+|     ` PotionEffectArgument`      |                      `PotionEffectType`                        |
+|         `RecipeArgument`         |                           `Recipe`                             |
+|rotation||
+|scoreboardslot||
+|`ScoreHolderArgument`|<ul><li>If `ScoreHolderType.SINGLE`: `String`</li><li>If `ScoreHolderType.MULTIPLE`: `Collection<String>`</li></ul>|
+|         `SoundArgument`          |                           `Sound`                              |
+|         `StringArgument`         |                           `String`                             |
+|`TeamArgument`|`Team`|
+|          `TextArgument`          |                           `String`                             |
+|`TimeArgument`|`int`|
 
 ## Arguments with overrideable suggestions
 

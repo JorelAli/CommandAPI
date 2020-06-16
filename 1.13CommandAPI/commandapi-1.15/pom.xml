@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>commandapi</artifactId>
-        <groupId>io.github.jorelali</groupId>
+        <groupId>dev.jorel</groupId>
         <version>3.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -18,7 +18,7 @@
             <version>1.15-R0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>io.github.jorelali</groupId>
+            <groupId>dev.jorel</groupId>
             <artifactId>commandapi-core</artifactId>
             <version>3.0</version>
             <scope>compile</scope>

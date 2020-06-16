@@ -50,10 +50,10 @@ The `CommandAPICommand` has various methods, which are outlined below:
 
 In order to register commands properly, **commands must be registered before the server finishes loading**. The CommandAPI will prevent command registration after the server has loaded. This basically means that all command registration must occur during a plugin's `onLoad()` or `onEnable()` method. With the CommandAPI, depending on whether you use `onLoad()` or `onEnable()` to load your commands depends on whether your plugin is used with Minecraft's functions:
 
-| When to load        | What to do                                                                               |
-| ------------------- | ---------------------------------------------------------------------------------------- |
+| When to load        | What to do                                                                                                     |
+| ------------------- | -------------------------------------------------------------------------------------------------------------- |
 | `onLoad()` method   | Register commands to be used in Minecraft functions ([see the Function section for more info](functions.html)) |
-| `onEnable()` method | Register regular commands                                                                |
+| `onEnable()` method | Register regular commands                                                                                      |
 
 ## Command unregistration
 

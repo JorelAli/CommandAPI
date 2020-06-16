@@ -5,7 +5,7 @@
 
 	<parent>
         <artifactId>commandapi</artifactId>
-        <groupId>io.github.jorelali</groupId>
+        <groupId>dev.jorel</groupId>
         <version>3.0</version>
     </parent>
     
@@ -15,42 +15,42 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.github.jorelali</groupId>
+            <groupId>dev.jorel</groupId>
             <artifactId>commandapi-core</artifactId>
             <version>3.0</version>
         </dependency>
         <dependency>
-            <groupId>io.github.jorelali</groupId>
+            <groupId>dev.jorel</groupId>
             <artifactId>commandapi-1.15</artifactId>
             <version>3.0</version>
         </dependency>
         <dependency>
-            <groupId>io.github.jorelali</groupId>
+            <groupId>dev.jorel</groupId>
             <artifactId>commandapi-1.14.4</artifactId>
             <version>3.0</version>
         </dependency>
         <dependency>
-            <groupId>io.github.jorelali</groupId>
+            <groupId>dev.jorel</groupId>
             <artifactId>commandapi-1.14.3</artifactId>
             <version>3.0</version>
         </dependency>
         <dependency>
-            <groupId>io.github.jorelali</groupId>
+            <groupId>dev.jorel</groupId>
             <artifactId>commandapi-1.14</artifactId>
             <version>3.0</version>
         </dependency>
         <dependency>
-            <groupId>io.github.jorelali</groupId>
+            <groupId>dev.jorel</groupId>
             <artifactId>commandapi-1.13.2</artifactId>
             <version>3.0</version>
         </dependency>
         <dependency>
-            <groupId>io.github.jorelali</groupId>
+            <groupId>dev.jorel</groupId>
             <artifactId>commandapi-1.13.1</artifactId>
             <version>3.0</version>
         </dependency>
         <dependency>
-            <groupId>io.github.jorelali</groupId>
+            <groupId>dev.jorel</groupId>
             <artifactId>commandapi-1.13</artifactId>
             <version>3.0</version>
         </dependency>
@@ -71,7 +71,7 @@
                         <configuration>
 			                <artifactSet>
 			                	<includes>
-			                		<include>io.github.jorelali:*</include>
+			                		<include>dev.jorel:*</include>
 			                	</includes>
 			                </artifactSet>
 			            </configuration>
