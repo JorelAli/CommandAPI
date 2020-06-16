@@ -2,9 +2,13 @@
 
 ## Chat color argument
 
-The `ChatColorArgument` class is used to represent a given chat color (e.g. red or green)
+The `ChatColorArgument` class is used to represent a given chat color (e.g. red or green) 
+
+<div class="example">
 
 ### Example - Username color changing plugin
+
+Say we want to create a plugin to change the username of a player. We basically want to 
 
 ```java
 LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
@@ -16,6 +20,8 @@ CommandAPI.getInstance().register("namecolor", arguments, (sender, args) -> {
 	player.setDisplayName(color + player.getDisplayName());
 });
 ```
+</div>
+
 -----
 
 # Spigot-based chat arguments
@@ -63,6 +69,8 @@ This is converted into Spigot's `BaseComponent[]`, which can be used for the fol
   sender.spigot().sendMessage(BaseComponent[]);
   ```
 
+<div class="example">
+
 ### Example - Book made from raw JSON
 
 ```java
@@ -85,6 +93,8 @@ CommandAPI.getInstance().register("makebook", arguments, (sender, args) -> {
 	}
 });
 ```
+
+</div>
 
 ## Chat argument
 

@@ -10,6 +10,7 @@ build-dir = "./../docs/detaileddocs"
 [output.html]
 git-repository-url = "https://github.com/JorelAli/1.13-Command-API"
 default-theme = "rust"
+additional-css = ["style.css"]
 
 [output.html.fold]
 enable = true

@@ -1,5 +1,9 @@
 # String arguments
 
+There are three types of arguments that return Java's `String` object. Each have their own unique set of features which make them suitable for specific needs.
+
+-----
+
 ## String argument
 
 The `StringArgument` class is used to represent a single word. These words **can only contain alphanumeric characters (A-Z, a-z and 0-9), and the underscore character**.
@@ -20,9 +24,15 @@ hello@email.com
 yesn't
 ```
 
-### Potential uses for string arguments
+<div class="example">
+
+### Examples of StringArgument uses:
 
 * Entering strings to identify offline players
+
+</div>
+
+-----
 
 ## Text argument
 
@@ -45,10 +55,17 @@ hello world
 "speech marks: ""
 ```
 
-### Potential uses for text arguments
+<div class="example">
 
-- A command to edit the contents on a sign
-- Any command that may require multiple text arguments
+
+### Examples of TextArgument uses:
+
+* Editing the contents of a sign
+* A command that requires multiple text arguments (say, username and password?)
+
+</div>
+
+-----
 
 ## Greedy string argument
 
@@ -62,18 +79,29 @@ hello world
 
 The `GreedyStringArgument` takes the `TextArgument` a step further. **Any characters and symbols are allowed** and quotation marks are not required.
 
+<div class="example">
+
 ### Example - Messaging command
 
-Say we have a command `/msg <target> <message>`
+Say we have a simple message command of the following form:
+
+```
+/msg <target> <message>
+```
+
+This would be ideal for a greedy string, since it can consume all text after the player's name:
 
 ```java
 LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 arguments.put("target", new PlayerArgument());
 arguments.put("message", new GreedyStringArgument());
 
-CommandAPI.getInstance().register("msg", arguments, (sender, args) -> {
-	((Player) args[0]).sendMessage((String) args[1]);
-});
+new CommandAPICommand("msg")
+    .withArguments(arguments)
+    .executes((sender, args) -> {
+		((Player) args[0]).sendMessage((String) args[1]);
+	})
+    .register();
 ```
 
 Any text entered after the `<target>` argument would be sent to the player. For example, the command could be used as follows:
@@ -82,15 +110,19 @@ Any text entered after the `<target>` argument would be sent to the player. For 
 /msg Skepter This is some incredibly long string with "symbols" and $p3c!aL characters~
 ```
 
+Note how this only works if the greedy string argument is _at the end_. If, say, the command was `/msg <message> <target>`, it would not be able to determine where the `<message>` argument ends and the `<target>` argument begins.
 
+</div>
 
+<div class="example">
 
-For example, if the syntax was`/msg <message> <target>`, it would not be able to determine where the message ends and the `<target>` argument begins.
+### Examples of GreedyStringArgument uses:
 
-### Potential uses for greedy strings
-
-- A messaging/whisper command
+- A messaging/whisper command (as shown in the example above)
 - A mailing command
-- Any command involving lots of text, such as a book writing command
+- Any command involving lots of text, such as a command to write the contents of a book
 - Any command which involves an unreasonable/unknown amount of arguments
 - Any command where you want to parse arguments similar to how regular Bukkit would
+
+</div>
+

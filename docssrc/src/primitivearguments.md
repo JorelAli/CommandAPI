@@ -1,22 +1,42 @@
 # Primitive arguments
 
+Primitive arguments are arguments that represent Java primitive types, such as `int`, `float`, `double`, `boolean` and `long`. These arguments are defined in their respective classes:
+
+| Primitive type | CommandAPI class  |
+| -------------- | ----------------- |
+| `int`          | `IntegerArgument` |
+| `float`        | `FloatArgument`   |
+| `double`       | `DoubleArgument`  |
+| `long`         | `LongArgument`    |
+| `boolean`      | `BooleanArgument` |
+
+These arguments simply cast to their primitive type and don't need any extra work.
+
+-----
+
 ## Boolean arguments
 
-The `BooleanArgument` class represents boolean values `true` and `false`.
+The `BooleanArgument` class represents the Boolean values `true` and `false`.
+
+<div class="example">
 
 ### Example - Config editing plugin
 
-```java
-String[] configKeys = getConfig().getKeys(true).toArray(new String[getConfig().getKeys(true).size()]);
+Say we want to create a plugin that lets you edit its own `config.yml` file using a command. To do this, let's create a command with the following structure:
 
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("config-key", new TextArgument().overrideSuggestions(configKeys));
-arguments.put("value", new BooleanArgument());
-
-CommandAPI.getInstance().register("editconfig", arguments, (sender, args) -> {
-	getConfig().set((String) args[0], (boolean) args[1]);
-});
 ```
+/editconfig <config-key> <value>
+```
+
+We first retrieve the keys from the configuration file using the typical Bukkit API. We construct our `LinkedHashMap` to hold our arguments, with the first parameter being a String key (in the form of a `TextArgument`, [overridden with an array of suggestions](TODO)). Finally, we register our command and update the config, ensuring that we cast the `BooleanArgument` to `boolean`: 
+
+```java
+{{#include examples/5.1booleanargs.java}}
+```
+
+</div>
+
+-----
 
 ## Numerical arguments
 
