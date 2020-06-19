@@ -16,8 +16,6 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -41,6 +39,8 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.CustomArgument;
+import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
+import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
 import dev.jorel.commandapi.arguments.CustomProvidedArgument;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
@@ -48,8 +48,6 @@ import dev.jorel.commandapi.arguments.Location2DArgument;
 import dev.jorel.commandapi.arguments.LocationArgument;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.ScoreHolderArgument;
-import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
-import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
 import dev.jorel.commandapi.nms.NMS;
 
 /**
@@ -108,65 +106,23 @@ public final class CommandAPIHandler {
 		CommandAPIHandler.packageName = nmsServer.getClass().getPackage().getName();
 
 		// Load higher order versioning
-		String hoVersion = null;
+		String version = null;
 		try {
-			hoVersion = (String) Class.forName(packageName + ".MinecraftServer").getDeclaredMethod("getVersion")
+			version = (String) Class.forName(packageName + ".MinecraftServer").getDeclaredMethod("getVersion")
 					.invoke(nmsServer);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
 				| SecurityException e) {
 			CommandAPIMain.getLog().severe("Failed to load higher order versioning system!");
 		}
 
-		// Handle versioning
-		Version version = new Version(packageName.split("\\Q.\\E")[3]);
-		try {
-			switch (hoVersion) {
-			case "1.13":
-				nms = (NMS) Class.forName("dev.jorel.commandapi.nms.NMS_1_13").getDeclaredConstructor()
-						.newInstance();
-				break;
-			case "1.13.1":
-				nms = (NMS) Class.forName("dev.jorel.commandapi.nms.NMS_1_13_1").getDeclaredConstructor()
-						.newInstance();
-				break;
-			case "1.13.2":
-				nms = (NMS) Class.forName("dev.jorel.commandapi.nms.NMS_1_13_2").getDeclaredConstructor()
-						.newInstance();
-				break;
-			case "1.14":
-			case "1.14.1":
-			case "1.14.2":
-				nms = (NMS) Class.forName("dev.jorel.commandapi.nms.NMS_1_14").getDeclaredConstructor()
-						.newInstance();
-				break;
-			case "1.14.3":
-				nms = (NMS) Class.forName("dev.jorel.commandapi.nms.NMS_1_14_3").getDeclaredConstructor()
-						.newInstance();
-				break;
-			case "1.14.4":
-				nms = (NMS) Class.forName("dev.jorel.commandapi.nms.NMS_1_14_4").getDeclaredConstructor()
-						.newInstance();
-				break;
-			case "1.15":
-			case "1.15.1":
-			case "1.15.2":
-				nms = (NMS) Class.forName("dev.jorel.commandapi.nms.NMS_1_15").getDeclaredConstructor()
-						.newInstance();
-				break;
-			default:
-				throw new UnsupportedClassVersionError("This version of Minecraft is unsupported: " + version);
-			}
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
-		}
+		nms = CommandAPIVersionHandler.getNMS(version);
 
 		// Log successful hooks
 		if (CommandAPIMain.getConfiguration().hasVerboseOutput()) {
 			String compatibleVersions = Arrays.toString(nms.compatibleVersions());
 			compatibleVersions = compatibleVersions.substring(1, compatibleVersions.length() - 1);
 			CommandAPIMain.getLog()
-					.info("Hooked into NMS " + version + " (compatible with " + compatibleVersions + ")");
+					.info("Hooked into NMS " + nms.getClass().getName() + " (compatible with " + compatibleVersions + ")");
 		}
 
 		// Checks other dependencies
@@ -688,47 +644,6 @@ public final class CommandAPIHandler {
 			result.setAccessible(true);
 			methods.put(key, result);
 			return result;
-		}
-	}
-
-	private class Version {
-		private int primaryVersion; // e.g. 14
-		private int rev; // e.g. 1
-
-		public Version(String version) {
-			this.primaryVersion = Integer.parseInt(version.split("_")[1]);
-
-			Matcher revMatcher = Pattern.compile("(?<=R).+").matcher(version);
-			if (revMatcher.find()) {
-				this.rev = Integer.parseInt(revMatcher.group());
-			}
-		}
-
-		@Override
-		public String toString() {
-			return "Version " + primaryVersion + " rev " + rev;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj) {
-				return true;
-			}
-			if (obj == null) {
-				return false;
-			}
-			if (getClass() != obj.getClass()) {
-				return false;
-			}
-			Version other = (Version) obj;
-
-			if (primaryVersion != other.primaryVersion) {
-				return false;
-			}
-			if (rev != other.rev) {
-				return false;
-			}
-			return true;
 		}
 	}
 
