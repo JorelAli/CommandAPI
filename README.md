@@ -1,24 +1,20 @@
 # 1.13-Command-API
 An API to use the new command UI introduced in Minecraft 1.13
 
-> # New PSA (as of 5th June)
-> I've finished all of my recent commitments and am now available to work on the 1.13-CommandAPI full time! Again, thanks to everyone for their support (issues/pull requests/contributions).
+> # New New PSA (as of 19th June)
+> As most of you are aware, the Minecraft Nether update is due on the 23rd June! Since this is indeed before the scheduled date (26th June), support for 1.16 will be prioritized before release.
 >
-> ## Project timeline
+> ## Updated project timeline
 > | Date | Project Status |
 > |------|----------------|
-> | 5th June - 19th June | Finish version 3.0, with support for Minecraft 1.15, 1.15.1 and 1.15.2 |
 > | 19th June - 26th June | Finish documentation |
+> | 23rd June - ??th June| Add support for version 1.16 |
 > | 26th June(ish) | 3.0 public release on GitHub |
-> | 26th June onwards | 1.16 support for version 3.1? |
 >
 > ## Issues that will be included
 > - Fix issue [#94](https://github.com/JorelAli/1.13-Command-API/issues/94)
 > - Proxied command senders [#93](https://github.com/JorelAli/1.13-Command-API/issues/93)
 > - Dynamic suggestions for any argument type [#85](https://github.com/JorelAli/1.13-Command-API/issues/85)
-> 
-> ## 1.16 Compatibility
-> If Minecraft 1.16 is released before the 26th June, and the spigot team are actually fast enough to provide a 1.16 API, I'll make sure version 3.0 has support for Minecraft 1.16. Otherwise, I won't let Minecraft 1.16 keep holding version 3.0's release back any further.
 
 ## Purpose
 This project provides an API to help Bukkit/Spigot developers use the new Minecraft 1.13 command UI, which includes:
