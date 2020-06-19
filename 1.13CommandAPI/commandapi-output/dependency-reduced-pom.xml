@@ -24,6 +24,14 @@
                   <include>dev.jorel:*</include>
                 </includes>
               </artifactSet>
+              <filters>
+                <filter>
+                  <artifact>dev.jorel:commandapi-core</artifact>
+                  <excludes>
+                    <exclude>dev/jorel/commandapi/CommandAPIHandler**</exclude>
+                  </excludes>
+                </filter>
+              </filters>
             </configuration>
           </execution>
         </executions>
