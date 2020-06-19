@@ -48,6 +48,7 @@ import dev.jorel.commandapi.arguments.Location2DArgument;
 import dev.jorel.commandapi.arguments.LocationArgument;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.ScoreHolderArgument;
+import dev.jorel.commandapi.exceptions.UnsupportedVersionException;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.nms.NMS_1_13;
 import dev.jorel.commandapi.nms.NMS_1_13_1;
@@ -149,7 +150,7 @@ public final class CommandAPIHandler {
 				nms = new NMS_1_15_R1();
 				break;
 			default:
-				throw new UnsupportedClassVersionError("This version of Minecraft is unsupported: " + version);
+				throw new UnsupportedVersionException("This version of Minecraft is unsupported: " + version);
 		}
 
 		// Log successful hooks
