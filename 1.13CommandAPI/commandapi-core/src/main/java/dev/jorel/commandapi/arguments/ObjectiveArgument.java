@@ -1,7 +1,5 @@
 package dev.jorel.commandapi.arguments;
 
-import org.bukkit.scoreboard.Objective;
-
 import dev.jorel.commandapi.CommandAPIHandler;
 
 public class ObjectiveArgument extends Argument {
@@ -15,7 +13,7 @@ public class ObjectiveArgument extends Argument {
 
 	@Override
 	public Class<?> getPrimitiveType() {
-		return Objective.class;
+		return String.class;
 	}
 	
 	@Override

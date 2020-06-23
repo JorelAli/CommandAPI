@@ -1,1 +1,4 @@
 # Objective arguments
+
+- ObjectiveArgument
+- ObjectiveCriteriaArgument
