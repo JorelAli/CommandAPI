@@ -222,7 +222,7 @@ new CommandAPICommand(&quot;kill&quot;)
 <p>Say we want a command to spawn a specific type of entity, similar to the <code>/summon</code> command in Vanilla Minecraft, with the addition of specifying how many entities to spawn. We want to create a command of the following form:</p>
 <pre><code>/spawnmob &lt;entity&gt; &lt;amount&gt;
 </code></pre>
-<p>Since we're trying to specify an entity type, we will use the <code>EntityTypeArgument</code> as our argument type for <code>&lt;entity&gt;</code>. We combine this with the <code>IntegerArgument</code> class with a specified range of \( 1 \le \textit{entity} \le 100 \):</p>
+<p>Since we're trying to specify an entity type, we will use the <code>EntityTypeArgument</code> as our argument type for <code>&lt;entity&gt;</code>. We combine this with the <code>IntegerArgument</code> class with a specified range of \( 1 \le \textit{amount} \le 100 \):</p>
 <pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 
 arguments.put(&quot;entity&quot;, new EntityTypeArgument());

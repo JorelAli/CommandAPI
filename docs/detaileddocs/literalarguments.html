@@ -168,20 +168,33 @@
 /gamemode spectator
 </code></pre>
 <p>Unlike regular commands (as those implemented by Bukkit for example), these four options are &quot;hardcoded&quot; - they're not &quot;suggestions&quot;. The user can <em>only</em> enter one of these four examples, no other values are allowed.</p>
+<hr />
 <h2><a class="header" href="#literal-arguments-vs-regular-arguments" id="literal-arguments-vs-regular-arguments">Literal arguments vs regular arguments</a></h2>
-<p>Unlike regular arguments that are shown in this chapter, the literal argument is <em>technically</em> not an argument. Due to this fact, the literal argument is <strong>not</strong> present in the <code>args[]</code> for the command declaration.</p>
+<p>Unlike regular arguments that are shown in this chapter, the literal argument is <em>technically</em> not an argument. Due to this fact, <strong>the literal argument is not present in the <code>args[]</code> for the command declaration.</strong></p>
+<div class="example">
 <h3><a class="header" href="#example---literal-arguments-and-regular-arguments" id="example---literal-arguments-and-regular-arguments">Example - Literal arguments and regular arguments</a></h3>
+<p>To illustrate the behavior of literal arguments, we create a command of the following form:</p>
+<pre><code>/mycommand &lt;literal&gt; &lt;text&gt;
+</code></pre>
+<p>As an example, let's declare the literal &quot;hello&quot; as a valid literal for this command. When we retrieve the result from <code>args[0]</code>, it returns the value of the <code>TextArgument</code>, as opposed to the literal &quot;hello&quot;:</p>
 <pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 arguments.put(&quot;literal&quot;, new LiteralArgument(&quot;hello&quot;));
 arguments.put(&quot;text&quot;, new TextArgument());
 
-CommandAPI.getInstance().register(&quot;mycommand&quot;, arguments, (sender, args) -&gt; {
-	/* This gives the variable &quot;text&quot; the contents of the 
-	 * TextArgument, and not the literal &quot;hello&quot; */
-	String text = (String) args[0];
-});
+new CommandAPICommand(&quot;mycommand&quot;)
+    .withArguments(arguments)
+    .executes((sender, args) -&gt; {
+        // This gives the variable &quot;text&quot; the contents of the TextArgument, and not the literal &quot;hello&quot;
+		String text = (String) args[0];
+    })
+    .register();
 </code></pre>
-<p>As you can see from this example, when you retrieve <code>args[0]</code>, it returns the value of the <code>TextArgument</code> instead of the <code>LiteralArgument</code></p>
+<p>If I were to run the following command:</p>
+<pre><code>/mycommand hello goodbye
+</code></pre>
+<p>The value of <code>text</code> in the code above would be &quot;goodbye&quot;.</p>
+</div>
+<div class="example">
 <h2><a class="header" href="#example---gamemode-command-using-literal-arguments" id="example---gamemode-command-using-literal-arguments">Example - Gamemode command using literal arguments</a></h2>
 <p>This is a demonstration of how you could create a command similar to Minecraft's <code>/gamemode</code> command by using literal arguments. To do this, we are effectively registering 4 separate commands, each called <code>/gamemode</code>, but with different literal arguments.</p>
 <pre><code class="language-java">//Create a map of gamemode names to their respective objects
@@ -199,16 +212,18 @@ for(String key : gamemodes.keySet()) {
 	arguments.put(key, new LiteralArgument(key));
     
     //Register the command as usual
-	CommandAPI.getInstance().register(&quot;gamemode&quot;, arguments, (sender, args) -&gt; {
-	    if(sender instanceof Player) {
-	        Player player = (Player) sender;
-            
+    new CommandAPICommand(&quot;gamemode&quot;)
+        .withArguments(arguments)
+        .executesPlayer((player, args) -&gt; {
             //Retrieve the object from the map via the key and NOT the args[]
 	        player.setGameMode(gamemodes.get(key));
-	    }
-	});
+        })
+        .register();
 }
 </code></pre>
+<p>Note how, since we don't have access to the literal from <code>args</code>, we must access the provided gamemode from elsewhere.</p>
+</div>
+<hr />
 <h2><a class="header" href="#literal-argument-warnings" id="literal-argument-warnings">Literal argument warnings</a></h2>
 <p>Literal arguments require a string in the constructor. If the literal is an empty String or is null, the CommandAPI will throw a <code>BadLiteralException</code>.</p>
 <p>Because literal arguments are <em>&quot;hardcoded&quot;</em>, each literal is effectively mapped to a single command. This is shown when using the configuration option <code>create-dispatcher-json: true</code> which shows the JSON result of registered commands. For instance, take the <code>/defaultgamemode</code> command:</p>

@@ -608,44 +608,44 @@ new CommandAPICommand(&quot;cmd&quot;)
 <p>The type to cast each argument (declared in the <code>dev.jorel.commandapi.arguments</code> package) is listed below:</p>
 <table><thead><tr><th align="right">Argument class</th><th align="left">Data type</th></tr></thead><tbody>
 <tr><td align="right"><code>AdvancementArgument</code></td><td align="left"><code>org.bukkit.advancement.Advancement</code></td></tr>
-<tr><td align="right"><code>AxisArgument</code></td><td align="left"><code>java.util.EnumSet&lt;org.bukkit.Axis&gt;</code></td></tr>
-<tr><td align="right"><code>BooleanArgument</code></td><td align="left"><code>boolean</code></td></tr>
-<tr><td align="right"><code>ChatArgument</code></td><td align="left"><code>net.md_5.bungee.api.chat.BaseComponent[]</code></td></tr>
-<tr><td align="right"><code>ChatColorArgument</code></td><td align="left"><code>org.bukkit.ChatColor</code></td></tr>
-<tr><td align="right"><code>ChatComponentArgument</code></td><td align="left"><code>net.md_5.bungee.api.chat.BaseComponent[]</code></td></tr>
-<tr><td align="right"><code>CustomArgument&lt;S&gt;</code></td><td align="left"><code>S</code></td></tr>
-<tr><td align="right"><code>DoubleArgument</code></td><td align="left"><code>double</code></td></tr>
+<tr><td align="right"><a href="./axisarg.html"><code>AxisArgument</code></a></td><td align="left"><code>java.util.EnumSet&lt;org.bukkit.Axis&gt;</code></td></tr>
+<tr><td align="right"><a href="./primitivearguments.html#boolean-arguments"><code>BooleanArgument</code></a></td><td align="left"><code>boolean</code></td></tr>
+<tr><td align="right"><a href="./chatarguments.html#chat-argument"><code>ChatArgument</code></a></td><td align="left"><code>net.md_5.bungee.api.chat.BaseComponent[]</code></td></tr>
+<tr><td align="right"><a href="./chatarguments.html#chat-color-argument"><code>ChatColorArgument</code></a></td><td align="left"><code>org.bukkit.ChatColor</code></td></tr>
+<tr><td align="right"><a href="./chatarguments.html#chat-component-argument"><code>ChatComponentArgument</code></a></td><td align="left"><code>net.md_5.bungee.api.chat.BaseComponent[]</code></td></tr>
+<tr><td align="right"><code>CustomArgument&lt;T&gt;</code></td><td align="left"><code>T</code></td></tr>
+<tr><td align="right"><a href="./primitivearguments.html#numerical-arguments"><code>DoubleArgument</code></a></td><td align="left"><code>double</code></td></tr>
 <tr><td align="right"><code> EnchantmentArgument</code></td><td align="left"><code>org.bukkit.enchantments.Enchantment</code></td></tr>
-<tr><td align="right"><code> EntitySelectorArgument</code></td><td align="left">The cast type changes depending on the input parameter:<br /><ul><li><code>EntitySelector.MANY_ENTITIES</code> - <code>Collection&lt;org.bukkit.entity.Entity&gt;</code></li><br /><li><code>EntitySelector.MANY_PLAYERS</code> - <code>Collection&lt;org.bukkit.entity.Player&gt;</code></li><br /><li><code>EntitySelector.ONE_ENTITY</code> - <code>org.bukkit.entity.Entity</code></li><br /><li><code>EntitySelector.ONE_PLAYER</code> - <code>org.bukkit.entity.Player</code></li></ul></td></tr>
-<tr><td align="right"><code> EntityTypeArgument</code></td><td align="left"><code>org.bukkit.entity.EntityType</code></td></tr>
+<tr><td align="right"><a href="./entityarguments.html#entity-selector-argument"><code>EntitySelectorArgument</code></a></td><td align="left">The cast type changes depending on the input parameter:<br /><ul><li><code>EntitySelector.MANY_ENTITIES</code> - <code>Collection&lt;org.bukkit.entity.Entity&gt;</code></li><br /><li><code>EntitySelector.MANY_PLAYERS</code> - <code>Collection&lt;org.bukkit.entity.Player&gt;</code></li><br /><li><code>EntitySelector.ONE_ENTITY</code> - <code>org.bukkit.entity.Entity</code></li><br /><li><code>EntitySelector.ONE_PLAYER</code> - <code>org.bukkit.entity.Player</code></li></ul></td></tr>
+<tr><td align="right"><a href="./entityarguments.html#entity-type-argument"><code>EntityTypeArgument</code></a></td><td align="left"><code>org.bukkit.entity.EntityType</code></td></tr>
 <tr><td align="right"><code>EnvironmentArgument</code></td><td align="left"><code>org.bukkit.World.Environment</code></td></tr>
-<tr><td align="right"><code> FloatArgument</code></td><td align="left"><code>float</code></td></tr>
-<tr><td align="right"><code>FloatRangeArgument</code></td><td align="left"><code>dev.jorel.commandapi.wrappers.FloatRange</code></td></tr>
+<tr><td align="right"><a href="./primitivearguments.html#numerical-arguments"><code>FloatArgument</code></a></td><td align="left"><code>float</code></td></tr>
+<tr><td align="right"><a href="./rangedarguments.html#the-integerrange--floatrange-class"><code>FloatRangeArgument</code></a></td><td align="left"><code>dev.jorel.commandapi.wrappers.FloatRange</code></td></tr>
 <tr><td align="right"><code> FunctionArgument</code></td><td align="left"><code>dev.jorel.commandapi.wrappers.FunctionWrapper[]</code></td></tr>
-<tr><td align="right"><code> GreedyStringArgument</code></td><td align="left"><code>String</code></td></tr>
-<tr><td align="right"><code> IntegerArgument</code></td><td align="left"><code>int</code></td></tr>
-<tr><td align="right"><code>IntegerRangeArgument</code></td><td align="left"><code>dev.jorel.commandapi.wrappers.IntegerRange</code></td></tr>
+<tr><td align="right"><a href="./stringarguments.html#greedy-string-argument"><code>GreedyStringArgument</code></a></td><td align="left"><code>String</code></td></tr>
+<tr><td align="right"><a href="./primitivearguments.html#numerical-arguments"><code>IntegerArgument</code></a></td><td align="left"><code>int</code></td></tr>
+<tr><td align="right"><a href="./rangedarguments.html#the-integerrange--floatrange-class"><code>IntegerRangeArgument</code></a></td><td align="left"><code>dev.jorel.commandapi.wrappers.IntegerRange</code></td></tr>
 <tr><td align="right"><code> ItemStackArgument</code></td><td align="left"><code>org.bukkit.inventory.ItemStack</code></td></tr>
-<tr><td align="right"><code> LiteralArgument</code></td><td align="left">N/A</td></tr>
-<tr><td align="right"><code> Location2DArgument</code></td><td align="left"><code>dev.jorel.commandapi.wrappers.Location2D</code></td></tr>
-<tr><td align="right"><code> LocationArgument</code></td><td align="left"><code>org.bukkit.Location</code></td></tr>
-<tr><td align="right"><code>LongArgument</code></td><td align="left"><code>long</code></td></tr>
+<tr><td align="right"><a href="./literalarguments.html"><code>LiteralArgument</code></a></td><td align="left">N/A</td></tr>
+<tr><td align="right"><a href="./locationargument.html#location-2d-space"><code>Location2DArgument</code></a></td><td align="left"><code>dev.jorel.commandapi.wrappers.Location2D</code></td></tr>
+<tr><td align="right"><a href="./locationargument.html#location-3d-space"><code>LocationArgument</code></a></td><td align="left"><code>org.bukkit.Location</code></td></tr>
+<tr><td align="right"><a href="./primitivearguments.html#numerical-arguments"><code>LongArgument</code></a></td><td align="left"><code>long</code></td></tr>
 <tr><td align="right"><code>LootTableArgument</code></td><td align="left"><code>org.bukkit.loot.LootTable</code></td></tr>
 <tr><td align="right"><code>MathOperationArgument</code></td><td align="left"><code>dev.jorel.commandapi.wrappers.MathOperation</code></td></tr>
 <tr><td align="right"><code>NBTCompoundArgument</code></td><td align="left"><code>de.tr7zw.nbtapi.NBTContainer</code></td></tr>
-<tr><td align="right"><code>ObjectiveArgument</code></td><td align="left"><code>String</code></td></tr>
-<tr><td align="right"><code>ObjectiveCriteriaArgument</code></td><td align="left"><code>String</code></td></tr>
+<tr><td align="right"><a href="./objectivearguments.html#objective-argument"><code>ObjectiveArgument</code></a></td><td align="left"><code>String</code></td></tr>
+<tr><td align="right"><a href="./objectivearguments.html#objective-criteria-argument"><code>ObjectiveCriteriaArgument</code></a></td><td align="left"><code>String</code></td></tr>
 <tr><td align="right"><code> ParticleArgument</code></td><td align="left"><code>org.bukkit.Particle</code></td></tr>
-<tr><td align="right"><code>PlayerArgument</code></td><td align="left"><code>org.bukkit.entity.Player</code></td></tr>
+<tr><td align="right"><a href="./entityarguments.html#player-argument"><code>PlayerArgument</code></a></td><td align="left"><code>org.bukkit.entity.Player</code></td></tr>
 <tr><td align="right"><code> PotionEffectArgument</code></td><td align="left"><code>org.bukkit.potion.PotionEffectType</code></td></tr>
 <tr><td align="right"><code>RecipeArgument</code></td><td align="left"><code>org.bukkit.inventory.Recipe</code></td></tr>
-<tr><td align="right"><code>RotationArgument</code></td><td align="left"><code>dev.jorel.commandapi.wrappers.Rotation</code></td></tr>
-<tr><td align="right"><code>ScoreboardSlotArgument</code></td><td align="left"><code>dev.jorel.commandapi.wrappers.ScoreboardSlot</code></td></tr>
-<tr><td align="right"><code>ScoreHolderArgument</code></td><td align="left">The cast type changes depending on the input parameter:<br /><ul><li><code>ScoreHolderType.SINGLE</code> - <code>String</code></li><br /><li><code>ScoreHolderType.MULTIPLE</code> - <code>Collection&lt;String&gt;</code></li></ul></td></tr>
+<tr><td align="right"><a href="./rotationargs.html"><code>RotationArgument</code></a></td><td align="left"><code>dev.jorel.commandapi.wrappers.Rotation</code></td></tr>
+<tr><td align="right"><a href="./scoreboardarguments.html#scoreboard-slot-argument"><code>ScoreboardSlotArgument</code></a></td><td align="left"><code>dev.jorel.commandapi.wrappers.ScoreboardSlot</code></td></tr>
+<tr><td align="right"><a href="./scoreboardarguments.html#score-holder-argument"><code>ScoreHolderArgument</code></a></td><td align="left">The cast type changes depending on the input parameter:<br /><ul><li><code>ScoreHolderType.SINGLE</code> - <code>String</code></li><br /><li><code>ScoreHolderType.MULTIPLE</code> - <code>Collection&lt;String&gt;</code></li></ul></td></tr>
 <tr><td align="right"><code>SoundArgument</code></td><td align="left"><code>org.bukkit.Sound</code></td></tr>
-<tr><td align="right"><code>StringArgument</code></td><td align="left"><code>String</code></td></tr>
-<tr><td align="right"><code>TeamArgument</code></td><td align="left"><code>String</code></td></tr>
-<tr><td align="right"><code>TextArgument</code></td><td align="left"><code>String</code></td></tr>
+<tr><td align="right"><a href="./stringarguments.html#string-argument"><code>StringArgument</code></a></td><td align="left"><code>String</code></td></tr>
+<tr><td align="right"><a href="./teamarguments.html"><code>TeamArgument</code></a></td><td align="left"><code>String</code></td></tr>
+<tr><td align="right"><a href="./stringarguments.html#text-argument"><code>TextArgument</code></a></td><td align="left"><code>String</code></td></tr>
 <tr><td align="right"><code>TimeArgument</code></td><td align="left"><code>int</code></td></tr>
 </tbody></table>
 <h2><a class="header" href="#arguments-with-overrideable-suggestions" id="arguments-with-overrideable-suggestions">Arguments with overrideable suggestions</a></h2>
@@ -1139,7 +1139,7 @@ new CommandAPICommand(&quot;kill&quot;)
 <p>Say we want a command to spawn a specific type of entity, similar to the <code>/summon</code> command in Vanilla Minecraft, with the addition of specifying how many entities to spawn. We want to create a command of the following form:</p>
 <pre><code>/spawnmob &lt;entity&gt; &lt;amount&gt;
 </code></pre>
-<p>Since we're trying to specify an entity type, we will use the <code>EntityTypeArgument</code> as our argument type for <code>&lt;entity&gt;</code>. We combine this with the <code>IntegerArgument</code> class with a specified range of \( 1 \le \textit{entity} \le 100 \):</p>
+<p>Since we're trying to specify an entity type, we will use the <code>EntityTypeArgument</code> as our argument type for <code>&lt;entity&gt;</code>. We combine this with the <code>IntegerArgument</code> class with a specified range of \( 1 \le \textit{amount} \le 100 \):</p>
 <pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 
 arguments.put(&quot;entity&quot;, new EntityTypeArgument());
@@ -1398,20 +1398,33 @@ CommandAPI.getInstance().register(&quot;bigmsg&quot;, arguments, (sender, args) 
 /gamemode spectator
 </code></pre>
 <p>Unlike regular commands (as those implemented by Bukkit for example), these four options are &quot;hardcoded&quot; - they're not &quot;suggestions&quot;. The user can <em>only</em> enter one of these four examples, no other values are allowed.</p>
+<hr />
 <h2><a class="header" href="#literal-arguments-vs-regular-arguments" id="literal-arguments-vs-regular-arguments">Literal arguments vs regular arguments</a></h2>
-<p>Unlike regular arguments that are shown in this chapter, the literal argument is <em>technically</em> not an argument. Due to this fact, the literal argument is <strong>not</strong> present in the <code>args[]</code> for the command declaration.</p>
+<p>Unlike regular arguments that are shown in this chapter, the literal argument is <em>technically</em> not an argument. Due to this fact, <strong>the literal argument is not present in the <code>args[]</code> for the command declaration.</strong></p>
+<div class="example">
 <h3><a class="header" href="#example---literal-arguments-and-regular-arguments" id="example---literal-arguments-and-regular-arguments">Example - Literal arguments and regular arguments</a></h3>
+<p>To illustrate the behavior of literal arguments, we create a command of the following form:</p>
+<pre><code>/mycommand &lt;literal&gt; &lt;text&gt;
+</code></pre>
+<p>As an example, let's declare the literal &quot;hello&quot; as a valid literal for this command. When we retrieve the result from <code>args[0]</code>, it returns the value of the <code>TextArgument</code>, as opposed to the literal &quot;hello&quot;:</p>
 <pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 arguments.put(&quot;literal&quot;, new LiteralArgument(&quot;hello&quot;));
 arguments.put(&quot;text&quot;, new TextArgument());
 
-CommandAPI.getInstance().register(&quot;mycommand&quot;, arguments, (sender, args) -&gt; {
-	/* This gives the variable &quot;text&quot; the contents of the 
-	 * TextArgument, and not the literal &quot;hello&quot; */
-	String text = (String) args[0];
-});
+new CommandAPICommand(&quot;mycommand&quot;)
+    .withArguments(arguments)
+    .executes((sender, args) -&gt; {
+        // This gives the variable &quot;text&quot; the contents of the TextArgument, and not the literal &quot;hello&quot;
+		String text = (String) args[0];
+    })
+    .register();
 </code></pre>
-<p>As you can see from this example, when you retrieve <code>args[0]</code>, it returns the value of the <code>TextArgument</code> instead of the <code>LiteralArgument</code></p>
+<p>If I were to run the following command:</p>
+<pre><code>/mycommand hello goodbye
+</code></pre>
+<p>The value of <code>text</code> in the code above would be &quot;goodbye&quot;.</p>
+</div>
+<div class="example">
 <h2><a class="header" href="#example---gamemode-command-using-literal-arguments" id="example---gamemode-command-using-literal-arguments">Example - Gamemode command using literal arguments</a></h2>
 <p>This is a demonstration of how you could create a command similar to Minecraft's <code>/gamemode</code> command by using literal arguments. To do this, we are effectively registering 4 separate commands, each called <code>/gamemode</code>, but with different literal arguments.</p>
 <pre><code class="language-java">//Create a map of gamemode names to their respective objects
@@ -1429,16 +1442,18 @@ for(String key : gamemodes.keySet()) {
 	arguments.put(key, new LiteralArgument(key));
     
     //Register the command as usual
-	CommandAPI.getInstance().register(&quot;gamemode&quot;, arguments, (sender, args) -&gt; {
-	    if(sender instanceof Player) {
-	        Player player = (Player) sender;
-            
+    new CommandAPICommand(&quot;gamemode&quot;)
+        .withArguments(arguments)
+        .executesPlayer((player, args) -&gt; {
             //Retrieve the object from the map via the key and NOT the args[]
 	        player.setGameMode(gamemodes.get(key));
-	    }
-	});
+        })
+        .register();
 }
 </code></pre>
+<p>Note how, since we don't have access to the literal from <code>args</code>, we must access the provided gamemode from elsewhere.</p>
+</div>
+<hr />
 <h2><a class="header" href="#literal-argument-warnings" id="literal-argument-warnings">Literal argument warnings</a></h2>
 <p>Literal arguments require a string in the constructor. If the literal is an empty String or is null, the CommandAPI will throw a <code>BadLiteralException</code>.</p>
 <p>Because literal arguments are <em>&quot;hardcoded&quot;</em>, each literal is effectively mapped to a single command. This is shown when using the configuration option <code>create-dispatcher-json: true</code> which shows the JSON result of registered commands. For instance, take the <code>/defaultgamemode</code> command:</p>

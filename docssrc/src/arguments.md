@@ -29,48 +29,48 @@ To access arguments, they have to be casted to the type that the argument repres
 
 The type to cast each argument (declared in the `dev.jorel.commandapi.arguments` package) is listed below:
 
-|              Argument class | Data type                                                    |
-| --------------------------: | :----------------------------------------------------------- |
-|       `AdvancementArgument` | `org.bukkit.advancement.Advancement`                         |
-|              `AxisArgument` | `java.util.EnumSet<org.bukkit.Axis>`                         |
-|           `BooleanArgument` | `boolean`                                                    |
-|              `ChatArgument` | `net.md_5.bungee.api.chat.BaseComponent[]`                   |
-|         `ChatColorArgument` | `org.bukkit.ChatColor`                                       |
-|     `ChatComponentArgument` | `net.md_5.bungee.api.chat.BaseComponent[]`                   |
-|         `CustomArgument<S>` | `S`                                                          |
-|            `DoubleArgument` | `double`                                                     |
-|      ` EnchantmentArgument` | `org.bukkit.enchantments.Enchantment`                        |
-|   ` EntitySelectorArgument` | The cast type changes depending on the input parameter:<br /><ul><li>`EntitySelector.MANY_ENTITIES` - `Collection<org.bukkit.entity.Entity>`</li><br /><li>`EntitySelector.MANY_PLAYERS` - `Collection<org.bukkit.entity.Player>`</li><br /><li>`EntitySelector.ONE_ENTITY` - `org.bukkit.entity.Entity`</li><br /><li>`EntitySelector.ONE_PLAYER` - `org.bukkit.entity.Player`</li></ul> |
-|       ` EntityTypeArgument` | `org.bukkit.entity.EntityType`                               |
-|       `EnvironmentArgument` | `org.bukkit.World.Environment`                               |
-|            ` FloatArgument` | `float`                                                      |
-|        `FloatRangeArgument` | `dev.jorel.commandapi.wrappers.FloatRange`                   |
-|         ` FunctionArgument` | `dev.jorel.commandapi.wrappers.FunctionWrapper[]`            |
-|     ` GreedyStringArgument` | `String`                                                     |
-|          ` IntegerArgument` | `int`                                                        |
-|      `IntegerRangeArgument` | `dev.jorel.commandapi.wrappers.IntegerRange`                 |
-|        ` ItemStackArgument` | `org.bukkit.inventory.ItemStack`                             |
-|          ` LiteralArgument` | N/A                                                          |
-|       ` Location2DArgument` | `dev.jorel.commandapi.wrappers.Location2D`                   |
-|         ` LocationArgument` | `org.bukkit.Location`                                        |
-|              `LongArgument` | `long`                                                       |
-|         `LootTableArgument` | `org.bukkit.loot.LootTable`                                  |
-|     `MathOperationArgument` | `dev.jorel.commandapi.wrappers.MathOperation`                |
-|       `NBTCompoundArgument` | `de.tr7zw.nbtapi.NBTContainer`                               |
-|         `ObjectiveArgument` | `String`                                                     |
-| `ObjectiveCriteriaArgument` | `String`                                                     |
-|         ` ParticleArgument` | `org.bukkit.Particle`                                        |
-|            `PlayerArgument` | `org.bukkit.entity.Player`                                   |
-|     ` PotionEffectArgument` | `org.bukkit.potion.PotionEffectType`                         |
-|            `RecipeArgument` | `org.bukkit.inventory.Recipe`                                |
-|          `RotationArgument` | `dev.jorel.commandapi.wrappers.Rotation`                     |
-|    `ScoreboardSlotArgument` | `dev.jorel.commandapi.wrappers.ScoreboardSlot`               |
-|       `ScoreHolderArgument` | The cast type changes depending on the input parameter:<br /><ul><li>`ScoreHolderType.SINGLE` - `String`</li><br /><li>`ScoreHolderType.MULTIPLE` - `Collection<String>`</li></ul> |
-|             `SoundArgument` | `org.bukkit.Sound`                                           |
-|            `StringArgument` | `String`                                                     |
-|              `TeamArgument` | `String`                                                     |
-|              `TextArgument` | `String`                                                     |
-|              `TimeArgument` | `int`                                                        |
+|                                               Argument class | Data type                                                    |
+| -----------------------------------------------------------: | :----------------------------------------------------------- |
+|                                        `AdvancementArgument` | `org.bukkit.advancement.Advancement`                         |
+|                               [`AxisArgument`](./axisarg.md) | `java.util.EnumSet<org.bukkit.Axis>`                         |
+| [`BooleanArgument`](./primitivearguments.md#boolean-arguments) | `boolean`                                                    |
+|           [`ChatArgument`](./chatarguments.md#chat-argument) | `net.md_5.bungee.api.chat.BaseComponent[]`                   |
+| [`ChatColorArgument`](./chatarguments.md#chat-color-argument) | `org.bukkit.ChatColor`                                       |
+| [`ChatComponentArgument`](./chatarguments.md#chat-component-argument) | `net.md_5.bungee.api.chat.BaseComponent[]`                   |
+|                                          `CustomArgument<T>` | `T`                                                          |
+| [`DoubleArgument`](./primitivearguments.md#numerical-arguments) | `double`                                                     |
+|                                       ` EnchantmentArgument` | `org.bukkit.enchantments.Enchantment`                        |
+| [`EntitySelectorArgument`](./entityarguments.md#entity-selector-argument) | The cast type changes depending on the input parameter:<br /><ul><li>`EntitySelector.MANY_ENTITIES` - `Collection<org.bukkit.entity.Entity>`</li><br /><li>`EntitySelector.MANY_PLAYERS` - `Collection<org.bukkit.entity.Player>`</li><br /><li>`EntitySelector.ONE_ENTITY` - `org.bukkit.entity.Entity`</li><br /><li>`EntitySelector.ONE_PLAYER` - `org.bukkit.entity.Player`</li></ul> |
+| [`EntityTypeArgument`](./entityarguments.md#entity-type-argument) | `org.bukkit.entity.EntityType`                               |
+|                                        `EnvironmentArgument` | `org.bukkit.World.Environment`                               |
+| [`FloatArgument`](./primitivearguments.md#numerical-arguments) | `float`                                                      |
+| [`FloatRangeArgument`](./rangedarguments.md#the-integerrange--floatrange-class) | `dev.jorel.commandapi.wrappers.FloatRange`                   |
+|                                          ` FunctionArgument` | `dev.jorel.commandapi.wrappers.FunctionWrapper[]`            |
+| [`GreedyStringArgument`](./stringarguments.md#greedy-string-argument) | `String`                                                     |
+| [`IntegerArgument`](./primitivearguments.md#numerical-arguments) | `int`                                                        |
+| [`IntegerRangeArgument`](./rangedarguments.md#the-integerrange--floatrange-class) | `dev.jorel.commandapi.wrappers.IntegerRange`                 |
+|                                         ` ItemStackArgument` | `org.bukkit.inventory.ItemStack`                             |
+|                                           [`LiteralArgument`](./literalarguments.md) | N/A                                                          |
+| [`Location2DArgument`](./locationargument.md#location-2d-space) | `dev.jorel.commandapi.wrappers.Location2D`                   |
+| [`LocationArgument`](./locationargument.md#location-3d-space) | `org.bukkit.Location`                                        |
+| [`LongArgument`](./primitivearguments.md#numerical-arguments) | `long`                                                       |
+|                                          `LootTableArgument` | `org.bukkit.loot.LootTable`                                  |
+|                                      `MathOperationArgument` | `dev.jorel.commandapi.wrappers.MathOperation`                |
+|                                        `NBTCompoundArgument` | `de.tr7zw.nbtapi.NBTContainer`                               |
+| [`ObjectiveArgument`](./objectivearguments.md#objective-argument) | `String`                                                     |
+| [`ObjectiveCriteriaArgument`](./objectivearguments.md#objective-criteria-argument) | `String`                                                     |
+|                                          ` ParticleArgument` | `org.bukkit.Particle`                                        |
+|     [`PlayerArgument`](./entityarguments.md#player-argument) | `org.bukkit.entity.Player`                                   |
+|                                      ` PotionEffectArgument` | `org.bukkit.potion.PotionEffectType`                         |
+|                                             `RecipeArgument` | `org.bukkit.inventory.Recipe`                                |
+|                      [`RotationArgument`](./rotationargs.md) | `dev.jorel.commandapi.wrappers.Rotation`                     |
+| [`ScoreboardSlotArgument`](./scoreboardarguments.md#scoreboard-slot-argument) | `dev.jorel.commandapi.wrappers.ScoreboardSlot`               |
+| [`ScoreHolderArgument`](./scoreboardarguments.md#score-holder-argument) | The cast type changes depending on the input parameter:<br /><ul><li>`ScoreHolderType.SINGLE` - `String`</li><br /><li>`ScoreHolderType.MULTIPLE` - `Collection<String>`</li></ul> |
+|                                              `SoundArgument` | `org.bukkit.Sound`                                           |
+|     [`StringArgument`](./stringarguments.md#string-argument) | `String`                                                     |
+|                         [`TeamArgument`](./teamarguments.md) | `String`                                                     |
+|         [`TextArgument`](./stringarguments.md#text-argument) | `String`                                                     |
+|                                               `TimeArgument` | `int`                                                        |
 
 ## Arguments with overrideable suggestions
 

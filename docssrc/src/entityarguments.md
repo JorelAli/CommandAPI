@@ -72,7 +72,7 @@ Say we want a command to spawn a specific type of entity, similar to the `/summo
 /spawnmob <entity> <amount>
 ```
 
-Since we're trying to specify an entity type, we will use the `EntityTypeArgument` as our argument type for `<entity>`. We combine this with the `IntegerArgument` class with a specified range of \\( 1 \le \textit{entity} \le 100 \\):
+Since we're trying to specify an entity type, we will use the `EntityTypeArgument` as our argument type for `<entity>`. We combine this with the `IntegerArgument` class with a specified range of \\( 1 \le \textit{amount} \le 100 \\):
 
 ```java
 {{ #include examples/5.6entitytype.java }}

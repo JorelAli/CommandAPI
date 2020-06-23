@@ -17,25 +17,49 @@ It consists of a gamemode, followed by an optional player argument. The list of 
 
 Unlike regular commands (as those implemented by Bukkit for example), these four options are "hardcoded" - they're not "suggestions". The user can _only_ enter one of these four examples, no other values are allowed.
 
+-----
+
 ## Literal arguments vs regular arguments
 
-Unlike regular arguments that are shown in this chapter, the literal argument is _technically_ not an argument. Due to this fact, the literal argument is **not** present in the `args[]` for the command declaration.
+Unlike regular arguments that are shown in this chapter, the literal argument is _technically_ not an argument. Due to this fact, **the literal argument is not present in the `args[]` for the command declaration.**
+
+<div class="example">
 
 ### Example - Literal arguments and regular arguments
+
+To illustrate the behavior of literal arguments, we create a command of the following form:
+
+```
+/mycommand <literal> <text>
+```
+
+As an example, let's declare the literal "hello" as a valid literal for this command. When we retrieve the result from `args[0]`, it returns the value of the `TextArgument`, as opposed to the literal "hello":
 
 ```java
 LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 arguments.put("literal", new LiteralArgument("hello"));
 arguments.put("text", new TextArgument());
 
-CommandAPI.getInstance().register("mycommand", arguments, (sender, args) -> {
-	/* This gives the variable "text" the contents of the 
-	 * TextArgument, and not the literal "hello" */
-	String text = (String) args[0];
-});
+new CommandAPICommand("mycommand")
+    .withArguments(arguments)
+    .executes((sender, args) -> {
+        // This gives the variable "text" the contents of the TextArgument, and not the literal "hello"
+		String text = (String) args[0];
+    })
+    .register();
 ```
 
-As you can see from this example, when you retrieve `args[0]`, it returns the value of the `TextArgument` instead of the `LiteralArgument`
+If I were to run the following command:
+
+```
+/mycommand hello goodbye
+```
+
+The value of `text` in the code above would be "goodbye".
+
+</div>
+
+<div class="example">
 
 ## Example - Gamemode command using literal arguments
 
@@ -57,16 +81,21 @@ for(String key : gamemodes.keySet()) {
 	arguments.put(key, new LiteralArgument(key));
     
     //Register the command as usual
-	CommandAPI.getInstance().register("gamemode", arguments, (sender, args) -> {
-	    if(sender instanceof Player) {
-	        Player player = (Player) sender;
-            
+    new CommandAPICommand("gamemode")
+        .withArguments(arguments)
+        .executesPlayer((player, args) -> {
             //Retrieve the object from the map via the key and NOT the args[]
 	        player.setGameMode(gamemodes.get(key));
-	    }
-	});
+        })
+        .register();
 }
 ```
+
+Note how, since we don't have access to the literal from `args`, we must access the provided gamemode from elsewhere.
+
+</div>
+
+-----
 
 ## Literal argument warnings
 
