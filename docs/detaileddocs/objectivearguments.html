@@ -195,11 +195,31 @@ new CommandAPICommand(&quot;sidebar&quot;)
 </code></pre>
 </div>
 <hr />
-<ul>
-<li>ObjectiveArgument</li>
-<li>ObjectiveCriteriaArgument</li>
-</ul>
+<h2><a class="header" href="#objective-criteria-argument" id="objective-criteria-argument">Objective criteria argument</a></h2>
+<p>The <code>ObjectiveCriteriaArgument</code> is fairly straight forward - it represents the criteria for an objective. Similar to Bukkit, the objective criteria is simply represented as a <code>String</code>, so it must be casted to a <code>String</code> when being used.</p>
+<div class="example">
+<h3><a class="header" href="#example---unregister-all-objectives-by-criteria" id="example---unregister-all-objectives-by-criteria">Example - Unregister all objectives by criteria</a></h3>
+<p>Say we wanted to create a command to unregister all commands based on a given criteria. Let's create a command with the following form:</p>
+<pre><code>/unregisterall &lt;objective critera&gt;
+</code></pre>
+<p>To do this, we're going to take advantage of Bukkit's <code>Scoreboard.getObjectivesByCriteria(String)</code> method</p>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;objective criteria&quot;, new ObjectiveCriteriaArgument());
 
+new CommandAPICommand(&quot;unregisterall&quot;)
+    .withArguments(arguments)
+    .executes((sender, args) -&gt; {
+        String objectiveCriteria = (String) args[0];
+        Set&lt;Objective&gt; objectives = Bukkit.getScoreboardManager().getMainScoreboard().getObjectivesByCriteria(objectiveCriteria);
+        
+        //Unregister the objectives
+        for(Objective objective : objectives) {
+            objective.unregister();
+        }
+    })
+    .register();
+</code></pre>
+</div>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">

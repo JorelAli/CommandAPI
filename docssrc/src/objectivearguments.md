@@ -28,31 +28,31 @@ As an example, let's create a command to move an objective to a player's sidebar
 Given that an objective has to be casted to a String, we have to find a way to convert it from its name to a Bukkit `Objective` object. We can do that by using the `getObjective(String)` method from a Bukkit `Scoreboard`:
 
 ```java
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("objective", new ObjectiveArgument());
-
-new CommandAPICommand("sidebar")
-    .withArguments(arguments)
-    .executes((sender, args) -> {
-        //The ObjectArgument must be casted to a String
-        String objectiveName = (String) args[0];
-        
-        //An objective name can be turned into an Objective using getObjective(String)
-        Objective objective = Bukkit.getScoreboardManager().getMainScoreboard().getObjective(objectiveName);
-        
-        //Set display slot
-        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-    })
-    .register();
+{{ #include examples/5.7.2objective.java }}
 ```
 
 </div>
 
 -----
 
+## Objective criteria argument
 
+The `ObjectiveCriteriaArgument` is fairly straight forward - it represents the criteria for an objective. Similar to Bukkit, the objective criteria is simply represented as a `String`, so it must be casted to a `String` when being used.
 
+<div class="example">
 
+### Example - Unregister all objectives by criteria
 
-- ObjectiveArgument
-- ObjectiveCriteriaArgument
+Say we wanted to create a command to unregister all commands based on a given criteria. Let's create a command with the following form:
+
+```
+/unregisterall <objective critera>
+```
+
+To do this, we're going to take advantage of Bukkit's `Scoreboard.getObjectivesByCriteria(String)` method
+
+```java
+{{ #include examples/5.7.2objectivecriteria.java }}
+```
+
+</div>
