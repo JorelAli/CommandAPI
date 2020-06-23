@@ -13,35 +13,38 @@ The `EntitySelectorArgument` constructor requires an `EntitySelector` argument t
 
 The return type is the type to be cast when retrieved from the `Object[] args` in the command declaration.
 
+<div class="example">
+
 ### Example - Kill entities command
 
-```java
-//LinkedHashMap to store arguments for the command
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+Say we want a command to kill certain types of entities. Typically, this would be implemented using a simple command like:
 
-//Using a collective entity selector to select multiple entities
-arguments.put("entities", new EntitySelectorArgument(EntitySelector.MANY_ENTITIES));
-
-CommandAPI.getInstance().register("kill", arguments, (sender, args) -> {
-    
-	//Parse the argument as a collection of entities (as stated above in the documentation)
-	Collection<Entity> entities = (Collection<Entity>) args[0];
-	sender.sendMessage("killed " + entities.size() + "entities");
-	for(Entity e : entity)
-		e.remove();
-});
+```
+/kill <player>
+/kill <mob type>
+/kill <radius>
 ```
 
-Example command usage for the above code would be:
+Instead, we can combine all of these into one by using the `EntitySelectorArgument`. We want to be able to target multiple entities at a time, so we want to use the `EntitySelector.MANY_ENTITIES` value in our constructor. We can simply retrieve the `Collection<Entity>` from this argument and iteratively kill each entity:
 
-* Kill all cows:
+```java
+{{ #include examples/5.6entityselector.java }}
+```
+
+We could then use this to target specific entities, for example:
+
+* To kill all cows:
   ```
   /kill @e[type=cow]
   ```
-* Kill the 10 furthest pigs from the command sender:
+* To kill the 10 furthest pigs from the command sender:
   ```
   /kill @e[type=pig,limit=10,sort=furthest]
   ```
+
+</div>
+
+-----
 
 ## Player argument
 
@@ -50,23 +53,29 @@ The `PlayerArgument` class is very similar _(almost identical)_ to `EntitySelect
 > **Developer's Note:** 
 >
 > I've not tested the `PlayerArgument` enough to recommend using it over the `EntitySelectorArgument(EntitySelector.ONE_PLAYER)`. There may be other advantages to using this than the regular EntitySelectorArgument, but as of writing this documentation, I know not of the advantages nor disadvantages to using this argument type. Internally, the `PlayerArgument` uses the `GameProfile` class from Mojang's authlib, which may be able to retrieve offline players (untested).
+>
+> _(Of course, if anyone is able to confirm any major differences between the `PlayerArgument` and the `EntitySelectorArgument(EntitySelector.ONE_PLAYER)`, I would be more than happy to include your findings in the documentation. If so, feel free to make a documentation amendment [here](https://github.com/JorelAli/1.13-Command-API/issues/new/choose).)_
+
+-----
 
 ## Entity type argument
 
 The `EntityTypeArgument` class is used to retrieve a type of entity as defined in the [`EntityType`](https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html) enum. In other words, this is an entity type, for example a pig or a zombie.
 
+<div class="example">
+
 ### Example - Spawning entities
 
-```java
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+Say we want a command to spawn a specific type of entity, similar to the `/summon` command in Vanilla Minecraft, with the addition of specifying how many entities to spawn. We want to create a command of the following form:
 
-arguments.put("entity", new EntityTypeArgument());
-arguments.put("amount", new IntegerArgument(1, 100)); //Prevent spawning too many entities
-
-CommandAPI.getInstance().register("spawnmob", arguments, (sender, args) -> {
-	Player player = (Player) sender;
-	for(int i = 0; i < (int) args[1]; i++) {
-		player.getWorld().spawnEntity(player.getLocation(), (EntityType) args[0]);
-	}
-});
 ```
+/spawnmob <entity> <amount>
+```
+
+Since we're trying to specify an entity type, we will use the `EntityTypeArgument` as our argument type for `<entity>`. We combine this with the `IntegerArgument` class with a specified range of \\( 1 \le \textit{entity} \le 100 \\):
+
+```java
+{{ #include examples/5.6entitytype.java }}
+```
+
+</div>
