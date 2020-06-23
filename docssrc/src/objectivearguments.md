@@ -1,4 +1,58 @@
 # Objective arguments
 
+In the CommandAPI, objectives are split into two classes: 
+
+- The `ObjectiveArgument` class, which represents objectives as a whole
+- The `ObjectiveCriteriaArgument` class, which represents objective criteria
+
+-----
+
+## Objective argument
+
+The objective argument refers to a single scoreboard objective. Unconventionally, the `ObjectiveArgument` must be cast to `String` due to implementation limitations.
+
+> **Developer's Note:**
+>
+> The two classes `ObjectiveArgument` and `TeamArgument` must both be cast to `String`, as opposed to `Objective` and `Team` respectively. This is due to the fact that commands are typically registered in the `onLoad()` method during a plugin's initialization. At this point in the server start-up sequence, the main server scoreboard is not initialized, so it cannot be used.
+
+<div class="example">
+
+### Example - Move objective to sidebar
+
+As an example, let's create a command to move an objective to a player's sidebar. To do this, we will use the following command structure:
+
+```
+/sidebar <objective>
+```
+
+Given that an objective has to be casted to a String, we have to find a way to convert it from its name to a Bukkit `Objective` object. We can do that by using the `getObjective(String)` method from a Bukkit `Scoreboard`:
+
+```java
+LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+arguments.put("objective", new ObjectiveArgument());
+
+new CommandAPICommand("sidebar")
+    .withArguments(arguments)
+    .executes((sender, args) -> {
+        //The ObjectArgument must be casted to a String
+        String objectiveName = (String) args[0];
+        
+        //An objective name can be turned into an Objective using getObjective(String)
+        Objective objective = Bukkit.getScoreboardManager().getMainScoreboard().getObjective(objectiveName);
+        
+        //Set display slot
+        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+    })
+    .register();
+```
+
+</div>
+
+-----
+
+
+
+
+
 - ObjectiveArgument
 - ObjectiveCriteriaArgument

@@ -236,7 +236,7 @@ arguments.put(&quot;slot&quot;, new ScoreboardSlotArgument());
 new CommandAPICommand(&quot;clearobjectives&quot;)
     .withArguments(arguments)
     .executes((sender, args) -&gt; {
-		Scoreboard scoreboard = Bukkit.getScoreboardManager.getMainScoreboard();
+		Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
         DisplaySlot slot = ((ScoreboardSlot) args[0]).getDisplaySlot();
         scoreboard.clearSlot(slot);
     })

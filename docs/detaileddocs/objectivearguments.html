@@ -158,6 +158,43 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#objective-arguments" id="objective-arguments">Objective arguments</a></h1>
+<p>In the CommandAPI, objectives are split into two classes: </p>
+<ul>
+<li>The <code>ObjectiveArgument</code> class, which represents objectives as a whole</li>
+<li>The <code>ObjectiveCriteriaArgument</code> class, which represents objective criteria</li>
+</ul>
+<hr />
+<h2><a class="header" href="#objective-argument" id="objective-argument">Objective argument</a></h2>
+<p>The objective argument refers to a single scoreboard objective. Unconventionally, the <code>ObjectiveArgument</code> must be cast to <code>String</code> due to implementation limitations.</p>
+<blockquote>
+<p><strong>Developer's Note:</strong></p>
+<p>The two classes <code>ObjectiveArgument</code> and <code>TeamArgument</code> must both be cast to <code>String</code>, as opposed to <code>Objective</code> and <code>Team</code> respectively. This is due to the fact that commands are typically registered in the <code>onLoad()</code> method during a plugin's initialization. At this point in the server start-up sequence, the main server scoreboard is not initialized, so it cannot be used.</p>
+</blockquote>
+<div class="example">
+<h3><a class="header" href="#example---move-objective-to-sidebar" id="example---move-objective-to-sidebar">Example - Move objective to sidebar</a></h3>
+<p>As an example, let's create a command to move an objective to a player's sidebar. To do this, we will use the following command structure:</p>
+<pre><code>/sidebar &lt;objective&gt;
+</code></pre>
+<p>Given that an objective has to be casted to a String, we have to find a way to convert it from its name to a Bukkit <code>Objective</code> object. We can do that by using the <code>getObjective(String)</code> method from a Bukkit <code>Scoreboard</code>:</p>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;objective&quot;, new ObjectiveArgument());
+
+new CommandAPICommand(&quot;sidebar&quot;)
+    .withArguments(arguments)
+    .executes((sender, args) -&gt; {
+        //The ObjectArgument must be casted to a String
+        String objectiveName = (String) args[0];
+        
+        //An objective name can be turned into an Objective using getObjective(String)
+        Objective objective = Bukkit.getScoreboardManager().getMainScoreboard().getObjective(objectiveName);
+        
+        //Set display slot
+        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+    })
+    .register();
+</code></pre>
+</div>
+<hr />
 <ul>
 <li>ObjectiveArgument</li>
 <li>ObjectiveCriteriaArgument</li>
