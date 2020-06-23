@@ -1310,7 +1310,31 @@ new CommandAPICommand(&quot;unregisterall&quot;)
     .register();
 </code></pre>
 </div><h1><a class="header" href="#team-arguments" id="team-arguments">Team arguments</a></h1>
-<h1><a class="header" href="#miscellaneous-arguments" id="miscellaneous-arguments">Miscellaneous arguments</a></h1>
+<p>The <code>TeamArgument</code> class interacts with the Minecraft scoreboard and represents a team. Similar to the <code>ObjectiveArgument</code> class, the <code>TeamArgument</code> class must be casted to a String.</p>
+<div class="example">
+<h3><a class="header" href="#example---toggling-friendly-fire-in-a-team" id="example---toggling-friendly-fire-in-a-team">Example - Toggling friendly fire in a team</a></h3>
+<p>Let's say we want to create a command to toggle the state of friendly fire in a team. We want a command of the following form</p>
+<pre><code>/togglepvp &lt;team&gt;
+</code></pre>
+<p>To do this, given a team we want to use the <code>setAllowFriendlyFire(boolean)</code> function. As with the <code>ObjectiveArgument</code>, we must convert the <code>String</code> into a <code>Team</code> object.</p>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;team&quot;, new ObjectiveArgument());
+
+new CommandAPICommand(&quot;togglepvp&quot;)
+    .withArguments(arguments)
+    .executes((sender, args) -&gt; {
+        //The TeamArgument must be casted to a String
+        String teamName = (String) args[0];
+        
+        //A team name can be turned into a Team using getTeam(String)
+        Team team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(teamName);
+        
+        //Toggle pvp
+        team.setAllowFriendlyFire(team.allowFriendlyFire());
+    })
+    .register();
+</code></pre>
+</div><h1><a class="header" href="#miscellaneous-arguments" id="miscellaneous-arguments">Miscellaneous arguments</a></h1>
 <h1><a class="header" href="#environment-arguments" id="environment-arguments">Environment arguments</a></h1>
 <p>The <code>EnvironmentArgument</code> class allows a command sender to refer to a specific world environment, declared in Bukkit's <code>World.Environment</code> class. This includes the following three environments: <code>NORMAL</code>, <code>NETHER</code> and <code>THE_END</code>.</p>
 <blockquote>
@@ -1603,7 +1627,7 @@ CommandAPI.getInstance().register(&quot;giveloottable&quot;, arguments, (sender,
 <pre><code>killall
 say Killed all living entities on the server
 </code></pre>
-<p>This will run the custom command killall <em>(as declared in <strong>Chapter 5 - Functions</strong>)</em>, and then broadcast a message to all players stating that all entities were killed.</p>
+<p>This will run the custom command killall <em>(as declared in <strong>Chapter 6 - Functions &amp; Tags</strong>)</em>, and then broadcast a message to all players stating that all entities were killed.</p>
 <h2><a class="header" href="#creating-tags" id="creating-tags">Creating tags</a></h2>
 <p>Tags are json files which contain a list of functions. Tags let you run multiple functions at a time. Say we have a tag called <code>mytag.json</code>:</p>
 <pre><code class="language-json">{
