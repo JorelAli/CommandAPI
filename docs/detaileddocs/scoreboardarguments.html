@@ -213,12 +213,36 @@ for(String str : entitiesAndPlayers) {
 </code></pre>
 </blockquote>
 <hr />
-<p>an entity that holds information in a scoreboard</p>
-<ul>
-<li>ScoreHolderArgument</li>
-<li>ScoreboardSlotArgument</li>
-</ul>
+<h2><a class="header" href="#scoreboard-slot-argument" id="scoreboard-slot-argument">Scoreboard slot argument</a></h2>
+<p>The <code>ScoreboardSlotArgument</code> represents where scoreboard information is displayed. Since the Bukkit scoreboard <code>DisplaySlot</code> is not able to represent the case where team colors are provided, the CommandAPI uses the <code>ScoreboardSlot</code> wrapper class as the representation of the <code>ScoreboardSlotArgument</code>.</p>
+<h3><a class="header" href="#scoreboardslot-wrapper" id="scoreboardslot-wrapper"><code>ScoreboardSlot</code> wrapper</a></h3>
+<p>The <code>ScoreboardSlot</code> wrapper class has 3 methods:</p>
+<pre><code class="language-java">class ScoreboardSlot {
+    public DisplaySlot getDisplaySlot();
+    public ChatColor getTeamColor();
+    public boolean hasTeamColor();
+}
+</code></pre>
+<p>The <code>getDisplaySlot()</code> method returns the display slot that was chosen. If the display slot is <code>DisplaySlot.SIDEBAR</code> and <code>hasTeamColor()</code> returns true, then it is possible to use <code>getTeamColor()</code> to get the team color provided.</p>
+<div class="example">
+<h3><a class="header" href="#example---clearing-objectives-in-a-scoreboard-slot" id="example---clearing-objectives-in-a-scoreboard-slot">Example - Clearing objectives in a scoreboard slot</a></h3>
+<p>Say we want to clear all objectives in a specific scoreboard slot. In this example, we will use the main server scoreboard, which is accessed using <code>Bukkit.getScoreboardManager.getMainScoreboard()</code>. We want a command with the following structure:</p>
+<pre><code>/clearobjectives &lt;slot&gt;
+</code></pre>
+<p>We implement this simply by using the <code>ScoreboardSlotArgument</code> as our argument, and then we can clear the slot using the scoreboard <code>clearSlot(DisplaySlot)</code> method.</p>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;slot&quot;, new ScoreboardSlotArgument());
 
+new CommandAPICommand(&quot;clearobjectives&quot;)
+    .withArguments(arguments)
+    .executes((sender, args) -&gt; {
+		Scoreboard scoreboard = Bukkit.getScoreboardManager.getMainScoreboard();
+        DisplaySlot slot = ((ScoreboardSlot) args[0]).getDisplaySlot();
+        scoreboard.clearSlot(slot);
+    })
+    .register();
+</code></pre>
+</div>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">

@@ -39,20 +39,7 @@ To give this example a bit more context, let's say we want to reward all players
 Note how we use `..9` to represent 9 or less deaths (since ranges are inclusive). Also note how we restrict our input to players via the command using `type=player`. We can now implement our command:
 
 ```java
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-//We want multiple players, so we use ScoreHolderType.MULTIPLE in the constructor
-arguments.put("players", new ScoreHolderArgument(ScoreHolderType.MULTIPLE));
-
-new CommandAPICommand("reward")
-    .withArguments(arguments)
-    .executes((sender, args) -> {
-        //Get player names by casting to Collection<String>
-        Collection<String> players = (Collection<String>) args[0];
-        for(String playerName : players) {
-            Bukkit.getPlayer(playerName).getInventory().addItem(new ItemStack(Material.DIAMOND, 3));
-        }
-    })
-    .register();
+{{ #include examples/5.7.1scoreholder.java}}
 ```
 
 </div>
@@ -77,7 +64,38 @@ new CommandAPICommand("reward")
 
 -----
 
-an entity that holds information in a scoreboard
+## Scoreboard slot argument
 
-- ScoreHolderArgument
-- ScoreboardSlotArgument
+The `ScoreboardSlotArgument` represents where scoreboard information is displayed. Since the Bukkit scoreboard `DisplaySlot` is not able to represent the case where team colors are provided, the CommandAPI uses the `ScoreboardSlot` wrapper class as the representation of the `ScoreboardSlotArgument`.
+
+### `ScoreboardSlot` wrapper
+
+The `ScoreboardSlot` wrapper class has 3 methods:
+
+```java
+class ScoreboardSlot {
+    public DisplaySlot getDisplaySlot();
+    public ChatColor getTeamColor();
+    public boolean hasTeamColor();
+}
+```
+
+The `getDisplaySlot()` method returns the display slot that was chosen. If the display slot is `DisplaySlot.SIDEBAR` and `hasTeamColor()` returns true, then it is possible to use `getTeamColor()` to get the team color provided.
+
+<div class="example">
+
+### Example - Clearing objectives in a scoreboard slot
+
+Say we want to clear all objectives in a specific scoreboard slot. In this example, we will use the main server scoreboard, which is accessed using `Bukkit.getScoreboardManager.getMainScoreboard()`. We want a command with the following structure:
+
+```
+/clearobjectives <slot>
+```
+
+We implement this simply by using the `ScoreboardSlotArgument` as our argument, and then we can clear the slot using the scoreboard `clearSlot(DisplaySlot)` method.
+
+```java
+{{ #include examples/5.7.1scoreboardslot.java }}
+```
+
+</div>
