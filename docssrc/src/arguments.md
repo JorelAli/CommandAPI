@@ -74,7 +74,7 @@ The type to cast each argument (declared in the `dev.jorel.commandapi.arguments`
 
 ## Arguments with overrideable suggestions
 
-Some arguments have a feature allowing you to override the list of suggestions they provide. This is achieved by using `.overrideSuggestions(String[])` on an instance of an argument, with the String array consisting of suggestions that will be shown to the user whilst they type their command. It's been designed such that this returns the same argument so it can be used inline (handy, eh?)
+Some arguments have a feature allowing you to override the list of suggestions they provide. This is achieved by using `.overrideSuggestions(String[])` on an instance of an argument, with the String array consisting of suggestions that will be shown to the user whilst they type their command. It's been designed such that this returns the same argument so it can be used inline.
 
 
 ### Example - Friend list by overriding suggestions

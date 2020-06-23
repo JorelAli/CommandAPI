@@ -32,7 +32,7 @@ To use the CommandAPI in your plugins, there are two methods of adding it to you
   ```xml
   <dependencies>
       <dependency>
-          <groupId>io.github.jorelali</groupId>
+          <groupId>dev.jorel</groupId>
           <artifactId>commandapi</artifactId>
           <version>VERSION</version>
       </dependency>
@@ -60,11 +60,11 @@ To use the CommandAPI in your plugins, there are two methods of adding it to you
 
   ```gradle
   dependencies {
-      compile "io.github.jorelali:commandapi:VERSION"
+      compile "dev.jorel:commandapi:VERSION"
   }
   ```
 
   A list of version numbers can be found [here](https://github.com/JorelAli/1.13-Command-API/tree/mvn-repo/1.13CommandAPI/io/github/jorelali/commandapi).
-  For example, if you wanted to use version 2.0, you would use `compile "io.github.jorelali:commandapi:2.0"`
+  For example, if you wanted to use version 2.0, you would use `compile "dev.jorel:commandapi:2.0"`
 
 * Add the plugin as a dependent in the plugin.yml (`depend: [CommandAPI]`)

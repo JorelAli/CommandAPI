@@ -1,5 +1,7 @@
 # Chat arguments
 
+The CommandAPI provides three main classes to interact with chat formatting in Minecraft.
+
 ## Chat color argument
 
 The `ChatColorArgument` class is used to represent a given chat color (e.g. red or green) 
@@ -8,17 +10,16 @@ The `ChatColorArgument` class is used to represent a given chat color (e.g. red 
 
 ### Example - Username color changing plugin
 
-Say we want to create a plugin to change the username of a player. We basically want to 
+Say we want to create a plugin to change the color of a player's username. We want to create a command of the following form:
+
+```
+/namecolor <chatcolor>
+```
+
+We then use the `ChatColorArgument` to change the player's name color:
 
 ```java
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("chatcolor", new ChatColorArgument());
-
-CommandAPI.getInstance().register("namecolor", arguments, (sender, args) -> {
-	Player player = (Player) sender;
-	ChatColor color = (ChatColor) args[0];
-	player.setDisplayName(color + player.getDisplayName());
-});
+{{#include examples/5.5chatcolor.java}}
 ```
 </div>
 
@@ -37,7 +38,7 @@ CommandAPI.getInstance().register("namecolor", arguments, (sender, args) -> {
 
 ## Chat component argument
 
-The `ChatComponentArgument` class accepts raw chat-based JSON as valid input. Despite being regular JSON, it _must_ conform to the standard declared [here](https://minecraft.gamepedia.com/Commands#Raw_JSON_text), which consists of JSON that has a limited subset of specific keys (In other words, you can have a JSON object that has the key `text`, but not one that has the key `blah`).
+The `ChatComponentArgument` class accepts raw chat-based JSON as valid input. Despite being regular JSON, it _must_ conform to the standard declared [here](https://minecraft.gamepedia.com/Raw_JSON_text_format), which consists of JSON that has a limited subset of specific keys (In other words, you can have a JSON object that has the key `text`, but not one that has the key `blah`).
 
 This is converted into Spigot's `BaseComponent[]`, which can be used for the following:
 
@@ -74,27 +75,12 @@ This is converted into Spigot's `BaseComponent[]`, which can be used for the fol
 ### Example - Book made from raw JSON
 
 ```java
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("contents", new ChatComponentArgument());
-
-CommandAPI.getInstance().register("makebook", arguments, (sender, args) -> {
-	if (sender instanceof Player) {
-		Player player = (Player) sender;
-		BaseComponent[] arr = (BaseComponent[]) args[0];
-		
-        //Create book
-		ItemStack is = new ItemStack(Material.WRITTEN_BOOK);
-		BookMeta meta = (BookMeta) is.getItemMeta(); 
-		meta.spigot().addPage(arr);
-		is.setItemMeta(meta);
-		
-        //Give player the book
-		player.getInventory().addItem(is);
-	}
-});
+{{#include examples/5.5bookjson.java}}
 ```
 
 </div>
+
+-----
 
 ## Chat argument
 
@@ -104,18 +90,26 @@ CommandAPI.getInstance().register("makebook", arguments, (sender, args) -> {
 
 The `ChatArgument` is basically identical to the `GreedyStringArgument`, with the added functionality of enabling _entity selectors_, such as `@e`, `@p` and so on. The `ChatArgument` also returns a `BaseComponent[]`, similar to the `ChatComponentArgument`.
 
+<div class="example">
+
 ### Example - Sending personalized messages to players
 
-```java
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("message", new ChatArgument());
+Say we wanted to broadcast a "personalized" message to players on the server. By "personalized", we mean a command which changes its output depending on who we are sending the output to. Simply put, we want a command of the following structure:
 
-CommandAPI.getInstance().register("personalmsg", arguments, (sender, args) -> {
-	BaseComponent[] message = (BaseComponent[]) args[0];
-    
-    //Broadcast the message to everyone on the server
-	Bukkit.getServer().spigot().broadcast(message);
-});
+```
+/pbroadcast <message>
 ```
 
-If a player "Bob" were to type `/personalmsg hello @p`, with players Jim and James on the server, Jim would receive the message `hello Bob`, and James would also receive the message `hello Bob`.
+Say we're on a server with 2 players: _Bob_ and _Michael_. If I were to use the following command:
+
+```
+/pbroadcast Hello @p
+```
+
+_Bob_ would receive the message "Hello Bob", whereas _Michael_ would receive the message "Hello Michael". We can use the `ChatArgument` to create this "personalized" broadcast:
+
+```java
+{{#include examples/5.5personalizedbroadcast.java}}
+```
+
+</div>
