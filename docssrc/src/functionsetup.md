@@ -6,6 +6,8 @@
 
 This section explains how functions are declared and set up for use in a Minecraft server. This is ideal for server owners who've never set up functions, or developers _(like the Command API's creator)_ that has no idea how to set this sort of thing up.
 
+-----
+
 ## Creating functions
 
 Functions are text files _(with the `.mcfunction` extension)_ which contains lists of functions which are executed one after another. Each line of the file is a valid Minecraft command. Say we have `text.mcfunction`:
@@ -16,6 +18,8 @@ say Killed all living entities on the server
 ```
 
 This will run the custom command killall _(as declared in **Chapter 6 - Functions & Tags**)_, and then broadcast a message to all players stating that all entities were killed.
+
+-----
 
 ## Creating tags
 
@@ -31,6 +35,8 @@ Tags are json files which contain a list of functions. Tags let you run multiple
 ```
 
 This will run the function `test` and the function `test2`, which are in the namespace `mycustomnamespace`.
+
+-----
 
 ## Namespaces & where to place everything
 

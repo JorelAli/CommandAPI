@@ -168,22 +168,28 @@
                         <h1><a class="header" href="#function-arguments" id="function-arguments">Function arguments</a></h1>
 <p>The <code>FunctionArgument</code> class is used to represent a function or a tag in Minecraft. When retrieving an instance of the argument, it will return a <code>FunctionWrapper[]</code>, where each <code>FunctionWrapper</code> consists of a Minecraft function.</p>
 <p>Therefore, if a user supplies a single function, the <code>FunctionWrapper[]</code> will be of size 1, and if the user supplies a tag which can consist of multiple functions, the <code>FunctionWrapper[]</code> will consist of the array of functions as declared by that tag.</p>
-<h2><a class="header" href="#example---minecrafts-function-command" id="example---minecrafts-function-command">Example - Minecraft's /function command</a></h2>
-<p>Here, we implement Minecraft's <code>/function</code> command which is used to execute a function.</p>
+<div class="example">
+<h3><a class="header" href="#example---minecrafts-function-command" id="example---minecrafts-function-command">Example - Minecraft's /function command</a></h3>
+<p>Since it's a little difficult to demonstrate a custom use for the <code>FunctionArgument</code>, we will show how you can implement Vanilla Minecraft's <code>/function</code> command. In this example, we want a command that uses the following structure:</p>
+<pre><code>/runfunction &lt;function&gt;
+</code></pre>
+<p>When provided with a function, it will execute that function. If instead a tag is provided, it will execute that tag (i.e. execute all functions declared in that tag).</p>
 <pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 arguments.put(&quot;function&quot;, new FunctionArgument());
 
-CommandAPI.getInstance().register(&quot;runfunction&quot;, arguments, (sender, args) -&gt; {
-	FunctionWrapper[] functions = (FunctionWrapper[]) args[0];
+new CommandAPICommand(&quot;runfunction&quot;)
+    .withArguments(arguments)
+    .executes((sender, args) -&gt; {
+        FunctionWrapper[] functions = (FunctionWrapper[]) args[0];
 
-	//Run all functions that the user stated
-	for(FunctionWrapper function : functions) {
-		function.run();
-	}
-
-});
+        //Run all functions in our FunctionWrapper[]
+        for(FunctionWrapper function : functions) {
+            function.run();
+        }
+    })
+    .register();
 </code></pre>
-
+</div>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">

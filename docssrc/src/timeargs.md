@@ -12,7 +12,9 @@ The CommandAPI converts the inputs provided by the command sender into a number 
 >
 > The `TimeArgument` provides inputs such as `2d` (2 in-game days), `10s` (10 seconds) and `20t` (20 ticks), but does **not** let you combine them, such as `2d10s`.
 
-## Example - Displaying a server-wide announcement
+<div class="example">
+
+### Example - Displaying a server-wide announcement
 
 Say we have a command `bigmsg` that displays a title message to all players for a certain duration:
 
@@ -21,19 +23,24 @@ Say we have a command `bigmsg` that displays a title message to all players for 
 ```
 
 ```java
-// Declare our arguments
+//Declare our arguments
 LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 arguments.put("duration", new TimeArgument());
 arguments.put("message", new GreedyStringArgument());
 
-CommandAPI.getInstance().register("bigmsg", arguments, (sender, args) -> {
-	int duration = (int) args[0];
-	String message = (String) args[1];
-    
-	for(Player player : Bukkit.getOnlinePlayers()) {
-        // Display the message to all players, with the default fade in/out times.
-		player.sendTitle(message, "", 10, duration, 20);
-	}
-});
+new CommandAPICommand("bigmsg")
+    .withArguments(arguments)
+    .executes((sender, args) -> {
+        //Duration in ticks
+        int duration = (int) args[0];
+        String message = (String) args[1];
+
+        for(Player player : Bukkit.getOnlinePlayers()) {
+            //Display the message to all players, with the default fade in/out times (10 and 20).
+            player.sendTitle(message, "", 10, duration, 20);
+        }
+    })
+    .register();
 ```
 
+</div>

@@ -171,12 +171,14 @@
 <p>Most developers can completely skip this section. This is for those that are unfamiliar with functions and tags and is less about how the CommandAPI works.</p>
 </blockquote>
 <p>This section explains how functions are declared and set up for use in a Minecraft server. This is ideal for server owners who've never set up functions, or developers <em>(like the Command API's creator)</em> that has no idea how to set this sort of thing up.</p>
+<hr />
 <h2><a class="header" href="#creating-functions" id="creating-functions">Creating functions</a></h2>
 <p>Functions are text files <em>(with the <code>.mcfunction</code> extension)</em> which contains lists of functions which are executed one after another. Each line of the file is a valid Minecraft command. Say we have <code>text.mcfunction</code>:</p>
 <pre><code>killall
 say Killed all living entities on the server
 </code></pre>
 <p>This will run the custom command killall <em>(as declared in <strong>Chapter 6 - Functions &amp; Tags</strong>)</em>, and then broadcast a message to all players stating that all entities were killed.</p>
+<hr />
 <h2><a class="header" href="#creating-tags" id="creating-tags">Creating tags</a></h2>
 <p>Tags are json files which contain a list of functions. Tags let you run multiple functions at a time. Say we have a tag called <code>mytag.json</code>:</p>
 <pre><code class="language-json">{
@@ -187,6 +189,7 @@ say Killed all living entities on the server
 }
 </code></pre>
 <p>This will run the function <code>test</code> and the function <code>test2</code>, which are in the namespace <code>mycustomnamespace</code>.</p>
+<hr />
 <h2><a class="header" href="#namespaces--where-to-place-everything" id="namespaces--where-to-place-everything">Namespaces &amp; where to place everything</a></h2>
 <p>The following hierarchy explains where functions and tags go. In this diagram, the two functions <code>test</code> and <code>test2</code> are in a directory called <code>functions</code>. There is also a tag called <code>mytag</code> which is placed in the <code>tags</code> directory under <code>functions</code>. These are all under the <em>namespace</em> called <code>mycustomnamespace</code></p>
 <pre><code>server/

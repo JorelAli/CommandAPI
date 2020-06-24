@@ -11,4 +11,4 @@ The `FunctionWrapper` class consists of two methods:
 | `run()`           | Executes the Minecraft function                      |
 | `runAs(Entity)`   | Executes the Minecraft function as a specific Entity |
 
-The `FunctionWrapper` also implements the `Keyed` interface, allowing you to retrieve the NamespacedKey for this function using `getKey()`.
+The `FunctionWrapper` also implements the `Keyed` interface, allowing you to retrieve the `NamespacedKey` for this function using `getKey()`.

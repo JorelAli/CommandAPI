@@ -171,7 +171,7 @@
 <li>The order which they will be used</li>
 <li>The type of each argument</li>
 </ul>
-<p>By definition of a LinkedHashMap, the order of the elements inserted into it are preserved, meaning the order you add arguments to the LinkedHashMap will be the resulting order of which arguments are presented to the user when they run that command.</p>
+<p>By definition of a <code>LinkedHashMap</code>, the order of the elements inserted into it are preserved, meaning the order you add arguments to the <code>LinkedHashMap</code> will be the resulting order of which arguments are presented to the user when they run that command.</p>
 <p>Adding arguments for registration is simple:</p>
 <pre><code class="language-java">//Create LinkedHashMap
 LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
@@ -180,6 +180,7 @@ LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 arguments.put(&quot;target&quot;, new PlayerArgument());
 </code></pre>
 <p>The String value is the tooltip that is shown to a player when they are entering the command.</p>
+<hr />
 <h2><a class="header" href="#argument-casting" id="argument-casting">Argument Casting</a></h2>
 <p>To access arguments, they have to be casted to the type that the argument represents. The order of the arguments in the <code>args[]</code> is the same as the order in which the arguments were declared.</p>
 <pre><code class="language-java">LinkedHashMap&lt;String, ArgumentType&gt; arguments = new LinkedHashMap&lt;&gt;();
@@ -198,7 +199,7 @@ new CommandAPICommand(&quot;cmd&quot;)
 </code></pre>
 <p>The type to cast each argument (declared in the <code>dev.jorel.commandapi.arguments</code> package) is listed below:</p>
 <table><thead><tr><th align="right">Argument class</th><th align="left">Data type</th></tr></thead><tbody>
-<tr><td align="right"><code>AdvancementArgument</code></td><td align="left"><code>org.bukkit.advancement.Advancement</code></td></tr>
+<tr><td align="right"><a href="./advancementargument.html"><code>AdvancementArgument</code></a></td><td align="left"><code>org.bukkit.advancement.Advancement</code></td></tr>
 <tr><td align="right"><a href="./axisarg.html"><code>AxisArgument</code></a></td><td align="left"><code>java.util.EnumSet&lt;org.bukkit.Axis&gt;</code></td></tr>
 <tr><td align="right"><a href="./primitivearguments.html#boolean-arguments"><code>BooleanArgument</code></a></td><td align="left"><code>boolean</code></td></tr>
 <tr><td align="right"><a href="./chatarguments.html#chat-argument"><code>ChatArgument</code></a></td><td align="left"><code>net.md_5.bungee.api.chat.BaseComponent[]</code></td></tr>
@@ -206,17 +207,17 @@ new CommandAPICommand(&quot;cmd&quot;)
 <tr><td align="right"><a href="./chatarguments.html#chat-component-argument"><code>ChatComponentArgument</code></a></td><td align="left"><code>net.md_5.bungee.api.chat.BaseComponent[]</code></td></tr>
 <tr><td align="right"><code>CustomArgument&lt;T&gt;</code></td><td align="left"><code>T</code></td></tr>
 <tr><td align="right"><a href="./primitivearguments.html#numerical-arguments"><code>DoubleArgument</code></a></td><td align="left"><code>double</code></td></tr>
-<tr><td align="right"><code> EnchantmentArgument</code></td><td align="left"><code>org.bukkit.enchantments.Enchantment</code></td></tr>
+<tr><td align="right"><a href="./enchantmentargument.html"><code>EnchantmentArgument</code></a></td><td align="left"><code>org.bukkit.enchantments.Enchantment</code></td></tr>
 <tr><td align="right"><a href="./entityarguments.html#entity-selector-argument"><code>EntitySelectorArgument</code></a></td><td align="left">The cast type changes depending on the input parameter:<br /><ul><li><code>EntitySelector.MANY_ENTITIES</code> - <code>Collection&lt;org.bukkit.entity.Entity&gt;</code></li><br /><li><code>EntitySelector.MANY_PLAYERS</code> - <code>Collection&lt;org.bukkit.entity.Player&gt;</code></li><br /><li><code>EntitySelector.ONE_ENTITY</code> - <code>org.bukkit.entity.Entity</code></li><br /><li><code>EntitySelector.ONE_PLAYER</code> - <code>org.bukkit.entity.Player</code></li></ul></td></tr>
 <tr><td align="right"><a href="./entityarguments.html#entity-type-argument"><code>EntityTypeArgument</code></a></td><td align="left"><code>org.bukkit.entity.EntityType</code></td></tr>
-<tr><td align="right"><code>EnvironmentArgument</code></td><td align="left"><code>org.bukkit.World.Environment</code></td></tr>
+<tr><td align="right"><a href="./environmentargs.html"><code>EnvironmentArgument</code></a></td><td align="left"><code>org.bukkit.World.Environment</code></td></tr>
 <tr><td align="right"><a href="./primitivearguments.html#numerical-arguments"><code>FloatArgument</code></a></td><td align="left"><code>float</code></td></tr>
 <tr><td align="right"><a href="./rangedarguments.html#the-integerrange--floatrange-class"><code>FloatRangeArgument</code></a></td><td align="left"><code>dev.jorel.commandapi.wrappers.FloatRange</code></td></tr>
-<tr><td align="right"><code> FunctionArgument</code></td><td align="left"><code>dev.jorel.commandapi.wrappers.FunctionWrapper[]</code></td></tr>
+<tr><td align="right"><a href="./functionwrapper.html"><code>FunctionArgument</code></a></td><td align="left"><code>dev.jorel.commandapi.wrappers.FunctionWrapper[]</code></td></tr>
 <tr><td align="right"><a href="./stringarguments.html#greedy-string-argument"><code>GreedyStringArgument</code></a></td><td align="left"><code>String</code></td></tr>
 <tr><td align="right"><a href="./primitivearguments.html#numerical-arguments"><code>IntegerArgument</code></a></td><td align="left"><code>int</code></td></tr>
 <tr><td align="right"><a href="./rangedarguments.html#the-integerrange--floatrange-class"><code>IntegerRangeArgument</code></a></td><td align="left"><code>dev.jorel.commandapi.wrappers.IntegerRange</code></td></tr>
-<tr><td align="right"><code> ItemStackArgument</code></td><td align="left"><code>org.bukkit.inventory.ItemStack</code></td></tr>
+<tr><td align="right"><a href="./itemstackarguments.html"><code>ItemStackArgument</code></a></td><td align="left"><code>org.bukkit.inventory.ItemStack</code></td></tr>
 <tr><td align="right"><a href="./literalarguments.html"><code>LiteralArgument</code></a></td><td align="left">N/A</td></tr>
 <tr><td align="right"><a href="./locationargument.html#location-2d-space"><code>Location2DArgument</code></a></td><td align="left"><code>dev.jorel.commandapi.wrappers.Location2D</code></td></tr>
 <tr><td align="right"><a href="./locationargument.html#location-3d-space"><code>LocationArgument</code></a></td><td align="left"><code>org.bukkit.Location</code></td></tr>
@@ -226,9 +227,9 @@ new CommandAPICommand(&quot;cmd&quot;)
 <tr><td align="right"><code>NBTCompoundArgument</code></td><td align="left"><code>de.tr7zw.nbtapi.NBTContainer</code></td></tr>
 <tr><td align="right"><a href="./objectivearguments.html#objective-argument"><code>ObjectiveArgument</code></a></td><td align="left"><code>String</code></td></tr>
 <tr><td align="right"><a href="./objectivearguments.html#objective-criteria-argument"><code>ObjectiveCriteriaArgument</code></a></td><td align="left"><code>String</code></td></tr>
-<tr><td align="right"><code> ParticleArgument</code></td><td align="left"><code>org.bukkit.Particle</code></td></tr>
+<tr><td align="right"><code>ParticleArgument</code></td><td align="left"><code>org.bukkit.Particle</code></td></tr>
 <tr><td align="right"><a href="./entityarguments.html#player-argument"><code>PlayerArgument</code></a></td><td align="left"><code>org.bukkit.entity.Player</code></td></tr>
-<tr><td align="right"><code> PotionEffectArgument</code></td><td align="left"><code>org.bukkit.potion.PotionEffectType</code></td></tr>
+<tr><td align="right"><code>PotionEffectArgument</code></td><td align="left"><code>org.bukkit.potion.PotionEffectType</code></td></tr>
 <tr><td align="right"><code>RecipeArgument</code></td><td align="left"><code>org.bukkit.inventory.Recipe</code></td></tr>
 <tr><td align="right"><a href="./rotationargs.html"><code>RotationArgument</code></a></td><td align="left"><code>dev.jorel.commandapi.wrappers.Rotation</code></td></tr>
 <tr><td align="right"><a href="./scoreboardarguments.html#scoreboard-slot-argument"><code>ScoreboardSlotArgument</code></a></td><td align="left"><code>dev.jorel.commandapi.wrappers.ScoreboardSlot</code></td></tr>
@@ -237,7 +238,7 @@ new CommandAPICommand(&quot;cmd&quot;)
 <tr><td align="right"><a href="./stringarguments.html#string-argument"><code>StringArgument</code></a></td><td align="left"><code>String</code></td></tr>
 <tr><td align="right"><a href="./teamarguments.html"><code>TeamArgument</code></a></td><td align="left"><code>String</code></td></tr>
 <tr><td align="right"><a href="./stringarguments.html#text-argument"><code>TextArgument</code></a></td><td align="left"><code>String</code></td></tr>
-<tr><td align="right"><code>TimeArgument</code></td><td align="left"><code>int</code></td></tr>
+<tr><td align="right"><a href="./timeargs.html"><code>TimeArgument</code></a></td><td align="left"><code>int</code></td></tr>
 </tbody></table>
 <h2><a class="header" href="#arguments-with-overrideable-suggestions" id="arguments-with-overrideable-suggestions">Arguments with overrideable suggestions</a></h2>
 <p>Some arguments have a feature allowing you to override the list of suggestions they provide. This is achieved by using <code>.overrideSuggestions(String[])</code> on an instance of an argument, with the String array consisting of suggestions that will be shown to the user whilst they type their command. It's been designed such that this returns the same argument so it can be used inline.</p>

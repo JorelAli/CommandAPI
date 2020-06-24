@@ -10,17 +10,25 @@ Permissions let you control which players are allowed to execute which commands.
 
 In addition to the `CommandPermission` class, there are two different ways to assign permissions (compared to the simple `CommandSender.hasPermission()` method that is provided by Bukkit).
 
+-----
+
 ## Adding permissions to commands
 
 To add a permission to a command, you can use the `withPermission(CommandPermission)` method _when declaring a command_.
 
+<div class="example">
+
 ### Example - /god command with permissions
 
-In this example, we register our command such that the player requires the `command.god` permission node in order to run the command.
+Say we created a command `/god` that sets a player as being invulnerable. Since this is a pretty non-survival command, we want to restrict who can run this command. As such, we want our player to have the permission `command.god` in order to run this command. To do this, we simply use the `withPermission(CommandPermission)` method from our command builder:
 
 ```java
 {{ #include examples/7cmdperms.java }}
 ```
+
+</div>
+
+-----
 
 ## Registering permissions to arguments
 
@@ -34,6 +42,8 @@ If a player does not have the required permission:
 * The argument hover text which suggests what the command is will not be shown
 * The player will receive an error if they try to type something in for that argument
 * Suggestions, such as a list of materials or players, will not be shown
+
+<div class="example">
 
 ### Example - /kill command with argument permissions
 
@@ -55,6 +65,10 @@ Now we declare our command with arguments. We use a `PlayerArgument` and apply t
 ```java
 {{ #include examples/7argperms2.java }}
 ```
+
+</div>
+
+-----
 
 > **Developer's Note:**
 >

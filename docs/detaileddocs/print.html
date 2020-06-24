@@ -588,7 +588,7 @@ new CommandAPICommand(&quot;getfruit&quot;)
 <li>The order which they will be used</li>
 <li>The type of each argument</li>
 </ul>
-<p>By definition of a LinkedHashMap, the order of the elements inserted into it are preserved, meaning the order you add arguments to the LinkedHashMap will be the resulting order of which arguments are presented to the user when they run that command.</p>
+<p>By definition of a <code>LinkedHashMap</code>, the order of the elements inserted into it are preserved, meaning the order you add arguments to the <code>LinkedHashMap</code> will be the resulting order of which arguments are presented to the user when they run that command.</p>
 <p>Adding arguments for registration is simple:</p>
 <pre><code class="language-java">//Create LinkedHashMap
 LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
@@ -597,6 +597,7 @@ LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 arguments.put(&quot;target&quot;, new PlayerArgument());
 </code></pre>
 <p>The String value is the tooltip that is shown to a player when they are entering the command.</p>
+<hr />
 <h2><a class="header" href="#argument-casting" id="argument-casting">Argument Casting</a></h2>
 <p>To access arguments, they have to be casted to the type that the argument represents. The order of the arguments in the <code>args[]</code> is the same as the order in which the arguments were declared.</p>
 <pre><code class="language-java">LinkedHashMap&lt;String, ArgumentType&gt; arguments = new LinkedHashMap&lt;&gt;();
@@ -615,7 +616,7 @@ new CommandAPICommand(&quot;cmd&quot;)
 </code></pre>
 <p>The type to cast each argument (declared in the <code>dev.jorel.commandapi.arguments</code> package) is listed below:</p>
 <table><thead><tr><th align="right">Argument class</th><th align="left">Data type</th></tr></thead><tbody>
-<tr><td align="right"><code>AdvancementArgument</code></td><td align="left"><code>org.bukkit.advancement.Advancement</code></td></tr>
+<tr><td align="right"><a href="./advancementargument.html"><code>AdvancementArgument</code></a></td><td align="left"><code>org.bukkit.advancement.Advancement</code></td></tr>
 <tr><td align="right"><a href="./axisarg.html"><code>AxisArgument</code></a></td><td align="left"><code>java.util.EnumSet&lt;org.bukkit.Axis&gt;</code></td></tr>
 <tr><td align="right"><a href="./primitivearguments.html#boolean-arguments"><code>BooleanArgument</code></a></td><td align="left"><code>boolean</code></td></tr>
 <tr><td align="right"><a href="./chatarguments.html#chat-argument"><code>ChatArgument</code></a></td><td align="left"><code>net.md_5.bungee.api.chat.BaseComponent[]</code></td></tr>
@@ -623,17 +624,17 @@ new CommandAPICommand(&quot;cmd&quot;)
 <tr><td align="right"><a href="./chatarguments.html#chat-component-argument"><code>ChatComponentArgument</code></a></td><td align="left"><code>net.md_5.bungee.api.chat.BaseComponent[]</code></td></tr>
 <tr><td align="right"><code>CustomArgument&lt;T&gt;</code></td><td align="left"><code>T</code></td></tr>
 <tr><td align="right"><a href="./primitivearguments.html#numerical-arguments"><code>DoubleArgument</code></a></td><td align="left"><code>double</code></td></tr>
-<tr><td align="right"><code> EnchantmentArgument</code></td><td align="left"><code>org.bukkit.enchantments.Enchantment</code></td></tr>
+<tr><td align="right"><a href="./enchantmentargument.html"><code>EnchantmentArgument</code></a></td><td align="left"><code>org.bukkit.enchantments.Enchantment</code></td></tr>
 <tr><td align="right"><a href="./entityarguments.html#entity-selector-argument"><code>EntitySelectorArgument</code></a></td><td align="left">The cast type changes depending on the input parameter:<br /><ul><li><code>EntitySelector.MANY_ENTITIES</code> - <code>Collection&lt;org.bukkit.entity.Entity&gt;</code></li><br /><li><code>EntitySelector.MANY_PLAYERS</code> - <code>Collection&lt;org.bukkit.entity.Player&gt;</code></li><br /><li><code>EntitySelector.ONE_ENTITY</code> - <code>org.bukkit.entity.Entity</code></li><br /><li><code>EntitySelector.ONE_PLAYER</code> - <code>org.bukkit.entity.Player</code></li></ul></td></tr>
 <tr><td align="right"><a href="./entityarguments.html#entity-type-argument"><code>EntityTypeArgument</code></a></td><td align="left"><code>org.bukkit.entity.EntityType</code></td></tr>
-<tr><td align="right"><code>EnvironmentArgument</code></td><td align="left"><code>org.bukkit.World.Environment</code></td></tr>
+<tr><td align="right"><a href="./environmentargs.html"><code>EnvironmentArgument</code></a></td><td align="left"><code>org.bukkit.World.Environment</code></td></tr>
 <tr><td align="right"><a href="./primitivearguments.html#numerical-arguments"><code>FloatArgument</code></a></td><td align="left"><code>float</code></td></tr>
 <tr><td align="right"><a href="./rangedarguments.html#the-integerrange--floatrange-class"><code>FloatRangeArgument</code></a></td><td align="left"><code>dev.jorel.commandapi.wrappers.FloatRange</code></td></tr>
-<tr><td align="right"><code> FunctionArgument</code></td><td align="left"><code>dev.jorel.commandapi.wrappers.FunctionWrapper[]</code></td></tr>
+<tr><td align="right"><a href="./functionwrapper.html"><code>FunctionArgument</code></a></td><td align="left"><code>dev.jorel.commandapi.wrappers.FunctionWrapper[]</code></td></tr>
 <tr><td align="right"><a href="./stringarguments.html#greedy-string-argument"><code>GreedyStringArgument</code></a></td><td align="left"><code>String</code></td></tr>
 <tr><td align="right"><a href="./primitivearguments.html#numerical-arguments"><code>IntegerArgument</code></a></td><td align="left"><code>int</code></td></tr>
 <tr><td align="right"><a href="./rangedarguments.html#the-integerrange--floatrange-class"><code>IntegerRangeArgument</code></a></td><td align="left"><code>dev.jorel.commandapi.wrappers.IntegerRange</code></td></tr>
-<tr><td align="right"><code> ItemStackArgument</code></td><td align="left"><code>org.bukkit.inventory.ItemStack</code></td></tr>
+<tr><td align="right"><a href="./itemstackarguments.html"><code>ItemStackArgument</code></a></td><td align="left"><code>org.bukkit.inventory.ItemStack</code></td></tr>
 <tr><td align="right"><a href="./literalarguments.html"><code>LiteralArgument</code></a></td><td align="left">N/A</td></tr>
 <tr><td align="right"><a href="./locationargument.html#location-2d-space"><code>Location2DArgument</code></a></td><td align="left"><code>dev.jorel.commandapi.wrappers.Location2D</code></td></tr>
 <tr><td align="right"><a href="./locationargument.html#location-3d-space"><code>LocationArgument</code></a></td><td align="left"><code>org.bukkit.Location</code></td></tr>
@@ -643,9 +644,9 @@ new CommandAPICommand(&quot;cmd&quot;)
 <tr><td align="right"><code>NBTCompoundArgument</code></td><td align="left"><code>de.tr7zw.nbtapi.NBTContainer</code></td></tr>
 <tr><td align="right"><a href="./objectivearguments.html#objective-argument"><code>ObjectiveArgument</code></a></td><td align="left"><code>String</code></td></tr>
 <tr><td align="right"><a href="./objectivearguments.html#objective-criteria-argument"><code>ObjectiveCriteriaArgument</code></a></td><td align="left"><code>String</code></td></tr>
-<tr><td align="right"><code> ParticleArgument</code></td><td align="left"><code>org.bukkit.Particle</code></td></tr>
+<tr><td align="right"><code>ParticleArgument</code></td><td align="left"><code>org.bukkit.Particle</code></td></tr>
 <tr><td align="right"><a href="./entityarguments.html#player-argument"><code>PlayerArgument</code></a></td><td align="left"><code>org.bukkit.entity.Player</code></td></tr>
-<tr><td align="right"><code> PotionEffectArgument</code></td><td align="left"><code>org.bukkit.potion.PotionEffectType</code></td></tr>
+<tr><td align="right"><code>PotionEffectArgument</code></td><td align="left"><code>org.bukkit.potion.PotionEffectType</code></td></tr>
 <tr><td align="right"><code>RecipeArgument</code></td><td align="left"><code>org.bukkit.inventory.Recipe</code></td></tr>
 <tr><td align="right"><a href="./rotationargs.html"><code>RotationArgument</code></a></td><td align="left"><code>dev.jorel.commandapi.wrappers.Rotation</code></td></tr>
 <tr><td align="right"><a href="./scoreboardarguments.html#scoreboard-slot-argument"><code>ScoreboardSlotArgument</code></a></td><td align="left"><code>dev.jorel.commandapi.wrappers.ScoreboardSlot</code></td></tr>
@@ -654,7 +655,7 @@ new CommandAPICommand(&quot;cmd&quot;)
 <tr><td align="right"><a href="./stringarguments.html#string-argument"><code>StringArgument</code></a></td><td align="left"><code>String</code></td></tr>
 <tr><td align="right"><a href="./teamarguments.html"><code>TeamArgument</code></a></td><td align="left"><code>String</code></td></tr>
 <tr><td align="right"><a href="./stringarguments.html#text-argument"><code>TextArgument</code></a></td><td align="left"><code>String</code></td></tr>
-<tr><td align="right"><code>TimeArgument</code></td><td align="left"><code>int</code></td></tr>
+<tr><td align="right"><a href="./timeargs.html"><code>TimeArgument</code></a></td><td align="left"><code>int</code></td></tr>
 </tbody></table>
 <h2><a class="header" href="#arguments-with-overrideable-suggestions" id="arguments-with-overrideable-suggestions">Arguments with overrideable suggestions</a></h2>
 <p>Some arguments have a feature allowing you to override the list of suggestions they provide. This is achieved by using <code>.overrideSuggestions(String[])</code> on an instance of an argument, with the String array consisting of suggestions that will be shown to the user whilst they type their command. It's been designed such that this returns the same argument so it can be used inline.</p>
@@ -1423,7 +1424,25 @@ new CommandAPICommand(&quot;createworld&quot;)
     .register();
 </code></pre>
 </div><h1><a class="header" href="#itemstack-arguments" id="itemstack-arguments">Itemstack arguments</a></h1>
-<h1><a class="header" href="#particle-arguments" id="particle-arguments">Particle arguments</a></h1>
+<p>The <code>ItemStackArgument</code> class represents in-game items. As expected, this should be casted to Bukkit's <code>ItemStack</code> object.</p>
+<div class="example">
+<h3><a class="header" href="#example---giving-a-player-an-itemstack" id="example---giving-a-player-an-itemstack">Example - Giving a player an itemstack</a></h3>
+<p>Say we want to create a command that gives you items. For this command, we will use the following structure:</p>
+<pre><code>/item &lt;itemstack&gt;
+</code></pre>
+<p>With this structure, we can easily create our command:</p>
+<pre><code class="language-java">// Declare our arguments
+LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;itemstack&quot;, new ItemStackArgument());
+
+new CommandAPICommand(&quot;item&quot;)
+    .withArguments(arguments)
+    .executesPlayer((player, args) -&gt; {
+        player.getInventory().addItem((ItemStack) args[0]);
+    })
+    .register();
+</code></pre>
+</div><h1><a class="header" href="#particle-arguments" id="particle-arguments">Particle arguments</a></h1>
 <h1><a class="header" href="#potion-effect-arguments" id="potion-effect-arguments">Potion effect arguments</a></h1>
 <h1><a class="header" href="#time-argument" id="time-argument">Time argument</a></h1>
 <p>The <code>TimeArgument</code> class represents in-game time, <em>in the number of in-game ticks</em>. This allows command senders to specify a certain number of ticks in a simpler way, by including the characters <code>d</code> to specify the numbers of days, <code>s</code> to specify the number of seconds or <code>t</code> to specify a number of ticks.</p>
@@ -1436,26 +1455,31 @@ new CommandAPICommand(&quot;createworld&quot;)
 <p><strong>Developer's Note:</strong></p>
 <p>The <code>TimeArgument</code> provides inputs such as <code>2d</code> (2 in-game days), <code>10s</code> (10 seconds) and <code>20t</code> (20 ticks), but does <strong>not</strong> let you combine them, such as <code>2d10s</code>.</p>
 </blockquote>
-<h2><a class="header" href="#example---displaying-a-server-wide-announcement" id="example---displaying-a-server-wide-announcement">Example - Displaying a server-wide announcement</a></h2>
+<div class="example">
+<h3><a class="header" href="#example---displaying-a-server-wide-announcement" id="example---displaying-a-server-wide-announcement">Example - Displaying a server-wide announcement</a></h3>
 <p>Say we have a command <code>bigmsg</code> that displays a title message to all players for a certain duration:</p>
 <pre><code>/bigmsg &lt;duration&gt; &lt;message&gt;
 </code></pre>
-<pre><code class="language-java">// Declare our arguments
+<pre><code class="language-java">//Declare our arguments
 LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 arguments.put(&quot;duration&quot;, new TimeArgument());
 arguments.put(&quot;message&quot;, new GreedyStringArgument());
 
-CommandAPI.getInstance().register(&quot;bigmsg&quot;, arguments, (sender, args) -&gt; {
-	int duration = (int) args[0];
-	String message = (String) args[1];
-    
-	for(Player player : Bukkit.getOnlinePlayers()) {
-        // Display the message to all players, with the default fade in/out times.
-		player.sendTitle(message, &quot;&quot;, 10, duration, 20);
-	}
-});
+new CommandAPICommand(&quot;bigmsg&quot;)
+    .withArguments(arguments)
+    .executes((sender, args) -&gt; {
+        //Duration in ticks
+        int duration = (int) args[0];
+        String message = (String) args[1];
+
+        for(Player player : Bukkit.getOnlinePlayers()) {
+            //Display the message to all players, with the default fade in/out times (10 and 20).
+            player.sendTitle(message, &quot;&quot;, 10, duration, 20);
+        }
+    })
+    .register();
 </code></pre>
-<h1><a class="header" href="#literal-arguments" id="literal-arguments">Literal arguments</a></h1>
+</div><h1><a class="header" href="#literal-arguments" id="literal-arguments">Literal arguments</a></h1>
 <p>Literal arguments are used to represent &quot;forced options&quot; for a command. For instance, take Minecraft's <code>/gamemode</code> command. The syntax consists of the following:</p>
 <pre><code>/gamemode &lt;mode&gt; [player]
 </code></pre>
@@ -1671,26 +1695,28 @@ CommandAPI.getInstance().register(&quot;giveloottable&quot;, arguments, (sender,
 </blockquote>
 <h1><a class="header" href="#functions" id="functions">Functions</a></h1>
 <p>The CommandAPI has support to use Minecraft's <a href="https://minecraft.gamepedia.com/Function_(Java_Edtion)">functions</a> within your plugins. This is handled by using a class provided by the CommandAPI called <code>FunctionWrapper</code>, which allows you to execute functions. The CommandAPI also provides support to let you run your own commands within Minecraft function files.</p>
+<hr />
 <h2><a class="header" href="#using-custom-commands-in-functions" id="using-custom-commands-in-functions">Using custom commands in functions</a></h2>
 <p>In order to use a command from your plugin in a <code>.mcfunction</code> file, you must register your command in your plugin's <code>onLoad()</code> method, instead of the <code>onEnable()</code> method. Failure to do so will not allow the command to be registered for Minecraft functions, causing the function file to fail to load during the server startup phase.</p>
 <blockquote>
 <p><strong>Developer's Note:</strong></p>
 <p>In short, if you want to register a command which can be used in Minecraft functions, register it in your plugin's <code>onLoad()</code> method.</p>
 </blockquote>
+<div class="example">
 <h3><a class="header" href="#example---registering-command-for-use-in-a-function" id="example---registering-command-for-use-in-a-function">Example - Registering command for use in a function</a></h3>
+<p>Say we have a command <code>/killall</code> that simply kills all entities in all worlds on the server. If we were to register this in our <code>onLoad()</code> method, this would allow us to use the <code>/killall</code> command in Minecraft functions and tags.</p>
 <pre><code class="language-java">public class Main extends JavaPlugin {
 
 	@Override
 	public void onLoad() {
 		//Commands which will be used in Minecraft functions are registered here
 
-		CommandAPI.getInstance().register(&quot;killall&quot;, new LinkedHashMap&lt;&gt;(), (sender, args) -&gt; {
-            //Kills all enemies in all worlds
-        	Bukkit.getWorlds()
-				.forEach(w -&gt; w.getLivingEntities()
-					.forEach(e -&gt; e.setHealth(0))
-				);
-        });
+        new CommandAPICommand(&quot;killall&quot;)
+            .executes(sender, args) -&gt; {
+                //Kills all enemies in all worlds
+                Bukkit.getWorlds().forEach(w -&gt; w.getLivingEntities().forEach(e -&gt; e.setHealth(0)));
+        	})
+            .register();
 	}
     
     @Override
@@ -1699,18 +1725,20 @@ CommandAPI.getInstance().register(&quot;giveloottable&quot;, arguments, (sender,
     } 
 }
 </code></pre>
-<h1><a class="header" href="#setting-up-functions--tags" id="setting-up-functions--tags">Setting up functions &amp; tags</a></h1>
+</div><h1><a class="header" href="#setting-up-functions--tags" id="setting-up-functions--tags">Setting up functions &amp; tags</a></h1>
 <blockquote>
 <p><strong>Developer's Note:</strong></p>
 <p>Most developers can completely skip this section. This is for those that are unfamiliar with functions and tags and is less about how the CommandAPI works.</p>
 </blockquote>
 <p>This section explains how functions are declared and set up for use in a Minecraft server. This is ideal for server owners who've never set up functions, or developers <em>(like the Command API's creator)</em> that has no idea how to set this sort of thing up.</p>
+<hr />
 <h2><a class="header" href="#creating-functions" id="creating-functions">Creating functions</a></h2>
 <p>Functions are text files <em>(with the <code>.mcfunction</code> extension)</em> which contains lists of functions which are executed one after another. Each line of the file is a valid Minecraft command. Say we have <code>text.mcfunction</code>:</p>
 <pre><code>killall
 say Killed all living entities on the server
 </code></pre>
 <p>This will run the custom command killall <em>(as declared in <strong>Chapter 6 - Functions &amp; Tags</strong>)</em>, and then broadcast a message to all players stating that all entities were killed.</p>
+<hr />
 <h2><a class="header" href="#creating-tags" id="creating-tags">Creating tags</a></h2>
 <p>Tags are json files which contain a list of functions. Tags let you run multiple functions at a time. Say we have a tag called <code>mytag.json</code>:</p>
 <pre><code class="language-json">{
@@ -1721,6 +1749,7 @@ say Killed all living entities on the server
 }
 </code></pre>
 <p>This will run the function <code>test</code> and the function <code>test2</code>, which are in the namespace <code>mycustomnamespace</code>.</p>
+<hr />
 <h2><a class="header" href="#namespaces--where-to-place-everything" id="namespaces--where-to-place-everything">Namespaces &amp; where to place everything</a></h2>
 <p>The following hierarchy explains where functions and tags go. In this diagram, the two functions <code>test</code> and <code>test2</code> are in a directory called <code>functions</code>. There is also a tag called <code>mytag</code> which is placed in the <code>tags</code> directory under <code>functions</code>. These are all under the <em>namespace</em> called <code>mycustomnamespace</code></p>
 <pre><code>server/
@@ -1758,26 +1787,32 @@ say Killed all living entities on the server
 <tr><td><code>run()</code></td><td>Executes the Minecraft function</td></tr>
 <tr><td><code>runAs(Entity)</code></td><td>Executes the Minecraft function as a specific Entity</td></tr>
 </tbody></table>
-<p>The <code>FunctionWrapper</code> also implements the <code>Keyed</code> interface, allowing you to retrieve the NamespacedKey for this function using <code>getKey()</code>.</p>
+<p>The <code>FunctionWrapper</code> also implements the <code>Keyed</code> interface, allowing you to retrieve the <code>NamespacedKey</code> for this function using <code>getKey()</code>.</p>
 <h1><a class="header" href="#function-arguments" id="function-arguments">Function arguments</a></h1>
 <p>The <code>FunctionArgument</code> class is used to represent a function or a tag in Minecraft. When retrieving an instance of the argument, it will return a <code>FunctionWrapper[]</code>, where each <code>FunctionWrapper</code> consists of a Minecraft function.</p>
 <p>Therefore, if a user supplies a single function, the <code>FunctionWrapper[]</code> will be of size 1, and if the user supplies a tag which can consist of multiple functions, the <code>FunctionWrapper[]</code> will consist of the array of functions as declared by that tag.</p>
-<h2><a class="header" href="#example---minecrafts-function-command" id="example---minecrafts-function-command">Example - Minecraft's /function command</a></h2>
-<p>Here, we implement Minecraft's <code>/function</code> command which is used to execute a function.</p>
+<div class="example">
+<h3><a class="header" href="#example---minecrafts-function-command" id="example---minecrafts-function-command">Example - Minecraft's /function command</a></h3>
+<p>Since it's a little difficult to demonstrate a custom use for the <code>FunctionArgument</code>, we will show how you can implement Vanilla Minecraft's <code>/function</code> command. In this example, we want a command that uses the following structure:</p>
+<pre><code>/runfunction &lt;function&gt;
+</code></pre>
+<p>When provided with a function, it will execute that function. If instead a tag is provided, it will execute that tag (i.e. execute all functions declared in that tag).</p>
 <pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 arguments.put(&quot;function&quot;, new FunctionArgument());
 
-CommandAPI.getInstance().register(&quot;runfunction&quot;, arguments, (sender, args) -&gt; {
-	FunctionWrapper[] functions = (FunctionWrapper[]) args[0];
+new CommandAPICommand(&quot;runfunction&quot;)
+    .withArguments(arguments)
+    .executes((sender, args) -&gt; {
+        FunctionWrapper[] functions = (FunctionWrapper[]) args[0];
 
-	//Run all functions that the user stated
-	for(FunctionWrapper function : functions) {
-		function.run();
-	}
-
-});
+        //Run all functions in our FunctionWrapper[]
+        for(FunctionWrapper function : functions) {
+            function.run();
+        }
+    })
+    .register();
 </code></pre>
-<h1><a class="header" href="#permissions" id="permissions">Permissions</a></h1>
+</div><h1><a class="header" href="#permissions" id="permissions">Permissions</a></h1>
 <p>Permissions let you control which players are allowed to execute which commands. This is handled using the <code>CommandPermission</code> class, which has the following uses:</p>
 <table><thead><tr><th>Permission</th><th>What it does</th></tr></thead><tbody>
 <tr><td><code>CommandPermission.OP</code></td><td>Requires OP to execute the command</td></tr>
@@ -1785,10 +1820,12 @@ CommandAPI.getInstance().register(&quot;runfunction&quot;, arguments, (sender, a
 <tr><td><code>CommandPermission.fromString(&quot;my.permission&quot;)</code></td><td>Requires a specific permission node to execute the command</td></tr>
 </tbody></table>
 <p>In addition to the <code>CommandPermission</code> class, there are two different ways to assign permissions (compared to the simple <code>CommandSender.hasPermission()</code> method that is provided by Bukkit).</p>
+<hr />
 <h2><a class="header" href="#adding-permissions-to-commands" id="adding-permissions-to-commands">Adding permissions to commands</a></h2>
 <p>To add a permission to a command, you can use the <code>withPermission(CommandPermission)</code> method <em>when declaring a command</em>.</p>
+<div class="example">
 <h3><a class="header" href="#example---god-command-with-permissions" id="example---god-command-with-permissions">Example - /god command with permissions</a></h3>
-<p>In this example, we register our command such that the player requires the <code>command.god</code> permission node in order to run the command.</p>
+<p>Say we created a command <code>/god</code> that sets a player as being invulnerable. Since this is a pretty non-survival command, we want to restrict who can run this command. As such, we want our player to have the permission <code>command.god</code> in order to run this command. To do this, we simply use the <code>withPermission(CommandPermission)</code> method from our command builder:</p>
 <pre><code class="language-java">// Register the /god command with the permission node &quot;command.god&quot;
 new CommandAPICommand(&quot;god&quot;)
 	.withPermission(CommandPermission.fromString(&quot;command.god&quot;))
@@ -1797,6 +1834,8 @@ new CommandAPICommand(&quot;god&quot;)
 	})
 	.register();
 </code></pre>
+</div>
+<hr />
 <h2><a class="header" href="#registering-permissions-to-arguments" id="registering-permissions-to-arguments">Registering permissions to arguments</a></h2>
 <p>For further fine-tuning of permission management, the CommandAPI allows you to add permissions to individual arguments. This prevents the user from executing a command <em>with a specific argument</em> if they do not have a specific permission.</p>
 <p>This is done by using the <code>withPermission(CommandPermission)</code> method <em>at the end of an argument</em>.</p>
@@ -1806,6 +1845,7 @@ new CommandAPICommand(&quot;god&quot;)
 <li>The player will receive an error if they try to type something in for that argument</li>
 <li>Suggestions, such as a list of materials or players, will not be shown</li>
 </ul>
+<div class="example">
 <h3><a class="header" href="#example---kill-command-with-argument-permissions" id="example---kill-command-with-argument-permissions">Example - /kill command with argument permissions</a></h3>
 <p>For example, say we're registering a command <code>/kill</code>:</p>
 <pre><code>/kill          - Kills yourself
@@ -1832,6 +1872,8 @@ new CommandAPICommand(&quot;kill&quot;)
 	})
 	.register();
 </code></pre>
+</div>
+<hr />
 <blockquote>
 <p><strong>Developer's Note:</strong></p>
 <p>As you can see, there are multiple ways of applying permissions to commands with arguments. In the <code>/god</code> command shown above, the permission was applied to the whole command. In the <code>/kill</code> command shown above, the permission was applied to the argument. </p>
@@ -1871,11 +1913,24 @@ new CommandAPICommand(&quot;kill&quot;)
 <p><strong>Developer's Note:</strong></p>
 <p>The command conversion system is nowhere near perfect. It tries its best to connect Bukkit plugins to vanilla Minecraft commands, but is not guaranteed to run flawlessly. If possible, consider forking/requesting a plugin and writing it with compatibility for the CommandAPI.</p>
 </blockquote>
+<hr />
 <h2><a class="header" href="#entire-plugins" id="entire-plugins">Entire plugins</a></h2>
 <p>To register all commands that are declared by a plugin, the <code>Converter.convert(Plugin)</code> method can be used. This attempts to register all commands declared in a plugin's <code>plugin.yml</code> file, as well as any aliases or permissions stated in the <code>plugin.yml</code> file.</p>
 <p>It is important to note that the plugin must be loaded before your plugin before attempting conversion. <em>(Use <code>loadbefore: [YourPlugin, CommandAPI]</code> to ensure it loads before your plugin)</em></p>
+<div class="example">
 <h3><a class="header" href="#example---converting-commands-for-a-plugin" id="example---converting-commands-for-a-plugin">Example - Converting commands for a plugin</a></h3>
-<p>Say you have some <code>plugin.yml</code> file for a plugin.</p>
+<p>Say you have some <code>plugin.yml</code> file for a plugin that adds some basic functionality to a server. The plugin in this example is called &quot;myPlugin&quot;:</p>
+<pre><code class="language-yaml">name: myPlugin
+main: some.random.package.Main
+version: 1.0
+commands:
+  gmc:
+    aliases: gm1
+  gms:
+  i:
+    permission: item.permission
+</code></pre>
+<p>As you can see, it declares 3 commands: <code>/gmc</code>, <code>/gms</code> and <code>/i</code>. <strong>Since this plugin hasn't been told to load before the CommandAPI, we must first modify the <code>plugin.yml</code> file:</strong></p>
 <pre><code class="language-yaml">name: myPlugin
 main: some.random.package.Main
 loadbefore: [CommandAPI]
@@ -1887,9 +1942,36 @@ commands:
   i:
     permission: item.permission
 </code></pre>
-<p>Then, the following code will register the commands <code>/gmc</code>, <code>/gm1</code>, <code>/gms</code> and <code>/i</code>:</p>
-<pre><code class="language-java">Converter.convert(Bukkit.getPluginManager().getPlugin(&quot;myPlugin&quot;));
+<hr />
+<p>Now that the plugin has been loaded before the CommandAPI, we can now begin writing our own plugin that uses the CommandAPI converter. We will call this plugin &quot;MyCoolPlugin&quot;:</p>
+<pre><code class="language-java">public class MyCoolPlugin extends JavaPlugin {
+    
+    @Override
+    public void onEnable() {
+        Converter.convert(Bukkit.getPluginManager().getPlugin(&quot;myPlugin&quot;));
+        //Other code goes here...
+    }
+    
+}
 </code></pre>
+<p>To ensure that <em>MyCoolPlugin</em> loads <em>after</em> <em>myPlugin</em>, we must ensure that the <code>plugin.yml</code> for <em>myPlugin</em> states this. So, we update the <code>plugin.yml</code> for <em>myPlugin</em> again:</p>
+<pre><code class="language-yaml">name: myPlugin
+main: some.random.package.Main
+loadbefore: [MyCoolPlugin, CommandAPI]
+version: 1.0
+commands:
+  gmc:
+    aliases: gm1
+  gms:
+  i:
+    permission: item.permission
+</code></pre>
+<p>When this is run, the commands <code>/gmc</code>, <code>/gm1</code>, <code>/gms</code> and <code>/i</code> will all be registered by the CommandAPI.</p>
+<hr />
+<p>So to summarise, our plugin loading order is the following:</p>
+<p>\[ \texttt{myPlugin} \xrightarrow{then} \texttt{CommandAPI} \xrightarrow{then} \texttt{MyCoolPlugin} \]</p>
+</div>
+<hr />
 <h2><a class="header" href="#only-specific-commands" id="only-specific-commands">Only specific commands</a></h2>
 <p>In addition to converting the whole plugin, the CommandAPI allows you to convert single commands at a time using the <code>Converter.convert(Plugin, String)</code> method, where the <code>String</code> argument refers to the command name as declared in the plugin's <code>plugin.yml</code> file.</p>
 <h1><a class="header" href="#upgrading-guide" id="upgrading-guide">Upgrading guide</a></h1>

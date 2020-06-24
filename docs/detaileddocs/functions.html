@@ -167,26 +167,28 @@
                     <main>
                         <h1><a class="header" href="#functions" id="functions">Functions</a></h1>
 <p>The CommandAPI has support to use Minecraft's <a href="https://minecraft.gamepedia.com/Function_(Java_Edtion)">functions</a> within your plugins. This is handled by using a class provided by the CommandAPI called <code>FunctionWrapper</code>, which allows you to execute functions. The CommandAPI also provides support to let you run your own commands within Minecraft function files.</p>
+<hr />
 <h2><a class="header" href="#using-custom-commands-in-functions" id="using-custom-commands-in-functions">Using custom commands in functions</a></h2>
 <p>In order to use a command from your plugin in a <code>.mcfunction</code> file, you must register your command in your plugin's <code>onLoad()</code> method, instead of the <code>onEnable()</code> method. Failure to do so will not allow the command to be registered for Minecraft functions, causing the function file to fail to load during the server startup phase.</p>
 <blockquote>
 <p><strong>Developer's Note:</strong></p>
 <p>In short, if you want to register a command which can be used in Minecraft functions, register it in your plugin's <code>onLoad()</code> method.</p>
 </blockquote>
+<div class="example">
 <h3><a class="header" href="#example---registering-command-for-use-in-a-function" id="example---registering-command-for-use-in-a-function">Example - Registering command for use in a function</a></h3>
+<p>Say we have a command <code>/killall</code> that simply kills all entities in all worlds on the server. If we were to register this in our <code>onLoad()</code> method, this would allow us to use the <code>/killall</code> command in Minecraft functions and tags.</p>
 <pre><code class="language-java">public class Main extends JavaPlugin {
 
 	@Override
 	public void onLoad() {
 		//Commands which will be used in Minecraft functions are registered here
 
-		CommandAPI.getInstance().register(&quot;killall&quot;, new LinkedHashMap&lt;&gt;(), (sender, args) -&gt; {
-            //Kills all enemies in all worlds
-        	Bukkit.getWorlds()
-				.forEach(w -&gt; w.getLivingEntities()
-					.forEach(e -&gt; e.setHealth(0))
-				);
-        });
+        new CommandAPICommand(&quot;killall&quot;)
+            .executes(sender, args) -&gt; {
+                //Kills all enemies in all worlds
+                Bukkit.getWorlds().forEach(w -&gt; w.getLivingEntities().forEach(e -&gt; e.setHealth(0)));
+        	})
+            .register();
 	}
     
     @Override
@@ -195,7 +197,7 @@
     } 
 }
 </code></pre>
-
+</div>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">

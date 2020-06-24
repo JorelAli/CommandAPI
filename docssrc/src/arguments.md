@@ -5,7 +5,7 @@ Arguments in the CommandAPI are registered by using a `LinkedHashMap<String, Arg
 * The order which they will be used
 * The type of each argument
 
-By definition of a LinkedHashMap, the order of the elements inserted into it are preserved, meaning the order you add arguments to the LinkedHashMap will be the resulting order of which arguments are presented to the user when they run that command.
+By definition of a `LinkedHashMap`, the order of the elements inserted into it are preserved, meaning the order you add arguments to the `LinkedHashMap` will be the resulting order of which arguments are presented to the user when they run that command.
 
 Adding arguments for registration is simple:
 
@@ -19,6 +19,8 @@ arguments.put("target", new PlayerArgument());
 
 The String value is the tooltip that is shown to a player when they are entering the command.
 
+-----
+
 ## Argument Casting
 
 To access arguments, they have to be casted to the type that the argument represents. The order of the arguments in the `args[]` is the same as the order in which the arguments were declared.
@@ -31,7 +33,7 @@ The type to cast each argument (declared in the `dev.jorel.commandapi.arguments`
 
 |                                               Argument class | Data type                                                    |
 | -----------------------------------------------------------: | :----------------------------------------------------------- |
-|                                        `AdvancementArgument` | `org.bukkit.advancement.Advancement`                         |
+|                                        [`AdvancementArgument`](./advancementargument.md) | `org.bukkit.advancement.Advancement`                         |
 |                               [`AxisArgument`](./axisarg.md) | `java.util.EnumSet<org.bukkit.Axis>`                         |
 | [`BooleanArgument`](./primitivearguments.md#boolean-arguments) | `boolean`                                                    |
 |           [`ChatArgument`](./chatarguments.md#chat-argument) | `net.md_5.bungee.api.chat.BaseComponent[]`                   |
@@ -39,17 +41,17 @@ The type to cast each argument (declared in the `dev.jorel.commandapi.arguments`
 | [`ChatComponentArgument`](./chatarguments.md#chat-component-argument) | `net.md_5.bungee.api.chat.BaseComponent[]`                   |
 |                                          `CustomArgument<T>` | `T`                                                          |
 | [`DoubleArgument`](./primitivearguments.md#numerical-arguments) | `double`                                                     |
-|                                       ` EnchantmentArgument` | `org.bukkit.enchantments.Enchantment`                        |
+|                                       [`EnchantmentArgument`](./enchantmentargument.md) | `org.bukkit.enchantments.Enchantment`                        |
 | [`EntitySelectorArgument`](./entityarguments.md#entity-selector-argument) | The cast type changes depending on the input parameter:<br /><ul><li>`EntitySelector.MANY_ENTITIES` - `Collection<org.bukkit.entity.Entity>`</li><br /><li>`EntitySelector.MANY_PLAYERS` - `Collection<org.bukkit.entity.Player>`</li><br /><li>`EntitySelector.ONE_ENTITY` - `org.bukkit.entity.Entity`</li><br /><li>`EntitySelector.ONE_PLAYER` - `org.bukkit.entity.Player`</li></ul> |
 | [`EntityTypeArgument`](./entityarguments.md#entity-type-argument) | `org.bukkit.entity.EntityType`                               |
-|                                        `EnvironmentArgument` | `org.bukkit.World.Environment`                               |
+|                                        [`EnvironmentArgument`](./environmentargs.md) | `org.bukkit.World.Environment`                               |
 | [`FloatArgument`](./primitivearguments.md#numerical-arguments) | `float`                                                      |
 | [`FloatRangeArgument`](./rangedarguments.md#the-integerrange--floatrange-class) | `dev.jorel.commandapi.wrappers.FloatRange`                   |
-|                                          ` FunctionArgument` | `dev.jorel.commandapi.wrappers.FunctionWrapper[]`            |
+|                                          [`FunctionArgument`](./functionwrapper.md) | `dev.jorel.commandapi.wrappers.FunctionWrapper[]`            |
 | [`GreedyStringArgument`](./stringarguments.md#greedy-string-argument) | `String`                                                     |
 | [`IntegerArgument`](./primitivearguments.md#numerical-arguments) | `int`                                                        |
 | [`IntegerRangeArgument`](./rangedarguments.md#the-integerrange--floatrange-class) | `dev.jorel.commandapi.wrappers.IntegerRange`                 |
-|                                         ` ItemStackArgument` | `org.bukkit.inventory.ItemStack`                             |
+|                                         [`ItemStackArgument`](./itemstackarguments.md) | `org.bukkit.inventory.ItemStack`                             |
 |                                           [`LiteralArgument`](./literalarguments.md) | N/A                                                          |
 | [`Location2DArgument`](./locationargument.md#location-2d-space) | `dev.jorel.commandapi.wrappers.Location2D`                   |
 | [`LocationArgument`](./locationargument.md#location-3d-space) | `org.bukkit.Location`                                        |
@@ -59,9 +61,9 @@ The type to cast each argument (declared in the `dev.jorel.commandapi.arguments`
 |                                        `NBTCompoundArgument` | `de.tr7zw.nbtapi.NBTContainer`                               |
 | [`ObjectiveArgument`](./objectivearguments.md#objective-argument) | `String`                                                     |
 | [`ObjectiveCriteriaArgument`](./objectivearguments.md#objective-criteria-argument) | `String`                                                     |
-|                                          ` ParticleArgument` | `org.bukkit.Particle`                                        |
+|                                          `ParticleArgument` | `org.bukkit.Particle`                                        |
 |     [`PlayerArgument`](./entityarguments.md#player-argument) | `org.bukkit.entity.Player`                                   |
-|                                      ` PotionEffectArgument` | `org.bukkit.potion.PotionEffectType`                         |
+|                                      `PotionEffectArgument` | `org.bukkit.potion.PotionEffectType`                         |
 |                                             `RecipeArgument` | `org.bukkit.inventory.Recipe`                                |
 |                      [`RotationArgument`](./rotationargs.md) | `dev.jorel.commandapi.wrappers.Rotation`                     |
 | [`ScoreboardSlotArgument`](./scoreboardarguments.md#scoreboard-slot-argument) | `dev.jorel.commandapi.wrappers.ScoreboardSlot`               |
@@ -70,7 +72,7 @@ The type to cast each argument (declared in the `dev.jorel.commandapi.arguments`
 |     [`StringArgument`](./stringarguments.md#string-argument) | `String`                                                     |
 |                         [`TeamArgument`](./teamarguments.md) | `String`                                                     |
 |         [`TextArgument`](./stringarguments.md#text-argument) | `String`                                                     |
-|                                               `TimeArgument` | `int`                                                        |
+|                                               [`TimeArgument`](./timeargs.md) | `int`                                                        |
 
 ## Arguments with overrideable suggestions
 

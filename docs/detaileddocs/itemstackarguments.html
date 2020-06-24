@@ -166,7 +166,25 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#itemstack-arguments" id="itemstack-arguments">Itemstack arguments</a></h1>
+<p>The <code>ItemStackArgument</code> class represents in-game items. As expected, this should be casted to Bukkit's <code>ItemStack</code> object.</p>
+<div class="example">
+<h3><a class="header" href="#example---giving-a-player-an-itemstack" id="example---giving-a-player-an-itemstack">Example - Giving a player an itemstack</a></h3>
+<p>Say we want to create a command that gives you items. For this command, we will use the following structure:</p>
+<pre><code>/item &lt;itemstack&gt;
+</code></pre>
+<p>With this structure, we can easily create our command:</p>
+<pre><code class="language-java">// Declare our arguments
+LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;itemstack&quot;, new ItemStackArgument());
 
+new CommandAPICommand(&quot;item&quot;)
+    .withArguments(arguments)
+    .executesPlayer((player, args) -&gt; {
+        player.getInventory().addItem((ItemStack) args[0]);
+    })
+    .register();
+</code></pre>
+</div>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">

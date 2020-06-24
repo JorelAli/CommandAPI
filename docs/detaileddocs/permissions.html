@@ -173,10 +173,12 @@
 <tr><td><code>CommandPermission.fromString(&quot;my.permission&quot;)</code></td><td>Requires a specific permission node to execute the command</td></tr>
 </tbody></table>
 <p>In addition to the <code>CommandPermission</code> class, there are two different ways to assign permissions (compared to the simple <code>CommandSender.hasPermission()</code> method that is provided by Bukkit).</p>
+<hr />
 <h2><a class="header" href="#adding-permissions-to-commands" id="adding-permissions-to-commands">Adding permissions to commands</a></h2>
 <p>To add a permission to a command, you can use the <code>withPermission(CommandPermission)</code> method <em>when declaring a command</em>.</p>
+<div class="example">
 <h3><a class="header" href="#example---god-command-with-permissions" id="example---god-command-with-permissions">Example - /god command with permissions</a></h3>
-<p>In this example, we register our command such that the player requires the <code>command.god</code> permission node in order to run the command.</p>
+<p>Say we created a command <code>/god</code> that sets a player as being invulnerable. Since this is a pretty non-survival command, we want to restrict who can run this command. As such, we want our player to have the permission <code>command.god</code> in order to run this command. To do this, we simply use the <code>withPermission(CommandPermission)</code> method from our command builder:</p>
 <pre><code class="language-java">// Register the /god command with the permission node &quot;command.god&quot;
 new CommandAPICommand(&quot;god&quot;)
 	.withPermission(CommandPermission.fromString(&quot;command.god&quot;))
@@ -185,6 +187,8 @@ new CommandAPICommand(&quot;god&quot;)
 	})
 	.register();
 </code></pre>
+</div>
+<hr />
 <h2><a class="header" href="#registering-permissions-to-arguments" id="registering-permissions-to-arguments">Registering permissions to arguments</a></h2>
 <p>For further fine-tuning of permission management, the CommandAPI allows you to add permissions to individual arguments. This prevents the user from executing a command <em>with a specific argument</em> if they do not have a specific permission.</p>
 <p>This is done by using the <code>withPermission(CommandPermission)</code> method <em>at the end of an argument</em>.</p>
@@ -194,6 +198,7 @@ new CommandAPICommand(&quot;god&quot;)
 <li>The player will receive an error if they try to type something in for that argument</li>
 <li>Suggestions, such as a list of materials or players, will not be shown</li>
 </ul>
+<div class="example">
 <h3><a class="header" href="#example---kill-command-with-argument-permissions" id="example---kill-command-with-argument-permissions">Example - /kill command with argument permissions</a></h3>
 <p>For example, say we're registering a command <code>/kill</code>:</p>
 <pre><code>/kill          - Kills yourself
@@ -220,6 +225,8 @@ new CommandAPICommand(&quot;kill&quot;)
 	})
 	.register();
 </code></pre>
+</div>
+<hr />
 <blockquote>
 <p><strong>Developer's Note:</strong></p>
 <p>As you can see, there are multiple ways of applying permissions to commands with arguments. In the <code>/god</code> command shown above, the permission was applied to the whole command. In the <code>/kill</code> command shown above, the permission was applied to the argument. </p>

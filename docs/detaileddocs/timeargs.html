@@ -176,26 +176,31 @@
 <p><strong>Developer's Note:</strong></p>
 <p>The <code>TimeArgument</code> provides inputs such as <code>2d</code> (2 in-game days), <code>10s</code> (10 seconds) and <code>20t</code> (20 ticks), but does <strong>not</strong> let you combine them, such as <code>2d10s</code>.</p>
 </blockquote>
-<h2><a class="header" href="#example---displaying-a-server-wide-announcement" id="example---displaying-a-server-wide-announcement">Example - Displaying a server-wide announcement</a></h2>
+<div class="example">
+<h3><a class="header" href="#example---displaying-a-server-wide-announcement" id="example---displaying-a-server-wide-announcement">Example - Displaying a server-wide announcement</a></h3>
 <p>Say we have a command <code>bigmsg</code> that displays a title message to all players for a certain duration:</p>
 <pre><code>/bigmsg &lt;duration&gt; &lt;message&gt;
 </code></pre>
-<pre><code class="language-java">// Declare our arguments
+<pre><code class="language-java">//Declare our arguments
 LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 arguments.put(&quot;duration&quot;, new TimeArgument());
 arguments.put(&quot;message&quot;, new GreedyStringArgument());
 
-CommandAPI.getInstance().register(&quot;bigmsg&quot;, arguments, (sender, args) -&gt; {
-	int duration = (int) args[0];
-	String message = (String) args[1];
-    
-	for(Player player : Bukkit.getOnlinePlayers()) {
-        // Display the message to all players, with the default fade in/out times.
-		player.sendTitle(message, &quot;&quot;, 10, duration, 20);
-	}
-});
-</code></pre>
+new CommandAPICommand(&quot;bigmsg&quot;)
+    .withArguments(arguments)
+    .executes((sender, args) -&gt; {
+        //Duration in ticks
+        int duration = (int) args[0];
+        String message = (String) args[1];
 
+        for(Player player : Bukkit.getOnlinePlayers()) {
+            //Display the message to all players, with the default fade in/out times (10 and 20).
+            player.sendTitle(message, &quot;&quot;, 10, duration, 20);
+        }
+    })
+    .register();
+</code></pre>
+</div>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">

@@ -171,11 +171,24 @@
 <p><strong>Developer's Note:</strong></p>
 <p>The command conversion system is nowhere near perfect. It tries its best to connect Bukkit plugins to vanilla Minecraft commands, but is not guaranteed to run flawlessly. If possible, consider forking/requesting a plugin and writing it with compatibility for the CommandAPI.</p>
 </blockquote>
+<hr />
 <h2><a class="header" href="#entire-plugins" id="entire-plugins">Entire plugins</a></h2>
 <p>To register all commands that are declared by a plugin, the <code>Converter.convert(Plugin)</code> method can be used. This attempts to register all commands declared in a plugin's <code>plugin.yml</code> file, as well as any aliases or permissions stated in the <code>plugin.yml</code> file.</p>
 <p>It is important to note that the plugin must be loaded before your plugin before attempting conversion. <em>(Use <code>loadbefore: [YourPlugin, CommandAPI]</code> to ensure it loads before your plugin)</em></p>
+<div class="example">
 <h3><a class="header" href="#example---converting-commands-for-a-plugin" id="example---converting-commands-for-a-plugin">Example - Converting commands for a plugin</a></h3>
-<p>Say you have some <code>plugin.yml</code> file for a plugin.</p>
+<p>Say you have some <code>plugin.yml</code> file for a plugin that adds some basic functionality to a server. The plugin in this example is called &quot;myPlugin&quot;:</p>
+<pre><code class="language-yaml">name: myPlugin
+main: some.random.package.Main
+version: 1.0
+commands:
+  gmc:
+    aliases: gm1
+  gms:
+  i:
+    permission: item.permission
+</code></pre>
+<p>As you can see, it declares 3 commands: <code>/gmc</code>, <code>/gms</code> and <code>/i</code>. <strong>Since this plugin hasn't been told to load before the CommandAPI, we must first modify the <code>plugin.yml</code> file:</strong></p>
 <pre><code class="language-yaml">name: myPlugin
 main: some.random.package.Main
 loadbefore: [CommandAPI]
@@ -187,9 +200,36 @@ commands:
   i:
     permission: item.permission
 </code></pre>
-<p>Then, the following code will register the commands <code>/gmc</code>, <code>/gm1</code>, <code>/gms</code> and <code>/i</code>:</p>
-<pre><code class="language-java">Converter.convert(Bukkit.getPluginManager().getPlugin(&quot;myPlugin&quot;));
+<hr />
+<p>Now that the plugin has been loaded before the CommandAPI, we can now begin writing our own plugin that uses the CommandAPI converter. We will call this plugin &quot;MyCoolPlugin&quot;:</p>
+<pre><code class="language-java">public class MyCoolPlugin extends JavaPlugin {
+    
+    @Override
+    public void onEnable() {
+        Converter.convert(Bukkit.getPluginManager().getPlugin(&quot;myPlugin&quot;));
+        //Other code goes here...
+    }
+    
+}
 </code></pre>
+<p>To ensure that <em>MyCoolPlugin</em> loads <em>after</em> <em>myPlugin</em>, we must ensure that the <code>plugin.yml</code> for <em>myPlugin</em> states this. So, we update the <code>plugin.yml</code> for <em>myPlugin</em> again:</p>
+<pre><code class="language-yaml">name: myPlugin
+main: some.random.package.Main
+loadbefore: [MyCoolPlugin, CommandAPI]
+version: 1.0
+commands:
+  gmc:
+    aliases: gm1
+  gms:
+  i:
+    permission: item.permission
+</code></pre>
+<p>When this is run, the commands <code>/gmc</code>, <code>/gm1</code>, <code>/gms</code> and <code>/i</code> will all be registered by the CommandAPI.</p>
+<hr />
+<p>So to summarise, our plugin loading order is the following:</p>
+<p>\[ \texttt{myPlugin} \xrightarrow{then} \texttt{CommandAPI} \xrightarrow{then} \texttt{MyCoolPlugin} \]</p>
+</div>
+<hr />
 <h2><a class="header" href="#only-specific-commands" id="only-specific-commands">Only specific commands</a></h2>
 <p>In addition to converting the whole plugin, the CommandAPI allows you to convert single commands at a time using the <code>Converter.convert(Plugin, String)</code> method, where the <code>String</code> argument refers to the command name as declared in the plugin's <code>plugin.yml</code> file.</p>
 
