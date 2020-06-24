@@ -166,7 +166,24 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#particle-arguments" id="particle-arguments">Particle arguments</a></h1>
+<p>The <code>ParticleArgument</code> class represents Minecraft particles. As expected, this is casted to the Bukkit <code>Particle</code> class.</p>
+<div class="example">
+<h3><a class="header" href="#example---show-particles-at-a-players-location" id="example---show-particles-at-a-players-location">Example - Show particles at a player's location</a></h3>
+<p>Say we wanted to have a command that displayed particles at a player's location. We will use the following command structure:</p>
+<pre><code>/showparticle &lt;particle&gt;
+</code></pre>
+<p>With this, we can simply spawn the particle using the <code>World.spawnParticle(Particle, Location, int)</code> method:</p>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;particle&quot;, new ItemStackArgument());
 
+new CommandAPICommand(&quot;showparticle&quot;)
+    .withArguments(arguments)
+    .executesPlayer((player, args) -&gt; {
+        player.getWorld().spawnParticle((Particle) args[0], player.getLocation(), 1);
+    })
+    .register();
+</code></pre>
+</div>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
