@@ -18,18 +18,6 @@ Due to the implementation of the CommandAPI, the CommandAPI does **not** support
 
 If players cannot connect, this could be due to the size of the command data packet. To see the resultant packet being sent to players when they log in, enable the `create-dispatcher-json: true` setting and view the file size of the resultant file. If the file size is abnormally large _(Over 2MB is considered very large)_, consider reducing the number of `LiteralArguments` which your plugin uses.
 
-## The server just hangs/slows down on my PaperSpigot server
-
-Officially, the CommandAPI does _not_ really support PaperSpigot. As PaperSpigot is a fork of Spigot, it just assumes that it'll work on PaperSpigot if it works on Spigot.
-
-> **Developer's Note:**
->
-> There's a few things I personally don't like about PaperSpigot:
->
-> * [Their developer documentation is non-existant](https://paper.readthedocs.io/en/latest/about/faq.html#what-can-i-do-with-paper)
-> * [Their JavaDocs](https://papermc.io/javadocs/paper/1.13/overview-summary.html) are very... lacking of documentation
-> * I personally think it's harder to keep track of new changes between Minecraft upgrades for PaperSpigot compared to Spigot's BuildTools
-
 ## Command conversion throws a `NullPointerException`
 
 This is likely caused by the fact that the plugin you want to convert hasn't been loaded yet. Ensure that it loads before your plugin by adding the following to the target plugin's `plugin.yml` file:
