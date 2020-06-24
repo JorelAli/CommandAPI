@@ -3,6 +3,8 @@ package dev.jorel.commandapi;
 import java.util.LinkedHashMap;
 import java.util.Random;
 
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.loot.LootContext;
 import org.bukkit.loot.LootTable;
@@ -53,6 +55,8 @@ public class Testing {
 				})
 				.register();
 		}
+		
+		Bukkit.getWorlds().stream().map(World::getName).toArray(String[]::new);
 		
 //		LootTable lt = ((Lootable) mob).getLootTable();
 //        LootContext.Builder bd = new LootContext.Builder(mob.getLocation());
