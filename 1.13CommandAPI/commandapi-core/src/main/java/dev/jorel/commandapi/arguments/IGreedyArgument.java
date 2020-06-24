@@ -1,3 +1,3 @@
 package dev.jorel.commandapi.arguments;
 
-public interface GreedyArgument {}
+public interface IGreedyArgument {}

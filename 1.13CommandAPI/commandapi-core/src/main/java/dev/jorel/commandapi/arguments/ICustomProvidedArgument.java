@@ -1,6 +1,6 @@
 package dev.jorel.commandapi.arguments;
 
-public interface CustomProvidedArgument {
+public interface ICustomProvidedArgument {
 			
 	SuggestionProviders getSuggestionProvider();
 	

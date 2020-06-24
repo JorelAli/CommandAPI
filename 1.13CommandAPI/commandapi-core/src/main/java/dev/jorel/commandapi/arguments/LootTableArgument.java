@@ -4,7 +4,7 @@ import org.bukkit.loot.LootTable;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 
-public class LootTableArgument extends Argument implements CustomProvidedArgument {
+public class LootTableArgument extends Argument implements ICustomProvidedArgument {
 	
 	public LootTableArgument() {
 		super(CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered());

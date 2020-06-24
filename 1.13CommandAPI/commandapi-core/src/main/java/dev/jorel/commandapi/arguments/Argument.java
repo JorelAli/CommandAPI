@@ -8,7 +8,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
 
 import dev.jorel.commandapi.CommandPermission;
 
-public abstract class Argument implements OverrideableSuggestions<Argument> {
+public abstract class Argument implements IOverrideableSuggestions<Argument> {
 
 	/**
 	 * Returns the primitive type of the current Argument. After executing a

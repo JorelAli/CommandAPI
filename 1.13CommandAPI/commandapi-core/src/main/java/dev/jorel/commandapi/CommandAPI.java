@@ -7,7 +7,7 @@ import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
 import dev.jorel.commandapi.arguments.Argument;
-import dev.jorel.commandapi.arguments.GreedyArgument;
+import dev.jorel.commandapi.arguments.IGreedyArgument;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
@@ -98,10 +98,10 @@ public class CommandAPI {
 			LinkedHashMap<String, Argument> copyOfArgs = args == null ? new LinkedHashMap<>() : (LinkedHashMap<String, Argument>) args.clone();
 			
 			//if args contains a GreedyString && args.getLast != GreedyString
-			long numGreedyArgs = copyOfArgs.values().stream().filter(arg -> arg instanceof GreedyArgument).count();
+			long numGreedyArgs = copyOfArgs.values().stream().filter(arg -> arg instanceof IGreedyArgument).count();
 			if(numGreedyArgs >= 1) {
 				//A GreedyString has been found
-				if(!(copyOfArgs.values().toArray()[copyOfArgs.size() - 1] instanceof GreedyArgument)) {
+				if(!(copyOfArgs.values().toArray()[copyOfArgs.size() - 1] instanceof IGreedyArgument)) {
 					throw new GreedyArgumentException();
 				}
 				

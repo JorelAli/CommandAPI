@@ -3,7 +3,7 @@ package dev.jorel.commandapi.arguments;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 
-public class FunctionArgument extends Argument implements CustomProvidedArgument {
+public class FunctionArgument extends Argument implements ICustomProvidedArgument {
 
 	/**
 	 * A Minecraft 1.12 function. Plugin commands which plan to be used INSIDE

@@ -41,7 +41,7 @@ import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.CustomArgument;
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
 import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
-import dev.jorel.commandapi.arguments.CustomProvidedArgument;
+import dev.jorel.commandapi.arguments.ICustomProvidedArgument;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.Location2DArgument;
@@ -489,10 +489,10 @@ public final class CommandAPIHandler {
 				if (innerArg instanceof LiteralArgument) {
 					String str = ((LiteralArgument) innerArg).getLiteral();
 					inner = getLiteralArgumentBuilderArgument(str, innerArg.getArgumentPermission()).executes(command);
-				} else if (innerArg instanceof CustomProvidedArgument) {
+				} else if (innerArg instanceof ICustomProvidedArgument) {
 					inner = getRequiredArgumentBuilderWithProvider(keys.get(keys.size() - 1), innerArg.getRawType(),
 							innerArg.getArgumentPermission(),
-							nms.getSuggestionProvider(((CustomProvidedArgument) innerArg).getSuggestionProvider()))
+							nms.getSuggestionProvider(((ICustomProvidedArgument) innerArg).getSuggestionProvider()))
 									.executes(command);
 				} else {
 					inner = getRequiredArgumentBuilderDynamic(keys.get(keys.size() - 1), innerArg,
@@ -507,10 +507,10 @@ public final class CommandAPIHandler {
 				if (outerArg instanceof LiteralArgument) {
 					String str = ((LiteralArgument) outerArg).getLiteral();
 					outer = getLiteralArgumentBuilderArgument(str, outerArg.getArgumentPermission()).then(outer);
-				} else if (outerArg instanceof CustomProvidedArgument) {
+				} else if (outerArg instanceof ICustomProvidedArgument) {
 					outer = getRequiredArgumentBuilderWithProvider(keys.get(i), outerArg.getRawType(),
 							outerArg.getArgumentPermission(),
-							nms.getSuggestionProvider(((CustomProvidedArgument) outerArg).getSuggestionProvider()))
+							nms.getSuggestionProvider(((ICustomProvidedArgument) outerArg).getSuggestionProvider()))
 									.then(outer);
 				} else {
 					outer = getRequiredArgumentBuilderDynamic(keys.get(i), outerArg, outerArg.getArgumentPermission())

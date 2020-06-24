@@ -4,7 +4,7 @@ import org.bukkit.Sound;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 
-public class SoundArgument extends Argument implements CustomProvidedArgument {
+public class SoundArgument extends Argument implements ICustomProvidedArgument {
 	
 	public SoundArgument() {
 		super(CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered());

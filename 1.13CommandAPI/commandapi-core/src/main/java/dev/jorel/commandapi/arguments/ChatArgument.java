@@ -4,7 +4,7 @@ import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.exceptions.SpigotNotFoundException;
 import net.md_5.bungee.api.chat.BaseComponent;
 
-public class ChatArgument extends Argument implements GreedyArgument {
+public class ChatArgument extends Argument implements IGreedyArgument {
 	
 	/**
 	 * A Chat argument. Represents fancy greedy strings that can parse entity selectors

@@ -4,7 +4,7 @@ import java.util.function.Function;
 
 import org.bukkit.command.CommandSender;
 
-public interface OverrideableSuggestions<T extends Argument> {
+public interface IOverrideableSuggestions<T extends Argument> {
 
 	/**
 	 * Override the suggestions of this argument with a String array. Typically,

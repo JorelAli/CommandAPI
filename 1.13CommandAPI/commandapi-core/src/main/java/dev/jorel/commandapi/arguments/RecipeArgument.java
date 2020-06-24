@@ -4,7 +4,7 @@ import org.bukkit.inventory.Recipe;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 
-public class RecipeArgument extends Argument implements CustomProvidedArgument {
+public class RecipeArgument extends Argument implements ICustomProvidedArgument {
 
 	public RecipeArgument() {
 		super(CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered());
