@@ -41,6 +41,7 @@
     - [Sound arguments](./soundargument.md)
     - [Recipe arguments](./recipeargument.md)
     - [Time arguments](./timeargs.md)
+  - [NBT arguments](./nbtarguments.md)
   - [Literal arguments](./literalarguments.md)
   - [Custom arguments](./customarguments.md)
   - [Technical arguments](./technicalargs.md)

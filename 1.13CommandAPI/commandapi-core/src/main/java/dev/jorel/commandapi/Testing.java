@@ -6,7 +6,6 @@ import java.util.Random;
 import org.bukkit.entity.Player;
 import org.bukkit.loot.LootContext;
 import org.bukkit.loot.LootTable;
-import org.bukkit.loot.Lootable;
 
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.LootTableArgument;
