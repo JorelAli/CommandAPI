@@ -1370,28 +1370,59 @@ new CommandAPICommand(&quot;award&quot;)
     .register();
 </code></pre>
 </div><h1><a class="header" href="#enchantment-argument" id="enchantment-argument">Enchantment argument</a></h1>
+<p>The <code>EnchantmentArgument</code> class lets users input a specific enchantment. As you would expect, the cast type is Bukkit's <code>Enchantment</code> class.</p>
+<div class="example">
+<h3><a class="header" href="#example---giving-a-player-an-enchantment-on-their-current-item" id="example---giving-a-player-an-enchantment-on-their-current-item">Example - Giving a player an enchantment on their current item</a></h3>
+<p>Say we want to give a player an enchantment on the item that the player is currently holding. We will use the following command structure:</p>
+<pre><code>/enchantitem &lt;enchantment&gt; &lt;level&gt;
+</code></pre>
+<p>Since most enchantment levels range between 1 and 5, we will also make use of the <code>IntegerArgument</code> to restrict the level of the enchantment by usng its range constructor.</p>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;enchantment&quot;, new EnchantmentArgument());
+arguments.put(&quot;level&quot;, new IntegerArgument(1, 5));
+
+new CommandAPICommand(&quot;enchantitem&quot;)
+    .withArguments(arguments)
+    .executesPlayer((player, args) -&gt; {
+		Enchantment enchantment = (Enchantment) args[0];
+		int level = (int) args[1];
+		
+		//Add the enchantment
+		player.getInventory().getItemInMainHand().addEnchantment(enchantment, level);
+    })
+    .register();
+</code></pre>
+</div>
 <h1><a class="header" href="#environment-arguments" id="environment-arguments">Environment arguments</a></h1>
 <p>The <code>EnvironmentArgument</code> class allows a command sender to refer to a specific world environment, declared in Bukkit's <code>World.Environment</code> class. This includes the following three environments: <code>NORMAL</code>, <code>NETHER</code> and <code>THE_END</code>.</p>
 <blockquote>
 <p><strong>Note:</strong></p>
 <p>The <code>EnvironmentArgument</code> is only supported in Minecraft versions 1.13.1 and later, meaning it <em>will not work</em> on Minecraft 1.13. This is due to fact that Minecraft added the environment argument in 1.13.1. Attempting to use the <code>EnvironmentArgument</code> on Minecraft 1.13 will throw an <code>EnvironmentArgumentException</code>.</p>
 </blockquote>
-<h2><a class="header" href="#example---creating-a-new-world" id="example---creating-a-new-world">Example - Creating a new world</a></h2>
+<div class="example">
+<h3><a class="header" href="#example---creating-a-new-world" id="example---creating-a-new-world">Example - Creating a new world</a></h3>
+<p>Say we want to create a new world on our Minecraft server. To do this, we need to know the name of the world, and the type (i.e. overworld, nether or the end). As such, we want to create a command with the following structure:</p>
+<pre><code>/createworld &lt;worldname&gt; &lt;type&gt;
+</code></pre>
+<p>Using the world name and the environment of the world, we can use Bukkit's <code>WorldCreator</code> to create a new world that matches our provided specifications:</p>
 <pre><code class="language-java">// Declare our arguments
 LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 arguments.put(&quot;worldname&quot;, new StringArgument());
 arguments.put(&quot;type&quot;, new EnvironmentArgument());
 
-CommandAPI.getInstance().register(&quot;createworld&quot;, arguments, (sender, args) -&gt; {
-	String worldName = (String) args[0];
-	Environment environment = (Environment) args[1];
-    
-    // Create a new world with the specific world name and environment
-    Bukkit.getServer().createWorld(new WorldCreator(worldName).environment(environment));
-	sender.sendMessage(&quot;World created!&quot;);
-});
+new CommandAPICommand(&quot;createworld&quot;)
+    .withArguments(arguments)
+    .executes((sender, args) -&gt; {
+        String worldName = (String) args[0];
+        Environment environment = (Environment) args[1];
+
+        // Create a new world with the specific world name and environment
+        Bukkit.getServer().createWorld(new WorldCreator(worldName).environment(environment));
+        sender.sendMessage(&quot;World created!&quot;);
+    })
+    .register();
 </code></pre>
-<h1><a class="header" href="#itemstack-arguments" id="itemstack-arguments">Itemstack arguments</a></h1>
+</div><h1><a class="header" href="#itemstack-arguments" id="itemstack-arguments">Itemstack arguments</a></h1>
 <h1><a class="header" href="#particle-arguments" id="particle-arguments">Particle arguments</a></h1>
 <h1><a class="header" href="#potion-effect-arguments" id="potion-effect-arguments">Potion effect arguments</a></h1>
 <h1><a class="header" href="#time-argument" id="time-argument">Time argument</a></h1>
