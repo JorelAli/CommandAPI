@@ -1,2 +1,2 @@
 verbose-outputs: true
-create-dispatcher-json: true
+create-dispatcher-json: false

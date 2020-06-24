@@ -8,11 +8,25 @@ Command executors are of the following format, where `sender` is a [`CommandSend
 
 With normal command executors, these do not need to return anything. By default, this will return a _success value_ of 1 if it runs successfully, and a _success value_ of 0 if it runs unsuccessfully, either by throwing an exception _(RuntimeException)_ or by forcing the command to fail (See the section on [handling command failures](./commandfailures.html).
 
-## Example - Creating a message broadcasting system
+<div class="example">
+
+### Example - Creating a message broadcasting system
+
+To illustrate this, let's take a look at a simple message broadcasting command. We declare our arguments (in this case, "message"), we provide some aliases and set a permission required to run the command. Then we declare our main command body by using the `.executes()` method, before finally registering the command:
 
 ```java
 {{#include examples/4.1messagebroadcast.java}}
 ```
+
+Note how when we finish up our implementation of `.executes()`, we don't return anything. This is unlike commands in the standard Bukkit API where the `onCommand` method returns a Boolean value:
+
+```java
+boolean onCommand(CommandSender, Command, String, String[])
+```
+
+The returning of this Boolean value is handled automatically by the CommandAPI on a much lower level.
+
+</div>
 
 -----
 
@@ -38,6 +52,8 @@ This is done using the respective method:
 | `ConsoleCommandSender` | `.executesConsole()`      |
 | `ProxiedCommandSender` | `.executesProxy()`        |
 
+<div class="example">
+
 ### Example - A `/suicide` command
 
 Say we wanted to create a command `/suicide`, which kills the player that executes it. Since this command isn't really "designed" for command senders that are not players, we can restrict it so only players can execute this command (meaning that the console and command blocks cannot run this command). Since it's a player, we can use the `.executesPlayer()` method:
@@ -46,11 +62,17 @@ Say we wanted to create a command `/suicide`, which kills the player that execut
 {{#include examples/4.1suicide.java}}
 ```
 
+</div>
+
+-----
+
 ## Multiple command executor implementations
 
 The CommandAPI allows you to chain different implementations of the command depending on the type of `CommandSender`. This allows you to easily specify what types of `CommandSender`s are required to run a command.
 
 Extending on the suicide example above, we could write another implementation for a different `CommandSender`. Here, we write an implementation to make entities (non-player) go out with a bang when they run the command (using `/execute as <entity> run <command>` command).
+
+<div class="example">
 
 ### Example - A `/suicide` command with different implementations
 
@@ -59,3 +81,5 @@ Extending on the suicide example above, we could write another implementation fo
 ```
 
 This saves having to use `instanceof` multiple times to check the type of the `CommandSender`.
+
+</div>

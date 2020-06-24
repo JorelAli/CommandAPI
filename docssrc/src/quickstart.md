@@ -1,14 +1,20 @@
 # Setting up your development environment
 
-To use the CommandAPI in your plugins, there are two methods of adding it to your development environment:
+To use the CommandAPI in your plugins, there are a few methods of adding it to your development environment.
+
+-----
 
 ## Manually using the .jar
 
 - Download the latest CommandAPI.jar from the download page [here](https://github.com/JorelAli/1.13-Command-API/releases/latest)
+
 - Add the CommandAPI.jar file to your project/environment's build path:
 
   ![](images/eclipse.jpg)
-- Add the plugin as a dependent in the plugin.yml (`depend: [CommandAPI]`)
+  
+- Add the CommandAPI as a dependent in the plugin.yml (`depend: [CommandAPI]`)
+
+-----
 
 ## Using Maven (recommended)
 
@@ -38,10 +44,16 @@ To use the CommandAPI in your plugins, there are two methods of adding it to you
       </dependency>
   </dependencies>
   ```
-  A list of version numbers can be found [here](https://github.com/JorelAli/1.13-Command-API/tree/mvn-repo/1.13CommandAPI/io/github/jorelali/commandapi).
-  For example, if you wanted to use version 2.0, you would use `<version>2.0</version>`
+  A list of version numbers can be found [here](https://github.com/JorelAli/1.13-Command-API/tree/mvn-repo/1.13CommandAPI/io/github/jorelali/commandapi)
+  For example, if you wanted to use version 3.0, you would use `<version>3.0</version>`
 
-* Add the plugin as a dependent in the plugin.yml (`depend: [CommandAPI]`)
+* Add the CommandAPI as a dependent in the plugin.yml (`depend: [CommandAPI]`)
+
+> **Please Note:**
+>
+> In version 3.0 onwards, the group ID is no longer `io.github.jorelali`. Instead, the group ID is `dev.jorel`, as shown above. If you would like to use a version of the CommandAPI that is less than 3.0, you must make sure the group ID is `io.github.jorelali`.
+
+-----
 
 ## Using Gradle
 
@@ -65,6 +77,6 @@ To use the CommandAPI in your plugins, there are two methods of adding it to you
   ```
 
   A list of version numbers can be found [here](https://github.com/JorelAli/1.13-Command-API/tree/mvn-repo/1.13CommandAPI/io/github/jorelali/commandapi).
-  For example, if you wanted to use version 2.0, you would use `compile "dev.jorel:commandapi:2.0"`
+  For example, if you wanted to use version 3.0, you would use `compile "dev.jorel:commandapi:3.0"`
 
-* Add the plugin as a dependent in the plugin.yml (`depend: [CommandAPI]`)
+* Add the CommandAPI as a dependent in the plugin.yml (`depend: [CommandAPI]`)

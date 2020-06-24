@@ -192,6 +192,7 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 <li>Finally, we register the command to the CommandAPI using <code>register</code>.</li>
 </ul>
 <p>That's it! This simple snippet of code fully registers the command to the server. No hassling with a plugin instance, no messing with <code>plugin.yml</code> files.</p>
+<hr />
 <h2><a class="header" href="#commandapicommand-methods" id="commandapicommand-methods"><code>CommandAPICommand</code> methods</a></h2>
 <p>The <code>CommandAPICommand</code> has various methods, which are outlined below:</p>
 <h4><a class="header" href="#setting-command-properties" id="setting-command-properties">Setting command properties</a></h4>
@@ -220,18 +221,21 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 <ul>
 <li><code>register()</code> - Registers the command.</li>
 </ul>
+<hr />
 <h2><a class="header" href="#command-loading-order" id="command-loading-order">Command loading order</a></h2>
 <p>In order to register commands properly, <strong>commands must be registered before the server finishes loading</strong>. The CommandAPI will prevent command registration after the server has loaded. This basically means that all command registration must occur during a plugin's <code>onLoad()</code> or <code>onEnable()</code> method. With the CommandAPI, depending on whether you use <code>onLoad()</code> or <code>onEnable()</code> to load your commands depends on whether your plugin is used with Minecraft's functions:</p>
 <table><thead><tr><th>When to load</th><th>What to do</th></tr></thead><tbody>
 <tr><td><code>onLoad()</code> method</td><td>Register commands to be used in Minecraft functions (<a href="functions.html">see the Function section for more info</a>)</td></tr>
 <tr><td><code>onEnable()</code> method</td><td>Register regular commands</td></tr>
 </tbody></table>
+<hr />
 <h2><a class="header" href="#command-unregistration" id="command-unregistration">Command unregistration</a></h2>
 <p>The CommandAPI has support to unregister commands completely from Minecraft's command list. This includes Minecraft built in commands!</p>
 <table><thead><tr><th>Method</th><th>Result</th></tr></thead><tbody>
-<tr><td><code>CommandAPI.getInstance().unregister(String cmd)</code></td><td>Unregisters a command from the game</td></tr>
-<tr><td><code>CommandAPI.getInstance().unregister(String cmd, boolean force)</code></td><td>Attempts to unregister a command from the game by force. This includes <code>/minecraft:cmd</code>, <code>/bukkit:cmd</code> and <code>/spigot:cmd</code> commands as well.</td></tr>
+<tr><td><code>CommandAPI.unregister(String cmd)</code></td><td>Unregisters a command from the game</td></tr>
+<tr><td><code>CommandAPI.unregister(String cmd, boolean force)</code></td><td>Attempts to unregister a command from the game by force. This includes <code>/minecraft:cmd</code>, <code>/bukkit:cmd</code> and <code>/spigot:cmd</code> commands as well.</td></tr>
 </tbody></table>
+<div class="example">
 <h3><a class="header" href="#example---replacing-minecrafts-gamemode-command" id="example---replacing-minecrafts-gamemode-command">Example - Replacing Minecraft's <code>/gamemode</code> command</a></h3>
 <p>To replace a command, we can first unregister it and then register our implementation of that command.</p>
 <pre><code class="language-java">//Unregister the gamemode command from the server (by force)
@@ -252,9 +256,9 @@ new CommandAPICommand(&quot;gamemode&quot;)
 <blockquote>
 <p><strong>Developer's Note:</strong></p>
 <p>Command unregistration, although powerful, is highly unrecommended. It is the CommandAPI's most &quot;dangerous&quot; feature as it can cause unexpected sideffects, such as command blocks executing commands you wouldn't expect them to. In almost every case, I'd recommend just creating a new command instead of unregistering one to replace it.</p>
-<p>For instance, instead of unregistering <code>/gamemode</code>, you could register a command <code>/gm</code> or <code>/customgamemode</code>.</p>
+<p>For instance, instead of unregistering <code>/gamemode</code>, you could register a command <code>/gm</code> or <code>/changegamemode</code>.</p>
 </blockquote>
-
+</div>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">

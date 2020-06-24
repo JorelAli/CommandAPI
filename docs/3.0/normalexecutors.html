@@ -172,7 +172,9 @@
 }).register();
 </code></pre>
 <p>With normal command executors, these do not need to return anything. By default, this will return a <em>success value</em> of 1 if it runs successfully, and a <em>success value</em> of 0 if it runs unsuccessfully, either by throwing an exception <em>(RuntimeException)</em> or by forcing the command to fail (See the section on <a href="./commandfailures.html">handling command failures</a>.</p>
-<h2><a class="header" href="#example---creating-a-message-broadcasting-system" id="example---creating-a-message-broadcasting-system">Example - Creating a message broadcasting system</a></h2>
+<div class="example">
+<h3><a class="header" href="#example---creating-a-message-broadcasting-system" id="example---creating-a-message-broadcasting-system">Example - Creating a message broadcasting system</a></h3>
+<p>To illustrate this, let's take a look at a simple message broadcasting command. We declare our arguments (in this case, &quot;message&quot;), we provide some aliases and set a permission required to run the command. Then we declare our main command body by using the <code>.executes()</code> method, before finally registering the command:</p>
 <pre><code class="language-java">// Create our arguments
 LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 arguments.put(&quot;message&quot;, new GreedyStringArgument());
@@ -187,6 +189,11 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
         Bukkit.getServer().broadcastMessage(message);
     }).register();
 </code></pre>
+<p>Note how when we finish up our implementation of <code>.executes()</code>, we don't return anything. This is unlike commands in the standard Bukkit API where the <code>onCommand</code> method returns a Boolean value:</p>
+<pre><code class="language-java">boolean onCommand(CommandSender, Command, String, String[])
+</code></pre>
+<p>The returning of this Boolean value is handled automatically by the CommandAPI on a much lower level.</p>
+</div>
 <hr />
 <h2><a class="header" href="#restricting-who-can-run-your-command" id="restricting-who-can-run-your-command">Restricting who can run your command</a></h2>
 <p>The <code>CommandAPICommand</code> has multiple different <code>executes...()</code> methods that can restrict the command sender to any of the following objects:</p>
@@ -207,6 +214,7 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 <tr><td><code>ConsoleCommandSender</code></td><td><code>.executesConsole()</code></td></tr>
 <tr><td><code>ProxiedCommandSender</code></td><td><code>.executesProxy()</code></td></tr>
 </tbody></table>
+<div class="example">
 <h3><a class="header" href="#example---a-suicide-command" id="example---a-suicide-command">Example - A <code>/suicide</code> command</a></h3>
 <p>Say we wanted to create a command <code>/suicide</code>, which kills the player that executes it. Since this command isn't really &quot;designed&quot; for command senders that are not players, we can restrict it so only players can execute this command (meaning that the console and command blocks cannot run this command). Since it's a player, we can use the <code>.executesPlayer()</code> method:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;suicide&quot;)
@@ -214,9 +222,12 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 		player.setHealth(0);
     }).register();
 </code></pre>
+</div>
+<hr />
 <h2><a class="header" href="#multiple-command-executor-implementations" id="multiple-command-executor-implementations">Multiple command executor implementations</a></h2>
 <p>The CommandAPI allows you to chain different implementations of the command depending on the type of <code>CommandSender</code>. This allows you to easily specify what types of <code>CommandSender</code>s are required to run a command.</p>
 <p>Extending on the suicide example above, we could write another implementation for a different <code>CommandSender</code>. Here, we write an implementation to make entities (non-player) go out with a bang when they run the command (using <code>/execute as &lt;entity&gt; run &lt;command&gt;</code> command).</p>
+<div class="example">
 <h3><a class="header" href="#example---a-suicide-command-with-different-implementations" id="example---a-suicide-command-with-different-implementations">Example - A <code>/suicide</code> command with different implementations</a></h3>
 <pre><code class="language-java">new CommandAPICommand(&quot;suicide&quot;)
     .executesPlayer((player, args) -&gt; {
@@ -228,7 +239,7 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
     }).register();
 </code></pre>
 <p>This saves having to use <code>instanceof</code> multiple times to check the type of the <code>CommandSender</code>.</p>
-
+</div>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">

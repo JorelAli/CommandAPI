@@ -166,7 +166,7 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#installation" id="installation">Installation</a></h1>
-<p>Installing the CommandAPI is easy! Just download the latest <code>CommandAPI.jar</code> file using the button below and place it in your server's <code>plugins/</code> folder!</p>
+<p>Installing the CommandAPI is easy! Just download the latest <code>CommandAPI.jar</code> file using the button below and place it in your server's <code>plugins</code> folder!</p>
 <br>
 <p><a href="https://github.com/JorelAli/1.13-Command-API/releases/latest/download/CommandAPI.jar" style="
 background-color:#EB7035;
@@ -180,11 +180,18 @@ margin-top: -30px;
 margin-bottom: 30px;
 margin-left:auto;
 margin-right: auto;">Download latest CommandAPI.jar</a></p>
+<hr />
+<h2><a class="header" href="#additional-dependencies" id="additional-dependencies">Additional dependencies</a></h2>
+<ul>
+<li>If you use NBT data, you'll also need the <a href="https://www.spigotmc.org/resources/nbt-api.7939/">NBT API</a>. (you can find out from your developers if you need this or not)</li>
+<li>If you are using raw JSON chat data, you'll need to be running <a href="https://www.spigotmc.org/wiki/about-spigot/">Spigot</a> or another spigot-related server such as <a href="https://papermc.io/">Paper Spigot</a> or <a href="https://tacospigot.github.io/">Taco Spigot</a>. (Again, you can find out from your developers if you need this or not)</li>
+</ul>
+<hr />
 <h2><a class="header" href="#configuring-the-commandapi" id="configuring-the-commandapi">Configuring the CommandAPI</a></h2>
 <p>The CommandAPI can be configured in the <code>plugins/CommandAPI/config.yml</code> file.</p>
 <p>The default <code>config.yml</code> settings are as follows:</p>
 <pre><code class="language-yaml">verbose-outputs: true
-create-dispatcher-json: true
+create-dispatcher-json: false
 </code></pre>
 <ul>
 <li><code>verbose-outputs</code> - Outputs command registration and unregistration logs in the console</li>

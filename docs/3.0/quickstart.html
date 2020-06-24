@@ -166,7 +166,8 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#setting-up-your-development-environment" id="setting-up-your-development-environment">Setting up your development environment</a></h1>
-<p>To use the CommandAPI in your plugins, there are two methods of adding it to your development environment:</p>
+<p>To use the CommandAPI in your plugins, there are a few methods of adding it to your development environment.</p>
+<hr />
 <h2><a class="header" href="#manually-using-the-jar" id="manually-using-the-jar">Manually using the .jar</a></h2>
 <ul>
 <li>
@@ -177,9 +178,10 @@
 <p><img src="images/eclipse.jpg" alt="" /></p>
 </li>
 <li>
-<p>Add the plugin as a dependent in the plugin.yml (<code>depend: [CommandAPI]</code>)</p>
+<p>Add the CommandAPI as a dependent in the plugin.yml (<code>depend: [CommandAPI]</code>)</p>
 </li>
 </ul>
+<hr />
 <h2><a class="header" href="#using-maven-recommended" id="using-maven-recommended">Using Maven (recommended)</a></h2>
 <blockquote>
 <p><strong>Developer's Note:</strong></p>
@@ -206,13 +208,18 @@
     &lt;/dependency&gt;
 &lt;/dependencies&gt;
 </code></pre>
-<p>A list of version numbers can be found <a href="https://github.com/JorelAli/1.13-Command-API/tree/mvn-repo/1.13CommandAPI/io/github/jorelali/commandapi">here</a>.
-For example, if you wanted to use version 2.0, you would use <code>&lt;version&gt;2.0&lt;/version&gt;</code></p>
+<p>A list of version numbers can be found <a href="https://github.com/JorelAli/1.13-Command-API/tree/mvn-repo/1.13CommandAPI/io/github/jorelali/commandapi">here</a>
+For example, if you wanted to use version 3.0, you would use <code>&lt;version&gt;3.0&lt;/version&gt;</code></p>
 </li>
 <li>
-<p>Add the plugin as a dependent in the plugin.yml (<code>depend: [CommandAPI]</code>)</p>
+<p>Add the CommandAPI as a dependent in the plugin.yml (<code>depend: [CommandAPI]</code>)</p>
 </li>
 </ul>
+<blockquote>
+<p><strong>Please Note:</strong></p>
+<p>In version 3.0 onwards, the group ID is no longer <code>io.github.jorelali</code>. Instead, the group ID is <code>dev.jorel</code>, as shown above. If you would like to use a version of the CommandAPI that is less than 3.0, you must make sure the group ID is <code>io.github.jorelali</code>.</p>
+</blockquote>
+<hr />
 <h2><a class="header" href="#using-gradle" id="using-gradle">Using Gradle</a></h2>
 <ul>
 <li>
@@ -232,10 +239,10 @@ For example, if you wanted to use version 2.0, you would use <code>&lt;version&g
 }
 </code></pre>
 <p>A list of version numbers can be found <a href="https://github.com/JorelAli/1.13-Command-API/tree/mvn-repo/1.13CommandAPI/io/github/jorelali/commandapi">here</a>.
-For example, if you wanted to use version 2.0, you would use <code>compile &quot;dev.jorel:commandapi:2.0&quot;</code></p>
+For example, if you wanted to use version 3.0, you would use <code>compile &quot;dev.jorel:commandapi:3.0&quot;</code></p>
 </li>
 <li>
-<p>Add the plugin as a dependent in the plugin.yml (<code>depend: [CommandAPI]</code>)</p>
+<p>Add the CommandAPI as a dependent in the plugin.yml (<code>depend: [CommandAPI]</code>)</p>
 </li>
 </ul>
 

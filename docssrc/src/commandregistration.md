@@ -18,6 +18,8 @@ I think the easiest way to explain it is with an example:
 
 That's it! This simple snippet of code fully registers the command to the server. No hassling with a plugin instance, no messing with `plugin.yml` files.
 
+-----
+
 ## `CommandAPICommand` methods
 
 The `CommandAPICommand` has various methods, which are outlined below:
@@ -45,6 +47,8 @@ The `CommandAPICommand` has various methods, which are outlined below:
 
 - `register()` - Registers the command.
 
+-----
+
 
 ## Command loading order
 
@@ -55,14 +59,18 @@ In order to register commands properly, **commands must be registered before the
 | `onLoad()` method   | Register commands to be used in Minecraft functions ([see the Function section for more info](functions.html)) |
 | `onEnable()` method | Register regular commands                                                                                      |
 
+-----
+
 ## Command unregistration
 
 The CommandAPI has support to unregister commands completely from Minecraft's command list. This includes Minecraft built in commands!
 
-| Method                                                       | Result                                                       |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| `CommandAPI.getInstance().unregister(String cmd)`            | Unregisters a command from the game                          |
-| `CommandAPI.getInstance().unregister(String cmd, boolean force)` | Attempts to unregister a command from the game by force. This includes `/minecraft:cmd`, `/bukkit:cmd` and `/spigot:cmd` commands as well. |
+| Method                                             | Result                                                       |
+| -------------------------------------------------- | ------------------------------------------------------------ |
+| `CommandAPI.unregister(String cmd)`                | Unregisters a command from the game                          |
+| `CommandAPI.unregister(String cmd, boolean force)` | Attempts to unregister a command from the game by force. This includes `/minecraft:cmd`, `/bukkit:cmd` and `/spigot:cmd` commands as well. |
+
+<div class="example">
 
 ### Example - Replacing Minecraft's `/gamemode` command
 
@@ -76,4 +84,6 @@ To replace a command, we can first unregister it and then register our implement
 >
 > Command unregistration, although powerful, is highly unrecommended. It is the CommandAPI's most "dangerous" feature as it can cause unexpected sideffects, such as command blocks executing commands you wouldn't expect them to. In almost every case, I'd recommend just creating a new command instead of unregistering one to replace it.
 >
-> For instance, instead of unregistering `/gamemode`, you could register a command `/gm` or `/customgamemode`.
+> For instance, instead of unregistering `/gamemode`, you could register a command `/gm` or `/changegamemode`.
+
+</div>

@@ -167,28 +167,24 @@
                     <main>
                         <h1><a class="header" href="#proxied-commandsenders" id="proxied-commandsenders">Proxied commandsenders</a></h1>
 <p>The CommandAPI has extra support for vanilla Minecraft's <code>/execute</code> command, by allowing the CommandSender to be an instance of the <code>ProxiedCommandSender</code> class. This allows the CommandSender to contain two extra pieces of information: The &quot;proxied sender&quot; and the original sender.</p>
-<h2><a class="header" href="#example---running-a-command-as-a-chicken" id="example---running-a-command-as-a-chicken">Example - Running a command as a chicken</a></h2>
+<div class="example">
+<h3><a class="header" href="#example---running-a-command-as-a-chicken" id="example---running-a-command-as-a-chicken">Example - Running a command as a chicken</a></h3>
 <p>Say we have a command which kills the sender of a command. This is easily implemented as follows:</p>
-<pre><code class="language-java">CommandAPI.getInstance().register(&quot;killme&quot;, new LinkedHashMap&lt;String, Argument&gt;(), (sender, args) -&gt; {
-	if(sender instanceof Player) {
-		Player player = (Player) sender;
+<pre><code class="language-java">new CommandAPICommand(&quot;killme&quot;)
+    .executesPlayer((player, args) -&gt; {
 		player.setHealth(0);
-	}
-});
+	})
+    .register();
 </code></pre>
 <p>But what if the sender of the command is <em>not</em> a player? By using Minecraft's <code>/execute</code> command, we could execute the command as <em>any</em> arbitrary entity, as shown with the command below:</p>
 <pre><code>/execute as @e[type=chicken] run killme
 </code></pre>
-<p>To handle this case, we can check if the sender is an instance of a <code>ProxiedCommandSender</code>, and kill the <code>callee</code> <em>(the entity which is being 'forced' to run the command /killme)</em></p>
-<pre><code class="language-java">CommandAPI.getInstance().register(&quot;killme&quot;, new LinkedHashMap&lt;String, Argument&gt;(), (sender, args) -&gt; {
-	if(sender instanceof Player) {
-		Player player = (Player) sender;
+<p>To handle this case, we can use the <code>.executesProxy()</code> method to ensure that the command sender is a <code>ProxiedCommandSender</code>. Then, we can kill the <code>callee</code> <em>(the entity which is being 'forced' to run the command /killme)</em></p>
+<pre><code class="language-java">new CommandAPICommand(&quot;killme&quot;)
+    .executesPlayer((player, args) -&gt; {
 		player.setHealth(0);
-	} else if(sender instanceof ProxiedCommandSender) {
-
-		//Get the proxy CommandSender object from the CommandSender
-		ProxiedCommandSender proxy = (ProxiedCommandSender) sender;
-
+	})
+    .executesProxy((proxy, args) -&gt; {
 		//Check if the callee is an Entity
 		if(proxy.getCallee() instanceof Entity) {
 
@@ -196,12 +192,11 @@
 			Entity target = (Entity) proxy.getCallee();
 			entity.setHealth(0);
 		}
-	}
-});
-
+    })
+    .register();
 </code></pre>
 <p>This allows the command above to run successfully, killing all chickens it can find.</p>
-
+</div>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
