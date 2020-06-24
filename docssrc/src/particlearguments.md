@@ -16,7 +16,7 @@ With this, we can simply spawn the particle using the `World.spawnParticle(Parti
 
 ```java
 LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("particle", new ItemStackArgument());
+arguments.put("particle", new ParticleArgument());
 
 new CommandAPICommand("showparticle")
     .withArguments(arguments)

@@ -36,8 +36,8 @@ import org.bukkit.craftbukkit.v1_15_R1.util.CraftChatMessage;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ComplexRecipe;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
 
@@ -53,10 +53,9 @@ import com.mojang.brigadier.suggestion.Suggestions;
 
 import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.CustomProvidedArgument.SuggestionProviders;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.IntegerRange;
@@ -107,6 +106,7 @@ import net.minecraft.server.v1_15_R1.Entity;
 import net.minecraft.server.v1_15_R1.EnumDirection.EnumAxis;
 import net.minecraft.server.v1_15_R1.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_15_R1.ICompletionProvider;
+import net.minecraft.server.v1_15_R1.IRecipe;
 import net.minecraft.server.v1_15_R1.IRegistry;
 import net.minecraft.server.v1_15_R1.IVectorPosition;
 import net.minecraft.server.v1_15_R1.LootTableRegistry;
@@ -345,8 +345,21 @@ public class NMS_1_15_R1 implements NMS {
 	}
 
 	@Override
-	public Recipe getRecipe(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return ArgumentMinecraftKeyRegistered.b(cmdCtx, key).toBukkitRecipe();
+	public ComplexRecipe getRecipe(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		IRecipe<?> recipe = ArgumentMinecraftKeyRegistered.b(cmdCtx, key);
+		return new ComplexRecipe() {
+			
+			@SuppressWarnings("deprecation")
+			@Override
+			public NamespacedKey getKey() {
+				return new NamespacedKey(recipe.getKey().getNamespace(), recipe.getKey().getKey());
+			}
+			
+			@Override
+			public ItemStack getResult() {
+				return recipe.toBukkitRecipe().getResult();
+			}
+		};
 	}
 
 	@Override

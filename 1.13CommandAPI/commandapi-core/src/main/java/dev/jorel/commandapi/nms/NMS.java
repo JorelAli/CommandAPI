@@ -34,9 +34,9 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 
 import de.tr7zw.nbtapi.NBTContainer;
-import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.CustomProvidedArgument.SuggestionProviders;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
+import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.IntegerRange;
@@ -140,7 +140,7 @@ public interface NMS {
 	String              getObjective(CommandContext<?> cmdCtx, String key, CommandSender sender) throws IllegalArgumentException, CommandSyntaxException;
 	Player              getPlayer(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 	PotionEffectType    getPotionEffect(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
-	Recipe              getRecipe(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException; 
+	Recipe       		getRecipe(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException; 
 	Collection<String>  getScoreHolderMultiple(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 	String              getScoreHolderSingle(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 	String              getTeam(CommandContext<?> cmdCtx, String key, CommandSender sender) throws CommandSyntaxException;

@@ -1,6 +1,6 @@
 package dev.jorel.commandapi.arguments;
 
-import org.bukkit.loot.LootTable;
+import org.bukkit.inventory.Recipe;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 
@@ -12,7 +12,7 @@ public class RecipeArgument extends Argument implements CustomProvidedArgument {
 
 	@Override
 	public Class<?> getPrimitiveType() {
-		return LootTable.class;
+		return Recipe.class;
 	}
 
 	@Override

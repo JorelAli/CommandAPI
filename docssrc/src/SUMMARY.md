@@ -2,6 +2,8 @@
 
 [Introduction](./intro.md)
 
+-----
+
 # Section 1: CommandAPI Setup
 
 - [Installation for server owners](./installation.md)
@@ -36,13 +38,12 @@
     - [Itemstack arguments](./itemstackarguments.md)
     - [Particle arguments](./particlearguments.md)
     - [Potion effect arguments](./potionarguments.md)
+    - [Sound arguments](./soundargument.md)
+    - [Recipe arguments](./recipeargument.md)
     - [Time arguments](./timeargs.md)
   - [Literal arguments](./literalarguments.md)
   - [Custom arguments](./customarguments.md)
   - [Technical arguments](./technicalargs.md)
-    - [Sound argument](./soundargument.md)
-    - [Advancement argument](./advancementarg.md)
-    - [Recipe argument](./recipeargument.md)
     - [LootTable argument](./loottableargument.md)
 - [Functions & Tags](./functions.md)
   - [Setting up functions & tags](./functionsetup.md)
@@ -54,6 +55,8 @@
 # Section 3: CommandAPI Utilities
 
 - [Command conversion](./conversion.md)
+
+-----
 
 [Upgrading guide](./upgrading.md)
 

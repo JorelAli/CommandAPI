@@ -61,14 +61,14 @@ The type to cast each argument (declared in the `dev.jorel.commandapi.arguments`
 |                                        `NBTCompoundArgument` | `de.tr7zw.nbtapi.NBTContainer`                               |
 | [`ObjectiveArgument`](./objectivearguments.md#objective-argument) | `String`                                                     |
 | [`ObjectiveCriteriaArgument`](./objectivearguments.md#objective-criteria-argument) | `String`                                                     |
-|                                          `ParticleArgument` | `org.bukkit.Particle`                                        |
+|                                          [`ParticleArgument`](./particlearguments.md) | `org.bukkit.Particle`                                        |
 |     [`PlayerArgument`](./entityarguments.md#player-argument) | `org.bukkit.entity.Player`                                   |
-|                                      `PotionEffectArgument` | `org.bukkit.potion.PotionEffectType`                         |
-|                                             `RecipeArgument` | `org.bukkit.inventory.Recipe`                                |
+|                                      [`PotionEffectArgument`](./potionarguments.md) | `org.bukkit.potion.PotionEffectType`                         |
+|                                             [`RecipeArgument`](./recipeargument.md) | `org.bukkit.inventory.Recipe`                                |
 |                      [`RotationArgument`](./rotationargs.md) | `dev.jorel.commandapi.wrappers.Rotation`                     |
 | [`ScoreboardSlotArgument`](./scoreboardarguments.md#scoreboard-slot-argument) | `dev.jorel.commandapi.wrappers.ScoreboardSlot`               |
 | [`ScoreHolderArgument`](./scoreboardarguments.md#score-holder-argument) | The cast type changes depending on the input parameter:<br /><ul><li>`ScoreHolderType.SINGLE` - `String`</li><br /><li>`ScoreHolderType.MULTIPLE` - `Collection<String>`</li></ul> |
-|                                              `SoundArgument` | `org.bukkit.Sound`                                           |
+|                                              [`SoundArgument`](./soundargument.md) | `org.bukkit.Sound`                                           |
 |     [`StringArgument`](./stringarguments.md#string-argument) | `String`                                                     |
 |                         [`TeamArgument`](./teamarguments.md) | `String`                                                     |
 |         [`TextArgument`](./stringarguments.md#text-argument) | `String`                                                     |
