@@ -58,7 +58,7 @@ The type to cast each argument (declared in the `dev.jorel.commandapi.arguments`
 | [`LongArgument`](./primitivearguments.md#numerical-arguments) | `long`                                                       |
 |                                          `LootTableArgument` | `org.bukkit.loot.LootTable`                                  |
 |                                      `MathOperationArgument` | `dev.jorel.commandapi.wrappers.MathOperation`                |
-|                                        `NBTCompoundArgument` | `de.tr7zw.nbtapi.NBTContainer`                               |
+|                                        [`NBTCompoundArgument`](./nbtarguments.md) | `de.tr7zw.nbtapi.NBTContainer`                               |
 | [`ObjectiveArgument`](./objectivearguments.md#objective-argument) | `String`                                                     |
 | [`ObjectiveCriteriaArgument`](./objectivearguments.md#objective-criteria-argument) | `String`                                                     |
 |                                          [`ParticleArgument`](./particlearguments.md) | `org.bukkit.Particle`                                        |

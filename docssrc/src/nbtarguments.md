@@ -21,3 +21,7 @@ new CommandAPICommand("award")
 ```
 
 </div>
+
+> **Developer's Note:**
+>
+> I haven't personally explored much with using this argument, so this example isn't great. If you believe you can supply a suitable example for this page, feel free to send an example [on the CommandAPI issues page](https://github.com/JorelAli/1.13-Command-API/issues/new/choose).

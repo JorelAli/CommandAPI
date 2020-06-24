@@ -641,7 +641,7 @@ new CommandAPICommand(&quot;cmd&quot;)
 <tr><td align="right"><a href="./primitivearguments.html#numerical-arguments"><code>LongArgument</code></a></td><td align="left"><code>long</code></td></tr>
 <tr><td align="right"><code>LootTableArgument</code></td><td align="left"><code>org.bukkit.loot.LootTable</code></td></tr>
 <tr><td align="right"><code>MathOperationArgument</code></td><td align="left"><code>dev.jorel.commandapi.wrappers.MathOperation</code></td></tr>
-<tr><td align="right"><code>NBTCompoundArgument</code></td><td align="left"><code>de.tr7zw.nbtapi.NBTContainer</code></td></tr>
+<tr><td align="right"><a href="./nbtarguments.html"><code>NBTCompoundArgument</code></a></td><td align="left"><code>de.tr7zw.nbtapi.NBTContainer</code></td></tr>
 <tr><td align="right"><a href="./objectivearguments.html#objective-argument"><code>ObjectiveArgument</code></a></td><td align="left"><code>String</code></td></tr>
 <tr><td align="right"><a href="./objectivearguments.html#objective-criteria-argument"><code>ObjectiveCriteriaArgument</code></a></td><td align="left"><code>String</code></td></tr>
 <tr><td align="right"><a href="./particlearguments.html"><code>ParticleArgument</code></a></td><td align="left"><code>org.bukkit.Particle</code></td></tr>
@@ -1608,7 +1608,12 @@ new CommandAPICommand(&quot;award&quot;)
     })
     .register();
 </code></pre>
-</div><h1><a class="header" href="#literal-arguments" id="literal-arguments">Literal arguments</a></h1>
+</div>
+<blockquote>
+<p><strong>Developer's Note:</strong></p>
+<p>I haven't personally explored much with using this argument, so this example isn't great. If you believe you can supply a suitable example for this page, feel free to send an example <a href="https://github.com/JorelAli/1.13-Command-API/issues/new/choose">on the CommandAPI issues page</a>.</p>
+</blockquote>
+<h1><a class="header" href="#literal-arguments" id="literal-arguments">Literal arguments</a></h1>
 <p>Literal arguments are used to represent &quot;forced options&quot; for a command. For instance, take Minecraft's <code>/gamemode</code> command. The syntax consists of the following:</p>
 <pre><code>/gamemode &lt;mode&gt; [player]
 </code></pre>
