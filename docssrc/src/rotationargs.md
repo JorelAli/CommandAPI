@@ -13,7 +13,9 @@ The `RotationArgument` class returns a `Rotation` object, which consists of the 
 
 <div class="example">
 
-## Example: ???
+### Example: ???
+
+Say we want to make an armor stand look in a certain direction.
 
 ```java
 LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();

@@ -6,7 +6,7 @@ import dev.jorel.commandapi.wrappers.MathOperation;
 public class MathOperationArgument extends Argument {
 
 	/**
-	 * An EntityType argument. Represents the type of an Entity
+	 * A MathOperation argument. Represents a math operation (e.g. addition, subtraction etc.)
 	 */
 	public MathOperationArgument() {
 		super(CommandAPIHandler.getNMS()._ArgumentMathOperation());

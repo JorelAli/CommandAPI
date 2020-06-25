@@ -25,35 +25,35 @@ List of things to document
     - [x] IntegerRangeArgument
     - [x] Mention how to use various Ranged classes
   - [x] LongArgument
-  - [ ] Math operation argument
-    - [ ] All of the technicalities with math operation argument:	
-      - [ ] x < y -> min(x, y)
-      - [ ] x > y -> max(x, y)
-      - [ ] x >< y -> y
-      - [ ] x = y -> y
-  - [ ] NBTCompoundArgument
-    - [ ] NBTNotFoundException, and the dependency on the NBTAPI
+  - [x] Math operation argument
+    - [x] All of the technicalities with math operation argument:	
+      - [x] x < y -> min(x, y)
+      - [x] x > y -> max(x, y)
+      - [x] x >< y -> y
+      - [x] x = y -> y
+  - [x] NBTCompoundArgument
+    - [x] NBTNotFoundException, and the dependency on the NBTAPI
   - [x] TimeArgument
     - [x] TimeArgumentException - TimeArgument only compatible with 1.14+
   - [ ] Position based arguments:
-    - [ ] Location2DArgument
-      - [ ] Mention how to use Location2D, and how it extends Location so can be used wherever location is used
+    - [x] Location2DArgument
+      - [x] Mention how to use Location2D, and how it extends Location so can be used wherever location is used
     - [x] RotationArgument
       - [x] Mention of Rotation class
       - [ ] Test the rotation example + give it a name
-    - [ ] AxisArgument
+    - [x] AxisArgument
     - [x] (Move LocationArgument section into "position based" section)
-  - [ ] Scoreboard based arguments:
-    - [ ] ScoreboardSlotArgument
-      - [ ] Extra mention about how to use ScoreboardSlot class
-    - [ ] ScoreHolderArgument
-      - [ ] Mention ScoreHolderTypes and their use
-    - [ ] TeamArgument
-    - [ ] ObjectiveArgument
-    - [ ] ObjectiveCriteriaArgument
+  - [x] Scoreboard based arguments:
+    - [x] ScoreboardSlotArgument
+      - [x] Extra mention about how to use ScoreboardSlot class
+    - [x] ScoreHolderArgument
+      - [x] Mention ScoreHolderTypes and their use
+    - [x] TeamArgument
+    - [x] ObjectiveArgument
+    - [x] ObjectiveCriteriaArgument
 - Things that weren't documented before but need to be:
 
-  - [ ] InvalidRangeException, for int,long,float,double arguments with ranges
+  - [x] InvalidRangeException, for int,long,float,double arguments with ranges
   - [ ] Update documentation for `LiteralArgument`s, based off of the new research from SuperLiterals:
     - [ ] They can be "entered", but not accepted _(i.e. pressing the enter button still sends it to the server)_
     - [ ] Can consist of any non-whitespace character

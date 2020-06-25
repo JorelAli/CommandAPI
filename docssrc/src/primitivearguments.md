@@ -54,9 +54,9 @@ Each numerical argument can have ranges applied to them, which restricts the use
 | Constructor | Description |
 | ----------- | ----------- |
 | `new IntegerArgument()` | Any range |
-| `new IntegerArgument(2)` | Values greater than _or equal to_ 2 |
-| `new IntegerArgument(2, 10)` | Values greater than or equal to 2 and less than or equal to 10 |
+| `new IntegerArgument(min)` | Values greater than _or equal to_ `min` |
+| `new IntegerArgument(min, max)` | Values greater than or equal to `min` and less than or equal to `max` |
 
-Each range is _inclusive_, so it includes the number given to it.
+Each range is _inclusive_, so it includes the number given to it. If the minimum value provided is larger than the maximum value, an `InvalidRangeException` is thrown.
 
 

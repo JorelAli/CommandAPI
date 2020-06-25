@@ -36,6 +36,7 @@
     - [Enchantment arguments](./enchantmentargument.md)
     - [Environment arguments](./environmentargs.md)
     - [Itemstack arguments](./itemstackarguments.md)
+    - [MathOperation arguments](./mathoperationarguments.md)
     - [Particle arguments](./particlearguments.md)
     - [Potion effect arguments](./potionarguments.md)
     - [Sound arguments](./soundargument.md)
