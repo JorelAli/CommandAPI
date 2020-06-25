@@ -131,6 +131,7 @@ public interface NMS {
 	/** Argument implementations with CommandSyntaxExceptions */
 	Advancement         getAdvancement(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 	BaseComponent[]     getChat(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException; 
+	Environment         getDimension(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 	ItemStack           getItemStack(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 	Object              getEntitySelector(CommandContext<?> cmdCtx, String key, EntitySelector selector) throws CommandSyntaxException;
 	EntityType          getEntityType(CommandContext<?> cmdCtx, String key, CommandSender sender) throws CommandSyntaxException;
@@ -151,7 +152,6 @@ public interface NMS {
 	EnumSet<Axis>      getAxis(CommandContext<?> cmdCtx, String key);
 	ChatColor          getChatColor(CommandContext<?> cmdCtx, String key);
 	BaseComponent[]    getChatComponent(CommandContext<?> cmdCtx, String key);
-	Environment        getDimension(CommandContext<?> cmdCtx, String key);
 	Enchantment        getEnchantment(CommandContext<?> cmdCtx, String key);
 	FloatRange         getFloatRange(CommandContext<?> cmdCtx, String key);
 	IntegerRange       getIntRange(CommandContext<?> cmdCtx, String key);

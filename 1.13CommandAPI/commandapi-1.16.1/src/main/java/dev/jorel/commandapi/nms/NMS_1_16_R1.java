@@ -523,18 +523,9 @@ public class NMS_1_16_R1 implements NMS {
 	}
 
 	@Override
-	public Environment getDimension(CommandContext cmdCtx, String key) {
+	public Environment getDimension(CommandContext cmdCtx, String key) throws CommandSyntaxException {
 		WorldServer worldServer = ArgumentDimension.a(cmdCtx, key);
-		worldServer.getDimensionKey().a()
-		switch (worldServer.getDimensionManager().getDimensionID()) {
-		case 0:
-			return Environment.NORMAL;
-		case -1:
-			return Environment.NETHER;
-		case 1:
-			return Environment.THE_END;
-		}
-		return null;
+		return worldServer.getWorld().getEnvironment();
 	}
 
 	@Override
