@@ -190,12 +190,14 @@ LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 //Using a collective entity selector to select multiple entities
 arguments.put(&quot;entities&quot;, new EntitySelectorArgument(EntitySelector.MANY_ENTITIES));
 
-new CommandAPICommand(&quot;kill&quot;)
+new CommandAPICommand(&quot;remove&quot;)
     .withArguments(arguments)
     .executes((sender, args) -&gt; {
         //Parse the argument as a collection of entities (as stated above in the documentation)
+        @SuppressWarnings(&quot;unchecked&quot;)
         Collection&lt;Entity&gt; entities = (Collection&lt;Entity&gt;) args[0];
-        sender.sendMessage(&quot;killed &quot; + entities.size() + &quot;entities&quot;);
+        
+        sender.sendMessage(&quot;Removed &quot; + entities.size() + &quot; entities&quot;);
         for(Entity e : entities) {
             e.remove();
         }

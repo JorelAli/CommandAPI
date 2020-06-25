@@ -175,29 +175,29 @@
 <tr><td><code>float getNormalizedYaw()</code></td><td>Returns a player's yaw between -180 and 180 degrees</td></tr>
 </tbody></table>
 <div class="example">
-<h3><a class="header" href="#example-" id="example-">Example: ???</a></h3>
-<p>Say we want to make an armor stand look in a certain direction.</p>
+<h3><a class="header" href="#example-rotate-an-armor-stand-head" id="example-rotate-an-armor-stand-head">Example: Rotate an armor stand head</a></h3>
+<p>Say we want to make an armor stand look in a certain direction. To do this, we'll use the following command:</p>
+<pre><code>/rotate &lt;rotation&gt; &lt;target&gt;
+</code></pre>
+<p>To do this, we'll use the rotation from the <code>RotationArgument</code> and select an entity using the <code>EntitySelectorArgument</code>, with <code>EntitySelector.ONE_ENTITY</code>. We then check if our entity is an armor stand and if so, we set its head pose to the given rotation.</p>
 <pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 arguments.put(&quot;rotation&quot;, new RotationArgument());
-arguments.put(&quot;target&quot;, new PlayerArgument());
+arguments.put(&quot;target&quot;, new EntitySelectorArgument(EntitySelector.ONE_ENTITY));
 
 new CommandAPICommand(&quot;rotate&quot;)
     .withArguments(arguments)
     .executes((sender, args) -&gt; {
         Rotation rotation = (Rotation) args[0];
-        Player target = (Player) args[1];
+        Entity target = (Entity) args[1];
 
-        Location newLocation = target.getLocation();
-        float newPitch = Location.normalizePitch(newLocation.getPitch() + rotation.getPitch());
-        float newYaw = Location.normalizeYaw(newLocation.getYaw() + rotation.getYaw());
-
-        newLocation.setPitch(newPitch);
-        newLocation.setYaw(newYaw);
-
-        target.teleport(newLocation);
+        if(target instanceof ArmorStand) {
+            ArmorStand a = (ArmorStand) target;
+            a.setHeadPose(new EulerAngle(Math.toRadians(rotation.getPitch()), Math.toRadians(rotation.getYaw() - 90), 0));
+        }
     })
     .register();
 </code></pre>
+<p>Note how the head pose requires an <code>EulerAngle</code> as opposed to a pitch and yaw. To account for this, we convert our rotation (which is in degrees) into an <code>EulerAngle</code> in radians.</p>
 </div>
                     </main>
 

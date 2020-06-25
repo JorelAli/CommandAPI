@@ -43,7 +43,7 @@ The `ObjectiveCriteriaArgument` is fairly straight forward - it represents the c
 
 ### Example - Unregister all objectives by criteria
 
-Say we wanted to create a command to unregister all commands based on a given criteria. Let's create a command with the following form:
+Say we wanted to create a command to unregister all objectives based on a given criteria. Let's create a command with the following form:
 
 ```
 /unregisterall <objective critera>

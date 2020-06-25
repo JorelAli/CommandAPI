@@ -13,31 +13,35 @@ The `RotationArgument` class returns a `Rotation` object, which consists of the 
 
 <div class="example">
 
-### Example: ???
+### Example: Rotate an armor stand head
 
-Say we want to make an armor stand look in a certain direction.
+Say we want to make an armor stand look in a certain direction. To do this, we'll use the following command:
+
+```
+/rotate <rotation> <target>
+```
+
+To do this, we'll use the rotation from the `RotationArgument` and select an entity using the `EntitySelectorArgument`, with `EntitySelector.ONE_ENTITY`. We then check if our entity is an armor stand and if so, we set its head pose to the given rotation.
 
 ```java
 LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 arguments.put("rotation", new RotationArgument());
-arguments.put("target", new PlayerArgument());
+arguments.put("target", new EntitySelectorArgument(EntitySelector.ONE_ENTITY));
 
 new CommandAPICommand("rotate")
     .withArguments(arguments)
     .executes((sender, args) -> {
         Rotation rotation = (Rotation) args[0];
-        Player target = (Player) args[1];
+        Entity target = (Entity) args[1];
 
-        Location newLocation = target.getLocation();
-        float newPitch = Location.normalizePitch(newLocation.getPitch() + rotation.getPitch());
-        float newYaw = Location.normalizeYaw(newLocation.getYaw() + rotation.getYaw());
-
-        newLocation.setPitch(newPitch);
-        newLocation.setYaw(newYaw);
-
-        target.teleport(newLocation);
+        if(target instanceof ArmorStand) {
+            ArmorStand a = (ArmorStand) target;
+            a.setHeadPose(new EulerAngle(Math.toRadians(rotation.getPitch()), Math.toRadians(rotation.getYaw() - 90), 0));
+        }
     })
     .register();
 ```
+
+Note how the head pose requires an `EulerAngle` as opposed to a pitch and yaw. To account for this, we convert our rotation (which is in degrees) into an `EulerAngle` in radians.
 
 </div>

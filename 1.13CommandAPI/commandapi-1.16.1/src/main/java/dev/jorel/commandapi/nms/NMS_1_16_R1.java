@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.function.ToIntBiFunction;
@@ -255,7 +256,7 @@ public class NMS_1_16_R1 implements NMS {
 
 	@Override
 	public CommandDispatcher getBrigadierDispatcher(Object server) {
-		return ((MinecraftServer) server).getCommandDispatcher().a(); //.getCommandDispatcher(); //TODO: This might be the vanilla cd
+		return ((MinecraftServer) server).getCommandDispatcher().a();
 	}
 
 	@Override
@@ -461,14 +462,16 @@ public class NMS_1_16_R1 implements NMS {
 	public void resendPackets(Player player) {
 		CraftPlayer craftPlayer = (CraftPlayer) player;
 		CraftServer craftServer = (CraftServer) Bukkit.getServer();
-		@SuppressWarnings("resource")
-		net.minecraft.server.v1_16_R1.CommandDispatcher nmsDispatcher = craftServer.getServer().getCommandDispatcher(); //TODO: This might be the vanilla cd
+		net.minecraft.server.v1_16_R1.CommandDispatcher nmsDispatcher = craftServer.getServer().getCommandDispatcher();
 		nmsDispatcher.a(craftPlayer.getHandle());
 	}
 
 	@Override
 	public BaseComponent[] getChat(CommandContext cmdCtx, String key) throws CommandSyntaxException {
 		String resultantString = ChatSerializer.a(ArgumentChat.a(cmdCtx, key));
+		System.out.println("Result: " + resultantString);
+		ComponentSerializer.parse(resultantString);
+		System.out.println("Succeeding in running parser: " + Arrays.deepToString(ComponentSerializer.parse(resultantString)));
 		return ComponentSerializer.parse(resultantString);
 	}
 
@@ -700,6 +703,7 @@ public class NMS_1_16_R1 implements NMS {
 	@Override
 	public Biome getBiome(CommandContext cmdCtx, String key) {
 		MinecraftKey minecraftKey = (MinecraftKey) cmdCtx.getArgument(key, MinecraftKey.class);
+		System.out.println("Casted to minecraftkey properly: " + minecraftKey);
 		return Biome.valueOf(minecraftKey.getKey().toUpperCase());
 	}
 

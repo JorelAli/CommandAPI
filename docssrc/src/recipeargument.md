@@ -59,7 +59,7 @@ new CommandAPICommand("unlockrecipe")
         //Check if we're running 1.15+
         if(recipe instanceof ComplexRecipe) {
             ComplexRecipe complexRecipe = (ComplexRecipe) recipe;
-            player.discoverRecipe(complexRecipe.getKey());
+            target.discoverRecipe(complexRecipe.getKey());
         } else {
             //Error here, can't unlock recipe for player
             CommandAPI.fail("Cannot unlock recipe for player (Are you using version 1.15 or above?)");

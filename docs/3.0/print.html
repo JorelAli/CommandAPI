@@ -1042,35 +1042,37 @@ new CommandAPICommand(&quot;break&quot;)
 <tr><td><code>float getNormalizedYaw()</code></td><td>Returns a player's yaw between -180 and 180 degrees</td></tr>
 </tbody></table>
 <div class="example">
-<h3><a class="header" href="#example-" id="example-">Example: ???</a></h3>
-<p>Say we want to make an armor stand look in a certain direction.</p>
+<h3><a class="header" href="#example-rotate-an-armor-stand-head" id="example-rotate-an-armor-stand-head">Example: Rotate an armor stand head</a></h3>
+<p>Say we want to make an armor stand look in a certain direction. To do this, we'll use the following command:</p>
+<pre><code>/rotate &lt;rotation&gt; &lt;target&gt;
+</code></pre>
+<p>To do this, we'll use the rotation from the <code>RotationArgument</code> and select an entity using the <code>EntitySelectorArgument</code>, with <code>EntitySelector.ONE_ENTITY</code>. We then check if our entity is an armor stand and if so, we set its head pose to the given rotation.</p>
 <pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 arguments.put(&quot;rotation&quot;, new RotationArgument());
-arguments.put(&quot;target&quot;, new PlayerArgument());
+arguments.put(&quot;target&quot;, new EntitySelectorArgument(EntitySelector.ONE_ENTITY));
 
 new CommandAPICommand(&quot;rotate&quot;)
     .withArguments(arguments)
     .executes((sender, args) -&gt; {
         Rotation rotation = (Rotation) args[0];
-        Player target = (Player) args[1];
+        Entity target = (Entity) args[1];
 
-        Location newLocation = target.getLocation();
-        float newPitch = Location.normalizePitch(newLocation.getPitch() + rotation.getPitch());
-        float newYaw = Location.normalizeYaw(newLocation.getYaw() + rotation.getYaw());
-
-        newLocation.setPitch(newPitch);
-        newLocation.setYaw(newYaw);
-
-        target.teleport(newLocation);
+        if(target instanceof ArmorStand) {
+            ArmorStand a = (ArmorStand) target;
+            a.setHeadPose(new EulerAngle(Math.toRadians(rotation.getPitch()), Math.toRadians(rotation.getYaw() - 90), 0));
+        }
     })
     .register();
 </code></pre>
+<p>Note how the head pose requires an <code>EulerAngle</code> as opposed to a pitch and yaw. To account for this, we convert our rotation (which is in degrees) into an <code>EulerAngle</code> in radians.</p>
 </div><h1><a class="header" href="#axisargument" id="axisargument">AxisArgument</a></h1>
 <p>The <code>AxisArgument</code> class refers to the x, y and z axes. When used with the CommandAPI, it returns an <code>EnumSet&lt;Axis&gt;</code> <em>(You can view the documentation for <code>EnumSet</code> <a href="https://docs.oracle.com/javase/7/docs/api/java/util/EnumSet.html">here</a>)</em>. </p>
-<h2><a class="header" href="#example--1" id="example--1">Example: ???</a></h2>
-<pre><code class="language-java">
-</code></pre>
-<h1><a class="header" href="#chat-arguments" id="chat-arguments">Chat arguments</a></h1>
+<div class="example">
+<h3><a class="header" href="#examples-of-axisargument-uses" id="examples-of-axisargument-uses">Examples of AxisArgument uses:</a></h3>
+<ul>
+<li>Reflecting a structure in the x, y or z axis</li>
+</ul>
+</div><h1><a class="header" href="#chat-arguments" id="chat-arguments">Chat arguments</a></h1>
 <p>The CommandAPI provides three main classes to interact with chat formatting in Minecraft.</p>
 <h2><a class="header" href="#chat-color-argument" id="chat-color-argument">Chat color argument</a></h2>
 <p>The <code>ChatColorArgument</code> class is used to represent a given chat color (e.g. red or green) </p>
@@ -1209,12 +1211,14 @@ LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 //Using a collective entity selector to select multiple entities
 arguments.put(&quot;entities&quot;, new EntitySelectorArgument(EntitySelector.MANY_ENTITIES));
 
-new CommandAPICommand(&quot;kill&quot;)
+new CommandAPICommand(&quot;remove&quot;)
     .withArguments(arguments)
     .executes((sender, args) -&gt; {
         //Parse the argument as a collection of entities (as stated above in the documentation)
+        @SuppressWarnings(&quot;unchecked&quot;)
         Collection&lt;Entity&gt; entities = (Collection&lt;Entity&gt;) args[0];
-        sender.sendMessage(&quot;killed &quot; + entities.size() + &quot;entities&quot;);
+        
+        sender.sendMessage(&quot;Removed &quot; + entities.size() + &quot; entities&quot;);
         for(Entity e : entities) {
             e.remove();
         }
@@ -1399,7 +1403,7 @@ new CommandAPICommand(&quot;sidebar&quot;)
 <p>The <code>ObjectiveCriteriaArgument</code> is fairly straight forward - it represents the criteria for an objective. Similar to Bukkit, the objective criteria is simply represented as a <code>String</code>, so it must be casted to a <code>String</code> when being used.</p>
 <div class="example">
 <h3><a class="header" href="#example---unregister-all-objectives-by-criteria" id="example---unregister-all-objectives-by-criteria">Example - Unregister all objectives by criteria</a></h3>
-<p>Say we wanted to create a command to unregister all commands based on a given criteria. Let's create a command with the following form:</p>
+<p>Say we wanted to create a command to unregister all objectives based on a given criteria. Let's create a command with the following form:</p>
 <pre><code>/unregisterall &lt;objective critera&gt;
 </code></pre>
 <p>To do this, we're going to take advantage of Bukkit's <code>Scoreboard.getObjectivesByCriteria(String)</code> method</p>
@@ -1428,7 +1432,7 @@ new CommandAPICommand(&quot;unregisterall&quot;)
 </code></pre>
 <p>To do this, given a team we want to use the <code>setAllowFriendlyFire(boolean)</code> function. As with the <code>ObjectiveArgument</code>, we must convert the <code>String</code> into a <code>Team</code> object.</p>
 <pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;team&quot;, new ObjectiveArgument());
+arguments.put(&quot;team&quot;, new TeamArgument());
 
 new CommandAPICommand(&quot;togglepvp&quot;)
     .withArguments(arguments)
@@ -1665,7 +1669,7 @@ new CommandAPICommand(&quot;unlockrecipe&quot;)
         //Check if we're running 1.15+
         if(recipe instanceof ComplexRecipe) {
             ComplexRecipe complexRecipe = (ComplexRecipe) recipe;
-            player.discoverRecipe(complexRecipe.getKey());
+            target.discoverRecipe(complexRecipe.getKey());
         } else {
             //Error here, can't unlock recipe for player
             CommandAPI.fail(&quot;Cannot unlock recipe for player (Are you using version 1.15 or above?)&quot;);
@@ -1785,7 +1789,7 @@ for(String key : gamemodes.keySet()) {
 	arguments.put(key, new LiteralArgument(key));
     
     //Register the command as usual
-    new CommandAPICommand(&quot;gamemode&quot;)
+    new CommandAPICommand(&quot;changegamemode&quot;)
         .withArguments(arguments)
         .executesPlayer((player, args) -&gt; {
             //Retrieve the object from the map via the key and NOT the args[]

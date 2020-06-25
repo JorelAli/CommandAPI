@@ -16,7 +16,7 @@ To do this, given a team we want to use the `setAllowFriendlyFire(boolean)` func
 
 ```java
 LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("team", new ObjectiveArgument());
+arguments.put("team", new TeamArgument());
 
 new CommandAPICommand("togglepvp")
     .withArguments(arguments)

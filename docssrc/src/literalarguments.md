@@ -81,7 +81,7 @@ for(String key : gamemodes.keySet()) {
 	arguments.put(key, new LiteralArgument(key));
     
     //Register the command as usual
-    new CommandAPICommand("gamemode")
+    new CommandAPICommand("changegamemode")
         .withArguments(arguments)
         .executesPlayer((player, args) -> {
             //Retrieve the object from the map via the key and NOT the args[]
