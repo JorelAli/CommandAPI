@@ -8,31 +8,9 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 
-public class CustomArgument<S> extends Argument {
+public class CustomArgument<T> extends Argument {
 	
-	/**
-	 * Throws an error to be handled by the command execution handler. When this error
-	 * is thrown, the original command is <i>not</i> executed and the provided error message
-	 * is displayed to the CommandSender
-	 * @param errorMessage The error message to display to the CommandSender
-	 * @throws CustomArgumentException An exception that is handled internally
-	 */
-	public static void throwError(String errorMessage) throws CustomArgumentException {
-		throw new CustomArgumentException(errorMessage);
-	}
-	
-	/**
-	 * Throws an error to be handled by the command execution handler. When this error
-	 * is thrown, the original command is <i>not</i> executed and the provided error message
-	 * is displayed to the CommandSender
-	 * @param errorMessage The error message to display to the CommandSender
-	 * @throws CustomArgumentException An exception that is handled internally
-	 */
-	public static void throwError(MessageBuilder errorMessage) throws CustomArgumentException {
-		throw new CustomArgumentException(errorMessage);
-	}
-	
-	private CustomArgumentFunction<S> parser;
+	private CustomArgumentFunction<T> parser;
 	
 	/**
 	 * Creates a CustomArgument with a valid parser, defaults to non-keyed argument
@@ -44,7 +22,7 @@ public class CustomArgument<S> extends Argument {
 	 *            
 	 * @see #CustomArgument(CustomArgumentFunction, boolean)
 	 */
-	public CustomArgument(CustomArgumentFunction<S> parser) {
+	public CustomArgument(CustomArgumentFunction<T> parser) {
 		this(parser, false);
 	}
 	
@@ -58,17 +36,17 @@ public class CustomArgument<S> extends Argument {
 	 * @param keyed Whether this argument can accept Minecraft's <code>NamespacedKey</code> as
 	 * valid arguments
 	 */
-	public CustomArgument(CustomArgumentFunction<S> parser, boolean keyed) {
+	public CustomArgument(CustomArgumentFunction<T> parser, boolean keyed) {
 		super(keyed ? CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered() : StringArgumentType.string());
 		this.parser = parser;
 	}
 
 	@Override
-	public Class<S> getPrimitiveType() {
+	public Class<T> getPrimitiveType() {
 		return null;
 	}
 	
-	public CustomArgumentFunction<S> getParser() {
+	public CustomArgumentFunction<T> getParser() {
 		return parser;
 	}
 
@@ -164,12 +142,12 @@ public class CustomArgument<S> extends Argument {
 		final String errorMessage;
 		final MessageBuilder errorMessageBuilder;
 		
-		private CustomArgumentException(String errorMessage) {
+		public CustomArgumentException(String errorMessage) {
 			this.errorMessage = errorMessage;
 			this.errorMessageBuilder = null;
 		}
 		
-		private CustomArgumentException(MessageBuilder errorMessage) {
+		public CustomArgumentException(MessageBuilder errorMessage) {
 			this.errorMessage = null;
 			this.errorMessageBuilder = errorMessage;
 		}
