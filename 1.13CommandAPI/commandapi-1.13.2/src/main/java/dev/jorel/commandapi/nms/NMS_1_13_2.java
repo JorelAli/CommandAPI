@@ -569,6 +569,9 @@ public class NMS_1_13_2 implements NMS {
                     }
                     return Suggestions.empty();
                 };
+            case ENTITIES:
+    			return CompletionProviders.d;
+    		case BIOMES:
             default:
                 return (context, builder) -> Suggestions.empty();
         }

@@ -578,6 +578,9 @@ public class NMS_1_14 implements NMS {
 				LootTableRegistry lootTables = getCLW(context).getServer().getLootTableRegistry();
 				return ICompletionProvider.a(lootTables.a(), builder);
 			};
+		case ENTITIES:
+			return CompletionProviders.d;
+		case BIOMES:
 		default:
 			return (context, builder) -> Suggestions.empty();
 		}

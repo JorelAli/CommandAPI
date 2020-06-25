@@ -4,7 +4,7 @@ import org.bukkit.entity.EntityType;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 
-public class EntityTypeArgument extends Argument {
+public class EntityTypeArgument extends Argument implements ICustomProvidedArgument {
 
 	/**
 	 * An EntityType argument. Represents the type of an Entity
@@ -21,5 +21,10 @@ public class EntityTypeArgument extends Argument {
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.ENTITY_TYPE;
+	}
+
+	@Override
+	public SuggestionProviders getSuggestionProvider() {
+		return SuggestionProviders.ENTITIES;
 	}
 }

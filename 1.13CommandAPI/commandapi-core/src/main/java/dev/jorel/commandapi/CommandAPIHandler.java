@@ -589,6 +589,7 @@ public final class CommandAPIHandler {
 	// Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
 	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilderDynamic(String argumentName, Argument type,
 			CommandPermission permission) {
+		System.out.println(type.getOverriddenSuggestions());
 		if(type.getOverriddenSuggestions() == null) {
 			return RequiredArgumentBuilder.argument(argumentName, (ArgumentType<T>) type.getRawType()).requires(clw -> 
 	             permissionCheck(nms.getCommandSenderForCLW(clw), permission)

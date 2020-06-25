@@ -966,14 +966,14 @@ yesn't
 <div class="example">
 <h3><a class="header" href="#example---messaging-command" id="example---messaging-command">Example - Messaging command</a></h3>
 <p>Say we have a simple message command of the following form:</p>
-<pre><code>/msg &lt;target&gt; &lt;message&gt;
+<pre><code>/message &lt;target&gt; &lt;message&gt;
 </code></pre>
 <p>This would be ideal for a greedy string, since it can consume all text after the player's name:</p>
 <pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 arguments.put(&quot;target&quot;, new PlayerArgument());
 arguments.put(&quot;message&quot;, new GreedyStringArgument());
 
-new CommandAPICommand(&quot;msg&quot;)
+new CommandAPICommand(&quot;message&quot;)
     .withArguments(arguments)
     .executes((sender, args) -&gt; {
 		((Player) args[0]).sendMessage((String) args[1]);
@@ -981,7 +981,7 @@ new CommandAPICommand(&quot;msg&quot;)
     .register();
 </code></pre>
 <p>Any text entered after the <code>&lt;target&gt;</code> argument would be sent to the player. For example, the command could be used as follows:</p>
-<pre><code>/msg Skepter This is some incredibly long string with &quot;symbols&quot; and $p3c!aL characters~
+<pre><code>/message Skepter This is some incredibly long string with &quot;symbols&quot; and $p3c!aL characters~
 </code></pre>
 <p>Note how this only works if the greedy string argument is <em>at the end</em>. If, say, the command was <code>/msg &lt;message&gt; &lt;target&gt;</code>, it would not be able to determine where the <code>&lt;message&gt;</code> argument ends and the <code>&lt;target&gt;</code> argument begins.</p>
 </div>
@@ -1215,7 +1215,7 @@ new CommandAPICommand(&quot;kill&quot;)
         //Parse the argument as a collection of entities (as stated above in the documentation)
         Collection&lt;Entity&gt; entities = (Collection&lt;Entity&gt;) args[0];
         sender.sendMessage(&quot;killed &quot; + entities.size() + &quot;entities&quot;);
-        for(Entity e : entity) {
+        for(Entity e : entities) {
             e.remove();
         }
     })

@@ -86,7 +86,7 @@ The `GreedyStringArgument` takes the `TextArgument` a step further. **Any charac
 Say we have a simple message command of the following form:
 
 ```
-/msg <target> <message>
+/message <target> <message>
 ```
 
 This would be ideal for a greedy string, since it can consume all text after the player's name:
@@ -96,7 +96,7 @@ LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 arguments.put("target", new PlayerArgument());
 arguments.put("message", new GreedyStringArgument());
 
-new CommandAPICommand("msg")
+new CommandAPICommand("message")
     .withArguments(arguments)
     .executes((sender, args) -> {
 		((Player) args[0]).sendMessage((String) args[1]);
@@ -107,7 +107,7 @@ new CommandAPICommand("msg")
 Any text entered after the `<target>` argument would be sent to the player. For example, the command could be used as follows:
 
 ```
-/msg Skepter This is some incredibly long string with "symbols" and $p3c!aL characters~
+/message Skepter This is some incredibly long string with "symbols" and $p3c!aL characters~
 ```
 
 Note how this only works if the greedy string argument is _at the end_. If, say, the command was `/msg <message> <target>`, it would not be able to determine where the `<message>` argument ends and the `<target>` argument begins.

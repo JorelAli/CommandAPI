@@ -10,7 +10,7 @@ new CommandAPICommand("kill")
         //Parse the argument as a collection of entities (as stated above in the documentation)
         Collection<Entity> entities = (Collection<Entity>) args[0];
         sender.sendMessage("killed " + entities.size() + "entities");
-        for(Entity e : entity) {
+        for(Entity e : entities) {
             e.remove();
         }
     })
