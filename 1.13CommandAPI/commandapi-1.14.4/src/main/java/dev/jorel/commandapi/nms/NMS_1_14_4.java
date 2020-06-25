@@ -17,6 +17,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World.Environment;
+import org.bukkit.block.Biome;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
@@ -54,6 +55,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.ICustomProvidedArgument.SuggestionProviders;
+import dev.jorel.commandapi.exceptions.BiomeArgumentException;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
@@ -670,4 +672,9 @@ public class NMS_1_14_4 implements NMS {
     	}
     	return null;
     }
+
+	@Override
+	public Biome getBiome(CommandContext cmdCtx, String key) {
+		throw new BiomeArgumentException();
+	}
 }

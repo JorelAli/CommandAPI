@@ -17,6 +17,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World.Environment;
+import org.bukkit.block.Biome;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
@@ -694,6 +695,12 @@ public class NMS_1_16_R1 implements NMS {
 		}
 		}
 		return null;
+	}
+
+	@Override
+	public Biome getBiome(CommandContext cmdCtx, String key) {
+		MinecraftKey minecraftKey = (MinecraftKey) cmdCtx.getArgument(key, MinecraftKey.class);
+		return Biome.valueOf(minecraftKey.getKey().toUpperCase());
 	}
 
 }

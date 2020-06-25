@@ -210,7 +210,9 @@ public final class CommandAPIHandler {
 					break;
 				case AXIS:
 					argList.add(nms.getAxis(cmdCtx, entry.getKey()));
-					break;				
+					break;	
+				case BIOME:
+					argList.add(nms.getBiome(cmdCtx, entry.getKey()));
 				case CHAT:
 					argList.add(nms.getChat(cmdCtx, entry.getKey()));
 					break;

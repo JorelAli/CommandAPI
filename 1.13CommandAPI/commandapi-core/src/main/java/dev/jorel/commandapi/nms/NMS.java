@@ -13,6 +13,7 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.advancement.Advancement;
+import org.bukkit.block.Biome;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -34,8 +35,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 
 import de.tr7zw.nbtapi.NBTContainer;
-import dev.jorel.commandapi.arguments.ICustomProvidedArgument.SuggestionProviders;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
+import dev.jorel.commandapi.arguments.ICustomProvidedArgument.SuggestionProviders;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
@@ -150,6 +151,7 @@ public interface NMS {
 
 	/** Argument implementations without CommandSyntaxExceptions */
 	EnumSet<Axis>      getAxis(CommandContext<?> cmdCtx, String key);
+	Biome              getBiome(CommandContext<?> cmdCtx, String key);
 	ChatColor          getChatColor(CommandContext<?> cmdCtx, String key);
 	BaseComponent[]    getChatComponent(CommandContext<?> cmdCtx, String key);
 	Enchantment        getEnchantment(CommandContext<?> cmdCtx, String key);
