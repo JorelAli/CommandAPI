@@ -4,6 +4,9 @@ import org.bukkit.Sound;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 
+/**
+ * An argument that represents the Bukkit Sound object
+ */
 public class SoundArgument extends Argument implements ICustomProvidedArgument {
 	
 	public SoundArgument() {

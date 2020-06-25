@@ -4,6 +4,9 @@ import org.bukkit.inventory.Recipe;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 
+/**
+ * An argument that represents the Bukkit Recipe object
+ */
 public class RecipeArgument extends Argument implements ICustomProvidedArgument {
 
 	public RecipeArgument() {

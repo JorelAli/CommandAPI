@@ -2,6 +2,9 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.arguments.BoolArgumentType;
 
+/**
+ * An argument that represents primitive Java booleans
+ */
 public class BooleanArgument extends Argument {
 	
 	/**

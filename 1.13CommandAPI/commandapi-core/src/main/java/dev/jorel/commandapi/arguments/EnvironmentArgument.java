@@ -4,6 +4,9 @@ import org.bukkit.World.Environment;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 
+/**
+ * An argument that represents the Bukkit Environment object
+ */
 public class EnvironmentArgument extends Argument {
 	
 	public EnvironmentArgument() {

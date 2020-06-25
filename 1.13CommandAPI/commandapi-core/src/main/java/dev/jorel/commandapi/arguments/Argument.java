@@ -8,6 +8,9 @@ import com.mojang.brigadier.arguments.ArgumentType;
 
 import dev.jorel.commandapi.CommandPermission;
 
+/**
+ * The core abstract class for Command API arguments
+ */
 public abstract class Argument implements IOverrideableSuggestions<Argument> {
 
 	/**
@@ -70,7 +73,7 @@ public abstract class Argument implements IOverrideableSuggestions<Argument> {
 		this.suggestions = (c) -> suggestions;
 		return this;
 	}
-	
+
 	/**
 	 * Override the suggestions of this argument with a function that maps the
 	 * command sender to a String array.

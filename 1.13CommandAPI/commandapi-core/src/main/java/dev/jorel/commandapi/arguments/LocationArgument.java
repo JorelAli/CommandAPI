@@ -4,6 +4,9 @@ import org.bukkit.Location;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 
+/**
+ * An argument that represents the Bukkit Location object
+ */
 public class LocationArgument extends Argument {
 	
 	/**

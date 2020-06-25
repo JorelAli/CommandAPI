@@ -4,6 +4,9 @@ import com.mojang.brigadier.arguments.FloatArgumentType;
 
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
 
+/**
+ * An argument that represents primitive Java floats
+ */
 public class FloatArgument extends Argument {
 
 	/**

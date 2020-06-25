@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['recipe_644',['RECIPE',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#aa09cc874d11bcf22ee751db19880215e',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
-  ['recipes_645',['RECIPES',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_provided_argument_1_1_suggestion_providers.html#a031e15c6cea6278241aac95e73d3ff12',1,'dev::jorel::commandapi::arguments::CustomProvidedArgument::SuggestionProviders']]],
-  ['rotation_646',['ROTATION',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a4e759cd1d96965532e758cc6df6c5577',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]]
+  ['score_5fholder_388',['SCORE_HOLDER',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a60588e9a9ad67f5f57d8d45a23563693',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['scoreboard_5fslot_389',['SCOREBOARD_SLOT',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a6678226820275646611b86a611fdf560',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['simple_5ftype_390',['SIMPLE_TYPE',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#aba8f3befc75b2a07e195656c8b08e859',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['sound_391',['SOUND',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a50202c583ee37d556add1cf10d2cbf95',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]]
 ];

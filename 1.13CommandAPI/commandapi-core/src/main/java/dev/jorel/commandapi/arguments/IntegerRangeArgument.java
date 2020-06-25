@@ -3,6 +3,9 @@ package dev.jorel.commandapi.arguments;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.wrappers.IntegerRange;
 
+/**
+ * An argument that represents a range of integer values
+ */
 public class IntegerRangeArgument extends Argument {
 
 	/**

@@ -3,6 +3,9 @@ package dev.jorel.commandapi.arguments;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.wrappers.Rotation;
 
+/**
+ * An argument that represents rotation as pitch and yaw
+ */
 public class RotationArgument extends Argument {
 
 	/**

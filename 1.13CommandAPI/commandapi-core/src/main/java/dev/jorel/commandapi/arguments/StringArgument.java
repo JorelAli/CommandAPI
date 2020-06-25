@@ -2,6 +2,9 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 
+/**
+ * An argument that represents a simple String
+ */
 public class StringArgument extends Argument {
 
 	/**

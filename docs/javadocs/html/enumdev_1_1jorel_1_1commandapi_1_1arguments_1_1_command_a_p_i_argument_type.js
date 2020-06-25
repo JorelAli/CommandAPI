@@ -2,6 +2,7 @@ var enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type 
 [
     [ "ADVANCEMENT", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ac779834aaa36e23794202e1790bd4753", null ],
     [ "AXIS", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#aebca6750f8f79f80ea7acab2aecc8b01", null ],
+    [ "BIOME", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a8e136cd4c078dc87cc936147943cba96", null ],
     [ "CHAT", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ab2c0100b593092b262b53712279ea6d9", null ],
     [ "CHAT_COMPONENT", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#afe6d7a47e3e6437e0edc23922c9ca167", null ],
     [ "CHATCOLOR", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a9d6371d2ebffc9a0ef081e7aab36ce28", null ],

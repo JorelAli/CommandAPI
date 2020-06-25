@@ -4,6 +4,9 @@ import org.bukkit.inventory.ItemStack;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 
+/**
+ * An argument that represents the Bukkit ItemStack object
+ */
 public class ItemStackArgument extends Argument {
 
 	/**

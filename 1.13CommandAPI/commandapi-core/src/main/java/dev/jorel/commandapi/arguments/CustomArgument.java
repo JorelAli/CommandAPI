@@ -8,6 +8,9 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 
+/**
+ * An argument that represents any custom object
+ */
 public class CustomArgument<T> extends Argument {
 	
 	private CustomArgumentFunction<T> parser;

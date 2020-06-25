@@ -4,6 +4,9 @@ import java.util.Collection;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 
+/**
+ * An argument that represents a scoreholder's name, or a collection of scoreholder names
+ */
 public class ScoreHolderArgument extends Argument {
 		
 	private final boolean single;

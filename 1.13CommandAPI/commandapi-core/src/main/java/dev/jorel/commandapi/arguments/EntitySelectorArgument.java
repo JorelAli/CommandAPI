@@ -7,6 +7,9 @@ import org.bukkit.entity.Player;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 
+/**
+ * An argument that represents a selection of entities
+ */
 public class EntitySelectorArgument extends Argument {
 	
 	private final EntitySelector selector;

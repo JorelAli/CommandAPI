@@ -2,6 +2,9 @@ package dev.jorel.commandapi.arguments;
 
 import dev.jorel.commandapi.exceptions.BadLiteralException;
 
+/**
+ * A pseudo-argument representing a single literal string
+ */
 public class LiteralArgument extends Argument {
 
 	private String literal;

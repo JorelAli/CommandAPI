@@ -2,6 +2,9 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 
+/**
+ * An argument that represents arbitrary strings
+ */
 public class GreedyStringArgument extends Argument implements IGreedyArgument {
 	
 	/**

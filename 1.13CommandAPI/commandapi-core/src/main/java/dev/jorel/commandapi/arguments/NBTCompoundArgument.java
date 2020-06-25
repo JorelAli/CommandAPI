@@ -6,6 +6,9 @@ import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.exceptions.NBTAPINotFoundException;
 
+/**
+ * An argument that represents an NBTContainer from the NBTAPI
+ */
 public class NBTCompoundArgument extends Argument {
 
 	/**

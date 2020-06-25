@@ -3,6 +3,9 @@ package dev.jorel.commandapi.arguments;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 
+/**
+ * An argument that represents Minecraft functions and tags
+ */
 public class FunctionArgument extends Argument implements ICustomProvidedArgument {
 
 	/**

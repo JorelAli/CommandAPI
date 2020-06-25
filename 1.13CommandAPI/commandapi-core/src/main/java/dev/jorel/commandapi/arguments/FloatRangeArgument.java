@@ -3,6 +3,9 @@ package dev.jorel.commandapi.arguments;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.wrappers.FloatRange;
 
+/**
+ * An argument that represents a range of float values
+ */
 public class FloatRangeArgument extends Argument {
 
 	/**

@@ -4,6 +4,9 @@ import org.bukkit.ChatColor;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 
+/**
+ * An argument that represents the Bukkit ChatColor object
+ */
 public class ChatColorArgument extends Argument {
 
 	/**

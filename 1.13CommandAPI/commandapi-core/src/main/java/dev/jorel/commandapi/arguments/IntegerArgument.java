@@ -4,6 +4,9 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
 
+/**
+ * An argument that represents primitive Java ints
+ */
 public class IntegerArgument extends Argument {
 
 	/**

@@ -4,6 +4,9 @@ import java.util.function.Function;
 
 import org.bukkit.command.CommandSender;
 
+/**
+ * An interface declaring methods required to override argument suggestions
+ */
 public interface IOverrideableSuggestions<T extends Argument> {
 
 	/**

@@ -3,6 +3,9 @@ package dev.jorel.commandapi.arguments;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.wrappers.MathOperation;
 
+/**
+ * An argument that represents Minecraft scoreboard math operations
+ */
 public class MathOperationArgument extends Argument {
 
 	/**

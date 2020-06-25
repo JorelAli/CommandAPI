@@ -3,6 +3,9 @@ package dev.jorel.commandapi.arguments;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.wrappers.Location2D;
 
+/**
+ * An argument that represents the Bukkit Location object in x and z directions
+ */
 public class Location2DArgument extends Argument {
 
 	/**

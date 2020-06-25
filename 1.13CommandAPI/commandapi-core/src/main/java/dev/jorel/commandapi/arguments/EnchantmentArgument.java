@@ -4,6 +4,9 @@ import org.bukkit.enchantments.Enchantment;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 
+/**
+ * An argument that represents the Bukkit Enchantment object
+ */
 public class EnchantmentArgument extends Argument {
 	
 	/**

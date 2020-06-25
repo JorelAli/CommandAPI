@@ -4,6 +4,9 @@ import java.util.EnumSet;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 
+/**
+ * An argument that represents x, y and z axes as an EnumSet of Axis
+ */
 public class AxisArgument extends Argument {
 	
 	/**

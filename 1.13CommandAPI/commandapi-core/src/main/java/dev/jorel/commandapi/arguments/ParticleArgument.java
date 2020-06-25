@@ -4,6 +4,9 @@ import org.bukkit.Particle;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 
+/**
+ * An argument that represents the Bukkit Particle object
+ */
 public class ParticleArgument extends Argument {
 
 	/**

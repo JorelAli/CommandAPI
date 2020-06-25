@@ -4,6 +4,9 @@ import org.bukkit.block.Biome;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 
+/**
+ * An argument that represents the Bukkit Biome object
+ */
 public class BiomeArgument extends Argument implements ICustomProvidedArgument {
 	
 	public BiomeArgument() {

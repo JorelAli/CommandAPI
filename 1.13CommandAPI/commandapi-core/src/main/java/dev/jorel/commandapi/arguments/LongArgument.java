@@ -4,6 +4,9 @@ import com.mojang.brigadier.arguments.LongArgumentType;
 
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
 
+/**
+ * An argument that represents primitive Java longs
+ */
 public class LongArgument extends Argument {
 
 	/**

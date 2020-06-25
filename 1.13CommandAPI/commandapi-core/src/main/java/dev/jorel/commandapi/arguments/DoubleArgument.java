@@ -4,6 +4,9 @@ import com.mojang.brigadier.arguments.DoubleArgumentType;
 
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
 
+/**
+ * An argument that represents primitive Java doubles
+ */
 public class DoubleArgument extends Argument {
 
 	/**

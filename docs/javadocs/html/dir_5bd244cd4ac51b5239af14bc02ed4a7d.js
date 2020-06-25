@@ -6,6 +6,7 @@ var dir_5bd244cd4ac51b5239af14bc02ed4a7d =
     [ "wrappers", "dir_dca364b050032dd9f00cdb45f3b5c377.html", "dir_dca364b050032dd9f00cdb45f3b5c377" ],
     [ "CommandAPI.java", "_command_a_p_i_8java_source.html", null ],
     [ "CommandAPICommand.java", "_command_a_p_i_command_8java_source.html", null ],
+    [ "CommandAPIVersionHandler.java", "_command_a_p_i_version_handler_8java_source.html", null ],
     [ "CommandPermission.java", "_command_permission_8java_source.html", null ],
     [ "Converter.java", "_converter_8java_source.html", null ],
     [ "CustomCommandExecutor.java", "_custom_command_executor_8java_source.html", null ]

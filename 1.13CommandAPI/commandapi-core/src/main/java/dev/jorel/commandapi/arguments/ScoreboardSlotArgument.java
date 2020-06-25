@@ -3,6 +3,9 @@ package dev.jorel.commandapi.arguments;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 
+/**
+ * An argument that represents the Bukkit ScoreboardSlot object
+ */
 public class ScoreboardSlotArgument extends Argument {
 
 	/**

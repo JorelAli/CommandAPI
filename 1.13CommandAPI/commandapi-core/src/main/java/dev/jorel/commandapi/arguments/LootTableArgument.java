@@ -4,6 +4,9 @@ import org.bukkit.loot.LootTable;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 
+/**
+ * An argument that represents the Bukkit LootTable object
+ */
 public class LootTableArgument extends Argument implements ICustomProvidedArgument {
 	
 	public LootTableArgument() {

@@ -1,11 +1,174 @@
 package dev.jorel.commandapi.arguments;
 
+/**
+ * An enum that represents the different arguments declared in the Command API
+ */
 public enum CommandAPIArgumentType {
 
-	ADVANCEMENT, AXIS, BIOME, CHAT, CHAT_COMPONENT, CHATCOLOR, CUSTOM, ENCHANTMENT, 
-	ENTITY_SELECTOR, ENTITY_TYPE, ENVIRONMENT, FLOAT_RANGE, FUNCTION, INT_RANGE, 
-	ITEMSTACK, LITERAL, LOCATION, LOCATION_2D, LOOT_TABLE, MATH_OPERATION, 
-	NBT_COMPOUND, OBJECTIVE, OBJECTIVE_CRITERIA, PARTICLE, PLAYER, POTION_EFFECT, 
-	RECIPE, ROTATION, SCORE_HOLDER, SCOREBOARD_SLOT, SIMPLE_TYPE, SOUND, TEAM, TIME;
+	/**
+	 * The AdvancementArgument
+	 */
+	ADVANCEMENT,
+
+	/**
+	 * The AxisArgument
+	 */
+	AXIS,
+
+	/**
+	 * The BiomeArgument
+	 */
+	BIOME,
+
+	/**
+	 * The ChatArgument
+	 */
+	CHAT,
+
+	/**
+	 * The ChatComponentArgument
+	 */
+	CHAT_COMPONENT,
+
+	/**
+	 * The ChatColorArgument
+	 */
+	CHATCOLOR, 
+	
+	/**
+	 * The CustomArgument
+	 */
+	CUSTOM, 
+	
+	/**
+	 * The EnchantmentArgument
+	 * 
+	 */
+	ENCHANTMENT, 
+	
+	/**
+	 * The EntitySelectorArgument
+	 */
+	ENTITY_SELECTOR, 
+	
+	/**
+	 * The EntityTypeArgument
+	 */
+	ENTITY_TYPE, 
+	
+	/**
+	 * The EnvironmentArgument
+	 */
+	ENVIRONMENT, 
+	
+	/**
+	 * The FloatRangeArgument
+	 */
+	FLOAT_RANGE, 
+	
+	/**
+	 * The FunctionArgument
+	 */
+	FUNCTION, 
+	
+	/**
+	 * The IntegerRangeArgument
+	 */
+	INT_RANGE,
+	
+	/**
+	 * The ItemStackArgument
+	 */
+	ITEMSTACK, 
+	
+	/**
+	 * The LiteralArgument
+	 */
+	LITERAL, 
+	
+	/**
+	 * The LocationArgument
+	 */
+	LOCATION, 
+	
+	/**
+	 * The Location2dArgument
+	 */
+	LOCATION_2D, 
+	
+	/**
+	 * The LootTableArgument
+	 */
+	LOOT_TABLE, 
+	
+	/**
+	 * The MathOperationArgument
+	 */
+	MATH_OPERATION, 
+	
+	/**
+	 * The NBTCompoundArgument
+	 */
+	NBT_COMPOUND, 
+	
+	/**
+	 * The ObjectiveArgument
+	 */
+	OBJECTIVE, 
+	
+	/**
+	 * The ObjectiveCriteriaArgument
+	 */
+	OBJECTIVE_CRITERIA,
+	
+	/**
+	 * The ParticleArgument
+	 */
+	PARTICLE, 
+	
+	/**
+	 * The PlayerArgument
+	 */
+	PLAYER, 
+	
+	/**
+	 * The PotionEffectArgument
+	 */
+	POTION_EFFECT, 
+	
+	/**
+	 * The RecipeArgument	
+	 */
+	RECIPE, ROTATION, 
+	
+	/**
+	 * The ScoreHolderArgument
+	 */
+	SCORE_HOLDER, 
+	
+	/**
+	 * The ScoreboardSlotArgument
+	 */
+	SCOREBOARD_SLOT, 
+	
+	/**
+	 * Primitive arguments BooleanArgument, DoubleArgument, FloatArgument, IntegerArgument, LongArgument, StringArgument, GreedyStringArgument, TextArgument
+	 */
+	SIMPLE_TYPE, 
+	
+	/**
+	 * The SoundArgument
+	 */
+	SOUND, 
+	
+	/**
+	 * The TeamArgument
+	 */
+	TEAM, 
+	
+	/**
+	 * The TimeArgument
+	 */
+	TIME;
 
 }

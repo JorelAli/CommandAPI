@@ -4,6 +4,9 @@ import org.bukkit.potion.PotionEffectType;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 
+/**
+ * An argument that represents the Bukkit PotionEffectType object
+ */
 public class PotionEffectArgument extends Argument {
 
 	/**

@@ -1,6 +1,7 @@
 var dir_625fde82f1ef27735138804b81450350 =
 [
     [ "BadLiteralException.java", "_bad_literal_exception_8java_source.html", null ],
+    [ "BiomeArgumentException.java", "_biome_argument_exception_8java_source.html", null ],
     [ "ConflictingPermissionsException.java", "_conflicting_permissions_exception_8java_source.html", null ],
     [ "EmptyExecutorException.java", "_empty_executor_exception_8java_source.html", null ],
     [ "EnvironmentArgumentException.java", "_environment_argument_exception_8java_source.html", null ],
@@ -11,5 +12,6 @@ var dir_625fde82f1ef27735138804b81450350 =
     [ "package-info.java", "exceptions_2package-info_8java_source.html", null ],
     [ "SpigotNotFoundException.java", "_spigot_not_found_exception_8java_source.html", null ],
     [ "TimeArgumentException.java", "_time_argument_exception_8java_source.html", null ],
+    [ "UnsupportedVersionException.java", "_unsupported_version_exception_8java_source.html", null ],
     [ "WrapperCommandSyntaxException.java", "_wrapper_command_syntax_exception_8java_source.html", null ]
 ];

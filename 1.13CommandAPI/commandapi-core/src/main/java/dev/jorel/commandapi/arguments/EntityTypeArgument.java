@@ -4,6 +4,9 @@ import org.bukkit.entity.EntityType;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 
+/**
+ * An argument that represents the Bukkit EntityType object
+ */
 public class EntityTypeArgument extends Argument implements ICustomProvidedArgument {
 
 	/**
