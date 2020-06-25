@@ -196,7 +196,9 @@ new CommandAPICommand(&quot;reward&quot;)
     .withArguments(arguments)
     .executes((sender, args) -&gt; {
         //Get player names by casting to Collection&lt;String&gt;
+        @SuppressWarnings(&quot;unchecked&quot;)
         Collection&lt;String&gt; players = (Collection&lt;String&gt;) args[0];
+        
         for(String playerName : players) {
             Bukkit.getPlayer(playerName).getInventory().addItem(new ItemStack(Material.DIAMOND, 3));
         }

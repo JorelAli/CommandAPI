@@ -31,11 +31,11 @@ new CommandAPICommand("killme")
 	})
     .executesProxy((proxy, args) -> {
 		//Check if the callee is an Entity
-		if(proxy.getCallee() instanceof Entity) {
+		if(proxy.getCallee() instanceof LivingEntity) {
 
 			//If so, kill the entity
-			Entity target = (Entity) proxy.getCallee();
-			entity.setHealth(0);
+			LivingEntity target = (LivingEntity) proxy.getCallee();
+			target.setHealth(0);
 		}
     })
     .register();

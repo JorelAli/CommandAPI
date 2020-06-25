@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.function.ToIntBiFunction;
@@ -325,6 +324,40 @@ public class NMS_1_16_R1 implements NMS {
 
 		net.minecraft.server.v1_16_R1.LootTable lootTable = getCLW(cmdCtx).getServer().getLootTableRegistry()
 				.getLootTable(minecraftKey);
+		
+//		CommandListenerWrapper clw = (CommandListenerWrapper) cmdCtx.getSource();
+//		new LootTableInfo.Builder(clw.getWorld())
+//			.setOptional(LootContextParameters.THIS_ENTITY, clw.getEntity())
+//			.set(LootContextParameters.POSITION, var1)
+//		
+//		private static int a(CommandContext<CommandListenerWrapper> var0, MinecraftKey var1, b var2)
+//				throws CommandSyntaxException {
+//			CommandListenerWrapper var3 = (CommandListenerWrapper) var0.getSource();
+//			LootTableInfo.Builder var4 = new LootTableInfo.Builder(var3.getWorld())
+//					.setOptional(LootContextParameters.THIS_ENTITY, (Object) var3.getEntity())
+//					.set(LootContextParameters.POSITION, (Object) new BlockPosition(var3.getPosition()));
+//			return CommandLoot.a(var0, var1, var4.build(LootContextParameterSets.CHEST), var2);
+//		}
+//		
+//		private static int a(CommandContext<CommandListenerWrapper> var0, MinecraftKey var12, LootTableInfo var2, b var3)
+//				throws CommandSyntaxException {
+//			CommandListenerWrapper var4 = (CommandListenerWrapper) var0.getSource();
+//			LootTable var5 = var4.getServer().getLootTableRegistry().getLootTable(var12);
+//			List var6 = var5.populateLoot(var2);
+//			return var3.accept(var0, var6, var1 -> CommandLoot.a(var4, var1));
+//		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		return new CraftLootTable(new NamespacedKey(namespace, key), lootTable);
 	}
 
@@ -469,9 +502,16 @@ public class NMS_1_16_R1 implements NMS {
 	@Override
 	public BaseComponent[] getChat(CommandContext cmdCtx, String key) throws CommandSyntaxException {
 		String resultantString = ChatSerializer.a(ArgumentChat.a(cmdCtx, key));
-		System.out.println("Result: " + resultantString);
-		ComponentSerializer.parse(resultantString);
-		System.out.println("Succeeding in running parser: " + Arrays.deepToString(ComponentSerializer.parse(resultantString)));
+		
+		{
+			System.out.println("init");
+			BaseComponent[] message = ComponentSerializer.parse(resultantString);
+	        System.out.println(message);
+	        System.out.println(BaseComponent.toPlainText(message));
+	        Bukkit.getServer().spigot().broadcast(message);
+	        System.out.println("postinit");
+		}
+		
 		return ComponentSerializer.parse(resultantString);
 	}
 

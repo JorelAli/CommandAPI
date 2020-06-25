@@ -183,7 +183,7 @@
 <p>Say we want a command that returns a random number as a result. This can then be used by vanilla Minecraft's <code>/execute store result ...</code> command, which can be used for other command block chains.</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;randnum&quot;)
     .executes((sender, args) -&gt; {
-        new Random().nextInt()
+        return new Random().nextInt();
     })
     .register();
 </code></pre>

@@ -27,7 +27,7 @@ Say we want a command that returns a random number as a result. This can then be
 ```java
 new CommandAPICommand("randnum")
     .executes((sender, args) -> {
-        new Random().nextInt()
+        return new Random().nextInt();
     })
     .register();
 ```

@@ -8,6 +8,13 @@ Command executors are of the following format, where `sender` is a [`CommandSend
 
 With normal command executors, these do not need to return anything. By default, this will return a _success value_ of 1 if it runs successfully, and a _success value_ of 0 if it runs unsuccessfully, either by throwing an exception _(RuntimeException)_ or by forcing the command to fail (See the section on [handling command failures](./commandfailures.html).
 
+In short, this is what values are returned when a command is executed from a normal command executor:
+
+|                   | Command Works | Command Doesn't Work |
+| :---------------: | :-----------: | :------------------: |
+| **Success Value** |       1       |          0           |
+| **Result Value**  |       1       |          0           |
+
 <div class="example">
 
 ### Example - Creating a message broadcasting system

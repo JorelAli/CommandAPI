@@ -172,6 +172,11 @@
 }).register();
 </code></pre>
 <p>With normal command executors, these do not need to return anything. By default, this will return a <em>success value</em> of 1 if it runs successfully, and a <em>success value</em> of 0 if it runs unsuccessfully, either by throwing an exception <em>(RuntimeException)</em> or by forcing the command to fail (See the section on <a href="./commandfailures.html">handling command failures</a>.</p>
+<p>In short, this is what values are returned when a command is executed from a normal command executor:</p>
+<table><thead><tr><th align="center"></th><th align="center">Command Works</th><th align="center">Command Doesn't Work</th></tr></thead><tbody>
+<tr><td align="center"><strong>Success Value</strong></td><td align="center">1</td><td align="center">0</td></tr>
+<tr><td align="center"><strong>Result Value</strong></td><td align="center">1</td><td align="center">0</td></tr>
+</tbody></table>
 <div class="example">
 <h3><a class="header" href="#example---creating-a-message-broadcasting-system" id="example---creating-a-message-broadcasting-system">Example - Creating a message broadcasting system</a></h3>
 <p>To illustrate this, let's take a look at a simple message broadcasting command. We declare our arguments (in this case, &quot;message&quot;), we provide some aliases and set a permission required to run the command. Then we declare our main command body by using the <code>.executes()</code> method, before finally registering the command:</p>
