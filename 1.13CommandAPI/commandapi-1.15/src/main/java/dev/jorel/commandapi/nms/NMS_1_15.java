@@ -117,7 +117,7 @@ import net.minecraft.server.v1_15_R1.Vec2F;
 import net.minecraft.server.v1_15_R1.Vec3D;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
-public class NMS_1_15_R1 implements NMS {
+public class NMS_1_15 implements NMS {
 
 	private CommandListenerWrapper getCLW(CommandContext cmdCtx) {
 		return (CommandListenerWrapper) cmdCtx.getSource();
