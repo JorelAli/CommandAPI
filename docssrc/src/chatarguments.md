@@ -52,10 +52,9 @@ This is converted into Spigot's `BaseComponent[]`, which can be used for the fol
 
   ```java
   BookMeta meta = // ...
-  meta.spigot().addPage(BaseComponent[]);
-  meta.spigot().setPage(int, BaseComponent[]);
+  meta.spigot().setPages(BaseComponent[]);
   ```
-
+  
 - Sending messages to `Player` objects:
 
   ```java
@@ -74,6 +73,44 @@ This is converted into Spigot's `BaseComponent[]`, which can be used for the fol
 
 ### Example - Book made from raw JSON
 
+Say we want to generate a book using raw JSON. For this example, we'll use the following JSON (generated from [minecraftjson.com](https://minecraftjson.com/)) to generate our book:
+
+```json
+["", {
+    "text": "Once upon a time, there was a guy call "
+}, {
+    "text": "Skepter",
+    "color": "light_purple",
+    "hoverEvent": {
+        "action": "show_entity",
+        "value": "Skepter"
+    }
+}, {
+    "text": " and he created the "
+}, {
+    "text": "CommandAPI",
+    "underlined": true,
+    "clickEvent": {
+        "action": "open_url",
+        "value": "https://github.com/JorelAli/1.13-Command-API"
+    }
+}]
+```
+
+Since we're writing a book, we must ensure that all quotes have been escaped. This can also be performed on the [minecraftjson.com](https://minecraftjson.com/) website by selecting "book": 
+
+```json
+["[\"\",{\"text\":\"Once upon a time, there was a guy call \"},{\"text\":\"Skepter\",\"color\":\"light_purple\",\"hoverEvent\":{\"action\":\"show_entity\",\"value\":\"Skepter\"}},{\"text\":\" and he created the \"},{\"text\":\"CommandAPI\",\"underlined\":true,\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https://github.com/JorelAli/1.13-Command-API\"}}]"]
+```
+
+Now let's define our command. Since book text is typically very large - too large to be entered into a chat, we'll make a command block compatible command by providing a player parameter:
+
+```
+/makebook <player> <contents>
+```
+
+Now we can create our book command. We use the player as the main target by using their name for the author field, as well as their inventory to place the book. We finally construct our book using the `.setPages(BaseComponent[])` method:
+
 ```java
 {{#include examples/5.5bookjson.java}}
 ```
@@ -83,6 +120,10 @@ This is converted into Spigot's `BaseComponent[]`, which can be used for the fol
 -----
 
 ## Chat argument
+
+> **Developer's Note:**
+>
+> As of the time of writing (25th June 2020), it has been observed that the `ChatArgument` does not work on Spigot 1.16.1. This is not the case however for Spigot versions 1.15.2 and below.
 
 > **Note:**
 >

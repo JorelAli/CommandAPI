@@ -5,7 +5,7 @@ arguments.put("amount", new IntegerArgument(1, 100)); //Prevent spawning too man
 
 new CommandAPICommand("spawnmob")
     .withArguments(arguments)
-    .executesPlayer((player, args) -> {
+    .executesPlayer((Player player, Object[] args) -> {
         for(int i = 0; i < (int) args[1]; i++) {
             player.getWorld().spawnEntity(player.getLocation(), (EntityType) args[0]);
         }

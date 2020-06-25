@@ -349,10 +349,14 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 <hr />
 <h2><a class="header" href="#commandapicommand-methods" id="commandapicommand-methods"><code>CommandAPICommand</code> methods</a></h2>
 <p>The <code>CommandAPICommand</code> has various methods, which are outlined below:</p>
+<h4><a class="header" href="#setting-the-command-name" id="setting-the-command-name">Setting the command name</a></h4>
+<ul>
+<li><code>new CommandAPICommand(String)</code> - This constructor is used to set the command's name. </li>
+</ul>
 <h4><a class="header" href="#setting-command-properties" id="setting-command-properties">Setting command properties</a></h4>
 <ul>
 <li>
-<p><code>withArguments(LinkedHashMap&lt;String, Argument&gt;)</code> - The list of arguments</p>
+<p><code>withArguments(LinkedHashMap&lt;String, Argument&gt;)</code> - The list of arguments.</p>
 <p>The CommandAPI requires a list of arguments which are used for the command. The argument map consists of a key which is the tooltip that is displayed as a prompt to users entering commands, and a value which is an instance of an argument (See the section on arguments). This list of arguments is interpreted in the <em>order that arguments are added to the LinkedHashMap</em>.</p>
 </li>
 <li>
@@ -371,6 +375,30 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 <li><code>executesConsole((console, args) -&gt; {})</code> - Executes a command using the <code>ConsoleCommandSender</code> object.</li>
 <li><code>executesProxy((proxy, args) -&gt; {})</code> - Executes a command using the <code>ProxiedCommandSender</code> object.</li>
 </ul>
+<blockquote>
+<p><strong>Developer's Note:</strong></p>
+<p>Sometimes, the Java compiler throws an error saying that a method is ambiguous for the type CommandAPICommand. This is due to a limitation in Java's type inference system and is not a fault of the CommandAPI. If we take the following code, used to spawn a pig:</p>
+<pre><code class="language-java">new CommandAPICommand(&quot;spawnpigs&quot;)
+ .executesPlayer((player, args) -&gt; {
+     for(int i = 0; i &lt; 10; i++) {
+         player.getWorld().spawnEntity(player.getLocation(), (EntityType) args[0]);
+     }
+ })
+ .register();
+</code></pre>
+<p>The Java type inference system cannot determine what the type of the lambda <code>(player, args) -&gt; ()</code> is, therefore it produces the following compilation error:</p>
+<pre><code>The method executesPlayer(PlayerCommandExecutor) is ambiguous for the type CommandAPICommand
+</code></pre>
+<p>This can easily be resolved by declaring the specific type of the command sender and the arguments. For example:</p>
+<pre><code class="language-java">new CommandAPICommand(&quot;spawnpigs&quot;)
+ .executesPlayer((Player player, Object[] args) -&gt; {
+     for(int i = 0; i &lt; 10; i++) {
+         player.getWorld().spawnEntity(player.getLocation(), (EntityType) args[0]);
+     }
+ })
+ .register();
+</code></pre>
+</blockquote>
 <h4><a class="header" href="#registering-the-command" id="registering-the-command">Registering the command</a></h4>
 <ul>
 <li><code>register()</code> - Registers the command.</li>
@@ -964,7 +992,7 @@ yesn't
 <blockquote>
 <p><strong>Greedy Arguments:</strong></p>
 <p>The <code>GreedyStringArgument</code>, similar to the <code>ChatArgument</code> uses the entire argument array from its current position. This means that it never ends, therefore if it is used, it must be the last element of your <code>LinkedHashMap</code> of arguments.</p>
-<p>For example, if you have a command <code>/msg &lt;message&gt; &lt;target&gt;</code>, it would not be able to determine where the message ends and the <code>&lt;target&gt;</code> argument begins.</p>
+<p>For example, if you have a command <code>/message &lt;message&gt; &lt;target&gt;</code>, it would not be able to determine where the message ends and the <code>&lt;target&gt;</code> argument begins.</p>
 <p>If a <code>GreedyStringArgument</code> or <code>ChatArgument</code> is not declared at the end of the <code>LinkedHashMap</code> of arguments, or multiple of these arguments are used in the same <code>LinkedHashMap</code>, the CommandAPI throws a <code>GreedyArgumentException</code>.</p>
 </blockquote>
 <p>The <code>GreedyStringArgument</code> takes the <code>TextArgument</code> a step further. <strong>Any characters and symbols are allowed</strong> and quotation marks are not required.</p>
@@ -988,7 +1016,7 @@ new CommandAPICommand(&quot;message&quot;)
 <p>Any text entered after the <code>&lt;target&gt;</code> argument would be sent to the player. For example, the command could be used as follows:</p>
 <pre><code>/message Skepter This is some incredibly long string with &quot;symbols&quot; and $p3c!aL characters~
 </code></pre>
-<p>Note how this only works if the greedy string argument is <em>at the end</em>. If, say, the command was <code>/msg &lt;message&gt; &lt;target&gt;</code>, it would not be able to determine where the <code>&lt;message&gt;</code> argument ends and the <code>&lt;target&gt;</code> argument begins.</p>
+<p>Note how this only works if the greedy string argument is <em>at the end</em>. If, say, the command was <code>/message &lt;message&gt; &lt;target&gt;</code>, it would not be able to determine where the <code>&lt;message&gt;</code> argument ends and the <code>&lt;target&gt;</code> argument begins.</p>
 </div>
 <div class="example">
 <h3><a class="header" href="#examples-of-greedystringargument-uses" id="examples-of-greedystringargument-uses">Examples of GreedyStringArgument uses:</a></h3>
@@ -1037,6 +1065,10 @@ new CommandAPICommand(&quot;break&quot;)
 <hr />
 <h2><a class="header" href="#location-2d-space" id="location-2d-space">Location (2D space)</a></h2>
 <p>The <code>Location2DArgument</code> is pretty much identical in use to the <code>LocationArgument</code> for 3D coordinates, except instead of returning a <code>Location</code> object, it instead returns a <code>Location2D</code> object that extends <code>Location</code> (thus, being compatible anywhere you would normally be able to use <code>Location</code>).</p>
+<blockquote>
+<p><strong>Note:</strong></p>
+<p>The <code>Location2DArgument</code> cannot be used with <code>LocationType.PRECISE_POSITION</code> in Minecraft 1.13. However, it can be used normally with <code>LocationType.PRECISE_POSITION</code> in Minecraft versions 1.13.1 and later.</p>
+</blockquote>
 <h1><a class="header" href="#rotation-arguments" id="rotation-arguments">Rotation arguments</a></h1>
 <p>The <code>RotationArgument</code> allows users to specify a pair of pitch and yaw coordinates. By default (using the <code>~</code> symbol), this refers to the player's current pitch and yaw of where they are looking at.</p>
 <p>The <code>RotationArgument</code> class returns a <code>Rotation</code> object, which consists of the following methods:</p>
@@ -1123,8 +1155,7 @@ new CommandAPICommand(&quot;namecolor&quot;)
 <li>
 <p>Adding and setting pages to books using <code>BookMeta</code>:</p>
 <pre><code class="language-java">BookMeta meta = // ...
-meta.spigot().addPage(BaseComponent[]);
-meta.spigot().setPage(int, BaseComponent[]);
+meta.spigot().setPages(BaseComponent[]);
 </code></pre>
 </li>
 <li>
@@ -1142,18 +1173,50 @@ sender.spigot().sendMessage(BaseComponent[]);
 </ul>
 <div class="example">
 <h3><a class="header" href="#example---book-made-from-raw-json" id="example---book-made-from-raw-json">Example - Book made from raw JSON</a></h3>
+<p>Say we want to generate a book using raw JSON. For this example, we'll use the following JSON (generated from <a href="https://minecraftjson.com/">minecraftjson.com</a>) to generate our book:</p>
+<pre><code class="language-json">[&quot;&quot;, {
+    &quot;text&quot;: &quot;Once upon a time, there was a guy call &quot;
+}, {
+    &quot;text&quot;: &quot;Skepter&quot;,
+    &quot;color&quot;: &quot;light_purple&quot;,
+    &quot;hoverEvent&quot;: {
+        &quot;action&quot;: &quot;show_entity&quot;,
+        &quot;value&quot;: &quot;Skepter&quot;
+    }
+}, {
+    &quot;text&quot;: &quot; and he created the &quot;
+}, {
+    &quot;text&quot;: &quot;CommandAPI&quot;,
+    &quot;underlined&quot;: true,
+    &quot;clickEvent&quot;: {
+        &quot;action&quot;: &quot;open_url&quot;,
+        &quot;value&quot;: &quot;https://github.com/JorelAli/1.13-Command-API&quot;
+    }
+}]
+</code></pre>
+<p>Since we're writing a book, we must ensure that all quotes have been escaped. This can also be performed on the <a href="https://minecraftjson.com/">minecraftjson.com</a> website by selecting &quot;book&quot;: </p>
+<pre><code class="language-json">[&quot;[\&quot;\&quot;,{\&quot;text\&quot;:\&quot;Once upon a time, there was a guy call \&quot;},{\&quot;text\&quot;:\&quot;Skepter\&quot;,\&quot;color\&quot;:\&quot;light_purple\&quot;,\&quot;hoverEvent\&quot;:{\&quot;action\&quot;:\&quot;show_entity\&quot;,\&quot;value\&quot;:\&quot;Skepter\&quot;}},{\&quot;text\&quot;:\&quot; and he created the \&quot;},{\&quot;text\&quot;:\&quot;CommandAPI\&quot;,\&quot;underlined\&quot;:true,\&quot;clickEvent\&quot;:{\&quot;action\&quot;:\&quot;open_url\&quot;,\&quot;value\&quot;:\&quot;https://github.com/JorelAli/1.13-Command-API\&quot;}}]&quot;]
+</code></pre>
+<p>Now let's define our command. Since book text is typically very large - too large to be entered into a chat, we'll make a command block compatible command by providing a player parameter:</p>
+<pre><code>/makebook &lt;player&gt; &lt;contents&gt;
+</code></pre>
+<p>Now we can create our book command. We use the player as the main target by using their name for the author field, as well as their inventory to place the book. We finally construct our book using the <code>.setPages(BaseComponent[])</code> method:</p>
 <pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;player&quot;, new PlayerArgument());
 arguments.put(&quot;contents&quot;, new ChatComponentArgument());
 
 new CommandAPICommand(&quot;makebook&quot;)
     .withArguments(arguments)
-    .executesPlayer((player, args) -&gt; {
-        BaseComponent[] arr = (BaseComponent[]) args[0];
+    .executes((sender, args) -&gt; {
+        Player player = (Player) args[0];
+        BaseComponent[] arr = (BaseComponent[]) args[1];
         
         //Create book
         ItemStack is = new ItemStack(Material.WRITTEN_BOOK);
         BookMeta meta = (BookMeta) is.getItemMeta(); 
-        meta.spigot().addPage(arr);
+        meta.setTitle(&quot;Custom Book&quot;);
+        meta.setAuthor(player.getName());
+        meta.spigot().setPages(arr);
         is.setItemMeta(meta);
         
         //Give player the book
@@ -1164,6 +1227,10 @@ new CommandAPICommand(&quot;makebook&quot;)
 </div>
 <hr />
 <h2><a class="header" href="#chat-argument" id="chat-argument">Chat argument</a></h2>
+<blockquote>
+<p><strong>Developer's Note:</strong></p>
+<p>As of the time of writing (25th June 2020), it has been observed that the <code>ChatArgument</code> does not work on Spigot 1.16.1. This is not the case however for Spigot versions 1.15.2 and below.</p>
+</blockquote>
 <blockquote>
 <p><strong>Note:</strong></p>
 <p>The <code>ChatArgument</code> class is an argument similar to the <a href="./stringarguments.html#greedy-string-argument"><code>GreedyStringArgument</code></a>, in the sense that it has no terminator and must be defined at the end of your <code>LinkedHashMap</code> of arguments. For more information on this, please read the section on <a href="./stringarguments.html#greedy-string-argument">Greedy arguments</a>.</p>
@@ -1203,13 +1270,13 @@ new CommandAPICommand(&quot;pbroadcast&quot;)
 </ul>
 <p>The return type is the type to be cast when retrieved from the <code>Object[] args</code> in the command declaration.</p>
 <div class="example">
-<h3><a class="header" href="#example---kill-entities-command" id="example---kill-entities-command">Example - Kill entities command</a></h3>
-<p>Say we want a command to kill certain types of entities. Typically, this would be implemented using a simple command like:</p>
-<pre><code>/kill &lt;player&gt;
-/kill &lt;mob type&gt;
-/kill &lt;radius&gt;
+<h3><a class="header" href="#example---remove-entities-command" id="example---remove-entities-command">Example - Remove entities command</a></h3>
+<p>Say we want a command to remove certain types of entities. Typically, this would be implemented using a simple command like:</p>
+<pre><code>/remove &lt;player&gt;
+/remove &lt;mob type&gt;
+/remove &lt;radius&gt;
 </code></pre>
-<p>Instead, we can combine all of these into one by using the <code>EntitySelectorArgument</code>. We want to be able to target multiple entities at a time, so we want to use the <code>EntitySelector.MANY_ENTITIES</code> value in our constructor. We can simply retrieve the <code>Collection&lt;Entity&gt;</code> from this argument and iteratively kill each entity:</p>
+<p>Instead, we can combine all of these into one by using the <code>EntitySelectorArgument</code>. We want to be able to target multiple entities at a time, so we want to use the <code>EntitySelector.MANY_ENTITIES</code> value in our constructor. We can simply retrieve the <code>Collection&lt;Entity&gt;</code> from this argument and iteratively remove each entity:</p>
 <pre><code class="language-java">//LinkedHashMap to store arguments for the command
 LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 
@@ -1232,12 +1299,12 @@ new CommandAPICommand(&quot;remove&quot;)
 </code></pre>
 <p>We could then use this to target specific entities, for example:</p>
 <ul>
-<li>To kill all cows:
-<pre><code>/kill @e[type=cow]
+<li>To remove all cows:
+<pre><code>/remove @e[type=cow]
 </code></pre>
 </li>
-<li>To kill the 10 furthest pigs from the command sender:
-<pre><code>/kill @e[type=pig,limit=10,sort=furthest]
+<li>To remove the 10 furthest pigs from the command sender:
+<pre><code>/remove @e[type=pig,limit=10,sort=furthest]
 </code></pre>
 </li>
 </ul>
@@ -1266,13 +1333,14 @@ arguments.put(&quot;amount&quot;, new IntegerArgument(1, 100)); //Prevent spawni
 
 new CommandAPICommand(&quot;spawnmob&quot;)
     .withArguments(arguments)
-    .executesPlayer((player, args) -&gt; {
+    .executesPlayer((Player player, Object[] args) -&gt; {
         for(int i = 0; i &lt; (int) args[1]; i++) {
             player.getWorld().spawnEntity(player.getLocation(), (EntityType) args[0]);
         }
     })
     .register();
 </code></pre>
+<p>Note how in this example above, we have to explicitly state <code>Player player, Object[] args</code>. This is due to a limitation of Java's type inference system which is discussed <a href="./commandregistration.html#setting-the-commands-executor">here</a>.</p>
 </div><h1><a class="header" href="#scoreboard-arguments" id="scoreboard-arguments">Scoreboard arguments</a></h1>
 <ul>
 <li>ScoreHolderArgument</li>
@@ -1460,7 +1528,7 @@ new CommandAPICommand(&quot;togglepvp&quot;)
 <p>The <code>AdvancementArgument</code> class represents in-game advancements. As expected, the <code>AdvancementArgument</code> can be casted to Bukkit's <code>Advancement</code> class.</p>
 <div class="example">
 <h3><a class="header" href="#example---awarding-a-player-an-advancement" id="example---awarding-a-player-an-advancement">Example - Awarding a player an advancement</a></h3>
-<p>Say we want to award a player an advancement. In this example, we will also update all preceding advancements that lead to a specific advancement. First, we need the structure of our command:</p>
+<p>Say we want to award a player an advancement. First, we need the structure of our command:</p>
 <pre><code>/award &lt;player&gt; &lt;advancement&gt;
 </code></pre>
 <p>Since we require a player, we will use the <code>PlayerArgument</code> for this example. Given a player, we can simply get the <code>AdvancementProgress</code> for that player, and then award the criteria required to fully complete the provided advancement.</p>

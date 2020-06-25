@@ -212,7 +212,7 @@ yesn't
 <blockquote>
 <p><strong>Greedy Arguments:</strong></p>
 <p>The <code>GreedyStringArgument</code>, similar to the <code>ChatArgument</code> uses the entire argument array from its current position. This means that it never ends, therefore if it is used, it must be the last element of your <code>LinkedHashMap</code> of arguments.</p>
-<p>For example, if you have a command <code>/msg &lt;message&gt; &lt;target&gt;</code>, it would not be able to determine where the message ends and the <code>&lt;target&gt;</code> argument begins.</p>
+<p>For example, if you have a command <code>/message &lt;message&gt; &lt;target&gt;</code>, it would not be able to determine where the message ends and the <code>&lt;target&gt;</code> argument begins.</p>
 <p>If a <code>GreedyStringArgument</code> or <code>ChatArgument</code> is not declared at the end of the <code>LinkedHashMap</code> of arguments, or multiple of these arguments are used in the same <code>LinkedHashMap</code>, the CommandAPI throws a <code>GreedyArgumentException</code>.</p>
 </blockquote>
 <p>The <code>GreedyStringArgument</code> takes the <code>TextArgument</code> a step further. <strong>Any characters and symbols are allowed</strong> and quotation marks are not required.</p>
@@ -236,7 +236,7 @@ new CommandAPICommand(&quot;message&quot;)
 <p>Any text entered after the <code>&lt;target&gt;</code> argument would be sent to the player. For example, the command could be used as follows:</p>
 <pre><code>/message Skepter This is some incredibly long string with &quot;symbols&quot; and $p3c!aL characters~
 </code></pre>
-<p>Note how this only works if the greedy string argument is <em>at the end</em>. If, say, the command was <code>/msg &lt;message&gt; &lt;target&gt;</code>, it would not be able to determine where the <code>&lt;message&gt;</code> argument ends and the <code>&lt;target&gt;</code> argument begins.</p>
+<p>Note how this only works if the greedy string argument is <em>at the end</em>. If, say, the command was <code>/message &lt;message&gt; &lt;target&gt;</code>, it would not be able to determine where the <code>&lt;message&gt;</code> argument ends and the <code>&lt;target&gt;</code> argument begins.</p>
 </div>
 <div class="example">
 <h3><a class="header" href="#examples-of-greedystringargument-uses" id="examples-of-greedystringargument-uses">Examples of GreedyStringArgument uses:</a></h3>

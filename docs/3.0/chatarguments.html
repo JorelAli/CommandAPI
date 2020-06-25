@@ -211,8 +211,7 @@ new CommandAPICommand(&quot;namecolor&quot;)
 <li>
 <p>Adding and setting pages to books using <code>BookMeta</code>:</p>
 <pre><code class="language-java">BookMeta meta = // ...
-meta.spigot().addPage(BaseComponent[]);
-meta.spigot().setPage(int, BaseComponent[]);
+meta.spigot().setPages(BaseComponent[]);
 </code></pre>
 </li>
 <li>
@@ -230,18 +229,50 @@ sender.spigot().sendMessage(BaseComponent[]);
 </ul>
 <div class="example">
 <h3><a class="header" href="#example---book-made-from-raw-json" id="example---book-made-from-raw-json">Example - Book made from raw JSON</a></h3>
+<p>Say we want to generate a book using raw JSON. For this example, we'll use the following JSON (generated from <a href="https://minecraftjson.com/">minecraftjson.com</a>) to generate our book:</p>
+<pre><code class="language-json">[&quot;&quot;, {
+    &quot;text&quot;: &quot;Once upon a time, there was a guy call &quot;
+}, {
+    &quot;text&quot;: &quot;Skepter&quot;,
+    &quot;color&quot;: &quot;light_purple&quot;,
+    &quot;hoverEvent&quot;: {
+        &quot;action&quot;: &quot;show_entity&quot;,
+        &quot;value&quot;: &quot;Skepter&quot;
+    }
+}, {
+    &quot;text&quot;: &quot; and he created the &quot;
+}, {
+    &quot;text&quot;: &quot;CommandAPI&quot;,
+    &quot;underlined&quot;: true,
+    &quot;clickEvent&quot;: {
+        &quot;action&quot;: &quot;open_url&quot;,
+        &quot;value&quot;: &quot;https://github.com/JorelAli/1.13-Command-API&quot;
+    }
+}]
+</code></pre>
+<p>Since we're writing a book, we must ensure that all quotes have been escaped. This can also be performed on the <a href="https://minecraftjson.com/">minecraftjson.com</a> website by selecting &quot;book&quot;: </p>
+<pre><code class="language-json">[&quot;[\&quot;\&quot;,{\&quot;text\&quot;:\&quot;Once upon a time, there was a guy call \&quot;},{\&quot;text\&quot;:\&quot;Skepter\&quot;,\&quot;color\&quot;:\&quot;light_purple\&quot;,\&quot;hoverEvent\&quot;:{\&quot;action\&quot;:\&quot;show_entity\&quot;,\&quot;value\&quot;:\&quot;Skepter\&quot;}},{\&quot;text\&quot;:\&quot; and he created the \&quot;},{\&quot;text\&quot;:\&quot;CommandAPI\&quot;,\&quot;underlined\&quot;:true,\&quot;clickEvent\&quot;:{\&quot;action\&quot;:\&quot;open_url\&quot;,\&quot;value\&quot;:\&quot;https://github.com/JorelAli/1.13-Command-API\&quot;}}]&quot;]
+</code></pre>
+<p>Now let's define our command. Since book text is typically very large - too large to be entered into a chat, we'll make a command block compatible command by providing a player parameter:</p>
+<pre><code>/makebook &lt;player&gt; &lt;contents&gt;
+</code></pre>
+<p>Now we can create our book command. We use the player as the main target by using their name for the author field, as well as their inventory to place the book. We finally construct our book using the <code>.setPages(BaseComponent[])</code> method:</p>
 <pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;player&quot;, new PlayerArgument());
 arguments.put(&quot;contents&quot;, new ChatComponentArgument());
 
 new CommandAPICommand(&quot;makebook&quot;)
     .withArguments(arguments)
-    .executesPlayer((player, args) -&gt; {
-        BaseComponent[] arr = (BaseComponent[]) args[0];
+    .executes((sender, args) -&gt; {
+        Player player = (Player) args[0];
+        BaseComponent[] arr = (BaseComponent[]) args[1];
         
         //Create book
         ItemStack is = new ItemStack(Material.WRITTEN_BOOK);
         BookMeta meta = (BookMeta) is.getItemMeta(); 
-        meta.spigot().addPage(arr);
+        meta.setTitle(&quot;Custom Book&quot;);
+        meta.setAuthor(player.getName());
+        meta.spigot().setPages(arr);
         is.setItemMeta(meta);
         
         //Give player the book
@@ -252,6 +283,10 @@ new CommandAPICommand(&quot;makebook&quot;)
 </div>
 <hr />
 <h2><a class="header" href="#chat-argument" id="chat-argument">Chat argument</a></h2>
+<blockquote>
+<p><strong>Developer's Note:</strong></p>
+<p>As of the time of writing (25th June 2020), it has been observed that the <code>ChatArgument</code> does not work on Spigot 1.16.1. This is not the case however for Spigot versions 1.15.2 and below.</p>
+</blockquote>
 <blockquote>
 <p><strong>Note:</strong></p>
 <p>The <code>ChatArgument</code> class is an argument similar to the <a href="./stringarguments.html#greedy-string-argument"><code>GreedyStringArgument</code></a>, in the sense that it has no terminator and must be defined at the end of your <code>LinkedHashMap</code> of arguments. For more information on this, please read the section on <a href="./stringarguments.html#greedy-string-argument">Greedy arguments</a>.</p>

@@ -502,16 +502,6 @@ public class NMS_1_16_R1 implements NMS {
 	@Override
 	public BaseComponent[] getChat(CommandContext cmdCtx, String key) throws CommandSyntaxException {
 		String resultantString = ChatSerializer.a(ArgumentChat.a(cmdCtx, key));
-		
-		{
-			System.out.println("init");
-			BaseComponent[] message = ComponentSerializer.parse(resultantString);
-	        System.out.println(message);
-	        System.out.println(BaseComponent.toPlainText(message));
-	        Bukkit.getServer().spigot().broadcast(message);
-	        System.out.println("postinit");
-		}
-		
 		return ComponentSerializer.parse(resultantString);
 	}
 
@@ -743,7 +733,6 @@ public class NMS_1_16_R1 implements NMS {
 	@Override
 	public Biome getBiome(CommandContext cmdCtx, String key) {
 		MinecraftKey minecraftKey = (MinecraftKey) cmdCtx.getArgument(key, MinecraftKey.class);
-		System.out.println("Casted to minecraftkey properly: " + minecraftKey);
 		return Biome.valueOf(minecraftKey.getKey().toUpperCase());
 	}
 

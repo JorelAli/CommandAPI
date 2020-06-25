@@ -177,13 +177,13 @@
 </ul>
 <p>The return type is the type to be cast when retrieved from the <code>Object[] args</code> in the command declaration.</p>
 <div class="example">
-<h3><a class="header" href="#example---kill-entities-command" id="example---kill-entities-command">Example - Kill entities command</a></h3>
-<p>Say we want a command to kill certain types of entities. Typically, this would be implemented using a simple command like:</p>
-<pre><code>/kill &lt;player&gt;
-/kill &lt;mob type&gt;
-/kill &lt;radius&gt;
+<h3><a class="header" href="#example---remove-entities-command" id="example---remove-entities-command">Example - Remove entities command</a></h3>
+<p>Say we want a command to remove certain types of entities. Typically, this would be implemented using a simple command like:</p>
+<pre><code>/remove &lt;player&gt;
+/remove &lt;mob type&gt;
+/remove &lt;radius&gt;
 </code></pre>
-<p>Instead, we can combine all of these into one by using the <code>EntitySelectorArgument</code>. We want to be able to target multiple entities at a time, so we want to use the <code>EntitySelector.MANY_ENTITIES</code> value in our constructor. We can simply retrieve the <code>Collection&lt;Entity&gt;</code> from this argument and iteratively kill each entity:</p>
+<p>Instead, we can combine all of these into one by using the <code>EntitySelectorArgument</code>. We want to be able to target multiple entities at a time, so we want to use the <code>EntitySelector.MANY_ENTITIES</code> value in our constructor. We can simply retrieve the <code>Collection&lt;Entity&gt;</code> from this argument and iteratively remove each entity:</p>
 <pre><code class="language-java">//LinkedHashMap to store arguments for the command
 LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 
@@ -206,12 +206,12 @@ new CommandAPICommand(&quot;remove&quot;)
 </code></pre>
 <p>We could then use this to target specific entities, for example:</p>
 <ul>
-<li>To kill all cows:
-<pre><code>/kill @e[type=cow]
+<li>To remove all cows:
+<pre><code>/remove @e[type=cow]
 </code></pre>
 </li>
-<li>To kill the 10 furthest pigs from the command sender:
-<pre><code>/kill @e[type=pig,limit=10,sort=furthest]
+<li>To remove the 10 furthest pigs from the command sender:
+<pre><code>/remove @e[type=pig,limit=10,sort=furthest]
 </code></pre>
 </li>
 </ul>
@@ -240,13 +240,14 @@ arguments.put(&quot;amount&quot;, new IntegerArgument(1, 100)); //Prevent spawni
 
 new CommandAPICommand(&quot;spawnmob&quot;)
     .withArguments(arguments)
-    .executesPlayer((player, args) -&gt; {
+    .executesPlayer((Player player, Object[] args) -&gt; {
         for(int i = 0; i &lt; (int) args[1]; i++) {
             player.getWorld().spawnEntity(player.getLocation(), (EntityType) args[0]);
         }
     })
     .register();
 </code></pre>
+<p>Note how in this example above, we have to explicitly state <code>Player player, Object[] args</code>. This is due to a limitation of Java's type inference system which is discussed <a href="./commandregistration.html#setting-the-commands-executor">here</a>.</p>
 </div>
                     </main>
 

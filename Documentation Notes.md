@@ -1,7 +1,7 @@
 # Things to note in the next documentation:
 
-- `LocationType.PRECISE_POSITION` Doesn't exist for Minecraft 1.13 for `Location2DArgument`, but does for 1.13.1+
-- Commands can have prefixes such as `a:b`
+- [x] `LocationType.PRECISE_POSITION` Doesn't exist for Minecraft 1.13 for `Location2DArgument`, but does for 1.13.1+
+- [ ] Commands can have prefixes such as `a:b`
 
 -----
 
@@ -35,12 +35,12 @@ List of things to document
     - [x] NBTNotFoundException, and the dependency on the NBTAPI
   - [x] TimeArgument
     - [x] TimeArgumentException - TimeArgument only compatible with 1.14+
-  - [ ] Position based arguments:
+  - [x] Position based arguments:
     - [x] Location2DArgument
       - [x] Mention how to use Location2D, and how it extends Location so can be used wherever location is used
     - [x] RotationArgument
       - [x] Mention of Rotation class
-      - [ ] Test the rotation example + give it a name
+      - [x] Test the rotation example + give it a name
     - [x] AxisArgument
     - [x] (Move LocationArgument section into "position based" section)
   - [x] Scoreboard based arguments:

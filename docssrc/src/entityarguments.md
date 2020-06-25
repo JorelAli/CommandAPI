@@ -15,17 +15,17 @@ The return type is the type to be cast when retrieved from the `Object[] args` i
 
 <div class="example">
 
-### Example - Kill entities command
+### Example - Remove entities command
 
-Say we want a command to kill certain types of entities. Typically, this would be implemented using a simple command like:
+Say we want a command to remove certain types of entities. Typically, this would be implemented using a simple command like:
 
 ```
-/kill <player>
-/kill <mob type>
-/kill <radius>
+/remove <player>
+/remove <mob type>
+/remove <radius>
 ```
 
-Instead, we can combine all of these into one by using the `EntitySelectorArgument`. We want to be able to target multiple entities at a time, so we want to use the `EntitySelector.MANY_ENTITIES` value in our constructor. We can simply retrieve the `Collection<Entity>` from this argument and iteratively kill each entity:
+Instead, we can combine all of these into one by using the `EntitySelectorArgument`. We want to be able to target multiple entities at a time, so we want to use the `EntitySelector.MANY_ENTITIES` value in our constructor. We can simply retrieve the `Collection<Entity>` from this argument and iteratively remove each entity:
 
 ```java
 {{ #include examples/5.6entityselector.java }}
@@ -33,13 +33,13 @@ Instead, we can combine all of these into one by using the `EntitySelectorArgume
 
 We could then use this to target specific entities, for example:
 
-* To kill all cows:
+* To remove all cows:
   ```
-  /kill @e[type=cow]
+  /remove @e[type=cow]
   ```
-* To kill the 10 furthest pigs from the command sender:
+* To remove the 10 furthest pigs from the command sender:
   ```
-  /kill @e[type=pig,limit=10,sort=furthest]
+  /remove @e[type=pig,limit=10,sort=furthest]
   ```
 
 </div>
@@ -77,5 +77,7 @@ Since we're trying to specify an entity type, we will use the `EntityTypeArgumen
 ```java
 {{ #include examples/5.6entitytype.java }}
 ```
+
+Note how in this example above, we have to explicitly state `Player player, Object[] args`. This is due to a limitation of Java's type inference system which is discussed [here](./commandregistration.md#setting-the-commands-executor).
 
 </div>

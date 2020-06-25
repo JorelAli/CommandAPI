@@ -195,10 +195,14 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 <hr />
 <h2><a class="header" href="#commandapicommand-methods" id="commandapicommand-methods"><code>CommandAPICommand</code> methods</a></h2>
 <p>The <code>CommandAPICommand</code> has various methods, which are outlined below:</p>
+<h4><a class="header" href="#setting-the-command-name" id="setting-the-command-name">Setting the command name</a></h4>
+<ul>
+<li><code>new CommandAPICommand(String)</code> - This constructor is used to set the command's name. </li>
+</ul>
 <h4><a class="header" href="#setting-command-properties" id="setting-command-properties">Setting command properties</a></h4>
 <ul>
 <li>
-<p><code>withArguments(LinkedHashMap&lt;String, Argument&gt;)</code> - The list of arguments</p>
+<p><code>withArguments(LinkedHashMap&lt;String, Argument&gt;)</code> - The list of arguments.</p>
 <p>The CommandAPI requires a list of arguments which are used for the command. The argument map consists of a key which is the tooltip that is displayed as a prompt to users entering commands, and a value which is an instance of an argument (See the section on arguments). This list of arguments is interpreted in the <em>order that arguments are added to the LinkedHashMap</em>.</p>
 </li>
 <li>
@@ -217,6 +221,30 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 <li><code>executesConsole((console, args) -&gt; {})</code> - Executes a command using the <code>ConsoleCommandSender</code> object.</li>
 <li><code>executesProxy((proxy, args) -&gt; {})</code> - Executes a command using the <code>ProxiedCommandSender</code> object.</li>
 </ul>
+<blockquote>
+<p><strong>Developer's Note:</strong></p>
+<p>Sometimes, the Java compiler throws an error saying that a method is ambiguous for the type CommandAPICommand. This is due to a limitation in Java's type inference system and is not a fault of the CommandAPI. If we take the following code, used to spawn a pig:</p>
+<pre><code class="language-java">new CommandAPICommand(&quot;spawnpigs&quot;)
+ .executesPlayer((player, args) -&gt; {
+     for(int i = 0; i &lt; 10; i++) {
+         player.getWorld().spawnEntity(player.getLocation(), (EntityType) args[0]);
+     }
+ })
+ .register();
+</code></pre>
+<p>The Java type inference system cannot determine what the type of the lambda <code>(player, args) -&gt; ()</code> is, therefore it produces the following compilation error:</p>
+<pre><code>The method executesPlayer(PlayerCommandExecutor) is ambiguous for the type CommandAPICommand
+</code></pre>
+<p>This can easily be resolved by declaring the specific type of the command sender and the arguments. For example:</p>
+<pre><code class="language-java">new CommandAPICommand(&quot;spawnpigs&quot;)
+ .executesPlayer((Player player, Object[] args) -&gt; {
+     for(int i = 0; i &lt; 10; i++) {
+         player.getWorld().spawnEntity(player.getLocation(), (EntityType) args[0]);
+     }
+ })
+ .register();
+</code></pre>
+</blockquote>
 <h4><a class="header" href="#registering-the-command" id="registering-the-command">Registering the command</a></h4>
 <ul>
 <li><code>register()</code> - Registers the command.</li>

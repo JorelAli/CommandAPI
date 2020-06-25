@@ -169,7 +169,7 @@
 <p>The <code>AdvancementArgument</code> class represents in-game advancements. As expected, the <code>AdvancementArgument</code> can be casted to Bukkit's <code>Advancement</code> class.</p>
 <div class="example">
 <h3><a class="header" href="#example---awarding-a-player-an-advancement" id="example---awarding-a-player-an-advancement">Example - Awarding a player an advancement</a></h3>
-<p>Say we want to award a player an advancement. In this example, we will also update all preceding advancements that lead to a specific advancement. First, we need the structure of our command:</p>
+<p>Say we want to award a player an advancement. First, we need the structure of our command:</p>
 <pre><code>/award &lt;player&gt; &lt;advancement&gt;
 </code></pre>
 <p>Since we require a player, we will use the <code>PlayerArgument</code> for this example. Given a player, we can simply get the <code>AdvancementProgress</code> for that player, and then award the criteria required to fully complete the provided advancement.</p>

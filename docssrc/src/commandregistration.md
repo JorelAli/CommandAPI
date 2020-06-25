@@ -24,9 +24,13 @@ That's it! This simple snippet of code fully registers the command to the server
 
 The `CommandAPICommand` has various methods, which are outlined below:
 
+#### Setting the command name
+
+- `new CommandAPICommand(String)` - This constructor is used to set the command's name. 
+
 #### Setting command properties
 
-- `withArguments(LinkedHashMap<String, Argument>)` - The list of arguments
+- `withArguments(LinkedHashMap<String, Argument>)` - The list of arguments.
 
   The CommandAPI requires a list of arguments which are used for the command. The argument map consists of a key which is the tooltip that is displayed as a prompt to users entering commands, and a value which is an instance of an argument (See the section on arguments). This list of arguments is interpreted in the _order that arguments are added to the LinkedHashMap_.
 
@@ -42,6 +46,38 @@ The `CommandAPICommand` has various methods, which are outlined below:
 - `executesCommandBlock((cmdblock, args) -> {})` - Executes a command using the `BlockCommandSender` object.
 - `executesConsole((console, args) -> {})` - Executes a command using the `ConsoleCommandSender` object.
 - `executesProxy((proxy, args) -> {})` - Executes a command using the `ProxiedCommandSender` object.
+
+> **Developer's Note:**
+>
+> Sometimes, the Java compiler throws an error saying that a method is ambiguous for the type CommandAPICommand. This is due to a limitation in Java's type inference system and is not a fault of the CommandAPI. If we take the following code, used to spawn a pig:
+>
+> ```java
+> new CommandAPICommand("spawnpigs")
+>  .executesPlayer((player, args) -> {
+>      for(int i = 0; i < 10; i++) {
+>          player.getWorld().spawnEntity(player.getLocation(), (EntityType) args[0]);
+>      }
+>  })
+>  .register();
+> ```
+>
+> The Java type inference system cannot determine what the type of the lambda `(player, args) -> ()` is, therefore it produces the following compilation error:
+>
+> ```
+> The method executesPlayer(PlayerCommandExecutor) is ambiguous for the type CommandAPICommand
+> ```
+>
+> This can easily be resolved by declaring the specific type of the command sender and the arguments. For example:
+>
+> ```java
+> new CommandAPICommand("spawnpigs")
+>  .executesPlayer((Player player, Object[] args) -> {
+>      for(int i = 0; i < 10; i++) {
+>          player.getWorld().spawnEntity(player.getLocation(), (EntityType) args[0]);
+>      }
+>  })
+>  .register();
+> ```
 
 #### Registering the command
 
