@@ -1,0 +1,4 @@
+var classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1exceptions_1_1_empty_executor_exception =
+[
+    [ "EmptyExecutorException", "classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1exceptions_1_1_empty_executor_exception.html#a645af86ea42d11eef62bb617a04ab687", null ]
+];

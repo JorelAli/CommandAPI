@@ -1,0 +1,4 @@
+var classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1exceptions_1_1_bad_literal_exception =
+[
+    [ "BadLiteralException", "classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1exceptions_1_1_bad_literal_exception.html#a6bc51c31fe052f15a231ee55c0d04674", null ]
+];

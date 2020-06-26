@@ -1,0 +1,4 @@
+var classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1exceptions_1_1_n_b_t_a_p_i_not_found_exception =
+[
+    [ "NBTAPINotFoundException", "classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1exceptions_1_1_n_b_t_a_p_i_not_found_exception.html#a1d9aad1cbe548237b6d6d6d8cc1ce424", null ]
+];

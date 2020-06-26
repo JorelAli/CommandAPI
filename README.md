@@ -1,5 +1,11 @@
 # 1.13-Command-API
-An API to use the new command UI introduced in Minecraft 1.13
+An API to use the new command UI introduced in Minecraft 1.13. _(Despite the name, this API is compatible for Minecraft versions 1.13 - 1.16.1)_
+
+## Downloads & Documentation (includes usage for server owners)
+
+The documentation has moved! You can now get your hands on the latest and greatest documentation on the [CommandAPI website!](https://www.jorel.dev/1.13-Command-API/)
+
+-----
 
 > # New New New PSA (as of 25th June)
 > 1.16.1 has been released for Spigot and as such, I have finished the final touches of bringing the CommandAPI up to version 1.16.1. There are still a few bits of documentation to finish up which should be complete by the end of today. The big thing holding back this release at the moment is testing, which will be worked on ASAP to push this out in the next few days.
@@ -59,15 +65,15 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 
 ## Building the CommandAPI
 
-The CommandAPI can be built easily, but requires copies of the Spigot server jars to be present locally on your machine. This is due to the SafeReflection library which performs extra checks at compile time _(and depends on spigot jar files being present)_.
+The CommandAPI can be built easily, but requires copies of the Spigot server jars to be present locally on your machine in order to be compatible with any Minecraft version. The CommandAPI is built using the Maven build tool - if you don't have it, you can download it [here](https://maven.apache.org/download.cgi).
 
-* Clone the repository using the command below or your preferred method
+* Clone the repository using your preferred method, or with the command below:
 
   ```
   git clone https://github.com/JorelAli/1.13-Command-API.git
   ```
 
-* Go into the folder named `1.13CommandAPI` _(Not to be confused with the folder named `1.13-Command-API`, which is what is cloned)_
+* Go into the folder named `1.13CommandAPI` _(Not to be confused with the folder named `1.13-Command-API`, which is what is cloned)_. You want the folder which contains `pom.xml`.
 
 * Ensure you have the required spigot server jars (see below)
 
@@ -75,18 +81,23 @@ The CommandAPI can be built easily, but requires copies of the Spigot server jar
 
 ### Spigot Libraries
 
-To build the CommandAPI, copies of the Spigot.jar servers are required for the following versions of Minecraft:
+To build the CommandAPI, the following versions of Spigot are required:
 
-|                   |      |        |        |        |        |
-| ----------------- | ---- | ------ | ------ | ------ | ------ |
-| **1.13 versions** | 1.13 | 1.13.1 | 1.13.2 |        |        |
-| **1.14 versions** | 1.14 | 1.14.1 | 1.14.2 | 1.14.3 | 1.14.4 |
+|                   |        |        |        |
+| ----------------- | ------ | ------ | ------ |
+| **1.13 versions** | 1.13   | 1.13.1 | 1.13.2 |
+| **1.14 versions** | 1.14.2 | 1.14.3 | 1.14.4 |
+| **1.15 versions** | 1.15.2 |        |        |
+| **1.16 versions** | 1.16.1 |        |        |
 
-There are various methods of acquiring the required Spigot.jar server jar files:
+These versions of Minecraft must be installed in your local machine's Maven repository (`~/.m2`). The easiest way to do this is to build them manually using Spigot's BuildTools, as it automatically adds it to the `.m2` local repository folder.
 
-#### Building them using _BuildTools_ + downloadSpigot file (Recommended)
+#### Building them using _BuildTools_ + downloadSpigot file
 
-* Download the `BuildTools.jar` file from [here](https://hub.spigotmc.org/jenkins/job/BuildTools/) and place it in a separate directory
+* Download the `BuildTools.jar` file from [here](https://hub.spigotmc.org/jenkins/job/BuildTools/) and place it in a separate directory _(trust me, this gets messy pretty quickly)_
+* Download the `downloadSpigot` file from this repository:
+  * If on Windows, use `downloadSpigot.bat`  [(from here)](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.bat)
+  * If on Linux/MacOS, use `downloadSpigot.sh`  [(from here)](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.bat)
 * If on Windows:
   * Download the `downloadSpigot.bat` file from this repository [(or just right click here, save as...)](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.bat)
   * Copy the `downloadSpigot.bat` file into the same directory as the `BuildTools.jar` file
@@ -95,54 +106,57 @@ There are various methods of acquiring the required Spigot.jar server jar files:
   * If on linux/mac, download the `downloadSpigot.sh` file from this repository [(or just right click here, save as...)](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.sh)
   * Copy the `downloadSpigot.sh` file into the same directory as the `BuildTools.jar` file
   * Open up a terminal in your folder and make the `downloadSpigot.sh` file executable by using `chmod u+x ./downloadSpigot.sh`
-  * Run the `downloadSpigot` file using `./downloadSpigot.sh` 
-* Copy the `spigotlibs` folder into the same directory as the `pom.xml` file (This should be inside the `1.13CommandAPI` folder)
+  * Run the `downloadSpigot` file using `./downloadSpigot.sh`
 
 > **Note:** Sometimes, the `downloadSpigot` file doesn't work because of incompatibilities with cloning certain files it needs. If for any reason, downloadSpigot stops working, delete the directories created (BuildData, Bukkit, CraftBukkit, Spigot and work) and re-run the downloadSpigot file.
 
-#### Building them using _BuildTools_ + manual command line (Recommended)
+#### Building them using _BuildTools_ + manual command line
 
-- Download the `BuildTools.jar` file from [here](https://hub.spigotmc.org/jenkins/job/BuildTools/) and place it in a separate directory
+- Download the `BuildTools.jar` file from [here](https://hub.spigotmc.org/jenkins/job/BuildTools/) and place it in a separate directory _(trust me, this gets messy pretty quickly)_
 - Use the command `java -jar BuildTools.jar --rev <VERSION>` to download the specific version of the Spigot.jar you need. For example, to download Spigot for 1.14.4, use `java -jar BuildTools.jar --rev 1.14.4`
-- Copy the spigot jar files into a folder called `spigotlibs` in the same directory as the `pom.xml` file (This should be inside the `1.13CommandAPI` folder)
-
-#### Downloading them from another source
-
-* Download the required versions from [getbukkit.org](https://getbukkit.org/download/spigot)
-* Copy them into a folder called `spigotlibs` in the same directory as the `pom.xml` file (This should be inside the `1.13CommandAPI` folder)
-
-#### Directory structure
-
-This is what your directory structure should look like _(so you know where to put the spigot jars)_:
-
-```
-1.13-Command-API/
-├── .git/
-├── .github/
-├── 1.13CommandAPI/
-│   ├── spigotlibs/
-│   │   ├── spigot-1.13.jar
-│   │   ├── spigot-1.13.1.jar
-│   │   ├── spigot-1.13.2.jar
-│   │   ├── ...
-│   │   └── spigot-1.14.4.jar
-│   ├── src/
-│   │   └── ...
-│   ├── .gitignore
-│   ├── config.yml
-│   ├── plugin.yml
-│   └── pom.xml
-├── docs/
-├── images/
-├── downloadSpigot.sh
-├── LICENSE
-└── README.md
-```
 
 -----
 
 ## Changelog
 
+* Version 3.0
+  * **Note: This version is incompatible with pre 3.0 versions CommandAPI plugins (See documentation for more information)**
+  * Complete code refactor to make command syntax slightly more intuitive and consistent
+  * Removes lots of reflection to improve performance
+  * Adds better documentation
+  * Adds JavaDocs
+  * Adds support for 1.16.1
+  * Adds new command executors (These let you filter commands based on what type of command executor runs the command):
+    * Player command executors
+    * Command block command executors
+    * Console command executors
+    * Entity command executors
+    * Proxied command executors
+  * Adds new arguments:
+    * Axis Argument
+    * Biome Argument
+    * ChatColor Argument
+    * Chat Argument
+    * FloatRange Argument
+    * IntegerRange Argument
+    * Location2D Argument
+    * MathOperation Argument
+    * NBT Argument (NBTAPI required)
+    * Scoreboard arguments:
+      * Objective Argument
+      * ObjectiveCriteria Argument
+      * ScoreboardSlot Argument
+      * ScoreHolder Argument
+      * Team Argument
+    * Time Argument
+    * Rotation Argument
+    * Environment Argument
+  * Removes old arguments:
+    * SuggestedStringArgument
+    * DynamicSuggestedStringArgument
+    * DefinedCustomArguments
+* Version 2.2a
+  * Adds support for Minecraft 1.15, 1.15.1 and 1.15.2
 * Version 2.2
   * Adds support for Minecraft 1.13 and 1.13.1 _(Funny isn't it? It's called the 1.13 CommandAPI but never supported Minecraft 1.13 until now)_
   * Improves support for different versions

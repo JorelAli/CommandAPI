@@ -1,0 +1,4 @@
+var classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1exceptions_1_1_invalid_command_name_exception =
+[
+    [ "InvalidCommandNameException", "classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1exceptions_1_1_invalid_command_name_exception.html#a1b11cc7d826c0aeee7238bc030547248", null ]
+];

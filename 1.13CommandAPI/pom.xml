@@ -4,9 +4,22 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.github.jorelali</groupId>
+    <groupId>dev.jorel</groupId>
     <artifactId>commandapi</artifactId>
-    <version>2.3</version>
+    <packaging>pom</packaging>
+    <modules>
+    	<module>commandapi-1.16.1</module>
+        <module>commandapi-1.15</module>
+        <module>commandapi-1.14.4</module>
+        <module>commandapi-1.14.3</module>
+        <module>commandapi-1.14</module>
+        <module>commandapi-1.13</module>
+        <module>commandapi-1.13.1</module>
+        <module>commandapi-1.13.2</module>
+        <module>commandapi-core</module>
+        <module>commandapi-extra</module>
+        <module>commandapi-output</module>
+    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -27,14 +40,11 @@
             <name>Minecraft Libraries</name>
             <url>https://libraries.minecraft.net</url>
         </repository>
-	        <repository>
-	        <id>mccommandapi</id>
-	        <url>https://raw.githubusercontent.com/JorelAli/1.13-Command-API/mvn-repo/1.13CommandAPI/</url>
-	    </repository>
-		<repository>
-			<id>jitpack.io</id>
-			<url>https://jitpack.io</url>
-		</repository>
+        <repository>
+            <id>codemc-repo</id>
+            <url>https://repo.codemc.org/repository/maven-public/</url>
+            <layout>default</layout>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -157,16 +167,6 @@
     <build>
         <defaultGoal>clean install</defaultGoal>
         <finalName>CommandAPIv${project.version}_${maven.build.timestamp}</finalName>
-        <sourceDirectory>src</sourceDirectory>
-        <resources>
-            <resource>
-            <directory>.</directory>
-            <includes>
-                <include>plugin.yml</include>
-                <include>config.yml</include>
-            </includes>
-            </resource>
-        </resources>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -185,10 +185,10 @@
                     <version>3.7.0</version>
                 </plugin>
                 <plugin>
-	                <groupId>org.apache.maven.plugins</groupId>
-	                <artifactId>maven-surefire-plugin</artifactId>
-	                <version>2.22.0</version>
-	            </plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.22.0</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -199,16 +199,9 @@
                     <compilerArgs>
                         <arg>-Xlint</arg>
                     </compilerArgs>
-	                
-	                <annotationProcessors>
-						<annotationProcessor>
-							io.github.jorelali.commandapi.safereflection.SafeReflectionProcessor
-						</annotationProcessor>
-					</annotationProcessors>
-					
                 </configuration>
             </plugin>
-            <plugin>
+            <!-- <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <executions>
@@ -219,7 +212,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin> -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -233,4 +226,5 @@
             </plugin>
         </plugins>
     </build>
+    <version>3.0</version>
 </project>
