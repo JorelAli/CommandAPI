@@ -1,7 +1,5 @@
 var NAVTREEINDEX1 =
 {
-"classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_time_argument_exception.html":[11,0,0,0,0,1,10],
-"classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_time_argument_exception.html#a76f646fce80f7b65a1dfaf29b063ef97":[11,0,0,0,0,1,10,0],
 "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_unsupported_version_exception.html":[11,0,0,0,0,1,11],
 "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_unsupported_version_exception.html#ab62481cdb04f1a86d4dc274601cdf681":[11,0,0,0,0,1,11,0],
 "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_wrapper_command_syntax_exception.html":[11,0,0,0,0,1,12],
@@ -109,8 +107,8 @@ var NAVTREEINDEX1 =
 "enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#a719bdc0fd4d38c02b070170d609f4120":[11,0,0,0,0,3,4,5],
 "enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#ab5473a4927e1025d8d721b4ad306c825":[11,0,0,0,0,3,4,2],
 "enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#adf8f8405b1d7667b43072e461b11e4ef":[11,0,0,0,0,3,4,6],
-"functions.html":[11,3,0],
 "functions.html":[11,3,0,0],
+"functions.html":[11,3,0],
 "functions_b.html":[11,3,0,1],
 "functions_c.html":[11,3,0,2],
 "functions_d.html":[11,3,0,3],
@@ -214,8 +212,8 @@ var NAVTREEINDEX1 =
 "md_docs_v1_86__documentation.html":[7],
 "md_docs_v1_87__documentation.html":[8],
 "md_docs_v1_88__documentation.html":[9],
-"namespacedev_1_1jorel_1_1commandapi_1_1arguments.html":[11,0,0,0,0,0],
 "namespacedev_1_1jorel_1_1commandapi_1_1arguments.html":[10,0,0,0,0,0],
+"namespacedev_1_1jorel_1_1commandapi_1_1arguments.html":[11,0,0,0,0,0],
 "namespacedev_1_1jorel_1_1commandapi_1_1exceptions.html":[10,0,0,0,0,1],
 "namespacedev_1_1jorel_1_1commandapi_1_1exceptions.html":[11,0,0,0,0,1],
 "namespacedev_1_1jorel_1_1commandapi_1_1executors.html":[10,0,0,0,0,2],

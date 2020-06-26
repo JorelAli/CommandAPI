@@ -27,10 +27,8 @@ var NAVTREEINDEX0 =
 "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ae332f09db60330118975e36020cce425":[11,0,0,0,0,5,15],
 "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ae5a4bf1048697f05ab049a7875b95538":[11,0,0,0,0,5,16],
 "classdev_1_1jorel_1_1commandapi_1_1_command_permission.html":[11,0,0,0,0,7],
-"classdev_1_1jorel_1_1commandapi_1_1_command_permission.html#a52b96b0e42edef36463700e626d0ce20":[11,0,0,0,0,7,3],
+"classdev_1_1jorel_1_1commandapi_1_1_command_permission.html#a52b96b0e42edef36463700e626d0ce20":[11,0,0,0,0,7,1],
 "classdev_1_1jorel_1_1commandapi_1_1_command_permission.html#ac2dd9b644e4bf1477d7bab7fdd3512ab":[11,0,0,0,0,7,0],
-"classdev_1_1jorel_1_1commandapi_1_1_command_permission.html#ad9f2398d556171c27ea6ae59cba92620":[11,0,0,0,0,7,2],
-"classdev_1_1jorel_1_1commandapi_1_1_command_permission.html#afa97ab99886a2977c7f3c529a0d9088b":[11,0,0,0,0,7,1],
 "classdev_1_1jorel_1_1commandapi_1_1_converter.html":[11,0,0,0,0,8],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_advancement_argument.html":[11,0,0,0,0,0,0],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_advancement_argument.html#abb614c7773d0ec11a76a71d9536716e3":[11,0,0,0,0,0,0,1],
@@ -249,5 +247,7 @@ var NAVTREEINDEX0 =
 "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_n_b_t_a_p_i_not_found_exception.html":[11,0,0,0,0,1,8],
 "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_n_b_t_a_p_i_not_found_exception.html#a5b7db4751b93434825b202912149aff3":[11,0,0,0,0,1,8,0],
 "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_spigot_not_found_exception.html":[11,0,0,0,0,1,9],
-"classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_spigot_not_found_exception.html#a5b5c52a86e283811cc66e7612ac9fe39":[11,0,0,0,0,1,9,0]
+"classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_spigot_not_found_exception.html#a5b5c52a86e283811cc66e7612ac9fe39":[11,0,0,0,0,1,9,0],
+"classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_time_argument_exception.html":[11,0,0,0,0,1,10],
+"classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_time_argument_exception.html#a76f646fce80f7b65a1dfaf29b063ef97":[11,0,0,0,0,1,10,0]
 };

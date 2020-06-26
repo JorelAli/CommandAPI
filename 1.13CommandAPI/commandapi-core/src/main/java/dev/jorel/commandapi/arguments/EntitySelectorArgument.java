@@ -36,6 +36,10 @@ public class EntitySelectorArgument extends Argument {
 		}
 	}
 	
+	/**
+	 * Returns the entity selector for this argument
+	 * @return the entity selector for this argument
+	 */
 	public EntitySelector getEntitySelector() {
 		return selector;
 	}
@@ -51,6 +55,9 @@ public class EntitySelectorArgument extends Argument {
 	 * c = true true -> only one PLAYER is allowed
 	 * d = false true -> multiple players
 	 */	
+	/**
+	 * An enum that represents single entities or players, as well as collections of entities or players
+	 */
 	public enum EntitySelector {
 		/**
 		 * A single entity. Returns a Bukkit Entity

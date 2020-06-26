@@ -19,11 +19,11 @@ public class CustomArgument<T> extends Argument {
 	 * Creates a CustomArgument with a valid parser, defaults to non-keyed argument
 	 * 
 	 * @param parser
-	 *            A CustomArgumentFunction that maps a String to the object of your choice.
+	 *            A CustomArgumentFunction<T> that maps a String to the object of your choice.
 	 *            The String input is the text that the CommandSender inputs for
 	 *            this argument
 	 *            
-	 * @see #CustomArgument(CustomArgumentFunction, boolean)
+	 * @see #CustomArgument(CustomArgumentFunction<T>, boolean)
 	 */
 	public CustomArgument(CustomArgumentFunction<T> parser) {
 		this(parser, false);
@@ -49,6 +49,10 @@ public class CustomArgument<T> extends Argument {
 		return null;
 	}
 	
+	/**
+	 * Returns the parser for this custom argument
+	 * @return the parser for this custom argument
+	 */
 	public CustomArgumentFunction<T> getParser() {
 		return parser;
 	}
@@ -139,6 +143,9 @@ public class CustomArgument<T> extends Argument {
 		}
 	}
 	
+	/**
+	 * An exception used to create command-related errors for the CustomArgument
+	 */
 	@SuppressWarnings("serial")
 	public static class CustomArgumentException extends Exception {
 
@@ -169,7 +176,7 @@ public class CustomArgument<T> extends Argument {
 	}
 	
 	@FunctionalInterface
-	public static interface CustomArgumentFunction<S> {
-		public S apply(String input) throws CustomArgumentException;
+	public static interface CustomArgumentFunction<T> {
+		public T apply(String input) throws CustomArgumentException;
 	}
 }

@@ -102,7 +102,7 @@ $(document).ready(function(){initNavTree('classdev_1_1jorel_1_1commandapi_1_1arg
   <img src="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_biome_argument.png" usemap="#dev.jorel.commandapi.arguments.BiomeArgument_map" alt=""/>
   <map id="dev.jorel.commandapi.arguments.BiomeArgument_map" name="dev.jorel.commandapi.arguments.BiomeArgument_map">
 <area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html" title="The core abstract class for Command API arguments." alt="dev.jorel.commandapi.arguments.Argument" shape="rect" coords="0,56,426,80"/>
-<area href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument.html" title="An interface allowing arguments to have built-in suggestion providers." alt="dev.jorel.commandapi.arguments.ICustomProvidedArgument" shape="rect" coords="436,56,862,80"/>
+<area href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument.html" title="An interface allowing arguments to have built-in suggestion providers based on Minecraft namespaced k..." alt="dev.jorel.commandapi.arguments.ICustomProvidedArgument" shape="rect" coords="436,56,862,80"/>
 <area href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html" alt="dev.jorel.commandapi.arguments.IOverrideableSuggestions&lt; Argument &gt;" shape="rect" coords="0,0,426,24"/>
   </map>
 </div></div>
@@ -115,8 +115,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a32dd5436d4ebd9ec6bbc89f08ade530f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html">CommandAPIArgumentType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_biome_argument.html#a32dd5436d4ebd9ec6bbc89f08ade530f">getArgumentType</a> ()</td></tr>
 <tr class="memdesc:a32dd5436d4ebd9ec6bbc89f08ade530f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the argument type for this argument.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_biome_argument.html#a32dd5436d4ebd9ec6bbc89f08ade530f">More...</a><br /></td></tr>
 <tr class="separator:a32dd5436d4ebd9ec6bbc89f08ade530f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba315e1b356e8c219cf00b858bdca746"><td class="memItemLeft" align="right" valign="top"><a id="aba315e1b356e8c219cf00b858bdca746"></a>
-<a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html">SuggestionProviders</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getSuggestionProvider</b> ()</td></tr>
+<tr class="memitem:aba315e1b356e8c219cf00b858bdca746"><td class="memItemLeft" align="right" valign="top"><a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html">SuggestionProviders</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_biome_argument.html#aba315e1b356e8c219cf00b858bdca746">getSuggestionProvider</a> ()</td></tr>
+<tr class="memdesc:aba315e1b356e8c219cf00b858bdca746"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the suggestion provider that this argument is populated with.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_biome_argument.html#aba315e1b356e8c219cf00b858bdca746">More...</a><br /></td></tr>
 <tr class="separator:aba315e1b356e8c219cf00b858bdca746"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">dev.jorel.commandapi.arguments.Argument</a></td></tr>
 <tr class="memitem:a42060cac4078ee0833bb7812a7e8c311 inherit pub_methods_classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument"><td class="memItemLeft" align="right" valign="top">final&lt; T &gt; ArgumentType&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a42060cac4078ee0833bb7812a7e8c311">getRawType</a> ()</td></tr>
@@ -203,6 +203,28 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="aba315e1b356e8c219cf00b858bdca746"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba315e1b356e8c219cf00b858bdca746">&#9670;&nbsp;</a></span>getSuggestionProvider()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html">SuggestionProviders</a> dev.jorel.commandapi.arguments.BiomeArgument.getSuggestionProvider </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the suggestion provider that this argument is populated with. </p>
+<dl class="section return"><dt>Returns</dt><dd>the suggestion provider that this argument is populated with </dd></dl>
+
+<p>Implements <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument.html#aff7c4fbe27af700ccbde2969a0a5d32a">dev.jorel.commandapi.arguments.ICustomProvidedArgument</a>.</p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>1.13CommandAPI/commandapi-core/src/main/java/dev/jorel/commandapi/arguments/BiomeArgument.java</li>
 </ul>
@@ -212,7 +234,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1arguments.html">arguments</a></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_biome_argument.html">BiomeArgument</a></li>
-    <li class="footer">Generated on Fri Jun 26 2020 01:16:08 for 1.13 CommandAPI by
+    <li class="footer">Generated on Fri Jun 26 2020 01:44:31 for 1.13 CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

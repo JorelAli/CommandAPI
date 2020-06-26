@@ -18,6 +18,7 @@ public class LocationArgument extends Argument {
 	
 	/**
 	 * A Location argument. Represents Minecraft locations
+	 * @param type the location type of this location, either LocationType.BLOCK_POSITION or LocationType.PRECISE_POSITION
 	 */
 	public LocationArgument(LocationType type) {
 		super(type == LocationType.BLOCK_POSITION ? CommandAPIHandler.getNMS()._ArgumentPosition()
@@ -27,6 +28,10 @@ public class LocationArgument extends Argument {
 	
 	private final LocationType locationType;
 
+	/**
+	 * Returns whether this argument is LocationType.BLOCK_POSITION or LocationType.PRECISE_POSITION 
+	 * @return the location type of this argument
+	 */
 	public LocationType getLocationType() {
 		return locationType;
 	}

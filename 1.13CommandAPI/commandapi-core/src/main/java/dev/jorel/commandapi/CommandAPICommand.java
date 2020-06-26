@@ -39,7 +39,7 @@ public class CommandAPICommand {
 	/**
 	 * Applies a permission to the current command builder
 	 * @param permission The permission node required to execute this command
-	 * @return This command builder
+	 * @return this command builder
 	 */
 	public CommandAPICommand withPermission(CommandPermission permission) {
 		this.permission = permission;
@@ -49,7 +49,7 @@ public class CommandAPICommand {
 	/**
 	 * Adds an array of aliases to the current command builder
 	 * @param aliases An array of aliases which can be used to execute this command
-	 * @return This command builder
+	 * @return this command builder
 	 */
 	public CommandAPICommand withAliases(String... aliases) {
 		this.aliases = aliases;
@@ -59,7 +59,7 @@ public class CommandAPICommand {
 	/**
 	 * Adds the mapping of arguments to the current command builder
 	 * @param args A <code>LinkedHashMap</code> that represents the arguments that this command can accept
-	 * @return This command builder
+	 * @return this command builder
 	 */
 	public CommandAPICommand withArguments(LinkedHashMap<String, Argument> args) {
 		this.args = args;
@@ -71,6 +71,7 @@ public class CommandAPICommand {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(CommandSender, Object[]) -> ()</code> that will be executed when the command is run
+	 * @return this command builder
 	 */
 	public CommandAPICommand executes(CommandExecutor executor) {
 		this.executor.addNormalExecutor(executor);
@@ -80,6 +81,7 @@ public class CommandAPICommand {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(CommandSender, Object[]) -> int</code> that will be executed when the command is run
+	 * @return this command builder
 	 */
 	public CommandAPICommand executes(ResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);
@@ -91,6 +93,7 @@ public class CommandAPICommand {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(Player, Object[]) -> ()</code> that will be executed when the command is run
+	 * @return this command builder
 	 */
 	public CommandAPICommand executesPlayer(PlayerCommandExecutor executor) {
 		this.executor.addNormalExecutor(executor);
@@ -100,6 +103,7 @@ public class CommandAPICommand {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(Player, Object[]) -> int</code> that will be executed when the command is run
+	 * @return this command builder
 	 */
 	public CommandAPICommand executesPlayer(PlayerResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);
@@ -111,6 +115,7 @@ public class CommandAPICommand {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(Entity, Object[]) -> ()</code> that will be executed when the command is run
+	 * @return this command builder
 	 */
 	public CommandAPICommand executesEntity(EntityCommandExecutor executor) {
 		this.executor.addNormalExecutor(executor);
@@ -120,6 +125,7 @@ public class CommandAPICommand {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(Entity, Object[]) -> int</code> that will be executed when the command is run
+	 * @return this command builder
 	 */
 	public CommandAPICommand executesEntity(EntityResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);
@@ -131,6 +137,7 @@ public class CommandAPICommand {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(Entity, Object[]) -> ()</code> that will be executed when the command is run
+	 * @return this command builder
 	 */
 	public CommandAPICommand executesProxy(ProxyCommandExecutor executor) {
 		this.executor.addNormalExecutor(executor);
@@ -140,6 +147,7 @@ public class CommandAPICommand {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(Entity, Object[]) -> int</code> that will be executed when the command is run
+	 * @return this command builder
 	 */
 	public CommandAPICommand executesProxy(ProxyResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);
@@ -151,6 +159,7 @@ public class CommandAPICommand {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -> ()</code> that will be executed when the command is run
+	 * @return this command builder
 	 */
 	public CommandAPICommand executesCommandBlock(CommandBlockCommandExecutor executor) {
 		this.executor.addNormalExecutor(executor);
@@ -160,6 +169,7 @@ public class CommandAPICommand {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -> int</code> that will be executed when the command is run
+	 * @return this command builder
 	 */
 	public CommandAPICommand executesCommandBlock(CommandBlockResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);
@@ -171,6 +181,7 @@ public class CommandAPICommand {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -> ()</code> that will be executed when the command is run
+	 * @return this command builder
 	 */
 	public CommandAPICommand executesConsole(ConsoleCommandExecutor executor) {
 		this.executor.addNormalExecutor(executor);
@@ -180,6 +191,7 @@ public class CommandAPICommand {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -> int</code> that will be executed when the command is run
+	 * @return this command builder
 	 */
 	public CommandAPICommand executesConsole(ConsoleResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);

@@ -54,7 +54,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_time_argument_exception.html"
+"classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_unsupported_version_exception.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

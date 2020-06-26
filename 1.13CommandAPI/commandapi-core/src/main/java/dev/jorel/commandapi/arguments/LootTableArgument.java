@@ -17,7 +17,7 @@ public class LootTableArgument extends Argument implements ICustomProvidedArgume
 	public Class<?> getPrimitiveType() {
 		return LootTable.class;
 	}
-
+	
 	@Override
 	public SuggestionProviders getSuggestionProvider() {
 		return SuggestionProviders.LOOT_TABLES;

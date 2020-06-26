@@ -11,6 +11,7 @@ public class LiteralArgument extends Argument {
 	
 	/**
 	 * A literal argument. Only takes one string value which cannot be modified 
+	 * @param literal the string literal that this argument will represent
 	 */
 	public LiteralArgument(final String literal) {
 		/*
@@ -36,6 +37,10 @@ public class LiteralArgument extends Argument {
 		return String.class;
 	}
 
+	/**
+	 * Returns the literal string represented by this argument
+	 * @return the literal string represented by this argument
+	 */
 	public String getLiteral() {
 		return literal;
 	}

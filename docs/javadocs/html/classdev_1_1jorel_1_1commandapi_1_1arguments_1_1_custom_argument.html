@@ -110,6 +110,7 @@ $(document).ready(function(){initNavTree('classdev_1_1jorel_1_1commandapi_1_1arg
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><b>CustomArgumentException</b></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An exception used to create command-related errors for the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html" title="An argument that represents any custom object.">CustomArgument</a>. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><b>CustomArgumentFunction</b></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -128,8 +129,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3b0069147049d02970d7921bda626a2a"><td class="memItemLeft" align="right" valign="top">Class&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#a3b0069147049d02970d7921bda626a2a">getPrimitiveType</a> ()</td></tr>
 <tr class="memdesc:a3b0069147049d02970d7921bda626a2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the primitive type of the current <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html" title="The core abstract class for Command API arguments.">Argument</a>.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#a3b0069147049d02970d7921bda626a2a">More...</a><br /></td></tr>
 <tr class="separator:a3b0069147049d02970d7921bda626a2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab19039b27558de43462d02b7de223001"><td class="memItemLeft" align="right" valign="top"><a id="ab19039b27558de43462d02b7de223001"></a>
-CustomArgumentFunction&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getParser</b> ()</td></tr>
+<tr class="memitem:ab19039b27558de43462d02b7de223001"><td class="memItemLeft" align="right" valign="top">CustomArgumentFunction&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#ab19039b27558de43462d02b7de223001">getParser</a> ()</td></tr>
+<tr class="memdesc:ab19039b27558de43462d02b7de223001"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the parser for this custom argument.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#ab19039b27558de43462d02b7de223001">More...</a><br /></td></tr>
 <tr class="separator:ab19039b27558de43462d02b7de223001"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a238ae04c0009b96b9b3a8f56d4b1c080"><td class="memItemLeft" align="right" valign="top"><a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html">CommandAPIArgumentType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#a238ae04c0009b96b9b3a8f56d4b1c080">getArgumentType</a> ()</td></tr>
 <tr class="memdesc:a238ae04c0009b96b9b3a8f56d4b1c080"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the argument type for this argument.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#a238ae04c0009b96b9b3a8f56d4b1c080">More...</a><br /></td></tr>
@@ -193,11 +194,11 @@ Additional Inherited Members</h2></td></tr>
 <p>Creates a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html" title="An argument that represents any custom object.">CustomArgument</a> with a valid parser, defaults to non-keyed argument. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">parser</td><td>A CustomArgumentFunction that maps a String to the object of your choice. The String input is the text that the CommandSender inputs for this argument</td></tr>
+    <tr><td class="paramname">parser</td><td>A CustomArgumentFunction&lt;T&gt; that maps a String to the object of your choice. The String input is the text that the CommandSender inputs for this argument</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd>#CustomArgument(CustomArgumentFunction, boolean) </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#ae2a3c0976de990520ab4d1fbbf6cf7bf" title="Creates a CustomArgument with a valid parser.">CustomArgument(CustomArgumentFunction&lt;T&gt;, boolean)</a> </dd></dl>
 
 </div>
 </div>
@@ -261,6 +262,26 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="ab19039b27558de43462d02b7de223001"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab19039b27558de43462d02b7de223001">&#9670;&nbsp;</a></span>getParser()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">CustomArgumentFunction&lt;T&gt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html">dev.jorel.commandapi.arguments.CustomArgument</a>&lt; T &gt;.getParser </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the parser for this custom argument. </p>
+<dl class="section return"><dt>Returns</dt><dd>the parser for this custom argument </dd></dl>
+
+</div>
+</div>
 <a id="a3b0069147049d02970d7921bda626a2a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3b0069147049d02970d7921bda626a2a">&#9670;&nbsp;</a></span>getPrimitiveType()</h2>
 
@@ -293,7 +314,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1arguments.html">arguments</a></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html">CustomArgument</a></li>
-    <li class="footer">Generated on Fri Jun 26 2020 01:16:08 for 1.13 CommandAPI by
+    <li class="footer">Generated on Fri Jun 26 2020 01:44:31 for 1.13 CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

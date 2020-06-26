@@ -1,5 +1,8 @@
 package dev.jorel.commandapi;
 
+/**
+ * A representation of permission nodes for commands. Represents permission nodes, being op and having all permissions
+ */
 public class CommandPermission {
 
 	@Override
@@ -21,10 +24,21 @@ public class CommandPermission {
 		return true;
 	}
 
+	/**
+	 * A player that has to be an operator to run a command
+	 */
 	public static CommandPermission OP = new CommandPermission(PermissionNode.OP);
 	
+	/**
+	 * Command can be run with no permissions
+	 */
 	public static CommandPermission NONE = new CommandPermission(PermissionNode.NONE);
 	
+	/**
+	 * Generates a new CommandPermission from a permission node
+	 * @param permission the permission node
+	 * @return a new CommandPermission
+	 */
 	public static CommandPermission fromString(String permission) {
 		return new CommandPermission(permission);
 	}
@@ -50,11 +64,11 @@ public class CommandPermission {
 		this.permissionNode = permissionNode;
 	}
 	
-	protected String getPermission() {
+	String getPermission() {
 		return this.permission;
 	}
 	
-	protected PermissionNode getPermissionNode() {
+	PermissionNode getPermissionNode() {
 		return this.permissionNode;
 	}
 	

@@ -110,6 +110,7 @@ $(document).ready(function(){initNavTree('classdev_1_1jorel_1_1commandapi_1_1arg
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>ScoreHolderType</b></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An enum specifying whether a score holder consists of a single score holder or a collection of score holders. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
@@ -117,8 +118,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a145435951e4f108704ce549c302c255c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html#a145435951e4f108704ce549c302c255c">ScoreHolderArgument</a> (ScoreHolderType type)</td></tr>
 <tr class="memdesc:a145435951e4f108704ce549c302c255c"><td class="mdescLeft">&#160;</td><td class="mdescRight">A Score Holder argument.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html#a145435951e4f108704ce549c302c255c">More...</a><br /></td></tr>
 <tr class="separator:a145435951e4f108704ce549c302c255c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a81620bd86ac80e62a1655d21fcd557b4"><td class="memItemLeft" align="right" valign="top"><a id="a81620bd86ac80e62a1655d21fcd557b4"></a>
-boolean&#160;</td><td class="memItemRight" valign="bottom"><b>isSingle</b> ()</td></tr>
+<tr class="memitem:a81620bd86ac80e62a1655d21fcd557b4"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html#a81620bd86ac80e62a1655d21fcd557b4">isSingle</a> ()</td></tr>
+<tr class="memdesc:a81620bd86ac80e62a1655d21fcd557b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether this argument represents a single score holder or a collection of score holders.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html#a81620bd86ac80e62a1655d21fcd557b4">More...</a><br /></td></tr>
 <tr class="separator:a81620bd86ac80e62a1655d21fcd557b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a24935d02af1b92fb7985b7099e40017d"><td class="memItemLeft" align="right" valign="top">Class&lt;?&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html#a24935d02af1b92fb7985b7099e40017d">getPrimitiveType</a> ()</td></tr>
 <tr class="memdesc:a24935d02af1b92fb7985b7099e40017d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the primitive type of the current <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html" title="The core abstract class for Command API arguments.">Argument</a>.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html#a24935d02af1b92fb7985b7099e40017d">More...</a><br /></td></tr>
@@ -183,7 +184,12 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>A Score Holder argument. </p>
-<p>Represents a collection of score holders </p>
+<p>Represents a single score holder or a collection of score holders </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>whether this argument represents a single score holder or a collection of score holders </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -233,6 +239,26 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="a81620bd86ac80e62a1655d21fcd557b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81620bd86ac80e62a1655d21fcd557b4">&#9670;&nbsp;</a></span>isSingle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">boolean dev.jorel.commandapi.arguments.ScoreHolderArgument.isSingle </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns whether this argument represents a single score holder or a collection of score holders. </p>
+<dl class="section return"><dt>Returns</dt><dd>true if this argument represents a single score holder </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>1.13CommandAPI/commandapi-core/src/main/java/dev/jorel/commandapi/arguments/ScoreHolderArgument.java</li>
 </ul>
@@ -242,7 +268,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1arguments.html">arguments</a></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html">ScoreHolderArgument</a></li>
-    <li class="footer">Generated on Fri Jun 26 2020 01:16:09 for 1.13 CommandAPI by
+    <li class="footer">Generated on Fri Jun 26 2020 01:44:31 for 1.13 CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>
