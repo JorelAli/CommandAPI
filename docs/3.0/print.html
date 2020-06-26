@@ -175,6 +175,7 @@
 <li>Having better auto-completion and suggestions</li>
 <li>Having command type checks before execution (e.g. ensuring a number is within a certain range)</li>
 </ul>
+<hr />
 <h2><a class="header" href="#how-the-commandapi-works" id="how-the-commandapi-works">How the CommandAPI works</a></h2>
 <blockquote>
 <p><strong>Developer's Note:</strong></p>
@@ -185,27 +186,30 @@
 <li>Commands do not need to be declared in the <code>plugin.yml</code> file</li>
 <li>Commands are not &quot;linked&quot; to a certain plugin. In other words, you cannot look up which commands are registered by which plugin.</li>
 </ul>
+<hr />
 <h2><a class="header" href="#how-this-documentation-works" id="how-this-documentation-works">How this documentation works</a></h2>
-<p>This documentation is split into the major sections that build up the CommandAPI. It's been designed in such a way that it should be easy to find exactly what you want to help you get started with the CommandAPI, how it's structured and how to make effective use of it. Each step of the way, the documentation will include examples which showcase how to use the CommandAPI. </p>
+<p>This documentation is split into the major sections that build up the CommandAPI. It's been designed in such a way that it should be easy to find exactly what you want to help you get started with the CommandAPI, and how to make effective use of it. Each step of the way, the documentation will include examples which showcase how to use the CommandAPI. </p>
 <p>You can use the side bar on the left to access the various sections of the documentation and can change the theme to your liking using the paintbrush icon in the top left corner. </p>
-<p>Using the search icon in the top left corner, typing &quot;Example&quot; will show a list of examples which are included throughout the documentation.</p>
-<h2><a class="header" href="#documentation-changelog" id="documentation-changelog">Documentation changelog</a></h2>
+<p>Using the search icon in the top left corner, you can search for anything in this entire documentation. For example, typing &quot;Example&quot; will show a list of examples which are included throughout the documentation.</p>
+<hr />
+<h2><a class="header" href="#documentation-updates" id="documentation-updates">Documentation updates</a></h2>
 <p>Whenever a new version of the CommandAPI comes out, the version number changes <em>(as you'd expect)</em>. In the same manner, if any changes to the documentation were made, the documentation version number changes. Ensure you keep up to date on the latest changes to the documentation (You can view the documentation version at the top of the page) when new versions of the CommandAPI are released. This changelog below gives a brief overview of the changes to pages that were made between each version of the documentation, as only the latest version of the documentation is hosted online.</p>
+<h3><a class="header" href="#documentation-changes-21-rightarrow-30" id="documentation-changes-21-rightarrow-30">Documentation changes 2.1 \(\rightarrow\) 3.0:</a></h3>
+<blockquote>
+<p><strong>Developer's Note:</strong></p>
+<p>Lots of changes occurred in version 3.0. I highly recommend reading the <a href="./upgrading.html">Upgrading guide</a> section which covers the changes in more detail and how to update your plugin for this version.</p>
+</blockquote>
 <ul>
-<li><strong>2.0 → 2.1</strong>
-<ul>
-<li><strong><a href="./commandregistration.html#command-registration">Click here</a></strong> - Include information about tooltips</li>
-<li><strong><a href="./technicalargs.html">Click here</a></strong> - Adds information on technical arguments</li>
-<li><strong><a href="./quickstart.html#using-maven-recommended">Click here</a></strong> - Improve documentation for adding dependencies and repositories to the <code>pom.xml</code> file</li>
-</ul>
-</li>
-<li><strong>1.8 → 2.0</strong>
-<ul>
-<li><strong><a href="./arguments.html#arguments-with-overrideable-suggestions">Click here</a></strong> - Deprecated <code>SuggestedStringArgument</code>, use <code>.overrideSuggestions()</code> instead</li>
-<li><strong><a href="./customarguments.html">Click here</a></strong> - Adds a new argument, the <code>CustomArgument</code> </li>
-<li><strong><a href="./dynsugargs.html">Click here</a></strong> - The <code>DynamicSuggestedArgument</code> now has access to the <code>CommandSender</code> object</li>
-</ul>
-</li>
+<li>Sections on the left have been tidied up and should be more &quot;approachable&quot;</li>
+<li>Installation section (<a href="./installation.html">1. Installation for server owners</a>) now includes information about additional dependencies</li>
+<li>Dependency section (<a href="./quickstart.html">2. Setting up your development environment</a>) updated to use the new dependency Group ID</li>
+<li>Command registration section (<a href="./commandregistration.html">3. Command registration</a>) updated to reflect new API changes</li>
+<li>Command execution section (<a href="./commandexecutors.html">4. Command Executors</a>) updated to reflect new API changes</li>
+<li>Arguments section (<a href="./arguments.html">5. Arguments</a>) completely rewritten to reflect new API changes. Adds more detailed examples for each argument</li>
+<li>Function arguments section (<a href="./functionarguments.html">6.3 Function Arguments</a>) updated to reflect new API changes</li>
+<li>Permissions section (<a href="./permissions.html">7. Permissions</a>) updated to reflect new API changes</li>
+<li>Aliases section (<a href="./aliases.html">8. Aliases</a>) updated to reflect new API changes</li>
+<li>Command conversion section (<a href="./conversion.html">9. Command conversion</a>) rewrite example to be more detailed</li>
 </ul>
 <h1><a class="header" href="#installation" id="installation">Installation</a></h1>
 <p>Installing the CommandAPI is easy! Just download the latest <code>CommandAPI.jar</code> file using the button below and place it in your server's <code>plugins</code> folder!</p>
