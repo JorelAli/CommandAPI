@@ -48,5 +48,65 @@ public enum MathOperation {
 	/**
 	 * Swap the results of two values (><)
 	 */
-	SWAP
+	SWAP;
+	
+	/**
+	 * Applies the current MathOperation to two ints
+	 * @param val1 the base int to operate on
+	 * @param val2 the new value to operate with
+	 * @return a int that is the result of applying this math operation
+	 */
+	public int apply(int val1, int val2) {
+		switch(this) {
+		case ADD:
+			return val1 + val2;
+		case ASSIGN:
+			return val2;
+		case DIVIDE:
+			return val1 / val2;
+		case MAX:
+			return Math.max(val1, val2);
+		case MIN:
+			return Math.min(val1, val2);
+		case MOD:
+			return val1 % val2;
+		case MULTIPLY:
+			return val1 * val2;
+		case SUBTRACT:
+			return val1 - val2;
+		case SWAP:
+			return val2;
+		}
+		return val2;
+	}
+	
+	/**
+	 * Applies the current MathOperation to two floats
+	 * @param val1 the base float to operate on
+	 * @param val2 the new value to operate with
+	 * @return a float that is the result of applying this math operation
+	 */
+	public float apply(float val1, float val2) {
+		switch(this) {
+		case ADD:
+			return val1 + val2;
+		case ASSIGN:
+			return val2;
+		case DIVIDE:
+			return val1 / val2;
+		case MAX:
+			return Math.max(val1, val2);
+		case MIN:
+			return Math.min(val1, val2);
+		case MOD:
+			return val1 % val2;
+		case MULTIPLY:
+			return val1 * val2;
+		case SUBTRACT:
+			return val1 - val2;
+		case SWAP:
+			return val2;
+		}
+		return val2;
+	}
 }

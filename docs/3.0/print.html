@@ -1683,8 +1683,69 @@ new CommandAPICommand(&quot;giveloottable&quot;)
 <tr><td align="center">\(&gt;&lt;\)</td><td><code>MathOperation.SWAP</code></td></tr>
 </tbody></table>
 <hr />
+<p>The <code>MathOperationArgument</code> also has two methods:</p>
+<pre><code class="language-java">public int apply(int val1, int val2);
+public float apply(float val1, float val2);
+</code></pre>
+<p>These methods are used to provide a basic implementation of these math operations on a given input. Given the values <code>val1</code> and <code>val2</code>, these are the operation that the <code>apply(val1, val2)</code> method performs:</p>
+<table><thead><tr><th>MathOperation enum value</th><th>Result</th></tr></thead><tbody>
+<tr><td><code>MathOperation.ADD</code></td><td><code>val1 + val2</code></td></tr>
+<tr><td><code>MathOperation.SUBTRACT</code></td><td><code>val1 - val2</code></td></tr>
+<tr><td><code>MathOperation.MULTIPLY</code></td><td><code>val1 * val2</code></td></tr>
+<tr><td><code>MathOperation.DIVIDE</code></td><td><code>val1 / val2</code></td></tr>
+<tr><td><code>MathOperation.MOD</code></td><td><code>val1 % val2</code></td></tr>
+<tr><td><code>MathOperation.ASSIGN</code></td><td><code>val2</code></td></tr>
+<tr><td><code>MathOperation.MIN</code></td><td><code>Math.min(val1, val2)</code></td></tr>
+<tr><td><code>MathOperation.MAX</code></td><td><code>Math.max(val1, val2)</code></td></tr>
+<tr><td><code>MathOperation.SWAP</code></td><td><code>val2</code></td></tr>
+</tbody></table>
+<hr />
+<div class="example">
 <h3><a class="header" href="#example---changing-a-players-level" id="example---changing-a-players-level">Example - Changing a player's level</a></h3>
-<h1><a class="header" href="#particle-arguments" id="particle-arguments">Particle arguments</a></h1>
+<p>Say we wanted to create a player's level. Typically, this is implemented in the following manner:</p>
+<pre><code>/xp set &lt;player&gt; &lt;level&gt;
+/xp add &lt;player&gt; &lt;levels&gt;
+</code></pre>
+<p>Using the <code>MathOperationArgument</code>, we can extend the functionality of adding and setting a player's level by allowing the user to choose what operation they desire. To do this, we'll use the following structure:</p>
+<pre><code>/changelevel &lt;player&gt; &lt;operation&gt; &lt;value&gt;
+</code></pre>
+<p>As with any command, we declare our arguments, cast them properly and then we write our main code. In this example, we use the <code>apply(int, int)</code> method from our <code>MathOperation</code> to calculate the player's new level.</p>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;player&quot;, new PlayerArgument());
+arguments.put(&quot;operation&quot;, new MathOperationArgument());
+arguments.put(&quot;value&quot;, new IntegerArgument());
+
+new CommandAPICommand(&quot;changelevel&quot;)
+    .withArguments(arguments)
+    .executes((sender, args) -&gt; {
+        Player target = (Player) args[0];
+        MathOperation op = (MathOperation) args[1];
+        int value = (int) args[2];
+
+        target.setLevel(op.apply(target.getLevel(), value));
+    })
+	.register();
+</code></pre>
+<hr />
+<p>There are various applications for the <code>changelevel</code> command based on what the user inputs. For example:</p>
+<ul>
+<li>
+<p>To set the player <em>Notch</em> to level 10:</p>
+<pre><code>/changelevel Notch = 10
+</code></pre>
+</li>
+<li>
+<p>To double the player <em>Notch's</em> level:</p>
+<pre><code>/changelevel Notch *= 2
+</code></pre>
+</li>
+<li>
+<p>To set the player <em>Notch</em>'s level to 20, or keep it as their current level if it is higher than 20:</p>
+<pre><code>/changelevel Notch &gt; 20
+</code></pre>
+</li>
+</ul>
+</div><h1><a class="header" href="#particle-arguments" id="particle-arguments">Particle arguments</a></h1>
 <p>The <code>ParticleArgument</code> class represents Minecraft particles. As expected, this is casted to the Bukkit <code>Particle</code> class.</p>
 <div class="example">
 <h3><a class="header" href="#example---show-particles-at-a-players-location" id="example---show-particles-at-a-players-location">Example - Show particles at a player's location</a></h3>
