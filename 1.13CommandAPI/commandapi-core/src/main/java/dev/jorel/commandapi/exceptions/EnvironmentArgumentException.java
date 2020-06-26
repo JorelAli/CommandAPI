@@ -1,5 +1,8 @@
 package dev.jorel.commandapi.exceptions;
 
+/**
+ * An exception caused when using the EnvironmentArgument on Minecraft version 1.13
+ */
 @SuppressWarnings("serial")
 public class EnvironmentArgumentException extends RuntimeException {
 

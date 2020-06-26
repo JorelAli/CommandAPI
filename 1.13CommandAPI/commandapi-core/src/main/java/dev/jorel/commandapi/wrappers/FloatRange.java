@@ -1,10 +1,18 @@
 package dev.jorel.commandapi.wrappers;
 
+/**
+ * A class representing a range of floats
+ */
 public class FloatRange {
 
 	private final float low;
 	private final float high;
 	
+	/**
+	 * Constructs a FloatRange with a lower bound and an upper bound
+	 * @param low the lower bound of this range
+	 * @param high the upper bound of this range
+	 */
 	public FloatRange(float low, float high) {
 		this.low = low;
 		this.high = high;

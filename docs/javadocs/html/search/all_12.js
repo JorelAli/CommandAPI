@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['withaliases_174',['withAliases',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a4964121c94c4786ecb26e45b13f1ca78',1,'dev::jorel::commandapi::CommandAPICommand']]],
-  ['witharguments_175',['withArguments',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ae332f09db60330118975e36020cce425',1,'dev::jorel::commandapi::CommandAPICommand']]],
-  ['withpermission_176',['withPermission',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a2168e67f0a32516350b6b35ce8569130',1,'dev.jorel.commandapi.arguments.Argument.withPermission()'],['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ae5a4bf1048697f05ab049a7875b95538',1,'dev.jorel.commandapi.CommandAPICommand.withPermission()']]],
-  ['wrappercommandsyntaxexception_177',['WrapperCommandSyntaxException',['../classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_wrapper_command_syntax_exception.html',1,'dev::jorel::commandapi::exceptions']]]
+  ['unregister_186',['unregister',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#af80c6e832cee1fd3e8e7e5ef52f98fb5',1,'dev.jorel.commandapi.CommandAPI.unregister(String command)'],['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a0fbec78135f7187645851ee4e12a74f3',1,'dev.jorel.commandapi.CommandAPI.unregister(String command, boolean force)']]],
+  ['unsupportedversionexception_187',['UnsupportedVersionException',['../classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_unsupported_version_exception.html',1,'dev::jorel::commandapi::exceptions']]]
 ];

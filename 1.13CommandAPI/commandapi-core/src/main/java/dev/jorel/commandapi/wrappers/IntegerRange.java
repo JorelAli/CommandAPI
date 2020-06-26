@@ -1,10 +1,18 @@
 package dev.jorel.commandapi.wrappers;
 
+/**
+ * A class representing a range of integers
+ */
 public class IntegerRange {
 
 	private final int low;
 	private final int high;
 	
+	/**
+	 * Constructs an IntegerRange with a lower bound and an upper bound
+	 * @param low the lower bound of this range
+	 * @param high the upper bound of this range
+	 */
 	public IntegerRange(int low, int high) {
 		this.low = low;
 		this.high = high;

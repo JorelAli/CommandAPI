@@ -24,7 +24,17 @@
 */
 var NAVTREE =
 [
-  [ "1.13 CommandAPI JavaDocs", "index.html", [
+  [ "1.13 CommandAPI", "index.html", [
+    [ "1.13-Command-API", "index.html", null ],
+    [ "Documentation for v1.0", "md_docs_v1_80__documentation.html", null ],
+    [ "Documentation for v1.1", "md_docs_v1_81__documentation.html", null ],
+    [ "Documentation for v1.2", "md_docs_v1_82__documentation.html", null ],
+    [ "Documentation for v1.3", "md_docs_v1_83__documentation.html", null ],
+    [ "Documentation for v1.4", "md_docs_v1_84__documentation.html", null ],
+    [ "Documentation for v1.5", "md_docs_v1_85__documentation.html", null ],
+    [ "Documentation for v1.6", "md_docs_v1_86__documentation.html", null ],
+    [ "Documentation for v1.7", "md_docs_v1_87__documentation.html", null ],
+    [ "Documentation for v1.8", "md_docs_v1_88__documentation.html", null ],
     [ "Packages", "namespaces.html", [
       [ "Packages", "namespaces.html", "namespaces_dup" ]
     ] ],
@@ -34,12 +44,9 @@ var NAVTREE =
       [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Class Members", "functions.html", [
         [ "All", "functions.html", "functions_dup" ],
-        [ "Functions", "functions_func.html", null ],
+        [ "Functions", "functions_func.html", "functions_func" ],
         [ "Variables", "functions_vars.html", null ]
       ] ]
-    ] ],
-    [ "Files", "files.html", [
-      [ "File List", "files.html", "files_dup" ]
     ] ]
   ] ]
 ];
@@ -47,8 +54,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_loot_table_argument.html#af2bf830c91781a521cee9aae32a2f3e1",
-"interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_command_executor.html#af52038d1c47f80150e5a6e76158849bd"
+"classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_time_argument_exception.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

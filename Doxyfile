@@ -32,7 +32,7 @@ DOXYFILE_ENCODING      = UTF-8
 # title of most generated pages and in a few other places.
 # The default value is: My Project.
 
-PROJECT_NAME           = "1.13 CommandAPI JavaDocs"
+PROJECT_NAME           = "1.13 CommandAPI"
 
 # The PROJECT_NUMBER tag can be used to enter a project or revision number. This
 # could be handy for archiving the generated documentation or if some version
@@ -336,7 +336,7 @@ MARKDOWN_SUPPORT       = YES
 # Minimum value: 0, maximum value: 99, default value: 5.
 # This tag requires that the tag MARKDOWN_SUPPORT is set to YES.
 
-TOC_INCLUDE_HEADINGS   = 5
+TOC_INCLUDE_HEADINGS   = 0
 
 # When enabled doxygen tries to link words that correspond to documented
 # classes, or namespaces to their corresponding documentation. Such a link can
@@ -811,7 +811,7 @@ WARN_FORMAT            = "$file:$line: $text"
 # messages should be written. If left blank the output is written to standard
 # error (stderr).
 
-WARN_LOGFILE           =
+WARN_LOGFILE           = doxygen_warn.txt
 
 #---------------------------------------------------------------------------
 # Configuration options related to the input files
@@ -823,7 +823,17 @@ WARN_LOGFILE           =
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = D:\Users\Jorel\Documents\github\1.13CommandAPI\1.13CommandAPI\commandapi-core\src\main\java
+INPUT                  = D:\Users\Jorel\Documents\github\1.13CommandAPI\1.13CommandAPI\commandapi-core\src\main\java \
+                         README.md \
+                         docs/v1.0_Documentation.md \
+                         docs/v1.1_Documentation.md \
+                         docs/v1.2_Documentation.md \
+                         docs/v1.3_Documentation.md \
+                         docs/v1.4_Documentation.md \
+                         docs/v1.5_Documentation.md \
+                         docs/v1.6_Documentation.md \
+                         docs/v1.7_Documentation.md \
+                         docs/v1.8_Documentation.md
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -1024,7 +1034,7 @@ FILTER_SOURCE_PATTERNS =
 # (index.html). This can be useful if you have a project on for instance GitHub
 # and want to reuse the introduction page also for the doxygen output.
 
-USE_MDFILE_AS_MAINPAGE =
+USE_MDFILE_AS_MAINPAGE = README.md
 
 #---------------------------------------------------------------------------
 # Configuration options related to source browsing
@@ -1037,7 +1047,7 @@ USE_MDFILE_AS_MAINPAGE =
 # also VERBATIM_HEADERS is set to NO.
 # The default value is: NO.
 
-SOURCE_BROWSER         = YES
+SOURCE_BROWSER         = NO
 
 # Setting the INLINE_SOURCES tag to YES will include the body of functions,
 # classes and enums directly into the documentation.
@@ -1110,7 +1120,7 @@ USE_HTAGS              = NO
 # See also: Section \class.
 # The default value is: YES.
 
-VERBATIM_HEADERS       = YES
+VERBATIM_HEADERS       = NO
 
 # If the CLANG_ASSISTED_PARSING tag is set to YES then doxygen will use the
 # clang parser (see: http://clang.llvm.org/) for more accurate parsing at the

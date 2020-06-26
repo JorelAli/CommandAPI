@@ -1,6 +1,8 @@
 var searchData=
 [
-  ['nbt_5fcompound_126',['NBT_COMPOUND',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ae8aed802df31abe3b1d38e3e5e753dca',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
-  ['nbtapinotfoundexception_127',['NBTAPINotFoundException',['../classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_n_b_t_a_p_i_not_found_exception.html',1,'dev::jorel::commandapi::exceptions']]],
-  ['nbtcompoundargument_128',['NBTCompoundArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_n_b_t_compound_argument.html',1,'dev.jorel.commandapi.arguments.NBTCompoundArgument'],['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_n_b_t_compound_argument.html#adec79fcddf19b00b3548e0253fbc1a2d',1,'dev.jorel.commandapi.arguments.NBTCompoundArgument.NBTCompoundArgument()']]]
+  ['many_5fentities_134',['MANY_ENTITIES',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html#af132746b80dc83b1e403a1b7bb3e5a03',1,'dev::jorel::commandapi::arguments::EntitySelectorArgument::EntitySelector']]],
+  ['many_5fplayers_135',['MANY_PLAYERS',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html#a4978c1626ef8f0916a4dbc67c65cc07f',1,'dev::jorel::commandapi::arguments::EntitySelectorArgument::EntitySelector']]],
+  ['math_5foperation_136',['MATH_OPERATION',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a6f23a91cb6cb79ee28311816d8cf50a8',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['mathoperation_137',['MathOperation',['../enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html',1,'dev::jorel::commandapi::wrappers']]],
+  ['mathoperationargument_138',['MathOperationArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_math_operation_argument.html',1,'dev.jorel.commandapi.arguments.MathOperationArgument'],['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_math_operation_argument.html#a5542d817bc4c5713573f50d19a035928',1,'dev.jorel.commandapi.arguments.MathOperationArgument.MathOperationArgument()']]]
 ];

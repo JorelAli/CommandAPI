@@ -9,7 +9,7 @@ import dev.jorel.commandapi.wrappers.Location2D;
 public class Location2DArgument extends Argument {
 
 	/**
-	 * A Location argument. Represents Minecraft locations in 2D space
+	 * A Location argument. Represents Minecraft locations in 2D space. Defaults to LocationType.PRECISE_POSITION
 	 */
 	public Location2DArgument() {
 		this(LocationType.PRECISE_POSITION);
@@ -17,6 +17,7 @@ public class Location2DArgument extends Argument {
 
 	/**
 	 * A Location argument. Represents Minecraft locations in 2D space
+	 * @param type the location type of this location, either LocationType.BLOCK_POSITION or LocationType.PRECISE_POSITION
 	 */
 	public Location2DArgument(LocationType type) {
 		super(type == LocationType.BLOCK_POSITION ? CommandAPIHandler.getNMS()._ArgumentPosition2D()
@@ -26,6 +27,10 @@ public class Location2DArgument extends Argument {
 
 	private final LocationType locationType;
 
+	/**
+	 * Returns whether this argument is LocationType.BLOCK_POSITION or LocationType.PRECISE_POSITION 
+	 * @return the location type of this argument
+	 */
 	public LocationType getLocationType() {
 		return locationType;
 	}

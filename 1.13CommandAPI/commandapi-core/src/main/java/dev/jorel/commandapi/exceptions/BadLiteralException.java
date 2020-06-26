@@ -1,5 +1,8 @@
 package dev.jorel.commandapi.exceptions;
 
+/**
+ * An exception caused when a literal is null or empty
+ */
 @SuppressWarnings("serial")
 public class BadLiteralException extends RuntimeException {
 	

@@ -2,6 +2,9 @@ package dev.jorel.commandapi.exceptions;
 
 import dev.jorel.commandapi.CommandPermission;
 
+/**
+ * An exception caused when the same permission is registered to a command
+ */
 @SuppressWarnings("serial")
 public class ConflictingPermissionsException extends RuntimeException {
 	

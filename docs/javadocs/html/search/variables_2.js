@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['chat_359',['CHAT',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ab2c0100b593092b262b53712279ea6d9',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
-  ['chat_5fcomponent_360',['CHAT_COMPONENT',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#afe6d7a47e3e6437e0edc23922c9ca167',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
-  ['chatcolor_361',['CHATCOLOR',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a9d6371d2ebffc9a0ef081e7aab36ce28',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
-  ['custom_362',['CUSTOM',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a0df48cab5613278885fd83acc8c21951',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]]
+  ['chat_380',['CHAT',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ab2c0100b593092b262b53712279ea6d9',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['chat_5fcomponent_381',['CHAT_COMPONENT',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#afe6d7a47e3e6437e0edc23922c9ca167',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['chatcolor_382',['CHATCOLOR',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a9d6371d2ebffc9a0ef081e7aab36ce28',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['custom_383',['CUSTOM',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a0df48cab5613278885fd83acc8c21951',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]]
 ];
