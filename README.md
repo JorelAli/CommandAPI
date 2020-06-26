@@ -7,16 +7,6 @@ The documentation has moved! You can now get your hands on the latest and greate
 
 -----
 
-> # New New New PSA (as of 25th June)
-> 1.16.1 has been released for Spigot and as such, I have finished the final touches of bringing the CommandAPI up to version 1.16.1. There are still a few bits of documentation to finish up which should be complete by the end of today. The big thing holding back this release at the moment is testing, which will be worked on ASAP to push this out in the next few days.
->
-> ## Updated project timeline
-> | Date | Project Status |
-> |------|----------------|
-> | 25th June | Finish documentation |
-> | 25th June - 26th June | Final tests |
-> | 26th June(ish) | 3.0 public release on GitHub |
-
 ## Purpose
 This project provides an API to help Bukkit/Spigot developers use the new Minecraft 1.13 command UI, which includes:
 
@@ -38,28 +28,9 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 
 * **No plugin.yml registration** - Commands don't need to be registered in the `plugin.yml` file anymore
 
-* **No other dependencies** - You don't need to import Brigadier in your projects to use the CommandAPI
+* **You don't need Brigadier** - You don't need to import Brigadier in your projects to use the CommandAPI
 
 * **No tracking** - We don't collect any stats about our plugin; what you see is what you get!
-
-## Downloads & Documentation (includes usage for server owners)
-
-| Version | Direct download                                              | Documentation                                                |
-| ------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| 2.3 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.3/CommandAPI.jar) | [Version 2.1 documentation](https://jorelali.github.io/1.13-Command-API/) |
-| 2.2 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.2/CommandAPI.jar) | [Version 2.1 documentation](https://jorelali.github.io/1.13-Command-API/) |
-| 2.1 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.1/CommandAPI.jar) | [Version 2.1 documentation](https://jorelali.github.io/1.13-Command-API/) |
-| 2.0.1 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.0.1/CommandAPI.jar)  | [Version 2.0 documentation](https://jorelali.github.io/1.13-Command-API/) |
-| 2.0 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.0/CommandAPI.jar)  | [Version 2.0 documentation](https://jorelali.github.io/1.13-Command-API/) |
-| 1.8.2 | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.8.2/CommandAPI.jar) | [Version 1.8 - 1.8.2 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/docs/olddocs/v1.8%20Documentation.md) |
-| 1.7.2     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.7.2/CommandAPI.jar) | [Version 1.7 - 1.7.2 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/docs/olddocs/v1.7%20Documentation.md) |
-| 1.6     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.6/CommandAPI.jar) | [Version 1.6 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/docs/olddocs/v1.6%20Documentation.md) |
-| 1.5     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.5/CommandAPI.jar) | [Version 1.5 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/docs/olddocs/v1.5%20Documentation.md) |
-| 1.4     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.4/CommandAPI.jar) | [Version 1.4 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/docs/olddocs/v1.4%20Documentation.md) |
-| 1.3     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.3/CommandAPI.jar) | [Version 1.3 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/docs/olddocs/v1.3%20Documentation.md) |
-| 1.2     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.2/CommandAPI.jar) | [Version 1.2 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/docs/olddocs/v1.2%20Documentation.md) |
-| 1.1     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.1/CommandAPI.jar) | [Version 1.1 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/docs/olddocs/v1.1%20Documentation.md) |
-| 1.0     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.0/CommandAPI.jar) | [Version 1.0 documentation](https://github.com/JorelAli/1.13-Command-API/blob/master/docs/olddocs/v1.0%20Documentation.md) |
 
 -----
 
