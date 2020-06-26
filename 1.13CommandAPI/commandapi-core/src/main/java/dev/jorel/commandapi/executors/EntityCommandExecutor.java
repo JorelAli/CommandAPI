@@ -4,6 +4,9 @@ import org.bukkit.entity.Entity;
 
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
+/**
+ * A normal command executor for an Entity
+ */
 @FunctionalInterface
 public interface EntityCommandExecutor extends IExecutorNormal<Entity> {
 

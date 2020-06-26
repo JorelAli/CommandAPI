@@ -6,6 +6,9 @@ package dev.jorel.commandapi.exceptions;
 @SuppressWarnings("serial")
 public class EmptyExecutorException extends RuntimeException {
 	
+	/**
+	 * Creates an EmptyExecutorException
+	 */
 	public EmptyExecutorException() {
 		super("Cannot create a command that doesn't do anything!");
 	}

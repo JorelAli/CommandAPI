@@ -4,6 +4,9 @@ import org.bukkit.entity.Player;
 
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
+/**
+ * A normal command executor for a Player
+ */
 @FunctionalInterface
 public interface PlayerCommandExecutor extends IExecutorNormal<Player> {
 

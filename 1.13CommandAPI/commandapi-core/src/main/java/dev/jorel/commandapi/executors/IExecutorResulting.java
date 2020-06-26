@@ -7,6 +7,10 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
+/**
+ * The interface for resulting command executors
+ * @param <T> the commandsender
+ */
 public interface IExecutorResulting<T extends CommandSender> {
 	
 	/**

@@ -4,6 +4,9 @@ import org.bukkit.command.CommandSender;
 
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
+/**
+ * A normal command executor for a CommandSender
+ */
 @FunctionalInterface
 public interface CommandExecutor extends IExecutorNormal<CommandSender> {
 

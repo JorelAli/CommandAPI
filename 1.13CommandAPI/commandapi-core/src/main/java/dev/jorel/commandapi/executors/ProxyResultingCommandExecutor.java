@@ -4,6 +4,9 @@ import org.bukkit.command.ProxiedCommandSender;
 
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
+/**
+ * A resulting command executor for a ProxiedCommandSender
+ */
 @FunctionalInterface
 public interface ProxyResultingCommandExecutor extends IExecutorResulting<ProxiedCommandSender> {
 

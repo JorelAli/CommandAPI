@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['int_5frange_422',['INT_RANGE',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a4f8704291dbbe3a3700db9ceefc8d555',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
-  ['itemstack_423',['ITEMSTACK',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a23d30f4a04a75c6a6b77e830464dc1b4',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]]
+  ['float_5frange_453',['FLOAT_RANGE',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a004ac2cb4bee537fe8e82217c5ac8677',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['function_454',['FUNCTION',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ad501697b32694925ec869e5467b98178',1,'dev.jorel.commandapi.arguments.CommandAPIArgumentType.FUNCTION()'],['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html#af1d30091e6c9f364f31762665e066421',1,'dev.jorel.commandapi.arguments.ICustomProvidedArgument.SuggestionProviders.FUNCTION()']]]
 ];

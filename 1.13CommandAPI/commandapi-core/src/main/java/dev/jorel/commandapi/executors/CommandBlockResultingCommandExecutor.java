@@ -4,6 +4,9 @@ import org.bukkit.entity.Player;
 
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
+/**
+ * A resulting command executor for a BlockCommandSender
+ */
 @FunctionalInterface
 public interface CommandBlockResultingCommandExecutor extends IExecutorResulting<Player> {
 

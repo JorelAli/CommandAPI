@@ -1,8 +1,5 @@
 var searchData=
 [
-  ['literal_424',['LITERAL',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a7eaf3cce61282d6ae706f2e7c28bfcd7',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
-  ['location_425',['LOCATION',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a12e62a2ee9d10f3fd710e0f3217e90ce',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
-  ['location_5f2d_426',['LOCATION_2D',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a92fef4ec30c3ea8b8ee1906baa071bd1',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
-  ['loot_5ftable_427',['LOOT_TABLE',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a6c31634e42bd1dec9fa3ded4ec443c9a',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
-  ['loot_5ftables_428',['LOOT_TABLES',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html#a4707419b548b60ec8a548d85d3f09da2',1,'dev::jorel::commandapi::arguments::ICustomProvidedArgument::SuggestionProviders']]]
+  ['int_5frange_455',['INT_RANGE',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a4f8704291dbbe3a3700db9ceefc8d555',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['itemstack_456',['ITEMSTACK',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a23d30f4a04a75c6a6b77e830464dc1b4',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]]
 ];

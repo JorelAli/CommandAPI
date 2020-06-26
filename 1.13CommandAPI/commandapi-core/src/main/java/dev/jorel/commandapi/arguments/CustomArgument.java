@@ -10,22 +10,24 @@ import dev.jorel.commandapi.CommandAPIHandler;
 
 /**
  * An argument that represents any custom object
+ *
+ * @param <T> the return type of this argument
  */
 public class CustomArgument<T> extends Argument {
 	
-	private CustomArgumentFunction<T> parser;
+	private CustomArgumentParser<T> parser;
 	
 	/**
 	 * Creates a CustomArgument with a valid parser, defaults to non-keyed argument
 	 * 
 	 * @param parser
-	 *            A CustomArgumentFunction<T> that maps a String to the object of your choice.
+	 *            A CustomArgumentParser<T> that maps a String to the object of your choice.
 	 *            The String input is the text that the CommandSender inputs for
 	 *            this argument
 	 *            
-	 * @see #CustomArgument(CustomArgumentFunction<T>, boolean)
+	 * @see #CustomArgument(CustomArgumentParser<T>, boolean)
 	 */
-	public CustomArgument(CustomArgumentFunction<T> parser) {
+	public CustomArgument(CustomArgumentParser<T> parser) {
 		this(parser, false);
 	}
 	
@@ -33,13 +35,13 @@ public class CustomArgument<T> extends Argument {
 	 * Creates a CustomArgument with a valid parser
 	 * 
 	 * @param parser
-	 *            A CustomArgumentFunction that maps a String to the object of your choice.
+	 *            A CustomArgumentParser that maps a String to the object of your choice.
 	 *            The String input is the text that the CommandSender inputs for
 	 *            this argument
 	 * @param keyed Whether this argument can accept Minecraft's <code>NamespacedKey</code> as
 	 * valid arguments
 	 */
-	public CustomArgument(CustomArgumentFunction<T> parser, boolean keyed) {
+	public CustomArgument(CustomArgumentParser<T> parser, boolean keyed) {
 		super(keyed ? CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered() : StringArgumentType.string());
 		this.parser = parser;
 	}
@@ -53,7 +55,7 @@ public class CustomArgument<T> extends Argument {
 	 * Returns the parser for this custom argument
 	 * @return the parser for this custom argument
 	 */
-	public CustomArgumentFunction<T> getParser() {
+	public CustomArgumentParser<T> getParser() {
 		return parser;
 	}
 
@@ -175,8 +177,13 @@ public class CustomArgument<T> extends Argument {
 		
 	}
 	
+	/**
+	 * A FunctionalInterface that takes in a String, returns T and can throw a CustomArgumentException
+	 * 
+	 * @param <T> the type that is returned when applying this parser
+	 */
 	@FunctionalInterface
-	public static interface CustomArgumentFunction<T> {
+	public static interface CustomArgumentParser<T> {
 		public T apply(String input) throws CustomArgumentException;
 	}
 }

@@ -11,6 +11,9 @@ public interface ICustomProvidedArgument {
 	 */
 	SuggestionProviders getSuggestionProvider();
 	
+	/**
+	 * An enum representing the different suggestion providers for arguments based on Minecraft namespaced keys
+	 */
 	enum SuggestionProviders { 
 		/**
 		 * A suggestion provider for the FunctionArgument

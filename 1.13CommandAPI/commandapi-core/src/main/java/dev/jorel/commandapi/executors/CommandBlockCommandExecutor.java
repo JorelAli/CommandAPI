@@ -4,6 +4,9 @@ import org.bukkit.command.BlockCommandSender;
 
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
+/**
+ * A normal command executor for a BlockCommandSender
+ */
 @FunctionalInterface
 public interface CommandBlockCommandExecutor extends IExecutorNormal<BlockCommandSender> {
 

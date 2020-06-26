@@ -4,6 +4,9 @@ import org.bukkit.command.ConsoleCommandSender;
 
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
+/**
+ * A resulting command executor for a ConsoleCommandSender
+ */
 @FunctionalInterface
 public interface ConsoleResultingCommandExecutor extends IExecutorResulting<ConsoleCommandSender> {
 

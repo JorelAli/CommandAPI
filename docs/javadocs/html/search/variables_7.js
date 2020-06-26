@@ -1,6 +1,8 @@
 var searchData=
 [
-  ['many_5fentities_429',['MANY_ENTITIES',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html#af132746b80dc83b1e403a1b7bb3e5a03',1,'dev::jorel::commandapi::arguments::EntitySelectorArgument::EntitySelector']]],
-  ['many_5fplayers_430',['MANY_PLAYERS',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html#a4978c1626ef8f0916a4dbc67c65cc07f',1,'dev::jorel::commandapi::arguments::EntitySelectorArgument::EntitySelector']]],
-  ['math_5foperation_431',['MATH_OPERATION',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a6f23a91cb6cb79ee28311816d8cf50a8',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]]
+  ['literal_457',['LITERAL',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a7eaf3cce61282d6ae706f2e7c28bfcd7',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['location_458',['LOCATION',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a12e62a2ee9d10f3fd710e0f3217e90ce',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['location_5f2d_459',['LOCATION_2D',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a92fef4ec30c3ea8b8ee1906baa071bd1',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['loot_5ftable_460',['LOOT_TABLE',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a6c31634e42bd1dec9fa3ded4ec443c9a',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['loot_5ftables_461',['LOOT_TABLES',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html#a4707419b548b60ec8a548d85d3f09da2',1,'dev::jorel::commandapi::arguments::ICustomProvidedArgument::SuggestionProviders']]]
 ];

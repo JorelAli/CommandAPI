@@ -3,7 +3,6 @@ var hierarchy =
     [ "dev.jorel.commandapi.CommandAPI", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html", null ],
     [ "dev.jorel.commandapi.arguments.CommandAPIArgumentType", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html", null ],
     [ "dev.jorel.commandapi.CommandAPICommand", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html", null ],
-    [ "dev.jorel.commandapi.CommandAPIVersionHandler", "interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_version_handler.html", null ],
     [ "dev.jorel.commandapi.CommandPermission", "classdev_1_1jorel_1_1commandapi_1_1_command_permission.html", null ],
     [ "dev.jorel.commandapi.Converter", "classdev_1_1jorel_1_1commandapi_1_1_converter.html", null ],
     [ "dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html", null ],

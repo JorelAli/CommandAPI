@@ -1,5 +1,9 @@
 var searchData=
 [
-  ['float_5frange_420',['FLOAT_RANGE',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a004ac2cb4bee537fe8e82217c5ac8677',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
-  ['function_421',['FUNCTION',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ad501697b32694925ec869e5467b98178',1,'dev.jorel.commandapi.arguments.CommandAPIArgumentType.FUNCTION()'],['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html#af1d30091e6c9f364f31762665e066421',1,'dev.jorel.commandapi.arguments.ICustomProvidedArgument.SuggestionProviders.FUNCTION()']]]
+  ['enchantment_447',['ENCHANTMENT',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a5a344fdfdd4a9f26a9dd04d749306647',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['entities_448',['ENTITIES',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html#af954d63611a1fd7009c905f667483c40',1,'dev::jorel::commandapi::arguments::ICustomProvidedArgument::SuggestionProviders']]],
+  ['entity_449',['ENTITY',['../enumdev_1_1jorel_1_1commandapi_1_1executors_1_1_executor_type.html#a319db0dfe10f7b065babc081fbbd15da',1,'dev::jorel::commandapi::executors::ExecutorType']]],
+  ['entity_5fselector_450',['ENTITY_SELECTOR',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a5259ac08e09d90a1c1432579b308320b',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['entity_5ftype_451',['ENTITY_TYPE',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#af506ae253bb84d7c10ce36fdbfd8a71a',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['environment_452',['ENVIRONMENT',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a11a15d4f5e89680b7951159323c3b730',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]]
 ];
