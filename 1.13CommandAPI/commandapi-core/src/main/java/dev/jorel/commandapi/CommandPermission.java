@@ -5,6 +5,11 @@ package dev.jorel.commandapi;
  */
 public class CommandPermission {
 
+	/**
+	 * Determines if this CommandPermission is equal to another CommandPermission
+	 * @param obj the other CommandPermission to check against
+	 * @return true if this CommandPermission is equal to the provided object
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -72,6 +77,10 @@ public class CommandPermission {
 		return this.permissionNode;
 	}
 	
+	/**
+	 * Returns a human-readable string of this CommandPermission
+	 * @return a human-readable string of this CommandPermission
+	 */
 	@Override
 	public String toString() {
 		if(permissionNode != null) {

@@ -139,7 +139,12 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The RecipeArgument	
 	 */
-	RECIPE, ROTATION, 
+	RECIPE, 
+	
+	/**
+	 * The RotationArgument
+	 */
+	ROTATION, 
 	
 	/**
 	 * The ScoreHolderArgument

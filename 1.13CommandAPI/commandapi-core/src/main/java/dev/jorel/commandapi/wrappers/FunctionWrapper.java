@@ -54,6 +54,10 @@ public class FunctionWrapper implements Keyed {
 		functionExecutor.applyAsInt(customFunction, clw);
 	}
 
+	/**
+	 * Returns the NamespacedKey that uniquely represents this object
+	 * @return the NamespacedKey that uniquely represents this object
+	 */
 	@Override
 	public NamespacedKey getKey() {
 		return minecraftKey;

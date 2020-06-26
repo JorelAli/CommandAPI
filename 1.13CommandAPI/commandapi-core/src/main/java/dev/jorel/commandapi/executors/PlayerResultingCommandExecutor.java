@@ -16,6 +16,7 @@ public interface PlayerResultingCommandExecutor extends IExecutorResulting<Playe
 	 *            The arguments given to this command. The objects are
 	 *            determined by the hashmap of arguments IN THE ORDER of
 	 *            insertion into the hashmap
+	 * @return the result of this command
 	 */
 	int run(Player sender, Object[] args) throws WrapperCommandSyntaxException;
 

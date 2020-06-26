@@ -16,6 +16,7 @@ public class EntitySelectorArgument extends Argument {
 	
 	/**
 	 * An EntityType argument. Represents an entity specified by a selector
+	 * @param selector the entity selector for this argument
 	 */
 	public EntitySelectorArgument(EntitySelector selector) {
 		super(CommandAPIHandler.getNMS()._ArgumentEntity(selector));

@@ -3,11 +3,18 @@ package dev.jorel.commandapi.wrappers;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.DisplaySlot;
 
+/**
+ * A representation of scoreboard display slots, as well as team colors for the sidebar
+ */
 public class ScoreboardSlot {
 
 	private final DisplaySlot displaySlot;
 	private final ChatColor teamColor;
 	
+	/**
+	 * Determines the scoreboard slot value based on an internal Minecraft integer
+	 * @param i the scoreboard slot value
+	 */
 	public ScoreboardSlot(int i) {
 		//Initialize displaySlot
 		switch(i) {

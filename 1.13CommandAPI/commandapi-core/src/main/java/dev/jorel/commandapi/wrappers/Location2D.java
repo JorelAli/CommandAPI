@@ -44,6 +44,7 @@ public class Location2D extends Location {
 	}
 
 	/**
+	 * @return A Location2DException
 	 * @throws A Location2DException
 	 */
 	@Override

@@ -2,11 +2,19 @@ package dev.jorel.commandapi.wrappers;
 
 import org.bukkit.Location;
 
+/**
+ * A class to represent the pitch and yaw rotation in degrees
+ */
 public class Rotation {
 
 	private final float pitch;
 	private final float yaw;
 	
+	/**
+	 * Constructs a Rotation with a given pitch and yaw
+	 * @param pitch the pitch of this rotation in degrees
+	 * @param yaw the yaw of this rotation in degrees
+	 */
 	public Rotation(float pitch, float yaw) {
 		this.pitch = pitch;
 		this.yaw = yaw;

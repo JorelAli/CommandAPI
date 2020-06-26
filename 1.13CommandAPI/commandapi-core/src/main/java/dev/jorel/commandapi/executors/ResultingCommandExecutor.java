@@ -16,6 +16,7 @@ public interface ResultingCommandExecutor extends IExecutorResulting<CommandSend
 	 *            The arguments given to this command. The objects are
 	 *            determined by the hashmap of arguments IN THE ORDER of
 	 *            insertion into the hashmap
+	 * @return the result of this command
 	 */
 	int run(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException;
 
