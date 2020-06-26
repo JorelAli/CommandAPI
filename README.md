@@ -1,23 +1,11 @@
 # 1.13-Command-API
-An API to use the new command UI introduced in Minecraft 1.13
+An API to use the new command UI introduced in Minecraft 1.13. _(Despite the name, this API is compatible for Minecraft versions 1.13 - 1.16.1)_
 
-> # PSA: v3.0 release date
-> As I'm sure most of you are aware, the CommandAPI v3.0 is under heavy development. An absurd amount of new content is being added, _(in particular, a tonne of new arguments and serious API refactoring)_ and it's unfortunately come to my attention that I'll not be able to meet my intended deadline of releasing this by October.
-> 
-> For now, **v3.0 is officially scheduled for August 2020**. This is mainly due to various events occuring right now (my higher education takes priority over this project), and working on v3.0 the project is a _lot_ more time consuming than I originally expected. **This date is just an estimate** and can change at any time.
->
-> | Date                         | Project status                                                             |
-> |------------------------------|----------------------------------------------------------------------------|
-> | October 2019 - December 2019 | On Hold                                                                    |
-> | December 2019 - January 2020 | Work on implementing new features from issues                              |
-> | January 2020 - July 2020     | On Hold                                                                    |
-> | July 2020 - August 2020      | Implementing other final features <br>3.0 documentation write up <br>3.0 release |
->
-> However, hope is not lost. **I will continue to monitor the issues pages** and respond to them as normal _(within 24 hours)_, but do not expect any code-based progress until about Decemberish.
->
-> If Minecraft are to release a new version (1.15) before the planned release, I will ensure that a version of the CommandAPI (based on version 2.3) will be released with full compatibility for Minecraft 1.15 as soon as possible.
->
-> Thanks for all of your support and I hope you'll be understanding of the current situation.
+## Downloads & Documentation (includes usage for server owners)
+
+The documentation has moved! You can now get your hands on the latest and greatest documentation on the [CommandAPI website!](https://www.jorel.dev/1.13-Command-API/)
+
+-----
 
 ## Purpose
 This project provides an API to help Bukkit/Spigot developers use the new Minecraft 1.13 command UI, which includes:
@@ -42,26 +30,6 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 
 * **No other dependencies** - You don't need to import Brigadier in your projects to use the CommandAPI
 
-## Downloads & Documentation (includes usage for server owners)
-
-| Version | Direct download                                                                                        | Documentation                                                                  |
-| ------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
-| 3.0     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v3.0/CommandAPI.jar)   | [Version 3.0 documentation](https://jorelali.github.io/1.13-Command-API/)      |
-| 2.3     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.3/CommandAPI.jar)   | [Version 2.1 documentation](https://jorelali.github.io/1.13-Command-API/)      |
-| 2.2     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.2/CommandAPI.jar)   | [Version 2.1 documentation](https://jorelali.github.io/1.13-Command-API/)      |
-| 2.1     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.1/CommandAPI.jar)   | [Version 2.1 documentation](https://jorelali.github.io/1.13-Command-API/)      |
-| 2.0.1   | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.0.1/CommandAPI.jar) | [Version 2.0 documentation](https://jorelali.github.io/1.13-Command-API/)      |
-| 2.0     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v2.0/CommandAPI.jar)   | [Version 2.0 documentation](https://jorelali.github.io/1.13-Command-API/)      |
-| 1.8.2   | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.8.2/CommandAPI.jar) | [Version 1.8 - 1.8.2 documentation](./docs/v1.8_Documentation.md) |
-| 1.7.2   | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.7.2/CommandAPI.jar) | [Version 1.7 - 1.7.2 documentation](./docs/v1.7_Documentation.md) |
-| 1.6     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.6/CommandAPI.jar)   | [Version 1.6 documentation](./docs/v1.6_Documentation.md)         |
-| 1.5     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.5/CommandAPI.jar)   | [Version 1.5 documentation](./docs/v1.5_Documentation.md)         |
-| 1.4     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.4/CommandAPI.jar)   | [Version 1.4 documentation](./docs/v1.4_Documentation.md)         |
-| 1.3     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.3/CommandAPI.jar)   | [Version 1.3 documentation](./docs/v1.3_Documentation.md)         |
-| 1.2     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.2/CommandAPI.jar)   | [Version 1.2 documentation](./docs/v1.2_Documentation.md)         |
-| 1.1     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.1/CommandAPI.jar)   | [Version 1.1 documentation](./docs/v1.1_Documentation.md)         |
-| 1.0     | [CommandAPI.jar](https://github.com/JorelAli/1.13-Command-API/releases/download/v1.0/CommandAPI.jar)   | [Version 1.0 documentation](./docs/v1.0_Documentation.md)         |
-
 -----
 
 ## Building the CommandAPI
@@ -82,22 +50,20 @@ The CommandAPI can be built easily, but requires copies of the Spigot server jar
 
 ### Spigot Libraries
 
-To build the CommandAPI, copies of the Spigot.jar servers are required for the following versions of Minecraft:
+To build the CommandAPI, the following versions of Spigot are required:
 
-|                   |        |        |        |        |        |
-| ----------------- | ------ | ------ | ------ | ------ | ------ |
-| **1.13 versions** | 1.13   | 1.13.1 | 1.13.2 |        |        |
-| **1.14 versions** | 1.14.2 | 1.14.3 | 1.14.4 |        |        |
-| **1.15 versions** | 1.15.2 |    ?   |        |        |        |
+|                   |        |        |        |
+| ----------------- | ------ | ------ | ------ |
+| **1.13 versions** | 1.13   | 1.13.1 | 1.13.2 |
+| **1.14 versions** | 1.14.2 | 1.14.3 | 1.14.4 |
+| **1.15 versions** | 1.15.2 |        |        |
+| **1.16 versions** | 1.16.1 |        |        |
 
 These versions of Minecraft must be installed in your local machine's Maven repository (`~/.m2`). The easiest way to do this is to build them manually using Spigot's BuildTools, as it automatically adds it to the `.m2` local repository folder.
 
+#### Building them using _BuildTools_ + downloadSpigot file
 
-There are various methods of acquiring the required Spigot.jar server jar files:
-
-#### Building them using _BuildTools_ + downloadSpigot file (Recommended)
-
-* Download the `BuildTools.jar` file from [here](https://hub.spigotmc.org/jenkins/job/BuildTools/) and place it in a separate directory
+* Download the `BuildTools.jar` file from [here](https://hub.spigotmc.org/jenkins/job/BuildTools/) and place it in a separate directory _(trust me, this gets messy pretty quickly)_
 * Download the `downloadSpigot` file from this repository:
   * If on Windows, use `downloadSpigot.bat`  [(from here)](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.bat)
   * If on Linux/MacOS, use `downloadSpigot.sh`  [(from here)](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.bat)
@@ -113,9 +79,9 @@ There are various methods of acquiring the required Spigot.jar server jar files:
 
 > **Note:** Sometimes, the `downloadSpigot` file doesn't work because of incompatibilities with cloning certain files it needs. If for any reason, downloadSpigot stops working, delete the directories created (BuildData, Bukkit, CraftBukkit, Spigot and work) and re-run the downloadSpigot file.
 
-#### Building them using _BuildTools_ + manual command line (Recommended)
+#### Building them using _BuildTools_ + manual command line
 
-- Download the `BuildTools.jar` file from [here](https://hub.spigotmc.org/jenkins/job/BuildTools/) and place it in a separate directory
+- Download the `BuildTools.jar` file from [here](https://hub.spigotmc.org/jenkins/job/BuildTools/) and place it in a separate directory _(trust me, this gets messy pretty quickly)_
 - Use the command `java -jar BuildTools.jar --rev <VERSION>` to download the specific version of the Spigot.jar you need. For example, to download Spigot for 1.14.4, use `java -jar BuildTools.jar --rev 1.14.4`
 
 -----
@@ -124,21 +90,42 @@ There are various methods of acquiring the required Spigot.jar server jar files:
 
 * Version 3.0
   * **Note: This version is incompatible with pre 3.0 versions CommandAPI plugins (See documentation for more information)**
-  * Adds Time argument
-  * Adds IntegerRange and FloatRange arguments
-  * Adds 2D location arguments
-  * Adds NBT arguments
-  * Adds environment arguments
-  * Adds rotation arguments
-  * Adds item slot arguments
-  * Adds axes (swizzle) argument
-  * Adds scoreboard slot arguments
-  * Adds scoreholder arguments
-  * Adds team arguments
-  * Adds objective and objective criteria arguments
-  * Adds chat arguments
-  * Removes defined custom arguments
-  * Removes suggested string arguments
+  * Complete code refactor to make command syntax slightly more intuitive and consistent
+  * Removes lots of reflection to improve performance
+  * Adds better documentation
+  * Adds JavaDocs
+  * Adds support for 1.16.1
+  * Adds new command executors (These let you filter commands based on what type of command executor runs the command):
+    * Player command executors
+    * Command block command executors
+    * Console command executors
+    * Entity command executors
+    * Proxied command executors
+  * Adds new arguments:
+    * Axis Argument
+    * Biome Argument
+    * ChatColor Argument
+    * Chat Argument
+    * FloatRange Argument
+    * IntegerRange Argument
+    * Location2D Argument
+    * MathOperation Argument
+    * NBT Argument (NBTAPI required)
+    * Scoreboard arguments:
+      * Objective Argument
+      * ObjectiveCriteria Argument
+      * ScoreboardSlot Argument
+      * ScoreHolder Argument
+      * Team Argument
+    * Time Argument
+    * Rotation Argument
+    * Environment Argument
+  * Removes old arguments:
+    * SuggestedStringArgument
+    * DynamicSuggestedStringArgument
+    * DefinedCustomArguments
+* Version 2.2a
+  * Adds support for Minecraft 1.15, 1.15.1 and 1.15.2
 * Version 2.2
   * Adds support for Minecraft 1.13 and 1.13.1 _(Funny isn't it? It's called the 1.13 CommandAPI but never supported Minecraft 1.13 until now)_
   * Improves support for different versions

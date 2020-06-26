@@ -26,15 +26,6 @@ var NAVTREE =
 [
   [ "1.13 CommandAPI", "index.html", [
     [ "1.13-Command-API", "index.html", null ],
-    [ "Documentation for v1.0", "md_docs_v1_80__documentation.html", null ],
-    [ "Documentation for v1.1", "md_docs_v1_81__documentation.html", null ],
-    [ "Documentation for v1.2", "md_docs_v1_82__documentation.html", null ],
-    [ "Documentation for v1.3", "md_docs_v1_83__documentation.html", null ],
-    [ "Documentation for v1.4", "md_docs_v1_84__documentation.html", null ],
-    [ "Documentation for v1.5", "md_docs_v1_85__documentation.html", null ],
-    [ "Documentation for v1.6", "md_docs_v1_86__documentation.html", null ],
-    [ "Documentation for v1.7", "md_docs_v1_87__documentation.html", null ],
-    [ "Documentation for v1.8", "md_docs_v1_88__documentation.html", null ],
     [ "Packages", "namespaces.html", [
       [ "Packages", "namespaces.html", "namespaces_dup" ]
     ] ],

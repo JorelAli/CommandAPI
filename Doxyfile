@@ -811,7 +811,7 @@ WARN_FORMAT            = "$file:$line: $text"
 # messages should be written. If left blank the output is written to standard
 # error (stderr).
 
-WARN_LOGFILE           = doxygen_warn.txt
+WARN_LOGFILE           =
 
 #---------------------------------------------------------------------------
 # Configuration options related to the input files
@@ -824,16 +824,7 @@ WARN_LOGFILE           = doxygen_warn.txt
 # Note: If this tag is empty the current directory is searched.
 
 INPUT                  = D:\Users\Jorel\Documents\github\1.13CommandAPI\1.13CommandAPI\commandapi-core\src\main\java \
-                         README.md \
-                         docs/v1.0_Documentation.md \
-                         docs/v1.1_Documentation.md \
-                         docs/v1.2_Documentation.md \
-                         docs/v1.3_Documentation.md \
-                         docs/v1.4_Documentation.md \
-                         docs/v1.5_Documentation.md \
-                         docs/v1.6_Documentation.md \
-                         docs/v1.7_Documentation.md \
-                         docs/v1.8_Documentation.md
+                         README.md
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -925,7 +916,8 @@ EXCLUDE                = 1.13CommandAPI/commandapi-core/src/main/java/dev/jorel/
                          1.13CommandAPI/commandapi-core/src/main/java/dev/jorel/commandapi/ClassCache.java \
                          1.13CommandAPI/commandapi-core/src/main/java/dev/jorel/commandapi/CommandAPIHandler.java \
                          1.13CommandAPI/commandapi-core/src/main/java/dev/jorel/commandapi/CommandAPIMain.java \
-                         1.13CommandAPI/commandapi-core/src/main/java/dev/jorel/commandapi/Testing.java
+                         1.13CommandAPI/commandapi-core/src/main/java/dev/jorel/commandapi/Testing.java \
+                         1.13CommandAPI/commandapi-core/src/main/java/dev/jorel/commandapi/CommandAPIVersionHandler.java
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded
