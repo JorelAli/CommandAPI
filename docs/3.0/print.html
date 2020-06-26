@@ -2370,58 +2370,24 @@ commands:
 <p>In addition to converting the whole plugin, the CommandAPI allows you to convert single commands at a time using the <code>Converter.convert(Plugin, String)</code> method, where the <code>String</code> argument refers to the command name as declared in the plugin's <code>plugin.yml</code> file.</p>
 <h1><a class="header" href="#upgrading-guide" id="upgrading-guide">Upgrading guide</a></h1>
 <h2><a class="header" href="#from-version-23-to-30" id="from-version-23-to-30">From version 2.3 to 3.0</a></h2>
-<p>The CommandAPI's upgrade from version 2.3 to 3.0 is very intense and various refactoring operations took place, which means that plugins that implement the CommandAPI version 2.3 or below are likely not to work.</p>
+<p>The CommandAPI's upgrade from version 2.3 to 3.0 is very intense and various refactoring operations took place, which means that plugins that implement the CommandAPI version 2.3 or will not to work with the CommandAPI version 3.0. This page outlines the few major changes and points you to the various pages in the documentation that covers how to use version 3.0.</p>
+<hr />
 <h3><a class="header" href="#imports--renaming" id="imports--renaming">Imports &amp; Renaming</a></h3>
-<p>Various imports have been moved around for sake of readability and keeping the CommandAPI more organized. The following imports are all preceded with the CommandAPI package name <code>io.github.jorelali.commandapi.api</code>:</p>
-<table><thead><tr><th>Pre 3.0 import</th><th>3.0 import</th></tr></thead><tbody>
-<tr><td><code>FunctionWrapper</code></td><td><code>wrappers.FunctionWrapper</code></td></tr>
-<tr><td><code>exceptions.GreedyStringException</code></td><td><code>exceptions.GreedyArgumentException</code></td></tr>
-<tr><td><code>arguments.LocationArgument.LocationType</code></td><td><code>arguments.LocationType</code></td></tr>
-<tr><td><code>CommandExecutor</code></td><td><code>executors.CommandExecutor</code></td></tr>
-<tr><td><code>ResultingCommandExecutor</code></td><td><code>executors.ResultingCommandExecutor</code></td></tr>
-</tbody></table>
-<p>For example, if you had the following code before:</p>
-<pre><code class="language-java">import io.github.jorelali.commandapi.api.FunctionWrapper;
-import io.github.jorelali.commandapi.api.CommandAPI;
-import io.github.jorelali.commandapi.api.arguments.Argument;
-
-// ...
-
-LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;function&quot;, new FunctionWrapper());
-
-CommandAPI.getInstance().register(&quot;myCommand&quot;, arguments, (sender, args) -&gt; {
-    // ...
-});
-
-// ...
-</code></pre>
-<p>You would need to change the import according to the table above:</p>
-<pre><code class="language-java">import io.github.jorelali.commandapi.api.wrappers.FunctionWrapper;
-import io.github.jorelali.commandapi.api.CommandAPI;
-import io.github.jorelali.commandapi.api.arguments.Argument;
-
-// ...
-
-LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;function&quot;, new FunctionWrapper());
-
-CommandAPI.getInstance().register(&quot;myCommand&quot;, arguments, (sender, args) -&gt; {
-    // ...
-});
-
-// ...
-</code></pre>
+<p>The default package name has been changed. Instead of being registered under the <code>io.github.jorelali</code> package, the CommandAPI has been moved to the <code>dev.jorel</code> package:</p>
+<p>\[\texttt{io.github.jorelali.commandapi.api}\rightarrow\texttt{dev.jorel.commandapi}\]</p>
+<p>To organise classes with other classes of similar functions, new packages have been introduced. These can be fully explored using the <a href="https://www.jorel.dev/1.13-Command-API/javadocs/html/annotated.html">new JavaDocs</a></p>
+<hr />
 <h3><a class="header" href="#removed-classes--alternatives" id="removed-classes--alternatives">Removed classes &amp; Alternatives</a></h3>
 <p>To reduce redundancies, the CommandAPI removed a few classes:</p>
 <table><thead><tr><th>Removed class</th><th>Alternative</th></tr></thead><tbody>
-<tr><td><code>SuggestedStringArgument</code></td><td>Use <code>.overrideSuggestions(String[])</code> for the relevant argument, as described <a href="./arguments.html#arguments-with-overrideable-suggestions">here</a></td></tr>
-<tr><td><code>DefinedCustomArguments</code> for Objectives</td><td>Use <code>ObjectiveArgument</code></td></tr>
-<tr><td><code>DefinedCustomArguments</code> for Teams</td><td>Use <code>TeamArgument</code></td></tr>
+<tr><td><code>SuggestedStringArgument</code></td><td>Use <code>.overrideSuggestions(String[])</code> for the relevant argument, as described <a href="./arguments.html#overriding-argument-suggestions">here</a></td></tr>
+<tr><td><code>DefinedCustomArguments</code> for Objectives</td><td>Use <a href="./objectivearguments.html"><code>ObjectiveArgument</code></a></td></tr>
+<tr><td><code>DefinedCustomArguments</code> for Teams</td><td>Use <a href="./teamarguments.html"><code>TeamArgument</code></a></td></tr>
 </tbody></table>
+<hr />
 <h3><a class="header" href="#command-registration-1" id="command-registration-1">Command registration</a></h3>
 <p>The way that commands are registered has been completely changed. It is highly recommended to switch to the new system, which is described <a href="./commandregistration.html"><strong>here</strong></a>.</p>
-<p>The following methods have been deprecated and will be removed in the next major release:</p>
+<p>The following methods have been removed:</p>
 <pre><code class="language-java">CommandAPI.getInstance().register(String, LinkedHashMap, CommandExecutor);
 CommandAPI.getInstance().register(String, String[], LinkedHashMap, CommandExecutor);
 CommandAPI.getInstance().register(String, CommandPermission, LinkedHashMap, CommandExecutor);
@@ -2431,6 +2397,12 @@ CommandAPI.getInstance().register(String, LinkedHashMap, ResultingCommandExecuto
 CommandAPI.getInstance().register(String, String[], LinkedHashMap, ResultingCommandExecutor);
 CommandAPI.getInstance().register(String, CommandPermission, LinkedHashMap, ResultingCommandExecutor);
 CommandAPI.getInstance().register(String, CommandPermission, String[], LinkedHashMap, ResultingCommandExecutor);
+</code></pre>
+<p>Additionally, the CommandAPI is no longer accessed by using <code>CommandAPI.getInstance()</code>. This has been replaced with static methods that can be accessed without an instance of the CommandAPI, so you can use the following:</p>
+<pre><code class="language-java">CommandAPI.fail(String command);
+CommandAPI.canRegister();
+CommandAPI.unregister(String command);
+CommandAPI.unregister(String command, boolean force);
 </code></pre>
 <h1><a class="header" href="#troubleshooting" id="troubleshooting">Troubleshooting</a></h1>
 <p>This section basically summarizes the list of things that <em>could</em> go wrong with the CommandAPI and how to mitigate these circumstances.</p>
@@ -2454,7 +2426,7 @@ CommandAPI.getInstance().register(String, CommandPermission, String[], LinkedHas
 <h2><a class="header" href="#my-issue-isnt-on-here-what-do-i-do" id="my-issue-isnt-on-here-what-do-i-do">My issue isn't on here, what do I do?!</a></h2>
 <p>If you've found a bug that isn't solved here, submit a bug report on <a href="https://github.com/JorelAli/1.13-Command-API/issues/new/choose">the CommandAPI's issues page</a> and I'll try my best to resolve the issue!</p>
 <h1><a class="header" href="#afterword" id="afterword">Afterword</a></h1>
-<blockquote>
+<div class="example">
 <p><strong>Developer's Note:</strong></p>
 <p>Congratulations on making it to the end of the documentation! I hope it was easy to understand everything ... I feel like it's a bit content heavy.</p>
 <p>This project is by far my most worked on and probably the project I'm most proud of. You can read about the creation of the CommandAPI in my blog post <a href="https://www.jorelsblog.co.uk/Creating-the-CommandAPI/">here</a>.</p>
@@ -2471,8 +2443,7 @@ CommandAPI.getInstance().register(String, CommandPermission, String[], LinkedHas
 </ul>
 <p>I never really expected more than 5 or so people to use this API, so it was truly an exciting time creating this for everyone - seeing everyone's responses, issues and problems helped me keep going.</p>
 <p>In short, thank you, and everyone else that helped make the CommandAPI what it is.</p>
-</blockquote>
-
+</div>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">

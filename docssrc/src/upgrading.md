@@ -2,57 +2,19 @@
 
 ## From version 2.3 to 3.0
 
-The CommandAPI's upgrade from version 2.3 to 3.0 is very intense and various refactoring operations took place, which means that plugins that implement the CommandAPI version 2.3 or below are likely not to work.
+The CommandAPI's upgrade from version 2.3 to 3.0 is very intense and various refactoring operations took place, which means that plugins that implement the CommandAPI version 2.3 or will not to work with the CommandAPI version 3.0. This page outlines the few major changes and points you to the various pages in the documentation that covers how to use version 3.0.
+
+-----
 
 ### Imports & Renaming
 
-Various imports have been moved around for sake of readability and keeping the CommandAPI more organized. The following imports are all preceded with the CommandAPI package name `io.github.jorelali.commandapi.api`:
+The default package name has been changed. Instead of being registered under the `io.github.jorelali` package, the CommandAPI has been moved to the `dev.jorel` package:
 
-| Pre 3.0 import                            | 3.0 import                           |
-| ----------------------------------------- | ------------------------------------ |
-| `FunctionWrapper`                         | `wrappers.FunctionWrapper`           |
-| `exceptions.GreedyStringException`        | `exceptions.GreedyArgumentException` |
-| `arguments.LocationArgument.LocationType` | `arguments.LocationType`             |
-| `CommandExecutor`                         | `executors.CommandExecutor`          |
-| `ResultingCommandExecutor`                | `executors.ResultingCommandExecutor` |
+\\[\texttt{io.github.jorelali.commandapi.api}\rightarrow\texttt{dev.jorel.commandapi}\\]
 
-For example, if you had the following code before:
+To organise classes with other classes of similar functions, new packages have been introduced. These can be fully explored using the [new JavaDocs](https://www.jorel.dev/1.13-Command-API/javadocs/html/annotated.html)
 
-```java
-import io.github.jorelali.commandapi.api.FunctionWrapper;
-import io.github.jorelali.commandapi.api.CommandAPI;
-import io.github.jorelali.commandapi.api.arguments.Argument;
-
-// ...
-
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("function", new FunctionWrapper());
-
-CommandAPI.getInstance().register("myCommand", arguments, (sender, args) -> {
-    // ...
-});
-
-// ...
-```
-
-You would need to change the import according to the table above:
-
-```java
-import io.github.jorelali.commandapi.api.wrappers.FunctionWrapper;
-import io.github.jorelali.commandapi.api.CommandAPI;
-import io.github.jorelali.commandapi.api.arguments.Argument;
-
-// ...
-
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("function", new FunctionWrapper());
-
-CommandAPI.getInstance().register("myCommand", arguments, (sender, args) -> {
-    // ...
-});
-
-// ...
-```
+-----
 
 ### Removed classes & Alternatives
 
@@ -60,15 +22,17 @@ To reduce redundancies, the CommandAPI removed a few classes:
 
 | Removed class                           | Alternative                                                  |
 | --------------------------------------- | ------------------------------------------------------------ |
-| `SuggestedStringArgument`               | Use `.overrideSuggestions(String[])` for the relevant argument, as described [here](./arguments.html#arguments-with-overrideable-suggestions) |
-| `DefinedCustomArguments` for Objectives | Use `ObjectiveArgument`                                      |
-| `DefinedCustomArguments` for Teams      | Use `TeamArgument`                                           |
+| `SuggestedStringArgument`               | Use `.overrideSuggestions(String[])` for the relevant argument, as described [here](./arguments.html#overriding-argument-suggestions) |
+| `DefinedCustomArguments` for Objectives | Use [`ObjectiveArgument`](./objectivearguments.md)           |
+| `DefinedCustomArguments` for Teams      | Use [`TeamArgument`](./teamarguments.md)                     |
+
+-----
 
 ### Command registration
 
 The way that commands are registered has been completely changed. It is highly recommended to switch to the new system, which is described [**here**](./commandregistration.html).
 
-The following methods have been deprecated and will be removed in the next major release:
+The following methods have been removed:
 
 ```java
 CommandAPI.getInstance().register(String, LinkedHashMap, CommandExecutor);
@@ -81,3 +45,13 @@ CommandAPI.getInstance().register(String, String[], LinkedHashMap, ResultingComm
 CommandAPI.getInstance().register(String, CommandPermission, LinkedHashMap, ResultingCommandExecutor);
 CommandAPI.getInstance().register(String, CommandPermission, String[], LinkedHashMap, ResultingCommandExecutor);
 ```
+
+Additionally, the CommandAPI is no longer accessed by using `CommandAPI.getInstance()`. This has been replaced with static methods that can be accessed without an instance of the CommandAPI, so you can use the following:
+
+```java
+CommandAPI.fail(String command);
+CommandAPI.canRegister();
+CommandAPI.unregister(String command);
+CommandAPI.unregister(String command, boolean force);
+```
+
