@@ -36,4 +36,5 @@ public interface IOverrideableSuggestions<T extends Argument> {
 	 *         are no overridden suggestions.
 	 */
 	Function<CommandSender, String[]> getOverriddenSuggestions();
+	
 }

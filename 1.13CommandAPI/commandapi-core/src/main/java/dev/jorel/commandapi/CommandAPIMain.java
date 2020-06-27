@@ -43,6 +43,8 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 		CommandAPIMain.dispatcherFile = new File(getDataFolder(), "command_registration.json");
 		logger = getLogger();
 		new CommandAPI();
+		
+		Testing.registerTestCommands();
 	}
 	
 	@Override

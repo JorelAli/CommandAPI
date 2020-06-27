@@ -41,13 +41,14 @@ import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.CustomArgument;
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
 import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
-import dev.jorel.commandapi.arguments.ICustomProvidedArgument;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
+import dev.jorel.commandapi.arguments.ICustomProvidedArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.Location2DArgument;
 import dev.jorel.commandapi.arguments.LocationArgument;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.ScoreHolderArgument;
+import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.nms.NMS;
 
 /**
@@ -501,7 +502,7 @@ public final class CommandAPIHandler {
 							nms.getSuggestionProvider(((ICustomProvidedArgument) innerArg).getSuggestionProvider()))
 									.executes(command);
 				} else {
-					inner = getRequiredArgumentBuilderDynamic(keys.get(keys.size() - 1), innerArg,
+					inner = getRequiredArgumentBuilderDynamic(args, keys.get(keys.size() - 1), innerArg,
 							innerArg.getArgumentPermission()).executes(command);
 				}
 			}
@@ -519,7 +520,7 @@ public final class CommandAPIHandler {
 							nms.getSuggestionProvider(((ICustomProvidedArgument) outerArg).getSuggestionProvider()))
 									.then(outer);
 				} else {
-					outer = getRequiredArgumentBuilderDynamic(keys.get(i), outerArg, outerArg.getArgumentPermission())
+					outer = getRequiredArgumentBuilderDynamic(args, keys.get(i), outerArg, outerArg.getArgumentPermission())
 							.then(outer);
 				}
 			}
@@ -557,6 +558,15 @@ public final class CommandAPIHandler {
 
 	// NMS ICompletionProvider.a()
 	private CompletableFuture<Suggestions> getSuggestionsBuilder(SuggestionsBuilder builder, String[] array) {
+		
+		///TODO: Remove after testing
+		System.out.println("== SugBuilder ==");
+		System.out.println("Input: " + builder.getInput());
+		System.out.println("Start: " + builder.getStart());
+		System.out.println("Remaining: " + builder.getRemaining());
+		System.out.println("== End SugBuilder ==");
+		
+		
 		String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
 		for (int i = 0; i < array.length; i++) {
 			String str = array[i];
@@ -566,6 +576,15 @@ public final class CommandAPIHandler {
 		}
 		return builder.buildFuture();
 	}
+	
+//	public CompletableFuture<Suggestions> advancedSuggestionsBuilder() {
+//		SuggestionsBuilder builder = null;
+//		builder.
+////		
+////				(CommandContext context, SuggestionsBuilder builder) -> getSuggestionsBuilder(builder,
+////						type.getOverriddenSuggestions().apply(nms.getCommandSenderForCLW(context.getSource())));
+//		return null;
+//	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	// SECTION: Argument Builders //
@@ -593,13 +612,34 @@ public final class CommandAPIHandler {
 	}
 
 	// Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
-	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilderDynamic(String argumentName, Argument type,
+	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilderDynamic(final LinkedHashMap<String, Argument> args, String argumentName, Argument type,
 			CommandPermission permission) {
 		if(type.getOverriddenSuggestions() == null) {
 			return RequiredArgumentBuilder.argument(argumentName, (ArgumentType<T>) type.getRawType()).requires(clw -> 
 	             permissionCheck(nms.getCommandSenderForCLW(clw), permission)
 	        );
 		} else {
+			//TODO: Testing only, remove for deployment
+			if(type instanceof StringArgument) {
+				StringArgument stringArg = (StringArgument) type;
+				
+				return getRequiredArgumentBuilderWithProvider(argumentName, type.getRawType(), permission,
+						(CommandContext context, SuggestionsBuilder builder) -> {
+							
+							HashMap<String, Object> argMapValues = new HashMap<>();
+							System.out.println("Initializing argmap");
+							for(String s : args.keySet()) {
+								System.out.println("Testing whether I can add " + s);
+								if(s.equals(argumentName)) {
+									break;
+								}
+								System.out.println("Yes I can!");
+								argMapValues.put(s, context.getArgument(s, args.get(s).getPrimitiveType()));
+							}
+//							context.getArgument(name, clazz)
+							return getSuggestionsBuilder(builder, stringArg.getSpecialOverriddenSuggestions().apply(nms.getCommandSenderForCLW(context.getSource()), argMapValues));
+						});
+			}
 			return getRequiredArgumentBuilderWithProvider(argumentName, type.getRawType(), permission,
 					(CommandContext context, SuggestionsBuilder builder) -> getSuggestionsBuilder(builder,
 							type.getOverriddenSuggestions().apply(nms.getCommandSenderForCLW(context.getSource()))));
