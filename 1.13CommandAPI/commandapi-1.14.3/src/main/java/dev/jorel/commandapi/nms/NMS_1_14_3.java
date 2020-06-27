@@ -48,6 +48,7 @@ import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -128,6 +129,11 @@ public class NMS_1_14_3 implements NMS {
     }
 
     @Override
+	public ArgumentType<?> _ArgumentBlockState() {
+		return ArgumentTile.a();
+	}
+
+    @Override
     public ArgumentType<?> _ArgumentChat() {
         return ArgumentChat.a();
     }
@@ -188,6 +194,11 @@ public class NMS_1_14_3 implements NMS {
     }
 
     @Override
+    public ArgumentType<?> _ArgumentMathOperation() {
+        return ArgumentMathOperation.a();
+    }
+
+    @Override
     public ArgumentType _ArgumentMinecraftKeyRegistered() {
         return ArgumentMinecraftKeyRegistered.a();
     }
@@ -195,6 +206,11 @@ public class NMS_1_14_3 implements NMS {
     @Override
     public ArgumentType _ArgumentMobEffect() {
         return ArgumentMobEffect.a();
+    }
+
+    @Override
+    public ArgumentType<?> _ArgumentNBTCompound() {
+        return ArgumentNBTTag.a();
     }
 
     @Override
@@ -240,6 +256,13 @@ public class NMS_1_14_3 implements NMS {
     @Override
     public ArgumentType<?> _ArgumentScoreboardTeam() {
         return ArgumentScoreboardTeam.a();
+    }
+
+    @Override
+    public ArgumentType<?> _ArgumentScoreholder(boolean single) {
+        return single
+               ? ArgumentScoreholder.a()
+               : ArgumentScoreholder.b();
     }
 
     @Override
@@ -296,6 +319,16 @@ public class NMS_1_14_3 implements NMS {
         }
         return set;
     }
+
+    @Override
+	public Biome getBiome(CommandContext cmdCtx, String key) {
+		throw new BiomeArgumentException();
+	}
+
+    @Override
+	public BlockData getBlockState(CommandContext cmdCtx, String key) {
+		return CraftBlockData.fromData(ArgumentTile.a(cmdCtx, key).a());
+	}
 
     @Override
     public CommandDispatcher getBrigadierDispatcher(Object server) {
@@ -472,6 +505,44 @@ public class NMS_1_14_3 implements NMS {
     }
 
     @Override
+    public MathOperation getMathOperation(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+    	ArgumentMathOperation.a result = ArgumentMathOperation.a(cmdCtx, key);
+    	net.minecraft.server.v1_14_R1.Scoreboard board = new net.minecraft.server.v1_14_R1.Scoreboard();
+    	ScoreboardScore tester_left = new ScoreboardScore(board, null, null);
+    	ScoreboardScore tester_right = new ScoreboardScore(board, null, null);
+    	
+    	tester_left.setScore(6);
+    	tester_right.setScore(2);
+    	result.apply(tester_left, tester_right);
+    	
+    	switch (tester_left.getScore()) {
+    		case 8: return MathOperation.ADD;
+    		case 4: return MathOperation.SUBTRACT;
+    		case 12: return MathOperation.MULTIPLY;
+    		case 3: return MathOperation.DIVIDE;
+    		case 0: return MathOperation.MOD;
+    		case 6: return MathOperation.MAX;
+    		
+    		case 2: {
+    			if (tester_right.getScore() == 6)
+    				return MathOperation.SWAP;
+    			tester_left.setScore(2);
+    			tester_right.setScore(6);
+    			result.apply(tester_left, tester_right);
+    			if (tester_left.getScore() == 2)
+    				return MathOperation.MIN;
+    			return MathOperation.ASSIGN;
+    		}
+    	}
+    	return null;
+    }
+
+    @Override
+    public NBTContainer getNBTCompound(CommandContext<?> cmdCtx, String key) {
+        return new NBTContainer(ArgumentNBTTag.a(cmdCtx, key));
+    }
+
+    @Override
     public String getObjective(CommandContext cmdCtx, String key, CommandSender sender) throws IllegalArgumentException, CommandSyntaxException {
         return ArgumentScoreboardObjective.a(cmdCtx, key).getName();
     }
@@ -516,6 +587,16 @@ public class NMS_1_14_3 implements NMS {
     @Override
     public ScoreboardSlot getScoreboardSlot(CommandContext cmdCtx, String key) {
         return new ScoreboardSlot(ArgumentScoreboardSlot.a(cmdCtx, key));
+    }
+
+    @Override
+    public Collection<String> getScoreHolderMultiple(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+        return ArgumentScoreholder.b(cmdCtx, key);
+    }
+
+    @Override
+    public String getScoreHolderSingle(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+        return ArgumentScoreholder.a(cmdCtx, key);
     }
 
     @Override
@@ -590,17 +671,17 @@ public class NMS_1_14_3 implements NMS {
         return ArgumentScoreboardTeam.a(cmdCtx, key).getName();
     }
 
-    @Override
+	@Override
     public int getTime(CommandContext<?> cmdCtx, String key) {
         return cmdCtx.getArgument(key, Integer.class);
     }
-
-    @Override
+	
+	@Override
     public boolean isVanillaCommandWrapper(Command command) {
         return command instanceof VanillaCommandWrapper;
     }
 
-    @Override
+	@Override
     public void resendPackets(Player player) {
         CraftPlayer craftPlayer = (CraftPlayer) player;
         CraftServer craftServer = (CraftServer) Bukkit.getServer();
@@ -608,84 +689,15 @@ public class NMS_1_14_3 implements NMS {
 		net.minecraft.server.v1_14_R1.CommandDispatcher nmsDispatcher = craftServer.getServer().commandDispatcher;
         nmsDispatcher.a(craftPlayer.getHandle());
     }
-
-    @Override
-    public ArgumentType<?> _ArgumentScoreholder(boolean single) {
-        return single
-               ? ArgumentScoreholder.a()
-               : ArgumentScoreholder.b();
-    }
-
-    @Override
-    public Collection<String> getScoreHolderMultiple(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-        return ArgumentScoreholder.b(cmdCtx, key);
-    }
-
-    @Override
-    public String getScoreHolderSingle(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-        return ArgumentScoreholder.a(cmdCtx, key);
-    }
-
-    @Override
-    public NBTContainer getNBTCompound(CommandContext<?> cmdCtx, String key) {
-        return new NBTContainer(ArgumentNBTTag.a(cmdCtx, key));
-    }
-
-    @Override
-    public ArgumentType<?> _ArgumentNBTCompound() {
-        return ArgumentNBTTag.a();
-    }
-
-    @Override
-    public ArgumentType<?> _ArgumentMathOperation() {
-        return ArgumentMathOperation.a();
-    }
-
-    @Override
-    public MathOperation getMathOperation(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-    	ArgumentMathOperation.a result = ArgumentMathOperation.a(cmdCtx, key);
-    	net.minecraft.server.v1_14_R1.Scoreboard board = new net.minecraft.server.v1_14_R1.Scoreboard();
-    	ScoreboardScore tester_left = new ScoreboardScore(board, null, null);
-    	ScoreboardScore tester_right = new ScoreboardScore(board, null, null);
-    	
-    	tester_left.setScore(6);
-    	tester_right.setScore(2);
-    	result.apply(tester_left, tester_right);
-    	
-    	switch (tester_left.getScore()) {
-    		case 8: return MathOperation.ADD;
-    		case 4: return MathOperation.SUBTRACT;
-    		case 12: return MathOperation.MULTIPLY;
-    		case 3: return MathOperation.DIVIDE;
-    		case 0: return MathOperation.MOD;
-    		case 6: return MathOperation.MAX;
-    		
-    		case 2: {
-    			if (tester_right.getScore() == 6)
-    				return MathOperation.SWAP;
-    			tester_left.setScore(2);
-    			tester_right.setScore(6);
-    			result.apply(tester_left, tester_right);
-    			if (tester_left.getScore() == 2)
-    				return MathOperation.MIN;
-    			return MathOperation.ASSIGN;
-    		}
-    	}
-    	return null;
-    }
-
-	@Override
-	public Biome getBiome(CommandContext cmdCtx, String key) {
-		throw new BiomeArgumentException();
-	}
 	
 	@Override
-	public BlockData getBlockState(CommandContext cmdCtx, String key) {
-		return CraftBlockData.fromData(ArgumentTile.a(cmdCtx, key).a());
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentBlockState() {
-		return ArgumentTile.a();
+	public boolean validateMinecraftKeyRegistered(String argument) {
+		try {
+			StringReader reader = new StringReader(argument);
+			ArgumentMinecraftKeyRegistered.a().parse(reader);
+			return true;
+		} catch (CommandSyntaxException e) {
+			return false;
+		}
 	}
 }

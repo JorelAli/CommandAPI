@@ -48,6 +48,7 @@ import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -124,8 +125,222 @@ import net.minecraft.server.v1_15_R1.Vec3D;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class NMS_1_15 implements NMS {
 
-	private CommandListenerWrapper getCLW(CommandContext cmdCtx) {
-		return (CommandListenerWrapper) cmdCtx.getSource();
+	@Override
+	public ArgumentType<?> _ArgumentAxis() {
+		return ArgumentRotationAxis.a();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentBlockState() {
+		return ArgumentTile.a();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentChat() {
+		return ArgumentChat.a();
+	}
+
+	@Override
+	public ArgumentType _ArgumentChatComponent() {
+		return ArgumentChatComponent.a();
+	}
+
+	@Override
+	public ArgumentType _ArgumentChatFormat() {
+		return ArgumentChatFormat.a();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentDimension() {
+		return ArgumentDimension.a();
+	}
+
+	@Override
+	public ArgumentType _ArgumentEnchantment() {
+		return ArgumentEnchantment.a();
+	}
+
+	@Override
+	public ArgumentType _ArgumentEntity(EntitySelector selector) {
+		switch (selector) {
+		case MANY_ENTITIES:
+			return ArgumentEntity.multipleEntities();
+		case MANY_PLAYERS:
+			return ArgumentEntity.d();
+		case ONE_ENTITY:
+			return ArgumentEntity.a();
+		case ONE_PLAYER:
+			return ArgumentEntity.c();
+		}
+		return null;
+	}
+
+	@Override
+	public ArgumentType _ArgumentEntitySummon() {
+		return ArgumentEntitySummon.a();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentFloatRange() {
+		return new ArgumentCriterionValue.a();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentIntRange() {
+		return new ArgumentCriterionValue.b();
+	}
+
+	@Override
+	public ArgumentType _ArgumentItemStack() {
+		return ArgumentItemStack.a();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentMathOperation() {
+		return ArgumentMathOperation.a();
+	}
+
+	@Override
+	public ArgumentType _ArgumentMinecraftKeyRegistered() {
+		return ArgumentMinecraftKeyRegistered.a();
+	}
+
+	@Override
+	public ArgumentType _ArgumentMobEffect() {
+		return ArgumentMobEffect.a();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentNBTCompound() {
+		return ArgumentNBTTag.a();
+	}
+
+	@Override
+	public ArgumentType _ArgumentParticle() {
+		return ArgumentParticle.a();
+	}
+
+	@Override
+	public ArgumentType _ArgumentPosition() {
+		return ArgumentPosition.a();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentPosition2D() {
+		return ArgumentVec2I.a();
+	}
+
+	@Override
+	public ArgumentType _ArgumentProfile() {
+		return ArgumentProfile.a();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentRotation() {
+		return ArgumentRotation.a();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentScoreboardCriteria() {
+		return ArgumentScoreboardCriteria.a();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentScoreboardObjective() {
+		return ArgumentScoreboardObjective.a();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentScoreboardSlot() {
+		return ArgumentScoreboardSlot.a();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentScoreboardTeam() {
+		return ArgumentScoreboardTeam.a();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentScoreholder(boolean single) {
+		return single ? ArgumentScoreholder.a() : ArgumentScoreholder.b();
+	}
+
+	@Override
+	public ArgumentType _ArgumentTag() {
+		return ArgumentTag.a();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentTime() {
+		return ArgumentTime.a();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentVec2() {
+		return ArgumentVec2.a();
+	}
+
+	@Override
+	public ArgumentType _ArgumentVec3() {
+		return ArgumentVec3.a();
+	}
+
+	@Override
+	public String[] compatibleVersions() {
+		return new String[] { "1.15", "1.15.1", "1.15.2" };
+	}
+
+	@Override
+	public void createDispatcherFile(Object server, File file, CommandDispatcher dispatcher) throws IOException {
+		Files.write((new GsonBuilder()).setPrettyPrinting().create()
+				.toJson(ArgumentRegistry.a(dispatcher, dispatcher.getRoot())), file, StandardCharsets.UTF_8);
+	}
+
+	@Override
+	public org.bukkit.advancement.Advancement getAdvancement(CommandContext cmdCtx, String key)
+			throws CommandSyntaxException {
+		return ArgumentMinecraftKeyRegistered.a(cmdCtx, key).bukkit;
+	}
+
+	@Override
+	public EnumSet<Axis> getAxis(CommandContext cmdCtx, String key) {
+		EnumSet<Axis> set = EnumSet.noneOf(Axis.class);
+		EnumSet<EnumAxis> parsedEnumSet = ArgumentRotationAxis.a(cmdCtx, key);
+		for (EnumAxis element : parsedEnumSet) {
+			switch (element) {
+			case X:
+				set.add(Axis.X);
+				break;
+			case Y:
+				set.add(Axis.Y);
+				break;
+			case Z:
+				set.add(Axis.Z);
+				break;
+			}
+		}
+		return set;
+	}
+
+	@Override
+	public Biome getBiome(CommandContext cmdCtx, String key) {
+		throw new BiomeArgumentException();
+	}
+
+	@Override
+	public BlockData getBlockState(CommandContext cmdCtx, String key) {
+		return CraftBlockData.fromData(ArgumentTile.a(cmdCtx, key).a());
+	}
+
+	@Override
+	public CommandDispatcher getBrigadierDispatcher(Object server) {
+		return ((MinecraftServer) server).commandDispatcher.a();
+	}
+
+	@Override
+	public BaseComponent[] getChat(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		String resultantString = ChatSerializer.a(ArgumentChat.a(cmdCtx, key));
+		return ComponentSerializer.parse(resultantString);
 	}
 
 	@Override
@@ -139,126 +354,8 @@ public class NMS_1_15 implements NMS {
 		return ComponentSerializer.parse((String) resultantString);
 	}
 
-	@Override
-	public Enchantment getEnchantment(CommandContext cmdCtx, String str) {
-		return new CraftEnchantment(ArgumentEnchantment.a(cmdCtx, str));
-	}
-
-	@Override
-	public ItemStack getItemStack(CommandContext cmdCtx, String str) throws CommandSyntaxException {
-		return CraftItemStack.asBukkitCopy(ArgumentItemStack.a(cmdCtx, str).a(1, false));
-	}
-
-	@Override
-	public Location getLocation(CommandContext cmdCtx, String str, LocationType locationType, CommandSender sender)
-			throws CommandSyntaxException {
-		switch (locationType) {
-		case BLOCK_POSITION:
-			BlockPosition blockPos = ArgumentPosition.a(cmdCtx, str);
-			return new Location(getCommandSenderWorld(sender), blockPos.getX(), blockPos.getY(), blockPos.getZ());
-		case PRECISE_POSITION:
-			Vec3D vecPos = ArgumentVec3.a(cmdCtx, str);
-			return new Location(getCommandSenderWorld(sender), vecPos.x, vecPos.y, vecPos.z);
-		}
-		return null;
-	}
-
-	@Override
-	public Particle getParticle(CommandContext cmdCtx, String str) {
-		return CraftParticle.toBukkit(ArgumentParticle.a(cmdCtx, str));
-	}
-
-	@Override
-	public PotionEffectType getPotionEffect(CommandContext cmdCtx, String str) throws CommandSyntaxException {
-		return new CraftPotionEffectType(ArgumentMobEffect.a(cmdCtx, str));
-	}
-
-	@Override
-	public void createDispatcherFile(Object server, File file, CommandDispatcher dispatcher) throws IOException {
-		Files.write((new GsonBuilder()).setPrettyPrinting().create()
-				.toJson(ArgumentRegistry.a(dispatcher, dispatcher.getRoot())), file, StandardCharsets.UTF_8);
-	}
-
-	@Override
-	public SuggestionProvider getSuggestionProvider(SuggestionProviders provider) {
-		switch (provider) {
-		case FUNCTION:
-			return (context, builder) -> {
-				CustomFunctionData functionData = getCLW(context).getServer().getFunctionData();
-				ICompletionProvider.a(functionData.h().a(), builder, "#");
-				return ICompletionProvider.a(functionData.c().keySet(), builder);
-			};
-		case RECIPES:
-			return CompletionProviders.b;
-		case SOUNDS:
-			return CompletionProviders.c;
-		case ADVANCEMENTS:
-			return (cmdCtx, builder) -> {
-				Collection<Advancement> advancements = ((CommandListenerWrapper) cmdCtx.getSource()).getServer()
-						.getAdvancementData().getAdvancements();
-				return ICompletionProvider.a(advancements.stream().map(Advancement::getName), builder);
-			};
-		case LOOT_TABLES:
-			return (context, builder) -> {
-				LootTableRegistry lootTables = getCLW(context).getServer().getLootTableRegistry();
-				return ICompletionProvider.a(lootTables.a(), builder);
-			};
-		case ENTITIES:
-			return CompletionProviders.d;
-		case BIOMES:
-		default:
-			return (context, builder) -> Suggestions.empty();
-		}
-	}
-
-	@Override
-	public FunctionWrapper[] getFunction(CommandContext cmdCtx, String str) throws CommandSyntaxException {
-		Collection<CustomFunction> customFuncList = ArgumentTag.a(cmdCtx, str);
-
-		FunctionWrapper[] result = new FunctionWrapper[customFuncList.size()];
-
-		CustomFunctionData customFunctionData = getCLW(cmdCtx).getServer().getFunctionData();
-		CommandListenerWrapper commandListenerWrapper = getCLW(cmdCtx).a().b(2);
-
-		int count = 0;
-
-		for (CustomFunction customFunction : customFuncList) {
-			@SuppressWarnings("deprecation")
-			NamespacedKey minecraftKey = new NamespacedKey(customFunction.a().getNamespace(),
-					customFunction.a().getKey());
-			ToIntBiFunction<CustomFunction, CommandListenerWrapper> obj = customFunctionData::a;
-
-			FunctionWrapper wrapper = new FunctionWrapper(minecraftKey, obj, customFunction, commandListenerWrapper,
-					e -> {
-						return (Object) getCLW(cmdCtx).a(((CraftEntity) e).getHandle());
-					});
-
-			result[count] = wrapper;
-			count++;
-		}
-
-		return result;
-	}
-
-	@Override
-	public CommandSender getSenderForCommand(CommandContext cmdCtx) {
-		CommandSender sender = getCLW(cmdCtx).getBukkitSender();
-
-		Entity proxyEntity = getCLW(cmdCtx).getEntity();
-		if (proxyEntity != null) {
-			CommandSender proxy = ((Entity) proxyEntity).getBukkitEntity();
-
-			if (!proxy.equals(sender)) {
-				sender = new ProxiedNativeCommandSender(getCLW(cmdCtx), sender, proxy);
-			}
-		}
-
-		return sender;
-	}
-
-	@Override
-	public CommandDispatcher getBrigadierDispatcher(Object server) {
-		return ((MinecraftServer) server).commandDispatcher.a();
+	private CommandListenerWrapper getCLW(CommandContext cmdCtx) {
+		return (CommandListenerWrapper) cmdCtx.getSource();
 	}
 
 	@Override
@@ -271,13 +368,22 @@ public class NMS_1_15 implements NMS {
 	}
 
 	@Override
-	public Player getPlayer(CommandContext cmdCtx, String str) throws CommandSyntaxException {
-		Player target = Bukkit.getPlayer(((GameProfile) ArgumentProfile.a(cmdCtx, str).iterator().next()).getId());
-		if (target == null) {
-			throw ArgumentProfile.a.create();
-		} else {
-			return target;
+	public Environment getDimension(CommandContext cmdCtx, String key) {
+		DimensionManager manager = ArgumentDimension.a(cmdCtx, key);
+		switch (manager.getDimensionID()) {
+		case 0:
+			return Environment.NORMAL;
+		case -1:
+			return Environment.NETHER;
+		case 1:
+			return Environment.THE_END;
 		}
+		return null;
+	}
+
+	@Override
+	public Enchantment getEnchantment(CommandContext cmdCtx, String str) {
+		return new CraftEnchantment(ArgumentEnchantment.a(cmdCtx, str));
 	}
 
 	@Override
@@ -315,164 +421,70 @@ public class NMS_1_15 implements NMS {
 		return entity.getBukkitEntity().getType();
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public LootTable getLootTable(CommandContext cmdCtx, String str) {
-		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.d(cmdCtx, str);
-		String namespace = minecraftKey.getNamespace();
-		String key = minecraftKey.getKey();
-//		LootItemCondition lootItemCondition = ArgumentMinecraftKeyRegistered.c(cmdCtx, str);
-//		lootItemCondition.
-//		String namespace = lootItemCondition.b();
-
-		net.minecraft.server.v1_15_R1.LootTable lootTable = getCLW(cmdCtx).getServer().getLootTableRegistry()
-				.getLootTable(minecraftKey);
-		return new CraftLootTable(new NamespacedKey(namespace, key), lootTable);
+	public FloatRange getFloatRange(CommandContext cmdCtx, String key) {
+		net.minecraft.server.v1_15_R1.CriterionConditionValue.FloatRange.FloatRange range = (net.minecraft.server.v1_15_R1.CriterionConditionValue.FloatRange.FloatRange) cmdCtx
+				.getArgument(key, FloatRange.class);
+		float low = range.a() == null ? -Float.MAX_VALUE : range.a();
+		float high = range.b() == null ? Float.MAX_VALUE : range.b();
+		return new FloatRange(low, high);
 	}
 
 	@Override
-	public Sound getSound(CommandContext cmdCtx, String key) {
-		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.d(cmdCtx, key);
-		for (CraftSound sound : CraftSound.values()) {
-			try {
-				if (CommandAPIHandler.getField(CraftSound.class, "minecraftKey").get(sound)
-						.equals(minecraftKey.getKey())) {
-					return Sound.valueOf(sound.name());
-				}
-			} catch (IllegalArgumentException | IllegalAccessException e1) {
-				e1.printStackTrace();
-			}
-		}
-		return null;
-	}
+	public FunctionWrapper[] getFunction(CommandContext cmdCtx, String str) throws CommandSyntaxException {
+		Collection<CustomFunction> customFuncList = ArgumentTag.a(cmdCtx, str);
 
-	@Override
-	public org.bukkit.advancement.Advancement getAdvancement(CommandContext cmdCtx, String key)
-			throws CommandSyntaxException {
-		return ArgumentMinecraftKeyRegistered.a(cmdCtx, key).bukkit;
-	}
+		FunctionWrapper[] result = new FunctionWrapper[customFuncList.size()];
 
-	@Override
-	public ComplexRecipe getRecipe(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		IRecipe<?> recipe = ArgumentMinecraftKeyRegistered.b(cmdCtx, key);
-		return new ComplexRecipe() {
-			
+		CustomFunctionData customFunctionData = getCLW(cmdCtx).getServer().getFunctionData();
+		CommandListenerWrapper commandListenerWrapper = getCLW(cmdCtx).a().b(2);
+
+		int count = 0;
+
+		for (CustomFunction customFunction : customFuncList) {
 			@SuppressWarnings("deprecation")
-			@Override
-			public NamespacedKey getKey() {
-				return new NamespacedKey(recipe.getKey().getNamespace(), recipe.getKey().getKey());
-			}
-			
-			@Override
-			public ItemStack getResult() {
-				return recipe.toBukkitRecipe().getResult();
-			}
-		};
+			NamespacedKey minecraftKey = new NamespacedKey(customFunction.a().getNamespace(),
+					customFunction.a().getKey());
+			ToIntBiFunction<CustomFunction, CommandListenerWrapper> obj = customFunctionData::a;
+
+			FunctionWrapper wrapper = new FunctionWrapper(minecraftKey, obj, customFunction, commandListenerWrapper,
+					e -> {
+						return (Object) getCLW(cmdCtx).a(((CraftEntity) e).getHandle());
+					});
+
+			result[count] = wrapper;
+			count++;
+		}
+
+		return result;
 	}
 
 	@Override
-	public SimpleCommandMap getSimpleCommandMap() {
-		return ((CraftServer) Bukkit.getServer()).getCommandMap();
+	public IntegerRange getIntRange(CommandContext cmdCtx, String key) {
+		net.minecraft.server.v1_15_R1.CriterionConditionValue.IntegerRange range = ArgumentCriterionValue.b.a(cmdCtx,
+				key);
+		int low = range.a() == null ? Integer.MIN_VALUE : range.a();
+		int high = range.b() == null ? Integer.MAX_VALUE : range.b();
+		return new IntegerRange(low, high);
 	}
 
 	@Override
-	public boolean isVanillaCommandWrapper(Command command) {
-		return command instanceof VanillaCommandWrapper;
+	public ItemStack getItemStack(CommandContext cmdCtx, String str) throws CommandSyntaxException {
+		return CraftItemStack.asBukkitCopy(ArgumentItemStack.a(cmdCtx, str).a(1, false));
 	}
 
 	@Override
-	public ArgumentType _ArgumentChatFormat() {
-		return ArgumentChatFormat.a();
-	}
-
-	@Override
-	public ArgumentType _ArgumentChatComponent() {
-		return ArgumentChatComponent.a();
-	}
-
-	@Override
-	public ArgumentType _ArgumentMinecraftKeyRegistered() {
-		return ArgumentMinecraftKeyRegistered.a();
-	}
-
-	@Override
-	public ArgumentType _ArgumentMobEffect() {
-		return ArgumentMobEffect.a();
-	}
-
-	@Override
-	public ArgumentType _ArgumentProfile() {
-		return ArgumentProfile.a();
-	}
-
-	@Override
-	public ArgumentType _ArgumentParticle() {
-		return ArgumentParticle.a();
-	}
-
-	@Override
-	public ArgumentType _ArgumentPosition() {
-		return ArgumentPosition.a();
-	}
-
-	@Override
-	public ArgumentType _ArgumentVec3() {
-		return ArgumentVec3.a();
-	}
-
-	@Override
-	public ArgumentType _ArgumentItemStack() {
-		return ArgumentItemStack.a();
-	}
-
-	@Override
-	public ArgumentType _ArgumentTag() {
-		return ArgumentTag.a();
-	}
-
-	@Override
-	public ArgumentType _ArgumentEntitySummon() {
-		return ArgumentEntitySummon.a();
-	}
-
-	@Override
-	public ArgumentType _ArgumentEntity(EntitySelector selector) {
-		switch (selector) {
-		case MANY_ENTITIES:
-			return ArgumentEntity.multipleEntities();
-		case MANY_PLAYERS:
-			return ArgumentEntity.d();
-		case ONE_ENTITY:
-			return ArgumentEntity.a();
-		case ONE_PLAYER:
-			return ArgumentEntity.c();
+	public Location getLocation(CommandContext cmdCtx, String str, LocationType locationType, CommandSender sender)
+			throws CommandSyntaxException {
+		switch (locationType) {
+		case BLOCK_POSITION:
+			BlockPosition blockPos = ArgumentPosition.a(cmdCtx, str);
+			return new Location(getCommandSenderWorld(sender), blockPos.getX(), blockPos.getY(), blockPos.getZ());
+		case PRECISE_POSITION:
+			Vec3D vecPos = ArgumentVec3.a(cmdCtx, str);
+			return new Location(getCommandSenderWorld(sender), vecPos.x, vecPos.y, vecPos.z);
 		}
 		return null;
-	}
-
-	@Override
-	public ArgumentType _ArgumentEnchantment() {
-		return ArgumentEnchantment.a();
-	}
-
-	@Override
-	public String[] compatibleVersions() {
-		return new String[] { "1.15", "1.15.1", "1.15.2" };
-	}
-
-	@Override
-	public void resendPackets(Player player) {
-		CraftPlayer craftPlayer = (CraftPlayer) player;
-		CraftServer craftServer = (CraftServer) Bukkit.getServer();
-		@SuppressWarnings("resource")
-		net.minecraft.server.v1_15_R1.CommandDispatcher nmsDispatcher = craftServer.getServer().commandDispatcher;
-		nmsDispatcher.a(craftPlayer.getHandle());
-	}
-
-	@Override
-	public BaseComponent[] getChat(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		String resultantString = ChatSerializer.a(ArgumentChat.a(cmdCtx, key));
-		return ComponentSerializer.parse(resultantString);
 	}
 
 	@Override
@@ -489,184 +501,19 @@ public class NMS_1_15 implements NMS {
 		return null;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public String getObjective(CommandContext cmdCtx, String key, CommandSender sender)
-			throws IllegalArgumentException, CommandSyntaxException {	
-		return ArgumentScoreboardObjective.a(cmdCtx, key).getName();
-	}
+	public LootTable getLootTable(CommandContext cmdCtx, String str) {
+		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.d(cmdCtx, str);
+		String namespace = minecraftKey.getNamespace();
+		String key = minecraftKey.getKey();
+//		LootItemCondition lootItemCondition = ArgumentMinecraftKeyRegistered.c(cmdCtx, str);
+//		lootItemCondition.
+//		String namespace = lootItemCondition.b();
 
-	@Override
-	public Collection<String> getScoreHolderMultiple(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return ArgumentScoreholder.b(cmdCtx, key);
-	}
-
-	@Override
-	public String getScoreHolderSingle(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return ArgumentScoreholder.a(cmdCtx, key);
-	}
-
-	@Override
-	public String getTeam(CommandContext cmdCtx, String key, CommandSender sender) throws CommandSyntaxException {
-		return ArgumentScoreboardTeam.a(cmdCtx, key).getName();
-	}
-
-	@Override
-	public EnumSet<Axis> getAxis(CommandContext cmdCtx, String key) {
-		EnumSet<Axis> set = EnumSet.noneOf(Axis.class);
-		EnumSet<EnumAxis> parsedEnumSet = ArgumentRotationAxis.a(cmdCtx, key);
-		for (EnumAxis element : parsedEnumSet) {
-			switch (element) {
-			case X:
-				set.add(Axis.X);
-				break;
-			case Y:
-				set.add(Axis.Y);
-				break;
-			case Z:
-				set.add(Axis.Z);
-				break;
-			}
-		}
-		return set;
-	}
-
-	@Override
-	public Environment getDimension(CommandContext cmdCtx, String key) {
-		DimensionManager manager = ArgumentDimension.a(cmdCtx, key);
-		switch (manager.getDimensionID()) {
-		case 0:
-			return Environment.NORMAL;
-		case -1:
-			return Environment.NETHER;
-		case 1:
-			return Environment.THE_END;
-		}
-		return null;
-	}
-
-	@Override
-	public FloatRange getFloatRange(CommandContext cmdCtx, String key) {
-		net.minecraft.server.v1_15_R1.CriterionConditionValue.FloatRange.FloatRange range = (net.minecraft.server.v1_15_R1.CriterionConditionValue.FloatRange.FloatRange) cmdCtx
-				.getArgument(key, FloatRange.class);
-		float low = range.a() == null ? -Float.MAX_VALUE : range.a();
-		float high = range.b() == null ? Float.MAX_VALUE : range.b();
-		return new FloatRange(low, high);
-	}
-
-	@Override
-	public IntegerRange getIntRange(CommandContext cmdCtx, String key) {
-		net.minecraft.server.v1_15_R1.CriterionConditionValue.IntegerRange range = ArgumentCriterionValue.b.a(cmdCtx,
-				key);
-		int low = range.a() == null ? Integer.MIN_VALUE : range.a();
-		int high = range.b() == null ? Integer.MAX_VALUE : range.b();
-		return new IntegerRange(low, high);
-	}
-
-	@Override
-	public NBTContainer getNBTCompound(CommandContext cmdCtx, String key) {
-		return new NBTContainer(ArgumentNBTTag.a(cmdCtx, key));
-	}
-
-	@Override
-	public String getObjectiveCriteria(CommandContext cmdCtx, String key) {
-		return ArgumentScoreboardCriteria.a(cmdCtx, key).getName();
-	}
-
-	@Override
-	public Rotation getRotation(CommandContext cmdCtx, String key) {
-		IVectorPosition pos = ArgumentRotation.a(cmdCtx, key);
-		Vec2F vec = pos.b(getCLW(cmdCtx));
-		return new Rotation(vec.i, vec.j);
-	}
-
-	@Override
-	public ScoreboardSlot getScoreboardSlot(CommandContext cmdCtx, String key) {
-		return new ScoreboardSlot(ArgumentScoreboardSlot.a(cmdCtx, key));
-	}
-
-	@Override
-	public int getTime(CommandContext cmdCtx, String key) {
-		return (Integer) cmdCtx.getArgument(key, Integer.class);
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentAxis() {
-		return ArgumentRotationAxis.a();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentChat() {
-		return ArgumentChat.a();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentDimension() {
-		return ArgumentDimension.a();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentFloatRange() {
-		return new ArgumentCriterionValue.a();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentIntRange() {
-		return new ArgumentCriterionValue.b();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentNBTCompound() {
-		return ArgumentNBTTag.a();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentPosition2D() {
-		return ArgumentVec2I.a();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentRotation() {
-		return ArgumentRotation.a();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentScoreboardCriteria() {
-		return ArgumentScoreboardCriteria.a();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentScoreboardObjective() {
-		return ArgumentScoreboardObjective.a();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentScoreboardSlot() {
-		return ArgumentScoreboardSlot.a();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentScoreboardTeam() {
-		return ArgumentScoreboardTeam.a();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentScoreholder(boolean single) {
-		return single ? ArgumentScoreholder.a() : ArgumentScoreholder.b();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentTime() {
-		return ArgumentTime.a();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentVec2() {
-		return ArgumentVec2.a();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentMathOperation() {
-		return ArgumentMathOperation.a();
+		net.minecraft.server.v1_15_R1.LootTable lootTable = getCLW(cmdCtx).getServer().getLootTableRegistry()
+				.getLootTable(minecraftKey);
+		return new CraftLootTable(new NamespacedKey(namespace, key), lootTable);
 	}
 
 	@Override
@@ -709,18 +556,183 @@ public class NMS_1_15 implements NMS {
 	}
 
 	@Override
-	public Biome getBiome(CommandContext cmdCtx, String key) {
-		throw new BiomeArgumentException();
-	}
-	
-	@Override
-	public BlockData getBlockState(CommandContext cmdCtx, String key) {
-		return CraftBlockData.fromData(ArgumentTile.a(cmdCtx, key).a());
+	public NBTContainer getNBTCompound(CommandContext cmdCtx, String key) {
+		return new NBTContainer(ArgumentNBTTag.a(cmdCtx, key));
 	}
 
 	@Override
-	public ArgumentType<?> _ArgumentBlockState() {
-		return ArgumentTile.a();
+	public String getObjective(CommandContext cmdCtx, String key, CommandSender sender)
+			throws IllegalArgumentException, CommandSyntaxException {	
+		return ArgumentScoreboardObjective.a(cmdCtx, key).getName();
+	}
+
+	@Override
+	public String getObjectiveCriteria(CommandContext cmdCtx, String key) {
+		return ArgumentScoreboardCriteria.a(cmdCtx, key).getName();
+	}
+
+	@Override
+	public Particle getParticle(CommandContext cmdCtx, String str) {
+		return CraftParticle.toBukkit(ArgumentParticle.a(cmdCtx, str));
+	}
+
+	@Override
+	public Player getPlayer(CommandContext cmdCtx, String str) throws CommandSyntaxException {
+		Player target = Bukkit.getPlayer(((GameProfile) ArgumentProfile.a(cmdCtx, str).iterator().next()).getId());
+		if (target == null) {
+			throw ArgumentProfile.a.create();
+		} else {
+			return target;
+		}
+	}
+
+	@Override
+	public PotionEffectType getPotionEffect(CommandContext cmdCtx, String str) throws CommandSyntaxException {
+		return new CraftPotionEffectType(ArgumentMobEffect.a(cmdCtx, str));
+	}
+
+	@Override
+	public ComplexRecipe getRecipe(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		IRecipe<?> recipe = ArgumentMinecraftKeyRegistered.b(cmdCtx, key);
+		return new ComplexRecipe() {
+			
+			@SuppressWarnings("deprecation")
+			@Override
+			public NamespacedKey getKey() {
+				return new NamespacedKey(recipe.getKey().getNamespace(), recipe.getKey().getKey());
+			}
+			
+			@Override
+			public ItemStack getResult() {
+				return recipe.toBukkitRecipe().getResult();
+			}
+		};
+	}
+
+	@Override
+	public Rotation getRotation(CommandContext cmdCtx, String key) {
+		IVectorPosition pos = ArgumentRotation.a(cmdCtx, key);
+		Vec2F vec = pos.b(getCLW(cmdCtx));
+		return new Rotation(vec.i, vec.j);
+	}
+
+	@Override
+	public ScoreboardSlot getScoreboardSlot(CommandContext cmdCtx, String key) {
+		return new ScoreboardSlot(ArgumentScoreboardSlot.a(cmdCtx, key));
+	}
+
+	@Override
+	public Collection<String> getScoreHolderMultiple(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		return ArgumentScoreholder.b(cmdCtx, key);
+	}
+
+	@Override
+	public String getScoreHolderSingle(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		return ArgumentScoreholder.a(cmdCtx, key);
+	}
+
+	@Override
+	public CommandSender getSenderForCommand(CommandContext cmdCtx) {
+		CommandSender sender = getCLW(cmdCtx).getBukkitSender();
+
+		Entity proxyEntity = getCLW(cmdCtx).getEntity();
+		if (proxyEntity != null) {
+			CommandSender proxy = ((Entity) proxyEntity).getBukkitEntity();
+
+			if (!proxy.equals(sender)) {
+				sender = new ProxiedNativeCommandSender(getCLW(cmdCtx), sender, proxy);
+			}
+		}
+
+		return sender;
+	}
+
+	@Override
+	public SimpleCommandMap getSimpleCommandMap() {
+		return ((CraftServer) Bukkit.getServer()).getCommandMap();
+	}
+
+	@Override
+	public Sound getSound(CommandContext cmdCtx, String key) {
+		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.d(cmdCtx, key);
+		for (CraftSound sound : CraftSound.values()) {
+			try {
+				if (CommandAPIHandler.getField(CraftSound.class, "minecraftKey").get(sound)
+						.equals(minecraftKey.getKey())) {
+					return Sound.valueOf(sound.name());
+				}
+			} catch (IllegalArgumentException | IllegalAccessException e1) {
+				e1.printStackTrace();
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public SuggestionProvider getSuggestionProvider(SuggestionProviders provider) {
+		switch (provider) {
+		case FUNCTION:
+			return (context, builder) -> {
+				CustomFunctionData functionData = getCLW(context).getServer().getFunctionData();
+				ICompletionProvider.a(functionData.h().a(), builder, "#");
+				return ICompletionProvider.a(functionData.c().keySet(), builder);
+			};
+		case RECIPES:
+			return CompletionProviders.b;
+		case SOUNDS:
+			return CompletionProviders.c;
+		case ADVANCEMENTS:
+			return (cmdCtx, builder) -> {
+				Collection<Advancement> advancements = ((CommandListenerWrapper) cmdCtx.getSource()).getServer()
+						.getAdvancementData().getAdvancements();
+				return ICompletionProvider.a(advancements.stream().map(Advancement::getName), builder);
+			};
+		case LOOT_TABLES:
+			return (context, builder) -> {
+				LootTableRegistry lootTables = getCLW(context).getServer().getLootTableRegistry();
+				return ICompletionProvider.a(lootTables.a(), builder);
+			};
+		case ENTITIES:
+			return CompletionProviders.d;
+		case BIOMES:
+		default:
+			return (context, builder) -> Suggestions.empty();
+		}
+	}
+
+	@Override
+	public String getTeam(CommandContext cmdCtx, String key, CommandSender sender) throws CommandSyntaxException {
+		return ArgumentScoreboardTeam.a(cmdCtx, key).getName();
+	}
+
+	@Override
+	public int getTime(CommandContext cmdCtx, String key) {
+		return (Integer) cmdCtx.getArgument(key, Integer.class);
+	}
+	
+	@Override
+	public boolean isVanillaCommandWrapper(Command command) {
+		return command instanceof VanillaCommandWrapper;
+	}
+
+	@Override
+	public void resendPackets(Player player) {
+		CraftPlayer craftPlayer = (CraftPlayer) player;
+		CraftServer craftServer = (CraftServer) Bukkit.getServer();
+		@SuppressWarnings("resource")
+		net.minecraft.server.v1_15_R1.CommandDispatcher nmsDispatcher = craftServer.getServer().commandDispatcher;
+		nmsDispatcher.a(craftPlayer.getHandle());
+	}
+	
+	@Override
+	public boolean validateMinecraftKeyRegistered(String argument) {
+		try {
+			StringReader reader = new StringReader(argument);
+			ArgumentMinecraftKeyRegistered.a().parse(reader);
+			return true;
+		} catch (CommandSyntaxException e) {
+			return false;
+		}
 	}
 
 }

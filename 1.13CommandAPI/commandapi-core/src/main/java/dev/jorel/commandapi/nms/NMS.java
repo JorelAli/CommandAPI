@@ -199,4 +199,8 @@ public interface NMS {
 	ArgumentType<?> _ArgumentVec2();
 	ArgumentType<?> _ArgumentVec3();
 	ArgumentType<?> _ArgumentMathOperation();
+	
+	/** Argument validators */
+	boolean validateMinecraftKeyRegistered(String argument);
+
 }
