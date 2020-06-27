@@ -12,7 +12,19 @@ public class Testing {
 	public static void registerTestCommands() {
 		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 		arguments.put("number", new IntegerArgument());
-		arguments.put("extra", new StringArgument().overrideSuggestions("a", "b"));
+		arguments.put("extra", new StringArgument().overrideSuggestions((sender, args) -> {
+			int number = (int) args[0];
+			
+			switch(number) {
+			case 1:
+				return new String[] {"a"};
+			case 2:
+				return new String[] {"b"};
+			case 3:
+				return new String[] {"c"};
+			}
+			return new String[] {};
+		}));
 		
 		new CommandAPICommand("test").withArguments(arguments)
 		.executes((sender, args) -> {

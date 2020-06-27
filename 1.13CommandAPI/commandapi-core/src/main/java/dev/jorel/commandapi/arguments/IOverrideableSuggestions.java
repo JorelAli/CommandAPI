@@ -1,5 +1,6 @@
 package dev.jorel.commandapi.arguments;
 
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.bukkit.command.CommandSender;
@@ -26,6 +27,15 @@ public interface IOverrideableSuggestions<T extends Argument> {
 	 * @return the current argument
 	 */
 	T overrideSuggestions(Function<CommandSender, String[]> suggestions);
+	
+	/**
+	 * Override the suggestions of this argument with a function that maps the
+	 * command sender to a String array.
+	 * 
+	 * @param suggestions the function to override suggestions with
+	 * @return the current argument
+	 */
+	T overrideSuggestions(BiFunction<CommandSender, Object[], String[]> suggestions);
 
 	/**
 	 * Returns a function that maps the command sender to a String array of
@@ -35,6 +45,6 @@ public interface IOverrideableSuggestions<T extends Argument> {
 	 * @return a function that provides suggestions, or <code>null</code> if there
 	 *         are no overridden suggestions.
 	 */
-	Function<CommandSender, String[]> getOverriddenSuggestions();
+	BiFunction<CommandSender, Object[], String[]> getOverriddenSuggestions();
 	
 }

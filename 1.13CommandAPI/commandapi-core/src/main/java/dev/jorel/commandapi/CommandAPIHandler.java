@@ -48,7 +48,6 @@ import dev.jorel.commandapi.arguments.Location2DArgument;
 import dev.jorel.commandapi.arguments.LocationArgument;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.ScoreHolderArgument;
-import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.nms.NMS;
 
 /**
@@ -558,15 +557,6 @@ public final class CommandAPIHandler {
 
 	// NMS ICompletionProvider.a()
 	private CompletableFuture<Suggestions> getSuggestionsBuilder(SuggestionsBuilder builder, String[] array) {
-		
-		///TODO: Remove after testing
-		System.out.println("== SugBuilder ==");
-		System.out.println("Input: " + builder.getInput());
-		System.out.println("Start: " + builder.getStart());
-		System.out.println("Remaining: " + builder.getRemaining());
-		System.out.println("== End SugBuilder ==");
-		
-		
 		String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
 		for (int i = 0; i < array.length; i++) {
 			String str = array[i];
@@ -619,30 +609,48 @@ public final class CommandAPIHandler {
 	             permissionCheck(nms.getCommandSenderForCLW(clw), permission)
 	        );
 		} else {
-			//TODO: Testing only, remove for deployment
-			if(type instanceof StringArgument) {
-				StringArgument stringArg = (StringArgument) type;
+			
+			
 				
-				return getRequiredArgumentBuilderWithProvider(argumentName, type.getRawType(), permission,
-						(CommandContext context, SuggestionsBuilder builder) -> {
-							
-							HashMap<String, Object> argMapValues = new HashMap<>();
-							System.out.println("Initializing argmap");
-							for(String s : args.keySet()) {
-								System.out.println("Testing whether I can add " + s);
-								if(s.equals(argumentName)) {
-									break;
-								}
-								System.out.println("Yes I can!");
-								argMapValues.put(s, context.getArgument(s, args.get(s).getPrimitiveType()));
-							}
-//							context.getArgument(name, clazz)
-							return getSuggestionsBuilder(builder, stringArg.getSpecialOverriddenSuggestions().apply(nms.getCommandSenderForCLW(context.getSource()), argMapValues));
-						});
-			}
 			return getRequiredArgumentBuilderWithProvider(argumentName, type.getRawType(), permission,
-					(CommandContext context, SuggestionsBuilder builder) -> getSuggestionsBuilder(builder,
-							type.getOverriddenSuggestions().apply(nms.getCommandSenderForCLW(context.getSource()))));
+					(CommandContext context, SuggestionsBuilder builder) -> {
+						List<Object> previousArguments = new ArrayList<>();
+						
+						for(String s : args.keySet()) {
+							if(s.equals(argumentName)) {
+								break;
+							}
+							previousArguments.add(context.getArgument(s, args.get(s).getPrimitiveType()));
+						}
+						return getSuggestionsBuilder(builder, type.getOverriddenSuggestions().apply(nms.getCommandSenderForCLW(context.getSource()), previousArguments.toArray()));
+					});
+			
+			
+			
+			//TODO: Testing only, remove for deployment
+//			if(type instanceof StringArgument) {
+//				StringArgument stringArg = (StringArgument) type;
+//				
+//				return getRequiredArgumentBuilderWithProvider(argumentName, type.getRawType(), permission,
+//						(CommandContext context, SuggestionsBuilder builder) -> {
+//							
+//							HashMap<String, Object> argMapValues = new HashMap<>();
+//							System.out.println("Initializing argmap");
+//							for(String s : args.keySet()) {
+//								System.out.println("Testing whether I can add " + s);
+//								if(s.equals(argumentName)) {
+//									break;
+//								}
+//								System.out.println("Yes I can!");
+//								argMapValues.put(s, context.getArgument(s, args.get(s).getPrimitiveType()));
+//							}
+////							context.getArgument(name, clazz)
+//							return getSuggestionsBuilder(builder, stringArg.getSpecialOverriddenSuggestions().apply(nms.getCommandSenderForCLW(context.getSource()), argMapValues));
+//						});
+//			}
+//			return getRequiredArgumentBuilderWithProvider(argumentName, type.getRawType(), permission,
+//					(CommandContext context, SuggestionsBuilder builder) -> getSuggestionsBuilder(builder,
+//							type.getOverriddenSuggestions().apply(nms.getCommandSenderForCLW(context.getSource()))));
 		}
 	}
 
