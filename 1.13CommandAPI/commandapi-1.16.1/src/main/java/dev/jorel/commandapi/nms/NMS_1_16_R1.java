@@ -18,6 +18,7 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
@@ -26,6 +27,7 @@ import org.bukkit.craftbukkit.v1_16_R1.CraftParticle;
 import org.bukkit.craftbukkit.v1_16_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_16_R1.CraftSound;
 import org.bukkit.craftbukkit.v1_16_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R1.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_16_R1.command.ProxiedNativeCommandSender;
 import org.bukkit.craftbukkit.v1_16_R1.command.VanillaCommandWrapper;
 import org.bukkit.craftbukkit.v1_16_R1.enchantments.CraftEnchantment;
@@ -92,6 +94,7 @@ import net.minecraft.server.v1_16_R1.ArgumentScoreboardSlot;
 import net.minecraft.server.v1_16_R1.ArgumentScoreboardTeam;
 import net.minecraft.server.v1_16_R1.ArgumentScoreholder;
 import net.minecraft.server.v1_16_R1.ArgumentTag;
+import net.minecraft.server.v1_16_R1.ArgumentTile;
 import net.minecraft.server.v1_16_R1.ArgumentTime;
 import net.minecraft.server.v1_16_R1.ArgumentVec2;
 import net.minecraft.server.v1_16_R1.ArgumentVec2I;
@@ -734,6 +737,16 @@ public class NMS_1_16_R1 implements NMS {
 	public Biome getBiome(CommandContext cmdCtx, String key) {
 		MinecraftKey minecraftKey = (MinecraftKey) cmdCtx.getArgument(key, MinecraftKey.class);
 		return Biome.valueOf(minecraftKey.getKey().toUpperCase());
+	}
+	
+	@Override
+	public BlockData getBlockState(CommandContext cmdCtx, String key) {
+		return CraftBlockData.fromData(ArgumentTile.a(cmdCtx, key).a());
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentBlockState() {
+		return ArgumentTile.a();
 	}
 
 }

@@ -14,6 +14,7 @@ import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.block.Biome;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -152,6 +153,7 @@ public interface NMS {
 	/** Argument implementations without CommandSyntaxExceptions */
 	EnumSet<Axis>      getAxis(CommandContext<?> cmdCtx, String key);
 	Biome              getBiome(CommandContext<?> cmdCtx, String key);
+	BlockData          getBlockState(CommandContext<?> cmdCtx, String key);
 	ChatColor          getChatColor(CommandContext<?> cmdCtx, String key);
 	BaseComponent[]    getChatComponent(CommandContext<?> cmdCtx, String key);
 	Enchantment        getEnchantment(CommandContext<?> cmdCtx, String key);
@@ -168,6 +170,7 @@ public interface NMS {
 
 	/** Argument types */
 	ArgumentType<?> _ArgumentAxis();
+	ArgumentType<?> _ArgumentBlockState();
 	ArgumentType<?> _ArgumentChat();
 	ArgumentType<?> _ArgumentChatFormat();
 	ArgumentType<?> _ArgumentChatComponent();

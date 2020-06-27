@@ -214,6 +214,9 @@ public final class CommandAPIHandler {
 				case BIOME:
 					argList.add(nms.getBiome(cmdCtx, entry.getKey()));
 					break;
+				case BLOCKSTATE:
+					argList.add(nms.getBlockState(cmdCtx, entry.getKey()));
+					break;
 				case CHAT:
 					argList.add(nms.getChat(cmdCtx, entry.getKey()));
 					break;

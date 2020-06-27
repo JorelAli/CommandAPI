@@ -17,6 +17,7 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
@@ -25,6 +26,7 @@ import org.bukkit.craftbukkit.v1_13_R2.CraftParticle;
 import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_13_R2.CraftSound;
 import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_13_R2.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_13_R2.command.ProxiedNativeCommandSender;
 import org.bukkit.craftbukkit.v1_13_R2.command.VanillaCommandWrapper;
 import org.bukkit.craftbukkit.v1_13_R2.enchantments.CraftEnchantment;
@@ -51,12 +53,11 @@ import com.mojang.brigadier.suggestion.Suggestions;
 
 import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.arguments.LocationType;
-import dev.jorel.commandapi.arguments.ICustomProvidedArgument.SuggestionProviders;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
+import dev.jorel.commandapi.arguments.ICustomProvidedArgument.SuggestionProviders;
+import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.exceptions.BiomeArgumentException;
 import dev.jorel.commandapi.exceptions.TimeArgumentException;
-import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.IntegerRange;
@@ -91,6 +92,7 @@ import net.minecraft.server.v1_13_R2.ArgumentScoreboardSlot;
 import net.minecraft.server.v1_13_R2.ArgumentScoreboardTeam;
 import net.minecraft.server.v1_13_R2.ArgumentScoreholder;
 import net.minecraft.server.v1_13_R2.ArgumentTag;
+import net.minecraft.server.v1_13_R2.ArgumentTile;
 import net.minecraft.server.v1_13_R2.ArgumentVec2;
 import net.minecraft.server.v1_13_R2.ArgumentVec2I;
 import net.minecraft.server.v1_13_R2.ArgumentVec3;
@@ -672,5 +674,15 @@ public class NMS_1_13_1 implements NMS {
 	@Override
 	public Biome getBiome(CommandContext cmdCtx, String key) {
 		throw new BiomeArgumentException();
+	}
+	
+	@Override
+	public BlockData getBlockState(CommandContext cmdCtx, String key) {
+		return CraftBlockData.fromData(ArgumentTile.a(cmdCtx, key).a());
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentBlockState() {
+		return ArgumentTile.a();
 	}
 }
