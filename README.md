@@ -68,10 +68,10 @@ These versions of Minecraft must be installed in your local machine's Maven repo
 * Download the `BuildTools.jar` file from [here](https://hub.spigotmc.org/jenkins/job/BuildTools/)
 * Make sure you have maven installed on your machine. If not, it can be downloaded from [here](https://maven.apache.org/download.cgi)
 * If on Windows:
-  * Download the `downloadSpigot.bat` file [(from here)](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.bat) and place it in the same folder as the `BuildTools.jar`
+  * Download the `downloadSpigot.bat` file [(right click this link, save as...)](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.bat) and place it in the same folder as the `BuildTools.jar`
   * Double click on the `downloadSpigot.bat` file to run it
 * If on Linux/MacOS:
-  * Download the `downloadSpigot.sh` file [(from here)](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.sh) and place it in the same folder as the `BuildTools.jar`
+  * Download the `downloadSpigot.sh` file [(right click this link, save as...)](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.sh) and place it in the same folder as the `BuildTools.jar`
   * Open up a terminal in your folder and make the `downloadSpigot.sh` file executable by using `chmod u+x ./downloadSpigot.sh`
   * Run the `downloadSpigot` file using `./downloadSpigot.sh`
 
