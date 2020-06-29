@@ -16,6 +16,8 @@
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
             <version>1.13.2-R0.1-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/../../libs/spigot-1.13.2.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>dev.jorel</groupId>
