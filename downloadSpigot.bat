@@ -1,24 +1,37 @@
-@echo off
-if exist BuildTools.jar (
-	mkdir spigotlibs
-	if not exist spigot-1.13.jar echo Building Spigot 1.13 && java -jar BuildTools.jar --rev 1.13
-	if not exist spigot-1.13.1.jar echo Building Spigot 1.13.1 && java -jar BuildTools.jar --rev 1.13.1
-	if not exist spigot-1.13.2.jar echo Building Spigot 1.13.2 && java -jar BuildTools.jar --rev 1.13.2
-	if not exist spigot-1.14.2.jar echo Building Spigot 1.14.2 && java -jar BuildTools.jar --rev 1.14.2
-	if not exist spigot-1.14.3.jar echo Building Spigot 1.14.3 && java -jar BuildTools.jar --rev 1.14.3
-	if not exist spigot-1.14.4.jar echo Building Spigot 1.14.4 && java -jar BuildTools.jar --rev 1.14.4
-	if not exist spigot-1.15.2.jar echo Building Spigot 1.15.2 && java -jar BuildTools.jar --rev 1.15.2
-	if not exist spigot-1.16.1.jar echo Building Spigot 1.16.1 && java -jar BuildTools.jar --rev 1.16.1
+@ECHO OFF
+
+IF exist BuildTools.jar (
+
+	mkdir buildspigot 
+	copy BuildTools.jar buildspigot 
+	cd buildspigot
+
+	FOR %%v IN (
+		1.13
+		1.13.1
+		1.13.2
+		1.14
+		1.14.3
+		1.14.4
+		1.15
+		1.16.1
+	) DO (
+		@ECHO OFF
+		mvn dependency:get --batch-mode -q -Dartifact=org.spigotmc:spigot:%%v-R0.1-SNAPSHOT
+		IF errorlevel 1 (
+			echo Building Spigot %%v
+			java -jar BuildTools.jar --rev %%v
+		) ELSE (
+			echo Found spigot version %%v
+		)
+	)
 	
-	copy spigot-1.13.jar spigotlibs
-	copy spigot-1.13.1.jar spigotlibs
-	copy spigot-1.13.2.jar spigotlibs
-	copy spigot-1.14.2.jar spigotlibs
-	copy spigot-1.14.3.jar spigotlibs
-	copy spigot-1.14.4.jar spigotlibs
-	copy spigot-1.15.2.jar spigotlibs
-	copy spigot-1.16.1.jar spigotlibs
-	
+	cd ..
+	del /f /s /q buildspigot 1>nul
+	rmdir /s /q buildspigot
 	echo Done!
 	pause
-) else (echo BuildTool.jar not found! && pause)
+	exit
+) ELSE (
+	echo Couldn't find the BuildTools.jar! && pause exit
+)
