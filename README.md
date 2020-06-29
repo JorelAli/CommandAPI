@@ -120,8 +120,11 @@ These versions of Minecraft must be installed in your local machine's Maven repo
     * SuggestedStringArgument
     * DynamicSuggestedStringArgument
     * DefinedCustomArguments
-* Version 2.2a
+* Version 2.3a
   * Adds support for Minecraft 1.15, 1.15.1 and 1.15.2
+* Version 2.3
+  * Fixes bug where permissions didn't work
+  * Fixes bug where functions weren't working on 1.14.3 and 1.14.4
 * Version 2.2
   * Adds support for Minecraft 1.13 and 1.13.1 _(Funny isn't it? It's called the 1.13 CommandAPI but never supported Minecraft 1.13 until now)_
   * Improves support for different versions
