@@ -1,9 +1,0 @@
-bin
-libs
-.classpath
-.project
-.settings
-target
-spigotlibs/*
-.idea/
-*.iml

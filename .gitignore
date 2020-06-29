@@ -2,3 +2,8 @@
 *.iml
 build-works/
 libs/
+bin
+.classpath
+.project
+.settings
+target
