@@ -57,33 +57,27 @@ To build the CommandAPI, the following versions of Spigot are required:
 |                   |        |        |        |
 | ----------------- | ------ | ------ | ------ |
 | **1.13 versions** | 1.13   | 1.13.1 | 1.13.2 |
-| **1.14 versions** | 1.14.2 | 1.14.3 | 1.14.4 |
-| **1.15 versions** | 1.15.2 |        |        |
+| **1.14 versions** | 1.14   | 1.14.3 | 1.14.4 |
+| **1.15 versions** | 1.15   |        |        |
 | **1.16 versions** | 1.16.1 |        |        |
 
 These versions of Minecraft must be installed in your local machine's Maven repository (`~/.m2`). **The easiest way to do this is to build them manually using Spigot's BuildTools, as it automatically adds it to the `.m2` local repository folder.**
 
-#### Building them using _BuildTools_ + downloadSpigot file
+#### Building them using _BuildTools_ + downloadSpigot file (recommended)
 
-* Download the `BuildTools.jar` file from [here](https://hub.spigotmc.org/jenkins/job/BuildTools/) and place it in a separate directory _(trust me, this gets messy pretty quickly)_
-* Download the `downloadSpigot` file from this repository:
-  * If on Windows, use `downloadSpigot.bat`  [(from here)](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.bat)
-  * If on Linux/MacOS, use `downloadSpigot.sh`  [(from here)](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.bat)
+* Download the `BuildTools.jar` file from [here](https://hub.spigotmc.org/jenkins/job/BuildTools/)
+* Make sure you have maven installed on your machine. If not, it can be downloaded from [here](https://maven.apache.org/download.cgi)
 * If on Windows:
-  * Download the `downloadSpigot.bat` file from this repository [(or just right click here, save as...)](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.bat)
-  * Copy the `downloadSpigot.bat` file into the same directory as the `BuildTools.jar` file
+  * Download the `downloadSpigot.bat` file [(from here)](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.bat) and place it in the same folder as the `BuildTools.jar`
   * Double click on the `downloadSpigot.bat` file to run it
 * If on Linux/MacOS:
-  * If on linux/mac, download the `downloadSpigot.sh` file from this repository [(or just right click here, save as...)](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.sh)
-  * Copy the `downloadSpigot.sh` file into the same directory as the `BuildTools.jar` file
+  * Download the `downloadSpigot.sh` file [(from here)](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.sh) and place it in the same folder as the `BuildTools.jar`
   * Open up a terminal in your folder and make the `downloadSpigot.sh` file executable by using `chmod u+x ./downloadSpigot.sh`
   * Run the `downloadSpigot` file using `./downloadSpigot.sh`
 
-> **Note:** Sometimes, the `downloadSpigot` file doesn't work because of incompatibilities with cloning certain files it needs. If for any reason, downloadSpigot stops working, delete the directories created (BuildData, Bukkit, CraftBukkit, Spigot and work) and re-run the downloadSpigot file.
-
 #### Building them using _BuildTools_ + manual command line
 
-- Download the `BuildTools.jar` file from [here](https://hub.spigotmc.org/jenkins/job/BuildTools/) and place it in a separate directory _(trust me, this gets messy pretty quickly)_
+- Download the `BuildTools.jar` file from [here](https://hub.spigotmc.org/jenkins/job/BuildTools/) and place it in a separate directory
 - Use the command `java -jar BuildTools.jar --rev <VERSION>` to download the specific version of the Spigot.jar you need. For example, to download Spigot for 1.14.4, use `java -jar BuildTools.jar --rev 1.14.4`
 
 -----
