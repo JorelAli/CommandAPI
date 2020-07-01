@@ -67,6 +67,7 @@ var hierarchy =
         [ "dev.jorel.commandapi.arguments.AdvancementArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_advancement_argument.html", null ],
         [ "dev.jorel.commandapi.arguments.AxisArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_axis_argument.html", null ],
         [ "dev.jorel.commandapi.arguments.BiomeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_biome_argument.html", null ],
+        [ "dev.jorel.commandapi.arguments.BlockStateArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument.html", null ],
         [ "dev.jorel.commandapi.arguments.BooleanArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_boolean_argument.html", null ],
         [ "dev.jorel.commandapi.arguments.ChatArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_chat_argument.html", null ],
         [ "dev.jorel.commandapi.arguments.ChatColorArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_chat_color_argument.html", null ],
