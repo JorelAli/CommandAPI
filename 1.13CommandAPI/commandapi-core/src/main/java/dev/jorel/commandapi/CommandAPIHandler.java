@@ -41,8 +41,8 @@ import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.CustomArgument;
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
 import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
-import dev.jorel.commandapi.arguments.ICustomProvidedArgument;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
+import dev.jorel.commandapi.arguments.ICustomProvidedArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.Location2DArgument;
 import dev.jorel.commandapi.arguments.LocationArgument;
@@ -54,7 +54,7 @@ import dev.jorel.commandapi.nms.NMS;
  * Handles the main backend of the CommandAPI. This constructs brigadier Command
  * objects, applies and generates arguments and handles suggestions. This also
  * handles permission registration for Bukkit, interactions for NMS and the
- * registration and unregistration of commands. 
+ * registration and unregistration of commands.
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public final class CommandAPIHandler {
@@ -72,6 +72,7 @@ public final class CommandAPIHandler {
 
 	/**
 	 * Returns an instance of NMS.
+	 * 
 	 * @return an instance of NMS
 	 */
 	public static NMS getNMS() {
@@ -121,8 +122,8 @@ public final class CommandAPIHandler {
 		if (CommandAPIMain.getConfiguration().hasVerboseOutput()) {
 			String compatibleVersions = Arrays.toString(nms.compatibleVersions());
 			compatibleVersions = compatibleVersions.substring(1, compatibleVersions.length() - 1);
-			CommandAPIMain.getLog()
-					.info("Hooked into NMS " + nms.getClass().getName() + " (compatible with " + compatibleVersions + ")");
+			CommandAPIMain.getLog().info(
+					"Hooked into NMS " + nms.getClass().getName() + " (compatible with " + compatibleVersions + ")");
 		}
 
 		// Checks other dependencies
@@ -185,7 +186,9 @@ public final class CommandAPIHandler {
 
 	/**
 	 * Generates a command to be registered by the CommandAPI.
-	 * @param args set of ordered argument pairs which contain the tooltip text and their argument types 
+	 * 
+	 * @param args     set of ordered argument pairs which contain the tooltip text
+	 *                 and their argument types
 	 * @param executor code to be ran when the command is executed
 	 * @return a brigadier command which is registered internally
 	 * @throws CommandSyntaxException if an error occurs when the command is ran
@@ -210,9 +213,12 @@ public final class CommandAPIHandler {
 					break;
 				case AXIS:
 					argList.add(nms.getAxis(cmdCtx, entry.getKey()));
-					break;	
+					break;
 				case BIOME:
 					argList.add(nms.getBiome(cmdCtx, entry.getKey()));
+					break;
+				case BLOCKSTATE:
+					argList.add(nms.getBlockState(cmdCtx, entry.getKey()));
 					break;
 				case CHAT:
 					argList.add(nms.getChat(cmdCtx, entry.getKey()));
@@ -372,7 +378,8 @@ public final class CommandAPIHandler {
 
 	/**
 	 * Checks if a sender has a given permission.
-	 * @param sender the sender to check permissions of
+	 * 
+	 * @param sender     the sender to check permissions of
 	 * @param permission the CommandAPI CommandPermission permission to check
 	 * @return true if the sender satisfies the provided permission
 	 */
@@ -489,16 +496,24 @@ public final class CommandAPIHandler {
 			// New scope used here to prevent innerArg accidentally being used below
 			{
 				Argument innerArg = args.get(keys.get(keys.size() - 1));
+
+				// Handle Literal arguments
 				if (innerArg instanceof LiteralArgument) {
 					String str = ((LiteralArgument) innerArg).getLiteral();
 					inner = getLiteralArgumentBuilderArgument(str, innerArg.getArgumentPermission()).executes(command);
-				} else if (innerArg instanceof ICustomProvidedArgument) {
+				}
+
+				// Handle arguments with built-in suggestion providers
+				else if (innerArg instanceof ICustomProvidedArgument) {
 					inner = getRequiredArgumentBuilderWithProvider(keys.get(keys.size() - 1), innerArg.getRawType(),
 							innerArg.getArgumentPermission(),
 							nms.getSuggestionProvider(((ICustomProvidedArgument) innerArg).getSuggestionProvider()))
 									.executes(command);
-				} else {
-					inner = getRequiredArgumentBuilderDynamic(keys.get(keys.size() - 1), innerArg,
+				}
+
+				// Handle every other type of argument
+				else {
+					inner = getRequiredArgumentBuilderDynamic(args, keys.get(keys.size() - 1), innerArg,
 							innerArg.getArgumentPermission()).executes(command);
 				}
 			}
@@ -507,17 +522,25 @@ public final class CommandAPIHandler {
 			ArgumentBuilder outer = inner;
 			for (int i = keys.size() - 2; i >= 0; i--) {
 				Argument outerArg = args.get(keys.get(i));
+
+				// Handle Literal arguments
 				if (outerArg instanceof LiteralArgument) {
 					String str = ((LiteralArgument) outerArg).getLiteral();
 					outer = getLiteralArgumentBuilderArgument(str, outerArg.getArgumentPermission()).then(outer);
-				} else if (outerArg instanceof ICustomProvidedArgument) {
+				}
+
+				// Handle arguments with built-in suggestion providers
+				else if (outerArg instanceof ICustomProvidedArgument) {
 					outer = getRequiredArgumentBuilderWithProvider(keys.get(i), outerArg.getRawType(),
 							outerArg.getArgumentPermission(),
 							nms.getSuggestionProvider(((ICustomProvidedArgument) outerArg).getSuggestionProvider()))
 									.then(outer);
-				} else {
-					outer = getRequiredArgumentBuilderDynamic(keys.get(i), outerArg, outerArg.getArgumentPermission())
-							.then(outer);
+				}
+
+				// Handle every other type of argument
+				else {
+					outer = getRequiredArgumentBuilderDynamic(args, keys.get(i), outerArg,
+							outerArg.getArgumentPermission()).then(outer);
 				}
 			}
 
@@ -570,6 +593,7 @@ public final class CommandAPIHandler {
 
 	/**
 	 * Creates a literal for a given name.
+	 * 
 	 * @param commandName the name of the literal to create
 	 * @return a brigadier LiteralArgumentBuilder representing a literal
 	 */
@@ -579,8 +603,9 @@ public final class CommandAPIHandler {
 
 	/**
 	 * Creates a literal for a given name that requires a specified permission.
+	 * 
 	 * @param commandName the name fo the literal to create
-	 * @param permission the permission required to use this literal
+	 * @param permission  the permission required to use this literal
 	 * @return a brigadier LiteralArgumentBuilder representing a literal
 	 */
 	private LiteralArgumentBuilder<?> getLiteralArgumentBuilderArgument(String commandName,
@@ -590,16 +615,33 @@ public final class CommandAPIHandler {
 	}
 
 	// Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
-	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilderDynamic(String argumentName, Argument type,
+	private <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilderDynamic(
+			final LinkedHashMap<String, Argument> args, String argumentName, Argument type,
 			CommandPermission permission) {
-		if(type.getOverriddenSuggestions() == null) {
-			return RequiredArgumentBuilder.argument(argumentName, (ArgumentType<T>) type.getRawType()).requires(clw -> 
-	             permissionCheck(nms.getCommandSenderForCLW(clw), permission)
-	        );
-		} else {
+
+		// If there are no changes to the default suggestions, return it as normal
+		if (type.getOverriddenSuggestions() == null) {
+			return RequiredArgumentBuilder.argument(argumentName, (ArgumentType<T>) type.getRawType())
+					.requires(clw -> permissionCheck(nms.getCommandSenderForCLW(clw), permission));
+		}
+
+		// Otherwise, we have to handle arguments of the form BiFunction<CommandSender,
+		// Object[], String[]>
+		else {
 			return getRequiredArgumentBuilderWithProvider(argumentName, type.getRawType(), permission,
-					(CommandContext context, SuggestionsBuilder builder) -> getSuggestionsBuilder(builder,
-							type.getOverriddenSuggestions().apply(nms.getCommandSenderForCLW(context.getSource()))));
+					(CommandContext context, SuggestionsBuilder builder) -> {
+						// Populate Object[], which is our previously filled arguments
+						List<Object> previousArguments = new ArrayList<>();
+
+						for (String s : args.keySet()) {
+							if (s.equals(argumentName)) {
+								break;
+							}
+							previousArguments.add(context.getArgument(s, args.get(s).getPrimitiveType()));
+						}
+						return getSuggestionsBuilder(builder, type.getOverriddenSuggestions()
+								.apply(nms.getCommandSenderForCLW(context.getSource()), previousArguments.toArray()));
+					});
 		}
 	}
 

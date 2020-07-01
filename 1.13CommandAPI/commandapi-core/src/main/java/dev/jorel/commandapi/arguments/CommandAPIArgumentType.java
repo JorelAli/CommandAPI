@@ -174,6 +174,11 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The TimeArgument
 	 */
-	TIME;
+	TIME, 
+	
+	/**
+	 * The BlockStateArgument
+	 */
+	BLOCKSTATE;
 
 }

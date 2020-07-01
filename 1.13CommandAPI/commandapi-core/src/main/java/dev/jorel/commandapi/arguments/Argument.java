@@ -1,5 +1,6 @@
 package dev.jorel.commandapi.arguments;
 
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.bukkit.command.CommandSender;
@@ -59,7 +60,7 @@ public abstract class Argument implements IOverrideableSuggestions<Argument> {
 	// Suggestions //
 	/////////////////
 
-	private Function<CommandSender, String[]> suggestions = null;
+	private BiFunction<CommandSender, Object[], String[]> suggestions = null;
 
 	/**
 	 * Override the suggestions of this argument with a String array. Typically,
@@ -70,7 +71,7 @@ public abstract class Argument implements IOverrideableSuggestions<Argument> {
 	 */
 	@Override
 	public final Argument overrideSuggestions(String... suggestions) {
-		this.suggestions = (c) -> suggestions;
+		this.suggestions = (c, m) -> suggestions;
 		return this;
 	}
 
@@ -83,6 +84,19 @@ public abstract class Argument implements IOverrideableSuggestions<Argument> {
 	 */
 	@Override
 	public final Argument overrideSuggestions(Function<CommandSender, String[]> suggestions) {
+		this.suggestions = (c, m) -> suggestions.apply(c);
+		return this;
+	}
+	
+	/**
+	 * Override the suggestions of this argument with a function that maps the
+	 * command sender and a data set of previously declared arguments to a String array.
+	 * 
+	 * @param suggestions the function to override suggestions with
+	 * @return the current argument
+	 */
+	@Override
+	public final Argument overrideSuggestions(BiFunction<CommandSender, Object[], String[]> suggestions) {
 		this.suggestions = suggestions;
 		return this;
 	}
@@ -96,7 +110,7 @@ public abstract class Argument implements IOverrideableSuggestions<Argument> {
 	 *         are no overridden suggestions.
 	 */
 	@Override
-	public final Function<CommandSender, String[]> getOverriddenSuggestions() {
+	public final BiFunction<CommandSender, Object[], String[]> getOverriddenSuggestions() {
 		return suggestions;
 	}
 

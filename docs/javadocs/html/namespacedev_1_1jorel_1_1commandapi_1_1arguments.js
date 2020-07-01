@@ -4,6 +4,7 @@ var namespacedev_1_1jorel_1_1commandapi_1_1arguments =
     [ "Argument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument" ],
     [ "AxisArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_axis_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_axis_argument" ],
     [ "BiomeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_biome_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_biome_argument" ],
+    [ "BlockStateArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument" ],
     [ "BooleanArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_boolean_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_boolean_argument" ],
     [ "ChatArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_chat_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_chat_argument" ],
     [ "ChatColorArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_chat_color_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_chat_color_argument" ],
