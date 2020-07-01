@@ -113,11 +113,6 @@ public abstract class Argument implements IOverrideableSuggestions<Argument> {
 	public final BiFunction<CommandSender, Object[], String[]> getOverriddenSuggestions() {
 		return suggestions;
 	}
-	
-	//TODO: Change to abstract later after testing
-	public boolean validate(String argument) {
-		return true;
-	}
 
 	/////////////////
 	// Permissions //

@@ -32,9 +32,15 @@ Using the search icon in the top left corner, you can search for anything in thi
 
 -----
 
-## Documentation updates
+## Documentation changelog
 
-Whenever a new version of the CommandAPI comes out, the version number changes _(as you'd expect)_. In the same manner, if any changes to the documentation were made, the documentation version number changes. Ensure you keep up to date on the latest changes to the documentation (You can view the documentation version at the top of the page) when new versions of the CommandAPI are released. This changelog below gives a brief overview of the changes to pages that were made between each version of the documentation, as only the latest version of the documentation is hosted online.
+Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
+
+### Documentation changes 3.0 \\(\rightarrow\\) 3.1:
+
+- Adds new section [5.1 Argument suggestions](./argumentsuggestions.md) to cover how to override suggestions - Having it all in section _5. Arguments_ was a bit too content-heavy
+- Adds documentation for the new `.overrideSuggestions()` method in section [5.1 Argument suggestions](./argumentsuggestions.md#suggestions-depending-on-previous-arguments)
+- Simplified the description of the documentation updates
 
 ### Documentation changes 2.1 \\(\rightarrow\\) 3.0:
 

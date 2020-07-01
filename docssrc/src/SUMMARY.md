@@ -18,6 +18,7 @@
   - [Resulting command executors](./resultingcommandexecutors.md)
   - [Handling command failures](./commandfailures.md)
 - [Arguments](./arguments.md)
+  - [Argument suggestions](./argumentsuggestions.md)
   - [Primitive arguments](./primitivearguments.md)
   - [Ranged arguments](./rangedarguments.md)
   - [String arguments](./stringarguments.md)

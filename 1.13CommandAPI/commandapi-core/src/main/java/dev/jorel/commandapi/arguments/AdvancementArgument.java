@@ -28,8 +28,8 @@ public class AdvancementArgument extends Argument implements ICustomProvidedArgu
 		return SuggestionProviders.ADVANCEMENTS;
 	}
 
-	@Override
-	public boolean validate(String argument) {
-		return CommandAPIHandler.getNMS().validateMinecraftKeyRegistered(argument);
-	}
+//	@Override
+//	public boolean validate(String argument) {
+//		return CommandAPIHandler.getNMS().validateMinecraftKeyRegistered(argument);
+//	}
 }
