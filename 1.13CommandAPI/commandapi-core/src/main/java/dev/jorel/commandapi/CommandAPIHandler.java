@@ -38,7 +38,6 @@ import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import dev.jorel.commandapi.arguments.Argument;
-import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
 import dev.jorel.commandapi.arguments.CustomArgument;
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
 import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
@@ -200,21 +199,18 @@ public final class CommandAPIHandler {
 		// Generate our command from executor
 		return (cmdCtx) -> {
 
-			// Get the CommandSender via NMS
-			CommandSender sender = nms.getSenderForCommand(cmdCtx);
-
 			// Array for arguments for executor
 			List<Object> argList = new ArrayList<>();
 
 			// Populate array
 			for (Entry<String, Argument> entry : args.entrySet()) {
-				Object result = parseArgument(entry.getValue().getArgumentType(), cmdCtx, entry.getKey(), entry.getValue(), sender);
+				Object result = parseArgument(cmdCtx, entry.getKey(), entry.getValue());
 				if(result != null) {
 					argList.add(result);
 				}
 			}
 
-			return executor.execute(sender, argList.toArray());
+			return executor.execute(nms.getSenderForCommand(cmdCtx), argList.toArray());
 		};
 	}
 	
@@ -228,9 +224,9 @@ public final class CommandAPIHandler {
 	 * @return the standard Bukkit type
 	 * @throws CommandSyntaxException
 	 */
-	private Object parseArgument(CommandAPIArgumentType type, CommandContext cmdCtx, String key, Argument value,
-			CommandSender sender) throws CommandSyntaxException {
-		switch (type) {
+	private Object parseArgument(CommandContext cmdCtx, String key, Argument value) throws CommandSyntaxException {
+		CommandSender sender = nms.getSenderForCommand(cmdCtx);
+		switch (value.getArgumentType()) {
 		case ADVANCEMENT:
 			return nms.getAdvancement(cmdCtx, key);
 		case AXIS:
@@ -628,7 +624,7 @@ public final class CommandAPIHandler {
 							if (s.equals(argumentName)) {
 								break;
 							}
-							previousArguments.add(parseArgument(args.get(s).getArgumentType(), context, s, args.get(s), nms.getCommandSenderForCLW(context.getSource())));
+							previousArguments.add(parseArgument(context, s, args.get(s)));
 						}
 						return getSuggestionsBuilder(builder, type.getOverriddenSuggestions()
 								.apply(nms.getCommandSenderForCLW(context.getSource()), previousArguments.toArray()));
