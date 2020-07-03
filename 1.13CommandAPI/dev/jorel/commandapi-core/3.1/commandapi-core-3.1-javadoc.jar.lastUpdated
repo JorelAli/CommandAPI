@@ -1,0 +1,10 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Fri Jul 03 19:25:50 BST 2020
+https\://hub.spigotmc.org/nexus/content/repositories/snapshots/.error=
+https\://hub.spigotmc.org/nexus/content/repositories/snapshots/.lastUpdated=1593800749786
+https\://repo.codemc.org/repository/maven-public/.lastUpdated=1593800750045
+https\://libraries.minecraft.net/.lastUpdated=1593800749946
+https\://repo.maven.apache.org/maven2/.lastUpdated=1593800750245
+https\://repo.codemc.org/repository/maven-public/.error=
+https\://libraries.minecraft.net/.error=
+https\://repo.maven.apache.org/maven2/.error=
