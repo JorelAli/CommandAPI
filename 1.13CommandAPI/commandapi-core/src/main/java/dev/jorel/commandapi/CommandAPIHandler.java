@@ -199,142 +199,125 @@ public final class CommandAPIHandler {
 		// Generate our command from executor
 		return (cmdCtx) -> {
 
-			// Get the CommandSender via NMS
-			CommandSender sender = nms.getSenderForCommand(cmdCtx);
-
 			// Array for arguments for executor
 			List<Object> argList = new ArrayList<>();
 
 			// Populate array
 			for (Entry<String, Argument> entry : args.entrySet()) {
-				switch (entry.getValue().getArgumentType()) {
-				case ADVANCEMENT:
-					argList.add(nms.getAdvancement(cmdCtx, entry.getKey()));
-					break;
-				case AXIS:
-					argList.add(nms.getAxis(cmdCtx, entry.getKey()));
-					break;
-				case BIOME:
-					argList.add(nms.getBiome(cmdCtx, entry.getKey()));
-					break;
-				case BLOCKSTATE:
-					argList.add(nms.getBlockState(cmdCtx, entry.getKey()));
-					break;
-				case CHAT:
-					argList.add(nms.getChat(cmdCtx, entry.getKey()));
-					break;
-				case CHATCOLOR:
-					argList.add(nms.getChatColor(cmdCtx, entry.getKey()));
-					break;
-				case CHAT_COMPONENT:
-					argList.add(nms.getChatComponent(cmdCtx, entry.getKey()));
-					break;
-				case CUSTOM:
-					CustomArgument arg = (CustomArgument) entry.getValue();
-					String customresult = (String) cmdCtx.getArgument(entry.getKey(), String.class);
-					try {
-						argList.add(arg.getParser().apply(customresult));
-					} catch (CustomArgumentException e) {
-						throw e.toCommandSyntax(customresult, cmdCtx);
-					} catch (Exception e) {
-						String errorMsg = new MessageBuilder("Error in executing command ").appendFullInput()
-								.append(" - ").appendArgInput().appendHere().toString().replace("%input%", customresult)
-								.replace("%finput%", cmdCtx.getInput());
-						throw new SimpleCommandExceptionType(() -> {
-							return errorMsg;
-						}).create();
-					}
-					break;
-				case ENCHANTMENT:
-					argList.add(nms.getEnchantment(cmdCtx, entry.getKey()));
-					break;
-				case ENTITY_SELECTOR:
-					EntitySelectorArgument argument = (EntitySelectorArgument) entry.getValue();
-					argList.add(nms.getEntitySelector(cmdCtx, entry.getKey(), argument.getEntitySelector()));
-					break;
-				case ENTITY_TYPE:
-					argList.add(nms.getEntityType(cmdCtx, entry.getKey(), sender));
-					break;
-				case ENVIRONMENT:
-					argList.add(nms.getDimension(cmdCtx, entry.getKey()));
-					break;
-				case FLOAT_RANGE:
-					argList.add(nms.getFloatRange(cmdCtx, entry.getKey()));
-					break;
-				case FUNCTION:
-					argList.add(nms.getFunction(cmdCtx, entry.getKey()));
-					break;
-				case INT_RANGE:
-					argList.add(nms.getIntRange(cmdCtx, entry.getKey()));
-					break;
-				case ITEMSTACK:
-					argList.add(nms.getItemStack(cmdCtx, entry.getKey()));
-					break;
-				case LITERAL:
-					break;
-				case LOCATION:
-					LocationType locationType = ((LocationArgument) entry.getValue()).getLocationType();
-					argList.add(nms.getLocation(cmdCtx, entry.getKey(), locationType, sender));
-					break;
-				case LOCATION_2D:
-					LocationType locationType2d = ((Location2DArgument) entry.getValue()).getLocationType();
-					argList.add(nms.getLocation2D(cmdCtx, entry.getKey(), locationType2d, sender));
-					break;
-				case LOOT_TABLE:
-					argList.add(nms.getLootTable(cmdCtx, entry.getKey()));
-					break;
-				case MATH_OPERATION:
-					argList.add(nms.getMathOperation(cmdCtx, entry.getKey()));
-					break;
-				case NBT_COMPOUND:
-					argList.add(nms.getNBTCompound(cmdCtx, entry.getKey()));
-					break;
-				case OBJECTIVE:
-					argList.add(nms.getObjective(cmdCtx, entry.getKey(), sender));
-					break;
-				case OBJECTIVE_CRITERIA:
-					argList.add(nms.getObjectiveCriteria(cmdCtx, entry.getKey()));
-					break;
-				case PARTICLE:
-					argList.add(nms.getParticle(cmdCtx, entry.getKey()));
-					break;
-				case PLAYER:
-					argList.add(nms.getPlayer(cmdCtx, entry.getKey()));
-					break;
-				case POTION_EFFECT:
-					argList.add(nms.getPotionEffect(cmdCtx, entry.getKey()));
-					break;
-				case RECIPE:
-					argList.add(nms.getRecipe(cmdCtx, entry.getKey()));
-					break;
-				case ROTATION:
-					argList.add(nms.getRotation(cmdCtx, entry.getKey()));
-					break;
-				case SCORE_HOLDER:
-					ScoreHolderArgument scoreHolderArgument = (ScoreHolderArgument) entry.getValue();
-					argList.add(scoreHolderArgument.isSingle() ? nms.getScoreHolderSingle(cmdCtx, entry.getKey())
-							: nms.getScoreHolderMultiple(cmdCtx, entry.getKey()));
-					break;
-				case SCOREBOARD_SLOT:
-					argList.add(nms.getScoreboardSlot(cmdCtx, entry.getKey()));
-					break;
-				case SIMPLE_TYPE:
-					argList.add(cmdCtx.getArgument(entry.getKey(), entry.getValue().getPrimitiveType()));
-					break;
-				case SOUND:
-					argList.add(nms.getSound(cmdCtx, entry.getKey()));
-					break;
-				case TEAM:
-					argList.add(nms.getTeam(cmdCtx, entry.getKey(), sender));
-					break;
-				case TIME:
-					argList.add(nms.getTime(cmdCtx, entry.getKey()));
-					break;
+				Object result = parseArgument(cmdCtx, entry.getKey(), entry.getValue());
+				if(result != null) {
+					argList.add(result);
 				}
 			}
 
-			return executor.execute(sender, argList.toArray());
+			return executor.execute(nms.getSenderForCommand(cmdCtx), argList.toArray());
 		};
+	}
+	
+	/**
+	 * Parses an argument and converts it into its standard Bukkit type (as defined in NMS.java)
+	 * @param type the argument type
+	 * @param cmdCtx the command context
+	 * @param key the key (declared in arguments)
+	 * @param value the value (the argument declared in arguments)
+	 * @param sender the command sender
+	 * @return the standard Bukkit type
+	 * @throws CommandSyntaxException
+	 */
+	private Object parseArgument(CommandContext cmdCtx, String key, Argument value) throws CommandSyntaxException {
+		CommandSender sender = nms.getSenderForCommand(cmdCtx);
+		switch (value.getArgumentType()) {
+		case ADVANCEMENT:
+			return nms.getAdvancement(cmdCtx, key);
+		case AXIS:
+			return nms.getAxis(cmdCtx, key);
+		case BIOME:
+			return nms.getBiome(cmdCtx, key);
+		case BLOCKSTATE:
+			return nms.getBlockState(cmdCtx, key);
+		case CHAT:
+			return nms.getChat(cmdCtx, key);
+		case CHATCOLOR:
+			return nms.getChatColor(cmdCtx, key);
+		case CHAT_COMPONENT:
+			return nms.getChatComponent(cmdCtx, key);
+		case CUSTOM:
+			CustomArgument arg = (CustomArgument) value;
+			String customresult = (String) cmdCtx.getArgument(key, String.class);
+			try {
+				return arg.getParser().apply(customresult);
+			} catch (CustomArgumentException e) {
+				throw e.toCommandSyntax(customresult, cmdCtx);
+			} catch (Exception e) {
+				String errorMsg = new MessageBuilder("Error in executing command ").appendFullInput().append(" - ")
+						.appendArgInput().appendHere().toString().replace("%input%", customresult)
+						.replace("%finput%", cmdCtx.getInput());
+				throw new SimpleCommandExceptionType(() -> {
+					return errorMsg;
+				}).create();
+			}
+		case ENCHANTMENT:
+			return nms.getEnchantment(cmdCtx, key);
+		case ENTITY_SELECTOR:
+			EntitySelectorArgument argument = (EntitySelectorArgument) value;
+			return nms.getEntitySelector(cmdCtx, key, argument.getEntitySelector());
+		case ENTITY_TYPE:
+			return nms.getEntityType(cmdCtx, key, sender);
+		case ENVIRONMENT:
+			return nms.getDimension(cmdCtx, key);
+		case FLOAT_RANGE:
+			return nms.getFloatRange(cmdCtx, key);
+		case FUNCTION:
+			return nms.getFunction(cmdCtx, key);
+		case INT_RANGE:
+			return nms.getIntRange(cmdCtx, key);
+		case ITEMSTACK:
+			return nms.getItemStack(cmdCtx, key);
+		case LITERAL:
+			return null;
+		case LOCATION:
+			LocationType locationType = ((LocationArgument) value).getLocationType();
+			return nms.getLocation(cmdCtx, key, locationType, sender);
+		case LOCATION_2D:
+			LocationType locationType2d = ((Location2DArgument) value).getLocationType();
+			return nms.getLocation2D(cmdCtx, key, locationType2d, sender);
+		case LOOT_TABLE:
+			return nms.getLootTable(cmdCtx, key);
+		case MATH_OPERATION:
+			return nms.getMathOperation(cmdCtx, key);
+		case NBT_COMPOUND:
+			return nms.getNBTCompound(cmdCtx, key);
+		case OBJECTIVE:
+			return nms.getObjective(cmdCtx, key, sender);
+		case OBJECTIVE_CRITERIA:
+			return nms.getObjectiveCriteria(cmdCtx, key);
+		case PARTICLE:
+			return nms.getParticle(cmdCtx, key);
+		case PLAYER:
+			return nms.getPlayer(cmdCtx, key);
+		case POTION_EFFECT:
+			return nms.getPotionEffect(cmdCtx, key);
+		case RECIPE:
+			return nms.getRecipe(cmdCtx, key);
+		case ROTATION:
+			return nms.getRotation(cmdCtx, key);
+		case SCORE_HOLDER:
+			ScoreHolderArgument scoreHolderArgument = (ScoreHolderArgument) value;
+			return scoreHolderArgument.isSingle() ? nms.getScoreHolderSingle(cmdCtx, key)
+					: nms.getScoreHolderMultiple(cmdCtx, key);
+		case SCOREBOARD_SLOT:
+			return nms.getScoreboardSlot(cmdCtx, key);
+		case SIMPLE_TYPE:
+			return cmdCtx.getArgument(key, value.getPrimitiveType());
+		case SOUND:
+			return nms.getSound(cmdCtx, key);
+		case TEAM:
+			return nms.getTeam(cmdCtx, key, sender);
+		case TIME:
+			return nms.getTime(cmdCtx, key);
+		default:
+			return null;
+		}
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -408,7 +391,9 @@ public final class CommandAPIHandler {
 			Map<String, org.bukkit.command.Command> knownCommands = (Map<String, org.bukkit.command.Command>) f
 					.get(map);
 
-			CommandAPIMain.getLog().info("Linking permissions to commands:");
+			if(!permissionsToFix.isEmpty()) {
+				CommandAPIMain.getLog().info("Linking permissions to commands:");
+			}
 			permissionsToFix.forEach((cmdName, perm) -> {
 
 				if (perm.equals(CommandPermission.NONE)) {
@@ -427,6 +412,8 @@ public final class CommandAPIHandler {
 					if (perm.getPermission() != null) {
 						if (CommandAPIMain.getConfiguration().hasVerboseOutput()) {
 							CommandAPIMain.getLog().info(perm.getPermission() + " -> /" + cmdName);
+						} else {
+							CommandAPIMain.getLog().info("OP -> /" + cmdName);
 						}
 						// Set the command permission to the (String) permission node
 						if (nms.isVanillaCommandWrapper(knownCommands.get(cmdName))) {
@@ -637,7 +624,7 @@ public final class CommandAPIHandler {
 							if (s.equals(argumentName)) {
 								break;
 							}
-							previousArguments.add(context.getArgument(s, args.get(s).getPrimitiveType()));
+							previousArguments.add(parseArgument(context, s, args.get(s)));
 						}
 						return getSuggestionsBuilder(builder, type.getOverriddenSuggestions()
 								.apply(nms.getCommandSenderForCLW(context.getSource()), previousArguments.toArray()));
