@@ -84,6 +84,12 @@ These versions of Minecraft must be installed in your local machine's Maven repo
 
 ## Changelog
 
+- Version 3.2
+  - Fixes a bug with `.overrideSuggestions()` from version 3.1
+- Version 3.1
+  - Fixes bug where command senders didn't work properly, causing commands to not work properly
+  - Adds the ability to override suggestions with the information of previously declared argument
+
 * Version 3.0
   * **Note: This version is incompatible with pre 3.0 versions CommandAPI plugins (See documentation for more information)**
   * Complete code refactor to make command syntax slightly more intuitive and consistent
