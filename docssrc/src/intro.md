@@ -41,6 +41,7 @@ Here's the list of changes to the documentation between each update. You can vie
 - Adds new section [5.1 Argument suggestions](./argumentsuggestions.md) to cover how to override suggestions - Having it all in section _5. Arguments_ was a bit too content-heavy
 - Adds documentation for the new `.overrideSuggestions()` method in section [5.1 Argument suggestions](./argumentsuggestions.md#suggestions-depending-on-previous-arguments)
 - Simplified the description of the documentation updates
+- Changed the artifact ID for the dependency of the CommandAPI. Instead of being `commandapi`, it is now `commandapi-core`. You can view the changes in section [2 Setting up your development environment](./quickstart.md)
 
 ### Documentation changes 2.1 \\(\rightarrow\\) 3.0:
 

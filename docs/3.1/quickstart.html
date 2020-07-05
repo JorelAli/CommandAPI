@@ -203,7 +203,7 @@
 <pre><code class="language-xml">&lt;dependencies&gt;
     &lt;dependency&gt;
         &lt;groupId&gt;dev.jorel&lt;/groupId&gt;
-        &lt;artifactId&gt;commandapi&lt;/artifactId&gt;
+        &lt;artifactId&gt;commandapi-core&lt;/artifactId&gt;
         &lt;version&gt;VERSION&lt;/version&gt;
     &lt;/dependency&gt;
 &lt;/dependencies&gt;
@@ -235,11 +235,11 @@ For example, if you wanted to use version 3.0, you would use <code>&lt;version&g
 <li>
 <p>Add the dependency to your list of dependencies in your <code>build.gradle</code> file:</p>
 <pre><code class="language-gradle">dependencies {
-    compile &quot;dev.jorel:commandapi:VERSION&quot;
+    compile &quot;dev.jorel:commandapi-core:VERSION&quot;
 }
 </code></pre>
 <p>A list of version numbers can be found <a href="https://github.com/JorelAli/1.13-Command-API/tree/mvn-repo/1.13CommandAPI/io/github/jorelali/commandapi">here</a>.
-For example, if you wanted to use version 3.0, you would use <code>compile &quot;dev.jorel:commandapi:3.0&quot;</code></p>
+For example, if you wanted to use version 3.0, you would use <code>compile &quot;dev.jorel:commandapi-core:3.0&quot;</code></p>
 </li>
 <li>
 <p>Add the CommandAPI as a dependent in the plugin.yml (<code>depend: [CommandAPI]</code>)</p>
@@ -283,21 +283,6 @@ For example, if you wanted to use version 3.0, you would use <code>compile &quot
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         
