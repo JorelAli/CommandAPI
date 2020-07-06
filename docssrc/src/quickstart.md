@@ -61,13 +61,11 @@ To use the CommandAPI in your plugins, there are a few methods of adding it to y
 
   ```gradle
   repositories {
-      maven {
-          name = 'mccommandapi'
-          url = 'https://raw.githubusercontent.com/JorelAli/1.13-Command-API/mvn-repo/1.13CommandAPI/'
-      }
+      maven { url = "https://raw.githubusercontent.com/JorelAli/1.13-Command-API/mvn-repo/1.13CommandAPI/" }
+      maven { url = "https://repo.codemc.org/repository/maven-public/" }
   }
   ```
-
+  
 * Add the dependency to your list of dependencies in your `build.gradle` file:
 
   ```gradle

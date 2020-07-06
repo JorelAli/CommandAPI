@@ -200,6 +200,7 @@
 <li>Adds documentation for the new <code>.overrideSuggestions()</code> method in section <a href="./argumentsuggestions.html#suggestions-depending-on-previous-arguments">5.1 Argument suggestions</a></li>
 <li>Simplified the description of the documentation updates</li>
 <li>Changed the artifact ID for the dependency of the CommandAPI. Instead of being <code>commandapi</code>, it is now <code>commandapi-core</code>. You can view the changes in section <a href="./quickstart.html">2 Setting up your development environment</a></li>
+<li>Changed the repository information for gradle in section <a href="./quickstart.html">2 Setting up your development environment</a>. You now have to include the NBTAPI repository because gradle can't automatically detect this for some reason. Kinda stupid tbh.</li>
 </ul>
 <h3><a class="header" href="#documentation-changes-21-rightarrow-30" id="documentation-changes-21-rightarrow-30">Documentation changes 2.1 \(\rightarrow\) 3.0:</a></h3>
 <blockquote>
@@ -310,10 +311,8 @@ For example, if you wanted to use version 3.0, you would use <code>&lt;version&g
 <li>
 <p>Add the repository to your <code>build.gradle</code> file:</p>
 <pre><code class="language-gradle">repositories {
-    maven {
-        name = 'mccommandapi'
-        url = 'https://raw.githubusercontent.com/JorelAli/1.13-Command-API/mvn-repo/1.13CommandAPI/'
-    }
+    maven { url = &quot;https://raw.githubusercontent.com/JorelAli/1.13-Command-API/mvn-repo/1.13CommandAPI/&quot; }
+    maven { url = &quot;https://repo.codemc.org/repository/maven-public/&quot; }
 }
 </code></pre>
 </li>

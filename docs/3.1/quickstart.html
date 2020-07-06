@@ -225,10 +225,8 @@ For example, if you wanted to use version 3.0, you would use <code>&lt;version&g
 <li>
 <p>Add the repository to your <code>build.gradle</code> file:</p>
 <pre><code class="language-gradle">repositories {
-    maven {
-        name = 'mccommandapi'
-        url = 'https://raw.githubusercontent.com/JorelAli/1.13-Command-API/mvn-repo/1.13CommandAPI/'
-    }
+    maven { url = &quot;https://raw.githubusercontent.com/JorelAli/1.13-Command-API/mvn-repo/1.13CommandAPI/&quot; }
+    maven { url = &quot;https://repo.codemc.org/repository/maven-public/&quot; }
 }
 </code></pre>
 </li>
