@@ -5,3 +5,4 @@ description: An API to use Minecraft 1.13s new command UI
 author: Skepter
 website: https://www.jorel.dev/1.13-Command-API/
 softdepend: [NBTAPI]
+api-version: 1.13
