@@ -43,6 +43,7 @@ Here's the list of changes to the documentation between each update. You can vie
 - Simplified the description of the documentation updates
 - Changed the artifact ID for the dependency of the CommandAPI. Instead of being `commandapi`, it is now `commandapi-core`. You can view the changes in section [2 Setting up your development environment](./quickstart.md)
 - Changed the repository information for gradle in section [2 Setting up your development environment](./quickstart.md). You now have to include the NBTAPI repository because gradle can't automatically detect this for some reason. Kinda stupid tbh.
+- Adds a section on using multiple or optional arguments in section [5 Arguments](./arguments.md#optionaldifferent-arguments)
 
 ### Documentation changes 2.1 \\(\rightarrow\\) 3.0:
 
