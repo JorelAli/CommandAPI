@@ -165,6 +165,9 @@
 
                 <div id="content" class="content">
                     <main>
+                        <!-- Page table of contents -->
+                        <div class="sidetoc"><nav class="pagetoc"></nav></div>
+                        
                         <h1><a class="header" href="#argument-suggestions" id="argument-suggestions">Argument suggestions</a></h1>
 <p>Sometimes, you want to override the list of suggestions that are provided by an argument. To handle this, CommandAPI arguments contain three methods to override suggestions:</p>
 <pre><code class="language-java">Argument overrideSuggestions(String... suggestions);
@@ -347,6 +350,8 @@ new CommandAPICommand(&quot;localmsg&quot;)
         <script src="book.js" type="text/javascript" charset="utf-8"></script>
 
         <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="sidebar.js"></script>
         
 
         

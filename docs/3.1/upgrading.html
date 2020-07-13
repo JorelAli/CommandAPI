@@ -165,6 +165,9 @@
 
                 <div id="content" class="content">
                     <main>
+                        <!-- Page table of contents -->
+                        <div class="sidetoc"><nav class="pagetoc"></nav></div>
+                        
                         <h1><a class="header" href="#upgrading-guide" id="upgrading-guide">Upgrading guide</a></h1>
 <h2><a class="header" href="#from-version-23-to-30" id="from-version-23-to-30">From version 2.3 to 3.0</a></h2>
 <p>The CommandAPI's upgrade from version 2.3 to 3.0 is very intense and various refactoring operations took place, which means that plugins that implement the CommandAPI version 2.3 or will not to work with the CommandAPI version 3.0. This page outlines the few major changes and points you to the various pages in the documentation that covers how to use version 3.0.</p>
@@ -264,6 +267,8 @@ CommandAPI.unregister(String command, boolean force);
         <script src="book.js" type="text/javascript" charset="utf-8"></script>
 
         <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="sidebar.js"></script>
         
 
         

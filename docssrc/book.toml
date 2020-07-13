@@ -11,6 +11,7 @@ build-dir = "./../docs/3.1"
 git-repository-url = "https://github.com/JorelAli/1.13-Command-API"
 default-theme = "rust"
 additional-css = ["style.css"]
+additional-js = ["sidebar.js"]
 mathjax-support = true
 
 [output.html.fold]

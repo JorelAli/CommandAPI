@@ -74,3 +74,57 @@ The type to cast each argument (declared in the `dev.jorel.commandapi.arguments`
 |                         [`TeamArgument`](./teamarguments.md) | `String`                                                     |
 |         [`TextArgument`](./stringarguments.md#text-argument) | `String`                                                     |
 |                              [`TimeArgument`](./timeargs.md) | `int`                                                        |
+
+-----
+
+## Optional/Different Arguments
+
+Sometimes, you want to register a command that has a different effect whether arguments are included or not. For example, take the `/kill` command. If you run `/kill` on its own, it will kill the command sender. If however you run `/kill <target>`, it will kill the target. In other words, we have the following command structure:
+
+```
+/kill          - Kills yourself
+/kill <target> - Kills a target player
+```
+
+As shown by the command structure, we need to register _two commands_.
+
+<div class="example">
+
+### Example - /kill command with two separate arguments
+
+For example, say we're registering a command `/kill`:
+
+```
+/kill          - Kills yourself
+/kill <target> - Kills a target player
+```
+
+We first register the first `/kill` command as normal:
+
+```java
+new CommandAPICommand("kill")
+    .executesPlayer((player, args) -> {
+        player.setHealth(0);
+    })
+    .register();
+```
+
+Now we declare our command with arguments for our second command. Then, we can register our second command `/kill <target>` as usual:
+
+```java
+// Declare our arguments
+LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+arguments.put("target", new PlayerArgument());
+
+// Register our second /kill <target> command
+new CommandAPICommand("kill")
+    .withArguments(arguments)
+    .executesPlayer((player, args) -> {
+        ((Player) args[0]).setHealth(0);
+    })
+    .register();
+```
+
+This gives us the ability to run both `/kill` and `/kill <target>` with the same command name "kill", but have different results based on the arguments used.
+
+</div>
