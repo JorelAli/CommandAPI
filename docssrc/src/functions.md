@@ -10,7 +10,7 @@ The CommandAPI has support to use Minecraft's [functions](https://minecraft.game
 >
 > Minecraft 1.16+ change the way that datapacks are loaded on the server, so that they load before plugins are enabled. This means that non-vanilla commands that are declared in functions and tags will be detected as invalid, causing the server to throw a lot of errors at the very start.
 >
-> The CommandAPI reloads datapacks once the server has finished loading using all declared commands, therefore **the error messages at the start of the server can be ignored**.
+> The CommandAPI reloads datapacks once the server has finished loading using all declared commands, therefore **the error messages at the start of the server can be ignored**. However, in order to do this, **your server must be running Java version 8, 9, 10 or 11**.
 
 -----
 

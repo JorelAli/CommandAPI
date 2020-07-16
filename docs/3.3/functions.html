@@ -175,7 +175,7 @@
 <blockquote>
 <p><strong>Developer's Note:</strong></p>
 <p>Minecraft 1.16+ change the way that datapacks are loaded on the server, so that they load before plugins are enabled. This means that non-vanilla commands that are declared in functions and tags will be detected as invalid, causing the server to throw a lot of errors at the very start.</p>
-<p>The CommandAPI reloads datapacks once the server has finished loading using all declared commands, therefore <strong>the error messages at the start of the server can be ignored</strong>.</p>
+<p>The CommandAPI reloads datapacks once the server has finished loading using all declared commands, therefore <strong>the error messages at the start of the server can be ignored</strong>. However, in order to do this, <strong>your server must be running Java version 8, 9, 10 or 11</strong>.</p>
 </blockquote>
 <hr />
 <h2><a class="header" href="#using-custom-commands-in-functions" id="using-custom-commands-in-functions">Using custom commands in functions</a></h2>
