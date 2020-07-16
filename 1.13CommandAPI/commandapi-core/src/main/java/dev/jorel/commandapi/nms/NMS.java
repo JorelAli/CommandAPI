@@ -202,5 +202,5 @@ public interface NMS {
 	
 	/** Argument validators (Coming soon!) */
 	boolean validateMinecraftKeyRegistered(String argument);
-
+	default void datapackupdate() {};
 }

@@ -26,7 +26,7 @@ public class Main extends JavaPlugin {
 		//Commands which will be used in Minecraft functions are registered here
 
         new CommandAPICommand("killall")
-            .executes(sender, args) -> {
+            .executes((sender, args) -> {
                 //Kills all enemies in all worlds
                 Bukkit.getWorlds().forEach(w -> w.getLivingEntities().forEach(e -> e.setHealth(0)));
         	})

@@ -123,6 +123,16 @@ import net.minecraft.server.v1_16_R1.WorldServer;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class NMS_1_16_R1 implements NMS {
+	
+	@Override
+	public void datapackupdate() {
+		try {
+			CommandAPIRP.invoke();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	@Override
 	public ArgumentType<?> _ArgumentAxis() {
