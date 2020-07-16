@@ -4,6 +4,16 @@ The CommandAPI has support to use Minecraft's [functions](https://minecraft.game
 
 -----
 
+## Functions in 1.16+
+
+> **Developer's Note:**
+>
+> Minecraft 1.16+ change the way that datapacks are loaded on the server, so that they load before plugins are enabled. This means that non-vanilla commands that are declared in functions and tags will be detected as invalid, causing the server to throw a lot of errors at the very start.
+>
+> The CommandAPI reloads datapacks once the server has finished loading using all declared commands, therefore **the error messages at the start of the server can be ignored**.
+
+-----
+
 ## Using custom commands in functions
 
 In order to use a command from your plugin in a `.mcfunction` file, you must register your command in your plugin's `onLoad()` method, instead of the `onEnable()` method. Failure to do so will not allow the command to be registered for Minecraft functions, causing the function file to fail to load during the server startup phase.

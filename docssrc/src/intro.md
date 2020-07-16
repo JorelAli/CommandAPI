@@ -36,6 +36,11 @@ Using the search icon in the top left corner, you can search for anything in thi
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 3.1 \\(\rightarrow\\) 3.3:
+
+- Adds information on how functions are loaded in 1.16+ in section [6. Functions & Tags](./functions.md#functions-in-116)
+- Added function error messages to section [Troubleshooting](./troubleshooting.md#server-errors-when-loading-datapacks-in-116)
+
 ### Documentation changes 3.0 \\(\rightarrow\\) 3.1:
 
 - Adds new section [5.1 Argument suggestions](./argumentsuggestions.md) to cover how to override suggestions - Having it all in section _5. Arguments_ was a bit too content-heavy
