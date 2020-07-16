@@ -2,11 +2,15 @@ package dev.jorel.commandapi.nms;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.ToIntBiFunction;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import org.bukkit.Axis;
@@ -57,6 +61,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 
 import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.CommandAPIMain;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
 import dev.jorel.commandapi.arguments.ICustomProvidedArgument.SuggestionProviders;
 import dev.jorel.commandapi.arguments.LocationType;
@@ -106,23 +111,89 @@ import net.minecraft.server.v1_16_R1.CommandListenerWrapper;
 import net.minecraft.server.v1_16_R1.CompletionProviders;
 import net.minecraft.server.v1_16_R1.CustomFunction;
 import net.minecraft.server.v1_16_R1.CustomFunctionData;
+import net.minecraft.server.v1_16_R1.CustomFunctionManager;
+import net.minecraft.server.v1_16_R1.DataPackResources;
+import net.minecraft.server.v1_16_R1.DedicatedServer;
 import net.minecraft.server.v1_16_R1.Entity;
 import net.minecraft.server.v1_16_R1.EnumDirection.EnumAxis;
 import net.minecraft.server.v1_16_R1.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_16_R1.ICompletionProvider;
 import net.minecraft.server.v1_16_R1.IRecipe;
 import net.minecraft.server.v1_16_R1.IRegistry;
+import net.minecraft.server.v1_16_R1.IReloadableResourceManager;
 import net.minecraft.server.v1_16_R1.IVectorPosition;
 import net.minecraft.server.v1_16_R1.LootTableRegistry;
 import net.minecraft.server.v1_16_R1.MinecraftKey;
 import net.minecraft.server.v1_16_R1.MinecraftServer;
 import net.minecraft.server.v1_16_R1.ScoreboardScore;
+import net.minecraft.server.v1_16_R1.SystemUtils;
+import net.minecraft.server.v1_16_R1.Unit;
 import net.minecraft.server.v1_16_R1.Vec2F;
 import net.minecraft.server.v1_16_R1.Vec3D;
 import net.minecraft.server.v1_16_R1.WorldServer;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class NMS_1_16_R1 implements NMS {
+
+	@Override
+	public void reloadDataPacks()
+			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		CommandAPIMain.getLog().info("Reloading datapacks...");
+
+		// Get the NMS server
+		DedicatedServer server = ((CraftServer) Bukkit.getServer()).getHandle().getServer();
+
+		// Update the commandDispatcher with the current server's commandDispatcher
+		DataPackResources datapackResources = server.dataPackResources;
+		datapackResources.commandDispatcher = server.getCommandDispatcher();
+
+		// Reflection doesn't need to be cached because this only executes once at
+		// server startup
+		Field i = DataPackResources.class.getDeclaredField("i");
+		i.setAccessible(true);
+		Field modifiersField = Field.class.getDeclaredField("modifiers");
+		modifiersField.setAccessible(true);
+		modifiersField.setInt(i, i.getModifiers() & ~Modifier.FINAL);
+
+		Field fField = CustomFunctionManager.class.getDeclaredField("f");
+		fField.setAccessible(true);
+		int f = (int) fField.get(datapackResources.a()); // Related to the permission required to run this function?
+
+		// Update the CustomFunctionManager for the datapackResources which now has the
+		// new commandDispatcher
+		i.set(datapackResources, new CustomFunctionManager(f, datapackResources.commandDispatcher.a()));
+
+		// Construct the new CompletableFuture that now uses datapackResources
+		Field b = DataPackResources.class.getDeclaredField("b");
+		b.setAccessible(true);
+		IReloadableResourceManager reloadableResourceManager = (IReloadableResourceManager) b.get(datapackResources);
+		Field a = DataPackResources.class.getDeclaredField("a");
+		a.setAccessible(true);
+
+		CompletableFuture<Unit> unit = (CompletableFuture<Unit>) a.get(null);
+		CompletableFuture<Unit> unitCompletableFuture = reloadableResourceManager.a(SystemUtils.f(), Runnable::run,
+				server.getResourcePackRepository().f(), unit);
+
+		CompletableFuture<DataPackResources> completablefuture = unitCompletableFuture
+				.whenComplete((Unit u, Throwable t) -> {
+					if (t != null) {
+						datapackResources.close();
+					}
+
+				}).thenApply((Unit u) -> {
+					return datapackResources;
+				});
+
+		// Run the completableFuture and bind tags
+		try {
+			((DataPackResources) completablefuture.get()).i();
+			CommandAPIMain.getLog().info("Finished reloading datapacks");
+		} catch (Exception e) {
+			CommandAPIMain.getLog().log(Level.WARNING,
+					"Failed to load datapacks, can't proceed with server load. You can either fix your datapacks or reset to vanilla with --safeMode",
+					e);
+		}
+	}
 
 	@Override
 	public ArgumentType<?> _ArgumentAxis() {
@@ -505,7 +576,7 @@ public class NMS_1_16_R1 implements NMS {
 
 		net.minecraft.server.v1_16_R1.LootTable lootTable = getCLW(cmdCtx).getServer().getLootTableRegistry()
 				.getLootTable(minecraftKey);
-		
+
 //		CommandListenerWrapper clw = (CommandListenerWrapper) cmdCtx.getSource();
 //		new LootTableInfo.Builder(clw.getWorld())
 //			.setOptional(LootContextParameters.THIS_ENTITY, clw.getEntity())
@@ -527,18 +598,7 @@ public class NMS_1_16_R1 implements NMS {
 //			List var6 = var5.populateLoot(var2);
 //			return var3.accept(var0, var6, var1 -> CommandLoot.a(var4, var1));
 //		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
 		return new CraftLootTable(new NamespacedKey(namespace, key), lootTable);
 	}
 
@@ -588,7 +648,7 @@ public class NMS_1_16_R1 implements NMS {
 
 	@Override
 	public String getObjective(CommandContext cmdCtx, String key, CommandSender sender)
-			throws IllegalArgumentException, CommandSyntaxException {	
+			throws IllegalArgumentException, CommandSyntaxException {
 		return ArgumentScoreboardObjective.a(cmdCtx, key).getName();
 	}
 
@@ -621,13 +681,13 @@ public class NMS_1_16_R1 implements NMS {
 	public ComplexRecipe getRecipe(CommandContext cmdCtx, String key) throws CommandSyntaxException {
 		IRecipe<?> recipe = ArgumentMinecraftKeyRegistered.b(cmdCtx, key);
 		return new ComplexRecipe() {
-			
+
 			@SuppressWarnings("deprecation")
 			@Override
 			public NamespacedKey getKey() {
 				return new NamespacedKey(recipe.getKey().getNamespace(), recipe.getKey().getKey());
 			}
-			
+
 			@Override
 			public ItemStack getResult() {
 				return recipe.toBukkitRecipe().getResult();
@@ -736,7 +796,7 @@ public class NMS_1_16_R1 implements NMS {
 	public int getTime(CommandContext cmdCtx, String key) {
 		return (Integer) cmdCtx.getArgument(key, Integer.class);
 	}
-	
+
 	@Override
 	public boolean isVanillaCommandWrapper(Command command) {
 		return command instanceof VanillaCommandWrapper;

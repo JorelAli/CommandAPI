@@ -38,6 +38,12 @@ public class CommandAPI {
 		
 		//Sort out permissions after the server has finished registering them all
 		handler.fixPermissions();
+		
+		try {
+			CommandAPIHandler.getNMS().reloadDataPacks();
+		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
