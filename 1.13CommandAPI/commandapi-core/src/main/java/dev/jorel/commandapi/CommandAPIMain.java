@@ -43,13 +43,6 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 		CommandAPIMain.dispatcherFile = new File(getDataFolder(), "command_registration.json");
 		logger = getLogger();
 		new CommandAPI();
-		
-		new CommandAPICommand("killall")
-        .executes((sender, args) -> {
-            //Kills all enemies in all worlds
-            Bukkit.getWorlds().forEach(w -> w.getLivingEntities().forEach(e -> e.setHealth(0)));
-    	})
-        .register();
 	}
 	
 	@Override
@@ -57,7 +50,6 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 		//Prevent command registration after server has loaded
 		Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
 			CommandAPI.cleanup();
-			CommandAPIHandler.getNMS().datapackupdate();
 		}, 0L);
         
         getServer().getPluginManager().registerEvents(this, this);

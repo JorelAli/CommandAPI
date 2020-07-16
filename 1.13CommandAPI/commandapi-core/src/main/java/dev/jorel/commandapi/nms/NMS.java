@@ -130,6 +130,15 @@ public interface NMS {
 	 */
 	SimpleCommandMap getSimpleCommandMap();
 	
+	/**
+	 * Reloads the datapacks by using the updated the commandDispatcher tree
+	 * @throws SecurityException 
+	 * @throws NoSuchFieldException 
+	 * @throws IllegalAccessException 
+	 * @throws IllegalArgumentException 
+	 */
+	default void reloadDataPacks() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {};
+	
 	/** Argument implementations with CommandSyntaxExceptions */
 	Advancement         getAdvancement(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 	BaseComponent[]     getChat(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException; 
@@ -202,5 +211,4 @@ public interface NMS {
 	
 	/** Argument validators (Coming soon!) */
 	boolean validateMinecraftKeyRegistered(String argument);
-	default void datapackupdate() {};
 }
