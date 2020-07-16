@@ -1,0 +1,4 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Thu Jul 16 16:07:58 BST 2020
+commandapi-core-3.3.jar>=
+commandapi-core-3.3.pom>=
