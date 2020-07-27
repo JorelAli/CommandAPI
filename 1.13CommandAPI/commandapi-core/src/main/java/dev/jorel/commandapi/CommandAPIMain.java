@@ -2,6 +2,7 @@ package dev.jorel.commandapi;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -15,6 +16,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.FloatArgument;
+import dev.jorel.commandapi.arguments.TimeArgument;
+import dev.jorel.commandapi.wrappers.arguments.Time;
 
 public class CommandAPIMain extends JavaPlugin implements Listener {
 	
@@ -70,6 +76,21 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 		}, 0L);
         
         getServer().getPluginManager().registerEvents(this, this);
+        
+        CommandAPIHandler.getNMS().converters();
+        
+        {
+	        LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+	        arguments.put("time", new TimeArgument().safeOverrideSuggestions(Time.days(2), Time.seconds(10)));
+	        arguments.put("floats", new FloatArgument().safeOverrideSuggestions(2f, 3f));
+	        
+	        new CommandAPICommand("a")
+	        .withArguments(arguments)
+	        .executes((s, a) -> {
+	        	System.out.println(a);
+	        })
+	        .register();
+        }
 	}
 	
 	/** 

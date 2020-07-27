@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Iterator;
@@ -19,6 +20,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Keyed;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -48,6 +50,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ComplexRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
 
@@ -128,6 +131,7 @@ import net.minecraft.server.v1_16_R1.IVectorPosition;
 import net.minecraft.server.v1_16_R1.LootTableRegistry;
 import net.minecraft.server.v1_16_R1.MinecraftKey;
 import net.minecraft.server.v1_16_R1.MinecraftServer;
+import net.minecraft.server.v1_16_R1.NBTTagCompound;
 import net.minecraft.server.v1_16_R1.ScoreboardScore;
 import net.minecraft.server.v1_16_R1.SystemUtils;
 import net.minecraft.server.v1_16_R1.Unit;
@@ -137,6 +141,20 @@ import net.minecraft.server.v1_16_R1.WorldServer;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class NMS_1_16_R1 implements NMS {
+	
+	@Override
+	public void converters() {
+		ItemStack is = new ItemStack(Material.DIAMOND_SWORD);
+		ItemMeta meta = is.getItemMeta();
+		meta.setLore(Arrays.asList(new String[] {"hello!"}));
+		is.setItemMeta(meta);
+		is.addEnchantment(Enchantment.DAMAGE_ALL, 2);
+		net.minecraft.server.v1_16_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(is);
+		NBTTagCompound base = nmsItemStack.getOrCreateTag();
+		System.out.println(base.asString());
+		
+		
+	}
 
 	@Override
 	public void reloadDataPacks()
@@ -596,35 +614,9 @@ public class NMS_1_16_R1 implements NMS {
 		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.e(cmdCtx, str);
 		String namespace = minecraftKey.getNamespace();
 		String key = minecraftKey.getKey();
-//		LootItemCondition lootItemCondition = ArgumentMinecraftKeyRegistered.c(cmdCtx, str);
-//		lootItemCondition.
-//		String namespace = lootItemCondition.b();
-
+		
 		net.minecraft.server.v1_16_R1.LootTable lootTable = getCLW(cmdCtx).getServer().getLootTableRegistry()
 				.getLootTable(minecraftKey);
-
-//		CommandListenerWrapper clw = (CommandListenerWrapper) cmdCtx.getSource();
-//		new LootTableInfo.Builder(clw.getWorld())
-//			.setOptional(LootContextParameters.THIS_ENTITY, clw.getEntity())
-//			.set(LootContextParameters.POSITION, var1)
-//		
-//		private static int a(CommandContext<CommandListenerWrapper> var0, MinecraftKey var1, b var2)
-//				throws CommandSyntaxException {
-//			CommandListenerWrapper var3 = (CommandListenerWrapper) var0.getSource();
-//			LootTableInfo.Builder var4 = new LootTableInfo.Builder(var3.getWorld())
-//					.setOptional(LootContextParameters.THIS_ENTITY, (Object) var3.getEntity())
-//					.set(LootContextParameters.POSITION, (Object) new BlockPosition(var3.getPosition()));
-//			return CommandLoot.a(var0, var1, var4.build(LootContextParameterSets.CHEST), var2);
-//		}
-//		
-//		private static int a(CommandContext<CommandListenerWrapper> var0, MinecraftKey var12, LootTableInfo var2, b var3)
-//				throws CommandSyntaxException {
-//			CommandListenerWrapper var4 = (CommandListenerWrapper) var0.getSource();
-//			LootTable var5 = var4.getServer().getLootTableRegistry().getLootTable(var12);
-//			List var6 = var5.populateLoot(var2);
-//			return var3.accept(var0, var6, var1 -> CommandLoot.a(var4, var1));
-//		}
-
 		return new CraftLootTable(new NamespacedKey(namespace, key), lootTable);
 	}
 

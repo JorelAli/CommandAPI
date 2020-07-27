@@ -20,7 +20,7 @@
         <dependency>
             <groupId>dev.jorel</groupId>
             <artifactId>commandapi-core</artifactId>
-            <version>3.3</version>
+            <version>3.4</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

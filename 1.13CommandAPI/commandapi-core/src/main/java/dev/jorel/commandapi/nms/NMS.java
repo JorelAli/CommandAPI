@@ -211,4 +211,6 @@ public interface NMS {
 	
 	/** Argument validators (Coming soon!) */
 	boolean validateMinecraftKeyRegistered(String argument);
+	
+	public default void converters() {};
 }
