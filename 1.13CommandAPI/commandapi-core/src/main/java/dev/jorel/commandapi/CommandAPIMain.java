@@ -8,15 +8,11 @@ import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -63,14 +59,6 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 				}
 			}
 		}
-		
-		{
-			//TODO remove before next release
-			new CommandAPICommand("killall")
-			.executes((s, a) -> {
-				System.out.println("hi");
-			}).register();
-		}
 	}
 	
 	@Override
@@ -82,15 +70,6 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 		}, 0L);
         
         getServer().getPluginManager().registerEvents(this, this);
-        
-        {
-        	//TODO remove before next release
-        	NamespacedKey customItem = new NamespacedKey(this, "TestItem");
-            ShapedRecipe customRecipe = new ShapedRecipe(customItem, new ItemStack(Material.COMPASS));
-            customRecipe.shape("AAA", "AAA", "AAA");
-            customRecipe.setIngredient('A', Material.CRAFTING_TABLE);
-            getServer().addRecipe(customRecipe);
-        }
 	}
 	
 	/** 
@@ -114,7 +93,6 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 			createDispatcherFile = fileConfig.getBoolean("create-dispatcher-json");
 			pluginsToConvert = new HashMap<>();
 			
-			System.out.println(fileConfig.getMapList("plugins-to-convert"));
 			for(Map<?, ?> map : fileConfig.getMapList("plugins-to-convert")) {
 				String pluginName = (String) map.keySet().stream().findFirst().get();
 				Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
