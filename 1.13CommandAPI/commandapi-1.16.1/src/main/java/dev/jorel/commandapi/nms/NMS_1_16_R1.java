@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.ToIntBiFunction;
 import java.util.logging.Level;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Keyed;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
@@ -45,6 +47,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ComplexRecipe;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
 
@@ -142,6 +145,9 @@ public class NMS_1_16_R1 implements NMS {
 
 		// Get the NMS server
 		DedicatedServer server = ((CraftServer) Bukkit.getServer()).getHandle().getServer();
+		
+		// Get previously declared recipes to be re-registered later
+		Iterator<Recipe> recipes = Bukkit.recipeIterator();
 
 		// Update the commandDispatcher with the current server's commandDispatcher
 		DataPackResources datapackResources = server.dataPackResources;
@@ -151,7 +157,14 @@ public class NMS_1_16_R1 implements NMS {
 		// server startup
 		Field i = DataPackResources.class.getDeclaredField("i");
 		i.setAccessible(true);
-		Field modifiersField = Field.class.getDeclaredField("modifiers");
+		
+		Field modifiersField = null;
+		try {
+			modifiersField = Field.class.getDeclaredField("modifiers");
+		} catch (NoSuchFieldException e) {
+			CommandAPIMain.getLog().severe("Java version " + System.getProperty("java.version") + " is not supported to reload datapacks! Try using Java 8?");
+			return;
+		}
 		modifiersField.setAccessible(true);
 		modifiersField.setInt(i, i.getModifiers() & ~Modifier.FINAL);
 
@@ -187,10 +200,23 @@ public class NMS_1_16_R1 implements NMS {
 		// Run the completableFuture and bind tags
 		try {
 			((DataPackResources) completablefuture.get()).i();
+			
+			// Register recipes again because reloading datapacks removes all non-vanilla recipes
+			recipes.forEachRemaining(recipe -> {
+				try {
+					Bukkit.addRecipe(recipe);
+					if(recipe instanceof Keyed) {
+						CommandAPIMain.getLog().info("Re-registering recipe: " + ((Keyed) recipe).getKey());
+					}
+				} catch(Exception e) {
+					// Can't re-register registered recipes. Not an error. 
+				}
+			});
+			
 			CommandAPIMain.getLog().info("Finished reloading datapacks");
 		} catch (Exception e) {
 			CommandAPIMain.getLog().log(Level.WARNING,
-					"Failed to load datapacks, can't proceed with server load. You can either fix your datapacks or reset to vanilla with --safeMode",
+					"Failed to load datapacks, can't proceed with normal server load procedure. Try fixing your datapacks?",
 					e);
 		}
 	}
