@@ -1,5 +1,6 @@
 package dev.jorel.commandapi;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ public class Converter {
 	 * @param plugin The plugin which commands are to be converted
 	 */
 	public static void convert(Plugin plugin) {
+		CommandAPIMain.getLog().info("Converting commands for " + plugin.getName());
 		plugin.getDescription().getCommands().keySet().forEach(commandName -> convertPluginCommand((JavaPlugin) plugin, commandName));
 	}
 	
@@ -34,9 +36,15 @@ public class Converter {
 	}
 	
 	private static void convertPluginCommand(JavaPlugin plugin, String commandName) {
+		CommandAPIMain.getLog().info("Converting " + plugin.getName() + " command /" + commandName);
 		
 		/* Parse the commands */
 		Map<String, Object> cmdData = plugin.getDescription().getCommands().get(commandName);
+		
+		if(cmdData == null) {
+			CommandAPIMain.getLog().severe("Couldn't find /" + commandName + " in " + plugin.getName() + "'s plugin.yml. Are you sure you're not confusing it with an alias?");
+			return;
+		}
 
 		//Convert stupid YAML aliases to a String[] for CommandAPI
 		String[] aliases = null;
@@ -50,6 +58,9 @@ public class Converter {
 			List<String> list = (List<String>) aliasObj;
 			aliases = list.toArray(new String[0]);
 		}
+		if(aliases.length != 0) {
+			CommandAPIMain.getLog().info("Aliases for command /" + commandName + " found. Using aliases " + Arrays.deepToString(aliases));
+		}
 		 
 		//Convert YAML to CommandPermission
 		CommandPermission permissionNode = null;
@@ -57,26 +68,27 @@ public class Converter {
 		if(permission == null) {
 			permissionNode = CommandPermission.NONE;
 		} else {
+			CommandAPIMain.getLog().info("Permission for command /" + commandName + " found. Using " + permission);
 			permissionNode = CommandPermission.fromString(permission);
 		}
 		
-		//Arguments (none)
-		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-		
+		//No arguments
 		new CommandAPICommand(commandName)
 			.withPermission(permissionNode)
 			.withAliases(aliases)
-			.withArguments(arguments)
-			.executes((sender, args) -> { plugin.getCommand(commandName).execute(sender, commandName, new String[0]); });
+			.executes((sender, args) -> { plugin.getCommand(commandName).execute(sender, commandName, new String[0]); })
+			.register();
 		
-		//Arguments (all)
+		//Multiple arguments
+		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 		arguments.put("args", new GreedyStringArgument());
 		
 		new CommandAPICommand(commandName)
 			.withPermission(permissionNode)
 			.withAliases(aliases)
 			.withArguments(arguments)
-			.executes((sender, args) -> { plugin.getCommand(commandName).execute(sender, commandName, ((String) args[0]).split(" ")); });
+			.executes((sender, args) -> { plugin.getCommand(commandName).execute(sender, commandName, ((String) args[0]).split(" ")); })
+			.register();
 	}
 	
 }

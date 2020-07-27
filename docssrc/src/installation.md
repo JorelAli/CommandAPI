@@ -21,21 +21,5 @@ margin-right: auto;">Download latest CommandAPI.jar</a>
 
 ## Additional dependencies
 
-- If you use NBT data, you'll also need the [NBT API](https://www.spigotmc.org/resources/nbt-api.7939/). (you can find out from your developers if you need this or not)
+- If you use NBT data, you'll also need the [NBT API](https://www.spigotmc.org/resources/nbt-api.7939/). (You can find out from your developers if you need this or not)
 - If you are using raw JSON chat data, you'll need to be running [Spigot](https://www.spigotmc.org/wiki/about-spigot/) or another spigot-related server such as [Paper Spigot](https://papermc.io/) or [Taco Spigot](https://tacospigot.github.io/). (Again, you can find out from your developers if you need this or not)
-
------
-
-## Configuring the CommandAPI
-
-The CommandAPI can be configured in the `plugins/CommandAPI/config.yml` file.
-
-The default `config.yml` settings are as follows:
-
-```yaml
-verbose-outputs: true
-create-dispatcher-json: false
-```
-
-* `verbose-outputs` - Outputs command registration and unregistration logs in the console
-* `create-dispatcher-json` - Creates a `command_registration.json` file showing the mapping of registered commands
