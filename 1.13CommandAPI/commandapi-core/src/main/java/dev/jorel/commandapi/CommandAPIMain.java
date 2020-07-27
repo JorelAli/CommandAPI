@@ -1,9 +1,11 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -13,12 +15,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-<<<<<<< converter-improvements
-import org.bukkit.plugin.Plugin;
-=======
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
->>>>>>> release-3.4
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class CommandAPIMain extends JavaPlugin implements Listener {
@@ -53,21 +52,29 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 		CommandAPIMain.dispatcherFile = new File(getDataFolder(), "command_registration.json");
 		logger = getLogger();
 		new CommandAPI();
+
+		//Convert all plugins to be converted
+		for(Entry<Plugin, String[]> pluginToConvert : config.pluginsToConvert.entrySet()) {
+			if(pluginToConvert.getValue().length == 0) {
+				Converter.convert(pluginToConvert.getKey());
+			} else {
+				for(String command : pluginToConvert.getValue()) {
+					Converter.convert(pluginToConvert.getKey(), command);
+				}
+			}
+		}
 		
 		{
 			//TODO remove before next release
 			new CommandAPICommand("killall")
 			.executes((s, a) -> {
 				System.out.println("hi");
-			}).register();;
+			}).register();
 		}
 	}
 	
 	@Override
 	public void onEnable() {
-		
-		//Convert all plugins to be converted
-		config.pluginsToConvert.forEach(Converter::convert);
 		
 		//Prevent command registration after server has loaded
 		Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
@@ -100,12 +107,32 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 		private final boolean createDispatcherFile;
 		
 		//List of plugins to convert
-		private final List<Plugin> pluginsToConvert; 
+		private final Map<Plugin, String[]> pluginsToConvert; 
 				
 		public Config(FileConfiguration fileConfig) {
 			verboseOutput = fileConfig.getBoolean("verbose-outputs");
 			createDispatcherFile = fileConfig.getBoolean("create-dispatcher-json");
-			pluginsToConvert = fileConfig.getStringList("plugins-to-convert").stream().map(Bukkit.getPluginManager()::getPlugin).collect(Collectors.toList());
+			pluginsToConvert = new HashMap<>();
+			
+			System.out.println(fileConfig.getMapList("plugins-to-convert"));
+			for(Map<?, ?> map : fileConfig.getMapList("plugins-to-convert")) {
+				String pluginName = (String) map.keySet().stream().findFirst().get();
+				Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
+				if(plugin == null) {
+					getLog().severe("Plugin '" + pluginName + "' was not found. Did you add loadbefore: [CommandAPI] to " + pluginName + "'s plugin.yml file?");
+					continue;
+				}
+				
+				String[] pluginCommands;
+				if(map.values() == null) {
+					pluginCommands = new String[0];
+				} else {
+					@SuppressWarnings("unchecked")
+					List<String> commands = (List<String>) map.values().stream().findFirst().get();
+					pluginCommands = commands.toArray(new String[0]);
+				}
+				pluginsToConvert.put(plugin, pluginCommands);
+			}
 		}
 		
 		public boolean hasVerboseOutput() {
