@@ -4,12 +4,18 @@
 
 -----
 
-# Section 1: CommandAPI Setup
+# Server Owner Usage
 
 - [Installation for server owners](./installation.md)
+- [Configuration for server owners](./config.md)
+
+-----
+
+# CommandAPI Setup
+
 - [Setting up your development environment](./quickstart.md)
 
-# Section 2: Creating Commands
+# Creating Commands
 
 - [Command registration](./commandregistration.md)
 - [Command executors](./commandexecutors.md)
@@ -55,7 +61,7 @@
 - [Permissions](./permissions.md)
 - [Aliases](./aliases.md)
 
-# Section 3: CommandAPI Utilities
+# CommandAPI Utilities
 
 - [Command conversion](./conversion.md)
 

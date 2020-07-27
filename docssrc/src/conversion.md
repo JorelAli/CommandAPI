@@ -86,6 +86,12 @@ So to summarise, our plugin loading order is the following:
 
 \\[ \texttt{myPlugin} \xrightarrow{then} \texttt{CommandAPI} \xrightarrow{then} \texttt{MyCoolPlugin} \\]
 
+where:
+
+- \\(\texttt{myPlugin}\\) is the plugin that registers commands normally via Bukkit
+- \\(\texttt{CommandAPI}\\) is the CommandAPI
+- \\(\texttt{MyCoolPlugin}\\) is your plugin that converts `myPlugin` commands using the CommandAPI
+
 </div>
 
 -----
