@@ -1,7 +1,9 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
+import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -11,8 +13,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+<<<<<<< converter-improvements
+import org.bukkit.plugin.Plugin;
+=======
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
+>>>>>>> release-3.4
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class CommandAPIMain extends JavaPlugin implements Listener {
@@ -59,6 +65,10 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 	
 	@Override
 	public void onEnable() {
+		
+		//Convert all plugins to be converted
+		config.pluginsToConvert.forEach(Converter::convert);
+		
 		//Prevent command registration after server has loaded
 		Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
 			CommandAPI.cleanup();
@@ -88,10 +98,14 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 		
 		//Create a command_registration.json file
 		private final boolean createDispatcherFile;
+		
+		//List of plugins to convert
+		private final List<Plugin> pluginsToConvert; 
 				
 		public Config(FileConfiguration fileConfig) {
 			verboseOutput = fileConfig.getBoolean("verbose-outputs");
 			createDispatcherFile = fileConfig.getBoolean("create-dispatcher-json");
+			pluginsToConvert = fileConfig.getStringList("plugins-to-convert").stream().map(Bukkit.getPluginManager()::getPlugin).collect(Collectors.toList());
 		}
 		
 		public boolean hasVerboseOutput() {

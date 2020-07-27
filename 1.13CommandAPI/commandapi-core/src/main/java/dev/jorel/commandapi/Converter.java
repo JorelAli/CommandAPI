@@ -20,6 +20,7 @@ public class Converter {
 	 * @param plugin The plugin which commands are to be converted
 	 */
 	public static void convert(Plugin plugin) {
+		CommandAPIMain.getLog().info("Converting commands for " + plugin.getName());
 		plugin.getDescription().getCommands().keySet().forEach(commandName -> convertPluginCommand((JavaPlugin) plugin, commandName));
 	}
 	
@@ -34,6 +35,7 @@ public class Converter {
 	}
 	
 	private static void convertPluginCommand(JavaPlugin plugin, String commandName) {
+		CommandAPIMain.getLog().info("Converting /" + commandName);
 		
 		/* Parse the commands */
 		Map<String, Object> cmdData = plugin.getDescription().getCommands().get(commandName);
