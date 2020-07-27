@@ -52,17 +52,17 @@ public class FloatArgument extends Argument implements ISafeOverrideableSuggesti
 	}
 	
 	public Argument safeOverrideSuggestions(Float... suggestions) {
-		super.suggestions = (c, m) -> stringMap(suggestions, String::valueOf);
+		super.suggestions = sMap0(String::valueOf, suggestions);
 		return this;
 	}
 
 	public Argument safeOverrideSuggestions(Function<CommandSender, Float[]> suggestions) {
-		super.suggestions = (c, m) -> stringMap(suggestions.apply(c), String::valueOf);
+		super.suggestions = sMap1(String::valueOf, suggestions);
 		return this;
 	}
 
 	public Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], Float[]> suggestions) {
-		super.suggestions = (c, m) -> stringMap(suggestions.apply(c, m), String::valueOf);
+		super.suggestions = sMap2(String::valueOf, suggestions);
 		return this;
 	}
 }

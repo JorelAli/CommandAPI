@@ -43,4 +43,18 @@ public interface ISafeOverrideableSuggestions<S> {
 		return Arrays.stream(arr).map(mapper).toArray(String[]::new);
 	}
 	
+	@SuppressWarnings("unchecked")
+	default BiFunction<CommandSender, Object[], String[]> sMap0(Function<S, String> mapper, S... suggestions) {
+		return (c, m) -> stringMap(suggestions, mapper);
+	}
+	
+	default BiFunction<CommandSender, Object[], String[]> sMap1(Function<S, String> mapper, Function<CommandSender, S[]> suggestions) {
+		return (c, m) -> stringMap(suggestions.apply(c), mapper);
+	}
+	
+	default BiFunction<CommandSender, Object[], String[]> sMap2(Function<S, String> mapper, BiFunction<CommandSender, Object[], S[]> suggestions) {
+		return (c, m) -> stringMap(suggestions.apply(c, m), mapper);
+
+	}
+	
 }

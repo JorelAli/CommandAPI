@@ -1,5 +1,10 @@
 package dev.jorel.commandapi.arguments;
 
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
+import org.bukkit.command.CommandSender;
+
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
@@ -7,7 +12,7 @@ import dev.jorel.commandapi.exceptions.InvalidRangeException;
 /**
  * An argument that represents primitive Java doubles
  */
-public class DoubleArgument extends Argument {
+public class DoubleArgument extends Argument implements ISafeOverrideableSuggestions<Double> {
 
 	/**
 	 * A double argument
@@ -44,6 +49,21 @@ public class DoubleArgument extends Argument {
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.SIMPLE_TYPE;
+	}
+	
+	public Argument safeOverrideSuggestions(Double... suggestions) {
+		super.suggestions = sMap0(String::valueOf, suggestions);
+		return this;
+	}
+
+	public Argument safeOverrideSuggestions(Function<CommandSender, Double[]> suggestions) {
+		super.suggestions = sMap1(String::valueOf, suggestions);
+		return this;
+	}
+
+	public Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], Double[]> suggestions) {
+		super.suggestions = sMap2(String::valueOf, suggestions);
+		return this;
 	}
 
 }

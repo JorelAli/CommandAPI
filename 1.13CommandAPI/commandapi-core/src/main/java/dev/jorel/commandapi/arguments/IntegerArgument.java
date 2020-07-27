@@ -1,5 +1,10 @@
 package dev.jorel.commandapi.arguments;
 
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
+import org.bukkit.command.CommandSender;
+
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
@@ -7,7 +12,7 @@ import dev.jorel.commandapi.exceptions.InvalidRangeException;
 /**
  * An argument that represents primitive Java ints
  */
-public class IntegerArgument extends Argument {
+public class IntegerArgument extends Argument implements ISafeOverrideableSuggestions<Integer> {
 
 	/**
 	 * An integer argument
@@ -44,6 +49,21 @@ public class IntegerArgument extends Argument {
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.SIMPLE_TYPE;
+	}
+	
+	public Argument safeOverrideSuggestions(Integer... suggestions) {
+		super.suggestions = sMap0(String::valueOf, suggestions);
+		return this;
+	}
+
+	public Argument safeOverrideSuggestions(Function<CommandSender, Integer[]> suggestions) {
+		super.suggestions = sMap1(String::valueOf, suggestions);
+		return this;
+	}
+
+	public Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], Integer[]> suggestions) {
+		super.suggestions = sMap2(String::valueOf, suggestions);
+		return this;
 	}
 	
 }
