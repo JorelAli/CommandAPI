@@ -197,6 +197,13 @@
 <hr />
 <h2><a class="header" href="#documentation-changelog" id="documentation-changelog">Documentation changelog</a></h2>
 <p>Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.</p>
+<h3><a class="header" href="#documentation-changes-33-rightarrow-34" id="documentation-changes-33-rightarrow-34">Documentation changes 3.3 \(\rightarrow\) 3.4:</a></h3>
+<ul>
+<li>Moves configuration for server owners to a new section <a href="./config.html">2. Configuration for server owners</a>. This has the side-effect of also re-numbering all of the sections on the left. Sorry!</li>
+<li>Adds server owner documentation for the CommandAPI's config command conversion system in section <a href="./config.html#command-conversion">2. Configuration for server owners</a></li>
+<li>Update the conversion page <a href="./conversion.html">10. Command conversion</a> so it should be much easier to follow and understand</li>
+<li>Changed the list of Java versions that the CommandAPI is compatible with in the <a href="./troubleshooting.html#commandapi-errors-when-reloading-datapacks">Troubleshooting</a> section</li>
+</ul>
 <h3><a class="header" href="#documentation-changes-31-rightarrow-33" id="documentation-changes-31-rightarrow-33">Documentation changes 3.1 \(\rightarrow\) 3.3:</a></h3>
 <ul>
 <li>Adds information on how functions are loaded in 1.16+ in section <a href="./functions.html#functions-in-116">6. Functions &amp; Tags</a></li>
@@ -2498,19 +2505,24 @@ new CommandAPICommand(&quot;kill&quot;)
     .register();
 </code></pre>
 </div><h1><a class="header" href="#command-conversion-1" id="command-conversion-1">Command conversion</a></h1>
-<p>Since the CommandAPI is used to register commands as a vanilla Minecraft command, you may want to use other plugins that are not written with the CommandAPI. For instance, if you want to include a command from a plugin which doesn't use the CommandAPI in a commandblock, <em>(such as the <code>/execute</code> command)</em>, you can use the CommandAPI's command conversion system.</p>
 <blockquote>
 <p><strong>Developer's Note:</strong></p>
-<p>The command conversion system is nowhere near perfect. It tries its best to connect Bukkit plugins to vanilla Minecraft commands, but is not guaranteed to run flawlessly. If possible, consider forking/requesting a plugin and writing it with compatibility for the CommandAPI.</p>
+<p>If you're a server owner, you're probably lost! This section is for developer command conversion. If you're looking for how to convert plugins with the <code>config.yml</code> file, you want <a href="./config.html#command-conversion">2. Configuration for server owners</a>.</p>
 </blockquote>
+<p>The CommandAPI has the ability to convert plugin commands to vanilla Minecraft commands using its <code>config.yml</code>'s <code>plugins-to-convert</code> option. Nevertheless, the API for command conversion is not hidden and you're free to use it as you see fit!</p>
+<hr />
+<p>Before you continue, let's clear up a few naming conventions which is used in the following sections!</p>
+<ul>
+<li><strong>Target plugin</strong> - This refers to a non-CommandAPI plugin which registers normal Bukkit commands. This typically uses the old <code>getCommand(...).setExecutor(...)</code> method</li>
+<li><strong>Your plugin</strong> - This refers to your plugin, the one that uses the CommandAPI and wants to add compatibility to a target plugin</li>
+</ul>
 <hr />
 <h2><a class="header" href="#entire-plugins" id="entire-plugins">Entire plugins</a></h2>
-<p>To register all commands that are declared by a plugin, the <code>Converter.convert(Plugin)</code> method can be used. This attempts to register all commands declared in a plugin's <code>plugin.yml</code> file, as well as any aliases or permissions stated in the <code>plugin.yml</code> file.</p>
-<p>It is important to note that the plugin must be loaded before your plugin before attempting conversion. <em>(Use <code>loadbefore: [YourPlugin, CommandAPI]</code> to ensure it loads before your plugin)</em></p>
+<p>To register all commands that are declared by a target plugin, the <code>Converter.convert(Plugin)</code> method can be used. This attempts to register all commands declared in a target plugin's <code>plugin.yml</code> file, as well as any aliases or permissions stated in the <code>plugin.yml</code> file.</p>
 <div class="example">
-<h3><a class="header" href="#example---converting-commands-for-a-plugin" id="example---converting-commands-for-a-plugin">Example - Converting commands for a plugin</a></h3>
-<p>Say you have some <code>plugin.yml</code> file for a plugin that adds some basic functionality to a server. The plugin in this example is called &quot;myPlugin&quot;:</p>
-<pre><code class="language-yaml">name: myPlugin
+<h3><a class="header" href="#example---converting-commands-for-a-target-plugin" id="example---converting-commands-for-a-target-plugin">Example - Converting commands for a target plugin</a></h3>
+<p>Say you have some <code>plugin.yml</code> file for a target plugin that adds some basic functionality to a server. The target plugin in this example is called &quot;TargetPlugin&quot;:</p>
+<pre><code class="language-yaml">name: TargetPlugin
 main: some.random.package.Main
 version: 1.0
 commands:
@@ -2520,8 +2532,8 @@ commands:
   i:
     permission: item.permission
 </code></pre>
-<p>As you can see, it declares 3 commands: <code>/gmc</code>, <code>/gms</code> and <code>/i</code>. <strong>Since this plugin hasn't been told to load before the CommandAPI, we must first modify the <code>plugin.yml</code> file:</strong></p>
-<pre><code class="language-yaml">name: myPlugin
+<p>As you can see, it declares 3 commands: <code>/gmc</code>, <code>/gms</code> and <code>/i</code>. <strong>Since this target plugin hasn't been told to load before the CommandAPI, we must first modify the <code>plugin.yml</code> file for the target plugin:</strong></p>
+<pre><code class="language-yaml">name: TargetPlugin
 main: some.random.package.Main
 loadbefore: [CommandAPI]
 version: 1.0
@@ -2533,43 +2545,26 @@ commands:
     permission: item.permission
 </code></pre>
 <hr />
-<p>Now that the plugin has been loaded before the CommandAPI, we can now begin writing our own plugin that uses the CommandAPI converter. We will call this plugin &quot;MyCoolPlugin&quot;:</p>
-<pre><code class="language-java">public class MyCoolPlugin extends JavaPlugin {
+<p>Now that the target plugin has been loaded before the CommandAPI, we can now begin writing your plugin that uses the CommandAPI converter. We will call this plugin &quot;YourPlugin&quot;:</p>
+<pre><code class="language-java">public class YourPlugin extends JavaPlugin {
     
     @Override
     public void onEnable() {
-        Converter.convert(Bukkit.getPluginManager().getPlugin(&quot;myPlugin&quot;));
+        Converter.convert(Bukkit.getPluginManager().getPlugin(&quot;TargetPlugin&quot;));
         //Other code goes here...
     }
     
 }
 </code></pre>
-<p>To ensure that <em>MyCoolPlugin</em> loads <em>after</em> <em>myPlugin</em>, we must ensure that the <code>plugin.yml</code> for <em>myPlugin</em> states this. So, we update the <code>plugin.yml</code> for <em>myPlugin</em> again:</p>
-<pre><code class="language-yaml">name: myPlugin
-main: some.random.package.Main
-loadbefore: [MyCoolPlugin, CommandAPI]
-version: 1.0
-commands:
-  gmc:
-    aliases: gm1
-  gms:
-  i:
-    permission: item.permission
-</code></pre>
 <p>When this is run, the commands <code>/gmc</code>, <code>/gm1</code>, <code>/gms</code> and <code>/i</code> will all be registered by the CommandAPI.</p>
 <hr />
 <p>So to summarise, our plugin loading order is the following:</p>
-<p>\[ \texttt{myPlugin} \xrightarrow{then} \texttt{CommandAPI} \xrightarrow{then} \texttt{MyCoolPlugin} \]</p>
-<p>where:</p>
-<ul>
-<li>\(\texttt{myPlugin}\) is the plugin that registers commands normally via Bukkit</li>
-<li>\(\texttt{CommandAPI}\) is the CommandAPI</li>
-<li>\(\texttt{MyCoolPlugin}\) is your plugin that converts <code>myPlugin</code> commands using the CommandAPI</li>
-</ul>
+<p>\[ \texttt{TargetPlugin} \xrightarrow{then} \texttt{CommandAPI} \xrightarrow{then} \texttt{YourPlugin} \]</p>
+<p>This makes sure that the target plugin's commands are registered first, so they are identifiable by the CommandAPI. The CommandAPI then does its initial setup before your plugin loads the target plugin's commands via the CommandAPI.</p>
 </div>
 <hr />
 <h2><a class="header" href="#only-specific-commands" id="only-specific-commands">Only specific commands</a></h2>
-<p>In addition to converting the whole plugin, the CommandAPI allows you to convert single commands at a time using the <code>Converter.convert(Plugin, String)</code> method, where the <code>String</code> argument refers to the command name as declared in the plugin's <code>plugin.yml</code> file.</p>
+<p>In addition to converting all commands from a target plugin, the CommandAPI allows you to convert single commands at a time using the <code>Converter.convert(Plugin, String)</code> method, where the <code>String</code> argument refers to the command name as declared in the target plugin's <code>plugin.yml</code> file.</p>
 <h1><a class="header" href="#upgrading-guide" id="upgrading-guide">Upgrading guide</a></h1>
 <h2><a class="header" href="#from-version-23-to-30" id="from-version-23-to-30">From version 2.3 to 3.0</a></h2>
 <p>The CommandAPI's upgrade from version 2.3 to 3.0 is very intense and various refactoring operations took place, which means that plugins that implement the CommandAPI version 2.3 or will not to work with the CommandAPI version 3.0. This page outlines the few major changes and points you to the various pages in the documentation that covers how to use version 3.0.</p>
@@ -2625,7 +2620,7 @@ CommandAPI.unregister(String command, boolean force);
 [14:47:25] [Server thread/WARN]:     at net.minecraft.server.v1_16_R1.MinecraftServer.lambda$0(MinecraftServer.java:164)
 [14:47:25] [Server thread/WARN]:     at java.base/java.lang.Thread.run(Thread.java:832)
 </code></pre>
-<p>This is likely due to using an incompatible version of Java. The CommandAPI was designed to run on Java 8 and <em>should</em> be able to support Java 8, 9, 10, 11, 12, 13, 14 and 15 for OpenJDK. For an Oracle Java installation, it is recommended to use Java 8.</p>
+<p>This is likely due to using an incompatible version of Java. The CommandAPI was designed to run on Java 8 and <em>should</em> be able to support Java 8, 9, 10 and 11. The CommandAPI currently does not support Java version 12 or later.</p>
 <h2><a class="header" href="#server-errors-when-loading-datapacks-in-116" id="server-errors-when-loading-datapacks-in-116">Server errors when loading datapacks in 1.16+</a></h2>
 <p>If you get an error at the very start of the server's startup sequence along the lines of:</p>
 <pre><code class="language-log">[15:57:29] [Worker-Main-5/ERROR]: Failed to load function mycustomnamespace:test
@@ -2712,21 +2707,6 @@ Caused by: java.lang.IllegalArgumentException: Whilst parsing command on line 2:
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

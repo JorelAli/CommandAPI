@@ -23,7 +23,7 @@ If you get an error along the lines of:
 [14:47:25] [Server thread/WARN]:     at java.base/java.lang.Thread.run(Thread.java:832)
 ```
 
-This is likely due to using an incompatible version of Java. The CommandAPI was designed to run on Java 8 and *should* be able to support Java 8, 9, 10, 11, 12, 13, 14 and 15 for OpenJDK. For an Oracle Java installation, it is recommended to use Java 8.
+This is likely due to using an incompatible version of Java. The CommandAPI was designed to run on Java 8 and *should* be able to support Java 8, 9, 10 and 11. The CommandAPI currently does not support Java version 12 or later.
 
 ## Server errors when loading datapacks in 1.16+
 

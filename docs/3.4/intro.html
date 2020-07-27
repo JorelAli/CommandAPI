@@ -195,6 +195,13 @@
 <hr />
 <h2><a class="header" href="#documentation-changelog" id="documentation-changelog">Documentation changelog</a></h2>
 <p>Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.</p>
+<h3><a class="header" href="#documentation-changes-33-rightarrow-34" id="documentation-changes-33-rightarrow-34">Documentation changes 3.3 \(\rightarrow\) 3.4:</a></h3>
+<ul>
+<li>Moves configuration for server owners to a new section <a href="./config.html">2. Configuration for server owners</a>. This has the side-effect of also re-numbering all of the sections on the left. Sorry!</li>
+<li>Adds server owner documentation for the CommandAPI's config command conversion system in section <a href="./config.html#command-conversion">2. Configuration for server owners</a></li>
+<li>Update the conversion page <a href="./conversion.html">10. Command conversion</a> so it should be much easier to follow and understand</li>
+<li>Changed the list of Java versions that the CommandAPI is compatible with in the <a href="./troubleshooting.html#commandapi-errors-when-reloading-datapacks">Troubleshooting</a> section</li>
+</ul>
 <h3><a class="header" href="#documentation-changes-31-rightarrow-33" id="documentation-changes-31-rightarrow-33">Documentation changes 3.1 \(\rightarrow\) 3.3:</a></h3>
 <ul>
 <li>Adds information on how functions are loaded in 1.16+ in section <a href="./functions.html#functions-in-116">6. Functions &amp; Tags</a></li>
@@ -256,21 +263,6 @@
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

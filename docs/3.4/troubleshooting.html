@@ -187,7 +187,7 @@
 [14:47:25] [Server thread/WARN]:     at net.minecraft.server.v1_16_R1.MinecraftServer.lambda$0(MinecraftServer.java:164)
 [14:47:25] [Server thread/WARN]:     at java.base/java.lang.Thread.run(Thread.java:832)
 </code></pre>
-<p>This is likely due to using an incompatible version of Java. The CommandAPI was designed to run on Java 8 and <em>should</em> be able to support Java 8, 9, 10, 11, 12, 13, 14 and 15 for OpenJDK. For an Oracle Java installation, it is recommended to use Java 8.</p>
+<p>This is likely due to using an incompatible version of Java. The CommandAPI was designed to run on Java 8 and <em>should</em> be able to support Java 8, 9, 10 and 11. The CommandAPI currently does not support Java version 12 or later.</p>
 <h2><a class="header" href="#server-errors-when-loading-datapacks-in-116" id="server-errors-when-loading-datapacks-in-116">Server errors when loading datapacks in 1.16+</a></h2>
 <p>If you get an error at the very start of the server's startup sequence along the lines of:</p>
 <pre><code class="language-log">[15:57:29] [Worker-Main-5/ERROR]: Failed to load function mycustomnamespace:test
@@ -263,21 +263,6 @@ Caused by: java.lang.IllegalArgumentException: Whilst parsing command on line 2:
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

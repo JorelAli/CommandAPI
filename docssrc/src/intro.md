@@ -36,6 +36,13 @@ Using the search icon in the top left corner, you can search for anything in thi
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 3.3 \\(\rightarrow\\) 3.4:
+
+- Moves configuration for server owners to a new section [2. Configuration for server owners](./config.md). This has the side-effect of also re-numbering all of the sections on the left. Sorry!
+- Adds server owner documentation for the CommandAPI's config command conversion system in section [2. Configuration for server owners](./config.md#command-conversion)
+- Update the conversion page [10. Command conversion](./conversion.md) so it should be much easier to follow and understand
+- Changed the list of Java versions that the CommandAPI is compatible with in the [Troubleshooting](./troubleshooting.md#commandapi-errors-when-reloading-datapacks) section
+
 ### Documentation changes 3.1 \\(\rightarrow\\) 3.3:
 
 - Adds information on how functions are loaded in 1.16+ in section [6. Functions & Tags](./functions.md#functions-in-116)
