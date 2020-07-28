@@ -1,12 +1,17 @@
 package dev.jorel.commandapi.arguments;
 
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
+import org.bukkit.command.CommandSender;
+
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.wrappers.Location2D;
 
 /**
  * An argument that represents the Bukkit Location object in x and z directions
  */
-public class Location2DArgument extends Argument {
+public class Location2DArgument extends Argument implements ISafeOverrideableSuggestions<Location2D> {
 
 	/**
 	 * A Location argument. Represents Minecraft locations in 2D space. Defaults to LocationType.PRECISE_POSITION
@@ -43,5 +48,35 @@ public class Location2DArgument extends Argument {
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.LOCATION_2D;
+	}
+	
+	@Override
+	public Argument safeOverrideSuggestions(Location2D... suggestions) {
+		if(locationType == LocationType.BLOCK_POSITION) {
+			super.suggestions = sMap0((Location2D l) -> l.getBlockX() + " " + l.getBlockZ(), suggestions);
+		} else {
+			super.suggestions = sMap0((Location2D l) -> l.getX() + " " + l.getZ(), suggestions);
+		}
+		return this;
+	}
+
+	@Override
+	public Argument safeOverrideSuggestions(Function<CommandSender, Location2D[]> suggestions) {
+		if(locationType == LocationType.BLOCK_POSITION) {
+			super.suggestions = sMap1((Location2D l) -> l.getBlockX() + " " + l.getBlockZ(), suggestions);
+		} else {
+			super.suggestions = sMap1((Location2D l) -> l.getX() + " " + l.getZ(), suggestions);
+		}
+		return this;
+	}
+
+	@Override
+	public Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], Location2D[]> suggestions) {
+		if(locationType == LocationType.BLOCK_POSITION) {
+			super.suggestions = sMap2((Location2D l) -> l.getBlockX() + " " + l.getBlockZ(), suggestions);
+		} else {
+			super.suggestions = sMap2((Location2D l) -> l.getX() + " " + l.getZ(), suggestions);
+		}
+		return this;
 	}
 }

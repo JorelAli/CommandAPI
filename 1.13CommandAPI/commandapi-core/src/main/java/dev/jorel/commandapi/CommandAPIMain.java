@@ -16,6 +16,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -44,11 +45,14 @@ import dev.jorel.commandapi.arguments.FloatArgument;
 import dev.jorel.commandapi.arguments.FloatRangeArgument;
 import dev.jorel.commandapi.arguments.ItemStackArgument;
 import dev.jorel.commandapi.arguments.LocationArgument;
+import dev.jorel.commandapi.arguments.MathOperationArgument;
 import dev.jorel.commandapi.arguments.NBTCompoundArgument;
+import dev.jorel.commandapi.arguments.ParticleArgument;
 import dev.jorel.commandapi.arguments.TextArgument;
 import dev.jorel.commandapi.arguments.TimeArgument;
 import dev.jorel.commandapi.wrappers.FloatRange;
-import dev.jorel.commandapi.wrappers.arguments.Time;
+import dev.jorel.commandapi.wrappers.MathOperation;
+import dev.jorel.commandapi.wrappers.Time;
 
 public class CommandAPIMain extends JavaPlugin implements Listener {
 	
@@ -93,6 +97,7 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 				}
 			}
 		}
+		
 	}
 	
 	@Override
@@ -149,7 +154,12 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         	LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
         	// buggy environment - enum values are just wrong
 	        arguments.put("environment", new EnvironmentArgument().safeOverrideSuggestions(Environment.NETHER, Environment.NORMAL));
-	        arguments.put("loc", new LocationArgument().safeOverrideSuggestions(s -> new Location[] {((Player) s).getLocation(), ((Player) s).getWorld().getSpawnLocation()}));
+			arguments.put("loc", new LocationArgument().safeOverrideSuggestions(
+				s -> new Location[] { 
+						((Player) s).getLocation(), 
+						((Player) s).getWorld().getSpawnLocation() 
+				})
+			);
 	        
 	        new CommandAPICommand("c")
 	        .withArguments(arguments)
@@ -186,6 +196,26 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 	        arguments.put("is", new ItemStackArgument().safeOverrideSuggestions(new ItemStack(Material.DIRT)));
 	        
 	        new CommandAPICommand("f")
+	        .withArguments(arguments)
+	        .executesPlayer((s, a) -> {
+	        	System.out.println(Arrays.deepToString(a));
+	        })
+	        .register();
+        } {
+        	LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+	        arguments.put("particle", new ParticleArgument().safeOverrideSuggestions(Particle.BARRIER, Particle.CLOUD));
+	        
+	        new CommandAPICommand("g")
+	        .withArguments(arguments)
+	        .executesPlayer((s, a) -> {
+	        	System.out.println(Arrays.deepToString(a));
+	        })
+	        .register();
+        } {
+        	LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+	        arguments.put("math", new MathOperationArgument().safeOverrideSuggestions(MathOperation.ADD, MathOperation.DIVIDE));
+	        
+	        new CommandAPICommand("h")
 	        .withArguments(arguments)
 	        .executesPlayer((s, a) -> {
 	        	System.out.println(Arrays.deepToString(a));

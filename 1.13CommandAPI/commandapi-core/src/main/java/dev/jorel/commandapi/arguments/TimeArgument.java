@@ -6,7 +6,7 @@ import java.util.function.Function;
 import org.bukkit.command.CommandSender;
 
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.wrappers.arguments.Time;
+import dev.jorel.commandapi.wrappers.Time;
 
 /**
  * An argument that represents a duration of time in ticks

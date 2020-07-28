@@ -211,4 +211,5 @@ public interface NMS {
 	
 	public default void converters() {};
 	String convert(ItemStack is);
+	default String convert(Particle particle) {return "TODO: (See NMS class)";};
 }

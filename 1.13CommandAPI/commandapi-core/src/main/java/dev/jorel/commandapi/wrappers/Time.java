@@ -1,4 +1,4 @@
-package dev.jorel.commandapi.wrappers.arguments;
+package dev.jorel.commandapi.wrappers;
 
 public class Time {
 

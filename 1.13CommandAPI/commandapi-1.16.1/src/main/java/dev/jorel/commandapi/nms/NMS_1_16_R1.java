@@ -142,6 +142,11 @@ import net.minecraft.server.v1_16_R1.WorldServer;
 public class NMS_1_16_R1 implements NMS {
 	
 	@Override
+	public String convert(Particle particle) {
+		return CraftParticle.toNMS(particle).a();
+	}
+	
+	@Override
 	public String convert(ItemStack is) {
 		net.minecraft.server.v1_16_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(is);
 		return is.getType().getKey().toString() + nmsItemStack.getOrCreateTag().asString();
