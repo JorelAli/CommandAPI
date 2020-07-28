@@ -126,6 +126,12 @@ import net.minecraft.server.v1_15_R1.Vec3D;
 public class NMS_1_15 implements NMS {
 
 	@Override
+	public String convert(ItemStack is) {
+		net.minecraft.server.v1_15_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(is);
+		return is.getType().getKey().toString() + nmsItemStack.getOrCreateTag().asString();
+	}
+	
+	@Override
 	public ArgumentType<?> _ArgumentAxis() {
 		return ArgumentRotationAxis.a();
 	}

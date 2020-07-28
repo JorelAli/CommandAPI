@@ -143,6 +143,12 @@ import net.minecraft.server.v1_16_R1.WorldServer;
 public class NMS_1_16_R1 implements NMS {
 	
 	@Override
+	public String convert(ItemStack is) {
+		net.minecraft.server.v1_16_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(is);
+		return is.getType().getKey().toString() + nmsItemStack.getOrCreateTag().asString();
+	}
+	
+	@Override
 	public void converters() {
 		ItemStack is = new ItemStack(Material.DIAMOND_SWORD);
 		ItemMeta meta = is.getItemMeta();
@@ -151,6 +157,7 @@ public class NMS_1_16_R1 implements NMS {
 		is.addEnchantment(Enchantment.DAMAGE_ALL, 2);
 		net.minecraft.server.v1_16_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(is);
 		NBTTagCompound base = nmsItemStack.getOrCreateTag();
+		System.out.println(is.getType().getKey().toString());
 		System.out.println(base.asString());
 		
 		

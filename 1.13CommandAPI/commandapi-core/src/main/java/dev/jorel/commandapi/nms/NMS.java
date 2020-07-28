@@ -213,4 +213,5 @@ public interface NMS {
 	boolean validateMinecraftKeyRegistered(String argument);
 	
 	public default void converters() {};
+	String convert(ItemStack is);
 }

@@ -119,6 +119,13 @@ import net.minecraft.server.v1_13_R2.Vec3D;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class NMS_1_13_2 implements NMS {
+	
+	@Override
+	public String convert(ItemStack is) {
+		net.minecraft.server.v1_13_R2.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(is);
+		return is.getType().getKey().toString() + nmsItemStack.getOrCreateTag().asString();
+	}
+	
     @Override
     public ArgumentType<?> _ArgumentAxis() {
         return ArgumentRotationAxis.a();

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 
 /**
@@ -43,6 +44,10 @@ public interface ISafeOverrideableSuggestions<S> {
 		return Arrays.stream(arr).map(mapper).toArray(String[]::new);
 	}
 	
+	default Function<S, String> fromKey(Function<S, NamespacedKey> mapper) {
+		return mapper.andThen(NamespacedKey::toString);
+	}
+	
 	@SuppressWarnings("unchecked")
 	default BiFunction<CommandSender, Object[], String[]> sMap0(Function<S, String> mapper, S... suggestions) {
 		return (c, m) -> stringMap(suggestions, mapper);
@@ -54,7 +59,6 @@ public interface ISafeOverrideableSuggestions<S> {
 	
 	default BiFunction<CommandSender, Object[], String[]> sMap2(Function<S, String> mapper, BiFunction<CommandSender, Object[], S[]> suggestions) {
 		return (c, m) -> stringMap(suggestions.apply(c, m), mapper);
-
 	}
 	
 }
