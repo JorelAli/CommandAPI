@@ -30,7 +30,7 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 
 * **You don't need Brigadier** - You don't need to import Brigadier in your projects to use the CommandAPI
 
-* **No tracking** - We don't collect any stats about our plugin; what you see is what you get!
+* **No tracking** - The CommandAPI don't collect any stats about its plugin; what you see is what you get!
 
 -----
 
@@ -84,6 +84,13 @@ These versions of Minecraft must be installed in your local machine's Maven repo
 
 ## Changelog
 
+- Version 3.4
+  - Fix bug with custom recipes not registering in Minecraft 1.16+
+  - Fix bug where command conversion didn't actually register commands
+  - Adds command conversion as a built-in feature via the CommandAPI's `config.yml`
+- Version 3.3
+  - Fixes a bug where functions didn't work in Minecraft 1.16+
+  - Fixes a bug where spigot produces a warning about api-versions
 - Version 3.2
   - Fixes a bug with `.overrideSuggestions()` from version 3.1
 - Version 3.1
