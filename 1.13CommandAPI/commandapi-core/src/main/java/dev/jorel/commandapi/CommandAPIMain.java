@@ -137,7 +137,6 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         {
         	LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 	        arguments.put("text", new TextArgument().safeOverrideSuggestions("hello", "world!"));
-	        //buggy fr FloatRange casting error or something?
 	        arguments.put("fr", new FloatRangeArgument().safeOverrideSuggestions(FloatRange.floatRangeGreaterThanOrEq(2), new FloatRange(20, 40)));
 	        
 	        new CommandAPICommand("b")
@@ -160,10 +159,8 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 	        .register();
         } {
         	LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-        	//Needs testing
 	        arguments.put("biome", new BiomeArgument().safeOverrideSuggestions(Biome.BADLANDS_PLATEAU));
-        	//Buggy
-	        arguments.put("adv", new AdvancementArgument().safeOverrideSuggestions(Bukkit.getAdvancement(new NamespacedKey("end", "kill_dragon"))));
+	        arguments.put("adv", new AdvancementArgument().safeOverrideSuggestions(Bukkit.getAdvancement(new NamespacedKey("minecraft", "end/kill_dragon"))));
 	        
 	        new CommandAPICommand("d")
 	        .withArguments(arguments)
