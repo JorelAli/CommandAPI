@@ -1,12 +1,18 @@
 package dev.jorel.commandapi.arguments;
 
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
+import org.bukkit.NamespacedKey;
+import org.bukkit.command.CommandSender;
+
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 
 /**
  * An argument that represents Minecraft functions and tags
  */
-public class FunctionArgument extends Argument implements ICustomProvidedArgument {
+public class FunctionArgument extends Argument implements ICustomProvidedArgument, ISafeOverrideableSuggestions<NamespacedKey> {
 
 	/**
 	 * A Minecraft 1.12 function. Plugin commands which plan to be used INSIDE
@@ -30,5 +36,23 @@ public class FunctionArgument extends Argument implements ICustomProvidedArgumen
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.FUNCTION;
+	}
+
+	@Override
+	public Argument safeOverrideSuggestions(NamespacedKey... suggestions) {
+		super.suggestions = sMap0(fromKey(n -> n), suggestions);
+		return this;
+	}
+
+	@Override
+	public Argument safeOverrideSuggestions(Function<CommandSender, NamespacedKey[]> suggestions) {
+		super.suggestions = sMap1(fromKey(n -> n), suggestions);
+		return this;
+	}
+
+	@Override
+	public Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], NamespacedKey[]> suggestions) {
+		super.suggestions = sMap2(fromKey(n -> n), suggestions);
+		return this;
 	}
 }
