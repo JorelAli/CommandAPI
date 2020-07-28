@@ -537,7 +537,7 @@ public class NMS_1_16_R1 implements NMS {
 	@Override
 	public FloatRange getFloatRange(CommandContext cmdCtx, String key) {
 		net.minecraft.server.v1_16_R1.CriterionConditionValue.FloatRange.FloatRange range = (net.minecraft.server.v1_16_R1.CriterionConditionValue.FloatRange.FloatRange) cmdCtx
-				.getArgument(key, FloatRange.class);
+				.getArgument(key, net.minecraft.server.v1_16_R1.CriterionConditionValue.FloatRange.FloatRange.class);
 		float low = range.a() == null ? -Float.MAX_VALUE : range.a();
 		float high = range.b() == null ? Float.MAX_VALUE : range.b();
 		return new FloatRange(low, high);

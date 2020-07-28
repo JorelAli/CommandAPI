@@ -31,8 +31,9 @@ public class AxisArgument extends Argument implements ISafeOverrideableSuggestio
 		return CommandAPIArgumentType.AXIS;
 	}
 
+	@SafeVarargs
 	@Override
-	public Argument safeOverrideSuggestions(@SuppressWarnings("unchecked") EnumSet<Axis>... suggestions) {
+	public final Argument safeOverrideSuggestions(EnumSet<Axis>... suggestions) {
 		super.suggestions = sMap0(e -> e.stream().map(Axis::name).map(String::toLowerCase).reduce(String::concat).get(), suggestions);
 		return this;
 	}
