@@ -209,9 +209,6 @@ public interface NMS {
 	ArgumentType<?> _ArgumentVec3();
 	ArgumentType<?> _ArgumentMathOperation();
 	
-	/** Argument validators (Coming soon!) */
-	boolean validateMinecraftKeyRegistered(String argument);
-	
 	public default void converters() {};
 	String convert(ItemStack is);
 }

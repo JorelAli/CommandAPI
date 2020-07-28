@@ -45,7 +45,6 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -691,15 +690,4 @@ public class NMS_1_13_2 implements NMS {
         net.minecraft.server.v1_13_R2.CommandDispatcher nmsDispatcher = craftServer.getServer().commandDispatcher;
         nmsDispatcher.a(craftPlayer.getHandle());
     }
-
-	@Override
-	public boolean validateMinecraftKeyRegistered(String argument) {
-		try {
-			StringReader reader = new StringReader(argument);
-			ArgumentMinecraftKeyRegistered.a().parse(reader);
-			return true;
-		} catch (CommandSyntaxException e) {
-			return false;
-		}
-	}
 }
