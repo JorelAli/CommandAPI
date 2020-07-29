@@ -25,6 +25,7 @@
   - [Handling command failures](./commandfailures.md)
 - [Arguments](./arguments.md)
   - [Argument suggestions](./argumentsuggestions.md)
+  - [Safe argument suggestions](./safeargumentsuggestions.md)
   - [Primitive arguments](./primitivearguments.md)
   - [Ranged arguments](./rangedarguments.md)
   - [String arguments](./stringarguments.md)

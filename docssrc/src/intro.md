@@ -36,6 +36,10 @@ Using the search icon in the top left corner, you can search for anything in thi
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 3.4 \\(\rightarrow\\) 4.0:
+
+- Arguments now include pictures that showcase how they work!
+
 ### Documentation changes 3.3 \\(\rightarrow\\) 3.4:
 
 - Moves configuration for server owners to a new section [2. Configuration for server owners](./config.md). This has the side-effect of also re-numbering all of the sections on the left. Sorry!
