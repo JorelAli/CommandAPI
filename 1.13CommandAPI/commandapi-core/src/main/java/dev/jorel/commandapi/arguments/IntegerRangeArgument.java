@@ -31,17 +31,14 @@ public class IntegerRangeArgument extends Argument implements ISafeOverrideableS
 	}
 	
 	public Argument safeOverrideSuggestions(IntegerRange... suggestions) {
-		super.suggestions = sMap0(IntegerRange::toString, suggestions);
-		return this;
+		return super.overrideSuggestions(sMap0(IntegerRange::toString, suggestions));
 	}
 
 	public Argument safeOverrideSuggestions(Function<CommandSender, IntegerRange[]> suggestions) {
-		super.suggestions = sMap1(IntegerRange::toString, suggestions);
-		return this;
+		return super.overrideSuggestions(sMap1(IntegerRange::toString, suggestions));
 	}
 
 	public Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], IntegerRange[]> suggestions) {
-		super.suggestions = sMap2(IntegerRange::toString, suggestions);
-		return this;
+		return super.overrideSuggestions(sMap2(IntegerRange::toString, suggestions));
 	}
 }

@@ -32,19 +32,16 @@ public class EnchantmentArgument extends Argument implements ISafeOverrideableSu
 	
 	@Override
 	public Argument safeOverrideSuggestions(Enchantment... suggestions) {
-		super.suggestions = sMap0(fromKey(Enchantment::getKey), suggestions);
-		return this;
+		return super.overrideSuggestions(sMap0(fromKey(Enchantment::getKey), suggestions));
 	}
 
 	@Override
 	public Argument safeOverrideSuggestions(Function<CommandSender, Enchantment[]> suggestions) {
-		super.suggestions = sMap1(fromKey(Enchantment::getKey), suggestions);
-		return this;
+		return super.overrideSuggestions(sMap1(fromKey(Enchantment::getKey), suggestions));
 	}
 
 	@Override
 	public Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], Enchantment[]> suggestions) {
-		super.suggestions = sMap2(fromKey(Enchantment::getKey), suggestions);
-		return this;
+		return super.overrideSuggestions(sMap2(fromKey(Enchantment::getKey), suggestions));
 	}
 }

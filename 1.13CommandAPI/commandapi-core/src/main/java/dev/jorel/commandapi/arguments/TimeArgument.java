@@ -31,17 +31,14 @@ public class TimeArgument extends Argument implements ISafeOverrideableSuggestio
 	}
 
 	public Argument safeOverrideSuggestions(Time... suggestions) {
-		super.suggestions = sMap0(Time::toString, suggestions);
-		return this;
+		return super.overrideSuggestions(sMap0(Time::toString, suggestions));
 	}
 
 	public Argument safeOverrideSuggestions(Function<CommandSender, Time[]> suggestions) {
-		super.suggestions = sMap1(Time::toString, suggestions);
-		return this;
+		return super.overrideSuggestions(sMap1(Time::toString, suggestions));
 	}
 
 	public Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], Time[]> suggestions) {
-		super.suggestions = sMap2(Time::toString, suggestions);
-		return this;
+		return super.overrideSuggestions(sMap2(Time::toString, suggestions));
 	}
 }

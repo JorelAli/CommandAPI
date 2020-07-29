@@ -53,30 +53,27 @@ public class LocationArgument extends Argument implements ISafeOverrideableSugge
 	@Override
 	public Argument safeOverrideSuggestions(Location... suggestions) {
 		if(locationType == LocationType.BLOCK_POSITION) {
-			super.suggestions = sMap0((Location l) -> l.getBlockX() + " " + l.getBlockY() + " " + l.getBlockZ(), suggestions);
+			return super.overrideSuggestions(sMap0((Location l) -> l.getBlockX() + " " + l.getBlockY() + " " + l.getBlockZ(), suggestions));
 		} else {
-			super.suggestions = sMap0((Location l) -> l.getX() + " " + l.getY() + " " + l.getZ(), suggestions);
+			return super.overrideSuggestions(sMap0((Location l) -> l.getX() + " " + l.getY() + " " + l.getZ(), suggestions));
 		}
-		return this;
 	}
 
 	@Override
 	public Argument safeOverrideSuggestions(Function<CommandSender, Location[]> suggestions) {
 		if(locationType == LocationType.BLOCK_POSITION) {
-			super.suggestions = sMap1((Location l) -> l.getBlockX() + " " + l.getBlockY() + " " + l.getBlockZ(), suggestions);
+			return super.overrideSuggestions(sMap1((Location l) -> l.getBlockX() + " " + l.getBlockY() + " " + l.getBlockZ(), suggestions));
 		} else {
-			super.suggestions = sMap1((Location l) -> l.getX() + " " + l.getY() + " " + l.getZ(), suggestions);
+			return super.overrideSuggestions(sMap1((Location l) -> l.getX() + " " + l.getY() + " " + l.getZ(), suggestions));
 		}
-		return this;
 	}
 
 	@Override
 	public Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], Location[]> suggestions) {
 		if(locationType == LocationType.BLOCK_POSITION) {
-			super.suggestions = sMap2((Location l) -> l.getBlockX() + " " + l.getBlockY() + " " + l.getBlockZ(), suggestions);
+			return super.overrideSuggestions(sMap2((Location l) -> l.getBlockX() + " " + l.getBlockY() + " " + l.getBlockZ(), suggestions));
 		} else {
-			super.suggestions = sMap2((Location l) -> l.getX() + " " + l.getY() + " " + l.getZ(), suggestions);
+			return super.overrideSuggestions(sMap2((Location l) -> l.getX() + " " + l.getY() + " " + l.getZ(), suggestions));
 		}
-		return this;
 	}
 }

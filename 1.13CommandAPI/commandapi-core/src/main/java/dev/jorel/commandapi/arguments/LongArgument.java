@@ -52,18 +52,15 @@ public class LongArgument extends Argument implements ISafeOverrideableSuggestio
 	}
 	
 	public Argument safeOverrideSuggestions(Long... suggestions) {
-		super.suggestions = sMap0(String::valueOf, suggestions);
-		return this;
+		return super.overrideSuggestions(sMap0(String::valueOf, suggestions));
 	}
 
 	public Argument safeOverrideSuggestions(Function<CommandSender, Long[]> suggestions) {
-		super.suggestions = sMap1(String::valueOf, suggestions);
-		return this;
+		return super.overrideSuggestions(sMap1(String::valueOf, suggestions));
 	}
 
 	public Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], Long[]> suggestions) {
-		super.suggestions = sMap2(String::valueOf, suggestions);
-		return this;
+		return super.overrideSuggestions(sMap2(String::valueOf, suggestions));
 	}
 	
 }

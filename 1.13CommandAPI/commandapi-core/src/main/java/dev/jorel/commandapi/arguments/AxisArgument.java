@@ -34,19 +34,16 @@ public class AxisArgument extends Argument implements ISafeOverrideableSuggestio
 	@SafeVarargs
 	@Override
 	public final Argument safeOverrideSuggestions(EnumSet<Axis>... suggestions) {
-		super.suggestions = sMap0(e -> e.stream().map(Axis::name).map(String::toLowerCase).reduce(String::concat).get(), suggestions);
-		return this;
+		return super.overrideSuggestions(sMap0(e -> e.stream().map(Axis::name).map(String::toLowerCase).reduce(String::concat).get(), suggestions));
 	}
 
 	@Override
 	public Argument safeOverrideSuggestions(Function<CommandSender, EnumSet<Axis>[]> suggestions) {
-		super.suggestions = sMap1(e -> e.stream().map(Axis::name).map(String::toLowerCase).reduce(String::concat).get(), suggestions);
-		return this;
+		return super.overrideSuggestions(sMap1(e -> e.stream().map(Axis::name).map(String::toLowerCase).reduce(String::concat).get(), suggestions));
 	}
 
 	@Override
 	public Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], EnumSet<Axis>[]> suggestions) {
-		super.suggestions = sMap2(e -> e.stream().map(Axis::name).map(String::toLowerCase).reduce(String::concat).get(), suggestions);
-		return this;
+		return super.overrideSuggestions(sMap2(e -> e.stream().map(Axis::name).map(String::toLowerCase).reduce(String::concat).get(), suggestions));
 	}
 }

@@ -32,19 +32,16 @@ public class ParticleArgument extends Argument implements ISafeOverrideableSugge
 
 	@Override
 	public Argument safeOverrideSuggestions(Particle... suggestions) {
-		super.suggestions = sMap0(CommandAPIHandler.getNMS()::convert, suggestions);
-		return this;
+		return super.overrideSuggestions(sMap0(CommandAPIHandler.getNMS()::convert, suggestions));
 	}
 
 	@Override
 	public Argument safeOverrideSuggestions(Function<CommandSender, Particle[]> suggestions) {
-		super.suggestions = sMap1(CommandAPIHandler.getNMS()::convert, suggestions);
-		return this;
+		return super.overrideSuggestions(sMap1(CommandAPIHandler.getNMS()::convert, suggestions));
 	}
 
 	@Override
 	public Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], Particle[]> suggestions) {
-		super.suggestions = sMap2(CommandAPIHandler.getNMS()::convert, suggestions);
-		return this;
+		return super.overrideSuggestions(sMap2(CommandAPIHandler.getNMS()::convert, suggestions));
 	}
 }

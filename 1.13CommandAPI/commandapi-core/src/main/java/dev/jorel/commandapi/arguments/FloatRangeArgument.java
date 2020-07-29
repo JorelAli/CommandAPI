@@ -31,17 +31,14 @@ public class FloatRangeArgument extends Argument implements ISafeOverrideableSug
 	}
 	
 	public Argument safeOverrideSuggestions(FloatRange... suggestions) {
-		super.suggestions = sMap0(FloatRange::toString, suggestions);
-		return this;
+		return super.overrideSuggestions(sMap0(FloatRange::toString, suggestions));
 	}
 
 	public Argument safeOverrideSuggestions(Function<CommandSender, FloatRange[]> suggestions) {
-		super.suggestions = sMap1(FloatRange::toString, suggestions);
-		return this;
+		return super.overrideSuggestions(sMap1(FloatRange::toString, suggestions));
 	}
 
 	public Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], FloatRange[]> suggestions) {
-		super.suggestions = sMap2(FloatRange::toString, suggestions);
-		return this;
+		return super.overrideSuggestions(sMap2(FloatRange::toString, suggestions));
 	}
 }

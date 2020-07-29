@@ -53,30 +53,27 @@ public class Location2DArgument extends Argument implements ISafeOverrideableSug
 	@Override
 	public Argument safeOverrideSuggestions(Location2D... suggestions) {
 		if(locationType == LocationType.BLOCK_POSITION) {
-			super.suggestions = sMap0((Location2D l) -> l.getBlockX() + " " + l.getBlockZ(), suggestions);
+			return super.overrideSuggestions(sMap0((Location2D l) -> l.getBlockX() + " " + l.getBlockZ(), suggestions));
 		} else {
-			super.suggestions = sMap0((Location2D l) -> l.getX() + " " + l.getZ(), suggestions);
+			return super.overrideSuggestions(sMap0((Location2D l) -> l.getX() + " " + l.getZ(), suggestions));
 		}
-		return this;
 	}
 
 	@Override
 	public Argument safeOverrideSuggestions(Function<CommandSender, Location2D[]> suggestions) {
 		if(locationType == LocationType.BLOCK_POSITION) {
-			super.suggestions = sMap1((Location2D l) -> l.getBlockX() + " " + l.getBlockZ(), suggestions);
+			return super.overrideSuggestions(sMap1((Location2D l) -> l.getBlockX() + " " + l.getBlockZ(), suggestions));
 		} else {
-			super.suggestions = sMap1((Location2D l) -> l.getX() + " " + l.getZ(), suggestions);
+			return super.overrideSuggestions(sMap1((Location2D l) -> l.getX() + " " + l.getZ(), suggestions));
 		}
-		return this;
 	}
 
 	@Override
 	public Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], Location2D[]> suggestions) {
 		if(locationType == LocationType.BLOCK_POSITION) {
-			super.suggestions = sMap2((Location2D l) -> l.getBlockX() + " " + l.getBlockZ(), suggestions);
+			return super.overrideSuggestions(sMap2((Location2D l) -> l.getBlockX() + " " + l.getBlockZ(), suggestions));
 		} else {
-			super.suggestions = sMap2((Location2D l) -> l.getX() + " " + l.getZ(), suggestions);
+			return super.overrideSuggestions(sMap2((Location2D l) -> l.getX() + " " + l.getZ(), suggestions));
 		}
-		return this;
 	}
 }

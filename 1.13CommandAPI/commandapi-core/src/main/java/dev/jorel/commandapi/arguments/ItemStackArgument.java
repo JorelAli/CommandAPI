@@ -32,19 +32,16 @@ public class ItemStackArgument extends Argument implements ISafeOverrideableSugg
 
 	@Override
 	public Argument safeOverrideSuggestions(ItemStack... suggestions) {
-		super.suggestions = sMap0(CommandAPIHandler.getNMS()::convert, suggestions);
-		return this;
+		return super.overrideSuggestions(sMap0(CommandAPIHandler.getNMS()::convert, suggestions));
 	}
 
 	@Override
 	public Argument safeOverrideSuggestions(Function<CommandSender, ItemStack[]> suggestions) {
-		super.suggestions = sMap1(CommandAPIHandler.getNMS()::convert, suggestions);
-		return this;
+		return super.overrideSuggestions(sMap1(CommandAPIHandler.getNMS()::convert, suggestions));
 	}
 
 	@Override
 	public Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], ItemStack[]> suggestions) {
-		super.suggestions = sMap2(CommandAPIHandler.getNMS()::convert, suggestions);
-		return this;
+		return super.overrideSuggestions(sMap2(CommandAPIHandler.getNMS()::convert, suggestions));
 	}
 }

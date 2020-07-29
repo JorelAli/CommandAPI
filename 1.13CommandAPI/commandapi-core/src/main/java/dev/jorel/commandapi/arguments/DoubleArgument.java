@@ -52,18 +52,15 @@ public class DoubleArgument extends Argument implements ISafeOverrideableSuggest
 	}
 	
 	public Argument safeOverrideSuggestions(Double... suggestions) {
-		super.suggestions = sMap0(String::valueOf, suggestions);
-		return this;
+		return super.overrideSuggestions(sMap0(String::valueOf, suggestions));
 	}
 
 	public Argument safeOverrideSuggestions(Function<CommandSender, Double[]> suggestions) {
-		super.suggestions = sMap1(String::valueOf, suggestions);
-		return this;
+		return super.overrideSuggestions(sMap1(String::valueOf, suggestions));
 	}
 
 	public Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], Double[]> suggestions) {
-		super.suggestions = sMap2(String::valueOf, suggestions);
-		return this;
+		return super.overrideSuggestions(sMap2(String::valueOf, suggestions));
 	}
 
 }

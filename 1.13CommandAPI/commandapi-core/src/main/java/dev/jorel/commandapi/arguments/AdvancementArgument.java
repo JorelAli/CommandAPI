@@ -34,19 +34,16 @@ public class AdvancementArgument extends Argument implements ICustomProvidedArgu
 
 	@Override
 	public Argument safeOverrideSuggestions(Advancement... suggestions) {
-		super.suggestions = sMap0(fromKey(Advancement::getKey), suggestions);
-		return this;
+		return super.overrideSuggestions(sMap0(fromKey(Advancement::getKey), suggestions));
 	}
 
 	@Override
 	public Argument safeOverrideSuggestions(Function<CommandSender, Advancement[]> suggestions) {
-		super.suggestions = sMap1(fromKey(Advancement::getKey), suggestions);
-		return this;
+		return super.overrideSuggestions(sMap1(fromKey(Advancement::getKey), suggestions));
 	}
 
 	@Override
 	public Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], Advancement[]> suggestions) {
-		super.suggestions = sMap2(fromKey(Advancement::getKey), suggestions);
-		return this;
+		return super.overrideSuggestions(sMap2(fromKey(Advancement::getKey), suggestions));
 	}
 }

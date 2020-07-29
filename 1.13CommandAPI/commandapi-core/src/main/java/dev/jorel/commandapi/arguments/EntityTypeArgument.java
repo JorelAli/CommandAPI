@@ -36,17 +36,14 @@ public class EntityTypeArgument extends Argument implements ICustomProvidedArgum
 	}
 	
 	public Argument safeOverrideSuggestions(EntityType... suggestions) {
-		super.suggestions = sMap0(fromKey(EntityType::getKey), suggestions);
-		return this;
+		return super.overrideSuggestions(sMap0(fromKey(EntityType::getKey), suggestions));
 	}
 
 	public Argument safeOverrideSuggestions(Function<CommandSender, EntityType[]> suggestions) {
-		super.suggestions = sMap1(fromKey(EntityType::getKey), suggestions);
-		return this;
+		return super.overrideSuggestions(sMap1(fromKey(EntityType::getKey), suggestions));
 	}
 
 	public Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], EntityType[]> suggestions) {
-		super.suggestions = sMap2(fromKey(EntityType::getKey), suggestions);
-		return this;
+		return super.overrideSuggestions(sMap2(fromKey(EntityType::getKey), suggestions));
 	}
 }

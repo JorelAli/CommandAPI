@@ -30,18 +30,15 @@ public class BooleanArgument extends Argument implements ISafeOverrideableSugges
 	}
 	
 	public Argument safeOverrideSuggestions(Boolean... suggestions) {
-		super.suggestions = sMap0(String::valueOf, suggestions);
-		return this;
+		return super.overrideSuggestions(sMap0(String::valueOf, suggestions));
 	}
 
 	public Argument safeOverrideSuggestions(Function<CommandSender, Boolean[]> suggestions) {
-		super.suggestions = sMap1(String::valueOf, suggestions);
-		return this;
+		return super.overrideSuggestions(sMap1(String::valueOf, suggestions));
 	}
 
 	public Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], Boolean[]> suggestions) {
-		super.suggestions = sMap2(String::valueOf, suggestions);
-		return this;
+		return super.overrideSuggestions(sMap2(String::valueOf, suggestions));
 	}
 	
 }
