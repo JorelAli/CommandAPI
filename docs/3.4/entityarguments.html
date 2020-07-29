@@ -170,7 +170,6 @@
                         
                         <h1><a class="header" href="#entity--player-arguments" id="entity--player-arguments">Entity &amp; player arguments</a></h1>
 <h2><a class="header" href="#entity-selector-argument" id="entity-selector-argument">Entity selector argument</a></h2>
-<p><img src="./images/arguments/entityselector.png" alt="" /></p>
 <p>Minecraft's <a href="https://minecraft.gamepedia.com/Commands#Target_selectors">target selectors</a> (e.g. <code>@a</code> or <code>@e</code>) are implemented using the <code>EntitySelectorArgument</code> class. This allows you to select specific entities based on certain attributes.</p>
 <p>The <code>EntitySelectorArgument</code> constructor requires an <code>EntitySelector</code> argument to determine what type of data to return. There are 4 types of entity selections which are available:</p>
 <ul>
@@ -230,7 +229,6 @@ new CommandAPICommand(&quot;remove&quot;)
 </blockquote>
 <hr />
 <h2><a class="header" href="#entity-type-argument" id="entity-type-argument">Entity type argument</a></h2>
-<p><img src="./images/arguments/entitytype.png" alt="" /></p>
 <p>The <code>EntityTypeArgument</code> class is used to retrieve a type of entity as defined in the <a href="https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html"><code>EntityType</code></a> enum. In other words, this is an entity type, for example a pig or a zombie.</p>
 <div class="example">
 <h3><a class="header" href="#example---spawning-entities" id="example---spawning-entities">Example - Spawning entities</a></h3>
@@ -291,21 +289,6 @@ new CommandAPICommand(&quot;spawnmob&quot;)
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

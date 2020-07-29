@@ -227,7 +227,6 @@ for(String str : entitiesAndPlayers) {
 </blockquote>
 <hr />
 <h2><a class="header" href="#scoreboard-slot-argument" id="scoreboard-slot-argument">Scoreboard slot argument</a></h2>
-<p><img src="./images/arguments/scoreboardslot.png" alt="" /></p>
 <p>The <code>ScoreboardSlotArgument</code> represents where scoreboard information is displayed. Since the Bukkit scoreboard <code>DisplaySlot</code> is not able to represent the case where team colors are provided, the CommandAPI uses the <code>ScoreboardSlot</code> wrapper class as the representation of the <code>ScoreboardSlotArgument</code>.</p>
 <h3><a class="header" href="#scoreboardslot-wrapper" id="scoreboardslot-wrapper"><code>ScoreboardSlot</code> wrapper</a></h3>
 <p>The <code>ScoreboardSlot</code> wrapper class has 3 methods:</p>
@@ -294,21 +293,6 @@ new CommandAPICommand(&quot;clearobjectives&quot;)
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

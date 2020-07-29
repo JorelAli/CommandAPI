@@ -1060,7 +1060,6 @@ new CommandAPICommand(&quot;editconfig&quot;)
 </tbody></table>
 <p>Each range is <em>inclusive</em>, so it includes the number given to it. If the minimum value provided is larger than the maximum value, an <code>InvalidRangeException</code> is thrown.</p>
 <h1><a class="header" href="#ranged-arguments" id="ranged-arguments">Ranged arguments</a></h1>
-<p><img src="./images/arguments/floatrange.png" alt="" /></p>
 <p>Ranged arguments allow players to provide a range between two numbers, all within a single argument. The CommandAPI provides two ranged arguments, <code>IntegerRangeArgument</code> for ranges with only integer values, and <code>FloatRangeArgument</code> for ranged with potential floating point values.</p>
 <p>These consist of values such as:</p>
 <table><thead><tr><th>Input</th><th>What it means</th></tr></thead><tbody>
@@ -1232,7 +1231,6 @@ new CommandAPICommand(&quot;message&quot;)
 </div>
 <h1><a class="header" href="#position-based-arguments" id="position-based-arguments">Position-based arguments</a></h1>
 <h1><a class="header" href="#location-arguments" id="location-arguments">Location arguments</a></h1>
-<p><img src="./images/arguments/loc.png" alt="" /></p>
 <p>In the CommandAPI, there are two arguments used to represent location. The <code>LocationArgument</code> argument, which represents a 3D location \( (x, y, z) \) and the <code>Location2DArgument</code>, which represents 2D location \( (x, z) \). </p>
 <hr />
 <h2><a class="header" href="#location-3d-space" id="location-3d-space">Location (3D space)</a></h2>
@@ -1267,14 +1265,12 @@ new CommandAPICommand(&quot;break&quot;)
 </div>
 <hr />
 <h2><a class="header" href="#location-2d-space" id="location-2d-space">Location (2D space)</a></h2>
-<p><img src="./images/arguments/loc2d.png" alt="" /></p>
 <p>The <code>Location2DArgument</code> is pretty much identical in use to the <code>LocationArgument</code> for 3D coordinates, except instead of returning a <code>Location</code> object, it instead returns a <code>Location2D</code> object that extends <code>Location</code> (thus, being compatible anywhere you would normally be able to use <code>Location</code>).</p>
 <blockquote>
 <p><strong>Note:</strong></p>
 <p>The <code>Location2DArgument</code> cannot be used with <code>LocationType.PRECISE_POSITION</code> in Minecraft 1.13. However, it can be used normally with <code>LocationType.PRECISE_POSITION</code> in Minecraft versions 1.13.1 and later.</p>
 </blockquote>
 <h1><a class="header" href="#rotation-arguments" id="rotation-arguments">Rotation arguments</a></h1>
-<p><img src="./images/arguments/rotation.png" alt="" /></p>
 <p>The <code>RotationArgument</code> allows users to specify a pair of pitch and yaw coordinates. By default (using the <code>~</code> symbol), this refers to the player's current pitch and yaw of where they are looking at.</p>
 <p>The <code>RotationArgument</code> class returns a <code>Rotation</code> object, which consists of the following methods:</p>
 <table><thead><tr><th>Method name</th><th>What it does</th></tr></thead><tbody>
@@ -1308,7 +1304,6 @@ new CommandAPICommand(&quot;rotate&quot;)
 </code></pre>
 <p>Note how the head pose requires an <code>EulerAngle</code> as opposed to a pitch and yaw. To account for this, we convert our rotation (which is in degrees) into an <code>EulerAngle</code> in radians.</p>
 </div><h1><a class="header" href="#axisargument" id="axisargument">AxisArgument</a></h1>
-<p><img src="./images/arguments/axis.png" alt="" /></p>
 <p>The <code>AxisArgument</code> class refers to the x, y and z axes. When used with the CommandAPI, it returns an <code>EnumSet&lt;Axis&gt;</code> <em>(You can view the documentation for <code>EnumSet</code> <a href="https://docs.oracle.com/javase/7/docs/api/java/util/EnumSet.html">here</a>)</em>. </p>
 <div class="example">
 <h3><a class="header" href="#examples-of-axisargument-uses" id="examples-of-axisargument-uses">Examples of AxisArgument uses:</a></h3>
@@ -1466,7 +1461,6 @@ new CommandAPICommand(&quot;pbroadcast&quot;)
 </code></pre>
 </div><h1><a class="header" href="#entity--player-arguments" id="entity--player-arguments">Entity &amp; player arguments</a></h1>
 <h2><a class="header" href="#entity-selector-argument" id="entity-selector-argument">Entity selector argument</a></h2>
-<p><img src="./images/arguments/entityselector.png" alt="" /></p>
 <p>Minecraft's <a href="https://minecraft.gamepedia.com/Commands#Target_selectors">target selectors</a> (e.g. <code>@a</code> or <code>@e</code>) are implemented using the <code>EntitySelectorArgument</code> class. This allows you to select specific entities based on certain attributes.</p>
 <p>The <code>EntitySelectorArgument</code> constructor requires an <code>EntitySelector</code> argument to determine what type of data to return. There are 4 types of entity selections which are available:</p>
 <ul>
@@ -1526,7 +1520,6 @@ new CommandAPICommand(&quot;remove&quot;)
 </blockquote>
 <hr />
 <h2><a class="header" href="#entity-type-argument" id="entity-type-argument">Entity type argument</a></h2>
-<p><img src="./images/arguments/entitytype.png" alt="" /></p>
 <p>The <code>EntityTypeArgument</code> class is used to retrieve a type of entity as defined in the <a href="https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html"><code>EntityType</code></a> enum. In other words, this is an entity type, for example a pig or a zombie.</p>
 <div class="example">
 <h3><a class="header" href="#example---spawning-entities" id="example---spawning-entities">Example - Spawning entities</a></h3>
@@ -1609,7 +1602,6 @@ for(String str : entitiesAndPlayers) {
 </blockquote>
 <hr />
 <h2><a class="header" href="#scoreboard-slot-argument" id="scoreboard-slot-argument">Scoreboard slot argument</a></h2>
-<p><img src="./images/arguments/scoreboardslot.png" alt="" /></p>
 <p>The <code>ScoreboardSlotArgument</code> represents where scoreboard information is displayed. Since the Bukkit scoreboard <code>DisplaySlot</code> is not able to represent the case where team colors are provided, the CommandAPI uses the <code>ScoreboardSlot</code> wrapper class as the representation of the <code>ScoreboardSlotArgument</code>.</p>
 <h3><a class="header" href="#scoreboardslot-wrapper" id="scoreboardslot-wrapper"><code>ScoreboardSlot</code> wrapper</a></h3>
 <p>The <code>ScoreboardSlot</code> wrapper class has 3 methods:</p>
@@ -1727,7 +1719,6 @@ new CommandAPICommand(&quot;togglepvp&quot;)
 </code></pre>
 </div><h1><a class="header" href="#miscellaneous-arguments" id="miscellaneous-arguments">Miscellaneous arguments</a></h1>
 <h1><a class="header" href="#advancement-arguments" id="advancement-arguments">Advancement arguments</a></h1>
-<p><img src="./images/arguments/advancement.png" alt="" /></p>
 <p>The <code>AdvancementArgument</code> class represents in-game advancements. As expected, the <code>AdvancementArgument</code> can be casted to Bukkit's <code>Advancement</code> class.</p>
 <div class="example">
 <h3><a class="header" href="#example---awarding-a-player-an-advancement" id="example---awarding-a-player-an-advancement">Example - Awarding a player an advancement</a></h3>
@@ -1754,7 +1745,6 @@ new CommandAPICommand(&quot;award&quot;)
     .register();
 </code></pre>
 </div><h1><a class="header" href="#biome-arguments" id="biome-arguments">Biome arguments</a></h1>
-<p><img src="./images/arguments/biome.png" alt="" /></p>
 <p>In Minecraft 1.16, they added the ability to refer to in-game biomes. The CommandAPI implements this using the <code>BiomeArgument</code>. As expected, this returns Bukkit's <code>Biome</code> enum when used.</p>
 <blockquote>
 <p><strong>Note:</strong></p>
@@ -1780,7 +1770,6 @@ new CommandAPICommand(&quot;setbiome&quot;)
 	.register();
 </code></pre>
 </div><h1><a class="header" href="#enchantment-argument" id="enchantment-argument">Enchantment argument</a></h1>
-<p><img src="./images/arguments/enchantment.png" alt="" /></p>
 <p>The <code>EnchantmentArgument</code> class lets users input a specific enchantment. As you would expect, the cast type is Bukkit's <code>Enchantment</code> class.</p>
 <div class="example">
 <h3><a class="header" href="#example---giving-a-player-an-enchantment-on-their-current-item" id="example---giving-a-player-an-enchantment-on-their-current-item">Example - Giving a player an enchantment on their current item</a></h3>
@@ -1805,7 +1794,6 @@ new CommandAPICommand(&quot;enchantitem&quot;)
 </code></pre>
 </div>
 <h1><a class="header" href="#environment-arguments" id="environment-arguments">Environment arguments</a></h1>
-<p><img src="./images/arguments/environment.png" alt="" /></p>
 <p>The <code>EnvironmentArgument</code> class allows a command sender to refer to a specific world environment, declared in Bukkit's <code>World.Environment</code> class. This includes the following three environments: <code>NORMAL</code>, <code>NETHER</code> and <code>THE_END</code>.</p>
 <blockquote>
 <p><strong>Note:</strong></p>
@@ -1835,7 +1823,6 @@ new CommandAPICommand(&quot;createworld&quot;)
     .register();
 </code></pre>
 </div><h1><a class="header" href="#itemstack-arguments" id="itemstack-arguments">Itemstack arguments</a></h1>
-<p><img src="./images/arguments/itemstack.png" alt="" /></p>
 <p>The <code>ItemStackArgument</code> class represents in-game items. As expected, this should be casted to Bukkit's <code>ItemStack</code> object.</p>
 <div class="example">
 <h3><a class="header" href="#example---giving-a-player-an-itemstack" id="example---giving-a-player-an-itemstack">Example - Giving a player an itemstack</a></h3>
@@ -1876,7 +1863,6 @@ new CommandAPICommand(&quot;giveloottable&quot;)
 <p>Honestly, I've not managed to get a successful example of using a <code>LootTable</code> in practice, due to being unable to generate a suitable <code>LootContext</code>. If you believe you can supply a suitable example for this page, feel free to send an example <a href="https://github.com/JorelAli/1.13-Command-API/issues/new/choose">on the CommandAPI issues page</a>.</p>
 </blockquote>
 </div><h1><a class="header" href="#mathoperation-arguments" id="mathoperation-arguments">MathOperation arguments</a></h1>
-<p><img src="./images/arguments/mathop.png" alt="" /></p>
 <p>The CommandAPI's <code>MathOperationArgument</code> is used to represent the Minecraft scoreboard arithmetic operation to alter scoreboard scores. Since there is no default representation in the Bukkit API, the CommandAPI provides the <code>MathOperation</code> class to represent each operation:</p>
 <table><thead><tr><th align="center">Symbol (in Minecraft)</th><th>MathOperation enum value</th></tr></thead><tbody>
 <tr><td align="center">\(+=\)</td><td><code>MathOperation.ADD</code></td></tr>
@@ -1890,7 +1876,7 @@ new CommandAPICommand(&quot;giveloottable&quot;)
 <tr><td align="center">\(&gt;&lt;\)</td><td><code>MathOperation.SWAP</code></td></tr>
 </tbody></table>
 <hr />
-<p>The <code>MathOperation</code> also has two methods:</p>
+<p>The <code>MathOperationArgument</code> also has two methods:</p>
 <pre><code class="language-java">public int apply(int val1, int val2);
 public float apply(float val1, float val2);
 </code></pre>
@@ -1953,7 +1939,6 @@ new CommandAPICommand(&quot;changelevel&quot;)
 </li>
 </ul>
 </div><h1><a class="header" href="#particle-arguments" id="particle-arguments">Particle arguments</a></h1>
-<p><img src="./images/arguments/particle.png" alt="" /></p>
 <p>The <code>ParticleArgument</code> class represents Minecraft particles. As expected, this is casted to the Bukkit <code>Particle</code> class.</p>
 <div class="example">
 <h3><a class="header" href="#example---show-particles-at-a-players-location" id="example---show-particles-at-a-players-location">Example - Show particles at a player's location</a></h3>
@@ -1972,7 +1957,6 @@ new CommandAPICommand(&quot;showparticle&quot;)
     .register();
 </code></pre>
 </div><h1><a class="header" href="#potion-effect-arguments" id="potion-effect-arguments">Potion effect arguments</a></h1>
-<p><img src="./images/arguments/potion.png" alt="" /></p>
 <p>The <code>PotionEffectArgument</code> class represents Minecraft potion effects. When used, this argument is casted to Bukkit's <code>PotionEffectType</code> class.</p>
 <div class="example">
 <h3><a class="header" href="#example---giving-a-player-a-potion-effect" id="example---giving-a-player-a-potion-effect">Example - Giving a player a potion effect</a></h3>
@@ -2001,7 +1985,6 @@ new CommandAPICommand(&quot;potion&quot;)
     .register();
 </code></pre>
 </div><h1><a class="header" href="#recipe-arguments" id="recipe-arguments">Recipe arguments</a></h1>
-<p><img src="./images/arguments/recipe.png" alt="" /></p>
 <p>The <code>RecipeArgument</code> class lets you retrieve Bukkit's <code>Recipe</code> object. Unlike the other arguments, <strong>this argument has a slightly different implementation for Minecraft 1.15+</strong>.</p>
 <blockquote>
 <p><strong>Developer's Note:</strong></p>
@@ -2724,21 +2707,6 @@ Caused by: java.lang.IllegalArgumentException: Whilst parsing command on line 2:
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         
