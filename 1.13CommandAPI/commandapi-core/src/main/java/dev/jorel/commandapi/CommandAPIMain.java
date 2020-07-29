@@ -32,7 +32,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.DisplaySlot;
 
@@ -42,20 +41,44 @@ import dev.jorel.commandapi.arguments.AdvancementArgument;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.AxisArgument;
 import dev.jorel.commandapi.arguments.BiomeArgument;
+import dev.jorel.commandapi.arguments.BlockStateArgument;
+import dev.jorel.commandapi.arguments.BooleanArgument;
+import dev.jorel.commandapi.arguments.ChatArgument;
 import dev.jorel.commandapi.arguments.ChatColorArgument;
+import dev.jorel.commandapi.arguments.ChatComponentArgument;
+import dev.jorel.commandapi.arguments.DoubleArgument;
 import dev.jorel.commandapi.arguments.EnchantmentArgument;
+import dev.jorel.commandapi.arguments.EntitySelectorArgument;
+import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
 import dev.jorel.commandapi.arguments.EntityTypeArgument;
 import dev.jorel.commandapi.arguments.EnvironmentArgument;
 import dev.jorel.commandapi.arguments.FloatArgument;
 import dev.jorel.commandapi.arguments.FloatRangeArgument;
+import dev.jorel.commandapi.arguments.FunctionArgument;
+import dev.jorel.commandapi.arguments.GreedyStringArgument;
+import dev.jorel.commandapi.arguments.IntegerArgument;
+import dev.jorel.commandapi.arguments.IntegerRangeArgument;
 import dev.jorel.commandapi.arguments.ItemStackArgument;
+import dev.jorel.commandapi.arguments.LiteralArgument;
+import dev.jorel.commandapi.arguments.Location2DArgument;
 import dev.jorel.commandapi.arguments.LocationArgument;
+import dev.jorel.commandapi.arguments.LongArgument;
+import dev.jorel.commandapi.arguments.LootTableArgument;
 import dev.jorel.commandapi.arguments.MathOperationArgument;
 import dev.jorel.commandapi.arguments.NBTCompoundArgument;
+import dev.jorel.commandapi.arguments.ObjectiveArgument;
+import dev.jorel.commandapi.arguments.ObjectiveCriteriaArgument;
 import dev.jorel.commandapi.arguments.ParticleArgument;
+import dev.jorel.commandapi.arguments.PlayerArgument;
+import dev.jorel.commandapi.arguments.PotionEffectArgument;
 import dev.jorel.commandapi.arguments.RecipeArgument;
 import dev.jorel.commandapi.arguments.RotationArgument;
+import dev.jorel.commandapi.arguments.ScoreHolderArgument;
+import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
 import dev.jorel.commandapi.arguments.ScoreboardSlotArgument;
+import dev.jorel.commandapi.arguments.SoundArgument;
+import dev.jorel.commandapi.arguments.StringArgument;
+import dev.jorel.commandapi.arguments.TeamArgument;
 import dev.jorel.commandapi.arguments.TextArgument;
 import dev.jorel.commandapi.arguments.TimeArgument;
 import dev.jorel.commandapi.wrappers.FloatRange;
@@ -284,6 +307,63 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 	        	System.out.println(Arrays.deepToString(a));
 	        })
 	        .register();
+        } {
+        	Argument[] arguments = new Argument[] {
+        		new AdvancementArgument(),
+        		new AxisArgument(),
+        		new BiomeArgument(),
+        		new BlockStateArgument(),
+        		new BooleanArgument(),
+        		new ChatArgument(),
+        		new ChatColorArgument(),
+        		new ChatComponentArgument(),
+//        		new CustomArgument(),
+        		new DoubleArgument(),
+        		new EnchantmentArgument(),
+//        		new EntitySelectorArgument(),
+        		new EnchantmentArgument(),
+        		new EntitySelectorArgument(EntitySelector.MANY_ENTITIES),
+        		new EntityTypeArgument(),
+        		new EnvironmentArgument(),
+        		new FloatArgument(),
+        		new FloatRangeArgument(),
+        		new FunctionArgument(),
+        		new GreedyStringArgument(),
+        		new IntegerArgument(),
+        		new IntegerRangeArgument(),
+        		new ItemStackArgument(),
+//        		new LiteralArgument(""),
+        		new Location2DArgument(),
+        		new LocationArgument(),
+        		new LongArgument(),
+        		new LootTableArgument(),
+        		new MathOperationArgument(),
+        		new NBTCompoundArgument(),
+        		new ObjectiveArgument(),
+        		new ObjectiveCriteriaArgument(),
+        		new ParticleArgument(),
+        		new PlayerArgument(),
+        		new PotionEffectArgument(),
+        		new RecipeArgument(),
+        		new RotationArgument(),
+        		new ScoreboardSlotArgument(),
+        		new ScoreHolderArgument(ScoreHolderType.MULTIPLE),
+        		new SoundArgument(),
+        		new StringArgument(),
+        		new TeamArgument(),
+        		new TextArgument(),
+        		new TimeArgument()
+        	};
+        	
+        	for(Argument a : arguments) {
+        		LinkedHashMap<String, Argument> args = new LinkedHashMap<>();
+        		args.put(a.getClass().getSimpleName(), a);
+        		
+        		new CommandAPICommand(a.getClass().getSimpleName())
+        		.withArguments(args)
+        		.executes((c, arg) -> {
+        		}).register();
+        	}
         }
 	}
 	

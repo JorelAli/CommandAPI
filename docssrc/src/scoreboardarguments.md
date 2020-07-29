@@ -66,6 +66,8 @@ Note how we use `..9` to represent 9 or less deaths (since ranges are inclusive)
 
 ## Scoreboard slot argument
 
+![](./images/arguments/scoreboardslot.png)
+
 The `ScoreboardSlotArgument` represents where scoreboard information is displayed. Since the Bukkit scoreboard `DisplaySlot` is not able to represent the case where team colors are provided, the CommandAPI uses the `ScoreboardSlot` wrapper class as the representation of the `ScoreboardSlotArgument`.
 
 ### `ScoreboardSlot` wrapper

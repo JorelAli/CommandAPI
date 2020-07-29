@@ -1,5 +1,7 @@
 # Rotation arguments
 
+![](./images/arguments/rotation.png)
+
 The `RotationArgument` allows users to specify a pair of pitch and yaw coordinates. By default (using the `~` symbol), this refers to the player's current pitch and yaw of where they are looking at.
 
 The `RotationArgument` class returns a `Rotation` object, which consists of the following methods:
