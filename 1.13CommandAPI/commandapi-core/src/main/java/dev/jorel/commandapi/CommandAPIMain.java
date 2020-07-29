@@ -310,7 +310,7 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         } {
         	Argument[] arguments = new Argument[] {
         		new AdvancementArgument(),
-        		new AxisArgument(),
+//        		new AxisArgument(),
         		new BiomeArgument(),
         		new BlockStateArgument(),
         		new BooleanArgument(),
@@ -364,6 +364,23 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         		.executes((c, arg) -> {
         		}).register();
         	}
+        } {
+        	
+        	LinkedHashMap<String, Argument> args = new LinkedHashMap<>();
+    		args.put("AxisArgument", new AxisArgument().safeOverrideSuggestions(
+    			EnumSet.of(Axis.X),
+    			EnumSet.of(Axis.Y),
+    			EnumSet.of(Axis.Z),
+    			EnumSet.of(Axis.X, Axis.Z),
+    			EnumSet.of(Axis.X, Axis.Y),
+    			EnumSet.of(Axis.Y, Axis.Z),
+    			EnumSet.allOf(Axis.class)
+			));
+    		
+    		new CommandAPICommand("AxisArgument")
+    		.withArguments(args)
+    		.executes((c, arg) -> {
+    		}).register();
         }
 	}
 	

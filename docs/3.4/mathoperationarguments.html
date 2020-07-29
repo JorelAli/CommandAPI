@@ -169,6 +169,7 @@
                         <div class="sidetoc"><nav class="pagetoc"></nav></div>
                         
                         <h1><a class="header" href="#mathoperation-arguments" id="mathoperation-arguments">MathOperation arguments</a></h1>
+<p><img src="./images/arguments/mathop.png" alt="" /></p>
 <p>The CommandAPI's <code>MathOperationArgument</code> is used to represent the Minecraft scoreboard arithmetic operation to alter scoreboard scores. Since there is no default representation in the Bukkit API, the CommandAPI provides the <code>MathOperation</code> class to represent each operation:</p>
 <table><thead><tr><th align="center">Symbol (in Minecraft)</th><th>MathOperation enum value</th></tr></thead><tbody>
 <tr><td align="center">\(+=\)</td><td><code>MathOperation.ADD</code></td></tr>
@@ -182,7 +183,7 @@
 <tr><td align="center">\(&gt;&lt;\)</td><td><code>MathOperation.SWAP</code></td></tr>
 </tbody></table>
 <hr />
-<p>The <code>MathOperationArgument</code> also has two methods:</p>
+<p>The <code>MathOperation</code> also has two methods:</p>
 <pre><code class="language-java">public int apply(int val1, int val2);
 public float apply(float val1, float val2);
 </code></pre>

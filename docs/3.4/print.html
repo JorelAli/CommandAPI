@@ -1308,6 +1308,7 @@ new CommandAPICommand(&quot;rotate&quot;)
 </code></pre>
 <p>Note how the head pose requires an <code>EulerAngle</code> as opposed to a pitch and yaw. To account for this, we convert our rotation (which is in degrees) into an <code>EulerAngle</code> in radians.</p>
 </div><h1><a class="header" href="#axisargument" id="axisargument">AxisArgument</a></h1>
+<p><img src="./images/arguments/axis.png" alt="" /></p>
 <p>The <code>AxisArgument</code> class refers to the x, y and z axes. When used with the CommandAPI, it returns an <code>EnumSet&lt;Axis&gt;</code> <em>(You can view the documentation for <code>EnumSet</code> <a href="https://docs.oracle.com/javase/7/docs/api/java/util/EnumSet.html">here</a>)</em>. </p>
 <div class="example">
 <h3><a class="header" href="#examples-of-axisargument-uses" id="examples-of-axisargument-uses">Examples of AxisArgument uses:</a></h3>
@@ -1753,6 +1754,7 @@ new CommandAPICommand(&quot;award&quot;)
     .register();
 </code></pre>
 </div><h1><a class="header" href="#biome-arguments" id="biome-arguments">Biome arguments</a></h1>
+<p><img src="./images/arguments/biome.png" alt="" /></p>
 <p>In Minecraft 1.16, they added the ability to refer to in-game biomes. The CommandAPI implements this using the <code>BiomeArgument</code>. As expected, this returns Bukkit's <code>Biome</code> enum when used.</p>
 <blockquote>
 <p><strong>Note:</strong></p>
@@ -1778,6 +1780,7 @@ new CommandAPICommand(&quot;setbiome&quot;)
 	.register();
 </code></pre>
 </div><h1><a class="header" href="#enchantment-argument" id="enchantment-argument">Enchantment argument</a></h1>
+<p><img src="./images/arguments/enchantment.png" alt="" /></p>
 <p>The <code>EnchantmentArgument</code> class lets users input a specific enchantment. As you would expect, the cast type is Bukkit's <code>Enchantment</code> class.</p>
 <div class="example">
 <h3><a class="header" href="#example---giving-a-player-an-enchantment-on-their-current-item" id="example---giving-a-player-an-enchantment-on-their-current-item">Example - Giving a player an enchantment on their current item</a></h3>
@@ -1802,6 +1805,7 @@ new CommandAPICommand(&quot;enchantitem&quot;)
 </code></pre>
 </div>
 <h1><a class="header" href="#environment-arguments" id="environment-arguments">Environment arguments</a></h1>
+<p><img src="./images/arguments/environment.png" alt="" /></p>
 <p>The <code>EnvironmentArgument</code> class allows a command sender to refer to a specific world environment, declared in Bukkit's <code>World.Environment</code> class. This includes the following three environments: <code>NORMAL</code>, <code>NETHER</code> and <code>THE_END</code>.</p>
 <blockquote>
 <p><strong>Note:</strong></p>
@@ -1871,6 +1875,7 @@ new CommandAPICommand(&quot;giveloottable&quot;)
 <p>Honestly, I've not managed to get a successful example of using a <code>LootTable</code> in practice, due to being unable to generate a suitable <code>LootContext</code>. If you believe you can supply a suitable example for this page, feel free to send an example <a href="https://github.com/JorelAli/1.13-Command-API/issues/new/choose">on the CommandAPI issues page</a>.</p>
 </blockquote>
 </div><h1><a class="header" href="#mathoperation-arguments" id="mathoperation-arguments">MathOperation arguments</a></h1>
+<p><img src="./images/arguments/mathop.png" alt="" /></p>
 <p>The CommandAPI's <code>MathOperationArgument</code> is used to represent the Minecraft scoreboard arithmetic operation to alter scoreboard scores. Since there is no default representation in the Bukkit API, the CommandAPI provides the <code>MathOperation</code> class to represent each operation:</p>
 <table><thead><tr><th align="center">Symbol (in Minecraft)</th><th>MathOperation enum value</th></tr></thead><tbody>
 <tr><td align="center">\(+=\)</td><td><code>MathOperation.ADD</code></td></tr>
@@ -1884,7 +1889,7 @@ new CommandAPICommand(&quot;giveloottable&quot;)
 <tr><td align="center">\(&gt;&lt;\)</td><td><code>MathOperation.SWAP</code></td></tr>
 </tbody></table>
 <hr />
-<p>The <code>MathOperationArgument</code> also has two methods:</p>
+<p>The <code>MathOperation</code> also has two methods:</p>
 <pre><code class="language-java">public int apply(int val1, int val2);
 public float apply(float val1, float val2);
 </code></pre>

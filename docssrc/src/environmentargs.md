@@ -1,5 +1,7 @@
 # Environment arguments
 
+![](./images/arguments/environment.png)
+
 The `EnvironmentArgument` class allows a command sender to refer to a specific world environment, declared in Bukkit's `World.Environment` class. This includes the following three environments: `NORMAL`, `NETHER` and `THE_END`.
 
 > **Note:**
