@@ -40,25 +40,21 @@ public interface ISafeOverrideableSuggestions<S> {
 	 */
 	Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], S[]> suggestions);
 	
-	default String[] stringMap(S[] arr, Function<S, String> mapper) {
-		return Arrays.stream(arr).map(mapper).toArray(String[]::new);
-	}
-	
 	default Function<S, String> fromKey(Function<S, NamespacedKey> mapper) {
 		return mapper.andThen(NamespacedKey::toString);
 	}
 	
 	@SuppressWarnings("unchecked")
 	default BiFunction<CommandSender, Object[], String[]> sMap0(Function<S, String> mapper, S... suggestions) {
-		return (c, m) -> stringMap(suggestions, mapper);
+		return (c, m) -> Arrays.stream(suggestions).map(mapper).toArray(String[]::new);
 	}
 	
 	default BiFunction<CommandSender, Object[], String[]> sMap1(Function<S, String> mapper, Function<CommandSender, S[]> suggestions) {
-		return (c, m) -> stringMap(suggestions.apply(c), mapper);
+		return (c, m) -> Arrays.stream(suggestions.apply(c)).map(mapper).toArray(String[]::new);
 	}
 	
 	default BiFunction<CommandSender, Object[], String[]> sMap2(Function<S, String> mapper, BiFunction<CommandSender, Object[], S[]> suggestions) {
-		return (c, m) -> stringMap(suggestions.apply(c, m), mapper);
+		return (c, m) -> Arrays.stream(suggestions.apply(c, m)).map(mapper).toArray(String[]::new);
 	}
 	
 }
