@@ -1,6 +1,7 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -31,6 +32,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.DisplaySlot;
 
 import de.tr7zw.nbtapi.NBTContainer;
@@ -51,11 +54,13 @@ import dev.jorel.commandapi.arguments.MathOperationArgument;
 import dev.jorel.commandapi.arguments.NBTCompoundArgument;
 import dev.jorel.commandapi.arguments.ParticleArgument;
 import dev.jorel.commandapi.arguments.RecipeArgument;
+import dev.jorel.commandapi.arguments.RotationArgument;
 import dev.jorel.commandapi.arguments.ScoreboardSlotArgument;
 import dev.jorel.commandapi.arguments.TextArgument;
 import dev.jorel.commandapi.arguments.TimeArgument;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.MathOperation;
+import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.Time;
 
@@ -114,8 +119,6 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 		}, 0L);
         
         getServer().getPluginManager().registerEvents(this, this);
-        
-        CommandAPIHandler.getNMS().converters();
         
         //TODO: Remove before release
         {
@@ -242,6 +245,40 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 	        arguments.put("scoreboardslot", new ScoreboardSlotArgument().safeOverrideSuggestions(ScoreboardSlot.of(DisplaySlot.BELOW_NAME), ScoreboardSlot.ofTeamColor(ChatColor.AQUA)));
 	        
 	        new CommandAPICommand("i")
+	        .withArguments(arguments)
+	        .executesPlayer((s, a) -> {
+	        	System.out.println(Arrays.deepToString(a));
+	        })
+	        .register();
+        } {
+        	
+        	
+        	Field f = null;
+			try {
+				f = PotionEffectType.class.getDeclaredField("byId");
+			} catch (NoSuchFieldException | SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	f.setAccessible(true);
+        	PotionEffectType[] byId = null;
+			try {
+				byId = (PotionEffectType[]) f.get(null);
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	for(PotionEffectType p : byId) {
+        		try {
+        			System.out.println(p.getName());
+        		} catch(Exception e) {}
+        	}
+        	CommandAPIHandler.getNMS().convert(PotionEffectType.FAST_DIGGING);
+        } {
+        	LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+	        arguments.put("rot", new RotationArgument().safeOverrideSuggestions(new Rotation(2, 3)));
+	        
+	        new CommandAPICommand("j")
 	        .withArguments(arguments)
 	        .executesPlayer((s, a) -> {
 	        	System.out.println(Arrays.deepToString(a));

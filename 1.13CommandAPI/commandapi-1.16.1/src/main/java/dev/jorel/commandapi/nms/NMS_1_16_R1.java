@@ -6,7 +6,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Iterator;
@@ -20,7 +19,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Keyed;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -50,7 +48,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ComplexRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
 
@@ -130,7 +127,6 @@ import net.minecraft.server.v1_16_R1.IVectorPosition;
 import net.minecraft.server.v1_16_R1.LootTableRegistry;
 import net.minecraft.server.v1_16_R1.MinecraftKey;
 import net.minecraft.server.v1_16_R1.MinecraftServer;
-import net.minecraft.server.v1_16_R1.NBTTagCompound;
 import net.minecraft.server.v1_16_R1.ScoreboardScore;
 import net.minecraft.server.v1_16_R1.SystemUtils;
 import net.minecraft.server.v1_16_R1.Unit;
@@ -141,6 +137,12 @@ import net.minecraft.server.v1_16_R1.WorldServer;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class NMS_1_16_R1 implements NMS {
 	
+	@SuppressWarnings("deprecation")
+	@Override
+	public String convert(PotionEffectType potion) {
+		return IRegistry.MOB_EFFECT.getKey(IRegistry.MOB_EFFECT.fromId(potion.getId())).toString();
+	}
+	
 	@Override
 	public String convert(Particle particle) {
 		return CraftParticle.toNMS(particle).a();
@@ -150,21 +152,6 @@ public class NMS_1_16_R1 implements NMS {
 	public String convert(ItemStack is) {
 		net.minecraft.server.v1_16_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(is);
 		return is.getType().getKey().toString() + nmsItemStack.getOrCreateTag().asString();
-	}
-	
-	@Override
-	public void converters() {
-		ItemStack is = new ItemStack(Material.DIAMOND_SWORD);
-		ItemMeta meta = is.getItemMeta();
-		meta.setLore(Arrays.asList(new String[] {"hello!"}));
-		is.setItemMeta(meta);
-		is.addEnchantment(Enchantment.DAMAGE_ALL, 2);
-		net.minecraft.server.v1_16_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(is);
-		NBTTagCompound base = nmsItemStack.getOrCreateTag();
-		System.out.println(is.getType().getKey().toString());
-		System.out.println(base.asString());
-		
-		
 	}
 
 	@Override
