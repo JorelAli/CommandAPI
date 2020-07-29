@@ -209,6 +209,8 @@ public interface NMS {
 	ArgumentType<?> _ArgumentVec3();
 	ArgumentType<?> _ArgumentMathOperation();
 	
-	/** Argument validators (Coming soon!) */
-	boolean validateMinecraftKeyRegistered(String argument);
+	//TODO: IMPLEMENT CONVERTERS!
+	String convert(ItemStack is);
+	default String convert(Particle particle) {return "TODO: (See NMS class)";};
+	default String convert(PotionEffectType potion) {return "TODO: (See NMS class)";};
 }

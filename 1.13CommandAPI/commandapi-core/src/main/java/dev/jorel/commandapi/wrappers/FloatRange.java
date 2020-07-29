@@ -18,6 +18,14 @@ public class FloatRange {
 		this.high = high;
 	}
 	
+	public static FloatRange floatRangeGreaterThanOrEq(float min) {
+		return new FloatRange(min, Float.MAX_VALUE);
+	}
+	
+	public static FloatRange floatRangeLessThanOrEq(float max) {
+		return new FloatRange(-Float.MAX_VALUE, max);
+	}
+	
 	/**
 	 * The lower bound of this range.
 	 * @return the lower bound of this range
@@ -41,6 +49,17 @@ public class FloatRange {
 	 */
 	public boolean isInRange(float f) {
 		return f >= low && f <= high;
+	}
+	
+	@Override
+	public String toString() {
+		if(this.high == Float.MAX_VALUE) {
+			return this.low + "..";
+		} else if(this.low == -Float.MAX_VALUE) {
+			return ".." + this.high;
+		} else {
+			return this.low + ".." + this.high;
+		}
 	}
 	
 }

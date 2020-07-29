@@ -11,8 +11,9 @@ import dev.jorel.commandapi.CommandPermission;
 
 /**
  * The core abstract class for Command API arguments
+ * @param <S>
  */
-public abstract class Argument implements IOverrideableSuggestions<Argument> {
+public abstract class Argument implements IOverrideableSuggestions {
 
 	/**
 	 * Returns the primitive type of the current Argument. After executing a
@@ -60,7 +61,7 @@ public abstract class Argument implements IOverrideableSuggestions<Argument> {
 	// Suggestions //
 	/////////////////
 
-	private BiFunction<CommandSender, Object[], String[]> suggestions = null;
+	BiFunction<CommandSender, Object[], String[]> suggestions = null;
 
 	/**
 	 * Override the suggestions of this argument with a String array. Typically,

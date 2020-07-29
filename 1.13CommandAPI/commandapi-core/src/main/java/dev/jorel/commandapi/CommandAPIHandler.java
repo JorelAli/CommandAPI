@@ -491,7 +491,7 @@ public final class CommandAPIHandler {
 				}
 
 				// Handle arguments with built-in suggestion providers
-				else if (innerArg instanceof ICustomProvidedArgument) {
+				else if (innerArg instanceof ICustomProvidedArgument && innerArg.getOverriddenSuggestions() == null) {
 					inner = getRequiredArgumentBuilderWithProvider(keys.get(keys.size() - 1), innerArg.getRawType(),
 							innerArg.getArgumentPermission(),
 							nms.getSuggestionProvider(((ICustomProvidedArgument) innerArg).getSuggestionProvider()))
@@ -517,7 +517,7 @@ public final class CommandAPIHandler {
 				}
 
 				// Handle arguments with built-in suggestion providers
-				else if (outerArg instanceof ICustomProvidedArgument) {
+				else if (outerArg instanceof ICustomProvidedArgument && outerArg.getOverriddenSuggestions() == null) {
 					outer = getRequiredArgumentBuilderWithProvider(keys.get(i), outerArg.getRawType(),
 							outerArg.getArgumentPermission(),
 							nms.getSuggestionProvider(((ICustomProvidedArgument) outerArg).getSuggestionProvider()))

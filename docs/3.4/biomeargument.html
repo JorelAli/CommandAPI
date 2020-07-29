@@ -169,6 +169,7 @@
                         <div class="sidetoc"><nav class="pagetoc"></nav></div>
                         
                         <h1><a class="header" href="#biome-arguments" id="biome-arguments">Biome arguments</a></h1>
+<p><img src="./images/arguments/biome.png" alt="" /></p>
 <p>In Minecraft 1.16, they added the ability to refer to in-game biomes. The CommandAPI implements this using the <code>BiomeArgument</code>. As expected, this returns Bukkit's <code>Biome</code> enum when used.</p>
 <blockquote>
 <p><strong>Note:</strong></p>
@@ -231,6 +232,21 @@ new CommandAPICommand(&quot;setbiome&quot;)
 
         </div>
 
+        
+        <!-- Livereload script (if served using the cli tool) -->
+        <script type="text/javascript">
+            var socket = new WebSocket("ws://localhost:3000/__livereload");
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
         
 
         

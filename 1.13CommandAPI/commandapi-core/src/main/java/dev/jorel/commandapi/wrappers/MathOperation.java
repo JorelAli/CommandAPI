@@ -8,47 +8,58 @@ public enum MathOperation {
 	/**
 	 * Addition of two values (+=)
 	 */
-	ADD, 
+	ADD("+="), 
 	
 	/**
 	 * Assignment of a value (=)
 	 */
-	ASSIGN, 
+	ASSIGN("="), 
 	
 	/**
 	 * Division of a value by another value (/=)
 	 */
-	DIVIDE, 
+	DIVIDE("/="), 
 	
 	/**
 	 * The maximum value of two values (>)
 	 */
-	MAX, 
+	MAX(">"), 
 	
 	/**
 	 * The minimum value of two values (<)
 	 */
-	MIN, 
+	MIN("<"), 
 	
 	/**
 	 * Modulo of a value by another value (%=)
 	 */
-	MOD, 
+	MOD("%="), 
 	
 	/**
 	 * Multiplication of a value by another value (*=) 
 	 */
-	MULTIPLY, 
+	MULTIPLY("*="), 
 	
 	/**
 	 * Subtraction of a value by another value (-=)
 	 */
-	SUBTRACT, 
+	SUBTRACT("-="), 
 	
 	/**
 	 * Swap the results of two values (><)
 	 */
-	SWAP;
+	SWAP("><");
+	
+	private String stringValue;
+	
+	MathOperation(String stringValue) {
+		this.stringValue = stringValue;
+	}
+	
+	@Override
+	public String toString() {
+		return this.stringValue;
+	}
 	
 	/**
 	 * Applies the current MathOperation to two ints

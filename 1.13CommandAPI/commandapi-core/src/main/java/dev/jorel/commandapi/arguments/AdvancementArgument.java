@@ -1,13 +1,17 @@
 package dev.jorel.commandapi.arguments;
 
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
 import org.bukkit.advancement.Advancement;
+import org.bukkit.command.CommandSender;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 
 /**
  * An argument that represents the Bukkit Advancement object
  */
-public class AdvancementArgument extends Argument implements ICustomProvidedArgument {
+public class AdvancementArgument extends Argument implements ICustomProvidedArgument, ISafeOverrideableSuggestions<Advancement> {
 	
 	public AdvancementArgument() {
 		super(CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered());
@@ -28,8 +32,18 @@ public class AdvancementArgument extends Argument implements ICustomProvidedArgu
 		return SuggestionProviders.ADVANCEMENTS;
 	}
 
-//	@Override
-//	public boolean validate(String argument) {
-//		return CommandAPIHandler.getNMS().validateMinecraftKeyRegistered(argument);
-//	}
+	@Override
+	public Argument safeOverrideSuggestions(Advancement... suggestions) {
+		return super.overrideSuggestions(sMap0(fromKey(Advancement::getKey), suggestions));
+	}
+
+	@Override
+	public Argument safeOverrideSuggestions(Function<CommandSender, Advancement[]> suggestions) {
+		return super.overrideSuggestions(sMap1(fromKey(Advancement::getKey), suggestions));
+	}
+
+	@Override
+	public Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], Advancement[]> suggestions) {
+		return super.overrideSuggestions(sMap2(fromKey(Advancement::getKey), suggestions));
+	}
 }

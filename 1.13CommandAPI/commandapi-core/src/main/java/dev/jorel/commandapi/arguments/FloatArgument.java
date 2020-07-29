@@ -1,5 +1,10 @@
 package dev.jorel.commandapi.arguments;
 
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
+import org.bukkit.command.CommandSender;
+
 import com.mojang.brigadier.arguments.FloatArgumentType;
 
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
@@ -7,7 +12,7 @@ import dev.jorel.commandapi.exceptions.InvalidRangeException;
 /**
  * An argument that represents primitive Java floats
  */
-public class FloatArgument extends Argument {
+public class FloatArgument extends Argument implements ISafeOverrideableSuggestions<Float> {
 
 	/**
 	 * A float argument
@@ -44,5 +49,17 @@ public class FloatArgument extends Argument {
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.SIMPLE_TYPE;
+	}
+	
+	public Argument safeOverrideSuggestions(Float... suggestions) {
+		return super.overrideSuggestions(sMap0(String::valueOf, suggestions));
+	}
+
+	public Argument safeOverrideSuggestions(Function<CommandSender, Float[]> suggestions) {
+		return super.overrideSuggestions(sMap1(String::valueOf, suggestions));
+	}
+
+	public Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], Float[]> suggestions) {
+		return super.overrideSuggestions(sMap2(String::valueOf, suggestions));
 	}
 }

@@ -169,6 +169,7 @@
                         <div class="sidetoc"><nav class="pagetoc"></nav></div>
                         
                         <h1><a class="header" href="#rotation-arguments" id="rotation-arguments">Rotation arguments</a></h1>
+<p><img src="./images/arguments/rotation.png" alt="" /></p>
 <p>The <code>RotationArgument</code> allows users to specify a pair of pitch and yaw coordinates. By default (using the <code>~</code> symbol), this refers to the player's current pitch and yaw of where they are looking at.</p>
 <p>The <code>RotationArgument</code> class returns a <code>Rotation</code> object, which consists of the following methods:</p>
 <table><thead><tr><th>Method name</th><th>What it does</th></tr></thead><tbody>
@@ -239,6 +240,21 @@ new CommandAPICommand(&quot;rotate&quot;)
 
         </div>
 
+        
+        <!-- Livereload script (if served using the cli tool) -->
+        <script type="text/javascript">
+            var socket = new WebSocket("ws://localhost:3000/__livereload");
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
         
 
         

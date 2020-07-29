@@ -169,6 +169,7 @@
                         <div class="sidetoc"><nav class="pagetoc"></nav></div>
                         
                         <h1><a class="header" href="#location-arguments" id="location-arguments">Location arguments</a></h1>
+<p><img src="./images/arguments/loc.png" alt="" /></p>
 <p>In the CommandAPI, there are two arguments used to represent location. The <code>LocationArgument</code> argument, which represents a 3D location \( (x, y, z) \) and the <code>Location2DArgument</code>, which represents 2D location \( (x, z) \). </p>
 <hr />
 <h2><a class="header" href="#location-3d-space" id="location-3d-space">Location (3D space)</a></h2>
@@ -203,6 +204,7 @@ new CommandAPICommand(&quot;break&quot;)
 </div>
 <hr />
 <h2><a class="header" href="#location-2d-space" id="location-2d-space">Location (2D space)</a></h2>
+<p><img src="./images/arguments/loc2d.png" alt="" /></p>
 <p>The <code>Location2DArgument</code> is pretty much identical in use to the <code>LocationArgument</code> for 3D coordinates, except instead of returning a <code>Location</code> object, it instead returns a <code>Location2D</code> object that extends <code>Location</code> (thus, being compatible anywhere you would normally be able to use <code>Location</code>).</p>
 <blockquote>
 <p><strong>Note:</strong></p>
@@ -246,6 +248,21 @@ new CommandAPICommand(&quot;break&quot;)
 
         </div>
 
+        
+        <!-- Livereload script (if served using the cli tool) -->
+        <script type="text/javascript">
+            var socket = new WebSocket("ws://localhost:3000/__livereload");
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
         
 
         

@@ -46,6 +46,58 @@ public class ScoreboardSlot {
 		}
 	}
 	
+	public static ScoreboardSlot of(DisplaySlot slot) {
+		switch(slot) {
+		case PLAYER_LIST:
+			return new ScoreboardSlot(0);
+		case SIDEBAR:
+			return new ScoreboardSlot(1);
+		case BELOW_NAME:
+			return new ScoreboardSlot(2);
+		default:
+			return new ScoreboardSlot(1);
+		}
+	}
+	
+	public static ScoreboardSlot ofTeamColor(ChatColor color) {
+		switch (color) {
+		case BLACK:
+			return new ScoreboardSlot(3);
+		case DARK_BLUE:
+			return new ScoreboardSlot(4);
+		case DARK_GREEN:
+			return new ScoreboardSlot(5);
+		case DARK_AQUA:
+			return new ScoreboardSlot(6);
+		case DARK_RED:
+			return new ScoreboardSlot(7);
+		case DARK_PURPLE:
+			return new ScoreboardSlot(8);
+		case GOLD:
+			return new ScoreboardSlot(9);
+		case GRAY:
+			return new ScoreboardSlot(10);
+		case DARK_GRAY:
+			return new ScoreboardSlot(11);
+		case BLUE:
+			return new ScoreboardSlot(12);
+		case GREEN:
+			return new ScoreboardSlot(13);
+		case AQUA:
+			return new ScoreboardSlot(14);
+		case RED:
+			return new ScoreboardSlot(15);
+		case LIGHT_PURPLE:
+			return new ScoreboardSlot(16);
+		case YELLOW:
+			return new ScoreboardSlot(17);
+		case WHITE:
+			return new ScoreboardSlot(18);
+		default:
+			return new ScoreboardSlot(1);
+		}
+	}
+	
 	/**
 	 * Gets the display slot of this scoreboard slot.
 	 * @return this scoreboard slot's display slot
@@ -68,5 +120,23 @@ public class ScoreboardSlot {
 	 */
 	public boolean hasTeamColor() {
 		return teamColor != null;
+	}
+	
+	@Override
+	public String toString() {
+		if(teamColor != null) {
+			return "sidebar.team." + teamColor.name().toLowerCase();
+		} else {
+			switch(displaySlot) {
+			case PLAYER_LIST:
+				return "list";
+			case SIDEBAR:
+				return "sidebar";
+			case BELOW_NAME:
+				return "belowName";
+			default:
+				return "sidebar";
+			}
+		}
 	}
 }

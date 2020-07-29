@@ -1,5 +1,9 @@
 package dev.jorel.commandapi.arguments;
 
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 
 import dev.jorel.commandapi.CommandAPIHandler;
@@ -7,7 +11,7 @@ import dev.jorel.commandapi.CommandAPIHandler;
 /**
  * An argument that represents the Bukkit EntityType object
  */
-public class EntityTypeArgument extends Argument implements ICustomProvidedArgument {
+public class EntityTypeArgument extends Argument implements ICustomProvidedArgument, ISafeOverrideableSuggestions<EntityType> {
 
 	/**
 	 * An EntityType argument. Represents the type of an Entity
@@ -29,5 +33,17 @@ public class EntityTypeArgument extends Argument implements ICustomProvidedArgum
 	@Override
 	public SuggestionProviders getSuggestionProvider() {
 		return SuggestionProviders.ENTITIES;
+	}
+	
+	public Argument safeOverrideSuggestions(EntityType... suggestions) {
+		return super.overrideSuggestions(sMap0(fromKey(EntityType::getKey), suggestions));
+	}
+
+	public Argument safeOverrideSuggestions(Function<CommandSender, EntityType[]> suggestions) {
+		return super.overrideSuggestions(sMap1(fromKey(EntityType::getKey), suggestions));
+	}
+
+	public Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], EntityType[]> suggestions) {
+		return super.overrideSuggestions(sMap2(fromKey(EntityType::getKey), suggestions));
 	}
 }

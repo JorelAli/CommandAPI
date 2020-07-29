@@ -1,5 +1,7 @@
 # Itemstack arguments
 
+![](./images/arguments/itemstack.png)
+
 The `ItemStackArgument` class represents in-game items. As expected, this should be casted to Bukkit's `ItemStack` object.
 
 <div class="example">

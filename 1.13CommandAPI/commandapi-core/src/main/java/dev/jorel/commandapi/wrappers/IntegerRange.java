@@ -18,6 +18,14 @@ public class IntegerRange {
 		this.high = high;
 	}
 	
+	public static IntegerRange integerRangeGreaterThanOrEq(int min) {
+		return new IntegerRange(min, Integer.MAX_VALUE);
+	}
+	
+	public static IntegerRange integerRangeLessThanOrEq(int max) {
+		return new IntegerRange(Integer.MIN_VALUE, max);
+	}
+	
 	/**
 	 * The lower bound of this range.
 	 * @return the lower bound of this range
@@ -41,6 +49,17 @@ public class IntegerRange {
 	 */
 	public boolean isInRange(int i) {
 		return i >= low && i <= high;
+	}
+	
+	@Override
+	public String toString() {
+		if(this.high == Integer.MAX_VALUE) {
+			return this.low + "..";
+		} else if(this.low == Integer.MIN_VALUE) {
+			return ".." + this.high;
+		} else {
+			return this.low + ".." + this.high;
+		}
 	}
 	
 }

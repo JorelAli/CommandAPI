@@ -169,6 +169,7 @@
                         <div class="sidetoc"><nav class="pagetoc"></nav></div>
                         
                         <h1><a class="header" href="#itemstack-arguments" id="itemstack-arguments">Itemstack arguments</a></h1>
+<p><img src="./images/arguments/itemstack.png" alt="" /></p>
 <p>The <code>ItemStackArgument</code> class represents in-game items. As expected, this should be casted to Bukkit's <code>ItemStack</code> object.</p>
 <div class="example">
 <h3><a class="header" href="#example---giving-a-player-an-itemstack" id="example---giving-a-player-an-itemstack">Example - Giving a player an itemstack</a></h3>
@@ -225,6 +226,21 @@ new CommandAPICommand(&quot;item&quot;)
 
         </div>
 
+        
+        <!-- Livereload script (if served using the cli tool) -->
+        <script type="text/javascript">
+            var socket = new WebSocket("ws://localhost:3000/__livereload");
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
         
 
         

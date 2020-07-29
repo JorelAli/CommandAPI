@@ -55,7 +55,6 @@ import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -137,6 +136,23 @@ import net.minecraft.server.v1_16_R1.WorldServer;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class NMS_1_16_R1 implements NMS {
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public String convert(PotionEffectType potion) {
+		return IRegistry.MOB_EFFECT.getKey(IRegistry.MOB_EFFECT.fromId(potion.getId())).toString();
+	}
+	
+	@Override
+	public String convert(Particle particle) {
+		return CraftParticle.toNMS(particle).a();
+	}
+	
+	@Override
+	public String convert(ItemStack is) {
+		net.minecraft.server.v1_16_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(is);
+		return is.getType().getKey().toString() + nmsItemStack.getOrCreateTag().asString();
+	}
 
 	@Override
 	public void reloadDataPacks()
@@ -513,7 +529,7 @@ public class NMS_1_16_R1 implements NMS {
 	@Override
 	public FloatRange getFloatRange(CommandContext cmdCtx, String key) {
 		net.minecraft.server.v1_16_R1.CriterionConditionValue.FloatRange.FloatRange range = (net.minecraft.server.v1_16_R1.CriterionConditionValue.FloatRange.FloatRange) cmdCtx
-				.getArgument(key, FloatRange.class);
+				.getArgument(key, net.minecraft.server.v1_16_R1.CriterionConditionValue.FloatRange.FloatRange.class);
 		float low = range.a() == null ? -Float.MAX_VALUE : range.a();
 		float high = range.b() == null ? Float.MAX_VALUE : range.b();
 		return new FloatRange(low, high);
@@ -596,35 +612,9 @@ public class NMS_1_16_R1 implements NMS {
 		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.e(cmdCtx, str);
 		String namespace = minecraftKey.getNamespace();
 		String key = minecraftKey.getKey();
-//		LootItemCondition lootItemCondition = ArgumentMinecraftKeyRegistered.c(cmdCtx, str);
-//		lootItemCondition.
-//		String namespace = lootItemCondition.b();
-
+		
 		net.minecraft.server.v1_16_R1.LootTable lootTable = getCLW(cmdCtx).getServer().getLootTableRegistry()
 				.getLootTable(minecraftKey);
-
-//		CommandListenerWrapper clw = (CommandListenerWrapper) cmdCtx.getSource();
-//		new LootTableInfo.Builder(clw.getWorld())
-//			.setOptional(LootContextParameters.THIS_ENTITY, clw.getEntity())
-//			.set(LootContextParameters.POSITION, var1)
-//		
-//		private static int a(CommandContext<CommandListenerWrapper> var0, MinecraftKey var1, b var2)
-//				throws CommandSyntaxException {
-//			CommandListenerWrapper var3 = (CommandListenerWrapper) var0.getSource();
-//			LootTableInfo.Builder var4 = new LootTableInfo.Builder(var3.getWorld())
-//					.setOptional(LootContextParameters.THIS_ENTITY, (Object) var3.getEntity())
-//					.set(LootContextParameters.POSITION, (Object) new BlockPosition(var3.getPosition()));
-//			return CommandLoot.a(var0, var1, var4.build(LootContextParameterSets.CHEST), var2);
-//		}
-//		
-//		private static int a(CommandContext<CommandListenerWrapper> var0, MinecraftKey var12, LootTableInfo var2, b var3)
-//				throws CommandSyntaxException {
-//			CommandListenerWrapper var4 = (CommandListenerWrapper) var0.getSource();
-//			LootTable var5 = var4.getServer().getLootTableRegistry().getLootTable(var12);
-//			List var6 = var5.populateLoot(var2);
-//			return var3.accept(var0, var6, var1 -> CommandLoot.a(var4, var1));
-//		}
-
 		return new CraftLootTable(new NamespacedKey(namespace, key), lootTable);
 	}
 
@@ -834,17 +824,6 @@ public class NMS_1_16_R1 implements NMS {
 		CraftServer craftServer = (CraftServer) Bukkit.getServer();
 		net.minecraft.server.v1_16_R1.CommandDispatcher nmsDispatcher = craftServer.getServer().getCommandDispatcher();
 		nmsDispatcher.a(craftPlayer.getHandle());
-	}
-
-	@Override
-	public boolean validateMinecraftKeyRegistered(String argument) {
-		try {
-			StringReader reader = new StringReader(argument);
-			ArgumentMinecraftKeyRegistered.a().parse(reader);
-			return true;
-		} catch (CommandSyntaxException e) {
-			return false;
-		}
 	}
 
 }

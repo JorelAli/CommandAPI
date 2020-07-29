@@ -2,6 +2,8 @@
 
 ## Entity selector argument
 
+![](./images/arguments/entityselector.png)
+
 Minecraft's [target selectors](https://minecraft.gamepedia.com/Commands#Target_selectors) (e.g. `@a` or `@e`) are implemented using the `EntitySelectorArgument` class. This allows you to select specific entities based on certain attributes.
 
 The `EntitySelectorArgument` constructor requires an `EntitySelector` argument to determine what type of data to return. There are 4 types of entity selections which are available:
@@ -59,6 +61,8 @@ The `PlayerArgument` class is very similar _(almost identical)_ to `EntitySelect
 -----
 
 ## Entity type argument
+
+![](./images/arguments/entitytype.png)
 
 The `EntityTypeArgument` class is used to retrieve a type of entity as defined in the [`EntityType`](https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html) enum. In other words, this is an entity type, for example a pig or a zombie.
 

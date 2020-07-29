@@ -56,5 +56,10 @@ public class Rotation {
 	public float getNormalizedYaw() {
 		return Location.normalizeYaw(this.yaw);
 	}
+	
+	@Override
+	public String toString() {
+		return yaw + " " + pitch;
+	}
 
 }

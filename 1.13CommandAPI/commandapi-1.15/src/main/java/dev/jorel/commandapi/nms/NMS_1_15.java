@@ -48,7 +48,6 @@ import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -125,6 +124,12 @@ import net.minecraft.server.v1_15_R1.Vec3D;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class NMS_1_15 implements NMS {
 
+	@Override
+	public String convert(ItemStack is) {
+		net.minecraft.server.v1_15_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(is);
+		return is.getType().getKey().toString() + nmsItemStack.getOrCreateTag().asString();
+	}
+	
 	@Override
 	public ArgumentType<?> _ArgumentAxis() {
 		return ArgumentRotationAxis.a();
@@ -424,7 +429,7 @@ public class NMS_1_15 implements NMS {
 	@Override
 	public FloatRange getFloatRange(CommandContext cmdCtx, String key) {
 		net.minecraft.server.v1_15_R1.CriterionConditionValue.FloatRange.FloatRange range = (net.minecraft.server.v1_15_R1.CriterionConditionValue.FloatRange.FloatRange) cmdCtx
-				.getArgument(key, FloatRange.class);
+				.getArgument(key, net.minecraft.server.v1_15_R1.CriterionConditionValue.FloatRange.FloatRange.class);
 		float low = range.a() == null ? -Float.MAX_VALUE : range.a();
 		float high = range.b() == null ? Float.MAX_VALUE : range.b();
 		return new FloatRange(low, high);
@@ -722,17 +727,6 @@ public class NMS_1_15 implements NMS {
 		@SuppressWarnings("resource")
 		net.minecraft.server.v1_15_R1.CommandDispatcher nmsDispatcher = craftServer.getServer().commandDispatcher;
 		nmsDispatcher.a(craftPlayer.getHandle());
-	}
-	
-	@Override
-	public boolean validateMinecraftKeyRegistered(String argument) {
-		try {
-			StringReader reader = new StringReader(argument);
-			ArgumentMinecraftKeyRegistered.a().parse(reader);
-			return true;
-		} catch (CommandSyntaxException e) {
-			return false;
-		}
 	}
 
 }

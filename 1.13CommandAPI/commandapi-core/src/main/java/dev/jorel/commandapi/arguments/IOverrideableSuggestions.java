@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 /**
  * An interface declaring methods required to override argument suggestions
  */
-public interface IOverrideableSuggestions<T extends Argument> {
+public interface IOverrideableSuggestions {
 
 	/**
 	 * Override the suggestions of this argument with a String array. Typically,
@@ -17,7 +17,7 @@ public interface IOverrideableSuggestions<T extends Argument> {
 	 * @param suggestions the string array to override suggestions with
 	 * @return the current argument
 	 */
-	T overrideSuggestions(String... suggestions);
+	Argument overrideSuggestions(String... suggestions);
 
 	/**
 	 * Override the suggestions of this argument with a function that maps the
@@ -26,7 +26,7 @@ public interface IOverrideableSuggestions<T extends Argument> {
 	 * @param suggestions the function to override suggestions with
 	 * @return the current argument
 	 */
-	T overrideSuggestions(Function<CommandSender, String[]> suggestions);
+	Argument overrideSuggestions(Function<CommandSender, String[]> suggestions);
 	
 	/**
 	 * Override the suggestions of this argument with a function that maps the
@@ -35,7 +35,7 @@ public interface IOverrideableSuggestions<T extends Argument> {
 	 * @param suggestions the function to override suggestions with
 	 * @return the current argument
 	 */
-	T overrideSuggestions(BiFunction<CommandSender, Object[], String[]> suggestions);
+	Argument overrideSuggestions(BiFunction<CommandSender, Object[], String[]> suggestions);
 
 	/**
 	 * Returns a function that maps the command sender to a String array of

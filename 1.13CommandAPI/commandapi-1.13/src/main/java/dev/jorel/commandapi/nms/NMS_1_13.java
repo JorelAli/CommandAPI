@@ -45,7 +45,6 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -117,6 +116,13 @@ import net.minecraft.server.v1_13_R1.Vec3D;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class NMS_1_13 implements NMS {
+	
+	@Override
+	public String convert(ItemStack is) {
+		net.minecraft.server.v1_13_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(is);
+		return is.getType().getKey().toString() + nmsItemStack.getOrCreateTag().toString();
+	}
+	
     @Override
     public ArgumentType<?> _ArgumentAxis() {
         return ArgumentRotationAxis.a();
@@ -677,15 +683,4 @@ public class NMS_1_13 implements NMS {
         net.minecraft.server.v1_13_R1.CommandDispatcher nmsDispatcher = craftServer.getServer().commandDispatcher;
         nmsDispatcher.a(craftPlayer.getHandle());
     }
-
-	@Override
-	public boolean validateMinecraftKeyRegistered(String argument) {
-		try {
-			StringReader reader = new StringReader(argument);
-			ArgumentMinecraftKeyRegistered.a().parse(reader);
-			return true;
-		} catch (CommandSyntaxException e) {
-			return false;
-		}
-	}
 }
