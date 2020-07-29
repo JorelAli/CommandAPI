@@ -28,8 +28,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.DisplaySlot;
 
 import de.tr7zw.nbtapi.NBTContainer;
 import de.tr7zw.nbtapi.NBTItem;
@@ -48,10 +50,13 @@ import dev.jorel.commandapi.arguments.LocationArgument;
 import dev.jorel.commandapi.arguments.MathOperationArgument;
 import dev.jorel.commandapi.arguments.NBTCompoundArgument;
 import dev.jorel.commandapi.arguments.ParticleArgument;
+import dev.jorel.commandapi.arguments.RecipeArgument;
+import dev.jorel.commandapi.arguments.ScoreboardSlotArgument;
 import dev.jorel.commandapi.arguments.TextArgument;
 import dev.jorel.commandapi.arguments.TimeArgument;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.MathOperation;
+import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.Time;
 
 public class CommandAPIMain extends JavaPlugin implements Listener {
@@ -216,6 +221,27 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 	        arguments.put("math", new MathOperationArgument().safeOverrideSuggestions(MathOperation.ADD, MathOperation.DIVIDE));
 	        
 	        new CommandAPICommand("h")
+	        .withArguments(arguments)
+	        .executesPlayer((s, a) -> {
+	        	System.out.println(Arrays.deepToString(a));
+	        })
+	        .register();
+        } {
+        	LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+        	
+        	ItemStack is = new ItemStack(Material.DIAMOND_SWORD);
+        	is.addEnchantment(Enchantment.DAMAGE_ALL, 2);
+        	
+        	ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(this, "myitem"), new ItemStack(Material.DIAMOND));
+        	recipe.shape("AAA", "AAA", "AAA");
+        	recipe.setIngredient('A', Material.CRAFTING_TABLE);
+        	getServer().addRecipe(recipe);
+        	
+	        arguments.put("nbt", new NBTCompoundArgument().safeOverrideSuggestions(NBTItem.convertItemtoNBT(is)));
+	        arguments.put("recipe", new RecipeArgument().safeOverrideSuggestions(recipe));
+	        arguments.put("scoreboardslot", new ScoreboardSlotArgument().safeOverrideSuggestions(ScoreboardSlot.of(DisplaySlot.BELOW_NAME), ScoreboardSlot.ofTeamColor(ChatColor.AQUA)));
+	        
+	        new CommandAPICommand("i")
 	        .withArguments(arguments)
 	        .executesPlayer((s, a) -> {
 	        	System.out.println(Arrays.deepToString(a));
