@@ -1,5 +1,7 @@
 # Recipe arguments
 
+![](./images/arguments/recipe.png)
+
 The `RecipeArgument` class lets you retrieve Bukkit's `Recipe` object. Unlike the other arguments, **this argument has a slightly different implementation for Minecraft 1.15+**.
 
 > **Developer's Note:**
