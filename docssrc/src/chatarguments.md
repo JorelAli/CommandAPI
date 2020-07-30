@@ -4,6 +4,8 @@ The CommandAPI provides three main classes to interact with chat formatting in M
 
 ## Chat color argument
 
+![](./images/arguments/chatcolor.png)
+
 The `ChatColorArgument` class is used to represent a given chat color (e.g. red or green) 
 
 <div class="example">

@@ -18,6 +18,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -172,7 +173,7 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         }
         {
         	LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-	        arguments.put("text", new TextArgument().safeOverrideSuggestions("hello", "world!"));
+//	        arguments.put("text", new TextArgument().safeOverrideSuggestions("hello", "world!"));
 	        arguments.put("fr", new FloatRangeArgument().safeOverrideSuggestions(FloatRange.floatRangeGreaterThanOrEq(2), new FloatRange(20, 40)));
 	        
 	        new CommandAPICommand("b")
@@ -381,6 +382,16 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
     		.withArguments(args)
     		.executes((c, arg) -> {
     		}).register();
+        } {
+        	LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+	        arguments.put("snd", new SoundArgument().safeOverrideSuggestions(Sound.AMBIENT_BASALT_DELTAS_ADDITIONS, Sound.BLOCK_BONE_BLOCK_HIT));
+	        
+	        new CommandAPICommand("k")
+	        .withArguments(arguments)
+	        .executesPlayer((s, a) -> {
+	        	System.out.println(Arrays.deepToString(a));
+	        })
+	        .register();
         }
 	}
 	

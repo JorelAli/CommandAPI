@@ -16,6 +16,8 @@ These arguments simply cast to their primitive type and don't need any extra wor
 
 ## Boolean arguments
 
+![](./images/arguments/boolean.png)
+
 The `BooleanArgument` class represents the Boolean values `true` and `false`.
 
 <div class="example">

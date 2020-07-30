@@ -137,6 +137,11 @@ import net.minecraft.server.v1_16_R1.WorldServer;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class NMS_1_16_R1 implements NMS {
 	
+	@Override
+	public String convert(Sound sound) {
+		return CraftSound.getSound(sound);
+	}
+	
 	@SuppressWarnings("deprecation")
 	@Override
 	public String convert(PotionEffectType potion) {

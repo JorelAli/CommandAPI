@@ -213,4 +213,5 @@ public interface NMS {
 	String convert(ItemStack is);
 	default String convert(Particle particle) {return "TODO: (See NMS class)";};
 	default String convert(PotionEffectType potion) {return "TODO: (See NMS class)";};
+	default String convert(Sound sound) {return "TODO: (See NMS class)";};
 }

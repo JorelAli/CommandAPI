@@ -170,15 +170,12 @@
                         
                         <h1><a class="header" href="#safe-argument-suggestions" id="safe-argument-suggestions">Safe argument suggestions</a></h1>
 <p>So far, we've covered how to override suggestions using the <code>overrideSuggestions()</code> method. The issue with using Strings for suggestion listings is that they are prone to errors. As a result, some arguments include the <code>safeOverrideSuggestions()</code>, which provides type-safety checks for argument suggestions, as well as automatic &quot;Bukkit-to-suggestion&quot; conversion.</p>
+<p>The whole point of the safe argument suggestions method is that parameters entered in this method are <strong>guaranteed</strong> to work.</p>
+<p>The use of the safe override suggestions function is basically the same as <code>overrideSuggestions()</code> from the previous section, except instead of returning a <code>String[]</code>, you now return a <code>T[]</code>, where <code>T</code> is the class corresponding to the argument. This is described in more detail in the table below.</p>
 <pre><code class="language-java">Argument safeOverrideSuggestions(T... suggestions);
 Argument safeOverrideSuggestions(Function&lt;CommandSender, T[]&gt; suggestions);
 Argument safeOverrideSuggestions(BiFunction&lt;CommandSender, Object[], T[]&gt; suggestions);
 </code></pre>
-<blockquote>
-<p><strong>Developer's Note:</strong></p>
-<p>This section assumes you've read the previous section <a href="./argumentsuggestions.html">Argument suggestions</a>. As a result, this section includes few examples on actually using this since it's basically the same as using <code>overrideSuggestions()</code>, except instead of having <code>String[]</code> as the return type, you now need <code>T[]</code>.</p>
-</blockquote>
-<hr />
 <h2><a class="header" href="#supported-arguments" id="supported-arguments">Supported arguments</a></h2>
 <p>Not all arguments support safe suggestions. This is mostly due to implementation constraints or inadequate support by the Bukkit API.</p>
 <p>The list of supported arguments are displayed in the following table. The parameter <code>T</code> (shown in the method signatures above) are also provided for each argument. This parameter is the same as the cast argument described in <a href="./arguments.html#argument-casting">Argument Casting</a>, except for a few exceptions which are outlined in <strong>bold</strong>.</p>
@@ -186,6 +183,7 @@ Argument safeOverrideSuggestions(BiFunction&lt;CommandSender, Object[], T[]&gt; 
 <tr><td align="right"><a href="./advancementargument.html"><code>AdvancementArgument</code></a></td><td align="left"><code>org.bukkit.advancement.Advancement</code></td></tr>
 <tr><td align="right"><a href="./axisarg.html"><code>AxisArgument</code></a></td><td align="left"><code>java.util.EnumSet&lt;org.bukkit.Axis&gt;</code></td></tr>
 <tr><td align="right"><a href="./biomeargument.html"><code>BiomeArgument</code></a></td><td align="left"><code>org.bukkit.block.Biome</code></td></tr>
+<tr><td align="right"><code>BlockStateArgument</code></td><td align="left"><code>org.bukkit.block.data.BlockData</code></td></tr>
 <tr><td align="right"><a href="./primitivearguments.html#boolean-arguments"><code>BooleanArgument</code></a></td><td align="left"><strong><code>Boolean</code></strong></td></tr>
 <tr><td align="right"><a href="./chatarguments.html#chat-color-argument"><code>ChatColorArgument</code></a></td><td align="left"><code>org.bukkit.ChatColor</code></td></tr>
 <tr><td align="right"><a href="./primitivearguments.html#numerical-arguments"><code>DoubleArgument</code></a></td><td align="left"><strong><code>Double</code></strong></td></tr>
@@ -212,10 +210,8 @@ Argument safeOverrideSuggestions(BiFunction&lt;CommandSender, Object[], T[]&gt; 
 <tr><td align="right"><a href="./recipeargument.html"><code>RecipeArgument</code></a></td><td align="left"><code>org.bukkit.inventory.Recipe</code></td></tr>
 <tr><td align="right"><a href="./rotationargs.html"><code>RotationArgument</code></a></td><td align="left"><code>dev.jorel.commandapi.wrappers.Rotation</code></td></tr>
 <tr><td align="right"><a href="./scoreboardarguments.html#scoreboard-slot-argument"><code>ScoreboardSlotArgument</code></a></td><td align="left"><code>dev.jorel.commandapi.wrappers.ScoreboardSlot</code></td></tr>
-<tr><td align="right"><a href="./soundargument.html"><code>SoundArgument</code></a></td><td align="left"><code>org.bukkit.Sound</code> TODO</td></tr>
-<tr><td align="right"><a href="./stringarguments.html#string-argument"><code>StringArgument</code></a></td><td align="left"><code>String</code> TODO</td></tr>
+<tr><td align="right"><a href="./soundargument.html"><code>SoundArgument</code></a></td><td align="left"><code>org.bukkit.Sound</code></td></tr>
 <tr><td align="right"><a href="./teamarguments.html"><code>TeamArgument</code></a></td><td align="left"><code>String</code> TODO</td></tr>
-<tr><td align="right"><a href="./stringarguments.html#text-argument"><code>TextArgument</code></a></td><td align="left"><code>String</code></td></tr>
 <tr><td align="right"><a href="./timeargs.html"><code>TimeArgument</code></a></td><td align="left"><strong><code>dev.jorel.commandapi.wrappers.Time</code></strong></td></tr>
 </tbody></table>
 

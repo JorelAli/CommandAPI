@@ -1,5 +1,7 @@
 # LootTable argument
 
+![](./images/arguments/loottable.png)
+
 The `LootTableArgument` class can be used to get a Bukkit `LootTable` object.
 
 <div class="example">

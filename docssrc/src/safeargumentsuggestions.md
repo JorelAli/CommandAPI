@@ -2,17 +2,15 @@
 
 So far, we've covered how to override suggestions using the `overrideSuggestions()` method. The issue with using Strings for suggestion listings is that they are prone to errors. As a result, some arguments include the `safeOverrideSuggestions()`, which provides type-safety checks for argument suggestions, as well as automatic "Bukkit-to-suggestion" conversion.
 
+The whole point of the safe argument suggestions method is that parameters entered in this method are **guaranteed** to work.
+
+The use of the safe override suggestions function is basically the same as `overrideSuggestions()` from the previous section, except instead of returning a `String[]`, you now return a `T[]`, where `T` is the class corresponding to the argument. This is described in more detail in the table below.
+
 ```java
 Argument safeOverrideSuggestions(T... suggestions);
 Argument safeOverrideSuggestions(Function<CommandSender, T[]> suggestions);
 Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], T[]> suggestions);
 ```
-
-> **Developer's Note:**
->
-> This section assumes you've read the previous section [Argument suggestions](./argumentsuggestions.md). As a result, this section includes few examples on actually using this since it's basically the same as using `overrideSuggestions()`, except instead of having `String[]` as the return type, you now need `T[]`.
-
------
 
 ## Supported arguments
 
@@ -25,6 +23,7 @@ The list of supported arguments are displayed in the following table. The parame
 |            [`AdvancementArgument`](./advancementargument.md) | `org.bukkit.advancement.Advancement`           |
 |                               [`AxisArgument`](./axisarg.md) | `java.util.EnumSet<org.bukkit.Axis>`           |
 |                        [`BiomeArgument`](./biomeargument.md) | `org.bukkit.block.Biome`                       |
+|                                         `BlockStateArgument` | `org.bukkit.block.data.BlockData`              |
 | [`BooleanArgument`](./primitivearguments.md#boolean-arguments) | **`Boolean`**                                  |
 | [`ChatColorArgument`](./chatarguments.md#chat-color-argument) | `org.bukkit.ChatColor`                         |
 | [`DoubleArgument`](./primitivearguments.md#numerical-arguments) | **`Double`**                                   |
@@ -51,9 +50,7 @@ The list of supported arguments are displayed in the following table. The parame
 |                      [`RecipeArgument`](./recipeargument.md) | `org.bukkit.inventory.Recipe`                  |
 |                      [`RotationArgument`](./rotationargs.md) | `dev.jorel.commandapi.wrappers.Rotation`       |
 | [`ScoreboardSlotArgument`](./scoreboardarguments.md#scoreboard-slot-argument) | `dev.jorel.commandapi.wrappers.ScoreboardSlot` |
-|                        [`SoundArgument`](./soundargument.md) | `org.bukkit.Sound` TODO                        |
-|     [`StringArgument`](./stringarguments.md#string-argument) | `String` TODO                                  |
+|                        [`SoundArgument`](./soundargument.md) | `org.bukkit.Sound`                             |
 |                         [`TeamArgument`](./teamarguments.md) | `String` TODO                                  |
-|         [`TextArgument`](./stringarguments.md#text-argument) | `String`                                       |
 |                              [`TimeArgument`](./timeargs.md) | **`dev.jorel.commandapi.wrappers.Time`**       |
 

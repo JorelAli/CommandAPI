@@ -818,6 +818,7 @@ new CommandAPICommand(&quot;cmd&quot;)
 <tr><td align="right"><a href="./advancementargument.html"><code>AdvancementArgument</code></a></td><td align="left"><code>org.bukkit.advancement.Advancement</code></td></tr>
 <tr><td align="right"><a href="./axisarg.html"><code>AxisArgument</code></a></td><td align="left"><code>java.util.EnumSet&lt;org.bukkit.Axis&gt;</code></td></tr>
 <tr><td align="right"><a href="./biomeargument.html"><code>BiomeArgument</code></a></td><td align="left"><code>org.bukkit.block.Biome</code></td></tr>
+<tr><td align="right"><code>BlockStateArgument</code></td><td align="left"><code>org.bukkit.block.data.BlockData</code></td></tr>
 <tr><td align="right"><a href="./primitivearguments.html#boolean-arguments"><code>BooleanArgument</code></a></td><td align="left"><code>boolean</code></td></tr>
 <tr><td align="right"><a href="./chatarguments.html#chat-argument"><code>ChatArgument</code></a></td><td align="left"><code>net.md_5.bungee.api.chat.BaseComponent[]</code></td></tr>
 <tr><td align="right"><a href="./chatarguments.html#chat-color-argument"><code>ChatColorArgument</code></a></td><td align="left"><code>org.bukkit.ChatColor</code></td></tr>
@@ -1012,15 +1013,12 @@ new CommandAPICommand(&quot;localmsg&quot;)
 </div>
 <h1><a class="header" href="#safe-argument-suggestions" id="safe-argument-suggestions">Safe argument suggestions</a></h1>
 <p>So far, we've covered how to override suggestions using the <code>overrideSuggestions()</code> method. The issue with using Strings for suggestion listings is that they are prone to errors. As a result, some arguments include the <code>safeOverrideSuggestions()</code>, which provides type-safety checks for argument suggestions, as well as automatic &quot;Bukkit-to-suggestion&quot; conversion.</p>
+<p>The whole point of the safe argument suggestions method is that parameters entered in this method are <strong>guaranteed</strong> to work.</p>
+<p>The use of the safe override suggestions function is basically the same as <code>overrideSuggestions()</code> from the previous section, except instead of returning a <code>String[]</code>, you now return a <code>T[]</code>, where <code>T</code> is the class corresponding to the argument. This is described in more detail in the table below.</p>
 <pre><code class="language-java">Argument safeOverrideSuggestions(T... suggestions);
 Argument safeOverrideSuggestions(Function&lt;CommandSender, T[]&gt; suggestions);
 Argument safeOverrideSuggestions(BiFunction&lt;CommandSender, Object[], T[]&gt; suggestions);
 </code></pre>
-<blockquote>
-<p><strong>Developer's Note:</strong></p>
-<p>This section assumes you've read the previous section <a href="./argumentsuggestions.html">Argument suggestions</a>. As a result, this section includes few examples on actually using this since it's basically the same as using <code>overrideSuggestions()</code>, except instead of having <code>String[]</code> as the return type, you now need <code>T[]</code>.</p>
-</blockquote>
-<hr />
 <h2><a class="header" href="#supported-arguments" id="supported-arguments">Supported arguments</a></h2>
 <p>Not all arguments support safe suggestions. This is mostly due to implementation constraints or inadequate support by the Bukkit API.</p>
 <p>The list of supported arguments are displayed in the following table. The parameter <code>T</code> (shown in the method signatures above) are also provided for each argument. This parameter is the same as the cast argument described in <a href="./arguments.html#argument-casting">Argument Casting</a>, except for a few exceptions which are outlined in <strong>bold</strong>.</p>
@@ -1028,6 +1026,7 @@ Argument safeOverrideSuggestions(BiFunction&lt;CommandSender, Object[], T[]&gt; 
 <tr><td align="right"><a href="./advancementargument.html"><code>AdvancementArgument</code></a></td><td align="left"><code>org.bukkit.advancement.Advancement</code></td></tr>
 <tr><td align="right"><a href="./axisarg.html"><code>AxisArgument</code></a></td><td align="left"><code>java.util.EnumSet&lt;org.bukkit.Axis&gt;</code></td></tr>
 <tr><td align="right"><a href="./biomeargument.html"><code>BiomeArgument</code></a></td><td align="left"><code>org.bukkit.block.Biome</code></td></tr>
+<tr><td align="right"><code>BlockStateArgument</code></td><td align="left"><code>org.bukkit.block.data.BlockData</code></td></tr>
 <tr><td align="right"><a href="./primitivearguments.html#boolean-arguments"><code>BooleanArgument</code></a></td><td align="left"><strong><code>Boolean</code></strong></td></tr>
 <tr><td align="right"><a href="./chatarguments.html#chat-color-argument"><code>ChatColorArgument</code></a></td><td align="left"><code>org.bukkit.ChatColor</code></td></tr>
 <tr><td align="right"><a href="./primitivearguments.html#numerical-arguments"><code>DoubleArgument</code></a></td><td align="left"><strong><code>Double</code></strong></td></tr>
@@ -1054,10 +1053,8 @@ Argument safeOverrideSuggestions(BiFunction&lt;CommandSender, Object[], T[]&gt; 
 <tr><td align="right"><a href="./recipeargument.html"><code>RecipeArgument</code></a></td><td align="left"><code>org.bukkit.inventory.Recipe</code></td></tr>
 <tr><td align="right"><a href="./rotationargs.html"><code>RotationArgument</code></a></td><td align="left"><code>dev.jorel.commandapi.wrappers.Rotation</code></td></tr>
 <tr><td align="right"><a href="./scoreboardarguments.html#scoreboard-slot-argument"><code>ScoreboardSlotArgument</code></a></td><td align="left"><code>dev.jorel.commandapi.wrappers.ScoreboardSlot</code></td></tr>
-<tr><td align="right"><a href="./soundargument.html"><code>SoundArgument</code></a></td><td align="left"><code>org.bukkit.Sound</code> TODO</td></tr>
-<tr><td align="right"><a href="./stringarguments.html#string-argument"><code>StringArgument</code></a></td><td align="left"><code>String</code> TODO</td></tr>
+<tr><td align="right"><a href="./soundargument.html"><code>SoundArgument</code></a></td><td align="left"><code>org.bukkit.Sound</code></td></tr>
 <tr><td align="right"><a href="./teamarguments.html"><code>TeamArgument</code></a></td><td align="left"><code>String</code> TODO</td></tr>
-<tr><td align="right"><a href="./stringarguments.html#text-argument"><code>TextArgument</code></a></td><td align="left"><code>String</code></td></tr>
 <tr><td align="right"><a href="./timeargs.html"><code>TimeArgument</code></a></td><td align="left"><strong><code>dev.jorel.commandapi.wrappers.Time</code></strong></td></tr>
 </tbody></table>
 <h1><a class="header" href="#primitive-arguments" id="primitive-arguments">Primitive arguments</a></h1>
@@ -1072,6 +1069,7 @@ Argument safeOverrideSuggestions(BiFunction&lt;CommandSender, Object[], T[]&gt; 
 <p>These arguments simply cast to their primitive type and don't need any extra work.</p>
 <hr />
 <h2><a class="header" href="#boolean-arguments" id="boolean-arguments">Boolean arguments</a></h2>
+<p><img src="./images/arguments/boolean.png" alt="" /></p>
 <p>The <code>BooleanArgument</code> class represents the Boolean values <code>true</code> and <code>false</code>.</p>
 <div class="example">
 <h3><a class="header" href="#example---config-editing-plugin" id="example---config-editing-plugin">Example - Config editing plugin</a></h3>
@@ -1372,6 +1370,7 @@ new CommandAPICommand(&quot;rotate&quot;)
 </div><h1><a class="header" href="#chat-arguments" id="chat-arguments">Chat arguments</a></h1>
 <p>The CommandAPI provides three main classes to interact with chat formatting in Minecraft.</p>
 <h2><a class="header" href="#chat-color-argument" id="chat-color-argument">Chat color argument</a></h2>
+<p><img src="./images/arguments/chatcolor.png" alt="" /></p>
 <p>The <code>ChatColorArgument</code> class is used to represent a given chat color (e.g. red or green) </p>
 <div class="example">
 <h3><a class="header" href="#example---username-color-changing-plugin" id="example---username-color-changing-plugin">Example - Username color changing plugin</a></h3>
@@ -1909,6 +1908,7 @@ new CommandAPICommand(&quot;item&quot;)
     .register();
 </code></pre>
 </div><h1><a class="header" href="#loottable-argument" id="loottable-argument">LootTable argument</a></h1>
+<p><img src="./images/arguments/loottable.png" alt="" /></p>
 <p>The <code>LootTableArgument</code> class can be used to get a Bukkit <code>LootTable</code> object.</p>
 <div class="example">
 <h3><a class="header" href="#example---filling-an-inventory-with-loot-table-contents" id="example---filling-an-inventory-with-loot-table-contents">Example - Filling an inventory with loot table contents</a></h3>
@@ -2107,6 +2107,7 @@ new CommandAPICommand(&quot;unlockrecipe&quot;)
     .register();
 </code></pre>
 </div><h1><a class="header" href="#sound-arguments" id="sound-arguments">Sound arguments</a></h1>
+<p><img src="./images/arguments/sound.png" alt="" /></p>
 <p>The <code>SoundArgument</code> class allows a command sender to retrieve the Bukkit <code>Sound</code> object to represent in-game sound effects (such as mob sounds or ambient sound effects), as well as in-game music.</p>
 <div class="example">
 <h3><a class="header" href="#example---playing-sound-to-yourself" id="example---playing-sound-to-yourself">Example - Playing sound to yourself</a></h3>
@@ -2125,6 +2126,7 @@ new CommandAPICommand(&quot;sound&quot;)
     .register();
 </code></pre>
 </div><h1><a class="header" href="#time-arguments" id="time-arguments">Time arguments</a></h1>
+<p><img src="./images/arguments/time.png" alt="" /></p>
 <p>The <code>TimeArgument</code> class represents in-game time, <em>in the number of in-game ticks</em>. This allows command senders to specify a certain number of ticks in a simpler way, by including the characters <code>d</code> to specify the numbers of days, <code>s</code> to specify the number of seconds or <code>t</code> to specify a number of ticks.</p>
 <p>The CommandAPI converts the inputs provided by the command sender into a number of ticks as an integer.</p>
 <blockquote>
