@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">1.13 CommandAPI
-   &#160;<span id="projectnumber">3.1</span>
+   &#160;<span id="projectnumber">4.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -107,7 +107,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <li><b>Support for Minecraft's functions</b> - Allow your command to be executed from Minecraft's functions and tags</li>
 <li><b>No plugin.yml registration</b> - Commands don't need to be registered in the <code>plugin.yml</code> file anymore</li>
 <li><b>You don't need Brigadier</b> - You don't need to import Brigadier in your projects to use the CommandAPI</li>
-<li><b>No tracking</b> - We don't collect any stats about our plugin; what you see is what you get!</li>
+<li><b>No tracking</b> - The CommandAPI don't collect any stats about its plugin; what you see is what you get!</li>
 </ul>
 <hr  />
 <h1>Building the CommandAPI</h1>
@@ -129,46 +129,57 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><b>1.13 versions</b> </td><td class="markdownTableBodyNone">1.13 </td><td class="markdownTableBodyNone">1.13.1 </td><td class="markdownTableBodyNone">1.13.2  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><b>1.14 versions</b> </td><td class="markdownTableBodyNone">1.14.2 </td><td class="markdownTableBodyNone">1.14.3 </td><td class="markdownTableBodyNone">1.14.4  </td></tr>
+<td class="markdownTableBodyNone"><b>1.14 versions</b> </td><td class="markdownTableBodyNone">1.14 </td><td class="markdownTableBodyNone">1.14.3 </td><td class="markdownTableBodyNone">1.14.4  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b>1.15 versions</b> </td><td class="markdownTableBodyNone">1.15.2 </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td></tr>
+<td class="markdownTableBodyNone"><b>1.15 versions</b> </td><td class="markdownTableBodyNone">1.15 </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><b>1.16 versions</b> </td><td class="markdownTableBodyNone">1.16.1 </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td></tr>
 </table>
-<p>These versions of Minecraft must be installed in your local machine's Maven repository (<code>~/.m2</code>). The easiest way to do this is to build them manually using Spigot's BuildTools, as it automatically adds it to the <code>.m2</code> local repository folder.</p>
-<h3>Building them using <em>BuildTools</em> + downloadSpigot file</h3>
+<p>These versions of Minecraft must be installed in your local machine's Maven repository (<code>~/.m2</code>). <b>The easiest way to do this is to build them manually using Spigot's BuildTools, as it automatically adds it to the <code>.m2</code> local repository folder.</b></p>
+<h3>Building them using <em>BuildTools</em> + downloadSpigot file (recommended)</h3>
 <ul>
-<li>Download the <code>BuildTools.jar</code> file from <a href="https://hub.spigotmc.org/jenkins/job/BuildTools/">here</a> and place it in a separate directory _(trust me, this gets messy pretty quickly)_</li>
-<li>Download the <code>downloadSpigot</code> file from this repository:<ul>
-<li>If on Windows, use <code>downloadSpigot.bat</code> <a href="https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.bat">(from here)</a></li>
-<li>If on Linux/MacOS, use <code>downloadSpigot.sh</code> <a href="https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.bat">(from here)</a></li>
-</ul>
-</li>
+<li>Download the <code>BuildTools.jar</code> file from <a href="https://hub.spigotmc.org/jenkins/job/BuildTools/">here</a></li>
+<li>Make sure you have maven installed on your machine. If not, it can be downloaded from <a href="https://maven.apache.org/download.cgi">here</a></li>
 <li>If on Windows:<ul>
-<li>Download the <code>downloadSpigot.bat</code> file from this repository <a href="https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.bat">(or just right click here, save as...)</a></li>
-<li>Copy the <code>downloadSpigot.bat</code> file into the same directory as the <code>BuildTools.jar</code> file</li>
+<li>Download the <code>downloadSpigot.bat</code> file <a href="https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.bat">(right click this link, save as...)</a> and place it in the same folder as the <code>BuildTools.jar</code></li>
 <li>Double click on the <code>downloadSpigot.bat</code> file to run it</li>
 </ul>
 </li>
 <li>If on Linux/MacOS:<ul>
-<li>If on linux/mac, download the <code>downloadSpigot.sh</code> file from this repository <a href="https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.sh">(or just right click here, save as...)</a></li>
-<li>Copy the <code>downloadSpigot.sh</code> file into the same directory as the <code>BuildTools.jar</code> file</li>
+<li>Download the <code>downloadSpigot.sh</code> file <a href="https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.sh">(right click this link, save as...)</a> and place it in the same folder as the <code>BuildTools.jar</code></li>
 <li>Open up a terminal in your folder and make the <code>downloadSpigot.sh</code> file executable by using <code>chmod u+x ./downloadSpigot.sh</code></li>
 <li>Run the <code>downloadSpigot</code> file using <code>./downloadSpigot.sh</code></li>
 </ul>
 </li>
 </ul>
-<blockquote class="doxtable">
-<p><b>Note:</b> Sometimes, the <code>downloadSpigot</code> file doesn't work because of incompatibilities with cloning certain files it needs. If for any reason, downloadSpigot stops working, delete the directories created (BuildData, Bukkit, CraftBukkit, Spigot and work) and re-run the downloadSpigot file. </p>
-</blockquote>
 <h3>Building them using <em>BuildTools</em> + manual command line</h3>
 <ul>
-<li>Download the <code>BuildTools.jar</code> file from <a href="https://hub.spigotmc.org/jenkins/job/BuildTools/">here</a> and place it in a separate directory _(trust me, this gets messy pretty quickly)_</li>
+<li>Download the <code>BuildTools.jar</code> file from <a href="https://hub.spigotmc.org/jenkins/job/BuildTools/">here</a> and place it in a separate directory</li>
 <li>Use the command <code>java -jar BuildTools.jar --rev &lt;VERSION&gt;</code> to download the specific version of the Spigot.jar you need. For example, to download Spigot for 1.14.4, use <code>java -jar BuildTools.jar --rev 1.14.4</code></li>
 </ul>
 <hr  />
 <h1>Changelog</h1>
 <ul>
+<li>Version 3.4<ul>
+<li>Fix bug with custom recipes not registering in Minecraft 1.16+</li>
+<li>Fix bug where command conversion didn't actually register commands</li>
+<li>Adds command conversion as a built-in feature via the CommandAPI's <code>config.yml</code></li>
+</ul>
+</li>
+<li>Version 3.3<ul>
+<li>Fixes a bug where functions didn't work in Minecraft 1.16+</li>
+<li>Fixes a bug where spigot produces a warning about api-versions</li>
+</ul>
+</li>
+<li>Version 3.2<ul>
+<li>Fixes a bug with <code>.overrideSuggestions()</code> from version 3.1</li>
+</ul>
+</li>
+<li>Version 3.1<ul>
+<li>Fixes bug where command senders didn't work properly, causing commands to not work properly</li>
+<li>Adds the ability to override suggestions with the information of previously declared argument</li>
+</ul>
+</li>
 <li>Version 3.0<ul>
 <li><b>Note: This version is incompatible with pre 3.0 versions CommandAPI plugins (See documentation for more information)</b></li>
 <li>Complete code refactor to make command syntax slightly more intuitive and consistent</li>
@@ -215,8 +226,13 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </li>
 </ul>
 </li>
-<li>Version 2.2a<ul>
+<li>Version 2.3a<ul>
 <li>Adds support for Minecraft 1.15, 1.15.1 and 1.15.2</li>
+</ul>
+</li>
+<li>Version 2.3<ul>
+<li>Fixes bug where permissions didn't work</li>
+<li>Fixes bug where functions weren't working on 1.14.3 and 1.14.4</li>
 </ul>
 </li>
 <li>Version 2.2<ul>
@@ -340,7 +356,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Jul 1 2020 22:07:21 for 1.13 CommandAPI by
+    <li class="footer">Generated on Thu Jul 30 2020 13:01:18 for 1.13 CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

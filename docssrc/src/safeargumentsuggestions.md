@@ -53,3 +53,8 @@ The list of supported arguments are displayed in the following table. The parame
 |                         [`TeamArgument`](./teamarguments.md) | **`org.bukkit.scoreboard.Team`**               |
 |                              [`TimeArgument`](./timeargs.md) | **`dev.jorel.commandapi.wrappers.Time`**       |
 
+-----
+
+## Safe time arguments
+
+While most of the arguments are fairly straight forward, I'd like to bring your attention to the `TimeArgument`'s safe suggestions function. This uses `dev.jorel.commandapi.wrappers.Time` as the class for `T`.

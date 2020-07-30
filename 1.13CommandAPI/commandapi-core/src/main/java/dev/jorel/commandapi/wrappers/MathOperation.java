@@ -52,10 +52,18 @@ public enum MathOperation {
 	
 	private String stringValue;
 	
+	/**
+	 * Construct a MathOperation with its respective Minecraft string value
+	 * @param stringValue
+	 */
 	MathOperation(String stringValue) {
 		this.stringValue = stringValue;
 	}
 	
+	/**
+	 * Returns the Minecraft string value of this MathOperation
+	 * @return the Minecraft string value of this MathOperation
+	 */
 	@Override
 	public String toString() {
 		return this.stringValue;

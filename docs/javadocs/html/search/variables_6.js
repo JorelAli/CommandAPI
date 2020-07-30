@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['int_5frange_453',['INT_RANGE',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a4f8704291dbbe3a3700db9ceefc8d555',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
-  ['itemstack_454',['ITEMSTACK',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a23d30f4a04a75c6a6b77e830464dc1b4',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]]
+  ['int_5frange_545',['INT_RANGE',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a4f8704291dbbe3a3700db9ceefc8d555',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['itemstack_546',['ITEMSTACK',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a23d30f4a04a75c6a6b77e830464dc1b4',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]]
 ];

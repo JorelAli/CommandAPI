@@ -25,6 +25,7 @@ var namespacedev_1_1jorel_1_1commandapi_1_1arguments =
     [ "IntegerArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_integer_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_integer_argument" ],
     [ "IntegerRangeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_integer_range_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_integer_range_argument" ],
     [ "IOverrideableSuggestions", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions" ],
+    [ "ISafeOverrideableSuggestions", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions" ],
     [ "ItemStackArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_item_stack_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_item_stack_argument" ],
     [ "LiteralArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument" ],
     [ "Location2DArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location2_d_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location2_d_argument" ],

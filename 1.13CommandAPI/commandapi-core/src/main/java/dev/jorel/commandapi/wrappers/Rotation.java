@@ -57,6 +57,10 @@ public class Rotation {
 		return Location.normalizeYaw(this.yaw);
 	}
 	
+	/**
+	 * Returns the Minecraft string value of this Rotation
+	 * @return the Minecraft string value of this Rotation
+	 */
 	@Override
 	public String toString() {
 		return yaw + " " + pitch;

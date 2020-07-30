@@ -45,7 +45,8 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_n_b_t_a_p_i_not_found_exception.html#a5b7db4751b93434825b202912149aff3"
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_objective_criteria_argument.html#acd2a908b539726b6355182989f65eccb",
+"functions_p.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

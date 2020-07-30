@@ -61,8 +61,7 @@ var hierarchy =
       [ "dev.jorel.commandapi.arguments.GreedyStringArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_greedy_string_argument.html", null ]
     ] ],
     [ "dev.jorel.commandapi.wrappers.IntegerRange", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_integer_range.html", null ],
-    [ "dev.jorel.commandapi.arguments.IOverrideableSuggestions< T extends Argument >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html", null ],
-    [ "dev.jorel.commandapi.arguments.IOverrideableSuggestions< Argument >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html", [
+    [ "dev.jorel.commandapi.arguments.IOverrideableSuggestions", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html", [
       [ "dev.jorel.commandapi.arguments.Argument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html", [
         [ "dev.jorel.commandapi.arguments.AdvancementArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_advancement_argument.html", null ],
         [ "dev.jorel.commandapi.arguments.AxisArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_axis_argument.html", null ],
@@ -108,6 +107,100 @@ var hierarchy =
         [ "dev.jorel.commandapi.arguments.TimeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_time_argument.html", null ]
       ] ]
     ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< S >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", null ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Advancement >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.AdvancementArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_advancement_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Biome >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.BiomeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_biome_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Boolean >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.BooleanArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_boolean_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< ChatColor >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.ChatColorArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_chat_color_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Double >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.DoubleArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_double_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Enchantment >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.EnchantmentArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_enchantment_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< EntityType >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.EntityTypeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_type_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< EnumSet< Axis > >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.AxisArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_axis_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Environment >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.EnvironmentArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_environment_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Float >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.FloatArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_float_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< FloatRange >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.FloatRangeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_float_range_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Integer >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.IntegerArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_integer_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< IntegerRange >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.IntegerRangeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_integer_range_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< ItemStack >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.ItemStackArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_item_stack_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Location >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.LocationArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Location2D >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.Location2DArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location2_d_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Long >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.LongArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_long_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< LootTable >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.LootTableArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_loot_table_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< MathOperation >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.MathOperationArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_math_operation_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< NamespacedKey >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.FunctionArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_function_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< NBTContainer >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.NBTCompoundArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_n_b_t_compound_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Objective >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.ObjectiveArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_objective_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Particle >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.ParticleArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_particle_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< PotionEffectType >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.PotionEffectArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_potion_effect_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Recipe >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.RecipeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_recipe_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Rotation >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.RotationArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_rotation_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< ScoreboardSlot >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.ScoreboardSlotArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_scoreboard_slot_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Sound >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.SoundArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_sound_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< String >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.GreedyStringArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_greedy_string_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Team >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.TeamArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_team_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Time >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.TimeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_time_argument.html", null ]
+    ] ],
     [ "dev.jorel.commandapi.arguments.LocationType", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_type.html", null ],
     [ "dev.jorel.commandapi.wrappers.MathOperation", "enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html", null ],
     [ "dev.jorel.commandapi.wrappers.Rotation", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_rotation.html", null ],
@@ -127,6 +220,7 @@ var hierarchy =
     ] ],
     [ "dev.jorel.commandapi.wrappers.ScoreboardSlot", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_scoreboard_slot.html", null ],
     [ "dev.jorel.commandapi.arguments.ICustomProvidedArgument.SuggestionProviders", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html", null ],
+    [ "dev.jorel.commandapi.wrappers.Time", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_time.html", null ],
     [ "Keyed", null, [
       [ "dev.jorel.commandapi.wrappers.FunctionWrapper", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html", null ]
     ] ],

@@ -283,7 +283,6 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 			try {
 				f = PotionEffectType.class.getDeclaredField("byId");
 			} catch (NoSuchFieldException | SecurityException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
         	f.setAccessible(true);
@@ -291,7 +290,6 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 			try {
 				byId = (PotionEffectType[]) f.get(null);
 			} catch (IllegalArgumentException | IllegalAccessException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
         	for(PotionEffectType p : byId) {

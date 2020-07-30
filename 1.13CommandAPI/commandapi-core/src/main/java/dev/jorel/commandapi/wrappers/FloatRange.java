@@ -18,10 +18,20 @@ public class FloatRange {
 		this.high = high;
 	}
 	
+	/**
+	 * Constructs a FloatRange with a given lower bound and no upper bound
+	 * @param min the lower bound of this range
+	 * @return a FloatRange min..
+	 */
 	public static FloatRange floatRangeGreaterThanOrEq(float min) {
 		return new FloatRange(min, Float.MAX_VALUE);
 	}
 	
+	/**
+	 * Constructs a FloatRange with a given upper bound and no lower bound
+	 * @param max the upper bound of this range
+	 * @return a FloatRange ..max
+	 */
 	public static FloatRange floatRangeLessThanOrEq(float max) {
 		return new FloatRange(-Float.MAX_VALUE, max);
 	}
@@ -51,6 +61,10 @@ public class FloatRange {
 		return f >= low && f <= high;
 	}
 	
+	/**
+	 * Converts this FloatRange to a Minecraft string for use with arguments
+	 * @return a Minecraft string for use with arguments
+	 */
 	@Override
 	public String toString() {
 		if(this.high == Float.MAX_VALUE) {

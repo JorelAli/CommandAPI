@@ -46,6 +46,11 @@ public class ScoreboardSlot {
 		}
 	}
 	
+	/**
+	 * Constructs a ScoreboardSlot from a DisplaySlot
+	 * @param slot the display slot to convert into a ScoreboardSlot
+	 * @return a ScoreboardSlot from the provided DisplaySlot
+	 */
 	public static ScoreboardSlot of(DisplaySlot slot) {
 		switch(slot) {
 		case PLAYER_LIST:
@@ -59,6 +64,11 @@ public class ScoreboardSlot {
 		}
 	}
 	
+	/**
+	 * Constructs a ScoreboardSlot from a ChatColor
+	 * @param color the chat color to convert into a ScoreboardSlot
+	 * @return a ScoreboardSlot from the provided ChatColor
+	 */
 	public static ScoreboardSlot ofTeamColor(ChatColor color) {
 		switch (color) {
 		case BLACK:
@@ -122,6 +132,10 @@ public class ScoreboardSlot {
 		return teamColor != null;
 	}
 	
+	/**
+	 * Returns the Minecraft string representation of this scoreboard slot
+	 * @return the Minecraft string representation of this scoreboard slot
+	 */
 	@Override
 	public String toString() {
 		if(teamColor != null) {
