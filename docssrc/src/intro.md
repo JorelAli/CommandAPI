@@ -39,6 +39,7 @@ Here's the list of changes to the documentation between each update. You can vie
 ### Documentation changes 3.4 \\(\rightarrow\\) 4.0:
 
 - Arguments now include pictures that showcase how they work!
+- Adds documentation for [6.2 Safe argument suggestions](./safeargumentsuggestions.md)
 
 ### Documentation changes 3.3 \\(\rightarrow\\) 3.4:
 
