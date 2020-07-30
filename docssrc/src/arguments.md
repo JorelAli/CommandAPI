@@ -36,7 +36,7 @@ The type to cast each argument (declared in the `dev.jorel.commandapi.arguments`
 |            [`AdvancementArgument`](./advancementargument.md) | `org.bukkit.advancement.Advancement`                         |
 |                               [`AxisArgument`](./axisarg.md) | `java.util.EnumSet<org.bukkit.Axis>`                         |
 |                        [`BiomeArgument`](./biomeargument.md) | `org.bukkit.block.Biome`                                     |
-|                                         `BlockStateArgument` | `org.bukkit.block.data.BlockData`                            |
+|             [`BlockStateArgument`](./blockstatearguments.md) | `org.bukkit.block.data.BlockData`                            |
 | [`BooleanArgument`](./primitivearguments.md#boolean-arguments) | `boolean`                                                    |
 |           [`ChatArgument`](./chatarguments.md#chat-argument) | `net.md_5.bungee.api.chat.BaseComponent[]`                   |
 | [`ChatColorArgument`](./chatarguments.md#chat-color-argument) | `org.bukkit.ChatColor`                                       |

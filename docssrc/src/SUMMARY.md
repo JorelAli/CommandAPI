@@ -42,6 +42,7 @@
   - [Miscellaneous arguments](./miscargs.md)
     - [Advancement arguments](./advancementargument.md)
     - [Biome arguments](./biomeargument.md)
+    - [BlockState arguments](./blockstatearguments.md)
     - [Enchantment arguments](./enchantmentargument.md)
     - [Environment arguments](./environmentargs.md)
     - [Itemstack arguments](./itemstackarguments.md)
