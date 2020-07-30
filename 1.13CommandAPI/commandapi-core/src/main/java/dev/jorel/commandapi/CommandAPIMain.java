@@ -1,7 +1,9 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -15,6 +17,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.IntegerArgument;
 
 public class CommandAPIMain extends JavaPlugin implements Listener {
 	
@@ -71,6 +76,27 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 		}, 0L);
         
         getServer().getPluginManager().registerEvents(this, this);
+        
+        //TODO: Remove before release
+        {
+        	LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+        	arguments.put("val", new IntegerArgument());
+        	
+        	new CommandAPICommand("hello")
+        	.withArguments(arguments)
+        	.withAliases("bye", "cya", "hi")
+        	.executes((s, a) -> {
+        		System.out.println(Arrays.deepToString(a));
+        	})
+        	.register();
+        	
+        	new CommandAPICommand("hello2")
+        	.withAliases("bye2", "cya2", "hi2")
+        	.executes((s, a) -> {
+        		System.out.println(Arrays.deepToString(a));
+        	})
+        	.register();
+        }
 	}
 	
 	/** 

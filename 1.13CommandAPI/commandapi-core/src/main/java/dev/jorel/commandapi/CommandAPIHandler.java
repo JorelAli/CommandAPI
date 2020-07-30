@@ -468,8 +468,6 @@ public final class CommandAPIHandler {
 				if (CommandAPIMain.getConfiguration().hasVerboseOutput()) {
 					CommandAPIMain.getLog().info("Registering alias /" + alias + " -> " + resultantNode.getName());
 				}
-				// TODO: What if we just do
-				// getLiteralArgumentBuilder(alias).redirect(resultantNode)?
 				this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(alias)
 						.requires(generatePermissions(alias, permissions)).executes(command));
 			}
@@ -541,7 +539,7 @@ public final class CommandAPIHandler {
 					CommandAPIMain.getLog().info("Registering alias /" + alias + " -> " + resultantNode.getName());
 				}
 				this.dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(alias)
-						.requires(generatePermissions(alias, permissions)).then(outer));
+						.requires(generatePermissions(alias, permissions)).redirect(resultantNode));
 			}
 		}
 
