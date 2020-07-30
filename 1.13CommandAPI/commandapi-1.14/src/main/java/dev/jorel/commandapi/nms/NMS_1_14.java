@@ -124,6 +124,22 @@ import net.minecraft.server.v1_14_R1.Vec3D;
 public class NMS_1_14 implements NMS {
 	
 	@Override
+	public String convert(Sound sound) {
+		return CraftSound.getSound(sound);
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public String convert(PotionEffectType potion) {
+		return IRegistry.MOB_EFFECT.getKey(IRegistry.MOB_EFFECT.fromId(potion.getId())).toString();
+	}
+	
+	@Override
+	public String convert(Particle particle) {
+		return CraftParticle.toNMS(particle).a();
+	}
+	
+	@Override
 	public String convert(ItemStack is) {
 		net.minecraft.server.v1_14_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(is);
 		return is.getType().getKey().toString() + nmsItemStack.getOrCreateTag().asString();

@@ -110,12 +110,29 @@ import net.minecraft.server.v1_13_R1.IVectorPosition;
 import net.minecraft.server.v1_13_R1.LootTableRegistry;
 import net.minecraft.server.v1_13_R1.MinecraftKey;
 import net.minecraft.server.v1_13_R1.MinecraftServer;
+import net.minecraft.server.v1_13_R1.MobEffectList;
 import net.minecraft.server.v1_13_R1.ScoreboardScore;
 import net.minecraft.server.v1_13_R1.Vec2F;
 import net.minecraft.server.v1_13_R1.Vec3D;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class NMS_1_13 implements NMS {
+	
+	@Override
+	public String convert(Sound sound) {
+		return CraftSound.getSound(sound);
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public String convert(PotionEffectType potion) {
+		return MobEffectList.REGISTRY.b(MobEffectList.fromId(potion.getId())).toString();
+	}
+	
+	@Override
+	public String convert(Particle particle) {
+		return CraftParticle.toNMS(particle).a();
+	}
 	
 	@Override
 	public String convert(ItemStack is) {

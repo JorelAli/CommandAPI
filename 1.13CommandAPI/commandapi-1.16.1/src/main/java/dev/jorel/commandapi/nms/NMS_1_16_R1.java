@@ -3,7 +3,6 @@ package dev.jorel.commandapi.nms;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -178,16 +177,7 @@ public class NMS_1_16_R1 implements NMS {
 		// server startup
 		Field i = DataPackResources.class.getDeclaredField("i");
 		i.setAccessible(true);
-		
-		Field modifiersField = null;
-		try {
-			modifiersField = Field.class.getDeclaredField("modifiers");
-		} catch (NoSuchFieldException e) {
-			CommandAPIMain.getLog().severe("Java version " + System.getProperty("java.version") + " is not supported to reload datapacks! Try using Java 8?");
-			return;
-		}
-		modifiersField.setAccessible(true);
-		modifiersField.setInt(i, i.getModifiers() & ~Modifier.FINAL);
+		NMS.unlockFinalField(i);
 
 		Field fField = CustomFunctionManager.class.getDeclaredField("f");
 		fField.setAccessible(true);

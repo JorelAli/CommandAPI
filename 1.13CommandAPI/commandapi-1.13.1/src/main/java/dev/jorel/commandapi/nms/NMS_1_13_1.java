@@ -108,6 +108,7 @@ import net.minecraft.server.v1_13_R2.EntityTypes;
 import net.minecraft.server.v1_13_R2.EnumDirection.EnumAxis;
 import net.minecraft.server.v1_13_R2.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_13_R2.ICompletionProvider;
+import net.minecraft.server.v1_13_R2.IRegistry;
 import net.minecraft.server.v1_13_R2.IVectorPosition;
 import net.minecraft.server.v1_13_R2.LootTableRegistry;
 import net.minecraft.server.v1_13_R2.MinecraftKey;
@@ -118,6 +119,22 @@ import net.minecraft.server.v1_13_R2.Vec3D;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class NMS_1_13_1 implements NMS {
+	
+	@Override
+	public String convert(Sound sound) {
+		return CraftSound.getSound(sound);
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public String convert(PotionEffectType potion) {
+		return IRegistry.MOB_EFFECT.getKey(IRegistry.MOB_EFFECT.fromId(potion.getId())).toString();
+	}
+	
+	@Override
+	public String convert(Particle particle) {
+		return CraftParticle.toNMS(particle).a();
+	}
 	
 	@Override
 	public String convert(ItemStack is) {
