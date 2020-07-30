@@ -40,17 +40,16 @@ The list of supported arguments are displayed in the following table. The parame
 | [`Location2DArgument`](./locationargument.md#location-2d-space) | `dev.jorel.commandapi.wrappers.Location2D`     |
 | [`LocationArgument`](./locationargument.md#location-3d-space) | `org.bukkit.Location`                          |
 | [`LongArgument`](./primitivearguments.md#numerical-arguments) | **`Long`**                                     |
-|                [`LootTableArgument`](./loottableargument.md) | `org.bukkit.loot.LootTable` TODO               |
+|                [`LootTableArgument`](./loottableargument.md) | `org.bukkit.loot.LootTable`                    |
 |       [`MathOperationArgument`](./mathoperationarguments.md) | `dev.jorel.commandapi.wrappers.MathOperation`  |
 |                   [`NBTCompoundArgument`](./nbtarguments.md) | `de.tr7zw.nbtapi.NBTContainer`                 |
-| [`ObjectiveArgument`](./objectivearguments.md#objective-argument) | `String` TODO                                  |
-| [`ObjectiveCriteriaArgument`](./objectivearguments.md#objective-criteria-argument) | `String` TODO                                  |
+| [`ObjectiveArgument`](./objectivearguments.md#objective-argument) | **`org.bukkit.scoreboard.Objective`**          |
 |                 [`ParticleArgument`](./particlearguments.md) | `org.bukkit.Particle`                          |
 |               [`PotionEffectArgument`](./potionarguments.md) | `org.bukkit.potion.PotionEffectType`           |
 |                      [`RecipeArgument`](./recipeargument.md) | `org.bukkit.inventory.Recipe`                  |
 |                      [`RotationArgument`](./rotationargs.md) | `dev.jorel.commandapi.wrappers.Rotation`       |
 | [`ScoreboardSlotArgument`](./scoreboardarguments.md#scoreboard-slot-argument) | `dev.jorel.commandapi.wrappers.ScoreboardSlot` |
 |                        [`SoundArgument`](./soundargument.md) | `org.bukkit.Sound`                             |
-|                         [`TeamArgument`](./teamarguments.md) | `String` TODO                                  |
+|                         [`TeamArgument`](./teamarguments.md) | **`org.bukkit.scoreboard.Team`**               |
 |                              [`TimeArgument`](./timeargs.md) | **`dev.jorel.commandapi.wrappers.Time`**       |
 

@@ -31,10 +31,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.loot.LootTables;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Team;
 
 import de.tr7zw.nbtapi.NBTContainer;
 import de.tr7zw.nbtapi.NBTItem;
@@ -60,7 +63,6 @@ import dev.jorel.commandapi.arguments.GreedyStringArgument;
 import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.IntegerRangeArgument;
 import dev.jorel.commandapi.arguments.ItemStackArgument;
-import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.Location2DArgument;
 import dev.jorel.commandapi.arguments.LocationArgument;
 import dev.jorel.commandapi.arguments.LongArgument;
@@ -392,7 +394,41 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 	        	System.out.println(Arrays.deepToString(a));
 	        })
 	        .register();
+        } {
+        	LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+	        arguments.put("loot", new LootTableArgument().safeOverrideSuggestions(LootTables.BURIED_TREASURE.getLootTable(), LootTables.PANDA.getLootTable()));
+
+	        new CommandAPICommand("l")
+	        .withArguments(arguments)
+	        .executesPlayer((s, a) -> {
+	        	System.out.println(Arrays.deepToString(a));
+	        })
+	        .register();
+        } {
+        	LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+        	
+	        arguments.put("team", new TeamArgument().safeOverrideSuggestions(Bukkit.getScoreboardManager().getMainScoreboard().getTeams().toArray(new Team[0])));
+
+	        new CommandAPICommand("m")
+	        .withArguments(arguments)
+	        .executesPlayer((s, a) -> {
+	        	System.out.println(Arrays.deepToString(a));
+	        })
+	        .register();
+        } {
+        	LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+        	
+	        arguments.put("obj", new ObjectiveArgument().safeOverrideSuggestions(Bukkit.getScoreboardManager().getMainScoreboard().getObjectives().toArray(new Objective[0])));
+
+	        new CommandAPICommand("n")
+	        .withArguments(arguments)
+	        .executesPlayer((s, a) -> {
+	        	System.out.println(Arrays.deepToString(a));
+	        })
+	        .register();
         }
+        
+        
 	}
 	
 	/** 
