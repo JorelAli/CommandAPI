@@ -431,7 +431,7 @@ public class NMS_1_14_4 implements NMS {
 
     @Override
     public EntityType getEntityType(CommandContext cmdCtx, String str, CommandSender sender) throws CommandSyntaxException {
-        Entity entity = IRegistry.ENTITY_TYPE.get(ArgumentEntitySummon.a(cmdCtx, str)).a(((CraftWorld) getCommandSenderWorld(sender)).getHandle());
+        Entity entity = IRegistry.ENTITY_TYPE.get(ArgumentEntitySummon.a(cmdCtx, str)).a(((CraftWorld) NMS.getCommandSenderWorld(sender)).getHandle());
         return entity.getBukkitEntity().getType();
     }
 
@@ -495,10 +495,10 @@ public class NMS_1_14_4 implements NMS {
         switch (locationType) {
             case BLOCK_POSITION:
                 BlockPosition blockPos = ArgumentPosition.a(cmdCtx, str);
-                return new Location(getCommandSenderWorld(sender), blockPos.getX(), blockPos.getY(), blockPos.getZ());
+                return new Location(NMS.getCommandSenderWorld(sender), blockPos.getX(), blockPos.getY(), blockPos.getZ());
             case PRECISE_POSITION:
                 Vec3D vecPos = ArgumentVec3.a(cmdCtx, str);
-                return new Location(getCommandSenderWorld(sender), vecPos.x, vecPos.y, vecPos.z);
+                return new Location(NMS.getCommandSenderWorld(sender), vecPos.x, vecPos.y, vecPos.z);
         }
         return null;
     }
@@ -508,10 +508,10 @@ public class NMS_1_14_4 implements NMS {
         switch (locationType2d) {
             case BLOCK_POSITION:
                 BlockPosition2D blockPos = ArgumentVec2I.a(cmdCtx, key);
-                return new Location2D(getCommandSenderWorld(sender), blockPos.a, blockPos.b);
+                return new Location2D(NMS.getCommandSenderWorld(sender), blockPos.a, blockPos.b);
             case PRECISE_POSITION:
                 Vec2F vecPos = ArgumentVec2.a(cmdCtx, key);
-                return new Location2D(getCommandSenderWorld(sender), vecPos.i, vecPos.j);
+                return new Location2D(NMS.getCommandSenderWorld(sender), vecPos.i, vecPos.j);
         }
         return null;
     }

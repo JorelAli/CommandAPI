@@ -2,9 +2,6 @@ package dev.jorel.commandapi.nms;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodHandles.Lookup;
-import java.lang.invoke.VarHandle;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
@@ -56,7 +53,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 public interface NMS {
 
 	//Returns the world in which a command sender is from
-	default World getCommandSenderWorld(CommandSender sender) {
+	static World getCommandSenderWorld(CommandSender sender) {
 		if(sender instanceof BlockCommandSender) {
 			return ((BlockCommandSender) sender).getBlock().getWorld();
 		} else if(sender instanceof ProxiedCommandSender) {
