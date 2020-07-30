@@ -57,4 +57,174 @@ The list of supported arguments are displayed in the following table. The parame
 
 ## Safe time arguments
 
-While most of the arguments are fairly straight forward, I'd like to bring your attention to the `TimeArgument`'s safe suggestions function. This uses `dev.jorel.commandapi.wrappers.Time` as the class for `T`.
+While most of the arguments are fairly straight forward, I'd like to bring your attention to the `TimeArgument`'s safe suggestions function. This uses `dev.jorel.commandapi.wrappers.Time` as the class for `T` to ensure type-safety. The `Time` class has three static methods:
+
+```java
+Time ticks(int ticks);
+Time days(int days);
+Time seconds(int seconds);
+```
+
+These create representations of ticks (e.g. `40t`), days (e.g. `2d`) and seconds (e.g. `60s`) respectively.
+
+-----
+
+## Safe function arguments
+
+Although all safe arguments are indeed "type-safe", the function argument uses a `NamespacedKey` which cannot be checked fully at compile time. As a result, this is argument should be used with caution - providing a `NamespacedKey` suggestion that does not exist when the server is running will cause that command to fail if that suggestion is used.
+
+-----
+
+## Safe scoreboard slot arguments
+
+Scoreboard slots now include two new static methods so they can be used with safe arguments:
+
+```java
+ScoreboardSlot of(DisplaySlot slot);
+ScoreboardSlot ofTeamColor(ChatColor color);
+```
+
+This allows you to create `ScoreboardSlot` instances which can be used with the safe override suggestions method.
+
+-----
+
+## Examples
+
+While this should be fairly straight forward, here's a few examples of how this can be used in practice:
+
+<div class="example">
+
+### Example - Safe recipe arguments
+
+Say we have a plugin that registers custom items which can be crafted. In this example, we use an "emerald sword" with a custom crafting recipe. Now say that we want to have a command that gives the player the item from our declared recipes. To do this, we first register our custom items:
+
+```java
+// Create our itemstack
+ItemStack emeraldSword = new ItemStack(Material.DIAMOND_SWORD);
+ItemMeta meta = emeraldSword.getItemMeta();
+meta.setDisplayName("Emerald Sword");
+meta.setUnbreakable(true);
+emeraldSword.setItemMeta(meta);
+
+// Create and register our recipe
+ShapedRecipe emeraldSwordRecipe = new ShapedRecipe(new NamespacedKey(this, "emerald_sword"), emeraldSword);
+emeraldSwordRecipe.shape(
+	"AEA", 
+	"AEA", 
+	"ABA"
+);
+emeraldSwordRecipe.setIngredient('A', Material.AIR);
+emeraldSwordRecipe.setIngredient('E', Material.EMERALD);
+emeraldSwordRecipe.setIngredient('B', Material.BLAZE_ROD);
+getServer().addRecipe(emeraldSwordRecipe);
+
+... // Omitted, more itemstacks and recipes
+```
+
+Once we've done that, we can now include them in our command registration. To do this, we use `safeOverrideSuggestions(recipes)` and then register our command as normal:
+
+```java
+// Safely override with the recipe we've defined
+LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+arguments.put("recipe", new RecipeArgument().safeOverrideSuggestions(emeraldSwordRecipe, /* Other recipes */));
+
+// Register our command
+new CommandAPICommand("giverecipe")
+	.withArguments(arguments)
+	.executesPlayer((player, args) -> {
+		Recipe recipe = (Recipe) args[0];
+		player.getInventory().addItem(recipe.getResult());
+	})
+	.register();
+```
+
+</div>
+
+<div class="example">
+
+### Example - Safe /spawnmob suggestions
+
+Say we have a command to spawn mobs:
+
+```
+/spawnmob <mob>
+```
+
+Now say that we don't want non-op players to spawn bosses. To do this, we'll create a `List<EntityType>` which is the list of all mobs that non-ops are allowed to spawn:
+
+```java
+EntityType[] forbiddenMobs = new EntityType[] {EntityType.ENDER_DRAGON, EntityType.WITHER};
+List<EntityType> allowedMobs = Arrays.asList(EntityType.values());
+allowedMobs.removeAll(Arrays.asList(forbiddenMobs)); //Now contains everything except enderdragon and wither
+```
+
+We then use our safe arguments to return an `EntityType[]` as the list of values that are suggested to the player. In this example, we use the `Function<CommandSender, EntityType[]>` argument to determine if the sender has permissions to view the suggestions:
+
+```java
+LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+arguments.put("mob", new EntityTypeArgument().safeOverrideSuggestions(
+	sender -> {
+		if(sender.isOp()) {
+			return EntityType.values(); //All entity types
+		} else {
+			return allowedMobs.toArray(new EntityType[0]); //Only allowsMobs
+		}
+	})
+);
+```
+
+Now we register our command as normal:
+
+```java
+new CommandAPICommand("spawnmob")
+	.withArguments(arguments)
+	.executesPlayer((player, args) -> {
+		EntityType entityType = (EntityType) args[0];
+		player.getWorld().spawnEntity(player.getLocation(), entityType);
+	})
+	.register();
+```
+
+</div>
+
+<div class="example">
+
+### Example - Removing a potion effect from a player
+
+Say we wanted to remove a potion effect from a player. To do this, we'll use the following command structure:
+
+```
+/removeeffect <player> <potioneffect>
+```
+
+Now, we don't want to remove a potion effect that already exists on a player, so instead we'll use the safe arguments to find a list of potion effects on the target player and then only suggest those potion effects. To do this, we'll use the `BiFunction<CommandSender, Object[], PotionEffectType[]>` parameter, as it allows us to access the previously defined `<player>` argument.
+
+```java
+LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+arguments.put("target", new EntitySelectorArgument(EntitySelector.ONE_PLAYER));
+arguments.put("potioneffect", new PotionEffectArgument().safeOverrideSuggestions(
+	(sender, prevArgs) -> {
+		Player target = (Player) prevArgs[0];
+        
+        //Convert PotionEffect[] into PotionEffectType[]
+		return target.getActivePotionEffects().stream()
+			.map(PotionEffect::getType)
+			.toArray(PotionEffectType[]::new);
+	})
+);
+```
+
+And then we can register our command as normal:
+
+```java
+new CommandAPICommand("removeeffect")
+	.withArguments(arguments)
+	.executesPlayer((player, args) -> {
+		EntityType entityType = (EntityType) args[0];
+		player.getWorld().spawnEntity(player.getLocation(), entityType);
+	})
+	.register();
+```
+
+</div>
+

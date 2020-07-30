@@ -30,10 +30,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.loot.LootTables;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -424,6 +427,81 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 	        	System.out.println(Arrays.deepToString(a));
 	        })
 	        .register();
+        } {
+        	
+ItemStack emeraldSword = new ItemStack(Material.DIAMOND_SWORD);
+ItemMeta meta = emeraldSword.getItemMeta();
+meta.setDisplayName("Emerald Sword");
+meta.setUnbreakable(true);
+emeraldSword.setItemMeta(meta);
+
+ShapedRecipe emeraldSwordRecipe = new ShapedRecipe(new NamespacedKey(this, "emerald_sword"), emeraldSword);
+emeraldSwordRecipe.shape(
+	"AEA", 
+	"AEA", 
+	"ABA"
+);
+emeraldSwordRecipe.setIngredient('A', Material.AIR);
+emeraldSwordRecipe.setIngredient('E', Material.EMERALD);
+emeraldSwordRecipe.setIngredient('B', Material.BLAZE_ROD);
+getServer().addRecipe(emeraldSwordRecipe);
+
+LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+arguments.put("recipe", new RecipeArgument().safeOverrideSuggestions(emeraldSwordRecipe));
+
+new CommandAPICommand("giverecipe")
+	.withArguments(arguments)
+	.executesPlayer((player, args) -> {
+		Recipe recipe = (Recipe) args[0];
+		player.getInventory().addItem(recipe.getResult());
+	})
+	.register();
+        } {
+        	
+        	EntityType[] forbiddenMobs = new EntityType[] {EntityType.ENDER_DRAGON, EntityType.WITHER};
+        	List<EntityType> allowedMobs = Arrays.asList(EntityType.values());
+        	allowedMobs.removeAll(Arrays.asList(forbiddenMobs));
+        	
+LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+arguments.put("mob", new EntityTypeArgument().safeOverrideSuggestions(
+	sender -> {
+		if(sender.isOp()) {
+			return EntityType.values();
+		} else {
+			return allowedMobs.toArray(new EntityType[0]);
+		}
+	})
+);
+
+new CommandAPICommand("spawnmob")
+	.withArguments(arguments)
+	.executesPlayer((player, args) -> {
+		EntityType entityType = (EntityType) args[0];
+		player.getWorld().spawnEntity(player.getLocation(), entityType);
+	})
+	.register();
+
+        	
+        } {
+
+LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+arguments.put("target", new EntitySelectorArgument(EntitySelector.ONE_PLAYER));
+arguments.put("potioneffect", new PotionEffectArgument().safeOverrideSuggestions(
+	(sender, prevArgs) -> {
+		Player target = (Player) prevArgs[0];
+		return target.getActivePotionEffects().stream()
+			.map(PotionEffect::getType)
+			.toArray(PotionEffectType[]::new);
+	})
+);
+
+new CommandAPICommand("spawnmob")
+	.withArguments(arguments)
+	.executesPlayer((player, args) -> {
+		EntityType entityType = (EntityType) args[0];
+		player.getWorld().spawnEntity(player.getLocation(), entityType);
+	})
+	.register();
         }
         
         
