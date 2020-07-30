@@ -2,29 +2,6 @@
 
 This section basically summarizes the list of things that _could_ go wrong with the CommandAPI and how to mitigate these circumstances.
 
-## CommandAPI errors when reloading datapacks
-
-If you get an error along the lines of:
-
-```log
-[14:47:25] [Server thread/INFO]: [CommandAPI] Reloading datapacks...
-[14:47:25] [Server thread/WARN]: java.lang.NoSuchFieldException: modifiers
-[14:47:25] [Server thread/WARN]:     at java.base/java.lang.Class.getDeclaredField(Class.java:2489)
-[14:47:25] [Server thread/WARN]:     at dev.jorel.commandapi.nms.NMS_1_16_R1.reloadDataPacks(NMS_1_16_R1.java:154)
-[14:47:25] [Server thread/WARN]:     at dev.jorel.commandapi.CommandAPI.cleanup(CommandAPI.java:43)
-[14:47:25] [Server thread/WARN]:     at dev.jorel.commandapi.CommandAPIMain.lambda$onEnable$0(CommandAPIMain.java:52)
-[14:47:25] [Server thread/WARN]:     at org.bukkit.craftbukkit.v1_16_R1.scheduler.CraftTask.run(CraftTask.java:81)
-[14:47:25] [Server thread/WARN]:     at org.bukkit.craftbukkit.v1_16_R1.scheduler.CraftScheduler.mainThreadHeartbeat(CraftScheduler.java:400)
-[14:47:25] [Server thread/WARN]:     at net.minecraft.server.v1_16_R1.MinecraftServer.b(MinecraftServer.java:1061)
-[14:47:25] [Server thread/WARN]:     at net.minecraft.server.v1_16_R1.DedicatedServer.b(DedicatedServer.java:354)
-[14:47:25] [Server thread/WARN]:     at net.minecraft.server.v1_16_R1.MinecraftServer.a(MinecraftServer.java:1009)
-[14:47:25] [Server thread/WARN]:     at net.minecraft.server.v1_16_R1.MinecraftServer.v(MinecraftServer.java:848)
-[14:47:25] [Server thread/WARN]:     at net.minecraft.server.v1_16_R1.MinecraftServer.lambda$0(MinecraftServer.java:164)
-[14:47:25] [Server thread/WARN]:     at java.base/java.lang.Thread.run(Thread.java:832)
-```
-
-This is likely due to using an incompatible version of Java. The CommandAPI was designed to run on Java 8 and *should* be able to support Java 8, 9, 10 and 11. The CommandAPI currently does not support Java version 12 or later.
-
 ## Server errors when loading datapacks in 1.16+
 
 If you get an error at the very start of the server's startup sequence along the lines of:
