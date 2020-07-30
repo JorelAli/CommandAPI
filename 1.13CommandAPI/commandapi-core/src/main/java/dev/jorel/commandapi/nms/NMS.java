@@ -2,8 +2,6 @@ package dev.jorel.commandapi.nms;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.EnumSet;
 
@@ -215,24 +213,4 @@ public interface NMS {
 	String convert(Particle particle);
 	String convert(PotionEffectType potion);
 	String convert(Sound sound);
-	
-	static void unlockFinalField(Field f) {
-		try {
-			Field modifiersField = Field.class.getDeclaredField("modifiers");
-			modifiersField.setAccessible(true);
-			modifiersField.setInt(f, f.getModifiers() & ~Modifier.FINAL);
-		} catch (NoSuchFieldException e) {
-//			try {
-//				Lookup lookup = MethodHandles.privateLookupIn(Field.class, MethodHandles.lookup());
-//				VarHandle modifiers = lookup.findVarHandle(Field.class, "modifiers", int.class);
-//				modifiers.set(f, f.getModifiers() & ~Modifier.FINAL);
-//			} catch (IllegalAccessException | NoSuchFieldException e1) {
-//				e1.printStackTrace();
-//			}
-			return;
-		} catch (IllegalArgumentException | IllegalAccessException  e) {
-			e.printStackTrace();
-		}
-		
-	}
 }

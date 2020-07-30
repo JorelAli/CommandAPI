@@ -177,7 +177,6 @@ public class NMS_1_16_R1 implements NMS {
 		// server startup
 		Field i = DataPackResources.class.getDeclaredField("i");
 		i.setAccessible(true);
-		NMS.unlockFinalField(i);
 
 		Field fField = CustomFunctionManager.class.getDeclaredField("f");
 		fField.setAccessible(true);
