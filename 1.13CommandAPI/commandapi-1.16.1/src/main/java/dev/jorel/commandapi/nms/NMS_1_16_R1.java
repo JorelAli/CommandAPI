@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Predicate;
 import java.util.function.ToIntBiFunction;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -135,6 +136,14 @@ import net.minecraft.server.v1_16_R1.WorldServer;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class NMS_1_16_R1 implements NMS {
+	
+	private void a() {
+		Predicate<net.minecraft.server.v1_16_R1.ItemStack> s = null;
+		net.minecraft.server.v1_16_R1.ItemStack i = null;
+		CraftItemStack.asBukkitCopy(i);
+		
+		Predicate<ItemStack> a = item -> s.test(CraftItemStack.asNMSCopy(item));
+	}
 	
 	@Override
 	public String convert(Sound sound) {
