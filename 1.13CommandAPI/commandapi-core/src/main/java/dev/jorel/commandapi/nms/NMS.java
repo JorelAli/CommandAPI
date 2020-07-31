@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.UUID;
 
 import org.bukkit.Axis;
 import org.bukkit.ChatColor;
@@ -176,6 +177,7 @@ public interface NMS {
 	ScoreboardSlot     getScoreboardSlot(CommandContext<?> cmdCtx, String key);
 	Sound              getSound(CommandContext<?> cmdCtx, String key);
 	int                getTime(CommandContext<?> cmdCtx, String key);
+	UUID               getUUID(CommandContext<?> cmdCtx, String key);
 
 	/** Argument types */
 	ArgumentType<?> _ArgumentAxis();
@@ -208,9 +210,11 @@ public interface NMS {
 	ArgumentType<?> _ArgumentVec2();
 	ArgumentType<?> _ArgumentVec3();
 	ArgumentType<?> _ArgumentMathOperation();
+	ArgumentType<?> _ArgumentUUID();
 	
 	String convert(ItemStack is);
 	String convert(Particle particle);
 	String convert(PotionEffectType potion);
 	String convert(Sound sound);
+	
 }

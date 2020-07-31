@@ -179,6 +179,11 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The BlockStateArgument
 	 */
-	BLOCKSTATE;
+	BLOCKSTATE, 
+	
+	/**
+	 * The UUIDArgument
+	 */
+	UUID;
 
 }

@@ -292,9 +292,10 @@ public interface CommandAPIHandler {
 			return nms.getTeam(cmdCtx, key, sender);
 		case TIME:
 			return nms.getTime(cmdCtx, key);
-		default:
-			return null;
+		case UUID:
+			return nms.getUUID(cmdCtx, key);
 		}
+		return null;
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.ToIntBiFunction;
 import java.util.stream.Collectors;
 
@@ -59,6 +60,7 @@ import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.exceptions.BiomeArgumentException;
 import dev.jorel.commandapi.exceptions.EnvironmentArgumentException;
 import dev.jorel.commandapi.exceptions.TimeArgumentException;
+import dev.jorel.commandapi.exceptions.UUIDArgumentException;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.IntegerRange;
@@ -119,52 +121,30 @@ import net.minecraft.server.v1_13_R1.Vec3D;
 public class NMS_1_13 implements NMS {
 	
 	@Override
-	public String convert(Sound sound) {
-		return CraftSound.getSound(sound);
-	}
-	
-	@SuppressWarnings("deprecation")
-	@Override
-	public String convert(PotionEffectType potion) {
-		return MobEffectList.REGISTRY.b(MobEffectList.fromId(potion.getId())).toString();
-	}
-	
-	@Override
-	public String convert(Particle particle) {
-		return CraftParticle.toNMS(particle).a();
-	}
-	
-	@Override
-	public String convert(ItemStack is) {
-		net.minecraft.server.v1_13_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(is);
-		return is.getType().getKey().toString() + nmsItemStack.getOrCreateTag().toString();
-	}
-	
-    @Override
     public ArgumentType<?> _ArgumentAxis() {
         return ArgumentRotationAxis.a();
     }
-    
-    @Override
+	
+	@Override
 	public ArgumentType<?> _ArgumentBlockState() {
 		return ArgumentTile.a();
 	}
-
-    @Override
+	
+	@Override
     public ArgumentType<?> _ArgumentChat() {
         return ArgumentChat.a();
     }
-
-    @Override
+	
+	@Override
     public ArgumentType _ArgumentChatComponent() {
         return ArgumentChatComponent.a();
     }
-
+	
     @Override
     public ArgumentType _ArgumentChatFormat() {
         return ArgumentChatFormat.a();
     }
-
+    
     @Override
     public ArgumentType<?> _ArgumentDimension() {
         throw new EnvironmentArgumentException();
@@ -293,6 +273,11 @@ public class NMS_1_13 implements NMS {
     }
 
     @Override
+	public ArgumentType<?> _ArgumentUUID() {
+		throw new UUIDArgumentException();
+	}
+
+    @Override
     public ArgumentType<?> _ArgumentVec2() {
         return ArgumentVec2.a();
     }
@@ -306,6 +291,28 @@ public class NMS_1_13 implements NMS {
     public String[] compatibleVersions() {
         return new String[]{ "1.13" };
     }
+
+    @Override
+	public String convert(ItemStack is) {
+		net.minecraft.server.v1_13_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(is);
+		return is.getType().getKey().toString() + nmsItemStack.getOrCreateTag().toString();
+	}
+
+    @Override
+	public String convert(Particle particle) {
+		return CraftParticle.toNMS(particle).a();
+	}
+
+    @SuppressWarnings("deprecation")
+	@Override
+	public String convert(PotionEffectType potion) {
+		return MobEffectList.REGISTRY.b(MobEffectList.fromId(potion.getId())).toString();
+	}
+
+    @Override
+	public String convert(Sound sound) {
+		return CraftSound.getSound(sound);
+	}
 
     @Override
     public void createDispatcherFile(File file, CommandDispatcher dispatcher) {
@@ -683,16 +690,21 @@ public class NMS_1_13 implements NMS {
         return ArgumentScoreboardTeam.a(cmdCtx, key).getName();
     }
 
-    @Override
+	@Override
     public int getTime(CommandContext<?> cmdCtx, String key) {
         throw new TimeArgumentException();
     }
 
 	@Override
+	public UUID getUUID(CommandContext cmdCtx, String key) {
+		throw new UUIDArgumentException();
+	}
+	
+	@Override
     public boolean isVanillaCommandWrapper(Command command) {
         return command instanceof VanillaCommandWrapper;
     }
-
+	
 	@Override
     public void resendPackets(Player player) {
         CraftPlayer craftPlayer = (CraftPlayer) player;

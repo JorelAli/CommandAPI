@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Iterator;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.function.ToIntBiFunction;
@@ -104,6 +105,7 @@ import net.minecraft.server.v1_16_R1.ArgumentScoreholder;
 import net.minecraft.server.v1_16_R1.ArgumentTag;
 import net.minecraft.server.v1_16_R1.ArgumentTile;
 import net.minecraft.server.v1_16_R1.ArgumentTime;
+import net.minecraft.server.v1_16_R1.ArgumentUUID;
 import net.minecraft.server.v1_16_R1.ArgumentVec2;
 import net.minecraft.server.v1_16_R1.ArgumentVec2I;
 import net.minecraft.server.v1_16_R1.ArgumentVec3;
@@ -827,6 +829,16 @@ public class NMS_1_16_R1 implements NMS {
 		CraftServer craftServer = (CraftServer) Bukkit.getServer();
 		net.minecraft.server.v1_16_R1.CommandDispatcher nmsDispatcher = craftServer.getServer().getCommandDispatcher();
 		nmsDispatcher.a(craftPlayer.getHandle());
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentUUID() {
+		return ArgumentUUID.a();
+	}
+	
+	@Override
+	public UUID getUUID(CommandContext cmdCtx, String key) {
+		return ArgumentUUID.a(cmdCtx, key);
 	}
 
 }

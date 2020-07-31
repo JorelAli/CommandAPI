@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.UUID;
 import java.util.function.ToIntBiFunction;
 import java.util.stream.Collectors;
 
@@ -60,6 +61,7 @@ import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
 import dev.jorel.commandapi.arguments.ICustomProvidedArgument.SuggestionProviders;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.exceptions.BiomeArgumentException;
+import dev.jorel.commandapi.exceptions.UUIDArgumentException;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.Location2D;
 import dev.jorel.commandapi.wrappers.MathOperation;
@@ -124,57 +126,35 @@ import net.minecraft.server.v1_14_R1.Vec3D;
 public class NMS_1_14_3 implements NMS {
 	
 	@Override
-	public String convert(Sound sound) {
-		return CraftSound.getSound(sound);
-	}
-	
-	@SuppressWarnings("deprecation")
-	@Override
-	public String convert(PotionEffectType potion) {
-		return IRegistry.MOB_EFFECT.getKey(IRegistry.MOB_EFFECT.fromId(potion.getId())).toString();
-	}
-	
-	@Override
-	public String convert(Particle particle) {
-		return CraftParticle.toNMS(particle).a();
-	}
-	
-	@Override
-	public String convert(ItemStack is) {
-		net.minecraft.server.v1_14_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(is);
-		return is.getType().getKey().toString() + nmsItemStack.getOrCreateTag().asString();
-	}
-	
-    @Override
     public ArgumentType<?> _ArgumentAxis() {
         return ArgumentRotationAxis.a();
     }
-
-    @Override
+	
+	@Override
 	public ArgumentType<?> _ArgumentBlockState() {
 		return ArgumentTile.a();
 	}
-
-    @Override
+	
+	@Override
     public ArgumentType<?> _ArgumentChat() {
         return ArgumentChat.a();
     }
-
-    @Override
+	
+	@Override
     public ArgumentType _ArgumentChatComponent() {
         return ArgumentChatComponent.a();
     }
-
-    @Override
+	
+	@Override
     public ArgumentType _ArgumentChatFormat() {
         return ArgumentChatFormat.a();
     }
-
-    @Override
+	
+	@Override
     public ArgumentType<?> _ArgumentDimension() {
         return ArgumentDimension.a();
     }
-
+	
     @Override
     public ArgumentType _ArgumentEnchantment() {
         return ArgumentEnchantment.a();
@@ -298,6 +278,11 @@ public class NMS_1_14_3 implements NMS {
     }
 
     @Override
+	public ArgumentType<?> _ArgumentUUID() {
+		throw new UUIDArgumentException();
+	}
+
+    @Override
     public ArgumentType<?> _ArgumentVec2() {
         return ArgumentVec2.a();
     }
@@ -311,6 +296,28 @@ public class NMS_1_14_3 implements NMS {
     public String[] compatibleVersions() {
         return new String[]{ "1.14.3" };
     }
+
+    @Override
+	public String convert(ItemStack is) {
+		net.minecraft.server.v1_14_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(is);
+		return is.getType().getKey().toString() + nmsItemStack.getOrCreateTag().asString();
+	}
+
+    @Override
+	public String convert(Particle particle) {
+		return CraftParticle.toNMS(particle).a();
+	}
+
+    @SuppressWarnings("deprecation")
+	@Override
+	public String convert(PotionEffectType potion) {
+		return IRegistry.MOB_EFFECT.getKey(IRegistry.MOB_EFFECT.fromId(potion.getId())).toString();
+	}
+
+    @Override
+	public String convert(Sound sound) {
+		return CraftSound.getSound(sound);
+	}
 
     @Override
     public void createDispatcherFile(File file, CommandDispatcher dispatcher) throws IOException {
@@ -693,10 +700,15 @@ public class NMS_1_14_3 implements NMS {
         return ArgumentScoreboardTeam.a(cmdCtx, key).getName();
     }
 
-	@Override
+    @Override
     public int getTime(CommandContext<?> cmdCtx, String key) {
         return cmdCtx.getArgument(key, Integer.class);
     }
+
+	@Override
+	public UUID getUUID(CommandContext cmdCtx, String key) {
+		throw new UUIDArgumentException();
+	}
 	
 	@Override
     public boolean isVanillaCommandWrapper(Command command) {

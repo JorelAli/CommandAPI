@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.UUID;
 import java.util.function.ToIntBiFunction;
 import java.util.stream.Collectors;
 
@@ -60,6 +61,7 @@ import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
 import dev.jorel.commandapi.arguments.ICustomProvidedArgument.SuggestionProviders;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.exceptions.BiomeArgumentException;
+import dev.jorel.commandapi.exceptions.UUIDArgumentException;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.IntegerRange;
@@ -123,6 +125,16 @@ import net.minecraft.server.v1_15_R1.Vec3D;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class NMS_1_15 implements NMS {
+	
+	@Override
+	public ArgumentType<?> _ArgumentUUID() {
+		throw new UUIDArgumentException();
+	}
+	
+	@Override
+	public UUID getUUID(CommandContext cmdCtx, String key) {
+		throw new UUIDArgumentException();
+	}
 	
 	@Override
 	public String convert(Sound sound) {
