@@ -1,6 +1,6 @@
 package dev.jorel.commandapi;
 
-/*
+/**
  * Class to store cached methods and fields 
  * 
  * This is required because each

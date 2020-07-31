@@ -655,22 +655,4 @@ public interface CommandAPIHandler {
 			return result;
 		}
 	}
-
-	/**
-	 * Class to store cached methods and fields
-	 * <p>
-	 * This is required because each key is made up of a class and a field or method
-	 * name
-	 */
-	@SuppressWarnings("unused")
-	static class ClassCache {
-
-		private final Class<?> clazz;
-		private final String name;
-
-		public ClassCache(Class<?> clazz, String name) {
-			this.clazz = clazz;
-			this.name = name;
-		}
-	}
 }

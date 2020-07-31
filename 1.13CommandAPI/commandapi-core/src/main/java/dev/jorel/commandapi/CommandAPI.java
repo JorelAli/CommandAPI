@@ -16,16 +16,16 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
  * Class to register commands with the 1.13 command UI
  *
  */
-public class CommandAPI {
+public interface CommandAPI {
 	
-	static boolean canRegister = true;
+	static boolean[] canRegister = { true };
 
 	/**
 	 * Prevents command registration when the server has finished loading and fixes
 	 * the registration of permissions.
 	 */
 	static void cleanup() {
-		canRegister = false;
+		canRegister[0] = false;
 		
 		//Sort out permissions after the server has finished registering them all
 		CommandAPIHandler.fixPermissions();
@@ -51,7 +51,7 @@ public class CommandAPI {
 	 * @return true if commands can still be registered
 	 */
 	public static boolean canRegister() {
-		return CommandAPI.canRegister;
+		return CommandAPI.canRegister[0];
 	}
 	
 	/**
@@ -70,7 +70,7 @@ public class CommandAPI {
 	 *                across all plugins as well as minecraft, bukkit and spigot
 	 */
 	public static void unregister(String command, boolean force) {
-		if(!canRegister) {
+		if(!canRegister()) {
 			CommandAPIMain.getLog().warning("Unexpected unregistering of /" + command + ", as server is loaded! Unregistering anyway, but this can lead to unstable results!");
 		}
 		CommandAPIHandler.unregister(command, force);
@@ -79,7 +79,7 @@ public class CommandAPI {
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	static void register(String commandName, CommandPermission permissions, String[] aliases, LinkedHashMap<String, Argument> args, CustomCommandExecutor executor) {
-		if(!canRegister) {
+		if(!canRegister()) {
 			CommandAPIMain.getLog().severe("Cannot register command /" + commandName + ", because the server has finished loading!");
 			return;
 		}
