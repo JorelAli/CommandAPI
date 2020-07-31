@@ -268,11 +268,12 @@ margin-right: auto;">Download latest CommandAPI.jar</a></p>
 create-dispatcher-json: false
 plugins-to-convert: []
 </code></pre>
-<table><thead><tr><th>Configuration Setting</th><th>What it does</th></tr></thead><tbody>
-<tr><td><code>verbose-outputs</code></td><td>If true, outputs command registration and unregistration logs in the console</td></tr>
-<tr><td><code>create-dispatcher-json</code></td><td>If true, creates a <code>command_registration.json</code> file showing the mapping of registered commands</td></tr>
-<tr><td><code>plugins-to-convert</code></td><td>Controls the list of plugins to process for command conversion. See below for more information</td></tr>
-</tbody></table>
+<p><strong>Configuration settings:</strong></p>
+<ul>
+<li><strong><code>verbose-outputs</code></strong> - If <code>true</code>, outputs command registration and unregistration logs in the console</li>
+<li><strong><code>create-dispatcher-json</code></strong> - If <code>true</code>, creates a <code>command_registration.json</code> file showing the mapping of registered commands. This is not designed to by developers - setting this to <code>false</code> will improve command registration performance</li>
+<li><strong><code>plugins-to-convert</code></strong> - Controls the list of plugins to process for command conversion. See below for more information</li>
+</ul>
 <hr />
 <h2><a class="header" href="#command-conversion" id="command-conversion">Command Conversion</a></h2>
 <p>The CommandAPI has the ability to convert plugin commands into &quot;Vanilla compatible&quot; commands automatically on startup. This allows you to use <code>/execute</code> and Minecraft functions/tags for plugins that do not use the CommandAPI. For example, if you want to use the <code>/hat</code> command from the plugin <code>Essentials</code>, you can use the CommandAPI's command conversion setting to do so.</p>

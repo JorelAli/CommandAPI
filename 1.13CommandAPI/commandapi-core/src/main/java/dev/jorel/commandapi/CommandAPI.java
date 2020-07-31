@@ -19,15 +19,7 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 public class CommandAPI {
 	
 	static boolean canRegister = true;
-	private static CommandAPIHandler handler;
-
-	static {
-		try {
-			CommandAPI.handler = new CommandAPIHandler();			
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
+	private static final CommandAPIHandler handler = new CommandAPIHandler();
 
 	/**
 	 * Prevents command registration when the server has finished loading and fixes

@@ -88,13 +88,13 @@ public final class CommandAPIHandler {
 	 * @throws ClassNotFoundException if brigadier is not found or cannot properly
 	 *                                hook into NMS
 	 */
-	protected CommandAPIHandler() throws ClassNotFoundException {
+	protected CommandAPIHandler() {
 		// Package checks
 
 		try {
 			Class.forName("com.mojang.brigadier.CommandDispatcher");
 		} catch (ClassNotFoundException e) {
-			throw new ClassNotFoundException("Cannot hook into Brigadier (Are you running Minecraft 1.13 or above?)");
+			new ClassNotFoundException("Cannot hook into Brigadier (Are you running Minecraft 1.13 or above?)").printStackTrace();
 		}
 
 		// Setup NMS
@@ -112,8 +112,8 @@ public final class CommandAPIHandler {
 			version = (String) Class.forName(packageName + ".MinecraftServer").getDeclaredMethod("getVersion")
 					.invoke(nmsServer);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
-				| SecurityException e) {
-			CommandAPIMain.getLog().severe("Failed to load higher order versioning system!");
+				| SecurityException | ClassNotFoundException e) {
+			CommandAPIMain.getLog().severe("Failed to find Minecraft version!");
 		}
 
 		nms = CommandAPIVersionHandler.getNMS(version);
@@ -138,7 +138,7 @@ public final class CommandAPIHandler {
 			Class.forName("org.spigotmc.SpigotConfig");
 			CommandAPIMain.getLog().info("Hooked into Spigot successfully for Chat/ChatComponents");
 		} catch (ClassNotFoundException e) {
-			CommandAPIMain.getLog().warning("Couldn't hook into Spigot for chat/chatcomponents");
+			CommandAPIMain.getLog().warning("Couldn't hook into Spigot for Chat/ChatComponents");
 		}
 
 		// Everything from this line will use getNMSClass(), so we initialize our cache
@@ -324,19 +324,21 @@ public final class CommandAPIHandler {
 	// SECTION: Permissions //
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	/**
+	 * This permission generation setup ONLY works iff: 
+	 * <ul>
+	 * <li>You register the parent permission node FIRST.</li>
+	 * <li>Example:<br>/mycmd - permission node: <code>my.perm</code> <br>/mycmd &lt;arg> - permission node: <code>my.perm.other</code></li>
+	 * </ul>
+	 *
+	 * The <code>my.perm.other</code> permission node is revoked for the COMMAND REGISTRATION, however: 
+	 * <ul>
+	 * <li>The permission node IS REGISTERED.</li> 
+	 * <li>The permission node, if used for an argument (as in this case), 
+	 *  	will be used for suggestions for said argument</li></ul>
+	 */
 	private Predicate generatePermissions(String commandName, CommandPermission permission) {
-
 		// If we've already registered a permission, set it to the "parent" permission.
-		/*
-		 * This permission generation setup ONLY works iff: - You register the parent
-		 * permission node FIRST. - Example: /mycmd - permission node my.perm /mycmd
-		 * <arg> - permission node my.perm.other
-		 *
-		 * the my.perm.other permission node is revoked for the COMMAND REGISTRATION,
-		 * however: - The permission node IS REGISTERED. - The permission node, if used
-		 * for an argument (as in this case), will be used for suggestions for said
-		 * argument
-		 */
 		if (permissionsToFix.containsKey(commandName.toLowerCase())) {
 			if (!permissionsToFix.get(commandName.toLowerCase()).equals(permission)) {
 				permission = permissionsToFix.get(commandName.toLowerCase());

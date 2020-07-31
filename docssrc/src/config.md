@@ -10,11 +10,11 @@ create-dispatcher-json: false
 plugins-to-convert: []
 ```
 
-| Configuration Setting    | What it does                                                 |
-| ------------------------ | ------------------------------------------------------------ |
-| `verbose-outputs`        | If true, outputs command registration and unregistration logs in the console |
-| `create-dispatcher-json` | If true, creates a `command_registration.json` file showing the mapping of registered commands |
-| `plugins-to-convert`     | Controls the list of plugins to process for command conversion. See below for more information |
+**Configuration settings:**
+
+- **`verbose-outputs`** - If `true`, outputs command registration and unregistration logs in the console
+- **`create-dispatcher-json`** - If `true`, creates a `command_registration.json` file showing the mapping of registered commands. This is not designed to by developers - setting this to `false` will improve command registration performance
+- **`plugins-to-convert`** - Controls the list of plugins to process for command conversion. See below for more information
 
 -----
 
