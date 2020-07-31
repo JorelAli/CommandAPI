@@ -84,7 +84,7 @@ public interface NMS {
 	 * @param dispatcher The Brigadier CommandDispatcher
 	 * @throws IOException When the file fails to be written to
 	 */
-	void createDispatcherFile(Object server, File file, CommandDispatcher<?> dispatcher) throws IOException;
+	void createDispatcherFile(File file, CommandDispatcher<?> dispatcher) throws IOException;
 	
 	/**
 	 * Retrieve a specific NMS implemented SuggestionProvider

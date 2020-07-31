@@ -310,8 +310,8 @@ public class NMS_1_13_2 implements NMS {
     }
 
     @Override
-    public void createDispatcherFile(Object server, File file, CommandDispatcher dispatcher) {
-        ((MinecraftServer) server).commandDispatcher.a(file);
+    public void createDispatcherFile(File file, CommandDispatcher dispatcher) {
+    	((CraftServer) Bukkit.getServer()).getServer().commandDispatcher.a(file);
     }
 
     @Override

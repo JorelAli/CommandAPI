@@ -311,7 +311,7 @@ public class NMS_1_14 implements NMS {
 	}
 
 	@Override
-	public void createDispatcherFile(Object server, File file, CommandDispatcher dispatcher) throws IOException {
+	public void createDispatcherFile(File file, CommandDispatcher dispatcher) throws IOException {
 		Files.write((new GsonBuilder()).setPrettyPrinting().create()
 				.toJson(ArgumentRegistry.a(dispatcher, dispatcher.getRoot())), file, StandardCharsets.UTF_8);
 	}

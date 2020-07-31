@@ -57,12 +57,11 @@ import dev.jorel.commandapi.nms.NMS;
  * registration and unregistration of commands.
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public final class CommandAPIHandler {
-	private TreeMap<String, CommandPermission> permissionsToFix;
+public final class ICommandAPIHandler {
+	private static final TreeMap<String, CommandPermission> permissionsToFix = new TreeMap<>();
 
-	// Cache maps
-	private static Map<ClassCache, Field> fields;
-	private static Map<ClassCache, Method> methods;
+	private static final Map<ClassCache, Field> fields = new HashMap<>();
+	private static final Map<ClassCache, Method> methods = new HashMap<>();
 
 	// NMS variables
 	private static String packageName = null;
@@ -88,7 +87,7 @@ public final class CommandAPIHandler {
 	 * @throws ClassNotFoundException if brigadier is not found or cannot properly
 	 *                                hook into NMS
 	 */
-	protected CommandAPIHandler() {
+	protected ICommandAPIHandler() {
 		// Package checks
 
 		try {
@@ -104,7 +103,7 @@ public final class CommandAPIHandler {
 				| SecurityException e) {
 			CommandAPIMain.getLog().severe("Unable to hook into NMS properly!");
 		}
-		CommandAPIHandler.packageName = nmsServer.getClass().getPackage().getName();
+		ICommandAPIHandler.packageName = nmsServer.getClass().getPackage().getName();
 
 		// Load higher order versioning
 		String version = null;
@@ -143,9 +142,9 @@ public final class CommandAPIHandler {
 
 		// Everything from this line will use getNMSClass(), so we initialize our cache
 		// here
-		fields = new HashMap<>();
-		methods = new HashMap<>();
-		permissionsToFix = new TreeMap<>();
+//		fields = new HashMap<>();
+//		methods = new HashMap<>();
+//		permissionsToFix = new TreeMap<>();
 
 		this.dispatcher = nms.getBrigadierDispatcher(nmsServer);
 	}
@@ -554,7 +553,7 @@ public final class CommandAPIHandler {
 				e.printStackTrace(System.out);
 			}
 
-			nms.createDispatcherFile(file, dispatcher);
+			nms.createDispatcherFile(nmsServer, file, dispatcher);
 		}
 	}
 
