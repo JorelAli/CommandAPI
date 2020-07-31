@@ -19,7 +19,6 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 public class CommandAPI {
 	
 	static boolean canRegister = true;
-	private static final CommandAPIHandler handler = new CommandAPIHandler();
 
 	/**
 	 * Prevents command registration when the server has finished loading and fixes
@@ -29,7 +28,7 @@ public class CommandAPI {
 		canRegister = false;
 		
 		//Sort out permissions after the server has finished registering them all
-		handler.fixPermissions();
+		CommandAPIHandler.fixPermissions();
 		
 		try {
 			CommandAPIHandler.getNMS().reloadDataPacks();
@@ -60,7 +59,7 @@ public class CommandAPI {
 	 * @param command the name of the command to unregister
 	 */
 	public static void unregister(String command) {
-		handler.unregister(command, false);
+		CommandAPIHandler.unregister(command, false);
 	}
 	
 	/**
@@ -74,7 +73,7 @@ public class CommandAPI {
 		if(!canRegister) {
 			CommandAPIMain.getLog().warning("Unexpected unregistering of /" + command + ", as server is loaded! Unregistering anyway, but this can lead to unstable results!");
 		}
-		handler.unregister(command, force);
+		CommandAPIHandler.unregister(command, force);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -115,7 +114,7 @@ public class CommandAPI {
 				}
 			}
 			
-			handler.register(commandName, permissions, aliases, copyOfArgs, executor);
+			CommandAPIHandler.register(commandName, permissions, aliases, copyOfArgs, executor);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
