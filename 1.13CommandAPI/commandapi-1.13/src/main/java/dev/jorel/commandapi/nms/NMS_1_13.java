@@ -19,6 +19,7 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
+import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -72,6 +73,7 @@ import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.server.v1_13_R1.Advancement;
+import net.minecraft.server.v1_13_R1.ArgumentBlockPredicate;
 import net.minecraft.server.v1_13_R1.ArgumentChat;
 import net.minecraft.server.v1_13_R1.ArgumentChatComponent;
 import net.minecraft.server.v1_13_R1.ArgumentChatFormat;
@@ -116,11 +118,26 @@ import net.minecraft.server.v1_13_R1.MinecraftKey;
 import net.minecraft.server.v1_13_R1.MinecraftServer;
 import net.minecraft.server.v1_13_R1.MobEffectList;
 import net.minecraft.server.v1_13_R1.ScoreboardScore;
+import net.minecraft.server.v1_13_R1.ShapeDetectorBlock;
 import net.minecraft.server.v1_13_R1.Vec2F;
 import net.minecraft.server.v1_13_R1.Vec3D;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class NMS_1_13 implements NMS {
+	
+	@Override
+	public ArgumentType<?> _ArgumentBlockPredicate() {
+		return ArgumentBlockPredicate.a();
+	}
+
+	@Override
+	public Predicate<Block> getBlockPredicate(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		Predicate<ShapeDetectorBlock> predicate = ArgumentBlockPredicate.a(cmdCtx, key);
+		return (Block block) -> {
+			return predicate.test(new ShapeDetectorBlock(getCLW(cmdCtx).getWorld(),
+					new BlockPosition(block.getX(), block.getY(), block.getZ()), true));
+		};
+	}
 	
 	@Override
 	public ArgumentType<?> _ArgumentItemPredicate() {

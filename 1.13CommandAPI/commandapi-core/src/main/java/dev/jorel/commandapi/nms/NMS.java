@@ -16,6 +16,7 @@ import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.block.Biome;
+import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
@@ -143,6 +144,7 @@ public interface NMS {
 	
 	/** Argument implementations with CommandSyntaxExceptions */
 	Advancement          getAdvancement(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
+	Predicate<Block>     getBlockPredicate(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 	BaseComponent[]      getChat(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException; 
 	Environment          getDimension(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 	ItemStack            getItemStack(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
@@ -183,6 +185,7 @@ public interface NMS {
                          
 	/** Argument types */
 	ArgumentType<?> _ArgumentAxis();
+	ArgumentType<?> _ArgumentBlockPredicate();
 	ArgumentType<?> _ArgumentBlockState();
 	ArgumentType<?> _ArgumentChat();
 	ArgumentType<?> _ArgumentChatFormat();
@@ -219,8 +222,5 @@ public interface NMS {
 	String convert(Particle particle);
 	String convert(PotionEffectType potion);
 	String convert(Sound sound);
-
-	
-
 	
 }

@@ -210,6 +210,8 @@ public interface CommandAPIHandler {
 			return nms.getAxis(cmdCtx, key);
 		case BIOME:
 			return nms.getBiome(cmdCtx, key);
+		case BLOCK_PREDICATE:
+			return nms.getBlockPredicate(cmdCtx, key);
 		case BLOCKSTATE:
 			return nms.getBlockState(cmdCtx, key);
 		case CHAT:

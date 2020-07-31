@@ -189,6 +189,11 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The ItemStackPredicateArgument
 	 */
-	ITEMSTACK_PREDICATE;
+	ITEMSTACK_PREDICATE, 
+	
+	/**
+	 * The BlockPredicateArgument
+	 */
+	BLOCK_PREDICATE;
 
 }
