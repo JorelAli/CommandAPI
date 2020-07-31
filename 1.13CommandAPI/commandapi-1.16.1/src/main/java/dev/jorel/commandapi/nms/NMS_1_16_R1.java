@@ -86,6 +86,7 @@ import net.minecraft.server.v1_16_R1.ArgumentDimension;
 import net.minecraft.server.v1_16_R1.ArgumentEnchantment;
 import net.minecraft.server.v1_16_R1.ArgumentEntity;
 import net.minecraft.server.v1_16_R1.ArgumentEntitySummon;
+import net.minecraft.server.v1_16_R1.ArgumentItemPredicate;
 import net.minecraft.server.v1_16_R1.ArgumentItemStack;
 import net.minecraft.server.v1_16_R1.ArgumentMathOperation;
 import net.minecraft.server.v1_16_R1.ArgumentMinecraftKeyRegistered;
@@ -138,14 +139,6 @@ import net.minecraft.server.v1_16_R1.WorldServer;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class NMS_1_16_R1 implements NMS {
-	
-	private void a() {
-		Predicate<net.minecraft.server.v1_16_R1.ItemStack> s = null;
-		net.minecraft.server.v1_16_R1.ItemStack i = null;
-		CraftItemStack.asBukkitCopy(i);
-		
-		Predicate<ItemStack> a = item -> s.test(CraftItemStack.asNMSCopy(item));
-	}
 	
 	@Override
 	public String convert(Sound sound) {
@@ -839,6 +832,17 @@ public class NMS_1_16_R1 implements NMS {
 	@Override
 	public UUID getUUID(CommandContext cmdCtx, String key) {
 		return ArgumentUUID.a(cmdCtx, key);
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentItemPredicate() {
+		return ArgumentItemPredicate.a();
+	}
+
+	@Override
+	public Predicate<ItemStack> getItemStackPredicate(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		Predicate<net.minecraft.server.v1_16_R1.ItemStack> predicate = ArgumentItemPredicate.a(cmdCtx, key);
+		return item -> predicate.test(CraftItemStack.asNMSCopy(item));
 	}
 
 }

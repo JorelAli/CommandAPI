@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Predicate;
 import java.util.function.ToIntBiFunction;
 import java.util.stream.Collectors;
 
@@ -78,6 +79,7 @@ import net.minecraft.server.v1_13_R2.ArgumentDimension;
 import net.minecraft.server.v1_13_R2.ArgumentEnchantment;
 import net.minecraft.server.v1_13_R2.ArgumentEntity;
 import net.minecraft.server.v1_13_R2.ArgumentEntitySummon;
+import net.minecraft.server.v1_13_R2.ArgumentItemPredicate;
 import net.minecraft.server.v1_13_R2.ArgumentItemStack;
 import net.minecraft.server.v1_13_R2.ArgumentMathOperation;
 import net.minecraft.server.v1_13_R2.ArgumentMinecraftKeyRegistered;
@@ -121,6 +123,17 @@ import net.minecraft.server.v1_13_R2.Vec3D;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class NMS_1_13_2 implements NMS {
+	
+	@Override
+	public ArgumentType<?> _ArgumentItemPredicate() {
+		return ArgumentItemPredicate.a();
+	}
+
+	@Override
+	public Predicate<ItemStack> getItemStackPredicate(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		Predicate<net.minecraft.server.v1_13_R2.ItemStack> predicate = ArgumentItemPredicate.a(cmdCtx, key);
+		return item -> predicate.test(CraftItemStack.asNMSCopy(item));
+	}
 	
 	@Override
     public ArgumentType<?> _ArgumentAxis() {

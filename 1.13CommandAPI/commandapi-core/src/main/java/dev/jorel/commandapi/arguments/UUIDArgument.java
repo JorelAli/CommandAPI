@@ -9,12 +9,12 @@ import org.bukkit.command.CommandSender;
 import dev.jorel.commandapi.CommandAPIHandler;
 
 /**
- * An argument that represents a duration of time in ticks
+ * An argument that represents a UUID
  */
 public class UUIDArgument extends Argument implements ISafeOverrideableSuggestions<UUID> {
 	
 	/**
-	 * A Time argument. Represents the number of in game ticks 
+	 * A UUID argument. Represents an in-game entity UUID 
 	 */
 	public UUIDArgument() {
 		super(CommandAPIHandler.getNMS()._ArgumentUUID());

@@ -250,6 +250,8 @@ public interface CommandAPIHandler {
 			return nms.getIntRange(cmdCtx, key);
 		case ITEMSTACK:
 			return nms.getItemStack(cmdCtx, key);
+		case ITEMSTACK_PREDICATE:
+			return nms.getItemStackPredicate(cmdCtx, key);
 		case LITERAL:
 			return null;
 		case LOCATION:

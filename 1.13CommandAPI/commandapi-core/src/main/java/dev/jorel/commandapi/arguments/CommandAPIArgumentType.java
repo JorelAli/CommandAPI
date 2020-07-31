@@ -184,6 +184,11 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The UUIDArgument
 	 */
-	UUID;
+	UUID, 
+	
+	/**
+	 * The ItemStackPredicateArgument
+	 */
+	ITEMSTACK_PREDICATE;
 
 }
