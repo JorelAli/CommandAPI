@@ -1,25 +1,35 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.UUID;
+import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.BlockPredicateArgument;
 import dev.jorel.commandapi.arguments.IntegerArgument;
+import dev.jorel.commandapi.arguments.ItemStackPredicateArgument;
+import dev.jorel.commandapi.arguments.UUIDArgument;
 
 public class CommandAPIMain extends JavaPlugin implements Listener {
 	
@@ -99,7 +109,81 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         		System.out.println(Arrays.deepToString(a));
         	})
         	.register();
+        } {
+        	LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+        	arguments.put("uuidarg", new UUIDArgument());
+        	
+        	new CommandAPICommand("u1")
+        	.withArguments(arguments)
+        	.executes((s, a) -> {
+        		System.out.println(Arrays.deepToString(a));
+        		System.out.println(Bukkit.getEntity((UUID) a[0]).getName());
+        	})
+        	.register();
+        } {
+        	LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+        	arguments.put("uuidarg", new UUIDArgument().safeOverrideSuggestions(UUID.randomUUID(), UUID.randomUUID()));
+        	
+        	new CommandAPICommand("u2")
+        	.withArguments(arguments)
+        	.executes((s, a) -> {
+        		System.out.println(Arrays.deepToString(a));
+        		System.out.println(Bukkit.getEntity((UUID) a[0]).getName());
+        	})
+        	.register();
+        } {
+        	LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+        	arguments.put("block", new BlockPredicateArgument());
+        	
+        	new CommandAPICommand("bpa")
+        	.withArguments(arguments)
+        	.executesPlayer((s, a) -> {
+        		
+        		ArrayList<Block> sphere = new ArrayList<Block>();
+        		Location center = s.getLocation();
+        		int radius = 20;
+        		for (int Y = -radius; Y < radius; Y++) {
+					for (int X = -radius; X < radius; X++) {
+						for (int Z = -radius; Z < radius; Z++) {
+							if (Math.sqrt((X * X) + (Y * Y) + (Z * Z)) <= radius) {
+								Block block = center.getWorld().getBlockAt(X + center.getBlockX(), Y + center.getBlockY(), Z + center.getBlockZ());
+								sphere.add(block);
+							}
+						}
+					}
+				}
+        		
+        		for(Block b : sphere) {
+        			@SuppressWarnings("unchecked")
+					Predicate<Block> predicate = (Predicate<Block>) a[0];
+        			if(predicate.test(b)) {
+        				b.setType(Material.GOLD_BLOCK);
+        			}
+        		}
+        		System.out.println(Arrays.deepToString(a));
+        	})
+        	.register();
+        } {
+        	LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+        	arguments.put("items", new ItemStackPredicateArgument());
+        	
+        	new CommandAPICommand("rem")
+        	.withArguments(arguments)
+        	.executesPlayer((s, a) -> {
+        		
+        		@SuppressWarnings("unchecked")
+				Predicate<ItemStack> predicate = (Predicate<ItemStack>) a[0];
+        		s.getInventory().forEach(i -> {
+        			if(predicate.test(i)) {
+        				s.getInventory().remove(i);
+        			}
+        		});
+        		System.out.println(Arrays.deepToString(a));
+        	})
+        	.register();
         }
+        
+        
 	}
 	
 	/** 
