@@ -169,6 +169,7 @@
                         <div class="sidetoc"><nav class="pagetoc"></nav></div>
                         
                         <h1><a class="header" href="#block-predicate-arguments" id="block-predicate-arguments">Block predicate arguments</a></h1>
+<p>The <code>BlockPredicateArgument</code> is used to represent a &quot;test&quot; for Minecraft blocks. This can consist of tags, such as [TODO]</p>
 <div class="example">
 <h3><a class="header" href="#example---replacing-specific-blocks-in-a-radius" id="example---replacing-specific-blocks-in-a-radius">Example - Replacing specific blocks in a radius</a></h3>
 <p>Say you want to replace blocks in a given radius. To do this, we'll use the following command structure:</p>
@@ -181,7 +182,9 @@ arguments.put(&quot;radius&quot;, new IntegerArgument());
 arguments.put(&quot;fromBlock&quot;, new BlockPredicateArgument());
 arguments.put(&quot;toBlock&quot;, new BlockStateArgument());
 </code></pre>
-<p>We then register our <code>/replace</code> command. First, we parse the arguments making sure to cast to <code>Predicate&lt;Block&gt;</code> and <code>BlockData</code> (and not <code>BlockState</code>).</p>
+<p>We then register our <code>/replace</code> command. First, we parse the arguments making sure to cast to <code>Predicate&lt;Block&gt;</code> and <code>BlockData</code> (and not <code>BlockState</code>). After that, we use a few simple for loops to find the blocks within a radius sphere from the player.</p>
+<p>In our most nested loop, we can then check if the block meets the requirements of our predicate. This is simply performed using <code>predicate.test(block)</code>, and if satisfied, we can set the block's type.</p>
+<p>Lastly, we register our command as normal using the <code>register()</code> method.</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;replace&quot;)
 .withArguments(arguments)
 .executesPlayer((player, args) -&gt; {
@@ -193,28 +196,23 @@ arguments.put(&quot;toBlock&quot;, new BlockStateArgument());
 	BlockData blockData = (BlockData) args[2];
 	
 	// Find a (solid) sphere of blocks around the player with a given radius
-	ArrayList&lt;Block&gt; sphere = new ArrayList&lt;Block&gt;();
 	Location center = player.getLocation();
 	for (int Y = -radius; Y &lt; radius; Y++) {
 		for (int X = -radius; X &lt; radius; X++) {
 			for (int Z = -radius; Z &lt; radius; Z++) {
 				if (Math.sqrt((X * X) + (Y * Y) + (Z * Z)) &lt;= radius) {
 					Block block = center.getWorld().getBlockAt(X + center.getBlockX(), Y + center.getBlockY(), Z + center.getBlockZ());
-					sphere.add(block);
+                    
+                    // If that block matches a block from the predicate, set it
+                    if(predicate.test(block)) {
+                        block.setType(blockData.getMaterial());
+						block.setBlockData(blockData);
+                    }
 				}
 			}
 		}
 	}
-	
-	// Iterate through the blocks in the radius
-	for(Block block : sphere) {
-		
-		// If that block matches a block from the predicate, set it
-		if(predicate.test(block)) {
-			block.setType(blockData.getMaterial());
-			block.setBlockData(blockData);
-		}
-	}
+    return;
 })
 .register();
 </code></pre>

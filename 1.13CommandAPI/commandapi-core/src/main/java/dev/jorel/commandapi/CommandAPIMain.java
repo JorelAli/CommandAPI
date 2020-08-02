@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -151,28 +150,21 @@ new CommandAPICommand("replace")
 	BlockData blockData = (BlockData) args[2];
 	
 	// Find a (solid) sphere of blocks around the player with a given radius
-	ArrayList<Block> sphere = new ArrayList<Block>();
 	Location center = player.getLocation();
 	for (int Y = -radius; Y < radius; Y++) {
 		for (int X = -radius; X < radius; X++) {
 			for (int Z = -radius; Z < radius; Z++) {
 				if (Math.sqrt((X * X) + (Y * Y) + (Z * Z)) <= radius) {
 					Block block = center.getWorld().getBlockAt(X + center.getBlockX(), Y + center.getBlockY(), Z + center.getBlockZ());
-					sphere.add(block);
+					if(predicate.test(block)) {
+						block.setType(blockData.getMaterial());
+						block.setBlockData(blockData);
+					}
 				}
 			}
 		}
 	}
-	
-	// Iterate through the blocks in the radius
-	for(Block block : sphere) {
-		
-		// If that block matches a block from the predicate, set it
-		if(predicate.test(block)) {
-			block.setType(blockData.getMaterial());
-			block.setBlockData(blockData);
-		}
-	}
+	return;
 })
 .register();
 
