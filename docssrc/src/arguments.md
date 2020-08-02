@@ -36,6 +36,7 @@ The type to cast each argument (declared in the `dev.jorel.commandapi.arguments`
 |            [`AdvancementArgument`](./advancementargument.md) | `org.bukkit.advancement.Advancement`                         |
 |                               [`AxisArgument`](./axisarg.md) | `java.util.EnumSet<org.bukkit.Axis>`                         |
 |                        [`BiomeArgument`](./biomeargument.md) | `org.bukkit.block.Biome`                                     |
+|                                     `BlockPredicateArgument` | `java.util.function.Predicate<org.bukkit.block.Block>`       |
 |             [`BlockStateArgument`](./blockstatearguments.md) | `org.bukkit.block.data.BlockData`                            |
 | [`BooleanArgument`](./primitivearguments.md#boolean-arguments) | `boolean`                                                    |
 |           [`ChatArgument`](./chatarguments.md#chat-argument) | `net.md_5.bungee.api.chat.BaseComponent[]`                   |
@@ -54,6 +55,7 @@ The type to cast each argument (declared in the `dev.jorel.commandapi.arguments`
 | [`IntegerArgument`](./primitivearguments.md#numerical-arguments) | `int`                                                        |
 | [`IntegerRangeArgument`](./rangedarguments.md#the-integerrange--floatrange-class) | `dev.jorel.commandapi.wrappers.IntegerRange`                 |
 |               [`ItemStackArgument`](./itemstackarguments.md) | `org.bukkit.inventory.ItemStack`                             |
+|                                 `ItemStackPredicateArgument` | `java.util.function.Predicate<org.bukkit.inventory.ItemStack>` |
 |                   [`LiteralArgument`](./literalarguments.md) | N/A                                                          |
 | [`Location2DArgument`](./locationargument.md#location-2d-space) | `dev.jorel.commandapi.wrappers.Location2D`                   |
 | [`LocationArgument`](./locationargument.md#location-3d-space) | `org.bukkit.Location`                                        |
@@ -75,6 +77,7 @@ The type to cast each argument (declared in the `dev.jorel.commandapi.arguments`
 |                         [`TeamArgument`](./teamarguments.md) | `String`                                                     |
 |         [`TextArgument`](./stringarguments.md#text-argument) | `String`                                                     |
 |                              [`TimeArgument`](./timeargs.md) | `int`                                                        |
+|                                               `UUIDArgument` | `java.util.UUID`                                             |
 
 -----
 

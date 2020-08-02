@@ -16,6 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -27,6 +28,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.BlockPredicateArgument;
+import dev.jorel.commandapi.arguments.BlockStateArgument;
 import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.ItemStackPredicateArgument;
 import dev.jorel.commandapi.arguments.UUIDArgument;
@@ -132,37 +134,48 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         	})
         	.register();
         } {
-        	LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-        	arguments.put("block", new BlockPredicateArgument());
         	
-        	new CommandAPICommand("bpa")
-        	.withArguments(arguments)
-        	.executesPlayer((s, a) -> {
-        		
-        		ArrayList<Block> sphere = new ArrayList<Block>();
-        		Location center = s.getLocation();
-        		int radius = 20;
-        		for (int Y = -radius; Y < radius; Y++) {
-					for (int X = -radius; X < radius; X++) {
-						for (int Z = -radius; Z < radius; Z++) {
-							if (Math.sqrt((X * X) + (Y * Y) + (Z * Z)) <= radius) {
-								Block block = center.getWorld().getBlockAt(X + center.getBlockX(), Y + center.getBlockY(), Z + center.getBlockZ());
-								sphere.add(block);
-							}
-						}
-					}
+LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+arguments.put("radius", new IntegerArgument());
+arguments.put("fromBlock", new BlockPredicateArgument());
+arguments.put("toBlock", new BlockStateArgument());
+
+new CommandAPICommand("replace")
+.withArguments(arguments)
+.executesPlayer((player, args) -> {
+	
+	// Parse the arguments
+	int radius = (int) args[0];
+	@SuppressWarnings("unchecked")
+	Predicate<Block> predicate = (Predicate<Block>) args[1];
+	BlockData blockData = (BlockData) args[2];
+	
+	// Find a (solid) sphere of blocks around the player with a given radius
+	ArrayList<Block> sphere = new ArrayList<Block>();
+	Location center = player.getLocation();
+	for (int Y = -radius; Y < radius; Y++) {
+		for (int X = -radius; X < radius; X++) {
+			for (int Z = -radius; Z < radius; Z++) {
+				if (Math.sqrt((X * X) + (Y * Y) + (Z * Z)) <= radius) {
+					Block block = center.getWorld().getBlockAt(X + center.getBlockX(), Y + center.getBlockY(), Z + center.getBlockZ());
+					sphere.add(block);
 				}
-        		
-        		for(Block b : sphere) {
-        			@SuppressWarnings("unchecked")
-					Predicate<Block> predicate = (Predicate<Block>) a[0];
-        			if(predicate.test(b)) {
-        				b.setType(Material.GOLD_BLOCK);
-        			}
-        		}
-        		System.out.println(Arrays.deepToString(a));
-        	})
-        	.register();
+			}
+		}
+	}
+	
+	// Iterate through the blocks in the radius
+	for(Block block : sphere) {
+		
+		// If that block matches a block from the predicate, set it
+		if(predicate.test(block)) {
+			block.setType(blockData.getMaterial());
+			block.setBlockData(blockData);
+		}
+	}
+})
+.register();
+
         } {
         	LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
         	arguments.put("items", new ItemStackPredicateArgument());

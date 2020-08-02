@@ -1,0 +1,1 @@
+# ItemStack predicate arguments
