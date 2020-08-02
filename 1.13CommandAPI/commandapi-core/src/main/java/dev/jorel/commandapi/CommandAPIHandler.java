@@ -57,34 +57,33 @@ import dev.jorel.commandapi.nms.NMS;
  * registration and unregistration of commands.
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public interface CommandAPIHandler {
+public abstract class CommandAPIHandler {
 	
-	static final TreeMap<String, CommandPermission> permissionsToFix = new TreeMap<>();
-
-	static final Map<ClassCache, Field> fields = new HashMap<>();
-	static final Map<ClassCache, Method> methods = new HashMap<>();
-
-	// NMS variables
-	static final String packageName = initNMSServer().getClass().getPackage().getName();
-	static final NMS nms = CommandAPIVersionHandler.getNMS(initVersion());
-	static final CommandDispatcher dispatcher = nms.getBrigadierDispatcher(initNMSServer());
+	private static final Map<ClassCache, Field> FIELDS = new HashMap<>();
+	private static final Map<ClassCache, Method> METHODS = new HashMap<>();
+	private static final TreeMap<String, CommandPermission> PERMISSIONS_TO_FIX = new TreeMap<>();
+	private static final NMS NMS;
+	private static final CommandDispatcher DISPATCHER;
 	
-	static Object initNMSServer() {
+	static {
+		Object server;
 		try {
-			return getMethod(Bukkit.getServer().getClass(), "getServer").invoke(Bukkit.getServer());
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException e) {
+			server = getMethod(Bukkit.getServer().getClass(), "getServer").invoke(Bukkit.getServer());
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			CommandAPIMain.getLog().severe("Unable to hook into NMS properly!");
+			server = null;
 		}
-		return null;
-	}
-	
-	static String initVersion() {
+		
+		String version;
 		try {
-			return (String) getMethod(Class.forName(packageName + ".MinecraftServer"), "getVersion").invoke(initNMSServer());
+			version = (String) getMethod(Class.forName(server.getClass().getPackage().getName() + ".MinecraftServer"), "getVersion").invoke(server);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException | ClassNotFoundException e) {
 			CommandAPIMain.getLog().severe("Failed to find Minecraft version!");
+			version = null;
 		}
-		return null;
+		
+		NMS = CommandAPIVersionHandler.getNMS(version);
+		DISPATCHER = NMS.getBrigadierDispatcher(server);
 	}
 	
 	static void checkDependencies() {
@@ -96,10 +95,10 @@ public interface CommandAPIHandler {
 
 		// Log successful hooks
 		if (CommandAPIMain.getConfiguration().hasVerboseOutput()) {
-			String compatibleVersions = Arrays.toString(nms.compatibleVersions());
+			String compatibleVersions = Arrays.toString(NMS.compatibleVersions());
 			compatibleVersions = compatibleVersions.substring(1, compatibleVersions.length() - 1);
 			CommandAPIMain.getLog().info(
-					"Hooked into NMS " + nms.getClass().getName() + " (compatible with " + compatibleVersions + ")");
+					"Hooked into NMS " + NMS.getClass().getName() + " (compatible with " + compatibleVersions + ")");
 		}
 
 		// Checks other dependencies
@@ -124,9 +123,9 @@ public interface CommandAPIHandler {
 	 * @return an instance of NMS
 	 */
 	public static NMS getNMS() {
-		return nms;
+		return NMS;
 	}
-
+	
 	/**
 	 * Unregisters a command from the NMS command graph.
 	 * 
@@ -144,7 +143,7 @@ public interface CommandAPIHandler {
 			// Get the child nodes from the loaded dispatcher class
 			Field children = getField(CommandNode.class, "children");
 			Map<String, CommandNode<?>> commandNodeChildren = (Map<String, CommandNode<?>>) children
-					.get(dispatcher.getRoot());
+					.get(DISPATCHER.getRoot());
 
 			if (force) {
 				// Remove them by force
@@ -187,7 +186,7 @@ public interface CommandAPIHandler {
 				}
 			}
 
-			return executor.execute(nms.getSenderForCommand(cmdCtx), argList.toArray());
+			return executor.execute(NMS.getSenderForCommand(cmdCtx), argList.toArray());
 		};
 	}
 	
@@ -202,24 +201,24 @@ public interface CommandAPIHandler {
 	 * @throws CommandSyntaxException
 	 */
 	static Object parseArgument(CommandContext cmdCtx, String key, Argument value) throws CommandSyntaxException {
-		CommandSender sender = nms.getSenderForCommand(cmdCtx);
+		CommandSender sender = NMS.getSenderForCommand(cmdCtx);
 		switch (value.getArgumentType()) {
 		case ADVANCEMENT:
-			return nms.getAdvancement(cmdCtx, key);
+			return NMS.getAdvancement(cmdCtx, key);
 		case AXIS:
-			return nms.getAxis(cmdCtx, key);
+			return NMS.getAxis(cmdCtx, key);
 		case BIOME:
-			return nms.getBiome(cmdCtx, key);
+			return NMS.getBiome(cmdCtx, key);
 		case BLOCK_PREDICATE:
-			return nms.getBlockPredicate(cmdCtx, key);
+			return NMS.getBlockPredicate(cmdCtx, key);
 		case BLOCKSTATE:
-			return nms.getBlockState(cmdCtx, key);
+			return NMS.getBlockState(cmdCtx, key);
 		case CHAT:
-			return nms.getChat(cmdCtx, key);
+			return NMS.getChat(cmdCtx, key);
 		case CHATCOLOR:
-			return nms.getChatColor(cmdCtx, key);
+			return NMS.getChatColor(cmdCtx, key);
 		case CHAT_COMPONENT:
-			return nms.getChatComponent(cmdCtx, key);
+			return NMS.getChatComponent(cmdCtx, key);
 		case CUSTOM:
 			CustomArgument arg = (CustomArgument) value;
 			String customresult = (String) cmdCtx.getArgument(key, String.class);
@@ -236,68 +235,68 @@ public interface CommandAPIHandler {
 				}).create();
 			}
 		case ENCHANTMENT:
-			return nms.getEnchantment(cmdCtx, key);
+			return NMS.getEnchantment(cmdCtx, key);
 		case ENTITY_SELECTOR:
 			EntitySelectorArgument argument = (EntitySelectorArgument) value;
-			return nms.getEntitySelector(cmdCtx, key, argument.getEntitySelector());
+			return NMS.getEntitySelector(cmdCtx, key, argument.getEntitySelector());
 		case ENTITY_TYPE:
-			return nms.getEntityType(cmdCtx, key, sender);
+			return NMS.getEntityType(cmdCtx, key, sender);
 		case ENVIRONMENT:
-			return nms.getDimension(cmdCtx, key);
+			return NMS.getDimension(cmdCtx, key);
 		case FLOAT_RANGE:
-			return nms.getFloatRange(cmdCtx, key);
+			return NMS.getFloatRange(cmdCtx, key);
 		case FUNCTION:
-			return nms.getFunction(cmdCtx, key);
+			return NMS.getFunction(cmdCtx, key);
 		case INT_RANGE:
-			return nms.getIntRange(cmdCtx, key);
+			return NMS.getIntRange(cmdCtx, key);
 		case ITEMSTACK:
-			return nms.getItemStack(cmdCtx, key);
+			return NMS.getItemStack(cmdCtx, key);
 		case ITEMSTACK_PREDICATE:
-			return nms.getItemStackPredicate(cmdCtx, key);
+			return NMS.getItemStackPredicate(cmdCtx, key);
 		case LITERAL:
 			return null;
 		case LOCATION:
 			LocationType locationType = ((LocationArgument) value).getLocationType();
-			return nms.getLocation(cmdCtx, key, locationType, sender);
+			return NMS.getLocation(cmdCtx, key, locationType, sender);
 		case LOCATION_2D:
 			LocationType locationType2d = ((Location2DArgument) value).getLocationType();
-			return nms.getLocation2D(cmdCtx, key, locationType2d, sender);
+			return NMS.getLocation2D(cmdCtx, key, locationType2d, sender);
 		case LOOT_TABLE:
-			return nms.getLootTable(cmdCtx, key);
+			return NMS.getLootTable(cmdCtx, key);
 		case MATH_OPERATION:
-			return nms.getMathOperation(cmdCtx, key);
+			return NMS.getMathOperation(cmdCtx, key);
 		case NBT_COMPOUND:
-			return nms.getNBTCompound(cmdCtx, key);
+			return NMS.getNBTCompound(cmdCtx, key);
 		case OBJECTIVE:
-			return nms.getObjective(cmdCtx, key, sender);
+			return NMS.getObjective(cmdCtx, key, sender);
 		case OBJECTIVE_CRITERIA:
-			return nms.getObjectiveCriteria(cmdCtx, key);
+			return NMS.getObjectiveCriteria(cmdCtx, key);
 		case PARTICLE:
-			return nms.getParticle(cmdCtx, key);
+			return NMS.getParticle(cmdCtx, key);
 		case PLAYER:
-			return nms.getPlayer(cmdCtx, key);
+			return NMS.getPlayer(cmdCtx, key);
 		case POTION_EFFECT:
-			return nms.getPotionEffect(cmdCtx, key);
+			return NMS.getPotionEffect(cmdCtx, key);
 		case RECIPE:
-			return nms.getRecipe(cmdCtx, key);
+			return NMS.getRecipe(cmdCtx, key);
 		case ROTATION:
-			return nms.getRotation(cmdCtx, key);
+			return NMS.getRotation(cmdCtx, key);
 		case SCORE_HOLDER:
 			ScoreHolderArgument scoreHolderArgument = (ScoreHolderArgument) value;
-			return scoreHolderArgument.isSingle() ? nms.getScoreHolderSingle(cmdCtx, key)
-					: nms.getScoreHolderMultiple(cmdCtx, key);
+			return scoreHolderArgument.isSingle() ? NMS.getScoreHolderSingle(cmdCtx, key)
+					: NMS.getScoreHolderMultiple(cmdCtx, key);
 		case SCOREBOARD_SLOT:
-			return nms.getScoreboardSlot(cmdCtx, key);
+			return NMS.getScoreboardSlot(cmdCtx, key);
 		case SIMPLE_TYPE:
 			return cmdCtx.getArgument(key, value.getPrimitiveType());
 		case SOUND:
-			return nms.getSound(cmdCtx, key);
+			return NMS.getSound(cmdCtx, key);
 		case TEAM:
-			return nms.getTeam(cmdCtx, key, sender);
+			return NMS.getTeam(cmdCtx, key, sender);
 		case TIME:
-			return nms.getTime(cmdCtx, key);
+			return NMS.getTime(cmdCtx, key);
 		case UUID:
-			return nms.getUUID(cmdCtx, key);
+			return NMS.getUUID(cmdCtx, key);
 		}
 		return null;
 	}
@@ -321,13 +320,13 @@ public interface CommandAPIHandler {
 	 */
 	static Predicate generatePermissions(String commandName, CommandPermission permission) {
 		// If we've already registered a permission, set it to the "parent" permission.
-		if (permissionsToFix.containsKey(commandName.toLowerCase())) {
-			if (!permissionsToFix.get(commandName.toLowerCase()).equals(permission)) {
-				permission = permissionsToFix.get(commandName.toLowerCase());
+		if (PERMISSIONS_TO_FIX.containsKey(commandName.toLowerCase())) {
+			if (!PERMISSIONS_TO_FIX.get(commandName.toLowerCase()).equals(permission)) {
+				permission = PERMISSIONS_TO_FIX.get(commandName.toLowerCase());
 			}
 		} else {
 			// Add permission to a list to fix conflicts with minecraft:permissions
-			permissionsToFix.put(commandName.toLowerCase(), permission);
+			PERMISSIONS_TO_FIX.put(commandName.toLowerCase(), permission);
 		}
 
 		final CommandPermission finalPermission = permission;
@@ -340,7 +339,7 @@ public interface CommandAPIHandler {
 			}
 		}
 
-		return (Object clw) -> permissionCheck(nms.getCommandSenderForCLW(clw), finalPermission);
+		return (Object clw) -> permissionCheck(NMS.getCommandSenderForCLW(clw), finalPermission);
 	}
 
 	/**
@@ -370,15 +369,15 @@ public interface CommandAPIHandler {
 		try {
 
 			// Get the command map to find registered commands
-			SimpleCommandMap map = nms.getSimpleCommandMap();
+			SimpleCommandMap map = NMS.getSimpleCommandMap();
 			Field f = getField(SimpleCommandMap.class, "knownCommands");
 			Map<String, org.bukkit.command.Command> knownCommands = (Map<String, org.bukkit.command.Command>) f
 					.get(map);
 
-			if(!permissionsToFix.isEmpty()) {
+			if(!PERMISSIONS_TO_FIX.isEmpty()) {
 				CommandAPIMain.getLog().info("Linking permissions to commands:");
 			}
-			permissionsToFix.forEach((cmdName, perm) -> {
+			PERMISSIONS_TO_FIX.forEach((cmdName, perm) -> {
 
 				if (perm.equals(CommandPermission.NONE)) {
 					if (CommandAPIMain.getConfiguration().hasVerboseOutput()) {
@@ -386,10 +385,10 @@ public interface CommandAPIHandler {
 					}
 					// Set the command permission to empty string (Minecraft standard for "no
 					// permission required")
-					if (nms.isVanillaCommandWrapper(knownCommands.get(cmdName))) {
+					if (NMS.isVanillaCommandWrapper(knownCommands.get(cmdName))) {
 						knownCommands.get(cmdName).setPermission("");
 					}
-					if (nms.isVanillaCommandWrapper(knownCommands.get("minecraft:" + cmdName))) {
+					if (NMS.isVanillaCommandWrapper(knownCommands.get("minecraft:" + cmdName))) {
 						knownCommands.get(cmdName).setPermission("");
 					}
 				} else {
@@ -400,10 +399,10 @@ public interface CommandAPIHandler {
 							CommandAPIMain.getLog().info("OP -> /" + cmdName);
 						}
 						// Set the command permission to the (String) permission node
-						if (nms.isVanillaCommandWrapper(knownCommands.get(cmdName))) {
+						if (NMS.isVanillaCommandWrapper(knownCommands.get(cmdName))) {
 							knownCommands.get(cmdName).setPermission(perm.getPermission());
 						}
-						if (nms.isVanillaCommandWrapper(knownCommands.get("minecraft:" + cmdName))) {
+						if (NMS.isVanillaCommandWrapper(knownCommands.get("minecraft:" + cmdName))) {
 							knownCommands.get(cmdName).setPermission(perm.getPermission());
 						}
 					} else {
@@ -444,7 +443,7 @@ public interface CommandAPIHandler {
 		LiteralCommandNode resultantNode;
 		if (args.isEmpty()) {
 			// Link command name to the executor
-			resultantNode = dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(commandName)
+			resultantNode = DISPATCHER.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(commandName)
 					.requires(generatePermissions(commandName, permissions)).executes(command));
 
 			// Register aliases
@@ -452,7 +451,7 @@ public interface CommandAPIHandler {
 				if (CommandAPIMain.getConfiguration().hasVerboseOutput()) {
 					CommandAPIMain.getLog().info("Registering alias /" + alias + " -> " + resultantNode.getName());
 				}
-				dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(alias)
+				DISPATCHER.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(alias)
 						.requires(generatePermissions(alias, permissions)).executes(command));
 			}
 		} else {
@@ -476,7 +475,7 @@ public interface CommandAPIHandler {
 				else if (innerArg instanceof ICustomProvidedArgument && innerArg.getOverriddenSuggestions() == null) {
 					inner = getRequiredArgumentBuilderWithProvider(keys.get(keys.size() - 1), innerArg.getRawType(),
 							innerArg.getArgumentPermission(),
-							nms.getSuggestionProvider(((ICustomProvidedArgument) innerArg).getSuggestionProvider()))
+							NMS.getSuggestionProvider(((ICustomProvidedArgument) innerArg).getSuggestionProvider()))
 									.executes(command);
 				}
 
@@ -502,7 +501,7 @@ public interface CommandAPIHandler {
 				else if (outerArg instanceof ICustomProvidedArgument && outerArg.getOverriddenSuggestions() == null) {
 					outer = getRequiredArgumentBuilderWithProvider(keys.get(i), outerArg.getRawType(),
 							outerArg.getArgumentPermission(),
-							nms.getSuggestionProvider(((ICustomProvidedArgument) outerArg).getSuggestionProvider()))
+							NMS.getSuggestionProvider(((ICustomProvidedArgument) outerArg).getSuggestionProvider()))
 									.then(outer);
 				}
 
@@ -514,7 +513,7 @@ public interface CommandAPIHandler {
 			}
 
 			// Link command name to first argument and register
-			resultantNode = dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(commandName)
+			resultantNode = DISPATCHER.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(commandName)
 					.requires(generatePermissions(commandName, permissions)).then(outer));
 
 			// Register aliases
@@ -522,7 +521,7 @@ public interface CommandAPIHandler {
 				if (CommandAPIMain.getConfiguration().hasVerboseOutput()) {
 					CommandAPIMain.getLog().info("Registering alias /" + alias + " -> " + resultantNode.getName());
 				}
-				dispatcher.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(alias)
+				DISPATCHER.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(alias)
 						.requires(generatePermissions(alias, permissions)).redirect(resultantNode));
 			}
 		}
@@ -536,7 +535,7 @@ public interface CommandAPIHandler {
 				e.printStackTrace(System.out);
 			}
 
-			nms.createDispatcherFile(file, dispatcher);
+			NMS.createDispatcherFile(file, DISPATCHER);
 		}
 	}
 
@@ -580,7 +579,7 @@ public interface CommandAPIHandler {
 	static LiteralArgumentBuilder<?> getLiteralArgumentBuilderArgument(String commandName,
 			CommandPermission permission) {
 		return LiteralArgumentBuilder.literal(commandName)
-				.requires(clw -> permissionCheck(nms.getCommandSenderForCLW(clw), permission));
+				.requires(clw -> permissionCheck(NMS.getCommandSenderForCLW(clw), permission));
 	}
 
 	// Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
@@ -591,7 +590,7 @@ public interface CommandAPIHandler {
 		// If there are no changes to the default suggestions, return it as normal
 		if (type.getOverriddenSuggestions() == null) {
 			return RequiredArgumentBuilder.argument(argumentName, (ArgumentType<T>) type.getRawType())
-					.requires(clw -> permissionCheck(nms.getCommandSenderForCLW(clw), permission));
+					.requires(clw -> permissionCheck(NMS.getCommandSenderForCLW(clw), permission));
 		}
 
 		// Otherwise, we have to handle arguments of the form BiFunction<CommandSender,
@@ -609,7 +608,7 @@ public interface CommandAPIHandler {
 							previousArguments.add(parseArgument(context, s, args.get(s)));
 						}
 						return getSuggestionsBuilder(builder, type.getOverriddenSuggestions()
-								.apply(nms.getCommandSenderForCLW(context.getSource()), previousArguments.toArray()));
+								.apply(NMS.getCommandSenderForCLW(context.getSource()), previousArguments.toArray()));
 					});
 		}
 	}
@@ -618,7 +617,7 @@ public interface CommandAPIHandler {
 	static <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilderWithProvider(String argumentName,
 			ArgumentType<T> type, CommandPermission permission, SuggestionProvider provider) {
 		return RequiredArgumentBuilder.argument(argumentName, type)
-				.requires(clw -> permissionCheck(nms.getCommandSenderForCLW(clw), permission)).suggests(provider);
+				.requires(clw -> permissionCheck(NMS.getCommandSenderForCLW(clw), permission)).suggests(provider);
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -628,8 +627,8 @@ public interface CommandAPIHandler {
 	// Gets a field using reflection and caches it
 	public static Field getField(Class<?> clazz, String name) {
 		ClassCache key = new ClassCache(clazz, name);
-		if (fields.containsKey(key)) {
-			return fields.get(key);
+		if (FIELDS.containsKey(key)) {
+			return FIELDS.get(key);
 		} else {
 			Field result = null;
 			try {
@@ -638,16 +637,23 @@ public interface CommandAPIHandler {
 				e.printStackTrace();
 			}
 			result.setAccessible(true);
-			fields.put(key, result);
+			FIELDS.put(key, result);
 			return result;
 		}
 	}
 
-	// Gets a field using reflection and caches it
+	/**
+	 * Caches a method using reflection if it is not already cached, then return the
+	 * method of a given class. This will also make the method accessible.
+	 * 
+	 * @param clazz the class where the method is declared
+	 * @param name the name of the method
+	 * @return a Method reference
+	 */
 	public static Method getMethod(Class<?> clazz, String name) {
 		ClassCache key = new ClassCache(clazz, name);
-		if (methods.containsKey(key)) {
-			return methods.get(key);
+		if (METHODS.containsKey(key)) {
+			return METHODS.get(key);
 		} else {
 			Method result = null;
 			try {
@@ -656,7 +662,7 @@ public interface CommandAPIHandler {
 				e.printStackTrace();
 			}
 			result.setAccessible(true);
-			methods.put(key, result);
+			METHODS.put(key, result);
 			return result;
 		}
 	}

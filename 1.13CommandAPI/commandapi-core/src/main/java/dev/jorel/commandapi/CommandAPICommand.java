@@ -1,9 +1,13 @@
 package dev.jorel.commandapi;
 
 import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 
 import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.IGreedyArgument;
 import dev.jorel.commandapi.exceptions.EmptyExecutorException;
+import dev.jorel.commandapi.exceptions.GreedyArgumentException;
+import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
 import dev.jorel.commandapi.executors.CommandBlockCommandExecutor;
 import dev.jorel.commandapi.executors.CommandBlockResultingCommandExecutor;
 import dev.jorel.commandapi.executors.CommandExecutor;
@@ -205,7 +209,44 @@ public class CommandAPICommand {
 		if(this.executor.isEmpty()) {
 			throw new EmptyExecutorException();
 		} else {
-			CommandAPI.register(commandName, permission, aliases, args, executor);
+			if(!CommandAPI.canRegister()) {
+				CommandAPIMain.getLog().severe("Cannot register command /" + commandName + ", because the server has finished loading!");
+				return;
+			}
+			try {
+				//Sanitize commandNames
+				if(commandName == null || commandName.length() == 0) {
+					throw new InvalidCommandNameException(commandName);
+				}
+				
+				//Make a local copy of args to deal with
+				@SuppressWarnings("unchecked")
+				LinkedHashMap<String, Argument> copyOfArgs = args == null ? new LinkedHashMap<>() : (LinkedHashMap<String, Argument>) args.clone();
+				
+				//if args contains a GreedyString && args.getLast != GreedyString
+				long numGreedyArgs = copyOfArgs.values().stream().filter(arg -> arg instanceof IGreedyArgument).count();
+				if(numGreedyArgs >= 1) {
+					//A GreedyString has been found
+					if(!(copyOfArgs.values().toArray()[copyOfArgs.size() - 1] instanceof IGreedyArgument)) {
+						throw new GreedyArgumentException();
+					}
+					
+					if(numGreedyArgs > 1) {
+						throw new GreedyArgumentException();
+					}
+				}
+				
+				//Reassign permissions to arguments if not declared
+				for(Entry<String, Argument> entry : copyOfArgs.entrySet()) {
+					if(entry.getValue().getArgumentPermission() == null) {
+						entry.setValue(entry.getValue().withPermission(permission));
+					}
+				}
+				
+				CommandAPIHandler.register(commandName, permission, aliases, copyOfArgs, executor);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

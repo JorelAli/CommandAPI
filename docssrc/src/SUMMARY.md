@@ -73,6 +73,12 @@
 
 -----
 
+# Internal CommandAPI
+
+- [Brigadier + CommandAPI](./brigadier.md)
+
+-----
+
 [Upgrading guide](./upgrading.md)
 
 [Troubleshooting](./troubleshooting.md)
