@@ -1,6 +1,10 @@
 # Block predicate arguments
 
-The `BlockPredicateArgument` is used to represent a "test" for Minecraft blocks. This can consist of tags, such as [TODO]
+The `BlockPredicateArgument` is used to represent a "test" for Minecraft blocks. This can consist of tags, such as the ones listed [here on the MinecraftWiki](https://minecraft.gamepedia.com/Tag#Blocks), or individual blocks. If a block matches the tag or block, then the predicate is satisfied.
+
+For example, if we were to use the predicate `#leaves`, then the following blocks will be satisfied by that predicate: `jungle_leaves`, `oak_leaves`, `spruce_leaves`, `dark_oak_leaves`, `acacia_leaves`, `birch_leaves`.
+
+When used, this argument must be casted to a `Predicate<Block>`. As with other similar arguments with parameterized types, you can ignore Java's unchecked cast type safety warning.
 
 <div class="example">
 
@@ -62,7 +66,4 @@ new CommandAPICommand("replace")
 .register();
 ```
 
-
-
 </div>
-

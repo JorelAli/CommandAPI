@@ -133,59 +133,28 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
         	})
         	.register();
         } {
-        	
 LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("radius", new IntegerArgument());
-arguments.put("fromBlock", new BlockPredicateArgument());
-arguments.put("toBlock", new BlockStateArgument());
+arguments.put("items", new ItemStackPredicateArgument());
 
-new CommandAPICommand("replace")
+new CommandAPICommand("rem")
 .withArguments(arguments)
 .executesPlayer((player, args) -> {
 	
-	// Parse the arguments
-	int radius = (int) args[0];
 	@SuppressWarnings("unchecked")
-	Predicate<Block> predicate = (Predicate<Block>) args[1];
-	BlockData blockData = (BlockData) args[2];
+	Predicate<ItemStack> predicate = (Predicate<ItemStack>) args[0];
 	
-	// Find a (solid) sphere of blocks around the player with a given radius
-	Location center = player.getLocation();
-	for (int Y = -radius; Y < radius; Y++) {
-		for (int X = -radius; X < radius; X++) {
-			for (int Z = -radius; Z < radius; Z++) {
-				if (Math.sqrt((X * X) + (Y * Y) + (Z * Z)) <= radius) {
-					Block block = center.getWorld().getBlockAt(X + center.getBlockX(), Y + center.getBlockY(), Z + center.getBlockZ());
-					if(predicate.test(block)) {
-						block.setType(blockData.getMaterial());
-						block.setBlockData(blockData);
-					}
-				}
-			}
+	for(ItemStack item : player.getInventory()) {
+		if(predicate.test(item)) {
+			player.getInventory().remove(item);
 		}
 	}
-	return;
+	player.getInventory().forEach(i -> {
+		if(predicate.test(i)) {
+			player.getInventory().remove(i);
+		}
+	});
 })
 .register();
-
-        } {
-        	LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-        	arguments.put("items", new ItemStackPredicateArgument());
-        	
-        	new CommandAPICommand("rem")
-        	.withArguments(arguments)
-        	.executesPlayer((s, a) -> {
-        		
-        		@SuppressWarnings("unchecked")
-				Predicate<ItemStack> predicate = (Predicate<ItemStack>) a[0];
-        		s.getInventory().forEach(i -> {
-        			if(predicate.test(i)) {
-        				s.getInventory().remove(i);
-        			}
-        		});
-        		System.out.println(Arrays.deepToString(a));
-        	})
-        	.register();
         }
         
         
