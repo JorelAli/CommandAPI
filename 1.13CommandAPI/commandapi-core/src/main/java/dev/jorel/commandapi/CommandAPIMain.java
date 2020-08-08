@@ -21,6 +21,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.ItemStackPredicateArgument;
@@ -70,6 +72,16 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 				for(String command : pluginToConvert.getValue()) {
 					Converter.convert(pluginToConvert.getKey(), command);
 				}
+			}
+		}
+		
+		//TODO: Remove before release
+		{
+			try {
+				new CommandAPIHandler.Brigadier().test1();
+			} catch (CommandSyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		

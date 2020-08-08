@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -24,11 +25,13 @@ import org.bukkit.permissions.Permission;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.RedirectModifier;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.context.ParsedArgument;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
@@ -43,11 +46,13 @@ import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
 import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.ICustomProvidedArgument;
+import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.Location2DArgument;
 import dev.jorel.commandapi.arguments.LocationArgument;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.ScoreHolderArgument;
+import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.nms.NMS;
 
 /**
@@ -664,6 +669,140 @@ public abstract class CommandAPIHandler {
 			result.setAccessible(true);
 			METHODS.put(key, result);
 			return result;
+		}
+	}
+	
+	public static class Brigadier {
+		public Brigadier() {
+			
+		}
+		
+		public CommandDispatcher getCommandDispatcher() {
+			return DISPATCHER;
+		}
+		
+		public LiteralArgumentBuilder mkLiteralArgumentBuilder(String name) {
+			return getLiteralArgumentBuilder(name);
+		}
+		
+		
+		public void test() {
+			LiteralCommandNode shardNode = DISPATCHER.register(getLiteralArgumentBuilder("shard"));
+
+			LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+			arguments.put("shardName", new StringArgument().overrideSuggestions("region_1", "region_2"));
+
+			//Ignore this, this can be way shorter
+			RequiredArgumentBuilder shardChild = getRequiredArgumentBuilderDynamic(arguments, "shardName", new StringArgument().overrideSuggestions("region_1", "region_2"), CommandPermission.NONE);
+
+			shardNode.addChild(shardChild.redirect(DISPATCHER.getRoot().getChild("execute")).build());
+
+			DISPATCHER.getRoot().getChild("execute").addChild(shardNode);
+		}
+	
+		public void test1() throws CommandSyntaxException {
+			LiteralCommandNode randomChance = DISPATCHER.register(getLiteralArgumentBuilder("randomchance"));
+			
+			LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+			arguments.put("firstVal", new IntegerArgument(0));
+			arguments.put("secondVal", new IntegerArgument(1));
+			
+			CustomCommandExecutor executor = new CustomCommandExecutor();
+			executor.addNormalExecutor((sender, args) -> {
+				System.out.println("Hi " + Arrays.deepToString(args));
+				return;
+			});
+			
+			RequiredArgumentBuilder firstVal = getRequiredArgumentBuilderDynamic(arguments, "firstVal", new IntegerArgument(0), CommandPermission.NONE);
+//			ArgumentBuilder secondVal = null;
+//			try {
+//				secondVal = getRequiredArgumentBuilderDynamic(arguments, "secondVal", new IntegerArgument(1), CommandPermission.NONE).redirect(DISPATCHER.getRoot().getChild("execute")).executes(CommandAPIHandler.generateCommand(arguments, executor));
+//			} catch (CommandSyntaxException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+			
+			RedirectModifier modifier = cmdCtx -> {
+				Field f = null;
+				try {
+					f = CommandContext.class.getDeclaredField("arguments");
+				} catch (NoSuchFieldException | SecurityException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				f.setAccessible(true);
+				Map<String, ParsedArgument> cmdCtxArgs = null;
+				try {
+					cmdCtxArgs = (Map<String, ParsedArgument>) f.get(cmdCtx);
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				System.out.println("Keys: " + cmdCtxArgs.keySet());
+				
+				
+				int firstVal1 = (int) parseArgument(cmdCtx, "firstVal", arguments.get("firstVal"));
+				
+				if(firstVal1 == 10) {
+					System.out.println("Using empty list");
+					return Collections.emptyList();
+				}
+				
+				System.out.println("Using non-empty list");
+				return Collections.singleton(cmdCtx.getSource());
+			};
+			
+			ArgumentBuilder secondVal = getRequiredArgumentBuilderDynamic(arguments, "secondVal", new IntegerArgument(1), CommandPermission.NONE).fork(DISPATCHER.getRoot().getChild("execute"), modifier).executes(CommandAPIHandler.generateCommand(arguments, executor));
+			
+
+//			LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+//			arguments.put("firstVal", new IntegerArgument(0));
+//			arguments.put("secondVal", new IntegerArgument(1));
+
+			//Ignore this, this can be way shorter
+//			RequiredArgumentBuilder shardChild = getRequiredArgumentBuilderDynamic(arguments, "shardName", new StringArgument().overrideSuggestions("region_1", "region_2"), CommandPermission.NONE);
+//			shardChild.redirect(DISPATCHER.getRoot()).executes(command)
+//			LiteralCommandNode run = DISPATCHER.register(getLiteralArgumentBuilder("run"));
+			
+			randomChance.addChild(firstVal.then(secondVal).build());
+			
+
+//			randomChance.addChild(shardChild.redirect(DISPATCHER.getRoot().getChild("execute")).build());
+
+			DISPATCHER.getRoot().getChild("execute").getChild("if").addChild(randomChance);
+		}
+		
+		
+//		private static ArgumentBuilder a(CommandNode var0,
+//				ArgumentBuilder var1, boolean someBoolean, Predicate predicate) {
+//			return var1.fork(var0, context -> CommandExecute.a(context, someBoolean,
+//					predicate.test((CommandContext<?>) context))).executes(clw -> {
+//						if (someBoolean == predicate.test(clw)) {
+//							clw.getSource().sendMessage(
+//									(IChatBaseComponent) new ChatMessage("commands.execute.conditional.pass"), false);
+//							return 1;
+//						}
+//						throw b.create();
+//					});
+//		}
+		
+		
+		public List<RequiredArgumentBuilder> constructFromArgs(LinkedHashMap<String, Argument> arguments) {
+			List<RequiredArgumentBuilder> result = new ArrayList<>();
+			for(Entry<String, Argument> entry : arguments.entrySet()) {
+				getRequiredArgumentBuilderDynamic(arguments, entry.getKey(), entry.getValue(), CommandPermission.NONE);
+			}
+			return result;
+		}
+		
+		public void registerExecutePredicate(CommandAPICommand predicate) {
+			//execute if <command> run <whatever>
+			
+			
+			
+			
+			
+			
 		}
 	}
 }

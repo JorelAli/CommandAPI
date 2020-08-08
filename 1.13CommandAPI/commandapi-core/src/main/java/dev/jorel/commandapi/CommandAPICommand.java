@@ -26,11 +26,11 @@ import dev.jorel.commandapi.executors.ResultingCommandExecutor;
  */
 public class CommandAPICommand {
 
-	private final String commandName;
-	private CommandPermission permission = CommandPermission.NONE;
-	private String[] aliases = new String[0];
-	private LinkedHashMap<String, Argument> args = new LinkedHashMap<>();
-	private CustomCommandExecutor executor = new CustomCommandExecutor();
+	final String commandName;
+	CommandPermission permission = CommandPermission.NONE;
+	String[] aliases = new String[0];
+	LinkedHashMap<String, Argument> args = new LinkedHashMap<>();
+	CustomCommandExecutor executor = new CustomCommandExecutor();
 	
 	/**
 	 * Creates a new command builder
