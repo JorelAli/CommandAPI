@@ -73,7 +73,7 @@
 
 -----
 
-# Internal CommandAPI
+# Extended CommandAPI
 
 - [Brigadier + CommandAPI](./brigadier.md)
 

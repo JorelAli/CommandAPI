@@ -711,7 +711,8 @@ public abstract class CommandAPIHandler {
 			} catch (CommandSyntaxException e) {
 				e.printStackTrace();
 			}
-			//This case should never happen
+			//This case should never happen, because the exception should be caught
+			//"lower down" in execution
 			return null;
 		}
 		
