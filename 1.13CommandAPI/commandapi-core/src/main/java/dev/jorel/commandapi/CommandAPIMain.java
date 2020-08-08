@@ -21,8 +21,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 
+import dev.jorel.commandapi.CommandAPIHandler.Brigadier;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.ItemStackPredicateArgument;
@@ -77,12 +81,32 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 		
 		//TODO: Remove before release
 		{
-			try {
-				new CommandAPIHandler.Brigadier().test1();
-			} catch (CommandSyntaxException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			LiteralCommandNode randomChance = Brigadier.registerNewLiteralArgument("randomchance");
+			
+			//Declare arguments as normal
+			LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+			arguments.put("firstVal", new IntegerArgument(0));
+			arguments.put("secondVal", new IntegerArgument(1));
+			
+			//firstVal and secondVal should be able to be constructed using the CommandAPI
+			RequiredArgumentBuilder firstVal = Brigadier.argBuildOf(arguments, "firstVal");
+			ArgumentBuilder secondVal = Brigadier.argBuildOf(arguments, "secondVal").fork(Brigadier.getRootNode().getChild("execute"), Brigadier.fromPredicate((sender, args) -> {
+				//Parse arguments like normal
+				int first = (int) args[0];
+				int second = (int) args[1];
+				
+				//Return boolean with a first/second chance
+				return Math.ceil(Math.random() * (double) second) <= (double) first;
+			}, arguments));
+			
+			//Optionally, you can include another 'execute' here, so you could do '/execute if <firstVal> <secondVal>' and that returns a value
+			
+			//Add <firstVal> -> <secondVal> as a child of randomchance
+			randomChance.addChild(firstVal.then(secondVal).build());
+			
+			//Add (randomchance -> <firstVal> -> <secondVal>) as a child of (execute -> if)
+			//This results in execute -> if -> randomchance -> <firstVal> -> <secondVal>
+			Brigadier.getRootNode().getChild("execute").getChild("if").addChild(randomChance);
 		}
 		
 	}
