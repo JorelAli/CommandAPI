@@ -41,6 +41,8 @@
     --search-mark-bg: #e3b171;
     --example-bg: hsl(129, 46%, 25%);
     --example-border: hsl(114, 99%, 36%);
+    --warning-bg: hsl(0, 57%, 25%);
+    --warning-border: hsl(0, 99%, 36%);
 }
 
 .coal {
@@ -75,6 +77,8 @@
     --search-mark-bg: #355c7d;
     --example-bg: hsl(129, 46%, 25%);
     --example-border: hsl(114, 99%, 36%);
+    --warning-bg: hsl(0, 57%, 25%);
+    --warning-border: hsl(0, 99%, 36%);
 }
 
 .light {
@@ -108,6 +112,8 @@
     --search-mark-bg: #a2cff5;
     --example-bg: hsl(129, 37%, 65%);
     --example-border: hsl(114, 99%, 36%);
+    --warning-bg: hsl(0, 77%, 68%);
+    --warning-border: hsl(0, 99%, 36%);
 }
 
 .navy {
@@ -142,6 +148,8 @@
     --search-mark-bg: #a2cff5;
     --example-bg: hsl(129, 46%, 25%);
     --example-border: hsl(114, 99%, 36%);
+    --warning-bg: hsl(0, 57%, 25%);
+    --warning-border: hsl(0, 99%, 36%);
 }
 
 .skepter {
@@ -176,6 +184,8 @@
     --search-mark-bg: #da06ef;
     --example-bg: #660066;
     --example-border: #da06ef;
+    --warning-bg: hsl(0, 57%, 25%);
+    --warning-border: hsl(0, 99%, 36%);
 }
 
 .rust {
@@ -209,6 +219,8 @@
     --search-mark-bg: #e69f67;
     --example-bg: hsl(129, 37%, 65%);
     --example-border: hsl(114, 99%, 36%);
+    --warning-bg: hsl(0, 77%, 68%);
+    --warning-border: hsl(0, 99%, 36%);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -244,5 +256,7 @@
         --search-mark-bg: #355c7d;
         --example-bg: hsl(129, 37%, 65%);
         --example-border: hsl(114, 99%, 36%);
+        --warning-bg: hsl(0, 77%, 68%);
+        --warning-border: hsl(0, 99%, 36%);
     }
 }

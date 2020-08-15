@@ -9,6 +9,17 @@
     border-bottom: .1em solid var(--example-border);
 }
 
+.warning {
+    padding-left: 20px;
+    padding-right: 20px;
+    margin: 20px 0;
+    padding: 0 20px;
+    color: var(--fg);
+    background-color: var(--warning-bg);
+    border-top: .1em solid var(--warning-border);
+    border-bottom: .1em solid var(--warning-border);
+}
+
 h3 {
     margin-top: 20px;
 }

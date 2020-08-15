@@ -123,9 +123,13 @@ Now we can create our book command. We use the player as the main target by usin
 
 ## Chat argument
 
-> **Developer's Note:**
->
-> As of the time of writing (25th June 2020), it has been observed that the `ChatArgument` does not work on Spigot 1.16.1. This is not the case however for Spigot versions 1.15.2 and below.
+<div class="warning">
+
+**Developer's Note:**
+
+As of the time of writing (25th June 2020), it has been observed that the `ChatArgument` does not work on Spigot 1.16.1. This is not the case however for Spigot versions 1.15.2 and below.
+
+</div>
 
 > **Note:**
 >
