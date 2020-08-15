@@ -62,7 +62,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	// Suggestions //
 	/////////////////
 
-	Optional<BiFunction<CommandSender, Object[], String[]>> suggestions = null;
+	Optional<BiFunction<CommandSender, Object[], String[]>> suggestions = Optional.empty();
 
 	/**
 	 * Override the suggestions of this argument with a String array. Typically,

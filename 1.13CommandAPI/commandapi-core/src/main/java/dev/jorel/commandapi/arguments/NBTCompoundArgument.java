@@ -38,16 +38,16 @@ public class NBTCompoundArgument extends Argument implements ISafeOverrideableSu
 
 	@Override
 	public Argument safeOverrideSuggestions(NBTContainer... suggestions) {
-		return super.overrideSuggestions(sMap0(NBTContainer::asNBTString, suggestions));
+		return super.overrideSuggestions(sMap0(NBTContainer::toString, suggestions));
 	}
 
 	@Override
 	public Argument safeOverrideSuggestions(Function<CommandSender, NBTContainer[]> suggestions) {
-		return super.overrideSuggestions(sMap1(NBTContainer::asNBTString, suggestions));
+		return super.overrideSuggestions(sMap1(NBTContainer::toString, suggestions));
 	}
 
 	@Override
 	public Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], NBTContainer[]> suggestions) {
-		return super.overrideSuggestions(sMap2(NBTContainer::asNBTString, suggestions));
+		return super.overrideSuggestions(sMap2(NBTContainer::toString, suggestions));
 	}
 }

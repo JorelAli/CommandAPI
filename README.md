@@ -48,7 +48,7 @@ The CommandAPI can be built easily, but requires copies of the Spigot server jar
 
 * Ensure you have the required spigot server jars (see below)
 
-* Run `mvn clean install`
+* Run `mvn`
 
 ### Spigot Libraries
 

@@ -40,13 +40,13 @@
         <dependency>
             <groupId>com.mojang</groupId>
             <artifactId>authlib</artifactId>
-            <version>1.5.25</version>
+            <version>1.6.25</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>de.tr7zw</groupId>
             <artifactId>item-nbt-api-plugin</artifactId>
-            <version>2.1.0</version>
+            <version>2.5.0</version>
         </dependency>
     </dependencies>
 </project>
