@@ -1,6 +1,5 @@
 var NAVTREEINDEX1 =
 {
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_argument.html#ae9362a6457530cce2335624ade3d1f85":[2,0,0,0,0,0,31,7],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_long_argument.html":[2,0,0,0,0,0,33],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_long_argument.html#a0bb53acca037b8db904c889238766c72":[2,0,0,0,0,0,33,6],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_long_argument.html#a10f6d2da9a7d02ca33aae29b8f69a0e1":[2,0,0,0,0,0,33,0],
@@ -249,5 +248,6 @@ var NAVTREEINDEX1 =
 "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html#af132746b80dc83b1e403a1b7bb3e5a03":[2,0,0,0,0,0,14,0,0],
 "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html":[2,0,0,0,0,0,21,0],
 "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html#a4707419b548b60ec8a548d85d3f09da2":[2,0,0,0,0,0,21,0,4],
-"enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html#a65e171b1e118d0f8adf2d2b4c0774c3d":[2,0,0,0,0,0,21,0,0]
+"enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html#a65e171b1e118d0f8adf2d2b4c0774c3d":[2,0,0,0,0,0,21,0,0],
+"enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html#a712b629f24be1c412b861271bef10b2d":[2,0,0,0,0,0,21,0,5]
 };

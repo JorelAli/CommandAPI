@@ -90,31 +90,269 @@ $(document).ready(function(){initNavTree('classdev_1_1jorel_1_1commandapi_1_1_co
 <div class="title">dev.jorel.commandapi.CommandAPIHandler.Brigadier Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>The <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html" title="The Brigadier class is used to access some of the internals of the CommandAPI so you can use the Comm...">Brigadier</a> class is used to access some of the internals of the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> so you can use the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> alongside Mojang's com.mojang.brigadier package.  
+ <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a606c791799a311de94079a0b3af56ccd"><td class="memItemLeft" align="right" valign="top"><a id="a606c791799a311de94079a0b3af56ccd"></a>
-static CommandDispatcher&#160;</td><td class="memItemRight" valign="bottom"><b>getCommandDispatcher</b> ()</td></tr>
+<tr class="memitem:a606c791799a311de94079a0b3af56ccd"><td class="memItemLeft" align="right" valign="top">static CommandDispatcher&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html#a606c791799a311de94079a0b3af56ccd">getCommandDispatcher</a> ()</td></tr>
+<tr class="memdesc:a606c791799a311de94079a0b3af56ccd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html" title="The Brigadier class is used to access some of the internals of the CommandAPI so you can use the Comm...">Brigadier</a> CommandDispatcher tree that is used internally by the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a>.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html#a606c791799a311de94079a0b3af56ccd">More...</a><br /></td></tr>
 <tr class="separator:a606c791799a311de94079a0b3af56ccd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4a337f554007578e3cbdb286570025ed"><td class="memItemLeft" align="right" valign="top"><a id="a4a337f554007578e3cbdb286570025ed"></a>
-static RootCommandNode&#160;</td><td class="memItemRight" valign="bottom"><b>getRootNode</b> ()</td></tr>
+<tr class="memitem:a4a337f554007578e3cbdb286570025ed"><td class="memItemLeft" align="right" valign="top">static RootCommandNode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html#a4a337f554007578e3cbdb286570025ed">getRootNode</a> ()</td></tr>
+<tr class="memdesc:a4a337f554007578e3cbdb286570025ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the root node of the current CommandDispatcher.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html#a4a337f554007578e3cbdb286570025ed">More...</a><br /></td></tr>
 <tr class="separator:a4a337f554007578e3cbdb286570025ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a94d722c9d68aba83fff5ae15740493f8"><td class="memItemLeft" align="right" valign="top"><a id="a94d722c9d68aba83fff5ae15740493f8"></a>
-static LiteralCommandNode&#160;</td><td class="memItemRight" valign="bottom"><b>registerNewLiteral</b> (String name)</td></tr>
+<tr class="memitem:a94d722c9d68aba83fff5ae15740493f8"><td class="memItemLeft" align="right" valign="top">static LiteralCommandNode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html#a94d722c9d68aba83fff5ae15740493f8">registerNewLiteral</a> (String name)</td></tr>
+<tr class="memdesc:a94d722c9d68aba83fff5ae15740493f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers a new literal argument builder into the CommandDispatcher.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html#a94d722c9d68aba83fff5ae15740493f8">More...</a><br /></td></tr>
 <tr class="separator:a94d722c9d68aba83fff5ae15740493f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a81fd6dcf052aa0323a087370ebc9e00e"><td class="memItemLeft" align="right" valign="top"><a id="a81fd6dcf052aa0323a087370ebc9e00e"></a>
-static RedirectModifier&#160;</td><td class="memItemRight" valign="bottom"><b>fromPredicate</b> (BiPredicate&lt; CommandSender, Object[]&gt; predicate, LinkedHashMap&lt; String, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a> &gt; args)</td></tr>
+<tr class="memitem:a81fd6dcf052aa0323a087370ebc9e00e"><td class="memItemLeft" align="right" valign="top">static RedirectModifier&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html#a81fd6dcf052aa0323a087370ebc9e00e">fromPredicate</a> (BiPredicate&lt; CommandSender, Object[]&gt; predicate, LinkedHashMap&lt; String, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a> &gt; args)</td></tr>
+<tr class="memdesc:a81fd6dcf052aa0323a087370ebc9e00e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a RedirectModifier from a predicate that uses a command sender and some arguments.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html#a81fd6dcf052aa0323a087370ebc9e00e">More...</a><br /></td></tr>
 <tr class="separator:a81fd6dcf052aa0323a087370ebc9e00e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af6d313d2d791c0da6023ebfc52abf7cc"><td class="memItemLeft" align="right" valign="top"><a id="af6d313d2d791c0da6023ebfc52abf7cc"></a>
-static Command&#160;</td><td class="memItemRight" valign="bottom"><b>fromCommand</b> (<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html">CommandAPICommand</a> command)</td></tr>
+<tr class="memitem:af6d313d2d791c0da6023ebfc52abf7cc"><td class="memItemLeft" align="right" valign="top">static Command&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html#af6d313d2d791c0da6023ebfc52abf7cc">fromCommand</a> (<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html">CommandAPICommand</a> command)</td></tr>
+<tr class="memdesc:af6d313d2d791c0da6023ebfc52abf7cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html" title="A builder used to create commands to be registered by the CommandAPI.">CommandAPICommand</a> into a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html" title="The Brigadier class is used to access some of the internals of the CommandAPI so you can use the Comm...">Brigadier</a> Command.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html#af6d313d2d791c0da6023ebfc52abf7cc">More...</a><br /></td></tr>
 <tr class="separator:af6d313d2d791c0da6023ebfc52abf7cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a710199c9f3b833562136eec22c2616ad"><td class="memItemLeft" align="right" valign="top"><a id="a710199c9f3b833562136eec22c2616ad"></a>
-static RequiredArgumentBuilder&#160;</td><td class="memItemRight" valign="bottom"><b>argBuildOf</b> (LinkedHashMap&lt; String, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a> &gt; args, String value)</td></tr>
+<tr class="memitem:a710199c9f3b833562136eec22c2616ad"><td class="memItemLeft" align="right" valign="top">static RequiredArgumentBuilder&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html#a710199c9f3b833562136eec22c2616ad">argBuildOf</a> (LinkedHashMap&lt; String, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a> &gt; args, String value)</td></tr>
+<tr class="memdesc:a710199c9f3b833562136eec22c2616ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs an RequiredArgumentBuilder from a given argument within a command declaration.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html#a710199c9f3b833562136eec22c2616ad">More...</a><br /></td></tr>
 <tr class="separator:a710199c9f3b833562136eec22c2616ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b694f3e44ad659d2ef2e0a30d8063ca"><td class="memItemLeft" align="right" valign="top"><a id="a8b694f3e44ad659d2ef2e0a30d8063ca"></a>
-static RequiredArgumentBuilder&#160;</td><td class="memItemRight" valign="bottom"><b>argBuildOf</b> (LinkedHashMap&lt; String, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a> &gt; args, String value, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_permission.html">CommandPermission</a> permission)</td></tr>
-<tr class="separator:a8b694f3e44ad659d2ef2e0a30d8063ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>The <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html" title="The Brigadier class is used to access some of the internals of the CommandAPI so you can use the Comm...">Brigadier</a> class is used to access some of the internals of the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> so you can use the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> alongside Mojang's com.mojang.brigadier package. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a710199c9f3b833562136eec22c2616ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a710199c9f3b833562136eec22c2616ad">&#9670;&nbsp;</a></span>argBuildOf()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static RequiredArgumentBuilder dev.jorel.commandapi.CommandAPIHandler.Brigadier.argBuildOf </td>
+          <td>(</td>
+          <td class="paramtype">LinkedHashMap&lt; String, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a> &gt;&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructs an RequiredArgumentBuilder from a given argument within a command declaration. </p>
+<p>For example:</p>
+<pre>
+LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put("hello", new IntegerArgument());</pre><pre>RequiredArgumentBuilder argBuilder = <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html#a710199c9f3b833562136eec22c2616ad" title="Constructs an RequiredArgumentBuilder from a given argument within a command declaration.">Brigadier.argBuildOf</a>(arguments, "hello");
+</pre><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">args</td><td>the LinkedHashMap of arguments which you typically declare for commands </td></tr>
+    <tr><td class="paramname">value</td><td>the name of the argument you want to specify </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a RequiredArgumentBuilder that represents the provided argument </dd></dl>
+
+</div>
+</div>
+<a id="af6d313d2d791c0da6023ebfc52abf7cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6d313d2d791c0da6023ebfc52abf7cc">&#9670;&nbsp;</a></span>fromCommand()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static Command dev.jorel.commandapi.CommandAPIHandler.Brigadier.fromCommand </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html">CommandAPICommand</a>&#160;</td>
+          <td class="paramname"><em>command</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Converts a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html" title="A builder used to create commands to be registered by the CommandAPI.">CommandAPICommand</a> into a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html" title="The Brigadier class is used to access some of the internals of the CommandAPI so you can use the Comm...">Brigadier</a> Command. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">command</td><td>the command to convert </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html" title="The Brigadier class is used to access some of the internals of the CommandAPI so you can use the Comm...">Brigadier</a> Command object that represents the provided command </dd></dl>
+
+</div>
+</div>
+<a id="a81fd6dcf052aa0323a087370ebc9e00e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81fd6dcf052aa0323a087370ebc9e00e">&#9670;&nbsp;</a></span>fromPredicate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static RedirectModifier dev.jorel.commandapi.CommandAPIHandler.Brigadier.fromPredicate </td>
+          <td>(</td>
+          <td class="paramtype">BiPredicate&lt; CommandSender, Object[]&gt;&#160;</td>
+          <td class="paramname"><em>predicate</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">LinkedHashMap&lt; String, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a> &gt;&#160;</td>
+          <td class="paramname"><em>args</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructs a RedirectModifier from a predicate that uses a command sender and some arguments. </p>
+<p>RedirectModifiers can be used with <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html" title="The Brigadier class is used to access some of the internals of the CommandAPI so you can use the Comm...">Brigadier</a>'s <code>fork()</code> method to invoke other nodes in the CommandDispatcher tree. You would use this method as shown:</p>
+<pre>
+<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html#a81fd6dcf052aa0323a087370ebc9e00e" title="Constructs a RedirectModifier from a predicate that uses a command sender and some arguments.">Brigadier.fromPredicate</a>((sender, args) -&gt; {
+    ...
+}, arguments);
+</pre><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">predicate</td><td>the predicate to test </td></tr>
+    <tr><td class="paramname">args</td><td>the arguments that the sender has filled in </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a RedirectModifier that encapsulates the provided predicate </dd></dl>
+
+</div>
+</div>
+<a id="a606c791799a311de94079a0b3af56ccd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a606c791799a311de94079a0b3af56ccd">&#9670;&nbsp;</a></span>getCommandDispatcher()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static CommandDispatcher dev.jorel.commandapi.CommandAPIHandler.Brigadier.getCommandDispatcher </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html" title="The Brigadier class is used to access some of the internals of the CommandAPI so you can use the Comm...">Brigadier</a> CommandDispatcher tree that is used internally by the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a>. </p>
+<p>Modifying this CommandDispatcher tree before the server finishes loading will still keep any changes made to it. For example, adding a new node to this tree will keep the node once the server has finished loading.</p>
+<dl class="section return"><dt>Returns</dt><dd>The <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a>'s internal CommandDispatcher instance </dd></dl>
+
+</div>
+</div>
+<a id="a4a337f554007578e3cbdb286570025ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a337f554007578e3cbdb286570025ed">&#9670;&nbsp;</a></span>getRootNode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static RootCommandNode dev.jorel.commandapi.CommandAPIHandler.Brigadier.getRootNode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the root node of the current CommandDispatcher. </p>
+<p>This is the equivalent of running</p>
+<p><code> <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html#a606c791799a311de94079a0b3af56ccd" title="Returns the Brigadier CommandDispatcher tree that is used internally by the CommandAPI.">Brigadier.getCommandDispatcher()</a>.getRoot(); </code></p>
+<dl class="section return"><dt>Returns</dt><dd>The <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html" title="The Brigadier class is used to access some of the internals of the CommandAPI so you can use the Comm...">Brigadier</a> CommandDispatcher's root node </dd></dl>
+
+</div>
+</div>
+<a id="a94d722c9d68aba83fff5ae15740493f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a94d722c9d68aba83fff5ae15740493f8">&#9670;&nbsp;</a></span>registerNewLiteral()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static LiteralCommandNode dev.jorel.commandapi.CommandAPIHandler.Brigadier.registerNewLiteral </td>
+          <td>(</td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Registers a new literal argument builder into the CommandDispatcher. </p>
+<p>This returns a new LiteralCommandNode. Internally, this constructs a new literal argument builder from the provided literal name and then registers it using</p>
+<p><code> <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html#a606c791799a311de94079a0b3af56ccd" title="Returns the Brigadier CommandDispatcher tree that is used internally by the CommandAPI.">Brigadier.getCommandDispatcher()</a>.register(...); </code></p>
+<p>This is the equivalent of running the following code:</p>
+<pre>
+<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html#a606c791799a311de94079a0b3af56ccd" title="Returns the Brigadier CommandDispatcher tree that is used internally by the CommandAPI.">Brigadier.getCommandDispatcher()</a>.register(LiteralArgumentBuilder.literal(name));
+</pre><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>the name of the literal to add </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a LiteralCommandNode of the literal within the CommandDispatcher </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>1.13CommandAPI/commandapi-core/src/main/java/dev/jorel/commandapi/CommandAPIHandler.java</li>
 </ul>
@@ -124,7 +362,7 @@ static RequiredArgumentBuilder&#160;</td><td class="memItemRight" valign="bottom
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html">CommandAPIHandler</a></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html">Brigadier</a></li>
-    <li class="footer">Generated on Sat Aug 15 2020 10:00:52 for 1.13 CommandAPI by
+    <li class="footer">Generated on Sat Aug 15 2020 10:43:10 for 1.13 CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

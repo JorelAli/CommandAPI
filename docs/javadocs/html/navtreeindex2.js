@@ -1,6 +1,5 @@
 var NAVTREEINDEX2 =
 {
-"enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html#a712b629f24be1c412b861271bef10b2d":[2,0,0,0,0,0,21,0,5],
 "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html#ace161152b6bdc1260401fec87ec98a44":[2,0,0,0,0,0,21,0,1],
 "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html#ae2d6c85015c93ab8de1ec154ae8a19c4":[2,0,0,0,0,0,21,0,6],
 "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html#af1d30091e6c9f364f31762665e066421":[2,0,0,0,0,0,21,0,3],
@@ -32,8 +31,8 @@ var NAVTREEINDEX2 =
 "enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#acb28bea287ccdbe2f366ad5f8a4e928b":[2,0,0,0,0,3,4,3],
 "enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#ad7e10356f536e3611d2ab80e0505fe20":[2,0,0,0,0,3,4,2],
 "enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#adf8f8405b1d7667b43072e461b11e4ef":[2,0,0,0,0,3,4,10],
-"functions.html":[2,3,0],
 "functions.html":[2,3,0,0],
+"functions.html":[2,3,0],
 "functions_b.html":[2,3,0,1],
 "functions_c.html":[2,3,0,2],
 "functions_d.html":[2,3,0,3],
@@ -83,7 +82,7 @@ var NAVTREEINDEX2 =
 "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_greedy_argument.html":[2,0,0,0,0,0,22],
 "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html":[2,0,0,0,0,0,25],
 "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html#a20b8d75a10b9270e3c5c79b87e5c376c":[2,0,0,0,0,0,25,3],
-"interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html#a90bd24f3e7f169e9643687473102566a":[2,0,0,0,0,0,25,0],
+"interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html#a515fde4dfd12357479c3f75b40c12356":[2,0,0,0,0,0,25,0],
 "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html#a9d9d01a7ef51b30114aaec5e91291046":[2,0,0,0,0,0,25,2],
 "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html#ad3dffbc1e887b4b2c7e66ba1c3a529d0":[2,0,0,0,0,0,25,1],
 "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html":[2,0,0,0,0,0,26],

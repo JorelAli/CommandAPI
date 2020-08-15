@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['doubleargument_313',['DoubleArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_double_argument.html',1,'dev::jorel::commandapi::arguments']]]
+  ['doubleargument_319',['DoubleArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_double_argument.html',1,'dev::jorel::commandapi::arguments']]]
 ];

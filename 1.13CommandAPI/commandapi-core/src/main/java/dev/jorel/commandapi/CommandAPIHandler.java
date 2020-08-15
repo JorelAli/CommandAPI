@@ -722,13 +722,13 @@ public abstract class CommandAPIHandler {
 		 * argument builder from the provided literal name and then registers it using
 		 * 
 		 * <code>
-		 * getCommandDispatcher().register(...);
+		 * Brigadier.getCommandDispatcher().register(...);
 		 * </code>
 		 * 
 		 * This is the equivalent of running the following code:
 		 * 
 		 * <pre>
-		 * getCommandDispatcher().register(LiteralArgumentBuilder.literal(name));
+		 * Brigadier.getCommandDispatcher().register(LiteralArgumentBuilder.literal(name));
 		 * </pre>
 		 * 
 		 * @param name the name of the literal to add
@@ -738,6 +738,22 @@ public abstract class CommandAPIHandler {
 			return DISPATCHER.register(getLiteralArgumentBuilder(name));
 		}
 		
+		/**
+		 * Constructs a RedirectModifier from a predicate that uses a command sender and
+		 * some arguments. RedirectModifiers can be used with Brigadier's
+		 * <code>fork()</code> method to invoke other nodes in the CommandDispatcher
+		 * tree. You would use this method as shown:
+		 * 
+		 * <pre>
+		 * Brigadier.fromPredicate((sender, args) -> {
+		 *     ...
+		 * }, arguments);
+		 * </pre>
+		 * 
+		 * @param predicate the predicate to test
+		 * @param args      the arguments that the sender has filled in
+		 * @return a RedirectModifier that encapsulates the provided predicate
+		 */
 		public static RedirectModifier fromPredicate(BiPredicate<CommandSender, Object[]> predicate, LinkedHashMap<String, Argument> args) {
 			return cmdCtx -> {
 				if(predicate.test(NMS.getSenderForCommand(cmdCtx), argsToObjectArr(cmdCtx, args))) {
@@ -773,7 +789,7 @@ public abstract class CommandAPIHandler {
 		 * LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 		 * arguments.put("hello", new IntegerArgument());
 		 * 
-		 * RequiredArgumentBuilder argBuilder = argBuildOf(arguments, "hello");
+		 * RequiredArgumentBuilder argBuilder = Brigadier.argBuildOf(arguments, "hello");
 		 * </pre>
 		 * 
 		 * @param args  the LinkedHashMap of arguments which you typically declare for

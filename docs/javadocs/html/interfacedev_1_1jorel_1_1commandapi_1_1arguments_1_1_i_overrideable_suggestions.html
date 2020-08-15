@@ -161,21 +161,21 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad3dffbc1e887b4b2c7e66ba1c3a529d0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html#ad3dffbc1e887b4b2c7e66ba1c3a529d0">overrideSuggestions</a> (BiFunction&lt; CommandSender, Object[], String[]&gt; suggestions)</td></tr>
 <tr class="memdesc:ad3dffbc1e887b4b2c7e66ba1c3a529d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override the suggestions of this argument with a function that maps the command sender to a String array.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html#ad3dffbc1e887b4b2c7e66ba1c3a529d0">More...</a><br /></td></tr>
 <tr class="separator:ad3dffbc1e887b4b2c7e66ba1c3a529d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90bd24f3e7f169e9643687473102566a"><td class="memItemLeft" align="right" valign="top">BiFunction&lt; CommandSender, Object[], String[]&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html#a90bd24f3e7f169e9643687473102566a">getOverriddenSuggestions</a> ()</td></tr>
-<tr class="memdesc:a90bd24f3e7f169e9643687473102566a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a function that maps the command sender to a String array of suggestions for the current command, or <code>null</code> if this is not overridden.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html#a90bd24f3e7f169e9643687473102566a">More...</a><br /></td></tr>
-<tr class="separator:a90bd24f3e7f169e9643687473102566a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a515fde4dfd12357479c3f75b40c12356"><td class="memItemLeft" align="right" valign="top">Optional&lt; BiFunction&lt; CommandSender, Object[], String[]&gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html#a515fde4dfd12357479c3f75b40c12356">getOverriddenSuggestions</a> ()</td></tr>
+<tr class="memdesc:a515fde4dfd12357479c3f75b40c12356"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a function that maps the command sender to a String array of suggestions for the current command, or <code>null</code> if this is not overridden.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html#a515fde4dfd12357479c3f75b40c12356">More...</a><br /></td></tr>
+<tr class="separator:a515fde4dfd12357479c3f75b40c12356"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>An interface declaring methods required to override argument suggestions. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a90bd24f3e7f169e9643687473102566a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a90bd24f3e7f169e9643687473102566a">&#9670;&nbsp;</a></span>getOverriddenSuggestions()</h2>
+<a id="a515fde4dfd12357479c3f75b40c12356"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a515fde4dfd12357479c3f75b40c12356">&#9670;&nbsp;</a></span>getOverriddenSuggestions()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">BiFunction&lt;CommandSender, Object[], String[]&gt; dev.jorel.commandapi.arguments.IOverrideableSuggestions.getOverriddenSuggestions </td>
+          <td class="memname">Optional&lt;BiFunction&lt;CommandSender, Object[], String[]&gt; &gt; dev.jorel.commandapi.arguments.IOverrideableSuggestions.getOverriddenSuggestions </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -186,7 +186,7 @@ Public Member Functions</h2></td></tr>
 <p>Returns a function that maps the command sender to a String array of suggestions for the current command, or <code>null</code> if this is not overridden. </p>
 <dl class="section return"><dt>Returns</dt><dd>a function that provides suggestions, or <code>null</code> if there are no overridden suggestions. </dd></dl>
 
-<p>Implemented in <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a8920fe1e1a11b4632c593d51a044f553">dev.jorel.commandapi.arguments.Argument</a>.</p>
+<p>Implemented in <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a67cc6b7220e3c6bb5f2443f23391e07b">dev.jorel.commandapi.arguments.Argument</a>.</p>
 
 </div>
 </div>
@@ -287,7 +287,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1arguments.html">arguments</a></li><li class="navelem"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html">IOverrideableSuggestions</a></li>
-    <li class="footer">Generated on Sat Aug 15 2020 10:00:53 for 1.13 CommandAPI by
+    <li class="footer">Generated on Sat Aug 15 2020 10:43:11 for 1.13 CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>
