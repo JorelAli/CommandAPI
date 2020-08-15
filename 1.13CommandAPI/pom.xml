@@ -9,6 +9,7 @@
 	<version>4.0</version>
 	<packaging>pom</packaging>
 	<modules>
+		<module>commandapi-1.16.2</module>
 		<module>commandapi-1.16.1</module>
 		<module>commandapi-1.15</module>
 		<module>commandapi-1.14.4</module>

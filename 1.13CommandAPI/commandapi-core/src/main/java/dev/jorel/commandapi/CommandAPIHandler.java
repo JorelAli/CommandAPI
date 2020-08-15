@@ -691,7 +691,7 @@ public abstract class CommandAPIHandler {
 			return DISPATCHER.getRoot();
 		}
 		
-		public static LiteralCommandNode registerNewLiteralArgument(String name) {
+		public static LiteralCommandNode registerNewLiteral(String name) {
 			return DISPATCHER.register(getLiteralArgumentBuilder(name));
 		}
 		
