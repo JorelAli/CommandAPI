@@ -59,7 +59,7 @@ To build the CommandAPI, the following versions of Spigot are required:
 | **1.13 versions** | 1.13   | 1.13.1 | 1.13.2 |
 | **1.14 versions** | 1.14   | 1.14.3 | 1.14.4 |
 | **1.15 versions** | 1.15   |        |        |
-| **1.16 versions** | 1.16.1 |        |        |
+| **1.16 versions** | 1.16.1 | 1.16.2 |        |
 
 These versions of Minecraft must be installed in your local machine's Maven repository (`~/.m2`). **The easiest way to do this is to build them manually using Spigot's BuildTools, as it automatically adds it to the `.m2` local repository folder.**
 
