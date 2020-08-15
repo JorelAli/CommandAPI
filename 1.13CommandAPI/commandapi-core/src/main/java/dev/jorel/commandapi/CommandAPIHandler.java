@@ -638,7 +638,14 @@ public abstract class CommandAPIHandler {
 	// SECTION: Reflection //
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// Gets a field using reflection and caches it
+	/**
+	 * Caches a field using reflection if it is not already cached, then return the
+	 * field of a given class. This will also make the field accessible.
+	 * 
+	 * @param clazz the class where the field is declared
+	 * @param name the name of the field
+	 * @return a Field reference
+	 */
 	public static Field getField(Class<?> clazz, String name) {
 		ClassCache key = new ClassCache(clazz, name);
 		if (FIELDS.containsKey(key)) {

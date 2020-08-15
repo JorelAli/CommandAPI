@@ -4,6 +4,7 @@ var namespacedev_1_1jorel_1_1commandapi_1_1arguments =
     [ "Argument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument" ],
     [ "AxisArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_axis_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_axis_argument" ],
     [ "BiomeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_biome_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_biome_argument" ],
+    [ "BlockPredicateArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_predicate_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_predicate_argument" ],
     [ "BlockStateArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument" ],
     [ "BooleanArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_boolean_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_boolean_argument" ],
     [ "ChatArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_chat_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_chat_argument" ],
@@ -27,6 +28,7 @@ var namespacedev_1_1jorel_1_1commandapi_1_1arguments =
     [ "IOverrideableSuggestions", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions" ],
     [ "ISafeOverrideableSuggestions", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions" ],
     [ "ItemStackArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_item_stack_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_item_stack_argument" ],
+    [ "ItemStackPredicateArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_item_stack_predicate_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_item_stack_predicate_argument" ],
     [ "LiteralArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument" ],
     [ "Location2DArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location2_d_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location2_d_argument" ],
     [ "LocationArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_argument" ],
@@ -48,5 +50,6 @@ var namespacedev_1_1jorel_1_1commandapi_1_1arguments =
     [ "StringArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_string_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_string_argument" ],
     [ "TeamArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_team_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_team_argument" ],
     [ "TextArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_text_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_text_argument" ],
-    [ "TimeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_time_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_time_argument" ]
+    [ "TimeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_time_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_time_argument" ],
+    [ "UUIDArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_u_u_i_d_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_u_u_i_d_argument" ]
 ];

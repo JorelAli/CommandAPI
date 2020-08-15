@@ -3,6 +3,7 @@ var enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type 
     [ "ADVANCEMENT", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ac779834aaa36e23794202e1790bd4753", null ],
     [ "AXIS", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#aebca6750f8f79f80ea7acab2aecc8b01", null ],
     [ "BIOME", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a8e136cd4c078dc87cc936147943cba96", null ],
+    [ "BLOCK_PREDICATE", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#aa733271cdb5cb8680c1e734bb11b859b", null ],
     [ "BLOCKSTATE", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ab19e0ad1435578f21da514556b78e7a7", null ],
     [ "CHAT", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ab2c0100b593092b262b53712279ea6d9", null ],
     [ "CHAT_COMPONENT", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#afe6d7a47e3e6437e0edc23922c9ca167", null ],
@@ -16,6 +17,7 @@ var enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type 
     [ "FUNCTION", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ad501697b32694925ec869e5467b98178", null ],
     [ "INT_RANGE", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a4f8704291dbbe3a3700db9ceefc8d555", null ],
     [ "ITEMSTACK", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a23d30f4a04a75c6a6b77e830464dc1b4", null ],
+    [ "ITEMSTACK_PREDICATE", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a5d28cea2f70cd969d9b02008e9009ace", null ],
     [ "LITERAL", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a7eaf3cce61282d6ae706f2e7c28bfcd7", null ],
     [ "LOCATION", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a12e62a2ee9d10f3fd710e0f3217e90ce", null ],
     [ "LOCATION_2D", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a92fef4ec30c3ea8b8ee1906baa071bd1", null ],
@@ -34,5 +36,6 @@ var enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type 
     [ "SIMPLE_TYPE", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#aba8f3befc75b2a07e195656c8b08e859", null ],
     [ "SOUND", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a50202c583ee37d556add1cf10d2cbf95", null ],
     [ "TEAM", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a72f7cc0043b1a0d16e3e84de02fed00c", null ],
-    [ "TIME", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ae42327b61e1cc61de34e8f6501ad624c", null ]
+    [ "TIME", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ae42327b61e1cc61de34e8f6501ad624c", null ],
+    [ "UUID", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#afbd8af45a4cf153e7571a3aec3b31366", null ]
 ];
