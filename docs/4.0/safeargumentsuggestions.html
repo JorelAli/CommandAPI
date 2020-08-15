@@ -279,7 +279,7 @@ new CommandAPICommand(&quot;giverecipe&quot;)
 </code></pre>
 <p>Now say that we don't want non-op players to spawn bosses. To do this, we'll create a <code>List&lt;EntityType&gt;</code> which is the list of all mobs that non-ops are allowed to spawn:</p>
 <pre><code class="language-java">EntityType[] forbiddenMobs = new EntityType[] {EntityType.ENDER_DRAGON, EntityType.WITHER};
-List&lt;EntityType&gt; allowedMobs = Arrays.asList(EntityType.values());
+List&lt;EntityType&gt; allowedMobs = new ArrayList&lt;&gt;(Arrays.asList(EntityType.values()));
 allowedMobs.removeAll(Arrays.asList(forbiddenMobs)); //Now contains everything except enderdragon and wither
 </code></pre>
 <p>We then use our safe arguments to return an <code>EntityType[]</code> as the list of values that are suggested to the player. In this example, we use the <code>Function&lt;CommandSender, EntityType[]&gt;</code> argument to determine if the sender has permissions to view the suggestions:</p>

@@ -153,7 +153,7 @@ Now say that we don't want non-op players to spawn bosses. To do this, we'll cre
 
 ```java
 EntityType[] forbiddenMobs = new EntityType[] {EntityType.ENDER_DRAGON, EntityType.WITHER};
-List<EntityType> allowedMobs = Arrays.asList(EntityType.values());
+List<EntityType> allowedMobs = new ArrayList<>(Arrays.asList(EntityType.values()));
 allowedMobs.removeAll(Arrays.asList(forbiddenMobs)); //Now contains everything except enderdragon and wither
 ```
 

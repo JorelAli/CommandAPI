@@ -185,13 +185,13 @@ public class NMS_1_16_R2 implements NMS {
 		Field i = DataPackResources.class.getDeclaredField("i");
 		i.setAccessible(true);
 
-		Field fField = CustomFunctionManager.class.getDeclaredField("f");
-		fField.setAccessible(true);
-		int f = (int) fField.get(datapackResources.a()); // Related to the permission required to run this function?
+		Field gField = CustomFunctionManager.class.getDeclaredField("g");
+		gField.setAccessible(true);
+		int g = (int) gField.get(datapackResources.a()); // Related to the permission required to run this function?
 
 		// Update the CustomFunctionManager for the datapackResources which now has the
 		// new commandDispatcher
-		i.set(datapackResources, new CustomFunctionManager(f, datapackResources.commandDispatcher.a()));
+		i.set(datapackResources, new CustomFunctionManager(g, datapackResources.commandDispatcher.a()));
 
 		// Construct the new CompletableFuture that now uses datapackResources
 		Field b = DataPackResources.class.getDeclaredField("b");

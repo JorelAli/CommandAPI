@@ -2,6 +2,7 @@ package dev.jorel.commandapi;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -100,6 +101,7 @@ import dev.jorel.commandapi.wrappers.MathOperation;
 import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.Time;
+import net.md_5.bungee.api.chat.BaseComponent;
 
 public class CommandAPIMain extends JavaPlugin implements Listener {
 	
@@ -156,6 +158,20 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 		        	System.out.println("KillAll");
 		        })
 		        .register();
+			}
+			{
+				LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+				arguments.put("message", new ChatArgument());
+
+				new CommandAPICommand("pbroadcast")
+				    .withArguments(arguments)
+				    .executes((sender, args) -> {
+				        BaseComponent[] message = (BaseComponent[]) args[0];
+				    
+				        //Broadcast the message to everyone on the server
+				        Bukkit.getServer().spigot().broadcast(message);
+				    })
+				    .register();
 			}
 LiteralCommandNode randomChance = Brigadier.registerNewLiteral("randomchance");
 
@@ -445,7 +461,7 @@ Brigadier.getRootNode().getChild("execute").getChild("if").addChild(randomChance
 	        } {
 	        	LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 	        	
-		        arguments.put("team", new TeamArgument().safeOverrideSuggestions(Bukkit.getScoreboardManager().getMainScoreboard().getTeams().toArray(new Team[0])));
+		        arguments.put("team", new TeamArgument().safeOverrideSuggestions(s -> Bukkit.getScoreboardManager().getMainScoreboard().getTeams().toArray(new Team[0])));
 
 		        new CommandAPICommand("m")
 		        .withArguments(arguments)
@@ -456,7 +472,7 @@ Brigadier.getRootNode().getChild("execute").getChild("if").addChild(randomChance
 	        } {
 	        	LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 	        	
-		        arguments.put("obj", new ObjectiveArgument().safeOverrideSuggestions(Bukkit.getScoreboardManager().getMainScoreboard().getObjectives().toArray(new Objective[0])));
+		        arguments.put("obj", new ObjectiveArgument().safeOverrideSuggestions(s -> Bukkit.getScoreboardManager().getMainScoreboard().getObjectives().toArray(new Objective[0])));
 
 		        new CommandAPICommand("n")
 		        .withArguments(arguments)
@@ -494,9 +510,9 @@ Brigadier.getRootNode().getChild("execute").getChild("if").addChild(randomChance
 		})
 		.register();
 	        } {
-	        	
+	        	//TODO: Rewrite the documentation for whatever this is - it's kinda buggy!
 	        	EntityType[] forbiddenMobs = new EntityType[] {EntityType.ENDER_DRAGON, EntityType.WITHER};
-	        	List<EntityType> allowedMobs = Arrays.asList(EntityType.values());
+	        	List<EntityType> allowedMobs = new ArrayList<>(Arrays.asList(EntityType.values()));
 	        	allowedMobs.removeAll(Arrays.asList(forbiddenMobs));
 	        	
 	LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
