@@ -406,21 +406,17 @@ public abstract class CommandAPIHandler {
 						knownCommands.get(cmdName).setPermission("");
 					}
 				} else {
-					if (perm.getPermission() != null) {
-						if (CommandAPIMain.getConfiguration().hasVerboseOutput()) {
-							CommandAPIMain.getLog().info(perm.getPermission() + " -> /" + cmdName);
-						} else {
-							CommandAPIMain.getLog().info("OP -> /" + cmdName);
-						}
-						// Set the command permission to the (String) permission node
-						if (NMS.isVanillaCommandWrapper(knownCommands.get(cmdName))) {
-							knownCommands.get(cmdName).setPermission(perm.getPermission());
-						}
-						if (NMS.isVanillaCommandWrapper(knownCommands.get("minecraft:" + cmdName))) {
-							knownCommands.get(cmdName).setPermission(perm.getPermission());
-						}
+					if (CommandAPIMain.getConfiguration().hasVerboseOutput()) {
+						CommandAPIMain.getLog().info(perm.getPermission() + " -> /" + cmdName);
 					} else {
-						// Dafaq?
+						CommandAPIMain.getLog().info("OP -> /" + cmdName);
+					}
+					// Set the command permission to the (String) permission node
+					if (NMS.isVanillaCommandWrapper(knownCommands.get(cmdName))) {
+						knownCommands.get(cmdName).setPermission(perm.getPermission());
+					}
+					if (NMS.isVanillaCommandWrapper(knownCommands.get("minecraft:" + cmdName))) {
+						knownCommands.get(cmdName).setPermission(perm.getPermission());
 					}
 				}
 			});
@@ -486,7 +482,7 @@ public abstract class CommandAPIHandler {
 				}
 
 				// Handle arguments with built-in suggestion providers
-				else if (innerArg instanceof ICustomProvidedArgument && innerArg.getOverriddenSuggestions() == null) {
+				else if (innerArg instanceof ICustomProvidedArgument && !innerArg.getOverriddenSuggestions().isPresent()) {
 					inner = getRequiredArgumentBuilderWithProvider(keys.get(keys.size() - 1), innerArg.getRawType(),
 							innerArg.getArgumentPermission(),
 							NMS.getSuggestionProvider(((ICustomProvidedArgument) innerArg).getSuggestionProvider()))
@@ -512,7 +508,7 @@ public abstract class CommandAPIHandler {
 				}
 
 				// Handle arguments with built-in suggestion providers
-				else if (outerArg instanceof ICustomProvidedArgument && outerArg.getOverriddenSuggestions() == null) {
+				else if (outerArg instanceof ICustomProvidedArgument && !outerArg.getOverriddenSuggestions().isPresent()) {
 					outer = getRequiredArgumentBuilderWithProvider(keys.get(i), outerArg.getRawType(),
 							outerArg.getArgumentPermission(),
 							NMS.getSuggestionProvider(((ICustomProvidedArgument) outerArg).getSuggestionProvider()))
@@ -602,7 +598,7 @@ public abstract class CommandAPIHandler {
 			CommandPermission permission) {
 
 		// If there are no changes to the default suggestions, return it as normal
-		if (type.getOverriddenSuggestions() == null) {
+		if (!type.getOverriddenSuggestions().isPresent()) {
 			return RequiredArgumentBuilder.argument(argumentName, (ArgumentType<T>) type.getRawType())
 					.requires(clw -> permissionCheck(NMS.getCommandSenderForCLW(clw), permission));
 		}
@@ -621,7 +617,7 @@ public abstract class CommandAPIHandler {
 							}
 							previousArguments.add(parseArgument(context, s, args.get(s)));
 						}
-						return getSuggestionsBuilder(builder, type.getOverriddenSuggestions()
+						return getSuggestionsBuilder(builder, type.getOverriddenSuggestions().get()
 								.apply(NMS.getCommandSenderForCLW(context.getSource()), previousArguments.toArray()));
 					});
 		}
@@ -688,16 +684,56 @@ public abstract class CommandAPIHandler {
 		}
 	}
 	
+	/**
+	 * The Brigadier class is used to access some of the internals of the CommandAPI
+	 * so you can use the CommandAPI alongside Mojang's com.mojang.brigadier package
+	 */
 	public static abstract class Brigadier {
 		
+		/**
+		 * Returns the Brigadier CommandDispatcher tree that is used internally by the
+		 * CommandAPI. Modifying this CommandDispatcher tree before the server finishes
+		 * loading will still keep any changes made to it. For example, adding a new
+		 * node to this tree will keep the node once the server has finished loading.
+		 * 
+		 * @return The CommandAPI's internal CommandDispatcher instance
+		 */
 		public static CommandDispatcher getCommandDispatcher() {
 			return DISPATCHER;
 		}
-		
+
+		/**
+		 * Returns the root node of the current CommandDispatcher. This is the
+		 * equivalent of running
+		 * 
+		 * <code>
+		 * Brigadier.getCommandDispatcher().getRoot();
+		 * </code>
+		 * 
+		 * @return The Brigadier CommandDispatcher's root node
+		 */
 		public static RootCommandNode getRootNode() {
 			return DISPATCHER.getRoot();
 		}
 		
+		/**
+		 * Registers a new literal argument builder into the CommandDispatcher. This
+		 * returns a new LiteralCommandNode. Internally, this constructs a new literal
+		 * argument builder from the provided literal name and then registers it using
+		 * 
+		 * <code>
+		 * getCommandDispatcher().register(...);
+		 * </code>
+		 * 
+		 * This is the equivalent of running the following code:
+		 * 
+		 * <pre>
+		 * getCommandDispatcher().register(LiteralArgumentBuilder.literal(name));
+		 * </pre>
+		 * 
+		 * @param name the name of the literal to add
+		 * @return a LiteralCommandNode of the literal within the CommandDispatcher
+		 */
 		public static LiteralCommandNode registerNewLiteral(String name) {
 			return DISPATCHER.register(getLiteralArgumentBuilder(name));
 		}
@@ -711,7 +747,13 @@ public abstract class CommandAPIHandler {
 				}
 			};
 		}
-		
+
+		/**
+		 * Converts a CommandAPICommand into a Brigadier Command
+		 * 
+		 * @param command the command to convert
+		 * @return a Brigadier Command object that represents the provided command
+		 */
 		public static Command fromCommand(CommandAPICommand command) {
 			try {
 				return generateCommand(command.args, command.executor);
@@ -723,12 +765,24 @@ public abstract class CommandAPIHandler {
 			return null;
 		}
 		
+		/**
+		 * Constructs an RequiredArgumentBuilder from a given argument within a command
+		 * declaration. For example:
+		 * 
+		 * <pre>
+		 * LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+		 * arguments.put("hello", new IntegerArgument());
+		 * 
+		 * RequiredArgumentBuilder argBuilder = argBuildOf(arguments, "hello");
+		 * </pre>
+		 * 
+		 * @param args  the LinkedHashMap of arguments which you typically declare for
+		 *              commands
+		 * @param value the name of the argument you want to specify
+		 * @return a RequiredArgumentBuilder that represents the provided argument
+		 */
 		public static RequiredArgumentBuilder argBuildOf(LinkedHashMap<String, Argument> args, String value) {
-			return argBuildOf(args, value, CommandPermission.NONE);
-		}
-		
-		public static RequiredArgumentBuilder argBuildOf(LinkedHashMap<String, Argument> args, String value, CommandPermission permission) {
-			return getRequiredArgumentBuilderDynamic(args, value, args.get(value), permission);
+			return getRequiredArgumentBuilderDynamic(args, value, args.get(value), args.get(value).getArgumentPermission());
 		}
 	}
 }

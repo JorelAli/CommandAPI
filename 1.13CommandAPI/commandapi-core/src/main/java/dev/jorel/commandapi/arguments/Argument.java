@@ -1,5 +1,6 @@
 package dev.jorel.commandapi.arguments;
 
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -61,7 +62,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	// Suggestions //
 	/////////////////
 
-	BiFunction<CommandSender, Object[], String[]> suggestions = null;
+	Optional<BiFunction<CommandSender, Object[], String[]>> suggestions = null;
 
 	/**
 	 * Override the suggestions of this argument with a String array. Typically,
@@ -72,7 +73,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 */
 	@Override
 	public final Argument overrideSuggestions(String... suggestions) {
-		this.suggestions = (c, m) -> suggestions;
+		this.suggestions = Optional.of((c, m) -> suggestions);
 		return this;
 	}
 
@@ -85,7 +86,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 */
 	@Override
 	public final Argument overrideSuggestions(Function<CommandSender, String[]> suggestions) {
-		this.suggestions = (c, m) -> suggestions.apply(c);
+		this.suggestions =  Optional.of((c, m) -> suggestions.apply(c));
 		return this;
 	}
 	
@@ -98,7 +99,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 */
 	@Override
 	public final Argument overrideSuggestions(BiFunction<CommandSender, Object[], String[]> suggestions) {
-		this.suggestions = suggestions;
+		this.suggestions =  Optional.of(suggestions);
 		return this;
 	}
 
@@ -111,7 +112,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 *         are no overridden suggestions.
 	 */
 	@Override
-	public final BiFunction<CommandSender, Object[], String[]> getOverriddenSuggestions() {
+	public final Optional<BiFunction<CommandSender, Object[], String[]>> getOverriddenSuggestions() {
 		return suggestions;
 	}
 
@@ -119,7 +120,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	// Permissions //
 	/////////////////
 
-	private CommandPermission permission = null;
+	private CommandPermission permission = CommandPermission.NONE;
 
 	/**
 	 * Assigns the given permission as a requirement to execute this command.

@@ -1,5 +1,6 @@
 package dev.jorel.commandapi.arguments;
 
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -45,6 +46,6 @@ public interface IOverrideableSuggestions {
 	 * @return a function that provides suggestions, or <code>null</code> if there
 	 *         are no overridden suggestions.
 	 */
-	BiFunction<CommandSender, Object[], String[]> getOverriddenSuggestions();
+	Optional<BiFunction<CommandSender, Object[], String[]>> getOverriddenSuggestions();
 	
 }
