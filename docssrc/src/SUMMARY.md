@@ -81,6 +81,8 @@
 
 [Upgrading guide](./upgrading.md)
 
+[Incompatible version information](./incompatibleversions.md)
+
 [Troubleshooting](./troubleshooting.md)
 
 -----
