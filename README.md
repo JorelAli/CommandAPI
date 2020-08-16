@@ -1,5 +1,5 @@
 # 1.13-Command-API
-An API to use the new command UI introduced in Minecraft 1.13. _(Despite the name, this API is compatible for Minecraft versions 1.13 - 1.16.1)_
+An API to use the new command UI introduced in Minecraft 1.13. _(Despite the name, this API is compatible for Minecraft versions 1.13 - 1.16.2)_
 
 ## Downloads & Documentation (includes usage for server owners)
 
