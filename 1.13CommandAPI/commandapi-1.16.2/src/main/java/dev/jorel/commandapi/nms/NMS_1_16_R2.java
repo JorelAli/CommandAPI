@@ -168,20 +168,6 @@ public class NMS_1_16_R2 implements NMS {
 		net.minecraft.server.v1_16_R2.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(is);
 		return is.getType().getKey().toString() + nmsItemStack.getOrCreateTag().asString();
 	}
-	
-	//TODO: Remove on release!
-//	public void deconstruct() {
-//		DedicatedServer server = ((CraftServer) Bukkit.getServer()).getHandle().getServer();
-//		DataPackResources datapackResources = server.dataPackResources;
-//		CustomFunctionManager functions = datapackResources.a();
-//		Map<MinecraftKey, CustomFunction> f = functions.a();
-//		
-//		Map<NamespacedKey, String[]> actualF = new HashMap<>(f.size());
-//		for(Entry<MinecraftKey, CustomFunction> ff : f.entrySet()) {
-//			NamespacedKey key = new NamespacedKey(ff.getKey().getNamespace(), ff.getKey().getKey());
-//			actualF.put(key, Arrays.stream(ff.getValue().b()).map(Object::toString).toArray(String[]::new));
-//		}
-//	}
 
 	@Override
 	public void reloadDataPacks()
