@@ -68,25 +68,6 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 				}
 			}
 		}
-		
-		new CommandAPICommand("killall")
-		.executes((s, a) -> {
-			System.out.println("Killall");
-		})
-		.register();
-		
-		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-		arguments.put("func", new FunctionArgument());
-		
-		new CommandAPICommand("tt")
-		.withArguments(arguments)
-		.executes((s, a) -> {
-			FunctionWrapper[] functions = (FunctionWrapper[]) a[0];
-			for(FunctionWrapper f : functions) {
-				System.out.println(Arrays.deepToString(f.getCommands()));
-			}
-		})
-		.register();
 	}
 	
 	@Override

@@ -104,9 +104,12 @@ $(document).ready(function(){initNavTree('classdev_1_1jorel_1_1commandapi_1_1wra
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a7ce597d7807dc93ddfa65f2336d9bf21"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#a7ce597d7807dc93ddfa65f2336d9bf21">FunctionWrapper</a> (NamespacedKey minecraftKey, @SuppressWarnings(&quot;rawtypes&quot;) ToIntBiFunction invoker, Object customFunction, Object clwArgB, Function&lt; Entity, Object &gt; mapper)</td></tr>
-<tr class="memdesc:a7ce597d7807dc93ddfa65f2336d9bf21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html" title="A wrapper class for Minecraft 1.12&#39;s functions.">FunctionWrapper</a>.  <a href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#a7ce597d7807dc93ddfa65f2336d9bf21">More...</a><br /></td></tr>
-<tr class="separator:a7ce597d7807dc93ddfa65f2336d9bf21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae35cd1c41d2fbbed6970cd4bd97e46dd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#ae35cd1c41d2fbbed6970cd4bd97e46dd">FunctionWrapper</a> (NamespacedKey minecraftKey, @SuppressWarnings(&quot;rawtypes&quot;) ToIntBiFunction invoker, Object customFunction, Object clwArgB, Function&lt; Entity, Object &gt; mapper, String[] internalCommands)</td></tr>
+<tr class="memdesc:ae35cd1c41d2fbbed6970cd4bd97e46dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html" title="A wrapper class for Minecraft 1.12&#39;s functions.">FunctionWrapper</a>.  <a href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#ae35cd1c41d2fbbed6970cd4bd97e46dd">More...</a><br /></td></tr>
+<tr class="separator:ae35cd1c41d2fbbed6970cd4bd97e46dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a486ead4bf88c2dbfa5101a460804b1dd"><td class="memItemLeft" align="right" valign="top">String[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#a486ead4bf88c2dbfa5101a460804b1dd">getCommands</a> ()</td></tr>
+<tr class="memdesc:a486ead4bf88c2dbfa5101a460804b1dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an array of commands that will be executed by this <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html" title="A wrapper class for Minecraft 1.12&#39;s functions.">FunctionWrapper</a>.  <a href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#a486ead4bf88c2dbfa5101a460804b1dd">More...</a><br /></td></tr>
+<tr class="separator:a486ead4bf88c2dbfa5101a460804b1dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5826daf79a5a972568c4caa05681470f"><td class="memItemLeft" align="right" valign="top"><a id="a5826daf79a5a972568c4caa05681470f"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#a5826daf79a5a972568c4caa05681470f">run</a> ()</td></tr>
 <tr class="memdesc:a5826daf79a5a972568c4caa05681470f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes this function as the executor of the command. <br /></td></tr>
@@ -121,8 +124,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A wrapper class for Minecraft 1.12's functions. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a7ce597d7807dc93ddfa65f2336d9bf21"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7ce597d7807dc93ddfa65f2336d9bf21">&#9670;&nbsp;</a></span>FunctionWrapper()</h2>
+<a id="ae35cd1c41d2fbbed6970cd4bd97e46dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae35cd1c41d2fbbed6970cd4bd97e46dd">&#9670;&nbsp;</a></span>FunctionWrapper()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -155,7 +158,13 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">Function&lt; Entity, Object &gt;&#160;</td>
-          <td class="paramname"><em>mapper</em>&#160;</td>
+          <td class="paramname"><em>mapper</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">String[]&#160;</td>
+          <td class="paramname"><em>internalCommands</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -173,6 +182,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
     <tr><td class="paramname">customFunction</td><td>an NMS CustomFunction that contains the information about the function </td></tr>
     <tr><td class="paramname">clwArgB</td><td>the instance of the CommandListenerWrapper which executed this command </td></tr>
     <tr><td class="paramname">mapper</td><td>a function that maps a Bukkit Entity to a Minecraft Entity </td></tr>
+    <tr><td class="paramname">internalCommands</td><td>a String[] of internal commands that this customFunction represents. Typically customFunction.b().map(Object::toString) </td></tr>
   </table>
   </dd>
 </dl>
@@ -180,6 +190,26 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a486ead4bf88c2dbfa5101a460804b1dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a486ead4bf88c2dbfa5101a460804b1dd">&#9670;&nbsp;</a></span>getCommands()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">String [] dev.jorel.commandapi.wrappers.FunctionWrapper.getCommands </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns an array of commands that will be executed by this <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html" title="A wrapper class for Minecraft 1.12&#39;s functions.">FunctionWrapper</a>. </p>
+<dl class="section return"><dt>Returns</dt><dd>the commands that are defined by this custom function </dd></dl>
+
+</div>
+</div>
 <a id="a6b2d5c707201b6c11e849f50ca9dbfa2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6b2d5c707201b6c11e849f50ca9dbfa2">&#9670;&nbsp;</a></span>getKey()</h2>
 
@@ -235,7 +265,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1wrappers.html">wrappers</a></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html">FunctionWrapper</a></li>
-    <li class="footer">Generated on Sat Aug 15 2020 10:43:11 for 1.13 CommandAPI by
+    <li class="footer">Generated on Sun Aug 16 2020 17:55:28 for 1.13 CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

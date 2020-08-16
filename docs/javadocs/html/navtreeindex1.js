@@ -162,10 +162,11 @@ var NAVTREEINDEX1 =
 "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_float_range.html#a78d6ea63c0595bf29e07c404cbbc960c":[2,0,0,0,0,3,0,2],
 "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_float_range.html#a98e38eb423ae31d1b5a44da4265d0caf":[2,0,0,0,0,3,0,1],
 "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html":[2,0,0,0,0,3,1],
-"classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#a5826daf79a5a972568c4caa05681470f":[2,0,0,0,0,3,1,2],
-"classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#a6b2d5c707201b6c11e849f50ca9dbfa2":[2,0,0,0,0,3,1,1],
-"classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#a7ce597d7807dc93ddfa65f2336d9bf21":[2,0,0,0,0,3,1,0],
-"classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#aee8b704708208b6c7bb88bf8d4861778":[2,0,0,0,0,3,1,3],
+"classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#a486ead4bf88c2dbfa5101a460804b1dd":[2,0,0,0,0,3,1,1],
+"classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#a5826daf79a5a972568c4caa05681470f":[2,0,0,0,0,3,1,3],
+"classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#a6b2d5c707201b6c11e849f50ca9dbfa2":[2,0,0,0,0,3,1,2],
+"classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#ae35cd1c41d2fbbed6970cd4bd97e46dd":[2,0,0,0,0,3,1,0],
+"classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#aee8b704708208b6c7bb88bf8d4861778":[2,0,0,0,0,3,1,4],
 "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_integer_range.html":[2,0,0,0,0,3,2],
 "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_integer_range.html#a26e5d83a8877830f8b0117564ab3b42c":[2,0,0,0,0,3,2,6],
 "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_integer_range.html#a3b02e53e2c9aa543dd847b99230d22f9":[2,0,0,0,0,3,2,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html#af132746b80dc83b1e403a1b7bb3e5a03":[2,0,0,0,0,0,14,0,0],
 "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html":[2,0,0,0,0,0,21,0],
 "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html#a4707419b548b60ec8a548d85d3f09da2":[2,0,0,0,0,0,21,0,4],
-"enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html#a65e171b1e118d0f8adf2d2b4c0774c3d":[2,0,0,0,0,0,21,0,0],
-"enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html#a712b629f24be1c412b861271bef10b2d":[2,0,0,0,0,0,21,0,5]
+"enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html#a65e171b1e118d0f8adf2d2b4c0774c3d":[2,0,0,0,0,0,21,0,0]
 };

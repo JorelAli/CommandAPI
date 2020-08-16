@@ -26,6 +26,7 @@ public class FunctionWrapper implements Keyed {
 	 * @param customFunction an NMS CustomFunction that contains the information about the function
 	 * @param clwArgB the instance of the CommandListenerWrapper which executed this command
 	 * @param mapper a function that maps a Bukkit Entity to a Minecraft Entity
+	 * @param internalCommands a String[] of internal commands that this customFunction represents. Typically customFunction.b().map(Object::toString)
 	 */
 	@SuppressWarnings("unchecked")
 	public FunctionWrapper(NamespacedKey minecraftKey, @SuppressWarnings("rawtypes") ToIntBiFunction invoker, Object customFunction, Object clwArgB, Function<Entity, Object> mapper, String[] internalCommands) {
