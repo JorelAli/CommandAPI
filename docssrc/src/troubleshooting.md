@@ -2,6 +2,30 @@
 
 This section basically summarizes the list of things that _could_ go wrong with the CommandAPI and how to mitigate these circumstances.
 
+## I encounter a `NullPointerException` when using Bukkit's scoreboard
+
+Shove the scoreboard access inside a lambda, so it is evaluated when commands are executed rather than when the server loads. For example, use:
+
+```java
+LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+            	
+arguments.put("team", new TeamArgument().safeOverrideSuggestions(s ->
+    Bukkit.getScoreboardManager().getMainScoreboard().getTeams().toArray(new Team[0]))
+);
+```
+
+as opposed to:
+
+```java
+LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+            	
+arguments.put("team", new TeamArgument().safeOverrideSuggestions(
+    Bukkit.getScoreboardManager().getMainScoreboard().getTeams().toArray(new Team[0]))
+);
+```
+
+
+
 ## Server errors when loading datapacks in 1.16+
 
 If you get an error at the very start of the server's startup sequence along the lines of:

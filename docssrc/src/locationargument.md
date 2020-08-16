@@ -62,6 +62,10 @@ new CommandAPICommand("break")
 
 The `Location2DArgument` is pretty much identical in use to the `LocationArgument` for 3D coordinates, except instead of returning a `Location` object, it instead returns a `Location2D` object that extends `Location` (thus, being compatible anywhere you would normally be able to use `Location`).
 
-> **Note:**
->
-> The `Location2DArgument` cannot be used with `LocationType.PRECISE_POSITION` in Minecraft 1.13. However, it can be used normally with `LocationType.PRECISE_POSITION` in Minecraft versions 1.13.1 and later.
+<div class="warning">
+
+**Note:**
+
+The `Location2DArgument` cannot be used with `LocationType.PRECISE_POSITION` in Minecraft 1.13. However, it can be used normally with `LocationType.PRECISE_POSITION` in Minecraft versions 1.13.1 and later.
+
+</div>

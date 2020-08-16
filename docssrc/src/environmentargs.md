@@ -4,9 +4,13 @@
 
 The `EnvironmentArgument` class allows a command sender to refer to a specific world environment, declared in Bukkit's `World.Environment` class. This includes the following three environments: `NORMAL`, `NETHER` and `THE_END`.
 
-> **Note:**
->
-> The `EnvironmentArgument` is only supported in Minecraft versions 1.13.1 and later, meaning it _will not work_ on Minecraft 1.13. This is due to fact that Minecraft added the environment argument in 1.13.1. Attempting to use the `EnvironmentArgument` on Minecraft 1.13 will throw an `EnvironmentArgumentException`.
+<div class="warning">
+
+**Note:**
+
+The `EnvironmentArgument` is only supported in Minecraft versions 1.13.1 and later, meaning it _will not work_ on Minecraft 1.13. This is due to fact that Minecraft added the environment argument in 1.13.1. Attempting to use the `EnvironmentArgument` on Minecraft 1.13 will throw an `EnvironmentArgumentException`.
+
+</div>
 
 <div class="example">
 

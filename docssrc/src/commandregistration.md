@@ -101,6 +101,16 @@ In order to register commands properly, **commands must be registered before the
 
 The CommandAPI has support to unregister commands completely from Minecraft's command list. This includes Minecraft built in commands!
 
+<div class="warning">
+
+**Developer's Note:**
+
+Command unregistration, although powerful, is highly unrecommended. It is the CommandAPI's most "dangerous" feature as it can cause unexpected sideffects, such as command blocks executing commands you wouldn't expect them to. In almost every case, I'd recommend just creating a new command instead of unregistering one to replace it.
+
+For instance, instead of unregistering `/gamemode`, you could register a command `/gm` or `/changegamemode`.
+
+</div>
+
 | Method                                             | Result                                                       |
 | -------------------------------------------------- | ------------------------------------------------------------ |
 | `CommandAPI.unregister(String cmd)`                | Unregisters a command from the game                          |
@@ -115,11 +125,5 @@ To replace a command, we can first unregister it and then register our implement
 ```java
 {{#include examples/3replacegamemode.java}}
 ```
-
-> **Developer's Note:**
->
-> Command unregistration, although powerful, is highly unrecommended. It is the CommandAPI's most "dangerous" feature as it can cause unexpected sideffects, such as command blocks executing commands you wouldn't expect them to. In almost every case, I'd recommend just creating a new command instead of unregistering one to replace it.
->
-> For instance, instead of unregistering `/gamemode`, you could register a command `/gm` or `/changegamemode`.
 
 </div>

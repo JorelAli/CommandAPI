@@ -6,9 +6,13 @@ The `TimeArgument` class represents in-game time, _in the number of in-game tick
 
 The CommandAPI converts the inputs provided by the command sender into a number of ticks as an integer.
 
-> **Note:**
->
-> The `TimeArgument` is only supported in Minecraft versions 1.14 and later, meaning it _will not work_ on Minecraft versions 1.13, 1.13.1 or 1.13.2. This is due to the fact that Minecraft added the time argument in 1.14. Attempting to use the `TimeArgument` on an incompatible version will throw a `TimeArgumentException`.
+<div class="warning">
+
+**Note:**
+
+The `TimeArgument` is only supported in Minecraft versions 1.14 and later, meaning it _will not work_ on Minecraft versions 1.13, 1.13.1 or 1.13.2. This is due to the fact that Minecraft added the time argument in 1.14. Attempting to use the `TimeArgument` on an incompatible version will throw a `TimeArgumentException`.
+
+</div>
 
 > **Developer's Note:**
 >
