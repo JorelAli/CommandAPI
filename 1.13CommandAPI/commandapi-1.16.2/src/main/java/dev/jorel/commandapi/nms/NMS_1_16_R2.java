@@ -5,9 +5,13 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
@@ -164,6 +168,20 @@ public class NMS_1_16_R2 implements NMS {
 		net.minecraft.server.v1_16_R2.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(is);
 		return is.getType().getKey().toString() + nmsItemStack.getOrCreateTag().asString();
 	}
+	
+	//TODO: Remove on release!
+//	public void deconstruct() {
+//		DedicatedServer server = ((CraftServer) Bukkit.getServer()).getHandle().getServer();
+//		DataPackResources datapackResources = server.dataPackResources;
+//		CustomFunctionManager functions = datapackResources.a();
+//		Map<MinecraftKey, CustomFunction> f = functions.a();
+//		
+//		Map<NamespacedKey, String[]> actualF = new HashMap<>(f.size());
+//		for(Entry<MinecraftKey, CustomFunction> ff : f.entrySet()) {
+//			NamespacedKey key = new NamespacedKey(ff.getKey().getNamespace(), ff.getKey().getKey());
+//			actualF.put(key, Arrays.stream(ff.getValue().b()).map(Object::toString).toArray(String[]::new));
+//		}
+//	}
 
 	@Override
 	public void reloadDataPacks()
@@ -556,7 +574,7 @@ public class NMS_1_16_R2 implements NMS {
 			FunctionWrapper wrapper = new FunctionWrapper(minecraftKey, obj, customFunction, commandListenerWrapper,
 					e -> {
 						return (Object) getCLW(cmdCtx).a(((CraftEntity) e).getHandle());
-					});
+					}, Arrays.stream(customFunction.b()).map(Object::toString).toArray(String[]::new));
 
 			result[count] = wrapper;
 			count++;

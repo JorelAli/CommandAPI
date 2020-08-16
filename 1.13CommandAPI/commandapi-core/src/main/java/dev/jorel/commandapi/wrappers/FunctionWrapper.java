@@ -17,6 +17,7 @@ public class FunctionWrapper implements Keyed {
 	private final Object customFunction; //The function to actually run
 	private final Object commandListenerWrapper;
 	private final Function<Entity, Object> mapper;
+	private final String[] internalCommands;
 	
 	/**
 	 * Creates a FunctionWrapper
@@ -27,12 +28,21 @@ public class FunctionWrapper implements Keyed {
 	 * @param mapper a function that maps a Bukkit Entity to a Minecraft Entity
 	 */
 	@SuppressWarnings("unchecked")
-	public FunctionWrapper(NamespacedKey minecraftKey, @SuppressWarnings("rawtypes") ToIntBiFunction invoker, Object customFunction, Object clwArgB, Function<Entity, Object> mapper) {
+	public FunctionWrapper(NamespacedKey minecraftKey, @SuppressWarnings("rawtypes") ToIntBiFunction invoker, Object customFunction, Object clwArgB, Function<Entity, Object> mapper, String[] internalCommands) {
 		this.minecraftKey = minecraftKey;
 		this.functionExecutor = invoker;
 		this.customFunction = customFunction;
 		this.commandListenerWrapper = clwArgB;
 		this.mapper = mapper;
+		this.internalCommands = internalCommands;
+	}
+	
+	/**
+	 * Returns an array of commands that will be executed by this FunctionWrapper 
+	 * @return the commands that are defined by this custom function
+	 */
+	public String[] getCommands() {
+		return this.internalCommands;
 	}
 
 	/**

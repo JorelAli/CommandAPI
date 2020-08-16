@@ -2,6 +2,7 @@ package dev.jorel.commandapi.nms;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Map;
@@ -492,7 +493,9 @@ public class NMS_1_13_2 implements NMS {
             NamespacedKey minecraftKey = new NamespacedKey(customFunction.a().b(), customFunction.a().getKey());
             ToIntBiFunction<CustomFunction, CommandListenerWrapper> obj = customFunctionData::a;
 
-            FunctionWrapper wrapper = new FunctionWrapper(minecraftKey, obj, customFunction, commandListenerWrapper, e -> getCLW(cmdCtx).a(((CraftEntity) e).getHandle()));
+			FunctionWrapper wrapper = new FunctionWrapper(minecraftKey, obj, customFunction, commandListenerWrapper,
+					e -> getCLW(cmdCtx).a(((CraftEntity) e).getHandle()),
+					Arrays.stream(customFunction.b()).map(Object::toString).toArray(String[]::new));
 
             result[count] = wrapper;
             count++;
