@@ -13,6 +13,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.function.ToIntBiFunction;
+import java.util.function.ToIntFunction;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
@@ -553,8 +554,9 @@ public class NMS_1_16_R1 implements NMS {
 			NamespacedKey minecraftKey = new NamespacedKey(customFunction.a().getNamespace(),
 					customFunction.a().getKey());
 			ToIntBiFunction<CustomFunction, CommandListenerWrapper> obj = customFunctionData::a;
+			ToIntFunction<CommandListenerWrapper> appliedObj = clw -> obj.applyAsInt(customFunction, clw);
 
-			FunctionWrapper wrapper = new FunctionWrapper(minecraftKey, obj, customFunction, commandListenerWrapper,
+			FunctionWrapper wrapper = new FunctionWrapper(minecraftKey, appliedObj, commandListenerWrapper,
 					e -> {
 						return (Object) getCLW(cmdCtx).a(((CraftEntity) e).getHandle());
 					}, Arrays.stream(customFunction.b()).map(Object::toString).toArray(String[]::new));

@@ -10,6 +10,7 @@ import java.util.EnumSet;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.function.ToIntBiFunction;
+import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
 import org.bukkit.Axis;
@@ -500,8 +501,9 @@ public class NMS_1_14 implements NMS {
 			@SuppressWarnings("deprecation")
 			NamespacedKey minecraftKey = new NamespacedKey(customFunction.a().b(), customFunction.a().getKey());
 			ToIntBiFunction<CustomFunction, CommandListenerWrapper> obj = customFunctionData::a;
+			ToIntFunction<CommandListenerWrapper> appliedObj = clw -> obj.applyAsInt(customFunction, clw);
 
-			FunctionWrapper wrapper = new FunctionWrapper(minecraftKey, obj, customFunction, commandListenerWrapper,
+			FunctionWrapper wrapper = new FunctionWrapper(minecraftKey, appliedObj, commandListenerWrapper,
 					e -> getCLW(cmdCtx).a(((CraftEntity) e).getHandle()), Arrays.stream(customFunction.b()).map(Object::toString).toArray(String[]::new));
 
 			result[count] = wrapper;

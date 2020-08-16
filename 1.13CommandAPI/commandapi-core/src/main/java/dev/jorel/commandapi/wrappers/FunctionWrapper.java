@@ -1,7 +1,7 @@
 package dev.jorel.commandapi.wrappers;
 
 import java.util.function.Function;
-import java.util.function.ToIntBiFunction;
+import java.util.function.ToIntFunction;
 
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
@@ -13,8 +13,7 @@ import org.bukkit.entity.Entity;
 public class FunctionWrapper implements Keyed {	
 	
 	private final NamespacedKey minecraftKey;
-	private final ToIntBiFunction<Object, Object> functionExecutor; //What the function does
-	private final Object customFunction; //The function to actually run
+	private final ToIntFunction<Object> functionExecutor; //What the function does
 	private final Object commandListenerWrapper;
 	private final Function<Entity, Object> mapper;
 	private final String[] internalCommands;
@@ -29,10 +28,9 @@ public class FunctionWrapper implements Keyed {
 	 * @param internalCommands a String[] of internal commands that this customFunction represents. Typically customFunction.b().map(Object::toString)
 	 */
 	@SuppressWarnings("unchecked")
-	public FunctionWrapper(NamespacedKey minecraftKey, @SuppressWarnings("rawtypes") ToIntBiFunction invoker, Object customFunction, Object clwArgB, Function<Entity, Object> mapper, String[] internalCommands) {
+	public FunctionWrapper(NamespacedKey minecraftKey, @SuppressWarnings("rawtypes") ToIntFunction invoker, Object clwArgB, Function<Entity, Object> mapper, String[] internalCommands) {
 		this.minecraftKey = minecraftKey;
 		this.functionExecutor = invoker;
-		this.customFunction = customFunction;
 		this.commandListenerWrapper = clwArgB;
 		this.mapper = mapper;
 		this.internalCommands = internalCommands;
@@ -62,7 +60,7 @@ public class FunctionWrapper implements Keyed {
 	}
 	
 	private void run(Object clw) {
-		functionExecutor.applyAsInt(customFunction, clw);
+		functionExecutor.applyAsInt(clw);
 	}
 
 	/**
