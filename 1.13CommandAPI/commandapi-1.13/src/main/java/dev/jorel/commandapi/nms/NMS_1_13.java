@@ -128,6 +128,12 @@ import net.minecraft.server.v1_13_R1.Vec3D;
 public class NMS_1_13 implements NMS {
 	
 	@Override
+	public String getKeyedAsString(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.c(cmdCtx, key);
+		return minecraftKey.toString();
+	}
+	
+	@Override
 	public ArgumentType<?> _ArgumentBlockPredicate() {
 		return ArgumentBlockPredicate.a();
 	}

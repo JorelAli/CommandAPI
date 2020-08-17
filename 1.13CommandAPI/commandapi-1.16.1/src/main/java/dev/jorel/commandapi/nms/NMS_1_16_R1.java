@@ -146,6 +146,12 @@ import net.minecraft.server.v1_16_R1.WorldServer;
 public class NMS_1_16_R1 implements NMS {
 	
 	@Override
+	public String getKeyedAsString(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.e(cmdCtx, key);
+		return minecraftKey.toString();
+	}
+	
+	@Override
 	public String convert(Sound sound) {
 		return CraftSound.getSound(sound);
 	}

@@ -235,7 +235,13 @@ public abstract class CommandAPIHandler {
 			return NMS.getChatComponent(cmdCtx, key);
 		case CUSTOM:
 			CustomArgument arg = (CustomArgument) value;
-			String customresult = (String) cmdCtx.getArgument(key, String.class);
+			String customresult;
+			if(arg.isKeyed()) {
+				customresult = getNMS().getKeyedAsString(cmdCtx, key);
+			} else {
+				customresult = (String) cmdCtx.getArgument(key, String.class);
+			}
+			
 			try {
 				return arg.getParser().apply(customresult);
 			} catch (CustomArgumentException e) {

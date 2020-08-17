@@ -152,6 +152,7 @@ public interface NMS {
 	EntityType           getEntityType(CommandContext<?> cmdCtx, String key, CommandSender sender) throws CommandSyntaxException;
 	FunctionWrapper[]    getFunction(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 	Predicate<ItemStack> getItemStackPredicate(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
+	String               getKeyedAsString(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 	Location             getLocation(CommandContext<?> cmdCtx, String key, LocationType locationType, CommandSender sender) throws CommandSyntaxException;
 	Location2D           getLocation2D(CommandContext<?> cmdCtx, String key, LocationType locationType2d, CommandSender sender) throws CommandSyntaxException;
 	String               getObjective(CommandContext<?> cmdCtx, String key, CommandSender sender) throws IllegalArgumentException, CommandSyntaxException;

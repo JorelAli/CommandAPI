@@ -16,6 +16,7 @@ import dev.jorel.commandapi.CommandAPIHandler;
 public class CustomArgument<T> extends Argument {
 	
 	private CustomArgumentParser<T> parser;
+	private boolean keyed;
 	
 	/**
 	 * Creates a CustomArgument with a valid parser, defaults to non-keyed argument
@@ -43,7 +44,12 @@ public class CustomArgument<T> extends Argument {
 	 */
 	public CustomArgument(CustomArgumentParser<T> parser, boolean keyed) {
 		super(keyed ? CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered() : StringArgumentType.string());
+		this.keyed = keyed;
 		this.parser = parser;
+	}
+	
+	public boolean isKeyed() {
+		return this.keyed;
 	}
 
 	@Override

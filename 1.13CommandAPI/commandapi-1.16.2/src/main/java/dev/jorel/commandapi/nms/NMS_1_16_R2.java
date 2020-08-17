@@ -865,4 +865,10 @@ public class NMS_1_16_R2 implements NMS {
 		};
 	}
 
+	@Override
+	public String getKeyedAsString(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.e(cmdCtx, key);
+		return minecraftKey.toString();
+	}
+
 }
