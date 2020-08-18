@@ -1,6 +1,10 @@
 # 1.13-Command-API
 An API to use the new command UI introduced in Minecraft 1.13. _(Despite the name, this API is compatible for Minecraft versions 1.13 - 1.16.1)_
 
+### Official Discord! (In progress)
+
+The project is somewhat big enough to make it worth building a community around! I've started creating a Discord server which you can join [here](https://discord.gg/juFNP7h)!
+
 ## Downloads & Documentation (includes usage for server owners)
 
 The documentation has moved! You can now get your hands on the latest and greatest documentation on the [CommandAPI website!](https://www.jorel.dev/1.13-Command-API/)
