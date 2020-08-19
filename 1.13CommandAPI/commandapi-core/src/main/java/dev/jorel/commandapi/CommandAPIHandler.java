@@ -372,10 +372,6 @@ public abstract class CommandAPIHandler {
 	 * @return true if the sender satisfies the provided permission
 	 */
 	static boolean permissionCheck(CommandSender sender, CommandPermission permission, Predicate<CommandSender> requirements) {
-		if(sender instanceof Player) {
-			NMS.resendPackets((Player) sender);
-		}
-		
 		boolean satisfiesPermissions = false;
 		if (sender == null) {
 			satisfiesPermissions = true;

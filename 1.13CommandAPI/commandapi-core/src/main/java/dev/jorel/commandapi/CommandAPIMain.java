@@ -10,14 +10,24 @@ import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.command.BlockCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.EventException;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerEvent;
+import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.jorel.commandapi.arguments.Argument;
@@ -48,6 +58,11 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 		CommandAPIHandler.getNMS().resendPackets(e.getPlayer());
 	}
 	
+//	@EventHandler
+//	public void onPlayerExp(PlayerExpChangeEvent e) {
+//		CommandAPIHandler.getNMS().resendPackets(e.getPlayer());
+//	}
+	
 	@Override
 	public void onLoad() {
 		//Config loading
@@ -69,6 +84,35 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 				}
 			}
 		}
+
+		
+//		
+//		@SafeVarargs
+//		public static void withEvents(Class<? extends PlayerEvent>... events) {
+//			RegisteredListener registeredListener = new RegisteredListener(new Listener() {}, new EventExecutor() {
+//			    @Override
+//			    public void execute(Listener listener, Event event) throws EventException {
+//			    	System.out.println(event.getEventName());
+//					if(event instanceof PlayerEvent) {
+//						for(Class<? extends PlayerEvent> pEvent : new Class[] {PlayerExpChangeEvent.class}) {
+//							if(pEvent.isInstance(event)) {
+//								System.out.println("Sending packets...");
+//								
+//								CommandAPIHandler.getNMS().resendPackets(((PlayerEvent) event).getPlayer());
+//							}
+//						}
+//					}
+//			    }
+//			}, EventPriority.NORMAL, this, false);
+//			
+//			for(HandlerList handler : HandlerList.getHandlerLists()) {
+//			    handler.register(registeredListener);
+//			}
+//		    HandlerList.bakeAll();
+
+//		}
+		
+//		CommandAPI.withEvents(PlayerExpChangeEvent.class);
 		
 		//TODO: Remove before release
 		{
@@ -102,8 +146,49 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 					player.getInventory().addItem(new ItemStack(Material.IRON_INGOT));
 				})
 				.register();
+		} {
+			LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+			arguments.put("test", new LiteralArgument("aa").withRequirement(s -> {
+				if(s instanceof BlockCommandSender) {
+					BlockCommandSender ss = (BlockCommandSender) s;
+					Block b = ss.getBlock().getRelative(BlockFace.UP);
+					if(b.getType() == Material.DIAMOND_BLOCK) {
+						return true;
+					}
+				}
+				return false;
+			}));
+			
+			new CommandAPICommand("zzz")
+			.withArguments(arguments)
+			.executesCommandBlock((block, args) -> {
+				Bukkit.broadcastMessage("HI");
+			})
+			.register();
 		}
 	
+	}
+	
+	@SafeVarargs
+	public final void registerEvents(Class<? extends PlayerEvent>... events) {
+		for(HandlerList handler : HandlerList.getHandlerLists()) {
+			handler.register(new RegisteredListener(new Listener() {}, new EventExecutor() {
+
+				@Override
+				public void execute(Listener var1, Event event) throws EventException {
+					if(event instanceof PlayerEvent) {
+						for(Class<? extends PlayerEvent> pEvent : events) {
+							System.out.println("Event: " + event.getEventName());
+							if(pEvent.isInstance(event)) {
+								System.out.println("Sending packets... " + event.getEventName());
+								CommandAPIHandler.getNMS().resendPackets(((PlayerEvent) event).getPlayer());
+							}
+						}
+					}
+				}
+				
+			}, EventPriority.HIGHEST, this, false));
+		}
 	}
 	
 	@Override
@@ -114,6 +199,7 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 		}, 0L);
         
         getServer().getPluginManager().registerEvents(this, this);
+        registerEvents(PlayerExpChangeEvent.class);
 	}
 	
 	/** 
