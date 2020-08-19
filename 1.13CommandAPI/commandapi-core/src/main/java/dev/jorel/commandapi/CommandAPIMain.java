@@ -2,19 +2,26 @@ package dev.jorel.commandapi;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.LiteralArgument;
 
 public class CommandAPIMain extends JavaPlugin implements Listener {
 	
@@ -62,6 +69,41 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 				}
 			}
 		}
+		
+		//TODO: Remove before release
+		{
+			LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+			arguments.put("test", new LiteralArgument("prize").withRequirement(s -> ((Player) s).getLevel() >= 20));
+			
+			new CommandAPICommand("hello")
+				.withArguments(arguments)
+				.executesPlayer((player, args) -> {
+					player.getInventory().addItem(new ItemStack(Material.DIAMOND));
+				})
+				.register();
+		} {
+			LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+			arguments.put("test", new LiteralArgument("otherprize").withRequirement(s -> ((Player) s).getLevel() >= 10));
+			
+			new CommandAPICommand("hello")
+				.withArguments(arguments)
+				.executesPlayer((player, args) -> {
+					player.getInventory().addItem(new ItemStack(Material.GOLD_INGOT));
+				})
+				.register();
+		} {
+			LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+			arguments.put("test1", new LiteralArgument("aprize").withRequirement(s -> ((Player) s).getLevel() >= 10));
+			arguments.put("test2", new LiteralArgument("anotherprize").withRequirement(s -> ((Player) s).getLevel() >= 20));
+			
+			new CommandAPICommand("bye")
+				.withArguments(arguments)
+				.executesPlayer((player, args) -> {
+					player.getInventory().addItem(new ItemStack(Material.IRON_INGOT));
+				})
+				.register();
+		}
+	
 	}
 	
 	@Override

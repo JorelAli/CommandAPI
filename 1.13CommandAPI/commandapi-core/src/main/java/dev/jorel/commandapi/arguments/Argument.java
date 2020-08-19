@@ -3,6 +3,7 @@ package dev.jorel.commandapi.arguments;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.bukkit.command.CommandSender;
 
@@ -142,6 +143,21 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 */
 	public final CommandPermission getArgumentPermission() {
 		return permission;
+	}
+	
+	//////////////////
+	// Requirements //
+	//////////////////
+	
+	private Predicate<CommandSender> requirements = s -> true;
+	
+	public final Predicate<CommandSender> getRequirements() {
+		return this.requirements;
+	}
+	
+	public final Argument withRequirement(Predicate<CommandSender> requirement) {
+		this.requirements = this.requirements.and(requirement);
+		return this;
 	}
 
 }

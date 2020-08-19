@@ -22,6 +22,7 @@ import java.util.function.Predicate;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
 import com.mojang.brigadier.Command;
@@ -337,8 +338,9 @@ public abstract class CommandAPIHandler {
 	 * <li>The permission node IS REGISTERED.</li> 
 	 * <li>The permission node, if used for an argument (as in this case), 
 	 *  	will be used for suggestions for said argument</li></ul>
+	 * @param requirements 
 	 */
-	static Predicate generatePermissions(String commandName, CommandPermission permission) {
+	static Predicate generatePermissions(String commandName, CommandPermission permission, Predicate<CommandSender> requirements) {
 		// If we've already registered a permission, set it to the "parent" permission.
 		if (PERMISSIONS_TO_FIX.containsKey(commandName.toLowerCase())) {
 			if (!PERMISSIONS_TO_FIX.get(commandName.toLowerCase()).equals(permission)) {
@@ -359,7 +361,7 @@ public abstract class CommandAPIHandler {
 			}
 		}
 
-		return (Object clw) -> permissionCheck(NMS.getCommandSenderForCLW(clw), finalPermission);
+		return (Object clw) -> permissionCheck(NMS.getCommandSenderForCLW(clw), finalPermission, requirements);
 	}
 
 	/**
@@ -369,17 +371,24 @@ public abstract class CommandAPIHandler {
 	 * @param permission the CommandAPI CommandPermission permission to check
 	 * @return true if the sender satisfies the provided permission
 	 */
-	static boolean permissionCheck(CommandSender sender, CommandPermission permission) {
+	static boolean permissionCheck(CommandSender sender, CommandPermission permission, Predicate<CommandSender> requirements) {
+		if(sender instanceof Player) {
+			NMS.resendPackets((Player) sender);
+		}
+		
+		boolean satisfiesPermissions = false;
 		if (sender == null) {
-			return true;
+			satisfiesPermissions = true;
 		}
 		if (permission.equals(CommandPermission.NONE)) {
-			return true;
+			satisfiesPermissions = true;
 		} else if (permission.equals(CommandPermission.OP)) {
-			return sender.isOp();
+			satisfiesPermissions = sender.isOp();
 		} else {
-			return sender.hasPermission(permission.getPermission());
+			satisfiesPermissions = sender.hasPermission(permission.getPermission());
 		}
+		
+		return satisfiesPermissions && requirements.test(sender);
 	}
 
 	static void fixPermissions() {
@@ -437,7 +446,7 @@ public abstract class CommandAPIHandler {
 
 	// Builds our NMS command using the given arguments for this method, then
 	// registers it
-	static void register(String commandName, CommandPermission permissions, String[] aliases,
+	static void register(String commandName, CommandPermission permissions, String[] aliases, Predicate<CommandSender> requirements,
 			final LinkedHashMap<String, Argument> args, CustomCommandExecutor executor) throws Exception {
 		if (CommandAPIMain.getConfiguration().hasVerboseOutput()) {
 			// Create a list of argument names
@@ -460,7 +469,7 @@ public abstract class CommandAPIHandler {
 		if (args.isEmpty()) {
 			// Link command name to the executor
 			resultantNode = DISPATCHER.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(commandName)
-					.requires(generatePermissions(commandName, permissions)).executes(command));
+					.requires(generatePermissions(commandName, permissions, requirements)).executes(command));
 
 			// Register aliases
 			for (String alias : aliases) {
@@ -468,7 +477,7 @@ public abstract class CommandAPIHandler {
 					CommandAPIMain.getLog().info("Registering alias /" + alias + " -> " + resultantNode.getName());
 				}
 				DISPATCHER.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(alias)
-						.requires(generatePermissions(alias, permissions)).executes(command));
+						.requires(generatePermissions(alias, permissions, requirements)).executes(command));
 			}
 		} else {
 
@@ -484,13 +493,13 @@ public abstract class CommandAPIHandler {
 				// Handle Literal arguments
 				if (innerArg instanceof LiteralArgument) {
 					String str = ((LiteralArgument) innerArg).getLiteral();
-					inner = getLiteralArgumentBuilderArgument(str, innerArg.getArgumentPermission()).executes(command);
+					inner = getLiteralArgumentBuilderArgument(str, innerArg.getArgumentPermission(), innerArg.getRequirements()).executes(command);
 				}
 
 				// Handle arguments with built-in suggestion providers
 				else if (innerArg instanceof ICustomProvidedArgument && !innerArg.getOverriddenSuggestions().isPresent()) {
 					inner = getRequiredArgumentBuilderWithProvider(keys.get(keys.size() - 1), innerArg.getRawType(),
-							innerArg.getArgumentPermission(),
+							innerArg.getArgumentPermission(), innerArg.getRequirements(),
 							NMS.getSuggestionProvider(((ICustomProvidedArgument) innerArg).getSuggestionProvider()))
 									.executes(command);
 				}
@@ -498,7 +507,7 @@ public abstract class CommandAPIHandler {
 				// Handle every other type of argument
 				else {
 					inner = getRequiredArgumentBuilderDynamic(args, keys.get(keys.size() - 1), innerArg,
-							innerArg.getArgumentPermission()).executes(command);
+							innerArg.getArgumentPermission(), innerArg.getRequirements()).executes(command);
 				}
 			}
 
@@ -510,13 +519,13 @@ public abstract class CommandAPIHandler {
 				// Handle Literal arguments
 				if (outerArg instanceof LiteralArgument) {
 					String str = ((LiteralArgument) outerArg).getLiteral();
-					outer = getLiteralArgumentBuilderArgument(str, outerArg.getArgumentPermission()).then(outer);
+					outer = getLiteralArgumentBuilderArgument(str, outerArg.getArgumentPermission(), outerArg.getRequirements()).then(outer);
 				}
 
 				// Handle arguments with built-in suggestion providers
 				else if (outerArg instanceof ICustomProvidedArgument && !outerArg.getOverriddenSuggestions().isPresent()) {
 					outer = getRequiredArgumentBuilderWithProvider(keys.get(i), outerArg.getRawType(),
-							outerArg.getArgumentPermission(),
+							outerArg.getArgumentPermission(), outerArg.getRequirements(),
 							NMS.getSuggestionProvider(((ICustomProvidedArgument) outerArg).getSuggestionProvider()))
 									.then(outer);
 				}
@@ -524,13 +533,13 @@ public abstract class CommandAPIHandler {
 				// Handle every other type of argument
 				else {
 					outer = getRequiredArgumentBuilderDynamic(args, keys.get(i), outerArg,
-							outerArg.getArgumentPermission()).then(outer);
+							outerArg.getArgumentPermission(), outerArg.getRequirements()).then(outer);
 				}
 			}
 
 			// Link command name to first argument and register
 			resultantNode = DISPATCHER.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(commandName)
-					.requires(generatePermissions(commandName, permissions)).then(outer));
+					.requires(generatePermissions(commandName, permissions, requirements)).then(outer));
 
 			// Register aliases
 			for (String alias : aliases) {
@@ -538,7 +547,7 @@ public abstract class CommandAPIHandler {
 					CommandAPIMain.getLog().info("Registering alias /" + alias + " -> " + resultantNode.getName());
 				}
 				DISPATCHER.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(alias)
-						.requires(generatePermissions(alias, permissions)).redirect(resultantNode));
+						.requires(generatePermissions(alias, permissions, requirements)).redirect(resultantNode));
 			}
 		}
 
@@ -593,26 +602,26 @@ public abstract class CommandAPIHandler {
 	 * @return a brigadier LiteralArgumentBuilder representing a literal
 	 */
 	static LiteralArgumentBuilder<?> getLiteralArgumentBuilderArgument(String commandName,
-			CommandPermission permission) {
+			CommandPermission permission, Predicate<CommandSender> requirements) {
 		return LiteralArgumentBuilder.literal(commandName)
-				.requires(clw -> permissionCheck(NMS.getCommandSenderForCLW(clw), permission));
+				.requires(clw -> permissionCheck(NMS.getCommandSenderForCLW(clw), permission, requirements));
 	}
 
 	// Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
 	static <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilderDynamic(
 			final LinkedHashMap<String, Argument> args, String argumentName, Argument type,
-			CommandPermission permission) {
+			CommandPermission permission, Predicate<CommandSender> requirements) {
 
 		// If there are no changes to the default suggestions, return it as normal
 		if (!type.getOverriddenSuggestions().isPresent()) {
 			return RequiredArgumentBuilder.argument(argumentName, (ArgumentType<T>) type.getRawType())
-					.requires(clw -> permissionCheck(NMS.getCommandSenderForCLW(clw), permission));
+					.requires(clw -> permissionCheck(NMS.getCommandSenderForCLW(clw), permission, requirements));
 		}
 
 		// Otherwise, we have to handle arguments of the form BiFunction<CommandSender,
 		// Object[], String[]>
 		else {
-			return getRequiredArgumentBuilderWithProvider(argumentName, type.getRawType(), permission,
+			return getRequiredArgumentBuilderWithProvider(argumentName, type.getRawType(), permission, requirements,
 					(CommandContext context, SuggestionsBuilder builder) -> {
 						// Populate Object[], which is our previously filled arguments
 						List<Object> previousArguments = new ArrayList<>();
@@ -631,9 +640,9 @@ public abstract class CommandAPIHandler {
 
 	// Gets a RequiredArgumentBuilder for an argument, given a SuggestionProvider
 	static <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilderWithProvider(String argumentName,
-			ArgumentType<T> type, CommandPermission permission, SuggestionProvider provider) {
+			ArgumentType<T> type, CommandPermission permission, Predicate<CommandSender> requirements, SuggestionProvider provider) {
 		return RequiredArgumentBuilder.argument(argumentName, type)
-				.requires(clw -> permissionCheck(NMS.getCommandSenderForCLW(clw), permission)).suggests(provider);
+				.requires(clw -> permissionCheck(NMS.getCommandSenderForCLW(clw), permission, requirements)).suggests(provider);
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -804,7 +813,7 @@ public abstract class CommandAPIHandler {
 		 * @return a RequiredArgumentBuilder that represents the provided argument
 		 */
 		public static RequiredArgumentBuilder argBuildOf(LinkedHashMap<String, Argument> args, String value) {
-			return getRequiredArgumentBuilderDynamic(args, value, args.get(value), args.get(value).getArgumentPermission());
+			return getRequiredArgumentBuilderDynamic(args, value, args.get(value), args.get(value).getArgumentPermission(), args.get(value).getRequirements());
 		}
 	}
 }
