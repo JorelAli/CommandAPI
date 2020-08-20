@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.18"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>CommandAPI: 1.13-Command-API</title>
+<title>CommandAPI: CommandAPI</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -84,24 +84,24 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 
 <div class="PageDoc"><div class="header">
   <div class="headertitle">
-<div class="title">1.13-Command-API </div>  </div>
+<div class="title">CommandAPI </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="md_README"></a>An API to use the new command UI introduced in Minecraft 1.13. _(Despite the name, this API is compatible for Minecraft versions 1.13 - 1.16.2)_</p>
+<div class="textblock"><p><a class="anchor" id="md_README"></a>A Bukkit/Spigot API to use the command UI introduced in Minecraft 1.13.</p>
 <h1>Downloads &amp; Documentation (includes usage for server owners)</h1>
-<p>The documentation has moved! You can now get your hands on the latest and greatest documentation on the <a href="https://www.jorel.dev/1.13-Command-API/">CommandAPI website!</a></p>
+<p>The documentation has moved! You can now get your hands on the latest and greatest documentation on the <a href="https://www.jorel.dev/CommandAPI/">CommandAPI website!</a></p>
 <hr  />
 <h1>Purpose</h1>
 <p>This project provides an API to help Bukkit/Spigot developers use the new Minecraft 1.13 command UI, which includes:</p>
 <ul>
 <li><p class="startli"><b>Better commands</b> - Prevent players from running invalid commands, making it easier for developers</p>
-<p class="startli"><img src="https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/images/printnumber.gif" alt="better commands" class="inline"/></p>
+<p class="startli"><img src="https://raw.githubusercontent.com/JorelAli/CommandAPI/master/images/printnumber.gif" alt="better commands" class="inline"/></p>
 </li>
 <li><p class="startli"><b>Better arguments</b> - Easily switch from Location arguments to raw JSON, fully supported with built-in error checking</p>
-<p class="startli"><img src="https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/images/explode.gif" alt="better arguments" class="inline"/></p>
+<p class="startli"><img src="https://raw.githubusercontent.com/JorelAli/CommandAPI/master/images/explode.gif" alt="better arguments" class="inline"/></p>
 </li>
 <li><p class="startli"><b>Support for proxied command senders</b> - Run your command as other entities using <code>/execute as ... run command</code></p>
-<p class="startli"><img src="https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/images/selfdestruct.gif" alt="proxied senders" class="inline"/></p>
+<p class="startli"><img src="https://raw.githubusercontent.com/JorelAli/CommandAPI/master/images/selfdestruct.gif" alt="proxied senders" class="inline"/></p>
 </li>
 <li><b>Support for the <code>/execute</code> command</b> - Let your command to be executed by the built in <code>/execute</code> command</li>
 <li><b>Support for Minecraft's functions</b> - Allow your command to be executed from Minecraft's functions and tags</li>
@@ -115,9 +115,9 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <ul>
 <li>Clone the repository using your preferred method, or with the command below:</li>
 </ul>
-<div class="fragment"><div class="line">git clone https://github.com/JorelAli/1.13-Command-API.git</div>
+<div class="fragment"><div class="line">git clone https://github.com/JorelAli/CommandAPI.git</div>
 </div><!-- fragment --><ul>
-<li>Go into the folder named <code>1.13CommandAPI</code> _(Not to be confused with the folder named <code>1.13-Command-API</code>, which is what is cloned)_. You want the folder which contains <code>pom.xml</code>.</li>
+<li>Go into the folder named <code>CommandAPI</code> _(Not to be confused with the folder named <code>CommandAPI</code>, which is what is cloned)_. You want the folder which contains <code>pom.xml</code>.</li>
 <li>Ensure you have the required spigot server jars (see below)</li>
 <li>Run <code>mvn</code></li>
 </ul>
@@ -141,12 +141,12 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <li>Download the <code>BuildTools.jar</code> file from <a href="https://hub.spigotmc.org/jenkins/job/BuildTools/">here</a></li>
 <li>Make sure you have maven installed on your machine. If not, it can be downloaded from <a href="https://maven.apache.org/download.cgi">here</a></li>
 <li>If on Windows:<ul>
-<li>Download the <code>downloadSpigot.bat</code> file <a href="https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.bat">(right click this link, save as...)</a> and place it in the same folder as the <code>BuildTools.jar</code></li>
+<li>Download the <code>downloadSpigot.bat</code> file <a href="https://raw.githubusercontent.com/JorelAli/CommandAPI/master/downloadSpigot.bat">(right click this link, save as...)</a> and place it in the same folder as the <code>BuildTools.jar</code></li>
 <li>Double click on the <code>downloadSpigot.bat</code> file to run it</li>
 </ul>
 </li>
 <li>If on Linux/MacOS:<ul>
-<li>Download the <code>downloadSpigot.sh</code> file <a href="https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.sh">(right click this link, save as...)</a> and place it in the same folder as the <code>BuildTools.jar</code></li>
+<li>Download the <code>downloadSpigot.sh</code> file <a href="https://raw.githubusercontent.com/JorelAli/CommandAPI/master/downloadSpigot.sh">(right click this link, save as...)</a> and place it in the same folder as the <code>BuildTools.jar</code></li>
 <li>Open up a terminal in your folder and make the <code>downloadSpigot.sh</code> file executable by using <code>chmod u+x ./downloadSpigot.sh</code></li>
 <li>Run the <code>downloadSpigot</code> file using <code>./downloadSpigot.sh</code></li>
 </ul>
@@ -248,7 +248,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <li>Adds AdvancementArgument</li>
 <li>Adds LootTableArgument</li>
 <li>Adds support for 1.14.3 and 1.14.4</li>
-<li>Fixes bug where aliases weren't registering properly (<a href="https://github.com/JorelAli/1.13-Command-API/issues/43">#43</a>)</li>
+<li>Fixes bug where aliases weren't registering properly (<a href="https://github.com/JorelAli/CommandAPI/issues/43">#43</a>)</li>
 <li>Fix documentation for tooltips</li>
 <li>Improve documentation for dependencies and repositories</li>
 </ul>
@@ -262,9 +262,9 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <li>Major overhaul of the CommandAPI's internals - greatly improves performance</li>
 <li>Deprecates SuggestedStringArgument, adding overrideSuggestions as an alternative for any argument type</li>
 <li>Adds CustomArguments, allowing you to create your own ... custom arguments</li>
-<li>Excludes dependencies from final jar (<a href="https://github.com/JorelAli/1.13-Command-API/issues/40">#40</a>)</li>
+<li>Excludes dependencies from final jar (<a href="https://github.com/JorelAli/CommandAPI/issues/40">#40</a>)</li>
 <li>Adds DefinedCustomArguments - CustomArguments that have been created by yours truly</li>
-<li>DynamicSuggestedArguments now have access to the CommandSender (<a href="https://github.com/JorelAli/1.13-Command-API/issues/41">#41</a>)</li>
+<li>DynamicSuggestedArguments now have access to the CommandSender (<a href="https://github.com/JorelAli/CommandAPI/issues/41">#41</a>)</li>
 <li>Adds Loot Table support</li>
 </ul>
 </li>
@@ -356,7 +356,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Aug 20 2020 17:54:47 for CommandAPI by
+    <li class="footer">Generated on Thu Aug 20 2020 18:18:23 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

@@ -823,7 +823,7 @@ WARN_LOGFILE           =
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = D:\Users\Jorel\Documents\github\1.13CommandAPI\1.13CommandAPI\commandapi-core\src\main\java \
+INPUT                  = D:\Users\Jorel\Documents\github\1.13CommandAPI\CommandAPI\commandapi-core\src\main\java \
                          README.md
 
 # This tag can be used to specify the character encoding of the source files
@@ -912,11 +912,11 @@ RECURSIVE              = YES
 # Note that relative paths are relative to the directory from which doxygen is
 # run.
 
-EXCLUDE                = 1.13CommandAPI/commandapi-core/src/main/java/dev/jorel/commandapi/nms \
-                         1.13CommandAPI/commandapi-core/src/main/java/dev/jorel/commandapi/ClassCache.java \
-                         1.13CommandAPI/commandapi-core/src/main/java/dev/jorel/commandapi/CommandAPIMain.java \
-                         1.13CommandAPI/commandapi-core/src/main/java/dev/jorel/commandapi/Testing.java \
-                         1.13CommandAPI/commandapi-core/src/main/java/dev/jorel/commandapi/CommandAPIVersionHandler.java
+EXCLUDE                = CommandAPI/commandapi-core/src/main/java/dev/jorel/commandapi/nms \
+                         CommandAPI/commandapi-core/src/main/java/dev/jorel/commandapi/ClassCache.java \
+                         CommandAPI/commandapi-core/src/main/java/dev/jorel/commandapi/CommandAPIMain.java \
+                         CommandAPI/commandapi-core/src/main/java/dev/jorel/commandapi/Testing.java \
+                         CommandAPI/commandapi-core/src/main/java/dev/jorel/commandapi/CommandAPIVersionHandler.java
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded

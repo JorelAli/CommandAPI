@@ -1,14 +1,6 @@
 package dev.jorel.commandapi;
 
-import org.bukkit.Bukkit;
-import org.bukkit.event.Event;
-import org.bukkit.event.EventException;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerEvent;
-import org.bukkit.plugin.EventExecutor;
-import org.bukkit.plugin.RegisteredListener;
+import org.bukkit.entity.Player;
 
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
@@ -38,6 +30,14 @@ public abstract class CommandAPI {
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Updates the requirements required for a given player to execute a command.
+	 * @param player the player whos requirements to update
+	 */
+	public static void updateRequirements(Player player) {
+		CommandAPIHandler.getNMS().resendPackets(player);
 	}
 	
 	/**

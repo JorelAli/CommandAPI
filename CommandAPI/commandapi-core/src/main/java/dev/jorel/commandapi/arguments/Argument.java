@@ -109,7 +109,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * suggestions for the current command, or <code>null</code> if this is not
 	 * overridden.
 	 * 
-	 * @return a function that provides suggestions, or <code>null</code> if there
+	 * @return a function that provides suggestions, or <code>Optional.empty()</code> if there
 	 *         are no overridden suggestions.
 	 */
 	@Override
@@ -135,11 +135,8 @@ public abstract class Argument implements IOverrideableSuggestions {
 	}
 
 	/**
-	 * Returns the permission required to run this command, or <code>null</code> if
-	 * no permissions are required to run this command.
-	 * 
-	 * @return the permission required to run this command, or <code>null</code> if
-	 *         no permissions are required to run this command
+	 * Returns the permission required to run this command
+	 * @return the permission required to run this command
 	 */
 	public final CommandPermission getArgumentPermission() {
 		return permission;
@@ -151,10 +148,23 @@ public abstract class Argument implements IOverrideableSuggestions {
 	
 	private Predicate<CommandSender> requirements = s -> true;
 	
+	
+	/**
+	 * Returns the requirements required to run this command
+	 * @return the requirements required to run this command
+	 */
 	public final Predicate<CommandSender> getRequirements() {
 		return this.requirements;
 	}
 	
+	/**
+	 * Adds a requirement that has to be satisfied to use this argument. This method
+	 * can be used multiple times and each use of this method will AND its
+	 * requirement with the previously declared ones
+	 * 
+	 * @param requirement the predicate that must be satisfied to use this argument
+	 * @return this current argument
+	 */
 	public final Argument withRequirement(Predicate<CommandSender> requirement) {
 		this.requirements = this.requirements.and(requirement);
 		return this;
