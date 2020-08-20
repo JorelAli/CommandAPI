@@ -1,6 +1,14 @@
 # 1.13-Command-API
 An API to use the new command UI introduced in Minecraft 1.13. _(Despite the name, this API is compatible for Minecraft versions 1.13 - 1.16.1)_
 
+> ## Emergency Notice: Maven URL issue
+>
+> If you can't get maven to work, it's because I've changed the url (sorry!)
+> The new url is as follows:
+> ```
+> https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/CommandAPI/
+> ```
+
 ### Official Discord! (In progress)
 
 The project is somewhat big enough to make it worth building a community around! I've started creating a Discord server which you can join [here](https://discord.gg/juFNP7h)!
