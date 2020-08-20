@@ -15,7 +15,7 @@ The project is somewhat big enough to make it worth building a community around!
 
 ## Downloads & Documentation (includes usage for server owners)
 
-The documentation has moved! You can now get your hands on the latest and greatest documentation on the [CommandAPI website!](https://www.jorel.dev/1.13-Command-API/)
+The documentation has moved! You can now get your hands on the latest and greatest documentation on the [CommandAPI website!](https://www.jorel.dev/CommandAPI/)
 
 -----
 
