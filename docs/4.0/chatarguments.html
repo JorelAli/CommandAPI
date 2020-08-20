@@ -250,12 +250,12 @@ sender.spigot().sendMessage(BaseComponent[]);
     &quot;underlined&quot;: true,
     &quot;clickEvent&quot;: {
         &quot;action&quot;: &quot;open_url&quot;,
-        &quot;value&quot;: &quot;https://github.com/JorelAli/1.13-Command-API&quot;
+        &quot;value&quot;: &quot;https://github.com/JorelAli/CommandAPI&quot;
     }
 }]
 </code></pre>
 <p>Since we're writing a book, we must ensure that all quotes have been escaped. This can also be performed on the <a href="https://minecraftjson.com/">minecraftjson.com</a> website by selecting &quot;book&quot;: </p>
-<pre><code class="language-json">[&quot;[\&quot;\&quot;,{\&quot;text\&quot;:\&quot;Once upon a time, there was a guy call \&quot;},{\&quot;text\&quot;:\&quot;Skepter\&quot;,\&quot;color\&quot;:\&quot;light_purple\&quot;,\&quot;hoverEvent\&quot;:{\&quot;action\&quot;:\&quot;show_entity\&quot;,\&quot;value\&quot;:\&quot;Skepter\&quot;}},{\&quot;text\&quot;:\&quot; and he created the \&quot;},{\&quot;text\&quot;:\&quot;CommandAPI\&quot;,\&quot;underlined\&quot;:true,\&quot;clickEvent\&quot;:{\&quot;action\&quot;:\&quot;open_url\&quot;,\&quot;value\&quot;:\&quot;https://github.com/JorelAli/1.13-Command-API\&quot;}}]&quot;]
+<pre><code class="language-json">[&quot;[\&quot;\&quot;,{\&quot;text\&quot;:\&quot;Once upon a time, there was a guy call \&quot;},{\&quot;text\&quot;:\&quot;Skepter\&quot;,\&quot;color\&quot;:\&quot;light_purple\&quot;,\&quot;hoverEvent\&quot;:{\&quot;action\&quot;:\&quot;show_entity\&quot;,\&quot;value\&quot;:\&quot;Skepter\&quot;}},{\&quot;text\&quot;:\&quot; and he created the \&quot;},{\&quot;text\&quot;:\&quot;CommandAPI\&quot;,\&quot;underlined\&quot;:true,\&quot;clickEvent\&quot;:{\&quot;action\&quot;:\&quot;open_url\&quot;,\&quot;value\&quot;:\&quot;https://github.com/JorelAli/CommandAPI\&quot;}}]&quot;]
 </code></pre>
 <p>Now let's define our command. Since book text is typically very large - too large to be entered into a chat, we'll make a command block compatible command by providing a player parameter:</p>
 <pre><code>/makebook &lt;player&gt; &lt;contents&gt;

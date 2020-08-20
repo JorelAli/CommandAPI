@@ -1,5 +1,5 @@
 //Unregister the gamemode command from the server (by force)
-CommandAPI.getInstance().unregister("gamemode", true);
+CommandAPI.unregister("gamemode", true);
 
 LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 

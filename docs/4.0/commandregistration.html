@@ -275,7 +275,7 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 <h3><a class="header" href="#example---replacing-minecrafts-gamemode-command" id="example---replacing-minecrafts-gamemode-command">Example - Replacing Minecraft's <code>/gamemode</code> command</a></h3>
 <p>To replace a command, we can first unregister it and then register our implementation of that command.</p>
 <pre><code class="language-java">//Unregister the gamemode command from the server (by force)
-CommandAPI.getInstance().unregister(&quot;gamemode&quot;, true);
+CommandAPI.unregister(&quot;gamemode&quot;, true);
 
 LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 
