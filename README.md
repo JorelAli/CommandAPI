@@ -84,6 +84,23 @@ These versions of Minecraft must be installed in your local machine's Maven repo
 
 ## Changelog
 
+- Version 4.0
+  - Suggestion overriding can now be populated by Bukkit objects instead of strings
+  - Fixes a bug with the `FloatRangeArgument` where it caused a casting error
+  - Adds support for 1.16.2
+    - `ChatArgument` now works on Minecraft 1.16.2 (still doesn't work on 1.16.1)
+  - Adds new arguments:
+    - `UUIDArgument`
+	- `ItemStackPredicateArgument`
+	- `BlockPredicateArgument`
+  - Fix bug where `CustomArgument`s break when using the namespaced key flag
+  - Adds a list of commands that `FunctionWrapper` executes which is now accessible
+  - Command aliases are now much more efficient 
+  - Documentation changes (briefly):
+    - `BlockStateArgument` is now documented properly
+	- Documentation now has pictures to show you what arguments look like
+	- Documentation now has a page dedicated to what doesn't work on what Minecraft version
+  - Adds Brigadier support for developers (lets you use the CommandAPI and Brigadier code side by side!)
 - Version 3.4
   - Fix bug with custom recipes not registering in Minecraft 1.16+
   - Fix bug where command conversion didn't actually register commands

@@ -39,7 +39,15 @@ Here's the list of changes to the documentation between each update. You can vie
 ### Documentation changes 3.4 \\(\rightarrow\\) 4.0:
 
 - Arguments now include pictures that showcase how they work!
-- Adds documentation for [6.2 Safe argument suggestions](./safeargumentsuggestions.md)
+- Adds documentation for [6.2. Safe argument suggestions](./safeargumentsuggestions.md)
+- Adds documentation for [6.10.3. BlockState arguments](./blockstatearguments.md)
+- Adds documentation for new arguments:
+  - `UUIDArgument`: [6.10.14. UUID arguments](./uuidargs.md)
+  - `BlockPredicateArgument`: [6.11.1. Block predicate arguments](./blockpredicateargs.md)
+  - `ItemStackPredicateArgument`: [6.11.2. ItemStack predicate arguments](./itemstackpredicateargs.md)
+- Adds page [Incompatible version information](./incompatibleversions.md) outlining what parts of the CommandAPI are incompatible with what versions of Minecraft
+- Adds `getCommands()` documentation to the [7.2. The FunctionWrapper class](./functionwrapper.md#getcommands) page
+- Adds page [11. Brigadier + CommandAPI](./brigadier.md) which shows how the CommandAPI can be used with Brigadier side-by-side
 
 ### Documentation changes 3.3 \\(\rightarrow\\) 3.4:
 
