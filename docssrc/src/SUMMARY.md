@@ -23,9 +23,10 @@
   - [Proxied commandsenders](./proxysender.md)
   - [Resulting command executors](./resultingcommandexecutors.md)
   - [Handling command failures](./commandfailures.md)
-- [Arguments](./arguments.md)
+- [Arguments (in general)](./arguments.md)
   - [Argument suggestions](./argumentsuggestions.md)
   - [Safe argument suggestions](./safeargumentsuggestions.md)
+- [Argument types](./argumenttypes.md)
   - [Primitive arguments](./primitivearguments.md)
   - [Ranged arguments](./rangedarguments.md)
   - [String arguments](./stringarguments.md)
@@ -65,6 +66,7 @@
   - [The FunctionWrapper class](./functionwrapper.md)
   - [Function arguments](./functionarguments.md)
 - [Permissions](./permissions.md)
+- [Requirements](./requirements.md)
 - [Aliases](./aliases.md)
 
 # CommandAPI Utilities
