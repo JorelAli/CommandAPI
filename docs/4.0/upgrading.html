@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Upgrading guide - 1.13 CommandAPI Documentation v4.0</title>
+        <title>Upgrading guide - CommandAPI Documentation v4.0</title>
         
         
 
@@ -127,14 +127,14 @@
                         
                     </div>
 
-                    <h1 class="menu-title">1.13 CommandAPI Documentation v4.0</h1>
+                    <h1 class="menu-title">CommandAPI Documentation v4.0</h1>
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
                         
-                        <a href="https://github.com/JorelAli/1.13-Command-API" title="Git repository" aria-label="Git repository">
+                        <a href="https://github.com/JorelAli/CommandAPI" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
                         
@@ -169,13 +169,23 @@
                         <div class="sidetoc"><nav class="pagetoc"></nav></div>
                         
                         <h1><a class="header" href="#upgrading-guide" id="upgrading-guide">Upgrading guide</a></h1>
+<h2><a class="header" href="#from-version-3x-to-40" id="from-version-3x-to-40">From version 3.x to 4.0</a></h2>
+<p>The maven repository url has changed:</p>
+<p>Instead of being:</p>
+<pre><code>https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/1.13-Command-API/
+</code></pre>
+<p>You must now use:</p>
+<pre><code class="language-xml">https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/CommandAPI/
+</code></pre>
+<p>This information can be viewed in section <a href="./quickstart.html">3.0 Setting up your development environment</a></p>
+<hr />
 <h2><a class="header" href="#from-version-23-to-30" id="from-version-23-to-30">From version 2.3 to 3.0</a></h2>
 <p>The CommandAPI's upgrade from version 2.3 to 3.0 is very intense and various refactoring operations took place, which means that plugins that implement the CommandAPI version 2.3 or will not to work with the CommandAPI version 3.0. This page outlines the few major changes and points you to the various pages in the documentation that covers how to use version 3.0.</p>
 <hr />
 <h3><a class="header" href="#imports--renaming" id="imports--renaming">Imports &amp; Renaming</a></h3>
 <p>The default package name has been changed. Instead of being registered under the <code>io.github.jorelali</code> package, the CommandAPI has been moved to the <code>dev.jorel</code> package:</p>
 <p>\[\texttt{io.github.jorelali.commandapi.api}\rightarrow\texttt{dev.jorel.commandapi}\]</p>
-<p>To organise classes with other classes of similar functions, new packages have been introduced. These can be fully explored using the <a href="https://www.jorel.dev/1.13-Command-API/javadocs/html/annotated.html">new JavaDocs</a></p>
+<p>To organise classes with other classes of similar functions, new packages have been introduced. These can be fully explored using the <a href="https://www.jorel.dev/CommandAPI/javadocs/html/annotated.html">new JavaDocs</a></p>
 <hr />
 <h3><a class="header" href="#removed-classes--alternatives" id="removed-classes--alternatives">Removed classes &amp; Alternatives</a></h3>
 <p>To reduce redundancies, the CommandAPI removed a few classes:</p>

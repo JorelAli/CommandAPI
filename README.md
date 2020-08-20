@@ -1,9 +1,9 @@
-# 1.13-Command-API
-An API to use the new command UI introduced in Minecraft 1.13. _(Despite the name, this API is compatible for Minecraft versions 1.13 - 1.16.2)_
+# CommandAPI
+A Bukkit/Spigot API to use the command UI introduced in Minecraft 1.13.
 
 ## Downloads & Documentation (includes usage for server owners)
 
-The documentation has moved! You can now get your hands on the latest and greatest documentation on the [CommandAPI website!](https://www.jorel.dev/1.13-Command-API/)
+The documentation has moved! You can now get your hands on the latest and greatest documentation on the [CommandAPI website!](https://www.jorel.dev/CommandAPI/)
 
 -----
 
@@ -12,15 +12,15 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 
 * **Better commands** - Prevent players from running invalid commands, making it easier for developers
 
-  ![better commands](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/images/printnumber.gif)
+  ![better commands](https://raw.githubusercontent.com/JorelAli/CommandAPI/master/images/printnumber.gif)
 
 * **Better arguments** - Easily switch from Location arguments to raw JSON, fully supported with built-in error checking
 
-  ![better arguments](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/images/explode.gif)
+  ![better arguments](https://raw.githubusercontent.com/JorelAli/CommandAPI/master/images/explode.gif)
 
 * **Support for proxied command senders** - Run your command as other entities using `/execute as ... run command`
 
-  ![proxied senders](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/images/selfdestruct.gif)
+  ![proxied senders](https://raw.githubusercontent.com/JorelAli/CommandAPI/master/images/selfdestruct.gif)
 
 * **Support for the `/execute` command** - Let your command to be executed by the built in `/execute` command
 
@@ -41,10 +41,10 @@ The CommandAPI can be built easily, but requires copies of the Spigot server jar
 * Clone the repository using your preferred method, or with the command below:
 
   ```
-  git clone https://github.com/JorelAli/1.13-Command-API.git
+  git clone https://github.com/JorelAli/CommandAPI.git
   ```
 
-* Go into the folder named `1.13CommandAPI` _(Not to be confused with the folder named `1.13-Command-API`, which is what is cloned)_. You want the folder which contains `pom.xml`.
+* Go into the folder named `CommandAPI` _(Not to be confused with the folder named `CommandAPI`, which is what is cloned)_. You want the folder which contains `pom.xml`.
 
 * Ensure you have the required spigot server jars (see below)
 
@@ -68,10 +68,10 @@ These versions of Minecraft must be installed in your local machine's Maven repo
 * Download the `BuildTools.jar` file from [here](https://hub.spigotmc.org/jenkins/job/BuildTools/)
 * Make sure you have maven installed on your machine. If not, it can be downloaded from [here](https://maven.apache.org/download.cgi)
 * If on Windows:
-  * Download the `downloadSpigot.bat` file [(right click this link, save as...)](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.bat) and place it in the same folder as the `BuildTools.jar`
+  * Download the `downloadSpigot.bat` file [(right click this link, save as...)](https://raw.githubusercontent.com/JorelAli/CommandAPI/master/downloadSpigot.bat) and place it in the same folder as the `BuildTools.jar`
   * Double click on the `downloadSpigot.bat` file to run it
 * If on Linux/MacOS:
-  * Download the `downloadSpigot.sh` file [(right click this link, save as...)](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.sh) and place it in the same folder as the `BuildTools.jar`
+  * Download the `downloadSpigot.sh` file [(right click this link, save as...)](https://raw.githubusercontent.com/JorelAli/CommandAPI/master/downloadSpigot.sh) and place it in the same folder as the `BuildTools.jar`
   * Open up a terminal in your folder and make the `downloadSpigot.sh` file executable by using `chmod u+x ./downloadSpigot.sh`
   * Run the `downloadSpigot` file using `./downloadSpigot.sh`
 
@@ -166,7 +166,7 @@ These versions of Minecraft must be installed in your local machine's Maven repo
   * Adds AdvancementArgument
   * Adds LootTableArgument
   * Adds support for 1.14.3 and 1.14.4
-  * Fixes bug where aliases weren't registering properly ([#43](https://github.com/JorelAli/1.13-Command-API/issues/43))
+  * Fixes bug where aliases weren't registering properly ([#43](https://github.com/JorelAli/CommandAPI/issues/43))
   * Fix documentation for tooltips
   * Improve documentation for dependencies and repositories
 * Version 2.0.1
@@ -176,9 +176,9 @@ These versions of Minecraft must be installed in your local machine's Maven repo
   * Major overhaul of the CommandAPI's internals - greatly improves performance
   * Deprecates SuggestedStringArgument, adding overrideSuggestions as an alternative for any argument type 
   * Adds CustomArguments, allowing you to create your own ... custom arguments
-  * Excludes dependencies from final jar ([#40](https://github.com/JorelAli/1.13-Command-API/issues/40))
+  * Excludes dependencies from final jar ([#40](https://github.com/JorelAli/CommandAPI/issues/40))
   * Adds DefinedCustomArguments - CustomArguments that have been created by yours truly
-  * DynamicSuggestedArguments now have access to the CommandSender ([#41](https://github.com/JorelAli/1.13-Command-API/issues/41))
+  * DynamicSuggestedArguments now have access to the CommandSender ([#41](https://github.com/JorelAli/CommandAPI/issues/41))
   * Adds Loot Table support
 * Version 1.8.2
   * Fix bug with PlayerArgument when player cannot be found

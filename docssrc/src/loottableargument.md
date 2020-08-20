@@ -25,6 +25,6 @@ new CommandAPICommand("giveloottable")
 
 > **Developer's Note:**
 >
-> Honestly, I've not managed to get a successful example of using a `LootTable` in practice, due to being unable to generate a suitable `LootContext`. If you believe you can supply a suitable example for this page, feel free to send an example [on the CommandAPI issues page](https://github.com/JorelAli/1.13-Command-API/issues/new/choose).
+> Honestly, I've not managed to get a successful example of using a `LootTable` in practice, due to being unable to generate a suitable `LootContext`. If you believe you can supply a suitable example for this page, feel free to send an example [on the CommandAPI issues page](https://github.com/JorelAli/CommandAPI/issues/new/choose).
 
 </div>

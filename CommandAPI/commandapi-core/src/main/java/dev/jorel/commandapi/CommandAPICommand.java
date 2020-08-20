@@ -2,6 +2,9 @@ package dev.jorel.commandapi;
 
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
+import java.util.function.Predicate;
+
+import org.bukkit.command.CommandSender;
 
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.IGreedyArgument;
@@ -29,6 +32,7 @@ public class CommandAPICommand {
 	final String commandName;
 	CommandPermission permission = CommandPermission.NONE;
 	String[] aliases = new String[0];
+	Predicate<CommandSender> requirements = s -> true;
 	LinkedHashMap<String, Argument> args = new LinkedHashMap<>();
 	CustomCommandExecutor executor = new CustomCommandExecutor();
 	
@@ -47,6 +51,19 @@ public class CommandAPICommand {
 	 */
 	public CommandAPICommand withPermission(CommandPermission permission) {
 		this.permission = permission;
+		return this;
+	}
+	
+	/**
+	 * Adds a requirement that has to be satisfied to use this command. This method
+	 * can be used multiple times and each use of this method will AND its
+	 * requirement with the previously declared ones
+	 * 
+	 * @param requirement the predicate that must be satisfied to use this command
+	 * @return this command builder
+	 */
+	public CommandAPICommand withRequirement(Predicate<CommandSender> requirement) {
+		this.requirements = this.requirements.and(requirement);
 		return this;
 	}
 	
@@ -243,7 +260,7 @@ public class CommandAPICommand {
 					}
 				}
 				
-				CommandAPIHandler.register(commandName, permission, aliases, copyOfArgs, executor);
+				CommandAPIHandler.register(commandName, permission, aliases, requirements, copyOfArgs, executor);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
