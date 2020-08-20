@@ -94,7 +94,7 @@ Say we want to generate a book using raw JSON. For this example, we'll use the f
     "underlined": true,
     "clickEvent": {
         "action": "open_url",
-        "value": "https://github.com/JorelAli/1.13-Command-API"
+        "value": "https://github.com/JorelAli/CommandAPI"
     }
 }]
 ```
@@ -102,7 +102,7 @@ Say we want to generate a book using raw JSON. For this example, we'll use the f
 Since we're writing a book, we must ensure that all quotes have been escaped. This can also be performed on the [minecraftjson.com](https://minecraftjson.com/) website by selecting "book": 
 
 ```json
-["[\"\",{\"text\":\"Once upon a time, there was a guy call \"},{\"text\":\"Skepter\",\"color\":\"light_purple\",\"hoverEvent\":{\"action\":\"show_entity\",\"value\":\"Skepter\"}},{\"text\":\" and he created the \"},{\"text\":\"CommandAPI\",\"underlined\":true,\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https://github.com/JorelAli/1.13-Command-API\"}}]"]
+["[\"\",{\"text\":\"Once upon a time, there was a guy call \"},{\"text\":\"Skepter\",\"color\":\"light_purple\",\"hoverEvent\":{\"action\":\"show_entity\",\"value\":\"Skepter\"}},{\"text\":\" and he created the \"},{\"text\":\"CommandAPI\",\"underlined\":true,\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https://github.com/JorelAli/CommandAPI\"}}]"]
 ```
 
 Now let's define our command. Since book text is typically very large - too large to be entered into a chat, we'll make a command block compatible command by providing a player parameter:

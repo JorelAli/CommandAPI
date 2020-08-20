@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>1.13 CommandAPI Documentation v4.0</title>
+        <title>CommandAPI Documentation v4.0</title>
         
         <meta name="robots" content="noindex" />
         
@@ -129,14 +129,14 @@
                         
                     </div>
 
-                    <h1 class="menu-title">1.13 CommandAPI Documentation v4.0</h1>
+                    <h1 class="menu-title">CommandAPI Documentation v4.0</h1>
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
                         
-                        <a href="https://github.com/JorelAli/1.13-Command-API" title="Git repository" aria-label="Git repository">
+                        <a href="https://github.com/JorelAli/CommandAPI" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
                         
@@ -2698,14 +2698,34 @@ say Killed all living entities on the server
 <pre><code>/function #mycustomnamespace:mytag
 </code></pre>
 <h1><a class="header" href="#the-functionwrapper" id="the-functionwrapper">The FunctionWrapper</a></h1>
-<p>The CommandAPI includes the <code>FunctionWrapper</code> class which is a wrapper for Minecraft's functions. It allows you to execute the commands that are represented by the respective <code>.mcfunction</code> file. There most important thing to note with the <code>FunctionWrapper</code>, and that it <em>does not &quot;store&quot; the functions inside it</em>, instead it just <em>stores what the function does</em>. In other words, you cannot &quot;extract&quot; the list of commands from a <code>FunctionWrapper</code> object.</p>
+<p>The CommandAPI includes the <code>FunctionWrapper</code> class which is a wrapper for Minecraft's functions. It allows you to execute the commands that are represented by the respective <code>.mcfunction</code> file.</p>
 <h2><a class="header" href="#functionwrapper-methods" id="functionwrapper-methods">FunctionWrapper methods</a></h2>
-<p>The <code>FunctionWrapper</code> class consists of two methods:</p>
-<table><thead><tr><th>Method</th><th>Result on execution</th></tr></thead><tbody>
-<tr><td><code>run()</code></td><td>Executes the Minecraft function</td></tr>
-<tr><td><code>runAs(Entity)</code></td><td>Executes the Minecraft function as a specific Entity</td></tr>
-</tbody></table>
-<p>The <code>FunctionWrapper</code> also implements the <code>Keyed</code> interface, allowing you to retrieve the <code>NamespacedKey</code> for this function using <code>getKey()</code>.</p>
+<p>The <code>FunctionWrapper</code> class has the following methods:</p>
+<pre><code class="language-java">String[] getCommands();
+void run();
+void runAs(Entity e);
+NamespacedKey getKey();
+</code></pre>
+<p>These methods allow you to interact with the Minecraft function that this class wraps.</p>
+<h3><a class="header" href="#getcommands" id="getcommands"><code>getCommands()</code></a></h3>
+<p>The <code>getCommands()</code> method returns a <code>String[]</code> that contains the list of commands that the Minecraft function &quot;holds&quot;. In other words, running this Minecraft function is basically as simple as iterating through its commands and running them in order. The commands that this <code>String[]</code> holds are the raw strings that this function represents - in other words, it can include things such as <code>@p</code> and <code>~ ~ ~</code> instead of &quot;filled in&quot; values.</p>
+<h3><a class="header" href="#run" id="run"><code>run()</code></a></h3>
+<p>The <code>run()</code> method basically does what it says on the tin - it runs the function. The command executor that runs this function is the command executor that was used to retrieve it. For example, if a player in-game populated this argument, then the player will be filled in for <code>@p</code> and the player's location would be used for things such as <code>~ ~ ~</code>:</p>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;function&quot;, new FunctionArgument());
+
+new CommandAPICommand(&quot;runfunc&quot;)
+    .withArguments(arguments)
+	.executes((sender, args) -&gt; {
+        FunctionWrapper[] functions = (FunctionWrapper[]) args[0];
+        for(FunctionWrapper function : functions) {
+            function.run(); // The command executor in this case is 'sender'
+        }
+    })
+    .register();
+</code></pre>
+<h3><a class="header" href="#runasentity" id="runasentity"><code>runAs(Entity)</code></a></h3>
+<p>The <code>runAs(Entity)</code> is basically the same as the <code>run()</code> method, but it allows you to change the command executor to another entity. </p>
 <h1><a class="header" href="#function-arguments" id="function-arguments">Function arguments</a></h1>
 <p><img src="./images/arguments/functions.png" alt="" /></p>
 <p>The <code>FunctionArgument</code> class is used to represent a function or a tag in Minecraft. When retrieving an instance of the argument, it will return a <code>FunctionWrapper[]</code>, where each <code>FunctionWrapper</code> consists of a Minecraft function.</p>

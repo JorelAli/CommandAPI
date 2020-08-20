@@ -11,5 +11,5 @@ var searchData=
   ['frompredicate_484',['fromPredicate',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html#a81fd6dcf052aa0323a087370ebc9e00e',1,'dev::jorel::commandapi::CommandAPIHandler::Brigadier']]],
   ['fromstring_485',['fromString',['../classdev_1_1jorel_1_1commandapi_1_1_command_permission.html#a23e33384d0a953e0b44799f6d5f1c34b',1,'dev::jorel::commandapi::CommandPermission']]],
   ['functionargument_486',['FunctionArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_function_argument.html#a3600b098aa5786c47898e68badd936de',1,'dev::jorel::commandapi::arguments::FunctionArgument']]],
-  ['functionwrapper_487',['FunctionWrapper',['../classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#ae35cd1c41d2fbbed6970cd4bd97e46dd',1,'dev::jorel::commandapi::wrappers::FunctionWrapper']]]
+  ['functionwrapper_487',['FunctionWrapper',['../classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#aa53d3eba91f83d314ebf2fe2c17834ee',1,'dev::jorel::commandapi::wrappers::FunctionWrapper']]]
 ];

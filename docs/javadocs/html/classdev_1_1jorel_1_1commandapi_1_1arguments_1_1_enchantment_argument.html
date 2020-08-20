@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.18"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>1.13 CommandAPI: dev.jorel.commandapi.arguments.EnchantmentArgument Class Reference</title>
+<title>CommandAPI: dev.jorel.commandapi.arguments.EnchantmentArgument Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -25,7 +25,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">1.13 CommandAPI
+   <div id="projectname">CommandAPI
    &#160;<span id="projectnumber">4.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
@@ -149,6 +149,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a358f2f31f1454de941efe64987842741 inherit pub_methods_classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument"><td class="memItemLeft" align="right" valign="top">final <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_permission.html">CommandPermission</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a358f2f31f1454de941efe64987842741">getArgumentPermission</a> ()</td></tr>
 <tr class="memdesc:a358f2f31f1454de941efe64987842741 inherit pub_methods_classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the permission required to run this command, or <code>null</code> if no permissions are required to run this command.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a358f2f31f1454de941efe64987842741">More...</a><br /></td></tr>
 <tr class="separator:a358f2f31f1454de941efe64987842741 inherit pub_methods_classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0fdbb9575a1f5a0c1c8d2a397bafb250 inherit pub_methods_classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument"><td class="memItemLeft" align="right" valign="top"><a id="a0fdbb9575a1f5a0c1c8d2a397bafb250"></a>
+final Predicate&lt; CommandSender &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getRequirements</b> ()</td></tr>
+<tr class="separator:a0fdbb9575a1f5a0c1c8d2a397bafb250 inherit pub_methods_classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59a33b6cbda4f10b89fc6ad521a59782 inherit pub_methods_classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument"><td class="memItemLeft" align="right" valign="top"><a id="a59a33b6cbda4f10b89fc6ad521a59782"></a>
+final <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>&#160;</td><td class="memItemRight" valign="bottom"><b>withRequirement</b> (Predicate&lt; CommandSender &gt; requirement)</td></tr>
+<tr class="separator:a59a33b6cbda4f10b89fc6ad521a59782 inherit pub_methods_classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html">dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions&lt; Enchantment &gt;</a></td></tr>
 <tr class="memitem:abdd6f2df611898c752df4b1a5eb9308c inherit pub_methods_interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html#abdd6f2df611898c752df4b1a5eb9308c">safeOverrideSuggestions</a> (S... suggestions)</td></tr>
 <tr class="memdesc:abdd6f2df611898c752df4b1a5eb9308c inherit pub_methods_interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override the suggestions of this argument with a custom array.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html#abdd6f2df611898c752df4b1a5eb9308c">More...</a><br /></td></tr>
@@ -257,7 +263,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1arguments.html">arguments</a></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_enchantment_argument.html">EnchantmentArgument</a></li>
-    <li class="footer">Generated on Sun Aug 16 2020 17:55:27 for 1.13 CommandAPI by
+    <li class="footer">Generated on Thu Aug 20 2020 17:54:46 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

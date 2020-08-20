@@ -6,7 +6,7 @@ To use the CommandAPI in your plugins, there are a few methods of adding it to y
 
 ## Manually using the .jar
 
-- Download the latest CommandAPI.jar from the download page [here](https://github.com/JorelAli/1.13-Command-API/releases/latest)
+- Download the latest CommandAPI.jar from the download page [here](https://github.com/JorelAli/CommandAPI/releases/latest)
 
 - Add the CommandAPI.jar file to your project/environment's build path:
 
@@ -28,7 +28,7 @@ To use the CommandAPI in your plugins, there are a few methods of adding it to y
   <repositories>
       <repository>
           <id>mccommandapi</id>
-          <url>https://raw.githubusercontent.com/JorelAli/1.13-Command-API/mvn-repo/1.13CommandAPI/</url>
+          <url>https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/CommandAPI/</url>
       </repository>
   </repositories>
   ```
@@ -44,7 +44,7 @@ To use the CommandAPI in your plugins, there are a few methods of adding it to y
       </dependency>
   </dependencies>
   ```
-  A list of version numbers can be found [here](https://github.com/JorelAli/1.13-Command-API/tree/mvn-repo/1.13CommandAPI/io/github/jorelali/commandapi)
+  A list of version numbers can be found [here](https://github.com/JorelAli/CommandAPI/tree/mvn-repo/1.13CommandAPI/io/github/jorelali/commandapi)
   For example, if you wanted to use version 3.0, you would use `<version>3.0</version>`
 
 * Add the CommandAPI as a dependent in the plugin.yml (`depend: [CommandAPI]`)
@@ -61,7 +61,7 @@ To use the CommandAPI in your plugins, there are a few methods of adding it to y
 
   ```gradle
   repositories {
-      maven { url = "https://raw.githubusercontent.com/JorelAli/1.13-Command-API/mvn-repo/1.13CommandAPI/" }
+      maven { url = "https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/CommandAPI/" }
       maven { url = "https://repo.codemc.org/repository/maven-public/" }
   }
   ```
@@ -74,7 +74,7 @@ To use the CommandAPI in your plugins, there are a few methods of adding it to y
   }
   ```
 
-  A list of version numbers can be found [here](https://github.com/JorelAli/1.13-Command-API/tree/mvn-repo/1.13CommandAPI/io/github/jorelali/commandapi).
+  A list of version numbers can be found [here](https://github.com/JorelAli/CommandAPI/tree/mvn-repo/1.13CommandAPI/io/github/jorelali/commandapi).
   For example, if you wanted to use version 3.0, you would use `compile "dev.jorel:commandapi-core:3.0"`
 
 * Add the CommandAPI as a dependent in the plugin.yml (`depend: [CommandAPI]`)

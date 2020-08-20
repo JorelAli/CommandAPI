@@ -16,7 +16,7 @@ This project is by far my most worked on and probably the project I'm most proud
 
 -----
 
-I'd like to give credit to all of the people that have opened issues on GitHub, that have truly made it what it is now. In addition to [my stargazers](https://github.com/JorelAli/1.13-Command-API/stargazers), I'd like to personally thank:
+I'd like to give credit to all of the people that have opened issues on GitHub, that have truly made it what it is now. In addition to [my stargazers](https://github.com/JorelAli/CommandAPI/stargazers), I'd like to personally thank:
 - **[Combustible](https://github.com/Combustible)**, who was my #1 supporter and motivated me to keep this project alive after its initial release. They also helped raise awareness of the CommandAPI throughout Spigot's forums.
 - **[DerpNerb](https://github.com/DerpNerb)**, who gave me the idea to convert the CommandAPI to a Maven project which resulted in making the CommandAPI much more accessible for everyone.
 - **[Draycia](https://github.com/Draycia)**, who suggested that I put `CommandSender` objects inside `DynamicSuggestedStringArguments`, which allow dynamic arguments to be much more powerful.

@@ -1,5 +1,9 @@
 var NAVTREEINDEX1 =
 {
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_argument.html#a914b0b2a63bdaaa51a487fbd4fb163a3":[2,0,0,0,0,0,31,6],
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_argument.html#aac5c362a0de9490916426bd130c48851":[2,0,0,0,0,0,31,3],
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_argument.html#ae297ad9947d022b66f07ab39eb272ee3":[2,0,0,0,0,0,31,5],
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_argument.html#ae9362a6457530cce2335624ade3d1f85":[2,0,0,0,0,0,31,7],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_long_argument.html":[2,0,0,0,0,0,33],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_long_argument.html#a0bb53acca037b8db904c889238766c72":[2,0,0,0,0,0,33,6],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_long_argument.html#a10f6d2da9a7d02ca33aae29b8f69a0e1":[2,0,0,0,0,0,33,0],
@@ -165,7 +169,7 @@ var NAVTREEINDEX1 =
 "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#a486ead4bf88c2dbfa5101a460804b1dd":[2,0,0,0,0,3,1,1],
 "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#a5826daf79a5a972568c4caa05681470f":[2,0,0,0,0,3,1,3],
 "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#a6b2d5c707201b6c11e849f50ca9dbfa2":[2,0,0,0,0,3,1,2],
-"classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#ae35cd1c41d2fbbed6970cd4bd97e46dd":[2,0,0,0,0,3,1,0],
+"classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#aa53d3eba91f83d314ebf2fe2c17834ee":[2,0,0,0,0,3,1,0],
 "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#aee8b704708208b6c7bb88bf8d4861778":[2,0,0,0,0,3,1,4],
 "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_integer_range.html":[2,0,0,0,0,3,2],
 "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_integer_range.html#a26e5d83a8877830f8b0117564ab3b42c":[2,0,0,0,0,3,2,6],
@@ -245,9 +249,5 @@ var NAVTREEINDEX1 =
 "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html":[2,0,0,0,0,0,14,0],
 "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html#a3872bc6c82b960b49d2a334b0f61a781":[2,0,0,0,0,0,14,0,3],
 "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html#a3a099f0f3ec97300f6f63359f2d66375":[2,0,0,0,0,0,14,0,2],
-"enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html#a4978c1626ef8f0916a4dbc67c65cc07f":[2,0,0,0,0,0,14,0,1],
-"enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html#af132746b80dc83b1e403a1b7bb3e5a03":[2,0,0,0,0,0,14,0,0],
-"enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html":[2,0,0,0,0,0,21,0],
-"enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html#a4707419b548b60ec8a548d85d3f09da2":[2,0,0,0,0,0,21,0,4],
-"enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html#a65e171b1e118d0f8adf2d2b4c0774c3d":[2,0,0,0,0,0,21,0,0]
+"enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html#a4978c1626ef8f0916a4dbc67c65cc07f":[2,0,0,0,0,0,14,0,1]
 };

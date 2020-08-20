@@ -12,7 +12,7 @@ The default package name has been changed. Instead of being registered under the
 
 \\[\texttt{io.github.jorelali.commandapi.api}\rightarrow\texttt{dev.jorel.commandapi}\\]
 
-To organise classes with other classes of similar functions, new packages have been introduced. These can be fully explored using the [new JavaDocs](https://www.jorel.dev/1.13-Command-API/javadocs/html/annotated.html)
+To organise classes with other classes of similar functions, new packages have been introduced. These can be fully explored using the [new JavaDocs](https://www.jorel.dev/CommandAPI/javadocs/html/annotated.html)
 
 -----
 
