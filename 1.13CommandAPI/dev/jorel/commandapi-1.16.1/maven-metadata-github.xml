@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>dev.jorel</groupId>
+  <artifactId>commandapi-1.16.1</artifactId>
+  <versioning>
+    <latest>3.4.0</latest>
+    <release>3.4</release>
+    <versions>
+      <version>3.4.0</version>
+      <version>3.4</version>
+    </versions>
+    <lastUpdated>20200728134711</lastUpdated>
+  </versioning>
+</metadata>
