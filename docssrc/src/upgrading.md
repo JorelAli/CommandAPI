@@ -7,16 +7,16 @@ The maven repository url has changed:
 Instead of being:
 
 ```
-https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/1.13-Command-API/
+https://raw.githubusercontent.com/JorelAli/1.13-Command-API/mvn-repo/1.13CommandAPI/
 ```
 
 You must now use:
 
 ```xml
-https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/CommandAPI/
+https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/1.13CommandAPI/
 ```
 
-This information can be viewed in section [3. Setting up your development environment](./quickstart.md)
+This information can be viewed in section [3. Setting up your development environment](./quickstart.md). _(Don't worry if you forget, it **should** work as normal nonetheless!)_
 
 -----
 

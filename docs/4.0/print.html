@@ -199,23 +199,53 @@
 <p>Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.</p>
 <h3><a class="header" href="#documentation-changes-34-rightarrow-40" id="documentation-changes-34-rightarrow-40">Documentation changes 3.4 \(\rightarrow\) 4.0:</a></h3>
 <ul>
-<li>Arguments now include pictures that showcase how they work!</li>
-<li>Reorganised the sections - arguments is now split up into two sections: <a href="./arguments.html">6. Arguments (in general)</a> and <a href="./argumenttypes.html">7. Argument types</a></li>
-<li>Adds documentation for <a href="./safeargumentsuggestions.html">6.2. Safe argument suggestions</a></li>
-<li>Adds documentation for <a href="./blockstatearguments.html">7.8.3. BlockState arguments</a></li>
-<li>Adds documentation for new arguments:
+<li>
+<p>The project has been renamed from the &quot;1.13 Command API&quot; to simply the &quot;CommandAPI&quot;. This has changed a few things, such as various links. See the section <a href="./upgrading.html">Upgrading guide</a> to view the relevant changes with regards to maven.</p>
+</li>
+<li>
+<p>Updated <a href="./quickstart.html">3. Setting up your development environment</a> to include new Maven repository links</p>
+</li>
+<li>
+<p>Fixed stronkage with Java versions - there's now no random warning boxes about incompatibility with Java 12!</p>
+</li>
+<li>
+<p>Arguments now include pictures that showcase how they work!</p>
+</li>
+<li>
+<p>Reorganised the sections - arguments is now split up into two sections: <a href="./arguments.html">6. Arguments (in general)</a> and <a href="./argumenttypes.html">7. Argument types</a></p>
+</li>
+<li>
+<p>Adds documentation for <a href="./safeargumentsuggestions.html">6.2. Safe argument suggestions</a></p>
+</li>
+<li>
+<p>Adds documentation for <a href="./blockstatearguments.html">7.8.3. BlockState arguments</a></p>
+</li>
+<li>
+<p>Adds documentation for new arguments:</p>
 <ul>
 <li><code>UUIDArgument</code>: <a href="./uuidargs.html">7.8.14. UUID arguments</a></li>
 <li><code>BlockPredicateArgument</code>: <a href="./blockpredicateargs.html">7.9.1. Block predicate arguments</a></li>
 <li><code>ItemStackPredicateArgument</code>: <a href="./itemstackpredicateargs.html">7.9.2. ItemStack predicate arguments</a></li>
 </ul>
 </li>
-<li>Adds page <a href="./incompatibleversions.html">Incompatible version information</a> outlining what parts of the CommandAPI are incompatible with what versions of Minecraft</li>
-<li>Adds <code>getCommands()</code> documentation to the <a href="./functionwrapper.html#getcommands">8.2. The FunctionWrapper class</a> page</li>
-<li>Adds page <a href="./brigadier.html">13. Brigadier + CommandAPI</a> which shows how the CommandAPI can be used with Brigadier side-by-side</li>
-<li>Adds page <a href="./requirements.html">10. Requirements</a> for the requirements feature to help restrict commands</li>
-<li>Adds page <a href="./predicatetips.html">14. Predicate tips</a> with information on how to reduce the amount of repeated code when using requirements</li>
-<li>Update <a href="./afterword.html">Afterword</a></li>
+<li>
+<p>Adds page <a href="./incompatibleversions.html">Incompatible version information</a> outlining what parts of the CommandAPI are incompatible with what versions of Minecraft</p>
+</li>
+<li>
+<p>Adds <code>getCommands()</code> documentation to the <a href="./functionwrapper.html#getcommands">8.2. The FunctionWrapper class</a> page</p>
+</li>
+<li>
+<p>Adds page <a href="./brigadier.html">13. Brigadier + CommandAPI</a> which shows how the CommandAPI can be used with Brigadier side-by-side</p>
+</li>
+<li>
+<p>Adds page <a href="./requirements.html">10. Requirements</a> for the requirements feature to help restrict commands</p>
+</li>
+<li>
+<p>Adds page <a href="./predicatetips.html">14. Predicate tips</a> with information on how to reduce the amount of repeated code when using requirements</p>
+</li>
+<li>
+<p>Update <a href="./afterword.html">Afterword</a></p>
+</li>
 </ul>
 <h3><a class="header" href="#documentation-changes-33-rightarrow-34" id="documentation-changes-33-rightarrow-34">Documentation changes 3.3 \(\rightarrow\) 3.4:</a></h3>
 <ul>
@@ -406,7 +436,7 @@ plugins-to-convert:
 <pre><code class="language-xml">&lt;repositories&gt;
     &lt;repository&gt;
         &lt;id&gt;mccommandapi&lt;/id&gt;
-        &lt;url&gt;https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/CommandAPI/&lt;/url&gt;
+        &lt;url&gt;https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/1.13CommandAPI/&lt;/url&gt;
     &lt;/repository&gt;
 &lt;/repositories&gt;
 </code></pre>
@@ -417,28 +447,22 @@ plugins-to-convert:
     &lt;dependency&gt;
         &lt;groupId&gt;dev.jorel&lt;/groupId&gt;
         &lt;artifactId&gt;commandapi-core&lt;/artifactId&gt;
-        &lt;version&gt;VERSION&lt;/version&gt;
+        &lt;version&gt;4.0&lt;/version&gt;
     &lt;/dependency&gt;
 &lt;/dependencies&gt;
 </code></pre>
-<p>A list of version numbers can be found <a href="https://github.com/JorelAli/CommandAPI/tree/mvn-repo/1.13CommandAPI/io/github/jorelali/commandapi">here</a>
-For example, if you wanted to use version 3.0, you would use <code>&lt;version&gt;3.0&lt;/version&gt;</code></p>
 </li>
 <li>
 <p>Add the CommandAPI as a dependent in the plugin.yml (<code>depend: [CommandAPI]</code>)</p>
 </li>
 </ul>
-<blockquote>
-<p><strong>Please Note:</strong></p>
-<p>In version 3.0 onwards, the group ID is no longer <code>io.github.jorelali</code>. Instead, the group ID is <code>dev.jorel</code>, as shown above. If you would like to use a version of the CommandAPI that is less than 3.0, you must make sure the group ID is <code>io.github.jorelali</code>.</p>
-</blockquote>
 <hr />
 <h2><a class="header" href="#using-gradle" id="using-gradle">Using Gradle</a></h2>
 <ul>
 <li>
 <p>Add the repository to your <code>build.gradle</code> file:</p>
 <pre><code class="language-gradle">repositories {
-    maven { url = &quot;https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/CommandAPI/&quot; }
+    maven { url = &quot;https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/1.13CommandAPI/&quot; }
     maven { url = &quot;https://repo.codemc.org/repository/maven-public/&quot; }
 }
 </code></pre>
@@ -446,15 +470,13 @@ For example, if you wanted to use version 3.0, you would use <code>&lt;version&g
 <li>
 <p>Add the dependency to your list of dependencies in your <code>build.gradle</code> file:</p>
 <pre><code class="language-gradle">dependencies {
-    compile &quot;dev.jorel:commandapi-core:VERSION&quot;
+    compile &quot;dev.jorel:commandapi-core:4.0&quot;
 }
 </code></pre>
-<p>A list of version numbers can be found <a href="https://github.com/JorelAli/CommandAPI/tree/mvn-repo/1.13CommandAPI/io/github/jorelali/commandapi">here</a>.
-For example, if you wanted to use version 3.0, you would use <code>compile &quot;dev.jorel:commandapi-core:3.0&quot;</code></p>
 </li>
-<li>
-<p>Add the CommandAPI as a dependent in the plugin.yml (<code>depend: [CommandAPI]</code>)</p>
-</li>
+</ul>
+<ul>
+<li>Add the CommandAPI as a dependent in the plugin.yml (<code>depend: [CommandAPI]</code>)</li>
 </ul>
 <h1><a class="header" href="#command-registration" id="command-registration">Command registration</a></h1>
 <p>To register commands with the CommandAPI, we use the <code>CommandAPICommand</code> class. It follows a simple builder pattern to improve readability.</p>
@@ -3294,12 +3316,12 @@ arguments.put(&quot;teleport&quot;, new LiteralArgument(&quot;tp&quot;)
 <h2><a class="header" href="#from-version-3x-to-40" id="from-version-3x-to-40">From version 3.x to 4.0</a></h2>
 <p>The maven repository url has changed:</p>
 <p>Instead of being:</p>
-<pre><code>https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/1.13-Command-API/
+<pre><code>https://raw.githubusercontent.com/JorelAli/1.13-Command-API/mvn-repo/1.13CommandAPI/
 </code></pre>
 <p>You must now use:</p>
-<pre><code class="language-xml">https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/CommandAPI/
+<pre><code class="language-xml">https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/1.13CommandAPI/
 </code></pre>
-<p>This information can be viewed in section <a href="./quickstart.html">3. Setting up your development environment</a></p>
+<p>This information can be viewed in section <a href="./quickstart.html">3. Setting up your development environment</a>. <em>(Don't worry if you forget, it <strong>should</strong> work as normal nonetheless!)</em></p>
 <hr />
 <h2><a class="header" href="#from-version-23-to-30" id="from-version-23-to-30">From version 2.3 to 3.0</a></h2>
 <p>The CommandAPI's upgrade from version 2.3 to 3.0 is very intense and various refactoring operations took place, which means that plugins that implement the CommandAPI version 2.3 or will not to work with the CommandAPI version 3.0. This page outlines the few major changes and points you to the various pages in the documentation that covers how to use version 3.0.</p>
