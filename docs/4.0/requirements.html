@@ -356,7 +356,7 @@ public void onEnable() {
 <h2><a class="header" href="#multiple-requirements" id="multiple-requirements">Multiple requirements</a></h2>
 <p>The CommandAPI lets you handle multiple requirements really easily! The <code>withRequirement</code> method can be called multiple times, so you don't have to worry about shoving everything in one expression.</p>
 <div class="example">
-### Example - Using multiple requirements
+<h3><a class="header" href="#example---using-multiple-requirements" id="example---using-multiple-requirements">Example - Using multiple requirements</a></h3>
 <p>For example, you can apply multiple requirements for a command by calling the <code>withRequirement</code> method multiple times:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;someCommand&quot;)
 	.withRequirement(sender -&gt; ((Player) sender).getLevel() &gt;= 30)

@@ -200,19 +200,22 @@
 <h3><a class="header" href="#documentation-changes-34-rightarrow-40" id="documentation-changes-34-rightarrow-40">Documentation changes 3.4 \(\rightarrow\) 4.0:</a></h3>
 <ul>
 <li>Arguments now include pictures that showcase how they work!</li>
-<li>Create a new subsection <a href="./argumentmodifiers.html">6.1. Argument modifiers</a> which houses the sections that explain how to modify arguments to add more functionality. This should make the documentation for arguments flow easier</li>
-<li>Adds documentation for <a href="./safeargumentsuggestions.html">6.1.2. Safe argument suggestions</a></li>
-<li>Adds documentation for <a href="./blockstatearguments.html">6.10.3. BlockState arguments</a></li>
+<li>Reorganised the sections - arguments is now split up into two sections: <a href="./arguments.html">6. Arguments (in general)</a> and <a href="./argumenttypes.html">7. Argument types</a></li>
+<li>Adds documentation for <a href="./safeargumentsuggestions.html">6.2. Safe argument suggestions</a></li>
+<li>Adds documentation for <a href="./blockstatearguments.html">7.8.3. BlockState arguments</a></li>
 <li>Adds documentation for new arguments:
 <ul>
-<li><code>UUIDArgument</code>: <a href="./uuidargs.html">6.9.14. UUID arguments</a></li>
-<li><code>BlockPredicateArgument</code>: <a href="./blockpredicateargs.html">6.10.1. Block predicate arguments</a></li>
-<li><code>ItemStackPredicateArgument</code>: <a href="./itemstackpredicateargs.html">6.10.2. ItemStack predicate arguments</a></li>
+<li><code>UUIDArgument</code>: <a href="./uuidargs.html">7.8.14. UUID arguments</a></li>
+<li><code>BlockPredicateArgument</code>: <a href="./blockpredicateargs.html">7.9.1. Block predicate arguments</a></li>
+<li><code>ItemStackPredicateArgument</code>: <a href="./itemstackpredicateargs.html">7.9.2. ItemStack predicate arguments</a></li>
 </ul>
 </li>
 <li>Adds page <a href="./incompatibleversions.html">Incompatible version information</a> outlining what parts of the CommandAPI are incompatible with what versions of Minecraft</li>
-<li>Adds <code>getCommands()</code> documentation to the <a href="./functionwrapper.html#getcommands">7.2. The FunctionWrapper class</a> page</li>
-<li>Adds page <a href="./brigadier.html">11. Brigadier + CommandAPI</a> which shows how the CommandAPI can be used with Brigadier side-by-side</li>
+<li>Adds <code>getCommands()</code> documentation to the <a href="./functionwrapper.html#getcommands">8.2. The FunctionWrapper class</a> page</li>
+<li>Adds page <a href="./brigadier.html">13. Brigadier + CommandAPI</a> which shows how the CommandAPI can be used with Brigadier side-by-side</li>
+<li>Adds page <a href="./requirements.html">10. Requirements</a> for the requirements feature to help restrict commands</li>
+<li>Adds page <a href="./predicatetips.html">14. Predicate tips</a> with information on how to reduce the amount of repeated code when using requirements</li>
+<li>Update <a href="./afterword.html">Afterword</a></li>
 </ul>
 <h3><a class="header" href="#documentation-changes-33-rightarrow-34" id="documentation-changes-33-rightarrow-34">Documentation changes 3.3 \(\rightarrow\) 3.4:</a></h3>
 <ul>
@@ -3020,7 +3023,7 @@ public void onEnable() {
 <h2><a class="header" href="#multiple-requirements" id="multiple-requirements">Multiple requirements</a></h2>
 <p>The CommandAPI lets you handle multiple requirements really easily! The <code>withRequirement</code> method can be called multiple times, so you don't have to worry about shoving everything in one expression.</p>
 <div class="example">
-### Example - Using multiple requirements
+<h3><a class="header" href="#example---using-multiple-requirements" id="example---using-multiple-requirements">Example - Using multiple requirements</a></h3>
 <p>For example, you can apply multiple requirements for a command by calling the <code>withRequirement</code> method multiple times:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;someCommand&quot;)
 	.withRequirement(sender -&gt; ((Player) sender).getLevel() &gt;= 30)
@@ -3296,7 +3299,7 @@ arguments.put(&quot;teleport&quot;, new LiteralArgument(&quot;tp&quot;)
 <p>You must now use:</p>
 <pre><code class="language-xml">https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/CommandAPI/
 </code></pre>
-<p>This information can be viewed in section <a href="./quickstart.html">3.0 Setting up your development environment</a></p>
+<p>This information can be viewed in section <a href="./quickstart.html">3. Setting up your development environment</a></p>
 <hr />
 <h2><a class="header" href="#from-version-23-to-30" id="from-version-23-to-30">From version 2.3 to 3.0</a></h2>
 <p>The CommandAPI's upgrade from version 2.3 to 3.0 is very intense and various refactoring operations took place, which means that plugins that implement the CommandAPI version 2.3 or will not to work with the CommandAPI version 3.0. This page outlines the few major changes and points you to the various pages in the documentation that covers how to use version 3.0.</p>

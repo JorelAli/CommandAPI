@@ -272,6 +272,7 @@ That's it!
 The CommandAPI lets you handle multiple requirements really easily! The `withRequirement` method can be called multiple times, so you don't have to worry about shoving everything in one expression.
 
 <div class="example">
+
 ### Example - Using multiple requirements
 
 For example, you can apply multiple requirements for a command by calling the `withRequirement` method multiple times:

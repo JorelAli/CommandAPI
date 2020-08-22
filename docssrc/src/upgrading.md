@@ -16,7 +16,7 @@ You must now use:
 https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/CommandAPI/
 ```
 
-This information can be viewed in section [3.0 Setting up your development environment](./quickstart.md)
+This information can be viewed in section [3. Setting up your development environment](./quickstart.md)
 
 -----
 

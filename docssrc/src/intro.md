@@ -39,16 +39,19 @@ Here's the list of changes to the documentation between each update. You can vie
 ### Documentation changes 3.4 \\(\rightarrow\\) 4.0:
 
 - Arguments now include pictures that showcase how they work!
-- Create a new subsection [6.1. Argument modifiers](./argumentmodifiers.md) which houses the sections that explain how to modify arguments to add more functionality. This should make the documentation for arguments flow easier
-- Adds documentation for [6.1.2. Safe argument suggestions](./safeargumentsuggestions.md)
-- Adds documentation for [6.10.3. BlockState arguments](./blockstatearguments.md)
+- Reorganised the sections - arguments is now split up into two sections: [6. Arguments (in general)](./arguments.md) and [7. Argument types](./argumenttypes.md)
+- Adds documentation for [6.2. Safe argument suggestions](./safeargumentsuggestions.md)
+- Adds documentation for [7.8.3. BlockState arguments](./blockstatearguments.md)
 - Adds documentation for new arguments:
-  - `UUIDArgument`: [6.9.14. UUID arguments](./uuidargs.md)
-  - `BlockPredicateArgument`: [6.10.1. Block predicate arguments](./blockpredicateargs.md)
-  - `ItemStackPredicateArgument`: [6.10.2. ItemStack predicate arguments](./itemstackpredicateargs.md)
+  - `UUIDArgument`: [7.8.14. UUID arguments](./uuidargs.md)
+  - `BlockPredicateArgument`: [7.9.1. Block predicate arguments](./blockpredicateargs.md)
+  - `ItemStackPredicateArgument`: [7.9.2. ItemStack predicate arguments](./itemstackpredicateargs.md)
 - Adds page [Incompatible version information](./incompatibleversions.md) outlining what parts of the CommandAPI are incompatible with what versions of Minecraft
-- Adds `getCommands()` documentation to the [7.2. The FunctionWrapper class](./functionwrapper.md#getcommands) page
-- Adds page [11. Brigadier + CommandAPI](./brigadier.md) which shows how the CommandAPI can be used with Brigadier side-by-side
+- Adds `getCommands()` documentation to the [8.2. The FunctionWrapper class](./functionwrapper.md#getcommands) page
+- Adds page [13. Brigadier + CommandAPI](./brigadier.md) which shows how the CommandAPI can be used with Brigadier side-by-side
+- Adds page [10. Requirements](./requirements.md) for the requirements feature to help restrict commands
+- Adds page [14. Predicate tips](./predicatetips.md) with information on how to reduce the amount of repeated code when using requirements
+- Update [Afterword](./afterword.md)
 
 ### Documentation changes 3.3 \\(\rightarrow\\) 3.4:
 
