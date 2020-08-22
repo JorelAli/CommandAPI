@@ -81,6 +81,12 @@
 
 -----
 
+# Java Tips
+
+- [Predicate tips](./predicatetips.md)
+
+-----
+
 [Upgrading guide](./upgrading.md)
 
 [Incompatible version information](./incompatibleversions.md)

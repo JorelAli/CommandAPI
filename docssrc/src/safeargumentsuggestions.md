@@ -44,6 +44,7 @@ The list of supported arguments are displayed in the following table. The parame
 |                   [`NBTCompoundArgument`](./nbtarguments.md) | `de.tr7zw.nbtapi.NBTContainer`                 |
 | [`ObjectiveArgument`](./objectivearguments.md#objective-argument) | **`org.bukkit.scoreboard.Objective`**          |
 |                 [`ParticleArgument`](./particlearguments.md) | `org.bukkit.Particle`                          |
+|     [`PlayerArgument`](./entityarguments.md#player-argument) | `org.bukkit.entity.Player`                     |
 |               [`PotionEffectArgument`](./potionarguments.md) | `org.bukkit.potion.PotionEffectType`           |
 |                      [`RecipeArgument`](./recipeargument.md) | `org.bukkit.inventory.Recipe`                  |
 |                      [`RotationArgument`](./rotationargs.md) | `dev.jorel.commandapi.wrappers.Rotation`       |
