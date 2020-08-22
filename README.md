@@ -11,7 +11,7 @@ An API to use the new command UI introduced in Minecraft 1.13. _(Despite the nam
 
 ### Official Discord! (In progress)
 
-The project is somewhat big enough to make it worth building a community around! I've started creating a Discord server which you can join [here](https://discord.gg/juFNP7h)!
+The project is somewhat big enough to make it worth building a community around! I've started creating a Discord server which you can join [here](https://discord.gg/G4SzSxZ)!
 
 ## Downloads & Documentation (includes usage for server owners)
 
