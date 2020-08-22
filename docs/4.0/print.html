@@ -2834,7 +2834,7 @@ new CommandAPICommand(&quot;kill&quot;)
 </blockquote>
 <h1><a class="header" href="#requirements" id="requirements">Requirements</a></h1>
 <p>Requirements is a feature that allows you to put a constraint on commands and arguments. Similar to permissions, a requirement is something that must be fulfilled in order to use a given command or argument.</p>
-<p>This section is broken up into three parts:</p>
+<p>This section is broken up into four parts:</p>
 <ul>
 <li>Adding requirements to commands</li>
 <li>Adding requirements to arguments</li>
@@ -2961,6 +2961,76 @@ arguments.put(&quot;player&quot;, new PlayerArgument()
 </code></pre>
 <hr />
 <p>What's important to note in this example is that if you spend the time to set up the arguments properly, it severely decreases the amount of code required to write your command. This makes the commands you declare easier to understand and follow and you don't end up having to put all of these checks in the body of your command executor.</p>
+</div>
+<hr />
+<h2><a class="header" href="#updating-requirements" id="updating-requirements">Updating requirements</a></h2>
+<p>Finally, the part you've all been waiting for - how to update requirements. With the way requirements work, they need to be updated manually. To illustrate why this is the case, I'll explain using <a href="./requirements.html#example---perks-based-on-a-players-level">the example of the /repair command</a>:</p>
+<p>When a player joins the game, the server tells the client the list of all commands that the client can run <em>(don't worry, this is completely normal, as declared <a href="https://wiki.vg/Protocol#Declare_Commands">here</a>)</em>. Let's say that the player has joined and has less than 30 levels.</p>
+<p>When a player has less than 30 levels, they are unable to execute the <code>/repair</code> command, because the list of commands that the server sent to the client did not contain the <code>/repair</code> command. Eventually, the player will fight some mobs or mine some ores and eventually will reach 30 levels. Despite this, the player's client doesn't actually know that they're now able to use the <code>/repair</code> command until the server tells them. As such, the server needs to somehow update the requirements that a player has so a player knows they can run the command.</p>
+<p>The CommandAPI handles this in a very simple method call:</p>
+<pre><code>CommandAPI.updateRequirements(player);
+</code></pre>
+<div class="warning">
+<p><strong>Developer's Note:</strong></p>
+<p>The <code>CommandAPI.updateRequirements(player);</code> method can be used anywhere, <strong>except</strong> for the <code>withRequirement</code> method. Using it inside this method will crash the server. This is by design - just make sure you don't use it within the <code>withRequirement</code> method and everything will be fine!</p>
+</div>
+<p>To illustrate how to use this, we'll go over the two examples above:</p>
+<div class="example">
+<h3><a class="header" href="#example---updating-requirements-for-xp-changes" id="example---updating-requirements-for-xp-changes">Example - Updating requirements for xp changes</a></h3>
+<p>In <a href="./requirements.html#example---perks-based-on-a-players-level">the example of requirements with the /repair command</a>, we needed to ensure that the player's requirements update when their experience changes. To do this, we'll simply use a normal event to check this:</p>
+<pre><code class="language-java">@EventHandler
+public void onExpChange(PlayerExpChangeEvent event) {
+    CommandAPI.updateRequirements(event.getPlayer());
+}
+</code></pre>
+<p>And of course, you have to ensure that this event is registered in your <code>onEnable()</code> method:</p>
+<pre><code class="language-java">@Override
+public void onEnable() {
+    getServer().getPluginManager().registerEvents(this, this);
+}
+</code></pre>
+<blockquote>
+<p><strong>Developer's Note:</strong></p>
+<p>I'm assuming you already know how to register events and don't need me to go into great detail how to do so, take the code above with a pinch of salt - I know how much everyone likes to divide their event handlers and listeners to organise their code.</p>
+</blockquote>
+</div>
+<div class="example">
+<h3><a class="header" href="#example---updating-requirements-for-the-party-creation-example" id="example---updating-requirements-for-the-party-creation-example">Example - Updating requirements for the party creation example</a></h3>
+<p>In the <a href="./requirements.html#example---a-party-creation-and-teleportation-system">example for a party creation</a>, we declared two commands:</p>
+<pre><code>/party create &lt;partyName&gt;
+/party tp &lt;player&gt;
+</code></pre>
+<p>When a player creates a new party, we need to ensure that their requirements are updated <em>when they create the party</em>. As such, we simply add this to our party creation command executor:</p>
+<pre><code class="language-java">new CommandAPICommand(&quot;party&quot;)
+	.withArguments(arguments)
+	.executesPlayer((player, args) -&gt; {
+		
+		//Get the name of the party to create
+		String partyName = (String) args[0];
+		
+		partyMembers.put(player.getUniqueId(), partyName);
+        
+        CommandAPI.updateRequirements(player);
+	})
+	.register();
+</code></pre>
+<p>That's it!</p>
+</div>
+<hr />
+<h2><a class="header" href="#multiple-requirements" id="multiple-requirements">Multiple requirements</a></h2>
+<p>The CommandAPI lets you handle multiple requirements really easily! The <code>withRequirement</code> method can be called multiple times, so you don't have to worry about shoving everything in one expression.</p>
+<div class="example">
+### Example - Using multiple requirements
+<p>For example, you can apply multiple requirements for a command by calling the <code>withRequirement</code> method multiple times:</p>
+<pre><code class="language-java">new CommandAPICommand(&quot;someCommand&quot;)
+	.withRequirement(sender -&gt; ((Player) sender).getLevel() &gt;= 30)
+	.withRequirement(sender -&gt; ((Player) sender).getInventory().contains(Material.DIAMOND_PICKAXE))
+	.withRequirement(sender -&gt; ((Player) sender).isInvulnerable())
+	.executesPlayer((player, args) -&gt; {
+		//Code goes here
+	})
+	.register();
+</code></pre>
 </div>
 <h1><a class="header" href="#aliases" id="aliases">Aliases</a></h1>
 <p>Aliases for commands can be added by using the <code>withAliases()</code> method when registering a command. Aliases allow you to run the same command with a different 'name' from the original registered command name.</p>
@@ -3182,7 +3252,7 @@ Brigadier.getRootNode().getChild(&quot;execute&quot;).getChild(&quot;if&quot;).a
 </code></pre>
 </div>
 <h1><a class="header" href="#predicate-tips" id="predicate-tips">Predicate tips</a></h1>
-<p>In our example for creating a party system, we ended up having lots of code repetition. In our party creation command, we had the following code:</p>
+<p>In our <a href="./requirements.html#example---a-party-creation-and-teleportation-system">example for creating a party system</a>, we ended up having lots of code repetition. In our party creation command, we had the following code:</p>
 <pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 arguments.put(&quot;createParty&quot;, new LiteralArgument(&quot;create&quot;)
 	.withRequirement(sender -&gt; {

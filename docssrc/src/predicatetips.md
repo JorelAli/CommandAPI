@@ -1,6 +1,6 @@
 # Predicate tips
 
-In our example for creating a party system, we ended up having lots of code repetition. In our party creation command, we had the following code:
+In our [example for creating a party system](./requirements.md#example---a-party-creation-and-teleportation-system), we ended up having lots of code repetition. In our party creation command, we had the following code:
 
 ```java
 LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();

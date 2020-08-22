@@ -2,7 +2,7 @@
 
 Requirements is a feature that allows you to put a constraint on commands and arguments. Similar to permissions, a requirement is something that must be fulfilled in order to use a given command or argument.
 
-This section is broken up into three parts:
+This section is broken up into four parts:
 
 - Adding requirements to commands
 - Adding requirements to arguments
@@ -176,6 +176,120 @@ new CommandAPICommand("party")
 What's important to note in this example is that if you spend the time to set up the arguments properly, it severely decreases the amount of code required to write your command. This makes the commands you declare easier to understand and follow and you don't end up having to put all of these checks in the body of your command executor.
 
 </div>
+
+-----
+
+## Updating requirements
+
+Finally, the part you've all been waiting for - how to update requirements. With the way requirements work, they need to be updated manually. To illustrate why this is the case, I'll explain using [the example of the /repair command](./requirements.md#example---perks-based-on-a-players-level):
+
+When a player joins the game, the server tells the client the list of all commands that the client can run _(don't worry, this is completely normal, as declared [here](https://wiki.vg/Protocol#Declare_Commands))_. Let's say that the player has joined and has less than 30 levels.
+
+When a player has less than 30 levels, they are unable to execute the `/repair` command, because the list of commands that the server sent to the client did not contain the `/repair` command. Eventually, the player will fight some mobs or mine some ores and eventually will reach 30 levels. Despite this, the player's client doesn't actually know that they're now able to use the `/repair` command until the server tells them. As such, the server needs to somehow update the requirements that a player has so a player knows they can run the command.
+
+The CommandAPI handles this in a very simple method call:
+
+```
+CommandAPI.updateRequirements(player);
+```
+
+<div class="warning">
+
+**Developer's Note:**
+
+The `CommandAPI.updateRequirements(player);` method can be used anywhere, **except** for the `withRequirement` method. Using it inside this method will crash the server. This is by design - just make sure you don't use it within the `withRequirement` method and everything will be fine!
+    
+</div>
+
+
+
+To illustrate how to use this, we'll go over the two examples above:
+
+<div class="example">
+
+### Example - Updating requirements for xp changes
+
+In [the example of requirements with the /repair command](./requirements.md#example---perks-based-on-a-players-level), we needed to ensure that the player's requirements update when their experience changes. To do this, we'll simply use a normal event to check this:
+
+```java
+@EventHandler
+public void onExpChange(PlayerExpChangeEvent event) {
+    CommandAPI.updateRequirements(event.getPlayer());
+}
+```
+
+And of course, you have to ensure that this event is registered in your `onEnable()` method:
+
+```java
+@Override
+public void onEnable() {
+    getServer().getPluginManager().registerEvents(this, this);
+}
+```
+
+> **Developer's Note:**
+>
+> I'm assuming you already know how to register events and don't need me to go into great detail how to do so, take the code above with a pinch of salt - I know how much everyone likes to divide their event handlers and listeners to organise their code.
+
+</div>
+
+<div class="example">
+
+### Example - Updating requirements for the party creation example
+
+In the [example for a party creation](./requirements.md#example---a-party-creation-and-teleportation-system), we declared two commands:
+
+```
+/party create <partyName>
+/party tp <player>
+```
+
+When a player creates a new party, we need to ensure that their requirements are updated _when they create the party_. As such, we simply add this to our party creation command executor:
+
+```java
+new CommandAPICommand("party")
+	.withArguments(arguments)
+	.executesPlayer((player, args) -> {
+		
+		//Get the name of the party to create
+		String partyName = (String) args[0];
+		
+		partyMembers.put(player.getUniqueId(), partyName);
+        
+        CommandAPI.updateRequirements(player);
+	})
+	.register();
+```
+
+That's it!
+
+</div>
+
+-----
+
+## Multiple requirements
+
+The CommandAPI lets you handle multiple requirements really easily! The `withRequirement` method can be called multiple times, so you don't have to worry about shoving everything in one expression.
+
+<div class="example">
+### Example - Using multiple requirements
+
+For example, you can apply multiple requirements for a command by calling the `withRequirement` method multiple times:
+
+```java
+new CommandAPICommand("someCommand")
+	.withRequirement(sender -> ((Player) sender).getLevel() >= 30)
+	.withRequirement(sender -> ((Player) sender).getInventory().contains(Material.DIAMOND_PICKAXE))
+	.withRequirement(sender -> ((Player) sender).isInvulnerable())
+	.executesPlayer((player, args) -> {
+		//Code goes here
+	})
+	.register();
+```
+
+</div>
+
+
 
 
 
