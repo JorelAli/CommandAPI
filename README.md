@@ -1,9 +1,13 @@
 # CommandAPI
 A Bukkit/Spigot API to use the command UI introduced in Minecraft 1.13.
 
-## Downloads & Documentation (includes usage for server owners)
+**Support and Project Discussion**:
 
-The documentation has moved! You can now get your hands on the latest and greatest documentation on the [CommandAPI website!](https://www.jorel.dev/CommandAPI/)
+- <img width="40px" src="https://cdn3.iconfinder.com/data/icons/popular-services-brands-vol-2/512/discord-512.png"></img> [Discord](https://discord.gg/G4SzSxZ)
+
+**Downloads & Documentation:**
+
+- <img width="40px" src="https://icon-icons.com/icons2/2348/PNG/512/download_arrow_icon_143023.png"></img> [Downloads & Documentation (includes usage for server owners!)](https://www.jorel.dev/CommandAPI/)
 
 -----
 
@@ -101,6 +105,8 @@ These versions of Minecraft must be installed in your local machine's Maven repo
 	- Documentation now has pictures to show you what arguments look like
 	- Documentation now has a page dedicated to what doesn't work on what Minecraft version
   - Adds Brigadier support for developers (lets you use the CommandAPI and Brigadier code side by side!)
+  - Fixes a bug where Java 12+ had incompatibility issues
+  - Adds support for setting arbitrary requirements to arguments and commands
 - Version 3.4
   - Fix bug with custom recipes not registering in Minecraft 1.16+
   - Fix bug where command conversion didn't actually register commands

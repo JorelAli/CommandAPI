@@ -1,5 +1,8 @@
 var NAVTREEINDEX2 =
 {
+"enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html":[1,0,0,0,0,0,14,0],
+"enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html#a3872bc6c82b960b49d2a334b0f61a781":[1,0,0,0,0,0,14,0,3],
+"enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html#a3a099f0f3ec97300f6f63359f2d66375":[1,0,0,0,0,0,14,0,2],
 "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html#a4978c1626ef8f0916a4dbc67c65cc07f":[1,0,0,0,0,0,14,0,1],
 "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html#af132746b80dc83b1e403a1b7bb3e5a03":[1,0,0,0,0,0,14,0,0],
 "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html":[1,0,0,0,0,0,21,0],
@@ -37,8 +40,8 @@ var NAVTREEINDEX2 =
 "enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#acb28bea287ccdbe2f366ad5f8a4e928b":[1,0,0,0,0,3,4,3],
 "enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#ad7e10356f536e3611d2ab80e0505fe20":[1,0,0,0,0,3,4,2],
 "enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#adf8f8405b1d7667b43072e461b11e4ef":[1,0,0,0,0,3,4,10],
-"functions.html":[1,3,0],
 "functions.html":[1,3,0,0],
+"functions.html":[1,3,0],
 "functions_b.html":[1,3,0,1],
 "functions_c.html":[1,3,0,2],
 "functions_d.html":[1,3,0,3],
@@ -142,14 +145,14 @@ var NAVTREEINDEX2 =
 "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_command_executor.html":[1,0,0,0,0,2,14],
 "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_command_executor.html#a4e51a420cfe6e7aa15ee67677239b9f6":[1,0,0,0,0,2,14,1],
 "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_command_executor.html#ac6261face9c8d59dfc684a5998b1038c":[1,0,0,0,0,2,14,0],
-"namespacedev_1_1jorel_1_1commandapi_1_1arguments.html":[1,0,0,0,0,0],
 "namespacedev_1_1jorel_1_1commandapi_1_1arguments.html":[0,0,0,0,0,0],
-"namespacedev_1_1jorel_1_1commandapi_1_1exceptions.html":[0,0,0,0,0,1],
+"namespacedev_1_1jorel_1_1commandapi_1_1arguments.html":[1,0,0,0,0,0],
 "namespacedev_1_1jorel_1_1commandapi_1_1exceptions.html":[1,0,0,0,0,1],
+"namespacedev_1_1jorel_1_1commandapi_1_1exceptions.html":[0,0,0,0,0,1],
 "namespacedev_1_1jorel_1_1commandapi_1_1executors.html":[0,0,0,0,0,2],
 "namespacedev_1_1jorel_1_1commandapi_1_1executors.html":[1,0,0,0,0,2],
-"namespacedev_1_1jorel_1_1commandapi_1_1wrappers.html":[0,0,0,0,0,3],
 "namespacedev_1_1jorel_1_1commandapi_1_1wrappers.html":[1,0,0,0,0,3],
+"namespacedev_1_1jorel_1_1commandapi_1_1wrappers.html":[0,0,0,0,0,3],
 "namespaces.html":[0,0],
 "pages.html":[]
 };

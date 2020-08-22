@@ -88,8 +88,14 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p><a class="anchor" id="md_README"></a>A Bukkit/Spigot API to use the command UI introduced in Minecraft 1.13.</p>
-<h1>Downloads &amp; Documentation (includes usage for server owners)</h1>
-<p>The documentation has moved! You can now get your hands on the latest and greatest documentation on the <a href="https://www.jorel.dev/CommandAPI/">CommandAPI website!</a></p>
+<p><b>Support and Project Discussion</b>:</p>
+<ul>
+<li><img src="https://cdn3.iconfinder.com/data/icons/popular-services-brands-vol-2/512/discord-512.png" alt="" width="40px" class="inline"/> <a href="https://discord.gg/G4SzSxZ">Discord</a></li>
+</ul>
+<p><b>Downloads &amp; Documentation:</b></p>
+<ul>
+<li><img src="https://icon-icons.com/icons2/2348/PNG/512/download_arrow_icon_143023.png" alt="" width="40px" class="inline"/> <a href="https://www.jorel.dev/CommandAPI/">Downloads &amp; Documentation (includes usage for server owners!)</a></li>
+</ul>
 <hr  />
 <h1>Purpose</h1>
 <p>This project provides an API to help Bukkit/Spigot developers use the new Minecraft 1.13 command UI, which includes:</p>
@@ -160,6 +166,33 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <hr  />
 <h1>Changelog</h1>
 <ul>
+<li>Version 4.0<ul>
+<li>Suggestion overriding can now be populated by Bukkit objects instead of strings</li>
+<li>Fixes a bug with the <code>FloatRangeArgument</code> where it caused a casting error</li>
+<li>Adds support for 1.16.2<ul>
+<li><code>ChatArgument</code> now works on Minecraft 1.16.2 (still doesn't work on 1.16.1)</li>
+</ul>
+</li>
+<li>Adds new arguments:<ul>
+<li><code>UUIDArgument</code></li>
+<li><code>ItemStackPredicateArgument</code></li>
+<li><code>BlockPredicateArgument</code></li>
+</ul>
+</li>
+<li>Fix bug where <code>CustomArgument</code>s break when using the namespaced key flag</li>
+<li>Adds a list of commands that <code>FunctionWrapper</code> executes which is now accessible</li>
+<li>Command aliases are now much more efficient</li>
+<li>Documentation changes (briefly):<ul>
+<li><code>BlockStateArgument</code> is now documented properly</li>
+<li>Documentation now has pictures to show you what arguments look like</li>
+<li>Documentation now has a page dedicated to what doesn't work on what Minecraft version</li>
+</ul>
+</li>
+<li>Adds Brigadier support for developers (lets you use the CommandAPI and Brigadier code side by side!)</li>
+<li>Fixes a bug where Java 12+ had incompatibility issues</li>
+<li>Adds support for setting arbitrary requirements to arguments and commands</li>
+</ul>
+</li>
 <li>Version 3.4<ul>
 <li>Fix bug with custom recipes not registering in Minecraft 1.16+</li>
 <li>Fix bug where command conversion didn't actually register commands</li>
@@ -356,7 +389,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Aug 20 2020 18:18:23 for CommandAPI by
+    <li class="footer">Generated on Sat Aug 22 2020 23:26:22 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

@@ -56,8 +56,11 @@ var NAVTREEINDEX1 =
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_particle_argument.html#ae1e0c014b6c01df771b3a0e13cc86ec7":[1,0,0,0,0,0,39,5],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_player_argument.html":[1,0,0,0,0,0,40],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_player_argument.html#a4e9bd4604fd9943b595add21ac5e0fea":[1,0,0,0,0,0,40,2],
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_player_argument.html#a5c6da1809da5b915d54fec2d5ee65ebc":[1,0,0,0,0,0,40,5],
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_player_argument.html#a896e8f504dc9dcdd01536e3068623cf2":[1,0,0,0,0,0,40,4],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_player_argument.html#adda0e876f945001348ca74390959416b":[1,0,0,0,0,0,40,1],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_player_argument.html#ae35130934b1fbbde8d2774080b244d8d":[1,0,0,0,0,0,40,0],
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_player_argument.html#ae6b586fc5b0ddad743cd4d07c594c358":[1,0,0,0,0,0,40,3],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_potion_effect_argument.html":[1,0,0,0,0,0,41],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_potion_effect_argument.html#a17bb8e01b6500bb3a64cbe85254d1c7f":[1,0,0,0,0,0,41,3],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_potion_effect_argument.html#a1a2ef911b7ff002bbcc10d898157026e":[1,0,0,0,0,0,41,0],
@@ -246,8 +249,5 @@ var NAVTREEINDEX1 =
 "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#aebca6750f8f79f80ea7acab2aecc8b01":[1,0,0,0,0,0,10,1],
 "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#af506ae253bb84d7c10ce36fdbfd8a71a":[1,0,0,0,0,0,10,11],
 "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#afbd8af45a4cf153e7571a3aec3b31366":[1,0,0,0,0,0,10,37],
-"enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#afe6d7a47e3e6437e0edc23922c9ca167":[1,0,0,0,0,0,10,6],
-"enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html":[1,0,0,0,0,0,14,0],
-"enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html#a3872bc6c82b960b49d2a334b0f61a781":[1,0,0,0,0,0,14,0,3],
-"enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html#a3a099f0f3ec97300f6f63359f2d66375":[1,0,0,0,0,0,14,0,2]
+"enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#afe6d7a47e3e6437e0edc23922c9ca167":[1,0,0,0,0,0,10,6]
 };

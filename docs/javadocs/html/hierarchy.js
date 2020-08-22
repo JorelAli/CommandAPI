@@ -184,6 +184,9 @@ var hierarchy =
     [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Particle >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
       [ "dev.jorel.commandapi.arguments.ParticleArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_particle_argument.html", null ]
     ] ],
+    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Player >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
+      [ "dev.jorel.commandapi.arguments.PlayerArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_player_argument.html", null ]
+    ] ],
     [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< PotionEffectType >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
       [ "dev.jorel.commandapi.arguments.PotionEffectArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_potion_effect_argument.html", null ]
     ] ],
