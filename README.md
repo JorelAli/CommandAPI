@@ -1,7 +1,6 @@
 # CommandAPI
 A Bukkit/Spigot API to use the command UI introduced in Minecraft 1.13.
 
-<<<<<<< 4.0-release
 **Support and Project Discussion**:
 
 - <img width="40px" src="https://cdn3.iconfinder.com/data/icons/popular-services-brands-vol-2/512/discord-512.png"></img> [Discord](https://discord.gg/G4SzSxZ)
@@ -9,23 +8,6 @@ A Bukkit/Spigot API to use the command UI introduced in Minecraft 1.13.
 **Downloads & Documentation:**
 
 - <img width="40px" src="https://icon-icons.com/icons2/2348/PNG/512/download_arrow_icon_143023.png"></img> [Downloads & Documentation (includes usage for server owners!)](https://www.jorel.dev/CommandAPI/)
-=======
-> ## Emergency Notice: Maven URL issue
->
-> If you can't get maven to work, it's because I've changed the url (sorry!)
-> The new url is as follows:
-> ```
-> https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/CommandAPI/
-> ```
-
-### Official Discord! (In progress)
-
-The project is somewhat big enough to make it worth building a community around! I've started creating a Discord server which you can join [here](https://discord.gg/G4SzSxZ)!
-
-## Downloads & Documentation (includes usage for server owners)
-
-The documentation has moved! You can now get your hands on the latest and greatest documentation on the [CommandAPI website!](https://www.jorel.dev/CommandAPI/)
->>>>>>> master
 
 -----
 
