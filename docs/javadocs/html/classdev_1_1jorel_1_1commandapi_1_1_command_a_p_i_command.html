@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.18"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>1.13 CommandAPI: dev.jorel.commandapi.CommandAPICommand Class Reference</title>
+<title>CommandAPI: dev.jorel.commandapi.CommandAPICommand Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -25,8 +25,8 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">1.13 CommandAPI
-   &#160;<span id="projectnumber">3.1</span>
+   <div id="projectname">CommandAPI
+   &#160;<span id="projectnumber">4.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -102,6 +102,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae5a4bf1048697f05ab049a7875b95538"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html">CommandAPICommand</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ae5a4bf1048697f05ab049a7875b95538">withPermission</a> (<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_permission.html">CommandPermission</a> permission)</td></tr>
 <tr class="memdesc:ae5a4bf1048697f05ab049a7875b95538"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a permission to the current command builder.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ae5a4bf1048697f05ab049a7875b95538">More...</a><br /></td></tr>
 <tr class="separator:ae5a4bf1048697f05ab049a7875b95538"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19269b7ad0a9a3c252d48d35bbe5a14f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html">CommandAPICommand</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a19269b7ad0a9a3c252d48d35bbe5a14f">withRequirement</a> (Predicate&lt; CommandSender &gt; requirement)</td></tr>
+<tr class="memdesc:a19269b7ad0a9a3c252d48d35bbe5a14f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a requirement that has to be satisfied to use this command.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a19269b7ad0a9a3c252d48d35bbe5a14f">More...</a><br /></td></tr>
+<tr class="separator:a19269b7ad0a9a3c252d48d35bbe5a14f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4964121c94c4786ecb26e45b13f1ca78"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html">CommandAPICommand</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a4964121c94c4786ecb26e45b13f1ca78">withAliases</a> (String... aliases)</td></tr>
 <tr class="memdesc:a4964121c94c4786ecb26e45b13f1ca78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an array of aliases to the current command builder.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a4964121c94c4786ecb26e45b13f1ca78">More...</a><br /></td></tr>
 <tr class="separator:a4964121c94c4786ecb26e45b13f1ca78"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -584,8 +587,36 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 </div>
 </div>
+<a id="a19269b7ad0a9a3c252d48d35bbe5a14f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19269b7ad0a9a3c252d48d35bbe5a14f">&#9670;&nbsp;</a></span>withRequirement()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html">CommandAPICommand</a> dev.jorel.commandapi.CommandAPICommand.withRequirement </td>
+          <td>(</td>
+          <td class="paramtype">Predicate&lt; CommandSender &gt;&#160;</td>
+          <td class="paramname"><em>requirement</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adds a requirement that has to be satisfied to use this command. </p>
+<p>This method can be used multiple times and each use of this method will AND its requirement with the previously declared ones</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">requirement</td><td>the predicate that must be satisfied to use this command </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>1.13CommandAPI/commandapi-core/src/main/java/dev/jorel/commandapi/CommandAPICommand.java</li>
+<li>CommandAPI/commandapi-core/src/main/java/dev/jorel/commandapi/CommandAPICommand.java</li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -593,7 +624,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html">CommandAPICommand</a></li>
-    <li class="footer">Generated on Wed Jul 1 2020 22:07:20 for 1.13 CommandAPI by
+    <li class="footer">Generated on Sat Aug 22 2020 23:26:21 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

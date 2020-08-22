@@ -2,13 +2,13 @@
 authors = ["JorelAli"]
 multilingual = false
 src = "src"
-title = "1.13 CommandAPI Documentation v3.4"
+title = "CommandAPI Documentation v4.0"
 
 [build]
-build-dir = "./../docs/3.4"
+build-dir = "./../docs/4.0"
 
 [output.html]
-git-repository-url = "https://github.com/JorelAli/1.13-Command-API"
+git-repository-url = "https://github.com/JorelAli/CommandAPI"
 default-theme = "rust"
 additional-css = ["style.css"]
 additional-js = ["sidebar.js"]

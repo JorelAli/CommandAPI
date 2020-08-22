@@ -3,5 +3,8 @@ var classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_type_argument =
     [ "EntityTypeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_type_argument.html#a1af2c9eca4947920f968a0d393a07d97", null ],
     [ "getArgumentType", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_type_argument.html#a4ddebd1dad3bb8e368880af1c346c040", null ],
     [ "getPrimitiveType", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_type_argument.html#aaf45da8a26606fe2366ae303970c7d23", null ],
-    [ "getSuggestionProvider", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_type_argument.html#a94eb49c5fd7c36fcbe57151d2b312340", null ]
+    [ "getSuggestionProvider", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_type_argument.html#a94eb49c5fd7c36fcbe57151d2b312340", null ],
+    [ "safeOverrideSuggestions", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_type_argument.html#a364a87a192b5b73812a244334a06c0a7", null ],
+    [ "safeOverrideSuggestions", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_type_argument.html#ab4cd754d6a9f7d0e760ddadeb5ebb59e", null ],
+    [ "safeOverrideSuggestions", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_type_argument.html#a1646d35a80d592a2fc9bc29a123b316d", null ]
 ];

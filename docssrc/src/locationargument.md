@@ -1,5 +1,7 @@
 # Location arguments
 
+![](./images/arguments/loc.png)
+
 In the CommandAPI, there are two arguments used to represent location. The `LocationArgument` argument, which represents a 3D location \\( (x, y, z) \\) and the `Location2DArgument`, which represents 2D location \\( (x, z) \\). 
 
 -----
@@ -56,8 +58,14 @@ new CommandAPICommand("break")
 
 ## Location (2D space)
 
+![](./images/arguments/loc2d.png)
+
 The `Location2DArgument` is pretty much identical in use to the `LocationArgument` for 3D coordinates, except instead of returning a `Location` object, it instead returns a `Location2D` object that extends `Location` (thus, being compatible anywhere you would normally be able to use `Location`).
 
-> **Note:**
->
-> The `Location2DArgument` cannot be used with `LocationType.PRECISE_POSITION` in Minecraft 1.13. However, it can be used normally with `LocationType.PRECISE_POSITION` in Minecraft versions 1.13.1 and later.
+<div class="warning">
+
+**Note:**
+
+The `Location2DArgument` cannot be used with `LocationType.PRECISE_POSITION` in Minecraft 1.13. However, it can be used normally with `LocationType.PRECISE_POSITION` in Minecraft versions 1.13.1 and later.
+
+</div>

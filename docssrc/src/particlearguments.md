@@ -1,5 +1,7 @@
 # Particle arguments
 
+![](./images/arguments/particle.png)
+
 The `ParticleArgument` class represents Minecraft particles. As expected, this is casted to the Bukkit `Particle` class.
 
 <div class="example">

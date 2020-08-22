@@ -1,36 +1,41 @@
 # Afterword
 
-<div class="example">
+<h2 style="text-align: center;">A message from the CommandAPI's author</h2>
 
-**Developer's Note:**
-
-Congratulations on making it to the end of the documentation! I hope it was easy to understand everything ... I feel like it's a bit content heavy.
+Congratulations on making it to the end of the documentation! It's really long, but I did my best to make it the best (Bukkit/Spigot plugin) documentation in existence.
 
 -----
 
-This project is by far my most worked on and probably the project I'm most proud of. If you're interested in reading about my journey with the CommandAPI, I've written about it a few times on my blog:
+My name is Jorel, commonly known by my Minecraft username _Skepter_. I started the CommandAPI in the summer holidays between my first and second year at university. On the 19th August, 2018 I made my first commit to the CommandAPI project - just a month and a day after Minecraft 1.13 was released.
 
-- You can read about the creation of the CommandAPI in my blog post [here](https://www.jorel.dev/blog/Creating-the-CommandAPI/).
-- You can read about the CommandAPI's first issue in my blog post [here](https://www.jorel.dev/blog/Run-commands-as-chickens/).
-- You can read about my self-review of the CommandAPI, two months after its creation [here](https://www.jorel.dev/blog/Return-of-the-Command-API/).
+At the time, I just decided to call it "The 1.13 Command API" - it wasn't the catchiest name out there, but it sort of said what I wanted it to - it's a Command API for Minecraft 1.13, which was the update when the big overhaul to the command system was introduced.
+
+It all started as a simple idea that can be summarized in 3 bullet points:
+
+- Create an API to use the new command UI that was introduced in Minecraft 1.13
+- Make it so the developers don't have to understand/use Mojang's brigadier
+- Make it similar to Bukkit's existing API
+-----
+After the release of version 1.2, two days after the initial release, I received my first GitHub issue. This was quite a shock to me - version 1.2 only had 11 total downloads so it seemed odd that someone managed to stumble upon it despite the fact that I did nothing to promote the CommandAPI. Little did I know that that one issue was the main motivation to keep this API alive after its initial release.
+
+I would never have possible imagined in my wildest dreams that 2 years later, I would still be in contact with them and know that if I had not chosen to create this API, their server would not have survived beyond Minecraft 1.13, let alone Minecraft 1.15, two major Minecraft versions later.
+
+-----
+This project has been insane. Absolutely, utterly insane. At over 570 commits and over 450,000 additions (that includes things such as lines of code, lines of generated HTML documentation etc.), I can say without a doubt that this is indeed my biggest project ever.
+
+-----
+Anyway, I digress. I'd like to give credit to all of the people that have opened issues on the CommandAPI GitHub, for without these people, the CommandAPI would have only remained a shadow of what it is now. I'd also like to give credit to [the people that have starred](https://github.com/JorelAli/CommandAPI/stargazers) the CommandAPI on its GitHub page.
+
+I would like to personally give thanks to the following people - these are people that have made a significant contribution to the project in terms of ideas or support:
+
+- **[Combustible](https://github.com/Combustible)**, who kickstarted the project by creating the CommandAPI's first issue. From this issue, this allowed the CommandAPI to have interoperability with Minecraft commands and functions which is by far the CommandAPI's most admirable feature. Additionally, Combustible helped raise awareness of the CommandAPI via the Spigot forums and Spigot issue tracker.
+- **[Draycia](https://github.com/Draycia)**, who suggested implementing lazy evaluation for argument suggestions. This has been extended to provide the CommandAPI's context-aware system for argument suggestions based on previously filled arguments.
+- **[HielkeMinecraft](https://github.com/HielkeMinecraft)**, who made three outstanding contributions to the CommandAPI. They created the suggestion of setting the result and success values of commands which improves the interoperability between commands registered with the CommandAPI and vanilla Minecraft commands. They also influenced the implementation of the requirements system to have more powerful command constraints and helped start the CommandAPI Discord server.
+- [**Minenash**](https://github.com/Minenash), who was the driving force for the CommandAPI's 3.0 release, which added a plethora of new arguments to the CommandAPI. Minenash's research, code prototypes, documentation examples, bug testing and code review was a tremendous help to make the 3.0 release such a feature-rich version.
+- [**Michael-Ziluck**](https://github.com/Michael-Ziluck), who created an amazing pull request that helped greatly improve the performance of the CommandAPI as well as structure the entire CommandAPI project into a multi-module Maven project which significantly improved the maintainability of the CommandAPI for the future.
 
 -----
 
-I'd like to give credit to all of the people that have opened issues on GitHub, that have truly made it what it is now. In addition to [my stargazers](https://github.com/JorelAli/1.13-Command-API/stargazers), I'd like to personally thank:
-- **[Combustible](https://github.com/Combustible)**, who was my #1 supporter and motivated me to keep this project alive after its initial release. They also helped raise awareness of the CommandAPI throughout Spigot's forums.
-- **[DerpNerb](https://github.com/DerpNerb)**, who gave me the idea to convert the CommandAPI to a Maven project which resulted in making the CommandAPI much more accessible for everyone.
-- **[Draycia](https://github.com/Draycia)**, who suggested that I put `CommandSender` objects inside `DynamicSuggestedStringArguments`, which allow dynamic arguments to be much more powerful.
-- **[HielkeMinecraft](https://github.com/HielkeMinecraft)**, who suggested various improvements for the `LocationArgument` class; suggested adding results and successes for commands and being a great bug reporter in general.
-- **[i509VCB](https://github.com/i509VCB)**, who is an absolute genius and a really good bug spotter. They pointed out a severe bug that made libraries depending on the CommandAPI depend on Brigadier; created the documentation for using the CommandAPI with Gradle and suggested using the NBTAPI to include NBT support.
-- **[Loapu](https://github.com/Loapu)**, who helped debug an incredibly difficult bug where command executors were not working properly. They were able to quickly communicate and explore the issue even when I was unable to replicate the issue on my machine.
-- **[Minenash](https://github.com/Minenash)**, who was the driving force for the 3.0 release which adds a plethora of additional arguments. They continued to research, write documentation examples, bug test, code review and basically oversee the project throughout its development.
-- **[Tinkot](https://github.com/Tinkot)**, who gave a review of the CommandAPI on its spigot page. This motivated me to fix a 6 month old bug. Somehow.
-- **[ZiluckMichael](https://github.com/ZiluckMichael)**, who truly changed the CommandAPI for the better. Refactored the entire code base to make the CommandAPI much more maintainable, as well as removing a lot of unnecessary reflection.
+I never really expected more than 5 or so people to use this API, so it was truly a pleasure to see everyone's responses, issues and suggestions that has made the CommandAPI what it is today.
 
------
-
-I never really expected more than 5 or so people to use this API, so it was truly an exciting time creating this for everyone - seeing everyone's responses, issues and problems helped me keep going.
-
-In short, thank you, and everyone else that helped make the CommandAPI what it is.
-
-</div>
+Thank you so much for using the CommandAPI!

@@ -1,5 +1,25 @@
 # Upgrading guide
 
+## From version 3.x to 4.0
+
+The maven repository url has changed:
+
+Instead of being:
+
+```
+https://raw.githubusercontent.com/JorelAli/1.13-Command-API/mvn-repo/1.13CommandAPI/
+```
+
+You must now use:
+
+```xml
+https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/1.13CommandAPI/
+```
+
+This information can be viewed in section [3. Setting up your development environment](./quickstart.md). _(Don't worry if you forget, it **should** work as normal nonetheless!)_
+
+-----
+
 ## From version 2.3 to 3.0
 
 The CommandAPI's upgrade from version 2.3 to 3.0 is very intense and various refactoring operations took place, which means that plugins that implement the CommandAPI version 2.3 or will not to work with the CommandAPI version 3.0. This page outlines the few major changes and points you to the various pages in the documentation that covers how to use version 3.0.
@@ -12,7 +32,7 @@ The default package name has been changed. Instead of being registered under the
 
 \\[\texttt{io.github.jorelali.commandapi.api}\rightarrow\texttt{dev.jorel.commandapi}\\]
 
-To organise classes with other classes of similar functions, new packages have been introduced. These can be fully explored using the [new JavaDocs](https://www.jorel.dev/1.13-Command-API/javadocs/html/annotated.html)
+To organise classes with other classes of similar functions, new packages have been introduced. These can be fully explored using the [new JavaDocs](https://www.jorel.dev/CommandAPI/javadocs/html/annotated.html)
 
 -----
 

@@ -1,5 +1,7 @@
 # Enchantment argument
 
+![](./images/arguments/enchantment.png)
+
 The `EnchantmentArgument` class lets users input a specific enchantment. As you would expect, the cast type is Bukkit's `Enchantment` class.
 
 <div class="example">

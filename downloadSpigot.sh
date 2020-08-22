@@ -7,7 +7,7 @@ if [ -f ./BuildTools.jar ]; then
 	cp BuildTools.jar buildspigot
 	cd buildspigot
 
-	versions=(1.13 1.13.1 1.13.2 1.14 1.14.3 1.14.4 1.15 1.16.1)
+	versions=(1.13 1.13.1 1.13.2 1.14 1.14.3 1.14.4 1.15 1.16.1 1.16.2)
 
 	for version in ${versions[@]}; do
 		if mvn dependency:get --batch-mode -q -Dartifact=org.spigotmc:spigot:${version}-R0.1-SNAPSHOT; then

@@ -1,14 +1,43 @@
 # The FunctionWrapper
 
-The CommandAPI includes the `FunctionWrapper` class which is a wrapper for Minecraft's functions. It allows you to execute the commands that are represented by the respective `.mcfunction` file. There most important thing to note with the `FunctionWrapper`, and that it _does not "store" the functions inside it_, instead it just _stores what the function does_. In other words, you cannot "extract" the list of commands from a `FunctionWrapper` object.
+The CommandAPI includes the `FunctionWrapper` class which is a wrapper for Minecraft's functions. It allows you to execute the commands that are represented by the respective `.mcfunction` file.
 
 ## FunctionWrapper methods
 
-The `FunctionWrapper` class consists of two methods:
+The `FunctionWrapper` class has the following methods:
 
-| Method            | Result on execution                                  |
-| ----------------- | ---------------------------------------------------- |
-| `run()`           | Executes the Minecraft function                      |
-| `runAs(Entity)`   | Executes the Minecraft function as a specific Entity |
+```java
+String[] getCommands();
+void run();
+void runAs(Entity e);
+NamespacedKey getKey();
+```
 
-The `FunctionWrapper` also implements the `Keyed` interface, allowing you to retrieve the `NamespacedKey` for this function using `getKey()`.
+These methods allow you to interact with the Minecraft function that this class wraps.
+
+### `getCommands()`
+
+The `getCommands()` method returns a `String[]` that contains the list of commands that the Minecraft function "holds". In other words, running this Minecraft function is basically as simple as iterating through its commands and running them in order. The commands that this `String[]` holds are the raw strings that this function represents - in other words, it can include things such as `@p` and `~ ~ ~` instead of "filled in" values.
+
+### `run()`
+
+The `run()` method basically does what it says on the tin - it runs the function. The command executor that runs this function is the command executor that was used to retrieve it. For example, if a player in-game populated this argument, then the player will be filled in for `@p` and the player's location would be used for things such as `~ ~ ~`:
+
+```java
+LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+arguments.put("function", new FunctionArgument());
+
+new CommandAPICommand("runfunc")
+    .withArguments(arguments)
+	.executes((sender, args) -> {
+        FunctionWrapper[] functions = (FunctionWrapper[]) args[0];
+        for(FunctionWrapper function : functions) {
+            function.run(); // The command executor in this case is 'sender'
+        }
+    })
+    .register();
+```
+
+### `runAs(Entity)`
+
+The `runAs(Entity)` is basically the same as the `run()` method, but it allows you to change the command executor to another entity. 

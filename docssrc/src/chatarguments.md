@@ -4,6 +4,8 @@ The CommandAPI provides three main classes to interact with chat formatting in M
 
 ## Chat color argument
 
+![](./images/arguments/chatcolor.png)
+
 The `ChatColorArgument` class is used to represent a given chat color (e.g. red or green) 
 
 <div class="example">
@@ -92,7 +94,7 @@ Say we want to generate a book using raw JSON. For this example, we'll use the f
     "underlined": true,
     "clickEvent": {
         "action": "open_url",
-        "value": "https://github.com/JorelAli/1.13-Command-API"
+        "value": "https://github.com/JorelAli/CommandAPI"
     }
 }]
 ```
@@ -100,7 +102,7 @@ Say we want to generate a book using raw JSON. For this example, we'll use the f
 Since we're writing a book, we must ensure that all quotes have been escaped. This can also be performed on the [minecraftjson.com](https://minecraftjson.com/) website by selecting "book": 
 
 ```json
-["[\"\",{\"text\":\"Once upon a time, there was a guy call \"},{\"text\":\"Skepter\",\"color\":\"light_purple\",\"hoverEvent\":{\"action\":\"show_entity\",\"value\":\"Skepter\"}},{\"text\":\" and he created the \"},{\"text\":\"CommandAPI\",\"underlined\":true,\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https://github.com/JorelAli/1.13-Command-API\"}}]"]
+["[\"\",{\"text\":\"Once upon a time, there was a guy call \"},{\"text\":\"Skepter\",\"color\":\"light_purple\",\"hoverEvent\":{\"action\":\"show_entity\",\"value\":\"Skepter\"}},{\"text\":\" and he created the \"},{\"text\":\"CommandAPI\",\"underlined\":true,\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https://github.com/JorelAli/CommandAPI\"}}]"]
 ```
 
 Now let's define our command. Since book text is typically very large - too large to be entered into a chat, we'll make a command block compatible command by providing a player parameter:
@@ -121,9 +123,13 @@ Now we can create our book command. We use the player as the main target by usin
 
 ## Chat argument
 
-> **Developer's Note:**
->
-> As of the time of writing (25th June 2020), it has been observed that the `ChatArgument` does not work on Spigot 1.16.1. This is not the case however for Spigot versions 1.15.2 and below.
+<div class="warning">
+
+**Developer's Note:**
+
+It has been observed that the `ChatArgument` does not work on Spigot 1.16.1. This is not the case however for Spigot versions 1.15.2 and below, as well as Spigot 1.16.2.
+
+</div>
 
 > **Note:**
 >

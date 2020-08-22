@@ -23,8 +23,10 @@
   - [Proxied commandsenders](./proxysender.md)
   - [Resulting command executors](./resultingcommandexecutors.md)
   - [Handling command failures](./commandfailures.md)
-- [Arguments](./arguments.md)
+- [Arguments (in general)](./arguments.md)
   - [Argument suggestions](./argumentsuggestions.md)
+  - [Safe argument suggestions](./safeargumentsuggestions.md)
+- [Argument types](./argumenttypes.md)
   - [Primitive arguments](./primitivearguments.md)
   - [Ranged arguments](./rangedarguments.md)
   - [String arguments](./stringarguments.md)
@@ -41,6 +43,7 @@
   - [Miscellaneous arguments](./miscargs.md)
     - [Advancement arguments](./advancementargument.md)
     - [Biome arguments](./biomeargument.md)
+    - [BlockState arguments](./blockstatearguments.md)
     - [Enchantment arguments](./enchantmentargument.md)
     - [Environment arguments](./environmentargs.md)
     - [Itemstack arguments](./itemstackarguments.md)
@@ -51,6 +54,10 @@
     - [Recipe arguments](./recipeargument.md)
     - [Sound arguments](./soundargument.md)
     - [Time arguments](./timeargs.md)
+    - [UUID arguments](./uuidargs.md)
+  - [Predicate arguments](./predicateargs.md)
+    - [Block predicate arguments](./blockpredicateargs.md)
+    - [ItemStack predicate arguments](./itemstackpredicateargs.md)
   - [NBT arguments](./nbtarguments.md)
   - [Literal arguments](./literalarguments.md)
   - [Custom arguments](./customarguments.md)
@@ -59,6 +66,7 @@
   - [The FunctionWrapper class](./functionwrapper.md)
   - [Function arguments](./functionarguments.md)
 - [Permissions](./permissions.md)
+- [Requirements](./requirements.md)
 - [Aliases](./aliases.md)
 
 # CommandAPI Utilities
@@ -67,7 +75,21 @@
 
 -----
 
+# Extended CommandAPI
+
+- [Brigadier + CommandAPI](./brigadier.md)
+
+-----
+
+# Java Tips
+
+- [Predicate tips](./predicatetips.md)
+
+-----
+
 [Upgrading guide](./upgrading.md)
+
+[Incompatible version information](./incompatibleversions.md)
 
 [Troubleshooting](./troubleshooting.md)
 

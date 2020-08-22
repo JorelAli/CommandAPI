@@ -12,5 +12,6 @@ var namespacedev_1_1jorel_1_1commandapi_1_1exceptions =
     [ "SpigotNotFoundException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_spigot_not_found_exception.html", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_spigot_not_found_exception" ],
     [ "TimeArgumentException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_time_argument_exception.html", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_time_argument_exception" ],
     [ "UnsupportedVersionException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_unsupported_version_exception.html", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_unsupported_version_exception" ],
+    [ "UUIDArgumentException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_u_u_i_d_argument_exception.html", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_u_u_i_d_argument_exception" ],
     [ "WrapperCommandSyntaxException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_wrapper_command_syntax_exception.html", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_wrapper_command_syntax_exception" ]
 ];

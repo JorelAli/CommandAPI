@@ -24,8 +24,7 @@
 */
 var NAVTREE =
 [
-  [ "1.13 CommandAPI", "index.html", [
-    [ "1.13-Command-API", "index.html", null ],
+  [ "CommandAPI", "index.html", [
     [ "Packages", "namespaces.html", [
       [ "Packages", "namespaces.html", "namespaces_dup" ]
     ] ],
@@ -45,7 +44,8 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_n_b_t_a_p_i_not_found_exception.html#a5b7db4751b93434825b202912149aff3"
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_argument.html#a4b472d4097254fc9a590b704f1bf9609",
+"enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

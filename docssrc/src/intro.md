@@ -36,6 +36,27 @@ Using the search icon in the top left corner, you can search for anything in thi
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 3.4 \\(\rightarrow\\) 4.0:
+
+- The project has been renamed from the "1.13 Command API" to simply the "CommandAPI". This has changed a few things, such as various links. See the section [Upgrading guide](./upgrading.md) to view the relevant changes with regards to maven.
+- Updated [3. Setting up your development environment](./quickstart.md) to include new Maven repository links
+- Fixed stronkage with Java versions - there's now no random warning boxes about incompatibility with Java 12!
+
+- Arguments now include pictures that showcase how they work!
+- Reorganised the sections - arguments is now split up into two sections: [6. Arguments (in general)](./arguments.md) and [7. Argument types](./argumenttypes.md)
+- Adds documentation for [6.2. Safe argument suggestions](./safeargumentsuggestions.md)
+- Adds documentation for [7.8.3. BlockState arguments](./blockstatearguments.md)
+- Adds documentation for new arguments:
+  - `UUIDArgument`: [7.8.14. UUID arguments](./uuidargs.md)
+  - `BlockPredicateArgument`: [7.9.1. Block predicate arguments](./blockpredicateargs.md)
+  - `ItemStackPredicateArgument`: [7.9.2. ItemStack predicate arguments](./itemstackpredicateargs.md)
+- Adds page [Incompatible version information](./incompatibleversions.md) outlining what parts of the CommandAPI are incompatible with what versions of Minecraft
+- Adds `getCommands()` documentation to the [8.2. The FunctionWrapper class](./functionwrapper.md#getcommands) page
+- Adds page [13. Brigadier + CommandAPI](./brigadier.md) which shows how the CommandAPI can be used with Brigadier side-by-side
+- Adds page [10. Requirements](./requirements.md) for the requirements feature to help restrict commands
+- Adds page [14. Predicate tips](./predicatetips.md) with information on how to reduce the amount of repeated code when using requirements
+- Update [Afterword](./afterword.md)
+
 ### Documentation changes 3.3 \\(\rightarrow\\) 3.4:
 
 - Moves configuration for server owners to a new section [2. Configuration for server owners](./config.md). This has the side-effect of also re-numbering all of the sections on the left. Sorry!

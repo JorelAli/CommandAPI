@@ -1,5 +1,7 @@
 # Advancement arguments
 
+![](./images/arguments/advancement.png)
+
 The `AdvancementArgument` class represents in-game advancements. As expected, the `AdvancementArgument` can be casted to Bukkit's `Advancement` class.
 
 <div class="example">

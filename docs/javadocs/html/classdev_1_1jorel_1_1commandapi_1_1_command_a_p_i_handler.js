@@ -1,7 +1,7 @@
 var classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler =
 [
-    [ "CommandAPIHandler", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a8c6ee84503de92e3fdcb7ead595e2ecc", null ],
-    [ "fixPermissions", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a6891ed9cd83ba39aebbb1b0683d13a61", null ],
-    [ "register", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#ae4f783a19203b09292fe3894568b4fa2", null ],
-    [ "unregister", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a890bd957441d1533a6dd12e4537dee09", null ]
+    [ "Brigadier", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier" ],
+    [ "getField", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a368112525c9b4db1ddc753071cf67bfc", null ],
+    [ "getMethod", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a8efbb164f33f627680faa6022f9081d4", null ],
+    [ "getNMS", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a13c7ca774a391f611002acc092274966", null ]
 ];

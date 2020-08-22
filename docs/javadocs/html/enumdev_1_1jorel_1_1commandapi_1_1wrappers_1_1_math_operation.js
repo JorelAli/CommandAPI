@@ -1,7 +1,9 @@
 var enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation =
 [
+    [ "MathOperation", "enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#a345a968718d01f5be3af38b3158cc737", null ],
     [ "apply", "enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#a0576e47d251a8a0958015bf91379d7ce", null ],
     [ "apply", "enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#ad7e10356f536e3611d2ab80e0505fe20", null ],
+    [ "toString", "enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#acb28bea287ccdbe2f366ad5f8a4e928b", null ],
     [ "ADD", "enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#a6554ecca7d5056e59a5430b8bf7ef5c8", null ],
     [ "ASSIGN", "enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#a6f206d87108ed092af3f568f789ebe4f", null ],
     [ "DIVIDE", "enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#ab5473a4927e1025d8d721b4ad306c825", null ],

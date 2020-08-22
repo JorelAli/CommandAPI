@@ -1,4 +1,18 @@
 var searchData=
 [
-  ['1_2e13_2dcommand_2dapi_0',['1.13-Command-API',['../index.html',1,'']]]
+  ['add_0',['ADD',['../enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#a6554ecca7d5056e59a5430b8bf7ef5c8',1,'dev::jorel::commandapi::wrappers::MathOperation']]],
+  ['advancement_1',['ADVANCEMENT',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ac779834aaa36e23794202e1790bd4753',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['advancementargument_2',['AdvancementArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_advancement_argument.html',1,'dev::jorel::commandapi::arguments']]],
+  ['advancements_3',['ADVANCEMENTS',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html#a65e171b1e118d0f8adf2d2b4c0774c3d',1,'dev::jorel::commandapi::arguments::ICustomProvidedArgument::SuggestionProviders']]],
+  ['all_4',['ALL',['../enumdev_1_1jorel_1_1commandapi_1_1executors_1_1_executor_type.html#a7f858e9b009005b812144a7e37f7b80a',1,'dev::jorel::commandapi::executors::ExecutorType']]],
+  ['append_5',['append',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_message_builder.html#aa2fed33a654c27d039dd92f83476a6b0',1,'dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder.append(String str)'],['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_message_builder.html#af1aaa10d072b8d8f179169dc0b91b93d',1,'dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder.append(Object obj)']]],
+  ['appendarginput_6',['appendArgInput',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_message_builder.html#a033b27543f607d539a685d4f943b0bb7',1,'dev::jorel::commandapi::arguments::CustomArgument::MessageBuilder']]],
+  ['appendfullinput_7',['appendFullInput',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_message_builder.html#a9623286614c930d54feb770cf42597d3',1,'dev::jorel::commandapi::arguments::CustomArgument::MessageBuilder']]],
+  ['appendhere_8',['appendHere',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_message_builder.html#a32cab9787b129b3d8341856b77e8f588',1,'dev::jorel::commandapi::arguments::CustomArgument::MessageBuilder']]],
+  ['apply_9',['apply',['../enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#ad7e10356f536e3611d2ab80e0505fe20',1,'dev.jorel.commandapi.wrappers.MathOperation.apply(int val1, int val2)'],['../enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#a0576e47d251a8a0958015bf91379d7ce',1,'dev.jorel.commandapi.wrappers.MathOperation.apply(float val1, float val2)']]],
+  ['argbuildof_10',['argBuildOf',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html#a710199c9f3b833562136eec22c2616ad',1,'dev::jorel::commandapi::CommandAPIHandler::Brigadier']]],
+  ['argument_11',['Argument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html',1,'dev.jorel.commandapi.arguments.Argument'],['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a84dc66de1e701585abe5cdea50a33913',1,'dev.jorel.commandapi.arguments.Argument.Argument()']]],
+  ['assign_12',['ASSIGN',['../enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#a6f206d87108ed092af3f568f789ebe4f',1,'dev::jorel::commandapi::wrappers::MathOperation']]],
+  ['axis_13',['AXIS',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#aebca6750f8f79f80ea7acab2aecc8b01',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['axisargument_14',['AxisArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_axis_argument.html',1,'dev.jorel.commandapi.arguments.AxisArgument'],['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_axis_argument.html#afb65b0d0165c17f80f9aa54fc1679cc7',1,'dev.jorel.commandapi.arguments.AxisArgument.AxisArgument()']]]
 ];

@@ -1,6 +1,15 @@
-# 1.13-Command-API
-An API to use the new command UI introduced in Minecraft 1.13. _(Despite the name, this API is compatible for Minecraft versions 1.13 - 1.16.1)_
+# CommandAPI
+A Bukkit/Spigot API to use the command UI introduced in Minecraft 1.13.
 
+<<<<<<< 4.0-release
+**Support and Project Discussion**:
+
+- <img width="40px" src="https://cdn3.iconfinder.com/data/icons/popular-services-brands-vol-2/512/discord-512.png"></img> [Discord](https://discord.gg/G4SzSxZ)
+
+**Downloads & Documentation:**
+
+- <img width="40px" src="https://icon-icons.com/icons2/2348/PNG/512/download_arrow_icon_143023.png"></img> [Downloads & Documentation (includes usage for server owners!)](https://www.jorel.dev/CommandAPI/)
+=======
 > ## Emergency Notice: Maven URL issue
 >
 > If you can't get maven to work, it's because I've changed the url (sorry!)
@@ -16,6 +25,7 @@ The project is somewhat big enough to make it worth building a community around!
 ## Downloads & Documentation (includes usage for server owners)
 
 The documentation has moved! You can now get your hands on the latest and greatest documentation on the [CommandAPI website!](https://www.jorel.dev/CommandAPI/)
+>>>>>>> master
 
 -----
 
@@ -24,15 +34,15 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 
 * **Better commands** - Prevent players from running invalid commands, making it easier for developers
 
-  ![better commands](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/images/printnumber.gif)
+  ![better commands](https://raw.githubusercontent.com/JorelAli/CommandAPI/master/images/printnumber.gif)
 
 * **Better arguments** - Easily switch from Location arguments to raw JSON, fully supported with built-in error checking
 
-  ![better arguments](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/images/explode.gif)
+  ![better arguments](https://raw.githubusercontent.com/JorelAli/CommandAPI/master/images/explode.gif)
 
 * **Support for proxied command senders** - Run your command as other entities using `/execute as ... run command`
 
-  ![proxied senders](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/images/selfdestruct.gif)
+  ![proxied senders](https://raw.githubusercontent.com/JorelAli/CommandAPI/master/images/selfdestruct.gif)
 
 * **Support for the `/execute` command** - Let your command to be executed by the built in `/execute` command
 
@@ -53,14 +63,14 @@ The CommandAPI can be built easily, but requires copies of the Spigot server jar
 * Clone the repository using your preferred method, or with the command below:
 
   ```
-  git clone https://github.com/JorelAli/1.13-Command-API.git
+  git clone https://github.com/JorelAli/CommandAPI.git
   ```
 
-* Go into the folder named `1.13CommandAPI` _(Not to be confused with the folder named `1.13-Command-API`, which is what is cloned)_. You want the folder which contains `pom.xml`.
+* Go into the folder named `CommandAPI` _(Not to be confused with the folder named `CommandAPI`, which is what is cloned)_. You want the folder which contains `pom.xml`.
 
 * Ensure you have the required spigot server jars (see below)
 
-* Run `mvn clean install`
+* Run `mvn`
 
 ### Spigot Libraries
 
@@ -71,7 +81,7 @@ To build the CommandAPI, the following versions of Spigot are required:
 | **1.13 versions** | 1.13   | 1.13.1 | 1.13.2 |
 | **1.14 versions** | 1.14   | 1.14.3 | 1.14.4 |
 | **1.15 versions** | 1.15   |        |        |
-| **1.16 versions** | 1.16.1 |        |        |
+| **1.16 versions** | 1.16.1 | 1.16.2 |        |
 
 These versions of Minecraft must be installed in your local machine's Maven repository (`~/.m2`). **The easiest way to do this is to build them manually using Spigot's BuildTools, as it automatically adds it to the `.m2` local repository folder.**
 
@@ -80,10 +90,10 @@ These versions of Minecraft must be installed in your local machine's Maven repo
 * Download the `BuildTools.jar` file from [here](https://hub.spigotmc.org/jenkins/job/BuildTools/)
 * Make sure you have maven installed on your machine. If not, it can be downloaded from [here](https://maven.apache.org/download.cgi)
 * If on Windows:
-  * Download the `downloadSpigot.bat` file [(right click this link, save as...)](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.bat) and place it in the same folder as the `BuildTools.jar`
+  * Download the `downloadSpigot.bat` file [(right click this link, save as...)](https://raw.githubusercontent.com/JorelAli/CommandAPI/master/downloadSpigot.bat) and place it in the same folder as the `BuildTools.jar`
   * Double click on the `downloadSpigot.bat` file to run it
 * If on Linux/MacOS:
-  * Download the `downloadSpigot.sh` file [(right click this link, save as...)](https://raw.githubusercontent.com/JorelAli/1.13-Command-API/master/downloadSpigot.sh) and place it in the same folder as the `BuildTools.jar`
+  * Download the `downloadSpigot.sh` file [(right click this link, save as...)](https://raw.githubusercontent.com/JorelAli/CommandAPI/master/downloadSpigot.sh) and place it in the same folder as the `BuildTools.jar`
   * Open up a terminal in your folder and make the `downloadSpigot.sh` file executable by using `chmod u+x ./downloadSpigot.sh`
   * Run the `downloadSpigot` file using `./downloadSpigot.sh`
 
@@ -96,6 +106,25 @@ These versions of Minecraft must be installed in your local machine's Maven repo
 
 ## Changelog
 
+- Version 4.0
+  - Suggestion overriding can now be populated by Bukkit objects instead of strings
+  - Fixes a bug with the `FloatRangeArgument` where it caused a casting error
+  - Adds support for 1.16.2
+    - `ChatArgument` now works on Minecraft 1.16.2 (still doesn't work on 1.16.1)
+  - Adds new arguments:
+    - `UUIDArgument`
+	- `ItemStackPredicateArgument`
+	- `BlockPredicateArgument`
+  - Fix bug where `CustomArgument`s break when using the namespaced key flag
+  - Adds a list of commands that `FunctionWrapper` executes which is now accessible
+  - Command aliases are now much more efficient 
+  - Documentation changes (briefly):
+    - `BlockStateArgument` is now documented properly
+	- Documentation now has pictures to show you what arguments look like
+	- Documentation now has a page dedicated to what doesn't work on what Minecraft version
+  - Adds Brigadier support for developers (lets you use the CommandAPI and Brigadier code side by side!)
+  - Fixes a bug where Java 12+ had incompatibility issues
+  - Adds support for setting arbitrary requirements to arguments and commands
 - Version 3.4
   - Fix bug with custom recipes not registering in Minecraft 1.16+
   - Fix bug where command conversion didn't actually register commands
@@ -161,7 +190,7 @@ These versions of Minecraft must be installed in your local machine's Maven repo
   * Adds AdvancementArgument
   * Adds LootTableArgument
   * Adds support for 1.14.3 and 1.14.4
-  * Fixes bug where aliases weren't registering properly ([#43](https://github.com/JorelAli/1.13-Command-API/issues/43))
+  * Fixes bug where aliases weren't registering properly ([#43](https://github.com/JorelAli/CommandAPI/issues/43))
   * Fix documentation for tooltips
   * Improve documentation for dependencies and repositories
 * Version 2.0.1
@@ -171,9 +200,9 @@ These versions of Minecraft must be installed in your local machine's Maven repo
   * Major overhaul of the CommandAPI's internals - greatly improves performance
   * Deprecates SuggestedStringArgument, adding overrideSuggestions as an alternative for any argument type 
   * Adds CustomArguments, allowing you to create your own ... custom arguments
-  * Excludes dependencies from final jar ([#40](https://github.com/JorelAli/1.13-Command-API/issues/40))
+  * Excludes dependencies from final jar ([#40](https://github.com/JorelAli/CommandAPI/issues/40))
   * Adds DefinedCustomArguments - CustomArguments that have been created by yours truly
-  * DynamicSuggestedArguments now have access to the CommandSender ([#41](https://github.com/JorelAli/1.13-Command-API/issues/41))
+  * DynamicSuggestedArguments now have access to the CommandSender ([#41](https://github.com/JorelAli/CommandAPI/issues/41))
   * Adds Loot Table support
 * Version 1.8.2
   * Fix bug with PlayerArgument when player cannot be found

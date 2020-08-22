@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.18"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>1.13 CommandAPI JavaDocs: dev.jorel.commandapi.CommandAPIHandler Class Reference</title>
+<title>CommandAPI: dev.jorel.commandapi.CommandAPIHandler Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -25,8 +25,8 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">1.13 CommandAPI JavaDocs
-   &#160;<span id="projectnumber">3.0</span>
+   <div id="projectname">CommandAPI
+   &#160;<span id="projectnumber">4.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -86,109 +86,37 @@ $(document).ready(function(){initNavTree('classdev_1_1jorel_1_1commandapi_1_1_co
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">dev.jorel.commandapi.CommandAPIHandler Class Reference</div>  </div>
+<div class="title">dev.jorel.commandapi.CommandAPIHandler Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
 
 <p>Handles the main backend of the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a>.  
  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#details">More...</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html">Brigadier</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html" title="The Brigadier class is used to access some of the internals of the CommandAPI so you can use the Comm...">Brigadier</a> class is used to access some of the internals of the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> so you can use the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> alongside Mojang's com.mojang.brigadier package.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a13c7ca774a391f611002acc092274966"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html">NMS</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a13c7ca774a391f611002acc092274966">getNMS</a> ()</td></tr>
+<tr class="memitem:a13c7ca774a391f611002acc092274966"><td class="memItemLeft" align="right" valign="top">static NMS&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a13c7ca774a391f611002acc092274966">getNMS</a> ()</td></tr>
 <tr class="memdesc:a13c7ca774a391f611002acc092274966"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an instance of NMS.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a13c7ca774a391f611002acc092274966">More...</a><br /></td></tr>
 <tr class="separator:a13c7ca774a391f611002acc092274966"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a368112525c9b4db1ddc753071cf67bfc"><td class="memItemLeft" align="right" valign="top">static Field&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a368112525c9b4db1ddc753071cf67bfc">getField</a> (Class&lt;?&gt; clazz, String name)</td></tr>
+<tr class="memdesc:a368112525c9b4db1ddc753071cf67bfc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Caches a field using reflection if it is not already cached, then return the field of a given class.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a368112525c9b4db1ddc753071cf67bfc">More...</a><br /></td></tr>
 <tr class="separator:a368112525c9b4db1ddc753071cf67bfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8efbb164f33f627680faa6022f9081d4"><td class="memItemLeft" align="right" valign="top">static Method&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a8efbb164f33f627680faa6022f9081d4">getMethod</a> (Class&lt;?&gt; clazz, String name)</td></tr>
+<tr class="memdesc:a8efbb164f33f627680faa6022f9081d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Caches a method using reflection if it is not already cached, then return the method of a given class.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a8efbb164f33f627680faa6022f9081d4">More...</a><br /></td></tr>
 <tr class="separator:a8efbb164f33f627680faa6022f9081d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr class="memitem:a8c6ee84503de92e3fdcb7ead595e2ecc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a8c6ee84503de92e3fdcb7ead595e2ecc">CommandAPIHandler</a> ()  throws ClassNotFoundException </td></tr>
-<tr class="memdesc:a8c6ee84503de92e3fdcb7ead595e2ecc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialise the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html" title="Handles the main backend of the CommandAPI.">CommandAPIHandler</a>.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a8c6ee84503de92e3fdcb7ead595e2ecc">More...</a><br /></td></tr>
-<tr class="separator:a8c6ee84503de92e3fdcb7ead595e2ecc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a890bd957441d1533a6dd12e4537dee09"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a890bd957441d1533a6dd12e4537dee09">unregister</a> (String commandName, boolean force)</td></tr>
-<tr class="memdesc:a890bd957441d1533a6dd12e4537dee09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unregisters a command from the NMS command graph.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a890bd957441d1533a6dd12e4537dee09">More...</a><br /></td></tr>
-<tr class="separator:a890bd957441d1533a6dd12e4537dee09"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6891ed9cd83ba39aebbb1b0683d13a61"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a6891ed9cd83ba39aebbb1b0683d13a61">fixPermissions</a> ()</td></tr>
-<tr class="separator:a6891ed9cd83ba39aebbb1b0683d13a61"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4f783a19203b09292fe3894568b4fa2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#ae4f783a19203b09292fe3894568b4fa2">register</a> (String commandName, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_permission.html">CommandPermission</a> permissions, String[] aliases, final LinkedHashMap&lt; String, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a> &gt; args, CustomCommandExecutor executor)  throws Exception </td></tr>
-<tr class="separator:ae4f783a19203b09292fe3894568b4fa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Handles the main backend of the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a>. </p>
 <p>This constructs brigadier Command objects, applies and generates arguments and handles suggestions. This also handles permission registration for Bukkit, interactions for NMS and the registration and unregistration of commands. </p>
-
-<p class="definition">Definition at line <a class="el" href="_command_a_p_i_handler_8java_source.html#l00062">62</a> of file <a class="el" href="_command_a_p_i_handler_8java_source.html">CommandAPIHandler.java</a>.</p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a8c6ee84503de92e3fdcb7ead595e2ecc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8c6ee84503de92e3fdcb7ead595e2ecc">&#9670;&nbsp;</a></span>CommandAPIHandler()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">dev.jorel.commandapi.CommandAPIHandler.CommandAPIHandler </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> throws ClassNotFoundException</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Initialise the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html" title="Handles the main backend of the CommandAPI.">CommandAPIHandler</a>. </p>
-<p>Hooks into the right version of NMS using the different versions, hooks into the NBTAPI if possible and hooks into Spigot's API if possible. Also initialises reflection caches and the NMS command dispatcher.</p>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">ClassNotFoundException</td><td>if brigadier is not found or cannot properly hook into NMS </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="definition">Definition at line <a class="el" href="_command_a_p_i_handler_8java_source.html#l00092">92</a> of file <a class="el" href="_command_a_p_i_handler_8java_source.html">CommandAPIHandler.java</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a6891ed9cd83ba39aebbb1b0683d13a61"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6891ed9cd83ba39aebbb1b0683d13a61">&#9670;&nbsp;</a></span>fixPermissions()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void dev.jorel.commandapi.CommandAPIHandler.fixPermissions </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="_command_a_p_i_handler_8java_source.html#l00433">433</a> of file <a class="el" href="_command_a_p_i_handler_8java_source.html">CommandAPIHandler.java</a>.</p>
-
-</div>
-</div>
+</div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a368112525c9b4db1ddc753071cf67bfc"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a368112525c9b4db1ddc753071cf67bfc">&#9670;&nbsp;</a></span>getField()</h2>
 
@@ -223,7 +151,16 @@ Protected Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_command_a_p_i_handler_8java_source.html#l00659">659</a> of file <a class="el" href="_command_a_p_i_handler_8java_source.html">CommandAPIHandler.java</a>.</p>
+<p>Caches a field using reflection if it is not already cached, then return the field of a given class. </p>
+<p>This will also make the field accessible.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">clazz</td><td>the class where the field is declared </td></tr>
+    <tr><td class="paramname">name</td><td>the name of the field </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a Field reference </dd></dl>
 
 </div>
 </div>
@@ -261,7 +198,16 @@ Protected Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_command_a_p_i_handler_8java_source.html#l00677">677</a> of file <a class="el" href="_command_a_p_i_handler_8java_source.html">CommandAPIHandler.java</a>.</p>
+<p>Caches a method using reflection if it is not already cached, then return the method of a given class. </p>
+<p>This will also make the method accessible.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">clazz</td><td>the class where the method is declared </td></tr>
+    <tr><td class="paramname">name</td><td>the name of the method </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a Method reference </dd></dl>
 
 </div>
 </div>
@@ -275,7 +221,7 @@ Protected Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html">NMS</a> dev.jorel.commandapi.CommandAPIHandler.getNMS </td>
+          <td class="memname">static NMS dev.jorel.commandapi.CommandAPIHandler.getNMS </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -291,123 +237,18 @@ Protected Member Functions</h2></td></tr>
 <p>Returns an instance of NMS. </p>
 <dl class="section return"><dt>Returns</dt><dd>an instance of NMS </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_command_a_p_i_handler_8java_source.html#l00079">79</a> of file <a class="el" href="_command_a_p_i_handler_8java_source.html">CommandAPIHandler.java</a>.</p>
-
-</div>
-</div>
-<a id="ae4f783a19203b09292fe3894568b4fa2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae4f783a19203b09292fe3894568b4fa2">&#9670;&nbsp;</a></span>register()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void dev.jorel.commandapi.CommandAPIHandler.register </td>
-          <td>(</td>
-          <td class="paramtype">String&#160;</td>
-          <td class="paramname"><em>commandName</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_permission.html">CommandPermission</a>&#160;</td>
-          <td class="paramname"><em>permissions</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">String[]&#160;</td>
-          <td class="paramname"><em>aliases</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">final LinkedHashMap&lt; String, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a> &gt;&#160;</td>
-          <td class="paramname"><em>args</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">CustomCommandExecutor&#160;</td>
-          <td class="paramname"><em>executor</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> throws Exception</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="_command_a_p_i_handler_8java_source.html#l00488">488</a> of file <a class="el" href="_command_a_p_i_handler_8java_source.html">CommandAPIHandler.java</a>.</p>
-
-</div>
-</div>
-<a id="a890bd957441d1533a6dd12e4537dee09"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a890bd957441d1533a6dd12e4537dee09">&#9670;&nbsp;</a></span>unregister()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void dev.jorel.commandapi.CommandAPIHandler.unregister </td>
-          <td>(</td>
-          <td class="paramtype">String&#160;</td>
-          <td class="paramname"><em>commandName</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">boolean&#160;</td>
-          <td class="paramname"><em>force</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Unregisters a command from the NMS command graph. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">commandName</td><td>the name of the command to unregister </td></tr>
-    <tr><td class="paramname">force</td><td>whether the unregistration system should attempt to remove all instances of the command, regardless of whether they have been registered by Minecraft, Bukkit or Spigot etc. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="definition">Definition at line <a class="el" href="_command_a_p_i_handler_8java_source.html#l00204">204</a> of file <a class="el" href="_command_a_p_i_handler_8java_source.html">CommandAPIHandler.java</a>.</p>
-
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>1.13CommandAPI/commandapi-core/src/main/java/dev/jorel/commandapi/<a class="el" href="_command_a_p_i_handler_8java_source.html">CommandAPIHandler.java</a></li>
+<li>CommandAPI/commandapi-core/src/main/java/dev/jorel/commandapi/CommandAPIHandler.java</li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacedev.html">dev</a></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel.html">jorel</a></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi.html">commandapi</a></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html">CommandAPIHandler</a></li>
-    <li class="footer">Generated on Tue Jun 16 2020 16:30:06 for 1.13 CommandAPI JavaDocs by
+    <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html">CommandAPIHandler</a></li>
+    <li class="footer">Generated on Sat Aug 22 2020 23:26:21 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

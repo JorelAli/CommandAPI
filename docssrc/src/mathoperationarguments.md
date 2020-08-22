@@ -1,5 +1,7 @@
 # MathOperation arguments
 
+![](./images/arguments/mathop.png)
+
 The CommandAPI's `MathOperationArgument` is used to represent the Minecraft scoreboard arithmetic operation to alter scoreboard scores. Since there is no default representation in the Bukkit API, the CommandAPI provides the `MathOperation` class to represent each operation:
 
 | Symbol (in Minecraft) | MathOperation enum value |
@@ -16,7 +18,7 @@ The CommandAPI's `MathOperationArgument` is used to represent the Minecraft scor
 
 -----
 
-The `MathOperationArgument` also has two methods:
+The `MathOperation` also has two methods:
 
 ```java
 public int apply(int val1, int val2);

@@ -30,7 +30,7 @@ Say we created a command `/god` that sets a player as being invulnerable. Since 
 
 -----
 
-## Registering permissions to arguments
+## Adding permissions to arguments
 
 For further fine-tuning of permission management, the CommandAPI allows you to add permissions to individual arguments. This prevents the user from executing a command *with a specific argument* if they do not have a specific permission.
 
