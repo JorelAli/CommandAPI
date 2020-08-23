@@ -13,7 +13,7 @@ https://raw.githubusercontent.com/JorelAli/1.13-Command-API/mvn-repo/1.13Command
 You must now use:
 
 ```xml
-https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/1.13CommandAPI/
+https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/
 ```
 
 This information can be viewed in section [3. Setting up your development environment](./quickstart.md). _(Don't worry if you forget, it **should** work as normal nonetheless!)_

@@ -9,6 +9,10 @@ A Bukkit/Spigot API to use the command UI introduced in Minecraft 1.13.
 
 - <img width="40px" src="https://icon-icons.com/icons2/2348/PNG/512/download_arrow_icon_143023.png"></img> [Downloads & Documentation (includes usage for server owners!)](https://www.jorel.dev/CommandAPI/)
 
+**Other relevant links:**
+
+- <img width="40px" src="https://static.spigotmc.org/img/spigot.png"></img> [Spigot page](https://www.spigotmc.org/resources/commandapi.62353/)
+
 -----
 
 ## Purpose
