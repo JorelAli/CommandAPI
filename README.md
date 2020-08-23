@@ -13,6 +13,8 @@ A Bukkit/Spigot API to use the command UI introduced in Minecraft 1.13.
 
 - <img width="40px" src="https://static.spigotmc.org/img/spigot.png"></img> [Spigot page](https://www.spigotmc.org/resources/commandapi.62353/)
 
+> :warning: The CommandAPI's Maven repository URL has changed! Please view [the documentation](https://www.jorel.dev/CommandAPI/4.0/quickstart.html#using-maven-recommended) to see how to update your Maven repository
+
 -----
 
 ## Purpose
