@@ -1,11 +1,11 @@
-# 1.13-Command-API Maven Repository
+# CommandAPI Maven Repository
 ## Repository Usage
 - Add the maven repository to your project:
 
   ```
   <repository>
-      <id>mccommandapi</id>
-      <url>https://raw.githubusercontent.com/JorelAli/1.13-Command-API/mvn-repo/1.13CommandAPI/</url>
+      <id>commandapi</id>
+      <url>https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/</url>
   </repository>
   ```
 
@@ -13,12 +13,8 @@
 
   ```
   <dependency>
-      <groupId>io.github.jorelali</groupId>
-      <artifactId>commandapi</artifactId>
-      <version>VERSION_NUMBER</version>
+      <groupId>dev.jorel</groupId>
+      <artifactId>commandapi-core</artifactId>
+      <version>4.0</version>
   </dependency>
   ```
-
-## Version Numbers
-
-A list of version numbers can be found [here](https://github.com/JorelAli/1.13-Command-API/tree/mvn-repo/1.13CommandAPI/io/github/jorelali/commandapi)
