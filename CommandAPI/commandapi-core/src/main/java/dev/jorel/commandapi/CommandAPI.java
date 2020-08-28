@@ -2,6 +2,8 @@ package dev.jorel.commandapi;
 
 import java.io.File;
 import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
@@ -26,6 +28,7 @@ public abstract class CommandAPI {
 	private static boolean canRegister = true;
 	private static Config config;
 	private static File dispatcherFile;
+	private static Logger logger;
 
 	static Config getConfiguration() {
 		return config;
@@ -36,7 +39,20 @@ public abstract class CommandAPI {
 	}
 	
 	public static Logger getLog() {
-		return Logger.getLogger("CommandAPI");
+		if(logger == null) {
+			logger = new Logger("CommandAPI", null) {
+				{
+					this.setParent(Bukkit.getServer().getLogger());
+					this.setLevel(Level.ALL);
+				}
+				
+				public void log(LogRecord logRecord) {
+					logRecord.setMessage("[CommandAPI] " + logRecord.getMessage());
+					super.log(logRecord);
+				}
+			};
+		}
+		return logger;
 	}
 	
 	static final void onLoad(Plugin plugin) {
@@ -45,6 +61,7 @@ public abstract class CommandAPI {
 			plugin.saveDefaultConfig();
 			CommandAPI.config = new Config(plugin.getConfig());
 			CommandAPI.dispatcherFile = new File(plugin.getDataFolder(), "command_registration.json");
+			CommandAPI.logger = plugin.getLogger();
 			
 			//Check dependencies for CommandAPI
 			CommandAPIHandler.checkDependencies();
@@ -60,7 +77,7 @@ public abstract class CommandAPI {
 				}
 			}
 		} else {
-			onLoad();
+			onLoad(true);
 		}
 	}
 	
@@ -68,8 +85,9 @@ public abstract class CommandAPI {
 	 * Initializes the CommandAPI for loading. This should be placed at the
 	 * start of your <code>onLoad()</code> method.
 	 */
-	public static void onLoad() {
-		CommandAPI.config = new Config();
+	public static void onLoad(boolean verbose) {
+		CommandAPI.config = new Config(verbose);
+		CommandAPIHandler.checkDependencies();
 	}
 	
 	/**

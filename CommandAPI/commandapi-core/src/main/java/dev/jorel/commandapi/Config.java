@@ -53,8 +53,8 @@ class Config {
 		}
 	}
 
-	public Config() {
-		verboseOutput = false;
+	public Config(boolean verbose) {
+		verboseOutput = verbose;
 		createDispatcherFile = false;
 		pluginsToConvert = new HashMap<>();
 	}
