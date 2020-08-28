@@ -14,6 +14,7 @@
 # CommandAPI Setup
 
 - [Setting up your development environment](./quickstart.md)
+- [Shading the CommandAPI in your plugins](./shading.md)
 
 # Creating Commands
 

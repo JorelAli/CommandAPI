@@ -1,11 +1,22 @@
 var searchData=
 [
-  ['scoreboardslot_424',['ScoreboardSlot',['../classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_scoreboard_slot.html',1,'dev::jorel::commandapi::wrappers']]],
-  ['scoreboardslotargument_425',['ScoreboardSlotArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_scoreboard_slot_argument.html',1,'dev::jorel::commandapi::arguments']]],
-  ['scoreholderargument_426',['ScoreHolderArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html',1,'dev::jorel::commandapi::arguments']]],
-  ['scoreholdertype_427',['ScoreHolderType',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument_1_1_score_holder_type.html',1,'dev::jorel::commandapi::arguments::ScoreHolderArgument']]],
-  ['soundargument_428',['SoundArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_sound_argument.html',1,'dev::jorel::commandapi::arguments']]],
-  ['spigotnotfoundexception_429',['SpigotNotFoundException',['../classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_spigot_not_found_exception.html',1,'dev::jorel::commandapi::exceptions']]],
-  ['stringargument_430',['StringArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_string_argument.html',1,'dev::jorel::commandapi::arguments']]],
-  ['suggestionproviders_431',['SuggestionProviders',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html',1,'dev::jorel::commandapi::arguments::ICustomProvidedArgument']]]
+  ['scoreboardslot_540',['ScoreboardSlot',['../classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_scoreboard_slot.html',1,'dev::jorel::commandapi::wrappers']]],
+  ['scoreboardslotargument_541',['ScoreboardSlotArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_scoreboard_slot_argument.html',1,'dev::jorel::commandapi::arguments']]],
+  ['scoreholderargument_542',['ScoreHolderArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html',1,'dev::jorel::commandapi::arguments']]],
+  ['scoreholdertype_543',['ScoreHolderType',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument_1_1_score_holder_type.html',1,'dev::jorel::commandapi::arguments::ScoreHolderArgument']]],
+  ['simplecommandexceptiontype_544',['SimpleCommandExceptionType',['../classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_simple_command_exception_type.html',1,'com::mojang::brigadier::exceptions']]],
+  ['singleredirectmodifier_545',['SingleRedirectModifier',['../interfacecom_1_1mojang_1_1brigadier_1_1_single_redirect_modifier.html',1,'com::mojang::brigadier']]],
+  ['soundargument_546',['SoundArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_sound_argument.html',1,'dev::jorel::commandapi::arguments']]],
+  ['spigotnotfoundexception_547',['SpigotNotFoundException',['../classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_spigot_not_found_exception.html',1,'dev::jorel::commandapi::exceptions']]],
+  ['stringargument_548',['StringArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_string_argument.html',1,'dev::jorel::commandapi::arguments']]],
+  ['stringargumenttype_549',['StringArgumentType',['../classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_string_argument_type.html',1,'com::mojang::brigadier::arguments']]],
+  ['stringrange_550',['StringRange',['../classcom_1_1mojang_1_1brigadier_1_1context_1_1_string_range.html',1,'com::mojang::brigadier::context']]],
+  ['stringreader_551',['StringReader',['../classcom_1_1mojang_1_1brigadier_1_1_string_reader.html',1,'com::mojang::brigadier']]],
+  ['stringtype_552',['StringType',['../enumcom_1_1mojang_1_1brigadier_1_1arguments_1_1_string_argument_type_1_1_string_type.html',1,'com::mojang::brigadier::arguments::StringArgumentType']]],
+  ['suggestion_553',['Suggestion',['../classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestion.html',1,'com::mojang::brigadier::suggestion']]],
+  ['suggestioncontext_554',['SuggestionContext',['../classcom_1_1mojang_1_1brigadier_1_1context_1_1_suggestion_context.html',1,'com::mojang::brigadier::context']]],
+  ['suggestionprovider_555',['SuggestionProvider',['../interfacecom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestion_provider.html',1,'com::mojang::brigadier::suggestion']]],
+  ['suggestionproviders_556',['SuggestionProviders',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html',1,'dev::jorel::commandapi::arguments::ICustomProvidedArgument']]],
+  ['suggestions_557',['Suggestions',['../classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions.html',1,'com::mojang::brigadier::suggestion']]],
+  ['suggestionsbuilder_558',['SuggestionsBuilder',['../classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions_builder.html',1,'com::mojang::brigadier::suggestion']]]
 ];
