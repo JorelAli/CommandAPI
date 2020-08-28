@@ -38,6 +38,8 @@ Here's the list of changes to the documentation between each update. You can vie
 
 ### Documentation changes 3.4 \\(\rightarrow\\) 4.0:
 
+- Update the maven and gradle documentation to state that it is `provided` and `compileOnly`
+
 - The project has been renamed from the "1.13 Command API" to simply the "CommandAPI". This has changed a few things, such as various links. See the section [Upgrading guide](./upgrading.md) to view the relevant changes with regards to maven.
 - Updated [3. Setting up your development environment](./quickstart.md) to include new Maven repository links
 - Fixed stronkage with Java versions - there's now no random warning boxes about incompatibility with Java 12!

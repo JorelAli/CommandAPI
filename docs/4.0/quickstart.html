@@ -208,6 +208,7 @@
         &lt;groupId&gt;dev.jorel&lt;/groupId&gt;
         &lt;artifactId&gt;commandapi-core&lt;/artifactId&gt;
         &lt;version&gt;4.0&lt;/version&gt;
+        &lt;scope&gt;provided&lt;/scope&gt;
     &lt;/dependency&gt;
 &lt;/dependencies&gt;
 </code></pre>
@@ -230,7 +231,7 @@
 <li>
 <p>Add the dependency to your list of dependencies in your <code>build.gradle</code> file:</p>
 <pre><code class="language-gradle">dependencies {
-    compile &quot;dev.jorel:commandapi-core:4.0&quot;
+    compileOnly &quot;dev.jorel:commandapi-core:4.0&quot;
 }
 </code></pre>
 </li>

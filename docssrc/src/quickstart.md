@@ -41,6 +41,7 @@ To use the CommandAPI in your plugins, there are a few methods of adding it to y
           <groupId>dev.jorel</groupId>
           <artifactId>commandapi-core</artifactId>
           <version>4.0</version>
+          <scope>provided</scope>
       </dependency>
   </dependencies>
   ```
@@ -63,7 +64,7 @@ To use the CommandAPI in your plugins, there are a few methods of adding it to y
 
   ```gradle
   dependencies {
-      compile "dev.jorel:commandapi-core:4.0"
+      compileOnly "dev.jorel:commandapi-core:4.0"
   }
   ```
 
