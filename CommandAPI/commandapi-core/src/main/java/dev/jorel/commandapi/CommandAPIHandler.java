@@ -810,5 +810,11 @@ public abstract class CommandAPIHandler {
 		public static RequiredArgumentBuilder argBuildOf(LinkedHashMap<String, Argument> args, String value) {
 			return getRequiredArgumentBuilderDynamic(args, value, args.get(value), args.get(value).getArgumentPermission(), args.get(value).getRequirements());
 		}
+		
+		public static RequiredArgumentBuilder argBuildOf(String tooltip, Argument argument) {
+			LinkedHashMap<String, Argument> map = new LinkedHashMap<>();
+			map.put(tooltip, argument);
+			return getRequiredArgumentBuilderDynamic(map, tooltip, argument, argument.getArgumentPermission(), argument.getRequirements());
+		}
 	}
 }
