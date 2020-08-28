@@ -66,8 +66,8 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 
 import de.tr7zw.nbtapi.NBTContainer;
+import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.CommandAPIMain;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
 import dev.jorel.commandapi.arguments.ICustomProvidedArgument.SuggestionProviders;
 import dev.jorel.commandapi.arguments.LocationType;
@@ -176,7 +176,7 @@ public class NMS_1_16_R1 implements NMS {
 	@Override
 	public void reloadDataPacks()
 			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		CommandAPIMain.getLog().info("Reloading datapacks...");
+		CommandAPI.getLog().info("Reloading datapacks...");
 
 		// Get the NMS server
 		DedicatedServer server = ((CraftServer) Bukkit.getServer()).getHandle().getServer();
@@ -231,16 +231,16 @@ public class NMS_1_16_R1 implements NMS {
 				try {
 					Bukkit.addRecipe(recipe);
 					if(recipe instanceof Keyed) {
-						CommandAPIMain.getLog().info("Re-registering recipe: " + ((Keyed) recipe).getKey());
+						CommandAPI.getLog().info("Re-registering recipe: " + ((Keyed) recipe).getKey());
 					}
 				} catch(Exception e) {
 					// Can't re-register registered recipes. Not an error. 
 				}
 			});
 			
-			CommandAPIMain.getLog().info("Finished reloading datapacks");
+			CommandAPI.getLog().info("Finished reloading datapacks");
 		} catch (Exception e) {
-			CommandAPIMain.getLog().log(Level.WARNING,
+			CommandAPI.getLog().log(Level.WARNING,
 					"Failed to load datapacks, can't proceed with normal server load procedure. Try fixing your datapacks?",
 					e);
 		}

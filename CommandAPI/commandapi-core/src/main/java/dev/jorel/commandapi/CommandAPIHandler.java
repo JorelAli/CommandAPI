@@ -74,7 +74,7 @@ public abstract class CommandAPIHandler {
 		try {
 			server = getMethod(Bukkit.getServer().getClass(), "getServer").invoke(Bukkit.getServer());
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			CommandAPIMain.getLog().severe("Unable to hook into NMS properly!");
+			CommandAPI.getLog().severe("Unable to hook into NMS properly!");
 			server = null;
 		}
 		
@@ -82,7 +82,7 @@ public abstract class CommandAPIHandler {
 		try {
 			version = (String) getMethod(Class.forName(server.getClass().getPackage().getName() + ".MinecraftServer"), "getVersion").invoke(server);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException | ClassNotFoundException e) {
-			CommandAPIMain.getLog().severe("Failed to find Minecraft version!");
+			CommandAPI.getLog().severe("Failed to find Minecraft version!");
 			version = null;
 		}
 		
@@ -98,26 +98,26 @@ public abstract class CommandAPIHandler {
 		}
 
 		// Log successful hooks
-		if (CommandAPIMain.getConfiguration().hasVerboseOutput()) {
+		if (CommandAPI.getConfiguration().hasVerboseOutput()) {
 			String compatibleVersions = Arrays.toString(NMS.compatibleVersions());
 			compatibleVersions = compatibleVersions.substring(1, compatibleVersions.length() - 1);
-			CommandAPIMain.getLog().info(
+			CommandAPI.getLog().info(
 					"Hooked into NMS " + NMS.getClass().getName() + " (compatible with " + compatibleVersions + ")");
 		}
 
 		// Checks other dependencies
 		if (Bukkit.getPluginManager().getPlugin("NBTAPI") != null) {
-			CommandAPIMain.getLog().info("Hooked into the NBTAPI successfully.");
+			CommandAPI.getLog().info("Hooked into the NBTAPI successfully.");
 		} else {
-			CommandAPIMain.getLog().warning(
+			CommandAPI.getLog().warning(
 					"Couldn't hook into the NBTAPI for NBT support. See https://www.spigotmc.org/resources/nbt-api.7939/");
 		}
 
 		try {
 			Class.forName("org.spigotmc.SpigotConfig");
-			CommandAPIMain.getLog().info("Hooked into Spigot successfully for Chat/ChatComponents");
+			CommandAPI.getLog().info("Hooked into Spigot successfully for Chat/ChatComponents");
 		} catch (ClassNotFoundException e) {
-			CommandAPIMain.getLog().warning("Couldn't hook into Spigot for Chat/ChatComponents");
+			CommandAPI.getLog().warning("Couldn't hook into Spigot for Chat/ChatComponents");
 		}
 	}
 	
@@ -140,8 +140,8 @@ public abstract class CommandAPIHandler {
 	 */
 	static void unregister(String commandName, boolean force) {
 		try {
-			if (CommandAPIMain.getConfiguration().hasVerboseOutput()) {
-				CommandAPIMain.getLog().info("Unregistering command /" + commandName);
+			if (CommandAPI.getConfiguration().hasVerboseOutput()) {
+				CommandAPI.getLog().info("Unregistering command /" + commandName);
 			}
 
 			// Get the child nodes from the loaded dispatcher class
@@ -399,13 +399,13 @@ public abstract class CommandAPIHandler {
 					.get(map);
 
 			if(!PERMISSIONS_TO_FIX.isEmpty()) {
-				CommandAPIMain.getLog().info("Linking permissions to commands:");
+				CommandAPI.getLog().info("Linking permissions to commands:");
 			}
 			PERMISSIONS_TO_FIX.forEach((cmdName, perm) -> {
 
 				if (perm.equals(CommandPermission.NONE)) {
-					if (CommandAPIMain.getConfiguration().hasVerboseOutput()) {
-						CommandAPIMain.getLog().info("NONE -> /" + cmdName);
+					if (CommandAPI.getConfiguration().hasVerboseOutput()) {
+						CommandAPI.getLog().info("NONE -> /" + cmdName);
 					}
 					// Set the command permission to empty string (Minecraft standard for "no
 					// permission required")
@@ -416,10 +416,10 @@ public abstract class CommandAPIHandler {
 						knownCommands.get(cmdName).setPermission("");
 					}
 				} else {
-					if (CommandAPIMain.getConfiguration().hasVerboseOutput()) {
-						CommandAPIMain.getLog().info(perm.getPermission() + " -> /" + cmdName);
+					if (CommandAPI.getConfiguration().hasVerboseOutput()) {
+						CommandAPI.getLog().info(perm.getPermission() + " -> /" + cmdName);
 					} else {
-						CommandAPIMain.getLog().info("OP -> /" + cmdName);
+						CommandAPI.getLog().info("OP -> /" + cmdName);
 					}
 					// Set the command permission to the (String) permission node
 					if (NMS.isVanillaCommandWrapper(knownCommands.get(cmdName))) {
@@ -443,11 +443,11 @@ public abstract class CommandAPIHandler {
 	// registers it
 	static void register(String commandName, CommandPermission permissions, String[] aliases, Predicate<CommandSender> requirements,
 			final LinkedHashMap<String, Argument> args, CustomCommandExecutor executor) throws Exception {
-		if (CommandAPIMain.getConfiguration().hasVerboseOutput()) {
+		if (CommandAPI.getConfiguration().hasVerboseOutput()) {
 			// Create a list of argument names
 			StringBuilder builder = new StringBuilder();
 			args.values().forEach(arg -> builder.append("<").append(arg.getClass().getSimpleName()).append("> "));
-			CommandAPIMain.getLog().info("Registering command /" + commandName + " " + builder.toString());
+			CommandAPI.getLog().info("Registering command /" + commandName + " " + builder.toString());
 		}
 
 		Command command = generateCommand(args, executor);
@@ -468,8 +468,8 @@ public abstract class CommandAPIHandler {
 
 			// Register aliases
 			for (String alias : aliases) {
-				if (CommandAPIMain.getConfiguration().hasVerboseOutput()) {
-					CommandAPIMain.getLog().info("Registering alias /" + alias + " -> " + resultantNode.getName());
+				if (CommandAPI.getConfiguration().hasVerboseOutput()) {
+					CommandAPI.getLog().info("Registering alias /" + alias + " -> " + resultantNode.getName());
 				}
 				DISPATCHER.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(alias)
 						.requires(generatePermissions(alias, permissions, requirements)).executes(command));
@@ -538,8 +538,8 @@ public abstract class CommandAPIHandler {
 
 			// Register aliases
 			for (String alias : aliases) {
-				if (CommandAPIMain.getConfiguration().hasVerboseOutput()) {
-					CommandAPIMain.getLog().info("Registering alias /" + alias + " -> " + resultantNode.getName());
+				if (CommandAPI.getConfiguration().hasVerboseOutput()) {
+					CommandAPI.getLog().info("Registering alias /" + alias + " -> " + resultantNode.getName());
 				}
 				DISPATCHER.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(alias)
 						.requires(generatePermissions(alias, permissions, requirements)).redirect(resultantNode));
@@ -547,8 +547,8 @@ public abstract class CommandAPIHandler {
 		}
 
 		// Produce the commandDispatch.json file for debug purposes
-		if (CommandAPIMain.getConfiguration().willCreateDispatcherFile()) {
-			File file = CommandAPIMain.getDispatcherFile();
+		if (CommandAPI.getConfiguration().willCreateDispatcherFile()) {
+			File file = CommandAPI.getDispatcherFile();
 			try {
 				file.createNewFile();
 			} catch (IOException e) {
