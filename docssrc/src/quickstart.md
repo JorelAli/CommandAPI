@@ -51,7 +51,7 @@ To use the CommandAPI in your plugins, there are a few methods of adding it to y
 
 ## Using Gradle
 
-* Add the repository to your `build.gradle` file:
+* Add the repositories to your `build.gradle` file (the second repository is required because the CommandAPI depends on the NBT-API):
 
   ```gradle
   repositories {

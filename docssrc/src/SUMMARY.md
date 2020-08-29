@@ -74,8 +74,6 @@
 
 - [Command conversion](./conversion.md)
 
------
-
 # Extended CommandAPI
 
 - [Brigadier + CommandAPI](./brigadier.md)
