@@ -34,6 +34,8 @@ I would like to personally give thanks to the following people - these are peopl
 - [**Minenash**](https://github.com/Minenash), who was the driving force for the CommandAPI's 3.0 release, which added a plethora of new arguments to the CommandAPI. Minenash's research, code prototypes, documentation examples, bug testing and code review was a tremendous help to make the 3.0 release such a feature-rich version.
 - [**Michael-Ziluck**](https://github.com/Michael-Ziluck), who created an amazing pull request that helped greatly improve the performance of the CommandAPI as well as structure the entire CommandAPI project into a multi-module Maven project which significantly improved the maintainability of the CommandAPI for the future.
 
+I'd also like to give a special mention to the following people that have helped find bugs or have supported the project in some way: aianlinb, Baka-Mitai, Checkium, Comeza, DerpNerb, DogeBogey, endrdragon, EnragedRabisu, i509VCB, KieranGateley, lifespan, Loapu, Marvmallow, MatrixTunnel, portlek, Ricky12Awesome, SHsuperCM, SpaceCheetah, The_Gavster, Tinkot, vladfrangu, zedwick
+
 -----
 
 I never really expected more than 5 or so people to use this API, so it was truly a pleasure to see everyone's responses, issues and suggestions that has made the CommandAPI what it is today.

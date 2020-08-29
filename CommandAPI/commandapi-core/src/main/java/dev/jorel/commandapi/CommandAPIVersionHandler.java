@@ -5,7 +5,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * This file handles the NMS version to be loaded. The CommandAPIVersionHandler
  * file within the commandapi-core module is NOT used at compile time. Instead,
- * the commandapi-extra module is loaded instead, which doesn't use reflection to
+ * the commandapi-vh module is loaded instead, which doesn't use reflection to
  * load NMS instances.
  */
 public interface CommandAPIVersionHandler {
