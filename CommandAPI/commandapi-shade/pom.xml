@@ -21,7 +21,7 @@
         </dependency>
         <dependency>
             <groupId>dev.jorel</groupId>
-            <artifactId>commandapi-extra</artifactId>
+            <artifactId>commandapi-vh</artifactId>
             <version>4.1</version>
         </dependency>
         <dependency>

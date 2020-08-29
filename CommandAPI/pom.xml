@@ -19,8 +19,8 @@
 		<module>commandapi-1.13.1</module>
 		<module>commandapi-1.13.2</module>
 		<module>commandapi-core</module>
-		<module>commandapi-extra</module>
-		<module>commandapi-output</module>
+		<module>commandapi-vh</module>
+		<module>commandapi-plugin</module>
 		<module>commandapi-shade</module>
 	</modules>
 
