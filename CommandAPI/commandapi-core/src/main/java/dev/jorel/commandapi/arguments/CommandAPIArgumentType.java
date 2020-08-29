@@ -194,6 +194,6 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The BlockPredicateArgument
 	 */
-	BLOCK_PREDICATE, STRING_LITERAL;
+	BLOCK_PREDICATE, SIMPLE_LITERAL;
 
 }
