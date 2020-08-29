@@ -45,7 +45,7 @@ To use the CommandAPI in your plugins, there are a few methods of adding it to y
       </dependency>
   </dependencies>
   ```
-* Add the CommandAPI as a dependent in the plugin.yml (`depend: [CommandAPI]`)
+* Add the CommandAPI as a dependent in the `plugin.yml` (`depend: [CommandAPI]`)
 
 -----
 
@@ -69,4 +69,4 @@ To use the CommandAPI in your plugins, there are a few methods of adding it to y
   ```
 
 
-- Add the CommandAPI as a dependent in the plugin.yml (`depend: [CommandAPI]`)
+- Add the CommandAPI as a dependent in the `plugin.yml` (`depend: [CommandAPI]`)

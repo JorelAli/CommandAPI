@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Shading the CommandAPI in your plugins - CommandAPI Documentation v4.0</title>
+        <title>Shading the CommandAPI in your plugins - CommandAPI Documentation v4.1</title>
         
         
 
@@ -127,7 +127,7 @@
                         
                     </div>
 
-                    <h1 class="menu-title">CommandAPI Documentation v4.0</h1>
+                    <h1 class="menu-title">CommandAPI Documentation v4.1</h1>
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
@@ -170,7 +170,46 @@
                         
                         <h1><a class="header" href="#shading-the-commandapi-in-your-plugins" id="shading-the-commandapi-in-your-plugins">Shading the CommandAPI in your plugins</a></h1>
 <p align="center"><i>After 2 years, this most requested feature is finally here...</i></p>
-<p>The CommandAPI can now be shaded into </p>
+<p>The CommandAPI can now be shaded into your own plugins! &quot;Shading&quot; is the process of including the CommandAPI inside your plugin, rather than requiring the CommandAPI as an external plugin. In other words, if you shade the CommandAPI into your plugin, you don't need to include the <code>CommandAPI.jar</code> in your server's plugins folder.</p>
+<hr />
+<h2><a class="header" href="#shading-with-maven" id="shading-with-maven">Shading with Maven</a></h2>
+<p>To shade the CommandAPI into a maven project, you'll need to use the <code>commandapi-shade</code> dependency, which is optimized for shading and doesn't include plugin-specific files <em>(such as <code>plugin.yml</code>)</em>:</p>
+<pre><code class="language-xml">&lt;dependencies&gt;
+	&lt;dependency&gt;
+		&lt;groupId&gt;dev.jorel&lt;/groupId&gt;
+        &lt;artifactId&gt;commandapi-shade&lt;/artifactId&gt;
+        &lt;version&gt;4.0&lt;/version&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+</code></pre>
+<p>Once you've added this this, you can shade the CommandAPI easily by adding the <code>maven-shade-plugin</code> to your build sequence:</p>
+<pre><code class="language-xml">&lt;build&gt;
+    &lt;plugins&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+            &lt;artifactId&gt;maven-shade-plugin&lt;/artifactId&gt;
+            &lt;version&gt;3.2.4&lt;/version&gt;
+            &lt;executions&gt;
+                &lt;execution&gt;
+                    &lt;id&gt;shade&lt;/id&gt;
+                    &lt;phase&gt;package&lt;/phase&gt;
+                    &lt;goals&gt;
+                        &lt;goal&gt;shade&lt;/goal&gt;
+                    &lt;/goals&gt;
+                &lt;/execution&gt;
+            &lt;/executions&gt;
+            &lt;configuration&gt;
+                &lt;relocations&gt;
+                    &lt;relocation&gt;
+                        &lt;pattern&gt;dev.jorel.commandapi-shade&lt;/pattern&gt;
+                    &lt;/relocation&gt;
+                &lt;/relocations&gt;
+            &lt;/configuration&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;
+</code></pre>
+<p>Of course, if you shade the CommandAPI into your plugin, you don't need to add <code>depend: [CommandAPI]</code> to your <code>plugin.yml</code> file.</p>
 
                     </main>
 
@@ -209,21 +248,6 @@
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         
