@@ -8,7 +8,7 @@ import dev.jorel.commandapi.exceptions.BadLiteralException;
 public class LiteralArgument extends Argument {
 
 	private String literal;
-	public boolean isSimple = false;
+	public boolean isMulti = false;
 	
 	/**
 	 * A literal argument. Only takes one string value which cannot be modified 

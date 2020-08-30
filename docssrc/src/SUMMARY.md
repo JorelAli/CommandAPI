@@ -62,7 +62,7 @@
   - [NBT arguments](./nbtarguments.md)
   - [Literal arguments](./litargs.md)
     - [Literal arguments](./literalarguments.md)
-    - [Simple literal arguments](./simplelitargs.md)
+    - [Multi literal arguments](./multilitargs.md)
   - [Custom arguments](./customarguments.md)
 - [Functions & Tags](./functions.md)
   - [Setting up functions & tags](./functionsetup.md)

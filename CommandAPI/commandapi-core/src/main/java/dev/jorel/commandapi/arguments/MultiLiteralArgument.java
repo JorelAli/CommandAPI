@@ -2,14 +2,14 @@ package dev.jorel.commandapi.arguments;
 
 import dev.jorel.commandapi.exceptions.BadLiteralException;
 
-public class SimpleLiteralArgument extends Argument {
+public class MultiLiteralArgument extends Argument {
 
 	String[] literals;
 	
 	/**
 	 * A literal argument. Only takes one string value which cannot be modified 
 	 */
-	public SimpleLiteralArgument(final String... literals) {
+	public MultiLiteralArgument(final String... literals) {
 		super(null);
 		if(literals == null) {
 			throw new BadLiteralException(true);
@@ -31,6 +31,6 @@ public class SimpleLiteralArgument extends Argument {
 	
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.SIMPLE_LITERAL;
+		return CommandAPIArgumentType.MULTI_LITERAL;
 	}
 }

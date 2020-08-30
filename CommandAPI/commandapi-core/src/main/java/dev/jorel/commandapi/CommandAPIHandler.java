@@ -53,7 +53,7 @@ import dev.jorel.commandapi.arguments.Location2DArgument;
 import dev.jorel.commandapi.arguments.LocationArgument;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.ScoreHolderArgument;
-import dev.jorel.commandapi.arguments.SimpleLiteralArgument;
+import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.nms.NMS;
 
 /**
@@ -277,7 +277,7 @@ public abstract class CommandAPIHandler {
 			return NMS.getItemStackPredicate(cmdCtx, key);
 		case LITERAL:
 			LiteralArgument a = (LiteralArgument) value;
-			return a.isSimple ? a.getLiteral() : null;
+			return a.isMulti ? a.getLiteral() : null;
 		case LOCATION:
 			LocationType locationType = ((LocationArgument) value).getLocationType();
 			return NMS.getLocation(cmdCtx, key, locationType, sender);
@@ -310,7 +310,7 @@ public abstract class CommandAPIHandler {
 					: NMS.getScoreHolderMultiple(cmdCtx, key);
 		case SCOREBOARD_SLOT:
 			return NMS.getScoreboardSlot(cmdCtx, key);
-		case SIMPLE_LITERAL:
+		case MULTI_LITERAL:
 			//This case should NEVER occur!
 			break;
 		case SIMPLE_TYPE:
@@ -450,21 +450,21 @@ public abstract class CommandAPIHandler {
 	static void register(String commandName, CommandPermission permissions, String[] aliases, Predicate<CommandSender> requirements,
 			final LinkedHashMap<String, Argument> args, CustomCommandExecutor executor) throws Exception {
 		
-		//"Expands" our SimpleLiterals into Literals
-		Predicate<Argument> isSimpleLiteral = arg -> arg.getArgumentType() == CommandAPIArgumentType.SIMPLE_LITERAL;
-		if(args.values().stream().filter(isSimpleLiteral).count() > 0) {
+		//"Expands" our MultiLiterals into Literals
+		Predicate<Argument> isMultiLiteral = arg -> arg.getArgumentType() == CommandAPIArgumentType.MULTI_LITERAL;
+		if(args.values().stream().filter(isMultiLiteral).count() > 0) {
 		
 			int index = 0;
 			for(Entry<String, Argument> entry : args.entrySet()) {
 				
-				//Find the first simpleLiteral in the for loop
-				if(isSimpleLiteral.test(entry.getValue())) {
-					SimpleLiteralArgument superArg = (SimpleLiteralArgument) entry.getValue();
+				//Find the first multiLiteral in the for loop
+				if(isMultiLiteral.test(entry.getValue())) {
+					MultiLiteralArgument superArg = (MultiLiteralArgument) entry.getValue();
 					
 					//Add all of its entries
 					for(int i = 0; i < superArg.getLiterals().length; i++) {
 						LiteralArgument litArg = new LiteralArgument(superArg.getLiterals()[i]);
-						litArg.isSimple = true;
+						litArg.isMulti = true;
 						
 						
 						//Reconstruct the list of arguments and place in the new literals
