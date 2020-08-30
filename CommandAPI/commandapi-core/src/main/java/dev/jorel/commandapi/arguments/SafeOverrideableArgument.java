@@ -58,7 +58,8 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 		return super.overrideSuggestions(sMap2(mapper, suggestions));
 	}
 	
-	public final Argument safeOverrideSuggestionsT(@SuppressWarnings("unchecked") Tooltip<S>... suggestions) {
+	@SafeVarargs
+	public final Argument safeOverrideSuggestionsT(Tooltip<S>... suggestions) {
 		return super.overrideSuggestionsT(tMap0(mapper, suggestions));
 	};
 	

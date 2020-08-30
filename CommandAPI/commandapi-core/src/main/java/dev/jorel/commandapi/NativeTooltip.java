@@ -15,7 +15,7 @@ public class NativeTooltip {
 	}
 	
 	public static NativeTooltip of(String suggestion, String tooltip) {
-		return new NativeTooltip(suggestion, new LiteralMessage(tooltip));
+		return tooltip == null ? empty(suggestion) : new NativeTooltip(suggestion, new LiteralMessage(tooltip));
 	}
 	
 	private NativeTooltip(String suggestion, Message tooltip) {
