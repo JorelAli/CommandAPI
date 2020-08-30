@@ -609,12 +609,12 @@ public abstract class CommandAPIHandler {
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// NMS ICompletionProvider.a()
-	static CompletableFuture<Suggestions> getSuggestionsBuilder(SuggestionsBuilder builder, String[] array) {
+	static CompletableFuture<Suggestions> getSuggestionsBuilder(SuggestionsBuilder builder, NativeTooltip[] array) {
 		String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
 		for (int i = 0; i < array.length; i++) {
-			String str = array[i];
-			if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
-				builder.suggest(str);
+			NativeTooltip str = array[i];
+			if (str.getSuggestion().toLowerCase(Locale.ROOT).startsWith(remaining)) {
+				builder.suggest(str.getSuggestion(), str.getTooltip());
 			}
 		}
 		return builder.buildFuture();

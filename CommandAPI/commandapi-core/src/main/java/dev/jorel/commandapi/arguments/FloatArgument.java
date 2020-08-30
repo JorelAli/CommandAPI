@@ -1,10 +1,5 @@
 package dev.jorel.commandapi.arguments;
 
-import java.util.function.BiFunction;
-import java.util.function.Function;
-
-import org.bukkit.command.CommandSender;
-
 import com.mojang.brigadier.arguments.FloatArgumentType;
 
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
@@ -12,13 +7,13 @@ import dev.jorel.commandapi.exceptions.InvalidRangeException;
 /**
  * An argument that represents primitive Java floats
  */
-public class FloatArgument extends Argument implements ISafeOverrideableSuggestions<Float> {
+public class FloatArgument extends SafeOverrideableArgument<Float> {
 
 	/**
 	 * A float argument
 	 */
 	public FloatArgument() {
-		super(FloatArgumentType.floatArg());
+		super(FloatArgumentType.floatArg(), String::valueOf);
 	}
 	
 	/**
@@ -26,7 +21,7 @@ public class FloatArgument extends Argument implements ISafeOverrideableSuggesti
 	 * @param min The minimum value this argument can take (inclusive)
 	 */
 	public FloatArgument(float min) {
-		super(FloatArgumentType.floatArg(min));
+		super(FloatArgumentType.floatArg(min), String::valueOf);
 	}
 	
 	/**
@@ -35,7 +30,7 @@ public class FloatArgument extends Argument implements ISafeOverrideableSuggesti
 	 * @param max The maximum value this argument can take (inclusive)
 	 */
 	public FloatArgument(float min, float max) {
-		super(FloatArgumentType.floatArg(min, max));
+		super(FloatArgumentType.floatArg(min, max), String::valueOf);
 		if(max < min) {
 			throw new InvalidRangeException();
 		}
@@ -49,17 +44,5 @@ public class FloatArgument extends Argument implements ISafeOverrideableSuggesti
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.SIMPLE_TYPE;
-	}
-	
-	public Argument safeOverrideSuggestions(Float... suggestions) {
-		return super.overrideSuggestions(sMap0(String::valueOf, suggestions));
-	}
-
-	public Argument safeOverrideSuggestions(Function<CommandSender, Float[]> suggestions) {
-		return super.overrideSuggestions(sMap1(String::valueOf, suggestions));
-	}
-
-	public Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], Float[]> suggestions) {
-		return super.overrideSuggestions(sMap2(String::valueOf, suggestions));
 	}
 }

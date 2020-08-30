@@ -1,10 +1,5 @@
 package dev.jorel.commandapi.arguments;
 
-import java.util.function.BiFunction;
-import java.util.function.Function;
-
-import org.bukkit.command.CommandSender;
-
 import com.mojang.brigadier.arguments.LongArgumentType;
 
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
@@ -12,13 +7,13 @@ import dev.jorel.commandapi.exceptions.InvalidRangeException;
 /**
  * An argument that represents primitive Java longs
  */
-public class LongArgument extends Argument implements ISafeOverrideableSuggestions<Long> {
+public class LongArgument extends SafeOverrideableArgument<Long> {
 
 	/**
 	 * A long argument
 	 */
 	public LongArgument() {
-		super(LongArgumentType.longArg());
+		super(LongArgumentType.longArg(), String::valueOf);
 	}
 	
 	/**
@@ -26,7 +21,7 @@ public class LongArgument extends Argument implements ISafeOverrideableSuggestio
 	 * @param min The minimum value this argument can take (inclusive)
 	 */
 	public LongArgument(int min) {
-		super(LongArgumentType.longArg(min));
+		super(LongArgumentType.longArg(min), String::valueOf);
 	}
 	
 	/**
@@ -35,7 +30,7 @@ public class LongArgument extends Argument implements ISafeOverrideableSuggestio
 	 * @param max The maximum value this argument can take (inclusive)
 	 */
 	public LongArgument(int min, int max) {
-		super(LongArgumentType.longArg(min, max));
+		super(LongArgumentType.longArg(min, max), String::valueOf);
 		if(max < min) {
 			throw new InvalidRangeException();
 		}
@@ -49,18 +44,6 @@ public class LongArgument extends Argument implements ISafeOverrideableSuggestio
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.SIMPLE_TYPE;
-	}
-	
-	public Argument safeOverrideSuggestions(Long... suggestions) {
-		return super.overrideSuggestions(sMap0(String::valueOf, suggestions));
-	}
-
-	public Argument safeOverrideSuggestions(Function<CommandSender, Long[]> suggestions) {
-		return super.overrideSuggestions(sMap1(String::valueOf, suggestions));
-	}
-
-	public Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], Long[]> suggestions) {
-		return super.overrideSuggestions(sMap2(String::valueOf, suggestions));
 	}
 	
 }

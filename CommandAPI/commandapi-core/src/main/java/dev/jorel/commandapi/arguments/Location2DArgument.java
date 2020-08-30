@@ -1,17 +1,12 @@
 package dev.jorel.commandapi.arguments;
 
-import java.util.function.BiFunction;
-import java.util.function.Function;
-
-import org.bukkit.command.CommandSender;
-
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.wrappers.Location2D;
 
 /**
  * An argument that represents the Bukkit Location object in x and z directions
  */
-public class Location2DArgument extends Argument implements ISafeOverrideableSuggestions<Location2D> {
+public class Location2DArgument extends SafeOverrideableArgument<Location2D> {
 
 	/**
 	 * A Location argument. Represents Minecraft locations in 2D space. Defaults to LocationType.PRECISE_POSITION
@@ -26,7 +21,9 @@ public class Location2DArgument extends Argument implements ISafeOverrideableSug
 	 */
 	public Location2DArgument(LocationType type) {
 		super(type == LocationType.BLOCK_POSITION ? CommandAPIHandler.getNMS()._ArgumentPosition2D()
-				: CommandAPIHandler.getNMS()._ArgumentVec2());
+				: CommandAPIHandler.getNMS()._ArgumentVec2(),
+				type == LocationType.BLOCK_POSITION ? (Location2D l) -> l.getBlockX() + " " + l.getBlockZ()
+						: (Location2D l) -> l.getX() + " " + l.getZ());
 		locationType = type;
 	}
 
@@ -48,32 +45,5 @@ public class Location2DArgument extends Argument implements ISafeOverrideableSug
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.LOCATION_2D;
-	}
-	
-	@Override
-	public Argument safeOverrideSuggestions(Location2D... suggestions) {
-		if(locationType == LocationType.BLOCK_POSITION) {
-			return super.overrideSuggestions(sMap0((Location2D l) -> l.getBlockX() + " " + l.getBlockZ(), suggestions));
-		} else {
-			return super.overrideSuggestions(sMap0((Location2D l) -> l.getX() + " " + l.getZ(), suggestions));
-		}
-	}
-
-	@Override
-	public Argument safeOverrideSuggestions(Function<CommandSender, Location2D[]> suggestions) {
-		if(locationType == LocationType.BLOCK_POSITION) {
-			return super.overrideSuggestions(sMap1((Location2D l) -> l.getBlockX() + " " + l.getBlockZ(), suggestions));
-		} else {
-			return super.overrideSuggestions(sMap1((Location2D l) -> l.getX() + " " + l.getZ(), suggestions));
-		}
-	}
-
-	@Override
-	public Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], Location2D[]> suggestions) {
-		if(locationType == LocationType.BLOCK_POSITION) {
-			return super.overrideSuggestions(sMap2((Location2D l) -> l.getBlockX() + " " + l.getBlockZ(), suggestions));
-		} else {
-			return super.overrideSuggestions(sMap2((Location2D l) -> l.getX() + " " + l.getZ(), suggestions));
-		}
 	}
 }

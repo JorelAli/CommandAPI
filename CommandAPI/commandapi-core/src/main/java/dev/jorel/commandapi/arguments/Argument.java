@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import com.mojang.brigadier.arguments.ArgumentType;
 
 import dev.jorel.commandapi.CommandPermission;
+import dev.jorel.commandapi.NativeTooltip;
 
 /**
  * The core abstract class for Command API arguments
@@ -63,7 +64,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	// Suggestions //
 	/////////////////
 
-	Optional<BiFunction<CommandSender, Object[], String[]>> suggestions = Optional.empty();
+	Optional<BiFunction<CommandSender, Object[], NativeTooltip[]>> suggestions = Optional.empty();
 
 	/**
 	 * Override the suggestions of this argument with a String array. Typically,
@@ -74,7 +75,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 */
 	@Override
 	public final Argument overrideSuggestions(String... suggestions) {
-		this.suggestions = Optional.of((c, m) -> suggestions);
+		this.suggestions = Optional.of((c, m) -> NativeTooltip.fromSuggestions(suggestions));
 		return this;
 	}
 
@@ -87,7 +88,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 */
 	@Override
 	public final Argument overrideSuggestions(Function<CommandSender, String[]> suggestions) {
-		this.suggestions =  Optional.of((c, m) -> suggestions.apply(c));
+		this.suggestions =  Optional.of((c, m) -> NativeTooltip.fromSuggestions(suggestions.apply(c)));
 		return this;
 	}
 	
@@ -100,6 +101,45 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 */
 	@Override
 	public final Argument overrideSuggestions(BiFunction<CommandSender, Object[], String[]> suggestions) {
+		this.suggestions =  Optional.of((c, m) -> NativeTooltip.fromSuggestions(suggestions.apply(c, m)));
+		return this;
+	}
+	
+	/**
+	 * Override the suggestions of this argument with a String array. Typically,
+	 * this is the supplier <code>s -> suggestions</code>.
+	 * 
+	 * @param suggestions the string array to override suggestions with
+	 * @return the current argument
+	 */
+	@Override
+	public final Argument overrideSuggestionsT(NativeTooltip... suggestions) {
+		this.suggestions = Optional.of((c, m) -> suggestions);
+		return this;
+	}
+
+	/**
+	 * Override the suggestions of this argument with a function that maps the
+	 * command sender to a String array.
+	 * 
+	 * @param suggestions the function to override suggestions with
+	 * @return the current argument
+	 */
+	@Override
+	public final Argument overrideSuggestionsT(Function<CommandSender, NativeTooltip[]> suggestions) {
+		this.suggestions =  Optional.of((c, m) -> suggestions.apply(c));
+		return this;
+	}
+	
+	/**
+	 * Override the suggestions of this argument with a function that maps the
+	 * command sender and a data set of previously declared arguments to a String array.
+	 * 
+	 * @param suggestions the function to override suggestions with
+	 * @return the current argument
+	 */
+	@Override
+	public final Argument overrideSuggestionsT(BiFunction<CommandSender, Object[], NativeTooltip[]> suggestions) {
 		this.suggestions =  Optional.of(suggestions);
 		return this;
 	}
@@ -113,7 +153,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 *         are no overridden suggestions.
 	 */
 	@Override
-	public final Optional<BiFunction<CommandSender, Object[], String[]>> getOverriddenSuggestions() {
+	public final Optional<BiFunction<CommandSender, Object[], NativeTooltip[]>> getOverriddenSuggestions() {
 		return suggestions;
 	}
 
