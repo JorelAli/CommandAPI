@@ -227,7 +227,7 @@ public class CommandAPICommand {
 			throw new EmptyExecutorException();
 		} else {
 			if(!CommandAPI.canRegister()) {
-				CommandAPIMain.getLog().severe("Cannot register command /" + commandName + ", because the server has finished loading!");
+				CommandAPI.getLog().severe("Cannot register command /" + commandName + ", because the server has finished loading!");
 				return;
 			}
 			try {

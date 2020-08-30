@@ -1,4 +1,0 @@
-var classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1exceptions_1_1_greedy_argument_exception =
-[
-    [ "GreedyArgumentException", "classio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1exceptions_1_1_greedy_argument_exception.html#afbfc041eb3392c2aec9f0cb3040f65c5", null ]
-];

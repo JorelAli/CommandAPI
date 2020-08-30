@@ -195,8 +195,8 @@
 <p>Add the maven repository to your <code>pom.xml</code> file:</p>
 <pre><code class="language-xml">&lt;repositories&gt;
     &lt;repository&gt;
-        &lt;id&gt;commandapi&lt;/id&gt;
-        &lt;url&gt;https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/&lt;/url&gt;
+        &lt;id&gt;mccommandapi&lt;/id&gt;
+        &lt;url&gt;https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/1.13CommandAPI/&lt;/url&gt;
     &lt;/repository&gt;
 &lt;/repositories&gt;
 </code></pre>
@@ -208,7 +208,6 @@
         &lt;groupId&gt;dev.jorel&lt;/groupId&gt;
         &lt;artifactId&gt;commandapi-core&lt;/artifactId&gt;
         &lt;version&gt;4.0&lt;/version&gt;
-        &lt;scope&gt;provided&lt;/scope&gt;
     &lt;/dependency&gt;
 &lt;/dependencies&gt;
 </code></pre>
@@ -223,7 +222,7 @@
 <li>
 <p>Add the repository to your <code>build.gradle</code> file:</p>
 <pre><code class="language-gradle">repositories {
-    maven { url = &quot;https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/&quot; }
+    maven { url = &quot;https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/1.13CommandAPI/&quot; }
     maven { url = &quot;https://repo.codemc.org/repository/maven-public/&quot; }
 }
 </code></pre>
@@ -231,7 +230,7 @@
 <li>
 <p>Add the dependency to your list of dependencies in your <code>build.gradle</code> file:</p>
 <pre><code class="language-gradle">dependencies {
-    compileOnly &quot;dev.jorel:commandapi-core:4.0&quot;
+    compile &quot;dev.jorel:commandapi-core:4.0&quot;
 }
 </code></pre>
 </li>

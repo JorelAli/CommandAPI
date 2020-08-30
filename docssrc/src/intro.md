@@ -36,6 +36,12 @@ Using the search icon in the top left corner, you can search for anything in thi
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 4.0 \\(\rightarrow\\) 4.1:
+
+- Adds documentation for the `SimpleLiteralArgument` in section [8.11.2. Simple literal arguments](./simplelitargs.md)
+- Adds a new section [4. Shading the CommandAPI into your plugins](./shading.md)
+- Update [Afterword](./afterword.md)
+
 ### Documentation changes 3.4 \\(\rightarrow\\) 4.0:
 
 - Update the maven and gradle documentation to state that it is `provided` and `compileOnly`

@@ -1,5 +1,0 @@
-var interfaceio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1executors_1_1_command_block_resulting_command_executor =
-[
-    [ "getType", "interfaceio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1executors_1_1_command_block_resulting_command_executor.html#affa868949c090d97130fbec69fe230da", null ],
-    [ "run", "interfaceio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1executors_1_1_command_block_resulting_command_executor.html#aa4e78c456d3ec1680d0fe705c2009a3b", null ]
-];

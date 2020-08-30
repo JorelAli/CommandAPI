@@ -40,18 +40,18 @@ To use the CommandAPI in your plugins, there are a few methods of adding it to y
       <dependency>
           <groupId>dev.jorel</groupId>
           <artifactId>commandapi-core</artifactId>
-          <version>4.0</version>
+          <version>4.1</version>
           <scope>provided</scope>
       </dependency>
   </dependencies>
   ```
-* Add the CommandAPI as a dependent in the plugin.yml (`depend: [CommandAPI]`)
+* Add the CommandAPI as a dependent in the `plugin.yml` (`depend: [CommandAPI]`)
 
 -----
 
 ## Using Gradle
 
-* Add the repository to your `build.gradle` file:
+* Add the repositories to your `build.gradle` file (the second repository is required because the CommandAPI depends on the NBT-API):
 
   ```gradle
   repositories {
@@ -64,9 +64,9 @@ To use the CommandAPI in your plugins, there are a few methods of adding it to y
 
   ```gradle
   dependencies {
-      compileOnly "dev.jorel:commandapi-core:4.0"
+      compileOnly "dev.jorel:commandapi-core:4.1"
   }
   ```
 
 
-- Add the CommandAPI as a dependent in the plugin.yml (`depend: [CommandAPI]`)
+- Add the CommandAPI as a dependent in the `plugin.yml` (`depend: [CommandAPI]`)

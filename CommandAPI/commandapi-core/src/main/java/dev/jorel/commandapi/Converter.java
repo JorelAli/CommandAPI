@@ -21,7 +21,7 @@ public class Converter {
 	 * @param plugin The plugin which commands are to be converted
 	 */
 	public static void convert(Plugin plugin) {
-		CommandAPIMain.getLog().info("Converting commands for " + plugin.getName());
+		CommandAPI.getLog().info("Converting commands for " + plugin.getName());
 		plugin.getDescription().getCommands().keySet().forEach(commandName -> convertPluginCommand((JavaPlugin) plugin, commandName));
 	}
 	
@@ -36,13 +36,13 @@ public class Converter {
 	}
 	
 	private static void convertPluginCommand(JavaPlugin plugin, String commandName) {
-		CommandAPIMain.getLog().info("Converting " + plugin.getName() + " command /" + commandName);
+		CommandAPI.getLog().info("Converting " + plugin.getName() + " command /" + commandName);
 		
 		/* Parse the commands */
 		Map<String, Object> cmdData = plugin.getDescription().getCommands().get(commandName);
 		
 		if(cmdData == null) {
-			CommandAPIMain.getLog().severe("Couldn't find /" + commandName + " in " + plugin.getName() + "'s plugin.yml. Are you sure you're not confusing it with an alias?");
+			CommandAPI.getLog().severe("Couldn't find /" + commandName + " in " + plugin.getName() + "'s plugin.yml. Are you sure you're not confusing it with an alias?");
 			return;
 		}
 
@@ -59,7 +59,7 @@ public class Converter {
 			aliases = list.toArray(new String[0]);
 		}
 		if(aliases.length != 0) {
-			CommandAPIMain.getLog().info("Aliases for command /" + commandName + " found. Using aliases " + Arrays.deepToString(aliases));
+			CommandAPI.getLog().info("Aliases for command /" + commandName + " found. Using aliases " + Arrays.deepToString(aliases));
 		}
 		 
 		//Convert YAML to CommandPermission
@@ -68,7 +68,7 @@ public class Converter {
 		if(permission == null) {
 			permissionNode = CommandPermission.NONE;
 		} else {
-			CommandAPIMain.getLog().info("Permission for command /" + commandName + " found. Using " + permission);
+			CommandAPI.getLog().info("Permission for command /" + commandName + " found. Using " + permission);
 			permissionNode = CommandPermission.fromString(permission);
 		}
 		
