@@ -42,6 +42,7 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
 
 import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
 import dev.jorel.commandapi.arguments.CustomArgument;
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
 import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
@@ -52,6 +53,7 @@ import dev.jorel.commandapi.arguments.Location2DArgument;
 import dev.jorel.commandapi.arguments.LocationArgument;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.ScoreHolderArgument;
+import dev.jorel.commandapi.arguments.SimpleLiteralArgument;
 import dev.jorel.commandapi.nms.NMS;
 
 /**
@@ -274,7 +276,8 @@ public abstract class CommandAPIHandler {
 		case ITEMSTACK_PREDICATE:
 			return NMS.getItemStackPredicate(cmdCtx, key);
 		case LITERAL:
-			return null;
+			LiteralArgument a = (LiteralArgument) value;
+			return a.isSimple ? a.getLiteral() : null;
 		case LOCATION:
 			LocationType locationType = ((LocationArgument) value).getLocationType();
 			return NMS.getLocation(cmdCtx, key, locationType, sender);
@@ -307,6 +310,9 @@ public abstract class CommandAPIHandler {
 					: NMS.getScoreHolderMultiple(cmdCtx, key);
 		case SCOREBOARD_SLOT:
 			return NMS.getScoreboardSlot(cmdCtx, key);
+		case SIMPLE_LITERAL:
+			//This case should NEVER occur!
+			break;
 		case SIMPLE_TYPE:
 			return cmdCtx.getArgument(key, value.getPrimitiveType());
 		case SOUND:
@@ -443,6 +449,45 @@ public abstract class CommandAPIHandler {
 	// registers it
 	static void register(String commandName, CommandPermission permissions, String[] aliases, Predicate<CommandSender> requirements,
 			final LinkedHashMap<String, Argument> args, CustomCommandExecutor executor) throws Exception {
+		
+		//"Expands" our SimpleLiterals into Literals
+		Predicate<Argument> isSimpleLiteral = arg -> arg.getArgumentType() == CommandAPIArgumentType.SIMPLE_LITERAL;
+		if(args.values().stream().filter(isSimpleLiteral).count() > 0) {
+		
+			int index = 0;
+			for(Entry<String, Argument> entry : args.entrySet()) {
+				
+				//Find the first simpleLiteral in the for loop
+				if(isSimpleLiteral.test(entry.getValue())) {
+					SimpleLiteralArgument superArg = (SimpleLiteralArgument) entry.getValue();
+					
+					//Add all of its entries
+					for(int i = 0; i < superArg.getLiterals().length; i++) {
+						LiteralArgument litArg = new LiteralArgument(superArg.getLiterals()[i]);
+						litArg.isSimple = true;
+						
+						
+						//Reconstruct the list of arguments and place in the new literals
+						LinkedHashMap<String, Argument> newArgs = new LinkedHashMap<>();
+						{
+							int j = 0;
+							for(Entry<String, Argument> previousEntry : args.entrySet()) {
+								if(j == index) {
+									newArgs.put(entry.getKey(), litArg);
+								} else {
+									newArgs.put(previousEntry.getKey(), previousEntry.getValue());
+								}
+								j++;
+							}
+						}
+						register(commandName, permissions, aliases, requirements, newArgs, executor);
+					}
+					return;
+				}
+				index++;
+			}
+		}
+		
 		if (CommandAPI.getConfiguration().hasVerboseOutput()) {
 			// Create a list of argument names
 			StringBuilder builder = new StringBuilder();
