@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.Tooltip;
 
 /**
  * An argument that represents the Bukkit Location object
@@ -49,31 +50,37 @@ public class LocationArgument extends Argument implements ISafeOverrideableSugge
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.LOCATION;
 	}
+	
+	Function<Location, String> blockPositionMapper = (Location l) -> l.getBlockX() + " " + l.getBlockY() + " " + l.getBlockZ();
+	Function<Location, String> precisePositionMapper = (Location l) -> l.getX() + " " + l.getY() + " " + l.getZ();	
 
 	@Override
 	public Argument safeOverrideSuggestions(Location... suggestions) {
-		if(locationType == LocationType.BLOCK_POSITION) {
-			return super.overrideSuggestions(sMap0((Location l) -> l.getBlockX() + " " + l.getBlockY() + " " + l.getBlockZ(), suggestions));
-		} else {
-			return super.overrideSuggestions(sMap0((Location l) -> l.getX() + " " + l.getY() + " " + l.getZ(), suggestions));
-		}
+		return super.overrideSuggestions(sMap0(locationType == LocationType.BLOCK_POSITION ? blockPositionMapper : precisePositionMapper, suggestions));
 	}
 
 	@Override
 	public Argument safeOverrideSuggestions(Function<CommandSender, Location[]> suggestions) {
-		if(locationType == LocationType.BLOCK_POSITION) {
-			return super.overrideSuggestions(sMap1((Location l) -> l.getBlockX() + " " + l.getBlockY() + " " + l.getBlockZ(), suggestions));
-		} else {
-			return super.overrideSuggestions(sMap1((Location l) -> l.getX() + " " + l.getY() + " " + l.getZ(), suggestions));
-		}
+		return super.overrideSuggestions(sMap1(locationType == LocationType.BLOCK_POSITION ? blockPositionMapper : precisePositionMapper, suggestions));
 	}
 
 	@Override
 	public Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], Location[]> suggestions) {
-		if(locationType == LocationType.BLOCK_POSITION) {
-			return super.overrideSuggestions(sMap2((Location l) -> l.getBlockX() + " " + l.getBlockY() + " " + l.getBlockZ(), suggestions));
-		} else {
-			return super.overrideSuggestions(sMap2((Location l) -> l.getX() + " " + l.getY() + " " + l.getZ(), suggestions));
-		}
+		return super.overrideSuggestions(sMap2(locationType == LocationType.BLOCK_POSITION ? blockPositionMapper : precisePositionMapper, suggestions));
+	}
+	
+	@Override
+	public Argument safeOverrideSuggestionsT(@SuppressWarnings("unchecked") Tooltip<Location>... suggestions) {
+		return super.overrideSuggestionsT(tMap0(locationType == LocationType.BLOCK_POSITION ? blockPositionMapper : precisePositionMapper, suggestions));
+	}
+
+	@Override
+	public Argument safeOverrideSuggestionsT(Function<CommandSender, Tooltip<Location>[]> suggestions) {
+		return super.overrideSuggestionsT(tMap1(locationType == LocationType.BLOCK_POSITION ? blockPositionMapper : precisePositionMapper, suggestions));
+	}
+
+	@Override
+	public Argument safeOverrideSuggestionsT(BiFunction<CommandSender, Object[], Tooltip<Location>[]> suggestions) {
+		return super.overrideSuggestionsT(tMap2(locationType == LocationType.BLOCK_POSITION ? blockPositionMapper : precisePositionMapper, suggestions));
 	}
 }

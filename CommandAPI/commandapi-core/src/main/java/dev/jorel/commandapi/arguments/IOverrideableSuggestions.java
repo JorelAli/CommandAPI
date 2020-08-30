@@ -6,6 +6,8 @@ import java.util.function.Function;
 
 import org.bukkit.command.CommandSender;
 
+import dev.jorel.commandapi.NativeTooltip;
+
 /**
  * An interface declaring methods required to override argument suggestions
  */
@@ -46,6 +48,10 @@ public interface IOverrideableSuggestions {
 	 * @return a function that provides suggestions, or <code>null</code> if there
 	 *         are no overridden suggestions.
 	 */
-	Optional<BiFunction<CommandSender, Object[], String[]>> getOverriddenSuggestions();
+	Optional<BiFunction<CommandSender, Object[], NativeTooltip[]>> getOverriddenSuggestions();
+	
+	Argument overrideSuggestionsT(NativeTooltip... suggestions);
+	Argument overrideSuggestionsT(Function<CommandSender, NativeTooltip[]> suggestions);
+	Argument overrideSuggestionsT(BiFunction<CommandSender, Object[], NativeTooltip[]> suggestions);
 	
 }
