@@ -3,22 +3,26 @@ A Bukkit/Spigot API to use the command UI introduced in Minecraft 1.13.
 
 **Support and Project Discussion**:
 
-- <img width="40px" src="https://cdn3.iconfinder.com/data/icons/popular-services-brands-vol-2/512/discord-512.png"></img> [Discord](https://discord.gg/G4SzSxZ)
+- <img width="20px" src="https://cdn3.iconfinder.com/data/icons/popular-services-brands-vol-2/512/discord-512.png"></img> [Discord](https://discord.gg/G4SzSxZ)
+- <img width="20px" src="https://static.spigotmc.org/img/spigot.png"></img> [Spigot page](https://www.spigotmc.org/resources/commandapi.62353/) 
 
 **Downloads & Documentation:**
 
-- <img width="40px" src="https://icon-icons.com/icons2/2348/PNG/512/download_arrow_icon_143023.png"></img> [Downloads & Documentation (includes usage for server owners!)](https://www.jorel.dev/CommandAPI/)
+- <img width="20px" src="https://icon-icons.com/icons2/2348/PNG/512/download_arrow_icon_143023.png"></img> [All downloads](https://github.com/JorelAli/CommandAPI/releases)
+- <img width="20px" src="https://icon-icons.com/icons2/2348/PNG/512/books_icon_143050.png"></img> [Documentation (includes usage for server owners!)](https://www.jorel.dev/CommandAPI/)
 
-**Other relevant links:**
+**Announcements:**
 
-- <img width="40px" src="https://static.spigotmc.org/img/spigot.png"></img> [Spigot page](https://www.spigotmc.org/resources/commandapi.62353/)
+> :warning: **The CommandAPI's Maven repository URL has changed!** Please view [the documentation](https://www.jorel.dev/CommandAPI/4.0/quickstart.html#using-maven-recommended) to see how to update your Maven repository
 
-> :warning: The CommandAPI's Maven repository URL has changed! Please view [the documentation](https://www.jorel.dev/CommandAPI/4.0/quickstart.html#using-maven-recommended) to see how to update your Maven repository
+**Compatible Minecraft versions:** 
+
+![](https://img.shields.io/badge/Minecraft%20Version-1.13-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.13.1-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.13.2-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.14-blue)  ![](https://img.shields.io/badge/Minecraft%20Version-1.14.1-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.14.2-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.14.3-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.14.4-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.15-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.15.1-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.15.2-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.16.1-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.16.2-blue)
 
 -----
 
 ## Purpose
-This project provides an API to help Bukkit/Spigot developers use the new Minecraft 1.13 command UI, which includes:
+This project provides an API to help Bukkit/Spigot developers use the Minecraft 1.13 command UI, which includes:
 
 * **Better commands** - Prevent players from running invalid commands, making it easier for developers
 
@@ -31,6 +35,10 @@ This project provides an API to help Bukkit/Spigot developers use the new Minecr
 * **Support for proxied command senders** - Run your command as other entities using `/execute as ... run command`
 
   ![proxied senders](https://raw.githubusercontent.com/JorelAli/CommandAPI/master/images/selfdestruct.gif)
+  
+* **Argument tooltips** - Let your users know exactly what their command will do
+
+  ![argument tooltips](https://raw.githubusercontent.com/JorelAli/CommandAPI/4.1-release2/docssrc/src/images/warps.gif)
 
 * **Support for the `/execute` command** - Let your command to be executed by the built in `/execute` command
 
