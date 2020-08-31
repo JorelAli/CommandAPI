@@ -2,26 +2,31 @@ package dev.jorel.commandapi;
 
 import java.util.function.Function;
 
-public class Tooltip<T> {
+public class Tooltip<S> {
 
-	private final T object;
+	private final S object;
 	private final String tooltip;
 	
-	private Tooltip(T object, String tooltip) {
+	private Tooltip(S object, String tooltip) {
 		this.object = object;
 		this.tooltip = tooltip;
 	}
 	
-	public static <T> Tooltip<T> of(T object, String tooltip) {
-		return new Tooltip<T>(object, tooltip);
+	public static <S> Tooltip<S> of(S object, String tooltip) {
+		return new Tooltip<S>(object, tooltip);
 	}
 	
-	public static <T> Tooltip<T> none(T object) {
-		return new Tooltip<T>(object, null);
+	public static <S> Tooltip<S> none(S object) {
+		return new Tooltip<S>(object, null);
 	}
 	
-	public NativeTooltip build(Function<T, String> mapper) {
-		return NativeTooltip.of(mapper.apply(object), tooltip);
+	@SafeVarargs
+	public static <S> Tooltip<S>[] arrayOf(Tooltip<S>... tooltips) {
+		return tooltips;
+	}
+	
+	public static <S> Function<Tooltip<S>, StringTooltip> build(Function<S, String> mapper) {
+		return t -> StringTooltip.of(mapper.apply(t.object), t.tooltip);
 	}
 	
 }

@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 
-import dev.jorel.commandapi.NativeTooltip;
+import dev.jorel.commandapi.StringTooltip;
 import dev.jorel.commandapi.Tooltip;
 
 /**
@@ -89,7 +89,7 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 * @param suggestions a S[] of objects to suggest to the command sender
 	 * @return the current argument
 	 */
-	@SuppressWarnings("unchecked")
+	@SafeVarargs
 	private final BiFunction<CommandSender, Object[], String[]> sMap0(Function<S, String> mapper, S... suggestions) {
 		return (c, m) -> Arrays.stream(suggestions).map(mapper).toArray(String[]::new);
 	}
@@ -120,17 +120,17 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 		return (c, m) -> Arrays.stream(suggestions.apply(c, m)).map(mapper).toArray(String[]::new);
 	}
 	
-	@SuppressWarnings("unchecked")
-	private final BiFunction<CommandSender, Object[], NativeTooltip[]> tMap0(Function<S, String> mapper, Tooltip<S>... suggestions) {
-		return (c, m) -> Arrays.stream(suggestions).map(x -> x.build(mapper)).toArray(NativeTooltip[]::new);
+	@SafeVarargs
+	private final BiFunction<CommandSender, Object[], StringTooltip[]> tMap0(Function<S, String> mapper, Tooltip<S>... suggestions) {
+		return (c, m) -> Arrays.stream(suggestions).map(Tooltip.build(mapper)).toArray(StringTooltip[]::new);
 	}
 	
-	private final BiFunction<CommandSender, Object[], NativeTooltip[]> tMap1(Function<S, String> mapper, Function<CommandSender, Tooltip<S>[]> suggestions) {
-		return (c, m) -> Arrays.stream(suggestions.apply(c)).map(x -> x.build(mapper)).toArray(NativeTooltip[]::new);
+	private final BiFunction<CommandSender, Object[], StringTooltip[]> tMap1(Function<S, String> mapper, Function<CommandSender, Tooltip<S>[]> suggestions) {
+		return (c, m) -> Arrays.stream(suggestions.apply(c)).map(Tooltip.build(mapper)).toArray(StringTooltip[]::new);
 	}
 	
-	private final BiFunction<CommandSender, Object[], NativeTooltip[]> tMap2(Function<S, String> mapper, BiFunction<CommandSender, Object[], Tooltip<S>[]> suggestions) {
-		return (c, m) -> Arrays.stream(suggestions.apply(c, m)).map(x -> x.build(mapper)).toArray(NativeTooltip[]::new);
+	private final BiFunction<CommandSender, Object[], StringTooltip[]> tMap2(Function<S, String> mapper, BiFunction<CommandSender, Object[], Tooltip<S>[]> suggestions) {
+		return (c, m) -> Arrays.stream(suggestions.apply(c, m)).map(Tooltip.build(mapper)).toArray(StringTooltip[]::new);
 	}
 	
 }

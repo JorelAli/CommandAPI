@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 import com.mojang.brigadier.arguments.ArgumentType;
 
 import dev.jorel.commandapi.CommandPermission;
-import dev.jorel.commandapi.NativeTooltip;
+import dev.jorel.commandapi.StringTooltip;
 
 /**
  * The core abstract class for Command API arguments
@@ -64,7 +64,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	// Suggestions //
 	/////////////////
 
-	Optional<BiFunction<CommandSender, Object[], NativeTooltip[]>> suggestions = Optional.empty();
+	Optional<BiFunction<CommandSender, Object[], StringTooltip[]>> suggestions = Optional.empty();
 
 	/**
 	 * Override the suggestions of this argument with a String array. Typically,
@@ -75,7 +75,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 */
 	@Override
 	public final Argument overrideSuggestions(String... suggestions) {
-		this.suggestions = Optional.of((c, m) -> NativeTooltip.fromSuggestions(suggestions));
+		this.suggestions = Optional.of((c, m) -> StringTooltip.fromSuggestions(suggestions));
 		return this;
 	}
 
@@ -88,7 +88,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 */
 	@Override
 	public final Argument overrideSuggestions(Function<CommandSender, String[]> suggestions) {
-		this.suggestions =  Optional.of((c, m) -> NativeTooltip.fromSuggestions(suggestions.apply(c)));
+		this.suggestions =  Optional.of((c, m) -> StringTooltip.fromSuggestions(suggestions.apply(c)));
 		return this;
 	}
 	
@@ -101,7 +101,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 */
 	@Override
 	public final Argument overrideSuggestions(BiFunction<CommandSender, Object[], String[]> suggestions) {
-		this.suggestions =  Optional.of((c, m) -> NativeTooltip.fromSuggestions(suggestions.apply(c, m)));
+		this.suggestions =  Optional.of((c, m) -> StringTooltip.fromSuggestions(suggestions.apply(c, m)));
 		return this;
 	}
 	
@@ -113,7 +113,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * @return the current argument
 	 */
 	@Override
-	public final Argument overrideSuggestionsT(NativeTooltip... suggestions) {
+	public final Argument overrideSuggestionsT(StringTooltip... suggestions) {
 		this.suggestions = Optional.of((c, m) -> suggestions);
 		return this;
 	}
@@ -126,7 +126,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * @return the current argument
 	 */
 	@Override
-	public final Argument overrideSuggestionsT(Function<CommandSender, NativeTooltip[]> suggestions) {
+	public final Argument overrideSuggestionsT(Function<CommandSender, StringTooltip[]> suggestions) {
 		this.suggestions =  Optional.of((c, m) -> suggestions.apply(c));
 		return this;
 	}
@@ -139,7 +139,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * @return the current argument
 	 */
 	@Override
-	public final Argument overrideSuggestionsT(BiFunction<CommandSender, Object[], NativeTooltip[]> suggestions) {
+	public final Argument overrideSuggestionsT(BiFunction<CommandSender, Object[], StringTooltip[]> suggestions) {
 		this.suggestions =  Optional.of(suggestions);
 		return this;
 	}
@@ -153,7 +153,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 *         are no overridden suggestions.
 	 */
 	@Override
-	public final Optional<BiFunction<CommandSender, Object[], NativeTooltip[]>> getOverriddenSuggestions() {
+	public final Optional<BiFunction<CommandSender, Object[], StringTooltip[]>> getOverriddenSuggestions() {
 		return suggestions;
 	}
 

@@ -128,152 +128,21 @@ var hierarchy =
     [ "dev.jorel.commandapi.wrappers.IntegerRange", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_integer_range.html", null ],
     [ "dev.jorel.commandapi.arguments.IOverrideableSuggestions", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html", [
       [ "dev.jorel.commandapi.arguments.Argument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html", [
-        [ "dev.jorel.commandapi.arguments.AdvancementArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_advancement_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.AxisArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_axis_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.BiomeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_biome_argument.html", null ],
         [ "dev.jorel.commandapi.arguments.BlockPredicateArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_predicate_argument.html", null ],
         [ "dev.jorel.commandapi.arguments.BlockStateArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.BooleanArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_boolean_argument.html", null ],
         [ "dev.jorel.commandapi.arguments.ChatArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_chat_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.ChatColorArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_chat_color_argument.html", null ],
         [ "dev.jorel.commandapi.arguments.ChatComponentArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_chat_component_argument.html", null ],
         [ "dev.jorel.commandapi.arguments.CustomArgument< T >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.DoubleArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_double_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.EnchantmentArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_enchantment_argument.html", null ],
         [ "dev.jorel.commandapi.arguments.EntitySelectorArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.EntityTypeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_type_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.EnvironmentArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_environment_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.FloatArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_float_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.FloatRangeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_float_range_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.FunctionArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_function_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.GreedyStringArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_greedy_string_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.IntegerArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_integer_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.IntegerRangeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_integer_range_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.ItemStackArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_item_stack_argument.html", null ],
         [ "dev.jorel.commandapi.arguments.ItemStackPredicateArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_item_stack_predicate_argument.html", null ],
         [ "dev.jorel.commandapi.arguments.LiteralArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.Location2DArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location2_d_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.LocationArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.LongArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_long_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.LootTableArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_loot_table_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.MathOperationArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_math_operation_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.NBTCompoundArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_n_b_t_compound_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.ObjectiveArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_objective_argument.html", null ],
+        [ "dev.jorel.commandapi.arguments.MultiLiteralArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html", null ],
         [ "dev.jorel.commandapi.arguments.ObjectiveCriteriaArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_objective_criteria_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.ParticleArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_particle_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.PlayerArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_player_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.PotionEffectArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_potion_effect_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.RecipeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_recipe_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.RotationArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_rotation_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.ScoreboardSlotArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_scoreboard_slot_argument.html", null ],
+        [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< S >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", null ],
         [ "dev.jorel.commandapi.arguments.ScoreHolderArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.SoundArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_sound_argument.html", null ],
         [ "dev.jorel.commandapi.arguments.StringArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_string_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.TeamArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_team_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.TextArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_text_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.TimeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_time_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.UUIDArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_u_u_i_d_argument.html", null ]
+        [ "dev.jorel.commandapi.arguments.TextArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_text_argument.html", null ]
       ] ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< S >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", null ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Advancement >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.AdvancementArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_advancement_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Biome >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.BiomeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_biome_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Boolean >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.BooleanArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_boolean_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< ChatColor >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.ChatColorArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_chat_color_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Double >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.DoubleArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_double_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Enchantment >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.EnchantmentArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_enchantment_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< EntityType >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.EntityTypeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_type_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< EnumSet< Axis > >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.AxisArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_axis_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Environment >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.EnvironmentArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_environment_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Float >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.FloatArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_float_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< FloatRange >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.FloatRangeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_float_range_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Integer >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.IntegerArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_integer_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< IntegerRange >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.IntegerRangeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_integer_range_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< ItemStack >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.ItemStackArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_item_stack_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Location >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.LocationArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Location2D >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.Location2DArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location2_d_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Long >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.LongArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_long_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< LootTable >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.LootTableArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_loot_table_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< MathOperation >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.MathOperationArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_math_operation_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< NamespacedKey >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.FunctionArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_function_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< NBTContainer >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.NBTCompoundArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_n_b_t_compound_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Objective >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.ObjectiveArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_objective_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Particle >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.ParticleArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_particle_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Player >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.PlayerArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_player_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< PotionEffectType >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.PotionEffectArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_potion_effect_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Recipe >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.RecipeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_recipe_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Rotation >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.RotationArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_rotation_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< ScoreboardSlot >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.ScoreboardSlotArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_scoreboard_slot_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Sound >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.SoundArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_sound_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< String >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.GreedyStringArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_greedy_string_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Team >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.TeamArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_team_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< Time >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.TimeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_time_argument.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.arguments.ISafeOverrideableSuggestions< UUID >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_safe_overrideable_suggestions.html", [
-      [ "dev.jorel.commandapi.arguments.UUIDArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_u_u_i_d_argument.html", null ]
     ] ],
     [ "dev.jorel.commandapi.arguments.LocationType", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_type.html", null ],
     [ "dev.jorel.commandapi.wrappers.MathOperation", "enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html", null ],
@@ -302,10 +171,110 @@ var hierarchy =
       [ "dev.jorel.commandapi.exceptions.UnsupportedVersionException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_unsupported_version_exception.html", null ],
       [ "dev.jorel.commandapi.exceptions.UUIDArgumentException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_u_u_i_d_argument_exception.html", null ]
     ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< Advancement >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.AdvancementArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_advancement_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< Biome >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.BiomeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_biome_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< Boolean >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.BooleanArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_boolean_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< ChatColor >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.ChatColorArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_chat_color_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< Double >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.DoubleArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_double_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< Enchantment >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.EnchantmentArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_enchantment_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< EntityType >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.EntityTypeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_type_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< EnumSet< Axis > >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.AxisArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_axis_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< Environment >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.EnvironmentArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_environment_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< Float >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.FloatArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_float_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< FloatRange >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.FloatRangeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_float_range_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< Integer >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.IntegerArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_integer_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< IntegerRange >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.IntegerRangeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_integer_range_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< ItemStack >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.ItemStackArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_item_stack_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< Location >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.LocationArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< Location2D >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.Location2DArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location2_d_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< Long >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.LongArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_long_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< LootTable >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.LootTableArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_loot_table_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< MathOperation >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.MathOperationArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_math_operation_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< NamespacedKey >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.FunctionArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_function_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< NBTContainer >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.NBTCompoundArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_n_b_t_compound_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< Objective >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.ObjectiveArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_objective_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< Particle >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.ParticleArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_particle_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< Player >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.PlayerArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_player_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< PotionEffectType >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.PotionEffectArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_potion_effect_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< Recipe >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.RecipeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_recipe_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< Rotation >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.RotationArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_rotation_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< ScoreboardSlot >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.ScoreboardSlotArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_scoreboard_slot_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< Sound >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.SoundArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_sound_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< String >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.GreedyStringArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_greedy_string_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< Team >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.TeamArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_team_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< Time >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.TimeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_time_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< UUID >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.UUIDArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_u_u_i_d_argument.html", null ]
+    ] ],
     [ "dev.jorel.commandapi.wrappers.ScoreboardSlot", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_scoreboard_slot.html", null ],
     [ "dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument_1_1_score_holder_type.html", null ],
     [ "com.mojang.brigadier.SingleRedirectModifier< S >", "interfacecom_1_1mojang_1_1brigadier_1_1_single_redirect_modifier.html", null ],
     [ "com.mojang.brigadier.context.StringRange", "classcom_1_1mojang_1_1brigadier_1_1context_1_1_string_range.html", null ],
+    [ "dev.jorel.commandapi.StringTooltip", "classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html", null ],
     [ "com.mojang.brigadier.arguments.StringArgumentType.StringType", "enumcom_1_1mojang_1_1brigadier_1_1arguments_1_1_string_argument_type_1_1_string_type.html", null ],
     [ "com.mojang.brigadier.context.SuggestionContext< S >", "classcom_1_1mojang_1_1brigadier_1_1context_1_1_suggestion_context.html", null ],
     [ "com.mojang.brigadier.suggestion.SuggestionProvider< S >", "interfacecom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestion_provider.html", null ],
@@ -313,6 +282,7 @@ var hierarchy =
     [ "com.mojang.brigadier.suggestion.Suggestions", "classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions.html", null ],
     [ "com.mojang.brigadier.suggestion.SuggestionsBuilder", "classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions_builder.html", null ],
     [ "dev.jorel.commandapi.wrappers.Time", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_time.html", null ],
+    [ "dev.jorel.commandapi.Tooltip< S >", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html", null ],
     [ "Keyed", null, [
       [ "dev.jorel.commandapi.wrappers.FunctionWrapper", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html", null ]
     ] ],

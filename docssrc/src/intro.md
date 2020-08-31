@@ -38,7 +38,9 @@ Here's the list of changes to the documentation between each update. You can vie
 
 ### Documentation changes 4.0 \\(\rightarrow\\) 4.1:
 
-- Adds documentation for the `SimpleLiteralArgument` in section [8.11.2. Multi literal arguments](./multilitargs.md)
+- Adds a new section [7.3. Argument suggestions with tooltips](./tooltips.md)
+
+- Adds documentation for the `MultiLiteralArgument` in section [8.11.2. Multi literal arguments](./multilitargs.md)
 - Adds a new section [4. Shading the CommandAPI into your plugins](./shading.md)
 - Update [Afterword](./afterword.md)
 

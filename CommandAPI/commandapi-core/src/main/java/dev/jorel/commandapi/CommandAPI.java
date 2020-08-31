@@ -38,6 +38,10 @@ public abstract class CommandAPI {
 		return dispatcherFile;
 	}
 	
+	/**
+	 * Returns the CommandAPI's logger
+	 * @return the CommandAPI's logger
+	 */
 	public static Logger getLog() {
 		if(logger == null) {
 			logger = new Logger("CommandAPI", null) {
@@ -84,6 +88,7 @@ public abstract class CommandAPI {
 	/**
 	 * Initializes the CommandAPI for loading. This should be placed at the
 	 * start of your <code>onLoad()</code> method.
+	 * @param verbose if true, enables verbose output for the CommandAPI
 	 */
 	public static void onLoad(boolean verbose) {
 		CommandAPI.config = new Config(verbose);
@@ -93,6 +98,7 @@ public abstract class CommandAPI {
 	/**
 	 * Enables the CommandAPI. This should be placed at the
 	 * start of your <code>onEnable()</code> method.
+	 * @param plugin the plugin that this onEnable method is called from
 	 */
 	public static void onEnable(Plugin plugin) {
 		//Prevent command registration after server has loaded

@@ -96,8 +96,8 @@ $(document).ready(function(){initNavTree('classdev_1_1jorel_1_1commandapi_1_1_co
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a80ab6ea5bb0ee168e1b8ad7199b9af46"><td class="memItemLeft" align="right" valign="top"><a id="a80ab6ea5bb0ee168e1b8ad7199b9af46"></a>
-static Logger&#160;</td><td class="memItemRight" valign="bottom"><b>getLog</b> ()</td></tr>
+<tr class="memitem:a80ab6ea5bb0ee168e1b8ad7199b9af46"><td class="memItemLeft" align="right" valign="top">static Logger&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a80ab6ea5bb0ee168e1b8ad7199b9af46">getLog</a> ()</td></tr>
+<tr class="memdesc:a80ab6ea5bb0ee168e1b8ad7199b9af46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a>'s logger.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a80ab6ea5bb0ee168e1b8ad7199b9af46">More...</a><br /></td></tr>
 <tr class="separator:a80ab6ea5bb0ee168e1b8ad7199b9af46"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a99b3b35daa96cb9781ead26a7729cd5e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a99b3b35daa96cb9781ead26a7729cd5e">onLoad</a> (boolean verbose)</td></tr>
 <tr class="memdesc:a99b3b35daa96cb9781ead26a7729cd5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> for loading.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a99b3b35daa96cb9781ead26a7729cd5e">More...</a><br /></td></tr>
@@ -192,6 +192,34 @@ static Logger&#160;</td><td class="memItemRight" valign="bottom"><b>getLog</b> (
 
 </div>
 </div>
+<a id="a80ab6ea5bb0ee168e1b8ad7199b9af46"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a80ab6ea5bb0ee168e1b8ad7199b9af46">&#9670;&nbsp;</a></span>getLog()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static Logger dev.jorel.commandapi.CommandAPI.getLog </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a>'s logger. </p>
+<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a>'s logger </dd></dl>
+
+</div>
+</div>
 <a id="abaaeec30c996adb7a07999cbee39bfa7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abaaeec30c996adb7a07999cbee39bfa7">&#9670;&nbsp;</a></span>onEnable()</h2>
 
@@ -217,7 +245,12 @@ static Logger&#160;</td><td class="memItemRight" valign="bottom"><b>getLog</b> (
 </div><div class="memdoc">
 
 <p>Enables the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a>. </p>
-<p>This should be placed at the start of your <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#abaaeec30c996adb7a07999cbee39bfa7" title="Enables the CommandAPI.">onEnable()</a></code> method. </p>
+<p>This should be placed at the start of your <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#abaaeec30c996adb7a07999cbee39bfa7" title="Enables the CommandAPI.">onEnable()</a></code> method. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">plugin</td><td>the plugin that this onEnable method is called from </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -246,7 +279,12 @@ static Logger&#160;</td><td class="memItemRight" valign="bottom"><b>getLog</b> (
 </div><div class="memdoc">
 
 <p>Initializes the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> for loading. </p>
-<p>This should be placed at the start of your <code>onLoad()</code> method. </p>
+<p>This should be placed at the start of your <code>onLoad()</code> method. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">verbose</td><td>if true, enables verbose output for the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -369,7 +407,7 @@ static Logger&#160;</td><td class="memItemRight" valign="bottom"><b>getLog</b> (
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html">CommandAPI</a></li>
-    <li class="footer">Generated on Fri Aug 28 2020 22:22:43 for CommandAPI by
+    <li class="footer">Generated on Mon Aug 31 2020 14:37:06 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>
