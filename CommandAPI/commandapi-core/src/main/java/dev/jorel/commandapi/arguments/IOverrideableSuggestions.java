@@ -50,8 +50,33 @@ public interface IOverrideableSuggestions {
 	 */
 	Optional<BiFunction<CommandSender, Object[], StringTooltip[]>> getOverriddenSuggestions();
 	
+	/**
+	 * Override the suggestions of this argument with an array of StringTooltips,
+	 * that represents the String suggestion and a hover tooltip
+	 * 
+	 * @param suggestions the suggestions and tooltips to override suggestions with 
+	 * @return the current argument
+	 */
 	Argument overrideSuggestionsT(StringTooltip... suggestions);
+	
+	/**
+	 * Override the suggestions of this argument with a function mapping the command
+	 * sender to an array of StringTooltips, that represents the String suggestion
+	 * and a hover tooltip
+	 * 
+	 * @param suggestions the suggestions and tooltips to override suggestions with
+	 * @return the current argument
+	 */
 	Argument overrideSuggestionsT(Function<CommandSender, StringTooltip[]> suggestions);
+	
+	/**
+	 * Override the suggestions of this argument with a function mapping the command
+	 * sender and previously declared arguments to an array of StringTooltips, that
+	 * represents the String suggestion and a hover tooltip
+	 * 
+	 * @param suggestions the suggestions and tooltips to override suggestions with
+	 * @return the current argument
+	 */
 	Argument overrideSuggestionsT(BiFunction<CommandSender, Object[], StringTooltip[]> suggestions);
 	
 }

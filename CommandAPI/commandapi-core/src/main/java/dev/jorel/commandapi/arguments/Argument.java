@@ -1,5 +1,6 @@
 package dev.jorel.commandapi.arguments;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -65,6 +66,19 @@ public abstract class Argument implements IOverrideableSuggestions {
 	/////////////////
 
 	Optional<BiFunction<CommandSender, Object[], StringTooltip[]>> suggestions = Optional.empty();
+	
+
+	
+	/**
+	 * Maps a String[] of suggestions to a StringTooltip[], using StringTooltip.none.
+	 * This is used internally by the CommandAPI.
+	 * 
+	 * @param suggestions the array of suggestions to convert
+	 * @return a StringTooltip[] representation of the provided suggestions
+	 */
+	private final StringTooltip[] fromSuggestions(String[] suggestions) {
+		return Arrays.stream(suggestions).map(StringTooltip::none).toArray(StringTooltip[]::new);
+	}
 
 	/**
 	 * Override the suggestions of this argument with a String array. Typically,
@@ -75,7 +89,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 */
 	@Override
 	public final Argument overrideSuggestions(String... suggestions) {
-		this.suggestions = Optional.of((c, m) -> StringTooltip.fromSuggestions(suggestions));
+		this.suggestions = Optional.of((c, m) -> fromSuggestions(suggestions));
 		return this;
 	}
 
@@ -88,7 +102,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 */
 	@Override
 	public final Argument overrideSuggestions(Function<CommandSender, String[]> suggestions) {
-		this.suggestions =  Optional.of((c, m) -> StringTooltip.fromSuggestions(suggestions.apply(c)));
+		this.suggestions =  Optional.of((c, m) -> fromSuggestions(suggestions.apply(c)));
 		return this;
 	}
 	
@@ -101,7 +115,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 */
 	@Override
 	public final Argument overrideSuggestions(BiFunction<CommandSender, Object[], String[]> suggestions) {
-		this.suggestions =  Optional.of((c, m) -> StringTooltip.fromSuggestions(suggestions.apply(c, m)));
+		this.suggestions =  Optional.of((c, m) -> fromSuggestions(suggestions.apply(c, m)));
 		return this;
 	}
 	

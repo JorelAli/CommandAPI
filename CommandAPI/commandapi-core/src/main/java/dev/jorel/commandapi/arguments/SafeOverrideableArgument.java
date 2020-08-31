@@ -58,15 +58,38 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 		return super.overrideSuggestions(sMap2(mapper, suggestions));
 	}
 	
+	/**
+	 * Override the suggestions of this argument with an array of Tooltip<S>,
+	 * that represents a safe suggestion and a hover tooltip
+	 * 
+	 * @param suggestions the suggestions and tooltips to override suggestions with 
+	 * @return the current argument
+	 */
 	@SafeVarargs
 	public final Argument safeOverrideSuggestionsT(Tooltip<S>... suggestions) {
 		return super.overrideSuggestionsT(tMap0(mapper, suggestions));
 	};
 	
+	/**
+	 * Override the suggestions of this argument with a function mapping the command
+	 * sender to an array of Tooltip<S>, that represents a safe suggestion and a
+	 * hover tooltip
+	 * 
+	 * @param suggestions the suggestions and tooltips to override suggestions with
+	 * @return the current argument
+	 */
 	public final Argument safeOverrideSuggestionsT(Function<CommandSender, Tooltip<S>[]> suggestions) {
 		return super.overrideSuggestionsT(tMap1(mapper, suggestions));
 	}
 	
+	/**
+	 * Override the suggestions of this argument with a function mapping the command
+	 * sender an previously declared arguments to an array of Tooltip<S>, that
+	 * represents a safe suggestion and a hover tooltip
+	 * 
+	 * @param suggestions the suggestions and tooltips to override suggestions with
+	 * @return the current argument
+	 */
 	public final Argument safeOverrideSuggestionsT(BiFunction<CommandSender, Object[], Tooltip<S>[]> suggestions) {
 		return super.overrideSuggestionsT(tMap2(mapper, suggestions));
 	}
@@ -120,15 +143,36 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 		return (c, m) -> Arrays.stream(suggestions.apply(c, m)).map(mapper).toArray(String[]::new);
 	}
 	
+	/**
+	 * sMap0, but for Tooltip<S> instead of Strings
+	 * @param mapper the mapping function from S to a String
+	 * @param suggestions a <code>Tooltip<S>[]</code> of tooltips and suggestions to send to the user
+	 * @return the current argument
+	 * @see SafeOverrideableArgument#sMap0(Function, Object...)
+	 */
 	@SafeVarargs
 	private final BiFunction<CommandSender, Object[], StringTooltip[]> tMap0(Function<S, String> mapper, Tooltip<S>... suggestions) {
 		return (c, m) -> Arrays.stream(suggestions).map(Tooltip.build(mapper)).toArray(StringTooltip[]::new);
 	}
 	
+	/**
+	 * sMap1, but for Tooltip<S> instead of Strings
+	 * @param mapper the mapping function from S to a String
+	 * @param suggestions a <code>(sender) -> Tooltip<S>[]</code> of tooltips and suggestions to send to the user
+	 * @return the current argument
+	 * @see SafeOverrideableArgument#sMap1(Function, Function)
+	 */
 	private final BiFunction<CommandSender, Object[], StringTooltip[]> tMap1(Function<S, String> mapper, Function<CommandSender, Tooltip<S>[]> suggestions) {
 		return (c, m) -> Arrays.stream(suggestions.apply(c)).map(Tooltip.build(mapper)).toArray(StringTooltip[]::new);
 	}
 	
+	/**
+	 * sMap2, but for Tooltip<S> instead of Strings
+	 * @param mapper the mapping function from S to a String
+	 * @param suggestions a <code>(sender, args) -> Tooltip<S>[]</code> of tooltips and suggestions to send to the user
+	 * @return the current argument
+	 * @see SafeOverrideableArgument#sMap2(Function, BiFunction)
+	 */
 	private final BiFunction<CommandSender, Object[], StringTooltip[]> tMap2(Function<S, String> mapper, BiFunction<CommandSender, Object[], Tooltip<S>[]> suggestions) {
 		return (c, m) -> Arrays.stream(suggestions.apply(c, m)).map(Tooltip.build(mapper)).toArray(StringTooltip[]::new);
 	}
