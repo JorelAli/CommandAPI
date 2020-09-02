@@ -108,156 +108,376 @@ These versions of Minecraft must be installed in your local machine's Maven repo
 
 ## Changelog
 
-- Version 4.0
-  - Suggestion overriding can now be populated by Bukkit objects instead of strings
-  - Fixes a bug with the `FloatRangeArgument` where it caused a casting error
-  - Adds support for 1.16.2
-    - `ChatArgument` now works on Minecraft 1.16.2 (still doesn't work on 1.16.1)
-  - Adds new arguments:
-    - `UUIDArgument`
-	- `ItemStackPredicateArgument`
-	- `BlockPredicateArgument`
-  - Fix bug where `CustomArgument`s break when using the namespaced key flag
-  - Adds a list of commands that `FunctionWrapper` executes which is now accessible
-  - Command aliases are now much more efficient 
-  - Documentation changes (briefly):
-    - `BlockStateArgument` is now documented properly
-	- Documentation now has pictures to show you what arguments look like
-	- Documentation now has a page dedicated to what doesn't work on what Minecraft version
-  - Adds Brigadier support for developers (lets you use the CommandAPI and Brigadier code side by side!)
-  - Fixes a bug where Java 12+ had incompatibility issues
-  - Adds support for setting arbitrary requirements to arguments and commands
-- Version 3.4
-  - Fix bug with custom recipes not registering in Minecraft 1.16+
-  - Fix bug where command conversion didn't actually register commands
-  - Adds command conversion as a built-in feature via the CommandAPI's `config.yml`
-- Version 3.3
-  - Fixes a bug where functions didn't work in Minecraft 1.16+
-  - Fixes a bug where spigot produces a warning about api-versions
-- Version 3.2
-  - Fixes a bug with `.overrideSuggestions()` from version 3.1
-- Version 3.1
-  - Fixes bug where command senders didn't work properly, causing commands to not work properly
-  - Adds the ability to override suggestions with the information of previously declared argument
-
-* Version 3.0
-  * **Note: This version is incompatible with pre 3.0 versions CommandAPI plugins (See documentation for more information)**
-  * Complete code refactor to make command syntax slightly more intuitive and consistent
-  * Removes lots of reflection to improve performance
-  * Adds better documentation
-  * Adds JavaDocs
-  * Adds support for 1.16.1
-  * Adds new command executors (These let you filter commands based on what type of command executor runs the command):
-    * Player command executors
-    * Command block command executors
-    * Console command executors
-    * Entity command executors
-    * Proxied command executors
-  * Adds new arguments:
-    * Axis Argument
-    * Biome Argument
-    * ChatColor Argument
-    * Chat Argument
-    * FloatRange Argument
-    * IntegerRange Argument
-    * Location2D Argument
-    * MathOperation Argument
-    * NBT Argument (NBTAPI required)
-    * Scoreboard arguments:
-      * Objective Argument
-      * ObjectiveCriteria Argument
-      * ScoreboardSlot Argument
-      * ScoreHolder Argument
-      * Team Argument
-    * Time Argument
-    * Rotation Argument
-    * Environment Argument
-  * Removes old arguments:
-    * SuggestedStringArgument
-    * DynamicSuggestedStringArgument
-    * DefinedCustomArguments
-* Version 2.3a
-  * Adds support for Minecraft 1.15, 1.15.1 and 1.15.2
-* Version 2.3
-  * Fixes bug where permissions didn't work
-  * Fixes bug where functions weren't working on 1.14.3 and 1.14.4
-* Version 2.2
-  * Adds support for Minecraft 1.13 and 1.13.1 _(Funny isn't it? It's called the 1.13 CommandAPI but never supported Minecraft 1.13 until now)_
-  * Improves support for different versions
-  * Adds pointless witty comments into changelog notes
-  * Adds [1.13-Command-API-SafeReflection library](https://github.com/JorelAli/1.13-Command-API-SafeReflection) to greatly improve reliability of reflection calls
-* Version 2.1
-  * Adds RecipeArgument
-  * Adds SoundArgument
-  * Adds AdvancementArgument
-  * Adds LootTableArgument
-  * Adds support for 1.14.3 and 1.14.4
-  * Fixes bug where aliases weren't registering properly ([#43](https://github.com/JorelAli/CommandAPI/issues/43))
-  * Fix documentation for tooltips
-  * Improve documentation for dependencies and repositories
-* Version 2.0.1
-  * Fix a bug where Brigadier was required as a dependency to build plugins
-* Version 2.0
-  * Compatibility for 1.14
-  * Major overhaul of the CommandAPI's internals - greatly improves performance
-  * Deprecates SuggestedStringArgument, adding overrideSuggestions as an alternative for any argument type 
-  * Adds CustomArguments, allowing you to create your own ... custom arguments
-  * Excludes dependencies from final jar ([#40](https://github.com/JorelAli/CommandAPI/issues/40))
-  * Adds DefinedCustomArguments - CustomArguments that have been created by yours truly
-  * DynamicSuggestedArguments now have access to the CommandSender ([#41](https://github.com/JorelAli/CommandAPI/issues/41))
-  * Adds Loot Table support
-* Version 1.8.2
-  * Fix bug with PlayerArgument when player cannot be found
-  * Adds LocationArgument options for block precision or exact precision
-* Version 1.8.1
-  * Fix permissions for argument from 1.8
-  * Neaten up logging with verbose outputs
-* Version 1.8
-  * Fix bugs where DynamicSuggestedArguments don't work as the last argument
-  * Fix support for latest spigot version
-  * Adds permissions for arguments
-  * Adds support to override suggestions for arguments
-* Version 1.7.2
-  * Fix a bug where default return value was 0 instead of 1, causing issues with commandblocks
-* Version 1.7.1
-  * Fix a bug with permission checks. Other than that, it's the same as 1.7 (in terms of documentation)
-* Version 1.7
-  * Adds DynamicSuggestedStringArguments for dynamically updating suggestions
-  * Adds support for `success` and `result` values for `/execute store`
-  * Overhaul permissions system so it works properly
-  * **Note: This version is incompatible with pre-1.7 version CommandAPI plugins**
-* Version 1.6
-  * Adds FunctionArguments to handle Minecraft functions
-  * Remove useless test code
-  * Fix bug with ProxiedCommandSender callee and caller
-  * Adds Converter for legacy plugin support
-  * Improved performance by caching NMS better than in version 1.5
-* Version 1.5
-  * Adds ChatComponentArgument to handle raw JSON
-  * Adds SuggestedStringArgument to suggest strings
-  * Adds config file
-  * Fix bug where command errors weren't being thrown
-  * Improved performance by caching NMS
-* Version 1.4
-  * Fix critical bug where arguments weren't being handled properly
-  * Adds GreedyStringArgument
-  * Adds various Exception classes
-* Version 1.3
-  * Migrate to Maven
-  * Remove unnecessary reflection
-  * Adds EntitySelectorArgument
-  * Adds LiteralArgument
-  * Adds support for ProxiedCommandSender
-* Version 1.2
-  * Adds TextArgument
-* Version 1.1
-  * Adds PlayerArgument
-  * Adds ParticleArgument
-  * Adds ChatColorArgument
-  * Adds EnchantmentArgument
-  * Adds LocationArgument
-  * Adds EntityTypeArgument
-  * Adds permissions support
-  * Adds alias support
-* Version 1.0
-  * Initial release
+<table width="100%">
+    <thead>
+        <tr>
+            <th width="10%">Version</th>
+            <th width="15%">Date</th>
+            <th width="65%">Features / Changes</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td valign="top"><b>4.1</b></td>
+            <td valign="top">September 2020</td>
+            <td valign="top">
+                <ul>
+                    <li>Allows the CommandAPI to be shaded into plugins</li>
+                    <li>Adds a way to set hover tooltips for suggestions</li>
+                    <li>Adds multi-literal arguments</li>
+                    <li>Adds a logo!</li>
+                    <li>Adds a new method to the CommandAPI/Brigadier system to easily create Brigadier arguments from CommandAPI arguments</li>
+                    <li><b>Rename maven modules</b> You can view more information about this on the <a href="https://github.com/JorelAli/CommandAPI/tree/mvn-repo">public maven repository</a></li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>4.0</b></td>
+            <td valign="top">August 2020</td>
+            <td valign="top">
+                <ul>
+                    <li>Suggestion overriding can now be populated by Bukkit objects instead of strings</li>
+                    <li>Fixes a bug with the <code>FloatRangeArgument</code> where it caused a casting error</li>
+                    <li>Adds support for 1.16.2
+                        <ul>
+                            <li><code>ChatArgument</code> now works on Minecraft 1.16.2 (still doesn't work on 1.16.1)</li>
+                        </ul>
+                    </li>
+                    <li>Adds new arguments:
+                        <ul>
+                            <li><code>UUIDArgument</code></li>
+                            <li><code>ItemStackPredicateArgument</code></li>
+                            <li><code>BlockPredicateArgument</code></li>
+                        </ul>
+                    </li>
+                    <li>Fix bug where <code>CustomArgument</code>s break when using the namespaced key flag</li>
+                    <li>Adds a list of commands that <code>FunctionWrapper</code> executes which is now accessible</li>
+                    <li>Command aliases are now much more efficient </li>
+                    <li>Documentation changes (briefly):
+                        <ul>
+                            <li><code>BlockStateArgument</code> is now documented properly</li>
+                            <li>Documentation now has pictures to show you what arguments look like</li>
+                            <li>Documentation now has a page dedicated to what doesn't work on what Minecraft version</li>
+                        </ul>
+                    </li>
+                    <li>Adds Brigadier support for developers (lets you use the CommandAPI and Brigadier code side by side!)</li>
+                    <li>Fixes a bug where Java 12+ had incompatibility issues</li>
+                    <li>Adds support for setting arbitrary requirements to arguments and commands</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>3.4</b></td>
+            <td valign="top">July 2020</td>
+            <td valign="top">
+                <ul>
+                    <li>Fix bug with custom recipes not registering in Minecraft 1.16+</li>
+                    <li>Fix bug where command conversion didn't actually register commands</li>
+                    <li>Adds command conversion as a built-in feature via the CommandAPI's <code>config.yml</code></li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>3.3</b></td>
+            <td valign="top">July 2020</td>
+            <td valign="top">
+                <ul>
+                    <li>Fixes a bug where functions didn't work in Minecraft 1.16+</li>
+                    <li>Fixes a bug where spigot produces a warning about api-versions</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>3.2</b></td>
+            <td valign="top">July 2020</td>
+            <td valign="top">
+                <ul>
+                    <li>Fixes a bug with <code>.overrideSuggestions()</code> from version 3.1</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>3.1</b></td>
+            <td valign="top">July 2020</td>
+            <td valign="top">
+                <ul>
+                    <li>Fixes bug where command senders didn't work properly, causing commands to not work properly</li>
+                    <li>Adds the ability to override suggestions with the information of previously declared argument</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>3.0</b></td>
+            <td valign="top">June 2020</td>
+            <td valign="top">
+                <ul>
+                    <li><b>Note: This version is incompatible with pre 3.0 versions CommandAPI plugins (See documentation for more information)</b></li>
+                    <li>Complete code refactor to make command syntax slightly more intuitive and consistent</li>
+                    <li>Removes lots of reflection to improve performance</li>
+                    <li>Adds better documentation</li>
+                    <li>Adds JavaDocs</li>
+                    <li>Adds support for 1.16.1</li>
+                    <li>Adds new command executors (These let you filter commands based on what type of command executor runs the command):
+                        <ul>
+                            <li>Player command executors</li>
+                            <li>Command block command executors</li>
+                            <li>Console command executors</li>
+                            <li>Entity command executors</li>
+                            <li>Proxied command executors</li>
+                        </ul>
+                    </li>
+                    <li>Adds new arguments:
+                        <ul>
+                            <li>Axis Argument</li>
+                            <li>Biome Argument</li>
+                            <li>ChatColor Argument</li>
+                            <li>Chat Argument</li>
+                            <li>FloatRange Argument</li>
+                            <li>IntegerRange Argument</li>
+                            <li>Location2D Argument</li>
+                            <li>MathOperation Argument</li>
+                            <li>NBT Argument (NBTAPI required)</li>
+                            <li>Scoreboard arguments:
+                                <ul>
+                                    <li>Objective Argument</li>
+                                    <li>ObjectiveCriteria Argument</li>
+                                    <li>ScoreboardSlot Argument</li>
+                                    <li>ScoreHolder Argument</li>
+                                    <li>Team Argument</li>
+                                </ul>
+                            </li>
+                            <li>Time Argument</li>
+                            <li>Rotation Argument</li>
+                            <li>Environment Argument</li>
+                            <li>Removes old arguments:
+                                <ul>
+                                    <li>SuggestedStringArgument</li>
+                                    <li>DynamicSuggestedStringArgument</li>
+                                    <li>DefinedCustomArguments</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>2.3a</b></td>
+            <td valign="top">December 2019</td>
+            <td valign="top">
+                <ul>
+                    <li>Adds support for Minecraft 1.15, 1.15.1 and 1.15.2</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>2.3</b></td>
+            <td valign="top">August 2019</td>
+            <td valign="top">
+                <ul>
+                    <li>Fixes bug where permissions didn't work</li>
+                    <li>Fixes bug where functions weren't working on 1.14.3 and 1.14.4</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>2.2</b></td>
+            <td valign="top">July 2019</td>
+            <td valign="top">
+                <ul>
+                    <li>Adds support for Minecraft 1.13 and 1.13.1 _(Funny isn't it? It's called the 1.13 CommandAPI but never supported Minecraft 1.13 until now)_</li>
+                    <li>Improves support for different versions</li>
+                    <li>Adds pointless witty comments into changelog notes</li>
+                    <li>Adds <a href="https://github.com/JorelAli/1.13-Command-API-SafeReflection">1.13-Command-API-SafeReflection</a> library to greatly improve reliability of reflection calls</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>2.1</b></td>
+            <td valign="top">July 2019</td>
+            <td valign="top">
+                <ul>
+                    <li>Adds RecipeArgument</li>
+                    <li>Adds SoundArgument</li>
+                    <li>Adds AdvancementArgument</li>
+                    <li>Adds LootTableArgument</li>
+                    <li>Adds support for 1.14.3 and 1.14.4</li>
+                    <li>Fixes bug where aliases weren't registering properly (<a href="https://github.com/JorelAli/CommandAPI/issues/43">#43</a>)</li>
+                    <li>Fix documentation for tooltips</li>
+                    <li>Improve documentation for dependencies and repositories</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>2.0.1</b></td>
+            <td valign="top">May 2019</td>
+            <td valign="top">
+                <ul>
+                    <li>Fix a bug where Brigadier was required as a dependency to build plugins</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>2.0</b></td>
+            <td valign="top">May 2019</td>
+            <td valign="top">
+                <ul>
+                    <li>Compatibility for 1.14</li>
+                    <li>Major overhaul of the CommandAPI's internals - greatly improves performance</li>
+                    <li>Deprecates SuggestedStringArgument, adding overrideSuggestions as an alternative for any argument type </li>
+                    <li>Adds CustomArguments, allowing you to create your own ... custom arguments</li>
+                    <li>Excludes dependencies from final jar (<a href="https://github.com/JorelAli/CommandAPI/issues/40">#40</a>)</li>
+                    <li>Adds DefinedCustomArguments - CustomArguments that have been created by yours truly</li>
+                    <li>DynamicSuggestedArguments now have access to the CommandSender (<a href="https://github.com/JorelAli/CommandAPI/issues/41">#41</a>)</li>
+                    <li>Adds Loot Table support</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>1.8.2</b></td>
+            <td valign="top">January 2019</td>
+            <td valign="top">
+                <ul>
+                    <li>Fix bug with PlayerArgument when player cannot be found</li>
+                    <li>Adds LocationArgument options for block precision or exact precision</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>1.8.1</b></td>
+            <td valign="top">December 2018</td>
+            <td valign="top">
+                <ul>
+                    <li>Fix permissions for argument from 1.8</li>
+                    <li>Neaten up logging with verbose outputs</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>1.8</b></td>
+            <td valign="top">December 2018</td>
+            <td valign="top">
+                <ul>
+                    <li>Fix bugs where DynamicSuggestedArguments don't work as the last argument</li>
+                    <li>Fix support for latest spigot version</li>
+                    <li>Adds permissions for arguments</li>
+                    <li>Adds support to override suggestions for arguments</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>1.7.2</b></td>
+            <td valign="top">December 2018</td>
+            <td valign="top">
+                <ul>
+                    <li>Fix a bug where default return value was 0 instead of 1, causing issues with commandblocks</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>1.7.1</b></td>
+            <td valign="top">December 2018</td>
+            <td valign="top">
+                <ul>
+                    <li>Fix a bug with permission checks. Other than that, it's the same as 1.7 (in terms of documentation)</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>1.7</b></td>
+            <td valign="top">December 2018</td>
+            <td valign="top">
+                <ul>
+                    <li>Adds DynamicSuggestedStringArguments for dynamically updating suggestions</li>
+                    <li>Adds support for <code>success</code> and <code>result</code> values for <code>/execute store</code></li>
+                    <li>Overhaul permissions system so it works properly</li>
+                    <li><b>Note: This version is incompatible with pre-1.7 version CommandAPI plugins</b></li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>1.6</b></td>
+            <td valign="top">November 2018</td>
+            <td valign="top">
+                <ul>
+                    <li>Adds FunctionArguments to handle Minecraft functions</li>
+                    <li>Remove useless test code</li>
+                    <li>Fix bug with ProxiedCommandSender callee and caller</li>
+                    <li>Adds Converter for legacy plugin support</li>
+                    <li>Improved performance by caching NMS better than in version 1.5</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>1.5</b></td>
+            <td valign="top">October 2018</td>
+            <td valign="top">
+                <ul>
+                    <li>Adds ChatComponentArgument to handle raw JSON</li>
+                    <li>Adds SuggestedStringArgument to suggest strings</li>
+                    <li>Adds config file</li>
+                    <li>Fix bug where command errors weren't being thrown</li>
+                    <li>Improved performance by caching NMS</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>1.4</b></td>
+            <td valign="top">October 2018</td>
+            <td valign="top">
+                <ul>
+                    <li>Fix critical bug where arguments weren't being handled properly</li>
+                    <li>Adds GreedyStringArgument</li>
+                    <li>Adds various Exception classes</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>1.3</b></td>
+            <td valign="top">October 2018</td>
+            <td valign="top">
+                <ul>
+                    <li>Migrate to Maven</li>
+                    <li>Remove unnecessary reflection</li>
+                    <li>Adds EntitySelectorArgument</li>
+                    <li>Adds LiteralArgument</li>
+                    <li>Adds support for ProxiedCommandSender</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>1.2</b></td>
+            <td valign="top">August 2018</td>
+            <td valign="top">
+                <ul>
+                    <li>Adds TextArgument</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>1.1</b></td>
+            <td valign="top">August 2018</td>
+            <td valign="top">
+                <ul>
+                    <li>Adds PlayerArgument</li>
+                    <li>Adds ParticleArgument</li>
+                    <li>Adds ChatColorArgument</li>
+                    <li>Adds EnchantmentArgument</li>
+                    <li>Adds LocationArgument</li>
+                    <li>Adds EntityTypeArgument</li>
+                    <li>Adds permissions support</li>
+                    <li>Adds alias support</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>1.0</b></td>
+            <td valign="top">August 2018</td>
+            <td valign="top">
+                <ul>
+                    <li>Initial release</li>
+                </ul>
+            </td>
+        </tr>
+    </tbody>
+</table>
