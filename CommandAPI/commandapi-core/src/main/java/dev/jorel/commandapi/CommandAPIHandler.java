@@ -169,7 +169,7 @@ public abstract class CommandAPIHandler {
 	/**
 	 * Generates a command to be registered by the CommandAPI.
 	 * 
-	 * @param args     set of ordered argument pairs which contain the tooltip text
+	 * @param args     set of ordered argument pairs which contain the prompt text
 	 *                 and their argument types
 	 * @param executor code to be ran when the command is executed
 	 * @return a brigadier command which is registered internally
@@ -837,7 +837,7 @@ public abstract class CommandAPIHandler {
 		}
 		
 		/**
-		 * Constructs an RequiredArgumentBuilder from a given argument within a command
+		 * Constructs a RequiredArgumentBuilder from a given argument within a command
 		 * declaration. For example:
 		 * 
 		 * <pre>
@@ -856,10 +856,16 @@ public abstract class CommandAPIHandler {
 			return getRequiredArgumentBuilderDynamic(args, value, args.get(value), args.get(value).getArgumentPermission(), args.get(value).getRequirements());
 		}
 		
-		public static RequiredArgumentBuilder argBuildOf(String tooltip, Argument argument) {
+		/**
+		 * Constructs a RequiredArgumentBuilder from a given argument and prompt text.
+		 * @param prompt the prompt to display when the user is typing the command
+		 * @param argument the argument to create a RequiredArgumentBuilder of
+		 * @return a RequiredArgumentBuilder that represents the provided argument
+		 */
+		public static RequiredArgumentBuilder argBuildOf(String prompt, Argument argument) {
 			LinkedHashMap<String, Argument> map = new LinkedHashMap<>();
-			map.put(tooltip, argument);
-			return getRequiredArgumentBuilderDynamic(map, tooltip, argument, argument.getArgumentPermission(), argument.getRequirements());
+			map.put(prompt, argument);
+			return getRequiredArgumentBuilderDynamic(map, prompt, argument, argument.getArgumentPermission(), argument.getRequirements());
 		}
 	}
 }

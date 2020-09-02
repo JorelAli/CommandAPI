@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">CommandAPI
-   &#160;<span id="projectnumber">4.0</span>
+   &#160;<span id="projectnumber">4.1</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -90,22 +90,23 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <div class="textblock"><p><a class="anchor" id="md_README"></a>A Bukkit/Spigot API to use the command UI introduced in Minecraft 1.13.</p>
 <p><b>Support and Project Discussion</b>:</p>
 <ul>
-<li><img src="https://cdn3.iconfinder.com/data/icons/popular-services-brands-vol-2/512/discord-512.png" alt="" width="40px" class="inline"/> <a href="https://discord.gg/G4SzSxZ">Discord</a></li>
+<li><img src="https://cdn3.iconfinder.com/data/icons/popular-services-brands-vol-2/512/discord-512.png" alt="" width="20px" class="inline"/> <a href="https://discord.gg/G4SzSxZ">Discord</a></li>
+<li><img src="https://static.spigotmc.org/img/spigot.png" alt="" width="20px" class="inline"/> <a href="https://www.spigotmc.org/resources/commandapi.62353/">Spigot page</a></li>
 </ul>
 <p><b>Downloads &amp; Documentation:</b></p>
 <ul>
-<li><img src="https://icon-icons.com/icons2/2348/PNG/512/download_arrow_icon_143023.png" alt="" width="40px" class="inline"/> <a href="https://www.jorel.dev/CommandAPI/">Downloads &amp; Documentation (includes usage for server owners!)</a></li>
+<li><img src="https://icon-icons.com/icons2/2348/PNG/512/download_arrow_icon_143023.png" alt="" width="20px" class="inline"/> <a href="https://github.com/JorelAli/CommandAPI/releases">All downloads</a></li>
+<li><img src="https://icon-icons.com/icons2/2348/PNG/512/books_icon_143050.png" alt="" width="20px" class="inline"/> <a href="https://www.jorel.dev/CommandAPI/">Documentation (includes usage for server owners!)</a></li>
 </ul>
-<p><b>Other relevant links:</b></p>
-<ul>
-<li><img src="https://static.spigotmc.org/img/spigot.png" alt="" width="40px" class="inline"/> <a href="https://www.spigotmc.org/resources/commandapi.62353/">Spigot page</a></li>
-</ul>
+<p><b>Announcements:</b></p>
 <blockquote class="doxtable">
-<p>:warning: The CommandAPI's Maven repository URL has changed! Please view <a href="https://www.jorel.dev/CommandAPI/4.0/quickstart.html#using-maven-recommended">the documentation</a> to see how to update your Maven repository </p>
+<p>:warning: <b>The CommandAPI's Maven repository URL has changed!</b> Please view <a href="https://www.jorel.dev/CommandAPI/4.0/quickstart.html#using-maven-recommended">the documentation</a> to see how to update your Maven repository </p>
 </blockquote>
+<p><b>Compatible Minecraft versions:</b></p>
+<p><img src="https://img.shields.io/badge/Minecraft%20Version-1.13-blue" alt="" class="inline"/> <img src="https://img.shields.io/badge/Minecraft%20Version-1.13.1-blue" alt="" class="inline"/> <img src="https://img.shields.io/badge/Minecraft%20Version-1.13.2-blue" alt="" class="inline"/> <img src="https://img.shields.io/badge/Minecraft%20Version-1.14-blue" alt="" class="inline"/> <img src="https://img.shields.io/badge/Minecraft%20Version-1.14.1-blue" alt="" class="inline"/> <img src="https://img.shields.io/badge/Minecraft%20Version-1.14.2-blue" alt="" class="inline"/> <img src="https://img.shields.io/badge/Minecraft%20Version-1.14.3-blue" alt="" class="inline"/> <img src="https://img.shields.io/badge/Minecraft%20Version-1.14.4-blue" alt="" class="inline"/> <img src="https://img.shields.io/badge/Minecraft%20Version-1.15-blue" alt="" class="inline"/> <img src="https://img.shields.io/badge/Minecraft%20Version-1.15.1-blue" alt="" class="inline"/> <img src="https://img.shields.io/badge/Minecraft%20Version-1.15.2-blue" alt="" class="inline"/> <img src="https://img.shields.io/badge/Minecraft%20Version-1.16.1-blue" alt="" class="inline"/> <img src="https://img.shields.io/badge/Minecraft%20Version-1.16.2-blue" alt="" class="inline"/></p>
 <hr  />
 <h1>Purpose</h1>
-<p>This project provides an API to help Bukkit/Spigot developers use the new Minecraft 1.13 command UI, which includes:</p>
+<p>This project provides an API to help Bukkit/Spigot developers use the Minecraft 1.13 command UI, which includes:</p>
 <ul>
 <li><p class="startli"><b>Better commands</b> - Prevent players from running invalid commands, making it easier for developers</p>
 <p class="startli"><img src="https://raw.githubusercontent.com/JorelAli/CommandAPI/master/images/printnumber.gif" alt="better commands" class="inline"/></p>
@@ -115,6 +116,9 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </li>
 <li><p class="startli"><b>Support for proxied command senders</b> - Run your command as other entities using <code>/execute as ... run command</code></p>
 <p class="startli"><img src="https://raw.githubusercontent.com/JorelAli/CommandAPI/master/images/selfdestruct.gif" alt="proxied senders" class="inline"/></p>
+</li>
+<li><p class="startli"><b>Argument tooltips</b> - Let your users know exactly what their command will do</p>
+<p class="startli"><img src="https://raw.githubusercontent.com/JorelAli/CommandAPI/4.1-release2/docssrc/src/images/warps.gif" alt="argument tooltips" class="inline"/></p>
 </li>
 <li><b>Support for the <code>/execute</code> command</b> - Let your command to be executed by the built in <code>/execute</code> command</li>
 <li><b>Support for Minecraft's functions</b> - Allow your command to be executed from Minecraft's functions and tags</li>
@@ -396,7 +400,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Mon Aug 31 2020 14:37:08 for CommandAPI by
+    <li class="footer">Generated on Wed Sep 2 2020 18:05:24 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

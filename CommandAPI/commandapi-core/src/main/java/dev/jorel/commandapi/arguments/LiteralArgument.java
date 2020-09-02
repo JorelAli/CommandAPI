@@ -8,6 +8,10 @@ import dev.jorel.commandapi.exceptions.BadLiteralException;
 public class LiteralArgument extends Argument {
 
 	private String literal;
+	
+	/**
+	 * Determines if this literal argument is a MultiLiteralArgument
+	 */
 	public boolean isMulti = false;
 	
 	/**

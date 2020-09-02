@@ -1,6 +1,5 @@
 var NAVTREEINDEX4 =
 {
-"interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument.html#aff7c4fbe27af700ccbde2969a0a5d32a":[1,0,1,0,0,0,21,1],
 "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_greedy_argument.html":[1,0,1,0,0,0,22],
 "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html":[1,0,1,0,0,0,25],
 "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html#a06131911b41e36cf21d8f5e74cef24cf":[1,0,1,0,0,0,25,4],

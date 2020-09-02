@@ -9,7 +9,7 @@ import java.util.function.Function;
  * used with safe suggestion overrides, via the
  * SafeOverrideableArgument.safeOverrideSuggestionsT method.
  *
- * @param <S> the object that the argument suggestions use
+ * @param &lt;S> the object that the argument suggestions use
  */
 public class Tooltip<S> {
 
@@ -22,38 +22,38 @@ public class Tooltip<S> {
 	}
 	
 	/**
-	 * Constructs a Tooltip<S> with a suggestion and a tooltip
+	 * Constructs a Tooltip&lt;S> with a suggestion and a tooltip
 	 * 
-	 * @param <S> the object that the argument suggestions use
+	 * @param &lt;S> the object that the argument suggestions use
 	 * @param object the suggestion to provide to the user
 	 * @param tooltip    the tooltip to show to the user when they hover over the
 	 *                   suggestion
-	 * @return a Tooltip<S> representing this suggestion and tooltip
+	 * @return a Tooltip&lt;S> representing this suggestion and tooltip
 	 */
 	public static <S> Tooltip<S> of(S object, String tooltip) {
 		return new Tooltip<S>(object, tooltip);
 	}
 	
 	/**
-	 * Constructs a Tooltip<S> with a suggestion and no tooltip
+	 * Constructs a Tooltip&lt;S> with a suggestion and no tooltip
 	 * 
-	 * @param <S> the object that the argument suggestions use
+	 * @param &lt;S> the object that the argument suggestions use
 	 * @param object the suggestion to provide to the user
-	 * @return a Tooltip<S> representing this suggestion
+	 * @return a Tooltip&lt;S> representing this suggestion
 	 */
 	public static <S> Tooltip<S> none(S object) {
 		return new Tooltip<S>(object, null);
 	}
 	
 	/**
-	 * Constructs a Tooltip<S>[] from an array of Tooltip<S> via varargs. This
+	 * Constructs a Tooltip&lt;S>[] from an array of Tooltip&lt;S> via varargs. This
 	 * method takes advantage of Java's varargs to construct a generic array
 	 * parameterised over S for the purpose of type safety for the
 	 * safeOverrideSuggestionsT method, because Java doesn't allow you to create generic arrays.
 	 * 
-	 * @param <S> the object that the argument suggestions use
-	 * @param tooltips an array of Tooltips<S> to be converted into Tooltip<S>[]
-	 * @return a Tooltip<S>[] from the provided Tooltip<S>
+	 * @param &lt;S> the object that the argument suggestions use
+	 * @param tooltips an array of Tooltips&lt;S> to be converted into Tooltip&lt;S>[]
+	 * @return a Tooltip&lt;S>[] from the provided Tooltip&lt;S>
 	 */
 	@SafeVarargs
 	public static <S> Tooltip<S>[] arrayOf(Tooltip<S>... tooltips) {
@@ -61,11 +61,11 @@ public class Tooltip<S> {
 	}
 	
 	/**
-	 * Constructs a function that maps the current Tooltip<S> into a StringTooltip,
+	 * Constructs a function that maps the current Tooltip&lt;S> into a StringTooltip,
 	 * using a standard mapping function which is defined for a given argument. This
 	 * method is used internally by the CommandAPI.
 	 * 
-	 * @param <S> the object that the argument suggestions use
+	 * @param &lt;S> the object that the argument suggestions use
 	 * @param mapper a mapping function that converts an S instance into a String
 	 * @return the mapping function from this tooltip into a StringTooltip
 	 */

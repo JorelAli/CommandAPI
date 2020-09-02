@@ -59,7 +59,7 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	}
 	
 	/**
-	 * Override the suggestions of this argument with an array of Tooltip<S>,
+	 * Override the suggestions of this argument with an array of Tooltip&lt;S>,
 	 * that represents a safe suggestion and a hover tooltip
 	 * 
 	 * @param suggestions the suggestions and tooltips to override suggestions with 
@@ -72,7 +72,7 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	
 	/**
 	 * Override the suggestions of this argument with a function mapping the command
-	 * sender to an array of Tooltip<S>, that represents a safe suggestion and a
+	 * sender to an array of Tooltip&lt;S>, that represents a safe suggestion and a
 	 * hover tooltip
 	 * 
 	 * @param suggestions the suggestions and tooltips to override suggestions with
@@ -84,7 +84,7 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	
 	/**
 	 * Override the suggestions of this argument with a function mapping the command
-	 * sender an previously declared arguments to an array of Tooltip<S>, that
+	 * sender an previously declared arguments to an array of Tooltip&lt;S>, that
 	 * represents a safe suggestion and a hover tooltip
 	 * 
 	 * @param suggestions the suggestions and tooltips to override suggestions with
@@ -144,7 +144,7 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	}
 	
 	/**
-	 * sMap0, but for Tooltip<S> instead of Strings
+	 * sMap0, but for Tooltip&lt;S> instead of Strings
 	 * @param mapper the mapping function from S to a String
 	 * @param suggestions a <code>Tooltip<S>[]</code> of tooltips and suggestions to send to the user
 	 * @return the current argument
@@ -156,9 +156,9 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	}
 	
 	/**
-	 * sMap1, but for Tooltip<S> instead of Strings
+	 * sMap1, but for Tooltip&lt;S> instead of Strings
 	 * @param mapper the mapping function from S to a String
-	 * @param suggestions a <code>(sender) -> Tooltip<S>[]</code> of tooltips and suggestions to send to the user
+	 * @param suggestions a <code>(sender) -> Tooltip&lt;S>[]</code> of tooltips and suggestions to send to the user
 	 * @return the current argument
 	 * @see SafeOverrideableArgument#sMap1(Function, Function)
 	 */
@@ -167,9 +167,9 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	}
 	
 	/**
-	 * sMap2, but for Tooltip<S> instead of Strings
+	 * sMap2, but for Tooltip&lt;S> instead of Strings
 	 * @param mapper the mapping function from S to a String
-	 * @param suggestions a <code>(sender, args) -> Tooltip<S>[]</code> of tooltips and suggestions to send to the user
+	 * @param suggestions a <code>(sender, args) -> Tooltip&lt;S>[]</code> of tooltips and suggestions to send to the user
 	 * @return the current argument
 	 * @see SafeOverrideableArgument#sMap2(Function, BiFunction)
 	 */
