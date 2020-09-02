@@ -634,7 +634,7 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 <ul>
 <li>
 <p><code>withArguments(LinkedHashMap&lt;String, Argument&gt;)</code> - The list of arguments.</p>
-<p>The CommandAPI requires a list of arguments which are used for the command. The argument map consists of a key which is the tooltip that is displayed as a prompt to users entering commands, and a value which is an instance of an argument (See the section on arguments). This list of arguments is interpreted in the <em>order that arguments are added to the LinkedHashMap</em>.</p>
+<p>The CommandAPI requires a list of arguments which are used for the command. The argument map consists of a key which is the prompt that is displayed as a prompt to users entering commands, and a value which is an instance of an argument (See the section on arguments). This list of arguments is interpreted in the <em>order that arguments are added to the LinkedHashMap</em>.</p>
 </li>
 <li>
 <p><code>withPermission(CommandPermission)</code> - The required permission to execute a command. (See <a href="permissions.html">the section on permissions</a>).</p>
@@ -952,7 +952,7 @@ LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
 //Add an argument called &quot;target&quot;, which is a PlayerArgument
 arguments.put(&quot;target&quot;, new PlayerArgument());
 </code></pre>
-<p>The String value is the tooltip that is shown to a player when they are entering the command.</p>
+<p>The String value is the prompt that is shown to a player when they are entering the command.</p>
 <hr />
 <h2><a class="header" href="#argument-casting" id="argument-casting">Argument Casting</a></h2>
 <p>To access arguments, they have to be casted to the type that the argument represents. The order of the arguments in the <code>args[]</code> is the same as the order in which the arguments were declared.</p>

@@ -17,7 +17,7 @@ LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 arguments.put("target", new PlayerArgument());
 ```
 
-The String value is the tooltip that is shown to a player when they are entering the command.
+The String value is the prompt that is shown to a player when they are entering the command.
 
 -----
 
