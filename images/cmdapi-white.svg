@@ -16,7 +16,7 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
-   sodipodi:docname="cmdapi.svg"
+   sodipodi:docname="cmdapi-white.svg"
    inkscape:export-filename="/home/jorel/github/CommandAPI/images/cmdapi-600w.png"
    inkscape:export-xdpi="842.68311"
    inkscape:export-ydpi="842.68311">
@@ -109,15 +109,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="5.6568543"
-     inkscape:cx="0.44754073"
+     inkscape:cx="-38.354944"
      inkscape:cy="-5.7144352"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
-     inkscape:window-width="1920"
-     inkscape:window-height="1080"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-width="1900"
+     inkscape:window-height="1034"
+     inkscape:window-x="10"
+     inkscape:window-y="10"
      inkscape:window-maximized="0"
      fit-margin-top="0"
      fit-margin-left="0"
@@ -155,29 +155,29 @@
        x="164.30624"
        y="131.63547"
        ry="0.47622699"
-       inkscape:export-xdpi="842.6781"
-       inkscape:export-ydpi="842.6781" />
+       inkscape:export-xdpi="192.01239"
+       inkscape:export-ydpi="192.01239" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.35609078px;line-height:1.25;font-family:'TeX Gyre Adventor';-inkscape-font-specification:'TeX Gyre Adventor';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.44176701"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.35609078px;line-height:1.25;font-family:'TeX Gyre Adventor';-inkscape-font-specification:'TeX Gyre Adventor';letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.44176701;"
        x="173.19362"
        y="128.83179"
        id="text4645"
        transform="scale(0.96338901,1.0380023)"
-       inkscape:export-xdpi="842.6781"
-       inkscape:export-ydpi="842.6781"><tspan
+       inkscape:export-xdpi="192.01239"
+       inkscape:export-ydpi="192.01239"><tspan
          sodipodi:role="line"
          id="tspan4643"
          x="173.19362"
          y="128.83179"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.35609078px;font-family:'TeX Gyre Adventor';-inkscape-font-specification:'TeX Gyre Adventor';stroke-width:0.44176701">CommandAPI</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.35609078px;font-family:'TeX Gyre Adventor';-inkscape-font-specification:'TeX Gyre Adventor';stroke-width:0.44176701;fill:#ffffff;fill-opacity:1;">CommandAPI</tspan></text>
     <path
        style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 165.36459,132.69375 h 0.26458 v -0.52916 h 0.26459 V 131.9 h 0.26458 v 0.26459 h -0.26458 v 0.52916 h -0.26459 v 0.26459 h -0.26458 v 0.52916 h -0.26458 v 0.26459 h -0.26459 v -0.26459 h 0.26459 v -0.52916 h 0.26458 z"
        id="path4659"
        inkscape:connector-curvature="0"
-       inkscape:export-xdpi="842.6781"
-       inkscape:export-ydpi="842.6781" />
+       inkscape:export-xdpi="192.01239"
+       inkscape:export-ydpi="192.01239" />
   </g>
   <g
      inkscape:groupmode="layer"
