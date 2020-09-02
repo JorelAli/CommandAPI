@@ -20,8 +20,8 @@ public static RootCommandNode getRootNode();
 public static LiteralCommandNode registerNewLiteral(String name);
 public static RedirectModifier fromPredicate(BiPredicate<CommandSender, Object[]> predicate, LinkedHashMap<String, Argument> args);
 public static Command fromCommand(CommandAPICommand command);
-public static RequiredArgumentBuilder argBuildOf(LinkedHashMap<String, Argument> args, String value);		
-public static RequiredArgumentBuilder argBuildOf(LinkedHashMap<String, Argument> args, String value, CommandPermission permission);
+public static RequiredArgumentBuilder argBuildOf(LinkedHashMap<String, Argument> args, String prompt);
+public static RequiredArgumentBuilder argBuildOf(String prompt, Argument argument);
 ```
 
 Briefly, here's what each of these functions do (you can view the JavaDocs for more information):
@@ -33,7 +33,7 @@ Briefly, here's what each of these functions do (you can view the JavaDocs for m
 | `registerNewLiteral`   | Creates a `LiteralCommandNode` from a given string           |
 | `fromPredicate`        | Converts a predicate and some arguments into a `RedirectModifier`. This can be used for the `fork` method in brigadier's `ArgumentBuilder` |
 | `fromCommand`          | Converts a `CommandAPICommand` into a brigadier `Command` object |
-| `argBuildOf`           | Converts an argument into a `RequiredArgumentBuilder`. If a `CommandPermission` is provided, it will simply use `CommandPermission.NONE` as the default. |
+| `argBuildOf`           | Converts an argument, or a list of arguments, into a `RequiredArgumentBuilder`. |
 
 -----
 

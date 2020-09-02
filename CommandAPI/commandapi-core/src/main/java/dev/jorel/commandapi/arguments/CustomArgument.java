@@ -48,6 +48,10 @@ public class CustomArgument<T> extends Argument {
 		this.parser = parser;
 	}
 	
+	/**
+	 * Returns true if this argument is represented by a NamespacedKey
+	 * @return true if this argument is represented by a NamespacedKey
+	 */
 	public boolean isKeyed() {
 		return this.keyed;
 	}
@@ -145,6 +149,10 @@ public class CustomArgument<T> extends Argument {
 			return this;
 		}
 		
+		/**
+		 * Returns the String content of this MessageBuilder
+		 * @return the String content of this MessageBuilder
+		 */
 		@Override
 		public String toString() {
 			return builder.toString();
@@ -190,6 +198,13 @@ public class CustomArgument<T> extends Argument {
 	 */
 	@FunctionalInterface
 	public static interface CustomArgumentParser<T> {
+		
+		/**
+		 * Applies a String input to this custom argument parser
+		 * @param input the String input to apply
+		 * @return the applied output represented by this FunctionalInterface
+		 * @throws CustomArgumentException if an error occurs during parsing
+		 */
 		public T apply(String input) throws CustomArgumentException;
 	}
 }

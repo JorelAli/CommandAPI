@@ -36,10 +36,17 @@ Using the search icon in the top left corner, you can search for anything in thi
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 4.0 \\(\rightarrow\\) 4.1:
+
+- Adds a new section [7.3. Argument suggestions with tooltips](./tooltips.md)
+- Adds documentation for the `MultiLiteralArgument` in section [8.11.2. Multi literal arguments](./multilitargs.md)
+- Adds a new section [4. Shading the CommandAPI into your plugins](./shading.md)
+- Update documentation for [14. Brigadier + CommandAPI](./brigadier.md) with new (overloaded) function `argBuildOf`
+- Update [Afterword](./afterword.md)
+
 ### Documentation changes 3.4 \\(\rightarrow\\) 4.0:
 
 - Update the maven and gradle documentation to state that it is `provided` and `compileOnly`
-
 - The project has been renamed from the "1.13 Command API" to simply the "CommandAPI". This has changed a few things, such as various links. See the section [Upgrading guide](./upgrading.md) to view the relevant changes with regards to maven.
 - Updated [3. Setting up your development environment](./quickstart.md) to include new Maven repository links
 - Fixed stronkage with Java versions - there's now no random warning boxes about incompatibility with Java 12!

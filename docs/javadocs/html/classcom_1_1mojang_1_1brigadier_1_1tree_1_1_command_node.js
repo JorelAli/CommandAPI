@@ -1,0 +1,26 @@
+var classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node =
+[
+    [ "CommandNode", "classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a40869c0f87264413208ad1119f32f055", null ],
+    [ "addChild", "classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#ad046050eed92f3560aaa7304dff72025", null ],
+    [ "canUse", "classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#ada85bee27df90c95429503814db9fea7", null ],
+    [ "compareTo", "classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#aa7a6326938609854466d2320faacaac7", null ],
+    [ "createBuilder", "classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a83f615ccea233eb9642e34a949256ef7", null ],
+    [ "equals", "classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a74c24a1bdba6f773f768e8f8d75dd654", null ],
+    [ "findAmbiguities", "classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#ac4a6f9c8b501465217bd352d653d7539", null ],
+    [ "getChild", "classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a720e0cfe35d5e7788f4636b73ea93fa4", null ],
+    [ "getChildren", "classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#ad542ff69983a03d8efe59e6fb530ce5f", null ],
+    [ "getCommand", "classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#acd5f042039c8253a7007316c0eb3a618", null ],
+    [ "getExamples", "classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#ad9c734606deaaf1da08aa1479a795153", null ],
+    [ "getName", "classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#aa9165f37a032b65528fcde6bb7f6f8d4", null ],
+    [ "getRedirect", "classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a699828668e970e477991208cd5e74634", null ],
+    [ "getRedirectModifier", "classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a6ec0fc503cc0a62c6b3dbba12ef41c13", null ],
+    [ "getRelevantNodes", "classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a8a3cfe9177bf476996497c696f57b0e7", null ],
+    [ "getRequirement", "classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#ace9e8fb3890f9639b0d6c1e159cdfb1a", null ],
+    [ "getSortedKey", "classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a7d697d9f6d61686529499415e51031ea", null ],
+    [ "getUsageText", "classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#adb2365ae320b15fc6f6ef7840042c95f", null ],
+    [ "hashCode", "classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#ae896e51d707e753851a6b1803c34f743", null ],
+    [ "isFork", "classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a351de90d7eaac3fa329a0615a11dd348", null ],
+    [ "isValidInput", "classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#af06cb38e7e526cff0f01d442a810bef9", null ],
+    [ "listSuggestions", "classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a1eca3b41c3b1c776ef8bb3156130949b", null ],
+    [ "parse", "classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a56a9832082abca83e51b87cdc4f64e04", null ]
+];

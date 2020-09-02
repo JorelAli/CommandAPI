@@ -24,9 +24,10 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">CommandAPI
-   &#160;<span id="projectnumber">4.0</span>
+   &#160;<span id="projectnumber">4.1</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -97,6 +98,12 @@ $(document).ready(function(){initNavTree('functions_vars.html',''); initResizabl
 </li>
 <li>ALL
 : <a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1executors_1_1_executor_type.html#a7f858e9b009005b812144a7e37f7b80a">dev.jorel.commandapi.executors.ExecutorType</a>
+</li>
+<li>ARGUMENT_SEPARATOR
+: <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_command_dispatcher.html#a457217ec881e3c1ad20c9efc024ed6ea">com.mojang.brigadier.CommandDispatcher&lt; S &gt;</a>
+</li>
+<li>ARGUMENT_SEPARATOR_CHAR
+: <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_command_dispatcher.html#ad1b0ac203944da8323b90ddd02cbab77">com.mojang.brigadier.CommandDispatcher&lt; S &gt;</a>
 </li>
 <li>ASSIGN
 : <a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#a6f206d87108ed092af3f568f789ebe4f">dev.jorel.commandapi.wrappers.MathOperation</a>
@@ -192,6 +199,9 @@ $(document).ready(function(){initNavTree('functions_vars.html',''); initResizabl
 <li>INT_RANGE
 : <a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a4f8704291dbbe3a3700db9ceefc8d555">dev.jorel.commandapi.arguments.CommandAPIArgumentType</a>
 </li>
+<li>isMulti
+: <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html#ab88b11277ae686697e81d5736fedc205">dev.jorel.commandapi.arguments.LiteralArgument</a>
+</li>
 <li>ITEMSTACK
 : <a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a23d30f4a04a75c6a6b77e830464dc1b4">dev.jorel.commandapi.arguments.CommandAPIArgumentType</a>
 </li>
@@ -238,6 +248,9 @@ $(document).ready(function(){initNavTree('functions_vars.html',''); initResizabl
 </li>
 <li>MOD
 : <a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#a719bdc0fd4d38c02b070170d609f4120">dev.jorel.commandapi.wrappers.MathOperation</a>
+</li>
+<li>MULTI_LITERAL
+: <a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a4535ee872eb09f7b4b67d58db32aa2f7">dev.jorel.commandapi.arguments.CommandAPIArgumentType</a>
 </li>
 <li>MULTIPLE
 : <a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument_1_1_score_holder_type.html#a2c047baf164bcb71de214a0657099cfb">dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType</a>
@@ -358,7 +371,7 @@ $(document).ready(function(){initNavTree('functions_vars.html',''); initResizabl
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sat Aug 22 2020 23:26:22 for CommandAPI by
+    <li class="footer">Generated on Wed Sep 2 2020 18:19:17 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

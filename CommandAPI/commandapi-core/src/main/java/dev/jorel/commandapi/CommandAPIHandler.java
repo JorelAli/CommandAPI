@@ -42,6 +42,7 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
 
 import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
 import dev.jorel.commandapi.arguments.CustomArgument;
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
 import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
@@ -52,6 +53,7 @@ import dev.jorel.commandapi.arguments.Location2DArgument;
 import dev.jorel.commandapi.arguments.LocationArgument;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.ScoreHolderArgument;
+import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.nms.NMS;
 
 /**
@@ -74,7 +76,7 @@ public abstract class CommandAPIHandler {
 		try {
 			server = getMethod(Bukkit.getServer().getClass(), "getServer").invoke(Bukkit.getServer());
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			CommandAPIMain.getLog().severe("Unable to hook into NMS properly!");
+			CommandAPI.getLog().severe("Unable to hook into NMS properly!");
 			server = null;
 		}
 		
@@ -82,7 +84,7 @@ public abstract class CommandAPIHandler {
 		try {
 			version = (String) getMethod(Class.forName(server.getClass().getPackage().getName() + ".MinecraftServer"), "getVersion").invoke(server);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException | ClassNotFoundException e) {
-			CommandAPIMain.getLog().severe("Failed to find Minecraft version!");
+			CommandAPI.getLog().severe("Failed to find Minecraft version!");
 			version = null;
 		}
 		
@@ -98,26 +100,26 @@ public abstract class CommandAPIHandler {
 		}
 
 		// Log successful hooks
-		if (CommandAPIMain.getConfiguration().hasVerboseOutput()) {
+		if (CommandAPI.getConfiguration().hasVerboseOutput()) {
 			String compatibleVersions = Arrays.toString(NMS.compatibleVersions());
 			compatibleVersions = compatibleVersions.substring(1, compatibleVersions.length() - 1);
-			CommandAPIMain.getLog().info(
+			CommandAPI.getLog().info(
 					"Hooked into NMS " + NMS.getClass().getName() + " (compatible with " + compatibleVersions + ")");
 		}
 
 		// Checks other dependencies
 		if (Bukkit.getPluginManager().getPlugin("NBTAPI") != null) {
-			CommandAPIMain.getLog().info("Hooked into the NBTAPI successfully.");
+			CommandAPI.getLog().info("Hooked into the NBTAPI successfully.");
 		} else {
-			CommandAPIMain.getLog().warning(
+			CommandAPI.getLog().warning(
 					"Couldn't hook into the NBTAPI for NBT support. See https://www.spigotmc.org/resources/nbt-api.7939/");
 		}
 
 		try {
 			Class.forName("org.spigotmc.SpigotConfig");
-			CommandAPIMain.getLog().info("Hooked into Spigot successfully for Chat/ChatComponents");
+			CommandAPI.getLog().info("Hooked into Spigot successfully for Chat/ChatComponents");
 		} catch (ClassNotFoundException e) {
-			CommandAPIMain.getLog().warning("Couldn't hook into Spigot for Chat/ChatComponents");
+			CommandAPI.getLog().warning("Couldn't hook into Spigot for Chat/ChatComponents");
 		}
 	}
 	
@@ -140,8 +142,8 @@ public abstract class CommandAPIHandler {
 	 */
 	static void unregister(String commandName, boolean force) {
 		try {
-			if (CommandAPIMain.getConfiguration().hasVerboseOutput()) {
-				CommandAPIMain.getLog().info("Unregistering command /" + commandName);
+			if (CommandAPI.getConfiguration().hasVerboseOutput()) {
+				CommandAPI.getLog().info("Unregistering command /" + commandName);
 			}
 
 			// Get the child nodes from the loaded dispatcher class
@@ -167,7 +169,7 @@ public abstract class CommandAPIHandler {
 	/**
 	 * Generates a command to be registered by the CommandAPI.
 	 * 
-	 * @param args     set of ordered argument pairs which contain the tooltip text
+	 * @param args     set of ordered argument pairs which contain the prompt text
 	 *                 and their argument types
 	 * @param executor code to be ran when the command is executed
 	 * @return a brigadier command which is registered internally
@@ -274,7 +276,8 @@ public abstract class CommandAPIHandler {
 		case ITEMSTACK_PREDICATE:
 			return NMS.getItemStackPredicate(cmdCtx, key);
 		case LITERAL:
-			return null;
+			LiteralArgument a = (LiteralArgument) value;
+			return a.isMulti ? a.getLiteral() : null;
 		case LOCATION:
 			LocationType locationType = ((LocationArgument) value).getLocationType();
 			return NMS.getLocation(cmdCtx, key, locationType, sender);
@@ -307,6 +310,9 @@ public abstract class CommandAPIHandler {
 					: NMS.getScoreHolderMultiple(cmdCtx, key);
 		case SCOREBOARD_SLOT:
 			return NMS.getScoreboardSlot(cmdCtx, key);
+		case MULTI_LITERAL:
+			//This case should NEVER occur!
+			break;
 		case SIMPLE_TYPE:
 			return cmdCtx.getArgument(key, value.getPrimitiveType());
 		case SOUND:
@@ -399,13 +405,13 @@ public abstract class CommandAPIHandler {
 					.get(map);
 
 			if(!PERMISSIONS_TO_FIX.isEmpty()) {
-				CommandAPIMain.getLog().info("Linking permissions to commands:");
+				CommandAPI.getLog().info("Linking permissions to commands:");
 			}
 			PERMISSIONS_TO_FIX.forEach((cmdName, perm) -> {
 
 				if (perm.equals(CommandPermission.NONE)) {
-					if (CommandAPIMain.getConfiguration().hasVerboseOutput()) {
-						CommandAPIMain.getLog().info("NONE -> /" + cmdName);
+					if (CommandAPI.getConfiguration().hasVerboseOutput()) {
+						CommandAPI.getLog().info("NONE -> /" + cmdName);
 					}
 					// Set the command permission to empty string (Minecraft standard for "no
 					// permission required")
@@ -416,10 +422,10 @@ public abstract class CommandAPIHandler {
 						knownCommands.get(cmdName).setPermission("");
 					}
 				} else {
-					if (CommandAPIMain.getConfiguration().hasVerboseOutput()) {
-						CommandAPIMain.getLog().info(perm.getPermission() + " -> /" + cmdName);
+					if (CommandAPI.getConfiguration().hasVerboseOutput()) {
+						CommandAPI.getLog().info(perm.getPermission() + " -> /" + cmdName);
 					} else {
-						CommandAPIMain.getLog().info("OP -> /" + cmdName);
+						CommandAPI.getLog().info("OP -> /" + cmdName);
 					}
 					// Set the command permission to the (String) permission node
 					if (NMS.isVanillaCommandWrapper(knownCommands.get(cmdName))) {
@@ -443,11 +449,50 @@ public abstract class CommandAPIHandler {
 	// registers it
 	static void register(String commandName, CommandPermission permissions, String[] aliases, Predicate<CommandSender> requirements,
 			final LinkedHashMap<String, Argument> args, CustomCommandExecutor executor) throws Exception {
-		if (CommandAPIMain.getConfiguration().hasVerboseOutput()) {
+		
+		//"Expands" our MultiLiterals into Literals
+		Predicate<Argument> isMultiLiteral = arg -> arg.getArgumentType() == CommandAPIArgumentType.MULTI_LITERAL;
+		if(args.values().stream().filter(isMultiLiteral).count() > 0) {
+		
+			int index = 0;
+			for(Entry<String, Argument> entry : args.entrySet()) {
+				
+				//Find the first multiLiteral in the for loop
+				if(isMultiLiteral.test(entry.getValue())) {
+					MultiLiteralArgument superArg = (MultiLiteralArgument) entry.getValue();
+					
+					//Add all of its entries
+					for(int i = 0; i < superArg.getLiterals().length; i++) {
+						LiteralArgument litArg = new LiteralArgument(superArg.getLiterals()[i]);
+						litArg.isMulti = true;
+						
+						
+						//Reconstruct the list of arguments and place in the new literals
+						LinkedHashMap<String, Argument> newArgs = new LinkedHashMap<>();
+						{
+							int j = 0;
+							for(Entry<String, Argument> previousEntry : args.entrySet()) {
+								if(j == index) {
+									newArgs.put(entry.getKey(), litArg);
+								} else {
+									newArgs.put(previousEntry.getKey(), previousEntry.getValue());
+								}
+								j++;
+							}
+						}
+						register(commandName, permissions, aliases, requirements, newArgs, executor);
+					}
+					return;
+				}
+				index++;
+			}
+		}
+		
+		if (CommandAPI.getConfiguration().hasVerboseOutput()) {
 			// Create a list of argument names
 			StringBuilder builder = new StringBuilder();
 			args.values().forEach(arg -> builder.append("<").append(arg.getClass().getSimpleName()).append("> "));
-			CommandAPIMain.getLog().info("Registering command /" + commandName + " " + builder.toString());
+			CommandAPI.getLog().info("Registering command /" + commandName + " " + builder.toString());
 		}
 
 		Command command = generateCommand(args, executor);
@@ -468,8 +513,8 @@ public abstract class CommandAPIHandler {
 
 			// Register aliases
 			for (String alias : aliases) {
-				if (CommandAPIMain.getConfiguration().hasVerboseOutput()) {
-					CommandAPIMain.getLog().info("Registering alias /" + alias + " -> " + resultantNode.getName());
+				if (CommandAPI.getConfiguration().hasVerboseOutput()) {
+					CommandAPI.getLog().info("Registering alias /" + alias + " -> " + resultantNode.getName());
 				}
 				DISPATCHER.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(alias)
 						.requires(generatePermissions(alias, permissions, requirements)).executes(command));
@@ -538,8 +583,8 @@ public abstract class CommandAPIHandler {
 
 			// Register aliases
 			for (String alias : aliases) {
-				if (CommandAPIMain.getConfiguration().hasVerboseOutput()) {
-					CommandAPIMain.getLog().info("Registering alias /" + alias + " -> " + resultantNode.getName());
+				if (CommandAPI.getConfiguration().hasVerboseOutput()) {
+					CommandAPI.getLog().info("Registering alias /" + alias + " -> " + resultantNode.getName());
 				}
 				DISPATCHER.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(alias)
 						.requires(generatePermissions(alias, permissions, requirements)).redirect(resultantNode));
@@ -547,8 +592,8 @@ public abstract class CommandAPIHandler {
 		}
 
 		// Produce the commandDispatch.json file for debug purposes
-		if (CommandAPIMain.getConfiguration().willCreateDispatcherFile()) {
-			File file = CommandAPIMain.getDispatcherFile();
+		if (CommandAPI.getConfiguration().willCreateDispatcherFile()) {
+			File file = CommandAPI.getDispatcherFile();
 			try {
 				file.createNewFile();
 			} catch (IOException e) {
@@ -564,12 +609,12 @@ public abstract class CommandAPIHandler {
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// NMS ICompletionProvider.a()
-	static CompletableFuture<Suggestions> getSuggestionsBuilder(SuggestionsBuilder builder, String[] array) {
+	static CompletableFuture<Suggestions> getSuggestionsBuilder(SuggestionsBuilder builder, StringTooltip[] array) {
 		String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
 		for (int i = 0; i < array.length; i++) {
-			String str = array[i];
-			if (str.toLowerCase(Locale.ROOT).startsWith(remaining)) {
-				builder.suggest(str);
+			StringTooltip str = array[i];
+			if (str.getSuggestion().toLowerCase(Locale.ROOT).startsWith(remaining)) {
+				builder.suggest(str.getSuggestion(), str.getTooltip());
 			}
 		}
 		return builder.buildFuture();
@@ -792,7 +837,7 @@ public abstract class CommandAPIHandler {
 		}
 		
 		/**
-		 * Constructs an RequiredArgumentBuilder from a given argument within a command
+		 * Constructs a RequiredArgumentBuilder from a given argument within a command
 		 * declaration. For example:
 		 * 
 		 * <pre>
@@ -809,6 +854,18 @@ public abstract class CommandAPIHandler {
 		 */
 		public static RequiredArgumentBuilder argBuildOf(LinkedHashMap<String, Argument> args, String value) {
 			return getRequiredArgumentBuilderDynamic(args, value, args.get(value), args.get(value).getArgumentPermission(), args.get(value).getRequirements());
+		}
+		
+		/**
+		 * Constructs a RequiredArgumentBuilder from a given argument and prompt text.
+		 * @param prompt the prompt to display when the user is typing the command
+		 * @param argument the argument to create a RequiredArgumentBuilder of
+		 * @return a RequiredArgumentBuilder that represents the provided argument
+		 */
+		public static RequiredArgumentBuilder argBuildOf(String prompt, Argument argument) {
+			LinkedHashMap<String, Argument> map = new LinkedHashMap<>();
+			map.put(prompt, argument);
+			return getRequiredArgumentBuilderDynamic(map, prompt, argument, argument.getArgumentPermission(), argument.getRequirements());
 		}
 	}
 }

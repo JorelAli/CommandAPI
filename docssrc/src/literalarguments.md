@@ -17,6 +17,16 @@ It consists of a gamemode, followed by an optional player argument. The list of 
 
 Unlike regular commands (as those implemented by Bukkit for example), these four options are "hardcoded" - they're not "suggestions". The user can _only_ enter one of these four examples, no other values are allowed.
 
+<div class="warning">
+
+**Developer's Note:**
+
+The `LiteralArgument` class is now obsolete! If you want to implement literals easily, consider using the much more intuitive `SimpleLiteralArgument`, which is described in more detail [here](./simplelitargs.md)!
+
+</div>
+
+
+
 -----
 
 ## Literal arguments vs regular arguments
@@ -61,7 +71,7 @@ The value of `text` in the code above would be "goodbye".
 
 <div class="example">
 
-## Example - Gamemode command using literal arguments
+### Example - Gamemode command using literal arguments
 
 This is a demonstration of how you could create a command similar to Minecraft's `/gamemode` command by using literal arguments. To do this, we are effectively registering 4 separate commands, each called `/gamemode`, but with different literal arguments.
 
