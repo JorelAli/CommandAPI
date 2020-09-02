@@ -183,8 +183,8 @@ public static RootCommandNode getRootNode();
 public static LiteralCommandNode registerNewLiteral(String name);
 public static RedirectModifier fromPredicate(BiPredicate&lt;CommandSender, Object[]&gt; predicate, LinkedHashMap&lt;String, Argument&gt; args);
 public static Command fromCommand(CommandAPICommand command);
-public static RequiredArgumentBuilder argBuildOf(LinkedHashMap&lt;String, Argument&gt; args, String value);		
-public static RequiredArgumentBuilder argBuildOf(LinkedHashMap&lt;String, Argument&gt; args, String value, CommandPermission permission);
+public static RequiredArgumentBuilder argBuildOf(LinkedHashMap&lt;String, Argument&gt; args, String prompt);
+public static RequiredArgumentBuilder argBuildOf(String prompt, Argument argument);
 </code></pre>
 <p>Briefly, here's what each of these functions do (you can view the JavaDocs for more information):</p>
 <table><thead><tr><th>Method</th><th>Description</th></tr></thead><tbody>
@@ -193,7 +193,7 @@ public static RequiredArgumentBuilder argBuildOf(LinkedHashMap&lt;String, Argume
 <tr><td><code>registerNewLiteral</code></td><td>Creates a <code>LiteralCommandNode</code> from a given string</td></tr>
 <tr><td><code>fromPredicate</code></td><td>Converts a predicate and some arguments into a <code>RedirectModifier</code>. This can be used for the <code>fork</code> method in brigadier's <code>ArgumentBuilder</code></td></tr>
 <tr><td><code>fromCommand</code></td><td>Converts a <code>CommandAPICommand</code> into a brigadier <code>Command</code> object</td></tr>
-<tr><td><code>argBuildOf</code></td><td>Converts an argument into a <code>RequiredArgumentBuilder</code>. If a <code>CommandPermission</code> is provided, it will simply use <code>CommandPermission.NONE</code> as the default.</td></tr>
+<tr><td><code>argBuildOf</code></td><td>Converts an argument, or a list of arguments, into a <code>RequiredArgumentBuilder</code>.</td></tr>
 </tbody></table>
 <hr />
 <h2><a class="header" href="#examples" id="examples">Examples</a></h2>
