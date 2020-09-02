@@ -1,6 +1,6 @@
 <h2 align="center">
 <br>
-  <img src="images/cmdapi-600w.png" alt="CommandAPI logo">
+  <img src="images/cmdapi.svg" alt="CommandAPI logo" width="600">
   <br>
     <br>
   A Bukkit/Spigot API to use the command UI introduced in Minecraft 1.13
