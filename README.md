@@ -1,5 +1,11 @@
-# CommandAPI
-A Bukkit/Spigot API to use the command UI introduced in Minecraft 1.13.
+<h2 align="center">
+<br>
+  <img src="images/cmdapi-600w.png" alt="CommandAPI logo">
+  <br>
+    <br>
+  A Bukkit/Spigot API to use the command UI introduced in Minecraft 1.13
+  <br>
+</h2>
 
 **Support and Project Discussion**:
 

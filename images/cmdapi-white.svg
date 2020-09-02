@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -8,16 +10,16 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   inkscape:export-ydpi="2090.7075"
-   inkscape:export-xdpi="2090.7075"
-   inkscape:export-filename="D:\Users\Jorel\Documents\github\1.13CommandAPI\docssrc\theme\favicon.png"
-   width="2.3812549mm"
+   width="17.990507mm"
    height="2.3812037mm"
-   viewBox="0 0 2.3812549 2.3812037"
+   viewBox="0 0 17.990507 2.3812037"
    version="1.1"
    id="svg8"
-   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
-   sodipodi:docname="cmdapi.svg">
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   sodipodi:docname="cmdapi-white.svg"
+   inkscape:export-filename="/home/jorel/github/CommandAPI/images/cmdapi-600w.png"
+   inkscape:export-xdpi="842.68311"
+   inkscape:export-ydpi="842.68311">
   <defs
      id="defs2">
     <inkscape:path-effect
@@ -33,9 +35,7 @@
        tang_offset="0"
        prop_units="false"
        vertical_pattern="false"
-       fuse_tolerance="0"
-       lpeversion="0"
-       hide_knot="false" />
+       fuse_tolerance="0" />
     <inkscape:path-effect
        effect="skeletal"
        id="path-effect4540"
@@ -49,9 +49,7 @@
        tang_offset="0"
        prop_units="false"
        vertical_pattern="false"
-       fuse_tolerance="0"
-       lpeversion="0"
-       hide_knot="false" />
+       fuse_tolerance="0" />
     <linearGradient
        gradientTransform="matrix(0.90000192,0,0,0.89998251,76.19981,289.3855)"
        inkscape:collect="always"
@@ -87,9 +85,7 @@
        tang_offset="0"
        prop_units="false"
        vertical_pattern="false"
-       fuse_tolerance="0"
-       lpeversion="0"
-       hide_knot="false" />
+       fuse_tolerance="0" />
     <inkscape:path-effect
        effect="skeletal"
        id="path-effect4540-6"
@@ -103,9 +99,7 @@
        tang_offset="0"
        prop_units="false"
        vertical_pattern="false"
-       fuse_tolerance="0"
-       lpeversion="0"
-       hide_knot="false" />
+       fuse_tolerance="0" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -114,27 +108,26 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="16"
-     inkscape:cx="-13.537801"
-     inkscape:cy="4.3089489"
+     inkscape:zoom="5.6568543"
+     inkscape:cx="-38.354944"
+     inkscape:cy="-5.7144352"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
-     inkscape:window-width="3840"
-     inkscape:window-height="2066"
-     inkscape:window-x="-11"
-     inkscape:window-y="-11"
-     inkscape:window-maximized="1"
+     inkscape:window-width="1900"
+     inkscape:window-height="1034"
+     inkscape:window-x="10"
+     inkscape:window-y="10"
+     inkscape:window-maximized="0"
      fit-margin-top="0"
      fit-margin-left="0"
      fit-margin-right="0"
-     fit-margin-bottom="0"
-     inkscape:document-rotation="0">
+     fit-margin-bottom="0">
     <inkscape:grid
        type="xygrid"
        id="grid4528"
-       originx="-164.30624"
-       originy="-162.98336" />
+       originx="-164.30623"
+       originy="-162.98334" />
   </sodipodi:namedview>
   <metadata
      id="metadata5">
@@ -144,7 +137,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -155,22 +148,36 @@
      style="opacity:1"
      transform="translate(-164.30624,-131.63547)">
     <rect
-       style="opacity:1;fill:url(#linearGradient4558);fill-opacity:1;stroke:none;stroke-width:0.0899992;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="opacity:1;fill:url(#linearGradient4558);fill-opacity:1;stroke:none;stroke-width:0.08999922;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4550"
        width="2.3812549"
        height="2.3812037"
        x="164.30624"
        y="131.63547"
        ry="0.47622699"
-       inkscape:export-xdpi="960.01874"
-       inkscape:export-ydpi="960.01874" />
+       inkscape:export-xdpi="192.01239"
+       inkscape:export-ydpi="192.01239" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.35609078px;line-height:1.25;font-family:'TeX Gyre Adventor';-inkscape-font-specification:'TeX Gyre Adventor';letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.44176701;"
+       x="173.19362"
+       y="128.83179"
+       id="text4645"
+       transform="scale(0.96338901,1.0380023)"
+       inkscape:export-xdpi="192.01239"
+       inkscape:export-ydpi="192.01239"><tspan
+         sodipodi:role="line"
+         id="tspan4643"
+         x="173.19362"
+         y="128.83179"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.35609078px;font-family:'TeX Gyre Adventor';-inkscape-font-specification:'TeX Gyre Adventor';stroke-width:0.44176701;fill:#ffffff;fill-opacity:1;">CommandAPI</tspan></text>
     <path
        style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 165.36459,132.69375 h 0.26458 v -0.52916 h 0.26459 V 131.9 h 0.26458 v 0.26459 h -0.26458 v 0.52916 h -0.26459 v 0.26459 h -0.26458 v 0.52916 h -0.26458 v 0.26459 h -0.26459 v -0.26459 h 0.26459 v -0.52916 h 0.26458 z"
        id="path4659"
        inkscape:connector-curvature="0"
-       inkscape:export-xdpi="960.01874"
-       inkscape:export-ydpi="960.01874" />
+       inkscape:export-xdpi="192.01239"
+       inkscape:export-ydpi="192.01239" />
   </g>
   <g
      inkscape:groupmode="layer"
