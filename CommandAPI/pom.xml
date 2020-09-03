@@ -24,14 +24,6 @@
 		<module>commandapi-shade</module>
 	</modules>
 
-	<distributionManagement>
-		<repository>
-			<id>github</id>
-			<name>GitHub JorelAli Apache Maven Packages</name>
-			<url>https://maven.pkg.github.com/JorelAli/1.13-Command-API</url>
-		</repository>
-	</distributionManagement>
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -75,7 +67,6 @@
 					<compilerArgs>
 						<arg>-Xlint</arg>
 					</compilerArgs>
-					<!-- <release>12</release> -->
 				</configuration>
 			</plugin>
 			<plugin>
