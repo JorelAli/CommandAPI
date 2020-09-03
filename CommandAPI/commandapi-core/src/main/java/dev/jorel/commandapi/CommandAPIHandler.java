@@ -108,9 +108,10 @@ public abstract class CommandAPIHandler {
 		}
 
 		// Checks other dependencies
-		if (Bukkit.getPluginManager().getPlugin("NBTAPI") != null) {
+		try {
+			Class.forName("de.tr7zw.nbtapi.NBTContainer");
 			CommandAPI.getLog().info("Hooked into the NBTAPI successfully.");
-		} else {
+		} catch(ClassNotFoundException e) {
 			CommandAPI.getLog().warning(
 					"Couldn't hook into the NBTAPI for NBT support. See https://www.spigotmc.org/resources/nbt-api.7939/");
 		}
