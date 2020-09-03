@@ -631,7 +631,7 @@ public class NMS_1_15 implements NMS {
 	}
 
 	@Override
-	public String getObjective(CommandContext cmdCtx, String key, CommandSender sender)
+	public String getObjective(CommandContext cmdCtx, String key)
 			throws IllegalArgumentException, CommandSyntaxException {	
 		return ArgumentScoreboardObjective.a(cmdCtx, key).getName();
 	}
@@ -773,7 +773,7 @@ public class NMS_1_15 implements NMS {
 	}
 
 	@Override
-	public String getTeam(CommandContext cmdCtx, String key, CommandSender sender) throws CommandSyntaxException {
+	public String getTeam(CommandContext cmdCtx, String key) throws CommandSyntaxException {
 		return ArgumentScoreboardTeam.a(cmdCtx, key).getName();
 	}
 

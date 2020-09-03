@@ -139,13 +139,13 @@ public interface NMS {
 	String               getKeyedAsString(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 	Location             getLocation(CommandContext<?> cmdCtx, String key, LocationType locationType) throws CommandSyntaxException;
 	Location2D           getLocation2D(CommandContext<?> cmdCtx, String key, LocationType locationType2d) throws CommandSyntaxException;
-	String               getObjective(CommandContext<?> cmdCtx, String key, CommandSender sender) throws IllegalArgumentException, CommandSyntaxException;
+	String               getObjective(CommandContext<?> cmdCtx, String key) throws IllegalArgumentException, CommandSyntaxException;
 	Player               getPlayer(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 	PotionEffectType     getPotionEffect(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 	Recipe       		 getRecipe(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException; 
 	Collection<String>   getScoreHolderMultiple(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 	String               getScoreHolderSingle(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
-	String               getTeam(CommandContext<?> cmdCtx, String key, CommandSender sender) throws CommandSyntaxException;
+	String               getTeam(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 	MathOperation        getMathOperation(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
                          
 

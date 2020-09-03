@@ -81,7 +81,9 @@ class CustomCommandExecutor {
 	}
 	
 	private int execute(List<? extends IExecutorTyped> executors, CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
-		if (sender instanceof Player && matches(executors, ExecutorType.PLAYER)) {
+		if(isForceNative()) {
+			return execute(executors, sender, args, ExecutorType.NATIVE);
+		} else if (sender instanceof Player && matches(executors, ExecutorType.PLAYER)) {
 			return execute(executors, sender, args, ExecutorType.PLAYER);
 		} else if (sender instanceof Entity && matches(executors, ExecutorType.ENTITY)) {
 			return execute(executors, sender, args, ExecutorType.ENTITY);

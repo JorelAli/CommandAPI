@@ -18,6 +18,8 @@ import dev.jorel.commandapi.executors.ConsoleCommandExecutor;
 import dev.jorel.commandapi.executors.ConsoleResultingCommandExecutor;
 import dev.jorel.commandapi.executors.EntityCommandExecutor;
 import dev.jorel.commandapi.executors.EntityResultingCommandExecutor;
+import dev.jorel.commandapi.executors.NativeCommandExecutor;
+import dev.jorel.commandapi.executors.NativeResultingCommandExecutor;
 import dev.jorel.commandapi.executors.PlayerCommandExecutor;
 import dev.jorel.commandapi.executors.PlayerResultingCommandExecutor;
 import dev.jorel.commandapi.executors.ProxyCommandExecutor;
@@ -215,6 +217,16 @@ public class CommandAPICommand {
 	 * @return this command builder
 	 */
 	public CommandAPICommand executesConsole(ConsoleResultingCommandExecutor executor) {
+		this.executor.addResultingExecutor(executor);
+		return this;
+	}
+	
+	public CommandAPICommand executesNative(NativeCommandExecutor executor) {
+		this.executor.addNormalExecutor(executor);
+		return this;
+	}
+	
+	public CommandAPICommand executesNative(NativeResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);
 		return this;
 	}

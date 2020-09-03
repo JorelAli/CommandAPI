@@ -217,7 +217,6 @@ public abstract class CommandAPIHandler {
 	 * @throws CommandSyntaxException
 	 */
 	static Object parseArgument(CommandContext cmdCtx, String key, Argument value) throws CommandSyntaxException {
-		//CommandSender sender = NMS.getSenderForCommand(cmdCtx);
 		switch (value.getArgumentType()) {
 		case ADVANCEMENT:
 			return NMS.getAdvancement(cmdCtx, key);
@@ -291,7 +290,7 @@ public abstract class CommandAPIHandler {
 		case NBT_COMPOUND:
 			return NMS.getNBTCompound(cmdCtx, key);
 		case OBJECTIVE:
-			return NMS.getObjective(cmdCtx, key, sender);
+			return NMS.getObjective(cmdCtx, key);
 		case OBJECTIVE_CRITERIA:
 			return NMS.getObjectiveCriteria(cmdCtx, key);
 		case PARTICLE:
@@ -318,7 +317,7 @@ public abstract class CommandAPIHandler {
 		case SOUND:
 			return NMS.getSound(cmdCtx, key);
 		case TEAM:
-			return NMS.getTeam(cmdCtx, key, sender);
+			return NMS.getTeam(cmdCtx, key);
 		case TIME:
 			return NMS.getTime(cmdCtx, key);
 		case UUID:
