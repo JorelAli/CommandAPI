@@ -20,6 +20,7 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
@@ -33,7 +34,6 @@ import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_14_R1.CraftSound;
 import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_14_R1.block.data.CraftBlockData;
-import org.bukkit.craftbukkit.v1_14_R1.command.ProxiedNativeCommandSender;
 import org.bukkit.craftbukkit.v1_14_R1.command.VanillaCommandWrapper;
 import org.bukkit.craftbukkit.v1_14_R1.enchantments.CraftEnchantment;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
@@ -69,6 +69,7 @@ import dev.jorel.commandapi.exceptions.UUIDArgumentException;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.Location2D;
 import dev.jorel.commandapi.wrappers.MathOperation;
+import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -670,18 +671,21 @@ public class NMS_1_14_4 implements NMS {
 
     @Override
     public CommandSender getSenderForCommand(CommandContext cmdCtx) {
-        CommandSender sender = getCLW(cmdCtx).getBukkitSender();
+    	CommandListenerWrapper clw = getCLW(cmdCtx);
+		CommandSender sender = clw.getBukkitSender();
 
-        Entity proxyEntity = getCLW(cmdCtx).getEntity();
-        if (proxyEntity != null) {
-            CommandSender proxy = ((Entity) proxyEntity).getBukkitEntity();
+		Entity proxyEntity = clw.getEntity();
+		if (proxyEntity != null) {
+			CommandSender proxy = ((Entity) proxyEntity).getBukkitEntity();
 
-            if (!proxy.equals(sender)) {
-                sender = new ProxiedNativeCommandSender(getCLW(cmdCtx), sender, proxy);
-            }
-        }
-
-        return sender;
+			if (!proxy.equals(sender)) {
+				Vec3D pos = clw.getPosition();
+				World world = clw.getWorld().getWorld();
+				Location location = new Location(clw.getWorld().getWorld(), pos.getX(), pos.getY(), pos.getZ());
+				sender = new NativeProxyCommandSender(sender, proxy, location, world);
+			}
+		}
+		return sender;
     }
 
     @Override

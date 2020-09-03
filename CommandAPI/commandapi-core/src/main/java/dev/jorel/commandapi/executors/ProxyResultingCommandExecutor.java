@@ -1,14 +1,13 @@
 package dev.jorel.commandapi.executors;
 
-import org.bukkit.command.ProxiedCommandSender;
-
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
+import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 
 /**
- * A resulting command executor for a ProxiedCommandSender
+ * A resulting command executor for a NativeProxyCommandSender
  */
 @FunctionalInterface
-public interface ProxyResultingCommandExecutor extends IExecutorResulting<ProxiedCommandSender> {
+public interface ProxyResultingCommandExecutor extends IExecutorResulting<NativeProxyCommandSender> {
 
 	/**
 	 * The code to run when this command is performed
@@ -21,7 +20,7 @@ public interface ProxyResultingCommandExecutor extends IExecutorResulting<Proxie
 	 *            insertion into the hashmap
 	 * @return the result of this command
 	 */
-	int run(ProxiedCommandSender sender, Object[] args) throws WrapperCommandSyntaxException;
+	int run(NativeProxyCommandSender sender, Object[] args) throws WrapperCommandSyntaxException;
 
 	@Override
 	default ExecutorType getType() {
