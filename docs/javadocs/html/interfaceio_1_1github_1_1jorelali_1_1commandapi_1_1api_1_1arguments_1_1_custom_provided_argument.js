@@ -1,5 +1,0 @@
-var interfaceio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_custom_provided_argument =
-[
-    [ "SuggestionProviders", "enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_custom_provided_argument_1_1_suggestion_providers.html", "enumio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_custom_provided_argument_1_1_suggestion_providers" ],
-    [ "getSuggestionProvider", "interfaceio_1_1github_1_1jorelali_1_1commandapi_1_1api_1_1arguments_1_1_custom_provided_argument.html#ab2dd825973cb900844ea5d5e4c2a2715", null ]
-];

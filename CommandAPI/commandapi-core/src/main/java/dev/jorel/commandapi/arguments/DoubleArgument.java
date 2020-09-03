@@ -1,10 +1,5 @@
 package dev.jorel.commandapi.arguments;
 
-import java.util.function.BiFunction;
-import java.util.function.Function;
-
-import org.bukkit.command.CommandSender;
-
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
@@ -12,13 +7,13 @@ import dev.jorel.commandapi.exceptions.InvalidRangeException;
 /**
  * An argument that represents primitive Java doubles
  */
-public class DoubleArgument extends Argument implements ISafeOverrideableSuggestions<Double> {
+public class DoubleArgument extends SafeOverrideableArgument<Double> {
 
 	/**
 	 * A double argument
 	 */
 	public DoubleArgument() {
-		super(DoubleArgumentType.doubleArg());
+		super(DoubleArgumentType.doubleArg(), String::valueOf);
 	}
 	
 	/**
@@ -26,7 +21,7 @@ public class DoubleArgument extends Argument implements ISafeOverrideableSuggest
 	 * @param min The minimum value this argument can take (inclusive)
 	 */
 	public DoubleArgument(double min) {
-		super(DoubleArgumentType.doubleArg(min));
+		super(DoubleArgumentType.doubleArg(min), String::valueOf);
 	}
 	
 	/**
@@ -35,7 +30,7 @@ public class DoubleArgument extends Argument implements ISafeOverrideableSuggest
 	 * @param max The maximum value this argument can take (inclusive)
 	 */
 	public DoubleArgument(double min, double max) {
-		super(DoubleArgumentType.doubleArg(min, max));
+		super(DoubleArgumentType.doubleArg(min, max), String::valueOf);
 		if(max < min) {
 			throw new InvalidRangeException();
 		}
@@ -49,18 +44,6 @@ public class DoubleArgument extends Argument implements ISafeOverrideableSuggest
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.SIMPLE_TYPE;
-	}
-	
-	public Argument safeOverrideSuggestions(Double... suggestions) {
-		return super.overrideSuggestions(sMap0(String::valueOf, suggestions));
-	}
-
-	public Argument safeOverrideSuggestions(Function<CommandSender, Double[]> suggestions) {
-		return super.overrideSuggestions(sMap1(String::valueOf, suggestions));
-	}
-
-	public Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], Double[]> suggestions) {
-		return super.overrideSuggestions(sMap2(String::valueOf, suggestions));
 	}
 
 }

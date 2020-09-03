@@ -17,7 +17,7 @@ LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
 arguments.put("target", new PlayerArgument());
 ```
 
-The String value is the tooltip that is shown to a player when they are entering the command.
+The String value is the prompt that is shown to a player when they are entering the command.
 
 -----
 
@@ -62,6 +62,7 @@ The type to cast each argument (declared in the `dev.jorel.commandapi.arguments`
 | [`LongArgument`](./primitivearguments.md#numerical-arguments) | `long`                                                       |
 |                [`LootTableArgument`](./loottableargument.md) | `org.bukkit.loot.LootTable`                                  |
 |       [`MathOperationArgument`](./mathoperationarguments.md) | `dev.jorel.commandapi.wrappers.MathOperation`                |
+|                  [`MultiLiteralArgument`](./multilitargs.md) | `String`                                                     |
 |                   [`NBTCompoundArgument`](./nbtarguments.md) | `de.tr7zw.nbtapi.NBTContainer`                               |
 | [`ObjectiveArgument`](./objectivearguments.md#objective-argument) | `String`                                                     |
 | [`ObjectiveCriteriaArgument`](./objectivearguments.md#objective-criteria-argument) | `String`                                                     |

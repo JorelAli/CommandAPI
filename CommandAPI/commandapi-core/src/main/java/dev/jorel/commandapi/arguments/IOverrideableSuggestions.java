@@ -6,6 +6,8 @@ import java.util.function.Function;
 
 import org.bukkit.command.CommandSender;
 
+import dev.jorel.commandapi.StringTooltip;
+
 /**
  * An interface declaring methods required to override argument suggestions
  */
@@ -46,6 +48,35 @@ public interface IOverrideableSuggestions {
 	 * @return a function that provides suggestions, or <code>null</code> if there
 	 *         are no overridden suggestions.
 	 */
-	Optional<BiFunction<CommandSender, Object[], String[]>> getOverriddenSuggestions();
+	Optional<BiFunction<CommandSender, Object[], StringTooltip[]>> getOverriddenSuggestions();
+	
+	/**
+	 * Override the suggestions of this argument with an array of StringTooltips,
+	 * that represents the String suggestion and a hover tooltip
+	 * 
+	 * @param suggestions the suggestions and tooltips to override suggestions with 
+	 * @return the current argument
+	 */
+	Argument overrideSuggestionsT(StringTooltip... suggestions);
+	
+	/**
+	 * Override the suggestions of this argument with a function mapping the command
+	 * sender to an array of StringTooltips, that represents the String suggestion
+	 * and a hover tooltip
+	 * 
+	 * @param suggestions the suggestions and tooltips to override suggestions with
+	 * @return the current argument
+	 */
+	Argument overrideSuggestionsT(Function<CommandSender, StringTooltip[]> suggestions);
+	
+	/**
+	 * Override the suggestions of this argument with a function mapping the command
+	 * sender and previously declared arguments to an array of StringTooltips, that
+	 * represents the String suggestion and a hover tooltip
+	 * 
+	 * @param suggestions the suggestions and tooltips to override suggestions with
+	 * @return the current argument
+	 */
+	Argument overrideSuggestionsT(BiFunction<CommandSender, Object[], StringTooltip[]> suggestions);
 	
 }

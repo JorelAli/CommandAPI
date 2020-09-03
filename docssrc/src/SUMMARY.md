@@ -14,6 +14,7 @@
 # CommandAPI Setup
 
 - [Setting up your development environment](./quickstart.md)
+- [Shading the CommandAPI in your plugins](./shading.md)
 
 # Creating Commands
 
@@ -26,6 +27,7 @@
 - [Arguments (in general)](./arguments.md)
   - [Argument suggestions](./argumentsuggestions.md)
   - [Safe argument suggestions](./safeargumentsuggestions.md)
+  - [Argument suggestions with tooltips](./tooltips.md)
 - [Argument types](./argumenttypes.md)
   - [Primitive arguments](./primitivearguments.md)
   - [Ranged arguments](./rangedarguments.md)
@@ -59,7 +61,9 @@
     - [Block predicate arguments](./blockpredicateargs.md)
     - [ItemStack predicate arguments](./itemstackpredicateargs.md)
   - [NBT arguments](./nbtarguments.md)
-  - [Literal arguments](./literalarguments.md)
+  - [Literal arguments](./litargs.md)
+    - [Literal arguments](./literalarguments.md)
+    - [Multi literal arguments](./multilitargs.md)
   - [Custom arguments](./customarguments.md)
 - [Functions & Tags](./functions.md)
   - [Setting up functions & tags](./functionsetup.md)
@@ -72,8 +76,6 @@
 # CommandAPI Utilities
 
 - [Command conversion](./conversion.md)
-
------
 
 # Extended CommandAPI
 

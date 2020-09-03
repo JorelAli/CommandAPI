@@ -32,7 +32,7 @@ The `CommandAPICommand` has various methods, which are outlined below:
 
 - `withArguments(LinkedHashMap<String, Argument>)` - The list of arguments.
 
-  The CommandAPI requires a list of arguments which are used for the command. The argument map consists of a key which is the tooltip that is displayed as a prompt to users entering commands, and a value which is an instance of an argument (See the section on arguments). This list of arguments is interpreted in the _order that arguments are added to the LinkedHashMap_.
+  The CommandAPI requires a list of arguments which are used for the command. The argument map consists of a key which is the prompt that is displayed as a prompt to users entering commands, and a value which is an instance of an argument (See the section on arguments). This list of arguments is interpreted in the _order that arguments are added to the LinkedHashMap_.
 
 - `withPermission(CommandPermission)` - The required permission to execute a command. (See [the section on permissions](permissions.html)).
 

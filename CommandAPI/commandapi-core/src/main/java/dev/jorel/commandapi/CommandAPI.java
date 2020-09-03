@@ -1,6 +1,18 @@
 package dev.jorel.commandapi;
 
+import java.io.File;
+import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
+
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.plugin.Plugin;
 
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
@@ -14,22 +26,103 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 public abstract class CommandAPI {
 	
 	private static boolean canRegister = true;
+	private static Config config;
+	private static File dispatcherFile;
+	private static Logger logger;
+
+	static Config getConfiguration() {
+		return config;
+	}
+	
+	static File getDispatcherFile() {
+		return dispatcherFile;
+	}
 	
 	/**
-	 * Prevents command registration when the server has finished loading and fixes
-	 * the registration of permissions.
+	 * Returns the CommandAPI's logger
+	 * @return the CommandAPI's logger
 	 */
-	static void cleanup() {
-		canRegister = false;
-		
-		//Sort out permissions after the server has finished registering them all
-		CommandAPIHandler.fixPermissions();
-		
-		try {
-			CommandAPIHandler.getNMS().reloadDataPacks();
-		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-			e.printStackTrace();
+	public static Logger getLog() {
+		if(logger == null) {
+			logger = new Logger("CommandAPI", null) {
+				{
+					this.setParent(Bukkit.getServer().getLogger());
+					this.setLevel(Level.ALL);
+				}
+				
+				public void log(LogRecord logRecord) {
+					logRecord.setMessage("[CommandAPI] " + logRecord.getMessage());
+					super.log(logRecord);
+				}
+			};
 		}
+		return logger;
+	}
+	
+	static final void onLoad(Plugin plugin) {
+		if(plugin.getName().equals("CommandAPI")) {
+			//Config loading
+			plugin.saveDefaultConfig();
+			CommandAPI.config = new Config(plugin.getConfig());
+			CommandAPI.dispatcherFile = new File(plugin.getDataFolder(), "command_registration.json");
+			CommandAPI.logger = plugin.getLogger();
+			
+			//Check dependencies for CommandAPI
+			CommandAPIHandler.checkDependencies();
+			
+			//Convert all plugins to be converted
+			for(Entry<Plugin, String[]> pluginToConvert : config.getPluginsToConvert()) {
+				if(pluginToConvert.getValue().length == 0) {
+					Converter.convert(pluginToConvert.getKey());
+				} else {
+					for(String command : pluginToConvert.getValue()) {
+						Converter.convert(pluginToConvert.getKey(), command);
+					}
+				}
+			}
+		} else {
+			onLoad(true);
+		}
+	}
+	
+	/**
+	 * Initializes the CommandAPI for loading. This should be placed at the
+	 * start of your <code>onLoad()</code> method.
+	 * @param verbose if true, enables verbose output for the CommandAPI
+	 */
+	public static void onLoad(boolean verbose) {
+		CommandAPI.config = new Config(verbose);
+		CommandAPIHandler.checkDependencies();
+	}
+	
+	/**
+	 * Enables the CommandAPI. This should be placed at the
+	 * start of your <code>onEnable()</code> method.
+	 * @param plugin the plugin that this onEnable method is called from
+	 */
+	public static void onEnable(Plugin plugin) {
+		//Prevent command registration after server has loaded
+		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+			canRegister = false;
+			
+			//Sort out permissions after the server has finished registering them all
+			CommandAPIHandler.fixPermissions();
+			
+			try {
+				CommandAPIHandler.getNMS().reloadDataPacks();
+			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}, 0L);
+		
+		final Listener listener = new Listener() {
+			@EventHandler(priority = EventPriority.MONITOR)
+			public void onPlayerJoin(PlayerJoinEvent e) {
+				CommandAPIHandler.getNMS().resendPackets(e.getPlayer());
+			}
+		};
+        
+        Bukkit.getServer().getPluginManager().registerEvents(listener, plugin);
 	}
 	
 	/**
@@ -74,7 +167,7 @@ public abstract class CommandAPI {
 	 */
 	public static void unregister(String command, boolean force) {
 		if(!canRegister()) {
-			CommandAPIMain.getLog().warning("Unexpected unregistering of /" + command + ", as server is loaded! Unregistering anyway, but this can lead to unstable results!");
+			getLog().warning("Unexpected unregistering of /" + command + ", as server is loaded! Unregistering anyway, but this can lead to unstable results!");
 		}
 		CommandAPIHandler.unregister(command, force);
 	}
