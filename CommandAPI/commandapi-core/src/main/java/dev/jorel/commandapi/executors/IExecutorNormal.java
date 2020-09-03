@@ -14,7 +14,7 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
  * The interface for normal command executors
  * @param <T> the commandsender
  */
-public interface IExecutorNormal<T extends CommandSender> {
+public interface IExecutorNormal<T extends CommandSender> extends IExecutorTyped {
 	
 	/**
 	 * Executes the command executor with the provided command sender and the provided arguments.
@@ -24,6 +24,7 @@ public interface IExecutorNormal<T extends CommandSender> {
 	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	default int executeWith(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
 		Method runMethod = Arrays.stream(this.getClass().getDeclaredMethods()).filter(m -> m.getName().equals("run")).findFirst().get();
 		Class<?> type = runMethod.getParameterTypes()[0];
@@ -37,14 +38,6 @@ public interface IExecutorNormal<T extends CommandSender> {
 				).create()
 			);
 		}
-	}
-	
-	/**
-	 * Returns the type of the sender of the current executor.
-	 * @return the type of the sender of the current executor
-	 */
-	default ExecutorType getType() {
-		return ExecutorType.ALL;
 	}
 	
 	/**

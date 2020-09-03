@@ -180,7 +180,7 @@ public abstract class CommandAPIHandler {
 
 		// Generate our command from executor
 		return (cmdCtx) -> {
-			return executor.execute(NMS.getSenderForCommand(cmdCtx), argsToObjectArr(cmdCtx, args));
+			return executor.execute(NMS.getSenderForCommand(cmdCtx, executor.isForceNative()), argsToObjectArr(cmdCtx, args));
 		};
 	}
 	
@@ -217,7 +217,7 @@ public abstract class CommandAPIHandler {
 	 * @throws CommandSyntaxException
 	 */
 	static Object parseArgument(CommandContext cmdCtx, String key, Argument value) throws CommandSyntaxException {
-		CommandSender sender = NMS.getSenderForCommand(cmdCtx);
+		//CommandSender sender = NMS.getSenderForCommand(cmdCtx);
 		switch (value.getArgumentType()) {
 		case ADVANCEMENT:
 			return NMS.getAdvancement(cmdCtx, key);
@@ -262,7 +262,7 @@ public abstract class CommandAPIHandler {
 			EntitySelectorArgument argument = (EntitySelectorArgument) value;
 			return NMS.getEntitySelector(cmdCtx, key, argument.getEntitySelector());
 		case ENTITY_TYPE:
-			return NMS.getEntityType(cmdCtx, key, sender);
+			return NMS.getEntityType(cmdCtx, key);
 		case ENVIRONMENT:
 			return NMS.getDimension(cmdCtx, key);
 		case FLOAT_RANGE:
@@ -280,10 +280,10 @@ public abstract class CommandAPIHandler {
 			return a.isMulti ? a.getLiteral() : null;
 		case LOCATION:
 			LocationType locationType = ((LocationArgument) value).getLocationType();
-			return NMS.getLocation(cmdCtx, key, locationType, sender);
+			return NMS.getLocation(cmdCtx, key, locationType);
 		case LOCATION_2D:
 			LocationType locationType2d = ((Location2DArgument) value).getLocationType();
-			return NMS.getLocation2D(cmdCtx, key, locationType2d, sender);
+			return NMS.getLocation2D(cmdCtx, key, locationType2d);
 		case LOOT_TABLE:
 			return NMS.getLootTable(cmdCtx, key);
 		case MATH_OPERATION:
@@ -811,7 +811,7 @@ public abstract class CommandAPIHandler {
 		 */
 		public static RedirectModifier fromPredicate(BiPredicate<CommandSender, Object[]> predicate, LinkedHashMap<String, Argument> args) {
 			return cmdCtx -> {
-				if(predicate.test(NMS.getSenderForCommand(cmdCtx), argsToObjectArr(cmdCtx, args))) {
+				if(predicate.test(NMS.getSenderForCommand(cmdCtx, false), argsToObjectArr(cmdCtx, args))) {
 					return Collections.singleton(cmdCtx.getSource());
 				} else {
 					return Collections.emptyList();

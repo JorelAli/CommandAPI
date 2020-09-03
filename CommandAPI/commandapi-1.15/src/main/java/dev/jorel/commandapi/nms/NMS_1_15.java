@@ -32,7 +32,6 @@ import org.bukkit.craftbukkit.v1_15_R1.CraftLootTable;
 import org.bukkit.craftbukkit.v1_15_R1.CraftParticle;
 import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_15_R1.CraftSound;
-import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_15_R1.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_15_R1.command.VanillaCommandWrapper;
 import org.bukkit.craftbukkit.v1_15_R1.enchantments.CraftEnchantment;
@@ -484,12 +483,11 @@ public class NMS_1_15 implements NMS {
 		}
 		return null;
 	}
-
+	
 	@Override
-	public EntityType getEntityType(CommandContext cmdCtx, String str, CommandSender sender)
-			throws CommandSyntaxException {
+	public EntityType getEntityType(CommandContext cmdCtx, String str) throws CommandSyntaxException {
 		Entity entity = IRegistry.ENTITY_TYPE.get(ArgumentEntitySummon.a(cmdCtx, str))
-				.a(((CraftWorld) NMS.getCommandSenderWorld(sender)).getHandle());
+				.a((getCLW(cmdCtx).getWorld().getWorld()).getHandle());
 		return entity.getBukkitEntity().getType();
 	}
 
@@ -547,29 +545,28 @@ public class NMS_1_15 implements NMS {
 	}
 
 	@Override
-	public Location getLocation(CommandContext cmdCtx, String str, LocationType locationType, CommandSender sender)
+	public Location getLocation(CommandContext cmdCtx, String str, LocationType locationType)
 			throws CommandSyntaxException {
 		switch (locationType) {
 		case BLOCK_POSITION:
 			BlockPosition blockPos = ArgumentPosition.a(cmdCtx, str);
-			return new Location(NMS.getCommandSenderWorld(sender), blockPos.getX(), blockPos.getY(), blockPos.getZ());
+			return new Location(getCLW(cmdCtx).getWorld().getWorld(), blockPos.getX(), blockPos.getY(), blockPos.getZ());
 		case PRECISE_POSITION:
 			Vec3D vecPos = ArgumentVec3.a(cmdCtx, str);
-			return new Location(NMS.getCommandSenderWorld(sender), vecPos.x, vecPos.y, vecPos.z);
+			return new Location(getCLW(cmdCtx).getWorld().getWorld(), vecPos.x, vecPos.y, vecPos.z);
 		}
 		return null;
 	}
 
 	@Override
-	public Location2D getLocation2D(CommandContext cmdCtx, String key, LocationType locationType2d,
-			CommandSender sender) throws CommandSyntaxException {
+	public Location2D getLocation2D(CommandContext cmdCtx, String key, LocationType locationType2d) throws CommandSyntaxException {
 		switch (locationType2d) {
 		case BLOCK_POSITION:
 			BlockPosition2D blockPos = ArgumentVec2I.a(cmdCtx, key);
-			return new Location2D(NMS.getCommandSenderWorld(sender), blockPos.a, blockPos.b);
+			return new Location2D(getCLW(cmdCtx).getWorld().getWorld(), blockPos.a, blockPos.b);
 		case PRECISE_POSITION:
 			Vec2F vecPos = ArgumentVec2.a(cmdCtx, key);
-			return new Location2D(NMS.getCommandSenderWorld(sender), vecPos.i, vecPos.j);
+			return new Location2D(getCLW(cmdCtx).getWorld().getWorld(), vecPos.i, vecPos.j);
 		}
 		return null;
 	}
@@ -705,21 +702,20 @@ public class NMS_1_15 implements NMS {
 	}
 
 	@Override
-	public CommandSender getSenderForCommand(CommandContext cmdCtx) {
+	public CommandSender getSenderForCommand(CommandContext cmdCtx, boolean isNative) {
 		CommandListenerWrapper clw = getCLW(cmdCtx);
+
 		CommandSender sender = clw.getBukkitSender();
-
+		Vec3D pos = clw.getPosition();
+		World world = clw.getWorld().getWorld();
+		Location location = new Location(clw.getWorld().getWorld(), pos.getX(), pos.getY(), pos.getZ());
+		
 		Entity proxyEntity = clw.getEntity();
-		if (proxyEntity != null) {
-			CommandSender proxy = ((Entity) proxyEntity).getBukkitEntity();
-
-			if (!proxy.equals(sender)) {
-				Vec3D pos = clw.getPosition();
-				World world = clw.getWorld().getWorld();
-				Location location = new Location(clw.getWorld().getWorld(), pos.getX(), pos.getY(), pos.getZ());
-				sender = new NativeProxyCommandSender(sender, proxy, location, world);
-			}
+		CommandSender proxy = proxyEntity == null ? null : ((Entity) proxyEntity).getBukkitEntity();
+		if(isNative || proxy != null) {
+			sender = new NativeProxyCommandSender(sender, proxy, location, world);
 		}
+
 		return sender;
 	}
 

@@ -12,19 +12,15 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -52,19 +48,6 @@ import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 public interface NMS {
-
-	//Returns the world in which a command sender is from
-	static World getCommandSenderWorld(CommandSender sender) {
-		if(sender instanceof BlockCommandSender) {
-			return ((BlockCommandSender) sender).getBlock().getWorld();
-		} else if(sender instanceof ProxiedCommandSender) {
-			return getCommandSenderWorld(((ProxiedCommandSender) sender).getCallee());
-		} else if(sender instanceof Entity) {
-			return ((Entity) sender).getWorld();
-		} else {
-			return null;
-		}
-	}
 	
 	/**
 	 * Resends the command dispatcher's set of commands to a player.
@@ -101,9 +84,10 @@ public interface NMS {
 	 * method should handle Proxied CommandSenders for entities
 	 * if a Proxy is being used.
 	 * @param cmdCtx The CommandContext for a given command
+	 * @param forceNative whether or not the CommandSender should be a NativeProxyCommandSender or not
 	 * @return A CommandSender instance (such as a ProxiedNativeCommandSender or Player)
 	 */
-	CommandSender getSenderForCommand(CommandContext<?> cmdCtx);
+	CommandSender getSenderForCommand(CommandContext<?> cmdCtx, boolean forceNative);
 	
 	/**
 	 * Returns a CommandSender of a given CommandListenerWrapper object
@@ -149,12 +133,12 @@ public interface NMS {
 	Environment          getDimension(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 	ItemStack            getItemStack(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 	Object               getEntitySelector(CommandContext<?> cmdCtx, String key, EntitySelector selector) throws CommandSyntaxException;
-	EntityType           getEntityType(CommandContext<?> cmdCtx, String key, CommandSender sender) throws CommandSyntaxException;
+	EntityType           getEntityType(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 	FunctionWrapper[]    getFunction(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 	Predicate<ItemStack> getItemStackPredicate(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 	String               getKeyedAsString(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
-	Location             getLocation(CommandContext<?> cmdCtx, String key, LocationType locationType, CommandSender sender) throws CommandSyntaxException;
-	Location2D           getLocation2D(CommandContext<?> cmdCtx, String key, LocationType locationType2d, CommandSender sender) throws CommandSyntaxException;
+	Location             getLocation(CommandContext<?> cmdCtx, String key, LocationType locationType) throws CommandSyntaxException;
+	Location2D           getLocation2D(CommandContext<?> cmdCtx, String key, LocationType locationType2d) throws CommandSyntaxException;
 	String               getObjective(CommandContext<?> cmdCtx, String key, CommandSender sender) throws IllegalArgumentException, CommandSyntaxException;
 	Player               getPlayer(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
 	PotionEffectType     getPotionEffect(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;

@@ -12,5 +12,14 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable(this);
+		
+		new CommandAPICommand("sbb")
+			.executesProxy((sender, args) -> {
+				System.out.println(sender.getWorld());
+				System.out.println(sender.getLocation());
+				System.out.println(sender.getCallee().getName());
+				System.out.println(sender.getCaller().getName());
+			})
+			.register();
 	}
 }

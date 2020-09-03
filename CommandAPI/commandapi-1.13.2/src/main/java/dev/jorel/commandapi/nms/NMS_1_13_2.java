@@ -31,7 +31,6 @@ import org.bukkit.craftbukkit.v1_13_R2.CraftLootTable;
 import org.bukkit.craftbukkit.v1_13_R2.CraftParticle;
 import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_13_R2.CraftSound;
-import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_13_R2.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_13_R2.command.VanillaCommandWrapper;
 import org.bukkit.craftbukkit.v1_13_R2.enchantments.CraftEnchantment;
@@ -113,7 +112,6 @@ import net.minecraft.server.v1_13_R2.CustomFunction;
 import net.minecraft.server.v1_13_R2.CustomFunctionData;
 import net.minecraft.server.v1_13_R2.DimensionManager;
 import net.minecraft.server.v1_13_R2.Entity;
-import net.minecraft.server.v1_13_R2.EntityTypes;
 import net.minecraft.server.v1_13_R2.EnumDirection.EnumAxis;
 import net.minecraft.server.v1_13_R2.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_13_R2.ICompletionProvider;
@@ -467,12 +465,13 @@ public class NMS_1_13_2 implements NMS {
         }
         return null;
     }
-
+    
     @Override
-    public EntityType getEntityType(CommandContext cmdCtx, String str, CommandSender sender) throws CommandSyntaxException {
-        Entity entity = EntityTypes.a(((CraftWorld) NMS.getCommandSenderWorld(sender)).getHandle(), ArgumentEntitySummon.a(cmdCtx, str));
+    public EntityType getEntityType(CommandContext cmdCtx, String str) throws CommandSyntaxException {
+        Entity entity = IRegistry.ENTITY_TYPE.get(ArgumentEntitySummon.a(cmdCtx, str)).a((getCLW(cmdCtx).getWorld().getWorld()).getHandle());
         return entity.getBukkitEntity().getType();
     }
+    
 
     @Override
     public FloatRange getFloatRange(CommandContext<?> cmdCtx, String key) {
@@ -529,32 +528,33 @@ public class NMS_1_13_2 implements NMS {
     public ItemStack getItemStack(CommandContext cmdCtx, String str) throws CommandSyntaxException {
         return CraftItemStack.asBukkitCopy(ArgumentItemStack.a(cmdCtx, str).a(1, false));
     }
-
+    
     @Override
-    public Location getLocation(CommandContext cmdCtx, String str, LocationType locationType, CommandSender sender) throws CommandSyntaxException {
-        switch (locationType) {
-            case BLOCK_POSITION:
-                BlockPosition blockPos = ArgumentPosition.a(cmdCtx, str);
-                return new Location(NMS.getCommandSenderWorld(sender), blockPos.getX(), blockPos.getY(), blockPos.getZ());
-            case PRECISE_POSITION:
-                Vec3D vecPos = ArgumentVec3.a(cmdCtx, str);
-                return new Location(NMS.getCommandSenderWorld(sender), vecPos.x, vecPos.y, vecPos.z);
-        }
-        return null;
-    }
+	public Location getLocation(CommandContext cmdCtx, String str, LocationType locationType)
+			throws CommandSyntaxException {
+		switch (locationType) {
+		case BLOCK_POSITION:
+			BlockPosition blockPos = ArgumentPosition.a(cmdCtx, str);
+			return new Location(getCLW(cmdCtx).getWorld().getWorld(), blockPos.getX(), blockPos.getY(), blockPos.getZ());
+		case PRECISE_POSITION:
+			Vec3D vecPos = ArgumentVec3.a(cmdCtx, str);
+			return new Location(getCLW(cmdCtx).getWorld().getWorld(), vecPos.x, vecPos.y, vecPos.z);
+		}
+		return null;
+	}
 
-    @Override
-    public Location2D getLocation2D(CommandContext cmdCtx, String key, LocationType locationType2d, CommandSender sender) throws CommandSyntaxException {
-        switch (locationType2d) {
-            case BLOCK_POSITION:
-                ArgumentVec2I.a blockPos = ArgumentVec2I.a(cmdCtx, key);
-                return new Location2D(NMS.getCommandSenderWorld(sender), blockPos.a, blockPos.b);
-            case PRECISE_POSITION:
-                Vec2F vecPos = ArgumentVec2.a(cmdCtx, key);
-                return new Location2D(NMS.getCommandSenderWorld(sender), vecPos.i, vecPos.j);
-        }
-        return null;
-    }
+	@Override
+	public Location2D getLocation2D(CommandContext cmdCtx, String key, LocationType locationType2d) throws CommandSyntaxException {
+		switch (locationType2d) {
+		case BLOCK_POSITION:
+			ArgumentVec2I.a blockPos = ArgumentVec2I.a(cmdCtx, key);
+			return new Location2D(getCLW(cmdCtx).getWorld().getWorld(), blockPos.a, blockPos.b);
+		case PRECISE_POSITION:
+			Vec2F vecPos = ArgumentVec2.a(cmdCtx, key);
+			return new Location2D(getCLW(cmdCtx).getWorld().getWorld(), vecPos.i, vecPos.j);
+		}
+		return null;
+	}
 
     @SuppressWarnings("deprecation")
     @Override
@@ -663,23 +663,22 @@ public class NMS_1_13_2 implements NMS {
     }
 
     @Override
-    public CommandSender getSenderForCommand(CommandContext cmdCtx) {
-    	CommandListenerWrapper clw = getCLW(cmdCtx);
+	public CommandSender getSenderForCommand(CommandContext cmdCtx, boolean isNative) {
+		CommandListenerWrapper clw = getCLW(cmdCtx);
+
 		CommandSender sender = clw.getBukkitSender();
-
+		Vec3D pos = clw.getPosition();
+		World world = clw.getWorld().getWorld();
+		Location location = new Location(clw.getWorld().getWorld(), pos.x, pos.y, pos.z);
+		
 		Entity proxyEntity = clw.getEntity();
-		if (proxyEntity != null) {
-			CommandSender proxy = ((Entity) proxyEntity).getBukkitEntity();
-
-			if (!proxy.equals(sender)) {
-				Vec3D pos = clw.getPosition();
-				World world = clw.getWorld().getWorld();
-				Location location = new Location(clw.getWorld().getWorld(), pos.x, pos.y, pos.z);
-				sender = new NativeProxyCommandSender(sender, proxy, location, world);
-			}
+		CommandSender proxy = proxyEntity == null ? null : ((Entity) proxyEntity).getBukkitEntity();
+		if(isNative || proxy != null) {
+			sender = new NativeProxyCommandSender(sender, proxy, location, world);
 		}
+
 		return sender;
-    }
+	}
 
     @Override
     public SimpleCommandMap getSimpleCommandMap() {
