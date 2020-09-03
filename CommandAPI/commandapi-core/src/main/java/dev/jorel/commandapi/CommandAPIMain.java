@@ -13,13 +13,19 @@ public class CommandAPIMain extends JavaPlugin {
 	public void onEnable() {
 		CommandAPI.onEnable(this);
 		
-		new CommandAPICommand("sbb")
-			.executesNative((sender, args) -> {
-				System.out.println(sender.getWorld());
-				System.out.println(sender.getLocation());
-				System.out.println(sender.getCallee().getName());
-				System.out.println(sender.getCaller().getName());
-			})
-			.register();
+		{
+			new CommandAPICommand("sbb")
+	            .executesNative((sender, args) -> {
+	            	System.out.println(sender.getLocation());
+	            	System.out.println(sender.getWorld());
+	            	System.out.println(sender.getCaller().getName());
+	            	if(sender.getCallee() == null) {
+	            		System.out.println("null");
+	            	} else {
+	            		System.out.println(sender.getCallee().getName());
+	            	}
+	            })
+	            .register();
+		}
 	}
 }

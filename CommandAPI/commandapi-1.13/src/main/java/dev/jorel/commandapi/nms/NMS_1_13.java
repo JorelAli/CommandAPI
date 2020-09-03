@@ -31,7 +31,6 @@ import org.bukkit.craftbukkit.v1_13_R1.CraftLootTable;
 import org.bukkit.craftbukkit.v1_13_R1.CraftParticle;
 import org.bukkit.craftbukkit.v1_13_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_13_R1.CraftSound;
-import org.bukkit.craftbukkit.v1_13_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_13_R1.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_13_R1.command.VanillaCommandWrapper;
 import org.bukkit.craftbukkit.v1_13_R1.enchantments.CraftEnchantment;
@@ -115,7 +114,6 @@ import net.minecraft.server.v1_13_R1.EntityTypes;
 import net.minecraft.server.v1_13_R1.EnumDirection.EnumAxis;
 import net.minecraft.server.v1_13_R1.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_13_R1.ICompletionProvider;
-import net.minecraft.server.v1_13_R1.IRegistry;
 import net.minecraft.server.v1_13_R1.IVectorPosition;
 import net.minecraft.server.v1_13_R1.LootTableRegistry;
 import net.minecraft.server.v1_13_R1.MinecraftKey;
@@ -661,8 +659,9 @@ public class NMS_1_13 implements NMS {
 
 		CommandSender sender = clw.getBukkitSender();
 		Vec3D pos = clw.getPosition();
+		Vec2F rot = clw.i();
 		World world = clw.getWorld().getWorld();
-		Location location = new Location(clw.getWorld().getWorld(), pos.x, pos.y, pos.z);
+		Location location = new Location(clw.getWorld().getWorld(), pos.x, pos.y, pos.z, rot.j, rot.i);
 		
 		Entity proxyEntity = clw.f();
 		CommandSender proxy = proxyEntity == null ? null : ((Entity) proxyEntity).getBukkitEntity();

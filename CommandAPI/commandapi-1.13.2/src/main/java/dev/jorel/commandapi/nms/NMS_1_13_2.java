@@ -665,11 +665,12 @@ public class NMS_1_13_2 implements NMS {
     @Override
 	public CommandSender getSenderForCommand(CommandContext cmdCtx, boolean isNative) {
 		CommandListenerWrapper clw = getCLW(cmdCtx);
-
+		
 		CommandSender sender = clw.getBukkitSender();
 		Vec3D pos = clw.getPosition();
+		Vec2F rot = clw.i();
 		World world = clw.getWorld().getWorld();
-		Location location = new Location(clw.getWorld().getWorld(), pos.x, pos.y, pos.z);
+		Location location = new Location(clw.getWorld().getWorld(), pos.x, pos.y, pos.z, rot.j, rot.i);
 		
 		Entity proxyEntity = clw.getEntity();
 		CommandSender proxy = proxyEntity == null ? null : ((Entity) proxyEntity).getBukkitEntity();

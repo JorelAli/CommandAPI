@@ -707,8 +707,9 @@ public class NMS_1_15 implements NMS {
 
 		CommandSender sender = clw.getBukkitSender();
 		Vec3D pos = clw.getPosition();
+		Vec2F rot = clw.i();
 		World world = clw.getWorld().getWorld();
-		Location location = new Location(clw.getWorld().getWorld(), pos.getX(), pos.getY(), pos.getZ());
+		Location location = new Location(clw.getWorld().getWorld(), pos.getX(), pos.getY(), pos.getZ(), rot.j, rot.i);
 		
 		Entity proxyEntity = clw.getEntity();
 		CommandSender proxy = proxyEntity == null ? null : ((Entity) proxyEntity).getBukkitEntity();

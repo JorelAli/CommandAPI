@@ -586,8 +586,9 @@ public abstract class CommandAPIHandler {
 				if (CommandAPI.getConfiguration().hasVerboseOutput()) {
 					CommandAPI.getLog().info("Registering alias /" + alias + " -> " + resultantNode.getName());
 				}
+				
 				DISPATCHER.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(alias)
-						.requires(generatePermissions(alias, permissions, requirements)).redirect(resultantNode));
+						.requires(generatePermissions(alias, permissions, requirements)).then(outer));
 			}
 		}
 
