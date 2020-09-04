@@ -22,6 +22,7 @@
 - [Command executors](./commandexecutors.md)
   - [Normal command executors](./normalexecutors.md)
   - [Proxied commandsenders](./proxysender.md)
+  - [Native commandsenders](./native.md)
   - [Resulting command executors](./resultingcommandexecutors.md)
   - [Handling command failures](./commandfailures.md)
 - [Arguments (in general)](./arguments.md)

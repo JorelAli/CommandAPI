@@ -1,5 +1,6 @@
 package dev.jorel.commandapi;
 
+import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class CommandAPIMain extends JavaPlugin {
@@ -14,16 +15,10 @@ public class CommandAPIMain extends JavaPlugin {
 		CommandAPI.onEnable(this);
 		
 		{
-			new CommandAPICommand("sbb")
+			new CommandAPICommand("break")
 	            .executesNative((sender, args) -> {
-	            	System.out.println(sender.getLocation());
-	            	System.out.println(sender.getWorld());
-	            	System.out.println(sender.getCaller().getName());
-	            	if(sender.getCallee() == null) {
-	            		System.out.println("null");
-	            	} else {
-	            		System.out.println(sender.getCallee().getName());
-	            	}
+	            	Location location = (Location) sender.getLocation();
+	            	location.getBlock().breakNaturally();
 	            })
 	            .register();
 		}
