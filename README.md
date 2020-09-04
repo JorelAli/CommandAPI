@@ -285,7 +285,7 @@ These versions of Minecraft must be installed in your local machine's Maven repo
             <td valign="top">July 2019</td>
             <td valign="top">
                 <ul>
-                    <li>Adds support for Minecraft 1.13 and 1.13.1 _(Funny isn't it? It's called the 1.13 CommandAPI but never supported Minecraft 1.13 until now)_</li>
+                    <li>Adds support for Minecraft 1.13 and 1.13.1 <i>(Funny isn't it? It's called the 1.13 CommandAPI but never supported Minecraft 1.13 until now)</i></li>
                     <li>Improves support for different versions</li>
                     <li>Adds pointless witty comments into changelog notes</li>
                     <li>Adds <a href="https://github.com/JorelAli/1.13-Command-API-SafeReflection">1.13-Command-API-SafeReflection</a> library to greatly improve reliability of reflection calls</li>
