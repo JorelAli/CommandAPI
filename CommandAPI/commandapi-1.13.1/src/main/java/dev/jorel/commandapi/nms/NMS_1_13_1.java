@@ -673,7 +673,7 @@ public class NMS_1_13_1 implements NMS {
 		
 		Entity proxyEntity = clw.f();
 		CommandSender proxy = proxyEntity == null ? null : ((Entity) proxyEntity).getBukkitEntity();
-		if(isNative || proxy != null) {
+		if(isNative || (proxy != null && !sender.equals(proxy))) {
 			sender = new NativeProxyCommandSender(sender, proxy, location, world);
 		}
 
