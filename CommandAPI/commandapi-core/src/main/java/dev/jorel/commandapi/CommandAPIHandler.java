@@ -671,7 +671,22 @@ public abstract class CommandAPIHandler {
 							if (s.equals(argumentName)) {
 								break;
 							}
-							previousArguments.add(parseArgument(context, s, args.get(s)));
+							
+							Object result;
+							try {
+								result = parseArgument(context, s, args.get(s));
+							} catch(IllegalArgumentException e) {
+								/*
+								 * Redirected commands don't parse previous arguments properly. Simplest way to
+								 * determine what we should do is simply set it to null, since there's nothing
+								 * else we can do. I thought about letting this simply be an empty array, but
+								 * then it's even more annoying to deal with - I wouldn't expect an array of
+								 * size n to suddenly, randomly be 0, but I would expect random NPEs because
+								 * let's be honest, this is Java we're dealing with.
+								 */
+								result = null;
+							}
+							previousArguments.add(result);
 						}
 						return getSuggestionsBuilder(builder, type.getOverriddenSuggestions().get()
 								.apply(NMS.getCommandSenderForCLW(context.getSource()), previousArguments.toArray()));
