@@ -29,6 +29,7 @@ public abstract class CommandAPI {
 	private static Config config;
 	private static File dispatcherFile;
 	private static Logger logger;
+	private static boolean loaded = false;
 
 	static Config getConfiguration() {
 		return config;
@@ -80,6 +81,7 @@ public abstract class CommandAPI {
 					}
 				}
 			}
+			loaded = true;
 		} else {
 			onLoad(true);
 		}
@@ -91,8 +93,13 @@ public abstract class CommandAPI {
 	 * @param verbose if true, enables verbose output for the CommandAPI
 	 */
 	public static void onLoad(boolean verbose) {
-		CommandAPI.config = new Config(verbose);
-		CommandAPIHandler.checkDependencies();
+		if(!loaded) {
+			CommandAPI.config = new Config(verbose);
+			CommandAPIHandler.checkDependencies();
+			loaded = true;
+		} else {
+			getLog().severe("You've tried to call the CommandAPI's onLoad() method more than once!");
+		}
 	}
 	
 	/**
