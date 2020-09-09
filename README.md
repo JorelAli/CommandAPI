@@ -32,19 +32,19 @@ This project provides an API to help Bukkit/Spigot developers use the Minecraft 
 
 * **Better commands** - Prevent players from running invalid commands, making it easier for developers
 
-  ![better commands](https://raw.githubusercontent.com/JorelAli/CommandAPI/master/images/printnumber.gif)
+  ![better commands](./images/printnumber.gif)
 
 * **Better arguments** - Easily switch from Location arguments to raw JSON, fully supported with built-in error checking
 
-  ![better arguments](https://raw.githubusercontent.com/JorelAli/CommandAPI/master/images/explode.gif)
+  ![better arguments](./images/explode.gif)
 
 * **Support for proxied command senders** - Run your command as other entities using `/execute as ... run command`
 
-  ![proxied senders](https://raw.githubusercontent.com/JorelAli/CommandAPI/master/images/selfdestruct.gif)
+  ![proxied senders](./images/selfdestruct.gif)
   
 * **Argument tooltips** - Let your users know exactly what their command will do
 
-  ![argument tooltips](https://raw.githubusercontent.com/JorelAli/CommandAPI/4.1-release2/docssrc/src/images/warps.gif)
+  ![argument tooltips](./docssrc/src/images/warps.gif)
 
 * **Support for the `/execute` command** - Let your command to be executed by the built in `/execute` command
 
