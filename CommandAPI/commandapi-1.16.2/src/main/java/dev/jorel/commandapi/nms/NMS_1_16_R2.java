@@ -151,17 +151,17 @@ public class NMS_1_16_R2 implements NMS {
 	public ArgumentType<?> _ArgumentAxis() {
 		return ArgumentRotationAxis.a();
 	}
-	
+
 	@Override
 	public ArgumentType<?> _ArgumentBlockPredicate() {
 		return ArgumentBlockPredicate.a();
 	}
-	
+
 	@Override
 	public ArgumentType<?> _ArgumentBlockState() {
 		return ArgumentTile.a();
 	}
-	
+
 	@Override
 	public ArgumentType<?> _ArgumentChat() {
 		return ArgumentChat.a();
@@ -420,7 +420,7 @@ public class NMS_1_16_R2 implements NMS {
 	@Override
 	public BaseComponent[] getChatComponent(CommandContext cmdCtx, String str) {
 		String resultantString = ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, str));
-		return ComponentSerializer.parse((String) resultantString);
+		return ComponentSerializer.parse(resultantString);
 	}
 
 	private CommandListenerWrapper getCLW(CommandContext cmdCtx) {
@@ -536,7 +536,7 @@ public class NMS_1_16_R2 implements NMS {
 	@Override
 	public Predicate<org.bukkit.inventory.ItemStack> getItemStackPredicate(CommandContext cmdCtx, String key) throws CommandSyntaxException {
 		Predicate<ItemStack> predicate = ArgumentItemPredicate.a(cmdCtx, key);
-		return (org.bukkit.inventory.ItemStack item) -> predicate.test(CraftItemStack.asNMSCopy(item));
+		return item -> predicate.test(CraftItemStack.asNMSCopy(item));
 	}
 
 	@Override
@@ -578,9 +578,8 @@ public class NMS_1_16_R2 implements NMS {
 		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.e(cmdCtx, str);
 		String namespace = minecraftKey.getNamespace();
 		String key = minecraftKey.getKey();
-		
-		LootTable lootTable = getCLW(cmdCtx).getServer().getLootTableRegistry()
-				.getLootTable(minecraftKey);
+
+		LootTable lootTable = getCLW(cmdCtx).getServer().getLootTableRegistry().getLootTable(minecraftKey);
 		return new CraftLootTable(new NamespacedKey(namespace, key), lootTable);
 	}
 
@@ -708,7 +707,7 @@ public class NMS_1_16_R2 implements NMS {
 		Vec2F rot = clw.i();
 		World world = clw.getWorld().getWorld();
 		Location location = new Location(clw.getWorld().getWorld(), pos.getX(), pos.getY(), pos.getZ(), rot.j, rot.i);
-		
+
 		Entity proxyEntity = clw.getEntity();
 		CommandSender proxy = proxyEntity == null ? null : ((Entity) proxyEntity).getBukkitEntity();
 		if(isNative || (proxy != null && !sender.equals(proxy))) {
@@ -771,7 +770,7 @@ public class NMS_1_16_R2 implements NMS {
 			return (context, builder) -> Suggestions.empty();
 		}
 	}
-	
+
 	@Override
 	public String getTeam(CommandContext cmdCtx, String key) throws CommandSyntaxException {
 		return ArgumentScoreboardTeam.a(cmdCtx, key).getName();

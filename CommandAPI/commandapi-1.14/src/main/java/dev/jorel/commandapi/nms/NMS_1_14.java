@@ -131,12 +131,12 @@ import net.minecraft.server.v1_14_R1.Vec3D;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class NMS_1_14 implements NMS {
-	
+
 	@Override
 	public ArgumentType<?> _ArgumentAxis() {
 		return ArgumentRotationAxis.a();
 	}
-	
+
 	@Override
 	public ArgumentType<?> _ArgumentBlockPredicate() {
 		return ArgumentBlockPredicate.a();
@@ -146,7 +146,7 @@ public class NMS_1_14 implements NMS {
 	public ArgumentType<?> _ArgumentBlockState() {
 		return ArgumentTile.a();
 	}
-	
+
 	@Override
 	public ArgumentType<?> _ArgumentChat() {
 		return ArgumentChat.a();
@@ -156,22 +156,22 @@ public class NMS_1_14 implements NMS {
 	public ArgumentType _ArgumentChatComponent() {
 		return ArgumentChatComponent.a();
 	}
-	
+
 	@Override
 	public ArgumentType _ArgumentChatFormat() {
 		return ArgumentChatFormat.a();
 	}
-	
+
 	@Override
 	public ArgumentType<?> _ArgumentDimension() {
 		return ArgumentDimension.a();
 	}
-	
+
 	@Override
 	public ArgumentType _ArgumentEnchantment() {
 		return ArgumentEnchantment.a();
 	}
-	
+
 	@Override
 	public ArgumentType _ArgumentEntity(EntitySelector selector) {
 		switch (selector) {
@@ -186,22 +186,22 @@ public class NMS_1_14 implements NMS {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public ArgumentType _ArgumentEntitySummon() {
 		return ArgumentEntitySummon.a();
 	}
-	
+
 	@Override
 	public ArgumentType<?> _ArgumentFloatRange() {
 		return new ArgumentCriterionValue.a();
 	}
-	
+
 	@Override
 	public ArgumentType<?> _ArgumentIntRange() {
 		return new ArgumentCriterionValue.b();
 	}
-	
+
 	@Override
 	public ArgumentType<?> _ArgumentItemPredicate() {
 		return ArgumentItemPredicate.a();
@@ -466,10 +466,10 @@ public class NMS_1_14 implements NMS {
 	}
 
 	@Override
-    public EntityType getEntityType(CommandContext cmdCtx, String str) throws CommandSyntaxException {
-        Entity entity = IRegistry.ENTITY_TYPE.get(ArgumentEntitySummon.a(cmdCtx, str)).a((getCLW(cmdCtx).getWorld().getWorld()).getHandle());
-        return entity.getBukkitEntity().getType();
-    }
+	public EntityType getEntityType(CommandContext cmdCtx, String str) throws CommandSyntaxException {
+		Entity entity = IRegistry.ENTITY_TYPE.get(ArgumentEntitySummon.a(cmdCtx, str)).a((getCLW(cmdCtx).getWorld().getWorld()).getHandle());
+		return entity.getBukkitEntity().getType();
+	}
 
 	@Override
 	public dev.jorel.commandapi.wrappers.FloatRange getFloatRange(CommandContext<?> cmdCtx, String key) {
@@ -478,7 +478,7 @@ public class NMS_1_14 implements NMS {
 		float high = range.b() == null ? Float.MAX_VALUE : range.b();
 		return new dev.jorel.commandapi.wrappers.FloatRange(low, high);
 	}
-	
+
 	@Override
 	public FunctionWrapper[] getFunction(CommandContext cmdCtx, String str) throws CommandSyntaxException {
 		Collection<CustomFunction> customFuncList = ArgumentTag.a(cmdCtx, str);
@@ -680,7 +680,7 @@ public class NMS_1_14 implements NMS {
 		Vec2F rot = clw.i();
 		World world = clw.getWorld().getWorld();
 		Location location = new Location(clw.getWorld().getWorld(), pos.getX(), pos.getY(), pos.getZ(), rot.j, rot.i);
-		
+
 		Entity proxyEntity = clw.getEntity();
 		CommandSender proxy = proxyEntity == null ? null : ((Entity) proxyEntity).getBukkitEntity();
 		if(isNative || (proxy != null && !sender.equals(proxy))) {
@@ -762,7 +762,7 @@ public class NMS_1_14 implements NMS {
 	public boolean isVanillaCommandWrapper(Command command) {
 		return command instanceof VanillaCommandWrapper;
 	}
-	
+
 	@Override
 	public void resendPackets(Player player) {
 		CraftPlayer craftPlayer = (CraftPlayer) player;
