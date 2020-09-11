@@ -42,13 +42,10 @@ import org.bukkit.craftbukkit.v1_13_R2.util.CraftChatMessage;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
-import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
 
 import com.mojang.authlib.GameProfile;
-import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -105,9 +102,11 @@ import net.minecraft.server.v1_13_R2.ArgumentVec2;
 import net.minecraft.server.v1_13_R2.ArgumentVec2I;
 import net.minecraft.server.v1_13_R2.ArgumentVec3;
 import net.minecraft.server.v1_13_R2.BlockPosition;
+import net.minecraft.server.v1_13_R2.CommandDispatcher;
 import net.minecraft.server.v1_13_R2.CommandListenerWrapper;
 import net.minecraft.server.v1_13_R2.CompletionProviders;
 import net.minecraft.server.v1_13_R2.CriterionConditionValue;
+import net.minecraft.server.v1_13_R2.CriterionConditionValue.c;
 import net.minecraft.server.v1_13_R2.CustomFunction;
 import net.minecraft.server.v1_13_R2.CustomFunctionData;
 import net.minecraft.server.v1_13_R2.DimensionManager;
@@ -117,9 +116,12 @@ import net.minecraft.server.v1_13_R2.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_13_R2.ICompletionProvider;
 import net.minecraft.server.v1_13_R2.IRegistry;
 import net.minecraft.server.v1_13_R2.IVectorPosition;
+import net.minecraft.server.v1_13_R2.ItemStack;
+import net.minecraft.server.v1_13_R2.LootTable;
 import net.minecraft.server.v1_13_R2.LootTableRegistry;
 import net.minecraft.server.v1_13_R2.MinecraftKey;
 import net.minecraft.server.v1_13_R2.MinecraftServer;
+import net.minecraft.server.v1_13_R2.Scoreboard;
 import net.minecraft.server.v1_13_R2.ScoreboardScore;
 import net.minecraft.server.v1_13_R2.ShapeDetectorBlock;
 import net.minecraft.server.v1_13_R2.Vec2F;
@@ -309,8 +311,8 @@ public class NMS_1_13_1 implements NMS {
 	}
 
 	@Override
-	public String convert(ItemStack is) {
-		net.minecraft.server.v1_13_R2.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(is);
+	public String convert(org.bukkit.inventory.ItemStack is) {
+		ItemStack nmsItemStack = CraftItemStack.asNMSCopy(is);
 		return is.getType().getKey().toString() + nmsItemStack.getOrCreateTag().toString();
 	}
 
@@ -331,8 +333,8 @@ public class NMS_1_13_1 implements NMS {
 	}
 
 	@Override
-	public void createDispatcherFile(File file, CommandDispatcher dispatcher) {
-		((CraftServer) Bukkit.getServer()).getServer().commandDispatcher.a(file);
+	public void createDispatcherFile(File file, com.mojang.brigadier.CommandDispatcher dispatcher) {
+		((CraftServer) Bukkit.getServer()).getServer().getCommandDispatcher().a(file);
 	}
 
 	@Override
@@ -381,8 +383,8 @@ public class NMS_1_13_1 implements NMS {
 	}
 
 	@Override
-	public CommandDispatcher getBrigadierDispatcher(Object server) {
-		return ((MinecraftServer) server).commandDispatcher.a();
+	public com.mojang.brigadier.CommandDispatcher getBrigadierDispatcher(Object server) {
+		return ((MinecraftServer) server).getCommandDispatcher().a();
 	}
 
 	@Override
@@ -399,7 +401,7 @@ public class NMS_1_13_1 implements NMS {
 	@Override
 	public BaseComponent[] getChatComponent(CommandContext cmdCtx, String str) {
 		String resultantString = ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, str));
-		return ComponentSerializer.parse((String) resultantString);
+		return ComponentSerializer.parse(resultantString);
 	}
 
 	private CommandListenerWrapper getCLW(CommandContext cmdCtx) {
@@ -408,7 +410,11 @@ public class NMS_1_13_1 implements NMS {
 
 	@Override
 	public CommandSender getCommandSenderForCLW(Object clw) {
-		return ((CommandListenerWrapper) clw).getBukkitSender();
+		try {
+			return ((CommandListenerWrapper) clw).getBukkitSender();
+		} catch (UnsupportedOperationException e) {
+			return null;
+		}
 	}
 
 	@Override
@@ -465,11 +471,11 @@ public class NMS_1_13_1 implements NMS {
 	}
 
 	@Override
-	public FloatRange getFloatRange(CommandContext<?> cmdCtx, String key) {
-		CriterionConditionValue.c range = cmdCtx.getArgument(key, CriterionConditionValue.c.class);
+	public FloatRange getFloatRange(CommandContext cmdCtx, String key) {
+		CriterionConditionValue.c range = (c) cmdCtx.getArgument(key, CriterionConditionValue.c.class);
 		float low = range.a() == null ? -Float.MAX_VALUE : range.a();
 		float high = range.b() == null ? Float.MAX_VALUE : range.b();
-		return new dev.jorel.commandapi.wrappers.FloatRange(low, high);
+		return new FloatRange(low, high);
 	}
 
 	@Override
@@ -482,9 +488,11 @@ public class NMS_1_13_1 implements NMS {
 		CommandListenerWrapper commandListenerWrapper = getCLW(cmdCtx).a().b(2);
 
 		int count = 0;
+
 		for (CustomFunction customFunction : customFuncList) {
 			@SuppressWarnings("deprecation")
-			NamespacedKey minecraftKey = new NamespacedKey(customFunction.a().b(), customFunction.a().getKey());
+			NamespacedKey minecraftKey = new NamespacedKey(customFunction.a().b(),
+					customFunction.a().getKey());
 			ToIntBiFunction<CustomFunction, CommandListenerWrapper> obj = customFunctionData::a;
 			ToIntFunction<CommandListenerWrapper> appliedObj = clw -> obj.applyAsInt(customFunction, clw);
 
@@ -504,17 +512,19 @@ public class NMS_1_13_1 implements NMS {
 		CriterionConditionValue.d range = ArgumentCriterionValue.b.a(cmdCtx, key);
 		int low = range.a() == null ? Integer.MIN_VALUE : range.a();
 		int high = range.b() == null ? Integer.MAX_VALUE : range.b();
-		return new dev.jorel.commandapi.wrappers.IntegerRange(low, high);
+		return new IntegerRange(low, high);
 	}
 
 	@Override
-	public ItemStack getItemStack(CommandContext cmdCtx, String str) throws CommandSyntaxException {
+	public org.bukkit.inventory.ItemStack getItemStack(CommandContext cmdCtx, String str)
+			throws CommandSyntaxException {
 		return CraftItemStack.asBukkitCopy(ArgumentItemStack.a(cmdCtx, str).a(1, false));
 	}
 
 	@Override
-	public Predicate<ItemStack> getItemStackPredicate(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		Predicate<net.minecraft.server.v1_13_R2.ItemStack> predicate = ArgumentItemPredicate.a(cmdCtx, key);
+	public Predicate<org.bukkit.inventory.ItemStack> getItemStackPredicate(CommandContext cmdCtx, String key)
+			throws CommandSyntaxException {
+		Predicate<ItemStack> predicate = ArgumentItemPredicate.a(cmdCtx, key);
 		return item -> predicate.test(CraftItemStack.asNMSCopy(item));
 	}
 
@@ -555,20 +565,19 @@ public class NMS_1_13_1 implements NMS {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public LootTable getLootTable(CommandContext cmdCtx, String str) {
+	public org.bukkit.loot.LootTable getLootTable(CommandContext cmdCtx, String str) {
 		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.c(cmdCtx, str);
 		String namespace = minecraftKey.b();
 		String key = minecraftKey.getKey();
 
-		net.minecraft.server.v1_13_R2.LootTable lootTable = getCLW(cmdCtx).getServer().getLootTableRegistry()
-				.getLootTable(minecraftKey);
+		LootTable lootTable = getCLW(cmdCtx).getServer().getLootTableRegistry().getLootTable(minecraftKey);
 		return new CraftLootTable(new NamespacedKey(namespace, key), lootTable);
 	}
 
 	@Override
 	public MathOperation getMathOperation(CommandContext cmdCtx, String key) throws CommandSyntaxException {
 		ArgumentMathOperation.a result = ArgumentMathOperation.a(cmdCtx, key);
-		net.minecraft.server.v1_13_R2.Scoreboard board = new net.minecraft.server.v1_13_R2.Scoreboard();
+		Scoreboard board = new Scoreboard();
 		ScoreboardScore tester_left = new ScoreboardScore(board, null, null);
 		ScoreboardScore tester_right = new ScoreboardScore(board, null, null);
 
@@ -605,7 +614,7 @@ public class NMS_1_13_1 implements NMS {
 	}
 
 	@Override
-	public NBTContainer getNBTCompound(CommandContext<?> cmdCtx, String key) {
+	public NBTContainer getNBTCompound(CommandContext cmdCtx, String key) {
 		return new NBTContainer(ArgumentNBTTag.a(cmdCtx, key));
 	}
 
@@ -752,7 +761,7 @@ public class NMS_1_13_1 implements NMS {
 	}
 
 	@Override
-	public int getTime(CommandContext<?> cmdCtx, String key) {
+	public int getTime(CommandContext cmdCtx, String key) {
 		throw new TimeArgumentException();
 	}
 
@@ -770,7 +779,7 @@ public class NMS_1_13_1 implements NMS {
 	public void resendPackets(Player player) {
 		CraftPlayer craftPlayer = (CraftPlayer) player;
 		CraftServer craftServer = (CraftServer) Bukkit.getServer();
-		net.minecraft.server.v1_13_R2.CommandDispatcher nmsDispatcher = craftServer.getServer().commandDispatcher;
+		CommandDispatcher nmsDispatcher = craftServer.getServer().getCommandDispatcher();
 		nmsDispatcher.a(craftPlayer.getHandle());
 	}
 }
