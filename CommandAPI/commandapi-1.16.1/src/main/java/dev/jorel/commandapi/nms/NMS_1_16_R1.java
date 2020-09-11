@@ -146,7 +146,7 @@ import net.minecraft.server.v1_16_R1.WorldServer;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class NMS_1_16_R1 implements NMS {
-	
+
 	@Override
 	public ArgumentType<?> _ArgumentAxis() {
 		return ArgumentRotationAxis.a();
@@ -508,10 +508,9 @@ public class NMS_1_16_R1 implements NMS {
 			ToIntBiFunction<CustomFunction, CommandListenerWrapper> obj = customFunctionData::a;
 			ToIntFunction<CommandListenerWrapper> appliedObj = clw -> obj.applyAsInt(customFunction, clw);
 
-			FunctionWrapper wrapper = new FunctionWrapper(minecraftKey, appliedObj, commandListenerWrapper,
-					e -> {
-						return (Object) getCLW(cmdCtx).a(((CraftEntity) e).getHandle());
-					}, Arrays.stream(customFunction.b()).map(Object::toString).toArray(String[]::new));
+			FunctionWrapper wrapper = new FunctionWrapper(minecraftKey, appliedObj, commandListenerWrapper, e -> {
+				return (Object) getCLW(cmdCtx).a(((CraftEntity) e).getHandle());
+			}, Arrays.stream(customFunction.b()).map(Object::toString).toArray(String[]::new));
 
 			result[count] = wrapper;
 			count++;
@@ -529,12 +528,14 @@ public class NMS_1_16_R1 implements NMS {
 	}
 
 	@Override
-	public org.bukkit.inventory.ItemStack getItemStack(CommandContext cmdCtx, String str) throws CommandSyntaxException {
+	public org.bukkit.inventory.ItemStack getItemStack(CommandContext cmdCtx, String str)
+			throws CommandSyntaxException {
 		return CraftItemStack.asBukkitCopy(ArgumentItemStack.a(cmdCtx, str).a(1, false));
 	}
 
 	@Override
-	public Predicate<org.bukkit.inventory.ItemStack> getItemStackPredicate(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+	public Predicate<org.bukkit.inventory.ItemStack> getItemStackPredicate(CommandContext cmdCtx, String key)
+			throws CommandSyntaxException {
 		Predicate<ItemStack> predicate = ArgumentItemPredicate.a(cmdCtx, key);
 		return item -> predicate.test(CraftItemStack.asNMSCopy(item));
 	}
@@ -551,7 +552,8 @@ public class NMS_1_16_R1 implements NMS {
 		switch (locationType) {
 		case BLOCK_POSITION:
 			BlockPosition blockPos = ArgumentPosition.a(cmdCtx, str);
-			return new Location(getCLW(cmdCtx).getWorld().getWorld(), blockPos.getX(), blockPos.getY(), blockPos.getZ());
+			return new Location(getCLW(cmdCtx).getWorld().getWorld(), blockPos.getX(), blockPos.getY(),
+					blockPos.getZ());
 		case PRECISE_POSITION:
 			Vec3D vecPos = ArgumentVec3.a(cmdCtx, str);
 			return new Location(getCLW(cmdCtx).getWorld().getWorld(), vecPos.x, vecPos.y, vecPos.z);
@@ -560,7 +562,8 @@ public class NMS_1_16_R1 implements NMS {
 	}
 
 	@Override
-	public Location2D getLocation2D(CommandContext cmdCtx, String key, LocationType locationType2d) throws CommandSyntaxException {
+	public Location2D getLocation2D(CommandContext cmdCtx, String key, LocationType locationType2d)
+			throws CommandSyntaxException {
 		switch (locationType2d) {
 		case BLOCK_POSITION:
 			BlockPosition2D blockPos = ArgumentVec2I.a(cmdCtx, key);
@@ -710,7 +713,7 @@ public class NMS_1_16_R1 implements NMS {
 
 		Entity proxyEntity = clw.getEntity();
 		CommandSender proxy = proxyEntity == null ? null : ((Entity) proxyEntity).getBukkitEntity();
-		if(isNative || (proxy != null && !sender.equals(proxy))) {
+		if (isNative || (proxy != null && !sender.equals(proxy))) {
 			sender = new NativeProxyCommandSender(sender, proxy, location, world);
 		}
 
@@ -798,7 +801,7 @@ public class NMS_1_16_R1 implements NMS {
 
 		// Get the NMS server
 		DedicatedServer server = ((CraftServer) Bukkit.getServer()).getHandle().getServer();
-		
+
 		// Get previously declared recipes to be re-registered later
 		Iterator<Recipe> recipes = Bukkit.recipeIterator();
 
@@ -843,19 +846,20 @@ public class NMS_1_16_R1 implements NMS {
 		// Run the completableFuture and bind tags
 		try {
 			((DataPackResources) completablefuture.get()).i();
-			
-			// Register recipes again because reloading datapacks removes all non-vanilla recipes
+
+			// Register recipes again because reloading datapacks removes all non-vanilla
+			// recipes
 			recipes.forEachRemaining(recipe -> {
 				try {
 					Bukkit.addRecipe(recipe);
-					if(recipe instanceof Keyed) {
+					if (recipe instanceof Keyed) {
 						CommandAPI.getLog().info("Re-registering recipe: " + ((Keyed) recipe).getKey());
 					}
-				} catch(Exception e) {
-					// Can't re-register registered recipes. Not an error. 
+				} catch (Exception e) {
+					// Can't re-register registered recipes. Not an error.
 				}
 			});
-			
+
 			CommandAPI.getLog().info("Finished reloading datapacks");
 		} catch (Exception e) {
 			CommandAPI.getLog().log(Level.WARNING,

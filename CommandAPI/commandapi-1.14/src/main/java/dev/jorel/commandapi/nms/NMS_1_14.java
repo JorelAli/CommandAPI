@@ -467,7 +467,8 @@ public class NMS_1_14 implements NMS {
 
 	@Override
 	public EntityType getEntityType(CommandContext cmdCtx, String str) throws CommandSyntaxException {
-		Entity entity = IRegistry.ENTITY_TYPE.get(ArgumentEntitySummon.a(cmdCtx, str)).a((getCLW(cmdCtx).getWorld().getWorld()).getHandle());
+		Entity entity = IRegistry.ENTITY_TYPE.get(ArgumentEntitySummon.a(cmdCtx, str))
+				.a((getCLW(cmdCtx).getWorld().getWorld()).getHandle());
 		return entity.getBukkitEntity().getType();
 	}
 
@@ -496,7 +497,8 @@ public class NMS_1_14 implements NMS {
 			ToIntFunction<CommandListenerWrapper> appliedObj = clw -> obj.applyAsInt(customFunction, clw);
 
 			FunctionWrapper wrapper = new FunctionWrapper(minecraftKey, appliedObj, commandListenerWrapper,
-					e -> getCLW(cmdCtx).a(((CraftEntity) e).getHandle()), Arrays.stream(customFunction.b()).map(Object::toString).toArray(String[]::new));
+					e -> getCLW(cmdCtx).a(((CraftEntity) e).getHandle()),
+					Arrays.stream(customFunction.b()).map(Object::toString).toArray(String[]::new));
 
 			result[count] = wrapper;
 			count++;
@@ -536,7 +538,8 @@ public class NMS_1_14 implements NMS {
 		switch (locationType) {
 		case BLOCK_POSITION:
 			BlockPosition blockPos = ArgumentPosition.a(cmdCtx, str);
-			return new Location(getCLW(cmdCtx).getWorld().getWorld(), blockPos.getX(), blockPos.getY(), blockPos.getZ());
+			return new Location(getCLW(cmdCtx).getWorld().getWorld(), blockPos.getX(), blockPos.getY(),
+					blockPos.getZ());
 		case PRECISE_POSITION:
 			Vec3D vecPos = ArgumentVec3.a(cmdCtx, str);
 			return new Location(getCLW(cmdCtx).getWorld().getWorld(), vecPos.x, vecPos.y, vecPos.z);
@@ -545,7 +548,8 @@ public class NMS_1_14 implements NMS {
 	}
 
 	@Override
-	public Location2D getLocation2D(CommandContext cmdCtx, String key, LocationType locationType2d) throws CommandSyntaxException {
+	public Location2D getLocation2D(CommandContext cmdCtx, String key, LocationType locationType2d)
+			throws CommandSyntaxException {
 		switch (locationType2d) {
 		case BLOCK_POSITION:
 			BlockPosition2D blockPos = ArgumentVec2I.a(cmdCtx, key);
@@ -683,7 +687,7 @@ public class NMS_1_14 implements NMS {
 
 		Entity proxyEntity = clw.getEntity();
 		CommandSender proxy = proxyEntity == null ? null : ((Entity) proxyEntity).getBukkitEntity();
-		if(isNative || (proxy != null && !sender.equals(proxy))) {
+		if (isNative || (proxy != null && !sender.equals(proxy))) {
 			sender = new NativeProxyCommandSender(sender, proxy, location, world);
 		}
 

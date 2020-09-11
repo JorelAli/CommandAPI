@@ -275,9 +275,7 @@ public class NMS_1_13_1 implements NMS {
 
 	@Override
 	public ArgumentType<?> _ArgumentScoreholder(boolean single) {
-		return single
-				? ArgumentScoreholder.a()
-						: ArgumentScoreholder.b();
+		return single ? ArgumentScoreholder.a() : ArgumentScoreholder.b();
 	}
 
 	@Override
@@ -307,7 +305,7 @@ public class NMS_1_13_1 implements NMS {
 
 	@Override
 	public String[] compatibleVersions() {
-		return new String[]{ "1.13.1" };
+		return new String[] { "1.13.1" };
 	}
 
 	@Override
@@ -338,7 +336,8 @@ public class NMS_1_13_1 implements NMS {
 	}
 
 	@Override
-	public org.bukkit.advancement.Advancement getAdvancement(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+	public org.bukkit.advancement.Advancement getAdvancement(CommandContext cmdCtx, String key)
+			throws CommandSyntaxException {
 		return ArgumentMinecraftKeyRegistered.a(cmdCtx, key).bukkit;
 	}
 
@@ -432,17 +431,21 @@ public class NMS_1_13_1 implements NMS {
 	}
 
 	@Override
-	public Object getEntitySelector(CommandContext cmdCtx, String str, EntitySelector selector) throws CommandSyntaxException {
+	public Object getEntitySelector(CommandContext cmdCtx, String str, EntitySelector selector)
+			throws CommandSyntaxException {
 		switch (selector) {
 		case MANY_ENTITIES:
 			try {
-				return ArgumentEntity.c(cmdCtx, str).stream().map(entity -> (org.bukkit.entity.Entity) ((Entity) entity).getBukkitEntity()).collect(Collectors.toList());
+				return ArgumentEntity.c(cmdCtx, str).stream()
+						.map(entity -> (org.bukkit.entity.Entity) ((Entity) entity).getBukkitEntity())
+						.collect(Collectors.toList());
 			} catch (CommandSyntaxException e) {
 				return new ArrayList<org.bukkit.entity.Entity>();
 			}
 		case MANY_PLAYERS:
 			try {
-				return ArgumentEntity.d(cmdCtx, str).stream().map(player -> (Player) ((Entity) player).getBukkitEntity()).collect(Collectors.toList());
+				return ArgumentEntity.d(cmdCtx, str).stream()
+						.map(player -> (Player) ((Entity) player).getBukkitEntity()).collect(Collectors.toList());
 			} catch (CommandSyntaxException e) {
 				return new ArrayList<Player>();
 			}
@@ -456,19 +459,16 @@ public class NMS_1_13_1 implements NMS {
 
 	@Override
 	public EntityType getEntityType(CommandContext cmdCtx, String str) throws CommandSyntaxException {
-		Entity entity = IRegistry.ENTITY_TYPE.get(ArgumentEntitySummon.a(cmdCtx, str)).a((getCLW(cmdCtx).getWorld().getWorld()).getHandle());
+		Entity entity = IRegistry.ENTITY_TYPE.get(ArgumentEntitySummon.a(cmdCtx, str))
+				.a((getCLW(cmdCtx).getWorld().getWorld()).getHandle());
 		return entity.getBukkitEntity().getType();
 	}
 
 	@Override
 	public FloatRange getFloatRange(CommandContext<?> cmdCtx, String key) {
 		CriterionConditionValue.c range = cmdCtx.getArgument(key, CriterionConditionValue.c.class);
-		float low = range.a() == null
-				? -Float.MAX_VALUE
-						: range.a();
-		float high = range.b() == null
-				? Float.MAX_VALUE
-						: range.b();
+		float low = range.a() == null ? -Float.MAX_VALUE : range.a();
+		float high = range.b() == null ? Float.MAX_VALUE : range.b();
 		return new dev.jorel.commandapi.wrappers.FloatRange(low, high);
 	}
 
@@ -482,7 +482,7 @@ public class NMS_1_13_1 implements NMS {
 		CommandListenerWrapper commandListenerWrapper = getCLW(cmdCtx).a().b(2);
 
 		int count = 0;
-		for(CustomFunction customFunction : customFuncList) {
+		for (CustomFunction customFunction : customFuncList) {
 			@SuppressWarnings("deprecation")
 			NamespacedKey minecraftKey = new NamespacedKey(customFunction.a().b(), customFunction.a().getKey());
 			ToIntBiFunction<CustomFunction, CommandListenerWrapper> obj = customFunctionData::a;
@@ -502,12 +502,8 @@ public class NMS_1_13_1 implements NMS {
 	@Override
 	public IntegerRange getIntRange(CommandContext cmdCtx, String key) {
 		CriterionConditionValue.d range = ArgumentCriterionValue.b.a(cmdCtx, key);
-		int low = range.a() == null
-				? Integer.MIN_VALUE
-						: range.a();
-		int high = range.b() == null
-				? Integer.MAX_VALUE
-						: range.b();
+		int low = range.a() == null ? Integer.MIN_VALUE : range.a();
+		int high = range.b() == null ? Integer.MAX_VALUE : range.b();
 		return new dev.jorel.commandapi.wrappers.IntegerRange(low, high);
 	}
 
@@ -534,7 +530,8 @@ public class NMS_1_13_1 implements NMS {
 		switch (locationType) {
 		case BLOCK_POSITION:
 			BlockPosition blockPos = ArgumentPosition.a(cmdCtx, str);
-			return new Location(getCLW(cmdCtx).getWorld().getWorld(), blockPos.getX(), blockPos.getY(), blockPos.getZ());
+			return new Location(getCLW(cmdCtx).getWorld().getWorld(), blockPos.getX(), blockPos.getY(),
+					blockPos.getZ());
 		case PRECISE_POSITION:
 			Vec3D vecPos = ArgumentVec3.a(cmdCtx, str);
 			return new Location(getCLW(cmdCtx).getWorld().getWorld(), vecPos.x, vecPos.y, vecPos.z);
@@ -543,7 +540,8 @@ public class NMS_1_13_1 implements NMS {
 	}
 
 	@Override
-	public Location2D getLocation2D(CommandContext cmdCtx, String key, LocationType locationType2d) throws CommandSyntaxException {
+	public Location2D getLocation2D(CommandContext cmdCtx, String key, LocationType locationType2d)
+			throws CommandSyntaxException {
 		switch (locationType2d) {
 		case BLOCK_POSITION:
 			ArgumentVec2I.a blockPos = ArgumentVec2I.a(cmdCtx, key);
@@ -562,7 +560,8 @@ public class NMS_1_13_1 implements NMS {
 		String namespace = minecraftKey.b();
 		String key = minecraftKey.getKey();
 
-		net.minecraft.server.v1_13_R2.LootTable lootTable = getCLW(cmdCtx).getServer().getLootTableRegistry().getLootTable(minecraftKey);
+		net.minecraft.server.v1_13_R2.LootTable lootTable = getCLW(cmdCtx).getServer().getLootTableRegistry()
+				.getLootTable(minecraftKey);
 		return new CraftLootTable(new NamespacedKey(namespace, key), lootTable);
 	}
 
@@ -578,12 +577,18 @@ public class NMS_1_13_1 implements NMS {
 		result.apply(tester_left, tester_right);
 
 		switch (tester_left.getScore()) {
-		case 8: return MathOperation.ADD;
-		case 4: return MathOperation.SUBTRACT;
-		case 12: return MathOperation.MULTIPLY;
-		case 3: return MathOperation.DIVIDE;
-		case 0: return MathOperation.MOD;
-		case 6: return MathOperation.MAX;
+		case 8:
+			return MathOperation.ADD;
+		case 4:
+			return MathOperation.SUBTRACT;
+		case 12:
+			return MathOperation.MULTIPLY;
+		case 3:
+			return MathOperation.DIVIDE;
+		case 0:
+			return MathOperation.MOD;
+		case 6:
+			return MathOperation.MAX;
 
 		case 2: {
 			if (tester_right.getScore() == 6)
@@ -605,7 +610,8 @@ public class NMS_1_13_1 implements NMS {
 	}
 
 	@Override
-	public String getObjective(CommandContext cmdCtx, String key) throws IllegalArgumentException, CommandSyntaxException {
+	public String getObjective(CommandContext cmdCtx, String key)
+			throws IllegalArgumentException, CommandSyntaxException {
 		return ArgumentScoreboardObjective.a(cmdCtx, key).getName();
 	}
 
@@ -673,7 +679,7 @@ public class NMS_1_13_1 implements NMS {
 
 		Entity proxyEntity = clw.f();
 		CommandSender proxy = proxyEntity == null ? null : ((Entity) proxyEntity).getBukkitEntity();
-		if(isNative || (proxy != null && !sender.equals(proxy))) {
+		if (isNative || (proxy != null && !sender.equals(proxy))) {
 			sender = new NativeProxyCommandSender(sender, proxy, location, world);
 		}
 
@@ -688,9 +694,10 @@ public class NMS_1_13_1 implements NMS {
 	@Override
 	public Sound getSound(CommandContext cmdCtx, String key) {
 		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.c(cmdCtx, key);
-		for(CraftSound sound : CraftSound.values()) {
+		for (CraftSound sound : CraftSound.values()) {
 			try {
-				if(CommandAPIHandler.getField(CraftSound.class, "minecraftKey").get(sound).equals(minecraftKey.getKey())) {
+				if (CommandAPIHandler.getField(CraftSound.class, "minecraftKey").get(sound)
+						.equals(minecraftKey.getKey())) {
 					return Sound.valueOf(sound.name());
 				}
 			} catch (IllegalArgumentException | IllegalAccessException e1) {
@@ -715,13 +722,16 @@ public class NMS_1_13_1 implements NMS {
 			return CompletionProviders.c;
 		case ADVANCEMENTS:
 			return (cmdCtx, builder) -> {
-				Collection<Advancement> advancements = ((CommandListenerWrapper) cmdCtx.getSource()).getServer().getAdvancementData().b();
+				Collection<Advancement> advancements = ((CommandListenerWrapper) cmdCtx.getSource()).getServer()
+						.getAdvancementData().b();
 				return ICompletionProvider.a(advancements.stream().map(Advancement::getName), builder);
 			};
 		case LOOT_TABLES:
 			return (context, builder) -> {
 				try {
-					Map<MinecraftKey, LootTable> map = (Map<MinecraftKey, LootTable>) CommandAPIHandler.getField(LootTableRegistry.class, "e").get(getCLW(context).getServer().getLootTableRegistry());
+					Map<MinecraftKey, LootTable> map = (Map<MinecraftKey, LootTable>) CommandAPIHandler
+							.getField(LootTableRegistry.class, "e")
+							.get(getCLW(context).getServer().getLootTableRegistry());
 					return ICompletionProvider.a((Iterable) map.keySet(), builder);
 				} catch (IllegalArgumentException | IllegalAccessException e) {
 					e.printStackTrace();
