@@ -483,8 +483,8 @@ public class NMS_1_16_R2 implements NMS {
 
 	@Override
 	public FloatRange getFloatRange(CommandContext cmdCtx, String key) {
-		CriterionConditionValue.FloatRange.FloatRange range = (CriterionConditionValue.FloatRange.FloatRange) cmdCtx
-				.getArgument(key, CriterionConditionValue.FloatRange.FloatRange.class);
+		CriterionConditionValue.FloatRange range = (CriterionConditionValue.FloatRange) cmdCtx
+				.getArgument(key, CriterionConditionValue.FloatRange.class);
 		float low = range.a() == null ? -Float.MAX_VALUE : range.a();
 		float high = range.b() == null ? Float.MAX_VALUE : range.b();
 		return new FloatRange(low, high);
