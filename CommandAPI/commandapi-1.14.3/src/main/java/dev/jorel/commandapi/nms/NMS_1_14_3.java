@@ -133,41 +133,15 @@ import net.minecraft.server.v1_14_R1.Vec3D;
 public class NMS_1_14_3 implements NMS {
 	
 	@Override
-	public String getKeyedAsString(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.c(cmdCtx, key);
-		return minecraftKey.toString();
-	}
+    public ArgumentType<?> _ArgumentAxis() {
+        return ArgumentRotationAxis.a();
+    }
 	
 	@Override
 	public ArgumentType<?> _ArgumentBlockPredicate() {
 		return ArgumentBlockPredicate.a();
 	}
 
-	@Override
-	public Predicate<Block> getBlockPredicate(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		Predicate<ShapeDetectorBlock> predicate = ArgumentBlockPredicate.a(cmdCtx, key);
-		return (Block block) -> {
-			return predicate.test(new ShapeDetectorBlock(getCLW(cmdCtx).getWorld(),
-					new BlockPosition(block.getX(), block.getY(), block.getZ()), true));
-		};
-	}
-	
-	@Override
-	public ArgumentType<?> _ArgumentItemPredicate() {
-		return ArgumentItemPredicate.a();
-	}
-
-	@Override
-	public Predicate<ItemStack> getItemStackPredicate(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		Predicate<net.minecraft.server.v1_14_R1.ItemStack> predicate = ArgumentItemPredicate.a(cmdCtx, key);
-		return item -> predicate.test(CraftItemStack.asNMSCopy(item));
-	}
-	
-	@Override
-    public ArgumentType<?> _ArgumentAxis() {
-        return ArgumentRotationAxis.a();
-    }
-	
 	@Override
 	public ArgumentType<?> _ArgumentBlockState() {
 		return ArgumentTile.a();
@@ -177,7 +151,7 @@ public class NMS_1_14_3 implements NMS {
     public ArgumentType<?> _ArgumentChat() {
         return ArgumentChat.a();
     }
-	
+
 	@Override
     public ArgumentType _ArgumentChatComponent() {
         return ArgumentChatComponent.a();
@@ -193,12 +167,12 @@ public class NMS_1_14_3 implements NMS {
         return ArgumentDimension.a();
     }
 	
-    @Override
+	@Override
     public ArgumentType _ArgumentEnchantment() {
         return ArgumentEnchantment.a();
     }
-
-    @Override
+	
+	@Override
     public ArgumentType _ArgumentEntity(EntitySelector selector) {
         switch (selector) {
             case MANY_ENTITIES:
@@ -212,21 +186,26 @@ public class NMS_1_14_3 implements NMS {
         }
         return null;
     }
-
-    @Override
+	
+	@Override
     public ArgumentType _ArgumentEntitySummon() {
         return ArgumentEntitySummon.a();
     }
-
-    @Override
+	
+	@Override
     public ArgumentType<?> _ArgumentFloatRange() {
         return new ArgumentCriterionValue.a();
     }
-
+	
     @Override
     public ArgumentType<?> _ArgumentIntRange() {
         return new ArgumentCriterionValue.b();
     }
+
+    @Override
+	public ArgumentType<?> _ArgumentItemPredicate() {
+		return ArgumentItemPredicate.a();
+	}
 
     @Override
     public ArgumentType _ArgumentItemStack() {
@@ -393,6 +372,15 @@ public class NMS_1_14_3 implements NMS {
 	}
 
     @Override
+	public Predicate<Block> getBlockPredicate(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		Predicate<ShapeDetectorBlock> predicate = ArgumentBlockPredicate.a(cmdCtx, key);
+		return (Block block) -> {
+			return predicate.test(new ShapeDetectorBlock(getCLW(cmdCtx).getWorld(),
+					new BlockPosition(block.getX(), block.getY(), block.getZ()), true));
+		};
+	}
+
+    @Override
 	public BlockData getBlockState(CommandContext cmdCtx, String key) {
 		return CraftBlockData.fromData(ArgumentTile.a(cmdCtx, key).a());
 	}
@@ -534,6 +522,18 @@ public class NMS_1_14_3 implements NMS {
     public ItemStack getItemStack(CommandContext cmdCtx, String str) throws CommandSyntaxException {
         return CraftItemStack.asBukkitCopy(ArgumentItemStack.a(cmdCtx, str).a(1, false));
     }
+
+    @Override
+	public Predicate<ItemStack> getItemStackPredicate(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		Predicate<net.minecraft.server.v1_14_R1.ItemStack> predicate = ArgumentItemPredicate.a(cmdCtx, key);
+		return item -> predicate.test(CraftItemStack.asNMSCopy(item));
+	}
+
+    @Override
+	public String getKeyedAsString(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.c(cmdCtx, key);
+		return minecraftKey.toString();
+	}
 
     @Override
 	public Location getLocation(CommandContext cmdCtx, String str, LocationType locationType)

@@ -49,15 +49,12 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ComplexRecipe;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
-import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
 
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
-import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -116,8 +113,10 @@ import net.minecraft.server.v1_16_R2.ArgumentVec2I;
 import net.minecraft.server.v1_16_R2.ArgumentVec3;
 import net.minecraft.server.v1_16_R2.BlockPosition;
 import net.minecraft.server.v1_16_R2.BlockPosition2D;
+import net.minecraft.server.v1_16_R2.CommandDispatcher;
 import net.minecraft.server.v1_16_R2.CommandListenerWrapper;
 import net.minecraft.server.v1_16_R2.CompletionProviders;
+import net.minecraft.server.v1_16_R2.CriterionConditionValue;
 import net.minecraft.server.v1_16_R2.CustomFunction;
 import net.minecraft.server.v1_16_R2.CustomFunctionData;
 import net.minecraft.server.v1_16_R2.CustomFunctionManager;
@@ -131,9 +130,12 @@ import net.minecraft.server.v1_16_R2.IRecipe;
 import net.minecraft.server.v1_16_R2.IRegistry;
 import net.minecraft.server.v1_16_R2.IReloadableResourceManager;
 import net.minecraft.server.v1_16_R2.IVectorPosition;
+import net.minecraft.server.v1_16_R2.ItemStack;
+import net.minecraft.server.v1_16_R2.LootTable;
 import net.minecraft.server.v1_16_R2.LootTableRegistry;
 import net.minecraft.server.v1_16_R2.MinecraftKey;
 import net.minecraft.server.v1_16_R2.MinecraftServer;
+import net.minecraft.server.v1_16_R2.Scoreboard;
 import net.minecraft.server.v1_16_R2.ScoreboardScore;
 import net.minecraft.server.v1_16_R2.ShapeDetectorBlock;
 import net.minecraft.server.v1_16_R2.SystemUtils;
@@ -146,110 +148,20 @@ import net.minecraft.server.v1_16_R2.WorldServer;
 public class NMS_1_16_R2 implements NMS {
 	
 	@Override
-	public String convert(Sound sound) {
-		return CraftSound.getSound(sound);
-	}
-	
-	@SuppressWarnings("deprecation")
-	@Override
-	public String convert(PotionEffectType potion) {
-		return IRegistry.MOB_EFFECT.getKey(IRegistry.MOB_EFFECT.fromId(potion.getId())).toString();
-	}
-	
-	@Override
-	public String convert(Particle particle) {
-		return CraftParticle.toNMS(particle).a();
-	}
-	
-	@Override
-	public String convert(ItemStack is) {
-		net.minecraft.server.v1_16_R2.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(is);
-		return is.getType().getKey().toString() + nmsItemStack.getOrCreateTag().asString();
-	}
-
-	@Override
-	public void reloadDataPacks()
-			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		CommandAPI.getLog().info("Reloading datapacks...");
-
-		// Get the NMS server
-		DedicatedServer server = ((CraftServer) Bukkit.getServer()).getHandle().getServer();
-		
-		// Get previously declared recipes to be re-registered later
-		Iterator<Recipe> recipes = Bukkit.recipeIterator();
-
-		// Update the commandDispatcher with the current server's commandDispatcher
-		DataPackResources datapackResources = server.dataPackResources;
-		datapackResources.commandDispatcher = server.getCommandDispatcher();
-
-		// Reflection doesn't need to be cached because this only executes once at
-		// server startup
-		Field i = DataPackResources.class.getDeclaredField("i");
-		i.setAccessible(true);
-
-		Field gField = CustomFunctionManager.class.getDeclaredField("g");
-		gField.setAccessible(true);
-		int g = (int) gField.get(datapackResources.a()); // Related to the permission required to run this function?
-
-		// Update the CustomFunctionManager for the datapackResources which now has the
-		// new commandDispatcher
-		i.set(datapackResources, new CustomFunctionManager(g, datapackResources.commandDispatcher.a()));
-
-		// Construct the new CompletableFuture that now uses datapackResources
-		Field b = DataPackResources.class.getDeclaredField("b");
-		b.setAccessible(true);
-		IReloadableResourceManager reloadableResourceManager = (IReloadableResourceManager) b.get(datapackResources);
-		Field a = DataPackResources.class.getDeclaredField("a");
-		a.setAccessible(true);
-
-		CompletableFuture<Unit> unit = (CompletableFuture<Unit>) a.get(null);
-		CompletableFuture<Unit> unitCompletableFuture = reloadableResourceManager.a(SystemUtils.f(), Runnable::run,
-				server.getResourcePackRepository().f(), unit);
-
-		CompletableFuture<DataPackResources> completablefuture = unitCompletableFuture
-				.whenComplete((Unit u, Throwable t) -> {
-					if (t != null) {
-						datapackResources.close();
-					}
-
-				}).thenApply((Unit u) -> {
-					return datapackResources;
-				});
-
-		// Run the completableFuture and bind tags
-		try {
-			((DataPackResources) completablefuture.get()).i();
-			
-			// Register recipes again because reloading datapacks removes all non-vanilla recipes
-			recipes.forEachRemaining(recipe -> {
-				try {
-					Bukkit.addRecipe(recipe);
-					if(recipe instanceof Keyed) {
-						CommandAPI.getLog().info("Re-registering recipe: " + ((Keyed) recipe).getKey());
-					}
-				} catch(Exception e) {
-					// Can't re-register registered recipes. Not an error. 
-				}
-			});
-			
-			CommandAPI.getLog().info("Finished reloading datapacks");
-		} catch (Exception e) {
-			CommandAPI.getLog().log(Level.WARNING,
-					"Failed to load datapacks, can't proceed with normal server load procedure. Try fixing your datapacks?",
-					e);
-		}
-	}
-
-	@Override
 	public ArgumentType<?> _ArgumentAxis() {
 		return ArgumentRotationAxis.a();
 	}
-
+	
+	@Override
+	public ArgumentType<?> _ArgumentBlockPredicate() {
+		return ArgumentBlockPredicate.a();
+	}
+	
 	@Override
 	public ArgumentType<?> _ArgumentBlockState() {
 		return ArgumentTile.a();
 	}
-
+	
 	@Override
 	public ArgumentType<?> _ArgumentChat() {
 		return ArgumentChat.a();
@@ -303,6 +215,11 @@ public class NMS_1_16_R2 implements NMS {
 	@Override
 	public ArgumentType<?> _ArgumentIntRange() {
 		return new ArgumentCriterionValue.b();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentItemPredicate() {
+		return ArgumentItemPredicate.a();
 	}
 
 	@Override
@@ -391,6 +308,11 @@ public class NMS_1_16_R2 implements NMS {
 	}
 
 	@Override
+	public ArgumentType<?> _ArgumentUUID() {
+		return ArgumentUUID.a();
+	}
+
+	@Override
 	public ArgumentType<?> _ArgumentVec2() {
 		return ArgumentVec2.a();
 	}
@@ -402,11 +324,33 @@ public class NMS_1_16_R2 implements NMS {
 
 	@Override
 	public String[] compatibleVersions() {
-		return new String[] { "1.16.2" };
+		return new String[] { "1.16.2", "1.16.3" };
 	}
 
 	@Override
-	public void createDispatcherFile(File file, CommandDispatcher dispatcher) throws IOException {
+	public String convert(org.bukkit.inventory.ItemStack is) {
+		ItemStack nmsItemStack = CraftItemStack.asNMSCopy(is);
+		return is.getType().getKey().toString() + nmsItemStack.getOrCreateTag().asString();
+	}
+
+	@Override
+	public String convert(Particle particle) {
+		return CraftParticle.toNMS(particle).a();
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public String convert(PotionEffectType potion) {
+		return IRegistry.MOB_EFFECT.getKey(IRegistry.MOB_EFFECT.fromId(potion.getId())).toString();
+	}
+
+	@Override
+	public String convert(Sound sound) {
+		return CraftSound.getSound(sound);
+	}
+
+	@Override
+	public void createDispatcherFile(File file, com.mojang.brigadier.CommandDispatcher dispatcher) throws IOException {
 		Files.write((new GsonBuilder()).setPrettyPrinting().create()
 				.toJson(ArgumentRegistry.a(dispatcher, dispatcher.getRoot())), file, StandardCharsets.UTF_8);
 	}
@@ -444,12 +388,21 @@ public class NMS_1_16_R2 implements NMS {
 	}
 
 	@Override
+	public Predicate<Block> getBlockPredicate(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		Predicate<ShapeDetectorBlock> predicate = ArgumentBlockPredicate.a(cmdCtx, key);
+		return (Block block) -> {
+			return predicate.test(new ShapeDetectorBlock(getCLW(cmdCtx).getWorld(),
+					new BlockPosition(block.getX(), block.getY(), block.getZ()), true));
+		};
+	}
+
+	@Override
 	public BlockData getBlockState(CommandContext cmdCtx, String key) {
 		return CraftBlockData.fromData(ArgumentTile.a(cmdCtx, key).a());
 	}
 
 	@Override
-	public CommandDispatcher getBrigadierDispatcher(Object server) {
+	public com.mojang.brigadier.CommandDispatcher getBrigadierDispatcher(Object server) {
 		return ((MinecraftServer) server).getCommandDispatcher().a();
 	}
 
@@ -530,8 +483,8 @@ public class NMS_1_16_R2 implements NMS {
 
 	@Override
 	public FloatRange getFloatRange(CommandContext cmdCtx, String key) {
-		net.minecraft.server.v1_16_R2.CriterionConditionValue.FloatRange.FloatRange range = (net.minecraft.server.v1_16_R2.CriterionConditionValue.FloatRange.FloatRange) cmdCtx
-				.getArgument(key, net.minecraft.server.v1_16_R2.CriterionConditionValue.FloatRange.FloatRange.class);
+		CriterionConditionValue.FloatRange.FloatRange range = (CriterionConditionValue.FloatRange.FloatRange) cmdCtx
+				.getArgument(key, CriterionConditionValue.FloatRange.FloatRange.class);
 		float low = range.a() == null ? -Float.MAX_VALUE : range.a();
 		float high = range.b() == null ? Float.MAX_VALUE : range.b();
 		return new FloatRange(low, high);
@@ -569,16 +522,27 @@ public class NMS_1_16_R2 implements NMS {
 
 	@Override
 	public IntegerRange getIntRange(CommandContext cmdCtx, String key) {
-		net.minecraft.server.v1_16_R2.CriterionConditionValue.IntegerRange range = ArgumentCriterionValue.b.a(cmdCtx,
-				key);
+		CriterionConditionValue.IntegerRange range = ArgumentCriterionValue.b.a(cmdCtx, key);
 		int low = range.a() == null ? Integer.MIN_VALUE : range.a();
 		int high = range.b() == null ? Integer.MAX_VALUE : range.b();
 		return new IntegerRange(low, high);
 	}
 
 	@Override
-	public ItemStack getItemStack(CommandContext cmdCtx, String str) throws CommandSyntaxException {
+	public org.bukkit.inventory.ItemStack getItemStack(CommandContext cmdCtx, String str) throws CommandSyntaxException {
 		return CraftItemStack.asBukkitCopy(ArgumentItemStack.a(cmdCtx, str).a(1, false));
+	}
+
+	@Override
+	public Predicate<org.bukkit.inventory.ItemStack> getItemStackPredicate(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		Predicate<ItemStack> predicate = ArgumentItemPredicate.a(cmdCtx, key);
+		return (org.bukkit.inventory.ItemStack item) -> predicate.test(CraftItemStack.asNMSCopy(item));
+	}
+
+	@Override
+	public String getKeyedAsString(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.e(cmdCtx, key);
+		return minecraftKey.toString();
 	}
 
 	@Override
@@ -610,12 +574,12 @@ public class NMS_1_16_R2 implements NMS {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public LootTable getLootTable(CommandContext cmdCtx, String str) {
+	public org.bukkit.loot.LootTable getLootTable(CommandContext cmdCtx, String str) {
 		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.e(cmdCtx, str);
 		String namespace = minecraftKey.getNamespace();
 		String key = minecraftKey.getKey();
 		
-		net.minecraft.server.v1_16_R2.LootTable lootTable = getCLW(cmdCtx).getServer().getLootTableRegistry()
+		LootTable lootTable = getCLW(cmdCtx).getServer().getLootTableRegistry()
 				.getLootTable(minecraftKey);
 		return new CraftLootTable(new NamespacedKey(namespace, key), lootTable);
 	}
@@ -623,7 +587,7 @@ public class NMS_1_16_R2 implements NMS {
 	@Override
 	public MathOperation getMathOperation(CommandContext cmdCtx, String key) throws CommandSyntaxException {
 		ArgumentMathOperation.a result = ArgumentMathOperation.a(cmdCtx, key);
-		net.minecraft.server.v1_16_R2.Scoreboard board = new net.minecraft.server.v1_16_R2.Scoreboard();
+		Scoreboard board = new Scoreboard();
 		ScoreboardScore tester_left = new ScoreboardScore(board, null, null);
 		ScoreboardScore tester_right = new ScoreboardScore(board, null, null);
 
@@ -707,7 +671,7 @@ public class NMS_1_16_R2 implements NMS {
 			}
 
 			@Override
-			public ItemStack getResult() {
+			public org.bukkit.inventory.ItemStack getResult() {
 				return recipe.toBukkitRecipe().getResult();
 			}
 		};
@@ -807,7 +771,7 @@ public class NMS_1_16_R2 implements NMS {
 			return (context, builder) -> Suggestions.empty();
 		}
 	}
-
+	
 	@Override
 	public String getTeam(CommandContext cmdCtx, String key) throws CommandSyntaxException {
 		return ArgumentScoreboardTeam.a(cmdCtx, key).getName();
@@ -819,57 +783,94 @@ public class NMS_1_16_R2 implements NMS {
 	}
 
 	@Override
+	public UUID getUUID(CommandContext cmdCtx, String key) {
+		return ArgumentUUID.a(cmdCtx, key);
+	}
+
+	@Override
 	public boolean isVanillaCommandWrapper(Command command) {
 		return command instanceof VanillaCommandWrapper;
+	}
+
+	@Override
+	public void reloadDataPacks()
+			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		CommandAPI.getLog().info("Reloading datapacks...");
+
+		// Get the NMS server
+		DedicatedServer server = ((CraftServer) Bukkit.getServer()).getHandle().getServer();
+		
+		// Get previously declared recipes to be re-registered later
+		Iterator<Recipe> recipes = Bukkit.recipeIterator();
+
+		// Update the commandDispatcher with the current server's commandDispatcher
+		DataPackResources datapackResources = server.dataPackResources;
+		datapackResources.commandDispatcher = server.getCommandDispatcher();
+
+		// Reflection doesn't need to be cached because this only executes once at
+		// server startup
+		Field i = DataPackResources.class.getDeclaredField("i");
+		i.setAccessible(true);
+
+		Field gField = CustomFunctionManager.class.getDeclaredField("g");
+		gField.setAccessible(true);
+		int g = (int) gField.get(datapackResources.a()); // Related to the permission required to run this function?
+
+		// Update the CustomFunctionManager for the datapackResources which now has the
+		// new commandDispatcher
+		i.set(datapackResources, new CustomFunctionManager(g, datapackResources.commandDispatcher.a()));
+
+		// Construct the new CompletableFuture that now uses datapackResources
+		Field b = DataPackResources.class.getDeclaredField("b");
+		b.setAccessible(true);
+		IReloadableResourceManager reloadableResourceManager = (IReloadableResourceManager) b.get(datapackResources);
+		Field a = DataPackResources.class.getDeclaredField("a");
+		a.setAccessible(true);
+
+		CompletableFuture<Unit> unit = (CompletableFuture<Unit>) a.get(null);
+		CompletableFuture<Unit> unitCompletableFuture = reloadableResourceManager.a(SystemUtils.f(), Runnable::run,
+				server.getResourcePackRepository().f(), unit);
+
+		CompletableFuture<DataPackResources> completablefuture = unitCompletableFuture
+				.whenComplete((Unit u, Throwable t) -> {
+					if (t != null) {
+						datapackResources.close();
+					}
+
+				}).thenApply((Unit u) -> {
+					return datapackResources;
+				});
+
+		// Run the completableFuture and bind tags
+		try {
+			((DataPackResources) completablefuture.get()).i();
+			
+			// Register recipes again because reloading datapacks removes all non-vanilla recipes
+			recipes.forEachRemaining(recipe -> {
+				try {
+					Bukkit.addRecipe(recipe);
+					if(recipe instanceof Keyed) {
+						CommandAPI.getLog().info("Re-registering recipe: " + ((Keyed) recipe).getKey());
+					}
+				} catch(Exception e) {
+					// Can't re-register registered recipes. Not an error. 
+				}
+			});
+			
+			CommandAPI.getLog().info("Finished reloading datapacks");
+		} catch (Exception e) {
+			CommandAPI.getLog().log(Level.WARNING,
+					"Failed to load datapacks, can't proceed with normal server load procedure. Try fixing your datapacks?",
+					e);
+		}
 	}
 
 	@Override
 	public void resendPackets(Player player) {
 		CraftPlayer craftPlayer = (CraftPlayer) player;
 		CraftServer craftServer = (CraftServer) Bukkit.getServer();
-		net.minecraft.server.v1_16_R2.CommandDispatcher nmsDispatcher = craftServer.getServer().getCommandDispatcher();
+		CommandDispatcher nmsDispatcher = craftServer.getServer().getCommandDispatcher();
 		nmsDispatcher.a(craftPlayer.getHandle());
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentUUID() {
-		return ArgumentUUID.a();
-	}
-	
-	@Override
-	public UUID getUUID(CommandContext cmdCtx, String key) {
-		return ArgumentUUID.a(cmdCtx, key);
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentItemPredicate() {
-		return ArgumentItemPredicate.a();
-	}
-
-	@Override
-	public Predicate<ItemStack> getItemStackPredicate(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		Predicate<net.minecraft.server.v1_16_R2.ItemStack> predicate = ArgumentItemPredicate.a(cmdCtx, key);
-		return (ItemStack item) -> predicate.test(CraftItemStack.asNMSCopy(item));
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentBlockPredicate() {
-		return ArgumentBlockPredicate.a();
-	}
-
-	@Override
-	public Predicate<Block> getBlockPredicate(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		Predicate<ShapeDetectorBlock> predicate = ArgumentBlockPredicate.a(cmdCtx, key);
-		return (Block block) -> {
-			return predicate.test(new ShapeDetectorBlock(getCLW(cmdCtx).getWorld(),
-					new BlockPosition(block.getX(), block.getY(), block.getZ()), true));
-		};
-	}
-
-	@Override
-	public String getKeyedAsString(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.e(cmdCtx, key);
-		return minecraftKey.toString();
 	}
 
 }

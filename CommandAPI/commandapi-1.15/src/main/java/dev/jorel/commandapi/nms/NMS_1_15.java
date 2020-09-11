@@ -134,9 +134,8 @@ import net.minecraft.server.v1_15_R1.Vec3D;
 public class NMS_1_15 implements NMS {
 	
 	@Override
-	public String getKeyedAsString(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.d(cmdCtx, key);
-		return minecraftKey.toString();
+	public ArgumentType<?> _ArgumentAxis() {
+		return ArgumentRotationAxis.a();
 	}
 	
 	@Override
@@ -145,67 +144,10 @@ public class NMS_1_15 implements NMS {
 	}
 
 	@Override
-	public Predicate<Block> getBlockPredicate(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		Predicate<ShapeDetectorBlock> predicate = ArgumentBlockPredicate.a(cmdCtx, key);
-		return (Block block) -> {
-			return predicate.test(new ShapeDetectorBlock(getCLW(cmdCtx).getWorld(),
-					new BlockPosition(block.getX(), block.getY(), block.getZ()), true));
-		};
-	}
-	
-	@Override
-	public ArgumentType<?> _ArgumentItemPredicate() {
-		return ArgumentItemPredicate.a();
-	}
-
-	@Override
-	public Predicate<ItemStack> getItemStackPredicate(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		Predicate<net.minecraft.server.v1_15_R1.ItemStack> predicate = ArgumentItemPredicate.a(cmdCtx, key);
-		return item -> predicate.test(CraftItemStack.asNMSCopy(item));
-	}
-	
-	@Override
-	public ArgumentType<?> _ArgumentUUID() {
-		throw new UUIDArgumentException();
-	}
-	
-	@Override
-	public UUID getUUID(CommandContext cmdCtx, String key) {
-		throw new UUIDArgumentException();
-	}
-	
-	@Override
-	public String convert(Sound sound) {
-		return CraftSound.getSound(sound);
-	}
-	
-	@SuppressWarnings("deprecation")
-	@Override
-	public String convert(PotionEffectType potion) {
-		return IRegistry.MOB_EFFECT.getKey(IRegistry.MOB_EFFECT.fromId(potion.getId())).toString();
-	}
-	
-	@Override
-	public String convert(Particle particle) {
-		return CraftParticle.toNMS(particle).a();
-	}
-
-	@Override
-	public String convert(ItemStack is) {
-		net.minecraft.server.v1_15_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(is);
-		return is.getType().getKey().toString() + nmsItemStack.getOrCreateTag().asString();
-	}
-	
-	@Override
-	public ArgumentType<?> _ArgumentAxis() {
-		return ArgumentRotationAxis.a();
-	}
-
-	@Override
 	public ArgumentType<?> _ArgumentBlockState() {
 		return ArgumentTile.a();
 	}
-
+	
 	@Override
 	public ArgumentType<?> _ArgumentChat() {
 		return ArgumentChat.a();
@@ -215,22 +157,22 @@ public class NMS_1_15 implements NMS {
 	public ArgumentType _ArgumentChatComponent() {
 		return ArgumentChatComponent.a();
 	}
-
+	
 	@Override
 	public ArgumentType _ArgumentChatFormat() {
 		return ArgumentChatFormat.a();
 	}
-
+	
 	@Override
 	public ArgumentType<?> _ArgumentDimension() {
 		return ArgumentDimension.a();
 	}
-
+	
 	@Override
 	public ArgumentType _ArgumentEnchantment() {
 		return ArgumentEnchantment.a();
 	}
-
+	
 	@Override
 	public ArgumentType _ArgumentEntity(EntitySelector selector) {
 		switch (selector) {
@@ -245,7 +187,7 @@ public class NMS_1_15 implements NMS {
 		}
 		return null;
 	}
-
+	
 	@Override
 	public ArgumentType _ArgumentEntitySummon() {
 		return ArgumentEntitySummon.a();
@@ -255,10 +197,15 @@ public class NMS_1_15 implements NMS {
 	public ArgumentType<?> _ArgumentFloatRange() {
 		return new ArgumentCriterionValue.a();
 	}
-
+	
 	@Override
 	public ArgumentType<?> _ArgumentIntRange() {
 		return new ArgumentCriterionValue.b();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentItemPredicate() {
+		return ArgumentItemPredicate.a();
 	}
 
 	@Override
@@ -347,6 +294,11 @@ public class NMS_1_15 implements NMS {
 	}
 
 	@Override
+	public ArgumentType<?> _ArgumentUUID() {
+		throw new UUIDArgumentException();
+	}
+
+	@Override
 	public ArgumentType<?> _ArgumentVec2() {
 		return ArgumentVec2.a();
 	}
@@ -359,6 +311,28 @@ public class NMS_1_15 implements NMS {
 	@Override
 	public String[] compatibleVersions() {
 		return new String[] { "1.15", "1.15.1", "1.15.2" };
+	}
+
+	@Override
+	public String convert(ItemStack is) {
+		net.minecraft.server.v1_15_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(is);
+		return is.getType().getKey().toString() + nmsItemStack.getOrCreateTag().asString();
+	}
+
+	@Override
+	public String convert(Particle particle) {
+		return CraftParticle.toNMS(particle).a();
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public String convert(PotionEffectType potion) {
+		return IRegistry.MOB_EFFECT.getKey(IRegistry.MOB_EFFECT.fromId(potion.getId())).toString();
+	}
+
+	@Override
+	public String convert(Sound sound) {
+		return CraftSound.getSound(sound);
 	}
 
 	@Override
@@ -396,6 +370,15 @@ public class NMS_1_15 implements NMS {
 	@Override
 	public Biome getBiome(CommandContext cmdCtx, String key) {
 		throw new BiomeArgumentException();
+	}
+
+	@Override
+	public Predicate<Block> getBlockPredicate(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		Predicate<ShapeDetectorBlock> predicate = ArgumentBlockPredicate.a(cmdCtx, key);
+		return (Block block) -> {
+			return predicate.test(new ShapeDetectorBlock(getCLW(cmdCtx).getWorld(),
+					new BlockPosition(block.getX(), block.getY(), block.getZ()), true));
+		};
 	}
 
 	@Override
@@ -483,7 +466,7 @@ public class NMS_1_15 implements NMS {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public EntityType getEntityType(CommandContext cmdCtx, String str) throws CommandSyntaxException {
 		Entity entity = IRegistry.ENTITY_TYPE.get(ArgumentEntitySummon.a(cmdCtx, str))
@@ -529,7 +512,7 @@ public class NMS_1_15 implements NMS {
 
 		return result;
 	}
-
+	
 	@Override
 	public IntegerRange getIntRange(CommandContext cmdCtx, String key) {
 		net.minecraft.server.v1_15_R1.CriterionConditionValue.IntegerRange range = ArgumentCriterionValue.b.a(cmdCtx,
@@ -542,6 +525,18 @@ public class NMS_1_15 implements NMS {
 	@Override
 	public ItemStack getItemStack(CommandContext cmdCtx, String str) throws CommandSyntaxException {
 		return CraftItemStack.asBukkitCopy(ArgumentItemStack.a(cmdCtx, str).a(1, false));
+	}
+
+	@Override
+	public Predicate<ItemStack> getItemStackPredicate(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		Predicate<net.minecraft.server.v1_15_R1.ItemStack> predicate = ArgumentItemPredicate.a(cmdCtx, key);
+		return item -> predicate.test(CraftItemStack.asNMSCopy(item));
+	}
+
+	@Override
+	public String getKeyedAsString(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.d(cmdCtx, key);
+		return minecraftKey.toString();
 	}
 
 	@Override
@@ -781,6 +776,11 @@ public class NMS_1_15 implements NMS {
 	@Override
 	public int getTime(CommandContext cmdCtx, String key) {
 		return (Integer) cmdCtx.getArgument(key, Integer.class);
+	}
+
+	@Override
+	public UUID getUUID(CommandContext cmdCtx, String key) {
+		throw new UUIDArgumentException();
 	}
 	
 	@Override
