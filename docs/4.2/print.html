@@ -510,7 +510,7 @@ CommandAPI.onEnable(Plugin plugin);
 	&lt;dependency&gt;
 		&lt;groupId&gt;dev.jorel&lt;/groupId&gt;
         &lt;artifactId&gt;commandapi-shade&lt;/artifactId&gt;
-        &lt;version&gt;4.1&lt;/version&gt;
+        &lt;version&gt;4.2&lt;/version&gt;
     &lt;/dependency&gt;
 &lt;/dependencies&gt;
 </code></pre>
@@ -552,13 +552,13 @@ CommandAPI.onEnable(Plugin plugin);
 </code></pre>
 <p>Next, we declare our dependencies:</p>
 <pre><code class="language-gradle">dependencies {
-    compile &quot;dev.jorel:commandapi-shade:4.1&quot;   
+    compile &quot;dev.jorel:commandapi-shade:4.2&quot;   
 }
 </code></pre>
 <p>Then we add it to the <code>shadowJar</code> task configuration:</p>
 <pre><code class="language-gradle">shadowJar {
 	dependencies {
-		include dependency(&quot;dev.jorel:commandapi-shade:4.1&quot;)
+		include dependency(&quot;dev.jorel:commandapi-shade:4.2&quot;)
 	}
 }
 </code></pre>
