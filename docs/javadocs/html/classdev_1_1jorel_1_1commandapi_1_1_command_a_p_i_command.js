@@ -9,6 +9,8 @@ var classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command =
     [ "executesConsole", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a8bd559b3ede4461f6de92d448e3acf7b", null ],
     [ "executesEntity", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a77a998fb100b2c0f566a940c76b37b80", null ],
     [ "executesEntity", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ab427d7a54c012243de232d1219b6b3fa", null ],
+    [ "executesNative", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a8df57e3ec273deddd1bfddc5035ddb75", null ],
+    [ "executesNative", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a85bb6e227a1d1d201548c19e8dffc94a", null ],
     [ "executesPlayer", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a033601a13a33850155442c39c6437f67", null ],
     [ "executesPlayer", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a3531dbfd340f8194c89574ea5fee106f", null ],
     [ "executesProxy", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ad373c8c5eb7377e71ee34207ff262ff8", null ],

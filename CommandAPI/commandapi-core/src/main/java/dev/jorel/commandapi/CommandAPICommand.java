@@ -221,11 +221,21 @@ public class CommandAPICommand {
 		return this;
 	}
 	
+	/**
+	 * Adds an executor to the current command builder
+	 * @param executor A lambda of type <code>(NativeCommandExecutor, Object[]) -> ()</code> that will be executed when the command is run
+	 * @return this command builder
+	 */
 	public CommandAPICommand executesNative(NativeCommandExecutor executor) {
 		this.executor.addNormalExecutor(executor);
 		return this;
 	}
 	
+	/**
+	 * Adds an executor to the current command builder
+	 * @param executor A lambda of type <code>(NativeCommandExecutor, Object[]) -> int</code> that will be executed when the command is run
+	 * @return this command builder
+	 */
 	public CommandAPICommand executesNative(NativeResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);
 		return this;
