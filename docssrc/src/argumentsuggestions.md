@@ -117,6 +117,32 @@ The `overrideSuggestions(BiFunction<CommandSender, Object[], String[]> suggestio
 
 This method requires a function that takes in a command sender and the **list of previous arguments** and must return a `String[]` of suggestions. The arguments are parsed exactly like any regular `CommandAPI` command argument.
 
+<div class="warning">
+
+**Note:**
+
+The ability to use previously declared arguments _does not work via redirects_. This means that any command that comes before it that leads into a command that uses suggestions depending on previous arguments will not work. For example, if we had a command `/mycommand <arg1> <arg2> <arg3>` and ran it as normal, it would work as normal:
+
+```
+/mycommand arg1 arg2 arg3
+```
+
+However, if we redirect execution via the `/execute` command to have the following:
+
+```
+/execute run mycommand <suggestions>
+```
+
+This won't work, because we make use of a redirect:
+
+\\[\texttt{/execute run} \xrightarrow{redirect} \texttt{mycommand arg1 arg2 arg3}\\]
+
+To clarify, by "does not work", I mean that it is not possible to access the `Object[]` of previously declared arguments. **If a command occurs via a redirect, the `Object[]` of previously declared arguments will be null**.
+
+</div>
+
+
+
 
 <div class="example">
 
