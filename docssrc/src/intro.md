@@ -36,6 +36,12 @@ Using the search icon in the top left corner, you can search for anything in thi
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 4.1 \\(\rightarrow\\) 4.2:
+
+- Adds a warning about using redirected commands for suggestions that depend on previous arguments in [7.1. Argument suggestions](./argumentsuggestions.md#suggestions-depending-on-previous-arguments)
+- Adds a new section [6.3. Native commandsenders](./native.md)
+- Update documentation for [6.1. Normal command executors](normalexecutors.md#restricting-who-can-run-your-command) to include the `.executesNative()` method for native command senders
+
 ### Documentation changes 4.0 \\(\rightarrow\\) 4.1:
 
 - Adds a new section [7.3. Argument suggestions with tooltips](./tooltips.md)
