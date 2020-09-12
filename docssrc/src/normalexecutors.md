@@ -47,17 +47,19 @@ The `CommandAPICommand` has multiple different `executes...()` methods that can 
 - `BlockCommandSender` - Only command blocks can run this command
 - `ConsoleCommandSender` - Only the console can run this command
 - `ProxiedCommandSender` - Only proxied command senders (e.g. other entities via the `/execute as ...` command)
+- `NativeProxyCommandSender` - This type has special rules governing it. See [Native commandsenders](./native.md) for more information
 
 This is done using the respective method:
 
-| Restricted sender      | Method to use             |
-| ---------------------- | ------------------------- |
-| `CommandSender`        | `.executes()`             |
-| `Player`               | `.executesPlayer()`       |
-| `Entity`               | `.executesEntity()`       |
-| `BlockCommandSender`   | `.executesCommandBlock()` |
-| `ConsoleCommandSender` | `.executesConsole()`      |
-| `ProxiedCommandSender` | `.executesProxy()`        |
+| Restricted sender          | Method to use             |
+| -------------------------- | ------------------------- |
+| `CommandSender`            | `.executes()`             |
+| `Player`                   | `.executesPlayer()`       |
+| `Entity`                   | `.executesEntity()`       |
+| `BlockCommandSender`       | `.executesCommandBlock()` |
+| `ConsoleCommandSender`     | `.executesConsole()`      |
+| `ProxiedCommandSender`     | `.executesProxy()`        |
+| `NativeProxyCommandSender` | `.executesNative()`       |
 
 <div class="example">
 

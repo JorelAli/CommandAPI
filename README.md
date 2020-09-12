@@ -23,7 +23,7 @@
 
 **Compatible Minecraft versions:** 
 
-![](https://img.shields.io/badge/Minecraft%20Version-1.13-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.13.1-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.13.2-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.14-blue)  ![](https://img.shields.io/badge/Minecraft%20Version-1.14.1-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.14.2-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.14.3-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.14.4-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.15-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.15.1-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.15.2-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.16.1-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.16.2-blue)
+![](https://img.shields.io/badge/Minecraft%20Version-1.13-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.13.1-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.13.2-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.14-blue)  ![](https://img.shields.io/badge/Minecraft%20Version-1.14.1-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.14.2-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.14.3-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.14.4-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.15-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.15.1-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.15.2-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.16.1-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.16.2-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.16.3-blue)
 
 -----
 
@@ -117,6 +117,17 @@ These versions of Minecraft must be installed in your local machine's Maven repo
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td valign="top"><b>4.2</b></td>
+            <td valign="top">September 2020</td>
+            <td valign="top">
+                <ul>
+                    <li>Fixes a bug where shading the CommandAPI and the NBT-API together causes the CommandAPI to incorrectly think that the NBT-API isn't present</li>
+                    <li>Fixes a bug where commands with redirects (4.0+ aliases and redirects from /execute) that have two consecutive arguments with suggestions would spam the console and not provide suggestions</li>
+					<li>Adds <code>NativeProxyCommandSender</code> which lets you access the location and world of a command sender via <code>/execute in|positioned|at|facing|rotated</code></li>
+                </ul>
+            </td>
+        </tr>
         <tr>
             <td valign="top"><b>4.1</b></td>
             <td valign="top">September 2020</td>

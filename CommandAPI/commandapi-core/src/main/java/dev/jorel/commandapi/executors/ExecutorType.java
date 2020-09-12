@@ -31,7 +31,12 @@ public enum ExecutorType {
 	ALL, 
 	
 	/**
-	 * An executor where the CommandSender is a ProxiedCommandSender
+	 * An executor where the CommandSender is a NativeProxyCommandSender
 	 */
-	PROXY;
+	PROXY,
+	
+	/**
+	 * An executor where the CommandSender is always a NativeProxyCommandSender
+	 */
+	NATIVE;
 }

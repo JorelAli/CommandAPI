@@ -6,7 +6,7 @@
 
 	<groupId>dev.jorel</groupId>
 	<artifactId>commandapi</artifactId>
-	<version>4.1</version>
+	<version>4.2</version>
 	<packaging>pom</packaging>
 	<modules>
 		<module>commandapi-1.16.2</module>
@@ -23,14 +23,6 @@
 		<module>commandapi-plugin</module>
 		<module>commandapi-shade</module>
 	</modules>
-
-	<distributionManagement>
-		<repository>
-			<id>github</id>
-			<name>GitHub JorelAli Apache Maven Packages</name>
-			<url>https://maven.pkg.github.com/JorelAli/1.13-Command-API</url>
-		</repository>
-	</distributionManagement>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -75,7 +67,6 @@
 					<compilerArgs>
 						<arg>-Xlint</arg>
 					</compilerArgs>
-					<!-- <release>12</release> -->
 				</configuration>
 			</plugin>
 			<plugin>

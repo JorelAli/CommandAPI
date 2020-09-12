@@ -82,7 +82,6 @@ var hierarchy =
       [ "dev.jorel.commandapi.arguments.RecipeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_recipe_argument.html", null ],
       [ "dev.jorel.commandapi.arguments.SoundArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_sound_argument.html", null ]
     ] ],
-    [ "dev.jorel.commandapi.executors.IExecutorNormal< T extends CommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_i_executor_normal.html", null ],
     [ "dev.jorel.commandapi.executors.IExecutorNormal< BlockCommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_i_executor_normal.html", [
       [ "dev.jorel.commandapi.executors.CommandBlockCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_command_executor.html", null ]
     ] ],
@@ -95,13 +94,13 @@ var hierarchy =
     [ "dev.jorel.commandapi.executors.IExecutorNormal< Entity >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_i_executor_normal.html", [
       [ "dev.jorel.commandapi.executors.EntityCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_entity_command_executor.html", null ]
     ] ],
+    [ "dev.jorel.commandapi.executors.IExecutorNormal< NativeProxyCommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_i_executor_normal.html", [
+      [ "dev.jorel.commandapi.executors.NativeCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_native_command_executor.html", null ],
+      [ "dev.jorel.commandapi.executors.ProxyCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_command_executor.html", null ]
+    ] ],
     [ "dev.jorel.commandapi.executors.IExecutorNormal< Player >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_i_executor_normal.html", [
       [ "dev.jorel.commandapi.executors.PlayerCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_player_command_executor.html", null ]
     ] ],
-    [ "dev.jorel.commandapi.executors.IExecutorNormal< ProxiedCommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_i_executor_normal.html", [
-      [ "dev.jorel.commandapi.executors.ProxyCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_command_executor.html", null ]
-    ] ],
-    [ "dev.jorel.commandapi.executors.IExecutorResulting< T extends CommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_i_executor_resulting.html", null ],
     [ "dev.jorel.commandapi.executors.IExecutorResulting< CommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_i_executor_resulting.html", [
       [ "dev.jorel.commandapi.executors.ResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_command_executor.html", null ]
     ] ],
@@ -111,12 +110,17 @@ var hierarchy =
     [ "dev.jorel.commandapi.executors.IExecutorResulting< Entity >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_i_executor_resulting.html", [
       [ "dev.jorel.commandapi.executors.EntityResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_entity_resulting_command_executor.html", null ]
     ] ],
+    [ "dev.jorel.commandapi.executors.IExecutorResulting< NativeProxyCommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_i_executor_resulting.html", [
+      [ "dev.jorel.commandapi.executors.NativeResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_native_resulting_command_executor.html", null ],
+      [ "dev.jorel.commandapi.executors.ProxyResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_resulting_command_executor.html", null ]
+    ] ],
     [ "dev.jorel.commandapi.executors.IExecutorResulting< Player >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_i_executor_resulting.html", [
       [ "dev.jorel.commandapi.executors.CommandBlockResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_command_executor.html", null ],
       [ "dev.jorel.commandapi.executors.PlayerResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_player_resulting_command_executor.html", null ]
     ] ],
-    [ "dev.jorel.commandapi.executors.IExecutorResulting< ProxiedCommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_i_executor_resulting.html", [
-      [ "dev.jorel.commandapi.executors.ProxyResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_resulting_command_executor.html", null ]
+    [ "dev.jorel.commandapi.executors.IExecutorTyped", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_i_executor_typed.html", [
+      [ "dev.jorel.commandapi.executors.IExecutorNormal< T extends CommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_i_executor_normal.html", null ],
+      [ "dev.jorel.commandapi.executors.IExecutorResulting< T extends CommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_i_executor_resulting.html", null ]
     ] ],
     [ "dev.jorel.commandapi.arguments.IGreedyArgument", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_greedy_argument.html", [
       [ "dev.jorel.commandapi.arguments.ChatArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_chat_argument.html", null ],
@@ -288,5 +292,8 @@ var hierarchy =
     ] ],
     [ "Location", null, [
       [ "dev.jorel.commandapi.wrappers.Location2D", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_location2_d.html", null ]
+    ] ],
+    [ "ProxiedCommandSender", null, [
+      [ "dev.jorel.commandapi.wrappers.NativeProxyCommandSender", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_native_proxy_command_sender.html", null ]
     ] ]
 ];

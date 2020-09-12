@@ -108,9 +108,10 @@ public abstract class CommandAPIHandler {
 		}
 
 		// Checks other dependencies
-		if (Bukkit.getPluginManager().getPlugin("NBTAPI") != null) {
+		try {
+			Class.forName("de.tr7zw.nbtapi.NBTContainer");
 			CommandAPI.getLog().info("Hooked into the NBTAPI successfully.");
-		} else {
+		} catch(ClassNotFoundException e) {
 			CommandAPI.getLog().warning(
 					"Couldn't hook into the NBTAPI for NBT support. See https://www.spigotmc.org/resources/nbt-api.7939/");
 		}
@@ -180,7 +181,7 @@ public abstract class CommandAPIHandler {
 
 		// Generate our command from executor
 		return (cmdCtx) -> {
-			return executor.execute(NMS.getSenderForCommand(cmdCtx), argsToObjectArr(cmdCtx, args));
+			return executor.execute(NMS.getSenderForCommand(cmdCtx, executor.isForceNative()), argsToObjectArr(cmdCtx, args));
 		};
 	}
 	
@@ -217,7 +218,6 @@ public abstract class CommandAPIHandler {
 	 * @throws CommandSyntaxException
 	 */
 	static Object parseArgument(CommandContext cmdCtx, String key, Argument value) throws CommandSyntaxException {
-		CommandSender sender = NMS.getSenderForCommand(cmdCtx);
 		switch (value.getArgumentType()) {
 		case ADVANCEMENT:
 			return NMS.getAdvancement(cmdCtx, key);
@@ -262,7 +262,7 @@ public abstract class CommandAPIHandler {
 			EntitySelectorArgument argument = (EntitySelectorArgument) value;
 			return NMS.getEntitySelector(cmdCtx, key, argument.getEntitySelector());
 		case ENTITY_TYPE:
-			return NMS.getEntityType(cmdCtx, key, sender);
+			return NMS.getEntityType(cmdCtx, key);
 		case ENVIRONMENT:
 			return NMS.getDimension(cmdCtx, key);
 		case FLOAT_RANGE:
@@ -280,10 +280,10 @@ public abstract class CommandAPIHandler {
 			return a.isMulti ? a.getLiteral() : null;
 		case LOCATION:
 			LocationType locationType = ((LocationArgument) value).getLocationType();
-			return NMS.getLocation(cmdCtx, key, locationType, sender);
+			return NMS.getLocation(cmdCtx, key, locationType);
 		case LOCATION_2D:
 			LocationType locationType2d = ((Location2DArgument) value).getLocationType();
-			return NMS.getLocation2D(cmdCtx, key, locationType2d, sender);
+			return NMS.getLocation2D(cmdCtx, key, locationType2d);
 		case LOOT_TABLE:
 			return NMS.getLootTable(cmdCtx, key);
 		case MATH_OPERATION:
@@ -291,7 +291,7 @@ public abstract class CommandAPIHandler {
 		case NBT_COMPOUND:
 			return NMS.getNBTCompound(cmdCtx, key);
 		case OBJECTIVE:
-			return NMS.getObjective(cmdCtx, key, sender);
+			return NMS.getObjective(cmdCtx, key);
 		case OBJECTIVE_CRITERIA:
 			return NMS.getObjectiveCriteria(cmdCtx, key);
 		case PARTICLE:
@@ -318,7 +318,7 @@ public abstract class CommandAPIHandler {
 		case SOUND:
 			return NMS.getSound(cmdCtx, key);
 		case TEAM:
-			return NMS.getTeam(cmdCtx, key, sender);
+			return NMS.getTeam(cmdCtx, key);
 		case TIME:
 			return NMS.getTime(cmdCtx, key);
 		case UUID:
@@ -586,8 +586,9 @@ public abstract class CommandAPIHandler {
 				if (CommandAPI.getConfiguration().hasVerboseOutput()) {
 					CommandAPI.getLog().info("Registering alias /" + alias + " -> " + resultantNode.getName());
 				}
+				
 				DISPATCHER.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(alias)
-						.requires(generatePermissions(alias, permissions, requirements)).redirect(resultantNode));
+						.requires(generatePermissions(alias, permissions, requirements)).then(outer));
 			}
 		}
 
@@ -670,7 +671,22 @@ public abstract class CommandAPIHandler {
 							if (s.equals(argumentName)) {
 								break;
 							}
-							previousArguments.add(parseArgument(context, s, args.get(s)));
+							
+							Object result;
+							try {
+								result = parseArgument(context, s, args.get(s));
+							} catch(IllegalArgumentException e) {
+								/*
+								 * Redirected commands don't parse previous arguments properly. Simplest way to
+								 * determine what we should do is simply set it to null, since there's nothing
+								 * else we can do. I thought about letting this simply be an empty array, but
+								 * then it's even more annoying to deal with - I wouldn't expect an array of
+								 * size n to suddenly, randomly be 0, but I would expect random NPEs because
+								 * let's be honest, this is Java we're dealing with.
+								 */
+								result = null;
+							}
+							previousArguments.add(result);
 						}
 						return getSuggestionsBuilder(builder, type.getOverriddenSuggestions().get()
 								.apply(NMS.getCommandSenderForCLW(context.getSource()), previousArguments.toArray()));
@@ -811,7 +827,7 @@ public abstract class CommandAPIHandler {
 		 */
 		public static RedirectModifier fromPredicate(BiPredicate<CommandSender, Object[]> predicate, LinkedHashMap<String, Argument> args) {
 			return cmdCtx -> {
-				if(predicate.test(NMS.getSenderForCommand(cmdCtx), argsToObjectArr(cmdCtx, args))) {
+				if(predicate.test(NMS.getSenderForCommand(cmdCtx, false), argsToObjectArr(cmdCtx, args))) {
 					return Collections.singleton(cmdCtx.getSource());
 				} else {
 					return Collections.emptyList();

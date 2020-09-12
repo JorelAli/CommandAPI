@@ -37,6 +37,7 @@ public interface CommandAPIVersionHandler {
 		case "1.16.1":
 			return new NMS_1_16_R1();
 		case "1.16.2":
+		case "1.16.3":
 			return new NMS_1_16_R2();
 		default:
 			throw new UnsupportedVersionException("This version of Minecraft is unsupported: " + version);

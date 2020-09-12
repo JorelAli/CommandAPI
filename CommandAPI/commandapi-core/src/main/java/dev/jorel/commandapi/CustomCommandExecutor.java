@@ -18,36 +18,41 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.ExecutorType;
 import dev.jorel.commandapi.executors.IExecutorNormal;
 import dev.jorel.commandapi.executors.IExecutorResulting;
+import dev.jorel.commandapi.executors.IExecutorTyped;
 
 class CustomCommandExecutor {
 	
-	private List<IExecutorNormal<? extends CommandSender>> ex;
-	private List<IExecutorResulting<? extends CommandSender>> rEx;
+	private List<IExecutorNormal<? extends CommandSender>> normalExecutors;
+	private List<IExecutorResulting<? extends CommandSender>> resultingExecutors;
 	
 	public CustomCommandExecutor() {
-		ex = new ArrayList<>();
-		rEx = new ArrayList<>();
+		normalExecutors = new ArrayList<>();
+		resultingExecutors = new ArrayList<>();
 	}
 	
 	public void addNormalExecutor(IExecutorNormal<? extends CommandSender> ex) {
-		this.ex.add(ex);
+		this.normalExecutors.add(ex);
 	}
 	
 	public void addResultingExecutor(IExecutorResulting<? extends CommandSender> rEx) {
-		this.rEx.add(rEx);
+		this.resultingExecutors.add(rEx);
 	}
 	
 	public boolean isEmpty() {
-		return ex.isEmpty() && rEx.isEmpty();
+		return normalExecutors.isEmpty() && resultingExecutors.isEmpty();
+	}
+	
+	public boolean isForceNative() {
+		return matches(normalExecutors, ExecutorType.NATIVE) || matches(resultingExecutors, ExecutorType.NATIVE);
 	}
 	
 	public int execute(CommandSender sender, Object[] arguments) throws CommandSyntaxException {
 		
 		//Parse executor type
-        if (!rEx.isEmpty()) {
+        if (!resultingExecutors.isEmpty()) {
             //Run resulting executor
             try {
-                return executeResultingExecutor(sender, arguments);
+                return execute(resultingExecutors, sender, arguments);
             } catch (WrapperCommandSyntaxException e) {
                 throw e.getException();
             } catch (Exception e) {
@@ -57,7 +62,7 @@ class CustomCommandExecutor {
         } else {
             //Run normal executor
             try {
-                return executeNormalExecutor(sender, arguments);
+                return execute(normalExecutors, sender, arguments);
             } catch (WrapperCommandSyntaxException e) {
                 throw e.getException();
             } catch (Exception e) {
@@ -67,47 +72,33 @@ class CustomCommandExecutor {
         }
 	}
 	
-	private int executeNormalExecutor(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
-		if(sender instanceof Player && ex.stream().anyMatch(o -> o.getType() == ExecutorType.PLAYER)) {
-			return ex.stream().filter(o -> o.getType() == ExecutorType.PLAYER).findFirst().get().executeWith(sender, args);
-		} else if(sender instanceof Entity && ex.stream().anyMatch(o -> o.getType() == ExecutorType.ENTITY)) {
-			return ex.stream().filter(o -> o.getType() == ExecutorType.ENTITY).findFirst().get().executeWith(sender, args);
-		} else if(sender instanceof ConsoleCommandSender && ex.stream().anyMatch(o -> o.getType() == ExecutorType.CONSOLE)) {
-			return ex.stream().filter(o -> o.getType() == ExecutorType.CONSOLE).findFirst().get().executeWith(sender, args);
-		} else if(sender instanceof BlockCommandSender && ex.stream().anyMatch(o -> o.getType() == ExecutorType.BLOCK)) {
-			return ex.stream().filter(o -> o.getType() == ExecutorType.BLOCK).findFirst().get().executeWith(sender, args);
-		} else if(sender instanceof ProxiedCommandSender && ex.stream().anyMatch(o -> o.getType() == ExecutorType.PROXY)) {
-			return ex.stream().filter(o -> o.getType() == ExecutorType.PROXY).findFirst().get().executeWith(sender, args);
-		} else if(ex.stream().anyMatch(o -> o.getType() == ExecutorType.ALL)) {
-			return ex.stream().filter(o -> o.getType() == ExecutorType.ALL).findFirst().get().executeWith(sender, args);
-		} else {
-			throw new WrapperCommandSyntaxException(
-				new SimpleCommandExceptionType(
-					new LiteralMessage("This command has no implementations for " + sender.getClass().getSimpleName().toLowerCase())
-				).create()
-			); 
-		}
+	private int execute(List<? extends IExecutorTyped> executors, CommandSender sender, Object[] args, ExecutorType type) throws WrapperCommandSyntaxException {
+		return executors.stream().filter(o -> o.getType() == type).findFirst().get().executeWith(sender, args);
 	}
 	
-	private int executeResultingExecutor(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
-		if(sender instanceof Player && rEx.stream().anyMatch(o -> o.getType() == ExecutorType.PLAYER)) {
-			return rEx.stream().filter(o -> o.getType() == ExecutorType.PLAYER).findFirst().get().executeWith(sender, args);
-		} else if(sender instanceof Entity && rEx.stream().anyMatch(o -> o.getType() == ExecutorType.ENTITY)) {
-			return rEx.stream().filter(o -> o.getType() == ExecutorType.ENTITY).findFirst().get().executeWith(sender, args);
-		} else if(sender instanceof ConsoleCommandSender && rEx.stream().anyMatch(o -> o.getType() == ExecutorType.CONSOLE)) {
-			return rEx.stream().filter(o -> o.getType() == ExecutorType.CONSOLE).findFirst().get().executeWith(sender, args);
-		} else if(sender instanceof BlockCommandSender && rEx.stream().anyMatch(o -> o.getType() == ExecutorType.BLOCK)) {
-			return rEx.stream().filter(o -> o.getType() == ExecutorType.BLOCK).findFirst().get().executeWith(sender, args);
-		} else if(sender instanceof ProxiedCommandSender && ex.stream().anyMatch(o -> o.getType() == ExecutorType.PROXY)) {
-			return ex.stream().filter(o -> o.getType() == ExecutorType.PROXY).findFirst().get().executeWith(sender, args);
-		} else if(rEx.stream().anyMatch(o -> o.getType() == ExecutorType.ALL)) {
-			return rEx.stream().filter(o -> o.getType() == ExecutorType.ALL).findFirst().get().executeWith(sender, args);
+	private boolean matches(List<? extends IExecutorTyped> executors, ExecutorType type) {
+		return executors.stream().map(IExecutorTyped::getType).anyMatch(type::equals);
+	}
+	
+	private int execute(List<? extends IExecutorTyped> executors, CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
+		if(isForceNative()) {
+			return execute(executors, sender, args, ExecutorType.NATIVE);
+		} else if (sender instanceof Player && matches(executors, ExecutorType.PLAYER)) {
+			return execute(executors, sender, args, ExecutorType.PLAYER);
+		} else if (sender instanceof Entity && matches(executors, ExecutorType.ENTITY)) {
+			return execute(executors, sender, args, ExecutorType.ENTITY);
+		} else if (sender instanceof ConsoleCommandSender && matches(executors, ExecutorType.CONSOLE)) {
+			return execute(executors, sender, args, ExecutorType.CONSOLE);
+		} else if (sender instanceof BlockCommandSender && matches(executors, ExecutorType.BLOCK)) {
+			return execute(executors, sender, args, ExecutorType.BLOCK);
+		} else if (sender instanceof ProxiedCommandSender && matches(executors, ExecutorType.PROXY)) {
+			return execute(executors, sender, args, ExecutorType.PROXY);
+		} else if (matches(executors, ExecutorType.ALL)) {
+			return execute(executors, sender, args, ExecutorType.ALL);
 		} else {
-			throw new WrapperCommandSyntaxException(
-				new SimpleCommandExceptionType(
-					new LiteralMessage("This command has no implementations for " + sender.getClass().getSimpleName().toLowerCase())
-				).create()
-			); 
+			throw new WrapperCommandSyntaxException(new SimpleCommandExceptionType(new LiteralMessage(
+					"This command has no implementations for " + sender.getClass().getSimpleName().toLowerCase()))
+							.create());
 		}
 	}
 }
