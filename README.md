@@ -122,6 +122,7 @@ These versions of Minecraft must be installed in your local machine's Maven repo
             <td valign="top">September 2020</td>
             <td valign="top">
                 <ul>
+                    <li>Adds support for Minecraft 1.16.3</li>
                     <li>Fixes a bug where shading the CommandAPI and the NBT-API together causes the CommandAPI to incorrectly think that the NBT-API isn't present</li>
                     <li>Fixes a bug where commands with redirects (4.0+ aliases and redirects from /execute) that have two consecutive arguments with suggestions would spam the console and not provide suggestions</li>
 					<li>Adds <code>NativeProxyCommandSender</code> which lets you access the location and world of a command sender via <code>/execute in|positioned|at|facing|rotated</code></li>
