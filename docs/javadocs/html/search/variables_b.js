@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['particle_810',['PARTICLE',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a72c70172767e42477678454eda33e7cb',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
-  ['player_811',['PLAYER',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ac5739032037514f0aa89935f8d9dd2cc',1,'dev.jorel.commandapi.arguments.CommandAPIArgumentType.PLAYER()'],['../enumdev_1_1jorel_1_1commandapi_1_1executors_1_1_executor_type.html#a52ebde1677f2c3a109bc1aa2407ca1b3',1,'dev.jorel.commandapi.executors.ExecutorType.PLAYER()']]],
-  ['potion_5feffect_812',['POTION_EFFECT',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ac83b55db69689cdc2bf9d527394e46be',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
-  ['precise_5fposition_813',['PRECISE_POSITION',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_type.html#ab0a982eafd756b64ffd940da6b306a4e',1,'dev::jorel::commandapi::arguments::LocationType']]],
-  ['proxy_814',['PROXY',['../enumdev_1_1jorel_1_1commandapi_1_1executors_1_1_executor_type.html#a3716b4662b5fdb66c4cd565a59ec7cba',1,'dev::jorel::commandapi::executors::ExecutorType']]]
+  ['objective_1055',['OBJECTIVE',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a0f0dde9643a62fab9bea9483cb09973a',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['objective_5fcriteria_1056',['OBJECTIVE_CRITERIA',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a88c23c908b311e33a06fae6edfb90e97',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['one_5fentity_1057',['ONE_ENTITY',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html#a3a099f0f3ec97300f6f63359f2d66375',1,'dev::jorel::commandapi::arguments::EntitySelectorArgument::EntitySelector']]],
+  ['one_5fplayer_1058',['ONE_PLAYER',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html#a3872bc6c82b960b49d2a334b0f61a781',1,'dev::jorel::commandapi::arguments::EntitySelectorArgument::EntitySelector']]],
+  ['op_1059',['OP',['../classdev_1_1jorel_1_1commandapi_1_1_command_permission.html#a06ad29ef4670e4d520ae4f2bb452b2ba',1,'dev::jorel::commandapi::CommandPermission']]]
 ];

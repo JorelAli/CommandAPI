@@ -91,17 +91,20 @@ $(document).ready(function(){initNavTree('classcom_1_1mojang_1_1brigadier_1_1con
 <div class="title">com.mojang.brigadier.context.ParsedArgument&lt; S, T &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Represents an argument that was parsed from the input.  
+ <a href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_parsed_argument.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:adbc5c44ffb6a6b89981ef02067c853f2"><td class="memItemLeft" align="right" valign="top"><a id="adbc5c44ffb6a6b89981ef02067c853f2"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ParsedArgument</b> (final int start, final int end, final T result)</td></tr>
+<tr class="memitem:adbc5c44ffb6a6b89981ef02067c853f2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_parsed_argument.html#adbc5c44ffb6a6b89981ef02067c853f2">ParsedArgument</a> (final int start, final int end, final T result)</td></tr>
+<tr class="memdesc:adbc5c44ffb6a6b89981ef02067c853f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_parsed_argument.html" title="Represents an argument that was parsed from the input.">ParsedArgument</a> for a given string range with a given value.  <a href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_parsed_argument.html#adbc5c44ffb6a6b89981ef02067c853f2">More...</a><br /></td></tr>
 <tr class="separator:adbc5c44ffb6a6b89981ef02067c853f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7391e703f6bcb646e67af50ebe43fb4"><td class="memItemLeft" align="right" valign="top"><a id="ac7391e703f6bcb646e67af50ebe43fb4"></a>
-<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_string_range.html">StringRange</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getRange</b> ()</td></tr>
+<tr class="memitem:ac7391e703f6bcb646e67af50ebe43fb4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_string_range.html">StringRange</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_parsed_argument.html#ac7391e703f6bcb646e67af50ebe43fb4">getRange</a> ()</td></tr>
+<tr class="memdesc:ac7391e703f6bcb646e67af50ebe43fb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the range this argument spans in the input string.  <a href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_parsed_argument.html#ac7391e703f6bcb646e67af50ebe43fb4">More...</a><br /></td></tr>
 <tr class="separator:ac7391e703f6bcb646e67af50ebe43fb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac2d372659fc00963d2f10a7819133495"><td class="memItemLeft" align="right" valign="top"><a id="ac2d372659fc00963d2f10a7819133495"></a>
-T&#160;</td><td class="memItemRight" valign="bottom"><b>getResult</b> ()</td></tr>
+<tr class="memitem:ac2d372659fc00963d2f10a7819133495"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_parsed_argument.html#ac2d372659fc00963d2f10a7819133495">getResult</a> ()</td></tr>
+<tr class="memdesc:ac2d372659fc00963d2f10a7819133495"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the value of the argument.  <a href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_parsed_argument.html#ac2d372659fc00963d2f10a7819133495">More...</a><br /></td></tr>
 <tr class="separator:ac2d372659fc00963d2f10a7819133495"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa073cff0a099ed786b5c66efaa5e7369"><td class="memItemLeft" align="right" valign="top"><a id="aa073cff0a099ed786b5c66efaa5e7369"></a>
 boolean&#160;</td><td class="memItemRight" valign="bottom"><b>equals</b> (final Object o)</td></tr>
@@ -110,13 +113,108 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>equals</b> (final 
 int&#160;</td><td class="memItemRight" valign="bottom"><b>hashCode</b> ()</td></tr>
 <tr class="separator:a5b055310280e57eaae04cbeade220066"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Represents an argument that was parsed from the input. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">&lt;S&gt;</td><td>the type of the command source </td></tr>
+    <tr><td class="paramname">&lt;T&gt;</td><td>the type of the argument </td></tr>
+  </table>
+  </dd>
+</dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="adbc5c44ffb6a6b89981ef02067c853f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adbc5c44ffb6a6b89981ef02067c853f2">&#9670;&nbsp;</a></span>ParsedArgument()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_parsed_argument.html">com.mojang.brigadier.context.ParsedArgument</a>&lt; S, T &gt;.<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_parsed_argument.html">ParsedArgument</a> </td>
+          <td>(</td>
+          <td class="paramtype">final int&#160;</td>
+          <td class="paramname"><em>start</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">final int&#160;</td>
+          <td class="paramname"><em>end</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">final T&#160;</td>
+          <td class="paramname"><em>result</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a new <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_parsed_argument.html" title="Represents an argument that was parsed from the input.">ParsedArgument</a> for a given string range with a given value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">start</td><td>the start of this argument in the input </td></tr>
+    <tr><td class="paramname">end</td><td>the end of this argument in the input </td></tr>
+    <tr><td class="paramname">result</td><td>the value of this argument </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ac7391e703f6bcb646e67af50ebe43fb4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7391e703f6bcb646e67af50ebe43fb4">&#9670;&nbsp;</a></span>getRange()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_string_range.html">StringRange</a> <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_parsed_argument.html">com.mojang.brigadier.context.ParsedArgument</a>&lt; S, T &gt;.getRange </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the range this argument spans in the input string. </p>
+<dl class="section return"><dt>Returns</dt><dd>the range this argument spans in the input string </dd></dl>
+
+</div>
+</div>
+<a id="ac2d372659fc00963d2f10a7819133495"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2d372659fc00963d2f10a7819133495">&#9670;&nbsp;</a></span>getResult()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">T <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_parsed_argument.html">com.mojang.brigadier.context.ParsedArgument</a>&lt; S, T &gt;.getResult </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the value of the argument. </p>
+<dl class="section return"><dt>Returns</dt><dd>the value of the argument </dd></dl>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>com</b></li><li class="navelem"><b>mojang</b></li><li class="navelem"><b>brigadier</b></li><li class="navelem"><b>context</b></li><li class="navelem"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_parsed_argument.html">ParsedArgument</a></li>
-    <li class="footer">Generated on Sat Sep 12 2020 14:30:01 for CommandAPI by
+    <li class="footer">Generated on Wed Sep 16 2020 18:17:15 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

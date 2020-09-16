@@ -91,20 +91,84 @@ $(document).ready(function(){initNavTree('interfacecom_1_1mojang_1_1brigadier_1_
 <div class="title">com.mojang.brigadier.AmbiguityConsumer&lt; S &gt; Interface Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>A consumer that is notified of found ambiguities in the command tree.  
+ <a href="interfacecom_1_1mojang_1_1brigadier_1_1_ambiguity_consumer.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a75318afb8cf08ecf79b55f1780dc988e"><td class="memItemLeft" align="right" valign="top"><a id="a75318afb8cf08ecf79b55f1780dc988e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ambiguous</b> (final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; parent, final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; child, final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; sibling, final Collection&lt; String &gt; inputs)</td></tr>
+<tr class="memitem:a75318afb8cf08ecf79b55f1780dc988e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_ambiguity_consumer.html#a75318afb8cf08ecf79b55f1780dc988e">ambiguous</a> (final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; parent, final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; child, final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; sibling, final Collection&lt; String &gt; inputs)</td></tr>
+<tr class="memdesc:a75318afb8cf08ecf79b55f1780dc988e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Invoked when ambiguities are detected.  <a href="interfacecom_1_1mojang_1_1brigadier_1_1_ambiguity_consumer.html#a75318afb8cf08ecf79b55f1780dc988e">More...</a><br /></td></tr>
 <tr class="separator:a75318afb8cf08ecf79b55f1780dc988e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A consumer that is notified of found ambiguities in the command tree. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">&lt;S&gt;</td><td>the command source </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_command_dispatcher.html#aa64998a8541e504e628d7003f7fe5cfb" title="Scans the command tree for potential ambiguous commands.">CommandDispatcher::findAmbiguities</a> </dd></dl>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a75318afb8cf08ecf79b55f1780dc988e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75318afb8cf08ecf79b55f1780dc988e">&#9670;&nbsp;</a></span>ambiguous()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_ambiguity_consumer.html">com.mojang.brigadier.AmbiguityConsumer</a>&lt; S &gt;.ambiguous </td>
+          <td>(</td>
+          <td class="paramtype">final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt;&#160;</td>
+          <td class="paramname"><em>parent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt;&#160;</td>
+          <td class="paramname"><em>child</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt;&#160;</td>
+          <td class="paramname"><em>sibling</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">final Collection&lt; String &gt;&#160;</td>
+          <td class="paramname"><em>inputs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Invoked when ambiguities are detected. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parent</td><td>the parent command of the command that is ambiguous </td></tr>
+    <tr><td class="paramname">child</td><td>the first command that is ambiguous </td></tr>
+    <tr><td class="paramname">sibling</td><td>the second command that is ambiguous </td></tr>
+    <tr><td class="paramname">inputs</td><td>the inputs for which they both matched and therefore were ambiguous </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>com</b></li><li class="navelem"><b>mojang</b></li><li class="navelem"><b>brigadier</b></li><li class="navelem"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_ambiguity_consumer.html">AmbiguityConsumer</a></li>
-    <li class="footer">Generated on Sat Sep 12 2020 14:30:01 for CommandAPI by
+    <li class="footer">Generated on Wed Sep 16 2020 18:17:15 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

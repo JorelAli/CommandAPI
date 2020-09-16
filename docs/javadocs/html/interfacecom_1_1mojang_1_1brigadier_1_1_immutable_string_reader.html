@@ -91,6 +91,9 @@ $(document).ready(function(){initNavTree('interfacecom_1_1mojang_1_1brigadier_1_
 <div class="title">com.mojang.brigadier.ImmutableStringReader Interface Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>A string reader can be used to progressively read through a string.  
+ <a href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for com.mojang.brigadier.ImmutableStringReader:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -99,50 +102,296 @@ $(document).ready(function(){initNavTree('interfacecom_1_1mojang_1_1brigadier_1_
  <div class="center">
   <img src="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.png" usemap="#com.mojang.brigadier.ImmutableStringReader_map" alt=""/>
   <map id="com.mojang.brigadier.ImmutableStringReader_map" name="com.mojang.brigadier.ImmutableStringReader_map">
-<area href="classcom_1_1mojang_1_1brigadier_1_1_string_reader.html" alt="com.mojang.brigadier.StringReader" shape="rect" coords="0,56,267,80"/>
+<area href="classcom_1_1mojang_1_1brigadier_1_1_string_reader.html" title="A mutable implementation of an ImmutableStringReader, that allows moving the cursor." alt="com.mojang.brigadier.StringReader" shape="rect" coords="0,56,267,80"/>
   </map>
 </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a9845bda6386d7010dcbba330f96352a5"><td class="memItemLeft" align="right" valign="top"><a id="a9845bda6386d7010dcbba330f96352a5"></a>
-String&#160;</td><td class="memItemRight" valign="bottom"><b>getString</b> ()</td></tr>
+<tr class="memitem:a9845bda6386d7010dcbba330f96352a5"><td class="memItemLeft" align="right" valign="top">String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#a9845bda6386d7010dcbba330f96352a5">getString</a> ()</td></tr>
+<tr class="memdesc:a9845bda6386d7010dcbba330f96352a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the full input string.  <a href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#a9845bda6386d7010dcbba330f96352a5">More...</a><br /></td></tr>
 <tr class="separator:a9845bda6386d7010dcbba330f96352a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8fc28d5e13bbc337ba757deff7ad80bd"><td class="memItemLeft" align="right" valign="top"><a id="a8fc28d5e13bbc337ba757deff7ad80bd"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>getRemainingLength</b> ()</td></tr>
+<tr class="memitem:a8fc28d5e13bbc337ba757deff7ad80bd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#a8fc28d5e13bbc337ba757deff7ad80bd">getRemainingLength</a> ()</td></tr>
+<tr class="memdesc:a8fc28d5e13bbc337ba757deff7ad80bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the remaining length, so the distance from the cursor to the end of the input.  <a href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#a8fc28d5e13bbc337ba757deff7ad80bd">More...</a><br /></td></tr>
 <tr class="separator:a8fc28d5e13bbc337ba757deff7ad80bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae795665cac875f2f282395b086b64400"><td class="memItemLeft" align="right" valign="top"><a id="ae795665cac875f2f282395b086b64400"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>getTotalLength</b> ()</td></tr>
+<tr class="memitem:ae795665cac875f2f282395b086b64400"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#ae795665cac875f2f282395b086b64400">getTotalLength</a> ()</td></tr>
+<tr class="memdesc:ae795665cac875f2f282395b086b64400"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the total length of the input.  <a href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#ae795665cac875f2f282395b086b64400">More...</a><br /></td></tr>
 <tr class="separator:ae795665cac875f2f282395b086b64400"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a473ae19672ffb40f838d0f8383ea4cf3"><td class="memItemLeft" align="right" valign="top"><a id="a473ae19672ffb40f838d0f8383ea4cf3"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>getCursor</b> ()</td></tr>
+<tr class="memitem:a473ae19672ffb40f838d0f8383ea4cf3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#a473ae19672ffb40f838d0f8383ea4cf3">getCursor</a> ()</td></tr>
+<tr class="memdesc:a473ae19672ffb40f838d0f8383ea4cf3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the current cursor position.  <a href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#a473ae19672ffb40f838d0f8383ea4cf3">More...</a><br /></td></tr>
 <tr class="separator:a473ae19672ffb40f838d0f8383ea4cf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ba138010dc49f927525efb80e4ffb1f"><td class="memItemLeft" align="right" valign="top"><a id="a3ba138010dc49f927525efb80e4ffb1f"></a>
-String&#160;</td><td class="memItemRight" valign="bottom"><b>getRead</b> ()</td></tr>
+<tr class="memitem:a3ba138010dc49f927525efb80e4ffb1f"><td class="memItemLeft" align="right" valign="top">String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#a3ba138010dc49f927525efb80e4ffb1f">getRead</a> ()</td></tr>
+<tr class="memdesc:a3ba138010dc49f927525efb80e4ffb1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the part of the input that was already read.  <a href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#a3ba138010dc49f927525efb80e4ffb1f">More...</a><br /></td></tr>
 <tr class="separator:a3ba138010dc49f927525efb80e4ffb1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d28f5a5a9f550a6c7dfc5811dac91ad"><td class="memItemLeft" align="right" valign="top"><a id="a7d28f5a5a9f550a6c7dfc5811dac91ad"></a>
-String&#160;</td><td class="memItemRight" valign="bottom"><b>getRemaining</b> ()</td></tr>
+<tr class="memitem:a7d28f5a5a9f550a6c7dfc5811dac91ad"><td class="memItemLeft" align="right" valign="top">String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#a7d28f5a5a9f550a6c7dfc5811dac91ad">getRemaining</a> ()</td></tr>
+<tr class="memdesc:a7d28f5a5a9f550a6c7dfc5811dac91ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the part of the input that was not yet read.  <a href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#a7d28f5a5a9f550a6c7dfc5811dac91ad">More...</a><br /></td></tr>
 <tr class="separator:a7d28f5a5a9f550a6c7dfc5811dac91ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a06ed257e7bc4ea806512d16e86d69651"><td class="memItemLeft" align="right" valign="top"><a id="a06ed257e7bc4ea806512d16e86d69651"></a>
-boolean&#160;</td><td class="memItemRight" valign="bottom"><b>canRead</b> (int length)</td></tr>
+<tr class="memitem:a06ed257e7bc4ea806512d16e86d69651"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#a06ed257e7bc4ea806512d16e86d69651">canRead</a> (int length)</td></tr>
+<tr class="memdesc:a06ed257e7bc4ea806512d16e86d69651"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the reader has enough input to read.  <a href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#a06ed257e7bc4ea806512d16e86d69651">More...</a><br /></td></tr>
 <tr class="separator:a06ed257e7bc4ea806512d16e86d69651"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb8541175da23883d2819c7dea27de2a"><td class="memItemLeft" align="right" valign="top"><a id="adb8541175da23883d2819c7dea27de2a"></a>
-boolean&#160;</td><td class="memItemRight" valign="bottom"><b>canRead</b> ()</td></tr>
+<tr class="memitem:adb8541175da23883d2819c7dea27de2a"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#adb8541175da23883d2819c7dea27de2a">canRead</a> ()</td></tr>
+<tr class="memdesc:adb8541175da23883d2819c7dea27de2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the reader can read at least one more character.  <a href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#adb8541175da23883d2819c7dea27de2a">More...</a><br /></td></tr>
 <tr class="separator:adb8541175da23883d2819c7dea27de2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aead5972aafb2db462584a0e7993578e1"><td class="memItemLeft" align="right" valign="top"><a id="aead5972aafb2db462584a0e7993578e1"></a>
-char&#160;</td><td class="memItemRight" valign="bottom"><b>peek</b> ()</td></tr>
+<tr class="memitem:aead5972aafb2db462584a0e7993578e1"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#aead5972aafb2db462584a0e7993578e1">peek</a> ()</td></tr>
+<tr class="memdesc:aead5972aafb2db462584a0e7993578e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the next character but without consuming it (so the cursor stays at its current position).  <a href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#aead5972aafb2db462584a0e7993578e1">More...</a><br /></td></tr>
 <tr class="separator:aead5972aafb2db462584a0e7993578e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aabff33b95cb94c66b9b8c3ccfeb782ef"><td class="memItemLeft" align="right" valign="top"><a id="aabff33b95cb94c66b9b8c3ccfeb782ef"></a>
-char&#160;</td><td class="memItemRight" valign="bottom"><b>peek</b> (int offset)</td></tr>
+<tr class="memitem:aabff33b95cb94c66b9b8c3ccfeb782ef"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#aabff33b95cb94c66b9b8c3ccfeb782ef">peek</a> (int offset)</td></tr>
+<tr class="memdesc:aabff33b95cb94c66b9b8c3ccfeb782ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the character.  <a href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#aabff33b95cb94c66b9b8c3ccfeb782ef">More...</a><br /></td></tr>
 <tr class="separator:aabff33b95cb94c66b9b8c3ccfeb782ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A string reader can be used to progressively read through a string. </p>
+<p>To do this the string reader has the concept of a "cursor", which is the current position in the input string. All operations not explicitly stating otherwise, like <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#aead5972aafb2db462584a0e7993578e1">peek</a> or <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#a06ed257e7bc4ea806512d16e86d69651">canRead</a>, are relative to the cursor position. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="adb8541175da23883d2819c7dea27de2a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb8541175da23883d2819c7dea27de2a">&#9670;&nbsp;</a></span>canRead() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">boolean com.mojang.brigadier.ImmutableStringReader.canRead </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks if the reader can read at least one more character. </p>
+<dl class="section return"><dt>Returns</dt><dd>true if the reader can read at least one more character </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#a06ed257e7bc4ea806512d16e86d69651" title="Checks if the reader has enough input to read.">canRead(int)</a> </dd></dl>
+
+<p>Implemented in <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_string_reader.html#a2e430065d98ca049dcb12842f140f7b9">com.mojang.brigadier.StringReader</a>.</p>
+
+</div>
+</div>
+<a id="a06ed257e7bc4ea806512d16e86d69651"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06ed257e7bc4ea806512d16e86d69651">&#9670;&nbsp;</a></span>canRead() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">boolean com.mojang.brigadier.ImmutableStringReader.canRead </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>length</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks if the reader has enough input to read. </p>
+<div class="fragment"><div class="line">length </div>
+</div><!-- fragment --><p> more characters.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">length</td><td>the amount of characters to read </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the reader has enough input to read<div class="fragment"><div class="line">length </div>
+</div><!-- fragment --> more characters </dd></dl>
+
+<p>Implemented in <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_string_reader.html#aa2512bff916bc5c83ab7183883bdb110">com.mojang.brigadier.StringReader</a>.</p>
+
+</div>
+</div>
+<a id="a473ae19672ffb40f838d0f8383ea4cf3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a473ae19672ffb40f838d0f8383ea4cf3">&#9670;&nbsp;</a></span>getCursor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int com.mojang.brigadier.ImmutableStringReader.getCursor </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the current cursor position. </p>
+<dl class="section return"><dt>Returns</dt><dd>the current cursor position </dd></dl>
+
+<p>Implemented in <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_string_reader.html#ac1372ce4f86fa7018af1cb66b7213af8">com.mojang.brigadier.StringReader</a>.</p>
+
+</div>
+</div>
+<a id="a3ba138010dc49f927525efb80e4ffb1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ba138010dc49f927525efb80e4ffb1f">&#9670;&nbsp;</a></span>getRead()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">String com.mojang.brigadier.ImmutableStringReader.getRead </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the part of the input that was already read. </p>
+<dl class="section return"><dt>Returns</dt><dd>the part of the input that was already read </dd></dl>
+
+<p>Implemented in <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_string_reader.html#a97ddd3e718cd75bbad5a30932658d9d4">com.mojang.brigadier.StringReader</a>.</p>
+
+</div>
+</div>
+<a id="a7d28f5a5a9f550a6c7dfc5811dac91ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d28f5a5a9f550a6c7dfc5811dac91ad">&#9670;&nbsp;</a></span>getRemaining()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">String com.mojang.brigadier.ImmutableStringReader.getRemaining </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the part of the input that was not yet read. </p>
+<dl class="section return"><dt>Returns</dt><dd>the part of the input that was not yet read </dd></dl>
+
+<p>Implemented in <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_string_reader.html#a0eb96b56457e1944d930096d06024837">com.mojang.brigadier.StringReader</a>.</p>
+
+</div>
+</div>
+<a id="a8fc28d5e13bbc337ba757deff7ad80bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8fc28d5e13bbc337ba757deff7ad80bd">&#9670;&nbsp;</a></span>getRemainingLength()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int com.mojang.brigadier.ImmutableStringReader.getRemainingLength </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the remaining length, so the distance from the cursor to the end of the input. </p>
+<dl class="section return"><dt>Returns</dt><dd>the remaining length, so the distance from the cursor to the end of the input </dd></dl>
+
+<p>Implemented in <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_string_reader.html#ae99ec820f945e6ab0ffa42d5c233c6af">com.mojang.brigadier.StringReader</a>.</p>
+
+</div>
+</div>
+<a id="a9845bda6386d7010dcbba330f96352a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9845bda6386d7010dcbba330f96352a5">&#9670;&nbsp;</a></span>getString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">String com.mojang.brigadier.ImmutableStringReader.getString </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the full input string. </p>
+<dl class="section return"><dt>Returns</dt><dd>the full input string </dd></dl>
+
+<p>Implemented in <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_string_reader.html#a0b0105e3867d1f34faa0049ee08d2fe9">com.mojang.brigadier.StringReader</a>.</p>
+
+</div>
+</div>
+<a id="ae795665cac875f2f282395b086b64400"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae795665cac875f2f282395b086b64400">&#9670;&nbsp;</a></span>getTotalLength()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int com.mojang.brigadier.ImmutableStringReader.getTotalLength </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the total length of the input. </p>
+<dl class="section return"><dt>Returns</dt><dd>the total length of the input </dd></dl>
+
+<p>Implemented in <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_string_reader.html#aab40f03590327882b9a384d8f7fa6262">com.mojang.brigadier.StringReader</a>.</p>
+
+</div>
+</div>
+<a id="aead5972aafb2db462584a0e7993578e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aead5972aafb2db462584a0e7993578e1">&#9670;&nbsp;</a></span>peek() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char com.mojang.brigadier.ImmutableStringReader.peek </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the next character but without consuming it (so the cursor stays at its current position). </p>
+<dl class="section return"><dt>Returns</dt><dd>the next character </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#aabff33b95cb94c66b9b8c3ccfeb782ef" title="Returns the character.">peek(int)</a> </dd></dl>
+
+<p>Implemented in <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_string_reader.html#a4864e36b974a667dd43faa8d49f72d52">com.mojang.brigadier.StringReader</a>.</p>
+
+</div>
+</div>
+<a id="aabff33b95cb94c66b9b8c3ccfeb782ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aabff33b95cb94c66b9b8c3ccfeb782ef">&#9670;&nbsp;</a></span>peek() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char com.mojang.brigadier.ImmutableStringReader.peek </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>offset</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the character. </p>
+<div class="fragment"><div class="line">offset </div>
+</div><!-- fragment --><p> places from the cursor position without consuming it (so the cursor stays at its current position).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">offset</td><td>the offset of the character to peek at </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the character<div class="fragment"><div class="line">offset </div>
+</div><!-- fragment --> places from the current cursor position </dd></dl>
+
+<p>Implemented in <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_string_reader.html#a4e23ed1b8cb7666861914919b5b1afe4">com.mojang.brigadier.StringReader</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>com</b></li><li class="navelem"><b>mojang</b></li><li class="navelem"><b>brigadier</b></li><li class="navelem"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html">ImmutableStringReader</a></li>
-    <li class="footer">Generated on Sat Sep 12 2020 14:30:01 for CommandAPI by
+    <li class="footer">Generated on Wed Sep 16 2020 18:17:15 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

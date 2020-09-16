@@ -1,7 +1,5 @@
 var NAVTREEINDEX1 =
 {
-"classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exceptions.html#a937bb360da12d376743eeb0fe7d84a6f":[1,0,0,0,0,3,1,5],
-"classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exceptions.html#a9612886859ce095984cc3e36cf960afa":[1,0,0,0,0,3,1,8],
 "classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exceptions.html#a97e5908970ea5986824d8876cf009b22":[1,0,0,0,0,3,1,1],
 "classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exceptions.html#aaeeb880ab20c8551f495a9512a97897b":[1,0,0,0,0,3,1,26],
 "classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exceptions.html#ab8df253b4b2a78001b72f85910a5cf3d":[1,0,0,0,0,3,1,15],
@@ -249,5 +247,7 @@ var NAVTREEINDEX1 =
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_axis_argument.html":[1,0,1,0,0,0,2],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_axis_argument.html#a4080a75c60a88300c1777eedbaa9d214":[1,0,1,0,0,0,2,2],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_axis_argument.html#a8a3d07a7de2dd697d78458a05d31c72e":[1,0,1,0,0,0,2,1],
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_axis_argument.html#afb65b0d0165c17f80f9aa54fc1679cc7":[1,0,1,0,0,0,2,0]
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_axis_argument.html#afb65b0d0165c17f80f9aa54fc1679cc7":[1,0,1,0,0,0,2,0],
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_biome_argument.html":[1,0,1,0,0,0,3],
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_biome_argument.html#a25fb861d1ffd3b66b09df9840e493e1c":[1,0,1,0,0,0,3,0]
 };

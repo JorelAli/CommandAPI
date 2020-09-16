@@ -91,6 +91,9 @@ $(document).ready(function(){initNavTree('classcom_1_1mojang_1_1brigadier_1_1exc
 <div class="title">com.mojang.brigadier.exceptions.DynamicCommandExceptionType Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>A <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_exception_type.html">CommandExceptionType</a> taking one input and returning a message based on it.  
+ <a href="classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_dynamic_command_exception_type.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for com.mojang.brigadier.exceptions.DynamicCommandExceptionType:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -99,7 +102,7 @@ $(document).ready(function(){initNavTree('classcom_1_1mojang_1_1brigadier_1_1exc
  <div class="center">
   <img src="classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_dynamic_command_exception_type.png" usemap="#com.mojang.brigadier.exceptions.DynamicCommandExceptionType_map" alt=""/>
   <map id="com.mojang.brigadier.exceptions.DynamicCommandExceptionType_map" name="com.mojang.brigadier.exceptions.DynamicCommandExceptionType_map">
-<area href="interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_exception_type.html" alt="com.mojang.brigadier.exceptions.CommandExceptionType" shape="rect" coords="0,0,389,24"/>
+<area href="interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_exception_type.html" title="A marker interface that indicates that the implementing class is a valid cause for a CommandSyntaxExc..." alt="com.mojang.brigadier.exceptions.CommandExceptionType" shape="rect" coords="0,0,389,24"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -108,20 +111,89 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae8b06a489d458c0380d2364529fd6916"><td class="memItemLeft" align="right" valign="top"><a id="ae8b06a489d458c0380d2364529fd6916"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>DynamicCommandExceptionType</b> (final Function&lt; Object, <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_message.html">Message</a> &gt; function)</td></tr>
 <tr class="separator:ae8b06a489d458c0380d2364529fd6916"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba47106c5aebba0a1ff8149ccda4d476"><td class="memItemLeft" align="right" valign="top"><a id="aba47106c5aebba0a1ff8149ccda4d476"></a>
-<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception.html">CommandSyntaxException</a>&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (final Object arg)</td></tr>
+<tr class="memitem:aba47106c5aebba0a1ff8149ccda4d476"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception.html">CommandSyntaxException</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_dynamic_command_exception_type.html#aba47106c5aebba0a1ff8149ccda4d476">create</a> (final Object arg)</td></tr>
+<tr class="memdesc:aba47106c5aebba0a1ff8149ccda4d476"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception.html">CommandSyntaxException</a> using the passed argument.  <a href="classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_dynamic_command_exception_type.html#aba47106c5aebba0a1ff8149ccda4d476">More...</a><br /></td></tr>
 <tr class="separator:aba47106c5aebba0a1ff8149ccda4d476"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0d6e16174caebb68a735c7faf880587c"><td class="memItemLeft" align="right" valign="top"><a id="a0d6e16174caebb68a735c7faf880587c"></a>
-<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception.html">CommandSyntaxException</a>&#160;</td><td class="memItemRight" valign="bottom"><b>createWithContext</b> (final <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html">ImmutableStringReader</a> reader, final Object arg)</td></tr>
+<tr class="memitem:a0d6e16174caebb68a735c7faf880587c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception.html">CommandSyntaxException</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_dynamic_command_exception_type.html#a0d6e16174caebb68a735c7faf880587c">createWithContext</a> (final <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html">ImmutableStringReader</a> reader, final Object arg)</td></tr>
+<tr class="memdesc:a0d6e16174caebb68a735c7faf880587c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception.html">CommandSyntaxException</a> using the passed argument and includes information about the position and input.  <a href="classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_dynamic_command_exception_type.html#a0d6e16174caebb68a735c7faf880587c">More...</a><br /></td></tr>
 <tr class="separator:a0d6e16174caebb68a735c7faf880587c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_exception_type.html">CommandExceptionType</a> taking one input and returning a message based on it. </p>
+<p>The argument can be used to e.g. format a message and display the input as well as why it did not match some criteria. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="aba47106c5aebba0a1ff8149ccda4d476"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba47106c5aebba0a1ff8149ccda4d476">&#9670;&nbsp;</a></span>create()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception.html">CommandSyntaxException</a> com.mojang.brigadier.exceptions.DynamicCommandExceptionType.create </td>
+          <td>(</td>
+          <td class="paramtype">final Object&#160;</td>
+          <td class="paramname"><em>arg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception.html">CommandSyntaxException</a> using the passed argument. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">arg</td><td>the argument </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a constructed <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception.html">CommandSyntaxException</a> </dd></dl>
+
+</div>
+</div>
+<a id="a0d6e16174caebb68a735c7faf880587c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d6e16174caebb68a735c7faf880587c">&#9670;&nbsp;</a></span>createWithContext()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception.html">CommandSyntaxException</a> com.mojang.brigadier.exceptions.DynamicCommandExceptionType.createWithContext </td>
+          <td>(</td>
+          <td class="paramtype">final <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html">ImmutableStringReader</a>&#160;</td>
+          <td class="paramname"><em>reader</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">final Object&#160;</td>
+          <td class="paramname"><em>arg</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception.html">CommandSyntaxException</a> using the passed argument and includes information about the position and input. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">reader</td><td>the <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html">ImmutableStringReader</a> giving information about the input and the place the error occurred </td></tr>
+    <tr><td class="paramname">arg</td><td>the argument </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a constructed <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception.html">CommandSyntaxException</a> </dd></dl>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>com</b></li><li class="navelem"><b>mojang</b></li><li class="navelem"><b>brigadier</b></li><li class="navelem"><b>exceptions</b></li><li class="navelem"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_dynamic_command_exception_type.html">DynamicCommandExceptionType</a></li>
-    <li class="footer">Generated on Sat Sep 12 2020 14:30:01 for CommandAPI by
+    <li class="footer">Generated on Wed Sep 16 2020 18:17:16 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

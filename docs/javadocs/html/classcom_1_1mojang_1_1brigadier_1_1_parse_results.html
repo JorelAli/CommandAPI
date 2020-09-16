@@ -91,6 +91,9 @@ $(document).ready(function(){initNavTree('classcom_1_1mojang_1_1brigadier_1_1_pa
 <div class="title">com.mojang.brigadier.ParseResults&lt; S &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Consolidates the results of parsing a command in an object.  
+ <a href="classcom_1_1mojang_1_1brigadier_1_1_parse_results.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -100,23 +103,92 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a497e2d5926cf9eb3a4b31b67f94da2bf"><td class="memItemLeft" align="right" valign="top"><a id="a497e2d5926cf9eb3a4b31b67f94da2bf"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>ParseResults</b> (final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context_builder.html">CommandContextBuilder</a>&lt; S &gt; context)</td></tr>
 <tr class="separator:a497e2d5926cf9eb3a4b31b67f94da2bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a513ec9d0a48f5633618ed4dccaf4d442"><td class="memItemLeft" align="right" valign="top"><a id="a513ec9d0a48f5633618ed4dccaf4d442"></a>
-<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context_builder.html">CommandContextBuilder</a>&lt; S &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getContext</b> ()</td></tr>
+<tr class="memitem:a513ec9d0a48f5633618ed4dccaf4d442"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context_builder.html">CommandContextBuilder</a>&lt; S &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_parse_results.html#a513ec9d0a48f5633618ed4dccaf4d442">getContext</a> ()</td></tr>
+<tr class="memdesc:a513ec9d0a48f5633618ed4dccaf4d442"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="">CommandContext</a> that was created.  <a href="classcom_1_1mojang_1_1brigadier_1_1_parse_results.html#a513ec9d0a48f5633618ed4dccaf4d442">More...</a><br /></td></tr>
 <tr class="separator:a513ec9d0a48f5633618ed4dccaf4d442"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4b456394b31e9156cef22d010def58ff"><td class="memItemLeft" align="right" valign="top"><a id="a4b456394b31e9156cef22d010def58ff"></a>
-<a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html">ImmutableStringReader</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getReader</b> ()</td></tr>
+<tr class="memitem:a4b456394b31e9156cef22d010def58ff"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html">ImmutableStringReader</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_parse_results.html#a4b456394b31e9156cef22d010def58ff">getReader</a> ()</td></tr>
+<tr class="memdesc:a4b456394b31e9156cef22d010def58ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">An immutable version of the string reader that was used to read the input.  <a href="classcom_1_1mojang_1_1brigadier_1_1_parse_results.html#a4b456394b31e9156cef22d010def58ff">More...</a><br /></td></tr>
 <tr class="separator:a4b456394b31e9156cef22d010def58ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a99e46d3829af9140b032db103857f5"><td class="memItemLeft" align="right" valign="top"><a id="a9a99e46d3829af9140b032db103857f5"></a>
-Map&lt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt;, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception.html">CommandSyntaxException</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getExceptions</b> ()</td></tr>
+<tr class="memitem:a9a99e46d3829af9140b032db103857f5"><td class="memItemLeft" align="right" valign="top">Map&lt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt;, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception.html">CommandSyntaxException</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_parse_results.html#a9a99e46d3829af9140b032db103857f5">getExceptions</a> ()</td></tr>
+<tr class="memdesc:a9a99e46d3829af9140b032db103857f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all exceptions that occurred while parsing together with the node that caused them.  <a href="classcom_1_1mojang_1_1brigadier_1_1_parse_results.html#a9a99e46d3829af9140b032db103857f5">More...</a><br /></td></tr>
 <tr class="separator:a9a99e46d3829af9140b032db103857f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Consolidates the results of parsing a command in an object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">&lt;S&gt;</td><td>the type of the command source </td></tr>
+  </table>
+  </dd>
+</dl>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a513ec9d0a48f5633618ed4dccaf4d442"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a513ec9d0a48f5633618ed4dccaf4d442">&#9670;&nbsp;</a></span>getContext()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context_builder.html">CommandContextBuilder</a>&lt;S&gt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_parse_results.html">com.mojang.brigadier.ParseResults</a>&lt; S &gt;.getContext </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The <a class="el" href="">CommandContext</a> that was created. </p>
+<dl class="section return"><dt>Returns</dt><dd>the created command context </dd></dl>
+
+</div>
+</div>
+<a id="a9a99e46d3829af9140b032db103857f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a99e46d3829af9140b032db103857f5">&#9670;&nbsp;</a></span>getExceptions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Map&lt;<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt;S&gt;, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception.html">CommandSyntaxException</a>&gt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_parse_results.html">com.mojang.brigadier.ParseResults</a>&lt; S &gt;.getExceptions </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns all exceptions that occurred while parsing together with the node that caused them. </p>
+<dl class="section return"><dt>Returns</dt><dd>all exceptions that occurred while parsing together with the node that caused them </dd></dl>
+
+</div>
+</div>
+<a id="a4b456394b31e9156cef22d010def58ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b456394b31e9156cef22d010def58ff">&#9670;&nbsp;</a></span>getReader()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html">ImmutableStringReader</a> <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_parse_results.html">com.mojang.brigadier.ParseResults</a>&lt; S &gt;.getReader </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>An immutable version of the string reader that was used to read the input. </p>
+<dl class="section return"><dt>Returns</dt><dd>the string reader that was used to read the input </dd></dl>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>com</b></li><li class="navelem"><b>mojang</b></li><li class="navelem"><b>brigadier</b></li><li class="navelem"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_parse_results.html">ParseResults</a></li>
-    <li class="footer">Generated on Sat Sep 12 2020 14:30:01 for CommandAPI by
+    <li class="footer">Generated on Wed Sep 16 2020 18:17:15 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

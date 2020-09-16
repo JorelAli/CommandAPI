@@ -92,6 +92,9 @@ $(document).ready(function(){initNavTree('classcom_1_1mojang_1_1brigadier_1_1tre
 <div class="title">com.mojang.brigadier.tree.CommandNode&lt; S &gt; Class Template Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>The abstract base for the command tree, just representing a single command node.  
+ <a href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for com.mojang.brigadier.tree.CommandNode&lt; S &gt;:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -100,37 +103,37 @@ $(document).ready(function(){initNavTree('classcom_1_1mojang_1_1brigadier_1_1tre
  <div class="center">
   <img src="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.png" usemap="#com.mojang.brigadier.tree.CommandNode_3C_20S_20_3E_map" alt=""/>
   <map id="com.mojang.brigadier.tree.CommandNode_3C_20S_20_3E_map" name="com.mojang.brigadier.tree.CommandNode_3C_20S_20_3E_map">
-<area href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_argument_command_node.html" alt="com.mojang.brigadier.tree.ArgumentCommandNode&lt; S, T &gt;" shape="rect" coords="0,112,351,136"/>
-<area href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_literal_command_node.html" alt="com.mojang.brigadier.tree.LiteralCommandNode&lt; S &gt;" shape="rect" coords="361,112,712,136"/>
-<area href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_root_command_node.html" alt="com.mojang.brigadier.tree.RootCommandNode&lt; S &gt;" shape="rect" coords="722,112,1073,136"/>
+<area href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_argument_command_node.html" title="A CommandNode that is triggered by an argument, like a number." alt="com.mojang.brigadier.tree.ArgumentCommandNode&lt; S, T &gt;" shape="rect" coords="0,112,351,136"/>
+<area href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_literal_command_node.html" title="An CommandNode that is triggered by a literal (i.e." alt="com.mojang.brigadier.tree.LiteralCommandNode&lt; S &gt;" shape="rect" coords="361,112,712,136"/>
+<area href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_root_command_node.html" title="The root of the command node tree, which has basically no functionality except to hold the tree toget..." alt="com.mojang.brigadier.tree.RootCommandNode&lt; S &gt;" shape="rect" coords="722,112,1073,136"/>
   </map>
 </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:acd5f042039c8253a7007316c0eb3a618"><td class="memItemLeft" align="right" valign="top"><a id="acd5f042039c8253a7007316c0eb3a618"></a>
-<a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_command.html">Command</a>&lt; S &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getCommand</b> ()</td></tr>
+<tr class="memitem:acd5f042039c8253a7007316c0eb3a618"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_command.html">Command</a>&lt; S &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#acd5f042039c8253a7007316c0eb3a618">getCommand</a> ()</td></tr>
+<tr class="memdesc:acd5f042039c8253a7007316c0eb3a618"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the command to execute when executing this command node.  <a href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#acd5f042039c8253a7007316c0eb3a618">More...</a><br /></td></tr>
 <tr class="separator:acd5f042039c8253a7007316c0eb3a618"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad542ff69983a03d8efe59e6fb530ce5f"><td class="memItemLeft" align="right" valign="top"><a id="ad542ff69983a03d8efe59e6fb530ce5f"></a>
-Collection&lt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getChildren</b> ()</td></tr>
+<tr class="memitem:ad542ff69983a03d8efe59e6fb530ce5f"><td class="memItemLeft" align="right" valign="top">Collection&lt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#ad542ff69983a03d8efe59e6fb530ce5f">getChildren</a> ()</td></tr>
+<tr class="memdesc:ad542ff69983a03d8efe59e6fb530ce5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all child command nodes.  <a href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#ad542ff69983a03d8efe59e6fb530ce5f">More...</a><br /></td></tr>
 <tr class="separator:ad542ff69983a03d8efe59e6fb530ce5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a720e0cfe35d5e7788f4636b73ea93fa4"><td class="memItemLeft" align="right" valign="top"><a id="a720e0cfe35d5e7788f4636b73ea93fa4"></a>
-<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getChild</b> (final String name)</td></tr>
+<tr class="memitem:a720e0cfe35d5e7788f4636b73ea93fa4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a720e0cfe35d5e7788f4636b73ea93fa4">getChild</a> (final String name)</td></tr>
+<tr class="memdesc:a720e0cfe35d5e7788f4636b73ea93fa4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a child with the given <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#aa9165f37a032b65528fcde6bb7f6f8d4">getName</a>.  <a href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a720e0cfe35d5e7788f4636b73ea93fa4">More...</a><br /></td></tr>
 <tr class="separator:a720e0cfe35d5e7788f4636b73ea93fa4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a699828668e970e477991208cd5e74634"><td class="memItemLeft" align="right" valign="top"><a id="a699828668e970e477991208cd5e74634"></a>
-<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getRedirect</b> ()</td></tr>
+<tr class="memitem:a699828668e970e477991208cd5e74634"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a699828668e970e477991208cd5e74634">getRedirect</a> ()</td></tr>
+<tr class="memdesc:a699828668e970e477991208cd5e74634"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the command node to redirect to.  <a href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a699828668e970e477991208cd5e74634">More...</a><br /></td></tr>
 <tr class="separator:a699828668e970e477991208cd5e74634"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ec0fc503cc0a62c6b3dbba12ef41c13"><td class="memItemLeft" align="right" valign="top"><a id="a6ec0fc503cc0a62c6b3dbba12ef41c13"></a>
-<a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_redirect_modifier.html">RedirectModifier</a>&lt; S &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getRedirectModifier</b> ()</td></tr>
+<tr class="memitem:a6ec0fc503cc0a62c6b3dbba12ef41c13"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_redirect_modifier.html">RedirectModifier</a>&lt; S &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a6ec0fc503cc0a62c6b3dbba12ef41c13">getRedirectModifier</a> ()</td></tr>
+<tr class="memdesc:a6ec0fc503cc0a62c6b3dbba12ef41c13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the redirect modifier to apply when redirecting.  <a href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a6ec0fc503cc0a62c6b3dbba12ef41c13">More...</a><br /></td></tr>
 <tr class="separator:a6ec0fc503cc0a62c6b3dbba12ef41c13"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada85bee27df90c95429503814db9fea7"><td class="memItemLeft" align="right" valign="top"><a id="ada85bee27df90c95429503814db9fea7"></a>
-boolean&#160;</td><td class="memItemRight" valign="bottom"><b>canUse</b> (final S source)</td></tr>
+<tr class="memitem:ada85bee27df90c95429503814db9fea7"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#ada85bee27df90c95429503814db9fea7">canUse</a> (final S source)</td></tr>
+<tr class="memdesc:ada85bee27df90c95429503814db9fea7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether the given command source can use this command node.  <a href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#ada85bee27df90c95429503814db9fea7">More...</a><br /></td></tr>
 <tr class="separator:ada85bee27df90c95429503814db9fea7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad046050eed92f3560aaa7304dff72025"><td class="memItemLeft" align="right" valign="top"><a id="ad046050eed92f3560aaa7304dff72025"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addChild</b> (final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; node)</td></tr>
+<tr class="memitem:ad046050eed92f3560aaa7304dff72025"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#ad046050eed92f3560aaa7304dff72025">addChild</a> (final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; node)</td></tr>
+<tr class="memdesc:ad046050eed92f3560aaa7304dff72025"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a new child node to this command node.  <a href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#ad046050eed92f3560aaa7304dff72025">More...</a><br /></td></tr>
 <tr class="separator:ad046050eed92f3560aaa7304dff72025"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4a6f9c8b501465217bd352d653d7539"><td class="memItemLeft" align="right" valign="top"><a id="ac4a6f9c8b501465217bd352d653d7539"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>findAmbiguities</b> (final <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_ambiguity_consumer.html">AmbiguityConsumer</a>&lt; S &gt; consumer)</td></tr>
+<tr class="memitem:ac4a6f9c8b501465217bd352d653d7539"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#ac4a6f9c8b501465217bd352d653d7539">findAmbiguities</a> (final <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_ambiguity_consumer.html">AmbiguityConsumer</a>&lt; S &gt; consumer)</td></tr>
+<tr class="memdesc:ac4a6f9c8b501465217bd352d653d7539"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tries to find ambiguities in the children of this command node and recurses down.  <a href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#ac4a6f9c8b501465217bd352d653d7539">More...</a><br /></td></tr>
 <tr class="separator:ac4a6f9c8b501465217bd352d653d7539"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a74c24a1bdba6f773f768e8f8d75dd654"><td class="memItemLeft" align="right" valign="top"><a id="a74c24a1bdba6f773f768e8f8d75dd654"></a>
 boolean&#160;</td><td class="memItemRight" valign="bottom"><b>equals</b> (final Object o)</td></tr>
@@ -138,35 +141,35 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>equals</b> (final 
 <tr class="memitem:ae896e51d707e753851a6b1803c34f743"><td class="memItemLeft" align="right" valign="top"><a id="ae896e51d707e753851a6b1803c34f743"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>hashCode</b> ()</td></tr>
 <tr class="separator:ae896e51d707e753851a6b1803c34f743"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace9e8fb3890f9639b0d6c1e159cdfb1a"><td class="memItemLeft" align="right" valign="top"><a id="ace9e8fb3890f9639b0d6c1e159cdfb1a"></a>
-Predicate&lt; S &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getRequirement</b> ()</td></tr>
+<tr class="memitem:ace9e8fb3890f9639b0d6c1e159cdfb1a"><td class="memItemLeft" align="right" valign="top">Predicate&lt; S &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#ace9e8fb3890f9639b0d6c1e159cdfb1a">getRequirement</a> ()</td></tr>
+<tr class="memdesc:ace9e8fb3890f9639b0d6c1e159cdfb1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the requirement for this command node, that is used by <a class="el" href="">canUse(Object)</a>.  <a href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#ace9e8fb3890f9639b0d6c1e159cdfb1a">More...</a><br /></td></tr>
 <tr class="separator:ace9e8fb3890f9639b0d6c1e159cdfb1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa9165f37a032b65528fcde6bb7f6f8d4"><td class="memItemLeft" align="right" valign="top"><a id="aa9165f37a032b65528fcde6bb7f6f8d4"></a>
-abstract String&#160;</td><td class="memItemRight" valign="bottom"><b>getName</b> ()</td></tr>
+<tr class="memitem:aa9165f37a032b65528fcde6bb7f6f8d4"><td class="memItemLeft" align="right" valign="top">abstract String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#aa9165f37a032b65528fcde6bb7f6f8d4">getName</a> ()</td></tr>
+<tr class="memdesc:aa9165f37a032b65528fcde6bb7f6f8d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of this command node.  <a href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#aa9165f37a032b65528fcde6bb7f6f8d4">More...</a><br /></td></tr>
 <tr class="separator:aa9165f37a032b65528fcde6bb7f6f8d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb2365ae320b15fc6f6ef7840042c95f"><td class="memItemLeft" align="right" valign="top"><a id="adb2365ae320b15fc6f6ef7840042c95f"></a>
-abstract String&#160;</td><td class="memItemRight" valign="bottom"><b>getUsageText</b> ()</td></tr>
+<tr class="memitem:adb2365ae320b15fc6f6ef7840042c95f"><td class="memItemLeft" align="right" valign="top">abstract String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#adb2365ae320b15fc6f6ef7840042c95f">getUsageText</a> ()</td></tr>
+<tr class="memdesc:adb2365ae320b15fc6f6ef7840042c95f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns some usage text for this command node.  <a href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#adb2365ae320b15fc6f6ef7840042c95f">More...</a><br /></td></tr>
 <tr class="separator:adb2365ae320b15fc6f6ef7840042c95f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a56a9832082abca83e51b87cdc4f64e04"><td class="memItemLeft" align="right" valign="top"><a id="a56a9832082abca83e51b87cdc4f64e04"></a>
-abstract void&#160;</td><td class="memItemRight" valign="bottom"><b>parse</b> (<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_string_reader.html">StringReader</a> reader, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context_builder.html">CommandContextBuilder</a>&lt; S &gt; contextBuilder)  throws CommandSyntaxException</td></tr>
+<tr class="memitem:a56a9832082abca83e51b87cdc4f64e04"><td class="memItemLeft" align="right" valign="top">abstract void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a56a9832082abca83e51b87cdc4f64e04">parse</a> (<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_string_reader.html">StringReader</a> reader, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context_builder.html">CommandContextBuilder</a>&lt; S &gt; contextBuilder)  throws CommandSyntaxException</td></tr>
+<tr class="memdesc:a56a9832082abca83e51b87cdc4f64e04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tries to parse the command given by the reader and stores the results in the contextBuilder.  <a href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a56a9832082abca83e51b87cdc4f64e04">More...</a><br /></td></tr>
 <tr class="separator:a56a9832082abca83e51b87cdc4f64e04"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1eca3b41c3b1c776ef8bb3156130949b"><td class="memItemLeft" align="right" valign="top"><a id="a1eca3b41c3b1c776ef8bb3156130949b"></a>
-abstract CompletableFuture&lt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions.html">Suggestions</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>listSuggestions</b> (<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context.html">CommandContext</a>&lt; S &gt; context, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions_builder.html">SuggestionsBuilder</a> builder)  throws CommandSyntaxException</td></tr>
+<tr class="memitem:a1eca3b41c3b1c776ef8bb3156130949b"><td class="memItemLeft" align="right" valign="top">abstract CompletableFuture&lt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions.html">Suggestions</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a1eca3b41c3b1c776ef8bb3156130949b">listSuggestions</a> (<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context.html">CommandContext</a>&lt; S &gt; context, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions_builder.html">SuggestionsBuilder</a> builder)  throws CommandSyntaxException</td></tr>
+<tr class="memdesc:a1eca3b41c3b1c776ef8bb3156130949b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lists suggestions for this command node, given the context and uses the passed <a class="el" href="">SuggestionsBuilder</a> to build them.  <a href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a1eca3b41c3b1c776ef8bb3156130949b">More...</a><br /></td></tr>
 <tr class="separator:a1eca3b41c3b1c776ef8bb3156130949b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a83f615ccea233eb9642e34a949256ef7"><td class="memItemLeft" align="right" valign="top"><a id="a83f615ccea233eb9642e34a949256ef7"></a>
-abstract <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html">ArgumentBuilder</a>&lt; S, ?&gt;&#160;</td><td class="memItemRight" valign="bottom"><b>createBuilder</b> ()</td></tr>
+<tr class="memitem:a83f615ccea233eb9642e34a949256ef7"><td class="memItemLeft" align="right" valign="top">abstract <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html">ArgumentBuilder</a>&lt; S, ?&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a83f615ccea233eb9642e34a949256ef7">createBuilder</a> ()</td></tr>
+<tr class="memdesc:a83f615ccea233eb9642e34a949256ef7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a builder for this command node.  <a href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a83f615ccea233eb9642e34a949256ef7">More...</a><br /></td></tr>
 <tr class="separator:a83f615ccea233eb9642e34a949256ef7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8a3cfe9177bf476996497c696f57b0e7"><td class="memItemLeft" align="right" valign="top"><a id="a8a3cfe9177bf476996497c696f57b0e7"></a>
-Collection&lt;? extends <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getRelevantNodes</b> (final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_string_reader.html">StringReader</a> input)</td></tr>
+<tr class="memitem:a8a3cfe9177bf476996497c696f57b0e7"><td class="memItemLeft" align="right" valign="top">Collection&lt;? extends <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a8a3cfe9177bf476996497c696f57b0e7">getRelevantNodes</a> (final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_string_reader.html">StringReader</a> input)</td></tr>
+<tr class="memdesc:a8a3cfe9177bf476996497c696f57b0e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all relevant command nodes for the input, so all nodes that are probably able to parse the input.  <a href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a8a3cfe9177bf476996497c696f57b0e7">More...</a><br /></td></tr>
 <tr class="separator:a8a3cfe9177bf476996497c696f57b0e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa7a6326938609854466d2320faacaac7"><td class="memItemLeft" align="right" valign="top"><a id="aa7a6326938609854466d2320faacaac7"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>compareTo</b> (final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; o)</td></tr>
 <tr class="separator:aa7a6326938609854466d2320faacaac7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a351de90d7eaac3fa329a0615a11dd348"><td class="memItemLeft" align="right" valign="top"><a id="a351de90d7eaac3fa329a0615a11dd348"></a>
-boolean&#160;</td><td class="memItemRight" valign="bottom"><b>isFork</b> ()</td></tr>
+<tr class="memitem:a351de90d7eaac3fa329a0615a11dd348"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a351de90d7eaac3fa329a0615a11dd348">isFork</a> ()</td></tr>
+<tr class="memdesc:a351de90d7eaac3fa329a0615a11dd348"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether this command node forks.  <a href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a351de90d7eaac3fa329a0615a11dd348">More...</a><br /></td></tr>
 <tr class="separator:a351de90d7eaac3fa329a0615a11dd348"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad9c734606deaaf1da08aa1479a795153"><td class="memItemLeft" align="right" valign="top"><a id="ad9c734606deaaf1da08aa1479a795153"></a>
-abstract Collection&lt; String &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getExamples</b> ()</td></tr>
+<tr class="memitem:ad9c734606deaaf1da08aa1479a795153"><td class="memItemLeft" align="right" valign="top">abstract Collection&lt; String &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#ad9c734606deaaf1da08aa1479a795153">getExamples</a> ()</td></tr>
+<tr class="memdesc:ad9c734606deaaf1da08aa1479a795153"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns example usages for this command node, which are used to find ambiguities.  <a href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#ad9c734606deaaf1da08aa1479a795153">More...</a><br /></td></tr>
 <tr class="separator:ad9c734606deaaf1da08aa1479a795153"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
@@ -174,20 +177,593 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a40869c0f87264413208ad1119f32f055"><td class="memItemLeft" align="right" valign="top"><a id="a40869c0f87264413208ad1119f32f055"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>CommandNode</b> (final <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_command.html">Command</a>&lt; S &gt; command, final Predicate&lt; S &gt; requirement, final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; redirect, final <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_redirect_modifier.html">RedirectModifier</a>&lt; S &gt; modifier, final boolean forks)</td></tr>
 <tr class="separator:a40869c0f87264413208ad1119f32f055"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af06cb38e7e526cff0f01d442a810bef9"><td class="memItemLeft" align="right" valign="top"><a id="af06cb38e7e526cff0f01d442a810bef9"></a>
-abstract boolean&#160;</td><td class="memItemRight" valign="bottom"><b>isValidInput</b> (final String input)</td></tr>
+<tr class="memitem:af06cb38e7e526cff0f01d442a810bef9"><td class="memItemLeft" align="right" valign="top">abstract boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#af06cb38e7e526cff0f01d442a810bef9">isValidInput</a> (final String input)</td></tr>
+<tr class="memdesc:af06cb38e7e526cff0f01d442a810bef9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the given input is valid for this command node, i.e.  <a href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#af06cb38e7e526cff0f01d442a810bef9">More...</a><br /></td></tr>
 <tr class="separator:af06cb38e7e526cff0f01d442a810bef9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d697d9f6d61686529499415e51031ea"><td class="memItemLeft" align="right" valign="top"><a id="a7d697d9f6d61686529499415e51031ea"></a>
-abstract String&#160;</td><td class="memItemRight" valign="bottom"><b>getSortedKey</b> ()</td></tr>
+<tr class="memitem:a7d697d9f6d61686529499415e51031ea"><td class="memItemLeft" align="right" valign="top">abstract String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a7d697d9f6d61686529499415e51031ea">getSortedKey</a> ()</td></tr>
+<tr class="memdesc:a7d697d9f6d61686529499415e51031ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a key for this command node, that is used for ordering the command nodes.  <a href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a7d697d9f6d61686529499415e51031ea">More...</a><br /></td></tr>
 <tr class="separator:a7d697d9f6d61686529499415e51031ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>The abstract base for the command tree, just representing a single command node. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">&lt;S&gt;</td><td>the type of the command source </td></tr>
+  </table>
+  </dd>
+</dl>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ad046050eed92f3560aaa7304dff72025"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad046050eed92f3560aaa7304dff72025">&#9670;&nbsp;</a></span>addChild()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">com.mojang.brigadier.tree.CommandNode</a>&lt; S &gt;.addChild </td>
+          <td>(</td>
+          <td class="paramtype">final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt;&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adds a new child node to this command node. </p>
+<p><br  />
+This will replace a command node with the same name, but there exist some bugs and some design decisions are not final as of now. Subsequently the exact behaviour in this case is not mandated. For a more detailed post about the problems, read this <a href="https://github.com/Mojang/brigadier/issues/32">github issue</a>. </p>
+<p><br  />
+<b>You are not allowed to add children to commands with a <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a699828668e970e477991208cd5e74634">getRedirect()</a> target!</b></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">node</td><td>the child command node to add </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">UnsupportedOperationException</td><td>if you try to add a <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_root_command_node.html">RootCommandNode</a> to any other command node </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ada85bee27df90c95429503814db9fea7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada85bee27df90c95429503814db9fea7">&#9670;&nbsp;</a></span>canUse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">boolean <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">com.mojang.brigadier.tree.CommandNode</a>&lt; S &gt;.canUse </td>
+          <td>(</td>
+          <td class="paramtype">final S&#160;</td>
+          <td class="paramname"><em>source</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks whether the given command source can use this command node. </p>
+<p>This just checks the <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#ace9e8fb3890f9639b0d6c1e159cdfb1a">getRequirement()</a> predicate, which could e.g. check for permissions.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">source</td><td>the command source to check for </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the given command source can use this command node </dd></dl>
+
+</div>
+</div>
+<a id="a83f615ccea233eb9642e34a949256ef7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a83f615ccea233eb9642e34a949256ef7">&#9670;&nbsp;</a></span>createBuilder()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">abstract <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html">ArgumentBuilder</a>&lt;S, ?&gt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">com.mojang.brigadier.tree.CommandNode</a>&lt; S &gt;.createBuilder </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">abstract</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates a builder for this command node. </p>
+<dl class="section return"><dt>Returns</dt><dd>a builder for this command node </dd></dl>
+
+<p>Reimplemented in <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_literal_command_node.html#a3d4eacfd45ef7891008c31e48b01f947">com.mojang.brigadier.tree.LiteralCommandNode&lt; S &gt;</a>, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_argument_command_node.html#a61fb295a75d68adb63f2359e7fe389da">com.mojang.brigadier.tree.ArgumentCommandNode&lt; S, T &gt;</a>, and <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_root_command_node.html#a3992ae98f7d8a3d2a13d2e3acae96767">com.mojang.brigadier.tree.RootCommandNode&lt; S &gt;</a>.</p>
+
+</div>
+</div>
+<a id="ac4a6f9c8b501465217bd352d653d7539"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4a6f9c8b501465217bd352d653d7539">&#9670;&nbsp;</a></span>findAmbiguities()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">com.mojang.brigadier.tree.CommandNode</a>&lt; S &gt;.findAmbiguities </td>
+          <td>(</td>
+          <td class="paramtype">final <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_ambiguity_consumer.html">AmbiguityConsumer</a>&lt; S &gt;&#160;</td>
+          <td class="paramname"><em>consumer</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Tries to find ambiguities in the children of this command node and recurses down. </p>
+<p>This can be used to detect whether multiple paths could be taken with a single input, which is not an ideal state for parsing commands. See <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_command_dispatcher.html#aa64998a8541e504e628d7003f7fe5cfb">CommandDispatcher#findAmbiguities</a> for more information.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">consumer</td><td>the <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_ambiguity_consumer.html">AmbiguityConsumer</a> to call when ambiguities are found </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a720e0cfe35d5e7788f4636b73ea93fa4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a720e0cfe35d5e7788f4636b73ea93fa4">&#9670;&nbsp;</a></span>getChild()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt;S&gt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">com.mojang.brigadier.tree.CommandNode</a>&lt; S &gt;.getChild </td>
+          <td>(</td>
+          <td class="paramtype">final String&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a child with the given <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#aa9165f37a032b65528fcde6bb7f6f8d4">getName</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>the name of the child command node </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the child with that name or null if not found </dd></dl>
+
+</div>
+</div>
+<a id="ad542ff69983a03d8efe59e6fb530ce5f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad542ff69983a03d8efe59e6fb530ce5f">&#9670;&nbsp;</a></span>getChildren()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Collection&lt;<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt;S&gt; &gt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">com.mojang.brigadier.tree.CommandNode</a>&lt; S &gt;.getChildren </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns all child command nodes. </p>
+<dl class="section return"><dt>Returns</dt><dd>all child command nodes </dd></dl>
+
+</div>
+</div>
+<a id="acd5f042039c8253a7007316c0eb3a618"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd5f042039c8253a7007316c0eb3a618">&#9670;&nbsp;</a></span>getCommand()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_command.html">Command</a>&lt;S&gt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">com.mojang.brigadier.tree.CommandNode</a>&lt; S &gt;.getCommand </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the command to execute when executing this command node. </p>
+<dl class="section return"><dt>Returns</dt><dd>the command to execute when executing this command node or null if not set </dd></dl>
+
+</div>
+</div>
+<a id="ad9c734606deaaf1da08aa1479a795153"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9c734606deaaf1da08aa1479a795153">&#9670;&nbsp;</a></span>getExamples()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">abstract Collection&lt;String&gt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">com.mojang.brigadier.tree.CommandNode</a>&lt; S &gt;.getExamples </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">abstract</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns example usages for this command node, which are used to find ambiguities. </p>
+<dl class="section return"><dt>Returns</dt><dd>some example usages for this command node, which are used to find ambiguities </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#ac4a6f9c8b501465217bd352d653d7539" title="Tries to find ambiguities in the children of this command node and recurses down.">findAmbiguities</a> </dd></dl>
+
+<p>Reimplemented in <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_argument_command_node.html#a6ec292c65dd154b0c6c74b97cfde64df">com.mojang.brigadier.tree.ArgumentCommandNode&lt; S, T &gt;</a>, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_literal_command_node.html#a1a93cf9aa54dac3fa53c21e65dae1efd">com.mojang.brigadier.tree.LiteralCommandNode&lt; S &gt;</a>, and <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_root_command_node.html#aea803e0b19170e620624e0be31e73050">com.mojang.brigadier.tree.RootCommandNode&lt; S &gt;</a>.</p>
+
+</div>
+</div>
+<a id="aa9165f37a032b65528fcde6bb7f6f8d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9165f37a032b65528fcde6bb7f6f8d4">&#9670;&nbsp;</a></span>getName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">abstract String <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">com.mojang.brigadier.tree.CommandNode</a>&lt; S &gt;.getName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">abstract</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the name of this command node. </p>
+<dl class="section return"><dt>Returns</dt><dd>the name of this command node </dd></dl>
+
+<p>Reimplemented in <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_argument_command_node.html#a646780f7b8e55ff55da354a5dffe9ffa">com.mojang.brigadier.tree.ArgumentCommandNode&lt; S, T &gt;</a>, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_literal_command_node.html#acaf4a435a0d94b579fb9923f9c43329c">com.mojang.brigadier.tree.LiteralCommandNode&lt; S &gt;</a>, and <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_root_command_node.html#a91e980b0d72dd5a1b2ab1506e92d87a6">com.mojang.brigadier.tree.RootCommandNode&lt; S &gt;</a>.</p>
+
+</div>
+</div>
+<a id="a699828668e970e477991208cd5e74634"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a699828668e970e477991208cd5e74634">&#9670;&nbsp;</a></span>getRedirect()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt;S&gt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">com.mojang.brigadier.tree.CommandNode</a>&lt; S &gt;.getRedirect </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the command node to redirect to. </p>
+<dl class="section return"><dt>Returns</dt><dd>the command node to redirect to or null if none </dd></dl>
+
+</div>
+</div>
+<a id="a6ec0fc503cc0a62c6b3dbba12ef41c13"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ec0fc503cc0a62c6b3dbba12ef41c13">&#9670;&nbsp;</a></span>getRedirectModifier()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_redirect_modifier.html">RedirectModifier</a>&lt;S&gt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">com.mojang.brigadier.tree.CommandNode</a>&lt; S &gt;.getRedirectModifier </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the redirect modifier to apply when redirecting. </p>
+<dl class="section return"><dt>Returns</dt><dd>the redirect modifier to apply when redirecting or null if none </dd></dl>
+
+</div>
+</div>
+<a id="a8a3cfe9177bf476996497c696f57b0e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a3cfe9177bf476996497c696f57b0e7">&#9670;&nbsp;</a></span>getRelevantNodes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Collection&lt;? extends <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt;S&gt; &gt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">com.mojang.brigadier.tree.CommandNode</a>&lt; S &gt;.getRelevantNodes </td>
+          <td>(</td>
+          <td class="paramtype">final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_string_reader.html">StringReader</a>&#160;</td>
+          <td class="paramname"><em>input</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns all relevant command nodes for the input, so all nodes that are probably able to parse the input. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>the input to check for </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>all relevant command nodes for the input, so all nodes that are probably able to parse the input </dd></dl>
+
+</div>
+</div>
+<a id="ace9e8fb3890f9639b0d6c1e159cdfb1a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace9e8fb3890f9639b0d6c1e159cdfb1a">&#9670;&nbsp;</a></span>getRequirement()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Predicate&lt;S&gt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">com.mojang.brigadier.tree.CommandNode</a>&lt; S &gt;.getRequirement </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the requirement for this command node, that is used by <a class="el" href="">canUse(Object)</a>. </p>
+<dl class="section return"><dt>Returns</dt><dd>the requirement for this command node, that is used by <a class="el" href="">canUse(Object)</a> </dd></dl>
+
+</div>
+</div>
+<a id="a7d697d9f6d61686529499415e51031ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d697d9f6d61686529499415e51031ea">&#9670;&nbsp;</a></span>getSortedKey()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">abstract String <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">com.mojang.brigadier.tree.CommandNode</a>&lt; S &gt;.getSortedKey </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">abstract</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns a key for this command node, that is used for ordering the command nodes. </p>
+<dl class="section return"><dt>Returns</dt><dd>a key for this command node, that is used for ordering command nodes </dd></dl>
+
+<p>Reimplemented in <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_argument_command_node.html#a8ecc2fd08f412739d4c6348806ff0f22">com.mojang.brigadier.tree.ArgumentCommandNode&lt; S, T &gt;</a>, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_literal_command_node.html#a7362d58f0a7e4c49a9f13793fead0dfa">com.mojang.brigadier.tree.LiteralCommandNode&lt; S &gt;</a>, and <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_root_command_node.html#acd3487d327422ab59fe62a3d8988a753">com.mojang.brigadier.tree.RootCommandNode&lt; S &gt;</a>.</p>
+
+</div>
+</div>
+<a id="adb2365ae320b15fc6f6ef7840042c95f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb2365ae320b15fc6f6ef7840042c95f">&#9670;&nbsp;</a></span>getUsageText()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">abstract String <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">com.mojang.brigadier.tree.CommandNode</a>&lt; S &gt;.getUsageText </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">abstract</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns some usage text for this command node. </p>
+<dl class="section return"><dt>Returns</dt><dd>some usage text for this command node </dd></dl>
+
+<p>Reimplemented in <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_literal_command_node.html#af6e97c5ce1331f96a1840f645eaf94f4">com.mojang.brigadier.tree.LiteralCommandNode&lt; S &gt;</a>, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_argument_command_node.html#a52e44bf7cd1d3def8fec65c9596b52db">com.mojang.brigadier.tree.ArgumentCommandNode&lt; S, T &gt;</a>, and <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_root_command_node.html#aaa3c3f0942ddb5e64936dd1a46d4ef52">com.mojang.brigadier.tree.RootCommandNode&lt; S &gt;</a>.</p>
+
+</div>
+</div>
+<a id="a351de90d7eaac3fa329a0615a11dd348"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a351de90d7eaac3fa329a0615a11dd348">&#9670;&nbsp;</a></span>isFork()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">boolean <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">com.mojang.brigadier.tree.CommandNode</a>&lt; S &gt;.isFork </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks whether this command node forks. </p>
+<p>See <a class="el" href="">CommandDispatcher#execute(ParseResults)</a> for an explanation of what it does.</p>
+<dl class="section return"><dt>Returns</dt><dd>true if this command node forks </dd></dl>
+
+</div>
+</div>
+<a id="af06cb38e7e526cff0f01d442a810bef9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af06cb38e7e526cff0f01d442a810bef9">&#9670;&nbsp;</a></span>isValidInput()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">abstract boolean <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">com.mojang.brigadier.tree.CommandNode</a>&lt; S &gt;.isValidInput </td>
+          <td>(</td>
+          <td class="paramtype">final String&#160;</td>
+          <td class="paramname"><em>input</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">abstract</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Checks if the given input is valid for this command node, i.e. </p>
+<p>if it is what the command expects. </p>
+<p>This is used to find ambiguities.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>the input to check </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the given input is valid </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#ac4a6f9c8b501465217bd352d653d7539" title="Tries to find ambiguities in the children of this command node and recurses down.">findAmbiguities</a> </dd></dl>
+
+<p>Reimplemented in <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_argument_command_node.html#a382c8b3a08276aab33ee9b2e7a2c3734">com.mojang.brigadier.tree.ArgumentCommandNode&lt; S, T &gt;</a>, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_literal_command_node.html#ad8177d526a56a07dcee997385f3e549a">com.mojang.brigadier.tree.LiteralCommandNode&lt; S &gt;</a>, and <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_root_command_node.html#aa23fed25f5902814d8306012616b69f9">com.mojang.brigadier.tree.RootCommandNode&lt; S &gt;</a>.</p>
+
+</div>
+</div>
+<a id="a1eca3b41c3b1c776ef8bb3156130949b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1eca3b41c3b1c776ef8bb3156130949b">&#9670;&nbsp;</a></span>listSuggestions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">abstract CompletableFuture&lt;<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions.html">Suggestions</a>&gt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">com.mojang.brigadier.tree.CommandNode</a>&lt; S &gt;.listSuggestions </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context.html">CommandContext</a>&lt; S &gt;&#160;</td>
+          <td class="paramname"><em>context</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions_builder.html">SuggestionsBuilder</a>&#160;</td>
+          <td class="paramname"><em>builder</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> throws <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception.html">CommandSyntaxException</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">abstract</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Lists suggestions for this command node, given the context and uses the passed <a class="el" href="">SuggestionsBuilder</a> to build them. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">context</td><td>the <a class="el" href="">CommandContext</a> to use for finding suggestions </td></tr>
+    <tr><td class="paramname">builder</td><td>the suggestions builder </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a completable future that might complete sometime in the future, as finding suggestions could involve I/O or other slow things </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">CommandSyntaxException</td><td>if the command is not well formed </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_argument_command_node.html#a513b5edad6d66a2458fc55fa5f544850">com.mojang.brigadier.tree.ArgumentCommandNode&lt; S, T &gt;</a>, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_literal_command_node.html#a39a44688ec12964b0545c7fc03f914cd">com.mojang.brigadier.tree.LiteralCommandNode&lt; S &gt;</a>, and <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_root_command_node.html#a25f72a59078406ed93e8971e7cf8cc61">com.mojang.brigadier.tree.RootCommandNode&lt; S &gt;</a>.</p>
+
+</div>
+</div>
+<a id="a56a9832082abca83e51b87cdc4f64e04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56a9832082abca83e51b87cdc4f64e04">&#9670;&nbsp;</a></span>parse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">abstract void <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">com.mojang.brigadier.tree.CommandNode</a>&lt; S &gt;.parse </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_string_reader.html">StringReader</a>&#160;</td>
+          <td class="paramname"><em>reader</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context_builder.html">CommandContextBuilder</a>&lt; S &gt;&#160;</td>
+          <td class="paramname"><em>contextBuilder</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> throws <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception.html">CommandSyntaxException</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">abstract</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Tries to parse the command given by the reader and stores the results in the contextBuilder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">reader</td><td>the reader to read from </td></tr>
+    <tr><td class="paramname">contextBuilder</td><td>the context builder to store the results in </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">CommandSyntaxException</td><td>if the input was malformed </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_argument_command_node.html#a7e698c584bcf28bd80f25a350eda1737">com.mojang.brigadier.tree.ArgumentCommandNode&lt; S, T &gt;</a>, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_root_command_node.html#a2f928d4935b753d22ed3e9abc7425e73">com.mojang.brigadier.tree.RootCommandNode&lt; S &gt;</a>, and <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_literal_command_node.html#a558533d7daf126da959fad70570bbeff">com.mojang.brigadier.tree.LiteralCommandNode&lt; S &gt;</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>com</b></li><li class="navelem"><b>mojang</b></li><li class="navelem"><b>brigadier</b></li><li class="navelem"><b>tree</b></li><li class="navelem"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a></li>
-    <li class="footer">Generated on Sat Sep 12 2020 14:30:02 for CommandAPI by
+    <li class="footer">Generated on Wed Sep 16 2020 18:17:16 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

@@ -1,8 +1,7 @@
 var searchData=
 [
-  ['literal_788',['LITERAL',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a7eaf3cce61282d6ae706f2e7c28bfcd7',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
-  ['location_789',['LOCATION',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a12e62a2ee9d10f3fd710e0f3217e90ce',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
-  ['location_5f2d_790',['LOCATION_2D',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a92fef4ec30c3ea8b8ee1906baa071bd1',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
-  ['loot_5ftable_791',['LOOT_TABLE',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a6c31634e42bd1dec9fa3ded4ec443c9a',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
-  ['loot_5ftables_792',['LOOT_TABLES',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html#a4707419b548b60ec8a548d85d3f09da2',1,'dev::jorel::commandapi::arguments::ICustomProvidedArgument::SuggestionProviders']]]
+  ['int_5frange_1034',['INT_RANGE',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a4f8704291dbbe3a3700db9ceefc8d555',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['ismulti_1035',['isMulti',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html#ab88b11277ae686697e81d5736fedc205',1,'dev::jorel::commandapi::arguments::LiteralArgument']]],
+  ['itemstack_1036',['ITEMSTACK',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a23d30f4a04a75c6a6b77e830464dc1b4',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['itemstack_5fpredicate_1037',['ITEMSTACK_PREDICATE',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a5d28cea2f70cd969d9b02008e9009ace',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]]
 ];

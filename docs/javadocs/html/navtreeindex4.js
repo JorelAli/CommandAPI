@@ -1,6 +1,5 @@
 var NAVTREEINDEX4 =
 {
-"interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exception_provider.html#a866087b72db98a0c1462e901e434f5cd":[1,0,0,0,0,3,0,16],
 "interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exception_provider.html#aa60cbeef9d508f5901ccbe9e014ee142":[1,0,0,0,0,3,0,24],
 "interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exception_provider.html#aa808b6764705b4858d7431da74e7ffec":[1,0,0,0,0,3,0,11],
 "interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exception_provider.html#aa9b1863027100b31364d799493e84ef2":[1,0,0,0,0,3,0,0],
@@ -87,14 +86,14 @@ var NAVTREEINDEX4 =
 "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_command_executor.html":[1,0,1,0,0,2,17],
 "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_command_executor.html#a4e51a420cfe6e7aa15ee67677239b9f6":[1,0,1,0,0,2,17,1],
 "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_command_executor.html#ac6261face9c8d59dfc684a5998b1038c":[1,0,1,0,0,2,17,0],
-"namespacedev_1_1jorel_1_1commandapi_1_1arguments.html":[0,0,0,0,0,0],
 "namespacedev_1_1jorel_1_1commandapi_1_1arguments.html":[1,0,1,0,0,0],
+"namespacedev_1_1jorel_1_1commandapi_1_1arguments.html":[0,0,0,0,0,0],
 "namespacedev_1_1jorel_1_1commandapi_1_1exceptions.html":[1,0,1,0,0,1],
 "namespacedev_1_1jorel_1_1commandapi_1_1exceptions.html":[0,0,0,0,0,1],
-"namespacedev_1_1jorel_1_1commandapi_1_1executors.html":[1,0,1,0,0,2],
 "namespacedev_1_1jorel_1_1commandapi_1_1executors.html":[0,0,0,0,0,2],
-"namespacedev_1_1jorel_1_1commandapi_1_1wrappers.html":[1,0,1,0,0,3],
+"namespacedev_1_1jorel_1_1commandapi_1_1executors.html":[1,0,1,0,0,2],
 "namespacedev_1_1jorel_1_1commandapi_1_1wrappers.html":[0,0,0,0,0,3],
+"namespacedev_1_1jorel_1_1commandapi_1_1wrappers.html":[1,0,1,0,0,3],
 "namespaces.html":[0,0],
 "pages.html":[]
 };
