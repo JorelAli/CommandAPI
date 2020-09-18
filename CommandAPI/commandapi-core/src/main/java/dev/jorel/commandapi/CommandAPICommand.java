@@ -37,6 +37,7 @@ public class CommandAPICommand {
 	Predicate<CommandSender> requirements = s -> true;
 	LinkedHashMap<String, Argument> args = new LinkedHashMap<>();
 	CustomCommandExecutor executor = new CustomCommandExecutor();
+	boolean isConverted;
 	
 	/**
 	 * Creates a new command builder
@@ -44,6 +45,13 @@ public class CommandAPICommand {
 	 */
 	public CommandAPICommand(String commandName) {
 		this.commandName = commandName;
+		this.isConverted = false;
+	}
+	
+	static CommandAPICommand convertedOf(String commandName) {
+		CommandAPICommand result = new CommandAPICommand(commandName);
+		result.isConverted = true;
+		return result;
 	}
 	
 	/**
@@ -282,7 +290,7 @@ public class CommandAPICommand {
 					}
 				}
 				
-				CommandAPIHandler.register(commandName, permission, aliases, requirements, copyOfArgs, executor);
+				CommandAPIHandler.register(commandName, permission, aliases, requirements, copyOfArgs, executor, isConverted);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

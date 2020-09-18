@@ -15,27 +15,38 @@ import dev.jorel.commandapi.arguments.GreedyStringArgument;
  * 'Simple' conversion of Plugin commands
  */
 public class Converter {
+	
+	private static final LinkedHashMap<String, Argument> PLAIN_ARGUMENTS;
+	
+	static {
+		PLAIN_ARGUMENTS = new LinkedHashMap<>();
+		PLAIN_ARGUMENTS.put("args", new GreedyStringArgument());
+	}
 
 	/**
 	 * Convert all commands stated in Plugin's plugin.yml file into CommandAPI-compatible commands
 	 * @param plugin The plugin which commands are to be converted
 	 */
 	public static void convert(Plugin plugin) {
-		CommandAPI.getLog().info("Converting commands for " + plugin.getName());
-		plugin.getDescription().getCommands().keySet().forEach(commandName -> convertPluginCommand((JavaPlugin) plugin, commandName));
+		CommandAPI.getLog().info("Converting commands for " + plugin.getName() + ":");
+		plugin.getDescription().getCommands().keySet().forEach(commandName -> convertPluginCommand((JavaPlugin) plugin, commandName, PLAIN_ARGUMENTS));
 	}
 	
 	/**
 	 * Convert a command stated in Plugin's plugin.yml file into CommandAPI-compatible commands
-	 * @param p The plugin where the command is registered
+	 * @param plugin The plugin where the command is registered
 	 * @param cmdName The command to convert
 	 */
-	public static void convert(Plugin p, String cmdName) {
-		JavaPlugin plugin = (JavaPlugin) p;
-		convertPluginCommand(plugin, cmdName);
+	public static void convert(Plugin plugin, String cmdName) {
+		convertPluginCommand((JavaPlugin) plugin, cmdName, PLAIN_ARGUMENTS);
 	}
 	
-	private static void convertPluginCommand(JavaPlugin plugin, String commandName) {
+	
+	public static void convert(Plugin plugin, String cmdName, LinkedHashMap<String, Argument> arguments) {
+		convertPluginCommand((JavaPlugin) plugin, cmdName, arguments);
+	}
+	
+	private static void convertPluginCommand(JavaPlugin plugin, String commandName, LinkedHashMap<String, Argument> arguments) {
 		CommandAPI.getLog().info("Converting " + plugin.getName() + " command /" + commandName);
 		
 		/* Parse the commands */
@@ -79,15 +90,18 @@ public class Converter {
 			.executes((sender, args) -> { plugin.getCommand(commandName).execute(sender, commandName, new String[0]); })
 			.register();
 		
-		//Multiple arguments
-		LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-		arguments.put("args", new GreedyStringArgument());
-		
-		new CommandAPICommand(commandName)
+		//Multiple arguments		
+		CommandAPICommand.convertedOf(commandName)
 			.withPermission(permissionNode)
 			.withAliases(aliases)
 			.withArguments(arguments)
-			.executes((sender, args) -> { plugin.getCommand(commandName).execute(sender, commandName, ((String) args[0]).split(" ")); })
+			.executes((sender, args) -> { 
+				if(arguments.equals(PLAIN_ARGUMENTS)) {
+					plugin.getCommand(commandName).execute(sender, commandName, ((String) args[0]).split(" "));
+				} else {
+					plugin.getCommand(commandName).execute(sender, commandName, (String[]) args);
+				}
+			})
 			.register();
 	}
 	
