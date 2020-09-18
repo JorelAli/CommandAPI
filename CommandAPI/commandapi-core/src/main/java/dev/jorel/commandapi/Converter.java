@@ -14,7 +14,7 @@ import dev.jorel.commandapi.arguments.GreedyStringArgument;
 /**
  * 'Simple' conversion of Plugin commands
  */
-public class Converter {
+public abstract class Converter {
 	
 	private static final LinkedHashMap<String, Argument> PLAIN_ARGUMENTS;
 	
@@ -40,7 +40,6 @@ public class Converter {
 	public static void convert(Plugin plugin, String cmdName) {
 		convertPluginCommand((JavaPlugin) plugin, cmdName, PLAIN_ARGUMENTS);
 	}
-	
 	
 	public static void convert(Plugin plugin, String cmdName, LinkedHashMap<String, Argument> arguments) {
 		convertPluginCommand((JavaPlugin) plugin, cmdName, arguments);
