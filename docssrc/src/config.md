@@ -95,7 +95,9 @@ To do this, we need to add `Essentials` to our `config.yml` file, and include th
 verbose-outputs: true
 create-dispatcher-json: false
 plugins-to-convert: 
-  - Essentials: [hat, afk]
+  - Essentials: 
+    - hat
+    - afk
 ```
 
 > **Developer's Note:**
@@ -133,13 +135,13 @@ plugins-to-convert:
 
 ### Converting all plugin commands
 
-If you want to convert all of the plugin commands that a plugin has, you can simply leave the list of commands to convert empty. **Make sure to keep the colon at the end!** For example, if you wanted to convert all commands that [EssentialsX](https://www.spigotmc.org/resources/essentialsx.9089/) has, you can use the following `config.yml`:
+If you want to convert all of the plugin commands that a plugin has, use a `~` character instead of a list of commands. For example, if you wanted to convert all commands that [EssentialsX](https://www.spigotmc.org/resources/essentialsx.9089/) has, you can use the following `config.yml`:
 
 ```yaml
 verbose-outputs: true
 create-dispatcher-json: false
 plugins-to-convert: 
-  - Essentials:
+  - Essentials: ~
 ```
 
 

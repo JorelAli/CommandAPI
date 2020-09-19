@@ -176,12 +176,22 @@ public abstract class CommandAPIHandler {
 	 * @return a brigadier command which is registered internally
 	 * @throws CommandSyntaxException if an error occurs when the command is ran
 	 */
-	static Command generateCommand(LinkedHashMap<String, Argument> args, CustomCommandExecutor executor)
+	static Command generateCommand(LinkedHashMap<String, Argument> args, CustomCommandExecutor executor, boolean converted)
 			throws CommandSyntaxException {
 
 		// Generate our command from executor
 		return (cmdCtx) -> {
-			return executor.execute(NMS.getSenderForCommand(cmdCtx, executor.isForceNative()), argsToObjectArr(cmdCtx, args));
+			CommandSender sender = NMS.getSenderForCommand(cmdCtx, executor.isForceNative());
+			Object[] arguments;
+			if(converted) {
+				String[] argsAndCmd = cmdCtx.getRange().get(cmdCtx.getInput()).split(" ");
+				String[] result = new String[argsAndCmd.length - 1];
+				System.arraycopy(argsAndCmd, 1, result, 0, argsAndCmd.length - 1);
+				arguments = result;
+			} else {
+				arguments = argsToObjectArr(cmdCtx, args);
+			}
+			return executor.execute(sender, arguments);
 		};
 	}
 	
@@ -448,7 +458,7 @@ public abstract class CommandAPIHandler {
 	// Builds our NMS command using the given arguments for this method, then
 	// registers it
 	static void register(String commandName, CommandPermission permissions, String[] aliases, Predicate<CommandSender> requirements,
-			final LinkedHashMap<String, Argument> args, CustomCommandExecutor executor) throws Exception {
+			final LinkedHashMap<String, Argument> args, CustomCommandExecutor executor, boolean converted) throws Exception {
 		
 		//"Expands" our MultiLiterals into Literals
 		Predicate<Argument> isMultiLiteral = arg -> arg.getArgumentType() == CommandAPIArgumentType.MULTI_LITERAL;
@@ -480,7 +490,7 @@ public abstract class CommandAPIHandler {
 								j++;
 							}
 						}
-						register(commandName, permissions, aliases, requirements, newArgs, executor);
+						register(commandName, permissions, aliases, requirements, newArgs, executor, converted);
 					}
 					return;
 				}
@@ -495,7 +505,7 @@ public abstract class CommandAPIHandler {
 			CommandAPI.getLog().info("Registering command /" + commandName + " " + builder.toString());
 		}
 
-		Command command = generateCommand(args, executor);
+		Command command = generateCommand(args, executor, converted);
 
 		/*
 		 * The innermost argument needs to be connected to the executor. Then that
@@ -843,7 +853,7 @@ public abstract class CommandAPIHandler {
 		 */
 		public static Command fromCommand(CommandAPICommand command) {
 			try {
-				return generateCommand(command.args, command.executor);
+				return generateCommand(command.args, command.executor, command.isConverted);
 			} catch (CommandSyntaxException e) {
 				e.printStackTrace();
 			}

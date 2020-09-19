@@ -36,6 +36,13 @@ Using the search icon in the top left corner, you can search for anything in thi
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 4.2 \\(\rightarrow\\) 4.3:
+
+- Improve the documentation for [2. Configuration for server owners](./config.md) by using simple YAML lists (using the `-` symbol) and update the command conversion syntax for all commands using the `~` syntax
+- Adds the command sender priority to [6.1. Normal command executors](./normalexecutors.md#multiple-command-executor-implementations)
+- Adds new method and example for converting specific commands internally in [13. Command conversion](./conversion.md#only-specific-commands)
+- Adds two sneaky little buttons in the main title toolbar at the top of the page
+
 ### Documentation changes 4.1 \\(\rightarrow\\) 4.2:
 
 - Adds a warning about using redirected commands for suggestions that depend on previous arguments in [7.1. Argument suggestions](./argumentsuggestions.md#suggestions-depending-on-previous-arguments)

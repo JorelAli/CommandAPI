@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exception_provider.html#a866087b72db98a0c1462e901e434f5cd":[1,0,0,0,0,3,0,16],
 "interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exception_provider.html#aa60cbeef9d508f5901ccbe9e014ee142":[1,0,0,0,0,3,0,24],
 "interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exception_provider.html#aa808b6764705b4858d7431da74e7ffec":[1,0,0,0,0,3,0,11],
 "interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exception_provider.html#aa9b1863027100b31364d799493e84ef2":[1,0,0,0,0,3,0,0],
@@ -39,8 +40,8 @@ var NAVTREEINDEX4 =
 "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_command_executor.html#a20fba0b274915fa53e8fe725276bd7cd":[1,0,1,0,0,2,0,0],
 "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_command_executor.html#a307549281adde21c8b5a0edf97dad6d2":[1,0,1,0,0,2,0,1],
 "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_command_executor.html":[1,0,1,0,0,2,1],
+"interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_command_executor.html#abd2446b23751aa7f915d061539972e99":[1,0,1,0,0,2,1,1],
 "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_command_executor.html#ac26cbc1f37981aa121112c4325f9e560":[1,0,1,0,0,2,1,0],
-"interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_command_executor.html#af52038d1c47f80150e5a6e76158849bd":[1,0,1,0,0,2,1,1],
 "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_executor.html":[1,0,1,0,0,2,2],
 "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_executor.html#a1aa4ce40c21a88ef84f90919ca9a8c00":[1,0,1,0,0,2,2,1],
 "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_executor.html#ad8c170a17e5154a5955968f2a1349f77":[1,0,1,0,0,2,2,0],
@@ -86,8 +87,8 @@ var NAVTREEINDEX4 =
 "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_command_executor.html":[1,0,1,0,0,2,17],
 "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_command_executor.html#a4e51a420cfe6e7aa15ee67677239b9f6":[1,0,1,0,0,2,17,1],
 "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_command_executor.html#ac6261face9c8d59dfc684a5998b1038c":[1,0,1,0,0,2,17,0],
-"namespacedev_1_1jorel_1_1commandapi_1_1arguments.html":[1,0,1,0,0,0],
 "namespacedev_1_1jorel_1_1commandapi_1_1arguments.html":[0,0,0,0,0,0],
+"namespacedev_1_1jorel_1_1commandapi_1_1arguments.html":[1,0,1,0,0,0],
 "namespacedev_1_1jorel_1_1commandapi_1_1exceptions.html":[1,0,1,0,0,1],
 "namespacedev_1_1jorel_1_1commandapi_1_1exceptions.html":[0,0,0,0,0,1],
 "namespacedev_1_1jorel_1_1commandapi_1_1executors.html":[0,0,0,0,0,2],

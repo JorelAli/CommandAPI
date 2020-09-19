@@ -210,8 +210,9 @@ var NAVTREEINDEX1 =
 "classdev_1_1jorel_1_1commandapi_1_1_command_permission.html#aae111c318e46d67d06b2613fc642da2b":[1,0,1,0,0,7,3],
 "classdev_1_1jorel_1_1commandapi_1_1_command_permission.html#ac2dd9b644e4bf1477d7bab7fdd3512ab":[1,0,1,0,0,7,0],
 "classdev_1_1jorel_1_1commandapi_1_1_converter.html":[1,0,1,0,0,8],
-"classdev_1_1jorel_1_1commandapi_1_1_converter.html#a55bcd57c4152d5e4734ca37cce6abfba":[1,0,1,0,0,8,1],
-"classdev_1_1jorel_1_1commandapi_1_1_converter.html#ac4d88722551c5bb0c29aa570a65fb4bc":[1,0,1,0,0,8,0],
+"classdev_1_1jorel_1_1commandapi_1_1_converter.html#a0ea2b25297724e4b1f99a7f69c27ac14":[1,0,1,0,0,8,2],
+"classdev_1_1jorel_1_1commandapi_1_1_converter.html#a55bcd57c4152d5e4734ca37cce6abfba":[1,0,1,0,0,8,0],
+"classdev_1_1jorel_1_1commandapi_1_1_converter.html#af173562630c14caa18c08ff864241b55":[1,0,1,0,0,8,1],
 "classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html":[1,0,1,0,0,9],
 "classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a095decc3f6efe501b3ddec523b436453":[1,0,1,0,0,9,0],
 "classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a1183715f87c70def147d25e33bad16e0":[1,0,1,0,0,9,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_axis_argument.html#a4080a75c60a88300c1777eedbaa9d214":[1,0,1,0,0,0,2,2],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_axis_argument.html#a8a3d07a7de2dd697d78458a05d31c72e":[1,0,1,0,0,0,2,1],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_axis_argument.html#afb65b0d0165c17f80f9aa54fc1679cc7":[1,0,1,0,0,0,2,0],
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_biome_argument.html":[1,0,1,0,0,0,3],
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_biome_argument.html#a25fb861d1ffd3b66b09df9840e493e1c":[1,0,1,0,0,0,3,0]
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_biome_argument.html":[1,0,1,0,0,0,3]
 };

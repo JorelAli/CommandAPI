@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_biome_argument.html#a25fb861d1ffd3b66b09df9840e493e1c":[1,0,1,0,0,0,3,0],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_biome_argument.html#a32dd5436d4ebd9ec6bbc89f08ade530f":[1,0,1,0,0,0,3,1],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_biome_argument.html#aba315e1b356e8c219cf00b858bdca746":[1,0,1,0,0,0,3,3],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_biome_argument.html#af0c81dc3516b303c4c93984eb09b60b3":[1,0,1,0,0,0,3,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_unsupported_version_exception.html":[1,0,1,0,0,1,11],
 "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_unsupported_version_exception.html#ab62481cdb04f1a86d4dc274601cdf681":[1,0,1,0,0,1,11,0],
 "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_wrapper_command_syntax_exception.html":[1,0,1,0,0,1,13],
-"classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_wrapper_command_syntax_exception.html#a0df2879b5a585f267c1fbe3f288066f2":[1,0,1,0,0,1,13,0],
-"classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_wrapper_command_syntax_exception.html#af968b8c2c2f77674744e36e5c9fa0d5c":[1,0,1,0,0,1,13,1]
+"classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_wrapper_command_syntax_exception.html#a0df2879b5a585f267c1fbe3f288066f2":[1,0,1,0,0,1,13,0]
 };

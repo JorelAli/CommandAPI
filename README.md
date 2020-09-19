@@ -19,7 +19,7 @@
 
 **Announcements:**
 
-> :warning: **The CommandAPI's Maven repository URL has changed!** Please view [the documentation](https://www.jorel.dev/CommandAPI/4.0/quickstart.html#using-maven-recommended) to see how to update your Maven repository
+> :moneybag: **The CommandAPI now has a donation link!**  Feel free to buy me a coffee [here](https://ko-fi.com/jorelali)!
 
 **Compatible Minecraft versions:** 
 
@@ -122,6 +122,17 @@ These versions of Minecraft must be installed in your local machine's Maven repo
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td valign="top"><b>4.3</b></td>
+            <td valign="top">September 2020</td>
+            <td valign="top">
+                <ul>
+                    <li>Fix bug where resulting command executors with command block senders would not work</li>
+                    <li>Improves the power of command conversion by letting you declare CommandAPICommand arguments for conversion</li>
+                    <li>Adds support for YAML's "null" for command conversion via the config.yml file, which should be way more comprehensible rather than trailing colons</li>
+                </ul>
+            </td>
+        </tr>
         <tr>
             <td valign="top"><b>4.2</b></td>
             <td valign="top">September 2020</td>
@@ -498,3 +509,4 @@ These versions of Minecraft must be installed in your local machine's Maven repo
         </tr>
     </tbody>
 </table>
+
