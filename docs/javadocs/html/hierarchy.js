@@ -101,6 +101,9 @@ var hierarchy =
     [ "dev.jorel.commandapi.executors.IExecutorNormal< Player >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_i_executor_normal.html", [
       [ "dev.jorel.commandapi.executors.PlayerCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_player_command_executor.html", null ]
     ] ],
+    [ "dev.jorel.commandapi.executors.IExecutorResulting< BlockCommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_i_executor_resulting.html", [
+      [ "dev.jorel.commandapi.executors.CommandBlockResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_command_executor.html", null ]
+    ] ],
     [ "dev.jorel.commandapi.executors.IExecutorResulting< CommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_i_executor_resulting.html", [
       [ "dev.jorel.commandapi.executors.ResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_command_executor.html", null ]
     ] ],
@@ -115,7 +118,6 @@ var hierarchy =
       [ "dev.jorel.commandapi.executors.ProxyResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_resulting_command_executor.html", null ]
     ] ],
     [ "dev.jorel.commandapi.executors.IExecutorResulting< Player >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_i_executor_resulting.html", [
-      [ "dev.jorel.commandapi.executors.CommandBlockResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_command_executor.html", null ],
       [ "dev.jorel.commandapi.executors.PlayerResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_player_resulting_command_executor.html", null ]
     ] ],
     [ "dev.jorel.commandapi.executors.IExecutorTyped", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_i_executor_typed.html", [
