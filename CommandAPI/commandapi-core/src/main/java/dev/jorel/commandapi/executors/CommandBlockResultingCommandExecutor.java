@@ -1,6 +1,6 @@
 package dev.jorel.commandapi.executors;
 
-import org.bukkit.entity.Player;
+import org.bukkit.command.BlockCommandSender;
 
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
@@ -8,7 +8,7 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
  * A resulting command executor for a BlockCommandSender
  */
 @FunctionalInterface
-public interface CommandBlockResultingCommandExecutor extends IExecutorResulting<Player> {
+public interface CommandBlockResultingCommandExecutor extends IExecutorResulting<BlockCommandSender> {
 
 	/**
 	 * The code to run when this command is performed
@@ -22,7 +22,7 @@ public interface CommandBlockResultingCommandExecutor extends IExecutorResulting
 	 *            
 	 * @return the result of this command
 	 */
-	int run(Player sender, Object[] args) throws WrapperCommandSyntaxException;
+	int run(BlockCommandSender sender, Object[] args) throws WrapperCommandSyntaxException;
 
 	@Override
 	default ExecutorType getType() {
