@@ -116,7 +116,7 @@ Next, we declare our dependencies:
 
 ```gradle
 dependencies {
-    compile "dev.jorel:commandapi-shade:4.2"   
+    compile "dev.jorel:commandapi-shade:4.3"   
 }
 ```
 
@@ -125,7 +125,7 @@ Then we add it to the `shadowJar` task configuration:
 ```gradle
 shadowJar {
 	dependencies {
-		include dependency("dev.jorel:commandapi-shade:4.2")
+		include dependency("dev.jorel:commandapi-shade:4.3")
 	}
 }
 ```

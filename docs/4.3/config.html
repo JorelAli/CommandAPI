@@ -133,6 +133,12 @@
                         <a href="print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
+                        <a href="https://www.jorel.dev/CommandAPI/" title="Back to main CommandAPI page" aria-label="Back to main CommandAPI page">
+                            <i id="home-button" class="fa fa-home"></i>
+                        </a>
+                        <a href="https://ko-fi.com/jorelali" title="Donate (ko-fi)" aria-label="Donate (ko-fi)">
+                            <i id="donate-button" class="fa fa-gift"></i>
+                        </a>
                         
                         <a href="https://github.com/JorelAli/CommandAPI" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
@@ -232,7 +238,9 @@ commands:
 <pre><code class="language-yaml">verbose-outputs: true
 create-dispatcher-json: false
 plugins-to-convert: 
-  - Essentials: [hat, afk]
+  - Essentials: 
+    - hat
+    - afk
 </code></pre>
 <blockquote>
 <p><strong>Developer's Note:</strong></p>

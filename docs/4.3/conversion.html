@@ -133,6 +133,12 @@
                         <a href="print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
+                        <a href="https://www.jorel.dev/CommandAPI/" title="Back to main CommandAPI page" aria-label="Back to main CommandAPI page">
+                            <i id="home-button" class="fa fa-home"></i>
+                        </a>
+                        <a href="https://ko-fi.com/jorelali" title="Donate (ko-fi)" aria-label="Donate (ko-fi)">
+                            <i id="donate-button" class="fa fa-gift"></i>
+                        </a>
                         
                         <a href="https://github.com/JorelAli/CommandAPI" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
@@ -228,7 +234,52 @@ commands:
 </div>
 <hr />
 <h2><a class="header" href="#only-specific-commands" id="only-specific-commands">Only specific commands</a></h2>
-<p>In addition to converting all commands from a target plugin, the CommandAPI allows you to convert single commands at a time using the <code>Converter.convert(Plugin, String)</code> method, where the <code>String</code> argument refers to the command name as declared in the target plugin's <code>plugin.yml</code> file.</p>
+<p>In addition to converting all commands from a target plugin, the CommandAPI allows you to convert single commands at a time using the following methods from the <code>Converter</code> class:</p>
+<pre><code class="language-java">public static convert(Plugin plugin, String cmdName);
+public static convert(Plugin plugin, String cmdName, LinkedHashMap&lt;String, Argument&gt; arguments);
+</code></pre>
+<p>In these commands, the <code>plugin</code> refers to the plugin which has the command you want to convert and <code>cmdName</code> is the name of the command declared in the target plugin's <code>plugin.yml</code> file (just the main command, not the aliases!).</p>
+<p>The <code>LinkedHashMap&lt;String, Argument&gt;</code> can be used to provide argument checks that lets you apply the command UI to a bukkit command.</p>
+<div class="example">
+<h3><a class="header" href="#example---converting-essentialsxs-speed-command" id="example---converting-essentialsxs-speed-command">Example - Converting EssentialsX's speed command</a></h3>
+<p>Say we want to convert EssentialsX's <code>/speed</code> command using the CommandAPI. The <code>plugin.yml</code> entry for the <code>/speed</code> command is the following:</p>
+<pre><code class="language-yaml">  speed:
+    description: Change your speed limits.
+    usage: /&lt;command&gt; [type] &lt;speed&gt; [player]
+    aliases: [flyspeed,eflyspeed,fspeed,efspeed,espeed,walkspeed,ewalkspeed,wspeed,ewspeed]
+</code></pre>
+<p>From this, we can determine that there are the following commands, where &quot;walk&quot; and &quot;fly&quot; are the different types that the command can take:</p>
+<pre><code>/speed &lt;speed&gt;
+/speed &lt;speed&gt; &lt;target&gt;
+/speed &lt;walk/fly&gt; &lt;speed&gt;
+/speed &lt;walk/fly&gt; &lt;speed&gt; &lt;target&gt;
+</code></pre>
+<p>With the EssentialsX plugin, the <code>&lt;speed&gt;</code> value can only take numbers between 0 and 10. As such, we'll ensure to apply these limits using the <code>IntegerArgument</code>. In addition, since the speed type can only be &quot;walk&quot; or &quot;fly&quot;, we'll add that to our converter as well using a <code>MultiLiteralArgument</code>:</p>
+<pre><code class="language-java">Plugin essentials = Bukkit.getPluginManager().getPlugin(&quot;Essentials&quot;);
+
+LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+
+// /speed &lt;speed&gt;
+arguments.put(&quot;speed&quot;, new IntegerArgument(0, 10));
+Converter.convert(essentials, &quot;speed&quot;, arguments);
+
+// /speed &lt;target&gt;
+arguments.put(&quot;target&quot;, new PlayerArgument());
+Converter.convert(essentials, &quot;speed&quot;, arguments);
+
+arguments.clear();
+
+// /speed &lt;walk/fly&gt; &lt;speed&gt;
+arguments.put(&quot;type&quot;, new MultiLiteralArgument(&quot;walk&quot;, &quot;fly&quot;));
+arguments.put(&quot;speed&quot;, new IntegerArgument(0, 10));
+Converter.convert(essentials, &quot;speed&quot;, arguments);
+
+// /speed &lt;walk/fly&gt; &lt;speed&gt; &lt;target&gt;
+arguments.put(&quot;target&quot;, new PlayerArgument());
+Converter.convert(essentials, &quot;speed&quot;, arguments);
+
+</code></pre>
+</div>
 
                     </main>
 

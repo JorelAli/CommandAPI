@@ -95,7 +95,9 @@ To do this, we need to add `Essentials` to our `config.yml` file, and include th
 verbose-outputs: true
 create-dispatcher-json: false
 plugins-to-convert: 
-  - Essentials: [hat, afk]
+  - Essentials: 
+    - hat
+    - afk
 ```
 
 > **Developer's Note:**

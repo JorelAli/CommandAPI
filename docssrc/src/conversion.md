@@ -84,4 +84,65 @@ This makes sure that the target plugin's commands are registered first, so they 
 
 ## Only specific commands
 
-In addition to converting all commands from a target plugin, the CommandAPI allows you to convert single commands at a time using the `Converter.convert(Plugin, String)` method, where the `String` argument refers to the command name as declared in the target plugin's `plugin.yml` file.
+In addition to converting all commands from a target plugin, the CommandAPI allows you to convert single commands at a time using the following methods from the `Converter` class:
+
+```java
+public static convert(Plugin plugin, String cmdName);
+public static convert(Plugin plugin, String cmdName, LinkedHashMap<String, Argument> arguments);
+```
+
+In these commands, the `plugin` refers to the plugin which has the command you want to convert and `cmdName` is the name of the command declared in the target plugin's `plugin.yml` file (just the main command, not the aliases!).
+
+The `LinkedHashMap<String, Argument>` can be used to provide argument checks that lets you apply the command UI to a bukkit command.
+
+<div class="example">
+
+### Example - Converting EssentialsX's speed command
+
+Say we want to convert EssentialsX's `/speed` command using the CommandAPI. The `plugin.yml` entry for the `/speed` command is the following:
+
+```yaml
+  speed:
+    description: Change your speed limits.
+    usage: /<command> [type] <speed> [player]
+    aliases: [flyspeed,eflyspeed,fspeed,efspeed,espeed,walkspeed,ewalkspeed,wspeed,ewspeed]
+```
+
+From this, we can determine that there are the following commands, where "walk" and "fly" are the different types that the command can take:
+
+```
+/speed <speed>
+/speed <speed> <target>
+/speed <walk/fly> <speed>
+/speed <walk/fly> <speed> <target>
+```
+
+With the EssentialsX plugin, the `<speed>` value can only take numbers between 0 and 10. As such, we'll ensure to apply these limits using the `IntegerArgument`. In addition, since the speed type can only be "walk" or "fly", we'll add that to our converter as well using a `MultiLiteralArgument`:
+
+```java
+Plugin essentials = Bukkit.getPluginManager().getPlugin("Essentials");
+
+LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+
+// /speed <speed>
+arguments.put("speed", new IntegerArgument(0, 10));
+Converter.convert(essentials, "speed", arguments);
+
+// /speed <target>
+arguments.put("target", new PlayerArgument());
+Converter.convert(essentials, "speed", arguments);
+
+arguments.clear();
+
+// /speed <walk/fly> <speed>
+arguments.put("type", new MultiLiteralArgument("walk", "fly"));
+arguments.put("speed", new IntegerArgument(0, 10));
+Converter.convert(essentials, "speed", arguments);
+
+// /speed <walk/fly> <speed> <target>
+arguments.put("target", new PlayerArgument());
+Converter.convert(essentials, "speed", arguments);
+
+```
+
+</div>
