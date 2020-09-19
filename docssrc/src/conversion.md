@@ -142,7 +142,8 @@ Converter.convert(essentials, "speed", arguments);
 // /speed <walk/fly> <speed> <target>
 arguments.put("target", new PlayerArgument());
 Converter.convert(essentials, "speed", arguments);
-
 ```
+
+![](./images/speed.gif)
 
 </div>
