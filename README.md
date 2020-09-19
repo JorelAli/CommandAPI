@@ -23,7 +23,12 @@
 
 **Compatible Minecraft versions:** 
 
-![](https://img.shields.io/badge/Minecraft%20Version-1.13-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.13.1-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.13.2-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.14-blue)  ![](https://img.shields.io/badge/Minecraft%20Version-1.14.1-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.14.2-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.14.3-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.14.4-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.15-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.15.1-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.15.2-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.16.1-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.16.2-blue) ![](https://img.shields.io/badge/Minecraft%20Version-1.16.3-blue)
+|                   |        |        |        |        |        |
+| ----------------- | ------ | ------ | ------ | ------ | ------ |
+| **1.13 versions** | 1.13   | 1.13.1 | 1.13.2 |        |        |
+| **1.14 versions** | 1.14   | 1.14.1 | 1.14.2 | 1.14.3 | 1.14.4 |
+| **1.15 versions** | 1.15   | 1.15.1 | 1.15.2 |        |        |
+| **1.16 versions** |        | 1.16.1 | 1.16.2 | 1.16.3 |        |
 
 -----
 
