@@ -92,3 +92,15 @@ Extending on the suicide example above, we could write another implementation fo
 This saves having to use `instanceof` multiple times to check the type of the `CommandSender`.
 
 </div>
+
+The different command sender priority is the following (from highest priority to lowest priority):
+
+\begin{align}
+&\quad\texttt{.executesNative()} && \texttt{(Always chosen if used)}\\\\
+&\quad\texttt{.executesPlayer()} \\\\
+&\quad\texttt{.executesEntity()} \\\\
+&\quad\texttt{.executesConsole()} \\\\
+&\quad\texttt{.executesCommandBlock()} \\\\
+&\quad\texttt{.executesProxy()} \\\\
+&\quad\texttt{.executes()}
+\end{align}

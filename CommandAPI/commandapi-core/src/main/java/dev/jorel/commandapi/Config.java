@@ -42,7 +42,7 @@ class Config {
 			}
 
 			String[] pluginCommands;
-			if (map.values() == null) {
+			if (map.values() == null || (map.values().size() == 1 && map.values().iterator().next() == null)) {
 				pluginCommands = new String[0];
 			} else {
 				@SuppressWarnings("unchecked")
