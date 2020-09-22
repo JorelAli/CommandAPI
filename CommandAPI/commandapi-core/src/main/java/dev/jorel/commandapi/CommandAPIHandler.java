@@ -433,9 +433,7 @@ public abstract class CommandAPIHandler {
 					}
 				} else {
 					if (CommandAPI.getConfiguration().hasVerboseOutput()) {
-						CommandAPI.getLog().info(perm.getPermission() + " -> /" + cmdName);
-					} else {
-						CommandAPI.getLog().info("OP -> /" + cmdName);
+						CommandAPI.getLog().info(perm.getPermission() == null ? "OP" : perm.getPermission() + " -> /" + cmdName);
 					}
 					// Set the command permission to the (String) permission node
 					if (NMS.isVanillaCommandWrapper(knownCommands.get(cmdName))) {
