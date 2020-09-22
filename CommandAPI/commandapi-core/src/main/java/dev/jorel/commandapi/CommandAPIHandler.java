@@ -419,27 +419,23 @@ public abstract class CommandAPIHandler {
 			}
 			
 			PERMISSIONS_TO_FIX.forEach((cmdName, perm) -> {
-
-				//Get the node string
-				final String permNode;
-				if(perm.equals(CommandPermission.NONE)) {
-					permNode = "";
-				} else {
-					permNode = perm.getPermission();
-				}
 				
-				//Print the permission
 				if(CommandAPI.getConfiguration().hasVerboseOutput()) {
-					if(permNode == null) {
-						CommandAPI.getLog().info("OP -> /" + cmdName);
-					} else if(permNode.length() == 0) {
-						CommandAPI.getLog().info("NONE -> /" + cmdName);
-					} else {
-						CommandAPI.getLog().info(permNode + " -> /" + cmdName);
-					}
+					CommandAPI.getLog().info(perm.toString() + " -> /" + cmdName);
 				}
 				
-				//Set the permission
+				String permNode = perm.equals(CommandPermission.NONE) ? "" : perm.getPermission();
+				
+				/*
+				 * Sets the permission. If you have to be OP to run this command,
+				 * we set the permission to null. Doing so means that Bukkit's
+				 * "testPermission" will always return true, however since the
+				 * command's permission check occurs internally via the CommandAPI,
+				 * this isn't a problem.
+				 * 
+				 * If anyone dares tries to use testPermission() on this command,
+				 * seriously, what are you doing and why?
+				 */
 				if (NMS.isVanillaCommandWrapper(knownCommands.get(cmdName))) {
 					knownCommands.get(cmdName).setPermission(permNode);
 				}
