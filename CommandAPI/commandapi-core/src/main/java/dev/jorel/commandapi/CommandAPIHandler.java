@@ -7,7 +7,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -17,9 +16,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.bukkit.Bukkit;
@@ -40,7 +37,6 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import com.mojang.brigadier.tree.ArgumentCommandNode;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
@@ -677,35 +673,7 @@ public abstract class CommandAPIHandler {
 		// Otherwise, we have to handle arguments of the form BiFunction<CommandSender,
 		// Object[], String[]>
 		else {
-			return getRequiredArgumentBuilderWithProvider(argumentName, type.getRawType(), permission, requirements,
-					(CommandContext context, SuggestionsBuilder builder) -> {
-						// Populate Object[], which is our previously filled arguments
-						List<Object> previousArguments = new ArrayList<>();
-
-						for (String s : args.keySet()) {
-							if (s.equals(argumentName)) {
-								break;
-							}
-							
-							Object result;
-							try {
-								result = parseArgument(context, s, args.get(s));
-							} catch(IllegalArgumentException e) {
-								/*
-								 * Redirected commands don't parse previous arguments properly. Simplest way to
-								 * determine what we should do is simply set it to null, since there's nothing
-								 * else we can do. I thought about letting this simply be an empty array, but
-								 * then it's even more annoying to deal with - I wouldn't expect an array of
-								 * size n to suddenly, randomly be 0, but I would expect random NPEs because
-								 * let's be honest, this is Java we're dealing with.
-								 */
-								result = null;
-							}
-							previousArguments.add(result);
-						}
-						return getSuggestionsBuilder(builder, type.getOverriddenSuggestions().get()
-								.apply(NMS.getCommandSenderForCLW(context.getSource()), previousArguments.toArray()));
-					});
+			return getRequiredArgumentBuilderWithProvider(argumentName, type.getRawType(), permission, requirements, Brigadier.toSuggestions(argumentName, args));
 		}
 	}
 
@@ -899,90 +867,45 @@ public abstract class CommandAPIHandler {
 			return getRequiredArgumentBuilderDynamic(map, prompt, argument, argument.getArgumentPermission(), argument.getRequirements());
 		}
 		
-		public static SuggestionProvider toSuggestions(String argumentName, LinkedHashMap<String, Argument> arguments) {
-			return null;
-		}
-		
-		public static ArgumentBuilder $(String prompt, Argument argument) {
-			if(argument.getArgumentType() == CommandAPIArgumentType.LITERAL);
-			return null;
-		}
-		
-		private static LinkedHashMap<String, Argument> traverseChildren(LinkedHashMap<String, Argument> arguments, Collection<CommandNode<?>> children) {
-			
-			for(CommandNode command : children) {
-				if(command instanceof ArgumentCommandNode) {
-					ArgumentCommandNode node = (ArgumentCommandNode) command;
-					arguments.put(node.getName(), null); //TODO?
-				} else if(command instanceof LiteralCommandNode) {
-					LiteralCommandNode<?> node = (LiteralCommandNode<?>) command;
-					node.getCommand()
-					LiteralArgument argument = new LiteralArgument(node.getLiteral());
-					if(node.getRequirement() == null) {
-						argument.withRequirement(cmdSender -> {
-							
-							//cmdSender convert to CLW
-							return node.getRequirement().test(null);
-						});
+		/**
+		 * Converts an argument name and a list of arguments to a Brigadier
+		 * SuggestionProvider
+		 * 
+		 * @param argumentName the name (prompt) of the argument as declared by its key
+		 *                     in the LinkedHashMap
+		 * @param args         the list of arguments
+		 * @return a SuggestionProvider that suggests the overridden suggestions for the
+		 *         argument declared in the LinkedHashMap with key argumentName
+		 */
+		public static SuggestionProvider toSuggestions(String argumentName, LinkedHashMap<String, Argument> args) {
+			return (CommandContext context, SuggestionsBuilder builder) -> {
+				// Populate Object[], which is our previously filled arguments
+				List<Object> previousArguments = new ArrayList<>();
+
+				for (String s : args.keySet()) {
+					if (s.equals(argumentName)) {
+						break;
 					}
-					NMS.getCommandSenderForCLW(null);
-					//clw -> NMS.getCommandSenderForCLW(clw)
-					arguments.put(node.getName(), new LiteralArgument(node.getLiteral())..withRequirement());
-				} else {
-					//RootCommandNode
+					
+					Object result;
+					try {
+						result = parseArgument(context, s, args.get(s));
+					} catch(IllegalArgumentException e) {
+						/*
+						 * Redirected commands don't parse previous arguments properly. Simplest way to
+						 * determine what we should do is simply set it to null, since there's nothing
+						 * else we can do. I thought about letting this simply be an empty array, but
+						 * then it's even more annoying to deal with - I wouldn't expect an array of
+						 * size n to suddenly, randomly be 0, but I would expect random NPEs because
+						 * let's be honest, this is Java we're dealing with.
+						 */
+						result = null;
+					}
+					previousArguments.add(result);
 				}
-			}
-			
-			
-			return null;
-		}
-		
-		public static CommandAPICommand $(CommandNode<?> command) {
-			if(command instanceof ArgumentCommandNode) {
-				
-			} else if(command instanceof LiteralCommandNode) {
-				LiteralCommandNode node = (LiteralCommandNode) command;
-				Collection<CommandNode<?>> children = node.getChildren();
-				traverseChildren(new LinkedHashMap<>(), children);
-			} else {
-				//RootCommandNode
-			}
-			
-			return null;
-		}
-		
-		public static <S> SuggestionProvider $(S... suggestions) {
-			
-			
-			
-			Arrays.stream(suggestions).map(x -> Tooltip.none(x))
-			.mapToDouble();
-			SuggestionProvider p = (CommandContext context, SuggestionsBuilder builder) -> {
-				return null;
-				//return getSuggestionsBuilder(builder, StringTooltip.));
+				return getSuggestionsBuilder(builder, args.get(argumentName).getOverriddenSuggestions().get()
+						.apply(NMS.getCommandSenderForCLW(context.getSource()), previousArguments.toArray()));
 			};
-			
-			return null;
-		}
-		
-		public static <S> SuggestionProvider $1(Function<CommandSender, S[]> suggestions) {
-			return null;
-		}
-		
-		public static <S> SuggestionProvider $1(BiFunction<CommandSender, Object[], S[]> suggestions) {
-			return null;
-		}
-		
-		public static <S> SuggestionProvider $(Tooltip<S>... suggestions) {
-			return null;
-		}
-		
-		public static <S> SuggestionProvider $(Function<CommandSender, Tooltip<S>[]> suggestions) {
-			return null;
-		}
-		
-		public static <S> SuggestionProvider $(BiFunction<CommandSender, Object[], Tooltip<S>[]> suggestions) {
-			return null;
 		}
 	}
 }
