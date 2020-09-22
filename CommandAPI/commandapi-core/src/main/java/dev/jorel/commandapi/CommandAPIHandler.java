@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -16,7 +17,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.bukkit.Bukkit;
@@ -37,6 +40,7 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import com.mojang.brigadier.tree.ArgumentCommandNode;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
@@ -52,8 +56,8 @@ import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.Location2DArgument;
 import dev.jorel.commandapi.arguments.LocationArgument;
 import dev.jorel.commandapi.arguments.LocationType;
-import dev.jorel.commandapi.arguments.ScoreHolderArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
+import dev.jorel.commandapi.arguments.ScoreHolderArgument;
 import dev.jorel.commandapi.nms.NMS;
 
 /**
@@ -893,6 +897,92 @@ public abstract class CommandAPIHandler {
 			LinkedHashMap<String, Argument> map = new LinkedHashMap<>();
 			map.put(prompt, argument);
 			return getRequiredArgumentBuilderDynamic(map, prompt, argument, argument.getArgumentPermission(), argument.getRequirements());
+		}
+		
+		public static SuggestionProvider toSuggestions(String argumentName, LinkedHashMap<String, Argument> arguments) {
+			return null;
+		}
+		
+		public static ArgumentBuilder $(String prompt, Argument argument) {
+			if(argument.getArgumentType() == CommandAPIArgumentType.LITERAL);
+			return null;
+		}
+		
+		private static LinkedHashMap<String, Argument> traverseChildren(LinkedHashMap<String, Argument> arguments, Collection<CommandNode<?>> children) {
+			
+			for(CommandNode command : children) {
+				if(command instanceof ArgumentCommandNode) {
+					ArgumentCommandNode node = (ArgumentCommandNode) command;
+					arguments.put(node.getName(), null); //TODO?
+				} else if(command instanceof LiteralCommandNode) {
+					LiteralCommandNode<?> node = (LiteralCommandNode<?>) command;
+					node.getCommand()
+					LiteralArgument argument = new LiteralArgument(node.getLiteral());
+					if(node.getRequirement() == null) {
+						argument.withRequirement(cmdSender -> {
+							
+							//cmdSender convert to CLW
+							return node.getRequirement().test(null);
+						});
+					}
+					NMS.getCommandSenderForCLW(null);
+					//clw -> NMS.getCommandSenderForCLW(clw)
+					arguments.put(node.getName(), new LiteralArgument(node.getLiteral())..withRequirement());
+				} else {
+					//RootCommandNode
+				}
+			}
+			
+			
+			return null;
+		}
+		
+		public static CommandAPICommand $(CommandNode<?> command) {
+			if(command instanceof ArgumentCommandNode) {
+				
+			} else if(command instanceof LiteralCommandNode) {
+				LiteralCommandNode node = (LiteralCommandNode) command;
+				Collection<CommandNode<?>> children = node.getChildren();
+				traverseChildren(new LinkedHashMap<>(), children);
+			} else {
+				//RootCommandNode
+			}
+			
+			return null;
+		}
+		
+		public static <S> SuggestionProvider $(S... suggestions) {
+			
+			
+			
+			Arrays.stream(suggestions).map(x -> Tooltip.none(x))
+			.mapToDouble();
+			SuggestionProvider p = (CommandContext context, SuggestionsBuilder builder) -> {
+				return null;
+				//return getSuggestionsBuilder(builder, StringTooltip.));
+			};
+			
+			return null;
+		}
+		
+		public static <S> SuggestionProvider $1(Function<CommandSender, S[]> suggestions) {
+			return null;
+		}
+		
+		public static <S> SuggestionProvider $1(BiFunction<CommandSender, Object[], S[]> suggestions) {
+			return null;
+		}
+		
+		public static <S> SuggestionProvider $(Tooltip<S>... suggestions) {
+			return null;
+		}
+		
+		public static <S> SuggestionProvider $(Function<CommandSender, Tooltip<S>[]> suggestions) {
+			return null;
+		}
+		
+		public static <S> SuggestionProvider $(BiFunction<CommandSender, Object[], Tooltip<S>[]> suggestions) {
+			return null;
 		}
 	}
 }
