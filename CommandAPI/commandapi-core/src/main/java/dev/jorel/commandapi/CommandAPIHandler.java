@@ -417,31 +417,34 @@ public abstract class CommandAPIHandler {
 			if(!PERMISSIONS_TO_FIX.isEmpty()) {
 				CommandAPI.getLog().info("Linking permissions to commands:");
 			}
+			
 			PERMISSIONS_TO_FIX.forEach((cmdName, perm) -> {
 
-				if (perm.equals(CommandPermission.NONE)) {
-					if (CommandAPI.getConfiguration().hasVerboseOutput()) {
-						CommandAPI.getLog().info("NONE -> /" + cmdName);
-					}
-					// Set the command permission to empty string (Minecraft standard for "no
-					// permission required")
-					if (NMS.isVanillaCommandWrapper(knownCommands.get(cmdName))) {
-						knownCommands.get(cmdName).setPermission("");
-					}
-					if (NMS.isVanillaCommandWrapper(knownCommands.get("minecraft:" + cmdName))) {
-						knownCommands.get(cmdName).setPermission("");
-					}
+				//Get the node string
+				final String permNode;
+				if(perm.equals(CommandPermission.NONE)) {
+					permNode = "";
 				} else {
-					if (CommandAPI.getConfiguration().hasVerboseOutput()) {
-						CommandAPI.getLog().info(perm.getPermission() == null ? "OP" : perm.getPermission() + " -> /" + cmdName);
+					permNode = perm.getPermission();
+				}
+				
+				//Print the permission
+				if(CommandAPI.getConfiguration().hasVerboseOutput()) {
+					if(permNode == null) {
+						CommandAPI.getLog().info("OP -> /" + cmdName);
+					} else if(permNode.length() == 0) {
+						CommandAPI.getLog().info("NONE -> /" + cmdName);
+					} else {
+						CommandAPI.getLog().info(permNode + " -> /" + cmdName);
 					}
-					// Set the command permission to the (String) permission node
-					if (NMS.isVanillaCommandWrapper(knownCommands.get(cmdName))) {
-						knownCommands.get(cmdName).setPermission(perm.getPermission());
-					}
-					if (NMS.isVanillaCommandWrapper(knownCommands.get("minecraft:" + cmdName))) {
-						knownCommands.get(cmdName).setPermission(perm.getPermission());
-					}
+				}
+				
+				//Set the permission
+				if (NMS.isVanillaCommandWrapper(knownCommands.get(cmdName))) {
+					knownCommands.get(cmdName).setPermission(permNode);
+				}
+				if (NMS.isVanillaCommandWrapper(knownCommands.get("minecraft:" + cmdName))) {
+					knownCommands.get(cmdName).setPermission(permNode);
 				}
 			});
 		} catch (IllegalAccessException | IllegalArgumentException e) {
