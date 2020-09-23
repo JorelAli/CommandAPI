@@ -14,8 +14,8 @@ public class ChatColorArgument extends SafeOverrideableArgument<ChatColor> {
 	/**
 	 * A ChatColor argument. Represents a color or formatting for chat
 	 */
-	public ChatColorArgument() {
-		super(CommandAPIHandler.getNMS()._ArgumentChatFormat(), ((Function<ChatColor, String>) ChatColor::name).andThen(String::toLowerCase));
+	public ChatColorArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getNMS()._ArgumentChatFormat(), ((Function<ChatColor, String>) ChatColor::name).andThen(String::toLowerCase));
 	}
 	
 	@Override

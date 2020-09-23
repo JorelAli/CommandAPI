@@ -15,8 +15,8 @@ public class ScoreHolderArgument extends Argument {
 	 * A Score Holder argument. Represents a single score holder or a collection of score holders
 	 * @param type whether this argument represents a single score holder or a collection of score holders
 	 */
-	public ScoreHolderArgument(ScoreHolderType type) {
-		super(CommandAPIHandler.getNMS()._ArgumentScoreholder(type == ScoreHolderType.SINGLE));
+	public ScoreHolderArgument(String nodeName, ScoreHolderType type) {
+		super(nodeName, CommandAPIHandler.getNMS()._ArgumentScoreholder(type == ScoreHolderType.SINGLE));
 		single = (type == ScoreHolderType.SINGLE);
 	}
 	

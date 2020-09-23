@@ -12,8 +12,8 @@ public class BlockPredicateArgument extends Argument {
 	/**
 	 * A Block Predicate argument. Represents a predicate for blocks 
 	 */
-	public BlockPredicateArgument() {
-		super(CommandAPIHandler.getNMS()._ArgumentBlockPredicate());
+	public BlockPredicateArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getNMS()._ArgumentBlockPredicate());
 	}
 
 	@Override

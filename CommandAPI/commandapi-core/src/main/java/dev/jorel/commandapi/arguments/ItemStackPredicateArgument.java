@@ -12,8 +12,8 @@ public class ItemStackPredicateArgument extends Argument {
 	/**
 	 * A ItemStack Predicate argument. Represents a predicate for itemstacks 
 	 */
-	public ItemStackPredicateArgument() {
-		super(CommandAPIHandler.getNMS()._ArgumentItemPredicate());
+	public ItemStackPredicateArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getNMS()._ArgumentItemPredicate());
 	}
 
 	@Override

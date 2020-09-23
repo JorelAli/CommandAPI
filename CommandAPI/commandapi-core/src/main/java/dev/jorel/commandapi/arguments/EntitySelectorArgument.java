@@ -19,7 +19,7 @@ public class EntitySelectorArgument extends Argument {
 	 * @param selector the entity selector for this argument
 	 */
 	public EntitySelectorArgument(EntitySelector selector) {
-		super(CommandAPIHandler.getNMS()._ArgumentEntity(selector));
+		super(nodeName, CommandAPIHandler.getNMS()._ArgumentEntity(selector));
 		this.selector = selector;
 	}
 

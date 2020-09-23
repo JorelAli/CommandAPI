@@ -10,8 +10,8 @@ public class StringArgument extends Argument {
 	/**
 	 * A string argument for one word
 	 */
-	public StringArgument() {
-		super(StringArgumentType.word());
+	public StringArgument(String nodeName) {
+		super(nodeName, StringArgumentType.word());
 	}
 
 	@Override

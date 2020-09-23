@@ -11,8 +11,8 @@ public class MathOperationArgument extends SafeOverrideableArgument<MathOperatio
 	/**
 	 * A MathOperation argument. Represents a math operation (e.g. addition, subtraction etc.)
 	 */
-	public MathOperationArgument() {
-		super(CommandAPIHandler.getNMS()._ArgumentMathOperation(), MathOperation::toString);
+	public MathOperationArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getNMS()._ArgumentMathOperation(), MathOperation::toString);
 	}
 	
 	@Override

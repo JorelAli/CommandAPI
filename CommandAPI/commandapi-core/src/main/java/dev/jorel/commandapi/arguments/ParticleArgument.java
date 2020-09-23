@@ -12,8 +12,8 @@ public class ParticleArgument extends SafeOverrideableArgument<Particle> {
 	/**
 	 * A Particle argument. Represents Minecraft particles
 	 */
-	public ParticleArgument() {
-		super(CommandAPIHandler.getNMS()._ArgumentParticle(), CommandAPIHandler.getNMS()::convert);
+	public ParticleArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getNMS()._ArgumentParticle(), CommandAPIHandler.getNMS()::convert);
 	}
 
 	@Override

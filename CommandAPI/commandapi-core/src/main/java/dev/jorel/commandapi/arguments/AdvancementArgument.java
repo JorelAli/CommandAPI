@@ -9,8 +9,8 @@ import dev.jorel.commandapi.CommandAPIHandler;
  */
 public class AdvancementArgument extends SafeOverrideableArgument<Advancement> implements ICustomProvidedArgument {
 	
-	public AdvancementArgument() {
-		super(CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered(), fromKey(Advancement::getKey));
+	public AdvancementArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered(), fromKey(Advancement::getKey));
 	}
 
 	@Override

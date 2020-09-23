@@ -12,8 +12,8 @@ public class PotionEffectArgument extends SafeOverrideableArgument<PotionEffectT
 	/**
 	 * A PotionEffect argument. Represents status/potion effects
 	 */
-	public PotionEffectArgument() {
-		super(CommandAPIHandler.getNMS()._ArgumentMobEffect(), CommandAPIHandler.getNMS()::convert);
+	public PotionEffectArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getNMS()._ArgumentMobEffect(), CommandAPIHandler.getNMS()::convert);
 	}
 
 	@Override

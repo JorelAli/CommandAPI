@@ -12,7 +12,7 @@ public class DoubleArgument extends SafeOverrideableArgument<Double> {
 	/**
 	 * A double argument
 	 */
-	public DoubleArgument() {
+	public DoubleArgument(String nodeName) {
 		super(DoubleArgumentType.doubleArg(), String::valueOf);
 	}
 	

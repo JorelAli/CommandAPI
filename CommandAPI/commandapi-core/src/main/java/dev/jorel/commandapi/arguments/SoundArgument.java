@@ -9,8 +9,8 @@ import dev.jorel.commandapi.CommandAPIHandler;
  */
 public class SoundArgument extends SafeOverrideableArgument<Sound> implements ICustomProvidedArgument {
 	
-	public SoundArgument() {
-		super(CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered(), CommandAPIHandler.getNMS()::convert);
+	public SoundArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered(), CommandAPIHandler.getNMS()::convert);
 	}
 
 	@Override

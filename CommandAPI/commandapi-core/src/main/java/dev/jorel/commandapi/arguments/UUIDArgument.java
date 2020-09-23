@@ -12,8 +12,8 @@ public class UUIDArgument extends SafeOverrideableArgument<UUID> {
 	/**
 	 * A UUID argument. Represents an in-game entity UUID 
 	 */
-	public UUIDArgument() {
-		super(CommandAPIHandler.getNMS()._ArgumentUUID(), UUID::toString);
+	public UUIDArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getNMS()._ArgumentUUID(), UUID::toString);
 	}
 
 	@Override

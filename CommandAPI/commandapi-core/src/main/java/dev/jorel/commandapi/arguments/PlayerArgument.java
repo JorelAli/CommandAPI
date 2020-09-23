@@ -12,8 +12,8 @@ public class PlayerArgument extends SafeOverrideableArgument<Player> {
 	/**
 	 * A Player argument. Produces a single player, regardless of whether @a, @p, @r or @e is used.
 	 */
-	public PlayerArgument() {
-		super(CommandAPIHandler.getNMS()._ArgumentProfile(), Player::getName);
+	public PlayerArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getNMS()._ArgumentProfile(), Player::getName);
 	}
 
 	@Override

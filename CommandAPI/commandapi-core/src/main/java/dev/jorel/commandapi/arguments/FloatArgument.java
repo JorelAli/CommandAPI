@@ -12,16 +12,16 @@ public class FloatArgument extends SafeOverrideableArgument<Float> {
 	/**
 	 * A float argument
 	 */
-	public FloatArgument() {
-		super(FloatArgumentType.floatArg(), String::valueOf);
+	public FloatArgument(String nodeName) {
+		super(nodeName, FloatArgumentType.floatArg(), String::valueOf);
 	}
 	
 	/**
 	 * A float argument with a minimum value
 	 * @param min The minimum value this argument can take (inclusive)
 	 */
-	public FloatArgument(float min) {
-		super(FloatArgumentType.floatArg(min), String::valueOf);
+	public FloatArgument(String nodeName, float min) {
+		super(nodeName, FloatArgumentType.floatArg(min), String::valueOf);
 	}
 	
 	/**
@@ -29,8 +29,8 @@ public class FloatArgument extends SafeOverrideableArgument<Float> {
 	 * @param min The minimum value this argument can take (inclusive)
 	 * @param max The maximum value this argument can take (inclusive)
 	 */
-	public FloatArgument(float min, float max) {
-		super(FloatArgumentType.floatArg(min, max), String::valueOf);
+	public FloatArgument(String nodeName, float min, float max) {
+		super(nodeName, FloatArgumentType.floatArg(min, max), String::valueOf);
 		if(max < min) {
 			throw new InvalidRangeException();
 		}

@@ -19,8 +19,8 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	
 	private final Function<S, String> mapper;
 
-	protected SafeOverrideableArgument(ArgumentType<?> rawType, Function<S, String> mapper) {
-		super(rawType);
+	protected SafeOverrideableArgument(String nodeName, ArgumentType<?> rawType, Function<S, String> mapper) {
+		super(nodeName, rawType);
 		this.mapper = mapper;
 	}
 

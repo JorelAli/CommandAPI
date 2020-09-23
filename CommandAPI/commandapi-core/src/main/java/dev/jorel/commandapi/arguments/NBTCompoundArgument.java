@@ -14,8 +14,8 @@ public class NBTCompoundArgument extends SafeOverrideableArgument<NBTContainer> 
 	/**
 	 * An NBT Compound Argument. Represents Minecraft's NBT Compound Tag using the NBT API
 	 */
-	public NBTCompoundArgument() {
-		super(CommandAPIHandler.getNMS()._ArgumentNBTCompound(), NBTContainer::toString);
+	public NBTCompoundArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getNMS()._ArgumentNBTCompound(), NBTContainer::toString);
 		
 		if(Bukkit.getPluginManager().getPlugin("NBTAPI") == null) {
 			throw new NBTAPINotFoundException(this.getClass());

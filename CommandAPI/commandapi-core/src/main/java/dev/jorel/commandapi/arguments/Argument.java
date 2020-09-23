@@ -38,6 +38,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	// Raw Argument Types //
 	////////////////////////
 
+	private final String nodeName;
 	private final ArgumentType<?> rawType;
 
 	/**
@@ -45,7 +46,8 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * 
 	 * @param rawType the NMS or brigadier type to be used for this argument
 	 */
-	protected Argument(ArgumentType<?> rawType) {
+	protected Argument(String nodeName, ArgumentType<?> rawType) {
+		this.nodeName = nodeName;
 		this.rawType = rawType;
 	}
 

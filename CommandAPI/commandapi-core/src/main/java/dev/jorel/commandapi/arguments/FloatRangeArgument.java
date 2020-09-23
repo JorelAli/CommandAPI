@@ -11,8 +11,8 @@ public class FloatRangeArgument extends SafeOverrideableArgument<FloatRange> {
 	/**
 	 * A FloatRange argument that represents
 	 */
-	public FloatRangeArgument() {
-		super(CommandAPIHandler.getNMS()._ArgumentFloatRange(), FloatRange::toString);
+	public FloatRangeArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getNMS()._ArgumentFloatRange(), FloatRange::toString);
 	}
 
 	@Override

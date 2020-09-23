@@ -10,8 +10,8 @@ public class GreedyStringArgument extends SafeOverrideableArgument<String> imple
 	/**
 	 * A string argument for a string of any length
 	 */
-	public GreedyStringArgument() {
-		super(StringArgumentType.greedyString(), s -> s);
+	public GreedyStringArgument(String nodeName) {
+		super(nodeName, StringArgumentType.greedyString(), s -> s);
 	}
 
 	@Override

@@ -25,7 +25,7 @@ public class LiteralArgument extends Argument {
 		 * 
 		 * This is a wrapper for the object "LiteralArgumentBuilder<>"
 		 */
-		super(null);
+		super(literal, null);
 		
 		if(literal == null) {
 			throw new BadLiteralException(true);

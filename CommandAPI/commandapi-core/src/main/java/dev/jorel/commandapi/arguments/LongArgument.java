@@ -12,16 +12,16 @@ public class LongArgument extends SafeOverrideableArgument<Long> {
 	/**
 	 * A long argument
 	 */
-	public LongArgument() {
-		super(LongArgumentType.longArg(), String::valueOf);
+	public LongArgument(String nodeName) {
+		super(nodeName, LongArgumentType.longArg(), String::valueOf);
 	}
 	
 	/**
 	 * A long argument with a minimum value
 	 * @param min The minimum value this argument can take (inclusive)
 	 */
-	public LongArgument(int min) {
-		super(LongArgumentType.longArg(min), String::valueOf);
+	public LongArgument(String nodeName, int min) {
+		super(nodeName, LongArgumentType.longArg(min), String::valueOf);
 	}
 	
 	/**
@@ -29,8 +29,8 @@ public class LongArgument extends SafeOverrideableArgument<Long> {
 	 * @param min The minimum value this argument can take (inclusive)
 	 * @param max The maximum value this argument can take (inclusive)
 	 */
-	public LongArgument(int min, int max) {
-		super(LongArgumentType.longArg(min, max), String::valueOf);
+	public LongArgument(String nodeName, int min, int max) {
+		super(nodeName, LongArgumentType.longArg(min, max), String::valueOf);
 		if(max < min) {
 			throw new InvalidRangeException();
 		}

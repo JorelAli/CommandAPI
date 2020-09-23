@@ -11,8 +11,8 @@ public class IntegerRangeArgument extends SafeOverrideableArgument<IntegerRange>
 	/**
 	 * A Time argument. Represents the number of ingame ticks 
 	 */
-	public IntegerRangeArgument() {
-		super(CommandAPIHandler.getNMS()._ArgumentIntRange(), IntegerRange::toString);
+	public IntegerRangeArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getNMS()._ArgumentIntRange(), IntegerRange::toString);
 	}
 	
 	@Override

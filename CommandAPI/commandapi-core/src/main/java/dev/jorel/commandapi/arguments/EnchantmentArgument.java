@@ -12,8 +12,8 @@ public class EnchantmentArgument extends SafeOverrideableArgument<Enchantment> {
 	/**
 	 * An Enchantment argument. Represents an enchantment for items 
 	 */
-	public EnchantmentArgument() {
-		super(CommandAPIHandler.getNMS()._ArgumentEnchantment(), fromKey(Enchantment::getKey));
+	public EnchantmentArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getNMS()._ArgumentEnchantment(), fromKey(Enchantment::getKey));
 	}
 
 	@Override

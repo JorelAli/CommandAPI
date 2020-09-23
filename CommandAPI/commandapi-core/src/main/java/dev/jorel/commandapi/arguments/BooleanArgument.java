@@ -10,8 +10,8 @@ public class BooleanArgument extends SafeOverrideableArgument<Boolean> {
 	/**
 	 * An Boolean argument
 	 */
-	public BooleanArgument() {
-		super(BoolArgumentType.bool(), String::valueOf);
+	public BooleanArgument(String nodeName) {
+		super(nodeName, BoolArgumentType.bool(), String::valueOf);
 	}
 
 	@Override

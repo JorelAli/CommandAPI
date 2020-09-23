@@ -12,8 +12,8 @@ public class ChatArgument extends Argument implements IGreedyArgument {
 	/**
 	 * A Chat argument. Represents fancy greedy strings that can parse entity selectors
 	 */
-	public ChatArgument() {
-		super(CommandAPIHandler.getNMS()._ArgumentChat());
+	public ChatArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getNMS()._ArgumentChat());
 		
 		try {
 			Class.forName("org.spigotmc.SpigotConfig");

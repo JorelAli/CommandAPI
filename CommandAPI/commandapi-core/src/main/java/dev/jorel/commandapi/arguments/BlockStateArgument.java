@@ -12,8 +12,8 @@ public class BlockStateArgument extends Argument {
 	/**
 	 * A BlockState argument
 	 */
-	public BlockStateArgument() {
-		super(CommandAPIHandler.getNMS()._ArgumentBlockState());
+	public BlockStateArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getNMS()._ArgumentBlockState());
 	}
 
 	@Override

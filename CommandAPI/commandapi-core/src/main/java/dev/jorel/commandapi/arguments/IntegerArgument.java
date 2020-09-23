@@ -12,16 +12,16 @@ public class IntegerArgument extends SafeOverrideableArgument<Integer> {
 	/**
 	 * An integer argument
 	 */
-	public IntegerArgument() {
-		super(IntegerArgumentType.integer(), String::valueOf);
+	public IntegerArgument(String nodeName) {
+		super(nodeName, IntegerArgumentType.integer(), String::valueOf);
 	}
 	
 	/**
 	 * An integer argument with a minimum value
 	 * @param min The minimum value this argument can take (inclusive)
 	 */
-	public IntegerArgument(int min) {
-		super(IntegerArgumentType.integer(min), String::valueOf);
+	public IntegerArgument(String nodeName, int min) {
+		super(nodeName, IntegerArgumentType.integer(min), String::valueOf);
 	}
 	
 	/**
@@ -29,8 +29,8 @@ public class IntegerArgument extends SafeOverrideableArgument<Integer> {
 	 * @param min The minimum value this argument can take (inclusive)
 	 * @param max The maximum value this argument can take (inclusive)
 	 */
-	public IntegerArgument(int min, int max) {
-		super(IntegerArgumentType.integer(min, max), String::valueOf);
+	public IntegerArgument(String nodeName, int min, int max) {
+		super(nodeName, IntegerArgumentType.integer(min, max), String::valueOf);
 		if(max < min) {
 			throw new InvalidRangeException();
 		}

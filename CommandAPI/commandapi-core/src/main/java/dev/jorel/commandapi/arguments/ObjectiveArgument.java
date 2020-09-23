@@ -12,8 +12,8 @@ public class ObjectiveArgument extends SafeOverrideableArgument<Objective> {
 	/**
 	 * An Objective argument. Represents a scoreboard objective
 	 */
-	public ObjectiveArgument() {
-		super(CommandAPIHandler.getNMS()._ArgumentScoreboardObjective(), Objective::getName);
+	public ObjectiveArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getNMS()._ArgumentScoreboardObjective(), Objective::getName);
 	}
 
 	@Override

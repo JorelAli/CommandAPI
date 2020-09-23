@@ -10,8 +10,8 @@ public class TextArgument extends Argument {
 	/**
 	 * A string argument for one word, or multiple words encased in quotes
 	 */
-	public TextArgument() {
-		super(StringArgumentType.string());
+	public TextArgument(String nodeName) {
+		super(nodeName, StringArgumentType.string());
 	}
 
 	@Override

@@ -10,8 +10,8 @@ import dev.jorel.commandapi.CommandAPIHandler;
  */
 public class LootTableArgument extends SafeOverrideableArgument<LootTable> implements ICustomProvidedArgument {
 	
-	public LootTableArgument() {
-		super(CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered(), fromKey(Keyed::getKey));
+	public LootTableArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered(), fromKey(Keyed::getKey));
 	}
 	
 	@Override

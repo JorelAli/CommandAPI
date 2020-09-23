@@ -15,8 +15,8 @@ public class FunctionArgument extends SafeOverrideableArgument<NamespacedKey> im
 	 * a function MUST be registered in the onLoad() method of your plugin, NOT
 	 * in the onEnable() method!
 	 */
-	public FunctionArgument() {
-		super(CommandAPIHandler.getNMS()._ArgumentTag(), fromKey(n -> n));
+	public FunctionArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getNMS()._ArgumentTag(), fromKey(n -> n));
 	}
 
 	@Override
