@@ -4,7 +4,8 @@ import dev.jorel.commandapi.exceptions.BadLiteralException;
 
 public class MultiLiteralArgument extends Argument {
 
-	String[] literals;
+	public boolean isMulti = true;
+	private String[] literals;
 	
 	/**
 	 * A literal argument. Only takes one string value which cannot be modified 

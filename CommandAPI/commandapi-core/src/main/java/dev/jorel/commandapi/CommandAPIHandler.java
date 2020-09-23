@@ -170,6 +170,7 @@ public abstract class CommandAPIHandler {
 	 * 
 	 * @param args     set of ordered argument pairs which contain the prompt text
 	 *                 and their argument types
+	 * @param actualArgs 
 	 * @param executor code to be ran when the command is executed
 	 * @return a brigadier command which is registered internally
 	 * @throws CommandSyntaxException if an error occurs when the command is ran
@@ -450,7 +451,7 @@ public abstract class CommandAPIHandler {
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	// SECTION: Registration //
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
-
+	
 	// Builds our NMS command using the given arguments for this method, then
 	// registers it
 	static void register(String commandName, CommandPermission permissions, String[] aliases, Predicate<CommandSender> requirements,
@@ -470,8 +471,7 @@ public abstract class CommandAPIHandler {
 					//Add all of its entries
 					for(int i = 0; i < superArg.getLiterals().length; i++) {
 						LiteralArgument litArg = new LiteralArgument(superArg.getLiterals()[i]);
-						litArg.isMulti = true;
-						
+						litArg.isMulti = superArg.isMulti;
 						
 						//Reconstruct the list of arguments and place in the new literals
 						List<Argument> newArgs = new ArrayList<>();

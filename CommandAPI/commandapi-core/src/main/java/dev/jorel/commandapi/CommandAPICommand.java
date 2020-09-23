@@ -263,8 +263,18 @@ public class CommandAPICommand {
 	
 	public void flatten(CommandAPICommand rootCommand, List<Argument> prevArguments, CommandAPICommand subcommand) {
 		
+		String[] literals = new String[subcommand.aliases.length + 1];
+		literals[0] = subcommand.commandName;
+		System.arraycopy(subcommand.aliases, 0, literals, 1, subcommand.aliases.length);
+		MultiLiteralArgument literal = (MultiLiteralArgument) new MultiLiteralArgument(literals)
+			.withPermission(subcommand.permission)
+			.withRequirement(subcommand.requirements);
+		
+		literal.isMulti = false;
+		
+		prevArguments.add(literal);
+		
 		if(!subcommand.executor.isEmpty()) {	
-			
 			rootCommand.args = prevArguments;
 			rootCommand.withArguments(subcommand.args);
 			rootCommand.executor = subcommand.executor;
@@ -272,64 +282,10 @@ public class CommandAPICommand {
 			rootCommand.subcommands = new ArrayList<>();
 			rootCommand.register();
 		} else {
-			String[] literals = new String[subcommand.aliases.length + 1];
-			literals[0] = subcommand.commandName;
-			System.arraycopy(subcommand.aliases, 0, literals, 1, subcommand.aliases.length);
-			Argument literal = new MultiLiteralArgument(literals)
-					.withPermission(subcommand.permission)
-					.withRequirement(subcommand.requirements);
-			
-			prevArguments.add(literal);
 			for(CommandAPICommand subsubcommand : new ArrayList<>(subcommand.subcommands)) {
-				flatten(rootCommand, prevArguments, subsubcommand);
+				flatten(rootCommand, new ArrayList<>(prevArguments), subsubcommand);
 			}
 		}
-		
-		/*
-		/*List<List<Argument>> arguments = new ArrayList<>();
-		for(CommandAPICommand subcommand : this.subcommands) {
-			
-			//Generate the argument from the command
-			String[] literals = new String[subcommand.aliases.length + 1];
-			literals[0] = subcommand.commandName;
-			System.arraycopy(subcommand.aliases, 0, literals, 1, subcommand.aliases.length);
-			Argument literal = new MultiLiteralArgument(literals)
-					.withPermission(subcommand.permission)
-					.withRequirement(subcommand.requirements);
-			
-			List<Argument> a = new ArrayList<>();
-			a.addAll(subcommand.flatten());
-		}
-		return arguments;
-		
-		this.args = new ArrayList<>();
-		
-		{
-			CommandAPICommand subcommand = null;
-			
-			while(subcommand.executor.isEmpty()) {
-				
-			}
-		}
-		
-		for(CommandAPICommand subcommand : this.subcommands) {
-			String[] literals = new String[subcommand.aliases.length + 1];
-			literals[0] = subcommand.commandName;
-			System.arraycopy(subcommand.aliases, 0, literals, 1, subcommand.aliases.length);
-			Argument literal = new MultiLiteralArgument(literals)
-					.withPermission(subcommand.permission)
-					.withRequirement(subcommand.requirements);
-			
-			this.withArguments(literal);
-			
-			if(!subcommand.executor.isEmpty()) {
-				this.executor = subcommand.executor;
-				this.register();
-			} else {
-				subcommand.flatten();
-			}
-		}*/
-		
 	}
 	
 	/**
@@ -369,17 +325,14 @@ public class CommandAPICommand {
 				}
 			}
 			
-			
-			
 			if(!executor.isEmpty()) {
-				System.out.println("Registering " + commandName + ": " + copyOfArgs);
 				CommandAPIHandler.register(commandName, permission, aliases, requirements, copyOfArgs, executor, isConverted);
-			} else {
-				System.out.println("Not registering " + commandName + ": " + copyOfArgs);
 			}
 			
 			if(this.subcommands.size() > 0) {
-				flatten(this, new ArrayList<>(), this);
+				for(CommandAPICommand subcommand : this.subcommands) {
+					flatten(this, new ArrayList<>(), subcommand);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
