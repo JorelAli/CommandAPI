@@ -1,6 +1,7 @@
 package dev.jorel.commandapi;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -8,6 +9,7 @@ import org.bukkit.command.CommandSender;
 
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.IGreedyArgument;
+import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.exceptions.EmptyExecutorException;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
@@ -36,6 +38,7 @@ public class CommandAPICommand {
 	String[] aliases = new String[0];
 	Predicate<CommandSender> requirements = s -> true;
 	List<Argument> args = new ArrayList<>();
+	List<CommandAPICommand> subcommands = new ArrayList<>();
 	CustomCommandExecutor executor = new CustomCommandExecutor();
 	boolean isConverted;
 	
@@ -93,12 +96,22 @@ public class CommandAPICommand {
 	 * @return this command builder
 	 */
 	public CommandAPICommand withArguments(List<Argument> args) {
-		this.args = args;
+		this.args.addAll(args);
+		return this;
+	}
+	
+	public CommandAPICommand withArguments(Argument... args) {
+		this.args = Arrays.asList(args);
 		return this;
 	}
 	
 	public CommandAPICommand withArgument(Argument argument) {
 		this.args.add(argument);
+		return this;
+	}
+	
+	public CommandAPICommand withSubcommand(CommandAPICommand subcommand) {
+		this.subcommands.add(subcommand);
 		return this;
 	}
 	
@@ -258,47 +271,58 @@ public class CommandAPICommand {
 	 * Registers the command
 	 */
 	public void register() {
-		if(this.executor.isEmpty()) {
-			throw new EmptyExecutorException();
-		} else {
-			if(!CommandAPI.canRegister()) {
-				CommandAPI.getLog().severe("Cannot register command /" + commandName + ", because the server has finished loading!");
-				return;
-			}
-			try {
-				//Sanitize commandNames
-				if(commandName == null || commandName.length() == 0) {
-					throw new InvalidCommandNameException(commandName);
-				}
-				
-				//Make a local copy of args to deal with
-				List<Argument> copyOfArgs = args == null ? new ArrayList<>() : new ArrayList<>(args);
-				
-				//if args contains a GreedyString && args.getLast != GreedyString
-				long numGreedyArgs = copyOfArgs.stream().filter(arg -> arg instanceof IGreedyArgument).count();
-				if(numGreedyArgs >= 1) {
-					//A GreedyString has been found
-					if(!(copyOfArgs.toArray()[copyOfArgs.size() - 1] instanceof IGreedyArgument)) {
-						throw new GreedyArgumentException();
-					}
-					
-					if(numGreedyArgs > 1) {
-						throw new GreedyArgumentException();
-					}
-				}
-				
-				//Reassign permissions to arguments if not declared
-				for(Argument argument : copyOfArgs) {
-					if(argument.getArgumentPermission() == null) {
-						argument.withPermission(permission);
-					}
-				}
-				
-				CommandAPIHandler.register(commandName, permission, aliases, requirements, copyOfArgs, executor, isConverted);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		if(!CommandAPI.canRegister()) {
+			CommandAPI.getLog().severe("Cannot register command /" + commandName + ", because the server has finished loading!");
+			return;
 		}
+		try {
+			//Sanitize commandNames
+			if(commandName == null || commandName.length() == 0) {
+				throw new InvalidCommandNameException(commandName);
+			}
+			
+			//Make a local copy of args to deal with
+			List<Argument> copyOfArgs = args == null ? new ArrayList<>() : new ArrayList<>(args);
+			
+			//if args contains a GreedyString && args.getLast != GreedyString
+			long numGreedyArgs = copyOfArgs.stream().filter(arg -> arg instanceof IGreedyArgument).count();
+			if(numGreedyArgs >= 1) {
+				//A GreedyString has been found
+				if(!(copyOfArgs.toArray()[copyOfArgs.size() - 1] instanceof IGreedyArgument)) {
+					throw new GreedyArgumentException();
+				}
+				
+				if(numGreedyArgs > 1) {
+					throw new GreedyArgumentException();
+				}
+			}
+			
+			//Assign the command's permissions to arguments if the arguments don't already have one
+			for(Argument argument : copyOfArgs) {
+				if(argument.getArgumentPermission() == null) {
+					argument.withPermission(permission);
+				}
+			}
+			
+			if(!executor.isEmpty()) {
+				CommandAPIHandler.register(commandName, permission, aliases, requirements, copyOfArgs, executor, isConverted);
+			}
+			
+			for(CommandAPICommand subcommand : subcommands) {
+				CommandAPICommand cmdToRegister = new CommandAPICommand(commandName)
+					.withArgument(new LiteralArgument(subcommand.commandName))
+					.withArguments(subcommand.args)
+					.withPermission(subcommand.permission)
+					.withRequirement(subcommand.requirements)
+					.withAliases(subcommand.aliases);
+				cmdToRegister.executor = subcommand.executor;
+				//isConverted?
+				cmdToRegister.register();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 }
