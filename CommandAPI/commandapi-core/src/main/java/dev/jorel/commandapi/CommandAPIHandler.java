@@ -497,7 +497,7 @@ public abstract class CommandAPIHandler {
 		if (CommandAPI.getConfiguration().hasVerboseOutput()) {
 			// Create a list of argument names
 			StringBuilder builder = new StringBuilder();
-			args.forEach(arg -> builder.append("<").append(arg.getClass().getSimpleName()).append("> "));
+			args.forEach(arg -> builder.append(arg.getNodeName()).append("<").append(arg.getClass().getSimpleName()).append("> "));
 			CommandAPI.getLog().info("Registering command /" + commandName + " " + builder.toString());
 		}
 

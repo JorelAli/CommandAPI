@@ -9,8 +9,7 @@ import org.bukkit.command.CommandSender;
 
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.IGreedyArgument;
-import dev.jorel.commandapi.arguments.LiteralArgument;
-import dev.jorel.commandapi.exceptions.EmptyExecutorException;
+import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
 import dev.jorel.commandapi.executors.CommandBlockCommandExecutor;
@@ -33,7 +32,7 @@ import dev.jorel.commandapi.executors.ResultingCommandExecutor;
  */
 public class CommandAPICommand {
 
-	final String commandName;
+	String commandName;
 	CommandPermission permission = CommandPermission.NONE;
 	String[] aliases = new String[0];
 	Predicate<CommandSender> requirements = s -> true;
@@ -101,12 +100,7 @@ public class CommandAPICommand {
 	}
 	
 	public CommandAPICommand withArguments(Argument... args) {
-		this.args = Arrays.asList(args);
-		return this;
-	}
-	
-	public CommandAPICommand withArgument(Argument argument) {
-		this.args.add(argument);
+		this.args.addAll(Arrays.asList(args));
 		return this;
 	}
 	
@@ -267,6 +261,77 @@ public class CommandAPICommand {
 		return this;
 	}
 	
+	public void flatten(CommandAPICommand rootCommand, List<Argument> prevArguments, CommandAPICommand subcommand) {
+		
+		if(!subcommand.executor.isEmpty()) {	
+			
+			rootCommand.args = prevArguments;
+			rootCommand.withArguments(subcommand.args);
+			rootCommand.executor = subcommand.executor;
+			
+			rootCommand.subcommands = new ArrayList<>();
+			rootCommand.register();
+		} else {
+			String[] literals = new String[subcommand.aliases.length + 1];
+			literals[0] = subcommand.commandName;
+			System.arraycopy(subcommand.aliases, 0, literals, 1, subcommand.aliases.length);
+			Argument literal = new MultiLiteralArgument(literals)
+					.withPermission(subcommand.permission)
+					.withRequirement(subcommand.requirements);
+			
+			prevArguments.add(literal);
+			for(CommandAPICommand subsubcommand : new ArrayList<>(subcommand.subcommands)) {
+				flatten(rootCommand, prevArguments, subsubcommand);
+			}
+		}
+		
+		/*
+		/*List<List<Argument>> arguments = new ArrayList<>();
+		for(CommandAPICommand subcommand : this.subcommands) {
+			
+			//Generate the argument from the command
+			String[] literals = new String[subcommand.aliases.length + 1];
+			literals[0] = subcommand.commandName;
+			System.arraycopy(subcommand.aliases, 0, literals, 1, subcommand.aliases.length);
+			Argument literal = new MultiLiteralArgument(literals)
+					.withPermission(subcommand.permission)
+					.withRequirement(subcommand.requirements);
+			
+			List<Argument> a = new ArrayList<>();
+			a.addAll(subcommand.flatten());
+		}
+		return arguments;
+		
+		this.args = new ArrayList<>();
+		
+		{
+			CommandAPICommand subcommand = null;
+			
+			while(subcommand.executor.isEmpty()) {
+				
+			}
+		}
+		
+		for(CommandAPICommand subcommand : this.subcommands) {
+			String[] literals = new String[subcommand.aliases.length + 1];
+			literals[0] = subcommand.commandName;
+			System.arraycopy(subcommand.aliases, 0, literals, 1, subcommand.aliases.length);
+			Argument literal = new MultiLiteralArgument(literals)
+					.withPermission(subcommand.permission)
+					.withRequirement(subcommand.requirements);
+			
+			this.withArguments(literal);
+			
+			if(!subcommand.executor.isEmpty()) {
+				this.executor = subcommand.executor;
+				this.register();
+			} else {
+				subcommand.flatten();
+			}
+		}*/
+		
+	}
+	
 	/**
 	 * Registers the command
 	 */
@@ -304,20 +369,17 @@ public class CommandAPICommand {
 				}
 			}
 			
+			
+			
 			if(!executor.isEmpty()) {
+				System.out.println("Registering " + commandName + ": " + copyOfArgs);
 				CommandAPIHandler.register(commandName, permission, aliases, requirements, copyOfArgs, executor, isConverted);
+			} else {
+				System.out.println("Not registering " + commandName + ": " + copyOfArgs);
 			}
 			
-			for(CommandAPICommand subcommand : subcommands) {
-				CommandAPICommand cmdToRegister = new CommandAPICommand(commandName)
-					.withArgument(new LiteralArgument(subcommand.commandName))
-					.withArguments(subcommand.args)
-					.withPermission(subcommand.permission)
-					.withRequirement(subcommand.requirements)
-					.withAliases(subcommand.aliases);
-				cmdToRegister.executor = subcommand.executor;
-				//isConverted?
-				cmdToRegister.register();
+			if(this.subcommands.size() > 0) {
+				flatten(this, new ArrayList<>(), this);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
