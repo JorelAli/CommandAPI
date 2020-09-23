@@ -1,7 +1,7 @@
 package dev.jorel.commandapi;
 
-import java.util.LinkedHashMap;
-import java.util.Map.Entry;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 
 import org.bukkit.command.CommandSender;
@@ -35,7 +35,7 @@ public class CommandAPICommand {
 	CommandPermission permission = CommandPermission.NONE;
 	String[] aliases = new String[0];
 	Predicate<CommandSender> requirements = s -> true;
-	LinkedHashMap<String, Argument> args = new LinkedHashMap<>();
+	List<Argument> args = new ArrayList<>();
 	CustomCommandExecutor executor = new CustomCommandExecutor();
 	boolean isConverted;
 	
@@ -92,7 +92,7 @@ public class CommandAPICommand {
 	 * @param args A <code>LinkedHashMap</code> that represents the arguments that this command can accept
 	 * @return this command builder
 	 */
-	public CommandAPICommand withArguments(LinkedHashMap<String, Argument> args) {
+	public CommandAPICommand withArguments(List<Argument> args) {
 		this.args = args;
 		return this;
 	}
@@ -267,14 +267,13 @@ public class CommandAPICommand {
 				}
 				
 				//Make a local copy of args to deal with
-				@SuppressWarnings("unchecked")
-				LinkedHashMap<String, Argument> copyOfArgs = args == null ? new LinkedHashMap<>() : (LinkedHashMap<String, Argument>) args.clone();
+				List<Argument> copyOfArgs = args == null ? new ArrayList<>() : new ArrayList<>(args);
 				
 				//if args contains a GreedyString && args.getLast != GreedyString
-				long numGreedyArgs = copyOfArgs.values().stream().filter(arg -> arg instanceof IGreedyArgument).count();
+				long numGreedyArgs = copyOfArgs.stream().filter(arg -> arg instanceof IGreedyArgument).count();
 				if(numGreedyArgs >= 1) {
 					//A GreedyString has been found
-					if(!(copyOfArgs.values().toArray()[copyOfArgs.size() - 1] instanceof IGreedyArgument)) {
+					if(!(copyOfArgs.toArray()[copyOfArgs.size() - 1] instanceof IGreedyArgument)) {
 						throw new GreedyArgumentException();
 					}
 					
@@ -284,9 +283,9 @@ public class CommandAPICommand {
 				}
 				
 				//Reassign permissions to arguments if not declared
-				for(Entry<String, Argument> entry : copyOfArgs.entrySet()) {
-					if(entry.getValue().getArgumentPermission() == null) {
-						entry.setValue(entry.getValue().withPermission(permission));
+				for(Argument argument : copyOfArgs) {
+					if(argument.getArgumentPermission() == null) {
+						argument.withPermission(permission);
 					}
 				}
 				

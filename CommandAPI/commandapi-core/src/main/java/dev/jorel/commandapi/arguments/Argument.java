@@ -60,7 +60,11 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 */
 	@SuppressWarnings("unchecked")
 	public final <T> ArgumentType<T> getRawType() {
-		return (ArgumentType<T>) rawType;
+		return (ArgumentType<T>) this.rawType;
+	}
+	
+	public final String getNodeName() {
+		return this.nodeName;
 	}
 
 	/////////////////

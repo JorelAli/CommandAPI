@@ -40,6 +40,7 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
+import com.sun.org.apache.xpath.internal.Arg;
 
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
@@ -176,7 +177,7 @@ public abstract class CommandAPIHandler {
 	 * @return a brigadier command which is registered internally
 	 * @throws CommandSyntaxException if an error occurs when the command is ran
 	 */
-	static Command generateCommand(LinkedHashMap<String, Argument> args, CustomCommandExecutor executor, boolean converted)
+	static Command generateCommand(List<Argument> args, CustomCommandExecutor executor, boolean converted)
 			throws CommandSyntaxException {
 
 		// Generate our command from executor
@@ -202,13 +203,13 @@ public abstract class CommandAPIHandler {
 	 * @return an Object[] which can be used in (sender, args) -> 
 	 * @throws CommandSyntaxException
 	 */
-	private static Object[] argsToObjectArr(CommandContext cmdCtx, LinkedHashMap<String, Argument> args) throws CommandSyntaxException {
+	private static Object[] argsToObjectArr(CommandContext cmdCtx, List<Argument> args) throws CommandSyntaxException {
 		// Array for arguments for executor
 		List<Object> argList = new ArrayList<>();
 
 		// Populate array
-		for (Entry<String, Argument> entry : args.entrySet()) {
-			Object result = parseArgument(cmdCtx, entry.getKey(), entry.getValue());
+		for (Argument argument : args) {
+			Object result = parseArgument(cmdCtx, argument.getNodeName(), argument);
 			if(result != null) {
 				argList.add(result);
 			}
@@ -456,18 +457,18 @@ public abstract class CommandAPIHandler {
 	// Builds our NMS command using the given arguments for this method, then
 	// registers it
 	static void register(String commandName, CommandPermission permissions, String[] aliases, Predicate<CommandSender> requirements,
-			final LinkedHashMap<String, Argument> args, CustomCommandExecutor executor, boolean converted) throws Exception {
+			final List<Argument> args, CustomCommandExecutor executor, boolean converted) throws Exception {
 		
 		//"Expands" our MultiLiterals into Literals
 		Predicate<Argument> isMultiLiteral = arg -> arg.getArgumentType() == CommandAPIArgumentType.MULTI_LITERAL;
-		if(args.values().stream().filter(isMultiLiteral).count() > 0) {
+		if(args.stream().filter(isMultiLiteral).count() > 0) {
 		
 			int index = 0;
-			for(Entry<String, Argument> entry : args.entrySet()) {
+			for(Argument argument : args) {
 				
 				//Find the first multiLiteral in the for loop
-				if(isMultiLiteral.test(entry.getValue())) {
-					MultiLiteralArgument superArg = (MultiLiteralArgument) entry.getValue();
+				if(isMultiLiteral.test(argument)) {
+					MultiLiteralArgument superArg = (MultiLiteralArgument) argument;
 					
 					//Add all of its entries
 					for(int i = 0; i < superArg.getLiterals().length; i++) {
@@ -499,7 +500,7 @@ public abstract class CommandAPIHandler {
 		if (CommandAPI.getConfiguration().hasVerboseOutput()) {
 			// Create a list of argument names
 			StringBuilder builder = new StringBuilder();
-			args.values().forEach(arg -> builder.append("<").append(arg.getClass().getSimpleName()).append("> "));
+			args.forEach(arg -> builder.append("<").append(arg.getClass().getSimpleName()).append("> "));
 			CommandAPI.getLog().info("Registering command /" + commandName + " " + builder.toString());
 		}
 
@@ -530,13 +531,13 @@ public abstract class CommandAPIHandler {
 		} else {
 
 			// List of keys for reverse iteration
-			ArrayList<String> keys = new ArrayList<>(args.keySet());
+			//ArrayList<String> keys = new ArrayList<>(args.keySet());
 
 			// Link the last element to the executor
 			ArgumentBuilder inner;
 			// New scope used here to prevent innerArg accidentally being used below
 			{
-				Argument innerArg = args.get(keys.get(keys.size() - 1));
+				Argument innerArg = args.get(args.size() - 1);
 
 				// Handle Literal arguments
 				if (innerArg instanceof LiteralArgument) {
@@ -546,7 +547,7 @@ public abstract class CommandAPIHandler {
 
 				// Handle arguments with built-in suggestion providers
 				else if (innerArg instanceof ICustomProvidedArgument && !innerArg.getOverriddenSuggestions().isPresent()) {
-					inner = getRequiredArgumentBuilderWithProvider(keys.get(keys.size() - 1), innerArg.getRawType(),
+					inner = getRequiredArgumentBuilderWithProvider(innerArg.getNodeName(), innerArg.getRawType(),
 							innerArg.getArgumentPermission(), innerArg.getRequirements(),
 							NMS.getSuggestionProvider(((ICustomProvidedArgument) innerArg).getSuggestionProvider()))
 									.executes(command);
@@ -554,7 +555,7 @@ public abstract class CommandAPIHandler {
 
 				// Handle every other type of argument
 				else {
-					inner = getRequiredArgumentBuilderDynamic(args, keys.get(keys.size() - 1), innerArg,
+					inner = getRequiredArgumentBuilderDynamic(args, innerArg.getNodeName(), innerArg,
 							innerArg.getArgumentPermission(), innerArg.getRequirements()).executes(command);
 				}
 			}
@@ -658,19 +659,18 @@ public abstract class CommandAPIHandler {
 
 	// Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
 	static <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilderDynamic(
-			final LinkedHashMap<String, Argument> args, String argumentName, Argument type,
-			CommandPermission permission, Predicate<CommandSender> requirements) {
+			final List<Argument> args, Argument argument) {
 
 		// If there are no changes to the default suggestions, return it as normal
-		if (!type.getOverriddenSuggestions().isPresent()) {
-			return RequiredArgumentBuilder.argument(argumentName, (ArgumentType<T>) type.getRawType())
-					.requires(clw -> permissionCheck(NMS.getCommandSenderForCLW(clw), permission, requirements));
+		if (!argument.getOverriddenSuggestions().isPresent()) {
+			return RequiredArgumentBuilder.argument(argument.getNodeName(), (ArgumentType<T>) argument.getRawType())
+					.requires(clw -> permissionCheck(NMS.getCommandSenderForCLW(clw), argument.getArgumentPermission(), argument.getRequirements()));
 		}
 
 		// Otherwise, we have to handle arguments of the form BiFunction<CommandSender,
 		// Object[], String[]>
 		else {
-			return getRequiredArgumentBuilderWithProvider(argumentName, type.getRawType(), permission, requirements, Brigadier.toSuggestions(argumentName, args));
+			return getRequiredArgumentBuilderWithProvider(argument.getNodeName(), argument.getRawType(), argument.getArgumentPermission(), argument.getRequirements(), Brigadier.toSuggestions(argument.getNodeName(), args));
 		}
 	}
 
@@ -805,7 +805,7 @@ public abstract class CommandAPIHandler {
 		 * @param args      the arguments that the sender has filled in
 		 * @return a RedirectModifier that encapsulates the provided predicate
 		 */
-		public static RedirectModifier fromPredicate(BiPredicate<CommandSender, Object[]> predicate, LinkedHashMap<String, Argument> args) {
+		public static RedirectModifier fromPredicate(BiPredicate<CommandSender, Object[]> predicate, List<Argument> args) {
 			return cmdCtx -> {
 				if(predicate.test(NMS.getSenderForCommand(cmdCtx, false), argsToObjectArr(cmdCtx, args))) {
 					return Collections.singleton(cmdCtx.getSource());
@@ -848,8 +848,12 @@ public abstract class CommandAPIHandler {
 		 * @param value the name of the argument you want to specify
 		 * @return a RequiredArgumentBuilder that represents the provided argument
 		 */
-		public static RequiredArgumentBuilder argBuildOf(LinkedHashMap<String, Argument> args, String value) {
-			return getRequiredArgumentBuilderDynamic(args, value, args.get(value), args.get(value).getArgumentPermission(), args.get(value).getRequirements());
+		public static RequiredArgumentBuilder argBuildOf(List<Argument> args, String value) {
+			return getRequiredArgumentBuilderDynamic(args, getArgument(args, value));
+		}
+		
+		private static Argument getArgument(List<Argument> args, String nodeName) {
+			return args.stream().filter(arg -> arg.getNodeName().equals(nodeName)).findFirst().get();
 		}
 		
 		/**
@@ -858,10 +862,10 @@ public abstract class CommandAPIHandler {
 		 * @param argument the argument to create a RequiredArgumentBuilder of
 		 * @return a RequiredArgumentBuilder that represents the provided argument
 		 */
-		public static RequiredArgumentBuilder argBuildOf(String prompt, Argument argument) {
-			LinkedHashMap<String, Argument> map = new LinkedHashMap<>();
-			map.put(prompt, argument);
-			return getRequiredArgumentBuilderDynamic(map, prompt, argument, argument.getArgumentPermission(), argument.getRequirements());
+		public static RequiredArgumentBuilder argBuildOf(Argument argument) {
+			List<Argument> arguments = new ArrayList<>();
+			arguments.add(argument);
+			return getRequiredArgumentBuilderDynamic(arguments, argument);
 		}
 		
 		/**
@@ -874,19 +878,19 @@ public abstract class CommandAPIHandler {
 		 * @return a SuggestionProvider that suggests the overridden suggestions for the
 		 *         argument declared in the LinkedHashMap with key argumentName
 		 */
-		public static SuggestionProvider toSuggestions(String argumentName, LinkedHashMap<String, Argument> args) {
+		public static SuggestionProvider toSuggestions(String argumentName, List<Argument> args) {
 			return (CommandContext context, SuggestionsBuilder builder) -> {
 				// Populate Object[], which is our previously filled arguments
 				List<Object> previousArguments = new ArrayList<>();
 
-				for (String s : args.keySet()) {
-					if (s.equals(argumentName)) {
+				for (Argument arg : args) {
+					if (arg.getNodeName().equals(argumentName)) {
 						break;
 					}
 					
 					Object result;
 					try {
-						result = parseArgument(context, s, args.get(s));
+						result = parseArgument(context, arg.getNodeName(), arg);
 					} catch(IllegalArgumentException e) {
 						/*
 						 * Redirected commands don't parse previous arguments properly. Simplest way to
@@ -900,7 +904,7 @@ public abstract class CommandAPIHandler {
 					}
 					previousArguments.add(result);
 				}
-				return getSuggestionsBuilder(builder, args.get(argumentName).getOverriddenSuggestions().get()
+				return getSuggestionsBuilder(builder, getArgument(args, argumentName).getOverriddenSuggestions().get()
 						.apply(NMS.getCommandSenderForCLW(context.getSource()), previousArguments.toArray()));
 			};
 		}
