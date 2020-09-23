@@ -97,6 +97,11 @@ public class CommandAPICommand {
 		return this;
 	}
 	
+	public CommandAPICommand withArgument(Argument argument) {
+		this.args.add(argument);
+		return this;
+	}
+	
 	// Regular command executor 
 	
 	/**

@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -22,11 +23,11 @@ import dev.jorel.commandapi.arguments.GreedyStringArgument;
  */
 public abstract class Converter {
 	
-	private static final LinkedHashMap<String, Argument> PLAIN_ARGUMENTS;
+	private static final List<Argument> PLAIN_ARGUMENTS;
 	
 	static {
-		PLAIN_ARGUMENTS = new LinkedHashMap<>();
-		PLAIN_ARGUMENTS.put("args", new GreedyStringArgument());
+		PLAIN_ARGUMENTS = new ArrayList<>();
+		PLAIN_ARGUMENTS.add(new GreedyStringArgument("args"));
 	}
 
 	/**
@@ -53,11 +54,11 @@ public abstract class Converter {
 	 * @param cmdName The command to convert
 	 * @param arguments The arguments that should be used to parse this command
 	 */
-	public static void convert(Plugin plugin, String cmdName, LinkedHashMap<String, Argument> arguments) {
+	public static void convert(Plugin plugin, String cmdName, List<Argument> arguments) {
 		convertPluginCommand((JavaPlugin) plugin, cmdName, arguments);
 	}
 	
-	private static void convertPluginCommand(JavaPlugin plugin, String commandName, LinkedHashMap<String, Argument> arguments) {
+	private static void convertPluginCommand(JavaPlugin plugin, String commandName, List<Argument> arguments) {
 		CommandAPI.getLog().info("Converting " + plugin.getName() + " command /" + commandName);
 		
 		/* Parse the commands */
