@@ -9,8 +9,8 @@ public class MultiLiteralArgument extends Argument {
 	/**
 	 * A literal argument. Only takes one string value which cannot be modified 
 	 */
-	public MultiLiteralArgument(final String... literals) {
-		super(null);
+	public MultiLiteralArgument(String nodeName, final String... literals) {
+		super(null, null);
 		if(literals == null) {
 			throw new BadLiteralException(true);
 		}

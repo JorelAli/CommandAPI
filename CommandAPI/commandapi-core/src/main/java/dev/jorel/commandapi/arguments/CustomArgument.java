@@ -28,8 +28,8 @@ public class CustomArgument<T> extends Argument {
 	 *            
 	 * @see #CustomArgument(CustomArgumentParser<T>, boolean)
 	 */
-	public CustomArgument(CustomArgumentParser<T> parser) {
-		this(parser, false);
+	public CustomArgument(String nodeName, CustomArgumentParser<T> parser) {
+		this(nodeName, parser, false);
 	}
 	
 	/**
@@ -42,8 +42,8 @@ public class CustomArgument<T> extends Argument {
 	 * @param keyed Whether this argument can accept Minecraft's <code>NamespacedKey</code> as
 	 * valid arguments
 	 */
-	public CustomArgument(CustomArgumentParser<T> parser, boolean keyed) {
-		super(keyed ? CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered() : StringArgumentType.string());
+	public CustomArgument(String nodeName, CustomArgumentParser<T> parser, boolean keyed) {
+		super(nodeName, keyed ? CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered() : StringArgumentType.string());
 		this.keyed = keyed;
 		this.parser = parser;
 	}
