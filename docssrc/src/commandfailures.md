@@ -21,8 +21,8 @@ Therefore, to gracefully handle this with a proper error message, we use `Comman
 String[] fruit = new String[] {"banana", "apple", "orange"};
 
 //Argument accepting a String, suggested with the list of fruit
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("item", new StringArgument().overrideSuggestions(fruit));
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new StringArgument("item").overrideSuggestions(fruit));
 
 //Register the command
 new CommandAPICommand("getfruit")

@@ -36,6 +36,12 @@ Using the search icon in the top left corner, you can search for anything in thi
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 4.3 \\(\rightarrow\\) 5.0:
+
+> **Developer's Note:**
+>
+> Lots and lots and lots of changes occurred in version 5.0! I highly recommend reading the [Upgrading guide](http://localhost:3000/upgrading.html) section which covers the changes in more detail and how to update your plugin for this version.
+
 ### Documentation changes 4.2 \\(\rightarrow\\) 4.3:
 
 - Improve the documentation for [2. Configuration for server owners](./config.md) by using simple YAML lists (using the `-` symbol) and update the command conversion syntax for all commands using the `~` syntax

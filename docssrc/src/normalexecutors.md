@@ -3,7 +3,11 @@
 Command executors are of the following format, where `sender` is a [`CommandSender`](https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/command/CommandSender.html), and `args` is an `Object[]`, which represents arguments which are parsed by the CommandAPI.
 
 ```java
-{{#include examples/4.1normalcommandexecutors.java}}
+new CommandAPICommand("...")
+    .executes((sender, args) -> {
+        //Code here  
+    })
+    .register();
 ```
 
 With normal command executors, these do not need to return anything. By default, this will return a _success value_ of 1 if it runs successfully, and a _success value_ of 0 if it runs unsuccessfully, either by throwing an exception _(RuntimeException)_ or by forcing the command to fail (See the section on [handling command failures](./commandfailures.html).
@@ -22,7 +26,15 @@ In short, this is what values are returned when a command is executed from a nor
 To illustrate this, let's take a look at a simple message broadcasting command. We declare our arguments (in this case, "message"), we provide some aliases and set a permission required to run the command. Then we declare our main command body by using the `.executes()` method, before finally registering the command:
 
 ```java
-{{#include examples/4.1messagebroadcast.java}}
+//Create our command
+new CommandAPICommand("broadcastmsg")
+    .withArguments(new GreedyStringArgument("message")) // The arguments
+    .withAliases("broadcast", "broadcastmessage")       // Command aliases
+    .withPermission(CommandPermission.OP)               // Required permissions
+    .executes((sender, args) -> {
+        String message = (String) args[0];
+        Bukkit.getServer().broadcastMessage(message);
+    }).register();
 ```
 
 Note how when we finish up our implementation of `.executes()`, we don't return anything. This is unlike commands in the standard Bukkit API where the `onCommand` method returns a Boolean value:

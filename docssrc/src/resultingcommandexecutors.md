@@ -64,8 +64,8 @@ Now we write our implementation for `/givereward`. In this example, we use the `
 
 ```java
 //Register reward giving system for a target player
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("target", new EntitySelectorArgument(EntitySelector.ONE_PLAYER));
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new EntitySelectorArgument("target", EntitySelector.ONE_PLAYER));
 
 new CommandAPICommand("givereward")
     .withArguments(arguments)

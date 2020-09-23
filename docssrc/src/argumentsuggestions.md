@@ -34,8 +34,8 @@ We then implement our world teleporting command using `overrideSuggestions()` on
 String[] worlds = Bukkit.getWorlds().stream().map(World::getName).toArray(String[]::new);
 
 //Override the suggestions of the StringArgument with the aforementioned String[]
-LinkedHashMap<String, ArgumentType> arguments = new LinkedHashMap<>();
-arguments.put("world", new StringArgument().overrideSuggestions(worlds));
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new StringArgument("world").overrideSuggestions(worlds));
 
 new CommandAPICommand("tpworld")
     .withArguments(arguments)
@@ -82,8 +82,8 @@ public class Friends {
 We can then use this to generate our suggested list of friends:
 
 ```java
-LinkedHashMap<String, ArgumentType> arguments = new LinkedHashMap<>();
-arguments.put("friend", new PlayerArgument().overrideSuggestions((sender) -> {
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new PlayerArgument("friend").overrideSuggestions((sender) -> {
     Friends.getFriends(sender);
 }));
 
@@ -101,8 +101,8 @@ new CommandAPICommand("friendtp")
 > The syntax of inlining the `.overrideSuggestions()` method has been designed to work well with Java's lambdas. For example, we could write the above code more consisely, such as:
 >
 > ```java
-> LinkedHashMap<String, ArgumentType> arguments = new LinkedHashMap<>();
-> arguments.put("friend", new PlayerArgument().overrideSuggestions(Friends::getFriends));
+> List<Argument> arguments = new LinkedHashMap<>();
+> arguments.add(new PlayerArgument("friend").overrideSuggestions(Friends::getFriends));
 > ```
 >
 > 
@@ -158,13 +158,13 @@ When run, this command will send a message to a target player within the provide
 
 ```java
 // Declare our arguments as normal
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("radius", new IntegerArgument());
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new IntegerArgument("radius"));
 
 // Override the suggestions for the PlayerArgument, using (sender, args) as the parameters
 // sender refers to the command sender that is running this command
 // args refers to the Object[] of PREVIOUSLY DECLARED arguments (in this case, the IntegerArgument radius)
-arguments.put("target", new PlayerArgument().overrideSuggestions((sender, args) -> {
+arguments.add(new PlayerArgument("target").overrideSuggestions((sender, args) -> {
 
     // Cast the first argument (radius, which is an IntegerArgument) to get its value
 	int radius = (int) args[0];
@@ -179,7 +179,7 @@ arguments.put("target", new PlayerArgument().overrideSuggestions((sender, args) 
 		.map(Entity::getName)
 		.toArray(String[]::new);
 }));
-arguments.put("message", new GreedyStringArgument());
+arguments.add(new GreedyStringArgument("message"));
 
 // Declare our command as normal
 new CommandAPICommand("localmsg")

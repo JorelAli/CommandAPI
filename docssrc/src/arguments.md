@@ -1,23 +1,23 @@
 # Arguments
 
-Arguments in the CommandAPI are registered by using a `LinkedHashMap<String, Argument>` object. There are two things you need to keep in mind when creating arguments:
+Arguments in the CommandAPI are registered by using a `List<Argument>` object. There are two things you need to keep in mind when creating arguments:
 
 * The order which they will be used
 * The type of each argument
 
-By definition of a `LinkedHashMap`, the order of the elements inserted into it are preserved, meaning the order you add arguments to the `LinkedHashMap` will be the resulting order of which arguments are presented to the user when they run that command.
+By definition of a `List`, the order of the elements inserted into it are preserved, meaning the order you add arguments to the `List` will be the resulting order of which arguments are presented to the user when they run that command.
 
 Adding arguments for registration is simple:
 
 ```java
-//Create LinkedHashMap
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+//Create a List
+List<Argument> arguments = new ArrayList<>();
 
-//Add an argument called "target", which is a PlayerArgument
-arguments.put("target", new PlayerArgument());
+//Add an argument with the node "target", which is a PlayerArgument
+arguments.add(new PlayerArgument("target"));
 ```
 
-The String value is the prompt that is shown to a player when they are entering the command.
+The String value is the node that is registered into Minecraft's internal command graph. This is name is also used as a prompt that is shown to a player when they are entering the command.
 
 -----
 
@@ -26,7 +26,19 @@ The String value is the prompt that is shown to a player when they are entering 
 To access arguments, they have to be casted to the type that the argument represents. The order of the arguments in the `args[]` is the same as the order in which the arguments were declared.
 
 ```java
-{{#include examples/5argumentcasting.java}}
+List<ArgumentType> arguments = new ArrayList<>();
+arguments.add(new StringArgument("arg0"));
+arguments.add(new PotionEffectArgument("arg1"));
+arguments.add(new LocationArgument("arg2"));
+
+new CommandAPICommand("cmd")
+    .withArguments(arguments)
+    .executes((sender, args) -> {
+        String stringArg = (String) args[0];
+        PotionEffectType potionArg = (PotionEffectType) args[1];
+        Location locationArg = (Location) args[2];
+    })
+    .register();
 ```
 
 The type to cast each argument (declared in the `dev.jorel.commandapi.arguments` package) is listed below:
@@ -117,13 +129,9 @@ new CommandAPICommand("kill")
 Now we declare our command with arguments for our second command. Then, we can register our second command `/kill <target>` as usual:
 
 ```java
-// Declare our arguments
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("target", new PlayerArgument());
-
 // Register our second /kill <target> command
 new CommandAPICommand("kill")
-    .withArguments(arguments)
+    .withArguments(new PlayerArgument("target"))
     .executesPlayer((player, args) -> {
         ((Player) args[0]).setHealth(0);
     })
@@ -131,5 +139,7 @@ new CommandAPICommand("kill")
 ```
 
 This gives us the ability to run both `/kill` and `/kill <target>` with the same command name "kill", but have different results based on the arguments used.
+
+In this example, we use the simpler, inline `.withArguments(Argument... arguments)` method to register our argument. There is no difference to using this method as opposed to explicitly declaring a list and using `.withArguments(List<Argument> arguments)`, so feel free to use whichever method you want!
 
 </div>

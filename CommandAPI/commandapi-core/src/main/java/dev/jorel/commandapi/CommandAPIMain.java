@@ -5,6 +5,8 @@ import java.util.Arrays;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import dev.jorel.commandapi.arguments.LocationArgument;
+import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.StringArgument;
 
 public class CommandAPIMain extends JavaPlugin {
@@ -27,6 +29,7 @@ new CommandAPICommand("perm")
 			.executes((sender, args) -> {
 				//perm group add 
 				Bukkit.broadcastMessage("perm group add " + Arrays.deepToString(args));
+				
 			})
 		)
 		.withSubcommand(new CommandAPICommand("remove")
