@@ -9,11 +9,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiPredicate;
@@ -40,7 +38,6 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
-import com.sun.org.apache.xpath.internal.Arg;
 
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
@@ -197,7 +194,7 @@ public abstract class CommandAPIHandler {
 	}
 	
 	/**
-	 * Converts the LinkedHashMap&lt;String, Argument> into an Object[] for command execution
+	 * Converts the List&lt;Argument> into an Object[] for command execution
 	 * @param cmdCtx the command context that will execute this command
 	 * @param args the map of strings to arguments
 	 * @return an Object[] which can be used in (sender, args) -> 
@@ -477,14 +474,14 @@ public abstract class CommandAPIHandler {
 						
 						
 						//Reconstruct the list of arguments and place in the new literals
-						LinkedHashMap<String, Argument> newArgs = new LinkedHashMap<>();
+						List<Argument> newArgs = new ArrayList<>();
 						{
 							int j = 0;
-							for(Entry<String, Argument> previousEntry : args.entrySet()) {
+							for(Argument previousEntry : args) {
 								if(j == index) {
-									newArgs.put(entry.getKey(), litArg);
+									newArgs.add(litArg);
 								} else {
-									newArgs.put(previousEntry.getKey(), previousEntry.getValue());
+									newArgs.add(previousEntry);
 								}
 								j++;
 							}
@@ -546,24 +543,23 @@ public abstract class CommandAPIHandler {
 				}
 
 				// Handle arguments with built-in suggestion providers
-				else if (innerArg instanceof ICustomProvidedArgument && !innerArg.getOverriddenSuggestions().isPresent()) {
-					inner = getRequiredArgumentBuilderWithProvider(innerArg.getNodeName(), innerArg.getRawType(),
-							innerArg.getArgumentPermission(), innerArg.getRequirements(),
+				else if (innerArg instanceof ICustomProvidedArgument
+						&& !innerArg.getOverriddenSuggestions().isPresent()) {
+					inner = getRequiredArgumentBuilderWithProvider(innerArg,
 							NMS.getSuggestionProvider(((ICustomProvidedArgument) innerArg).getSuggestionProvider()))
 									.executes(command);
 				}
 
 				// Handle every other type of argument
 				else {
-					inner = getRequiredArgumentBuilderDynamic(args, innerArg.getNodeName(), innerArg,
-							innerArg.getArgumentPermission(), innerArg.getRequirements()).executes(command);
+					inner = getRequiredArgumentBuilderDynamic(args, innerArg).executes(command);
 				}
 			}
 
 			// Link everything else up, except the first
 			ArgumentBuilder outer = inner;
-			for (int i = keys.size() - 2; i >= 0; i--) {
-				Argument outerArg = args.get(keys.get(i));
+			for (int i = args.size() - 2; i >= 0; i--) {
+				Argument outerArg = args.get(i);
 
 				// Handle Literal arguments
 				if (outerArg instanceof LiteralArgument) {
@@ -573,16 +569,14 @@ public abstract class CommandAPIHandler {
 
 				// Handle arguments with built-in suggestion providers
 				else if (outerArg instanceof ICustomProvidedArgument && !outerArg.getOverriddenSuggestions().isPresent()) {
-					outer = getRequiredArgumentBuilderWithProvider(keys.get(i), outerArg.getRawType(),
-							outerArg.getArgumentPermission(), outerArg.getRequirements(),
+					outer = getRequiredArgumentBuilderWithProvider(outerArg,
 							NMS.getSuggestionProvider(((ICustomProvidedArgument) outerArg).getSuggestionProvider()))
 									.then(outer);
 				}
 
 				// Handle every other type of argument
 				else {
-					outer = getRequiredArgumentBuilderDynamic(args, keys.get(i), outerArg,
-							outerArg.getArgumentPermission(), outerArg.getRequirements()).then(outer);
+					outer = getRequiredArgumentBuilderDynamic(args, outerArg).then(outer);
 				}
 			}
 
@@ -670,15 +664,17 @@ public abstract class CommandAPIHandler {
 		// Otherwise, we have to handle arguments of the form BiFunction<CommandSender,
 		// Object[], String[]>
 		else {
-			return getRequiredArgumentBuilderWithProvider(argument.getNodeName(), argument.getRawType(), argument.getArgumentPermission(), argument.getRequirements(), Brigadier.toSuggestions(argument.getNodeName(), args));
+			return getRequiredArgumentBuilderWithProvider(argument, Brigadier.toSuggestions(argument.getNodeName(), args));
 		}
 	}
 
 	// Gets a RequiredArgumentBuilder for an argument, given a SuggestionProvider
-	static <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilderWithProvider(String argumentName,
-			ArgumentType<T> type, CommandPermission permission, Predicate<CommandSender> requirements, SuggestionProvider provider) {
-		return RequiredArgumentBuilder.argument(argumentName, type)
-				.requires(clw -> permissionCheck(NMS.getCommandSenderForCLW(clw), permission, requirements)).suggests(provider);
+	static <T> RequiredArgumentBuilder<?, T> getRequiredArgumentBuilderWithProvider(Argument argument,
+			SuggestionProvider provider) {
+		return RequiredArgumentBuilder.argument(argument.getNodeName(), argument.getRawType())
+				.requires(clw -> permissionCheck(NMS.getCommandSenderForCLW(clw), argument.getArgumentPermission(),
+						argument.getRequirements()))
+				.suggests(provider);
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -837,13 +833,13 @@ public abstract class CommandAPIHandler {
 		 * declaration. For example:
 		 * 
 		 * <pre>
-		 * LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-		 * arguments.put("hello", new IntegerArgument());
+		 * List<Argument> arguments = new ArrayList<>();
+		 * arguments.add(new IntegerArgument("hello"));
 		 * 
 		 * RequiredArgumentBuilder argBuilder = Brigadier.argBuildOf(arguments, "hello");
 		 * </pre>
 		 * 
-		 * @param args  the LinkedHashMap of arguments which you typically declare for
+		 * @param args  the List of arguments which you typically declare for
 		 *              commands
 		 * @param value the name of the argument you want to specify
 		 * @return a RequiredArgumentBuilder that represents the provided argument
@@ -873,10 +869,10 @@ public abstract class CommandAPIHandler {
 		 * SuggestionProvider
 		 * 
 		 * @param argumentName the name (prompt) of the argument as declared by its key
-		 *                     in the LinkedHashMap
+		 *                     in the List
 		 * @param args         the list of arguments
 		 * @return a SuggestionProvider that suggests the overridden suggestions for the
-		 *         argument declared in the LinkedHashMap with key argumentName
+		 *         argument declared in the List with key argumentName
 		 */
 		public static SuggestionProvider toSuggestions(String argumentName, List<Argument> args) {
 			return (CommandContext context, SuggestionsBuilder builder) -> {

@@ -89,7 +89,7 @@ public class CommandAPICommand {
 	
 	/**
 	 * Adds the mapping of arguments to the current command builder
-	 * @param args A <code>LinkedHashMap</code> that represents the arguments that this command can accept
+	 * @param args A <code>List</code> that represents the arguments that this command can accept
 	 * @return this command builder
 	 */
 	public CommandAPICommand withArguments(List<Argument> args) {
