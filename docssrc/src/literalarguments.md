@@ -21,7 +21,7 @@ Unlike regular commands (as those implemented by Bukkit for example), these four
 
 **Developer's Note:**
 
-The `LiteralArgument` class is now obsolete! If you want to implement literals easily, consider using the much more intuitive `SimpleLiteralArgument`, which is described in more detail [here](./simplelitargs.md)!
+The `LiteralArgument` class is now obsolete! If you want to implement literals easily, consider using the much more intuitive `MultiLiteralArgument`, which is described in more detail [here](./multilitargs.md)!
 
 </div>
 
