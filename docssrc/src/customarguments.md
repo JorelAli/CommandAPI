@@ -18,8 +18,8 @@ The first argument is the `CustomArgumentFunction`, which is a lambda that takes
 > I may have complicated this too much, so let me clarify what I mean. The `CustomArgument` constructor is of the following forms:
 >
 > ```java
-> CustomArgument((String) -> { ... return T; });
-> CustomArgument((String) -> { ... return T; }, boolean keyed);
+> CustomArgument(nodeName, (String) -> { ... return T; });
+> CustomArgument(nodeName, (String) -> { ... return T; }, boolean keyed);
 > ```
 >
 > Both constructors take in a **String** as input and return `T`. When enabling `keyed`, it allows the input to be of the form of a Minecraft key, but doesn't change the input type.
