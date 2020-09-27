@@ -30,10 +30,25 @@ Say we want to create a plugin that lets you edit its own `config.yml` file usin
 /editconfig <config-key> <value>
 ```
 
-We first retrieve the keys from the configuration file using the typical Bukkit API. We construct our `LinkedHashMap` to hold our arguments, with the first parameter being a String key (in the form of a `TextArgument`, [overridden with an array of suggestions](TODO)). Finally, we register our command and update the config, ensuring that we cast the `BooleanArgument` to `boolean`: 
+We first retrieve the keys from the configuration file using the typical Bukkit API. We construct our `List` to hold our arguments, with the first parameter being a String key (in the form of a `TextArgument`, [overridden with an array of suggestions](TODO)). Finally, we register our command and update the config, ensuring that we cast the `BooleanArgument` to `boolean`: 
 
 ```java
-{{#include examples/5.1booleanargs.java}}
+// Load keys from config file
+String[] configKeys = getConfig().getKeys(true).toArray(new String[0]);
+
+// Create arguments with the config key and a boolean value to set it to
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new TextArgument("config-key").overrideSuggestions(configKeys));
+arguments.add(new BooleanArgument("value"));
+
+// Register our command
+new CommandAPICommand("editconfig")
+    .withArguments(arguments)
+    .executes((sender, args) -> {
+        // Update the config with the boolean argument
+        getConfig().set((String) args[0], (boolean) args[1]);
+    })
+    .register();
 ```
 
 </div>

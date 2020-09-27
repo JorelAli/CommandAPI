@@ -194,14 +194,9 @@
 /remove &lt;radius&gt;
 </code></pre>
 <p>Instead, we can combine all of these into one by using the <code>EntitySelectorArgument</code>. We want to be able to target multiple entities at a time, so we want to use the <code>EntitySelector.MANY_ENTITIES</code> value in our constructor. We can simply retrieve the <code>Collection&lt;Entity&gt;</code> from this argument and iteratively remove each entity:</p>
-<pre><code class="language-java">//LinkedHashMap to store arguments for the command
-LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-
-//Using a collective entity selector to select multiple entities
-arguments.put(&quot;entities&quot;, new EntitySelectorArgument(EntitySelector.MANY_ENTITIES));
-
-new CommandAPICommand(&quot;remove&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;remove&quot;)
+    //Using a collective entity selector to select multiple entities
+    .withArguments(new EntitySelectorArgument(&quot;entities&quot;, EntitySelector.MANY_ENTITIES))
     .executes((sender, args) -&gt; {
         //Parse the argument as a collection of entities (as stated above in the documentation)
         @SuppressWarnings(&quot;unchecked&quot;)
@@ -244,13 +239,9 @@ new CommandAPICommand(&quot;remove&quot;)
 <pre><code>/spawnmob &lt;entity&gt; &lt;amount&gt;
 </code></pre>
 <p>Since we're trying to specify an entity type, we will use the <code>EntityTypeArgument</code> as our argument type for <code>&lt;entity&gt;</code>. We combine this with the <code>IntegerArgument</code> class with a specified range of \( 1 \le \textit{amount} \le 100 \):</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-
-arguments.put(&quot;entity&quot;, new EntityTypeArgument());
-arguments.put(&quot;amount&quot;, new IntegerArgument(1, 100)); //Prevent spawning too many entities
-
-new CommandAPICommand(&quot;spawnmob&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;spawnmob&quot;)
+    .withArguments(new EntityTypeArgument(&quot;entity&quot;))
+    .withArguments(new IntegerArgument(&quot;amount&quot;, 1, 100)) //Prevent spawning too many entities
     .executesPlayer((Player player, Object[] args) -&gt; {
         for(int i = 0; i &lt; (int) args[1]; i++) {
             player.getWorld().spawnEntity(player.getLocation(), (EntityType) args[0]);

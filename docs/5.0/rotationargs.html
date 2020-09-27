@@ -190,12 +190,9 @@
 <pre><code>/rotate &lt;rotation&gt; &lt;target&gt;
 </code></pre>
 <p>To do this, we'll use the rotation from the <code>RotationArgument</code> and select an entity using the <code>EntitySelectorArgument</code>, with <code>EntitySelector.ONE_ENTITY</code>. We then check if our entity is an armor stand and if so, we set its head pose to the given rotation.</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;rotation&quot;, new RotationArgument());
-arguments.put(&quot;target&quot;, new EntitySelectorArgument(EntitySelector.ONE_ENTITY));
-
-new CommandAPICommand(&quot;rotate&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;rotate&quot;)
+    .withArguments(new RotationArgument(&quot;rotation&quot;))
+    .withArguments(new EntitySelectorArgument(&quot;target&quot;, EntitySelector.ONE_ENTITY))
     .executes((sender, args) -&gt; {
         Rotation rotation = (Rotation) args[0];
         Entity target = (Entity) args[1];

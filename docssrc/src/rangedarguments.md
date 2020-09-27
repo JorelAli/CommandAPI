@@ -55,9 +55,9 @@ Now, we simply create our arguments using `IntegerRangeArgument` for our range a
 
 ```java
 // Declare our arguments for /searchrange <IntegerRange> <ItemStack>
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("range", new IntegerRangeArgument());
-arguments.put("item", new ItemStackArgument());
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new IntegerRangeArgument("range"));
+arguments.add(new ItemStackArgument("item"));
 
 new CommandAPICommand("searchrange")
     .withArguments(arguments)

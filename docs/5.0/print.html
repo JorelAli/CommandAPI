@@ -1184,7 +1184,7 @@ new CommandAPICommand(&quot;friendtp&quot;)
 <blockquote>
 <p><strong>Developer's Note:</strong></p>
 <p>The syntax of inlining the <code>.overrideSuggestions()</code> method has been designed to work well with Java's lambdas. For example, we could write the above code more consisely, such as:</p>
-<pre><code class="language-java">List&lt;Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+<pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
 arguments.add(new PlayerArgument(&quot;friend&quot;).overrideSuggestions(Friends::getFriends));
 </code></pre>
 </blockquote>
@@ -1339,8 +1339,8 @@ getServer().addRecipe(emeraldSwordRecipe);
 </code></pre>
 <p>Once we've done that, we can now include them in our command registration. To do this, we use <code>safeOverrideSuggestions(recipes)</code> and then register our command as normal:</p>
 <pre><code class="language-java">// Safely override with the recipe we've defined
-LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;recipe&quot;, new RecipeArgument().safeOverrideSuggestions(emeraldSwordRecipe, /* Other recipes */));
+List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
+arguments.add(new RecipeArgument(&quot;recipe&quot;).safeOverrideSuggestions(emeraldSwordRecipe, /* Other recipes */));
 
 // Register our command
 new CommandAPICommand(&quot;giverecipe&quot;)
@@ -1363,8 +1363,8 @@ List&lt;EntityType&gt; allowedMobs = new ArrayList&lt;&gt;(Arrays.asList(EntityT
 allowedMobs.removeAll(Arrays.asList(forbiddenMobs)); //Now contains everything except enderdragon and wither
 </code></pre>
 <p>We then use our safe arguments to return an <code>EntityType[]</code> as the list of values that are suggested to the player. In this example, we use the <code>Function&lt;CommandSender, EntityType[]&gt;</code> argument to determine if the sender has permissions to view the suggestions:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;mob&quot;, new EntityTypeArgument().safeOverrideSuggestions(
+<pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
+arguments.add(new EntityTypeArgument(&quot;mob&quot;).safeOverrideSuggestions(
 	sender -&gt; {
 		if(sender.isOp()) {
 			return EntityType.values(); //All entity types
@@ -1390,9 +1390,9 @@ arguments.put(&quot;mob&quot;, new EntityTypeArgument().safeOverrideSuggestions(
 <pre><code>/removeeffect &lt;player&gt; &lt;potioneffect&gt;
 </code></pre>
 <p>Now, we don't want to remove a potion effect that already exists on a player, so instead we'll use the safe arguments to find a list of potion effects on the target player and then only suggest those potion effects. To do this, we'll use the <code>BiFunction&lt;CommandSender, Object[], PotionEffectType[]&gt;</code> parameter, as it allows us to access the previously defined <code>&lt;player&gt;</code> argument.</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;target&quot;, new EntitySelectorArgument(EntitySelector.ONE_PLAYER));
-arguments.put(&quot;potioneffect&quot;, new PotionEffectArgument().safeOverrideSuggestions(
+<pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
+arguments.add(new EntitySelectorArgument(&quot;target&quot;, EntitySelector.ONE_PLAYER));
+arguments.add(new PotionEffectArgument(&quot;potioneffect&quot;).safeOverrideSuggestions(
 	(sender, prevArgs) -&gt; {
 		Player target = (Player) prevArgs[0];
         
@@ -1439,8 +1439,8 @@ StringTooltip of(String suggestion, String tooltip);
 <pre><code>/emote &lt;emote&gt; &lt;target&gt;
 </code></pre>
 <p>First, we'll declare our arguments. Here, we'll use the <code>overrideSuggestionsT</code> method, along with the <code>StringTooltip.of(String, String)</code> method to create emote suggestions and include suitable descriptions. In this example, we also make use of <code>arrayOf(StringTooltip...)</code> to easily create a <code>StringTooltip[]</code>:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;emote&quot;, new StringArgument()
+<pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
+arguments.add(new StringArgument(&quot;emote&quot;)
 	.overrideSuggestionsT( 
 		StringTooltip.arrayOf(
 			StringTooltip.of(&quot;wave&quot;, &quot;Waves at a player&quot;),
@@ -1448,7 +1448,7 @@ arguments.put(&quot;emote&quot;, new StringArgument()
 			StringTooltip.of(&quot;glare&quot;, &quot;Gives a player the death glare&quot;)
 		)
 	));
-arguments.put(&quot;target&quot;, new PlayerArgument());
+arguments.add(new PlayerArgument(&quot;target&quot;));
 </code></pre>
 <p>Finally, we declare our command as normal:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;emote&quot;)
@@ -1493,8 +1493,8 @@ Tooltip&lt;S&gt;[] arrayOf(Tooltip&lt;S&gt;... tooltips);
 <pre><code>/warp &lt;location&gt;
 </code></pre>
 <p>First, we'll declare our arguments. Here, we use a <code>LocationArgument()</code> and use the <code>safeOverrideSuggestionsT</code> method, with a parameter for the command sender, so we can get information about the world. We populate the suggestions with tooltips using <code>Tooltip.of(Location, String)</code> and collate them together with <code>Tooltip.arrayOf(Tooltip&lt;Location&gt;...)</code>:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;location&quot;, new LocationArgument()
+<pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
+arguments.add(new LocationArgument(&quot;location&quot;)
 	.safeOverrideSuggestionsT((sender) -&gt; {
 		return Tooltip.arrayOf(
 			Tooltip.of(((Player) sender).getWorld().getSpawnLocation(), &quot;World spawn&quot;),
@@ -1532,14 +1532,14 @@ arguments.put(&quot;location&quot;, new LocationArgument()
 <p>Say we want to create a plugin that lets you edit its own <code>config.yml</code> file using a command. To do this, let's create a command with the following structure:</p>
 <pre><code>/editconfig &lt;config-key&gt; &lt;value&gt;
 </code></pre>
-<p>We first retrieve the keys from the configuration file using the typical Bukkit API. We construct our <code>LinkedHashMap</code> to hold our arguments, with the first parameter being a String key (in the form of a <code>TextArgument</code>, <a href="TODO">overridden with an array of suggestions</a>). Finally, we register our command and update the config, ensuring that we cast the <code>BooleanArgument</code> to <code>boolean</code>: </p>
+<p>We first retrieve the keys from the configuration file using the typical Bukkit API. We construct our <code>List</code> to hold our arguments, with the first parameter being a String key (in the form of a <code>TextArgument</code>, <a href="TODO">overridden with an array of suggestions</a>). Finally, we register our command and update the config, ensuring that we cast the <code>BooleanArgument</code> to <code>boolean</code>: </p>
 <pre><code class="language-java">// Load keys from config file
 String[] configKeys = getConfig().getKeys(true).toArray(new String[0]);
 
 // Create arguments with the config key and a boolean value to set it to
-LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;config-key&quot;, new TextArgument().overrideSuggestions(configKeys));
-arguments.put(&quot;value&quot;, new BooleanArgument());
+List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
+arguments.add(new TextArgument(&quot;config-key&quot;).overrideSuggestions(configKeys));
+arguments.add(new BooleanArgument(&quot;value&quot;));
 
 // Register our command
 new CommandAPICommand(&quot;editconfig&quot;)
@@ -1602,9 +1602,9 @@ new CommandAPICommand(&quot;editconfig&quot;)
 </code></pre>
 <p>Now, we simply create our arguments using <code>IntegerRangeArgument</code> for our range and <code>ItemStackArgument</code> as the item to search for. We can then find all chests in a given area and determine if it is within the range provided by the command sender by using <code>range.isInRange(distance)</code>:</p>
 <pre><code class="language-java">// Declare our arguments for /searchrange &lt;IntegerRange&gt; &lt;ItemStack&gt;
-LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;range&quot;, new IntegerRangeArgument());
-arguments.put(&quot;item&quot;, new ItemStackArgument());
+List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
+arguments.add(new IntegerRangeArgument(&quot;range&quot;));
+arguments.add(new ItemStackArgument(&quot;item&quot;));
 
 new CommandAPICommand(&quot;searchrange&quot;)
     .withArguments(arguments)
@@ -1701,9 +1701,9 @@ yesn't
 <h2><a class="header" href="#greedy-string-argument" id="greedy-string-argument">Greedy string argument</a></h2>
 <blockquote>
 <p><strong>Greedy Arguments:</strong></p>
-<p>The <code>GreedyStringArgument</code>, similar to the <code>ChatArgument</code> uses the entire argument array from its current position. This means that it never ends, therefore if it is used, it must be the last element of your <code>LinkedHashMap</code> of arguments.</p>
+<p>The <code>GreedyStringArgument</code>, similar to the <code>ChatArgument</code> uses the entire argument array from its current position. This means that it never ends, therefore if it is used, it must be the last element of your <code>List</code> of arguments.</p>
 <p>For example, if you have a command <code>/message &lt;message&gt; &lt;target&gt;</code>, it would not be able to determine where the message ends and the <code>&lt;target&gt;</code> argument begins.</p>
-<p>If a <code>GreedyStringArgument</code> or <code>ChatArgument</code> is not declared at the end of the <code>LinkedHashMap</code> of arguments, or multiple of these arguments are used in the same <code>LinkedHashMap</code>, the CommandAPI throws a <code>GreedyArgumentException</code>.</p>
+<p>If a <code>GreedyStringArgument</code> or <code>ChatArgument</code> is not declared at the end of the <code>List</code> of arguments, or multiple of these arguments are used in the same <code>List</code>, the CommandAPI throws a <code>GreedyArgumentException</code>.</p>
 </blockquote>
 <p>The <code>GreedyStringArgument</code> takes the <code>TextArgument</code> a step further. <strong>Any characters and symbols are allowed</strong> and quotation marks are not required.</p>
 <div class="example">
@@ -1712,9 +1712,9 @@ yesn't
 <pre><code>/message &lt;target&gt; &lt;message&gt;
 </code></pre>
 <p>This would be ideal for a greedy string, since it can consume all text after the player's name:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;target&quot;, new PlayerArgument());
-arguments.put(&quot;message&quot;, new GreedyStringArgument());
+<pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
+arguments.add(new PlayerArgument(&quot;target&quot;));
+arguments.add(new GreedyStringArgument(&quot;message&quot;));
 
 new CommandAPICommand(&quot;message&quot;)
     .withArguments(arguments)
@@ -1760,13 +1760,9 @@ new CommandAPICommand(&quot;message&quot;)
 <pre><code>/break &lt;location&gt;
 </code></pre>
 <p>Simply put, given the coordinates provided to the command, &quot;break&quot; the block by setting it's type to <code>Material.AIR</code>. For this example, we're referring to block specific coordinates, so we want to use <code>LocationType.BLOCK_POSITION</code>:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-
-//We want to target blocks in particular, so use BLOCK_POSITION
-arguments.put(&quot;block&quot;, new LocationArgument(LocationType.BLOCK_POSITION));
-
-new CommandAPICommand(&quot;break&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;break&quot;)
+    //We want to target blocks in particular, so use BLOCK_POSITION
+    .withArguments(new LocationArgument(&quot;block&quot;, LocationType.BLOCK_POSITION))
     .executesPlayer((player, args) -&gt; {
         ((Location) args[0]).getBlock().setType(Material.AIR);
     })
@@ -1796,12 +1792,9 @@ new CommandAPICommand(&quot;break&quot;)
 <pre><code>/rotate &lt;rotation&gt; &lt;target&gt;
 </code></pre>
 <p>To do this, we'll use the rotation from the <code>RotationArgument</code> and select an entity using the <code>EntitySelectorArgument</code>, with <code>EntitySelector.ONE_ENTITY</code>. We then check if our entity is an armor stand and if so, we set its head pose to the given rotation.</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;rotation&quot;, new RotationArgument());
-arguments.put(&quot;target&quot;, new EntitySelectorArgument(EntitySelector.ONE_ENTITY));
-
-new CommandAPICommand(&quot;rotate&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;rotate&quot;)
+    .withArguments(new RotationArgument(&quot;rotation&quot;))
+    .withArguments(new EntitySelectorArgument(&quot;target&quot;, EntitySelector.ONE_ENTITY))
     .executes((sender, args) -&gt; {
         Rotation rotation = (Rotation) args[0];
         Entity target = (Entity) args[1];
@@ -1833,14 +1826,11 @@ new CommandAPICommand(&quot;rotate&quot;)
 <pre><code>/namecolor &lt;chatcolor&gt;
 </code></pre>
 <p>We then use the <code>ChatColorArgument</code> to change the player's name color:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;chatcolor&quot;, new ChatColorArgument());
-
-new CommandAPICommand(&quot;namecolor&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;namecolor&quot;)
+    .withArguments(new ChatColorArgument(&quot;chatcolor&quot;))
     .executesPlayer((player, args) -&gt; {
         ChatColor color = (ChatColor) args[0];
-	    player.setDisplayName(color + player.getName());
+        player.setDisplayName(color + player.getName());
     })
     .register();
 </code></pre>
@@ -1915,12 +1905,9 @@ sender.spigot().sendMessage(BaseComponent[]);
 <pre><code>/makebook &lt;player&gt; &lt;contents&gt;
 </code></pre>
 <p>Now we can create our book command. We use the player as the main target by using their name for the author field, as well as their inventory to place the book. We finally construct our book using the <code>.setPages(BaseComponent[])</code> method:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;player&quot;, new PlayerArgument());
-arguments.put(&quot;contents&quot;, new ChatComponentArgument());
-
-new CommandAPICommand(&quot;makebook&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;makebook&quot;)
+    .withArguments(new PlayerArgument(&quot;player&quot;))
+    .withArguments(new ChatComponentArgument(&quot;contents&quot;))
     .executes((sender, args) -&gt; {
         Player player = (Player) args[0];
         BaseComponent[] arr = (BaseComponent[]) args[1];
@@ -1947,7 +1934,7 @@ new CommandAPICommand(&quot;makebook&quot;)
 </div>
 <blockquote>
 <p><strong>Note:</strong></p>
-<p>The <code>ChatArgument</code> class is an argument similar to the <a href="./stringarguments.html#greedy-string-argument"><code>GreedyStringArgument</code></a>, in the sense that it has no terminator and must be defined at the end of your <code>LinkedHashMap</code> of arguments. For more information on this, please read the section on <a href="./stringarguments.html#greedy-string-argument">Greedy arguments</a>.</p>
+<p>The <code>ChatArgument</code> class is an argument similar to the <a href="./stringarguments.html#greedy-string-argument"><code>GreedyStringArgument</code></a>, in the sense that it has no terminator and must be defined at the end of your <code>List</code> of arguments. For more information on this, please read the section on <a href="./stringarguments.html#greedy-string-argument">Greedy arguments</a>.</p>
 </blockquote>
 <p>The <code>ChatArgument</code> is basically identical to the <code>GreedyStringArgument</code>, with the added functionality of enabling <em>entity selectors</em>, such as <code>@e</code>, <code>@p</code> and so on. The <code>ChatArgument</code> also returns a <code>BaseComponent[]</code>, similar to the <code>ChatComponentArgument</code>.</p>
 <div class="example">
@@ -1959,11 +1946,8 @@ new CommandAPICommand(&quot;makebook&quot;)
 <pre><code>/pbroadcast Hello @p
 </code></pre>
 <p><em>Bob</em> would receive the message &quot;Hello Bob&quot;, whereas <em>Michael</em> would receive the message &quot;Hello Michael&quot;. We can use the <code>ChatArgument</code> to create this &quot;personalized&quot; broadcast:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;message&quot;, new ChatArgument());
-
-new CommandAPICommand(&quot;pbroadcast&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;pbroadcast&quot;)
+    .withArguments(new ChatArgument(&quot;message&quot;))
     .executes((sender, args) -&gt; {
         BaseComponent[] message = (BaseComponent[]) args[0];
     
@@ -1992,14 +1976,9 @@ new CommandAPICommand(&quot;pbroadcast&quot;)
 /remove &lt;radius&gt;
 </code></pre>
 <p>Instead, we can combine all of these into one by using the <code>EntitySelectorArgument</code>. We want to be able to target multiple entities at a time, so we want to use the <code>EntitySelector.MANY_ENTITIES</code> value in our constructor. We can simply retrieve the <code>Collection&lt;Entity&gt;</code> from this argument and iteratively remove each entity:</p>
-<pre><code class="language-java">//LinkedHashMap to store arguments for the command
-LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-
-//Using a collective entity selector to select multiple entities
-arguments.put(&quot;entities&quot;, new EntitySelectorArgument(EntitySelector.MANY_ENTITIES));
-
-new CommandAPICommand(&quot;remove&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;remove&quot;)
+    //Using a collective entity selector to select multiple entities
+    .withArguments(new EntitySelectorArgument(&quot;entities&quot;, EntitySelector.MANY_ENTITIES))
     .executes((sender, args) -&gt; {
         //Parse the argument as a collection of entities (as stated above in the documentation)
         @SuppressWarnings(&quot;unchecked&quot;)
@@ -2042,13 +2021,9 @@ new CommandAPICommand(&quot;remove&quot;)
 <pre><code>/spawnmob &lt;entity&gt; &lt;amount&gt;
 </code></pre>
 <p>Since we're trying to specify an entity type, we will use the <code>EntityTypeArgument</code> as our argument type for <code>&lt;entity&gt;</code>. We combine this with the <code>IntegerArgument</code> class with a specified range of \( 1 \le \textit{amount} \le 100 \):</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-
-arguments.put(&quot;entity&quot;, new EntityTypeArgument());
-arguments.put(&quot;amount&quot;, new IntegerArgument(1, 100)); //Prevent spawning too many entities
-
-new CommandAPICommand(&quot;spawnmob&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;spawnmob&quot;)
+    .withArguments(new EntityTypeArgument(&quot;entity&quot;))
+    .withArguments(new IntegerArgument(&quot;amount&quot;, 1, 100)) //Prevent spawning too many entities
     .executesPlayer((Player player, Object[] args) -&gt; {
         for(int i = 0; i &lt; (int) args[1]; i++) {
             player.getWorld().spawnEntity(player.getLocation(), (EntityType) args[0]);
@@ -2060,9 +2035,9 @@ new CommandAPICommand(&quot;spawnmob&quot;)
 </div><h1><a class="header" href="#scoreboard-arguments" id="scoreboard-arguments">Scoreboard arguments</a></h1>
 <p>The scoreboard arguments that the CommandAPI provides allows you to interact with various scoreboard elements, such as objectives, teams and score holders. Since commands are registered in the <code>onEnable()</code> or <code>onLoad()</code> method of a plugin, this means that these are registered before Bukkit's main scoreboard is loaded.</p>
 <p>This means that calling <code>Bukkit.getScoreboardManager().getMainScoreboard()</code> will <em>always</em> result in a <code>NullPointerException</code>. To avoid this scenario, try using a lambda which delays the call that gets Bukkit's main scoreboard to the moment when the command is executed, which typically occurs after the server has initialized it. For example, if you wanted to populate a <code>TeamArgument</code> with a list of all registered teams on the server, you should use the following:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+<pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
 	        	
-arguments.put(&quot;team&quot;, new TeamArgument().safeOverrideSuggestions(s -&gt;
+arguments.add(new TeamArgument(&quot;team&quot;).safeOverrideSuggestions(s -&gt;
     Bukkit.getScoreboardManager().getMainScoreboard().getTeams().toArray(new Team[0]))
 );
 </code></pre>
@@ -2089,12 +2064,9 @@ new ScoreHolderArgument(ScoreHolderType.MULTIPLE);
 <pre><code>/reward @e[type=player,scores={deaths=..9}]
 </code></pre>
 <p>Note how we use <code>..9</code> to represent 9 or less deaths (since ranges are inclusive). Also note how we restrict our input to players via the command using <code>type=player</code>. We can now implement our command:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-//We want multiple players, so we use ScoreHolderType.MULTIPLE in the constructor
-arguments.put(&quot;players&quot;, new ScoreHolderArgument(ScoreHolderType.MULTIPLE));
-
-new CommandAPICommand(&quot;reward&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;reward&quot;)
+    //We want multiple players, so we use ScoreHolderType.MULTIPLE in the constructor
+    .withArguments(new ScoreHolderArgument(&quot;players&quot;, ScoreHolderType.MULTIPLE))
     .executes((sender, args) -&gt; {
         //Get player names by casting to Collection&lt;String&gt;
         @SuppressWarnings(&quot;unchecked&quot;)
@@ -2142,13 +2114,10 @@ for(String str : entitiesAndPlayers) {
 <pre><code>/clearobjectives &lt;slot&gt;
 </code></pre>
 <p>We implement this simply by using the <code>ScoreboardSlotArgument</code> as our argument, and then we can clear the slot using the scoreboard <code>clearSlot(DisplaySlot)</code> method.</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;slot&quot;, new ScoreboardSlotArgument());
-
-new CommandAPICommand(&quot;clearobjectives&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;clearobjectives&quot;)
+    .withArguments(new ScoreboardSlotArgument(&quot;slot&quot;))
     .executes((sender, args) -&gt; {
-		Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
+        Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
         DisplaySlot slot = ((ScoreboardSlot) args[0]).getDisplaySlot();
         scoreboard.clearSlot(slot);
     })
@@ -2173,11 +2142,8 @@ new CommandAPICommand(&quot;clearobjectives&quot;)
 <pre><code>/sidebar &lt;objective&gt;
 </code></pre>
 <p>Given that an objective has to be casted to a String, we have to find a way to convert it from its name to a Bukkit <code>Objective</code> object. We can do that by using the <code>getObjective(String)</code> method from a Bukkit <code>Scoreboard</code>:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;objective&quot;, new ObjectiveArgument());
-
-new CommandAPICommand(&quot;sidebar&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;sidebar&quot;)
+    .withArguments(new ObjectiveArgument(&quot;objective&quot;))
     .executes((sender, args) -&gt; {
         //The ObjectArgument must be casted to a String
         String objectiveName = (String) args[0];
@@ -2200,11 +2166,8 @@ new CommandAPICommand(&quot;sidebar&quot;)
 <pre><code>/unregisterall &lt;objective critera&gt;
 </code></pre>
 <p>To do this, we're going to take advantage of Bukkit's <code>Scoreboard.getObjectivesByCriteria(String)</code> method</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;objective criteria&quot;, new ObjectiveCriteriaArgument());
-
-new CommandAPICommand(&quot;unregisterall&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;unregisterall&quot;)
+    .withArguments(new ObjectiveCriteriaArgument(&quot;objective criteria&quot;))
     .executes((sender, args) -&gt; {
         String objectiveCriteria = (String) args[0];
         Set&lt;Objective&gt; objectives = Bukkit.getScoreboardManager().getMainScoreboard().getObjectivesByCriteria(objectiveCriteria);
@@ -2224,11 +2187,8 @@ new CommandAPICommand(&quot;unregisterall&quot;)
 <pre><code>/togglepvp &lt;team&gt;
 </code></pre>
 <p>To do this, given a team we want to use the <code>setAllowFriendlyFire(boolean)</code> function. As with the <code>ObjectiveArgument</code>, we must convert the <code>String</code> into a <code>Team</code> object.</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;team&quot;, new TeamArgument());
-
-new CommandAPICommand(&quot;togglepvp&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;togglepvp&quot;)
+    .withArguments(new TeamArgument(&quot;team&quot;))
     .executes((sender, args) -&gt; {
         //The TeamArgument must be casted to a String
         String teamName = (String) args[0];

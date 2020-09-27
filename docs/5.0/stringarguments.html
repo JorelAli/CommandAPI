@@ -220,9 +220,9 @@ yesn't
 <h2><a class="header" href="#greedy-string-argument" id="greedy-string-argument">Greedy string argument</a></h2>
 <blockquote>
 <p><strong>Greedy Arguments:</strong></p>
-<p>The <code>GreedyStringArgument</code>, similar to the <code>ChatArgument</code> uses the entire argument array from its current position. This means that it never ends, therefore if it is used, it must be the last element of your <code>LinkedHashMap</code> of arguments.</p>
+<p>The <code>GreedyStringArgument</code>, similar to the <code>ChatArgument</code> uses the entire argument array from its current position. This means that it never ends, therefore if it is used, it must be the last element of your <code>List</code> of arguments.</p>
 <p>For example, if you have a command <code>/message &lt;message&gt; &lt;target&gt;</code>, it would not be able to determine where the message ends and the <code>&lt;target&gt;</code> argument begins.</p>
-<p>If a <code>GreedyStringArgument</code> or <code>ChatArgument</code> is not declared at the end of the <code>LinkedHashMap</code> of arguments, or multiple of these arguments are used in the same <code>LinkedHashMap</code>, the CommandAPI throws a <code>GreedyArgumentException</code>.</p>
+<p>If a <code>GreedyStringArgument</code> or <code>ChatArgument</code> is not declared at the end of the <code>List</code> of arguments, or multiple of these arguments are used in the same <code>List</code>, the CommandAPI throws a <code>GreedyArgumentException</code>.</p>
 </blockquote>
 <p>The <code>GreedyStringArgument</code> takes the <code>TextArgument</code> a step further. <strong>Any characters and symbols are allowed</strong> and quotation marks are not required.</p>
 <div class="example">
@@ -231,9 +231,9 @@ yesn't
 <pre><code>/message &lt;target&gt; &lt;message&gt;
 </code></pre>
 <p>This would be ideal for a greedy string, since it can consume all text after the player's name:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;target&quot;, new PlayerArgument());
-arguments.put(&quot;message&quot;, new GreedyStringArgument());
+<pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
+arguments.add(new PlayerArgument(&quot;target&quot;));
+arguments.add(new GreedyStringArgument(&quot;message&quot;));
 
 new CommandAPICommand(&quot;message&quot;)
     .withArguments(arguments)

@@ -43,8 +43,8 @@ Say we want to create a simple command to provide ingame emotes between players.
 First, we'll declare our arguments. Here, we'll use the `overrideSuggestionsT` method, along with the `StringTooltip.of(String, String)` method to create emote suggestions and include suitable descriptions. In this example, we also make use of `arrayOf(StringTooltip...)` to easily create a `StringTooltip[]`:
 
 ```java
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("emote", new StringArgument()
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new StringArgument("emote")
 	.overrideSuggestionsT( 
 		StringTooltip.arrayOf(
 			StringTooltip.of("wave", "Waves at a player"),
@@ -52,7 +52,7 @@ arguments.put("emote", new StringArgument()
 			StringTooltip.of("glare", "Gives a player the death glare")
 		)
 	));
-arguments.put("target", new PlayerArgument());
+arguments.add(new PlayerArgument("target"));
 ```
 
 Finally, we declare our command as normal:
@@ -121,8 +121,8 @@ Say we wanted to create a custom teleport command which suggestions a few key lo
 First, we'll declare our arguments. Here, we use a `LocationArgument()` and use the `safeOverrideSuggestionsT` method, with a parameter for the command sender, so we can get information about the world. We populate the suggestions with tooltips using `Tooltip.of(Location, String)` and collate them together with `Tooltip.arrayOf(Tooltip<Location>...)`:
 
 ```java
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("location", new LocationArgument()
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new LocationArgument("location")
 	.safeOverrideSuggestionsT((sender) -> {
 		return Tooltip.arrayOf(
 			Tooltip.of(((Player) sender).getWorld().getSpawnLocation(), "World spawn"),

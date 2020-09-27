@@ -197,12 +197,9 @@ new ScoreHolderArgument(ScoreHolderType.MULTIPLE);
 <pre><code>/reward @e[type=player,scores={deaths=..9}]
 </code></pre>
 <p>Note how we use <code>..9</code> to represent 9 or less deaths (since ranges are inclusive). Also note how we restrict our input to players via the command using <code>type=player</code>. We can now implement our command:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-//We want multiple players, so we use ScoreHolderType.MULTIPLE in the constructor
-arguments.put(&quot;players&quot;, new ScoreHolderArgument(ScoreHolderType.MULTIPLE));
-
-new CommandAPICommand(&quot;reward&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;reward&quot;)
+    //We want multiple players, so we use ScoreHolderType.MULTIPLE in the constructor
+    .withArguments(new ScoreHolderArgument(&quot;players&quot;, ScoreHolderType.MULTIPLE))
     .executes((sender, args) -&gt; {
         //Get player names by casting to Collection&lt;String&gt;
         @SuppressWarnings(&quot;unchecked&quot;)
@@ -250,13 +247,10 @@ for(String str : entitiesAndPlayers) {
 <pre><code>/clearobjectives &lt;slot&gt;
 </code></pre>
 <p>We implement this simply by using the <code>ScoreboardSlotArgument</code> as our argument, and then we can clear the slot using the scoreboard <code>clearSlot(DisplaySlot)</code> method.</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;slot&quot;, new ScoreboardSlotArgument());
-
-new CommandAPICommand(&quot;clearobjectives&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;clearobjectives&quot;)
+    .withArguments(new ScoreboardSlotArgument(&quot;slot&quot;))
     .executes((sender, args) -&gt; {
-		Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
+        Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
         DisplaySlot slot = ((ScoreboardSlot) args[0]).getDisplaySlot();
         scoreboard.clearSlot(slot);
     })

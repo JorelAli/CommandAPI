@@ -177,9 +177,9 @@
                         <h1><a class="header" href="#scoreboard-arguments" id="scoreboard-arguments">Scoreboard arguments</a></h1>
 <p>The scoreboard arguments that the CommandAPI provides allows you to interact with various scoreboard elements, such as objectives, teams and score holders. Since commands are registered in the <code>onEnable()</code> or <code>onLoad()</code> method of a plugin, this means that these are registered before Bukkit's main scoreboard is loaded.</p>
 <p>This means that calling <code>Bukkit.getScoreboardManager().getMainScoreboard()</code> will <em>always</em> result in a <code>NullPointerException</code>. To avoid this scenario, try using a lambda which delays the call that gets Bukkit's main scoreboard to the moment when the command is executed, which typically occurs after the server has initialized it. For example, if you wanted to populate a <code>TeamArgument</code> with a list of all registered teams on the server, you should use the following:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+<pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
 	        	
-arguments.put(&quot;team&quot;, new TeamArgument().safeOverrideSuggestions(s -&gt;
+arguments.add(new TeamArgument(&quot;team&quot;).safeOverrideSuggestions(s -&gt;
     Bukkit.getScoreboardManager().getMainScoreboard().getTeams().toArray(new Team[0]))
 );
 </code></pre>

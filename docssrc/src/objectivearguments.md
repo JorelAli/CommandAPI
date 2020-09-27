@@ -28,7 +28,19 @@ As an example, let's create a command to move an objective to a player's sidebar
 Given that an objective has to be casted to a String, we have to find a way to convert it from its name to a Bukkit `Objective` object. We can do that by using the `getObjective(String)` method from a Bukkit `Scoreboard`:
 
 ```java
-{{ #include examples/5.7.2objective.java }}
+new CommandAPICommand("sidebar")
+    .withArguments(new ObjectiveArgument("objective"))
+    .executes((sender, args) -> {
+        //The ObjectArgument must be casted to a String
+        String objectiveName = (String) args[0];
+        
+        //An objective name can be turned into an Objective using getObjective(String)
+        Objective objective = Bukkit.getScoreboardManager().getMainScoreboard().getObjective(objectiveName);
+        
+        //Set display slot
+        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+    })
+    .register();
 ```
 
 </div>
@@ -52,7 +64,18 @@ Say we wanted to create a command to unregister all objectives based on a given 
 To do this, we're going to take advantage of Bukkit's `Scoreboard.getObjectivesByCriteria(String)` method
 
 ```java
-{{ #include examples/5.7.2objectivecriteria.java }}
+new CommandAPICommand("unregisterall")
+    .withArguments(new ObjectiveCriteriaArgument("objective criteria"))
+    .executes((sender, args) -> {
+        String objectiveCriteria = (String) args[0];
+        Set<Objective> objectives = Bukkit.getScoreboardManager().getMainScoreboard().getObjectivesByCriteria(objectiveCriteria);
+        
+        //Unregister the objectives
+        for(Objective objective : objectives) {
+            objective.unregister();
+        }
+    })
+    .register();
 ```
 
 </div>

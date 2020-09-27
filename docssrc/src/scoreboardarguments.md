@@ -39,7 +39,19 @@ To give this example a bit more context, let's say we want to reward all players
 Note how we use `..9` to represent 9 or less deaths (since ranges are inclusive). Also note how we restrict our input to players via the command using `type=player`. We can now implement our command:
 
 ```java
-{{ #include examples/5.7.1scoreholder.java}}
+new CommandAPICommand("reward")
+    //We want multiple players, so we use ScoreHolderType.MULTIPLE in the constructor
+    .withArguments(new ScoreHolderArgument("players", ScoreHolderType.MULTIPLE))
+    .executes((sender, args) -> {
+        //Get player names by casting to Collection<String>
+        @SuppressWarnings("unchecked")
+        Collection<String> players = (Collection<String>) args[0];
+        
+        for(String playerName : players) {
+            Bukkit.getPlayer(playerName).getInventory().addItem(new ItemStack(Material.DIAMOND, 3));
+        }
+    })
+    .register();
 ```
 
 </div>
@@ -97,7 +109,14 @@ Say we want to clear all objectives in a specific scoreboard slot. In this examp
 We implement this simply by using the `ScoreboardSlotArgument` as our argument, and then we can clear the slot using the scoreboard `clearSlot(DisplaySlot)` method.
 
 ```java
-{{ #include examples/5.7.1scoreboardslot.java }}
+new CommandAPICommand("clearobjectives")
+    .withArguments(new ScoreboardSlotArgument("slot"))
+    .executes((sender, args) -> {
+        Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
+        DisplaySlot slot = ((ScoreboardSlot) args[0]).getDisplaySlot();
+        scoreboard.clearSlot(slot);
+    })
+    .register();
 ```
 
 </div>

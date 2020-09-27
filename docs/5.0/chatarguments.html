@@ -185,14 +185,11 @@
 <pre><code>/namecolor &lt;chatcolor&gt;
 </code></pre>
 <p>We then use the <code>ChatColorArgument</code> to change the player's name color:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;chatcolor&quot;, new ChatColorArgument());
-
-new CommandAPICommand(&quot;namecolor&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;namecolor&quot;)
+    .withArguments(new ChatColorArgument(&quot;chatcolor&quot;))
     .executesPlayer((player, args) -&gt; {
         ChatColor color = (ChatColor) args[0];
-	    player.setDisplayName(color + player.getName());
+        player.setDisplayName(color + player.getName());
     })
     .register();
 </code></pre>
@@ -267,12 +264,9 @@ sender.spigot().sendMessage(BaseComponent[]);
 <pre><code>/makebook &lt;player&gt; &lt;contents&gt;
 </code></pre>
 <p>Now we can create our book command. We use the player as the main target by using their name for the author field, as well as their inventory to place the book. We finally construct our book using the <code>.setPages(BaseComponent[])</code> method:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;player&quot;, new PlayerArgument());
-arguments.put(&quot;contents&quot;, new ChatComponentArgument());
-
-new CommandAPICommand(&quot;makebook&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;makebook&quot;)
+    .withArguments(new PlayerArgument(&quot;player&quot;))
+    .withArguments(new ChatComponentArgument(&quot;contents&quot;))
     .executes((sender, args) -&gt; {
         Player player = (Player) args[0];
         BaseComponent[] arr = (BaseComponent[]) args[1];
@@ -299,7 +293,7 @@ new CommandAPICommand(&quot;makebook&quot;)
 </div>
 <blockquote>
 <p><strong>Note:</strong></p>
-<p>The <code>ChatArgument</code> class is an argument similar to the <a href="./stringarguments.html#greedy-string-argument"><code>GreedyStringArgument</code></a>, in the sense that it has no terminator and must be defined at the end of your <code>LinkedHashMap</code> of arguments. For more information on this, please read the section on <a href="./stringarguments.html#greedy-string-argument">Greedy arguments</a>.</p>
+<p>The <code>ChatArgument</code> class is an argument similar to the <a href="./stringarguments.html#greedy-string-argument"><code>GreedyStringArgument</code></a>, in the sense that it has no terminator and must be defined at the end of your <code>List</code> of arguments. For more information on this, please read the section on <a href="./stringarguments.html#greedy-string-argument">Greedy arguments</a>.</p>
 </blockquote>
 <p>The <code>ChatArgument</code> is basically identical to the <code>GreedyStringArgument</code>, with the added functionality of enabling <em>entity selectors</em>, such as <code>@e</code>, <code>@p</code> and so on. The <code>ChatArgument</code> also returns a <code>BaseComponent[]</code>, similar to the <code>ChatComponentArgument</code>.</p>
 <div class="example">
@@ -311,11 +305,8 @@ new CommandAPICommand(&quot;makebook&quot;)
 <pre><code>/pbroadcast Hello @p
 </code></pre>
 <p><em>Bob</em> would receive the message &quot;Hello Bob&quot;, whereas <em>Michael</em> would receive the message &quot;Hello Michael&quot;. We can use the <code>ChatArgument</code> to create this &quot;personalized&quot; broadcast:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;message&quot;, new ChatArgument());
-
-new CommandAPICommand(&quot;pbroadcast&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;pbroadcast&quot;)
+    .withArguments(new ChatArgument(&quot;message&quot;))
     .executes((sender, args) -&gt; {
         BaseComponent[] message = (BaseComponent[]) args[0];
     

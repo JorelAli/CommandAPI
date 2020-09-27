@@ -101,7 +101,7 @@ new CommandAPICommand("friendtp")
 > The syntax of inlining the `.overrideSuggestions()` method has been designed to work well with Java's lambdas. For example, we could write the above code more consisely, such as:
 >
 > ```java
-> List<Argument> arguments = new LinkedHashMap<>();
+> List<Argument> arguments = new ArrayList<>();
 > arguments.add(new PlayerArgument("friend").overrideSuggestions(Friends::getFriends));
 > ```
 >

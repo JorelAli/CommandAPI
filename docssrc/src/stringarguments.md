@@ -71,11 +71,11 @@ hello world
 
 > **Greedy Arguments:**
 >
-> The `GreedyStringArgument`, similar to the `ChatArgument` uses the entire argument array from its current position. This means that it never ends, therefore if it is used, it must be the last element of your `LinkedHashMap` of arguments.
+> The `GreedyStringArgument`, similar to the `ChatArgument` uses the entire argument array from its current position. This means that it never ends, therefore if it is used, it must be the last element of your `List` of arguments.
 >
 > For example, if you have a command `/message <message> <target>`, it would not be able to determine where the message ends and the `<target>` argument begins.
 >
-> If a `GreedyStringArgument` or `ChatArgument` is not declared at the end of the `LinkedHashMap` of arguments, or multiple of these arguments are used in the same `LinkedHashMap`, the CommandAPI throws a `GreedyArgumentException`.
+> If a `GreedyStringArgument` or `ChatArgument` is not declared at the end of the `List` of arguments, or multiple of these arguments are used in the same `List`, the CommandAPI throws a `GreedyArgumentException`.
 
 The `GreedyStringArgument` takes the `TextArgument` a step further. **Any characters and symbols are allowed** and quotation marks are not required.
 
@@ -92,9 +92,9 @@ Say we have a simple message command of the following form:
 This would be ideal for a greedy string, since it can consume all text after the player's name:
 
 ```java
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("target", new PlayerArgument());
-arguments.put("message", new GreedyStringArgument());
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new PlayerArgument("target"));
+arguments.add(new GreedyStringArgument("message"));
 
 new CommandAPICommand("message")
     .withArguments(arguments)

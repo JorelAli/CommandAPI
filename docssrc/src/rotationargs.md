@@ -26,12 +26,9 @@ Say we want to make an armor stand look in a certain direction. To do this, we'l
 To do this, we'll use the rotation from the `RotationArgument` and select an entity using the `EntitySelectorArgument`, with `EntitySelector.ONE_ENTITY`. We then check if our entity is an armor stand and if so, we set its head pose to the given rotation.
 
 ```java
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("rotation", new RotationArgument());
-arguments.put("target", new EntitySelectorArgument(EntitySelector.ONE_ENTITY));
-
 new CommandAPICommand("rotate")
-    .withArguments(arguments)
+    .withArguments(new RotationArgument("rotation"))
+    .withArguments(new EntitySelectorArgument("target", EntitySelector.ONE_ENTITY))
     .executes((sender, args) -> {
         Rotation rotation = (Rotation) args[0];
         Entity target = (Entity) args[1];

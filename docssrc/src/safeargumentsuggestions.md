@@ -125,8 +125,8 @@ Once we've done that, we can now include them in our command registration. To do
 
 ```java
 // Safely override with the recipe we've defined
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("recipe", new RecipeArgument().safeOverrideSuggestions(emeraldSwordRecipe, /* Other recipes */));
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new RecipeArgument("recipe").safeOverrideSuggestions(emeraldSwordRecipe, /* Other recipes */));
 
 // Register our command
 new CommandAPICommand("giverecipe")
@@ -161,8 +161,8 @@ allowedMobs.removeAll(Arrays.asList(forbiddenMobs)); //Now contains everything e
 We then use our safe arguments to return an `EntityType[]` as the list of values that are suggested to the player. In this example, we use the `Function<CommandSender, EntityType[]>` argument to determine if the sender has permissions to view the suggestions:
 
 ```java
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("mob", new EntityTypeArgument().safeOverrideSuggestions(
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new EntityTypeArgument("mob").safeOverrideSuggestions(
 	sender -> {
 		if(sender.isOp()) {
 			return EntityType.values(); //All entity types
@@ -200,9 +200,9 @@ Say we wanted to remove a potion effect from a player. To do this, we'll use the
 Now, we don't want to remove a potion effect that already exists on a player, so instead we'll use the safe arguments to find a list of potion effects on the target player and then only suggest those potion effects. To do this, we'll use the `BiFunction<CommandSender, Object[], PotionEffectType[]>` parameter, as it allows us to access the previously defined `<player>` argument.
 
 ```java
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("target", new EntitySelectorArgument(EntitySelector.ONE_PLAYER));
-arguments.put("potioneffect", new PotionEffectArgument().safeOverrideSuggestions(
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new EntitySelectorArgument("target", EntitySelector.ONE_PLAYER));
+arguments.add(new PotionEffectArgument("potioneffect").safeOverrideSuggestions(
 	(sender, prevArgs) -> {
 		Player target = (Player) prevArgs[0];
         

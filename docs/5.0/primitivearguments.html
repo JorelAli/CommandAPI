@@ -193,14 +193,14 @@
 <p>Say we want to create a plugin that lets you edit its own <code>config.yml</code> file using a command. To do this, let's create a command with the following structure:</p>
 <pre><code>/editconfig &lt;config-key&gt; &lt;value&gt;
 </code></pre>
-<p>We first retrieve the keys from the configuration file using the typical Bukkit API. We construct our <code>LinkedHashMap</code> to hold our arguments, with the first parameter being a String key (in the form of a <code>TextArgument</code>, <a href="TODO">overridden with an array of suggestions</a>). Finally, we register our command and update the config, ensuring that we cast the <code>BooleanArgument</code> to <code>boolean</code>: </p>
+<p>We first retrieve the keys from the configuration file using the typical Bukkit API. We construct our <code>List</code> to hold our arguments, with the first parameter being a String key (in the form of a <code>TextArgument</code>, <a href="TODO">overridden with an array of suggestions</a>). Finally, we register our command and update the config, ensuring that we cast the <code>BooleanArgument</code> to <code>boolean</code>: </p>
 <pre><code class="language-java">// Load keys from config file
 String[] configKeys = getConfig().getKeys(true).toArray(new String[0]);
 
 // Create arguments with the config key and a boolean value to set it to
-LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;config-key&quot;, new TextArgument().overrideSuggestions(configKeys));
-arguments.put(&quot;value&quot;, new BooleanArgument());
+List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
+arguments.add(new TextArgument(&quot;config-key&quot;).overrideSuggestions(configKeys));
+arguments.add(new BooleanArgument(&quot;value&quot;));
 
 // Register our command
 new CommandAPICommand(&quot;editconfig&quot;)

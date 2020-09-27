@@ -195,13 +195,9 @@
 <pre><code>/break &lt;location&gt;
 </code></pre>
 <p>Simply put, given the coordinates provided to the command, &quot;break&quot; the block by setting it's type to <code>Material.AIR</code>. For this example, we're referring to block specific coordinates, so we want to use <code>LocationType.BLOCK_POSITION</code>:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-
-//We want to target blocks in particular, so use BLOCK_POSITION
-arguments.put(&quot;block&quot;, new LocationArgument(LocationType.BLOCK_POSITION));
-
-new CommandAPICommand(&quot;break&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;break&quot;)
+    //We want to target blocks in particular, so use BLOCK_POSITION
+    .withArguments(new LocationArgument(&quot;block&quot;, LocationType.BLOCK_POSITION))
     .executesPlayer((player, args) -&gt; {
         ((Location) args[0]).getBlock().setType(Material.AIR);
     })

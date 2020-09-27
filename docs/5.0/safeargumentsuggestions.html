@@ -266,8 +266,8 @@ getServer().addRecipe(emeraldSwordRecipe);
 </code></pre>
 <p>Once we've done that, we can now include them in our command registration. To do this, we use <code>safeOverrideSuggestions(recipes)</code> and then register our command as normal:</p>
 <pre><code class="language-java">// Safely override with the recipe we've defined
-LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;recipe&quot;, new RecipeArgument().safeOverrideSuggestions(emeraldSwordRecipe, /* Other recipes */));
+List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
+arguments.add(new RecipeArgument(&quot;recipe&quot;).safeOverrideSuggestions(emeraldSwordRecipe, /* Other recipes */));
 
 // Register our command
 new CommandAPICommand(&quot;giverecipe&quot;)
@@ -290,8 +290,8 @@ List&lt;EntityType&gt; allowedMobs = new ArrayList&lt;&gt;(Arrays.asList(EntityT
 allowedMobs.removeAll(Arrays.asList(forbiddenMobs)); //Now contains everything except enderdragon and wither
 </code></pre>
 <p>We then use our safe arguments to return an <code>EntityType[]</code> as the list of values that are suggested to the player. In this example, we use the <code>Function&lt;CommandSender, EntityType[]&gt;</code> argument to determine if the sender has permissions to view the suggestions:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;mob&quot;, new EntityTypeArgument().safeOverrideSuggestions(
+<pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
+arguments.add(new EntityTypeArgument(&quot;mob&quot;).safeOverrideSuggestions(
 	sender -&gt; {
 		if(sender.isOp()) {
 			return EntityType.values(); //All entity types
@@ -317,9 +317,9 @@ arguments.put(&quot;mob&quot;, new EntityTypeArgument().safeOverrideSuggestions(
 <pre><code>/removeeffect &lt;player&gt; &lt;potioneffect&gt;
 </code></pre>
 <p>Now, we don't want to remove a potion effect that already exists on a player, so instead we'll use the safe arguments to find a list of potion effects on the target player and then only suggest those potion effects. To do this, we'll use the <code>BiFunction&lt;CommandSender, Object[], PotionEffectType[]&gt;</code> parameter, as it allows us to access the previously defined <code>&lt;player&gt;</code> argument.</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;target&quot;, new EntitySelectorArgument(EntitySelector.ONE_PLAYER));
-arguments.put(&quot;potioneffect&quot;, new PotionEffectArgument().safeOverrideSuggestions(
+<pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
+arguments.add(new EntitySelectorArgument(&quot;target&quot;, EntitySelector.ONE_PLAYER));
+arguments.add(new PotionEffectArgument(&quot;potioneffect&quot;).safeOverrideSuggestions(
 	(sender, prevArgs) -&gt; {
 		Player target = (Player) prevArgs[0];
         
