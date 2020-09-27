@@ -1021,7 +1021,7 @@ new CommandAPICommand("getfruit")
     .executes((sender, args) -> {
         String inputFruit = (String) args[0];
         
-        if(Arrays.binarySearch(fruit, inputFruit) >= 0) {
+        if(Arrays.stream(fruit).anyMatch(inputFruit::equals)) {
             //Do something with inputFruit
         } else {
             //The player's input is not in the list of fruit
