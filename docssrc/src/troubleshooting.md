@@ -7,9 +7,9 @@ This section basically summarizes the list of things that _could_ go wrong with 
 Shove the scoreboard access inside a lambda, so it is evaluated when commands are executed rather than when the server loads. For example, use:
 
 ```java
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+List<Argument> arguments = new ArrayList<>();
             	
-arguments.put("team", new TeamArgument().safeOverrideSuggestions(s ->
+arguments.add(new TeamArgument("team").safeOverrideSuggestions(s ->
     Bukkit.getScoreboardManager().getMainScoreboard().getTeams().toArray(new Team[0]))
 );
 ```
@@ -17,9 +17,9 @@ arguments.put("team", new TeamArgument().safeOverrideSuggestions(s ->
 as opposed to:
 
 ```java
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+List<Argument> arguments = new ArrayList<>();
             	
-arguments.put("team", new TeamArgument().safeOverrideSuggestions(
+arguments.add(new TeamArgument("team").safeOverrideSuggestions(
     Bukkit.getScoreboardManager().getMainScoreboard().getTeams().toArray(new Team[0]))
 );
 ```

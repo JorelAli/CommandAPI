@@ -178,16 +178,16 @@
 <p>This section basically summarizes the list of things that <em>could</em> go wrong with the CommandAPI and how to mitigate these circumstances.</p>
 <h2><a class="header" href="#i-encounter-a-nullpointerexception-when-using-bukkits-scoreboard" id="i-encounter-a-nullpointerexception-when-using-bukkits-scoreboard">I encounter a <code>NullPointerException</code> when using Bukkit's scoreboard</a></h2>
 <p>Shove the scoreboard access inside a lambda, so it is evaluated when commands are executed rather than when the server loads. For example, use:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+<pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
             	
-arguments.put(&quot;team&quot;, new TeamArgument().safeOverrideSuggestions(s -&gt;
+arguments.add(new TeamArgument(&quot;team&quot;).safeOverrideSuggestions(s -&gt;
     Bukkit.getScoreboardManager().getMainScoreboard().getTeams().toArray(new Team[0]))
 );
 </code></pre>
 <p>as opposed to:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+<pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
             	
-arguments.put(&quot;team&quot;, new TeamArgument().safeOverrideSuggestions(
+arguments.add(new TeamArgument(&quot;team&quot;).safeOverrideSuggestions(
     Bukkit.getScoreboardManager().getMainScoreboard().getTeams().toArray(new Team[0]))
 );
 </code></pre>
