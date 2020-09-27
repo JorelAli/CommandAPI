@@ -187,11 +187,8 @@
 <pre><code>/set &lt;block&gt;
 </code></pre>
 <p>And then we can simply set our block using <code>setBlockData()</code>:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;block&quot;, new BlockStateArgument());
-
-new CommandAPICommand(&quot;set&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;set&quot;)
+    .withArguments(new BlockStateArgument(&quot;block&quot;))
     .executesPlayer((player, args) -&gt; {
         BlockData blockdata = (BlockData) args[0];
         Block targetBlock = player.getTargetBlockExact(256);

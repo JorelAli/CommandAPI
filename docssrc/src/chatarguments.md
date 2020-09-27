@@ -21,7 +21,7 @@ Say we want to create a plugin to change the color of a player's username. We wa
 We then use the `ChatColorArgument` to change the player's name color:
 
 ```java
-{{#include Examples.java:chatcolorarguments}}
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:chatcolorarguments}}
 ```
 </div>
 
@@ -114,7 +114,7 @@ Now let's define our command. Since book text is typically very large - too larg
 Now we can create our book command. We use the player as the main target by using their name for the author field, as well as their inventory to place the book. We finally construct our book using the `.setPages(BaseComponent[])` method:
 
 ```java
-{{#include Examples.java:chatcomponentarguments}}
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:chatcomponentarguments}}
 ```
 
 </div>
@@ -156,7 +156,7 @@ Say we're on a server with 2 players: _Bob_ and _Michael_. If I were to use the 
 _Bob_ would receive the message "Hello Bob", whereas _Michael_ would receive the message "Hello Michael". We can use the `ChatArgument` to create this "personalized" broadcast:
 
 ```java
-{{#include Examples.java:chatarguments}}
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:chatarguments}}
 ```
 
 </div>

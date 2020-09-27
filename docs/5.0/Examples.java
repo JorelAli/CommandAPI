@@ -355,4 +355,48 @@ new CommandAPICommand("set")
 /* ANCHOR_END: blockstateargument */
 }
 
+{
+/* ANCHOR: enchantmentarguments */
+new CommandAPICommand("enchantitem")
+    .withArguments(new EnchantmentArgument("enchantment"))
+    .withArguments(new IntegerArgument("level", 1, 5))
+    .executesPlayer((player, args) -> {
+        Enchantment enchantment = (Enchantment) args[0];
+        int level = (int) args[1];
+        
+        //Add the enchantment
+        player.getInventory().getItemInMainHand().addEnchantment(enchantment, level);
+    })
+    .register();
+/* ANCHOR_END: enchantmentarguments */
+}
+
+{
+/* ANCHOR: environmentarguments */
+new CommandAPICommand("createworld")
+    .withArguments(new StringArgument("worldname"))
+    .withArguments(new EnvironmentArgument("type"))
+    .executes((sender, args) -> {
+        String worldName = (String) args[0];
+        Environment environment = (Environment) args[1];
+
+        // Create a new world with the specific world name and environment
+        Bukkit.getServer().createWorld(new WorldCreator(worldName).environment(environment));
+        sender.sendMessage("World created!");
+    })
+    .register();
+/* ANCHOR_END: environmentarguments */
+}
+
+{
+/* ANCHOR: itemstackarguments */
+new CommandAPICommand("item")
+    .withArguments(new ItemStackArgument("itemstack"))
+    .executesPlayer((player, args) -> {
+        player.getInventory().addItem((ItemStack) args[0]);
+    })
+    .register();
+/* ANCHOR_END: itemstackarguments */
+}
+
 }

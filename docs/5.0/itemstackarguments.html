@@ -183,12 +183,8 @@
 <pre><code>/item &lt;itemstack&gt;
 </code></pre>
 <p>With this structure, we can easily create our command:</p>
-<pre><code class="language-java">// Declare our arguments
-LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;itemstack&quot;, new ItemStackArgument());
-
-new CommandAPICommand(&quot;item&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;item&quot;)
+    .withArguments(new ItemStackArgument(&quot;itemstack&quot;))
     .executesPlayer((player, args) -&gt; {
         player.getInventory().addItem((ItemStack) args[0]);
     })

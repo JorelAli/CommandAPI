@@ -183,18 +183,15 @@
 <pre><code>/enchantitem &lt;enchantment&gt; &lt;level&gt;
 </code></pre>
 <p>Since most enchantment levels range between 1 and 5, we will also make use of the <code>IntegerArgument</code> to restrict the level of the enchantment by usng its range constructor.</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;enchantment&quot;, new EnchantmentArgument());
-arguments.put(&quot;level&quot;, new IntegerArgument(1, 5));
-
-new CommandAPICommand(&quot;enchantitem&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;enchantitem&quot;)
+    .withArguments(new EnchantmentArgument(&quot;enchantment&quot;))
+    .withArguments(new IntegerArgument(&quot;level&quot;, 1, 5))
     .executesPlayer((player, args) -&gt; {
-		Enchantment enchantment = (Enchantment) args[0];
-		int level = (int) args[1];
-		
-		//Add the enchantment
-		player.getInventory().getItemInMainHand().addEnchantment(enchantment, level);
+        Enchantment enchantment = (Enchantment) args[0];
+        int level = (int) args[1];
+        
+        //Add the enchantment
+        player.getInventory().getItemInMainHand().addEnchantment(enchantment, level);
     })
     .register();
 </code></pre>

@@ -1,4 +1,72 @@
-public class Examples {
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World.Environment;
+import org.bukkit.WorldCreator;
+import org.bukkit.advancement.Advancement;
+import org.bukkit.advancement.AdvancementProgress;
+import org.bukkit.block.Biome;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Chest;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
+import org.bukkit.util.EulerAngle;
+
+import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.arguments.AdvancementArgument;
+import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.BiomeArgument;
+import dev.jorel.commandapi.arguments.BlockStateArgument;
+import dev.jorel.commandapi.arguments.BooleanArgument;
+import dev.jorel.commandapi.arguments.ChatArgument;
+import dev.jorel.commandapi.arguments.ChatColorArgument;
+import dev.jorel.commandapi.arguments.ChatComponentArgument;
+import dev.jorel.commandapi.arguments.EnchantmentArgument;
+import dev.jorel.commandapi.arguments.EntitySelectorArgument;
+import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
+import dev.jorel.commandapi.arguments.EntityTypeArgument;
+import dev.jorel.commandapi.arguments.EnvironmentArgument;
+import dev.jorel.commandapi.arguments.GreedyStringArgument;
+import dev.jorel.commandapi.arguments.IntegerArgument;
+import dev.jorel.commandapi.arguments.IntegerRangeArgument;
+import dev.jorel.commandapi.arguments.ItemStackArgument;
+import dev.jorel.commandapi.arguments.LocationArgument;
+import dev.jorel.commandapi.arguments.LocationType;
+import dev.jorel.commandapi.arguments.ObjectiveArgument;
+import dev.jorel.commandapi.arguments.ObjectiveCriteriaArgument;
+import dev.jorel.commandapi.arguments.PlayerArgument;
+import dev.jorel.commandapi.arguments.RotationArgument;
+import dev.jorel.commandapi.arguments.ScoreHolderArgument;
+import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
+import dev.jorel.commandapi.arguments.ScoreboardSlotArgument;
+import dev.jorel.commandapi.arguments.StringArgument;
+import dev.jorel.commandapi.arguments.TeamArgument;
+import dev.jorel.commandapi.arguments.TextArgument;
+import dev.jorel.commandapi.wrappers.IntegerRange;
+import dev.jorel.commandapi.wrappers.Rotation;
+import dev.jorel.commandapi.wrappers.ScoreboardSlot;
+import net.md_5.bungee.api.chat.BaseComponent;
+
+public class Examples extends JavaPlugin {
 
 /**
  * The list of all examples that are present in the CommandAPI's
@@ -9,7 +77,7 @@ public class Examples {
  * To manage scope between each example, these should be encased
  * in curly braces {}.
  */
-public static void examples() {
+public void examples() {
 
 {
 /* ANCHOR: booleanargs */
@@ -338,11 +406,8 @@ new CommandAPICommand("setbiome")
 
 {
 /* ANCHOR: blockstateargument */
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("block", new BlockStateArgument());
-
 new CommandAPICommand("set")
-    .withArguments(arguments)
+    .withArguments(new BlockStateArgument("block"))
     .executesPlayer((player, args) -> {
         BlockData blockdata = (BlockData) args[0];
         Block targetBlock = player.getTargetBlockExact(256);
@@ -353,6 +418,50 @@ new CommandAPICommand("set")
     })
     .register();
 /* ANCHOR_END: blockstateargument */
+}
+
+{
+/* ANCHOR: enchantmentarguments */
+new CommandAPICommand("enchantitem")
+    .withArguments(new EnchantmentArgument("enchantment"))
+    .withArguments(new IntegerArgument("level", 1, 5))
+    .executesPlayer((player, args) -> {
+        Enchantment enchantment = (Enchantment) args[0];
+        int level = (int) args[1];
+        
+        //Add the enchantment
+        player.getInventory().getItemInMainHand().addEnchantment(enchantment, level);
+    })
+    .register();
+/* ANCHOR_END: enchantmentarguments */
+}
+
+{
+/* ANCHOR: environmentarguments */
+new CommandAPICommand("createworld")
+    .withArguments(new StringArgument("worldname"))
+    .withArguments(new EnvironmentArgument("type"))
+    .executes((sender, args) -> {
+        String worldName = (String) args[0];
+        Environment environment = (Environment) args[1];
+
+        // Create a new world with the specific world name and environment
+        Bukkit.getServer().createWorld(new WorldCreator(worldName).environment(environment));
+        sender.sendMessage("World created!");
+    })
+    .register();
+/* ANCHOR_END: environmentarguments */
+}
+
+{
+/* ANCHOR: itemstackarguments */
+new CommandAPICommand("item")
+    .withArguments(new ItemStackArgument("itemstack"))
+    .executesPlayer((player, args) -> {
+        player.getInventory().addItem((ItemStack) args[0]);
+    })
+    .register();
+/* ANCHOR_END: itemstackarguments */
 }
 
 }

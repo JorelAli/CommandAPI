@@ -2253,11 +2253,8 @@ for(String str : entitiesAndPlayers) {
 <pre><code>/set &lt;block&gt;
 </code></pre>
 <p>And then we can simply set our block using <code>setBlockData()</code>:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;block&quot;, new BlockStateArgument());
-
-new CommandAPICommand(&quot;set&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;set&quot;)
+    .withArguments(new BlockStateArgument(&quot;block&quot;))
     .executesPlayer((player, args) -&gt; {
         BlockData blockdata = (BlockData) args[0];
         Block targetBlock = player.getTargetBlockExact(256);
@@ -2278,18 +2275,15 @@ new CommandAPICommand(&quot;set&quot;)
 <pre><code>/enchantitem &lt;enchantment&gt; &lt;level&gt;
 </code></pre>
 <p>Since most enchantment levels range between 1 and 5, we will also make use of the <code>IntegerArgument</code> to restrict the level of the enchantment by usng its range constructor.</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;enchantment&quot;, new EnchantmentArgument());
-arguments.put(&quot;level&quot;, new IntegerArgument(1, 5));
-
-new CommandAPICommand(&quot;enchantitem&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;enchantitem&quot;)
+    .withArguments(new EnchantmentArgument(&quot;enchantment&quot;))
+    .withArguments(new IntegerArgument(&quot;level&quot;, 1, 5))
     .executesPlayer((player, args) -&gt; {
-		Enchantment enchantment = (Enchantment) args[0];
-		int level = (int) args[1];
-		
-		//Add the enchantment
-		player.getInventory().getItemInMainHand().addEnchantment(enchantment, level);
+        Enchantment enchantment = (Enchantment) args[0];
+        int level = (int) args[1];
+        
+        //Add the enchantment
+        player.getInventory().getItemInMainHand().addEnchantment(enchantment, level);
     })
     .register();
 </code></pre>
@@ -2307,13 +2301,9 @@ new CommandAPICommand(&quot;enchantitem&quot;)
 <pre><code>/createworld &lt;worldname&gt; &lt;type&gt;
 </code></pre>
 <p>Using the world name and the environment of the world, we can use Bukkit's <code>WorldCreator</code> to create a new world that matches our provided specifications:</p>
-<pre><code class="language-java">// Declare our arguments
-LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;worldname&quot;, new StringArgument());
-arguments.put(&quot;type&quot;, new EnvironmentArgument());
-
-new CommandAPICommand(&quot;createworld&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;createworld&quot;)
+    .withArguments(new StringArgument(&quot;worldname&quot;))
+    .withArguments(new EnvironmentArgument(&quot;type&quot;))
     .executes((sender, args) -&gt; {
         String worldName = (String) args[0];
         Environment environment = (Environment) args[1];
@@ -2333,12 +2323,8 @@ new CommandAPICommand(&quot;createworld&quot;)
 <pre><code>/item &lt;itemstack&gt;
 </code></pre>
 <p>With this structure, we can easily create our command:</p>
-<pre><code class="language-java">// Declare our arguments
-LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;itemstack&quot;, new ItemStackArgument());
-
-new CommandAPICommand(&quot;item&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;item&quot;)
+    .withArguments(new ItemStackArgument(&quot;itemstack&quot;))
     .executesPlayer((player, args) -&gt; {
         player.getInventory().addItem((ItemStack) args[0]);
     })

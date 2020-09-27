@@ -54,7 +54,7 @@ Say you're working on a plugin for server administrators to help them find restr
 Now, we simply create our arguments using `IntegerRangeArgument` for our range and `ItemStackArgument` as the item to search for. We can then find all chests in a given area and determine if it is within the range provided by the command sender by using `range.isInRange(distance)`:
 
 ```java
-{{#include Examples.java:rangedarguments}}
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:rangedarguments}}
 ```
 
 </div>

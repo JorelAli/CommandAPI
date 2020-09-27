@@ -21,7 +21,7 @@ Say we want a simple command to set the block that you're looking at. We'll use 
 And then we can simply set our block using `setBlockData()`:
 
 ```java
-{{#include Examples.java:blockstateargument}}
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:blockstateargument}}
 ```
 
 </div>

@@ -26,7 +26,7 @@ Say we want to make an armor stand look in a certain direction. To do this, we'l
 To do this, we'll use the rotation from the `RotationArgument` and select an entity using the `EntitySelectorArgument`, with `EntitySelector.ONE_ENTITY`. We then check if our entity is an armor stand and if so, we set its head pose to the given rotation.
 
 ```java
-{{#include Examples.java:rotationarguments}}
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:rotationarguments}}
 ```
 
 Note how the head pose requires an `EulerAngle` as opposed to a pitch and yaw. To account for this, we convert our rotation (which is in degrees) into an `EulerAngle` in radians.

@@ -25,7 +25,7 @@ Say you want to set the biome of the current chunk that a player is in. We can d
 And we can set the biome of the current chunk as expected:
 
 ```java
-{{#include Examples.java:biomearguments}}
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:biomearguments}}
 ```
 
 </div>

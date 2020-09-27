@@ -39,7 +39,7 @@ To give this example a bit more context, let's say we want to reward all players
 Note how we use `..9` to represent 9 or less deaths (since ranges are inclusive). Also note how we restrict our input to players via the command using `type=player`. We can now implement our command:
 
 ```java
-{{#include Examples.java:scoreholderargument}}
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:scoreholderargument}}
 ```
 
 </div>
@@ -97,7 +97,7 @@ Say we want to clear all objectives in a specific scoreboard slot. In this examp
 We implement this simply by using the `ScoreboardSlotArgument` as our argument, and then we can clear the slot using the scoreboard `clearSlot(DisplaySlot)` method.
 
 ```java
-{{#include Examples.java:scoreboardslotargument}}
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:scoreboardslotargument}}
 ```
 
 </div>

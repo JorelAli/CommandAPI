@@ -17,16 +17,7 @@ Say we want to create a command that gives you items. For this command, we will 
 With this structure, we can easily create our command:
 
 ```java
-// Declare our arguments
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("itemstack", new ItemStackArgument());
-
-new CommandAPICommand("item")
-    .withArguments(arguments)
-    .executesPlayer((player, args) -> {
-        player.getInventory().addItem((ItemStack) args[0]);
-    })
-    .register();
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:itemstackarguments}}
 ```
 
 </div>

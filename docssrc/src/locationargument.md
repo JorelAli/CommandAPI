@@ -39,7 +39,7 @@ We can declare a simple command to break a block:
 Simply put, given the coordinates provided to the command, "break" the block by setting it's type to `Material.AIR`. For this example, we're referring to block specific coordinates, so we want to use `LocationType.BLOCK_POSITION`:
 
 ```java
-{{#include Examples.java:locationarguments}}
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:locationarguments}}
 ```
 
 </div>
