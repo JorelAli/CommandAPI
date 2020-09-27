@@ -185,11 +185,8 @@
 <div class="example">
 <h3><a class="header" href="#example---using-multi-literals-to-make-the-gamemode-command" id="example---using-multi-literals-to-make-the-gamemode-command">Example - Using multi literals to make the gamemode command</a></h3>
 <p>In this example, we'll show how to use multi literals to declare Minecraft's <code>/gamemode</code> command. As you can see from the example code below, the argument declaration and command declaration is the same as if you were declaring any normal argument or command.</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;gamemode&quot;, new MultiLiteralArgument(&quot;adventure&quot;, &quot;creative&quot;, &quot;spectator&quot;, &quot;survival&quot;));
-
-new CommandAPICommand(&quot;gamemode&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;gamemode&quot;)
+    .withArguments(new MultiLiteralArgument(&quot;adventure&quot;, &quot;creative&quot;, &quot;spectator&quot;, &quot;survival&quot;))
     .executesPlayer((player, args) -&gt; {
         // The literal string that the player enters IS available in the args[]
         switch((String) args[0]) {

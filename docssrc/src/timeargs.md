@@ -29,24 +29,7 @@ Say we have a command `bigmsg` that displays a title message to all players for 
 ```
 
 ```java
-//Declare our arguments
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("duration", new TimeArgument());
-arguments.put("message", new GreedyStringArgument());
-
-new CommandAPICommand("bigmsg")
-    .withArguments(arguments)
-    .executes((sender, args) -> {
-        //Duration in ticks
-        int duration = (int) args[0];
-        String message = (String) args[1];
-
-        for(Player player : Bukkit.getOnlinePlayers()) {
-            //Display the message to all players, with the default fade in/out times (10 and 20).
-            player.sendTitle(message, "", 10, duration, 20);
-        }
-    })
-    .register();
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:timearguments}}
 ```
 
 </div>

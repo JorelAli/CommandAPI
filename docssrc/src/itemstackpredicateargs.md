@@ -15,26 +15,7 @@ Say we wanted to remove items in your inventory _(I know, the `/clear` command d
 We implement this with a simple for loop over the player's inventory and remove items that satisfy the predicate.
 
 ```java
-// Declare our arguments
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("items", new ItemStackPredicateArgument());
-
-// Register our command
-new CommandAPICommand("rem")
-.withArguments(arguments)
-.executesPlayer((player, args) -> {
-	
-    // Get our predicate
-	@SuppressWarnings("unchecked")
-	Predicate<ItemStack> predicate = (Predicate<ItemStack>) args[0];
-    
-	for(ItemStack item : player.getInventory()) {
-		if(predicate.test(item)) {
-			player.getInventory().remove(item);
-		}
-	}
-})
-.register();
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:itemstackpredicatearguments}}
 ```
 
 

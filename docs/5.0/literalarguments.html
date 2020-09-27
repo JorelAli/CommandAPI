@@ -198,15 +198,12 @@
 <pre><code>/mycommand &lt;literal&gt; &lt;text&gt;
 </code></pre>
 <p>As an example, let's declare the literal &quot;hello&quot; as a valid literal for this command. When we retrieve the result from <code>args[0]</code>, it returns the value of the <code>TextArgument</code>, as opposed to the literal &quot;hello&quot;:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;literal&quot;, new LiteralArgument(&quot;hello&quot;));
-arguments.put(&quot;text&quot;, new TextArgument());
-
-new CommandAPICommand(&quot;mycommand&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;mycommand&quot;)
+    .withArguments(new LiteralArgument(&quot;hello&quot;))
+    .withArguments(new TextArgument(&quot;text&quot;))
     .executes((sender, args) -&gt; {
         // This gives the variable &quot;text&quot; the contents of the TextArgument, and not the literal &quot;hello&quot;
-		String text = (String) args[0];
+        String text = (String) args[0];
     })
     .register();
 </code></pre>
@@ -228,19 +225,15 @@ gamemodes.put(&quot;survival&quot;, GameMode.SURVIVAL);
 //Iterate over the map
 for(String key : gamemodes.keySet()) {
     
-    //Create our arguments as usual, using the LiteralArgument for the name of the gamemode
-	LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-	arguments.put(key, new LiteralArgument(key));
-    
     //Register the command as usual
     new CommandAPICommand(&quot;changegamemode&quot;)
-        .withArguments(arguments)
+        .withArguments(new LiteralArgument(key))
         .executesPlayer((player, args) -&gt; {
             //Retrieve the object from the map via the key and NOT the args[]
-	        player.setGameMode(gamemodes.get(key));
+            player.setGameMode(gamemodes.get(key));
         })
         .register();
-}
+}	
 </code></pre>
 <p>Note how, since we don't have access to the literal from <code>args</code>, we must access the provided gamemode from elsewhere.</p>
 </div>

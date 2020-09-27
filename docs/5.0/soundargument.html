@@ -183,11 +183,8 @@
 <pre><code>/sound &lt;sound&gt;
 </code></pre>
 <p>This command simply plays the provided sound to the current player:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;sound&quot;, new SoundArgument());
-
-new CommandAPICommand(&quot;sound&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;sound&quot;)
+    .withArguments(new SoundArgument(&quot;sound&quot;))
     .executesPlayer((player, args) -&gt; {
         player.getWorld().playSound(player.getLocation(), (Sound) args[0], 100.0f, 1.0f);
     })

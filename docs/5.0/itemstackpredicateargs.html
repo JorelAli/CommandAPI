@@ -182,26 +182,22 @@
 <pre><code>/rem &lt;item&gt;
 </code></pre>
 <p>We implement this with a simple for loop over the player's inventory and remove items that satisfy the predicate.</p>
-<pre><code class="language-java">// Declare our arguments
-LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;items&quot;, new ItemStackPredicateArgument());
-
-// Register our command
+<pre><code class="language-java">// Register our command
 new CommandAPICommand(&quot;rem&quot;)
-.withArguments(arguments)
-.executesPlayer((player, args) -&gt; {
-	
-    // Get our predicate
-	@SuppressWarnings(&quot;unchecked&quot;)
-	Predicate&lt;ItemStack&gt; predicate = (Predicate&lt;ItemStack&gt;) args[0];
-    
-	for(ItemStack item : player.getInventory()) {
-		if(predicate.test(item)) {
-			player.getInventory().remove(item);
-		}
-	}
-})
-.register();
+	.withArguments(new ItemStackPredicateArgument(&quot;items&quot;))
+	.executesPlayer((player, args) -&gt; {
+	    
+	    // Get our predicate
+		@SuppressWarnings(&quot;unchecked&quot;)
+	    Predicate&lt;ItemStack&gt; predicate = (Predicate&lt;ItemStack&gt;) args[0];
+	    
+	    for(ItemStack item : player.getInventory()) {
+	        if(predicate.test(item)) {
+	            player.getInventory().remove(item);
+	        }
+	    }
+	})
+	.register();
 </code></pre>
 </div>
 

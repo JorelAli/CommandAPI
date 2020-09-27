@@ -179,16 +179,15 @@
 <p>The <code>LootTableArgument</code> class can be used to get a Bukkit <code>LootTable</code> object.</p>
 <div class="example">
 <h3><a class="header" href="#example---filling-an-inventory-with-loot-table-contents" id="example---filling-an-inventory-with-loot-table-contents">Example - Filling an inventory with loot table contents</a></h3>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;loottable&quot;, new LootTableArgument());
-
-new CommandAPICommand(&quot;giveloottable&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;giveloottable&quot;)
+    .withArguments(new LootTableArgument(&quot;loottable&quot;))
     .executesPlayer((player, args) -&gt; {
         LootTable lootTable = (LootTable) args[0];
     
-    	LootContext context = /* Some generated LootContext relating to the lootTable*/
-		lootTable.fillInventory(player.getInventory(), new Random(), context);
+        /* Some generated LootContext relating to the lootTable*/
+    	LootContext context = new LootContext.Builder(player.getLocation()).build();
+    	
+        lootTable.fillInventory(player.getInventory(), new Random(), context);
     })
     .register();
 </code></pre>

@@ -187,11 +187,8 @@
 <pre><code>/giverecipe &lt;recipe&gt;
 </code></pre>
 <p>As such, we easily implement it by specifying the <code>RecipeArgument</code>, casting it and adding it to the player's inventory:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;recipe&quot;, new RecipeArgument());
-
-new CommandAPICommand(&quot;giverecipe&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;giverecipe&quot;)
+    .withArguments(new RecipeArgument(&quot;recipe&quot;))
     .executesPlayer((player, args) -&gt; {
         Recipe recipe = (Recipe) args[0];
     	player.getInventory().addItem(recipe.getResult());
@@ -205,12 +202,9 @@ new CommandAPICommand(&quot;giverecipe&quot;)
 <pre><code>/unlockrecipe &lt;player&gt; &lt;recipe&gt;
 </code></pre>
 <p>Since the <code>discoverRecipe(NamespacedKey)</code> method for a player requires a <code>NamespacedKey</code>, we have to ensure that this recipe is of type <code>ComplexRecipe</code>. This is simply done by using <code>instanceof</code>. If this is the case, then we can unlock the recipe for the player. Otherwise, we cannot, so we fail gracefully using the <code>CommandAPI.fail(String)</code> method;</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;player&quot;, new PlayerArgument());
-arguments.put(&quot;recipe&quot;, new RecipeArgument());
-
-new CommandAPICommand(&quot;unlockrecipe&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;unlockrecipe&quot;)
+    .withArguments(new PlayerArgument(&quot;player&quot;))
+    .withArguments(new RecipeArgument(&quot;recipe&quot;))
     .executes((sender, args) -&gt; {
         Player target = (Player) args[0];
         Recipe recipe = (Recipe) args[1];

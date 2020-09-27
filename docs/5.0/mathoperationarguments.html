@@ -216,13 +216,10 @@ public float apply(float val1, float val2);
 <pre><code>/changelevel &lt;player&gt; &lt;operation&gt; &lt;value&gt;
 </code></pre>
 <p>As with any command, we declare our arguments, cast them properly and then we write our main code. In this example, we use the <code>apply(int, int)</code> method from our <code>MathOperation</code> to calculate the player's new level.</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;player&quot;, new PlayerArgument());
-arguments.put(&quot;operation&quot;, new MathOperationArgument());
-arguments.put(&quot;value&quot;, new IntegerArgument());
-
-new CommandAPICommand(&quot;changelevel&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;changelevel&quot;)
+    .withArguments(new PlayerArgument(&quot;player&quot;))
+    .withArguments(new MathOperationArgument(&quot;operation&quot;))
+    .withArguments(new IntegerArgument(&quot;value&quot;))
     .executes((sender, args) -&gt; {
         Player target = (Player) args[0];
         MathOperation op = (MathOperation) args[1];
@@ -230,7 +227,7 @@ new CommandAPICommand(&quot;changelevel&quot;)
 
         target.setLevel(op.apply(target.getLevel(), value));
     })
-	.register();
+    .register();
 </code></pre>
 <hr />
 <p>There are various applications for the <code>changelevel</code> command based on what the user inputs. For example:</p>

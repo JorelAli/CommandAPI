@@ -185,44 +185,45 @@
 </code></pre>
 <p>Of course, we could simply use a <code>BlockStateArgument</code> or even an <code>ItemStackArgument</code> as our <code>&lt;fromBlock&gt;</code> in order to get the material to replace, but the block predicate argument provides a test for a given block, which if satisfied, allows certain code to be executed. </p>
 <p>First, we declare our arguments. We want to use the <code>BlockPredicateArgument</code> since it also allows us to use Minecraft tags to identify blocks, as well as individual blocks. We then use <code>BlockStateArgument</code> to set the block to a given type. The <code>BlockStateArgument</code> also allows the user to provide any block data (e.g. contents of a chest or a stair's orientation).</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;radius&quot;, new IntegerArgument());
-arguments.put(&quot;fromBlock&quot;, new BlockPredicateArgument());
-arguments.put(&quot;toBlock&quot;, new BlockStateArgument());
+<pre><code class="language-java">Argument[] arguments = new Argument[] {
+	new IntegerArgument(&quot;radius&quot;),
+	new BlockPredicateArgument(&quot;fromBlock&quot;),
+	new BlockStateArgument(&quot;toBlock&quot;),
+};
 </code></pre>
 <p>We then register our <code>/replace</code> command. First, we parse the arguments making sure to cast to <code>Predicate&lt;Block&gt;</code> and <code>BlockData</code> (and not <code>BlockState</code>). After that, we use a few simple for loops to find the blocks within a radius sphere from the player.</p>
 <p>In our most nested loop, we can then check if the block meets the requirements of our predicate. This is simply performed using <code>predicate.test(block)</code>, and if satisfied, we can set the block's type.</p>
 <p>Lastly, we register our command as normal using the <code>register()</code> method.</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;replace&quot;)
-.withArguments(arguments)
-.executesPlayer((player, args) -&gt; {
-	
-	// Parse the arguments
-	int radius = (int) args[0];
-	@SuppressWarnings(&quot;unchecked&quot;)
-	Predicate&lt;Block&gt; predicate = (Predicate&lt;Block&gt;) args[1];
-	BlockData blockData = (BlockData) args[2];
-	
-	// Find a (solid) sphere of blocks around the player with a given radius
-	Location center = player.getLocation();
-	for (int Y = -radius; Y &lt; radius; Y++) {
-		for (int X = -radius; X &lt; radius; X++) {
-			for (int Z = -radius; Z &lt; radius; Z++) {
-				if (Math.sqrt((X * X) + (Y * Y) + (Z * Z)) &lt;= radius) {
-					Block block = center.getWorld().getBlockAt(X + center.getBlockX(), Y + center.getBlockY(), Z + center.getBlockZ());
-                    
-                    // If that block matches a block from the predicate, set it
-                    if(predicate.test(block)) {
-                        block.setType(blockData.getMaterial());
-						block.setBlockData(blockData);
-                    }
-				}
-			}
-		}
-	}
-    return;
-})
-.register();
+	.withArguments(arguments)
+	.executesPlayer((player, args) -&gt; {
+	    
+	    // Parse the arguments
+	    int radius = (int) args[0];
+	    @SuppressWarnings(&quot;unchecked&quot;)
+	    Predicate&lt;Block&gt; predicate = (Predicate&lt;Block&gt;) args[1];
+	    BlockData blockData = (BlockData) args[2];
+	    
+	    // Find a (solid) sphere of blocks around the player with a given radius
+	    Location center = player.getLocation();
+	    for (int Y = -radius; Y &lt; radius; Y++) {
+	        for (int X = -radius; X &lt; radius; X++) {
+	            for (int Z = -radius; Z &lt; radius; Z++) {
+	                if (Math.sqrt((X * X) + (Y * Y) + (Z * Z)) &lt;= radius) {
+	                    Block block = center.getWorld().getBlockAt(X + center.getBlockX(), Y + center.getBlockY(), Z + center.getBlockZ());
+	                    
+	                    // If that block matches a block from the predicate, set it
+	                    if(predicate.test(block)) {
+	                        block.setType(blockData.getMaterial());
+	                        block.setBlockData(blockData);
+	                    }
+	                }
+	            }
+	        }
+	    }
+	    return;
+	})
+	.register();
 </code></pre>
 </div>
 

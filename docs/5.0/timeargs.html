@@ -191,13 +191,9 @@
 <p>Say we have a command <code>bigmsg</code> that displays a title message to all players for a certain duration:</p>
 <pre><code>/bigmsg &lt;duration&gt; &lt;message&gt;
 </code></pre>
-<pre><code class="language-java">//Declare our arguments
-LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;duration&quot;, new TimeArgument());
-arguments.put(&quot;message&quot;, new GreedyStringArgument());
-
-new CommandAPICommand(&quot;bigmsg&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;bigmsg&quot;)
+    .withArguments(new TimeArgument(&quot;duration&quot;))
+    .withArguments(new GreedyStringArgument(&quot;message&quot;))
     .executes((sender, args) -&gt; {
         //Duration in ticks
         int duration = (int) args[0];

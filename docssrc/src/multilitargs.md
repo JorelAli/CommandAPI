@@ -17,29 +17,7 @@ The multi literal argument has all of the same benefits of a regular literal arg
 In this example, we'll show how to use multi literals to declare Minecraft's `/gamemode` command. As you can see from the example code below, the argument declaration and command declaration is the same as if you were declaring any normal argument or command.
 
 ```java
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("gamemode", new MultiLiteralArgument("adventure", "creative", "spectator", "survival"));
-
-new CommandAPICommand("gamemode")
-    .withArguments(arguments)
-    .executesPlayer((player, args) -> {
-        // The literal string that the player enters IS available in the args[]
-        switch((String) args[0]) {
-            case "adventure":
-                player.setGameMode(GameMode.ADVENTURE);
-                break;
-            case "creative":
-                player.setGameMode(GameMode.CREATIVE);
-                break;
-            case "spectator":
-                player.setGameMode(GameMode.SPECTATOR);
-                break;
-            case "survival":
-                player.setGameMode(GameMode.SURVIVAL);
-                break;
-        }
-    }) 
-    .register();
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:multiliteralarguments}}
 ```
 
 </div>

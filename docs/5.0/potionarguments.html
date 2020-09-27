@@ -183,15 +183,11 @@
 <pre><code>/potion &lt;target&gt; &lt;potion&gt; &lt;duration&gt; &lt;strength&gt;
 </code></pre>
 <p>In this example, we utilize some of the other arguments that we've described earlier, such as the <code>PlayerArgument</code> and <code>TimeArgument</code>. Since duration for the <code>PotionEffect</code> constructor is in ticks, this is perfectly fit for the <code>TimeArgument</code>, which is represented in ticks.</p>
-<pre><code class="language-java">//Declare our arguments
-LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;target&quot;, new PlayerArgument());
-arguments.put(&quot;potion&quot;, new PotionEffectArgument());
-arguments.put(&quot;duration&quot;, new TimeArgument());
-arguments.put(&quot;strength&quot;, new IntegerArgument());
-
-new CommandAPICommand(&quot;potion&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;potion&quot;)
+    .withArguments(new PlayerArgument(&quot;target&quot;))
+    .withArguments(new PotionEffectArgument(&quot;potion&quot;))
+    .withArguments(new TimeArgument(&quot;duration&quot;))
+    .withArguments(new IntegerArgument(&quot;strength&quot;))
     .executes((sender, args) -&gt; {
         Player target = (Player) args[0];
         PotionEffectType potion = (PotionEffectType) args[1];

@@ -183,11 +183,8 @@
 <pre><code>/showparticle &lt;particle&gt;
 </code></pre>
 <p>With this, we can simply spawn the particle using the <code>World.spawnParticle(Particle, Location, int)</code> method:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;particle&quot;, new ParticleArgument());
-
-new CommandAPICommand(&quot;showparticle&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;showparticle&quot;)
+    .withArguments(new ParticleArgument(&quot;particle&quot;))
     .executesPlayer((player, args) -&gt; {
         player.getWorld().spawnParticle((Particle) args[0], player.getLocation(), 1);
     })

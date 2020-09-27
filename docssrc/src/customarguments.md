@@ -33,24 +33,7 @@ The custom argument requires the type of the target object that the custom argum
 Say we want to create an argument to represents the list of available worlds on the server. We basically want to have an argument which always returns a Bukkit `World` object as the result. Here, we create a method `worldArgument()` that returns our custom argument that returns a `World`. First, we retrieve our `String[]` of world names to be used for our suggestions. We then write our custom argument that creates a `World` object from the input (in this case, we simply convert the String to a `World` using `Bukkit.getWorld(String)`). We perform error handling before returning our result:
 
 ```java
-//Function that returns our custom argument
-public Argument worldArgument() {
-
-    //List of worlds on the server, as Strings
-    String[] worlds = Bukkit.getWorlds().stream().map(World::getName).toArray(String[]::new);
-
-    //Construct our CustomArgument that takes in a String input and returns a World object
-    return new CustomArgument<World>((input) -> {
-        //Parse the world from our input
-        World world = Bukkit.getWorld(input);
-
-        if(world == null) {
-            throw new CustomArgumentException(new MessageBuilder("Unknown world: ").appendArgInput());
-        } else {
-            return world;
-        }
-    }).overrideSuggestions(worlds);
-}
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:customarguments2}}
 ```
 
 In our error handling step, we check if the world is equal to null (since the `Bukkit.getWorld(String)` is `@Nullable`). To handle this case, we throw a `CustomArgumentException` with an error from a `MessageBuilder`. The `CustomArgumentException` has two constructors, so a message builder isn't required each time:
@@ -71,15 +54,7 @@ We can use our custom argument like any other argument. Say we wanted to write a
 Since we have defined the method `worldArgument()` which automatically generates our argument, we can use it as follows:
 
 ```java
-LinkedHashMap<String, ArgumentType> arguments = new LinkedHashMap<>();
-arguments.put("world", worldArgument());
-
-new CommandAPICommand("tpworld")
-    .withArguments(arguments)
-    .executesPlayer((player, args) -> {
-        player.teleport(Bukkit.getWorld((World) args[0])).getSpawnLocation());
-    })
-    .register();
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:customarguments}}
 ```
 
 -----

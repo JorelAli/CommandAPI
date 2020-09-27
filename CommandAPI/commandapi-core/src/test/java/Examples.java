@@ -1,13 +1,20 @@
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.WorldCreator;
 import org.bukkit.advancement.Advancement;
@@ -22,24 +29,36 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ComplexRecipe;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.loot.LootContext;
+import org.bukkit.loot.LootTable;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.EulerAngle;
 
+import de.tr7zw.nbtapi.NBTContainer;
+import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.AdvancementArgument;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.BiomeArgument;
+import dev.jorel.commandapi.arguments.BlockPredicateArgument;
 import dev.jorel.commandapi.arguments.BlockStateArgument;
 import dev.jorel.commandapi.arguments.BooleanArgument;
 import dev.jorel.commandapi.arguments.ChatArgument;
 import dev.jorel.commandapi.arguments.ChatColorArgument;
 import dev.jorel.commandapi.arguments.ChatComponentArgument;
+import dev.jorel.commandapi.arguments.CustomArgument;
+import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
+import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
 import dev.jorel.commandapi.arguments.EnchantmentArgument;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
@@ -49,19 +68,31 @@ import dev.jorel.commandapi.arguments.GreedyStringArgument;
 import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.IntegerRangeArgument;
 import dev.jorel.commandapi.arguments.ItemStackArgument;
+import dev.jorel.commandapi.arguments.ItemStackPredicateArgument;
+import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.LocationArgument;
 import dev.jorel.commandapi.arguments.LocationType;
+import dev.jorel.commandapi.arguments.LootTableArgument;
+import dev.jorel.commandapi.arguments.MathOperationArgument;
+import dev.jorel.commandapi.arguments.MultiLiteralArgument;
+import dev.jorel.commandapi.arguments.NBTCompoundArgument;
 import dev.jorel.commandapi.arguments.ObjectiveArgument;
 import dev.jorel.commandapi.arguments.ObjectiveCriteriaArgument;
+import dev.jorel.commandapi.arguments.ParticleArgument;
 import dev.jorel.commandapi.arguments.PlayerArgument;
+import dev.jorel.commandapi.arguments.PotionEffectArgument;
+import dev.jorel.commandapi.arguments.RecipeArgument;
 import dev.jorel.commandapi.arguments.RotationArgument;
 import dev.jorel.commandapi.arguments.ScoreHolderArgument;
 import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
 import dev.jorel.commandapi.arguments.ScoreboardSlotArgument;
+import dev.jorel.commandapi.arguments.SoundArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.arguments.TeamArgument;
 import dev.jorel.commandapi.arguments.TextArgument;
+import dev.jorel.commandapi.arguments.TimeArgument;
 import dev.jorel.commandapi.wrappers.IntegerRange;
+import dev.jorel.commandapi.wrappers.MathOperation;
 import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -99,7 +130,6 @@ new CommandAPICommand("editconfig")
     .register();
 }
 /* ANCHOR_END: booleanargs */
-}
 
 {
 /* ANCHOR: rangedarguments */
@@ -464,4 +494,305 @@ new CommandAPICommand("item")
 /* ANCHOR_END: itemstackarguments */
 }
 
+{
+/* ANCHOR: loottablearguments */
+new CommandAPICommand("giveloottable")
+    .withArguments(new LootTableArgument("loottable"))
+    .executesPlayer((player, args) -> {
+        LootTable lootTable = (LootTable) args[0];
+    
+        /* Some generated LootContext relating to the lootTable*/
+    	LootContext context = new LootContext.Builder(player.getLocation()).build();
+    	
+        lootTable.fillInventory(player.getInventory(), new Random(), context);
+    })
+    .register();
+/* ANCHOR_END: loottablearguments */
 }
+
+{
+/* ANCHOR: mathoperationarguments */
+new CommandAPICommand("changelevel")
+    .withArguments(new PlayerArgument("player"))
+    .withArguments(new MathOperationArgument("operation"))
+    .withArguments(new IntegerArgument("value"))
+    .executes((sender, args) -> {
+        Player target = (Player) args[0];
+        MathOperation op = (MathOperation) args[1];
+        int value = (int) args[2];
+
+        target.setLevel(op.apply(target.getLevel(), value));
+    })
+    .register();
+/* ANCHOR_END: mathoperationarguments */
+}
+
+{
+/* ANCHOR: particlearguments */
+new CommandAPICommand("showparticle")
+    .withArguments(new ParticleArgument("particle"))
+    .executesPlayer((player, args) -> {
+        player.getWorld().spawnParticle((Particle) args[0], player.getLocation(), 1);
+    })
+    .register();
+/* ANCHOR_END: particlearguments */
+}
+
+{
+/* ANCHOR: potioneffectarguments */
+new CommandAPICommand("potion")
+    .withArguments(new PlayerArgument("target"))
+    .withArguments(new PotionEffectArgument("potion"))
+    .withArguments(new TimeArgument("duration"))
+    .withArguments(new IntegerArgument("strength"))
+    .executes((sender, args) -> {
+        Player target = (Player) args[0];
+        PotionEffectType potion = (PotionEffectType) args[1];
+        int duration = (int) args[2];
+        int strength = (int) args[3];
+        
+        //Add the potion effect to the target player
+        target.addPotionEffect(new PotionEffect(potion, duration, strength));
+    })
+    .register();
+/* ANCHOR_END: potioneffectarguments */
+}
+
+{
+/* ANCHOR: recipearguments */
+new CommandAPICommand("giverecipe")
+    .withArguments(new RecipeArgument("recipe"))
+    .executesPlayer((player, args) -> {
+        Recipe recipe = (Recipe) args[0];
+    	player.getInventory().addItem(recipe.getResult());
+    })
+    .register();
+/* ANCHOR_END: recipearguments */
+}
+
+{
+/* ANCHOR: recipearguments2 */
+new CommandAPICommand("unlockrecipe")
+    .withArguments(new PlayerArgument("player"))
+    .withArguments(new RecipeArgument("recipe"))
+    .executes((sender, args) -> {
+        Player target = (Player) args[0];
+        Recipe recipe = (Recipe) args[1];
+		
+        //Check if we're running 1.15+
+        if(recipe instanceof ComplexRecipe) {
+            ComplexRecipe complexRecipe = (ComplexRecipe) recipe;
+            target.discoverRecipe(complexRecipe.getKey());
+        } else {
+            //Error here, can't unlock recipe for player
+            CommandAPI.fail("Cannot unlock recipe for player (Are you using version 1.15 or above?)");
+        }
+    })
+    .register();
+/* ANCHOR_END: recipearguments2 */
+}
+
+{
+/* ANCHOR: soundarguments */
+new CommandAPICommand("sound")
+    .withArguments(new SoundArgument("sound"))
+    .executesPlayer((player, args) -> {
+        player.getWorld().playSound(player.getLocation(), (Sound) args[0], 100.0f, 1.0f);
+    })
+    .register();
+/* ANCHOR_END: soundarguments */
+}
+
+{
+/* ANCHOR: timearguments */
+new CommandAPICommand("bigmsg")
+    .withArguments(new TimeArgument("duration"))
+    .withArguments(new GreedyStringArgument("message"))
+    .executes((sender, args) -> {
+        //Duration in ticks
+        int duration = (int) args[0];
+        String message = (String) args[1];
+
+        for(Player player : Bukkit.getOnlinePlayers()) {
+            //Display the message to all players, with the default fade in/out times (10 and 20).
+            player.sendTitle(message, "", 10, duration, 20);
+        }
+    })
+    .register();
+/* ANCHOR_END: timearguments */
+}
+
+{
+/* ANCHOR: blockpredicatearguments */
+Argument[] arguments = new Argument[] {
+	new IntegerArgument("radius"),
+	new BlockPredicateArgument("fromBlock"),
+	new BlockStateArgument("toBlock"),
+};
+/* ANCHOR_END: blockpredicatearguments */
+
+/* ANCHOR: blockpredicatearguments2 */
+new CommandAPICommand("replace")
+	.withArguments(arguments)
+	.executesPlayer((player, args) -> {
+	    
+	    // Parse the arguments
+	    int radius = (int) args[0];
+	    @SuppressWarnings("unchecked")
+	    Predicate<Block> predicate = (Predicate<Block>) args[1];
+	    BlockData blockData = (BlockData) args[2];
+	    
+	    // Find a (solid) sphere of blocks around the player with a given radius
+	    Location center = player.getLocation();
+	    for (int Y = -radius; Y < radius; Y++) {
+	        for (int X = -radius; X < radius; X++) {
+	            for (int Z = -radius; Z < radius; Z++) {
+	                if (Math.sqrt((X * X) + (Y * Y) + (Z * Z)) <= radius) {
+	                    Block block = center.getWorld().getBlockAt(X + center.getBlockX(), Y + center.getBlockY(), Z + center.getBlockZ());
+	                    
+	                    // If that block matches a block from the predicate, set it
+	                    if(predicate.test(block)) {
+	                        block.setType(blockData.getMaterial());
+	                        block.setBlockData(blockData);
+	                    }
+	                }
+	            }
+	        }
+	    }
+	    return;
+	})
+	.register();
+/* ANCHOR_END: blockpredicatearguments2 */
+}
+
+{
+/* ANCHOR: itemstackpredicatearguments */
+// Register our command
+new CommandAPICommand("rem")
+	.withArguments(new ItemStackPredicateArgument("items"))
+	.executesPlayer((player, args) -> {
+	    
+	    // Get our predicate
+		@SuppressWarnings("unchecked")
+	    Predicate<ItemStack> predicate = (Predicate<ItemStack>) args[0];
+	    
+	    for(ItemStack item : player.getInventory()) {
+	        if(predicate.test(item)) {
+	            player.getInventory().remove(item);
+	        }
+	    }
+	})
+	.register();
+/* ANCHOR_END: itemstackpredicatearguments */
+}
+
+{
+/* ANCHOR: nbtcompoundarguments */
+new CommandAPICommand("award")
+    .withArguments(new NBTCompoundArgument("nbt"))
+    .executes((sender, args) -> {
+        NBTContainer nbt = (NBTContainer) args[0];
+        
+        //Do something with "nbt" here...
+    })
+    .register();
+/* ANCHOR_END: nbtcompoundarguments */
+}
+
+{
+/* ANCHOR: literalarguments */
+new CommandAPICommand("mycommand")
+    .withArguments(new LiteralArgument("hello"))
+    .withArguments(new TextArgument("text"))
+    .executes((sender, args) -> {
+        // This gives the variable "text" the contents of the TextArgument, and not the literal "hello"
+        String text = (String) args[0];
+    })
+    .register();
+/* ANCHOR_END: literalarguments */
+}
+
+{
+/* ANCHOR: literalarguments2 */
+//Create a map of gamemode names to their respective objects
+HashMap<String, GameMode> gamemodes = new HashMap<>();
+gamemodes.put("adventure", GameMode.ADVENTURE);
+gamemodes.put("creative", GameMode.CREATIVE);
+gamemodes.put("spectator", GameMode.SPECTATOR);
+gamemodes.put("survival", GameMode.SURVIVAL);
+
+//Iterate over the map
+for(String key : gamemodes.keySet()) {
+    
+    //Register the command as usual
+    new CommandAPICommand("changegamemode")
+        .withArguments(new LiteralArgument(key))
+        .executesPlayer((player, args) -> {
+            //Retrieve the object from the map via the key and NOT the args[]
+            player.setGameMode(gamemodes.get(key));
+        })
+        .register();
+}	
+/* ANCHOR_END: literalarguments2 */
+}
+
+{
+/* ANCHOR: multiliteralarguments */
+new CommandAPICommand("gamemode")
+    .withArguments(new MultiLiteralArgument("adventure", "creative", "spectator", "survival"))
+    .executesPlayer((player, args) -> {
+        // The literal string that the player enters IS available in the args[]
+        switch((String) args[0]) {
+            case "adventure":
+                player.setGameMode(GameMode.ADVENTURE);
+                break;
+            case "creative":
+                player.setGameMode(GameMode.CREATIVE);
+                break;
+            case "spectator":
+                player.setGameMode(GameMode.SPECTATOR);
+                break;
+            case "survival":
+                player.setGameMode(GameMode.SURVIVAL);
+                break;
+        }
+    }) 
+    .register();
+/* ANCHOR_END: multiliteralarguments */
+}
+
+{
+/* ANCHOR: customarguments */
+new CommandAPICommand("tpworld")
+    .withArguments(worldArgument("world"))
+    .executesPlayer((player, args) -> {
+        player.teleport(((World) args[0]).getSpawnLocation());
+    })
+    .register();
+/* ANCHOR_END: customarguments */
+}
+
+} // examples() function end
+
+/* ANCHOR: customarguments2 */
+//Function that returns our custom argument
+public Argument worldArgument(String nodeName) {
+
+	//List of worlds on the server, as Strings
+	String[] worlds = Bukkit.getWorlds().stream().map(World::getName).toArray(String[]::new);
+	
+	//Construct our CustomArgument that takes in a String input and returns a World object
+	return new CustomArgument<World>(nodeName, (input) -> {
+	    //Parse the world from our input
+	    World world = Bukkit.getWorld(input);
+	
+	    if(world == null) {
+	        throw new CustomArgumentException(new MessageBuilder("Unknown world: ").appendArgInput());
+	    } else {
+	        return world;
+	    }
+	}).overrideSuggestions(worlds);
+}
+/* ANCHOR_END: customarguments2 */
+
+} // Examples class end

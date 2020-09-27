@@ -9,18 +9,7 @@ The `LootTableArgument` class can be used to get a Bukkit `LootTable` object.
 ### Example - Filling an inventory with loot table contents
 
 ```java
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("loottable", new LootTableArgument());
-
-new CommandAPICommand("giveloottable")
-    .withArguments(arguments)
-    .executesPlayer((player, args) -> {
-        LootTable lootTable = (LootTable) args[0];
-    
-    	LootContext context = /* Some generated LootContext relating to the lootTable*/
-		lootTable.fillInventory(player.getInventory(), new Random(), context);
-    })
-    .register();
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:loottablearguments}}
 ```
 
 > **Developer's Note:**

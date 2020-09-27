@@ -179,11 +179,8 @@
 <p>Since this argument depends on the NBT API, if this is used and the NBT API is not available on the server, an <code>NBTAPINotFoundException</code> will be thrown.</p>
 <div class="example">
 <h3><a class="header" href="#example---" id="example---">Example - ???</a></h3>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;nbt&quot;, new NBTCompoundArgument());
-
-new CommandAPICommand(&quot;award&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;award&quot;)
+    .withArguments(new NBTCompoundArgument(&quot;nbt&quot;))
     .executes((sender, args) -&gt; {
         NBTContainer nbt = (NBTContainer) args[0];
         

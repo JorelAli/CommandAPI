@@ -2335,16 +2335,15 @@ for(String str : entitiesAndPlayers) {
 <p>The <code>LootTableArgument</code> class can be used to get a Bukkit <code>LootTable</code> object.</p>
 <div class="example">
 <h3><a class="header" href="#example---filling-an-inventory-with-loot-table-contents" id="example---filling-an-inventory-with-loot-table-contents">Example - Filling an inventory with loot table contents</a></h3>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;loottable&quot;, new LootTableArgument());
-
-new CommandAPICommand(&quot;giveloottable&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;giveloottable&quot;)
+    .withArguments(new LootTableArgument(&quot;loottable&quot;))
     .executesPlayer((player, args) -&gt; {
         LootTable lootTable = (LootTable) args[0];
     
-    	LootContext context = /* Some generated LootContext relating to the lootTable*/
-		lootTable.fillInventory(player.getInventory(), new Random(), context);
+        /* Some generated LootContext relating to the lootTable*/
+    	LootContext context = new LootContext.Builder(player.getLocation()).build();
+    	
+        lootTable.fillInventory(player.getInventory(), new Random(), context);
     })
     .register();
 </code></pre>
@@ -2394,13 +2393,10 @@ public float apply(float val1, float val2);
 <pre><code>/changelevel &lt;player&gt; &lt;operation&gt; &lt;value&gt;
 </code></pre>
 <p>As with any command, we declare our arguments, cast them properly and then we write our main code. In this example, we use the <code>apply(int, int)</code> method from our <code>MathOperation</code> to calculate the player's new level.</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;player&quot;, new PlayerArgument());
-arguments.put(&quot;operation&quot;, new MathOperationArgument());
-arguments.put(&quot;value&quot;, new IntegerArgument());
-
-new CommandAPICommand(&quot;changelevel&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;changelevel&quot;)
+    .withArguments(new PlayerArgument(&quot;player&quot;))
+    .withArguments(new MathOperationArgument(&quot;operation&quot;))
+    .withArguments(new IntegerArgument(&quot;value&quot;))
     .executes((sender, args) -&gt; {
         Player target = (Player) args[0];
         MathOperation op = (MathOperation) args[1];
@@ -2408,7 +2404,7 @@ new CommandAPICommand(&quot;changelevel&quot;)
 
         target.setLevel(op.apply(target.getLevel(), value));
     })
-	.register();
+    .register();
 </code></pre>
 <hr />
 <p>There are various applications for the <code>changelevel</code> command based on what the user inputs. For example:</p>
@@ -2438,11 +2434,8 @@ new CommandAPICommand(&quot;changelevel&quot;)
 <pre><code>/showparticle &lt;particle&gt;
 </code></pre>
 <p>With this, we can simply spawn the particle using the <code>World.spawnParticle(Particle, Location, int)</code> method:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;particle&quot;, new ParticleArgument());
-
-new CommandAPICommand(&quot;showparticle&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;showparticle&quot;)
+    .withArguments(new ParticleArgument(&quot;particle&quot;))
     .executesPlayer((player, args) -&gt; {
         player.getWorld().spawnParticle((Particle) args[0], player.getLocation(), 1);
     })
@@ -2457,15 +2450,11 @@ new CommandAPICommand(&quot;showparticle&quot;)
 <pre><code>/potion &lt;target&gt; &lt;potion&gt; &lt;duration&gt; &lt;strength&gt;
 </code></pre>
 <p>In this example, we utilize some of the other arguments that we've described earlier, such as the <code>PlayerArgument</code> and <code>TimeArgument</code>. Since duration for the <code>PotionEffect</code> constructor is in ticks, this is perfectly fit for the <code>TimeArgument</code>, which is represented in ticks.</p>
-<pre><code class="language-java">//Declare our arguments
-LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;target&quot;, new PlayerArgument());
-arguments.put(&quot;potion&quot;, new PotionEffectArgument());
-arguments.put(&quot;duration&quot;, new TimeArgument());
-arguments.put(&quot;strength&quot;, new IntegerArgument());
-
-new CommandAPICommand(&quot;potion&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;potion&quot;)
+    .withArguments(new PlayerArgument(&quot;target&quot;))
+    .withArguments(new PotionEffectArgument(&quot;potion&quot;))
+    .withArguments(new TimeArgument(&quot;duration&quot;))
+    .withArguments(new IntegerArgument(&quot;strength&quot;))
     .executes((sender, args) -&gt; {
         Player target = (Player) args[0];
         PotionEffectType potion = (PotionEffectType) args[1];
@@ -2490,11 +2479,8 @@ new CommandAPICommand(&quot;potion&quot;)
 <pre><code>/giverecipe &lt;recipe&gt;
 </code></pre>
 <p>As such, we easily implement it by specifying the <code>RecipeArgument</code>, casting it and adding it to the player's inventory:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;recipe&quot;, new RecipeArgument());
-
-new CommandAPICommand(&quot;giverecipe&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;giverecipe&quot;)
+    .withArguments(new RecipeArgument(&quot;recipe&quot;))
     .executesPlayer((player, args) -&gt; {
         Recipe recipe = (Recipe) args[0];
     	player.getInventory().addItem(recipe.getResult());
@@ -2508,12 +2494,9 @@ new CommandAPICommand(&quot;giverecipe&quot;)
 <pre><code>/unlockrecipe &lt;player&gt; &lt;recipe&gt;
 </code></pre>
 <p>Since the <code>discoverRecipe(NamespacedKey)</code> method for a player requires a <code>NamespacedKey</code>, we have to ensure that this recipe is of type <code>ComplexRecipe</code>. This is simply done by using <code>instanceof</code>. If this is the case, then we can unlock the recipe for the player. Otherwise, we cannot, so we fail gracefully using the <code>CommandAPI.fail(String)</code> method;</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;player&quot;, new PlayerArgument());
-arguments.put(&quot;recipe&quot;, new RecipeArgument());
-
-new CommandAPICommand(&quot;unlockrecipe&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;unlockrecipe&quot;)
+    .withArguments(new PlayerArgument(&quot;player&quot;))
+    .withArguments(new RecipeArgument(&quot;recipe&quot;))
     .executes((sender, args) -&gt; {
         Player target = (Player) args[0];
         Recipe recipe = (Recipe) args[1];
@@ -2538,11 +2521,8 @@ new CommandAPICommand(&quot;unlockrecipe&quot;)
 <pre><code>/sound &lt;sound&gt;
 </code></pre>
 <p>This command simply plays the provided sound to the current player:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;sound&quot;, new SoundArgument());
-
-new CommandAPICommand(&quot;sound&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;sound&quot;)
+    .withArguments(new SoundArgument(&quot;sound&quot;))
     .executesPlayer((player, args) -&gt; {
         player.getWorld().playSound(player.getLocation(), (Sound) args[0], 100.0f, 1.0f);
     })
@@ -2565,13 +2545,9 @@ new CommandAPICommand(&quot;sound&quot;)
 <p>Say we have a command <code>bigmsg</code> that displays a title message to all players for a certain duration:</p>
 <pre><code>/bigmsg &lt;duration&gt; &lt;message&gt;
 </code></pre>
-<pre><code class="language-java">//Declare our arguments
-LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;duration&quot;, new TimeArgument());
-arguments.put(&quot;message&quot;, new GreedyStringArgument());
-
-new CommandAPICommand(&quot;bigmsg&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;bigmsg&quot;)
+    .withArguments(new TimeArgument(&quot;duration&quot;))
+    .withArguments(new GreedyStringArgument(&quot;message&quot;))
     .executes((sender, args) -&gt; {
         //Duration in ticks
         int duration = (int) args[0];
@@ -2602,44 +2578,45 @@ new CommandAPICommand(&quot;bigmsg&quot;)
 </code></pre>
 <p>Of course, we could simply use a <code>BlockStateArgument</code> or even an <code>ItemStackArgument</code> as our <code>&lt;fromBlock&gt;</code> in order to get the material to replace, but the block predicate argument provides a test for a given block, which if satisfied, allows certain code to be executed. </p>
 <p>First, we declare our arguments. We want to use the <code>BlockPredicateArgument</code> since it also allows us to use Minecraft tags to identify blocks, as well as individual blocks. We then use <code>BlockStateArgument</code> to set the block to a given type. The <code>BlockStateArgument</code> also allows the user to provide any block data (e.g. contents of a chest or a stair's orientation).</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;radius&quot;, new IntegerArgument());
-arguments.put(&quot;fromBlock&quot;, new BlockPredicateArgument());
-arguments.put(&quot;toBlock&quot;, new BlockStateArgument());
+<pre><code class="language-java">Argument[] arguments = new Argument[] {
+	new IntegerArgument(&quot;radius&quot;),
+	new BlockPredicateArgument(&quot;fromBlock&quot;),
+	new BlockStateArgument(&quot;toBlock&quot;),
+};
 </code></pre>
 <p>We then register our <code>/replace</code> command. First, we parse the arguments making sure to cast to <code>Predicate&lt;Block&gt;</code> and <code>BlockData</code> (and not <code>BlockState</code>). After that, we use a few simple for loops to find the blocks within a radius sphere from the player.</p>
 <p>In our most nested loop, we can then check if the block meets the requirements of our predicate. This is simply performed using <code>predicate.test(block)</code>, and if satisfied, we can set the block's type.</p>
 <p>Lastly, we register our command as normal using the <code>register()</code> method.</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;replace&quot;)
-.withArguments(arguments)
-.executesPlayer((player, args) -&gt; {
-	
-	// Parse the arguments
-	int radius = (int) args[0];
-	@SuppressWarnings(&quot;unchecked&quot;)
-	Predicate&lt;Block&gt; predicate = (Predicate&lt;Block&gt;) args[1];
-	BlockData blockData = (BlockData) args[2];
-	
-	// Find a (solid) sphere of blocks around the player with a given radius
-	Location center = player.getLocation();
-	for (int Y = -radius; Y &lt; radius; Y++) {
-		for (int X = -radius; X &lt; radius; X++) {
-			for (int Z = -radius; Z &lt; radius; Z++) {
-				if (Math.sqrt((X * X) + (Y * Y) + (Z * Z)) &lt;= radius) {
-					Block block = center.getWorld().getBlockAt(X + center.getBlockX(), Y + center.getBlockY(), Z + center.getBlockZ());
-                    
-                    // If that block matches a block from the predicate, set it
-                    if(predicate.test(block)) {
-                        block.setType(blockData.getMaterial());
-						block.setBlockData(blockData);
-                    }
-				}
-			}
-		}
-	}
-    return;
-})
-.register();
+	.withArguments(arguments)
+	.executesPlayer((player, args) -&gt; {
+	    
+	    // Parse the arguments
+	    int radius = (int) args[0];
+	    @SuppressWarnings(&quot;unchecked&quot;)
+	    Predicate&lt;Block&gt; predicate = (Predicate&lt;Block&gt;) args[1];
+	    BlockData blockData = (BlockData) args[2];
+	    
+	    // Find a (solid) sphere of blocks around the player with a given radius
+	    Location center = player.getLocation();
+	    for (int Y = -radius; Y &lt; radius; Y++) {
+	        for (int X = -radius; X &lt; radius; X++) {
+	            for (int Z = -radius; Z &lt; radius; Z++) {
+	                if (Math.sqrt((X * X) + (Y * Y) + (Z * Z)) &lt;= radius) {
+	                    Block block = center.getWorld().getBlockAt(X + center.getBlockX(), Y + center.getBlockY(), Z + center.getBlockZ());
+	                    
+	                    // If that block matches a block from the predicate, set it
+	                    if(predicate.test(block)) {
+	                        block.setType(blockData.getMaterial());
+	                        block.setBlockData(blockData);
+	                    }
+	                }
+	            }
+	        }
+	    }
+	    return;
+	})
+	.register();
 </code></pre>
 </div>
 <h1><a class="header" href="#itemstack-predicate-arguments" id="itemstack-predicate-arguments">ItemStack predicate arguments</a></h1>
@@ -2650,26 +2627,22 @@ arguments.put(&quot;toBlock&quot;, new BlockStateArgument());
 <pre><code>/rem &lt;item&gt;
 </code></pre>
 <p>We implement this with a simple for loop over the player's inventory and remove items that satisfy the predicate.</p>
-<pre><code class="language-java">// Declare our arguments
-LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;items&quot;, new ItemStackPredicateArgument());
-
-// Register our command
+<pre><code class="language-java">// Register our command
 new CommandAPICommand(&quot;rem&quot;)
-.withArguments(arguments)
-.executesPlayer((player, args) -&gt; {
-	
-    // Get our predicate
-	@SuppressWarnings(&quot;unchecked&quot;)
-	Predicate&lt;ItemStack&gt; predicate = (Predicate&lt;ItemStack&gt;) args[0];
-    
-	for(ItemStack item : player.getInventory()) {
-		if(predicate.test(item)) {
-			player.getInventory().remove(item);
-		}
-	}
-})
-.register();
+	.withArguments(new ItemStackPredicateArgument(&quot;items&quot;))
+	.executesPlayer((player, args) -&gt; {
+	    
+	    // Get our predicate
+		@SuppressWarnings(&quot;unchecked&quot;)
+	    Predicate&lt;ItemStack&gt; predicate = (Predicate&lt;ItemStack&gt;) args[0];
+	    
+	    for(ItemStack item : player.getInventory()) {
+	        if(predicate.test(item)) {
+	            player.getInventory().remove(item);
+	        }
+	    }
+	})
+	.register();
 </code></pre>
 </div>
 <h1><a class="header" href="#nbt-arguments" id="nbt-arguments">NBT arguments</a></h1>
@@ -2677,11 +2650,8 @@ new CommandAPICommand(&quot;rem&quot;)
 <p>Since this argument depends on the NBT API, if this is used and the NBT API is not available on the server, an <code>NBTAPINotFoundException</code> will be thrown.</p>
 <div class="example">
 <h3><a class="header" href="#example---" id="example---">Example - ???</a></h3>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;nbt&quot;, new NBTCompoundArgument());
-
-new CommandAPICommand(&quot;award&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;award&quot;)
+    .withArguments(new NBTCompoundArgument(&quot;nbt&quot;))
     .executes((sender, args) -&gt; {
         NBTContainer nbt = (NBTContainer) args[0];
         
@@ -2719,15 +2689,12 @@ new CommandAPICommand(&quot;award&quot;)
 <pre><code>/mycommand &lt;literal&gt; &lt;text&gt;
 </code></pre>
 <p>As an example, let's declare the literal &quot;hello&quot; as a valid literal for this command. When we retrieve the result from <code>args[0]</code>, it returns the value of the <code>TextArgument</code>, as opposed to the literal &quot;hello&quot;:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;literal&quot;, new LiteralArgument(&quot;hello&quot;));
-arguments.put(&quot;text&quot;, new TextArgument());
-
-new CommandAPICommand(&quot;mycommand&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;mycommand&quot;)
+    .withArguments(new LiteralArgument(&quot;hello&quot;))
+    .withArguments(new TextArgument(&quot;text&quot;))
     .executes((sender, args) -&gt; {
         // This gives the variable &quot;text&quot; the contents of the TextArgument, and not the literal &quot;hello&quot;
-		String text = (String) args[0];
+        String text = (String) args[0];
     })
     .register();
 </code></pre>
@@ -2749,19 +2716,15 @@ gamemodes.put(&quot;survival&quot;, GameMode.SURVIVAL);
 //Iterate over the map
 for(String key : gamemodes.keySet()) {
     
-    //Create our arguments as usual, using the LiteralArgument for the name of the gamemode
-	LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-	arguments.put(key, new LiteralArgument(key));
-    
     //Register the command as usual
     new CommandAPICommand(&quot;changegamemode&quot;)
-        .withArguments(arguments)
+        .withArguments(new LiteralArgument(key))
         .executesPlayer((player, args) -&gt; {
             //Retrieve the object from the map via the key and NOT the args[]
-	        player.setGameMode(gamemodes.get(key));
+            player.setGameMode(gamemodes.get(key));
         })
         .register();
-}
+}	
 </code></pre>
 <p>Note how, since we don't have access to the literal from <code>args</code>, we must access the provided gamemode from elsewhere.</p>
 </div>
@@ -2807,11 +2770,8 @@ for(String key : gamemodes.keySet()) {
 <div class="example">
 <h3><a class="header" href="#example---using-multi-literals-to-make-the-gamemode-command" id="example---using-multi-literals-to-make-the-gamemode-command">Example - Using multi literals to make the gamemode command</a></h3>
 <p>In this example, we'll show how to use multi literals to declare Minecraft's <code>/gamemode</code> command. As you can see from the example code below, the argument declaration and command declaration is the same as if you were declaring any normal argument or command.</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;gamemode&quot;, new MultiLiteralArgument(&quot;adventure&quot;, &quot;creative&quot;, &quot;spectator&quot;, &quot;survival&quot;));
-
-new CommandAPICommand(&quot;gamemode&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;gamemode&quot;)
+    .withArguments(new MultiLiteralArgument(&quot;adventure&quot;, &quot;creative&quot;, &quot;spectator&quot;, &quot;survival&quot;))
     .executesPlayer((player, args) -&gt; {
         // The literal string that the player enters IS available in the args[]
         switch((String) args[0]) {
@@ -2853,22 +2813,22 @@ CustomArgument((String) -&gt; { ... return T; }, boolean keyed);
 <h3><a class="header" href="#example---world-argument" id="example---world-argument">Example - World argument</a></h3>
 <p>Say we want to create an argument to represents the list of available worlds on the server. We basically want to have an argument which always returns a Bukkit <code>World</code> object as the result. Here, we create a method <code>worldArgument()</code> that returns our custom argument that returns a <code>World</code>. First, we retrieve our <code>String[]</code> of world names to be used for our suggestions. We then write our custom argument that creates a <code>World</code> object from the input (in this case, we simply convert the String to a <code>World</code> using <code>Bukkit.getWorld(String)</code>). We perform error handling before returning our result:</p>
 <pre><code class="language-java">//Function that returns our custom argument
-public Argument worldArgument() {
+public Argument worldArgument(String nodeName) {
 
-    //List of worlds on the server, as Strings
-    String[] worlds = Bukkit.getWorlds().stream().map(World::getName).toArray(String[]::new);
-
-    //Construct our CustomArgument that takes in a String input and returns a World object
-    return new CustomArgument&lt;World&gt;((input) -&gt; {
-        //Parse the world from our input
-        World world = Bukkit.getWorld(input);
-
-        if(world == null) {
-            throw new CustomArgumentException(new MessageBuilder(&quot;Unknown world: &quot;).appendArgInput());
-        } else {
-            return world;
-        }
-    }).overrideSuggestions(worlds);
+	//List of worlds on the server, as Strings
+	String[] worlds = Bukkit.getWorlds().stream().map(World::getName).toArray(String[]::new);
+	
+	//Construct our CustomArgument that takes in a String input and returns a World object
+	return new CustomArgument&lt;World&gt;(nodeName, (input) -&gt; {
+	    //Parse the world from our input
+	    World world = Bukkit.getWorld(input);
+	
+	    if(world == null) {
+	        throw new CustomArgumentException(new MessageBuilder(&quot;Unknown world: &quot;).appendArgInput());
+	    } else {
+	        return world;
+	    }
+	}).overrideSuggestions(worlds);
 }
 </code></pre>
 <p>In our error handling step, we check if the world is equal to null (since the <code>Bukkit.getWorld(String)</code> is <code>@Nullable</code>). To handle this case, we throw a <code>CustomArgumentException</code> with an error from a <code>MessageBuilder</code>. The <code>CustomArgumentException</code> has two constructors, so a message builder isn't required each time:</p>
@@ -2880,13 +2840,10 @@ new CustomArgumentException(MessageBuilder message);
 <pre><code>/tpworld &lt;world&gt;
 </code></pre>
 <p>Since we have defined the method <code>worldArgument()</code> which automatically generates our argument, we can use it as follows:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, ArgumentType&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;world&quot;, worldArgument());
-
-new CommandAPICommand(&quot;tpworld&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;tpworld&quot;)
+    .withArguments(worldArgument(&quot;world&quot;))
     .executesPlayer((player, args) -&gt; {
-        player.teleport(Bukkit.getWorld((World) args[0])).getSpawnLocation());
+        player.teleport(((World) args[0]).getSpawnLocation());
     })
     .register();
 </code></pre>
