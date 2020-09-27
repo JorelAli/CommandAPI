@@ -188,13 +188,7 @@
 <div class="example">
 <h3><a class="header" href="#example---god-command-with-permissions" id="example---god-command-with-permissions">Example - /god command with permissions</a></h3>
 <p>Say we created a command <code>/god</code> that sets a player as being invulnerable. Since this is a pretty non-survival command, we want to restrict who can run this command. As such, we want our player to have the permission <code>command.god</code> in order to run this command. To do this, we simply use the <code>withPermission(CommandPermission)</code> method from our command builder:</p>
-<pre><code class="language-java">// Register the /god command with the permission node &quot;command.god&quot;
-new CommandAPICommand(&quot;god&quot;)
-	.withPermission(CommandPermission.fromString(&quot;command.god&quot;))
-	.executesPlayer((player, args) -&gt; {
-		player.setInvulnerable(true);
-	})
-	.register();
+<pre><code class="language-java">{{ #include examples/7cmdperms.java }}
 </code></pre>
 </div>
 <hr />
@@ -214,25 +208,10 @@ new CommandAPICommand(&quot;god&quot;)
 /kill &lt;target&gt; - Kills a target player
 </code></pre>
 <p>We first declare the command as normal. Nothing fancy is going on here:</p>
-<pre><code class="language-java">// Register /kill command normally. Since no permissions are applied, anyone can run this command
-new CommandAPICommand(&quot;kill&quot;)
-	.executesPlayer((player, args) -&gt; {
-		player.setHealth(0);
-	})
-	.register();
+<pre><code class="language-java">{{ #include examples/7argperms1.java }}
 </code></pre>
 <p>Now we declare our command with arguments. We use a <code>PlayerArgument</code> and apply the permission <em>to the argument</em>. After that, we register our command as normal:</p>
-<pre><code class="language-java">// Declare our arguments
-LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;target&quot;, new PlayerArgument().withPermission(CommandPermission.OP));
-
-// Adds the OP permission to the &quot;target&quot; argument. The sender requires OP to execute /kill &lt;target&gt;
-new CommandAPICommand(&quot;kill&quot;)
-	.withArguments(arguments)
-	.executesPlayer((player, args) -&gt; {
-		((Player) args[0]).setHealth(0);
-	})
-	.register();
+<pre><code class="language-java">{{ #include examples/7argperms2.java }}
 </code></pre>
 </div>
 <hr />

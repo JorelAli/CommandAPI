@@ -30,20 +30,7 @@ Say we want a command to remove certain types of entities. Typically, this would
 Instead, we can combine all of these into one by using the `EntitySelectorArgument`. We want to be able to target multiple entities at a time, so we want to use the `EntitySelector.MANY_ENTITIES` value in our constructor. We can simply retrieve the `Collection<Entity>` from this argument and iteratively remove each entity:
 
 ```java
-new CommandAPICommand("remove")
-    //Using a collective entity selector to select multiple entities
-    .withArguments(new EntitySelectorArgument("entities", EntitySelector.MANY_ENTITIES))
-    .executes((sender, args) -> {
-        //Parse the argument as a collection of entities (as stated above in the documentation)
-        @SuppressWarnings("unchecked")
-        Collection<Entity> entities = (Collection<Entity>) args[0];
-        
-        sender.sendMessage("Removed " + entities.size() + " entities");
-        for(Entity e : entities) {
-            e.remove();
-        }
-    })
-    .register();
+{{#include Examples.java:entityselectorarguments}}
 ```
 
 We could then use this to target specific entities, for example:
@@ -92,15 +79,7 @@ Say we want a command to spawn a specific type of entity, similar to the `/summo
 Since we're trying to specify an entity type, we will use the `EntityTypeArgument` as our argument type for `<entity>`. We combine this with the `IntegerArgument` class with a specified range of \\( 1 \le \textit{amount} \le 100 \\):
 
 ```java
-new CommandAPICommand("spawnmob")
-    .withArguments(new EntityTypeArgument("entity"))
-    .withArguments(new IntegerArgument("amount", 1, 100)) //Prevent spawning too many entities
-    .executesPlayer((Player player, Object[] args) -> {
-        for(int i = 0; i < (int) args[1]; i++) {
-            player.getWorld().spawnEntity(player.getLocation(), (EntityType) args[0]);
-        }
-    })
-    .register();
+{{#include Examples.java:entitytypearguments}}
 ```
 
 Note how in this example above, we have to explicitly state `Player player, Object[] args`. This is due to a limitation of Java's type inference system which is discussed [here](./commandregistration.md#setting-the-commands-executor).

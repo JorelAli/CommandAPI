@@ -39,13 +39,7 @@ We can declare a simple command to break a block:
 Simply put, given the coordinates provided to the command, "break" the block by setting it's type to `Material.AIR`. For this example, we're referring to block specific coordinates, so we want to use `LocationType.BLOCK_POSITION`:
 
 ```java
-new CommandAPICommand("break")
-    //We want to target blocks in particular, so use BLOCK_POSITION
-    .withArguments(new LocationArgument("block", LocationType.BLOCK_POSITION))
-    .executesPlayer((player, args) -> {
-        ((Location) args[0]).getBlock().setType(Material.AIR);
-    })
-    .register();
+{{#include Examples.java:locationarguments}}
 ```
 
 </div>

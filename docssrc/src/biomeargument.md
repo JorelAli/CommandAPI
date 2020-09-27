@@ -24,19 +24,8 @@ Say you want to set the biome of the current chunk that a player is in. We can d
 
 And we can set the biome of the current chunk as expected:
 
-```
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("biome", new BiomeArgument());
-
-new CommandAPICommand("setbiome")
-	.withArguments(arguments)
-	.executesPlayer((player, args) -> {
-		Biome biome = (Biome) args[0];
-
-		Chunk chunk = player.getLocation().getChunk();
-		player.getWorld().setBiome(chunk.getX(), player.getLocation().getBlockY(), chunk.getZ(), biome);
-	})
-	.register();
+```java
+{{#include Examples.java:biomearguments}}
 ```
 
 </div>

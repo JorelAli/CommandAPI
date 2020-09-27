@@ -187,11 +187,8 @@
 <pre><code>/setbiome &lt;biome&gt;
 </code></pre>
 <p>And we can set the biome of the current chunk as expected:</p>
-<pre><code>LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;biome&quot;, new BiomeArgument());
-
-new CommandAPICommand(&quot;setbiome&quot;)
-	.withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;setbiome&quot;)
+	.withArguments(new BiomeArgument(&quot;biome&quot;))
 	.executesPlayer((player, args) -&gt; {
 		Biome biome = (Biome) args[0];
 

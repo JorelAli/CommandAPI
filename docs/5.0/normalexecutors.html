@@ -231,10 +231,7 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 <div class="example">
 <h3><a class="header" href="#example---a-suicide-command" id="example---a-suicide-command">Example - A <code>/suicide</code> command</a></h3>
 <p>Say we wanted to create a command <code>/suicide</code>, which kills the player that executes it. Since this command isn't really &quot;designed&quot; for command senders that are not players, we can restrict it so only players can execute this command (meaning that the console and command blocks cannot run this command). Since it's a player, we can use the <code>.executesPlayer()</code> method:</p>
-<pre><code class="language-java">new CommandAPICommand(&quot;suicide&quot;)
-    .executesPlayer((player, args) -&gt; {
-		player.setHealth(0);
-    }).register();
+<pre><code class="language-java">{{#include examples/4.1suicide.java}}
 </code></pre>
 </div>
 <hr />
@@ -243,14 +240,7 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 <p>Extending on the suicide example above, we could write another implementation for a different <code>CommandSender</code>. Here, we write an implementation to make entities (non-player) go out with a bang when they run the command (using <code>/execute as &lt;entity&gt; run &lt;command&gt;</code> command).</p>
 <div class="example">
 <h3><a class="header" href="#example---a-suicide-command-with-different-implementations" id="example---a-suicide-command-with-different-implementations">Example - A <code>/suicide</code> command with different implementations</a></h3>
-<pre><code class="language-java">new CommandAPICommand(&quot;suicide&quot;)
-    .executesPlayer((player, args) -&gt; {
-		player.setHealth(0);
-    })
-    .executesEntity((entity, args) -&gt; {
-        entity.getWorld().createExplosion(e.getLocation(), 4);
-		entity.remove();
-    }).register();
+<pre><code class="language-java">{{#include examples/4.1suicide2.java}}
 </code></pre>
 <p>This saves having to use <code>instanceof</code> multiple times to check the type of the <code>CommandSender</code>.</p>
 </div>

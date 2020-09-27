@@ -191,16 +191,16 @@
 arguments.put(&quot;block&quot;, new BlockStateArgument());
 
 new CommandAPICommand(&quot;set&quot;)
-	.withArguments(arguments)
-	.executesPlayer((player, args) -&gt; {
-		BlockData blockdata = (BlockData) args[0];
-		Block targetBlock = player.getTargetBlockExact(256);
-		
+    .withArguments(arguments)
+    .executesPlayer((player, args) -&gt; {
+        BlockData blockdata = (BlockData) args[0];
+        Block targetBlock = player.getTargetBlockExact(256);
+        
         // Set the block, along with its data
-		targetBlock.setType(blockdata.getMaterial());
-		targetBlock.getState().setBlockData(blockdata);
-	})
-	.register();
+        targetBlock.setType(blockdata.getMaterial());
+        targetBlock.getState().setBlockData(blockdata);
+    })
+    .register();
 </code></pre>
 </div>
 

@@ -794,10 +794,7 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 <div class="example">
 <h3><a class="header" href="#example---a-suicide-command" id="example---a-suicide-command">Example - A <code>/suicide</code> command</a></h3>
 <p>Say we wanted to create a command <code>/suicide</code>, which kills the player that executes it. Since this command isn't really &quot;designed&quot; for command senders that are not players, we can restrict it so only players can execute this command (meaning that the console and command blocks cannot run this command). Since it's a player, we can use the <code>.executesPlayer()</code> method:</p>
-<pre><code class="language-java">new CommandAPICommand(&quot;suicide&quot;)
-    .executesPlayer((player, args) -&gt; {
-		player.setHealth(0);
-    }).register();
+<pre><code class="language-java">{{#include examples/4.1suicide.java}}
 </code></pre>
 </div>
 <hr />
@@ -806,14 +803,7 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 <p>Extending on the suicide example above, we could write another implementation for a different <code>CommandSender</code>. Here, we write an implementation to make entities (non-player) go out with a bang when they run the command (using <code>/execute as &lt;entity&gt; run &lt;command&gt;</code> command).</p>
 <div class="example">
 <h3><a class="header" href="#example---a-suicide-command-with-different-implementations" id="example---a-suicide-command-with-different-implementations">Example - A <code>/suicide</code> command with different implementations</a></h3>
-<pre><code class="language-java">new CommandAPICommand(&quot;suicide&quot;)
-    .executesPlayer((player, args) -&gt; {
-		player.setHealth(0);
-    })
-    .executesEntity((entity, args) -&gt; {
-        entity.getWorld().createExplosion(e.getLocation(), 4);
-		entity.remove();
-    }).register();
+<pre><code class="language-java">{{#include examples/4.1suicide2.java}}
 </code></pre>
 <p>This saves having to use <code>instanceof</code> multiple times to check the type of the <code>CommandSender</code>.</p>
 </div>
@@ -1549,6 +1539,7 @@ new CommandAPICommand(&quot;editconfig&quot;)
         getConfig().set((String) args[0], (boolean) args[1]);
     })
     .register();
+}
 </code></pre>
 </div>
 <hr />
@@ -1719,8 +1710,8 @@ arguments.add(new GreedyStringArgument(&quot;message&quot;));
 new CommandAPICommand(&quot;message&quot;)
     .withArguments(arguments)
     .executes((sender, args) -&gt; {
-		((Player) args[0]).sendMessage((String) args[1]);
-	})
+        ((Player) args[0]).sendMessage((String) args[1]);
+    })
     .register();
 </code></pre>
 <p>Any text entered after the <code>&lt;target&gt;</code> argument would be sent to the player. For example, the command could be used as follows:</p>
@@ -2211,12 +2202,9 @@ for(String str : entitiesAndPlayers) {
 <pre><code>/award &lt;player&gt; &lt;advancement&gt;
 </code></pre>
 <p>Since we require a player, we will use the <code>PlayerArgument</code> for this example. Given a player, we can simply get the <code>AdvancementProgress</code> for that player, and then award the criteria required to fully complete the provided advancement.</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;player&quot;, new PlayerArgument());
-arguments.put(&quot;advancement&quot;, new AdvancementArgument());
-
-new CommandAPICommand(&quot;award&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;award&quot;)
+    .withArguments(new PlayerArgument(&quot;player&quot;))
+    .withArguments(new AdvancementArgument(&quot;advancement&quot;))
     .executes((sender, args) -&gt; {
         Player target = (Player) args[0];
         Advancement advancement = (Advancement) args[1];
@@ -2242,11 +2230,8 @@ new CommandAPICommand(&quot;award&quot;)
 <pre><code>/setbiome &lt;biome&gt;
 </code></pre>
 <p>And we can set the biome of the current chunk as expected:</p>
-<pre><code>LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;biome&quot;, new BiomeArgument());
-
-new CommandAPICommand(&quot;setbiome&quot;)
-	.withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;setbiome&quot;)
+	.withArguments(new BiomeArgument(&quot;biome&quot;))
 	.executesPlayer((player, args) -&gt; {
 		Biome biome = (Biome) args[0];
 
@@ -2272,16 +2257,16 @@ new CommandAPICommand(&quot;setbiome&quot;)
 arguments.put(&quot;block&quot;, new BlockStateArgument());
 
 new CommandAPICommand(&quot;set&quot;)
-	.withArguments(arguments)
-	.executesPlayer((player, args) -&gt; {
-		BlockData blockdata = (BlockData) args[0];
-		Block targetBlock = player.getTargetBlockExact(256);
-		
+    .withArguments(arguments)
+    .executesPlayer((player, args) -&gt; {
+        BlockData blockdata = (BlockData) args[0];
+        Block targetBlock = player.getTargetBlockExact(256);
+        
         // Set the block, along with its data
-		targetBlock.setType(blockdata.getMaterial());
-		targetBlock.getState().setBlockData(blockdata);
-	})
-	.register();
+        targetBlock.setType(blockdata.getMaterial());
+        targetBlock.getState().setBlockData(blockdata);
+    })
+    .register();
 </code></pre>
 </div>
 <h1><a class="header" href="#enchantment-argument" id="enchantment-argument">Enchantment argument</a></h1>
@@ -3098,13 +3083,7 @@ new CommandAPICommand(&quot;runfunction&quot;)
 <div class="example">
 <h3><a class="header" href="#example---god-command-with-permissions" id="example---god-command-with-permissions">Example - /god command with permissions</a></h3>
 <p>Say we created a command <code>/god</code> that sets a player as being invulnerable. Since this is a pretty non-survival command, we want to restrict who can run this command. As such, we want our player to have the permission <code>command.god</code> in order to run this command. To do this, we simply use the <code>withPermission(CommandPermission)</code> method from our command builder:</p>
-<pre><code class="language-java">// Register the /god command with the permission node &quot;command.god&quot;
-new CommandAPICommand(&quot;god&quot;)
-	.withPermission(CommandPermission.fromString(&quot;command.god&quot;))
-	.executesPlayer((player, args) -&gt; {
-		player.setInvulnerable(true);
-	})
-	.register();
+<pre><code class="language-java">{{ #include examples/7cmdperms.java }}
 </code></pre>
 </div>
 <hr />
@@ -3124,25 +3103,10 @@ new CommandAPICommand(&quot;god&quot;)
 /kill &lt;target&gt; - Kills a target player
 </code></pre>
 <p>We first declare the command as normal. Nothing fancy is going on here:</p>
-<pre><code class="language-java">// Register /kill command normally. Since no permissions are applied, anyone can run this command
-new CommandAPICommand(&quot;kill&quot;)
-	.executesPlayer((player, args) -&gt; {
-		player.setHealth(0);
-	})
-	.register();
+<pre><code class="language-java">{{ #include examples/7argperms1.java }}
 </code></pre>
 <p>Now we declare our command with arguments. We use a <code>PlayerArgument</code> and apply the permission <em>to the argument</em>. After that, we register our command as normal:</p>
-<pre><code class="language-java">// Declare our arguments
-LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;target&quot;, new PlayerArgument().withPermission(CommandPermission.OP));
-
-// Adds the OP permission to the &quot;target&quot; argument. The sender requires OP to execute /kill &lt;target&gt;
-new CommandAPICommand(&quot;kill&quot;)
-	.withArguments(arguments)
-	.executesPlayer((player, args) -&gt; {
-		((Player) args[0]).setHealth(0);
-	})
-	.register();
+<pre><code class="language-java">{{ #include examples/7argperms2.java }}
 </code></pre>
 </div>
 <hr />
@@ -3356,28 +3320,7 @@ public void onEnable() {
 <div class="example">
 <h3><a class="header" href="#example---using-aliases-for-getpos" id="example---using-aliases-for-getpos">Example - Using aliases for /getpos</a></h3>
 <p>In this example, we register the command <code>/getpos</code> that returns the command sender's location. We apply the aliases <code>/getposition</code>, <code>/getloc</code>, <code>/getlocation</code> and <code>/whereami</code> as well, using the <code>withAliases()</code> method.</p>
-<pre><code class="language-java">new CommandAPICommand(&quot;getpos&quot;)
-    // Declare your aliases
-    .withAliases(&quot;getposition&quot;, &quot;getloc&quot;, &quot;getlocation&quot;, &quot;whereami&quot;)
-  
-    //Declare your implementation
-    .executesEntity((entity, args) -&gt; {
-        entity.sendMessage(String.format(&quot;You are at %d, %d, %d&quot;, 
-            entity.getLocation().getBlockX(), 
-            entity.getLocation().getBlockY(), 
-            entity.getLocation().getBlockZ())
-        );
-    })
-    .executesCommandBlock((block, args) -&gt; {
-        block.sendMessage(String.format(&quot;You are at %d, %d, %d&quot;, 
-            block.getBlock().getLocation().getBlockX(), 
-            block.getBlock().getLocation().getBlockY(), 
-            block.getBlock().getLocation().getBlockZ())
-        );
-    })
-  
-    //Register the command
-    .register();
+<pre><code class="language-java">{{ #include examples/8aliases.java }}
 </code></pre>
 </div><h1><a class="header" href="#command-conversion-1" id="command-conversion-1">Command conversion</a></h1>
 <blockquote>

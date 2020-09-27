@@ -183,12 +183,9 @@
 <pre><code>/award &lt;player&gt; &lt;advancement&gt;
 </code></pre>
 <p>Since we require a player, we will use the <code>PlayerArgument</code> for this example. Given a player, we can simply get the <code>AdvancementProgress</code> for that player, and then award the criteria required to fully complete the provided advancement.</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;player&quot;, new PlayerArgument());
-arguments.put(&quot;advancement&quot;, new AdvancementArgument());
-
-new CommandAPICommand(&quot;award&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;award&quot;)
+    .withArguments(new PlayerArgument(&quot;player&quot;))
+    .withArguments(new AdvancementArgument(&quot;advancement&quot;))
     .executes((sender, args) -&gt; {
         Player target = (Player) args[0];
         Advancement advancement = (Advancement) args[1];

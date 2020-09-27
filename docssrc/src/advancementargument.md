@@ -17,23 +17,7 @@ Say we want to award a player an advancement. First, we need the structure of ou
 Since we require a player, we will use the `PlayerArgument` for this example. Given a player, we can simply get the `AdvancementProgress` for that player, and then award the criteria required to fully complete the provided advancement.
 
 ```java
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("player", new PlayerArgument());
-arguments.put("advancement", new AdvancementArgument());
-
-new CommandAPICommand("award")
-    .withArguments(arguments)
-    .executes((sender, args) -> {
-        Player target = (Player) args[0];
-        Advancement advancement = (Advancement) args[1];
-        
-        //Award all criteria for the advancement
-        AdvancementProgress progress = target.getAdvancementProgress(advancement);
-        for(String criteria : advancement.getCriteria()) {
-            progress.awardCriteria(criteria);
-        }
-    })
-    .register();
+{{#include Examples.java:advancementarguments}}
 ```
 
 </div>

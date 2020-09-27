@@ -21,13 +21,7 @@ Say we want to create a plugin to change the color of a player's username. We wa
 We then use the `ChatColorArgument` to change the player's name color:
 
 ```java
-new CommandAPICommand("namecolor")
-    .withArguments(new ChatColorArgument("chatcolor"))
-    .executesPlayer((player, args) -> {
-        ChatColor color = (ChatColor) args[0];
-        player.setDisplayName(color + player.getName());
-    })
-    .register();
+{{#include Examples.java:chatcolorarguments}}
 ```
 </div>
 
@@ -120,25 +114,7 @@ Now let's define our command. Since book text is typically very large - too larg
 Now we can create our book command. We use the player as the main target by using their name for the author field, as well as their inventory to place the book. We finally construct our book using the `.setPages(BaseComponent[])` method:
 
 ```java
-new CommandAPICommand("makebook")
-    .withArguments(new PlayerArgument("player"))
-    .withArguments(new ChatComponentArgument("contents"))
-    .executes((sender, args) -> {
-        Player player = (Player) args[0];
-        BaseComponent[] arr = (BaseComponent[]) args[1];
-        
-        //Create book
-        ItemStack is = new ItemStack(Material.WRITTEN_BOOK);
-        BookMeta meta = (BookMeta) is.getItemMeta(); 
-        meta.setTitle("Custom Book");
-        meta.setAuthor(player.getName());
-        meta.spigot().setPages(arr);
-        is.setItemMeta(meta);
-        
-        //Give player the book
-        player.getInventory().addItem(is);
-    })
-    .register();
+{{#include Examples.java:chatcomponentarguments}}
 ```
 
 </div>
@@ -180,15 +156,7 @@ Say we're on a server with 2 players: _Bob_ and _Michael_. If I were to use the 
 _Bob_ would receive the message "Hello Bob", whereas _Michael_ would receive the message "Hello Michael". We can use the `ChatArgument` to create this "personalized" broadcast:
 
 ```java
-new CommandAPICommand("pbroadcast")
-    .withArguments(new ChatArgument("message"))
-    .executes((sender, args) -> {
-        BaseComponent[] message = (BaseComponent[]) args[0];
-    
-        //Broadcast the message to everyone on the server
-        Bukkit.getServer().spigot().broadcast(message);
-    })
-    .register();
+{{#include Examples.java:chatarguments}}
 ```
 
 </div>

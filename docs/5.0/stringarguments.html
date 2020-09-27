@@ -238,8 +238,8 @@ arguments.add(new GreedyStringArgument(&quot;message&quot;));
 new CommandAPICommand(&quot;message&quot;)
     .withArguments(arguments)
     .executes((sender, args) -&gt; {
-		((Player) args[0]).sendMessage((String) args[1]);
-	})
+        ((Player) args[0]).sendMessage((String) args[1]);
+    })
     .register();
 </code></pre>
 <p>Any text entered after the <code>&lt;target&gt;</code> argument would be sent to the player. For example, the command could be used as follows:</p>

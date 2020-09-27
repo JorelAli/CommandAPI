@@ -179,28 +179,7 @@
 <div class="example">
 <h3><a class="header" href="#example---using-aliases-for-getpos" id="example---using-aliases-for-getpos">Example - Using aliases for /getpos</a></h3>
 <p>In this example, we register the command <code>/getpos</code> that returns the command sender's location. We apply the aliases <code>/getposition</code>, <code>/getloc</code>, <code>/getlocation</code> and <code>/whereami</code> as well, using the <code>withAliases()</code> method.</p>
-<pre><code class="language-java">new CommandAPICommand(&quot;getpos&quot;)
-    // Declare your aliases
-    .withAliases(&quot;getposition&quot;, &quot;getloc&quot;, &quot;getlocation&quot;, &quot;whereami&quot;)
-  
-    //Declare your implementation
-    .executesEntity((entity, args) -&gt; {
-        entity.sendMessage(String.format(&quot;You are at %d, %d, %d&quot;, 
-            entity.getLocation().getBlockX(), 
-            entity.getLocation().getBlockY(), 
-            entity.getLocation().getBlockZ())
-        );
-    })
-    .executesCommandBlock((block, args) -&gt; {
-        block.sendMessage(String.format(&quot;You are at %d, %d, %d&quot;, 
-            block.getBlock().getLocation().getBlockX(), 
-            block.getBlock().getLocation().getBlockY(), 
-            block.getBlock().getLocation().getBlockZ())
-        );
-    })
-  
-    //Register the command
-    .register();
+<pre><code class="language-java">{{ #include examples/8aliases.java }}
 </code></pre>
 </div>
                     </main>

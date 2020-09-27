@@ -92,16 +92,7 @@ Say we have a simple message command of the following form:
 This would be ideal for a greedy string, since it can consume all text after the player's name:
 
 ```java
-List<Argument> arguments = new ArrayList<>();
-arguments.add(new PlayerArgument("target"));
-arguments.add(new GreedyStringArgument("message"));
-
-new CommandAPICommand("message")
-    .withArguments(arguments)
-    .executes((sender, args) -> {
-		((Player) args[0]).sendMessage((String) args[1]);
-	})
-    .register();
+{{#include Examples.java:greedystringarguments}}
 ```
 
 Any text entered after the `<target>` argument would be sent to the player. For example, the command could be used as follows:
