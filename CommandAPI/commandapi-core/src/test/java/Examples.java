@@ -53,9 +53,13 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.EulerAngle;
 
+import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.tree.LiteralCommandNode;
+
 import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.CommandAPIHandler.Brigadier;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.Converter;
 import dev.jorel.commandapi.arguments.AdvancementArgument;
@@ -1215,6 +1219,49 @@ Converter.convert(essentials, "speed",
 	new PlayerArgument("target")
 	);
 /* ANCHOR_END: converter2 */
+}
+
+{
+/* ANCHOR: brigadier */
+/* ANCHOR: declareliteral */
+//Register literal "randomchance"
+LiteralCommandNode randomChance = Brigadier.registerNewLiteral("randomchance");
+/* ANCHOR_END: declareliteral */
+
+/* ANCHOR: declarearguments */
+//Declare arguments like normal
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new IntegerArgument("numerator", 0));
+arguments.add(new IntegerArgument("denominator", 1));
+/* ANCHOR_END: declarearguments */
+
+//Get brigadier argument objects
+/* ANCHOR: declareargumentbuilders */
+ArgumentBuilder numerator = Brigadier.argBuildOf(arguments, "numerator");
+/* ANCHOR: declarefork */
+ArgumentBuilder denominator = Brigadier.argBuildOf(arguments, "denominator")
+/* ANCHOR_END: declareargumentbuilders */
+    //Fork redirecting to "execute" and state our predicate
+    .fork(Brigadier.getRootNode().getChild("execute"), Brigadier.fromPredicate((sender, args) -> {
+        //Parse arguments like normal
+        int num = (int) args[0];
+        int denom = (int) args[1];
+        
+        //Return boolean with a num/denom chance
+        return Math.ceil(Math.random() * (double) denom) <= (double) num;
+    }, arguments));
+/* ANCHOR_END: declarefork */
+
+/* ANCHOR: declarerandomchance */
+//Add <numerator> <denominator> as a child of randomchance
+randomChance.addChild(numerator.then(denominator).build());
+/* ANCHOR_END: declarerandomchance */
+
+/* ANCHOR: injectintoroot */
+//Add (randomchance <numerator> <denominator>) as a child of (execute -> if)
+Brigadier.getRootNode().getChild("execute").getChild("if").addChild(randomChance);
+/* ANCHOR_END: injectintoroot */
+/* ANCHOR_END: brigadier */
 }
 
 } // Examples class end

@@ -240,7 +240,7 @@ public static convert(Plugin plugin, String cmdName, List&lt;Argument&gt; argume
 public static convert(Plugin plugin, String cmdName, Argument... arguments);
 </code></pre>
 <p>In these commands, the <code>plugin</code> refers to the plugin which has the command you want to convert and <code>cmdName</code> is the name of the command declared in the target plugin's <code>plugin.yml</code> file (just the main command, not the aliases!).</p>
-<p>The <code>LinkedHashMap&lt;String, Argument&gt;</code> can be used to provide argument checks that lets you apply the command UI to a bukkit command.</p>
+<p>The <code>List&lt;Argument&gt;</code> or <code>Argument...</code> can be used to provide argument checks that lets you apply the command UI to a bukkit command.</p>
 <div class="example">
 <h3><a class="header" href="#example---converting-essentialsxs-speed-command" id="example---converting-essentialsxs-speed-command">Example - Converting EssentialsX's speed command</a></h3>
 <p>Say we want to convert EssentialsX's <code>/speed</code> command using the CommandAPI. The <code>plugin.yml</code> entry for the <code>/speed</code> command is the following:</p>
@@ -256,7 +256,7 @@ public static convert(Plugin plugin, String cmdName, Argument... arguments);
 /speed &lt;walk/fly&gt; &lt;speed&gt; &lt;target&gt;
 </code></pre>
 <p>With the EssentialsX plugin, the <code>&lt;speed&gt;</code> value can only take numbers between 0 and 10. As such, we'll ensure to apply these limits using the <code>IntegerArgument</code>. In addition, since the speed type can only be &quot;walk&quot; or &quot;fly&quot;, we'll add that to our converter as well using a <code>MultiLiteralArgument</code>:</p>
-<pre><code class="language-java">public Plugin essentials = Bukkit.getPluginManager().getPlugin(&quot;Essentials&quot;);
+<pre><code class="language-java">Plugin essentials = Bukkit.getPluginManager().getPlugin(&quot;Essentials&quot;);
 
 // /speed &lt;speed&gt;
 Converter.convert(essentials, &quot;speed&quot;, new IntegerArgument(&quot;speed&quot;, 0, 10));

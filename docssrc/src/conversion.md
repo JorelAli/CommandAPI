@@ -86,7 +86,7 @@ public static convert(Plugin plugin, String cmdName, Argument... arguments);
 
 In these commands, the `plugin` refers to the plugin which has the command you want to convert and `cmdName` is the name of the command declared in the target plugin's `plugin.yml` file (just the main command, not the aliases!).
 
-The `LinkedHashMap<String, Argument>` can be used to provide argument checks that lets you apply the command UI to a bukkit command.
+The `List<Argument>` or `Argument...` can be used to provide argument checks that lets you apply the command UI to a bukkit command.
 
 <div class="example">
 
@@ -113,7 +113,7 @@ From this, we can determine that there are the following commands, where "walk" 
 With the EssentialsX plugin, the `<speed>` value can only take numbers between 0 and 10. As such, we'll ensure to apply these limits using the `IntegerArgument`. In addition, since the speed type can only be "walk" or "fly", we'll add that to our converter as well using a `MultiLiteralArgument`:
 
 ```java
-public {{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:converter2}}
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:converter2}}
 ```
 
 ![](./images/speed.gif)

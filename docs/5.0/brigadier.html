@@ -243,27 +243,30 @@ public static RequiredArgumentBuilder argBuildOf(Argument argument);
 <hr />
 <h4><a class="header" href="#writing-the-code" id="writing-the-code">Writing the code</a></h4>
 <p>Now that we've established what we want, we can finally begin writing the code! First we want to create a literal <code>randomchance</code>. It's a literal because literal values don't change (similar to say <code>run</code> or <code>if</code> from the <code>/execute</code> command). To create a literal, we'll use the <code>registerNewLiteral</code> method described above.</p>
-<pre><code class="language-java">LiteralCommandNode randomChance = Brigadier.registerNewLiteral(&quot;randomchance&quot;);
+<pre><code class="language-java">//Register literal &quot;randomchance&quot;
+LiteralCommandNode randomChance = Brigadier.registerNewLiteral(&quot;randomchance&quot;);
 </code></pre>
 <p>With that completed, we can now create our &quot;argument&quot; to this predicate. To do this, we'll use the regular declaration of arguments that we would normally use for commands. In this example, because we're computing \(\frac{numerator}{denominator}\), we want our numerator to be 0 or greater and our denominator to be 1 or greater (we don't want any negative numbers or division by zero!):</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;numerator&quot;, new IntegerArgument(0));
-arguments.put(&quot;denominator&quot;, new IntegerArgument(1));
+<pre><code class="language-java">//Declare arguments like normal
+List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
+arguments.add(new IntegerArgument(&quot;numerator&quot;, 0));
+arguments.add(new IntegerArgument(&quot;denominator&quot;, 1));
 </code></pre>
 <p>Now we're going to get into the very nitty-gritty part - the predicate declaration. First, we'll create some variables <code>numerator</code> and <code>denominator</code> to represent the brigadier instances of these arguments. This can be handled by using the <code>Brigadier.argBuildOf</code> function:</p>
 <pre><code class="language-java">ArgumentBuilder numerator = Brigadier.argBuildOf(arguments, &quot;numerator&quot;);
-ArgumentBuilder denominator = Brigadier.argBuildOf(arguments, &quot;denominator&quot;);
+ArgumentBuilder denominator = Brigadier.argBuildOf(arguments, &quot;denominator&quot;)
 </code></pre>
 <p>Now we'll define our predicate. Since this is sort of a &quot;meta-command&quot; (it directly affects the outcome of the <code>run</code> command), we need to use the <code>ArgumentBuilder</code>'s <code>fork</code> method. Remember that after we run this predicate, we want to link back to <code>execute</code> again, so our first argument is the <code>CommandNode</code> for <code>execute</code>, which we can get using <code>Brigadier.getRootNode().getChild(&quot;execute&quot;)</code>. Then, we can simply use <code>Brigadier.fromPredicate</code> to finish our declaration:</p>
-<pre><code class="language-java">denominator = denominator
-	.fork(Brigadier.getRootNode().getChild(&quot;execute&quot;), Brigadier.fromPredicate((sender, args) -&gt; {
-		//Parse arguments like normal
-		int num = (int) args[0];
-		int denom = (int) args[1];
-		
-		//Return boolean with a num/denom chance
-		return Math.ceil(Math.random() * (double) denom) &lt;= (double) num;
-	}, arguments));
+<pre><code class="language-java">ArgumentBuilder denominator = Brigadier.argBuildOf(arguments, &quot;denominator&quot;)
+    //Fork redirecting to &quot;execute&quot; and state our predicate
+    .fork(Brigadier.getRootNode().getChild(&quot;execute&quot;), Brigadier.fromPredicate((sender, args) -&gt; {
+        //Parse arguments like normal
+        int num = (int) args[0];
+        int denom = (int) args[1];
+        
+        //Return boolean with a num/denom chance
+        return Math.ceil(Math.random() * (double) denom) &lt;= (double) num;
+    }, arguments));
 </code></pre>
 <p>Finally, we can now link everything up. We know that <code>numerator</code> comes first, <strong>then</strong> <code>denominator</code>, so we have to have <code>numerator.then(denominator)</code>. We also know that these arguments are the <strong>children</strong> of the <code>randomChance</code> literal, so we use the following code to state all of this:</p>
 <pre><code class="language-java">//Add &lt;numerator&gt; &lt;denominator&gt; as a child of randomchance
@@ -280,22 +283,22 @@ Brigadier.getRootNode().getChild(&quot;execute&quot;).getChild(&quot;if&quot;).a
 LiteralCommandNode randomChance = Brigadier.registerNewLiteral(&quot;randomchance&quot;);
 
 //Declare arguments like normal
-LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;numerator&quot;, new IntegerArgument(0));
-arguments.put(&quot;denominator&quot;, new IntegerArgument(1));
+List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
+arguments.add(new IntegerArgument(&quot;numerator&quot;, 0));
+arguments.add(new IntegerArgument(&quot;denominator&quot;, 1));
 
 //Get brigadier argument objects
 ArgumentBuilder numerator = Brigadier.argBuildOf(arguments, &quot;numerator&quot;);
 ArgumentBuilder denominator = Brigadier.argBuildOf(arguments, &quot;denominator&quot;)
     //Fork redirecting to &quot;execute&quot; and state our predicate
-	.fork(Brigadier.getRootNode().getChild(&quot;execute&quot;), Brigadier.fromPredicate((sender, args) -&gt; {
-		//Parse arguments like normal
-		int num = (int) args[0];
-		int denom = (int) args[1];
-		
-		//Return boolean with a num/denom chance
-		return Math.ceil(Math.random() * (double) denom) &lt;= (double) num;
-	}, arguments));
+    .fork(Brigadier.getRootNode().getChild(&quot;execute&quot;), Brigadier.fromPredicate((sender, args) -&gt; {
+        //Parse arguments like normal
+        int num = (int) args[0];
+        int denom = (int) args[1];
+        
+        //Return boolean with a num/denom chance
+        return Math.ceil(Math.random() * (double) denom) &lt;= (double) num;
+    }, arguments));
 
 //Add &lt;numerator&gt; &lt;denominator&gt; as a child of randomchance
 randomChance.addChild(numerator.then(denominator).build());
