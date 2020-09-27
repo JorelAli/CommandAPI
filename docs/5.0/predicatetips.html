@@ -176,18 +176,21 @@
                         
                         <h1><a class="header" href="#predicate-tips" id="predicate-tips">Predicate tips</a></h1>
 <p>In our <a href="./requirements.html#example---a-party-creation-and-teleportation-system">example for creating a party system</a>, we ended up having lots of code repetition. In our party creation command, we had the following code:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;createParty&quot;, new LiteralArgument(&quot;create&quot;)
+<pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
+
+// The &quot;create&quot; literal, with a requirement that a player must have a party
+arguments.add(new LiteralArgument(&quot;create&quot;)
 	.withRequirement(sender -&gt; {
 		
 		return !partyMembers.containsKey(((Player) sender).getUniqueId());
-        
+		
 	}));
-arguments.put(&quot;partyName&quot;, new StringArgument());
+
+arguments.add(new StringArgument(&quot;partyName&quot;));
 </code></pre>
 <p>And for our party teleportation command, we had the following code:</p>
-<pre><code class="language-java">arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;teleport&quot;, new LiteralArgument(&quot;tp&quot;)
+<pre><code class="language-java">arguments = new ArrayList&lt;&gt;();
+arguments.add(new LiteralArgument(&quot;tp&quot;)
 	.withRequirement(sender -&gt; {
 		
 		return partyMembers.containsKey(((Player) sender).getUniqueId());
@@ -200,15 +203,13 @@ arguments.put(&quot;teleport&quot;, new LiteralArgument(&quot;tp&quot;)
 };
 </code></pre>
 <p>Now, we can use the predicate <code>testIfPlayerHasParty</code> in our code for creating a party. Since we want to apply the &quot;not&quot; (<code>!</code>) operator to this predicate, we can use <code>.negate()</code> to invert the result of our predicate:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;createParty&quot;, new LiteralArgument(&quot;create&quot;)
-	.withRequirement(testIfPlayerHasParty.negate());
-arguments.put(&quot;partyName&quot;, new StringArgument());
+<pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
+arguments.add(new LiteralArgument(&quot;create&quot;).withRequirement(testIfPlayerHasParty.negate()));
+arguments.add(new StringArgument(&quot;partyName&quot;));
 </code></pre>
 <p>And we can use it again for our code for teleporting to party members:</p>
-<pre><code class="language-java">arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;teleport&quot;, new LiteralArgument(&quot;tp&quot;)
-	.withRequirement(testIfPlayerHasParty));
+<pre><code class="language-java">arguments = new ArrayList&lt;&gt;();
+arguments.add(new LiteralArgument(&quot;tp&quot;).withRequirement(testIfPlayerHasParty));
 </code></pre>
 
                     </main>

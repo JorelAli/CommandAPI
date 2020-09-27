@@ -187,10 +187,10 @@
 <pre><code class="language-java">public static CommandDispatcher getCommandDispatcher();
 public static RootCommandNode getRootNode();
 public static LiteralCommandNode registerNewLiteral(String name);
-public static RedirectModifier fromPredicate(BiPredicate&lt;CommandSender, Object[]&gt; predicate, LinkedHashMap&lt;String, Argument&gt; args);
+public static RedirectModifier fromPredicate(BiPredicate&lt;CommandSender, Object[]&gt; predicate, List&lt;Argument&gt; args);
 public static Command fromCommand(CommandAPICommand command);
-public static RequiredArgumentBuilder argBuildOf(LinkedHashMap&lt;String, Argument&gt; args, String prompt);
-public static RequiredArgumentBuilder argBuildOf(String prompt, Argument argument);
+public static RequiredArgumentBuilder argBuildOf(List&lt;Argument&gt; args, String nodeName);
+public static RequiredArgumentBuilder argBuildOf(Argument argument);
 </code></pre>
 <p>Briefly, here's what each of these functions do (you can view the JavaDocs for more information):</p>
 <table><thead><tr><th>Method</th><th>Description</th></tr></thead><tbody>

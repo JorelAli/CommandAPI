@@ -3,8 +3,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 
@@ -26,6 +28,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -36,6 +39,8 @@ import org.bukkit.inventory.ComplexRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.loot.LootContext;
 import org.bukkit.loot.LootTable;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -1030,6 +1035,159 @@ new CommandAPICommand("getfruit")
     })
     .register();
 /* ANCHOR_END: commandfailures */
+}
+
+{
+/* ANCHOR: requirements */
+new CommandAPICommand("repair")
+    .withRequirement(sender -> ((Player) sender).getLevel() >= 30)
+    .executesPlayer((player, args) -> {
+        
+        //Repair the item back to full durability
+        ItemStack is = player.getInventory().getItemInMainHand();
+        ItemMeta itemMeta = is.getItemMeta();
+        if(itemMeta instanceof Damageable) {
+            ((Damageable) itemMeta).setDamage(0);
+            is.setItemMeta(itemMeta);
+        }
+        
+        //Subtract 30 levels
+        player.setLevel(player.getLevel() - 30);
+    })
+    .register();
+/* ANCHOR_END: requirements */
+}
+
+{
+/* ANCHOR: requirementsmap */
+Map<UUID, String> partyMembers = new HashMap<>();
+/* ANCHOR_END: requirementsmap */
+
+/* ANCHOR: requirements2 */
+List<Argument> arguments = new ArrayList<>();
+
+// The "create" literal, with a requirement that a player must have a party
+arguments.add(new LiteralArgument("create")
+	.withRequirement(sender -> {
+		
+		return !partyMembers.containsKey(((Player) sender).getUniqueId());
+		
+	}));
+
+arguments.add(new StringArgument("partyName"));
+/* ANCHOR_END: requirements2 */
+
+/* ANCHOR: requirements3 */
+new CommandAPICommand("party")
+	.withArguments(arguments)
+	.executesPlayer((player, args) -> {
+		
+		//Get the name of the party to create
+		String partyName = (String) args[0];
+		
+		partyMembers.put(player.getUniqueId(), partyName);
+	})
+	.register();
+/* ANCHOR_END: requirements3 */
+
+/* ANCHOR: requirementstp */
+/* ANCHOR: requirements4 */
+arguments = new ArrayList<>();
+arguments.add(new LiteralArgument("tp")
+	.withRequirement(sender -> {
+		
+		return partyMembers.containsKey(((Player) sender).getUniqueId());
+        
+	}));
+/* ANCHOR_END: requirementstp */
+
+arguments.add(new PlayerArgument("player")
+	.safeOverrideSuggestions((sender) -> {
+		
+		//Store the list of party members to teleport to
+		List<Player> playersToTeleportTo = new ArrayList<>();
+		
+		String partyName = partyMembers.get(((Player) sender).getUniqueId());
+		
+		//Find the party members
+		for(UUID uuid : partyMembers.keySet()) {
+			
+			//Ignore yourself
+			if(uuid.equals(((Player) sender).getUniqueId())) {
+				continue;
+			} else {
+				//If the party member is in the same party as you
+				if(partyMembers.get(uuid).equals(partyName)) {
+					Player target = Bukkit.getPlayer(uuid);
+					if(target.isOnline()) {
+						//Add them if they are online
+						playersToTeleportTo.add(target);
+					}
+				}
+			}
+		}
+		
+		return playersToTeleportTo.toArray(new Player[0]);
+	}));
+/* ANCHOR_END: requirements4 */
+
+/* ANCHOR: requirements5 */
+new CommandAPICommand("party")
+	.withArguments(arguments)
+	.executesPlayer((player, args) -> {
+		Player target = (Player) args[0];
+		player.teleport(target);
+	})
+	.register();
+/* ANCHOR_END: requirements5 */
+
+/* ANCHOR: updatingrequirements */
+new CommandAPICommand("party")
+	.withArguments(arguments)
+	.executesPlayer((player, args) -> {
+		
+		//Get the name of the party to create
+		String partyName = (String) args[0];
+		
+		partyMembers.put(player.getUniqueId(), partyName);
+	    
+	    CommandAPI.updateRequirements(player);
+	})
+	.register();
+/* ANCHOR_END: updatingrequirements */
+}
+
+{
+/* ANCHOR: multiplerequirements */
+new CommandAPICommand("someCommand")
+	.withRequirement(sender -> ((Player) sender).getLevel() >= 30)
+	.withRequirement(sender -> ((Player) sender).getInventory().contains(Material.DIAMOND_PICKAXE))
+	.withRequirement(sender -> ((Player) sender).isInvulnerable())
+	.executesPlayer((player, args) -> {
+		//Code goes here
+	})
+	.register();
+/* ANCHOR_END: multiplerequirements */
+}
+
+{
+Map<UUID, String> partyMembers = new HashMap<>();
+/* ANCHOR: predicatetips */
+Predicate<CommandSender> testIfPlayerHasParty = sender -> {
+    return partyMembers.containsKey(((Player) sender).getUniqueId());
+};
+/* ANCHOR_END: predicatetips */
+
+/* ANCHOR: predicatetips2 */
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new LiteralArgument("create").withRequirement(testIfPlayerHasParty.negate()));
+arguments.add(new StringArgument("partyName"));
+/* ANCHOR_END: predicatetips2 */
+
+/* ANCHOR: predicatetips3 */
+arguments = new ArrayList<>();
+arguments.add(new LiteralArgument("tp").withRequirement(testIfPlayerHasParty));
+/* ANCHOR_END: predicatetips3 */
 }
 
 } // Examples class end

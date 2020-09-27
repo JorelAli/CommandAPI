@@ -3095,7 +3095,7 @@ new CommandAPICommand(&quot;kill&quot;)
 <hr />
 <h2><a class="header" href="#adding-requirements-to-commands" id="adding-requirements-to-commands">Adding requirements to commands</a></h2>
 <p>To add a requirement to a command, similar to adding permissions to commands, use the <code>withRequirement</code> method:</p>
-<pre><code class="language-java">withRequirement(Predicate&lt;CommandSender&gt; sender);
+<pre><code class="language-java">CommandAPICommand withRequirement(Predicate&lt;CommandSender&gt; sender);
 </code></pre>
 <p>The <code>withRequirement</code> method requires a predicate that determines if the sender is able to run the command - if the predicate is satisfied, then the command sender will be able to execute that command.</p>
 <div class="example">
@@ -3106,20 +3106,20 @@ new CommandAPICommand(&quot;kill&quot;)
 <p>We want to put a requirement on this command that the player needs to have at least 30 levels of experience in order to run the command - if the player has less than 30 levels, the player should not be able to run the command. The easiest way to make the player not able to run the command is to literally tell the user that the command doesn't exist. That's what requirements do in the CommandAPI:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;repair&quot;)
     .withRequirement(sender -&gt; ((Player) sender).getLevel() &gt;= 30)
-	.executesPlayer((player, args) -&gt; {
-		
-		//Repair the item back to full durability
-		ItemStack is = player.getInventory().getItemInMainHand();
-		ItemMeta itemMeta = is.getItemMeta();
-		if(itemMeta instanceof Damageable) {
-			((Damageable) itemMeta).setDamage(0);
-			is.setItemMeta(itemMeta);
-		}
-		
-		//Subtract 30 levels
-		player.setLevel(player.getLevel() - 30);
-	})
-	.register();
+    .executesPlayer((player, args) -&gt; {
+        
+        //Repair the item back to full durability
+        ItemStack is = player.getInventory().getItemInMainHand();
+        ItemMeta itemMeta = is.getItemMeta();
+        if(itemMeta instanceof Damageable) {
+            ((Damageable) itemMeta).setDamage(0);
+            is.setItemMeta(itemMeta);
+        }
+        
+        //Subtract 30 levels
+        player.setLevel(player.getLevel() - 30);
+    })
+    .register();
 </code></pre>
 <p>It's important to note that in this example, we case the <code>sender</code> to a <code>player</code> for the requirement method. We know that the sender is definitely a player because we use <code>executesPlayer()</code>, which ensures that this is the case. Now that we've got this, <strong>we need to make sure we update the player's requirements <em>when their exp changes</em></strong>. This is covered in more detail in the section about updating requirements below.</p>
 </div>
@@ -3137,16 +3137,17 @@ new CommandAPICommand(&quot;kill&quot;)
 <pre><code class="language-java">Map&lt;UUID, String&gt; partyMembers = new HashMap&lt;&gt;();
 </code></pre>
 <p>To begin with, let's create the <code>/party create &lt;partyName&gt;</code> command. First, we must declare our arguments:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+<pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
 
 // The &quot;create&quot; literal, with a requirement that a player must have a party
-arguments.put(&quot;createParty&quot;, new LiteralArgument(&quot;create&quot;)
+arguments.add(new LiteralArgument(&quot;create&quot;)
 	.withRequirement(sender -&gt; {
 		
 		return !partyMembers.containsKey(((Player) sender).getUniqueId());
 		
 	}));
-arguments.put(&quot;partyName&quot;, new StringArgument());
+
+arguments.add(new StringArgument(&quot;partyName&quot;));
 </code></pre>
 <p>In this argument declaration, we put a requirement on the literal <code>create</code>, where the player does not have a party. In other words, if the player does not have a party, they are allowed to run <code>/party create &lt;partyName&gt;</code>. If a player already has a party, then they won't be allowed to run this command. </p>
 <p>Now that we've declared our arguments, we can now declare our main command <code>/party create &lt;partyName&gt;</code>. We populate it with the arguments, and we create an entry in our <code>partyMembers</code> with the player's UUID and the name of the party that they created. Since this updates the requirements of the player, we'll have to make sure we update it (which is covered in more detail in the section about updating requirements below) - until then, I'll omit this from the code:</p>
@@ -3163,14 +3164,15 @@ arguments.put(&quot;partyName&quot;, new StringArgument());
 </code></pre>
 <hr />
 <p>So now we've added the ability to create a party if we're not already in it. Now we need to implement our <code>party tp &lt;player&gt;</code> command. Again, we must start by declaring our arguments:</p>
-<pre><code class="language-java">arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;teleport&quot;, new LiteralArgument(&quot;tp&quot;)
+<pre><code class="language-java">arguments = new ArrayList&lt;&gt;();
+arguments.add(new LiteralArgument(&quot;tp&quot;)
 	.withRequirement(sender -&gt; {
 		
 		return partyMembers.containsKey(((Player) sender).getUniqueId());
         
 	}));
-arguments.put(&quot;player&quot;, new PlayerArgument()
+
+arguments.add(new PlayerArgument(&quot;player&quot;)
 	.safeOverrideSuggestions((sender) -&gt; {
 		
 		//Store the list of party members to teleport to
@@ -3259,8 +3261,8 @@ public void onEnable() {
 		String partyName = (String) args[0];
 		
 		partyMembers.put(player.getUniqueId(), partyName);
-        
-        CommandAPI.updateRequirements(player);
+	    
+	    CommandAPI.updateRequirements(player);
 	})
 	.register();
 </code></pre>
@@ -3429,10 +3431,10 @@ Converter.convert(essentials, &quot;speed&quot;, arguments);
 <pre><code class="language-java">public static CommandDispatcher getCommandDispatcher();
 public static RootCommandNode getRootNode();
 public static LiteralCommandNode registerNewLiteral(String name);
-public static RedirectModifier fromPredicate(BiPredicate&lt;CommandSender, Object[]&gt; predicate, LinkedHashMap&lt;String, Argument&gt; args);
+public static RedirectModifier fromPredicate(BiPredicate&lt;CommandSender, Object[]&gt; predicate, List&lt;Argument&gt; args);
 public static Command fromCommand(CommandAPICommand command);
-public static RequiredArgumentBuilder argBuildOf(LinkedHashMap&lt;String, Argument&gt; args, String prompt);
-public static RequiredArgumentBuilder argBuildOf(String prompt, Argument argument);
+public static RequiredArgumentBuilder argBuildOf(List&lt;Argument&gt; args, String nodeName);
+public static RequiredArgumentBuilder argBuildOf(Argument argument);
 </code></pre>
 <p>Briefly, here's what each of these functions do (you can view the JavaDocs for more information):</p>
 <table><thead><tr><th>Method</th><th>Description</th></tr></thead><tbody>
@@ -3548,18 +3550,21 @@ Brigadier.getRootNode().getChild(&quot;execute&quot;).getChild(&quot;if&quot;).a
 </div>
 <h1><a class="header" href="#predicate-tips" id="predicate-tips">Predicate tips</a></h1>
 <p>In our <a href="./requirements.html#example---a-party-creation-and-teleportation-system">example for creating a party system</a>, we ended up having lots of code repetition. In our party creation command, we had the following code:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;createParty&quot;, new LiteralArgument(&quot;create&quot;)
+<pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
+
+// The &quot;create&quot; literal, with a requirement that a player must have a party
+arguments.add(new LiteralArgument(&quot;create&quot;)
 	.withRequirement(sender -&gt; {
 		
 		return !partyMembers.containsKey(((Player) sender).getUniqueId());
-        
+		
 	}));
-arguments.put(&quot;partyName&quot;, new StringArgument());
+
+arguments.add(new StringArgument(&quot;partyName&quot;));
 </code></pre>
 <p>And for our party teleportation command, we had the following code:</p>
-<pre><code class="language-java">arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;teleport&quot;, new LiteralArgument(&quot;tp&quot;)
+<pre><code class="language-java">arguments = new ArrayList&lt;&gt;();
+arguments.add(new LiteralArgument(&quot;tp&quot;)
 	.withRequirement(sender -&gt; {
 		
 		return partyMembers.containsKey(((Player) sender).getUniqueId());
@@ -3572,15 +3577,13 @@ arguments.put(&quot;teleport&quot;, new LiteralArgument(&quot;tp&quot;)
 };
 </code></pre>
 <p>Now, we can use the predicate <code>testIfPlayerHasParty</code> in our code for creating a party. Since we want to apply the &quot;not&quot; (<code>!</code>) operator to this predicate, we can use <code>.negate()</code> to invert the result of our predicate:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;createParty&quot;, new LiteralArgument(&quot;create&quot;)
-	.withRequirement(testIfPlayerHasParty.negate());
-arguments.put(&quot;partyName&quot;, new StringArgument());
+<pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
+arguments.add(new LiteralArgument(&quot;create&quot;).withRequirement(testIfPlayerHasParty.negate()));
+arguments.add(new StringArgument(&quot;partyName&quot;));
 </code></pre>
 <p>And we can use it again for our code for teleporting to party members:</p>
-<pre><code class="language-java">arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;teleport&quot;, new LiteralArgument(&quot;tp&quot;)
-	.withRequirement(testIfPlayerHasParty));
+<pre><code class="language-java">arguments = new ArrayList&lt;&gt;();
+arguments.add(new LiteralArgument(&quot;tp&quot;).withRequirement(testIfPlayerHasParty));
 </code></pre>
 <h1><a class="header" href="#upgrading-guide" id="upgrading-guide">Upgrading guide</a></h1>
 <h2><a class="header" href="#from-version-4x-to-50" id="from-version-4x-to-50">From version 4.x to 5.0</a></h2>

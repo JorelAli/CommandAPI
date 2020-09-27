@@ -18,10 +18,10 @@ The CommandAPI offers the following methods in the `dev.jorel.commandapi.Command
 public static CommandDispatcher getCommandDispatcher();
 public static RootCommandNode getRootNode();
 public static LiteralCommandNode registerNewLiteral(String name);
-public static RedirectModifier fromPredicate(BiPredicate<CommandSender, Object[]> predicate, LinkedHashMap<String, Argument> args);
+public static RedirectModifier fromPredicate(BiPredicate<CommandSender, Object[]> predicate, List<Argument> args);
 public static Command fromCommand(CommandAPICommand command);
-public static RequiredArgumentBuilder argBuildOf(LinkedHashMap<String, Argument> args, String prompt);
-public static RequiredArgumentBuilder argBuildOf(String prompt, Argument argument);
+public static RequiredArgumentBuilder argBuildOf(List<Argument> args, String nodeName);
+public static RequiredArgumentBuilder argBuildOf(Argument argument);
 ```
 
 Briefly, here's what each of these functions do (you can view the JavaDocs for more information):
