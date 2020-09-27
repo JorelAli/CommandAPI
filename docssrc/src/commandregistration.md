@@ -40,35 +40,81 @@ The `CommandAPICommand` has various methods, which are outlined below:
 
 #### Setting the command name
 
-- `new CommandAPICommand(String)` - This constructor is used to set the command's name. 
+```java
+new CommandAPICommand(String)
+```
+
+This constructor creates a new instance of the `CommandAPICommand` object. This constructor requires the _name_ of the command.
 
 #### Setting command properties
 
-- ```java
-  CommandAPICommand withArguments(List<Argument> arguments)
-  ```
+```java
+CommandAPICommand withArguments(List<Argument> arguments)
+```
 
-  Adds `arguments` to the list of arguments for the command
+The `withArguments` method is used to add arguments to your command. The `arguments` parameter is appended to the the list of arguments for the command.
 
-- ```java
-  CommandAPICommand withArguments(Argument... arguments)
-  ```
+```java
+CommandAPICommand withArguments(Argument... arguments)
+```
 
-  Adds `arguments` to the list of arguments for the command. This is purely to make adding one or two arguments nice and easy instead of creating lots of `List` objects everywhere.
+Similar to the other `withArguments` method, this method appends the `arguments` to the list of arguments for the command. This is purely to make adding one or two arguments nice and easy instead of creating lots of `List` objects everywhere.
 
-- `withPermission(CommandPermission)` - The required permission to execute a command. (See [the section on permissions](permissions.html)).
+```java
+CommandAPICommad withPermission(CommandPermission)
+``` 
 
-- `withAliases(String... args)` - An array of aliases that the command can be run via.
+The `withPermission` method is used to assign a permission that is required to execute the command. (See [the section on permissions](permissions.html)).
+
+```java
+withAliases(String... args)
+```
+
+The `withAliases` method is used to declare a list of aliases that can be used to run this command via.
 
 #### Setting the command's executor
 
-- `executes((sender, args) -> {})` - Executes a command using the `CommandSender` object.
-- `executesPlayer((player, args) -> {})` - Executes a command using the `Player` object.
-- `executesEntity((entity, args) -> {})` - Executes a command using the `Entity` object.
-- `executesCommandBlock((cmdblock, args) -> {})` - Executes a command using the `BlockCommandSender` object.
-- `executesConsole((console, args) -> {})` - Executes a command using the `ConsoleCommandSender` object.
-- `executesProxy((proxy, args) -> {})` - Executes a command using the `ProxiedCommandSender` object.
-- `executesNative((proxy, args) -> {})` - Executes a command using the `NativeProxyCommandSender` object.
+```java
+CommandAPICommand executes((sender, args) -> {})
+```
+
+Executes a command using the `CommandSender` object.
+
+```java
+CommandAPICommand executesPlayer((player, args) -> {})
+```
+
+Executes a command only if the command sender is a `Player`.
+
+```java
+CommandAPICommand executesEntity((entity, args) -> {})
+```
+
+Executes a command only if the command sender is an `Entity`.
+
+```java
+CommandAPICommand executesCommandBlock((cmdblock, args) -> {})
+```
+
+Executes a command only if the command sender is a `BlockCommandSender`.
+
+```java
+CommandAPICommand executesConsole((console, args) -> {})
+```
+
+Executes a command only if the command sender is a `ConsoleCommandSender`.
+
+```java
+CommandAPICommand executesProxy((proxy, args) -> {})
+```
+
+Executes a command only if the command sender is a `ProxiedCommandSender`.
+
+```java
+CommandAPICOmmand executesNative((proxy, args) -> {})
+```
+
+Executes a command regardless of what the command sender is, using the `NativeProxyCommandSender`.  Read more about native proxied command senders [here](./native.md).
 
 > **Developer's Note:**
 >
@@ -104,7 +150,11 @@ The `CommandAPICommand` has various methods, which are outlined below:
 
 #### Registering the command
 
-- `register()` - Registers the command.
+```java
+void register()
+```
+
+Registers the command.
 
 -----
 

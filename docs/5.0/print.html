@@ -618,38 +618,44 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 <h2><a class="header" href="#commandapicommand-methods" id="commandapicommand-methods"><code>CommandAPICommand</code> methods</a></h2>
 <p>The <code>CommandAPICommand</code> has various methods, which are outlined below:</p>
 <h4><a class="header" href="#setting-the-command-name" id="setting-the-command-name">Setting the command name</a></h4>
-<ul>
-<li><code>new CommandAPICommand(String)</code> - This constructor is used to set the command's name. </li>
-</ul>
+<pre><code class="language-java">new CommandAPICommand(String)
+</code></pre>
+<p>This constructor creates a new instance of the <code>CommandAPICommand</code> object. This constructor requires the <em>name</em> of the command.</p>
 <h4><a class="header" href="#setting-command-properties" id="setting-command-properties">Setting command properties</a></h4>
-<ul>
-<li>
 <pre><code class="language-java">CommandAPICommand withArguments(List&lt;Argument&gt; arguments)
 </code></pre>
-<p>Adds <code>arguments</code> to the list of arguments for the command</p>
-</li>
-<li>
+<p>The <code>withArguments</code> method is used to add arguments to your command. The <code>arguments</code> parameter is appended to the the list of arguments for the command.</p>
 <pre><code class="language-java">CommandAPICommand withArguments(Argument... arguments)
 </code></pre>
-<p>Adds <code>arguments</code> to the list of arguments for the command. This is purely to make adding one or two arguments nice and easy instead of creating lots of <code>List</code> objects everywhere.</p>
-</li>
-<li>
-<p><code>withPermission(CommandPermission)</code> - The required permission to execute a command. (See <a href="permissions.html">the section on permissions</a>).</p>
-</li>
-<li>
-<p><code>withAliases(String... args)</code> - An array of aliases that the command can be run via.</p>
-</li>
-</ul>
+<p>Similar to the other <code>withArguments</code> method, this method appends the <code>arguments</code> to the list of arguments for the command. This is purely to make adding one or two arguments nice and easy instead of creating lots of <code>List</code> objects everywhere.</p>
+<pre><code class="language-java">CommandAPICommad withPermission(CommandPermission)
+</code></pre>
+<p>The <code>withPermission</code> method is used to assign a permission that is required to execute the command. (See <a href="permissions.html">the section on permissions</a>).</p>
+<pre><code class="language-java">withAliases(String... args)
+</code></pre>
+<p>The <code>withAliases</code> method is used to declare a list of aliases that can be used to run this command via.</p>
 <h4><a class="header" href="#setting-the-commands-executor" id="setting-the-commands-executor">Setting the command's executor</a></h4>
-<ul>
-<li><code>executes((sender, args) -&gt; {})</code> - Executes a command using the <code>CommandSender</code> object.</li>
-<li><code>executesPlayer((player, args) -&gt; {})</code> - Executes a command using the <code>Player</code> object.</li>
-<li><code>executesEntity((entity, args) -&gt; {})</code> - Executes a command using the <code>Entity</code> object.</li>
-<li><code>executesCommandBlock((cmdblock, args) -&gt; {})</code> - Executes a command using the <code>BlockCommandSender</code> object.</li>
-<li><code>executesConsole((console, args) -&gt; {})</code> - Executes a command using the <code>ConsoleCommandSender</code> object.</li>
-<li><code>executesProxy((proxy, args) -&gt; {})</code> - Executes a command using the <code>ProxiedCommandSender</code> object.</li>
-<li><code>executesNative((proxy, args) -&gt; {})</code> - Executes a command using the <code>NativeProxyCommandSender</code> object.</li>
-</ul>
+<pre><code class="language-java">CommandAPICommand executes((sender, args) -&gt; {})
+</code></pre>
+<p>Executes a command using the <code>CommandSender</code> object.</p>
+<pre><code class="language-java">CommandAPICommand executesPlayer((player, args) -&gt; {})
+</code></pre>
+<p>Executes a command only if the command sender is a <code>Player</code>.</p>
+<pre><code class="language-java">CommandAPICommand executesEntity((entity, args) -&gt; {})
+</code></pre>
+<p>Executes a command only if the command sender is an <code>Entity</code>.</p>
+<pre><code class="language-java">CommandAPICommand executesCommandBlock((cmdblock, args) -&gt; {})
+</code></pre>
+<p>Executes a command only if the command sender is a <code>BlockCommandSender</code>.</p>
+<pre><code class="language-java">CommandAPICommand executesConsole((console, args) -&gt; {})
+</code></pre>
+<p>Executes a command only if the command sender is a <code>ConsoleCommandSender</code>.</p>
+<pre><code class="language-java">CommandAPICommand executesProxy((proxy, args) -&gt; {})
+</code></pre>
+<p>Executes a command only if the command sender is a <code>ProxiedCommandSender</code>.</p>
+<pre><code class="language-java">CommandAPICOmmand executesNative((proxy, args) -&gt; {})
+</code></pre>
+<p>Executes a command regardless of what the command sender is, using the <code>NativeProxyCommandSender</code>.  Read more about native proxied command senders <a href="./native.html">here</a>.</p>
 <blockquote>
 <p><strong>Developer's Note:</strong></p>
 <p>Sometimes, the Java compiler throws an error saying that a method is ambiguous for the type CommandAPICommand. This is due to a limitation in Java's type inference system and is not a fault of the CommandAPI. If we take the following code, used to spawn a pig:</p>
@@ -675,9 +681,9 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 </code></pre>
 </blockquote>
 <h4><a class="header" href="#registering-the-command" id="registering-the-command">Registering the command</a></h4>
-<ul>
-<li><code>register()</code> - Registers the command.</li>
-</ul>
+<pre><code class="language-java">void register()
+</code></pre>
+<p>Registers the command.</p>
 <hr />
 <h2><a class="header" href="#command-loading-order" id="command-loading-order">Command loading order</a></h2>
 <p>In order to register commands properly, <strong>commands must be registered before the server finishes loading</strong>. The CommandAPI will prevent command registration after the server has loaded. This basically means that all command registration must occur during a plugin's <code>onLoad()</code> or <code>onEnable()</code> method. With the CommandAPI, depending on whether you use <code>onLoad()</code> or <code>onEnable()</code> to load your commands depends on whether your plugin is used with Minecraft's functions:</p>
