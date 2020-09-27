@@ -12,8 +12,8 @@ The CommandAPI uses two classes to provide information about a scoreboard:
 The score holder argument can accept either a single entity or a collection of multiple entities. In order to specify which one to use, you must provide a `ScoreHolderType` enum value to the `ScoreHolderArgument` constructor, which is either `ScoreHolderType.SINGLE` or `ScoreHolderType.MULTIPLE`:
 
 ```java
-new ScoreHolderArgument(ScoreHolderType.SINGLE);
-new ScoreHolderArgument(ScoreHolderType.MULTIPLE);
+new ScoreHolderArgument(nodeName, ScoreHolderType.SINGLE);
+new ScoreHolderArgument(nodeName, ScoreHolderType.MULTIPLE);
 ```
 
 Depending on which constructor is used, the cast type changes. If you use a `ScoreHolderType.SINGLE`, the argument must be casted to a `String`. Otherwise, if you use `ScoreHolderType.MULTIPLE`, the argument must be casted to a `Collection<String>`.

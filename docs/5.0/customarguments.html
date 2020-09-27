@@ -178,8 +178,8 @@
 <p>Custom arguments are arguably the most powerful argument that the CommandAPI offers. This argument is used to represent any String, or Minecraft key <em>(Something of the form <code>String:String</code>, such as <code>minecraft:diamond</code>)</em>. They basically represent <code>StringArgument</code> with overrideable suggestions and a built-in parser for any object of your choice. They are designed to be used for multiple commands - you define the argument once and can use it wherever you want when declaring commands.</p>
 <hr />
 <p>The <code>CustomArgument&lt;T&gt;</code> has two constructors, declared as follows:</p>
-<pre><code class="language-java">public CustomArgument(CustomArgumentFunction&lt;T&gt; parser);
-public CustomArgument(CustomArgumentFunction&lt;T&gt; parser, boolean keyed);
+<pre><code class="language-java">public CustomArgument(String nodeName, CustomArgumentFunction&lt;T&gt; parser);
+public CustomArgument(String nodeName, CustomArgumentFunction&lt;T&gt; parser, boolean keyed);
 </code></pre>
 <p>The first argument is the <code>CustomArgumentFunction</code>, which is a lambda that takes in a String and returns some custom object of type <code>T</code>. The first constructor will construct a <code>CustomArgument</code> which uses the <code>StringArgument</code> as a base (thus, only simple strings). The second argument has the field <code>keyed</code>. When this field is set to <code>true</code>, the <code>CustomArgument</code> will use a <code>Minecraft key</code> as a base, allowing you to use Minecraft keys as input.</p>
 <blockquote>

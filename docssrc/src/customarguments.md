@@ -7,8 +7,8 @@ Custom arguments are arguably the most powerful argument that the CommandAPI off
 The `CustomArgument<T>` has two constructors, declared as follows:
 
 ```java
-public CustomArgument(CustomArgumentFunction<T> parser);
-public CustomArgument(CustomArgumentFunction<T> parser, boolean keyed);
+public CustomArgument(String nodeName, CustomArgumentFunction<T> parser);
+public CustomArgument(String nodeName, CustomArgumentFunction<T> parser, boolean keyed);
 ```
 
 The first argument is the `CustomArgumentFunction`, which is a lambda that takes in a String and returns some custom object of type `T`. The first constructor will construct a `CustomArgument` which uses the `StringArgument` as a base (thus, only simple strings). The second argument has the field `keyed`. When this field is set to `true`, the `CustomArgument` will use a `Minecraft key` as a base, allowing you to use Minecraft keys as input.

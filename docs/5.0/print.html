@@ -2052,8 +2052,8 @@ arguments.add(new TeamArgument(&quot;team&quot;).safeOverrideSuggestions(s -&gt;
 <hr />
 <h2><a class="header" href="#score-holder-argument" id="score-holder-argument">Score holder argument</a></h2>
 <p>The score holder argument can accept either a single entity or a collection of multiple entities. In order to specify which one to use, you must provide a <code>ScoreHolderType</code> enum value to the <code>ScoreHolderArgument</code> constructor, which is either <code>ScoreHolderType.SINGLE</code> or <code>ScoreHolderType.MULTIPLE</code>:</p>
-<pre><code class="language-java">new ScoreHolderArgument(ScoreHolderType.SINGLE);
-new ScoreHolderArgument(ScoreHolderType.MULTIPLE);
+<pre><code class="language-java">new ScoreHolderArgument(nodeName, ScoreHolderType.SINGLE);
+new ScoreHolderArgument(nodeName, ScoreHolderType.MULTIPLE);
 </code></pre>
 <p>Depending on which constructor is used, the cast type changes. If you use a <code>ScoreHolderType.SINGLE</code>, the argument must be casted to a <code>String</code>. Otherwise, if you use <code>ScoreHolderType.MULTIPLE</code>, the argument must be casted to a <code>Collection&lt;String&gt;</code>.</p>
 <div class="example">
@@ -2807,8 +2807,8 @@ for(String key : gamemodes.keySet()) {
 <p>Custom arguments are arguably the most powerful argument that the CommandAPI offers. This argument is used to represent any String, or Minecraft key <em>(Something of the form <code>String:String</code>, such as <code>minecraft:diamond</code>)</em>. They basically represent <code>StringArgument</code> with overrideable suggestions and a built-in parser for any object of your choice. They are designed to be used for multiple commands - you define the argument once and can use it wherever you want when declaring commands.</p>
 <hr />
 <p>The <code>CustomArgument&lt;T&gt;</code> has two constructors, declared as follows:</p>
-<pre><code class="language-java">public CustomArgument(CustomArgumentFunction&lt;T&gt; parser);
-public CustomArgument(CustomArgumentFunction&lt;T&gt; parser, boolean keyed);
+<pre><code class="language-java">public CustomArgument(String nodeName, CustomArgumentFunction&lt;T&gt; parser);
+public CustomArgument(String nodeName, CustomArgumentFunction&lt;T&gt; parser, boolean keyed);
 </code></pre>
 <p>The first argument is the <code>CustomArgumentFunction</code>, which is a lambda that takes in a String and returns some custom object of type <code>T</code>. The first constructor will construct a <code>CustomArgument</code> which uses the <code>StringArgument</code> as a base (thus, only simple strings). The second argument has the field <code>keyed</code>. When this field is set to <code>true</code>, the <code>CustomArgument</code> will use a <code>Minecraft key</code> as a base, allowing you to use Minecraft keys as input.</p>
 <blockquote>

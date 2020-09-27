@@ -183,8 +183,8 @@
 <hr />
 <h2><a class="header" href="#score-holder-argument" id="score-holder-argument">Score holder argument</a></h2>
 <p>The score holder argument can accept either a single entity or a collection of multiple entities. In order to specify which one to use, you must provide a <code>ScoreHolderType</code> enum value to the <code>ScoreHolderArgument</code> constructor, which is either <code>ScoreHolderType.SINGLE</code> or <code>ScoreHolderType.MULTIPLE</code>:</p>
-<pre><code class="language-java">new ScoreHolderArgument(ScoreHolderType.SINGLE);
-new ScoreHolderArgument(ScoreHolderType.MULTIPLE);
+<pre><code class="language-java">new ScoreHolderArgument(nodeName, ScoreHolderType.SINGLE);
+new ScoreHolderArgument(nodeName, ScoreHolderType.MULTIPLE);
 </code></pre>
 <p>Depending on which constructor is used, the cast type changes. If you use a <code>ScoreHolderType.SINGLE</code>, the argument must be casted to a <code>String</code>. Otherwise, if you use <code>ScoreHolderType.MULTIPLE</code>, the argument must be casted to a <code>Collection&lt;String&gt;</code>.</p>
 <div class="example">
