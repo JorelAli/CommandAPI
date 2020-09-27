@@ -19,20 +19,7 @@ Since it's a little difficult to demonstrate a custom use for the `FunctionArgum
 When provided with a function, it will execute that function. If instead a tag is provided, it will execute that tag (i.e. execute all functions declared in that tag).
 
 ```java
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("function", new FunctionArgument());
-
-new CommandAPICommand("runfunction")
-    .withArguments(arguments)
-    .executes((sender, args) -> {
-        FunctionWrapper[] functions = (FunctionWrapper[]) args[0];
-
-        //Run all functions in our FunctionWrapper[]
-        for(FunctionWrapper function : functions) {
-            function.run();
-        }
-    })
-    .register();
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:functionarguments2}}
 ```
 
 </div>

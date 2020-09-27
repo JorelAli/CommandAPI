@@ -24,32 +24,11 @@ The `onEnable(Plugin)` method initializes the CommandAPI's enabling sequence. As
 ### Example - Setting up the CommandAPI in your plugin
 
 ```java
-public class MyPlugin extends JavaPlugin {
-
-	@Override
-	public void onLoad() {
-		CommandAPI.onLoad(true); //Load with verbose output
-        
-        new CommandAPICommand("ping")
-            .executes((sender, args) -> {
-                sender.sendMessage("pong!");
-            })
-            .register();
-	}
-	
-	@Override
-	public void onEnable() {
-		CommandAPI.onEnable(this);
-		
-		//Register commands, listeners etc.
-	}
-
-}
+public {{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:shading}}
 ```
 
 
 </div>
-
 
 -----
 

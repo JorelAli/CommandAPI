@@ -181,8 +181,8 @@
 <p>Say we have a command which kills the sender of a command. This is easily implemented as follows:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;killme&quot;)
     .executesPlayer((player, args) -&gt; {
-		player.setHealth(0);
-	})
+        player.setHealth(0);
+    })
     .register();
 </code></pre>
 <p>But what if the sender of the command is <em>not</em> a player? By using Minecraft's <code>/execute</code> command, we could execute the command as <em>any</em> arbitrary entity, as shown with the command below:</p>
@@ -191,16 +191,16 @@
 <p>To handle this case, we can use the <code>.executesProxy()</code> method to ensure that the command sender is a <code>ProxiedCommandSender</code>. Then, we can kill the <code>callee</code> <em>(the entity which is being 'forced' to run the command /killme)</em></p>
 <pre><code class="language-java">new CommandAPICommand(&quot;killme&quot;)
     .executesPlayer((player, args) -&gt; {
-		player.setHealth(0);
-	})
+        player.setHealth(0);
+    })
     .executesProxy((proxy, args) -&gt; {
-		//Check if the callee is an Entity
-		if(proxy.getCallee() instanceof LivingEntity) {
+        //Check if the callee is an Entity
+        if(proxy.getCallee() instanceof LivingEntity) {
 
-			//If so, kill the entity
-			LivingEntity target = (LivingEntity) proxy.getCallee();
-			target.setHealth(0);
-		}
+            //If so, kill the entity
+            LivingEntity target = (LivingEntity) proxy.getCallee();
+            target.setHealth(0);
+        }
     })
     .register();
 </code></pre>

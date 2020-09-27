@@ -7,10 +7,12 @@ The CommandAPI includes the `FunctionWrapper` class which is a wrapper for Minec
 The `FunctionWrapper` class has the following methods:
 
 ```java
-String[] getCommands();
-void run();
-void runAs(Entity e);
-NamespacedKey getKey();
+class FunctionWrapper implements Keyed {
+    String[] getCommands();
+	void run();
+	void runAs(Entity e);
+	NamespacedKey getKey();
+}
 ```
 
 These methods allow you to interact with the Minecraft function that this class wraps.
@@ -24,18 +26,7 @@ The `getCommands()` method returns a `String[]` that contains the list of comman
 The `run()` method basically does what it says on the tin - it runs the function. The command executor that runs this function is the command executor that was used to retrieve it. For example, if a player in-game populated this argument, then the player will be filled in for `@p` and the player's location would be used for things such as `~ ~ ~`:
 
 ```java
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("function", new FunctionArgument());
-
-new CommandAPICommand("runfunc")
-    .withArguments(arguments)
-	.executes((sender, args) -> {
-        FunctionWrapper[] functions = (FunctionWrapper[]) args[0];
-        for(FunctionWrapper function : functions) {
-            function.run(); // The command executor in this case is 'sender'
-        }
-    })
-    .register();
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:functionarguments}}
 ```
 
 ### `runAs(Entity)`

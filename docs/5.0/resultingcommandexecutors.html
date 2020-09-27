@@ -215,11 +215,8 @@ new CommandAPICommand(&quot;randomnumber&quot;)
 </code></pre>
 <p>Now we write our implementation for <code>/givereward</code>. In this example, we use the <code>EntitySelectorArgument</code> to select a single player. We cast it to <code>Player</code> and then add the items to their inventory.</p>
 <pre><code class="language-java">//Register reward giving system for a target player
-List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
-arguments.add(new EntitySelectorArgument(&quot;target&quot;, EntitySelector.ONE_PLAYER));
-
 new CommandAPICommand(&quot;givereward&quot;)
-    .withArguments(arguments)
+    .withArguments(new EntitySelectorArgument(&quot;target&quot;, EntitySelector.ONE_PLAYER))
     .executes((sender, args) -&gt; {
         Player player = (Player) args[0];
         player.getInventory().addItem(new ItemStack(Material.DIAMOND, 64));

@@ -26,15 +26,7 @@ In short, this is what values are returned when a command is executed from a nor
 To illustrate this, let's take a look at a simple message broadcasting command. We declare our arguments (in this case, "message"), we provide some aliases and set a permission required to run the command. Then we declare our main command body by using the `.executes()` method, before finally registering the command:
 
 ```java
-//Create our command
-new CommandAPICommand("broadcastmsg")
-    .withArguments(new GreedyStringArgument("message")) // The arguments
-    .withAliases("broadcast", "broadcastmessage")       // Command aliases
-    .withPermission(CommandPermission.OP)               // Required permissions
-    .executes((sender, args) -> {
-        String message = (String) args[0];
-        Bukkit.getServer().broadcastMessage(message);
-    }).register();
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:normalcommandexecutors3}}
 ```
 
 Note how when we finish up our implementation of `.executes()`, we don't return anything. This is unlike commands in the standard Bukkit API where the `onCommand` method returns a Boolean value:
@@ -80,7 +72,7 @@ This is done using the respective method:
 Say we wanted to create a command `/suicide`, which kills the player that executes it. Since this command isn't really "designed" for command senders that are not players, we can restrict it so only players can execute this command (meaning that the console and command blocks cannot run this command). Since it's a player, we can use the `.executesPlayer()` method:
 
 ```java
-{{#include examples/4.1suicide.java}}
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:normalcommandexecutors}}
 ```
 
 </div>
@@ -98,7 +90,7 @@ Extending on the suicide example above, we could write another implementation fo
 ### Example - A `/suicide` command with different implementations
 
 ```java
-{{#include examples/4.1suicide2.java}}
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:normalcommandexecutors2}}
 ```
 
 This saves having to use `instanceof` multiple times to check the type of the `CommandSender`.

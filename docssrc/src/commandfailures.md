@@ -17,26 +17,7 @@ Say we have some list containing fruit and the player can choose from it. In ord
 Therefore, to gracefully handle this with a proper error message, we use `CommandAPI.fail(String)` with a meaningful error message which is displayed to the user.
 
 ```java
-//Array of fruit
-String[] fruit = new String[] {"banana", "apple", "orange"};
-
-//Argument accepting a String, suggested with the list of fruit
-List<Argument> arguments = new ArrayList<>();
-arguments.add(new StringArgument("item").overrideSuggestions(fruit));
-
-//Register the command
-new CommandAPICommand("getfruit")
-    .withArguments(arguments)
-    .executes((sender, args) -> {
-        String inputFruit = (String) args[0];
-        if(fruit.contains(inputFruit)) {
-            //Do something with inputFruit
-        } else {
-            //The player's input is not in the list of fruit
-            CommandAPI.fail("That fruit doesn't exist!");
-        }
-	})
-    .register();
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:commandfailures}}
 ```
 
 </div>

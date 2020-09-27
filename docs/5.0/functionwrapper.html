@@ -178,21 +178,20 @@
 <p>The CommandAPI includes the <code>FunctionWrapper</code> class which is a wrapper for Minecraft's functions. It allows you to execute the commands that are represented by the respective <code>.mcfunction</code> file.</p>
 <h2><a class="header" href="#functionwrapper-methods" id="functionwrapper-methods">FunctionWrapper methods</a></h2>
 <p>The <code>FunctionWrapper</code> class has the following methods:</p>
-<pre><code class="language-java">String[] getCommands();
-void run();
-void runAs(Entity e);
-NamespacedKey getKey();
+<pre><code class="language-java">class FunctionWrapper implements Keyed {
+    String[] getCommands();
+	void run();
+	void runAs(Entity e);
+	NamespacedKey getKey();
+}
 </code></pre>
 <p>These methods allow you to interact with the Minecraft function that this class wraps.</p>
 <h3><a class="header" href="#getcommands" id="getcommands"><code>getCommands()</code></a></h3>
 <p>The <code>getCommands()</code> method returns a <code>String[]</code> that contains the list of commands that the Minecraft function &quot;holds&quot;. In other words, running this Minecraft function is basically as simple as iterating through its commands and running them in order. The commands that this <code>String[]</code> holds are the raw strings that this function represents - in other words, it can include things such as <code>@p</code> and <code>~ ~ ~</code> instead of &quot;filled in&quot; values.</p>
 <h3><a class="header" href="#run" id="run"><code>run()</code></a></h3>
 <p>The <code>run()</code> method basically does what it says on the tin - it runs the function. The command executor that runs this function is the command executor that was used to retrieve it. For example, if a player in-game populated this argument, then the player will be filled in for <code>@p</code> and the player's location would be used for things such as <code>~ ~ ~</code>:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;function&quot;, new FunctionArgument());
-
-new CommandAPICommand(&quot;runfunc&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;runfunc&quot;)
+    .withArguments(new FunctionArgument(&quot;function&quot;))
 	.executes((sender, args) -&gt; {
         FunctionWrapper[] functions = (FunctionWrapper[]) args[0];
         for(FunctionWrapper function : functions) {

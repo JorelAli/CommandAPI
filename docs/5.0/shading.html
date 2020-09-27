@@ -189,23 +189,23 @@ CommandAPI.onEnable(Plugin plugin);
 <h3><a class="header" href="#example---setting-up-the-commandapi-in-your-plugin" id="example---setting-up-the-commandapi-in-your-plugin">Example - Setting up the CommandAPI in your plugin</a></h3>
 <pre><code class="language-java">public class MyPlugin extends JavaPlugin {
 
-	@Override
-	public void onLoad() {
-		CommandAPI.onLoad(true); //Load with verbose output
+    @Override
+    public void onLoad() {
+        CommandAPI.onLoad(true); //Load with verbose output
         
         new CommandAPICommand(&quot;ping&quot;)
             .executes((sender, args) -&gt; {
                 sender.sendMessage(&quot;pong!&quot;);
             })
             .register();
-	}
-	
-	@Override
-	public void onEnable() {
-		CommandAPI.onEnable(this);
-		
-		//Register commands, listeners etc.
-	}
+    }
+    
+    @Override
+    public void onEnable() {
+        CommandAPI.onEnable(this);
+        
+        //Register commands, listeners etc.
+    }
 
 }
 </code></pre>

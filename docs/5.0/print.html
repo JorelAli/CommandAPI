@@ -502,23 +502,23 @@ CommandAPI.onEnable(Plugin plugin);
 <h3><a class="header" href="#example---setting-up-the-commandapi-in-your-plugin" id="example---setting-up-the-commandapi-in-your-plugin">Example - Setting up the CommandAPI in your plugin</a></h3>
 <pre><code class="language-java">public class MyPlugin extends JavaPlugin {
 
-	@Override
-	public void onLoad() {
-		CommandAPI.onLoad(true); //Load with verbose output
+    @Override
+    public void onLoad() {
+        CommandAPI.onLoad(true); //Load with verbose output
         
         new CommandAPICommand(&quot;ping&quot;)
             .executes((sender, args) -&gt; {
                 sender.sendMessage(&quot;pong!&quot;);
             })
             .register();
-	}
-	
-	@Override
-	public void onEnable() {
-		CommandAPI.onEnable(this);
-		
-		//Register commands, listeners etc.
-	}
+    }
+    
+    @Override
+    public void onEnable() {
+        CommandAPI.onEnable(this);
+        
+        //Register commands, listeners etc.
+    }
 
 }
 </code></pre>
@@ -762,7 +762,8 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
     .executes((sender, args) -&gt; {
         String message = (String) args[0];
         Bukkit.getServer().broadcastMessage(message);
-    }).register();
+    })
+    .register();
 </code></pre>
 <p>Note how when we finish up our implementation of <code>.executes()</code>, we don't return anything. This is unlike commands in the standard Bukkit API where the <code>onCommand</code> method returns a Boolean value:</p>
 <pre><code class="language-java">boolean onCommand(CommandSender, Command, String, String[])
@@ -794,7 +795,11 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 <div class="example">
 <h3><a class="header" href="#example---a-suicide-command" id="example---a-suicide-command">Example - A <code>/suicide</code> command</a></h3>
 <p>Say we wanted to create a command <code>/suicide</code>, which kills the player that executes it. Since this command isn't really &quot;designed&quot; for command senders that are not players, we can restrict it so only players can execute this command (meaning that the console and command blocks cannot run this command). Since it's a player, we can use the <code>.executesPlayer()</code> method:</p>
-<pre><code class="language-java">{{#include examples/4.1suicide.java}}
+<pre><code class="language-java">new CommandAPICommand(&quot;suicide&quot;)
+	.executesPlayer((player, args) -&gt; {
+	    player.setHealth(0);
+	})
+	.register();
 </code></pre>
 </div>
 <hr />
@@ -803,7 +808,15 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 <p>Extending on the suicide example above, we could write another implementation for a different <code>CommandSender</code>. Here, we write an implementation to make entities (non-player) go out with a bang when they run the command (using <code>/execute as &lt;entity&gt; run &lt;command&gt;</code> command).</p>
 <div class="example">
 <h3><a class="header" href="#example---a-suicide-command-with-different-implementations" id="example---a-suicide-command-with-different-implementations">Example - A <code>/suicide</code> command with different implementations</a></h3>
-<pre><code class="language-java">{{#include examples/4.1suicide2.java}}
+<pre><code class="language-java">new CommandAPICommand(&quot;suicide&quot;)
+    .executesPlayer((player, args) -&gt; {
+        player.setHealth(0);
+    })
+    .executesEntity((entity, args) -&gt; {
+        entity.getWorld().createExplosion(entity.getLocation(), 4);
+        entity.remove();
+    })
+    .register();
 </code></pre>
 <p>This saves having to use <code>instanceof</code> multiple times to check the type of the <code>CommandSender</code>.</p>
 </div>
@@ -824,8 +837,8 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 <p>Say we have a command which kills the sender of a command. This is easily implemented as follows:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;killme&quot;)
     .executesPlayer((player, args) -&gt; {
-		player.setHealth(0);
-	})
+        player.setHealth(0);
+    })
     .register();
 </code></pre>
 <p>But what if the sender of the command is <em>not</em> a player? By using Minecraft's <code>/execute</code> command, we could execute the command as <em>any</em> arbitrary entity, as shown with the command below:</p>
@@ -834,16 +847,16 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 <p>To handle this case, we can use the <code>.executesProxy()</code> method to ensure that the command sender is a <code>ProxiedCommandSender</code>. Then, we can kill the <code>callee</code> <em>(the entity which is being 'forced' to run the command /killme)</em></p>
 <pre><code class="language-java">new CommandAPICommand(&quot;killme&quot;)
     .executesPlayer((player, args) -&gt; {
-		player.setHealth(0);
-	})
+        player.setHealth(0);
+    })
     .executesProxy((proxy, args) -&gt; {
-		//Check if the callee is an Entity
-		if(proxy.getCallee() instanceof LivingEntity) {
+        //Check if the callee is an Entity
+        if(proxy.getCallee() instanceof LivingEntity) {
 
-			//If so, kill the entity
-			LivingEntity target = (LivingEntity) proxy.getCallee();
-			target.setHealth(0);
-		}
+            //If so, kill the entity
+            LivingEntity target = (LivingEntity) proxy.getCallee();
+            target.setHealth(0);
+        }
     })
     .register();
 </code></pre>
@@ -940,11 +953,8 @@ new CommandAPICommand(&quot;randomnumber&quot;)
 </code></pre>
 <p>Now we write our implementation for <code>/givereward</code>. In this example, we use the <code>EntitySelectorArgument</code> to select a single player. We cast it to <code>Player</code> and then add the items to their inventory.</p>
 <pre><code class="language-java">//Register reward giving system for a target player
-List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
-arguments.add(new EntitySelectorArgument(&quot;target&quot;, EntitySelector.ONE_PLAYER));
-
 new CommandAPICommand(&quot;givereward&quot;)
-    .withArguments(arguments)
+    .withArguments(new EntitySelectorArgument(&quot;target&quot;, EntitySelector.ONE_PLAYER))
     .executes((sender, args) -&gt; {
         Player player = (Player) args[0];
         player.getInventory().addItem(new ItemStack(Material.DIAMOND, 64));
@@ -980,13 +990,14 @@ new CommandAPICommand(&quot;getfruit&quot;)
     .withArguments(arguments)
     .executes((sender, args) -&gt; {
         String inputFruit = (String) args[0];
-        if(fruit.contains(inputFruit)) {
+        
+        if(Arrays.binarySearch(fruit, inputFruit) &gt;= 0) {
             //Do something with inputFruit
         } else {
             //The player's input is not in the list of fruit
             CommandAPI.fail(&quot;That fruit doesn't exist!&quot;);
         }
-	})
+    })
     .register();
 </code></pre>
 </div>
@@ -2886,9 +2897,9 @@ new CustomArgumentException(MessageBuilder message);
 <p>Say we have a command <code>/killall</code> that simply kills all entities in all worlds on the server. If we were to register this in our <code>onLoad()</code> method, this would allow us to use the <code>/killall</code> command in Minecraft functions and tags.</p>
 <pre><code class="language-java">public class Main extends JavaPlugin {
 
-	@Override
-	public void onLoad() {
-		//Commands which will be used in Minecraft functions are registered here
+    @Override
+    public void onLoad() {
+        //Commands which will be used in Minecraft functions are registered here
 
         new CommandAPICommand(&quot;killall&quot;)
             .executes((sender, args) -&gt; {
@@ -2896,7 +2907,7 @@ new CustomArgumentException(MessageBuilder message);
                 Bukkit.getWorlds().forEach(w -&gt; w.getLivingEntities().forEach(e -&gt; e.setHealth(0)));
         	})
             .register();
-	}
+    }
     
     @Override
     public void onEnable() {
@@ -2962,21 +2973,20 @@ say Killed all living entities on the server
 <p>The CommandAPI includes the <code>FunctionWrapper</code> class which is a wrapper for Minecraft's functions. It allows you to execute the commands that are represented by the respective <code>.mcfunction</code> file.</p>
 <h2><a class="header" href="#functionwrapper-methods" id="functionwrapper-methods">FunctionWrapper methods</a></h2>
 <p>The <code>FunctionWrapper</code> class has the following methods:</p>
-<pre><code class="language-java">String[] getCommands();
-void run();
-void runAs(Entity e);
-NamespacedKey getKey();
+<pre><code class="language-java">class FunctionWrapper implements Keyed {
+    String[] getCommands();
+	void run();
+	void runAs(Entity e);
+	NamespacedKey getKey();
+}
 </code></pre>
 <p>These methods allow you to interact with the Minecraft function that this class wraps.</p>
 <h3><a class="header" href="#getcommands" id="getcommands"><code>getCommands()</code></a></h3>
 <p>The <code>getCommands()</code> method returns a <code>String[]</code> that contains the list of commands that the Minecraft function &quot;holds&quot;. In other words, running this Minecraft function is basically as simple as iterating through its commands and running them in order. The commands that this <code>String[]</code> holds are the raw strings that this function represents - in other words, it can include things such as <code>@p</code> and <code>~ ~ ~</code> instead of &quot;filled in&quot; values.</p>
 <h3><a class="header" href="#run" id="run"><code>run()</code></a></h3>
 <p>The <code>run()</code> method basically does what it says on the tin - it runs the function. The command executor that runs this function is the command executor that was used to retrieve it. For example, if a player in-game populated this argument, then the player will be filled in for <code>@p</code> and the player's location would be used for things such as <code>~ ~ ~</code>:</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;function&quot;, new FunctionArgument());
-
-new CommandAPICommand(&quot;runfunc&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;runfunc&quot;)
+    .withArguments(new FunctionArgument(&quot;function&quot;))
 	.executes((sender, args) -&gt; {
         FunctionWrapper[] functions = (FunctionWrapper[]) args[0];
         for(FunctionWrapper function : functions) {
@@ -2997,11 +3007,8 @@ new CommandAPICommand(&quot;runfunc&quot;)
 <pre><code>/runfunction &lt;function&gt;
 </code></pre>
 <p>When provided with a function, it will execute that function. If instead a tag is provided, it will execute that tag (i.e. execute all functions declared in that tag).</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;function&quot;, new FunctionArgument());
-
-new CommandAPICommand(&quot;runfunction&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;runfunction&quot;)
+    .withArguments(new FunctionArgument(&quot;function&quot;))
     .executes((sender, args) -&gt; {
         FunctionWrapper[] functions = (FunctionWrapper[]) args[0];
 
@@ -3026,7 +3033,13 @@ new CommandAPICommand(&quot;runfunction&quot;)
 <div class="example">
 <h3><a class="header" href="#example---god-command-with-permissions" id="example---god-command-with-permissions">Example - /god command with permissions</a></h3>
 <p>Say we created a command <code>/god</code> that sets a player as being invulnerable. Since this is a pretty non-survival command, we want to restrict who can run this command. As such, we want our player to have the permission <code>command.god</code> in order to run this command. To do this, we simply use the <code>withPermission(CommandPermission)</code> method from our command builder:</p>
-<pre><code class="language-java">{{ #include examples/7cmdperms.java }}
+<pre><code class="language-java">// Register the /god command with the permission node &quot;command.god&quot;
+new CommandAPICommand(&quot;god&quot;)
+    .withPermission(CommandPermission.fromString(&quot;command.god&quot;))
+    .executesPlayer((player, args) -&gt; {
+        player.setInvulnerable(true);
+    })
+    .register();
 </code></pre>
 </div>
 <hr />
@@ -3046,10 +3059,21 @@ new CommandAPICommand(&quot;runfunction&quot;)
 /kill &lt;target&gt; - Kills a target player
 </code></pre>
 <p>We first declare the command as normal. Nothing fancy is going on here:</p>
-<pre><code class="language-java">{{ #include examples/7argperms1.java }}
+<pre><code class="language-java">// Register /kill command normally. Since no permissions are applied, anyone can run this command
+new CommandAPICommand(&quot;kill&quot;)
+    .executesPlayer((player, args) -&gt; {
+        player.setHealth(0);
+    })
+    .register();
 </code></pre>
 <p>Now we declare our command with arguments. We use a <code>PlayerArgument</code> and apply the permission <em>to the argument</em>. After that, we register our command as normal:</p>
-<pre><code class="language-java">{{ #include examples/7argperms2.java }}
+<pre><code class="language-java">// Adds the OP permission to the &quot;target&quot; argument. The sender requires OP to execute /kill &lt;target&gt;
+new CommandAPICommand(&quot;kill&quot;)
+    .withArguments(new PlayerArgument(&quot;target&quot;).withPermission(CommandPermission.OP))
+    .executesPlayer((player, args) -&gt; {
+        ((Player) args[0]).setHealth(0);
+    })
+    .register();
 </code></pre>
 </div>
 <hr />
@@ -3263,7 +3287,28 @@ public void onEnable() {
 <div class="example">
 <h3><a class="header" href="#example---using-aliases-for-getpos" id="example---using-aliases-for-getpos">Example - Using aliases for /getpos</a></h3>
 <p>In this example, we register the command <code>/getpos</code> that returns the command sender's location. We apply the aliases <code>/getposition</code>, <code>/getloc</code>, <code>/getlocation</code> and <code>/whereami</code> as well, using the <code>withAliases()</code> method.</p>
-<pre><code class="language-java">{{ #include examples/8aliases.java }}
+<pre><code class="language-java">new CommandAPICommand(&quot;getpos&quot;)
+	// Declare your aliases
+	.withAliases(&quot;getposition&quot;, &quot;getloc&quot;, &quot;getlocation&quot;, &quot;whereami&quot;)
+	  
+	    //Declare your implementation
+	.executesEntity((entity, args) -&gt; {
+	    entity.sendMessage(String.format(&quot;You are at %d, %d, %d&quot;, 
+	        entity.getLocation().getBlockX(), 
+	        entity.getLocation().getBlockY(), 
+	        entity.getLocation().getBlockZ())
+	    );
+	})
+	.executesCommandBlock((block, args) -&gt; {
+	    block.sendMessage(String.format(&quot;You are at %d, %d, %d&quot;, 
+	            block.getBlock().getLocation().getBlockX(), 
+	            block.getBlock().getLocation().getBlockY(), 
+	            block.getBlock().getLocation().getBlockZ())
+	        );
+	    })
+	  
+	    //Register the command
+	.register();
 </code></pre>
 </div><h1><a class="header" href="#command-conversion-1" id="command-conversion-1">Command conversion</a></h1>
 <blockquote>

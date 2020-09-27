@@ -29,25 +29,7 @@ In order to use a command from your plugin in a `.mcfunction` file, you must reg
 Say we have a command `/killall` that simply kills all entities in all worlds on the server. If we were to register this in our `onLoad()` method, this would allow us to use the `/killall` command in Minecraft functions and tags.
 
 ```java
-public class Main extends JavaPlugin {
-
-	@Override
-	public void onLoad() {
-		//Commands which will be used in Minecraft functions are registered here
-
-        new CommandAPICommand("killall")
-            .executes((sender, args) -> {
-                //Kills all enemies in all worlds
-                Bukkit.getWorlds().forEach(w -> w.getLivingEntities().forEach(e -> e.setHealth(0)));
-        	})
-            .register();
-	}
-    
-    @Override
-    public void onEnable() {
-        //Register all other commands here
-    } 
-}
+public {{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:functionregistration}}
 ```
 
 </div>

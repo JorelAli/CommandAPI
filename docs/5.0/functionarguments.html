@@ -184,11 +184,8 @@
 <pre><code>/runfunction &lt;function&gt;
 </code></pre>
 <p>When provided with a function, it will execute that function. If instead a tag is provided, it will execute that tag (i.e. execute all functions declared in that tag).</p>
-<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
-arguments.put(&quot;function&quot;, new FunctionArgument());
-
-new CommandAPICommand(&quot;runfunction&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;runfunction&quot;)
+    .withArguments(new FunctionArgument(&quot;function&quot;))
     .executes((sender, args) -&gt; {
         FunctionWrapper[] functions = (FunctionWrapper[]) args[0];
 

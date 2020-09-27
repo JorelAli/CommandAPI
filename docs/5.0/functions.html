@@ -195,9 +195,9 @@
 <p>Say we have a command <code>/killall</code> that simply kills all entities in all worlds on the server. If we were to register this in our <code>onLoad()</code> method, this would allow us to use the <code>/killall</code> command in Minecraft functions and tags.</p>
 <pre><code class="language-java">public class Main extends JavaPlugin {
 
-	@Override
-	public void onLoad() {
-		//Commands which will be used in Minecraft functions are registered here
+    @Override
+    public void onLoad() {
+        //Commands which will be used in Minecraft functions are registered here
 
         new CommandAPICommand(&quot;killall&quot;)
             .executes((sender, args) -&gt; {
@@ -205,7 +205,7 @@
                 Bukkit.getWorlds().forEach(w -&gt; w.getLivingEntities().forEach(e -&gt; e.setHealth(0)));
         	})
             .register();
-	}
+    }
     
     @Override
     public void onEnable() {

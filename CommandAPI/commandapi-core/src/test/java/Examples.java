@@ -1,9 +1,11 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 
 import org.bukkit.Bukkit;
@@ -28,6 +30,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ComplexRecipe;
 import org.bukkit.inventory.ItemStack;
@@ -47,6 +50,7 @@ import org.bukkit.util.EulerAngle;
 import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.arguments.AdvancementArgument;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.BiomeArgument;
@@ -64,6 +68,7 @@ import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
 import dev.jorel.commandapi.arguments.EntityTypeArgument;
 import dev.jorel.commandapi.arguments.EnvironmentArgument;
+import dev.jorel.commandapi.arguments.FunctionArgument;
 import dev.jorel.commandapi.arguments.GreedyStringArgument;
 import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.IntegerRangeArgument;
@@ -91,6 +96,7 @@ import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.arguments.TeamArgument;
 import dev.jorel.commandapi.arguments.TextArgument;
 import dev.jorel.commandapi.arguments.TimeArgument;
+import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.IntegerRange;
 import dev.jorel.commandapi.wrappers.MathOperation;
 import dev.jorel.commandapi.wrappers.Rotation;
@@ -108,7 +114,6 @@ public class Examples extends JavaPlugin {
  * To manage scope between each example, these should be encased
  * in curly braces {}.
  */
-public void examples() {
 
 {
 /* ANCHOR: booleanargs */
@@ -772,8 +777,6 @@ new CommandAPICommand("tpworld")
 /* ANCHOR_END: customarguments */
 }
 
-} // examples() function end
-
 /* ANCHOR: customarguments2 */
 //Function that returns our custom argument
 public Argument worldArgument(String nodeName) {
@@ -795,4 +798,284 @@ public Argument worldArgument(String nodeName) {
 }
 /* ANCHOR_END: customarguments2 */
 
+{
+/* ANCHOR: functionarguments */
+new CommandAPICommand("runfunc")
+    .withArguments(new FunctionArgument("function"))
+	.executes((sender, args) -> {
+        FunctionWrapper[] functions = (FunctionWrapper[]) args[0];
+        for(FunctionWrapper function : functions) {
+            function.run(); // The command executor in this case is 'sender'
+        }
+    })
+    .register();
+/* ANCHOR_END: functionarguments */
+}
+
+{
+/* ANCHOR: functionarguments2 */
+new CommandAPICommand("runfunction")
+    .withArguments(new FunctionArgument("function"))
+    .executes((sender, args) -> {
+        FunctionWrapper[] functions = (FunctionWrapper[]) args[0];
+
+        //Run all functions in our FunctionWrapper[]
+        for(FunctionWrapper function : functions) {
+            function.run();
+        }
+    })
+    .register();
+/* ANCHOR_END: functionarguments2 */
+}
+
+{
+/* ANCHOR: permissions */
+// Register the /god command with the permission node "command.god"
+new CommandAPICommand("god")
+    .withPermission(CommandPermission.fromString("command.god"))
+    .executesPlayer((player, args) -> {
+        player.setInvulnerable(true);
+    })
+    .register();
+/* ANCHOR_END: permissions */
+}
+
+{
+/* ANCHOR: permissions2 */
+// Register /kill command normally. Since no permissions are applied, anyone can run this command
+new CommandAPICommand("kill")
+    .executesPlayer((player, args) -> {
+        player.setHealth(0);
+    })
+    .register();
+/* ANCHOR_END: permissions2 */
+}
+
+{
+/* ANCHOR: permissions3 */
+// Adds the OP permission to the "target" argument. The sender requires OP to execute /kill <target>
+new CommandAPICommand("kill")
+    .withArguments(new PlayerArgument("target").withPermission(CommandPermission.OP))
+    .executesPlayer((player, args) -> {
+        ((Player) args[0]).setHealth(0);
+    })
+    .register();
+/* ANCHOR_END: permissions3 */
+}
+
+{
+/* ANCHOR: aliases */
+new CommandAPICommand("getpos")
+	// Declare your aliases
+	.withAliases("getposition", "getloc", "getlocation", "whereami")
+	  
+	    //Declare your implementation
+	.executesEntity((entity, args) -> {
+	    entity.sendMessage(String.format("You are at %d, %d, %d", 
+	        entity.getLocation().getBlockX(), 
+	        entity.getLocation().getBlockY(), 
+	        entity.getLocation().getBlockZ())
+	    );
+	})
+	.executesCommandBlock((block, args) -> {
+	    block.sendMessage(String.format("You are at %d, %d, %d", 
+	            block.getBlock().getLocation().getBlockX(), 
+	            block.getBlock().getLocation().getBlockY(), 
+	            block.getBlock().getLocation().getBlockZ())
+	        );
+	    })
+	  
+	    //Register the command
+	.register();
+/* ANCHOR_END: aliases */
+}
+
+{
+/* ANCHOR: normalcommandexecutors */
+new CommandAPICommand("suicide")
+	.executesPlayer((player, args) -> {
+	    player.setHealth(0);
+	})
+	.register();
+/* ANCHOR_END: normalcommandexecutors */
+}
+
+{
+/* ANCHOR: normalcommandexecutors2 */
+new CommandAPICommand("suicide")
+    .executesPlayer((player, args) -> {
+        player.setHealth(0);
+    })
+    .executesEntity((entity, args) -> {
+        entity.getWorld().createExplosion(entity.getLocation(), 4);
+        entity.remove();
+    })
+    .register();
+/* ANCHOR_END: normalcommandexecutors2 */
+}
+
+{
+/* ANCHOR: normalcommandexecutors3 */
+//Create our command
+new CommandAPICommand("broadcastmsg")
+    .withArguments(new GreedyStringArgument("message")) // The arguments
+    .withAliases("broadcast", "broadcastmessage")       // Command aliases
+    .withPermission(CommandPermission.OP)               // Required permissions
+    .executes((sender, args) -> {
+        String message = (String) args[0];
+        Bukkit.getServer().broadcastMessage(message);
+    })
+    .register();
+/* ANCHOR_END: normalcommandexecutors3 */
+}
+
+{
+/* ANCHOR: proxysender */
+new CommandAPICommand("killme")
+    .executesPlayer((player, args) -> {
+        player.setHealth(0);
+    })
+    .register();
+/* ANCHOR_END: proxysender */
+}
+
+{
+/* ANCHOR: proxysender2 */
+new CommandAPICommand("killme")
+    .executesPlayer((player, args) -> {
+        player.setHealth(0);
+    })
+    .executesProxy((proxy, args) -> {
+        //Check if the callee is an Entity
+        if(proxy.getCallee() instanceof LivingEntity) {
+
+            //If so, kill the entity
+            LivingEntity target = (LivingEntity) proxy.getCallee();
+            target.setHealth(0);
+        }
+    })
+    .register();
+/* ANCHOR_END: proxysender2 */
+}
+
+{
+/* ANCHOR: nativesender */
+new CommandAPICommand("break")
+    .executesNative((sender, args) -> {
+        Location location = (Location) sender.getLocation();
+        if(location != null) {
+            location.getBlock().breakNaturally();
+        }
+    })
+    .register();
+/* ANCHOR_END: nativesender */
+}
+
+{
+/* ANCHOR: resultingcommandexecutor */
+new CommandAPICommand("randnum")
+    .executes((sender, args) -> {
+        return new Random().nextInt();
+    })
+    .register();
+/* ANCHOR_END: resultingcommandexecutor */
+}
+
+{
+/* ANCHOR: resultingcommandexecutor2 */
+//Register random number generator command from 1 to 99 (inclusive)
+new CommandAPICommand("randomnumber")
+    .executes((sender, args) -> {
+        return ThreadLocalRandom.current().nextInt(1, 100); //Returns random number from 1 <= x < 100
+    })
+    .register();
+/* ANCHOR_END: resultingcommandexecutor2 */
+}
+
+{
+/* ANCHOR: resultingcommandexecutor3 */
+//Register reward giving system for a target player
+new CommandAPICommand("givereward")
+    .withArguments(new EntitySelectorArgument("target", EntitySelector.ONE_PLAYER))
+    .executes((sender, args) -> {
+        Player player = (Player) args[0];
+        player.getInventory().addItem(new ItemStack(Material.DIAMOND, 64));
+        Bukkit.broadcastMessage(player.getName() + " won a rare 64 diamonds from a loot box!");
+    })
+    .register();
+/* ANCHOR_END: resultingcommandexecutor3 */
+}
+
+{
+/* ANCHOR: commandfailures */
+//Array of fruit
+String[] fruit = new String[] {"banana", "apple", "orange"};
+
+//Argument accepting a String, suggested with the list of fruit
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new StringArgument("item").overrideSuggestions(fruit));
+
+//Register the command
+new CommandAPICommand("getfruit")
+    .withArguments(arguments)
+    .executes((sender, args) -> {
+        String inputFruit = (String) args[0];
+        
+        if(Arrays.binarySearch(fruit, inputFruit) >= 0) {
+            //Do something with inputFruit
+        } else {
+            //The player's input is not in the list of fruit
+            CommandAPI.fail("That fruit doesn't exist!");
+        }
+    })
+    .register();
+/* ANCHOR_END: commandfailures */
+}
+
 } // Examples class end
+
+/* ANCHOR: functionregistration */
+class Main extends JavaPlugin {
+
+    @Override
+    public void onLoad() {
+        //Commands which will be used in Minecraft functions are registered here
+
+        new CommandAPICommand("killall")
+            .executes((sender, args) -> {
+                //Kills all enemies in all worlds
+                Bukkit.getWorlds().forEach(w -> w.getLivingEntities().forEach(e -> e.setHealth(0)));
+        	})
+            .register();
+    }
+    
+    @Override
+    public void onEnable() {
+        //Register all other commands here
+    } 
+}
+/* ANCHOR_END: functionregistration */
+
+/* ANCHOR: shading */
+class MyPlugin extends JavaPlugin {
+
+    @Override
+    public void onLoad() {
+        CommandAPI.onLoad(true); //Load with verbose output
+        
+        new CommandAPICommand("ping")
+            .executes((sender, args) -> {
+                sender.sendMessage("pong!");
+            })
+            .register();
+    }
+    
+    @Override
+    public void onEnable() {
+        CommandAPI.onEnable(this);
+        
+        //Register commands, listeners etc.
+    }
+
+}
+/* ANCHOR_END: shading */

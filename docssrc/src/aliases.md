@@ -9,7 +9,7 @@ Aliases for commands can be added by using the `withAliases()` method when regis
 In this example, we register the command `/getpos` that returns the command sender's location. We apply the aliases `/getposition`, `/getloc`, `/getlocation` and `/whereami` as well, using the `withAliases()` method.
 
 ```java
-{{ #include examples/8aliases.java }}
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:aliases}}
 ```
 
 </div>
