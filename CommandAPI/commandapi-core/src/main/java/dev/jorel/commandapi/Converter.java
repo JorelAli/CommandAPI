@@ -57,6 +57,16 @@ public abstract class Converter {
 		convertPluginCommand((JavaPlugin) plugin, cmdName, arguments);
 	}
 	
+	/**
+	 * Convert a command stated in Plugin's plugin.yml file into CommandAPI-compatible commands
+	 * @param plugin The plugin where the command is registered
+	 * @param cmdName The command to convert
+	 * @param arguments The arguments that should be used to parse this command
+	 */
+	public static void convert(Plugin plugin, String cmdName, Argument... arguments) {
+		convertPluginCommand((JavaPlugin) plugin, cmdName, Arrays.asList(arguments));
+	}
+	
 	private static void convertPluginCommand(JavaPlugin plugin, String commandName, List<Argument> arguments) {
 		CommandAPI.getLog().info("Converting " + plugin.getName() + " command /" + commandName);
 		
