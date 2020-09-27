@@ -57,15 +57,7 @@ commands:
 Now that the target plugin has been loaded before the CommandAPI, we can now begin writing your plugin that uses the CommandAPI converter. We will call this plugin "YourPlugin":
 
 ```java
-public class YourPlugin extends JavaPlugin {
-    
-    @Override
-    public void onEnable() {
-        Converter.convert(Bukkit.getPluginManager().getPlugin("TargetPlugin"));
-        //Other code goes here...
-    }
-    
-}
+public {{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:converter}}
 ```
 
 When this is run, the commands `/gmc`, `/gm1`, `/gms` and `/i` will all be registered by the CommandAPI.
@@ -88,7 +80,8 @@ In addition to converting all commands from a target plugin, the CommandAPI allo
 
 ```java
 public static convert(Plugin plugin, String cmdName);
-public static convert(Plugin plugin, String cmdName, LinkedHashMap<String, Argument> arguments);
+public static convert(Plugin plugin, String cmdName, List<Argument> arguments);
+public static convert(Plugin plugin, String cmdName, Argument... arguments);
 ```
 
 In these commands, the `plugin` refers to the plugin which has the command you want to convert and `cmdName` is the name of the command declared in the target plugin's `plugin.yml` file (just the main command, not the aliases!).
@@ -120,28 +113,7 @@ From this, we can determine that there are the following commands, where "walk" 
 With the EssentialsX plugin, the `<speed>` value can only take numbers between 0 and 10. As such, we'll ensure to apply these limits using the `IntegerArgument`. In addition, since the speed type can only be "walk" or "fly", we'll add that to our converter as well using a `MultiLiteralArgument`:
 
 ```java
-Plugin essentials = Bukkit.getPluginManager().getPlugin("Essentials");
-
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-
-// /speed <speed>
-arguments.put("speed", new IntegerArgument(0, 10));
-Converter.convert(essentials, "speed", arguments);
-
-// /speed <target>
-arguments.put("target", new PlayerArgument());
-Converter.convert(essentials, "speed", arguments);
-
-arguments.clear();
-
-// /speed <walk/fly> <speed>
-arguments.put("type", new MultiLiteralArgument("walk", "fly"));
-arguments.put("speed", new IntegerArgument(0, 10));
-Converter.convert(essentials, "speed", arguments);
-
-// /speed <walk/fly> <speed> <target>
-arguments.put("target", new PlayerArgument());
-Converter.convert(essentials, "speed", arguments);
+public {{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:converter2}}
 ```
 
 ![](./images/speed.gif)

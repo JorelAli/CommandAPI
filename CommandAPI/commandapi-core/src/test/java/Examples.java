@@ -43,6 +43,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.loot.LootContext;
 import org.bukkit.loot.LootTable;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -56,6 +57,7 @@ import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandPermission;
+import dev.jorel.commandapi.Converter;
 import dev.jorel.commandapi.arguments.AdvancementArgument;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.BiomeArgument;
@@ -1190,6 +1192,31 @@ arguments.add(new LiteralArgument("tp").withRequirement(testIfPlayerHasParty));
 /* ANCHOR_END: predicatetips3 */
 }
 
+{
+/* ANCHOR: converter2 */
+Plugin essentials = Bukkit.getPluginManager().getPlugin("Essentials");
+
+// /speed <speed>
+Converter.convert(essentials, "speed", new IntegerArgument("speed", 0, 10));
+
+// /speed <target>
+Converter.convert(essentials, "speed", new PlayerArgument("target"));
+
+// /speed <walk/fly> <speed>
+Converter.convert(essentials, "speed", 
+	new MultiLiteralArgument("walk", "fly"), 
+	new IntegerArgument("speed", 0, 10)
+	);
+
+// /speed <walk/fly> <speed> <target>
+Converter.convert(essentials, "speed", 
+	new MultiLiteralArgument("walk", "fly"), 
+	new IntegerArgument("speed", 0, 10), 
+	new PlayerArgument("target")
+	);
+/* ANCHOR_END: converter2 */
+}
+
 } // Examples class end
 
 /* ANCHOR: functionregistration */
@@ -1237,3 +1264,15 @@ class MyPlugin extends JavaPlugin {
 
 }
 /* ANCHOR_END: shading */
+
+/* ANCHOR: converter */
+class YourPlugin extends JavaPlugin {
+    
+    @Override
+    public void onEnable() {
+        Converter.convert(Bukkit.getPluginManager().getPlugin("TargetPlugin"));
+        //Other code goes here...
+    }
+    
+}
+/* ANCHOR_END: converter */

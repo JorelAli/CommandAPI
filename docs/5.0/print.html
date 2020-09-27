@@ -3374,7 +3374,8 @@ commands:
 <h2><a class="header" href="#only-specific-commands" id="only-specific-commands">Only specific commands</a></h2>
 <p>In addition to converting all commands from a target plugin, the CommandAPI allows you to convert single commands at a time using the following methods from the <code>Converter</code> class:</p>
 <pre><code class="language-java">public static convert(Plugin plugin, String cmdName);
-public static convert(Plugin plugin, String cmdName, LinkedHashMap&lt;String, Argument&gt; arguments);
+public static convert(Plugin plugin, String cmdName, List&lt;Argument&gt; arguments);
+public static convert(Plugin plugin, String cmdName, Argument... arguments);
 </code></pre>
 <p>In these commands, the <code>plugin</code> refers to the plugin which has the command you want to convert and <code>cmdName</code> is the name of the command declared in the target plugin's <code>plugin.yml</code> file (just the main command, not the aliases!).</p>
 <p>The <code>LinkedHashMap&lt;String, Argument&gt;</code> can be used to provide argument checks that lets you apply the command UI to a bukkit command.</p>
@@ -3393,28 +3394,26 @@ public static convert(Plugin plugin, String cmdName, LinkedHashMap&lt;String, Ar
 /speed &lt;walk/fly&gt; &lt;speed&gt; &lt;target&gt;
 </code></pre>
 <p>With the EssentialsX plugin, the <code>&lt;speed&gt;</code> value can only take numbers between 0 and 10. As such, we'll ensure to apply these limits using the <code>IntegerArgument</code>. In addition, since the speed type can only be &quot;walk&quot; or &quot;fly&quot;, we'll add that to our converter as well using a <code>MultiLiteralArgument</code>:</p>
-<pre><code class="language-java">Plugin essentials = Bukkit.getPluginManager().getPlugin(&quot;Essentials&quot;);
-
-LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+<pre><code class="language-java">public Plugin essentials = Bukkit.getPluginManager().getPlugin(&quot;Essentials&quot;);
 
 // /speed &lt;speed&gt;
-arguments.put(&quot;speed&quot;, new IntegerArgument(0, 10));
-Converter.convert(essentials, &quot;speed&quot;, arguments);
+Converter.convert(essentials, &quot;speed&quot;, new IntegerArgument(&quot;speed&quot;, 0, 10));
 
 // /speed &lt;target&gt;
-arguments.put(&quot;target&quot;, new PlayerArgument());
-Converter.convert(essentials, &quot;speed&quot;, arguments);
-
-arguments.clear();
+Converter.convert(essentials, &quot;speed&quot;, new PlayerArgument(&quot;target&quot;));
 
 // /speed &lt;walk/fly&gt; &lt;speed&gt;
-arguments.put(&quot;type&quot;, new MultiLiteralArgument(&quot;walk&quot;, &quot;fly&quot;));
-arguments.put(&quot;speed&quot;, new IntegerArgument(0, 10));
-Converter.convert(essentials, &quot;speed&quot;, arguments);
+Converter.convert(essentials, &quot;speed&quot;, 
+	new MultiLiteralArgument(&quot;walk&quot;, &quot;fly&quot;), 
+	new IntegerArgument(&quot;speed&quot;, 0, 10)
+	);
 
 // /speed &lt;walk/fly&gt; &lt;speed&gt; &lt;target&gt;
-arguments.put(&quot;target&quot;, new PlayerArgument());
-Converter.convert(essentials, &quot;speed&quot;, arguments);
+Converter.convert(essentials, &quot;speed&quot;, 
+	new MultiLiteralArgument(&quot;walk&quot;, &quot;fly&quot;), 
+	new IntegerArgument(&quot;speed&quot;, 0, 10), 
+	new PlayerArgument(&quot;target&quot;)
+	);
 </code></pre>
 <p><img src="./images/speed.gif" alt="" /></p>
 </div>
