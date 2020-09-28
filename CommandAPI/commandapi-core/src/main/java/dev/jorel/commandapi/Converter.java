@@ -92,7 +92,7 @@ public abstract class Converter {
 		new CommandAPICommand(commandName)
 			.withPermission(permissionNode)
 			.withAliases(aliases)
-			.executes((sender, args) -> { plugin.getCommand(commandName).execute(sender, commandName, new String[0]); })
+			.executesProxy((sender, args) -> { plugin.getCommand(commandName).execute(sender.getCallee(), commandName, new String[0]); })
 			.register();
 		
 		//Multiple arguments		
@@ -100,11 +100,11 @@ public abstract class Converter {
 			.withPermission(permissionNode)
 			.withAliases(aliases)
 			.withArguments(arguments)
-			.executes((sender, args) -> { 
+			.executesProxy((sender, args) -> { 
 				if(arguments.equals(PLAIN_ARGUMENTS)) {
-					plugin.getCommand(commandName).execute(sender, commandName, ((String) args[0]).split(" "));
+					plugin.getCommand(commandName).execute(sender.getCallee(), commandName, ((String) args[0]).split(" "));
 				} else {
-					plugin.getCommand(commandName).execute(sender, commandName, (String[]) args);
+					plugin.getCommand(commandName).execute(sender.getCallee(), commandName, (String[]) args);
 				}
 			})
 			.register();
