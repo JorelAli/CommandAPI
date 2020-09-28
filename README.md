@@ -123,6 +123,15 @@ These versions of Minecraft must be installed in your local machine's Maven repo
     </thead>
     <tbody>
         <tr>
+            <td valign="top"><b>4.3b</b></td>
+            <td valign="top">September 2020</td>
+            <td valign="top">
+                <ul>
+                    <li>Fixes minor command sender related bugs from 4.3a. Fixes permissions with <code>/execute ... as ...</code> from converted commands</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
             <td valign="top"><b>4.3a</b></td>
             <td valign="top">September 2020</td>
             <td valign="top">

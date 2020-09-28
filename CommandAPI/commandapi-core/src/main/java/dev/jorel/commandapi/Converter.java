@@ -1,10 +1,16 @@
 package dev.jorel.commandapi;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -92,7 +98,7 @@ public abstract class Converter {
 		new CommandAPICommand(commandName)
 			.withPermission(permissionNode)
 			.withAliases(aliases)
-			.executesProxy((sender, args) -> { plugin.getCommand(commandName).execute(sender.getCallee(), commandName, new String[0]); })
+			.executesNative((sender, args) -> { plugin.getCommand(commandName).execute(of(sender), commandName, new String[0]); })
 			.register();
 		
 		//Multiple arguments		
@@ -100,14 +106,48 @@ public abstract class Converter {
 			.withPermission(permissionNode)
 			.withAliases(aliases)
 			.withArguments(arguments)
-			.executesProxy((sender, args) -> { 
+			.executesNative((sender, args) -> { 
 				if(arguments.equals(PLAIN_ARGUMENTS)) {
-					plugin.getCommand(commandName).execute(sender.getCallee(), commandName, ((String) args[0]).split(" "));
+					plugin.getCommand(commandName).execute(of(sender), commandName, ((String) args[0]).split(" "));
 				} else {
-					plugin.getCommand(commandName).execute(sender.getCallee(), commandName, (String[]) args);
+					plugin.getCommand(commandName).execute(of(sender), commandName, (String[]) args);
 				}
 			})
 			.register();
 	}
+	
+	private static CommandSender of(ProxiedCommandSender proxy) {
+		CommandSender sender = (CommandSender) Proxy.newProxyInstance(CommandSender.class.getClassLoader(),
+				proxy.getCallee().getClass().getInterfaces(), new CommandSenderHandler(proxy));
+		
+		return sender;
+	}
+	
+	static class CommandSenderHandler implements InvocationHandler {
+		
+        private final ProxiedCommandSender proxiedCommandSender;
+        
+        public CommandSenderHandler(ProxiedCommandSender proxiedCommandSender) {
+            this.proxiedCommandSender = proxiedCommandSender;
+        }
+
+		public Object invoke(Object proxy, Method method, Object[] args)
+				throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+			
+			switch(method.getName()) {
+			case "isPermissionSet":
+			case "hasPermission":
+			case "addAttachment":
+			case "removeAttachment":
+			case "recalculatePermissions":
+			case "getEffectivePermissions":
+			case "isOp":
+			case "setOp":
+				return method.invoke(proxiedCommandSender.getCaller(), args);
+			default:
+				return method.invoke(proxiedCommandSender.getCallee(), args);
+			}
+        }
+    }
 	
 }
