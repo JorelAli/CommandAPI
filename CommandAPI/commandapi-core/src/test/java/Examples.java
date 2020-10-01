@@ -1225,7 +1225,7 @@ Converter.convert(essentials, "speed",
 /* ANCHOR: brigadier */
 /* ANCHOR: declareliteral */
 //Register literal "randomchance"
-LiteralCommandNode randomChance = Brigadier.registerNewLiteral("randomchance");
+LiteralCommandNode randomChance = Brigadier.fromLiteralArgument(new LiteralArgument("randomchance")).build();
 /* ANCHOR_END: declareliteral */
 
 /* ANCHOR: declarearguments */
@@ -1237,9 +1237,9 @@ arguments.add(new IntegerArgument("denominator", 1));
 
 //Get brigadier argument objects
 /* ANCHOR: declareargumentbuilders */
-ArgumentBuilder numerator = Brigadier.argBuildOf(arguments, "numerator");
+ArgumentBuilder numerator = Brigadier.fromArgument(arguments, "numerator");
 /* ANCHOR: declarefork */
-ArgumentBuilder denominator = Brigadier.argBuildOf(arguments, "denominator")
+ArgumentBuilder denominator = Brigadier.fromArgument(arguments, "denominator")
 /* ANCHOR_END: declareargumentbuilders */
     //Fork redirecting to "execute" and state our predicate
     .fork(Brigadier.getRootNode().getChild("execute"), Brigadier.fromPredicate((sender, args) -> {

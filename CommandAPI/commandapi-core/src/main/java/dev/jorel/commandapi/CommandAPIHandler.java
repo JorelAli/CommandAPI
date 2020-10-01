@@ -764,25 +764,13 @@ public abstract class CommandAPIHandler {
 		}
 		
 		/**
-		 * Registers a new literal argument builder into the CommandDispatcher. This
-		 * returns a new LiteralCommandNode. Internally, this constructs a new literal
-		 * argument builder from the provided literal name and then registers it using
+		 * Creates a new literal argument builder from a CommandAPI LiteralArgument
 		 * 
-		 * <code>
-		 * Brigadier.getCommandDispatcher().register(...);
-		 * </code>
-		 * 
-		 * This is the equivalent of running the following code:
-		 * 
-		 * <pre>
-		 * Brigadier.getCommandDispatcher().register(LiteralArgumentBuilder.literal(name));
-		 * </pre>
-		 * 
-		 * @param name the name of the literal to add
-		 * @return a LiteralCommandNode of the literal within the CommandDispatcher
+		 * @param the LiteralArgument to convert from
+		 * @return a LiteralArgumentBuilder that represents the literal
 		 */
-		public static LiteralCommandNode registerNewLiteral(String name) {
-			return DISPATCHER.register(getLiteralArgumentBuilder(name));
+		public static LiteralArgumentBuilder fromLiteralArgument(LiteralArgument literalArgument) {
+			return getLiteralArgumentBuilderArgument(literalArgument.getLiteral(), literalArgument.getArgumentPermission(), literalArgument.getRequirements());
 		}
 		
 		/**
@@ -836,7 +824,7 @@ public abstract class CommandAPIHandler {
 		 * List<Argument> arguments = new ArrayList<>();
 		 * arguments.add(new IntegerArgument("hello"));
 		 * 
-		 * RequiredArgumentBuilder argBuilder = Brigadier.argBuildOf(arguments, "hello");
+		 * RequiredArgumentBuilder argBuilder = Brigadier.fromArguments(arguments, "hello");
 		 * </pre>
 		 * 
 		 * @param args  the List of arguments which you typically declare for
@@ -844,7 +832,7 @@ public abstract class CommandAPIHandler {
 		 * @param value the name of the argument you want to specify
 		 * @return a RequiredArgumentBuilder that represents the provided argument
 		 */
-		public static RequiredArgumentBuilder argBuildOf(List<Argument> args, String value) {
+		public static RequiredArgumentBuilder fromArgument(List<Argument> args, String value) {
 			return getRequiredArgumentBuilderDynamic(args, getArgument(args, value));
 		}
 		
@@ -858,7 +846,7 @@ public abstract class CommandAPIHandler {
 		 * @param argument the argument to create a RequiredArgumentBuilder of
 		 * @return a RequiredArgumentBuilder that represents the provided argument
 		 */
-		public static RequiredArgumentBuilder argBuildOf(Argument argument) {
+		public static RequiredArgumentBuilder fromArgument(Argument argument) {
 			List<Argument> arguments = new ArrayList<>();
 			arguments.add(argument);
 			return getRequiredArgumentBuilderDynamic(arguments, argument);
