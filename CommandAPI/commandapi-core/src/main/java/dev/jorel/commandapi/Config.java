@@ -25,22 +25,17 @@ class Config {
 
 	// List of plugins to convert
 	private final Map<Plugin, String[]> pluginsToConvert;
+	
+	private final Map<String, String[]> pluginsForDeferredConversion;
 
 	public Config(FileConfiguration fileConfig) {
 		verboseOutput = fileConfig.getBoolean("verbose-outputs");
 		createDispatcherFile = fileConfig.getBoolean("create-dispatcher-json");
 		pluginsToConvert = new HashMap<>();
+		pluginsForDeferredConversion = new HashMap<>();
 
 		for (Map<?, ?> map : fileConfig.getMapList("plugins-to-convert")) {
-			String pluginName = (String) map.keySet().stream().findFirst().get();
-			Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
-			if (plugin == null) {
-				CommandAPI.getLog()
-						.severe("Plugin '" + pluginName + "' was not found. Did you add loadbefore: [CommandAPI] to "
-								+ pluginName + "'s plugin.yml file?");
-				continue;
-			}
-
+			
 			String[] pluginCommands;
 			if (map.values() == null || (map.values().size() == 1 && map.values().iterator().next() == null)) {
 				pluginCommands = new String[0];
@@ -49,7 +44,15 @@ class Config {
 				List<String> commands = (List<String>) map.values().stream().findFirst().get();
 				pluginCommands = commands.toArray(new String[0]);
 			}
-			pluginsToConvert.put(plugin, pluginCommands);
+			
+			String pluginName = (String) map.keySet().stream().findFirst().get();
+			Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
+			if(plugin == null) {
+				CommandAPI.getLog().info("Deferring registration of " + pluginName);
+				pluginsForDeferredConversion.put(pluginName, pluginCommands);
+			} else {
+				pluginsToConvert.put(plugin, pluginCommands);
+			}
 		}
 	}
 
@@ -57,6 +60,7 @@ class Config {
 		verboseOutput = verbose;
 		createDispatcherFile = false;
 		pluginsToConvert = new HashMap<>();
+		pluginsForDeferredConversion = new HashMap<>();
 	}
 
 	public boolean hasVerboseOutput() {
@@ -69,6 +73,10 @@ class Config {
 	
 	public Set<Entry<Plugin, String[]>> getPluginsToConvert() {
 		return this.pluginsToConvert.entrySet();
+	}
+	
+	public Map<String, String[]> getPluginForDeferredConversion() {
+		return this.pluginsForDeferredConversion;
 	}
 
 }

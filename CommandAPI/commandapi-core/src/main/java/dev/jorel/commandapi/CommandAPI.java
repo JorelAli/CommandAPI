@@ -12,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.Plugin;
 
 import com.mojang.brigadier.LiteralMessage;
@@ -122,14 +123,34 @@ public abstract class CommandAPI {
 			}
 		}, 0L);
 		
-		final Listener listener = new Listener() {
+		final Listener playerJoinListener = new Listener() {
 			@EventHandler(priority = EventPriority.MONITOR)
 			public void onPlayerJoin(PlayerJoinEvent e) {
 				CommandAPIHandler.getNMS().resendPackets(e.getPlayer());
 			}
 		};
         
-        Bukkit.getServer().getPluginManager().registerEvents(listener, plugin);
+		Bukkit.getServer().getPluginManager().registerEvents(playerJoinListener, plugin);
+		
+		if(plugin.getName().equals("CommandAPI")) {
+			final Listener pluginEnableListener = new Listener() {
+				@EventHandler(priority = EventPriority.HIGH)
+				public void onPluginEnable(PluginEnableEvent e) {
+					if(config.getPluginForDeferredConversion().containsKey(e.getPlugin().getName())) {
+						
+						String[] commands = config.getPluginForDeferredConversion().get(e.getPlugin().getName());
+						if(commands.length == 0) {
+							Converter.convert(e.getPlugin());
+						} else {
+							for(String command : commands) {
+								Converter.convert(e.getPlugin(), command);
+							}
+						}
+					}
+				}
+			};
+			Bukkit.getServer().getPluginManager().registerEvents(pluginEnableListener, plugin);
+		}   
 	}
 	
 	/**
