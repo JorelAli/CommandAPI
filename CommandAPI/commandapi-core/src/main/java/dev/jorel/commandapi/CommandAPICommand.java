@@ -261,7 +261,7 @@ public class CommandAPICommand {
 		return this;
 	}
 	
-	public void flatten(CommandAPICommand rootCommand, List<Argument> prevArguments, CommandAPICommand subcommand) {
+	private void flatten(CommandAPICommand rootCommand, List<Argument> prevArguments, CommandAPICommand subcommand) {
 		
 		String[] literals = new String[subcommand.aliases.length + 1];
 		literals[0] = subcommand.commandName;
@@ -281,10 +281,10 @@ public class CommandAPICommand {
 			
 			rootCommand.subcommands = new ArrayList<>();
 			rootCommand.register();
-		} else {
-			for(CommandAPICommand subsubcommand : new ArrayList<>(subcommand.subcommands)) {
-				flatten(rootCommand, new ArrayList<>(prevArguments), subsubcommand);
-			}
+		}
+		
+		for(CommandAPICommand subsubcommand : new ArrayList<>(subcommand.subcommands)) {
+			flatten(rootCommand, new ArrayList<>(prevArguments), subsubcommand);
 		}
 	}
 	
