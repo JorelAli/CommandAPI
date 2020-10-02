@@ -199,6 +199,11 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The MultiLiteralArgument
 	 */
-	MULTI_LITERAL;
+	MULTI_LITERAL, 
+	
+	/**
+	 * The AngleArgument
+	 */
+	ANGLE;
 
 }

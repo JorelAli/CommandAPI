@@ -60,6 +60,7 @@ import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
 import dev.jorel.commandapi.arguments.ICustomProvidedArgument.SuggestionProviders;
 import dev.jorel.commandapi.arguments.LocationType;
+import dev.jorel.commandapi.exceptions.AngleArgumentException;
 import dev.jorel.commandapi.exceptions.BiomeArgumentException;
 import dev.jorel.commandapi.exceptions.UUIDArgumentException;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
@@ -132,6 +133,11 @@ import net.minecraft.server.v1_14_R1.Vec3D;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class NMS_1_14_4 implements NMS {
+
+	@Override
+	public ArgumentType<?> _ArgumentAngle() {
+		throw new AngleArgumentException();
+	}
 
 	@Override
 	public ArgumentType<?> _ArgumentAxis() {
@@ -345,6 +351,11 @@ public class NMS_1_14_4 implements NMS {
 	public org.bukkit.advancement.Advancement getAdvancement(CommandContext cmdCtx, String key)
 			throws CommandSyntaxException {
 		return ArgumentMinecraftKeyRegistered.a(cmdCtx, key).bukkit;
+	}
+
+	@Override
+	public float getAngle(CommandContext cmdCtx, String key) {
+		throw new AngleArgumentException();
 	}
 
 	@Override

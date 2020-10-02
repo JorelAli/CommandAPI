@@ -78,6 +78,7 @@ import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.server.v1_16_R2.Advancement;
+import net.minecraft.server.v1_16_R2.ArgumentAngle;
 import net.minecraft.server.v1_16_R2.ArgumentBlockPredicate;
 import net.minecraft.server.v1_16_R2.ArgumentChat;
 import net.minecraft.server.v1_16_R2.ArgumentChatComponent;
@@ -146,6 +147,11 @@ import net.minecraft.server.v1_16_R2.WorldServer;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class NMS_1_16_R2 implements NMS {
+
+	@Override
+	public ArgumentType<?> _ArgumentAngle() {
+		return ArgumentAngle.a();
+	}
 
 	@Override
 	public ArgumentType<?> _ArgumentAxis() {
@@ -362,6 +368,11 @@ public class NMS_1_16_R2 implements NMS {
 	}
 
 	@Override
+	public float getAngle(CommandContext cmdCtx, String key) {
+		return ArgumentAngle.a(cmdCtx, key);
+	}
+
+	@Override
 	public EnumSet<Axis> getAxis(CommandContext cmdCtx, String key) {
 		EnumSet<Axis> set = EnumSet.noneOf(Axis.class);
 		EnumSet<EnumAxis> parsedEnumSet = ArgumentRotationAxis.a(cmdCtx, key);
@@ -483,8 +494,8 @@ public class NMS_1_16_R2 implements NMS {
 
 	@Override
 	public FloatRange getFloatRange(CommandContext cmdCtx, String key) {
-		CriterionConditionValue.FloatRange range = (CriterionConditionValue.FloatRange) cmdCtx
-				.getArgument(key, CriterionConditionValue.FloatRange.class);
+		CriterionConditionValue.FloatRange range = (CriterionConditionValue.FloatRange) cmdCtx.getArgument(key,
+				CriterionConditionValue.FloatRange.class);
 		float low = range.a() == null ? -Float.MAX_VALUE : range.a();
 		float high = range.b() == null ? Float.MAX_VALUE : range.b();
 		return new FloatRange(low, high);

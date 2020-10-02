@@ -60,6 +60,7 @@ import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
 import dev.jorel.commandapi.arguments.ICustomProvidedArgument.SuggestionProviders;
 import dev.jorel.commandapi.arguments.LocationType;
+import dev.jorel.commandapi.exceptions.AngleArgumentException;
 import dev.jorel.commandapi.exceptions.BiomeArgumentException;
 import dev.jorel.commandapi.exceptions.UUIDArgumentException;
 import dev.jorel.commandapi.wrappers.FloatRange;
@@ -134,6 +135,11 @@ import net.minecraft.server.v1_15_R1.Vec3D;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class NMS_1_15 implements NMS {
+
+	@Override
+	public ArgumentType<?> _ArgumentAngle() {
+		throw new AngleArgumentException();
+	}
 
 	@Override
 	public ArgumentType<?> _ArgumentAxis() {
@@ -350,6 +356,11 @@ public class NMS_1_15 implements NMS {
 	}
 
 	@Override
+	public float getAngle(CommandContext cmdCtx, String key) {
+		throw new AngleArgumentException();
+	}
+
+	@Override
 	public EnumSet<Axis> getAxis(CommandContext cmdCtx, String key) {
 		EnumSet<Axis> set = EnumSet.noneOf(Axis.class);
 		EnumSet<EnumAxis> parsedEnumSet = ArgumentRotationAxis.a(cmdCtx, key);
@@ -478,8 +489,8 @@ public class NMS_1_15 implements NMS {
 
 	@Override
 	public FloatRange getFloatRange(CommandContext cmdCtx, String key) {
-		CriterionConditionValue.FloatRange range = (CriterionConditionValue.FloatRange) cmdCtx
-				.getArgument(key, CriterionConditionValue.FloatRange.class);
+		CriterionConditionValue.FloatRange range = (CriterionConditionValue.FloatRange) cmdCtx.getArgument(key,
+				CriterionConditionValue.FloatRange.class);
 		float low = range.a() == null ? -Float.MAX_VALUE : range.a();
 		float high = range.b() == null ? Float.MAX_VALUE : range.b();
 		return new FloatRange(low, high);

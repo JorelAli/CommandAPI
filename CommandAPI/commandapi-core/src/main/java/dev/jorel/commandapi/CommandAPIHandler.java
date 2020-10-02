@@ -228,6 +228,8 @@ public abstract class CommandAPIHandler {
 	 */
 	static Object parseArgument(CommandContext cmdCtx, String key, Argument value) throws CommandSyntaxException {
 		switch (value.getArgumentType()) {
+		case ANGLE:
+			return NMS.getAngle(cmdCtx, key);
 		case ADVANCEMENT:
 			return NMS.getAdvancement(cmdCtx, key);
 		case AXIS:
