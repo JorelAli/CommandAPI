@@ -1,17 +1,14 @@
 package dev.jorel.commandapi;
 
-import com.mojang.brigadier.LiteralMessage;
-import com.mojang.brigadier.Message;
-
 /**
  * Represents a suggestion for an argument with a hover tooltip text for that
  * suggestion. This class is to be used with normal suggestion overrides, via
  * the <code>Argument.overrideSuggestionsT</code> method.
  */
-public class StringTooltip {
+public class StringTooltip implements IStringTooltip {
 
 	private final String suggestion;
-	private final Message tooltip;
+	private final String tooltip;
 	
 	/**
 	 * Constructs a StringTooltip with a suggestion and no tooltip
@@ -32,10 +29,10 @@ public class StringTooltip {
 	 * @return a StringTooltip representing this suggestion and tooltip
 	 */
 	public static StringTooltip of(String suggestion, String tooltip) {
-		return tooltip == null ? none(suggestion) : new StringTooltip(suggestion, new LiteralMessage(tooltip));
+		return tooltip == null ? none(suggestion) : new StringTooltip(suggestion, tooltip);
 	}
 	
-	private StringTooltip(String suggestion, Message tooltip) {
+	private StringTooltip(String suggestion, String tooltip) {
 		this.suggestion = suggestion;
 		this.tooltip = tooltip;
 	}
@@ -63,7 +60,7 @@ public class StringTooltip {
 	 * Returns the current tooltip text that this class holds
 	 * @return the current tooltip text that this class holds
 	 */
-	public Message getTooltip() {
+	public String getTooltip() {
 		return this.tooltip;
 	}
 	

@@ -18,6 +18,7 @@ public class CommandAPIMain extends JavaPlugin {
 	public void onEnable() {
 		CommandAPI.onEnable(this);
 		
+		//new StringArgument("").overrideSuggestionsT(null);
 
 new CommandAPICommand("perm")
  	.withSubcommand(new CommandAPICommand("group")

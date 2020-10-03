@@ -24,6 +24,8 @@ import org.bukkit.permissions.Permission;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.LiteralMessage;
+import com.mojang.brigadier.Message;
 import com.mojang.brigadier.RedirectModifier;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
@@ -615,12 +617,16 @@ public abstract class CommandAPIHandler {
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// NMS ICompletionProvider.a()
-	static CompletableFuture<Suggestions> getSuggestionsBuilder(SuggestionsBuilder builder, StringTooltip[] array) {
+	static CompletableFuture<Suggestions> getSuggestionsBuilder(SuggestionsBuilder builder, IStringTooltip[] array) {
 		String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
 		for (int i = 0; i < array.length; i++) {
-			StringTooltip str = array[i];
+			IStringTooltip str = array[i];
 			if (str.getSuggestion().toLowerCase(Locale.ROOT).startsWith(remaining)) {
-				builder.suggest(str.getSuggestion(), str.getTooltip());
+				Message tooltipMsg = null;
+				if(str.getTooltip() != null) {
+					tooltipMsg = new LiteralMessage(str.getTooltip());
+				}
+				builder.suggest(str.getSuggestion(), tooltipMsg);
 			}
 		}
 		return builder.buildFuture();
