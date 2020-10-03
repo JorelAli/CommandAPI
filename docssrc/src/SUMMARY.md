@@ -44,6 +44,7 @@
     - [Objective arguments](./objectivearguments.md)
     - [Team arguments](./teamarguments.md)
   - [Miscellaneous arguments](./miscargs.md)
+    - [Angle arguments](./angleargument.md)
     - [Advancement arguments](./advancementargument.md)
     - [Biome arguments](./biomeargument.md)
     - [BlockState arguments](./blockstatearguments.md)

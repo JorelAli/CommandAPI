@@ -45,6 +45,7 @@ The type to cast each argument (declared in the `dev.jorel.commandapi.arguments`
 
 |                                               Argument class | Data type                                                    |
 | -----------------------------------------------------------: | :----------------------------------------------------------- |
+|                           [`AngleArgument`](./angleargument) | `float`                                                      |
 |            [`AdvancementArgument`](./advancementargument.md) | `org.bukkit.advancement.Advancement`                         |
 |                               [`AxisArgument`](./axisarg.md) | `java.util.EnumSet<org.bukkit.Axis>`                         |
 |                        [`BiomeArgument`](./biomeargument.md) | `org.bukkit.block.Biome`                                     |

@@ -16,7 +16,7 @@ The CommandAPI's arguments are basically representations of the different argume
 | `brigadier:integer` | [`IntegerArgument`](./primitivearguments.md#numerical-arguments) |
 | `brigadier:long` | [`LongArgument`](./primitivearguments.md#numerical-arguments) |
 | `brigadier:string` | [`StringArgument`](./stringarguments.md#string-argument)<br />[`TextArgument`](./stringarguments.md#text-argument)<br />[`GreedyStringArgument`](./stringarguments.md#greedy-string-argument)<br />[`CustomArgument<T>`](./customarguments.md) |
-| `minecraft:angle` |  |
+| `minecraft:angle` | [`AngleArgument`](./angleargument.md) |
 | `minecraft:block_pos` | [`LocationArgument`](./locationargument.md#location-3d-space)<br />(`LocationType.BLOCK_POSITION`) |
 | `minecraft:block_predicate` | [`BlockPredicateArgument`](./blockpredicateargs.md) |
 | `minecraft:block_state` | [`BlockStateArgument`](./blockstatearguments.md) |
@@ -58,8 +58,7 @@ The CommandAPI's arguments are basically representations of the different argume
 
 There are a few arguments that aren't implemented. Here's why:
 
-- `minecraft:angle` is basically just a `FloatArgument` with a minimum value of -180 (inclusive) and a maximum value of 180 (exclusive).
-
 - `minecraft:entity_anchor` - This argument only has two values: `eyes` and `feet`. It's incredibly unnecessary for any other purpose and is easier to implement with a `MultiLiteralArgument`.
+
 - `minecraft:item_slot` - Bukkit's implementation of item slot numbers differs very wildly to Minecraft's implementation of item slot numbers. This difference makes it near-impossible to have a suitable middle-ground for item slot numbers that ensures that invalid numbers cannot be passed to the wrong inventory type. An implementation of this would require a rewrite of the current system to maintain proper inventory slot access safety.
 - `minecraft:nbt`, `minecraft:nbt_path`, `minecraft:nbt_tag` - You've got the `NBTCompoundArgument`, that's good enough, right? ¯\\\_(ツ)\_/¯

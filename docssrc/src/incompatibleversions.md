@@ -6,6 +6,10 @@ There are a few arguments that are incompatible with various versions of Minecra
 
 ## Argument changes with respect to Minecraft version
 
+### AngleArgument
+
+Incompatible with Minecraft versions **less than 1.16.2** (1.13.x, 1.14.x, 1.15.x, 1.16, 1.16.1)
+
 ### BiomeArgument
 
 Incompatible with Minecraft versions **less than 1.16** _(1.13.x, 1.14.x, 1.15.x)_
