@@ -61,6 +61,12 @@ public abstract class CommandAPI {
 		return logger;
 	}
 	
+	public static void logInfo(String message) {
+		if(CommandAPI.getConfiguration().hasVerboseOutput()) {
+			CommandAPI.getLog().info(message);
+		}
+	}
+	
 	static final void onLoad(Plugin plugin) {
 		if(plugin.getName().equals("CommandAPI")) {
 			//Config loading

@@ -112,8 +112,10 @@ public abstract class CommandAPIHandler {
 			Class.forName("de.tr7zw.nbtapi.NBTContainer");
 			CommandAPI.getLog().info("Hooked into the NBTAPI successfully.");
 		} catch(ClassNotFoundException e) {
-			CommandAPI.getLog().warning(
-					"Couldn't hook into the NBTAPI for NBT support. See https://www.spigotmc.org/resources/nbt-api.7939/");
+			if(CommandAPI.getConfiguration().hasVerboseOutput()) {
+				CommandAPI.getLog().warning(
+					"Couldn't hook into the NBTAPI for NBT support. Download it from https://www.spigotmc.org/resources/nbt-api.7939/");
+			}
 		}
 
 		try {
@@ -136,6 +138,7 @@ public abstract class CommandAPIHandler {
 	/**
 	 * Unregisters a command from the NMS command graph.
 	 * 
+
 	 * @param commandName the name of the command to unregister
 	 * @param force       whether the unregistration system should attempt to remove
 	 *                    all instances of the command, regardless of whether they
@@ -419,14 +422,11 @@ public abstract class CommandAPIHandler {
 					.get(map);
 
 			if(!PERMISSIONS_TO_FIX.isEmpty()) {
-				CommandAPI.getLog().info("Linking permissions to commands:");
+				CommandAPI.logInfo("Linking permissions to commands:");
 			}
 			
 			PERMISSIONS_TO_FIX.forEach((cmdName, perm) -> {
-				
-				if(CommandAPI.getConfiguration().hasVerboseOutput()) {
-					CommandAPI.getLog().info(perm.toString() + " -> /" + cmdName);
-				}
+				CommandAPI.logInfo(perm.toString() + " -> /" + cmdName);
 				
 				String permNode = perm.equals(CommandPermission.NONE) ? "" : perm.getPermission();
 				
@@ -447,6 +447,7 @@ public abstract class CommandAPIHandler {
 					knownCommands.get(cmdName).setPermission(permNode);
 				}
 			});
+			CommandAPI.getLog().info("Linked " + PERMISSIONS_TO_FIX.size() + " Bukkit permissions to commands");
 		} catch (IllegalAccessException | IllegalArgumentException e) {
 			e.printStackTrace();
 		}
@@ -502,7 +503,7 @@ public abstract class CommandAPIHandler {
 			// Create a list of argument names
 			StringBuilder builder = new StringBuilder();
 			args.forEach(arg -> builder.append(arg.getNodeName()).append("<").append(arg.getClass().getSimpleName()).append("> "));
-			CommandAPI.getLog().info("Registering command /" + commandName + " " + builder.toString());
+			CommandAPI.logInfo("Registering command /" + commandName + " " + builder.toString());
 		}
 
 		Command command = generateCommand(args, executor, converted);
@@ -523,9 +524,7 @@ public abstract class CommandAPIHandler {
 
 			// Register aliases
 			for (String alias : aliases) {
-				if (CommandAPI.getConfiguration().hasVerboseOutput()) {
-					CommandAPI.getLog().info("Registering alias /" + alias + " -> " + resultantNode.getName());
-				}
+				CommandAPI.logInfo("Registering alias /" + alias + " -> " + resultantNode.getName());
 				DISPATCHER.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(alias)
 						.requires(generatePermissions(alias, permissions, requirements)).executes(command));
 			}
@@ -591,7 +590,7 @@ public abstract class CommandAPIHandler {
 			// Register aliases
 			for (String alias : aliases) {
 				if (CommandAPI.getConfiguration().hasVerboseOutput()) {
-					CommandAPI.getLog().info("Registering alias /" + alias + " -> " + resultantNode.getName());
+					CommandAPI.logInfo("Registering alias /" + alias + " -> " + resultantNode.getName());
 				}
 				
 				DISPATCHER.register((LiteralArgumentBuilder) getLiteralArgumentBuilder(alias)

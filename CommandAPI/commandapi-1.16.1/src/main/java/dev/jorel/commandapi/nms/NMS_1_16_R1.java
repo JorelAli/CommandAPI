@@ -864,7 +864,7 @@ public class NMS_1_16_R1 implements NMS {
 				try {
 					Bukkit.addRecipe(recipe);
 					if (recipe instanceof Keyed) {
-						CommandAPI.getLog().info("Re-registering recipe: " + ((Keyed) recipe).getKey());
+						CommandAPI.logInfo("Re-registering recipe: " + ((Keyed) recipe).getKey());
 					}
 				} catch (Exception e) {
 					// Can't re-register registered recipes. Not an error.

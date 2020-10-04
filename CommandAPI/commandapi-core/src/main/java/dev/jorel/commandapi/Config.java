@@ -48,7 +48,6 @@ class Config {
 			String pluginName = (String) map.keySet().stream().findFirst().get();
 			Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
 			if(plugin == null) {
-				CommandAPI.getLog().info("Deferring registration of " + pluginName);
 				pluginsForDeferredConversion.put(pluginName, pluginCommands);
 			} else {
 				pluginsToConvert.put(plugin, pluginCommands);
