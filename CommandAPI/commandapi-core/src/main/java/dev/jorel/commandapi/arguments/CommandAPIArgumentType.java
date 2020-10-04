@@ -13,7 +13,7 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The AxisArgument
 	 */
-	AXIS,
+	AXIS("minecraft:swizzle"),
 
 	/**
 	 * The BiomeArgument
@@ -23,17 +23,17 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The ChatArgument
 	 */
-	CHAT,
+	CHAT("minecraft:message"),
 
 	/**
 	 * The ChatComponentArgument
 	 */
-	CHAT_COMPONENT,
+	CHAT_COMPONENT("minecraft:component"),
 
 	/**
 	 * The ChatColorArgument
 	 */
-	CHATCOLOR, 
+	CHATCOLOR("minecraft:color"), 
 	
 	/**
 	 * The CustomArgument
@@ -44,42 +44,42 @@ public enum CommandAPIArgumentType {
 	 * The EnchantmentArgument
 	 * 
 	 */
-	ENCHANTMENT, 
+	ENCHANTMENT("minecraft:item_enchantment"), 
 	
 	/**
 	 * The EntitySelectorArgument
 	 */
-	ENTITY_SELECTOR, 
+	ENTITY_SELECTOR("minecraft:entity"), 
 	
 	/**
 	 * The EntityTypeArgument
 	 */
-	ENTITY_TYPE, 
+	ENTITY_TYPE("minecraft:entity_summon"), 
 	
 	/**
 	 * The EnvironmentArgument
 	 */
-	ENVIRONMENT, 
+	ENVIRONMENT("minecraft:dimension"), 
 	
 	/**
 	 * The FloatRangeArgument
 	 */
-	FLOAT_RANGE, 
+	FLOAT_RANGE("minecraft:float_range"), 
 	
 	/**
 	 * The FunctionArgument
 	 */
-	FUNCTION, 
+	FUNCTION("minecraft:function"), 
 	
 	/**
 	 * The IntegerRangeArgument
 	 */
-	INT_RANGE,
+	INT_RANGE("minecraft:int_range"),
 	
 	/**
 	 * The ItemStackArgument
 	 */
-	ITEMSTACK, 
+	ITEMSTACK("minecraft:item_stack"), 
 	
 	/**
 	 * The LiteralArgument
@@ -89,12 +89,12 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The LocationArgument
 	 */
-	LOCATION, 
+	LOCATION(new String[] {"minecraft:vec3", "minecraft:block_pos"}), 
 	
 	/**
 	 * The Location2dArgument
 	 */
-	LOCATION_2D, 
+	LOCATION_2D(new String[] {"minecraft:vec2", "minecraft:column_pos"}), 
 	
 	/**
 	 * The LootTableArgument
@@ -104,37 +104,37 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The MathOperationArgument
 	 */
-	MATH_OPERATION, 
+	MATH_OPERATION("minecraft:operation"), 
 	
 	/**
 	 * The NBTCompoundArgument
 	 */
-	NBT_COMPOUND, 
+	NBT_COMPOUND("minecraft:nbt_compound_tag"), 
 	
 	/**
 	 * The ObjectiveArgument
 	 */
-	OBJECTIVE, 
+	OBJECTIVE("minecraft:objective"), 
 	
 	/**
 	 * The ObjectiveCriteriaArgument
 	 */
-	OBJECTIVE_CRITERIA,
+	OBJECTIVE_CRITERIA("minecraft:objective_criteria"),
 	
 	/**
 	 * The ParticleArgument
 	 */
-	PARTICLE, 
+	PARTICLE("minecraft:particle"), 
 	
 	/**
 	 * The PlayerArgument
 	 */
-	PLAYER, 
+	PLAYER("minecraft:game_profile"), 
 	
 	/**
 	 * The PotionEffectArgument
 	 */
-	POTION_EFFECT, 
+	POTION_EFFECT("minecraft:mob_effect"), 
 	
 	/**
 	 * The RecipeArgument	
@@ -144,17 +144,17 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The RotationArgument
 	 */
-	ROTATION, 
+	ROTATION("minecraft:rotation"), 
 	
 	/**
 	 * The ScoreHolderArgument
 	 */
-	SCORE_HOLDER, 
+	SCORE_HOLDER("minecraft:score_holder"), 
 	
 	/**
 	 * The ScoreboardSlotArgument
 	 */
-	SCOREBOARD_SLOT, 
+	SCOREBOARD_SLOT("minecraft:scoreboard_slot"), 
 	
 	/**
 	 * Primitive arguments BooleanArgument, DoubleArgument, FloatArgument, IntegerArgument, LongArgument, StringArgument, GreedyStringArgument, TextArgument
@@ -169,32 +169,32 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The TeamArgument
 	 */
-	TEAM, 
+	TEAM("minecraft:team"), 
 	
 	/**
 	 * The TimeArgument
 	 */
-	TIME, 
+	TIME("minecraft:time"), 
 	
 	/**
 	 * The BlockStateArgument
 	 */
-	BLOCKSTATE, 
+	BLOCKSTATE("minecraft:block_state"), 
 	
 	/**
 	 * The UUIDArgument
 	 */
-	UUID, 
+	UUID("minecraft:uuid"), 
 	
 	/**
 	 * The ItemStackPredicateArgument
 	 */
-	ITEMSTACK_PREDICATE, 
+	ITEMSTACK_PREDICATE("minecraft:item_predicate"), 
 	
 	/**
 	 * The BlockPredicateArgument
 	 */
-	BLOCK_PREDICATE, 
+	BLOCK_PREDICATE("minecraft:block_predicate"), 
 	
 	/**
 	 * The MultiLiteralArgument
@@ -204,6 +204,18 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The AngleArgument
 	 */
-	ANGLE;
+	ANGLE("minecraft:angle");
+	
+	CommandAPIArgumentType(String internal) {
+		
+	}
+	
+	CommandAPIArgumentType(String[] internal) {
+		
+	}
+	
+	public static CommandAPIArgumentType fromInternal(String internal) {
+		return null;
+	}
 
 }
