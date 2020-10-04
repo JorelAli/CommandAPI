@@ -39,7 +39,7 @@ public class CommandAPICommand {
 	List<Argument> args = new ArrayList<>();
 	List<CommandAPICommand> subcommands = new ArrayList<>();
 	CustomCommandExecutor executor = new CustomCommandExecutor();
-	boolean isConverted;
+	public boolean isConverted;
 	
 	/**
 	 * Creates a new command builder
@@ -48,12 +48,6 @@ public class CommandAPICommand {
 	public CommandAPICommand(String commandName) {
 		this.commandName = commandName;
 		this.isConverted = false;
-	}
-	
-	static CommandAPICommand convertedOf(String commandName) {
-		CommandAPICommand result = new CommandAPICommand(commandName);
-		result.isConverted = true;
-		return result;
 	}
 	
 	/**

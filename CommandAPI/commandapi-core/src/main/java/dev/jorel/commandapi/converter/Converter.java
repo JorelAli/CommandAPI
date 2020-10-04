@@ -1,4 +1,4 @@
-package dev.jorel.commandapi;
+package dev.jorel.commandapi.converter;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -14,6 +14,9 @@ import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.GreedyStringArgument;
 
@@ -68,9 +71,7 @@ public abstract class Converter {
 	}
 	
 	private static void convertPluginCommand(JavaPlugin plugin, String commandName, List<Argument> arguments) {
-		if(CommandAPI.getConfiguration().hasVerboseOutput()) {
-			CommandAPI.logInfo("Converting " + plugin.getName() + " command /" + commandName);
-		}
+		CommandAPI.logInfo("Converting " + plugin.getName() + " command /" + commandName);
 		/* Parse the commands */
 		Map<String, Object> cmdData = plugin.getDescription().getCommands().get(commandName);
 		
@@ -113,7 +114,7 @@ public abstract class Converter {
 			.register();
 		
 		//Multiple arguments		
-		CommandAPICommand.convertedOf(commandName)
+		CommandAPICommand multiArgs = new CommandAPICommand(commandName)
 			.withPermission(permissionNode)
 			.withAliases(aliases)
 			.withArguments(arguments)
@@ -123,8 +124,10 @@ public abstract class Converter {
 				} else {
 					plugin.getCommand(commandName).execute(of(sender), commandName, (String[]) args);
 				}
-			})
-			.register();
+			});
+		// Good grief, what a hack~
+		multiArgs.isConverted = true;
+		multiArgs.register();
 	}
 	
 	private static CommandSender of(ProxiedCommandSender proxy) {

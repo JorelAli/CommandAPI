@@ -18,6 +18,7 @@ import org.bukkit.plugin.Plugin;
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
+import dev.jorel.commandapi.converter.Converter;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
 /**
