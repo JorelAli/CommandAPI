@@ -241,5 +241,21 @@ public abstract class Argument implements IOverrideableSuggestions {
 		this.requirements = this.requirements.and(requirement);
 		return this;
 	}
+	
+	/////////////////
+	// Listability //
+	/////////////////
+	
+	private boolean isListed = true;
+	
+	public boolean isListed() {
+		return this.isListed;
+	}
+	
+	public Argument setListed(boolean listed) {
+		this.isListed = listed;
+		return this;
+	}
+	
 
 }

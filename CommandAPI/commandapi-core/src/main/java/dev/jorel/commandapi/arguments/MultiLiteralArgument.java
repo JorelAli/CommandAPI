@@ -4,7 +4,6 @@ import dev.jorel.commandapi.exceptions.BadLiteralException;
 
 public class MultiLiteralArgument extends Argument {
 
-	public boolean isMulti = true;
 	private String[] literals;
 	
 	/**

@@ -212,9 +212,11 @@ public abstract class CommandAPIHandler {
 
 		// Populate array
 		for (Argument argument : args) {
-			Object result = parseArgument(cmdCtx, argument.getNodeName(), argument);
-			if(result != null) {
-				argList.add(result);
+			if(argument.isListed()) {
+				Object result = parseArgument(cmdCtx, argument.getNodeName(), argument);
+				if(result != null) {
+					argList.add(result);
+				}
 			}
 		}
 		
@@ -292,8 +294,7 @@ public abstract class CommandAPIHandler {
 		case ITEMSTACK_PREDICATE:
 			return NMS.getItemStackPredicate(cmdCtx, key);
 		case LITERAL:
-			LiteralArgument a = (LiteralArgument) value;
-			return a.isMulti ? a.getLiteral() : null;
+			return ((LiteralArgument) value).getLiteral();
 		case LOCATION:
 			LocationType locationType = ((LocationArgument) value).getLocationType();
 			return NMS.getLocation(cmdCtx, key, locationType);
@@ -475,8 +476,7 @@ public abstract class CommandAPIHandler {
 					
 					//Add all of its entries
 					for(int i = 0; i < superArg.getLiterals().length; i++) {
-						LiteralArgument litArg = new LiteralArgument(superArg.getLiterals()[i]);
-						litArg.isMulti = superArg.isMulti;
+						LiteralArgument litArg = (LiteralArgument) new LiteralArgument(superArg.getLiterals()[i]).setListed(superArg.isListed());
 						
 						//Reconstruct the list of arguments and place in the new literals
 						List<Argument> newArgs = new ArrayList<>();

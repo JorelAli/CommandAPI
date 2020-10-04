@@ -268,9 +268,8 @@ public class CommandAPICommand {
 		System.arraycopy(subcommand.aliases, 0, literals, 1, subcommand.aliases.length);
 		MultiLiteralArgument literal = (MultiLiteralArgument) new MultiLiteralArgument(literals)
 			.withPermission(subcommand.permission)
-			.withRequirement(subcommand.requirements);
-		
-		literal.isMulti = false;
+			.withRequirement(subcommand.requirements)
+			.setListed(false);
 		
 		prevArguments.add(literal);
 		

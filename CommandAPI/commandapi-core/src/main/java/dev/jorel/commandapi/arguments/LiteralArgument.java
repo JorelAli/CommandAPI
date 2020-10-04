@@ -10,11 +10,6 @@ public class LiteralArgument extends Argument {
 	private String literal;
 	
 	/**
-	 * Determines if this literal argument is a MultiLiteralArgument
-	 */
-	public boolean isMulti = false;
-	
-	/**
 	 * A literal argument. Only takes one string value which cannot be modified 
 	 * @param literal the string literal that this argument will represent
 	 */
@@ -34,6 +29,7 @@ public class LiteralArgument extends Argument {
 			throw new BadLiteralException(false);
 		}
 		this.literal = literal;
+		this.setListed(false);
 	}
 	
 
