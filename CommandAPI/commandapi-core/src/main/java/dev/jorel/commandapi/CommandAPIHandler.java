@@ -330,7 +330,14 @@ public abstract class CommandAPIHandler {
 		case MULTI_LITERAL:
 			//This case should NEVER occur!
 			break;
-		case SIMPLE_TYPE:
+		case PRIMITIVE_BOOLEAN:
+		case PRIMITIVE_DOUBLE:
+		case PRIMITIVE_FLOAT:
+		case PRIMITIVE_INTEGER:
+		case PRIMITIVE_LONG:
+		case PRIMITIVE_STRING:
+		case PRIMITIVE_GREEDY_STRING:
+		case PRIMITIVE_TEXT:
 			return cmdCtx.getArgument(key, value.getPrimitiveType());
 		case SOUND:
 			return NMS.getSound(cmdCtx, key);

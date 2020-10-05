@@ -43,7 +43,7 @@ public class IntegerArgument extends SafeOverrideableArgument<Integer> {
 	
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.SIMPLE_TYPE;
+		return CommandAPIArgumentType.PRIMITIVE_INTEGER;
 	}
 	
 }

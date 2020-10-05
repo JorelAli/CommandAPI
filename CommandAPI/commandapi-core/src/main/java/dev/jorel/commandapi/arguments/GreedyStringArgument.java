@@ -21,6 +21,6 @@ public class GreedyStringArgument extends SafeOverrideableArgument<String> imple
 
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.SIMPLE_TYPE;
+		return CommandAPIArgumentType.PRIMITIVE_GREEDY_STRING;
 	}
 }

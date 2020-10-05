@@ -1,5 +1,7 @@
 package dev.jorel.commandapi.arguments;
 
+import java.util.Arrays;
+
 /**
  * An enum that represents the different arguments declared in the Command API
  */
@@ -8,7 +10,7 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The AdvancementArgument
 	 */
-	ADVANCEMENT,
+	ADVANCEMENT("api:advancement"),
 
 	/**
 	 * The AxisArgument
@@ -18,7 +20,7 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The BiomeArgument
 	 */
-	BIOME,
+	BIOME("api:biome"),
 
 	/**
 	 * The ChatArgument
@@ -99,7 +101,7 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The LootTableArgument
 	 */
-	LOOT_TABLE, 
+	LOOT_TABLE("api:loot_table"), 
 	
 	/**
 	 * The MathOperationArgument
@@ -139,7 +141,7 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The RecipeArgument	
 	 */
-	RECIPE, 
+	RECIPE("api:recipe"), 
 	
 	/**
 	 * The RotationArgument
@@ -159,12 +161,19 @@ public enum CommandAPIArgumentType {
 	/**
 	 * Primitive arguments BooleanArgument, DoubleArgument, FloatArgument, IntegerArgument, LongArgument, StringArgument, GreedyStringArgument, TextArgument
 	 */
-	SIMPLE_TYPE, 
+	PRIMITIVE_BOOLEAN("brigadier:bool"),
+	PRIMITIVE_DOUBLE("brigadier:double"),
+	PRIMITIVE_FLOAT("brigadier:float"),
+	PRIMITIVE_INTEGER("brigadier:integer"),
+	PRIMITIVE_LONG("brigadier:long"),
+	PRIMITIVE_STRING("brigadier:string"),
+	PRIMITIVE_GREEDY_STRING("api:greedy_string"),
+	PRIMITIVE_TEXT("api:text"),
 	
 	/**
 	 * The SoundArgument
 	 */
-	SOUND, 
+	SOUND("api:sound"), 
 	
 	/**
 	 * The TeamArgument
@@ -206,15 +215,26 @@ public enum CommandAPIArgumentType {
 	 */
 	ANGLE("minecraft:angle");
 	
-	CommandAPIArgumentType(String internal) {
-		
+	private String[] internals;
+	
+	CommandAPIArgumentType() {
+		internals = new String[0];
 	}
 	
-	CommandAPIArgumentType(String[] internal) {
-		
+	CommandAPIArgumentType(String internal) {
+		this.internals = new String[] {internal};
+	}
+	
+	CommandAPIArgumentType(String[] internals) {
+		this.internals = internals;
 	}
 	
 	public static CommandAPIArgumentType fromInternal(String internal) {
+		for(CommandAPIArgumentType type : CommandAPIArgumentType.values()) {
+			if(Arrays.asList(type.internals).contains(internal)) {
+				return type;
+			}
+		}
 		return null;
 	}
 

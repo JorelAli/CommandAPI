@@ -21,7 +21,7 @@ public class BooleanArgument extends SafeOverrideableArgument<Boolean> {
 	
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.SIMPLE_TYPE;
+		return CommandAPIArgumentType.PRIMITIVE_BOOLEAN;
 	}
 	
 }

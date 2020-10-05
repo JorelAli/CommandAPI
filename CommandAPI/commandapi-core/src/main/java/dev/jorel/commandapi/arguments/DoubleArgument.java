@@ -43,7 +43,7 @@ public class DoubleArgument extends SafeOverrideableArgument<Double> {
 
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.SIMPLE_TYPE;
+		return CommandAPIArgumentType.PRIMITIVE_DOUBLE;
 	}
 
 }

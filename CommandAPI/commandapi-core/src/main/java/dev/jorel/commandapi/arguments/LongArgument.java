@@ -43,7 +43,7 @@ public class LongArgument extends SafeOverrideableArgument<Long> {
 	
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.SIMPLE_TYPE;
+		return CommandAPIArgumentType.PRIMITIVE_LONG;
 	}
 	
 }

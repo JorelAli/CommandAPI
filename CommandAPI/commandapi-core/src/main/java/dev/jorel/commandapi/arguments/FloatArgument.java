@@ -43,6 +43,6 @@ public class FloatArgument extends SafeOverrideableArgument<Float> {
 	
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.SIMPLE_TYPE;
+		return CommandAPIArgumentType.PRIMITIVE_FLOAT;
 	}
 }

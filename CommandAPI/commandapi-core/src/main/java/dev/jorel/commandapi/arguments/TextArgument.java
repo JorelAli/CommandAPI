@@ -21,6 +21,6 @@ public class TextArgument extends Argument {
 	
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.SIMPLE_TYPE;
+		return CommandAPIArgumentType.PRIMITIVE_TEXT;
 	}
 }
