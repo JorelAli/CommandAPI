@@ -3,6 +3,7 @@ package dev.jorel.commandapi.converter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.AdvancementArgument;
 import dev.jorel.commandapi.arguments.AngleArgument;
 import dev.jorel.commandapi.arguments.Argument;
@@ -37,7 +38,6 @@ import dev.jorel.commandapi.arguments.PlayerArgument;
 import dev.jorel.commandapi.arguments.PotionEffectArgument;
 import dev.jorel.commandapi.arguments.RecipeArgument;
 import dev.jorel.commandapi.arguments.RotationArgument;
-import dev.jorel.commandapi.arguments.ScoreHolderArgument;
 import dev.jorel.commandapi.arguments.ScoreboardSlotArgument;
 import dev.jorel.commandapi.arguments.SoundArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
@@ -62,6 +62,15 @@ public class CommandParser {
 	public void parse(String command) {
 		String[] parts = command.split(" ");
 		String commandName = parts[0];
+		
+		CommandAPICommand cmdCommand = new CommandAPICommand(commandName);
+		if(parts.length == 1) {
+			//done
+		} else {
+			for(int i = 1; i < parts.length; i++) {
+				cmdCommand.withArguments(parseArgument(parts[i]));
+			}
+		}
 	}
 	
 	public Argument parseArgument(String argument) {
