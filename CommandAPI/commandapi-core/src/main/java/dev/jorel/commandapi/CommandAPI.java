@@ -28,9 +28,9 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 public abstract class CommandAPI {
 	
 	private static boolean canRegister = true;
-	private static Config config;
-	private static File dispatcherFile;
-	private static Logger logger;
+	static Config config;
+	static File dispatcherFile;
+	static Logger logger;
 	private static boolean loaded = false;
 
 	static Config getConfiguration() {
@@ -65,33 +65,6 @@ public abstract class CommandAPI {
 	public static void logInfo(String message) {
 		if(CommandAPI.getConfiguration().hasVerboseOutput()) {
 			CommandAPI.getLog().info(message);
-		}
-	}
-	
-	static final void onLoad(Plugin plugin) {
-		if(plugin.getName().equals("CommandAPI")) {
-			//Config loading
-			plugin.saveDefaultConfig();
-			CommandAPI.config = new Config(plugin.getConfig());
-			CommandAPI.dispatcherFile = new File(plugin.getDataFolder(), "command_registration.json");
-			CommandAPI.logger = plugin.getLogger();
-			
-			//Check dependencies for CommandAPI
-			CommandAPIHandler.checkDependencies();
-			
-			//Convert all plugins to be converted
-			for(Entry<Plugin, String[]> pluginToConvert : config.getPluginsToConvert()) {
-				if(pluginToConvert.getValue().length == 0) {
-					Converter.convert(pluginToConvert.getKey());
-				} else {
-					for(String command : pluginToConvert.getValue()) {
-						Converter.convert(pluginToConvert.getKey(), command);
-					}
-				}
-			}
-			loaded = true;
-		} else {
-			onLoad(true);
 		}
 	}
 	

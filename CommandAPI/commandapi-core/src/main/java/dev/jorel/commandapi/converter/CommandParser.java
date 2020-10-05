@@ -16,6 +16,7 @@ import dev.jorel.commandapi.arguments.ChatArgument;
 import dev.jorel.commandapi.arguments.ChatColorArgument;
 import dev.jorel.commandapi.arguments.ChatComponentArgument;
 import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
+import dev.jorel.commandapi.arguments.DoubleArgument;
 import dev.jorel.commandapi.arguments.EnchantmentArgument;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
@@ -24,9 +25,14 @@ import dev.jorel.commandapi.arguments.EnvironmentArgument;
 import dev.jorel.commandapi.arguments.FloatRangeArgument;
 import dev.jorel.commandapi.arguments.FunctionArgument;
 import dev.jorel.commandapi.arguments.GreedyStringArgument;
+import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.IntegerRangeArgument;
 import dev.jorel.commandapi.arguments.ItemStackArgument;
 import dev.jorel.commandapi.arguments.ItemStackPredicateArgument;
+import dev.jorel.commandapi.arguments.Location2DArgument;
+import dev.jorel.commandapi.arguments.LocationArgument;
+import dev.jorel.commandapi.arguments.LocationType;
+import dev.jorel.commandapi.arguments.LongArgument;
 import dev.jorel.commandapi.arguments.LootTableArgument;
 import dev.jorel.commandapi.arguments.MathOperationArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
@@ -38,6 +44,8 @@ import dev.jorel.commandapi.arguments.PlayerArgument;
 import dev.jorel.commandapi.arguments.PotionEffectArgument;
 import dev.jorel.commandapi.arguments.RecipeArgument;
 import dev.jorel.commandapi.arguments.RotationArgument;
+import dev.jorel.commandapi.arguments.ScoreHolderArgument;
+import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
 import dev.jorel.commandapi.arguments.ScoreboardSlotArgument;
 import dev.jorel.commandapi.arguments.SoundArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
@@ -59,18 +67,79 @@ public class CommandParser {
     - speed (walk|fly) <speed>[0..10]
     - speed (walk|fly) <speed>[0..10] <target>[minecraft:game_profile]
 	 */
-	public void parse(String command) {
+	public CommandAPICommand parse(String command) {
 		String[] parts = command.split(" ");
 		String commandName = parts[0];
 		
 		CommandAPICommand cmdCommand = new CommandAPICommand(commandName);
-		if(parts.length == 1) {
-			//done
-		} else {
-			for(int i = 1; i < parts.length; i++) {
+		if (parts.length != 1) {
+			for (int i = 1; i < parts.length; i++) {
 				cmdCommand.withArguments(parseArgument(parts[i]));
 			}
 		}
+		return cmdCommand;
+	}
+	
+	private CommandAPIArgumentType a(String s) {
+		double value;
+		try {
+			value = Double.parseDouble(s);
+		} catch(Exception e) {
+			throw new RuntimeException();
+		}
+		if(value > Integer.MAX_VALUE) {
+			if(value == (long) value) {
+				return CommandAPIArgumentType.PRIMITIVE_LONG;
+			} else {
+				return CommandAPIArgumentType.PRIMITIVE_DOUBLE;
+			}
+		} else {
+			if(value == (int) value) {
+				return CommandAPIArgumentType.PRIMITIVE_INTEGER;
+			} else {
+				return CommandAPIArgumentType.PRIMITIVE_DOUBLE;
+			}
+		}
+	}
+	
+	//TODO: Whatever this function is
+	public Argument parseRange(String nodeName, String[] bounds) {
+		double value;
+		try {
+			value = Double.parseDouble(bounds[0]);
+		} catch(Exception e) {
+			throw new RuntimeException();
+		}
+		
+		if(bounds.length == 1) {
+			//x..
+			switch(a(bounds[0])) {
+				case PRIMITIVE_LONG:
+					return new LongArgument(nodeName, (long) value);
+				case PRIMITIVE_DOUBLE:
+					return new DoubleArgument(nodeName, value);
+				case PRIMITIVE_INTEGER:
+					return new IntegerArgument(nodeName, (int) value);
+			}
+		} else {
+			if(bounds[0].length() == 0) {
+				//..x
+				switch(a(bounds[0])) {
+					case PRIMITIVE_LONG:
+						return new LongArgument(nodeName, Long.MIN_VALUE, (long) value);
+					case PRIMITIVE_DOUBLE:
+						return new DoubleArgument(nodeName, -Double.MAX_VALUE, value);
+					case PRIMITIVE_INTEGER:
+						return new IntegerArgument(nodeName, Integer.MIN_VALUE, (int) value);
+				}
+			} else {
+				//x..x
+				if(a(bounds[0]) == CommandAPIArgumentType.PRIMITIVE_LONG || a(bounds[1]) == CommandAPIArgumentType.PRIMITIVE_LONG) {
+					new LongArgument(nodeName, Long.MIN_VALUE, (long) value);
+				}
+			}
+		}
+		return null;
 	}
 	
 	public Argument parseArgument(String argument) {
@@ -83,144 +152,110 @@ public class CommandParser {
 			String nodeName = literalMatcher.group(1);
 			String argumentType = literalMatcher.group(2);
 			
-			Argument resultArgument = null; //TODO: Remove
+			if(argumentType.contains("..")) {
+				return parseRange(nodeName, argumentType.split("\\.\\."));
+			}
+			
 			switch(CommandAPIArgumentType.fromInternal(argumentType)) {
 			case ADVANCEMENT:
-				resultArgument = new AdvancementArgument(nodeName);
-				break;
+				return new AdvancementArgument(nodeName);
 			case ANGLE:
-				resultArgument = new AngleArgument(nodeName);
-				break;
+				return new AngleArgument(nodeName);
 			case AXIS:
-				resultArgument = new AxisArgument(nodeName);
-				break;
+				return new AxisArgument(nodeName);
 			case BIOME:
-				resultArgument = new BiomeArgument(nodeName);
-				break;
+				return new BiomeArgument(nodeName);
 			case BLOCKSTATE:
-				resultArgument = new BlockStateArgument(nodeName);
-				break;
+				return new BlockStateArgument(nodeName);
 			case BLOCK_PREDICATE:
-				resultArgument = new BlockPredicateArgument(nodeName);
-				break;
+				return new BlockPredicateArgument(nodeName);
 			case CHAT:
-				resultArgument = new ChatArgument(nodeName);
-				break;
+				return new ChatArgument(nodeName);
 			case CHATCOLOR:
-				resultArgument = new ChatColorArgument(nodeName);
-				break;
+				return new ChatColorArgument(nodeName);
 			case CHAT_COMPONENT:
-				resultArgument = new ChatComponentArgument(nodeName);
-				break;
+				return new ChatComponentArgument(nodeName);
 			case CUSTOM:
 				break;
 			case ENCHANTMENT:
-				resultArgument = new EnchantmentArgument(nodeName);
-				break;
+				return new EnchantmentArgument(nodeName);
 			case ENTITY_SELECTOR:
-				resultArgument = new EntitySelectorArgument(nodeName, EntitySelector.ONE_ENTITY);
-				break;
+				return new EntitySelectorArgument(nodeName, EntitySelector.ONE_ENTITY);
 			case ENTITY_TYPE:
-				resultArgument = new EntityTypeArgument(nodeName);
-				break;
+				return new EntityTypeArgument(nodeName);
 			case ENVIRONMENT:
-				resultArgument = new EnvironmentArgument(nodeName);
-				break;
+				return new EnvironmentArgument(nodeName);
 			case FLOAT_RANGE:
-				resultArgument = new FloatRangeArgument(nodeName);
-				break;
+				return new FloatRangeArgument(nodeName);
 			case FUNCTION:
-				resultArgument = new FunctionArgument(nodeName);
-				break;
+				return new FunctionArgument(nodeName);
 			case INT_RANGE:
-				resultArgument = new IntegerRangeArgument(nodeName);
-				break;
+				return new IntegerRangeArgument(nodeName);
 			case ITEMSTACK:
-				resultArgument = new ItemStackArgument(nodeName);
-				break;
+				return new ItemStackArgument(nodeName);
 			case ITEMSTACK_PREDICATE:
-				resultArgument = new ItemStackPredicateArgument(nodeName);
-				break;
+				return new ItemStackPredicateArgument(nodeName);
 			case LITERAL:
 				break;
 			case LOCATION:
-				break;
+				return new LocationArgument(nodeName, LocationType.BLOCK_POSITION);
 			case LOCATION_2D:
-				break;
+				return new Location2DArgument(nodeName, LocationType.BLOCK_POSITION);
 			case LOOT_TABLE:
-				resultArgument = new LootTableArgument(nodeName);
-				break;
+				return new LootTableArgument(nodeName);
 			case MATH_OPERATION:
-				resultArgument = new MathOperationArgument(nodeName);
-				break;
+				return new MathOperationArgument(nodeName);
 			case MULTI_LITERAL:
 				break;
 			case NBT_COMPOUND:
-				resultArgument = new NBTCompoundArgument(nodeName);
-				break;
+				return new NBTCompoundArgument(nodeName);
 			case OBJECTIVE:
-				resultArgument = new ObjectiveArgument(nodeName);
-				break;
+				return new ObjectiveArgument(nodeName);
 			case OBJECTIVE_CRITERIA:
-				resultArgument = new ObjectiveCriteriaArgument(nodeName);
-				break;
+				return new ObjectiveCriteriaArgument(nodeName);
 			case PARTICLE:
-				resultArgument = new ParticleArgument(nodeName);
-				break;
+				return new ParticleArgument(nodeName);
 			case PLAYER:
-				resultArgument = new PlayerArgument(nodeName);
-				break;
+				return new PlayerArgument(nodeName);
 			case POTION_EFFECT:
-				resultArgument = new PotionEffectArgument(nodeName);
-				break;
+				return new PotionEffectArgument(nodeName);
 			case RECIPE:
-				resultArgument = new RecipeArgument(nodeName);
-				break;
+				return new RecipeArgument(nodeName);
 			case ROTATION:
-				resultArgument = new RotationArgument(nodeName);
-				break;
+				return new RotationArgument(nodeName);
 			case SCOREBOARD_SLOT:
-				resultArgument = new ScoreboardSlotArgument(nodeName);
-				break;
+				return new ScoreboardSlotArgument(nodeName);
 			case SCORE_HOLDER:
-				break;
+				return new ScoreHolderArgument(nodeName, ScoreHolderType.SINGLE);
 			case SOUND:
-				resultArgument = new SoundArgument(nodeName);
-				break;
+				return new SoundArgument(nodeName);
 			case TEAM:
-				resultArgument = new TeamArgument(nodeName);
-				break;
+				return new TeamArgument(nodeName);
 			case TIME:
-				resultArgument = new TimeArgument(nodeName);
-				break;
+				return new TimeArgument(nodeName);
 			case UUID:
-				resultArgument = new UUIDArgument(nodeName);
-				break;
+				return new UUIDArgument(nodeName);
 			case PRIMITIVE_BOOLEAN:
-				resultArgument = new BooleanArgument(nodeName);
-				break;
+				return new BooleanArgument(nodeName);
 			case PRIMITIVE_DOUBLE:
 				break;
 			case PRIMITIVE_FLOAT:
 				break;
 			case PRIMITIVE_GREEDY_STRING:
-				resultArgument = new GreedyStringArgument(nodeName);
-				break;
+				return new GreedyStringArgument(nodeName);
 			case PRIMITIVE_INTEGER:
 				break;
 			case PRIMITIVE_LONG:
 				break;
 			case PRIMITIVE_STRING:
-				resultArgument = new StringArgument(nodeName);
-				break;
+				return new StringArgument(nodeName);
 			case PRIMITIVE_TEXT:
-				resultArgument = new TextArgument(nodeName);
-				break;
+				return new TextArgument(nodeName);
 			default:
 				break;
 			}
 			
-			return resultArgument;
+			return null;
 			
 		}
 		return null;
