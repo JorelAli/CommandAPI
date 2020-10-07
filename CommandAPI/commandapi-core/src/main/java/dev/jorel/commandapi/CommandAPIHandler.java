@@ -905,7 +905,7 @@ public abstract class CommandAPIHandler {
 						previousArguments.add(result);
 					}
 				}
-				return getSuggestionsBuilder(builder, getArgument(args, argumentName).getOverriddenSuggestions().get()
+				return getSuggestionsBuilder(builder, getArgument(args, argumentName).getOverriddenSuggestions().orElseGet(() -> (c, m) -> new IStringTooltip[0])
 						.apply(NMS.getCommandSenderForCLW(context.getSource()), previousArguments.toArray()));
 			};
 		}
