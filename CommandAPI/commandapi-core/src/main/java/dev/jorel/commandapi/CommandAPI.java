@@ -1,7 +1,6 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
@@ -12,13 +11,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.Plugin;
 
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
-import dev.jorel.commandapi.converter.Converter;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
 /**
@@ -110,27 +107,7 @@ public abstract class CommandAPI {
 			}
 		};
         
-		Bukkit.getServer().getPluginManager().registerEvents(playerJoinListener, plugin);
-		
-		if(plugin.getName().equals("CommandAPI")) {
-			final Listener pluginEnableListener = new Listener() {
-				@EventHandler(priority = EventPriority.HIGH)
-				public void onPluginEnable(PluginEnableEvent e) {
-					if(config.getPluginForDeferredConversion().containsKey(e.getPlugin().getName())) {
-						
-						String[] commands = config.getPluginForDeferredConversion().get(e.getPlugin().getName());
-						if(commands.length == 0) {
-							Converter.convert(e.getPlugin());
-						} else {
-							for(String command : commands) {
-								Converter.convert(e.getPlugin(), command);
-							}
-						}
-					}
-				}
-			};
-			Bukkit.getServer().getPluginManager().registerEvents(pluginEnableListener, plugin);
-		}   
+		Bukkit.getServer().getPluginManager().registerEvents(playerJoinListener, plugin);  
 	}
 	
 	/**

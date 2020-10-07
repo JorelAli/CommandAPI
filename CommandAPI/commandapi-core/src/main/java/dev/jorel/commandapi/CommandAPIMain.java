@@ -1,7 +1,6 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
@@ -12,7 +11,6 @@ import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.converter.Converter;
 
 public class CommandAPIMain extends JavaPlugin implements Listener {

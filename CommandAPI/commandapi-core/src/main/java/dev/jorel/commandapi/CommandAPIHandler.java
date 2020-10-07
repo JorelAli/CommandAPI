@@ -212,11 +212,9 @@ public abstract class CommandAPIHandler {
 
 		// Populate array
 		for (Argument argument : args) {
-			if(argument.isListed()) {
-				Object result = parseArgument(cmdCtx, argument.getNodeName(), argument);
-				if(result != null) {
-					argList.add(result);
-				}
+			Object result = parseArgument(cmdCtx, argument.getNodeName(), argument);
+			if(result != null) {
+				argList.add(result);
 			}
 		}
 		
@@ -234,6 +232,9 @@ public abstract class CommandAPIHandler {
 	 * @throws CommandSyntaxException
 	 */
 	static Object parseArgument(CommandContext cmdCtx, String key, Argument value) throws CommandSyntaxException {
+		if(value.isListed()) {
+			return null;
+		}
 		switch (value.getArgumentType()) {
 		case ANGLE:
 			return NMS.getAngle(cmdCtx, key);
@@ -900,7 +901,9 @@ public abstract class CommandAPIHandler {
 						 */
 						result = null;
 					}
-					previousArguments.add(result);
+					if(result != null) {
+						previousArguments.add(result);
+					}
 				}
 				return getSuggestionsBuilder(builder, getArgument(args, argumentName).getOverriddenSuggestions().get()
 						.apply(NMS.getCommandSenderForCLW(context.getSource()), previousArguments.toArray()));
