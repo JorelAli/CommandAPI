@@ -123,6 +123,15 @@ These versions of Minecraft must be installed in your local machine's Maven repo
     </thead>
     <tbody>
         <tr>
+            <td valign="top"><b>4.3c</b></td>
+            <td valign="top">October 2020</td>
+            <td valign="top">
+                <ul>
+                    <li>Fixes bug where function loading would break because permissions could not be properly computed</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
             <td valign="top"><b>4.3b</b></td>
             <td valign="top">September 2020</td>
             <td valign="top">
