@@ -390,13 +390,14 @@ public abstract class CommandAPIHandler {
 		boolean satisfiesPermissions = false;
 		if (sender == null) {
 			satisfiesPermissions = true;
-		}
-		if (permission.equals(CommandPermission.NONE)) {
-			satisfiesPermissions = true;
-		} else if (permission.equals(CommandPermission.OP)) {
-			satisfiesPermissions = sender.isOp();
 		} else {
-			satisfiesPermissions = sender.hasPermission(permission.getPermission());
+			if (permission.equals(CommandPermission.NONE)) {
+				satisfiesPermissions = true;
+			} else if (permission.equals(CommandPermission.OP)) {
+				satisfiesPermissions = sender.isOp();
+			} else {
+				satisfiesPermissions = sender.hasPermission(permission.getPermission());
+			}
 		}
 		
 		return satisfiesPermissions && requirements.test(sender);
