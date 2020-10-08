@@ -402,7 +402,7 @@ public abstract class CommandAPIHandler {
 	 * @return true if the sender satisfies the provided permission
 	 */
 	static boolean permissionCheck(CommandSender sender, CommandPermission permission, Predicate<CommandSender> requirements) {
-		boolean satisfiesPermissions = false;
+		boolean satisfiesPermissions;
 		if (sender == null) {
 			satisfiesPermissions = true;
 		} else {
@@ -905,8 +905,10 @@ public abstract class CommandAPIHandler {
 						previousArguments.add(result);
 					}
 				}
-				return getSuggestionsBuilder(builder, getArgument(args, argumentName).getOverriddenSuggestions().orElseGet(() -> (c, m) -> new IStringTooltip[0])
-						.apply(NMS.getCommandSenderForCLW(context.getSource()), previousArguments.toArray()));
+				return getSuggestionsBuilder(builder,
+						getArgument(args, argumentName).getOverriddenSuggestions()
+								.orElseGet(() -> (c, m) -> new IStringTooltip[0])
+								.apply(NMS.getCommandSenderForCLW(context.getSource()), previousArguments.toArray()));
 			};
 		}
 	}
