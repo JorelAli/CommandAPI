@@ -1264,6 +1264,71 @@ Brigadier.getRootNode().getChild("execute").getChild("if").addChild(randomChance
 /* ANCHOR_END: brigadier */
 }
 
+{
+
+/* ANCHOR: subcommandspart */
+CommandAPICommand groupAdd = new CommandAPICommand("add")
+	.withArguments(new StringArgument("permission"))
+	.withArguments(new StringArgument("groupName"))
+	.executes((sender, args) -> {
+	    //perm group add code
+	});
+/* ANCHOR_END: subcommandspart */
+/* ANCHOR: subcommands */
+CommandAPICommand groupRemove = new CommandAPICommand("remove")
+	.withArguments(new StringArgument("permission"))
+	.withArguments(new StringArgument("groupName"))
+	.executes((sender, args) -> {
+	    //perm group remove code
+	});
+
+CommandAPICommand group = new CommandAPICommand("group")
+	.withSubcommand(groupAdd)
+	.withSubcommand(groupRemove);
+/* ANCHOR_END: subcommands */
+/* ANCHOR: subcommandsend */
+new CommandAPICommand("perm")
+    .withSubcommand(group)
+    .register();
+/* ANCHOR_END: subcommandsend */
+/* ANCHOR: subcommands1 */
+new CommandAPICommand("perm")
+    .withSubcommand(new CommandAPICommand("group")
+        .withSubcommand(new CommandAPICommand("add")
+            .withArguments(new StringArgument("permission"))
+            .withArguments(new StringArgument("groupName"))
+            .executes((sender, args) -> {
+                //perm group add code
+            })
+        )
+        .withSubcommand(new CommandAPICommand("remove")
+            .withArguments(new StringArgument("permission"))
+            .withArguments(new StringArgument("groupName"))
+            .executes((sender, args) -> {
+                //perm group remove code
+            })
+        )
+    )
+    .withSubcommand(new CommandAPICommand("user")
+        .withSubcommand(new CommandAPICommand("add")
+            .withArguments(new StringArgument("permission"))
+            .withArguments(new StringArgument("userName"))
+            .executes((sender, args) -> {
+                //perm user add code
+            })
+        )
+        .withSubcommand(new CommandAPICommand("remove")
+            .withArguments(new StringArgument("permission"))
+            .withArguments(new StringArgument("userName"))
+            .executes((sender, args) -> {
+                //perm user remove code
+            })
+        )
+    )
+    .register();
+/* ANCHOR_END: subcommands1 */
+}
+
 } // Examples class end
 
 /* ANCHOR: functionregistration */

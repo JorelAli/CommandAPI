@@ -41,7 +41,7 @@ The `CommandAPICommand` has various methods, which are outlined below:
 #### Setting the command name
 
 ```java
-new CommandAPICommand(String)
+new CommandAPICommand(String commandName)
 ```
 
 This constructor creates a new instance of the `CommandAPICommand` object. This constructor requires the _name_ of the command.
@@ -61,16 +61,22 @@ CommandAPICommand withArguments(Argument... arguments)
 Similar to the other `withArguments` method, this method appends the `arguments` to the list of arguments for the command. This is purely to make adding one or two arguments nice and easy instead of creating lots of `List` objects everywhere.
 
 ```java
-CommandAPICommad withPermission(CommandPermission)
-``` 
-
-The `withPermission` method is used to assign a permission that is required to execute the command. (See [the section on permissions](permissions.html)).
-
-```java
-withAliases(String... args)
+CommandAPICommand withPermission(CommandPermission)
 ```
 
-The `withAliases` method is used to declare a list of aliases that can be used to run this command via.
+The `withPermission` method is used to assign a permission that is required to execute the command. (See [the section on permissions](permissions.html) for more info).
+
+```java
+CommandAPICommand withAliases(String... args)
+```
+
+The `withAliases` method is used to declare a list of aliases that can be used to run this command via. (See [the section on aliases](./aliases.md) for more info).
+
+```java
+CommandAPICommand withSubcommand(CommandAPICommand subcommand)
+```
+
+The `withSubcommand` method is used to declare a subcommand that leads on from the current command. (See [the section on subcommands](./subcommands.md) for more info).
 
 #### Setting the command's executor
 

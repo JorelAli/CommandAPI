@@ -74,6 +74,7 @@
 - [Permissions](./permissions.md)
 - [Requirements](./requirements.md)
 - [Aliases](./aliases.md)
+- [Subcommands](./subcommands.md)
 
 # CommandAPI Utilities
 
