@@ -123,6 +123,48 @@ These versions of Minecraft must be installed in your local machine's Maven repo
     </thead>
     <tbody>
         <tr>
+            <td valign="top"><b>5.0</b></td>
+            <td valign="top">October 2020</td>
+            <td valign="top">
+                <ul>
+                    <li><b>Note: This version is incompatible with any plugin that used the CommandAPI version 4.3c or below! (See documentation for more information)</b></li>
+                    <li>CommandAPI-Brigadier improvements:</li>
+                    <ul>
+                        <li>Adds <code>toSuggestions()</code> to the CommandAPI-Brigadier library to convert CommandAPI suggestions into Brigadier's <code>SuggestionProvider</code></li>
+                        <li>CommandAPI-Brigadier library methods got renamed</li>
+                        <li>Changed the way literal arguments are constructed in the CommandAPI-Brigadier library - they are no longer unnecessarily registered into the command graph</li>
+                    </ul>
+                    <li>Bug fixes:</li>
+                    <ul>
+                        <li>Fixes bug where verbose logging of permission linking was inaccurate</li>
+                        <li>Fixes bug where overriding suggestions can break when generating suggestions</li>
+                        <li>Fixes bug where <code>null</code> could appear in the suggestions list of arguments</li>
+                        <li>CommandAPI's non-verbose logging is now actually quiet</li>
+                    </ul>
+                    <li>Documentation improvements:</li>
+                    <ul>
+                        <li>Documentation code examples are now guaranteed to compile</li>
+                        <li>The list of CommandAPI arguments to Minecraft argument IDs is now in the documentation</li>
+                    </ul>
+                    <li>Command conversion improvements:</li>
+                    <ul>
+                        <li>The <code>Converter.convert()</code> method can now take varargs for arguments</li>
+                        <li>Command conversion code that was specific to the CommandAPI plugin is no longer included in the shaded version of the CommandAPI</li>
+                        <li>Command conversion in the configuration for server owners can now let server owners apply their own command argument implementations!</li>
+                    </ul>
+                    <li>API improvements:</code>
+                    <ul>
+                        <li>The <code>.withArguments</code> method can now take varargs</li>
+                        <li>String tooltips are now much easier to implement for custom objects using <code>IStringTooltip</code></li>
+                        <li>Removes <code>LinkedHashMap</code> for argument registration in favour of <code>List</code></li>
+                    </ul>
+                    <li>Adds subcommands</li>
+                    <li>Adds <code>AngleArgument</code></li>
+                    <li>Arguments can now be omitted from the <code>Object[] args</code> using the method <code>.setListed()</code>. This means Literal arguments can now be "present" in the arguments if desired.</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
             <td valign="top"><b>4.3c</b></td>
             <td valign="top">October 2020</td>
             <td valign="top">
