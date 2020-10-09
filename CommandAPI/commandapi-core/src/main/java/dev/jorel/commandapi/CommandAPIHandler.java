@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiPredicate;
@@ -214,7 +215,7 @@ public abstract class CommandAPIHandler {
 	 * @throws CommandSyntaxException
 	 */
 	static Object parseArgument(CommandContext cmdCtx, String key, Argument value) throws CommandSyntaxException {
-		if(value.isListed()) {
+		if(!value.isListed()) {
 			return null;
 		}
 		switch (value.getArgumentType()) {
@@ -411,7 +412,9 @@ public abstract class CommandAPIHandler {
 			CommandAPI.logInfo("Linking permissions to commands:");
 		}
 		
-		PERMISSIONS_TO_FIX.forEach((cmdName, perm) -> {
+		for(Entry<String, CommandPermission> entry : PERMISSIONS_TO_FIX.entrySet()) {
+			String cmdName = entry.getKey();
+			CommandPermission perm = entry.getValue();
 			CommandAPI.logInfo(perm.toString() + " -> /" + cmdName);
 			
 			String permNode = perm.equals(CommandPermission.NONE) ? "" : perm.getPermission();
@@ -432,7 +435,7 @@ public abstract class CommandAPIHandler {
 			if (NMS.isVanillaCommandWrapper(map.getCommand("minecraft:" + cmdName))) {
 				map.getCommand(cmdName).setPermission(permNode);
 			}
-		});
+		}
 		CommandAPI.getLog().info("Linked " + PERMISSIONS_TO_FIX.size() + " Bukkit permissions to commands");
 	}
 

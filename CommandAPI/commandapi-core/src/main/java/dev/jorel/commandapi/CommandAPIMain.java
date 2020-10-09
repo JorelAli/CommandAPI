@@ -1,6 +1,7 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
@@ -10,6 +11,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import dev.jorel.commandapi.arguments.DoubleArgument;
 
 public class CommandAPIMain extends JavaPlugin implements Listener {
 	
@@ -30,7 +33,7 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 				Converter.convert(pluginToConvert.getKey());
 			} else {
 				for(String command : pluginToConvert.getValue()) {
-					Converter.convert(pluginToConvert.getKey(), command);
+					new AdvancedConverter(pluginToConvert.getKey(), command).convert();
 				}
 			}
 		}
@@ -40,7 +43,11 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 	public void onEnable() {
 		CommandAPI.onEnable(this);
 		Bukkit.getServer().getPluginManager().registerEvents(this, this);
-
+		
+		new CommandAPICommand("d").withArguments(new DoubleArgument("dd"))
+				.executesPlayer((s, a) -> {
+					System.out.println(Arrays.deepToString(a));
+				}).register();
 	}
 	
 	@EventHandler(priority = EventPriority.HIGH)
