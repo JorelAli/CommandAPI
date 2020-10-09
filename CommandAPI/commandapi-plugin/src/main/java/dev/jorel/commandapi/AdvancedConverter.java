@@ -64,7 +64,7 @@ import dev.jorel.commandapi.exceptions.InvalidNumberException;
  */
 public class AdvancedConverter {
 
-	private static Pattern argumentPattern = Pattern.compile("<(\\w+)>\\[([a-z:_]+|(?:[0-9]+)?\\.\\.(?:[0-9]+)?)\\]");
+	private static Pattern argumentPattern = Pattern.compile("<(\\w+)>\\[([a-z:_]+|(?:[0-9\\.]+)?\\.\\.(?:[0-9\\.]+)?)\\]");
 	private static Pattern literalPattern = Pattern.compile("\\((\\w+(?:\\|\\w+)*)\\)");
 	
 	private final Plugin plugin;
