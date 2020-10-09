@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -66,7 +65,6 @@ import dev.jorel.commandapi.nms.NMS;
 public abstract class CommandAPIHandler {
 	
 	private static final Map<ClassCache, Field> FIELDS = new HashMap<>();
-	private static final Map<ClassCache, Method> METHODS = new HashMap<>();
 	private static final TreeMap<String, CommandPermission> PERMISSIONS_TO_FIX = new TreeMap<>();
 	private static final NMS NMS;
 	private static final CommandDispatcher DISPATCHER;
@@ -74,16 +72,16 @@ public abstract class CommandAPIHandler {
 	static {
 		Object server;
 		try {
-			server = getMethod(Bukkit.getServer().getClass(), "getServer").invoke(Bukkit.getServer());
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			server = Bukkit.getServer().getClass().getDeclaredMethod("getServer").invoke(Bukkit.getServer());
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			CommandAPI.getLog().severe("Unable to hook into NMS properly!");
 			server = null;
 		}
 		
 		String version;
 		try {
-			version = (String) getMethod(Class.forName(server.getClass().getPackage().getName() + ".MinecraftServer"), "getVersion").invoke(server);
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException | ClassNotFoundException e) {
+			version = (String) Class.forName(server.getClass().getPackage().getName() + ".MinecraftServer").getDeclaredMethod("getVersion").invoke(server);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException | ClassNotFoundException | NoSuchMethodException e) {
 			CommandAPI.getLog().severe("Failed to find Minecraft version!");
 			version = null;
 		}
@@ -717,31 +715,6 @@ public abstract class CommandAPIHandler {
 			}
 			result.setAccessible(true);
 			FIELDS.put(key, result);
-			return result;
-		}
-	}
-
-	/**
-	 * Caches a method using reflection if it is not already cached, then return the
-	 * method of a given class. This will also make the method accessible.
-	 * 
-	 * @param clazz the class where the method is declared
-	 * @param name the name of the method
-	 * @return a Method reference
-	 */
-	public static Method getMethod(Class<?> clazz, String name) {
-		ClassCache key = new ClassCache(clazz, name);
-		if (METHODS.containsKey(key)) {
-			return METHODS.get(key);
-		} else {
-			Method result = null;
-			try {
-				result = clazz.getDeclaredMethod(name);
-			} catch (SecurityException | NoSuchMethodException e) {
-				e.printStackTrace();
-			}
-			result.setAccessible(true);
-			METHODS.put(key, result);
 			return result;
 		}
 	}
