@@ -154,8 +154,8 @@ public class AdvancedConverter {
 			return new MultiLiteralArgument(literals.split("\\|"));
 		} else if(argumentMatcher.matches()) {
 			//Parse arguments
-			String nodeName = literalMatcher.group(1);
-			String argumentType = literalMatcher.group(2);
+			String nodeName = argumentMatcher.group(1);
+			String argumentType = argumentMatcher.group(2);
 			
 			if(argumentType.contains("..")) {
 				//Parse ranges
