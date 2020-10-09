@@ -27,10 +27,7 @@
                 <filter>
                   <artifact>dev.jorel:commandapi-core</artifact>
                   <excludes>
-                    <exclude>dev/jorel/commandapi/CommandAPIVersionHandler**</exclude>
                     <exclude>dev/jorel/commandapi/CommandAPIMain**</exclude>
-                    <exclude>config.yml</exclude>
-                    <exclude>plugin.yml</exclude>
                   </excludes>
                 </filter>
               </filters>
