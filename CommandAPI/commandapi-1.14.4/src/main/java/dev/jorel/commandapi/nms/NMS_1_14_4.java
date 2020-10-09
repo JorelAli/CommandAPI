@@ -398,8 +398,8 @@ public class NMS_1_14_4 implements NMS {
 	}
 
 	@Override
-	public com.mojang.brigadier.CommandDispatcher getBrigadierDispatcher(Object server) {
-		return ((MinecraftServer) server).getCommandDispatcher().a();
+	public com.mojang.brigadier.CommandDispatcher getBrigadierDispatcher() {
+		return ((MinecraftServer) ((CraftServer) Bukkit.getServer()).getServer()).getCommandDispatcher().a();
 	}
 
 	@Override

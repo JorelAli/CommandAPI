@@ -3,7 +3,6 @@ package dev.jorel.commandapi;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -70,24 +69,9 @@ public abstract class CommandAPIHandler {
 	private static final CommandDispatcher DISPATCHER;
 	
 	static {
-		Object server;
-		try {
-			server = Bukkit.getServer().getClass().getDeclaredMethod("getServer").invoke(Bukkit.getServer());
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			CommandAPI.getLog().severe("Unable to hook into NMS properly!");
-			server = null;
-		}
-		
-		String version;
-		try {
-			version = (String) Class.forName(server.getClass().getPackage().getName() + ".MinecraftServer").getDeclaredMethod("getVersion").invoke(server);
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException | ClassNotFoundException | NoSuchMethodException e) {
-			CommandAPI.getLog().severe("Failed to find Minecraft version!");
-			version = null;
-		}
-		
-		NMS = CommandAPIVersionHandler.getNMS(version);
-		DISPATCHER = NMS.getBrigadierDispatcher(server);
+		String bukkit = Bukkit.getServer().toString();
+		NMS = CommandAPIVersionHandler.getNMS(bukkit.substring(bukkit.indexOf("minecraftVersion") + 17, bukkit.length() - 1));
+		DISPATCHER = NMS.getBrigadierDispatcher();
 	}
 	
 	static void checkDependencies() {

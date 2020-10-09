@@ -102,7 +102,7 @@ public interface NMS {
 	 * @param server The NMS MinecraftServer instance
 	 * @return A Brigadier CommandDispatcher
 	 */
-	CommandDispatcher<?> getBrigadierDispatcher(Object server);
+	CommandDispatcher<?> getBrigadierDispatcher();
 
 	/**
 	 * Checks if a Command is an instance of the OBC VanillaCommandWrapper
