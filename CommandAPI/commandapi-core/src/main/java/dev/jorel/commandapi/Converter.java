@@ -1,22 +1,17 @@
-package dev.jorel.commandapi.converter;
+package dev.jorel.commandapi;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.GreedyStringArgument;
 
@@ -25,12 +20,9 @@ import dev.jorel.commandapi.arguments.GreedyStringArgument;
  */
 public abstract class Converter {
 	
-	private static final List<Argument> PLAIN_ARGUMENTS;
-	
-	static {
-		PLAIN_ARGUMENTS = new ArrayList<>();
-		PLAIN_ARGUMENTS.add(new GreedyStringArgument("args"));
-	}
+	private static final List<Argument> PLAIN_ARGUMENTS = Arrays.asList(new GreedyStringArgument("args"));
+	private static final Set<String> CALLER_METHODS = new HashSet<>(Arrays.asList("isPermissionSet", "hasPermission",
+			"addAttachment", "removeAttachment", "recalculatePermissions", "getEffectivePermissions", "isOp", "setOp"));
 
 	/**
 	 * Convert all commands stated in Plugin's plugin.yml file into CommandAPI-compatible commands
@@ -110,7 +102,7 @@ public abstract class Converter {
 		new CommandAPICommand(commandName)
 			.withPermission(permissionNode)
 			.withAliases(aliases)
-			.executesNative((sender, args) -> { plugin.getCommand(commandName).execute(of(sender), commandName, new String[0]); })
+			.executesNative((sender, args) -> { plugin.getCommand(commandName).execute(mergeProxySender(sender), commandName, new String[0]); })
 			.register();
 		
 		//Multiple arguments		
@@ -120,9 +112,9 @@ public abstract class Converter {
 			.withArguments(arguments)
 			.executesNative((sender, args) -> { 
 				if(arguments.equals(PLAIN_ARGUMENTS)) {
-					plugin.getCommand(commandName).execute(of(sender), commandName, ((String) args[0]).split(" "));
+					plugin.getCommand(commandName).execute(mergeProxySender(sender), commandName, ((String) args[0]).split(" "));
 				} else {
-					plugin.getCommand(commandName).execute(of(sender), commandName, (String[]) args);
+					plugin.getCommand(commandName).execute(mergeProxySender(sender), commandName, (String[]) args);
 				}
 			});
 		// Good grief, what a hack~
@@ -130,38 +122,16 @@ public abstract class Converter {
 		multiArgs.register();
 	}
 	
-	private static CommandSender of(ProxiedCommandSender proxy) {
-		CommandSender sender = (CommandSender) Proxy.newProxyInstance(CommandSender.class.getClassLoader(),
-				proxy.getCallee().getClass().getInterfaces(), new CommandSenderHandler(proxy));
-		
-		return sender;
+	/*
+	 * https://www.jorel.dev/blog/Simplifying-Bukkit-CommandSenders/
+	 * No matter what I can name this method, I'm never satisfied its name
+	 */
+	private static CommandSender mergeProxySender(ProxiedCommandSender proxySender) {
+		return (CommandSender) Proxy.newProxyInstance(CommandSender.class.getClassLoader(),
+				proxySender.getCallee().getClass().getInterfaces(),
+				(p, method, args) -> method.invoke(
+						CALLER_METHODS.contains(method.getName()) ? proxySender.getCaller() : proxySender.getCaller(),
+						args));
 	}
-	
-	static class CommandSenderHandler implements InvocationHandler {
-		
-        private final ProxiedCommandSender proxiedCommandSender;
-        
-        public CommandSenderHandler(ProxiedCommandSender proxiedCommandSender) {
-            this.proxiedCommandSender = proxiedCommandSender;
-        }
-
-		public Object invoke(Object proxy, Method method, Object[] args)
-				throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-			
-			switch(method.getName()) {
-			case "isPermissionSet":
-			case "hasPermission":
-			case "addAttachment":
-			case "removeAttachment":
-			case "recalculatePermissions":
-			case "getEffectivePermissions":
-			case "isOp":
-			case "setOp":
-				return method.invoke(proxiedCommandSender.getCaller(), args);
-			default:
-				return method.invoke(proxiedCommandSender.getCallee(), args);
-			}
-        }
-    }
 	
 }

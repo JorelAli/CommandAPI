@@ -11,8 +11,6 @@ import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import dev.jorel.commandapi.converter.Converter;
-
 public class CommandAPIMain extends JavaPlugin implements Listener {
 	
 	@Override
