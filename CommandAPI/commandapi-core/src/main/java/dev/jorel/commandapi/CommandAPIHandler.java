@@ -400,48 +400,40 @@ public abstract class CommandAPIHandler {
 		return satisfiesPermissions && requirements.test(sender);
 	}
 
+	/*
+	 * Makes permission checks more "Bukkit" like and less "Vanilla Minecraft" like
+	 */
 	static void fixPermissions() {
-		/*
-		 * Makes permission checks more "Bukkit" like and less "Vanilla Minecraft" like
-		 */
-		try {
+		// Get the command map to find registered commands
+		SimpleCommandMap map = NMS.getSimpleCommandMap();
 
-			// Get the command map to find registered commands
-			SimpleCommandMap map = NMS.getSimpleCommandMap();
-			Field f = getField(SimpleCommandMap.class, "knownCommands");
-			Map<String, org.bukkit.command.Command> knownCommands = (Map<String, org.bukkit.command.Command>) f
-					.get(map);
-
-			if(!PERMISSIONS_TO_FIX.isEmpty()) {
-				CommandAPI.logInfo("Linking permissions to commands:");
-			}
-			
-			PERMISSIONS_TO_FIX.forEach((cmdName, perm) -> {
-				CommandAPI.logInfo(perm.toString() + " -> /" + cmdName);
-				
-				String permNode = perm.equals(CommandPermission.NONE) ? "" : perm.getPermission();
-				
-				/*
-				 * Sets the permission. If you have to be OP to run this command,
-				 * we set the permission to null. Doing so means that Bukkit's
-				 * "testPermission" will always return true, however since the
-				 * command's permission check occurs internally via the CommandAPI,
-				 * this isn't a problem.
-				 * 
-				 * If anyone dares tries to use testPermission() on this command,
-				 * seriously, what are you doing and why?
-				 */
-				if (NMS.isVanillaCommandWrapper(knownCommands.get(cmdName))) {
-					knownCommands.get(cmdName).setPermission(permNode);
-				}
-				if (NMS.isVanillaCommandWrapper(knownCommands.get("minecraft:" + cmdName))) {
-					knownCommands.get(cmdName).setPermission(permNode);
-				}
-			});
-			CommandAPI.getLog().info("Linked " + PERMISSIONS_TO_FIX.size() + " Bukkit permissions to commands");
-		} catch (IllegalAccessException | IllegalArgumentException e) {
-			e.printStackTrace();
+		if(!PERMISSIONS_TO_FIX.isEmpty()) {
+			CommandAPI.logInfo("Linking permissions to commands:");
 		}
+		
+		PERMISSIONS_TO_FIX.forEach((cmdName, perm) -> {
+			CommandAPI.logInfo(perm.toString() + " -> /" + cmdName);
+			
+			String permNode = perm.equals(CommandPermission.NONE) ? "" : perm.getPermission();
+			
+			/*
+			 * Sets the permission. If you have to be OP to run this command,
+			 * we set the permission to null. Doing so means that Bukkit's
+			 * "testPermission" will always return true, however since the
+			 * command's permission check occurs internally via the CommandAPI,
+			 * this isn't a problem.
+			 * 
+			 * If anyone dares tries to use testPermission() on this command,
+			 * seriously, what are you doing and why?
+			 */
+			if (NMS.isVanillaCommandWrapper(map.getCommand(cmdName))) {
+				map.getCommand(cmdName).setPermission(permNode);
+			}
+			if (NMS.isVanillaCommandWrapper(map.getCommand("minecraft:" + cmdName))) {
+				map.getCommand(cmdName).setPermission(permNode);
+			}
+		});
+		CommandAPI.getLog().info("Linked " + PERMISSIONS_TO_FIX.size() + " Bukkit permissions to commands");
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
