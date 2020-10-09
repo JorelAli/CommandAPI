@@ -57,6 +57,7 @@ import dev.jorel.commandapi.arguments.TeamArgument;
 import dev.jorel.commandapi.arguments.TextArgument;
 import dev.jorel.commandapi.arguments.TimeArgument;
 import dev.jorel.commandapi.arguments.UUIDArgument;
+import dev.jorel.commandapi.exceptions.InvalidNumberException;
 
 /**
  * A command parsing system that converts string arguments into something way more useful
@@ -68,6 +69,7 @@ public class AdvancedConverter {
 	
 	private final Plugin plugin;
 	private final String command;
+	private int argumentIndex = 1;
 	
 	public AdvancedConverter(Plugin plugin, String command) {
 		this.plugin = plugin;
@@ -95,8 +97,8 @@ public class AdvancedConverter {
 	private List<Argument> parseArguments(String command) {
 		List<Argument> arguments = new ArrayList<>();
 		String[] parts = command.split(" ");
-		for (int i = 1; i < parts.length; i++) {
-			Argument argument = parseArgument(parts[i]);
+		for (argumentIndex = 1; argumentIndex < parts.length; argumentIndex++) {
+			Argument argument = parseArgument(parts[argumentIndex]);
 			if(argument != null) {
 				arguments.add(argument);
 			}
@@ -112,7 +114,7 @@ public class AdvancedConverter {
 		try {
 			return Double.parseDouble(bound);
 		} catch(NumberFormatException e) {
-			throw new RuntimeException(bound + " is not a number!");
+			throw new InvalidNumberException(bound, command, argumentIndex);
 		}
 	}
 	

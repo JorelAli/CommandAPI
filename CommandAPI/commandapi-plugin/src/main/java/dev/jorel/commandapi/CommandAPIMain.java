@@ -43,11 +43,6 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 	public void onEnable() {
 		CommandAPI.onEnable(this);
 		Bukkit.getServer().getPluginManager().registerEvents(this, this);
-		
-		new CommandAPICommand("d").withArguments(new DoubleArgument("dd"))
-				.executesPlayer((s, a) -> {
-					System.out.println(Arrays.deepToString(a));
-				}).register();
 	}
 	
 	@EventHandler(priority = EventPriority.HIGH)
