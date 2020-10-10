@@ -58,6 +58,7 @@ import dev.jorel.commandapi.arguments.TextArgument;
 import dev.jorel.commandapi.arguments.TimeArgument;
 import dev.jorel.commandapi.arguments.UUIDArgument;
 import dev.jorel.commandapi.exceptions.InvalidNumberException;
+import dev.jorel.commandapi.exceptions.UnknownArgumentException;
 
 /**
  * A command parsing system that converts string arguments into something way more useful
@@ -78,7 +79,13 @@ public class AdvancedConverter {
 	
 	public void convert() {
 		String commandName = command.split(" ")[0];
-		List<Argument> arguments = parseArguments(command);
+		List<Argument> arguments;
+		try {
+			arguments = parseArguments(command);
+		} catch (UnknownArgumentException | InvalidNumberException e) {
+			CommandAPI.getLog().severe(e.getMessage());
+			return;
+		}
 		if(arguments.size() == 0) {
 			Converter.convert(plugin, commandName);
 		} else {
@@ -94,7 +101,7 @@ public class AdvancedConverter {
 	 *     - speed (walk|fly) <speed>[0..10]
 	 *     - speed (walk|fly) <speed>[0..10] <target>[minecraft:game_profile]
 	 */
-	private List<Argument> parseArguments(String command) {
+	private List<Argument> parseArguments(String command) throws UnknownArgumentException, InvalidNumberException {
 		List<Argument> arguments = new ArrayList<>();
 		String[] parts = command.split(" ");
 		for (argumentIndex = 1; argumentIndex < parts.length; argumentIndex++) {
@@ -110,7 +117,7 @@ public class AdvancedConverter {
 		return value == (long) value;
 	}
 	
-	private double parseValue(String bound) {
+	private double parseValue(String bound) throws InvalidNumberException {
 		try {
 			return Double.parseDouble(bound);
 		} catch(NumberFormatException e) {
@@ -118,7 +125,7 @@ public class AdvancedConverter {
 		}
 	}
 	
-	private Argument parseRange(String nodeName, String[] bounds) {		
+	private Argument parseRange(String nodeName, String[] bounds) throws InvalidNumberException {		
 		if(bounds.length == 1) {
 			//x..
 			double value = parseValue(bounds[0]);
@@ -147,7 +154,7 @@ public class AdvancedConverter {
 		}
 	}
 	
-	private Argument parseArgument(String argument) {
+	private Argument parseArgument(String argument) throws UnknownArgumentException, InvalidNumberException {
 		Matcher literalMatcher = literalPattern.matcher(argument);
 		Matcher argumentMatcher = argumentPattern.matcher(argument);
 		if(literalMatcher.matches()) {
@@ -257,11 +264,11 @@ public class AdvancedConverter {
 				case MULTI_LITERAL:
 				case CUSTOM:
 				default:
-					return null;
+					throw new UnknownArgumentException(argumentType);
 				}
 			}
 		} else {
-			return null;
+			throw new UnknownArgumentException(argumentType);
 		}
 	}
 	

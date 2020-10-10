@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
  * An exception caused when a number is not a number
  */
 @SuppressWarnings("serial")
-public class InvalidNumberException extends RuntimeException {
+public class InvalidNumberException extends Exception {
 	
 	public InvalidNumberException(String input, String command, int index) {
 		super(format(input, command, index));
