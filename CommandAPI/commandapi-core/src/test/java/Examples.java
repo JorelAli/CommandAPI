@@ -63,6 +63,7 @@ import dev.jorel.commandapi.CommandAPIHandler.Brigadier;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.Converter;
 import dev.jorel.commandapi.arguments.AdvancementArgument;
+import dev.jorel.commandapi.arguments.AngleArgument;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.BiomeArgument;
 import dev.jorel.commandapi.arguments.BlockPredicateArgument;
@@ -1327,6 +1328,20 @@ new CommandAPICommand("perm")
     )
     .register();
 /* ANCHOR_END: subcommands1 */
+}
+
+{
+	//NOTE: This example isn't used!
+/* ANCHOR: anglearguments */
+new CommandAPICommand("yaw")
+	.withArguments(new AngleArgument("amount"))
+	.executesPlayer((player, args) -> {
+		Location newLocation = player.getLocation();
+		newLocation.setYaw((float) args[0]);
+		player.teleport(newLocation);
+	})
+	.register();
+/* ANCHOR_END: anglearguments */
 }
 
 } // Examples class end

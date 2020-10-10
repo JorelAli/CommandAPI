@@ -268,7 +268,7 @@ public class AdvancedConverter {
 				}
 			}
 		} else {
-			throw new UnknownArgumentException(argumentType);
+			throw new UnknownArgumentException(argument);
 		}
 	}
 	

@@ -39,7 +39,6 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 	public void onEnable() {
 		CommandAPI.onEnable(this);
 		getServer().getPluginManager().registerEvents(this, this);
-		
 	}
 	
 	@EventHandler(priority = EventPriority.HIGH)
