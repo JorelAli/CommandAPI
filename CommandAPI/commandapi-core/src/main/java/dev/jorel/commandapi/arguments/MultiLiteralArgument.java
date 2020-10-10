@@ -2,12 +2,16 @@ package dev.jorel.commandapi.arguments;
 
 import dev.jorel.commandapi.exceptions.BadLiteralException;
 
+/**
+ * An argument that represents multiple LiteralArguments
+ */
 public class MultiLiteralArgument extends Argument {
 
 	private String[] literals;
 	
 	/**
-	 * A literal argument. Only takes one string value which cannot be modified 
+	 * A multiliteral argument. Takes in string literals which cannot be modified 
+	 * @param literals the literals that this argument represents
 	 */
 	public MultiLiteralArgument(final String... literals) {
 		super(null, null);

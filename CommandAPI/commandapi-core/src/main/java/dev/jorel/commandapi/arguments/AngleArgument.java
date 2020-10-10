@@ -12,7 +12,8 @@ import dev.jorel.commandapi.CommandAPIHandler;
 public class AngleArgument extends SafeOverrideableArgument<Float> {
 
 	/**
-	 * A Particle argument. Represents Minecraft particles
+	 * Constructs an AngleArgument with a given node name
+	 * @param nodeName the name of the node for argument
 	 */
 	public AngleArgument(String nodeName) {
 		super(nodeName, CommandAPIHandler.getNMS()._ArgumentAngle(), String::valueOf);

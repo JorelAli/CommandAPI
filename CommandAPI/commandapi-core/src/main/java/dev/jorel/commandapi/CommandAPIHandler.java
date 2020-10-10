@@ -733,7 +733,7 @@ public abstract class CommandAPIHandler {
 		/**
 		 * Creates a new literal argument builder from a CommandAPI LiteralArgument
 		 * 
-		 * @param the LiteralArgument to convert from
+		 * @param literalArgument the LiteralArgument to convert from
 		 * @return a LiteralArgumentBuilder that represents the literal
 		 */
 		public static LiteralArgumentBuilder fromLiteralArgument(LiteralArgument literalArgument) {
@@ -808,9 +808,8 @@ public abstract class CommandAPIHandler {
 		}
 		
 		/**
-		 * Constructs a RequiredArgumentBuilder from a given argument and prompt text.
-		 * @param prompt the prompt to display when the user is typing the command
-		 * @param argument the argument to create a RequiredArgumentBuilder of
+		 * Constructs a RequiredArgumentBuilder from a given argument
+		 * @param argument the argument to create a RequiredArgumentBuilder from
 		 * @return a RequiredArgumentBuilder that represents the provided argument
 		 */
 		public static RequiredArgumentBuilder fromArgument(Argument argument) {

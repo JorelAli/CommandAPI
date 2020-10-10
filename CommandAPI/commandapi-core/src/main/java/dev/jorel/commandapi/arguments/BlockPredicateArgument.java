@@ -10,7 +10,8 @@ import dev.jorel.commandapi.CommandAPIHandler;
 public class BlockPredicateArgument extends Argument {
 	
 	/**
-	 * A Block Predicate argument. Represents a predicate for blocks 
+	 * Constructs a BlockPredicateArgument with a given node name. Represents a predicate for blocks 
+	 * @param nodeName the name of the node for argument
 	 */
 	public BlockPredicateArgument(String nodeName) {
 		super(nodeName, CommandAPIHandler.getNMS()._ArgumentBlockPredicate());

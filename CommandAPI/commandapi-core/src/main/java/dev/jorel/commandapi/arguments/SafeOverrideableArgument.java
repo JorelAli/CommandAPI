@@ -26,10 +26,9 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	}
 
 	/**
-	 * Override the suggestions of this argument with a custom array. Typically,
-	 * this is the supplier <code>s -> suggestions</code>.
+	 * Override the suggestions of this argument with a custom array.
 	 * 
-	 * @param suggestions the string array to override suggestions with
+	 * @param suggestions the S array to override suggestions with
 	 * @return the current argument
 	 */
 	@SuppressWarnings("unchecked")
@@ -37,6 +36,12 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 		return super.overrideSuggestions(sMap0(mapper, suggestions));
 	}
 	
+	/**
+	 * Override the suggestions of this argument with a custom Collection&lt;S>.
+	 * 
+	 * @param suggestions the Collection<S> to override suggestions with
+	 * @return the current argument
+	 */
 	@SuppressWarnings("unchecked")
 	public final Argument safeOverrideSuggestions(Collection<S> suggestions) {
 		return super.overrideSuggestions(sMap0(mapper, suggestions.toArray((S[]) new Object[0])));
@@ -76,6 +81,13 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 		return super.overrideSuggestionsT(tMap0(mapper, suggestions));
 	};
 	
+	/**
+	 * Override the suggestions of this argument with a Collection<Tooltip&lt;S>>,
+	 * that represents a safe suggestion and a hover tooltip
+	 * 
+	 * @param suggestions the suggestions and tooltips to override suggestions with 
+	 * @return the current argument
+	 */
 	@SuppressWarnings("unchecked")
 	public final Argument safeOverrideSuggestionsT(Collection<Tooltip<S>> suggestions) {
 		return super.overrideSuggestionsT(tMap0(mapper, suggestions.toArray(new Tooltip[0])));

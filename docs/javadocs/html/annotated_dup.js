@@ -76,6 +76,7 @@ var annotated_dup =
           [ "CommandAPIHandler", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler" ],
           [ "CommandPermission", "classdev_1_1jorel_1_1commandapi_1_1_command_permission.html", "classdev_1_1jorel_1_1commandapi_1_1_command_permission" ],
           [ "Converter", "classdev_1_1jorel_1_1commandapi_1_1_converter.html", "classdev_1_1jorel_1_1commandapi_1_1_converter" ],
+          [ "IStringTooltip", "interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html", "interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip" ],
           [ "StringTooltip", "classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html", "classdev_1_1jorel_1_1commandapi_1_1_string_tooltip" ],
           [ "Tooltip", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html", "classdev_1_1jorel_1_1commandapi_1_1_tooltip" ]
         ] ]

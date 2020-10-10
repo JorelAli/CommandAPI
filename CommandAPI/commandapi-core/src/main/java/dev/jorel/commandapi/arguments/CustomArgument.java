@@ -21,6 +21,7 @@ public class CustomArgument<T> extends Argument {
 	/**
 	 * Creates a CustomArgument with a valid parser, defaults to non-keyed argument
 	 * 
+	 * @param nodeName the name of the node for this argument
 	 * @param parser
 	 *            A CustomArgumentParser<T> that maps a String to the object of your choice.
 	 *            The String input is the text that the CommandSender inputs for
@@ -35,6 +36,7 @@ public class CustomArgument<T> extends Argument {
 	/**
 	 * Creates a CustomArgument with a valid parser
 	 * 
+	 * @param nodeName the name of the node for this argument
 	 * @param parser
 	 *            A CustomArgumentParser that maps a String to the object of your choice.
 	 *            The String input is the text that the CommandSender inputs for
@@ -168,16 +170,30 @@ public class CustomArgument<T> extends Argument {
 		final String errorMessage;
 		final MessageBuilder errorMessageBuilder;
 		
+		/**
+		 * Constructs a CustomArgumentException with a given error message
+		 * @param errorMessage the error message to display to the user when this exception is thrown
+		 */
 		public CustomArgumentException(String errorMessage) {
 			this.errorMessage = errorMessage;
 			this.errorMessageBuilder = null;
 		}
 		
+		/**
+		 * Constructs a CustomArgumentException with a given error message
+		 * @param errorMessage the error message to display to the user when this exception is thrown
+		 */
 		public CustomArgumentException(MessageBuilder errorMessage) {
 			this.errorMessage = null;
 			this.errorMessageBuilder = errorMessage;
 		}
 		
+		/**
+		 * Converts this CustomArgumentException into a CommandSyntaxException 
+		 * @param result the argument that the user entered that caused this exception to arise
+		 * @param cmdCtx the command context that executed this command
+		 * @return a Brigadier CommandSyntaxException
+		 */
 		public CommandSyntaxException toCommandSyntax(String result, CommandContext<?> cmdCtx) {
 			if(errorMessage == null) {
 				//Deal with MessageBuilder

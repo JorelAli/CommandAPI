@@ -12,6 +12,10 @@ import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
 
+/**
+ * A simple representation of Minecraft's CommandListenerWrapper, in the form of
+ * Bukkit's ProxiedCommandSender
+ */
 public class NativeProxyCommandSender implements ProxiedCommandSender {
 
 	private final CommandSender caller;

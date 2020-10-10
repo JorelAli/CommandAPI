@@ -11,6 +11,10 @@ import dev.jorel.commandapi.CommandAPIHandler;
  */
 public class BiomeArgument extends SafeOverrideableArgument<Biome> implements ICustomProvidedArgument {
 	
+	/**
+	 * Constructs a BiomeArgument with a given node name.
+	 * @param nodeName the name of the node for argument
+	 */
 	public BiomeArgument(String nodeName) {
 		super(nodeName, CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered(),((Function<Biome, String>) Biome::name).andThen(String::toLowerCase));
 	}

@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">CommandAPI
-   &#160;<span id="projectnumber">4.3</span>
+   &#160;<span id="projectnumber">5.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -100,6 +100,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a80ab6ea5bb0ee168e1b8ad7199b9af46"><td class="memItemLeft" align="right" valign="top">static Logger&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a80ab6ea5bb0ee168e1b8ad7199b9af46">getLog</a> ()</td></tr>
 <tr class="memdesc:a80ab6ea5bb0ee168e1b8ad7199b9af46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a>'s logger.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a80ab6ea5bb0ee168e1b8ad7199b9af46">More...</a><br /></td></tr>
 <tr class="separator:a80ab6ea5bb0ee168e1b8ad7199b9af46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a386654d2b9a36d863263c6def5430845"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a386654d2b9a36d863263c6def5430845">logInfo</a> (String message)</td></tr>
+<tr class="memdesc:a386654d2b9a36d863263c6def5430845"><td class="mdescLeft">&#160;</td><td class="mdescRight">Logs a message to the console using Logger.info() if the configuration has verbose logging enabled.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a386654d2b9a36d863263c6def5430845">More...</a><br /></td></tr>
+<tr class="separator:a386654d2b9a36d863263c6def5430845"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a99b3b35daa96cb9781ead26a7729cd5e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a99b3b35daa96cb9781ead26a7729cd5e">onLoad</a> (boolean verbose)</td></tr>
 <tr class="memdesc:a99b3b35daa96cb9781ead26a7729cd5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> for loading.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a99b3b35daa96cb9781ead26a7729cd5e">More...</a><br /></td></tr>
 <tr class="separator:a99b3b35daa96cb9781ead26a7729cd5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -221,6 +224,40 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a386654d2b9a36d863263c6def5430845"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a386654d2b9a36d863263c6def5430845">&#9670;&nbsp;</a></span>logInfo()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void dev.jorel.commandapi.CommandAPI.logInfo </td>
+          <td>(</td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>message</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Logs a message to the console using Logger.info() if the configuration has verbose logging enabled. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">message</td><td>the message to log to the console </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="abaaeec30c996adb7a07999cbee39bfa7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abaaeec30c996adb7a07999cbee39bfa7">&#9670;&nbsp;</a></span>onEnable()</h2>
 
@@ -280,7 +317,7 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Initializes the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> for loading. </p>
-<p>This should be placed at the start of your <code>onLoad()</code> method. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>This should be placed at the start of your <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a99b3b35daa96cb9781ead26a7729cd5e" title="Initializes the CommandAPI for loading.">onLoad()</a></code> method. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">verbose</td><td>if true, enables verbose output for the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> </td></tr>
   </table>
@@ -408,7 +445,7 @@ Static Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html">CommandAPI</a></li>
-    <li class="footer">Generated on Sat Sep 19 2020 17:18:12 for CommandAPI by
+    <li class="footer">Generated on Sat Oct 10 2020 17:56:28 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

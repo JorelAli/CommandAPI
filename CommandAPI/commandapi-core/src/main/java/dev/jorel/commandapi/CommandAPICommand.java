@@ -39,7 +39,7 @@ public class CommandAPICommand {
 	List<Argument> args = new ArrayList<>();
 	List<CommandAPICommand> subcommands = new ArrayList<>();
 	CustomCommandExecutor executor = new CustomCommandExecutor();
-	public boolean isConverted;
+	boolean isConverted;
 	
 	/**
 	 * Creates a new command builder
@@ -84,7 +84,7 @@ public class CommandAPICommand {
 	}
 	
 	/**
-	 * Adds the mapping of arguments to the current command builder
+	 * Appends the arguments to the current command builder
 	 * @param args A <code>List</code> that represents the arguments that this command can accept
 	 * @return this command builder
 	 */
@@ -93,11 +93,21 @@ public class CommandAPICommand {
 		return this;
 	}
 	
+	/**
+	 * Appends the argument(s) to the current command builder
+	 * @param args Arguments that this command can accept
+	 * @return this command builder
+	 */
 	public CommandAPICommand withArguments(Argument... args) {
 		this.args.addAll(Arrays.asList(args));
 		return this;
 	}
 	
+	/**
+	 * Adds a subcommand to this command builder
+	 * @param subcommand the subcommand to add as a child of this command 
+	 * @return this command builder
+	 */
 	public CommandAPICommand withSubcommand(CommandAPICommand subcommand) {
 		this.subcommands.add(subcommand);
 		return this;

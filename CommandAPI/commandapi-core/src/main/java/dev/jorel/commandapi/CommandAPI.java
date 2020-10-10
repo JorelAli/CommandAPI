@@ -59,6 +59,12 @@ public abstract class CommandAPI {
 		return logger;
 	}
 	
+	/**
+	 * Logs a message to the console using Logger.info() if the configuration has
+	 * verbose logging enabled
+	 * 
+	 * @param message the message to log to the console
+	 */
 	public static void logInfo(String message) {
 		if(CommandAPI.getConfiguration().hasVerboseOutput()) {
 			CommandAPI.getLog().info(message);
