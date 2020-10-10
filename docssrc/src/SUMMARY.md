@@ -8,6 +8,9 @@
 
 - [Installation for server owners](./installation.md)
 - [Configuration for server owners](./config.md)
+- [Command conversion](./conversionforowners.md)
+  - [Single command conversion](./conversionforownerssingle.md)
+  - [Single command conversion (with arguments)](./conversionforownerssingleargs.md)
 
 -----
 

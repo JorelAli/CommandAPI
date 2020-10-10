@@ -1,18 +1,14 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Map.Entry;
 
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import dev.jorel.commandapi.arguments.DoubleArgument;
 
 public class CommandAPIMain extends JavaPlugin implements Listener {
 	
@@ -42,7 +38,8 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable(this);
-		Bukkit.getServer().getPluginManager().registerEvents(this, this);
+		getServer().getPluginManager().registerEvents(this, this);
+		
 	}
 	
 	@EventHandler(priority = EventPriority.HIGH)
