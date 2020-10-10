@@ -17,11 +17,12 @@ The CommandAPI offers the following methods in the `dev.jorel.commandapi.Command
 ```java
 public static CommandDispatcher getCommandDispatcher();
 public static RootCommandNode getRootNode();
-public static LiteralCommandNode registerNewLiteral(String name);
+public static LiteralArgumentBuilder fromLiteralArgument(LiteralArgument literalArgument);
 public static RedirectModifier fromPredicate(BiPredicate<CommandSender, Object[]> predicate, List<Argument> args);
 public static Command fromCommand(CommandAPICommand command);
-public static RequiredArgumentBuilder argBuildOf(List<Argument> args, String nodeName);
-public static RequiredArgumentBuilder argBuildOf(Argument argument);
+public static RequiredArgumentBuilder fromArgument(List<Argument> args, String nodeName);
+public static RequiredArgumentBuilder fromArgument(Argument argument);
+public static SuggestionProvider toSuggestions(String nodeName, List<Argument> args);
 ```
 
 Briefly, here's what each of these functions do (you can view the JavaDocs for more information):
@@ -30,10 +31,11 @@ Briefly, here's what each of these functions do (you can view the JavaDocs for m
 | ---------------------- | ------------------------------------------------------------ |
 | `getCommandDispatcher` | Returns the Minecraft command dispatcher graph               |
 | `getRootNode`          | Returns the root node of the command dispatcher.<br>This is equivalent to using<br />`getCommandDispatcher().getRoot();` |
-| `registerNewLiteral`   | Creates a `LiteralCommandNode` from a given string           |
+| `fromLiteralArgument`  | Creates a `LiteralArgumentBuilder` from a `LiteralArgument`  |
 | `fromPredicate`        | Converts a predicate and some arguments into a `RedirectModifier`. This can be used for the `fork` method in brigadier's `ArgumentBuilder` |
 | `fromCommand`          | Converts a `CommandAPICommand` into a brigadier `Command` object |
-| `argBuildOf`           | Converts an argument, or a list of arguments, into a `RequiredArgumentBuilder`. |
+| `fromArgument`         | Converts an argument, or a list of arguments, into a `RequiredArgumentBuilder` |
+| `toSuggestions`        | Converts an argument's suggestions into brigadier's `SuggestionProvider`, with a list of previously declared arguments |
 
 -----
 
@@ -84,7 +86,7 @@ In this scenario, if we ran this command, we would expect "Hello!" to appear in 
 
 #### Writing the code
 
-Now that we've established what we want, we can finally begin writing the code! First we want to create a literal `randomchance`. It's a literal because literal values don't change (similar to say `run` or `if` from the `/execute` command). To create a literal, we'll use the `registerNewLiteral` method described above.
+Now that we've established what we want, we can finally begin writing the code! First we want to create a literal `randomchance`. It's a literal because literal values don't change (similar to say `run` or `if` from the `/execute` command). To create a literal, we'll use the `fromLiteralArgument` method described above, and then build it using the `.build()` method:
 
 ```java
 {{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:declareliteral}}

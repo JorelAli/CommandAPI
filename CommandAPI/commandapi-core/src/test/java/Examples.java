@@ -703,7 +703,8 @@ new CommandAPICommand("rem")
 /* ANCHOR_END: itemstackpredicatearguments */
 }
 
-{
+@SuppressWarnings("unused")
+void b(){
 /* ANCHOR: nbtcompoundarguments */
 new CommandAPICommand("award")
     .withArguments(new NBTCompoundArgument("nbt"))
@@ -716,7 +717,8 @@ new CommandAPICommand("award")
 /* ANCHOR_END: nbtcompoundarguments */
 }
 
-{
+@SuppressWarnings("unused")
+void c(){
 /* ANCHOR: literalarguments */
 new CommandAPICommand("mycommand")
     .withArguments(new LiteralArgument("hello"))
@@ -1222,7 +1224,8 @@ Converter.convert(essentials, "speed",
 /* ANCHOR_END: converter2 */
 }
 
-{
+@SuppressWarnings({ "rawtypes", "unchecked" })
+void a(){
 /* ANCHOR: brigadier */
 /* ANCHOR: declareliteral */
 //Register literal "randomchance"

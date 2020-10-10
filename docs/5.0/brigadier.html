@@ -186,20 +186,22 @@
 <p>The CommandAPI offers the following methods in the <code>dev.jorel.commandapi.CommandAPIHandler.Brigadier</code> class:</p>
 <pre><code class="language-java">public static CommandDispatcher getCommandDispatcher();
 public static RootCommandNode getRootNode();
-public static LiteralCommandNode registerNewLiteral(String name);
+public static LiteralArgumentBuilder fromLiteralArgument(LiteralArgument literalArgument);
 public static RedirectModifier fromPredicate(BiPredicate&lt;CommandSender, Object[]&gt; predicate, List&lt;Argument&gt; args);
 public static Command fromCommand(CommandAPICommand command);
-public static RequiredArgumentBuilder argBuildOf(List&lt;Argument&gt; args, String nodeName);
-public static RequiredArgumentBuilder argBuildOf(Argument argument);
+public static RequiredArgumentBuilder fromArgument(List&lt;Argument&gt; args, String nodeName);
+public static RequiredArgumentBuilder fromArgument(Argument argument);
+public static SuggestionProvider toSuggestions(String nodeName, List&lt;Argument&gt; args);
 </code></pre>
 <p>Briefly, here's what each of these functions do (you can view the JavaDocs for more information):</p>
 <table><thead><tr><th>Method</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>getCommandDispatcher</code></td><td>Returns the Minecraft command dispatcher graph</td></tr>
 <tr><td><code>getRootNode</code></td><td>Returns the root node of the command dispatcher.<br>This is equivalent to using<br /><code>getCommandDispatcher().getRoot();</code></td></tr>
-<tr><td><code>registerNewLiteral</code></td><td>Creates a <code>LiteralCommandNode</code> from a given string</td></tr>
+<tr><td><code>fromLiteralArgument</code></td><td>Creates a <code>LiteralArgumentBuilder</code> from a <code>LiteralArgument</code></td></tr>
 <tr><td><code>fromPredicate</code></td><td>Converts a predicate and some arguments into a <code>RedirectModifier</code>. This can be used for the <code>fork</code> method in brigadier's <code>ArgumentBuilder</code></td></tr>
 <tr><td><code>fromCommand</code></td><td>Converts a <code>CommandAPICommand</code> into a brigadier <code>Command</code> object</td></tr>
-<tr><td><code>argBuildOf</code></td><td>Converts an argument, or a list of arguments, into a <code>RequiredArgumentBuilder</code>.</td></tr>
+<tr><td><code>fromArgument</code></td><td>Converts an argument, or a list of arguments, into a <code>RequiredArgumentBuilder</code></td></tr>
+<tr><td><code>toSuggestions</code></td><td>Converts an argument's suggestions into brigadier's <code>SuggestionProvider</code>, with a list of previously declared arguments</td></tr>
 </tbody></table>
 <hr />
 <h2><a class="header" href="#examples" id="examples">Examples</a></h2>
@@ -242,7 +244,7 @@ public static RequiredArgumentBuilder argBuildOf(Argument argument);
 </ul>
 <hr />
 <h4><a class="header" href="#writing-the-code" id="writing-the-code">Writing the code</a></h4>
-<p>Now that we've established what we want, we can finally begin writing the code! First we want to create a literal <code>randomchance</code>. It's a literal because literal values don't change (similar to say <code>run</code> or <code>if</code> from the <code>/execute</code> command). To create a literal, we'll use the <code>registerNewLiteral</code> method described above.</p>
+<p>Now that we've established what we want, we can finally begin writing the code! First we want to create a literal <code>randomchance</code>. It's a literal because literal values don't change (similar to say <code>run</code> or <code>if</code> from the <code>/execute</code> command). To create a literal, we'll use the <code>fromLiteralArgument</code> method described above, and then build it using the <code>.build()</code> method:</p>
 <pre><code class="language-java">//Register literal &quot;randomchance&quot;
 LiteralCommandNode randomChance = Brigadier.fromLiteralArgument(new LiteralArgument(&quot;randomchance&quot;)).build();
 </code></pre>

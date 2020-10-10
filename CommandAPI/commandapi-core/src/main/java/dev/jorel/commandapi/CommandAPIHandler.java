@@ -796,11 +796,11 @@ public abstract class CommandAPIHandler {
 		 * 
 		 * @param args  the List of arguments which you typically declare for
 		 *              commands
-		 * @param value the name of the argument you want to specify
+		 * @param nodeName the name of the argument you want to specify
 		 * @return a RequiredArgumentBuilder that represents the provided argument
 		 */
-		public static RequiredArgumentBuilder fromArgument(List<Argument> args, String value) {
-			return getRequiredArgumentBuilderDynamic(args, getArgument(args, value));
+		public static RequiredArgumentBuilder fromArgument(List<Argument> args, String nodeName) {
+			return getRequiredArgumentBuilderDynamic(args, getArgument(args, nodeName));
 		}
 		
 		private static Argument getArgument(List<Argument> args, String nodeName) {
@@ -823,19 +823,18 @@ public abstract class CommandAPIHandler {
 		 * Converts an argument name and a list of arguments to a Brigadier
 		 * SuggestionProvider
 		 * 
-		 * @param argumentName the name (prompt) of the argument as declared by its key
-		 *                     in the List
+		 * @param nodeName the name (prompt) of the argument as declared by its node name
 		 * @param args         the list of arguments
 		 * @return a SuggestionProvider that suggests the overridden suggestions for the
 		 *         argument declared in the List with key argumentName
 		 */
-		public static SuggestionProvider toSuggestions(String argumentName, List<Argument> args) {
+		public static SuggestionProvider toSuggestions(String nodeName, List<Argument> args) {
 			return (CommandContext context, SuggestionsBuilder builder) -> {
 				// Populate Object[], which is our previously filled arguments
 				List<Object> previousArguments = new ArrayList<>();
 
 				for (Argument arg : args) {
-					if (arg.getNodeName().equals(argumentName)) {
+					if (arg.getNodeName().equals(nodeName)) {
 						break;
 					}
 					
@@ -858,7 +857,7 @@ public abstract class CommandAPIHandler {
 					}
 				}
 				return getSuggestionsBuilder(builder,
-						getArgument(args, argumentName).getOverriddenSuggestions()
+						getArgument(args, nodeName).getOverriddenSuggestions()
 								.orElseGet(() -> (c, m) -> new IStringTooltip[0])
 								.apply(NMS.getCommandSenderForCLW(context.getSource()), previousArguments.toArray()));
 			};
