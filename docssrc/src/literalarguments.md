@@ -31,7 +31,7 @@ The `LiteralArgument` class is now obsolete! If you want to implement literals e
 
 ## Literal arguments vs regular arguments
 
-Unlike regular arguments that are shown in this chapter, the literal argument is _technically_ not an argument. Due to this fact, **the literal argument is not present in the `args[]` for the command declaration.**
+Unlike regular arguments that are shown in this chapter, the literal argument is _technically_ not an argument. Due to this fact, literal arguments are [unlisted](./listed.md) by default. In other words, **the literal argument is not present in the `args[]` for the command declaration.**
 
 <div class="example">
 

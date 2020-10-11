@@ -1347,6 +1347,22 @@ new CommandAPICommand("yaw")
 /* ANCHOR_END: anglearguments */
 }
 
+{
+/* ANCHOR: listed */
+new CommandAPICommand("mycommand")
+    .withArguments(new PlayerArgument("player"))
+    .withArguments(new IntegerArgument("value").setListed(false))
+    .withArguments(new GreedyStringArgument("message"))
+    .executes((sender, args) -> {
+    	// args == [player, message]
+    	Player player = (Player) args[0];
+    	String message = (String) args[1]; //Note that this is args[1] and NOT args[2]
+        player.sendMessage(message);
+    })
+    .register();
+/* ANCHOR_END: listed */
+}
+
 } // Examples class end
 
 /* ANCHOR: functionregistration */

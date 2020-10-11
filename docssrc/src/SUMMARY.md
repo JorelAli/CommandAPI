@@ -32,6 +32,7 @@
   - [Argument suggestions](./argumentsuggestions.md)
   - [Safe argument suggestions](./safeargumentsuggestions.md)
   - [Argument suggestions with tooltips](./tooltips.md)
+  - [Listed arguments](./listed.md)
 - [Argument types](./argumenttypes.md)
   - [Primitive arguments](./primitivearguments.md)
   - [Ranged arguments](./rangedarguments.md)
