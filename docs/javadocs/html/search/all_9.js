@@ -18,5 +18,5 @@ var searchData=
   ['longargumenttype_330',['LongArgumentType',['../classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_long_argument_type.html',1,'com::mojang::brigadier::arguments']]],
   ['loot_5ftable_331',['LOOT_TABLE',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a6c31634e42bd1dec9fa3ded4ec443c9a',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
   ['loot_5ftables_332',['LOOT_TABLES',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument_1_1_suggestion_providers.html#a4707419b548b60ec8a548d85d3f09da2',1,'dev::jorel::commandapi::arguments::ICustomProvidedArgument::SuggestionProviders']]],
-  ['loottableargument_333',['LootTableArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_loot_table_argument.html',1,'dev::jorel::commandapi::arguments']]]
+  ['loottableargument_333',['LootTableArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_loot_table_argument.html',1,'dev.jorel.commandapi.arguments.LootTableArgument'],['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_loot_table_argument.html#a2c26e34bc7b8846736cdcd1d2fe659b6',1,'dev.jorel.commandapi.arguments.LootTableArgument.LootTableArgument()']]]
 ];
