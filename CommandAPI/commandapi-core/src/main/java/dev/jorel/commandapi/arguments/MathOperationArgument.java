@@ -10,6 +10,7 @@ public class MathOperationArgument extends SafeOverrideableArgument<MathOperatio
 
 	/**
 	 * A MathOperation argument. Represents a math operation (e.g. addition, subtraction etc.)
+	 * @param nodeName the name of the node for this argument
 	 */
 	public MathOperationArgument(String nodeName) {
 		super(nodeName, CommandAPIHandler.getNMS()._ArgumentMathOperation(), MathOperation::toString);

@@ -10,7 +10,8 @@ import dev.jorel.commandapi.CommandAPIHandler;
 public class EnchantmentArgument extends SafeOverrideableArgument<Enchantment> {
 	
 	/**
-	 * An Enchantment argument. Represents an enchantment for items 
+	 * An Enchantment argument. Represents an enchantment for items
+	 * @param nodeName the name of the node for this argument 
 	 */
 	public EnchantmentArgument(String nodeName) {
 		super(nodeName, CommandAPIHandler.getNMS()._ArgumentEnchantment(), fromKey(Enchantment::getKey));

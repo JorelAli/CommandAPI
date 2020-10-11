@@ -8,9 +8,12 @@ import net.md_5.bungee.api.chat.BaseComponent;
  * An argument that represents chat with entity selectors
  */
 public class ChatArgument extends Argument implements IGreedyArgument {
-	
+
 	/**
-	 * A Chat argument. Represents fancy greedy strings that can parse entity selectors
+	 * Constructs a Chat argument with a given node name. Represents fancy greedy
+	 * strings that can parse entity selectors
+	 * 
+	 * @param nodeName the name of the node for argument
 	 */
 	public ChatArgument(String nodeName) {
 		super(nodeName, CommandAPIHandler.getNMS()._ArgumentChat());

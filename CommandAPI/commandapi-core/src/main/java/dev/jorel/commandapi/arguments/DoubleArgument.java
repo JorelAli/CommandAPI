@@ -11,6 +11,7 @@ public class DoubleArgument extends SafeOverrideableArgument<Double> {
 
 	/**
 	 * A double argument
+	 * @param nodeName the name of the node for this argument
 	 */
 	public DoubleArgument(String nodeName) {
 		super(nodeName, DoubleArgumentType.doubleArg(), String::valueOf);
@@ -18,6 +19,7 @@ public class DoubleArgument extends SafeOverrideableArgument<Double> {
 	
 	/**
 	 * A double argument with a minimum value
+	 * @param nodeName the name of the node for this argument
 	 * @param min The minimum value this argument can take (inclusive)
 	 */
 	public DoubleArgument(String nodeName, double min) {
@@ -26,6 +28,7 @@ public class DoubleArgument extends SafeOverrideableArgument<Double> {
 	
 	/**
 	 * A double argument with a minimum and maximum value 
+	 * @param nodeName the name of the node for this argument
 	 * @param min The minimum value this argument can take (inclusive)
 	 * @param max The maximum value this argument can take (inclusive)
 	 */

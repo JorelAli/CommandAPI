@@ -9,6 +9,7 @@ public class StringArgument extends Argument {
 
 	/**
 	 * A string argument for one word
+	 * @param nodeName the name of the node for this argument
 	 */
 	public StringArgument(String nodeName) {
 		super(nodeName, StringArgumentType.word());

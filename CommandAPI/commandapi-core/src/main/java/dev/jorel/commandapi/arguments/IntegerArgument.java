@@ -11,6 +11,7 @@ public class IntegerArgument extends SafeOverrideableArgument<Integer> {
 
 	/**
 	 * An integer argument
+	 * @param nodeName the name of the node for this argument
 	 */
 	public IntegerArgument(String nodeName) {
 		super(nodeName, IntegerArgumentType.integer(), String::valueOf);
@@ -18,6 +19,7 @@ public class IntegerArgument extends SafeOverrideableArgument<Integer> {
 	
 	/**
 	 * An integer argument with a minimum value
+	 * @param nodeName the name of the node for this argument
 	 * @param min The minimum value this argument can take (inclusive)
 	 */
 	public IntegerArgument(String nodeName, int min) {
@@ -26,6 +28,7 @@ public class IntegerArgument extends SafeOverrideableArgument<Integer> {
 	
 	/**
 	 * An integer argument with a minimum and maximum value
+	 * @param nodeName the name of the node for this argument
 	 * @param min The minimum value this argument can take (inclusive)
 	 * @param max The maximum value this argument can take (inclusive)
 	 */

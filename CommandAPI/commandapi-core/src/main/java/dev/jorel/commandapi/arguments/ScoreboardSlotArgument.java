@@ -10,6 +10,7 @@ public class ScoreboardSlotArgument extends SafeOverrideableArgument<ScoreboardS
 
 	/**
 	 * A Display slot argument. Represents scoreboard slots
+	 * @param nodeName the name of the node for this argument
 	 */
 	public ScoreboardSlotArgument(String nodeName) {
 		super(nodeName, CommandAPIHandler.getNMS()._ArgumentScoreboardSlot(), ScoreboardSlot::toString);

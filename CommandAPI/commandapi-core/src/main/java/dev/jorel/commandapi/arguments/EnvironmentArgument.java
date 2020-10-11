@@ -11,6 +11,10 @@ import dev.jorel.commandapi.CommandAPIHandler;
  */
 public class EnvironmentArgument extends SafeOverrideableArgument<Environment> {
 	
+	/**
+	 * An Environment argument. Represents Bukkit's Environment object
+	 * @param nodeName the name of the node for this argument
+	 */
 	public EnvironmentArgument(String nodeName) {
 		super(nodeName, CommandAPIHandler.getNMS()._ArgumentDimension(), ((Function<Environment, String>) Environment::name).andThen(String::toLowerCase));
 	}

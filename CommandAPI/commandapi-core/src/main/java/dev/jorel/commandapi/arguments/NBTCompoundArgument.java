@@ -13,6 +13,7 @@ public class NBTCompoundArgument extends SafeOverrideableArgument<NBTContainer> 
 
 	/**
 	 * An NBT Compound Argument. Represents Minecraft's NBT Compound Tag using the NBT API
+	 * @param nodeName the name of the node for this argument
 	 */
 	public NBTCompoundArgument(String nodeName) {
 		super(nodeName, CommandAPIHandler.getNMS()._ArgumentNBTCompound(), NBTContainer::toString);

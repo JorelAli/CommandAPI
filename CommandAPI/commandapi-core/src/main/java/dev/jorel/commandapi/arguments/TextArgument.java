@@ -9,6 +9,7 @@ public class TextArgument extends Argument {
 
 	/**
 	 * A string argument for one word, or multiple words encased in quotes
+	 * @param nodeName the name of the node for this argument
 	 */
 	public TextArgument(String nodeName) {
 		super(nodeName, StringArgumentType.string());

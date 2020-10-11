@@ -8,7 +8,8 @@ import com.mojang.brigadier.arguments.BoolArgumentType;
 public class BooleanArgument extends SafeOverrideableArgument<Boolean> {
 	
 	/**
-	 * An Boolean argument
+	 * Constructs a Boolean argument with a given node name
+	 * @param nodeName the name of the node for argument
 	 */
 	public BooleanArgument(String nodeName) {
 		super(nodeName, BoolArgumentType.bool(), String::valueOf);

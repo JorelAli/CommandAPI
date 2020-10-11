@@ -11,6 +11,7 @@ public class FloatArgument extends SafeOverrideableArgument<Float> {
 
 	/**
 	 * A float argument
+	 * @param nodeName the name of the node for this argument
 	 */
 	public FloatArgument(String nodeName) {
 		super(nodeName, FloatArgumentType.floatArg(), String::valueOf);
@@ -18,6 +19,7 @@ public class FloatArgument extends SafeOverrideableArgument<Float> {
 	
 	/**
 	 * A float argument with a minimum value
+	 * @param nodeName the name of the node for this argument
 	 * @param min The minimum value this argument can take (inclusive)
 	 */
 	public FloatArgument(String nodeName, float min) {
@@ -26,6 +28,7 @@ public class FloatArgument extends SafeOverrideableArgument<Float> {
 	
 	/**
 	 * A float argument with a minimum and maximum value
+	 * @param nodeName the name of the node for this argument
 	 * @param min The minimum value this argument can take (inclusive)
 	 * @param max The maximum value this argument can take (inclusive)
 	 */

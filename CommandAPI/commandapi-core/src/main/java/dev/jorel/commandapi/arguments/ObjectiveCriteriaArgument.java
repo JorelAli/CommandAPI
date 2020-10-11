@@ -9,6 +9,7 @@ public class ObjectiveCriteriaArgument extends Argument {
 
 	/**
 	 * An Objective criteria argument. Represents an objective criteria
+	 * @param nodeName the name of the node for this argument
 	 */
 	public ObjectiveCriteriaArgument(String nodeName) {
 		super(nodeName, CommandAPIHandler.getNMS()._ArgumentScoreboardCriteria());

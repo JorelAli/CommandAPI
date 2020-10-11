@@ -10,6 +10,10 @@ import dev.jorel.commandapi.CommandAPIHandler;
  */
 public class RecipeArgument extends SafeOverrideableArgument<Recipe> implements ICustomProvidedArgument {
 
+	/**
+	 * A Recipe argument. Represents a Bukkit Recipe or ComplexRecipe
+	 * @param nodeName the name of the node for this argument
+	 */
 	public RecipeArgument(String nodeName) {
 		super(nodeName, CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered(), fromKey((Recipe r) -> ((Keyed) r).getKey()));
 	}

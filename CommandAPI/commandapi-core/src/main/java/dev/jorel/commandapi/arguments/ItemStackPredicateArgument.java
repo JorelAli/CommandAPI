@@ -10,7 +10,8 @@ import dev.jorel.commandapi.CommandAPIHandler;
 public class ItemStackPredicateArgument extends Argument {
 	
 	/**
-	 * A ItemStack Predicate argument. Represents a predicate for itemstacks 
+	 * A ItemStack Predicate argument. Represents a predicate for itemstacks
+	 * @param nodeName the name of the node for this argument 
 	 */
 	public ItemStackPredicateArgument(String nodeName) {
 		super(nodeName, CommandAPIHandler.getNMS()._ArgumentItemPredicate());

@@ -14,6 +14,7 @@ public class FunctionArgument extends SafeOverrideableArgument<NamespacedKey> im
 	 * A Minecraft function. Plugin commands which plan to be used INSIDE a Minecraft
 	 * a function MUST be registered in the onLoad() method of your plugin, NOT
 	 * in the onEnable() method!
+	 * @param nodeName the name of the node for this argument
 	 */
 	public FunctionArgument(String nodeName) {
 		super(nodeName, CommandAPIHandler.getNMS()._ArgumentTag(), fromKey(n -> n));

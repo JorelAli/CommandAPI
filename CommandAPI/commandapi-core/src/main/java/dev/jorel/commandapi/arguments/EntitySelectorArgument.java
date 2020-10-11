@@ -16,6 +16,7 @@ public class EntitySelectorArgument extends Argument {
 	
 	/**
 	 * An EntityType argument. Represents an entity specified by a selector
+	 * @param nodeName the name of the node for this argument
 	 * @param selector the entity selector for this argument
 	 */
 	public EntitySelectorArgument(String nodeName, EntitySelector selector) {

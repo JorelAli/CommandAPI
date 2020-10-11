@@ -11,6 +11,7 @@ public class ItemStackArgument extends SafeOverrideableArgument<ItemStack> {
 
 	/**
 	 * An ItemStack argument. Always returns an itemstack of size 1
+	 * @param nodeName the name of the node for this argument
 	 */
 	public ItemStackArgument(String nodeName) {
 		super(nodeName, CommandAPIHandler.getNMS()._ArgumentItemStack(), CommandAPIHandler.getNMS()::convert);

@@ -9,6 +9,7 @@ public class GreedyStringArgument extends SafeOverrideableArgument<String> imple
 	
 	/**
 	 * A string argument for a string of any length
+	 * @param nodeName the name of the node for this argument
 	 */
 	public GreedyStringArgument(String nodeName) {
 		super(nodeName, StringArgumentType.greedyString(), s -> s);

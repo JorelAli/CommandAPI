@@ -11,6 +11,7 @@ public class LongArgument extends SafeOverrideableArgument<Long> {
 
 	/**
 	 * A long argument
+	 * @param nodeName the name of the node for this argument
 	 */
 	public LongArgument(String nodeName) {
 		super(nodeName, LongArgumentType.longArg(), String::valueOf);
@@ -18,6 +19,7 @@ public class LongArgument extends SafeOverrideableArgument<Long> {
 	
 	/**
 	 * A long argument with a minimum value
+	 * @param nodeName the name of the node for this argument
 	 * @param value The minimum value this argument can take (inclusive)
 	 */
 	public LongArgument(String nodeName, long value) {
@@ -26,6 +28,7 @@ public class LongArgument extends SafeOverrideableArgument<Long> {
 	
 	/**
 	 * A long argument with a minimum and maximum value
+	 * @param nodeName the name of the node for this argument
 	 * @param min The minimum value this argument can take (inclusive)
 	 * @param max The maximum value this argument can take (inclusive)
 	 */

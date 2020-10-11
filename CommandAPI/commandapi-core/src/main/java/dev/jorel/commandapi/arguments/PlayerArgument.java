@@ -10,7 +10,10 @@ import dev.jorel.commandapi.CommandAPIHandler;
 public class PlayerArgument extends SafeOverrideableArgument<Player> {
 
 	/**
-	 * A Player argument. Produces a single player, regardless of whether @a, @p, @r or @e is used.
+	 * A Player argument. Produces a single player, regardless of whether
+	 * <code>@a</code>, </code>@p</code>, <code>@r</code> or <code>@e</code> is used.
+	 * 
+	 * @param nodeName the name of the node for this argument
 	 */
 	public PlayerArgument(String nodeName) {
 		super(nodeName, CommandAPIHandler.getNMS()._ArgumentProfile(), Player::getName);
