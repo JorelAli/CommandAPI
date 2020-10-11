@@ -10,7 +10,7 @@ The CommandAPI has the ability to convert plugin commands to vanilla Minecraft c
 
 Before you continue, let's clear up a few naming conventions which is used in the following sections!
 
-- **Target plugin** - This refers to a non-CommandAPI plugin which registers normal Bukkit commands. This typically uses the old `getCommand(...).setExecutor(...)` method
+- **Target plugin** - This refers to a non-CommandAPI plugin which registers normal Bukkit commands. This typically uses the old `boolean onCommand(CommandSender ... )` method
 - **Your plugin** - This refers to your plugin, the one that uses the CommandAPI and wants to add compatibility to a target plugin
 
 -----
@@ -37,38 +37,13 @@ commands:
     permission: item.permission
 ```
 
-As you can see, it declares 3 commands: `/gmc`, `/gms` and `/i`. **Since this target plugin hasn't been told to load before the CommandAPI, we must first modify the `plugin.yml` file for the target plugin:**
-
-```yaml
-name: TargetPlugin
-main: some.random.package.Main
-loadbefore: [CommandAPI]
-version: 1.0
-commands:
-  gmc:
-    aliases: gm1
-  gms:
-  i:
-    permission: item.permission
-```
-
------
-
-Now that the target plugin has been loaded before the CommandAPI, we can now begin writing your plugin that uses the CommandAPI converter. We will call this plugin "YourPlugin":
+As you can see, it declares 3 commands: `/gmc`, `/gms` and `/i`. We can now begin writing your plugin that uses the CommandAPI converter. We will call this plugin "YourPlugin":
 
 ```java
 public {{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:converter}}
 ```
 
 When this is run, the commands `/gmc`, `/gm1`, `/gms` and `/i` will all be registered by the CommandAPI.
-
------
-
-So to summarise, our plugin loading order is the following:
-
-\\[ \texttt{TargetPlugin} \xrightarrow{then} \texttt{CommandAPI} \xrightarrow{then} \texttt{YourPlugin} \\]
-
-This makes sure that the target plugin's commands are registered first, so they are identifiable by the CommandAPI. The CommandAPI then does its initial setup before your plugin loads the target plugin's commands via the CommandAPI.
 
 </div>
 

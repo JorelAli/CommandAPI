@@ -183,7 +183,7 @@
 <hr />
 <p>Before you continue, let's clear up a few naming conventions which is used in the following sections!</p>
 <ul>
-<li><strong>Target plugin</strong> - This refers to a non-CommandAPI plugin which registers normal Bukkit commands. This typically uses the old <code>getCommand(...).setExecutor(...)</code> method</li>
+<li><strong>Target plugin</strong> - This refers to a non-CommandAPI plugin which registers normal Bukkit commands. This typically uses the old <code>boolean onCommand(CommandSender ... )</code> method</li>
 <li><strong>Your plugin</strong> - This refers to your plugin, the one that uses the CommandAPI and wants to add compatibility to a target plugin</li>
 </ul>
 <hr />
@@ -202,20 +202,7 @@ commands:
   i:
     permission: item.permission
 </code></pre>
-<p>As you can see, it declares 3 commands: <code>/gmc</code>, <code>/gms</code> and <code>/i</code>. <strong>Since this target plugin hasn't been told to load before the CommandAPI, we must first modify the <code>plugin.yml</code> file for the target plugin:</strong></p>
-<pre><code class="language-yaml">name: TargetPlugin
-main: some.random.package.Main
-loadbefore: [CommandAPI]
-version: 1.0
-commands:
-  gmc:
-    aliases: gm1
-  gms:
-  i:
-    permission: item.permission
-</code></pre>
-<hr />
-<p>Now that the target plugin has been loaded before the CommandAPI, we can now begin writing your plugin that uses the CommandAPI converter. We will call this plugin &quot;YourPlugin&quot;:</p>
+<p>As you can see, it declares 3 commands: <code>/gmc</code>, <code>/gms</code> and <code>/i</code>. We can now begin writing your plugin that uses the CommandAPI converter. We will call this plugin &quot;YourPlugin&quot;:</p>
 <pre><code class="language-java">public class YourPlugin extends JavaPlugin {
     
     @Override
@@ -227,10 +214,6 @@ commands:
 }
 </code></pre>
 <p>When this is run, the commands <code>/gmc</code>, <code>/gm1</code>, <code>/gms</code> and <code>/i</code> will all be registered by the CommandAPI.</p>
-<hr />
-<p>So to summarise, our plugin loading order is the following:</p>
-<p>\[ \texttt{TargetPlugin} \xrightarrow{then} \texttt{CommandAPI} \xrightarrow{then} \texttt{YourPlugin} \]</p>
-<p>This makes sure that the target plugin's commands are registered first, so they are identifiable by the CommandAPI. The CommandAPI then does its initial setup before your plugin loads the target plugin's commands via the CommandAPI.</p>
 </div>
 <hr />
 <h2><a class="header" href="#only-specific-commands" id="only-specific-commands">Only specific commands</a></h2>
