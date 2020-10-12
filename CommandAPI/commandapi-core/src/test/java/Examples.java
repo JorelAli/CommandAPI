@@ -62,6 +62,9 @@ import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandAPIHandler.Brigadier;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.Converter;
+import dev.jorel.commandapi.IStringTooltip;
+import dev.jorel.commandapi.StringTooltip;
+import dev.jorel.commandapi.Tooltip;
 import dev.jorel.commandapi.arguments.AdvancementArgument;
 import dev.jorel.commandapi.arguments.AngleArgument;
 import dev.jorel.commandapi.arguments.Argument;
@@ -1363,7 +1366,123 @@ new CommandAPICommand("mycommand")
 /* ANCHOR_END: listed */
 }
 
+{
+/* ANCHOR: Tooltips1 */
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new StringArgument("emote")
+	.overrideSuggestionsT( 
+        StringTooltip.of("wave", "Waves at a player"),
+        StringTooltip.of("hug", "Gives a player a hug"),
+        StringTooltip.of("glare", "Gives a player the death glare")
+	)
+);
+arguments.add(new PlayerArgument("target"));
+/* ANCHOR_END: Tooltips1 */
+/* ANCHOR: Tooltips2 */
+new CommandAPICommand("emote")
+	.withArguments(arguments)
+	.executesPlayer((player, args) -> {
+		String emote = (String) args[0];
+		Player target = (Player) args[1];
+		
+		switch(emote) {
+		case "wave":
+			target.sendMessage(player.getName() + " waves at you!");
+			break;
+		case "hug":
+			target.sendMessage(player.getName() + " hugs you!");
+			break;
+		case "glare":
+			target.sendMessage(player.getName() + " gives you the death glare...");
+			break;
+		}
+	})
+	.register();
+/* ANCHOR_END: Tooltips2 */
+}
+
+{
+/* ANCHOR: Tooltips4 */
+CustomItem[] customItems = new CustomItem[] {
+	new CustomItem(new ItemStack(Material.DIAMOND_SWORD), "God sword", "A sword from the heavens"),
+	new CustomItem(new ItemStack(Material.PUMPKIN_PIE), "Sweet pie", "Just like grandma used to make")
+};  //
+	
+new CommandAPICommand("giveitem")
+	.withArguments(new StringArgument("item").overrideSuggestionsT(customItems)) // We use customItems[] as the input for our suggestions with tooltips
+	.executesPlayer((player, args) -> {
+		String itemName = (String) args[0];
+		
+		//Give them the item
+		for(CustomItem item : customItems) {
+			if(item.getName().equals(itemName)) {
+				player.getInventory().addItem(item.getItem());
+			}
+		}
+	})
+	.register();
+/* ANCHOR_END: Tooltips4 */
+}
+
+{
+/* ANCHOR: SafeTooltips */
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new LocationArgument("location")
+    .safeOverrideSuggestionsT((sender) -> {
+        return Tooltip.arrayOf(
+            Tooltip.of(((Player) sender).getWorld().getSpawnLocation(), "World spawn"),
+            Tooltip.of(((Player) sender).getBedSpawnLocation(), "Your bed"),
+            Tooltip.of(((Player) sender).getTargetBlockExact(256).getLocation(), "Target block")
+        );
+    }));
+/* ANCHOR_END: SafeTooltips */
+/* ANCHOR: SafeTooltips2 */
+new CommandAPICommand("warp")
+	.withArguments(arguments)
+	.executesPlayer((player, args) -> {
+	    player.teleport((Location) args[0]);
+	})
+	.register();
+/* ANCHOR_END: SafeTooltips2 */
+}
+
 } // Examples class end
+
+/* ANCHOR: Tooltips3 */
+class CustomItem implements IStringTooltip {
+
+	private ItemStack itemstack;
+	private String name;
+	
+	public CustomItem(ItemStack itemstack, String name, String lore) {
+		ItemMeta meta = itemstack.getItemMeta();
+		meta.setDisplayName(name);
+		meta.setLore(Arrays.asList(lore));
+		itemstack.setItemMeta(meta);
+		this.itemstack = itemstack;
+		this.name = name;
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public ItemStack getItem() {
+		return this.itemstack;
+	}
+	
+	@Override
+	public String getSuggestion() {
+		return this.itemstack.getItemMeta().getDisplayName();
+	}
+
+	@Override
+	public String getTooltip() {
+		return this.itemstack.getItemMeta().getLore().get(0);
+	}
+	
+}
+/* ANCHOR_END: Tooltips3 */
 
 /* ANCHOR: functionregistration */
 class Main extends JavaPlugin {

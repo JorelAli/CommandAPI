@@ -38,17 +38,6 @@ public class StringTooltip implements IStringTooltip {
 	}
 	
 	/**
-	 * Constructs a StringTooltip[] from an array of StringTooltips. This method
-	 * only exists for consistency between this class and the Tooltip class.
-	 * 
-	 * @param tooltips the tooltips to convert to a StringTooltip[]
-	 * @return a StringTooltip[] from the provided StringTooltips
-	 */
-	public static StringTooltip[] arrayOf(StringTooltip... tooltips) {
-		return tooltips;
-	}
-	
-	/**
 	 * Returns the current suggestion that this class holds
 	 * @return the current suggestion that this class holds
 	 */
