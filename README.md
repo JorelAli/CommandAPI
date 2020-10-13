@@ -15,7 +15,7 @@
   <dependency>
       <groupId>dev.jorel</groupId>
       <artifactId>commandapi-core</artifactId>
-      <version>4.3c</version>
+      <version>5.0</version>
   </dependency>
   ```
 
