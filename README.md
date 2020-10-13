@@ -137,6 +137,7 @@ These versions of Minecraft must be installed in your local machine's Maven repo
                     <li>Adds subcommands</li>
                     <li>Adds <code>AngleArgument</code></li>
                     <li>Arguments can now be omitted from the <code>Object[] args</code> using the method <code>.setListed()</code>. This means Literal arguments can now be "present" in the arguments if desired.</li>
+                    <li>Remove lots of reflection calls, so start up should be a little faster</li>
                     <li>Bug fixes:</li>
                     <ul>
                         <li>Fixes bug where verbose logging of permission linking was inaccurate</li>
