@@ -65,14 +65,6 @@ Due to the implementation of the CommandAPI, the CommandAPI does **not** support
 
 If players cannot connect, this could be due to the size of the command data packet. To see the resultant packet being sent to players when they log in, enable the `create-dispatcher-json: true` setting and view the file size of the resultant file. If the file size is abnormally large _(Over 2MB is considered very large)_, consider reducing the number of `LiteralArguments` which your plugin uses.
 
-## Command conversion throws a `NullPointerException`
-
-This is likely caused by the fact that the plugin you want to convert hasn't been loaded yet. Ensure that it loads before your plugin by adding the following to the target plugin's `plugin.yml` file:
-
-```yaml
-loadbefore: [YourPlugin, CommandAPI]
-```
-
 ## My issue isn't on here, what do I do?!
 
 If you've found a bug that isn't solved here, submit a bug report on [the CommandAPI's issues page](https://github.com/JorelAli/CommandAPI/issues/new/choose) and I'll try my best to resolve the issue!

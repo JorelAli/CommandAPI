@@ -6,6 +6,15 @@ The CommandAPI can now be shaded into your own plugins! "Shading" is the process
 
 -----
 
+## Shading vs CommandAPI plugin
+
+The CommandAPI plugin has a few slight differences with the shaded CommandAPI jar file. The CommandAPI plugin has the following extra features that are not present in the shaded version:
+
+- Command conversion via a `config.yml` file
+- Creation of the `command_registration.json` file to show the Brigadier command graph
+
+-----
+
 ## Shading requirements
 
 For the CommandAPI to function as normal, you **must** call the CommandAPI's initializers in the `onLoad()` and `onEnable()` methods of your plugin:

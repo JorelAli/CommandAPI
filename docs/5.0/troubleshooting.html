@@ -222,10 +222,6 @@ Caused by: java.lang.IllegalArgumentException: Whilst parsing command on line 2:
 </blockquote>
 <h2><a class="header" href="#players-cannot-connecttimeout-when-joining" id="players-cannot-connecttimeout-when-joining">Players cannot connect/timeout when joining</a></h2>
 <p>If players cannot connect, this could be due to the size of the command data packet. To see the resultant packet being sent to players when they log in, enable the <code>create-dispatcher-json: true</code> setting and view the file size of the resultant file. If the file size is abnormally large <em>(Over 2MB is considered very large)</em>, consider reducing the number of <code>LiteralArguments</code> which your plugin uses.</p>
-<h2><a class="header" href="#command-conversion-throws-a-nullpointerexception" id="command-conversion-throws-a-nullpointerexception">Command conversion throws a <code>NullPointerException</code></a></h2>
-<p>This is likely caused by the fact that the plugin you want to convert hasn't been loaded yet. Ensure that it loads before your plugin by adding the following to the target plugin's <code>plugin.yml</code> file:</p>
-<pre><code class="language-yaml">loadbefore: [YourPlugin, CommandAPI]
-</code></pre>
 <h2><a class="header" href="#my-issue-isnt-on-here-what-do-i-do" id="my-issue-isnt-on-here-what-do-i-do">My issue isn't on here, what do I do?!</a></h2>
 <p>If you've found a bug that isn't solved here, submit a bug report on <a href="https://github.com/JorelAli/CommandAPI/issues/new/choose">the CommandAPI's issues page</a> and I'll try my best to resolve the issue!</p>
 

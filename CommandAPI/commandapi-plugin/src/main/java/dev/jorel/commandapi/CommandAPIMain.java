@@ -3,10 +3,7 @@ package dev.jorel.commandapi;
 import java.io.File;
 import java.util.Map.Entry;
 
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -39,20 +36,5 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 	public void onEnable() {
 		CommandAPI.onEnable(this);
 		getServer().getPluginManager().registerEvents(this, this);
-	}
-	
-	@EventHandler(priority = EventPriority.HIGH)
-	public void onPluginEnable(PluginEnableEvent e) {
-		if(CommandAPI.getConfiguration().getPluginForDeferredConversion().containsKey(e.getPlugin().getName())) {
-			
-			String[] commands = CommandAPI.getConfiguration().getPluginForDeferredConversion().get(e.getPlugin().getName());
-			if(commands.length == 0) {
-				Converter.convert(e.getPlugin());
-			} else {
-				for(String command : commands) {
-					Converter.convert(e.getPlugin(), command);
-				}
-			}
-		}
 	}
 }

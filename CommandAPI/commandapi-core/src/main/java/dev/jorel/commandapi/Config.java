@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.InvalidPluginException;
 import org.bukkit.plugin.Plugin;
 
 /**
@@ -26,16 +27,12 @@ class Config {
 	// List of plugins to convert
 	private final Map<Plugin, String[]> pluginsToConvert;
 	
-	private final Map<String, String[]> pluginsForDeferredConversion;
-
 	public Config(FileConfiguration fileConfig) {
 		verboseOutput = fileConfig.getBoolean("verbose-outputs");
 		createDispatcherFile = fileConfig.getBoolean("create-dispatcher-json");
 		pluginsToConvert = new HashMap<>();
-		pluginsForDeferredConversion = new HashMap<>();
 
 		for (Map<?, ?> map : fileConfig.getMapList("plugins-to-convert")) {
-			
 			String[] pluginCommands;
 			if (map.values() == null || (map.values().size() == 1 && map.values().iterator().next() == null)) {
 				pluginCommands = new String[0];
@@ -47,10 +44,10 @@ class Config {
 			
 			String pluginName = (String) map.keySet().stream().findFirst().get();
 			Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
-			if(plugin == null) {
-				pluginsForDeferredConversion.put(pluginName, pluginCommands);
-			} else {
+			if(plugin != null) { 
 				pluginsToConvert.put(plugin, pluginCommands);
+			} else {
+				new InvalidPluginException("Could not find a plugin " + pluginName + "! Has it been loaded properly?").printStackTrace();
 			}
 		}
 	}
@@ -59,7 +56,6 @@ class Config {
 		verboseOutput = verbose;
 		createDispatcherFile = false;
 		pluginsToConvert = new HashMap<>();
-		pluginsForDeferredConversion = new HashMap<>();
 	}
 
 	public boolean hasVerboseOutput() {
@@ -72,10 +68,6 @@ class Config {
 	
 	public Set<Entry<Plugin, String[]>> getPluginsToConvert() {
 		return this.pluginsToConvert.entrySet();
-	}
-	
-	public Map<String, String[]> getPluginForDeferredConversion() {
-		return this.pluginsForDeferredConversion;
 	}
 
 }
