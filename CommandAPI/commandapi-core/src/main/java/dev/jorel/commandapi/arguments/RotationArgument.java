@@ -10,9 +10,10 @@ public class RotationArgument extends SafeOverrideableArgument<Rotation> {
 
 	/**
 	 * A Rotation argument. Represents pitch and yaw
+	 * @param nodeName the name of the node for this argument
 	 */
-	public RotationArgument() {
-		super(CommandAPIHandler.getNMS()._ArgumentRotation(), Rotation::toString);
+	public RotationArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getNMS()._ArgumentRotation(), Rotation::toString);
 	}
 	
 	@Override

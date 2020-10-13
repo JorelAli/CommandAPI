@@ -28,7 +28,7 @@ As an example, let's create a command to move an objective to a player's sidebar
 Given that an objective has to be casted to a String, we have to find a way to convert it from its name to a Bukkit `Objective` object. We can do that by using the `getObjective(String)` method from a Bukkit `Scoreboard`:
 
 ```java
-{{ #include examples/5.7.2objective.java }}
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:objectiveargument}}
 ```
 
 </div>
@@ -52,7 +52,7 @@ Say we wanted to create a command to unregister all objectives based on a given 
 To do this, we're going to take advantage of Bukkit's `Scoreboard.getObjectivesByCriteria(String)` method
 
 ```java
-{{ #include examples/5.7.2objectivecriteria.java }}
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:objectivecriteriaarguments}}
 ```
 
 </div>

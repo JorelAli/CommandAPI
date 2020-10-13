@@ -10,10 +10,11 @@ import dev.jorel.commandapi.CommandAPIHandler;
 public class UUIDArgument extends SafeOverrideableArgument<UUID> {
 	
 	/**
-	 * A UUID argument. Represents an in-game entity UUID 
+	 * A UUID argument. Represents an in-game entity UUID
+	 * @param nodeName the name of the node for this argument 
 	 */
-	public UUIDArgument() {
-		super(CommandAPIHandler.getNMS()._ArgumentUUID(), UUID::toString);
+	public UUIDArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getNMS()._ArgumentUUID(), UUID::toString);
 	}
 
 	@Override

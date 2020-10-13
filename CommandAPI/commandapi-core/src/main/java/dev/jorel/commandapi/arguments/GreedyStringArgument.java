@@ -9,9 +9,10 @@ public class GreedyStringArgument extends SafeOverrideableArgument<String> imple
 	
 	/**
 	 * A string argument for a string of any length
+	 * @param nodeName the name of the node for this argument
 	 */
-	public GreedyStringArgument() {
-		super(StringArgumentType.greedyString(), s -> s);
+	public GreedyStringArgument(String nodeName) {
+		super(nodeName, StringArgumentType.greedyString(), s -> s);
 	}
 
 	@Override
@@ -21,6 +22,6 @@ public class GreedyStringArgument extends SafeOverrideableArgument<String> imple
 
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.SIMPLE_TYPE;
+		return CommandAPIArgumentType.PRIMITIVE_GREEDY_STRING;
 	}
 }

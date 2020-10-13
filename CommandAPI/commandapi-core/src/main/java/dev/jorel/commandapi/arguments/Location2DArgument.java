@@ -10,17 +10,19 @@ public class Location2DArgument extends SafeOverrideableArgument<Location2D> {
 
 	/**
 	 * A Location argument. Represents Minecraft locations in 2D space. Defaults to LocationType.PRECISE_POSITION
+	 * @param nodeName the name of the node for this argument
 	 */
-	public Location2DArgument() {
-		this(LocationType.PRECISE_POSITION);
+	public Location2DArgument(String nodeName) {
+		this(nodeName, LocationType.PRECISE_POSITION);
 	}
 
 	/**
 	 * A Location argument. Represents Minecraft locations in 2D space
+	 * @param nodeName the name of the node for this argument
 	 * @param type the location type of this location, either LocationType.BLOCK_POSITION or LocationType.PRECISE_POSITION
 	 */
-	public Location2DArgument(LocationType type) {
-		super(type == LocationType.BLOCK_POSITION ? CommandAPIHandler.getNMS()._ArgumentPosition2D()
+	public Location2DArgument(String nodeName, LocationType type) {
+		super(nodeName, type == LocationType.BLOCK_POSITION ? CommandAPIHandler.getNMS()._ArgumentPosition2D()
 				: CommandAPIHandler.getNMS()._ArgumentVec2(),
 				type == LocationType.BLOCK_POSITION ? (Location2D l) -> l.getBlockX() + " " + l.getBlockZ()
 						: (Location2D l) -> l.getX() + " " + l.getZ());

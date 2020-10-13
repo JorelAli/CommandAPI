@@ -17,7 +17,9 @@ var classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command =
     [ "executesProxy", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a5cbaf45347d32ee2ac76fbcd24ab5470", null ],
     [ "register", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a56fd6c1a70cbcecdc0fcb8c58fd79150", null ],
     [ "withAliases", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a4964121c94c4786ecb26e45b13f1ca78", null ],
-    [ "withArguments", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ae332f09db60330118975e36020cce425", null ],
+    [ "withArguments", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ad0b8b38fb5fd66c24e34861869b6a8f0", null ],
+    [ "withArguments", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a5231b4dae198d8954befc95bea391e55", null ],
     [ "withPermission", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ae5a4bf1048697f05ab049a7875b95538", null ],
-    [ "withRequirement", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a19269b7ad0a9a3c252d48d35bbe5a14f", null ]
+    [ "withRequirement", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a19269b7ad0a9a3c252d48d35bbe5a14f", null ],
+    [ "withSubcommand", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ae96b5e2ad2f71bc1cdd15ca223095919", null ]
 ];

@@ -15,22 +15,7 @@ Let's say we want to create a command to toggle the state of friendly fire in a 
 To do this, given a team we want to use the `setAllowFriendlyFire(boolean)` function. As with the `ObjectiveArgument`, we must convert the `String` into a `Team` object.
 
 ```java
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("team", new TeamArgument());
-
-new CommandAPICommand("togglepvp")
-    .withArguments(arguments)
-    .executes((sender, args) -> {
-        //The TeamArgument must be casted to a String
-        String teamName = (String) args[0];
-        
-        //A team name can be turned into a Team using getTeam(String)
-        Team team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(teamName);
-        
-        //Toggle pvp
-        team.setAllowFriendlyFire(team.allowFriendlyFire());
-    })
-    .register();
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:teamarguments}}
 ```
 
 </div>

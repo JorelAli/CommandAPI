@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">CommandAPI
-   &#160;<span id="projectnumber">4.3</span>
+   &#160;<span id="projectnumber">5.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -96,8 +96,17 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 <li>addChild()
 : <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#ad046050eed92f3560aaa7304dff72025">com.mojang.brigadier.tree.CommandNode&lt; S &gt;</a>
 </li>
+<li>AdvancementArgument()
+: <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_advancement_argument.html#a09039deb8c55d7024b512383b527a2e6">dev.jorel.commandapi.arguments.AdvancementArgument</a>
+</li>
 <li>ambiguous()
 : <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_ambiguity_consumer.html#a75318afb8cf08ecf79b55f1780dc988e">com.mojang.brigadier.AmbiguityConsumer&lt; S &gt;</a>
+</li>
+<li>AngleArgument()
+: <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_angle_argument.html#ac618321b91e9dad3b937d8d825ac93ee">dev.jorel.commandapi.arguments.AngleArgument</a>
+</li>
+<li>AngleArgumentException()
+: <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_angle_argument_exception.html#a52a3892341a36b417d2dc2a8388f448a">dev.jorel.commandapi.exceptions.AngleArgumentException</a>
 </li>
 <li>append()
 : <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_message_builder.html#aa2fed33a654c27d039dd92f83476a6b0">dev.jorel.commandapi.arguments.CustomArgument&lt; T &gt;.MessageBuilder</a>
@@ -118,24 +127,20 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 , <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser.html#a7b5a8c1a5f74a8ad0e68f6a61249f593">dev.jorel.commandapi.arguments.CustomArgument&lt; T &gt;.CustomArgumentParser&lt; T &gt;</a>
 , <a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html#a0576e47d251a8a0958015bf91379d7ce">dev.jorel.commandapi.wrappers.MathOperation</a>
 </li>
-<li>argBuildOf()
-: <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html#a710199c9f3b833562136eec22c2616ad">dev.jorel.commandapi.CommandAPIHandler.Brigadier</a>
-</li>
 <li>argument()
 : <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_required_argument_builder.html#aa6704a9315050b25fa23194265a619f5">com.mojang.brigadier.builder.RequiredArgumentBuilder&lt; S, T &gt;</a>
 </li>
 <li>Argument()
-: <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a84dc66de1e701585abe5cdea50a33913">dev.jorel.commandapi.arguments.Argument</a>
+: <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a15f4ab80a58ae696842618cc3a24944a">dev.jorel.commandapi.arguments.Argument</a>
 </li>
 <li>arrayOf()
-: <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a095decc3f6efe501b3ddec523b436453">dev.jorel.commandapi.StringTooltip</a>
-, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#afcb296987c41c438fac52733e5795796">dev.jorel.commandapi.Tooltip&lt; S &gt;</a>
+: <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#afcb296987c41c438fac52733e5795796">dev.jorel.commandapi.Tooltip&lt; S &gt;</a>
 </li>
 <li>at()
 : <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_string_range.html#aed9c2d49b37a7598078bd9604943eb92">com.mojang.brigadier.context.StringRange</a>
 </li>
 <li>AxisArgument()
-: <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_axis_argument.html#afb65b0d0165c17f80f9aa54fc1679cc7">dev.jorel.commandapi.arguments.AxisArgument</a>
+: <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_axis_argument.html#aa6ff849b79f291c4904fc56b82e2be7c">dev.jorel.commandapi.arguments.AxisArgument</a>
 </li>
 </ul>
 </div><!-- contents -->
@@ -143,7 +148,7 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sat Sep 19 2020 17:18:13 for CommandAPI by
+    <li class="footer">Generated on Tue Oct 13 2020 21:40:49 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

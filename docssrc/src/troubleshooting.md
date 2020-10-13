@@ -7,9 +7,9 @@ This section basically summarizes the list of things that _could_ go wrong with 
 Shove the scoreboard access inside a lambda, so it is evaluated when commands are executed rather than when the server loads. For example, use:
 
 ```java
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+List<Argument> arguments = new ArrayList<>();
             	
-arguments.put("team", new TeamArgument().safeOverrideSuggestions(s ->
+arguments.add(new TeamArgument("team").safeOverrideSuggestions(s ->
     Bukkit.getScoreboardManager().getMainScoreboard().getTeams().toArray(new Team[0]))
 );
 ```
@@ -17,9 +17,9 @@ arguments.put("team", new TeamArgument().safeOverrideSuggestions(s ->
 as opposed to:
 
 ```java
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+List<Argument> arguments = new ArrayList<>();
             	
-arguments.put("team", new TeamArgument().safeOverrideSuggestions(
+arguments.add(new TeamArgument("team").safeOverrideSuggestions(
     Bukkit.getScoreboardManager().getMainScoreboard().getTeams().toArray(new Team[0]))
 );
 ```
@@ -64,14 +64,6 @@ Due to the implementation of the CommandAPI, the CommandAPI does **not** support
 ## Players cannot connect/timeout when joining
 
 If players cannot connect, this could be due to the size of the command data packet. To see the resultant packet being sent to players when they log in, enable the `create-dispatcher-json: true` setting and view the file size of the resultant file. If the file size is abnormally large _(Over 2MB is considered very large)_, consider reducing the number of `LiteralArguments` which your plugin uses.
-
-## Command conversion throws a `NullPointerException`
-
-This is likely caused by the fact that the plugin you want to convert hasn't been loaded yet. Ensure that it loads before your plugin by adding the following to the target plugin's `plugin.yml` file:
-
-```yaml
-loadbefore: [YourPlugin, CommandAPI]
-```
 
 ## My issue isn't on here, what do I do?!
 

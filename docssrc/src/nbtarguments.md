@@ -9,17 +9,7 @@ Since this argument depends on the NBT API, if this is used and the NBT API is n
 ### Example - ???
 
 ```java
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("nbt", new NBTCompoundArgument());
-
-new CommandAPICommand("award")
-    .withArguments(arguments)
-    .executes((sender, args) -> {
-        NBTContainer nbt = (NBTContainer) args[0];
-        
-        //Do something with "nbt" here...
-    })
-    .register();
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:nbtcompoundarguments}}
 ```
 
 </div>

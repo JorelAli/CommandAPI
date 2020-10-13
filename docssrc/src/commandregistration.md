@@ -5,7 +5,19 @@ To register commands with the CommandAPI, we use the `CommandAPICommand` class. 
 I think the easiest way to explain it is with an example:
 
 ```java
-{{#include examples/3commandregistration.java}}
+// Create our arguments
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new GreedyStringArgument("message"));
+
+//Create our command
+new CommandAPICommand("broadcastmsg")
+    .withArguments(arguments)                     // The arguments
+    .withAliases("broadcast", "broadcastmessage") // Command aliases
+    .withPermission(CommandPermission.OP)         // Required permissions
+    .executes((sender, args) -> {
+        String message = (String) args[0];
+        Bukkit.getServer().broadcastMessage(message);
+    }).register();
 ```
 
 - First, we create our arguments for the command. This is described in more detail in [the section on arguments](./arguments.html). 
@@ -18,6 +30,8 @@ I think the easiest way to explain it is with an example:
 
 That's it! This simple snippet of code fully registers the command to the server. No hassling with a plugin instance, no messing with `plugin.yml` files.
 
+Throughout this documentation, we will use the various different methods for command registration to give you an idea of when and where certain methods are more suitable than others.
+
 -----
 
 ## `CommandAPICommand` methods
@@ -26,26 +40,87 @@ The `CommandAPICommand` has various methods, which are outlined below:
 
 #### Setting the command name
 
-- `new CommandAPICommand(String)` - This constructor is used to set the command's name. 
+```java
+new CommandAPICommand(String commandName)
+```
+
+This constructor creates a new instance of the `CommandAPICommand` object. This constructor requires the _name_ of the command.
 
 #### Setting command properties
 
-- `withArguments(LinkedHashMap<String, Argument>)` - The list of arguments.
+```java
+CommandAPICommand withArguments(List<Argument> arguments)
+```
 
-  The CommandAPI requires a list of arguments which are used for the command. The argument map consists of a key which is the prompt that is displayed as a prompt to users entering commands, and a value which is an instance of an argument (See the section on arguments). This list of arguments is interpreted in the _order that arguments are added to the LinkedHashMap_.
+The `withArguments` method is used to add arguments to your command. The `arguments` parameter is appended to the the list of arguments for the command.
 
-- `withPermission(CommandPermission)` - The required permission to execute a command. (See [the section on permissions](permissions.html)).
+```java
+CommandAPICommand withArguments(Argument... arguments)
+```
 
-- `withAliases(String... args)` - An array of aliases that the command can be run via.
+Similar to the other `withArguments` method, this method appends the `arguments` to the list of arguments for the command. This is purely to make adding one or two arguments nice and easy instead of creating lots of `List` objects everywhere.
+
+```java
+CommandAPICommand withPermission(CommandPermission)
+```
+
+The `withPermission` method is used to assign a permission that is required to execute the command. (See [the section on permissions](permissions.html) for more info).
+
+```java
+CommandAPICommand withAliases(String... args)
+```
+
+The `withAliases` method is used to declare a list of aliases that can be used to run this command via. (See [the section on aliases](./aliases.md) for more info).
+
+```java
+CommandAPICommand withSubcommand(CommandAPICommand subcommand)
+```
+
+The `withSubcommand` method is used to declare a subcommand that leads on from the current command. (See [the section on subcommands](./subcommands.md) for more info).
 
 #### Setting the command's executor
 
-- `executes((sender, args) -> {})` - Executes a command using the `CommandSender` object.
-- `executesPlayer((player, args) -> {})` - Executes a command using the `Player` object.
-- `executesEntity((entity, args) -> {})` - Executes a command using the `Entity` object.
-- `executesCommandBlock((cmdblock, args) -> {})` - Executes a command using the `BlockCommandSender` object.
-- `executesConsole((console, args) -> {})` - Executes a command using the `ConsoleCommandSender` object.
-- `executesProxy((proxy, args) -> {})` - Executes a command using the `ProxiedCommandSender` object.
+```java
+CommandAPICommand executes((sender, args) -> {})
+```
+
+Executes a command using the `CommandSender` object.
+
+```java
+CommandAPICommand executesPlayer((player, args) -> {})
+```
+
+Executes a command only if the command sender is a `Player`.
+
+```java
+CommandAPICommand executesEntity((entity, args) -> {})
+```
+
+Executes a command only if the command sender is an `Entity`.
+
+```java
+CommandAPICommand executesCommandBlock((cmdblock, args) -> {})
+```
+
+Executes a command only if the command sender is a `BlockCommandSender`.
+
+```java
+CommandAPICommand executesConsole((console, args) -> {})
+```
+
+Executes a command only if the command sender is a `ConsoleCommandSender`.
+
+```java
+CommandAPICommand executesProxy((proxy, args) -> {})
+```
+
+Executes a command only if the command sender is a `ProxiedCommandSender`.
+
+```java
+CommandAPICOmmand executesNative((proxy, args) -> {})
+```
+
+Executes a command regardless of what the command sender is, using the `NativeProxyCommandSender`.  Read more about native proxied command senders [here](./native.md).
 
 > **Developer's Note:**
 >
@@ -53,12 +128,12 @@ The `CommandAPICommand` has various methods, which are outlined below:
 >
 > ```java
 > new CommandAPICommand("spawnpigs")
->  .executesPlayer((player, args) -> {
->      for(int i = 0; i < 10; i++) {
->          player.getWorld().spawnEntity(player.getLocation(), (EntityType) args[0]);
->      }
->  })
->  .register();
+>      .executesPlayer((player, args) -> {
+>            for(int i = 0; i < 10; i++) {
+>                player.getWorld().spawnEntity(player.getLocation(), (EntityType) args[0]);
+>            }
+>      })
+>      .register();
 > ```
 >
 > The Java type inference system cannot determine what the type of the lambda `(player, args) -> ()` is, therefore it produces the following compilation error:
@@ -71,17 +146,21 @@ The `CommandAPICommand` has various methods, which are outlined below:
 >
 > ```java
 > new CommandAPICommand("spawnpigs")
->  .executesPlayer((Player player, Object[] args) -> {
->      for(int i = 0; i < 10; i++) {
->          player.getWorld().spawnEntity(player.getLocation(), (EntityType) args[0]);
->      }
->  })
->  .register();
+>      .executesPlayer((Player player, Object[] args) -> {
+>            for(int i = 0; i < 10; i++) {
+>                player.getWorld().spawnEntity(player.getLocation(), (EntityType) args[0]);
+>            }
+>      })
+>      .register();
 > ```
 
 #### Registering the command
 
-- `register()` - Registers the command.
+```java
+void register()
+```
+
+Registers the command.
 
 -----
 
@@ -123,7 +202,20 @@ For instance, instead of unregistering `/gamemode`, you could register a command
 To replace a command, we can first unregister it and then register our implementation of that command.
 
 ```java
-{{#include examples/3replacegamemode.java}}
+//Unregister the gamemode command from the server (by force)
+CommandAPI.unregister("gamemode", true);
+
+List<Argument> arguments = new ArrayList<>();
+
+/* Arguments for the gamemode command. In this sample, I'm just 
+ * using a simple literal argument which allows for /gamemode survival */
+arguments.add(new LiteralArgument("survival"));
+
+new CommandAPICommand("gamemode")
+    .withArguments(arguments)
+    .executes((sender, args) -> {
+        //Implementation of our /gamemode command
+    }).register();
 ```
 
 </div>

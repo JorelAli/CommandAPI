@@ -12,6 +12,10 @@ import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
 
+/**
+ * A simple representation of Minecraft's CommandListenerWrapper, in the form of
+ * Bukkit's ProxiedCommandSender
+ */
 public class NativeProxyCommandSender implements ProxiedCommandSender {
 
 	private final CommandSender caller;
@@ -28,7 +32,7 @@ public class NativeProxyCommandSender implements ProxiedCommandSender {
 	 */
 	public NativeProxyCommandSender(CommandSender caller, CommandSender callee, Location location, World world) {
 		this.caller = caller;
-		this.callee = callee;
+		this.callee = callee == null ? caller : callee;
 		this.location = location;
 		this.world = world;
 	}
@@ -62,7 +66,7 @@ public class NativeProxyCommandSender implements ProxiedCommandSender {
 	/**
      * Returns the CommandSender which is being used to call the command
      *
-     * @return the caller which the command is being run as. This <b>can be null!</b>
+     * @return the caller which the command is being run as
      */
 	@Override
 	public CommandSender getCallee() {

@@ -30,7 +30,7 @@ Say we want a command to remove certain types of entities. Typically, this would
 Instead, we can combine all of these into one by using the `EntitySelectorArgument`. We want to be able to target multiple entities at a time, so we want to use the `EntitySelector.MANY_ENTITIES` value in our constructor. We can simply retrieve the `Collection<Entity>` from this argument and iteratively remove each entity:
 
 ```java
-{{ #include examples/5.6entityselector.java }}
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:entityselectorarguments}}
 ```
 
 We could then use this to target specific entities, for example:
@@ -79,7 +79,7 @@ Say we want a command to spawn a specific type of entity, similar to the `/summo
 Since we're trying to specify an entity type, we will use the `EntityTypeArgument` as our argument type for `<entity>`. We combine this with the `IntegerArgument` class with a specified range of \\( 1 \le \textit{amount} \le 100 \\):
 
 ```java
-{{ #include examples/5.6entitytype.java }}
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:entitytypearguments}}
 ```
 
 Note how in this example above, we have to explicitly state `Player player, Object[] args`. This is due to a limitation of Java's type inference system which is discussed [here](./commandregistration.md#setting-the-commands-executor).

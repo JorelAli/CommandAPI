@@ -57,6 +57,7 @@ import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
 import dev.jorel.commandapi.arguments.ICustomProvidedArgument.SuggestionProviders;
 import dev.jorel.commandapi.arguments.LocationType;
+import dev.jorel.commandapi.exceptions.AngleArgumentException;
 import dev.jorel.commandapi.exceptions.BiomeArgumentException;
 import dev.jorel.commandapi.exceptions.TimeArgumentException;
 import dev.jorel.commandapi.exceptions.UUIDArgumentException;
@@ -128,6 +129,11 @@ import net.minecraft.server.v1_13_R2.Vec3D;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class NMS_1_13_2 implements NMS {
+
+	@Override
+	public ArgumentType<?> _ArgumentAngle() {
+		throw new AngleArgumentException();
+	}
 
 	@Override
 	public ArgumentType<?> _ArgumentAxis() {
@@ -343,6 +349,11 @@ public class NMS_1_13_2 implements NMS {
 	}
 
 	@Override
+	public float getAngle(CommandContext cmdCtx, String key) {
+		throw new AngleArgumentException();
+	}
+
+	@Override
 	public EnumSet<Axis> getAxis(CommandContext cmdCtx, String key) {
 		EnumSet<Axis> set = EnumSet.noneOf(Axis.class);
 		EnumSet<EnumAxis> parsedEnumSet = ArgumentRotationAxis.a(cmdCtx, key);
@@ -382,8 +393,8 @@ public class NMS_1_13_2 implements NMS {
 	}
 
 	@Override
-	public com.mojang.brigadier.CommandDispatcher getBrigadierDispatcher(Object server) {
-		return ((MinecraftServer) server).getCommandDispatcher().a();
+	public com.mojang.brigadier.CommandDispatcher getBrigadierDispatcher() {
+		return ((MinecraftServer) ((CraftServer) Bukkit.getServer()).getServer()).getCommandDispatcher().a();
 	}
 
 	@Override
@@ -471,7 +482,8 @@ public class NMS_1_13_2 implements NMS {
 
 	@Override
 	public FloatRange getFloatRange(CommandContext cmdCtx, String key) {
-		CriterionConditionValue.FloatRange range = (CriterionConditionValue.FloatRange) cmdCtx.getArgument(key, CriterionConditionValue.FloatRange.class);
+		CriterionConditionValue.FloatRange range = (CriterionConditionValue.FloatRange) cmdCtx.getArgument(key,
+				CriterionConditionValue.FloatRange.class);
 		float low = range.a() == null ? -Float.MAX_VALUE : range.a();
 		float high = range.b() == null ? Float.MAX_VALUE : range.b();
 		return new FloatRange(low, high);
@@ -490,8 +502,7 @@ public class NMS_1_13_2 implements NMS {
 
 		for (CustomFunction customFunction : customFuncList) {
 			@SuppressWarnings("deprecation")
-			NamespacedKey minecraftKey = new NamespacedKey(customFunction.a().b(),
-					customFunction.a().getKey());
+			NamespacedKey minecraftKey = new NamespacedKey(customFunction.a().b(), customFunction.a().getKey());
 			ToIntBiFunction<CustomFunction, CommandListenerWrapper> obj = customFunctionData::a;
 			ToIntFunction<CommandListenerWrapper> appliedObj = clw -> obj.applyAsInt(customFunction, clw);
 

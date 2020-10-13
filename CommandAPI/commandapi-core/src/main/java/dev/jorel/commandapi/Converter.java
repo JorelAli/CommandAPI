@@ -1,13 +1,11 @@
 package dev.jorel.commandapi;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ProxiedCommandSender;
@@ -22,19 +20,16 @@ import dev.jorel.commandapi.arguments.GreedyStringArgument;
  */
 public abstract class Converter {
 	
-	private static final LinkedHashMap<String, Argument> PLAIN_ARGUMENTS;
-	
-	static {
-		PLAIN_ARGUMENTS = new LinkedHashMap<>();
-		PLAIN_ARGUMENTS.put("args", new GreedyStringArgument());
-	}
+	private static final List<Argument> PLAIN_ARGUMENTS = Arrays.asList(new GreedyStringArgument("args"));
+	private static final Set<String> CALLER_METHODS = new HashSet<>(Arrays.asList("isPermissionSet", "hasPermission",
+			"addAttachment", "removeAttachment", "recalculatePermissions", "getEffectivePermissions", "isOp", "setOp"));
 
 	/**
 	 * Convert all commands stated in Plugin's plugin.yml file into CommandAPI-compatible commands
 	 * @param plugin The plugin which commands are to be converted
 	 */
 	public static void convert(Plugin plugin) {
-		CommandAPI.getLog().info("Converting commands for " + plugin.getName() + ":");
+		CommandAPI.logInfo("Converting commands for " + plugin.getName() + ":");
 		plugin.getDescription().getCommands().keySet().forEach(commandName -> convertPluginCommand((JavaPlugin) plugin, commandName, PLAIN_ARGUMENTS));
 	}
 	
@@ -53,13 +48,22 @@ public abstract class Converter {
 	 * @param cmdName The command to convert
 	 * @param arguments The arguments that should be used to parse this command
 	 */
-	public static void convert(Plugin plugin, String cmdName, LinkedHashMap<String, Argument> arguments) {
+	public static void convert(Plugin plugin, String cmdName, List<Argument> arguments) {
 		convertPluginCommand((JavaPlugin) plugin, cmdName, arguments);
 	}
 	
-	private static void convertPluginCommand(JavaPlugin plugin, String commandName, LinkedHashMap<String, Argument> arguments) {
-		CommandAPI.getLog().info("Converting " + plugin.getName() + " command /" + commandName);
-		
+	/**
+	 * Convert a command stated in Plugin's plugin.yml file into CommandAPI-compatible commands
+	 * @param plugin The plugin where the command is registered
+	 * @param cmdName The command to convert
+	 * @param arguments The arguments that should be used to parse this command
+	 */
+	public static void convert(Plugin plugin, String cmdName, Argument... arguments) {
+		convertPluginCommand((JavaPlugin) plugin, cmdName, Arrays.asList(arguments));
+	}
+	
+	private static void convertPluginCommand(JavaPlugin plugin, String commandName, List<Argument> arguments) {
+		CommandAPI.logInfo("Converting " + plugin.getName() + " command /" + commandName);
 		/* Parse the commands */
 		Map<String, Object> cmdData = plugin.getDescription().getCommands().get(commandName);
 		
@@ -81,7 +85,7 @@ public abstract class Converter {
 			aliases = list.toArray(new String[0]);
 		}
 		if(aliases.length != 0) {
-			CommandAPI.getLog().info("Aliases for command /" + commandName + " found. Using aliases " + Arrays.deepToString(aliases));
+			CommandAPI.logInfo("Aliases for command /" + commandName + " found. Using aliases " + Arrays.deepToString(aliases));
 		}
 		 
 		//Convert YAML to CommandPermission
@@ -90,7 +94,7 @@ public abstract class Converter {
 		if(permission == null) {
 			permissionNode = CommandPermission.NONE;
 		} else {
-			CommandAPI.getLog().info("Permission for command /" + commandName + " found. Using " + permission);
+			CommandAPI.logInfo("Permission for command /" + commandName + " found. Using " + permission);
 			permissionNode = CommandPermission.fromString(permission);
 		}
 		
@@ -98,56 +102,39 @@ public abstract class Converter {
 		new CommandAPICommand(commandName)
 			.withPermission(permissionNode)
 			.withAliases(aliases)
-			.executesNative((sender, args) -> { plugin.getCommand(commandName).execute(of(sender), commandName, new String[0]); })
+			.executesNative((sender, args) -> { plugin.getCommand(commandName).execute(mergeProxySender(sender), commandName, new String[0]); })
 			.register();
 		
 		//Multiple arguments		
-		CommandAPICommand.convertedOf(commandName)
+		CommandAPICommand multiArgs = new CommandAPICommand(commandName)
 			.withPermission(permissionNode)
 			.withAliases(aliases)
 			.withArguments(arguments)
 			.executesNative((sender, args) -> { 
 				if(arguments.equals(PLAIN_ARGUMENTS)) {
-					plugin.getCommand(commandName).execute(of(sender), commandName, ((String) args[0]).split(" "));
+					plugin.getCommand(commandName).execute(mergeProxySender(sender), commandName, ((String) args[0]).split(" "));
 				} else {
-					plugin.getCommand(commandName).execute(of(sender), commandName, (String[]) args);
+					plugin.getCommand(commandName).execute(mergeProxySender(sender), commandName, (String[]) args);
 				}
-			})
-			.register();
+			});
+		// Good grief, what a hack~
+		multiArgs.isConverted = true;
+		multiArgs.register();
 	}
 	
-	private static CommandSender of(ProxiedCommandSender proxy) {
-		CommandSender sender = (CommandSender) Proxy.newProxyInstance(CommandSender.class.getClassLoader(),
-				proxy.getCallee().getClass().getInterfaces(), new CommandSenderHandler(proxy));
-		
-		return sender;
+	/*
+	 * https://www.jorel.dev/blog/Simplifying-Bukkit-CommandSenders/
+	 * No matter what I can name this method, I'm never satisfied its name
+	 */
+	private static CommandSender mergeProxySender(ProxiedCommandSender proxySender) {
+		Class<?>[] calleeInterfaces = proxySender.getCallee().getClass().getInterfaces();
+		Class<?>[] interfaces = new Class<?>[calleeInterfaces.length + 1];
+		System.arraycopy(calleeInterfaces, 0, interfaces, 1, calleeInterfaces.length);
+		interfaces[0] = proxySender.getCallee().getClass();
+		return (CommandSender) Proxy.newProxyInstance(CommandSender.class.getClassLoader(), interfaces,
+				(p, method, args) -> method.invoke(
+						CALLER_METHODS.contains(method.getName()) ? proxySender.getCaller() : proxySender.getCaller(),
+						args));
 	}
-	
-	static class CommandSenderHandler implements InvocationHandler {
-		
-        private final ProxiedCommandSender proxiedCommandSender;
-        
-        public CommandSenderHandler(ProxiedCommandSender proxiedCommandSender) {
-            this.proxiedCommandSender = proxiedCommandSender;
-        }
 
-		public Object invoke(Object proxy, Method method, Object[] args)
-				throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-			
-			switch(method.getName()) {
-			case "isPermissionSet":
-			case "hasPermission":
-			case "addAttachment":
-			case "removeAttachment":
-			case "recalculatePermissions":
-			case "getEffectivePermissions":
-			case "isOp":
-			case "setOp":
-				return method.invoke(proxiedCommandSender.getCaller(), args);
-			default:
-				return method.invoke(proxiedCommandSender.getCallee(), args);
-			}
-        }
-    }
-	
 }

@@ -11,17 +11,19 @@ public class LocationArgument extends SafeOverrideableArgument<Location> {
 	
 	/**
 	 * A Location argument. Represents Minecraft locations
+	 * @param nodeName the name of the node for this argument
 	 */
-	public LocationArgument() {
-		this(LocationType.PRECISE_POSITION);
+	public LocationArgument(String nodeName) {
+		this(nodeName, LocationType.PRECISE_POSITION);
 	}
 	
 	/**
 	 * A Location argument. Represents Minecraft locations
+	 * @param nodeName the name of the node for this argument
 	 * @param type the location type of this location, either LocationType.BLOCK_POSITION or LocationType.PRECISE_POSITION
 	 */
-	public LocationArgument(LocationType type) {
-		super(type == LocationType.BLOCK_POSITION ? CommandAPIHandler.getNMS()._ArgumentPosition()
+	public LocationArgument(String nodeName, LocationType type) {
+		super(nodeName, type == LocationType.BLOCK_POSITION ? CommandAPIHandler.getNMS()._ArgumentPosition()
 				: CommandAPIHandler.getNMS()._ArgumentVec3(),
 				type == LocationType.BLOCK_POSITION
 						? (Location l) -> l.getBlockX() + " " + l.getBlockY() + " " + l.getBlockZ()

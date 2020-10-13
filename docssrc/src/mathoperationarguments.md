@@ -61,21 +61,7 @@ Using the `MathOperationArgument`, we can extend the functionality of adding and
 As with any command, we declare our arguments, cast them properly and then we write our main code. In this example, we use the `apply(int, int)` method from our `MathOperation` to calculate the player's new level.
 
 ```java
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("player", new PlayerArgument());
-arguments.put("operation", new MathOperationArgument());
-arguments.put("value", new IntegerArgument());
-
-new CommandAPICommand("changelevel")
-    .withArguments(arguments)
-    .executes((sender, args) -> {
-        Player target = (Player) args[0];
-        MathOperation op = (MathOperation) args[1];
-        int value = (int) args[2];
-
-        target.setLevel(op.apply(target.getLevel(), value));
-    })
-	.register();
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:mathoperationarguments}}
 ```
 
 -----

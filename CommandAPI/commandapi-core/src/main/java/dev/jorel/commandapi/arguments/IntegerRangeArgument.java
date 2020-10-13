@@ -9,10 +9,11 @@ import dev.jorel.commandapi.wrappers.IntegerRange;
 public class IntegerRangeArgument extends SafeOverrideableArgument<IntegerRange> {
 
 	/**
-	 * A Time argument. Represents the number of ingame ticks 
+	 * An IntegerRange argument. Represents a range of whole numbers
+	 * @param nodeName the name of the node for this argument 
 	 */
-	public IntegerRangeArgument() {
-		super(CommandAPIHandler.getNMS()._ArgumentIntRange(), IntegerRange::toString);
+	public IntegerRangeArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getNMS()._ArgumentIntRange(), IntegerRange::toString);
 	}
 	
 	@Override

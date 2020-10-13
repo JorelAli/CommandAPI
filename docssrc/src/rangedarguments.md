@@ -54,59 +54,7 @@ Say you're working on a plugin for server administrators to help them find restr
 Now, we simply create our arguments using `IntegerRangeArgument` for our range and `ItemStackArgument` as the item to search for. We can then find all chests in a given area and determine if it is within the range provided by the command sender by using `range.isInRange(distance)`:
 
 ```java
-// Declare our arguments for /searchrange <IntegerRange> <ItemStack>
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("range", new IntegerRangeArgument());
-arguments.put("item", new ItemStackArgument());
-
-new CommandAPICommand("searchrange")
-    .withArguments(arguments)
-    .executesPlayer((player, args) -> {
-        // Retrieve the range from the arguments
-        IntegerRange range = (IntegerRange) args[0];
-        ItemStack itemStack = (ItemStack) args[1];
-
-        // Store the locations of chests with certain items
-        List<Location> locations = new ArrayList<>();
-
-        // Iterate through all chunks, and then all tile entities within each chunk
-        for(Chunk chunk : player.getWorld().getLoadedChunks()) {
-            for(BlockState blockState : chunk.getTileEntities()) {
-
-                // The distance between the block and the player
-                int distance = (int) blockState.getLocation().distance(player.getLocation());
-
-                // Check if the distance is within the specified range 
-                if(range.isInRange(distance)) {
-
-                    // Check if the tile entity is a chest
-                    if(blockState instanceof Chest) {
-                        Chest chest = (Chest) blockState;
-
-                        // Check if the chest contains the item specified by the player
-                        if(chest.getInventory().contains(itemStack.getType())) {
-                            locations.add(chest.getLocation());
-                        }
-                    }
-                }
-
-            }
-        }
-
-        // Output the locations of the chests, or whether no chests were found
-        if(locations.isEmpty()) {
-            player.sendMessage("No chests were found");
-        } else {
-            player.sendMessage("Found " + locations.size() + " chests:");
-            locations.forEach(location -> {
-                player.sendMessage("  Found at: " 
-                        + location.getX() + ", " 
-                        + location.getY() + ", " 
-                        + location.getZ());
-            });
-        }
-    })
-    .register();
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:rangedarguments}}
 ```
 
 </div>

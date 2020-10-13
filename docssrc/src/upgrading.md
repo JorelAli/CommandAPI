@@ -1,5 +1,84 @@
 # Upgrading guide
 
+## From version 4.x to 5.0
+
+### Argument registration
+
+`LinkedHashMap` is no longer used for argument registration. Instead, use a `List`, and put the argument's "prompt" as the first parameter in the argument's constructor. For example:
+
+```java
+LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
+arguments.put("target", new PlayerArgument())
+arguments.put("location", new LocationArgument(LocationType.BLOCK_POSITION));
+
+new CommandAPICommand("teleport")
+    .withArguments(arguments)
+    .executes((sender, args) -> {
+        //Teleport <target> to <location>
+    })
+    .register();
+```
+
+\\[\downarrow\\]
+
+```java
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new PlayerArgument("target"));
+arguments.add(new LocationArgument("location", LocationType.BLOCK_POSITION));
+
+new CommandAPICommand("teleport")
+    .withArguments(arguments)
+    .executes((sender, args) -> {
+        //Teleport <target> to <location>
+    })
+    .register();
+```
+
+Alternatively, you can declare them directly in the command's declaration so you don't have to construct a list:
+
+```java
+new CommandAPICommand("teleport")
+    .withArguments(new PlayerArgument("target"))
+    .withArguments(new LocationArgument("location", LocationType.BLOCK_POSITION))
+    .executes((sender, args) -> {
+        //Teleport <target> to <location>
+    })
+    .register();
+```
+
+Alternatively, you can declare it in one line:
+
+```java
+new CommandAPICommand("teleport")
+    .withArguments(new PlayerArgument("target"), new LocationArgument("location", LocationType.BLOCK_POSITION))
+    .executes((sender, args) -> {
+        //Teleport <target> to <location>
+    })
+    .register();
+```
+
+### Method changes
+
+Some of the `Brigadier` methods were changed:
+
+```java
+LiteralCommandNode registerNewLiteral(String name);
+RequiredArgumentBuilder argBuildOf(LinkedHashMap<String, Argument> args, String value);
+RequiredArgumentBuilder argBuildOf(String prompt, Argument argument);
+```
+
+\\[\downarrow\\]
+
+```java
+LiteralArgumentBuilder fromLiteralArgument(LiteralArgument literalArgument);
+RequiredArgumentBuilder fromArgument(List<Argument> args, String nodeName);
+RequiredArgumentBuilder fromArgument(Argument argument);
+```
+
+In particular, the `fromLiteralArgument` now takes in a `LiteralArgument` and returns a `LiteralArgumentBuilder`. To convert from a `LiteralArgumentBuilder` to the `LiteralCommandNode`, you can run the `.build()` method.
+
+-----
+
 ## From version 3.x to 4.0
 
 The maven repository url has changed:

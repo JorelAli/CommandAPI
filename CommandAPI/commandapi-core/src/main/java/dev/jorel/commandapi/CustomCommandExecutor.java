@@ -30,6 +30,15 @@ class CustomCommandExecutor {
 		resultingExecutors = new ArrayList<>();
 	}
 	
+	CustomCommandExecutor mergeExecutor(CustomCommandExecutor executor) {
+		CustomCommandExecutor result = new CustomCommandExecutor();
+		result.normalExecutors = new ArrayList<>(normalExecutors);
+		result.resultingExecutors = new ArrayList<>(resultingExecutors);
+		result.normalExecutors.addAll(executor.normalExecutors);
+		result.resultingExecutors.addAll(executor.resultingExecutors);
+		return result;
+	}
+	
 	public void addNormalExecutor(IExecutorNormal<? extends CommandSender> ex) {
 		this.normalExecutors.add(ex);
 	}

@@ -9,8 +9,12 @@ import dev.jorel.commandapi.CommandAPIHandler;
  */
 public class SoundArgument extends SafeOverrideableArgument<Sound> implements ICustomProvidedArgument {
 	
-	public SoundArgument() {
-		super(CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered(), CommandAPIHandler.getNMS()::convert);
+	/**
+	 * A Sound argument. Represents Bukkit's Sound object
+	 * @param nodeName the name of the node for this argument
+	 */
+	public SoundArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered(), CommandAPIHandler.getNMS()::convert);
 	}
 
 	@Override

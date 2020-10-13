@@ -150,6 +150,9 @@ var hierarchy =
         [ "dev.jorel.commandapi.arguments.TextArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_text_argument.html", null ]
       ] ]
     ] ],
+    [ "dev.jorel.commandapi.IStringTooltip", "interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html", [
+      [ "dev.jorel.commandapi.StringTooltip", "classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html", null ]
+    ] ],
     [ "dev.jorel.commandapi.arguments.LocationType", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_type.html", null ],
     [ "dev.jorel.commandapi.wrappers.MathOperation", "enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html", null ],
     [ "com.mojang.brigadier.Message", "interfacecom_1_1mojang_1_1brigadier_1_1_message.html", [
@@ -163,6 +166,7 @@ var hierarchy =
     [ "com.mojang.brigadier.ResultConsumer< S >", "interfacecom_1_1mojang_1_1brigadier_1_1_result_consumer.html", null ],
     [ "dev.jorel.commandapi.wrappers.Rotation", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_rotation.html", null ],
     [ "RuntimeException", null, [
+      [ "dev.jorel.commandapi.exceptions.AngleArgumentException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_angle_argument_exception.html", null ],
       [ "dev.jorel.commandapi.exceptions.BadLiteralException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_bad_literal_exception.html", null ],
       [ "dev.jorel.commandapi.exceptions.BiomeArgumentException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_biome_argument_exception.html", null ],
       [ "dev.jorel.commandapi.exceptions.ConflictingPermissionsException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_conflicting_permissions_exception.html", null ],
@@ -205,6 +209,7 @@ var hierarchy =
       [ "dev.jorel.commandapi.arguments.EnvironmentArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_environment_argument.html", null ]
     ] ],
     [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< Float >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.AngleArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_angle_argument.html", null ],
       [ "dev.jorel.commandapi.arguments.FloatArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_float_argument.html", null ]
     ] ],
     [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< FloatRange >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
@@ -280,7 +285,6 @@ var hierarchy =
     [ "dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument_1_1_score_holder_type.html", null ],
     [ "com.mojang.brigadier.SingleRedirectModifier< S >", "interfacecom_1_1mojang_1_1brigadier_1_1_single_redirect_modifier.html", null ],
     [ "com.mojang.brigadier.context.StringRange", "classcom_1_1mojang_1_1brigadier_1_1context_1_1_string_range.html", null ],
-    [ "dev.jorel.commandapi.StringTooltip", "classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html", null ],
     [ "com.mojang.brigadier.arguments.StringArgumentType.StringType", "enumcom_1_1mojang_1_1brigadier_1_1arguments_1_1_string_argument_type_1_1_string_type.html", null ],
     [ "com.mojang.brigadier.context.SuggestionContext< S >", "classcom_1_1mojang_1_1brigadier_1_1context_1_1_suggestion_context.html", null ],
     [ "com.mojang.brigadier.suggestion.SuggestionProvider< S >", "interfacecom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestion_provider.html", null ],

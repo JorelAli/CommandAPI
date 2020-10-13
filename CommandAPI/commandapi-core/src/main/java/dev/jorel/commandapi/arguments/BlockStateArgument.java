@@ -10,10 +10,11 @@ import dev.jorel.commandapi.CommandAPIHandler;
 public class BlockStateArgument extends Argument {
 
 	/**
-	 * A BlockState argument
+	 * Constructs a BlockStateArgument with a given node name.
+	 * @param nodeName the name of the node for argument
 	 */
-	public BlockStateArgument() {
-		super(CommandAPIHandler.getNMS()._ArgumentBlockState());
+	public BlockStateArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getNMS()._ArgumentBlockState());
 	}
 
 	@Override

@@ -11,26 +11,29 @@ public class DoubleArgument extends SafeOverrideableArgument<Double> {
 
 	/**
 	 * A double argument
+	 * @param nodeName the name of the node for this argument
 	 */
-	public DoubleArgument() {
-		super(DoubleArgumentType.doubleArg(), String::valueOf);
+	public DoubleArgument(String nodeName) {
+		super(nodeName, DoubleArgumentType.doubleArg(), String::valueOf);
 	}
 	
 	/**
 	 * A double argument with a minimum value
+	 * @param nodeName the name of the node for this argument
 	 * @param min The minimum value this argument can take (inclusive)
 	 */
-	public DoubleArgument(double min) {
-		super(DoubleArgumentType.doubleArg(min), String::valueOf);
+	public DoubleArgument(String nodeName, double min) {
+		super(nodeName, DoubleArgumentType.doubleArg(min), String::valueOf);
 	}
 	
 	/**
 	 * A double argument with a minimum and maximum value 
+	 * @param nodeName the name of the node for this argument
 	 * @param min The minimum value this argument can take (inclusive)
 	 * @param max The maximum value this argument can take (inclusive)
 	 */
-	public DoubleArgument(double min, double max) {
-		super(DoubleArgumentType.doubleArg(min, max), String::valueOf);
+	public DoubleArgument(String nodeName, double min, double max) {
+		super(nodeName, DoubleArgumentType.doubleArg(min, max), String::valueOf);
 		if(max < min) {
 			throw new InvalidRangeException();
 		}
@@ -43,7 +46,7 @@ public class DoubleArgument extends SafeOverrideableArgument<Double> {
 
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.SIMPLE_TYPE;
+		return CommandAPIArgumentType.PRIMITIVE_DOUBLE;
 	}
 
 }

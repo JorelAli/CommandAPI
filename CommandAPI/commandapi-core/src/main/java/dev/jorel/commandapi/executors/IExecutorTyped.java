@@ -4,6 +4,11 @@ import org.bukkit.command.CommandSender;
 
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
+/**
+ * An interface that includes the type of an executor (what command senders it
+ * can execute) and has a method that executes an executor with a given command
+ * sender and arguments
+ */
 public interface IExecutorTyped {
 	
 	/**

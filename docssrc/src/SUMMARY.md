@@ -8,6 +8,9 @@
 
 - [Installation for server owners](./installation.md)
 - [Configuration for server owners](./config.md)
+- [Command conversion](./conversionforowners.md)
+  - [Single command conversion](./conversionforownerssingle.md)
+  - [Single command conversion (with arguments)](./conversionforownerssingleargs.md)
 
 -----
 
@@ -29,6 +32,7 @@
   - [Argument suggestions](./argumentsuggestions.md)
   - [Safe argument suggestions](./safeargumentsuggestions.md)
   - [Argument suggestions with tooltips](./tooltips.md)
+  - [Listed arguments](./listed.md)
 - [Argument types](./argumenttypes.md)
   - [Primitive arguments](./primitivearguments.md)
   - [Ranged arguments](./rangedarguments.md)
@@ -44,6 +48,7 @@
     - [Objective arguments](./objectivearguments.md)
     - [Team arguments](./teamarguments.md)
   - [Miscellaneous arguments](./miscargs.md)
+    - [Angle arguments](./angleargument.md)
     - [Advancement arguments](./advancementargument.md)
     - [Biome arguments](./biomeargument.md)
     - [BlockState arguments](./blockstatearguments.md)
@@ -73,13 +78,15 @@
 - [Permissions](./permissions.md)
 - [Requirements](./requirements.md)
 - [Aliases](./aliases.md)
+- [Subcommands](./subcommands.md)
 
 # CommandAPI Utilities
 
 - [Command conversion](./conversion.md)
 
-# Extended CommandAPI
+# Internal CommandAPI
 
+- [Internal CommandAPI](./internal.md)
 - [Brigadier + CommandAPI](./brigadier.md)
 
 -----

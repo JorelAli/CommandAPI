@@ -10,8 +10,12 @@ import dev.jorel.commandapi.CommandAPIHandler;
  */
 public class LootTableArgument extends SafeOverrideableArgument<LootTable> implements ICustomProvidedArgument {
 	
-	public LootTableArgument() {
-		super(CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered(), fromKey(Keyed::getKey));
+	/**
+	 * A LootTable argument that represents a Bukkit LootTable.
+	 * @param nodeName the name of the node for this argument
+	 */
+	public LootTableArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered(), fromKey(Keyed::getKey));
 	}
 	
 	@Override

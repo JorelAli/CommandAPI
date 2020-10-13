@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">CommandAPI
-   &#160;<span id="projectnumber">4.3</span>
+   &#160;<span id="projectnumber">5.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -253,9 +253,6 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <li>getMessage()
 : <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception.html#aba256380915e0f1d55a69c8e259315d8">com.mojang.brigadier.exceptions.CommandSyntaxException</a>
 </li>
-<li>getMethod()
-: <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a8efbb164f33f627680faa6022f9081d4">dev.jorel.commandapi.CommandAPIHandler</a>
-</li>
 <li>getMinimum()
 : <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_double_argument_type.html#aadc0834eb4e5fcd705c1a2d575b42523">com.mojang.brigadier.arguments.DoubleArgumentType</a>
 , <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_float_argument_type.html#ad682059f4ad0f766dc0090b8ce586365">com.mojang.brigadier.arguments.FloatArgumentType</a>
@@ -276,6 +273,9 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <li>getNode()
 : <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_parsed_command_node.html#abc0602e52c24f8bcf02237aed7967840">com.mojang.brigadier.context.ParsedCommandNode&lt; S &gt;</a>
 </li>
+<li>getNodeName()
+: <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a164048fb64180ca8193747db36b240a8">dev.jorel.commandapi.arguments.Argument</a>
+</li>
 <li>getNodes()
 : <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context.html#a0c05a1c3549994973b7791fdb8524304">com.mojang.brigadier.context.CommandContext&lt; S &gt;</a>
 , <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context_builder.html#a59fab4ec936e7e70319b6ece81acae22">com.mojang.brigadier.context.CommandContextBuilder&lt; S &gt;</a>
@@ -287,8 +287,8 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_rotation.html#a4533ed4cfb21c8e99f6b1a43f28feb9e">dev.jorel.commandapi.wrappers.Rotation</a>
 </li>
 <li>getOverriddenSuggestions()
-: <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#ad876094e516dfdf71eabd356727bb324">dev.jorel.commandapi.arguments.Argument</a>
-, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html#a72bfb193e6fe8cf48df8cc76fdeae900">dev.jorel.commandapi.arguments.IOverrideableSuggestions</a>
+: <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#aa29913fe39c21a84575b262501720a18">dev.jorel.commandapi.arguments.Argument</a>
+, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html#a8555fbde28b46e4067af5bf1a3c6d268">dev.jorel.commandapi.arguments.IOverrideableSuggestions</a>
 </li>
 <li>getParser()
 : <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#aed33498ca1a3c49fd1a4b7dcd226fd39">dev.jorel.commandapi.arguments.CustomArgument&lt; T &gt;</a>
@@ -403,7 +403,8 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 , <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_string_reader.html#a0b0105e3867d1f34faa0049ee08d2fe9">com.mojang.brigadier.StringReader</a>
 </li>
 <li>getSuggestion()
-: <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#ae0357c216f882cb438aefb2abbaa9ef8">dev.jorel.commandapi.StringTooltip</a>
+: <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html#a80ab73503a4ffdc503abbde7e2c33ec8">dev.jorel.commandapi.IStringTooltip</a>
+, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#ae0357c216f882cb438aefb2abbaa9ef8">dev.jorel.commandapi.StringTooltip</a>
 </li>
 <li>getSuggestionProvider()
 : <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_advancement_argument.html#ae9dae710bb116d63995c71059e68c418">dev.jorel.commandapi.arguments.AdvancementArgument</a>
@@ -432,7 +433,8 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 </li>
 <li>getTooltip()
 : <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestion.html#ae688951525965e9b59d9d85230add6dd">com.mojang.brigadier.suggestion.Suggestion</a>
-, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#ab319f9b24c376f0219e7fc2f6be5fac1">dev.jorel.commandapi.StringTooltip</a>
+, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html#a2c9a691ae6d662a701a48567ef611f3f">dev.jorel.commandapi.IStringTooltip</a>
+, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a6189f95a0967d30c2a0b5f97549cc871">dev.jorel.commandapi.StringTooltip</a>
 </li>
 <li>getTotalLength()
 : <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#ae795665cac875f2f282395b086b64400">com.mojang.brigadier.ImmutableStringReader</a>
@@ -477,7 +479,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_string_argument_type.html#a21f0903e54d65b36baa17ca0f0752bba">com.mojang.brigadier.arguments.StringArgumentType</a>
 </li>
 <li>GreedyStringArgument()
-: <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_greedy_string_argument.html#afd81cc5c62e474a470b0946242191fc9">dev.jorel.commandapi.arguments.GreedyStringArgument</a>
+: <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_greedy_string_argument.html#ab975eff4bcef17fd4d5bfbee3a2c9221">dev.jorel.commandapi.arguments.GreedyStringArgument</a>
 </li>
 </ul>
 </div><!-- contents -->
@@ -485,7 +487,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sat Sep 19 2020 17:18:13 for CommandAPI by
+    <li class="footer">Generated on Tue Oct 13 2020 21:40:49 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

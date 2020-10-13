@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">CommandAPI
-   &#160;<span id="projectnumber">4.3</span>
+   &#160;<span id="projectnumber">5.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -105,10 +105,21 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </ul>
 <p><b>Announcements:</b></p>
 <blockquote class="doxtable">
-<p>:warning: <b>The CommandAPI's Maven repository URL has changed!</b> Please view <a href="https://www.jorel.dev/CommandAPI/4.0/quickstart.html#using-maven-recommended">the documentation</a> to see how to update your Maven repository </p>
+<p>:moneybag: <b>The CommandAPI now has a donation link!</b> Feel free to buy me a coffee <a href="https://ko-fi.com/jorelali">here</a>! </p>
 </blockquote>
 <p><b>Compatible Minecraft versions:</b></p>
-<p><img src="https://img.shields.io/badge/Minecraft%20Version-1.13-blue" alt="" class="inline"/> <img src="https://img.shields.io/badge/Minecraft%20Version-1.13.1-blue" alt="" class="inline"/> <img src="https://img.shields.io/badge/Minecraft%20Version-1.13.2-blue" alt="" class="inline"/> <img src="https://img.shields.io/badge/Minecraft%20Version-1.14-blue" alt="" class="inline"/> <img src="https://img.shields.io/badge/Minecraft%20Version-1.14.1-blue" alt="" class="inline"/> <img src="https://img.shields.io/badge/Minecraft%20Version-1.14.2-blue" alt="" class="inline"/> <img src="https://img.shields.io/badge/Minecraft%20Version-1.14.3-blue" alt="" class="inline"/> <img src="https://img.shields.io/badge/Minecraft%20Version-1.14.4-blue" alt="" class="inline"/> <img src="https://img.shields.io/badge/Minecraft%20Version-1.15-blue" alt="" class="inline"/> <img src="https://img.shields.io/badge/Minecraft%20Version-1.15.1-blue" alt="" class="inline"/> <img src="https://img.shields.io/badge/Minecraft%20Version-1.15.2-blue" alt="" class="inline"/> <img src="https://img.shields.io/badge/Minecraft%20Version-1.16.1-blue" alt="" class="inline"/> <img src="https://img.shields.io/badge/Minecraft%20Version-1.16.2-blue" alt="" class="inline"/> <img src="https://img.shields.io/badge/Minecraft%20Version-1.16.3-blue" alt="" class="inline"/></p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone"></th><th class="markdownTableHeadNone"></th><th class="markdownTableHeadNone"></th><th class="markdownTableHeadNone"></th><th class="markdownTableHeadNone"></th><th class="markdownTableHeadNone"></th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>1.13 versions</b> </td><td class="markdownTableBodyNone">1.13 </td><td class="markdownTableBodyNone">1.13.1 </td><td class="markdownTableBodyNone">1.13.2 </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>1.14 versions</b> </td><td class="markdownTableBodyNone">1.14 </td><td class="markdownTableBodyNone">1.14.1 </td><td class="markdownTableBodyNone">1.14.2 </td><td class="markdownTableBodyNone">1.14.3 </td><td class="markdownTableBodyNone">1.14.4  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>1.15 versions</b> </td><td class="markdownTableBodyNone">1.15 </td><td class="markdownTableBodyNone">1.15.1 </td><td class="markdownTableBodyNone">1.15.2 </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>1.16 versions</b> </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone">1.16.1 </td><td class="markdownTableBodyNone">1.16.2 </td><td class="markdownTableBodyNone">1.16.3 </td><td class="markdownTableBodyNone"></td></tr>
+</table>
 <hr  />
 <h2>Purpose</h2>
 <p>This project provides an API to help Bukkit/Spigot developers use the Minecraft 1.13 command UI, which includes:</p>
@@ -186,6 +197,96 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <p>Version </p>
 <p>Date </p>
 <p>Features / Changes  &lt;/thead&gt; &lt;tbody&gt; </p>
+<p><b>5.0</b> </p>
+<p>October 2020 </p>
+<ul>
+<li>
+<b>Note: This version is incompatible with any plugin that used the CommandAPI version 4.3c or below! (See documentation for more information)</b> </li>
+<li>
+CommandAPI-Brigadier improvements: <ul>
+<li>
+Adds <code>toSuggestions()</code> to the CommandAPI-Brigadier library to convert CommandAPI suggestions into Brigadier's <code>SuggestionProvider</code> </li>
+<li>
+CommandAPI-Brigadier library methods got renamed </li>
+<li>
+Changed the way literal arguments are constructed in the CommandAPI-Brigadier library - they are no longer unnecessarily registered into the command graph </li>
+</ul>
+</li>
+<li>
+Bug fixes: <ul>
+<li>
+Fixes bug where verbose logging of permission linking was inaccurate </li>
+<li>
+Fixes bug where overriding suggestions can break when generating suggestions </li>
+<li>
+Fixes bug where <code>null</code> could appear in the suggestions list of arguments </li>
+<li>
+CommandAPI's non-verbose logging is now actually quiet </li>
+</ul>
+</li>
+<li>
+Documentation improvements: <ul>
+<li>
+Documentation code examples are now guaranteed to compile </li>
+<li>
+The list of CommandAPI arguments to Minecraft argument IDs is now in the documentation </li>
+</ul>
+</li>
+<li>
+Command conversion improvements: <ul>
+<li>
+The <code>Converter.convert()</code> method can now take varargs for arguments </li>
+<li>
+Command conversion code that was specific to the CommandAPI plugin is no longer included in the shaded version of the CommandAPI </li>
+<li>
+Command conversion in the configuration for server owners can now let server owners apply their own command argument implementations! </li>
+</ul>
+</li>
+<li>
+API improvements: <ul>
+<li>
+The <code>.withArguments</code> method can now take varargs </li>
+<li>
+String tooltips are now much easier to implement for custom objects using <code>IStringTooltip</code> </li>
+<li>
+Removes <code>LinkedHashMap</code> for argument registration in favour of <code>List</code> </li>
+</ul>
+</li>
+<li>
+Adds subcommands </li>
+<li>
+Adds <code>AngleArgument</code> </li>
+<li>
+Arguments can now be omitted from the <code>Object[] args</code> using the method <code>.setListed()</code>. This means Literal arguments can now be "present" in the arguments if desired. </li>
+</ul>
+<p><b>4.3c</b> </p>
+<p>October 2020 </p>
+<ul>
+<li>
+Fixes bug where function loading would break because permissions could not be properly computed </li>
+</ul>
+<p><b>4.3b</b> </p>
+<p>September 2020 </p>
+<ul>
+<li>
+Fixes minor command sender related bugs from 4.3a. Fixes permissions with <code>/execute ... as ...</code> from converted commands </li>
+</ul>
+<p><b>4.3a</b> </p>
+<p>September 2020 </p>
+<ul>
+<li>
+Fixes a bug where running converted commands via <code>/execute ... as ...</code> wouldn't apply the command sender correctly </li>
+</ul>
+<p><b>4.3</b> </p>
+<p>September 2020 </p>
+<ul>
+<li>
+Fix bug where resulting command executors with command block senders would not work </li>
+<li>
+Improves the power of command conversion by letting you declare CommandAPICommand arguments for conversion </li>
+<li>
+Adds support for YAML's "null" for command conversion via the config.yml file, which should be way more comprehensible rather than trailing colons </li>
+</ul>
 <p><b>4.2</b> </p>
 <p>September 2020 </p>
 <ul>
@@ -589,7 +690,7 @@ Initial release </li>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sat Sep 19 2020 17:18:13 for CommandAPI by
+    <li class="footer">Generated on Tue Oct 13 2020 21:40:49 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

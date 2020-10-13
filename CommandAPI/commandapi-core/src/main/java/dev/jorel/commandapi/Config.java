@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.InvalidPluginException;
 import org.bukkit.plugin.Plugin;
 
 /**
@@ -25,22 +26,13 @@ class Config {
 
 	// List of plugins to convert
 	private final Map<Plugin, String[]> pluginsToConvert;
-
+	
 	public Config(FileConfiguration fileConfig) {
 		verboseOutput = fileConfig.getBoolean("verbose-outputs");
 		createDispatcherFile = fileConfig.getBoolean("create-dispatcher-json");
 		pluginsToConvert = new HashMap<>();
 
 		for (Map<?, ?> map : fileConfig.getMapList("plugins-to-convert")) {
-			String pluginName = (String) map.keySet().stream().findFirst().get();
-			Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
-			if (plugin == null) {
-				CommandAPI.getLog()
-						.severe("Plugin '" + pluginName + "' was not found. Did you add loadbefore: [CommandAPI] to "
-								+ pluginName + "'s plugin.yml file?");
-				continue;
-			}
-
 			String[] pluginCommands;
 			if (map.values() == null || (map.values().size() == 1 && map.values().iterator().next() == null)) {
 				pluginCommands = new String[0];
@@ -49,7 +41,14 @@ class Config {
 				List<String> commands = (List<String>) map.values().stream().findFirst().get();
 				pluginCommands = commands.toArray(new String[0]);
 			}
-			pluginsToConvert.put(plugin, pluginCommands);
+			
+			String pluginName = (String) map.keySet().stream().findFirst().get();
+			Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
+			if(plugin != null) { 
+				pluginsToConvert.put(plugin, pluginCommands);
+			} else {
+				new InvalidPluginException("Could not find a plugin " + pluginName + "! Has it been loaded properly?").printStackTrace();
+			}
 		}
 	}
 

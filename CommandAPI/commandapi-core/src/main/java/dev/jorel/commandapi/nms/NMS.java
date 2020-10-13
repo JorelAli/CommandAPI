@@ -102,7 +102,7 @@ public interface NMS {
 	 * @param server The NMS MinecraftServer instance
 	 * @return A Brigadier CommandDispatcher
 	 */
-	CommandDispatcher<?> getBrigadierDispatcher(Object server);
+	CommandDispatcher<?> getBrigadierDispatcher();
 
 	/**
 	 * Checks if a Command is an instance of the OBC VanillaCommandWrapper
@@ -150,6 +150,7 @@ public interface NMS {
                          
 
 	/** Argument implementations without CommandSyntaxExceptions */
+	float                getAngle(CommandContext<?> cmdCtx, String key);
 	EnumSet<Axis>        getAxis(CommandContext<?> cmdCtx, String key);
 	Biome                getBiome(CommandContext<?> cmdCtx, String key);
 	BlockData            getBlockState(CommandContext<?> cmdCtx, String key);
@@ -169,6 +170,7 @@ public interface NMS {
 	UUID                 getUUID(CommandContext<?> cmdCtx, String key);
                          
 	/** Argument types */
+	ArgumentType<?> _ArgumentAngle();
 	ArgumentType<?> _ArgumentAxis();
 	ArgumentType<?> _ArgumentBlockPredicate();
 	ArgumentType<?> _ArgumentBlockState();

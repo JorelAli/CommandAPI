@@ -6,6 +6,15 @@ The CommandAPI can now be shaded into your own plugins! "Shading" is the process
 
 -----
 
+## Shading vs CommandAPI plugin
+
+The CommandAPI plugin has a few slight differences with the shaded CommandAPI jar file. The CommandAPI plugin has the following extra features that are not present in the shaded version:
+
+- Command conversion via a `config.yml` file
+- Creation of the `command_registration.json` file to show the Brigadier command graph
+
+-----
+
 ## Shading requirements
 
 For the CommandAPI to function as normal, you **must** call the CommandAPI's initializers in the `onLoad()` and `onEnable()` methods of your plugin:
@@ -24,32 +33,11 @@ The `onEnable(Plugin)` method initializes the CommandAPI's enabling sequence. As
 ### Example - Setting up the CommandAPI in your plugin
 
 ```java
-public class MyPlugin extends JavaPlugin {
-
-	@Override
-	public void onLoad() {
-		CommandAPI.onLoad(true); //Load with verbose output
-        
-        new CommandAPICommand("ping")
-            .executes((sender, args) -> {
-                sender.sendMessage("pong!");
-            })
-            .register();
-	}
-	
-	@Override
-	public void onEnable() {
-		CommandAPI.onEnable(this);
-		
-		//Register commands, listeners etc.
-	}
-
-}
+public {{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:shading}}
 ```
 
 
 </div>
-
 
 -----
 
@@ -62,7 +50,7 @@ To shade the CommandAPI into a maven project, you'll need to use the `commandapi
 	<dependency>
 		<groupId>dev.jorel</groupId>
         <artifactId>commandapi-shade</artifactId>
-        <version>4.2</version>
+        <version>5.0</version>
     </dependency>
 </dependencies>
 ```
@@ -116,7 +104,7 @@ Next, we declare our dependencies:
 
 ```gradle
 dependencies {
-    compile "dev.jorel:commandapi-shade:4.3"   
+    compile "dev.jorel:commandapi-shade:5.0"   
 }
 ```
 
@@ -125,7 +113,7 @@ Then we add it to the `shadowJar` task configuration:
 ```gradle
 shadowJar {
 	dependencies {
-		include dependency("dev.jorel:commandapi-shade:4.3")
+		include dependency("dev.jorel:commandapi-shade:5.0")
 	}
 }
 ```

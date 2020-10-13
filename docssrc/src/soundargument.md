@@ -17,15 +17,7 @@ Say we want a simple command that plays a specific sound at your location. To do
 This command simply plays the provided sound to the current player:
 
 ```java
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("sound", new SoundArgument());
-
-new CommandAPICommand("sound")
-    .withArguments(arguments)
-    .executesPlayer((player, args) -> {
-        player.getWorld().playSound(player.getLocation(), (Sound) args[0], 100.0f, 1.0f);
-    })
-    .register();
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:soundarguments}}
 ```
 
 </div>

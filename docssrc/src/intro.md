@@ -36,6 +36,24 @@ Using the search icon in the top left corner, you can search for anything in thi
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 4.3 \\(\rightarrow\\) 5.0:
+
+> **Developer's Note:**
+>
+> Lots and lots and lots of changes occurred in version 5.0! I highly recommend reading the [Upgrading guide](http://localhost:3000/upgrading.html) section which covers the changes in more detail and how to update your plugin for this version.
+
+Basically every page has been rewritten in this update and checked for errors. In general, this is the list of new additions:
+
+- New section [3. Command conversion](./conversionforowners.md) dedicated to command conversion via the `config.yml`
+- New section [8.4. Listed arguments](./listed.md)
+- New section [9.8.1. Angle arguments](./anglearguments.md)
+- New section [14. Subcommands](./subcommands.md)
+- New section [16. Internal CommandAPI](./internal) now lists all arguments and their respective Minecraft argument IDs
+- Mentions listed arguments in section [9.11.1. Literal arguments](./literalarguments.md)
+- Section [15. Command conversion](./conversion.md) has been rewritten
+- Executes native is now present in the command registration page
+- Section [8.3. Argument suggestions with tooltips](./tooltips.md) now mentions the `IStringTooltip` class
+
 ### Documentation changes 4.2 \\(\rightarrow\\) 4.3:
 
 - Improve the documentation for [2. Configuration for server owners](./config.md) by using simple YAML lists (using the `-` symbol) and update the command conversion syntax for all commands using the `~` syntax

@@ -9,10 +9,11 @@ import dev.jorel.commandapi.wrappers.Time;
 public class TimeArgument extends SafeOverrideableArgument<Time> {
 	
 	/**
-	 * A Time argument. Represents the number of in game ticks 
+	 * A Time argument. Represents the number of in game ticks
+	 * @param nodeName the name of the node for this argument 
 	 */
-	public TimeArgument() {
-		super(CommandAPIHandler.getNMS()._ArgumentTime(), Time::toString);
+	public TimeArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getNMS()._ArgumentTime(), Time::toString);
 	}
 
 	@Override

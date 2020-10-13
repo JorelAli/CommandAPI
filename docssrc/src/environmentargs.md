@@ -25,22 +25,7 @@ Say we want to create a new world on our Minecraft server. To do this, we need t
 Using the world name and the environment of the world, we can use Bukkit's `WorldCreator` to create a new world that matches our provided specifications:
 
 ```java
-// Declare our arguments
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("worldname", new StringArgument());
-arguments.put("type", new EnvironmentArgument());
-
-new CommandAPICommand("createworld")
-    .withArguments(arguments)
-    .executes((sender, args) -> {
-        String worldName = (String) args[0];
-        Environment environment = (Environment) args[1];
-
-        // Create a new world with the specific world name and environment
-        Bukkit.getServer().createWorld(new WorldCreator(worldName).environment(environment));
-        sender.sendMessage("World created!");
-    })
-    .register();
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:environmentarguments}}
 ```
 
 </div>

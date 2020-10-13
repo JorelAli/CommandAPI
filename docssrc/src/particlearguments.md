@@ -17,15 +17,7 @@ Say we wanted to have a command that displayed particles at a player's location.
 With this, we can simply spawn the particle using the `World.spawnParticle(Particle, Location, int)` method:
 
 ```java
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("particle", new ParticleArgument());
-
-new CommandAPICommand("showparticle")
-    .withArguments(arguments)
-    .executesPlayer((player, args) -> {
-        player.getWorld().spawnParticle((Particle) args[0], player.getLocation(), 1);
-    })
-    .register();
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:particlearguments}}
 ```
 
 </div>

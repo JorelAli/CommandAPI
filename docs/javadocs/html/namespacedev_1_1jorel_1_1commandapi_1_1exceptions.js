@@ -1,5 +1,6 @@
 var namespacedev_1_1jorel_1_1commandapi_1_1exceptions =
 [
+    [ "AngleArgumentException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_angle_argument_exception.html", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_angle_argument_exception" ],
     [ "BadLiteralException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_bad_literal_exception.html", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_bad_literal_exception" ],
     [ "BiomeArgumentException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_biome_argument_exception.html", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_biome_argument_exception" ],
     [ "ConflictingPermissionsException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_conflicting_permissions_exception.html", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_conflicting_permissions_exception" ],

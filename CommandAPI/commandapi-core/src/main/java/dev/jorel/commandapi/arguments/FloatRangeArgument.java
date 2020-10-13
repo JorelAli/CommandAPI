@@ -9,10 +9,11 @@ import dev.jorel.commandapi.wrappers.FloatRange;
 public class FloatRangeArgument extends SafeOverrideableArgument<FloatRange> {
 
 	/**
-	 * A FloatRange argument that represents
+	 * A FloatRange argument that represents a range of floating-point values
+	 * @param nodeName the name of the node for this argument
 	 */
-	public FloatRangeArgument() {
-		super(CommandAPIHandler.getNMS()._ArgumentFloatRange(), FloatRange::toString);
+	public FloatRangeArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getNMS()._ArgumentFloatRange(), FloatRange::toString);
 	}
 
 	@Override

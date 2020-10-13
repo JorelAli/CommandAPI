@@ -9,9 +9,10 @@ public class StringArgument extends Argument {
 
 	/**
 	 * A string argument for one word
+	 * @param nodeName the name of the node for this argument
 	 */
-	public StringArgument() {
-		super(StringArgumentType.word());
+	public StringArgument(String nodeName) {
+		super(nodeName, StringArgumentType.word());
 	}
 
 	@Override
@@ -21,6 +22,6 @@ public class StringArgument extends Argument {
 
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.SIMPLE_TYPE;
+		return CommandAPIArgumentType.PRIMITIVE_STRING;
 	}
 }

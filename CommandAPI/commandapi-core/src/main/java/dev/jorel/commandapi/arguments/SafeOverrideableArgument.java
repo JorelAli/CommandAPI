@@ -1,6 +1,7 @@
 package dev.jorel.commandapi.arguments;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -9,7 +10,7 @@ import org.bukkit.command.CommandSender;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 
-import dev.jorel.commandapi.StringTooltip;
+import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.Tooltip;
 
 /**
@@ -19,22 +20,32 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	
 	private final Function<S, String> mapper;
 
-	protected SafeOverrideableArgument(ArgumentType<?> rawType, Function<S, String> mapper) {
-		super(rawType);
+	protected SafeOverrideableArgument(String nodeName, ArgumentType<?> rawType, Function<S, String> mapper) {
+		super(nodeName, rawType);
 		this.mapper = mapper;
 	}
 
 	/**
-	 * Override the suggestions of this argument with a custom array. Typically,
-	 * this is the supplier <code>s -> suggestions</code>.
+	 * Override the suggestions of this argument with a custom array.
 	 * 
-	 * @param suggestions the string array to override suggestions with
+	 * @param suggestions the S array to override suggestions with
 	 * @return the current argument
 	 */
 	@SuppressWarnings("unchecked")
 	public final Argument safeOverrideSuggestions(S... suggestions) {
 		return super.overrideSuggestions(sMap0(mapper, suggestions));
 	}
+	
+	/**
+	 * Override the suggestions of this argument with a custom Collection&lt;S>.
+	 * 
+	 * @param suggestions the Collection<S> to override suggestions with
+	 * @return the current argument
+	 */
+	@SuppressWarnings("unchecked")
+	public final Argument safeOverrideSuggestions(Collection<S> suggestions) {
+		return super.overrideSuggestions(sMap0(mapper, suggestions.toArray((S[]) new Object[0])));
+	} 
 
 	/**
 	 * Override the suggestions of this argument with a function that maps the
@@ -68,6 +79,18 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	@SafeVarargs
 	public final Argument safeOverrideSuggestionsT(Tooltip<S>... suggestions) {
 		return super.overrideSuggestionsT(tMap0(mapper, suggestions));
+	};
+	
+	/**
+	 * Override the suggestions of this argument with a Collection<Tooltip&lt;S>>,
+	 * that represents a safe suggestion and a hover tooltip
+	 * 
+	 * @param suggestions the suggestions and tooltips to override suggestions with 
+	 * @return the current argument
+	 */
+	@SuppressWarnings("unchecked")
+	public final Argument safeOverrideSuggestionsT(Collection<Tooltip<S>> suggestions) {
+		return super.overrideSuggestionsT(tMap0(mapper, suggestions.toArray(new Tooltip[0])));
 	};
 	
 	/**
@@ -151,8 +174,8 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 * @see SafeOverrideableArgument#sMap0(Function, Object...)
 	 */
 	@SafeVarargs
-	private final BiFunction<CommandSender, Object[], StringTooltip[]> tMap0(Function<S, String> mapper, Tooltip<S>... suggestions) {
-		return (c, m) -> Arrays.stream(suggestions).map(Tooltip.build(mapper)).toArray(StringTooltip[]::new);
+	private final BiFunction<CommandSender, Object[], IStringTooltip[]> tMap0(Function<S, String> mapper, Tooltip<S>... suggestions) {
+		return (c, m) -> Arrays.stream(suggestions).map(Tooltip.build(mapper)).toArray(IStringTooltip[]::new);
 	}
 	
 	/**
@@ -162,8 +185,8 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 * @return the current argument
 	 * @see SafeOverrideableArgument#sMap1(Function, Function)
 	 */
-	private final BiFunction<CommandSender, Object[], StringTooltip[]> tMap1(Function<S, String> mapper, Function<CommandSender, Tooltip<S>[]> suggestions) {
-		return (c, m) -> Arrays.stream(suggestions.apply(c)).map(Tooltip.build(mapper)).toArray(StringTooltip[]::new);
+	private final BiFunction<CommandSender, Object[], IStringTooltip[]> tMap1(Function<S, String> mapper, Function<CommandSender, Tooltip<S>[]> suggestions) {
+		return (c, m) -> Arrays.stream(suggestions.apply(c)).map(Tooltip.build(mapper)).toArray(IStringTooltip[]::new);
 	}
 	
 	/**
@@ -173,8 +196,8 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 * @return the current argument
 	 * @see SafeOverrideableArgument#sMap2(Function, BiFunction)
 	 */
-	private final BiFunction<CommandSender, Object[], StringTooltip[]> tMap2(Function<S, String> mapper, BiFunction<CommandSender, Object[], Tooltip<S>[]> suggestions) {
-		return (c, m) -> Arrays.stream(suggestions.apply(c, m)).map(Tooltip.build(mapper)).toArray(StringTooltip[]::new);
+	private final BiFunction<CommandSender, Object[], IStringTooltip[]> tMap2(Function<S, String> mapper, BiFunction<CommandSender, Object[], Tooltip<S>[]> suggestions) {
+		return (c, m) -> Arrays.stream(suggestions.apply(c, m)).map(Tooltip.build(mapper)).toArray(IStringTooltip[]::new);
 	}
 	
 }

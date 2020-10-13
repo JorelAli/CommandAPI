@@ -9,9 +9,10 @@ public class TextArgument extends Argument {
 
 	/**
 	 * A string argument for one word, or multiple words encased in quotes
+	 * @param nodeName the name of the node for this argument
 	 */
-	public TextArgument() {
-		super(StringArgumentType.string());
+	public TextArgument(String nodeName) {
+		super(nodeName, StringArgumentType.string());
 	}
 
 	@Override
@@ -21,6 +22,6 @@ public class TextArgument extends Argument {
 	
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.SIMPLE_TYPE;
+		return CommandAPIArgumentType.PRIMITIVE_TEXT;
 	}
 }

@@ -1,7 +1,6 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
@@ -26,9 +25,9 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 public abstract class CommandAPI {
 	
 	private static boolean canRegister = true;
-	private static Config config;
-	private static File dispatcherFile;
-	private static Logger logger;
+	static Config config;
+	static File dispatcherFile;
+	static Logger logger;
 	private static boolean loaded = false;
 
 	static Config getConfiguration() {
@@ -60,30 +59,15 @@ public abstract class CommandAPI {
 		return logger;
 	}
 	
-	static final void onLoad(Plugin plugin) {
-		if(plugin.getName().equals("CommandAPI")) {
-			//Config loading
-			plugin.saveDefaultConfig();
-			CommandAPI.config = new Config(plugin.getConfig());
-			CommandAPI.dispatcherFile = new File(plugin.getDataFolder(), "command_registration.json");
-			CommandAPI.logger = plugin.getLogger();
-			
-			//Check dependencies for CommandAPI
-			CommandAPIHandler.checkDependencies();
-			
-			//Convert all plugins to be converted
-			for(Entry<Plugin, String[]> pluginToConvert : config.getPluginsToConvert()) {
-				if(pluginToConvert.getValue().length == 0) {
-					Converter.convert(pluginToConvert.getKey());
-				} else {
-					for(String command : pluginToConvert.getValue()) {
-						Converter.convert(pluginToConvert.getKey(), command);
-					}
-				}
-			}
-			loaded = true;
-		} else {
-			onLoad(true);
+	/**
+	 * Logs a message to the console using Logger.info() if the configuration has
+	 * verbose logging enabled
+	 * 
+	 * @param message the message to log to the console
+	 */
+	public static void logInfo(String message) {
+		if(CommandAPI.getConfiguration().hasVerboseOutput()) {
+			CommandAPI.getLog().info(message);
 		}
 	}
 	
@@ -122,14 +106,14 @@ public abstract class CommandAPI {
 			}
 		}, 0L);
 		
-		final Listener listener = new Listener() {
+		final Listener playerJoinListener = new Listener() {
 			@EventHandler(priority = EventPriority.MONITOR)
 			public void onPlayerJoin(PlayerJoinEvent e) {
 				CommandAPIHandler.getNMS().resendPackets(e.getPlayer());
 			}
 		};
         
-        Bukkit.getServer().getPluginManager().registerEvents(listener, plugin);
+		Bukkit.getServer().getPluginManager().registerEvents(playerJoinListener, plugin);  
 	}
 	
 	/**

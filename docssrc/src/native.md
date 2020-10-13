@@ -36,8 +36,6 @@ As described in the section about [normal command executors](./normalexecutors.m
 >
 > The `.executesNative()` method has the highest priority over all over `.executesXXX()` methods - if you use the `.executesNative()` method, no other execution method will be run.
 
-Because this method has the highest priority over all other executes methods, this also means that the **`.getCallee()` method can return null**.
-
 -----
 
 <div class="example">
@@ -53,14 +51,7 @@ Say we wanted to make a command that simply sets the current block to air. For t
 As you can see, this command takes no arguments. This is fine, since our "argument" will be the sender's location. We can access the sender's location using the `getLocation()` method from the `NativeProxyCommandSender` object, available from the `.executesNative()` method:
 
 ```java
-new CommandAPICommand("break")
-    .executesNative((sender, args) -> {
-        Location location = (Location) sender.getLocation();
-        if(location != null) {
-            location.getBlock().breakNaturally();
-        }
-    })
-    .register();
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:nativesender}}
 ```
 
 This can now be used via the following command examples:

@@ -17,11 +17,12 @@ The CommandAPI offers the following methods in the `dev.jorel.commandapi.Command
 ```java
 public static CommandDispatcher getCommandDispatcher();
 public static RootCommandNode getRootNode();
-public static LiteralCommandNode registerNewLiteral(String name);
-public static RedirectModifier fromPredicate(BiPredicate<CommandSender, Object[]> predicate, LinkedHashMap<String, Argument> args);
+public static LiteralArgumentBuilder fromLiteralArgument(LiteralArgument literalArgument);
+public static RedirectModifier fromPredicate(BiPredicate<CommandSender, Object[]> predicate, List<Argument> args);
 public static Command fromCommand(CommandAPICommand command);
-public static RequiredArgumentBuilder argBuildOf(LinkedHashMap<String, Argument> args, String prompt);
-public static RequiredArgumentBuilder argBuildOf(String prompt, Argument argument);
+public static RequiredArgumentBuilder fromArgument(List<Argument> args, String nodeName);
+public static RequiredArgumentBuilder fromArgument(Argument argument);
+public static SuggestionProvider toSuggestions(String nodeName, List<Argument> args);
 ```
 
 Briefly, here's what each of these functions do (you can view the JavaDocs for more information):
@@ -30,10 +31,11 @@ Briefly, here's what each of these functions do (you can view the JavaDocs for m
 | ---------------------- | ------------------------------------------------------------ |
 | `getCommandDispatcher` | Returns the Minecraft command dispatcher graph               |
 | `getRootNode`          | Returns the root node of the command dispatcher.<br>This is equivalent to using<br />`getCommandDispatcher().getRoot();` |
-| `registerNewLiteral`   | Creates a `LiteralCommandNode` from a given string           |
+| `fromLiteralArgument`  | Creates a `LiteralArgumentBuilder` from a `LiteralArgument`  |
 | `fromPredicate`        | Converts a predicate and some arguments into a `RedirectModifier`. This can be used for the `fork` method in brigadier's `ArgumentBuilder` |
 | `fromCommand`          | Converts a `CommandAPICommand` into a brigadier `Command` object |
-| `argBuildOf`           | Converts an argument, or a list of arguments, into a `RequiredArgumentBuilder`. |
+| `fromArgument`         | Converts an argument, or a list of arguments, into a `RequiredArgumentBuilder` |
+| `toSuggestions`        | Converts an argument's suggestions into brigadier's `SuggestionProvider`, with a list of previously declared arguments |
 
 -----
 
@@ -84,53 +86,40 @@ In this scenario, if we ran this command, we would expect "Hello!" to appear in 
 
 #### Writing the code
 
-Now that we've established what we want, we can finally begin writing the code! First we want to create a literal `randomchance`. It's a literal because literal values don't change (similar to say `run` or `if` from the `/execute` command). To create a literal, we'll use the `registerNewLiteral` method described above.
+Now that we've established what we want, we can finally begin writing the code! First we want to create a literal `randomchance`. It's a literal because literal values don't change (similar to say `run` or `if` from the `/execute` command). To create a literal, we'll use the `fromLiteralArgument` method described above, and then build it using the `.build()` method:
 
 ```java
-LiteralCommandNode randomChance = Brigadier.registerNewLiteral("randomchance");
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:declareliteral}}
 ```
 
 With that completed, we can now create our "argument" to this predicate. To do this, we'll use the regular declaration of arguments that we would normally use for commands. In this example, because we're computing \\(\frac{numerator}{denominator}\\), we want our numerator to be 0 or greater and our denominator to be 1 or greater (we don't want any negative numbers or division by zero!):
 
 
 ```java
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("numerator", new IntegerArgument(0));
-arguments.put("denominator", new IntegerArgument(1));
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:declarearguments}}
 ```
 Now we're going to get into the very nitty-gritty part - the predicate declaration. First, we'll create some variables `numerator` and `denominator` to represent the brigadier instances of these arguments. This can be handled by using the `Brigadier.argBuildOf` function:
 
 ```java
-ArgumentBuilder numerator = Brigadier.argBuildOf(arguments, "numerator");
-ArgumentBuilder denominator = Brigadier.argBuildOf(arguments, "denominator");
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:declareargumentbuilders}}
 ```
 
 Now we'll define our predicate. Since this is sort of a "meta-command" (it directly affects the outcome of the `run` command), we need to use the `ArgumentBuilder`'s `fork` method. Remember that after we run this predicate, we want to link back to `execute` again, so our first argument is the `CommandNode` for `execute`, which we can get using `Brigadier.getRootNode().getChild("execute")`. Then, we can simply use `Brigadier.fromPredicate` to finish our declaration:
 
 ```java
-denominator = denominator
-	.fork(Brigadier.getRootNode().getChild("execute"), Brigadier.fromPredicate((sender, args) -> {
-		//Parse arguments like normal
-		int num = (int) args[0];
-		int denom = (int) args[1];
-		
-		//Return boolean with a num/denom chance
-		return Math.ceil(Math.random() * (double) denom) <= (double) num;
-	}, arguments));
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:declarefork}}
 ```
 
 Finally, we can now link everything up. We know that `numerator` comes first, **then** `denominator`, so we have to have `numerator.then(denominator)`. We also know that these arguments are the **children** of the `randomChance` literal, so we use the following code to state all of this:
 
 ```java
-//Add <numerator> <denominator> as a child of randomchance
-randomChance.addChild(numerator.then(denominator).build());
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:declarerandomchance}}
 ```
 
 Finally, we "register" the command. In this case, we're actually just adding the `randomChance` node under \\(\texttt{execute}\rightarrow\texttt{if}\\), which we can add using the following code:
 
 ```java
-//Add (randomchance <numerator> <denominator>) as a child of (execute -> if)
-Brigadier.getRootNode().getChild("execute").getChild("if").addChild(randomChance);
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:injectintoroot}}
 ```
 
 -----
@@ -140,32 +129,7 @@ Brigadier.getRootNode().getChild("execute").getChild("if").addChild(randomChance
 So, hopefully that wasn't too confusing! If you're still lost, here's the whole code that we wrote:
 
 ```java
-//Register literal "randomchance"
-LiteralCommandNode randomChance = Brigadier.registerNewLiteral("randomchance");
-
-//Declare arguments like normal
-LinkedHashMap<String, Argument> arguments = new LinkedHashMap<>();
-arguments.put("numerator", new IntegerArgument(0));
-arguments.put("denominator", new IntegerArgument(1));
-
-//Get brigadier argument objects
-ArgumentBuilder numerator = Brigadier.argBuildOf(arguments, "numerator");
-ArgumentBuilder denominator = Brigadier.argBuildOf(arguments, "denominator")
-    //Fork redirecting to "execute" and state our predicate
-	.fork(Brigadier.getRootNode().getChild("execute"), Brigadier.fromPredicate((sender, args) -> {
-		//Parse arguments like normal
-		int num = (int) args[0];
-		int denom = (int) args[1];
-		
-		//Return boolean with a num/denom chance
-		return Math.ceil(Math.random() * (double) denom) <= (double) num;
-	}, arguments));
-
-//Add <numerator> <denominator> as a child of randomchance
-randomChance.addChild(numerator.then(denominator).build());
-
-//Add (randomchance <numerator> <denominator>) as a child of (execute -> if)
-Brigadier.getRootNode().getChild("execute").getChild("if").addChild(randomChance);
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:brigadier}}
 ```
 
 

@@ -1,12 +1,13 @@
 package dev.jorel.commandapi.arguments;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.bukkit.command.CommandSender;
 
-import dev.jorel.commandapi.StringTooltip;
+import dev.jorel.commandapi.IStringTooltip;
 
 /**
  * An interface declaring methods required to override argument suggestions
@@ -21,6 +22,8 @@ public interface IOverrideableSuggestions {
 	 * @return the current argument
 	 */
 	Argument overrideSuggestions(String... suggestions);
+	
+	Argument overrideSuggestions(Collection<String> suggestions);
 
 	/**
 	 * Override the suggestions of this argument with a function that maps the
@@ -48,7 +51,7 @@ public interface IOverrideableSuggestions {
 	 * @return a function that provides suggestions, or <code>null</code> if there
 	 *         are no overridden suggestions.
 	 */
-	Optional<BiFunction<CommandSender, Object[], StringTooltip[]>> getOverriddenSuggestions();
+	Optional<BiFunction<CommandSender, Object[], IStringTooltip[]>> getOverriddenSuggestions();
 	
 	/**
 	 * Override the suggestions of this argument with an array of StringTooltips,
@@ -57,7 +60,16 @@ public interface IOverrideableSuggestions {
 	 * @param suggestions the suggestions and tooltips to override suggestions with 
 	 * @return the current argument
 	 */
-	Argument overrideSuggestionsT(StringTooltip... suggestions);
+	Argument overrideSuggestionsT(IStringTooltip... suggestions);
+	
+	/**
+	 * Override the suggestions of this argument with a collection of StringTooltips,
+	 * that represents the String suggestion and a hover tooltip
+	 * 
+	 * @param suggestions the suggestions and tooltips to override suggestions with 
+	 * @return the current argument
+	 */
+	Argument overrideSuggestionsT(Collection<IStringTooltip> suggestions);
 	
 	/**
 	 * Override the suggestions of this argument with a function mapping the command
@@ -67,7 +79,7 @@ public interface IOverrideableSuggestions {
 	 * @param suggestions the suggestions and tooltips to override suggestions with
 	 * @return the current argument
 	 */
-	Argument overrideSuggestionsT(Function<CommandSender, StringTooltip[]> suggestions);
+	Argument overrideSuggestionsT(Function<CommandSender, IStringTooltip[]> suggestions);
 	
 	/**
 	 * Override the suggestions of this argument with a function mapping the command
@@ -77,6 +89,6 @@ public interface IOverrideableSuggestions {
 	 * @param suggestions the suggestions and tooltips to override suggestions with
 	 * @return the current argument
 	 */
-	Argument overrideSuggestionsT(BiFunction<CommandSender, Object[], StringTooltip[]> suggestions);
+	Argument overrideSuggestionsT(BiFunction<CommandSender, Object[], IStringTooltip[]> suggestions);
 	
 }

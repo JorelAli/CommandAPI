@@ -12,8 +12,8 @@ The CommandAPI uses two classes to provide information about a scoreboard:
 The score holder argument can accept either a single entity or a collection of multiple entities. In order to specify which one to use, you must provide a `ScoreHolderType` enum value to the `ScoreHolderArgument` constructor, which is either `ScoreHolderType.SINGLE` or `ScoreHolderType.MULTIPLE`:
 
 ```java
-new ScoreHolderArgument(ScoreHolderType.SINGLE);
-new ScoreHolderArgument(ScoreHolderType.MULTIPLE);
+new ScoreHolderArgument(nodeName, ScoreHolderType.SINGLE);
+new ScoreHolderArgument(nodeName, ScoreHolderType.MULTIPLE);
 ```
 
 Depending on which constructor is used, the cast type changes. If you use a `ScoreHolderType.SINGLE`, the argument must be casted to a `String`. Otherwise, if you use `ScoreHolderType.MULTIPLE`, the argument must be casted to a `Collection<String>`.
@@ -39,7 +39,7 @@ To give this example a bit more context, let's say we want to reward all players
 Note how we use `..9` to represent 9 or less deaths (since ranges are inclusive). Also note how we restrict our input to players via the command using `type=player`. We can now implement our command:
 
 ```java
-{{ #include examples/5.7.1scoreholder.java}}
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:scoreholderargument}}
 ```
 
 </div>
@@ -97,7 +97,7 @@ Say we want to clear all objectives in a specific scoreboard slot. In this examp
 We implement this simply by using the `ScoreboardSlotArgument` as our argument, and then we can clear the slot using the scoreboard `clearSlot(DisplaySlot)` method.
 
 ```java
-{{ #include examples/5.7.1scoreboardslot.java }}
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:scoreboardslotargument}}
 ```
 
 </div>
