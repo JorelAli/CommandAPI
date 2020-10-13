@@ -1,6 +1,5 @@
 var NAVTREEINDEX2 =
 {
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a716845e6c83d646b240bd1a92972645b":[1,0,1,0,0,0,2,11],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a93b5de93aea5b624ca883b75081c449d":[1,0,1,0,0,0,2,14],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a9a03f1f9c14d5c508ccc42e004ae7432":[1,0,1,0,0,0,2,17],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#aa29913fe39c21a84575b262501720a18":[1,0,1,0,0,0,2,4],
@@ -249,5 +248,6 @@ var NAVTREEINDEX2 =
 "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_environment_argument_exception.html":[1,0,1,0,0,1,5],
 "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_environment_argument_exception.html#ad07112c03b687c4d17bf085d05433373":[1,0,1,0,0,1,5,0],
 "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_greedy_argument_exception.html":[1,0,1,0,0,1,6],
-"classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_greedy_argument_exception.html#a2cbc848c849d09ab848e302fb28f6b48":[1,0,1,0,0,1,6,0]
+"classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_greedy_argument_exception.html#a2cbc848c849d09ab848e302fb28f6b48":[1,0,1,0,0,1,6,0],
+"classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_invalid_command_name_exception.html":[1,0,1,0,0,1,7]
 };

@@ -1,6 +1,5 @@
 var NAVTREEINDEX3 =
 {
-"classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_invalid_command_name_exception.html":[1,0,1,0,0,1,7],
 "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_invalid_command_name_exception.html#ac0fe657c03aa69499fa5a7f306a082e2":[1,0,1,0,0,1,7,0],
 "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_invalid_range_exception.html":[1,0,1,0,0,1,8],
 "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_invalid_range_exception.html#a85297c8f1b30b2ad67b9837ea8571aa7":[1,0,1,0,0,1,8,0],
@@ -249,5 +248,6 @@ var NAVTREEINDEX3 =
 "interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#aabff33b95cb94c66b9b8c3ccfeb782ef":[1,0,0,0,0,9,9],
 "interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#adb8541175da23883d2819c7dea27de2a":[1,0,0,0,0,9,0],
 "interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#ae795665cac875f2f282395b086b64400":[1,0,0,0,0,9,7],
-"interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#aead5972aafb2db462584a0e7993578e1":[1,0,0,0,0,9,8]
+"interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#aead5972aafb2db462584a0e7993578e1":[1,0,0,0,0,9,8],
+"interfacecom_1_1mojang_1_1brigadier_1_1_message.html":[1,0,0,0,0,11]
 };

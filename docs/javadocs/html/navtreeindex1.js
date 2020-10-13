@@ -218,11 +218,10 @@ var NAVTREEINDEX1 =
 "classdev_1_1jorel_1_1commandapi_1_1_converter.html#a969a754d618725c3a4dc98a8a13ed7b9":[1,0,1,0,0,8,3],
 "classdev_1_1jorel_1_1commandapi_1_1_converter.html#af173562630c14caa18c08ff864241b55":[1,0,1,0,0,8,1],
 "classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html":[1,0,1,0,0,10],
-"classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a095decc3f6efe501b3ddec523b436453":[1,0,1,0,0,10,0],
-"classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a1183715f87c70def147d25e33bad16e0":[1,0,1,0,0,10,4],
-"classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a561e104ee768ac9c672227188aa738c8":[1,0,1,0,0,10,3],
-"classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a6189f95a0967d30c2a0b5f97549cc871":[1,0,1,0,0,10,2],
-"classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#ae0357c216f882cb438aefb2abbaa9ef8":[1,0,1,0,0,10,1],
+"classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a1183715f87c70def147d25e33bad16e0":[1,0,1,0,0,10,3],
+"classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a561e104ee768ac9c672227188aa738c8":[1,0,1,0,0,10,2],
+"classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a6189f95a0967d30c2a0b5f97549cc871":[1,0,1,0,0,10,1],
+"classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#ae0357c216f882cb438aefb2abbaa9ef8":[1,0,1,0,0,10,0],
 "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html":[1,0,1,0,0,11],
 "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#a13d427aedb1d7cfa373643e50c25dbbd":[1,0,1,0,0,11,2],
 "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#a2accbbb3fa1e1a33960d5e81587db210":[1,0,1,0,0,11,1],
@@ -249,5 +248,6 @@ var NAVTREEINDEX1 =
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a42060cac4078ee0833bb7812a7e8c311":[1,0,1,0,0,0,2,6],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a45618ba438bcedaac2aaf2da366f3350":[1,0,1,0,0,0,2,9],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a57eecdc6d7f7758d47b600e794d26742":[1,0,1,0,0,0,2,5],
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a59a33b6cbda4f10b89fc6ad521a59782":[1,0,1,0,0,0,2,19]
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a59a33b6cbda4f10b89fc6ad521a59782":[1,0,1,0,0,0,2,19],
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a716845e6c83d646b240bd1a92972645b":[1,0,1,0,0,0,2,11]
 };
