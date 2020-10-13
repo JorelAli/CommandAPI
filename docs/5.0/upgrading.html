@@ -218,6 +218,18 @@ new CommandAPICommand(&quot;teleport&quot;)
     })
     .register();
 </code></pre>
+<h3><a class="header" href="#method-changes" id="method-changes">Method changes</a></h3>
+<p>Some of the <code>Brigadier</code> methods were changed:</p>
+<pre><code class="language-java">LiteralCommandNode registerNewLiteral(String name);
+RequiredArgumentBuilder argBuildOf(LinkedHashMap&lt;String, Argument&gt; args, String value);
+RequiredArgumentBuilder argBuildOf(String prompt, Argument argument);
+</code></pre>
+<p>\[\downarrow\]</p>
+<pre><code class="language-java">LiteralArgumentBuilder fromLiteralArgument(LiteralArgument literalArgument);
+RequiredArgumentBuilder fromArgument(List&lt;Argument&gt; args, String nodeName);
+RequiredArgumentBuilder fromArgument(Argument argument);
+</code></pre>
+<p>In particular, the <code>fromLiteralArgument</code> now takes in a <code>LiteralArgument</code> and returns a <code>LiteralArgumentBuilder</code>. To convert from a <code>LiteralArgumentBuilder</code> to the <code>LiteralCommandNode</code>, you can run the <code>.build()</code> method.</p>
 <hr />
 <h2><a class="header" href="#from-version-3x-to-40" id="from-version-3x-to-40">From version 3.x to 4.0</a></h2>
 <p>The maven repository url has changed:</p>
@@ -302,21 +314,6 @@ CommandAPI.unregister(String command, boolean force);
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

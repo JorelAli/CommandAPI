@@ -57,6 +57,26 @@ new CommandAPICommand("teleport")
     .register();
 ```
 
+### Method changes
+
+Some of the `Brigadier` methods were changed:
+
+```java
+LiteralCommandNode registerNewLiteral(String name);
+RequiredArgumentBuilder argBuildOf(LinkedHashMap<String, Argument> args, String value);
+RequiredArgumentBuilder argBuildOf(String prompt, Argument argument);
+```
+
+\\[\downarrow\\]
+
+```java
+LiteralArgumentBuilder fromLiteralArgument(LiteralArgument literalArgument);
+RequiredArgumentBuilder fromArgument(List<Argument> args, String nodeName);
+RequiredArgumentBuilder fromArgument(Argument argument);
+```
+
+In particular, the `fromLiteralArgument` now takes in a `LiteralArgument` and returns a `LiteralArgumentBuilder`. To convert from a `LiteralArgumentBuilder` to the `LiteralCommandNode`, you can run the `.build()` method.
+
 -----
 
 ## From version 3.x to 4.0

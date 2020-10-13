@@ -208,6 +208,18 @@
 <p><strong>Developer's Note:</strong></p>
 <p>Lots and lots and lots of changes occurred in version 5.0! I highly recommend reading the <a href="http://localhost:3000/upgrading.html">Upgrading guide</a> section which covers the changes in more detail and how to update your plugin for this version.</p>
 </blockquote>
+<p>Basically every page has been rewritten in this update and checked for errors. In general, this is the list of new additions:</p>
+<ul>
+<li>New section <a href="./conversionforowners.html">3. Command conversion</a> dedicated to command conversion via the <code>config.yml</code></li>
+<li>New section <a href="./listed.html">8.4. Listed arguments</a></li>
+<li>New section <a href="./anglearguments.html">9.8.1. Angle arguments</a></li>
+<li>New section <a href="./subcommands.html">14. Subcommands</a></li>
+<li>New section <a href="./internal">16. Internal CommandAPI</a> now lists all arguments and their respective Minecraft argument IDs</li>
+<li>Mentions listed arguments in section <a href="./literalarguments.html">9.11.1. Literal arguments</a></li>
+<li>Section <a href="./conversion.html">15. Command conversion</a> has been rewritten</li>
+<li>Executes native is now present in the command registration page</li>
+<li>Section <a href="./tooltips.html">8.3. Argument suggestions with tooltips</a> now mentions the <code>IStringTooltip</code> class</li>
+</ul>
 <h3><a class="header" href="#documentation-changes-42-rightarrow-43" id="documentation-changes-42-rightarrow-43">Documentation changes 4.2 \(\rightarrow\) 4.3:</a></h3>
 <ul>
 <li>Improve the documentation for <a href="./config.html">2. Configuration for server owners</a> by using simple YAML lists (using the <code>-</code> symbol) and update the command conversion syntax for all commands using the <code>~</code> syntax</li>
@@ -3997,6 +4009,18 @@ new CommandAPICommand(&quot;teleport&quot;)
     })
     .register();
 </code></pre>
+<h3><a class="header" href="#method-changes" id="method-changes">Method changes</a></h3>
+<p>Some of the <code>Brigadier</code> methods were changed:</p>
+<pre><code class="language-java">LiteralCommandNode registerNewLiteral(String name);
+RequiredArgumentBuilder argBuildOf(LinkedHashMap&lt;String, Argument&gt; args, String value);
+RequiredArgumentBuilder argBuildOf(String prompt, Argument argument);
+</code></pre>
+<p>\[\downarrow\]</p>
+<pre><code class="language-java">LiteralArgumentBuilder fromLiteralArgument(LiteralArgument literalArgument);
+RequiredArgumentBuilder fromArgument(List&lt;Argument&gt; args, String nodeName);
+RequiredArgumentBuilder fromArgument(Argument argument);
+</code></pre>
+<p>In particular, the <code>fromLiteralArgument</code> now takes in a <code>LiteralArgument</code> and returns a <code>LiteralArgumentBuilder</code>. To convert from a <code>LiteralArgumentBuilder</code> to the <code>LiteralCommandNode</code>, you can run the <code>.build()</code> method.</p>
 <hr />
 <h2><a class="header" href="#from-version-3x-to-40" id="from-version-3x-to-40">From version 3.x to 4.0</a></h2>
 <p>The maven repository url has changed:</p>
@@ -4189,21 +4213,6 @@ Caused by: java.lang.IllegalArgumentException: Whilst parsing command on line 2:
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         
