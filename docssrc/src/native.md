@@ -36,8 +36,6 @@ As described in the section about [normal command executors](./normalexecutors.m
 >
 > The `.executesNative()` method has the highest priority over all over `.executesXXX()` methods - if you use the `.executesNative()` method, no other execution method will be run.
 
-Because this method has the highest priority over all other executes methods, this also means that the **`.getCallee()` method can return null**.
-
 -----
 
 <div class="example">
