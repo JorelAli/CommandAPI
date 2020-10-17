@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 import org.bukkit.Axis;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World.Environment;
@@ -45,6 +46,7 @@ import dev.jorel.commandapi.wrappers.Location2D;
 import dev.jorel.commandapi.wrappers.MathOperation;
 import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
+import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 public interface NMS {
@@ -95,6 +97,13 @@ public interface NMS {
 	 * @return A CommandSender (not proxied) from the command listener wrapper
 	 */
 	CommandSender getCommandSenderForCLW(Object clw);
+	
+	/**
+	 * Converts a CommandSender into a CLW
+	 * @param sender the command sender to convert
+	 * @return a CLW.
+	 */
+	Object getCLWFromCommandSender(CommandSender sender);
 
 	/**
 	 * Given the MinecraftServer instance, returns the Brigadier
@@ -209,5 +218,8 @@ public interface NMS {
 	String convert(Particle particle);
 	String convert(PotionEffectType potion);
 	String convert(Sound sound);
+	
+	SimpleFunctionWrapper[] convertFunction(NamespacedKey key);
+	
 	
 }

@@ -9,6 +9,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
@@ -75,6 +77,7 @@ import dev.jorel.commandapi.wrappers.MathOperation;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
+import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.server.v1_16_R2.Advancement;
@@ -499,6 +502,54 @@ public class NMS_1_16_R2 implements NMS {
 		float low = range.a() == null ? -Float.MAX_VALUE : range.a();
 		float high = range.b() == null ? Float.MAX_VALUE : range.b();
 		return new FloatRange(low, high);
+	}
+	
+	@SuppressWarnings("deprecation")
+	public List<NamespacedKey> getFunctions() {
+		List<NamespacedKey> functions = new ArrayList<>();
+		for(MinecraftKey key : ((CraftServer) Bukkit.getServer()).getServer().getFunctionData().f()) {
+			functions.add(new NamespacedKey(key.getNamespace(), key.getKey()));
+		}
+		return functions;
+	}
+	
+	@SuppressWarnings("deprecation")
+	public List<NamespacedKey> getTags() {
+		List<NamespacedKey> functions = new ArrayList<>();
+		for(MinecraftKey key : ((CraftServer) Bukkit.getServer()).getServer().getFunctionData().g()) {
+			functions.add(new NamespacedKey(key.getNamespace(), key.getKey()));
+		}
+		return functions;
+	}
+	
+	private SimpleFunctionWrapper convertFunction(CustomFunction customFunction) {
+		@SuppressWarnings("deprecation")
+		NamespacedKey minecraftKey = new NamespacedKey(customFunction.a().getNamespace(), customFunction.a().getKey());
+
+		CustomFunctionData customFunctionData = ((CraftServer) Bukkit.getServer()).getServer().getFunctionData();
+
+		ToIntBiFunction<CustomFunction, CommandListenerWrapper> obj = customFunctionData::a;
+		ToIntFunction<CommandListenerWrapper> appliedObj = clw -> obj.applyAsInt(customFunction, clw);
+
+		return new SimpleFunctionWrapper(minecraftKey, appliedObj,
+				Arrays.stream(customFunction.b()).map(Object::toString).toArray(String[]::new));
+	}
+	
+	@Override
+	public Object getCLWFromCommandSender(CommandSender sender) {
+		return VanillaCommandWrapper.getListener(sender);
+	}
+	
+	public SimpleFunctionWrapper[] convertFunction(NamespacedKey key) {
+		MinecraftKey minecraftKey = new MinecraftKey(key.getNamespace(), key.getKey());
+		CustomFunctionData functionData = ((CraftServer) Bukkit.getServer()).getServer().getFunctionData();
+		
+		Optional<CustomFunction> function = functionData.a(minecraftKey);
+		if(function.isPresent()) {
+			return new SimpleFunctionWrapper[] { convertFunction(function.get()) };
+		} else {
+			return functionData.b(minecraftKey).getTagged().stream().map(this::convertFunction).toArray(SimpleFunctionWrapper[]::new);
+		}
 	}
 
 	@Override
