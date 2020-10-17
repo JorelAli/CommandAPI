@@ -127,8 +127,7 @@ import net.minecraft.server.v1_13_R2.ShapeDetectorBlock;
 import net.minecraft.server.v1_13_R2.Vec2F;
 import net.minecraft.server.v1_13_R2.Vec3D;
 
-@SuppressWarnings({ "unchecked", "rawtypes" })
-public class NMS_1_13_2 implements NMS {
+public class NMS_1_13_2 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public CommandListenerWrapper getCLWFromCommandSender(CommandSender sender) {
@@ -343,23 +342,23 @@ public class NMS_1_13_2 implements NMS {
 	}
 
 	@Override
-	public void createDispatcherFile(File file, com.mojang.brigadier.CommandDispatcher dispatcher) {
+	public void createDispatcherFile(File file, com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> dispatcher) {
 		((CraftServer) Bukkit.getServer()).getServer().getCommandDispatcher().a(file);
 	}
 
 	@Override
-	public org.bukkit.advancement.Advancement getAdvancement(CommandContext cmdCtx, String key)
+	public org.bukkit.advancement.Advancement getAdvancement(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException {
 		return ArgumentMinecraftKeyRegistered.a(cmdCtx, key).bukkit;
 	}
 
 	@Override
-	public float getAngle(CommandContext cmdCtx, String key) {
+	public float getAngle(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		throw new AngleArgumentException();
 	}
 
 	@Override
-	public EnumSet<Axis> getAxis(CommandContext cmdCtx, String key) {
+	public EnumSet<Axis> getAxis(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		EnumSet<Axis> set = EnumSet.noneOf(Axis.class);
 		EnumSet<EnumAxis> parsedEnumSet = ArgumentRotationAxis.a(cmdCtx, key);
 		for (EnumAxis element : parsedEnumSet) {
@@ -379,12 +378,12 @@ public class NMS_1_13_2 implements NMS {
 	}
 
 	@Override
-	public Biome getBiome(CommandContext cmdCtx, String key) {
+	public Biome getBiome(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		throw new BiomeArgumentException();
 	}
 
 	@Override
-	public Predicate<Block> getBlockPredicate(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+	public Predicate<Block> getBlockPredicate(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		Predicate<ShapeDetectorBlock> predicate = ArgumentBlockPredicate.a(cmdCtx, key);
 		return (Block block) -> {
 			return predicate.test(new ShapeDetectorBlock(getCLW(cmdCtx).getWorld(),
@@ -393,47 +392,47 @@ public class NMS_1_13_2 implements NMS {
 	}
 
 	@Override
-	public BlockData getBlockState(CommandContext cmdCtx, String key) {
+	public BlockData getBlockState(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		return CraftBlockData.fromData(ArgumentTile.a(cmdCtx, key).a());
 	}
 
 	@Override
-	public com.mojang.brigadier.CommandDispatcher getBrigadierDispatcher() {
+	public com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> getBrigadierDispatcher() {
 		return ((MinecraftServer) ((CraftServer) Bukkit.getServer()).getServer()).getCommandDispatcher().a();
 	}
 
 	@Override
-	public BaseComponent[] getChat(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+	public BaseComponent[] getChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		String resultantString = ChatSerializer.a(ArgumentChat.a(cmdCtx, key));
 		return ComponentSerializer.parse(resultantString);
 	}
 
 	@Override
-	public ChatColor getChatColor(CommandContext cmdCtx, String str) {
+	public ChatColor getChatColor(CommandContext<CommandListenerWrapper> cmdCtx, String str) {
 		return CraftChatMessage.getColor(ArgumentChatFormat.a(cmdCtx, str));
 	}
 
 	@Override
-	public BaseComponent[] getChatComponent(CommandContext cmdCtx, String str) {
+	public BaseComponent[] getChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String str) {
 		String resultantString = ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, str));
 		return ComponentSerializer.parse(resultantString);
 	}
 
-	private CommandListenerWrapper getCLW(CommandContext cmdCtx) {
+	private CommandListenerWrapper getCLW(CommandContext<CommandListenerWrapper> cmdCtx) {
 		return (CommandListenerWrapper) cmdCtx.getSource();
 	}
 
 	@Override
-	public CommandSender getCommandSenderForCLW(Object clw) {
+	public CommandSender getCommandSenderForCLW(CommandListenerWrapper clw) {
 		try {
-			return ((CommandListenerWrapper) clw).getBukkitSender();
+			return clw.getBukkitSender();
 		} catch (UnsupportedOperationException e) {
 			return null;
 		}
 	}
 
 	@Override
-	public Environment getDimension(CommandContext cmdCtx, String key) {
+	public Environment getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		DimensionManager manager = ArgumentDimension.a(cmdCtx, key);
 		switch (manager.getDimensionID()) {
 		case 0:
@@ -447,12 +446,12 @@ public class NMS_1_13_2 implements NMS {
 	}
 
 	@Override
-	public Enchantment getEnchantment(CommandContext cmdCtx, String str) {
+	public Enchantment getEnchantment(CommandContext<CommandListenerWrapper> cmdCtx, String str) {
 		return new CraftEnchantment(ArgumentEnchantment.a(cmdCtx, str));
 	}
 
 	@Override
-	public Object getEntitySelector(CommandContext cmdCtx, String str, EntitySelector selector)
+	public Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String str, EntitySelector selector)
 			throws CommandSyntaxException {
 		switch (selector) {
 		case MANY_ENTITIES:
@@ -479,14 +478,14 @@ public class NMS_1_13_2 implements NMS {
 	}
 
 	@Override
-	public EntityType getEntityType(CommandContext cmdCtx, String str) throws CommandSyntaxException {
+	public EntityType getEntityType(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
 		Entity entity = IRegistry.ENTITY_TYPE.get(ArgumentEntitySummon.a(cmdCtx, str))
 				.a((getCLW(cmdCtx).getWorld().getWorld()).getHandle());
 		return entity.getBukkitEntity().getType();
 	}
 
 	@Override
-	public FloatRange getFloatRange(CommandContext cmdCtx, String key) {
+	public FloatRange getFloatRange(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		CriterionConditionValue.FloatRange range = (CriterionConditionValue.FloatRange) cmdCtx.getArgument(key,
 				CriterionConditionValue.FloatRange.class);
 		float low = range.a() == null ? -Float.MAX_VALUE : range.a();
@@ -495,7 +494,7 @@ public class NMS_1_13_2 implements NMS {
 	}
 
 	@Override
-	public FunctionWrapper[] getFunction(CommandContext cmdCtx, String str) throws CommandSyntaxException {
+	public FunctionWrapper[] getFunction(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
 		Collection<CustomFunction> customFuncList = ArgumentTag.a(cmdCtx, str);
 
 		FunctionWrapper[] result = new FunctionWrapper[customFuncList.size()];
@@ -523,7 +522,7 @@ public class NMS_1_13_2 implements NMS {
 	}
 
 	@Override
-	public IntegerRange getIntRange(CommandContext cmdCtx, String key) {
+	public IntegerRange getIntRange(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		CriterionConditionValue.IntegerRange range = ArgumentCriterionValue.b.a(cmdCtx, key);
 		int low = range.a() == null ? Integer.MIN_VALUE : range.a();
 		int high = range.b() == null ? Integer.MAX_VALUE : range.b();
@@ -531,26 +530,26 @@ public class NMS_1_13_2 implements NMS {
 	}
 
 	@Override
-	public org.bukkit.inventory.ItemStack getItemStack(CommandContext cmdCtx, String str)
+	public org.bukkit.inventory.ItemStack getItemStack(CommandContext<CommandListenerWrapper> cmdCtx, String str)
 			throws CommandSyntaxException {
 		return CraftItemStack.asBukkitCopy(ArgumentItemStack.a(cmdCtx, str).a(1, false));
 	}
 
 	@Override
-	public Predicate<org.bukkit.inventory.ItemStack> getItemStackPredicate(CommandContext cmdCtx, String key)
+	public Predicate<org.bukkit.inventory.ItemStack> getItemStackPredicate(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException {
 		Predicate<ItemStack> predicate = ArgumentItemPredicate.a(cmdCtx, key);
 		return item -> predicate.test(CraftItemStack.asNMSCopy(item));
 	}
 
 	@Override
-	public String getKeyedAsString(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+	public String getKeyedAsString(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.c(cmdCtx, key);
 		return minecraftKey.toString();
 	}
 
 	@Override
-	public Location getLocation(CommandContext cmdCtx, String str, LocationType locationType)
+	public Location getLocation(CommandContext<CommandListenerWrapper> cmdCtx, String str, LocationType locationType)
 			throws CommandSyntaxException {
 		switch (locationType) {
 		case BLOCK_POSITION:
@@ -565,7 +564,7 @@ public class NMS_1_13_2 implements NMS {
 	}
 
 	@Override
-	public Location2D getLocation2D(CommandContext cmdCtx, String key, LocationType locationType2d)
+	public Location2D getLocation2D(CommandContext<CommandListenerWrapper> cmdCtx, String key, LocationType locationType2d)
 			throws CommandSyntaxException {
 		switch (locationType2d) {
 		case BLOCK_POSITION:
@@ -580,7 +579,7 @@ public class NMS_1_13_2 implements NMS {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public org.bukkit.loot.LootTable getLootTable(CommandContext cmdCtx, String str) {
+	public org.bukkit.loot.LootTable getLootTable(CommandContext<CommandListenerWrapper> cmdCtx, String str) {
 		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.c(cmdCtx, str);
 		String namespace = minecraftKey.b();
 		String key = minecraftKey.getKey();
@@ -590,7 +589,7 @@ public class NMS_1_13_2 implements NMS {
 	}
 
 	@Override
-	public MathOperation getMathOperation(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+	public MathOperation getMathOperation(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		ArgumentMathOperation.a result = ArgumentMathOperation.a(cmdCtx, key);
 		Scoreboard board = new Scoreboard();
 		ScoreboardScore tester_left = new ScoreboardScore(board, null, null);
@@ -629,28 +628,28 @@ public class NMS_1_13_2 implements NMS {
 	}
 
 	@Override
-	public NBTContainer getNBTCompound(CommandContext cmdCtx, String key) {
+	public NBTContainer getNBTCompound(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		return new NBTContainer(ArgumentNBTTag.a(cmdCtx, key));
 	}
 
 	@Override
-	public String getObjective(CommandContext cmdCtx, String key)
+	public String getObjective(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws IllegalArgumentException, CommandSyntaxException {
 		return ArgumentScoreboardObjective.a(cmdCtx, key).getName();
 	}
 
 	@Override
-	public String getObjectiveCriteria(CommandContext cmdCtx, String key) {
+	public String getObjectiveCriteria(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		return ArgumentScoreboardCriteria.a(cmdCtx, key).getName();
 	}
 
 	@Override
-	public Particle getParticle(CommandContext cmdCtx, String str) {
+	public Particle getParticle(CommandContext<CommandListenerWrapper> cmdCtx, String str) {
 		return CraftParticle.toBukkit(ArgumentParticle.a(cmdCtx, str));
 	}
 
 	@Override
-	public Player getPlayer(CommandContext cmdCtx, String str) throws CommandSyntaxException {
+	public Player getPlayer(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
 		Player target = Bukkit.getPlayer(((GameProfile) ArgumentProfile.a(cmdCtx, str).iterator().next()).getId());
 		if (target == null) {
 			throw ArgumentProfile.a.create();
@@ -660,39 +659,39 @@ public class NMS_1_13_2 implements NMS {
 	}
 
 	@Override
-	public PotionEffectType getPotionEffect(CommandContext cmdCtx, String str) throws CommandSyntaxException {
+	public PotionEffectType getPotionEffect(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
 		return new CraftPotionEffectType(ArgumentMobEffect.a(cmdCtx, str));
 	}
 
 	@Override
-	public Recipe getRecipe(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+	public Recipe getRecipe(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return ArgumentMinecraftKeyRegistered.b(cmdCtx, key).toBukkitRecipe();
 	}
 
 	@Override
-	public Rotation getRotation(CommandContext cmdCtx, String key) {
+	public Rotation getRotation(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		IVectorPosition pos = ArgumentRotation.a(cmdCtx, key);
 		Vec2F vec = pos.b(getCLW(cmdCtx));
 		return new Rotation(vec.i, vec.j);
 	}
 
 	@Override
-	public ScoreboardSlot getScoreboardSlot(CommandContext cmdCtx, String key) {
+	public ScoreboardSlot getScoreboardSlot(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		return new ScoreboardSlot(ArgumentScoreboardSlot.a(cmdCtx, key));
 	}
 
 	@Override
-	public Collection<String> getScoreHolderMultiple(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+	public Collection<String> getScoreHolderMultiple(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return ArgumentScoreholder.b(cmdCtx, key);
 	}
 
 	@Override
-	public String getScoreHolderSingle(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+	public String getScoreHolderSingle(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return ArgumentScoreholder.a(cmdCtx, key);
 	}
 
 	@Override
-	public CommandSender getSenderForCommand(CommandContext cmdCtx, boolean isNative) {
+	public CommandSender getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean isNative) {
 		CommandListenerWrapper clw = getCLW(cmdCtx);
 
 		CommandSender sender = clw.getBukkitSender();
@@ -716,7 +715,7 @@ public class NMS_1_13_2 implements NMS {
 	}
 
 	@Override
-	public Sound getSound(CommandContext cmdCtx, String key) {
+	public Sound getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.c(cmdCtx, key);
 		for (CraftSound sound : CraftSound.values()) {
 			try {
@@ -732,7 +731,7 @@ public class NMS_1_13_2 implements NMS {
 	}
 
 	@Override
-	public SuggestionProvider getSuggestionProvider(SuggestionProviders provider) {
+	public SuggestionProvider<CommandListenerWrapper> getSuggestionProvider(SuggestionProviders provider) {
 		switch (provider) {
 		case FUNCTION:
 			return (context, builder) -> {
@@ -771,17 +770,17 @@ public class NMS_1_13_2 implements NMS {
 	}
 
 	@Override
-	public String getTeam(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+	public String getTeam(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return ArgumentScoreboardTeam.a(cmdCtx, key).getName();
 	}
 
 	@Override
-	public int getTime(CommandContext cmdCtx, String key) {
+	public int getTime(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		throw new TimeArgumentException();
 	}
 
 	@Override
-	public UUID getUUID(CommandContext cmdCtx, String key) {
+	public UUID getUUID(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		throw new UUIDArgumentException();
 	}
 

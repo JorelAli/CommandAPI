@@ -85,7 +85,7 @@ public interface NMS<CommandListenerWrapper> {
 	 * Retrieves a CommandSender, given some CommandContext. This
 	 * method should handle Proxied CommandSenders for entities
 	 * if a Proxy is being used.
-	 * @param cmdCtx The CommandContext for a given command
+	 * @param cmdCtx The CommandContext<CommandListenerWrapper> for a given command
 	 * @param forceNative whether or not the CommandSender should be a NativeProxyCommandSender or not
 	 * @return A CommandSender instance (such as a ProxiedNativeCommandSender or Player)
 	 */

@@ -14,7 +14,7 @@ import dev.jorel.commandapi.nms.NMS_1_16_R2;
 
 public interface CommandAPIVersionHandler {
 
-	public static NMS getNMS(String version) {
+	public static NMS<?> getNMS(String version) {
 		switch (version) {
 		case "1.13":
 			return new NMS_1_13();
