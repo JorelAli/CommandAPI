@@ -767,9 +767,10 @@ public class NMS_1_13 implements NMS<CommandListenerWrapper> {
 		case LOOT_TABLES:
 			return (context, builder) -> {
 				try {
+					@SuppressWarnings("unchecked")
 					Map<MinecraftKey, LootTable> map = (Map<MinecraftKey, LootTable>) CommandAPIHandler.getInstance()
 							.getField(LootTableRegistry.class, "e").get(getCLW(context).getServer().aP());
-					return ICompletionProvider.a((Iterable) map.keySet(), builder);
+					return ICompletionProvider.a(map.keySet(), builder);
 				} catch (IllegalArgumentException | IllegalAccessException e) {
 					e.printStackTrace();
 				}
