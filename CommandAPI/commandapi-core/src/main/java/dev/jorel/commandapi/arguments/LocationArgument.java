@@ -23,8 +23,8 @@ public class LocationArgument extends SafeOverrideableArgument<Location> {
 	 * @param type the location type of this location, either LocationType.BLOCK_POSITION or LocationType.PRECISE_POSITION
 	 */
 	public LocationArgument(String nodeName, LocationType type) {
-		super(nodeName, type == LocationType.BLOCK_POSITION ? CommandAPIHandler.getNMS()._ArgumentPosition()
-				: CommandAPIHandler.getNMS()._ArgumentVec3(),
+		super(nodeName, type == LocationType.BLOCK_POSITION ? CommandAPIHandler.getInstance().getNMS()._ArgumentPosition()
+				: CommandAPIHandler.getInstance().getNMS()._ArgumentVec3(),
 				type == LocationType.BLOCK_POSITION
 						? (Location l) -> l.getBlockX() + " " + l.getBlockY() + " " + l.getBlockZ()
 						: (Location l) -> l.getX() + " " + l.getY() + " " + l.getZ());

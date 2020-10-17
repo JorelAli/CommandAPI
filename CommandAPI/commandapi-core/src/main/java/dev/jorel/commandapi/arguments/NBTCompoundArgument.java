@@ -16,7 +16,7 @@ public class NBTCompoundArgument extends SafeOverrideableArgument<NBTContainer> 
 	 * @param nodeName the name of the node for this argument
 	 */
 	public NBTCompoundArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getNMS()._ArgumentNBTCompound(), NBTContainer::toString);
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentNBTCompound(), NBTContainer::toString);
 		
 		if(Bukkit.getPluginManager().getPlugin("NBTAPI") == null) {
 			throw new NBTAPINotFoundException(this.getClass());

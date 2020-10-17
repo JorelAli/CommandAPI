@@ -14,7 +14,7 @@ public class EntityTypeArgument extends SafeOverrideableArgument<EntityType> imp
 	 * @param nodeName the name of the node for this argument
 	 */
 	public EntityTypeArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getNMS()._ArgumentEntitySummon(), fromKey(EntityType::getKey));
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentEntitySummon(), fromKey(EntityType::getKey));
 	}
 
 	@Override

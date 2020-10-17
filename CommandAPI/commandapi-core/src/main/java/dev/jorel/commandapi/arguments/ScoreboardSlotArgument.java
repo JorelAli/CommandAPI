@@ -13,7 +13,7 @@ public class ScoreboardSlotArgument extends SafeOverrideableArgument<ScoreboardS
 	 * @param nodeName the name of the node for this argument
 	 */
 	public ScoreboardSlotArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getNMS()._ArgumentScoreboardSlot(), ScoreboardSlot::toString);
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentScoreboardSlot(), ScoreboardSlot::toString);
 	}
 
 	@Override

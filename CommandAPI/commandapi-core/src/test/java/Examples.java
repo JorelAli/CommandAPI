@@ -57,9 +57,9 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import de.tr7zw.nbtapi.NBTContainer;
+import dev.jorel.commandapi.Brigadier;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.CommandAPIHandler.Brigadier;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.Converter;
 import dev.jorel.commandapi.IStringTooltip;

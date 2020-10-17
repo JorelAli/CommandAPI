@@ -18,7 +18,7 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 		CommandAPI.logger = getLogger();
 		
 		//Check dependencies for CommandAPI
-		CommandAPIHandler.checkDependencies();
+		CommandAPIHandler.getInstance().checkDependencies();
 		
 		//Convert all plugins to be converted
 		for(Entry<Plugin, String[]> pluginToConvert : CommandAPI.config.getPluginsToConvert()) {

@@ -14,7 +14,7 @@ public class AdvancementArgument extends SafeOverrideableArgument<Advancement> i
 	 * @param nodeName the name of the node for argument
 	 */
 	public AdvancementArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered(), fromKey(Advancement::getKey));
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered(), fromKey(Advancement::getKey));
 	}
 
 	@Override

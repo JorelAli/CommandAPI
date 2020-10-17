@@ -17,7 +17,6 @@ import dev.jorel.commandapi.StringTooltip;
 
 /**
  * The core abstract class for Command API arguments
- * @param <S>
  */
 public abstract class Argument implements IOverrideableSuggestions {
 
@@ -60,9 +59,8 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 *            the code
 	 * @return the NMS or brigadier type for this argument
 	 */
-	@SuppressWarnings("unchecked")
-	public final <T> ArgumentType<T> getRawType() {
-		return (ArgumentType<T>) this.rawType;
+	public final ArgumentType<?> getRawType() {
+		return this.rawType;
 	}
 	
 	/**

@@ -10,7 +10,7 @@ import dev.jorel.commandapi.nms.NMS;
  */
 public interface CommandAPIVersionHandler {
 	
-	public static NMS getNMS(String version) {
+	public static <CommandListenerWrapper> NMS<CommandListenerWrapper> getNMS(String version) {
 		throw new RuntimeException("You have the wrong copy of the CommandAPI! Make sure to use the one from https://github.com/JorelAli/CommandAPI/releases");
 	}
 	

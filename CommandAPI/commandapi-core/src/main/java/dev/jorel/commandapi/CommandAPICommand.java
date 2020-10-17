@@ -329,7 +329,7 @@ public class CommandAPICommand {
 			}
 			
 			if(!executor.isEmpty()) {
-				CommandAPIHandler.register(commandName, permission, aliases, requirements, copyOfArgs, executor, isConverted);
+				CommandAPIHandler.getInstance().register(commandName, permission, aliases, requirements, copyOfArgs, executor, isConverted);
 			}
 			
 			if(this.subcommands.size() > 0) {

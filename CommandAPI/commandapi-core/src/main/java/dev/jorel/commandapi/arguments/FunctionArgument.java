@@ -17,7 +17,7 @@ public class FunctionArgument extends SafeOverrideableArgument<NamespacedKey> im
 	 * @param nodeName the name of the node for this argument
 	 */
 	public FunctionArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getNMS()._ArgumentTag(), fromKey(n -> n));
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentTag(), fromKey(n -> n));
 	}
 
 	@Override

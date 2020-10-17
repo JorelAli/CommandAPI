@@ -724,7 +724,7 @@ public class NMS_1_14_4 implements NMS<CommandListenerWrapper> {
 		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.c(cmdCtx, key);
 		for (CraftSound sound : CraftSound.values()) {
 			try {
-				if (CommandAPIHandler.getField(CraftSound.class, "minecraftKey").get(sound)
+				if (CommandAPIHandler.getInstance().getField(CraftSound.class, "minecraftKey").get(sound)
 						.equals(minecraftKey.getKey())) {
 					return Sound.valueOf(sound.name());
 				}

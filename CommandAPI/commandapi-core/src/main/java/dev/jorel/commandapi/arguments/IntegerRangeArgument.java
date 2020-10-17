@@ -13,7 +13,7 @@ public class IntegerRangeArgument extends SafeOverrideableArgument<IntegerRange>
 	 * @param nodeName the name of the node for this argument 
 	 */
 	public IntegerRangeArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getNMS()._ArgumentIntRange(), IntegerRange::toString);
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentIntRange(), IntegerRange::toString);
 	}
 	
 	@Override

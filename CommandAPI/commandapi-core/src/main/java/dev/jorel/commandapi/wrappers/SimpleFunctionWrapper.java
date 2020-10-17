@@ -38,7 +38,7 @@ public class SimpleFunctionWrapper implements Keyed {
 	}
 	
 	public static SimpleFunctionWrapper[] fromNamespace(NamespacedKey key) {
-		return CommandAPIHandler.getNMS().convertFunction(key);
+		return CommandAPIHandler.getInstance().getNMS().convertFunction(key);
 	}
 	
 	public static List<NamespacedKey> getFunctions() {
@@ -50,7 +50,7 @@ public class SimpleFunctionWrapper implements Keyed {
 	}
 	
 	public void run(CommandSender sender) {
-		runInternal(CommandAPIHandler.getNMS().getCLWFromCommandSender(sender));
+		runInternal(CommandAPIHandler.getInstance().getNMS().getCLWFromCommandSender(sender));
 	}
 	
 	/**

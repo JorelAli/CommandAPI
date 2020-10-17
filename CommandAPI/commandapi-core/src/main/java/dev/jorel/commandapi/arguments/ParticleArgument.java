@@ -14,7 +14,7 @@ public class ParticleArgument extends SafeOverrideableArgument<Particle> {
 	 * @param nodeName the name of the node for this argument
 	 */
 	public ParticleArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getNMS()._ArgumentParticle(), CommandAPIHandler.getNMS()::convert);
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentParticle(), CommandAPIHandler.getInstance().getNMS()::convert);
 	}
 
 	@Override

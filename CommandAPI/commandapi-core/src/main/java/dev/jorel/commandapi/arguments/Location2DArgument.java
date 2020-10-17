@@ -22,8 +22,8 @@ public class Location2DArgument extends SafeOverrideableArgument<Location2D> {
 	 * @param type the location type of this location, either LocationType.BLOCK_POSITION or LocationType.PRECISE_POSITION
 	 */
 	public Location2DArgument(String nodeName, LocationType type) {
-		super(nodeName, type == LocationType.BLOCK_POSITION ? CommandAPIHandler.getNMS()._ArgumentPosition2D()
-				: CommandAPIHandler.getNMS()._ArgumentVec2(),
+		super(nodeName, type == LocationType.BLOCK_POSITION ? CommandAPIHandler.getInstance().getNMS()._ArgumentPosition2D()
+				: CommandAPIHandler.getInstance().getNMS()._ArgumentVec2(),
 				type == LocationType.BLOCK_POSITION ? (Location2D l) -> l.getBlockX() + " " + l.getBlockZ()
 						: (Location2D l) -> l.getX() + " " + l.getZ());
 		locationType = type;

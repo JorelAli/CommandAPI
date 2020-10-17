@@ -719,7 +719,7 @@ public class NMS_1_13_2 implements NMS<CommandListenerWrapper> {
 		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.c(cmdCtx, key);
 		for (CraftSound sound : CraftSound.values()) {
 			try {
-				if (CommandAPIHandler.getField(CraftSound.class, "minecraftKey").get(sound)
+				if (CommandAPIHandler.getInstance().getField(CraftSound.class, "minecraftKey").get(sound)
 						.equals(minecraftKey.getKey())) {
 					return Sound.valueOf(sound.name());
 				}
@@ -752,7 +752,7 @@ public class NMS_1_13_2 implements NMS<CommandListenerWrapper> {
 		case LOOT_TABLES:
 			return (context, builder) -> {
 				try {
-					Map<MinecraftKey, LootTable> map = (Map<MinecraftKey, LootTable>) CommandAPIHandler
+					Map<MinecraftKey, LootTable> map = (Map<MinecraftKey, LootTable>) CommandAPIHandler.getInstance()
 							.getField(LootTableRegistry.class, "e")
 							.get(getCLW(context).getServer().getLootTableRegistry());
 					return ICompletionProvider.a((Iterable) map.keySet(), builder);

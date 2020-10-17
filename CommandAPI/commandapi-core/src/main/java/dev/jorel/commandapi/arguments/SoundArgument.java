@@ -14,7 +14,7 @@ public class SoundArgument extends SafeOverrideableArgument<Sound> implements IC
 	 * @param nodeName the name of the node for this argument
 	 */
 	public SoundArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered(), CommandAPIHandler.getNMS()::convert);
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered(), CommandAPIHandler.getInstance().getNMS()::convert);
 	}
 
 	@Override

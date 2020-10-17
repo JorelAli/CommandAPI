@@ -45,7 +45,7 @@ public class CustomArgument<T> extends Argument {
 	 * valid arguments
 	 */
 	public CustomArgument(String nodeName, CustomArgumentParser<T> parser, boolean keyed) {
-		super(nodeName, keyed ? CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered() : StringArgumentType.string());
+		super(nodeName, keyed ? CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered() : StringArgumentType.string());
 		this.keyed = keyed;
 		this.parser = parser;
 	}

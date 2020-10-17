@@ -13,7 +13,7 @@ public class RotationArgument extends SafeOverrideableArgument<Rotation> {
 	 * @param nodeName the name of the node for this argument
 	 */
 	public RotationArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getNMS()._ArgumentRotation(), Rotation::toString);
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentRotation(), Rotation::toString);
 	}
 	
 	@Override
