@@ -24,17 +24,24 @@ import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.ProxiedCommandSender;
+import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.v1_13_R2.CraftLootTable;
 import org.bukkit.craftbukkit.v1_13_R2.CraftParticle;
 import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_13_R2.CraftSound;
 import org.bukkit.craftbukkit.v1_13_R2.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_13_R2.command.CraftBlockCommandSender;
+import org.bukkit.craftbukkit.v1_13_R2.command.ProxiedNativeCommandSender;
 import org.bukkit.craftbukkit.v1_13_R2.command.VanillaCommandWrapper;
 import org.bukkit.craftbukkit.v1_13_R2.enchantments.CraftEnchantment;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftMinecartCommand;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_13_R2.potion.CraftPotionEffectType;
@@ -42,6 +49,7 @@ import org.bukkit.craftbukkit.v1_13_R2.util.CraftChatMessage;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.minecart.CommandMinecart;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.potion.PotionEffectType;
 
@@ -110,6 +118,7 @@ import net.minecraft.server.v1_13_R2.CriterionConditionValue;
 import net.minecraft.server.v1_13_R2.CriterionConditionValue.c;
 import net.minecraft.server.v1_13_R2.CustomFunction;
 import net.minecraft.server.v1_13_R2.CustomFunctionData;
+import net.minecraft.server.v1_13_R2.DedicatedServer;
 import net.minecraft.server.v1_13_R2.DimensionManager;
 import net.minecraft.server.v1_13_R2.Entity;
 import net.minecraft.server.v1_13_R2.EnumDirection.EnumAxis;
@@ -131,6 +140,25 @@ import net.minecraft.server.v1_13_R2.Vec3D;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class NMS_1_13_1 implements NMS {
 
+	@Override
+	public CommandListenerWrapper getCLWFromCommandSender(CommandSender sender) {
+		if (sender instanceof Player) {
+			return ((CraftPlayer) sender).getHandle().getCommandListener();
+		} else if (sender instanceof BlockCommandSender) {
+			return ((CraftBlockCommandSender) sender).getWrapper();
+		} else if (sender instanceof CommandMinecart) {
+			return ((CraftMinecartCommand) sender).getHandle().getCommandBlock().getWrapper();
+		} else if (sender instanceof RemoteConsoleCommandSender) {
+			return ((DedicatedServer) ((CraftServer) Bukkit.getServer()).getServer()).remoteControlCommandListener.f();
+		} else if (sender instanceof ConsoleCommandSender) {
+			return ((CraftServer) sender.getServer()).getServer().getServerCommandListener();
+		} else if (sender instanceof ProxiedCommandSender) {
+			return ((ProxiedNativeCommandSender) sender).getHandle();
+		} else {
+			throw new IllegalArgumentException("Cannot make " + sender + " a vanilla command listener");
+		}
+	}
+	
 	@Override
 	public ArgumentType<?> _ArgumentAngle() {
 		throw new AngleArgumentException();
@@ -157,12 +185,12 @@ public class NMS_1_13_1 implements NMS {
 	}
 
 	@Override
-	public ArgumentType _ArgumentChatComponent() {
+	public ArgumentType<?> _ArgumentChatComponent() {
 		return ArgumentChatComponent.a();
 	}
 
 	@Override
-	public ArgumentType _ArgumentChatFormat() {
+	public ArgumentType<?> _ArgumentChatFormat() {
 		return ArgumentChatFormat.a();
 	}
 
@@ -172,12 +200,12 @@ public class NMS_1_13_1 implements NMS {
 	}
 
 	@Override
-	public ArgumentType _ArgumentEnchantment() {
+	public ArgumentType<?> _ArgumentEnchantment() {
 		return ArgumentEnchantment.a();
 	}
 
 	@Override
-	public ArgumentType _ArgumentEntity(EntitySelector selector) {
+	public ArgumentType<?> _ArgumentEntity(EntitySelector selector) {
 		switch (selector) {
 		case MANY_ENTITIES:
 			return ArgumentEntity.b();
@@ -192,7 +220,7 @@ public class NMS_1_13_1 implements NMS {
 	}
 
 	@Override
-	public ArgumentType _ArgumentEntitySummon() {
+	public ArgumentType<?> _ArgumentEntitySummon() {
 		return ArgumentEntitySummon.a();
 	}
 
@@ -212,7 +240,7 @@ public class NMS_1_13_1 implements NMS {
 	}
 
 	@Override
-	public ArgumentType _ArgumentItemStack() {
+	public ArgumentType<?> _ArgumentItemStack() {
 		return ArgumentItemStack.a();
 	}
 
@@ -222,12 +250,12 @@ public class NMS_1_13_1 implements NMS {
 	}
 
 	@Override
-	public ArgumentType _ArgumentMinecraftKeyRegistered() {
+	public ArgumentType<?> _ArgumentMinecraftKeyRegistered() {
 		return ArgumentMinecraftKeyRegistered.a();
 	}
 
 	@Override
-	public ArgumentType _ArgumentMobEffect() {
+	public ArgumentType<?> _ArgumentMobEffect() {
 		return ArgumentMobEffect.a();
 	}
 
@@ -237,12 +265,12 @@ public class NMS_1_13_1 implements NMS {
 	}
 
 	@Override
-	public ArgumentType _ArgumentParticle() {
+	public ArgumentType<?> _ArgumentParticle() {
 		return ArgumentParticle.a();
 	}
 
 	@Override
-	public ArgumentType _ArgumentPosition() {
+	public ArgumentType<?> _ArgumentPosition() {
 		return ArgumentPosition.a();
 	}
 
@@ -252,7 +280,7 @@ public class NMS_1_13_1 implements NMS {
 	}
 
 	@Override
-	public ArgumentType _ArgumentProfile() {
+	public ArgumentType<?> _ArgumentProfile() {
 		return ArgumentProfile.a();
 	}
 
@@ -287,7 +315,7 @@ public class NMS_1_13_1 implements NMS {
 	}
 
 	@Override
-	public ArgumentType _ArgumentTag() {
+	public ArgumentType<?> _ArgumentTag() {
 		return ArgumentTag.a();
 	}
 
@@ -307,7 +335,7 @@ public class NMS_1_13_1 implements NMS {
 	}
 
 	@Override
-	public ArgumentType _ArgumentVec3() {
+	public ArgumentType<?> _ArgumentVec3() {
 		return ArgumentVec3.a();
 	}
 

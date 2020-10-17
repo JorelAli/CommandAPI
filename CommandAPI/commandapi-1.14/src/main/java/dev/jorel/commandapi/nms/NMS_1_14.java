@@ -135,6 +135,11 @@ import net.minecraft.server.v1_14_R1.Vec3D;
 public class NMS_1_14 implements NMS {
 
 	@Override
+	public CommandListenerWrapper getCLWFromCommandSender(CommandSender sender) {
+		return VanillaCommandWrapper.getListener(sender);
+	}
+	
+	@Override
 	public ArgumentType<?> _ArgumentAngle() {
 		throw new AngleArgumentException();
 	}
@@ -160,12 +165,12 @@ public class NMS_1_14 implements NMS {
 	}
 
 	@Override
-	public ArgumentType _ArgumentChatComponent() {
+	public ArgumentType<?> _ArgumentChatComponent() {
 		return ArgumentChatComponent.a();
 	}
 
 	@Override
-	public ArgumentType _ArgumentChatFormat() {
+	public ArgumentType<?> _ArgumentChatFormat() {
 		return ArgumentChatFormat.a();
 	}
 
@@ -175,12 +180,12 @@ public class NMS_1_14 implements NMS {
 	}
 
 	@Override
-	public ArgumentType _ArgumentEnchantment() {
+	public ArgumentType<?> _ArgumentEnchantment() {
 		return ArgumentEnchantment.a();
 	}
 
 	@Override
-	public ArgumentType _ArgumentEntity(EntitySelector selector) {
+	public ArgumentType<?> _ArgumentEntity(EntitySelector selector) {
 		switch (selector) {
 		case MANY_ENTITIES:
 			return ArgumentEntity.multipleEntities();
@@ -195,7 +200,7 @@ public class NMS_1_14 implements NMS {
 	}
 
 	@Override
-	public ArgumentType _ArgumentEntitySummon() {
+	public ArgumentType<?> _ArgumentEntitySummon() {
 		return ArgumentEntitySummon.a();
 	}
 
@@ -215,7 +220,7 @@ public class NMS_1_14 implements NMS {
 	}
 
 	@Override
-	public ArgumentType _ArgumentItemStack() {
+	public ArgumentType<?> _ArgumentItemStack() {
 		return ArgumentItemStack.a();
 	}
 
@@ -225,12 +230,12 @@ public class NMS_1_14 implements NMS {
 	}
 
 	@Override
-	public ArgumentType _ArgumentMinecraftKeyRegistered() {
+	public ArgumentType<?> _ArgumentMinecraftKeyRegistered() {
 		return ArgumentMinecraftKeyRegistered.a();
 	}
 
 	@Override
-	public ArgumentType _ArgumentMobEffect() {
+	public ArgumentType<?> _ArgumentMobEffect() {
 		return ArgumentMobEffect.a();
 	}
 
@@ -240,12 +245,12 @@ public class NMS_1_14 implements NMS {
 	}
 
 	@Override
-	public ArgumentType _ArgumentParticle() {
+	public ArgumentType<?> _ArgumentParticle() {
 		return ArgumentParticle.a();
 	}
 
 	@Override
-	public ArgumentType _ArgumentPosition() {
+	public ArgumentType<?> _ArgumentPosition() {
 		return ArgumentPosition.a();
 	}
 
@@ -255,7 +260,7 @@ public class NMS_1_14 implements NMS {
 	}
 
 	@Override
-	public ArgumentType _ArgumentProfile() {
+	public ArgumentType<?> _ArgumentProfile() {
 		return ArgumentProfile.a();
 	}
 
@@ -290,7 +295,7 @@ public class NMS_1_14 implements NMS {
 	}
 
 	@Override
-	public ArgumentType _ArgumentTag() {
+	public ArgumentType<?> _ArgumentTag() {
 		return ArgumentTag.a();
 	}
 
@@ -310,7 +315,7 @@ public class NMS_1_14 implements NMS {
 	}
 
 	@Override
-	public ArgumentType _ArgumentVec3() {
+	public ArgumentType<?> _ArgumentVec3() {
 		return ArgumentVec3.a();
 	}
 

@@ -66,6 +66,7 @@
 				<configuration>
 					<compilerArgs>
 						<arg>-Xlint</arg>
+						<arg>-Xlint:cast</arg>
 					</compilerArgs>
 				</configuration>
 			</plugin>
