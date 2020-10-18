@@ -128,9 +128,14 @@ public abstract class Converter {
 	 */
 	private static CommandSender mergeProxySender(ProxiedCommandSender proxySender) {
 		Class<?>[] calleeInterfaces = proxySender.getCallee().getClass().getInterfaces();
-		Class<?>[] interfaces = new Class<?>[calleeInterfaces.length + 1];
-		System.arraycopy(calleeInterfaces, 0, interfaces, 1, calleeInterfaces.length);
-		interfaces[0] = proxySender.getCallee().getClass();
+		Class<?>[] interfaces;
+		if(proxySender.getCallee().getClass().isInterface()) {
+			interfaces = new Class<?>[calleeInterfaces.length + 1];
+			System.arraycopy(calleeInterfaces, 0, interfaces, 1, calleeInterfaces.length);
+			interfaces[0] = proxySender.getCallee().getClass();
+		} else {
+			interfaces = calleeInterfaces;
+		}
 		return (CommandSender) Proxy.newProxyInstance(CommandSender.class.getClassLoader(), interfaces,
 				(p, method, args) -> method.invoke(
 						CALLER_METHODS.contains(method.getName()) ? proxySender.getCaller() : proxySender.getCaller(),
