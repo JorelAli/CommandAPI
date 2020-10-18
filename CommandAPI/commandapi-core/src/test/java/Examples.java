@@ -855,6 +855,16 @@ new CommandAPICommand("god")
     })
     .register();
 /* ANCHOR_END: permissions */
+
+/* ANCHOR: permissions2 */
+//Register the /god command with the permission node "command.god", without creating a CommandPermission
+new CommandAPICommand("god")
+    .withPermission("command.god")
+    .executesPlayer((player, args) -> {
+        player.setInvulnerable(true);
+    })
+    .register();
+/* ANCHOR_END: permissions2 */
 }
 
 {

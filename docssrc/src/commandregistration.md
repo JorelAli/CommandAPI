@@ -62,6 +62,7 @@ Similar to the other `withArguments` method, this method appends the `arguments`
 
 ```java
 CommandAPICommand withPermission(CommandPermission)
+CommandAPICommand withPermission(String)
 ```
 
 The `withPermission` method is used to assign a permission that is required to execute the command. (See [the section on permissions](permissions.html) for more info).

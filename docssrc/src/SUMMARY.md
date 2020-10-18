@@ -73,6 +73,7 @@
   - [Custom arguments](./customarguments.md)
 - [Functions & Tags](./functions.md)
   - [Setting up functions & tags](./functionsetup.md)
+  - [The SimpleFunctionWrapper class](./simplefunctionwrapper.md)
   - [The FunctionWrapper class](./functionwrapper.md)
   - [Function arguments](./functionarguments.md)
 - [Permissions](./permissions.md)

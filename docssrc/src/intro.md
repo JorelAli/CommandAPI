@@ -36,6 +36,13 @@ Using the search icon in the top left corner, you can search for anything in thi
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 5.0 \\(\rightarrow\\) 5.1:
+
+- Adds a section [10.2. The SimpleFunctionWrapper class](./simplefunctionwrapper.md) which outlines the new `SimpleFunctionWrapper` class
+- Updates the documentation for [10.3. The FunctionWrapper class](./functionwrapper.md)
+- Update the name of the package from `dev.jorel.commandapi.CommandAPIHandler.Brigadier` to `dev.jorel.commandapi.Brigadier` in section [17. Brigadier + CommandAPI](./brigadier.md#brigadier-support-functions)
+- Update the documentation for [11. Permissions](./permissions.md) stating that you can use `withPermission(String)` instead of `withPermission(CommandPermission)`
+
 ### Documentation changes 4.3 \\(\rightarrow\\) 5.0:
 
 > **Developer's Note:**

@@ -12,7 +12,7 @@ The CommandAPI has been designed in such a way that you shouldn't have to access
 
 ## Brigadier support functions
 
-The CommandAPI offers the following methods in the `dev.jorel.commandapi.CommandAPIHandler.Brigadier` class:
+The CommandAPI offers the following methods in the `dev.jorel.commandapi.Brigadier` class:
 
 ```java
 public static CommandDispatcher getCommandDispatcher();

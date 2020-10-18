@@ -2,24 +2,31 @@
 
 The CommandAPI includes the `FunctionWrapper` class which is a wrapper for Minecraft's functions. It allows you to execute the commands that are represented by the respective `.mcfunction` file.
 
+The `FunctionWrapper` class is an extension of the `SimpleFunctionWrapper` class. It is basically a `SimpleFunctionWrapper`, which has been constructed from an existing command sender when a command is used. This basically means that the command sender has already been "baked into" the `FunctionWrapper` object, allowing you to run it without having to provide a command sender.
+
 ## FunctionWrapper methods
 
 The `FunctionWrapper` class has the following methods:
 
 ```java
-class FunctionWrapper implements Keyed {
+class FunctionWrapper extends SimpleFunctionWrapper {
+
+    // Methods specific to this class
+	int run();
+	int runAs(Entity e);
+
+    // Methods inherited from SimpleFunctionWrapper
+    static SimpleFunctionWrapper getFunction(NamespacedKey key);
+    static SimpleFunctionWrapper[] getTag(NamespacedKey key);
+    static Set<NamespacedKey> getFunctions();
+    static Set<NamespacedKey> getTags();
+    int run(CommandSender sender);
     String[] getCommands();
-	void run();
-	void runAs(Entity e);
-	NamespacedKey getKey();
+    NamespacedKey getKey();
 }
 ```
 
 These methods allow you to interact with the Minecraft function that this class wraps.
-
-### `getCommands()`
-
-The `getCommands()` method returns a `String[]` that contains the list of commands that the Minecraft function "holds". In other words, running this Minecraft function is basically as simple as iterating through its commands and running them in order. The commands that this `String[]` holds are the raw strings that this function represents - in other words, it can include things such as `@p` and `~ ~ ~` instead of "filled in" values.
 
 ### `run()`
 

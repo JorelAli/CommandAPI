@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#a06ed257e7bc4ea806512d16e86d69651":[1,0,0,0,0,9,1],
 "interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#a3ba138010dc49f927525efb80e4ffb1f":[1,0,0,0,0,9,3],
 "interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#a473ae19672ffb40f838d0f8383ea4cf3":[1,0,0,0,0,9,2],
 "interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#a7d28f5a5a9f550a6c7dfc5811dac91ad":[1,0,0,0,0,9,4],
@@ -133,10 +134,10 @@ var NAVTREEINDEX4 =
 "namespacedev_1_1jorel_1_1commandapi_1_1arguments.html":[1,0,1,0,0,0],
 "namespacedev_1_1jorel_1_1commandapi_1_1exceptions.html":[0,0,0,0,0,1],
 "namespacedev_1_1jorel_1_1commandapi_1_1exceptions.html":[1,0,1,0,0,1],
-"namespacedev_1_1jorel_1_1commandapi_1_1executors.html":[1,0,1,0,0,2],
 "namespacedev_1_1jorel_1_1commandapi_1_1executors.html":[0,0,0,0,0,2],
-"namespacedev_1_1jorel_1_1commandapi_1_1wrappers.html":[0,0,0,0,0,3],
+"namespacedev_1_1jorel_1_1commandapi_1_1executors.html":[1,0,1,0,0,2],
 "namespacedev_1_1jorel_1_1commandapi_1_1wrappers.html":[1,0,1,0,0,3],
+"namespacedev_1_1jorel_1_1commandapi_1_1wrappers.html":[0,0,0,0,0,3],
 "namespaces.html":[0,0],
 "pages.html":[]
 };
