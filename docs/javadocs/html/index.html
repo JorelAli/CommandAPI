@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">CommandAPI
-   &#160;<span id="projectnumber">5.0</span>
+   &#160;<span id="projectnumber">5.1</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -203,46 +203,6 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <li>
 <b>Note: This version is incompatible with any plugin that used the CommandAPI version 4.3c or below! (See documentation for more information)</b> </li>
 <li>
-CommandAPI-Brigadier improvements: <ul>
-<li>
-Adds <code>toSuggestions()</code> to the CommandAPI-Brigadier library to convert CommandAPI suggestions into Brigadier's <code>SuggestionProvider</code> </li>
-<li>
-CommandAPI-Brigadier library methods got renamed </li>
-<li>
-Changed the way literal arguments are constructed in the CommandAPI-Brigadier library - they are no longer unnecessarily registered into the command graph </li>
-</ul>
-</li>
-<li>
-Bug fixes: <ul>
-<li>
-Fixes bug where verbose logging of permission linking was inaccurate </li>
-<li>
-Fixes bug where overriding suggestions can break when generating suggestions </li>
-<li>
-Fixes bug where <code>null</code> could appear in the suggestions list of arguments </li>
-<li>
-CommandAPI's non-verbose logging is now actually quiet </li>
-</ul>
-</li>
-<li>
-Documentation improvements: <ul>
-<li>
-Documentation code examples are now guaranteed to compile </li>
-<li>
-The list of CommandAPI arguments to Minecraft argument IDs is now in the documentation </li>
-</ul>
-</li>
-<li>
-Command conversion improvements: <ul>
-<li>
-The <code>Converter.convert()</code> method can now take varargs for arguments </li>
-<li>
-Command conversion code that was specific to the CommandAPI plugin is no longer included in the shaded version of the CommandAPI </li>
-<li>
-Command conversion in the configuration for server owners can now let server owners apply their own command argument implementations! </li>
-</ul>
-</li>
-<li>
 API improvements: <ul>
 <li>
 The <code>.withArguments</code> method can now take varargs </li>
@@ -258,6 +218,52 @@ Adds subcommands </li>
 Adds <code>AngleArgument</code> </li>
 <li>
 Arguments can now be omitted from the <code>Object[] args</code> using the method <code>.setListed()</code>. This means Literal arguments can now be "present" in the arguments if desired. </li>
+<li>
+Remove lots of reflection calls, so start up should be a little faster </li>
+<li>
+Bug fixes: <ul>
+<li>
+Fixes bug where verbose logging of permission linking was inaccurate </li>
+<li>
+Fixes bug where overriding suggestions can break when generating suggestions </li>
+<li>
+Fixes bug where <code>null</code> could appear in the suggestions list of arguments </li>
+<li>
+CommandAPI's non-verbose logging is now actually quiet </li>
+<li>
+Fixes bug where converted commands couldn't be run from the console </li>
+<li>
+Fixes bug where <code>LongArgument</code> wouldn't let you use long values as minimum or maximum </li>
+</ul>
+</li>
+<li>
+Command conversion improvements: <ul>
+<li>
+The <code>Converter.convert()</code> method can now take varargs for arguments </li>
+<li>
+Command conversion code that was specific to the CommandAPI plugin is no longer included in the shaded version of the CommandAPI </li>
+<li>
+Command conversion in the configuration for server owners can now let server owners apply their own command argument implementations! </li>
+</ul>
+</li>
+<li>
+Documentation improvements: <ul>
+<li>
+Documentation code examples are now guaranteed to compile </li>
+<li>
+The list of CommandAPI arguments to Minecraft argument IDs is now in the documentation </li>
+</ul>
+</li>
+<li>
+CommandAPI-Brigadier improvements: <ul>
+<li>
+Adds <code>toSuggestions()</code> to the CommandAPI-Brigadier library to convert CommandAPI suggestions into Brigadier's <code>SuggestionProvider</code> </li>
+<li>
+CommandAPI-Brigadier library methods got renamed </li>
+<li>
+Changed the way literal arguments are constructed in the CommandAPI-Brigadier library - they are no longer unnecessarily registered into the command graph </li>
+</ul>
+</li>
 </ul>
 <p><b>4.3c</b> </p>
 <p>October 2020 </p>
@@ -690,7 +696,7 @@ Initial release </li>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Oct 13 2020 21:40:49 for CommandAPI by
+    <li class="footer">Generated on Sun Oct 18 2020 14:51:08 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

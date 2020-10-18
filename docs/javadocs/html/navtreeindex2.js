@@ -6,6 +6,8 @@ var NAVTREEINDEX2 =
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#aadc3ac7ac024a5d25f14de72c24fc957":[1,0,1,0,0,0,2,2],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#acc39107f27b6c493c9ad1d5b04be36dd":[1,0,1,0,0,0,2,10],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#ad9fe9ad15b0af457f58c9ff2aff5161b":[1,0,1,0,0,0,2,8],
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#adcaa4e187c665d35020fc681b8750591":[1,0,1,0,0,0,2,6],
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#ae9a53aa98c3776326c063a9f8733979b":[1,0,1,0,0,0,2,19],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#af19355b889385c173107290e6e2d045e":[1,0,1,0,0,0,2,16],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_axis_argument.html":[1,0,1,0,0,0,3],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_axis_argument.html#a4080a75c60a88300c1777eedbaa9d214":[1,0,1,0,0,0,3,2],
@@ -247,7 +249,5 @@ var NAVTREEINDEX2 =
 "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_empty_executor_exception.html#a72c0e9252c3da0a2528edf8b2d9968c3":[1,0,1,0,0,1,4,0],
 "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_environment_argument_exception.html":[1,0,1,0,0,1,5],
 "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_environment_argument_exception.html#ad07112c03b687c4d17bf085d05433373":[1,0,1,0,0,1,5,0],
-"classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_greedy_argument_exception.html":[1,0,1,0,0,1,6],
-"classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_greedy_argument_exception.html#a2cbc848c849d09ab848e302fb28f6b48":[1,0,1,0,0,1,6,0],
-"classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_invalid_command_name_exception.html":[1,0,1,0,0,1,7]
+"classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_greedy_argument_exception.html":[1,0,1,0,0,1,6]
 };
