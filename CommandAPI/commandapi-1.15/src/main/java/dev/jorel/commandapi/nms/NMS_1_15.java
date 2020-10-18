@@ -7,7 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.function.ToIntBiFunction;
@@ -153,8 +154,8 @@ public class NMS_1_15 implements NMS<CommandListenerWrapper> {
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public List<NamespacedKey> getFunctions() {
-		List<NamespacedKey> functions = new ArrayList<>();
+	public Set<NamespacedKey> getFunctions() {
+		Set<NamespacedKey> functions = new HashSet<>();
 		for(MinecraftKey key : ((CraftServer) Bukkit.getServer()).getServer().getFunctionData().c().keySet()) {
 			functions.add(new NamespacedKey(key.getNamespace(), key.getKey()));
 		}
@@ -163,8 +164,8 @@ public class NMS_1_15 implements NMS<CommandListenerWrapper> {
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public List<NamespacedKey> getTags() {
-		List<NamespacedKey> functions = new ArrayList<>();
+	public Set<NamespacedKey> getTags() {
+		Set<NamespacedKey> functions = new HashSet<>();
 		for(MinecraftKey key : ((CraftServer) Bukkit.getServer()).getServer().getFunctionData().h().a()) {
 			functions.add(new NamespacedKey(key.getNamespace(), key.getKey()));
 		}

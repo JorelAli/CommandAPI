@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.EnumSet;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
 
@@ -222,8 +222,8 @@ public interface NMS<CommandListenerWrapper> {
 	
 	SimpleFunctionWrapper[] getTag(NamespacedKey key);
 	SimpleFunctionWrapper getFunction(NamespacedKey key);
-	List<NamespacedKey> getFunctions();
-	List<NamespacedKey> getTags();
+	Set<NamespacedKey> getFunctions();
+	Set<NamespacedKey> getTags();
 	
 	
 }

@@ -1,6 +1,6 @@
 package dev.jorel.commandapi.wrappers;
 
-import java.util.List;
+import java.util.Set;
 import java.util.function.ToIntFunction;
 
 import org.bukkit.Keyed;
@@ -37,24 +37,47 @@ public class SimpleFunctionWrapper implements Keyed {
 		this.internalCommands = functionWrapper.internalCommands;
 	}
 	
+	/**
+	 * Returns a SimpleFunctionWrapper[], which is an array of all of the functions that this tag contains 
+	 * @param key a NamespacedKey representation of the tag. This key should not include a # symbol.
+	 * @return a SimpleFunctionWrapper[], which is an array of all of the functions that this tag contains
+	 */
 	public static SimpleFunctionWrapper[] getTag(NamespacedKey key) {
 		return CommandAPIHandler.getInstance().getNMS().getTag(key);
 	}
 	
+	/**
+	 * Returns a SimpleFunctionWrapper representation of the Minecraft function for the provided NamespacedKey
+	 * @param key a NamespacedKey representation of the function
+	 * @return a SimpleFunctionWrapper representation of the Minecraft function for the provided NamespacedKey
+	 */
 	public static SimpleFunctionWrapper getFunction(NamespacedKey key) {
 		return CommandAPIHandler.getInstance().getNMS().getFunction(key);
 	}
 	
-	public static List<NamespacedKey> getFunctions() {
+	/**
+	 * Returns a set of all functions that the server has registered
+	 * @return a set of all functions that the server has registered
+	 */
+	public static Set<NamespacedKey> getFunctions() {
 		return CommandAPIHandler.getInstance().getNMS().getFunctions();
 	}
 	
-	public static List<NamespacedKey> getTags() {
+	/**
+	 * Returns a set of all tags that the server has registered
+	 * @return a set of all tags that the server has registered
+	 */
+	public static Set<NamespacedKey> getTags() {
 		return CommandAPIHandler.getInstance().getNMS().getTags();
 	}
 	
-	public void run(CommandSender sender) {
-		runInternal(CommandAPIHandler.getInstance().getNMS().getCLWFromCommandSender(sender));
+	/**
+	 * Runs this function with a given CommandSender
+	 * @param sender the sender to use to run this function
+	 * @return the result of running this command
+	 */
+	public int run(CommandSender sender) {
+		return runInternal(CommandAPIHandler.getInstance().getNMS().getCLWFromCommandSender(sender));
 	}
 	
 	/**
@@ -65,8 +88,8 @@ public class SimpleFunctionWrapper implements Keyed {
 		return this.internalCommands;
 	}
 	
-	void runInternal(Object clw) {
-		functionExecutor.applyAsInt(clw);
+	int runInternal(Object clw) {
+		return functionExecutor.applyAsInt(clw);
 	}
 
 	/**
