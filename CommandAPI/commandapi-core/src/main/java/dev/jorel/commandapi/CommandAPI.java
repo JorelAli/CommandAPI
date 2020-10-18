@@ -79,7 +79,7 @@ public abstract class CommandAPI {
 	public static void onLoad(boolean verbose) {
 		if(!loaded) {
 			CommandAPI.config = new Config(verbose);
-			CommandAPIHandler.checkDependencies();
+			CommandAPIHandler.getInstance().checkDependencies();
 			loaded = true;
 		} else {
 			getLog().severe("You've tried to call the CommandAPI's onLoad() method more than once!");
@@ -97,10 +97,10 @@ public abstract class CommandAPI {
 			canRegister = false;
 			
 			//Sort out permissions after the server has finished registering them all
-			CommandAPIHandler.fixPermissions();
+			CommandAPIHandler.getInstance().fixPermissions();
 			
 			try {
-				CommandAPIHandler.getNMS().reloadDataPacks();
+				CommandAPIHandler.getInstance().getNMS().reloadDataPacks();
 			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 				e.printStackTrace();
 			}
@@ -109,7 +109,7 @@ public abstract class CommandAPI {
 		final Listener playerJoinListener = new Listener() {
 			@EventHandler(priority = EventPriority.MONITOR)
 			public void onPlayerJoin(PlayerJoinEvent e) {
-				CommandAPIHandler.getNMS().resendPackets(e.getPlayer());
+				CommandAPIHandler.getInstance().getNMS().resendPackets(e.getPlayer());
 			}
 		};
         
@@ -121,7 +121,7 @@ public abstract class CommandAPI {
 	 * @param player the player whos requirements to update
 	 */
 	public static void updateRequirements(Player player) {
-		CommandAPIHandler.getNMS().resendPackets(player);
+		CommandAPIHandler.getInstance().getNMS().resendPackets(player);
 	}
 	
 	/**
@@ -146,7 +146,7 @@ public abstract class CommandAPI {
 	 * @param command the name of the command to unregister
 	 */
 	public static void unregister(String command) {
-		CommandAPIHandler.unregister(command, false);
+		CommandAPIHandler.getInstance().unregister(command, false);
 	}
 	
 	/**
@@ -160,6 +160,6 @@ public abstract class CommandAPI {
 		if(!canRegister()) {
 			getLog().warning("Unexpected unregistering of /" + command + ", as server is loaded! Unregistering anyway, but this can lead to unstable results!");
 		}
-		CommandAPIHandler.unregister(command, force);
+		CommandAPIHandler.getInstance().unregister(command, force);
 	}
 }

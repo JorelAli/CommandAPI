@@ -16,7 +16,7 @@ public class AxisArgument extends SafeOverrideableArgument<EnumSet<Axis>> {
 	 * @param nodeName the name of the node for argument
 	 */
 	public AxisArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getNMS()._ArgumentAxis(), e -> e.stream().map(Axis::name).map(String::toLowerCase).reduce(String::concat).get());
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentAxis(), e -> e.stream().map(Axis::name).map(String::toLowerCase).reduce(String::concat).get());
 	}
 
 	@Override

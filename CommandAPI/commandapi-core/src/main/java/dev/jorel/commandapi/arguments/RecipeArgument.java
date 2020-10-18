@@ -15,7 +15,7 @@ public class RecipeArgument extends SafeOverrideableArgument<Recipe> implements 
 	 * @param nodeName the name of the node for this argument
 	 */
 	public RecipeArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered(), fromKey((Recipe r) -> ((Keyed) r).getKey()));
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered(), fromKey((Recipe r) -> ((Keyed) r).getKey()));
 	}
 
 	@Override

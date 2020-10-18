@@ -16,7 +16,7 @@ public class BiomeArgument extends SafeOverrideableArgument<Biome> implements IC
 	 * @param nodeName the name of the node for argument
 	 */
 	public BiomeArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getNMS()._ArgumentMinecraftKeyRegistered(),((Function<Biome, String>) Biome::name).andThen(String::toLowerCase));
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered(),((Function<Biome, String>) Biome::name).andThen(String::toLowerCase));
 	}
 
 	@Override

@@ -14,7 +14,7 @@ public class PotionEffectArgument extends SafeOverrideableArgument<PotionEffectT
 	 * @param nodeName the name of the node for this argument
 	 */
 	public PotionEffectArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getNMS()._ArgumentMobEffect(), CommandAPIHandler.getNMS()::convert);
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMobEffect(), CommandAPIHandler.getInstance().getNMS()::convert);
 	}
 
 	@Override

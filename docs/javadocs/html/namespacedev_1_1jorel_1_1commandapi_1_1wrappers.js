@@ -8,5 +8,6 @@ var namespacedev_1_1jorel_1_1commandapi_1_1wrappers =
     [ "NativeProxyCommandSender", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_native_proxy_command_sender.html", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_native_proxy_command_sender" ],
     [ "Rotation", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_rotation.html", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_rotation" ],
     [ "ScoreboardSlot", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_scoreboard_slot.html", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_scoreboard_slot" ],
+    [ "SimpleFunctionWrapper", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper" ],
     [ "Time", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_time.html", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_time" ]
 ];

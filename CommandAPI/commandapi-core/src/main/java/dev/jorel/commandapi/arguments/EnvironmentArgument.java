@@ -16,7 +16,7 @@ public class EnvironmentArgument extends SafeOverrideableArgument<Environment> {
 	 * @param nodeName the name of the node for this argument
 	 */
 	public EnvironmentArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getNMS()._ArgumentDimension(), ((Function<Environment, String>) Environment::name).andThen(String::toLowerCase));
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentDimension(), ((Function<Environment, String>) Environment::name).andThen(String::toLowerCase));
 	}
 	
 	@Override

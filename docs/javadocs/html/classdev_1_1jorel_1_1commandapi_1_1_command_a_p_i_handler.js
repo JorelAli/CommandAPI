@@ -1,6 +1,6 @@
 var classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler =
 [
-    [ "Brigadier", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier" ],
-    [ "getField", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a368112525c9b4db1ddc753071cf67bfc", null ],
-    [ "getNMS", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a13c7ca774a391f611002acc092274966", null ]
+    [ "getField", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#af97b5fe94c3644242586c62d144a0455", null ],
+    [ "getInstance", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a8f21a4e8fec1297ff259df57e01265e6", null ],
+    [ "getNMS", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a2bd4e2c6f39c28e0ff581b9364a1aa01", null ]
 ];

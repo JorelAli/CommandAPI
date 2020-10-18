@@ -20,6 +20,7 @@ var classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command =
     [ "withArguments", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ad0b8b38fb5fd66c24e34861869b6a8f0", null ],
     [ "withArguments", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a5231b4dae198d8954befc95bea391e55", null ],
     [ "withPermission", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ae5a4bf1048697f05ab049a7875b95538", null ],
+    [ "withPermission", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a2c37999d136ec5ef56eb1549c133e393", null ],
     [ "withRequirement", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a19269b7ad0a9a3c252d48d35bbe5a14f", null ],
     [ "withSubcommand", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ae96b5e2ad2f71bc1cdd15ca223095919", null ]
 ];

@@ -16,7 +16,7 @@ public class AngleArgument extends SafeOverrideableArgument<Float> {
 	 * @param nodeName the name of the node for argument
 	 */
 	public AngleArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getNMS()._ArgumentAngle(), String::valueOf);
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentAngle(), String::valueOf);
 	}
 
 	@Override

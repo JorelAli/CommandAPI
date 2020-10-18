@@ -4,12 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
 
 import org.bukkit.Axis;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World.Environment;
@@ -45,9 +47,10 @@ import dev.jorel.commandapi.wrappers.Location2D;
 import dev.jorel.commandapi.wrappers.MathOperation;
 import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
+import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.md_5.bungee.api.chat.BaseComponent;
 
-public interface NMS {
+public interface NMS<CommandListenerWrapper> {
 	
 	/**
 	 * Resends the command dispatcher's set of commands to a player.
@@ -70,31 +73,38 @@ public interface NMS {
 	 * @param dispatcher The Brigadier CommandDispatcher
 	 * @throws IOException When the file fails to be written to
 	 */
-	void createDispatcherFile(File file, CommandDispatcher<?> dispatcher) throws IOException;
+	void createDispatcherFile(File file, CommandDispatcher<CommandListenerWrapper> dispatcher) throws IOException;
 	
 	/**
 	 * Retrieve a specific NMS implemented SuggestionProvider
 	 * @param provider The SuggestionProvider type to retrieve
 	 * @return A SuggestionProvider that matches the SuggestionProviders input
 	 */
-	SuggestionProvider<?> getSuggestionProvider(SuggestionProviders provider);
+	SuggestionProvider<CommandListenerWrapper> getSuggestionProvider(SuggestionProviders provider);
 	
 	/**
 	 * Retrieves a CommandSender, given some CommandContext. This
 	 * method should handle Proxied CommandSenders for entities
 	 * if a Proxy is being used.
-	 * @param cmdCtx The CommandContext for a given command
+	 * @param cmdCtx The CommandContext<CommandListenerWrapper> for a given command
 	 * @param forceNative whether or not the CommandSender should be a NativeProxyCommandSender or not
 	 * @return A CommandSender instance (such as a ProxiedNativeCommandSender or Player)
 	 */
-	CommandSender getSenderForCommand(CommandContext<?> cmdCtx, boolean forceNative);
+	CommandSender getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean forceNative);
 	
 	/**
 	 * Returns a CommandSender of a given CommandListenerWrapper object
 	 * @param clw The CommandListenerWrapper object
 	 * @return A CommandSender (not proxied) from the command listener wrapper
 	 */
-	CommandSender getCommandSenderForCLW(Object clw);
+	CommandSender getCommandSenderForCLW(CommandListenerWrapper clw);
+	
+	/**
+	 * Converts a CommandSender into a CLW
+	 * @param sender the command sender to convert
+	 * @return a CLW.
+	 */
+	CommandListenerWrapper getCLWFromCommandSender(CommandSender sender);
 
 	/**
 	 * Given the MinecraftServer instance, returns the Brigadier
@@ -102,7 +112,7 @@ public interface NMS {
 	 * @param server The NMS MinecraftServer instance
 	 * @return A Brigadier CommandDispatcher
 	 */
-	CommandDispatcher<?> getBrigadierDispatcher();
+	CommandDispatcher<CommandListenerWrapper> getBrigadierDispatcher();
 
 	/**
 	 * Checks if a Command is an instance of the OBC VanillaCommandWrapper
@@ -127,47 +137,47 @@ public interface NMS {
 	default void reloadDataPacks() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {};
 	
 	/** Argument implementations with CommandSyntaxExceptions */
-	Advancement          getAdvancement(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
-	Predicate<Block>     getBlockPredicate(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
-	BaseComponent[]      getChat(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException; 
-	Environment          getDimension(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
-	ItemStack            getItemStack(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
-	Object               getEntitySelector(CommandContext<?> cmdCtx, String key, EntitySelector selector) throws CommandSyntaxException;
-	EntityType           getEntityType(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
-	FunctionWrapper[]    getFunction(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
-	Predicate<ItemStack> getItemStackPredicate(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
-	String               getKeyedAsString(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
-	Location             getLocation(CommandContext<?> cmdCtx, String key, LocationType locationType) throws CommandSyntaxException;
-	Location2D           getLocation2D(CommandContext<?> cmdCtx, String key, LocationType locationType2d) throws CommandSyntaxException;
-	String               getObjective(CommandContext<?> cmdCtx, String key) throws IllegalArgumentException, CommandSyntaxException;
-	Player               getPlayer(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
-	PotionEffectType     getPotionEffect(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
-	Recipe       		 getRecipe(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException; 
-	Collection<String>   getScoreHolderMultiple(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
-	String               getScoreHolderSingle(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
-	String               getTeam(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
-	MathOperation        getMathOperation(CommandContext<?> cmdCtx, String key) throws CommandSyntaxException;
+	Advancement          getAdvancement(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	Predicate<Block>     getBlockPredicate(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	BaseComponent[]      getChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException; 
+	Environment          getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	ItemStack            getItemStack(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	Object               getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String key, EntitySelector selector) throws CommandSyntaxException;
+	EntityType           getEntityType(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	FunctionWrapper[]    getFunction(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	Predicate<ItemStack> getItemStackPredicate(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	String               getKeyedAsString(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	Location             getLocation(CommandContext<CommandListenerWrapper> cmdCtx, String key, LocationType locationType) throws CommandSyntaxException;
+	Location2D           getLocation2D(CommandContext<CommandListenerWrapper> cmdCtx, String key, LocationType locationType2d) throws CommandSyntaxException;
+	String               getObjective(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws IllegalArgumentException, CommandSyntaxException;
+	Player               getPlayer(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	PotionEffectType     getPotionEffect(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	Recipe       		 getRecipe(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException; 
+	Collection<String>   getScoreHolderMultiple(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	String               getScoreHolderSingle(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	String               getTeam(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	MathOperation        getMathOperation(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
                          
 
 	/** Argument implementations without CommandSyntaxExceptions */
-	float                getAngle(CommandContext<?> cmdCtx, String key);
-	EnumSet<Axis>        getAxis(CommandContext<?> cmdCtx, String key);
-	Biome                getBiome(CommandContext<?> cmdCtx, String key);
-	BlockData            getBlockState(CommandContext<?> cmdCtx, String key);
-	ChatColor            getChatColor(CommandContext<?> cmdCtx, String key);
-	BaseComponent[]      getChatComponent(CommandContext<?> cmdCtx, String key);
-	Enchantment          getEnchantment(CommandContext<?> cmdCtx, String key);
-	FloatRange           getFloatRange(CommandContext<?> cmdCtx, String key);
-	IntegerRange         getIntRange(CommandContext<?> cmdCtx, String key);
-	LootTable            getLootTable(CommandContext<?> cmdCtx, String key);
-	NBTContainer         getNBTCompound(CommandContext<?> cmdCtx, String key);
-	String               getObjectiveCriteria(CommandContext<?> cmdCtx, String key);
-	Particle             getParticle(CommandContext<?> cmdCtx, String key);
-	Rotation             getRotation(CommandContext<?> cmdCtx, String key);
-	ScoreboardSlot       getScoreboardSlot(CommandContext<?> cmdCtx, String key);
-	Sound                getSound(CommandContext<?> cmdCtx, String key);
-	int                  getTime(CommandContext<?> cmdCtx, String key);
-	UUID                 getUUID(CommandContext<?> cmdCtx, String key);
+	float                getAngle(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	EnumSet<Axis>        getAxis(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	Biome                getBiome(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	BlockData            getBlockState(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	ChatColor            getChatColor(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	BaseComponent[]      getChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	Enchantment          getEnchantment(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	FloatRange           getFloatRange(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	IntegerRange         getIntRange(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	LootTable            getLootTable(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	NBTContainer         getNBTCompound(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	String               getObjectiveCriteria(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	Particle             getParticle(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	Rotation             getRotation(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	ScoreboardSlot       getScoreboardSlot(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	Sound                getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	int                  getTime(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	UUID                 getUUID(CommandContext<CommandListenerWrapper> cmdCtx, String key);
                          
 	/** Argument types */
 	ArgumentType<?> _ArgumentAngle();
@@ -209,5 +219,11 @@ public interface NMS {
 	String convert(Particle particle);
 	String convert(PotionEffectType potion);
 	String convert(Sound sound);
+	
+	SimpleFunctionWrapper[] getTag(NamespacedKey key);
+	SimpleFunctionWrapper getFunction(NamespacedKey key);
+	Set<NamespacedKey> getFunctions();
+	Set<NamespacedKey> getTags();
+	
 	
 }

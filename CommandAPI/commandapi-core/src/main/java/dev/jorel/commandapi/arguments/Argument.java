@@ -17,7 +17,6 @@ import dev.jorel.commandapi.StringTooltip;
 
 /**
  * The core abstract class for Command API arguments
- * @param <S>
  */
 public abstract class Argument implements IOverrideableSuggestions {
 
@@ -60,9 +59,8 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 *            the code
 	 * @return the NMS or brigadier type for this argument
 	 */
-	@SuppressWarnings("unchecked")
-	public final <T> ArgumentType<T> getRawType() {
-		return (ArgumentType<T>) this.rawType;
+	public final ArgumentType<?> getRawType() {
+		return this.rawType;
 	}
 	
 	/**
@@ -216,6 +214,17 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 */
 	public final Argument withPermission(CommandPermission permission) {
 		this.permission = permission;
+		return this;
+	}
+	
+	/**
+	 * Assigns the given permission as a requirement to execute this command.
+	 * 
+	 * @param permission the permission required to execute this command
+	 * @return this current argument
+	 */
+	public final Argument withPermission(String permission) {
+		this.permission = CommandPermission.fromString(permission);
 		return this;
 	}
 

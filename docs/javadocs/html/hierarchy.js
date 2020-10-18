@@ -28,7 +28,7 @@ var hierarchy =
       [ "com.mojang.brigadier.arguments.StringArgumentType", "classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_string_argument_type.html", null ]
     ] ],
     [ "com.mojang.brigadier.arguments.ArgumentType<?>", "interfacecom_1_1mojang_1_1brigadier_1_1arguments_1_1_argument_type.html", null ],
-    [ "dev.jorel.commandapi.CommandAPIHandler.Brigadier", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html", null ],
+    [ "dev.jorel.commandapi.Brigadier", "classdev_1_1jorel_1_1commandapi_1_1_brigadier.html", null ],
     [ "com.mojang.brigadier.exceptions.BuiltInExceptionProvider", "interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exception_provider.html", [
       [ "com.mojang.brigadier.exceptions.BuiltInExceptions", "classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exceptions.html", null ]
     ] ],
@@ -36,10 +36,12 @@ var hierarchy =
     [ "dev.jorel.commandapi.CommandAPI", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html", null ],
     [ "dev.jorel.commandapi.arguments.CommandAPIArgumentType", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html", null ],
     [ "dev.jorel.commandapi.CommandAPICommand", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html", null ],
-    [ "dev.jorel.commandapi.CommandAPIHandler", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html", null ],
+    [ "dev.jorel.commandapi.CommandAPIHandler< CommandListenerWrapper >", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html", null ],
+    [ "dev.jorel.commandapi.CommandAPIHandler<?>", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html", null ],
     [ "com.mojang.brigadier.context.CommandContext< S >", "classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context.html", null ],
     [ "com.mojang.brigadier.context.CommandContextBuilder< S >", "classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context_builder.html", null ],
     [ "com.mojang.brigadier.CommandDispatcher< S >", "classcom_1_1mojang_1_1brigadier_1_1_command_dispatcher.html", null ],
+    [ "com.mojang.brigadier.CommandDispatcher< CommandListenerWrapper >", "classcom_1_1mojang_1_1brigadier_1_1_command_dispatcher.html", null ],
     [ "com.mojang.brigadier.exceptions.CommandExceptionType", "interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_exception_type.html", [
       [ "com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType", "classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_dynamic2_command_exception_type.html", null ],
       [ "com.mojang.brigadier.exceptions.Dynamic3CommandExceptionType", "classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_dynamic3_command_exception_type.html", null ],
@@ -294,7 +296,9 @@ var hierarchy =
     [ "dev.jorel.commandapi.wrappers.Time", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_time.html", null ],
     [ "dev.jorel.commandapi.Tooltip< S >", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html", null ],
     [ "Keyed", null, [
-      [ "dev.jorel.commandapi.wrappers.FunctionWrapper", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html", null ]
+      [ "dev.jorel.commandapi.wrappers.SimpleFunctionWrapper", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html", [
+        [ "dev.jorel.commandapi.wrappers.FunctionWrapper", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html", null ]
+      ] ]
     ] ],
     [ "Location", null, [
       [ "dev.jorel.commandapi.wrappers.Location2D", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_location2_d.html", null ]

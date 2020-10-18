@@ -16,7 +16,7 @@ public class PlayerArgument extends SafeOverrideableArgument<Player> {
 	 * @param nodeName the name of the node for this argument
 	 */
 	public PlayerArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getNMS()._ArgumentProfile(), Player::getName);
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentProfile(), Player::getName);
 	}
 
 	@Override

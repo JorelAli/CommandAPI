@@ -57,9 +57,9 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import de.tr7zw.nbtapi.NBTContainer;
+import dev.jorel.commandapi.Brigadier;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.CommandAPIHandler.Brigadier;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.Converter;
 import dev.jorel.commandapi.IStringTooltip;
@@ -855,6 +855,16 @@ new CommandAPICommand("god")
     })
     .register();
 /* ANCHOR_END: permissions */
+
+/* ANCHOR: permissions2 */
+//Register the /god command with the permission node "command.god", without creating a CommandPermission
+new CommandAPICommand("god")
+    .withPermission("command.god")
+    .executesPlayer((player, args) -> {
+        player.setInvulnerable(true);
+    })
+    .register();
+/* ANCHOR_END: permissions2 */
 }
 
 {

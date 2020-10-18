@@ -16,7 +16,7 @@ public class ChatArgument extends Argument implements IGreedyArgument {
 	 * @param nodeName the name of the node for argument
 	 */
 	public ChatArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getNMS()._ArgumentChat());
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentChat());
 		
 		try {
 			Class.forName("org.spigotmc.SpigotConfig");

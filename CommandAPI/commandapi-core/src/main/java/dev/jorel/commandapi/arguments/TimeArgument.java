@@ -13,7 +13,7 @@ public class TimeArgument extends SafeOverrideableArgument<Time> {
 	 * @param nodeName the name of the node for this argument 
 	 */
 	public TimeArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getNMS()._ArgumentTime(), Time::toString);
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentTime(), Time::toString);
 	}
 
 	@Override

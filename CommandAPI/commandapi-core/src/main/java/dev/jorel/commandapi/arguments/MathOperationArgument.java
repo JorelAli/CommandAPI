@@ -13,7 +13,7 @@ public class MathOperationArgument extends SafeOverrideableArgument<MathOperatio
 	 * @param nodeName the name of the node for this argument
 	 */
 	public MathOperationArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getNMS()._ArgumentMathOperation(), MathOperation::toString);
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMathOperation(), MathOperation::toString);
 	}
 	
 	@Override

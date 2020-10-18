@@ -18,6 +18,13 @@ sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" CommandAPI/c
 sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" CommandAPI/commandapi-shade/pom.xml
 sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" CommandAPI/commandapi-vh/pom.xml
 sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" CommandAPI/pom.xml
+
+sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" docssrc/src/shading.md
+sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" docssrc/src/quickstart.md
+
+sed -i "s/dev\.jorel:commandapi-shade:$oldVer/dev\.jorel:commandapi-shade:$newVer/" docssrc/src/shading.md
+sed -i "s/dev\.jorel:commandapi-core:$oldVer/dev\.jorel:commandapi-core:$newVer/" docssrc/src/quickstart.md
+
 sed -i "s/version: $oldVer/version: $newVer/" CommandAPI/commandapi-plugin/src/main/resources/plugin.yml
 
 sed -i "s/PROJECT_NUMBER         = $oldVer/PROJECT_NUMBER         = $newVer/" Doxyfile

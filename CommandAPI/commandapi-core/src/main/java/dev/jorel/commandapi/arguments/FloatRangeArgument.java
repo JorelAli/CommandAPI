@@ -13,7 +13,7 @@ public class FloatRangeArgument extends SafeOverrideableArgument<FloatRange> {
 	 * @param nodeName the name of the node for this argument
 	 */
 	public FloatRangeArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getNMS()._ArgumentFloatRange(), FloatRange::toString);
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentFloatRange(), FloatRange::toString);
 	}
 
 	@Override

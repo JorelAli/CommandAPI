@@ -8,13 +8,18 @@ Permissions let you control which players are allowed to execute which commands.
 | `CommandPermission.NONE`                        | Anyone can execute the command                             |
 | `CommandPermission.fromString("my.permission")` | Requires a specific permission node to execute the command |
 
-In addition to the `CommandPermission` class, there are two different ways to assign permissions (compared to the simple `CommandSender.hasPermission()` method that is provided by Bukkit).
+In addition to the `CommandPermission` class, there are two different ways to assign permissions (compared to the simple `CommandSender.hasPermission()` method that is provided by Bukkit), by using the `withPermission` method for arguments or for commands.
+
+The `withPermission` method can take two values:
+
+- A `CommandPermission`, which represents a permission such as `OP` or `NONE`
+- A `String`, which will be converted automatically to a `CommandPermission` using `CommandPermission.fromString()`
 
 -----
 
 ## Adding permissions to commands
 
-To add a permission to a command, you can use the `withPermission(CommandPermission)` method _when declaring a command_.
+To add a permission to a command, you can use the `withPermission(CommandPermission)` or `withPermission(String)` method _when declaring a command_.
 
 <div class="example">
 
@@ -24,6 +29,11 @@ Say we created a command `/god` that sets a player as being invulnerable. Since 
 
 ```java
 {{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:permissions}}
+```
+
+As stated above, it is possible to assign a permission using a String instead of using `CommandPermission.fromString()`:
+```java
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:permissions2}}
 ```
 
 </div>

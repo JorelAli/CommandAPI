@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.18"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>CommandAPI: dev.jorel.commandapi.CommandAPIHandler Class Reference</title>
+<title>CommandAPI: dev.jorel.commandapi.CommandAPIHandler&lt; CommandListenerWrapper &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">CommandAPI
-   &#160;<span id="projectnumber">5.0</span>
+   &#160;<span id="projectnumber">5.1</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -85,47 +85,44 @@ $(document).ready(function(){initNavTree('classdev_1_1jorel_1_1commandapi_1_1_co
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">dev.jorel.commandapi.CommandAPIHandler Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
+<div class="title">dev.jorel.commandapi.CommandAPIHandler&lt; CommandListenerWrapper &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
 <p>Handles the main backend of the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a>.  
  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#details">More...</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html">Brigadier</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html" title="The Brigadier class is used to access some of the internals of the CommandAPI so you can use the Comm...">Brigadier</a> class is used to access some of the internals of the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> so you can use the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> alongside Mojang's com.mojang.brigadier package.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_1_1_brigadier.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a2bd4e2c6f39c28e0ff581b9364a1aa01"><td class="memItemLeft" align="right" valign="top">NMS&lt; CommandListenerWrapper &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a2bd4e2c6f39c28e0ff581b9364a1aa01">getNMS</a> ()</td></tr>
+<tr class="memdesc:a2bd4e2c6f39c28e0ff581b9364a1aa01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an instance of NMS.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a2bd4e2c6f39c28e0ff581b9364a1aa01">More...</a><br /></td></tr>
+<tr class="separator:a2bd4e2c6f39c28e0ff581b9364a1aa01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af97b5fe94c3644242586c62d144a0455"><td class="memItemLeft" align="right" valign="top">Field&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#af97b5fe94c3644242586c62d144a0455">getField</a> (Class&lt;?&gt; clazz, String name)</td></tr>
+<tr class="memdesc:af97b5fe94c3644242586c62d144a0455"><td class="mdescLeft">&#160;</td><td class="mdescRight">Caches a field using reflection if it is not already cached, then return the field of a given class.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#af97b5fe94c3644242586c62d144a0455">More...</a><br /></td></tr>
+<tr class="separator:af97b5fe94c3644242586c62d144a0455"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a13c7ca774a391f611002acc092274966"><td class="memItemLeft" align="right" valign="top">static NMS&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a13c7ca774a391f611002acc092274966">getNMS</a> ()</td></tr>
-<tr class="memdesc:a13c7ca774a391f611002acc092274966"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an instance of NMS.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a13c7ca774a391f611002acc092274966">More...</a><br /></td></tr>
-<tr class="separator:a13c7ca774a391f611002acc092274966"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a368112525c9b4db1ddc753071cf67bfc"><td class="memItemLeft" align="right" valign="top">static Field&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a368112525c9b4db1ddc753071cf67bfc">getField</a> (Class&lt;?&gt; clazz, String name)</td></tr>
-<tr class="memdesc:a368112525c9b4db1ddc753071cf67bfc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Caches a field using reflection if it is not already cached, then return the field of a given class.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a368112525c9b4db1ddc753071cf67bfc">More...</a><br /></td></tr>
-<tr class="separator:a368112525c9b4db1ddc753071cf67bfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f21a4e8fec1297ff259df57e01265e6"><td class="memItemLeft" align="right" valign="top"><a id="a8f21a4e8fec1297ff259df57e01265e6"></a>
+static <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html">CommandAPIHandler</a>&lt;?&gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getInstance</b> ()</td></tr>
+<tr class="separator:a8f21a4e8fec1297ff259df57e01265e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Handles the main backend of the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a>. </p>
 <p>This constructs brigadier Command objects, applies and generates arguments and handles suggestions. This also handles permission registration for Bukkit, interactions for NMS and the registration and unregistration of commands. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a368112525c9b4db1ddc753071cf67bfc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a368112525c9b4db1ddc753071cf67bfc">&#9670;&nbsp;</a></span>getField()</h2>
+<a id="af97b5fe94c3644242586c62d144a0455"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af97b5fe94c3644242586c62d144a0455">&#9670;&nbsp;</a></span>getField()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static Field dev.jorel.commandapi.CommandAPIHandler.getField </td>
+          <td class="memname">Field <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html">dev.jorel.commandapi.CommandAPIHandler</a>&lt; CommandListenerWrapper &gt;.getField </td>
           <td>(</td>
           <td class="paramtype">Class&lt;?&gt;&#160;</td>
           <td class="paramname"><em>clazz</em>, </td>
@@ -142,11 +139,6 @@ Static Public Member Functions</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Caches a field using reflection if it is not already cached, then return the field of a given class. </p>
@@ -162,27 +154,19 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a13c7ca774a391f611002acc092274966"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a13c7ca774a391f611002acc092274966">&#9670;&nbsp;</a></span>getNMS()</h2>
+<a id="a2bd4e2c6f39c28e0ff581b9364a1aa01"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2bd4e2c6f39c28e0ff581b9364a1aa01">&#9670;&nbsp;</a></span>getNMS()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static NMS dev.jorel.commandapi.CommandAPIHandler.getNMS </td>
+          <td class="memname">NMS&lt;CommandListenerWrapper&gt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html">dev.jorel.commandapi.CommandAPIHandler</a>&lt; CommandListenerWrapper &gt;.getNMS </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Returns an instance of NMS. </p>
@@ -196,7 +180,7 @@ Static Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html">CommandAPIHandler</a></li>
-    <li class="footer">Generated on Tue Oct 13 2020 21:40:47 for CommandAPI by
+    <li class="footer">Generated on Sun Oct 18 2020 20:58:22 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">CommandAPI
-   &#160;<span id="projectnumber">5.0</span>
+   &#160;<span id="projectnumber">5.1</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -86,6 +86,7 @@ $(document).ready(function(){initNavTree('classdev_1_1jorel_1_1commandapi_1_1wra
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">dev.jorel.commandapi.wrappers.FunctionWrapper Class Reference</div>  </div>
@@ -100,27 +101,55 @@ $(document).ready(function(){initNavTree('classdev_1_1jorel_1_1commandapi_1_1wra
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
  <div class="center">
-  <img src="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.png" alt=""/>
- </div></div>
+  <img src="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.png" usemap="#dev.jorel.commandapi.wrappers.FunctionWrapper_map" alt=""/>
+  <map id="dev.jorel.commandapi.wrappers.FunctionWrapper_map" name="dev.jorel.commandapi.wrappers.FunctionWrapper_map">
+<area href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html" title="A wrapper class for Minecraft 1.12&#39;s functions." alt="dev.jorel.commandapi.wrappers.SimpleFunctionWrapper" shape="rect" coords="0,56,332,80"/>
+  </map>
+</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aa53d3eba91f83d314ebf2fe2c17834ee"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#aa53d3eba91f83d314ebf2fe2c17834ee">FunctionWrapper</a> (NamespacedKey minecraftKey, @SuppressWarnings(&quot;rawtypes&quot;) ToIntFunction invoker, Object clwArgB, Function&lt; Entity, Object &gt; mapper, String[] internalCommands)</td></tr>
 <tr class="memdesc:aa53d3eba91f83d314ebf2fe2c17834ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html" title="A wrapper class for Minecraft 1.12&#39;s functions.">FunctionWrapper</a>.  <a href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#aa53d3eba91f83d314ebf2fe2c17834ee">More...</a><br /></td></tr>
 <tr class="separator:aa53d3eba91f83d314ebf2fe2c17834ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a486ead4bf88c2dbfa5101a460804b1dd"><td class="memItemLeft" align="right" valign="top">String[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#a486ead4bf88c2dbfa5101a460804b1dd">getCommands</a> ()</td></tr>
-<tr class="memdesc:a486ead4bf88c2dbfa5101a460804b1dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an array of commands that will be executed by this <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html" title="A wrapper class for Minecraft 1.12&#39;s functions.">FunctionWrapper</a>.  <a href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#a486ead4bf88c2dbfa5101a460804b1dd">More...</a><br /></td></tr>
-<tr class="separator:a486ead4bf88c2dbfa5101a460804b1dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5826daf79a5a972568c4caa05681470f"><td class="memItemLeft" align="right" valign="top"><a id="a5826daf79a5a972568c4caa05681470f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#a5826daf79a5a972568c4caa05681470f">run</a> ()</td></tr>
-<tr class="memdesc:a5826daf79a5a972568c4caa05681470f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes this function as the executor of the command. <br /></td></tr>
-<tr class="separator:a5826daf79a5a972568c4caa05681470f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aee8b704708208b6c7bb88bf8d4861778"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#aee8b704708208b6c7bb88bf8d4861778">runAs</a> (Entity e)</td></tr>
-<tr class="memdesc:aee8b704708208b6c7bb88bf8d4861778"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes this function as an entity.  <a href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#aee8b704708208b6c7bb88bf8d4861778">More...</a><br /></td></tr>
-<tr class="separator:aee8b704708208b6c7bb88bf8d4861778"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b2d5c707201b6c11e849f50ca9dbfa2"><td class="memItemLeft" align="right" valign="top">NamespacedKey&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#a6b2d5c707201b6c11e849f50ca9dbfa2">getKey</a> ()</td></tr>
-<tr class="memdesc:a6b2d5c707201b6c11e849f50ca9dbfa2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the NamespacedKey that uniquely represents this object.  <a href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#a6b2d5c707201b6c11e849f50ca9dbfa2">More...</a><br /></td></tr>
-<tr class="separator:a6b2d5c707201b6c11e849f50ca9dbfa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a531753d3554a23ddc34f6d778a9c3477"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#a531753d3554a23ddc34f6d778a9c3477">run</a> ()</td></tr>
+<tr class="memdesc:a531753d3554a23ddc34f6d778a9c3477"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes this function as the executor of the command.  <a href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#a531753d3554a23ddc34f6d778a9c3477">More...</a><br /></td></tr>
+<tr class="separator:a531753d3554a23ddc34f6d778a9c3477"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a53fba32e342e435fe023e7d757d799"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#a4a53fba32e342e435fe023e7d757d799">runAs</a> (Entity e)</td></tr>
+<tr class="memdesc:a4a53fba32e342e435fe023e7d757d799"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes this function as an entity.  <a href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#a4a53fba32e342e435fe023e7d757d799">More...</a><br /></td></tr>
+<tr class="separator:a4a53fba32e342e435fe023e7d757d799"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html">dev.jorel.commandapi.wrappers.SimpleFunctionWrapper</a></td></tr>
+<tr class="memitem:ae22530f376627aa2bf836967a4a4d5e7 inherit pub_methods_classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html#ae22530f376627aa2bf836967a4a4d5e7">SimpleFunctionWrapper</a> (NamespacedKey minecraftKey, @SuppressWarnings(&quot;rawtypes&quot;) ToIntFunction invoker, String[] internalCommands)</td></tr>
+<tr class="memdesc:ae22530f376627aa2bf836967a4a4d5e7 inherit pub_methods_classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html" title="A wrapper class for Minecraft 1.12&#39;s functions.">SimpleFunctionWrapper</a>.  <a href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html#ae22530f376627aa2bf836967a4a4d5e7">More...</a><br /></td></tr>
+<tr class="separator:ae22530f376627aa2bf836967a4a4d5e7 inherit pub_methods_classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9e6d00da27ee24025dc45158a68445c inherit pub_methods_classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html#af9e6d00da27ee24025dc45158a68445c">run</a> (CommandSender sender)</td></tr>
+<tr class="memdesc:af9e6d00da27ee24025dc45158a68445c inherit pub_methods_classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs this function with a given CommandSender.  <a href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html#af9e6d00da27ee24025dc45158a68445c">More...</a><br /></td></tr>
+<tr class="separator:af9e6d00da27ee24025dc45158a68445c inherit pub_methods_classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a21061058c679486e4b536f09d56cd1 inherit pub_methods_classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper"><td class="memItemLeft" align="right" valign="top">String[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html#a3a21061058c679486e4b536f09d56cd1">getCommands</a> ()</td></tr>
+<tr class="memdesc:a3a21061058c679486e4b536f09d56cd1 inherit pub_methods_classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an array of commands that will be executed by this <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html" title="A wrapper class for Minecraft 1.12&#39;s functions.">FunctionWrapper</a>.  <a href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html#a3a21061058c679486e4b536f09d56cd1">More...</a><br /></td></tr>
+<tr class="separator:a3a21061058c679486e4b536f09d56cd1 inherit pub_methods_classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef21108470866775b242b1a1065be8eb inherit pub_methods_classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper"><td class="memItemLeft" align="right" valign="top">NamespacedKey&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html#aef21108470866775b242b1a1065be8eb">getKey</a> ()</td></tr>
+<tr class="memdesc:aef21108470866775b242b1a1065be8eb inherit pub_methods_classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the NamespacedKey that uniquely represents this object.  <a href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html#aef21108470866775b242b1a1065be8eb">More...</a><br /></td></tr>
+<tr class="separator:aef21108470866775b242b1a1065be8eb inherit pub_methods_classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a6043d5de8e054248fe54ff5a409a178c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html">FunctionWrapper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#a6043d5de8e054248fe54ff5a409a178c">fromSimpleFunctionWrapper</a> (<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html">SimpleFunctionWrapper</a> wrapper, Object commandListenerWrapper, Function&lt; Entity, Object &gt; mapper)</td></tr>
+<tr class="memdesc:a6043d5de8e054248fe54ff5a409a178c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html" title="A wrapper class for Minecraft 1.12&#39;s functions.">SimpleFunctionWrapper</a> into a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html" title="A wrapper class for Minecraft 1.12&#39;s functions.">FunctionWrapper</a>.  <a href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#a6043d5de8e054248fe54ff5a409a178c">More...</a><br /></td></tr>
+<tr class="separator:a6043d5de8e054248fe54ff5a409a178c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_static_methods_classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper')"><img src="closed.png" alt="-"/>&#160;Static Public Member Functions inherited from <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html">dev.jorel.commandapi.wrappers.SimpleFunctionWrapper</a></td></tr>
+<tr class="memitem:a919149a19d8727ca917c6a825dd3ec68 inherit pub_static_methods_classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html">SimpleFunctionWrapper</a>[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html#a919149a19d8727ca917c6a825dd3ec68">getTag</a> (NamespacedKey key)</td></tr>
+<tr class="memdesc:a919149a19d8727ca917c6a825dd3ec68 inherit pub_static_methods_classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html" title="A wrapper class for Minecraft 1.12&#39;s functions.">SimpleFunctionWrapper</a>[], which is an array of all of the functions that this tag contains.  <a href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html#a919149a19d8727ca917c6a825dd3ec68">More...</a><br /></td></tr>
+<tr class="separator:a919149a19d8727ca917c6a825dd3ec68 inherit pub_static_methods_classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0c8cf04db2ea1fc42510b4f8c47c170 inherit pub_static_methods_classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html">SimpleFunctionWrapper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html#ab0c8cf04db2ea1fc42510b4f8c47c170">getFunction</a> (NamespacedKey key)</td></tr>
+<tr class="memdesc:ab0c8cf04db2ea1fc42510b4f8c47c170 inherit pub_static_methods_classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html" title="A wrapper class for Minecraft 1.12&#39;s functions.">SimpleFunctionWrapper</a> representation of the Minecraft function for the provided NamespacedKey.  <a href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html#ab0c8cf04db2ea1fc42510b4f8c47c170">More...</a><br /></td></tr>
+<tr class="separator:ab0c8cf04db2ea1fc42510b4f8c47c170 inherit pub_static_methods_classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a697f53b9666630bdfba5e9bfb94645e4 inherit pub_static_methods_classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper"><td class="memItemLeft" align="right" valign="top">static Set&lt; NamespacedKey &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html#a697f53b9666630bdfba5e9bfb94645e4">getFunctions</a> ()</td></tr>
+<tr class="memdesc:a697f53b9666630bdfba5e9bfb94645e4 inherit pub_static_methods_classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a set of all functions that the server has registered.  <a href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html#a697f53b9666630bdfba5e9bfb94645e4">More...</a><br /></td></tr>
+<tr class="separator:a697f53b9666630bdfba5e9bfb94645e4 inherit pub_static_methods_classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a42e8f6f5dc214a2d407aa09fa8e7fe inherit pub_static_methods_classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper"><td class="memItemLeft" align="right" valign="top">static Set&lt; NamespacedKey &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html#a4a42e8f6f5dc214a2d407aa09fa8e7fe">getTags</a> ()</td></tr>
+<tr class="memdesc:a4a42e8f6f5dc214a2d407aa09fa8e7fe inherit pub_static_methods_classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a set of all tags that the server has registered.  <a href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html#a4a42e8f6f5dc214a2d407aa09fa8e7fe">More...</a><br /></td></tr>
+<tr class="separator:a4a42e8f6f5dc214a2d407aa09fa8e7fe inherit pub_static_methods_classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A wrapper class for Minecraft 1.12's functions. </p>
@@ -184,14 +213,67 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a486ead4bf88c2dbfa5101a460804b1dd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a486ead4bf88c2dbfa5101a460804b1dd">&#9670;&nbsp;</a></span>getCommands()</h2>
+<a id="a6043d5de8e054248fe54ff5a409a178c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6043d5de8e054248fe54ff5a409a178c">&#9670;&nbsp;</a></span>fromSimpleFunctionWrapper()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html">FunctionWrapper</a> dev.jorel.commandapi.wrappers.FunctionWrapper.fromSimpleFunctionWrapper </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html">SimpleFunctionWrapper</a>&#160;</td>
+          <td class="paramname"><em>wrapper</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Object&#160;</td>
+          <td class="paramname"><em>commandListenerWrapper</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Function&lt; Entity, Object &gt;&#160;</td>
+          <td class="paramname"><em>mapper</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Converts a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html" title="A wrapper class for Minecraft 1.12&#39;s functions.">SimpleFunctionWrapper</a> into a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html" title="A wrapper class for Minecraft 1.12&#39;s functions.">FunctionWrapper</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">wrapper</td><td>the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html" title="A wrapper class for Minecraft 1.12&#39;s functions.">SimpleFunctionWrapper</a> to convert </td></tr>
+    <tr><td class="paramname">commandListenerWrapper</td><td>the instance of the CommandListenerWrapper which will be applied to this function </td></tr>
+    <tr><td class="paramname">mapper</td><td>a function that maps a Bukkit Entity to a Minecraft Entity </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html" title="A wrapper class for Minecraft 1.12&#39;s functions.">FunctionWrapper</a> which is a child of the provided <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html" title="A wrapper class for Minecraft 1.12&#39;s functions.">SimpleFunctionWrapper</a> </dd></dl>
+
+</div>
+</div>
+<a id="a531753d3554a23ddc34f6d778a9c3477"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a531753d3554a23ddc34f6d778a9c3477">&#9670;&nbsp;</a></span>run()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">String [] dev.jorel.commandapi.wrappers.FunctionWrapper.getCommands </td>
+          <td class="memname">int dev.jorel.commandapi.wrappers.FunctionWrapper.run </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -199,39 +281,19 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
       </table>
 </div><div class="memdoc">
 
-<p>Returns an array of commands that will be executed by this <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html" title="A wrapper class for Minecraft 1.12&#39;s functions.">FunctionWrapper</a>. </p>
-<dl class="section return"><dt>Returns</dt><dd>the commands that are defined by this custom function </dd></dl>
+<p>Executes this function as the executor of the command. </p>
+<dl class="section return"><dt>Returns</dt><dd>the result of running this command </dd></dl>
 
 </div>
 </div>
-<a id="a6b2d5c707201b6c11e849f50ca9dbfa2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6b2d5c707201b6c11e849f50ca9dbfa2">&#9670;&nbsp;</a></span>getKey()</h2>
+<a id="a4a53fba32e342e435fe023e7d757d799"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a53fba32e342e435fe023e7d757d799">&#9670;&nbsp;</a></span>runAs()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">NamespacedKey dev.jorel.commandapi.wrappers.FunctionWrapper.getKey </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Returns the NamespacedKey that uniquely represents this object. </p>
-<dl class="section return"><dt>Returns</dt><dd>the NamespacedKey that uniquely represents this object </dd></dl>
-
-</div>
-</div>
-<a id="aee8b704708208b6c7bb88bf8d4861778"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aee8b704708208b6c7bb88bf8d4861778">&#9670;&nbsp;</a></span>runAs()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void dev.jorel.commandapi.wrappers.FunctionWrapper.runAs </td>
+          <td class="memname">int dev.jorel.commandapi.wrappers.FunctionWrapper.runAs </td>
           <td>(</td>
           <td class="paramtype">Entity&#160;</td>
           <td class="paramname"><em>e</em></td><td>)</td>
@@ -247,6 +309,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>the result of running this command </dd></dl>
 
 </div>
 </div>
@@ -256,7 +319,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1wrappers.html">wrappers</a></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html">FunctionWrapper</a></li>
-    <li class="footer">Generated on Tue Oct 13 2020 21:40:49 for CommandAPI by
+    <li class="footer">Generated on Sun Oct 18 2020 20:58:24 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

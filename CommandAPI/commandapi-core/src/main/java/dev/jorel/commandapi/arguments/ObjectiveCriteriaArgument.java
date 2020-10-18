@@ -12,7 +12,7 @@ public class ObjectiveCriteriaArgument extends Argument {
 	 * @param nodeName the name of the node for this argument
 	 */
 	public ObjectiveCriteriaArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getNMS()._ArgumentScoreboardCriteria());
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentScoreboardCriteria());
 	}
 	
 	@Override

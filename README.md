@@ -123,6 +123,19 @@ These versions of Minecraft must be installed in your local machine's Maven repo
     </thead>
     <tbody>
         <tr>
+            <td valign="top"><b>5.1</b></td>
+            <td valign="top">October 2020</td>
+            <td valign="top">
+                <ul>
+                    <li>Fixes bug where converted commands could not be executed by players ingame</li>
+                    <li>Adds <code>withPermission(String)</code> to arguments and CommandAPICommands</li>
+                    <li>Adds SimpleFunctionWrapper with helper methods to get functions and tags from ingame, as well as run them without needing to parse them via commands</li>
+                    <li>Greatly improve the type-safety of the internal CommandAPI code</li>
+                    <li>Move the <code>Brigadier</code> class outside of the <code>CommandAPIHandler</code> class</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
             <td valign="top"><b>5.0</b></td>
             <td valign="top">October 2020</td>
             <td valign="top">
