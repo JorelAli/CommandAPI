@@ -216,6 +216,17 @@ public abstract class Argument implements IOverrideableSuggestions {
 		this.permission = permission;
 		return this;
 	}
+	
+	/**
+	 * Assigns the given permission as a requirement to execute this command.
+	 * 
+	 * @param permission the permission required to execute this command
+	 * @return this current argument
+	 */
+	public final Argument withPermission(String permission) {
+		this.permission = CommandPermission.fromString(permission);
+		return this;
+	}
 
 	/**
 	 * Returns the permission required to run this command
