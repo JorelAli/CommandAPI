@@ -220,10 +220,10 @@ public interface NMS<CommandListenerWrapper> {
 	String convert(PotionEffectType potion);
 	String convert(Sound sound);
 	
-	default SimpleFunctionWrapper[] getTag(NamespacedKey key) {return null;}
-	default SimpleFunctionWrapper getFunction(NamespacedKey key) {return null;}
-	default List<NamespacedKey> getFunctions() {return null;}
-	default List<NamespacedKey> getTags() {return null;}
+	SimpleFunctionWrapper[] getTag(NamespacedKey key);
+	SimpleFunctionWrapper getFunction(NamespacedKey key);
+	List<NamespacedKey> getFunctions();
+	List<NamespacedKey> getTags();
 	
 	
 }

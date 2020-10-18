@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.function.ToIntBiFunction;
@@ -69,6 +70,7 @@ import dev.jorel.commandapi.wrappers.MathOperation;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
+import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.server.v1_14_R1.Advancement;
@@ -133,6 +135,70 @@ import net.minecraft.server.v1_14_R1.Vec3D;
 
 public class NMS_1_14_3 implements NMS<CommandListenerWrapper> {
 
+	//Converts NMS function to SimpleFunctionWrapper
+	private SimpleFunctionWrapper convertFunction(CustomFunction customFunction) {
+		@SuppressWarnings("deprecation")
+		NamespacedKey minecraftKey = new NamespacedKey(customFunction.a().b(), customFunction.a().getKey());
+
+		CustomFunctionData customFunctionData = ((CraftServer) Bukkit.getServer()).getServer().getFunctionData();
+
+		ToIntBiFunction<CustomFunction, CommandListenerWrapper> obj = customFunctionData::a;
+		ToIntFunction<CommandListenerWrapper> appliedObj = clw -> obj.applyAsInt(customFunction, clw);
+
+		return new SimpleFunctionWrapper(minecraftKey, appliedObj,
+				Arrays.stream(customFunction.b()).map(Object::toString).toArray(String[]::new));
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public List<NamespacedKey> getFunctions() {
+		List<NamespacedKey> functions = new ArrayList<>();
+		for(MinecraftKey key : ((CraftServer) Bukkit.getServer()).getServer().getFunctionData().c().keySet()) {
+			functions.add(new NamespacedKey(key.b(), key.getKey()));
+		}
+		return functions;
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public List<NamespacedKey> getTags() {
+		List<NamespacedKey> functions = new ArrayList<>();
+		for(MinecraftKey key : ((CraftServer) Bukkit.getServer()).getServer().getFunctionData().h().a()) {
+			functions.add(new NamespacedKey(key.b(), key.getKey()));
+		}
+		return functions;
+	}
+	
+	@Override
+	public SimpleFunctionWrapper[] getTag(NamespacedKey key) {
+		MinecraftKey minecraftKey = new MinecraftKey(key.getNamespace(), key.getKey());
+		CustomFunctionData functionData = ((CraftServer) Bukkit.getServer()).getServer().getFunctionData();
+		return functionData.h().b(minecraftKey).a().stream().map(this::convertFunction).toArray(SimpleFunctionWrapper[]::new);
+	}
+	
+	@Override
+	public SimpleFunctionWrapper getFunction(NamespacedKey key) {
+		MinecraftKey minecraftKey = new MinecraftKey(key.getNamespace(), key.getKey());
+		CustomFunctionData functionData = ((CraftServer) Bukkit.getServer()).getServer().getFunctionData();
+		return convertFunction(functionData.a(minecraftKey).get());
+	}
+
+	@Override
+	public FunctionWrapper[] getFunction(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
+		Collection<CustomFunction> customFuncList = ArgumentTag.a(cmdCtx, str);
+		FunctionWrapper[] result = new FunctionWrapper[customFuncList.size()];
+		CommandListenerWrapper commandListenerWrapper = getCLW(cmdCtx).a().b(2);
+
+		int count = 0;
+		for (CustomFunction customFunction : customFuncList) { 
+			result[count++] = FunctionWrapper.fromSimpleFunctionWrapper(convertFunction(customFunction), commandListenerWrapper, e -> {
+				return getCLW(cmdCtx).a(((CraftEntity) e).getHandle());
+			});
+		}
+
+		return result;
+	}
+	
 	@Override
 	public CommandListenerWrapper getCLWFromCommandSender(CommandSender sender) {
 		return VanillaCommandWrapper.getListener(sender);
@@ -495,34 +561,6 @@ public class NMS_1_14_3 implements NMS<CommandListenerWrapper> {
 		float low = range.a() == null ? -Float.MAX_VALUE : range.a();
 		float high = range.b() == null ? Float.MAX_VALUE : range.b();
 		return new dev.jorel.commandapi.wrappers.FloatRange(low, high);
-	}
-
-	@Override
-	public FunctionWrapper[] getFunction(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
-		Collection<CustomFunction> customFuncList = ArgumentTag.a(cmdCtx, str);
-
-		FunctionWrapper[] result = new FunctionWrapper[customFuncList.size()];
-
-		CustomFunctionData customFunctionData = getCLW(cmdCtx).getServer().getFunctionData();
-		CommandListenerWrapper commandListenerWrapper = getCLW(cmdCtx).a().b(2);
-
-		int count = 0;
-
-		for (CustomFunction customFunction : customFuncList) {
-			@SuppressWarnings("deprecation")
-			NamespacedKey minecraftKey = new NamespacedKey(customFunction.a().b(), customFunction.a().getKey());
-			ToIntBiFunction<CustomFunction, CommandListenerWrapper> obj = customFunctionData::a;
-			ToIntFunction<CommandListenerWrapper> appliedObj = clw -> obj.applyAsInt(customFunction, clw);
-
-			FunctionWrapper wrapper = new FunctionWrapper(minecraftKey, appliedObj, commandListenerWrapper, e -> {
-				return (Object) getCLW(cmdCtx).a(((CraftEntity) e).getHandle());
-			}, Arrays.stream(customFunction.b()).map(Object::toString).toArray(String[]::new));
-
-			result[count] = wrapper;
-			count++;
-		}
-
-		return result;
 	}
 
 	@Override

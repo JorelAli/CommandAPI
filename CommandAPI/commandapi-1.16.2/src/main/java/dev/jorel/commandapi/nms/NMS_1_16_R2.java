@@ -522,6 +522,11 @@ public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
 		return functions;
 	}
 	
+	@Override
+	public CommandListenerWrapper getCLWFromCommandSender(CommandSender sender) {
+		return VanillaCommandWrapper.getListener(sender);
+	}
+	
 	//Converts NMS function to SimpleFunctionWrapper
 	private SimpleFunctionWrapper convertFunction(CustomFunction customFunction) {
 		@SuppressWarnings("deprecation")
@@ -534,11 +539,6 @@ public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
 
 		return new SimpleFunctionWrapper(minecraftKey, appliedObj,
 				Arrays.stream(customFunction.b()).map(Object::toString).toArray(String[]::new));
-	}
-	
-	@Override
-	public CommandListenerWrapper getCLWFromCommandSender(CommandSender sender) {
-		return VanillaCommandWrapper.getListener(sender);
 	}
 	
 	@Override
