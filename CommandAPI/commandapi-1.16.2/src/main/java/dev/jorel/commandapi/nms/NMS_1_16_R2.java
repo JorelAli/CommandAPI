@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
@@ -504,6 +503,7 @@ public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
 	}
 	
 	@SuppressWarnings("deprecation")
+	@Override
 	public List<NamespacedKey> getFunctions() {
 		List<NamespacedKey> functions = new ArrayList<>();
 		for(MinecraftKey key : ((CraftServer) Bukkit.getServer()).getServer().getFunctionData().f()) {
@@ -513,6 +513,7 @@ public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
 	}
 	
 	@SuppressWarnings("deprecation")
+	@Override
 	public List<NamespacedKey> getTags() {
 		List<NamespacedKey> functions = new ArrayList<>();
 		for(MinecraftKey key : ((CraftServer) Bukkit.getServer()).getServer().getFunctionData().g()) {
@@ -521,6 +522,7 @@ public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
 		return functions;
 	}
 	
+	//Converts NMS function to SimpleFunctionWrapper
 	private SimpleFunctionWrapper convertFunction(CustomFunction customFunction) {
 		@SuppressWarnings("deprecation")
 		NamespacedKey minecraftKey = new NamespacedKey(customFunction.a().getNamespace(), customFunction.a().getKey());
@@ -539,42 +541,31 @@ public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
 		return VanillaCommandWrapper.getListener(sender);
 	}
 	
-	public SimpleFunctionWrapper[] convertFunction(NamespacedKey key) {
+	@Override
+	public SimpleFunctionWrapper[] getTag(NamespacedKey key) {
 		MinecraftKey minecraftKey = new MinecraftKey(key.getNamespace(), key.getKey());
 		CustomFunctionData functionData = ((CraftServer) Bukkit.getServer()).getServer().getFunctionData();
-		
-		Optional<CustomFunction> function = functionData.a(minecraftKey);
-		if(function.isPresent()) {
-			return new SimpleFunctionWrapper[] { convertFunction(function.get()) };
-		} else {
-			return functionData.b(minecraftKey).getTagged().stream().map(this::convertFunction).toArray(SimpleFunctionWrapper[]::new);
-		}
+		return functionData.b(minecraftKey).getTagged().stream().map(this::convertFunction).toArray(SimpleFunctionWrapper[]::new);
+	}
+	
+	@Override
+	public SimpleFunctionWrapper getFunction(NamespacedKey key) {
+		MinecraftKey minecraftKey = new MinecraftKey(key.getNamespace(), key.getKey());
+		CustomFunctionData functionData = ((CraftServer) Bukkit.getServer()).getServer().getFunctionData();
+		return convertFunction(functionData.a(minecraftKey).get());
 	}
 
 	@Override
 	public FunctionWrapper[] getFunction(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
 		Collection<CustomFunction> customFuncList = ArgumentTag.a(cmdCtx, str);
-
 		FunctionWrapper[] result = new FunctionWrapper[customFuncList.size()];
-
-		CustomFunctionData customFunctionData = getCLW(cmdCtx).getServer().getFunctionData();
 		CommandListenerWrapper commandListenerWrapper = getCLW(cmdCtx).a().b(2);
 
 		int count = 0;
-
-		for (CustomFunction customFunction : customFuncList) {
-			@SuppressWarnings("deprecation")
-			NamespacedKey minecraftKey = new NamespacedKey(customFunction.a().getNamespace(),
-					customFunction.a().getKey());
-			ToIntBiFunction<CustomFunction, CommandListenerWrapper> obj = customFunctionData::a;
-			ToIntFunction<CommandListenerWrapper> appliedObj = clw -> obj.applyAsInt(customFunction, clw);
-
-			FunctionWrapper wrapper = new FunctionWrapper(minecraftKey, appliedObj, commandListenerWrapper, e -> {
-				return (Object) getCLW(cmdCtx).a(((CraftEntity) e).getHandle());
-			}, Arrays.stream(customFunction.b()).map(Object::toString).toArray(String[]::new));
-
-			result[count] = wrapper;
-			count++;
+		for (CustomFunction customFunction : customFuncList) { 
+			result[count++] = FunctionWrapper.fromSimpleFunctionWrapper(convertFunction(customFunction), commandListenerWrapper, e -> {
+				return getCLW(cmdCtx).a(((CraftEntity) e).getHandle());
+			});
 		}
 
 		return result;
@@ -937,5 +928,4 @@ public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
 		CommandDispatcher nmsDispatcher = craftServer.getServer().getCommandDispatcher();
 		nmsDispatcher.a(craftPlayer.getHandle());
 	}
-
 }

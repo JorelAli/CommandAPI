@@ -37,16 +37,20 @@ public class SimpleFunctionWrapper implements Keyed {
 		this.internalCommands = functionWrapper.internalCommands;
 	}
 	
-	public static SimpleFunctionWrapper[] fromNamespace(NamespacedKey key) {
-		return CommandAPIHandler.getInstance().getNMS().convertFunction(key);
+	public static SimpleFunctionWrapper[] getTag(NamespacedKey key) {
+		return CommandAPIHandler.getInstance().getNMS().getTag(key);
+	}
+	
+	public static SimpleFunctionWrapper getFunction(NamespacedKey key) {
+		return CommandAPIHandler.getInstance().getNMS().getFunction(key);
 	}
 	
 	public static List<NamespacedKey> getFunctions() {
-		return null;
+		return CommandAPIHandler.getInstance().getNMS().getFunctions();
 	}
 	
-	public static List<NamespacedKey> getFunctionTags() {
-		return null;
+	public static List<NamespacedKey> getTags() {
+		return CommandAPIHandler.getInstance().getNMS().getTags();
 	}
 	
 	public void run(CommandSender sender) {

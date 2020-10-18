@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Predicate;
 
@@ -219,7 +220,10 @@ public interface NMS<CommandListenerWrapper> {
 	String convert(PotionEffectType potion);
 	String convert(Sound sound);
 	
-	default SimpleFunctionWrapper[] convertFunction(NamespacedKey key) {return null;};
+	default SimpleFunctionWrapper[] getTag(NamespacedKey key) {return null;}
+	default SimpleFunctionWrapper getFunction(NamespacedKey key) {return null;}
+	default List<NamespacedKey> getFunctions() {return null;}
+	default List<NamespacedKey> getTags() {return null;}
 	
 	
 }
