@@ -127,7 +127,7 @@ public class CommandAPICommand {
 	
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(CommandSender, Object[]) -> ()</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(CommandSender, Object[]) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	public CommandAPICommand executes(CommandExecutor executor) {
@@ -137,7 +137,7 @@ public class CommandAPICommand {
 	
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(CommandSender, Object[]) -> int</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(CommandSender, Object[]) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	public CommandAPICommand executes(ResultingCommandExecutor executor) {
@@ -149,7 +149,7 @@ public class CommandAPICommand {
 	
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(Player, Object[]) -> ()</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(Player, Object[]) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	public CommandAPICommand executesPlayer(PlayerCommandExecutor executor) {
@@ -159,7 +159,7 @@ public class CommandAPICommand {
 	
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(Player, Object[]) -> int</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(Player, Object[]) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	public CommandAPICommand executesPlayer(PlayerResultingCommandExecutor executor) {
@@ -171,7 +171,7 @@ public class CommandAPICommand {
 	
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(Entity, Object[]) -> ()</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(Entity, Object[]) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	public CommandAPICommand executesEntity(EntityCommandExecutor executor) {
@@ -181,7 +181,7 @@ public class CommandAPICommand {
 	
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(Entity, Object[]) -> int</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(Entity, Object[]) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	public CommandAPICommand executesEntity(EntityResultingCommandExecutor executor) {
@@ -193,7 +193,7 @@ public class CommandAPICommand {
 	
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(Entity, Object[]) -> ()</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(Entity, Object[]) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	public CommandAPICommand executesProxy(ProxyCommandExecutor executor) {
@@ -203,7 +203,7 @@ public class CommandAPICommand {
 	
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(Entity, Object[]) -> int</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(Entity, Object[]) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	public CommandAPICommand executesProxy(ProxyResultingCommandExecutor executor) {
@@ -215,7 +215,7 @@ public class CommandAPICommand {
 	
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -> ()</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	public CommandAPICommand executesCommandBlock(CommandBlockCommandExecutor executor) {
@@ -225,7 +225,7 @@ public class CommandAPICommand {
 	
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -> int</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	public CommandAPICommand executesCommandBlock(CommandBlockResultingCommandExecutor executor) {
@@ -237,7 +237,7 @@ public class CommandAPICommand {
 	
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -> ()</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	public CommandAPICommand executesConsole(ConsoleCommandExecutor executor) {
@@ -247,7 +247,7 @@ public class CommandAPICommand {
 	
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -> int</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	public CommandAPICommand executesConsole(ConsoleResultingCommandExecutor executor) {
@@ -257,7 +257,7 @@ public class CommandAPICommand {
 	
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(NativeCommandExecutor, Object[]) -> ()</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(NativeCommandExecutor, Object[]) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	public CommandAPICommand executesNative(NativeCommandExecutor executor) {
@@ -267,7 +267,7 @@ public class CommandAPICommand {
 	
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(NativeCommandExecutor, Object[]) -> int</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(NativeCommandExecutor, Object[]) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	public CommandAPICommand executesNative(NativeResultingCommandExecutor executor) {

@@ -5,7 +5,7 @@ import java.util.function.Predicate;
 import dev.jorel.commandapi.CommandAPIHandler;
 
 /**
- * An argument that represents a Predicate&lt;ItemStack>
+ * An argument that represents a <code>Predicate&lt;ItemStack&gt;</code>
  */
 public class ItemStackPredicateArgument extends Argument {
 	

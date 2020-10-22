@@ -23,11 +23,9 @@ public class CustomArgument<T> extends Argument {
 	 * 
 	 * @param nodeName the name of the node for this argument
 	 * @param parser
-	 *            A CustomArgumentParser<T> that maps a String to the object of your choice.
+	 *            A <code>CustomArgumentParser&lt;T&gt;</code> that maps a String to the object of your choice.
 	 *            The String input is the text that the CommandSender inputs for
 	 *            this argument
-	 *            
-	 * @see #CustomArgument(CustomArgumentParser<T>, boolean)
 	 */
 	public CustomArgument(String nodeName, CustomArgumentParser<T> parser) {
 		this(nodeName, parser, false);
@@ -123,7 +121,7 @@ public class CustomArgument<T> extends Argument {
 		}
 		
 		/**
-		 * Appends <code><--[HERE]</code> to the end of the message
+		 * Appends <code>&lt;--[HERE]</code> to the end of the message
 		 * @return A reference to this object
 		 */
 		public MessageBuilder appendHere() {

@@ -16,7 +16,7 @@ public interface IOverrideableSuggestions {
 
 	/**
 	 * Override the suggestions of this argument with a String array. Typically,
-	 * this is the supplier <code>s -> suggestions</code>.
+	 * this is the supplier <code>s -&gt; suggestions</code>.
 	 * 
 	 * @param suggestions the string array to override suggestions with
 	 * @return the current argument
