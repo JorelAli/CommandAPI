@@ -125,6 +125,19 @@ public abstract class CommandAPI {
 	}
 	
 	/**
+	 * Reloads all of the datapacks that are on the server. This should be used if
+	 * you change a datapack and want to reload a server. Execute this method after
+	 * running /minecraft:reload, NOT before.
+	 */
+	public static void reloadDatapacks() {
+		try {
+			CommandAPIHandler.getInstance().getNMS().reloadDataPacks();
+		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
 	 * Forces a command to return a success value of 0
 	 * @param message Description of the error message
 	 * @throws WrapperCommandSyntaxException which indicates that there was a command failure
