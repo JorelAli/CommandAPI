@@ -11,7 +11,7 @@ public class PlayerArgument extends SafeOverrideableArgument<Player> {
 
 	/**
 	 * A Player argument. Produces a single player, regardless of whether
-	 * <code>@a</code>, </code>@p</code>, <code>@r</code> or <code>@e</code> is used.
+	 * <code>@a</code>, <code>@p</code>, <code>@r</code> or <code>@e</code> is used.
 	 * 
 	 * @param nodeName the name of the node for this argument
 	 */

@@ -1,7 +1,7 @@
 package dev.jorel.commandapi.exceptions;
 
 /**
- * An exception that occurs when trying to use the TimeArgument on Minecraft version < 1.14
+ * An exception that occurs when trying to use the TimeArgument on Minecraft version &lt; 1.14
  */
 @SuppressWarnings("serial")
 public class TimeArgumentException extends RuntimeException {

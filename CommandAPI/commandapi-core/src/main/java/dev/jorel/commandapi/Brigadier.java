@@ -70,7 +70,7 @@ public abstract class Brigadier {
 	 * tree. You would use this method as shown:
 	 * 
 	 * <pre>
-	 * Brigadier.fromPredicate((sender, args) -> {
+	 * Brigadier.fromPredicate((sender, args) -&gt; {
 	 *     ...
 	 * }, arguments);
 	 * </pre>
@@ -112,7 +112,7 @@ public abstract class Brigadier {
 	 * declaration. For example:
 	 * 
 	 * <pre>
-	 * List<Argument> arguments = new ArrayList<>();
+	 * List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
 	 * arguments.add(new IntegerArgument("hello"));
 	 * 
 	 * RequiredArgumentBuilder argBuilder = Brigadier.fromArguments(arguments, "hello");

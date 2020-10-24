@@ -54,7 +54,7 @@ public interface NMS<CommandListenerWrapper> {
 	
 	/**
 	 * Resends the command dispatcher's set of commands to a player.
-	 * @param player
+	 * @param player the player to send the command graph packet to
 	 */
 	void resendPackets(Player player);
 	
@@ -68,7 +68,6 @@ public interface NMS<CommandListenerWrapper> {
 	/**
 	 * Creates a JSON file that describes the hierarchical structure of
 	 * the commands that have been registered by the server.
-	 * @param server The NMS MinecraftServer instance
 	 * @param file The JSON file to write to
 	 * @param dispatcher The Brigadier CommandDispatcher
 	 * @throws IOException When the file fails to be written to
@@ -86,7 +85,7 @@ public interface NMS<CommandListenerWrapper> {
 	 * Retrieves a CommandSender, given some CommandContext. This
 	 * method should handle Proxied CommandSenders for entities
 	 * if a Proxy is being used.
-	 * @param cmdCtx The CommandContext<CommandListenerWrapper> for a given command
+	 * @param cmdCtx The <code>CommandContext&lt;CommandListenerWrapper&gt;</code> for a given command
 	 * @param forceNative whether or not the CommandSender should be a NativeProxyCommandSender or not
 	 * @return A CommandSender instance (such as a ProxiedNativeCommandSender or Player)
 	 */
@@ -107,9 +106,7 @@ public interface NMS<CommandListenerWrapper> {
 	CommandListenerWrapper getCLWFromCommandSender(CommandSender sender);
 
 	/**
-	 * Given the MinecraftServer instance, returns the Brigadier
-	 * CommandDispatcher from the NMS CommandDispatcher
-	 * @param server The NMS MinecraftServer instance
+	 * Returns the Brigadier CommandDispatcher from the NMS CommandDispatcher
 	 * @return A Brigadier CommandDispatcher
 	 */
 	CommandDispatcher<CommandListenerWrapper> getBrigadierDispatcher();
@@ -129,14 +126,14 @@ public interface NMS<CommandListenerWrapper> {
 	
 	/**
 	 * Reloads the datapacks by using the updated the commandDispatcher tree
-	 * @throws SecurityException 
-	 * @throws NoSuchFieldException 
-	 * @throws IllegalAccessException 
-	 * @throws IllegalArgumentException 
+	 * @throws SecurityException reflection exception
+	 * @throws NoSuchFieldException reflection exception 
+	 * @throws IllegalAccessException reflection exception
+	 * @throws IllegalArgumentException reflection exception
 	 */
 	default void reloadDataPacks() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {};
 	
-	/** Argument implementations with CommandSyntaxExceptions */
+	/* Argument implementations with CommandSyntaxExceptions */
 	Advancement          getAdvancement(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 	Predicate<Block>     getBlockPredicate(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 	BaseComponent[]      getChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException; 
@@ -159,7 +156,7 @@ public interface NMS<CommandListenerWrapper> {
 	MathOperation        getMathOperation(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
                          
 
-	/** Argument implementations without CommandSyntaxExceptions */
+	/* Argument implementations without CommandSyntaxExceptions */
 	float                getAngle(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 	EnumSet<Axis>        getAxis(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 	Biome                getBiome(CommandContext<CommandListenerWrapper> cmdCtx, String key);
@@ -179,7 +176,7 @@ public interface NMS<CommandListenerWrapper> {
 	int                  getTime(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 	UUID                 getUUID(CommandContext<CommandListenerWrapper> cmdCtx, String key);
                          
-	/** Argument types */
+	/* Argument types */
 	ArgumentType<?> _ArgumentAngle();
 	ArgumentType<?> _ArgumentAxis();
 	ArgumentType<?> _ArgumentBlockPredicate();

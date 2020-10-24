@@ -127,7 +127,7 @@ public abstract class CommandAPI {
 	/**
 	 * Forces a command to return a success value of 0
 	 * @param message Description of the error message
-	 * @throws WrapperCommandSyntaxException
+	 * @throws WrapperCommandSyntaxException which indicates that there was a command failure
 	 */
 	public static void fail(String message) throws WrapperCommandSyntaxException {
 		throw new WrapperCommandSyntaxException(new SimpleCommandExceptionType(new LiteralMessage(message)).create());

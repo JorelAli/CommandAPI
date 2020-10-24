@@ -21,12 +21,12 @@ public enum MathOperation {
 	DIVIDE("/="), 
 	
 	/**
-	 * The maximum value of two values (>)
+	 * The maximum value of two values (&gt;)
 	 */
 	MAX(">"), 
 	
 	/**
-	 * The minimum value of two values (<)
+	 * The minimum value of two values (&lt;)
 	 */
 	MIN("<"), 
 	
@@ -46,7 +46,7 @@ public enum MathOperation {
 	SUBTRACT("-="), 
 	
 	/**
-	 * Swap the results of two values (><)
+	 * Swap the results of two values (&gt;&lt;)
 	 */
 	SWAP("><");
 	

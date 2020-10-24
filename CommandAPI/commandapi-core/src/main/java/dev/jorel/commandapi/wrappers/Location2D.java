@@ -45,7 +45,6 @@ public class Location2D extends Location {
 
 	/**
 	 * @return A Location2DException
-	 * @throws A Location2DException
 	 */
 	@Override
 	public double getY() {
@@ -54,7 +53,6 @@ public class Location2D extends Location {
 
 	/**
 	 * @return A Location2DException
-	 * @throws A Location2DException
 	 */
 	@Override
 	public int getBlockY() {
@@ -62,9 +60,8 @@ public class Location2D extends Location {
 	}
 
 	/**
+	 * Throws a Location2DException
 	 * @param y y-coordinate
-	 * @return A Location2DException
-	 * @throws A Location2DException
 	 */
 	@Override
 	public void setY(double y) {

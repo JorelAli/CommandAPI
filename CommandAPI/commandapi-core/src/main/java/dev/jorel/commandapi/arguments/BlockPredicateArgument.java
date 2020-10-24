@@ -5,7 +5,7 @@ import java.util.function.Predicate;
 import dev.jorel.commandapi.CommandAPIHandler;
 
 /**
- * An argument that represents a Predicate&lt;Block>
+ * An argument that represents a <code>Predicate&lt;Block&gt;</code>
  */
 public class BlockPredicateArgument extends Argument {
 	

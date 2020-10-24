@@ -45,6 +45,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	/**
 	 * Constructs an argument with a given NMS/brigadier type.
 	 * 
+	 * @param nodeName the name to assign to this argument node 
 	 * @param rawType the NMS or brigadier type to be used for this argument
 	 */
 	protected Argument(String nodeName, ArgumentType<?> rawType) {
@@ -55,8 +56,6 @@ public abstract class Argument implements IOverrideableSuggestions {
 	/**
 	 * Returns the NMS or brigadier type for this argument.
 	 * 
-	 * @param <T> the object that the argument type yields, in its lowest level in
-	 *            the code
 	 * @return the NMS or brigadier type for this argument
 	 */
 	public final ArgumentType<?> getRawType() {
@@ -101,7 +100,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	}
 	
 	/**
-	 * Override the suggestions of this argument with a Collection<String>.
+	 * Override the suggestions of this argument with a <code>Collection&lt;String&gt;</code>.
 	 * 
 	 * @param suggestions the collection of suggestions to override suggestions with
 	 * @return the current argument
@@ -139,7 +138,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	}
 	
 	/**
-	 * Override the suggestions of this argument with a Collection<IStringTooltip>.
+	 * Override the suggestions of this argument with a <code>Collection&lt;IStringTooltip&gt;</code>.
 	 * 
 	 * @param suggestions the collection of IStringTooltip to override suggestions with
 	 * @return the current argument
