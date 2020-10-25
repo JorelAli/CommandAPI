@@ -19,6 +19,7 @@ import java.util.function.ToIntFunction;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.LogManager;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -54,6 +55,7 @@ import org.bukkit.inventory.ComplexRecipe;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.potion.PotionEffectType;
 
+import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
@@ -117,6 +119,7 @@ import net.minecraft.server.v1_16_R2.ArgumentVec2I;
 import net.minecraft.server.v1_16_R2.ArgumentVec3;
 import net.minecraft.server.v1_16_R2.BlockPosition;
 import net.minecraft.server.v1_16_R2.BlockPosition2D;
+import net.minecraft.server.v1_16_R2.ChatMessage;
 import net.minecraft.server.v1_16_R2.CommandDispatcher;
 import net.minecraft.server.v1_16_R2.CommandListenerWrapper;
 import net.minecraft.server.v1_16_R2.CompletionProviders;
@@ -139,6 +142,8 @@ import net.minecraft.server.v1_16_R2.LootTable;
 import net.minecraft.server.v1_16_R2.LootTableRegistry;
 import net.minecraft.server.v1_16_R2.MinecraftKey;
 import net.minecraft.server.v1_16_R2.MinecraftServer;
+import net.minecraft.server.v1_16_R2.ResourcePackRepository;
+import net.minecraft.server.v1_16_R2.SaveData;
 import net.minecraft.server.v1_16_R2.Scoreboard;
 import net.minecraft.server.v1_16_R2.ScoreboardScore;
 import net.minecraft.server.v1_16_R2.ShapeDetectorBlock;
@@ -149,7 +154,44 @@ import net.minecraft.server.v1_16_R2.Vec3D;
 import net.minecraft.server.v1_16_R2.WorldServer;
 
 public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
+	
+	public void a() {
+		getBrigadierDispatcher().register(CommandDispatcher.a("reload")
+			.requires(clw -> clw.hasPermission(2))
+			.executes((cmdCtx) -> {
+				CommandListenerWrapper commandlistenerwrapper = cmdCtx.getSource();
+				MinecraftServer minecraftserver = commandlistenerwrapper.getServer();
+				ResourcePackRepository resourcepackrepository = minecraftserver.getResourcePackRepository();
+				SaveData savedata = minecraftserver.getSaveData();
+				Collection<String> collection = resourcepackrepository.d();
+				
+				resourcepackrepository.a();
+				Collection<String> c1 = Lists.newArrayList(collection); //collection1
+				Collection<String> c2 = savedata.D().b(); //collection2
+				
+				Iterator<String> iterator = resourcepackrepository.b().iterator();
 
+				while (iterator.hasNext()) {
+					String s = (String) iterator.next();
+					if (!c2.contains(s) && !c1.contains(s)) {
+						c1.add(s);
+					}
+				}
+				Collection<String> collection1 = c1;
+				
+				commandlistenerwrapper.sendMessage(new ChatMessage("commands.reload.success"), true);
+				
+				commandlistenerwrapper.getServer().a(collection1).exceptionally((throwable) -> {
+					LogManager.getLogger().warn("Failed to execute reload", throwable);
+					commandlistenerwrapper.sendFailureMessage(new ChatMessage("commands.reload.failure"));
+					return null;
+				});
+				
+				return 0;
+			})
+		);
+	}
+	
 	@Override
 	public ArgumentType<?> _ArgumentAngle() {
 		return ArgumentAngle.a();
