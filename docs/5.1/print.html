@@ -3084,9 +3084,6 @@ CustomArgument(nodeName, (String) -&gt; { ... return T; }, boolean keyed);
 <p>Say we want to create an argument to represents the list of available worlds on the server. We basically want to have an argument which always returns a Bukkit <code>World</code> object as the result. Here, we create a method <code>worldArgument()</code> that returns our custom argument that returns a <code>World</code>. First, we retrieve our <code>String[]</code> of world names to be used for our suggestions. We then write our custom argument that creates a <code>World</code> object from the input (in this case, we simply convert the String to a <code>World</code> using <code>Bukkit.getWorld(String)</code>). We perform error handling before returning our result:</p>
 <pre><code class="language-java">//Function that returns our custom argument
 public Argument worldArgument(String nodeName) {
-
-	//List of worlds on the server, as Strings
-	String[] worlds = Bukkit.getWorlds().stream().map(World::getName).toArray(String[]::new);
 	
 	//Construct our CustomArgument that takes in a String input and returns a World object
 	return new CustomArgument&lt;World&gt;(nodeName, (input) -&gt; {
@@ -3098,7 +3095,12 @@ public Argument worldArgument(String nodeName) {
 	    } else {
 	        return world;
 	    }
-	}).overrideSuggestions(worlds);
+	}).overrideSuggestions(sender -&gt; {
+		//List of worlds on the server, as Strings. We use overrideSuggestions(sender -&gt; ...)
+		//since this evaluates the list of worlds when the player types the command as opposed
+		//to when the plugin starts up
+		return Bukkit.getWorlds().stream().map(World::getName).toArray(String[]::new);
+	});
 }
 </code></pre>
 <p>In our error handling step, we check if the world is equal to null (since the <code>Bukkit.getWorld(String)</code> is <code>@Nullable</code>). To handle this case, we throw a <code>CustomArgumentException</code> with an error from a <code>MessageBuilder</code>. The <code>CustomArgumentException</code> has two constructors, so a message builder isn't required each time:</p>

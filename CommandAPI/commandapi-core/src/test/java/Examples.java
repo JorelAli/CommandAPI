@@ -797,9 +797,6 @@ new CommandAPICommand("tpworld")
 /* ANCHOR: customarguments2 */
 //Function that returns our custom argument
 public Argument worldArgument(String nodeName) {
-
-	//List of worlds on the server, as Strings
-	String[] worlds = Bukkit.getWorlds().stream().map(World::getName).toArray(String[]::new);
 	
 	//Construct our CustomArgument that takes in a String input and returns a World object
 	return new CustomArgument<World>(nodeName, (input) -> {
@@ -811,7 +808,12 @@ public Argument worldArgument(String nodeName) {
 	    } else {
 	        return world;
 	    }
-	}).overrideSuggestions(worlds);
+	}).overrideSuggestions(sender -> {
+		//List of worlds on the server, as Strings. We use overrideSuggestions(sender -> ...)
+		//since this evaluates the list of worlds when the player types the command as opposed
+		//to when the plugin starts up
+		return Bukkit.getWorlds().stream().map(World::getName).toArray(String[]::new);
+	});
 }
 /* ANCHOR_END: customarguments2 */
 
