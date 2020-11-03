@@ -123,6 +123,16 @@ These versions of Minecraft must be installed in your local machine's Maven repo
     </thead>
     <tbody>
         <tr>
+            <td valign="top"><b>5.2</b></td>
+            <td valign="top">November 2020</td>
+            <td valign="top">
+                <ul>
+                    <li>Adds <code>CommandAPI.reloadDatapacks()</code> method to reload datapacks in the same way the CommandAPI does</li>
+                    <li>Adds support for Minecraft 1.16.4</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
             <td valign="top"><b>5.1</b></td>
             <td valign="top">October 2020</td>
             <td valign="top">
