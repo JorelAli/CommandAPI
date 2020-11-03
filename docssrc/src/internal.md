@@ -62,3 +62,14 @@ There are a few arguments that aren't implemented. Here's why:
 
 - `minecraft:item_slot` - Bukkit's implementation of item slot numbers differs very wildly to Minecraft's implementation of item slot numbers. This difference makes it near-impossible to have a suitable middle-ground for item slot numbers that ensures that invalid numbers cannot be passed to the wrong inventory type. An implementation of this would require a rewrite of the current system to maintain proper inventory slot access safety.
 - `minecraft:nbt`, `minecraft:nbt_path`, `minecraft:nbt_tag` - You've got the `NBTCompoundArgument`, that's good enough, right? ¯\\\_(ツ)\_/¯
+
+-----
+
+## Reloading datapacks
+
+During the initialization of Minecraft 1.16+ servers, the CommandAPI uses a custom datapack reloading sequence as opposed to the normal Vanilla Minecraft datapack reloading method. The CommandAPI's method uses the server's current command dispatcher object as opposed to a new one, which allows datapacks to use commands registered by the CommandAPI. This can be invoked using the following method:
+
+```java
+CommandAPI.reloadDatapacks();
+```
+

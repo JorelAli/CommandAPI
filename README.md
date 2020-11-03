@@ -23,12 +23,12 @@
 
 **Compatible Minecraft versions:** 
 
-|                   |        |        |        |        |        |
-| ----------------- | ------ | ------ | ------ | ------ | ------ |
-| **1.13 versions** | 1.13   | 1.13.1 | 1.13.2 |        |        |
-| **1.14 versions** | 1.14   | 1.14.1 | 1.14.2 | 1.14.3 | 1.14.4 |
-| **1.15 versions** | 1.15   | 1.15.1 | 1.15.2 |        |        |
-| **1.16 versions** |        | 1.16.1 | 1.16.2 | 1.16.3 |        |
+|                   |      |        |        |        |        |
+| ----------------- | ---- | ------ | ------ | ------ | ------ |
+| **1.13 versions** | 1.13 | 1.13.1 | 1.13.2 |        |        |
+| **1.14 versions** | 1.14 | 1.14.1 | 1.14.2 | 1.14.3 | 1.14.4 |
+| **1.15 versions** | 1.15 | 1.15.1 | 1.15.2 |        |        |
+| **1.16 versions** |      | 1.16.1 | 1.16.2 | 1.16.3 | 1.16.4 |
 
 -----
 
@@ -88,7 +88,7 @@ To build the CommandAPI, the following versions of Spigot are required:
 | **1.13 versions** | 1.13   | 1.13.1 | 1.13.2 |
 | **1.14 versions** | 1.14   | 1.14.3 | 1.14.4 |
 | **1.15 versions** | 1.15   |        |        |
-| **1.16 versions** | 1.16.1 | 1.16.2 |        |
+| **1.16 versions** | 1.16.1 | 1.16.2 | 1.16.4 |
 
 These versions of Minecraft must be installed in your local machine's Maven repository (`~/.m2`). **The easiest way to do this is to build them manually using Spigot's BuildTools, as it automatically adds it to the `.m2` local repository folder.**
 
@@ -122,6 +122,16 @@ These versions of Minecraft must be installed in your local machine's Maven repo
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td valign="top"><b>5.2</b></td>
+            <td valign="top">November 2020</td>
+            <td valign="top">
+                <ul>
+                    <li>Adds <code>CommandAPI.reloadDatapacks()</code> method to reload datapacks in the same way the CommandAPI does</li>
+                    <li>Adds support for Minecraft 1.16.4</li>
+                </ul>
+            </td>
+        </tr>
         <tr>
             <td valign="top"><b>5.1</b></td>
             <td valign="top">October 2020</td>

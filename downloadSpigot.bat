@@ -16,6 +16,7 @@ IF exist BuildTools.jar (
 		1.15
 		1.16.1
 		1.16.2
+		1.16.4
 	) DO (
 		@ECHO OFF
 		mvn dependency:get --batch-mode -q -Dartifact=org.spigotmc:spigot:%%v-R0.1-SNAPSHOT

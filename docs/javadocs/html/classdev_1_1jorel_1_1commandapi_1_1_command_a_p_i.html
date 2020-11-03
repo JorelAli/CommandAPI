@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">CommandAPI
-   &#160;<span id="projectnumber">5.1</span>
+   &#160;<span id="projectnumber">5.2</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -112,6 +112,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ad451a2cce6533da8ea8b25a20db0dd19"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#ad451a2cce6533da8ea8b25a20db0dd19">updateRequirements</a> (Player player)</td></tr>
 <tr class="memdesc:ad451a2cce6533da8ea8b25a20db0dd19"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the requirements required for a given player to execute a command.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#ad451a2cce6533da8ea8b25a20db0dd19">More...</a><br /></td></tr>
 <tr class="separator:ad451a2cce6533da8ea8b25a20db0dd19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba5625d16830784a80f5971915892173"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#aba5625d16830784a80f5971915892173">reloadDatapacks</a> ()</td></tr>
+<tr class="memdesc:aba5625d16830784a80f5971915892173"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reloads all of the datapacks that are on the server.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#aba5625d16830784a80f5971915892173">More...</a><br /></td></tr>
+<tr class="separator:aba5625d16830784a80f5971915892173"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acea9f164361b1e4ec98520436685f591"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#acea9f164361b1e4ec98520436685f591">fail</a> (String message)  throws WrapperCommandSyntaxException </td></tr>
 <tr class="memdesc:acea9f164361b1e4ec98520436685f591"><td class="mdescLeft">&#160;</td><td class="mdescRight">Forces a command to return a success value of 0.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#acea9f164361b1e4ec98520436685f591">More...</a><br /></td></tr>
 <tr class="separator:acea9f164361b1e4ec98520436685f591"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -189,7 +192,7 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">WrapperCommandSyntaxException</td><td></td></tr>
+    <tr><td class="paramname">WrapperCommandSyntaxException</td><td>which indicates that there was a command failure </td></tr>
   </table>
   </dd>
 </dl>
@@ -326,6 +329,34 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="aba5625d16830784a80f5971915892173"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba5625d16830784a80f5971915892173">&#9670;&nbsp;</a></span>reloadDatapacks()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void dev.jorel.commandapi.CommandAPI.reloadDatapacks </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reloads all of the datapacks that are on the server. </p>
+<p>This should be used if you change a datapack and want to reload a server. Execute this method after running /minecraft:reload, NOT before. </p>
+
+</div>
+</div>
 <a id="af80c6e832cee1fd3e8e7e5ef52f98fb5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af80c6e832cee1fd3e8e7e5ef52f98fb5">&#9670;&nbsp;</a></span>unregister() <span class="overload">[1/2]</span></h2>
 
@@ -445,7 +476,7 @@ Static Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html">CommandAPI</a></li>
-    <li class="footer">Generated on Sun Oct 18 2020 20:58:22 for CommandAPI by
+    <li class="footer">Generated on Tue Nov 3 2020 18:55:45 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

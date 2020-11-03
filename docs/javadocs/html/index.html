@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">CommandAPI
-   &#160;<span id="projectnumber">5.1</span>
+   &#160;<span id="projectnumber">5.2</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -197,6 +197,20 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <p>Version </p>
 <p>Date </p>
 <p>Features / Changes  &lt;/thead&gt; &lt;tbody&gt; </p>
+<p><b>5.1</b> </p>
+<p>October 2020 </p>
+<ul>
+<li>
+Fixes bug where converted commands could not be executed by players ingame </li>
+<li>
+Adds <code>withPermission(String)</code> to arguments and CommandAPICommands </li>
+<li>
+Adds SimpleFunctionWrapper with helper methods to get functions and tags from ingame, as well as run them without needing to parse them via commands </li>
+<li>
+Greatly improve the type-safety of the internal CommandAPI code </li>
+<li>
+Move the <code>Brigadier</code> class outside of the <code>CommandAPIHandler</code> class </li>
+</ul>
 <p><b>5.0</b> </p>
 <p>October 2020 </p>
 <ul>
@@ -696,7 +710,7 @@ Initial release </li>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sun Oct 18 2020 20:58:24 for CommandAPI by
+    <li class="footer">Generated on Tue Nov 3 2020 18:55:47 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

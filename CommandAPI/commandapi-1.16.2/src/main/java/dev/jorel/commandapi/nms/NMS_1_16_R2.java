@@ -149,7 +149,7 @@ import net.minecraft.server.v1_16_R2.Vec3D;
 import net.minecraft.server.v1_16_R2.WorldServer;
 
 public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
-
+	
 	@Override
 	public ArgumentType<?> _ArgumentAngle() {
 		return ArgumentAngle.a();

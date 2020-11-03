@@ -6,9 +6,10 @@
 
 	<groupId>dev.jorel</groupId>
 	<artifactId>commandapi</artifactId>
-	<version>5.1</version>
+	<version>5.2</version>
 	<packaging>pom</packaging>
 	<modules>
+		<module>commandapi-1.16.4</module>
 		<module>commandapi-1.16.2</module>
 		<module>commandapi-1.16.1</module>
 		<module>commandapi-1.15</module>

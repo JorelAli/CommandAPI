@@ -11,6 +11,7 @@ import dev.jorel.commandapi.nms.NMS_1_14_4;
 import dev.jorel.commandapi.nms.NMS_1_15;
 import dev.jorel.commandapi.nms.NMS_1_16_R1;
 import dev.jorel.commandapi.nms.NMS_1_16_R2;
+import dev.jorel.commandapi.nms.NMS_1_16_R3;
 
 public interface CommandAPIVersionHandler {
 
@@ -39,6 +40,8 @@ public interface CommandAPIVersionHandler {
 		case "1.16.2":
 		case "1.16.3":
 			return new NMS_1_16_R2();
+		case "1.16.4":
+			return new NMS_1_16_R3();
 		default:
 			throw new UnsupportedVersionException("This version of Minecraft is unsupported: " + version);
 		}

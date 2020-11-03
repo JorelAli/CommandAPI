@@ -12,6 +12,7 @@ sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" CommandAPI/c
 sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" CommandAPI/commandapi-1.15/pom.xml
 sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" CommandAPI/commandapi-1.16.1/pom.xml
 sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" CommandAPI/commandapi-1.16.2/pom.xml
+sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" CommandAPI/commandapi-1.16.4/pom.xml
 
 sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" CommandAPI/commandapi-core/pom.xml
 sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" CommandAPI/commandapi-plugin/pom.xml

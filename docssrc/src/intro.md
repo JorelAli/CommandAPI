@@ -36,6 +36,10 @@ Using the search icon in the top left corner, you can search for anything in thi
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 5.1 \\(\rightarrow\\) 5.2:
+
+- Adds brief documentation for the CommandAPI's `reloadDatapacks` method in [16. Internal CommandAPI](./internal.md#reloading-datapacks)
+
 ### Documentation changes 5.0 \\(\rightarrow\\) 5.1:
 
 - Adds a section [10.2. The SimpleFunctionWrapper class](./simplefunctionwrapper.md) which outlines the new `SimpleFunctionWrapper` class

@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a59a33b6cbda4f10b89fc6ad521a59782":[1,0,1,0,0,0,2,20],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a716845e6c83d646b240bd1a92972645b":[1,0,1,0,0,0,2,11],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a93b5de93aea5b624ca883b75081c449d":[1,0,1,0,0,0,2,14],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a9a03f1f9c14d5c508ccc42e004ae7432":[1,0,1,0,0,0,2,17],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_conflicting_permissions_exception.html#ab6714b3bbe0b8296f1fa506fbb84da9e":[1,0,1,0,0,1,3,0],
 "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_empty_executor_exception.html":[1,0,1,0,0,1,4],
 "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_empty_executor_exception.html#a72c0e9252c3da0a2528edf8b2d9968c3":[1,0,1,0,0,1,4,0],
-"classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_environment_argument_exception.html":[1,0,1,0,0,1,5],
-"classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_environment_argument_exception.html#ad07112c03b687c4d17bf085d05433373":[1,0,1,0,0,1,5,0]
+"classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_environment_argument_exception.html":[1,0,1,0,0,1,5]
 };
