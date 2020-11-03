@@ -1,0 +1,6 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Tue Nov 03 18:57:52 GMT 2020
+commandapi-plugin-5.2.jar>=
+commandapi-plugin-5.2.pom>=
+commandapi-plugin-5.2-sources.jar>=
+commandapi-plugin-5.2-javadoc.jar>=

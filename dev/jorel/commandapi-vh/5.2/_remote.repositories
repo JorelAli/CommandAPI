@@ -1,0 +1,6 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Tue Nov 03 18:57:45 GMT 2020
+commandapi-vh-5.2-javadoc.jar>=
+commandapi-vh-5.2.jar>=
+commandapi-vh-5.2.pom>=
+commandapi-vh-5.2-sources.jar>=
