@@ -9,18 +9,18 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>commandapi-1.13</artifactId>
+    <artifactId>commandapi-1.16.4</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
-            <version>1.13-R0.1-SNAPSHOT</version>
+            <version>1.16.4-R0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>dev.jorel</groupId>
             <artifactId>commandapi-core</artifactId>
-			<version>5.2</version>
+            <version>5.2</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

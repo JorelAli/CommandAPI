@@ -35,18 +35,18 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.craftbukkit.v1_16_R2.CraftLootTable;
-import org.bukkit.craftbukkit.v1_16_R2.CraftParticle;
-import org.bukkit.craftbukkit.v1_16_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_16_R2.CraftSound;
-import org.bukkit.craftbukkit.v1_16_R2.block.data.CraftBlockData;
-import org.bukkit.craftbukkit.v1_16_R2.command.VanillaCommandWrapper;
-import org.bukkit.craftbukkit.v1_16_R2.enchantments.CraftEnchantment;
-import org.bukkit.craftbukkit.v1_16_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_16_R2.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_16_R2.potion.CraftPotionEffectType;
-import org.bukkit.craftbukkit.v1_16_R2.util.CraftChatMessage;
+import org.bukkit.craftbukkit.v1_16_R3.CraftLootTable;
+import org.bukkit.craftbukkit.v1_16_R3.CraftParticle;
+import org.bukkit.craftbukkit.v1_16_R3.CraftServer;
+import org.bukkit.craftbukkit.v1_16_R3.CraftSound;
+import org.bukkit.craftbukkit.v1_16_R3.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_16_R3.command.VanillaCommandWrapper;
+import org.bukkit.craftbukkit.v1_16_R3.enchantments.CraftEnchantment;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_16_R3.potion.CraftPotionEffectType;
+import org.bukkit.craftbukkit.v1_16_R3.util.CraftChatMessage;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -80,75 +80,75 @@ import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
-import net.minecraft.server.v1_16_R2.Advancement;
-import net.minecraft.server.v1_16_R2.ArgumentAngle;
-import net.minecraft.server.v1_16_R2.ArgumentBlockPredicate;
-import net.minecraft.server.v1_16_R2.ArgumentChat;
-import net.minecraft.server.v1_16_R2.ArgumentChatComponent;
-import net.minecraft.server.v1_16_R2.ArgumentChatFormat;
-import net.minecraft.server.v1_16_R2.ArgumentCriterionValue;
-import net.minecraft.server.v1_16_R2.ArgumentDimension;
-import net.minecraft.server.v1_16_R2.ArgumentEnchantment;
-import net.minecraft.server.v1_16_R2.ArgumentEntity;
-import net.minecraft.server.v1_16_R2.ArgumentEntitySummon;
-import net.minecraft.server.v1_16_R2.ArgumentItemPredicate;
-import net.minecraft.server.v1_16_R2.ArgumentItemStack;
-import net.minecraft.server.v1_16_R2.ArgumentMathOperation;
-import net.minecraft.server.v1_16_R2.ArgumentMinecraftKeyRegistered;
-import net.minecraft.server.v1_16_R2.ArgumentMobEffect;
-import net.minecraft.server.v1_16_R2.ArgumentNBTTag;
-import net.minecraft.server.v1_16_R2.ArgumentParticle;
-import net.minecraft.server.v1_16_R2.ArgumentPosition;
-import net.minecraft.server.v1_16_R2.ArgumentProfile;
-import net.minecraft.server.v1_16_R2.ArgumentRegistry;
-import net.minecraft.server.v1_16_R2.ArgumentRotation;
-import net.minecraft.server.v1_16_R2.ArgumentRotationAxis;
-import net.minecraft.server.v1_16_R2.ArgumentScoreboardCriteria;
-import net.minecraft.server.v1_16_R2.ArgumentScoreboardObjective;
-import net.minecraft.server.v1_16_R2.ArgumentScoreboardSlot;
-import net.minecraft.server.v1_16_R2.ArgumentScoreboardTeam;
-import net.minecraft.server.v1_16_R2.ArgumentScoreholder;
-import net.minecraft.server.v1_16_R2.ArgumentTag;
-import net.minecraft.server.v1_16_R2.ArgumentTile;
-import net.minecraft.server.v1_16_R2.ArgumentTime;
-import net.minecraft.server.v1_16_R2.ArgumentUUID;
-import net.minecraft.server.v1_16_R2.ArgumentVec2;
-import net.minecraft.server.v1_16_R2.ArgumentVec2I;
-import net.minecraft.server.v1_16_R2.ArgumentVec3;
-import net.minecraft.server.v1_16_R2.BlockPosition;
-import net.minecraft.server.v1_16_R2.BlockPosition2D;
-import net.minecraft.server.v1_16_R2.CommandDispatcher;
-import net.minecraft.server.v1_16_R2.CommandListenerWrapper;
-import net.minecraft.server.v1_16_R2.CompletionProviders;
-import net.minecraft.server.v1_16_R2.CriterionConditionValue;
-import net.minecraft.server.v1_16_R2.CustomFunction;
-import net.minecraft.server.v1_16_R2.CustomFunctionData;
-import net.minecraft.server.v1_16_R2.CustomFunctionManager;
-import net.minecraft.server.v1_16_R2.DataPackResources;
-import net.minecraft.server.v1_16_R2.DedicatedServer;
-import net.minecraft.server.v1_16_R2.Entity;
-import net.minecraft.server.v1_16_R2.EnumDirection.EnumAxis;
-import net.minecraft.server.v1_16_R2.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_16_R2.ICompletionProvider;
-import net.minecraft.server.v1_16_R2.IRecipe;
-import net.minecraft.server.v1_16_R2.IRegistry;
-import net.minecraft.server.v1_16_R2.IReloadableResourceManager;
-import net.minecraft.server.v1_16_R2.IVectorPosition;
-import net.minecraft.server.v1_16_R2.ItemStack;
-import net.minecraft.server.v1_16_R2.LootTable;
-import net.minecraft.server.v1_16_R2.LootTableRegistry;
-import net.minecraft.server.v1_16_R2.MinecraftKey;
-import net.minecraft.server.v1_16_R2.MinecraftServer;
-import net.minecraft.server.v1_16_R2.Scoreboard;
-import net.minecraft.server.v1_16_R2.ScoreboardScore;
-import net.minecraft.server.v1_16_R2.ShapeDetectorBlock;
-import net.minecraft.server.v1_16_R2.SystemUtils;
-import net.minecraft.server.v1_16_R2.Unit;
-import net.minecraft.server.v1_16_R2.Vec2F;
-import net.minecraft.server.v1_16_R2.Vec3D;
-import net.minecraft.server.v1_16_R2.WorldServer;
+import net.minecraft.server.v1_16_R3.Advancement;
+import net.minecraft.server.v1_16_R3.ArgumentAngle;
+import net.minecraft.server.v1_16_R3.ArgumentBlockPredicate;
+import net.minecraft.server.v1_16_R3.ArgumentChat;
+import net.minecraft.server.v1_16_R3.ArgumentChatComponent;
+import net.minecraft.server.v1_16_R3.ArgumentChatFormat;
+import net.minecraft.server.v1_16_R3.ArgumentCriterionValue;
+import net.minecraft.server.v1_16_R3.ArgumentDimension;
+import net.minecraft.server.v1_16_R3.ArgumentEnchantment;
+import net.minecraft.server.v1_16_R3.ArgumentEntity;
+import net.minecraft.server.v1_16_R3.ArgumentEntitySummon;
+import net.minecraft.server.v1_16_R3.ArgumentItemPredicate;
+import net.minecraft.server.v1_16_R3.ArgumentItemStack;
+import net.minecraft.server.v1_16_R3.ArgumentMathOperation;
+import net.minecraft.server.v1_16_R3.ArgumentMinecraftKeyRegistered;
+import net.minecraft.server.v1_16_R3.ArgumentMobEffect;
+import net.minecraft.server.v1_16_R3.ArgumentNBTTag;
+import net.minecraft.server.v1_16_R3.ArgumentParticle;
+import net.minecraft.server.v1_16_R3.ArgumentPosition;
+import net.minecraft.server.v1_16_R3.ArgumentProfile;
+import net.minecraft.server.v1_16_R3.ArgumentRegistry;
+import net.minecraft.server.v1_16_R3.ArgumentRotation;
+import net.minecraft.server.v1_16_R3.ArgumentRotationAxis;
+import net.minecraft.server.v1_16_R3.ArgumentScoreboardCriteria;
+import net.minecraft.server.v1_16_R3.ArgumentScoreboardObjective;
+import net.minecraft.server.v1_16_R3.ArgumentScoreboardSlot;
+import net.minecraft.server.v1_16_R3.ArgumentScoreboardTeam;
+import net.minecraft.server.v1_16_R3.ArgumentScoreholder;
+import net.minecraft.server.v1_16_R3.ArgumentTag;
+import net.minecraft.server.v1_16_R3.ArgumentTile;
+import net.minecraft.server.v1_16_R3.ArgumentTime;
+import net.minecraft.server.v1_16_R3.ArgumentUUID;
+import net.minecraft.server.v1_16_R3.ArgumentVec2;
+import net.minecraft.server.v1_16_R3.ArgumentVec2I;
+import net.minecraft.server.v1_16_R3.ArgumentVec3;
+import net.minecraft.server.v1_16_R3.BlockPosition;
+import net.minecraft.server.v1_16_R3.BlockPosition2D;
+import net.minecraft.server.v1_16_R3.CommandDispatcher;
+import net.minecraft.server.v1_16_R3.CommandListenerWrapper;
+import net.minecraft.server.v1_16_R3.CompletionProviders;
+import net.minecraft.server.v1_16_R3.CriterionConditionValue;
+import net.minecraft.server.v1_16_R3.CustomFunction;
+import net.minecraft.server.v1_16_R3.CustomFunctionData;
+import net.minecraft.server.v1_16_R3.CustomFunctionManager;
+import net.minecraft.server.v1_16_R3.DataPackResources;
+import net.minecraft.server.v1_16_R3.DedicatedServer;
+import net.minecraft.server.v1_16_R3.Entity;
+import net.minecraft.server.v1_16_R3.EnumDirection.EnumAxis;
+import net.minecraft.server.v1_16_R3.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_16_R3.ICompletionProvider;
+import net.minecraft.server.v1_16_R3.IRecipe;
+import net.minecraft.server.v1_16_R3.IRegistry;
+import net.minecraft.server.v1_16_R3.IReloadableResourceManager;
+import net.minecraft.server.v1_16_R3.IVectorPosition;
+import net.minecraft.server.v1_16_R3.ItemStack;
+import net.minecraft.server.v1_16_R3.LootTable;
+import net.minecraft.server.v1_16_R3.LootTableRegistry;
+import net.minecraft.server.v1_16_R3.MinecraftKey;
+import net.minecraft.server.v1_16_R3.MinecraftServer;
+import net.minecraft.server.v1_16_R3.Scoreboard;
+import net.minecraft.server.v1_16_R3.ScoreboardScore;
+import net.minecraft.server.v1_16_R3.ShapeDetectorBlock;
+import net.minecraft.server.v1_16_R3.SystemUtils;
+import net.minecraft.server.v1_16_R3.Unit;
+import net.minecraft.server.v1_16_R3.Vec2F;
+import net.minecraft.server.v1_16_R3.Vec3D;
+import net.minecraft.server.v1_16_R3.WorldServer;
 
-public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
+public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	
 	@Override
 	public ArgumentType<?> _ArgumentAngle() {
@@ -332,7 +332,7 @@ public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public String[] compatibleVersions() {
-		return new String[] { "1.16.2", "1.16.3" };
+		return new String[] { "1.16.4" };
 	}
 
 	@Override
@@ -864,10 +864,10 @@ public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
 
 		// Reflection doesn't need to be cached because this only executes once at
 		// server startup
-		Field i = DataPackResources.class.getDeclaredField("i");
+		Field i = DataPackResources.class.getDeclaredField("i"); // CustomFunctionManager
 		i.setAccessible(true);
 
-		Field gField = CustomFunctionManager.class.getDeclaredField("g");
+		Field gField = CustomFunctionManager.class.getDeclaredField("g"); // int
 		gField.setAccessible(true);
 		int g = (int) gField.get(datapackResources.a()); // Related to the permission required to run this function?
 
@@ -876,10 +876,10 @@ public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
 		i.set(datapackResources, new CustomFunctionManager(g, datapackResources.commandDispatcher.a()));
 
 		// Construct the new CompletableFuture that now uses datapackResources
-		Field b = DataPackResources.class.getDeclaredField("b");
+		Field b = DataPackResources.class.getDeclaredField("b"); // IReloadableResourceManager
 		b.setAccessible(true);
 		IReloadableResourceManager reloadableResourceManager = (IReloadableResourceManager) b.get(datapackResources);
-		Field a = DataPackResources.class.getDeclaredField("a");
+		Field a = DataPackResources.class.getDeclaredField("a"); // CompletableFuture<Unit>
 		a.setAccessible(true);
 
 		@SuppressWarnings("unchecked")
