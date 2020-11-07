@@ -7,11 +7,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import dev.jorel.commandapi.arguments.EntitySelectorArgument;
-import dev.jorel.commandapi.arguments.LiteralArgument;
-import dev.jorel.commandapi.arguments.PlayerArgument;
-import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
-
 public class CommandAPIMain extends JavaPlugin implements Listener {
 	
 	@Override
@@ -35,32 +30,6 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 				}
 			}
 		}
-		
-		CommandAPICommand testCmd = new CommandAPICommand("test")
-			.withPermission("myplugin.test")
-			.executes((sender, args) -> {
-				sender.sendMessage("Hello there.");
-			});
-
-		new CommandAPICommand("name")
-			.withPermission("myplugin.admin")
-			.withSubcommand(testCmd)
-			.register();
-		
-		new CommandAPICommand("race")
-		    .withArguments(new LiteralArgument("invite"), new PlayerArgument("player"))
-		    .executes((s, a) -> {})
-		    .register();
-		
-		new CommandAPICommand("race")
-	    .withArguments(new LiteralArgument("invite"), new EntitySelectorArgument("player", EntitySelector.MANY_PLAYERS))
-	    .executes((s, a) -> {})
-	    .register();
-		
-		new CommandAPICommand("notop")
-		.withoutPermission(CommandPermission.OP)
-		.executes((s, a) -> { System.out.println("ayyy");})
-		.register();
 	}
 	
 	@Override
