@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -72,11 +73,13 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	final TreeMap<String, CommandPermission> PERMISSIONS_TO_FIX = new TreeMap<>();
 	final NMS<CommandListenerWrapper> NMS;
 	final CommandDispatcher<CommandListenerWrapper> DISPATCHER;
+	final Map<String, List<String>> registeredCommands; //Keep track of what has been registered for type checking 
 	
 	private CommandAPIHandler() {
 		String bukkit = Bukkit.getServer().toString();
 		NMS = CommandAPIVersionHandler.getNMS(bukkit.substring(bukkit.indexOf("minecraftVersion") + 17, bukkit.length() - 1));
 		DISPATCHER = NMS.getBrigadierDispatcher();
+		registeredCommands = new HashMap<>();
 	}
 	
 	void checkDependencies() {
@@ -490,6 +493,48 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 				index++;
 			}
 		}
+		
+		// Prevent nodes of the same name but with different types:
+		// allow    /race invite<LiteralArgument> player<PlayerArgument>
+		// disallow /race invite<LiteralArgument> player<EntitySelectorArgument>
+		if(registeredCommands.containsKey(commandName)) {
+			List<String[]> regArgs = registeredCommands.get(commandName).stream().map(s -> s.split(":")).collect(Collectors.toList());
+			for(int i = 0; i < args.size(); i++) {
+				// Avoid IAOOBEs
+				if(regArgs.size() == i && regArgs.size() < args.size()) {
+					break;
+				}
+				// We want to ensure all node names are the same
+				if(!regArgs.get(i)[0].equals(args.get(i).getNodeName())) {
+					break;
+				}
+				// This only applies to the last argument
+				if(i == args.size() - 1) {
+					if(!regArgs.get(i)[1].equals(args.get(i).getClass().getSimpleName())) { 
+						
+						//Command we're trying to register
+						StringBuilder builder = new StringBuilder();
+						args.forEach(arg -> builder.append(arg.getNodeName()).append("<").append(arg.getClass().getSimpleName()).append("> "));
+						
+						//Command it conflicts with
+						StringBuilder builder2 = new StringBuilder();
+						regArgs.forEach(arg -> builder2.append(arg[0]).append("<").append(arg[1]).append("> "));
+						
+						// Lovely high quality error message formatting (inspired by Elm)
+						CommandAPI.getLog().severe("Failed to register command:");
+						CommandAPI.getLog().severe("");
+						CommandAPI.getLog().severe("  " + commandName + " " + builder.toString());
+						CommandAPI.getLog().severe("");
+						CommandAPI.getLog().severe("Because it conflicts with this previously registered command:");
+						CommandAPI.getLog().severe("");
+						CommandAPI.getLog().severe("  " + commandName + " " + builder2.toString());
+						CommandAPI.getLog().severe("");
+						return;
+					}
+				}
+			}
+		}
+		registeredCommands.put(commandName, args.stream().map(arg -> arg.getNodeName() + ":" + arg.getClass().getSimpleName()).collect(Collectors.toList()));
 		
 		if (CommandAPI.getConfiguration().hasVerboseOutput()) {
 			// Create a list of argument names
