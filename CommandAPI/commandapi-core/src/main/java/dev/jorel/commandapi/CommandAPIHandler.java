@@ -465,7 +465,10 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 					
 					//Add all of its entries
 					for(int i = 0; i < superArg.getLiterals().length; i++) {
-						LiteralArgument litArg = (LiteralArgument) new LiteralArgument(superArg.getLiterals()[i]).setListed(superArg.isListed());
+						LiteralArgument litArg = (LiteralArgument) new LiteralArgument(superArg.getLiterals()[i])
+							.setListed(superArg.isListed())
+							.withPermission(superArg.getArgumentPermission())
+							.withRequirement(superArg.getRequirements());
 						
 						//Reconstruct the list of arguments and place in the new literals
 						List<Argument> newArgs = new ArrayList<>();

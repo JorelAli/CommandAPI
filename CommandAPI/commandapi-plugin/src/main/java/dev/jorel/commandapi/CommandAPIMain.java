@@ -30,6 +30,17 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 				}
 			}
 		}
+		
+		CommandAPICommand testCmd = new CommandAPICommand("test")
+			.withPermission("myplugin.test")
+			.executes((sender, args) -> {
+				sender.sendMessage("Hello there.");
+			});
+
+		new CommandAPICommand("name")
+			.withPermission("myplugin.admin")
+			.withSubcommand(testCmd)
+			.register();
 	}
 	
 	@Override
