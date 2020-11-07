@@ -56,6 +56,11 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 	    .withArguments(new LiteralArgument("invite"), new EntitySelectorArgument("player", EntitySelector.MANY_PLAYERS))
 	    .executes((s, a) -> {})
 	    .register();
+		
+		new CommandAPICommand("notop")
+		.withoutPermission(CommandPermission.OP)
+		.executes((s, a) -> { System.out.println("ayyy");})
+		.register();
 	}
 	
 	@Override

@@ -50,6 +50,7 @@ public class CommandPermission {
 
 	private String permission;
 	private PermissionNode permissionNode;
+	private boolean negated = false;
 	
 	/**
 	 * Represents a single permission required to execute a command
@@ -77,20 +78,32 @@ public class CommandPermission {
 		return this.permissionNode;
 	}
 	
+	boolean isNegated() {
+		return this.negated;
+	}
+	
+	CommandPermission negate() {
+		this.negated = true;
+		return this;
+	}
+	
 	/**
 	 * Returns a human-readable string of this CommandPermission
 	 * @return a human-readable string of this CommandPermission
 	 */
 	@Override
 	public String toString() {
+		final String result;
 		if(permissionNode != null) {
-			if(permissionNode == PermissionNode.OP)
-				return "OP";
-			else
-				return "NONE";
+			if(permissionNode == PermissionNode.OP) {
+				result = "OP";
+			} else {
+				result =  "NONE";
+			}
 		} else {
-			return permission;
+			result = permission;
 		}
+		return (negated ? "not " : "") + result;
 	}
 	
 	private enum PermissionNode {

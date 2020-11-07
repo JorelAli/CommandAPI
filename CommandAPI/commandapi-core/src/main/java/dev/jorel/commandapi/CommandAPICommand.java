@@ -71,6 +71,26 @@ public class CommandAPICommand {
 	}
 	
 	/**
+	 * Applies a permission to the current command builder
+	 * @param permission The permission node required to execute this command
+	 * @return this command builder
+	 */
+	public CommandAPICommand withoutPermission(CommandPermission permission) {
+		this.permission = permission.negate();
+		return this;
+	}
+	
+	/**
+	 * Applies a permission to the current command builder
+	 * @param permission The permission node required to execute this command
+	 * @return this command builder
+	 */
+	public CommandAPICommand withoutPermission(String permission) {
+		this.permission = CommandPermission.fromString(permission).negate();
+		return this;
+	}
+	
+	/**
 	 * Adds a requirement that has to be satisfied to use this command. This method
 	 * can be used multiple times and each use of this method will AND its
 	 * requirement with the previously declared ones

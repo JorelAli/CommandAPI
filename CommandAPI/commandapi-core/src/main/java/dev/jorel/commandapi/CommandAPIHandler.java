@@ -404,7 +404,9 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 				satisfiesPermissions = sender.hasPermission(permission.getPermission());
 			}
 		}
-		
+		if(permission.isNegated()) {
+			satisfiesPermissions = !satisfiesPermissions;
+		}
 		return satisfiesPermissions && requirements.test(sender);
 	}
 
@@ -424,7 +426,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 			CommandPermission perm = entry.getValue();
 			CommandAPI.logInfo(perm.toString() + " -> /" + cmdName);
 			
-			String permNode = perm.equals(CommandPermission.NONE) ? "" : perm.getPermission();
+			String permNode = (perm.equals(CommandPermission.NONE) || perm.isNegated()) ? "" : perm.getPermission();
 			
 			/*
 			 * Sets the permission. If you have to be OP to run this command,
