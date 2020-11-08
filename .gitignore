@@ -7,3 +7,4 @@ bin
 .project
 .settings
 target
+CommandAPI/logs/latest.log

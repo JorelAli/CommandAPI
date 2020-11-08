@@ -72,6 +72,7 @@ import dev.jorel.commandapi.exceptions.BiomeArgumentException;
 import dev.jorel.commandapi.exceptions.EnvironmentArgumentException;
 import dev.jorel.commandapi.exceptions.TimeArgumentException;
 import dev.jorel.commandapi.exceptions.UUIDArgumentException;
+import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.IntegerRange;
@@ -139,6 +140,7 @@ import net.minecraft.server.v1_13_R1.ShapeDetectorBlock;
 import net.minecraft.server.v1_13_R1.Vec2F;
 import net.minecraft.server.v1_13_R1.Vec3D;
 
+@RequireField(in = CraftSound.class, name = "minecraftKey", ofType = String.class)
 public class NMS_1_13 implements NMS<CommandListenerWrapper> {
 	
 	//Converts NMS function to SimpleFunctionWrapper
