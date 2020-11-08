@@ -14,11 +14,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-core</artifactId>
-			<version>5.3</version>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-1.16.4</artifactId>
 			<version>5.3</version>
 		</dependency>
