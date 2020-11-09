@@ -1,26 +1,21 @@
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.annotations.Alias;
 import dev.jorel.commandapi.annotations.Arg;
 import dev.jorel.commandapi.annotations.Command;
 import dev.jorel.commandapi.annotations.Default;
 import dev.jorel.commandapi.annotations.Description;
 import dev.jorel.commandapi.annotations.Executor;
-import dev.jorel.commandapi.annotations.Executor.ExecutorType;
 import dev.jorel.commandapi.annotations.NeedsOp;
 import dev.jorel.commandapi.annotations.Permission;
 import dev.jorel.commandapi.annotations.Subcommand;
 import dev.jorel.commandapi.arguments.PlayerArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
+import dev.jorel.commandapi.executors.ExecutorType;
 
 @Command("party")
 public class PartyCommand {
-	
-	static void register() {
-		CommandAPI.registerCommand(PartyCommand.class);
-	}
 	
 	@Default
 	@Description("Show party help")
@@ -47,7 +42,5 @@ public class PartyCommand {
 	public static void createParty(CommandSender sender, Object[] args) {
 		// TODO: Create a party
 	}
-	
-	
 	
 }

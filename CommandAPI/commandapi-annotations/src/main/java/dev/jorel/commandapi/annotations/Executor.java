@@ -5,18 +5,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.executors.ExecutorType;
+
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.SOURCE)
 public @interface Executor {
-	
-	public enum ExecutorType {
-		NATIVE,
-		COMMAND_BLOCK,
-		CONSOLE,
-		ENTITY,
-		PROXY,
-		PLAYER;
-	}
 
 	ExecutorType value();
 	
