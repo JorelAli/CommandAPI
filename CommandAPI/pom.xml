@@ -31,6 +31,7 @@
 		<!-- Outputs -->
 		<module>commandapi-plugin</module>
 		<module>commandapi-shade</module>
+		<module>commandapi-annotations</module>
 	</modules>
 
 	<properties>
