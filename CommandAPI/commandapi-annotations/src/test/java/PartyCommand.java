@@ -1,9 +1,11 @@
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.annotations.Alias;
 import dev.jorel.commandapi.annotations.Arg;
 import dev.jorel.commandapi.annotations.Command;
+import dev.jorel.commandapi.annotations.Default;
 import dev.jorel.commandapi.annotations.Description;
 import dev.jorel.commandapi.annotations.Executor;
 import dev.jorel.commandapi.annotations.Executor.ExecutorType;
@@ -16,7 +18,15 @@ import dev.jorel.commandapi.arguments.StringArgument;
 @Command("party")
 public class PartyCommand {
 	
-	static void register() {}
+	static void register() {
+		CommandAPI.registerCommand(PartyCommand.class);
+	}
+	
+	@Default
+	@Description("Show party help")
+	public static void party(CommandSender sender, Object[] args) {
+		// Show help
+	}
 		
 	@Subcommand("tp")
 	@Executor(ExecutorType.PLAYER)
@@ -24,7 +34,7 @@ public class PartyCommand {
 	@Description("Teleport to a party member")
 	@Alias({"tele", "teleport"})
 	@Arg(name = "target", type = PlayerArgument.class)
-	public void teleport(Player player, Object[] args) {
+	public static void teleport(Player player, Object[] args) {
 		Player target = (Player) args[0];
 		player.teleport(target);
 	}
@@ -34,7 +44,7 @@ public class PartyCommand {
 	@Description("Creates a new party")
 	@Arg(name = "name", type = StringArgument.class)
 	@Arg(name = "owner", type = PlayerArgument.class)
-	public void createParty(CommandSender sender, Object[] args) {
+	public static void createParty(CommandSender sender, Object[] args) {
 		// TODO: Create a party
 	}
 	
