@@ -6,13 +6,11 @@ import dev.jorel.commandapi.annotations.Arg;
 import dev.jorel.commandapi.annotations.Command;
 import dev.jorel.commandapi.annotations.Default;
 import dev.jorel.commandapi.annotations.Description;
-import dev.jorel.commandapi.annotations.Executor;
 import dev.jorel.commandapi.annotations.NeedsOp;
 import dev.jorel.commandapi.annotations.Permission;
 import dev.jorel.commandapi.annotations.Subcommand;
 import dev.jorel.commandapi.arguments.PlayerArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
-import dev.jorel.commandapi.executors.ExecutorType;
 
 @Command("party")
 public class PartyCommand {
@@ -24,7 +22,6 @@ public class PartyCommand {
 	}
 		
 	@Subcommand("tp")
-	@Executor(ExecutorType.PLAYER)
 	@Permission("party.tp")
 	@Description("Teleport to a party member")
 	@Alias({"tele", "teleport"})

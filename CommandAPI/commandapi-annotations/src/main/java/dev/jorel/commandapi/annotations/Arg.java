@@ -10,7 +10,7 @@ import dev.jorel.commandapi.arguments.Argument;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.SOURCE)
-@Repeatable(Arguments.class)
+@Repeatable(Args.class)
 public @interface Arg {
 	
 	String name();
