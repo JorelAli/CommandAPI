@@ -23,7 +23,7 @@ public class Annotations extends AbstractProcessor {
 	public Set<String> getSupportedAnnotationTypes() {
 		return new HashSet<String>(Arrays.asList(Alias.class.getCanonicalName(), Arg.class.getCanonicalName(),
 				Command.class.getCanonicalName(), Default.class.getCanonicalName(),
-				Description.class.getCanonicalName(), NeedsOp.class.getCanonicalName(),
+				NeedsOp.class.getCanonicalName(),
 				Permission.class.getCanonicalName(), Subcommand.class.getCanonicalName()));
 	}
 
@@ -117,7 +117,6 @@ public class Annotations extends AbstractProcessor {
 						
 						out.println(").setListed(false))");
 					}
-//				    .withArguments(new MultiLiteralArgument("adventure", "creative", "spectator", "survival"))
 
 					// @NeedsOp
 					if (methodElement.getAnnotation(NeedsOp.class) != null) {
