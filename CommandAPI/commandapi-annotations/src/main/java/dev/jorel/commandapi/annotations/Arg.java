@@ -14,11 +14,6 @@ import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.SOURCE)
 @Repeatable(Args.class)
-
-/**
- * An argument.
- * For ScoreHolderArgument, defaults to using ScoreHolderType.SINGLE
- */
 public @interface Arg {
 	
 	String name();

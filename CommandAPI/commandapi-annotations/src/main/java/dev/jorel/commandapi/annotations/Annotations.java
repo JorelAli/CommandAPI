@@ -16,10 +16,19 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.ExecutableType;
 import javax.lang.model.type.MirroredTypeException;
 import javax.tools.JavaFileObject;
+import javax.tools.Diagnostic.Kind;
+
+import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.CommandPermission;
+import dev.jorel.commandapi.arguments.LocationType;
+import dev.jorel.commandapi.arguments.MultiLiteralArgument;
+import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
+import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
 
 /* The main processor */
 public class Annotations extends AbstractProcessor {
 
+	// List of stuff we can deal with
 	@Override
 	public Set<String> getSupportedAnnotationTypes() {
 		return new HashSet<String>(Arrays.asList(Alias.class.getCanonicalName(), Arg.class.getCanonicalName(),
@@ -45,43 +54,87 @@ public class Annotations extends AbstractProcessor {
 		return true;
 	}
 
+	// Indentation, because half of this file is actually just making stuff look nice
 	private String indent(int indent) {
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < indent; i++) {
-			builder.append("  ");
+			builder.append("    ");
 		}
 		return builder.toString();
 	}
 
+	// Get fully qualified name from type mirror
 	private String fromTypeMirror(MirroredTypeException e) {
 		return e.getTypeMirror().toString();
 	}
 
-	@SuppressWarnings("unused")
-	private void processCommand(RoundEnvironment roundEnv, Element element) throws IOException {
-		TypeElement commandClass = (TypeElement) element;
+	private void processCommand(RoundEnvironment roundEnv, Element classElement) throws IOException {
+		TypeElement commandClass = (TypeElement) classElement;
 		JavaFileObject builderFile = processingEnv.getFiler()
 				.createSourceFile(commandClass.getQualifiedName() + "$Command");
 
 		try (PrintWriter out = new PrintWriter(builderFile.openWriter())) {
 
+			// Package name (https://www.baeldung.com/java-annotation-processing-builder)
 			int indent = 0;
-			String packageName = null;
-
-			if (packageName != null) {
-				out.print("package ");
-				out.print(packageName);
+			int lastDot = commandClass.getQualifiedName().toString().lastIndexOf('.');
+		    if (lastDot > 0) {
+		    	out.print("package ");
+				out.print(commandClass.getQualifiedName().toString().substring(0, lastDot));
 				out.println(";");
 				out.println();
-			}
+		    }
 
 			// Imports
-			out.println("import dev.jorel.commandapi.CommandAPICommand;");
-			out.println("import dev.jorel.commandapi.CommandPermission;");
-			out.println("import dev.jorel.commandapi.arguments.MultiLiteralArgument;");
-			out.println("import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;");
-			out.println("import dev.jorel.commandapi.arguments.LocationType;");
-			out.println("import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;");
+			Set<String> imports = new HashSet<>();
+			
+			imports.add(CommandAPICommand.class.getCanonicalName());
+			for (Element methodElement : classElement.getEnclosedElements()) {
+				if (methodElement.getAnnotation(Subcommand.class) != null) {
+					imports.add(MultiLiteralArgument.class.getCanonicalName());
+				}
+				if (methodElement.getAnnotation(NeedsOp.class) != null) {
+					imports.add(CommandPermission.class.getCanonicalName());
+				}
+				
+				// @Arg/@Args handler
+				BiConsumer<Integer, Arg> argHandler = (indent_, arg) -> {
+					String className;
+					String simpleClassName;
+					try {
+						className = arg.type().getCanonicalName();
+						simpleClassName = arg.type().getSimpleName();
+					} catch (MirroredTypeException e) {
+						className = fromTypeMirror(e);
+						simpleClassName = className.split("\\.")[className.split("\\.").length - 1];
+					}
+					imports.add(className);
+					if(simpleClassName.equals("LocationArgument") || simpleClassName.equals("Location2DArgument")) {
+						imports.add(LocationType.class.getCanonicalName());
+					} else if(simpleClassName.equals("ScoreHolderArgument")) {
+						imports.add(ScoreHolderType.class.getCanonicalName());
+					} else if(simpleClassName.equals("EntitySelectorArgument")) {
+						imports.add(EntitySelector.class.getCanonicalName());
+					}
+				};
+				
+				// @Arg
+				if (methodElement.getAnnotation(Arg.class) != null) {
+					argHandler.accept(indent, methodElement.getAnnotation(Arg.class));
+				}
+				// @Args
+				if (methodElement.getAnnotation(Args.class) != null) {
+					for (Arg arg : methodElement.getAnnotation(Args.class).value()) {
+						argHandler.accept(indent, arg);
+					}
+				}
+			}
+			
+			for(String import_ : imports) {
+				out.print("import ");
+				out.print(import_);
+				out.println(";");
+			}
 			out.println();
 
 			// Class declaration
@@ -96,7 +149,7 @@ public class Annotations extends AbstractProcessor {
 			out.println();
 			indent++;
 
-			for (Element methodElement : element.getEnclosedElements()) {
+			for (Element methodElement : classElement.getEnclosedElements()) {
 				if (methodElement.getAnnotation(Default.class) != null
 						|| methodElement.getAnnotation(Subcommand.class) != null) {
 					
@@ -109,35 +162,54 @@ public class Annotations extends AbstractProcessor {
 
 					// @Subcommand (Also handle @Alias for @Subcommand)
 					if (methodElement.getAnnotation(Subcommand.class) != null) {
-						out.print(indent(indent) + ".withArguments(new MultiLiteralArgument(\"");
-						out.print(methodElement.getAnnotation(Subcommand.class).value());
-						out.print("\"");
+						out.println(indent(indent) + ".withArguments(");
+						indent++;
+						out.print(indent(indent) + "new MultiLiteralArgument(");
 						
-						if (methodElement.getAnnotation(Alias.class) != null) {
-							out.print(", ");
-							out.print(Arrays.stream(methodElement.getAnnotation(Alias.class).value())
-									.map(x -> "\"" + x + "\"").collect(Collectors.joining(", ")));
+						if(methodElement.getAnnotation(Subcommand.class).value().length == 0) {
+							processingEnv.getMessager().printMessage(Kind.ERROR, "Invalid @Subcommand on " + methodElement.getSimpleName() + " - no subcommand name was found");
 						}
 						
-						out.println(").setListed(false))");
+						// @Subcommand (name)
+						out.print(Arrays.stream(methodElement.getAnnotation(Subcommand.class).value())
+							.map(x -> "\"" + x + "\"").collect(Collectors.joining(", ")));
+						
+						out.println(")");
+						indent++;
+						out.println(indent(indent) + ".setListed(false)");
+						
+						// @NeedsOp
+						if (methodElement.getAnnotation(NeedsOp.class) != null) {
+							out.println(indent(indent) + ".withPermission(CommandPermission.OP)");
+						}
+						
+						// @Permission
+						if (methodElement.getAnnotation(Permission.class) != null) {
+							out.print(indent(indent) + ".withPermission(\"");
+							out.print(methodElement.getAnnotation(Permission.class).value());
+							out.println("\")");
+						}
+						indent--;
+						indent--;
+						out.println(indent(indent) + ")");
 					}
-
+					
 					// @NeedsOp
-					if (methodElement.getAnnotation(NeedsOp.class) != null) {
+					if (classElement.getAnnotation(NeedsOp.class) != null) {
 						out.println(indent(indent) + ".withPermission(CommandPermission.OP)");
 					}
 
 					// @Permission
-					if (methodElement.getAnnotation(Permission.class) != null) {
+					if (classElement.getAnnotation(Permission.class) != null) {
 						out.print(indent(indent) + ".withPermission(\"");
-						out.print(methodElement.getAnnotation(Permission.class).value());
+						out.print(classElement.getAnnotation(Permission.class).value());
 						out.println("\")");
 					}
 
-					// @Alias (@Default only)
-					if (methodElement.getAnnotation(Alias.class) != null & methodElement.getAnnotation(Default.class) != null) {
+					// @Alias
+					if (classElement.getAnnotation(Alias.class) != null) {
 						out.print(indent(indent) + ".withAliases(");
-						out.print(Arrays.stream(methodElement.getAnnotation(Alias.class).value())
+						out.print(Arrays.stream(classElement.getAnnotation(Alias.class).value())
 								.map(x -> "\"" + x + "\"").collect(Collectors.joining(", ")));
 						out.println(")");
 					}
@@ -145,16 +217,13 @@ public class Annotations extends AbstractProcessor {
 					// @Arg/@Args handler
 					BiConsumer<Integer, Arg> argHandler = (indent_, arg) -> {
 						out.print(indent(indent_) + ".withArguments(new ");
-						String className;
 						String simpleClassName;
 						try {
-							className = arg.type().getCanonicalName();
 							simpleClassName = arg.type().getSimpleName();
 						} catch (MirroredTypeException e) {
-							className = fromTypeMirror(e);
-							simpleClassName = className.split("\\.")[className.split("\\.").length - 1];
+							simpleClassName = fromTypeMirror(e).split("\\.")[fromTypeMirror(e).split("\\.").length - 1];
 						}
-						out.print(className);
+						out.print(simpleClassName);
 						out.print("(\"");
 						out.print(arg.name());
 						
