@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -78,6 +79,9 @@ public class Annotations extends AbstractProcessor {
 			out.println("import dev.jorel.commandapi.CommandAPICommand;");
 			out.println("import dev.jorel.commandapi.CommandPermission;");
 			out.println("import dev.jorel.commandapi.arguments.MultiLiteralArgument;");
+			out.println("import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;");
+			out.println("import dev.jorel.commandapi.arguments.LocationType;");
+			out.println("import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;");
 			out.println();
 
 			// Class declaration
@@ -137,36 +141,48 @@ public class Annotations extends AbstractProcessor {
 								.map(x -> "\"" + x + "\"").collect(Collectors.joining(", ")));
 						out.println(")");
 					}
-
-					// @Arg
-					if (methodElement.getAnnotation(Arg.class) != null) {
-						out.print(indent(indent) + ".withArguments(new ");
+					
+					// @Arg/@Args handler
+					BiConsumer<Integer, Arg> argHandler = (indent_, arg) -> {
+						out.print(indent(indent_) + ".withArguments(new ");
 						String className;
+						String simpleClassName;
 						try {
-							className = methodElement.getAnnotation(Arg.class).type().getCanonicalName();
+							className = arg.type().getCanonicalName();
+							simpleClassName = arg.type().getSimpleName();
 						} catch (MirroredTypeException e) {
 							className = fromTypeMirror(e);
+							simpleClassName = className.split("\\.")[className.split("\\.").length - 1];
 						}
 						out.print(className);
 						out.print("(\"");
-						out.print(methodElement.getAnnotation(Arg.class).name());
-						out.println("\"))");
+						out.print(arg.name());
+						
+						if(simpleClassName.equals("LocationArgument") || simpleClassName.equals("Location2DArgument")) {
+							out.print("\", ");
+							out.print("LocationType." + arg.locationType().name());
+						} else if(simpleClassName.equals("ScoreHolderArgument")) {
+							out.print("\", ");
+							out.print("ScoreHolderType." + arg.scoreHolderType().name());
+						} else if(simpleClassName.equals("EntitySelectorArgument")) {
+							out.print("\", ");
+							out.print("EntitySelector." + arg.entityType().name());
+						} else {
+							out.print("\"");
+						}
+						
+						out.println("))");
+					};
+
+					// @Arg
+					if (methodElement.getAnnotation(Arg.class) != null) {
+						argHandler.accept(indent, methodElement.getAnnotation(Arg.class));
 					}
 
 					// @Args
 					if (methodElement.getAnnotation(Args.class) != null) {
 						for (Arg arg : methodElement.getAnnotation(Args.class).value()) {
-							out.print(indent(indent) + ".withArguments(new ");
-							String className;
-							try {
-								className = arg.type().getCanonicalName();
-							} catch (MirroredTypeException e) {
-								className = fromTypeMirror(e);
-							}
-							out.print(className);
-							out.print("(\"");
-							out.print(arg.name());
-							out.println("\"))");
+							argHandler.accept(indent, arg);
 						}
 					}
 

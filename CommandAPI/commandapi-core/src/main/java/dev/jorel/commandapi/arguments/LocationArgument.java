@@ -10,7 +10,7 @@ import dev.jorel.commandapi.CommandAPIHandler;
 public class LocationArgument extends SafeOverrideableArgument<Location> {
 	
 	/**
-	 * A Location argument. Represents Minecraft locations
+	 * A Location argument. Represents Minecraft locations. Defaults to LocationType.PRECISE_POSITION
 	 * @param nodeName the name of the node for this argument
 	 */
 	public LocationArgument(String nodeName) {

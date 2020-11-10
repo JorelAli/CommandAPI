@@ -12,6 +12,16 @@ public class ScoreHolderArgument extends Argument {
 	private final boolean single;
 	
 	/**
+	 * A Score Holder argument. Represents a single score holder or a collection of score holders.
+	 * Defaults to using ScoreHolderType.SINGLE
+	 * @param nodeName the name of the node for this argument
+	 * @param type whether this argument represents a single score holder or a collection of score holders
+	 */
+	public ScoreHolderArgument(String nodeName) {
+		this(nodeName, ScoreHolderType.SINGLE);
+	}
+	
+	/**
 	 * A Score Holder argument. Represents a single score holder or a collection of score holders
 	 * @param nodeName the name of the node for this argument
 	 * @param type whether this argument represents a single score holder or a collection of score holders
