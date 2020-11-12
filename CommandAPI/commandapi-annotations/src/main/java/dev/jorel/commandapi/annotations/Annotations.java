@@ -81,7 +81,6 @@ public class Annotations extends AbstractProcessor {
 		case "FloatArgument": return float.class.getCanonicalName();
 		case "FloatRangeArgument": return "";
 		case "FunctionArgument": return "";
-		case "GreedyStringArgument": return "";
 		case "ICustomProvidedArgument": return "";
 		case "IGreedyArgument": return "";
 		case "IntegerArgument": return "";
@@ -100,7 +99,7 @@ public class Annotations extends AbstractProcessor {
 		case "NBTCompoundArgument": return "";
 		case "ObjectiveArgument": return "";
 		case "ObjectiveCriteriaArgument": return "";
-		case "package-info": return "";
+//		case "package-info": return "";
 		case "ParticleArgument": return "";
 		case "PlayerArgument": return "org.bukkit.entity.Player";
 		case "PotionEffectArgument": return "";
@@ -110,9 +109,11 @@ public class Annotations extends AbstractProcessor {
 		case "ScoreboardSlotArgument": return "";
 		case "ScoreHolderArgument": return "";
 		case "SoundArgument": return "";
-		case "StringArgument": return String.class.getCanonicalName();
+		case "GreedyStringArgument":
+		case "TextArgument":
+		case "StringArgument": 
+			return String.class.getCanonicalName();
 		case "TeamArgument": return "";
-		case "TextArgument": return "";
 		case "TimeArgument": return "";
 		case "UUIDArgument": return "";
 		}
