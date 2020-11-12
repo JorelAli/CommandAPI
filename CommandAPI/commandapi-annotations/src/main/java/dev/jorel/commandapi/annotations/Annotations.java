@@ -3,7 +3,9 @@ package dev.jorel.commandapi.annotations;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
@@ -12,17 +14,19 @@ import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.ExecutableType;
 import javax.lang.model.type.MirroredTypeException;
-import javax.tools.JavaFileObject;
+import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic.Kind;
+import javax.tools.JavaFileObject;
 
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandPermission;
+import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
-import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
 import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
 
 /* The main processor */
@@ -52,6 +56,67 @@ public class Annotations extends AbstractProcessor {
 			}
 		}
 		return true;
+	}
+	
+	private String mapArgumentTypes(String argumentClass) {
+		switch(argumentClass) {
+		case "AdvancementArgument": return "org.bukkit.advancement.Advancement";
+		case "AngleArgument": return "float";
+		//case "Argument": return "";
+		case "AxisArgument": return "";
+		case "BiomeArgument": return "";
+		case "BlockPredicateArgument": return "";
+		case "BlockStateArgument": return "";
+		case "BooleanArgument": return boolean.class.getCanonicalName();
+		case "ChatArgument": return "";
+		case "ChatColorArgument": return "";
+		case "ChatComponentArgument": return "";
+		case "CommandAPIArgumentType": return "";
+		case "CustomArgument": return "";
+		case "DoubleArgument": return "";
+		case "EnchantmentArgument": return "";
+		case "EntitySelectorArgument": return "";
+		case "EntityTypeArgument": return "";
+		case "EnvironmentArgument": return "";
+		case "FloatArgument": return float.class.getCanonicalName();
+		case "FloatRangeArgument": return "";
+		case "FunctionArgument": return "";
+		case "GreedyStringArgument": return "";
+		case "ICustomProvidedArgument": return "";
+		case "IGreedyArgument": return "";
+		case "IntegerArgument": return "";
+		case "IntegerRangeArgument": return "";
+		case "IOverrideableSuggestions": return "";
+		case "ItemStackArgument": return "";
+		case "ItemStackPredicateArgument": return "";
+		case "LiteralArgument": return "";
+		case "Location2DArgument": return "";
+		case "LocationArgument": return "";
+		case "LocationType": return "";
+		case "LongArgument": return long.class.getCanonicalName();
+		case "LootTableArgument": return "";
+		case "MathOperationArgument": return "";
+		case "MultiLiteralArgument": return "";
+		case "NBTCompoundArgument": return "";
+		case "ObjectiveArgument": return "";
+		case "ObjectiveCriteriaArgument": return "";
+		case "package-info": return "";
+		case "ParticleArgument": return "";
+		case "PlayerArgument": return "org.bukkit.entity.Player";
+		case "PotionEffectArgument": return "";
+		case "RecipeArgument": return "";
+		case "RotationArgument": return "";
+		case "SafeOverrideableArgument": return "";
+		case "ScoreboardSlotArgument": return "";
+		case "ScoreHolderArgument": return "";
+		case "SoundArgument": return "";
+		case "StringArgument": return String.class.getCanonicalName();
+		case "TeamArgument": return "";
+		case "TextArgument": return "";
+		case "TimeArgument": return "";
+		case "UUIDArgument": return "";
+		}
+		return null;
 	}
 
 	// Indentation, because half of this file is actually just making stuff look nice
@@ -214,6 +279,10 @@ public class Annotations extends AbstractProcessor {
 						out.println(")");
 					}
 					
+					//Maps parameter index to argument's primitive type
+					Map<Integer, String> argumentMapping = new HashMap<>();
+					final int[] argIndex = new int[] {0};
+					
 					// @Arg/@Args handler
 					BiConsumer<Integer, Arg> argHandler = (indent_, arg) -> {
 						out.print(indent(indent_) + ".withArguments(new ");
@@ -239,8 +308,30 @@ public class Annotations extends AbstractProcessor {
 						} else {
 							out.print("\"");
 						}
-						
 						out.println("))");
+
+						//Construct the argument to get its primitive type
+						String expectedPrimitiveType = mapArgumentTypes(simpleClassName);
+						
+						// Get the name of the parameter itself (e.g. Player p -> "p")
+						ExecutableElement executableMethodElement = (ExecutableElement) methodElement;
+						String paramName = executableMethodElement.getParameters().get(argIndex[0] + 1).getSimpleName().toString();
+						
+						// Get the type of the parameter
+						TypeMirror paramType = methodType.getParameterTypes().get(argIndex[0] + 1);
+						
+						//TODO: Handle the case with generics!
+						if(paramType.toString().equals(expectedPrimitiveType)) {
+							argumentMapping.put(argIndex[0], expectedPrimitiveType);
+						} else {
+							processingEnv.getMessager().printMessage(Kind.ERROR,
+									"Invalid argument " + paramName + " in method " + methodElement.getSimpleName()
+											+ ". Expected type " + expectedPrimitiveType
+											+ " but instead got " + paramType.toString());
+						}
+						
+						
+						argIndex[0]++;
 					};
 
 					// @Arg
@@ -294,7 +385,18 @@ public class Annotations extends AbstractProcessor {
 					out.print(commandClass.getSimpleName());
 					out.print(".");
 					out.print(methodElement.getSimpleName());
-					out.println("(sender, args);");
+					out.print("(sender");
+					
+					for(int i = 0; i < argIndex[0]; i++) {
+						out.print(", (");
+						out.print(argumentMapping.get(i));
+						out.print(") args[");
+						out.print(i);
+						out.print("]");
+					}
+					//populate stuff here
+					
+					out.println(");");
 					indent--;
 					out.println(indent(indent) + "})");
 
