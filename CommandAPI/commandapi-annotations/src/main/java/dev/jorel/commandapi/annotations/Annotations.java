@@ -47,7 +47,9 @@ import dev.jorel.commandapi.wrappers.MathOperation;
 import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 
-/* The main processor */
+/**
+ * The main annotation processor for annotation-based arguments
+ */
 public class Annotations extends AbstractProcessor {
 
 	// List of stuff we can deal with

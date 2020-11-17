@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">CommandAPI
-   &#160;<span id="projectnumber">5.2</span>
+   &#160;<span id="projectnumber">5.3</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -106,6 +106,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2c37999d136ec5ef56eb1549c133e393"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html">CommandAPICommand</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a2c37999d136ec5ef56eb1549c133e393">withPermission</a> (String permission)</td></tr>
 <tr class="memdesc:a2c37999d136ec5ef56eb1549c133e393"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a permission to the current command builder.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a2c37999d136ec5ef56eb1549c133e393">More...</a><br /></td></tr>
 <tr class="separator:a2c37999d136ec5ef56eb1549c133e393"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8797e088e5674ec769b76e089ee6ed8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html">CommandAPICommand</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ab8797e088e5674ec769b76e089ee6ed8">withoutPermission</a> (<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_permission.html">CommandPermission</a> permission)</td></tr>
+<tr class="memdesc:ab8797e088e5674ec769b76e089ee6ed8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a permission to the current command builder.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ab8797e088e5674ec769b76e089ee6ed8">More...</a><br /></td></tr>
+<tr class="separator:ab8797e088e5674ec769b76e089ee6ed8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18c2bd5a4dd36b39bd49806579f1eced"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html">CommandAPICommand</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a18c2bd5a4dd36b39bd49806579f1eced">withoutPermission</a> (String permission)</td></tr>
+<tr class="memdesc:a18c2bd5a4dd36b39bd49806579f1eced"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a permission to the current command builder.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a18c2bd5a4dd36b39bd49806579f1eced">More...</a><br /></td></tr>
+<tr class="separator:a18c2bd5a4dd36b39bd49806579f1eced"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a19269b7ad0a9a3c252d48d35bbe5a14f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html">CommandAPICommand</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a19269b7ad0a9a3c252d48d35bbe5a14f">withRequirement</a> (Predicate&lt; CommandSender &gt; requirement)</td></tr>
 <tr class="memdesc:a19269b7ad0a9a3c252d48d35bbe5a14f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a requirement that has to be satisfied to use this command.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a19269b7ad0a9a3c252d48d35bbe5a14f">More...</a><br /></td></tr>
 <tr class="separator:a19269b7ad0a9a3c252d48d35bbe5a14f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -657,6 +663,60 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 </div>
 </div>
+<a id="ab8797e088e5674ec769b76e089ee6ed8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8797e088e5674ec769b76e089ee6ed8">&#9670;&nbsp;</a></span>withoutPermission() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html">CommandAPICommand</a> dev.jorel.commandapi.CommandAPICommand.withoutPermission </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_permission.html">CommandPermission</a>&#160;</td>
+          <td class="paramname"><em>permission</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Applies a permission to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">permission</td><td>The permission node required to execute this command </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="a18c2bd5a4dd36b39bd49806579f1eced"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18c2bd5a4dd36b39bd49806579f1eced">&#9670;&nbsp;</a></span>withoutPermission() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html">CommandAPICommand</a> dev.jorel.commandapi.CommandAPICommand.withoutPermission </td>
+          <td>(</td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>permission</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Applies a permission to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">permission</td><td>The permission node required to execute this command </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
 <a id="ae5a4bf1048697f05ab049a7875b95538"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae5a4bf1048697f05ab049a7875b95538">&#9670;&nbsp;</a></span>withPermission() <span class="overload">[1/2]</span></h2>
 
@@ -772,7 +832,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html">CommandAPICommand</a></li>
-    <li class="footer">Generated on Tue Nov 3 2020 18:55:45 for CommandAPI by
+    <li class="footer">Generated on Tue Nov 17 2020 20:02:12 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

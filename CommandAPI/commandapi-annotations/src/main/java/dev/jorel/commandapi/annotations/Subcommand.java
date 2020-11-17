@@ -5,10 +5,17 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * The annotation to indicate that this method is a subcommand
+ */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.SOURCE)
 public @interface Subcommand {
 
-	String[] value();
+	/**
+	 * The names (and thus, aliases) of this subcommand
+	 * @return the names that this subcommand produces
+	 */
+	public String[] value();
 	
 }

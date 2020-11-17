@@ -19,6 +19,8 @@ var classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command =
     [ "withAliases", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a4964121c94c4786ecb26e45b13f1ca78", null ],
     [ "withArguments", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ad0b8b38fb5fd66c24e34861869b6a8f0", null ],
     [ "withArguments", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a5231b4dae198d8954befc95bea391e55", null ],
+    [ "withoutPermission", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ab8797e088e5674ec769b76e089ee6ed8", null ],
+    [ "withoutPermission", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a18c2bd5a4dd36b39bd49806579f1eced", null ],
     [ "withPermission", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ae5a4bf1048697f05ab049a7875b95538", null ],
     [ "withPermission", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a2c37999d136ec5ef56eb1549c133e393", null ],
     [ "withRequirement", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a19269b7ad0a9a3c252d48d35bbe5a14f", null ],

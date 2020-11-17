@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">CommandAPI
-   &#160;<span id="projectnumber">5.2</span>
+   &#160;<span id="projectnumber">5.3</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -118,7 +118,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><b>1.15 versions</b> </td><td class="markdownTableBodyNone">1.15 </td><td class="markdownTableBodyNone">1.15.1 </td><td class="markdownTableBodyNone">1.15.2 </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><b>1.16 versions</b> </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone">1.16.1 </td><td class="markdownTableBodyNone">1.16.2 </td><td class="markdownTableBodyNone">1.16.3 </td><td class="markdownTableBodyNone"></td></tr>
+<td class="markdownTableBodyNone"><b>1.16 versions</b> </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone">1.16.1 </td><td class="markdownTableBodyNone">1.16.2 </td><td class="markdownTableBodyNone">1.16.3 </td><td class="markdownTableBodyNone">1.16.4  </td></tr>
 </table>
 <hr  />
 <h2>Purpose</h2>
@@ -166,7 +166,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><b>1.15 versions</b> </td><td class="markdownTableBodyNone">1.15 </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><b>1.16 versions</b> </td><td class="markdownTableBodyNone">1.16.1 </td><td class="markdownTableBodyNone">1.16.2 </td><td class="markdownTableBodyNone"></td></tr>
+<td class="markdownTableBodyNone"><b>1.16 versions</b> </td><td class="markdownTableBodyNone">1.16.1 </td><td class="markdownTableBodyNone">1.16.2 </td><td class="markdownTableBodyNone">1.16.4  </td></tr>
 </table>
 <p>These versions of Minecraft must be installed in your local machine's Maven repository (<code>~/.m2</code>). <b>The easiest way to do this is to build them manually using Spigot's BuildTools, as it automatically adds it to the <code>.m2</code> local repository folder.</b></p>
 <h4>Building them using <em>BuildTools</em> + downloadSpigot file (recommended)</h4>
@@ -197,6 +197,14 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <p>Version </p>
 <p>Date </p>
 <p>Features / Changes  &lt;/thead&gt; &lt;tbody&gt; </p>
+<p><b>5.2</b> </p>
+<p>November 2020 </p>
+<ul>
+<li>
+Adds <code>CommandAPI.reloadDatapacks()</code> method to reload datapacks in the same way the CommandAPI does </li>
+<li>
+Adds support for Minecraft 1.16.4 </li>
+</ul>
 <p><b>5.1</b> </p>
 <p>October 2020 </p>
 <ul>
@@ -710,7 +718,7 @@ Initial release </li>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Nov 3 2020 18:55:47 for CommandAPI by
+    <li class="footer">Generated on Tue Nov 17 2020 20:02:13 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

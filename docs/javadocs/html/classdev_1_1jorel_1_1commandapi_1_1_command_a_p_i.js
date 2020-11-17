@@ -6,6 +6,7 @@ var classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i =
     [ "logInfo", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a386654d2b9a36d863263c6def5430845", null ],
     [ "onEnable", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#abaaeec30c996adb7a07999cbee39bfa7", null ],
     [ "onLoad", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a99b3b35daa96cb9781ead26a7729cd5e", null ],
+    [ "registerCommand", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a10b6668a659eb55d995e450a07a41d05", null ],
     [ "reloadDatapacks", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#aba5625d16830784a80f5971915892173", null ],
     [ "unregister", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#af80c6e832cee1fd3e8e7e5ef52f98fb5", null ],
     [ "unregister", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a0fbec78135f7187645851ee4e12a74f3", null ],
