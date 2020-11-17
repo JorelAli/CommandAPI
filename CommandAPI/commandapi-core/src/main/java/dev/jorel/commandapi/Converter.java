@@ -111,11 +111,8 @@ public abstract class Converter {
 			.withAliases(aliases)
 			.withArguments(arguments)
 			.executesNative((sender, args) -> { 
-				if(arguments.equals(PLAIN_ARGUMENTS)) {
-					plugin.getCommand(commandName).execute(mergeProxySender(sender), commandName, ((String) args[0]).split(" "));
-				} else {
-					plugin.getCommand(commandName).execute(mergeProxySender(sender), commandName, (String[]) args);
-				}
+				// We know the args are a String[] because that's how converted things are handled in generateCommand()
+				plugin.getCommand(commandName).execute(mergeProxySender(sender), commandName, (String[]) args);
 			});
 		// Good grief, what a hack~
 		multiArgs.isConverted = true;
