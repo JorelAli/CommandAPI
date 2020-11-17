@@ -81,6 +81,10 @@
 - [Aliases](./aliases.md)
 - [Subcommands](./subcommands.md)
 
+# Annotation-based Commands
+
+
+
 # CommandAPI Utilities
 
 - [Command conversion](./conversion.md)
