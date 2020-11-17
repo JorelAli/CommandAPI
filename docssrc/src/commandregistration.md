@@ -118,7 +118,7 @@ CommandAPICommand executesProxy((proxy, args) -> {})
 Executes a command only if the command sender is a `ProxiedCommandSender`.
 
 ```java
-CommandAPICOmmand executesNative((proxy, args) -> {})
+CommandAPICommand executesNative((proxy, args) -> {})
 ```
 
 Executes a command regardless of what the command sender is, using the `NativeProxyCommandSender`.  Read more about native proxied command senders [here](./native.md).

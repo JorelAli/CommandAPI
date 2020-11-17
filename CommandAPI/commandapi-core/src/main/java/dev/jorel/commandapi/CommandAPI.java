@@ -1,6 +1,7 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
@@ -174,5 +175,14 @@ public abstract class CommandAPI {
 			getLog().warning("Unexpected unregistering of /" + command + ", as server is loaded! Unregistering anyway, but this can lead to unstable results!");
 		}
 		CommandAPIHandler.getInstance().unregister(command, force);
+	}
+
+	public static void registerCommand(Class<?> commandClass) {
+		try {
+			Class<?> command = Class.forName(commandClass.getName() + "$Command");
+			command.getDeclaredMethod("register").invoke(null);
+		} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -178,6 +178,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 			CommandSender sender = NMS.getSenderForCommand(cmdCtx, executor.isForceNative());
 			Object[] arguments;
 			if(converted) {
+				// Return a String[] of arguments for converted commands
 				String[] argsAndCmd = cmdCtx.getRange().get(cmdCtx.getInput()).split(" ");
 				String[] result = new String[argsAndCmd.length - 1];
 				System.arraycopy(argsAndCmd, 1, result, 0, argsAndCmd.length - 1);
