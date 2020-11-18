@@ -98,7 +98,7 @@ public abstract class Brigadier {
 	 */
 	public static Command fromCommand(CommandAPICommand command) {
 		try {
-			return CommandAPIHandler.getInstance().generateCommand(command.args, command.executor, command.isConverted);
+			return CommandAPIHandler.getInstance().generateCommand(command.getArguments(), command.getExecutor(), command.isConverted());
 		} catch (CommandSyntaxException e) {
 			e.printStackTrace();
 		}

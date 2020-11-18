@@ -32,14 +32,15 @@ import dev.jorel.commandapi.executors.ResultingCommandExecutor;
  */
 public class CommandAPICommand {
 
-	String commandName;
-	CommandPermission permission = CommandPermission.NONE;
-	String[] aliases = new String[0];
-	Predicate<CommandSender> requirements = s -> true;
-	List<Argument> args = new ArrayList<>();
-	List<CommandAPICommand> subcommands = new ArrayList<>();
-	CustomCommandExecutor executor = new CustomCommandExecutor();
-	boolean isConverted;
+	private final String commandName;
+	
+	private CommandPermission permission = CommandPermission.NONE;
+	private String[] aliases = new String[0];
+	private Predicate<CommandSender> requirements = s -> true;
+	private List<Argument> args = new ArrayList<>();
+	private List<CommandAPICommand> subcommands = new ArrayList<>();
+	private CustomCommandExecutor executor = new CustomCommandExecutor();
+	private boolean isConverted;
 	
 	/**
 	 * Creates a new command builder
@@ -295,6 +296,123 @@ public class CommandAPICommand {
 		return this;
 	}
 	
+	/**
+	 * Returns the name of this command
+	 * @return the name of this command
+	 */
+	public String getName() {
+		return commandName;
+	}
+
+	/**
+	 * Returns the permission associated with this command
+	 * @return the permission associated with this command
+	 */
+	public CommandPermission getPermission() {
+		return permission;
+	}
+
+	/**
+	 * Sets the permission required to run this command
+	 * @param permission the permission required to run this command
+	 */
+	public void setPermission(CommandPermission permission) {
+		this.permission = permission;
+	}
+
+	/**
+	 * Returns an array of aliases that can be used to run this command
+	 * @return an array of aliases that can be used to run this command
+	 */
+	public String[] getAliases() {
+		return aliases;
+	}
+
+	/**
+	 * Sets the aliases for this command
+	 * @param aliases the aliases for this command
+	 */
+	public void setAliases(String[] aliases) {
+		this.aliases = aliases;
+	}
+
+	/**
+	 * Returns the requirements that must be satisfied to run this command
+	 * @return the requirements that must be satisfied to run this command
+	 */
+	public Predicate<CommandSender> getRequirements() {
+		return requirements;
+	}
+
+	/**
+	 * Sets the requirements that must be satisfied to run this command
+	 * @param requirements the requirements that must be satisfied to run this command
+	 */
+	public void setRequirements(Predicate<CommandSender> requirements) {
+		this.requirements = requirements;
+	}
+
+	/**
+	 * Returns the list of arguments that this command has
+	 * @return the list of arguments that this command has
+	 */
+	public List<Argument> getArguments() {
+		return args;
+	}
+
+	/**
+	 * Sets the arguments that this command has
+	 * @param args the arguments that this command has
+	 */
+	public void setArguments(List<Argument> args) {
+		this.args = args;
+	}
+
+	/**
+	 * Returns the list of subcommands that this command has
+	 * @return the list of subcommands that this command has
+	 */
+	public List<CommandAPICommand> getSubcommands() {
+		return subcommands;
+	}
+
+	/**
+	 * Sets the list of subcommands that this command has
+	 * @param subcommands the list of subcommands that this command has
+	 */
+	public void setSubcommands(List<CommandAPICommand> subcommands) {
+		this.subcommands = subcommands;
+	}
+
+	/**
+	 * Returns the executors that this command has
+	 * @return the executors that this command has
+	 */
+	public CustomCommandExecutor getExecutor() {
+		return executor;
+	}
+
+	/**
+	 * Sets the executors for this command
+	 * @param executor the executors for this command
+	 */
+	public void setExecutor(CustomCommandExecutor executor) {
+		this.executor = executor;
+	}
+
+	/**
+	 * Returns whether this command is an automatically converted command
+	 * @return whether this command is an automatically converted command
+	 */
+	public boolean isConverted() {
+		return isConverted;
+	}
+
+	void setConverted(boolean isConverted) {
+		this.isConverted = isConverted;
+	}
+	
+	//Expand subcommands into arguments
 	private void flatten(CommandAPICommand rootCommand, List<Argument> prevArguments, CommandAPICommand subcommand) {
 		
 		String[] literals = new String[subcommand.aliases.length + 1];
