@@ -9,6 +9,8 @@ import dev.jorel.commandapi.annotations.Arg;
 import dev.jorel.commandapi.annotations.Command;
 import dev.jorel.commandapi.annotations.Default;
 import dev.jorel.commandapi.annotations.Subcommand;
+import dev.jorel.commandapi.annotations.Suggest;
+import dev.jorel.commandapi.annotations.Suggestion;
 import dev.jorel.commandapi.arguments.StringArgument;
 
 @Command("warp")	
@@ -27,8 +29,13 @@ public class WarpCommand {
 	
 	@Default
 	@Arg(name = "warp", type = StringArgument.class)
-	public static void warp(Player player, String warpName) {
+	public static void warp(Player player, @Suggest("warpNames") String warpName) {
 		player.teleport(warps.get(warpName));
+	}
+	
+	@Suggestion
+	public static String[] warpNames() {
+		return warps.keySet().toArray(new String[0]);
 	}
 	
 	@Subcommand("create")
