@@ -5,12 +5,15 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.annotations.Arg;
 import dev.jorel.commandapi.annotations.Command;
 import dev.jorel.commandapi.annotations.Default;
+import dev.jorel.commandapi.annotations.Permission;
 import dev.jorel.commandapi.annotations.Subcommand;
 import dev.jorel.commandapi.arguments.StringArgument;
 
+/* ANCHOR: warps */
 @Command("warp")	
 public class WarpCommand {
 	
@@ -32,10 +35,53 @@ public class WarpCommand {
 	}
 	
 	@Subcommand("create")
+	@Permission("warps.create")
 	@Arg(name = "warpname", type = StringArgument.class)
 	public static void createWarp(Player player, String warpName) {
 		warps.put(warpName, player.getLocation());
 	}
 	
 }
+/* ANCHOR_END: warps */
+
+class Examples {
 	
+{
+/* ANCHOR: old_warps */
+Map<String, Location> warps = new HashMap<>();
+
+// /warp
+new CommandAPICommand("warp")
+	.executes((sender, args) -> {
+		sender.sendMessage("--- Warp help ---");
+		sender.sendMessage("/warp - Show this help");
+		sender.sendMessage("/warp <warp> - Teleport to <warp>");
+		sender.sendMessage("/warp create <warpname> - Creates a warp at your current location");
+	})
+	.register();
+
+// /warp <warp>
+new CommandAPICommand("warp")
+	.withArguments(new StringArgument("warp").overrideSuggestions(sender -> {
+		return warps.keySet().toArray(new String[0]);
+	}))
+	.executesPlayer((player, args) -> {
+		player.teleport(warps.get((String) args[0]));
+	})
+	.register();
+
+// /warp create <warpname>
+new CommandAPICommand("warp")
+    .withSubcommand(
+		new CommandAPICommand("create")
+			.withPermission("warps.create")
+			.withArguments(new StringArgument("warpname"))
+			.executesPlayer((player, args) -> {
+				warps.put((String) args[0], player.getLocation());
+			})
+	)
+    .register();
+/* ANCHOR_END: old_warps */
+}
+	
+}

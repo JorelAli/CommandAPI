@@ -3731,9 +3731,81 @@ CommandAPICommand group = new CommandAPICommand(&quot;group&quot;)
 <li>Is not as powerful as the regular command registration system.</li>
 </ul>
 <p>Currently, the annotation framework is in its infancy, so any suggestions or improvements are heavily appreciated!</p>
-<hr />
 <p>Before we go into too much detail, let's take a look at a few examples of what this annotation framework can do, and compare this to the existing method.</p>
-<pre><code class="language-java">
+<hr />
+<h2><a class="header" href="#a-warp-command" id="a-warp-command">A warp command</a></h2>
+<p>Let's say we're writing a plugin with the capability to create warps to places on the server. To do this, we'll make a simple command <code>/warp</code>, defined as follows:</p>
+<pre><code>/warp - Shows help
+/warp &lt;warp&gt; - Teleports a player to &lt;warp&gt;
+/warp create &lt;name&gt; - Creates a new warp &lt;name&gt; at the player's location
+</code></pre>
+<h3><a class="header" href="#warp-command-without-annotations" id="warp-command-without-annotations">Warp command (without annotations)</a></h3>
+<p>Using the regular CommandAPI, this is one way we can create this command. In the code below, we use StringArguments to represent the warp names. To teleport to a warp, we also populate it with suggestions (deferred so it updates), and also use a subcommand to represent <code>/warp create</code>:</p>
+<pre><code class="language-java">Map&lt;String, Location&gt; warps = new HashMap&lt;&gt;();
+
+// /warp
+new CommandAPICommand(&quot;warp&quot;)
+	.executes((sender, args) -&gt; {
+		sender.sendMessage(&quot;--- Warp help ---&quot;);
+		sender.sendMessage(&quot;/warp - Show this help&quot;);
+		sender.sendMessage(&quot;/warp &lt;warp&gt; - Teleport to &lt;warp&gt;&quot;);
+		sender.sendMessage(&quot;/warp create &lt;warpname&gt; - Creates a warp at your current location&quot;);
+	})
+	.register();
+
+// /warp &lt;warp&gt;
+new CommandAPICommand(&quot;warp&quot;)
+	.withArguments(new StringArgument(&quot;warp&quot;).overrideSuggestions(sender -&gt; {
+		return warps.keySet().toArray(new String[0]);
+	}))
+	.executesPlayer((player, args) -&gt; {
+		player.teleport(warps.get((String) args[0]));
+	})
+	.register();
+
+// /warp create &lt;warpname&gt;
+new CommandAPICommand(&quot;warp&quot;)
+    .withSubcommand(
+		new CommandAPICommand(&quot;create&quot;)
+			.withPermission(&quot;warps.create&quot;)
+			.withArguments(new StringArgument(&quot;warpname&quot;))
+			.executesPlayer((player, args) -&gt; {
+				warps.put((String) args[0], player.getLocation());
+			})
+	)
+    .register();
+</code></pre>
+<p>Seems fairly straightforward, given everything else covered in this documentation. Now let's compare it to using annotations!</p>
+<h3><a class="header" href="#warp-command-with-annotations" id="warp-command-with-annotations">Warp command (with annotations)</a></h3>
+<p>I think it's best to show the example and the explain it afterwards:</p>
+<pre><code class="language-java">@Command(&quot;warp&quot;)	
+public class WarpCommand {
+	
+	// List of warp names and their locations
+	static Map&lt;String, Location&gt; warps = new HashMap&lt;&gt;();
+	
+	@Default
+	public static void warp(CommandSender sender) {
+		sender.sendMessage(&quot;--- Warp help ---&quot;);
+		sender.sendMessage(&quot;/warp - Show this help&quot;);
+		sender.sendMessage(&quot;/warp &lt;warp&gt; - Teleport to &lt;warp&gt;&quot;);
+		sender.sendMessage(&quot;/warp create &lt;warpname&gt; - Creates a warp at your current location&quot;);
+	}
+	
+	@Default
+	@Arg(name = &quot;warp&quot;, type = StringArgument.class)
+	public static void warp(Player player, String warpName) {
+		player.teleport(warps.get(warpName));
+	}
+	
+	@Subcommand(&quot;create&quot;)
+	@Permission(&quot;warps.create&quot;)
+	@Arg(name = &quot;warpname&quot;, type = StringArgument.class)
+	public static void createWarp(Player player, String warpName) {
+		warps.put(warpName, player.getLocation());
+	}
+	
+}
 </code></pre>
 <h1><a class="header" href="#annotations" id="annotations">Annotations</a></h1>
 <h1><a class="header" href="#command-conversion" id="command-conversion">Command conversion</a></h1>
