@@ -83,7 +83,8 @@
 
 # Annotation-based Commands
 
-
+- [Annotation-based commands](./annotationsintro.md)
+- [Annotations](./annotations.md)
 
 # CommandAPI Utilities
 

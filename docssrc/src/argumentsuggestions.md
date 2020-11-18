@@ -32,7 +32,7 @@ overrideSuggestions(sender -> Bukkit.getWorlds().stream().map(World::getName).to
 
 ## Suggestions with a String Array
 
-The first method, `overrideSuggestions(String... suggestions)`, allows you to *replace* the suggestions normally associated with that argument with an array of strings.
+The first method, `overrideSuggestions(String... suggestions)`, allows you to *replace* the suggestions normally associated with that argument with an array of strings. As described above, this doesn't use suggestion deferral, _so this list will not update automatically_.
 
 <div class="example">
 

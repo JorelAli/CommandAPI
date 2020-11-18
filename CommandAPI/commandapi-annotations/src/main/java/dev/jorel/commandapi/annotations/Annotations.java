@@ -20,6 +20,7 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.ExecutableType;
 import javax.lang.model.type.MirroredTypeException;
@@ -317,6 +318,9 @@ public class Annotations extends AbstractProcessor {
 						|| methodElement.getAnnotation(Subcommand.class) != null) {
 					
 					ExecutableType methodType = (ExecutableType) methodElement.asType();
+					if(!methodElement.getModifiers().contains(Modifier.STATIC)) {
+						processingEnv.getMessager().printMessage(Kind.ERROR, "Method " + methodElement.getSimpleName() + " must be static to be used as a command");
+					}
 
 					out.print(indent(indent) + "new CommandAPICommand(\"");
 					out.print(commandClass.getAnnotation(Command.class).value());
