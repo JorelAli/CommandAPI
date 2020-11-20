@@ -3722,18 +3722,23 @@ CommandAPICommand group = new CommandAPICommand(&quot;group&quot;)
     .register();
 </code></pre>
 </div><h1><a class="header" href="#annotation-based-commands" id="annotation-based-commands">Annotation-based commands</a></h1>
+<div class="warning">
+<p>The CommandAPI's annotation-based system is very new and currently in development. <strong>It is stable</strong> (everything should work), but the main API hasn't been set in stone and is subject to change. It is very likely that commands registered in this version will need updating in future versions.</p>
+<p>I hope this doesn't put off too many people from using it. If in doubt, consult the <a href="./upgrading.html">Upgrading guide</a> to be aware of the API changes for annotations.</p>
+</div>
 <p>The CommandAPI also includes a very small lightweight annotation-based command framework. This works very differently compared to previous commands shown in this documentation and <strong>it is less feature-rich than registering commands using the other methods.</strong></p>
 <p>In short, the CommandAPI's annotation-based system:</p>
 <ul>
-<li>Has no runtime overhead compared to using the regular command registration system (unlike other annotation-based frameworks such as ACF).</li>
+<li>Has no runtime overhead compared to using the regular command registration system (unlike other annotation-based frameworks such as <a href="https://github.com/aikar/commands">ACF</a>).</li>
 <li>Reduces code bloat (to an extent).</li>
 <li>Improves readability since commands are declared declaratively instead of imperatively.</li>
 <li>Is not as powerful as the regular command registration system.</li>
 </ul>
 <p>Currently, the annotation framework is in its infancy, so any suggestions or improvements are heavily appreciated!</p>
-<p>Before we go into too much detail, let's take a look at a few examples of what this annotation framework can do, and compare this to the existing method.</p>
+<p>Before we go into too much detail, let's take a look at an example of what this annotation framework looks like, and compare this to the existing method.</p>
 <hr />
-<h2><a class="header" href="#a-warp-command" id="a-warp-command">A warp command</a></h2>
+<h2><a class="header" href="#example-a-warp-command" id="example-a-warp-command">Example: A warp command</a></h2>
+<p><em>(So I would put this section in a big green box, but this example is REALLY big and that wouldn't look good)</em></p>
 <p>Let's say we're writing a plugin with the capability to create warps to places on the server. To do this, we'll make a simple command <code>/warp</code>, defined as follows:</p>
 <pre><code>/warp - Shows help
 /warp &lt;warp&gt; - Teleports a player to &lt;warp&gt;
@@ -3807,6 +3812,52 @@ public class WarpCommand {
 	
 }
 </code></pre>
+<pre><code class="language-java">CommandAPI.registerCommand(WarpCommand.class);
+</code></pre>
+<p>As we can see, the code certainly <em>looks</em> very different to the normal registration method. Let's take it apart piece by piece to see what exactly is going on here.</p>
+<h4><a class="header" href="#command-declaration" id="command-declaration">Command declaration</a></h4>
+<pre><code class="language-java">@Command(&quot;warp&quot;)	
+public class WarpCommand {
+</code></pre>
+<p>Firstly, we declare our command <code>warp</code>. To do this, we use the <code>@Command</code> annotation and simply state the name of the command in the annotation. This annotation is attached to the class <code>WarpCommand</code>, which basically indicates that the whole class <code>WarpCommand</code> will be housing our command.</p>
+<p>The annotation framework is designed in such a way that an entire command is represented by a single class. This provides a more modular approach to command declaration that allows you to easily contain the methods of a command in one location.</p>
+<h4><a class="header" href="#default-command" id="default-command">Default command</a></h4>
+<pre><code class="language-java">@Default
+public static void warp(CommandSender sender) {
+	sender.sendMessage(&quot;--- Warp help ---&quot;);
+	sender.sendMessage(&quot;/warp - Show this help&quot;);
+	sender.sendMessage(&quot;/warp &lt;warp&gt; - Teleport to &lt;warp&gt;&quot;);
+	sender.sendMessage(&quot;/warp create &lt;warpname&gt; - Creates a warp at your current location&quot;);
+}
+</code></pre>
+<p>Here, declare the main command implementation using the <code>@Default</code> annotation. The <code>@Default</code> annotation basically informs the CommandAPI that the method it is attached to does not have any subcommands. This is basically the same as registering a regular command without using <code>.withSubcommand()</code>.</p>
+<p>Here, we simply write what happens when no arguments are run (i.e. the user just runs <code>/warp</code> on its own). As such, we don't include any parameters to our method.</p>
+<h4><a class="header" href="#default-command-again" id="default-command-again">Default command (again!)</a></h4>
+<pre><code class="language-java">@Default
+@Arg(name = &quot;warp&quot;, type = StringArgument.class)
+public static void warp(Player player, String warpName) {
+	player.teleport(warps.get(warpName));
+}
+</code></pre>
+<p>We also have a second <code>@Default</code> annotated method, which handles our <code>/warp &lt;warp&gt;</code> command. Because this isn't a subcommand (the warp to teleport to is not a subcommand, it's an argument), we still using the <code>@Default</code> annotation. In this method, we include an argument with this command by using the <code>@Arg</code> annotation. This argument uses the <code>StringArgument</code> class, and the name of this argument is &quot;warp&quot;. This is synonymous with using the following:</p>
+<pre><code class="language-java">new StringArgument(&quot;warp&quot;)
+</code></pre>
+<p>It's also very important to note the parameters for this method. The first parameter is a <code>Player</code> object, which represents our command sender. The CommandAPI's annotation system uses the fact that the command sender is a <code>Player</code> object and automatically ensures that anyone using the command must be a <code>Player</code>. In other words, non-players (such as the console or command blocks), would be unable to execute this command.</p>
+<p>The second argument is a <code>String</code> object, which represents the result of our argument &quot;warp&quot;. The CommandAPI's annotation system can also infer the return type of the argument that is provided to it (in this case, a <code>StringArgument</code> will produce a <code>String</code>) and will automatically cast and provide the result to that parameter.</p>
+<h4><a class="header" href="#subcommand" id="subcommand">Subcommand</a></h4>
+<pre><code class="language-java">@Subcommand(&quot;create&quot;)
+@Permission(&quot;warps.create&quot;)
+@Arg(name = &quot;warpname&quot;, type = StringArgument.class)
+public static void createWarp(Player player, String warpName) {
+	warps.put(warpName, player.getLocation());
+}
+</code></pre>
+<p>Lastly, we declare a subcommand to allow us to run <code>/warp create &lt;name&gt;</code>. To do this, we simply use the <code>@Subcommand</code> annotation. In this example, we also apply a permission node that is required to run the command by using the <code>@Permission</code> annotation. The rest is fairly straight forward - we declare an argument using <code>@Arg</code> and then declare everything else in a similar fashion to the default command executor.</p>
+<h4><a class="header" href="#registering-the-command-1" id="registering-the-command-1">Registering the command</a></h4>
+<p>Registering the command is fairly simple and is a one liner:</p>
+<pre><code class="language-java">CommandAPI.registerCommand(WarpCommand.class);
+</code></pre>
+<p>This line can be placed in your <code>onEnable()</code> or <code>onLoad()</code> method like you were registering a normal command.</p>
 <h1><a class="header" href="#annotations" id="annotations">Annotations</a></h1>
 <h1><a class="header" href="#command-conversion" id="command-conversion">Command conversion</a></h1>
 <blockquote>
