@@ -14,7 +14,7 @@ import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
 })
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)
-public @interface EntitySelectorArgumentA {
+public @interface AEntitySelectorArgument {
 	
 	EntitySelector value() default EntitySelector.ONE_ENTITY;
 	

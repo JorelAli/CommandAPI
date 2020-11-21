@@ -5,8 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Primitive("org.bukkit.ChatColor")
+@Primitive("float")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)
-public @interface ChatColorArgumentA {		
+public @interface AAngleArgument {		
 }

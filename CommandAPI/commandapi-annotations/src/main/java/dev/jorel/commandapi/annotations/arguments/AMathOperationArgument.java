@@ -5,8 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Primitive("java.util.function.Predicate<org.bukkit.block.Block>")
+@Primitive("dev.jorel.commandapi.wrappers.MathOperation")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)
-public @interface BlockPredicateArgumentA {		
+public @interface AMathOperationArgument {
 }

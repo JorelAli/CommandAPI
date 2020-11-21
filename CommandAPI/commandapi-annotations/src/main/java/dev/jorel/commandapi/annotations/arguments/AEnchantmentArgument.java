@@ -5,8 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Primitive("java.util.EnumSet<org.bukkit.Axis>")
+@Primitive("org.bukkit.enchantments.Enchantment")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)
-public @interface AxisArgumentA {		
+public @interface AEnchantmentArgument {		
 }

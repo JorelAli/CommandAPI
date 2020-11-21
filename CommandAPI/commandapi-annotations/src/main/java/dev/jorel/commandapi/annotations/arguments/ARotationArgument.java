@@ -5,8 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Primitive("java.lang.String")
+@Primitive("dev.jorel.commandapi.wrappers.Rotation")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)
-public @interface StringArgumentA {		
+public @interface ARotationArgument {
 }

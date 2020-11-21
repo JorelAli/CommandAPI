@@ -5,8 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Primitive("org.bukkit.entity.EntityType")
+@Primitive("org.bukkit.entity.Player")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)
-public @interface EntityTypeA {		
+public @interface APlayerArgument {
 }

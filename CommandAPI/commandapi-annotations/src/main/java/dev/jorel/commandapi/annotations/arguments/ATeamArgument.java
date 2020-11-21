@@ -5,12 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+@Primitive("String")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)
-@Primitive("int")
-public @interface IntegerArgumentA {
-	
-	public int min() default Integer.MIN_VALUE;
-	public int max() default Integer.MAX_VALUE;
-	
+public @interface ATeamArgument {
 }

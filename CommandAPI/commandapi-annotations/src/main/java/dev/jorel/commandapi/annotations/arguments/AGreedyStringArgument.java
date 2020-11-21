@@ -5,8 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Primitive("org.bukkit.advancement.Advancement")
+@Primitive("String")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)
-public @interface AdvancementArgumentA {		
+public @interface AGreedyStringArgument {
 }

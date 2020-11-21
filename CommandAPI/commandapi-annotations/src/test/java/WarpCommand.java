@@ -11,7 +11,7 @@ import dev.jorel.commandapi.annotations.Command;
 import dev.jorel.commandapi.annotations.Default;
 import dev.jorel.commandapi.annotations.Permission;
 import dev.jorel.commandapi.annotations.Subcommand;
-import dev.jorel.commandapi.annotations.arguments.StringArgumentA;
+import dev.jorel.commandapi.annotations.arguments.AStringArgument;
 import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 
@@ -33,13 +33,13 @@ public class WarpCommand {
 	}
 	
 	@Default
-	public static void warp(Player player, @StringArgumentA String warpName) {
+	public static void warp(Player player, @AStringArgument String warpName) {
 		player.teleport(warps.get(warpName));
 	}
 	
 	@Subcommand("create")
 	@Permission("warps.create")
-	public static void createWarp(Player player, @StringArgumentA String warpName) {
+	public static void createWarp(Player player, @AStringArgument String warpName) {
 		warps.put(warpName, player.getLocation());
 		new IntegerArgument("");
 	}
@@ -68,7 +68,7 @@ public static void warp(CommandSender sender) {
 	
 /* ANCHOR: warps_warp */
 @Default
-public static void warp(Player player, @StringArgumentA String warpName) {
+public static void warp(Player player, @AStringArgument String warpName) {
 	player.teleport(warps.get(warpName));
 }
 /* ANCHOR_END: warps_warp */
@@ -76,7 +76,7 @@ public static void warp(Player player, @StringArgumentA String warpName) {
 /* ANCHOR: warps_create */
 @Subcommand("create")
 @Permission("warps.create")
-public static void createWarp(Player player, @StringArgumentA String warpName) {
+public static void createWarp(Player player, @AStringArgument String warpName) {
 	warps.put(warpName, player.getLocation());
 }
 /* ANCHOR_END: warps_create */

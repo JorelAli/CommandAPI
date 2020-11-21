@@ -5,8 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Primitive("net.md_5.bungee.api.chat.BaseComponent[]")
+@Primitive("String")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)
-public @interface ChatArgumentA {		
+public @interface AStringArgument {		
 }

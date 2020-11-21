@@ -5,8 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Primitive("org.bukkit.enchantments.Enchantment")
+@Primitive("org.bukkit.World.Environment")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)
-public @interface EnchantmentArgumentA {		
+public @interface AEnvironmentArgument {		
 }

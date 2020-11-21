@@ -8,5 +8,9 @@ import java.lang.annotation.Target;
 @Primitive("float")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)
-public @interface AngleArgumentA {		
+public @interface AFloatArgument {
+	
+	public float min() default -Float.MAX_VALUE;
+	public float max() default Float.MAX_VALUE;
+	
 }

@@ -5,8 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Primitive("org.bukkit.World.Environment")
+@Primitive("org.bukkit.potion.PotionEffectType")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)
-public @interface EnvironmentArgumentA {		
+public @interface APotionEffectArgument {
 }

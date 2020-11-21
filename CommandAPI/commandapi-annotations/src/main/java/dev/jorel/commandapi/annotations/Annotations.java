@@ -10,10 +10,12 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
+import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
@@ -25,32 +27,87 @@ import javax.tools.JavaFileObject;
 
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandPermission;
-import dev.jorel.commandapi.annotations.arguments.EntitySelectorArgumentA;
-import dev.jorel.commandapi.annotations.arguments.IntegerArgumentA;
-import dev.jorel.commandapi.annotations.arguments.LongArgumentA;
+import dev.jorel.commandapi.annotations.arguments.AAdvancementArgument;
+import dev.jorel.commandapi.annotations.arguments.AAngleArgument;
+import dev.jorel.commandapi.annotations.arguments.AAxisArgument;
+import dev.jorel.commandapi.annotations.arguments.ABiomeArgument;
+import dev.jorel.commandapi.annotations.arguments.ABlockPredicateArgument;
+import dev.jorel.commandapi.annotations.arguments.ABlockStateArgument;
+import dev.jorel.commandapi.annotations.arguments.ABooleanArgument;
+import dev.jorel.commandapi.annotations.arguments.AChatArgument;
+import dev.jorel.commandapi.annotations.arguments.AChatColorArgument;
+import dev.jorel.commandapi.annotations.arguments.AChatComponentArgument;
+import dev.jorel.commandapi.annotations.arguments.ADoubleArgument;
+import dev.jorel.commandapi.annotations.arguments.AEnchantmentArgument;
+import dev.jorel.commandapi.annotations.arguments.AEntitySelectorArgument;
+import dev.jorel.commandapi.annotations.arguments.AEntityType;
+import dev.jorel.commandapi.annotations.arguments.AEnvironmentArgument;
+import dev.jorel.commandapi.annotations.arguments.AFloatArgument;
+import dev.jorel.commandapi.annotations.arguments.AFloatRangeArgument;
+import dev.jorel.commandapi.annotations.arguments.AFunctionArgument;
+import dev.jorel.commandapi.annotations.arguments.AGreedyStringArgument;
+import dev.jorel.commandapi.annotations.arguments.AIntegerArgument;
+import dev.jorel.commandapi.annotations.arguments.AIntegerRangeArgument;
+import dev.jorel.commandapi.annotations.arguments.AItemStackArgument;
+import dev.jorel.commandapi.annotations.arguments.AItemStackPredicateArgument;
+import dev.jorel.commandapi.annotations.arguments.ALiteralArgument;
+import dev.jorel.commandapi.annotations.arguments.ALocation2DArgument;
+import dev.jorel.commandapi.annotations.arguments.ALocationArgument;
+import dev.jorel.commandapi.annotations.arguments.ALongArgument;
+import dev.jorel.commandapi.annotations.arguments.ALootTableArgument;
+import dev.jorel.commandapi.annotations.arguments.AMathOperationArgument;
+import dev.jorel.commandapi.annotations.arguments.AMultiLiteralArgument;
+import dev.jorel.commandapi.annotations.arguments.ANBTCompoundArgument;
+import dev.jorel.commandapi.annotations.arguments.AObjectiveArgument;
+import dev.jorel.commandapi.annotations.arguments.AObjectiveCriteriaArgument;
+import dev.jorel.commandapi.annotations.arguments.AParticleArgument;
+import dev.jorel.commandapi.annotations.arguments.APlayerArgument;
+import dev.jorel.commandapi.annotations.arguments.APotionEffectArgument;
+import dev.jorel.commandapi.annotations.arguments.ARecipeArgument;
+import dev.jorel.commandapi.annotations.arguments.ARotationArgument;
+import dev.jorel.commandapi.annotations.arguments.AScoreHolderArgument;
+import dev.jorel.commandapi.annotations.arguments.AScoreboardSlotArgument;
+import dev.jorel.commandapi.annotations.arguments.ASoundArgument;
+import dev.jorel.commandapi.annotations.arguments.AStringArgument;
+import dev.jorel.commandapi.annotations.arguments.ATeamArgument;
+import dev.jorel.commandapi.annotations.arguments.ATextArgument;
+import dev.jorel.commandapi.annotations.arguments.ATimeArgument;
+import dev.jorel.commandapi.annotations.arguments.AUUIDArgument;
 import dev.jorel.commandapi.annotations.arguments.Primitive;
-import dev.jorel.commandapi.annotations.arguments.StringArgumentA;
+import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
+import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
+import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
 
 /**
  * The main annotation processor for annotation-based arguments
  */
 public class Annotations extends AbstractProcessor {
 
+	private final Class<?>[] ARGUMENT_ANNOTATIONS = new Class<?>[] {
+		AAdvancementArgument.class, AAngleArgument.class, AAxisArgument.class, ABiomeArgument.class,
+		ABlockPredicateArgument.class, ABlockStateArgument.class, ABooleanArgument.class, AChatArgument.class,
+		AChatColorArgument.class, AChatComponentArgument.class, ADoubleArgument.class,
+		AEnchantmentArgument.class, AEntitySelectorArgument.class, AEntityType.class,
+		AEnvironmentArgument.class, AFloatArgument.class, AFloatRangeArgument.class, AFunctionArgument.class,
+		AGreedyStringArgument.class, AIntegerArgument.class, AIntegerRangeArgument.class,
+		AItemStackArgument.class, AItemStackPredicateArgument.class, ALiteralArgument.class,
+		ALocation2DArgument.class, ALocationArgument.class, ALongArgument.class, ALootTableArgument.class,
+		AMathOperationArgument.class, AMultiLiteralArgument.class, ANBTCompoundArgument.class,
+		AObjectiveArgument.class, AObjectiveCriteriaArgument.class, AParticleArgument.class,
+		APlayerArgument.class, APotionEffectArgument.class, ARecipeArgument.class, ARotationArgument.class,
+		AScoreboardSlotArgument.class, AScoreHolderArgument.class, ASoundArgument.class, AStringArgument.class,
+		ATeamArgument.class, ATextArgument.class, ATimeArgument.class,
+		AUUIDArgument.class
+	};
+
 	// List of stuff we can deal with
 	@Override
 	public Set<String> getSupportedAnnotationTypes() {
-		return Arrays.stream(new Class<?>[] {
-			Alias.class,
-			Command.class,
-			Default.class,
-			NeedsOp.class,
-			Permission.class,
-			Subcommand.class,
-			IntegerArgumentA.class,
-			StringArgumentA.class,
-			LongArgumentA.class
-		}).map(Class::getCanonicalName).collect(Collectors.toSet());
+		return Stream
+				.concat(Arrays.stream(new Class<?>[] { Alias.class, Command.class, Default.class, NeedsOp.class,
+						Permission.class, Subcommand.class }), Arrays.stream(ARGUMENT_ANNOTATIONS))
+				.map(Class::getCanonicalName).collect(Collectors.toSet());
 	}
 
 	@Override
@@ -69,86 +126,6 @@ public class Annotations extends AbstractProcessor {
 		}
 		return true;
 	}
-	
-//		case "EntitySelectorArgument":
-//			switch(arg.entityType()) {
-//			case MANY_ENTITIES:
-//				return Collection.class.getCanonicalName() + "<org.bukkit.entity.Entity>";
-//			case MANY_PLAYERS:
-//				return Collection.class.getCanonicalName() + "<org.bukkit.entity.Player>";
-//			case ONE_ENTITY:
-//				return "org.bukkit.entity.Entity";
-//			case ONE_PLAYER:
-//				return "org.bukkit.entity.Player";
-//			}
-//			return null;
-//		case "EntityTypeArgument":
-//			return "org.bukkit.entity.EntityType";
-//		case "EnvironmentArgument":
-//			return "org.bukkit.World.Environment";
-//		case "FloatArgument":
-//			return float.class.getCanonicalName();
-//		case "FloatRangeArgument":
-//			return FloatRange.class.getCanonicalName();
-//		case "FunctionArgument":
-//			return FunctionWrapper[].class.getCanonicalName();
-//		case "IntegerArgument":
-//			return int.class.getCanonicalName();
-//		case "IntegerRangeArgument":
-//			return IntegerRange.class.getCanonicalName();
-//		case "ItemStackArgument":
-//			return "org.bukkit.inventory.ItemStack";
-//		case "ItemStackPredicateArgument":
-//			return Predicate.class.getCanonicalName() + "<org.bukkit.inventory.ItemStack>";
-//		case "Location2DArgument":
-//			return Location2D.class.getCanonicalName();
-//		case "LocationArgument":
-//			return "org.bukkit.Location";
-//		case "LongArgument":
-//			return long.class.getCanonicalName();
-//		case "LootTableArgument":
-//			return "org.bukkit.loot.LootTable";
-//		case "MathOperationArgument":
-//			return MathOperation.class.getCanonicalName();
-//		case "NBTCompoundArgument":
-//			return "de.tr7zw.nbtapi.NBTContainer";
-//		case "ParticleArgument":
-//			return "org.bukkit.Particle";
-//		case "PlayerArgument":
-//			return "org.bukkit.entity.Player";
-//		case "PotionEffectArgument":
-//			return "org.bukkit.potion.PotionEffectType";
-//		case "RecipeArgument":
-//			return "org.bukkit.inventory.Recipe";
-//		case "RotationArgument":
-//			return Rotation.class.getCanonicalName();
-//		case "ScoreboardSlotArgument":
-//			return ScoreboardSlot.class.getCanonicalName();
-//		case "ScoreHolderArgument":
-//			switch(arg.scoreHolderType()) {
-////			case MULTIPLE:
-////				return Collection.class.getCanonicalName() + "<String>";
-////			case SINGLE:
-////				return String.class.getCanonicalName();
-////			}
-//			return null;
-//		case "SoundArgument":
-//			return "org.bukkit.Sound";
-//		case "LiteralArgument":
-//		case "GreedyStringArgument":
-//		case "TextArgument":
-//		case "StringArgument":
-//		case "TeamArgument":
-//		case "ObjectiveArgument":
-//		case "ObjectiveCriteriaArgument":
-//			return String.class.getCanonicalName();
-//		case "TimeArgument":
-//			return int.class.getCanonicalName();
-//		case "UUIDArgument":
-//			return UUID.class.getCanonicalName();
-//		}
-//		return null;
-//	}
 
 	// Indentation, because half of this file is actually just making stuff look nice
 	private String indent(int indent) {
@@ -195,16 +172,36 @@ public class Annotations extends AbstractProcessor {
 					imports.add(CommandPermission.class.getCanonicalName());
 				}
 				
-				// Frankly, CBA to do it for each argument, it's so not worth it
-				imports.add("dev.jorel.commandapi.arguments.*");
+				if(methodElement instanceof ExecutableElement) {
+					ExecutableElement method = (ExecutableElement) methodElement;
+					for(VariableElement parameter : method.getParameters()) {
+						if(getArgument(parameter) != null ) {
+							imports.addAll(Arrays.asList(getPrimitive(getArgument(parameter)).value()));
+							imports.add("dev.jorel.commandapi.arguments." + getArgument(parameter).annotationType().getSimpleName().substring(1));
+						}
+						
+					}
+				}
+			}
+			
+			for(String import_ : imports) {
+				if(import_.contains("<")) {
+					imports.add(import_.substring(0, import_.indexOf("<")));
+					imports.add(import_.substring(import_.indexOf("<") + 1, import_.indexOf(">")));
+				}
 			}
 			
 			String previousImport = "";
 			for(String import_ : imports) {
+				// Separate different packages
 				if(previousImport.contains(".") && import_.contains(".")) {
 					if(!previousImport.substring(0, previousImport.indexOf(".")).equals(import_.substring(0, import_.indexOf(".")))) {
 						out.println();
 					}
+				}
+				// Don't import stuff like "String"
+				if(!import_.contains(".") || import_.contains("<")) {
+					continue;
 				}
 				
 				out.print("import ");
@@ -302,7 +299,7 @@ public class Annotations extends AbstractProcessor {
 					ExecutableElement executableMethodElement = (ExecutableElement) methodElement;
 					for(int i = 1; i < executableMethodElement.getParameters().size(); i++) {
 						VariableElement parameter = executableMethodElement.getParameters().get(i);
-						T argumentAnnotation = ArgumentProcessor.getArgument(parameter);
+						T argumentAnnotation = getArgument(parameter);
 						if (argumentAnnotation == null) {
 							processingEnv.getMessager().printMessage(Kind.ERROR,
 									"Parameter " + parameter.getSimpleName() + " in method "
@@ -311,33 +308,68 @@ public class Annotations extends AbstractProcessor {
 							return;
 						}
 						
-						
 						out.print(indent(indent) + ".withArguments(new ");
-						// We're assuming that the name of the argument MUST be the same name + "A"
-						out.print(argumentAnnotation.annotationType().getSimpleName().substring(0, argumentAnnotation.annotationType().getSimpleName().length() - 1));
+						// We're assuming that the name of the argument MUST be "A" + the same name
+						out.print(argumentAnnotation.annotationType().getSimpleName().substring(1));
 						
 						// Node name
-						out.print("(\"");
-						out.print(parameter.getSimpleName());
-						out.print("\"");
+						if(argumentAnnotation instanceof AMultiLiteralArgument || argumentAnnotation instanceof ALiteralArgument) {
+							// Ignore node name for MultiLiteralArgument and LiteralArgument
+							out.print("(");
+						} else {
+							out.print("(\"");
+							out.print(parameter.getSimpleName());
+							out.print("\"");
+						}
 						
-						//Complex processing goes here...
-						if(argumentAnnotation instanceof IntegerArgumentA) {
-							IntegerArgumentA argument = (IntegerArgumentA) argumentAnnotation;
+						// Handle parameters
+						// Number arguments
+						if(argumentAnnotation instanceof AIntegerArgument) {
+							AIntegerArgument argument = (AIntegerArgument) argumentAnnotation;
 							out.print(", " + argument.min() + ", " + argument.max());
-						} else if(argumentAnnotation instanceof LongArgumentA) {
-							LongArgumentA argument = (LongArgumentA) argumentAnnotation;
+						} else if(argumentAnnotation instanceof ALongArgument) {
+							ALongArgument argument = (ALongArgument) argumentAnnotation;
 							out.print(", " + argument.min() + ", " + argument.max());
+						} else if(argumentAnnotation instanceof AFloatArgument) {
+							AFloatArgument argument = (AFloatArgument) argumentAnnotation;
+							out.print(", " + argument.min() + ", " + argument.max());
+						} else if(argumentAnnotation instanceof ADoubleArgument) {
+							ADoubleArgument argument = (ADoubleArgument) argumentAnnotation;
+							out.print(", " + argument.min() + ", " + argument.max());
+						}
+						
+						// Non-number arguments
+						else if(argumentAnnotation instanceof ALocation2DArgument) {
+							ALocation2DArgument argument = (ALocation2DArgument) argumentAnnotation;
+							out.print(", " + LocationType.class.getSimpleName() + "." + argument.value().toString());
+						} else if(argumentAnnotation instanceof ALocationArgument) {
+							ALocationArgument argument = (ALocationArgument) argumentAnnotation;
+							out.print(", " + LocationType.class.getSimpleName() + "." + argument.value().toString());
+						} else if(argumentAnnotation instanceof AEntitySelectorArgument) {
+							AEntitySelectorArgument argument = (AEntitySelectorArgument) argumentAnnotation;
+							out.print(", " + EntitySelector.class.getSimpleName() + "." + argument.value().toString());
+						} else if(argumentAnnotation instanceof AScoreHolderArgument) {
+							AScoreHolderArgument argument = (AScoreHolderArgument) argumentAnnotation;
+							out.print(", " + ScoreHolderType.class.getSimpleName() + "." + argument.value().toString());
+						} else if(argumentAnnotation instanceof AMultiLiteralArgument) {
+							AMultiLiteralArgument argument = (AMultiLiteralArgument) argumentAnnotation;
+							out.print(Arrays.stream(argument.value()).map(s -> "\"" + s + "\"").collect(Collectors.joining(", ")));
+						} else if(argumentAnnotation instanceof ALiteralArgument) {
+							ALiteralArgument argument = (ALiteralArgument) argumentAnnotation;
+							out.print("\"");
+							out.print(argument.value());
+							out.print("\"");
 						}
 						
 						out.println("))");
 						
-						Primitive primitive = ArgumentProcessor.getPrimitive(argumentAnnotation);
+						// Handle return types
+						Primitive primitive = getPrimitive(argumentAnnotation);
 						if(primitive.value().length == 1) {
 							argumentMapping.put(i - 1, primitive.value()[0]);
 						} else {
-							if(argumentAnnotation instanceof EntitySelectorArgumentA) {
-								EntitySelectorArgumentA argument = (EntitySelectorArgumentA) argumentAnnotation;
+							if(argumentAnnotation instanceof AEntitySelectorArgument) {
+								AEntitySelectorArgument argument = (AEntitySelectorArgument) argumentAnnotation;
 								switch(argument.value()) {
 								case MANY_ENTITIES:
 									argumentMapping.put(i - 1, primitive.value()[0]);
@@ -352,8 +384,17 @@ public class Annotations extends AbstractProcessor {
 									argumentMapping.put(i - 1, primitive.value()[3]);
 									break;
 								}
+							} else if (argumentAnnotation instanceof AScoreHolderArgument) {
+								AScoreHolderArgument argument = (AScoreHolderArgument) argumentAnnotation;
+								switch(argument.value()) {
+								case MULTIPLE:
+									argumentMapping.put(i - 1, primitive.value()[0]);
+									break;
+								case SINGLE:
+									argumentMapping.put(i - 1, primitive.value()[1]);
+									break;
+								}
 							}
-							//TODO
 						}
 					}
 					// .executes
@@ -430,6 +471,31 @@ public class Annotations extends AbstractProcessor {
 			out.println();
 			out.println("}"); // $Command class
 		}
+	}
+
+	// Checks if an annotation mirror is an argument annotation
+	private boolean isArgument(AnnotationMirror mirror) {
+		final String mirrorName = mirror.getAnnotationType().toString();
+		return Arrays.stream(ARGUMENT_ANNOTATIONS).map(Class::getCanonicalName).anyMatch(mirrorName::equals);
+	}
+
+	// Get the Primitive annotation from an annotation
+	private <T extends Annotation> Primitive getPrimitive(T annotation) {
+		return annotation.annotationType().getDeclaredAnnotation(Primitive.class);
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T extends Annotation> T getArgument(VariableElement tMirror) {
+		for(AnnotationMirror mirror : tMirror.getAnnotationMirrors()) {
+			if(isArgument(mirror)) {
+				try {
+					return tMirror.getAnnotationsByType((Class<T>) Class.forName(mirror.getAnnotationType().toString()))[0];
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
 	}
 
 }
