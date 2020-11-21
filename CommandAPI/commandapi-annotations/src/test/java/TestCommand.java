@@ -5,13 +5,11 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import dev.jorel.commandapi.annotations.Arg;
 import dev.jorel.commandapi.annotations.Command;
 import dev.jorel.commandapi.annotations.Default;
 import dev.jorel.commandapi.annotations.Permission;
 import dev.jorel.commandapi.annotations.Subcommand;
 import dev.jorel.commandapi.annotations.arguments.StringArgumentA;
-import dev.jorel.commandapi.arguments.StringArgument;
 
 @Command("warp")	
 public class TestCommand {
@@ -28,14 +26,12 @@ public class TestCommand {
 	}
 	
 	@Default
-	@Arg(name = "warp", type = StringArgument.class)
-	public static void warp(Player player, String warpName) {
+	public static void warp(Player player, @StringArgumentA String warpName) {
 		player.teleport(warps.get(warpName));
 	}
 	
 	@Subcommand("create")
 	@Permission("warps.create")
-	@Arg(name = "name", type = StringArgument.class)
 	public static void createWarp(Player player, @StringArgumentA String warpName) {
 //		warps.put(warpName, player.getLocation());
 //		new IntegerArgument("");

@@ -2,17 +2,13 @@ package dev.jorel.commandapi.annotations;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.annotation.Annotation;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.UUID;
-import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -22,33 +18,19 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.ExecutableType;
-import javax.lang.model.type.MirroredTypeException;
-import javax.lang.model.type.TypeMirror;
-import javax.sql.rowset.Predicate;
 import javax.tools.Diagnostic.Kind;
 import javax.tools.JavaFileObject;
 
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandPermission;
+import dev.jorel.commandapi.annotations.arguments.EntitySelectorArgumentA;
 import dev.jorel.commandapi.annotations.arguments.IntegerArgumentA;
+import dev.jorel.commandapi.annotations.arguments.LongArgumentA;
+import dev.jorel.commandapi.annotations.arguments.Primitive;
 import dev.jorel.commandapi.annotations.arguments.StringArgumentA;
-import dev.jorel.commandapi.arguments.CustomArgument;
-import dev.jorel.commandapi.arguments.EntitySelectorArgument;
-import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
-import dev.jorel.commandapi.arguments.Location2DArgument;
-import dev.jorel.commandapi.arguments.LocationArgument;
-import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
-import dev.jorel.commandapi.arguments.ScoreHolderArgument;
-import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
-import dev.jorel.commandapi.wrappers.FloatRange;
-import dev.jorel.commandapi.wrappers.FunctionWrapper;
-import dev.jorel.commandapi.wrappers.IntegerRange;
-import dev.jorel.commandapi.wrappers.Location2D;
-import dev.jorel.commandapi.wrappers.MathOperation;
-import dev.jorel.commandapi.wrappers.Rotation;
-import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 
 /**
  * The main annotation processor for annotation-based arguments
@@ -58,11 +40,17 @@ public class Annotations extends AbstractProcessor {
 	// List of stuff we can deal with
 	@Override
 	public Set<String> getSupportedAnnotationTypes() {
-		return new HashSet<String>(Arrays.asList(Alias.class.getCanonicalName(), Arg.class.getCanonicalName(),
-				Command.class.getCanonicalName(), Default.class.getCanonicalName(),
-				NeedsOp.class.getCanonicalName(),
-				Permission.class.getCanonicalName(), Subcommand.class.getCanonicalName(),
-				IntegerArgumentA.class.getCanonicalName(), StringArgumentA.class.getCanonicalName()));
+		return Arrays.stream(new Class<?>[] {
+			Alias.class,
+			Command.class,
+			Default.class,
+			NeedsOp.class,
+			Permission.class,
+			Subcommand.class,
+			IntegerArgumentA.class,
+			StringArgumentA.class,
+			LongArgumentA.class
+		}).map(Class::getCanonicalName).collect(Collectors.toSet());
 	}
 
 	@Override
@@ -82,121 +70,85 @@ public class Annotations extends AbstractProcessor {
 		return true;
 	}
 	
-	/*
-	 * So you're probably wondering, why do I have to do all of this
-	 * instead of just create an instance of the Argument class and
-	 * then everything's all good?
-	 * 
-	 * Well, that's because you can't instantiate an Argument
-	 * class without having Brigadier as a dependency in the plugin you're
-	 * trying to compile and that's completely against what the CommandAPI
-	 * is trying to achieve
-	 */
-	private String mapArgumentTypes(String argumentClass, Arg arg) {
-		switch (argumentClass) {
-		case "AdvancementArgument":
-			return "org.bukkit.advancement.Advancement";
-		case "AngleArgument":
-			return float.class.getCanonicalName();
-		case "AxisArgument":
-			return EnumSet.class.getCanonicalName() + "<org.bukkit.Axis>";
-		case "BiomeArgument":
-			return "org.bukkit.block.Biome";
-		case "BlockPredicateArgument":
-			return Predicate.class.getCanonicalName() + "<org.bukkit.block.Block>";
-		case "BlockStateArgument":
-			return "org.bukkit.block.data.BlockData";
-		case "BooleanArgument":
-			return boolean.class.getCanonicalName();
-		case "ChatArgument":
-			return "net.md_5.bungee.api.chat.BaseComponent[]";
-		case "ChatColorArgument":
-			return "org.bukkit.ChatColor";
-		case "ChatComponentArgument":
-			return "net.md_5.bungee.api.chat.BaseComponent[]";
-		case "DoubleArgument":
-			return double.class.getCanonicalName();
-		case "EnchantmentArgument":
-			return "org.bukkit.enchantments.Enchantment";
-		case "EntitySelectorArgument":
-			switch(arg.entityType()) {
-			case MANY_ENTITIES:
-				return Collection.class.getCanonicalName() + "<org.bukkit.entity.Entity>";
-			case MANY_PLAYERS:
-				return Collection.class.getCanonicalName() + "<org.bukkit.entity.Player>";
-			case ONE_ENTITY:
-				return "org.bukkit.entity.Entity";
-			case ONE_PLAYER:
-				return "org.bukkit.entity.Player";
-			}
-			return null;
-		case "EntityTypeArgument":
-			return "org.bukkit.entity.EntityType";
-		case "EnvironmentArgument":
-			return "org.bukkit.World.Environment";
-		case "FloatArgument":
-			return float.class.getCanonicalName();
-		case "FloatRangeArgument":
-			return FloatRange.class.getCanonicalName();
-		case "FunctionArgument":
-			return FunctionWrapper[].class.getCanonicalName();
-		case "IntegerArgument":
-			return int.class.getCanonicalName();
-		case "IntegerRangeArgument":
-			return IntegerRange.class.getCanonicalName();
-		case "ItemStackArgument":
-			return "org.bukkit.inventory.ItemStack";
-		case "ItemStackPredicateArgument":
-			return Predicate.class.getCanonicalName() + "<org.bukkit.inventory.ItemStack>";
-		case "Location2DArgument":
-			return Location2D.class.getCanonicalName();
-		case "LocationArgument":
-			return "org.bukkit.Location";
-		case "LongArgument":
-			return long.class.getCanonicalName();
-		case "LootTableArgument":
-			return "org.bukkit.loot.LootTable";
-		case "MathOperationArgument":
-			return MathOperation.class.getCanonicalName();
-		case "NBTCompoundArgument":
-			return "de.tr7zw.nbtapi.NBTContainer";
-		case "ParticleArgument":
-			return "org.bukkit.Particle";
-		case "PlayerArgument":
-			return "org.bukkit.entity.Player";
-		case "PotionEffectArgument":
-			return "org.bukkit.potion.PotionEffectType";
-		case "RecipeArgument":
-			return "org.bukkit.inventory.Recipe";
-		case "RotationArgument":
-			return Rotation.class.getCanonicalName();
-		case "ScoreboardSlotArgument":
-			return ScoreboardSlot.class.getCanonicalName();
-		case "ScoreHolderArgument":
-			switch(arg.scoreHolderType()) {
-			case MULTIPLE:
-				return Collection.class.getCanonicalName() + "<String>";
-			case SINGLE:
-				return String.class.getCanonicalName();
-			}
-			return null;
-		case "SoundArgument":
-			return "org.bukkit.Sound";
-		case "LiteralArgument":
-		case "GreedyStringArgument":
-		case "TextArgument":
-		case "StringArgument":
-		case "TeamArgument":
-		case "ObjectiveArgument":
-		case "ObjectiveCriteriaArgument":
-			return String.class.getCanonicalName();
-		case "TimeArgument":
-			return int.class.getCanonicalName();
-		case "UUIDArgument":
-			return UUID.class.getCanonicalName();
-		}
-		return null;
-	}
+//		case "EntitySelectorArgument":
+//			switch(arg.entityType()) {
+//			case MANY_ENTITIES:
+//				return Collection.class.getCanonicalName() + "<org.bukkit.entity.Entity>";
+//			case MANY_PLAYERS:
+//				return Collection.class.getCanonicalName() + "<org.bukkit.entity.Player>";
+//			case ONE_ENTITY:
+//				return "org.bukkit.entity.Entity";
+//			case ONE_PLAYER:
+//				return "org.bukkit.entity.Player";
+//			}
+//			return null;
+//		case "EntityTypeArgument":
+//			return "org.bukkit.entity.EntityType";
+//		case "EnvironmentArgument":
+//			return "org.bukkit.World.Environment";
+//		case "FloatArgument":
+//			return float.class.getCanonicalName();
+//		case "FloatRangeArgument":
+//			return FloatRange.class.getCanonicalName();
+//		case "FunctionArgument":
+//			return FunctionWrapper[].class.getCanonicalName();
+//		case "IntegerArgument":
+//			return int.class.getCanonicalName();
+//		case "IntegerRangeArgument":
+//			return IntegerRange.class.getCanonicalName();
+//		case "ItemStackArgument":
+//			return "org.bukkit.inventory.ItemStack";
+//		case "ItemStackPredicateArgument":
+//			return Predicate.class.getCanonicalName() + "<org.bukkit.inventory.ItemStack>";
+//		case "Location2DArgument":
+//			return Location2D.class.getCanonicalName();
+//		case "LocationArgument":
+//			return "org.bukkit.Location";
+//		case "LongArgument":
+//			return long.class.getCanonicalName();
+//		case "LootTableArgument":
+//			return "org.bukkit.loot.LootTable";
+//		case "MathOperationArgument":
+//			return MathOperation.class.getCanonicalName();
+//		case "NBTCompoundArgument":
+//			return "de.tr7zw.nbtapi.NBTContainer";
+//		case "ParticleArgument":
+//			return "org.bukkit.Particle";
+//		case "PlayerArgument":
+//			return "org.bukkit.entity.Player";
+//		case "PotionEffectArgument":
+//			return "org.bukkit.potion.PotionEffectType";
+//		case "RecipeArgument":
+//			return "org.bukkit.inventory.Recipe";
+//		case "RotationArgument":
+//			return Rotation.class.getCanonicalName();
+//		case "ScoreboardSlotArgument":
+//			return ScoreboardSlot.class.getCanonicalName();
+//		case "ScoreHolderArgument":
+//			switch(arg.scoreHolderType()) {
+////			case MULTIPLE:
+////				return Collection.class.getCanonicalName() + "<String>";
+////			case SINGLE:
+////				return String.class.getCanonicalName();
+////			}
+//			return null;
+//		case "SoundArgument":
+//			return "org.bukkit.Sound";
+//		case "LiteralArgument":
+//		case "GreedyStringArgument":
+//		case "TextArgument":
+//		case "StringArgument":
+//		case "TeamArgument":
+//		case "ObjectiveArgument":
+//		case "ObjectiveCriteriaArgument":
+//			return String.class.getCanonicalName();
+//		case "TimeArgument":
+//			return int.class.getCanonicalName();
+//		case "UUIDArgument":
+//			return UUID.class.getCanonicalName();
+//		}
+//		return null;
+//	}
 
 	// Indentation, because half of this file is actually just making stuff look nice
 	private String indent(int indent) {
@@ -206,11 +158,6 @@ public class Annotations extends AbstractProcessor {
 		}
 		return builder.toString();
 	}
-
-	// Get fully qualified name from type mirror
-	private String fromTypeMirror(MirroredTypeException e) {
-		return e.getTypeMirror().toString();
-	}
 	
 	private String simpleFromQualified(String name) {
 		if(name == null) {
@@ -219,7 +166,7 @@ public class Annotations extends AbstractProcessor {
 		return name.split("\\.")[name.split("\\.").length - 1];
 	}
 
-	private void processCommand(RoundEnvironment roundEnv, Element classElement) throws IOException {
+	private <T extends Annotation> void processCommand(RoundEnvironment roundEnv, Element classElement) throws IOException {
 		TypeElement commandClass = (TypeElement) classElement;
 		JavaFileObject builderFile = processingEnv.getFiler()
 				.createSourceFile(commandClass.getQualifiedName() + "$Command");
@@ -248,44 +195,8 @@ public class Annotations extends AbstractProcessor {
 					imports.add(CommandPermission.class.getCanonicalName());
 				}
 				
-				// @Arg/@Args handler
-				BiConsumer<Integer, Arg> argHandler = (indent_, arg) -> {
-					String className;
-					String simpleClassName;
-					try {
-						className = arg.type().getCanonicalName();
-						simpleClassName = arg.type().getSimpleName();
-					} catch (MirroredTypeException e) {
-						className = fromTypeMirror(e);
-						simpleClassName = simpleFromQualified(className);
-					}
-					imports.add(className);
-					if(simpleClassName.equals(LocationArgument.class.getSimpleName()) || simpleClassName.equals(Location2DArgument.class.getSimpleName())) {
-						imports.add(LocationType.class.getCanonicalName());
-					} else if(simpleClassName.equals(ScoreHolderArgument.class.getSimpleName())) {
-						imports.add(ScoreHolderType.class.getCanonicalName());
-					} else if(simpleClassName.equals(EntitySelectorArgument.class.getSimpleName())) {
-						imports.add(EntitySelector.class.getCanonicalName());
-					}
-					
-					String import_ = mapArgumentTypes(simpleClassName, arg);
-					imports.add(import_.replaceAll("<.+>", ""));
-					if(import_.contains("<")) {
-						System.out.println(import_);
-						imports.add(import_.substring(import_.indexOf("<") + 1, import_.indexOf(">")));
-					}
-				};
-				
-				// @Arg
-				if (methodElement.getAnnotation(Arg.class) != null) {
-					argHandler.accept(indent, methodElement.getAnnotation(Arg.class));
-				}
-				// @Args
-				if (methodElement.getAnnotation(Args.class) != null) {
-					for (Arg arg : methodElement.getAnnotation(Args.class).value()) {
-						argHandler.accept(indent, arg);
-					}
-				}
+				// Frankly, CBA to do it for each argument, it's so not worth it
+				imports.add("dev.jorel.commandapi.arguments.*");
 			}
 			
 			String previousImport = "";
@@ -384,75 +295,67 @@ public class Annotations extends AbstractProcessor {
 						out.println(")");
 					}
 					
+
 					//Maps parameter index to argument's primitive type
 					Map<Integer, String> argumentMapping = new HashMap<>();
-					final int[] argIndex = new int[] {0};
 					
-					// @Arg/@Args handler
-					BiConsumer<Integer, Arg> argHandler = (indent_, arg) -> {
-						out.print(indent(indent_) + ".withArguments(new ");
-						String simpleClassName;
-						try {
-							simpleClassName = arg.type().getSimpleName();
-						} catch (MirroredTypeException e) {
-							simpleClassName = simpleFromQualified(fromTypeMirror(e));
-						}
-						out.print(simpleClassName);
-						out.print("(\"");
-						out.print(arg.name());
-						
-						if(simpleClassName.equals(LocationArgument.class.getSimpleName()) || simpleClassName.equals(Location2DArgument.class.getSimpleName())) {
-							out.print("\", ");
-							out.print(LocationType.class.getSimpleName() + "." + arg.locationType().name());
-						} else if(simpleClassName.equals(ScoreHolderArgument.class.getSimpleName())) {
-							out.print("\", ");
-							out.print(ScoreHolderType.class.getSimpleName() + "." + arg.scoreHolderType().name());
-						} else if(simpleClassName.equals(EntitySelectorArgument.class.getSimpleName())) {
-							out.print("\", ");
-							out.print(EntitySelector.class.getSimpleName() + "." + arg.entityType().name());
-						} else if (simpleClassName.equals(CustomArgument.class.getSimpleName())) {
-							processingEnv.getMessager().printMessage(Kind.ERROR, CustomArgument.class.getSimpleName() + " is not supported with annotations");
-						} else {
-							out.print("\"");
-						}
-						out.println("))");
-
-						//Construct the argument to get its primitive type
-						String expectedPrimitiveType = mapArgumentTypes(simpleClassName, arg);
-						
-						// Get the name of the parameter itself (e.g. Player p -> "p")
-						ExecutableElement executableMethodElement = (ExecutableElement) methodElement;
-						String paramName = executableMethodElement.getParameters().get(argIndex[0] + 1).getSimpleName().toString();
-						
-						// Get the type of the parameter
-						TypeMirror paramType = methodType.getParameterTypes().get(argIndex[0] + 1);
-						
-						if(paramType.toString().equals(expectedPrimitiveType)) {
-							argumentMapping.put(argIndex[0], expectedPrimitiveType);
-						} else {
+					ExecutableElement executableMethodElement = (ExecutableElement) methodElement;
+					for(int i = 1; i < executableMethodElement.getParameters().size(); i++) {
+						VariableElement parameter = executableMethodElement.getParameters().get(i);
+						T argumentAnnotation = ArgumentProcessor.getArgument(parameter);
+						if (argumentAnnotation == null) {
 							processingEnv.getMessager().printMessage(Kind.ERROR,
-									"Invalid argument " + paramName + " in method " + methodElement.getSimpleName()
-											+ ". Expected type " + expectedPrimitiveType
-											+ " but instead got " + paramType.toString());
+									"Parameter " + parameter.getSimpleName() + " in method "
+											+ methodElement.getSimpleName()
+											+ " does not have an argument annotation on it! ");
+							return;
 						}
 						
-						argIndex[0]++;
-					};
-
-					// @Arg
-					if (methodElement.getAnnotation(Arg.class) != null) {
-						argHandler.accept(indent, methodElement.getAnnotation(Arg.class));
-					}
-
-					// @Args
-					if (methodElement.getAnnotation(Args.class) != null) {
-						for (Arg arg : methodElement.getAnnotation(Args.class).value()) {
-							argHandler.accept(indent, arg);
+						
+						out.print(indent(indent) + ".withArguments(new ");
+						// We're assuming that the name of the argument MUST be the same name + "A"
+						out.print(argumentAnnotation.annotationType().getSimpleName().substring(0, argumentAnnotation.annotationType().getSimpleName().length() - 1));
+						
+						// Node name
+						out.print("(\"");
+						out.print(parameter.getSimpleName());
+						out.print("\"");
+						
+						//Complex processing goes here...
+						if(argumentAnnotation instanceof IntegerArgumentA) {
+							IntegerArgumentA argument = (IntegerArgumentA) argumentAnnotation;
+							out.print(", " + argument.min() + ", " + argument.max());
+						} else if(argumentAnnotation instanceof LongArgumentA) {
+							LongArgumentA argument = (LongArgumentA) argumentAnnotation;
+							out.print(", " + argument.min() + ", " + argument.max());
+						}
+						
+						out.println("))");
+						
+						Primitive primitive = ArgumentProcessor.getPrimitive(argumentAnnotation);
+						if(primitive.value().length == 1) {
+							argumentMapping.put(i - 1, primitive.value()[0]);
+						} else {
+							if(argumentAnnotation instanceof EntitySelectorArgumentA) {
+								EntitySelectorArgumentA argument = (EntitySelectorArgumentA) argumentAnnotation;
+								switch(argument.value()) {
+								case MANY_ENTITIES:
+									argumentMapping.put(i - 1, primitive.value()[0]);
+									break;
+								case MANY_PLAYERS:
+									argumentMapping.put(i - 1, primitive.value()[1]);
+									break;
+								case ONE_ENTITY:
+									argumentMapping.put(i - 1, primitive.value()[2]);
+									break;
+								case ONE_PLAYER:
+									argumentMapping.put(i - 1, primitive.value()[3]);
+									break;
+								}
+							}
+							//TODO
 						}
 					}
-
-					ArgumentProcessor.getArguments((ExecutableElement) methodElement);
-
 					// .executes
 					String[] firstParam = methodType.getParameterTypes().get(0).toString().split("\\.");
 					switch(firstParam[firstParam.length - 1]) {
@@ -494,7 +397,7 @@ public class Annotations extends AbstractProcessor {
 					out.print(methodElement.getSimpleName());
 					out.print("(sender");
 					
-					for(int i = 0; i < argIndex[0]; i++) {
+					for(int i = 0; i < argumentMapping.size(); i++) {
 						out.print(", (");
 						String fromArgumentMap = argumentMapping.get(i);
 						if(fromArgumentMap.contains("<")) {

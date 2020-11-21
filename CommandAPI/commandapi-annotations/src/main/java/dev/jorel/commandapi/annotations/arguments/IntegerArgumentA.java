@@ -7,11 +7,8 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)
+@Primitive("int")
 public @interface IntegerArgumentA {
-	
-	class Metadata {
-		static int x = 2;
-	}
 	
 	public int min() default Integer.MIN_VALUE;
 	public int max() default Integer.MAX_VALUE;
