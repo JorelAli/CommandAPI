@@ -31,6 +31,8 @@ import javax.tools.JavaFileObject;
 
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandPermission;
+import dev.jorel.commandapi.annotations.arguments.IntegerArgumentA;
+import dev.jorel.commandapi.annotations.arguments.StringArgumentA;
 import dev.jorel.commandapi.arguments.CustomArgument;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
@@ -59,7 +61,8 @@ public class Annotations extends AbstractProcessor {
 		return new HashSet<String>(Arrays.asList(Alias.class.getCanonicalName(), Arg.class.getCanonicalName(),
 				Command.class.getCanonicalName(), Default.class.getCanonicalName(),
 				NeedsOp.class.getCanonicalName(),
-				Permission.class.getCanonicalName(), Subcommand.class.getCanonicalName()));
+				Permission.class.getCanonicalName(), Subcommand.class.getCanonicalName(),
+				IntegerArgumentA.class.getCanonicalName(), StringArgumentA.class.getCanonicalName()));
 	}
 
 	@Override
@@ -447,6 +450,8 @@ public class Annotations extends AbstractProcessor {
 							argHandler.accept(indent, arg);
 						}
 					}
+
+					ArgumentProcessor.getArguments((ExecutableElement) methodElement);
 
 					// .executes
 					String[] firstParam = methodType.getParameterTypes().get(0).toString().split("\\.");

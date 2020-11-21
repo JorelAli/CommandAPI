@@ -12,6 +12,7 @@ import dev.jorel.commandapi.annotations.Command;
 import dev.jorel.commandapi.annotations.Default;
 import dev.jorel.commandapi.annotations.Permission;
 import dev.jorel.commandapi.annotations.Subcommand;
+import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 
 /* ANCHOR: warps */
@@ -42,6 +43,7 @@ public class WarpCommand {
 	@Arg(name = "warpname", type = StringArgument.class)
 	public static void createWarp(Player player, String warpName) {
 		warps.put(warpName, player.getLocation());
+		new IntegerArgument("");
 	}
 	
 }
