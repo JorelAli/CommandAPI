@@ -4,6 +4,7 @@ import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
@@ -121,5 +122,16 @@ new CommandAPICommand("warp")
     .register();
 /* ANCHOR_END: old_warps */
 }
+
+/* ANCHOR: warp_register2 */
+class MyPlugin extends JavaPlugin {
+	
+	@Override
+	public void onLoad() {
+		CommandAPI.registerCommand(WarpCommand.class);
+	}
+	
+}
+/* ANCHOR_END: warp_register2 */
 	
 }

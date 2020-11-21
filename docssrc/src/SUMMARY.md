@@ -85,6 +85,7 @@
 
 - [Annotation-based commands](./annotationsintro.md)
 - [Annotations](./annotations.md)
+- [Registering annotation-based commands](./registeringannotations.md)
 
 # CommandAPI Utilities
 

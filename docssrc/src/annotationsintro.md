@@ -1,13 +1,5 @@
 # Annotation-based commands
 
-<div class="warning">
-
-The CommandAPI's annotation-based system is very new and currently in development. **It is stable** (everything should work), but the main API hasn't been set in stone and is subject to change. It is very likely that commands registered in this version will need updating in future versions.
-
-I hope this doesn't put off too many people from using it. If in doubt, consult the [Upgrading guide](./upgrading.md) to be aware of the API changes for annotations.
-
-</div>
-
 The CommandAPI also includes a very small lightweight annotation-based command framework. This works very differently compared to previous commands shown in this documentation and **it is less feature-rich than registering commands using the other methods.**
 
 In short, the CommandAPI's annotation-based system:
@@ -85,7 +77,7 @@ Here, we simply write what happens when no arguments are run (i.e. the user just
 {{#include ../../CommandAPI/commandapi-annotations/src/test/java/WarpCommand.java:warps_warp}}
 ```
 
-We also have a second `@Default` annotated method, which handles our `/warp <warp>` command. Because this isn't a subcommand (the warp to teleport to is not a subcommand, it's an argument), we still using the `@Default` annotation. In this method, we include an argument with this command by using the `@Arg` annotation. This argument uses the `StringArgument` class, and the name of this argument is "warp". This is synonymous with using the following:
+We also have a second `@Default` annotated method, which handles our `/warp <warp>` command. Because this isn't a subcommand (the warp to teleport to is not a subcommand, it's an argument), we still using the `@Default` annotation. In this method, we include an argument with this command by using the `@AStringArgument` annotation. This argument uses the `StringArgument` class, and the name of this argument is "warpName", which is extracted from the name of the variable. Simply put, if the **Annotation** for an argument is **A** followed by the name of the argument. This is synonymous with using the following:
 
 ```java
 new StringArgument("warp")
@@ -101,7 +93,7 @@ The second argument is a `String` object, which represents the result of our arg
 {{#include ../../CommandAPI/commandapi-annotations/src/test/java/WarpCommand.java:warps_create}}
 ```
 
-Lastly, we declare a subcommand to allow us to run `/warp create <name>`. To do this, we simply use the `@Subcommand` annotation. In this example, we also apply a permission node that is required to run the command by using the `@Permission` annotation. The rest is fairly straight forward - we declare an argument using `@Arg` and then declare everything else in a similar fashion to the default command executor.
+Lastly, we declare a subcommand to allow us to run `/warp create <name>`. To do this, we simply use the `@Subcommand` annotation. In this example, we also apply a permission node that is required to run the command by using the `@Permission` annotation. The rest is fairly straight forward - we declare an argument, in this case it's another `StringArgument` , so we use `@AStringArgument` and then declare everything else in a similar fashion to the default command executor.
 
 #### Registering the command
 
