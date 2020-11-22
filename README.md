@@ -132,6 +132,8 @@ These versions of Minecraft must be installed in your local machine's Maven repo
                     <li>Adds a way to "negate" permissions using <code>.withoutPermission</code></li>
                     <li>Adds an annotation-based command framework</li>
                     <li>Fix minor documentation inaccuracies</li>
+                    <li>Fix bug where converted commands didn't apply multiple parameters</li>
+					<li>The fields in <code>CommandAPICommand</code> can now be accessed via getters and setters</li>
                 </ul>
             </td>
         </tr>
