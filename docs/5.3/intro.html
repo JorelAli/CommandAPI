@@ -201,6 +201,14 @@
 <hr />
 <h2><a class="header" href="#documentation-changelog" id="documentation-changelog">Documentation changelog</a></h2>
 <p>Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.</p>
+<h3><a class="header" href="#documentation-changes-52-rightarrow-53" id="documentation-changes-52-rightarrow-53">Documentation changes 5.2 \(\rightarrow\) 5.3:</a></h3>
+<ul>
+<li>Adds a section <a href="./annotationsetup.html">6. Using the annotation system</a> on setting up your development environment to use the annotation system</li>
+<li>Adds a whole massive section on using annotations (<a href="./annotationsintro.html">16. Annotation-based commands</a>, <a href="./annotations.html">17. Annotations</a>, <a href="./registeringannotations.html">18. Registering annotation-based commands</a>)</li>
+<li>Adds a section on argument suggestion deferral in section <a href="./argumentsuggestions.html#argument-suggestion-deferral">9.1. Argument suggestions</a></li>
+<li>Improve warning for <code>LiteralArgument</code> - instead of it being &quot;obsolete&quot; compared to the <code>MultiLiteralArgument</code>, it is now &quot;more complex&quot; than <code>MultiLiteralArgument</code>s</li>
+<li>Fix issue in the section for custom arguments which should have been updated but wasn't</li>
+</ul>
 <h3><a class="header" href="#documentation-changes-51-rightarrow-52" id="documentation-changes-51-rightarrow-52">Documentation changes 5.1 \(\rightarrow\) 5.2:</a></h3>
 <ul>
 <li>Adds brief documentation for the CommandAPI's <code>reloadDatapacks</code> method in <a href="./internal.html#reloading-datapacks">16. Internal CommandAPI</a></li>
@@ -342,21 +350,6 @@
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

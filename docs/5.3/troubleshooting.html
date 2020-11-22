@@ -176,6 +176,8 @@
                         
                         <h1><a class="header" href="#troubleshooting" id="troubleshooting">Troubleshooting</a></h1>
 <p>This section basically summarizes the list of things that <em>could</em> go wrong with the CommandAPI and how to mitigate these circumstances.</p>
+<h2><a class="header" href="#my-suggestions-dont-work-or-update" id="my-suggestions-dont-work-or-update">My suggestions don't work or update</a></h2>
+<p>The suggestions need to be deferred so they are evaluated when the user requests it rather than during server start up. See <a href="./argumentsuggestions.html#argument-suggestion-deferral">Argument suggestion deferral</a> which describes this in more detail.</p>
 <h2><a class="header" href="#i-encounter-a-nullpointerexception-when-using-bukkits-scoreboard" id="i-encounter-a-nullpointerexception-when-using-bukkits-scoreboard">I encounter a <code>NullPointerException</code> when using Bukkit's scoreboard</a></h2>
 <p>Shove the scoreboard access inside a lambda, so it is evaluated when commands are executed rather than when the server loads. For example, use:</p>
 <pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
@@ -262,21 +264,6 @@ Caused by: java.lang.IllegalArgumentException: Whilst parsing command on line 2:
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

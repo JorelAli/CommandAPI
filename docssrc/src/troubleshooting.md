@@ -2,6 +2,10 @@
 
 This section basically summarizes the list of things that _could_ go wrong with the CommandAPI and how to mitigate these circumstances.
 
+## My suggestions don't work or update
+
+The suggestions need to be deferred so they are evaluated when the user requests it rather than during server start up. See [Argument suggestion deferral](./argumentsuggestions.md#argument-suggestion-deferral) which describes this in more detail.
+
 ## I encounter a `NullPointerException` when using Bukkit's scoreboard
 
 Shove the scoreboard access inside a lambda, so it is evaluated when commands are executed rather than when the server loads. For example, use:
@@ -23,8 +27,6 @@ arguments.add(new TeamArgument("team").safeOverrideSuggestions(
     Bukkit.getScoreboardManager().getMainScoreboard().getTeams().toArray(new Team[0]))
 );
 ```
-
-
 
 ## Server errors when loading datapacks in 1.16+
 
