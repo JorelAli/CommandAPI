@@ -36,6 +36,14 @@ Using the search icon in the top left corner, you can search for anything in thi
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 5.2 \\(\rightarrow\\) 5.3:
+
+- Adds a section [6. Using the annotation system](./annotationsetup.md) on setting up your development environment to use the annotation system
+- Adds a whole massive section on using annotations ([16. Annotation-based commands](./annotationsintro.md), [17. Annotations](./annotations.md), [18. Registering annotation-based commands](./registeringannotations.md))
+- Adds a section on argument suggestion deferral in section [9.1. Argument suggestions](./argumentsuggestions.md#argument-suggestion-deferral)
+- Improve warning for `LiteralArgument` - instead of it being "obsolete" compared to the `MultiLiteralArgument`, it is now "more complex" than `MultiLiteralArgument`s
+- Fix issue in the section for custom arguments which should have been updated but wasn't
+
 ### Documentation changes 5.1 \\(\rightarrow\\) 5.2:
 
 - Adds brief documentation for the CommandAPI's `reloadDatapacks` method in [16. Internal CommandAPI](./internal.md#reloading-datapacks)

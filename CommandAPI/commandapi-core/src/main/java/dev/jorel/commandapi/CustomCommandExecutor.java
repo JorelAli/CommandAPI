@@ -55,6 +55,22 @@ class CustomCommandExecutor {
 		return matches(normalExecutors, ExecutorType.NATIVE) || matches(resultingExecutors, ExecutorType.NATIVE);
 	}
 	
+	public List<IExecutorNormal<? extends CommandSender>> getNormalExecutors() {
+		return normalExecutors;
+	}
+
+	public void setNormalExecutors(List<IExecutorNormal<? extends CommandSender>> normalExecutors) {
+		this.normalExecutors = normalExecutors;
+	}
+
+	public List<IExecutorResulting<? extends CommandSender>> getResultingExecutors() {
+		return resultingExecutors;
+	}
+
+	public void setResultingExecutors(List<IExecutorResulting<? extends CommandSender>> resultingExecutors) {
+		this.resultingExecutors = resultingExecutors;
+	}
+	
 	public int execute(CommandSender sender, Object[] arguments) throws CommandSyntaxException {
 		
 		//Parse executor type

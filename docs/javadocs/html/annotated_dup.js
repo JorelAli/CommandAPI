@@ -67,6 +67,7 @@ var annotated_dup =
     [ "dev", null, [
       [ "jorel", null, [
         [ "commandapi", null, [
+          [ "annotations", "namespacedev_1_1jorel_1_1commandapi_1_1annotations.html", "namespacedev_1_1jorel_1_1commandapi_1_1annotations" ],
           [ "arguments", "namespacedev_1_1jorel_1_1commandapi_1_1arguments.html", "namespacedev_1_1jorel_1_1commandapi_1_1arguments" ],
           [ "exceptions", "namespacedev_1_1jorel_1_1commandapi_1_1exceptions.html", "namespacedev_1_1jorel_1_1commandapi_1_1exceptions" ],
           [ "executors", "namespacedev_1_1jorel_1_1commandapi_1_1executors.html", "namespacedev_1_1jorel_1_1commandapi_1_1executors" ],

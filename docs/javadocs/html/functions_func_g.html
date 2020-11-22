@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">CommandAPI
-   &#160;<span id="projectnumber">5.2</span>
+   &#160;<span id="projectnumber">5.3</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -90,6 +90,9 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>get()
 : <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_string_range.html#ad7701316cb42e550de0c0c1938d811e2">com.mojang.brigadier.context.StringRange</a>
 </li>
+<li>getAliases()
+: <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a32eb9837cdd5d0aedc0d931301311958">dev.jorel.commandapi.CommandAPICommand</a>
+</li>
 <li>getAllUsage()
 : <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_command_dispatcher.html#a043b2cf7f838a5b828696f4bd5ea5001">com.mojang.brigadier.CommandDispatcher&lt; S &gt;</a>
 </li>
@@ -99,6 +102,7 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>getArguments()
 : <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#ab8ffca636577d747b85a66c1b06bc9c8">com.mojang.brigadier.builder.ArgumentBuilder&lt; S, T extends ArgumentBuilder&lt; S, T &gt;</a>
 , <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context_builder.html#a28a79a844896143dada6f29d641cfdb9">com.mojang.brigadier.context.CommandContextBuilder&lt; S &gt;</a>
+, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ad8cde78c7184574b0f77135a20f23857">dev.jorel.commandapi.CommandAPICommand</a>
 </li>
 <li>getArgumentType()
 : <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#aadc3ac7ac024a5d25f14de72c24fc957">dev.jorel.commandapi.arguments.Argument</a>
@@ -195,6 +199,9 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>getExceptions()
 : <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_parse_results.html#a9a99e46d3829af9140b032db103857f5">com.mojang.brigadier.ParseResults&lt; S &gt;</a>
 </li>
+<li>getExecutor()
+: <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a52e20728e6560f3f933d78f1328ee1fa">dev.jorel.commandapi.CommandAPICommand</a>
+</li>
 <li>getField()
 : <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#af97b5fe94c3644242586c62d144a0455">dev.jorel.commandapi.CommandAPIHandler&lt; CommandListenerWrapper &gt;</a>
 </li>
@@ -271,6 +278,7 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 , <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#aa9165f37a032b65528fcde6bb7f6f8d4">com.mojang.brigadier.tree.CommandNode&lt; S &gt;</a>
 , <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_literal_command_node.html#acaf4a435a0d94b579fb9923f9c43329c">com.mojang.brigadier.tree.LiteralCommandNode&lt; S &gt;</a>
 , <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_root_command_node.html#a91e980b0d72dd5a1b2ab1506e92d87a6">com.mojang.brigadier.tree.RootCommandNode&lt; S &gt;</a>
+, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a3d305f937aee495e95a387de0787e297">dev.jorel.commandapi.CommandAPICommand</a>
 , <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_native_proxy_command_sender.html#a71b8a359b0ef684532ecfda07a88b28f">dev.jorel.commandapi.wrappers.NativeProxyCommandSender</a>
 </li>
 <li>getNMS()
@@ -301,6 +309,9 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 </li>
 <li>getPath()
 : <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_command_dispatcher.html#ab11bd430550e0b60e0f650eaea3e6f5d">com.mojang.brigadier.CommandDispatcher&lt; S &gt;</a>
+</li>
+<li>getPermission()
+: <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a93b02402bc3c84af5f523cb620c17447">dev.jorel.commandapi.CommandAPICommand</a>
 </li>
 <li>getPitch()
 : <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_rotation.html#a6217817580bc6a210368e2f13a01b565">dev.jorel.commandapi.wrappers.Rotation</a>
@@ -369,6 +380,7 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 </li>
 <li>getRequirements()
 : <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a0fdbb9575a1f5a0c1c8d2a397bafb250">dev.jorel.commandapi.arguments.Argument</a>
+, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#af10331d0d959e2e6c01d9af81e2f6f61">dev.jorel.commandapi.CommandAPICommand</a>
 </li>
 <li>getResult()
 : <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_parsed_argument.html#ac2d372659fc00963d2f10a7819133495">com.mojang.brigadier.context.ParsedArgument&lt; S, T &gt;</a>
@@ -407,6 +419,9 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 , <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_literal_message.html#a4a140163a4e95f8f949f671cf814d0a4">com.mojang.brigadier.LiteralMessage</a>
 , <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_message.html#a54e358b8fdebb8d99d2d1249a51a35ab">com.mojang.brigadier.Message</a>
 , <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_string_reader.html#a0b0105e3867d1f34faa0049ee08d2fe9">com.mojang.brigadier.StringReader</a>
+</li>
+<li>getSubcommands()
+: <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a1cba278fc6461a025fc632b09d32c8cc">dev.jorel.commandapi.CommandAPICommand</a>
 </li>
 <li>getSuggestion()
 : <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html#a80ab73503a4ffdc503abbde7e2c33ec8">dev.jorel.commandapi.IStringTooltip</a>
@@ -496,7 +511,7 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Nov 3 2020 18:55:47 for CommandAPI by
+    <li class="footer">Generated on Sun Nov 22 2020 15:51:44 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

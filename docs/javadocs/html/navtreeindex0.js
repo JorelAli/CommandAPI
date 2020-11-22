@@ -2,6 +2,7 @@ var NAVTREEINDEX0 =
 {
 ".html":[0,0,0],
 ".html":[0,0,0,0],
+".html":[1,0,0,0,0,0],
 ".html":[1,0,0,0,0,4],
 ".html":[1,0,0,0,0,1],
 ".html":[1,0,0,0,0,5],
@@ -10,11 +11,11 @@ var NAVTREEINDEX0 =
 ".html":[1,0,0],
 ".html":[1,0,0,0],
 ".html":[1,0,0,0,0],
-".html":[1,0,0,0,0,0],
 ".html":[1,0,0,0,0,2],
 ".html":[1,0,1],
 ".html":[1,0,1,0],
 ".html":[1,0,1,0,0],
+".html":[1,0,1,0,0,0,0],
 "annotated.html":[1,0],
 "classcom_1_1mojang_1_1brigadier_1_1_command_dispatcher.html":[1,0,0,0,0,8],
 "classcom_1_1mojang_1_1brigadier_1_1_command_dispatcher.html#a02abc41246d26ae2704d831fe16f58dd":[1,0,0,0,0,8,16],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exceptions.html#a691ccbf825c7cdc97af8fd16ccc708fe":[1,0,0,0,0,3,1,2],
 "classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exceptions.html#a7373aadc7a6e2881ea0676e2bd6fb8b0":[1,0,0,0,0,3,1,16],
 "classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exceptions.html#a73e937391610847db0518a8c111c0f5c":[1,0,0,0,0,3,1,23],
-"classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exceptions.html#a937bb360da12d376743eeb0fe7d84a6f":[1,0,0,0,0,3,1,5],
-"classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exceptions.html#a9612886859ce095984cc3e36cf960afa":[1,0,0,0,0,3,1,8]
+"classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exceptions.html#a937bb360da12d376743eeb0fe7d84a6f":[1,0,0,0,0,3,1,5]
 };

@@ -123,6 +123,19 @@ These versions of Minecraft must be installed in your local machine's Maven repo
     </thead>
     <tbody>
         <tr>
+            <td valign="top"><b>5.3</b></td>
+            <td valign="top">November 2020</td>
+            <td valign="top">
+                <ul>
+                    <li>Fix bug where permissions weren't being applied for subcommands and multi literal arguments</li>
+                    <li>Adds detection system for command graph conflicts</li>
+                    <li>Adds a way to "negate" permissions using <code>.withoutPermission</code></li>
+                    <li>Adds an annotation-based command framework</li>
+                    <li>Fix minor documentation inaccuracies</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
             <td valign="top"><b>5.2</b></td>
             <td valign="top">November 2020</td>
             <td valign="top">

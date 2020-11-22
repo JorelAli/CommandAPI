@@ -1458,7 +1458,99 @@ new CommandAPICommand("warp")
 /* ANCHOR_END: SafeTooltips2 */
 }
 
-} // Examples class end
+{
+/* ANCHOR: ArgumentSuggestionsPrevious */
+// Declare our arguments as normal
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new IntegerArgument("radius"));
+
+// Override the suggestions for the PlayerArgument, using (sender, args) as the parameters
+// sender refers to the command sender that is running this command
+// args refers to the Object[] of PREVIOUSLY DECLARED arguments (in this case, the IntegerArgument radius)
+arguments.add(new PlayerArgument("target").overrideSuggestions((sender, args) -> {
+
+    // Cast the first argument (radius, which is an IntegerArgument) to get its value
+	int radius = (int) args[0];
+	
+    // Get nearby entities within the provided radius
+	Player player = (Player) sender;
+	Collection<Entity> entities = player.getWorld().getNearbyEntities(player.getLocation(), radius, radius, radius);
+	
+    // Get player names within that radius
+	return entities.stream()
+		.filter(e -> e.getType() == EntityType.PLAYER)
+		.map(Entity::getName)
+		.toArray(String[]::new);
+}));
+arguments.add(new GreedyStringArgument("message"));
+
+// Declare our command as normal
+new CommandAPICommand("localmsg")
+	.withArguments(arguments)
+	.executesPlayer((player, args) -> {
+		Player target = (Player) args[1];
+		String message = (String) args[2];
+		target.sendMessage(message);
+	})
+	.register();
+/* ANCHOR_END: ArgumentSuggestionsPrevious */
+}
+
+{
+/* ANCHOR: ArgumentSuggestions2_2 */
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new PlayerArgument("friend").overrideSuggestions((sender) -> {
+    return Friends.getFriends(sender);
+}));
+
+new CommandAPICommand("friendtp")
+    .withArguments(arguments)
+    .executesPlayer((player, args) -> {
+       	Player target = (Player) args[0];
+		player.teleport(target);
+    })
+    .register();
+/* ANCHOR_END: ArgumentSuggestions2_2 */
+}
+
+{
+Map<String, Location> warps = new HashMap<>();
+/* ANCHOR: ArgumentSuggestions1 */
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new StringArgument("world").overrideSuggestions("northland", "eastland", "southland", "westland"));
+
+new CommandAPICommand("warp")
+    .withArguments(arguments)
+    .executesPlayer((player, args) -> {
+       	String warp = (String) args[0];
+		player.teleport(warps.get(warp)); // Look up the warp in a map, for example
+    })
+    .register();
+/* ANCHOR_END: ArgumentSuggestions1 */
+}
+
+
+
+} // Examples class end ////////////////////////////////////////////////////////////////////
+
+
+
+/* ANCHOR: ArgumentSuggestions2_1 */
+class Friends {
+	
+	static Map<UUID, String[]> friends /* = ... */;
+	
+    public static String[] getFriends(CommandSender sender) {
+        if(sender instanceof Player) {
+        	//Look up friends in a database or file
+            return friends.get(((Player) sender).getUniqueId());
+        } else {
+            return new String[0];
+        }
+    }
+}
+/* ANCHOR_END: ArgumentSuggestions2_1 */
+
 
 /* ANCHOR: Tooltips3 */
 class CustomItem implements IStringTooltip {

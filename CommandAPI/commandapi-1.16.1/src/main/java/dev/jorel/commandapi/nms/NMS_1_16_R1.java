@@ -70,6 +70,7 @@ import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
 import dev.jorel.commandapi.arguments.ICustomProvidedArgument.SuggestionProviders;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.exceptions.AngleArgumentException;
+import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.IntegerRange;
@@ -148,6 +149,11 @@ import net.minecraft.server.v1_16_R1.Vec2F;
 import net.minecraft.server.v1_16_R1.Vec3D;
 import net.minecraft.server.v1_16_R1.WorldServer;
 
+@RequireField(in = DataPackResources.class, name = "i", ofType = CustomFunctionManager.class)
+@RequireField(in = DataPackResources.class, name = "b", ofType = IReloadableResourceManager.class)
+@RequireField(in = DataPackResources.class, name = "a", ofType = CompletableFuture.class)
+@RequireField(in = CustomFunctionManager.class, name = "f", ofType = int.class)
+@RequireField(in = CraftSound.class, name = "minecraftKey", ofType = String.class)
 public class NMS_1_16_R1 implements NMS<CommandListenerWrapper> {
 
 	//Converts NMS function to SimpleFunctionWrapper

@@ -8,42 +8,46 @@ Argument overrideSuggestions(Function<CommandSender, String[]> suggestions);
 Argument overrideSuggestions(BiFunction<CommandSender, Object[], String[]> suggestions);
 ```
 
-We will describe these methods in detail in this section.
+-----
+
+## Argument suggestion deferral
+
+Before we go into detail about what the above methods do, we must first describe _suggestion deferral_. When the server loads, arguments that are provided with a String array are fixed, and do not change. However, arguments that are provided using the function and bifunction parameters are evaluated when they are needed - their execution is deferred until requested by the user. As such, if you wanted to retrieve something that isn't available during server load but is available during normal server running, it is recommended to use either of those functions instead of the String array.
+
+For example, instead of doing the following, which retrieves a list of worlds on the server:
+
+```java
+overrideSuggestions(Bukkit.getWorlds().stream().map(World::getName).toArray(String[]::new))
+```
+
+You should defer it using the function parameter:
+
+```java
+overrideSuggestions(sender -> Bukkit.getWorlds().stream().map(World::getName).toArray(String[]::new))
+```
+
+
 
 -----
 
 ## Suggestions with a String Array
 
-The first method, `overrideSuggestions(String... suggestions)`, allows you to *replace* the suggestions normally associated with that argument with an array of strings.
+The first method, `overrideSuggestions(String... suggestions)`, allows you to *replace* the suggestions normally associated with that argument with an array of strings. As described above, this doesn't use suggestion deferral, _so this list will not update automatically_.
 
 <div class="example">
 
-
 ### Example - Teleport to worlds by overriding suggestions
 
-Say we're creating a plugin with the ability to teleport to different worlds on the server. If we were to retrieve a list of worlds, we would be able to override the suggestions of a typical `StringArgument` to teleport to that world. Let's create a command with the following structure:
+Say we're creating a plugin with the ability to teleport to different warps on the server. If we were to retrieve a list of warps, we would be able to override the suggestions of a typical `StringArgument` to teleport to that warp. Let's create a command with the following structure:
 
 ```
-/tpworld <world>
+/warp <warp>
 ```
 
-We then implement our world teleporting command using `overrideSuggestions()` on the `StringArgument` to provide a list of worlds to teleport to:
+We then implement our warp teleporting command using `overrideSuggestions()` on the `StringArgument` to provide a list of warps to teleport to:
 
 ```java
-//Populate a String[] with the names of worlds on the server
-String[] worlds = Bukkit.getWorlds().stream().map(World::getName).toArray(String[]::new);
-
-//Override the suggestions of the StringArgument with the aforementioned String[]
-List<Argument> arguments = new ArrayList<>();
-arguments.add(new StringArgument("world").overrideSuggestions(worlds));
-
-new CommandAPICommand("tpworld")
-    .withArguments(arguments)
-    .executesPlayer((player, args) -> {
-       	String world = (String) args[0];
-		player.teleport(Bukkit.getWorld(world).getSpawnLocation());
-    })
-    .register();
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:ArgumentSuggestions1}}
 ```
 
 </div>
@@ -68,32 +72,13 @@ Say you have a plugin which has a "friend list" for players. If you want to tele
 Let's say we have a simple class to get the friends of a command sender:
 
 ```java
-public class Friends {
-    public static String[] getFriends(CommandSender sender) {
-        if(sender instanceof Player) {
-            return //Look up friends in a database or file
-        } else {
-            return new String[0];
-        }
-    }
-}
+public {{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:ArgumentSuggestions2_1}}
 ```
 
 We can then use this to generate our suggested list of friends:
 
 ```java
-List<Argument> arguments = new ArrayList<>();
-arguments.add(new PlayerArgument("friend").overrideSuggestions((sender) -> {
-    Friends.getFriends(sender);
-}));
-
-new CommandAPICommand("friendtp")
-    .withArguments(arguments)
-    .executesPlayer((player, args) -> {
-       	Player target = (Player) args[0];
-		player.teleport(target);
-    })
-    .register();
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:ArgumentSuggestions2_2}}
 ```
 
 > **Developer's Note:**
@@ -157,39 +142,7 @@ Say we wanted to create a command that lets you send a message to a specific pla
 When run, this command will send a message to a target player within the provided radius. To help identify which players are within a radius, we can override the suggestions on the `<target>` argument to include a list of players within the provided radius. We do this with the following code:
 
 ```java
-// Declare our arguments as normal
-List<Argument> arguments = new ArrayList<>();
-arguments.add(new IntegerArgument("radius"));
-
-// Override the suggestions for the PlayerArgument, using (sender, args) as the parameters
-// sender refers to the command sender that is running this command
-// args refers to the Object[] of PREVIOUSLY DECLARED arguments (in this case, the IntegerArgument radius)
-arguments.add(new PlayerArgument("target").overrideSuggestions((sender, args) -> {
-
-    // Cast the first argument (radius, which is an IntegerArgument) to get its value
-	int radius = (int) args[0];
-	
-    // Get nearby entities within the provided radius
-	Player player = (Player) sender;
-	Collection<Entity> entities = player.getWorld().getNearbyEntities(player.getLocation(), radius, radius, radius);
-	
-    // Get player names within that radius
-	return entities.stream()
-		.filter(e -> e.getType() == EntityType.PLAYER)
-		.map(Entity::getName)
-		.toArray(String[]::new);
-}));
-arguments.add(new GreedyStringArgument("message"));
-
-// Declare our command as normal
-new CommandAPICommand("localmsg")
-	.withArguments(arguments)
-	.executesPlayer((player, args) -> {
-		Player target = (Player) args[1];
-		String message = (String) args[2];
-		target.sendMessage(message);
-	})
-	.register();
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:ArgumentSuggestionsPrevious}}
 ```
 
 As shown in this code, we use the `(sender, args) -> ...` lambda to override suggestions with previously declared arguments. In this example, our variable `args` will be `{ int }`, where this `int` refers to the radius. Note how this object array only has the previously declared arguments (and not for example `{ int, Player, String }`).

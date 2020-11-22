@@ -18,6 +18,7 @@
 
 - [Setting up your development environment](./quickstart.md)
 - [Shading the CommandAPI in your plugins](./shading.md)
+- [Using the annotation system](./annotationsetup.md)
 
 # Creating Commands
 
@@ -80,6 +81,12 @@
 - [Requirements](./requirements.md)
 - [Aliases](./aliases.md)
 - [Subcommands](./subcommands.md)
+
+# Annotation-based Commands
+
+- [Annotation-based commands](./annotationsintro.md)
+- [Annotations](./annotations.md)
+- [Registering annotation-based commands](./registeringannotations.md)
 
 # CommandAPI Utilities
 
