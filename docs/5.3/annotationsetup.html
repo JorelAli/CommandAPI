@@ -175,11 +175,10 @@
                         <div class="sidetoc"><nav class="pagetoc"></nav></div>
                         
                         <h1><a class="header" href="#using-the-annotation-system" id="using-the-annotation-system">Using the annotation system</a></h1>
-<p>The annotation system is a separate part of the CommandAPI, and as a result it needs to be included as an additional dependency to your project. As well as that, the compiler needs to be aware that the annotation processor exists, so this needs to be added to the build cycle.</p>
+<p>The annotation system is a separate part of the CommandAPI, and as a result it needs to be included as an additional dependency to your project. </p>
+<p>The annotation system effectively needs to be added twice: Once for compilation and again to invoke the annotation processor itself.</p>
 <hr />
-<h2><a class="header" href="#manually-why-would-you-do-this" id="manually-why-would-you-do-this">Manually (why would you do this)</a></h2>
-<hr />
-<h2><a class="header" href="#using-maven-recommended" id="using-maven-recommended">Using Maven (recommended)</a></h2>
+<h2><a class="header" href="#using-maven" id="using-maven">Using Maven</a></h2>
 <ul>
 <li>
 <p>If you haven't already done so, add the maven repository to your <code>pom.xml</code> file:</p>
@@ -212,11 +211,15 @@
             &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
             &lt;version&gt;3.8.1&lt;/version&gt;
             &lt;configuration&gt;
-                &lt;annotationProcessors&gt;
-                    &lt;annotationProcessor&gt;dev.jorel.commandapi.annotations.Annotations&lt;/annotationProcessor&gt;
-                &lt;/annotationProcessors&gt;
+                &lt;annotationProcessorPaths&gt;
+					&lt;path&gt;
+                        &lt;groupId&gt;dev.jorel&lt;/groupId&gt;
+                        &lt;artifactId&gt;commandapi-annotations&lt;/artifactId&gt;
+                        &lt;version&gt;5.3&lt;/version&gt;
+                    &lt;/path&gt;
+                &lt;/annotationProcessorPaths&gt;
             &lt;/configuration&gt;
-        &lt;/plugin&gt;
+      &lt;/plugin&gt;
     &lt;/plugins&gt;
 &lt;/build&gt;
 </code></pre>
@@ -224,6 +227,24 @@
 </ul>
 <hr />
 <h2><a class="header" href="#using-gradle" id="using-gradle">Using Gradle</a></h2>
+<ul>
+<li>
+<p>If you haven't already done so, add the maven repository to your <code>build.gradle</code> file:</p>
+<pre><code class="language-gradle">repositories {
+    maven { url = &quot;https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/&quot; }
+    maven { url = &quot;https://repo.codemc.org/repository/maven-public/&quot; }
+}
+</code></pre>
+</li>
+<li>
+<p>Add the dependency and annotation processor to your list of dependencies in your <code>build.gradle</code> file:</p>
+<pre><code class="language-gradle">dependencies {
+    compileOnly &quot;dev.jorel:commandapi-annotations:5.3&quot;
+    annotationProcessor &quot;dev.jorel:commandapi-annotations:5.3&quot;
+}
+</code></pre>
+</li>
+</ul>
 
                     </main>
 
