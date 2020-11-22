@@ -77,7 +77,7 @@ Here, we simply write what happens when no arguments are run (i.e. the user just
 {{#include ../../CommandAPI/commandapi-annotations/src/test/java/WarpCommand.java:warps_warp}}
 ```
 
-We also have a second `@Default` annotated method, which handles our `/warp <warp>` command. Because this isn't a subcommand (the warp to teleport to is not a subcommand, it's an argument), we still using the `@Default` annotation. In this method, we include an argument with this command by using the `@AStringArgument` annotation. This argument uses the `StringArgument` class, and the name of this argument is "warpName", which is extracted from the name of the variable. Simply put, if the **Annotation** for an argument is **A** followed by the name of the argument. This is synonymous with using the following:
+We also have a second `@Default` annotated method, which handles our `/warp <warp>` command. Because this isn't a subcommand (the warp to teleport to is not a subcommand, it's an argument), we still using the `@Default` annotation. In this method, we include an argument with this command by using the `@AStringArgument` annotation. This argument uses the `StringArgument` class, and the name of this argument is "warpName", which is extracted from the name of the variable. Simply put, **the Annotation for an argument is A** followed by the name of the argument. This is synonymous with using the following:
 
 ```java
 new StringArgument("warp")

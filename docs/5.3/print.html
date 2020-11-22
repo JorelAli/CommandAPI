@@ -3833,7 +3833,7 @@ public static void warp(Player player, @AStringArgument String warpName) {
 	player.teleport(warps.get(warpName));
 }
 </code></pre>
-<p>We also have a second <code>@Default</code> annotated method, which handles our <code>/warp &lt;warp&gt;</code> command. Because this isn't a subcommand (the warp to teleport to is not a subcommand, it's an argument), we still using the <code>@Default</code> annotation. In this method, we include an argument with this command by using the <code>@AStringArgument</code> annotation. This argument uses the <code>StringArgument</code> class, and the name of this argument is &quot;warpName&quot;, which is extracted from the name of the variable. Simply put, if the <strong>Annotation</strong> for an argument is <strong>A</strong> followed by the name of the argument. This is synonymous with using the following:</p>
+<p>We also have a second <code>@Default</code> annotated method, which handles our <code>/warp &lt;warp&gt;</code> command. Because this isn't a subcommand (the warp to teleport to is not a subcommand, it's an argument), we still using the <code>@Default</code> annotation. In this method, we include an argument with this command by using the <code>@AStringArgument</code> annotation. This argument uses the <code>StringArgument</code> class, and the name of this argument is &quot;warpName&quot;, which is extracted from the name of the variable. Simply put, <strong>the Annotation for an argument is A</strong> followed by the name of the argument. This is synonymous with using the following:</p>
 <pre><code class="language-java">new StringArgument(&quot;warp&quot;)
 </code></pre>
 <p>It's also very important to note the parameters for this method. The first parameter is a <code>Player</code> object, which represents our command sender. The CommandAPI's annotation system uses the fact that the command sender is a <code>Player</code> object and automatically ensures that anyone using the command must be a <code>Player</code>. In other words, non-players (such as the console or command blocks), would be unable to execute this command.</p>
@@ -3880,6 +3880,59 @@ class TeleportCommand {
 </code></pre>
 <hr />
 <h2><a class="header" href="#annotations-that-go-on-methods" id="annotations-that-go-on-methods">Annotations that go on methods</a></h2>
+<p>To use annotations on methods, <strong>methods must be static</strong>.</p>
+<h3><a class="header" href="#default" id="default"><code>@Default</code></a></h3>
+<h3><a class="header" href="#subcommand-1" id="subcommand-1"><code>@Subcommand</code></a></h3>
+<h3><a class="header" href="#permission" id="permission"><code>@Permission</code></a></h3>
+<h3><a class="header" href="#needsop-1" id="needsop-1"><code>@NeedsOp</code></a></h3>
+<hr />
+<h2><a class="header" href="#annotations-that-go-on-parameters" id="annotations-that-go-on-parameters">Annotations that go on parameters</a></h2>
+<p>The annotations for arguments are really simple, there's just two things you need to know:</p>
+<ul>
+<li>
+<p>To use an annotation argument, just add the letter <code>A</code> (for 'annotation') at the beginning of it! For example:</p>
+<p>\begin{align}
+\texttt{StringArgument}&amp;\xrightarrow{A}\texttt{@AStringArgument}\\
+\texttt{PlayerArgument}&amp;\xrightarrow{A}\texttt{@APlayerArgument}\\
+\texttt{AdvancementArgument}&amp;\xrightarrow{A}\texttt{@AAdvancementArgument}\\
+&amp;\hspace{0.75em}\vdots
+\end{align}</p>
+<p>For example, we use <code>@AStringArgument</code> to indicate that this command takes a <code>StringArgument</code> as its first parameter:</p>
+</li>
+</ul>
+<pre><code class="language-java">@Default
+public static void warp(Player player, @AStringArgument String warpName) {
+	player.teleport(warps.get(warpName));
+}
+</code></pre>
+<ul>
+<li><strong>The name of the argument (referred to as &quot;nodeName&quot; in the normal CommandAPI system) is the name of the variable assigned to the parameter.</strong> In the above code, this means that the name of the argument is <code>warpName</code>.</li>
+</ul>
+<h3><a class="header" href="#special-argument-annotations" id="special-argument-annotations">Special argument annotations</a></h3>
+<p>Certain argument annotations have extra parameters that can be supplied to provide additional customization:</p>
+<h4><a class="header" href="#numerical-arguments-1" id="numerical-arguments-1">Numerical arguments</a></h4>
+<p>The following numerical arguments can take both a <code>min</code> and <code>max</code> value. Both of these are completely optional. This indicates the range of values (inclusive) that is valid for this argument. For example:</p>
+<pre><code class="language-java">@Default
+public static void command(CommandSender sender, 
+	@ADoubleArgument(min = 0.0, max = 10.0) double someDouble,
+	@AFloatArgument(min = 5.0f, max = 10.0f) float someFloat,
+	@AIntegerArgument(max = 100) int someInt,
+	@ALongArgument(min = -10) long someLong
+) {
+	// Command implementation here
+}
+</code></pre>
+<h4><a class="header" href="#literal-arguments-3" id="literal-arguments-3">Literal arguments</a></h4>
+<p>Both the <code>LiteralArgument</code> and <code>MultiLiteralArgument</code> can be used. When these are used, the name of the variable assigned to the parameter is <em>ignored</em> and not used as the argument's name.</p>
+<p>For the <code>@ALiteralArgument</code> annotation, the parameter is the literal to be used for the command. For the <code>@AMultiLiteralArgument</code>, the parameter can be an array of multiple literals to use:</p>
+<pre><code class="language-java">@Default
+public static void command(CommandSender sender, 
+	@ALiteralArgument(&quot;myliteral&quot;) String literal,
+	@AMultiLiteralArgument({&quot;literal&quot;, &quot;anotherliteral&quot;}) String multipleLiterals
+) {
+	// Command implementation here
+}
+</code></pre>
 <h1><a class="header" href="#registering-annotation-based-commands" id="registering-annotation-based-commands">Registering annotation-based commands</a></h1>
 <p>Registering annotation-based commands is <em>really</em> simple. To do this, we use the following method, where <code>className</code> is the name of a class with a <code>@Command</code> annotation:</p>
 <pre><code class="language-java">CommandAPI.registerCommand(className)

@@ -361,7 +361,13 @@ public class Annotations extends AbstractProcessor {
 							out.print("\"");
 						}
 						
-						out.println("))");
+						out.print(")");
+						
+						if(argumentAnnotation instanceof ALiteralArgument) {
+							out.print(".setListed(true)");
+						}
+						
+						out.println(")");
 						
 						// Handle return types
 						Primitive primitive = getPrimitive(argumentAnnotation);
