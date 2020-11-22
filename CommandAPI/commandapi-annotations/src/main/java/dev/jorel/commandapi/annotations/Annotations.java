@@ -175,16 +175,23 @@ public class Annotations extends AbstractProcessor {
 				if(methodElement instanceof ExecutableElement) {
 					ExecutableElement method = (ExecutableElement) methodElement;
 					for(VariableElement parameter : method.getParameters()) {
-						if(getArgument(parameter) != null ) {
+						if(getArgument(parameter) != null) {
 							imports.addAll(Arrays.asList(getPrimitive(getArgument(parameter)).value()));
 							imports.add("dev.jorel.commandapi.arguments." + getArgument(parameter).annotationType().getSimpleName().substring(1));
+							if(getArgument(parameter) instanceof ALocationArgument || getArgument(parameter) instanceof ALocation2DArgument) {
+								imports.add(LocationType.class.getCanonicalName());
+							} else if(getArgument(parameter) instanceof AScoreHolderArgument) {
+								imports.add(ScoreHolderType.class.getCanonicalName());
+							} else if(getArgument(parameter) instanceof AEntitySelectorArgument) {
+								imports.add(EntitySelector.class.getCanonicalName());
+							}
 						}
 						
 					}
 				}
 			}
 			
-			for(String import_ : imports) {
+			for(String import_ : new TreeSet<>(imports)) {
 				if(import_.contains("<")) {
 					imports.add(import_.substring(0, import_.indexOf("<")));
 					imports.add(import_.substring(import_.indexOf("<") + 1, import_.indexOf(">")));
@@ -220,6 +227,7 @@ public class Annotations extends AbstractProcessor {
 			indent++;
 
 			// Main registration method
+			out.println(indent(indent) + "@SuppressWarnings(\"unchecked\")");
 			out.println(indent(indent) + "public static void register() {");
 			out.println();
 			indent++;
@@ -329,13 +337,13 @@ public class Annotations extends AbstractProcessor {
 							out.print(", " + argument.min() + ", " + argument.max());
 						} else if(argumentAnnotation instanceof ALongArgument) {
 							ALongArgument argument = (ALongArgument) argumentAnnotation;
-							out.print(", " + argument.min() + ", " + argument.max());
+							out.print(", " + argument.min() + "L, " + argument.max() + "L");
 						} else if(argumentAnnotation instanceof AFloatArgument) {
 							AFloatArgument argument = (AFloatArgument) argumentAnnotation;
-							out.print(", " + argument.min() + ", " + argument.max());
+							out.print(", " + argument.min() + "F, " + argument.max() + "F");
 						} else if(argumentAnnotation instanceof ADoubleArgument) {
 							ADoubleArgument argument = (ADoubleArgument) argumentAnnotation;
-							out.print(", " + argument.min() + ", " + argument.max());
+							out.print(", " + argument.min() + "D, " + argument.max() + "D");
 						}
 						
 						// Non-number arguments
@@ -445,8 +453,9 @@ public class Annotations extends AbstractProcessor {
 					out.print("(sender");
 					
 					for(int i = 0; i < argumentMapping.size(); i++) {
-						out.print(", (");
 						String fromArgumentMap = argumentMapping.get(i);
+						out.print(", (");
+
 						if(fromArgumentMap.contains("<")) {
 							out.print(simpleFromQualified(fromArgumentMap.substring(0, fromArgumentMap.indexOf("<"))));
 							out.print("<");

@@ -1,4 +1,8 @@
+import java.util.Collection;
+
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 
 import dev.jorel.commandapi.annotations.Alias;
 import dev.jorel.commandapi.annotations.Command;
@@ -6,11 +10,18 @@ import dev.jorel.commandapi.annotations.Default;
 import dev.jorel.commandapi.annotations.NeedsOp;
 import dev.jorel.commandapi.annotations.Permission;
 import dev.jorel.commandapi.annotations.arguments.ADoubleArgument;
+import dev.jorel.commandapi.annotations.arguments.AEntitySelectorArgument;
 import dev.jorel.commandapi.annotations.arguments.AFloatArgument;
 import dev.jorel.commandapi.annotations.arguments.AIntegerArgument;
 import dev.jorel.commandapi.annotations.arguments.ALiteralArgument;
+import dev.jorel.commandapi.annotations.arguments.ALocation2DArgument;
+import dev.jorel.commandapi.annotations.arguments.ALocationArgument;
 import dev.jorel.commandapi.annotations.arguments.ALongArgument;
 import dev.jorel.commandapi.annotations.arguments.AMultiLiteralArgument;
+import dev.jorel.commandapi.annotations.arguments.AScoreHolderArgument;
+import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
+import dev.jorel.commandapi.arguments.LocationType;
+import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
 
 /* ANCHOR: teleport_command */
 @Command("teleport")	
@@ -38,6 +49,7 @@ class TeleportCommand {
 	}
 }
 
+@Command("aa")
 class AA {
 /* ANCHOR: number_arguments */
 @Default
@@ -60,5 +72,18 @@ public static void command(CommandSender sender,
 	// Command implementation here
 }
 /* ANCHOR_END: literal_arguments */
+
+
+/* ANCHOR: other_arguments */
+@Default
+public static void command(CommandSender sender, 
+	@ALocationArgument(LocationType.BLOCK_POSITION) Location location,
+	@ALocation2DArgument(LocationType.PRECISE_POSITION) Location location2d,
+	@AEntitySelectorArgument(EntitySelector.MANY_ENTITIES) Collection<Entity> entities,
+	@AScoreHolderArgument(ScoreHolderType.MULTIPLE) Collection<String> scoreHolders
+) {
+	// Command implementation here
+}
+/* ANCHOR_END: other_arguments */
 
 }

@@ -3933,6 +3933,8 @@ public static void command(CommandSender sender,
 	// Command implementation here
 }
 </code></pre>
+<h4><a class="header" href="#other-arguments" id="other-arguments">Other arguments</a></h4>
+<p>The <code>LocationArgument</code>, <code>Location2DArgument</code>, <code>EntitySelectorArgument</code> and <code>ScoreHolderArgument</code> can all take an extra parameter in their constructors. As a result, the annotation-equivalent of these arguments also allow you to provide the parameter in the annotation.</p>
 <h1><a class="header" href="#registering-annotation-based-commands" id="registering-annotation-based-commands">Registering annotation-based commands</a></h1>
 <p>Registering annotation-based commands is <em>really</em> simple. To do this, we use the following method, where <code>className</code> is the name of a class with a <code>@Command</code> annotation:</p>
 <pre><code class="language-java">CommandAPI.registerCommand(className)

@@ -9,7 +9,7 @@ import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
 
 @Primitive({ "java.util.Collection<org.bukkit.entity.Entity>", // MANY_ENTITIES
 		"java.util.Collection<org.bukkit.entity.Player>", // MANY_PLAYERS
-		"org.bukkit.entity.ENTITY", // ONE_ENTITY
+		"org.bukkit.entity.Entity", // ONE_ENTITY
 		"org.bukkit.entity.Player" // ONE_PLAYER
 })
 @Retention(RetentionPolicy.SOURCE)
