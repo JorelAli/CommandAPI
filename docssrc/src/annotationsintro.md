@@ -9,7 +9,9 @@ In short, the CommandAPI's annotation-based system:
 - Improves readability since commands are declared declaratively instead of imperatively.
 - Is not as powerful as the regular command registration system.
 
-Currently, the annotation framework is in its infancy, so any suggestions or improvements are heavily appreciated!
+> **Developer's Note:**
+>
+> Currently, the annotation framework is in its infancy, so any suggestions or improvements are heavily appreciated!
 
 Before we go into too much detail, let's take a look at an example of what this annotation framework looks like, and compare this to the existing method.
 

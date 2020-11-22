@@ -3801,7 +3801,10 @@ CommandAPICommand group = new CommandAPICommand(&quot;group&quot;)
 <li>Improves readability since commands are declared declaratively instead of imperatively.</li>
 <li>Is not as powerful as the regular command registration system.</li>
 </ul>
+<blockquote>
+<p><strong>Developer's Note:</strong></p>
 <p>Currently, the annotation framework is in its infancy, so any suggestions or improvements are heavily appreciated!</p>
+</blockquote>
 <p>Before we go into too much detail, let's take a look at an example of what this annotation framework looks like, and compare this to the existing method.</p>
 <hr />
 <h2><a class="header" href="#example-a-warp-command" id="example-a-warp-command">Example: A warp command</a></h2>
@@ -3953,9 +3956,45 @@ class TeleportCommand {
 <h2><a class="header" href="#annotations-that-go-on-methods" id="annotations-that-go-on-methods">Annotations that go on methods</a></h2>
 <p>To use annotations on methods, <strong>methods must be static</strong>.</p>
 <h3><a class="header" href="#default" id="default"><code>@Default</code></a></h3>
+<p>The <code>@Default</code> annotation indicates that the method is <em>not</em> a subcommand. This acts in a similar way to regular Bukkit commands. Commands with the <code>@Default</code> annotation can be used to run the main code when the command named with the <code>@Command</code> annotation is stated, such as the following:</p>
+<pre><code class="language-java">@Default
+public static void warp(CommandSender sender) {
+	sender.sendMessage(&quot;--- Warp help ---&quot;);
+	sender.sendMessage(&quot;/warp - Show this help&quot;);
+	sender.sendMessage(&quot;/warp &lt;warp&gt; - Teleport to &lt;warp&gt;&quot;);
+	sender.sendMessage(&quot;/warp create &lt;warpname&gt; - Creates a warp at your current location&quot;);
+}
+</code></pre>
+<p>The <code>@Default</code> annotation does not mean that the command can't have arguments! Arguments can still be used and declared as shown:</p>
+<pre><code class="language-java">@Default
+public static void warp(Player player, @AStringArgument String warpName) {
+	player.teleport(warps.get(warpName));
+}
+</code></pre>
 <h3><a class="header" href="#subcommand-1" id="subcommand-1"><code>@Subcommand</code></a></h3>
+<p>The <code>@Subcommand</code> simply tells the CommandAPI that the declared method is a subcommand. This acts in a similar way to the regular CommandAPI's <code>.withSubcommand()</code> method. The subcommand annotation can take in a single string which is the name of the subcommand:</p>
+<pre><code class="language-java">@Subcommand(&quot;create&quot;)
+@Permission(&quot;warps.create&quot;)
+public static void createWarp(Player player, @AStringArgument String warpName) {
+	warps.put(warpName, player.getLocation());
+}
+</code></pre>
+<p>Or, it can take in a list of strings which represent the <em>aliases</em> that can also be used for the declared subcommand:</p>
+<pre><code class="language-java">@Subcommand({&quot;teleport&quot;, &quot;tp&quot;})
+public static void teleport(Player player, @APlayerArgument Player target) {
+	player.teleport(target);
+}
+</code></pre>
 <h3><a class="header" href="#permission" id="permission"><code>@Permission</code></a></h3>
+<p>The <code>@Permission</code> annotation can also be used on methods to indicate that a permission is required to execute a command.</p>
+<pre><code class="language-java">@Subcommand(&quot;create&quot;)
+@Permission(&quot;warps.create&quot;)
+public static void createWarp(Player player, @AStringArgument String warpName) {
+	warps.put(warpName, player.getLocation());
+}
+</code></pre>
 <h3><a class="header" href="#needsop-1" id="needsop-1"><code>@NeedsOp</code></a></h3>
+<p>The <code>@NeedsOp</code> annotation can also be used on methods to indicate that the user must be an operator to run the command.</p>
 <hr />
 <h2><a class="header" href="#annotations-that-go-on-parameters" id="annotations-that-go-on-parameters">Annotations that go on parameters</a></h2>
 <p>The annotations for arguments are really simple, there's just two things you need to know:</p>

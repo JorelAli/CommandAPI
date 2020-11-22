@@ -23,11 +23,11 @@
 		<module>commandapi-1.13</module>
 		<module>commandapi-1.13.1</module>
 		<module>commandapi-1.13.2</module>
-		
+
 		<!-- Main core code + NMS selector -->
 		<module>commandapi-core</module>
 		<module>commandapi-vh</module>
-		
+
 		<!-- Outputs -->
 		<module>commandapi-plugin</module>
 		<module>commandapi-shade</module>
@@ -86,7 +86,7 @@
 						<annotationProcessor>dev.jorel.commandapi.preprocessor.Preprocessor</annotationProcessor>
 					</annotationProcessors>
 				</configuration>
-				
+
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -99,11 +99,30 @@
 					</archive>
 				</configuration>
 			</plugin>
-			<!--<plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-source-plugin</artifactId> 
-				<executions> <execution> <id>attach-sources</id> <goals> <goal>jar</goal> 
-				</goals> </execution> </executions> </plugin> <plugin> <groupId>org.apache.maven.plugins</groupId> 
-				<artifactId>maven-javadoc-plugin</artifactId> <executions> <execution> <id>attach-javadocs</id> 
-				<goals> <goal>jar</goal> </goals> </execution> </executions> </plugin> -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 </project>

@@ -46,11 +46,43 @@ To use annotations on methods, **methods must be static**.
 
 ### `@Default`
 
+The `@Default` annotation indicates that the method is _not_ a subcommand. This acts in a similar way to regular Bukkit commands. Commands with the `@Default` annotation can be used to run the main code when the command named with the `@Command` annotation is stated, such as the following:
+
+```java
+{{#include ../../CommandAPI/commandapi-annotations/src/test/java/WarpCommand.java:warps_help}}
+```
+
+The `@Default` annotation does not mean that the command can't have arguments! Arguments can still be used and declared as shown:
+
+```java
+{{#include ../../CommandAPI/commandapi-annotations/src/test/java/WarpCommand.java:warps_warp}}
+```
+
 ### `@Subcommand`
+
+The `@Subcommand` simply tells the CommandAPI that the declared method is a subcommand. This acts in a similar way to the regular CommandAPI's `.withSubcommand()` method. The subcommand annotation can take in a single string which is the name of the subcommand:
+
+```java
+{{#include ../../CommandAPI/commandapi-annotations/src/test/java/WarpCommand.java:warps_create}}
+```
+
+Or, it can take in a list of strings which represent the _aliases_ that can also be used for the declared subcommand:
+
+```java
+{{#include ../../CommandAPI/commandapi-annotations/src/test/java/TeleportCommand.java:teleport_subcommand}}
+```
 
 ### `@Permission`
 
+The `@Permission` annotation can also be used on methods to indicate that a permission is required to execute a command.
+
+```java
+{{#include ../../CommandAPI/commandapi-annotations/src/test/java/WarpCommand.java:warps_create}}
+```
+
 ### `@NeedsOp`
+
+The `@NeedsOp` annotation can also be used on methods to indicate that the user must be an operator to run the command.
 
 -----
 
