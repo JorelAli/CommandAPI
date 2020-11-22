@@ -99,4 +99,9 @@ For the `@ALiteralArgument` annotation, the parameter is the literal to be used 
 
 #### Other arguments
 
-The `LocationArgument`, `Location2DArgument`, `EntitySelectorArgument` and `ScoreHolderArgument` can all take an extra parameter in their constructors. As a result, the annotation-equivalent of these arguments also allow you to provide the parameter in the annotation.
+The `LocationArgument`, `Location2DArgument`, `EntitySelectorArgument` and `ScoreHolderArgument` can all take an extra parameter in their constructors. As a result, the annotation-equivalent of these arguments also allow you to provide the parameter in the annotation:
+
+```java
+{{#include ../../CommandAPI/commandapi-annotations/src/test/java/Test2Command.java:other_arguments}}
+```
+

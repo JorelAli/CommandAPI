@@ -18,6 +18,7 @@
 
 - [Setting up your development environment](./quickstart.md)
 - [Shading the CommandAPI in your plugins](./shading.md)
+- [Using the annotation system](./annotationsetup.md)
 
 # Creating Commands
 
