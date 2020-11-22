@@ -33,6 +33,7 @@
 -----
 
 ## Purpose
+
 This project provides an API to help Bukkit/Spigot developers use the Minecraft 1.13 command UI, which includes:
 
 * **Better commands** - Prevent players from running invalid commands, making it easier for developers
@@ -60,6 +61,156 @@ This project provides an API to help Bukkit/Spigot developers use the Minecraft 
 * **You don't need Brigadier** - You don't need to import Brigadier in your projects to use the CommandAPI
 
 * **No tracking** - The CommandAPI don't collect any stats about its plugin; what you see is what you get!
+
+In addition to all of the above:
+
+- **Built-in command converter** - Convert regular plugin commands into `/execute`-compatible ones - no coding experience required!
+- **Optional compile-time annotation-based framework** - Don't like writing lots of code with builders? You don't have to if you don't want to!
+- [**Insanely detailed documentation**](https://www.jorel.dev/CommandAPI/) - Trust me, you've never seen a plugin documentation look so good.
+
+-----
+
+## Code examples
+
+_(I always like to see code examples on GitHub repos, so here's what CommandAPI code looks like):_
+
+<details>
+	<summary><b>Simple command registration</b></summary>
+  
+```java
+new CommandAPICommand("enchantitem")
+    .withArguments(new EnchantmentArgument("enchantment"))
+    .withArguments(new IntegerArgument("level", 1, 5))
+    .executesPlayer((player, args) -> {
+        Enchantment enchantment = (Enchantment) args[0];
+        int level = (int) args[1];
+        
+        //Add the enchantment
+        player.getInventory().getItemInMainHand().addEnchantment(enchantment, level);
+    })
+    .register();
+```
+  
+</details>
+
+<details>
+	<summary><b>Potion removing, suggesting potions that a player has currently</b></summary>
+  
+```java
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new EntitySelectorArgument("target", EntitySelector.ONE_PLAYER));
+arguments.add(new PotionEffectArgument("potioneffect").safeOverrideSuggestions(
+    (sender, prevArgs) -> {
+        Player target = (Player) prevArgs[0];
+        
+        //Convert PotionEffect[] into PotionEffectType[]
+        return target.getActivePotionEffects().stream()
+            .map(PotionEffect::getType)
+            .toArray(PotionEffectType[]::new);
+    })
+);
+
+new CommandAPICommand("removeeffect")
+    .withArguments(arguments)
+    .executesPlayer((player, args) -> {
+        EntityType entityType = (EntityType) args[0];
+        player.getWorld().spawnEntity(player.getLocation(), entityType);
+    })
+    .register();
+```
+  
+</details>
+
+<details>
+	<summary><b>Subcommands</b></summary>
+  
+```java
+new CommandAPICommand("perm")
+    .withSubcommand(new CommandAPICommand("group")
+        .withSubcommand(new CommandAPICommand("add")
+            .withArguments(new StringArgument("permission"))
+            .withArguments(new StringArgument("groupName"))
+            .executes((sender, args) -> {
+                //perm group add code
+            })
+        )
+        .withSubcommand(new CommandAPICommand("remove")
+            .withArguments(new StringArgument("permission"))
+            .withArguments(new StringArgument("groupName"))
+            .executes((sender, args) -> {
+                //perm group remove code
+            })
+        )
+    )
+    .withSubcommand(new CommandAPICommand("user")
+        .withSubcommand(new CommandAPICommand("add")
+            .withArguments(new StringArgument("permission"))
+            .withArguments(new StringArgument("userName"))
+            .executes((sender, args) -> {
+                //perm user add code
+            })
+        )
+        .withSubcommand(new CommandAPICommand("remove")
+            .withArguments(new StringArgument("permission"))
+            .withArguments(new StringArgument("userName"))
+            .executes((sender, args) -> {
+                //perm user remove code
+            })
+        )
+    )
+    .register();
+```
+  
+</details>
+
+<details>
+	<summary><b>Annotation-based commands</b></summary>
+  
+```java
+@Command("warp")	
+public class WarpCommand {
+    
+    // List of warp names and their locations
+    static Map<String, Location> warps = new HashMap<>();
+    
+    @Default
+    public static void warp(CommandSender sender) {
+        sender.sendMessage("--- Warp help ---");
+        sender.sendMessage("/warp - Show this help");
+        sender.sendMessage("/warp <warp> - Teleport to <warp>");
+        sender.sendMessage("/warp create <warpname> - Creates a warp at your current location");
+    }
+    
+    @Default
+    public static void warp(Player player, @AStringArgument String warpName) {
+        player.teleport(warps.get(warpName));
+    }
+    
+    @Subcommand("create")
+    @Permission("warps.create")
+    public static void createWarp(Player player, @AStringArgument String warpName) {
+        warps.put(warpName, player.getLocation());
+        new IntegerArgument("");
+    }
+    
+}
+```
+  
+</details>
+
+<details>
+	<summary><b>Command conversion (no compilation required)</b></summary>
+  
+```yml
+plugins-to-convert:
+  - Essentials:
+    - speed <speed>[0..10]
+    - speed <target>[minecraft:game_profile]
+    - speed (walk|fly) <speed>[0..10]
+    - speed (walk|fly) <speed>[0..10] <target>[minecraft:game_profile]
+```
+  
+</details>
 
 -----
 
