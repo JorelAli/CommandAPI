@@ -82,7 +82,7 @@ public abstract class Brigadier {
 	public static RedirectModifier fromPredicate(BiPredicate<CommandSender, Object[]> predicate, List<Argument> args) {
 		return cmdCtx -> {
 			
-			CommandAPIHandler.getInstance().NMS.inject(cmdCtx);
+			//CommandAPIHandler.getInstance().NMS.inject(cmdCtx);
 			
 			if (predicate.test(CommandAPIHandler.getInstance().NMS.getSenderForCommand(cmdCtx, false),
 					CommandAPIHandler.getInstance().argsToObjectArr(cmdCtx, args))) {

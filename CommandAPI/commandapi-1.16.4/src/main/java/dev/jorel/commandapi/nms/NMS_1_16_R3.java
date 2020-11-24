@@ -166,7 +166,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	@Override
 	public void inject(CommandContext<CommandListenerWrapper> cmdCtx) {
 		CommandListenerWrapper clw = cmdCtx.getSource();
-		NewCLW nclw;
+		NewCLW nclw = null;
 		try {
 			nclw = new NewCLW(clw);
 		} catch (IllegalArgumentException | IllegalAccessException e1) {
