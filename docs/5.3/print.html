@@ -2695,23 +2695,32 @@ for(String str : entitiesAndPlayers) {
 <p><img src="./images/arguments/loottable.png" alt="" /></p>
 <p>The <code>LootTableArgument</code> class can be used to get a Bukkit <code>LootTable</code> object.</p>
 <div class="example">
-<h3><a class="header" href="#example---filling-an-inventory-with-loot-table-contents" id="example---filling-an-inventory-with-loot-table-contents">Example - Filling an inventory with loot table contents</a></h3>
+<h3><a class="header" href="#example---filling-a-chest-with-loot-table-contents" id="example---filling-a-chest-with-loot-table-contents">Example - Filling a chest with loot table contents</a></h3>
+<p>Say we wanted to write a command that populates a chest with some loot table contents. For this example, we'll use the following command:</p>
+<pre><code>/giveloottable &lt;loottable&gt; &lt;location&gt;
+</code></pre>
+<p>We ensure that the location provided is a container (such as a chest or shulkerbox) and then update the contents of that container:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;giveloottable&quot;)
     .withArguments(new LootTableArgument(&quot;loottable&quot;))
-    .executesPlayer((player, args) -&gt; {
-        LootTable lootTable = (LootTable) args[0];
-    
-        /* Some generated LootContext relating to the lootTable*/
-    	LootContext context = new LootContext.Builder(player.getLocation()).build();
-    	
-        lootTable.fillInventory(player.getInventory(), new Random(), context);
-    })
+    .withArguments(new LocationArgument(&quot;location&quot;, LocationType.BLOCK_POSITION))
+    .executes((sender, args) -&gt; {
+		LootTable lootTable = (LootTable) args[0];
+		Location location = (Location) args[1];
+		
+		BlockState state = location.getBlock().getState();
+		
+		// Check if the input block is a container (e.g. chest)
+		if(state instanceof Container &amp;&amp; state instanceof Lootable) {
+			Container container = (Container) state;
+			Lootable lootable = (Lootable) container;
+			
+			// Apply the loot table to the chest
+			lootable.setLootTable(lootTable);
+			container.update();
+		}
+	})
     .register();
 </code></pre>
-<blockquote>
-<p><strong>Developer's Note:</strong></p>
-<p>Honestly, I've not managed to get a successful example of using a <code>LootTable</code> in practice, due to being unable to generate a suitable <code>LootContext</code>. If you believe you can supply a suitable example for this page, feel free to send an example <a href="https://github.com/JorelAli/CommandAPI/issues/new/choose">on the CommandAPI issues page</a>.</p>
-</blockquote>
 </div><h1><a class="header" href="#mathoperation-arguments" id="mathoperation-arguments">MathOperation arguments</a></h1>
 <p><img src="./images/arguments/mathop.png" alt="" /></p>
 <p>The CommandAPI's <code>MathOperationArgument</code> is used to represent the Minecraft scoreboard arithmetic operation to alter scoreboard scores. Since there is no default representation in the Bukkit API, the CommandAPI provides the <code>MathOperation</code> class to represent each operation:</p>
