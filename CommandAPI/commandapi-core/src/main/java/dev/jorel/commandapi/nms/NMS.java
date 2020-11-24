@@ -325,4 +325,7 @@ public interface NMS<CommandListenerWrapper> {
 
 	Set<NamespacedKey> getTags();
 
+	default void inject(CommandContext<CommandListenerWrapper> cmdCtx) {};
+	default Class<?> g() { return null; };
+
 }

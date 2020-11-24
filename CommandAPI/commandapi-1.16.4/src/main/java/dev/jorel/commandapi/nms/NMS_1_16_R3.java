@@ -3,6 +3,7 @@ package dev.jorel.commandapi.nms;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -156,6 +157,37 @@ import net.minecraft.server.v1_16_R3.WorldServer;
 @RequireField(in = CraftSound.class, name = "minecraftKey", ofType = String.class)
 @RequireField(in = EntitySelector.class, name = "checkPermissions", ofType = boolean.class)
 public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
+	
+	@Override
+	public Class<?> g() {
+		return NewCLW.class;
+	}
+	
+	@Override
+	public void inject(CommandContext<CommandListenerWrapper> cmdCtx) {
+		CommandListenerWrapper clw = cmdCtx.getSource();
+		NewCLW nclw;
+		try {
+			nclw = new NewCLW(clw);
+		} catch (IllegalArgumentException | IllegalAccessException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		Field f = CommandAPIHandler.getInstance().getField(cmdCtx.getClass(), "source");
+		try {
+			System.out.println(clw.getClass().getCanonicalName());
+			f.setAccessible(true);
+			
+			Field modifiersField = Field.class.getDeclaredField("modifiers");
+	        modifiersField.setAccessible(true);
+	        modifiersField.setInt(f, f.getModifiers() & ~Modifier.FINAL);
+			
+	        Object o = (Object) nclw;
+			f.set(clw, o);
+		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	@Override
 	public ArgumentType<?> _ArgumentAngle() {

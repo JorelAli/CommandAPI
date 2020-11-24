@@ -178,6 +178,14 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 
 		// Generate our command from executor
 		return (cmdCtx) -> {
+			
+			if(NMS.g().isInstance(cmdCtx)) {
+				System.out.println("YAY!!!!");
+				System.out.println(cmdCtx.getClass().getCanonicalName());
+			}
+			
+			System.out.println(cmdCtx.getInput());
+			
 			CommandSender sender = NMS.getSenderForCommand(cmdCtx, executor.isForceNative());
 			Object[] arguments;
 			if(converted) {
