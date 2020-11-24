@@ -27,7 +27,7 @@ The annotation system effectively needs to be added twice: Once for compilation 
           <groupId>dev.jorel</groupId>
           <artifactId>commandapi-annotations</artifactId>
           <version>5.3</version>
-          <scope>compile</scope>
+          <scope>provided</scope>
       </dependency>
   </dependencies>
   ```
