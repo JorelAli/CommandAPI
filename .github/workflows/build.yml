@@ -1,0 +1,44 @@
+name: Build the CommandAPI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+  
+    - name: Cache local Maven repository
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+      
+    - name: Download Spigot dependencies 
+      uses: SpraxDev/Action-SpigotMC@v1
+      with:
+        versions: 1.13, 1.13.1, 1.13.2, 1.14, 1.14.3, 1.14.4, 1.15, 1.16.1, 1.16.2, 1.16.4
+        target: Spigot
+        generateSrc: false
+        generateDoc: false
+        disableJavaCheck: false
+        forceRun: false
+        threads: -1
+        buildToolProvider: SpraxDev
+
+    - name: Build the CommandAPI using Maven
+      run: |
+        cd CommandAPI
+        mvn clean package
