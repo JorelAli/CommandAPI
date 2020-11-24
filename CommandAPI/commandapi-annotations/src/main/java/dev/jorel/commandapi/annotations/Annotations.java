@@ -3,12 +3,7 @@ package dev.jorel.commandapi.annotations;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -100,13 +95,22 @@ public class Annotations extends AbstractProcessor {
 		ATeamArgument.class, ATextArgument.class, ATimeArgument.class,
 		AUUIDArgument.class
 	};
+	private final ArrayList<Class<?>> CUSTOM_ARGUMENT_ANNOTATIONS = new ArrayList<>();
+
+	public void addCustomArgumentAnnotation(Class<?> annotationClass) {
+		CUSTOM_ARGUMENT_ANNOTATIONS.add(annotationClass);
+	}
+
+	private Stream<Class<?>> getAnnotationStream() {
+		return Stream.concat(Arrays.stream(ARGUMENT_ANNOTATIONS), CUSTOM_ARGUMENT_ANNOTATIONS.stream());
+	}
 
 	// List of stuff we can deal with
 	@Override
 	public Set<String> getSupportedAnnotationTypes() {
 		return Stream
 				.concat(Arrays.stream(new Class<?>[] { Alias.class, Command.class, Default.class, NeedsOp.class,
-						Permission.class, Subcommand.class }), Arrays.stream(ARGUMENT_ANNOTATIONS))
+						Permission.class, Subcommand.class }), getAnnotationStream())
 				.map(Class::getCanonicalName).collect(Collectors.toSet());
 	}
 
@@ -135,7 +139,7 @@ public class Annotations extends AbstractProcessor {
 		}
 		return builder.toString();
 	}
-	
+
 	private String simpleFromQualified(String name) {
 		if(name == null) {
 			return null;
@@ -162,7 +166,7 @@ public class Annotations extends AbstractProcessor {
 
 			// Imports
 			SortedSet<String> imports = new TreeSet<>();
-			
+
 			imports.add(CommandAPICommand.class.getCanonicalName());
 			for (Element methodElement : classElement.getEnclosedElements()) {
 				if (methodElement.getAnnotation(Subcommand.class) != null) {
@@ -171,7 +175,7 @@ public class Annotations extends AbstractProcessor {
 				if (methodElement.getAnnotation(NeedsOp.class) != null) {
 					imports.add(CommandPermission.class.getCanonicalName());
 				}
-				
+
 				if(methodElement instanceof ExecutableElement) {
 					ExecutableElement method = (ExecutableElement) methodElement;
 					for(VariableElement parameter : method.getParameters()) {
@@ -186,18 +190,18 @@ public class Annotations extends AbstractProcessor {
 								imports.add(EntitySelector.class.getCanonicalName());
 							}
 						}
-						
+
 					}
 				}
 			}
-			
+
 			for(String import_ : new TreeSet<>(imports)) {
 				if(import_.contains("<")) {
 					imports.add(import_.substring(0, import_.indexOf("<")));
 					imports.add(import_.substring(import_.indexOf("<") + 1, import_.indexOf(">")));
 				}
 			}
-			
+
 			String previousImport = "";
 			for(String import_ : imports) {
 				// Separate different packages
@@ -210,7 +214,7 @@ public class Annotations extends AbstractProcessor {
 				if(!import_.contains(".") || import_.contains("<")) {
 					continue;
 				}
-				
+
 				out.print("import ");
 				out.print(import_);
 				out.println(";");
@@ -235,7 +239,7 @@ public class Annotations extends AbstractProcessor {
 			for (Element methodElement : classElement.getEnclosedElements()) {
 				if (methodElement.getAnnotation(Default.class) != null
 						|| methodElement.getAnnotation(Subcommand.class) != null) {
-					
+
 					ExecutableType methodType = (ExecutableType) methodElement.asType();
 					if(!methodElement.getModifiers().contains(Modifier.STATIC)) {
 						processingEnv.getMessager().printMessage(Kind.ERROR, "Method " + methodElement.getSimpleName() + " must be static to be used as a command");
@@ -251,24 +255,24 @@ public class Annotations extends AbstractProcessor {
 						out.println(indent(indent) + ".withArguments(");
 						indent++;
 						out.print(indent(indent) + "new MultiLiteralArgument(");
-						
+
 						if(methodElement.getAnnotation(Subcommand.class).value().length == 0) {
 							processingEnv.getMessager().printMessage(Kind.ERROR, "Invalid @Subcommand on " + methodElement.getSimpleName() + " - no subcommand name was found");
 						}
-						
+
 						// @Subcommand (name)
 						out.print(Arrays.stream(methodElement.getAnnotation(Subcommand.class).value())
 							.map(x -> "\"" + x + "\"").collect(Collectors.joining(", ")));
-						
+
 						out.println(")");
 						indent++;
 						out.println(indent(indent) + ".setListed(false)");
-						
+
 						// @NeedsOp
 						if (methodElement.getAnnotation(NeedsOp.class) != null) {
 							out.println(indent(indent) + ".withPermission(CommandPermission.OP)");
 						}
-						
+
 						// @Permission
 						if (methodElement.getAnnotation(Permission.class) != null) {
 							out.print(indent(indent) + ".withPermission(\"");
@@ -279,7 +283,7 @@ public class Annotations extends AbstractProcessor {
 						indent--;
 						out.println(indent(indent) + ")");
 					}
-					
+
 					// @NeedsOp
 					if (classElement.getAnnotation(NeedsOp.class) != null) {
 						out.println(indent(indent) + ".withPermission(CommandPermission.OP)");
@@ -299,11 +303,11 @@ public class Annotations extends AbstractProcessor {
 								.map(x -> "\"" + x + "\"").collect(Collectors.joining(", ")));
 						out.println(")");
 					}
-					
+
 
 					//Maps parameter index to argument's primitive type
 					Map<Integer, String> argumentMapping = new HashMap<>();
-					
+
 					ExecutableElement executableMethodElement = (ExecutableElement) methodElement;
 					for(int i = 1; i < executableMethodElement.getParameters().size(); i++) {
 						VariableElement parameter = executableMethodElement.getParameters().get(i);
@@ -315,11 +319,11 @@ public class Annotations extends AbstractProcessor {
 											+ " does not have an argument annotation on it! ");
 							return;
 						}
-						
+
 						out.print(indent(indent) + ".withArguments(new ");
 						// We're assuming that the name of the argument MUST be "A" + the same name
 						out.print(argumentAnnotation.annotationType().getSimpleName().substring(1));
-						
+
 						// Node name
 						if(argumentAnnotation instanceof AMultiLiteralArgument || argumentAnnotation instanceof ALiteralArgument) {
 							// Ignore node name for MultiLiteralArgument and LiteralArgument
@@ -329,7 +333,7 @@ public class Annotations extends AbstractProcessor {
 							out.print(parameter.getSimpleName());
 							out.print("\"");
 						}
-						
+
 						// Handle parameters
 						// Number arguments
 						if(argumentAnnotation instanceof AIntegerArgument) {
@@ -345,7 +349,7 @@ public class Annotations extends AbstractProcessor {
 							ADoubleArgument argument = (ADoubleArgument) argumentAnnotation;
 							out.print(", " + argument.min() + "D, " + argument.max() + "D");
 						}
-						
+
 						// Non-number arguments
 						else if(argumentAnnotation instanceof ALocation2DArgument) {
 							ALocation2DArgument argument = (ALocation2DArgument) argumentAnnotation;
@@ -368,15 +372,15 @@ public class Annotations extends AbstractProcessor {
 							out.print(argument.value());
 							out.print("\"");
 						}
-						
+
 						out.print(")");
-						
+
 						if(argumentAnnotation instanceof ALiteralArgument) {
 							out.print(".setListed(true)");
 						}
-						
+
 						out.println(")");
-						
+
 						// Handle return types
 						Primitive primitive = getPrimitive(argumentAnnotation);
 						if(primitive.value().length == 1) {
@@ -451,7 +455,7 @@ public class Annotations extends AbstractProcessor {
 					out.print(".");
 					out.print(methodElement.getSimpleName());
 					out.print("(sender");
-					
+
 					for(int i = 0; i < argumentMapping.size(); i++) {
 						String fromArgumentMap = argumentMapping.get(i);
 						out.print(", (");
@@ -469,7 +473,7 @@ public class Annotations extends AbstractProcessor {
 						out.print("]");
 					}
 					//populate stuff here
-					
+
 					out.println(");");
 					indent--;
 					out.println(indent(indent) + "})");
@@ -491,7 +495,7 @@ public class Annotations extends AbstractProcessor {
 	// Checks if an annotation mirror is an argument annotation
 	private boolean isArgument(AnnotationMirror mirror) {
 		final String mirrorName = mirror.getAnnotationType().toString();
-		return Arrays.stream(ARGUMENT_ANNOTATIONS).map(Class::getCanonicalName).anyMatch(mirrorName::equals);
+		return getAnnotationStream().map(Class::getCanonicalName).anyMatch(mirrorName::equals);
 	}
 
 	// Get the Primitive annotation from an annotation
