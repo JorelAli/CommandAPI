@@ -59,7 +59,7 @@ Here's the list of changes to the documentation between each update. You can vie
 
 > **Developer's Note:**
 >
-> Lots and lots and lots of changes occurred in version 5.0! I highly recommend reading the [Upgrading guide](http://localhost:3000/upgrading.html) section which covers the changes in more detail and how to update your plugin for this version.
+> Lots and lots and lots of changes occurred in version 5.0! I highly recommend reading the [Upgrading guide](./upgrading.html) section which covers the changes in more detail and how to update your plugin for this version.
 
 Basically every page has been rewritten in this update and checked for errors. In general, this is the list of new additions:
 
