@@ -42,17 +42,27 @@ jobs:
       run: |
         cd CommandAPI
         mvn clean package
-    
-    - name: Copy important artifacts to artifacts
-      run: |
-        mkdir artifacts
-        cp CommandAPI/commandapi-core/target/*.jar artifacts
-        cp CommandAPI/commandapi-plugin/target/*.jar artifacts
-        cp CommandAPI/commandapi-shade/target/*.jar artifacts
-        cp CommandAPI/commandapi-annotations/target/*.jar artifacts
         
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: CommandAPI build jars
-        path: artifacts
+        name: CommandAPI (core)
+        path: CommandAPI/commandapi-core/target/CommandAPI*.jar
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: CommandAPI (plugin)
+        path: CommandAPI/commandapi-plugin/target/CommandAPI*.jar
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: CommandAPI (shade)
+        path: CommandAPI/commandapi-shade/target/CommandAPI*.jar
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: CommandAPI (annotations)
+        path: CommandAPI/commandapi-annotations/target/CommandAPI*.jar
