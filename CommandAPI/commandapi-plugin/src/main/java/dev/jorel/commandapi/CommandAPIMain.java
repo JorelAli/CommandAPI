@@ -3,11 +3,17 @@ package dev.jorel.commandapi;
 import java.io.File;
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Stream;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.loot.LootTable;
+import org.bukkit.loot.LootTables;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -17,11 +23,12 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import dev.jorel.commandapi.arguments.Argument;
-import dev.jorel.commandapi.arguments.CustomArgument;
 import dev.jorel.commandapi.arguments.FloatArgument;
+import dev.jorel.commandapi.arguments.GreedyStringArgument;
 import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.PlayerArgument;
+import dev.jorel.commandapi.arguments.StringArgument;
 
 public class CommandAPIMain extends JavaPlugin implements Listener {
 	
@@ -97,7 +104,14 @@ randomChance.addChild(numerator.then(denominator).build());
 //Add (randomchance <numerator> <denominator>) as a child of (execute -> if)
 Brigadier.getRootNode().getChild("execute").getChild("if").addChild(randomChance);
 
-
+new CommandAPICommand("ttt")
+	.withArguments(new GreedyStringArgument("hello").overrideSuggestions((sender, args) -> {
+		return new String[] {"hi", "whoa", "bye", "123"};
+	}))
+	.executesPlayer((p, a) -> {
+		System.out.println(a[0]);
+	})
+	.register();
 	}
 	
 	@Override

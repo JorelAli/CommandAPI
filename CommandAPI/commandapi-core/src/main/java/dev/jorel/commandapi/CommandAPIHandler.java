@@ -51,7 +51,9 @@ import dev.jorel.commandapi.arguments.LocationArgument;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.ScoreHolderArgument;
+import dev.jorel.commandapi.exceptions.ParseException;
 import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.wrappers.StringRangeWrapper;
 
 /**
  * Handles the main backend of the CommandAPI. This constructs brigadier Command
@@ -765,8 +767,18 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 					previousArguments.add(result);
 				}
 			}
+			
+			Argument argument = getArgument(args, nodeName);
+			try {
+				// TODO: This needs to also work for arguments that don't declare suggestions but do declare a parser.
+				argument.getParser().parse(context.getInput(), new StringRangeWrapper(context.getRange().getStart(), context.getRange().getEnd()));
+			} catch (ParseException e) {
+				builder.suggest(e.getMessage());
+				return builder.buildFuture();
+			}
+			
 			return getSuggestionsBuilder(builder,
-					getArgument(args, nodeName).getOverriddenSuggestions()
+					argument.getOverriddenSuggestions()
 							.orElseGet(() -> (c, m) -> new IStringTooltip[0])
 							.apply(NMS.getCommandSenderForCLW(context.getSource()), previousArguments.toArray()));
 		};

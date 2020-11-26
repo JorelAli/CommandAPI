@@ -14,6 +14,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.StringTooltip;
+import dev.jorel.commandapi.wrappers.InputParser;
 
 /**
  * The core abstract class for Command API arguments
@@ -232,7 +233,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * @return the permission required to run this command
 	 */
 	public final CommandPermission getArgumentPermission() {
-		return permission;
+		return this.permission;
 	}
 	
 	//////////////////
@@ -286,5 +287,19 @@ public abstract class Argument implements IOverrideableSuggestions {
 		return this;
 	}
 	
-
+	/////////////
+	// Parsing //
+	/////////////
+	
+	private InputParser parser = (s, r) -> {};
+	
+	public final InputParser getParser() {
+		return this.parser;
+	}
+	
+	public final Argument withParser(InputParser parser) {
+		this.parser = parser;
+		return this;
+	}
+	
 }
