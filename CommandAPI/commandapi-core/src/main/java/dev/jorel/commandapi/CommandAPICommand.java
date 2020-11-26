@@ -50,6 +50,9 @@ public class CommandAPICommand {
 		this.commandName = commandName;
 		this.isConverted = false;
 	}
+
+	//region With Commands (Adds/Subtracts traits)
+	//================================================================================
 	
 	/**
 	 * Applies a permission to the current command builder
@@ -143,7 +146,12 @@ public class CommandAPICommand {
 		this.subcommands.add(subcommand);
 		return this;
 	}
-	
+
+	//================================================================================
+	//endregion
+	//region Executes
+	//================================================================================
+
 	// Regular command executor 
 	
 	/**
@@ -187,9 +195,9 @@ public class CommandAPICommand {
 		this.executor.addResultingExecutor(executor);
 		return this;
 	}
-	
+
+
 	// Entity command executor
-	
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(Entity, Object[]) -&gt; ()</code> that will be executed when the command is run
@@ -199,7 +207,7 @@ public class CommandAPICommand {
 		this.executor.addNormalExecutor(executor);
 		return this;
 	}
-	
+
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(Entity, Object[]) -&gt; int</code> that will be executed when the command is run
@@ -209,9 +217,9 @@ public class CommandAPICommand {
 		this.executor.addResultingExecutor(executor);
 		return this;
 	}
-	
+
+
 	// Proxy command executor
-	
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(Entity, Object[]) -&gt; ()</code> that will be executed when the command is run
@@ -221,7 +229,7 @@ public class CommandAPICommand {
 		this.executor.addNormalExecutor(executor);
 		return this;
 	}
-	
+
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(Entity, Object[]) -&gt; int</code> that will be executed when the command is run
@@ -231,9 +239,9 @@ public class CommandAPICommand {
 		this.executor.addResultingExecutor(executor);
 		return this;
 	}
-	
+
+
 	// Command block command sender
-	
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -&gt; ()</code> that will be executed when the command is run
@@ -243,7 +251,7 @@ public class CommandAPICommand {
 		this.executor.addNormalExecutor(executor);
 		return this;
 	}
-	
+
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -&gt; int</code> that will be executed when the command is run
@@ -253,9 +261,9 @@ public class CommandAPICommand {
 		this.executor.addResultingExecutor(executor);
 		return this;
 	}
-	
+
+
 	// Console command sender
-	
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -&gt; ()</code> that will be executed when the command is run
@@ -265,7 +273,7 @@ public class CommandAPICommand {
 		this.executor.addNormalExecutor(executor);
 		return this;
 	}
-	
+
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -&gt; int</code> that will be executed when the command is run
@@ -275,7 +283,7 @@ public class CommandAPICommand {
 		this.executor.addResultingExecutor(executor);
 		return this;
 	}
-	
+
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(NativeCommandExecutor, Object[]) -&gt; ()</code> that will be executed when the command is run
@@ -285,7 +293,7 @@ public class CommandAPICommand {
 		this.executor.addNormalExecutor(executor);
 		return this;
 	}
-	
+
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(NativeCommandExecutor, Object[]) -&gt; int</code> that will be executed when the command is run
@@ -295,7 +303,81 @@ public class CommandAPICommand {
 		this.executor.addResultingExecutor(executor);
 		return this;
 	}
-	
+
+	//================================================================================
+	//endregion
+	//region Set (Sets the underlying array/etc. DIRECTLY) Commands
+	//Note: We should probably improve the documentation in this area too, to better reflect what it does.
+	// (Many people may just think its the plural version of the `with` commands
+	//================================================================================
+
+
+	/**
+	 * Sets the permissions required to run this command
+	 * @param permission the permission required to run this command
+	 * @return this command builder
+	 * @deprecated setPermission and withPermission function exactly the same
+	 */
+	public CommandAPICommand setPermission(CommandPermission permission) {
+		this.permission = permission;
+		return this;
+	}
+
+	/**
+	 * Sets the requirements that must be satisfied to run this command
+	 * @param requirements the requirements that must be satisfied to run this command (previous requirements will be replaced)
+	 * @return this command builder
+	 */
+	public CommandAPICommand setRequirements(Predicate<CommandSender> requirements) {
+		this.requirements = requirements;
+		return this;
+	}
+
+	/**
+	 * Sets the aliases for this command
+	 * @param aliases aliases that this command's aliases will be set to (previous aliases will be replaced)
+	 * @return this command builder
+	 */
+	public CommandAPICommand setAliases(String[] aliases) {
+		this.aliases = aliases;
+		return this;
+	}
+
+	/**
+	 * Sets the arguments that this command has
+	 * @param args list of arguments this command's arguments will be set to (previous arguments will be replaced)
+	 * @return this command builder
+	 */
+	public CommandAPICommand setArguments(List<Argument> args) {
+		this.args = args;
+		return this;
+	}
+
+	/**
+	 * Sets the list of subcommands that this command has
+	 * @param subcommands subcommands to set to (previous subcommands will be replaced)
+	 * @return this command builder
+	 */
+	public CommandAPICommand setSubcommands(List<CommandAPICommand> subcommands) {
+		this.subcommands = subcommands;
+		return this;
+	}
+
+	/**
+	 * Sets the executors for this command
+	 * @param executor the executor for this command (previous executors will be replaced)
+	 * @return this command builder
+	 */
+	public CommandAPICommand setExecutor(CustomCommandExecutor executor) {
+		this.executor = executor;
+		return this;
+	}
+
+	//================================================================================
+	//endregion
+	//region Getter Commands
+	//================================================================================
+
 	/**
 	 * Returns the name of this command
 	 * @return the name of this command
@@ -313,14 +395,6 @@ public class CommandAPICommand {
 	}
 
 	/**
-	 * Sets the permission required to run this command
-	 * @param permission the permission required to run this command
-	 */
-	public void setPermission(CommandPermission permission) {
-		this.permission = permission;
-	}
-
-	/**
 	 * Returns an array of aliases that can be used to run this command
 	 * @return an array of aliases that can be used to run this command
 	 */
@@ -329,28 +403,10 @@ public class CommandAPICommand {
 	}
 
 	/**
-	 * Sets the aliases for this command
-	 * @param aliases the aliases for this command
-	 */
-	public void setAliases(String[] aliases) {
-		this.aliases = aliases;
-	}
-
-	/**
 	 * Returns the requirements that must be satisfied to run this command
 	 * @return the requirements that must be satisfied to run this command
 	 */
-	public Predicate<CommandSender> getRequirements() {
-		return requirements;
-	}
-
-	/**
-	 * Sets the requirements that must be satisfied to run this command
-	 * @param requirements the requirements that must be satisfied to run this command
-	 */
-	public void setRequirements(Predicate<CommandSender> requirements) {
-		this.requirements = requirements;
-	}
+	public Predicate<CommandSender> getRequirements() { return requirements; }
 
 	/**
 	 * Returns the list of arguments that this command has
@@ -358,14 +414,6 @@ public class CommandAPICommand {
 	 */
 	public List<Argument> getArguments() {
 		return args;
-	}
-
-	/**
-	 * Sets the arguments that this command has
-	 * @param args the arguments that this command has
-	 */
-	public void setArguments(List<Argument> args) {
-		this.args = args;
 	}
 
 	/**
@@ -377,14 +425,6 @@ public class CommandAPICommand {
 	}
 
 	/**
-	 * Sets the list of subcommands that this command has
-	 * @param subcommands the list of subcommands that this command has
-	 */
-	public void setSubcommands(List<CommandAPICommand> subcommands) {
-		this.subcommands = subcommands;
-	}
-
-	/**
 	 * Returns the executors that this command has
 	 * @return the executors that this command has
 	 */
@@ -392,26 +432,29 @@ public class CommandAPICommand {
 		return executor;
 	}
 
-	/**
-	 * Sets the executors for this command
-	 * @param executor the executors for this command
-	 */
-	public void setExecutor(CustomCommandExecutor executor) {
-		this.executor = executor;
-	}
+	//================================================================================
+	//endregion
+	//region misc.
+	//================================================================================
 
 	/**
 	 * Returns whether this command is an automatically converted command
 	 * @return whether this command is an automatically converted command
 	 */
+
 	public boolean isConverted() {
 		return isConverted;
 	}
 
+	/**
+	 * @param isConverted
+	 * @todo Do we mark this as depricated? There are no javadocs for this so I'd assume its
+	 * for internal usage, but then shouldn't you mark as protected? I'm gonna leave this alone for now
+	 */
 	void setConverted(boolean isConverted) {
 		this.isConverted = isConverted;
 	}
-	
+
 	//Expand subcommands into arguments
 	private void flatten(CommandAPICommand rootCommand, List<Argument> prevArguments, CommandAPICommand subcommand) {
 		
@@ -490,5 +533,6 @@ public class CommandAPICommand {
 		}
 		
 	}
-	
+	//================================================================================
+	//endregion
 }
