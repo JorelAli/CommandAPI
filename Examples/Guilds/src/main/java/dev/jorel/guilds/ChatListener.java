@@ -1,5 +1,6 @@
 package dev.jorel.guilds;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.bukkit.event.EventHandler;
@@ -19,8 +20,10 @@ public class ChatListener implements Listener {
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent event) { 
 		UUID uuid = event.getPlayer().getUniqueId();
-		Guild guild = plugin.getGuild(uuid);
-		event.setFormat("[" + guild.getTagColor() + guild.getTag() + ChatColor.RESET + "] " + "%s: %s");
+		Optional<Guild> guild = plugin.getGuild(uuid);
+		if(guild.isPresent()) {
+			event.setFormat("[" + guild.get().getTagColor() + guild.get().getTag() + ChatColor.RESET + "] " + "%s: %s");
+		}
 	}
 	
 }

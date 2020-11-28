@@ -3,7 +3,8 @@ package dev.jorel.guilds;
 import org.bukkit.ChatColor;
 
 /**
- * A very simple class that contains guild information
+ * A very simple class that contains guild information. Generated using
+ * generic getters and setters
  */
 public class Guild {
 	
