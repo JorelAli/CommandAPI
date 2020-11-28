@@ -1,0 +1,5 @@
+name: Guilds
+version: 1.0
+main: dev.jorel.guilds.Guilds
+api-version: 1.13
+depend: [CommandAPI]
