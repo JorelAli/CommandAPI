@@ -22,7 +22,6 @@ public class Guilds extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-
 		// Register events and commands
 		getServer().getPluginManager().registerEvents(new ChatListener(this), this);
 	}
