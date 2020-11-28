@@ -37,7 +37,8 @@ public class GuildCommands {
 		// returns a non-empty value.
 		final Predicate<CommandSender> isInGuild = sender -> {
 			if(sender instanceof Player) {
-				return plugin.getGuild(((Player) sender).getUniqueId()).isPresent();
+				boolean result = plugin.getGuild(((Player) sender).getUniqueId()).isPresent();
+				return result;
 			} else {
 				return false;
 			}
@@ -60,11 +61,10 @@ public class GuildCommands {
 		
 		// /guild create <name> <tag> <tagColor>
 		new CommandAPICommand("guild")
-		    .withArguments(new LiteralArgument("create"))
+		    .withArguments(new LiteralArgument("create").withRequirement(isInGuild.negate()))
 		    .withArguments(new StringArgument("name"))
 		    .withArguments(new StringArgument("tag"))
 		    .withArguments(new ChatColorArgument("tagColor"))
-		    .withRequirement(isInGuild.negate())
 		    .executesPlayer((player, args) -> {
 		    	// Get the arguments
 		    	String guildName = (String) args[0];
@@ -82,8 +82,7 @@ public class GuildCommands {
 		
 		// /guild info
 		new CommandAPICommand("guild")
-			.withArguments(new LiteralArgument("info"))
-			.withRequirement(isInGuild)
+			.withArguments(new LiteralArgument("info").withRequirement(isInGuild))
 			.executesPlayer((player, args) -> {
 				Guild guild = plugin.getGuild(player.getUniqueId()).get();
 				
@@ -105,9 +104,8 @@ public class GuildCommands {
 		
 		// /guild add <player>
 		new CommandAPICommand("guild")
-			.withArguments(new LiteralArgument("add"))
+			.withArguments(new LiteralArgument("add").withRequirement(isInGuild))
 			.withArguments(new PlayerArgument("player"))
-			.withRequirement(isInGuild)
 			.executesPlayer((player, args) -> {
 				Player target = (Player) args[0];
 				plugin.addGuild(target.getUniqueId(), plugin.getGuild(player.getUniqueId()).get());
@@ -117,9 +115,8 @@ public class GuildCommands {
 		
 		// /guild kick <player>
 		new CommandAPICommand("guild")
-			.withArguments(new LiteralArgument("kick"))
+			.withArguments(new LiteralArgument("kick").withRequirement(isInGuild))
 			.withArguments(new PlayerArgument("player"))
-			.withRequirement(isInGuild)
 			.executesPlayer((player, args) -> {
 				Player target = (Player) args[0];
 				plugin.removeGuild(target.getUniqueId());
@@ -129,8 +126,7 @@ public class GuildCommands {
 		
 		// /guild leave
 		new CommandAPICommand("guild")
-			.withArguments(new LiteralArgument("leave"))
-			.withRequirement(isInGuild)
+			.withArguments(new LiteralArgument("leave").withRequirement(isInGuild))
 			.executesPlayer((player, args) -> {
 				plugin.removeGuild(player.getUniqueId());
 				CommandAPI.updateRequirements(player);

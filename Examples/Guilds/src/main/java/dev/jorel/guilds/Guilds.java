@@ -13,14 +13,18 @@ public class Guilds extends JavaPlugin {
 
 	// Map players to their guild
 	private Map<UUID, Guild> playerGuilds;
+	
+	@Override
+	public void onLoad() {
+		playerGuilds = new HashMap<>();
+		GuildCommands.registerCommands(this);
+	}
 
 	@Override
 	public void onEnable() {
-		playerGuilds = new HashMap<>();
 
 		// Register events and commands
 		getServer().getPluginManager().registerEvents(new ChatListener(this), this);
-		GuildCommands.registerCommands(this);
 	}
 
 	/**
