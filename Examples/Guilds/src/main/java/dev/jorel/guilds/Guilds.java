@@ -22,6 +22,10 @@ public class Guilds extends JavaPlugin {
 		GuildCommands.registerCommands(this);
 	}
 	
+	public void addGuild(UUID uuid, Guild guild) {
+		this.playerGuilds.put(uuid, guild);
+	}
+	
 	public Guild getGuild(UUID uuid) {
 		return this.playerGuilds.get(uuid);
 	}
