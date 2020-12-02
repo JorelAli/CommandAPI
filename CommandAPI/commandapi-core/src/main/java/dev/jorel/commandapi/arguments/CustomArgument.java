@@ -48,6 +48,11 @@ public class CustomArgument<T> extends Argument {
 		this.parser = parser;
 	}
 	
+	public CustomArgument(Argument base, CustomArgumentParser<T> parser) {
+		super(base.getNodeName(), base.getRawType());
+		this.parser = parser;
+	}
+	
 	/**
 	 * Returns true if this argument is represented by a NamespacedKey
 	 * @return true if this argument is represented by a NamespacedKey
@@ -65,7 +70,7 @@ public class CustomArgument<T> extends Argument {
 	 * Returns the parser for this custom argument
 	 * @return the parser for this custom argument
 	 */
-	public CustomArgumentParser<T> getParser() {
+	public CustomArgumentParser<T> getParserOld() {
 		return parser;
 	}
 

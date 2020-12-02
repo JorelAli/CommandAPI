@@ -37,5 +37,4 @@ public class StringRangeWrapper extends StringRange {
 	public boolean isEmpty() {
 		return super.isEmpty();
 	}
-
 }

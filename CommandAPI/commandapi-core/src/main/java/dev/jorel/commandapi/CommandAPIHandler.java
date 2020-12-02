@@ -181,12 +181,12 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 		// Generate our command from executor
 		return (cmdCtx) -> {
 			
-			if(NMS.g().isInstance(cmdCtx)) {
-				System.out.println("YAY!!!!");
-				System.out.println(cmdCtx.getClass().getCanonicalName());
-			}
-			
-			System.out.println(cmdCtx.getInput());
+//			if(NMS.g().isInstance(cmdCtx)) {
+//				System.out.println("YAY!!!!");
+//				System.out.println(cmdCtx.getClass().getCanonicalName());
+//			}
+//			
+//			System.out.println(cmdCtx.getInput());
 			
 			CommandSender sender = NMS.getSenderForCommand(cmdCtx, executor.isForceNative());
 			Object[] arguments;
@@ -268,7 +268,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 			}
 			
 			try {
-				return arg.getParser().apply(customresult);
+				return arg.getParserOld().apply(customresult);
 			} catch (CustomArgumentException e) {
 				throw e.toCommandSyntax(customresult, cmdCtx);
 			} catch (Exception e) {
@@ -713,9 +713,19 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 
 		// If there are no changes to the default suggestions, return it as normal
 		if (!argument.getOverriddenSuggestions().isPresent()) {
+			
+			// Construct the builder
 			@SuppressWarnings("unchecked")
-			RequiredArgumentBuilder<CommandListenerWrapper, T> builder = RequiredArgumentBuilder.argument(argument.getNodeName(), (ArgumentType<T>) argument.getRawType());
-			return builder.requires(clw -> permissionCheck(NMS.getCommandSenderForCLW(clw), argument.getArgumentPermission(), argument.getRequirements()));
+			RequiredArgumentBuilder<CommandListenerWrapper, T> builder = RequiredArgumentBuilder
+					.argument(argument.getNodeName(), (ArgumentType<T>) argument.getRawType());
+			
+			// Apply requirements
+			builder.requires(clw -> permissionCheck(NMS.getCommandSenderForCLW(clw), argument.getArgumentPermission(), argument.getRequirements()));
+			
+			// Merge default suggestions with parser
+			builder.suggests(mergeSuggestionsWithParser(getArgument(args, argument.getNodeName()), builder.getSuggestionsProvider()));
+			
+			return builder;
 		}
 
 		// Otherwise, we have to handle arguments of the form BiFunction<CommandSender,
@@ -724,15 +734,34 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 			return getRequiredArgumentBuilderWithProvider(argument, toSuggestions(argument.getNodeName(), args));
 		}
 	}
+	
+	// Given an argument and a provider, merge the two together and apply the parser before the provider
+	private SuggestionProvider<CommandListenerWrapper> mergeSuggestionsWithParser(Argument argument, SuggestionProvider<CommandListenerWrapper> provider) {
+		// Merge default suggestions with parser
+		return (CommandContext<CommandListenerWrapper> context, SuggestionsBuilder builder) -> {
+			try {
+				argument.getParser().parse(context.getInput(), new StringRangeWrapper(context.getRange().getStart(), context.getRange().getEnd()));
+			} catch (ParseException e) {
+				return builder.restart().suggest(e.getMessage()).buildFuture();
+			}
+			
+			return provider.getSuggestions(context, builder);
+		};
+	}
 
 	// Gets a RequiredArgumentBuilder for an argument, given a SuggestionProvider
 	<T> RequiredArgumentBuilder<CommandListenerWrapper, T> getRequiredArgumentBuilderWithProvider(Argument argument,
 			SuggestionProvider<CommandListenerWrapper> provider) {
+		
+		// Construct the builder
 		@SuppressWarnings("unchecked")
 		RequiredArgumentBuilder<CommandListenerWrapper, T> builder = RequiredArgumentBuilder
 				.argument(argument.getNodeName(), (ArgumentType<T>) argument.getRawType());
+		
+		// Apply requirements and suggestions
 		return builder.requires(clw -> permissionCheck(NMS.getCommandSenderForCLW(clw),
-				argument.getArgumentPermission(), argument.getRequirements())).suggests(provider);
+				argument.getArgumentPermission(), argument.getRequirements()))
+				.suggests(mergeSuggestionsWithParser(argument, provider));
 	}
 	
 	static Argument getArgument(List<Argument> args, String nodeName) {
@@ -768,17 +797,8 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 				}
 			}
 			
-			Argument argument = getArgument(args, nodeName);
-			try {
-				// TODO: This needs to also work for arguments that don't declare suggestions but do declare a parser.
-				argument.getParser().parse(context.getInput(), new StringRangeWrapper(context.getRange().getStart(), context.getRange().getEnd()));
-			} catch (ParseException e) {
-				builder.suggest(e.getMessage());
-				return builder.buildFuture();
-			}
-			
 			return getSuggestionsBuilder(builder,
-					argument.getOverriddenSuggestions()
+					getArgument(args, nodeName).getOverriddenSuggestions()
 							.orElseGet(() -> (c, m) -> new IStringTooltip[0])
 							.apply(NMS.getCommandSenderForCLW(context.getSource()), previousArguments.toArray()));
 		};
