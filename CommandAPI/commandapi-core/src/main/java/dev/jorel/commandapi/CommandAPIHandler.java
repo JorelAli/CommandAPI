@@ -52,6 +52,7 @@ import dev.jorel.commandapi.arguments.LocationArgument;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.SafeOverrideableArgument;
+import dev.jorel.commandapi.arguments.SafeOverrideableArgument.PlaceholderArgument;
 import dev.jorel.commandapi.arguments.ScoreHolderArgument;
 import dev.jorel.commandapi.exceptions.ParseException;
 import dev.jorel.commandapi.nms.NMS;
@@ -241,13 +242,11 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 		if(!value.isListed()) {
 			return null;
 		}
-		if(value instanceof SafeOverrideableArgument) {
+		if(value instanceof PlaceholderArgument) {
 			System.out.println("SOA");
 			SafeOverrideableArgument<?> optionalArgument = (SafeOverrideableArgument<?>) value;
-			if(optionalArgument.isInternallyOptional()) {
-				System.out.println("Returning internal default: " + optionalArgument.getDefaultValue());
-				return optionalArgument.getDefaultValue();
-			}
+			System.out.println("Returning internal default: " + optionalArgument.getDefaultValue());
+			return optionalArgument.getDefaultValue();
 		}
 		switch (value.getArgumentType()) {
 		case ANGLE:
@@ -587,26 +586,28 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 				}
 				// This only applies to the last argument
 				if(i == args.size() - 1) {
-					if(!regArgs.get(i)[1].equals(args.get(i).getClass().getSimpleName())) { 
-						
-						//Command we're trying to register
-						StringBuilder builder = new StringBuilder();
-						args.forEach(arg -> builder.append(arg.getNodeName()).append("<").append(arg.getClass().getSimpleName()).append("> "));
-						
-						//Command it conflicts with
-						StringBuilder builder2 = new StringBuilder();
-						regArgs.forEach(arg -> builder2.append(arg[0]).append("<").append(arg[1]).append("> "));
-						
-						// Lovely high quality error message formatting (inspired by Elm)
-						CommandAPI.getLog().severe("Failed to register command:");
-						CommandAPI.getLog().severe("");
-						CommandAPI.getLog().severe("  " + commandName + " " + builder.toString());
-						CommandAPI.getLog().severe("");
-						CommandAPI.getLog().severe("Because it conflicts with this previously registered command:");
-						CommandAPI.getLog().severe("");
-						CommandAPI.getLog().severe("  " + commandName + " " + builder2.toString());
-						CommandAPI.getLog().severe("");
-						return;
+					if(!(args.get(i) instanceof PlaceholderArgument)) {
+						if(!regArgs.get(i)[1].equals(args.get(i).getClass().getSimpleName())) { 
+							
+							//Command we're trying to register
+							StringBuilder builder = new StringBuilder();
+							args.forEach(arg -> builder.append(arg.getNodeName()).append("<").append(arg.getClass().getSimpleName()).append("> "));
+							
+							//Command it conflicts with
+							StringBuilder builder2 = new StringBuilder();
+							regArgs.forEach(arg -> builder2.append(arg[0]).append("<").append(arg[1]).append("> "));
+							
+							// Lovely high quality error message formatting (inspired by Elm)
+							CommandAPI.getLog().severe("Failed to register command:");
+							CommandAPI.getLog().severe("");
+							CommandAPI.getLog().severe("  " + commandName + " " + builder.toString());
+							CommandAPI.getLog().severe("");
+							CommandAPI.getLog().severe("Because it conflicts with this previously registered command:");
+							CommandAPI.getLog().severe("");
+							CommandAPI.getLog().severe("  " + commandName + " " + builder2.toString());
+							CommandAPI.getLog().severe("");
+							return;
+						}						
 					}
 				}
 			}
@@ -641,11 +642,9 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 		ListIterator<Argument> argumentsIterator = args.listIterator();
 		while(argumentsIterator.hasNext()) {
 			Argument arg = argumentsIterator.next();
-			if(arg instanceof SafeOverrideableArgument) {
-				if(((SafeOverrideableArgument<?>) arg).isInternallyOptional()) {
-					System.out.println("Removing internally optional argument");
-					argumentsIterator.remove();
-				}
+			if(arg instanceof PlaceholderArgument) {
+				System.out.println("Removing internally optional argument");
+				argumentsIterator.remove();
 			}
 		}
 		

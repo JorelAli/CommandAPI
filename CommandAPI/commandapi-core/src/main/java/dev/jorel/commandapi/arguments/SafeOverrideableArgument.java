@@ -20,7 +20,6 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	
 	private final Function<S, String> mapper;
 	private S defaultValue;
-	private boolean isInternallyOptional = false;
 
 	protected SafeOverrideableArgument(String nodeName, ArgumentType<?> rawType, Function<S, String> mapper) {
 		super(nodeName, rawType);
@@ -33,10 +32,6 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	
 	public final S getDefaultValue() {
 		return this.defaultValue;
-	}	
-	
-	public final boolean isInternallyOptional() {
-		return this.isInternallyOptional;
 	}
 
 	/**
@@ -214,10 +209,35 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 		return (c, m) -> Arrays.stream(suggestions.apply(c, m)).map(Tooltip.build(mapper)).toArray(IStringTooltip[]::new);
 	}
 	
-	public final SafeOverrideableArgument<S> asOptional() {
-		isInternallyOptional = true;
-		setOptional(false);
-		return this;
+	public final PlaceholderArgument asOptional() {
+		PlaceholderArgument result = new PlaceholderArgument(this);
+		
+		result.setListed(this.isListed());
+		result.withPermission(this.getArgumentPermission());
+		result.withRequirement(this.getRequirements());
+		result.setDefaultValue(this.defaultValue);
+		result.withParser(this.getParser());
+		//TODO: Add suggestions... etc.
+	
+		return result;
+	}
+	
+	public class PlaceholderArgument extends SafeOverrideableArgument<S> {
+				
+		protected PlaceholderArgument(SafeOverrideableArgument<S> base) {
+			super(base.getNodeName(), base.getRawType(), base.mapper);
+		}
+
+		@Override
+		public Class<?> getPrimitiveType() {
+			return null; // Not needed
+		}
+
+		@Override
+		public CommandAPIArgumentType getArgumentType() {
+			return null; // Not needed
+		}
+		
 	}
 	
 }
