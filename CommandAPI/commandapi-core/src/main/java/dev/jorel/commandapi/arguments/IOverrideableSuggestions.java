@@ -13,7 +13,25 @@ import dev.jorel.commandapi.IStringTooltip;
  * An interface declaring methods required to override argument suggestions
  */
 public interface IOverrideableSuggestions {
-
+	
+	/////////////////
+	// Main getter //
+	/////////////////
+	
+	/**
+	 * Returns a function that maps the command sender to a String array of
+	 * suggestions for the current command, or <code>null</code> if this is not
+	 * overridden.
+	 * 
+	 * @return a function that provides suggestions, or <code>null</code> if there
+	 *         are no overridden suggestions.
+	 */
+	Optional<BiFunction<CommandSender, Object[], IStringTooltip[]>> getOverriddenSuggestions();
+	
+	///////////////////////////////////////
+	// Override suggestions with strings //
+	///////////////////////////////////////
+	
 	/**
 	 * Override the suggestions of this argument with a String array. Typically,
 	 * this is the supplier <code>s -&gt; suggestions</code>.
@@ -42,16 +60,10 @@ public interface IOverrideableSuggestions {
 	 * @return the current argument
 	 */
 	Argument overrideSuggestions(BiFunction<CommandSender, Object[], String[]> suggestions);
-
-	/**
-	 * Returns a function that maps the command sender to a String array of
-	 * suggestions for the current command, or <code>null</code> if this is not
-	 * overridden.
-	 * 
-	 * @return a function that provides suggestions, or <code>null</code> if there
-	 *         are no overridden suggestions.
-	 */
-	Optional<BiFunction<CommandSender, Object[], IStringTooltip[]>> getOverriddenSuggestions();
+	
+	////////////////////////////////////////
+	// Override suggestions with tooltips //
+	////////////////////////////////////////
 	
 	/**
 	 * Override the suggestions of this argument with an array of StringTooltips,

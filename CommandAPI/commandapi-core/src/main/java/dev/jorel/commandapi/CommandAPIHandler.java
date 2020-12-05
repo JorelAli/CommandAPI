@@ -557,6 +557,21 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 			StringBuilder builder = new StringBuilder();
 			args.forEach(arg -> builder.append(arg.getNodeName()).append("<").append(arg.getClass().getSimpleName()).append("> "));
 			CommandAPI.logInfo("Registering command /" + commandName + " " + builder.toString());
+			System.out.println("Command:     " + commandName);
+			System.out.println("Permissions: " + permissions.toString());
+			System.out.println("NExecutors:  " + executor.getNormalExecutors().size());
+			System.out.println("RExecutors:  " + executor.getResultingExecutors().size());
+			System.out.println("Converted:   " + converted);
+			System.out.println("Arguments:   ");
+			for(Argument arg : args) {
+				System.out.println("- Name:        " + arg.getNodeName());
+				System.out.println("  Type:        " + arg.getClass().getSimpleName());
+				System.out.println("  Perms:       " + arg.getArgumentPermission().toString());
+				System.out.println("  OverrideSug: " + arg.getOverriddenSuggestions().isPresent());
+				System.out.println("  Listed:      " + arg.isListed());
+				System.out.println("  Primitive:   " + arg.getPrimitiveType().getSimpleName());
+				System.out.println("  Raw type:    " + arg.getRawType());
+			}
 		}
 
 		Command<CommandListenerWrapper> command = generateCommand(args, executor, converted);
@@ -745,7 +760,13 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 				return builder.restart().suggest(e.getMessage()).buildFuture();
 			}
 			
-			return provider.getSuggestions(context, builder);
+			// Looks weird, but this is a Brigadier implementation with the null and there's
+			// nothing I can do about it
+			if(provider == null) {
+				return null;
+			} else {
+				return provider.getSuggestions(context, builder);
+			}
 		};
 	}
 
