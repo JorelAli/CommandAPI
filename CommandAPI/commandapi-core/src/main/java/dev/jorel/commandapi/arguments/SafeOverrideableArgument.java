@@ -19,10 +19,24 @@ import dev.jorel.commandapi.Tooltip;
 public abstract class SafeOverrideableArgument<S> extends Argument {
 	
 	private final Function<S, String> mapper;
+	private S defaultValue;
+	private boolean isInternallyOptional = false;
 
 	protected SafeOverrideableArgument(String nodeName, ArgumentType<?> rawType, Function<S, String> mapper) {
 		super(nodeName, rawType);
 		this.mapper = mapper;
+	}
+	
+	public final void setDefaultValue(S defaultValue) {
+		this.defaultValue = defaultValue;
+	}
+	
+	public final S getDefaultValue() {
+		return this.defaultValue;
+	}	
+	
+	public final boolean isInternallyOptional() {
+		return this.isInternallyOptional;
 	}
 
 	/**
@@ -198,6 +212,12 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 */
 	private final BiFunction<CommandSender, Object[], IStringTooltip[]> tMap2(Function<S, String> mapper, BiFunction<CommandSender, Object[], Tooltip<S>[]> suggestions) {
 		return (c, m) -> Arrays.stream(suggestions.apply(c, m)).map(Tooltip.build(mapper)).toArray(IStringTooltip[]::new);
+	}
+	
+	public final SafeOverrideableArgument<S> asOptional() {
+		isInternallyOptional = true;
+		setOptional(false);
+		return this;
 	}
 	
 }

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -50,6 +51,7 @@ import dev.jorel.commandapi.arguments.Location2DArgument;
 import dev.jorel.commandapi.arguments.LocationArgument;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
+import dev.jorel.commandapi.arguments.SafeOverrideableArgument;
 import dev.jorel.commandapi.arguments.ScoreHolderArgument;
 import dev.jorel.commandapi.exceptions.ParseException;
 import dev.jorel.commandapi.nms.NMS;
@@ -238,6 +240,14 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	Object parseArgument(CommandContext<CommandListenerWrapper> cmdCtx, String key, Argument value) throws CommandSyntaxException {
 		if(!value.isListed()) {
 			return null;
+		}
+		if(value instanceof SafeOverrideableArgument) {
+			System.out.println("SOA");
+			SafeOverrideableArgument<?> optionalArgument = (SafeOverrideableArgument<?>) value;
+			if(optionalArgument.isInternallyOptional()) {
+				System.out.println("Returning internal default: " + optionalArgument.getDefaultValue());
+				return optionalArgument.getDefaultValue();
+			}
 		}
 		switch (value.getArgumentType()) {
 		case ANGLE:
@@ -471,7 +481,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	void register(String commandName, CommandPermission permissions, String[] aliases, Predicate<CommandSender> requirements,
 			final List<Argument> args, CustomCommandExecutor executor, boolean converted) throws Exception {
 		
-		//"Expands" our MultiLiterals into Literals
+		// "Expands" our MultiLiterals into Literals
 		Predicate<Argument> isMultiLiteral = arg -> arg.getArgumentType() == CommandAPIArgumentType.MULTI_LITERAL;
 		if(args.stream().filter(isMultiLiteral).count() > 0) {
 		
@@ -507,6 +517,57 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 					return;
 				}
 				index++;
+			}
+		}
+		
+		// Expand optional arguments
+		Predicate<Argument> isOptional = arg -> {
+			if(arg instanceof SafeOverrideableArgument) {
+				return ((SafeOverrideableArgument<?>) arg).isOptional();
+			} else {
+				return false;
+			}
+		};
+		if(args.stream().filter(isOptional).count() > 0) {
+			for(int index = 0; index < args.size(); index++) {
+				Argument argument = args.get(index);
+				if(isOptional.test(argument)) {
+					SafeOverrideableArgument<?> optionalArg = (SafeOverrideableArgument<?>) argument;
+					
+					// Reconstruct the list of arguments, keeping it as it should be
+					{
+						List<Argument> newArgs = new ArrayList<>();
+						int j = 0;
+						for(Argument previousEntry : args) {
+							if(j == index) {
+								optionalArg.setOptional(false);
+								newArgs.add(optionalArg);
+							} else {
+								newArgs.add(previousEntry);
+							}
+							j++;
+						}
+						System.out.println("Registering one as normal");
+						register(commandName, permissions, aliases, requirements, newArgs, executor, converted);
+					}
+					
+					//Reconstruct the list of arguments and place in the "placeholder" (default) value
+					{	
+						List<Argument> newArgs = new ArrayList<>();
+						int j = 0;
+						for(Argument previousEntry : args) {
+							if(j == index) {
+								newArgs.add(optionalArg.asOptional());
+							} else {
+								newArgs.add(previousEntry);
+							}
+							j++;
+						}
+						System.out.println("Registering one with placeholder argument");
+						register(commandName, permissions, aliases, requirements, newArgs, executor, converted);
+					}
+					return;
+				}
 			}
 		}
 		
@@ -557,24 +618,38 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 			StringBuilder builder = new StringBuilder();
 			args.forEach(arg -> builder.append(arg.getNodeName()).append("<").append(arg.getClass().getSimpleName()).append("> "));
 			CommandAPI.logInfo("Registering command /" + commandName + " " + builder.toString());
-			System.out.println("Command:     " + commandName);
-			System.out.println("Permissions: " + permissions.toString());
-			System.out.println("NExecutors:  " + executor.getNormalExecutors().size());
-			System.out.println("RExecutors:  " + executor.getResultingExecutors().size());
-			System.out.println("Converted:   " + converted);
-			System.out.println("Arguments:   ");
-			for(Argument arg : args) {
-				System.out.println("- Name:        " + arg.getNodeName());
-				System.out.println("  Type:        " + arg.getClass().getSimpleName());
-				System.out.println("  Perms:       " + arg.getArgumentPermission().toString());
-				System.out.println("  OverrideSug: " + arg.getOverriddenSuggestions().isPresent());
-				System.out.println("  Listed:      " + arg.isListed());
-				System.out.println("  Primitive:   " + arg.getPrimitiveType().getSimpleName());
-				System.out.println("  Raw type:    " + arg.getRawType());
-			}
+//			System.out.println("Command:     " + commandName);
+//			System.out.println("Permissions: " + permissions.toString());
+//			System.out.println("NExecutors:  " + executor.getNormalExecutors().size());
+//			System.out.println("RExecutors:  " + executor.getResultingExecutors().size());
+//			System.out.println("Converted:   " + converted);
+//			System.out.println("Arguments:   ");
+//			for(Argument arg : args) {
+//				System.out.println("- Name:        " + arg.getNodeName());
+//				System.out.println("  Type:        " + arg.getClass().getSimpleName());
+//				System.out.println("  Perms:       " + arg.getArgumentPermission().toString());
+//				System.out.println("  OverrideSug: " + arg.getOverriddenSuggestions().isPresent());
+//				System.out.println("  Listed:      " + arg.isListed());
+//				System.out.println("  Primitive:   " + arg.getPrimitiveType().getSimpleName());
+//				System.out.println("  Raw type:    " + arg.getRawType());
+//			}
 		}
 
-		Command<CommandListenerWrapper> command = generateCommand(args, executor, converted);
+		Command<CommandListenerWrapper> command = generateCommand(new ArrayList<Argument>(args), executor, converted);
+		
+		// At this point, remove all internally optional arguments
+		ListIterator<Argument> argumentsIterator = args.listIterator();
+		while(argumentsIterator.hasNext()) {
+			Argument arg = argumentsIterator.next();
+			if(arg instanceof SafeOverrideableArgument) {
+				if(((SafeOverrideableArgument<?>) arg).isInternallyOptional()) {
+					System.out.println("Removing internally optional argument");
+					argumentsIterator.remove();
+				}
+			}
+		}
+		
+		System.out.println(args);
 
 		/*
 		 * The innermost argument needs to be connected to the executor. Then that
@@ -752,6 +827,9 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	
 	// Given an argument and a provider, merge the two together and apply the parser before the provider
 	private SuggestionProvider<CommandListenerWrapper> mergeSuggestionsWithParser(Argument argument, SuggestionProvider<CommandListenerWrapper> provider) {
+		if(true) {
+			return provider;
+		}
 		// Merge default suggestions with parser
 		return (CommandContext<CommandListenerWrapper> context, SuggestionsBuilder builder) -> {
 			try {
@@ -760,10 +838,8 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 				return builder.restart().suggest(e.getMessage()).buildFuture();
 			}
 			
-			// Looks weird, but this is a Brigadier implementation with the null and there's
-			// nothing I can do about it
 			if(provider == null) {
-				return null;
+				return null; // <-- TODO: Fix whatever this nonsense is, this can't be null!
 			} else {
 				return provider.getSuggestions(context, builder);
 			}

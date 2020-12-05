@@ -308,13 +308,8 @@ public abstract class Argument implements IOverrideableSuggestions {
 	
 	private boolean optional = false;
 	
-	public final Argument setOptional() {
-		return setOptional(true);
-	}
-	
-	public final Argument setOptional(boolean optional) {
+	public final void setOptional(boolean optional) {
 		this.optional = optional;
-		return this;
 	}
 	
 	public final boolean isOptional() {

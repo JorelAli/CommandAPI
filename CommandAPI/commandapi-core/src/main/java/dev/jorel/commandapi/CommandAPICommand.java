@@ -143,6 +143,7 @@ public class CommandAPICommand {
 	 */
 	public <S> CommandAPICommand withOptionalArgument(SafeOverrideableArgument<S> argument, S defaultValue) {
 		argument.setOptional(true);
+		argument.setDefaultValue(defaultValue);
 		this.args.add(argument);
 		return this;
 	}
@@ -461,15 +462,15 @@ public class CommandAPICommand {
 			return;
 		}
 		try {
-			//Sanitize commandNames
+			// Sanitize commandNames
 			if(commandName == null || commandName.length() == 0) {
 				throw new InvalidCommandNameException(commandName);
 			}
 			
-			//Make a local copy of args to deal with
+			// Make a local copy of args to deal with
 			List<Argument> copyOfArgs = args == null ? new ArrayList<>() : new ArrayList<>(args);
 			
-			//if args contains a GreedyString && args.getLast != GreedyString
+			// if args contains a GreedyString && args.getLast != GreedyString
 			long numGreedyArgs = copyOfArgs.stream().filter(arg -> arg instanceof IGreedyArgument).count();
 			if(numGreedyArgs >= 1) {
 				//A GreedyString has been found
@@ -482,12 +483,12 @@ public class CommandAPICommand {
 				}
 			}
 			
-			//Assign the command's permissions to arguments if the arguments don't already have one
+			// Assign the command's permissions to arguments if the arguments don't already have one
 			for(Argument argument : copyOfArgs) {
 				if(argument.getArgumentPermission() == CommandPermission.NONE) {
 					argument.withPermission(permission);
 				}
-			}
+			}	
 			
 			if(!executor.isEmpty()) {
 				CommandAPIHandler.getInstance().register(commandName, permission, aliases, requirements, copyOfArgs, executor, isConverted);
