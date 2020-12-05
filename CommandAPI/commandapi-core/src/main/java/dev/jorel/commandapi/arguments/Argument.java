@@ -302,4 +302,23 @@ public abstract class Argument implements IOverrideableSuggestions {
 		return this;
 	}
 	
+	////////////////////////
+	// Optional arguments //
+	////////////////////////
+	
+	private boolean optional = false;
+	
+	public final Argument setOptional() {
+		return setOptional(true);
+	}
+	
+	public final Argument setOptional(boolean optional) {
+		this.optional = optional;
+		return this;
+	}
+	
+	public final boolean isOptional() {
+		return this.optional;
+	}
+	
 }

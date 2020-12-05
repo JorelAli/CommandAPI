@@ -7,13 +7,12 @@ import java.util.Map.Entry;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.server.TabCompleteEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.exceptions.ParseException;
 
@@ -68,6 +67,17 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 				Bukkit.broadcastMessage(input);
 			})
 			.register();
+		
+		new CommandAPICommand("blah")
+		  .withArguments(new IntegerArgument("int"))
+		  .withOptionalArgument(new IntegerArgument("optional"), 10)
+		  .executes((sender, args) -> {
+		    int arg1 = (int) args[0];
+		    int arg2 = (int) args[1]; // This is 10 if not existant
+		    System.out.println("This is whatever:  " + arg1);
+		    System.out.println("This should be 10: " + arg2);
+		  })
+		  .register();
 	}
 	
 	@Override

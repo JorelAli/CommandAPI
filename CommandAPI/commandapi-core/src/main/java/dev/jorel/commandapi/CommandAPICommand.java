@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.IGreedyArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
+import dev.jorel.commandapi.arguments.SafeOverrideableArgument;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
 import dev.jorel.commandapi.executors.CommandBlockCommandExecutor;
@@ -131,6 +132,18 @@ public class CommandAPICommand {
 	 */
 	public CommandAPICommand withArguments(Argument... args) {
 		this.args.addAll(Arrays.asList(args));
+		return this;
+	}
+	
+	
+	/**
+	 * Appends the argument(s) to the current command builder
+	 * @param args Arguments that this command can accept
+	 * @return this command builder
+	 */
+	public <S> CommandAPICommand withOptionalArgument(SafeOverrideableArgument<S> argument, S defaultValue) {
+		argument.setOptional(true);
+		this.args.add(argument);
 		return this;
 	}
 	
@@ -471,7 +484,7 @@ public class CommandAPICommand {
 			
 			//Assign the command's permissions to arguments if the arguments don't already have one
 			for(Argument argument : copyOfArgs) {
-				if(argument.getArgumentPermission() == null) {
+				if(argument.getArgumentPermission() == CommandPermission.NONE) {
 					argument.withPermission(permission);
 				}
 			}
