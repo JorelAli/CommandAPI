@@ -13,7 +13,7 @@ import dev.jorel.commandapi.CommandAPIHandler;
  *
  * @param <T> the return type of this argument
  */
-public class CustomArgument<T> extends Argument {
+public class CustomArgument<T> extends SafeOverrideableArgument<T> {
 	
 	private CustomArgumentParser<T> parser;
 	private boolean keyed;
@@ -43,13 +43,13 @@ public class CustomArgument<T> extends Argument {
 	 * valid arguments
 	 */
 	public CustomArgument(String nodeName, CustomArgumentParser<T> parser, boolean keyed) {
-		super(nodeName, keyed ? CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered() : StringArgumentType.string());
+		super(nodeName, keyed ? CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered() : StringArgumentType.string(), Object::toString);
 		this.keyed = keyed;
 		this.parser = parser;
 	}
 	
 	public CustomArgument(Argument base, CustomArgumentParser<T> parser) {
-		super(base.getNodeName(), base.getRawType());
+		super(base.getNodeName(), base.getRawType(), Object::toString);
 		this.parser = parser;
 	}
 	
