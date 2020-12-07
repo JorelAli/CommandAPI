@@ -132,7 +132,7 @@
 					<filename>CommandAPIv${project.version}_${maven.build.timestamp}.jar</filename>
 					<foldername>commandapi-test</foldername>
 					<usepaper>true</usepaper>
-					<waitingphrase>Running test suite</waitingphrase>
+					<waitingphrase>Finished test suite</waitingphrase>
 				</configuration>
 				<executions>
 					<execution>
