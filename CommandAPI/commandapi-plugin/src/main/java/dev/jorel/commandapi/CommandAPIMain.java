@@ -3,15 +3,9 @@ package dev.jorel.commandapi;
 import java.io.File;
 import java.util.Map.Entry;
 
-import org.bukkit.Bukkit;
-import org.bukkit.World;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import dev.jorel.commandapi.arguments.CustomArgument;
-import dev.jorel.commandapi.arguments.IntegerArgument;
-import dev.jorel.commandapi.arguments.SafeOverrideableArgument;
 
 public class CommandAPIMain extends JavaPlugin implements Listener {
 	
@@ -43,18 +37,6 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 	public void onEnable() {
 		CommandAPI.onEnable(this);
 		getServer().getPluginManager().registerEvents(this, this);
-		
-SafeOverrideableArgument<World> customArg = new CustomArgument<World>("world", Bukkit::getWorld);
-customArg.overrideSuggestionsT(/*blah*/);
-
-
-new CommandAPICommand("tpworld")
-	.withOptionalArgument(customArg, Bukkit.getWorld("world"))
-	.withOptionalArgument(new IntegerArgument("arg").overrideSuggestions(""), 2)
-	.executesPlayer((player, args) -> {
-		// ... code
-	})
-	.register();
 
 	}
 }
