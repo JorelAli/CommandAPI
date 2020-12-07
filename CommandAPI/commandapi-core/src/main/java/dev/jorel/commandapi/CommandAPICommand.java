@@ -3,7 +3,9 @@ package dev.jorel.commandapi;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import org.bukkit.command.CommandSender;
 
@@ -135,13 +137,15 @@ public class CommandAPICommand {
 		return this;
 	}
 	
-	
-	/**
-	 * Appends the argument(s) to the current command builder
-	 * @param args Arguments that this command can accept
-	 * @return this command builder
-	 */
 	public <S> CommandAPICommand withOptionalArgument(SafeOverrideableArgument<S> argument, S defaultValue) {
+		return withOptionalArgument(argument, (Function<CommandSender, S>) s -> defaultValue);
+	}
+	
+	public <S> CommandAPICommand withOptionalArgument(SafeOverrideableArgument<S> argument, Supplier<S> defaultValue) {
+		return withOptionalArgument(argument, (Function<CommandSender, S>) s -> defaultValue.get());
+	}
+	
+	public <S> CommandAPICommand withOptionalArgument(SafeOverrideableArgument<S> argument, Function<CommandSender, S> defaultValue) {
 		argument.setOptional(true);
 		argument.setDefaultValue(defaultValue);
 		this.args.add(argument);

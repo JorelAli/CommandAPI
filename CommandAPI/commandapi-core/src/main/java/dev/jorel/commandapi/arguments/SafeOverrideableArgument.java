@@ -22,18 +22,18 @@ import dev.jorel.commandapi.wrappers.InputParser;
 public abstract class SafeOverrideableArgument<S> extends Argument {
 	
 	private final Function<S, String> mapper;
-	private S defaultValue;
+	private Function<CommandSender, S> defaultValue;
 
 	protected SafeOverrideableArgument(String nodeName, ArgumentType<?> rawType, Function<S, String> mapper) {
 		super(nodeName, rawType);
 		this.mapper = mapper;
 	}
 	
-	public final void setDefaultValue(S defaultValue) {
+	public final void setDefaultValue(Function<CommandSender, S> defaultValue) {
 		this.defaultValue = defaultValue;
 	}
 	
-	public final S getDefaultValue() {
+	public final Function<CommandSender, S> getDefaultValue() {
 		return this.defaultValue;
 	}
 
