@@ -1,0 +1,3 @@
+verbose-outputs: false
+create-dispatcher-json: false
+plugins-to-convert: []

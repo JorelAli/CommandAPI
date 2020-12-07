@@ -1,12 +1,19 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import dev.jorel.commandapi.tests.Test;
+
 public class CommandAPIMain extends JavaPlugin {
+	
+	List<Test> tests = new ArrayList<>();
 	
 	@Override
 	public void onLoad() {
@@ -29,12 +36,46 @@ public class CommandAPIMain extends JavaPlugin {
 				}
 			}
 		}
+		
+		// Load tests
+		
+		
+		
+		// Run all of the Test.register() method here
+		for(Test test : tests) {
+			test.register();
+		}
 
 	}
 	
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable(this);
-
+		
+		getLogger().info("Enabled!");
+		
+		// Run tests
+		Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+			getLogger().info("Running " + tests.size() + " tests...");
+			for(Test test : tests) {
+				if(!test.test()) {
+					failure();
+				}
+			}
+			
+			success();
+		}, 5L);
+	}
+	
+	/////////////
+	// Testing //
+	/////////////
+	
+	public void success() {
+		getLogger().info("Success! All CommandAPI tests passed!");
+	}
+	
+	public void failure() {
+		getLogger().info("Failure! Some CommandAPI tests failed!");
 	}
 }

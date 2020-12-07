@@ -1,0 +1,8 @@
+name: CommandAPI
+main: dev.jorel.commandapi.CommandAPIMain
+version: 6.0
+description: An API to use Minecraft 1.13s new command UI
+author: Skepter
+website: https://www.jorel.dev/CommandAPI/
+softdepend: [NBTAPI]
+api-version: 1.13

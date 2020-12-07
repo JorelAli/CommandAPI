@@ -32,6 +32,10 @@
 		<module>commandapi-plugin</module>
 		<module>commandapi-shade</module>
 		<module>commandapi-annotations</module>
+		
+		<!-- Testing -->
+		<module>commandapi-test-maven-plugin</module>
+		<module>commandapi-test</module>
 	</modules>
 
 	<properties>
