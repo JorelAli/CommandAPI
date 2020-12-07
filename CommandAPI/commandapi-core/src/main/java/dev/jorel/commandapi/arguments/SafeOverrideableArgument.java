@@ -4,14 +4,17 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 
+import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.Tooltip;
+import dev.jorel.commandapi.wrappers.InputParser;
 
 /**
  * An interface declaring methods required to override argument suggestions
@@ -41,8 +44,8 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 * @return the current argument
 	 */
 	@SuppressWarnings("unchecked")
-	public final Argument safeOverrideSuggestions(S... suggestions) {
-		return super.overrideSuggestions(sMap0(mapper, suggestions));
+	public final SafeOverrideableArgument<S> safeOverrideSuggestions(S... suggestions) {
+		return this.overrideSuggestions(sMap0(mapper, suggestions));
 	}
 	
 	/**
@@ -52,8 +55,8 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 * @return the current argument
 	 */
 	@SuppressWarnings("unchecked")
-	public final Argument safeOverrideSuggestions(Collection<S> suggestions) {
-		return super.overrideSuggestions(sMap0(mapper, suggestions.toArray((S[]) new Object[0])));
+	public final SafeOverrideableArgument<S> safeOverrideSuggestions(Collection<S> suggestions) {
+		return this.overrideSuggestions(sMap0(mapper, suggestions.toArray((S[]) new Object[0])));
 	} 
 
 	/**
@@ -63,8 +66,8 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 * @param suggestions the function to override suggestions with
 	 * @return the current argument
 	 */
-	public final Argument safeOverrideSuggestions(Function<CommandSender, S[]> suggestions) {
-		return super.overrideSuggestions(sMap1(mapper, suggestions));
+	public final SafeOverrideableArgument<S> safeOverrideSuggestions(Function<CommandSender, S[]> suggestions) {
+		return this.overrideSuggestions(sMap1(mapper, suggestions));
 	}
 	
 	/**
@@ -74,8 +77,8 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 * @param suggestions the function to override suggestions with
 	 * @return the current argument
 	 */
-	public final Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], S[]> suggestions) {
-		return super.overrideSuggestions(sMap2(mapper, suggestions));
+	public final SafeOverrideableArgument<S> safeOverrideSuggestions(BiFunction<CommandSender, Object[], S[]> suggestions) {
+		return this.overrideSuggestions(sMap2(mapper, suggestions));
 	}
 	
 	/**
@@ -86,8 +89,8 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 * @return the current argument
 	 */
 	@SafeVarargs
-	public final Argument safeOverrideSuggestionsT(Tooltip<S>... suggestions) {
-		return super.overrideSuggestionsT(tMap0(mapper, suggestions));
+	public final SafeOverrideableArgument<S> safeOverrideSuggestionsT(Tooltip<S>... suggestions) {
+		return this.overrideSuggestionsT(tMap0(mapper, suggestions));
 	};
 	
 	/**
@@ -98,8 +101,8 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 * @return the current argument
 	 */
 	@SuppressWarnings("unchecked")
-	public final Argument safeOverrideSuggestionsT(Collection<Tooltip<S>> suggestions) {
-		return super.overrideSuggestionsT(tMap0(mapper, suggestions.toArray(new Tooltip[0])));
+	public final SafeOverrideableArgument<S> safeOverrideSuggestionsT(Collection<Tooltip<S>> suggestions) {
+		return this.overrideSuggestionsT(tMap0(mapper, suggestions.toArray(new Tooltip[0])));
 	};
 	
 	/**
@@ -110,8 +113,8 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 * @param suggestions the suggestions and tooltips to override suggestions with
 	 * @return the current argument
 	 */
-	public final Argument safeOverrideSuggestionsT(Function<CommandSender, Tooltip<S>[]> suggestions) {
-		return super.overrideSuggestionsT(tMap1(mapper, suggestions));
+	public final SafeOverrideableArgument<S> safeOverrideSuggestionsT(Function<CommandSender, Tooltip<S>[]> suggestions) {
+		return this.overrideSuggestionsT(tMap1(mapper, suggestions));
 	}
 	
 	/**
@@ -122,8 +125,8 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 * @param suggestions the suggestions and tooltips to override suggestions with
 	 * @return the current argument
 	 */
-	public final Argument safeOverrideSuggestionsT(BiFunction<CommandSender, Object[], Tooltip<S>[]> suggestions) {
-		return super.overrideSuggestionsT(tMap2(mapper, suggestions));
+	public final SafeOverrideableArgument<S> safeOverrideSuggestionsT(BiFunction<CommandSender, Object[], Tooltip<S>[]> suggestions) {
+		return this.overrideSuggestionsT(tMap2(mapper, suggestions));
 	}
 	
 	/**
@@ -134,6 +137,10 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	static <S> Function<S, String> fromKey(Function<S, NamespacedKey> mapper) {
 		return mapper.andThen(NamespacedKey::toString);
 	}
+	
+	////////////////////
+	// Implementation //
+	////////////////////
 	
 	/**
 	 * Safely overrides the suggestions of this argument with a custom array.
@@ -208,6 +215,92 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	private final BiFunction<CommandSender, Object[], IStringTooltip[]> tMap2(Function<S, String> mapper, BiFunction<CommandSender, Object[], Tooltip<S>[]> suggestions) {
 		return (c, m) -> Arrays.stream(suggestions.apply(c, m)).map(Tooltip.build(mapper)).toArray(IStringTooltip[]::new);
 	}
+	
+	/////////////////////////////////////////////////////////////////////
+	// Overrides (fix type-level issues with SafeOverrideableArgument) //
+	/////////////////////////////////////////////////////////////////////
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public SafeOverrideableArgument<S> overrideSuggestions(BiFunction<CommandSender, Object[], String[]> suggestions) {
+		return (SafeOverrideableArgument<S>) super.overrideSuggestions(suggestions);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public SafeOverrideableArgument<S> overrideSuggestions(Collection<String> suggestions) {
+		return (SafeOverrideableArgument<S>) super.overrideSuggestions(suggestions);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public SafeOverrideableArgument<S> overrideSuggestions(Function<CommandSender, String[]> suggestions) {
+		return (SafeOverrideableArgument<S>) super.overrideSuggestions(suggestions);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public SafeOverrideableArgument<S> overrideSuggestions(String... suggestions) {
+		return (SafeOverrideableArgument<S>) super.overrideSuggestions(suggestions);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public SafeOverrideableArgument<S> overrideSuggestionsT(BiFunction<CommandSender, Object[], IStringTooltip[]> suggestions) {
+		return (SafeOverrideableArgument<S>) super.overrideSuggestionsT(suggestions);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public SafeOverrideableArgument<S> overrideSuggestionsT(Collection<IStringTooltip> suggestions) {
+		return (SafeOverrideableArgument<S>) super.overrideSuggestionsT(suggestions);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public SafeOverrideableArgument<S> overrideSuggestionsT(Function<CommandSender, IStringTooltip[]> suggestions) {
+		return (SafeOverrideableArgument<S>) super.overrideSuggestionsT(suggestions);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public SafeOverrideableArgument<S> overrideSuggestionsT(IStringTooltip... suggestions) {
+		return (SafeOverrideableArgument<S>) super.overrideSuggestionsT(suggestions);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public SafeOverrideableArgument<S> withPermission(CommandPermission permission) {
+		return (SafeOverrideableArgument<S>) super.withPermission(permission);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public SafeOverrideableArgument<S> withPermission(String permission) {
+		return (SafeOverrideableArgument<S>) super.withPermission(permission);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public SafeOverrideableArgument<S> withRequirement(Predicate<CommandSender> requirement) {
+		return (SafeOverrideableArgument<S>) super.withRequirement(requirement);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public SafeOverrideableArgument<S> setListed(boolean listed) {
+		return (SafeOverrideableArgument<S>) super.setListed(listed);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public SafeOverrideableArgument<S> withParser(InputParser parser) {
+		return (SafeOverrideableArgument<S>) super.withParser(parser);
+	}
+	
+	////////////////////////
+	// Optional arguments //
+	////////////////////////
 	
 	public final PlaceholderArgument asOptional() {
 		PlaceholderArgument result = new PlaceholderArgument(this);

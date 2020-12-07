@@ -95,7 +95,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * @return the current argument
 	 */
 	@Override
-	public final Argument overrideSuggestions(String... suggestions) {
+	public Argument overrideSuggestions(String... suggestions) {
 		this.suggestions = Optional.of((c, m) -> fromSuggestions(suggestions));
 		return this;
 	}
@@ -107,7 +107,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * @return the current argument
 	 */
 	@Override
-	public final Argument overrideSuggestions(Collection<String> suggestions) {
+	public Argument overrideSuggestions(Collection<String> suggestions) {
 		this.suggestions = Optional.of((c, m) -> fromSuggestions(suggestions.toArray(new String[0])));
 		return this;
 	}
@@ -120,7 +120,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * @return the current argument
 	 */
 	@Override
-	public final Argument overrideSuggestions(Function<CommandSender, String[]> suggestions) {
+	public Argument overrideSuggestions(Function<CommandSender, String[]> suggestions) {
 		this.suggestions =  Optional.of((c, m) -> fromSuggestions(suggestions.apply(c)));
 		return this;
 	}
@@ -133,7 +133,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * @return the current argument
 	 */
 	@Override
-	public final Argument overrideSuggestions(BiFunction<CommandSender, Object[], String[]> suggestions) {
+	public Argument overrideSuggestions(BiFunction<CommandSender, Object[], String[]> suggestions) {
 		this.suggestions =  Optional.of((c, m) -> fromSuggestions(suggestions.apply(c, m)));
 		return this;
 	}
@@ -145,7 +145,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * @return the current argument
 	 */
 	@Override
-	public final Argument overrideSuggestionsT(Collection<IStringTooltip> suggestions) {
+	public Argument overrideSuggestionsT(Collection<IStringTooltip> suggestions) {
 		this.suggestions = Optional.of((c, m) -> suggestions.toArray(new IStringTooltip[0]));
 		return this;
 	}
@@ -157,7 +157,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * @return the current argument
 	 */
 	@Override
-	public final Argument overrideSuggestionsT(IStringTooltip... suggestions) {
+	public Argument overrideSuggestionsT(IStringTooltip... suggestions) {
 		this.suggestions = Optional.of((c, m) -> suggestions);
 		return this;
 	}
@@ -170,7 +170,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * @return the current argument
 	 */
 	@Override
-	public final Argument overrideSuggestionsT(Function<CommandSender, IStringTooltip[]> suggestions) {
+	public Argument overrideSuggestionsT(Function<CommandSender, IStringTooltip[]> suggestions) {
 		this.suggestions =  Optional.of((c, m) -> suggestions.apply(c));
 		return this;
 	}
@@ -183,7 +183,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * @return the current argument
 	 */
 	@Override
-	public final Argument overrideSuggestionsT(BiFunction<CommandSender, Object[], IStringTooltip[]> suggestions) {
+	public Argument overrideSuggestionsT(BiFunction<CommandSender, Object[], IStringTooltip[]> suggestions) {
 		this.suggestions =  Optional.of(suggestions);
 		return this;
 	}
@@ -212,7 +212,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * @param permission the permission required to execute this command
 	 * @return this current argument
 	 */
-	public final Argument withPermission(CommandPermission permission) {
+	public Argument withPermission(CommandPermission permission) {
 		this.permission = permission;
 		return this;
 	}
@@ -223,7 +223,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * @param permission the permission required to execute this command
 	 * @return this current argument
 	 */
-	public final Argument withPermission(String permission) {
+	public Argument withPermission(String permission) {
 		this.permission = CommandPermission.fromString(permission);
 		return this;
 	}
@@ -258,7 +258,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * @param requirement the predicate that must be satisfied to use this argument
 	 * @return this current argument
 	 */
-	public final Argument withRequirement(Predicate<CommandSender> requirement) {
+	public Argument withRequirement(Predicate<CommandSender> requirement) {
 		this.requirements = this.requirements.and(requirement);
 		return this;
 	}
@@ -297,7 +297,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 		return this.parser;
 	}
 	
-	public final Argument withParser(InputParser parser) {
+	public Argument withParser(InputParser parser) {
 		this.parser = parser;
 		return this;
 	}
@@ -308,6 +308,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	
 	private boolean optional = false;
 	
+	// This shouldn't be used by regular developers - this can screw everything up!
 	public final void setOptional(boolean optional) {
 		this.optional = optional;
 	}
