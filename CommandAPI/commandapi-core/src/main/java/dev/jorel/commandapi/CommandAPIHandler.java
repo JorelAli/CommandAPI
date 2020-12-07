@@ -581,29 +581,32 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 				}
 				// This only applies to the last argument
 				if(i == args.size() - 1) {
-					if(!(args.get(i) instanceof PlaceholderArgument)) {
-						if(!regArgs.get(i)[1].equals(args.get(i).getClass().getSimpleName())) { 
-							
-							//Command we're trying to register
-							StringBuilder builder = new StringBuilder();
-							args.forEach(arg -> builder.append(arg.getNodeName()).append("<").append(arg.getClass().getSimpleName()).append("> "));
-							
-							//Command it conflicts with
-							StringBuilder builder2 = new StringBuilder();
-							regArgs.forEach(arg -> builder2.append(arg[0]).append("<").append(arg[1]).append("> "));
-							
-							// Lovely high quality error message formatting (inspired by Elm)
-							CommandAPI.getLog().severe("Failed to register command:");
-							CommandAPI.getLog().severe("");
-							CommandAPI.getLog().severe("  " + commandName + " " + builder.toString());
-							CommandAPI.getLog().severe("");
-							CommandAPI.getLog().severe("Because it conflicts with this previously registered command:");
-							CommandAPI.getLog().severe("");
-							CommandAPI.getLog().severe("  " + commandName + " " + builder2.toString());
-							CommandAPI.getLog().severe("");
-							return;
-						}						
-					}
+					if(!regArgs.get(i)[1].equals(args.get(i).getClass().getSimpleName())) { 
+						
+						// Ignore PlaceholderArguments because they dont' exist at command registration time
+						if(args.get(i) instanceof PlaceholderArgument || regArgs.get(i)[1].equals(PlaceholderArgument.class.getSimpleName())) {
+							continue;
+						}
+						
+						//Command we're trying to register
+						StringBuilder builder = new StringBuilder();
+						args.forEach(arg -> builder.append(arg.getNodeName()).append("<").append(arg.getClass().getSimpleName()).append("> "));
+						
+						//Command it conflicts with
+						StringBuilder builder2 = new StringBuilder();
+						regArgs.forEach(arg -> builder2.append(arg[0]).append("<").append(arg[1]).append("> "));
+						
+						// Lovely high quality error message formatting (inspired by Elm)
+						CommandAPI.getLog().severe("Failed to register command:");
+						CommandAPI.getLog().severe("");
+						CommandAPI.getLog().severe("  " + commandName + " " + builder.toString());
+						CommandAPI.getLog().severe("");
+						CommandAPI.getLog().severe("Because it conflicts with this previously registered command:");
+						CommandAPI.getLog().severe("");
+						CommandAPI.getLog().severe("  " + commandName + " " + builder2.toString());
+						CommandAPI.getLog().severe("");
+						return;
+					}						
 				}
 			}
 		}
@@ -804,7 +807,9 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 			builder.requires(clw -> permissionCheck(NMS.getCommandSenderForCLW(clw), argument.getArgumentPermission(), argument.getRequirements()));
 			
 			// Merge default suggestions with parser
-			builder.suggests(mergeSuggestionsWithParser(getArgument(args, argument.getNodeName()), builder.getSuggestionsProvider()));
+			if(builder.getSuggestionsProvider() != null) {
+				builder.suggests(mergeSuggestionsWithParser(getArgument(args, argument.getNodeName()), builder.getSuggestionsProvider()));
+			}
 			
 			return builder;
 		}
@@ -826,11 +831,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 				return builder.restart().suggest(e.getMessage()).buildFuture();
 			}
 			
-			if(provider == null) {
-				return getSuggestionsBuilder(builder, new IStringTooltip[0]);
-			} else {
-				return provider.getSuggestions(context, builder);
-			}
+			return provider.getSuggestions(context, builder);
 		};
 	}
 

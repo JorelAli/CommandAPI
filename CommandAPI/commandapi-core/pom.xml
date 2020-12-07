@@ -5,7 +5,7 @@
     <parent>
         <artifactId>commandapi</artifactId>
         <groupId>dev.jorel</groupId>
-        <version>${commandapi.version}</version>
+        <version>6.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -51,7 +51,7 @@
         <dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-preprocessor</artifactId>
-			<version>${commandapi.version}</version>
+			<version>6.0</version>
 		</dependency>
 	</dependencies>
 </project>

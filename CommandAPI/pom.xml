@@ -6,7 +6,7 @@
 
 	<groupId>dev.jorel</groupId>
 	<artifactId>commandapi</artifactId>
-	<version>${commandapi.version}</version>
+	<version>6.0</version>
 	<packaging>pom</packaging>
 	<modules>
 		<!-- Compile time reflection checker -->
@@ -40,7 +40,6 @@
 		<maven.build.timestamp.format>dd_MMM_yyyy_(hh-mm-ssa)</maven.build.timestamp.format>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<commandapi.version>6.0</commandapi.version>
 	</properties>
 
 	<build>
