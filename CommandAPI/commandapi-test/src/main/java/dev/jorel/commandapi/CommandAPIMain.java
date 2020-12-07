@@ -52,8 +52,6 @@ public class CommandAPIMain extends JavaPlugin {
 	public void onEnable() {
 		CommandAPI.onEnable(this);
 		
-		getLogger().info("Enabled!");
-		
 		// Run tests
 		Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
 			getLogger().info("Running " + tests.size() + " tests...");
@@ -64,6 +62,7 @@ public class CommandAPIMain extends JavaPlugin {
 			}
 			
 			success();
+			getLogger().info("Finished test suite");
 		}, 5L);
 	}
 	

@@ -60,6 +60,9 @@ public class SpigotStartMojo extends AbstractMojo {
 	@Parameter(property = "start.usepaper", defaultValue = "")
 	private String usepaper;
 	
+	@Parameter(property = "start.waitingphrase", defaultValue = "")
+	private String waitingphrase;
+	
 	public static final long SERVER_TIMEOUT = 4; // Timeout in minutes
 	public static final Map<String, String> PAPER_DOWNLOADS;
 	
@@ -267,7 +270,7 @@ public class SpigotStartMojo extends AbstractMojo {
 								// TODO: This shouldn't be the point where we start waiting.
 								// I need this to start waiting after all of the scheduled tasks
 								// from Bukkit have ended
-								if (read.contains("Done")) {
+								if (read.contains(waitingphrase)) {
 									status.set(Status.WAITING);
 									return;
 								}
