@@ -260,7 +260,7 @@ public class SpigotStartMojo extends AbstractMojo {
 									return;
 								}
 								if (read.contains("FAILED TO BIND TO PORT")) {
-									status.set(Status.ERROR);
+									status.set(Status.COULD_NOT_START);
 									return;
 								}
 								if (read.contains("This crash report")) {
@@ -285,11 +285,17 @@ public class SpigotStartMojo extends AbstractMojo {
 				Thread.sleep(1000);
 			}
 			System.out.println("Status: " + status.get());
-			if (status.get() == Status.WAITING) {
-				throw new MojoFailureException("Nothing happened!");
-			}
-			if (status.get() == Status.ERROR) {
+			
+			switch(status.get()) {
+			case COULD_NOT_START:
+				throw new MojoFailureException("Server could not start up properly!");
+			case ERROR:
 				throw new MojoFailureException("Plugin did not start successfully!");
+			case WAITING:
+				throw new MojoFailureException("Nothing happened!");
+			case OK:
+			default:
+				break;
 			}
 			new SpigotStopMojo().execute();
 		} catch (Throwable t) {
@@ -312,7 +318,7 @@ public class SpigotStartMojo extends AbstractMojo {
 	}
 
 	private static enum Status {
-		WAITING, ERROR, OK
+		WAITING, ERROR, OK, COULD_NOT_START
 	}
 
 }

@@ -80,7 +80,7 @@ public class CommandAPIMain extends JavaPlugin {
 	}
 	
 	public static void failure(String name) {
-		CommandAPI.logger.info("Failure! A CommandAPI test failed: " + name);
+		CommandAPI.logger.info("Failure! A CommandAPI test failed in " + name);
 	}
 	
 	public static List<String> getLog() {

@@ -20,7 +20,7 @@ public abstract class Test {
 			try {
 				executor.executeWith(s, a);
 			} catch(Exception e) {
-				failure();
+				failure("Executing a command");
 			}
 		};
 	}
@@ -29,65 +29,38 @@ public abstract class Test {
 		CommandAPIMain.success();
 	}
 	
-	public void failure() {
-		CommandAPIMain.failure(this.getClass().getSimpleName());
+	public void failure(String test) {
+		CommandAPIMain.failure(this.getClass().getSimpleName() + ": " + test);
 	}
 	
-	// index = 1: last message
-	// index = 2: second to last message
+	// index = 0: last message
+	// index = 1: second to last message
 	// etc.
-	public void assertContains(int index, String message, Runnable operation) {
+	public void assertContains(int index, String input, Runnable operation) {
 		operation.run();
 		List<String> log = CommandAPIMain.getLog();
-		log = log.subList(0, log.size() - 1);
-		String msg = log.get(log.size() - index);
-		if(!msg.contains(message)) {
-			failure();
+		String msg = log.get(log.size() - 1 - index);
+		if(!msg.contains(input)) {
+			failure("'" + msg + "' does not contain '" + input + "'");
 		};
 	}
 	
-//	public boolean assertContains2(String message, Runnable operation) {
-//		final boolean[] result = new boolean[] {true};
-//		preLog(msg -> {
-//			System.out.println("Msg: " + msg);
-//			System.out.println("c.f: " + message);
-//			if(!msg.contains(message)) {
-//				result[0] = false;
-//				postLog();
-//				System.out.println("Failure! A CommandAPI test failed: " + this.getClass().getSimpleName());
-//				CommandAPIMain.failure("FAILURE");
-//				JavaPlugin.getPlugin(CommandAPIMain.class).getLogger().info("FAILURE!!!");
-//				failure();
-//			}
-//		});
-//		operation.run();
-//		postLog();
-//		return result[0];
-//	}
-//	
-//	/////////////
-//	// Logging //
-//	/////////////
-//	
-//	Logger logger;
-//	Appender appender;
-//	
-//	public void preLog(Consumer<String> consumer) {
-//		logger = (Logger) LogManager.getRootLogger();
-//		appender = new AbstractAppender("appender", null, null, false) {
-//			
-//			@Override
-//			public void append(LogEvent record) {
-//				consumer.accept(record.toImmutable().getMessage().getFormattedMessage());
-//			}
-//		};
-//		appender.start();
-//		logger.addAppender(appender);
-//	}
-//	
-//	public void postLog() {
-//		appender.stop();
-//		logger.removeAppender(appender);
-//	}
+	public void assertEquals(int index, String input, Runnable operation) {
+		operation.run();
+		List<String> log = CommandAPIMain.getLog();
 		
+		//[00:32:24] [Server thread/INFO]: ...123.12314 2<--[HERE]
+		String msg = log.get(log.size() - 1 - index);
+		msg = msg.substring(msg.indexOf("]") + 1);
+		msg = msg.substring(msg.indexOf("]") + 3);
+		if(!msg.equals(input)) {
+			failure("'" + msg + "' does not equal '" + input + "'");
+		}
+	}
+	
+	public <T> void assertEquals(T object1, T object2) {
+		if(!object1.equals(object2)) {
+			failure("'" + object1 + "' does not equal '" + object2 + "'");
+		}
+	}
 }
