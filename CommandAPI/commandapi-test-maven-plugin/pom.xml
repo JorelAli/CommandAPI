@@ -14,8 +14,6 @@
 	<artifactId>commandapi-test-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
 
-	<name>Spigot Boot Maven Plugin</name>
-
     <licenses>
         <license>
             <name>MIT</name>

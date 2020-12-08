@@ -267,9 +267,6 @@ public class SpigotStartMojo extends AbstractMojo {
 									status.set(Status.ERROR);
 									return;
 								}
-								// TODO: This shouldn't be the point where we start waiting.
-								// I need this to start waiting after all of the scheduled tasks
-								// from Bukkit have ended
 								if (read.contains(waitingphrase)) {
 									status.set(Status.WAITING);
 									return;

@@ -1,6 +1,8 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -9,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import dev.jorel.commandapi.tests.ArgumentTests;
 import dev.jorel.commandapi.tests.Test;
 
 public class CommandAPIMain extends JavaPlugin {
@@ -38,8 +41,7 @@ public class CommandAPIMain extends JavaPlugin {
 		}
 		
 		// Load tests
-		
-		
+		tests.add(new ArgumentTests());		
 		
 		// Run all of the Test.register() method here
 		for(Test test : tests) {
@@ -56,8 +58,11 @@ public class CommandAPIMain extends JavaPlugin {
 		Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
 			getLogger().info("Running " + tests.size() + " tests...");
 			for(Test test : tests) {
-				if(!test.test()) {
-					failure();
+				try {
+					test.test();
+				} catch (Exception e) {
+					e.printStackTrace();
+					failure(test.getClass().getSimpleName());
 				}
 			}
 			
@@ -70,11 +75,21 @@ public class CommandAPIMain extends JavaPlugin {
 	// Testing //
 	/////////////
 	
-	public void success() {
-		getLogger().info("Success! All CommandAPI tests passed!");
+	public static void success() {
+		CommandAPI.logger.info("Success! All CommandAPI tests passed!");
 	}
 	
-	public void failure() {
-		getLogger().info("Failure! Some CommandAPI tests failed!");
+	public static void failure(String name) {
+		CommandAPI.logger.info("Failure! A CommandAPI test failed: " + name);
+	}
+	
+	public static List<String> getLog() {
+		File file = new File(JavaPlugin.getPlugin(CommandAPIMain.class).getDataFolder().getParentFile().getParentFile(), "logs/latest.log");
+		try {
+			return Files.readAllLines(file.toPath());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return new ArrayList<>();
 	}
 }
