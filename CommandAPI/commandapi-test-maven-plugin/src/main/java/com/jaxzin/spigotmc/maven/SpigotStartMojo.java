@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -127,11 +128,13 @@ public class SpigotStartMojo extends AbstractMojo {
 
 		File spigotWorkingDir = new File(baseFolder, "target/it/spigotmc");
 		spigotWorkingDir.mkdirs();
+		
 		// Delete worlds
 		getLog().info("Deleting worlds!");
 		deleteFolder(new File(spigotWorkingDir, "world"));
 		deleteFolder(new File(spigotWorkingDir, "world_nether"));
 		deleteFolder(new File(spigotWorkingDir, "world_the_end"));
+		
 		// Copy plugin
 		File pluginFolder = new File(spigotWorkingDir, "plugins");
 		pluginFolder.mkdirs();
@@ -194,6 +197,11 @@ public class SpigotStartMojo extends AbstractMojo {
 			File outFile;
 			if(usepaper.equals("true")) {
 				String paperRevision = PAPER_DOWNLOADS.get(version);
+				if(paperRevision == null) {
+					throw new MojoFailureException(
+							"Paper version " + version + " is not supported. Supported versions: "
+									+ PAPER_DOWNLOADS.keySet().stream().sorted().collect(Collectors.joining(",")));
+				}
 				paperRevision = paperRevision.substring(0, paperRevision.length() - "/download".length());
 				paperRevision = paperRevision.substring(paperRevision.lastIndexOf("/") + 1, paperRevision.length());
 				outFile = new File(spigotWorkingDir, "paper-" + paperRevision + ".jar");
