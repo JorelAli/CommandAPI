@@ -273,6 +273,15 @@ These versions of Minecraft must be installed in your local machine's Maven repo
         </tr>
     </thead>
     <tbody>
+    <tr>
+            <td valign="top"><b>5.4</b></td>
+            <td valign="top">December 2020</td>
+            <td valign="top">
+                <ul>
+                    <li>Fix bug where the NBT-API wasn't compatible with the CommandAPI when both are shaded into a plugin</li>
+                </ul>
+            </td>
+        </tr>
         <tr>
             <td valign="top"><b>5.3</b></td>
             <td valign="top">November 2020</td>

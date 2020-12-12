@@ -1,10 +1,7 @@
 package dev.jorel.commandapi.arguments;
 
-import org.bukkit.Bukkit;
-
-import de.tr7zw.nbtapi.NBTContainer;
+import de.tr7zw.changeme.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.exceptions.NBTAPINotFoundException;
 
 /**
  * An argument that represents an NBTContainer from the NBTAPI
@@ -17,10 +14,6 @@ public class NBTCompoundArgument extends SafeOverrideableArgument<NBTContainer> 
 	 */
 	public NBTCompoundArgument(String nodeName) {
 		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentNBTCompound(), NBTContainer::toString);
-		
-		if(Bukkit.getPluginManager().getPlugin("NBTAPI") == null) {
-			throw new NBTAPINotFoundException(this.getClass());
-		}
 	}
 	
 	@Override

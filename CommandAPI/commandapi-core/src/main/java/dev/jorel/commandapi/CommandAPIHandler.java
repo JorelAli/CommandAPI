@@ -37,6 +37,7 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
+import de.tr7zw.changeme.nbtapi.NBTContainer;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
 import dev.jorel.commandapi.arguments.CustomArgument;
@@ -84,8 +85,9 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	
 	void checkDependencies() {
 		try {
-			Class.forName("com.mojang.brigadier.CommandDispatcher");
-		} catch (ClassNotFoundException e) {
+			@SuppressWarnings("unused")
+			Class<?> commandDispatcherClass = CommandDispatcher.class;
+		} catch (NoClassDefFoundError e) {
 			new ClassNotFoundException("Cannot hook into Brigadier (Are you running Minecraft 1.13 or above?)").printStackTrace();
 		}
 
@@ -99,9 +101,10 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 
 		// Checks other dependencies
 		try {
-			Class.forName("de.tr7zw.nbtapi.NBTContainer");
+			@SuppressWarnings("unused")
+			Class<NBTContainer> container = NBTContainer.class;
 			CommandAPI.getLog().info("Hooked into the NBTAPI successfully.");
-		} catch(ClassNotFoundException e) {
+		} catch(NoClassDefFoundError e) {
 			if(CommandAPI.getConfiguration().hasVerboseOutput()) {
 				CommandAPI.getLog().warning(
 					"Couldn't hook into the NBTAPI for NBT support. Download it from https://www.spigotmc.org/resources/nbt-api.7939/");
