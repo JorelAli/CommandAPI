@@ -304,7 +304,7 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	
 	public final PlaceholderArgument asOptional() {
 		PlaceholderArgument result = new PlaceholderArgument(this);
-		
+		result.setOptional(false);
 		result.setListed(this.isListed());
 		result.withPermission(this.getArgumentPermission());
 		result.withRequirement(this.getRequirements());

@@ -137,9 +137,9 @@ public class CommandAPICommand {
 		return this;
 	}
 	
-	public <S> CommandAPICommand withOptionalArgument(SafeOverrideableArgument<S> argument, S defaultValue) {
-		return withOptionalArgument(argument, (Function<CommandSender, S>) s -> defaultValue);
-	}
+//	public <S> CommandAPICommand withOptionalArgument(SafeOverrideableArgument<S> argument, S defaultValue) {
+//		return withOptionalArgument(argument, (Function<CommandSender, S>) s -> defaultValue);
+//	}
 	
 	public <S> CommandAPICommand withOptionalArgument(SafeOverrideableArgument<S> argument, Supplier<S> defaultValue) {
 		return withOptionalArgument(argument, (Function<CommandSender, S>) s -> defaultValue.get());

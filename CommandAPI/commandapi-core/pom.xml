@@ -45,8 +45,8 @@
         </dependency>
         <dependency>
             <groupId>de.tr7zw</groupId>
-            <artifactId>item-nbt-api-plugin</artifactId>
-            <version>2.5.0</version>
+            <artifactId>item-nbt-api</artifactId>
+            <version>2.6.0</version>
         </dependency>
         <dependency>
 			<groupId>dev.jorel</groupId>
