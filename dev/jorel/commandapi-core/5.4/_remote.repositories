@@ -1,0 +1,6 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Sat Dec 12 12:22:07 GMT 2020
+commandapi-core-5.4.jar>=
+commandapi-core-5.4-javadoc.jar>=
+commandapi-core-5.4.pom>=
+commandapi-core-5.4-sources.jar>=
