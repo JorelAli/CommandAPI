@@ -164,6 +164,9 @@ public class Annotations extends AbstractProcessor {
 			SortedSet<String> imports = new TreeSet<>();
 			
 			imports.add(CommandAPICommand.class.getCanonicalName());
+			if(classElement.getAnnotation(NeedsOp.class) != null) {
+				imports.add(CommandPermission.class.getCanonicalName());
+			}
 			for (Element methodElement : classElement.getEnclosedElements()) {
 				if (methodElement.getAnnotation(Subcommand.class) != null) {
 					imports.add(MultiLiteralArgument.class.getCanonicalName());
