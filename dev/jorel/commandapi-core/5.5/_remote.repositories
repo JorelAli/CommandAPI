@@ -1,0 +1,6 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Thu Jan 07 20:04:10 GMT 2021
+commandapi-core-5.5-javadoc.jar>=
+commandapi-core-5.5.pom>=
+commandapi-core-5.5-sources.jar>=
+commandapi-core-5.5.jar>=

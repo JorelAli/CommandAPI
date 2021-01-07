@@ -1,0 +1,6 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Thu Jan 07 20:03:56 GMT 2021
+commandapi-preprocessor-5.5-javadoc.jar>=
+commandapi-preprocessor-5.5.jar>=
+commandapi-preprocessor-5.5-sources.jar>=
+commandapi-preprocessor-5.5.pom>=

@@ -1,0 +1,6 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Thu Jan 07 20:05:00 GMT 2021
+commandapi-annotations-5.5-javadoc.jar>=
+commandapi-annotations-5.5.jar>=
+commandapi-annotations-5.5.pom>=
+commandapi-annotations-5.5-sources.jar>=
