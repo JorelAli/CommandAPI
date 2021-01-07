@@ -66,7 +66,6 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import de.tr7zw.changeme.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
 import dev.jorel.commandapi.arguments.ICustomProvidedArgument.SuggestionProviders;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.preprocessor.RequireField;
@@ -128,6 +127,7 @@ import net.minecraft.server.v1_16_R3.CustomFunctionManager;
 import net.minecraft.server.v1_16_R3.DataPackResources;
 import net.minecraft.server.v1_16_R3.DedicatedServer;
 import net.minecraft.server.v1_16_R3.Entity;
+import net.minecraft.server.v1_16_R3.EntitySelector;
 import net.minecraft.server.v1_16_R3.EnumDirection.EnumAxis;
 import net.minecraft.server.v1_16_R3.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_16_R3.ICompletionProvider;
@@ -154,6 +154,7 @@ import net.minecraft.server.v1_16_R3.WorldServer;
 @RequireField(in = DataPackResources.class, name = "a", ofType = CompletableFuture.class)
 @RequireField(in = CustomFunctionManager.class, name = "g", ofType = int.class)
 @RequireField(in = CraftSound.class, name = "minecraftKey", ofType = String.class)
+@RequireField(in = EntitySelector.class, name = "checkPermissions", ofType = boolean.class)
 public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	
 	@Override
@@ -202,7 +203,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
-	public ArgumentType<?> _ArgumentEntity(EntitySelector selector) {
+	public ArgumentType<?> _ArgumentEntity(dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector selector) {
 		switch (selector) {
 		case MANY_ENTITIES:
 			return ArgumentEntity.multipleEntities();
@@ -467,30 +468,42 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
-	public Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String str, EntitySelector selector)
+	public Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String str, dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector selector)
 			throws CommandSyntaxException {
+		
+		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
+		try {
+			CommandAPIHandler.getInstance().getField(EntitySelector.class, "checkPermissions").set(argument, false);
+		} catch (IllegalArgumentException | IllegalAccessException e1) {
+			e1.printStackTrace();
+		}
+		
 		switch (selector) {
 		case MANY_ENTITIES:
+			// ArgumentEntity.c -> EntitySelector.getEntities
 			try {
-				return ArgumentEntity.c(cmdCtx, str).stream()
+				return argument.getEntities(cmdCtx.getSource()).stream()
 						.map(entity -> (org.bukkit.entity.Entity) ((Entity) entity).getBukkitEntity())
 						.collect(Collectors.toList());
 			} catch (CommandSyntaxException e) {
 				return new ArrayList<org.bukkit.entity.Entity>();
 			}
 		case MANY_PLAYERS:
+			// ArgumentEntity.d -> EntitySelector.d
 			try {
-				return ArgumentEntity.d(cmdCtx, str).stream()
+				return argument.d(cmdCtx.getSource()).stream()
 						.map(player -> (Player) ((Entity) player).getBukkitEntity()).collect(Collectors.toList());
 			} catch (CommandSyntaxException e) {
 				return new ArrayList<Player>();
 			}
 		case ONE_ENTITY:
-			return (org.bukkit.entity.Entity) ArgumentEntity.a(cmdCtx, str).getBukkitEntity();
+			// ArgumentEntity.a -> EntitySelector.a
+			return (org.bukkit.entity.Entity) argument.a(cmdCtx.getSource()).getBukkitEntity();
 		case ONE_PLAYER:
-			return (Player) ArgumentEntity.e(cmdCtx, str).getBukkitEntity();
+			// ArgumentEntity.e -> EntitySelector.c
+			return (Player) argument.c(cmdCtx.getSource()).getBukkitEntity();
 		}
-		return null;
+		throw new IllegalStateException("A serious error has occurred! Contact the author of the CommandAPI");
 	}
 
 	@Override

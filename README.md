@@ -273,7 +273,17 @@ These versions of Minecraft must be installed in your local machine's Maven repo
         </tr>
     </thead>
     <tbody>
-    <tr>
+        <tr>
+            <td valign="top"><b>5.5</b></td>
+            <td valign="top">January 2021</td>
+            <td valign="top">
+                <ul>
+                    <li>Fix bug with annotations where <code>@NeedsOp</code> didn't work if placed on a class</li>
+                    <li>Fix bug where entity selector arguments with <code>@</code> selectors return empty values if the sender is not op</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
             <td valign="top"><b>5.4</b></td>
             <td valign="top">December 2020</td>
             <td valign="top">

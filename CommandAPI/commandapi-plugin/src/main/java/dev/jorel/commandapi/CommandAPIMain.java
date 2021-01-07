@@ -1,11 +1,15 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Map.Entry;
 
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import dev.jorel.commandapi.arguments.EntitySelectorArgument;
+import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
 
 public class CommandAPIMain extends JavaPlugin implements Listener {
 	
@@ -36,5 +40,12 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 	public void onEnable() {
 		CommandAPI.onEnable(this);
 		getServer().getPluginManager().registerEvents(this, this);
+		
+		new CommandAPICommand("test")
+			.withArguments(new EntitySelectorArgument("target", EntitySelector.MANY_PLAYERS))
+			.executes((s, a) -> {
+				System.out.println(Arrays.deepToString(a));
+			})
+			.register();
 	}
 }
