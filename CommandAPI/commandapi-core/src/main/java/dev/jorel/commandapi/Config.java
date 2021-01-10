@@ -56,7 +56,7 @@ class Config {
 			}
 		}
 		
-		for (String pluginName : fileConfig.getStringList("skip-sender-proxy:")) {
+		for (String pluginName : fileConfig.getStringList("skip-sender-proxy")) {
 			Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
 			if(plugin != null) { 
 				skipSenderProxy.add(pluginName);
