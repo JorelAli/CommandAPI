@@ -1,5 +1,6 @@
 package dev.jorel.commandapi;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,10 +28,14 @@ class Config {
 	// List of plugins to convert
 	private final Map<Plugin, String[]> pluginsToConvert;
 	
+	// List of plugins which should ignore proxied senders
+	private final List<String> skipSenderProxy;
+	
 	public Config(FileConfiguration fileConfig) {
 		verboseOutput = fileConfig.getBoolean("verbose-outputs");
 		createDispatcherFile = fileConfig.getBoolean("create-dispatcher-json");
 		pluginsToConvert = new HashMap<>();
+		skipSenderProxy = new ArrayList<>();
 
 		for (Map<?, ?> map : fileConfig.getMapList("plugins-to-convert")) {
 			String[] pluginCommands;
@@ -50,12 +55,22 @@ class Config {
 				new InvalidPluginException("Could not find a plugin " + pluginName + "! Has it been loaded properly?").printStackTrace();
 			}
 		}
+		
+		for (String pluginName : fileConfig.getStringList("skip-sender-proxy")) {
+			Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
+			if(plugin != null) { 
+				skipSenderProxy.add(pluginName);
+			} else {
+				new InvalidPluginException("Could not find a plugin " + pluginName + "! Has it been loaded properly?").printStackTrace();
+			}
+		}
 	}
 
 	public Config(boolean verbose) {
 		verboseOutput = verbose;
 		createDispatcherFile = false;
 		pluginsToConvert = new HashMap<>();
+		skipSenderProxy = new ArrayList<>();
 	}
 
 	public boolean hasVerboseOutput() {
@@ -68,6 +83,10 @@ class Config {
 	
 	public Set<Entry<Plugin, String[]>> getPluginsToConvert() {
 		return this.pluginsToConvert.entrySet();
+	}
+	
+	public boolean shouldSkipSenderProxy(Plugin plugin) {
+		return skipSenderProxy.contains(plugin.getName());
 	}
 
 }

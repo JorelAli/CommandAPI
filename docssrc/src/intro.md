@@ -36,6 +36,10 @@ Using the search icon in the top left corner, you can search for anything in thi
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 5.3 \\(\rightarrow\\) 5.6:
+
+- Adds a section [4. Skipping proxy senders](./skippingproxysenders.md) which describes how to use the `skip-sender-proxy` configuration option.
+
 ### Documentation changes 5.2 \\(\rightarrow\\) 5.3:
 
 - Adds a section [6. Using the annotation system](./annotationsetup.md) on setting up your development environment to use the annotation system

@@ -13,4 +13,4 @@ The default `config.yml` is shown below:
 - **`verbose-outputs`** - If `true`, outputs command registration and unregistration logs in the console
 - **`create-dispatcher-json`** - If `true`, the CommandAPI creates a `command_registration.json` file showing the mapping of registered commands. This is designed to be used by developers - setting this to `false` will improve command registration performance
 - **`plugins-to-convert`** - Controls the list of plugins to process for command conversion. See [Command conversion](./conversionforowners.md) for more information!
-
+- **`skip-sender-proxy`** - Determines whether the proxy sender should be skipped when converting a command. See [Skipping proxy senders](./skippingproxysenders.md) for more information!

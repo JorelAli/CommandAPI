@@ -104,7 +104,14 @@ public abstract class Converter {
 		new CommandAPICommand(commandName)
 			.withPermission(permissionNode)
 			.withAliases(aliases)
-			.executesNative((sender, args) -> { plugin.getCommand(commandName).execute(mergeProxySender(sender), commandName, new String[0]); })
+			.executesNative((sender, args) -> { 
+				org.bukkit.command.Command command = plugin.getCommand(commandName);
+				if(command == null) {
+					command = CommandAPIHandler.getInstance().getNMS().getSimpleCommandMap().getCommand(commandName);
+				}
+				CommandSender proxiedSender = CommandAPI.getConfiguration().shouldSkipSenderProxy(plugin) ? sender.getCallee() : mergeProxySender(sender);
+				command.execute(proxiedSender, commandName, new String[0]);
+			})
 			.register();
 		
 		//Multiple arguments		
@@ -114,7 +121,12 @@ public abstract class Converter {
 			.withArguments(arguments)
 			.executesNative((sender, args) -> { 
 				// We know the args are a String[] because that's how converted things are handled in generateCommand()
-				plugin.getCommand(commandName).execute(mergeProxySender(sender), commandName, (String[]) args);
+				org.bukkit.command.Command command = plugin.getCommand(commandName);
+				if(command == null) {
+					command = CommandAPIHandler.getInstance().getNMS().getSimpleCommandMap().getCommand(commandName);
+				}
+				CommandSender proxiedSender = CommandAPI.getConfiguration().shouldSkipSenderProxy(plugin) ? sender.getCallee() : mergeProxySender(sender);
+				command.execute(proxiedSender, commandName, (String[]) args);
 			});
 		// Good grief, what a hack~
 		multiArgs.setConverted(true);
