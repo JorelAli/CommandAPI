@@ -1,0 +1,6 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Sun Jan 10 21:09:25 GMT 2021
+commandapi-1.15-5.6.pom>=
+commandapi-1.15-5.6-javadoc.jar>=
+commandapi-1.15-5.6.jar>=
+commandapi-1.15-5.6-sources.jar>=
