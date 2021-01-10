@@ -109,7 +109,8 @@ public abstract class Converter {
 				if(command == null) {
 					command = CommandAPIHandler.getInstance().getNMS().getSimpleCommandMap().getCommand(commandName);
 				}
-				command.execute(mergeProxySender(sender), commandName, new String[0]);
+				CommandSender proxiedSender = CommandAPI.getConfiguration().shouldSkipSenderProxy(plugin) ? sender.getCallee() : mergeProxySender(sender);
+				command.execute(proxiedSender, commandName, new String[0]);
 			})
 			.register();
 		
@@ -124,7 +125,8 @@ public abstract class Converter {
 				if(command == null) {
 					command = CommandAPIHandler.getInstance().getNMS().getSimpleCommandMap().getCommand(commandName);
 				}
-				command.execute(mergeProxySender(sender), commandName, (String[]) args);
+				CommandSender proxiedSender = CommandAPI.getConfiguration().shouldSkipSenderProxy(plugin) ? sender.getCallee() : mergeProxySender(sender);
+				command.execute(proxiedSender, commandName, (String[]) args);
 			});
 		// Good grief, what a hack~
 		multiArgs.setConverted(true);
