@@ -274,6 +274,16 @@ These versions of Minecraft must be installed in your local machine's Maven repo
     </thead>
     <tbody>
         <tr>
+            <td valign="top"><b>5.6</b></td>
+            <td valign="top">January 2021</td>
+            <td valign="top">
+                <ul>
+                    <li>Fix bug where plugins that use <a href="https://github.com/aikar/commands">Aikar's ACF</a> were incompatible with the CommandAPI</li>
+                    <li>Add a new configuration option <code>skip-sender-proxy</code> which prevents certain plugins from running properly</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
             <td valign="top"><b>5.5</b></td>
             <td valign="top">January 2021</td>
             <td valign="top">
