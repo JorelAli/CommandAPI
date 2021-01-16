@@ -1,4 +1,4 @@
-#/bin/sh
+#!/bin/sh
 echo "Old version: "
 read oldVer
 echo "New version: "
