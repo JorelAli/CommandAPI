@@ -273,6 +273,15 @@ These versions of Minecraft must be installed in your local machine's Maven repo
         </tr>
     </thead>
     <tbody>
+		<tr>
+            <td valign="top"><b>5.7</b></td>
+            <td valign="top">January 2021</td>
+            <td valign="top">
+                <ul>
+                    <li>Add support for Minecraft 1.16.5</li>
+                </ul>
+            </td>
+        </tr>
         <tr>
             <td valign="top"><b>5.6</b></td>
             <td valign="top">January 2021</td>
