@@ -6,7 +6,7 @@
 
 	<groupId>dev.jorel</groupId>
 	<artifactId>commandapi</artifactId>
-	<version>5.7</version>
+	<version>5.8</version>
 	<packaging>pom</packaging>
 	<modules>
 		<!-- Compile time reflection checker -->
