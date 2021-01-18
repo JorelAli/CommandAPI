@@ -273,7 +273,16 @@ These versions of Minecraft must be installed in your local machine's Maven repo
         </tr>
     </thead>
     <tbody>
-		<tr>
+        <tr>
+            <td valign="top"><b>5.8</b></td>
+            <td valign="top">January 2021</td>
+            <td valign="top">
+                <ul>
+                    <li>Removed a debug <code>/test</code> command which wasn't supposed to be released!</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
             <td valign="top"><b>5.7</b></td>
             <td valign="top">January 2021</td>
             <td valign="top">
