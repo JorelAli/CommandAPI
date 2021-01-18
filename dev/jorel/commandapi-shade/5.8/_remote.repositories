@@ -1,0 +1,4 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Mon Jan 18 19:27:52 GMT 2021
+commandapi-shade-5.8.pom>=
+commandapi-shade-5.8.jar>=

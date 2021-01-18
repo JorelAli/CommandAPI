@@ -1,0 +1,6 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Mon Jan 18 19:27:09 GMT 2021
+commandapi-1.14.4-5.8-sources.jar>=
+commandapi-1.14.4-5.8.pom>=
+commandapi-1.14.4-5.8-javadoc.jar>=
+commandapi-1.14.4-5.8.jar>=
