@@ -40,12 +40,5 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 	public void onEnable() {
 		CommandAPI.onEnable(this);
 		getServer().getPluginManager().registerEvents(this, this);
-		
-		new CommandAPICommand("test")
-			.withArguments(new EntitySelectorArgument("target", EntitySelector.MANY_PLAYERS))
-			.executes((s, a) -> {
-				System.out.println(Arrays.deepToString(a));
-			})
-			.register();
 	}
 }
