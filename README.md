@@ -262,6 +262,54 @@ These versions of Minecraft must be installed in your local machine's Maven repo
 
 -----
 
+## Future project plans + timeline
+
+The CommandAPI has somewhat reached a "stable" point in its lifecycle. It can basically do everything that it needs to do and has been able to keep up-to-date with the latest Minecraft versions (e.g. 1.16.5 support released within a day of 1.16.5 being released). The original goal was to release CommandAPI v6.0 sometime early 2021. As you can see, this hasn't happened yet.
+
+So what went wrong? I over-planned v6.0. The plans for v6.0 was so excessive that it brought down motivation and has made such an update seem forever out of reach. For example, this was the list of all features planned for v6.0:
+
+- A better (refined and rewritten) annotation system
+- Optional arguments
+- A way to add suggestions to existing suggestions
+- Help page support
+- Namespace support
+- More powerful argument sanitization with earlier fail detection
+- A continuous integration suite for public access to dev builds
+- A testing suite to determine correctness and accuracy of the CommandAPI
+- A rewrite of custom arguments
+- More full plugin examples
+- Conflicting argument research and documentation on how to avoid them
+
+So where do we go from here? It's simple - we do one feature at a time and release one update for each feature. That way, we get more of the new stuff that people want and less of the "absolutely no development is going on". This is the current roadmap for the CommandAPI (as of 22nd Feb 2021):
+
+- **CommandAPI v5.9:** "Quick" version updating
+
+  Another proof of concept that I want to bring into fruition. Currently, the CommandAPI's version system goes along the lines of: When a new version of Minecraft comes out, you need to update your version of the CommandAPI with the latest version. This is an acceptable solution - it's not unreasonable for the CommandAPI to require a version-specific update when a new version comes out. The downside with this is the CommandAPI is always in constant development, so API changes occur (e.g. deprecation/refactoring of methods etc.) and bugs may be present in later versions. So to avoid this, releases from this point onwards which add additional support for future Minecraft versions will also release with a supported version `.class` file which can be shoved into your existing setup of the CommandAPI which will allow you to have support for newer versions of Minecraft without needing to update.
+  
+  _(Of course, this isn't recommended, but it may benefit a few people and I think it's an interesting thing to add)_.
+
+- **CommandAPI v5.10:** PaperSpigot support and deprecations
+
+  PaperSpigot have recently announced that they are moving away from the BungeeCord API and it is pretty important that the CommandAPI updates in order to keep up with things. Additionally, PaperSpigot have changed their supported Java version to Java 11, from Java 8. Despite this, to ensure backwards compatibility with older Java versions, the CommandAPI will remain compiled for Java 8.
+  
+  Lastly, in this update I want to deprecate a few methods to do with argument suggestions. The CommandAPI has a number of ways of populating argument suggestions using constant values, but more often than not this causes expected issues. As such, these will be deprecated in this version in favour of the existing lambdas. (Don't worry, updating is really really easy!)
+  
+- **CommandAPI v5.11:** CustomArgument improvements
+
+  The CustomArgument class is fairly flexible, but nowhere near flexible enough. In this update, more attention will be focused on the CustomArgument class to provide it the ability to extend from all other argument types as a base.
+  
+- **CommandAPI v5.12:** Annotation improvements
+
+  The CommandAPI's annotation system has always been a bit limited and was primarily introduced as a proof-of-concept. In this update, the CommandAPI's annotation system will be improved to be (ideally) as powerful as the non-annotation system and have slightly better type safety.
+  
+- **CommandAPI v5.13:** Argument conflict detection
+
+  The CommandAPI simply uses the Brigadier system under the hood. This system is prone to _argument conflicts_, which is where certain arguments are given priority over other arguments. (For example "hello" and "123" are both valid string arguments, but if you have a command that has a string argument or an integer argument, Brigadier may ignore the integer argument). In this update, the CommandAPI will try to spot potential conflicts and add a warning in the console. The research required for this is also required in order to implement optional arguments (which is not coming out in this release).
+  
+- **CommandAPI v5.14+:** TBD
+
+-----
+
 ## Changelog
 
 <table width="100%">
