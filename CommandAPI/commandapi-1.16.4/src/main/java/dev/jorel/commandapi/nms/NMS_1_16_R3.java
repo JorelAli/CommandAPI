@@ -948,4 +948,23 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		CommandDispatcher nmsDispatcher = craftServer.getServer().getCommandDispatcher();
 		nmsDispatcher.a(craftPlayer.getHandle());
 	}
+
+	@Override
+	public BaseComponent[] getChatPaperAdventure(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException {
+		
+		String jsonString = ChatSerializer.a(ArgumentChat.a(cmdCtx, key));
+		 //GsonComponentSerializer.gson().deserialize(json);
+		
+		return null;
+	}
+
+	@Override
+	public Object getChatComponentPaperAdventure(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		// TODO Auto-generated method stub
+		//String jsonString = ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, str));
+		//return ComponentSerializer.parse(resultantString);
+		
+		return null;
+	}
 }
