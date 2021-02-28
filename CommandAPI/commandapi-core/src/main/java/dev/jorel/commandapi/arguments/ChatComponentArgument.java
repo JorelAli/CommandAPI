@@ -3,6 +3,7 @@ package dev.jorel.commandapi.arguments;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.exceptions.PaperAdventureNotFoundException;
 import dev.jorel.commandapi.exceptions.SpigotNotFoundException;
+import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 /**
@@ -35,7 +36,11 @@ public class ChatComponentArgument extends Argument {
 	
 	@Override
 	public Class<?> getPrimitiveType() {
-		return BaseComponent[].class;
+		if(CommandAPIHandler.getInstance().usePaperAdventure()) {
+			return Component.class;
+		} else {
+			return BaseComponent[].class;
+		}
 	}
 	
 	@Override

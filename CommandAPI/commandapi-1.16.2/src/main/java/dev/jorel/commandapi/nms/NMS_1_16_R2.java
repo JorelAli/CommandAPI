@@ -78,6 +78,8 @@ import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.server.v1_16_R2.Advancement;
@@ -947,5 +949,18 @@ public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
 		CraftServer craftServer = (CraftServer) Bukkit.getServer();
 		CommandDispatcher nmsDispatcher = craftServer.getServer().getCommandDispatcher();
 		nmsDispatcher.a(craftPlayer.getHandle());
+	}
+
+	@Override
+	public Component getChatPaperAdventure(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException {
+		String jsonString = ChatSerializer.a(ArgumentChat.a(cmdCtx, key));
+		return GsonComponentSerializer.gson().deserialize(jsonString);
+	}
+
+	@Override
+	public Component getChatComponentPaperAdventure(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		String jsonString = ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, key));
+		return GsonComponentSerializer.gson().deserialize(jsonString);
 	}
 }
