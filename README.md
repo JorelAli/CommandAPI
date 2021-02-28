@@ -282,11 +282,11 @@ So what went wrong? I over-planned v6.0. The plans for v6.0 was so excessive tha
 
 So where do we go from here? It's simple - we do one feature at a time and release one update for each feature. That way, we get more of the new stuff that people want and less of the "absolutely no development is going on". This is the current roadmap for the CommandAPI (as of 22nd Feb 2021):
 
-- **CommandAPI v5.9:** "Quick" version updating
+- **CommandAPI v5.9:** Conversion stability and improvements
 
-  Another proof of concept that I want to bring into fruition. Currently, the CommandAPI's version system goes along the lines of: When a new version of Minecraft comes out, you need to update your version of the CommandAPI with the latest version. This is an acceptable solution - it's not unreasonable for the CommandAPI to require a version-specific update when a new version comes out. The downside with this is the CommandAPI is always in constant development, so API changes occur (e.g. deprecation/refactoring of methods etc.) and bugs may be present in later versions. So to avoid this, releases from this point onwards which add additional support for future Minecraft versions will also release with a supported version `.class` file which can be shoved into your existing setup of the CommandAPI which will allow you to have support for newer versions of Minecraft without needing to update.
-  
-  _(Of course, this isn't recommended, but it may benefit a few people and I think it's an interesting thing to add)_.
+  The CommandAPI performs a few operations to allow plugin commands to be converted into vanilla-compatible commands. More often than not, the CommandAPI encounters proxied conversion issues which should be rectified. This update will attempt to correct these issues.
+
+  The documentation will also be updated to include information about how entity selectors (inside converted plugins) will not be supported.
 
 - **CommandAPI v5.10:** PaperSpigot support and deprecations
 
