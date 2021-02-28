@@ -159,6 +159,8 @@ public interface NMS<CommandListenerWrapper> {
 
 	BaseComponent[] getChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
+	BaseComponent[] getChatPaperAdventure(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	
 	Environment getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
 	ItemStack getItemStack(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
@@ -215,6 +217,8 @@ public interface NMS<CommandListenerWrapper> {
 	ChatColor getChatColor(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
 	BaseComponent[] getChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	
+	Object getChatComponentPaperAdventure(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
 	Enchantment getEnchantment(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 

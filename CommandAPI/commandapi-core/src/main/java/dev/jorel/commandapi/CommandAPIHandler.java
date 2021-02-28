@@ -111,11 +111,20 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 			}
 		}
 
-		try {
-			Class.forName("org.spigotmc.SpigotConfig");
-			CommandAPI.getLog().info("Hooked into Spigot successfully for Chat/ChatComponents");
-		} catch (ClassNotFoundException e) {
-			CommandAPI.getLog().warning("Couldn't hook into Spigot for Chat/ChatComponents");
+		if(CommandAPI.getConfiguration().usePaperAdventure()) {
+			try {
+				Class.forName("net.kyori.adventure.text.Component");
+				CommandAPI.getLog().info("Hooked into Paper Adventure API successfully for Chat/ChatComponents");
+			} catch (ClassNotFoundException e) {
+				CommandAPI.getLog().warning("Couldn't hook into Paper Adventure API for Chat/ChatComponents");
+			}
+		} else {
+			try {
+				Class.forName("org.spigotmc.SpigotConfig");
+				CommandAPI.getLog().info("Hooked into Spigot successfully for Chat/ChatComponents");
+			} catch (ClassNotFoundException e) {
+				CommandAPI.getLog().warning("Couldn't hook into Spigot for Chat/ChatComponents");
+			}
 		}
 	}
 	
@@ -126,6 +135,14 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	 */
 	public NMS<CommandListenerWrapper> getNMS() {
 		return NMS;
+	}
+	
+	/**
+	 * Alias for CommandAPI.getConfiguration().usePaperAdventure for other classes
+	 * @return
+	 */
+	public boolean usePaperAdventure() {
+		return CommandAPI.getConfiguration().usePaperAdventure();
 	}
 	
 	/**
@@ -243,11 +260,19 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 		case BLOCKSTATE:
 			return NMS.getBlockState(cmdCtx, key);
 		case CHAT:
-			return NMS.getChat(cmdCtx, key);
+			if(CommandAPI.getConfiguration().usePaperAdventure()) {
+				return NMS.getChatPaperAdventure(cmdCtx, key);
+			} else {
+				return NMS.getChat(cmdCtx, key);
+			}
 		case CHATCOLOR:
 			return NMS.getChatColor(cmdCtx, key);
 		case CHAT_COMPONENT:
-			return NMS.getChatComponent(cmdCtx, key);
+			if(CommandAPI.getConfiguration().usePaperAdventure()) {
+				return NMS.getChatComponentPaperAdventure(cmdCtx, key);
+			} else {
+				return NMS.getChatComponent(cmdCtx, key);
+			}
 		case CUSTOM:
 			CustomArgument<?> arg = (CustomArgument<?>) value;
 			String customresult;

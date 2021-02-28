@@ -31,11 +31,14 @@ class Config {
 	// List of plugins which should ignore proxied senders
 	private final List<String> skipSenderProxy;
 	
+	private final boolean usePaperAdventure;
+	
 	public Config(FileConfiguration fileConfig) {
-		verboseOutput = fileConfig.getBoolean("verbose-outputs");
-		createDispatcherFile = fileConfig.getBoolean("create-dispatcher-json");
-		pluginsToConvert = new HashMap<>();
-		skipSenderProxy = new ArrayList<>();
+		this.verboseOutput = fileConfig.getBoolean("verbose-outputs");
+		this.createDispatcherFile = fileConfig.getBoolean("create-dispatcher-json");
+		this.pluginsToConvert = new HashMap<>();
+		this.skipSenderProxy = new ArrayList<>();
+		this.usePaperAdventure = fileConfig.getBoolean("use-paper-adventure");
 
 		for (Map<?, ?> map : fileConfig.getMapList("plugins-to-convert")) {
 			String[] pluginCommands;
@@ -50,7 +53,7 @@ class Config {
 			String pluginName = (String) map.keySet().stream().findFirst().get();
 			Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
 			if(plugin != null) { 
-				pluginsToConvert.put(plugin, pluginCommands);
+				this.pluginsToConvert.put(plugin, pluginCommands);
 			} else {
 				new InvalidPluginException("Could not find a plugin " + pluginName + "! Has it been loaded properly?").printStackTrace();
 			}
@@ -59,7 +62,7 @@ class Config {
 		for (String pluginName : fileConfig.getStringList("skip-sender-proxy")) {
 			Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
 			if(plugin != null) { 
-				skipSenderProxy.add(pluginName);
+				this.skipSenderProxy.add(pluginName);
 			} else {
 				new InvalidPluginException("Could not find a plugin " + pluginName + "! Has it been loaded properly?").printStackTrace();
 			}
@@ -67,10 +70,19 @@ class Config {
 	}
 
 	public Config(boolean verbose) {
-		verboseOutput = verbose;
-		createDispatcherFile = false;
-		pluginsToConvert = new HashMap<>();
-		skipSenderProxy = new ArrayList<>();
+		this.verboseOutput = verbose;
+		this.createDispatcherFile = false;
+		this.pluginsToConvert = new HashMap<>();
+		this.skipSenderProxy = new ArrayList<>();
+		this.usePaperAdventure= false;
+	}
+	
+	public Config(CommandAPIConfig config) {
+		this.verboseOutput = config.verboseOutput;
+		this.createDispatcherFile = config.createDispatcherFile;
+		this.pluginsToConvert = new HashMap<>();
+		this.skipSenderProxy = new ArrayList<>();
+		this.usePaperAdventure = config.usePaperAdventure;
 	}
 
 	public boolean hasVerboseOutput() {
@@ -86,7 +98,11 @@ class Config {
 	}
 	
 	public boolean shouldSkipSenderProxy(Plugin plugin) {
-		return skipSenderProxy.contains(plugin.getName());
+		return this.skipSenderProxy.contains(plugin.getName());
+	}
+	
+	public boolean usePaperAdventure() {
+		return this.usePaperAdventure;
 	}
 
 }
