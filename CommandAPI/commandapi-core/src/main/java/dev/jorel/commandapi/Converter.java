@@ -1,5 +1,6 @@
 package dev.jorel.commandapi;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -148,8 +149,8 @@ public abstract class Converter {
 			interfaces = calleeInterfaces;
 		}
 		return (CommandSender) Proxy.newProxyInstance(CommandSender.class.getClassLoader(), interfaces,
-				(p, method, args) -> method.invoke(
-						CALLER_METHODS.contains(method.getName()) ? proxySender.getCaller() : proxySender.getCaller(),
+				(Object p, Method method, Object[] args) -> method.invoke(
+						CALLER_METHODS.contains(method.getName()) ? proxySender.getCaller() : proxySender.getCallee(),
 						args));
 	}
 
