@@ -280,13 +280,7 @@ So what went wrong? I over-planned v6.0. The plans for v6.0 was so excessive tha
 - More full plugin examples
 - Conflicting argument research and documentation on how to avoid them
 
-So where do we go from here? It's simple - we do one feature at a time and release one update for each feature. That way, we get more of the new stuff that people want and less of the "absolutely no development is going on". This is the current roadmap for the CommandAPI (as of 22nd Feb 2021):
-
-- **CommandAPI v5.9:** Conversion stability and improvements
-
-  The CommandAPI performs a few operations to allow plugin commands to be converted into vanilla-compatible commands. More often than not, the CommandAPI encounters proxied conversion issues which should be rectified. This update will attempt to correct these issues.
-
-  The documentation will also be updated to include information about how entity selectors (inside converted plugins) will not be supported.
+So where do we go from here? It's simple - we do one feature at a time and release one update for each feature. That way, we get more of the new stuff that people want and less of the "absolutely no development is going on". This is the current roadmap for the CommandAPI (as of 28th Feb 2021):
 
 - **CommandAPI v5.10:** PaperSpigot support and deprecations
 
@@ -321,6 +315,15 @@ So where do we go from here? It's simple - we do one feature at a time and relea
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td valign="top"><b>5.9</b></td>
+            <td valign="top">February 2021</td>
+            <td valign="top">
+                <ul>
+                    <li>Fixed a critical bug where plugin conversion would run the caller methods instead of callee methods, which prevented command blocks from running commands.</li>
+                </ul>
+            </td>
+        </tr>
         <tr>
             <td valign="top"><b>5.8</b></td>
             <td valign="top">January 2021</td>
