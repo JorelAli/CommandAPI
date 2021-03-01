@@ -63,8 +63,6 @@ public abstract class Converter {
 		convertPluginCommand((JavaPlugin) plugin, cmdName, Arrays.asList(arguments));
 	}
 	
-	
-	
 	private static void convertPluginCommand(JavaPlugin plugin, String commandName, List<Argument> arguments) {
 		CommandAPI.logInfo("Converting " + plugin.getName() + " command /" + commandName);
 		/* Parse the commands */
