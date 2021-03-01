@@ -92,7 +92,9 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * 
 	 * @param suggestions the string array to override suggestions with
 	 * @return the current argument
+	 * @deprecated use {@link Argument#overrideSuggestions(Function)}
 	 */
+	@Deprecated
 	@Override
 	public final Argument overrideSuggestions(String... suggestions) {
 		this.suggestions = Optional.of((c, m) -> fromSuggestions(suggestions));
@@ -104,7 +106,9 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * 
 	 * @param suggestions the collection of suggestions to override suggestions with
 	 * @return the current argument
+	 * @deprecated use {@link Argument#overrideSuggestions(Function)}
 	 */
+	@Deprecated
 	@Override
 	public final Argument overrideSuggestions(Collection<String> suggestions) {
 		this.suggestions = Optional.of((c, m) -> fromSuggestions(suggestions.toArray(new String[0])));
@@ -142,7 +146,9 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * 
 	 * @param suggestions the collection of IStringTooltip to override suggestions with
 	 * @return the current argument
+	 * @deprecated use {@link Argument#overrideSuggestionsT(Function)}
 	 */
+	@Deprecated
 	@Override
 	public final Argument overrideSuggestionsT(Collection<IStringTooltip> suggestions) {
 		this.suggestions = Optional.of((c, m) -> suggestions.toArray(new IStringTooltip[0]));
@@ -154,7 +160,9 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * 
 	 * @param suggestions the IStringTooltip array to override suggestions with
 	 * @return the current argument
+	 * @deprecated use {@link Argument#overrideSuggestionsT(Function)}
 	 */
+	@Deprecated
 	@Override
 	public final Argument overrideSuggestionsT(IStringTooltip... suggestions) {
 		this.suggestions = Optional.of((c, m) -> suggestions);

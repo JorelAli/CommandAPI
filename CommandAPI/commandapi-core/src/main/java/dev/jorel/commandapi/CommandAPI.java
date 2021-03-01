@@ -76,7 +76,9 @@ public abstract class CommandAPI {
 	 * Initializes the CommandAPI for loading. This should be placed at the
 	 * start of your <code>onLoad()</code> method.
 	 * @param verbose if true, enables verbose output for the CommandAPI
+	 * @deprecated Use {@link CommandAPI#onLoad(CommandAPIConfig)} instead
 	 */
+	@Deprecated
 	public static void onLoad(boolean verbose) {
 		if(!loaded) {
 			CommandAPI.config = new Config(verbose);
@@ -192,6 +194,10 @@ public abstract class CommandAPI {
 		CommandAPIHandler.getInstance().unregister(command, force);
 	}
 
+	/**
+	 * Registers a command. Used with the CommandAPI's Annotation API.
+	 * @param commandClass the class to register
+	 */
 	public static void registerCommand(Class<?> commandClass) {
 		try {
 			Class<?> command = Class.forName(commandClass.getName() + "$Command");
