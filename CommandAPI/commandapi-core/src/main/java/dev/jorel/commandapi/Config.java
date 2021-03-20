@@ -75,7 +75,7 @@ class Config {
 
 	public Config(CommandAPIConfig config) {
 		this.verboseOutput = config.verboseOutput;
-		this.createDispatcherFile = config.createDispatcherFile;
+		this.createDispatcherFile = false; // The dispatcher File is only declared in the plugin version
 		this.pluginsToConvert = new HashMap<>();
 		this.skipSenderProxy = new ArrayList<>();
 	}

@@ -3,27 +3,30 @@ package dev.jorel.commandapi;
 public class CommandAPIConfig {
 
 	public boolean verboseOutput;
-	public boolean createDispatcherFile;
 
+	/**
+	 * Creates a new CommandAPI configuration
+	 */
 	public CommandAPIConfig() {
 		verboseOutput = false;
-		createDispatcherFile = false;
 	}
 
+	/**
+	 * Returns whether verbose output is enabled
+	 * 
+	 * @return true if verbose output is enabled
+	 */
 	public boolean isVerboseOutput() {
 		return verboseOutput;
 	}
 
+	/**
+	 * Sets verbose output
+	 * 
+	 * @param verboseOutput whether verbose output should be enabled
+	 */
 	public void setVerboseOutput(boolean verboseOutput) {
 		this.verboseOutput = verboseOutput;
-	}
-
-	public boolean isCreateDispatcherFile() {
-		return createDispatcherFile;
-	}
-
-	public void setCreateDispatcherFile(boolean createDispatcherFile) {
-		this.createDispatcherFile = createDispatcherFile;
 	}
 
 }

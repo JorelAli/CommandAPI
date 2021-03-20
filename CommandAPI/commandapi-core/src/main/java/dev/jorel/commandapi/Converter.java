@@ -134,7 +134,6 @@ public abstract class Converter {
 	
 	/*
 	 * https://www.jorel.dev/blog/Simplifying-Bukkit-CommandSenders/
-	 * No matter what I can name this method, I'm never satisfied its name
 	 */
 	private static CommandSender mergeProxySender(ProxiedCommandSender proxySender) {
 		Class<?>[] calleeInterfaces = proxySender.getCallee().getClass().getInterfaces();
