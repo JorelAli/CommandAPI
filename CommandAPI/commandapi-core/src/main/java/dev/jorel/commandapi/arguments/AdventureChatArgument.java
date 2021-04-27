@@ -5,17 +5,18 @@ import dev.jorel.commandapi.exceptions.PaperAdventureNotFoundException;
 import net.kyori.adventure.text.Component;
 
 /**
- * An argument that represents raw JSON text
+ * An argument that represents chat with entity selectors
  */
-public class AdvChatComponentArgument extends Argument {
+public class AdventureChatArgument extends Argument implements IGreedyArgument {
 
 	/**
-	 * Constructs a ChatComponnent argument with a given node name. Represents raw JSON text, used in Book MetaData, Chat and other various areas of Minecraft
-	 * @see <a href="https://minecraft.gamepedia.com/Commands#Raw_JSON_text">Raw JSON text</a> 
+	 * Constructs a Chat argument with a given node name. Represents fancy greedy
+	 * strings that can parse entity selectors
+	 * 
 	 * @param nodeName the name of the node for argument
 	 */
-	public AdvChatComponentArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentChatComponent());
+	public AdventureChatArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentChat());
 		
 		try {
 			Class.forName("net.kyori.adventure.text.Component");
@@ -23,7 +24,7 @@ public class AdvChatComponentArgument extends Argument {
 			throw new PaperAdventureNotFoundException(this.getClass());
 		}
 	}
-	
+
 	@Override
 	public Class<?> getPrimitiveType() {
 		return Component.class;
@@ -31,6 +32,6 @@ public class AdvChatComponentArgument extends Argument {
 	
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.ADVENTURE_CHAT_COMPONENT;
+		return CommandAPIArgumentType.ADVENTURE_CHAT;
 	}
 }
