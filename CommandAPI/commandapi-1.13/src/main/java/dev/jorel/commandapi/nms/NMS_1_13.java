@@ -147,6 +147,12 @@ import net.minecraft.server.v1_13_R1.Vec3D;
 public class NMS_1_13 implements NMS<CommandListenerWrapper> {
 	
 	@Override
+	public Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException  {
+		String jsonString = ChatSerializer.a(ArgumentChat.a(cmdCtx, key));
+		return GsonComponentSerializer.gson().deserialize(jsonString);
+	}
+	
+	@Override
 	public Component getAdventureChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		String jsonString = ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, key));
 		return GsonComponentSerializer.gson().deserialize(jsonString);

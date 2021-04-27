@@ -21,9 +21,14 @@ public enum CommandAPIArgumentType {
 	 * The BiomeArgument
 	 */
 	BIOME("api:biome"),
+	
+	/**
+	 * The ChatArgument (with Paper Adventure backend)
+	 */
+	ADVENTURE_CHAT,
 
 	/**
-	 * The ChatArgument
+	 * The ChatArgument (with BaseComponent backend)
 	 */
 	CHAT("minecraft:message"),
 
@@ -35,7 +40,7 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The ChatComponentArgument (with Paper Adventure backend)
 	 */
-	ADVENTURE_CHAT_COMPONENT(),
+	ADVENTURE_CHAT_COMPONENT,
 
 	/**
 	 * The ChatColorArgument

@@ -160,6 +160,12 @@ import net.minecraft.server.v1_16_R3.WorldServer;
 public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	
 	@Override
+	public Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException  {
+		String jsonString = ChatSerializer.a(ArgumentChat.a(cmdCtx, key));
+		return GsonComponentSerializer.gson().deserialize(jsonString);
+	}
+	
+	@Override
 	public ArgumentType<?> _ArgumentAngle() {
 		return ArgumentAngle.a();
 	}

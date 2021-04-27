@@ -242,6 +242,8 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 			return NMS.getBlockPredicate(cmdCtx, key);
 		case BLOCKSTATE:
 			return NMS.getBlockState(cmdCtx, key);
+		case ADVENTURE_CHAT:
+			return NMS.getAdventureChat(cmdCtx, key);
 		case CHAT:
 			return NMS.getChat(cmdCtx, key);
 		case CHATCOLOR:
