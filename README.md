@@ -280,7 +280,7 @@ So what went wrong? I over-planned v6.0. The plans for v6.0 was so excessive tha
 - More full plugin examples
 - Conflicting argument research and documentation on how to avoid them
 
-So where do we go from here? It's simple - we do one feature at a time and release one update for each feature. That way, we get more of the new stuff that people want and less of the "absolutely no development is going on". This is the current roadmap for the CommandAPI (as of 28th Feb 2021):
+So where do we go from here? It's simple - we do one feature at a time and release one update for each feature. That way, we get more of the new stuff that people want and less of the "absolutely no development is going on". This is the current roadmap for the CommandAPI (as of 27th Apr 2021):
 
 - **CommandAPI v5.10:** PaperSpigot support and deprecations
 
@@ -288,19 +288,23 @@ So where do we go from here? It's simple - we do one feature at a time and relea
   
   Lastly, in this update I want to deprecate a few methods to do with argument suggestions. The CommandAPI has a number of ways of populating argument suggestions using constant values, but more often than not this causes expected issues. As such, these will be deprecated in this version in favour of the existing lambdas. (Don't worry, updating is really really easy!)
   
-- **CommandAPI v5.11:** CustomArgument improvements
+- **CommandAPI v5.11:** Priority issues + Paper improvements
+
+  [Issue #189](https://github.com/JorelAli/CommandAPI/issues/189) has been requested/brought up very often. For this update, we're going to focus on implementing this. In addition to this, we'll also focus on adding console tab-support for PaperSpigot. Since PaperSpigot is the clear leader in actual Spigot-related development, the CommandAPI's release schedule will prioritize Paper-specific features more - starting with [Issue #192](https://github.com/JorelAli/CommandAPI/issues/192).
+  
+- **CommandAPI v5.12:** CustomArgument improvements
 
   The CustomArgument class is fairly flexible, but nowhere near flexible enough. In this update, more attention will be focused on the CustomArgument class to provide it the ability to extend from all other argument types as a base.
   
-- **CommandAPI v5.12:** Annotation improvements
+- **CommandAPI v5.13:** Annotation improvements
 
   The CommandAPI's annotation system has always been a bit limited and was primarily introduced as a proof-of-concept. In this update, the CommandAPI's annotation system will be improved to be (ideally) as powerful as the non-annotation system and have slightly better type safety.
   
-- **CommandAPI v5.13:** Argument conflict detection
+- **CommandAPI v5.14:** Argument conflict detection
 
   The CommandAPI simply uses the Brigadier system under the hood. This system is prone to _argument conflicts_, which is where certain arguments are given priority over other arguments. (For example "hello" and "123" are both valid string arguments, but if you have a command that has a string argument or an integer argument, Brigadier may ignore the integer argument). In this update, the CommandAPI will try to spot potential conflicts and add a warning in the console. The research required for this is also required in order to implement optional arguments (which is not coming out in this release).
   
-- **CommandAPI v5.14+:** TBD
+- **CommandAPI v5.15+:** TBD
 
 -----
 
