@@ -88,6 +88,21 @@ public abstract class CommandAPI {
 	}
 	
 	/**
+	 * Initializes the CommandAPI for loading. This should be placed at the
+	 * start of your <code>onLoad()</code> method.
+	 * @param verbose if true, enables verbose output for the CommandAPI
+	 */
+	public static void onLoad(CommandAPIConfig config) {
+		if(!loaded) {
+			CommandAPI.config = new Config(config);
+			CommandAPIHandler.getInstance().checkDependencies();
+			loaded = true;
+		} else {
+			getLog().severe("You've tried to call the CommandAPI's onLoad() method more than once!");
+		}
+	}
+	
+	/**
 	 * Enables the CommandAPI. This should be placed at the
 	 * start of your <code>onEnable()</code> method.
 	 * @param plugin the plugin that this onEnable method is called from

@@ -246,6 +246,8 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 			return NMS.getChat(cmdCtx, key);
 		case CHATCOLOR:
 			return NMS.getChatColor(cmdCtx, key);
+		case ADVENTURE_CHAT_COMPONENT:
+			return NMS.getAdventureChatComponent(cmdCtx, key);
 		case CHAT_COMPONENT:
 			return NMS.getChatComponent(cmdCtx, key);
 		case CUSTOM:

@@ -1,6 +1,7 @@
 package dev.jorel.commandapi.wrappers;
 
 import java.util.Set;
+import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -280,6 +281,28 @@ public class NativeProxyCommandSender implements ProxiedCommandSender {
 	@Override
 	public Spigot spigot() {
 		return this.caller.spigot();
+	}
+	
+	/**
+     * Sends this sender a message
+     *
+     * @param message Message to be displayed
+     * @param sender The sender of this message
+     */
+	@Override
+	public void sendMessage(UUID sender, String message) {
+		this.caller.sendMessage(sender, message);
+	}
+
+	/**
+     * Sends this sender multiple messages
+     *
+     * @param messages An array of messages to be displayed
+     * @param sender The sender of this message
+     */
+	@Override
+	public void sendMessage(UUID sender, String[] messages) {
+		this.caller.sendMessage(sender, messages);
 	}
 
 }

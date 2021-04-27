@@ -28,9 +28,14 @@ public enum CommandAPIArgumentType {
 	CHAT("minecraft:message"),
 
 	/**
-	 * The ChatComponentArgument
+	 * The ChatComponentArgument (with BaseComponent backend)
 	 */
 	CHAT_COMPONENT("minecraft:component"),
+	
+	/**
+	 * The ChatComponentArgument (with Paper Adventure backend)
+	 */
+	ADVENTURE_CHAT_COMPONENT(),
 
 	/**
 	 * The ChatColorArgument
