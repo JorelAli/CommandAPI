@@ -47,6 +47,8 @@ The type to cast each argument (declared in the `dev.jorel.commandapi.arguments`
 | -----------------------------------------------------------: | :----------------------------------------------------------- |
 |                           [`AngleArgument`](./angleargument) | `float`                                                      |
 |            [`AdvancementArgument`](./advancementargument.md) | `org.bukkit.advancement.Advancement`                         |
+|                                      `AdventureChatArgument` | `net.kyori.adventure.text.Component`                         |
+|                             `AdventureChatComponentArgument` | `net.kyori.adventure.text.Component`                         |
 |                               [`AxisArgument`](./axisarg.md) | `java.util.EnumSet<org.bukkit.Axis>`                         |
 |                        [`BiomeArgument`](./biomeargument.md) | `org.bukkit.block.Biome`                                     |
 |          [`BlockPredicateArgument`](./blockpredicateargs.md) | `java.util.function.Predicate<org.bukkit.block.Block>`       |

@@ -28,7 +28,9 @@
         <link rel="stylesheet" href="{{ path_to_root }}css/print.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="{{ path_to_root }}FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="{{ path_to_root }}FontAwesome/css/fontawesome.css">
+        <link rel="stylesheet" href="{{ path_to_root }}FontAwesome/css/brands.css">
+        <link rel="stylesheet" href="{{ path_to_root }}FontAwesome/css/solid.css">
         {{#if copy_fonts}}
         <link rel="stylesheet" href="{{ path_to_root }}fonts/fonts.css">
         {{/if}}
@@ -110,10 +112,10 @@
                 <div id="menu-bar" class="menu-bar sticky bordered">
                     <div class="left-buttons">
                         <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                            <i class="fa fa-bars"></i>
+                            <i class="fas fa-bars"></i>
                         </button>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                            <i class="fa fa-paint-brush"></i>
+                            <i class="fas fa-palette"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
                             <li role="none"><button role="menuitem" class="theme" id="light">{{ theme_option "Light" }}</button></li>
@@ -125,7 +127,7 @@
                         </ul>
                         {{#if search_enabled}}
                         <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
-                            <i class="fa fa-search"></i>
+                            <i class="fas fa-search"></i>
                         </button>
                         {{/if}}
                     </div>
@@ -133,18 +135,18 @@
                     <h1 class="menu-title">{{ book_title }}</h1>
 
                     <div class="right-buttons">
-                        <a href="{{ path_to_root }}print.html" title="Print this book" aria-label="Print this book">
-                            <i id="print-button" class="fa fa-print"></i>
-                        </a>
                         <a href="https://www.jorel.dev/CommandAPI/" title="Back to main CommandAPI page" aria-label="Back to main CommandAPI page">
-                            <i id="home-button" class="fa fa-home"></i>
+                            <i id="home-button" class="fas fa-home"></i>
                         </a>
                         <a href="https://ko-fi.com/jorelali" title="Donate (ko-fi)" aria-label="Donate (ko-fi)">
-                            <i id="donate-button" class="fa fa-gift"></i>
+                            <i id="donate-button" class="fas fa-donate"></i>
+                        </a>
+                        <a href="https://discord.com/invite/G4SzSxZ" title="Discord" aria-label="Discord">
+                            <i id="discord-button" class="fab fa-discord"></i>
                         </a>
                         {{#if git_repository_url}}
                         <a href="{{git_repository_url}}" title="Git repository" aria-label="Git repository">
-                            <i id="git-repository-button" class="fa {{git_repository_icon}}"></i>
+                            <i id="git-repository-button" class="fab fa-github"></i>
                         </a>
                         {{/if}}
                     </div>
@@ -184,13 +186,13 @@
                         <!-- Mobile navigation buttons -->
                         {{#previous}}
                             <a rel="prev" href="{{ path_to_root }}{{link}}" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                                <i class="fa fa-angle-left"></i>
+                                <i class="fas fa-chevron-left"></i>
                             </a>
                         {{/previous}}
 
                         {{#next}}
                             <a rel="next" href="{{ path_to_root }}{{link}}" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
+                                <i class="fas fa-chevron-right"></i>
                             </a>
                         {{/next}}
 
@@ -202,13 +204,13 @@
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 {{#previous}}
                     <a rel="prev" href="{{ path_to_root }}{{link}}" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                        <i class="fa fa-angle-left"></i>
+                        <i class="fas fa-chevron-left"></i>
                     </a>
                 {{/previous}}
 
                 {{#next}}
                     <a rel="next" href="{{ path_to_root }}{{link}}" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
+                        <i class="fas fa-chevron-right"></i>
                     </a>
                 {{/next}}
             </nav>

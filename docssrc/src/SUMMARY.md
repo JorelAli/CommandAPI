@@ -44,6 +44,8 @@
     - [Rotation arguments](./rotationargs.md)
     - [AxisArguments](./axisarg.md)
   - [Chat arguments](./chatarguments.md)
+    - [Spigot chat arguments](./spigotchatarguments.md)
+    - [Adventure chat arguments](./adventurechatarguments.md)
   - [Entity & player arguments](./entityarguments.md)
   - [Scoreboard arguments](./scoreboardargs.md)
     - [Scoreboard arguments](./scoreboardarguments.md)
@@ -107,6 +109,8 @@
 -----
 
 [Upgrading guide](./upgrading.md)
+
+[FAQ](./faq.md)
 
 [Incompatible version information](./incompatibleversions.md)
 
