@@ -205,6 +205,12 @@
 <hr />
 <h2><a class="header" href="#documentation-changelog" id="documentation-changelog">Documentation changelog</a></h2>
 <p>Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.</p>
+<h3><a class="header" href="#documentation-changes-56-rightarrow-510" id="documentation-changes-56-rightarrow-510">Documentation changes 5.6 \(\rightarrow\) 5.10:</a></h3>
+<ul>
+<li>Splits chat argument sections into two: <a href="./spigotchatarguments.html">11.5.1. Spigot chat arguments</a> and <a href="./adventurechatarguments.html">11.5.2. Adventure chat arguments</a></li>
+<li>Adds a <a href="./faq.html">FAQ page</a></li>
+<li>Adds a warning about shading in <a href="./shading.html">6. Shading the CommandAPI in your plugins</a></li>
+</ul>
 <h3><a class="header" href="#documentation-changes-53-rightarrow-56" id="documentation-changes-53-rightarrow-56">Documentation changes 5.3 \(\rightarrow\) 5.6:</a></h3>
 <ul>
 <li>Adds a section <a href="./skippingproxysenders.html">4. Skipping proxy senders</a> which describes how to use the <code>skip-sender-proxy</code> configuration option.</li>
@@ -1324,16 +1330,16 @@ new CommandAPICommand(&quot;cmd&quot;)
 <table><thead><tr><th align="right">Argument class</th><th align="left">Data type</th></tr></thead><tbody>
 <tr><td align="right"><a href="./angleargument"><code>AngleArgument</code></a></td><td align="left"><code>float</code></td></tr>
 <tr><td align="right"><a href="./advancementargument.html"><code>AdvancementArgument</code></a></td><td align="left"><code>org.bukkit.advancement.Advancement</code></td></tr>
-<tr><td align="right"><code>AdventureChatArgument</code></td><td align="left"><code>net.kyori.adventure.text.Component</code></td></tr>
-<tr><td align="right"><code>AdventureChatComponentArgument</code></td><td align="left"><code>net.kyori.adventure.text.Component</code></td></tr>
+<tr><td align="right"><a href="./adventurechatarguments.html"><code>AdventureChatArgument</code></a></td><td align="left"><code>net.kyori.adventure.text.Component</code></td></tr>
+<tr><td align="right"><a href="./adventurechatarguments.html"><code>AdventureChatComponentArgument</code></a></td><td align="left"><code>net.kyori.adventure.text.Component</code></td></tr>
 <tr><td align="right"><a href="./axisarg.html"><code>AxisArgument</code></a></td><td align="left"><code>java.util.EnumSet&lt;org.bukkit.Axis&gt;</code></td></tr>
 <tr><td align="right"><a href="./biomeargument.html"><code>BiomeArgument</code></a></td><td align="left"><code>org.bukkit.block.Biome</code></td></tr>
 <tr><td align="right"><a href="./blockpredicateargs.html"><code>BlockPredicateArgument</code></a></td><td align="left"><code>java.util.function.Predicate&lt;org.bukkit.block.Block&gt;</code></td></tr>
 <tr><td align="right"><a href="./blockstatearguments.html"><code>BlockStateArgument</code></a></td><td align="left"><code>org.bukkit.block.data.BlockData</code></td></tr>
 <tr><td align="right"><a href="./primitivearguments.html#boolean-arguments"><code>BooleanArgument</code></a></td><td align="left"><code>boolean</code></td></tr>
-<tr><td align="right"><a href="./chatarguments.html#chat-argument"><code>ChatArgument</code></a></td><td align="left"><code>net.md_5.bungee.api.chat.BaseComponent[]</code></td></tr>
+<tr><td align="right"><a href="./spigotchatarguments.html#chat-argument"><code>ChatArgument</code></a></td><td align="left"><code>net.md_5.bungee.api.chat.BaseComponent[]</code></td></tr>
 <tr><td align="right"><a href="./chatarguments.html#chat-color-argument"><code>ChatColorArgument</code></a></td><td align="left"><code>org.bukkit.ChatColor</code></td></tr>
-<tr><td align="right"><a href="./chatarguments.html#chat-component-argument"><code>ChatComponentArgument</code></a></td><td align="left"><code>net.md_5.bungee.api.chat.BaseComponent[]</code></td></tr>
+<tr><td align="right"><a href="./spigotchatarguments.html#chat-component-argument"><code>ChatComponentArgument</code></a></td><td align="left"><code>net.md_5.bungee.api.chat.BaseComponent[]</code></td></tr>
 <tr><td align="right"><a href="./customarguments.html"><code>CustomArgument&lt;T&gt;</code></a></td><td align="left"><code>T</code></td></tr>
 <tr><td align="right"><a href="./primitivearguments.html#numerical-arguments"><code>DoubleArgument</code></a></td><td align="left"><code>double</code></td></tr>
 <tr><td align="right"><a href="./enchantmentargument.html"><code>EnchantmentArgument</code></a></td><td align="left"><code>org.bukkit.enchantments.Enchantment</code></td></tr>

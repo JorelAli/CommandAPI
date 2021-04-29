@@ -217,17 +217,17 @@ plugins-to-convert:
 
 The CommandAPI can be built easily, but requires copies of the Spigot server jars to be present locally on your machine in order to be compatible with any Minecraft version. The CommandAPI is built using the Maven build tool - if you don't have it, you can download it [here](https://maven.apache.org/download.cgi).
 
-* Clone the repository using your preferred method, or with the command below:
+- Clone the repository using your preferred method, or with the command below:
 
   ```
   git clone https://github.com/JorelAli/CommandAPI.git
   ```
 
-* Go into the folder named `CommandAPI` _(Not to be confused with the folder named `CommandAPI`, which is what is cloned)_. You want the folder which contains `pom.xml`.
+- Go into the folder named `CommandAPI` _(Not to be confused with the folder named `CommandAPI`, which is what is cloned)_. You want the folder which contains `pom.xml`.
 
-* Ensure you have the required spigot server jars (see below)
+- Ensure you have the required spigot server jars (see below)
 
-* Run `mvn`
+- Run `mvn`
 
 ### Spigot Libraries
 
@@ -244,15 +244,15 @@ These versions of Minecraft must be installed in your local machine's Maven repo
 
 #### Building them using _BuildTools_ + downloadSpigot file (recommended)
 
-* Download the `BuildTools.jar` file from [here](https://hub.spigotmc.org/jenkins/job/BuildTools/)
-* Make sure you have maven installed on your machine. If not, it can be downloaded from [here](https://maven.apache.org/download.cgi)
-* If on Windows:
-  * Download the `downloadSpigot.bat` file [(right click this link, save as...)](https://raw.githubusercontent.com/JorelAli/CommandAPI/master/downloadSpigot.bat) and place it in the same folder as the `BuildTools.jar`
-  * Double click on the `downloadSpigot.bat` file to run it
-* If on Linux/MacOS:
-  * Download the `downloadSpigot.sh` file [(right click this link, save as...)](https://raw.githubusercontent.com/JorelAli/CommandAPI/master/downloadSpigot.sh) and place it in the same folder as the `BuildTools.jar`
-  * Open up a terminal in your folder and make the `downloadSpigot.sh` file executable by using `chmod u+x ./downloadSpigot.sh`
-  * Run the `downloadSpigot` file using `./downloadSpigot.sh`
+- Download the `BuildTools.jar` file from [here](https://hub.spigotmc.org/jenkins/job/BuildTools/)
+- Make sure you have maven installed on your machine. If not, it can be downloaded from [here](https://maven.apache.org/download.cgi)
+- If on Windows:
+  - Download the `downloadSpigot.bat` file [(right click this link, save as...)](https://raw.githubusercontent.com/JorelAli/CommandAPI/master/downloadSpigot.bat) and place it in the same folder as the `BuildTools.jar`
+  - Double click on the `downloadSpigot.bat` file to run it
+- If on Linux/MacOS:
+  - Download the `downloadSpigot.sh` file [(right click this link, save as...)](https://raw.githubusercontent.com/JorelAli/CommandAPI/master/downloadSpigot.sh) and place it in the same folder as the `BuildTools.jar`
+  - Open up a terminal in your folder and make the `downloadSpigot.sh` file executable by using `chmod u+x ./downloadSpigot.sh`
+  - Run the `downloadSpigot` file using `./downloadSpigot.sh`
 
 #### Building them using _BuildTools_ + manual command line
 
@@ -314,6 +314,17 @@ So where do we go from here? It's simple - we do one feature at a time and relea
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td valign="top"><b>5.10</b></td>
+            <td valign="top">May 2021</td>
+            <td valign="top">
+                <ul>
+                    <li>Adds support for Paper's Adventure API for ChatComponent and Chat arguments.</li>
+                    <li>Deprecated a few methods in favour of some slightly better ones.</li>
+                    <li>Update proxied sender for Spigot 1.16.5</li>
+                </ul>
+            </td>
+        </tr>
         <tr>
             <td valign="top"><b>5.9</b></td>
             <td valign="top">February 2021</td>
