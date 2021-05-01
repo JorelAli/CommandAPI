@@ -5,6 +5,8 @@ var enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type 
     [ "CommandAPIArgumentType", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a15b326f697b5569995d87c5b3f008332", null ],
     [ "fromInternal", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a60022d4baf8ee34b98f5262a632aadd6", null ],
     [ "ADVANCEMENT", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ac779834aaa36e23794202e1790bd4753", null ],
+    [ "ADVENTURE_CHAT", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#aedd43293095ddfddac4e6a02dfe78242", null ],
+    [ "ADVENTURE_CHAT_COMPONENT", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ac3dec5562c05503064fdc3d53a0e8aa5", null ],
     [ "ANGLE", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a57cc405825c9932b24f3f6d4facb2b29", null ],
     [ "AXIS", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#aebca6750f8f79f80ea7acab2aecc8b01", null ],
     [ "BIOME", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a8e136cd4c078dc87cc936147943cba96", null ],

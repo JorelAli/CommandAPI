@@ -1,6 +1,8 @@
 var hierarchy =
 [
     [ "dev.jorel.commandapi.annotations.arguments.AAdvancementArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_advancement_argument.html", null ],
+    [ "dev.jorel.commandapi.annotations.arguments.AAdventureChatArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_adventure_chat_argument.html", null ],
+    [ "dev.jorel.commandapi.annotations.arguments.AAdventureChatComponentArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_adventure_chat_component_argument.html", null ],
     [ "dev.jorel.commandapi.annotations.arguments.AAngleArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_angle_argument.html", null ],
     [ "dev.jorel.commandapi.annotations.arguments.AAxisArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_axis_argument.html", null ],
     [ "dev.jorel.commandapi.annotations.arguments.ABiomeArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_biome_argument.html", null ],
@@ -84,6 +86,7 @@ var hierarchy =
     [ "dev.jorel.commandapi.CommandAPI", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html", null ],
     [ "dev.jorel.commandapi.arguments.CommandAPIArgumentType", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html", null ],
     [ "dev.jorel.commandapi.CommandAPICommand", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html", null ],
+    [ "dev.jorel.commandapi.CommandAPIConfig", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html", null ],
     [ "dev.jorel.commandapi.CommandAPIHandler< CommandListenerWrapper >", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html", null ],
     [ "dev.jorel.commandapi.CommandAPIHandler<?>", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html", null ],
     [ "com.mojang.brigadier.context.CommandContext< S >", "classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context.html", null ],
@@ -120,10 +123,10 @@ var hierarchy =
     ] ],
     [ "dev.jorel.commandapi.executors.ExecutorType", "enumdev_1_1jorel_1_1commandapi_1_1executors_1_1_executor_type.html", null ],
     [ "dev.jorel.commandapi.wrappers.FloatRange", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_float_range.html", null ],
-    [ "com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType.Function", "interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_dynamic2_command_exception_type_1_1_function.html", null ],
     [ "com.mojang.brigadier.exceptions.Dynamic3CommandExceptionType.Function", "interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_dynamic3_command_exception_type_1_1_function.html", null ],
     [ "com.mojang.brigadier.exceptions.Dynamic4CommandExceptionType.Function", "interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_dynamic4_command_exception_type_1_1_function.html", null ],
     [ "com.mojang.brigadier.exceptions.DynamicNCommandExceptionType.Function", "interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_dynamic_n_command_exception_type_1_1_function.html", null ],
+    [ "com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType.Function", "interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_dynamic2_command_exception_type_1_1_function.html", null ],
     [ "dev.jorel.commandapi.arguments.ICustomProvidedArgument", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument.html", [
       [ "dev.jorel.commandapi.arguments.AdvancementArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_advancement_argument.html", null ],
       [ "dev.jorel.commandapi.arguments.BiomeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_biome_argument.html", null ],
@@ -176,6 +179,7 @@ var hierarchy =
       [ "dev.jorel.commandapi.executors.IExecutorResulting< T extends CommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_i_executor_resulting.html", null ]
     ] ],
     [ "dev.jorel.commandapi.arguments.IGreedyArgument", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_greedy_argument.html", [
+      [ "dev.jorel.commandapi.arguments.AdventureChatArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_argument.html", null ],
       [ "dev.jorel.commandapi.arguments.ChatArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_chat_argument.html", null ],
       [ "dev.jorel.commandapi.arguments.GreedyStringArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_greedy_string_argument.html", null ]
     ] ],
@@ -185,6 +189,8 @@ var hierarchy =
     [ "dev.jorel.commandapi.wrappers.IntegerRange", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_integer_range.html", null ],
     [ "dev.jorel.commandapi.arguments.IOverrideableSuggestions", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html", [
       [ "dev.jorel.commandapi.arguments.Argument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html", [
+        [ "dev.jorel.commandapi.arguments.AdventureChatArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_argument.html", null ],
+        [ "dev.jorel.commandapi.arguments.AdventureChatComponentArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_component_argument.html", null ],
         [ "dev.jorel.commandapi.arguments.BlockPredicateArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_predicate_argument.html", null ],
         [ "dev.jorel.commandapi.arguments.BlockStateArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument.html", null ],
         [ "dev.jorel.commandapi.arguments.ChatArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_chat_argument.html", null ],
@@ -230,6 +236,7 @@ var hierarchy =
       [ "dev.jorel.commandapi.exceptions.InvalidCommandNameException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_invalid_command_name_exception.html", null ],
       [ "dev.jorel.commandapi.exceptions.InvalidRangeException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_invalid_range_exception.html", null ],
       [ "dev.jorel.commandapi.exceptions.NBTAPINotFoundException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_n_b_t_a_p_i_not_found_exception.html", null ],
+      [ "dev.jorel.commandapi.exceptions.PaperAdventureNotFoundException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_paper_adventure_not_found_exception.html", null ],
       [ "dev.jorel.commandapi.exceptions.SpigotNotFoundException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_spigot_not_found_exception.html", null ],
       [ "dev.jorel.commandapi.exceptions.TimeArgumentException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_time_argument_exception.html", null ],
       [ "dev.jorel.commandapi.exceptions.UUIDArgumentException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_u_u_i_d_argument_exception.html", null ]

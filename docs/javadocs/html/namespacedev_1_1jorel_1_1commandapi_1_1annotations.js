@@ -2,6 +2,8 @@ var namespacedev_1_1jorel_1_1commandapi_1_1annotations =
 [
     [ "arguments", null, [
       [ "AAdvancementArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_advancement_argument.html", null ],
+      [ "AAdventureChatArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_adventure_chat_argument.html", null ],
+      [ "AAdventureChatComponentArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_adventure_chat_component_argument.html", null ],
       [ "AAngleArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_angle_argument.html", null ],
       [ "AAxisArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_axis_argument.html", null ],
       [ "ABiomeArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_biome_argument.html", null ],

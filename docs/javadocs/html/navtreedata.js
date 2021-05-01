@@ -25,6 +25,7 @@
 var NAVTREE =
 [
   [ "CommandAPI", "index.html", [
+    [ "Deprecated List", "deprecated.html", null ],
     [ "Packages", "namespaces.html", [
       [ "Packages", "namespaces.html", "namespaces_dup" ]
     ] ],
@@ -45,9 +46,10 @@ var NAVTREEINDEX =
 [
 ".html",
 "classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exceptions.html#a9612886859ce095984cc3e36cf960afa",
-"classdev_1_1jorel_1_1commandapi_1_1annotations_1_1_annotations.html#a7120a2d64e5108c5d0faaad59ae0e171",
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_team_argument.html#aecc98b8cd0d99396e2e74450bb630c53",
-"functions_func_w.html"
+"classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#a13d427aedb1d7cfa373643e50c25dbbd",
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_scoreboard_slot_argument.html#af65c1928e32d31cb660d780abf35ac05",
+"functions_f.html",
+"namespacedev_1_1jorel_1_1commandapi_1_1annotations.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

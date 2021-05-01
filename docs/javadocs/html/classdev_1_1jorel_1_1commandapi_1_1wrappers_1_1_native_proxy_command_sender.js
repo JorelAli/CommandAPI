@@ -21,6 +21,8 @@ var classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_native_proxy_command_sender 
     [ "removeAttachment", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_native_proxy_command_sender.html#a1993262af90b248e8e1ad3cecff9b5bd", null ],
     [ "sendMessage", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_native_proxy_command_sender.html#a7f9849f25e1c18e413792dd894d4d40a", null ],
     [ "sendMessage", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_native_proxy_command_sender.html#a9638258f5ca0f98867052e749c2cb771", null ],
+    [ "sendMessage", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_native_proxy_command_sender.html#a45dc7412a80a9743268e7ab882b13865", null ],
+    [ "sendMessage", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_native_proxy_command_sender.html#a1a0ecfba57efa11f42c43f2a2f93f804", null ],
     [ "setOp", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_native_proxy_command_sender.html#a32c05d616a9c1590a65412099411c868", null ],
     [ "spigot", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_native_proxy_command_sender.html#aba83adc7790f6059087ace85e91cd1f0", null ]
 ];

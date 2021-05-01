@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">CommandAPI
-   &#160;<span id="projectnumber">5.3</span>
+   &#160;<span id="projectnumber">5.10</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -88,7 +88,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <div class="title">CommandAPI Documentation</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="md_README"></a></p><h2 align="center"><br  />
+<div class="textblock"><p><b>Simple command registration</b><a class="anchor" id="md_README"></a></p><h2 align="center"><br  />
  <img src="images/cmdapi.svg" alt="CommandAPI logo" style="pointer-events: none;" width="600" class="inline"/> <br  />
  <br  />
  A Bukkit/Spigot API to use the command UI introduced in Minecraft 1.13 <br  />
@@ -110,15 +110,23 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <p><b>Compatible Minecraft versions:</b></p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
-<th class="markdownTableHeadNone"></th><th class="markdownTableHeadNone"></th><th class="markdownTableHeadNone"></th><th class="markdownTableHeadNone"></th><th class="markdownTableHeadNone"></th><th class="markdownTableHeadNone"></th></tr>
+<th class="markdownTableHeadNone"></th><th class="markdownTableHeadCenter"></th><th class="markdownTableHeadCenter"></th><th class="markdownTableHeadCenter"></th><th class="markdownTableHeadCenter"></th><th class="markdownTableHeadCenter"></th><th class="markdownTableHeadNone"></th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b>1.13 versions</b> </td><td class="markdownTableBodyNone">1.13 </td><td class="markdownTableBodyNone">1.13.1 </td><td class="markdownTableBodyNone">1.13.2 </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td></tr>
+<td class="markdownTableBodyNone"><b>1.13 versions</b> </td><td class="markdownTableBodyCenter">1.13 </td><td class="markdownTableBodyCenter">1.13.1 </td><td class="markdownTableBodyCenter">1.13.2 </td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter" colspan="2"></td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><b>1.14 versions</b> </td><td class="markdownTableBodyNone">1.14 </td><td class="markdownTableBodyNone">1.14.1 </td><td class="markdownTableBodyNone">1.14.2 </td><td class="markdownTableBodyNone">1.14.3 </td><td class="markdownTableBodyNone">1.14.4  </td></tr>
+<td class="markdownTableBodyNone"><b>1.14 versions</b> </td><td class="markdownTableBodyCenter">1.14<br  />
+(v2.0+) </td><td class="markdownTableBodyCenter">1.14.1 </td><td class="markdownTableBodyCenter">1.14.2 </td><td class="markdownTableBodyCenter">1.14.3<br  />
+(v2.1+) </td><td class="markdownTableBodyCenter" colspan="2">1.14.4  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b>1.15 versions</b> </td><td class="markdownTableBodyNone">1.15 </td><td class="markdownTableBodyNone">1.15.1 </td><td class="markdownTableBodyNone">1.15.2 </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td></tr>
+<td class="markdownTableBodyNone"><b>1.15 versions</b> </td><td class="markdownTableBodyCenter">1.15<br  />
+(v2.3a+) </td><td class="markdownTableBodyCenter">1.15.1 </td><td class="markdownTableBodyCenter">1.15.2 </td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter" colspan="2"></td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><b>1.16 versions</b> </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone">1.16.1 </td><td class="markdownTableBodyNone">1.16.2 </td><td class="markdownTableBodyNone">1.16.3 </td><td class="markdownTableBodyNone">1.16.4  </td></tr>
+<td class="markdownTableBodyNone"><b>1.16 versions</b> </td><td class="markdownTableBodyCenter"></td><td class="markdownTableBodyCenter">1.16.1<br  />
+(v3.0+) </td><td class="markdownTableBodyCenter">1.16.2<br  />
+(v4.0+) </td><td class="markdownTableBodyCenter">1.16.3<br  />
+(v4.2+) </td><td class="markdownTableBodyCenter">1.16.4<br  />
+(v5.2+) </td><td class="markdownTableBodyNone">1.16.5<br  />
+(v5.7+)  </td></tr>
 </table>
 <hr  />
 <h2>Purpose</h2>
@@ -142,6 +150,126 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <li><b>You don't need Brigadier</b> - You don't need to import Brigadier in your projects to use the CommandAPI</li>
 <li><b>No tracking</b> - The CommandAPI don't collect any stats about its plugin; what you see is what you get!</li>
 </ul>
+<p>In addition to all of the above:</p>
+<ul>
+<li><b>Built-in command converter</b> - Convert regular plugin commands into <code>/execute</code>-compatible ones - no coding experience required!</li>
+<li><b>Optional compile-time annotation-based framework</b> - Don't like writing lots of code with builders? You don't have to if you don't want to!</li>
+<li><a href="https://www.jorel.dev/CommandAPI/"><b>Insanely detailed documentation</b></a> - Trust me, you've never seen a plugin documentation look so good.</li>
+</ul>
+<hr  />
+<h2>Code examples</h2>
+<p>_(I always like to see code examples on GitHub repos, so here's what CommandAPI code looks like):_</p>
+<p>&lt;details&gt;</p>
+<div class="fragment"><div class="line"><span class="keyword">new</span> CommandAPICommand(<span class="stringliteral">&quot;enchantitem&quot;</span>)</div>
+<div class="line">    .withArguments(<span class="keyword">new</span> EnchantmentArgument(<span class="stringliteral">&quot;enchantment&quot;</span>))</div>
+<div class="line">    .withArguments(<span class="keyword">new</span> IntegerArgument(<span class="stringliteral">&quot;level&quot;</span>, 1, 5))</div>
+<div class="line">    .executesPlayer((player, args) -&gt; {</div>
+<div class="line">        Enchantment enchantment = (Enchantment) args[0];</div>
+<div class="line">        <span class="keywordtype">int</span> level = (int) args[1];</div>
+<div class="line">        </div>
+<div class="line">        <span class="comment">//Add the enchantment</span></div>
+<div class="line">        player.getInventory().getItemInMainHand().addEnchantment(enchantment, level);</div>
+<div class="line">    })</div>
+<div class="line">    .<span class="keyword">register</span>();</div>
+</div><!-- fragment --><p>&lt;/details&gt;</p>
+<p>&lt;details&gt;</p>
+<p><b>Potion removing, suggesting potions that a player has currently</b> </p>
+<div class="fragment"><div class="line">List&lt;Argument&gt; arguments = <span class="keyword">new</span> ArrayList&lt;&gt;();</div>
+<div class="line">arguments.add(<span class="keyword">new</span> EntitySelectorArgument(<span class="stringliteral">&quot;target&quot;</span>, EntitySelector.ONE_PLAYER));</div>
+<div class="line">arguments.add(<span class="keyword">new</span> PotionEffectArgument(<span class="stringliteral">&quot;potioneffect&quot;</span>).safeOverrideSuggestions(</div>
+<div class="line">    (sender, prevArgs) -&gt; {</div>
+<div class="line">        Player target = (Player) prevArgs[0];</div>
+<div class="line">        </div>
+<div class="line">        <span class="comment">//Convert PotionEffect[] into PotionEffectType[]</span></div>
+<div class="line">        <span class="keywordflow">return</span> target.getActivePotionEffects().stream()</div>
+<div class="line">            .map(PotionEffect::getType)</div>
+<div class="line">            .toArray(PotionEffectType[]::<span class="keyword">new</span>);</div>
+<div class="line">    })</div>
+<div class="line">);</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">new</span> CommandAPICommand(<span class="stringliteral">&quot;removeeffect&quot;</span>)</div>
+<div class="line">    .withArguments(arguments)</div>
+<div class="line">    .executesPlayer((player, args) -&gt; {</div>
+<div class="line">        EntityType entityType = (EntityType) args[0];</div>
+<div class="line">        player.getWorld().spawnEntity(player.getLocation(), entityType);</div>
+<div class="line">    })</div>
+<div class="line">    .<span class="keyword">register</span>();</div>
+</div><!-- fragment --><p>&lt;/details&gt;</p>
+<p>&lt;details&gt;</p>
+<p><b>Subcommands</b> </p>
+<div class="fragment"><div class="line"><span class="keyword">new</span> CommandAPICommand(<span class="stringliteral">&quot;perm&quot;</span>)</div>
+<div class="line">    .withSubcommand(<span class="keyword">new</span> CommandAPICommand(<span class="stringliteral">&quot;group&quot;</span>)</div>
+<div class="line">        .withSubcommand(<span class="keyword">new</span> CommandAPICommand(<span class="stringliteral">&quot;add&quot;</span>)</div>
+<div class="line">            .withArguments(<span class="keyword">new</span> StringArgument(<span class="stringliteral">&quot;permission&quot;</span>))</div>
+<div class="line">            .withArguments(<span class="keyword">new</span> StringArgument(<span class="stringliteral">&quot;groupName&quot;</span>))</div>
+<div class="line">            .executes((sender, args) -&gt; {</div>
+<div class="line">                <span class="comment">//perm group add code</span></div>
+<div class="line">            })</div>
+<div class="line">        )</div>
+<div class="line">        .withSubcommand(<span class="keyword">new</span> CommandAPICommand(<span class="stringliteral">&quot;remove&quot;</span>)</div>
+<div class="line">            .withArguments(<span class="keyword">new</span> StringArgument(<span class="stringliteral">&quot;permission&quot;</span>))</div>
+<div class="line">            .withArguments(<span class="keyword">new</span> StringArgument(<span class="stringliteral">&quot;groupName&quot;</span>))</div>
+<div class="line">            .executes((sender, args) -&gt; {</div>
+<div class="line">                <span class="comment">//perm group remove code</span></div>
+<div class="line">            })</div>
+<div class="line">        )</div>
+<div class="line">    )</div>
+<div class="line">    .withSubcommand(<span class="keyword">new</span> CommandAPICommand(<span class="stringliteral">&quot;user&quot;</span>)</div>
+<div class="line">        .withSubcommand(<span class="keyword">new</span> CommandAPICommand(<span class="stringliteral">&quot;add&quot;</span>)</div>
+<div class="line">            .withArguments(<span class="keyword">new</span> StringArgument(<span class="stringliteral">&quot;permission&quot;</span>))</div>
+<div class="line">            .withArguments(<span class="keyword">new</span> StringArgument(<span class="stringliteral">&quot;userName&quot;</span>))</div>
+<div class="line">            .executes((sender, args) -&gt; {</div>
+<div class="line">                <span class="comment">//perm user add code</span></div>
+<div class="line">            })</div>
+<div class="line">        )</div>
+<div class="line">        .withSubcommand(<span class="keyword">new</span> CommandAPICommand(<span class="stringliteral">&quot;remove&quot;</span>)</div>
+<div class="line">            .withArguments(<span class="keyword">new</span> StringArgument(<span class="stringliteral">&quot;permission&quot;</span>))</div>
+<div class="line">            .withArguments(<span class="keyword">new</span> StringArgument(<span class="stringliteral">&quot;userName&quot;</span>))</div>
+<div class="line">            .executes((sender, args) -&gt; {</div>
+<div class="line">                <span class="comment">//perm user remove code</span></div>
+<div class="line">            })</div>
+<div class="line">        )</div>
+<div class="line">    )</div>
+<div class="line">    .register();</div>
+</div><!-- fragment --><p>&lt;/details&gt;</p>
+<p>&lt;details&gt;</p>
+<p><b>Annotation-based commands</b> </p>
+<div class="fragment"><div class="line">@Command(<span class="stringliteral">&quot;warp&quot;</span>)    </div>
+<div class="line">public class WarpCommand {</div>
+<div class="line">    </div>
+<div class="line">    <span class="comment">// List of warp names and their locations</span></div>
+<div class="line">    <span class="keyword">static</span> Map&lt;String, Location&gt; warps = <span class="keyword">new</span> HashMap&lt;&gt;();</div>
+<div class="line">    </div>
+<div class="line">    @Default</div>
+<div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keywordtype">void</span> warp(CommandSender sender) {</div>
+<div class="line">        sender.sendMessage(<span class="stringliteral">&quot;--- Warp help ---&quot;</span>);</div>
+<div class="line">        sender.sendMessage(<span class="stringliteral">&quot;/warp - Show this help&quot;</span>);</div>
+<div class="line">        sender.sendMessage(<span class="stringliteral">&quot;/warp &lt;warp&gt; - Teleport to &lt;warp&gt;&quot;</span>);</div>
+<div class="line">        sender.sendMessage(<span class="stringliteral">&quot;/warp create &lt;warpname&gt; - Creates a warp at your current location&quot;</span>);</div>
+<div class="line">    }</div>
+<div class="line">    </div>
+<div class="line">    @Default</div>
+<div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keywordtype">void</span> warp(Player player, @AStringArgument String warpName) {</div>
+<div class="line">        player.teleport(warps.get(warpName));</div>
+<div class="line">    }</div>
+<div class="line">    </div>
+<div class="line">    @Subcommand(<span class="stringliteral">&quot;create&quot;</span>)</div>
+<div class="line">    @Permission(<span class="stringliteral">&quot;warps.create&quot;</span>)</div>
+<div class="line">    public static <span class="keywordtype">void</span> createWarp(Player player, @AStringArgument String warpName) {</div>
+<div class="line">        warps.put(warpName, player.getLocation());</div>
+<div class="line">    }</div>
+<div class="line">    </div>
+<div class="line">}</div>
+</div><!-- fragment --><p>&lt;/details&gt;</p>
+<p>&lt;details&gt;</p>
+<p><b>Command conversion (no compilation required)</b> </p>
+<div class="fragment"><div class="line">plugins-to-convert:</div>
+<div class="line">  - Essentials:</div>
+<div class="line">    - speed &lt;speed&gt;[0..10]</div>
+<div class="line">    - speed &lt;target&gt;[minecraft:game_profile]</div>
+<div class="line">    - speed (walk|fly) &lt;speed&gt;[0..10]</div>
+<div class="line">    - speed (walk|fly) &lt;speed&gt;[0..10] &lt;target&gt;[minecraft:game_profile]</div>
+</div><!-- fragment --><p>&lt;/details&gt;</p>
 <hr  />
 <h2>Building the CommandAPI</h2>
 <p>The CommandAPI can be built easily, but requires copies of the Spigot server jars to be present locally on your machine in order to be compatible with any Minecraft version. The CommandAPI is built using the Maven build tool - if you don't have it, you can download it <a href="https://maven.apache.org/download.cgi">here</a>.</p>
@@ -191,17 +319,126 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <li>Use the command <code>java -jar BuildTools.jar --rev &lt;VERSION&gt;</code> to download the specific version of the Spigot.jar you need. For example, to download Spigot for 1.14.4, use <code>java -jar BuildTools.jar --rev 1.14.4</code></li>
 </ul>
 <hr  />
+<h2>Future project plans + timeline</h2>
+<p>The CommandAPI has somewhat reached a "stable" point in its lifecycle. It can basically do everything that it needs to do and has been able to keep up-to-date with the latest Minecraft versions (e.g. 1.16.5 support released within a day of 1.16.5 being released). The original goal was to release CommandAPI v6.0 sometime early 2021. As you can see, this hasn't happened yet.</p>
+<p>So what went wrong? I over-planned v6.0. The plans for v6.0 was so excessive that it brought down motivation and has made such an update seem forever out of reach. For example, this was the list of all features planned for v6.0:</p>
+<ul>
+<li>A better (refined and rewritten) annotation system</li>
+<li>Optional arguments</li>
+<li>A way to add suggestions to existing suggestions</li>
+<li>Help page support</li>
+<li>Namespace support</li>
+<li>More powerful argument sanitization with earlier fail detection</li>
+<li>A continuous integration suite for public access to dev builds</li>
+<li>A testing suite to determine correctness and accuracy of the CommandAPI</li>
+<li>A rewrite of custom arguments</li>
+<li>More full plugin examples</li>
+<li>Conflicting argument research and documentation on how to avoid them</li>
+</ul>
+<p>So where do we go from here? It's simple - we do one feature at a time and release one update for each feature. That way, we get more of the new stuff that people want and less of the "absolutely no development is going on". This is the current roadmap for the CommandAPI (as of 28th Feb 2021):</p>
+<ul>
+<li><p class="startli"><b>CommandAPI v5.10:</b> Paper support and deprecations</p>
+<p class="startli">Paper have recently announced that they are moving away from the BungeeCord API and it is pretty important that the CommandAPI updates in order to keep up with things. Additionally, Paper have changed their supported Java version to Java 11, from Java 8. Despite this, to ensure backwards compatibility with older Java versions, the CommandAPI will remain compiled for Java 8.</p>
+<p class="startli">Lastly, in this update I want to deprecate a few methods to do with argument suggestions. The CommandAPI has a number of ways of populating argument suggestions using constant values, but more often than not this causes expected issues. As such, these will be deprecated in this version in favour of the existing lambdas. (Don't worry, updating is really really easy!)</p>
+</li>
+<li><p class="startli"><b>CommandAPI v5.11:</b> CustomArgument improvements</p>
+<p class="startli">The CustomArgument class is fairly flexible, but nowhere near flexible enough. In this update, more attention will be focused on the CustomArgument class to provide it the ability to extend from all other argument types as a base.</p>
+</li>
+<li><p class="startli"><b>CommandAPI v5.12:</b> Annotation improvements</p>
+<p class="startli">The CommandAPI's annotation system has always been a bit limited and was primarily introduced as a proof-of-concept. In this update, the CommandAPI's annotation system will be improved to be (ideally) as powerful as the non-annotation system and have slightly better type safety.</p>
+</li>
+<li><p class="startli"><b>CommandAPI v5.13:</b> Argument conflict detection</p>
+<p class="startli">The CommandAPI simply uses the Brigadier system under the hood. This system is prone to <em>argument conflicts</em>, which is where certain arguments are given priority over other arguments. (For example "hello" and "123" are both valid string arguments, but if you have a command that has a string argument or an integer argument, Brigadier may ignore the integer argument). In this update, the CommandAPI will try to spot potential conflicts and add a warning in the console. The research required for this is also required in order to implement optional arguments (which is not coming out in this release).</p>
+</li>
+<li><b>CommandAPI v5.14+:</b> TBD</li>
+</ul>
+<hr  />
 <h2>Changelog</h2>
 <table width="100%">
 </table>
 <p>Version </p>
 <p>Date </p>
 <p>Features / Changes  &lt;/thead&gt; &lt;tbody&gt; </p>
+<p><b>5.10</b> </p>
+<p>May 2021 </p>
+<ul>
+<li>
+Adds support for Paper's Adventure API for ChatComponent and Chat arguments. </li>
+<li>
+Deprecated a few methods in favour of some slightly better ones. </li>
+<li>
+Update proxied sender for Spigot 1.16.5 </li>
+</ul>
+<p><b>5.9</b> </p>
+<p>February 2021 </p>
+<ul>
+<li>
+Fixed a critical bug where plugin conversion would run the caller methods instead of callee methods, which prevented command blocks from running commands. </li>
+</ul>
+<p><b>5.8</b> </p>
+<p>January 2021 </p>
+<ul>
+<li>
+Removed a debug <div class="fragment"><div class="line">/test</div>
+</div><!-- fragment --> command which wasn't supposed to be released! </li>
+</ul>
+<p><b>5.7</b> </p>
+<p>January 2021 </p>
+<ul>
+<li>
+Add support for Minecraft 1.16.5 </li>
+</ul>
+<p><b>5.6</b> </p>
+<p>January 2021 </p>
+<ul>
+<li>
+Fix bug where plugins that use <a href="https://github.com/aikar/commands">Aikar's ACF</a> were incompatible with the CommandAPI </li>
+<li>
+Add a new configuration option <div class="fragment"><div class="line">skip-sender-proxy</div>
+</div><!-- fragment --> which prevents certain plugins from running properly </li>
+</ul>
+<p><b>5.5</b> </p>
+<p>January 2021 </p>
+<ul>
+<li>
+Fix bug with annotations where <div class="fragment"><div class="line">@NeedsOp</div>
+</div><!-- fragment --> didn't work if placed on a class </li>
+<li>
+Fix bug where entity selector arguments with <div class="fragment"><div class="line">@</div>
+</div><!-- fragment --> selectors return empty values if the sender is not op </li>
+</ul>
+<p><b>5.4</b> </p>
+<p>December 2020 </p>
+<ul>
+<li>
+Fix bug where the NBT-API wasn't compatible with the CommandAPI when both are shaded into a plugin </li>
+</ul>
+<p><b>5.3</b> </p>
+<p>November 2020 </p>
+<ul>
+<li>
+Fix bug where permissions weren't being applied for subcommands and multi literal arguments </li>
+<li>
+Adds detection system for command graph conflicts </li>
+<li>
+Adds a way to "negate" permissions using <div class="fragment"><div class="line">.withoutPermission</div>
+</div><!-- fragment --> </li>
+<li>
+Adds an annotation-based command framework </li>
+<li>
+Fix minor documentation inaccuracies </li>
+<li>
+Fix bug where converted commands didn't apply multiple parameters </li>
+<li>
+The fields in <div class="fragment"><div class="line">CommandAPICommand</div>
+</div><!-- fragment --> can now be accessed via getters and setters </li>
+</ul>
 <p><b>5.2</b> </p>
 <p>November 2020 </p>
 <ul>
 <li>
-Adds <code>CommandAPI.reloadDatapacks()</code> method to reload datapacks in the same way the CommandAPI does </li>
+Adds <div class="fragment"><div class="line">CommandAPI.reloadDatapacks()</div>
+</div><!-- fragment --> method to reload datapacks in the same way the CommandAPI does </li>
 <li>
 Adds support for Minecraft 1.16.4 </li>
 </ul>
@@ -211,13 +448,16 @@ Adds support for Minecraft 1.16.4 </li>
 <li>
 Fixes bug where converted commands could not be executed by players ingame </li>
 <li>
-Adds <code>withPermission(String)</code> to arguments and CommandAPICommands </li>
+Adds <div class="fragment"><div class="line">withPermission(String)</div>
+</div><!-- fragment --> to arguments and CommandAPICommands </li>
 <li>
 Adds SimpleFunctionWrapper with helper methods to get functions and tags from ingame, as well as run them without needing to parse them via commands </li>
 <li>
 Greatly improve the type-safety of the internal CommandAPI code </li>
 <li>
-Move the <code>Brigadier</code> class outside of the <code>CommandAPIHandler</code> class </li>
+Move the <div class="fragment"><div class="line">Brigadier</div>
+</div><!-- fragment --> class outside of the <div class="fragment"><div class="line">CommandAPIHandler</div>
+</div><!-- fragment --> class </li>
 </ul>
 <p><b>5.0</b> </p>
 <p>October 2020 </p>
@@ -227,19 +467,26 @@ Move the <code>Brigadier</code> class outside of the <code>CommandAPIHandler</co
 <li>
 API improvements: <ul>
 <li>
-The <code>.withArguments</code> method can now take varargs </li>
+The <div class="fragment"><div class="line">.withArguments</div>
+</div><!-- fragment --> method can now take varargs </li>
 <li>
-String tooltips are now much easier to implement for custom objects using <code>IStringTooltip</code> </li>
+String tooltips are now much easier to implement for custom objects using <div class="fragment"><div class="line">IStringTooltip</div>
+</div><!-- fragment --> </li>
 <li>
-Removes <code>LinkedHashMap</code> for argument registration in favour of <code>List</code> </li>
+Removes <div class="fragment"><div class="line">LinkedHashMap</div>
+</div><!-- fragment --> for argument registration in favour of <div class="fragment"><div class="line">List</div>
+</div><!-- fragment --> </li>
 </ul>
 </li>
 <li>
 Adds subcommands </li>
 <li>
-Adds <code>AngleArgument</code> </li>
+Adds <div class="fragment"><div class="line">AngleArgument</div>
+</div><!-- fragment --> </li>
 <li>
-Arguments can now be omitted from the <code>Object[] args</code> using the method <code>.setListed()</code>. This means Literal arguments can now be "present" in the arguments if desired. </li>
+Arguments can now be omitted from the <div class="fragment"><div class="line">Object[] args</div>
+</div><!-- fragment --> using the method <div class="fragment"><div class="line">.setListed()</div>
+</div><!-- fragment -->. This means Literal arguments can now be "present" in the arguments if desired. </li>
 <li>
 Remove lots of reflection calls, so start up should be a little faster </li>
 <li>
@@ -249,19 +496,22 @@ Fixes bug where verbose logging of permission linking was inaccurate </li>
 <li>
 Fixes bug where overriding suggestions can break when generating suggestions </li>
 <li>
-Fixes bug where <code>null</code> could appear in the suggestions list of arguments </li>
+Fixes bug where <div class="fragment"><div class="line">null</div>
+</div><!-- fragment --> could appear in the suggestions list of arguments </li>
 <li>
 CommandAPI's non-verbose logging is now actually quiet </li>
 <li>
 Fixes bug where converted commands couldn't be run from the console </li>
 <li>
-Fixes bug where <code>LongArgument</code> wouldn't let you use long values as minimum or maximum </li>
+Fixes bug where <div class="fragment"><div class="line">LongArgument</div>
+</div><!-- fragment --> wouldn't let you use long values as minimum or maximum </li>
 </ul>
 </li>
 <li>
 Command conversion improvements: <ul>
 <li>
-The <code>Converter.convert()</code> method can now take varargs for arguments </li>
+The <div class="fragment"><div class="line">Converter.convert()</div>
+</div><!-- fragment --> method can now take varargs for arguments </li>
 <li>
 Command conversion code that was specific to the CommandAPI plugin is no longer included in the shaded version of the CommandAPI </li>
 <li>
@@ -279,7 +529,9 @@ The list of CommandAPI arguments to Minecraft argument IDs is now in the documen
 <li>
 CommandAPI-Brigadier improvements: <ul>
 <li>
-Adds <code>toSuggestions()</code> to the CommandAPI-Brigadier library to convert CommandAPI suggestions into Brigadier's <code>SuggestionProvider</code> </li>
+Adds <div class="fragment"><div class="line">toSuggestions()</div>
+</div><!-- fragment --> to the CommandAPI-Brigadier library to convert CommandAPI suggestions into Brigadier's <div class="fragment"><div class="line">SuggestionProvider</div>
+</div><!-- fragment --> </li>
 <li>
 CommandAPI-Brigadier library methods got renamed </li>
 <li>
@@ -297,13 +549,15 @@ Fixes bug where function loading would break because permissions could not be pr
 <p>September 2020 </p>
 <ul>
 <li>
-Fixes minor command sender related bugs from 4.3a. Fixes permissions with <code>/execute ... as ...</code> from converted commands </li>
+Fixes minor command sender related bugs from 4.3a. Fixes permissions with <div class="fragment"><div class="line">/execute ... as ...</div>
+</div><!-- fragment --> from converted commands </li>
 </ul>
 <p><b>4.3a</b> </p>
 <p>September 2020 </p>
 <ul>
 <li>
-Fixes a bug where running converted commands via <code>/execute ... as ...</code> wouldn't apply the command sender correctly </li>
+Fixes a bug where running converted commands via <div class="fragment"><div class="line">/execute ... as ...</div>
+</div><!-- fragment --> wouldn't apply the command sender correctly </li>
 </ul>
 <p><b>4.3</b> </p>
 <p>September 2020 </p>
@@ -325,7 +579,9 @@ Fixes a bug where shading the CommandAPI and the NBT-API together causes the Com
 <li>
 Fixes a bug where commands with redirects (4.0+ aliases and redirects from /execute) that have two consecutive arguments with suggestions would spam the console and not provide suggestions </li>
 <li>
-Adds <code>NativeProxyCommandSender</code> which lets you access the location and world of a command sender via <code>/execute in|positioned|at|facing|rotated</code> </li>
+Adds <div class="fragment"><div class="line">NativeProxyCommandSender</div>
+</div><!-- fragment --> which lets you access the location and world of a command sender via <div class="fragment"><div class="line">/execute in|positioned|at|facing|rotated</div>
+</div><!-- fragment --> </li>
 </ul>
 <p><b>4.1</b> </p>
 <p>September 2020 </p>
@@ -349,33 +605,41 @@ Adds a new method to the CommandAPI/Brigadier system to easily create Brigadier 
 <li>
 Suggestion overriding can now be populated by Bukkit objects instead of strings </li>
 <li>
-Fixes a bug with the <code>FloatRangeArgument</code> where it caused a casting error </li>
+Fixes a bug with the <div class="fragment"><div class="line">FloatRangeArgument</div>
+</div><!-- fragment --> where it caused a casting error </li>
 <li>
 Adds support for 1.16.2 <ul>
 <li>
-<code>ChatArgument</code> now works on Minecraft 1.16.2 (still doesn't work on 1.16.1) </li>
+<div class="fragment"><div class="line">ChatArgument</div>
+</div><!-- fragment --> now works on Minecraft 1.16.2 (still doesn't work on 1.16.1) </li>
 </ul>
 </li>
 <li>
 Adds new arguments: <ul>
 <li>
-<code>UUIDArgument</code> </li>
+<div class="fragment"><div class="line">UUIDArgument</div>
+</div><!-- fragment --> </li>
 <li>
-<code>ItemStackPredicateArgument</code> </li>
+<div class="fragment"><div class="line">ItemStackPredicateArgument</div>
+</div><!-- fragment --> </li>
 <li>
-<code>BlockPredicateArgument</code> </li>
+<div class="fragment"><div class="line">BlockPredicateArgument</div>
+</div><!-- fragment --> </li>
 </ul>
 </li>
 <li>
-Fix bug where <code>CustomArgument</code>s break when using the namespaced key flag </li>
+Fix bug where <div class="fragment"><div class="line">CustomArgument</div>
+</div><!-- fragment -->s break when using the namespaced key flag </li>
 <li>
-Adds a list of commands that <code>FunctionWrapper</code> executes which is now accessible </li>
+Adds a list of commands that <div class="fragment"><div class="line">FunctionWrapper</div>
+</div><!-- fragment --> executes which is now accessible </li>
 <li>
 Command aliases are now much more efficient  </li>
 <li>
 Documentation changes (briefly): <ul>
 <li>
-<code>BlockStateArgument</code> is now documented properly </li>
+<div class="fragment"><div class="line">BlockStateArgument</div>
+</div><!-- fragment --> is now documented properly </li>
 <li>
 Documentation now has pictures to show you what arguments look like </li>
 <li>
@@ -397,7 +661,8 @@ Fix bug with custom recipes not registering in Minecraft 1.16+ </li>
 <li>
 Fix bug where command conversion didn't actually register commands </li>
 <li>
-Adds command conversion as a built-in feature via the CommandAPI's <code>config.yml</code> </li>
+Adds command conversion as a built-in feature via the CommandAPI's <div class="fragment"><div class="line">config.yml</div>
+</div><!-- fragment --> </li>
 </ul>
 <p><b>3.3</b> </p>
 <p>July 2020 </p>
@@ -411,7 +676,8 @@ Fixes a bug where spigot produces a warning about api-versions </li>
 <p>July 2020 </p>
 <ul>
 <li>
-Fixes a bug with <code>.overrideSuggestions()</code> from version 3.1 </li>
+Fixes a bug with <div class="fragment"><div class="line">.overrideSuggestions()</div>
+</div><!-- fragment --> from version 3.1 </li>
 </ul>
 <p><b>3.1</b> </p>
 <p>July 2020 </p>
@@ -621,7 +887,10 @@ Fix a bug with permission checks. Other than that, it's the same as 1.7 (in term
 <li>
 Adds DynamicSuggestedStringArguments for dynamically updating suggestions </li>
 <li>
-Adds support for <code>success</code> and <code>result</code> values for <code>/execute store</code> </li>
+Adds support for <div class="fragment"><div class="line">success</div>
+</div><!-- fragment --> and <div class="fragment"><div class="line">result</div>
+</div><!-- fragment --> values for <div class="fragment"><div class="line">/execute store</div>
+</div><!-- fragment --> </li>
 <li>
 Overhaul permissions system so it works properly </li>
 <li>
@@ -718,7 +987,7 @@ Initial release </li>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sun Nov 22 2020 15:51:44 for CommandAPI by
+    <li class="footer">Generated on Sat May 1 2021 02:30:24 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>
