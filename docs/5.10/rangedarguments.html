@@ -206,7 +206,7 @@
 </code></pre>
 <div class="example">
 <h2><a class="header" href="#example---searching-chests-for-certain-items" id="example---searching-chests-for-certain-items">Example - Searching chests for certain items</a></h2>
-<p>Say you're working on a plugin for server administrators to help them find restricted items. A method of doing so would be to search chests in a given radius for certain items. As such, we can use the following structure:</p>
+<p>Say you're working on a plugin for server administrators to help them find restricted items. A method of doing so would be to search chests in a given radius for certain items. As such, we can use the following syntax:</p>
 <pre><code>/searchchests &lt;range&gt; &lt;item&gt;
 </code></pre>
 <p>Now, we simply create our arguments using <code>IntegerRangeArgument</code> for our range and <code>ItemStackArgument</code> as the item to search for. We can then find all chests in a given area and determine if it is within the range provided by the command sender by using <code>range.isInRange(distance)</code>:</p>
@@ -302,21 +302,6 @@ new CommandAPICommand(&quot;searchrange&quot;)
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

@@ -27,7 +27,7 @@ The `withRequirement` method requires a predicate that determines if the sender 
 
 ### Example - Perks based on a player's level
 
-Say we have a perks-based command system that depends on a player's level. For example, if a player has over 30 levels of experience, they would then be able to run a command that lets them repair the item in their hand in exchange for 30 levels. As such, we'll use the following command structure:
+Say we have a perks-based command system that depends on a player's level. For example, if a player has over 30 levels of experience, they would then be able to run a command that lets them repair the item in their hand in exchange for 30 levels. As such, we'll use the following command syntax:
 
 ```
 /repair
@@ -55,7 +55,7 @@ In a similar way that you can restrict certain arguments by adding permissions t
 
 Let's say that we're working on a plugin that has a system to form groups of players called "parties". If you are not already in a party, you can create one of your own and if you are in a party, you can teleport to any other member in your party.
 
-For this example, we'll use the following command structure:
+For this example, we'll use the following command syntax:
 
 ```
 /party create <partyName>

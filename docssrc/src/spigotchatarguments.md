@@ -113,7 +113,7 @@ The `ChatArgument` is basically identical to the `GreedyStringArgument`, with th
 
 ### Example - Sending personalized messages to players
 
-Say we wanted to broadcast a "personalized" message to players on the server. By "personalized", we mean a command which changes its output depending on who we are sending the output to. Simply put, we want a command of the following structure:
+Say we wanted to broadcast a "personalized" message to players on the server. By "personalized", we mean a command which changes its output depending on who we are sending the output to. Simply put, we want a command of the following syntax:
 
 ```
 /pbroadcast <message>

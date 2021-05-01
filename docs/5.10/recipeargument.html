@@ -200,7 +200,7 @@
 </div>
 <div class="example">
 <h3><a class="header" href="#example---unlocking-a-recipe-for-a-player-115-only" id="example---unlocking-a-recipe-for-a-player-115-only">Example - Unlocking a recipe for a player (1.15+ only)</a></h3>
-<p>Since 1.15 has the <code>ComplexRecipe</code> class, we will take advantage of this to unlock a recipe for a player. For this command, we'll use the following structure:</p>
+<p>Since 1.15 has the <code>ComplexRecipe</code> class, we will take advantage of this to unlock a recipe for a player. For this command, we'll use the following syntax:</p>
 <pre><code>/unlockrecipe &lt;player&gt; &lt;recipe&gt;
 </code></pre>
 <p>Since the <code>discoverRecipe(NamespacedKey)</code> method for a player requires a <code>NamespacedKey</code>, we have to ensure that this recipe is of type <code>ComplexRecipe</code>. This is simply done by using <code>instanceof</code>. If this is the case, then we can unlock the recipe for the player. Otherwise, we cannot, so we fail gracefully using the <code>CommandAPI.fail(String)</code> method;</p>
@@ -260,21 +260,6 @@
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

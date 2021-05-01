@@ -181,7 +181,7 @@
 <p>The <code>PotionEffectArgument</code> class represents Minecraft potion effects. When used, this argument is casted to Bukkit's <code>PotionEffectType</code> class.</p>
 <div class="example">
 <h3><a class="header" href="#example---giving-a-player-a-potion-effect" id="example---giving-a-player-a-potion-effect">Example - Giving a player a potion effect</a></h3>
-<p>Say we wanted to have a command that gives a player a potion effect. For this command, we'll use the following structure:</p>
+<p>Say we wanted to have a command that gives a player a potion effect. For this command, we'll use the following syntax:</p>
 <pre><code>/potion &lt;target&gt; &lt;potion&gt; &lt;duration&gt; &lt;strength&gt;
 </code></pre>
 <p>In this example, we utilize some of the other arguments that we've described earlier, such as the <code>PlayerArgument</code> and <code>TimeArgument</code>. Since duration for the <code>PotionEffect</code> constructor is in ticks, this is perfectly fit for the <code>TimeArgument</code>, which is represented in ticks.</p>
@@ -239,21 +239,6 @@
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

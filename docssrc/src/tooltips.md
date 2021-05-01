@@ -35,7 +35,7 @@ The first method, `StringTooltip.none(String)` creates a normal suggestion entry
 
 ### Example - An emotes command with string suggestion tooltips
 
-Say we want to create a simple command to provide ingame emotes between players. For example, if you did `/emote wave Bob`, you'll "wave" to the player _Bob_. For this example, we'll use the following command structure:
+Say we want to create a simple command to provide ingame emotes between players. For example, if you did `/emote wave Bob`, you'll "wave" to the player _Bob_. For this example, we'll use the following command syntax:
 
 ```
 /emote <emote> <target>
@@ -115,7 +115,7 @@ The use of `arrayOf` is heavily recommended as it provides the necessary type sa
 
 ### Example - Teleportation command with suggestion descriptions
 
-Say we wanted to create a custom teleport command which suggestions a few key locations. In this example, we'll use the following command structure:
+Say we wanted to create a custom teleport command which suggestions a few key locations. In this example, we'll use the following command syntax:
 
 ```
 /warp <location>

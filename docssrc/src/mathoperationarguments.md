@@ -52,7 +52,7 @@ Say we wanted to create a player's level. Typically, this is implemented in the 
 /xp add <player> <levels>
 ```
 
-Using the `MathOperationArgument`, we can extend the functionality of adding and setting a player's level by allowing the user to choose what operation they desire. To do this, we'll use the following structure:
+Using the `MathOperationArgument`, we can extend the functionality of adding and setting a player's level by allowing the user to choose what operation they desire. To do this, we'll use the following syntax:
 
 ```
 /changelevel <player> <operation> <value>

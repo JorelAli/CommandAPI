@@ -45,7 +45,7 @@ class FloatRange {
 
 ## Example - Searching chests for certain items
 
-Say you're working on a plugin for server administrators to help them find restricted items. A method of doing so would be to search chests in a given radius for certain items. As such, we can use the following structure:
+Say you're working on a plugin for server administrators to help them find restricted items. A method of doing so would be to search chests in a given radius for certain items. As such, we can use the following syntax:
 
 ```
 /searchchests <range> <item>

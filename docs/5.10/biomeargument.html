@@ -185,7 +185,7 @@
 </div>
 <div class="example">
 <h3><a class="header" href="#example---setting-the-biome-of-a-chunk" id="example---setting-the-biome-of-a-chunk">Example - Setting the biome of a chunk</a></h3>
-<p>Say you want to set the biome of the current chunk that a player is in. We can do this using the <code>World.setBiome(x, y, z, biome)</code> method for a given world. We will use this command structure to set the biome of our current chunk:</p>
+<p>Say you want to set the biome of the current chunk that a player is in. We can do this using the <code>World.setBiome(x, y, z, biome)</code> method for a given world. We will use this command syntax to set the biome of our current chunk:</p>
 <pre><code>/setbiome &lt;biome&gt;
 </code></pre>
 <p>And we can set the biome of the current chunk as expected:</p>
@@ -237,21 +237,6 @@
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

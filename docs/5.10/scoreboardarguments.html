@@ -191,7 +191,7 @@ new ScoreHolderArgument(nodeName, ScoreHolderType.MULTIPLE);
 <p>Depending on which constructor is used, the cast type changes. If you use a <code>ScoreHolderType.SINGLE</code>, the argument must be casted to a <code>String</code>. Otherwise, if you use <code>ScoreHolderType.MULTIPLE</code>, the argument must be casted to a <code>Collection&lt;String&gt;</code>.</p>
 <div class="example">
 <h3><a class="header" href="#example---rewarding-players-with-scoreboard-objectives" id="example---rewarding-players-with-scoreboard-objectives">Example - Rewarding players with scoreboard objectives</a></h3>
-<p>Say we want to reward all players that fit a certain criteria. We want a command with the following structure:</p>
+<p>Say we want to reward all players that fit a certain criteria. We want a command with the following syntax:</p>
 <pre><code>/reward &lt;players&gt;
 </code></pre>
 <p>Since we could have multiple players that fit a certain criterion, we want to use <code>ScoreHolderType.MULTIPLE</code> as the parameter for the argument's constructor.</p>
@@ -245,7 +245,7 @@ for(String str : entitiesAndPlayers) {
 <p>The <code>getDisplaySlot()</code> method returns the display slot that was chosen. If the display slot is <code>DisplaySlot.SIDEBAR</code> and <code>hasTeamColor()</code> returns true, then it is possible to use <code>getTeamColor()</code> to get the team color provided.</p>
 <div class="example">
 <h3><a class="header" href="#example---clearing-objectives-in-a-scoreboard-slot" id="example---clearing-objectives-in-a-scoreboard-slot">Example - Clearing objectives in a scoreboard slot</a></h3>
-<p>Say we want to clear all objectives in a specific scoreboard slot. In this example, we will use the main server scoreboard, which is accessed using <code>Bukkit.getScoreboardManager.getMainScoreboard()</code>. We want a command with the following structure:</p>
+<p>Say we want to clear all objectives in a specific scoreboard slot. In this example, we will use the main server scoreboard, which is accessed using <code>Bukkit.getScoreboardManager.getMainScoreboard()</code>. We want a command with the following syntax:</p>
 <pre><code>/clearobjectives &lt;slot&gt;
 </code></pre>
 <p>We implement this simply by using the <code>ScoreboardSlotArgument</code> as our argument, and then we can clear the slot using the scoreboard <code>clearSlot(DisplaySlot)</code> method.</p>
@@ -296,21 +296,6 @@ for(String str : entitiesAndPlayers) {
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

@@ -191,7 +191,7 @@
 </blockquote>
 <div class="example">
 <h3><a class="header" href="#example---move-objective-to-sidebar" id="example---move-objective-to-sidebar">Example - Move objective to sidebar</a></h3>
-<p>As an example, let's create a command to move an objective to a player's sidebar. To do this, we will use the following command structure:</p>
+<p>As an example, let's create a command to move an objective to a player's sidebar. To do this, we will use the following command syntax:</p>
 <pre><code>/sidebar &lt;objective&gt;
 </code></pre>
 <p>Given that an objective has to be casted to a String, we have to find a way to convert it from its name to a Bukkit <code>Objective</code> object. We can do that by using the <code>getObjective(String)</code> method from a Bukkit <code>Scoreboard</code>:</p>
@@ -270,21 +270,6 @@
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

@@ -212,8 +212,8 @@ new CommandAPICommand(&quot;cmd&quot;)
 <table><thead><tr><th align="right">Argument class</th><th align="left">Data type</th></tr></thead><tbody>
 <tr><td align="right"><a href="./angleargument"><code>AngleArgument</code></a></td><td align="left"><code>float</code></td></tr>
 <tr><td align="right"><a href="./advancementargument.html"><code>AdvancementArgument</code></a></td><td align="left"><code>org.bukkit.advancement.Advancement</code></td></tr>
-<tr><td align="right"><a href="./adventurechatarguments.html"><code>AdventureChatArgument</code></a></td><td align="left"><code>net.kyori.adventure.text.Component</code></td></tr>
-<tr><td align="right"><a href="./adventurechatarguments.html"><code>AdventureChatComponentArgument</code></a></td><td align="left"><code>net.kyori.adventure.text.Component</code></td></tr>
+<tr><td align="right"><a href="./adventurechatarguments.html#adventure-chat-argument"><code>AdventureChatArgument</code></a></td><td align="left"><code>net.kyori.adventure.text.Component</code></td></tr>
+<tr><td align="right"><a href="./adventurechatarguments.html#adventure-chat-component-argument"><code>AdventureChatComponentArgument</code></a></td><td align="left"><code>net.kyori.adventure.text.Component</code></td></tr>
 <tr><td align="right"><a href="./axisarg.html"><code>AxisArgument</code></a></td><td align="left"><code>java.util.EnumSet&lt;org.bukkit.Axis&gt;</code></td></tr>
 <tr><td align="right"><a href="./biomeargument.html"><code>BiomeArgument</code></a></td><td align="left"><code>org.bukkit.block.Biome</code></td></tr>
 <tr><td align="right"><a href="./blockpredicateargs.html"><code>BlockPredicateArgument</code></a></td><td align="left"><code>java.util.function.Predicate&lt;org.bukkit.block.Block&gt;</code></td></tr>
@@ -262,11 +262,11 @@ new CommandAPICommand(&quot;cmd&quot;)
 </tbody></table>
 <hr />
 <h2><a class="header" href="#optionaldifferent-arguments" id="optionaldifferent-arguments">Optional/Different Arguments</a></h2>
-<p>Sometimes, you want to register a command that has a different effect whether arguments are included or not. For example, take the <code>/kill</code> command. If you run <code>/kill</code> on its own, it will kill the command sender. If however you run <code>/kill &lt;target&gt;</code>, it will kill the target. In other words, we have the following command structure:</p>
+<p>Sometimes, you want to register a command that has a different effect whether arguments are included or not. For example, take the <code>/kill</code> command. If you run <code>/kill</code> on its own, it will kill the command sender. If however you run <code>/kill &lt;target&gt;</code>, it will kill the target. In other words, we have the following command command syntax:</p>
 <pre><code>/kill          - Kills yourself
 /kill &lt;target&gt; - Kills a target player
 </code></pre>
-<p>As shown by the command structure, we need to register <em>two commands</em>.</p>
+<p>As shown by the command syntax, we need to register <em>two commands</em>.</p>
 <div class="example">
 <h3><a class="header" href="#example---kill-command-with-two-separate-arguments" id="example---kill-command-with-two-separate-arguments">Example - /kill command with two separate arguments</a></h3>
 <p>For example, say we're registering a command <code>/kill</code>:</p>
@@ -329,21 +329,6 @@ new CommandAPICommand(&quot;kill&quot;)
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

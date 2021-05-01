@@ -12,7 +12,7 @@ The `BlockStateArgument` is used to represent data about blocks in the world. Th
 
 ### Example - Setting a block
 
-Say we want a simple command to set the block that you're looking at. We'll use the following command structure:
+Say we want a simple command to set the block that you're looking at. We'll use the following command syntax:
 
 ```
 /set <block>

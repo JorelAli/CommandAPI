@@ -45,7 +45,7 @@ new CustomArgumentException(MessageBuilder message);
 
 -----
 
-We can use our custom argument like any other argument. Say we wanted to write a command to teleport to a specific world. We will create a command of the following structure:
+We can use our custom argument like any other argument. Say we wanted to write a command to teleport to a specific world. We will create a command of the following syntax:
 
 ```
 /tpworld <world>

@@ -196,7 +196,7 @@ Argument overrideSuggestions(BiFunction&lt;CommandSender, Object[], String[]&gt;
 <p>The first method, <code>overrideSuggestions(String... suggestions)</code>, allows you to <em>replace</em> the suggestions normally associated with that argument with an array of strings. As described above, this doesn't use suggestion deferral, <em>so this list will not update automatically</em>.</p>
 <div class="example">
 <h3><a class="header" href="#example---teleport-to-worlds-by-overriding-suggestions" id="example---teleport-to-worlds-by-overriding-suggestions">Example - Teleport to worlds by overriding suggestions</a></h3>
-<p>Say we're creating a plugin with the ability to teleport to different warps on the server. If we were to retrieve a list of warps, we would be able to override the suggestions of a typical <code>StringArgument</code> to teleport to that warp. Let's create a command with the following structure:</p>
+<p>Say we're creating a plugin with the ability to teleport to different warps on the server. If we were to retrieve a list of warps, we would be able to override the suggestions of a typical <code>StringArgument</code> to teleport to that warp. Let's create a command with the following syntax:</p>
 <pre><code>/warp &lt;warp&gt;
 </code></pre>
 <p>We then implement our warp teleporting command using <code>overrideSuggestions()</code> on the <code>StringArgument</code> to provide a list of warps to teleport to:</p>
@@ -275,7 +275,7 @@ arguments.add(new PlayerArgument(&quot;friend&quot;).overrideSuggestions(Friends
 </div>
 <div class="example">
 <h3><a class="header" href="#example---sending-a-message-to-a-nearby-player" id="example---sending-a-message-to-a-nearby-player">Example - Sending a message to a nearby player</a></h3>
-<p>Say we wanted to create a command that lets you send a message to a specific player in a given radius. <em>(This is a bit of a contrived example, but let's roll with it)</em>. To do this, we'll use the following command structure:</p>
+<p>Say we wanted to create a command that lets you send a message to a specific player in a given radius. <em>(This is a bit of a contrived example, but let's roll with it)</em>. To do this, we'll use the following command syntax:</p>
 <pre><code>/localmsg &lt;radius&gt; &lt;target&gt; &lt;message&gt;
 </code></pre>
 <p>When run, this command will send a message to a target player within the provided radius. To help identify which players are within a radius, we can override the suggestions on the <code>&lt;target&gt;</code> argument to include a list of players within the provided radius. We do this with the following code:</p>
@@ -353,21 +353,6 @@ new CommandAPICommand(&quot;localmsg&quot;)
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

@@ -185,7 +185,7 @@
 </div>
 <div class="example">
 <h3><a class="header" href="#example---creating-a-new-world" id="example---creating-a-new-world">Example - Creating a new world</a></h3>
-<p>Say we want to create a new world on our Minecraft server. To do this, we need to know the name of the world, and the type (i.e. overworld, nether or the end). As such, we want to create a command with the following structure:</p>
+<p>Say we want to create a new world on our Minecraft server. To do this, we need to know the name of the world, and the type (i.e. overworld, nether or the end). As such, we want to create a command with the following syntax:</p>
 <pre><code>/createworld &lt;worldname&gt; &lt;type&gt;
 </code></pre>
 <p>Using the world name and the environment of the world, we can use Bukkit's <code>WorldCreator</code> to create a new world that matches our provided specifications:</p>
@@ -240,21 +240,6 @@
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

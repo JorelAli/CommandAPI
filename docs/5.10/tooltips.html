@@ -199,7 +199,7 @@ StringTooltip of(String suggestion, String tooltip);
 <p>The first method, <code>StringTooltip.none(String)</code> creates a normal suggestion entry with no tooltip, whereas the <code>StringTooltip.of(String, String)</code> method creates a suggestion with the provided tooltip text.</p>
 <div class="example">
 <h3><a class="header" href="#example---an-emotes-command-with-string-suggestion-tooltips" id="example---an-emotes-command-with-string-suggestion-tooltips">Example - An emotes command with string suggestion tooltips</a></h3>
-<p>Say we want to create a simple command to provide ingame emotes between players. For example, if you did <code>/emote wave Bob</code>, you'll &quot;wave&quot; to the player <em>Bob</em>. For this example, we'll use the following command structure:</p>
+<p>Say we want to create a simple command to provide ingame emotes between players. For example, if you did <code>/emote wave Bob</code>, you'll &quot;wave&quot; to the player <em>Bob</em>. For this example, we'll use the following command syntax:</p>
 <pre><code>/emote &lt;emote&gt; &lt;target&gt;
 </code></pre>
 <p>First, we'll declare our arguments. Here, we'll use the <code>overrideSuggestionsT</code> method, along with the <code>StringTooltip.of(String, String)</code> method to create emote suggestions and include suitable descriptions:</p>
@@ -318,7 +318,7 @@ Tooltip&lt;S&gt;[] arrayOf(Tooltip&lt;S&gt;... tooltips);
 <p>The use of <code>arrayOf</code> is heavily recommended as it provides the necessary type safety for Java code to ensure that the correct types are being passed to the <code>safeOverrideSuggestionsT</code> method.</p>
 <div class="example">
 <h3><a class="header" href="#example---teleportation-command-with-suggestion-descriptions" id="example---teleportation-command-with-suggestion-descriptions">Example - Teleportation command with suggestion descriptions</a></h3>
-<p>Say we wanted to create a custom teleport command which suggestions a few key locations. In this example, we'll use the following command structure:</p>
+<p>Say we wanted to create a custom teleport command which suggestions a few key locations. In this example, we'll use the following command syntax:</p>
 <pre><code>/warp &lt;location&gt;
 </code></pre>
 <p>First, we'll declare our arguments. Here, we use a <code>LocationArgument</code> and use the <code>safeOverrideSuggestionsT</code> method, with a parameter for the command sender, so we can get information about the world. We populate the suggestions with tooltips using <code>Tooltip.of(Location, String)</code> and collate them together with <code>Tooltip.arrayOf(Tooltip&lt;Location&gt;...)</code>:</p>
@@ -379,21 +379,6 @@ arguments.add(new LocationArgument(&quot;location&quot;)
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

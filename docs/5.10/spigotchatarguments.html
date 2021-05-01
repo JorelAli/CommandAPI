@@ -279,7 +279,7 @@ sender.spigot().sendMessage(BaseComponent[]);
 <p>The <code>ChatArgument</code> is basically identical to the <code>GreedyStringArgument</code>, with the added functionality of enabling <em>entity selectors</em>, such as <code>@e</code>, <code>@p</code> and so on. The <code>ChatArgument</code> also returns a <code>BaseComponent[]</code>, similar to the <code>ChatComponentArgument</code>.</p>
 <div class="example">
 <h3><a class="header" href="#example---sending-personalized-messages-to-players" id="example---sending-personalized-messages-to-players">Example - Sending personalized messages to players</a></h3>
-<p>Say we wanted to broadcast a &quot;personalized&quot; message to players on the server. By &quot;personalized&quot;, we mean a command which changes its output depending on who we are sending the output to. Simply put, we want a command of the following structure:</p>
+<p>Say we wanted to broadcast a &quot;personalized&quot; message to players on the server. By &quot;personalized&quot;, we mean a command which changes its output depending on who we are sending the output to. Simply put, we want a command of the following syntax:</p>
 <pre><code>/pbroadcast &lt;message&gt;
 </code></pre>
 <p>Say we're on a server with 2 players: <em>Bob</em> and <em>Michael</em>. If I were to use the following command:</p>
@@ -334,21 +334,6 @@ sender.spigot().sendMessage(BaseComponent[]);
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

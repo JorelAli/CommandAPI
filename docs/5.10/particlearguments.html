@@ -181,7 +181,7 @@
 <p>The <code>ParticleArgument</code> class represents Minecraft particles. As expected, this is casted to the Bukkit <code>Particle</code> class.</p>
 <div class="example">
 <h3><a class="header" href="#example---show-particles-at-a-players-location" id="example---show-particles-at-a-players-location">Example - Show particles at a player's location</a></h3>
-<p>Say we wanted to have a command that displayed particles at a player's location. We will use the following command structure:</p>
+<p>Say we wanted to have a command that displayed particles at a player's location. We will use the following command syntax:</p>
 <pre><code>/showparticle &lt;particle&gt;
 </code></pre>
 <p>With this, we can simply spawn the particle using the <code>World.spawnParticle(Particle, Location, int)</code> method:</p>
@@ -230,21 +230,6 @@
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

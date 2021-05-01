@@ -181,10 +181,10 @@
 <p>The <code>ItemStackArgument</code> class represents in-game items. As expected, this should be casted to Bukkit's <code>ItemStack</code> object.</p>
 <div class="example">
 <h3><a class="header" href="#example---giving-a-player-an-itemstack" id="example---giving-a-player-an-itemstack">Example - Giving a player an itemstack</a></h3>
-<p>Say we want to create a command that gives you items. For this command, we will use the following structure:</p>
+<p>Say we want to create a command that gives you items. For this command, we will use the following syntax:</p>
 <pre><code>/item &lt;itemstack&gt;
 </code></pre>
-<p>With this structure, we can easily create our command:</p>
+<p>With this syntax, we can easily create our command:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;item&quot;)
     .withArguments(new ItemStackArgument(&quot;itemstack&quot;))
     .executesPlayer((player, args) -&gt; {
@@ -230,21 +230,6 @@
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

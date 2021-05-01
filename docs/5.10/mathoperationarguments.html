@@ -214,7 +214,7 @@ public float apply(float val1, float val2);
 <pre><code>/xp set &lt;player&gt; &lt;level&gt;
 /xp add &lt;player&gt; &lt;levels&gt;
 </code></pre>
-<p>Using the <code>MathOperationArgument</code>, we can extend the functionality of adding and setting a player's level by allowing the user to choose what operation they desire. To do this, we'll use the following structure:</p>
+<p>Using the <code>MathOperationArgument</code>, we can extend the functionality of adding and setting a player's level by allowing the user to choose what operation they desire. To do this, we'll use the following syntax:</p>
 <pre><code>/changelevel &lt;player&gt; &lt;operation&gt; &lt;value&gt;
 </code></pre>
 <p>As with any command, we declare our arguments, cast them properly and then we write our main code. In this example, we use the <code>apply(int, int)</code> method from our <code>MathOperation</code> to calculate the player's new level.</p>
@@ -288,21 +288,6 @@ public float apply(float val1, float val2);
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

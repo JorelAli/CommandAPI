@@ -42,7 +42,7 @@ As described in the section about [normal command executors](./normalexecutors.m
 
 ### Example - A really simple "break block" command
 
-Say we wanted to make a command that simply sets the current block to air. For this example, we'll use the following command structure:
+Say we wanted to make a command that simply sets the current block to air. For this example, we'll use the following command syntax:
 
 ```
 /break

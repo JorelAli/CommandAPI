@@ -208,9 +208,30 @@
         target.openBook(mybook);
     })
     .register();
-}
 </code></pre>
 </div>
+<hr />
+<h2><a class="header" href="#adventure-chat-argument" id="adventure-chat-argument">Adventure chat argument</a></h2>
+<p>The <code>AdventureChatArgument</code> class is the equivalent Adventure API class for the <code>ChatArgument</code> - it represents infinitely long strings similar to the <code>GreedyStringArgument</code> and allows entity selectors such as <code>@e</code>, <code>@p</code> and so on. The <code>AdventureChatArgument</code> returns a <code>Component</code>, similar to the <code>AdventureChatComponentArgument</code>.</p>
+<div class="example">
+<h3><a class="header" href="#example---sending-personalized-messages-to-players" id="example---sending-personalized-messages-to-players">Example - Sending personalized messages to players</a></h3>
+<p>We'll take the same example from the <code>ChatArgument</code> class, but using the <code>AdventureChatArgument</code> instead - We want to create a personalized message broadcasted to all users using a chat component that allows entity selectors. For this command, we want the following syntax:</p>
+<pre><code>/pbroadcast &lt;message&gt;
+</code></pre>
+<p>In order to broadcast an Adventure <code>Component</code> to all players on the server, we have to use Paper's <code>broadcast(Component, String)</code> method. This method requires a permission node which all players must have in order to receive the broadcasted message. By default, Bukkit-based servers (Spigot and Paper) use the <code>bukkit.broadcast.user</code> permission, which is described <a href="https://bukkit.fandom.com/wiki/CraftBukkit_Commands#Additional_Permissions">here</a>:</p>
+<pre><code class="language-java">new CommandAPICommand(&quot;pbroadcast&quot;)
+	.withArguments(new AdventureChatArgument(&quot;message&quot;))
+    .executes((sender, args) -&gt; {
+        Component message = (Component) args[0];
+        
+        // Broadcast the message to everyone with broadcast permissions. Read more info about broadcast
+        // permissions here: https://bukkit.fandom.com/wiki/CraftBukkit_Commands#Additional_Permissions
+        Bukkit.getServer().broadcast(message, &quot;bukkit.broadcast.user&quot;);
+    })
+    .register();
+</code></pre>
+</div>
+
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
@@ -248,21 +269,6 @@
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

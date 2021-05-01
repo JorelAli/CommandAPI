@@ -66,6 +66,7 @@ import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.StringTooltip;
 import dev.jorel.commandapi.Tooltip;
 import dev.jorel.commandapi.arguments.AdvancementArgument;
+import dev.jorel.commandapi.arguments.AdventureChatArgument;
 import dev.jorel.commandapi.arguments.AdventureChatComponentArgument;
 import dev.jorel.commandapi.arguments.AngleArgument;
 import dev.jorel.commandapi.arguments.Argument;
@@ -117,11 +118,8 @@ import dev.jorel.commandapi.wrappers.IntegerRange;
 import dev.jorel.commandapi.wrappers.MathOperation;
 import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.inventory.Book;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 public class Examples extends JavaPlugin {
@@ -1553,8 +1551,23 @@ new CommandAPICommand("showbook")
         target.openBook(mybook);
     })
     .register();
-}
 /* ANCHOR_END: ArgumentAdventureChatComponent */
+}
+
+{
+/* ANCHOR: ArgumentAdventureChat */
+new CommandAPICommand("pbroadcast")
+	.withArguments(new AdventureChatArgument("message"))
+    .executes((sender, args) -> {
+        Component message = (Component) args[0];
+        
+        // Broadcast the message to everyone with broadcast permissions. Read more info about broadcast
+        // permissions here: https://bukkit.fandom.com/wiki/CraftBukkit_Commands#Additional_Permissions
+        Bukkit.getServer().broadcast(message, "bukkit.broadcast.user");
+    })
+    .register();
+/* ANCHOR_END: ArgumentAdventureChat */
+}
 
 
 } // Examples class end ////////////////////////////////////////////////////////////////////

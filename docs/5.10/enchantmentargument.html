@@ -181,7 +181,7 @@
 <p>The <code>EnchantmentArgument</code> class lets users input a specific enchantment. As you would expect, the cast type is Bukkit's <code>Enchantment</code> class.</p>
 <div class="example">
 <h3><a class="header" href="#example---giving-a-player-an-enchantment-on-their-current-item" id="example---giving-a-player-an-enchantment-on-their-current-item">Example - Giving a player an enchantment on their current item</a></h3>
-<p>Say we want to give a player an enchantment on the item that the player is currently holding. We will use the following command structure:</p>
+<p>Say we want to give a player an enchantment on the item that the player is currently holding. We will use the following command syntax:</p>
 <pre><code>/enchantitem &lt;enchantment&gt; &lt;level&gt;
 </code></pre>
 <p>Since most enchantment levels range between 1 and 5, we will also make use of the <code>IntegerArgument</code> to restrict the level of the enchantment by usng its range constructor.</p>
@@ -236,21 +236,6 @@
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

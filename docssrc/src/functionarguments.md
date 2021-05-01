@@ -10,7 +10,7 @@ Therefore, if a user supplies a single function, the `FunctionWrapper[]` will be
 
 ### Example - Minecraft's /function command
 
-Since it's a little difficult to demonstrate a custom use for the `FunctionArgument`, we will show how you can implement Vanilla Minecraft's `/function` command. In this example, we want a command that uses the following structure:
+Since it's a little difficult to demonstrate a custom use for the `FunctionArgument`, we will show how you can implement Vanilla Minecraft's `/function` command. In this example, we want a command that uses the following syntax:
 
 ```
 /runfunction <function>

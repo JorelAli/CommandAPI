@@ -192,7 +192,7 @@
 <p>The <code>BooleanArgument</code> class represents the Boolean values <code>true</code> and <code>false</code>.</p>
 <div class="example">
 <h3><a class="header" href="#example---config-editing-plugin" id="example---config-editing-plugin">Example - Config editing plugin</a></h3>
-<p>Say we want to create a plugin that lets you edit its own <code>config.yml</code> file using a command. To do this, let's create a command with the following structure:</p>
+<p>Say we want to create a plugin that lets you edit its own <code>config.yml</code> file using a command. To do this, let's create a command with the following syntax:</p>
 <pre><code>/editconfig &lt;config-key&gt; &lt;value&gt;
 </code></pre>
 <p>We first retrieve the keys from the configuration file using the typical Bukkit API. We construct our <code>List</code> to hold our arguments, with the first parameter being a String key (in the form of a <code>TextArgument</code>, <a href="TODO">overridden with an array of suggestions</a>). Finally, we register our command and update the config, ensuring that we cast the <code>BooleanArgument</code> to <code>boolean</code>: </p>
@@ -269,21 +269,6 @@ new CommandAPICommand(&quot;editconfig&quot;)
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

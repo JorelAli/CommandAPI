@@ -181,7 +181,7 @@
 <p>The <code>AdvancementArgument</code> class represents in-game advancements. As expected, the <code>AdvancementArgument</code> can be casted to Bukkit's <code>Advancement</code> class.</p>
 <div class="example">
 <h3><a class="header" href="#example---awarding-a-player-an-advancement" id="example---awarding-a-player-an-advancement">Example - Awarding a player an advancement</a></h3>
-<p>Say we want to award a player an advancement. First, we need the structure of our command:</p>
+<p>Say we want to award a player an advancement. First, we need the syntax that our command will use:</p>
 <pre><code>/award &lt;player&gt; &lt;advancement&gt;
 </code></pre>
 <p>Since we require a player, we will use the <code>PlayerArgument</code> for this example. Given a player, we can simply get the <code>AdvancementProgress</code> for that player, and then award the criteria required to fully complete the provided advancement.</p>
@@ -238,21 +238,6 @@
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

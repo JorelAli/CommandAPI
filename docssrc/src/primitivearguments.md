@@ -24,7 +24,7 @@ The `BooleanArgument` class represents the Boolean values `true` and `false`.
 
 ### Example - Config editing plugin
 
-Say we want to create a plugin that lets you edit its own `config.yml` file using a command. To do this, let's create a command with the following structure:
+Say we want to create a plugin that lets you edit its own `config.yml` file using a command. To do this, let's create a command with the following syntax:
 
 ```
 /editconfig <config-key> <value>

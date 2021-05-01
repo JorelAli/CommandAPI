@@ -205,7 +205,7 @@ public Location getLocation();
 <hr />
 <div class="example">
 <h3><a class="header" href="#example---a-really-simple-break-block-command" id="example---a-really-simple-break-block-command">Example - A really simple &quot;break block&quot; command</a></h3>
-<p>Say we wanted to make a command that simply sets the current block to air. For this example, we'll use the following command structure:</p>
+<p>Say we wanted to make a command that simply sets the current block to air. For this example, we'll use the following command syntax:</p>
 <pre><code>/break
 </code></pre>
 <p>As you can see, this command takes no arguments. This is fine, since our &quot;argument&quot; will be the sender's location. We can access the sender's location using the <code>getLocation()</code> method from the <code>NativeProxyCommandSender</code> object, available from the <code>.executesNative()</code> method:</p>
@@ -264,21 +264,6 @@ public Location getLocation();
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

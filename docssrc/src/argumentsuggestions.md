@@ -38,7 +38,7 @@ The first method, `overrideSuggestions(String... suggestions)`, allows you to *r
 
 ### Example - Teleport to worlds by overriding suggestions
 
-Say we're creating a plugin with the ability to teleport to different warps on the server. If we were to retrieve a list of warps, we would be able to override the suggestions of a typical `StringArgument` to teleport to that warp. Let's create a command with the following structure:
+Say we're creating a plugin with the ability to teleport to different warps on the server. If we were to retrieve a list of warps, we would be able to override the suggestions of a typical `StringArgument` to teleport to that warp. Let's create a command with the following syntax:
 
 ```
 /warp <warp>
@@ -133,7 +133,7 @@ To clarify, by "does not work", I mean that it is not possible to access the `Ob
 
 ### Example - Sending a message to a nearby player
 
-Say we wanted to create a command that lets you send a message to a specific player in a given radius. _(This is a bit of a contrived example, but let's roll with it)_. To do this, we'll use the following command structure:
+Say we wanted to create a command that lets you send a message to a specific player in a given radius. _(This is a bit of a contrived example, but let's roll with it)_. To do this, we'll use the following command syntax:
 
 ```
 /localmsg <radius> <target> <message>

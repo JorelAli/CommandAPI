@@ -31,3 +31,28 @@ We can construct a book using the Adventure API's `Book.book(Component, Componen
 ```
 
 </div>
+
+-----
+
+## Adventure chat argument
+
+The `AdventureChatArgument` class is the equivalent Adventure API class for the `ChatArgument` - it represents infinitely long strings similar to the `GreedyStringArgument` and allows entity selectors such as `@e`, `@p` and so on. The `AdventureChatArgument` returns a `Component`, similar to the `AdventureChatComponentArgument`.
+
+<div class="example">
+
+### Example - Sending personalized messages to players
+
+We'll take the same example from the `ChatArgument` class, but using the `AdventureChatArgument` instead - We want to create a personalized message broadcasted to all users using a chat component that allows entity selectors. For this command, we want the following syntax:
+
+```
+/pbroadcast <message>
+```
+
+In order to broadcast an Adventure `Component` to all players on the server, we have to use Paper's `broadcast(Component, String)` method. This method requires a permission node which all players must have in order to receive the broadcasted message. By default, Bukkit-based servers (Spigot and Paper) use the `bukkit.broadcast.user` permission, which is described [here](https://bukkit.fandom.com/wiki/CraftBukkit_Commands#Additional_Permissions):
+
+```java
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:ArgumentAdventureChat}}
+```
+
+</div>
+
