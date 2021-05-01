@@ -48,6 +48,7 @@ import dev.jorel.commandapi.wrappers.MathOperation;
 import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
+import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 public interface NMS<CommandListenerWrapper> {
@@ -156,6 +157,8 @@ public interface NMS<CommandListenerWrapper> {
 
 	Predicate<Block> getBlockPredicate(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException;
+	
+	Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
 	BaseComponent[] getChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
@@ -213,6 +216,8 @@ public interface NMS<CommandListenerWrapper> {
 	BlockData getBlockState(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
 	ChatColor getChatColor(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	
+	Component getAdventureChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
 	BaseComponent[] getChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 

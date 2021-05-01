@@ -63,8 +63,6 @@ public abstract class Converter {
 		convertPluginCommand((JavaPlugin) plugin, cmdName, Arrays.asList(arguments));
 	}
 	
-	
-	
 	private static void convertPluginCommand(JavaPlugin plugin, String commandName, List<Argument> arguments) {
 		CommandAPI.logInfo("Converting " + plugin.getName() + " command /" + commandName);
 		/* Parse the commands */
@@ -136,7 +134,6 @@ public abstract class Converter {
 	
 	/*
 	 * https://www.jorel.dev/blog/Simplifying-Bukkit-CommandSenders/
-	 * No matter what I can name this method, I'm never satisfied its name
 	 */
 	private static CommandSender mergeProxySender(ProxiedCommandSender proxySender) {
 		Class<?>[] calleeInterfaces = proxySender.getCallee().getClass().getInterfaces();

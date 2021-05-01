@@ -32,10 +32,10 @@ class Config {
 	private final List<String> skipSenderProxy;
 	
 	public Config(FileConfiguration fileConfig) {
-		verboseOutput = fileConfig.getBoolean("verbose-outputs");
-		createDispatcherFile = fileConfig.getBoolean("create-dispatcher-json");
-		pluginsToConvert = new HashMap<>();
-		skipSenderProxy = new ArrayList<>();
+		this.verboseOutput = fileConfig.getBoolean("verbose-outputs");
+		this.createDispatcherFile = fileConfig.getBoolean("create-dispatcher-json");
+		this.pluginsToConvert = new HashMap<>();
+		this.skipSenderProxy = new ArrayList<>();
 
 		for (Map<?, ?> map : fileConfig.getMapList("plugins-to-convert")) {
 			String[] pluginCommands;
@@ -59,7 +59,7 @@ class Config {
 		for (String pluginName : fileConfig.getStringList("skip-sender-proxy")) {
 			Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
 			if(plugin != null) { 
-				skipSenderProxy.add(pluginName);
+				this.skipSenderProxy.add(pluginName);
 			} else {
 				new InvalidPluginException("Could not find a plugin " + pluginName + "! Has it been loaded properly?").printStackTrace();
 			}
@@ -67,10 +67,17 @@ class Config {
 	}
 
 	public Config(boolean verbose) {
-		verboseOutput = verbose;
-		createDispatcherFile = false;
-		pluginsToConvert = new HashMap<>();
-		skipSenderProxy = new ArrayList<>();
+		this.verboseOutput = verbose;
+		this.createDispatcherFile = false;
+		this.pluginsToConvert = new HashMap<>();
+		this.skipSenderProxy = new ArrayList<>();
+	}
+
+	public Config(CommandAPIConfig config) {
+		this.verboseOutput = config.verboseOutput;
+		this.createDispatcherFile = false; // The dispatcher File is only declared in the plugin version
+		this.pluginsToConvert = new HashMap<>();
+		this.skipSenderProxy = new ArrayList<>();
 	}
 
 	public boolean hasVerboseOutput() {
@@ -86,7 +93,7 @@ class Config {
 	}
 	
 	public boolean shouldSkipSenderProxy(Plugin plugin) {
-		return skipSenderProxy.contains(plugin.getName());
+		return this.skipSenderProxy.contains(plugin.getName());
 	}
 
 }

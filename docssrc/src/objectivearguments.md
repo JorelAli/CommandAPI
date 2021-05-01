@@ -19,7 +19,7 @@ The objective argument refers to a single scoreboard objective. Unconventionally
 
 ### Example - Move objective to sidebar
 
-As an example, let's create a command to move an objective to a player's sidebar. To do this, we will use the following command structure:
+As an example, let's create a command to move an objective to a player's sidebar. To do this, we will use the following command syntax:
 
 ```
 /sidebar <objective>

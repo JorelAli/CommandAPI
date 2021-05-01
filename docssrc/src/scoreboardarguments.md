@@ -22,7 +22,7 @@ Depending on which constructor is used, the cast type changes. If you use a `Sco
 
 ### Example - Rewarding players with scoreboard objectives
 
-Say we want to reward all players that fit a certain criteria. We want a command with the following structure:
+Say we want to reward all players that fit a certain criteria. We want a command with the following syntax:
 
 ```
 /reward <players>
@@ -88,7 +88,7 @@ The `getDisplaySlot()` method returns the display slot that was chosen. If the d
 
 ### Example - Clearing objectives in a scoreboard slot
 
-Say we want to clear all objectives in a specific scoreboard slot. In this example, we will use the main server scoreboard, which is accessed using `Bukkit.getScoreboardManager.getMainScoreboard()`. We want a command with the following structure:
+Say we want to clear all objectives in a specific scoreboard slot. In this example, we will use the main server scoreboard, which is accessed using `Bukkit.getScoreboardManager.getMainScoreboard()`. We want a command with the following syntax:
 
 ```
 /clearobjectives <slot>

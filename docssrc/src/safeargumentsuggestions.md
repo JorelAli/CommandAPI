@@ -191,7 +191,7 @@ new CommandAPICommand("spawnmob")
 
 ### Example - Removing a potion effect from a player
 
-Say we wanted to remove a potion effect from a player. To do this, we'll use the following command structure:
+Say we wanted to remove a potion effect from a player. To do this, we'll use the following command syntax:
 
 ```
 /removeeffect <player> <potioneffect>

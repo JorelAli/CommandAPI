@@ -6,7 +6,7 @@
 
 	<groupId>dev.jorel</groupId>
 	<artifactId>commandapi</artifactId>
-	<version>5.9</version>
+	<version>5.10</version>
 	<packaging>pom</packaging>
 	<modules>
 		<!-- Compile time reflection checker -->
@@ -98,7 +98,7 @@
 						</manifest>
 					</archive>
 				</configuration>
-			</plugin> 
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>

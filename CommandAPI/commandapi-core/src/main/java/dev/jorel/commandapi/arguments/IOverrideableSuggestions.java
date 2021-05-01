@@ -20,9 +20,16 @@ public interface IOverrideableSuggestions {
 	 * 
 	 * @param suggestions the string array to override suggestions with
 	 * @return the current argument
+	 * @deprecated use {@link Argument#overrideSuggestions(Function)} 
 	 */
+	@Deprecated
 	Argument overrideSuggestions(String... suggestions);
 	
+	/**
+	 * @deprecated use {@link Argument#overrideSuggestions(Function)} 
+	 * @param suggestions a collection of strings to override suggestions with
+	 */
+	@Deprecated
 	Argument overrideSuggestions(Collection<String> suggestions);
 
 	/**
@@ -59,7 +66,9 @@ public interface IOverrideableSuggestions {
 	 * 
 	 * @param suggestions the suggestions and tooltips to override suggestions with 
 	 * @return the current argument
+	 * @deprecated use {@link Argument#overrideSuggestionsT(Function)}
 	 */
+	@Deprecated
 	Argument overrideSuggestionsT(IStringTooltip... suggestions);
 	
 	/**
@@ -68,7 +77,9 @@ public interface IOverrideableSuggestions {
 	 * 
 	 * @param suggestions the suggestions and tooltips to override suggestions with 
 	 * @return the current argument
+	 * @deprecated use {@link Argument#overrideSuggestionsT(Function)}
 	 */
+	@Deprecated
 	Argument overrideSuggestionsT(Collection<IStringTooltip> suggestions);
 	
 	/**

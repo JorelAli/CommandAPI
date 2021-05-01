@@ -12,7 +12,7 @@ Using subcommands has no disadvantages to using regular commands with the `Liter
 
 ### Example - Permission system with subcommands
 
-Say we wanted to write a permission management system. To do this, we'll use the following command structure:
+Say we wanted to write a permission management system. To do this, we'll use the following command structsyntaxure:
 
 ```
 /perm group add <permission> <groupName>

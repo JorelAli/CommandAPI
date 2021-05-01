@@ -47,14 +47,16 @@ The type to cast each argument (declared in the `dev.jorel.commandapi.arguments`
 | -----------------------------------------------------------: | :----------------------------------------------------------- |
 |                           [`AngleArgument`](./angleargument) | `float`                                                      |
 |            [`AdvancementArgument`](./advancementargument.md) | `org.bukkit.advancement.Advancement`                         |
+| [`AdventureChatArgument`](./adventurechatarguments.md#adventure-chat-argument) | `net.kyori.adventure.text.Component`                         |
+| [`AdventureChatComponentArgument`](./adventurechatarguments.md#adventure-chat-component-argument) | `net.kyori.adventure.text.Component`                         |
 |                               [`AxisArgument`](./axisarg.md) | `java.util.EnumSet<org.bukkit.Axis>`                         |
 |                        [`BiomeArgument`](./biomeargument.md) | `org.bukkit.block.Biome`                                     |
 |          [`BlockPredicateArgument`](./blockpredicateargs.md) | `java.util.function.Predicate<org.bukkit.block.Block>`       |
 |             [`BlockStateArgument`](./blockstatearguments.md) | `org.bukkit.block.data.BlockData`                            |
 | [`BooleanArgument`](./primitivearguments.md#boolean-arguments) | `boolean`                                                    |
-|           [`ChatArgument`](./chatarguments.md#chat-argument) | `net.md_5.bungee.api.chat.BaseComponent[]`                   |
+|     [`ChatArgument`](./spigotchatarguments.md#chat-argument) | `net.md_5.bungee.api.chat.BaseComponent[]`                   |
 | [`ChatColorArgument`](./chatarguments.md#chat-color-argument) | `org.bukkit.ChatColor`                                       |
-| [`ChatComponentArgument`](./chatarguments.md#chat-component-argument) | `net.md_5.bungee.api.chat.BaseComponent[]`                   |
+| [`ChatComponentArgument`](./spigotchatarguments.md#chat-component-argument) | `net.md_5.bungee.api.chat.BaseComponent[]`                   |
 |                  [`CustomArgument<T>`](./customarguments.md) | `T`                                                          |
 | [`DoubleArgument`](./primitivearguments.md#numerical-arguments) | `double`                                                     |
 |            [`EnchantmentArgument`](./enchantmentargument.md) | `org.bukkit.enchantments.Enchantment`                        |
@@ -97,14 +99,14 @@ The type to cast each argument (declared in the `dev.jorel.commandapi.arguments`
 
 ## Optional/Different Arguments
 
-Sometimes, you want to register a command that has a different effect whether arguments are included or not. For example, take the `/kill` command. If you run `/kill` on its own, it will kill the command sender. If however you run `/kill <target>`, it will kill the target. In other words, we have the following command structure:
+Sometimes, you want to register a command that has a different effect whether arguments are included or not. For example, take the `/kill` command. If you run `/kill` on its own, it will kill the command sender. If however you run `/kill <target>`, it will kill the target. In other words, we have the following command command syntax:
 
 ```
 /kill          - Kills yourself
 /kill <target> - Kills a target player
 ```
 
-As shown by the command structure, we need to register _two commands_.
+As shown by the command syntax, we need to register _two commands_.
 
 <div class="example">
 

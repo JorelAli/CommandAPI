@@ -36,6 +36,12 @@ Using the search icon in the top left corner, you can search for anything in thi
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 5.6 \\(\rightarrow\\) 5.10:
+
+- Splits chat argument sections into two: [11.5.1. Spigot chat arguments](./spigotchatarguments.md) and [11.5.2. Adventure chat arguments](./adventurechatarguments.md)
+- Adds a [FAQ page](./faq.md)
+- Adds a warning about shading in [6. Shading the CommandAPI in your plugins](./shading.md)
+
 ### Documentation changes 5.3 \\(\rightarrow\\) 5.6:
 
 - Adds a section [4. Skipping proxy senders](./skippingproxysenders.md) which describes how to use the `skip-sender-proxy` configuration option.

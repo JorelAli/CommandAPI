@@ -8,7 +8,7 @@ The `AdvancementArgument` class represents in-game advancements. As expected, th
 
 ### Example - Awarding a player an advancement
 
-Say we want to award a player an advancement. First, we need the structure of our command:
+Say we want to award a player an advancement. First, we need the syntax that our command will use:
 
 ```
 /award <player> <advancement>

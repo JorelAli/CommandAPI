@@ -42,7 +42,6 @@ public class WarpCommand {
 	@Permission("warps.create")
 	public static void createWarp(Player player, @AStringArgument String warpName) {
 		warps.put(warpName, player.getLocation());
-		new IntegerArgument("");
 	}
 	
 }

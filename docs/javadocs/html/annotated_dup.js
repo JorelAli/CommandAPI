@@ -75,6 +75,7 @@ var annotated_dup =
           [ "Brigadier", "classdev_1_1jorel_1_1commandapi_1_1_brigadier.html", "classdev_1_1jorel_1_1commandapi_1_1_brigadier" ],
           [ "CommandAPI", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i" ],
           [ "CommandAPICommand", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command" ],
+          [ "CommandAPIConfig", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config" ],
           [ "CommandAPIHandler", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler" ],
           [ "CommandPermission", "classdev_1_1jorel_1_1commandapi_1_1_command_permission.html", "classdev_1_1jorel_1_1commandapi_1_1_command_permission" ],
           [ "Converter", "classdev_1_1jorel_1_1commandapi_1_1_converter.html", "classdev_1_1jorel_1_1commandapi_1_1_converter" ],

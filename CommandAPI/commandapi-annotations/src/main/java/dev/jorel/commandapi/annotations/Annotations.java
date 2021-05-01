@@ -28,6 +28,8 @@ import javax.tools.JavaFileObject;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.annotations.arguments.AAdvancementArgument;
+import dev.jorel.commandapi.annotations.arguments.AAdventureChatArgument;
+import dev.jorel.commandapi.annotations.arguments.AAdventureChatComponentArgument;
 import dev.jorel.commandapi.annotations.arguments.AAngleArgument;
 import dev.jorel.commandapi.annotations.arguments.AAxisArgument;
 import dev.jorel.commandapi.annotations.arguments.ABiomeArgument;
@@ -84,22 +86,20 @@ import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
  */
 public class Annotations extends AbstractProcessor {
 
-	private final Class<?>[] ARGUMENT_ANNOTATIONS = new Class<?>[] {
-		AAdvancementArgument.class, AAngleArgument.class, AAxisArgument.class, ABiomeArgument.class,
-		ABlockPredicateArgument.class, ABlockStateArgument.class, ABooleanArgument.class, AChatArgument.class,
-		AChatColorArgument.class, AChatComponentArgument.class, ADoubleArgument.class,
-		AEnchantmentArgument.class, AEntitySelectorArgument.class, AEntityType.class,
-		AEnvironmentArgument.class, AFloatArgument.class, AFloatRangeArgument.class, AFunctionArgument.class,
-		AGreedyStringArgument.class, AIntegerArgument.class, AIntegerRangeArgument.class,
-		AItemStackArgument.class, AItemStackPredicateArgument.class, ALiteralArgument.class,
-		ALocation2DArgument.class, ALocationArgument.class, ALongArgument.class, ALootTableArgument.class,
-		AMathOperationArgument.class, AMultiLiteralArgument.class, ANBTCompoundArgument.class,
-		AObjectiveArgument.class, AObjectiveCriteriaArgument.class, AParticleArgument.class,
-		APlayerArgument.class, APotionEffectArgument.class, ARecipeArgument.class, ARotationArgument.class,
-		AScoreboardSlotArgument.class, AScoreHolderArgument.class, ASoundArgument.class, AStringArgument.class,
-		ATeamArgument.class, ATextArgument.class, ATimeArgument.class,
-		AUUIDArgument.class
-	};
+	private final Class<?>[] ARGUMENT_ANNOTATIONS = new Class<?>[] { AAdvancementArgument.class,
+			AAdventureChatArgument.class, AAdventureChatComponentArgument.class, AAngleArgument.class,
+			AAxisArgument.class, ABiomeArgument.class, ABlockPredicateArgument.class, ABlockStateArgument.class,
+			ABooleanArgument.class, AChatArgument.class, AChatColorArgument.class, AChatComponentArgument.class,
+			ADoubleArgument.class, AEnchantmentArgument.class, AEntitySelectorArgument.class, AEntityType.class,
+			AEnvironmentArgument.class, AFloatArgument.class, AFloatRangeArgument.class, AFunctionArgument.class,
+			AGreedyStringArgument.class, AIntegerArgument.class, AIntegerRangeArgument.class, AItemStackArgument.class,
+			AItemStackPredicateArgument.class, ALiteralArgument.class, ALocation2DArgument.class,
+			ALocationArgument.class, ALongArgument.class, ALootTableArgument.class, AMathOperationArgument.class,
+			AMultiLiteralArgument.class, ANBTCompoundArgument.class, AObjectiveArgument.class,
+			AObjectiveCriteriaArgument.class, AParticleArgument.class, APlayerArgument.class,
+			APotionEffectArgument.class, ARecipeArgument.class, ARotationArgument.class, AScoreboardSlotArgument.class,
+			AScoreHolderArgument.class, ASoundArgument.class, AStringArgument.class, ATeamArgument.class,
+			ATextArgument.class, ATimeArgument.class, AUUIDArgument.class };
 
 	// List of stuff we can deal with
 	@Override

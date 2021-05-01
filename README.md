@@ -190,7 +190,6 @@ public class WarpCommand {
     @Permission("warps.create")
     public static void createWarp(Player player, @AStringArgument String warpName) {
         warps.put(warpName, player.getLocation());
-        new IntegerArgument("");
     }
     
 }
@@ -218,17 +217,17 @@ plugins-to-convert:
 
 The CommandAPI can be built easily, but requires copies of the Spigot server jars to be present locally on your machine in order to be compatible with any Minecraft version. The CommandAPI is built using the Maven build tool - if you don't have it, you can download it [here](https://maven.apache.org/download.cgi).
 
-* Clone the repository using your preferred method, or with the command below:
+- Clone the repository using your preferred method, or with the command below:
 
   ```
   git clone https://github.com/JorelAli/CommandAPI.git
   ```
 
-* Go into the folder named `CommandAPI` _(Not to be confused with the folder named `CommandAPI`, which is what is cloned)_. You want the folder which contains `pom.xml`.
+- Go into the folder named `CommandAPI` _(Not to be confused with the folder named `CommandAPI`, which is what is cloned)_. You want the folder which contains `pom.xml`.
 
-* Ensure you have the required spigot server jars (see below)
+- Ensure you have the required spigot server jars (see below)
 
-* Run `mvn`
+- Run `mvn`
 
 ### Spigot Libraries
 
@@ -245,15 +244,15 @@ These versions of Minecraft must be installed in your local machine's Maven repo
 
 #### Building them using _BuildTools_ + downloadSpigot file (recommended)
 
-* Download the `BuildTools.jar` file from [here](https://hub.spigotmc.org/jenkins/job/BuildTools/)
-* Make sure you have maven installed on your machine. If not, it can be downloaded from [here](https://maven.apache.org/download.cgi)
-* If on Windows:
-  * Download the `downloadSpigot.bat` file [(right click this link, save as...)](https://raw.githubusercontent.com/JorelAli/CommandAPI/master/downloadSpigot.bat) and place it in the same folder as the `BuildTools.jar`
-  * Double click on the `downloadSpigot.bat` file to run it
-* If on Linux/MacOS:
-  * Download the `downloadSpigot.sh` file [(right click this link, save as...)](https://raw.githubusercontent.com/JorelAli/CommandAPI/master/downloadSpigot.sh) and place it in the same folder as the `BuildTools.jar`
-  * Open up a terminal in your folder and make the `downloadSpigot.sh` file executable by using `chmod u+x ./downloadSpigot.sh`
-  * Run the `downloadSpigot` file using `./downloadSpigot.sh`
+- Download the `BuildTools.jar` file from [here](https://hub.spigotmc.org/jenkins/job/BuildTools/)
+- Make sure you have maven installed on your machine. If not, it can be downloaded from [here](https://maven.apache.org/download.cgi)
+- If on Windows:
+  - Download the `downloadSpigot.bat` file [(right click this link, save as...)](https://raw.githubusercontent.com/JorelAli/CommandAPI/master/downloadSpigot.bat) and place it in the same folder as the `BuildTools.jar`
+  - Double click on the `downloadSpigot.bat` file to run it
+- If on Linux/MacOS:
+  - Download the `downloadSpigot.sh` file [(right click this link, save as...)](https://raw.githubusercontent.com/JorelAli/CommandAPI/master/downloadSpigot.sh) and place it in the same folder as the `BuildTools.jar`
+  - Open up a terminal in your folder and make the `downloadSpigot.sh` file executable by using `chmod u+x ./downloadSpigot.sh`
+  - Run the `downloadSpigot` file using `./downloadSpigot.sh`
 
 #### Building them using _BuildTools_ + manual command line
 
@@ -282,9 +281,9 @@ So what went wrong? I over-planned v6.0. The plans for v6.0 was so excessive tha
 
 So where do we go from here? It's simple - we do one feature at a time and release one update for each feature. That way, we get more of the new stuff that people want and less of the "absolutely no development is going on". This is the current roadmap for the CommandAPI (as of 27th Apr 2021):
 
-- **CommandAPI v5.10:** PaperSpigot support and deprecations
+- **CommandAPI v5.10:** Paper support and deprecations
 
-  PaperSpigot have recently announced that they are moving away from the BungeeCord API and it is pretty important that the CommandAPI updates in order to keep up with things. Additionally, PaperSpigot have changed their supported Java version to Java 11, from Java 8. Despite this, to ensure backwards compatibility with older Java versions, the CommandAPI will remain compiled for Java 8.
+  Paper have recently announced that they are moving away from the BungeeCord API and it is pretty important that the CommandAPI updates in order to keep up with things. Additionally, Paper have changed their supported Java version to Java 11, from Java 8. Despite this, to ensure backwards compatibility with older Java versions, the CommandAPI will remain compiled for Java 8.
   
   Lastly, in this update I want to deprecate a few methods to do with argument suggestions. The CommandAPI has a number of ways of populating argument suggestions using constant values, but more often than not this causes expected issues. As such, these will be deprecated in this version in favour of the existing lambdas. (Don't worry, updating is really really easy!)
   
@@ -319,6 +318,17 @@ So where do we go from here? It's simple - we do one feature at a time and relea
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td valign="top"><b>5.10</b></td>
+            <td valign="top">May 2021</td>
+            <td valign="top">
+                <ul>
+                    <li>Adds support for Paper's Adventure API for ChatComponent and Chat arguments.</li>
+                    <li>Deprecated a few methods in favour of some slightly better ones.</li>
+                    <li>Update proxied sender for Spigot 1.16.5</li>
+                </ul>
+            </td>
+        </tr>
         <tr>
             <td valign="top"><b>5.9</b></td>
             <td valign="top">February 2021</td>

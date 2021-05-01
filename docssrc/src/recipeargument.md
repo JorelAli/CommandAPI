@@ -30,7 +30,7 @@ As such, we easily implement it by specifying the `RecipeArgument`, casting it a
 
 ### Example - Unlocking a recipe for a player (1.15+ only)
 
-Since 1.15 has the `ComplexRecipe` class, we will take advantage of this to unlock a recipe for a player. For this command, we'll use the following structure:
+Since 1.15 has the `ComplexRecipe` class, we will take advantage of this to unlock a recipe for a player. For this command, we'll use the following syntax:
 
 ```
 /unlockrecipe <player> <recipe>

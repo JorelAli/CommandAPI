@@ -8,13 +8,13 @@ The `ItemStackArgument` class represents in-game items. As expected, this should
 
 ### Example - Giving a player an itemstack
 
-Say we want to create a command that gives you items. For this command, we will use the following structure:
+Say we want to create a command that gives you items. For this command, we will use the following syntax:
 
 ```
 /item <itemstack>
 ```
 
-With this structure, we can easily create our command:
+With this syntax, we can easily create our command:
 
 ```java
 {{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:itemstackarguments}}

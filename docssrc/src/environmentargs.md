@@ -16,7 +16,7 @@ The `EnvironmentArgument` is only supported in Minecraft versions 1.13.1 and lat
 
 ### Example - Creating a new world
 
-Say we want to create a new world on our Minecraft server. To do this, we need to know the name of the world, and the type (i.e. overworld, nether or the end). As such, we want to create a command with the following structure:
+Say we want to create a new world on our Minecraft server. To do this, we need to know the name of the world, and the type (i.e. overworld, nether or the end). As such, we want to create a command with the following syntax:
 
 ```
 /createworld <worldname> <type>

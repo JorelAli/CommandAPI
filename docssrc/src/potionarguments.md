@@ -8,7 +8,7 @@ The `PotionEffectArgument` class represents Minecraft potion effects. When used,
 
 ### Example - Giving a player a potion effect
 
-Say we wanted to have a command that gives a player a potion effect. For this command, we'll use the following structure:
+Say we wanted to have a command that gives a player a potion effect. For this command, we'll use the following syntax:
 
 ```
 /potion <target> <potion> <duration> <strength>

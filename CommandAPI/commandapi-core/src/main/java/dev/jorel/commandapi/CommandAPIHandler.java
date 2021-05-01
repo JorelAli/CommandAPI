@@ -242,10 +242,14 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 			return NMS.getBlockPredicate(cmdCtx, key);
 		case BLOCKSTATE:
 			return NMS.getBlockState(cmdCtx, key);
+		case ADVENTURE_CHAT:
+			return NMS.getAdventureChat(cmdCtx, key);
 		case CHAT:
 			return NMS.getChat(cmdCtx, key);
 		case CHATCOLOR:
 			return NMS.getChatColor(cmdCtx, key);
+		case ADVENTURE_CHAT_COMPONENT:
+			return NMS.getAdventureChatComponent(cmdCtx, key);
 		case CHAT_COMPONENT:
 			return NMS.getChatComponent(cmdCtx, key);
 		case CUSTOM:

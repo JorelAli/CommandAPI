@@ -72,6 +72,8 @@ import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.server.v1_14_R1.Advancement;
@@ -139,6 +141,18 @@ import net.minecraft.server.v1_14_R1.Vec3D;
 @RequireField(in = EntitySelector.class, name = "checkPermissions", ofType = boolean.class)
 public class NMS_1_14_3 implements NMS<CommandListenerWrapper> {
 
+	@Override
+	public Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException  {
+		String jsonString = ChatSerializer.a(ArgumentChat.a(cmdCtx, key));
+		return GsonComponentSerializer.gson().deserialize(jsonString);
+	}
+	
+	@Override
+	public Component getAdventureChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		String jsonString = ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, key));
+		return GsonComponentSerializer.gson().deserialize(jsonString);
+	}
+	
 	//Converts NMS function to SimpleFunctionWrapper
 	private SimpleFunctionWrapper convertFunction(CustomFunction customFunction) {
 		@SuppressWarnings("deprecation")

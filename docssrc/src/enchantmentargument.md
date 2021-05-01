@@ -8,7 +8,7 @@ The `EnchantmentArgument` class lets users input a specific enchantment. As you 
 
 ### Example - Giving a player an enchantment on their current item
 
-Say we want to give a player an enchantment on the item that the player is currently holding. We will use the following command structure:
+Say we want to give a player an enchantment on the item that the player is currently holding. We will use the following command syntax:
 
 ```
 /enchantitem <enchantment> <level>

@@ -16,7 +16,7 @@ The `BiomeArgument` is only supported in Minecraft versions 1.16 and later. Atte
 
 ### Example - Setting the biome of a chunk
 
-Say you want to set the biome of the current chunk that a player is in. We can do this using the `World.setBiome(x, y, z, biome)` method for a given world. We will use this command structure to set the biome of our current chunk:
+Say you want to set the biome of the current chunk that a player is in. We can do this using the `World.setBiome(x, y, z, biome)` method for a given world. We will use this command syntax to set the biome of our current chunk:
 
 ```
 /setbiome <biome>
