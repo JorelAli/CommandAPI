@@ -1,15 +1,11 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Map.Entry;
 
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import dev.jorel.commandapi.arguments.EntitySelectorArgument;
-import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
 
 public class CommandAPIMain extends JavaPlugin implements Listener {
 	
@@ -33,6 +29,20 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 					new AdvancedConverter(pluginToConvert.getKey(), command).convert();
 				}
 			}
+		}
+		
+		for(Entry<Plugin, String[]> pluginToConvert : CommandAPI.config.getPluginsToConvert()) {
+			if(pluginToConvert.getValue().length == 0) {
+				Converter.convert(pluginToConvert.getKey());
+			} else {
+				for(String command : pluginToConvert.getValue()) {
+					new AdvancedConverter(pluginToConvert.getKey(), command).convert();
+				}
+			}
+		}
+		
+		for(String commandName : CommandAPI.config.getCommandsToConvert()) {
+			new AdvancedConverter(commandName).convert();
 		}
 	}
 	

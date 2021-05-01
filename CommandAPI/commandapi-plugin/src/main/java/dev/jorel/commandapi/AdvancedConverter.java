@@ -77,6 +77,11 @@ public class AdvancedConverter {
 		this.command = command;
 	}
 	
+	public AdvancedConverter(String command) {
+		this.plugin = null;
+		this.command = command;
+	}
+	
 	public void convert() {
 		String commandName = command.split(" ")[0];
 		List<Argument> arguments;
@@ -86,11 +91,20 @@ public class AdvancedConverter {
 			CommandAPI.getLog().severe(e.getMessage());
 			return;
 		}
-		if(arguments.size() == 0) {
-			Converter.convert(plugin, commandName);
+		if(plugin != null) {
+			if(arguments.size() == 0) {
+				Converter.convert(plugin, commandName);
+			} else {
+				Converter.convert(plugin, commandName, arguments);
+			}
 		} else {
-			Converter.convert(plugin, commandName, arguments);
+			if(arguments.size() == 0) {
+				Converter.convert(commandName);
+			} else {
+				Converter.convert(commandName, arguments);
+			}
 		}
+		
 	}
 	
 	/*
