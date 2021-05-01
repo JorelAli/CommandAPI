@@ -92,7 +92,7 @@ public abstract class CommandAPI {
 	/**
 	 * Initializes the CommandAPI for loading. This should be placed at the
 	 * start of your <code>onLoad()</code> method.
-	 * @param verbose if true, enables verbose output for the CommandAPI
+	 * @param config the configuration to use for the CommandAPI
 	 */
 	public static void onLoad(CommandAPIConfig config) {
 		if(!loaded) {

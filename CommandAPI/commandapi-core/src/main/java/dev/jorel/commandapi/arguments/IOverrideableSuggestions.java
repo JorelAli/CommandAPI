@@ -27,6 +27,7 @@ public interface IOverrideableSuggestions {
 	
 	/**
 	 * @deprecated use {@link Argument#overrideSuggestions(Function)} 
+	 * @param suggestions a collection of strings to override suggestions with
 	 */
 	@Deprecated
 	Argument overrideSuggestions(Collection<String> suggestions);
