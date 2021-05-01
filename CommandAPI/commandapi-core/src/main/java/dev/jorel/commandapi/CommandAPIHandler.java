@@ -191,7 +191,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 				System.arraycopy(argsAndCmd, 1, result, 0, argsAndCmd.length - 1);
 				
 				@SuppressWarnings("unchecked")
-				List<String>[] entityNamesForArgs = new ArrayList[args.size()];
+				List<String>[] entityNamesForArgs = new List[args.size()];
 				
 				for(int i = 0; i < args.size(); i++) {
 					if(args.get(i) instanceof EntitySelectorArgument) {
@@ -219,25 +219,29 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 						default:
 							break;
 						}
-						
+					} else {
+						entityNamesForArgs[i] = Arrays.asList(new String[] {null});
 					}
 				}
 				
-				// Doesn't work for anything where the actual list has a size of 0
-				CartesianProduct.product(entityNamesForArgs);
+				@SuppressWarnings("unchecked")
+				List<List<?>> product = (List<List<?>>) CartesianProduct.product(entityNamesForArgs);
+				CartesianProduct.flatten(product);
 				
-				Predicate<List<String>[]> hasElements = k -> {
-					for(List<String> elem : k) {
-						return !elem.isEmpty();
+				// These objects in obj are List<String>
+				for(Object obj : product) {
+					@SuppressWarnings("unchecked")
+					List<String> strings = (List<String>) obj;
+					
+					// We assume result.length == strings.length
+					for(int i = 0; i < result.length; i++) {
+						if(strings.get(i) != null) {
+							result[i] = strings.get(i);
+						}
 					}
-					return false;
-				};
+					resultValue += executor.execute(sender, result);
+				}
 				
-//				for(Entity e : entities)
-//				{
-//					result[i] = e.getName();
-//					resultValue += executor.execute(sender, result);	
-//				}
 				
 				return resultValue;
 			} else {
