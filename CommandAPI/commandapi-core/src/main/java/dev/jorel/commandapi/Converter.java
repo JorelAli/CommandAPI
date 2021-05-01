@@ -26,10 +26,21 @@ public abstract class Converter {
 	private static final Set<String> CALLER_METHODS = new HashSet<>(Arrays.asList("isPermissionSet", "hasPermission",
 			"addAttachment", "removeAttachment", "recalculatePermissions", "getEffectivePermissions", "isOp", "setOp"));
 
+	/**
+	 * Convert the provided command name into a CommandAPI-compatible command
+	 * @param cmdName The name of the command (without the leading /). For commands such as //set in WorldEdit,
+	 * 				  this parameter should be "/set"
+	 */
 	public static void convert(String cmdName) {
 		convertCommand(cmdName, PLAIN_ARGUMENTS);
 	}
 	
+	/**
+	 * Convert the provided command name with its list of arguments into a CommandAPI-compatible command
+	 * @param cmdName The name of the command (without the leading /). For commands such as //set in WorldEdit,
+	 * 				  this parameter should be "/set"
+	 * @param arguments The arguments that should be used to parse this command
+	 */
 	public static void convert(String cmdName, List<Argument> arguments) {
 		convertCommand(cmdName, arguments);
 	}
@@ -41,7 +52,7 @@ public abstract class Converter {
 		new CommandAPICommand(commandName)
 			.withPermission(CommandPermission.NONE)
 			.executesNative((sender, args) -> { 
-				CommandSender proxiedSender = sender.getCallee();//CommandAPI.getConfiguration().shouldSkipSenderProxy(commandName) ? sender.getCallee() : mergeProxySender(sender);
+				CommandSender proxiedSender = sender.getCallee();
 				Bukkit.dispatchCommand(proxiedSender, commandName);
 			})
 			.register();
@@ -52,10 +63,10 @@ public abstract class Converter {
 			.withArguments(arguments)
 			.executesNative((sender, args) -> { 
 				// We know the args are a String[] because that's how converted things are handled in generateCommand()
-				CommandSender proxiedSender = sender.getCallee();//CommandAPI.getConfiguration().shouldSkipSenderProxy(commandName) ? sender.getCallee() : mergeProxySender(sender);
+				CommandSender proxiedSender = sender.getCallee();
 				Bukkit.dispatchCommand(proxiedSender, commandName + " " +  String.join(" ", (String[]) args));
 			});
-		// Good grief, what a hack~
+
 		multiArgs.setConverted(true);
 		multiArgs.register();
 	}

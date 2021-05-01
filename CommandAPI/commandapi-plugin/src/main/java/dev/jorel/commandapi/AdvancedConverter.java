@@ -91,20 +91,28 @@ public class AdvancedConverter {
 			CommandAPI.getLog().severe(e.getMessage());
 			return;
 		}
-		if(plugin != null) {
-			if(arguments.size() == 0) {
-				Converter.convert(plugin, commandName);
-			} else {
-				Converter.convert(plugin, commandName, arguments);
-			}
+		if(arguments.size() == 0) {
+			Converter.convert(plugin, commandName);
 		} else {
-			if(arguments.size() == 0) {
-				Converter.convert(commandName);
-			} else {
-				Converter.convert(commandName, arguments);
-			}
+			Converter.convert(plugin, commandName, arguments);
 		}
 		
+	}
+	
+	public void convertCommand() {
+		String commandName = command.split(" ")[0];
+		List<Argument> arguments;
+		try {
+			arguments = parseArguments(command);
+		} catch (UnknownArgumentException | InvalidNumberException e) {
+			CommandAPI.getLog().severe(e.getMessage());
+			return;
+		}
+		if(arguments.size() == 0) {
+			Converter.convert(commandName);
+		} else {
+			Converter.convert(commandName, arguments);
+		}
 	}
 	
 	/*

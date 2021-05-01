@@ -31,18 +31,9 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 			}
 		}
 		
-		for(Entry<Plugin, String[]> pluginToConvert : CommandAPI.config.getPluginsToConvert()) {
-			if(pluginToConvert.getValue().length == 0) {
-				Converter.convert(pluginToConvert.getKey());
-			} else {
-				for(String command : pluginToConvert.getValue()) {
-					new AdvancedConverter(pluginToConvert.getKey(), command).convert();
-				}
-			}
-		}
-		
+		// Convert all arbitrary commands		
 		for(String commandName : CommandAPI.config.getCommandsToConvert()) {
-			new AdvancedConverter(commandName).convert();
+			new AdvancedConverter(commandName).convertCommand();
 		}
 	}
 	
