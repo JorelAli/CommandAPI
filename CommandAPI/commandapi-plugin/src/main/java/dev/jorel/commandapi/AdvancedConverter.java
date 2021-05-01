@@ -192,7 +192,23 @@ public class AdvancedConverter {
 				//Parse ranges
 				return parseRange(nodeName, argumentType.split("\\.\\."));
 			} else {
-				//Parse everything else
+				// We have a few edge cases to handle
+				switch(argumentType) {
+				case "api:entity":
+					return new EntitySelectorArgument(nodeName, EntitySelector.ONE_ENTITY);
+				case "api:entities":
+					return new EntitySelectorArgument(nodeName, EntitySelector.MANY_ENTITIES);
+				case "api:player":
+					return new EntitySelectorArgument(nodeName, EntitySelector.ONE_PLAYER);
+				case "api:players":
+					return new EntitySelectorArgument(nodeName, EntitySelector.MANY_PLAYERS);
+				case "minecraft:vec3":
+					return new LocationArgument(nodeName, LocationType.PRECISE_POSITION);
+				case "minecraft:vec2":
+					return new Location2DArgument(nodeName, LocationType.PRECISE_POSITION);
+				}
+				
+				// Parse everything else
 				switch(CommandAPIArgumentType.fromInternal(argumentType)) {
 				case ADVANCEMENT:
 					return new AdvancementArgument(nodeName);
