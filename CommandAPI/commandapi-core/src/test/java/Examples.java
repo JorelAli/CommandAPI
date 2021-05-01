@@ -66,6 +66,7 @@ import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.StringTooltip;
 import dev.jorel.commandapi.Tooltip;
 import dev.jorel.commandapi.arguments.AdvancementArgument;
+import dev.jorel.commandapi.arguments.AdventureChatComponentArgument;
 import dev.jorel.commandapi.arguments.AngleArgument;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.BiomeArgument;
@@ -116,6 +117,11 @@ import dev.jorel.commandapi.wrappers.IntegerRange;
 import dev.jorel.commandapi.wrappers.MathOperation;
 import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.inventory.Book;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 public class Examples extends JavaPlugin {
@@ -1529,11 +1535,29 @@ new CommandAPICommand("warp")
 /* ANCHOR_END: ArgumentSuggestions1 */
 }
 
+{
+/* ANCHOR: ArgumentAdventureChatComponent */
+new CommandAPICommand("showbook")
+	.withArguments(new PlayerArgument("target"))
+    .withArguments(new TextArgument("title"))
+    .withArguments(new StringArgument("author"))
+    .withArguments(new AdventureChatComponentArgument("contents"))
+    .executes((sender, args) -> {
+    	Player target = (Player) args[0];
+        String title = (String) args[1];
+        String author = (String) args[2];
+        Component content = (Component) args[3];
+        
+        // Create a book and show it to the user (Requires Paper)
+        Book mybook = Book.book(Component.text(title), Component.text(author), content);
+        target.openBook(mybook);
+    })
+    .register();
+}
+/* ANCHOR_END: ArgumentAdventureChatComponent */
 
 
 } // Examples class end ////////////////////////////////////////////////////////////////////
-
-
 
 /* ANCHOR: ArgumentSuggestions2_1 */
 class Friends {

@@ -7,7 +7,7 @@
 > Spigot based servers include, but are not limited to:
 >
 > - [Spigot](https://www.spigotmc.org/)
-> - [PaperSpigot](https://papermc.io/)
+> - [Paper](https://papermc.io/)
 > - [TacoSpigot](https://tacospigot.github.io/)
 
 ## Chat component argument

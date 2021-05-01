@@ -179,23 +179,38 @@
                         <h1><a class="header" href="#adventure-chat-arguments" id="adventure-chat-arguments">Adventure chat arguments</a></h1>
 <blockquote>
 <p><strong>Developer's Note:</strong></p>
-<p>The two following classes, <code>AdventureChatComponentArgument</code> and <code>AdventureChatArgument</code> depend on a PaperSpigot based server which has the Adventure library. If you use this class on a server without the Adventure library, it will throw a <code>PaperAdventureNotFoundException</code></p>
+<p>The two following classes, <code>AdventureChatComponentArgument</code> and <code>AdventureChatArgument</code> depend on a Paper based server which has the Adventure library. If you use this class on a server without the Adventure library, it will throw a <code>PaperAdventureNotFoundException</code></p>
 </blockquote>
-<p>From PaperSpigot 1.16.5 build #473, it now includes <a href="https://github.com/KyoriPowered/adventure-platform">Kyori's Adventure API</a>. This library is a replacement of the BungeeCord chat API and has all of the same functionality as the BungeeCord chat API (and more!). The documentation for this API can be found <a href="https://docs.adventure.kyori.net/index.html">here</a>.</p>
+<p>From Paper 1.16.5 build #473, it now includes <a href="https://github.com/KyoriPowered/adventure-platform">Kyori's Adventure API</a>. This library is a replacement of the BungeeCord chat API and has all of the same functionality as the BungeeCord chat API (and more!). The documentation for this API can be found <a href="https://docs.adventure.kyori.net/index.html">here</a>.</p>
 <p>Since this functions very similar to the Spigot chat arguments, this page won't reiterate everything about how it works, we'll just outline some examples of how to use these arguments instead.</p>
 <hr />
 <h2><a class="header" href="#adventure-chat-component-argument" id="adventure-chat-component-argument">Adventure chat component argument</a></h2>
 <p>The <code>AdventureChatComponentArgument</code> class accepts raw chat-based JSON as valid input, as declared <a href="https://minecraft.gamepedia.com/Raw_JSON_text_format">here</a>. This is converted into Adventure's <code>Component</code> class.</p>
-<p>TODO: An example here!</p>
-<pre><code class="language-java">new CommandAPICommand(&quot;ccpadventure&quot;).withArguments(new ChatArgument(&quot;test2&quot;))
-    .executes((sender, args) -&gt; {
-        Component message = (Component) args[0];
-        
-        //Broadcast the message to everyone on the server
-        Bukkit.broadcast(message, &quot;someperm&quot;);
-    }).register();
+<div class="example">
+<h3><a class="header" href="#example---opening-a-book-with-raw-json-content" id="example---opening-a-book-with-raw-json-content">Example - Opening a book with raw JSON content</a></h3>
+<p>In this example, we'll create a simple command which lets you show a book to a user. The syntax for our command is as follows:</p>
+<pre><code>/showbook &lt;target&gt; &lt;title&gt; &lt;author&gt; &lt;contents&gt;
 </code></pre>
-
+<p>We can construct a book using the Adventure API's <code>Book.book(Component, Component, Component...)</code> method. In order to convert our strings into <code>Component</code> objects, we use the <code>Component.text(String)</code> method. Since Paper supports the Adventure API natively, we can then send this book to a player using the <code>openBook(Book)</code> method:</p>
+<pre><code class="language-java">new CommandAPICommand(&quot;showbook&quot;)
+	.withArguments(new PlayerArgument(&quot;target&quot;))
+    .withArguments(new TextArgument(&quot;title&quot;))
+    .withArguments(new StringArgument(&quot;author&quot;))
+    .withArguments(new AdventureChatComponentArgument(&quot;contents&quot;))
+    .executes((sender, args) -&gt; {
+    	Player target = (Player) args[0];
+        String title = (String) args[1];
+        String author = (String) args[2];
+        Component content = (Component) args[3];
+        
+        // Create a book and show it to the user (Requires Paper)
+        Book mybook = Book.book(Component.text(title), Component.text(author), content);
+        target.openBook(mybook);
+    })
+    .register();
+}
+</code></pre>
+</div>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
