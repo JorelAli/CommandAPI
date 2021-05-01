@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
 import com.mojang.brigadier.Command;
@@ -161,7 +163,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 		} catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
-	}
+	}		
 
 	/**
 	 * Generates a command to be registered by the CommandAPI.
@@ -179,17 +181,68 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 		// Generate our command from executor
 		return (cmdCtx) -> {
 			CommandSender sender = NMS.getSenderForCommand(cmdCtx, executor.isForceNative());
-			Object[] arguments;
 			if(converted) {
+				Object[] argObjs = argsToObjectArr(cmdCtx, args);
+				int resultValue = 0;
+				
 				// Return a String[] of arguments for converted commands
 				String[] argsAndCmd = cmdCtx.getRange().get(cmdCtx.getInput()).split(" ");
 				String[] result = new String[argsAndCmd.length - 1];
 				System.arraycopy(argsAndCmd, 1, result, 0, argsAndCmd.length - 1);
-				arguments = result;
+				
+				@SuppressWarnings("unchecked")
+				List<String>[] entityNamesForArgs = new ArrayList[args.size()];
+				
+				for(int i = 0; i < args.size(); i++) {
+					if(args.get(i) instanceof EntitySelectorArgument) {
+						EntitySelectorArgument entitySelectorArg = (EntitySelectorArgument) args.get(i);
+						switch(entitySelectorArg.getEntitySelector())
+						{
+						case MANY_ENTITIES:
+							@SuppressWarnings("unchecked")
+							List<Entity> entities = (List<Entity>) argObjs[i];
+							entityNamesForArgs[i] = entities.stream().map(Entity::getName).collect(Collectors.toList());
+							break;
+						case MANY_PLAYERS:
+							@SuppressWarnings("unchecked")
+							List<Player> players = (List<Player>) argObjs[i];
+							entityNamesForArgs[i] = players.stream().map(Entity::getName).collect(Collectors.toList());
+							break;
+						case ONE_ENTITY:
+							Entity entity = (Entity) argObjs[i];
+							entityNamesForArgs[i] = Arrays.asList(new String[] {entity.getName()});
+							break;
+						case ONE_PLAYER:
+							Player player = (Player) argObjs[i];
+							entityNamesForArgs[i] = Arrays.asList(new String[] {player.getName()});
+							break;
+						default:
+							break;
+						}
+						
+					}
+				}
+				
+				// Doesn't work for anything where the actual list has a size of 0
+				CartesianProduct.product(entityNamesForArgs);
+				
+				Predicate<List<String>[]> hasElements = k -> {
+					for(List<String> elem : k) {
+						return !elem.isEmpty();
+					}
+					return false;
+				};
+				
+//				for(Entity e : entities)
+//				{
+//					result[i] = e.getName();
+//					resultValue += executor.execute(sender, result);	
+//				}
+				
+				return resultValue;
 			} else {
-				arguments = argsToObjectArr(cmdCtx, args);
+				return executor.execute(sender, argsToObjectArr(cmdCtx, args));
 			}
-			return executor.execute(sender, arguments);
 		};
 	}
 	
@@ -258,7 +311,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 			if(arg.isKeyed()) {
 				customresult = getNMS().getKeyedAsString(cmdCtx, key);
 			} else {
-				customresult = (String) cmdCtx.getArgument(key, String.class);
+				customresult = cmdCtx.getArgument(key, String.class);
 			}
 			
 			try {
