@@ -280,30 +280,40 @@ So what went wrong? I over-planned v6.0. The plans for v6.0 was so excessive tha
 - Conflicting argument research and documentation on how to avoid them
 
 So where do we go from here? It's simple - we do one feature at a time and release one update for each feature. That way, we get more of the new stuff that people want and less of the "absolutely no development is going on". This is the current roadmap for the CommandAPI (as of 27th Apr 2021):
-
-- **CommandAPI v5.10:** Paper support and deprecations
-
-  Paper have recently announced that they are moving away from the BungeeCord API and it is pretty important that the CommandAPI updates in order to keep up with things. Additionally, Paper have changed their supported Java version to Java 11, from Java 8. Despite this, to ensure backwards compatibility with older Java versions, the CommandAPI will remain compiled for Java 8.
   
-  Lastly, in this update I want to deprecate a few methods to do with argument suggestions. The CommandAPI has a number of ways of populating argument suggestions using constant values, but more often than not this causes expected issues. As such, these will be deprecated in this version in favour of the existing lambdas. (Don't worry, updating is really really easy!)
-  
-- **CommandAPI v5.11:** Priority issues + Paper improvements
+- **CommandAPI v5.11:** Server owner features
 
-  [Issue #189](https://github.com/JorelAli/CommandAPI/issues/189) has been requested/brought up very often. For this update, we're going to focus on implementing this. In addition to this, we'll also focus on adding console tab-support for PaperSpigot. Since PaperSpigot is the clear leader in actual Spigot-related development, the CommandAPI's release schedule will prioritize Paper-specific features more - starting with [Issue #192](https://github.com/JorelAli/CommandAPI/issues/192).
+  The CommandAPI's use by server owners (i.e. users who do not know how to make plugins or do not want to make their own plugins) is ever increasing. The CommandAPI's command conversion system makes the CommandAPI more than a mere API wrapper for Brigadier and now a tool used to bridge the gap between plugins and Vanilla features, such as command blocks. As a result of this, a number of users with little programmatical knowledge have been visiting the CommandAPI Discord server with similar issues, such as:
   
-- **CommandAPI v5.12:** CustomArgument improvements
+  - Trying to use entity selectors in converted commands (e.g. using `/ext @p` with EssentialsX's extinguish command). CommandHook is constantly used in combination with the CommandAPI, however more often than not this does not resolve issues. This currently doesn't work and has been raised in [Issue #189](https://github.com/JorelAli/CommandAPI/issues/189).
+
+  - Trying to use unconvential command registration plugins. For example, WorldEdit's commands are not declared in its `plugin.yml` file and cannot be used for command conversion. [Issue #195](https://github.com/JorelAli/CommandAPI/issues/195) mentions a method of implementing arbitrary command conversion which are not tied to any specific plugin.
+  
+- **Intermediate update:** Server owner web tools
+
+  The CommandAPI's documentation for server owners is "alright" at best. A number of tools would be useful for server owners. This isn't an update in itself, but it's a small ongoing side-project which I think will be worth it in the long term. In particular, I aim to implement:
+  
+  - A quick way to check the validity of YAML config files (this can be extended to include the CommandAPI's argument syntax and provide full validation on that as well)
+
+  - A quick way to upload a `.jar` file and allow the website to output the name of the plugin and a list of commands that it registers.
+  
+- **CommandAPI v5.12:** Minor fixes + Paper console tab completion
+
+  Once again, Paper has taken innovation to the next level and it now supports Brigadier tab-completion from the console. This conflicts with the CommandAPI's built-in suggestion providing features which assumes that anyone performing tab-completion to generate suggestions is an in-game player. This has been raised in [Issue #192](https://github.com/JorelAli/CommandAPI/issues/192).
+  
+- **CommandAPI v5.13:** CustomArgument improvements
 
   The CustomArgument class is fairly flexible, but nowhere near flexible enough. In this update, more attention will be focused on the CustomArgument class to provide it the ability to extend from all other argument types as a base.
   
-- **CommandAPI v5.13:** Annotation improvements
+- **CommandAPI v5.14:** Annotation improvements
 
   The CommandAPI's annotation system has always been a bit limited and was primarily introduced as a proof-of-concept. In this update, the CommandAPI's annotation system will be improved to be (ideally) as powerful as the non-annotation system and have slightly better type safety.
   
-- **CommandAPI v5.14:** Argument conflict detection
+- **CommandAPI v5.15:** Argument conflict detection
 
   The CommandAPI simply uses the Brigadier system under the hood. This system is prone to _argument conflicts_, which is where certain arguments are given priority over other arguments. (For example "hello" and "123" are both valid string arguments, but if you have a command that has a string argument or an integer argument, Brigadier may ignore the integer argument). In this update, the CommandAPI will try to spot potential conflicts and add a warning in the console. The research required for this is also required in order to implement optional arguments (which is not coming out in this release).
   
-- **CommandAPI v5.15+:** TBD
+- **CommandAPI v5.16+:** TBD
 
 -----
 
