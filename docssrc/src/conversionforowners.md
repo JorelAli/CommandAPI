@@ -10,7 +10,7 @@ The CommandAPI has 3 different conversion methods, each one more specific and po
 
 - [**Single command conversion**](./conversionforownerssingle.md) 
 
-  Converts a single command from a plugin into a Vanilla compatible command
+  Converts a single command into a Vanilla compatible command
 
 - [**Single command conversion with custom arguments**](./conversionforownerssingleargs.md) 
 

@@ -81,18 +81,20 @@ The name in the argument can basically be whatever you want, but it is highly re
 
 **The following argument types are highly recommended** and are very likely to be compatible with every plugin command that you may want to convert:
 
-| Type                     | Description                                                  |
-| ------------------------ | ------------------------------------------------------------ |
-| `api:greedy_string`      | An unlimited amount of text. This can only be used as the last entry of a list of arguments |
-| `brigadier:bool`         | A Boolean value `true` or `false`                            |
-| `brigadier:double`       | A decimal number                                             |
-| `brigadier:float`        | A decimal number                                             |
-| `brigadier:integer`      | A whole number                                               |
-| `brigadier:long`         | A whole number                                               |
-| `brigadier:string`       | A single word                                                |
-| `minecraft:block_pos`    | A location of x, y and z coordinates (whole numbers)         |
-| `minecraft:entity`       | An entity (e.g. `Notch`)                                     |
-| `minecraft:game_profile` | A player (e.g. `Notch`)                                      |
+| Type                  | Description                                                  |
+| --------------------- | ------------------------------------------------------------ |
+| `api:entity`          | An single entity (e.g. `@e[limit=1]`)                        |
+| `api:entities`        | Many entities (e.g. `@e`)                                    |
+| `api:player`          | A single player (e.g. `Notch` or `@r`)                       |
+| `api:players`         | Many players (e.g. `@a`)                                     |
+| `api:greedy_string`   | An unlimited amount of text. This can only be used as the last entry of a list of arguments |
+| `brigadier:bool`      | A Boolean value `true` or `false`                            |
+| `brigadier:double`    | A decimal number                                             |
+| `brigadier:float`     | A decimal number                                             |
+| `brigadier:integer`   | A whole number                                               |
+| `brigadier:long`      | A whole number                                               |
+| `brigadier:string`    | A single word                                                |
+| `minecraft:block_pos` | A location of x, y and z coordinates (whole numbers)         |
 
 In the example above, we used the a "range type" in the form `[0..10]`. This is a special argument type that will conform to `brigader:long` or `brigader:double` and apply a limit to the values that can be entered. 
 
@@ -142,8 +144,12 @@ The list of types are based on [the list of argument types from the Minecraft Wi
 | ------------------------------ | ------------------------------------------------------------ |
 | `api:advancement`              | An advancement                                               |
 | `api:biome`                    | A biome                                                      |
+| `api:entity`                   | An single entity (e.g. `@e[limit=1]`)                        |
+| `api:entities`                 | Many entities (e.g. `@e`)                                    |
 | `api:greedy_string`            | An unlimited amount of text. This can only be used as the last entry of a list of arguments |
 | `api:loot_table`               | A loot table                                                 |
+| `api:player`                   | A single player (e.g. `Notch` or `@r`)                       |
+| `api:players`                  | Many players (e.g. `@a`)                                     |
 | `api:recipe`                   | A recipe                                                     |
 | `api:sound`                    | A sound effect                                               |
 | `api:text`                     | Text encased in quotes: `"text with spaces"`                 |

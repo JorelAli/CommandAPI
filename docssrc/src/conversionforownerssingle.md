@@ -2,6 +2,15 @@
 
 Often, you don't want to convert _every single command_ that a plugin declares, and instead you only want to convert a few commands that a plugin has.
 
+The CommandAPI has two ways of doing this: 
+
+- Plugin command conversion: This converts a command which is declared in a plugin's `plugin.yml` file
+- Arbitrary command conversion: This converts a command which is not declared in a plugin's `plugin.yml` file
+
+-----
+
+## Plugin command conversion
+
 To convert a single command, you need to first populate the `config.yml` with the name of the plugin and commands to be converted. To illustrate this, we'll use an example:
 
 <div class="example">
@@ -58,3 +67,14 @@ plugins-to-convert:
 </div>
 
 -----
+
+## Arbitrary command conversion
+
+Some commands which are registered by plugins are not present in the plugin's `plugin.yml` file. Due to this, the CommandAPI cannot link a command to its respective plugin for command conversion. In order to deal with this, the CommandAPI can link arbitrary commands via the `other-commands-to-convert` option in the CommandAPI's `config.yml` file.
+
+This can be used for any of the following (and more):
+
+- Commands created using [Skript](https://github.com/SkriptLang/Skript)
+- Commands created using [MyCommand](https://dev.bukkit.org/projects/mycommand)
+- Commands which are not registered in a `plugin.yml`, such as [WorldEdit](https://dev.bukkit.org/projects/worldedit) commands
+

@@ -11,6 +11,7 @@
 - [Command conversion](./conversionforowners.md)
   - [Single command conversion](./conversionforownerssingle.md)
   - [Single command conversion (with arguments)](./conversionforownerssingleargs.md)
+  - [Entity selectors](./conversionentityselectors.md)
 - [Skipping proxy senders](./skippingproxysenders.md)
 
 -----
