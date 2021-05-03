@@ -15,7 +15,7 @@ To convert a single command, you need to first populate the `config.yml` with th
 
 <div class="example">
 
-### Example - Converting commands
+### Example - Converting plugin commands
 
 Say we're using [EssentialsX](https://www.spigotmc.org/resources/essentialsx.9089/) on our server and we want to be able to use `/afk` and `/hat` in command blocks. This would allow us to use (for example) the following commands in command blocks:
 
@@ -77,4 +77,23 @@ This can be used for any of the following (and more):
 - Commands created using [Skript](https://github.com/SkriptLang/Skript)
 - Commands created using [MyCommand](https://dev.bukkit.org/projects/mycommand)
 - Commands which are not registered in a `plugin.yml`, such as [WorldEdit](https://dev.bukkit.org/projects/worldedit) commands
+
+To add commands to be converted, simply add them under the `other-command-to-convert` section in the CommandAPI's `config.yml`. 
+
+<div class="example">
+
+### Example - Converting arbitrary commands
+
+In this example, we want to convert the `//set` command from WorldEdit, as well as a custom command `/mycommand`. Note that since WorldEdit's `//set` command has two forward slashes, we ignore the first one (because that is the symbol used to start commands), but must make sure that we include the second one as that is part of WorldEdit's command syntax. This is the following `config.yml` that you would need:
+
+```yml
+verbose-outputs: false
+create-dispatcher-json: false
+plugins-to-convert: []
+skip-sender-proxy: []
+other-commands-to-convert:
+  - /set
+  - mycommand
+```
+</div>
 
