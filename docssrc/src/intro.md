@@ -36,6 +36,12 @@ Using the search icon in the top left corner, you can search for anything in thi
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 5.10 \\(\rightarrow\\) 5.11:
+
+- Adds a section [Arbitrary command conversion](./conversionforownerssingle.md#arbitrary-command-conversion) on how to convert arbitrary commands
+- Adds a section [3.3. Entity selectors](./conversionentityselectors.md) describing how to convert entity selector commands with the CommandAPI's command conversion system
+- Updated the [list of all suppoprted argument types](./conversionforownerssingleargs.md#list-of-all-supported-argument-types) for command conversion
+
 ### Documentation changes 5.6 \\(\rightarrow\\) 5.10:
 
 - Splits chat argument sections into two: [11.5.1. Spigot chat arguments](./spigotchatarguments.md) and [11.5.2. Adventure chat arguments](./adventurechatarguments.md)

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.plugin.Plugin;
@@ -25,6 +26,51 @@ public abstract class Converter {
 	private static final Set<String> CALLER_METHODS = new HashSet<>(Arrays.asList("isPermissionSet", "hasPermission",
 			"addAttachment", "removeAttachment", "recalculatePermissions", "getEffectivePermissions", "isOp", "setOp"));
 
+	/**
+	 * Convert the provided command name into a CommandAPI-compatible command
+	 * @param cmdName The name of the command (without the leading /). For commands such as //set in WorldEdit,
+	 * 				  this parameter should be "/set"
+	 */
+	public static void convert(String cmdName) {
+		convertCommand(cmdName, PLAIN_ARGUMENTS);
+	}
+	
+	/**
+	 * Convert the provided command name with its list of arguments into a CommandAPI-compatible command
+	 * @param cmdName The name of the command (without the leading /). For commands such as //set in WorldEdit,
+	 * 				  this parameter should be "/set"
+	 * @param arguments The arguments that should be used to parse this command
+	 */
+	public static void convert(String cmdName, List<Argument> arguments) {
+		convertCommand(cmdName, arguments);
+	}
+	
+	private static void convertCommand(String commandName, List<Argument> arguments) {
+		CommandAPI.logInfo("Converting command /" + commandName);
+		 
+		//No arguments
+		new CommandAPICommand(commandName)
+			.withPermission(CommandPermission.NONE)
+			.executesNative((sender, args) -> { 
+				CommandSender proxiedSender = sender.getCallee();
+				Bukkit.dispatchCommand(proxiedSender, commandName);
+			})
+			.register();
+		
+		//Multiple arguments		
+		CommandAPICommand multiArgs = new CommandAPICommand(commandName)
+			.withPermission(CommandPermission.NONE)
+			.withArguments(arguments)
+			.executesNative((sender, args) -> { 
+				// We know the args are a String[] because that's how converted things are handled in generateCommand()
+				CommandSender proxiedSender = sender.getCallee();
+				Bukkit.dispatchCommand(proxiedSender, commandName + " " +  String.join(" ", (String[]) args));
+			});
+
+		multiArgs.setConverted(true);
+		multiArgs.register();
+	}
+	
 	/**
 	 * Convert all commands stated in Plugin's plugin.yml file into CommandAPI-compatible commands
 	 * @param plugin The plugin which commands are to be converted

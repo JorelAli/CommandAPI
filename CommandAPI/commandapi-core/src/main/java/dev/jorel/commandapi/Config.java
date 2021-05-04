@@ -31,11 +31,14 @@ class Config {
 	// List of plugins which should ignore proxied senders
 	private final List<String> skipSenderProxy;
 	
+	 private final List<String> commandsToConvert;
+	
 	public Config(FileConfiguration fileConfig) {
 		this.verboseOutput = fileConfig.getBoolean("verbose-outputs");
 		this.createDispatcherFile = fileConfig.getBoolean("create-dispatcher-json");
 		this.pluginsToConvert = new HashMap<>();
 		this.skipSenderProxy = new ArrayList<>();
+		this.commandsToConvert = new ArrayList<>();
 
 		for (Map<?, ?> map : fileConfig.getMapList("plugins-to-convert")) {
 			String[] pluginCommands;
@@ -64,6 +67,10 @@ class Config {
 				new InvalidPluginException("Could not find a plugin " + pluginName + "! Has it been loaded properly?").printStackTrace();
 			}
 		}
+		
+		for (String commandName : fileConfig.getStringList("other-commands-to-convert")) {
+			this.commandsToConvert.add(commandName);
+		}
 	}
 
 	public Config(boolean verbose) {
@@ -71,6 +78,7 @@ class Config {
 		this.createDispatcherFile = false;
 		this.pluginsToConvert = new HashMap<>();
 		this.skipSenderProxy = new ArrayList<>();
+		this.commandsToConvert = new ArrayList<>();
 	}
 
 	public Config(CommandAPIConfig config) {
@@ -78,6 +86,7 @@ class Config {
 		this.createDispatcherFile = false; // The dispatcher File is only declared in the plugin version
 		this.pluginsToConvert = new HashMap<>();
 		this.skipSenderProxy = new ArrayList<>();
+		this.commandsToConvert = new ArrayList<>();
 	}
 
 	public boolean hasVerboseOutput() {
@@ -94,6 +103,14 @@ class Config {
 	
 	public boolean shouldSkipSenderProxy(Plugin plugin) {
 		return this.skipSenderProxy.contains(plugin.getName());
+	}
+	
+	public boolean shouldSkipSenderProxy(String commandName) {
+		return this.skipSenderProxy.contains(commandName);
+	}
+	
+	public List<String> getCommandsToConvert() {
+		return this.commandsToConvert;
 	}
 
 }
