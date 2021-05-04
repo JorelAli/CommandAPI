@@ -319,6 +319,16 @@ So where do we go from here? It's simple - we do one feature at a time and relea
     </thead>
     <tbody>
         <tr>
+            <td valign="top"><b>5.11</b></td>
+            <td valign="top">May 2021</td>
+            <td valign="top">
+                <ul>
+                    <li>Allows converted commands to use entity selectors in plugin commands</li>
+                    <li>Allows arbitrary commands to be converted with the CommandAPI's converter system</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
             <td valign="top"><b>5.10</b></td>
             <td valign="top">May 2021</td>
             <td valign="top">
