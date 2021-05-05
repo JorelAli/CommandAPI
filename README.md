@@ -279,15 +279,7 @@ So what went wrong? I over-planned v6.0. The plans for v6.0 was so excessive tha
 - More full plugin examples
 - Conflicting argument research and documentation on how to avoid them
 
-So where do we go from here? It's simple - we do one feature at a time and release one update for each feature. That way, we get more of the new stuff that people want and less of the "absolutely no development is going on". This is the current roadmap for the CommandAPI (as of 27th Apr 2021):
-  
-- **CommandAPI v5.11:** Server owner features
-
-  The CommandAPI's use by server owners (i.e. users who do not know how to make plugins or do not want to make their own plugins) is ever increasing. The CommandAPI's command conversion system makes the CommandAPI more than a mere API wrapper for Brigadier and now a tool used to bridge the gap between plugins and Vanilla features, such as command blocks. As a result of this, a number of users with little programmatical knowledge have been visiting the CommandAPI Discord server with similar issues, such as:
-  
-  - Trying to use entity selectors in converted commands (e.g. using `/ext @p` with EssentialsX's extinguish command). CommandHook is constantly used in combination with the CommandAPI, however more often than not this does not resolve issues. This currently doesn't work and has been raised in [Issue #189](https://github.com/JorelAli/CommandAPI/issues/189).
-
-  - Trying to use unconvential command registration plugins. For example, WorldEdit's commands are not declared in its `plugin.yml` file and cannot be used for command conversion. [Issue #195](https://github.com/JorelAli/CommandAPI/issues/195) mentions a method of implementing arbitrary command conversion which are not tied to any specific plugin.
+So where do we go from here? It's simple - we do one feature at a time and release one update for each feature. That way, we get more of the new stuff that people want and less of the "absolutely no development is going on". This is the current roadmap for the CommandAPI (as of 5th May 2021):
   
 - **Intermediate update:** Server owner web tools
 
