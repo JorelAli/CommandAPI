@@ -2,7 +2,9 @@ package dev.jorel.commandapi.nms;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodHandles.Lookup;
+import java.lang.invoke.VarHandle;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,7 +67,6 @@ import com.mojang.brigadier.suggestion.Suggestions;
 
 import de.tr7zw.changeme.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.ICustomProvidedArgument.SuggestionProviders;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.preprocessor.RequireField;
@@ -119,7 +120,6 @@ import net.minecraft.server.v1_16_R3.ArgumentVec2I;
 import net.minecraft.server.v1_16_R3.ArgumentVec3;
 import net.minecraft.server.v1_16_R3.BlockPosition;
 import net.minecraft.server.v1_16_R3.BlockPosition2D;
-import net.minecraft.server.v1_16_R3.CommandDispatcher;
 import net.minecraft.server.v1_16_R3.CommandListenerWrapper;
 import net.minecraft.server.v1_16_R3.CompletionProviders;
 import net.minecraft.server.v1_16_R3.CriterionConditionValue;
@@ -127,7 +127,6 @@ import net.minecraft.server.v1_16_R3.CustomFunction;
 import net.minecraft.server.v1_16_R3.CustomFunctionData;
 import net.minecraft.server.v1_16_R3.CustomFunctionManager;
 import net.minecraft.server.v1_16_R3.DataPackResources;
-import net.minecraft.server.v1_16_R3.DedicatedServer;
 import net.minecraft.server.v1_16_R3.Entity;
 import net.minecraft.server.v1_16_R3.EntitySelector;
 import net.minecraft.server.v1_16_R3.EntityTypes;
@@ -137,10 +136,8 @@ import net.minecraft.server.v1_16_R3.ICompletionProvider;
 import net.minecraft.server.v1_16_R3.IRecipe;
 import net.minecraft.server.v1_16_R3.IRegistry;
 import net.minecraft.server.v1_16_R3.IReloadableResourceManager;
-import net.minecraft.server.v1_16_R3.IVectorPosition;
 import net.minecraft.server.v1_16_R3.ItemStack;
 import net.minecraft.server.v1_16_R3.LootTable;
-import net.minecraft.server.v1_16_R3.LootTableRegistry;
 import net.minecraft.server.v1_16_R3.MinecraftKey;
 import net.minecraft.server.v1_16_R3.MinecraftServer;
 import net.minecraft.server.v1_16_R3.Scoreboard;
@@ -158,6 +155,42 @@ import net.minecraft.server.v1_16_R3.Vec3D;
 @RequireField(in = CraftSound.class, name = "minecraftKey", ofType = String.class)
 @RequireField(in = EntitySelector.class, name = "checkPermissions", ofType = boolean.class)
 public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
+	
+	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
+	private static final VarHandle DataPackResources_i;
+	private static final VarHandle DataPackResources_b;
+	private static final VarHandle DataPackResources_a;
+	private static final VarHandle CustomFunctionManager_g;
+	private static final VarHandle CraftSound_minecraftKey;
+	private static final VarHandle EntitySelector_checkPermissions;
+	
+	// Compute all var handles all in one go so we don't do this during main server runtime
+	static {
+		VarHandle dpr_i = null;
+		VarHandle dpr_b = null;
+		VarHandle dpr_a = null;
+		VarHandle cfm_g = null;
+		VarHandle cs_mk = null;
+		VarHandle es_cp = null;
+		 try {
+			 Lookup dpr_lookup = MethodHandles.privateLookupIn(DataPackResources.class, MethodHandles.lookup());
+			 dpr_i = dpr_lookup.findVarHandle(DataPackResources.class, "i", CustomFunctionManager.class);
+			 dpr_b = dpr_lookup.findVarHandle(DataPackResources.class, "b", IReloadableResourceManager.class);
+			 dpr_a = dpr_lookup.findVarHandle(DataPackResources.class, "a", CompletableFuture.class);
+
+			 cfm_g = MethodHandles.privateLookupIn(CustomFunctionManager.class, MethodHandles.lookup()).findVarHandle(CustomFunctionManager.class, "g", int.class);
+			 cs_mk = MethodHandles.privateLookupIn(CraftSound.class, MethodHandles.lookup()).findVarHandle(CraftSound.class, "minecraftKey", String.class);
+			 es_cp = MethodHandles.privateLookupIn(EntitySelector.class, MethodHandles.lookup()).findVarHandle(EntitySelector.class, "checkPermissions", boolean.class);
+		} catch (NoSuchFieldException | IllegalAccessException e) {
+		}
+		 DataPackResources_i = dpr_i;
+		 DataPackResources_b = dpr_b;
+		 DataPackResources_a = dpr_a;
+		 CustomFunctionManager_g = cfm_g;
+		 CraftSound_minecraftKey = cs_mk;
+		 EntitySelector_checkPermissions = es_cp;
+	}
+
 	
 	@Override
 	public Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException  {
@@ -211,17 +244,16 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public ArgumentType<?> _ArgumentEntity(dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector selector) {
-		switch (selector) {
+		return switch (selector) {
 		case MANY_ENTITIES:
-			return ArgumentEntity.multipleEntities();
+			yield ArgumentEntity.multipleEntities();
 		case MANY_PLAYERS:
-			return ArgumentEntity.d();
+			yield ArgumentEntity.d();
 		case ONE_ENTITY:
-			return ArgumentEntity.a();
+			yield ArgumentEntity.a();
 		case ONE_PLAYER:
-			return ArgumentEntity.c();
-		}
-		return null;
+			yield ArgumentEntity.c();
+		};
 	}
 
 	@Override
@@ -428,7 +460,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> getBrigadierDispatcher() {
-		return ((MinecraftServer) ((CraftServer) Bukkit.getServer()).getServer()).getCommandDispatcher().a();
+		return MINECRAFT_SERVER.getCommandDispatcher().a();
 	}
 
 	@Override
@@ -474,11 +506,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 			throws CommandSyntaxException {
 		
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
-		try {
-			CommandAPIHandler.getInstance().getField(EntitySelector.class, "checkPermissions").set(argument, false);
-		} catch (IllegalArgumentException | IllegalAccessException e1) {
-			e1.printStackTrace();
-		}
+		EntitySelector_checkPermissions.set(argument, false);
 		
 		return switch (selector) {
 		case MANY_ENTITIES:
@@ -526,7 +554,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	@Override
 	public Set<NamespacedKey> getFunctions() {
 		Set<NamespacedKey> functions = new HashSet<>();
-		for(MinecraftKey key : ((CraftServer) Bukkit.getServer()).getServer().getFunctionData().f()) {
+		for(MinecraftKey key : MINECRAFT_SERVER.getFunctionData().f()) {
 			functions.add(new NamespacedKey(key.getNamespace(), key.getKey()));
 		}
 		return functions;
@@ -536,7 +564,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	@Override
 	public Set<NamespacedKey> getTags() {
 		Set<NamespacedKey> functions = new HashSet<>();
-		for(MinecraftKey key : ((CraftServer) Bukkit.getServer()).getServer().getFunctionData().g()) {
+		for(MinecraftKey key : MINECRAFT_SERVER.getFunctionData().g()) {
 			functions.add(new NamespacedKey(key.getNamespace(), key.getKey()));
 		}
 		return functions;
@@ -552,7 +580,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		@SuppressWarnings("deprecation")
 		NamespacedKey minecraftKey = new NamespacedKey(customFunction.a().getNamespace(), customFunction.a().getKey());
 
-		CustomFunctionData customFunctionData = ((CraftServer) Bukkit.getServer()).getServer().getFunctionData();
+		CustomFunctionData customFunctionData = MINECRAFT_SERVER.getFunctionData();
 
 		ToIntBiFunction<CustomFunction, CommandListenerWrapper> obj = customFunctionData::a;
 		ToIntFunction<CommandListenerWrapper> appliedObj = clw -> obj.applyAsInt(customFunction, clw);
@@ -564,14 +592,14 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	@Override
 	public SimpleFunctionWrapper[] getTag(NamespacedKey key) {
 		MinecraftKey minecraftKey = new MinecraftKey(key.getNamespace(), key.getKey());
-		CustomFunctionData functionData = ((CraftServer) Bukkit.getServer()).getServer().getFunctionData();
+		CustomFunctionData functionData = MINECRAFT_SERVER.getFunctionData();
 		return functionData.b(minecraftKey).getTagged().stream().map(this::convertFunction).toArray(SimpleFunctionWrapper[]::new);
 	}
 	
 	@Override
 	public SimpleFunctionWrapper getFunction(NamespacedKey key) {
 		MinecraftKey minecraftKey = new MinecraftKey(key.getNamespace(), key.getKey());
-		CustomFunctionData functionData = ((CraftServer) Bukkit.getServer()).getServer().getFunctionData();
+		CustomFunctionData functionData = MINECRAFT_SERVER.getFunctionData();
 		return convertFunction(functionData.a(minecraftKey).get());
 	}
 
@@ -667,32 +695,28 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		tester_right.setScore(2);
 		result.apply(tester_left, tester_right);
 
-		switch (tester_left.getScore()) {
-		case 8:
-			return MathOperation.ADD;
-		case 4:
-			return MathOperation.SUBTRACT;
-		case 12:
-			return MathOperation.MULTIPLY;
-		case 3:
-			return MathOperation.DIVIDE;
-		case 0:
-			return MathOperation.MOD;
-		case 6:
-			return MathOperation.MAX;
-
-		case 2: {
-			if (tester_right.getScore() == 6)
-				return MathOperation.SWAP;
+		return switch (tester_left.getScore()) {
+		case 8 ->  MathOperation.ADD;
+		case 4 ->  MathOperation.SUBTRACT;
+		case 12 -> MathOperation.MULTIPLY;
+		case 3 ->  MathOperation.DIVIDE;
+		case 0 ->  MathOperation.MOD;
+		case 6 ->  MathOperation.MAX;
+		case 2 -> {
+			if (tester_right.getScore() == 6) {
+				yield MathOperation.SWAP;
+			}
 			tester_left.setScore(2);
 			tester_right.setScore(6);
 			result.apply(tester_left, tester_right);
-			if (tester_left.getScore() == 2)
-				return MathOperation.MIN;
-			return MathOperation.ASSIGN;
+			if (tester_left.getScore() == 2) {
+				yield MathOperation.MIN;
+			} else {
+				yield MathOperation.ASSIGN;	
+			}
 		}
-		}
-		return null;
+		default -> null;
+		};
 	}
 
 	@Override
@@ -751,8 +775,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public Rotation getRotation(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		IVectorPosition pos = ArgumentRotation.a(cmdCtx, key);
-		Vec2F vec = pos.b(getCLW(cmdCtx));
+		Vec2F vec = ArgumentRotation.a(cmdCtx, key).b(getCLW(cmdCtx));
 		return new Rotation(vec.i, vec.j);
 	}
 
@@ -799,13 +822,8 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	public Sound getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.e(cmdCtx, key);
 		for (CraftSound sound : CraftSound.values()) {
-			try {
-				if (CommandAPIHandler.getInstance().getField(CraftSound.class, "minecraftKey").get(sound)
-						.equals(minecraftKey.getKey())) {
-					return Sound.valueOf(sound.name());
-				}
-			} catch (IllegalArgumentException | IllegalAccessException e1) {
-				e1.printStackTrace();
+			if (CraftSound_minecraftKey.get(sound).equals(minecraftKey.getKey())) {
+				return Sound.valueOf(sound.name());
 			}
 		}
 		return null;
@@ -813,35 +831,27 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public SuggestionProvider<CommandListenerWrapper> getSuggestionProvider(SuggestionProviders provider) {
-		switch (provider) {
-		case FUNCTION:
-			return (context, builder) -> {
-				CustomFunctionData functionData = getCLW(context).getServer().getFunctionData();
+		return switch (provider) {
+		case FUNCTION -> 
+			(context, builder) -> {
+				CustomFunctionData functionData = MINECRAFT_SERVER.getFunctionData();
 				ICompletionProvider.a(functionData.g(), builder, "#");
 				return ICompletionProvider.a(functionData.f(), builder);
 			};
-		case RECIPES:
-			return CompletionProviders.b;
-		case SOUNDS:
-			return CompletionProviders.c;
-		case ADVANCEMENTS:
-			return (cmdCtx, builder) -> {
-				Collection<Advancement> advancements = ((CommandListenerWrapper) cmdCtx.getSource()).getServer()
-						.getAdvancementData().getAdvancements();
-				return ICompletionProvider.a(advancements.stream().map(Advancement::getName), builder);
+		case RECIPES -> CompletionProviders.b;
+		case SOUNDS -> CompletionProviders.c;
+		case ADVANCEMENTS ->
+			(cmdCtx, builder) -> {
+				return ICompletionProvider.a(MINECRAFT_SERVER.getAdvancementData().getAdvancements().stream().map(Advancement::getName), builder);
 			};
-		case LOOT_TABLES:
-			return (context, builder) -> {
-				LootTableRegistry lootTables = getCLW(context).getServer().getLootTableRegistry();
-				return ICompletionProvider.a(lootTables.a(), builder);
+		case LOOT_TABLES ->
+			(context, builder) -> {
+				return ICompletionProvider.a(getCLW(context).getServer().getLootTableRegistry().a(), builder);
 			};
-		case BIOMES:
-			return CompletionProviders.d;
-		case ENTITIES:
-			return CompletionProviders.e;
-		default:
-			return (context, builder) -> Suggestions.empty();
-		}
+		case BIOMES -> CompletionProviders.d;
+		case ENTITIES -> CompletionProviders.e;
+		default -> (context, builder) -> Suggestions.empty();
+		};
 	}
 
 	@Override
@@ -869,40 +879,26 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		CommandAPI.getLog().info("Reloading datapacks...");
 
-		// Get the NMS server
-		DedicatedServer server = ((CraftServer) Bukkit.getServer()).getHandle().getServer();
-
 		// Get previously declared recipes to be re-registered later
 		Iterator<Recipe> recipes = Bukkit.recipeIterator();
 
 		// Update the commandDispatcher with the current server's commandDispatcher
-		DataPackResources datapackResources = server.dataPackResources;
-		datapackResources.commandDispatcher = server.getCommandDispatcher();
+		DataPackResources datapackResources = MINECRAFT_SERVER.dataPackResources;
+		datapackResources.commandDispatcher = MINECRAFT_SERVER.getCommandDispatcher();
 
-		// Reflection doesn't need to be cached because this only executes once at
-		// server startup
-		Field i = DataPackResources.class.getDeclaredField("i"); // CustomFunctionManager
-		i.setAccessible(true);
-
-		Field gField = CustomFunctionManager.class.getDeclaredField("g"); // int
-		gField.setAccessible(true);
-		int g = (int) gField.get(datapackResources.a()); // Related to the permission required to run this function?
+		// Reflection doesn't need to be cached because this only executes once at server startup
+		int g = (int) CustomFunctionManager_g.get(datapackResources.a()); // Related to the permission required to run this function?
 
 		// Update the CustomFunctionManager for the datapackResources which now has the
 		// new commandDispatcher
-		i.set(datapackResources, new CustomFunctionManager(g, datapackResources.commandDispatcher.a()));
+		DataPackResources_i.set(datapackResources, new CustomFunctionManager(g, datapackResources.commandDispatcher.a()));
 
 		// Construct the new CompletableFuture that now uses datapackResources
-		Field b = DataPackResources.class.getDeclaredField("b"); // IReloadableResourceManager
-		b.setAccessible(true);
-		IReloadableResourceManager reloadableResourceManager = (IReloadableResourceManager) b.get(datapackResources);
-		Field a = DataPackResources.class.getDeclaredField("a"); // CompletableFuture<Unit>
-		a.setAccessible(true);
+		IReloadableResourceManager reloadableResourceManager = (IReloadableResourceManager) DataPackResources_b.get(datapackResources);
 
-		@SuppressWarnings("unchecked")
-		CompletableFuture<Unit> unit = (CompletableFuture<Unit>) a.get(null);
+		CompletableFuture<Unit> unit = (CompletableFuture<Unit>) DataPackResources_a.get(null);
 		CompletableFuture<Unit> unitCompletableFuture = reloadableResourceManager.a(SystemUtils.f(), Runnable::run,
-				server.getResourcePackRepository().f(), unit);
+				MINECRAFT_SERVER.getResourcePackRepository().f(), unit);
 
 		CompletableFuture<DataPackResources> completablefuture = unitCompletableFuture
 				.whenComplete((Unit u, Throwable t) -> {
@@ -941,10 +937,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public void resendPackets(Player player) {
-		CraftPlayer craftPlayer = (CraftPlayer) player;
-		CraftServer craftServer = (CraftServer) Bukkit.getServer();
-		CommandDispatcher nmsDispatcher = craftServer.getServer().getCommandDispatcher();
-		nmsDispatcher.a(craftPlayer.getHandle());
+		MINECRAFT_SERVER.getCommandDispatcher().a(((CraftPlayer) player).getHandle());
 	}
 
 	@Override
