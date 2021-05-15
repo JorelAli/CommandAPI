@@ -1,4 +1,5 @@
 #!/bin/sh
+echo "Installing Spigot libraries..."
 versions=(1.13 1.13.1 1.13.2 1.14 1.14.3 1.14.4 1.15 1.16.1 1.16.2 1.16.4)
 
 for version in ${versions[@]}; do
