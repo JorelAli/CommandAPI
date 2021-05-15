@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
@@ -20,6 +19,7 @@ import java.util.function.ToIntBiFunction;
 import java.util.function.ToIntFunction;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
@@ -191,6 +191,10 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		 EntitySelector_checkPermissions = es_cp;
 	}
 
+	@SuppressWarnings("deprecation")
+	private static NamespacedKey fromMinecrafKey(MinecraftKey key) {
+		return new NamespacedKey(key.getNamespace(), key.getKey());
+	}
 	
 	@Override
 	public Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException  {
@@ -425,15 +429,9 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		EnumSet<EnumAxis> parsedEnumSet = ArgumentRotationAxis.a(cmdCtx, key);
 		for (EnumAxis element : parsedEnumSet) {
 			switch (element) {
-			case X:
-				set.add(Axis.X);
-				break;
-			case Y:
-				set.add(Axis.Y);
-				break;
-			case Z:
-				set.add(Axis.Z);
-				break;
+			case X -> set.add(Axis.X);
+			case Y -> set.add(Axis.Y);
+			case Z -> set.add(Axis.Z);
 			}
 		}
 		return set;
@@ -550,24 +548,14 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		return new FloatRange(low, high);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	public Set<NamespacedKey> getFunctions() {
-		Set<NamespacedKey> functions = new HashSet<>();
-		for(MinecraftKey key : MINECRAFT_SERVER.getFunctionData().f()) {
-			functions.add(new NamespacedKey(key.getNamespace(), key.getKey()));
-		}
-		return functions;
+		return StreamSupport.stream(MINECRAFT_SERVER.getFunctionData().f().spliterator(), false).map(NMS_1_16_R3::fromMinecrafKey).collect(Collectors.toSet());
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	public Set<NamespacedKey> getTags() {
-		Set<NamespacedKey> functions = new HashSet<>();
-		for(MinecraftKey key : MINECRAFT_SERVER.getFunctionData().g()) {
-			functions.add(new NamespacedKey(key.getNamespace(), key.getKey()));
-		}
-		return functions;
+		return StreamSupport.stream(MINECRAFT_SERVER.getFunctionData().g().spliterator(), false).map(NMS_1_16_R3::fromMinecrafKey).collect(Collectors.toSet());
 	}
 	
 	@Override
@@ -577,8 +565,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	
 	//Converts NMS function to SimpleFunctionWrapper
 	private SimpleFunctionWrapper convertFunction(CustomFunction customFunction) {
-		@SuppressWarnings("deprecation")
-		NamespacedKey minecraftKey = new NamespacedKey(customFunction.a().getNamespace(), customFunction.a().getKey());
+		NamespacedKey minecraftKey = fromMinecrafKey(customFunction.a());
 
 		CustomFunctionData customFunctionData = MINECRAFT_SERVER.getFunctionData();
 
@@ -673,15 +660,11 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		};
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public org.bukkit.loot.LootTable getLootTable(CommandContext<CommandListenerWrapper> cmdCtx, String str) {
 		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.e(cmdCtx, str);
-		String namespace = minecraftKey.getNamespace();
-		String key = minecraftKey.getKey();
-
 		LootTable lootTable = getCLW(cmdCtx).getServer().getLootTableRegistry().getLootTable(minecraftKey);
-		return new CraftLootTable(new NamespacedKey(namespace, key), lootTable);
+		return new CraftLootTable(fromMinecrafKey(minecraftKey), lootTable);
 	}
 
 	@Override
@@ -760,10 +743,9 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		IRecipe<?> recipe = ArgumentMinecraftKeyRegistered.b(cmdCtx, key);
 		return new ComplexRecipe() {
 
-			@SuppressWarnings("deprecation")
 			@Override
 			public NamespacedKey getKey() {
-				return new NamespacedKey(recipe.getKey().getNamespace(), recipe.getKey().getKey());
+				return NMS_1_16_R3.fromMinecrafKey(recipe.getKey());
 			}
 
 			@Override
@@ -807,10 +789,10 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		Entity proxyEntity = clw.getEntity();
 		CommandSender proxy = proxyEntity == null ? null : ((Entity) proxyEntity).getBukkitEntity();
 		if (isNative || (proxy != null && !sender.equals(proxy))) {
-			sender = new NativeProxyCommandSender(sender, proxy, location, world);
+			return new NativeProxyCommandSender(sender, proxy, location, world);
+		} else {
+			return sender;
 		}
-
-		return sender;
 	}
 
 	@Override
@@ -942,8 +924,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public Component getAdventureChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		String jsonString = ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, key));
-		return GsonComponentSerializer.gson().deserialize(jsonString);
+		return GsonComponentSerializer.gson().deserialize(ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, key)));
 	}
 
 	@Override
