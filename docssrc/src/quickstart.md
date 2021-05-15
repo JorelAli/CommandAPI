@@ -27,8 +27,8 @@ To use the CommandAPI in your plugins, there are a few methods of adding it to y
   ```xml
   <repositories>
       <repository>
-          <id>commandapi</id>
-          <url>https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/</url>
+          <id>jitpack.io</id>
+          <url>https://jitpack.io</url>
       </repository>
   </repositories>
   ```
@@ -55,7 +55,7 @@ To use the CommandAPI in your plugins, there are a few methods of adding it to y
 
   ```gradle
   repositories {
-      maven { url = "https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/" }
+      maven { url = "https://jitpack.io" }
       maven { url = "https://repo.codemc.org/repository/maven-public/" }
   }
   ```
