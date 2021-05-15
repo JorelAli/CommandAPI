@@ -939,8 +939,8 @@ public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
 			recipes.forEachRemaining(recipe -> {
 				try {
 					Bukkit.addRecipe(recipe);
-					if (recipe instanceof Keyed) {
-						CommandAPI.logInfo("Re-registering recipe: " + ((Keyed) recipe).getKey());
+					if (recipe instanceof Keyed keyedRecipe) {
+						CommandAPI.logInfo("Re-registering recipe: " + keyedRecipe.getKey());
 					}
 				} catch (Exception e) {
 					// Can't re-register registered recipes. Not an error.

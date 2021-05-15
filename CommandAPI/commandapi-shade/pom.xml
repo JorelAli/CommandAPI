@@ -39,41 +39,6 @@
 			<artifactId>commandapi-1.16.1</artifactId>
 			<version>5.12</version>
 		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-1.15</artifactId>
-			<version>5.12</version>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-1.14.4</artifactId>
-			<version>5.12</version>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-1.14.3</artifactId>
-			<version>5.12</version>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-1.14</artifactId>
-			<version>5.12</version>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-1.13.2</artifactId>
-			<version>5.12</version>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-1.13.1</artifactId>
-			<version>5.12</version>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-1.13</artifactId>
-			<version>5.12</version>
-		</dependency>
 	</dependencies>
 
 	<build>
@@ -93,13 +58,6 @@
 									<include>dev.jorel:commandapi-1.16.4</include>
 									<include>dev.jorel:commandapi-1.16.2</include>
 									<include>dev.jorel:commandapi-1.16.1</include>
-									<include>dev.jorel:commandapi-1.15</include>
-									<include>dev.jorel:commandapi-1.14.4</include>
-									<include>dev.jorel:commandapi-1.14.3</include>
-									<include>dev.jorel:commandapi-1.14</include>
-									<include>dev.jorel:commandapi-1.13.2</include>
-									<include>dev.jorel:commandapi-1.13.1</include>
-									<include>dev.jorel:commandapi-1.13</include>
 									<include>dev.jorel:commandapi-core</include>
 									<include>dev.jorel:commandapi-vh</include>
 								</includes>

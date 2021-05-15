@@ -130,6 +130,7 @@ import net.minecraft.server.v1_16_R3.DataPackResources;
 import net.minecraft.server.v1_16_R3.DedicatedServer;
 import net.minecraft.server.v1_16_R3.Entity;
 import net.minecraft.server.v1_16_R3.EntitySelector;
+import net.minecraft.server.v1_16_R3.EntityTypes;
 import net.minecraft.server.v1_16_R3.EnumDirection.EnumAxis;
 import net.minecraft.server.v1_16_R3.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_16_R3.ICompletionProvider;
@@ -149,7 +150,6 @@ import net.minecraft.server.v1_16_R3.SystemUtils;
 import net.minecraft.server.v1_16_R3.Unit;
 import net.minecraft.server.v1_16_R3.Vec2F;
 import net.minecraft.server.v1_16_R3.Vec3D;
-import net.minecraft.server.v1_16_R3.WorldServer;
 
 @RequireField(in = DataPackResources.class, name = "i", ofType = CustomFunctionManager.class)
 @RequireField(in = DataPackResources.class, name = "b", ofType = IReloadableResourceManager.class)
@@ -161,8 +161,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	
 	@Override
 	public Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException  {
-		String jsonString = ChatSerializer.a(ArgumentChat.a(cmdCtx, key));
-		return GsonComponentSerializer.gson().deserialize(jsonString);
+		return GsonComponentSerializer.gson().deserialize(ChatSerializer.a(ArgumentChat.a(cmdCtx, key)));
 	}
 	
 	@Override
@@ -352,8 +351,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public String convert(org.bukkit.inventory.ItemStack is) {
-		ItemStack nmsItemStack = CraftItemStack.asNMSCopy(is);
-		return is.getType().getKey().toString() + nmsItemStack.getOrCreateTag().asString();
+		return is.getType().getKey().toString() + CraftItemStack.asNMSCopy(is).getOrCreateTag().asString();
 	}
 
 	@Override
@@ -411,8 +409,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public Biome getBiome(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		MinecraftKey minecraftKey = (MinecraftKey) cmdCtx.getArgument(key, MinecraftKey.class);
-		return Biome.valueOf(minecraftKey.getKey().toUpperCase());
+		return Biome.valueOf(cmdCtx.getArgument(key, MinecraftKey.class).getKey().toUpperCase());
 	}
 
 	@Override
@@ -436,8 +433,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public BaseComponent[] getChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		String resultantString = ChatSerializer.a(ArgumentChat.a(cmdCtx, key));
-		return ComponentSerializer.parse(resultantString);
+		return ComponentSerializer.parse(ChatSerializer.a(ArgumentChat.a(cmdCtx, key)));
 	}
 
 	@Override
@@ -447,12 +443,11 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public BaseComponent[] getChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String str) {
-		String resultantString = ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, str));
-		return ComponentSerializer.parse(resultantString);
+		return ComponentSerializer.parse(ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, str)));
 	}
 
 	private CommandListenerWrapper getCLW(CommandContext<CommandListenerWrapper> cmdCtx) {
-		return (CommandListenerWrapper) cmdCtx.getSource();
+		return cmdCtx.getSource();
 	}
 
 	@Override
@@ -466,8 +461,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public Environment getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		WorldServer worldServer = ArgumentDimension.a(cmdCtx, key);
-		return worldServer.getWorld().getEnvironment();
+		return ArgumentDimension.a(cmdCtx, key).getWorld().getEnvironment();
 	}
 
 	@Override
@@ -486,39 +480,37 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 			e1.printStackTrace();
 		}
 		
-		switch (selector) {
+		return switch (selector) {
 		case MANY_ENTITIES:
 			// ArgumentEntity.c -> EntitySelector.getEntities
 			try {
-				return argument.getEntities(cmdCtx.getSource()).stream()
+				yield argument.getEntities(cmdCtx.getSource()).stream()
 						.map(entity -> (org.bukkit.entity.Entity) ((Entity) entity).getBukkitEntity())
 						.collect(Collectors.toList());
 			} catch (CommandSyntaxException e) {
-				return new ArrayList<org.bukkit.entity.Entity>();
+				yield new ArrayList<org.bukkit.entity.Entity>();
 			}
 		case MANY_PLAYERS:
 			// ArgumentEntity.d -> EntitySelector.d
 			try {
-				return argument.d(cmdCtx.getSource()).stream()
+				yield argument.d(cmdCtx.getSource()).stream()
 						.map(player -> (Player) ((Entity) player).getBukkitEntity()).collect(Collectors.toList());
 			} catch (CommandSyntaxException e) {
-				return new ArrayList<Player>();
+				yield new ArrayList<Player>();
 			}
 		case ONE_ENTITY:
 			// ArgumentEntity.a -> EntitySelector.a
-			return (org.bukkit.entity.Entity) argument.a(cmdCtx.getSource()).getBukkitEntity();
+			yield (org.bukkit.entity.Entity) argument.a(cmdCtx.getSource()).getBukkitEntity();
 		case ONE_PLAYER:
 			// ArgumentEntity.e -> EntitySelector.c
-			return (Player) argument.c(cmdCtx.getSource()).getBukkitEntity();
-		}
-		throw new IllegalStateException("A serious error has occurred! Contact the author of the CommandAPI");
+			yield (Player) argument.c(cmdCtx.getSource()).getBukkitEntity();
+		};
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public EntityType getEntityType(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
-		Entity entity = IRegistry.ENTITY_TYPE.get(ArgumentEntitySummon.a(cmdCtx, str))
-				.a((getCLW(cmdCtx).getWorld().getWorld()).getHandle());
-		return entity.getBukkitEntity().getType();
+		return EntityType.fromName(EntityTypes.getName(IRegistry.ENTITY_TYPE.get(ArgumentEntitySummon.a(cmdCtx, str))).getKey());
 	}
 
 	@Override
@@ -629,30 +621,28 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	@Override
 	public Location getLocation(CommandContext<CommandListenerWrapper> cmdCtx, String str, LocationType locationType)
 			throws CommandSyntaxException {
-		switch (locationType) {
+		return switch (locationType) {
 		case BLOCK_POSITION:
 			BlockPosition blockPos = ArgumentPosition.a(cmdCtx, str);
-			return new Location(getCLW(cmdCtx).getWorld().getWorld(), blockPos.getX(), blockPos.getY(),
+			yield new Location(getWorldForCLW(getCLW(cmdCtx)), blockPos.getX(), blockPos.getY(),
 					blockPos.getZ());
 		case PRECISE_POSITION:
 			Vec3D vecPos = ArgumentVec3.a(cmdCtx, str);
-			return new Location(getCLW(cmdCtx).getWorld().getWorld(), vecPos.x, vecPos.y, vecPos.z);
-		}
-		return null;
+			yield new Location(getWorldForCLW(getCLW(cmdCtx)), vecPos.x, vecPos.y, vecPos.z);
+		};
 	}
 
 	@Override
 	public Location2D getLocation2D(CommandContext<CommandListenerWrapper> cmdCtx, String key, LocationType locationType2d)
 			throws CommandSyntaxException {
-		switch (locationType2d) {
+		return switch (locationType2d) {
 		case BLOCK_POSITION:
 			BlockPosition2D blockPos = ArgumentVec2I.a(cmdCtx, key);
-			return new Location2D(getCLW(cmdCtx).getWorld().getWorld(), blockPos.a, blockPos.b);
+			yield new Location2D(getWorldForCLW(getCLW(cmdCtx)), blockPos.a, blockPos.b);
 		case PRECISE_POSITION:
 			Vec2F vecPos = ArgumentVec2.a(cmdCtx, key);
-			return new Location2D(getCLW(cmdCtx).getWorld().getWorld(), vecPos.i, vecPos.j);
-		}
-		return null;
+			yield new Location2D(getWorldForCLW(getCLW(cmdCtx)), vecPos.i, vecPos.j);
+		};
 	}
 
 	@SuppressWarnings("deprecation")
@@ -788,8 +778,8 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		CommandSender sender = clw.getBukkitSender();
 		Vec3D pos = clw.getPosition();
 		Vec2F rot = clw.i();
-		World world = clw.getWorld().getWorld();
-		Location location = new Location(clw.getWorld().getWorld(), pos.getX(), pos.getY(), pos.getZ(), rot.j, rot.i);
+		World world = getWorldForCLW(clw);
+		Location location = new Location(world, pos.getX(), pos.getY(), pos.getZ(), rot.j, rot.i);
 
 		Entity proxyEntity = clw.getEntity();
 		CommandSender proxy = proxyEntity == null ? null : ((Entity) proxyEntity).getBukkitEntity();
@@ -933,8 +923,8 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 			recipes.forEachRemaining(recipe -> {
 				try {
 					Bukkit.addRecipe(recipe);
-					if (recipe instanceof Keyed) {
-						CommandAPI.logInfo("Re-registering recipe: " + ((Keyed) recipe).getKey());
+					if (recipe instanceof Keyed keyedRecipe) {
+						CommandAPI.logInfo("Re-registering recipe: " + keyedRecipe.getKey());
 					}
 				} catch (Exception e) {
 					// Can't re-register registered recipes. Not an error.
@@ -961,5 +951,10 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	public Component getAdventureChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		String jsonString = ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, key));
 		return GsonComponentSerializer.gson().deserialize(jsonString);
+	}
+
+	@Override
+	public World getWorldForCLW(CommandListenerWrapper clw) {
+		return (clw.getWorld() == null) ? null : clw.getWorld().getWorld();
 	}
 }

@@ -54,6 +54,7 @@ import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.ScoreHolderArgument;
 import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.preprocessor.RequireField;
 
 /**
  * Handles the main backend of the CommandAPI. This constructs brigadier Command
@@ -61,6 +62,7 @@ import dev.jorel.commandapi.nms.NMS;
  * handles permission registration for Bukkit, interactions for NMS and the
  * registration and unregistration of commands.
  */
+@RequireField(in = CommandNode.class, name = "children", ofType = Map.class)
 public class CommandAPIHandler<CommandListenerWrapper> {
 	
 	private static CommandAPIHandler<?> instance;

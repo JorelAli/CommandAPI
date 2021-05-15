@@ -27,40 +27,5 @@
 			<artifactId>commandapi-1.16.1</artifactId>
 			<version>5.12</version>
 		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-1.15</artifactId>
-			<version>5.12</version>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-1.14.4</artifactId>
-			<version>5.12</version>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-1.14.3</artifactId>
-			<version>5.12</version>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-1.14</artifactId>
-			<version>5.12</version>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-1.13.2</artifactId>
-			<version>5.12</version>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-1.13.1</artifactId>
-			<version>5.12</version>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-1.13</artifactId>
-			<version>5.12</version>
-		</dependency>
 	</dependencies>
 </project>

@@ -14,6 +14,7 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.block.Biome;
@@ -52,7 +53,9 @@ import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 public interface NMS<CommandListenerWrapper> {
-
+	
+	World getWorldForCLW(CommandListenerWrapper clw);
+	
 	/**
 	 * Resends the command dispatcher's set of commands to a player.
 	 * 
