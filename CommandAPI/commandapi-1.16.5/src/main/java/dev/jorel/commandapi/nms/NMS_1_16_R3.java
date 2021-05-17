@@ -23,7 +23,6 @@ package dev.jorel.commandapi.nms;
 import java.io.File;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodHandles.Lookup;
 import java.lang.invoke.VarHandle;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -87,6 +86,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 
 import de.tr7zw.changeme.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.ICustomProvidedArgument.SuggestionProviders;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.preprocessor.RequireField;
@@ -176,34 +176,21 @@ import net.minecraft.server.v1_16_R3.Vec3D;
 public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	
 	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
-	private static final VarHandle DataPackResources_i;
-	private static final VarHandle DataPackResources_b;
-	private static final VarHandle DataPackResources_a;
-	private static final VarHandle CustomFunctionManager_g;
-	private static final VarHandle EntitySelector_checkPermissions;
+	private static final VarHandle DATAPACKRESOURCES_B;
+	private static final VarHandle CUSTOMFUNCTIONMANAGER_G;
 	
 	// Compute all var handles all in one go so we don't do this during main server runtime
 	static {
-		VarHandle dpr_i = null;
 		VarHandle dpr_b = null;
-		VarHandle dpr_a = null;
 		VarHandle cfm_g = null;
-		VarHandle es_cp = null;
 		 try {
-			 Lookup dpr_lookup = MethodHandles.privateLookupIn(DataPackResources.class, MethodHandles.lookup());
-			 dpr_i = dpr_lookup.findVarHandle(DataPackResources.class, "i", CustomFunctionManager.class);
-			 dpr_b = dpr_lookup.findVarHandle(DataPackResources.class, "b", IReloadableResourceManager.class);
-			 dpr_a = dpr_lookup.findVarHandle(DataPackResources.class, "a", CompletableFuture.class);
-
+			 dpr_b = MethodHandles.privateLookupIn(DataPackResources.class, MethodHandles.lookup()).findVarHandle(DataPackResources.class, "b", IReloadableResourceManager.class);			 
 			 cfm_g = MethodHandles.privateLookupIn(CustomFunctionManager.class, MethodHandles.lookup()).findVarHandle(CustomFunctionManager.class, "g", int.class);
-			 es_cp = MethodHandles.privateLookupIn(EntitySelector.class, MethodHandles.lookup()).findVarHandle(EntitySelector.class, "checkPermissions", boolean.class);
-		} catch (NoSuchFieldException | IllegalAccessException e) {
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
 		}
-		 DataPackResources_i = dpr_i;
-		 DataPackResources_b = dpr_b;
-		 DataPackResources_a = dpr_a;
-		 CustomFunctionManager_g = cfm_g;
-		 EntitySelector_checkPermissions = es_cp;
+		 DATAPACKRESOURCES_B = dpr_b;
+		 CUSTOMFUNCTIONMANAGER_G = cfm_g;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -542,7 +529,11 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 			throws CommandSyntaxException {
 		
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
-		EntitySelector_checkPermissions.set(argument, false);
+		try {
+			CommandAPIHandler.getInstance().getField(EntitySelector.class, "checkPermissions").set(argument, false);
+		} catch (IllegalArgumentException | IllegalAccessException e1) {
+			e1.printStackTrace();
+		}
 		
 		return switch (selector) {
 		case MANY_ENTITIES:
@@ -888,18 +879,21 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		datapackResources.commandDispatcher = MINECRAFT_SERVER.getCommandDispatcher();
 
 		// Reflection doesn't need to be cached because this only executes once at server startup
-		int g = (int) CustomFunctionManager_g.get(datapackResources.a()); // Related to the permission required to run this function?
+		int g = (int) CUSTOMFUNCTIONMANAGER_G.get(datapackResources.a()); // Related to the permission required to run this function?
 
-		// Update the CustomFunctionManager for the datapackResources which now has the
-		// new commandDispatcher
-		DataPackResources_i.set(datapackResources, new CustomFunctionManager(g, datapackResources.commandDispatcher.a()));
+		// Update the CustomFunctionManager for the datapackResources which now has the new commandDispatcher
+		
+		try {
+			CommandAPIHandler.getInstance().getField(DataPackResources.class, "i").set(datapackResources, new CustomFunctionManager(g, datapackResources.commandDispatcher.a()));
+		} catch (IllegalArgumentException | IllegalAccessException e1) {
+			e1.printStackTrace();
+		}
 
 		// Construct the new CompletableFuture that now uses datapackResources
-		IReloadableResourceManager reloadableResourceManager = (IReloadableResourceManager) DataPackResources_b.get(datapackResources);
+		IReloadableResourceManager reloadableResourceManager = (IReloadableResourceManager) DATAPACKRESOURCES_B.get(datapackResources);
 
-		CompletableFuture<Unit> unit = (CompletableFuture<Unit>) DataPackResources_a.get(null);
 		CompletableFuture<Unit> unitCompletableFuture = reloadableResourceManager.a(SystemUtils.f(), Runnable::run,
-				MINECRAFT_SERVER.getResourcePackRepository().f(), unit);
+				MINECRAFT_SERVER.getResourcePackRepository().f(), CompletableFuture.completedFuture(Unit.INSTANCE));
 
 		CompletableFuture<DataPackResources> completablefuture = unitCompletableFuture
 				.whenComplete((Unit u, Throwable t) -> {
