@@ -78,7 +78,7 @@ To shade the CommandAPI into a maven project, you'll need to use the `commandapi
 	<dependency>
 		<groupId>dev.jorel.CommandAPI</groupId>
         <artifactId>commandapi-shade</artifactId>
-        <version>5.12</version>
+        <version>6.0.0</version>
     </dependency>
 </dependencies>
 ```
@@ -132,7 +132,7 @@ Next, we declare our dependencies:
 
 ```gradle
 dependencies {
-    compile "dev.jorel.CommandAPI:commandapi-shade:5.12"   
+    compile "dev.jorel.CommandAPI:commandapi-shade:6.0.0"   
 }
 ```
 
@@ -141,7 +141,7 @@ Then we add it to the `shadowJar` task configuration:
 ```gradle
 shadowJar {
 	dependencies {
-		include dependency("dev.jorel.CommandAPI:commandapi-shade:5.12")
+		include dependency("dev.jorel.CommandAPI:commandapi-shade:6.0.0")
 	}
 }
 ```
