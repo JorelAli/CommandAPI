@@ -21,7 +21,7 @@
 
 > ### The CommandAPI's Maven repo has moved!
 >
-> Versions 5.12 and onwards will use jitpack.io. To update, simply replace the old repo URL (`https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/`) with the new one (`https://jitpack.io`)
+> Versions 5.12 and onwards will use jitpack.io. To update, simply replace the old repo URL (`https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/`) with the new one (`https://jitpack.io`) and change the group ID from `dev.jorel` to `dev.jorel.CommandAPI`
 
 **Compatible Minecraft versions:** 
 
