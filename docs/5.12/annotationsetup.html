@@ -186,8 +186,8 @@
 <p>If you haven't already done so, add the maven repository to your <code>pom.xml</code> file:</p>
 <pre><code class="language-xml">&lt;repositories&gt;
     &lt;repository&gt;
-        &lt;id&gt;commandapi&lt;/id&gt;
-        &lt;url&gt;https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/&lt;/url&gt;
+        &lt;id&gt;jitpack.io&lt;/id&gt;
+        &lt;url&gt;https://jitpack.io&lt;/url&gt;
     &lt;/repository&gt;
 &lt;/repositories&gt;
 </code></pre>
@@ -196,9 +196,9 @@
 <p>Add the annotation dependency to your <code>pom.xml</code>:</p>
 <pre><code class="language-xml">&lt;dependencies&gt;
     &lt;dependency&gt;
-        &lt;groupId&gt;dev.jorel&lt;/groupId&gt;
+        &lt;groupId&gt;dev.jorel.CommandAPI&lt;/groupId&gt;
         &lt;artifactId&gt;commandapi-annotations&lt;/artifactId&gt;
-        &lt;version&gt;5.3&lt;/version&gt;
+        &lt;version&gt;5.12&lt;/version&gt;
         &lt;scope&gt;provided&lt;/scope&gt;
     &lt;/dependency&gt;
 &lt;/dependencies&gt;
@@ -214,10 +214,10 @@
             &lt;version&gt;3.8.1&lt;/version&gt;
             &lt;configuration&gt;
                 &lt;annotationProcessorPaths&gt;
-					&lt;path&gt;
-                        &lt;groupId&gt;dev.jorel&lt;/groupId&gt;
+                    &lt;path&gt;
+                        &lt;groupId&gt;dev.jorel.CommandAPI&lt;/groupId&gt;
                         &lt;artifactId&gt;commandapi-annotations&lt;/artifactId&gt;
-                        &lt;version&gt;5.3&lt;/version&gt;
+                        &lt;version&gt;5.12&lt;/version&gt;
                     &lt;/path&gt;
                 &lt;/annotationProcessorPaths&gt;
             &lt;/configuration&gt;
@@ -233,7 +233,7 @@
 <li>
 <p>If you haven't already done so, add the maven repository to your <code>build.gradle</code> file:</p>
 <pre><code class="language-gradle">repositories {
-    maven { url = &quot;https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/&quot; }
+    maven { url = &quot;https://jitpack.io&quot; }
     maven { url = &quot;https://repo.codemc.org/repository/maven-public/&quot; }
 }
 </code></pre>
@@ -241,8 +241,8 @@
 <li>
 <p>Add the dependency and annotation processor to your list of dependencies in your <code>build.gradle</code> file:</p>
 <pre><code class="language-gradle">dependencies {
-    compileOnly &quot;dev.jorel:commandapi-annotations:5.3&quot;
-    annotationProcessor &quot;dev.jorel:commandapi-annotations:5.3&quot;
+    compileOnly &quot;dev.jorel.CommandAPI:commandapi-annotations:5.12&quot;
+    annotationProcessor &quot;dev.jorel.CommandAPI:commandapi-annotations:5.12&quot;
 }
 </code></pre>
 </li>

@@ -242,7 +242,7 @@ CommandAPI.onEnable(Plugin plugin);
 <p>To shade the CommandAPI into a maven project, you'll need to use the <code>commandapi-shade</code> dependency, which is optimized for shading and doesn't include plugin-specific files <em>(such as <code>plugin.yml</code>)</em>:</p>
 <pre><code class="language-xml">&lt;dependencies&gt;
 	&lt;dependency&gt;
-		&lt;groupId&gt;dev.jorel&lt;/groupId&gt;
+		&lt;groupId&gt;dev.jorel.CommandAPI&lt;/groupId&gt;
         &lt;artifactId&gt;commandapi-shade&lt;/artifactId&gt;
         &lt;version&gt;5.12&lt;/version&gt;
     &lt;/dependency&gt;
@@ -286,13 +286,13 @@ CommandAPI.onEnable(Plugin plugin);
 </code></pre>
 <p>Next, we declare our dependencies:</p>
 <pre><code class="language-gradle">dependencies {
-    compile &quot;dev.jorel:commandapi-shade:5.12&quot;   
+    compile &quot;dev.jorel.CommandAPI:commandapi-shade:5.12&quot;   
 }
 </code></pre>
 <p>Then we add it to the <code>shadowJar</code> task configuration:</p>
 <pre><code class="language-gradle">shadowJar {
 	dependencies {
-		include dependency(&quot;dev.jorel:commandapi-shade:5.12&quot;)
+		include dependency(&quot;dev.jorel.CommandAPI:commandapi-shade:5.12&quot;)
 	}
 }
 </code></pre>

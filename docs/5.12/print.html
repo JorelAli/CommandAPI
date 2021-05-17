@@ -735,7 +735,7 @@ skip-sender-proxy:
 <p>Add the dependency to your <code>pom.xml</code>:</p>
 <pre><code class="language-xml">&lt;dependencies&gt;
     &lt;dependency&gt;
-        &lt;groupId&gt;dev.jorel&lt;/groupId&gt;
+        &lt;groupId&gt;dev.jorel.CommandAPI&lt;/groupId&gt;
         &lt;artifactId&gt;commandapi-core&lt;/artifactId&gt;
         &lt;version&gt;5.12&lt;/version&gt;
         &lt;scope&gt;provided&lt;/scope&gt;
@@ -761,7 +761,7 @@ skip-sender-proxy:
 <li>
 <p>Add the dependency to your list of dependencies in your <code>build.gradle</code> file:</p>
 <pre><code class="language-gradle">dependencies {
-    compileOnly &quot;dev.jorel:commandapi-core:5.12&quot;
+    compileOnly &quot;dev.jorel.CommandAPI:commandapi-core:5.12&quot;
 }
 </code></pre>
 </li>
@@ -835,7 +835,7 @@ CommandAPI.onEnable(Plugin plugin);
 <p>To shade the CommandAPI into a maven project, you'll need to use the <code>commandapi-shade</code> dependency, which is optimized for shading and doesn't include plugin-specific files <em>(such as <code>plugin.yml</code>)</em>:</p>
 <pre><code class="language-xml">&lt;dependencies&gt;
 	&lt;dependency&gt;
-		&lt;groupId&gt;dev.jorel&lt;/groupId&gt;
+		&lt;groupId&gt;dev.jorel.CommandAPI&lt;/groupId&gt;
         &lt;artifactId&gt;commandapi-shade&lt;/artifactId&gt;
         &lt;version&gt;5.12&lt;/version&gt;
     &lt;/dependency&gt;
@@ -879,13 +879,13 @@ CommandAPI.onEnable(Plugin plugin);
 </code></pre>
 <p>Next, we declare our dependencies:</p>
 <pre><code class="language-gradle">dependencies {
-    compile &quot;dev.jorel:commandapi-shade:5.12&quot;   
+    compile &quot;dev.jorel.CommandAPI:commandapi-shade:5.12&quot;   
 }
 </code></pre>
 <p>Then we add it to the <code>shadowJar</code> task configuration:</p>
 <pre><code class="language-gradle">shadowJar {
 	dependencies {
-		include dependency(&quot;dev.jorel:commandapi-shade:5.12&quot;)
+		include dependency(&quot;dev.jorel.CommandAPI:commandapi-shade:5.12&quot;)
 	}
 }
 </code></pre>
@@ -903,8 +903,8 @@ CommandAPI.onEnable(Plugin plugin);
 <p>If you haven't already done so, add the maven repository to your <code>pom.xml</code> file:</p>
 <pre><code class="language-xml">&lt;repositories&gt;
     &lt;repository&gt;
-        &lt;id&gt;commandapi&lt;/id&gt;
-        &lt;url&gt;https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/&lt;/url&gt;
+        &lt;id&gt;jitpack.io&lt;/id&gt;
+        &lt;url&gt;https://jitpack.io&lt;/url&gt;
     &lt;/repository&gt;
 &lt;/repositories&gt;
 </code></pre>
@@ -913,9 +913,9 @@ CommandAPI.onEnable(Plugin plugin);
 <p>Add the annotation dependency to your <code>pom.xml</code>:</p>
 <pre><code class="language-xml">&lt;dependencies&gt;
     &lt;dependency&gt;
-        &lt;groupId&gt;dev.jorel&lt;/groupId&gt;
+        &lt;groupId&gt;dev.jorel.CommandAPI&lt;/groupId&gt;
         &lt;artifactId&gt;commandapi-annotations&lt;/artifactId&gt;
-        &lt;version&gt;5.3&lt;/version&gt;
+        &lt;version&gt;5.12&lt;/version&gt;
         &lt;scope&gt;provided&lt;/scope&gt;
     &lt;/dependency&gt;
 &lt;/dependencies&gt;
@@ -931,10 +931,10 @@ CommandAPI.onEnable(Plugin plugin);
             &lt;version&gt;3.8.1&lt;/version&gt;
             &lt;configuration&gt;
                 &lt;annotationProcessorPaths&gt;
-					&lt;path&gt;
-                        &lt;groupId&gt;dev.jorel&lt;/groupId&gt;
+                    &lt;path&gt;
+                        &lt;groupId&gt;dev.jorel.CommandAPI&lt;/groupId&gt;
                         &lt;artifactId&gt;commandapi-annotations&lt;/artifactId&gt;
-                        &lt;version&gt;5.3&lt;/version&gt;
+                        &lt;version&gt;5.12&lt;/version&gt;
                     &lt;/path&gt;
                 &lt;/annotationProcessorPaths&gt;
             &lt;/configuration&gt;
@@ -950,7 +950,7 @@ CommandAPI.onEnable(Plugin plugin);
 <li>
 <p>If you haven't already done so, add the maven repository to your <code>build.gradle</code> file:</p>
 <pre><code class="language-gradle">repositories {
-    maven { url = &quot;https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/&quot; }
+    maven { url = &quot;https://jitpack.io&quot; }
     maven { url = &quot;https://repo.codemc.org/repository/maven-public/&quot; }
 }
 </code></pre>
@@ -958,8 +958,8 @@ CommandAPI.onEnable(Plugin plugin);
 <li>
 <p>Add the dependency and annotation processor to your list of dependencies in your <code>build.gradle</code> file:</p>
 <pre><code class="language-gradle">dependencies {
-    compileOnly &quot;dev.jorel:commandapi-annotations:5.3&quot;
-    annotationProcessor &quot;dev.jorel:commandapi-annotations:5.3&quot;
+    compileOnly &quot;dev.jorel.CommandAPI:commandapi-annotations:5.12&quot;
+    annotationProcessor &quot;dev.jorel.CommandAPI:commandapi-annotations:5.12&quot;
 }
 </code></pre>
 </li>
