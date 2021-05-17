@@ -13,7 +13,6 @@ import dev.jorel.commandapi.annotations.Default;
 import dev.jorel.commandapi.annotations.Permission;
 import dev.jorel.commandapi.annotations.Subcommand;
 import dev.jorel.commandapi.annotations.arguments.AStringArgument;
-import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 
 /* ANCHOR: warps */

@@ -160,7 +160,6 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	private static final VarHandle DataPackResources_b;
 	private static final VarHandle DataPackResources_a;
 	private static final VarHandle CustomFunctionManager_g;
-	private static final VarHandle CraftSound_minecraftKey;
 	private static final VarHandle EntitySelector_checkPermissions;
 	
 	// Compute all var handles all in one go so we don't do this during main server runtime
@@ -169,7 +168,6 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		VarHandle dpr_b = null;
 		VarHandle dpr_a = null;
 		VarHandle cfm_g = null;
-		VarHandle cs_mk = null;
 		VarHandle es_cp = null;
 		 try {
 			 Lookup dpr_lookup = MethodHandles.privateLookupIn(DataPackResources.class, MethodHandles.lookup());
@@ -178,7 +176,6 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 			 dpr_a = dpr_lookup.findVarHandle(DataPackResources.class, "a", CompletableFuture.class);
 
 			 cfm_g = MethodHandles.privateLookupIn(CustomFunctionManager.class, MethodHandles.lookup()).findVarHandle(CustomFunctionManager.class, "g", int.class);
-			 cs_mk = MethodHandles.privateLookupIn(CraftSound.class, MethodHandles.lookup()).findVarHandle(CraftSound.class, "minecraftKey", String.class);
 			 es_cp = MethodHandles.privateLookupIn(EntitySelector.class, MethodHandles.lookup()).findVarHandle(EntitySelector.class, "checkPermissions", boolean.class);
 		} catch (NoSuchFieldException | IllegalAccessException e) {
 		}
@@ -186,7 +183,6 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		 DataPackResources_b = dpr_b;
 		 DataPackResources_a = dpr_a;
 		 CustomFunctionManager_g = cfm_g;
-		 CraftSound_minecraftKey = cs_mk;
 		 EntitySelector_checkPermissions = es_cp;
 	}
 
