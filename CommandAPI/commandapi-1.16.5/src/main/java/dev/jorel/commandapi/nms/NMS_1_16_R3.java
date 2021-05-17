@@ -381,7 +381,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public String[] compatibleVersions() {
-		return new String[] { "1.16.4", "1.16.5" };
+		return new String[] { "1.16.5" };
 	}
 
 	@Override

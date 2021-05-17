@@ -14,7 +14,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-1.16.4</artifactId>
+			<artifactId>commandapi-1.16.5</artifactId>
 			<version>6.0.0</version>
 		</dependency>
 	</dependencies>
