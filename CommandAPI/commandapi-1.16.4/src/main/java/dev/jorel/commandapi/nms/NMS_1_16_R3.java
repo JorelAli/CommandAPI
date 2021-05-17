@@ -152,7 +152,6 @@ import net.minecraft.server.v1_16_R3.Vec3D;
 @RequireField(in = DataPackResources.class, name = "b", ofType = IReloadableResourceManager.class)
 @RequireField(in = DataPackResources.class, name = "a", ofType = CompletableFuture.class)
 @RequireField(in = CustomFunctionManager.class, name = "g", ofType = int.class)
-@RequireField(in = CraftSound.class, name = "minecraftKey", ofType = String.class)
 @RequireField(in = EntitySelector.class, name = "checkPermissions", ofType = boolean.class)
 public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	
@@ -403,7 +402,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public String convert(Sound sound) {
-		return CraftSound.getSound(sound);
+		return sound.getKey().toString();
 	}
 
 	@Override
@@ -802,13 +801,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public Sound getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.e(cmdCtx, key);
-		for (CraftSound sound : CraftSound.values()) {
-			if (CraftSound_minecraftKey.get(sound).equals(minecraftKey.getKey())) {
-				return Sound.valueOf(sound.name());
-			}
-		}
-		return null;
+		return CraftSound.getBukkit(IRegistry.SOUND_EVENT.get(ArgumentMinecraftKeyRegistered.e(cmdCtx, key)));
 	}
 
 	@Override

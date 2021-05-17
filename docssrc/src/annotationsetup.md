@@ -13,8 +13,8 @@ The annotation system effectively needs to be added twice: Once for compilation 
   ```xml
   <repositories>
       <repository>
-          <id>commandapi</id>
-          <url>https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/</url>
+          <id>jitpack.io</id>
+          <url>https://jitpack.io</url>
       </repository>
   </repositories>
   ```
@@ -24,9 +24,9 @@ The annotation system effectively needs to be added twice: Once for compilation 
   ```xml
   <dependencies>
       <dependency>
-          <groupId>dev.jorel</groupId>
+          <groupId>dev.jorel.CommandAPI</groupId>
           <artifactId>commandapi-annotations</artifactId>
-          <version>5.3</version>
+          <version>5.12</version>
           <scope>provided</scope>
       </dependency>
   </dependencies>
@@ -43,10 +43,10 @@ The annotation system effectively needs to be added twice: Once for compilation 
               <version>3.8.1</version>
               <configuration>
                   <annotationProcessorPaths>
-  					<path>
-                          <groupId>dev.jorel</groupId>
+                      <path>
+                          <groupId>dev.jorel.CommandAPI</groupId>
                           <artifactId>commandapi-annotations</artifactId>
-                          <version>5.3</version>
+                          <version>5.12</version>
                       </path>
                   </annotationProcessorPaths>
               </configuration>
@@ -54,7 +54,6 @@ The annotation system effectively needs to be added twice: Once for compilation 
       </plugins>
   </build>
   ```
-  
 
 -----
 
@@ -64,7 +63,7 @@ The annotation system effectively needs to be added twice: Once for compilation 
 
   ```gradle
   repositories {
-      maven { url = "https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/" }
+      maven { url = "https://jitpack.io" }
       maven { url = "https://repo.codemc.org/repository/maven-public/" }
   }
   ```
@@ -73,8 +72,8 @@ The annotation system effectively needs to be added twice: Once for compilation 
 
   ```gradle
   dependencies {
-      compileOnly "dev.jorel:commandapi-annotations:5.3"
-      annotationProcessor "dev.jorel:commandapi-annotations:5.3"
+      compileOnly "dev.jorel.CommandAPI:commandapi-annotations:5.12"
+      annotationProcessor "dev.jorel.CommandAPI:commandapi-annotations:5.12"
   }
   ```
 
