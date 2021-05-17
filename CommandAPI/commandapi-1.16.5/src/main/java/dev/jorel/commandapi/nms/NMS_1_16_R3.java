@@ -1,3 +1,23 @@
+/*******************************************************************************
+ * Copyright 2018, 2021 Jorel Ali (Skepter) - MIT License
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *******************************************************************************/
 package dev.jorel.commandapi.nms;
 
 import java.io.File;
@@ -192,15 +212,10 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	}
 	
 	@Override
-	public Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException  {
-		return GsonComponentSerializer.gson().deserialize(ChatSerializer.a(ArgumentChat.a(cmdCtx, key)));
-	}
-	
-	@Override
 	public ArgumentType<?> _ArgumentAngle() {
 		return ArgumentAngle.a();
 	}
-
+	
 	@Override
 	public ArgumentType<?> _ArgumentAxis() {
 		return ArgumentRotationAxis.a();
@@ -401,6 +416,19 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		return sound.getKey().toString();
 	}
 
+	//Converts NMS function to SimpleFunctionWrapper
+	private SimpleFunctionWrapper convertFunction(CustomFunction customFunction) {
+		NamespacedKey minecraftKey = fromMinecrafKey(customFunction.a());
+
+		CustomFunctionData customFunctionData = MINECRAFT_SERVER.getFunctionData();
+
+		ToIntBiFunction<CustomFunction, CommandListenerWrapper> obj = customFunctionData::a;
+		ToIntFunction<CommandListenerWrapper> appliedObj = clw -> obj.applyAsInt(customFunction, clw);
+
+		return new SimpleFunctionWrapper(minecraftKey, appliedObj,
+				Arrays.stream(customFunction.b()).map(Object::toString).toArray(String[]::new));
+	}
+
 	@Override
 	public void createDispatcherFile(File file, com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> dispatcher) throws IOException {
 		Files.write((new GsonBuilder()).setPrettyPrinting().create()
@@ -411,6 +439,16 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	public org.bukkit.advancement.Advancement getAdvancement(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException {
 		return ArgumentMinecraftKeyRegistered.a(cmdCtx, key).bukkit;
+	}
+
+	@Override
+	public Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException  {
+		return GsonComponentSerializer.gson().deserialize(ChatSerializer.a(ArgumentChat.a(cmdCtx, key)));
+	}
+
+	@Override
+	public Component getAdventureChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return GsonComponentSerializer.gson().deserialize(ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, key)));
 	}
 
 	@Override
@@ -476,6 +514,11 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
+	public CommandListenerWrapper getCLWFromCommandSender(CommandSender sender) {
+		return VanillaCommandWrapper.getListener(sender);
+	}
+
+	@Override
 	public CommandSender getCommandSenderForCLW(CommandListenerWrapper clw) {
 		try {
 			return clw.getBukkitSender();
@@ -493,7 +536,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	public Enchantment getEnchantment(CommandContext<CommandListenerWrapper> cmdCtx, String str) {
 		return new CraftEnchantment(ArgumentEnchantment.a(cmdCtx, str));
 	}
-
+	
 	@Override
 	public Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String str, dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector selector)
 			throws CommandSyntaxException {
@@ -527,13 +570,13 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 			yield (Player) argument.c(cmdCtx.getSource()).getBukkitEntity();
 		};
 	}
-
+	
 	@SuppressWarnings("deprecation")
 	@Override
 	public EntityType getEntityType(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
 		return EntityType.fromName(EntityTypes.getName(IRegistry.ENTITY_TYPE.get(ArgumentEntitySummon.a(cmdCtx, str))).getKey());
 	}
-
+	
 	@Override
 	public FloatRange getFloatRange(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		CriterionConditionValue.FloatRange range = (CriterionConditionValue.FloatRange) cmdCtx.getArgument(key,
@@ -543,48 +586,6 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		return new FloatRange(low, high);
 	}
 	
-	@Override
-	public Set<NamespacedKey> getFunctions() {
-		return StreamSupport.stream(MINECRAFT_SERVER.getFunctionData().f().spliterator(), false).map(NMS_1_16_R3::fromMinecrafKey).collect(Collectors.toSet());
-	}
-	
-	@Override
-	public Set<NamespacedKey> getTags() {
-		return StreamSupport.stream(MINECRAFT_SERVER.getFunctionData().g().spliterator(), false).map(NMS_1_16_R3::fromMinecrafKey).collect(Collectors.toSet());
-	}
-	
-	@Override
-	public CommandListenerWrapper getCLWFromCommandSender(CommandSender sender) {
-		return VanillaCommandWrapper.getListener(sender);
-	}
-	
-	//Converts NMS function to SimpleFunctionWrapper
-	private SimpleFunctionWrapper convertFunction(CustomFunction customFunction) {
-		NamespacedKey minecraftKey = fromMinecrafKey(customFunction.a());
-
-		CustomFunctionData customFunctionData = MINECRAFT_SERVER.getFunctionData();
-
-		ToIntBiFunction<CustomFunction, CommandListenerWrapper> obj = customFunctionData::a;
-		ToIntFunction<CommandListenerWrapper> appliedObj = clw -> obj.applyAsInt(customFunction, clw);
-
-		return new SimpleFunctionWrapper(minecraftKey, appliedObj,
-				Arrays.stream(customFunction.b()).map(Object::toString).toArray(String[]::new));
-	}
-	
-	@Override
-	public SimpleFunctionWrapper[] getTag(NamespacedKey key) {
-		MinecraftKey minecraftKey = new MinecraftKey(key.getNamespace(), key.getKey());
-		CustomFunctionData functionData = MINECRAFT_SERVER.getFunctionData();
-		return functionData.b(minecraftKey).getTagged().stream().map(this::convertFunction).toArray(SimpleFunctionWrapper[]::new);
-	}
-	
-	@Override
-	public SimpleFunctionWrapper getFunction(NamespacedKey key) {
-		MinecraftKey minecraftKey = new MinecraftKey(key.getNamespace(), key.getKey());
-		CustomFunctionData functionData = MINECRAFT_SERVER.getFunctionData();
-		return convertFunction(functionData.a(minecraftKey).get());
-	}
-
 	@Override
 	public FunctionWrapper[] getFunction(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
 		Collection<CustomFunction> customFuncList = ArgumentTag.a(cmdCtx, str);
@@ -599,6 +600,18 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		}
 
 		return result;
+	}
+	
+	@Override
+	public SimpleFunctionWrapper getFunction(NamespacedKey key) {
+		MinecraftKey minecraftKey = new MinecraftKey(key.getNamespace(), key.getKey());
+		CustomFunctionData functionData = MINECRAFT_SERVER.getFunctionData();
+		return convertFunction(functionData.a(minecraftKey).get());
+	}
+	
+	@Override
+	public Set<NamespacedKey> getFunctions() {
+		return StreamSupport.stream(MINECRAFT_SERVER.getFunctionData().f().spliterator(), false).map(NMS_1_16_R3::fromMinecrafKey).collect(Collectors.toSet());
 	}
 
 	@Override
@@ -826,6 +839,18 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
+	public SimpleFunctionWrapper[] getTag(NamespacedKey key) {
+		MinecraftKey minecraftKey = new MinecraftKey(key.getNamespace(), key.getKey());
+		CustomFunctionData functionData = MINECRAFT_SERVER.getFunctionData();
+		return functionData.b(minecraftKey).getTagged().stream().map(this::convertFunction).toArray(SimpleFunctionWrapper[]::new);
+	}
+
+	@Override
+	public Set<NamespacedKey> getTags() {
+		return StreamSupport.stream(MINECRAFT_SERVER.getFunctionData().g().spliterator(), false).map(NMS_1_16_R3::fromMinecrafKey).collect(Collectors.toSet());
+	}
+
+	@Override
 	public String getTeam(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return ArgumentScoreboardTeam.a(cmdCtx, key).getName();
 	}
@@ -838,6 +863,11 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	@Override
 	public UUID getUUID(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		return ArgumentUUID.a(cmdCtx, key);
+	}
+
+	@Override
+	public World getWorldForCLW(CommandListenerWrapper clw) {
+		return (clw.getWorld() == null) ? null : clw.getWorld().getWorld();
 	}
 
 	@Override
@@ -909,15 +939,5 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	@Override
 	public void resendPackets(Player player) {
 		MINECRAFT_SERVER.getCommandDispatcher().a(((CraftPlayer) player).getHandle());
-	}
-
-	@Override
-	public Component getAdventureChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		return GsonComponentSerializer.gson().deserialize(ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, key)));
-	}
-
-	@Override
-	public World getWorldForCLW(CommandListenerWrapper clw) {
-		return (clw.getWorld() == null) ? null : clw.getWorld().getWorld();
 	}
 }
