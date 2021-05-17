@@ -78,7 +78,7 @@ To shade the CommandAPI into a maven project, you'll need to use the `commandapi
 	<dependency>
 		<groupId>dev.jorel.CommandAPI</groupId>
         <artifactId>commandapi-shade</artifactId>
-        <version>5.11</version>
+        <version>5.12</version>
     </dependency>
 </dependencies>
 ```

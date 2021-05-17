@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>dev.jorel</groupId>
 		<artifactId>commandapi</artifactId>
-		<version>5.11</version>
+		<version>5.12</version>
 	</parent>
 	<artifactId>commandapi-annotations</artifactId>
 	<name>commandapi-annotations</name>
@@ -14,7 +14,7 @@
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-core</artifactId>
-			<version>5.11</version>
+			<version>5.12</version>
 		</dependency>
 		<dependency>
 			<groupId>org.spigotmc</groupId>

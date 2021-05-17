@@ -19,7 +19,9 @@
 
 **Announcements:**
 
-> :moneybag: **The CommandAPI now has a donation link!**  Feel free to buy me a coffee [here](https://ko-fi.com/jorelali)!
+> ### The CommandAPI's Maven repo has moved!
+>
+> Versions 5.12 and onwards will use jitpack.io. To update, simply replace the old repo URL (`https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/`) with the new one (`https://jitpack.io`)
 
 **Compatible Minecraft versions:** 
 
@@ -225,61 +227,13 @@ The CommandAPI can be built easily, but requires copies of the Spigot server jar
 
 - Go into the folder named `CommandAPI` _(Not to be confused with the folder named `CommandAPI`, which is what is cloned)_. You want the folder which contains `pom.xml`.
 
-- Ensure you have the required spigot server jars (see below)
-
 - Run `mvn`
-
-### Spigot Libraries
-
-To build the CommandAPI, the following versions of Spigot are required:
-
-|                   |        |        |        |
-| ----------------- | ------ | ------ | ------ |
-| **1.13 versions** | 1.13   | 1.13.1 | 1.13.2 |
-| **1.14 versions** | 1.14   | 1.14.3 | 1.14.4 |
-| **1.15 versions** | 1.15   |        |        |
-| **1.16 versions** | 1.16.1 | 1.16.2 | 1.16.4 |
-
-These versions of Minecraft must be installed in your local machine's Maven repository (`~/.m2`). **The easiest way to do this is to build them manually using Spigot's BuildTools, as it automatically adds it to the `.m2` local repository folder.**
-
-#### Building them using _BuildTools_ + downloadSpigot file (recommended)
-
-- Download the `BuildTools.jar` file from [here](https://hub.spigotmc.org/jenkins/job/BuildTools/)
-- Make sure you have maven installed on your machine. If not, it can be downloaded from [here](https://maven.apache.org/download.cgi)
-- If on Windows:
-  - Download the `downloadSpigot.bat` file [(right click this link, save as...)](https://raw.githubusercontent.com/JorelAli/CommandAPI/master/downloadSpigot.bat) and place it in the same folder as the `BuildTools.jar`
-  - Double click on the `downloadSpigot.bat` file to run it
-- If on Linux/MacOS:
-  - Download the `downloadSpigot.sh` file [(right click this link, save as...)](https://raw.githubusercontent.com/JorelAli/CommandAPI/master/downloadSpigot.sh) and place it in the same folder as the `BuildTools.jar`
-  - Open up a terminal in your folder and make the `downloadSpigot.sh` file executable by using `chmod u+x ./downloadSpigot.sh`
-  - Run the `downloadSpigot` file using `./downloadSpigot.sh`
-
-#### Building them using _BuildTools_ + manual command line
-
-- Download the `BuildTools.jar` file from [here](https://hub.spigotmc.org/jenkins/job/BuildTools/) and place it in a separate directory
-- Use the command `java -jar BuildTools.jar --rev <VERSION>` to download the specific version of the Spigot.jar you need. For example, to download Spigot for 1.14.4, use `java -jar BuildTools.jar --rev 1.14.4`
 
 -----
 
-## Future project plans + timeline
+## CommandAPI Project Timeline
 
-The CommandAPI has somewhat reached a "stable" point in its lifecycle. It can basically do everything that it needs to do and has been able to keep up-to-date with the latest Minecraft versions (e.g. 1.16.5 support released within a day of 1.16.5 being released). The original goal was to release CommandAPI v6.0 sometime early 2021. As you can see, this hasn't happened yet.
-
-So what went wrong? I over-planned v6.0. The plans for v6.0 was so excessive that it brought down motivation and has made such an update seem forever out of reach. For example, this was the list of all features planned for v6.0:
-
-- A better (refined and rewritten) annotation system
-- Optional arguments
-- A way to add suggestions to existing suggestions
-- Help page support
-- Namespace support
-- More powerful argument sanitization with earlier fail detection
-- A continuous integration suite for public access to dev builds
-- A testing suite to determine correctness and accuracy of the CommandAPI
-- A rewrite of custom arguments
-- More full plugin examples
-- Conflicting argument research and documentation on how to avoid them
-
-So where do we go from here? It's simple - we do one feature at a time and release one update for each feature. That way, we get more of the new stuff that people want and less of the "absolutely no development is going on". This is the current roadmap for the CommandAPI (as of 5th May 2021):
+This is the current roadmap for the CommandAPI (as of 16th May 2021):
   
 - **Intermediate update:** Server owner web tools
 
@@ -289,23 +243,27 @@ So where do we go from here? It's simple - we do one feature at a time and relea
 
   - A quick way to upload a `.jar` file and allow the website to output the name of the plugin and a list of commands that it registers.
   
-- **CommandAPI v5.12:** Minor fixes + Paper console tab completion
+- **CommandAPI 6.0.0:** Java 16 and Minecraft 1.17 support
 
-  Once again, Paper has taken innovation to the next level and it now supports Brigadier tab-completion from the console. This conflicts with the CommandAPI's built-in suggestion providing features which assumes that anyone performing tab-completion to generate suggestions is an in-game player. This has been raised in [Issue #192](https://github.com/JorelAli/CommandAPI/issues/192).
-  
-- **CommandAPI v5.13:** CustomArgument improvements
+  Minecraft 1.17 is due to be released sometime "mid-summer". According to [Minecraft Snapshot 21w19a](https://www.minecraft.net/da-dk/article/minecraft-snapshot-21w19a), Minecraft will use Java 16. As such, the CommandAPI will be built using Java 16 and will no longer run on servers running Java 15 or below. This is simply to prevent the CommandAPI from using legacy software as deemed by Minecraft.
 
-  The CustomArgument class is fairly flexible, but nowhere near flexible enough. In this update, more attention will be focused on the CustomArgument class to provide it the ability to extend from all other argument types as a base.
-  
-- **CommandAPI v5.14:** Annotation improvements
+  Additionally, the CommandAPI will drop support for old versions of Bukkit/Spigot. So far, the CommandAPI has been supporting versions 1.13 - 1.16.5, however given that over 80% of servers are running a version which is compatible with the CommandAPI, and over 75% of servers are running Minecraft 1.16 or above, the CommandAPI will no longer support versions below Minecraft 1.16. Due to the severity of the Minecraft 1.16.4 vulnerability, **CommandAPI 6.0.0 will only support Minecraft 1.16.5 and above.**
+
+  This update will also fix minor issues such as Paper's console tab completion bug raised in [Issue #192](https://github.com/JorelAli/CommandAPI/issues/192).
+
+- **CommandAPI 7.0.0:** Annotation improvements
 
   The CommandAPI's annotation system has always been a bit limited and was primarily introduced as a proof-of-concept. In this update, the CommandAPI's annotation system will be improved to be (ideally) as powerful as the non-annotation system and have slightly better type safety.
-  
-- **CommandAPI v5.15:** Argument conflict detection
+
+- **Future:**
+
+  **CustomArgument improvements**
+
+  The CustomArgument class is fairly flexible, but nowhere near flexible enough. In this update, more attention will be focused on the CustomArgument class to provide it the ability to extend from all other argument types as a base.
+
+  **Argument conflict detection**
 
   The CommandAPI simply uses the Brigadier system under the hood. This system is prone to _argument conflicts_, which is where certain arguments are given priority over other arguments. (For example "hello" and "123" are both valid string arguments, but if you have a command that has a string argument or an integer argument, Brigadier may ignore the integer argument). In this update, the CommandAPI will try to spot potential conflicts and add a warning in the console. The research required for this is also required in order to implement optional arguments (which is not coming out in this release).
-  
-- **CommandAPI v5.16+:** TBD
 
 -----
 
@@ -320,6 +278,16 @@ So where do we go from here? It's simple - we do one feature at a time and relea
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td valign="top"><b>5.12</b></td>
+            <td valign="top">May 2021</td>
+            <td valign="top">
+                <ul>
+                    <li>Moves the Maven repo for 5.12 and future updates to jitpack.io</li>
+                    <li>Fixes issue with sound arguments on Minecraft 1.16.4 and 1.16.5</li>
+                </ul>
+            </td>
+        </tr>
         <tr>
             <td valign="top"><b>5.11</b></td>
             <td valign="top">May 2021</td>

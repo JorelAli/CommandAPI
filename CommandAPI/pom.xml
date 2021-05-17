@@ -6,7 +6,7 @@
 
 	<groupId>dev.jorel</groupId>
 	<artifactId>commandapi</artifactId>
-	<version>5.11</version>
+	<version>5.12</version>
 	<packaging>pom</packaging>
 	<modules>
 		<!-- Compile time reflection checker -->
@@ -33,6 +33,14 @@
 		<module>commandapi-shade</module>
 		<module>commandapi-annotations</module>
 	</modules>
+	
+	<repositories>
+        <repository>
+            <id>codemc-repo-nms</id>
+            <url>https://repo.codemc.org/repository/nms/</url>
+            <layout>default</layout>
+        </repository>
+	</repositories>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
