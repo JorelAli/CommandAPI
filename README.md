@@ -19,7 +19,9 @@
 
 **Announcements:**
 
-> :moneybag: **The CommandAPI now has a donation link!**  Feel free to buy me a coffee [here](https://ko-fi.com/jorelali)!
+> ### The CommandAPI's Maven repo has moved!
+>
+> Versions 5.12 and onwards will use jitpack.io. To update, simply replace the old repo URL (`https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/`) with the new one (`https://jitpack.io`)
 
 **Compatible Minecraft versions:** 
 
@@ -252,7 +254,6 @@ This is the current roadmap for the CommandAPI (as of 16th May 2021):
 - **CommandAPI 7.0.0:** Annotation improvements
 
   The CommandAPI's annotation system has always been a bit limited and was primarily introduced as a proof-of-concept. In this update, the CommandAPI's annotation system will be improved to be (ideally) as powerful as the non-annotation system and have slightly better type safety.
-
 
 - **Future:**
 
