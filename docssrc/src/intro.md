@@ -36,6 +36,15 @@ Using the search icon in the top left corner, you can search for anything in thi
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 5.11 \(\rightarrow\) 5.12:
+
+> **Developer's Note**
+>
+> The Maven/Gradle repository URL has changed! See [5. Setting up your development environment](./quickstart.md) for more information. For older versions of the CommandAPI (versions 5.11 and below), please consult the older documentation which can be found on the homepage [here](https://commandapi.jorel.dev/).
+
+- Change the repository URL for the CommandAPI in [5. Setting up your development environment](./quickstart.md)
+- Update the [Afterword](./afterword.md)
+
 ### Documentation changes 5.10 \\(\rightarrow\\) 5.11:
 
 - Adds a section [Arbitrary command conversion](./conversionforownerssingle.md#arbitrary-command-conversion) on how to convert arbitrary commands
