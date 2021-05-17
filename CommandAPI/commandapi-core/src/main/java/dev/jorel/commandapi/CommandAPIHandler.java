@@ -22,6 +22,8 @@ package dev.jorel.commandapi;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -84,6 +86,19 @@ import dev.jorel.commandapi.preprocessor.RequireField;
  */
 @RequireField(in = CommandNode.class, name = "children", ofType = Map.class)
 public class CommandAPIHandler<CommandListenerWrapper> {
+	
+	private final static VarHandle COMMANDNODE_CHILDREN;
+	
+	// Compute all var handles all in one go so we don't do this during main server runtime
+	static {
+		VarHandle commandNodeChildren = null;
+		 try {
+			 commandNodeChildren = MethodHandles.privateLookupIn(CommandNode.class, MethodHandles.lookup()).findVarHandle(CommandNode.class, "children", Map.class);			 
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
+		} 
+		COMMANDNODE_CHILDREN = commandNodeChildren;
+	}
 	
 	private static CommandAPIHandler<?> instance;
 	
@@ -162,29 +177,23 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	 *                    have been registered by Minecraft, Bukkit or Spigot etc.
 	 */
 	void unregister(String commandName, boolean force) {
-		try {
-			if (CommandAPI.getConfiguration().hasVerboseOutput()) {
-				CommandAPI.getLog().info("Unregistering command /" + commandName);
-			}
-
-			// Get the child nodes from the loaded dispatcher class
-			Field children = getField(CommandNode.class, "children");
-			@SuppressWarnings("unchecked")
-			Map<String, CommandNode<?>> commandNodeChildren = (Map<String, CommandNode<?>>) children.get(DISPATCHER.getRoot());
-
-			if (force) {
-				// Remove them by force
-				List<String> keysToRemove = new ArrayList<>();
-				commandNodeChildren.keySet().stream().filter(s -> s.contains(":"))
-						.filter(s -> s.split(":")[1].equalsIgnoreCase(commandName)).forEach(keysToRemove::add);
-				keysToRemove.forEach(commandNodeChildren::remove);
-			}
-
-			// Otherwise, just remove them normally
-			commandNodeChildren.remove(commandName);
-		} catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
-			e.printStackTrace();
+		if (CommandAPI.getConfiguration().hasVerboseOutput()) {
+			CommandAPI.getLog().info("Unregistering command /" + commandName);
 		}
+
+		// Get the child nodes from the loaded dispatcher class
+		Map<String, CommandNode<?>> commandNodeChildren = (Map<String, CommandNode<?>>) COMMANDNODE_CHILDREN.get(DISPATCHER.getRoot());
+
+		if (force) {
+			// Remove them by force
+			List<String> keysToRemove = new ArrayList<>();
+			commandNodeChildren.keySet().stream().filter(s -> s.contains(":"))
+					.filter(s -> s.split(":")[1].equalsIgnoreCase(commandName)).forEach(keysToRemove::add);
+			keysToRemove.forEach(commandNodeChildren::remove);
+		}
+
+		// Otherwise, just remove them normally
+		commandNodeChildren.remove(commandName);
 	}		
 
 	/**

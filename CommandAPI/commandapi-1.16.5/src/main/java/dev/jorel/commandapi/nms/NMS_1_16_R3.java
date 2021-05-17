@@ -170,7 +170,6 @@ import net.minecraft.server.v1_16_R3.Vec3D;
 
 @RequireField(in = DataPackResources.class, name = "i", ofType = CustomFunctionManager.class)
 @RequireField(in = DataPackResources.class, name = "b", ofType = IReloadableResourceManager.class)
-@RequireField(in = DataPackResources.class, name = "a", ofType = CompletableFuture.class)
 @RequireField(in = CustomFunctionManager.class, name = "g", ofType = int.class)
 @RequireField(in = EntitySelector.class, name = "checkPermissions", ofType = boolean.class)
 public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
