@@ -235,14 +235,6 @@ The CommandAPI can be built easily, but requires copies of the Spigot server jar
 
 This is the current roadmap for the CommandAPI (as of 16th May 2021):
   
-- **Intermediate update:** Server owner web tools
-
-  The CommandAPI's documentation for server owners is "alright" at best. A number of tools would be useful for server owners. This isn't an update in itself, but it's a small ongoing side-project which I think will be worth it in the long term. In particular, I aim to implement:
-  
-  - A quick way to check the validity of YAML config files (this can be extended to include the CommandAPI's argument syntax and provide full validation on that as well)
-
-  - A quick way to upload a `.jar` file and allow the website to output the name of the plugin and a list of commands that it registers.
-  
 - **CommandAPI 6.0.0:** Java 16 and Minecraft 1.17 support
 
   Minecraft 1.17 is due to be released sometime "mid-summer". According to [Minecraft Snapshot 21w19a](https://www.minecraft.net/da-dk/article/minecraft-snapshot-21w19a), Minecraft will use Java 16. As such, the CommandAPI will be built using Java 16 and will no longer run on servers running Java 15 or below. This is simply to prevent the CommandAPI from using legacy software as deemed by Minecraft.
@@ -250,6 +242,13 @@ This is the current roadmap for the CommandAPI (as of 16th May 2021):
   Additionally, the CommandAPI will drop support for old versions of Bukkit/Spigot. So far, the CommandAPI has been supporting versions 1.13 - 1.16.5, however given that over 80% of servers are running a version which is compatible with the CommandAPI, and over 75% of servers are running Minecraft 1.16 or above, the CommandAPI will no longer support versions below Minecraft 1.16. Due to the severity of the Minecraft 1.16.4 vulnerability, **CommandAPI 6.0.0 will only support Minecraft 1.16.5 and above.**
 
   This update will also fix minor issues such as Paper's console tab completion bug raised in [Issue #192](https://github.com/JorelAli/CommandAPI/issues/192).
+	
+  **Upcoming list of features/additions/etc.:**
+  - Written in Java 16
+  - Fixes bug where `LocationArgument` and `Location2DArgument` produced errors when using Paper's console tab-completion
+  - Removes support for Minecraft 1.16.4 and below
+  - Improve performance
+  - Adds support for offline players with `PlayerArgument`
 
 - **CommandAPI 7.0.0:** Annotation improvements
 
