@@ -109,6 +109,13 @@
 
 -----
 
+# CommandAPI Contribution
+
+- [Introduction](./contributionintro.md)
+- [Project Structure](./projectstructure.md)
+
+-----
+
 [Upgrading guide](./upgrading.md)
 
 [FAQ](./faq.md)
