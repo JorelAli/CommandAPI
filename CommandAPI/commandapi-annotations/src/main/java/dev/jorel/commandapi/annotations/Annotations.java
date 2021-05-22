@@ -408,57 +408,34 @@ public class Annotations extends AbstractProcessor {
 							if(argumentAnnotation instanceof AEntitySelectorArgument) {
 								AEntitySelectorArgument argument = (AEntitySelectorArgument) argumentAnnotation;
 								switch(argument.value()) {
-								case MANY_ENTITIES:
-									argumentMapping.put(i - 1, primitive.value()[0]);
-									break;
-								case MANY_PLAYERS:
-									argumentMapping.put(i - 1, primitive.value()[1]);
-									break;
-								case ONE_ENTITY:
-									argumentMapping.put(i - 1, primitive.value()[2]);
-									break;
-								case ONE_PLAYER:
-									argumentMapping.put(i - 1, primitive.value()[3]);
-									break;
+								case MANY_ENTITIES -> argumentMapping.put(i - 1, primitive.value()[0]);
+								case MANY_PLAYERS -> argumentMapping.put(i - 1, primitive.value()[1]);
+								case ONE_ENTITY -> argumentMapping.put(i - 1, primitive.value()[2]);
+								case ONE_PLAYER -> argumentMapping.put(i - 1, primitive.value()[3]);
+								default -> throw new IllegalArgumentException("Unexpected value: " + argument.value());
 								}
 							} else if (argumentAnnotation instanceof AScoreHolderArgument) {
 								AScoreHolderArgument argument = (AScoreHolderArgument) argumentAnnotation;
 								switch(argument.value()) {
-								case MULTIPLE:
-									argumentMapping.put(i - 1, primitive.value()[0]);
-									break;
-								case SINGLE:
-									argumentMapping.put(i - 1, primitive.value()[1]);
-									break;
+								case MULTIPLE -> argumentMapping.put(i - 1, primitive.value()[0]);
+								case SINGLE -> argumentMapping.put(i - 1, primitive.value()[1]);
+								default -> throw new IllegalArgumentException("Unexpected value: " + argument.value());
 								}
 							}
 						}
 					}
 					// .executes
 					String[] firstParam = methodType.getParameterTypes().get(0).toString().split("\\.");
-					switch(firstParam[firstParam.length - 1]) {
-					case "Player":
-						out.print(indent(indent) + ".executesPlayer");
-						break;
-					case "ConsoleCommandSender":
-						out.print(indent(indent) + ".executesConsole");
-						break;
-					case "BlockCommandSender":
-						out.print(indent(indent) + ".executesCommandBlock");
-						break;
-					case "ProxiedCommandSender":
-						out.print(indent(indent) + ".executesProxy");
-						break;
-					case "NativeProxyCommandSender":
-						out.print(indent(indent) + ".executesNative");
-						break;
-					case "Entity":
-						out.print(indent(indent) + ".executesEntity");
-						break;
-					case "CommandSender":
-					default:
-						out.print(indent(indent) + ".executes");
-						break;
+					out.print(indent(indent));
+					switch (firstParam[firstParam.length - 1]) {
+					case "Player" -> out.print(".executesPlayer");
+					case "ConsoleCommandSender" -> out.print(".executesConsole");
+					case "BlockCommandSender" -> out.print(".executesCommandBlock");
+					case "ProxiedCommandSender" -> out.print(".executesProxy");
+					case "NativeProxyCommandSender" -> out.print(".executesNative");
+					case "Entity" -> out.print(".executesEntity");
+					case "CommandSender" -> out.print(".executes");
+					default -> out.print(".executes");
 					}
 
 					out.println("((sender, args) -> {");

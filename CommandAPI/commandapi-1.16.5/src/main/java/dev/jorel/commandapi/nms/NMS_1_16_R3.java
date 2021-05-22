@@ -453,6 +453,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 			case X -> set.add(Axis.X);
 			case Y -> set.add(Axis.Y);
 			case Z -> set.add(Axis.Z);
+			default -> throw new IllegalArgumentException("Unexpected value: " + element);
 			}
 		}
 		return set;
