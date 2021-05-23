@@ -98,7 +98,7 @@ public interface NMS<CommandListenerWrapper> {
 
 	ArgumentType<?> _ArgumentEntitySummon();
 
-	ArgumentType<?> _ArgumentFloatRange();;
+	ArgumentType<?> _ArgumentFloatRange();
 
 	ArgumentType<?> _ArgumentIntRange();
 

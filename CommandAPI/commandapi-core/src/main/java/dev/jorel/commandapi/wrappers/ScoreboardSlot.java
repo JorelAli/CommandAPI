@@ -72,12 +72,12 @@ public class ScoreboardSlot {
 	 * @return a ScoreboardSlot from the provided DisplaySlot
 	 */
 	public static ScoreboardSlot of(DisplaySlot slot) {
-		return switch(slot) {
-		case PLAYER_LIST -> new ScoreboardSlot(0);
-		case SIDEBAR     -> new ScoreboardSlot(1);
-		case BELOW_NAME  -> new ScoreboardSlot(2);
-		default          -> new ScoreboardSlot(1);
-		};
+		return new ScoreboardSlot(switch(slot) {
+		case PLAYER_LIST -> 0;
+		case SIDEBAR     -> 1;
+		case BELOW_NAME  -> 2;
+		default          -> 1;
+		});
 	}
 	
 	/**
@@ -86,25 +86,25 @@ public class ScoreboardSlot {
 	 * @return a ScoreboardSlot from the provided ChatColor
 	 */
 	public static ScoreboardSlot ofTeamColor(ChatColor color) {
-		return switch (color) {
-		case BLACK        -> new ScoreboardSlot(3);
-		case DARK_BLUE    -> new ScoreboardSlot(4);
-		case DARK_GREEN   -> new ScoreboardSlot(5);
-		case DARK_AQUA    -> new ScoreboardSlot(6);
-		case DARK_RED     -> new ScoreboardSlot(7);
-		case DARK_PURPLE  -> new ScoreboardSlot(8);
-		case GOLD         -> new ScoreboardSlot(9);
-		case GRAY         -> new ScoreboardSlot(10);
-		case DARK_GRAY    -> new ScoreboardSlot(11);
-		case BLUE         -> new ScoreboardSlot(12);
-		case GREEN        -> new ScoreboardSlot(13);
-		case AQUA         -> new ScoreboardSlot(14);
-		case RED          -> new ScoreboardSlot(15);
-		case LIGHT_PURPLE -> new ScoreboardSlot(16);
-		case YELLOW       -> new ScoreboardSlot(17);
-		case WHITE        -> new ScoreboardSlot(18);
-		default           -> new ScoreboardSlot(1);
-		};
+		return new ScoreboardSlot(switch (color) {
+		case BLACK        -> 3;
+		case DARK_BLUE    -> 4;
+		case DARK_GREEN   -> 5;
+		case DARK_AQUA    -> 6;
+		case DARK_RED     -> 7;
+		case DARK_PURPLE  -> 8;
+		case GOLD         -> 9;
+		case GRAY         -> 10;
+		case DARK_GRAY    -> 11;
+		case BLUE         -> 12;
+		case GREEN        -> 13;
+		case AQUA         -> 14;
+		case RED          -> 15;
+		case LIGHT_PURPLE -> 16;
+		case YELLOW       -> 17;
+		case WHITE        -> 18;
+		default           -> 1;
+		});
 	}
 	
 	/**
