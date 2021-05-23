@@ -18,6 +18,7 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import dev.jorel.commandapi.annotations.Alias;
@@ -33,8 +34,10 @@ public class TeleportCommand {
 	
 /* ANCHOR: teleport_subcommand */
 @Subcommand({"teleport", "tp"})
-public static void teleport(Player player, @APlayerArgument Player target) {
-	player.teleport(target);
+public static void teleport(Player player, @APlayerArgument OfflinePlayer target) {
+	if(target.isOnline() && target instanceof Player onlineTarget) {
+		player.teleport(onlineTarget);
+	}
 }
 /* ANCHOR_END: teleport_subcommand */
 

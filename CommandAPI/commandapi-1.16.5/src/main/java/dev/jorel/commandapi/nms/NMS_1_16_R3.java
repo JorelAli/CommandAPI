@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -392,11 +393,9 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		return CraftParticle.toNMS(particle).a();
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public String convert(PotionEffectType potion) {
-		// TODO: We should be able to use potion.getName() instead.
-		return IRegistry.MOB_EFFECT.getKey(IRegistry.MOB_EFFECT.fromId(potion.getId())).toString();
+		return potion.getName().toLowerCase(Locale.ENGLISH);
 	}
 
 	@Override

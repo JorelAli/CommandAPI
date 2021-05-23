@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -60,8 +61,10 @@ public class TestCommand {
 	
 	@Subcommand("create")
 	@Permission("warps.create")
-	public static void tpWarp(CommandSender sender, @APlayerArgument Player target, @AStringArgument String warpName) {
-		target.teleport(warps.get(warpName));
+	public static void tpWarp(CommandSender sender, @APlayerArgument OfflinePlayer target, @AStringArgument String warpName) {
+		if(target.isOnline() && target instanceof Player onlineTarget) {
+			onlineTarget.teleport(warps.get(warpName));			
+		}
 	}
 	
 	
