@@ -503,11 +503,13 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	// SECTION: Registration //
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	// Builds our NMS command using the given arguments for this method, then
-	// registers it
-	void register(String commandName, CommandPermission permissions, String[] aliases, Predicate<CommandSender> requirements,
+	/*
+	 * Expands multiliteral arguments and registers all expansions of MultiLiteralArguments throughout
+	 * the provided command. Returns true if multiliteral arguments were present (and expanded) and
+	 * returns false if multiliteral arguments were not present.
+	 */
+	private boolean expandMultiLiterals(String commandName, CommandPermission permissions, String[] aliases, Predicate<CommandSender> requirements,
 			final List<Argument> args, CustomCommandExecutor executor, boolean converted) throws Exception {
-		
 		//"Expands" our MultiLiterals into Literals
 		Predicate<Argument> isMultiLiteral = arg -> arg.getArgumentType() == CommandAPIArgumentType.MULTI_LITERAL;
 		if(args.stream().filter(isMultiLiteral).count() > 0) {
@@ -541,71 +543,138 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 						}
 						register(commandName, permissions, aliases, requirements, newArgs, executor, converted);
 					}
-					return;
+					return true;
 				}
 				index++;
 			}
 		}
-		
-		// Prevent nodes of the same name but with different types:
-		// allow    /race invite<LiteralArgument> player<PlayerArgument>
-		// disallow /race invite<LiteralArgument> player<EntitySelectorArgument>
-		if(registeredCommands.containsKey(commandName)) {
-			List<String[]> regArgs = registeredCommands.get(commandName).stream().map(s -> s.split(":")).collect(Collectors.toList());
-			for(int i = 0; i < args.size(); i++) {
-				// Avoid IAOOBEs
-				if(regArgs.size() == i && regArgs.size() < args.size()) {
-					break;
-				}
-				// We want to ensure all node names are the same
-				if(!regArgs.get(i)[0].equals(args.get(i).getNodeName())) {
-					break;
-				}
-				// This only applies to the last argument
-				if(i == args.size() - 1) {
-					if(!regArgs.get(i)[1].equals(args.get(i).getClass().getSimpleName())) { 
-						
-						//Command we're trying to register
-						StringBuilder builder = new StringBuilder();
-						args.forEach(arg -> builder.append(arg.getNodeName()).append("<").append(arg.getClass().getSimpleName()).append("> "));
-						
-						//Command it conflicts with
-						StringBuilder builder2 = new StringBuilder();
-						regArgs.forEach(arg -> builder2.append(arg[0]).append("<").append(arg[1]).append("> "));
-						
-						// Lovely high quality error message formatting (inspired by Elm)
-						CommandAPI.getLog().severe("Failed to register command:");
-						CommandAPI.getLog().severe("");
-						CommandAPI.getLog().severe("  " + commandName + " " + builder.toString());
-						CommandAPI.getLog().severe("");
-						CommandAPI.getLog().severe("Because it conflicts with this previously registered command:");
-						CommandAPI.getLog().severe("");
-						CommandAPI.getLog().severe("  " + commandName + " " + builder2.toString());
-						CommandAPI.getLog().severe("");
-						return;
-					}
+		return false;
+	}
+	
+	// Prevent nodes of the same name but with different types:
+	// allow    /race invite<LiteralArgument> player<PlayerArgument>
+	// disallow /race invite<LiteralArgument> player<EntitySelectorArgument>
+	// Return true if conflict was present, otherwise return false
+	private boolean hasCommandConflict(String commandName, final List<Argument> args) {
+		List<String[]> regArgs = registeredCommands.get(commandName).stream().map(s -> s.split(":")).collect(Collectors.toList());
+		for(int i = 0; i < args.size(); i++) {
+			// Avoid IAOOBEs
+			if(regArgs.size() == i && regArgs.size() < args.size()) {
+				break;
+			}
+			// We want to ensure all node names are the same
+			if(!regArgs.get(i)[0].equals(args.get(i).getNodeName())) {
+				break;
+			}
+			// This only applies to the last argument
+			if(i == args.size() - 1) {
+				if(!regArgs.get(i)[1].equals(args.get(i).getClass().getSimpleName())) { 
+					
+					//Command we're trying to register
+					StringBuilder builder = new StringBuilder();
+					args.forEach(arg -> builder.append(arg.getNodeName()).append("<").append(arg.getClass().getSimpleName()).append("> "));
+					
+					//Command it conflicts with
+					StringBuilder builder2 = new StringBuilder();
+					regArgs.forEach(arg -> builder2.append(arg[0]).append("<").append(arg[1]).append("> "));
+					
+					// Lovely high quality error message formatting (inspired by Elm)
+					CommandAPI.getLog().severe("Failed to register command:");
+					CommandAPI.getLog().severe("");
+					CommandAPI.getLog().severe("  " + commandName + " " + builder.toString());
+					CommandAPI.getLog().severe("");
+					CommandAPI.getLog().severe("Because it conflicts with this previously registered command:");
+					CommandAPI.getLog().severe("");
+					CommandAPI.getLog().severe("  " + commandName + " " + builder2.toString());
+					CommandAPI.getLog().severe("");
+					return true;
 				}
 			}
 		}
-		registeredCommands.put(commandName, args.stream().map(arg -> arg.getNodeName() + ":" + arg.getClass().getSimpleName()).collect(Collectors.toList()));
-		
-		if (CommandAPI.getConfiguration().hasVerboseOutput()) {
-			// Create a list of argument names
-			StringBuilder builder = new StringBuilder();
-			args.forEach(arg -> builder.append(arg.getNodeName()).append("<").append(arg.getClass().getSimpleName()).append("> "));
-			CommandAPI.logInfo("Registering command /" + commandName + " " + builder.toString());
+		return false;
+	}
+	
+	// Links arg -> Executor
+	private ArgumentBuilder<CommandListenerWrapper, ?> generateInnerArgument(Command<CommandListenerWrapper> command, final List<Argument> args) {
+		Argument innerArg = args.get(args.size() - 1);
+
+		// Handle Literal arguments
+		if (innerArg instanceof LiteralArgument) {
+			String str = ((LiteralArgument) innerArg).getLiteral();
+			return getLiteralArgumentBuilderArgument(str, innerArg.getArgumentPermission(), innerArg.getRequirements()).executes(command);
 		}
 
+		// Handle arguments with built-in suggestion providers
+		else if (innerArg instanceof ICustomProvidedArgument
+				&& !innerArg.getOverriddenSuggestions().isPresent()) {
+			return getRequiredArgumentBuilderWithProvider(innerArg,
+					NMS.getSuggestionProvider(((ICustomProvidedArgument) innerArg).getSuggestionProvider()))
+							.executes(command);
+		}
+
+		// Handle every other type of argument
+		else {
+			return getRequiredArgumentBuilderDynamic(args, innerArg).executes(command);
+		}
+	}
+	
+	// Links arg1 -> arg2 -> ... argN -> innermostArgument
+	private ArgumentBuilder<CommandListenerWrapper, ?> generateOuterArguments(ArgumentBuilder<CommandListenerWrapper, ?> innermostArgument, final List<Argument> args) {
+		ArgumentBuilder<CommandListenerWrapper, ?> outer = innermostArgument;
+		for (int i = args.size() - 2; i >= 0; i--) {
+			Argument outerArg = args.get(i);
+
+			// Handle Literal arguments
+			if (outerArg instanceof LiteralArgument) {
+				String str = ((LiteralArgument) outerArg).getLiteral();
+				outer = getLiteralArgumentBuilderArgument(str, outerArg.getArgumentPermission(), outerArg.getRequirements()).then(outer);
+			}
+
+			// Handle arguments with built-in suggestion providers
+			else if (outerArg instanceof ICustomProvidedArgument && !outerArg.getOverriddenSuggestions().isPresent()) {
+				outer = getRequiredArgumentBuilderWithProvider(outerArg,
+						NMS.getSuggestionProvider(((ICustomProvidedArgument) outerArg).getSuggestionProvider()))
+								.then(outer);
+			}
+
+			// Handle every other type of argument
+			else {
+				outer = getRequiredArgumentBuilderDynamic(args, outerArg).then(outer);
+			}
+		}
+		return outer;
+	}
+	
+	// Builds our NMS command using the given arguments for this method, then
+	// registers it
+	void register(String commandName, CommandPermission permissions, String[] aliases, Predicate<CommandSender> requirements,
+			final List<Argument> args, CustomCommandExecutor executor, boolean converted) throws Exception {
+		
+		//"Expands" our MultiLiterals into Literals
+		if(expandMultiLiterals(commandName, permissions, aliases, requirements, args, executor, converted)) {
+			return;
+		}
+		
+		// Handle command conflicts
+		if(registeredCommands.containsKey(commandName) && hasCommandConflict(commandName, args)) {
+			return;
+		} else {
+			registeredCommands.put(commandName, args.stream().map(arg -> arg.getNodeName() + ":" + arg.getClass().getSimpleName()).collect(Collectors.toList()));			
+		}
+		
+		// Create a list of argument names
+		StringBuilder builder = new StringBuilder();
+		args.forEach(arg -> builder.append(arg.getNodeName()).append("<").append(arg.getClass().getSimpleName()).append("> "));
+		CommandAPI.logInfo("Registering command /" + commandName + " " + builder.toString());
+
+		// Generate the actual command
 		Command<CommandListenerWrapper> command = generateCommand(args, executor, converted);
 
 		/*
-		 * The innermost argument needs to be connected to the executor. Then that
-		 * argument needs to be connected to the previous argument etc. Then the first
-		 * argument needs to be connected to the command name
-		 *
-		 * CommandName -> Args1 -> Args2 -> ... -> ArgsN -> Executor
+		 * The innermost argument needs to be connected to the executor. Then that argument needs to be connected to
+		 * the previous argument etc. Then the first argument needs to be connected to the command name, so we get:
+		 *   CommandName -> Args1 -> Args2 -> ... -> ArgsN -> Executor
 		 */
-
 		LiteralCommandNode<CommandListenerWrapper> resultantNode;
 		if (args.isEmpty()) {
 			// Link command name to the executor
@@ -618,61 +687,11 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 			}
 		} else {
 
-			// List of keys for reverse iteration
-			//ArrayList<String> keys = new ArrayList<>(args.keySet());
-
-			// Link the last element to the executor
-			ArgumentBuilder<CommandListenerWrapper, ?> inner;
-			// New scope used here to prevent innerArg accidentally being used below
-			{
-				Argument innerArg = args.get(args.size() - 1);
-
-				// Handle Literal arguments
-				if (innerArg instanceof LiteralArgument) {
-					String str = ((LiteralArgument) innerArg).getLiteral();
-					inner = getLiteralArgumentBuilderArgument(str, innerArg.getArgumentPermission(), innerArg.getRequirements()).executes(command);
-				}
-
-				// Handle arguments with built-in suggestion providers
-				else if (innerArg instanceof ICustomProvidedArgument
-						&& !innerArg.getOverriddenSuggestions().isPresent()) {
-					inner = getRequiredArgumentBuilderWithProvider(innerArg,
-							NMS.getSuggestionProvider(((ICustomProvidedArgument) innerArg).getSuggestionProvider()))
-									.executes(command);
-				}
-
-				// Handle every other type of argument
-				else {
-					inner = getRequiredArgumentBuilderDynamic(args, innerArg).executes(command);
-				}
-			}
-
-			// Link everything else up, except the first
-			ArgumentBuilder<CommandListenerWrapper, ?> outer = inner;
-			for (int i = args.size() - 2; i >= 0; i--) {
-				Argument outerArg = args.get(i);
-
-				// Handle Literal arguments
-				if (outerArg instanceof LiteralArgument) {
-					String str = ((LiteralArgument) outerArg).getLiteral();
-					outer = getLiteralArgumentBuilderArgument(str, outerArg.getArgumentPermission(), outerArg.getRequirements()).then(outer);
-				}
-
-				// Handle arguments with built-in suggestion providers
-				else if (outerArg instanceof ICustomProvidedArgument && !outerArg.getOverriddenSuggestions().isPresent()) {
-					outer = getRequiredArgumentBuilderWithProvider(outerArg,
-							NMS.getSuggestionProvider(((ICustomProvidedArgument) outerArg).getSuggestionProvider()))
-									.then(outer);
-				}
-
-				// Handle every other type of argument
-				else {
-					outer = getRequiredArgumentBuilderDynamic(args, outerArg).then(outer);
-				}
-			}
+			// Generate all of the arguments, following each other and finally linking to the executor
+			ArgumentBuilder<CommandListenerWrapper, ?> commandArguments = generateOuterArguments(generateInnerArgument(command, args), args);
 
 			// Link command name to first argument and register
-			resultantNode = DISPATCHER.register(getLiteralArgumentBuilder(commandName).requires(generatePermissions(commandName, permissions, requirements)).then(outer));
+			resultantNode = DISPATCHER.register(getLiteralArgumentBuilder(commandName).requires(generatePermissions(commandName, permissions, requirements)).then(commandArguments));
 
 			// Register aliases
 			for (String alias : aliases) {
@@ -680,11 +699,17 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 					CommandAPI.logInfo("Registering alias /" + alias + " -> " + resultantNode.getName());
 				}
 				
-				DISPATCHER.register(getLiteralArgumentBuilder(alias).requires(generatePermissions(alias, permissions, requirements)).then(outer));
+				DISPATCHER.register(getLiteralArgumentBuilder(alias).requires(generatePermissions(alias, permissions, requirements)).then(commandArguments));
 			}
 		}
 
-		// Produce the commandDispatch.json file for debug purposes
+		// We never know if this is "the last command" and we want dynamic (even if partial)
+		// command registration. Generate the dispatcher file!
+		generateDispatcherFile();
+	}
+	
+	// Produce the commandDispatch.json file for debug purposes
+	private void generateDispatcherFile() throws IOException {
 		if (CommandAPI.getConfiguration().willCreateDispatcherFile()) {
 			File file = CommandAPI.getDispatcherFile();
 			try {
