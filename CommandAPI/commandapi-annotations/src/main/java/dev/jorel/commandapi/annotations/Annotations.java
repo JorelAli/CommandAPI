@@ -162,92 +162,258 @@ public class Annotations extends AbstractProcessor {
 		}
 		return name.split("\\.")[name.split("\\.").length - 1];
 	}
+	
+	private SortedSet<String> calculateImports(Element classElement) {
+		SortedSet<String> imports = new TreeSet<>();
+		
+		imports.add(CommandAPICommand.class.getCanonicalName());
+		if(classElement.getAnnotation(NeedsOp.class) != null) {
+			imports.add(CommandPermission.class.getCanonicalName());
+		}
+		for (Element methodElement : classElement.getEnclosedElements()) {
+			if (methodElement.getAnnotation(Subcommand.class) != null) {
+				imports.add(MultiLiteralArgument.class.getCanonicalName());
+			}
+			if (methodElement.getAnnotation(NeedsOp.class) != null) {
+				imports.add(CommandPermission.class.getCanonicalName());
+			}
+			
+			if(methodElement instanceof ExecutableElement) {
+				ExecutableElement method = (ExecutableElement) methodElement;
+				for(VariableElement parameter : method.getParameters()) {
+					if(getArgument(parameter) != null) {
+						imports.addAll(Arrays.asList(getPrimitive(getArgument(parameter)).value()));
+						imports.add("dev.jorel.commandapi.arguments." + getArgument(parameter).annotationType().getSimpleName().substring(1));
+						if(getArgument(parameter) instanceof ALocationArgument || getArgument(parameter) instanceof ALocation2DArgument) {
+							imports.add(LocationType.class.getCanonicalName());
+						} else if(getArgument(parameter) instanceof AScoreHolderArgument) {
+							imports.add(ScoreHolderType.class.getCanonicalName());
+						} else if(getArgument(parameter) instanceof AEntitySelectorArgument) {
+							imports.add(EntitySelector.class.getCanonicalName());
+						}
+					}
+					
+				}
+			}
+		}
+		
+		for(String import_ : new TreeSet<>(imports)) {
+			if(import_.contains("<")) {
+				imports.add(import_.substring(0, import_.indexOf("<")));
+				imports.add(import_.substring(import_.indexOf("<") + 1, import_.indexOf(">")));
+			}
+		}
+		
+		return imports;
+	}
+	
+	private void emitImports(PrintWriter out, Element classElement) {
+		String previousImport = "";
+		for(String import_ : calculateImports(classElement)) {
+			// Separate different packages
+			if(previousImport.contains(".") && import_.contains(".")) {
+				if(!previousImport.substring(0, previousImport.indexOf(".")).equals(import_.substring(0, import_.indexOf(".")))) {
+					out.println();
+				}
+			}
+			// Don't import stuff like "String"
+			if(!import_.contains(".") || import_.contains("<")) {
+				continue;
+			}
+			
+			out.print("import ");
+			out.print(import_);
+			out.println(";");
+			previousImport = import_;
+		}
+		out.println();
+	}
+	
+	// (https://www.baeldung.com/java-annotation-processing-builder)
+	private void emitPackage(PrintWriter out, TypeElement commandClass) {
+		int lastDot = commandClass.getQualifiedName().toString().lastIndexOf('.');
+	    if (lastDot > 0) {
+	    	out.print("package ");
+			out.print(commandClass.getQualifiedName().toString().substring(0, lastDot));
+			out.println(";");
+			out.println();
+	    }
+	}
+	
+	private int emitSubcommand(PrintWriter out, Element methodElement, int indent) {
+		if (methodElement.getAnnotation(Subcommand.class) != null) {
+			out.println(indent(indent) + ".withArguments(");
+			indent++;
+			out.print(indent(indent) + "new MultiLiteralArgument(");
+			
+			if(methodElement.getAnnotation(Subcommand.class).value().length == 0) {
+				processingEnv.getMessager().printMessage(Kind.ERROR, "Invalid @Subcommand on " + methodElement.getSimpleName() + " - no subcommand name was found");
+			}
+			
+			// @Subcommand (name)
+			out.print(Arrays.stream(methodElement.getAnnotation(Subcommand.class).value())
+				.map(x -> "\"" + x + "\"").collect(Collectors.joining(", ")));
+			
+			out.println(")");
+			indent++;
+			out.println(indent(indent) + ".setListed(false)");
+			
+			// @NeedsOp
+			if (methodElement.getAnnotation(NeedsOp.class) != null) {
+				out.println(indent(indent) + ".withPermission(CommandPermission.OP)");
+			}
+			
+			// @Permission
+			if (methodElement.getAnnotation(Permission.class) != null) {
+				out.print(indent(indent) + ".withPermission(\"");
+				out.print(methodElement.getAnnotation(Permission.class).value());
+				out.println("\")");
+			}
+			indent--;
+			indent--;
+			out.println(indent(indent) + ")");
+		}
+		return indent;
+	}
+	
+	private <T extends Annotation> Map<Integer, String> emitArgumentsAndGenerateArgumentMapping(PrintWriter out, Element methodElement, int indent) throws IllegalArgumentException {
+		Map<Integer, String> argumentMapping = new HashMap<>();
+		
+		ExecutableElement executableMethodElement = (ExecutableElement) methodElement;
+		for(int i = 1; i < executableMethodElement.getParameters().size(); i++) {
+			VariableElement parameter = executableMethodElement.getParameters().get(i);
+			T argumentAnnotation = getArgument(parameter);
+			if (argumentAnnotation == null) {
+				processingEnv.getMessager().printMessage(Kind.ERROR,
+						"Parameter " + parameter.getSimpleName() + " in method "
+								+ methodElement.getSimpleName()
+								+ " does not have an argument annotation on it! ");
+				throw new IllegalArgumentException();
+			}
+			
+			emitArgument(out, argumentAnnotation, parameter, indent);
+			
+			// Handle return types
+			Primitive primitive = getPrimitive(argumentAnnotation);
+			if(primitive.value().length == 1) {
+				argumentMapping.put(i - 1, primitive.value()[0]);
+			} else {
+				if(argumentAnnotation instanceof AEntitySelectorArgument argument) {
+					switch(argument.value()) {
+					case MANY_ENTITIES -> argumentMapping.put(i - 1, primitive.value()[0]);
+					case MANY_PLAYERS  -> argumentMapping.put(i - 1, primitive.value()[1]);
+					case ONE_ENTITY    -> argumentMapping.put(i - 1, primitive.value()[2]);
+					case ONE_PLAYER    -> argumentMapping.put(i - 1, primitive.value()[3]);
+					default            -> throw new IllegalArgumentException("Unexpected value: " + argument.value());
+					}
+				} else if (argumentAnnotation instanceof AScoreHolderArgument argument) {
+					switch(argument.value()) {
+					case MULTIPLE -> argumentMapping.put(i - 1, primitive.value()[0]);
+					case SINGLE   -> argumentMapping.put(i - 1, primitive.value()[1]);
+					default       -> throw new IllegalArgumentException("Unexpected value: " + argument.value());
+					}
+				}
+			}
+		}
+		
+		return argumentMapping;
+	}
+	
+	private int emitExecutes(PrintWriter out, Map<Integer, String> argumentMapping, ExecutableType methodType, TypeElement commandClass, Element methodElement, int indent) {
+		String[] firstParam = methodType.getParameterTypes().get(0).toString().split("\\.");
+		out.print(indent(indent));
+		switch (firstParam[firstParam.length - 1]) {
+		case "Player" -> out.print(".executesPlayer");
+		case "ConsoleCommandSender" -> out.print(".executesConsole");
+		case "BlockCommandSender" -> out.print(".executesCommandBlock");
+		case "ProxiedCommandSender" -> out.print(".executesProxy");
+		case "NativeProxyCommandSender" -> out.print(".executesNative");
+		case "Entity" -> out.print(".executesEntity");
+		case "CommandSender" -> out.print(".executes");
+		default -> out.print(".executes");
+		}
+
+		out.println("((sender, args) -> {");
+		indent++;
+		out.print(indent(indent));
+
+		// Return int or void?
+		if (methodType.getReturnType().toString().equals("int")) {
+			out.print("return ");
+		}
+
+		out.print(commandClass.getSimpleName());
+		out.print(".");
+		out.print(methodElement.getSimpleName());
+		out.print("(sender");
+		
+		for(int i = 0; i < argumentMapping.size(); i++) {
+			String fromArgumentMap = argumentMapping.get(i);
+			out.print(", (");
+
+			if(fromArgumentMap.contains("<")) {
+				out.print(simpleFromQualified(fromArgumentMap.substring(0, fromArgumentMap.indexOf("<"))));
+				out.print("<");
+				out.print(simpleFromQualified(fromArgumentMap.substring(fromArgumentMap.indexOf("<") + 1, fromArgumentMap.indexOf(">"))));
+				out.print(">");
+			} else {
+				out.print(simpleFromQualified(fromArgumentMap));
+			}
+			out.print(") args[");
+			out.print(i);
+			out.print("]");
+		}
+		//populate stuff here
+		
+		out.println(");");
+		indent--;
+		out.println(indent(indent) + "})");
+		
+		return indent;
+	}
+	
+	private int emitClassDeclarationStart(PrintWriter out, TypeElement commandClass, int indent) {
+		out.println("// This class was automatically generated by the CommandAPI");
+		out.print("public class ");
+		out.print(commandClass.getSimpleName() + "$Command");
+		out.println(" {");
+		out.println();
+		indent++;
+		return indent;
+	}
+	
+	private void emitPermission(PrintWriter out, Element classElement, int indent) {
+		if (classElement.getAnnotation(Permission.class) != null) {
+			out.print(indent(indent) + ".withPermission(\"");
+			out.print(classElement.getAnnotation(Permission.class).value());
+			out.println("\")");
+		}
+	}
+	
+	private void emitAlias(PrintWriter out, Element classElement, int indent) {
+		if (classElement.getAnnotation(Alias.class) != null) {
+			out.print(indent(indent) + ".withAliases(");
+			out.print(Arrays.stream(classElement.getAnnotation(Alias.class).value())
+					.map(x -> "\"" + x + "\"").collect(Collectors.joining(", ")));
+			out.println(")");
+		}
+	}
+	
+	private void emitNeedsOp(PrintWriter out, Element classElement, int indent) {
+		if (classElement.getAnnotation(NeedsOp.class) != null) {
+			out.println(indent(indent) + ".withPermission(CommandPermission.OP)");
+		}
+	}
 
 	private <T extends Annotation> void processCommand(RoundEnvironment roundEnv, Element classElement) throws IOException {
 		TypeElement commandClass = (TypeElement) classElement;
-		JavaFileObject builderFile = processingEnv.getFiler()
-				.createSourceFile(commandClass.getQualifiedName() + "$Command");
+		JavaFileObject builderFile = processingEnv.getFiler().createSourceFile(commandClass.getQualifiedName() + "$Command");
+		int indent = 0;
 
 		try (PrintWriter out = new PrintWriter(builderFile.openWriter())) {
-
-			// Package name (https://www.baeldung.com/java-annotation-processing-builder)
-			int indent = 0;
-			int lastDot = commandClass.getQualifiedName().toString().lastIndexOf('.');
-		    if (lastDot > 0) {
-		    	out.print("package ");
-				out.print(commandClass.getQualifiedName().toString().substring(0, lastDot));
-				out.println(";");
-				out.println();
-		    }
-
-			// Imports
-			SortedSet<String> imports = new TreeSet<>();
-			
-			imports.add(CommandAPICommand.class.getCanonicalName());
-			if(classElement.getAnnotation(NeedsOp.class) != null) {
-				imports.add(CommandPermission.class.getCanonicalName());
-			}
-			for (Element methodElement : classElement.getEnclosedElements()) {
-				if (methodElement.getAnnotation(Subcommand.class) != null) {
-					imports.add(MultiLiteralArgument.class.getCanonicalName());
-				}
-				if (methodElement.getAnnotation(NeedsOp.class) != null) {
-					imports.add(CommandPermission.class.getCanonicalName());
-				}
-				
-				if(methodElement instanceof ExecutableElement) {
-					ExecutableElement method = (ExecutableElement) methodElement;
-					for(VariableElement parameter : method.getParameters()) {
-						if(getArgument(parameter) != null) {
-							imports.addAll(Arrays.asList(getPrimitive(getArgument(parameter)).value()));
-							imports.add("dev.jorel.commandapi.arguments." + getArgument(parameter).annotationType().getSimpleName().substring(1));
-							if(getArgument(parameter) instanceof ALocationArgument || getArgument(parameter) instanceof ALocation2DArgument) {
-								imports.add(LocationType.class.getCanonicalName());
-							} else if(getArgument(parameter) instanceof AScoreHolderArgument) {
-								imports.add(ScoreHolderType.class.getCanonicalName());
-							} else if(getArgument(parameter) instanceof AEntitySelectorArgument) {
-								imports.add(EntitySelector.class.getCanonicalName());
-							}
-						}
-						
-					}
-				}
-			}
-			
-			for(String import_ : new TreeSet<>(imports)) {
-				if(import_.contains("<")) {
-					imports.add(import_.substring(0, import_.indexOf("<")));
-					imports.add(import_.substring(import_.indexOf("<") + 1, import_.indexOf(">")));
-				}
-			}
-			
-			String previousImport = "";
-			for(String import_ : imports) {
-				// Separate different packages
-				if(previousImport.contains(".") && import_.contains(".")) {
-					if(!previousImport.substring(0, previousImport.indexOf(".")).equals(import_.substring(0, import_.indexOf(".")))) {
-						out.println();
-					}
-				}
-				// Don't import stuff like "String"
-				if(!import_.contains(".") || import_.contains("<")) {
-					continue;
-				}
-				
-				out.print("import ");
-				out.print(import_);
-				out.println(";");
-				previousImport = import_;
-			}
-			out.println();
-
-			// Class declaration
-			out.println("// This class was automatically generated by the CommandAPI");
-			out.print("public class ");
-			out.print(commandClass.getSimpleName() + "$Command");
-			out.println(" {");
-			out.println();
-			indent++;
+			emitPackage(out, commandClass); // Package name
+			emitImports(out, classElement); // Imports	
+			emitClassDeclarationStart(out, commandClass, indent); // Class declaration
 
 			// Main registration method
 			out.println(indent(indent) + "@SuppressWarnings(\"unchecked\")");
@@ -269,216 +435,26 @@ public class Annotations extends AbstractProcessor {
 					out.println("\")");
 					indent++;
 
-					// @Subcommand (Also handle @Alias for @Subcommand)
-					if (methodElement.getAnnotation(Subcommand.class) != null) {
-						out.println(indent(indent) + ".withArguments(");
-						indent++;
-						out.print(indent(indent) + "new MultiLiteralArgument(");
-						
-						if(methodElement.getAnnotation(Subcommand.class).value().length == 0) {
-							processingEnv.getMessager().printMessage(Kind.ERROR, "Invalid @Subcommand on " + methodElement.getSimpleName() + " - no subcommand name was found");
-						}
-						
-						// @Subcommand (name)
-						out.print(Arrays.stream(methodElement.getAnnotation(Subcommand.class).value())
-							.map(x -> "\"" + x + "\"").collect(Collectors.joining(", ")));
-						
-						out.println(")");
-						indent++;
-						out.println(indent(indent) + ".setListed(false)");
-						
-						// @NeedsOp
-						if (methodElement.getAnnotation(NeedsOp.class) != null) {
-							out.println(indent(indent) + ".withPermission(CommandPermission.OP)");
-						}
-						
-						// @Permission
-						if (methodElement.getAnnotation(Permission.class) != null) {
-							out.print(indent(indent) + ".withPermission(\"");
-							out.print(methodElement.getAnnotation(Permission.class).value());
-							out.println("\")");
-						}
-						indent--;
-						indent--;
-						out.println(indent(indent) + ")");
-					}
+					indent = emitSubcommand(out, methodElement, indent); // @Subcommand (Also handle @Alias for @Subcommand)
+					emitNeedsOp(out, classElement, indent);    // @NeedsOp
+					emitPermission(out, classElement, indent); // @Permission
+					emitAlias(out, classElement, indent);      // @Alias
 					
-					// @NeedsOp
-					if (classElement.getAnnotation(NeedsOp.class) != null) {
-						out.println(indent(indent) + ".withPermission(CommandPermission.OP)");
-					}
-
-					// @Permission
-					if (classElement.getAnnotation(Permission.class) != null) {
-						out.print(indent(indent) + ".withPermission(\"");
-						out.print(classElement.getAnnotation(Permission.class).value());
-						out.println("\")");
-					}
-
-					// @Alias
-					if (classElement.getAnnotation(Alias.class) != null) {
-						out.print(indent(indent) + ".withAliases(");
-						out.print(Arrays.stream(classElement.getAnnotation(Alias.class).value())
-								.map(x -> "\"" + x + "\"").collect(Collectors.joining(", ")));
-						out.println(")");
-					}
-					
-
 					//Maps parameter index to argument's primitive type
-					Map<Integer, String> argumentMapping = new HashMap<>();
-					
-					ExecutableElement executableMethodElement = (ExecutableElement) methodElement;
-					for(int i = 1; i < executableMethodElement.getParameters().size(); i++) {
-						VariableElement parameter = executableMethodElement.getParameters().get(i);
-						T argumentAnnotation = getArgument(parameter);
-						if (argumentAnnotation == null) {
-							processingEnv.getMessager().printMessage(Kind.ERROR,
-									"Parameter " + parameter.getSimpleName() + " in method "
-											+ methodElement.getSimpleName()
-											+ " does not have an argument annotation on it! ");
-							return;
-						}
-						
-						out.print(indent(indent) + ".withArguments(new ");
-						// We're assuming that the name of the argument MUST be "A" + the same name
-						out.print(argumentAnnotation.annotationType().getSimpleName().substring(1));
-						
-						// Node name
-						if(argumentAnnotation instanceof AMultiLiteralArgument || argumentAnnotation instanceof ALiteralArgument) {
-							// Ignore node name for MultiLiteralArgument and LiteralArgument
-							out.print("(");
-						} else {
-							out.print("(\"");
-							out.print(parameter.getSimpleName());
-							out.print("\"");
-						}
-						
-						// Handle parameters
-						// Number arguments
-						if(argumentAnnotation instanceof AIntegerArgument) {
-							AIntegerArgument argument = (AIntegerArgument) argumentAnnotation;
-							out.print(", " + argument.min() + ", " + argument.max());
-						} else if(argumentAnnotation instanceof ALongArgument) {
-							ALongArgument argument = (ALongArgument) argumentAnnotation;
-							out.print(", " + argument.min() + "L, " + argument.max() + "L");
-						} else if(argumentAnnotation instanceof AFloatArgument) {
-							AFloatArgument argument = (AFloatArgument) argumentAnnotation;
-							out.print(", " + argument.min() + "F, " + argument.max() + "F");
-						} else if(argumentAnnotation instanceof ADoubleArgument) {
-							ADoubleArgument argument = (ADoubleArgument) argumentAnnotation;
-							out.print(", " + argument.min() + "D, " + argument.max() + "D");
-						}
-						
-						// Non-number arguments
-						else if(argumentAnnotation instanceof ALocation2DArgument) {
-							ALocation2DArgument argument = (ALocation2DArgument) argumentAnnotation;
-							out.print(", " + LocationType.class.getSimpleName() + "." + argument.value().toString());
-						} else if(argumentAnnotation instanceof ALocationArgument) {
-							ALocationArgument argument = (ALocationArgument) argumentAnnotation;
-							out.print(", " + LocationType.class.getSimpleName() + "." + argument.value().toString());
-						} else if(argumentAnnotation instanceof AEntitySelectorArgument) {
-							AEntitySelectorArgument argument = (AEntitySelectorArgument) argumentAnnotation;
-							out.print(", " + EntitySelector.class.getSimpleName() + "." + argument.value().toString());
-						} else if(argumentAnnotation instanceof AScoreHolderArgument) {
-							AScoreHolderArgument argument = (AScoreHolderArgument) argumentAnnotation;
-							out.print(", " + ScoreHolderType.class.getSimpleName() + "." + argument.value().toString());
-						} else if(argumentAnnotation instanceof AMultiLiteralArgument) {
-							AMultiLiteralArgument argument = (AMultiLiteralArgument) argumentAnnotation;
-							out.print(Arrays.stream(argument.value()).map(s -> "\"" + s + "\"").collect(Collectors.joining(", ")));
-						} else if(argumentAnnotation instanceof ALiteralArgument) {
-							ALiteralArgument argument = (ALiteralArgument) argumentAnnotation;
-							out.print("\"");
-							out.print(argument.value());
-							out.print("\"");
-						}
-						
-						out.print(")");
-						
-						if(argumentAnnotation instanceof ALiteralArgument) {
-							out.print(".setListed(true)");
-						}
-						
-						out.println(")");
-						
-						// Handle return types
-						Primitive primitive = getPrimitive(argumentAnnotation);
-						if(primitive.value().length == 1) {
-							argumentMapping.put(i - 1, primitive.value()[0]);
-						} else {
-							if(argumentAnnotation instanceof AEntitySelectorArgument) {
-								AEntitySelectorArgument argument = (AEntitySelectorArgument) argumentAnnotation;
-								switch(argument.value()) {
-								case MANY_ENTITIES -> argumentMapping.put(i - 1, primitive.value()[0]);
-								case MANY_PLAYERS -> argumentMapping.put(i - 1, primitive.value()[1]);
-								case ONE_ENTITY -> argumentMapping.put(i - 1, primitive.value()[2]);
-								case ONE_PLAYER -> argumentMapping.put(i - 1, primitive.value()[3]);
-								default -> throw new IllegalArgumentException("Unexpected value: " + argument.value());
-								}
-							} else if (argumentAnnotation instanceof AScoreHolderArgument) {
-								AScoreHolderArgument argument = (AScoreHolderArgument) argumentAnnotation;
-								switch(argument.value()) {
-								case MULTIPLE -> argumentMapping.put(i - 1, primitive.value()[0]);
-								case SINGLE -> argumentMapping.put(i - 1, primitive.value()[1]);
-								default -> throw new IllegalArgumentException("Unexpected value: " + argument.value());
-								}
-							}
-						}
+					Map<Integer, String> argumentMapping = null;
+					try {
+						argumentMapping = emitArgumentsAndGenerateArgumentMapping(out, methodElement, indent);
+					} catch (IllegalArgumentException e) {
+						return;
 					}
+					
 					// .executes
-					String[] firstParam = methodType.getParameterTypes().get(0).toString().split("\\.");
-					out.print(indent(indent));
-					switch (firstParam[firstParam.length - 1]) {
-					case "Player" -> out.print(".executesPlayer");
-					case "ConsoleCommandSender" -> out.print(".executesConsole");
-					case "BlockCommandSender" -> out.print(".executesCommandBlock");
-					case "ProxiedCommandSender" -> out.print(".executesProxy");
-					case "NativeProxyCommandSender" -> out.print(".executesNative");
-					case "Entity" -> out.print(".executesEntity");
-					case "CommandSender" -> out.print(".executes");
-					default -> out.print(".executes");
-					}
-
-					out.println("((sender, args) -> {");
-					indent++;
-					out.print(indent(indent));
-
-					// Return int or void?
-					if (methodType.getReturnType().toString().equals("int")) {
-						out.print("return ");
-					}
-
-					out.print(commandClass.getSimpleName());
-					out.print(".");
-					out.print(methodElement.getSimpleName());
-					out.print("(sender");
-					
-					for(int i = 0; i < argumentMapping.size(); i++) {
-						String fromArgumentMap = argumentMapping.get(i);
-						out.print(", (");
-
-						if(fromArgumentMap.contains("<")) {
-							out.print(simpleFromQualified(fromArgumentMap.substring(0, fromArgumentMap.indexOf("<"))));
-							out.print("<");
-							out.print(simpleFromQualified(fromArgumentMap.substring(fromArgumentMap.indexOf("<") + 1, fromArgumentMap.indexOf(">"))));
-							out.print(">");
-						} else {
-							out.print(simpleFromQualified(fromArgumentMap));
-						}
-						out.print(") args[");
-						out.print(i);
-						out.print("]");
-					}
-					//populate stuff here
-					
-					out.println(");");
-					indent--;
-					out.println(indent(indent) + "})");
+					indent = emitExecutes(out, argumentMapping, methodType, commandClass, methodElement, indent);
 
 					// Register command
 					out.println(indent(indent) + ".register();");
 					out.println();
 					indent--;
-
 				}
 			}
 			out.println(indent(indent) + "}"); // register()
@@ -486,6 +462,59 @@ public class Annotations extends AbstractProcessor {
 			out.println();
 			out.println("}"); // $Command class
 		}
+	}
+
+	private <T extends Annotation> void emitArgument(PrintWriter out, T argumentAnnotation, VariableElement parameter, int indent) {
+		out.print(indent(indent) + ".withArguments(new ");
+		// We're assuming that the name of the argument MUST be "A" + the same name
+		out.print(argumentAnnotation.annotationType().getSimpleName().substring(1));
+		
+		// Node name
+		if(argumentAnnotation instanceof AMultiLiteralArgument || argumentAnnotation instanceof ALiteralArgument) {
+			// Ignore node name for MultiLiteralArgument and LiteralArgument
+			out.print("(");
+		} else {
+			out.print("(\"");
+			out.print(parameter.getSimpleName());
+			out.print("\"");
+		}
+		
+		// Handle parameters
+		// Number arguments
+		if(argumentAnnotation instanceof AIntegerArgument argument) {
+			out.print(", " + argument.min() + ", " + argument.max());
+		} else if(argumentAnnotation instanceof ALongArgument argument) {
+			out.print(", " + argument.min() + "L, " + argument.max() + "L");
+		} else if(argumentAnnotation instanceof AFloatArgument argument) {
+			out.print(", " + argument.min() + "F, " + argument.max() + "F");
+		} else if(argumentAnnotation instanceof ADoubleArgument argument) {
+			out.print(", " + argument.min() + "D, " + argument.max() + "D");
+		}
+		
+		// Non-number arguments
+		else if(argumentAnnotation instanceof ALocation2DArgument argument) {
+			out.print(", " + LocationType.class.getSimpleName() + "." + argument.value().toString());
+		} else if(argumentAnnotation instanceof ALocationArgument argument) {
+			out.print(", " + LocationType.class.getSimpleName() + "." + argument.value().toString());
+		} else if(argumentAnnotation instanceof AEntitySelectorArgument argument) {
+			out.print(", " + EntitySelector.class.getSimpleName() + "." + argument.value().toString());
+		} else if(argumentAnnotation instanceof AScoreHolderArgument argument) {
+			out.print(", " + ScoreHolderType.class.getSimpleName() + "." + argument.value().toString());
+		} else if(argumentAnnotation instanceof AMultiLiteralArgument argument) {
+			out.print(Arrays.stream(argument.value()).map(s -> "\"" + s + "\"").collect(Collectors.joining(", ")));
+		} else if(argumentAnnotation instanceof ALiteralArgument argument) {
+			out.print("\"");
+			out.print(argument.value());
+			out.print("\"");
+		}
+		
+		out.print(")");
+		
+		if(argumentAnnotation instanceof ALiteralArgument) {
+			out.print(".setListed(true)");
+		}
+		
+		out.println(")");
 	}
 
 	// Checks if an annotation mirror is an argument annotation

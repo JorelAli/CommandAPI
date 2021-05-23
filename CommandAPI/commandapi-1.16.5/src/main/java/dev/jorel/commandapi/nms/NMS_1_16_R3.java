@@ -247,14 +247,10 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	@Override
 	public ArgumentType<?> _ArgumentEntity(dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector selector) {
 		return switch (selector) {
-		case MANY_ENTITIES:
-			yield ArgumentEntity.multipleEntities();
-		case MANY_PLAYERS:
-			yield ArgumentEntity.d();
-		case ONE_ENTITY:
-			yield ArgumentEntity.a();
-		case ONE_PLAYER:
-			yield ArgumentEntity.c();
+		case MANY_ENTITIES -> ArgumentEntity.multipleEntities();
+		case MANY_PLAYERS  -> ArgumentEntity.d();
+		case ONE_ENTITY    -> ArgumentEntity.a();
+		case ONE_PLAYER    -> ArgumentEntity.c();
 		};
 	}
 
