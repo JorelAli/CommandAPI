@@ -47,6 +47,44 @@ public abstract class Converter {
 			"addAttachment", "removeAttachment", "recalculatePermissions", "getEffectivePermissions", "isOp", "setOp"));
 
 	/**
+	 * Convert all commands stated in Plugin's plugin.yml file into CommandAPI-compatible commands
+	 * @param plugin The plugin which commands are to be converted
+	 */
+	public static void convert(Plugin plugin) {
+		CommandAPI.logInfo("Converting commands for " + plugin.getName() + ":");
+		plugin.getDescription().getCommands().keySet().forEach(commandName -> convertPluginCommand((JavaPlugin) plugin, commandName, PLAIN_ARGUMENTS));
+	}
+	
+	/**
+	 * Convert a command stated in Plugin's plugin.yml file into CommandAPI-compatible commands
+	 * @param plugin The plugin where the command is registered
+	 * @param cmdName The command to convert
+	 */
+	public static void convert(Plugin plugin, String cmdName) {
+		convertPluginCommand((JavaPlugin) plugin, cmdName, PLAIN_ARGUMENTS);
+	}
+	
+	/**
+	 * Convert a command stated in Plugin's plugin.yml file into CommandAPI-compatible commands
+	 * @param plugin The plugin where the command is registered
+	 * @param cmdName The command to convert
+	 * @param arguments The arguments that should be used to parse this command
+	 */
+	public static void convert(Plugin plugin, String cmdName, Argument... arguments) {
+		convertPluginCommand((JavaPlugin) plugin, cmdName, Arrays.asList(arguments));
+	}
+	
+	/**
+	 * Convert a command stated in Plugin's plugin.yml file into CommandAPI-compatible commands
+	 * @param plugin The plugin where the command is registered
+	 * @param cmdName The command to convert
+	 * @param arguments The arguments that should be used to parse this command
+	 */
+	public static void convert(Plugin plugin, String cmdName, List<Argument> arguments) {
+		convertPluginCommand((JavaPlugin) plugin, cmdName, arguments);
+	}
+	
+	/**
 	 * Convert the provided command name into a CommandAPI-compatible command
 	 * @param cmdName The name of the command (without the leading /). For commands such as //set in WorldEdit,
 	 * 				  this parameter should be "/set"
@@ -89,44 +127,6 @@ public abstract class Converter {
 
 		multiArgs.setConverted(true);
 		multiArgs.register();
-	}
-	
-	/**
-	 * Convert all commands stated in Plugin's plugin.yml file into CommandAPI-compatible commands
-	 * @param plugin The plugin which commands are to be converted
-	 */
-	public static void convert(Plugin plugin) {
-		CommandAPI.logInfo("Converting commands for " + plugin.getName() + ":");
-		plugin.getDescription().getCommands().keySet().forEach(commandName -> convertPluginCommand((JavaPlugin) plugin, commandName, PLAIN_ARGUMENTS));
-	}
-	
-	/**
-	 * Convert a command stated in Plugin's plugin.yml file into CommandAPI-compatible commands
-	 * @param plugin The plugin where the command is registered
-	 * @param cmdName The command to convert
-	 */
-	public static void convert(Plugin plugin, String cmdName) {
-		convertPluginCommand((JavaPlugin) plugin, cmdName, PLAIN_ARGUMENTS);
-	}
-	
-	/**
-	 * Convert a command stated in Plugin's plugin.yml file into CommandAPI-compatible commands
-	 * @param plugin The plugin where the command is registered
-	 * @param cmdName The command to convert
-	 * @param arguments The arguments that should be used to parse this command
-	 */
-	public static void convert(Plugin plugin, String cmdName, List<Argument> arguments) {
-		convertPluginCommand((JavaPlugin) plugin, cmdName, arguments);
-	}
-	
-	/**
-	 * Convert a command stated in Plugin's plugin.yml file into CommandAPI-compatible commands
-	 * @param plugin The plugin where the command is registered
-	 * @param cmdName The command to convert
-	 * @param arguments The arguments that should be used to parse this command
-	 */
-	public static void convert(Plugin plugin, String cmdName, Argument... arguments) {
-		convertPluginCommand((JavaPlugin) plugin, cmdName, Arrays.asList(arguments));
 	}
 	
 	private static void convertPluginCommand(JavaPlugin plugin, String commandName, List<Argument> arguments) {

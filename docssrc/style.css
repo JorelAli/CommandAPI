@@ -1,6 +1,6 @@
 .example {
-    margin: 20px 0px;
-    padding: 0px 20px;
+    margin: 20px 0;
+    padding: 0 20px;
     color: var(--fg);
     background-color: var(--example-bg);
     border-top: .1em solid var(--example-border);
@@ -8,8 +8,8 @@
 }
 
 .warning {
-    margin: 20px 0px;
-    padding: 0px 20px;
+    margin: 20px 0;
+    padding: 0 20px;
     color: var(--fg);
     background-color: var(--warning-bg);
     border-top: .1em solid var(--warning-border);

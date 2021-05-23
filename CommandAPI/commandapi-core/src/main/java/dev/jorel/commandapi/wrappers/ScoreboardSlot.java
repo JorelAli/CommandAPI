@@ -37,33 +37,33 @@ public class ScoreboardSlot {
 	 */
 	public ScoreboardSlot(int i) {
 		//Initialize displaySlot
-		switch(i) {
-			case 0: displaySlot = DisplaySlot.PLAYER_LIST; break;
-			case 1: displaySlot = DisplaySlot.SIDEBAR; break;
-			case 2: displaySlot = DisplaySlot.BELOW_NAME; break;
-			default: displaySlot = DisplaySlot.SIDEBAR; break;
-		}
+		displaySlot = switch(i) {
+			case 0  -> DisplaySlot.PLAYER_LIST;
+			case 1  -> DisplaySlot.SIDEBAR;
+			case 2  -> DisplaySlot.BELOW_NAME;
+			default -> DisplaySlot.SIDEBAR;
+		};
 		
 		//Initialize teamColor
-		switch(i) {
-			case 3: teamColor = ChatColor.BLACK; break;
-			case 4: teamColor = ChatColor.DARK_BLUE; break;
-			case 5: teamColor = ChatColor.DARK_GREEN; break;
-			case 6: teamColor = ChatColor.DARK_AQUA; break;
-			case 7: teamColor = ChatColor.DARK_RED; break;
-			case 8: teamColor = ChatColor.DARK_PURPLE; break;
-			case 9: teamColor = ChatColor.GOLD; break;
-			case 10: teamColor = ChatColor.GRAY; break;
-			case 11: teamColor = ChatColor.DARK_GRAY; break;
-			case 12: teamColor = ChatColor.BLUE; break;
-			case 13: teamColor = ChatColor.GREEN; break;
-			case 14: teamColor = ChatColor.AQUA; break;
-			case 15: teamColor = ChatColor.RED; break;
-			case 16: teamColor = ChatColor.LIGHT_PURPLE; break;
-			case 17: teamColor = ChatColor.YELLOW; break;
-			case 18: teamColor = ChatColor.WHITE; break;
-			default: teamColor = null; break;
-		}
+		teamColor = switch(i) {
+			case 3  -> ChatColor.BLACK;
+			case 4  -> ChatColor.DARK_BLUE;
+			case 5  -> ChatColor.DARK_GREEN;
+			case 6  -> ChatColor.DARK_AQUA;
+			case 7  -> ChatColor.DARK_RED;
+			case 8  -> ChatColor.DARK_PURPLE;
+			case 9  -> ChatColor.GOLD;
+			case 10 -> ChatColor.GRAY;
+			case 11 -> ChatColor.DARK_GRAY;
+			case 12 -> ChatColor.BLUE;
+			case 13 -> ChatColor.GREEN;
+			case 14 -> ChatColor.AQUA;
+			case 15 -> ChatColor.RED;
+			case 16 -> ChatColor.LIGHT_PURPLE;
+			case 17 -> ChatColor.YELLOW;
+			case 18 -> ChatColor.WHITE;
+			default -> null;
+		};
 	}
 	
 	/**
@@ -72,16 +72,12 @@ public class ScoreboardSlot {
 	 * @return a ScoreboardSlot from the provided DisplaySlot
 	 */
 	public static ScoreboardSlot of(DisplaySlot slot) {
-		switch(slot) {
-		case PLAYER_LIST:
-			return new ScoreboardSlot(0);
-		case SIDEBAR:
-			return new ScoreboardSlot(1);
-		case BELOW_NAME:
-			return new ScoreboardSlot(2);
-		default:
-			return new ScoreboardSlot(1);
-		}
+		return switch(slot) {
+		case PLAYER_LIST -> new ScoreboardSlot(0);
+		case SIDEBAR     -> new ScoreboardSlot(1);
+		case BELOW_NAME  -> new ScoreboardSlot(2);
+		default          -> new ScoreboardSlot(1);
+		};
 	}
 	
 	/**
@@ -90,42 +86,25 @@ public class ScoreboardSlot {
 	 * @return a ScoreboardSlot from the provided ChatColor
 	 */
 	public static ScoreboardSlot ofTeamColor(ChatColor color) {
-		switch (color) {
-		case BLACK:
-			return new ScoreboardSlot(3);
-		case DARK_BLUE:
-			return new ScoreboardSlot(4);
-		case DARK_GREEN:
-			return new ScoreboardSlot(5);
-		case DARK_AQUA:
-			return new ScoreboardSlot(6);
-		case DARK_RED:
-			return new ScoreboardSlot(7);
-		case DARK_PURPLE:
-			return new ScoreboardSlot(8);
-		case GOLD:
-			return new ScoreboardSlot(9);
-		case GRAY:
-			return new ScoreboardSlot(10);
-		case DARK_GRAY:
-			return new ScoreboardSlot(11);
-		case BLUE:
-			return new ScoreboardSlot(12);
-		case GREEN:
-			return new ScoreboardSlot(13);
-		case AQUA:
-			return new ScoreboardSlot(14);
-		case RED:
-			return new ScoreboardSlot(15);
-		case LIGHT_PURPLE:
-			return new ScoreboardSlot(16);
-		case YELLOW:
-			return new ScoreboardSlot(17);
-		case WHITE:
-			return new ScoreboardSlot(18);
-		default:
-			return new ScoreboardSlot(1);
-		}
+		return switch (color) {
+		case BLACK        -> new ScoreboardSlot(3);
+		case DARK_BLUE    -> new ScoreboardSlot(4);
+		case DARK_GREEN   -> new ScoreboardSlot(5);
+		case DARK_AQUA    -> new ScoreboardSlot(6);
+		case DARK_RED     -> new ScoreboardSlot(7);
+		case DARK_PURPLE  -> new ScoreboardSlot(8);
+		case GOLD         -> new ScoreboardSlot(9);
+		case GRAY         -> new ScoreboardSlot(10);
+		case DARK_GRAY    -> new ScoreboardSlot(11);
+		case BLUE         -> new ScoreboardSlot(12);
+		case GREEN        -> new ScoreboardSlot(13);
+		case AQUA         -> new ScoreboardSlot(14);
+		case RED          -> new ScoreboardSlot(15);
+		case LIGHT_PURPLE -> new ScoreboardSlot(16);
+		case YELLOW       -> new ScoreboardSlot(17);
+		case WHITE        -> new ScoreboardSlot(18);
+		default           -> new ScoreboardSlot(1);
+		};
 	}
 	
 	/**
@@ -161,16 +140,12 @@ public class ScoreboardSlot {
 		if(teamColor != null) {
 			return "sidebar.team." + teamColor.name().toLowerCase();
 		} else {
-			switch(displaySlot) {
-			case PLAYER_LIST:
-				return "list";
-			case SIDEBAR:
-				return "sidebar";
-			case BELOW_NAME:
-				return "belowName";
-			default:
-				return "sidebar";
-			}
+			return switch(displaySlot) {
+			case PLAYER_LIST -> "list";
+			case SIDEBAR     -> "sidebar";
+			case BELOW_NAME  -> "belowName";
+			default          -> "sidebar";
+			};
 		}
 	}
 }

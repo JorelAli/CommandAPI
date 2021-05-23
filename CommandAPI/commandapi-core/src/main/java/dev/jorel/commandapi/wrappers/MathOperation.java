@@ -96,27 +96,18 @@ public enum MathOperation {
 	 * @return a int that is the result of applying this math operation
 	 */
 	public int apply(int val1, int val2) {
-		switch(this) {
-		case ADD:
-			return val1 + val2;
-		case ASSIGN:
-			return val2;
-		case DIVIDE:
-			return val1 / val2;
-		case MAX:
-			return Math.max(val1, val2);
-		case MIN:
-			return Math.min(val1, val2);
-		case MOD:
-			return val1 % val2;
-		case MULTIPLY:
-			return val1 * val2;
-		case SUBTRACT:
-			return val1 - val2;
-		case SWAP:
-			return val2;
-		}
-		return val2;
+		return switch(this) {
+		case ADD      -> val1 + val2;
+		case ASSIGN   -> val2;
+		case DIVIDE   -> val1 / val2;
+		case MAX      -> Math.max(val1, val2);
+		case MIN      -> Math.min(val1, val2);
+		case MOD      -> val1 % val2;
+		case MULTIPLY -> val1 * val2;
+		case SUBTRACT -> val1 - val2;
+		case SWAP     -> val2;
+		default       -> val2;
+		};
 	}
 	
 	/**
@@ -126,26 +117,17 @@ public enum MathOperation {
 	 * @return a float that is the result of applying this math operation
 	 */
 	public float apply(float val1, float val2) {
-		switch(this) {
-		case ADD:
-			return val1 + val2;
-		case ASSIGN:
-			return val2;
-		case DIVIDE:
-			return val1 / val2;
-		case MAX:
-			return Math.max(val1, val2);
-		case MIN:
-			return Math.min(val1, val2);
-		case MOD:
-			return val1 % val2;
-		case MULTIPLY:
-			return val1 * val2;
-		case SUBTRACT:
-			return val1 - val2;
-		case SWAP:
-			return val2;
-		}
-		return val2;
+		return switch(this) {
+		case ADD      -> val1 + val2;
+		case ASSIGN   -> val2;
+		case DIVIDE   -> val1 / val2;
+		case MAX      -> Math.max(val1, val2);
+		case MIN      -> Math.min(val1, val2);
+		case MOD      -> val1 % val2;
+		case MULTIPLY -> val1 * val2;
+		case SUBTRACT -> val1 - val2;
+		case SWAP     -> val2;
+		default       -> val2;
+		};
 	}
 }

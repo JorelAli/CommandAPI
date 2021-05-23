@@ -25,11 +25,16 @@ package dev.jorel.commandapi;
  */
 public class CommandPermission {
 
-	/**
-	 * Determines if this CommandPermission is equal to another CommandPermission
-	 * @param obj the other CommandPermission to check against
-	 * @return true if this CommandPermission is equal to the provided object
-	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (negated ? 1231 : 1237);
+		result = prime * result + ((permission == null) ? 0 : permission.hashCode());
+		result = prime * result + ((permissionNode == null) ? 0 : permissionNode.hashCode());
+		return result;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -39,6 +44,8 @@ public class CommandPermission {
 		if (getClass() != obj.getClass())
 			return false;
 		CommandPermission other = (CommandPermission) obj;
+		if (negated != other.negated)
+			return false;
 		if (permission == null) {
 			if (other.permission != null)
 				return false;

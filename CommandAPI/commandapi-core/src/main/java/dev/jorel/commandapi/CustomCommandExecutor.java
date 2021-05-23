@@ -50,45 +50,12 @@ class CustomCommandExecutor {
 		resultingExecutors = new ArrayList<>();
 	}
 	
-	CustomCommandExecutor mergeExecutor(CustomCommandExecutor executor) {
-		CustomCommandExecutor result = new CustomCommandExecutor();
-		result.normalExecutors = new ArrayList<>(normalExecutors);
-		result.resultingExecutors = new ArrayList<>(resultingExecutors);
-		result.normalExecutors.addAll(executor.normalExecutors);
-		result.resultingExecutors.addAll(executor.resultingExecutors);
-		return result;
-	}
-	
 	public void addNormalExecutor(IExecutorNormal<? extends CommandSender> ex) {
 		this.normalExecutors.add(ex);
 	}
 	
 	public void addResultingExecutor(IExecutorResulting<? extends CommandSender> rEx) {
 		this.resultingExecutors.add(rEx);
-	}
-	
-	public boolean isEmpty() {
-		return normalExecutors.isEmpty() && resultingExecutors.isEmpty();
-	}
-	
-	public boolean isForceNative() {
-		return matches(normalExecutors, ExecutorType.NATIVE) || matches(resultingExecutors, ExecutorType.NATIVE);
-	}
-	
-	public List<IExecutorNormal<? extends CommandSender>> getNormalExecutors() {
-		return normalExecutors;
-	}
-
-	public void setNormalExecutors(List<IExecutorNormal<? extends CommandSender>> normalExecutors) {
-		this.normalExecutors = normalExecutors;
-	}
-
-	public List<IExecutorResulting<? extends CommandSender>> getResultingExecutors() {
-		return resultingExecutors;
-	}
-
-	public void setResultingExecutors(List<IExecutorResulting<? extends CommandSender>> resultingExecutors) {
-		this.resultingExecutors = resultingExecutors;
 	}
 	
 	public int execute(CommandSender sender, Object[] arguments) throws CommandSyntaxException {
@@ -117,14 +84,6 @@ class CustomCommandExecutor {
         }
 	}
 	
-	private int execute(List<? extends IExecutorTyped> executors, CommandSender sender, Object[] args, ExecutorType type) throws WrapperCommandSyntaxException {
-		return executors.stream().filter(o -> o.getType() == type).findFirst().get().executeWith(sender, args);
-	}
-	
-	private boolean matches(List<? extends IExecutorTyped> executors, ExecutorType type) {
-		return executors.stream().map(IExecutorTyped::getType).anyMatch(type::equals);
-	}
-	
 	private int execute(List<? extends IExecutorTyped> executors, CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
 		if(isForceNative()) {
 			return execute(executors, sender, args, ExecutorType.NATIVE);
@@ -145,5 +104,46 @@ class CustomCommandExecutor {
 					"This command has no implementations for " + sender.getClass().getSimpleName().toLowerCase()))
 							.create());
 		}
+	}
+	
+	private int execute(List<? extends IExecutorTyped> executors, CommandSender sender, Object[] args, ExecutorType type) throws WrapperCommandSyntaxException {
+		return executors.stream().filter(o -> o.getType() == type).findFirst().get().executeWith(sender, args);
+	}
+	
+	public List<IExecutorNormal<? extends CommandSender>> getNormalExecutors() {
+		return normalExecutors;
+	}
+
+	public List<IExecutorResulting<? extends CommandSender>> getResultingExecutors() {
+		return resultingExecutors;
+	}
+
+	public boolean isEmpty() {
+		return normalExecutors.isEmpty() && resultingExecutors.isEmpty();
+	}
+
+	public boolean isForceNative() {
+		return matches(normalExecutors, ExecutorType.NATIVE) || matches(resultingExecutors, ExecutorType.NATIVE);
+	}
+	
+	private boolean matches(List<? extends IExecutorTyped> executors, ExecutorType type) {
+		return executors.stream().map(IExecutorTyped::getType).anyMatch(type::equals);
+	}
+	
+	CustomCommandExecutor mergeExecutor(CustomCommandExecutor executor) {
+		CustomCommandExecutor result = new CustomCommandExecutor();
+		result.normalExecutors = new ArrayList<>(normalExecutors);
+		result.resultingExecutors = new ArrayList<>(resultingExecutors);
+		result.normalExecutors.addAll(executor.normalExecutors);
+		result.resultingExecutors.addAll(executor.resultingExecutors);
+		return result;
+	}
+	
+	public void setNormalExecutors(List<IExecutorNormal<? extends CommandSender>> normalExecutors) {
+		this.normalExecutors = normalExecutors;
+	}
+	
+	public void setResultingExecutors(List<IExecutorResulting<? extends CommandSender>> resultingExecutors) {
+		this.resultingExecutors = resultingExecutors;
 	}
 }
