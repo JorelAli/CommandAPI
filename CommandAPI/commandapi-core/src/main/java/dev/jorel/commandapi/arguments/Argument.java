@@ -31,9 +31,11 @@ import org.bukkit.command.CommandSender;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 
+import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.StringTooltip;
+import dev.jorel.commandapi.SuggestionInfo;
 
 /**
  * The core abstract class for Command API arguments
@@ -212,6 +214,16 @@ public abstract class Argument implements IOverrideableSuggestions {
 	@Override
 	public final Argument overrideSuggestionsT(BiFunction<CommandSender, Object[], IStringTooltip[]> suggestions) {
 		this.suggestions =  Optional.of(suggestions);
+		return this;
+	}
+
+	public Argument withSuggestions(Function<SuggestionInfo, String[]> suggestions) {
+		// TODO: Implement
+		return this;
+	}
+	
+	public Argument withSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
+		// TODO: Implement
 		return this;
 	}
 

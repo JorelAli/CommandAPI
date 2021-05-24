@@ -27,6 +27,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import dev.jorel.commandapi.arguments.StringArgument;
+
 public class CommandAPIMain extends JavaPlugin implements Listener {
 	
 	@Override
@@ -61,5 +63,15 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 	public void onEnable() {
 		CommandAPI.onEnable(this);
 		getServer().getPluginManager().registerEvents(this, this);
+		
+		new CommandAPICommand("concept")
+			.withArguments(new StringArgument("input").withSuggestions(suggestions -> {
+				suggestions.currentArg();
+				return new String[0];
+			}))
+			.executes((sender, args) -> {
+				//stuff
+			})
+			.register();
 	}
 }
