@@ -20,6 +20,8 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import org.bukkit.command.CommandSender;
+
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -36,6 +38,7 @@ import dev.jorel.commandapi.CommandAPIHandler;
 public class CustomArgument<T> extends Argument {
 	
 	private CustomArgumentParser<T> parser;
+	private CustomArgumentParser2<T> parser2;
 	private boolean keyed;
 	
 	/**
@@ -48,6 +51,10 @@ public class CustomArgument<T> extends Argument {
 	 *            this argument
 	 */
 	public CustomArgument(String nodeName, CustomArgumentParser<T> parser) {
+		this(nodeName, parser, false);
+	}
+	
+	public CustomArgument(String nodeName, CustomArgumentParser2<T> parser) {
 		this(nodeName, parser, false);
 	}
 	
@@ -66,6 +73,12 @@ public class CustomArgument<T> extends Argument {
 		super(nodeName, keyed ? CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered() : StringArgumentType.string());
 		this.keyed = keyed;
 		this.parser = parser;
+	}
+	
+	public CustomArgument(String nodeName, CustomArgumentParser2<T> parser, boolean keyed) {
+		super(nodeName, keyed ? CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered() : StringArgumentType.string());
+		this.keyed = keyed;
+		this.parser2 = parser;
 	}
 	
 	/**
@@ -87,6 +100,10 @@ public class CustomArgument<T> extends Argument {
 	 */
 	public CustomArgumentParser<T> getParser() {
 		return parser;
+	}
+	
+	public CustomArgumentParser2<T> getParser2() {
+		return parser2;
 	}
 
 	@Override
@@ -240,5 +257,10 @@ public class CustomArgument<T> extends Argument {
 		 * @throws CustomArgumentException if an error occurs during parsing
 		 */
 		public T apply(String input) throws CustomArgumentException;
+	}
+	
+	@FunctionalInterface
+	public static interface CustomArgumentParser2<T> {
+		public T apply(CommandSender sender, String input) throws CustomArgumentException;
 	}
 }

@@ -311,7 +311,11 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 		}
 		
 		try {
-			return arg.getParser().apply(customresult);
+			if(arg.getParser() != null && arg.getParser2() == null) {
+				return arg.getParser().apply(customresult);
+			} else {
+				return arg.getParser2().apply(NMS.getCommandSenderForCLW(cmdCtx.getSource()), customresult);
+			}
 		} catch (CustomArgumentException e) {
 			throw e.toCommandSyntax(customresult, cmdCtx);
 		} catch (Exception e) {
