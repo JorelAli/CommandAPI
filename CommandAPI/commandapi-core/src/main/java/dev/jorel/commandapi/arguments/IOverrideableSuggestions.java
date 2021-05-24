@@ -60,6 +60,7 @@ public interface IOverrideableSuggestions {
 	 * @param suggestions the function to override suggestions with
 	 * @return the current argument
 	 */
+	@Deprecated
 	Argument overrideSuggestions(Function<CommandSender, String[]> suggestions);
 	
 	/**
@@ -69,6 +70,7 @@ public interface IOverrideableSuggestions {
 	 * @param suggestions the function to override suggestions with
 	 * @return the current argument
 	 */
+	@Deprecated
 	Argument overrideSuggestions(BiFunction<CommandSender, Object[], String[]> suggestions);
 
 	/**
@@ -111,6 +113,7 @@ public interface IOverrideableSuggestions {
 	 * @param suggestions the suggestions and tooltips to override suggestions with
 	 * @return the current argument
 	 */
+	@Deprecated
 	Argument overrideSuggestionsT(Function<CommandSender, IStringTooltip[]> suggestions);
 	
 	/**
@@ -121,6 +124,7 @@ public interface IOverrideableSuggestions {
 	 * @param suggestions the suggestions and tooltips to override suggestions with
 	 * @return the current argument
 	 */
+	@Deprecated
 	Argument overrideSuggestionsT(BiFunction<CommandSender, Object[], IStringTooltip[]> suggestions);
 	
 

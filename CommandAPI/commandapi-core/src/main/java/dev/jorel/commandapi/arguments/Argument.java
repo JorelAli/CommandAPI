@@ -143,6 +143,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * @param suggestions the function to override suggestions with
 	 * @return the current argument
 	 */
+	@Deprecated
 	@Override
 	public final Argument overrideSuggestions(Function<CommandSender, String[]> suggestions) {
 		this.suggestions =  Optional.of(suggestionInfo -> fromSuggestions(suggestions.apply(suggestionInfo.sender())));
@@ -156,6 +157,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * @param suggestions the function to override suggestions with
 	 * @return the current argument
 	 */
+	@Deprecated
 	@Override
 	public final Argument overrideSuggestions(BiFunction<CommandSender, Object[], String[]> suggestions) {
 		this.suggestions =  Optional.of(suggestionInfo -> fromSuggestions(suggestions.apply(suggestionInfo.sender(), suggestionInfo.previousArgs())));
@@ -197,6 +199,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * @param suggestions the function to override suggestions with
 	 * @return the current argument
 	 */
+	@Deprecated
 	@Override
 	public final Argument overrideSuggestionsT(Function<CommandSender, IStringTooltip[]> suggestions) {
 		this.suggestions =  Optional.of(suggestionInfo -> suggestions.apply(suggestionInfo.sender()));
@@ -210,6 +213,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * @param suggestions the function to override suggestions with
 	 * @return the current argument
 	 */
+	@Deprecated
 	@Override
 	public final Argument overrideSuggestionsT(BiFunction<CommandSender, Object[], IStringTooltip[]> suggestions) {
 		this.suggestions =  Optional.of(suggestionInfo -> suggestions.apply(suggestionInfo.sender(), suggestionInfo.previousArgs()));

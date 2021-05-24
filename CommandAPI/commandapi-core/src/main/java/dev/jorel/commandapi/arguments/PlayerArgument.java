@@ -21,7 +21,6 @@
 package dev.jorel.commandapi.arguments;
 
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 
