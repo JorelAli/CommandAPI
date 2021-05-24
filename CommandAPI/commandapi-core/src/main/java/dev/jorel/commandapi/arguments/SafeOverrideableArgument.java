@@ -31,6 +31,7 @@ import org.bukkit.command.CommandSender;
 import com.mojang.brigadier.arguments.ArgumentType;
 
 import dev.jorel.commandapi.IStringTooltip;
+import dev.jorel.commandapi.SuggestionInfo;
 import dev.jorel.commandapi.Tooltip;
 
 /**
@@ -43,6 +44,14 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	protected SafeOverrideableArgument(String nodeName, ArgumentType<?> rawType, Function<S, String> mapper) {
 		super(nodeName, rawType);
 		this.mapper = mapper;
+	}
+	
+	public final Argument withSafeSuggestions(Function<SuggestionInfo, S[]> suggestions) {
+		return super.withSuggestions(suggestionsInfo -> Arrays.stream(suggestions.apply(suggestionsInfo)).map(mapper).toArray(String[]::new));
+	}
+	
+	public final Argument withSafeSuggestionsT(Function<SuggestionInfo, Tooltip<S>[]> suggestions) {
+		return super.withSuggestionsT(suggestionsInfo -> Arrays.stream(suggestions.apply(suggestionsInfo)).map(Tooltip.build(mapper)).toArray(IStringTooltip[]::new));
 	}
 
 	/**

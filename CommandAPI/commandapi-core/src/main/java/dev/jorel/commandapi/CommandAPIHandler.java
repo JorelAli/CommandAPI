@@ -829,10 +829,15 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 					previousArguments.add(result);
 				}
 			}
-			return getSuggestionsBuilder(builder,
-					getArgument(args, nodeName).getOverriddenSuggestions()
-							.orElseGet(() -> (c, m) -> new IStringTooltip[0])
-							.apply(NMS.getCommandSenderForCLW(context.getSource()), previousArguments.toArray()));
+			
+			// I actually don't know what the method is to get the "last argument bit", so I'll use builder.getRemaining() for now
+			SuggestionInfo suggestionInfo = new SuggestionInfo(NMS.getCommandSenderForCLW(context.getSource()), previousArguments.toArray(), builder.getInput(), builder.getRemaining());
+			
+			return getSuggestionsBuilder(builder, getArgument(args, nodeName)
+					.getOverriddenSuggestions()
+					.orElseGet(() -> k -> new IStringTooltip[0])
+					.apply(suggestionInfo)
+			);
 		};
 	}
 

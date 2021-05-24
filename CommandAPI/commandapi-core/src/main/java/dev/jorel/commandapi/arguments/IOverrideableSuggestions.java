@@ -28,6 +28,7 @@ import java.util.function.Function;
 import org.bukkit.command.CommandSender;
 
 import dev.jorel.commandapi.IStringTooltip;
+import dev.jorel.commandapi.SuggestionInfo;
 
 /**
  * An interface declaring methods required to override argument suggestions
@@ -78,7 +79,7 @@ public interface IOverrideableSuggestions {
 	 * @return a function that provides suggestions, or <code>null</code> if there
 	 *         are no overridden suggestions.
 	 */
-	Optional<BiFunction<CommandSender, Object[], IStringTooltip[]>> getOverriddenSuggestions();
+	Optional<Function<SuggestionInfo, IStringTooltip[]>> getOverriddenSuggestions();
 	
 	/**
 	 * Override the suggestions of this argument with an array of StringTooltips,
@@ -121,5 +122,10 @@ public interface IOverrideableSuggestions {
 	 * @return the current argument
 	 */
 	Argument overrideSuggestionsT(BiFunction<CommandSender, Object[], IStringTooltip[]> suggestions);
+	
+
+	Argument withSuggestions(Function<SuggestionInfo, String[]> suggestions);
+	
+	Argument withSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions);
 	
 }
