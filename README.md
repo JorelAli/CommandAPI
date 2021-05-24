@@ -7,6 +7,18 @@
   <br>
 </h2>
 
+<div align="center">
+
+![GitHub](https://img.shields.io/github/license/JorelAli/CommandAPI)
+[![CodeFactor](https://www.codefactor.io/repository/github/jorelali/commandapi/badge)](https://www.codefactor.io/repository/github/jorelali/commandapi)
+[![](https://jitpack.io/v/dev.jorel/CommandAPI.svg)](https://jitpack.io/#dev.jorel/CommandAPI)
+[![Join us on Discord](https://img.shields.io/discord/745416925924032523.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/G4SzSxZ)
+<br>
+![Spiget Download Size](https://img.shields.io/spiget/download-size/62353)
+![Spiget Downloads](https://img.shields.io/spiget/downloads/62353?label=Total%20Spigot%20Downloads)
+![GitHub all releases](https://img.shields.io/github/downloads/JorelAli/CommandAPI/total?label=Total%20GitHub%20Downloads)
+</div>
+
 **Support and Project Discussion**:
 
 - <img width="20px" src="https://cdn3.iconfinder.com/data/icons/popular-services-brands-vol-2/512/discord-512.png"></img> [Discord](https://discord.gg/G4SzSxZ)
