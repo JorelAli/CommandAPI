@@ -26,16 +26,16 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
-import java.util.function.ToIntBiFunction;
 import java.util.function.ToIntFunction;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -150,6 +150,7 @@ import net.minecraft.server.v1_16_R3.CustomFunctionData;
 import net.minecraft.server.v1_16_R3.CustomFunctionManager;
 import net.minecraft.server.v1_16_R3.DataPackResources;
 import net.minecraft.server.v1_16_R3.Entity;
+import net.minecraft.server.v1_16_R3.EntityPlayer;
 import net.minecraft.server.v1_16_R3.EntitySelector;
 import net.minecraft.server.v1_16_R3.EntityTypes;
 import net.minecraft.server.v1_16_R3.EnumDirection.EnumAxis;
@@ -404,12 +405,14 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		NamespacedKey minecraftKey = fromMinecrafKey(customFunction.a());
 
 		CustomFunctionData customFunctionData = MINECRAFT_SERVER.getFunctionData();
+		ToIntFunction<CommandListenerWrapper> appliedObj = clw -> customFunctionData.a(customFunction, clw);
 
-		ToIntBiFunction<CustomFunction, CommandListenerWrapper> obj = customFunctionData::a;
-		ToIntFunction<CommandListenerWrapper> appliedObj = clw -> obj.applyAsInt(customFunction, clw);
-
-		return new SimpleFunctionWrapper(minecraftKey, appliedObj,
-				Arrays.stream(customFunction.b()).map(Object::toString).toArray(String[]::new));
+		Object[] cArr = customFunction.b();
+		String[] result = new String[cArr.length];
+		for(int i = 0, size = cArr.length; i < size; i++) {
+			result[i] = cArr[i].toString();
+		}
+		return new SimpleFunctionWrapper(minecraftKey, appliedObj, result);
 	}
 
 	@Override
@@ -536,17 +539,22 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		case MANY_ENTITIES:
 			// ArgumentEntity.c -> EntitySelector.getEntities
 			try {
-				yield argument.getEntities(cmdCtx.getSource()).stream()
-						.map(entity -> (org.bukkit.entity.Entity) ((Entity) entity).getBukkitEntity())
-						.collect(Collectors.toList());
+				List<org.bukkit.entity.Entity> result = new ArrayList<>();
+				for(Entity entity : argument.getEntities(cmdCtx.getSource())) {
+					result.add(entity.getBukkitEntity());
+				}
+				yield result;
 			} catch (CommandSyntaxException e) {
 				yield new ArrayList<org.bukkit.entity.Entity>();
 			}
 		case MANY_PLAYERS:
 			// ArgumentEntity.d -> EntitySelector.d
 			try {
-				yield argument.d(cmdCtx.getSource()).stream()
-						.map(player -> (Player) ((Entity) player).getBukkitEntity()).collect(Collectors.toList());
+				List<Player> result = new ArrayList<>();
+				for(EntityPlayer player : argument.d(cmdCtx.getSource())) {
+					result.add(player.getBukkitEntity());
+				}
+				yield result;
 			} catch (CommandSyntaxException e) {
 				yield new ArrayList<Player>();
 			}
@@ -592,14 +600,16 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	
 	@Override
 	public SimpleFunctionWrapper getFunction(NamespacedKey key) {
-		MinecraftKey minecraftKey = new MinecraftKey(key.getNamespace(), key.getKey());
-		CustomFunctionData functionData = MINECRAFT_SERVER.getFunctionData();
-		return convertFunction(functionData.a(minecraftKey).get());
+		return convertFunction(MINECRAFT_SERVER.getFunctionData().a(new MinecraftKey(key.getNamespace(), key.getKey())).get());
 	}
 	
 	@Override
 	public Set<NamespacedKey> getFunctions() {
-		return StreamSupport.stream(MINECRAFT_SERVER.getFunctionData().f().spliterator(), false).map(NMS_1_16_R3::fromMinecrafKey).collect(Collectors.toSet());
+		Set<NamespacedKey> result = new HashSet<>();
+		for(MinecraftKey minecraftKey : MINECRAFT_SERVER.getFunctionData().f()) {
+			result.add(fromMinecrafKey(minecraftKey));
+		}
+		return result;
 	}
 
 	@Override
@@ -625,8 +635,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public String getKeyedAsString(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.e(cmdCtx, key);
-		return minecraftKey.toString();
+		return ArgumentMinecraftKeyRegistered.e(cmdCtx, key).toString();
 	}
 
 	@Override
@@ -665,6 +674,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public MathOperation getMathOperation(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		// TODO: Come back to this
 		ArgumentMathOperation.a result = ArgumentMathOperation.a(cmdCtx, key);
 		Scoreboard board = new Scoreboard();
 		ScoreboardScore tester_left = new ScoreboardScore(board, null, null);
@@ -783,7 +793,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		Location location = new Location(world, pos.getX(), pos.getY(), pos.getZ(), rot.j, rot.i);
 
 		Entity proxyEntity = clw.getEntity();
-		CommandSender proxy = proxyEntity == null ? null : ((Entity) proxyEntity).getBukkitEntity();
+		CommandSender proxy = proxyEntity == null ? null : proxyEntity.getBukkitEntity();
 		if (isNative || (proxy != null && !sender.equals(proxy))) {
 			return new NativeProxyCommandSender(sender, proxy, location, world);
 		} else {
@@ -828,14 +838,21 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public SimpleFunctionWrapper[] getTag(NamespacedKey key) {
-		MinecraftKey minecraftKey = new MinecraftKey(key.getNamespace(), key.getKey());
-		CustomFunctionData functionData = MINECRAFT_SERVER.getFunctionData();
-		return functionData.b(minecraftKey).getTagged().stream().map(this::convertFunction).toArray(SimpleFunctionWrapper[]::new);
+		List<CustomFunction> customFunctions = MINECRAFT_SERVER.getFunctionData().b(new MinecraftKey(key.getNamespace(), key.getKey())).getTagged();
+		SimpleFunctionWrapper[] result = new SimpleFunctionWrapper[customFunctions.size()];
+		for(int i = 0, size = customFunctions.size(); i < size; i++) {
+			result[i] = convertFunction(customFunctions.get(i));
+		}
+		return result;
 	}
 
 	@Override
 	public Set<NamespacedKey> getTags() {
-		return StreamSupport.stream(MINECRAFT_SERVER.getFunctionData().g().spliterator(), false).map(NMS_1_16_R3::fromMinecrafKey).collect(Collectors.toSet());
+		Set<NamespacedKey> result = new HashSet<>();
+		for(MinecraftKey minecraftKey : MINECRAFT_SERVER.getFunctionData().g()) {
+			result.add(fromMinecrafKey(minecraftKey));
+		}
+		return result;
 	}
 
 	@Override
@@ -906,18 +923,19 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		try {
 			((DataPackResources) completablefuture.get()).i();
 
-			// Register recipes again because reloading datapacks removes all non-vanilla
-			// recipes
-			recipes.forEachRemaining(recipe -> {
+			// Register recipes again because reloading datapacks removes all non-vanilla recipes
+			Recipe recipe;
+			while(recipes.hasNext()) {
+				recipe = recipes.next();
 				try {
 					Bukkit.addRecipe(recipe);
 					if (recipe instanceof Keyed keyedRecipe) {
 						CommandAPI.logInfo("Re-registering recipe: " + keyedRecipe.getKey());
 					}
 				} catch (Exception e) {
-					// Can't re-register registered recipes. Not an error.
+					continue; // Can't re-register registered recipes. Not an error.
 				}
-			});
+			}
 
 			CommandAPI.getLog().info("Finished reloading datapacks");
 		} catch (Exception e) {
