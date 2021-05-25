@@ -26,16 +26,16 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.NoSuchElementException;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -44,6 +44,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
+import com.google.common.base.Suppliers;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.LiteralMessage;
@@ -63,7 +64,6 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import de.tr7zw.changeme.nbtapi.NBTContainer;
 import dev.jorel.commandapi.arguments.Argument;
-import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
 import dev.jorel.commandapi.arguments.CustomArgument;
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
 import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
@@ -131,10 +131,8 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 
 		// Log successful hooks
 		if (CommandAPI.getConfiguration().hasVerboseOutput()) {
-			String compatibleVersions = Arrays.toString(NMS.compatibleVersions());
-			compatibleVersions = compatibleVersions.substring(1, compatibleVersions.length() - 1);
 			CommandAPI.getLog().info(
-					"Hooked into NMS " + NMS.getClass().getName() + " (compatible with " + compatibleVersions + ")");
+					"Hooked into NMS " + NMS.getClass().getName() + " (compatible with " + String.join(", ", NMS.compatibleVersions()) + ")");
 		}
 
 		// Checks other dependencies
@@ -185,10 +183,11 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 
 		if (force) {
 			// Remove them by force
-			List<String> keysToRemove = new ArrayList<>();
-			commandNodeChildren.keySet().stream().filter(s -> s.contains(":"))
-					.filter(s -> s.split(":")[1].equalsIgnoreCase(commandName)).forEach(keysToRemove::add);
-			keysToRemove.forEach(commandNodeChildren::remove);
+			for(String key : new HashSet<>(commandNodeChildren.keySet())) {
+				if(key.contains(":") && key.split(":")[1].equalsIgnoreCase(commandName)) {
+					commandNodeChildren.remove(key);
+				}
+			}
 		}
 
 		// Otherwise, just remove them normally
@@ -231,26 +230,34 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 						case MANY_ENTITIES:
 							@SuppressWarnings("unchecked")
 							List<Entity> entities = (List<Entity>) argObjs[i];
-							entityNamesForArgs[i] = entities.stream().map(Entity::getName).collect(Collectors.toList());
+							List<String> entityNames = new ArrayList<>();
+							for(Entity entity : entities) {
+								entityNames.add(entity.getName());
+							}
+							entityNamesForArgs[i] = entityNames;
 							break;
 						case MANY_PLAYERS:
 							@SuppressWarnings("unchecked")
 							List<Player> players = (List<Player>) argObjs[i];
-							entityNamesForArgs[i] = players.stream().map(Entity::getName).collect(Collectors.toList());
+							List<String> playerNames = new ArrayList<>();
+							for(Player player : players) {
+								playerNames.add(player.getName());
+							}
+							entityNamesForArgs[i] = playerNames;
 							break;
 						case ONE_ENTITY:
 							Entity entity = (Entity) argObjs[i];
-							entityNamesForArgs[i] = Arrays.asList(new String[] {entity.getName()});
+							entityNamesForArgs[i] = List.of(entity.getName());
 							break;
 						case ONE_PLAYER:
 							Player player = (Player) argObjs[i];
-							entityNamesForArgs[i] = Arrays.asList(new String[] {player.getName()});
+							entityNamesForArgs[i] = List.of(player.getName());
 							break;
 						default:
 							break;
 						}
 					} else {
-						entityNamesForArgs[i] = Arrays.asList(new String[] {null});
+						entityNamesForArgs[i] = List.of((String) null);
 					}
 				}
 				
@@ -514,43 +521,37 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	 */
 	private boolean expandMultiLiterals(String commandName, CommandPermission permissions, String[] aliases, Predicate<CommandSender> requirements,
 			final List<Argument> args, CustomCommandExecutor executor, boolean converted) throws Exception {
-		//"Expands" our MultiLiterals into Literals
-		Predicate<Argument> isMultiLiteral = arg -> arg.getArgumentType() == CommandAPIArgumentType.MULTI_LITERAL;
-		if(args.stream().filter(isMultiLiteral).count() > 0) {
 		
-			int index = 0;
-			for(Argument argument : args) {
+		//"Expands" our MultiLiterals into Literals
+		for(int index = 0, size = args.size(); index < size; index++) {
+			//Find the first multiLiteral in the for loop
+			if(args.get(index) instanceof MultiLiteralArgument superArg) {
 				
-				//Find the first multiLiteral in the for loop
-				if(isMultiLiteral.test(argument)) {
-					MultiLiteralArgument superArg = (MultiLiteralArgument) argument;
+				//Add all of its entries
+				for(int i = 0; i < superArg.getLiterals().length; i++) {
+					LiteralArgument litArg = (LiteralArgument) new LiteralArgument(superArg.getLiterals()[i])
+						.setListed(superArg.isListed())
+						.withPermission(superArg.getArgumentPermission())
+						.withRequirement(superArg.getRequirements());
 					
-					//Add all of its entries
-					for(int i = 0; i < superArg.getLiterals().length; i++) {
-						LiteralArgument litArg = (LiteralArgument) new LiteralArgument(superArg.getLiterals()[i])
-							.setListed(superArg.isListed())
-							.withPermission(superArg.getArgumentPermission())
-							.withRequirement(superArg.getRequirements());
-						
-						//Reconstruct the list of arguments and place in the new literals
-						List<Argument> newArgs = new ArrayList<>();
-						{
-							int j = 0;
-							for(Argument previousEntry : args) {
-								if(j == index) {
-									newArgs.add(litArg);
-								} else {
-									newArgs.add(previousEntry);
-								}
-								j++;
+					//Reconstruct the list of arguments and place in the new literals
+					List<Argument> newArgs = new ArrayList<>();
+					{
+						int j = 0;
+						for(Argument previousEntry : args) {
+							if(j == index) {
+								newArgs.add(litArg);
+							} else {
+								newArgs.add(previousEntry);
 							}
+							j++;
 						}
-						register(commandName, permissions, aliases, requirements, newArgs, executor, converted);
 					}
-					return true;
+					register(commandName, permissions, aliases, requirements, newArgs, executor, converted);
 				}
-				index++;
+				return true;
 			}
+			index++;
 		}
 		return false;
 	}
@@ -559,11 +560,14 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	// allow    /race invite<LiteralArgument> player<PlayerArgument>
 	// disallow /race invite<LiteralArgument> player<EntitySelectorArgument>
 	// Return true if conflict was present, otherwise return false
-	private boolean hasCommandConflict(String commandName, final List<Argument> args) {
-		List<String[]> regArgs = registeredCommands.get(commandName).stream().map(s -> s.split(":")).collect(Collectors.toList());
-		for(int i = 0; i < args.size(); i++) {
+	private boolean hasCommandConflict(String commandName, final List<Argument> args, String argumentsAsString) {
+		List<String[]> regArgs = new ArrayList<>();
+		for(String str : registeredCommands.get(commandName)) {
+			regArgs.add(str.split(":"));
+		}
+		for(int i = 0, size = args.size(); i < size; i++) {
 			// Avoid IAOOBEs
-			if(regArgs.size() == i && regArgs.size() < args.size()) {
+			if(regArgs.size() == i && regArgs.size() < size) {
 				break;
 			}
 			// We want to ensure all node names are the same
@@ -571,21 +575,18 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 				break;
 			}
 			// This only applies to the last argument
-			if(i == args.size() - 1) {
+			if(i == size - 1) {
 				if(!regArgs.get(i)[1].equals(args.get(i).getClass().getSimpleName())) { 
-					
-					//Command we're trying to register
-					StringBuilder builder = new StringBuilder();
-					args.forEach(arg -> builder.append(arg.getNodeName()).append("<").append(arg.getClass().getSimpleName()).append("> "));
-					
 					//Command it conflicts with
 					StringBuilder builder2 = new StringBuilder();
-					regArgs.forEach(arg -> builder2.append(arg[0]).append("<").append(arg[1]).append("> "));
+					for(String[] arg : regArgs) {
+						builder2.append(arg[0]).append("<").append(arg[1]).append("> ");
+					}
 					
 					// Lovely high quality error message formatting (inspired by Elm)
 					CommandAPI.getLog().severe("Failed to register command:");
 					CommandAPI.getLog().severe("");
-					CommandAPI.getLog().severe("  " + commandName + " " + builder.toString());
+					CommandAPI.getLog().severe("  " + commandName + " " + argumentsAsString);
 					CommandAPI.getLog().severe("");
 					CommandAPI.getLog().severe("Because it conflicts with this previously registered command:");
 					CommandAPI.getLog().severe("");
@@ -603,16 +604,14 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 		Argument innerArg = args.get(args.size() - 1);
 
 		// Handle Literal arguments
-		if (innerArg instanceof LiteralArgument) {
-			String str = ((LiteralArgument) innerArg).getLiteral();
-			return getLiteralArgumentBuilderArgument(str, innerArg.getArgumentPermission(), innerArg.getRequirements()).executes(command);
+		if (innerArg instanceof LiteralArgument literalArgument) {
+			return getLiteralArgumentBuilderArgument(literalArgument.getLiteral(), innerArg.getArgumentPermission(), innerArg.getRequirements()).executes(command);
 		}
 
 		// Handle arguments with built-in suggestion providers
-		else if (innerArg instanceof ICustomProvidedArgument
-				&& !innerArg.getOverriddenSuggestions().isPresent()) {
+		else if (innerArg instanceof ICustomProvidedArgument customProvidedArg && !innerArg.getOverriddenSuggestions().isPresent()) {
 			return getRequiredArgumentBuilderWithProvider(innerArg,
-					NMS.getSuggestionProvider(((ICustomProvidedArgument) innerArg).getSuggestionProvider()))
+					NMS.getSuggestionProvider(customProvidedArg.getSuggestionProvider()))
 							.executes(command);
 		}
 
@@ -629,15 +628,14 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 			Argument outerArg = args.get(i);
 
 			// Handle Literal arguments
-			if (outerArg instanceof LiteralArgument) {
-				String str = ((LiteralArgument) outerArg).getLiteral();
-				outer = getLiteralArgumentBuilderArgument(str, outerArg.getArgumentPermission(), outerArg.getRequirements()).then(outer);
+			if (outerArg instanceof LiteralArgument literalArgument) {
+				outer = getLiteralArgumentBuilderArgument(literalArgument.getLiteral(), outerArg.getArgumentPermission(), outerArg.getRequirements()).then(outer);
 			}
 
 			// Handle arguments with built-in suggestion providers
-			else if (outerArg instanceof ICustomProvidedArgument && !outerArg.getOverriddenSuggestions().isPresent()) {
+			else if (outerArg instanceof ICustomProvidedArgument customProvidedArg && !outerArg.getOverriddenSuggestions().isPresent()) {
 				outer = getRequiredArgumentBuilderWithProvider(outerArg,
-						NMS.getSuggestionProvider(((ICustomProvidedArgument) outerArg).getSuggestionProvider()))
+						NMS.getSuggestionProvider(customProvidedArg.getSuggestionProvider()))
 								.then(outer);
 			}
 
@@ -659,16 +657,23 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 			return;
 		}
 		
-		// Handle command conflicts
-		if(registeredCommands.containsKey(commandName) && hasCommandConflict(commandName, args)) {
-			return;
-		} else {
-			registeredCommands.put(commandName, args.stream().map(arg -> arg.getNodeName() + ":" + arg.getClass().getSimpleName()).collect(Collectors.toList()));			
-		}
-		
 		// Create a list of argument names
 		StringBuilder builder = new StringBuilder();
-		args.forEach(arg -> builder.append(arg.getNodeName()).append("<").append(arg.getClass().getSimpleName()).append("> "));
+		for(Argument arg : args) {
+			builder.append(arg.getNodeName()).append("<").append(arg.getClass().getSimpleName()).append("> ");
+		}
+		
+		// Handle command conflicts
+		if(registeredCommands.containsKey(commandName) && hasCommandConflict(commandName, args, builder.toString())) {
+			return;
+		} else {
+			List<String> argumentsString = new ArrayList<>();
+			for(Argument arg : args) {
+				argumentsString.add(arg.getNodeName() + ":" + arg.getClass().getSimpleName());
+			}
+			registeredCommands.put(commandName, argumentsString);			
+		}
+		
 		CommandAPI.logInfo("Registering command /" + commandName + " " + builder.toString());
 
 		// Generate the actual command
@@ -781,7 +786,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 		if (!argument.getOverriddenSuggestions().isPresent()) {
 			@SuppressWarnings("unchecked")
 			RequiredArgumentBuilder<CommandListenerWrapper, T> builder = RequiredArgumentBuilder.argument(argument.getNodeName(), (ArgumentType<T>) argument.getRawType());
-			return builder.requires(clw -> permissionCheck(NMS.getCommandSenderForCLW(clw), argument.getArgumentPermission(), argument.getRequirements()));
+			return builder.requires((CommandListenerWrapper clw) -> permissionCheck(NMS.getCommandSenderForCLW(clw), argument.getArgumentPermission(), argument.getRequirements()));
 		}
 
 		// Otherwise, we have to handle arguments of the form BiFunction<CommandSender,
@@ -802,7 +807,12 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	}
 	
 	static Argument getArgument(List<Argument> args, String nodeName) {
-		return args.stream().filter(arg -> arg.getNodeName().equals(nodeName)).findFirst().get();
+		for(Argument arg : args) {
+			if(arg.getNodeName().equals(nodeName)) {
+				return arg;
+			}
+		}
+		throw new NoSuchElementException("Could not find argument " + nodeName);
 	}
 	
 	SuggestionProvider<CommandListenerWrapper> toSuggestions(String nodeName, List<Argument> args) {
@@ -836,15 +846,14 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 			
 			// I actually don't know what the method is to get the "last argument bit", so I'll use builder.getRemaining() for now
 			SuggestionInfo suggestionInfo = new SuggestionInfo(NMS.getCommandSenderForCLW(context.getSource()), previousArguments.toArray(), builder.getInput(), builder.getRemaining());
-			
 			return getSuggestionsBuilder(builder, getArgument(args, nodeName)
 					.getOverriddenSuggestions()
-					.orElseGet(() -> k -> new IStringTooltip[0])
+					.orElseGet(Suppliers.ofInstance(o -> new IStringTooltip[0]))
 					.apply(suggestionInfo)
 			);
 		};
 	}
-
+	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	// SECTION: Reflection //
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
