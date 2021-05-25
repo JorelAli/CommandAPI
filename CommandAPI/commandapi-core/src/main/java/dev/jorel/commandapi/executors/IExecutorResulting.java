@@ -21,7 +21,6 @@
 package dev.jorel.commandapi.executors;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
 import org.bukkit.command.CommandSender;
 
@@ -46,8 +45,13 @@ public interface IExecutorResulting<T extends CommandSender> extends IExecutorTy
 	@SuppressWarnings("unchecked")
 	@Override
 	default int executeWith(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
-		Method runMethod = Arrays.stream(this.getClass().getDeclaredMethods()).filter(m -> m.getName().equals("run")).findFirst().get();
-		Class<?> type = runMethod.getParameterTypes()[0];
+		Class<?> type = null;
+		for(Method method : this.getClass().getDeclaredMethods()) {
+			if(method.getName().equals("run")) {
+				type = method.getParameterTypes()[0];
+				break;
+			}
+		}
 		if(type.isInstance(sender)) {
 			return this.run((T) type.cast(sender), args);
 		} else {

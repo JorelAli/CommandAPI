@@ -31,7 +31,6 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ProxiedCommandSender;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.jorel.commandapi.arguments.Argument;
@@ -50,9 +49,11 @@ public abstract class Converter {
 	 * Convert all commands stated in Plugin's plugin.yml file into CommandAPI-compatible commands
 	 * @param plugin The plugin which commands are to be converted
 	 */
-	public static void convert(Plugin plugin) {
+	public static void convert(JavaPlugin plugin) {
 		CommandAPI.logInfo("Converting commands for " + plugin.getName() + ":");
-		plugin.getDescription().getCommands().keySet().forEach(commandName -> convertPluginCommand((JavaPlugin) plugin, commandName, PLAIN_ARGUMENTS));
+		for(String commandName : plugin.getDescription().getCommands().keySet()) {
+			convertPluginCommand(plugin, commandName, PLAIN_ARGUMENTS);
+		}
 	}
 	
 	/**
@@ -60,18 +61,8 @@ public abstract class Converter {
 	 * @param plugin The plugin where the command is registered
 	 * @param cmdName The command to convert
 	 */
-	public static void convert(Plugin plugin, String cmdName) {
-		convertPluginCommand((JavaPlugin) plugin, cmdName, PLAIN_ARGUMENTS);
-	}
-	
-	/**
-	 * Convert a command stated in Plugin's plugin.yml file into CommandAPI-compatible commands
-	 * @param plugin The plugin where the command is registered
-	 * @param cmdName The command to convert
-	 * @param arguments The arguments that should be used to parse this command
-	 */
-	public static void convert(Plugin plugin, String cmdName, Argument... arguments) {
-		convertPluginCommand((JavaPlugin) plugin, cmdName, Arrays.asList(arguments));
+	public static void convert(JavaPlugin plugin, String cmdName) {
+		convertPluginCommand(plugin, cmdName, PLAIN_ARGUMENTS);
 	}
 	
 	/**
@@ -80,8 +71,19 @@ public abstract class Converter {
 	 * @param cmdName The command to convert
 	 * @param arguments The arguments that should be used to parse this command
 	 */
-	public static void convert(Plugin plugin, String cmdName, List<Argument> arguments) {
-		convertPluginCommand((JavaPlugin) plugin, cmdName, arguments);
+	public static void convert(JavaPlugin plugin, String cmdName, Argument... arguments) {
+		List.of(arguments);
+		convertPluginCommand(plugin, cmdName, Arrays.asList(arguments));
+	}
+	
+	/**
+	 * Convert a command stated in Plugin's plugin.yml file into CommandAPI-compatible commands
+	 * @param plugin The plugin where the command is registered
+	 * @param cmdName The command to convert
+	 * @param arguments The arguments that should be used to parse this command
+	 */
+	public static void convert(JavaPlugin plugin, String cmdName, List<Argument> arguments) {
+		convertPluginCommand(plugin, cmdName, arguments);
 	}
 	
 	/**

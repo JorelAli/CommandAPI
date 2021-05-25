@@ -31,6 +31,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.InvalidPluginException;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * Configuration wrapper class. The config.yml file used by the CommandAPI is
@@ -46,7 +47,7 @@ class Config {
 	private final boolean createDispatcherFile;
 
 	// List of plugins to convert
-	private final Map<Plugin, String[]> pluginsToConvert;
+	private final Map<JavaPlugin, String[]> pluginsToConvert;
 	
 	// List of plugins which should ignore proxied senders
 	private final List<String> skipSenderProxy;
@@ -66,22 +67,25 @@ class Config {
 				pluginCommands = new String[0];
 			} else {
 				@SuppressWarnings("unchecked")
-				List<String> commands = (List<String>) map.values().stream().findFirst().get();
+				List<String> commands = (List<String>) map.values().iterator().next();
 				pluginCommands = commands.toArray(new String[0]);
 			}
 			
-			String pluginName = (String) map.keySet().stream().findFirst().get();
+			String pluginName = (String) map.keySet().iterator().next();
 			Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
 			if(plugin != null) { 
-				pluginsToConvert.put(plugin, pluginCommands);
+				if(plugin instanceof JavaPlugin javaPlugin) {
+					pluginsToConvert.put(javaPlugin, pluginCommands);					
+				} else {
+					new InvalidPluginException("Plugin " + pluginName + " is not a JavaPlugin!").printStackTrace();
+				}
 			} else {
 				new InvalidPluginException("Could not find a plugin " + pluginName + "! Has it been loaded properly?").printStackTrace();
 			}
 		}
 		
 		for (String pluginName : fileConfig.getStringList("skip-sender-proxy")) {
-			Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
-			if(plugin != null) { 
+			if(Bukkit.getPluginManager().getPlugin(pluginName) != null) { 
 				this.skipSenderProxy.add(pluginName);
 			} else {
 				new InvalidPluginException("Could not find a plugin " + pluginName + "! Has it been loaded properly?").printStackTrace();
@@ -117,7 +121,7 @@ class Config {
 		return this.createDispatcherFile;
 	}
 	
-	public Set<Entry<Plugin, String[]>> getPluginsToConvert() {
+	public Set<Entry<JavaPlugin, String[]>> getPluginsToConvert() {
 		return this.pluginsToConvert.entrySet();
 	}
 	

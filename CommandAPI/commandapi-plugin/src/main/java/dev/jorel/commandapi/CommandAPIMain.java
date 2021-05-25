@@ -24,7 +24,6 @@ import java.io.File;
 import java.util.Map.Entry;
 
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class CommandAPIMain extends JavaPlugin implements Listener {
@@ -41,7 +40,7 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 		CommandAPIHandler.getInstance().checkDependencies();
 		
 		//Convert all plugins to be converted
-		for(Entry<Plugin, String[]> pluginToConvert : CommandAPI.config.getPluginsToConvert()) {
+		for(Entry<JavaPlugin, String[]> pluginToConvert : CommandAPI.config.getPluginsToConvert()) {
 			if(pluginToConvert.getValue().length == 0) {
 				Converter.convert(pluginToConvert.getKey());
 			} else {

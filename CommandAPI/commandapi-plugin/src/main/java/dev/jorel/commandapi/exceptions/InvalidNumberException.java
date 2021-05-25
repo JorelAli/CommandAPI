@@ -20,9 +20,6 @@
  *******************************************************************************/
 package dev.jorel.commandapi.exceptions;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
 /**
  * An exception caused when a number is not a number
  */
@@ -40,8 +37,7 @@ public class InvalidNumberException extends Exception {
 				parts[i] = parts[i] + "<--[HERE]";
 			}
 		}
-		return "Invalid number found in command '" + 
-			Arrays.stream(parts).collect(Collectors.joining(" ")) + 
+		return "Invalid number found in command '" + String.join(" ", parts) + 
 			"': '" + input + "' is not a valid number!";
 	}
 	

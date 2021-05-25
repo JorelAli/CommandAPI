@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.jorel.commandapi.arguments.AdvancementArgument;
 import dev.jorel.commandapi.arguments.AngleArgument;
@@ -88,11 +88,11 @@ public class AdvancedConverter {
 	private static Pattern argumentPattern = Pattern.compile("<(\\w+)>\\[([a-z:_]+|(?:[0-9\\.]+)?\\.\\.(?:[0-9\\.]+)?)\\]");
 	private static Pattern literalPattern = Pattern.compile("\\((\\w+(?:\\|\\w+)*)\\)");
 	
-	private final Plugin plugin;
+	private final JavaPlugin plugin;
 	private final String command;
 	private int argumentIndex = 1;
 	
-	public AdvancedConverter(Plugin plugin, String command) {
+	public AdvancedConverter(JavaPlugin plugin, String command) {
 		this.plugin = plugin;
 		this.command = command;
 	}

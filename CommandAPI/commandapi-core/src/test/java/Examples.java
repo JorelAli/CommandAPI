@@ -1240,7 +1240,7 @@ arguments.add(new LiteralArgument("tp").withRequirement(testIfPlayerHasParty));
 
 {
 /* ANCHOR: converter2 */
-Plugin essentials = Bukkit.getPluginManager().getPlugin("Essentials");
+JavaPlugin essentials = (JavaPlugin) Bukkit.getPluginManager().getPlugin("Essentials");
 
 // /speed <speed>
 Converter.convert(essentials, "speed", new IntegerArgument("speed", 0, 10));
@@ -1730,7 +1730,7 @@ class YourPlugin extends JavaPlugin {
     
     @Override
     public void onEnable() {
-        Converter.convert(Bukkit.getPluginManager().getPlugin("TargetPlugin"));
+        Converter.convert((JavaPlugin) Bukkit.getPluginManager().getPlugin("TargetPlugin"));
         //Other code goes here...
     }
     

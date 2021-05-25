@@ -28,6 +28,7 @@ import java.util.function.Predicate;
 import org.bukkit.command.CommandSender;
 
 import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.GreedyStringArgument;
 import dev.jorel.commandapi.arguments.IGreedyArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
@@ -477,7 +478,12 @@ public class CommandAPICommand {
 			List<Argument> copyOfArgs = args == null ? new ArrayList<>() : new ArrayList<>(args);
 			
 			//if args contains a GreedyString && args.getLast != GreedyString
-			long numGreedyArgs = copyOfArgs.stream().filter(arg -> arg instanceof IGreedyArgument).count();
+			long numGreedyArgs = 0;
+			for(Argument argument : copyOfArgs) {
+				if(argument instanceof GreedyStringArgument) {
+					numGreedyArgs++;
+				}
+			}
 			if(numGreedyArgs >= 1) {
 				//A GreedyString has been found
 				if(!(copyOfArgs.toArray()[copyOfArgs.size() - 1] instanceof IGreedyArgument)) {

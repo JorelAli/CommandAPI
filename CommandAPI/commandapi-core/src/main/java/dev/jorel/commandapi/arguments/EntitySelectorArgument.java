@@ -54,16 +54,13 @@ public class EntitySelectorArgument extends Argument {
 
 	@Override
 	public Class<?> getPrimitiveType() {	
-		switch(selector) {
-			case MANY_ENTITIES:
-			case MANY_PLAYERS:
-			default:
-				return Collection.class;
-			case ONE_ENTITY:
-				return Entity.class;
-			case ONE_PLAYER:
-				return Player.class;
-		}
+		return switch(selector) {
+			case MANY_ENTITIES, 
+			   MANY_PLAYERS -> Collection.class;
+			case ONE_ENTITY -> Entity.class;
+			case ONE_PLAYER -> Player.class;
+			default         -> Collection.class;
+		};
 	}
 	
 	/**

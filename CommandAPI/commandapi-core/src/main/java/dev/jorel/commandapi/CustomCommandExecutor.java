@@ -22,6 +22,7 @@ package dev.jorel.commandapi;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
@@ -107,7 +108,12 @@ class CustomCommandExecutor {
 	}
 	
 	private int execute(List<? extends IExecutorTyped> executors, CommandSender sender, Object[] args, ExecutorType type) throws WrapperCommandSyntaxException {
-		return executors.stream().filter(o -> o.getType() == type).findFirst().get().executeWith(sender, args);
+		for(IExecutorTyped executor : executors) {
+			if(executor.getType() == type) {
+				return executor.executeWith(sender, args);
+			}
+		}
+		throw new NoSuchElementException("Executor had no valid executors for type " + type.toString());
 	}
 	
 	public List<IExecutorNormal<? extends CommandSender>> getNormalExecutors() {
@@ -127,7 +133,12 @@ class CustomCommandExecutor {
 	}
 	
 	private boolean matches(List<? extends IExecutorTyped> executors, ExecutorType type) {
-		return executors.stream().map(IExecutorTyped::getType).anyMatch(type::equals);
+		for(IExecutorTyped executor : executors) {
+			if(executor.getType() == type) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	CustomCommandExecutor mergeExecutor(CustomCommandExecutor executor) {

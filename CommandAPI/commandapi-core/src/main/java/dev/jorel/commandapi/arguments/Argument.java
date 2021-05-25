@@ -20,7 +20,6 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -105,7 +104,11 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * @return a StringTooltip[] representation of the provided suggestions
 	 */
 	private final StringTooltip[] fromSuggestions(String[] suggestions) {
-		return Arrays.stream(suggestions).map(StringTooltip::none).toArray(StringTooltip[]::new);
+		StringTooltip[] result = new StringTooltip[suggestions.length];
+		for (int i = 0; i < suggestions.length; i++) {
+			result[i] = StringTooltip.none(suggestions[i]);
+		}
+		return result;
 	}
 
 	/**
