@@ -72,7 +72,6 @@ public abstract class Converter {
 	 * @param arguments The arguments that should be used to parse this command
 	 */
 	public static void convert(JavaPlugin plugin, String cmdName, Argument... arguments) {
-		List.of(arguments);
 		convertPluginCommand(plugin, cmdName, Arrays.asList(arguments));
 	}
 	

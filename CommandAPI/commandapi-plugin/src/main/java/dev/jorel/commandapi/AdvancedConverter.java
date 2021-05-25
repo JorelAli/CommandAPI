@@ -85,8 +85,8 @@ import dev.jorel.commandapi.exceptions.UnknownArgumentException;
  */
 public class AdvancedConverter {
 
-	private static Pattern argumentPattern = Pattern.compile("<(\\w+)>\\[([a-z:_]+|(?:[0-9\\.]+)?\\.\\.(?:[0-9\\.]+)?)\\]");
-	private static Pattern literalPattern = Pattern.compile("\\((\\w+(?:\\|\\w+)*)\\)");
+	private static final Pattern ARGUMENT_PATTERN = Pattern.compile("<(\\w+)>\\[([a-z:_]+|(?:[0-9\\.]+)?\\.\\.(?:[0-9\\.]+)?)\\]");
+	private static final Pattern LITERAL_PATTERN = Pattern.compile("\\((\\w+(?:\\|\\w+)*)\\)");
 	
 	private final JavaPlugin plugin;
 	private final String command;
@@ -250,8 +250,8 @@ public class AdvancedConverter {
 	}
 	
 	private Argument parseArgument(String argument) throws UnknownArgumentException, InvalidNumberException {
-		Matcher literalMatcher = literalPattern.matcher(argument);
-		Matcher argumentMatcher = argumentPattern.matcher(argument);
+		Matcher literalMatcher = LITERAL_PATTERN.matcher(argument);
+		Matcher argumentMatcher = ARGUMENT_PATTERN.matcher(argument);
 		if(literalMatcher.matches()) {
 			//Parse literals
 			String literals = literalMatcher.group(1);
