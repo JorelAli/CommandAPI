@@ -21,9 +21,12 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Map.Entry;
 
 import org.bukkit.plugin.java.JavaPlugin;
+
+import dev.jorel.commandapi.arguments.PotionEffectArgument;
 
 public class CommandAPIMain extends JavaPlugin {
 	
@@ -58,5 +61,14 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable(this);
+		new CommandAPICommand("mycmd")
+			.withArguments(new PotionEffectArgument("pot").addSuggestions(info -> {
+				return new IStringTooltip[] { StringTooltip.of("customsuggestion", "tooltip!") };
+			}))
+			.executes((sender, args) -> {
+				System.out.println(Arrays.deepToString(args));
+			})
+			.register();
+		;
 	}
 }

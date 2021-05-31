@@ -702,17 +702,60 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	// Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
 	RequiredArgumentBuilder<CommandListenerWrapper, ?> getRequiredArgumentBuilderDynamic(
 			final Argument[] args, Argument argument) {
+		
+		if(argument.getOverriddenSuggestions().isPresent()) {
+			// Override the suggestions
+			return getRequiredArgumentBuilderWithProvider(argument, toSuggestions(argument.getNodeName(), args));
+		} else if(argument.getAddedSuggestions().isPresent()) {
+			// Append the suggestions
+			
+			RequiredArgumentBuilder<CommandListenerWrapper, ?> builder = RequiredArgumentBuilder.argument(argument.getNodeName(), argument.getRawType());
+			SuggestionProvider<CommandListenerWrapper> ss = (cmdCtx, b) -> {
+				
+				// Populate Object[], which is our previously filled arguments
+				List<Object> previousArguments = new ArrayList<>();
 
-		// If there are no changes to the default suggestions, return it as normal
-		if (!argument.getOverriddenSuggestions().isPresent()) {
+				for (Argument arg : args) {
+					if (arg.getNodeName().equals(argument.getNodeName())) {
+						break;
+					}
+					
+					Object result;
+					try {
+						result = parseArgument(cmdCtx, arg.getNodeName(), arg);
+					} catch(IllegalArgumentException e) {
+						/*
+						 * Redirected commands don't parse previous arguments properly. Simplest way to
+						 * determine what we should do is simply set it to null, since there's nothing
+						 * else we can do. I thought about letting this simply be an empty array, but
+						 * then it's even more annoying to deal with - I wouldn't expect an array of
+						 * size n to suddenly, randomly be 0, but I would expect random NPEs because
+						 * let's be honest, this is Java we're dealing with.
+						 */
+						result = null;
+					}
+					if(result != null) {
+						previousArguments.add(result);
+					}
+				}
+				
+				SuggestionInfo suggestionInfo = new SuggestionInfo(NMS.getCommandSenderFromCLW(cmdCtx.getSource()), previousArguments.toArray(), b.getInput(), b.getRemaining());
+				CompletableFuture<Suggestions> addedSuggestions = getSuggestionsBuilder(b, getArgument(args, argument.getNodeName())
+						.getAddedSuggestions()
+						.orElseGet(Suppliers.ofInstance(o -> new IStringTooltip[0]))
+						.apply(suggestionInfo));
+				
+				return argument.getRawType().listSuggestions(cmdCtx, b).thenCombine(addedSuggestions, (inputSuggestions, newSuggestion) -> {
+					inputSuggestions.getList().addAll(newSuggestion.getList());
+					return inputSuggestions;
+				}); 
+			};
+			
+			return builder.requires((CommandListenerWrapper clw) -> permissionCheck(NMS.getCommandSenderFromCLW(clw), argument.getArgumentPermission(), argument.getRequirements())).suggests(ss);
+		} else {
+			// Normal argument builder.
 			RequiredArgumentBuilder<CommandListenerWrapper, ?> builder = RequiredArgumentBuilder.argument(argument.getNodeName(), argument.getRawType());
 			return builder.requires((CommandListenerWrapper clw) -> permissionCheck(NMS.getCommandSenderFromCLW(clw), argument.getArgumentPermission(), argument.getRequirements()));
-		}
-
-		// Otherwise, we have to handle arguments of the form BiFunction<CommandSender,
-		// Object[], String[]>
-		else {
-			return getRequiredArgumentBuilderWithProvider(argument, toSuggestions(argument.getNodeName(), args));
 		}
 	}
 
