@@ -162,7 +162,6 @@ import net.minecraft.server.v1_16_R3.MinecraftKey;
 import net.minecraft.server.v1_16_R3.MinecraftServer;
 import net.minecraft.server.v1_16_R3.ShapeDetectorBlock;
 import net.minecraft.server.v1_16_R3.SystemUtils;
-import net.minecraft.server.v1_16_R3.Unit;
 import net.minecraft.server.v1_16_R3.Vec2F;
 import net.minecraft.server.v1_16_R3.Vec3D;
 
@@ -458,7 +457,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	public Predicate<Block> getBlockPredicate(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		Predicate<ShapeDetectorBlock> predicate = ArgumentBlockPredicate.a(cmdCtx, key);
 		return (Block block) -> {
-			return predicate.test(new ShapeDetectorBlock(getCLW(cmdCtx).getWorld(),
+			return predicate.test(new ShapeDetectorBlock(cmdCtx.getSource().getWorld(),
 					new BlockPosition(block.getX(), block.getY(), block.getZ()), true));
 		};
 	}
@@ -486,10 +485,6 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	@Override
 	public BaseComponent[] getChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String str) {
 		return ComponentSerializer.parse(ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, str)));
-	}
-
-	private CommandListenerWrapper getCLW(CommandContext<CommandListenerWrapper> cmdCtx) {
-		return cmdCtx.getSource();
 	}
 
 	@Override
@@ -577,11 +572,11 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	@Override
 	public FunctionWrapper[] getFunction(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
 		List<FunctionWrapper> result = new ArrayList<>();
-		CommandListenerWrapper commandListenerWrapper = getCLW(cmdCtx).a().b(2);
+		CommandListenerWrapper commandListenerWrapper = cmdCtx.getSource().a().b(2);
 		
 		for(CustomFunction customFunction : ArgumentTag.a(cmdCtx, str)) {
 			result.add(FunctionWrapper.fromSimpleFunctionWrapper(convertFunction(customFunction), commandListenerWrapper, e -> {
-				return getCLW(cmdCtx).a(((CraftEntity) e).getHandle());
+				return cmdCtx.getSource().a(((CraftEntity) e).getHandle());
 			}));
 		}
 		return result.toArray(new FunctionWrapper[0]);
@@ -631,34 +626,34 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	public Location getLocationBlock(CommandContext<CommandListenerWrapper> cmdCtx, String str)
 			throws CommandSyntaxException {
 		BlockPosition blockPos = ArgumentPosition.a(cmdCtx, str);
-		return new Location(getWorldForCLW(getCLW(cmdCtx)), blockPos.getX(), blockPos.getY(), blockPos.getZ());
+		return new Location(getWorldForCLW(cmdCtx.getSource()), blockPos.getX(), blockPos.getY(), blockPos.getZ());
 	}
 	
 	@Override
 	public Location getLocationPrecise(CommandContext<CommandListenerWrapper> cmdCtx, String str)
 			throws CommandSyntaxException {
 		Vec3D vecPos = ArgumentVec3.a(cmdCtx, str);
-		return new Location(getWorldForCLW(getCLW(cmdCtx)), vecPos.x, vecPos.y, vecPos.z);
+		return new Location(getWorldForCLW(cmdCtx.getSource()), vecPos.x, vecPos.y, vecPos.z);
 	}
 	
 	@Override
 	public Location2D getLocation2DPrecise(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException {
 		Vec2F vecPos = ArgumentVec2.a(cmdCtx, key);
-		return new Location2D(getWorldForCLW(getCLW(cmdCtx)), vecPos.i, vecPos.j);
+		return new Location2D(getWorldForCLW(cmdCtx.getSource()), vecPos.i, vecPos.j);
 	}
 
 	@Override
 	public Location2D getLocation2DBlock(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException {
 		BlockPosition2D blockPos = ArgumentVec2I.a(cmdCtx, key);
-		return new Location2D(getWorldForCLW(getCLW(cmdCtx)), blockPos.a, blockPos.b);
+		return new Location2D(getWorldForCLW(cmdCtx.getSource()), blockPos.a, blockPos.b);
 	}
 
 	@Override
 	public org.bukkit.loot.LootTable getLootTable(CommandContext<CommandListenerWrapper> cmdCtx, String str) {
 		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.e(cmdCtx, str);
-		return new CraftLootTable(fromMinecrafKey(minecraftKey), getCLW(cmdCtx).getServer().getLootTableRegistry().getLootTable(minecraftKey));
+		return new CraftLootTable(fromMinecrafKey(minecraftKey), MINECRAFT_SERVER.getLootTableRegistry().getLootTable(minecraftKey));
 	}
 
 	@Override
@@ -712,7 +707,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public Rotation getRotation(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		Vec2F vec = ArgumentRotation.a(cmdCtx, key).b(getCLW(cmdCtx));
+		Vec2F vec = ArgumentRotation.a(cmdCtx, key).b(cmdCtx.getSource());
 		return new Rotation(vec.i, vec.j);
 	}
 
@@ -733,7 +728,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public CommandSender getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean isNative) {
-		CommandListenerWrapper clw = getCLW(cmdCtx);
+		CommandListenerWrapper clw = cmdCtx.getSource();
 
 		CommandSender sender = clw.getBukkitSender();
 		Vec3D pos = clw.getPosition();
@@ -776,8 +771,8 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 				return ICompletionProvider.a(MINECRAFT_SERVER.getAdvancementData().getAdvancements().stream().map(Advancement::getName), builder);
 			};
 		case LOOT_TABLES ->
-			(context, builder) -> {
-				return ICompletionProvider.a(getCLW(context).getServer().getLootTableRegistry().a(), builder);
+			(cmdCtx, builder) -> {
+				return ICompletionProvider.a(MINECRAFT_SERVER.getLootTableRegistry().a(), builder);
 			};
 		case BIOMES -> CompletionProviders.d;
 		case ENTITIES -> CompletionProviders.e;
@@ -850,22 +845,21 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 			e1.printStackTrace();
 		}
 
-		// Construct the new CompletableFuture that now uses datapackResources
-		IReloadableResourceManager reloadableResourceManager = (IReloadableResourceManager) DATAPACKRESOURCES_B.get(datapackResources);
-
-		CompletableFuture<Unit> unitCompletableFuture = reloadableResourceManager.a(SystemUtils.f(), Runnable::run,
-				MINECRAFT_SERVER.getResourcePackRepository().f(), CompletableFuture.completedFuture(Unit.INSTANCE));
+		// Construct the new CompletableFuture that now uses our updated datapackResources
+		CompletableFuture<?> unitCompletableFuture = ((IReloadableResourceManager) DATAPACKRESOURCES_B
+				.get(datapackResources)).a(SystemUtils.f(), Runnable::run,
+						MINECRAFT_SERVER.getResourcePackRepository().f(), CompletableFuture.completedFuture(null));
 
 		CompletableFuture<DataPackResources> completablefuture = unitCompletableFuture
-				.whenComplete((Unit u, Throwable t) -> {
+				.whenComplete((Object u, Throwable t) -> {
 					if (t != null) {
 						datapackResources.close();
 					}
-				}).thenApply((Unit u) -> datapackResources);
+				}).thenApply((Object u) -> datapackResources);
 
 		// Run the completableFuture and bind tags
 		try {
-			((DataPackResources) completablefuture.get()).i();
+			completablefuture.get().i();
 
 			// Register recipes again because reloading datapacks removes all non-vanilla recipes
 			Recipe recipe;
