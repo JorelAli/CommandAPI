@@ -20,6 +20,8 @@
  *******************************************************************************/
 package dev.jorel.commandapi.wrappers;
 
+import dev.jorel.commandapi.arguments.MathOperationArgument;
+
 /**
  * A representation of the math operations for the Minecraft scoreboard
  */
@@ -87,6 +89,21 @@ public enum MathOperation {
 	@Override
 	public String toString() {
 		return this.stringValue;
+	}
+	
+	public static MathOperation fromString(String s) {
+		return switch(s) {
+			case "="  -> MathOperation.ASSIGN;
+			case "+=" -> MathOperation.ADD;
+			case "-=" -> MathOperation.SUBTRACT;
+			case "*=" -> MathOperation.MULTIPLY;
+			case "/=" -> MathOperation.DIVIDE;
+			case "%=" -> MathOperation.MOD;
+			case "<"  -> MathOperation.MIN;
+			case ">"  -> MathOperation.MAX;
+			case "><" -> MathOperation.SWAP;
+			default   -> null;
+		};
 	}
 	
 	/**

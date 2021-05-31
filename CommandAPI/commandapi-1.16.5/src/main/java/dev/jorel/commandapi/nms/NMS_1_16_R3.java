@@ -32,7 +32,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -81,8 +80,6 @@ import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.context.ParsedArgument;
-import com.mojang.brigadier.context.StringRange;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
@@ -164,8 +161,6 @@ import net.minecraft.server.v1_16_R3.ItemStack;
 import net.minecraft.server.v1_16_R3.LootTable;
 import net.minecraft.server.v1_16_R3.MinecraftKey;
 import net.minecraft.server.v1_16_R3.MinecraftServer;
-import net.minecraft.server.v1_16_R3.Scoreboard;
-import net.minecraft.server.v1_16_R3.ScoreboardScore;
 import net.minecraft.server.v1_16_R3.ShapeDetectorBlock;
 import net.minecraft.server.v1_16_R3.SystemUtils;
 import net.minecraft.server.v1_16_R3.Unit;
@@ -675,59 +670,9 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public MathOperation getMathOperation(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		// TODO: Come back to this
-		ArgumentMathOperation.a result = ArgumentMathOperation.a(cmdCtx, key);
-
-		try {
-			VarHandle arguments = MethodHandles.privateLookupIn(CommandContext.class, MethodHandles.lookup()).findVarHandle(CommandContext.class, "arguments", Map.class);
-			Map<String, ParsedArgument<CommandListenerWrapper, ?>> argumentsMap = (Map<String, ParsedArgument<CommandListenerWrapper, ?>>) arguments.get(cmdCtx);
-			StringRange range = argumentsMap.get(key).getRange();
-			String output = cmdCtx.getInput().substring(range.getStart(), range.getEnd());
-			return switch(output) {
-				case "=" -> MathOperation.ASSIGN;
-				case "+=" -> MathOperation.ADD;
-				case "-=" -> MathOperation.SUBTRACT;
-				case "*=" -> MathOperation.MULTIPLY;
-				case "/=" -> MathOperation.DIVIDE;
-				case "%=" -> MathOperation.MOD;
-				case "<"  -> MathOperation.MIN;
-				case ">"  -> MathOperation.MAX;
-				default   -> null;
-			};
-		} catch (NoSuchFieldException | IllegalAccessException e) {
-			e.printStackTrace();
-		}
-		
-		Scoreboard board = new Scoreboard();
-		ScoreboardScore tester_left = new ScoreboardScore(board, null, null);
-		ScoreboardScore tester_right = new ScoreboardScore(board, null, null);
-
-		tester_left.setScore(6);
-		tester_right.setScore(2);
-		result.apply(tester_left, tester_right);
-
-		return switch (tester_left.getScore()) {
-		case 8 ->  MathOperation.ADD;
-		case 4 ->  MathOperation.SUBTRACT;
-		case 12 -> MathOperation.MULTIPLY;
-		case 3 ->  MathOperation.DIVIDE;
-		case 0 ->  MathOperation.MOD;
-		case 6 ->  MathOperation.MAX;
-		case 2 -> {
-			if (tester_right.getScore() == 6) {
-				yield MathOperation.SWAP;
-			}
-			tester_left.setScore(2);
-			tester_right.setScore(6);
-			result.apply(tester_left, tester_right);
-			if (tester_left.getScore() == 2) {
-				yield MathOperation.MIN;
-			} else {
-				yield MathOperation.ASSIGN;	
-			}
-		}
-		default -> null;
-		};
+		// We run this to ensure the argument exists/parses properly 
+		ArgumentMathOperation.a(cmdCtx, key);
+		return MathOperation.fromString(CommandAPIHandler.getRawArgumentInput(cmdCtx, key));
 	}
 
 	@Override

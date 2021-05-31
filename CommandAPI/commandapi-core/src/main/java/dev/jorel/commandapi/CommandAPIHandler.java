@@ -54,6 +54,8 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.context.ParsedArgument;
+import com.mojang.brigadier.context.StringRange;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
@@ -84,19 +86,30 @@ import dev.jorel.commandapi.preprocessor.RequireField;
  * registration and unregistration of commands.
  */
 @RequireField(in = CommandNode.class, name = "children", ofType = Map.class)
+@RequireField(in = CommandContext.class, name = "arguments", ofType = Map.class)
 public class CommandAPIHandler<CommandListenerWrapper> {
 	
 	private final static VarHandle COMMANDNODE_CHILDREN;
+	private final static VarHandle COMMANDCONTEXT_ARGUMENTS;
 	
 	// Compute all var handles all in one go so we don't do this during main server runtime
 	static {
 		VarHandle commandNodeChildren = null;
+		VarHandle commandContextArguments = null;
 		 try {
-			 commandNodeChildren = MethodHandles.privateLookupIn(CommandNode.class, MethodHandles.lookup()).findVarHandle(CommandNode.class, "children", Map.class);			 
+			 commandNodeChildren = MethodHandles.privateLookupIn(CommandNode.class, MethodHandles.lookup()).findVarHandle(CommandNode.class, "children", Map.class);
+			 commandContextArguments = MethodHandles.privateLookupIn(CommandContext.class, MethodHandles.lookup()).findVarHandle(CommandContext.class, "arguments", Map.class);
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		} 
 		COMMANDNODE_CHILDREN = commandNodeChildren;
+		COMMANDCONTEXT_ARGUMENTS = commandContextArguments;
+	}
+	
+	// I'm not sure that this is the right place to put this function, but it's doing no harm, right?
+	public static <CommandListenerWrapper> String getRawArgumentInput(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		StringRange range = ((Map<String, ParsedArgument<CommandListenerWrapper, ?>>) COMMANDCONTEXT_ARGUMENTS.get(cmdCtx)).get(key).getRange();
+		return cmdCtx.getInput().substring(range.getStart(), range.getEnd());
 	}
 	
 	private static CommandAPIHandler<?> instance;
