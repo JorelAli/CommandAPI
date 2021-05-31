@@ -118,15 +118,20 @@ public abstract class Argument implements IOverrideableSuggestions {
 		return result;
 	}
 	
-	public Argument appendSuggestions(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
+	public Argument includeSuggestions(Function<SuggestionInfo, String[]> suggestions) {
+		this.addedSuggestions = Optional.of(suggestionInfo -> fromSuggestions(suggestions.apply(suggestionInfo)));
+		return this;
+	}
+	
+	public Argument includeSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
 		this.addedSuggestions = Optional.of(suggestions);
 		return this;
 	}
 
-	public Optional<Function<SuggestionInfo, IStringTooltip[]>> getAddedSuggestions() {
+	public Optional<Function<SuggestionInfo, IStringTooltip[]>> getIncludedSuggestions() {
 		return addedSuggestions;
 	}
-
+	
 	/**
 	 * Override the suggestions of this argument with a String array.
 	 * 
@@ -240,13 +245,13 @@ public abstract class Argument implements IOverrideableSuggestions {
 	}
 
 	@Override
-	public Argument withSuggestions(Function<SuggestionInfo, String[]> suggestions) {
+	public Argument replaceSuggestions(Function<SuggestionInfo, String[]> suggestions) {
 		this.suggestions = Optional.of(suggestionInfo -> fromSuggestions(suggestions.apply(suggestionInfo)));
 		return this;
 	}
 	
 	@Override
-	public Argument withSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
+	public Argument replaceSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
 		this.suggestions = Optional.of(suggestions);
 		return this;
 	}

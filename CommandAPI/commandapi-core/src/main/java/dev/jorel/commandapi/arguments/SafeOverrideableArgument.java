@@ -47,7 +47,7 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	}
 	
 	public final Argument withSafeSuggestions(Function<SuggestionInfo, S[]> suggestions) {
-		return super.withSuggestions(suggestionsInfo -> {
+		return super.replaceSuggestions(suggestionsInfo -> {
 			S[] sArr = suggestions.apply(suggestionsInfo);
 			String[] result = new String[sArr.length];
 			for(int i = 0; i < sArr.length; i++) {
@@ -58,7 +58,7 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	}
 	
 	public final Argument withSafeSuggestionsT(Function<SuggestionInfo, Tooltip<S>[]> suggestions) {
-		return super.withSuggestionsT(suggestionsInfo -> {
+		return super.replaceSuggestionsT(suggestionsInfo -> {
 			Tooltip<S>[] tArr = suggestions.apply(suggestionsInfo);
 			IStringTooltip[] result = new IStringTooltip[tArr.length];
 			for(int i = 0; i < tArr.length; i++) {

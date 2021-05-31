@@ -63,8 +63,8 @@ public class CommandAPIMain extends JavaPlugin {
 	public void onEnable() {
 		CommandAPI.onEnable(this);
 		new CommandAPICommand("mycmd")
-			.withArguments(new PotionEffectArgument("pot").appendSuggestions(info -> {
-				return new IStringTooltip[] { StringTooltip.of("customsuggestion", "tooltip!") };
+			.withArguments(new PotionEffectArgument("pot").includeSuggestions(info -> {
+				return new String[] { "minecraft:glnwing" };
 			}))
 			.executes((sender, args) -> {
 				System.out.println(Arrays.deepToString(args));
@@ -72,7 +72,7 @@ public class CommandAPIMain extends JavaPlugin {
 			.register();
 		
 		new CommandAPICommand("mycmd2")
-		.withArguments(new AdvancementArgument("pot").appendSuggestions(info -> {
+		.withArguments(new AdvancementArgument("pot").includeSuggestionsT(info -> {
 			return new IStringTooltip[] { StringTooltip.of("customsuggestion2", "tooltip2!") };
 		}))
 		.executes((sender, args) -> {

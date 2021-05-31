@@ -719,7 +719,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 		SuggestionProvider<CommandListenerWrapper> newSuggestionsProvider = provider;
 		
 		// If we have suggestions to add, combine provider with the suggestions
-		if(argument.getAddedSuggestions().isPresent() && argument.getOverriddenSuggestions().isEmpty()) {
+		if(argument.getIncludedSuggestions().isPresent() && argument.getOverriddenSuggestions().isEmpty()) {
 			SuggestionProvider<CommandListenerWrapper> addedSuggestions = toSuggestions(argument.getNodeName(), args, false);
 			
 			newSuggestionsProvider = (cmdCtx, builder) -> {
@@ -771,7 +771,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 			}
 			
 			SuggestionInfo suggestionInfo = new SuggestionInfo(NMS.getCommandSenderFromCLW(context.getSource()), previousArguments.toArray(), builder.getInput(), builder.getRemaining());
-			Optional<Function<SuggestionInfo, IStringTooltip[]>> suggestionsToAddOrOverride = overrideSuggestions ? getArgument(args, nodeName).getOverriddenSuggestions() : getArgument(args, nodeName).getAddedSuggestions();
+			Optional<Function<SuggestionInfo, IStringTooltip[]>> suggestionsToAddOrOverride = overrideSuggestions ? getArgument(args, nodeName).getOverriddenSuggestions() : getArgument(args, nodeName).getIncludedSuggestions();
 			return getSuggestionsBuilder(builder, suggestionsToAddOrOverride.orElseGet(() -> o -> new IStringTooltip[0]).apply(suggestionInfo));
 		};
 	}

@@ -1610,7 +1610,7 @@ new CommandAPICommand("pbroadcast")
 	
 	new CommandAPICommand("concept")
 		.withArguments(new StringArgument("text"))
-		.withArguments(new StringArgument("input").withSuggestions(suggestions -> {
+		.withArguments(new StringArgument("input").replaceSuggestions(suggestions -> {
 			System.out.println(suggestions.currentArg()); // partially typed argument
 			System.out.println(suggestions.currentInput()); // current input (includes the /)
 			return Arrays.stream(fruits).filter(s -> s.toLowerCase().startsWith(suggestions.currentArg().toLowerCase())).toArray(String[]::new);

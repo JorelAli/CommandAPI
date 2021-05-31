@@ -128,8 +128,8 @@ public interface IOverrideableSuggestions {
 	Argument overrideSuggestionsT(BiFunction<CommandSender, Object[], IStringTooltip[]> suggestions);
 	
 
-	Argument withSuggestions(Function<SuggestionInfo, String[]> suggestions);
+	Argument replaceSuggestions(Function<SuggestionInfo, String[]> suggestions);
 	
-	Argument withSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions);
+	Argument replaceSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions);
 	
 }
