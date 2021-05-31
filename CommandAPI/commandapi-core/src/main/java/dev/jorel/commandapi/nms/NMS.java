@@ -172,14 +172,12 @@ public interface NMS<CommandListenerWrapper> {
 	 */
 	void createDispatcherFile(File file, CommandDispatcher<CommandListenerWrapper> dispatcher) throws IOException;
 
-	/* Argument implementations with CommandSyntaxExceptions */
 	Advancement getAdvancement(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
 	Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
 	Component getAdventureChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
-	/* Argument implementations without CommandSyntaxExceptions */
 	float getAngle(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
 	EnumSet<Axis> getAxis(CommandContext<CommandListenerWrapper> cmdCtx, String key);
