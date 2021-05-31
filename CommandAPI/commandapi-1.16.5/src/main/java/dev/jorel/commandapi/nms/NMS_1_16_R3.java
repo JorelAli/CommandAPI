@@ -158,7 +158,6 @@ import net.minecraft.server.v1_16_R3.IRecipe;
 import net.minecraft.server.v1_16_R3.IRegistry;
 import net.minecraft.server.v1_16_R3.IReloadableResourceManager;
 import net.minecraft.server.v1_16_R3.ItemStack;
-import net.minecraft.server.v1_16_R3.LootTable;
 import net.minecraft.server.v1_16_R3.MinecraftKey;
 import net.minecraft.server.v1_16_R3.MinecraftServer;
 import net.minecraft.server.v1_16_R3.ShapeDetectorBlock;
@@ -659,8 +658,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	@Override
 	public org.bukkit.loot.LootTable getLootTable(CommandContext<CommandListenerWrapper> cmdCtx, String str) {
 		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.e(cmdCtx, str);
-		LootTable lootTable = getCLW(cmdCtx).getServer().getLootTableRegistry().getLootTable(minecraftKey);
-		return new CraftLootTable(fromMinecrafKey(minecraftKey), lootTable);
+		return new CraftLootTable(fromMinecrafKey(minecraftKey), getCLW(cmdCtx).getServer().getLootTableRegistry().getLootTable(minecraftKey));
 	}
 
 	@Override
@@ -843,13 +841,11 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		DataPackResources datapackResources = MINECRAFT_SERVER.dataPackResources;
 		datapackResources.commandDispatcher = MINECRAFT_SERVER.getCommandDispatcher();
 
-		// Reflection doesn't need to be cached because this only executes once at server startup
-		int g = (int) CUSTOMFUNCTIONMANAGER_G.get(datapackResources.a()); // Related to the permission required to run this function?
-
 		// Update the CustomFunctionManager for the datapackResources which now has the new commandDispatcher
-		
 		try {
-			CommandAPIHandler.getInstance().getField(DataPackResources.class, "i").set(datapackResources, new CustomFunctionManager(g, datapackResources.commandDispatcher.a()));
+			CommandAPIHandler.getInstance().getField(DataPackResources.class, "i").set(datapackResources,
+					new CustomFunctionManager((int) CUSTOMFUNCTIONMANAGER_G.get(datapackResources.a()),
+							datapackResources.commandDispatcher.a()));
 		} catch (IllegalArgumentException | IllegalAccessException e1) {
 			e1.printStackTrace();
 		}
@@ -865,10 +861,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 					if (t != null) {
 						datapackResources.close();
 					}
-
-				}).thenApply((Unit u) -> {
-					return datapackResources;
-				});
+				}).thenApply((Unit u) -> datapackResources);
 
 		// Run the completableFuture and bind tags
 		try {
