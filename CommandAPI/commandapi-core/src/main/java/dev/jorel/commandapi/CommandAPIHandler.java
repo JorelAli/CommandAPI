@@ -49,7 +49,6 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.Message;
-import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
@@ -64,12 +63,10 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
-import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.CustomArgument;
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
 import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
-import dev.jorel.commandapi.exceptions.PaperAdventureNotFoundException;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.ICustomProvidedArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
@@ -790,13 +787,12 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	}
 
 	// Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
-	<T> RequiredArgumentBuilder<CommandListenerWrapper, T> getRequiredArgumentBuilderDynamic(
+	RequiredArgumentBuilder<CommandListenerWrapper, ?> getRequiredArgumentBuilderDynamic(
 			final Argument[] args, Argument argument) {
 
 		// If there are no changes to the default suggestions, return it as normal
 		if (!argument.getOverriddenSuggestions().isPresent()) {
-			@SuppressWarnings("unchecked")
-			RequiredArgumentBuilder<CommandListenerWrapper, T> builder = RequiredArgumentBuilder.argument(argument.getNodeName(), (ArgumentType<T>) argument.getRawType());
+			RequiredArgumentBuilder<CommandListenerWrapper, ?> builder = RequiredArgumentBuilder.argument(argument.getNodeName(), argument.getRawType());
 			return builder.requires((CommandListenerWrapper clw) -> permissionCheck(NMS.getCommandSenderForCLW(clw), argument.getArgumentPermission(), argument.getRequirements()));
 		}
 
@@ -808,13 +804,10 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	}
 
 	// Gets a RequiredArgumentBuilder for an argument, given a SuggestionProvider
-	<T> RequiredArgumentBuilder<CommandListenerWrapper, T> getRequiredArgumentBuilderWithProvider(Argument argument,
+	RequiredArgumentBuilder<CommandListenerWrapper, ?> getRequiredArgumentBuilderWithProvider(Argument argument,
 			SuggestionProvider<CommandListenerWrapper> provider) {
-		@SuppressWarnings("unchecked")
-		RequiredArgumentBuilder<CommandListenerWrapper, T> builder = RequiredArgumentBuilder
-				.argument(argument.getNodeName(), (ArgumentType<T>) argument.getRawType());
-		return builder.requires(clw -> permissionCheck(NMS.getCommandSenderForCLW(clw),
-				argument.getArgumentPermission(), argument.getRequirements())).suggests(provider);
+		RequiredArgumentBuilder<CommandListenerWrapper, ?> builder = RequiredArgumentBuilder.argument(argument.getNodeName(), argument.getRawType());
+		return builder.requires((CommandListenerWrapper clw) -> permissionCheck(NMS.getCommandSenderForCLW(clw), argument.getArgumentPermission(), argument.getRequirements())).suggests(provider);
 	}
 	
 	static Argument getArgument(Argument[] args, String nodeName) {
