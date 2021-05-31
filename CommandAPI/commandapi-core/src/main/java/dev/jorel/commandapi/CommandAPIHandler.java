@@ -372,7 +372,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 			}
 		}
 
-		return (CommandListenerWrapper clw) -> permissionCheck(NMS.getCommandSenderForCLW(clw), finalPermission, requirements);
+		return (CommandListenerWrapper clw) -> permissionCheck(NMS.getCommandSenderFromCLW(clw), finalPermission, requirements);
 	}
 
 	/**
@@ -696,7 +696,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	LiteralArgumentBuilder<CommandListenerWrapper> getLiteralArgumentBuilderArgument(String commandName,
 			CommandPermission permission, Predicate<CommandSender> requirements) {
 		LiteralArgumentBuilder<CommandListenerWrapper> builder = LiteralArgumentBuilder.literal(commandName);
-		return builder.requires((CommandListenerWrapper clw) -> permissionCheck(NMS.getCommandSenderForCLW(clw), permission, requirements));
+		return builder.requires((CommandListenerWrapper clw) -> permissionCheck(NMS.getCommandSenderFromCLW(clw), permission, requirements));
 	}
 
 	// Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
@@ -706,7 +706,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 		// If there are no changes to the default suggestions, return it as normal
 		if (!argument.getOverriddenSuggestions().isPresent()) {
 			RequiredArgumentBuilder<CommandListenerWrapper, ?> builder = RequiredArgumentBuilder.argument(argument.getNodeName(), argument.getRawType());
-			return builder.requires((CommandListenerWrapper clw) -> permissionCheck(NMS.getCommandSenderForCLW(clw), argument.getArgumentPermission(), argument.getRequirements()));
+			return builder.requires((CommandListenerWrapper clw) -> permissionCheck(NMS.getCommandSenderFromCLW(clw), argument.getArgumentPermission(), argument.getRequirements()));
 		}
 
 		// Otherwise, we have to handle arguments of the form BiFunction<CommandSender,
@@ -720,7 +720,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	RequiredArgumentBuilder<CommandListenerWrapper, ?> getRequiredArgumentBuilderWithProvider(Argument argument,
 			SuggestionProvider<CommandListenerWrapper> provider) {
 		RequiredArgumentBuilder<CommandListenerWrapper, ?> builder = RequiredArgumentBuilder.argument(argument.getNodeName(), argument.getRawType());
-		return builder.requires((CommandListenerWrapper clw) -> permissionCheck(NMS.getCommandSenderForCLW(clw), argument.getArgumentPermission(), argument.getRequirements())).suggests(provider);
+		return builder.requires((CommandListenerWrapper clw) -> permissionCheck(NMS.getCommandSenderFromCLW(clw), argument.getArgumentPermission(), argument.getRequirements())).suggests(provider);
 	}
 	
 	static Argument getArgument(Argument[] args, String nodeName) {
@@ -762,7 +762,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 			}
 			
 			// I actually don't know what the method is to get the "last argument bit", so I'll use builder.getRemaining() for now
-			SuggestionInfo suggestionInfo = new SuggestionInfo(NMS.getCommandSenderForCLW(context.getSource()), previousArguments.toArray(), builder.getInput(), builder.getRemaining());
+			SuggestionInfo suggestionInfo = new SuggestionInfo(NMS.getCommandSenderFromCLW(context.getSource()), previousArguments.toArray(), builder.getInput(), builder.getRemaining());
 			return getSuggestionsBuilder(builder, getArgument(args, nodeName)
 					.getOverriddenSuggestions()
 					.orElseGet(Suppliers.ofInstance(o -> new IStringTooltip[0]))

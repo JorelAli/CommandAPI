@@ -126,7 +126,7 @@ public class CustomArgument<T> extends Argument {
 			if(parser != null && parser2 == null) {
 				return parser.apply(customresult);
 			} else {
-				return parser2.apply(nms.getCommandSenderForCLW(cmdCtx.getSource()), customresult);
+				return parser2.apply(nms.getCommandSenderFromCLW(cmdCtx.getSource()), customresult);
 			}
 		} catch (CustomArgumentException e) {
 			throw e.toCommandSyntax(customresult, cmdCtx);

@@ -90,6 +90,7 @@ import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.ICustomProvidedArgument.SuggestionProviders;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.preprocessor.RequireField;
+import dev.jorel.commandapi.wrappers.ComplexRecipeImpl;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.IntegerRange;
@@ -502,7 +503,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
-	public CommandSender getCommandSenderForCLW(CommandListenerWrapper clw) {
+	public CommandSender getCommandSenderFromCLW(CommandListenerWrapper clw) {
 		try {
 			return clw.getBukkitSender();
 		} catch (UnsupportedOperationException e) {
@@ -714,18 +715,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	@Override
 	public ComplexRecipe getRecipe(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		IRecipe<?> recipe = ArgumentMinecraftKeyRegistered.b(cmdCtx, key);
-		return new ComplexRecipe() {
-
-			@Override
-			public NamespacedKey getKey() {
-				return NMS_1_16_R3.fromMinecrafKey(recipe.getKey());
-			}
-
-			@Override
-			public org.bukkit.inventory.ItemStack getResult() {
-				return recipe.toBukkitRecipe().getResult();
-			}
-		};
+		return new ComplexRecipeImpl(fromMinecrafKey(recipe.getKey()), recipe.toBukkitRecipe());
 	}
 
 	@Override
