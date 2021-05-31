@@ -20,7 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import de.tr7zw.changeme.nbtapi.NBTContainer;
+import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPIHandler;
 
 /**

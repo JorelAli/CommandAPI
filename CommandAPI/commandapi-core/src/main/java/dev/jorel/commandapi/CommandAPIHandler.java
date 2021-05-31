@@ -64,11 +64,12 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
-import de.tr7zw.changeme.nbtapi.NBTContainer;
+import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.CustomArgument;
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
 import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
+import dev.jorel.commandapi.exceptions.PaperAdventureNotFoundException;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.ICustomProvidedArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
@@ -136,27 +137,22 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	
 	void checkDependencies() {
 		try {
-			@SuppressWarnings("unused")
-			Class<?> commandDispatcherClass = CommandDispatcher.class;
-		} catch (NoClassDefFoundError e) {
-			new ClassNotFoundException("Cannot hook into Brigadier (Are you running Minecraft 1.13 or above?)").printStackTrace();
+			Class.forName("com.mojang.brigadier.CommandDispatcher");
+		} catch (ClassNotFoundException e) {
+			new ClassNotFoundException("Could not hook into Brigadier (Are you running Minecraft 1.13 or above?)").printStackTrace();
 		}
 
 		// Log successful hooks
-		if (CommandAPI.getConfiguration().hasVerboseOutput()) {
-			CommandAPI.getLog().info(
-					"Hooked into NMS " + NMS.getClass().getName() + " (compatible with " + String.join(", ", NMS.compatibleVersions()) + ")");
-		}
+		CommandAPI.logInfo("Hooked into NMS " + NMS.getClass().getName() + " (compatible with " + String.join(", ", NMS.compatibleVersions()) + ")");
 
 		// Checks other dependencies
 		try {
-			@SuppressWarnings("unused")
-			Class<NBTContainer> container = NBTContainer.class;
+			Class.forName("de.tr7zw.nbtapi.NBTContainer");
 			CommandAPI.getLog().info("Hooked into the NBTAPI successfully.");
-		} catch(NoClassDefFoundError e) {
+		} catch(ClassNotFoundException e) {
 			if(CommandAPI.getConfiguration().hasVerboseOutput()) {
 				CommandAPI.getLog().warning(
-					"Couldn't hook into the NBTAPI for NBT support. Download it from https://www.spigotmc.org/resources/nbt-api.7939/");
+					"Could not hook into the NBTAPI for NBT support. Download it from https://www.spigotmc.org/resources/nbt-api.7939/");
 			}
 		}
 
@@ -164,7 +160,18 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 			Class.forName("org.spigotmc.SpigotConfig");
 			CommandAPI.getLog().info("Hooked into Spigot successfully for Chat/ChatComponents");
 		} catch (ClassNotFoundException e) {
-			CommandAPI.getLog().warning("Couldn't hook into Spigot for Chat/ChatComponents");
+			if(CommandAPI.getConfiguration().hasVerboseOutput()) {
+				CommandAPI.getLog().warning("Could not hook into Spigot for Chat/ChatComponents");
+			}
+		}
+		
+		try {
+			Class.forName("net.kyori.adventure.text.Component");
+			CommandAPI.getLog().info("Hooked into Adventure for AdventureChat/AdventureChatComponents");
+		} catch(ClassNotFoundException e) {
+			if(CommandAPI.getConfiguration().hasVerboseOutput()) {
+				CommandAPI.getLog().warning("Could not hook into Adventure for AdventureChat/AdventureChatComponents");
+			}
 		}
 	}
 	
