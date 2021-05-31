@@ -93,6 +93,17 @@ public abstract class Argument implements IOverrideableSuggestions {
 		return this.nodeName;
 	}
 	
+	/**
+	 * Parses an argument, returning the specific Bukkit object that the argument
+	 * represents. This is intended for use by the internals of the CommandAPI and
+	 * isn't expected to be used outside the CommandAPI
+	 * 
+	 * @param nms                      an instance of NMS
+	 * @param cmdCtx                   the context which ran this command
+	 * @param key                      the name of the argument node
+	 * @return the parsed object represented by this argument
+	 * @throws CommandSyntaxException if parsing fails
+	 */
 	public abstract <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
@@ -118,16 +129,41 @@ public abstract class Argument implements IOverrideableSuggestions {
 		return result;
 	}
 	
+	/**
+	 * Include suggestions to add to the list of default suggestions represented by
+	 * this argument.
+	 * 
+	 * @param suggestions a function that takes in SuggestionInfo which includes
+	 *                    information about the current state at the time the
+	 *                    suggestions are run and returns a String[] of suggestions
+	 *                    to add
+	 * @return the current argument
+	 */
 	public Argument includeSuggestions(Function<SuggestionInfo, String[]> suggestions) {
 		this.addedSuggestions = Optional.of(suggestionInfo -> fromSuggestions(suggestions.apply(suggestionInfo)));
 		return this;
 	}
 	
+	/**
+	 * Include suggestions to add to the list of default suggestions represented by
+	 * this argument.
+	 * 
+	 * @param suggestions a function that takes in SuggestionInfo which includes
+	 *                    information about the current state at the time the
+	 *                    suggestions are run and returns an IStringTooltip[] of
+	 *                    suggestions (with tooltips) to add
+	 * @return the current argument
+	 */
 	public Argument includeSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
 		this.addedSuggestions = Optional.of(suggestions);
 		return this;
 	}
 
+	/**
+	 * Returns an optional function which produces an array of suggestions which should be added
+	 * to existing suggestions.
+	 * @return An Optional containing a function which generates suggestions
+	 */
 	public Optional<Function<SuggestionInfo, IStringTooltip[]>> getIncludedSuggestions() {
 		return addedSuggestions;
 	}
@@ -151,7 +187,6 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * 
 	 * @param suggestions the collection of suggestions to override suggestions with
 	 * @return the current argument
-	 * @deprecated use {@link Argument#overrideSuggestions(Function)}
 	 */
 	@Deprecated
 	@Override
@@ -193,7 +228,6 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * 
 	 * @param suggestions the collection of IStringTooltip to override suggestions with
 	 * @return the current argument
-	 * @deprecated use {@link Argument#overrideSuggestionsT(Function)}
 	 */
 	@Deprecated
 	@Override
@@ -207,7 +241,6 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * 
 	 * @param suggestions the IStringTooltip array to override suggestions with
 	 * @return the current argument
-	 * @deprecated use {@link Argument#overrideSuggestionsT(Function)}
 	 */
 	@Deprecated
 	@Override
@@ -244,6 +277,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 		return this;
 	}
 
+	
 	@Override
 	public Argument replaceSuggestions(Function<SuggestionInfo, String[]> suggestions) {
 		this.suggestions = Optional.of(suggestionInfo -> fromSuggestions(suggestions.apply(suggestionInfo)));

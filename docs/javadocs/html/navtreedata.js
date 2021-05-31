@@ -27,7 +27,11 @@ var NAVTREE =
   [ "CommandAPI", "index.html", [
     [ "Deprecated List", "deprecated.html", null ],
     [ "Packages", "namespaces.html", [
-      [ "Packages", "namespaces.html", "namespaces_dup" ]
+      [ "Packages", "namespaces.html", "namespaces_dup" ],
+      [ "Package Functions", "namespacemembers.html", [
+        [ "All", "namespacemembers.html", null ],
+        [ "Functions", "namespacemembers_func.html", null ]
+      ] ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
@@ -45,11 +49,14 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exceptions.html#a9612886859ce095984cc3e36cf960afa",
-"classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#a13d427aedb1d7cfa373643e50c25dbbd",
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_scoreboard_slot_argument.html#af65c1928e32d31cb660d780abf35ac05",
-"functions_f.html",
-"namespacedev_1_1jorel_1_1commandapi_1_1annotations.html"
+"classcom_1_1mojang_1_1brigadier_1_1context_1_1_string_range.html",
+"classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html",
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_predicate_argument.html#a9a03f1f9c14d5c508ccc42e004ae7432",
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_environment_argument.html#ae03d7ba36c4d03e92e5713e5080427ec",
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html#a5106d256f43351d501d1e81a711a8ed6",
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_string_argument.html#a45618ba438bcedaac2aaf2da366f3350",
+"enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ac3dec5562c05503064fdc3d53a0e8aa5",
+"interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser2.html#a35caa34a784b6c19e4e21b771d183351"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

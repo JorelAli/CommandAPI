@@ -738,7 +738,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 				return arg;
 			}
 		}
-		throw new NoSuchElementException("Could not find argument " + nodeName);
+		throw new NoSuchElementException("Could not find argument '" + nodeName + "'");
 	}
 	
 	SuggestionProvider<CommandListenerWrapper> toSuggestions(String nodeName, Argument[] args, boolean overrideSuggestions) {

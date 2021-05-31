@@ -42,6 +42,10 @@ public interface ConsoleCommandExecutor extends IExecutorNormal<ConsoleCommandSe
 	 */
 	void run(ConsoleCommandSender sender, Object[] args) throws WrapperCommandSyntaxException;
 
+	/**
+	 * Returns the type of the sender of the current executor.
+	 * @return the type of the sender of the current executor
+	 */
 	@Override
 	default ExecutorType getType() {
 		return ExecutorType.CONSOLE;

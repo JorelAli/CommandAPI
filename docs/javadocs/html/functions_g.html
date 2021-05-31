@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">CommandAPI
-   &#160;<span id="projectnumber">5.10</span>
+   &#160;<span id="projectnumber">6.0.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -216,6 +216,9 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <li>getFunctions()
 : <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html#a697f53b9666630bdfba5e9bfb94645e4">dev.jorel.commandapi.wrappers.SimpleFunctionWrapper</a>
 </li>
+<li>getIncludedSuggestions()
+: <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a7125440b8b91e2748302ef93aecb480f">dev.jorel.commandapi.arguments.Argument</a>
+</li>
 <li>getInput()
 : <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context.html#a3ba67239e1fc15751e3430906571928f">com.mojang.brigadier.context.CommandContext&lt; S &gt;</a>
 , <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception.html#a5234b1fa9ca65dcd5fd7cf8ea3956286">com.mojang.brigadier.exceptions.CommandSyntaxException</a>
@@ -303,8 +306,8 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_rotation.html#a4533ed4cfb21c8e99f6b1a43f28feb9e">dev.jorel.commandapi.wrappers.Rotation</a>
 </li>
 <li>getOverriddenSuggestions()
-: <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#aa29913fe39c21a84575b262501720a18">dev.jorel.commandapi.arguments.Argument</a>
-, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html#a8555fbde28b46e4067af5bf1a3c6d268">dev.jorel.commandapi.arguments.IOverrideableSuggestions</a>
+: <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a33feaa3af9efb01b43c7da74503af365">dev.jorel.commandapi.arguments.Argument</a>
+, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html#a2951e628ce9259ebf6bde65c273cee81">dev.jorel.commandapi.arguments.IOverrideableSuggestions</a>
 </li>
 <li>getParser()
 : <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#aed33498ca1a3c49fd1a4b7dcd226fd39">dev.jorel.commandapi.arguments.CustomArgument&lt; T &gt;</a>
@@ -476,7 +479,21 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 , <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_required_argument_builder.html#a2e6b33c5f47f47b93d94373e2f980263">com.mojang.brigadier.builder.RequiredArgumentBuilder&lt; S, T &gt;</a>
 , <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception.html#a0ef311e3cfcbe40813feb685acff3c54">com.mojang.brigadier.exceptions.CommandSyntaxException</a>
 , <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_argument_command_node.html#a01bb560a325acdc270c25df44b014d73">com.mojang.brigadier.tree.ArgumentCommandNode&lt; S, T &gt;</a>
+, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_command_executor.html#a20fba0b274915fa53e8fe725276bd7cd">dev.jorel.commandapi.executors.CommandBlockCommandExecutor</a>
+, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_command_executor.html#ac26cbc1f37981aa121112c4325f9e560">dev.jorel.commandapi.executors.CommandBlockResultingCommandExecutor</a>
+, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_executor.html#ad8c170a17e5154a5955968f2a1349f77">dev.jorel.commandapi.executors.CommandExecutor</a>
+, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_console_command_executor.html#a07e4949cad5fd9a8c08d2681a5c94227">dev.jorel.commandapi.executors.ConsoleCommandExecutor</a>
+, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_console_resulting_command_executor.html#a2453c594c8be845b8ecdeef7d127ee31">dev.jorel.commandapi.executors.ConsoleResultingCommandExecutor</a>
+, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_entity_command_executor.html#a5eb1f378cf2bbdad4fc2f348d23e72b8">dev.jorel.commandapi.executors.EntityCommandExecutor</a>
+, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_entity_resulting_command_executor.html#af90020bc2f54efee7f5d82b385cbfb68">dev.jorel.commandapi.executors.EntityResultingCommandExecutor</a>
 , <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_i_executor_typed.html#a0da1bed57b1a63259fd2d0469ecad7da">dev.jorel.commandapi.executors.IExecutorTyped</a>
+, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_native_command_executor.html#ada41715fbdbf4b68550335b791d8be2a">dev.jorel.commandapi.executors.NativeCommandExecutor</a>
+, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_native_resulting_command_executor.html#adb6e527639d62e507b4fca64fba88309">dev.jorel.commandapi.executors.NativeResultingCommandExecutor</a>
+, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_player_command_executor.html#ac1b91a88a0d908a3880ecfe085e5f311">dev.jorel.commandapi.executors.PlayerCommandExecutor</a>
+, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_player_resulting_command_executor.html#a9da944bfc88335ede1292d533173ebc3">dev.jorel.commandapi.executors.PlayerResultingCommandExecutor</a>
+, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_command_executor.html#a5a451397e759eb42c7c0007d5a7a527b">dev.jorel.commandapi.executors.ProxyCommandExecutor</a>
+, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_resulting_command_executor.html#a136d7c07e803a041839a39ee7a27cadd">dev.jorel.commandapi.executors.ProxyResultingCommandExecutor</a>
+, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_command_executor.html#ac6261face9c8d59dfc684a5998b1038c">dev.jorel.commandapi.executors.ResultingCommandExecutor</a>
 </li>
 <li>getUpperBound()
 : <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_float_range.html#a289b992f365f58c7273f7f6f2facf835">dev.jorel.commandapi.wrappers.FloatRange</a>
@@ -518,7 +535,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sat May 1 2021 13:23:34 for CommandAPI by
+    <li class="footer">Generated on Mon May 31 2021 23:21:33 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

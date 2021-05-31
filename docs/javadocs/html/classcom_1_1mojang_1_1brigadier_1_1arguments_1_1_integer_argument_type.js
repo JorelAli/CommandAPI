@@ -9,6 +9,7 @@ var classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_integer_argument_type =
     [ "integer", "classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_integer_argument_type.html#a394c9a954aade4100019b6c9285f8af1", null ],
     [ "integer", "classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_integer_argument_type.html#a71bbc0bcb21001f1abff1a0bc100137f", null ],
     [ "integer", "classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_integer_argument_type.html#a90dfd355e563d6463aff70e65698dcb5", null ],
+    [ "listSuggestions", "classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_integer_argument_type.html#a46910a3a91fac97bae4eb3eecd6d27f6", null ],
     [ "parse", "classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_integer_argument_type.html#a2284cc489aa1a15f67467bc9a3d2531e", null ],
     [ "toString", "classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_integer_argument_type.html#ae581c5f4ea6e8f10ff295bc82ce388f1", null ]
 ];

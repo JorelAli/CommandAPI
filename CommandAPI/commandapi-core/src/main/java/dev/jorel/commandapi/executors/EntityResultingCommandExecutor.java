@@ -43,6 +43,10 @@ public interface EntityResultingCommandExecutor extends IExecutorResulting<Entit
 	 */
 	int run(Entity sender, Object[] args) throws WrapperCommandSyntaxException;
 
+	/**
+	 * Returns the type of the sender of the current executor.
+	 * @return the type of the sender of the current executor
+	 */
 	@Override
 	default ExecutorType getType() {
 		return ExecutorType.ENTITY;

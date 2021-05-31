@@ -43,6 +43,10 @@ public interface ConsoleResultingCommandExecutor extends IExecutorResulting<Cons
 	 */
 	int run(ConsoleCommandSender sender, Object[] args) throws WrapperCommandSyntaxException;
 
+	/**
+	 * Returns the type of the sender of the current executor.
+	 * @return the type of the sender of the current executor
+	 */
 	@Override
 	default ExecutorType getType() {
 		return ExecutorType.CONSOLE;

@@ -52,6 +52,7 @@ var namespacedev_1_1jorel_1_1commandapi_1_1arguments =
     [ "ScoreHolderArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument" ],
     [ "SoundArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_sound_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_sound_argument" ],
     [ "StringArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_string_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_string_argument" ],
+    [ "SuggestionProviders", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_suggestion_providers.html", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_suggestion_providers" ],
     [ "TeamArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_team_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_team_argument" ],
     [ "TextArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_text_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_text_argument" ],
     [ "TimeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_time_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_time_argument" ],

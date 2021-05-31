@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">CommandAPI
-   &#160;<span id="projectnumber">5.10</span>
+   &#160;<span id="projectnumber">6.0.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -125,9 +125,6 @@ $(document).ready(function(){initNavTree('classdev_1_1jorel_1_1commandapi_1_1arg
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a57eecdc6d7f7758d47b600e794d26742"><td class="memItemLeft" align="right" valign="top">abstract Class&lt;?&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a57eecdc6d7f7758d47b600e794d26742">getPrimitiveType</a> ()</td></tr>
-<tr class="memdesc:a57eecdc6d7f7758d47b600e794d26742"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the primitive type of the current <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html" title="The core abstract class for Command API arguments.">Argument</a>.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a57eecdc6d7f7758d47b600e794d26742">More...</a><br /></td></tr>
-<tr class="separator:a57eecdc6d7f7758d47b600e794d26742"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aadc3ac7ac024a5d25f14de72c24fc957"><td class="memItemLeft" align="right" valign="top">abstract <a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html">CommandAPIArgumentType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#aadc3ac7ac024a5d25f14de72c24fc957">getArgumentType</a> ()</td></tr>
 <tr class="memdesc:aadc3ac7ac024a5d25f14de72c24fc957"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the argument type for this argument.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#aadc3ac7ac024a5d25f14de72c24fc957">More...</a><br /></td></tr>
 <tr class="separator:aadc3ac7ac024a5d25f14de72c24fc957"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -137,6 +134,21 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a164048fb64180ca8193747db36b240a8"><td class="memItemLeft" align="right" valign="top">final String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a164048fb64180ca8193747db36b240a8">getNodeName</a> ()</td></tr>
 <tr class="memdesc:a164048fb64180ca8193747db36b240a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of this argument's node.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a164048fb64180ca8193747db36b240a8">More...</a><br /></td></tr>
 <tr class="separator:a164048fb64180ca8193747db36b240a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d12d39897a617da9eb15b33670a6485"><td class="memItemLeft" align="right" valign="top">abstract&lt; CommandListenerWrapper &gt; Object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a2d12d39897a617da9eb15b33670a6485">parseArgument</a> (NMS&lt; CommandListenerWrapper &gt; nms, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context.html">CommandContext</a>&lt; CommandListenerWrapper &gt; cmdCtx, String key)  throws CommandSyntaxException</td></tr>
+<tr class="memdesc:a2d12d39897a617da9eb15b33670a6485"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses an argument, returning the specific Bukkit object that the argument represents.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a2d12d39897a617da9eb15b33670a6485">More...</a><br /></td></tr>
+<tr class="separator:a2d12d39897a617da9eb15b33670a6485"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57eecdc6d7f7758d47b600e794d26742"><td class="memItemLeft" align="right" valign="top">abstract Class&lt;?&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a57eecdc6d7f7758d47b600e794d26742">getPrimitiveType</a> ()</td></tr>
+<tr class="memdesc:a57eecdc6d7f7758d47b600e794d26742"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the primitive type of the current <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html" title="The core abstract class for Command API arguments.">Argument</a>.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a57eecdc6d7f7758d47b600e794d26742">More...</a><br /></td></tr>
+<tr class="separator:a57eecdc6d7f7758d47b600e794d26742"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13dd1cd3f9ae91577d3411971f043374"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a13dd1cd3f9ae91577d3411971f043374">includeSuggestions</a> (Function&lt; SuggestionInfo, String[]&gt; suggestions)</td></tr>
+<tr class="memdesc:a13dd1cd3f9ae91577d3411971f043374"><td class="mdescLeft">&#160;</td><td class="mdescRight">Include suggestions to add to the list of default suggestions represented by this argument.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a13dd1cd3f9ae91577d3411971f043374">More...</a><br /></td></tr>
+<tr class="separator:a13dd1cd3f9ae91577d3411971f043374"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c740ac65ed20a963eda6bf875af570c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a1c740ac65ed20a963eda6bf875af570c">includeSuggestionsT</a> (Function&lt; SuggestionInfo, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a>[]&gt; suggestions)</td></tr>
+<tr class="memdesc:a1c740ac65ed20a963eda6bf875af570c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Include suggestions to add to the list of default suggestions represented by this argument.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a1c740ac65ed20a963eda6bf875af570c">More...</a><br /></td></tr>
+<tr class="separator:a1c740ac65ed20a963eda6bf875af570c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7125440b8b91e2748302ef93aecb480f"><td class="memItemLeft" align="right" valign="top">Optional&lt; Function&lt; SuggestionInfo, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a>[]&gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a7125440b8b91e2748302ef93aecb480f">getIncludedSuggestions</a> ()</td></tr>
+<tr class="memdesc:a7125440b8b91e2748302ef93aecb480f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an optional function which produces an array of suggestions which should be added to existing suggestions.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a7125440b8b91e2748302ef93aecb480f">More...</a><br /></td></tr>
+<tr class="separator:a7125440b8b91e2748302ef93aecb480f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a32ebae8c2f2eb50a533bb33792f3fe31"><td class="memItemLeft" align="right" valign="top">final <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a32ebae8c2f2eb50a533bb33792f3fe31">overrideSuggestions</a> (String... suggestions)</td></tr>
 <tr class="memdesc:a32ebae8c2f2eb50a533bb33792f3fe31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override the suggestions of this argument with a String array.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a32ebae8c2f2eb50a533bb33792f3fe31">More...</a><br /></td></tr>
 <tr class="separator:a32ebae8c2f2eb50a533bb33792f3fe31"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -161,9 +173,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0ab463b04cb4374469cce40f1de07bd2"><td class="memItemLeft" align="right" valign="top">final <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a0ab463b04cb4374469cce40f1de07bd2">overrideSuggestionsT</a> (BiFunction&lt; CommandSender, Object[], <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a>[]&gt; suggestions)</td></tr>
 <tr class="memdesc:a0ab463b04cb4374469cce40f1de07bd2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override the suggestions of this argument with a function that maps the command sender and a data set of previously declared arguments to an <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html" title="A string-based tooltip interface that includes a string suggestion and a string tooltip text to displ...">IStringTooltip</a> array.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a0ab463b04cb4374469cce40f1de07bd2">More...</a><br /></td></tr>
 <tr class="separator:a0ab463b04cb4374469cce40f1de07bd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa29913fe39c21a84575b262501720a18"><td class="memItemLeft" align="right" valign="top">final Optional&lt; BiFunction&lt; CommandSender, Object[], <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a>[]&gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#aa29913fe39c21a84575b262501720a18">getOverriddenSuggestions</a> ()</td></tr>
-<tr class="memdesc:aa29913fe39c21a84575b262501720a18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an optional function that maps the command sender to an <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html" title="A string-based tooltip interface that includes a string suggestion and a string tooltip text to displ...">IStringTooltip</a> array of suggestions for the current command.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#aa29913fe39c21a84575b262501720a18">More...</a><br /></td></tr>
-<tr class="separator:aa29913fe39c21a84575b262501720a18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a136d1fafa00702ec911803427d3c8642"><td class="memItemLeft" align="right" valign="top"><a id="a136d1fafa00702ec911803427d3c8642"></a>
+<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>&#160;</td><td class="memItemRight" valign="bottom"><b>replaceSuggestions</b> (Function&lt; SuggestionInfo, String[]&gt; suggestions)</td></tr>
+<tr class="separator:a136d1fafa00702ec911803427d3c8642"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c7f96061fe9761813c9d995cc7aa5f5"><td class="memItemLeft" align="right" valign="top"><a id="a4c7f96061fe9761813c9d995cc7aa5f5"></a>
+<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>&#160;</td><td class="memItemRight" valign="bottom"><b>replaceSuggestionsT</b> (Function&lt; SuggestionInfo, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a>[]&gt; suggestions)</td></tr>
+<tr class="separator:a4c7f96061fe9761813c9d995cc7aa5f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33feaa3af9efb01b43c7da74503af365"><td class="memItemLeft" align="right" valign="top">final Optional&lt; Function&lt; SuggestionInfo, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a>[]&gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a33feaa3af9efb01b43c7da74503af365">getOverriddenSuggestions</a> ()</td></tr>
+<tr class="memdesc:a33feaa3af9efb01b43c7da74503af365"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an optional function that maps the command sender to an <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html" title="A string-based tooltip interface that includes a string suggestion and a string tooltip text to displ...">IStringTooltip</a> array of suggestions for the current command.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a33feaa3af9efb01b43c7da74503af365">More...</a><br /></td></tr>
+<tr class="separator:a33feaa3af9efb01b43c7da74503af365"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2168e67f0a32516350b6b35ce8569130"><td class="memItemLeft" align="right" valign="top">final <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a2168e67f0a32516350b6b35ce8569130">withPermission</a> (<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_permission.html">CommandPermission</a> permission)</td></tr>
 <tr class="memdesc:a2168e67f0a32516350b6b35ce8569130"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assigns the given permission as a requirement to execute this command.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a2168e67f0a32516350b6b35ce8569130">More...</a><br /></td></tr>
 <tr class="separator:a2168e67f0a32516350b6b35ce8569130"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -291,6 +309,26 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a7125440b8b91e2748302ef93aecb480f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7125440b8b91e2748302ef93aecb480f">&#9670;&nbsp;</a></span>getIncludedSuggestions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Optional&lt;Function&lt;SuggestionInfo, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a>[]&gt; &gt; dev.jorel.commandapi.arguments.Argument.getIncludedSuggestions </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns an optional function which produces an array of suggestions which should be added to existing suggestions. </p>
+<dl class="section return"><dt>Returns</dt><dd>An Optional containing a function which generates suggestions </dd></dl>
+
+</div>
+</div>
 <a id="a164048fb64180ca8193747db36b240a8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a164048fb64180ca8193747db36b240a8">&#9670;&nbsp;</a></span>getNodeName()</h2>
 
@@ -311,14 +349,14 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aa29913fe39c21a84575b262501720a18"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa29913fe39c21a84575b262501720a18">&#9670;&nbsp;</a></span>getOverriddenSuggestions()</h2>
+<a id="a33feaa3af9efb01b43c7da74503af365"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a33feaa3af9efb01b43c7da74503af365">&#9670;&nbsp;</a></span>getOverriddenSuggestions()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">final Optional&lt;BiFunction&lt;CommandSender, Object[], <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a>[]&gt; &gt; dev.jorel.commandapi.arguments.Argument.getOverriddenSuggestions </td>
+          <td class="memname">final Optional&lt;Function&lt;SuggestionInfo, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a>[]&gt; &gt; dev.jorel.commandapi.arguments.Argument.getOverriddenSuggestions </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -329,7 +367,7 @@ Protected Member Functions</h2></td></tr>
 <p>Returns an optional function that maps the command sender to an <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html" title="A string-based tooltip interface that includes a string suggestion and a string tooltip text to displ...">IStringTooltip</a> array of suggestions for the current command. </p>
 <dl class="section return"><dt>Returns</dt><dd>a function that provides suggestions, or <code>Optional.empty()</code> if there are no overridden suggestions. </dd></dl>
 
-<p>Implements <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html#a8555fbde28b46e4067af5bf1a3c6d268">dev.jorel.commandapi.arguments.IOverrideableSuggestions</a>.</p>
+<p>Implements <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html#a2951e628ce9259ebf6bde65c273cee81">dev.jorel.commandapi.arguments.IOverrideableSuggestions</a>.</p>
 
 </div>
 </div>
@@ -401,6 +439,60 @@ Protected Member Functions</h2></td></tr>
 
 <p>Returns the requirements required to run this command. </p>
 <dl class="section return"><dt>Returns</dt><dd>the requirements required to run this command </dd></dl>
+
+</div>
+</div>
+<a id="a13dd1cd3f9ae91577d3411971f043374"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a13dd1cd3f9ae91577d3411971f043374">&#9670;&nbsp;</a></span>includeSuggestions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a> dev.jorel.commandapi.arguments.Argument.includeSuggestions </td>
+          <td>(</td>
+          <td class="paramtype">Function&lt; SuggestionInfo, String[]&gt;&#160;</td>
+          <td class="paramname"><em>suggestions</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Include suggestions to add to the list of default suggestions represented by this argument. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">suggestions</td><td>a function that takes in SuggestionInfo which includes information about the current state at the time the suggestions are run and returns a String[] of suggestions to add </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the current argument </dd></dl>
+
+</div>
+</div>
+<a id="a1c740ac65ed20a963eda6bf875af570c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c740ac65ed20a963eda6bf875af570c">&#9670;&nbsp;</a></span>includeSuggestionsT()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a> dev.jorel.commandapi.arguments.Argument.includeSuggestionsT </td>
+          <td>(</td>
+          <td class="paramtype">Function&lt; SuggestionInfo, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a>[]&gt;&#160;</td>
+          <td class="paramname"><em>suggestions</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Include suggestions to add to the list of default suggestions represented by this argument. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">suggestions</td><td>a function that takes in SuggestionInfo which includes information about the current state at the time the suggestions are run and returns an <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html" title="A string-based tooltip interface that includes a string suggestion and a string tooltip text to displ...">IStringTooltip</a>[] of suggestions (with tooltips) to add </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the current argument </dd></dl>
 
 </div>
 </div>
@@ -477,7 +569,6 @@ Protected Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the current argument </dd></dl>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000002">Deprecated:</a></b></dt><dd>use <a class="el" href="">Argument#overrideSuggestions(Function)</a> </dd></dl>
 
 <p>Implements <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html#af00d0029b322578f92c1e664630d75a9">dev.jorel.commandapi.arguments.IOverrideableSuggestions</a>.</p>
 
@@ -595,7 +686,6 @@ Protected Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the current argument </dd></dl>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000003">Deprecated:</a></b></dt><dd>use <a class="el" href="">Argument#overrideSuggestionsT(Function)</a> </dd></dl>
 
 <p>Implements <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html#a9ea6b75c68cdf307621fb4921786bbce">dev.jorel.commandapi.arguments.IOverrideableSuggestions</a>.</p>
 
@@ -654,9 +744,69 @@ Protected Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the current argument </dd></dl>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000004">Deprecated:</a></b></dt><dd>use <a class="el" href="">Argument#overrideSuggestionsT(Function)</a> </dd></dl>
 
 <p>Implements <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_overrideable_suggestions.html#a480c68526c7c7b405deaf9d89a1b12c5">dev.jorel.commandapi.arguments.IOverrideableSuggestions</a>.</p>
+
+</div>
+</div>
+<a id="a2d12d39897a617da9eb15b33670a6485"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d12d39897a617da9eb15b33670a6485">&#9670;&nbsp;</a></span>parseArgument()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">abstract &lt;CommandListenerWrapper&gt; Object dev.jorel.commandapi.arguments.Argument.parseArgument </td>
+          <td>(</td>
+          <td class="paramtype">NMS&lt; CommandListenerWrapper &gt;&#160;</td>
+          <td class="paramname"><em>nms</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context.html">CommandContext</a>&lt; CommandListenerWrapper &gt;&#160;</td>
+          <td class="paramname"><em>cmdCtx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>key</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> throws <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception.html">CommandSyntaxException</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">abstract</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Parses an argument, returning the specific Bukkit object that the argument represents. </p>
+<p>This is intended for use by the internals of the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> and isn't expected to be used outside the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">&lt;CommandListenerWrapper&gt;</td><td>The command listener wrapper instance </td></tr>
+    <tr><td class="paramname">nms</td><td>an instance of NMS </td></tr>
+    <tr><td class="paramname">cmdCtx</td><td>the context which ran this command </td></tr>
+    <tr><td class="paramname">key</td><td>the name of the argument node </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the parsed object represented by this argument </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">CommandSyntaxException</td><td>if parsing fails </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -775,7 +925,7 @@ Protected Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1arguments.html">arguments</a></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a></li>
-    <li class="footer">Generated on Sat May 1 2021 13:23:33 for CommandAPI by
+    <li class="footer">Generated on Mon May 31 2021 23:21:32 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

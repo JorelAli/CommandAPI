@@ -9,6 +9,7 @@ var classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_float_argument_type =
     [ "getMaximum", "classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_float_argument_type.html#aedc18330f32c310831b42d7aedb7ee6b", null ],
     [ "getMinimum", "classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_float_argument_type.html#ad682059f4ad0f766dc0090b8ce586365", null ],
     [ "hashCode", "classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_float_argument_type.html#a0f788b94f70db03969433b2a392687f3", null ],
+    [ "listSuggestions", "classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_float_argument_type.html#a46910a3a91fac97bae4eb3eecd6d27f6", null ],
     [ "parse", "classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_float_argument_type.html#a5e70ee137de4c79c003742530b69db08", null ],
     [ "toString", "classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_float_argument_type.html#a45300457e22ff508ac9de6a68c488515", null ]
 ];

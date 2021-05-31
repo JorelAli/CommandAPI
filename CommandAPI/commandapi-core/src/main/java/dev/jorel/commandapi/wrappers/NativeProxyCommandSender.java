@@ -320,6 +320,10 @@ public class NativeProxyCommandSender implements ProxiedCommandSender {
 		this.caller.setOp(value);
 	}
 
+	/**
+	 * Returns a Spigot instance of this object
+	 * @return a Spigot instance of this object
+	 */
 	@Override
 	public Spigot spigot() {
 		return this.caller.spigot();

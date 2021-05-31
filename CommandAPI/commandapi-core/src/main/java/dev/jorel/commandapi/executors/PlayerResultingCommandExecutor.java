@@ -43,6 +43,10 @@ public interface PlayerResultingCommandExecutor extends IExecutorResulting<Playe
 	 */
 	int run(Player sender, Object[] args) throws WrapperCommandSyntaxException;
 
+	/**
+	 * Returns the type of the sender of the current executor.
+	 * @return the type of the sender of the current executor
+	 */
 	@Override
 	default ExecutorType getType() {
 		return ExecutorType.PLAYER;

@@ -89,8 +89,15 @@ public enum MathOperation {
 		return this.stringValue;
 	}
 	
-	public static MathOperation fromString(String s) {
-		return switch(s) {
+	/**
+	 * Creates a MathOperation from the Minecraft string representation (e.g. "=" or
+	 * "/=")
+	 * 
+	 * @param input the string to convert to
+	 * @return a MathOperation instance which represents the provided string
+	 */
+	public static MathOperation fromString(String input) {
+		return switch(input) {
 			case "="  -> MathOperation.ASSIGN;
 			case "+=" -> MathOperation.ADD;
 			case "-=" -> MathOperation.SUBTRACT;
