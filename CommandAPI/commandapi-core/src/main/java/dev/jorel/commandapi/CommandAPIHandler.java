@@ -217,7 +217,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	 * @return a brigadier command which is registered internally
 	 * @throws CommandSyntaxException if an error occurs when the command is ran
 	 */
-	Command<CommandListenerWrapper> generateCommand(List<Argument> args, CustomCommandExecutor executor, boolean converted)
+	Command<CommandListenerWrapper> generateCommand(Argument[] args, CustomCommandExecutor executor, boolean converted)
 			throws CommandSyntaxException {
 
 		// Generate our command from executor
@@ -233,11 +233,10 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 				System.arraycopy(argsAndCmd, 1, result, 0, argsAndCmd.length - 1);
 				
 				@SuppressWarnings("unchecked")
-				List<String>[] entityNamesForArgs = new List[args.size()];
+				List<String>[] entityNamesForArgs = new List[args.length];
 				
-				for(int i = 0; i < args.size(); i++) {
-					if(args.get(i) instanceof EntitySelectorArgument) {
-						EntitySelectorArgument entitySelectorArg = (EntitySelectorArgument) args.get(i);
+				for(int i = 0; i < args.length; i++) {
+					if(args[i] instanceof EntitySelectorArgument entitySelectorArg) {
 						switch(entitySelectorArg.getEntitySelector())
 						{
 						case MANY_ENTITIES:
@@ -307,7 +306,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	 * @return an Object[] which can be used in (sender, args) -> 
 	 * @throws CommandSyntaxException
 	 */
-	Object[] argsToObjectArr(CommandContext<CommandListenerWrapper> cmdCtx, List<Argument> args) throws CommandSyntaxException {
+	Object[] argsToObjectArr(CommandContext<CommandListenerWrapper> cmdCtx, Argument[] args) throws CommandSyntaxException {
 		// Array for arguments for executor
 		List<Object> argList = new ArrayList<>();
 
@@ -533,12 +532,12 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	 * returns false if multiliteral arguments were not present.
 	 */
 	private boolean expandMultiLiterals(String commandName, CommandPermission permissions, String[] aliases, Predicate<CommandSender> requirements,
-			final List<Argument> args, CustomCommandExecutor executor, boolean converted) throws Exception {
+			final Argument[] args, CustomCommandExecutor executor, boolean converted) throws Exception {
 		
 		//"Expands" our MultiLiterals into Literals
-		for(int index = 0, size = args.size(); index < size; index++) {
+		for(int index = 0; index < args.length; index++) {
 			//Find the first multiLiteral in the for loop
-			if(args.get(index) instanceof MultiLiteralArgument superArg) {
+			if(args[index] instanceof MultiLiteralArgument superArg) {
 				
 				//Add all of its entries
 				for(int i = 0; i < superArg.getLiterals().length; i++) {
@@ -548,17 +547,9 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 						.withRequirement(superArg.getRequirements());
 					
 					//Reconstruct the list of arguments and place in the new literals
-					List<Argument> newArgs = new ArrayList<>();
-					{
-						int j = 0;
-						for(Argument previousEntry : args) {
-							if(j == index) {
-								newArgs.add(litArg);
-							} else {
-								newArgs.add(previousEntry);
-							}
-							j++;
-						}
+					Argument[] newArgs = new Argument[args.length];
+					for(int j = 0; j < args.length; j++) {
+						newArgs[index] = (j == index) ? litArg : args[j];
 					}
 					register(commandName, permissions, aliases, requirements, newArgs, executor, converted);
 				}
@@ -573,23 +564,23 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	// allow    /race invite<LiteralArgument> player<PlayerArgument>
 	// disallow /race invite<LiteralArgument> player<EntitySelectorArgument>
 	// Return true if conflict was present, otherwise return false
-	private boolean hasCommandConflict(String commandName, final List<Argument> args, String argumentsAsString) {
+	private boolean hasCommandConflict(String commandName, Argument[] args, String argumentsAsString) {
 		List<String[]> regArgs = new ArrayList<>();
 		for(String str : registeredCommands.get(commandName)) {
 			regArgs.add(str.split(":"));
 		}
-		for(int i = 0, size = args.size(); i < size; i++) {
+		for(int i = 0; i < args.length; i++) {
 			// Avoid IAOOBEs
-			if(regArgs.size() == i && regArgs.size() < size) {
+			if(regArgs.size() == i && regArgs.size() < args.length) {
 				break;
 			}
 			// We want to ensure all node names are the same
-			if(!regArgs.get(i)[0].equals(args.get(i).getNodeName())) {
+			if(!regArgs.get(i)[0].equals(args[i].getNodeName())) {
 				break;
 			}
 			// This only applies to the last argument
-			if(i == size - 1) {
-				if(!regArgs.get(i)[1].equals(args.get(i).getClass().getSimpleName())) { 
+			if(i == args.length - 1) {
+				if(!regArgs.get(i)[1].equals(args[i].getClass().getSimpleName())) { 
 					//Command it conflicts with
 					StringBuilder builder2 = new StringBuilder();
 					for(String[] arg : regArgs) {
@@ -613,8 +604,8 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	}
 	
 	// Links arg -> Executor
-	private ArgumentBuilder<CommandListenerWrapper, ?> generateInnerArgument(Command<CommandListenerWrapper> command, final List<Argument> args) {
-		Argument innerArg = args.get(args.size() - 1);
+	private ArgumentBuilder<CommandListenerWrapper, ?> generateInnerArgument(Command<CommandListenerWrapper> command, Argument[] args) {
+		Argument innerArg = args[args.length - 1];
 
 		// Handle Literal arguments
 		if (innerArg instanceof LiteralArgument literalArgument) {
@@ -635,10 +626,10 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	}
 	
 	// Links arg1 -> arg2 -> ... argN -> innermostArgument
-	private ArgumentBuilder<CommandListenerWrapper, ?> generateOuterArguments(ArgumentBuilder<CommandListenerWrapper, ?> innermostArgument, final List<Argument> args) {
+	private ArgumentBuilder<CommandListenerWrapper, ?> generateOuterArguments(ArgumentBuilder<CommandListenerWrapper, ?> innermostArgument, Argument[] args) {
 		ArgumentBuilder<CommandListenerWrapper, ?> outer = innermostArgument;
-		for (int i = args.size() - 2; i >= 0; i--) {
-			Argument outerArg = args.get(i);
+		for (int i = args.length - 2; i >= 0; i--) {
+			Argument outerArg = args[i];
 
 			// Handle Literal arguments
 			if (outerArg instanceof LiteralArgument literalArgument) {
@@ -663,7 +654,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	// Builds our NMS command using the given arguments for this method, then
 	// registers it
 	void register(String commandName, CommandPermission permissions, String[] aliases, Predicate<CommandSender> requirements,
-			final List<Argument> args, CustomCommandExecutor executor, boolean converted) throws Exception {
+			final Argument[] args, CustomCommandExecutor executor, boolean converted) throws Exception {
 		
 		//"Expands" our MultiLiterals into Literals
 		if(expandMultiLiterals(commandName, permissions, aliases, requirements, args, executor, converted)) {
@@ -698,7 +689,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 		 *   CommandName -> Args1 -> Args2 -> ... -> ArgsN -> Executor
 		 */
 		LiteralCommandNode<CommandListenerWrapper> resultantNode;
-		if (args.isEmpty()) {
+		if (args.length == 0) {
 			// Link command name to the executor
 			resultantNode = DISPATCHER.register(getLiteralArgumentBuilder(commandName).requires(generatePermissions(commandName, permissions, requirements)).executes(command));
 
@@ -793,7 +784,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 
 	// Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
 	<T> RequiredArgumentBuilder<CommandListenerWrapper, T> getRequiredArgumentBuilderDynamic(
-			final List<Argument> args, Argument argument) {
+			final Argument[] args, Argument argument) {
 
 		// If there are no changes to the default suggestions, return it as normal
 		if (!argument.getOverriddenSuggestions().isPresent()) {
@@ -819,7 +810,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 				argument.getArgumentPermission(), argument.getRequirements())).suggests(provider);
 	}
 	
-	static Argument getArgument(List<Argument> args, String nodeName) {
+	static Argument getArgument(Argument[] args, String nodeName) {
 		for(Argument arg : args) {
 			if(arg.getNodeName().equals(nodeName)) {
 				return arg;
@@ -828,7 +819,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 		throw new NoSuchElementException("Could not find argument " + nodeName);
 	}
 	
-	SuggestionProvider<CommandListenerWrapper> toSuggestions(String nodeName, List<Argument> args) {
+	SuggestionProvider<CommandListenerWrapper> toSuggestions(String nodeName, Argument[] args) {
 		return (CommandContext<CommandListenerWrapper> context, SuggestionsBuilder builder) -> {
 			// Populate Object[], which is our previously filled arguments
 			List<Object> previousArguments = new ArrayList<>();

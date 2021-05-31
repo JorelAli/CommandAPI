@@ -102,7 +102,7 @@ public abstract class Brigadier {
 	public static RedirectModifier fromPredicate(BiPredicate<CommandSender, Object[]> predicate, List<Argument> args) {
 		return cmdCtx -> {
 			if (predicate.test(CommandAPIHandler.getInstance().NMS.getSenderForCommand(cmdCtx, false),
-					CommandAPIHandler.getInstance().argsToObjectArr(cmdCtx, args))) {
+					CommandAPIHandler.getInstance().argsToObjectArr(cmdCtx, args.toArray(new Argument[0])))) {
 				return Collections.singleton(cmdCtx.getSource());
 			} else {
 				return Collections.emptyList();
@@ -118,7 +118,7 @@ public abstract class Brigadier {
 	 */
 	public static Command fromCommand(CommandAPICommand command) {
 		try {
-			return CommandAPIHandler.getInstance().generateCommand(command.getArguments(), command.getExecutor(), command.isConverted());
+			return CommandAPIHandler.getInstance().generateCommand(command.getArguments().toArray(new Argument[0]), command.getExecutor(), command.isConverted());
 		} catch (CommandSyntaxException e) {
 			e.printStackTrace();
 		}
@@ -144,7 +144,8 @@ public abstract class Brigadier {
 	 * @return a RequiredArgumentBuilder that represents the provided argument
 	 */
 	public static RequiredArgumentBuilder fromArgument(List<Argument> args, String nodeName) {
-		return CommandAPIHandler.getInstance().getRequiredArgumentBuilderDynamic(args, CommandAPIHandler.getArgument(args, nodeName));
+		Argument[] argsArr = args.toArray(new Argument[0]);
+		return CommandAPIHandler.getInstance().getRequiredArgumentBuilderDynamic(argsArr, CommandAPIHandler.getArgument(argsArr, nodeName));
 	}
 
 	/**
@@ -156,7 +157,7 @@ public abstract class Brigadier {
 	public static RequiredArgumentBuilder fromArgument(Argument argument) {
 		List<Argument> arguments = new ArrayList<>();
 		arguments.add(argument);
-		return CommandAPIHandler.getInstance().getRequiredArgumentBuilderDynamic(arguments, argument);
+		return CommandAPIHandler.getInstance().getRequiredArgumentBuilderDynamic(arguments.toArray(new Argument[0]), argument);
 	}
 
 	/**
@@ -170,6 +171,6 @@ public abstract class Brigadier {
 	 *         argument declared in the List with key argumentName
 	 */
 	public static SuggestionProvider toSuggestions(String nodeName, List<Argument> args) {
-		return CommandAPIHandler.getInstance().toSuggestions(nodeName, args);
+		return CommandAPIHandler.getInstance().toSuggestions(nodeName, args.toArray(new Argument[0]));
 	}
 }

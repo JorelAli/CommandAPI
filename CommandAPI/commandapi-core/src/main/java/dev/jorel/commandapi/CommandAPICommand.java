@@ -475,7 +475,7 @@ public class CommandAPICommand {
 			}
 			
 			//Make a local copy of args to deal with
-			List<Argument> copyOfArgs = args == null ? new ArrayList<>() : new ArrayList<>(args);
+			Argument[] copyOfArgs = args == null ? new Argument[0] : args.toArray(new Argument[0]);
 			
 			//if args contains a GreedyString && args.getLast != GreedyString
 			long numGreedyArgs = 0;
@@ -486,7 +486,7 @@ public class CommandAPICommand {
 			}
 			if(numGreedyArgs >= 1) {
 				//A GreedyString has been found
-				if(!(copyOfArgs.toArray()[copyOfArgs.size() - 1] instanceof IGreedyArgument)) {
+				if(!(copyOfArgs[copyOfArgs.length - 1] instanceof IGreedyArgument)) {
 					throw new GreedyArgumentException();
 				}
 				

@@ -20,8 +20,6 @@
  *******************************************************************************/
 package dev.jorel.commandapi.wrappers;
 
-import dev.jorel.commandapi.arguments.MathOperationArgument;
-
 /**
  * A representation of the math operations for the Minecraft scoreboard
  */
