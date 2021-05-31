@@ -45,25 +45,7 @@ public class ScoreboardSlot {
 		};
 		
 		//Initialize teamColor
-		teamColor = switch(i) {
-			case 3  -> ChatColor.BLACK;
-			case 4  -> ChatColor.DARK_BLUE;
-			case 5  -> ChatColor.DARK_GREEN;
-			case 6  -> ChatColor.DARK_AQUA;
-			case 7  -> ChatColor.DARK_RED;
-			case 8  -> ChatColor.DARK_PURPLE;
-			case 9  -> ChatColor.GOLD;
-			case 10 -> ChatColor.GRAY;
-			case 11 -> ChatColor.DARK_GRAY;
-			case 12 -> ChatColor.BLUE;
-			case 13 -> ChatColor.GREEN;
-			case 14 -> ChatColor.AQUA;
-			case 15 -> ChatColor.RED;
-			case 16 -> ChatColor.LIGHT_PURPLE;
-			case 17 -> ChatColor.YELLOW;
-			case 18 -> ChatColor.WHITE;
-			default -> null;
-		};
+		teamColor = ChatColor.getByChar(Integer.toHexString(i - 3));
 	}
 	
 	/**
@@ -86,25 +68,11 @@ public class ScoreboardSlot {
 	 * @return a ScoreboardSlot from the provided ChatColor
 	 */
 	public static ScoreboardSlot ofTeamColor(ChatColor color) {
-		return new ScoreboardSlot(switch (color) {
-		case BLACK        -> 3;
-		case DARK_BLUE    -> 4;
-		case DARK_GREEN   -> 5;
-		case DARK_AQUA    -> 6;
-		case DARK_RED     -> 7;
-		case DARK_PURPLE  -> 8;
-		case GOLD         -> 9;
-		case GRAY         -> 10;
-		case DARK_GRAY    -> 11;
-		case BLUE         -> 12;
-		case GREEN        -> 13;
-		case AQUA         -> 14;
-		case RED          -> 15;
-		case LIGHT_PURPLE -> 16;
-		case YELLOW       -> 17;
-		case WHITE        -> 18;
-		default           -> 1;
-		});
+		try {
+			return new ScoreboardSlot(Integer.parseInt(color.toString().substring(1), 16) + 3);
+		} catch (NumberFormatException e) {
+			return new ScoreboardSlot(1);
+		}
 	}
 	
 	/**
