@@ -536,7 +536,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	 * returns false if multiliteral arguments were not present.
 	 */
 	private boolean expandMultiLiterals(String commandName, CommandPermission permissions, String[] aliases, Predicate<CommandSender> requirements,
-			final Argument[] args, CustomCommandExecutor executor, boolean converted) throws Exception {
+			final Argument[] args, CustomCommandExecutor executor, boolean converted) throws CommandSyntaxException, IOException {
 		
 		//"Expands" our MultiLiterals into Literals
 		for(int index = 0; index < args.length; index++) {
@@ -658,7 +658,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	// Builds our NMS command using the given arguments for this method, then
 	// registers it
 	void register(String commandName, CommandPermission permissions, String[] aliases, Predicate<CommandSender> requirements,
-			final Argument[] args, CustomCommandExecutor executor, boolean converted) throws Exception {
+			final Argument[] args, CustomCommandExecutor executor, boolean converted) throws CommandSyntaxException, IOException {
 		
 		//"Expands" our MultiLiterals into Literals
 		if(expandMultiLiterals(commandName, permissions, aliases, requirements, args, executor, converted)) {

@@ -23,10 +23,9 @@ package dev.jorel.commandapi;
 import java.io.File;
 import java.util.Map.Entry;
 
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class CommandAPIMain extends JavaPlugin implements Listener {
+public class CommandAPIMain extends JavaPlugin {
 	
 	@Override
 	public void onLoad() {
@@ -59,6 +58,5 @@ public class CommandAPIMain extends JavaPlugin implements Listener {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable(this);
-		getServer().getPluginManager().registerEvents(this, this);
 	}
 }

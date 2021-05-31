@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,8 +28,9 @@ import java.util.function.Predicate;
 
 import org.bukkit.command.CommandSender;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import dev.jorel.commandapi.arguments.Argument;
-import dev.jorel.commandapi.arguments.GreedyStringArgument;
 import dev.jorel.commandapi.arguments.IGreedyArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
@@ -68,6 +70,10 @@ public class CommandAPICommand {
 	 * @param commandName The name of the command to create
 	 */
 	public CommandAPICommand(String commandName) {
+		if(commandName == null || commandName.length() == 0) {
+			throw new InvalidCommandNameException(commandName);
+		}
+		
 		this.commandName = commandName;
 		this.isConverted = false;
 	}
@@ -465,53 +471,35 @@ public class CommandAPICommand {
 	 */
 	public void register() {
 		if(!CommandAPI.canRegister()) {
-			CommandAPI.getLog().severe("Cannot register command /" + commandName + ", because the server has finished loading!");
-			return;
+			CommandAPI.getLog().warning("Command /" + commandName + " is being registered after the server had loaded. Undefined behavior ahead!");
 		}
 		try {
-			//Sanitize commandNames
-			if(commandName == null || commandName.length() == 0) {
-				throw new InvalidCommandNameException(commandName);
-			}
+			Argument[] argumentsArr = args == null ? new Argument[0] : args.toArray(new Argument[0]);
 			
-			//Make a local copy of args to deal with
-			Argument[] copyOfArgs = args == null ? new Argument[0] : args.toArray(new Argument[0]);
-			
-			//if args contains a GreedyString && args.getLast != GreedyString
-			long numGreedyArgs = 0;
-			for(Argument argument : copyOfArgs) {
-				if(argument instanceof GreedyStringArgument) {
-					numGreedyArgs++;
-				}
-			}
-			if(numGreedyArgs >= 1) {
-				//A GreedyString has been found
-				if(!(copyOfArgs[copyOfArgs.length - 1] instanceof IGreedyArgument)) {
-					throw new GreedyArgumentException();
-				}
-				
-				if(numGreedyArgs > 1) {
-					throw new GreedyArgumentException();
+			// Check IGreedyArgument constraints 
+			for(int i = 0, numGreedyArgs = 0; i < argumentsArr.length; i++) {
+				if(argumentsArr[i] instanceof IGreedyArgument) {
+					if(++numGreedyArgs > 1 || i != argumentsArr.length - 1) {
+						throw new GreedyArgumentException();
+					}
 				}
 			}
 			
 			//Assign the command's permissions to arguments if the arguments don't already have one
-			for(Argument argument : copyOfArgs) {
+			for(Argument argument : argumentsArr) {
 				if(argument.getArgumentPermission() == null) {
 					argument.withPermission(permission);
 				}
 			}
 			
 			if(!executor.isEmpty()) {
-				CommandAPIHandler.getInstance().register(commandName, permission, aliases, requirements, copyOfArgs, executor, isConverted);
+				CommandAPIHandler.getInstance().register(commandName, permission, aliases, requirements, argumentsArr, executor, isConverted);
 			}
 			
-			if(this.subcommands.size() > 0) {
-				for(CommandAPICommand subcommand : this.subcommands) {
-					flatten(this, new ArrayList<>(), subcommand);
-				}
+			for(CommandAPICommand subcommand : this.subcommands) {
+				flatten(this, new ArrayList<>(), subcommand);
 			}
-		} catch (Exception e) {
+		} catch (InvalidCommandNameException | GreedyArgumentException | CommandSyntaxException | IOException e) {
 			e.printStackTrace();
 		}
 		
