@@ -22,7 +22,11 @@ package dev.jorel.commandapi.arguments;
 
 import org.bukkit.entity.EntityType;
 
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.nms.NMS;
 
 /**
  * An argument that represents the Bukkit EntityType object
@@ -50,5 +54,11 @@ public class EntityTypeArgument extends SafeOverrideableArgument<EntityType> imp
 	@Override
 	public SuggestionProviders getSuggestionProvider() {
 		return SuggestionProviders.ENTITIES;
+	}
+	
+	@Override
+	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		return nms.getEntityType(cmdCtx, key);
 	}
 }

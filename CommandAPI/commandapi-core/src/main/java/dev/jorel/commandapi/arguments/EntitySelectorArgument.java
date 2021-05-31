@@ -25,7 +25,11 @@ import java.util.Collection;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.nms.NMS;
 
 /**
  * An argument that represents a selection of entities
@@ -74,6 +78,12 @@ public class EntitySelectorArgument extends Argument {
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.ENTITY_SELECTOR;
+	}
+	
+	@Override
+	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		return nms.getEntitySelector(cmdCtx, key, selector);
 	}
 	
 	/*

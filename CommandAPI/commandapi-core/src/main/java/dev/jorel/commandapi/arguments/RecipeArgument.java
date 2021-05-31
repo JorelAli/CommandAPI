@@ -23,7 +23,11 @@ package dev.jorel.commandapi.arguments;
 import org.bukkit.Keyed;
 import org.bukkit.inventory.Recipe;
 
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.nms.NMS;
 
 /**
  * An argument that represents the Bukkit Recipe object
@@ -52,5 +56,11 @@ public class RecipeArgument extends SafeOverrideableArgument<Recipe> implements 
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.RECIPE;
 	}	
+	
+	@Override
+	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		return nms.getRecipe(cmdCtx, key);
+	}
 	
 }

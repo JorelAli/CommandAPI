@@ -21,8 +21,11 @@
 package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.arguments.LongArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
+import dev.jorel.commandapi.nms.NMS;
 
 /**
  * An argument that represents primitive Java longs
@@ -67,6 +70,12 @@ public class LongArgument extends SafeOverrideableArgument<Long> {
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.PRIMITIVE_LONG;
+	}
+	
+	@Override
+	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 	
 }

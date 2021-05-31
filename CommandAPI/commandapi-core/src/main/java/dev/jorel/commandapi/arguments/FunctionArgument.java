@@ -22,7 +22,11 @@ package dev.jorel.commandapi.arguments;
 
 import org.bukkit.NamespacedKey;
 
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 
 /**
@@ -53,5 +57,11 @@ public class FunctionArgument extends SafeOverrideableArgument<NamespacedKey> im
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.FUNCTION;
+	}
+	
+	@Override
+	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		return nms.getFunction(cmdCtx, key);
 	}
 }

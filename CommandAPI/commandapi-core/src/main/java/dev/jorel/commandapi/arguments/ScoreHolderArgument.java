@@ -22,7 +22,11 @@ package dev.jorel.commandapi.arguments;
 
 import java.util.Collection;
 
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.nms.NMS;
 
 /**
  * An argument that represents a scoreholder's name, or a collection of scoreholder names
@@ -66,6 +70,12 @@ public class ScoreHolderArgument extends Argument {
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.SCORE_HOLDER;
+	}
+	
+	@Override
+	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		return single ? nms.getScoreHolderSingle(cmdCtx, key) : nms.getScoreHolderMultiple(cmdCtx, key);
 	}
 
 	/**

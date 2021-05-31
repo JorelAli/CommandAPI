@@ -21,8 +21,11 @@
 package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
+import dev.jorel.commandapi.nms.NMS;
 
 /**
  * An argument that represents primitive Java ints
@@ -67,6 +70,12 @@ public class IntegerArgument extends SafeOverrideableArgument<Integer> {
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.PRIMITIVE_INTEGER;
+	}
+	
+	@Override
+	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 	
 }

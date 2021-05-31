@@ -23,7 +23,11 @@ package dev.jorel.commandapi.arguments;
 import org.bukkit.Keyed;
 import org.bukkit.loot.LootTable;
 
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.nms.NMS;
 
 /**
  * An argument that represents the Bukkit LootTable object
@@ -51,5 +55,11 @@ public class LootTableArgument extends SafeOverrideableArgument<LootTable> imple
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.LOOT_TABLE;
+	}
+	
+	@Override
+	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		return nms.getLootTable(cmdCtx, key);
 	}
 }

@@ -22,7 +22,11 @@ package dev.jorel.commandapi.arguments;
 
 import org.bukkit.scoreboard.Team;
 
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.nms.NMS;
 
 /**
  * An argument that represents the name of a scoreboard Team
@@ -45,5 +49,11 @@ public class TeamArgument extends SafeOverrideableArgument<Team> {
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.TEAM;
+	}
+	
+	@Override
+	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		return nms.getTeam(cmdCtx, key);
 	}
 }

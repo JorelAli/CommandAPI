@@ -21,6 +21,10 @@
 package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
+import dev.jorel.commandapi.nms.NMS;
 
 /**
  * An argument that represents primitive Java booleans
@@ -43,6 +47,12 @@ public class BooleanArgument extends SafeOverrideableArgument<Boolean> {
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.PRIMITIVE_BOOLEAN;
+	}
+	
+	@Override
+	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 	
 }

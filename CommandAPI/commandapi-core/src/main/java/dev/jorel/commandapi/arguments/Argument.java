@@ -29,11 +29,14 @@ import java.util.function.Predicate;
 import org.bukkit.command.CommandSender;
 
 import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.StringTooltip;
 import dev.jorel.commandapi.SuggestionInfo;
+import dev.jorel.commandapi.nms.NMS;
 
 /**
  * The core abstract class for Command API arguments
@@ -89,6 +92,9 @@ public abstract class Argument implements IOverrideableSuggestions {
 	public final String getNodeName() {
 		return this.nodeName;
 	}
+	
+	public abstract <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
 	/////////////////
 	// Suggestions //

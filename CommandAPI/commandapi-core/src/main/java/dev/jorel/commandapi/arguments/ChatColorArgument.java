@@ -24,7 +24,11 @@ import java.util.function.Function;
 
 import org.bukkit.ChatColor;
 
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.nms.NMS;
 
 /**
  * An argument that represents the Bukkit ChatColor object
@@ -49,5 +53,11 @@ public class ChatColorArgument extends SafeOverrideableArgument<ChatColor> {
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.CHATCOLOR;
+	}
+	
+	@Override
+	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		return nms.getChatColor(cmdCtx, key);
 	}
 }

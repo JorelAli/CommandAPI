@@ -22,7 +22,11 @@ package dev.jorel.commandapi.arguments;
 
 import org.bukkit.Location;
 
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.nms.NMS;
 
 /**
  * An argument that represents the Bukkit Location object
@@ -69,5 +73,11 @@ public class LocationArgument extends SafeOverrideableArgument<Location> {
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.LOCATION;
+	}
+	
+	@Override
+	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		return nms.getLocation(cmdCtx, key, locationType);
 	}
 }

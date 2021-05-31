@@ -24,7 +24,11 @@ import java.util.function.Function;
 
 import org.bukkit.World.Environment;
 
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.nms.NMS;
 
 /**
  * An argument that represents the Bukkit Environment object
@@ -47,5 +51,11 @@ public class EnvironmentArgument extends SafeOverrideableArgument<Environment> {
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.ENVIRONMENT;
+	}
+	
+	@Override
+	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		return nms.getDimension(cmdCtx, key);
 	}
 }

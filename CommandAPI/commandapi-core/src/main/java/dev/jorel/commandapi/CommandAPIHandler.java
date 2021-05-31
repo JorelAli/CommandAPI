@@ -56,7 +56,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.context.ParsedArgument;
 import com.mojang.brigadier.context.StringRange;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
@@ -64,16 +63,10 @@ import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import dev.jorel.commandapi.arguments.Argument;
-import dev.jorel.commandapi.arguments.CustomArgument;
-import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
-import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.ICustomProvidedArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
-import dev.jorel.commandapi.arguments.Location2DArgument;
-import dev.jorel.commandapi.arguments.LocationArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
-import dev.jorel.commandapi.arguments.ScoreHolderArgument;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.preprocessor.RequireField;
 
@@ -325,32 +318,6 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 		return argList.toArray();
 	}
 	
-	private Object parseCustomArgument(CustomArgument<?> arg, CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		String customresult;
-		if(arg.isKeyed()) {
-			customresult = getNMS().getKeyedAsString(cmdCtx, key);
-		} else {
-			customresult = cmdCtx.getArgument(key, String.class);
-		}
-		
-		try {
-			if(arg.getParser() != null && arg.getParser2() == null) {
-				return arg.getParser().apply(customresult);
-			} else {
-				return arg.getParser2().apply(NMS.getCommandSenderForCLW(cmdCtx.getSource()), customresult);
-			}
-		} catch (CustomArgumentException e) {
-			throw e.toCommandSyntax(customresult, cmdCtx);
-		} catch (Exception e) {
-			String errorMsg = new MessageBuilder("Error in executing command ").appendFullInput().append(" - ")
-					.appendArgInput().appendHere().toString().replace("%input%", customresult)
-					.replace("%finput%", cmdCtx.getInput());
-			throw new SimpleCommandExceptionType(() -> {
-				return errorMsg;
-			}).create();
-		}
-	}
-	
 	
 	/**
 	 * Parses an argument and converts it into its standard Bukkit type (as defined in NMS.java)
@@ -363,61 +330,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	 * @throws CommandSyntaxException
 	 */
 	Object parseArgument(CommandContext<CommandListenerWrapper> cmdCtx, String key, Argument value) throws CommandSyntaxException {
-		if(!value.isListed()) {
-			return null;
-		}
-		return switch (value.getArgumentType()) {
-		case ANGLE                    -> NMS.getAngle(cmdCtx, key);
-		case ADVANCEMENT              -> NMS.getAdvancement(cmdCtx, key);
-		case AXIS                     -> NMS.getAxis(cmdCtx, key);
-		case BIOME                    -> NMS.getBiome(cmdCtx, key);
-		case BLOCK_PREDICATE          -> NMS.getBlockPredicate(cmdCtx, key);
-		case BLOCKSTATE               -> NMS.getBlockState(cmdCtx, key);
-		case ADVENTURE_CHAT           -> NMS.getAdventureChat(cmdCtx, key);
-		case CHAT                     -> NMS.getChat(cmdCtx, key);
-		case CHATCOLOR                -> NMS.getChatColor(cmdCtx, key);
-		case ADVENTURE_CHAT_COMPONENT -> NMS.getAdventureChatComponent(cmdCtx, key);
-		case CHAT_COMPONENT           -> NMS.getChatComponent(cmdCtx, key);
-		case CUSTOM                   -> parseCustomArgument((CustomArgument<?>) value, cmdCtx, key);
-		case ENCHANTMENT              -> NMS.getEnchantment(cmdCtx, key);
-		case ENTITY_SELECTOR          -> NMS.getEntitySelector(cmdCtx, key, ((EntitySelectorArgument) value).getEntitySelector());
-		case ENTITY_TYPE              -> NMS.getEntityType(cmdCtx, key);
-		case ENVIRONMENT              -> NMS.getDimension(cmdCtx, key);
-		case FLOAT_RANGE              -> NMS.getFloatRange(cmdCtx, key);
-		case FUNCTION                 -> NMS.getFunction(cmdCtx, key);
-		case INT_RANGE                -> NMS.getIntRange(cmdCtx, key);
-		case ITEMSTACK                -> NMS.getItemStack(cmdCtx, key);
-		case ITEMSTACK_PREDICATE      -> NMS.getItemStackPredicate(cmdCtx, key);
-		case LITERAL                  -> ((LiteralArgument) value).getLiteral();
-		case LOCATION                 -> NMS.getLocation(cmdCtx, key, ((LocationArgument) value).getLocationType());
-		case LOCATION_2D              -> NMS.getLocation2D(cmdCtx, key, ((Location2DArgument) value).getLocationType());
-		case LOOT_TABLE               -> NMS.getLootTable(cmdCtx, key);
-		case MATH_OPERATION           -> NMS.getMathOperation(cmdCtx, key);
-		case NBT_COMPOUND             -> NMS.getNBTCompound(cmdCtx, key);
-		case OBJECTIVE                -> NMS.getObjective(cmdCtx, key);
-		case OBJECTIVE_CRITERIA       -> NMS.getObjectiveCriteria(cmdCtx, key);
-		case PARTICLE                 -> NMS.getParticle(cmdCtx, key);
-		case PLAYER                   -> NMS.getPlayer(cmdCtx, key);
-		case POTION_EFFECT            -> NMS.getPotionEffect(cmdCtx, key);
-		case RECIPE                   -> NMS.getRecipe(cmdCtx, key);
-		case ROTATION                 -> NMS.getRotation(cmdCtx, key);
-		case SCORE_HOLDER             -> ((ScoreHolderArgument) value).isSingle() ? NMS.getScoreHolderSingle(cmdCtx, key) : NMS.getScoreHolderMultiple(cmdCtx, key);
-		case SCOREBOARD_SLOT          -> NMS.getScoreboardSlot(cmdCtx, key);
-		case MULTI_LITERAL            -> throw new IllegalStateException("Cannot parseArgument for MultiLiteralArgument");
-		case PRIMITIVE_BOOLEAN,
-			 PRIMITIVE_DOUBLE,
-			 PRIMITIVE_FLOAT,
-			 PRIMITIVE_INTEGER,
-			 PRIMITIVE_LONG,
-			 PRIMITIVE_STRING,
-			 PRIMITIVE_GREEDY_STRING,
-			 PRIMITIVE_TEXT          -> cmdCtx.getArgument(key, value.getPrimitiveType());
-		case SOUND                   -> NMS.getSound(cmdCtx, key);
-		case TEAM                    -> NMS.getTeam(cmdCtx, key);
-		case TIME                    -> NMS.getTime(cmdCtx, key);
-		case UUID                    -> NMS.getUUID(cmdCtx, key);
-		default                      -> throw new IllegalArgumentException("Unexpected value: " + value.getArgumentType());
-		};
+		return value.isListed() ? value.parseArgument(NMS, cmdCtx, key) : null;
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////

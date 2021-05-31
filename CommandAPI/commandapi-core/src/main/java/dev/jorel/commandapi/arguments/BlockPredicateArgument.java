@@ -22,7 +22,11 @@ package dev.jorel.commandapi.arguments;
 
 import java.util.function.Predicate;
 
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.nms.NMS;
 
 /**
  * An argument that represents a <code>Predicate&lt;Block&gt;</code>
@@ -45,5 +49,11 @@ public class BlockPredicateArgument extends Argument {
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.BLOCK_PREDICATE;
+	}
+	
+	@Override
+	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		return nms.getBlockPredicate(cmdCtx, key);
 	}
 }

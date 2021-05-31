@@ -20,8 +20,12 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.exceptions.PaperAdventureNotFoundException;
+import dev.jorel.commandapi.nms.NMS;
 import net.kyori.adventure.text.Component;
 
 /**
@@ -52,5 +56,11 @@ public class AdventureChatComponentArgument extends Argument {
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.ADVENTURE_CHAT_COMPONENT;
+	}
+	
+	@Override
+	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		return nms.getAdventureChatComponent(cmdCtx, key);
 	}
 }

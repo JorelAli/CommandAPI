@@ -22,7 +22,11 @@ package dev.jorel.commandapi.arguments;
 
 import java.util.UUID;
 
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.nms.NMS;
 
 /**
  * An argument that represents a UUID
@@ -45,5 +49,11 @@ public class UUIDArgument extends SafeOverrideableArgument<UUID> {
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.UUID;
+	}
+	
+	@Override
+	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		return nms.getUUID(cmdCtx, key);
 	}
 }

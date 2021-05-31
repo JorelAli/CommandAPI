@@ -24,7 +24,11 @@ import java.util.EnumSet;
 
 import org.bukkit.Axis;
 
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.nms.NMS;
 
 /**
  * An argument that represents x, y and z axes as an EnumSet of Axis
@@ -47,5 +51,11 @@ public class AxisArgument extends SafeOverrideableArgument<EnumSet<Axis>> {
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.AXIS;
+	}
+	
+	@Override
+	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		return nms.getAxis(cmdCtx, key);
 	}
 }

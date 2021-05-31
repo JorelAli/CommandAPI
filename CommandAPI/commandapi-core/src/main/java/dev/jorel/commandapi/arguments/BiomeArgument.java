@@ -24,7 +24,11 @@ import java.util.function.Function;
 
 import org.bukkit.block.Biome;
 
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.nms.NMS;
 
 /**
  * An argument that represents the Bukkit Biome object
@@ -52,5 +56,11 @@ public class BiomeArgument extends SafeOverrideableArgument<Biome> implements IC
 	@Override
 	public SuggestionProviders getSuggestionProvider() {
 		return SuggestionProviders.BIOMES;
+	}
+	
+	@Override
+	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		return nms.getBiome(cmdCtx, key);
 	}
 }

@@ -29,6 +29,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.nms.NMS;
 
 /**
  * An argument that represents any custom object
@@ -109,6 +110,34 @@ public class CustomArgument<T> extends Argument {
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.CUSTOM;
+	}
+	
+	@Override
+	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		String customresult;
+		if(this.keyed) {
+			customresult = nms.getKeyedAsString(cmdCtx, key);
+		} else {
+			customresult = cmdCtx.getArgument(key, String.class);
+		}
+		
+		try {
+			if(parser != null && parser2 == null) {
+				return parser.apply(customresult);
+			} else {
+				return parser2.apply(nms.getCommandSenderForCLW(cmdCtx.getSource()), customresult);
+			}
+		} catch (CustomArgumentException e) {
+			throw e.toCommandSyntax(customresult, cmdCtx);
+		} catch (Exception e) {
+			String errorMsg = new MessageBuilder("Error in executing command ").appendFullInput().append(" - ")
+					.appendArgInput().appendHere().toString().replace("%input%", customresult)
+					.replace("%finput%", cmdCtx.getInput());
+			throw new SimpleCommandExceptionType(() -> {
+				return errorMsg;
+			}).create();
+		}
 	}
 	
 	/**
