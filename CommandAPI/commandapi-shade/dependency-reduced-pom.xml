@@ -20,7 +20,8 @@
             <configuration>
               <artifactSet>
                 <includes>
-                  <include>dev.jorel:commandapi-1.16.4</include>
+                  <include>dev.jorel:commandapi-1.16.5</include>
+                  <include>dev.jorel:commandapi-1.17</include>
                   <include>dev.jorel:commandapi-core</include>
                   <include>dev.jorel:commandapi-vh</include>
                 </includes>
@@ -39,12 +40,4 @@
       </plugin>
     </plugins>
   </build>
-  <dependencies>
-    <dependency>
-      <groupId>dev.jorel</groupId>
-      <artifactId>commandapi-1.16.5</artifactId>
-      <version>6.0.0</version>
-      <scope>compile</scope>
-    </dependency>
-  </dependencies>
 </project>
