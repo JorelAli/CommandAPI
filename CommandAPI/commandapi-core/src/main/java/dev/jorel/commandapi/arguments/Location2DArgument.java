@@ -50,17 +50,17 @@ public class Location2DArgument extends SafeOverrideableArgument<Location2D> {
 				: CommandAPIHandler.getInstance().getNMS()._ArgumentVec2(),
 				type == LocationType.BLOCK_POSITION ? (Location2D l) -> l.getBlockX() + " " + l.getBlockZ()
 						: (Location2D l) -> l.getX() + " " + l.getZ());
-		locationType = type;
+		isPrecise = type == LocationType.PRECISE_POSITION;
 	}
 
-	private final LocationType locationType;
+	private final boolean isPrecise;
 
 	/**
 	 * Returns whether this argument is LocationType.BLOCK_POSITION or LocationType.PRECISE_POSITION 
 	 * @return the location type of this argument
 	 */
 	public LocationType getLocationType() {
-		return locationType;
+		return isPrecise ? LocationType.PRECISE_POSITION : LocationType.BLOCK_POSITION;
 	}
 	
 	@Override
@@ -76,6 +76,6 @@ public class Location2DArgument extends SafeOverrideableArgument<Location2D> {
 	@Override
 	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return nms.getLocation2D(cmdCtx, key, locationType);
+		return isPrecise ? nms.getLocation2DPrecise(cmdCtx, key) : nms.getLocation2DBlock(cmdCtx, key);
 	}
 }

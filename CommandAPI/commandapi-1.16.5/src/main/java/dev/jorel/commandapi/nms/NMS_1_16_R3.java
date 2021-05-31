@@ -88,7 +88,6 @@ import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.ICustomProvidedArgument.SuggestionProviders;
-import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.wrappers.ComplexRecipeImpl;
 import dev.jorel.commandapi.wrappers.FloatRange;
@@ -399,22 +398,19 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 	//Converts NMS function to SimpleFunctionWrapper
 	private SimpleFunctionWrapper convertFunction(CustomFunction customFunction) {
-		NamespacedKey minecraftKey = fromMinecrafKey(customFunction.a());
-
-		CustomFunctionData customFunctionData = MINECRAFT_SERVER.getFunctionData();
-		ToIntFunction<CommandListenerWrapper> appliedObj = clw -> customFunctionData.a(customFunction, clw);
+		ToIntFunction<CommandListenerWrapper> appliedObj = clw -> MINECRAFT_SERVER.getFunctionData().a(customFunction, clw);
 
 		Object[] cArr = customFunction.b();
 		String[] result = new String[cArr.length];
 		for(int i = 0, size = cArr.length; i < size; i++) {
 			result[i] = cArr[i].toString();
 		}
-		return new SimpleFunctionWrapper(minecraftKey, appliedObj, result);
+		return new SimpleFunctionWrapper(fromMinecrafKey(customFunction.a()), appliedObj, result);
 	}
 
 	@Override
 	public void createDispatcherFile(File file, com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> dispatcher) throws IOException {
-		Files.write((new GsonBuilder()).setPrettyPrinting().create()
+		Files.write(new GsonBuilder().setPrettyPrinting().create()
 				.toJson(ArgumentRegistry.a(dispatcher, dispatcher.getRoot())), file, StandardCharsets.UTF_8);
 	}
 
@@ -581,18 +577,15 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	
 	@Override
 	public FunctionWrapper[] getFunction(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
-		Collection<CustomFunction> customFuncList = ArgumentTag.a(cmdCtx, str);
-		FunctionWrapper[] result = new FunctionWrapper[customFuncList.size()];
+		List<FunctionWrapper> result = new ArrayList<>();
 		CommandListenerWrapper commandListenerWrapper = getCLW(cmdCtx).a().b(2);
-
-		int count = 0;
-		for (CustomFunction customFunction : customFuncList) { 
-			result[count++] = FunctionWrapper.fromSimpleFunctionWrapper(convertFunction(customFunction), commandListenerWrapper, e -> {
+		
+		for(CustomFunction customFunction : ArgumentTag.a(cmdCtx, str)) {
+			result.add(FunctionWrapper.fromSimpleFunctionWrapper(convertFunction(customFunction), commandListenerWrapper, e -> {
 				return getCLW(cmdCtx).a(((CraftEntity) e).getHandle());
-			});
+			}));
 		}
-
-		return result;
+		return result.toArray(new FunctionWrapper[0]);
 	}
 	
 	@Override
@@ -636,30 +629,31 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
-	public Location getLocation(CommandContext<CommandListenerWrapper> cmdCtx, String str, LocationType locationType)
+	public Location getLocationBlock(CommandContext<CommandListenerWrapper> cmdCtx, String str)
 			throws CommandSyntaxException {
-		return switch (locationType) {
-		case BLOCK_POSITION:
-			BlockPosition blockPos = ArgumentPosition.a(cmdCtx, str);
-			yield new Location(getWorldForCLW(getCLW(cmdCtx)), blockPos.getX(), blockPos.getY(),
-					blockPos.getZ());
-		case PRECISE_POSITION:
-			Vec3D vecPos = ArgumentVec3.a(cmdCtx, str);
-			yield new Location(getWorldForCLW(getCLW(cmdCtx)), vecPos.x, vecPos.y, vecPos.z);
-		};
+		BlockPosition blockPos = ArgumentPosition.a(cmdCtx, str);
+		return new Location(getWorldForCLW(getCLW(cmdCtx)), blockPos.getX(), blockPos.getY(), blockPos.getZ());
+	}
+	
+	@Override
+	public Location getLocationPrecise(CommandContext<CommandListenerWrapper> cmdCtx, String str)
+			throws CommandSyntaxException {
+		Vec3D vecPos = ArgumentVec3.a(cmdCtx, str);
+		return new Location(getWorldForCLW(getCLW(cmdCtx)), vecPos.x, vecPos.y, vecPos.z);
+	}
+	
+	@Override
+	public Location2D getLocation2DPrecise(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException {
+		Vec2F vecPos = ArgumentVec2.a(cmdCtx, key);
+		return new Location2D(getWorldForCLW(getCLW(cmdCtx)), vecPos.i, vecPos.j);
 	}
 
 	@Override
-	public Location2D getLocation2D(CommandContext<CommandListenerWrapper> cmdCtx, String key, LocationType locationType2d)
+	public Location2D getLocation2DBlock(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException {
-		return switch (locationType2d) {
-		case BLOCK_POSITION:
-			BlockPosition2D blockPos = ArgumentVec2I.a(cmdCtx, key);
-			yield new Location2D(getWorldForCLW(getCLW(cmdCtx)), blockPos.a, blockPos.b);
-		case PRECISE_POSITION:
-			Vec2F vecPos = ArgumentVec2.a(cmdCtx, key);
-			yield new Location2D(getWorldForCLW(getCLW(cmdCtx)), vecPos.i, vecPos.j);
-		};
+		BlockPosition2D blockPos = ArgumentVec2I.a(cmdCtx, key);
+		return new Location2D(getWorldForCLW(getCLW(cmdCtx)), blockPos.a, blockPos.b);
 	}
 
 	@Override

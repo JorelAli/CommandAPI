@@ -61,7 +61,6 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
 import dev.jorel.commandapi.arguments.ICustomProvidedArgument.SuggestionProviders;
-import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.IntegerRange;
@@ -74,10 +73,10 @@ import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 public interface NMS<CommandListenerWrapper> {
-	
+
 	/* Argument types */
 	ArgumentType<?> _ArgumentAngle();
-	
+
 	ArgumentType<?> _ArgumentAxis();
 
 	ArgumentType<?> _ArgumentBlockPredicate();
@@ -103,7 +102,7 @@ public interface NMS<CommandListenerWrapper> {
 	ArgumentType<?> _ArgumentIntRange();
 
 	ArgumentType<?> _ArgumentItemPredicate();
-	
+
 	ArgumentType<?> _ArgumentItemStack();
 
 	ArgumentType<?> _ArgumentMathOperation();
@@ -159,7 +158,7 @@ public interface NMS<CommandListenerWrapper> {
 	String convert(Particle particle);
 
 	String convert(PotionEffectType potion);
-	
+
 	String convert(Sound sound);
 
 	/**
@@ -245,10 +244,15 @@ public interface NMS<CommandListenerWrapper> {
 
 	String getKeyedAsString(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
-	Location getLocation(CommandContext<CommandListenerWrapper> cmdCtx, String key, LocationType locationType)
+	Location2D getLocation2DBlock(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException;
+	
+	Location2D getLocation2DPrecise(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException;
 
-	Location2D getLocation2D(CommandContext<CommandListenerWrapper> cmdCtx, String key, LocationType locationType2d)
+	Location getLocationBlock(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException;
+
+	Location getLocationPrecise(CommandContext<CommandListenerWrapper> cmdCtx, String str)
 			throws CommandSyntaxException;
 
 	LootTable getLootTable(CommandContext<CommandListenerWrapper> cmdCtx, String key);
