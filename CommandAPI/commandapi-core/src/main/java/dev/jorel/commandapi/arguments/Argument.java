@@ -101,6 +101,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 	/////////////////
 
 	private Optional<Function<SuggestionInfo, IStringTooltip[]>> suggestions = Optional.empty();
+	private Optional<Function<SuggestionInfo, IStringTooltip[]>> addedSuggestions = Optional.empty();
 		
 	/**
 	 * Maps a String[] of suggestions to a StringTooltip[], using StringTooltip.none.
@@ -115,6 +116,15 @@ public abstract class Argument implements IOverrideableSuggestions {
 			result[i] = StringTooltip.none(suggestions[i]);
 		}
 		return result;
+	}
+	
+	public Argument appendSuggestions(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
+		this.addedSuggestions = Optional.of(suggestions);
+		return this;
+	}
+
+	public Optional<Function<SuggestionInfo, IStringTooltip[]>> getAddedSuggestions() {
+		return addedSuggestions;
 	}
 
 	/**

@@ -33,8 +33,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.bukkit.Bukkit;
@@ -44,7 +46,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
-import com.google.common.base.Suppliers;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.LiteralMessage;
@@ -531,7 +532,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 
 		// Handle arguments with built-in suggestion providers
 		else if (innerArg instanceof ICustomProvidedArgument customProvidedArg && !innerArg.getOverriddenSuggestions().isPresent()) {
-			return getRequiredArgumentBuilderWithProvider(innerArg,
+			return getRequiredArgumentBuilderWithProvider(innerArg, args,
 					NMS.getSuggestionProvider(customProvidedArg.getSuggestionProvider()))
 							.executes(command);
 		}
@@ -555,7 +556,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 
 			// Handle arguments with built-in suggestion providers
 			else if (outerArg instanceof ICustomProvidedArgument customProvidedArg && !outerArg.getOverriddenSuggestions().isPresent()) {
-				outer = getRequiredArgumentBuilderWithProvider(outerArg,
+				outer = getRequiredArgumentBuilderWithProvider(outerArg, args,
 						NMS.getSuggestionProvider(customProvidedArg.getSuggestionProvider()))
 								.then(outer);
 			}
@@ -693,8 +694,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	 * @param permission  the permission required to use this literal
 	 * @return a brigadier LiteralArgumentBuilder representing a literal
 	 */
-	LiteralArgumentBuilder<CommandListenerWrapper> getLiteralArgumentBuilderArgument(String commandName,
-			CommandPermission permission, Predicate<CommandSender> requirements) {
+	LiteralArgumentBuilder<CommandListenerWrapper> getLiteralArgumentBuilderArgument(String commandName, CommandPermission permission, Predicate<CommandSender> requirements) {
 		LiteralArgumentBuilder<CommandListenerWrapper> builder = LiteralArgumentBuilder.literal(commandName);
 		return builder.requires((CommandListenerWrapper clw) -> permissionCheck(NMS.getCommandSenderFromCLW(clw), permission, requirements));
 	}
@@ -702,25 +702,34 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	// Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
 	RequiredArgumentBuilder<CommandListenerWrapper, ?> getRequiredArgumentBuilderDynamic(
 			final Argument[] args, Argument argument) {
-
-		// If there are no changes to the default suggestions, return it as normal
-		if (!argument.getOverriddenSuggestions().isPresent()) {
-			RequiredArgumentBuilder<CommandListenerWrapper, ?> builder = RequiredArgumentBuilder.argument(argument.getNodeName(), argument.getRawType());
-			return builder.requires((CommandListenerWrapper clw) -> permissionCheck(NMS.getCommandSenderFromCLW(clw), argument.getArgumentPermission(), argument.getRequirements()));
-		}
-
-		// Otherwise, we have to handle arguments of the form BiFunction<CommandSender,
-		// Object[], String[]>
-		else {
-			return getRequiredArgumentBuilderWithProvider(argument, toSuggestions(argument.getNodeName(), args));
+		
+		if(argument.getOverriddenSuggestions().isPresent()) {
+			// Override the suggestions
+			return getRequiredArgumentBuilderWithProvider(argument, args, toSuggestions(argument.getNodeName(), args, true));
+		} else {
+			return getRequiredArgumentBuilderWithProvider(argument, args, (cmdCtx, builder) -> argument.getRawType().listSuggestions(cmdCtx, builder));
 		}
 	}
 
 	// Gets a RequiredArgumentBuilder for an argument, given a SuggestionProvider
-	RequiredArgumentBuilder<CommandListenerWrapper, ?> getRequiredArgumentBuilderWithProvider(Argument argument,
-			SuggestionProvider<CommandListenerWrapper> provider) {
-		RequiredArgumentBuilder<CommandListenerWrapper, ?> builder = RequiredArgumentBuilder.argument(argument.getNodeName(), argument.getRawType());
-		return builder.requires((CommandListenerWrapper clw) -> permissionCheck(NMS.getCommandSenderFromCLW(clw), argument.getArgumentPermission(), argument.getRequirements())).suggests(provider);
+	RequiredArgumentBuilder<CommandListenerWrapper, ?> getRequiredArgumentBuilderWithProvider(Argument argument, Argument[] args, SuggestionProvider<CommandListenerWrapper> provider) {
+		RequiredArgumentBuilder<CommandListenerWrapper, ?> requiredArgumentBuilder = RequiredArgumentBuilder.argument(argument.getNodeName(), argument.getRawType());
+		requiredArgumentBuilder = requiredArgumentBuilder.requires((CommandListenerWrapper clw) -> permissionCheck(NMS.getCommandSenderFromCLW(clw), argument.getArgumentPermission(), argument.getRequirements()));
+		
+		SuggestionProvider<CommandListenerWrapper> newSuggestionsProvider = provider;
+		
+		// If we have suggestions to add, combine provider with the suggestions
+		if(argument.getAddedSuggestions().isPresent() && argument.getOverriddenSuggestions().isEmpty()) {
+			SuggestionProvider<CommandListenerWrapper> addedSuggestions = toSuggestions(argument.getNodeName(), args, false);
+			
+			newSuggestionsProvider = (cmdCtx, builder) -> {
+				addedSuggestions.getSuggestions(cmdCtx, builder);
+				provider.getSuggestions(cmdCtx, builder);
+				return builder.buildFuture();
+			};
+		} 
+		
+		return requiredArgumentBuilder.requires((CommandListenerWrapper clw) -> permissionCheck(NMS.getCommandSenderFromCLW(clw), argument.getArgumentPermission(), argument.getRequirements())).suggests(newSuggestionsProvider);
 	}
 	
 	static Argument getArgument(Argument[] args, String nodeName) {
@@ -732,7 +741,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 		throw new NoSuchElementException("Could not find argument " + nodeName);
 	}
 	
-	SuggestionProvider<CommandListenerWrapper> toSuggestions(String nodeName, Argument[] args) {
+	SuggestionProvider<CommandListenerWrapper> toSuggestions(String nodeName, Argument[] args, boolean overrideSuggestions) {
 		return (CommandContext<CommandListenerWrapper> context, SuggestionsBuilder builder) -> {
 			// Populate Object[], which is our previously filled arguments
 			List<Object> previousArguments = new ArrayList<>();
@@ -761,13 +770,9 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 				}
 			}
 			
-			// I actually don't know what the method is to get the "last argument bit", so I'll use builder.getRemaining() for now
 			SuggestionInfo suggestionInfo = new SuggestionInfo(NMS.getCommandSenderFromCLW(context.getSource()), previousArguments.toArray(), builder.getInput(), builder.getRemaining());
-			return getSuggestionsBuilder(builder, getArgument(args, nodeName)
-					.getOverriddenSuggestions()
-					.orElseGet(Suppliers.ofInstance(o -> new IStringTooltip[0]))
-					.apply(suggestionInfo)
-			);
+			Optional<Function<SuggestionInfo, IStringTooltip[]>> suggestionsToAddOrOverride = overrideSuggestions ? getArgument(args, nodeName).getOverriddenSuggestions() : getArgument(args, nodeName).getAddedSuggestions();
+			return getSuggestionsBuilder(builder, suggestionsToAddOrOverride.orElseGet(() -> o -> new IStringTooltip[0]).apply(suggestionInfo));
 		};
 	}
 	
