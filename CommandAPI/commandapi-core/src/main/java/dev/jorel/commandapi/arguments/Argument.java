@@ -118,7 +118,7 @@ public abstract class Argument implements IOverrideableSuggestions {
 		return result;
 	}
 	
-	public Argument addSuggestions(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
+	public Argument appendSuggestions(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
 		this.addedSuggestions = Optional.of(suggestions);
 		return this;
 	}

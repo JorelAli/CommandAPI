@@ -171,6 +171,6 @@ public abstract class Brigadier {
 	 *         argument declared in the List with key argumentName
 	 */
 	public static SuggestionProvider toSuggestions(String nodeName, List<Argument> args) {
-		return CommandAPIHandler.getInstance().toSuggestions(nodeName, args.toArray(new Argument[0]));
+		return CommandAPIHandler.getInstance().toSuggestions(nodeName, args.toArray(new Argument[0]), true);
 	}
 }
