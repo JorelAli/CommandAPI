@@ -11,7 +11,7 @@ build-dir = "./../docs/6.0.0"
 git-repository-url = "https://github.com/JorelAli/CommandAPI"
 default-theme = "rust"
 additional-css = ["style.css"]
-additional-js = ["sidebar.js"]
+additional-js = ["sidebar.js", "mccmd.js"]
 mathjax-support = true
 
 [output.html.fold]

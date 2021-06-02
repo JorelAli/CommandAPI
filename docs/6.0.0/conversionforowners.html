@@ -200,6 +200,7 @@
 <li><strong><code>config.yml</code> cannot have tab characters</strong> - The <code>config.yml</code> file <em>must</em> only consist of spaces!</li>
 <li>Indentation is important and should be <em>two spaces</em></li>
 </ul>
+<p>If you're uncertain if your configuration is valid (or you're getting weird errors in the console), you can check if your configuration is valid using <a href="http://www.yamllint.com/">YAMLLint</a>.</p>
 <hr />
 <h3><a class="header" href="#converting-all-plugin-commands" id="converting-all-plugin-commands">Converting all plugin commands</a></h3>
 <p>To convert all of the commands that a plugin has, add the name of the plugin, followed by a <code>~</code> character to the list of plugins to convert in the <code>config.yml</code> file.</p>
@@ -291,6 +292,8 @@ plugins-to-convert:
         <!-- Custom JS scripts -->
         
         <script type="text/javascript" src="sidebar.js"></script>
+        
+        <script type="text/javascript" src="mccmd.js"></script>
         
 
         

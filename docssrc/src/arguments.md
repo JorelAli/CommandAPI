@@ -1,6 +1,6 @@
 # Arguments
 
-Arguments in the CommandAPI are registered by using a `List<Argument>` object. There are two things you need to keep in mind when creating arguments:
+Arguments in the CommandAPI are registered by using an `Argument[]` or `List<Argument>` object. There are two things you need to keep in mind when creating arguments:
 
 * The order which they will be used
 * The type of each argument
@@ -10,14 +10,30 @@ By definition of a `List`, the order of the elements inserted into it are preser
 Adding arguments for registration is simple:
 
 ```java
-//Create a List
+// Create a List
 List<Argument> arguments = new ArrayList<>();
 
-//Add an argument with the node "target", which is a PlayerArgument
+// Add an argument with the node "target", which is a PlayerArgument
 arguments.add(new PlayerArgument("target"));
 ```
 
 The String value is the node that is registered into Minecraft's internal command graph. This is name is also used as a prompt that is shown to a player when they are entering the command.
+
+-----
+
+The CommandAPI is very flexible when it comes to registering arguments, and lets you use a number of different methods to suit your preference:
+
+```java
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:argumentsyntax1}}
+```
+
+```java
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:argumentsyntax2}}
+```
+
+```java
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:argumentsyntax3}}
+```
 
 -----
 
@@ -26,19 +42,7 @@ The String value is the node that is registered into Minecraft's internal comman
 To access arguments, they have to be casted to the type that the argument represents. The order of the arguments in the `args[]` is the same as the order in which the arguments were declared.
 
 ```java
-List<ArgumentType> arguments = new ArrayList<>();
-arguments.add(new StringArgument("arg0"));
-arguments.add(new PotionEffectArgument("arg1"));
-arguments.add(new LocationArgument("arg2"));
-
-new CommandAPICommand("cmd")
-    .withArguments(arguments)
-    .executes((sender, args) -> {
-        String stringArg = (String) args[0];
-        PotionEffectType potionArg = (PotionEffectType) args[1];
-        Location locationArg = (Location) args[2];
-    })
-    .register();
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:argumentcasting}}
 ```
 
 The type to cast each argument (declared in the `dev.jorel.commandapi.arguments` package) is listed below:
@@ -101,7 +105,7 @@ The type to cast each argument (declared in the `dev.jorel.commandapi.arguments`
 
 Sometimes, you want to register a command that has a different effect whether arguments are included or not. For example, take the `/kill` command. If you run `/kill` on its own, it will kill the command sender. If however you run `/kill <target>`, it will kill the target. In other words, we have the following command command syntax:
 
-```
+```mccmd
 /kill          - Kills yourself
 /kill <target> - Kills a target player
 ```
@@ -114,7 +118,7 @@ As shown by the command syntax, we need to register _two commands_.
 
 For example, say we're registering a command `/kill`:
 
-```
+```mccmd
 /kill          - Kills yourself
 /kill <target> - Kills a target player
 ```
@@ -122,23 +126,13 @@ For example, say we're registering a command `/kill`:
 We first register the first `/kill` command as normal:
 
 ```java
-new CommandAPICommand("kill")
-    .executesPlayer((player, args) -> {
-        player.setHealth(0);
-    })
-    .register();
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:argumentkillcmd}}
 ```
 
 Now we declare our command with arguments for our second command. Then, we can register our second command `/kill <target>` as usual:
 
 ```java
-// Register our second /kill <target> command
-new CommandAPICommand("kill")
-    .withArguments(new PlayerArgument("target"))
-    .executesPlayer((player, args) -> {
-        ((Player) args[0]).setHealth(0);
-    })
-    .register();
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:argumentkillcmd2}}
 ```
 
 This gives us the ability to run both `/kill` and `/kill <target>` with the same command name "kill", but have different results based on the arguments used.

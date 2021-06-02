@@ -154,6 +154,19 @@ public class Examples extends JavaPlugin {
  */
 
 {
+/* ANCHOR: commandunregistration */
+//Unregister the gamemode command from the server (by force)
+CommandAPI.unregister("gamemode", true);
+
+// Register our new /gamemode, with survival, creative, adventure and spectator
+new CommandAPICommand("gamemode")
+    .withArguments(new MultiLiteralArgument("survival", "creative", "adventure", "spectator"))
+    .executes((sender, args) -> {
+        //Implementation of our /gamemode command
+    }).register();
+/* ANCHOR_END: commandunregistration */
+}
+{
 /* ANCHOR: booleanargs */
 // Load keys from config file
 String[] configKeys = getConfig().getKeys(true).toArray(new String[0]);
@@ -998,11 +1011,8 @@ new CommandAPICommand("killme")
         player.setHealth(0);
     })
     .executesProxy((proxy, args) -> {
-        //Check if the callee is an Entity
-        if(proxy.getCallee() instanceof LivingEntity) {
-
-            //If so, kill the entity
-            LivingEntity target = (LivingEntity) proxy.getCallee();
+        //Check if the callee (target) is an Entity and kill it
+        if(proxy.getCallee() instanceof LivingEntity target) {
             target.setHealth(0);
         }
     })
@@ -1014,7 +1024,7 @@ new CommandAPICommand("killme")
 /* ANCHOR: nativesender */
 new CommandAPICommand("break")
     .executesNative((sender, args) -> {
-        Location location = (Location) sender.getLocation();
+        Location location = sender.getLocation();
         if(location != null) {
             location.getBlock().breakNaturally();
         }
@@ -1046,7 +1056,7 @@ new CommandAPICommand("randomnumber")
 
 {
 /* ANCHOR: resultingcommandexecutor3 */
-//Register reward giving system for a target player
+// Register reward giving system for a target player
 new CommandAPICommand("givereward")
     .withArguments(new EntitySelectorArgument("target", EntitySelector.ONE_PLAYER))
     .executes((sender, args) -> {
@@ -1060,28 +1070,92 @@ new CommandAPICommand("givereward")
 
 {
 /* ANCHOR: commandfailures */
-//Array of fruit
+// Array of fruit
 String[] fruit = new String[] {"banana", "apple", "orange"};
 
-//Argument accepting a String, suggested with the list of fruit
-List<Argument> arguments = new ArrayList<>();
-arguments.add(new StringArgument("item").overrideSuggestions(fruit));
-
-//Register the command
+// Register the command
 new CommandAPICommand("getfruit")
-    .withArguments(arguments)
+    .withArguments(new StringArgument("item").replaceSuggestions(info -> fruit))
     .executes((sender, args) -> {
         String inputFruit = (String) args[0];
         
         if(Arrays.stream(fruit).anyMatch(inputFruit::equals)) {
-            //Do something with inputFruit
+            // Do something with inputFruit
         } else {
-            //The player's input is not in the list of fruit
+            // The sender's input is not in the list of fruit
             CommandAPI.fail("That fruit doesn't exist!");
         }
     })
     .register();
 /* ANCHOR_END: commandfailures */
+}
+
+{
+/* ANCHOR: argumentsyntax1 */
+new CommandAPICommand("mycommand")
+    .withArguments(new StringArgument("arg0"))
+    .withArguments(new StringArgument("arg1"))
+    .withArguments(new StringArgument("arg2"))
+    // And so on
+/* ANCHOR_END: argumentsyntax1 */
+    ;
+
+/* ANCHOR: argumentsyntax2 */
+new CommandAPICommand("mycommand")
+    .withArguments(new StringArgument("arg0"), new StringArgument("arg1"), new StringArgument("arg2"))
+    // And so on
+/* ANCHOR_END: argumentsyntax2 */
+    ;
+
+/* ANCHOR: argumentsyntax3 */
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new StringArgument("arg0"));
+arguments.add(new StringArgument("arg1"));
+arguments.add(new StringArgument("arg2"));
+
+new CommandAPICommand("mycommand")
+    .withArguments(arguments)
+    // And so on
+/* ANCHOR_END: argumentsyntax3 */
+    ;
+}
+
+{
+/* ANCHOR: argumentkillcmd */
+new CommandAPICommand("kill")
+    .executesPlayer((player, args) -> {
+        player.setHealth(0);
+    })
+    .register();
+/* ANCHOR_END: argumentkillcmd */
+
+/* ANCHOR: argumentkillcmd2 */
+// Register our second /kill <target> command
+new CommandAPICommand("kill")
+    .withArguments(new PlayerArgument("target"))
+    .executesPlayer((player, args) -> {
+        ((Player) args[0]).setHealth(0);
+    })
+    .register();
+/* ANCHOR_END: argumentkillcmd2 */
+}
+
+{
+/* ANCHOR: argumentcasting */
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new StringArgument("arg0"));
+arguments.add(new PotionEffectArgument("arg1"));
+arguments.add(new LocationArgument("arg2"));
+
+new CommandAPICommand("cmd")
+    .withArguments(arguments)
+    .executes((sender, args) -> {
+        String stringArg = (String) args[0];
+        PotionEffectType potionArg = (PotionEffectType) args[1];
+        Location locationArg = (Location) args[2];
+    })
+    .register();
+/* ANCHOR_END: argumentcasting */
 }
 
 {
@@ -1098,7 +1172,7 @@ new CommandAPICommand("repair")
             is.setItemMeta(itemMeta);
         }
         
-        //Subtract 30 levels
+        // Subtract 30 levels
         player.setLevel(player.getLevel() - 30);
     })
     .register();

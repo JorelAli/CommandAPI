@@ -184,7 +184,7 @@
     })
     .register();
 </code></pre>
-<p>With normal command executors, these do not need to return anything. By default, this will return a <em>success value</em> of 1 if it runs successfully, and a <em>success value</em> of 0 if it runs unsuccessfully, either by throwing an exception <em>(RuntimeException)</em> or by forcing the command to fail (See the section on <a href="./commandfailures.html">handling command failures</a>.</p>
+<p>With normal command executors, these do not need to return anything. By default, this will return a <em>success value</em> of 1 if it runs successfully, and a <em>success value</em> of 0 if it runs unsuccessfully, either by throwing an exception <em>(RuntimeException)</em> or by forcing the command to fail (See the section on <a href="./commandfailures.html">handling command failures</a>).</p>
 <p>In short, this is what values are returned when a command is executed from a normal command executor:</p>
 <table><thead><tr><th align="center"></th><th align="center">Command Works</th><th align="center">Command Doesn't Work</th></tr></thead><tbody>
 <tr><td align="center"><strong>Success Value</strong></td><td align="center">1</td><td align="center">0</td></tr>
@@ -192,7 +192,12 @@
 </tbody></table>
 <div class="example">
 <h3><a class="header" href="#example---creating-a-message-broadcasting-system" id="example---creating-a-message-broadcasting-system">Example - Creating a message broadcasting system</a></h3>
-<p>To illustrate this, let's take a look at a simple message broadcasting command. We declare our arguments (in this case, &quot;message&quot;), we provide some aliases and set a permission required to run the command. Then we declare our main command body by using the <code>.executes()</code> method, before finally registering the command:</p>
+<p>To illustrate this, let's take a look at a simple message broadcasting command. We'll make a command which sends a message to everyone on the server, using the following syntax:</p>
+<pre><code class="language-mccmd">/broadcastmsg &lt;message&gt;
+/broadcastmessage &lt;message&gt;
+/broadcast &lt;message&gt;
+</code></pre>
+<p>We use an argument &quot;message&quot; to hold the message to broadcast, we provide some aliases and set a permission required to run the command. Then we declare our main command body by using the <code>.executes()</code> method, before finally registering the command:</p>
 <pre><code class="language-java">//Create our command
 new CommandAPICommand(&quot;broadcastmsg&quot;)
     .withArguments(new GreedyStringArgument(&quot;message&quot;)) // The arguments
@@ -211,29 +216,19 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 </div>
 <hr />
 <h2><a class="header" href="#restricting-who-can-run-your-command" id="restricting-who-can-run-your-command">Restricting who can run your command</a></h2>
-<p>The <code>CommandAPICommand</code> has multiple different <code>executes...()</code> methods that can restrict the command sender to any of the following objects:</p>
-<ul>
-<li><code>CommandSender</code> - No restriction, players, the console etc. can use this command. This is what Bukkit normally uses.</li>
-<li><code>Player</code> - Only in-game players can run this command</li>
-<li><code>Entity</code> - Only entities (therefore, players as well) can run this command</li>
-<li><code>BlockCommandSender</code> - Only command blocks can run this command</li>
-<li><code>ConsoleCommandSender</code> - Only the console can run this command</li>
-<li><code>ProxiedCommandSender</code> - Only proxied command senders (e.g. other entities via the <code>/execute as ...</code> command)</li>
-<li><code>NativeProxyCommandSender</code> - This type has special rules governing it. See <a href="./native.html">Native commandsenders</a> for more information</li>
-</ul>
-<p>This is done using the respective method:</p>
-<table><thead><tr><th>Restricted sender</th><th>Method to use</th></tr></thead><tbody>
-<tr><td><code>CommandSender</code></td><td><code>.executes()</code></td></tr>
-<tr><td><code>Player</code></td><td><code>.executesPlayer()</code></td></tr>
-<tr><td><code>Entity</code></td><td><code>.executesEntity()</code></td></tr>
-<tr><td><code>BlockCommandSender</code></td><td><code>.executesCommandBlock()</code></td></tr>
-<tr><td><code>ConsoleCommandSender</code></td><td><code>.executesConsole()</code></td></tr>
-<tr><td><code>ProxiedCommandSender</code></td><td><code>.executesProxy()</code></td></tr>
-<tr><td><code>NativeProxyCommandSender</code></td><td><code>.executesNative()</code></td></tr>
+<p>The <code>CommandAPICommand</code> class has multiple different <code>executes...()</code> methods that can restrict the command sender to any of the following objects:</p>
+<table><thead><tr><th>CommandSender Object</th><th>Method to use</th><th>Who can run this?</th></tr></thead><tbody>
+<tr><td><code>CommandSender</code></td><td><code>.executes()</code></td><td>Any CommandSender</td></tr>
+<tr><td><code>Player</code></td><td><code>.executesPlayer()</code></td><td>In-game players only</td></tr>
+<tr><td><code>Entity</code></td><td><code>.executesEntity()</code></td><td>Entities only</td></tr>
+<tr><td><code>BlockCommandSender</code></td><td><code>.executesCommandBlock()</code></td><td>Command blocks only</td></tr>
+<tr><td><code>ConsoleCommandSender</code></td><td><code>.executesConsole()</code></td><td>The console only</td></tr>
+<tr><td><code>ProxiedCommandSender</code></td><td><code>.executesProxy()</code></td><td>Proxied senders only<br />(via <code>/execute as ...</code>)</td></tr>
+<tr><td><code>NativeProxyCommandSender</code></td><td><code>.executesNative()</code></td><td>See <a href="./native.html">Native commandsenders</a></td></tr>
 </tbody></table>
 <div class="example">
 <h3><a class="header" href="#example---a-suicide-command" id="example---a-suicide-command">Example - A <code>/suicide</code> command</a></h3>
-<p>Say we wanted to create a command <code>/suicide</code>, which kills the player that executes it. Since this command isn't really &quot;designed&quot; for command senders that are not players, we can restrict it so only players can execute this command (meaning that the console and command blocks cannot run this command). Since it's a player, we can use the <code>.executesPlayer()</code> method:</p>
+<p>Say we wanted to create a command <code>/suicide</code>, which kills the player that executes it. Since this command can't be used by non-players (you can't kill a command block!), we can restrict it so only players can execute this command. Since it's a player, we can use the <code>.executesPlayer()</code> method:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;suicide&quot;)
 	.executesPlayer((player, args) -&gt; {
 	    player.setHealth(0);
@@ -244,7 +239,7 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 <hr />
 <h2><a class="header" href="#multiple-command-executor-implementations" id="multiple-command-executor-implementations">Multiple command executor implementations</a></h2>
 <p>The CommandAPI allows you to chain different implementations of the command depending on the type of <code>CommandSender</code>. This allows you to easily specify what types of <code>CommandSender</code>s are required to run a command.</p>
-<p>Extending on the suicide example above, we could write another implementation for a different <code>CommandSender</code>. Here, we write an implementation to make entities (non-player) go out with a bang when they run the command (using <code>/execute as &lt;entity&gt; run &lt;command&gt;</code> command).</p>
+<p>Extending on the suicide example above, we could write another implementation for a different <code>CommandSender</code>. Here, we write an implementation to make entities (non-player) go out with a bang when they run the command (using <code>/execute as &lt;entity&gt; run suicide</code> command).</p>
 <div class="example">
 <h3><a class="header" href="#example---a-suicide-command-with-different-implementations" id="example---a-suicide-command-with-different-implementations">Example - A <code>/suicide</code> command with different implementations</a></h3>
 <pre><code class="language-java">new CommandAPICommand(&quot;suicide&quot;)
@@ -349,6 +344,8 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
         <!-- Custom JS scripts -->
         
         <script type="text/javascript" src="sidebar.js"></script>
+        
+        <script type="text/javascript" src="mccmd.js"></script>
         
 
         

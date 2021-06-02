@@ -14,7 +14,7 @@ Say we have a command which kills the sender of a command. This is easily implem
 
 But what if the sender of the command is _not_ a player? By using Minecraft's `/execute` command, we could execute the command as _any_ arbitrary entity, as shown with the command below:
 
-```
+```mccmd
 /execute as @e[type=chicken] run killme
 ```
 

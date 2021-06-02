@@ -188,7 +188,7 @@
     .register();
 </code></pre>
 <p>But what if the sender of the command is <em>not</em> a player? By using Minecraft's <code>/execute</code> command, we could execute the command as <em>any</em> arbitrary entity, as shown with the command below:</p>
-<pre><code>/execute as @e[type=chicken] run killme
+<pre><code class="language-mccmd">/execute as @e[type=chicken] run killme
 </code></pre>
 <p>To handle this case, we can use the <code>.executesProxy()</code> method to ensure that the command sender is a <code>ProxiedCommandSender</code>. Then, we can kill the <code>callee</code> <em>(the entity which is being 'forced' to run the command /killme)</em></p>
 <pre><code class="language-java">new CommandAPICommand(&quot;killme&quot;)
@@ -196,11 +196,8 @@
         player.setHealth(0);
     })
     .executesProxy((proxy, args) -&gt; {
-        //Check if the callee is an Entity
-        if(proxy.getCallee() instanceof LivingEntity) {
-
-            //If so, kill the entity
-            LivingEntity target = (LivingEntity) proxy.getCallee();
+        //Check if the callee (target) is an Entity and kill it
+        if(proxy.getCallee() instanceof LivingEntity target) {
             target.setHealth(0);
         }
     })
@@ -287,6 +284,8 @@
         <!-- Custom JS scripts -->
         
         <script type="text/javascript" src="sidebar.js"></script>
+        
+        <script type="text/javascript" src="mccmd.js"></script>
         
 
         

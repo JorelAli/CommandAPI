@@ -189,7 +189,7 @@
 <div class="example">
 <h3><a class="header" href="#example---converting-plugin-commands" id="example---converting-plugin-commands">Example - Converting plugin commands</a></h3>
 <p>Say we're using <a href="https://www.spigotmc.org/resources/essentialsx.9089/">EssentialsX</a> on our server and we want to be able to use <code>/afk</code> and <code>/hat</code> in command blocks. This would allow us to use (for example) the following commands in command blocks:</p>
-<pre><code>/execute as @p run afk
+<pre><code class="language-mccmd">/execute as @p run afk
 /execute as @p run hat
 </code></pre>
 <p>To do this, we need to add <code>Essentials</code> to our <code>config.yml</code> file, and include the commands <code>afk</code> and <code>hat</code> as the commands to be converted from the Essentials plugin. This would then make our <code>config.yml</code> file look like this:</p>
@@ -330,6 +330,8 @@ other-commands-to-convert:
         <!-- Custom JS scripts -->
         
         <script type="text/javascript" src="sidebar.js"></script>
+        
+        <script type="text/javascript" src="mccmd.js"></script>
         
 
         

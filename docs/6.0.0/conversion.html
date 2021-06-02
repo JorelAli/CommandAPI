@@ -209,7 +209,7 @@ commands:
     
     @Override
     public void onEnable() {
-        Converter.convert(Bukkit.getPluginManager().getPlugin(&quot;TargetPlugin&quot;));
+        Converter.convert((JavaPlugin) Bukkit.getPluginManager().getPlugin(&quot;TargetPlugin&quot;));
         //Other code goes here...
     }
     
@@ -241,7 +241,7 @@ public static convert(Plugin plugin, String cmdName, Argument... arguments);
 /speed &lt;walk/fly&gt; &lt;speed&gt; &lt;target&gt;
 </code></pre>
 <p>With the EssentialsX plugin, the <code>&lt;speed&gt;</code> value can only take numbers between 0 and 10. As such, we'll ensure to apply these limits using the <code>IntegerArgument</code>. In addition, since the speed type can only be &quot;walk&quot; or &quot;fly&quot;, we'll add that to our converter as well using a <code>MultiLiteralArgument</code>:</p>
-<pre><code class="language-java">Plugin essentials = Bukkit.getPluginManager().getPlugin(&quot;Essentials&quot;);
+<pre><code class="language-java">JavaPlugin essentials = (JavaPlugin) Bukkit.getPluginManager().getPlugin(&quot;Essentials&quot;);
 
 // /speed &lt;speed&gt;
 Converter.convert(essentials, &quot;speed&quot;, new IntegerArgument(&quot;speed&quot;, 0, 10));
@@ -344,6 +344,8 @@ Converter.convert(essentials, &quot;speed&quot;,
         <!-- Custom JS scripts -->
         
         <script type="text/javascript" src="sidebar.js"></script>
+        
+        <script type="text/javascript" src="mccmd.js"></script>
         
 
         

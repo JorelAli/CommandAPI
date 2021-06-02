@@ -177,7 +177,12 @@
                         <div class="sidetoc"><nav class="pagetoc"></nav></div>
                         
                         <h1><a class="header" href="#setting-up-your-development-environment" id="setting-up-your-development-environment">Setting up your development environment</a></h1>
-<p>To use the CommandAPI in your plugins, there are a few methods of adding it to your development environment.</p>
+<p>To use the CommandAPI in your plugins, there are a few methods of adding it to your development environment. First things first, if you're using the CommandAPI plugin, you need to add the CommandAPI has a dependent in your plugin.yml:</p>
+<pre><code class="language-yaml">name: MyPlugin
+main: some.package.name.Main
+version: 1.0
+depend: [CommandAPI]
+</code></pre>
 <hr />
 <h2><a class="header" href="#manually-using-the-jar" id="manually-using-the-jar">Manually using the .jar</a></h2>
 <ul>
@@ -188,11 +193,7 @@
 <p>Add the CommandAPI.jar file to your project/environment's build path:</p>
 <p><img src="images/eclipse.jpg" alt="" /></p>
 </li>
-<li>
-<p>Add the CommandAPI as a dependent in the plugin.yml (<code>depend: [CommandAPI]</code>)</p>
-</li>
 </ul>
-<hr />
 <h2><a class="header" href="#using-maven-recommended" id="using-maven-recommended">Using Maven (recommended)</a></h2>
 <blockquote>
 <p><strong>Developer's Note:</strong></p>
@@ -221,11 +222,7 @@
 &lt;/dependencies&gt;
 </code></pre>
 </li>
-<li>
-<p>Add the CommandAPI as a dependent in the <code>plugin.yml</code> (<code>depend: [CommandAPI]</code>)</p>
-</li>
 </ul>
-<hr />
 <h2><a class="header" href="#using-gradle" id="using-gradle">Using Gradle</a></h2>
 <ul>
 <li>
@@ -243,9 +240,6 @@
 }
 </code></pre>
 </li>
-</ul>
-<ul>
-<li>Add the CommandAPI as a dependent in the <code>plugin.yml</code> (<code>depend: [CommandAPI]</code>)</li>
 </ul>
 
                     </main>
@@ -327,6 +321,8 @@
         <!-- Custom JS scripts -->
         
         <script type="text/javascript" src="sidebar.js"></script>
+        
+        <script type="text/javascript" src="mccmd.js"></script>
         
 
         

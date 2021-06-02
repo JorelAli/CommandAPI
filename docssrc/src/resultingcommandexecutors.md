@@ -40,7 +40,7 @@ We can store state using `/execute store` and we can perform conditional checks 
 
 To do this, we'll declare two commands:
 
-```
+```mccmd
 /randomnumber        - returns a random number between 1 and 99 (inclusive)
 /givereward <player> - gives a player 64 diamonds and broadcasts it in the chat
 ```
@@ -61,12 +61,12 @@ Now we write our implementation for `/givereward`. In this example, we use the `
 
 Now that we've declared these commands, we can now use them in practice. We can use a command block to store a random number under the scoreboard score `randVal` for a player called `SomePlayer`, by executing the command `/randomnumber`. Since `/randomnumber` **returns** an integer, this value is stored in the scoreboard score:
 
-```
+```mccmd
 /execute store result score SomePlayer randVal run randomnumber
 ```
 
 To check if the random number is equal to 1, we can use the `/execute if` command. If their score stored in `randVal` matches 1, then we run the `/givereward` command.
-```
+```mccmd
 /execute if score SomePlayer randVal matches 1 run givereward SomePlayer
 ```
 

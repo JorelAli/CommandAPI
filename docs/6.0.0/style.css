@@ -1,6 +1,6 @@
 .example {
-    margin: 20px 0px;
-    padding: 0px 20px;
+    margin: 20px 0;
+    padding: 0 20px;
     color: var(--fg);
     background-color: var(--example-bg);
     border-top: .1em solid var(--example-border);
@@ -8,8 +8,8 @@
 }
 
 .warning {
-    margin: 20px 0px;
-    padding: 0px 20px;
+    margin: 20px 0;
+    padding: 0 20px;
     color: var(--fg);
     background-color: var(--warning-bg);
     border-top: .1em solid var(--warning-border);
@@ -50,19 +50,18 @@ h1 {
     }
     .pagetoc a {
         border-left: 1px solid var(--sidebar-bg);
-        color: var(--fg);
+        color: var(--fg) !important;
         display: block;
         padding-bottom: 5px;
         padding-top: 5px;
         padding-left: 10px;
-        font-size: 10pt;
         text-align: left;
         text-decoration: none;
     }
     .pagetoc a:hover,
     .pagetoc a.active {
         background: var(--sidebar-bg);
-        color: var(--sidebar-fg);
+        color: var(--sidebar-fg) !important;
     }
     .pagetoc .active {
         background: var(--sidebar-bg);

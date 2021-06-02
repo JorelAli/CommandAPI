@@ -36,7 +36,7 @@ Using the search icon in the top left corner, you can search for anything in thi
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
-### Documentation changes 5.11 \(\rightarrow\) 5.12:
+### Documentation changes 5.11 \\(\rightarrow\\) 5.12:
 
 > **Developer's Note**
 >

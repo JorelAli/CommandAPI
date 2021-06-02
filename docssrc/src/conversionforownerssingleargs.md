@@ -8,7 +8,7 @@ For even finer control when converting a single command, you can provide the lis
 
 EssentialsX includes a command `/speed` which lets you change the current speed that a player can move at. The command format is the following:
 
-```
+```mccmd
 /speed <speed>
 /speed <speed> <target>
 /speed <walk/fly> <speed>
@@ -17,7 +17,7 @@ EssentialsX includes a command `/speed` which lets you change the current speed 
 
 Which means you can run any of the following commands:
 
-```
+```mccmd
 /speed 5
 /speed 2 Notch
 /speed fly 6

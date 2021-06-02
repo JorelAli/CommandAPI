@@ -206,12 +206,12 @@ public Location getLocation();
 <div class="example">
 <h3><a class="header" href="#example---a-really-simple-break-block-command" id="example---a-really-simple-break-block-command">Example - A really simple &quot;break block&quot; command</a></h3>
 <p>Say we wanted to make a command that simply sets the current block to air. For this example, we'll use the following command syntax:</p>
-<pre><code>/break
+<pre><code class="language-mccmd">/break
 </code></pre>
 <p>As you can see, this command takes no arguments. This is fine, since our &quot;argument&quot; will be the sender's location. We can access the sender's location using the <code>getLocation()</code> method from the <code>NativeProxyCommandSender</code> object, available from the <code>.executesNative()</code> method:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;break&quot;)
     .executesNative((sender, args) -&gt; {
-        Location location = (Location) sender.getLocation();
+        Location location = sender.getLocation();
         if(location != null) {
             location.getBlock().breakNaturally();
         }
@@ -219,11 +219,11 @@ public Location getLocation();
     .register();
 </code></pre>
 <p>This can now be used via the following command examples:</p>
-<pre><code>/execute positioned 100 62 50 run break
+<pre><code class="language-mccmd">/execute positioned 100 62 50 run break
 </code></pre>
-<pre><code>/execute at @e[type=pig] run break
+<pre><code class="language-mccmd">/execute at @e[type=pig] run break
 </code></pre>
-<pre><code>/execute in minecraft:overworld positioned 20 60 -20 run break
+<pre><code class="language-mccmd">/execute in minecraft:overworld positioned 20 60 -20 run break
 </code></pre>
 </div>
 
@@ -306,6 +306,8 @@ public Location getLocation();
         <!-- Custom JS scripts -->
         
         <script type="text/javascript" src="sidebar.js"></script>
+        
+        <script type="text/javascript" src="mccmd.js"></script>
         
 
         

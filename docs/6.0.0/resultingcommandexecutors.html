@@ -204,7 +204,7 @@
 <h3><a class="header" href="#example---lootbox-system-with-execute-command" id="example---lootbox-system-with-execute-command">Example - Lootbox system with <code>/execute</code> command</a></h3>
 <p>We can store state using <code>/execute store</code> and we can perform conditional checks using <code>/execute if</code>. By combining these, we can create a system which can be used with commandblocks to say, give players random lootboxes and redeem them. The concept is to create a command that generates a random number from 1 to 100. If the number is 1 (thus, the chance of being chosen is \(\frac{1}{100}\)), then we award a player with some reward, say 64 diamonds.</p>
 <p>To do this, we'll declare two commands:</p>
-<pre><code>/randomnumber        - returns a random number between 1 and 99 (inclusive)
+<pre><code class="language-mccmd">/randomnumber        - returns a random number between 1 and 99 (inclusive)
 /givereward &lt;player&gt; - gives a player 64 diamonds and broadcasts it in the chat
 </code></pre>
 <p>Since we're declaring commands that are to be used in <code>/execute</code>, we must ensure that these commands are registered in your plugin's <code>onLoad()</code> method. First, we write our implementation for <code>/randomnumber</code>. It is fairly straight forward using Java's <code>ThreadLocalRandom</code> to generate a random number:</p>
@@ -216,7 +216,7 @@ new CommandAPICommand(&quot;randomnumber&quot;)
     .register();
 </code></pre>
 <p>Now we write our implementation for <code>/givereward</code>. In this example, we use the <code>EntitySelectorArgument</code> to select a single player. We cast it to <code>Player</code> and then add the items to their inventory.</p>
-<pre><code class="language-java">//Register reward giving system for a target player
+<pre><code class="language-java">// Register reward giving system for a target player
 new CommandAPICommand(&quot;givereward&quot;)
     .withArguments(new EntitySelectorArgument(&quot;target&quot;, EntitySelector.ONE_PLAYER))
     .executes((sender, args) -&gt; {
@@ -228,10 +228,10 @@ new CommandAPICommand(&quot;givereward&quot;)
 </code></pre>
 <hr />
 <p>Now that we've declared these commands, we can now use them in practice. We can use a command block to store a random number under the scoreboard score <code>randVal</code> for a player called <code>SomePlayer</code>, by executing the command <code>/randomnumber</code>. Since <code>/randomnumber</code> <strong>returns</strong> an integer, this value is stored in the scoreboard score:</p>
-<pre><code>/execute store result score SomePlayer randVal run randomnumber
+<pre><code class="language-mccmd">/execute store result score SomePlayer randVal run randomnumber
 </code></pre>
 <p>To check if the random number is equal to 1, we can use the <code>/execute if</code> command. If their score stored in <code>randVal</code> matches 1, then we run the <code>/givereward</code> command.</p>
-<pre><code>/execute if score SomePlayer randVal matches 1 run givereward SomePlayer
+<pre><code class="language-mccmd">/execute if score SomePlayer randVal matches 1 run givereward SomePlayer
 </code></pre>
 </div>
                     </main>
@@ -313,6 +313,8 @@ new CommandAPICommand(&quot;givereward&quot;)
         <!-- Custom JS scripts -->
         
         <script type="text/javascript" src="sidebar.js"></script>
+        
+        <script type="text/javascript" src="mccmd.js"></script>
         
 
         

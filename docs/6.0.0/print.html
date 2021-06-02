@@ -205,7 +205,7 @@
 <hr />
 <h2><a class="header" href="#documentation-changelog" id="documentation-changelog">Documentation changelog</a></h2>
 <p>Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.</p>
-<h3><a class="header" href="#documentation-changes-511-rightarrow-512" id="documentation-changes-511-rightarrow-512">Documentation changes 5.11 (\rightarrow) 5.12:</a></h3>
+<h3><a class="header" href="#documentation-changes-511-rightarrow-512" id="documentation-changes-511-rightarrow-512">Documentation changes 5.11 \(\rightarrow\) 5.12:</a></h3>
 <blockquote>
 <p><strong>Developer's Note</strong></p>
 <p>The Maven/Gradle repository URL has changed! See <a href="./quickstart.html">5. Setting up your development environment</a> for more information. For older versions of the CommandAPI (versions 5.11 and below), please consult the older documentation which can be found on the homepage <a href="https://commandapi.jorel.dev/">here</a>.</p>
@@ -368,7 +368,7 @@ margin-right: auto;">Download latest CommandAPI.jar</a></p>
 <h2><a class="header" href="#additional-dependencies" id="additional-dependencies">Additional dependencies</a></h2>
 <ul>
 <li>If you use NBT data, you'll also need the <a href="https://www.spigotmc.org/resources/nbt-api.7939/">NBT API</a>. (You can find out from your developers if you need this or not)</li>
-<li>If you are using raw JSON chat data, you'll need to be running <a href="https://www.spigotmc.org/wiki/about-spigot/">Spigot</a> or another spigot-related server such as <a href="https://papermc.io/">Paper Spigot</a> or <a href="https://tacospigot.github.io/">Taco Spigot</a>. (Again, you can find out from your developers if you need this or not)</li>
+<li>If you are using raw JSON chat data, you'll need to be running <a href="https://www.spigotmc.org/wiki/about-spigot/">Spigot</a> or a Paper-based server such as <a href="https://papermc.io/">Paper</a> or <a href="https://purpur.pl3x.net/">Purpur</a>. (Again, you can find out from your developers if you need this or not)</li>
 </ul>
 <h1><a class="header" href="#configuration-for-server-owners" id="configuration-for-server-owners">Configuration for server owners</a></h1>
 <p>The CommandAPI has a few configuration options to change how it functions. These options can be configured in the <code>plugins/CommandAPI/config.yml</code> file, which is generated automatically when the CommandAPI runs for the first time.</p>
@@ -421,6 +421,7 @@ other-commands-to-convert: []
 <li><strong><code>config.yml</code> cannot have tab characters</strong> - The <code>config.yml</code> file <em>must</em> only consist of spaces!</li>
 <li>Indentation is important and should be <em>two spaces</em></li>
 </ul>
+<p>If you're uncertain if your configuration is valid (or you're getting weird errors in the console), you can check if your configuration is valid using <a href="http://www.yamllint.com/">YAMLLint</a>.</p>
 <hr />
 <h3><a class="header" href="#converting-all-plugin-commands" id="converting-all-plugin-commands">Converting all plugin commands</a></h3>
 <p>To convert all of the commands that a plugin has, add the name of the plugin, followed by a <code>~</code> character to the list of plugins to convert in the <code>config.yml</code> file.</p>
@@ -445,7 +446,7 @@ plugins-to-convert:
 <div class="example">
 <h3><a class="header" href="#example---converting-plugin-commands" id="example---converting-plugin-commands">Example - Converting plugin commands</a></h3>
 <p>Say we're using <a href="https://www.spigotmc.org/resources/essentialsx.9089/">EssentialsX</a> on our server and we want to be able to use <code>/afk</code> and <code>/hat</code> in command blocks. This would allow us to use (for example) the following commands in command blocks:</p>
-<pre><code>/execute as @p run afk
+<pre><code class="language-mccmd">/execute as @p run afk
 /execute as @p run hat
 </code></pre>
 <p>To do this, we need to add <code>Essentials</code> to our <code>config.yml</code> file, and include the commands <code>afk</code> and <code>hat</code> as the commands to be converted from the Essentials plugin. This would then make our <code>config.yml</code> file look like this:</p>
@@ -511,13 +512,13 @@ other-commands-to-convert:
 <div class="example">
 <h3><a class="header" href="#example---converting-essentialsxs-speed-command" id="example---converting-essentialsxs-speed-command">Example - Converting EssentialsX's /speed command</a></h3>
 <p>EssentialsX includes a command <code>/speed</code> which lets you change the current speed that a player can move at. The command format is the following:</p>
-<pre><code>/speed &lt;speed&gt;
+<pre><code class="language-mccmd">/speed &lt;speed&gt;
 /speed &lt;speed&gt; &lt;target&gt;
 /speed &lt;walk/fly&gt; &lt;speed&gt;
 /speed &lt;walk/fly&gt; &lt;speed&gt; &lt;target&gt;
 </code></pre>
 <p>Which means you can run any of the following commands:</p>
-<pre><code>/speed 5
+<pre><code class="language-mccmd">/speed 5
 /speed 2 Notch
 /speed fly 6
 /speed walk 3 Notch
@@ -650,7 +651,7 @@ plugins-to-convert:
 <div class="example">
 <h3><a class="header" href="#example---converting-essentialsxs-ext-command" id="example---converting-essentialsxs-ext-command">Example - Converting EssentialsX's /ext command</a></h3>
 <p>EssentialsX includes a command <code>/ext</code> which lets you extinguish a player that is currently on fire. The command format is the following:</p>
-<pre><code>/ext
+<pre><code class="language-mccmd">/ext
 /ext &lt;player&gt;
 </code></pre>
 <p>In order to convert this command, we could use the following <code>config.yml</code> file:</p>
@@ -661,11 +662,11 @@ plugins-to-convert:
     - ext
 </code></pre>
 <p>Using the above <code>config.yml</code> file will support the following commands:</p>
-<pre><code>/ext
+<pre><code class="language-mccmd">/ext
 /ext Notch
 </code></pre>
 <p>However, the above <code>config.yml</code> <strong>will not</strong> support the following commands:</p>
-<pre><code>/ext @a[distance=10]
+<pre><code class="language-mccmd">/ext @a[distance=10]
 /ext @p
 </code></pre>
 <p>In order to handle this, we have to use the conversion with arguments (as described in the <a href="./conversionforownerssingleargs.html">previous section</a>). For this <code>ext</code> command, we want to only use this command on <em>one or more players</em>, therefore we want to use the <code>api:players</code> argument which is compatible with one or more players:</p>
@@ -699,7 +700,12 @@ skip-sender-proxy:
 </code></pre>
 </div>
 <h1><a class="header" href="#setting-up-your-development-environment" id="setting-up-your-development-environment">Setting up your development environment</a></h1>
-<p>To use the CommandAPI in your plugins, there are a few methods of adding it to your development environment.</p>
+<p>To use the CommandAPI in your plugins, there are a few methods of adding it to your development environment. First things first, if you're using the CommandAPI plugin, you need to add the CommandAPI has a dependent in your plugin.yml:</p>
+<pre><code class="language-yaml">name: MyPlugin
+main: some.package.name.Main
+version: 1.0
+depend: [CommandAPI]
+</code></pre>
 <hr />
 <h2><a class="header" href="#manually-using-the-jar" id="manually-using-the-jar">Manually using the .jar</a></h2>
 <ul>
@@ -710,11 +716,7 @@ skip-sender-proxy:
 <p>Add the CommandAPI.jar file to your project/environment's build path:</p>
 <p><img src="images/eclipse.jpg" alt="" /></p>
 </li>
-<li>
-<p>Add the CommandAPI as a dependent in the plugin.yml (<code>depend: [CommandAPI]</code>)</p>
-</li>
 </ul>
-<hr />
 <h2><a class="header" href="#using-maven-recommended" id="using-maven-recommended">Using Maven (recommended)</a></h2>
 <blockquote>
 <p><strong>Developer's Note:</strong></p>
@@ -743,11 +745,7 @@ skip-sender-proxy:
 &lt;/dependencies&gt;
 </code></pre>
 </li>
-<li>
-<p>Add the CommandAPI as a dependent in the <code>plugin.yml</code> (<code>depend: [CommandAPI]</code>)</p>
-</li>
 </ul>
-<hr />
 <h2><a class="header" href="#using-gradle" id="using-gradle">Using Gradle</a></h2>
 <ul>
 <li>
@@ -765,9 +763,6 @@ skip-sender-proxy:
 }
 </code></pre>
 </li>
-</ul>
-<ul>
-<li>Add the CommandAPI as a dependent in the <code>plugin.yml</code> (<code>depend: [CommandAPI]</code>)</li>
 </ul>
 <h1><a class="header" href="#shading-the-commandapi-in-your-plugins" id="shading-the-commandapi-in-your-plugins">Shading the CommandAPI in your plugins</a></h1>
 <blockquote>
@@ -967,30 +962,37 @@ CommandAPI.onEnable(Plugin plugin);
 <h1><a class="header" href="#command-registration" id="command-registration">Command registration</a></h1>
 <p>To register commands with the CommandAPI, we use the <code>CommandAPICommand</code> class. It follows a simple builder pattern to improve readability.</p>
 <p>I think the easiest way to explain it is with an example:</p>
-<pre><code class="language-java">// Create our arguments
-List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
-arguments.add(new GreedyStringArgument(&quot;message&quot;));
-
-//Create our command
+<pre><code class="language-java">//Create our command
 new CommandAPICommand(&quot;broadcastmsg&quot;)
-    .withArguments(arguments)                     // The arguments
-    .withAliases(&quot;broadcast&quot;, &quot;broadcastmessage&quot;) // Command aliases
-    .withPermission(CommandPermission.OP)         // Required permissions
+    .withArguments(new GreedyStringArgument(&quot;message&quot;)) // The arguments
+    .withAliases(&quot;broadcast&quot;, &quot;broadcastmessage&quot;)       // Command aliases
+    .withPermission(CommandPermission.OP)               // Required permissions
     .executes((sender, args) -&gt; {
         String message = (String) args[0];
         Bukkit.getServer().broadcastMessage(message);
     }).register();
 </code></pre>
 <ul>
-<li>First, we create our arguments for the command. This is described in more detail in <a href="./arguments.html">the section on arguments</a>. </li>
-<li>We then create a new <code>CommandAPICommand</code>, with the name of the command that the sender must enter to run it. </li>
-<li>We then add the arguments to the command with <code>withArguments</code>.</li>
-<li>In this example, we add an alias, &quot;broadcast&quot;, to the command. This allows the sender to use either <code>/broadcastmsg &lt;message&gt;</code> or <code>/broadcast &lt;message&gt;</code>.</li>
-<li>By using <code>withPermission</code>, we require the sender to be an OP in order to run the command.</li>
-<li>We control what the command does using <code>executes</code> (this is described in more detail in <a href="./commandexecutors.html">the section on command executors</a>).</li>
-<li>Finally, we register the command to the CommandAPI using <code>register</code>.</li>
+<li>
+<p>First, we create a new <code>CommandAPICommand</code>, with the name of the command that the sender must enter to run it. </p>
+</li>
+<li>
+<p>When, we create an argument to add to the command using <code>withArguments</code>. This is described in more detail in <a href="./arguments.html">the section on arguments</a>.</p>
+</li>
+<li>
+<p>In this example, we add an alias, &quot;broadcast&quot;, to the command. This allows the sender to use either <code>/broadcastmsg &lt;message&gt;</code> or <code>/broadcast &lt;message&gt;</code>.</p>
+</li>
+<li>
+<p>By using <code>withPermission</code>, we require the sender to be an OP in order to run the command.</p>
+</li>
+<li>
+<p>We control what the command does using <code>executes</code> (this is described in more detail in <a href="./commandexecutors.html">the section on command executors</a>).</p>
+</li>
+<li>
+<p>Finally, we register the command to the CommandAPI using <code>register</code>.</p>
+</li>
 </ul>
-<p>That's it! This simple snippet of code fully registers the command to the server. No hassling with a plugin instance, no messing with <code>plugin.yml</code> files.</p>
+<p>That's it! This simple snippet of code fully registers the command to the server. You don't need to supply a plugin instance, you don't have to create a custom class and you don't have to mess with the <code>plugin.yml</code> file.</p>
 <p>Throughout this documentation, we will use the various different methods for command registration to give you an idea of when and where certain methods are more suitable than others.</p>
 <hr />
 <h2><a class="header" href="#commandapicommand-methods" id="commandapicommand-methods"><code>CommandAPICommand</code> methods</a></h2>
@@ -1001,15 +1003,16 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 <p>This constructor creates a new instance of the <code>CommandAPICommand</code> object. This constructor requires the <em>name</em> of the command.</p>
 <h4><a class="header" href="#setting-command-properties" id="setting-command-properties">Setting command properties</a></h4>
 <pre><code class="language-java">CommandAPICommand withArguments(List&lt;Argument&gt; arguments)
+CommandAPICommand withArguments(Argument... arguments)
 </code></pre>
 <p>The <code>withArguments</code> method is used to add arguments to your command. The <code>arguments</code> parameter is appended to the the list of arguments for the command.</p>
-<pre><code class="language-java">CommandAPICommand withArguments(Argument... arguments)
-</code></pre>
-<p>Similar to the other <code>withArguments</code> method, this method appends the <code>arguments</code> to the list of arguments for the command. This is purely to make adding one or two arguments nice and easy instead of creating lots of <code>List</code> objects everywhere.</p>
 <pre><code class="language-java">CommandAPICommand withPermission(CommandPermission)
 CommandAPICommand withPermission(String)
 </code></pre>
 <p>The <code>withPermission</code> method is used to assign a permission that is required to execute the command. (See <a href="permissions.html">the section on permissions</a> for more info).</p>
+<pre><code class="language-java">CommandAPICommand withRequirements(sender -&gt; {})
+</code></pre>
+<p>The <code>withRequirements</code> method is used to assign additional constraints required to execute the command, similar to permissions. (See <a href="./requirements.html">the section on requirements</a> for more info).</p>
 <pre><code class="language-java">CommandAPICommand withAliases(String... args)
 </code></pre>
 <p>The <code>withAliases</code> method is used to declare a list of aliases that can be used to run this command via. (See <a href="./aliases.html">the section on aliases</a> for more info).</p>
@@ -1068,7 +1071,7 @@ CommandAPICommand withPermission(String)
 <p>Registers the command.</p>
 <hr />
 <h2><a class="header" href="#command-loading-order" id="command-loading-order">Command loading order</a></h2>
-<p>In order to register commands properly, <strong>commands must be registered before the server finishes loading</strong>. The CommandAPI will prevent command registration after the server has loaded. This basically means that all command registration must occur during a plugin's <code>onLoad()</code> or <code>onEnable()</code> method. With the CommandAPI, depending on whether you use <code>onLoad()</code> or <code>onEnable()</code> to load your commands depends on whether your plugin is used with Minecraft's functions:</p>
+<p>In order to register commands properly, <strong>commands must be registered before the server finishes loading</strong>. The CommandAPI will output a warning if you register a command after the server has loaded. This basically means that all command registration must occur during a plugin's <code>onLoad()</code> or <code>onEnable()</code> method. With the CommandAPI, depending on whether you use <code>onLoad()</code> or <code>onEnable()</code> to load your commands depends on whether your plugin is used with Minecraft's functions:</p>
 <table><thead><tr><th>When to load</th><th>What to do</th></tr></thead><tbody>
 <tr><td><code>onLoad()</code> method</td><td>Register commands to be used in Minecraft functions (<a href="functions.html">see the Function section for more info</a>)</td></tr>
 <tr><td><code>onEnable()</code> method</td><td>Register regular commands</td></tr>
@@ -1078,7 +1081,7 @@ CommandAPICommand withPermission(String)
 <p>The CommandAPI has support to unregister commands completely from Minecraft's command list. This includes Minecraft built in commands!</p>
 <div class="warning">
 <p><strong>Developer's Note:</strong></p>
-<p>Command unregistration, although powerful, is highly unrecommended. It is the CommandAPI's most &quot;dangerous&quot; feature as it can cause unexpected sideffects, such as command blocks executing commands you wouldn't expect them to. In almost every case, I'd recommend just creating a new command instead of unregistering one to replace it.</p>
+<p>Command unregistration, although powerful, is not recommended! It is the CommandAPI's most &quot;dangerous&quot; feature as it can cause unexpected side effects, such as command blocks executing commands you wouldn't expect them to. In almost every case, I'd recommend just creating a new command instead of unregistering one to replace it.</p>
 <p>For instance, instead of unregistering <code>/gamemode</code>, you could register a command <code>/gm</code> or <code>/changegamemode</code>.</p>
 </div>
 <table><thead><tr><th>Method</th><th>Result</th></tr></thead><tbody>
@@ -1091,14 +1094,9 @@ CommandAPICommand withPermission(String)
 <pre><code class="language-java">//Unregister the gamemode command from the server (by force)
 CommandAPI.unregister(&quot;gamemode&quot;, true);
 
-List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
-
-/* Arguments for the gamemode command. In this sample, I'm just 
- * using a simple literal argument which allows for /gamemode survival */
-arguments.add(new LiteralArgument(&quot;survival&quot;));
-
+// Register our new /gamemode, with survival, creative, adventure and spectator
 new CommandAPICommand(&quot;gamemode&quot;)
-    .withArguments(arguments)
+    .withArguments(new MultiLiteralArgument(&quot;survival&quot;, &quot;creative&quot;, &quot;adventure&quot;, &quot;spectator&quot;))
     .executes((sender, args) -&gt; {
         //Implementation of our /gamemode command
     }).register();
@@ -1127,7 +1125,7 @@ new CommandAPICommand(&quot;gamemode&quot;)
     })
     .register();
 </code></pre>
-<p>With normal command executors, these do not need to return anything. By default, this will return a <em>success value</em> of 1 if it runs successfully, and a <em>success value</em> of 0 if it runs unsuccessfully, either by throwing an exception <em>(RuntimeException)</em> or by forcing the command to fail (See the section on <a href="./commandfailures.html">handling command failures</a>.</p>
+<p>With normal command executors, these do not need to return anything. By default, this will return a <em>success value</em> of 1 if it runs successfully, and a <em>success value</em> of 0 if it runs unsuccessfully, either by throwing an exception <em>(RuntimeException)</em> or by forcing the command to fail (See the section on <a href="./commandfailures.html">handling command failures</a>).</p>
 <p>In short, this is what values are returned when a command is executed from a normal command executor:</p>
 <table><thead><tr><th align="center"></th><th align="center">Command Works</th><th align="center">Command Doesn't Work</th></tr></thead><tbody>
 <tr><td align="center"><strong>Success Value</strong></td><td align="center">1</td><td align="center">0</td></tr>
@@ -1135,7 +1133,12 @@ new CommandAPICommand(&quot;gamemode&quot;)
 </tbody></table>
 <div class="example">
 <h3><a class="header" href="#example---creating-a-message-broadcasting-system" id="example---creating-a-message-broadcasting-system">Example - Creating a message broadcasting system</a></h3>
-<p>To illustrate this, let's take a look at a simple message broadcasting command. We declare our arguments (in this case, &quot;message&quot;), we provide some aliases and set a permission required to run the command. Then we declare our main command body by using the <code>.executes()</code> method, before finally registering the command:</p>
+<p>To illustrate this, let's take a look at a simple message broadcasting command. We'll make a command which sends a message to everyone on the server, using the following syntax:</p>
+<pre><code class="language-mccmd">/broadcastmsg &lt;message&gt;
+/broadcastmessage &lt;message&gt;
+/broadcast &lt;message&gt;
+</code></pre>
+<p>We use an argument &quot;message&quot; to hold the message to broadcast, we provide some aliases and set a permission required to run the command. Then we declare our main command body by using the <code>.executes()</code> method, before finally registering the command:</p>
 <pre><code class="language-java">//Create our command
 new CommandAPICommand(&quot;broadcastmsg&quot;)
     .withArguments(new GreedyStringArgument(&quot;message&quot;)) // The arguments
@@ -1154,29 +1157,19 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 </div>
 <hr />
 <h2><a class="header" href="#restricting-who-can-run-your-command" id="restricting-who-can-run-your-command">Restricting who can run your command</a></h2>
-<p>The <code>CommandAPICommand</code> has multiple different <code>executes...()</code> methods that can restrict the command sender to any of the following objects:</p>
-<ul>
-<li><code>CommandSender</code> - No restriction, players, the console etc. can use this command. This is what Bukkit normally uses.</li>
-<li><code>Player</code> - Only in-game players can run this command</li>
-<li><code>Entity</code> - Only entities (therefore, players as well) can run this command</li>
-<li><code>BlockCommandSender</code> - Only command blocks can run this command</li>
-<li><code>ConsoleCommandSender</code> - Only the console can run this command</li>
-<li><code>ProxiedCommandSender</code> - Only proxied command senders (e.g. other entities via the <code>/execute as ...</code> command)</li>
-<li><code>NativeProxyCommandSender</code> - This type has special rules governing it. See <a href="./native.html">Native commandsenders</a> for more information</li>
-</ul>
-<p>This is done using the respective method:</p>
-<table><thead><tr><th>Restricted sender</th><th>Method to use</th></tr></thead><tbody>
-<tr><td><code>CommandSender</code></td><td><code>.executes()</code></td></tr>
-<tr><td><code>Player</code></td><td><code>.executesPlayer()</code></td></tr>
-<tr><td><code>Entity</code></td><td><code>.executesEntity()</code></td></tr>
-<tr><td><code>BlockCommandSender</code></td><td><code>.executesCommandBlock()</code></td></tr>
-<tr><td><code>ConsoleCommandSender</code></td><td><code>.executesConsole()</code></td></tr>
-<tr><td><code>ProxiedCommandSender</code></td><td><code>.executesProxy()</code></td></tr>
-<tr><td><code>NativeProxyCommandSender</code></td><td><code>.executesNative()</code></td></tr>
+<p>The <code>CommandAPICommand</code> class has multiple different <code>executes...()</code> methods that can restrict the command sender to any of the following objects:</p>
+<table><thead><tr><th>CommandSender Object</th><th>Method to use</th><th>Who can run this?</th></tr></thead><tbody>
+<tr><td><code>CommandSender</code></td><td><code>.executes()</code></td><td>Any CommandSender</td></tr>
+<tr><td><code>Player</code></td><td><code>.executesPlayer()</code></td><td>In-game players only</td></tr>
+<tr><td><code>Entity</code></td><td><code>.executesEntity()</code></td><td>Entities only</td></tr>
+<tr><td><code>BlockCommandSender</code></td><td><code>.executesCommandBlock()</code></td><td>Command blocks only</td></tr>
+<tr><td><code>ConsoleCommandSender</code></td><td><code>.executesConsole()</code></td><td>The console only</td></tr>
+<tr><td><code>ProxiedCommandSender</code></td><td><code>.executesProxy()</code></td><td>Proxied senders only<br />(via <code>/execute as ...</code>)</td></tr>
+<tr><td><code>NativeProxyCommandSender</code></td><td><code>.executesNative()</code></td><td>See <a href="./native.html">Native commandsenders</a></td></tr>
 </tbody></table>
 <div class="example">
 <h3><a class="header" href="#example---a-suicide-command" id="example---a-suicide-command">Example - A <code>/suicide</code> command</a></h3>
-<p>Say we wanted to create a command <code>/suicide</code>, which kills the player that executes it. Since this command isn't really &quot;designed&quot; for command senders that are not players, we can restrict it so only players can execute this command (meaning that the console and command blocks cannot run this command). Since it's a player, we can use the <code>.executesPlayer()</code> method:</p>
+<p>Say we wanted to create a command <code>/suicide</code>, which kills the player that executes it. Since this command can't be used by non-players (you can't kill a command block!), we can restrict it so only players can execute this command. Since it's a player, we can use the <code>.executesPlayer()</code> method:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;suicide&quot;)
 	.executesPlayer((player, args) -&gt; {
 	    player.setHealth(0);
@@ -1187,7 +1180,7 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 <hr />
 <h2><a class="header" href="#multiple-command-executor-implementations" id="multiple-command-executor-implementations">Multiple command executor implementations</a></h2>
 <p>The CommandAPI allows you to chain different implementations of the command depending on the type of <code>CommandSender</code>. This allows you to easily specify what types of <code>CommandSender</code>s are required to run a command.</p>
-<p>Extending on the suicide example above, we could write another implementation for a different <code>CommandSender</code>. Here, we write an implementation to make entities (non-player) go out with a bang when they run the command (using <code>/execute as &lt;entity&gt; run &lt;command&gt;</code> command).</p>
+<p>Extending on the suicide example above, we could write another implementation for a different <code>CommandSender</code>. Here, we write an implementation to make entities (non-player) go out with a bang when they run the command (using <code>/execute as &lt;entity&gt; run suicide</code> command).</p>
 <div class="example">
 <h3><a class="header" href="#example---a-suicide-command-with-different-implementations" id="example---a-suicide-command-with-different-implementations">Example - A <code>/suicide</code> command with different implementations</a></h3>
 <pre><code class="language-java">new CommandAPICommand(&quot;suicide&quot;)
@@ -1224,7 +1217,7 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
     .register();
 </code></pre>
 <p>But what if the sender of the command is <em>not</em> a player? By using Minecraft's <code>/execute</code> command, we could execute the command as <em>any</em> arbitrary entity, as shown with the command below:</p>
-<pre><code>/execute as @e[type=chicken] run killme
+<pre><code class="language-mccmd">/execute as @e[type=chicken] run killme
 </code></pre>
 <p>To handle this case, we can use the <code>.executesProxy()</code> method to ensure that the command sender is a <code>ProxiedCommandSender</code>. Then, we can kill the <code>callee</code> <em>(the entity which is being 'forced' to run the command /killme)</em></p>
 <pre><code class="language-java">new CommandAPICommand(&quot;killme&quot;)
@@ -1232,11 +1225,8 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
         player.setHealth(0);
     })
     .executesProxy((proxy, args) -&gt; {
-        //Check if the callee is an Entity
-        if(proxy.getCallee() instanceof LivingEntity) {
-
-            //If so, kill the entity
-            LivingEntity target = (LivingEntity) proxy.getCallee();
+        //Check if the callee (target) is an Entity and kill it
+        if(proxy.getCallee() instanceof LivingEntity target) {
             target.setHealth(0);
         }
     })
@@ -1273,12 +1263,12 @@ public Location getLocation();
 <div class="example">
 <h3><a class="header" href="#example---a-really-simple-break-block-command" id="example---a-really-simple-break-block-command">Example - A really simple &quot;break block&quot; command</a></h3>
 <p>Say we wanted to make a command that simply sets the current block to air. For this example, we'll use the following command syntax:</p>
-<pre><code>/break
+<pre><code class="language-mccmd">/break
 </code></pre>
 <p>As you can see, this command takes no arguments. This is fine, since our &quot;argument&quot; will be the sender's location. We can access the sender's location using the <code>getLocation()</code> method from the <code>NativeProxyCommandSender</code> object, available from the <code>.executesNative()</code> method:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;break&quot;)
     .executesNative((sender, args) -&gt; {
-        Location location = (Location) sender.getLocation();
+        Location location = sender.getLocation();
         if(location != null) {
             location.getBlock().breakNaturally();
         }
@@ -1286,11 +1276,11 @@ public Location getLocation();
     .register();
 </code></pre>
 <p>This can now be used via the following command examples:</p>
-<pre><code>/execute positioned 100 62 50 run break
+<pre><code class="language-mccmd">/execute positioned 100 62 50 run break
 </code></pre>
-<pre><code>/execute at @e[type=pig] run break
+<pre><code class="language-mccmd">/execute at @e[type=pig] run break
 </code></pre>
-<pre><code>/execute in minecraft:overworld positioned 20 60 -20 run break
+<pre><code class="language-mccmd">/execute in minecraft:overworld positioned 20 60 -20 run break
 </code></pre>
 </div>
 <h1><a class="header" href="#resulting-command-executors" id="resulting-command-executors">Resulting command executors</a></h1>
@@ -1321,7 +1311,7 @@ public Location getLocation();
 <h3><a class="header" href="#example---lootbox-system-with-execute-command" id="example---lootbox-system-with-execute-command">Example - Lootbox system with <code>/execute</code> command</a></h3>
 <p>We can store state using <code>/execute store</code> and we can perform conditional checks using <code>/execute if</code>. By combining these, we can create a system which can be used with commandblocks to say, give players random lootboxes and redeem them. The concept is to create a command that generates a random number from 1 to 100. If the number is 1 (thus, the chance of being chosen is \(\frac{1}{100}\)), then we award a player with some reward, say 64 diamonds.</p>
 <p>To do this, we'll declare two commands:</p>
-<pre><code>/randomnumber        - returns a random number between 1 and 99 (inclusive)
+<pre><code class="language-mccmd">/randomnumber        - returns a random number between 1 and 99 (inclusive)
 /givereward &lt;player&gt; - gives a player 64 diamonds and broadcasts it in the chat
 </code></pre>
 <p>Since we're declaring commands that are to be used in <code>/execute</code>, we must ensure that these commands are registered in your plugin's <code>onLoad()</code> method. First, we write our implementation for <code>/randomnumber</code>. It is fairly straight forward using Java's <code>ThreadLocalRandom</code> to generate a random number:</p>
@@ -1333,7 +1323,7 @@ new CommandAPICommand(&quot;randomnumber&quot;)
     .register();
 </code></pre>
 <p>Now we write our implementation for <code>/givereward</code>. In this example, we use the <code>EntitySelectorArgument</code> to select a single player. We cast it to <code>Player</code> and then add the items to their inventory.</p>
-<pre><code class="language-java">//Register reward giving system for a target player
+<pre><code class="language-java">// Register reward giving system for a target player
 new CommandAPICommand(&quot;givereward&quot;)
     .withArguments(new EntitySelectorArgument(&quot;target&quot;, EntitySelector.ONE_PLAYER))
     .executes((sender, args) -&gt; {
@@ -1345,10 +1335,10 @@ new CommandAPICommand(&quot;givereward&quot;)
 </code></pre>
 <hr />
 <p>Now that we've declared these commands, we can now use them in practice. We can use a command block to store a random number under the scoreboard score <code>randVal</code> for a player called <code>SomePlayer</code>, by executing the command <code>/randomnumber</code>. Since <code>/randomnumber</code> <strong>returns</strong> an integer, this value is stored in the scoreboard score:</p>
-<pre><code>/execute store result score SomePlayer randVal run randomnumber
+<pre><code class="language-mccmd">/execute store result score SomePlayer randVal run randomnumber
 </code></pre>
 <p>To check if the random number is equal to 1, we can use the <code>/execute if</code> command. If their score stored in <code>randVal</code> matches 1, then we run the <code>/givereward</code> command.</p>
-<pre><code>/execute if score SomePlayer randVal matches 1 run givereward SomePlayer
+<pre><code class="language-mccmd">/execute if score SomePlayer randVal matches 1 run givereward SomePlayer
 </code></pre>
 </div><h1><a class="header" href="#handling-command-failures" id="handling-command-failures">Handling command failures</a></h1>
 <p>Sometimes, you want your command to fail on purpose. This is basically the way to &quot;gracefully&quot; handle errors in your command execution. This is performed using the following method:</p>
@@ -1357,25 +1347,21 @@ new CommandAPICommand(&quot;givereward&quot;)
 <p>When the CommandAPI calls the fail method, it will cause the command to return a <em>success value</em> of 0, to indicate failure.</p>
 <div class="example">
 <h3><a class="header" href="#example---command-failing-for-element-not-in-a-list" id="example---command-failing-for-element-not-in-a-list">Example - Command failing for element not in a list</a></h3>
-<p>Say we have some list containing fruit and the player can choose from it. In order to do that, we can use a <code>StringArgument</code> and suggest it to the player using <code>.overrideSuggestions(String[])</code>. However, because this only lists <em>suggestions</em> to the player, it does <strong>not</strong> stop the player from entering an option that isn't on the list of suggestions.</p>
+<p>Say we have some list containing fruit and the player can choose from it. In order to do that, we can use a <code>StringArgument</code> and suggest it to the player using <code>.replaceSuggestions(info -&gt; String[])</code>. However, because this only lists <em>suggestions</em> to the player, it does <strong>not</strong> stop the player from entering an option that isn't on the list of suggestions.</p>
 <p>Therefore, to gracefully handle this with a proper error message, we use <code>CommandAPI.fail(String)</code> with a meaningful error message which is displayed to the user.</p>
-<pre><code class="language-java">//Array of fruit
+<pre><code class="language-java">// Array of fruit
 String[] fruit = new String[] {&quot;banana&quot;, &quot;apple&quot;, &quot;orange&quot;};
 
-//Argument accepting a String, suggested with the list of fruit
-List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
-arguments.add(new StringArgument(&quot;item&quot;).overrideSuggestions(fruit));
-
-//Register the command
+// Register the command
 new CommandAPICommand(&quot;getfruit&quot;)
-    .withArguments(arguments)
+    .withArguments(new StringArgument(&quot;item&quot;).replaceSuggestions(info -&gt; fruit))
     .executes((sender, args) -&gt; {
         String inputFruit = (String) args[0];
         
         if(Arrays.stream(fruit).anyMatch(inputFruit::equals)) {
-            //Do something with inputFruit
+            // Do something with inputFruit
         } else {
-            //The player's input is not in the list of fruit
+            // The sender's input is not in the list of fruit
             CommandAPI.fail(&quot;That fruit doesn't exist!&quot;);
         }
     })
@@ -1387,24 +1373,45 @@ new CommandAPICommand(&quot;getfruit&quot;)
 <p>In general, it's a good idea to handle unexpected cases with the <code>CommandAPI.fail()</code> method. Most arguments used by the CommandAPI will have their own built-in failsafe system <em>(e.g. the <code>EntitySelectorArgument</code> will not execute the command executor if it fails to find an entity)</em>, so this feature is for those extra cases.</p>
 </blockquote>
 <h1><a class="header" href="#arguments" id="arguments">Arguments</a></h1>
-<p>Arguments in the CommandAPI are registered by using a <code>List&lt;Argument&gt;</code> object. There are two things you need to keep in mind when creating arguments:</p>
+<p>Arguments in the CommandAPI are registered by using an <code>Argument[]</code> or <code>List&lt;Argument&gt;</code> object. There are two things you need to keep in mind when creating arguments:</p>
 <ul>
 <li>The order which they will be used</li>
 <li>The type of each argument</li>
 </ul>
 <p>By definition of a <code>List</code>, the order of the elements inserted into it are preserved, meaning the order you add arguments to the <code>List</code> will be the resulting order of which arguments are presented to the user when they run that command.</p>
 <p>Adding arguments for registration is simple:</p>
-<pre><code class="language-java">//Create a List
+<pre><code class="language-java">// Create a List
 List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
 
-//Add an argument with the node &quot;target&quot;, which is a PlayerArgument
+// Add an argument with the node &quot;target&quot;, which is a PlayerArgument
 arguments.add(new PlayerArgument(&quot;target&quot;));
 </code></pre>
 <p>The String value is the node that is registered into Minecraft's internal command graph. This is name is also used as a prompt that is shown to a player when they are entering the command.</p>
 <hr />
+<p>The CommandAPI is very flexible when it comes to registering arguments, and lets you use a number of different methods to suit your preference:</p>
+<pre><code class="language-java">new CommandAPICommand(&quot;mycommand&quot;)
+    .withArguments(new StringArgument(&quot;arg0&quot;))
+    .withArguments(new StringArgument(&quot;arg1&quot;))
+    .withArguments(new StringArgument(&quot;arg2&quot;))
+    // And so on
+</code></pre>
+<pre><code class="language-java">new CommandAPICommand(&quot;mycommand&quot;)
+    .withArguments(new StringArgument(&quot;arg0&quot;), new StringArgument(&quot;arg1&quot;), new StringArgument(&quot;arg2&quot;))
+    // And so on
+</code></pre>
+<pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
+arguments.add(new StringArgument(&quot;arg0&quot;));
+arguments.add(new StringArgument(&quot;arg1&quot;));
+arguments.add(new StringArgument(&quot;arg2&quot;));
+
+new CommandAPICommand(&quot;mycommand&quot;)
+    .withArguments(arguments)
+    // And so on
+</code></pre>
+<hr />
 <h2><a class="header" href="#argument-casting" id="argument-casting">Argument Casting</a></h2>
 <p>To access arguments, they have to be casted to the type that the argument represents. The order of the arguments in the <code>args[]</code> is the same as the order in which the arguments were declared.</p>
-<pre><code class="language-java">List&lt;ArgumentType&gt; arguments = new ArrayList&lt;&gt;();
+<pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
 arguments.add(new StringArgument(&quot;arg0&quot;));
 arguments.add(new PotionEffectArgument(&quot;arg1&quot;));
 arguments.add(new LocationArgument(&quot;arg2&quot;));
@@ -1473,14 +1480,14 @@ new CommandAPICommand(&quot;cmd&quot;)
 <hr />
 <h2><a class="header" href="#optionaldifferent-arguments" id="optionaldifferent-arguments">Optional/Different Arguments</a></h2>
 <p>Sometimes, you want to register a command that has a different effect whether arguments are included or not. For example, take the <code>/kill</code> command. If you run <code>/kill</code> on its own, it will kill the command sender. If however you run <code>/kill &lt;target&gt;</code>, it will kill the target. In other words, we have the following command command syntax:</p>
-<pre><code>/kill          - Kills yourself
+<pre><code class="language-mccmd">/kill          - Kills yourself
 /kill &lt;target&gt; - Kills a target player
 </code></pre>
 <p>As shown by the command syntax, we need to register <em>two commands</em>.</p>
 <div class="example">
 <h3><a class="header" href="#example---kill-command-with-two-separate-arguments" id="example---kill-command-with-two-separate-arguments">Example - /kill command with two separate arguments</a></h3>
 <p>For example, say we're registering a command <code>/kill</code>:</p>
-<pre><code>/kill          - Kills yourself
+<pre><code class="language-mccmd">/kill          - Kills yourself
 /kill &lt;target&gt; - Kills a target player
 </code></pre>
 <p>We first register the first <code>/kill</code> command as normal:</p>
@@ -3735,7 +3742,7 @@ new CommandAPICommand(&quot;kill&quot;)
             is.setItemMeta(itemMeta);
         }
         
-        //Subtract 30 levels
+        // Subtract 30 levels
         player.setLevel(player.getLevel() - 30);
     })
     .register();
@@ -4197,8 +4204,10 @@ public static void createWarp(Player player, @AStringArgument String warpName) {
 </code></pre>
 <p>Or, it can take in a list of strings which represent the <em>aliases</em> that can also be used for the declared subcommand:</p>
 <pre><code class="language-java">@Subcommand({&quot;teleport&quot;, &quot;tp&quot;})
-public static void teleport(Player player, @APlayerArgument Player target) {
-	player.teleport(target);
+public static void teleport(Player player, @APlayerArgument OfflinePlayer target) {
+	if(target.isOnline() &amp;&amp; target instanceof Player onlineTarget) {
+		player.teleport(onlineTarget);
+	}
 }
 </code></pre>
 <h3><a class="header" href="#permission" id="permission"><code>@Permission</code></a></h3>
@@ -4349,7 +4358,7 @@ commands:
     
     @Override
     public void onEnable() {
-        Converter.convert(Bukkit.getPluginManager().getPlugin(&quot;TargetPlugin&quot;));
+        Converter.convert((JavaPlugin) Bukkit.getPluginManager().getPlugin(&quot;TargetPlugin&quot;));
         //Other code goes here...
     }
     
@@ -4381,7 +4390,7 @@ public static convert(Plugin plugin, String cmdName, Argument... arguments);
 /speed &lt;walk/fly&gt; &lt;speed&gt; &lt;target&gt;
 </code></pre>
 <p>With the EssentialsX plugin, the <code>&lt;speed&gt;</code> value can only take numbers between 0 and 10. As such, we'll ensure to apply these limits using the <code>IntegerArgument</code>. In addition, since the speed type can only be &quot;walk&quot; or &quot;fly&quot;, we'll add that to our converter as well using a <code>MultiLiteralArgument</code>:</p>
-<pre><code class="language-java">Plugin essentials = Bukkit.getPluginManager().getPlugin(&quot;Essentials&quot;);
+<pre><code class="language-java">JavaPlugin essentials = (JavaPlugin) Bukkit.getPluginManager().getPlugin(&quot;Essentials&quot;);
 
 // /speed &lt;speed&gt;
 Converter.convert(essentials, &quot;speed&quot;, new IntegerArgument(&quot;speed&quot;, 0, 10));
@@ -5004,6 +5013,8 @@ Caused by: java.lang.IllegalArgumentException: Whilst parsing command on line 2:
         <!-- Custom JS scripts -->
         
         <script type="text/javascript" src="sidebar.js"></script>
+        
+        <script type="text/javascript" src="mccmd.js"></script>
         
 
         

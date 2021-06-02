@@ -50,19 +50,18 @@ h1 {
     }
     .pagetoc a {
         border-left: 1px solid var(--sidebar-bg);
-        color: var(--fg);
+        color: var(--fg) !important;
         display: block;
         padding-bottom: 5px;
         padding-top: 5px;
         padding-left: 10px;
-        font-size: 10pt;
         text-align: left;
         text-decoration: none;
     }
     .pagetoc a:hover,
     .pagetoc a.active {
         background: var(--sidebar-bg);
-        color: var(--sidebar-fg);
+        color: var(--sidebar-fg) !important;
     }
     .pagetoc .active {
         background: var(--sidebar-bg);

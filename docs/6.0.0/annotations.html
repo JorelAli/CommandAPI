@@ -232,8 +232,10 @@ public static void createWarp(Player player, @AStringArgument String warpName) {
 </code></pre>
 <p>Or, it can take in a list of strings which represent the <em>aliases</em> that can also be used for the declared subcommand:</p>
 <pre><code class="language-java">@Subcommand({&quot;teleport&quot;, &quot;tp&quot;})
-public static void teleport(Player player, @APlayerArgument Player target) {
-	player.teleport(target);
+public static void teleport(Player player, @APlayerArgument OfflinePlayer target) {
+	if(target.isOnline() &amp;&amp; target instanceof Player onlineTarget) {
+		player.teleport(onlineTarget);
+	}
 }
 </code></pre>
 <h3><a class="header" href="#permission" id="permission"><code>@Permission</code></a></h3>
@@ -386,6 +388,8 @@ public static void command(CommandSender sender,
         <!-- Custom JS scripts -->
         
         <script type="text/javascript" src="sidebar.js"></script>
+        
+        <script type="text/javascript" src="mccmd.js"></script>
         
 
         

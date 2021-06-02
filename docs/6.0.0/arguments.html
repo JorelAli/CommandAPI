@@ -177,24 +177,45 @@
                         <div class="sidetoc"><nav class="pagetoc"></nav></div>
                         
                         <h1><a class="header" href="#arguments" id="arguments">Arguments</a></h1>
-<p>Arguments in the CommandAPI are registered by using a <code>List&lt;Argument&gt;</code> object. There are two things you need to keep in mind when creating arguments:</p>
+<p>Arguments in the CommandAPI are registered by using an <code>Argument[]</code> or <code>List&lt;Argument&gt;</code> object. There are two things you need to keep in mind when creating arguments:</p>
 <ul>
 <li>The order which they will be used</li>
 <li>The type of each argument</li>
 </ul>
 <p>By definition of a <code>List</code>, the order of the elements inserted into it are preserved, meaning the order you add arguments to the <code>List</code> will be the resulting order of which arguments are presented to the user when they run that command.</p>
 <p>Adding arguments for registration is simple:</p>
-<pre><code class="language-java">//Create a List
+<pre><code class="language-java">// Create a List
 List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
 
-//Add an argument with the node &quot;target&quot;, which is a PlayerArgument
+// Add an argument with the node &quot;target&quot;, which is a PlayerArgument
 arguments.add(new PlayerArgument(&quot;target&quot;));
 </code></pre>
 <p>The String value is the node that is registered into Minecraft's internal command graph. This is name is also used as a prompt that is shown to a player when they are entering the command.</p>
 <hr />
+<p>The CommandAPI is very flexible when it comes to registering arguments, and lets you use a number of different methods to suit your preference:</p>
+<pre><code class="language-java">new CommandAPICommand(&quot;mycommand&quot;)
+    .withArguments(new StringArgument(&quot;arg0&quot;))
+    .withArguments(new StringArgument(&quot;arg1&quot;))
+    .withArguments(new StringArgument(&quot;arg2&quot;))
+    // And so on
+</code></pre>
+<pre><code class="language-java">new CommandAPICommand(&quot;mycommand&quot;)
+    .withArguments(new StringArgument(&quot;arg0&quot;), new StringArgument(&quot;arg1&quot;), new StringArgument(&quot;arg2&quot;))
+    // And so on
+</code></pre>
+<pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
+arguments.add(new StringArgument(&quot;arg0&quot;));
+arguments.add(new StringArgument(&quot;arg1&quot;));
+arguments.add(new StringArgument(&quot;arg2&quot;));
+
+new CommandAPICommand(&quot;mycommand&quot;)
+    .withArguments(arguments)
+    // And so on
+</code></pre>
+<hr />
 <h2><a class="header" href="#argument-casting" id="argument-casting">Argument Casting</a></h2>
 <p>To access arguments, they have to be casted to the type that the argument represents. The order of the arguments in the <code>args[]</code> is the same as the order in which the arguments were declared.</p>
-<pre><code class="language-java">List&lt;ArgumentType&gt; arguments = new ArrayList&lt;&gt;();
+<pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
 arguments.add(new StringArgument(&quot;arg0&quot;));
 arguments.add(new PotionEffectArgument(&quot;arg1&quot;));
 arguments.add(new LocationArgument(&quot;arg2&quot;));
@@ -263,14 +284,14 @@ new CommandAPICommand(&quot;cmd&quot;)
 <hr />
 <h2><a class="header" href="#optionaldifferent-arguments" id="optionaldifferent-arguments">Optional/Different Arguments</a></h2>
 <p>Sometimes, you want to register a command that has a different effect whether arguments are included or not. For example, take the <code>/kill</code> command. If you run <code>/kill</code> on its own, it will kill the command sender. If however you run <code>/kill &lt;target&gt;</code>, it will kill the target. In other words, we have the following command command syntax:</p>
-<pre><code>/kill          - Kills yourself
+<pre><code class="language-mccmd">/kill          - Kills yourself
 /kill &lt;target&gt; - Kills a target player
 </code></pre>
 <p>As shown by the command syntax, we need to register <em>two commands</em>.</p>
 <div class="example">
 <h3><a class="header" href="#example---kill-command-with-two-separate-arguments" id="example---kill-command-with-two-separate-arguments">Example - /kill command with two separate arguments</a></h3>
 <p>For example, say we're registering a command <code>/kill</code>:</p>
-<pre><code>/kill          - Kills yourself
+<pre><code class="language-mccmd">/kill          - Kills yourself
 /kill &lt;target&gt; - Kills a target player
 </code></pre>
 <p>We first register the first <code>/kill</code> command as normal:</p>
@@ -371,6 +392,8 @@ new CommandAPICommand(&quot;kill&quot;)
         <!-- Custom JS scripts -->
         
         <script type="text/javascript" src="sidebar.js"></script>
+        
+        <script type="text/javascript" src="mccmd.js"></script>
         
 
         

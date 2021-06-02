@@ -179,30 +179,37 @@
                         <h1><a class="header" href="#command-registration" id="command-registration">Command registration</a></h1>
 <p>To register commands with the CommandAPI, we use the <code>CommandAPICommand</code> class. It follows a simple builder pattern to improve readability.</p>
 <p>I think the easiest way to explain it is with an example:</p>
-<pre><code class="language-java">// Create our arguments
-List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
-arguments.add(new GreedyStringArgument(&quot;message&quot;));
-
-//Create our command
+<pre><code class="language-java">//Create our command
 new CommandAPICommand(&quot;broadcastmsg&quot;)
-    .withArguments(arguments)                     // The arguments
-    .withAliases(&quot;broadcast&quot;, &quot;broadcastmessage&quot;) // Command aliases
-    .withPermission(CommandPermission.OP)         // Required permissions
+    .withArguments(new GreedyStringArgument(&quot;message&quot;)) // The arguments
+    .withAliases(&quot;broadcast&quot;, &quot;broadcastmessage&quot;)       // Command aliases
+    .withPermission(CommandPermission.OP)               // Required permissions
     .executes((sender, args) -&gt; {
         String message = (String) args[0];
         Bukkit.getServer().broadcastMessage(message);
     }).register();
 </code></pre>
 <ul>
-<li>First, we create our arguments for the command. This is described in more detail in <a href="./arguments.html">the section on arguments</a>. </li>
-<li>We then create a new <code>CommandAPICommand</code>, with the name of the command that the sender must enter to run it. </li>
-<li>We then add the arguments to the command with <code>withArguments</code>.</li>
-<li>In this example, we add an alias, &quot;broadcast&quot;, to the command. This allows the sender to use either <code>/broadcastmsg &lt;message&gt;</code> or <code>/broadcast &lt;message&gt;</code>.</li>
-<li>By using <code>withPermission</code>, we require the sender to be an OP in order to run the command.</li>
-<li>We control what the command does using <code>executes</code> (this is described in more detail in <a href="./commandexecutors.html">the section on command executors</a>).</li>
-<li>Finally, we register the command to the CommandAPI using <code>register</code>.</li>
+<li>
+<p>First, we create a new <code>CommandAPICommand</code>, with the name of the command that the sender must enter to run it. </p>
+</li>
+<li>
+<p>When, we create an argument to add to the command using <code>withArguments</code>. This is described in more detail in <a href="./arguments.html">the section on arguments</a>.</p>
+</li>
+<li>
+<p>In this example, we add an alias, &quot;broadcast&quot;, to the command. This allows the sender to use either <code>/broadcastmsg &lt;message&gt;</code> or <code>/broadcast &lt;message&gt;</code>.</p>
+</li>
+<li>
+<p>By using <code>withPermission</code>, we require the sender to be an OP in order to run the command.</p>
+</li>
+<li>
+<p>We control what the command does using <code>executes</code> (this is described in more detail in <a href="./commandexecutors.html">the section on command executors</a>).</p>
+</li>
+<li>
+<p>Finally, we register the command to the CommandAPI using <code>register</code>.</p>
+</li>
 </ul>
-<p>That's it! This simple snippet of code fully registers the command to the server. No hassling with a plugin instance, no messing with <code>plugin.yml</code> files.</p>
+<p>That's it! This simple snippet of code fully registers the command to the server. You don't need to supply a plugin instance, you don't have to create a custom class and you don't have to mess with the <code>plugin.yml</code> file.</p>
 <p>Throughout this documentation, we will use the various different methods for command registration to give you an idea of when and where certain methods are more suitable than others.</p>
 <hr />
 <h2><a class="header" href="#commandapicommand-methods" id="commandapicommand-methods"><code>CommandAPICommand</code> methods</a></h2>
@@ -213,15 +220,16 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 <p>This constructor creates a new instance of the <code>CommandAPICommand</code> object. This constructor requires the <em>name</em> of the command.</p>
 <h4><a class="header" href="#setting-command-properties" id="setting-command-properties">Setting command properties</a></h4>
 <pre><code class="language-java">CommandAPICommand withArguments(List&lt;Argument&gt; arguments)
+CommandAPICommand withArguments(Argument... arguments)
 </code></pre>
 <p>The <code>withArguments</code> method is used to add arguments to your command. The <code>arguments</code> parameter is appended to the the list of arguments for the command.</p>
-<pre><code class="language-java">CommandAPICommand withArguments(Argument... arguments)
-</code></pre>
-<p>Similar to the other <code>withArguments</code> method, this method appends the <code>arguments</code> to the list of arguments for the command. This is purely to make adding one or two arguments nice and easy instead of creating lots of <code>List</code> objects everywhere.</p>
 <pre><code class="language-java">CommandAPICommand withPermission(CommandPermission)
 CommandAPICommand withPermission(String)
 </code></pre>
 <p>The <code>withPermission</code> method is used to assign a permission that is required to execute the command. (See <a href="permissions.html">the section on permissions</a> for more info).</p>
+<pre><code class="language-java">CommandAPICommand withRequirements(sender -&gt; {})
+</code></pre>
+<p>The <code>withRequirements</code> method is used to assign additional constraints required to execute the command, similar to permissions. (See <a href="./requirements.html">the section on requirements</a> for more info).</p>
 <pre><code class="language-java">CommandAPICommand withAliases(String... args)
 </code></pre>
 <p>The <code>withAliases</code> method is used to declare a list of aliases that can be used to run this command via. (See <a href="./aliases.html">the section on aliases</a> for more info).</p>
@@ -280,7 +288,7 @@ CommandAPICommand withPermission(String)
 <p>Registers the command.</p>
 <hr />
 <h2><a class="header" href="#command-loading-order" id="command-loading-order">Command loading order</a></h2>
-<p>In order to register commands properly, <strong>commands must be registered before the server finishes loading</strong>. The CommandAPI will prevent command registration after the server has loaded. This basically means that all command registration must occur during a plugin's <code>onLoad()</code> or <code>onEnable()</code> method. With the CommandAPI, depending on whether you use <code>onLoad()</code> or <code>onEnable()</code> to load your commands depends on whether your plugin is used with Minecraft's functions:</p>
+<p>In order to register commands properly, <strong>commands must be registered before the server finishes loading</strong>. The CommandAPI will output a warning if you register a command after the server has loaded. This basically means that all command registration must occur during a plugin's <code>onLoad()</code> or <code>onEnable()</code> method. With the CommandAPI, depending on whether you use <code>onLoad()</code> or <code>onEnable()</code> to load your commands depends on whether your plugin is used with Minecraft's functions:</p>
 <table><thead><tr><th>When to load</th><th>What to do</th></tr></thead><tbody>
 <tr><td><code>onLoad()</code> method</td><td>Register commands to be used in Minecraft functions (<a href="functions.html">see the Function section for more info</a>)</td></tr>
 <tr><td><code>onEnable()</code> method</td><td>Register regular commands</td></tr>
@@ -290,7 +298,7 @@ CommandAPICommand withPermission(String)
 <p>The CommandAPI has support to unregister commands completely from Minecraft's command list. This includes Minecraft built in commands!</p>
 <div class="warning">
 <p><strong>Developer's Note:</strong></p>
-<p>Command unregistration, although powerful, is highly unrecommended. It is the CommandAPI's most &quot;dangerous&quot; feature as it can cause unexpected sideffects, such as command blocks executing commands you wouldn't expect them to. In almost every case, I'd recommend just creating a new command instead of unregistering one to replace it.</p>
+<p>Command unregistration, although powerful, is not recommended! It is the CommandAPI's most &quot;dangerous&quot; feature as it can cause unexpected side effects, such as command blocks executing commands you wouldn't expect them to. In almost every case, I'd recommend just creating a new command instead of unregistering one to replace it.</p>
 <p>For instance, instead of unregistering <code>/gamemode</code>, you could register a command <code>/gm</code> or <code>/changegamemode</code>.</p>
 </div>
 <table><thead><tr><th>Method</th><th>Result</th></tr></thead><tbody>
@@ -303,14 +311,9 @@ CommandAPICommand withPermission(String)
 <pre><code class="language-java">//Unregister the gamemode command from the server (by force)
 CommandAPI.unregister(&quot;gamemode&quot;, true);
 
-List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
-
-/* Arguments for the gamemode command. In this sample, I'm just 
- * using a simple literal argument which allows for /gamemode survival */
-arguments.add(new LiteralArgument(&quot;survival&quot;));
-
+// Register our new /gamemode, with survival, creative, adventure and spectator
 new CommandAPICommand(&quot;gamemode&quot;)
-    .withArguments(arguments)
+    .withArguments(new MultiLiteralArgument(&quot;survival&quot;, &quot;creative&quot;, &quot;adventure&quot;, &quot;spectator&quot;))
     .executes((sender, args) -&gt; {
         //Implementation of our /gamemode command
     }).register();
@@ -395,6 +398,8 @@ new CommandAPICommand(&quot;gamemode&quot;)
         <!-- Custom JS scripts -->
         
         <script type="text/javascript" src="sidebar.js"></script>
+        
+        <script type="text/javascript" src="mccmd.js"></script>
         
 
         
