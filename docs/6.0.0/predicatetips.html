@@ -182,22 +182,22 @@
 
 // The &quot;create&quot; literal, with a requirement that a player must have a party
 arguments.add(new LiteralArgument(&quot;create&quot;)
-	.withRequirement(sender -&gt; {
-		
-		return !partyMembers.containsKey(((Player) sender).getUniqueId());
-		
-	}));
+    .withRequirement(sender -&gt; {
+        
+        return !partyMembers.containsKey(((Player) sender).getUniqueId());
+        
+    }));
 
 arguments.add(new StringArgument(&quot;partyName&quot;));
 </code></pre>
 <p>And for our party teleportation command, we had the following code:</p>
 <pre><code class="language-java">arguments = new ArrayList&lt;&gt;();
 arguments.add(new LiteralArgument(&quot;tp&quot;)
-	.withRequirement(sender -&gt; {
-		
-		return partyMembers.containsKey(((Player) sender).getUniqueId());
+    .withRequirement(sender -&gt; {
         
-	}));
+        return partyMembers.containsKey(((Player) sender).getUniqueId());
+        
+    }));
 </code></pre>
 <p>We can simplify this code by declaring the predicate:</p>
 <pre><code class="language-java">Predicate&lt;CommandSender&gt; testIfPlayerHasParty = sender -&gt; {

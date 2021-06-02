@@ -205,7 +205,7 @@
             .executes((sender, args) -&gt; {
                 //Kills all enemies in all worlds
                 Bukkit.getWorlds().forEach(w -&gt; w.getLivingEntities().forEach(e -&gt; e.setHealth(0)));
-        	})
+            })
             .register();
     }
     

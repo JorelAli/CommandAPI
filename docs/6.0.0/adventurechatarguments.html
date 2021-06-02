@@ -193,12 +193,12 @@
 </code></pre>
 <p>We can construct a book using the Adventure API's <code>Book.book(Component, Component, Component...)</code> method. In order to convert our strings into <code>Component</code> objects, we use the <code>Component.text(String)</code> method. Since Paper supports the Adventure API natively, we can then send this book to a player using the <code>openBook(Book)</code> method:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;showbook&quot;)
-	.withArguments(new PlayerArgument(&quot;target&quot;))
+    .withArguments(new PlayerArgument(&quot;target&quot;))
     .withArguments(new TextArgument(&quot;title&quot;))
     .withArguments(new StringArgument(&quot;author&quot;))
     .withArguments(new AdventureChatComponentArgument(&quot;contents&quot;))
     .executes((sender, args) -&gt; {
-    	Player target = (Player) args[0];
+        Player target = (Player) args[0];
         String title = (String) args[1];
         String author = (String) args[2];
         Component content = (Component) args[3];
@@ -220,7 +220,7 @@
 </code></pre>
 <p>In order to broadcast an Adventure <code>Component</code> to all players on the server, we have to use Paper's <code>broadcast(Component, String)</code> method. This method requires a permission node which all players must have in order to receive the broadcasted message. By default, Bukkit-based servers (Spigot and Paper) use the <code>bukkit.broadcast.user</code> permission, which is described <a href="https://bukkit.fandom.com/wiki/CraftBukkit_Commands#Additional_Permissions">here</a>:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;pbroadcast&quot;)
-	.withArguments(new AdventureChatArgument(&quot;message&quot;))
+    .withArguments(new AdventureChatArgument(&quot;message&quot;))
     .executes((sender, args) -&gt; {
         Component message = (Component) args[0];
         

@@ -251,16 +251,16 @@ Converter.convert(essentials, &quot;speed&quot;, new PlayerArgument(&quot;target
 
 // /speed &lt;walk/fly&gt; &lt;speed&gt;
 Converter.convert(essentials, &quot;speed&quot;, 
-	new MultiLiteralArgument(&quot;walk&quot;, &quot;fly&quot;), 
-	new IntegerArgument(&quot;speed&quot;, 0, 10)
-	);
+    new MultiLiteralArgument(&quot;walk&quot;, &quot;fly&quot;), 
+    new IntegerArgument(&quot;speed&quot;, 0, 10)
+    );
 
 // /speed &lt;walk/fly&gt; &lt;speed&gt; &lt;target&gt;
 Converter.convert(essentials, &quot;speed&quot;, 
-	new MultiLiteralArgument(&quot;walk&quot;, &quot;fly&quot;), 
-	new IntegerArgument(&quot;speed&quot;, 0, 10), 
-	new PlayerArgument(&quot;target&quot;)
-	);
+    new MultiLiteralArgument(&quot;walk&quot;, &quot;fly&quot;), 
+    new IntegerArgument(&quot;speed&quot;, 0, 10), 
+    new PlayerArgument(&quot;target&quot;)
+    );
 </code></pre>
 <p><img src="./images/speed.gif" alt="" /></p>
 </div>

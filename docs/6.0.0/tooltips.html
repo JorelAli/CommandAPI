@@ -205,34 +205,34 @@ StringTooltip of(String suggestion, String tooltip);
 <p>First, we'll declare our arguments. Here, we'll use the <code>overrideSuggestionsT</code> method, along with the <code>StringTooltip.of(String, String)</code> method to create emote suggestions and include suitable descriptions:</p>
 <pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
 arguments.add(new StringArgument(&quot;emote&quot;)
-	.overrideSuggestionsT( 
+    .overrideSuggestionsT( 
         StringTooltip.of(&quot;wave&quot;, &quot;Waves at a player&quot;),
         StringTooltip.of(&quot;hug&quot;, &quot;Gives a player a hug&quot;),
         StringTooltip.of(&quot;glare&quot;, &quot;Gives a player the death glare&quot;)
-	)
+    )
 );
 arguments.add(new PlayerArgument(&quot;target&quot;));
 </code></pre>
 <p>Finally, we declare our command as normal:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;emote&quot;)
-	.withArguments(arguments)
-	.executesPlayer((player, args) -&gt; {
-		String emote = (String) args[0];
-		Player target = (Player) args[1];
-		
-		switch(emote) {
-		case &quot;wave&quot;:
-			target.sendMessage(player.getName() + &quot; waves at you!&quot;);
-			break;
-		case &quot;hug&quot;:
-			target.sendMessage(player.getName() + &quot; hugs you!&quot;);
-			break;
-		case &quot;glare&quot;:
-			target.sendMessage(player.getName() + &quot; gives you the death glare...&quot;);
-			break;
-		}
-	})
-	.register();
+    .withArguments(arguments)
+    .executesPlayer((player, args) -&gt; {
+        String emote = (String) args[0];
+        Player target = (Player) args[1];
+        
+        switch(emote) {
+        case &quot;wave&quot;:
+            target.sendMessage(player.getName() + &quot; waves at you!&quot;);
+            break;
+        case &quot;hug&quot;:
+            target.sendMessage(player.getName() + &quot; hugs you!&quot;);
+            break;
+        case &quot;glare&quot;:
+            target.sendMessage(player.getName() + &quot; gives you the death glare...&quot;);
+            break;
+        }
+    })
+    .register();
 </code></pre>
 </div>
 <p>The <code>IStringTooltip</code> interface can be implemented by any other class to provide tooltips for custom objects. The <code>IStringTooltip</code> interface has the following methods:</p>
@@ -247,57 +247,57 @@ arguments.add(new PlayerArgument(&quot;target&quot;));
 <p>Let's say we've created a simple plugin which has custom items. For a custom item, we'll have a super simple class <code>CustomItem</code> that sets its name, lore and attached itemstack:</p>
 <pre><code class="language-java">public class CustomItem implements IStringTooltip {
 
-	private ItemStack itemstack;
-	private String name;
-	
-	public CustomItem(ItemStack itemstack, String name, String lore) {
-		ItemMeta meta = itemstack.getItemMeta();
-		meta.setDisplayName(name);
-		meta.setLore(Arrays.asList(lore));
-		itemstack.setItemMeta(meta);
-		this.itemstack = itemstack;
-		this.name = name;
-	}
-	
-	public String getName() {
-		return this.name;
-	}
-	
-	public ItemStack getItem() {
-		return this.itemstack;
-	}
-	
-	@Override
-	public String getSuggestion() {
-		return this.itemstack.getItemMeta().getDisplayName();
-	}
+    private ItemStack itemstack;
+    private String name;
+    
+    public CustomItem(ItemStack itemstack, String name, String lore) {
+        ItemMeta meta = itemstack.getItemMeta();
+        meta.setDisplayName(name);
+        meta.setLore(Arrays.asList(lore));
+        itemstack.setItemMeta(meta);
+        this.itemstack = itemstack;
+        this.name = name;
+    }
+    
+    public String getName() {
+        return this.name;
+    }
+    
+    public ItemStack getItem() {
+        return this.itemstack;
+    }
+    
+    @Override
+    public String getSuggestion() {
+        return this.itemstack.getItemMeta().getDisplayName();
+    }
 
-	@Override
-	public String getTooltip() {
-		return this.itemstack.getItemMeta().getLore().get(0);
-	}
-	
+    @Override
+    public String getTooltip() {
+        return this.itemstack.getItemMeta().getLore().get(0);
+    }
+    
 }
 </code></pre>
 <p>Let's also say that our plugin has registered lots of <code>CustomItem</code>s and has this stored in a <code>CustomItem[]</code> in our plugin. We could then use this as our input for suggestions:</p>
 <pre><code class="language-java">CustomItem[] customItems = new CustomItem[] {
-	new CustomItem(new ItemStack(Material.DIAMOND_SWORD), &quot;God sword&quot;, &quot;A sword from the heavens&quot;),
-	new CustomItem(new ItemStack(Material.PUMPKIN_PIE), &quot;Sweet pie&quot;, &quot;Just like grandma used to make&quot;)
+    new CustomItem(new ItemStack(Material.DIAMOND_SWORD), &quot;God sword&quot;, &quot;A sword from the heavens&quot;),
+    new CustomItem(new ItemStack(Material.PUMPKIN_PIE), &quot;Sweet pie&quot;, &quot;Just like grandma used to make&quot;)
 };  //
-	
+    
 new CommandAPICommand(&quot;giveitem&quot;)
-	.withArguments(new StringArgument(&quot;item&quot;).overrideSuggestionsT(customItems)) // We use customItems[] as the input for our suggestions with tooltips
-	.executesPlayer((player, args) -&gt; {
-		String itemName = (String) args[0];
-		
-		//Give them the item
-		for(CustomItem item : customItems) {
-			if(item.getName().equals(itemName)) {
-				player.getInventory().addItem(item.getItem());
-			}
-		}
-	})
-	.register();
+    .withArguments(new StringArgument(&quot;item&quot;).overrideSuggestionsT(customItems)) // We use customItems[] as the input for our suggestions with tooltips
+    .executesPlayer((player, args) -&gt; {
+        String itemName = (String) args[0];
+        
+        //Give them the item
+        for(CustomItem item : customItems) {
+            if(item.getName().equals(itemName)) {
+                player.getInventory().addItem(item.getItem());
+            }
+        }
+    })
+    .register();
 </code></pre>
 </div>
 <hr />
@@ -334,11 +334,11 @@ arguments.add(new LocationArgument(&quot;location&quot;)
 </code></pre>
 <p>In the arguments declaration, we've casted the command sender to a player. To ensure that the command sender is definitely a player, we'll use the <code>executesPlayer</code> command execution method in our command declaration:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;warp&quot;)
-	.withArguments(arguments)
-	.executesPlayer((player, args) -&gt; {
-	    player.teleport((Location) args[0]);
-	})
-	.register();
+    .withArguments(arguments)
+    .executesPlayer((player, args) -&gt; {
+        player.teleport((Location) args[0]);
+    })
+    .register();
 </code></pre>
 </div>
 

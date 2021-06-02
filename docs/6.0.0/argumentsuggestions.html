@@ -206,8 +206,8 @@ arguments.add(new StringArgument(&quot;world&quot;).overrideSuggestions(&quot;no
 new CommandAPICommand(&quot;warp&quot;)
     .withArguments(arguments)
     .executesPlayer((player, args) -&gt; {
-       	String warp = (String) args[0];
-		player.teleport(warps.get(warp)); // Look up the warp in a map, for example
+           String warp = (String) args[0];
+        player.teleport(warps.get(warp)); // Look up the warp in a map, for example
     })
     .register();
 </code></pre>
@@ -222,12 +222,12 @@ new CommandAPICommand(&quot;warp&quot;)
 </code></pre>
 <p>Let's say we have a simple class to get the friends of a command sender:</p>
 <pre><code class="language-java">public class Friends {
-	
-	static Map&lt;UUID, String[]&gt; friends /* = ... */;
-	
+    
+    static Map&lt;UUID, String[]&gt; friends /* = ... */;
+    
     public static String[] getFriends(CommandSender sender) {
         if(sender instanceof Player) {
-        	//Look up friends in a database or file
+            //Look up friends in a database or file
             return friends.get(((Player) sender).getUniqueId());
         } else {
             return new String[0];
@@ -244,8 +244,8 @@ arguments.add(new PlayerArgument(&quot;friend&quot;).overrideSuggestions((sender
 new CommandAPICommand(&quot;friendtp&quot;)
     .withArguments(arguments)
     .executesPlayer((player, args) -&gt; {
-       	Player target = (Player) args[0];
-		player.teleport(target);
+           Player target = (Player) args[0];
+        player.teleport(target);
     })
     .register();
 </code></pre>
@@ -289,29 +289,29 @@ arguments.add(new IntegerArgument(&quot;radius&quot;));
 arguments.add(new PlayerArgument(&quot;target&quot;).overrideSuggestions((sender, args) -&gt; {
 
     // Cast the first argument (radius, which is an IntegerArgument) to get its value
-	int radius = (int) args[0];
-	
+    int radius = (int) args[0];
+    
     // Get nearby entities within the provided radius
-	Player player = (Player) sender;
-	Collection&lt;Entity&gt; entities = player.getWorld().getNearbyEntities(player.getLocation(), radius, radius, radius);
-	
+    Player player = (Player) sender;
+    Collection&lt;Entity&gt; entities = player.getWorld().getNearbyEntities(player.getLocation(), radius, radius, radius);
+    
     // Get player names within that radius
-	return entities.stream()
-		.filter(e -&gt; e.getType() == EntityType.PLAYER)
-		.map(Entity::getName)
-		.toArray(String[]::new);
+    return entities.stream()
+        .filter(e -&gt; e.getType() == EntityType.PLAYER)
+        .map(Entity::getName)
+        .toArray(String[]::new);
 }));
 arguments.add(new GreedyStringArgument(&quot;message&quot;));
 
 // Declare our command as normal
 new CommandAPICommand(&quot;localmsg&quot;)
-	.withArguments(arguments)
-	.executesPlayer((player, args) -&gt; {
-		Player target = (Player) args[1];
-		String message = (String) args[2];
-		target.sendMessage(message);
-	})
-	.register();
+    .withArguments(arguments)
+    .executesPlayer((player, args) -&gt; {
+        Player target = (Player) args[1];
+        String message = (String) args[2];
+        target.sendMessage(message);
+    })
+    .register();
 </code></pre>
 <p>As shown in this code, we use the <code>(sender, args) -&gt; ...</code> lambda to override suggestions with previously declared arguments. In this example, our variable <code>args</code> will be <code>{ int }</code>, where this <code>int</code> refers to the radius. Note how this object array only has the previously declared arguments (and not for example <code>{ int, Player, String }</code>).</p>
 </div>

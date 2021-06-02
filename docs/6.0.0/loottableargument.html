@@ -187,8 +187,8 @@
         LootTable lootTable = (LootTable) args[0];
     
         /* Some generated LootContext relating to the lootTable*/
-    	LootContext context = new LootContext.Builder(player.getLocation()).build();
-    	
+        LootContext context = new LootContext.Builder(player.getLocation()).build();
+        
         lootTable.fillInventory(player.getInventory(), new Random(), context);
     })
     .register();

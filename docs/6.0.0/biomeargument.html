@@ -190,14 +190,14 @@
 </code></pre>
 <p>And we can set the biome of the current chunk as expected:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;setbiome&quot;)
-	.withArguments(new BiomeArgument(&quot;biome&quot;))
-	.executesPlayer((player, args) -&gt; {
-		Biome biome = (Biome) args[0];
+    .withArguments(new BiomeArgument(&quot;biome&quot;))
+    .executesPlayer((player, args) -&gt; {
+        Biome biome = (Biome) args[0];
 
-		Chunk chunk = player.getLocation().getChunk();
-		player.getWorld().setBiome(chunk.getX(), player.getLocation().getBlockY(), chunk.getZ(), biome);
-	})
-	.register();
+        Chunk chunk = player.getLocation().getChunk();
+        player.getWorld().setBiome(chunk.getX(), player.getLocation().getBlockY(), chunk.getZ(), biome);
+    })
+    .register();
 </code></pre>
 </div>
                     </main>

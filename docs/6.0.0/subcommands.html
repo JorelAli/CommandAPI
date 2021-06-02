@@ -194,23 +194,23 @@
 </code></pre>
 <p>We can implement this by creating a <code>CommandAPICommand</code> with the command name <code>add</code>:</p>
 <pre><code class="language-java">CommandAPICommand groupAdd = new CommandAPICommand(&quot;add&quot;)
-	.withArguments(new StringArgument(&quot;permission&quot;))
-	.withArguments(new StringArgument(&quot;groupName&quot;))
-	.executes((sender, args) -&gt; {
-	    //perm group add code
-	});
+    .withArguments(new StringArgument(&quot;permission&quot;))
+    .withArguments(new StringArgument(&quot;groupName&quot;))
+    .executes((sender, args) -&gt; {
+        //perm group add code
+    });
 </code></pre>
 <p>Similarly, we have another part <code>remove &lt;permission&gt; &lt;groupName&gt;</code>. We can declare this similar to our <code>add</code> command. Once we've done that, we can now join everything up together. Here, we create a command <code>group</code> which adds the two other subcommands:</p>
 <pre><code class="language-java">CommandAPICommand groupRemove = new CommandAPICommand(&quot;remove&quot;)
-	.withArguments(new StringArgument(&quot;permission&quot;))
-	.withArguments(new StringArgument(&quot;groupName&quot;))
-	.executes((sender, args) -&gt; {
-	    //perm group remove code
-	});
+    .withArguments(new StringArgument(&quot;permission&quot;))
+    .withArguments(new StringArgument(&quot;groupName&quot;))
+    .executes((sender, args) -&gt; {
+        //perm group remove code
+    });
 
 CommandAPICommand group = new CommandAPICommand(&quot;group&quot;)
-	.withSubcommand(groupAdd)
-	.withSubcommand(groupRemove);
+    .withSubcommand(groupAdd)
+    .withSubcommand(groupRemove);
 </code></pre>
 <p>Finally, we can link everything up together to the <code>perm</code> command and register the whole thing together:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;perm&quot;)

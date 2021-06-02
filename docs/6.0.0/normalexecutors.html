@@ -230,10 +230,10 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 <h3><a class="header" href="#example---a-suicide-command" id="example---a-suicide-command">Example - A <code>/suicide</code> command</a></h3>
 <p>Say we wanted to create a command <code>/suicide</code>, which kills the player that executes it. Since this command can't be used by non-players (you can't kill a command block!), we can restrict it so only players can execute this command. Since it's a player, we can use the <code>.executesPlayer()</code> method:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;suicide&quot;)
-	.executesPlayer((player, args) -&gt; {
-	    player.setHealth(0);
-	})
-	.register();
+    .executesPlayer((player, args) -&gt; {
+        player.setHealth(0);
+    })
+    .register();
 </code></pre>
 </div>
 <hr />

@@ -193,7 +193,7 @@
     .withArguments(new RecipeArgument(&quot;recipe&quot;))
     .executesPlayer((player, args) -&gt; {
         Recipe recipe = (Recipe) args[0];
-    	player.getInventory().addItem(recipe.getResult());
+        player.getInventory().addItem(recipe.getResult());
     })
     .register();
 </code></pre>
@@ -210,7 +210,7 @@
     .executes((sender, args) -&gt; {
         Player target = (Player) args[0];
         Recipe recipe = (Recipe) args[1];
-		
+        
         //Check if we're running 1.15+
         if(recipe instanceof ComplexRecipe) {
             ComplexRecipe complexRecipe = (ComplexRecipe) recipe;

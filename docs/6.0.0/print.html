@@ -1171,10 +1171,10 @@ new CommandAPICommand(&quot;broadcastmsg&quot;)
 <h3><a class="header" href="#example---a-suicide-command" id="example---a-suicide-command">Example - A <code>/suicide</code> command</a></h3>
 <p>Say we wanted to create a command <code>/suicide</code>, which kills the player that executes it. Since this command can't be used by non-players (you can't kill a command block!), we can restrict it so only players can execute this command. Since it's a player, we can use the <code>.executesPlayer()</code> method:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;suicide&quot;)
-	.executesPlayer((player, args) -&gt; {
-	    player.setHealth(0);
-	})
-	.register();
+    .executesPlayer((player, args) -&gt; {
+        player.setHealth(0);
+    })
+    .register();
 </code></pre>
 </div>
 <hr />
@@ -1538,8 +1538,8 @@ arguments.add(new StringArgument(&quot;world&quot;).overrideSuggestions(&quot;no
 new CommandAPICommand(&quot;warp&quot;)
     .withArguments(arguments)
     .executesPlayer((player, args) -&gt; {
-       	String warp = (String) args[0];
-		player.teleport(warps.get(warp)); // Look up the warp in a map, for example
+           String warp = (String) args[0];
+        player.teleport(warps.get(warp)); // Look up the warp in a map, for example
     })
     .register();
 </code></pre>
@@ -1554,12 +1554,12 @@ new CommandAPICommand(&quot;warp&quot;)
 </code></pre>
 <p>Let's say we have a simple class to get the friends of a command sender:</p>
 <pre><code class="language-java">public class Friends {
-	
-	static Map&lt;UUID, String[]&gt; friends /* = ... */;
-	
+    
+    static Map&lt;UUID, String[]&gt; friends /* = ... */;
+    
     public static String[] getFriends(CommandSender sender) {
         if(sender instanceof Player) {
-        	//Look up friends in a database or file
+            //Look up friends in a database or file
             return friends.get(((Player) sender).getUniqueId());
         } else {
             return new String[0];
@@ -1576,8 +1576,8 @@ arguments.add(new PlayerArgument(&quot;friend&quot;).overrideSuggestions((sender
 new CommandAPICommand(&quot;friendtp&quot;)
     .withArguments(arguments)
     .executesPlayer((player, args) -&gt; {
-       	Player target = (Player) args[0];
-		player.teleport(target);
+           Player target = (Player) args[0];
+        player.teleport(target);
     })
     .register();
 </code></pre>
@@ -1621,29 +1621,29 @@ arguments.add(new IntegerArgument(&quot;radius&quot;));
 arguments.add(new PlayerArgument(&quot;target&quot;).overrideSuggestions((sender, args) -&gt; {
 
     // Cast the first argument (radius, which is an IntegerArgument) to get its value
-	int radius = (int) args[0];
-	
+    int radius = (int) args[0];
+    
     // Get nearby entities within the provided radius
-	Player player = (Player) sender;
-	Collection&lt;Entity&gt; entities = player.getWorld().getNearbyEntities(player.getLocation(), radius, radius, radius);
-	
+    Player player = (Player) sender;
+    Collection&lt;Entity&gt; entities = player.getWorld().getNearbyEntities(player.getLocation(), radius, radius, radius);
+    
     // Get player names within that radius
-	return entities.stream()
-		.filter(e -&gt; e.getType() == EntityType.PLAYER)
-		.map(Entity::getName)
-		.toArray(String[]::new);
+    return entities.stream()
+        .filter(e -&gt; e.getType() == EntityType.PLAYER)
+        .map(Entity::getName)
+        .toArray(String[]::new);
 }));
 arguments.add(new GreedyStringArgument(&quot;message&quot;));
 
 // Declare our command as normal
 new CommandAPICommand(&quot;localmsg&quot;)
-	.withArguments(arguments)
-	.executesPlayer((player, args) -&gt; {
-		Player target = (Player) args[1];
-		String message = (String) args[2];
-		target.sendMessage(message);
-	})
-	.register();
+    .withArguments(arguments)
+    .executesPlayer((player, args) -&gt; {
+        Player target = (Player) args[1];
+        String message = (String) args[2];
+        target.sendMessage(message);
+    })
+    .register();
 </code></pre>
 <p>As shown in this code, we use the <code>(sender, args) -&gt; ...</code> lambda to override suggestions with previously declared arguments. In this example, our variable <code>args</code> will be <code>{ int }</code>, where this <code>int</code> refers to the radius. Note how this object array only has the previously declared arguments (and not for example <code>{ int, Player, String }</code>).</p>
 </div>
@@ -1842,34 +1842,34 @@ StringTooltip of(String suggestion, String tooltip);
 <p>First, we'll declare our arguments. Here, we'll use the <code>overrideSuggestionsT</code> method, along with the <code>StringTooltip.of(String, String)</code> method to create emote suggestions and include suitable descriptions:</p>
 <pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
 arguments.add(new StringArgument(&quot;emote&quot;)
-	.overrideSuggestionsT( 
+    .overrideSuggestionsT( 
         StringTooltip.of(&quot;wave&quot;, &quot;Waves at a player&quot;),
         StringTooltip.of(&quot;hug&quot;, &quot;Gives a player a hug&quot;),
         StringTooltip.of(&quot;glare&quot;, &quot;Gives a player the death glare&quot;)
-	)
+    )
 );
 arguments.add(new PlayerArgument(&quot;target&quot;));
 </code></pre>
 <p>Finally, we declare our command as normal:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;emote&quot;)
-	.withArguments(arguments)
-	.executesPlayer((player, args) -&gt; {
-		String emote = (String) args[0];
-		Player target = (Player) args[1];
-		
-		switch(emote) {
-		case &quot;wave&quot;:
-			target.sendMessage(player.getName() + &quot; waves at you!&quot;);
-			break;
-		case &quot;hug&quot;:
-			target.sendMessage(player.getName() + &quot; hugs you!&quot;);
-			break;
-		case &quot;glare&quot;:
-			target.sendMessage(player.getName() + &quot; gives you the death glare...&quot;);
-			break;
-		}
-	})
-	.register();
+    .withArguments(arguments)
+    .executesPlayer((player, args) -&gt; {
+        String emote = (String) args[0];
+        Player target = (Player) args[1];
+        
+        switch(emote) {
+        case &quot;wave&quot;:
+            target.sendMessage(player.getName() + &quot; waves at you!&quot;);
+            break;
+        case &quot;hug&quot;:
+            target.sendMessage(player.getName() + &quot; hugs you!&quot;);
+            break;
+        case &quot;glare&quot;:
+            target.sendMessage(player.getName() + &quot; gives you the death glare...&quot;);
+            break;
+        }
+    })
+    .register();
 </code></pre>
 </div>
 <p>The <code>IStringTooltip</code> interface can be implemented by any other class to provide tooltips for custom objects. The <code>IStringTooltip</code> interface has the following methods:</p>
@@ -1884,57 +1884,57 @@ arguments.add(new PlayerArgument(&quot;target&quot;));
 <p>Let's say we've created a simple plugin which has custom items. For a custom item, we'll have a super simple class <code>CustomItem</code> that sets its name, lore and attached itemstack:</p>
 <pre><code class="language-java">public class CustomItem implements IStringTooltip {
 
-	private ItemStack itemstack;
-	private String name;
-	
-	public CustomItem(ItemStack itemstack, String name, String lore) {
-		ItemMeta meta = itemstack.getItemMeta();
-		meta.setDisplayName(name);
-		meta.setLore(Arrays.asList(lore));
-		itemstack.setItemMeta(meta);
-		this.itemstack = itemstack;
-		this.name = name;
-	}
-	
-	public String getName() {
-		return this.name;
-	}
-	
-	public ItemStack getItem() {
-		return this.itemstack;
-	}
-	
-	@Override
-	public String getSuggestion() {
-		return this.itemstack.getItemMeta().getDisplayName();
-	}
+    private ItemStack itemstack;
+    private String name;
+    
+    public CustomItem(ItemStack itemstack, String name, String lore) {
+        ItemMeta meta = itemstack.getItemMeta();
+        meta.setDisplayName(name);
+        meta.setLore(Arrays.asList(lore));
+        itemstack.setItemMeta(meta);
+        this.itemstack = itemstack;
+        this.name = name;
+    }
+    
+    public String getName() {
+        return this.name;
+    }
+    
+    public ItemStack getItem() {
+        return this.itemstack;
+    }
+    
+    @Override
+    public String getSuggestion() {
+        return this.itemstack.getItemMeta().getDisplayName();
+    }
 
-	@Override
-	public String getTooltip() {
-		return this.itemstack.getItemMeta().getLore().get(0);
-	}
-	
+    @Override
+    public String getTooltip() {
+        return this.itemstack.getItemMeta().getLore().get(0);
+    }
+    
 }
 </code></pre>
 <p>Let's also say that our plugin has registered lots of <code>CustomItem</code>s and has this stored in a <code>CustomItem[]</code> in our plugin. We could then use this as our input for suggestions:</p>
 <pre><code class="language-java">CustomItem[] customItems = new CustomItem[] {
-	new CustomItem(new ItemStack(Material.DIAMOND_SWORD), &quot;God sword&quot;, &quot;A sword from the heavens&quot;),
-	new CustomItem(new ItemStack(Material.PUMPKIN_PIE), &quot;Sweet pie&quot;, &quot;Just like grandma used to make&quot;)
+    new CustomItem(new ItemStack(Material.DIAMOND_SWORD), &quot;God sword&quot;, &quot;A sword from the heavens&quot;),
+    new CustomItem(new ItemStack(Material.PUMPKIN_PIE), &quot;Sweet pie&quot;, &quot;Just like grandma used to make&quot;)
 };  //
-	
+    
 new CommandAPICommand(&quot;giveitem&quot;)
-	.withArguments(new StringArgument(&quot;item&quot;).overrideSuggestionsT(customItems)) // We use customItems[] as the input for our suggestions with tooltips
-	.executesPlayer((player, args) -&gt; {
-		String itemName = (String) args[0];
-		
-		//Give them the item
-		for(CustomItem item : customItems) {
-			if(item.getName().equals(itemName)) {
-				player.getInventory().addItem(item.getItem());
-			}
-		}
-	})
-	.register();
+    .withArguments(new StringArgument(&quot;item&quot;).overrideSuggestionsT(customItems)) // We use customItems[] as the input for our suggestions with tooltips
+    .executesPlayer((player, args) -&gt; {
+        String itemName = (String) args[0];
+        
+        //Give them the item
+        for(CustomItem item : customItems) {
+            if(item.getName().equals(itemName)) {
+                player.getInventory().addItem(item.getItem());
+            }
+        }
+    })
+    .register();
 </code></pre>
 </div>
 <hr />
@@ -1971,11 +1971,11 @@ arguments.add(new LocationArgument(&quot;location&quot;)
 </code></pre>
 <p>In the arguments declaration, we've casted the command sender to a player. To ensure that the command sender is definitely a player, we'll use the <code>executesPlayer</code> command execution method in our command declaration:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;warp&quot;)
-	.withArguments(arguments)
-	.executesPlayer((player, args) -&gt; {
-	    player.teleport((Location) args[0]);
-	})
-	.register();
+    .withArguments(arguments)
+    .executesPlayer((player, args) -&gt; {
+        player.teleport((Location) args[0]);
+    })
+    .register();
 </code></pre>
 </div>
 <h1><a class="header" href="#listed-arguments" id="listed-arguments">Listed arguments</a></h1>
@@ -1995,9 +1995,9 @@ arguments.add(new LocationArgument(&quot;location&quot;)
     .withArguments(new IntegerArgument(&quot;value&quot;).setListed(false))
     .withArguments(new GreedyStringArgument(&quot;message&quot;))
     .executes((sender, args) -&gt; {
-    	// args == [player, message]
-    	Player player = (Player) args[0];
-    	String message = (String) args[1]; //Note that this is args[1] and NOT args[2]
+        // args == [player, message]
+        Player player = (Player) args[0];
+        String message = (String) args[1]; //Note that this is args[1] and NOT args[2]
         player.sendMessage(message);
     })
     .register();
@@ -2471,12 +2471,12 @@ sender.spigot().sendMessage(BaseComponent[]);
 </code></pre>
 <p>We can construct a book using the Adventure API's <code>Book.book(Component, Component, Component...)</code> method. In order to convert our strings into <code>Component</code> objects, we use the <code>Component.text(String)</code> method. Since Paper supports the Adventure API natively, we can then send this book to a player using the <code>openBook(Book)</code> method:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;showbook&quot;)
-	.withArguments(new PlayerArgument(&quot;target&quot;))
+    .withArguments(new PlayerArgument(&quot;target&quot;))
     .withArguments(new TextArgument(&quot;title&quot;))
     .withArguments(new StringArgument(&quot;author&quot;))
     .withArguments(new AdventureChatComponentArgument(&quot;contents&quot;))
     .executes((sender, args) -&gt; {
-    	Player target = (Player) args[0];
+        Player target = (Player) args[0];
         String title = (String) args[1];
         String author = (String) args[2];
         Component content = (Component) args[3];
@@ -2498,7 +2498,7 @@ sender.spigot().sendMessage(BaseComponent[]);
 </code></pre>
 <p>In order to broadcast an Adventure <code>Component</code> to all players on the server, we have to use Paper's <code>broadcast(Component, String)</code> method. This method requires a permission node which all players must have in order to receive the broadcasted message. By default, Bukkit-based servers (Spigot and Paper) use the <code>bukkit.broadcast.user</code> permission, which is described <a href="https://bukkit.fandom.com/wiki/CraftBukkit_Commands#Additional_Permissions">here</a>:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;pbroadcast&quot;)
-	.withArguments(new AdventureChatArgument(&quot;message&quot;))
+    .withArguments(new AdventureChatArgument(&quot;message&quot;))
     .executes((sender, args) -&gt; {
         Component message = (Component) args[0];
         
@@ -2808,14 +2808,14 @@ for(String str : entitiesAndPlayers) {
 </code></pre>
 <p>And we can set the biome of the current chunk as expected:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;setbiome&quot;)
-	.withArguments(new BiomeArgument(&quot;biome&quot;))
-	.executesPlayer((player, args) -&gt; {
-		Biome biome = (Biome) args[0];
+    .withArguments(new BiomeArgument(&quot;biome&quot;))
+    .executesPlayer((player, args) -&gt; {
+        Biome biome = (Biome) args[0];
 
-		Chunk chunk = player.getLocation().getChunk();
-		player.getWorld().setBiome(chunk.getX(), player.getLocation().getBlockY(), chunk.getZ(), biome);
-	})
-	.register();
+        Chunk chunk = player.getLocation().getChunk();
+        player.getWorld().setBiome(chunk.getX(), player.getLocation().getBlockY(), chunk.getZ(), biome);
+    })
+    .register();
 </code></pre>
 </div><h1><a class="header" href="#blockstate-arguments" id="blockstate-arguments">BlockState arguments</a></h1>
 <p><img src="./images/arguments/blockstate.png" alt="" /></p>
@@ -2918,8 +2918,8 @@ for(String str : entitiesAndPlayers) {
         LootTable lootTable = (LootTable) args[0];
     
         /* Some generated LootContext relating to the lootTable*/
-    	LootContext context = new LootContext.Builder(player.getLocation()).build();
-    	
+        LootContext context = new LootContext.Builder(player.getLocation()).build();
+        
         lootTable.fillInventory(player.getInventory(), new Random(), context);
     })
     .register();
@@ -3060,7 +3060,7 @@ public float apply(float val1, float val2);
     .withArguments(new RecipeArgument(&quot;recipe&quot;))
     .executesPlayer((player, args) -&gt; {
         Recipe recipe = (Recipe) args[0];
-    	player.getInventory().addItem(recipe.getResult());
+        player.getInventory().addItem(recipe.getResult());
     })
     .register();
 </code></pre>
@@ -3077,7 +3077,7 @@ public float apply(float val1, float val2);
     .executes((sender, args) -&gt; {
         Player target = (Player) args[0];
         Recipe recipe = (Recipe) args[1];
-		
+        
         //Check if we're running 1.15+
         if(recipe instanceof ComplexRecipe) {
             ComplexRecipe complexRecipe = (ComplexRecipe) recipe;
@@ -3156,44 +3156,44 @@ public float apply(float val1, float val2);
 <p>Of course, we could simply use a <code>BlockStateArgument</code> or even an <code>ItemStackArgument</code> as our <code>&lt;fromBlock&gt;</code> in order to get the material to replace, but the block predicate argument provides a test for a given block, which if satisfied, allows certain code to be executed. </p>
 <p>First, we declare our arguments. We want to use the <code>BlockPredicateArgument</code> since it also allows us to use Minecraft tags to identify blocks, as well as individual blocks. We then use <code>BlockStateArgument</code> to set the block to a given type. The <code>BlockStateArgument</code> also allows the user to provide any block data (e.g. contents of a chest or a stair's orientation).</p>
 <pre><code class="language-java">Argument[] arguments = new Argument[] {
-	new IntegerArgument(&quot;radius&quot;),
-	new BlockPredicateArgument(&quot;fromBlock&quot;),
-	new BlockStateArgument(&quot;toBlock&quot;),
+    new IntegerArgument(&quot;radius&quot;),
+    new BlockPredicateArgument(&quot;fromBlock&quot;),
+    new BlockStateArgument(&quot;toBlock&quot;),
 };
 </code></pre>
 <p>We then register our <code>/replace</code> command. First, we parse the arguments making sure to cast to <code>Predicate&lt;Block&gt;</code> and <code>BlockData</code> (and not <code>BlockState</code>). After that, we use a few simple for loops to find the blocks within a radius sphere from the player.</p>
 <p>In our most nested loop, we can then check if the block meets the requirements of our predicate. This is simply performed using <code>predicate.test(block)</code>, and if satisfied, we can set the block's type.</p>
 <p>Lastly, we register our command as normal using the <code>register()</code> method.</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;replace&quot;)
-	.withArguments(arguments)
-	.executesPlayer((player, args) -&gt; {
-	    
-	    // Parse the arguments
-	    int radius = (int) args[0];
-	    @SuppressWarnings(&quot;unchecked&quot;)
-	    Predicate&lt;Block&gt; predicate = (Predicate&lt;Block&gt;) args[1];
-	    BlockData blockData = (BlockData) args[2];
-	    
-	    // Find a (solid) sphere of blocks around the player with a given radius
-	    Location center = player.getLocation();
-	    for (int Y = -radius; Y &lt; radius; Y++) {
-	        for (int X = -radius; X &lt; radius; X++) {
-	            for (int Z = -radius; Z &lt; radius; Z++) {
-	                if (Math.sqrt((X * X) + (Y * Y) + (Z * Z)) &lt;= radius) {
-	                    Block block = center.getWorld().getBlockAt(X + center.getBlockX(), Y + center.getBlockY(), Z + center.getBlockZ());
-	                    
-	                    // If that block matches a block from the predicate, set it
-	                    if(predicate.test(block)) {
-	                        block.setType(blockData.getMaterial());
-	                        block.setBlockData(blockData);
-	                    }
-	                }
-	            }
-	        }
-	    }
-	    return;
-	})
-	.register();
+    .withArguments(arguments)
+    .executesPlayer((player, args) -&gt; {
+        
+        // Parse the arguments
+        int radius = (int) args[0];
+        @SuppressWarnings(&quot;unchecked&quot;)
+        Predicate&lt;Block&gt; predicate = (Predicate&lt;Block&gt;) args[1];
+        BlockData blockData = (BlockData) args[2];
+        
+        // Find a (solid) sphere of blocks around the player with a given radius
+        Location center = player.getLocation();
+        for (int Y = -radius; Y &lt; radius; Y++) {
+            for (int X = -radius; X &lt; radius; X++) {
+                for (int Z = -radius; Z &lt; radius; Z++) {
+                    if (Math.sqrt((X * X) + (Y * Y) + (Z * Z)) &lt;= radius) {
+                        Block block = center.getWorld().getBlockAt(X + center.getBlockX(), Y + center.getBlockY(), Z + center.getBlockZ());
+                        
+                        // If that block matches a block from the predicate, set it
+                        if(predicate.test(block)) {
+                            block.setType(blockData.getMaterial());
+                            block.setBlockData(blockData);
+                        }
+                    }
+                }
+            }
+        }
+        return;
+    })
+    .register();
 </code></pre>
 </div>
 <h1><a class="header" href="#itemstack-predicate-arguments" id="itemstack-predicate-arguments">ItemStack predicate arguments</a></h1>
@@ -3206,20 +3206,20 @@ public float apply(float val1, float val2);
 <p>We implement this with a simple for loop over the player's inventory and remove items that satisfy the predicate.</p>
 <pre><code class="language-java">// Register our command
 new CommandAPICommand(&quot;rem&quot;)
-	.withArguments(new ItemStackPredicateArgument(&quot;items&quot;))
-	.executesPlayer((player, args) -&gt; {
-	    
-	    // Get our predicate
-		@SuppressWarnings(&quot;unchecked&quot;)
-	    Predicate&lt;ItemStack&gt; predicate = (Predicate&lt;ItemStack&gt;) args[0];
-	    
-	    for(ItemStack item : player.getInventory()) {
-	        if(predicate.test(item)) {
-	            player.getInventory().remove(item);
-	        }
-	    }
-	})
-	.register();
+    .withArguments(new ItemStackPredicateArgument(&quot;items&quot;))
+    .executesPlayer((player, args) -&gt; {
+        
+        // Get our predicate
+        @SuppressWarnings(&quot;unchecked&quot;)
+        Predicate&lt;ItemStack&gt; predicate = (Predicate&lt;ItemStack&gt;) args[0];
+        
+        for(ItemStack item : player.getInventory()) {
+            if(predicate.test(item)) {
+                player.getInventory().remove(item);
+            }
+        }
+    })
+    .register();
 </code></pre>
 </div>
 <h1><a class="header" href="#nbt-arguments" id="nbt-arguments">NBT arguments</a></h1>
@@ -3301,7 +3301,7 @@ for(String key : gamemodes.keySet()) {
             player.setGameMode(gamemodes.get(key));
         })
         .register();
-}	
+}    
 </code></pre>
 <p>Note how, since we don't have access to the literal from <code>args</code>, we must access the provided gamemode from elsewhere.</p>
 </div>
@@ -3391,23 +3391,23 @@ CustomArgument(nodeName, (String) -&gt; { ... return T; }, boolean keyed);
 <p>Say we want to create an argument to represents the list of available worlds on the server. We basically want to have an argument which always returns a Bukkit <code>World</code> object as the result. Here, we create a method <code>worldArgument()</code> that returns our custom argument that returns a <code>World</code>. First, we retrieve our <code>String[]</code> of world names to be used for our suggestions. We then write our custom argument that creates a <code>World</code> object from the input (in this case, we simply convert the String to a <code>World</code> using <code>Bukkit.getWorld(String)</code>). We perform error handling before returning our result:</p>
 <pre><code class="language-java">//Function that returns our custom argument
 public Argument worldArgument(String nodeName) {
-	
-	//Construct our CustomArgument that takes in a String input and returns a World object
-	return new CustomArgument&lt;World&gt;(nodeName, (input) -&gt; {
-	    //Parse the world from our input
-	    World world = Bukkit.getWorld(input);
-	
-	    if(world == null) {
-	        throw new CustomArgumentException(new MessageBuilder(&quot;Unknown world: &quot;).appendArgInput());
-	    } else {
-	        return world;
-	    }
-	}).overrideSuggestions(sender -&gt; {
-		//List of worlds on the server, as Strings. We use overrideSuggestions(sender -&gt; ...)
-		//since this evaluates the list of worlds when the player types the command as opposed
-		//to when the plugin starts up
-		return Bukkit.getWorlds().stream().map(World::getName).toArray(String[]::new);
-	});
+    
+    //Construct our CustomArgument that takes in a String input and returns a World object
+    return new CustomArgument&lt;World&gt;(nodeName, (input) -&gt; {
+        //Parse the world from our input
+        World world = Bukkit.getWorld(input);
+    
+        if(world == null) {
+            throw new CustomArgumentException(new MessageBuilder(&quot;Unknown world: &quot;).appendArgInput());
+        } else {
+            return world;
+        }
+    }).overrideSuggestions(sender -&gt; {
+        //List of worlds on the server, as Strings. We use overrideSuggestions(sender -&gt; ...)
+        //since this evaluates the list of worlds when the player types the command as opposed
+        //to when the plugin starts up
+        return Bukkit.getWorlds().stream().map(World::getName).toArray(String[]::new);
+    });
 }
 </code></pre>
 <p>In our error handling step, we check if the world is equal to null (since the <code>Bukkit.getWorld(String)</code> is <code>@Nullable</code>). To handle this case, we throw a <code>CustomArgumentException</code> with an error from a <code>MessageBuilder</code>. The <code>CustomArgumentException</code> has two constructors, so a message builder isn't required each time:</p>
@@ -3473,7 +3473,7 @@ new CustomArgumentException(MessageBuilder message);
             .executes((sender, args) -&gt; {
                 //Kills all enemies in all worlds
                 Bukkit.getWorlds().forEach(w -&gt; w.getLivingEntities().forEach(e -&gt; e.setHealth(0)));
-        	})
+            })
             .register();
     }
     
@@ -3598,7 +3598,7 @@ say Killed all living entities on the server
 <p>The <code>run()</code> method basically does what it says on the tin - it runs the function. The command executor that runs this function is the command executor that was used to retrieve it. For example, if a player in-game populated this argument, then the player will be filled in for <code>@p</code> and the player's location would be used for things such as <code>~ ~ ~</code>:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;runfunc&quot;)
     .withArguments(new FunctionArgument(&quot;function&quot;))
-	.executes((sender, args) -&gt; {
+    .executes((sender, args) -&gt; {
         FunctionWrapper[] functions = (FunctionWrapper[]) args[0];
         for(FunctionWrapper function : functions) {
             function.run(); // The command executor in this case is 'sender'
@@ -3767,75 +3767,75 @@ new CommandAPICommand(&quot;kill&quot;)
 
 // The &quot;create&quot; literal, with a requirement that a player must have a party
 arguments.add(new LiteralArgument(&quot;create&quot;)
-	.withRequirement(sender -&gt; {
-		
-		return !partyMembers.containsKey(((Player) sender).getUniqueId());
-		
-	}));
+    .withRequirement(sender -&gt; {
+        
+        return !partyMembers.containsKey(((Player) sender).getUniqueId());
+        
+    }));
 
 arguments.add(new StringArgument(&quot;partyName&quot;));
 </code></pre>
 <p>In this argument declaration, we put a requirement on the literal <code>create</code>, where the player does not have a party. In other words, if the player does not have a party, they are allowed to run <code>/party create &lt;partyName&gt;</code>. If a player already has a party, then they won't be allowed to run this command. </p>
 <p>Now that we've declared our arguments, we can now declare our main command <code>/party create &lt;partyName&gt;</code>. We populate it with the arguments, and we create an entry in our <code>partyMembers</code> with the player's UUID and the name of the party that they created. Since this updates the requirements of the player, we'll have to make sure we update it (which is covered in more detail in the section about updating requirements below) - until then, I'll omit this from the code:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;party&quot;)
-	.withArguments(arguments)
-	.executesPlayer((player, args) -&gt; {
-		
-		//Get the name of the party to create
-		String partyName = (String) args[0];
-		
-		partyMembers.put(player.getUniqueId(), partyName);
-	})
-	.register();
+    .withArguments(arguments)
+    .executesPlayer((player, args) -&gt; {
+        
+        //Get the name of the party to create
+        String partyName = (String) args[0];
+        
+        partyMembers.put(player.getUniqueId(), partyName);
+    })
+    .register();
 </code></pre>
 <hr />
 <p>So now we've added the ability to create a party if we're not already in it. Now we need to implement our <code>party tp &lt;player&gt;</code> command. Again, we must start by declaring our arguments:</p>
 <pre><code class="language-java">arguments = new ArrayList&lt;&gt;();
 arguments.add(new LiteralArgument(&quot;tp&quot;)
-	.withRequirement(sender -&gt; {
-		
-		return partyMembers.containsKey(((Player) sender).getUniqueId());
+    .withRequirement(sender -&gt; {
         
-	}));
+        return partyMembers.containsKey(((Player) sender).getUniqueId());
+        
+    }));
 
 arguments.add(new PlayerArgument(&quot;player&quot;)
-	.safeOverrideSuggestions((sender) -&gt; {
-		
-		//Store the list of party members to teleport to
-		List&lt;Player&gt; playersToTeleportTo = new ArrayList&lt;&gt;();
-		
-		String partyName = partyMembers.get(((Player) sender).getUniqueId());
-		
-		//Find the party members
-		for(UUID uuid : partyMembers.keySet()) {
-			
-			//Ignore yourself
-			if(uuid.equals(((Player) sender).getUniqueId())) {
-				continue;
-			} else {
-				//If the party member is in the same party as you
-				if(partyMembers.get(uuid).equals(partyName)) {
-					Player target = Bukkit.getPlayer(uuid);
-					if(target.isOnline()) {
-						//Add them if they are online
-						playersToTeleportTo.add(target);
-					}
-				}
-			}
-		}
-		
-		return playersToTeleportTo.toArray(new Player[0]);
-	}));
+    .safeOverrideSuggestions((sender) -&gt; {
+        
+        //Store the list of party members to teleport to
+        List&lt;Player&gt; playersToTeleportTo = new ArrayList&lt;&gt;();
+        
+        String partyName = partyMembers.get(((Player) sender).getUniqueId());
+        
+        //Find the party members
+        for(UUID uuid : partyMembers.keySet()) {
+            
+            //Ignore yourself
+            if(uuid.equals(((Player) sender).getUniqueId())) {
+                continue;
+            } else {
+                //If the party member is in the same party as you
+                if(partyMembers.get(uuid).equals(partyName)) {
+                    Player target = Bukkit.getPlayer(uuid);
+                    if(target.isOnline()) {
+                        //Add them if they are online
+                        playersToTeleportTo.add(target);
+                    }
+                }
+            }
+        }
+        
+        return playersToTeleportTo.toArray(new Player[0]);
+    }));
 </code></pre>
 <p>Notice something here? There's some code repetition for the <code>withRequirement</code> method - this is the same predicate that we used earlier, except we remove the negation. If you are interested, you can view the section <a href="./predicatetips.html">Predicate tips</a> for a method to improve code reuse.</p>
 <p>Once the arguments have been declared, we can now implement our party teleportation command:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;party&quot;)
-	.withArguments(arguments)
-	.executesPlayer((player, args) -&gt; {
-		Player target = (Player) args[0];
-		player.teleport(target);
-	})
-	.register();
+    .withArguments(arguments)
+    .executesPlayer((player, args) -&gt; {
+        Player target = (Player) args[0];
+        player.teleport(target);
+    })
+    .register();
 </code></pre>
 <hr />
 <p>What's important to note in this example is that if you spend the time to set up the arguments properly, it severely decreases the amount of code required to write your command. This makes the commands you declare easier to understand and follow and you don't end up having to put all of these checks in the body of your command executor.</p>
@@ -3880,17 +3880,17 @@ public void onEnable() {
 </code></pre>
 <p>When a player creates a new party, we need to ensure that their requirements are updated <em>when they create the party</em>. As such, we simply add this to our party creation command executor:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;party&quot;)
-	.withArguments(arguments)
-	.executesPlayer((player, args) -&gt; {
-		
-		//Get the name of the party to create
-		String partyName = (String) args[0];
-		
-		partyMembers.put(player.getUniqueId(), partyName);
-	    
-	    CommandAPI.updateRequirements(player);
-	})
-	.register();
+    .withArguments(arguments)
+    .executesPlayer((player, args) -&gt; {
+        
+        //Get the name of the party to create
+        String partyName = (String) args[0];
+        
+        partyMembers.put(player.getUniqueId(), partyName);
+        
+        CommandAPI.updateRequirements(player);
+    })
+    .register();
 </code></pre>
 <p>That's it!</p>
 </div>
@@ -3901,13 +3901,13 @@ public void onEnable() {
 <h3><a class="header" href="#example---using-multiple-requirements" id="example---using-multiple-requirements">Example - Using multiple requirements</a></h3>
 <p>For example, you can apply multiple requirements for a command by calling the <code>withRequirement</code> method multiple times:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;someCommand&quot;)
-	.withRequirement(sender -&gt; ((Player) sender).getLevel() &gt;= 30)
-	.withRequirement(sender -&gt; ((Player) sender).getInventory().contains(Material.DIAMOND_PICKAXE))
-	.withRequirement(sender -&gt; ((Player) sender).isInvulnerable())
-	.executesPlayer((player, args) -&gt; {
-		//Code goes here
-	})
-	.register();
+    .withRequirement(sender -&gt; ((Player) sender).getLevel() &gt;= 30)
+    .withRequirement(sender -&gt; ((Player) sender).getInventory().contains(Material.DIAMOND_PICKAXE))
+    .withRequirement(sender -&gt; ((Player) sender).isInvulnerable())
+    .executesPlayer((player, args) -&gt; {
+        //Code goes here
+    })
+    .register();
 </code></pre>
 </div>
 <h1><a class="header" href="#aliases" id="aliases">Aliases</a></h1>
@@ -3916,27 +3916,27 @@ public void onEnable() {
 <h3><a class="header" href="#example---using-aliases-for-getpos" id="example---using-aliases-for-getpos">Example - Using aliases for /getpos</a></h3>
 <p>In this example, we register the command <code>/getpos</code> that returns the command sender's location. We apply the aliases <code>/getposition</code>, <code>/getloc</code>, <code>/getlocation</code> and <code>/whereami</code> as well, using the <code>withAliases()</code> method.</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;getpos&quot;)
-	// Declare your aliases
-	.withAliases(&quot;getposition&quot;, &quot;getloc&quot;, &quot;getlocation&quot;, &quot;whereami&quot;)
-	  
-	    //Declare your implementation
-	.executesEntity((entity, args) -&gt; {
-	    entity.sendMessage(String.format(&quot;You are at %d, %d, %d&quot;, 
-	        entity.getLocation().getBlockX(), 
-	        entity.getLocation().getBlockY(), 
-	        entity.getLocation().getBlockZ())
-	    );
-	})
-	.executesCommandBlock((block, args) -&gt; {
-	    block.sendMessage(String.format(&quot;You are at %d, %d, %d&quot;, 
-	            block.getBlock().getLocation().getBlockX(), 
-	            block.getBlock().getLocation().getBlockY(), 
-	            block.getBlock().getLocation().getBlockZ())
-	        );
-	    })
-	  
-	    //Register the command
-	.register();
+    // Declare your aliases
+    .withAliases(&quot;getposition&quot;, &quot;getloc&quot;, &quot;getlocation&quot;, &quot;whereami&quot;)
+      
+        //Declare your implementation
+    .executesEntity((entity, args) -&gt; {
+        entity.sendMessage(String.format(&quot;You are at %d, %d, %d&quot;, 
+            entity.getLocation().getBlockX(), 
+            entity.getLocation().getBlockY(), 
+            entity.getLocation().getBlockZ())
+        );
+    })
+    .executesCommandBlock((block, args) -&gt; {
+        block.sendMessage(String.format(&quot;You are at %d, %d, %d&quot;, 
+                block.getBlock().getLocation().getBlockX(), 
+                block.getBlock().getLocation().getBlockY(), 
+                block.getBlock().getLocation().getBlockZ())
+            );
+        })
+      
+        //Register the command
+    .register();
 </code></pre>
 </div><h1><a class="header" href="#subcommands" id="subcommands">Subcommands</a></h1>
 <p>Subcommands is another method for registering commands that makes use of creating multiple different <code>CommandAPICommand</code> instances. Given a <code>CommandAPICommand</code>, we can add a subcommand by using the following method:</p>
@@ -3956,23 +3956,23 @@ public void onEnable() {
 </code></pre>
 <p>We can implement this by creating a <code>CommandAPICommand</code> with the command name <code>add</code>:</p>
 <pre><code class="language-java">CommandAPICommand groupAdd = new CommandAPICommand(&quot;add&quot;)
-	.withArguments(new StringArgument(&quot;permission&quot;))
-	.withArguments(new StringArgument(&quot;groupName&quot;))
-	.executes((sender, args) -&gt; {
-	    //perm group add code
-	});
+    .withArguments(new StringArgument(&quot;permission&quot;))
+    .withArguments(new StringArgument(&quot;groupName&quot;))
+    .executes((sender, args) -&gt; {
+        //perm group add code
+    });
 </code></pre>
 <p>Similarly, we have another part <code>remove &lt;permission&gt; &lt;groupName&gt;</code>. We can declare this similar to our <code>add</code> command. Once we've done that, we can now join everything up together. Here, we create a command <code>group</code> which adds the two other subcommands:</p>
 <pre><code class="language-java">CommandAPICommand groupRemove = new CommandAPICommand(&quot;remove&quot;)
-	.withArguments(new StringArgument(&quot;permission&quot;))
-	.withArguments(new StringArgument(&quot;groupName&quot;))
-	.executes((sender, args) -&gt; {
-	    //perm group remove code
-	});
+    .withArguments(new StringArgument(&quot;permission&quot;))
+    .withArguments(new StringArgument(&quot;groupName&quot;))
+    .executes((sender, args) -&gt; {
+        //perm group remove code
+    });
 
 CommandAPICommand group = new CommandAPICommand(&quot;group&quot;)
-	.withSubcommand(groupAdd)
-	.withSubcommand(groupRemove);
+    .withSubcommand(groupAdd)
+    .withSubcommand(groupRemove);
 </code></pre>
 <p>Finally, we can link everything up together to the <code>perm</code> command and register the whole thing together:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;perm&quot;)
@@ -4400,16 +4400,16 @@ Converter.convert(essentials, &quot;speed&quot;, new PlayerArgument(&quot;target
 
 // /speed &lt;walk/fly&gt; &lt;speed&gt;
 Converter.convert(essentials, &quot;speed&quot;, 
-	new MultiLiteralArgument(&quot;walk&quot;, &quot;fly&quot;), 
-	new IntegerArgument(&quot;speed&quot;, 0, 10)
-	);
+    new MultiLiteralArgument(&quot;walk&quot;, &quot;fly&quot;), 
+    new IntegerArgument(&quot;speed&quot;, 0, 10)
+    );
 
 // /speed &lt;walk/fly&gt; &lt;speed&gt; &lt;target&gt;
 Converter.convert(essentials, &quot;speed&quot;, 
-	new MultiLiteralArgument(&quot;walk&quot;, &quot;fly&quot;), 
-	new IntegerArgument(&quot;speed&quot;, 0, 10), 
-	new PlayerArgument(&quot;target&quot;)
-	);
+    new MultiLiteralArgument(&quot;walk&quot;, &quot;fly&quot;), 
+    new IntegerArgument(&quot;speed&quot;, 0, 10), 
+    new PlayerArgument(&quot;target&quot;)
+    );
 </code></pre>
 <p><img src="./images/speed.gif" alt="" /></p>
 </div>
@@ -4623,22 +4623,22 @@ Brigadier.getRootNode().getChild(&quot;execute&quot;).getChild(&quot;if&quot;).a
 
 // The &quot;create&quot; literal, with a requirement that a player must have a party
 arguments.add(new LiteralArgument(&quot;create&quot;)
-	.withRequirement(sender -&gt; {
-		
-		return !partyMembers.containsKey(((Player) sender).getUniqueId());
-		
-	}));
+    .withRequirement(sender -&gt; {
+        
+        return !partyMembers.containsKey(((Player) sender).getUniqueId());
+        
+    }));
 
 arguments.add(new StringArgument(&quot;partyName&quot;));
 </code></pre>
 <p>And for our party teleportation command, we had the following code:</p>
 <pre><code class="language-java">arguments = new ArrayList&lt;&gt;();
 arguments.add(new LiteralArgument(&quot;tp&quot;)
-	.withRequirement(sender -&gt; {
-		
-		return partyMembers.containsKey(((Player) sender).getUniqueId());
+    .withRequirement(sender -&gt; {
         
-	}));
+        return partyMembers.containsKey(((Player) sender).getUniqueId());
+        
+    }));
 </code></pre>
 <p>We can simplify this code by declaring the predicate:</p>
 <pre><code class="language-java">Predicate&lt;CommandSender&gt; testIfPlayerHasParty = sender -&gt; {

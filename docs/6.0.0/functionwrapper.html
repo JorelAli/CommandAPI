@@ -202,7 +202,7 @@
 <p>The <code>run()</code> method basically does what it says on the tin - it runs the function. The command executor that runs this function is the command executor that was used to retrieve it. For example, if a player in-game populated this argument, then the player will be filled in for <code>@p</code> and the player's location would be used for things such as <code>~ ~ ~</code>:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;runfunc&quot;)
     .withArguments(new FunctionArgument(&quot;function&quot;))
-	.executes((sender, args) -&gt; {
+    .executes((sender, args) -&gt; {
         FunctionWrapper[] functions = (FunctionWrapper[]) args[0];
         for(FunctionWrapper function : functions) {
             function.run(); // The command executor in this case is 'sender'
