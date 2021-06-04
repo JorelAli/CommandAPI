@@ -15,12 +15,12 @@ assignees: ''
 
 - List of stuff that I did
 
-**Result:**
+**Actual result:**
 
 ```
 Stuff that happened when I did it (post error logs here for example)
 ```
 
-**What should have happened**
+**What should have happened:**
 
 - List of things that should happen instead of whatever the bug is
