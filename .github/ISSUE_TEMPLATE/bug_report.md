@@ -7,29 +7,20 @@ assignees: ''
 
 ---
 
-**CommandAPI version**
-The version of the CommandAPI that has caused this bug
+**CommandAPI version:** _5.12_
 
-**Minecraft version**
-What version of Minecraft you're using (e.g. 1.14.4)
+**Minecraft version:** _1.16.5_
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+**What I did:**
 
-**My code**
-This code reproduces the behavior:
-```java
-LinkedHashMap<String, Argument> args = new LinkedHashMap<>();
-CommandAPI.getInstance().register("mycmd", args, (sender, args) -> {
-    //blah
-});
+- List of stuff that I did
+
+**Result:**
+
+```
+Stuff that happened when I did it (post error logs here for example)
 ```
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+**What should have happened**
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
-
-**Additional context**
-Add any other context about the problem here.
+- List of things that should happen instead of whatever the bug is
