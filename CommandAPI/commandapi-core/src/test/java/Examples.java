@@ -241,12 +241,9 @@ new CommandAPICommand("searchrange")
 
 {
 /* ANCHOR: greedystringarguments */
-List<Argument> arguments = new ArrayList<>();
-arguments.add(new PlayerArgument("target"));
-arguments.add(new GreedyStringArgument("message"));
-
 new CommandAPICommand("message")
-    .withArguments(arguments)
+    .withArguments(new PlayerArgument("target"))
+    .withArguments(new GreedyStringArgument("message"))
     .executes((sender, args) -> {
         ((Player) args[0]).sendMessage((String) args[1]);
     })
@@ -275,9 +272,8 @@ new CommandAPICommand("rotate")
         Rotation rotation = (Rotation) args[0];
         Entity target = (Entity) args[1];
 
-        if(target instanceof ArmorStand) {
-            ArmorStand a = (ArmorStand) target;
-            a.setHeadPose(new EulerAngle(Math.toRadians(rotation.getPitch()), Math.toRadians(rotation.getYaw() - 90), 0));
+        if(target instanceof ArmorStand armorStand) {
+            armorStand.setHeadPose(new EulerAngle(Math.toRadians(rotation.getPitch()), Math.toRadians(rotation.getYaw() - 90), 0));
         }
     })
     .register();

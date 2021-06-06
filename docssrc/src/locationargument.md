@@ -32,7 +32,7 @@ If no `LocationType` is provided, **the `LocationArgument` will use `PRECISE_POS
 
 We can declare a simple command to break a block:
 
-```
+```mccmd
 /break <location>
 ```
 
@@ -51,11 +51,3 @@ Simply put, given the coordinates provided to the command, "break" the block by 
 ![](./images/arguments/loc2d.png)
 
 The `Location2DArgument` is pretty much identical in use to the `LocationArgument` for 3D coordinates, except instead of returning a `Location` object, it instead returns a `Location2D` object that extends `Location` (thus, being compatible anywhere you would normally be able to use `Location`).
-
-<div class="warning">
-
-**Note:**
-
-The `Location2DArgument` cannot be used with `LocationType.PRECISE_POSITION` in Minecraft 1.13. However, it can be used normally with `LocationType.PRECISE_POSITION` in Minecraft versions 1.13.1 and later.
-
-</div>

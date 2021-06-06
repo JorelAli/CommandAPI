@@ -199,7 +199,7 @@ yesn't
 </div>
 <hr />
 <h2><a class="header" href="#text-argument" id="text-argument">Text argument</a></h2>
-<p>The <code>TextArgument</code> acts similar to any String in Java. These can be single words, like to the <code>StringArgument</code>, or have additional characters (e.g. spaces, symbols) <strong>if surrounded by quotes</strong>. To type quotation marks, you can use <code>\&quot;</code> (as similar to Java) to escape these special characters.</p>
+<p>The <code>TextArgument</code> acts similar to any String in Java. These can be single words, like the <code>StringArgument</code>, or have additional characters (e.g. spaces, symbols) <strong>if surrounded by quotes</strong>. To type quotation marks, you can use <code>\&quot;</code> (as similar to Java) to escape these special characters.</p>
 <p>Accepted <code>TextArgument</code> values:</p>
 <pre><code>hello
 &quot;hello world!&quot;
@@ -230,15 +230,12 @@ yesn't
 <div class="example">
 <h3><a class="header" href="#example---messaging-command" id="example---messaging-command">Example - Messaging command</a></h3>
 <p>Say we have a simple message command of the following form:</p>
-<pre><code>/message &lt;target&gt; &lt;message&gt;
+<pre><code class="language-mccmd">/message &lt;target&gt; &lt;message&gt;
 </code></pre>
 <p>This would be ideal for a greedy string, since it can consume all text after the player's name:</p>
-<pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
-arguments.add(new PlayerArgument(&quot;target&quot;));
-arguments.add(new GreedyStringArgument(&quot;message&quot;));
-
-new CommandAPICommand(&quot;message&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;message&quot;)
+    .withArguments(new PlayerArgument(&quot;target&quot;))
+    .withArguments(new GreedyStringArgument(&quot;message&quot;))
     .executes((sender, args) -&gt; {
         ((Player) args[0]).sendMessage((String) args[1]);
     })

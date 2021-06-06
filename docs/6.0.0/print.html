@@ -2164,7 +2164,7 @@ yesn't
 </div>
 <hr />
 <h2><a class="header" href="#text-argument" id="text-argument">Text argument</a></h2>
-<p>The <code>TextArgument</code> acts similar to any String in Java. These can be single words, like to the <code>StringArgument</code>, or have additional characters (e.g. spaces, symbols) <strong>if surrounded by quotes</strong>. To type quotation marks, you can use <code>\&quot;</code> (as similar to Java) to escape these special characters.</p>
+<p>The <code>TextArgument</code> acts similar to any String in Java. These can be single words, like the <code>StringArgument</code>, or have additional characters (e.g. spaces, symbols) <strong>if surrounded by quotes</strong>. To type quotation marks, you can use <code>\&quot;</code> (as similar to Java) to escape these special characters.</p>
 <p>Accepted <code>TextArgument</code> values:</p>
 <pre><code>hello
 &quot;hello world!&quot;
@@ -2195,15 +2195,12 @@ yesn't
 <div class="example">
 <h3><a class="header" href="#example---messaging-command" id="example---messaging-command">Example - Messaging command</a></h3>
 <p>Say we have a simple message command of the following form:</p>
-<pre><code>/message &lt;target&gt; &lt;message&gt;
+<pre><code class="language-mccmd">/message &lt;target&gt; &lt;message&gt;
 </code></pre>
 <p>This would be ideal for a greedy string, since it can consume all text after the player's name:</p>
-<pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
-arguments.add(new PlayerArgument(&quot;target&quot;));
-arguments.add(new GreedyStringArgument(&quot;message&quot;));
-
-new CommandAPICommand(&quot;message&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;message&quot;)
+    .withArguments(new PlayerArgument(&quot;target&quot;))
+    .withArguments(new GreedyStringArgument(&quot;message&quot;))
     .executes((sender, args) -&gt; {
         ((Player) args[0]).sendMessage((String) args[1]);
     })
@@ -2243,7 +2240,7 @@ new CommandAPICommand(&quot;message&quot;)
 <div class="example">
 <h3><a class="header" href="#example---break-block-using-coordinates" id="example---break-block-using-coordinates">Example - Break block using coordinates</a></h3>
 <p>We can declare a simple command to break a block:</p>
-<pre><code>/break &lt;location&gt;
+<pre><code class="language-mccmd">/break &lt;location&gt;
 </code></pre>
 <p>Simply put, given the coordinates provided to the command, &quot;break&quot; the block by setting it's type to <code>Material.AIR</code>. For this example, we're referring to block specific coordinates, so we want to use <code>LocationType.BLOCK_POSITION</code>:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;break&quot;)
@@ -2259,10 +2256,7 @@ new CommandAPICommand(&quot;message&quot;)
 <h2><a class="header" href="#location-2d-space" id="location-2d-space">Location (2D space)</a></h2>
 <p><img src="./images/arguments/loc2d.png" alt="" /></p>
 <p>The <code>Location2DArgument</code> is pretty much identical in use to the <code>LocationArgument</code> for 3D coordinates, except instead of returning a <code>Location</code> object, it instead returns a <code>Location2D</code> object that extends <code>Location</code> (thus, being compatible anywhere you would normally be able to use <code>Location</code>).</p>
-<div class="warning">
-<p><strong>Note:</strong></p>
-<p>The <code>Location2DArgument</code> cannot be used with <code>LocationType.PRECISE_POSITION</code> in Minecraft 1.13. However, it can be used normally with <code>LocationType.PRECISE_POSITION</code> in Minecraft versions 1.13.1 and later.</p>
-</div><h1><a class="header" href="#rotation-arguments" id="rotation-arguments">Rotation arguments</a></h1>
+<h1><a class="header" href="#rotation-arguments" id="rotation-arguments">Rotation arguments</a></h1>
 <p><img src="./images/arguments/rotation.png" alt="" /></p>
 <p>The <code>RotationArgument</code> allows users to specify a pair of pitch and yaw coordinates. By default (using the <code>~</code> symbol), this refers to the player's current pitch and yaw of where they are looking at.</p>
 <p>The <code>RotationArgument</code> class returns a <code>Rotation</code> object, which consists of the following methods:</p>
@@ -2275,7 +2269,7 @@ new CommandAPICommand(&quot;message&quot;)
 <div class="example">
 <h3><a class="header" href="#example-rotate-an-armor-stand-head" id="example-rotate-an-armor-stand-head">Example: Rotate an armor stand head</a></h3>
 <p>Say we want to make an armor stand look in a certain direction. To do this, we'll use the following command:</p>
-<pre><code>/rotate &lt;rotation&gt; &lt;target&gt;
+<pre><code class="language-mccmd">/rotate &lt;rotation&gt; &lt;target&gt;
 </code></pre>
 <p>To do this, we'll use the rotation from the <code>RotationArgument</code> and select an entity using the <code>EntitySelectorArgument</code>, with <code>EntitySelector.ONE_ENTITY</code>. We then check if our entity is an armor stand and if so, we set its head pose to the given rotation.</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;rotate&quot;)
@@ -2285,9 +2279,8 @@ new CommandAPICommand(&quot;message&quot;)
         Rotation rotation = (Rotation) args[0];
         Entity target = (Entity) args[1];
 
-        if(target instanceof ArmorStand) {
-            ArmorStand a = (ArmorStand) target;
-            a.setHeadPose(new EulerAngle(Math.toRadians(rotation.getPitch()), Math.toRadians(rotation.getYaw() - 90), 0));
+        if(target instanceof ArmorStand armorStand) {
+            armorStand.setHeadPose(new EulerAngle(Math.toRadians(rotation.getPitch()), Math.toRadians(rotation.getYaw() - 90), 0));
         }
     })
     .register();
@@ -4817,24 +4810,6 @@ CommandAPI.unregister(String command, boolean force);
 </blockquote>
 <h1><a class="header" href="#incompatible-version-information" id="incompatible-version-information">Incompatible version information</a></h1>
 <p>There are a few arguments that are incompatible with various versions of Minecraft. This page outlines the full list of incompatibilities that the CommandAPI has with what versions of Minecraft.</p>
-<hr />
-<h2><a class="header" href="#argument-changes-with-respect-to-minecraft-version" id="argument-changes-with-respect-to-minecraft-version">Argument changes with respect to Minecraft version</a></h2>
-<h3><a class="header" href="#angleargument" id="angleargument">AngleArgument</a></h3>
-<p>Incompatible with Minecraft versions <strong>less than 1.16.2</strong> (1.13.x, 1.14.x, 1.15.x, 1.16, 1.16.1)</p>
-<h3><a class="header" href="#biomeargument" id="biomeargument">BiomeArgument</a></h3>
-<p>Incompatible with Minecraft versions <strong>less than 1.16</strong> <em>(1.13.x, 1.14.x, 1.15.x)</em></p>
-<h3><a class="header" href="#chatargument" id="chatargument">ChatArgument</a></h3>
-<p>Incompatible with Minecraft version <strong>1.16.1</strong> (Works on 1.16.2)</p>
-<h3><a class="header" href="#environmentargument" id="environmentargument">EnvironmentArgument</a></h3>
-<p>Incompatible with Minecraft version <strong>1.13</strong> (Works on 1.13.1 and 1.13.2)</p>
-<h3><a class="header" href="#locationargument2d" id="locationargument2d">LocationArgument2D</a></h3>
-<p>If you're using LocationArgument2D with <code>LocationType.PRECISE_POSITION</code>, then it is incompatible with Minecraft version <strong>1.13</strong> (Works on 1.13.1 and 1.13.2)</p>
-<h3><a class="header" href="#recipeargument" id="recipeargument">RecipeArgument</a></h3>
-<p>If you use Minecraft versions <strong>less than 1.15</strong>, this argument will return a <code>Recipe</code>. If you are using Minecraft version 1.15 or greater, this argument will return a <code>ComplexRecipe</code> (which is a subclass of <code>Recipe</code>).</p>
-<h3><a class="header" href="#timeargument" id="timeargument">TimeArgument</a></h3>
-<p>Incompatible with Minecraft versions <strong>less than 1.14</strong> <em>(1.13.x)</em></p>
-<h3><a class="header" href="#uuidargument" id="uuidargument">UUIDArgument</a></h3>
-<p>Incompatible with Minecraft versions <strong>less than 1.16</strong> <em>(1.13.x, 1.14.x, 1.15.x)</em></p>
 <hr />
 <h2><a class="header" href="#commandapi-behavior-with-respect-to-minecraft-version" id="commandapi-behavior-with-respect-to-minecraft-version">CommandAPI behavior with respect to Minecraft version</a></h2>
 <h3><a class="header" href="#minecraft-version-116-and-beyond" id="minecraft-version-116-and-beyond">Minecraft version 1.16 and beyond</a></h3>

@@ -179,24 +179,6 @@
                         <h1><a class="header" href="#incompatible-version-information" id="incompatible-version-information">Incompatible version information</a></h1>
 <p>There are a few arguments that are incompatible with various versions of Minecraft. This page outlines the full list of incompatibilities that the CommandAPI has with what versions of Minecraft.</p>
 <hr />
-<h2><a class="header" href="#argument-changes-with-respect-to-minecraft-version" id="argument-changes-with-respect-to-minecraft-version">Argument changes with respect to Minecraft version</a></h2>
-<h3><a class="header" href="#angleargument" id="angleargument">AngleArgument</a></h3>
-<p>Incompatible with Minecraft versions <strong>less than 1.16.2</strong> (1.13.x, 1.14.x, 1.15.x, 1.16, 1.16.1)</p>
-<h3><a class="header" href="#biomeargument" id="biomeargument">BiomeArgument</a></h3>
-<p>Incompatible with Minecraft versions <strong>less than 1.16</strong> <em>(1.13.x, 1.14.x, 1.15.x)</em></p>
-<h3><a class="header" href="#chatargument" id="chatargument">ChatArgument</a></h3>
-<p>Incompatible with Minecraft version <strong>1.16.1</strong> (Works on 1.16.2)</p>
-<h3><a class="header" href="#environmentargument" id="environmentargument">EnvironmentArgument</a></h3>
-<p>Incompatible with Minecraft version <strong>1.13</strong> (Works on 1.13.1 and 1.13.2)</p>
-<h3><a class="header" href="#locationargument2d" id="locationargument2d">LocationArgument2D</a></h3>
-<p>If you're using LocationArgument2D with <code>LocationType.PRECISE_POSITION</code>, then it is incompatible with Minecraft version <strong>1.13</strong> (Works on 1.13.1 and 1.13.2)</p>
-<h3><a class="header" href="#recipeargument" id="recipeargument">RecipeArgument</a></h3>
-<p>If you use Minecraft versions <strong>less than 1.15</strong>, this argument will return a <code>Recipe</code>. If you are using Minecraft version 1.15 or greater, this argument will return a <code>ComplexRecipe</code> (which is a subclass of <code>Recipe</code>).</p>
-<h3><a class="header" href="#timeargument" id="timeargument">TimeArgument</a></h3>
-<p>Incompatible with Minecraft versions <strong>less than 1.14</strong> <em>(1.13.x)</em></p>
-<h3><a class="header" href="#uuidargument" id="uuidargument">UUIDArgument</a></h3>
-<p>Incompatible with Minecraft versions <strong>less than 1.16</strong> <em>(1.13.x, 1.14.x, 1.15.x)</em></p>
-<hr />
 <h2><a class="header" href="#commandapi-behavior-with-respect-to-minecraft-version" id="commandapi-behavior-with-respect-to-minecraft-version">CommandAPI behavior with respect to Minecraft version</a></h2>
 <h3><a class="header" href="#minecraft-version-116-and-beyond" id="minecraft-version-116-and-beyond">Minecraft version 1.16 and beyond</a></h3>
 <p>In Minecraft version <strong>1.16</strong>, the way datapacks were loaded changed in such a way that the CommandAPI had to put in additional countermeasures to provide full support to it. To illustrate this, this was the previous loading sequence for Bukkit servers in Minecraft 1.15:</p>

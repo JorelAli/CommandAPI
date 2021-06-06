@@ -19,7 +19,7 @@ The `RotationArgument` class returns a `Rotation` object, which consists of the 
 
 Say we want to make an armor stand look in a certain direction. To do this, we'll use the following command:
 
-```
+```mccmd
 /rotate <rotation> <target>
 ```
 
