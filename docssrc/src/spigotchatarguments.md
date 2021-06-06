@@ -2,13 +2,8 @@
 
 > **Developer's Note:**
 >
-> The two following classes, `ChatComponentArgument` and `ChatArgument` depend on a Spigot based server. This means that these arguments will not work on a non-Spigot based server, such as CraftBukkit. If you use this class on a non-Spigot based server, it will throw a `SpigotNotFoundException`
+> The two following classes, `ChatComponentArgument` and `ChatArgument` depend on a [Spigot](https://www.spigotmc.org/) based server. This means that these arguments will not work on a non-Spigot based server, such as CraftBukkit. If you use this class on a non-Spigot based server, it will throw a `SpigotNotFoundException`
 >
-> Spigot based servers include, but are not limited to:
->
-> - [Spigot](https://www.spigotmc.org/)
-> - [Paper](https://papermc.io/)
-> - [TacoSpigot](https://tacospigot.github.io/)
 
 ## Chat component argument
 
@@ -79,7 +74,7 @@ Since we're writing a book, we must ensure that all quotes have been escaped. Th
 
 Now let's define our command. Since book text is typically very large - too large to be entered into a chat, we'll make a command block compatible command by providing a player parameter:
 
-```
+```mccmd
 /makebook <player> <contents>
 ```
 
@@ -95,14 +90,6 @@ Now we can create our book command. We use the player as the main target by usin
 
 ## Chat argument
 
-<div class="warning">
-
-**Developer's Note:**
-
-It has been observed that the `ChatArgument` does not work on Spigot 1.16.1. This is not the case however for Spigot versions 1.15.2 and below, as well as Spigot 1.16.2.
-
-</div>
-
 > **Note:**
 >
 > The `ChatArgument` class is an argument similar to the [`GreedyStringArgument`](./stringarguments.html#greedy-string-argument), in the sense that it has no terminator and must be defined at the end of your `List` of arguments. For more information on this, please read the section on [Greedy arguments](./stringarguments.html#greedy-string-argument).
@@ -115,13 +102,13 @@ The `ChatArgument` is basically identical to the `GreedyStringArgument`, with th
 
 Say we wanted to broadcast a "personalized" message to players on the server. By "personalized", we mean a command which changes its output depending on who we are sending the output to. Simply put, we want a command of the following syntax:
 
-```
+```mccmd
 /pbroadcast <message>
 ```
 
 Say we're on a server with 2 players: _Bob_ and _Michael_. If I were to use the following command:
 
-```
+```mccmd
 /pbroadcast Hello @p
 ```
 

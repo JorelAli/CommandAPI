@@ -179,13 +179,7 @@
                         <h1><a class="header" href="#spigot-chat-arguments" id="spigot-chat-arguments">Spigot chat arguments</a></h1>
 <blockquote>
 <p><strong>Developer's Note:</strong></p>
-<p>The two following classes, <code>ChatComponentArgument</code> and <code>ChatArgument</code> depend on a Spigot based server. This means that these arguments will not work on a non-Spigot based server, such as CraftBukkit. If you use this class on a non-Spigot based server, it will throw a <code>SpigotNotFoundException</code></p>
-<p>Spigot based servers include, but are not limited to:</p>
-<ul>
-<li><a href="https://www.spigotmc.org/">Spigot</a></li>
-<li><a href="https://papermc.io/">Paper</a></li>
-<li><a href="https://tacospigot.github.io/">TacoSpigot</a></li>
-</ul>
+<p>The two following classes, <code>ChatComponentArgument</code> and <code>ChatArgument</code> depend on a <a href="https://www.spigotmc.org/">Spigot</a> based server. This means that these arguments will not work on a non-Spigot based server, such as CraftBukkit. If you use this class on a non-Spigot based server, it will throw a <code>SpigotNotFoundException</code></p>
 </blockquote>
 <h2><a class="header" href="#chat-component-argument" id="chat-component-argument">Chat component argument</a></h2>
 <p>The <code>ChatComponentArgument</code> class accepts raw chat-based JSON as valid input. Despite being regular JSON, it <em>must</em> conform to the standard declared <a href="https://minecraft.gamepedia.com/Raw_JSON_text_format">here</a>, which consists of JSON that has a limited subset of specific keys (In other words, you can have a JSON object that has the key <code>text</code>, but not one that has the key <code>blah</code>).</p>
@@ -242,7 +236,7 @@ sender.spigot().sendMessage(BaseComponent[]);
 <pre><code class="language-json">[&quot;[\&quot;\&quot;,{\&quot;text\&quot;:\&quot;Once upon a time, there was a guy call \&quot;},{\&quot;text\&quot;:\&quot;Skepter\&quot;,\&quot;color\&quot;:\&quot;light_purple\&quot;,\&quot;hoverEvent\&quot;:{\&quot;action\&quot;:\&quot;show_entity\&quot;,\&quot;value\&quot;:\&quot;Skepter\&quot;}},{\&quot;text\&quot;:\&quot; and he created the \&quot;},{\&quot;text\&quot;:\&quot;CommandAPI\&quot;,\&quot;underlined\&quot;:true,\&quot;clickEvent\&quot;:{\&quot;action\&quot;:\&quot;open_url\&quot;,\&quot;value\&quot;:\&quot;https://github.com/JorelAli/CommandAPI\&quot;}}]&quot;]
 </code></pre>
 <p>Now let's define our command. Since book text is typically very large - too large to be entered into a chat, we'll make a command block compatible command by providing a player parameter:</p>
-<pre><code>/makebook &lt;player&gt; &lt;contents&gt;
+<pre><code class="language-mccmd">/makebook &lt;player&gt; &lt;contents&gt;
 </code></pre>
 <p>Now we can create our book command. We use the player as the main target by using their name for the author field, as well as their inventory to place the book. We finally construct our book using the <code>.setPages(BaseComponent[])</code> method:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;makebook&quot;)
@@ -268,10 +262,6 @@ sender.spigot().sendMessage(BaseComponent[]);
 </div>
 <hr />
 <h2><a class="header" href="#chat-argument" id="chat-argument">Chat argument</a></h2>
-<div class="warning">
-<p><strong>Developer's Note:</strong></p>
-<p>It has been observed that the <code>ChatArgument</code> does not work on Spigot 1.16.1. This is not the case however for Spigot versions 1.15.2 and below, as well as Spigot 1.16.2.</p>
-</div>
 <blockquote>
 <p><strong>Note:</strong></p>
 <p>The <code>ChatArgument</code> class is an argument similar to the <a href="./stringarguments.html#greedy-string-argument"><code>GreedyStringArgument</code></a>, in the sense that it has no terminator and must be defined at the end of your <code>List</code> of arguments. For more information on this, please read the section on <a href="./stringarguments.html#greedy-string-argument">Greedy arguments</a>.</p>
@@ -280,10 +270,10 @@ sender.spigot().sendMessage(BaseComponent[]);
 <div class="example">
 <h3><a class="header" href="#example---sending-personalized-messages-to-players" id="example---sending-personalized-messages-to-players">Example - Sending personalized messages to players</a></h3>
 <p>Say we wanted to broadcast a &quot;personalized&quot; message to players on the server. By &quot;personalized&quot;, we mean a command which changes its output depending on who we are sending the output to. Simply put, we want a command of the following syntax:</p>
-<pre><code>/pbroadcast &lt;message&gt;
+<pre><code class="language-mccmd">/pbroadcast &lt;message&gt;
 </code></pre>
 <p>Say we're on a server with 2 players: <em>Bob</em> and <em>Michael</em>. If I were to use the following command:</p>
-<pre><code>/pbroadcast Hello @p
+<pre><code class="language-mccmd">/pbroadcast Hello @p
 </code></pre>
 <p><em>Bob</em> would receive the message &quot;Hello Bob&quot;, whereas <em>Michael</em> would receive the message &quot;Hello Michael&quot;. We can use the <code>ChatArgument</code> to create this &quot;personalized&quot; broadcast:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;pbroadcast&quot;)

@@ -38,6 +38,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
+import org.bukkit.Server;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
@@ -328,6 +329,42 @@ new CommandAPICommand("pbroadcast")
     })
     .register();
 /* ANCHOR_END: chatarguments */
+}
+
+
+{
+/* ANCHOR: ArgumentAdventureChatComponent */
+new CommandAPICommand("showbook")
+    .withArguments(new PlayerArgument("target"))
+    .withArguments(new TextArgument("title"))
+    .withArguments(new StringArgument("author"))
+    .withArguments(new AdventureChatComponentArgument("contents"))
+    .executes((sender, args) -> {
+        Player target = (Player) args[0];
+        String title = (String) args[1];
+        String author = (String) args[2];
+        Component content = (Component) args[3];
+        
+        // Create a book and show it to the user (Requires Paper)
+        Book mybook = Book.book(Component.text(title), Component.text(author), content);
+        target.openBook(mybook);
+    })
+    .register();
+/* ANCHOR_END: ArgumentAdventureChatComponent */
+}
+
+{
+/* ANCHOR: ArgumentAdventureChat */
+new CommandAPICommand("pbroadcast")
+    .withArguments(new AdventureChatArgument("message"))
+    .executes((sender, args) -> {
+        Component message = (Component) args[0];
+        
+        // Broadcast the message to everyone with broadcast permissions.
+        Bukkit.getServer().broadcast(message, Server.BROADCAST_CHANNEL_USERS);
+    })
+    .register();
+/* ANCHOR_END: ArgumentAdventureChat */
 }
 
 {
@@ -1723,42 +1760,6 @@ new CommandAPICommand("removeeffect")
     })
     .register();
 /* ANCHOR_END: SafePotionArguments_2 */
-}
-
-{
-/* ANCHOR: ArgumentAdventureChatComponent */
-new CommandAPICommand("showbook")
-    .withArguments(new PlayerArgument("target"))
-    .withArguments(new TextArgument("title"))
-    .withArguments(new StringArgument("author"))
-    .withArguments(new AdventureChatComponentArgument("contents"))
-    .executes((sender, args) -> {
-        Player target = (Player) args[0];
-        String title = (String) args[1];
-        String author = (String) args[2];
-        Component content = (Component) args[3];
-        
-        // Create a book and show it to the user (Requires Paper)
-        Book mybook = Book.book(Component.text(title), Component.text(author), content);
-        target.openBook(mybook);
-    })
-    .register();
-/* ANCHOR_END: ArgumentAdventureChatComponent */
-}
-
-{
-/* ANCHOR: ArgumentAdventureChat */
-new CommandAPICommand("pbroadcast")
-    .withArguments(new AdventureChatArgument("message"))
-    .executes((sender, args) -> {
-        Component message = (Component) args[0];
-        
-        // Broadcast the message to everyone with broadcast permissions. Read more info about broadcast
-        // permissions here: https://bukkit.fandom.com/wiki/CraftBukkit_Commands#Additional_Permissions
-        Bukkit.getServer().broadcast(message, "bukkit.broadcast.user");
-    })
-    .register();
-/* ANCHOR_END: ArgumentAdventureChat */
 }
 
 {

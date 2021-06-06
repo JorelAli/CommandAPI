@@ -181,7 +181,7 @@
 <p><strong>Developer's Note:</strong></p>
 <p>The two following classes, <code>AdventureChatComponentArgument</code> and <code>AdventureChatArgument</code> depend on a Paper based server which has the Adventure library. If you use this class on a server without the Adventure library, it will throw a <code>PaperAdventureNotFoundException</code></p>
 </blockquote>
-<p>From Paper 1.16.5 build #473, it now includes <a href="https://github.com/KyoriPowered/adventure-platform">Kyori's Adventure API</a>. This library is a replacement of the BungeeCord chat API and has all of the same functionality as the BungeeCord chat API (and more!). The documentation for this API can be found <a href="https://docs.adventure.kyori.net/index.html">here</a>.</p>
+<p>From Paper 1.16.5 build #473 onwards, Paper now includes <a href="https://github.com/KyoriPowered/adventure-platform">Kyori's Adventure API</a>. This library is a replacement of the BungeeCord chat API and has all of the same functionality as the BungeeCord chat API (and more!). The documentation for this API can be found <a href="https://docs.adventure.kyori.net/index.html">here</a>.</p>
 <p>Since this functions very similar to the Spigot chat arguments, this page won't reiterate everything about how it works, we'll just outline some examples of how to use these arguments instead.</p>
 <hr />
 <h2><a class="header" href="#adventure-chat-component-argument" id="adventure-chat-component-argument">Adventure chat component argument</a></h2>
@@ -189,7 +189,7 @@
 <div class="example">
 <h3><a class="header" href="#example---opening-a-book-with-raw-json-content" id="example---opening-a-book-with-raw-json-content">Example - Opening a book with raw JSON content</a></h3>
 <p>In this example, we'll create a simple command which lets you show a book to a user. The syntax for our command is as follows:</p>
-<pre><code>/showbook &lt;target&gt; &lt;title&gt; &lt;author&gt; &lt;contents&gt;
+<pre><code class="language-mccmd">/showbook &lt;target&gt; &lt;title&gt; &lt;author&gt; &lt;contents&gt;
 </code></pre>
 <p>We can construct a book using the Adventure API's <code>Book.book(Component, Component, Component...)</code> method. In order to convert our strings into <code>Component</code> objects, we use the <code>Component.text(String)</code> method. Since Paper supports the Adventure API natively, we can then send this book to a player using the <code>openBook(Book)</code> method:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;showbook&quot;)
@@ -216,7 +216,7 @@
 <div class="example">
 <h3><a class="header" href="#example---sending-personalized-messages-to-players" id="example---sending-personalized-messages-to-players">Example - Sending personalized messages to players</a></h3>
 <p>We'll take the same example from the <code>ChatArgument</code> class, but using the <code>AdventureChatArgument</code> instead - We want to create a personalized message broadcasted to all users using a chat component that allows entity selectors. For this command, we want the following syntax:</p>
-<pre><code>/pbroadcast &lt;message&gt;
+<pre><code class="language-mccmd">/pbroadcast &lt;message&gt;
 </code></pre>
 <p>In order to broadcast an Adventure <code>Component</code> to all players on the server, we have to use Paper's <code>broadcast(Component, String)</code> method. This method requires a permission node which all players must have in order to receive the broadcasted message. By default, Bukkit-based servers (Spigot and Paper) use the <code>bukkit.broadcast.user</code> permission, which is described <a href="https://bukkit.fandom.com/wiki/CraftBukkit_Commands#Additional_Permissions">here</a>:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;pbroadcast&quot;)
@@ -224,9 +224,8 @@
     .executes((sender, args) -&gt; {
         Component message = (Component) args[0];
         
-        // Broadcast the message to everyone with broadcast permissions. Read more info about broadcast
-        // permissions here: https://bukkit.fandom.com/wiki/CraftBukkit_Commands#Additional_Permissions
-        Bukkit.getServer().broadcast(message, &quot;bukkit.broadcast.user&quot;);
+        // Broadcast the message to everyone with broadcast permissions.
+        Bukkit.getServer().broadcast(message, Server.BROADCAST_CHANNEL_USERS);
     })
     .register();
 </code></pre>

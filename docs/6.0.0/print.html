@@ -2309,7 +2309,7 @@ yesn't
 <div class="example">
 <h3><a class="header" href="#example---username-color-changing-plugin" id="example---username-color-changing-plugin">Example - Username color changing plugin</a></h3>
 <p>Say we want to create a plugin to change the color of a player's username. We want to create a command of the following form:</p>
-<pre><code>/namecolor &lt;chatcolor&gt;
+<pre><code class="language-mccmd">/namecolor &lt;chatcolor&gt;
 </code></pre>
 <p>We then use the <code>ChatColorArgument</code> to change the player's name color:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;namecolor&quot;)
@@ -2320,17 +2320,10 @@ yesn't
     })
     .register();
 </code></pre>
-</div>
-<h1><a class="header" href="#spigot-chat-arguments" id="spigot-chat-arguments">Spigot chat arguments</a></h1>
+</div><h1><a class="header" href="#spigot-chat-arguments" id="spigot-chat-arguments">Spigot chat arguments</a></h1>
 <blockquote>
 <p><strong>Developer's Note:</strong></p>
-<p>The two following classes, <code>ChatComponentArgument</code> and <code>ChatArgument</code> depend on a Spigot based server. This means that these arguments will not work on a non-Spigot based server, such as CraftBukkit. If you use this class on a non-Spigot based server, it will throw a <code>SpigotNotFoundException</code></p>
-<p>Spigot based servers include, but are not limited to:</p>
-<ul>
-<li><a href="https://www.spigotmc.org/">Spigot</a></li>
-<li><a href="https://papermc.io/">Paper</a></li>
-<li><a href="https://tacospigot.github.io/">TacoSpigot</a></li>
-</ul>
+<p>The two following classes, <code>ChatComponentArgument</code> and <code>ChatArgument</code> depend on a <a href="https://www.spigotmc.org/">Spigot</a> based server. This means that these arguments will not work on a non-Spigot based server, such as CraftBukkit. If you use this class on a non-Spigot based server, it will throw a <code>SpigotNotFoundException</code></p>
 </blockquote>
 <h2><a class="header" href="#chat-component-argument" id="chat-component-argument">Chat component argument</a></h2>
 <p>The <code>ChatComponentArgument</code> class accepts raw chat-based JSON as valid input. Despite being regular JSON, it <em>must</em> conform to the standard declared <a href="https://minecraft.gamepedia.com/Raw_JSON_text_format">here</a>, which consists of JSON that has a limited subset of specific keys (In other words, you can have a JSON object that has the key <code>text</code>, but not one that has the key <code>blah</code>).</p>
@@ -2387,7 +2380,7 @@ sender.spigot().sendMessage(BaseComponent[]);
 <pre><code class="language-json">[&quot;[\&quot;\&quot;,{\&quot;text\&quot;:\&quot;Once upon a time, there was a guy call \&quot;},{\&quot;text\&quot;:\&quot;Skepter\&quot;,\&quot;color\&quot;:\&quot;light_purple\&quot;,\&quot;hoverEvent\&quot;:{\&quot;action\&quot;:\&quot;show_entity\&quot;,\&quot;value\&quot;:\&quot;Skepter\&quot;}},{\&quot;text\&quot;:\&quot; and he created the \&quot;},{\&quot;text\&quot;:\&quot;CommandAPI\&quot;,\&quot;underlined\&quot;:true,\&quot;clickEvent\&quot;:{\&quot;action\&quot;:\&quot;open_url\&quot;,\&quot;value\&quot;:\&quot;https://github.com/JorelAli/CommandAPI\&quot;}}]&quot;]
 </code></pre>
 <p>Now let's define our command. Since book text is typically very large - too large to be entered into a chat, we'll make a command block compatible command by providing a player parameter:</p>
-<pre><code>/makebook &lt;player&gt; &lt;contents&gt;
+<pre><code class="language-mccmd">/makebook &lt;player&gt; &lt;contents&gt;
 </code></pre>
 <p>Now we can create our book command. We use the player as the main target by using their name for the author field, as well as their inventory to place the book. We finally construct our book using the <code>.setPages(BaseComponent[])</code> method:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;makebook&quot;)
@@ -2413,10 +2406,6 @@ sender.spigot().sendMessage(BaseComponent[]);
 </div>
 <hr />
 <h2><a class="header" href="#chat-argument" id="chat-argument">Chat argument</a></h2>
-<div class="warning">
-<p><strong>Developer's Note:</strong></p>
-<p>It has been observed that the <code>ChatArgument</code> does not work on Spigot 1.16.1. This is not the case however for Spigot versions 1.15.2 and below, as well as Spigot 1.16.2.</p>
-</div>
 <blockquote>
 <p><strong>Note:</strong></p>
 <p>The <code>ChatArgument</code> class is an argument similar to the <a href="./stringarguments.html#greedy-string-argument"><code>GreedyStringArgument</code></a>, in the sense that it has no terminator and must be defined at the end of your <code>List</code> of arguments. For more information on this, please read the section on <a href="./stringarguments.html#greedy-string-argument">Greedy arguments</a>.</p>
@@ -2425,10 +2414,10 @@ sender.spigot().sendMessage(BaseComponent[]);
 <div class="example">
 <h3><a class="header" href="#example---sending-personalized-messages-to-players" id="example---sending-personalized-messages-to-players">Example - Sending personalized messages to players</a></h3>
 <p>Say we wanted to broadcast a &quot;personalized&quot; message to players on the server. By &quot;personalized&quot;, we mean a command which changes its output depending on who we are sending the output to. Simply put, we want a command of the following syntax:</p>
-<pre><code>/pbroadcast &lt;message&gt;
+<pre><code class="language-mccmd">/pbroadcast &lt;message&gt;
 </code></pre>
 <p>Say we're on a server with 2 players: <em>Bob</em> and <em>Michael</em>. If I were to use the following command:</p>
-<pre><code>/pbroadcast Hello @p
+<pre><code class="language-mccmd">/pbroadcast Hello @p
 </code></pre>
 <p><em>Bob</em> would receive the message &quot;Hello Bob&quot;, whereas <em>Michael</em> would receive the message &quot;Hello Michael&quot;. We can use the <code>ChatArgument</code> to create this &quot;personalized&quot; broadcast:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;pbroadcast&quot;)
@@ -2446,7 +2435,7 @@ sender.spigot().sendMessage(BaseComponent[]);
 <p><strong>Developer's Note:</strong></p>
 <p>The two following classes, <code>AdventureChatComponentArgument</code> and <code>AdventureChatArgument</code> depend on a Paper based server which has the Adventure library. If you use this class on a server without the Adventure library, it will throw a <code>PaperAdventureNotFoundException</code></p>
 </blockquote>
-<p>From Paper 1.16.5 build #473, it now includes <a href="https://github.com/KyoriPowered/adventure-platform">Kyori's Adventure API</a>. This library is a replacement of the BungeeCord chat API and has all of the same functionality as the BungeeCord chat API (and more!). The documentation for this API can be found <a href="https://docs.adventure.kyori.net/index.html">here</a>.</p>
+<p>From Paper 1.16.5 build #473 onwards, Paper now includes <a href="https://github.com/KyoriPowered/adventure-platform">Kyori's Adventure API</a>. This library is a replacement of the BungeeCord chat API and has all of the same functionality as the BungeeCord chat API (and more!). The documentation for this API can be found <a href="https://docs.adventure.kyori.net/index.html">here</a>.</p>
 <p>Since this functions very similar to the Spigot chat arguments, this page won't reiterate everything about how it works, we'll just outline some examples of how to use these arguments instead.</p>
 <hr />
 <h2><a class="header" href="#adventure-chat-component-argument" id="adventure-chat-component-argument">Adventure chat component argument</a></h2>
@@ -2454,7 +2443,7 @@ sender.spigot().sendMessage(BaseComponent[]);
 <div class="example">
 <h3><a class="header" href="#example---opening-a-book-with-raw-json-content" id="example---opening-a-book-with-raw-json-content">Example - Opening a book with raw JSON content</a></h3>
 <p>In this example, we'll create a simple command which lets you show a book to a user. The syntax for our command is as follows:</p>
-<pre><code>/showbook &lt;target&gt; &lt;title&gt; &lt;author&gt; &lt;contents&gt;
+<pre><code class="language-mccmd">/showbook &lt;target&gt; &lt;title&gt; &lt;author&gt; &lt;contents&gt;
 </code></pre>
 <p>We can construct a book using the Adventure API's <code>Book.book(Component, Component, Component...)</code> method. In order to convert our strings into <code>Component</code> objects, we use the <code>Component.text(String)</code> method. Since Paper supports the Adventure API natively, we can then send this book to a player using the <code>openBook(Book)</code> method:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;showbook&quot;)
@@ -2481,7 +2470,7 @@ sender.spigot().sendMessage(BaseComponent[]);
 <div class="example">
 <h3><a class="header" href="#example---sending-personalized-messages-to-players-1" id="example---sending-personalized-messages-to-players-1">Example - Sending personalized messages to players</a></h3>
 <p>We'll take the same example from the <code>ChatArgument</code> class, but using the <code>AdventureChatArgument</code> instead - We want to create a personalized message broadcasted to all users using a chat component that allows entity selectors. For this command, we want the following syntax:</p>
-<pre><code>/pbroadcast &lt;message&gt;
+<pre><code class="language-mccmd">/pbroadcast &lt;message&gt;
 </code></pre>
 <p>In order to broadcast an Adventure <code>Component</code> to all players on the server, we have to use Paper's <code>broadcast(Component, String)</code> method. This method requires a permission node which all players must have in order to receive the broadcasted message. By default, Bukkit-based servers (Spigot and Paper) use the <code>bukkit.broadcast.user</code> permission, which is described <a href="https://bukkit.fandom.com/wiki/CraftBukkit_Commands#Additional_Permissions">here</a>:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;pbroadcast&quot;)
@@ -2489,9 +2478,8 @@ sender.spigot().sendMessage(BaseComponent[]);
     .executes((sender, args) -&gt; {
         Component message = (Component) args[0];
         
-        // Broadcast the message to everyone with broadcast permissions. Read more info about broadcast
-        // permissions here: https://bukkit.fandom.com/wiki/CraftBukkit_Commands#Additional_Permissions
-        Bukkit.getServer().broadcast(message, &quot;bukkit.broadcast.user&quot;);
+        // Broadcast the message to everyone with broadcast permissions.
+        Bukkit.getServer().broadcast(message, Server.BROADCAST_CHANNEL_USERS);
     })
     .register();
 </code></pre>
