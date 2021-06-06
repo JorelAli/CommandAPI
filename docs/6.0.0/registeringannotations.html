@@ -183,41 +183,41 @@
 <div class="example">
 <h3><a class="header" href="#example-registering-a-warp-command" id="example-registering-a-warp-command">Example: Registering a Warp command</a></h3>
 <p>Say we have a simple command <code>/warp</code> that is defined as follows:</p>
-<pre><code class="language-java">@Command(&quot;warp&quot;)	
+<pre><code class="language-java">@Command(&quot;warp&quot;)    
 public class WarpCommand {
-	
-	// List of warp names and their locations
-	static Map&lt;String, Location&gt; warps = new HashMap&lt;&gt;();
-	
-	@Default
-	public static void warp(CommandSender sender) {
-		sender.sendMessage(&quot;--- Warp help ---&quot;);
-		sender.sendMessage(&quot;/warp - Show this help&quot;);
-		sender.sendMessage(&quot;/warp &lt;warp&gt; - Teleport to &lt;warp&gt;&quot;);
-		sender.sendMessage(&quot;/warp create &lt;warpname&gt; - Creates a warp at your current location&quot;);
-	}
-	
-	@Default
-	public static void warp(Player player, @AStringArgument String warpName) {
-		player.teleport(warps.get(warpName));
-	}
-	
-	@Subcommand(&quot;create&quot;)
-	@Permission(&quot;warps.create&quot;)
-	public static void createWarp(Player player, @AStringArgument String warpName) {
-		warps.put(warpName, player.getLocation());
-	}
-	
+    
+    // List of warp names and their locations
+    static Map&lt;String, Location&gt; warps = new HashMap&lt;&gt;();
+    
+    @Default
+    public static void warp(CommandSender sender) {
+        sender.sendMessage(&quot;--- Warp help ---&quot;);
+        sender.sendMessage(&quot;/warp - Show this help&quot;);
+        sender.sendMessage(&quot;/warp &lt;warp&gt; - Teleport to &lt;warp&gt;&quot;);
+        sender.sendMessage(&quot;/warp create &lt;warpname&gt; - Creates a warp at your current location&quot;);
+    }
+    
+    @Default
+    public static void warp(Player player, @AStringArgument String warpName) {
+        player.teleport(warps.get(warpName));
+    }
+    
+    @Subcommand(&quot;create&quot;)
+    @Permission(&quot;warps.create&quot;)
+    public static void createWarp(Player player, @AStringArgument String warpName) {
+        warps.put(warpName, player.getLocation());
+    }
+    
 }
 </code></pre>
 <p>We can register this in our <code>onLoad()</code> method so we can use this command from within Minecraft functions:</p>
-<pre><code class="language-java">class MyPlugin extends JavaPlugin {
-	
-	@Override
-	public void onLoad() {
-		CommandAPI.registerCommand(WarpCommand.class);
-	}
-	
+<pre><code class="language-java">public class MyPlugin extends JavaPlugin {
+    
+    @Override
+    public void onLoad() {
+        CommandAPI.registerCommand(WarpCommand.class);
+    }
+    
 }
 </code></pre>
 </div>

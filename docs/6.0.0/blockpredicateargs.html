@@ -183,7 +183,7 @@
 <div class="example">
 <h3><a class="header" href="#example---replacing-specific-blocks-in-a-radius" id="example---replacing-specific-blocks-in-a-radius">Example - Replacing specific blocks in a radius</a></h3>
 <p>Say you want to replace blocks in a given radius. To do this, we'll use the following command structure:</p>
-<pre><code>/replace &lt;radius&gt; &lt;fromBlock&gt; &lt;toBlock&gt;
+<pre><code class="language-mccmd">/replace &lt;radius&gt; &lt;fromBlock&gt; &lt;toBlock&gt;
 </code></pre>
 <p>Of course, we could simply use a <code>BlockStateArgument</code> or even an <code>ItemStackArgument</code> as our <code>&lt;fromBlock&gt;</code> in order to get the material to replace, but the block predicate argument provides a test for a given block, which if satisfied, allows certain code to be executed. </p>
 <p>First, we declare our arguments. We want to use the <code>BlockPredicateArgument</code> since it also allows us to use Minecraft tags to identify blocks, as well as individual blocks. We then use <code>BlockStateArgument</code> to set the block to a given type. The <code>BlockStateArgument</code> also allows the user to provide any block data (e.g. contents of a chest or a stair's orientation).</p>
@@ -208,11 +208,11 @@
         
         // Find a (solid) sphere of blocks around the player with a given radius
         Location center = player.getLocation();
-        for (int Y = -radius; Y &lt; radius; Y++) {
-            for (int X = -radius; X &lt; radius; X++) {
-                for (int Z = -radius; Z &lt; radius; Z++) {
-                    if (Math.sqrt((X * X) + (Y * Y) + (Z * Z)) &lt;= radius) {
-                        Block block = center.getWorld().getBlockAt(X + center.getBlockX(), Y + center.getBlockY(), Z + center.getBlockZ());
+        for (int x = -radius; x &lt;= radius; x++) {
+            for (int y = -radius; y &lt;= radius; y++) {
+                for (int z = -radius; z &lt;= radius; z++) {
+                    if (Math.sqrt((x * x) + (y * y) + (z * z)) &lt;= radius) {
+                        Block block = center.getWorld().getBlockAt(x + center.getBlockX(), y + center.getBlockY(), z + center.getBlockZ());
                         
                         // If that block matches a block from the predicate, set it
                         if(predicate.test(block)) {
@@ -228,7 +228,6 @@
     .register();
 </code></pre>
 </div>
-
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">

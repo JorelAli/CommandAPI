@@ -281,7 +281,8 @@ new CommandAPICommand("rotate")
 /* ANCHOR_END: rotationarguments */
 }
 
-{
+@SuppressWarnings("deprecation")
+void chatcolorarguments(){
 /* ANCHOR: chatcolorarguments */
 new CommandAPICommand("namecolor")
     .withArguments(new ChatColorArgument("chatcolor"))
@@ -293,7 +294,8 @@ new CommandAPICommand("namecolor")
 /* ANCHOR_END: chatcolorarguments */
 }
 
-{
+@SuppressWarnings("deprecation")
+void chatcomponentarguments(){
 /* ANCHOR: chatcomponentarguments */
 new CommandAPICommand("makebook")
     .withArguments(new PlayerArgument("player"))
@@ -317,7 +319,8 @@ new CommandAPICommand("makebook")
 /* ANCHOR_END: chatcomponentarguments */
 }
 
-{
+@SuppressWarnings("deprecation")
+void chatarguments() {
 /* ANCHOR: chatarguments */
 new CommandAPICommand("pbroadcast")
     .withArguments(new ChatArgument("message"))
@@ -740,11 +743,11 @@ new CommandAPICommand("replace")
         
         // Find a (solid) sphere of blocks around the player with a given radius
         Location center = player.getLocation();
-        for (int Y = -radius; Y < radius; Y++) {
-            for (int X = -radius; X < radius; X++) {
-                for (int Z = -radius; Z < radius; Z++) {
-                    if (Math.sqrt((X * X) + (Y * Y) + (Z * Z)) <= radius) {
-                        Block block = center.getWorld().getBlockAt(X + center.getBlockX(), Y + center.getBlockY(), Z + center.getBlockZ());
+        for (int x = -radius; x <= radius; x++) {
+            for (int y = -radius; y <= radius; y++) {
+                for (int z = -radius; z <= radius; z++) {
+                    if (Math.sqrt((x * x) + (y * y) + (z * z)) <= radius) {
+                        Block block = center.getWorld().getBlockAt(x + center.getBlockX(), y + center.getBlockY(), z + center.getBlockZ());
                         
                         // If that block matches a block from the predicate, set it
                         if(predicate.test(block)) {
@@ -946,18 +949,18 @@ new CommandAPICommand("god")
 }
 
 {
-/* ANCHOR: permissions2 */
+/* ANCHOR: permissions3_1 */
 // Register /kill command normally. Since no permissions are applied, anyone can run this command
 new CommandAPICommand("kill")
     .executesPlayer((player, args) -> {
         player.setHealth(0);
     })
     .register();
-/* ANCHOR_END: permissions2 */
+/* ANCHOR_END: permissions3_1 */
 }
 
 {
-/* ANCHOR: permissions3 */
+/* ANCHOR: permissions3_2 */
 // Adds the OP permission to the "target" argument. The sender requires OP to execute /kill <target>
 new CommandAPICommand("kill")
     .withArguments(new PlayerArgument("target").withPermission(CommandPermission.OP))
@@ -965,7 +968,7 @@ new CommandAPICommand("kill")
         ((Player) args[0]).setHealth(0);
     })
     .register();
-/* ANCHOR_END: permissions3 */
+/* ANCHOR_END: permissions3_2 */
 }
 
 {
@@ -974,7 +977,7 @@ new CommandAPICommand("getpos")
     // Declare your aliases
     .withAliases("getposition", "getloc", "getlocation", "whereami")
       
-        //Declare your implementation
+    // Declare your implementation
     .executesEntity((entity, args) -> {
         entity.sendMessage(String.format("You are at %d, %d, %d", 
             entity.getLocation().getBlockX(), 
@@ -984,13 +987,13 @@ new CommandAPICommand("getpos")
     })
     .executesCommandBlock((block, args) -> {
         block.sendMessage(String.format("You are at %d, %d, %d", 
-                block.getBlock().getLocation().getBlockX(), 
-                block.getBlock().getLocation().getBlockY(), 
-                block.getBlock().getLocation().getBlockZ())
-            );
-        })
+            block.getBlock().getLocation().getBlockX(), 
+            block.getBlock().getLocation().getBlockY(), 
+            block.getBlock().getLocation().getBlockZ())
+        );
+    })
       
-        //Register the command
+    // Register the command
     .register();
 /* ANCHOR_END: aliases */
 }
@@ -1019,7 +1022,8 @@ new CommandAPICommand("suicide")
 /* ANCHOR_END: normalcommandexecutors2 */
 }
 
-{
+@SuppressWarnings("deprecation")
+void normalcommandexecutors3() {
 /* ANCHOR: normalcommandexecutors3 */
 //Create our command
 new CommandAPICommand("broadcastmsg")
@@ -1094,7 +1098,8 @@ new CommandAPICommand("randomnumber")
 /* ANCHOR_END: resultingcommandexecutor2 */
 }
 
-{
+@SuppressWarnings("deprecation")
+void resultingcommandexecutor3(){
 /* ANCHOR: resultingcommandexecutor3 */
 // Register reward giving system for a target player
 new CommandAPICommand("givereward")
@@ -1230,11 +1235,8 @@ List<Argument> arguments = new ArrayList<>();
 
 // The "create" literal, with a requirement that a player must have a party
 arguments.add(new LiteralArgument("create")
-    .withRequirement(sender -> {
-        
-        return !partyMembers.containsKey(((Player) sender).getUniqueId());
-        
-    }));
+    .withRequirement(sender -> !partyMembers.containsKey(((Player) sender).getUniqueId()))
+);
 
 arguments.add(new StringArgument("partyName"));
 /* ANCHOR_END: requirements2 */
@@ -1256,26 +1258,23 @@ new CommandAPICommand("party")
 /* ANCHOR: requirements4 */
 arguments = new ArrayList<>();
 arguments.add(new LiteralArgument("tp")
-    .withRequirement(sender -> {
-        
-        return partyMembers.containsKey(((Player) sender).getUniqueId());
-        
-    }));
+    .withRequirement(sender -> partyMembers.containsKey(((Player) sender).getUniqueId()))
+);
 /* ANCHOR_END: requirementstp */
 
 arguments.add(new PlayerArgument("player")
-    .safeOverrideSuggestions((sender) -> {
+    .replaceWithSafeSuggestions(info -> {
         
         //Store the list of party members to teleport to
         List<Player> playersToTeleportTo = new ArrayList<>();
         
-        String partyName = partyMembers.get(((Player) sender).getUniqueId());
+        String partyName = partyMembers.get(((Player) info.sender()).getUniqueId());
         
         //Find the party members
         for(UUID uuid : partyMembers.keySet()) {
             
             //Ignore yourself
-            if(uuid.equals(((Player) sender).getUniqueId())) {
+            if(uuid.equals(((Player) info.sender()).getUniqueId())) {
                 continue;
             } else {
                 //If the party member is in the same party as you
@@ -1366,14 +1365,14 @@ Converter.convert(essentials, "speed", new PlayerArgument("target"));
 Converter.convert(essentials, "speed", 
     new MultiLiteralArgument("walk", "fly"), 
     new IntegerArgument("speed", 0, 10)
-    );
+);
 
 // /speed <walk/fly> <speed> <target>
 Converter.convert(essentials, "speed", 
     new MultiLiteralArgument("walk", "fly"), 
     new IntegerArgument("speed", 0, 10), 
     new PlayerArgument("target")
-    );
+);
 /* ANCHOR_END: converter2 */
 }
 
@@ -1606,7 +1605,7 @@ new CommandAPICommand("warp")
 List<Argument> arguments = new ArrayList<>();
 arguments.add(new IntegerArgument("radius"));
 
-// Override the suggestions for the PlayerArgument.
+// Replace the suggestions for the PlayerArgument.
 // info.sender() refers to the command sender that is running this command
 // info.previousArgs() refers to the Object[] of previously declared arguments (in this case, the IntegerArgument radius)
 arguments.add(new PlayerArgument("target").replaceSuggestions(info -> {
@@ -1673,8 +1672,8 @@ new CommandAPICommand("warp")
 /* ANCHOR_END: ArgumentSuggestions1 */
 }
 
-{
-    //{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:resultingcommandexecutor2}}
+@SuppressWarnings("deprecation")
+void SafeRecipeArguments() {
 /* ANCHOR: SafeRecipeArguments */
 // Create our itemstack
 ItemStack emeraldSword = new ItemStack(Material.DIAMOND_SWORD);
@@ -1831,12 +1830,13 @@ class Friends {
 
 
 /* ANCHOR: Tooltips3 */
+@SuppressWarnings("deprecation")
 class CustomItem implements IStringTooltip {
 
     private ItemStack itemstack;
     private String name;
     
-    public CustomItem(ItemStack itemstack, String name, String lore) {
+	public CustomItem(ItemStack itemstack, String name, String lore) {
         ItemMeta meta = itemstack.getItemMeta();
         meta.setDisplayName(name);
         meta.setLore(Arrays.asList(lore));

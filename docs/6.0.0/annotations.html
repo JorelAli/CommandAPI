@@ -182,24 +182,24 @@
 <h2><a class="header" href="#annotations-that-go-on-classes" id="annotations-that-go-on-classes">Annotations that go on classes</a></h2>
 <h3><a class="header" href="#commandcommandname" id="commandcommandname"><code>@Command</code>(&quot;commandName&quot;)</a></h3>
 <p>The <code>@Command</code> annotation is used to declare a command. The parameter is the name of the command that will be registered.</p>
-<pre><code class="language-java">@Command(&quot;warp&quot;)	
+<pre><code class="language-java">@Command(&quot;warp&quot;)    
 public class WarpCommand {
 </code></pre>
 <h3><a class="header" href="#alias" id="alias"><code>@Alias({...})</code></a></h3>
 <p>The <code>@Alias</code> annotation is used to declare a list of aliases for a command. The parameter is a list of aliases which can be used for the command.</p>
-<pre><code class="language-java">@Command(&quot;teleport&quot;)	
+<pre><code class="language-java">@Command(&quot;teleport&quot;)    
 @Alias({&quot;tp&quot;, &quot;tele&quot;})
 public class TeleportCommand {
 </code></pre>
 <h3><a class="header" href="#permissionpermissionnode" id="permissionpermissionnode"><code>@Permission(&quot;permissionNode&quot;)</code></a></h3>
 <p>The <code>@Permission</code> annotation is used to add a permission node to a command. Users that want to run this command must have this permission. The parameter is the permission node required to run the command.</p>
-<pre><code class="language-java">@Command(&quot;teleport&quot;)	
+<pre><code class="language-java">@Command(&quot;teleport&quot;)    
 @Permission(&quot;myplugin.tp&quot;)
 class TeleportCommand {
 </code></pre>
 <h3><a class="header" href="#needsop" id="needsop"><code>@NeedsOp</code></a></h3>
 <p>The <code>@NeedsOp</code> annotation is used to indicate that a command needs to have operator privileges to run it. This annotation has no parameters.</p>
-<pre><code class="language-java">@Command(&quot;teleport&quot;)	
+<pre><code class="language-java">@Command(&quot;teleport&quot;)    
 @NeedsOp
 class TeleportCommand {
 </code></pre>
@@ -210,16 +210,16 @@ class TeleportCommand {
 <p>The <code>@Default</code> annotation indicates that the method is <em>not</em> a subcommand. This acts in a similar way to regular Bukkit commands. Commands with the <code>@Default</code> annotation can be used to run the main code when the command named with the <code>@Command</code> annotation is stated, such as the following:</p>
 <pre><code class="language-java">@Default
 public static void warp(CommandSender sender) {
-	sender.sendMessage(&quot;--- Warp help ---&quot;);
-	sender.sendMessage(&quot;/warp - Show this help&quot;);
-	sender.sendMessage(&quot;/warp &lt;warp&gt; - Teleport to &lt;warp&gt;&quot;);
-	sender.sendMessage(&quot;/warp create &lt;warpname&gt; - Creates a warp at your current location&quot;);
+    sender.sendMessage(&quot;--- Warp help ---&quot;);
+    sender.sendMessage(&quot;/warp - Show this help&quot;);
+    sender.sendMessage(&quot;/warp &lt;warp&gt; - Teleport to &lt;warp&gt;&quot;);
+    sender.sendMessage(&quot;/warp create &lt;warpname&gt; - Creates a warp at your current location&quot;);
 }
 </code></pre>
 <p>The <code>@Default</code> annotation does not mean that the command can't have arguments! Arguments can still be used and declared as shown:</p>
 <pre><code class="language-java">@Default
 public static void warp(Player player, @AStringArgument String warpName) {
-	player.teleport(warps.get(warpName));
+    player.teleport(warps.get(warpName));
 }
 </code></pre>
 <h3><a class="header" href="#subcommand" id="subcommand"><code>@Subcommand</code></a></h3>
@@ -227,15 +227,15 @@ public static void warp(Player player, @AStringArgument String warpName) {
 <pre><code class="language-java">@Subcommand(&quot;create&quot;)
 @Permission(&quot;warps.create&quot;)
 public static void createWarp(Player player, @AStringArgument String warpName) {
-	warps.put(warpName, player.getLocation());
+    warps.put(warpName, player.getLocation());
 }
 </code></pre>
 <p>Or, it can take in a list of strings which represent the <em>aliases</em> that can also be used for the declared subcommand:</p>
 <pre><code class="language-java">@Subcommand({&quot;teleport&quot;, &quot;tp&quot;})
 public static void teleport(Player player, @APlayerArgument OfflinePlayer target) {
-	if(target.isOnline() &amp;&amp; target instanceof Player onlineTarget) {
-		player.teleport(onlineTarget);
-	}
+    if(target.isOnline() &amp;&amp; target instanceof Player onlineTarget) {
+        player.teleport(onlineTarget);
+    }
 }
 </code></pre>
 <h3><a class="header" href="#permission" id="permission"><code>@Permission</code></a></h3>
@@ -243,7 +243,7 @@ public static void teleport(Player player, @APlayerArgument OfflinePlayer target
 <pre><code class="language-java">@Subcommand(&quot;create&quot;)
 @Permission(&quot;warps.create&quot;)
 public static void createWarp(Player player, @AStringArgument String warpName) {
-	warps.put(warpName, player.getLocation());
+    warps.put(warpName, player.getLocation());
 }
 </code></pre>
 <h3><a class="header" href="#needsop-1" id="needsop-1"><code>@NeedsOp</code></a></h3>
@@ -265,7 +265,7 @@ public static void createWarp(Player player, @AStringArgument String warpName) {
 </ul>
 <pre><code class="language-java">@Default
 public static void warp(Player player, @AStringArgument String warpName) {
-	player.teleport(warps.get(warpName));
+    player.teleport(warps.get(warpName));
 }
 </code></pre>
 <ul>
@@ -277,12 +277,12 @@ public static void warp(Player player, @AStringArgument String warpName) {
 <p>The following numerical arguments can take both a <code>min</code> and <code>max</code> value. Both of these are completely optional. This indicates the range of values (inclusive) that is valid for this argument. For example:</p>
 <pre><code class="language-java">@Default
 public static void command(CommandSender sender, 
-	@ADoubleArgument(min = 0.0, max = 10.0) double someDouble,
-	@AFloatArgument(min = 5.0f, max = 10.0f) float someFloat,
-	@AIntegerArgument(max = 100) int someInt,
-	@ALongArgument(min = -10) long someLong
+    @ADoubleArgument(min = 0.0, max = 10.0) double someDouble,
+    @AFloatArgument(min = 5.0f, max = 10.0f) float someFloat,
+    @AIntegerArgument(max = 100) int someInt,
+    @ALongArgument(min = -10) long someLong
 ) {
-	// Command implementation here
+    // Command implementation here
 }
 </code></pre>
 <h4><a class="header" href="#literal-arguments" id="literal-arguments">Literal arguments</a></h4>
@@ -290,22 +290,22 @@ public static void command(CommandSender sender,
 <p>For the <code>@ALiteralArgument</code> annotation, the parameter is the literal to be used for the command. For the <code>@AMultiLiteralArgument</code>, the parameter can be an array of multiple literals to use:</p>
 <pre><code class="language-java">@Default
 public static void command(CommandSender sender, 
-	@ALiteralArgument(&quot;myliteral&quot;) String literal,
-	@AMultiLiteralArgument({&quot;literal&quot;, &quot;anotherliteral&quot;}) String multipleLiterals
+    @ALiteralArgument(&quot;myliteral&quot;) String literal,
+    @AMultiLiteralArgument({&quot;literal&quot;, &quot;anotherliteral&quot;}) String multipleLiterals
 ) {
-	// Command implementation here
+    // Command implementation here
 }
 </code></pre>
 <h4><a class="header" href="#other-arguments" id="other-arguments">Other arguments</a></h4>
 <p>The <code>LocationArgument</code>, <code>Location2DArgument</code>, <code>EntitySelectorArgument</code> and <code>ScoreHolderArgument</code> can all take an extra parameter in their constructors. As a result, the annotation-equivalent of these arguments also allow you to provide the parameter in the annotation:</p>
 <pre><code class="language-java">@Default
 public static void command(CommandSender sender, 
-	@ALocationArgument(LocationType.BLOCK_POSITION) Location location,
-	@ALocation2DArgument(LocationType.PRECISE_POSITION) Location location2d,
-	@AEntitySelectorArgument(EntitySelector.MANY_ENTITIES) Collection&lt;Entity&gt; entities,
-	@AScoreHolderArgument(ScoreHolderType.MULTIPLE) Collection&lt;String&gt; scoreHolders
+    @ALocationArgument(LocationType.BLOCK_POSITION) Location location,
+    @ALocation2DArgument(LocationType.PRECISE_POSITION) Location location2d,
+    @AEntitySelectorArgument(EntitySelector.MANY_ENTITIES) Collection&lt;Entity&gt; entities,
+    @AScoreHolderArgument(ScoreHolderType.MULTIPLE) Collection&lt;String&gt; scoreHolders
 ) {
-	// Command implementation here
+    // Command implementation here
 }
 </code></pre>
 

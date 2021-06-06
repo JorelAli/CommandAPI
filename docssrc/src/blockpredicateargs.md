@@ -12,7 +12,7 @@ When used, this argument must be casted to a `Predicate<Block>`. As with other s
 
 Say you want to replace blocks in a given radius. To do this, we'll use the following command structure:
 
-```
+```mccmd
 /replace <radius> <fromBlock> <toBlock>
 ```
 

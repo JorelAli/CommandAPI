@@ -226,15 +226,14 @@ new CommandAPICommand(&quot;god&quot;)
 <div class="example">
 <h3><a class="header" href="#example---kill-command-with-argument-permissions" id="example---kill-command-with-argument-permissions">Example - /kill command with argument permissions</a></h3>
 <p>For example, say we're registering a command <code>/kill</code>:</p>
-<pre><code>/kill          - Kills yourself
+<pre><code class="language-mccmd">/kill          - Kills yourself
 /kill &lt;target&gt; - Kills a target player
 </code></pre>
 <p>We first declare the command as normal. Nothing fancy is going on here:</p>
-<pre><code class="language-java">//Register the /god command with the permission node &quot;command.god&quot;, without creating a CommandPermission
-new CommandAPICommand(&quot;god&quot;)
-    .withPermission(&quot;command.god&quot;)
+<pre><code class="language-java">// Register /kill command normally. Since no permissions are applied, anyone can run this command
+new CommandAPICommand(&quot;kill&quot;)
     .executesPlayer((player, args) -&gt; {
-        player.setInvulnerable(true);
+        player.setHealth(0);
     })
     .register();
 </code></pre>

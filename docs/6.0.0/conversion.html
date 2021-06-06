@@ -235,7 +235,7 @@ public static convert(Plugin plugin, String cmdName, Argument... arguments);
     aliases: [flyspeed,eflyspeed,fspeed,efspeed,espeed,walkspeed,ewalkspeed,wspeed,ewspeed]
 </code></pre>
 <p>From this, we can determine that there are the following commands, where &quot;walk&quot; and &quot;fly&quot; are the different types that the command can take:</p>
-<pre><code>/speed &lt;speed&gt;
+<pre><code class="language-mccmd">/speed &lt;speed&gt;
 /speed &lt;speed&gt; &lt;target&gt;
 /speed &lt;walk/fly&gt; &lt;speed&gt;
 /speed &lt;walk/fly&gt; &lt;speed&gt; &lt;target&gt;
@@ -253,18 +253,17 @@ Converter.convert(essentials, &quot;speed&quot;, new PlayerArgument(&quot;target
 Converter.convert(essentials, &quot;speed&quot;, 
     new MultiLiteralArgument(&quot;walk&quot;, &quot;fly&quot;), 
     new IntegerArgument(&quot;speed&quot;, 0, 10)
-    );
+);
 
 // /speed &lt;walk/fly&gt; &lt;speed&gt; &lt;target&gt;
 Converter.convert(essentials, &quot;speed&quot;, 
     new MultiLiteralArgument(&quot;walk&quot;, &quot;fly&quot;), 
     new IntegerArgument(&quot;speed&quot;, 0, 10), 
     new PlayerArgument(&quot;target&quot;)
-    );
+);
 </code></pre>
 <p><img src="./images/speed.gif" alt="" /></p>
 </div>
-
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">

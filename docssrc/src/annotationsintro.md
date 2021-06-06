@@ -23,7 +23,7 @@ _(So I would put this section in a big green box, but this example is REALLY big
 
 Let's say we're writing a plugin with the capability to create warps to places on the server. To do this, we'll make a simple command `/warp`, defined as follows:
 
-```
+```mccmd
 /warp - Shows help
 /warp <warp> - Teleports a player to <warp>
 /warp create <name> - Creates a new warp <name> at the player's location

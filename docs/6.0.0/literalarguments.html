@@ -178,10 +178,11 @@
                         
                         <h1><a class="header" href="#literal-arguments" id="literal-arguments">Literal arguments</a></h1>
 <p>Literal arguments are used to represent &quot;forced options&quot; for a command. For instance, take Minecraft's <code>/gamemode</code> command. The syntax consists of the following:</p>
-<pre><code>/gamemode &lt;mode&gt; [player]
+<pre><code class="language-mccmd">/gamemode &lt;mode&gt;
+/gamemode &lt;mode&gt; &lt;player&gt;
 </code></pre>
 <p>It consists of a gamemode, followed by an optional player argument. The list of gamemodes are as follows:</p>
-<pre><code>/gamemode survival 
+<pre><code class="language-mccmd">/gamemode survival 
 /gamemode creative
 /gamemode adventure
 /gamemode spectator
@@ -197,7 +198,7 @@
 <div class="example">
 <h3><a class="header" href="#example---literal-arguments-and-regular-arguments" id="example---literal-arguments-and-regular-arguments">Example - Literal arguments and regular arguments</a></h3>
 <p>To illustrate the behavior of literal arguments, we create a command of the following form:</p>
-<pre><code>/mycommand &lt;literal&gt; &lt;text&gt;
+<pre><code class="language-mccmd">/mycommand &lt;literal&gt; &lt;text&gt;
 </code></pre>
 <p>As an example, let's declare the literal &quot;hello&quot; as a valid literal for this command. When we retrieve the result from <code>args[0]</code>, it returns the value of the <code>TextArgument</code>, as opposed to the literal &quot;hello&quot;:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;mycommand&quot;)
@@ -210,7 +211,7 @@
     .register();
 </code></pre>
 <p>If I were to run the following command:</p>
-<pre><code>/mycommand hello goodbye
+<pre><code class="language-mccmd">/mycommand hello goodbye
 </code></pre>
 <p>The value of <code>text</code> in the code above would be &quot;goodbye&quot;.</p>
 </div>
@@ -268,7 +269,7 @@ for(String key : gamemodes.keySet()) {
 <p>Each option produces a new &quot;command&quot; in the tree of commands. This means that having exceptionally large lists of literals, or nested literals (e.g. <code>/command &lt;literal1&gt; &lt;literal2&gt;</code>) can cause very large trees which cannot be sent to the clients <em>(it can cause clients to crash)</em>.</p>
 <blockquote>
 <p><strong>Developer's Note:</strong></p>
-<p>Take care when using literal arguments. If your list of arguments is exceptionally large, or contains many nested arguments, the server may be unable to send the command information to the client. If many command argument choices are required, consider using a <code>StringArgument</code> and using <code>.overrideSuggestions()</code> to create your own list of required arguments.</p>
+<p>Take care when using literal arguments. If your list of arguments is exceptionally large, or contains many nested arguments, the server may be unable to send the command information to the client. If many command argument choices are required, consider using a <code>StringArgument</code> and using <code>.replaceSuggestions()</code> to create your own list of required arguments.</p>
 </blockquote>
 
                     </main>

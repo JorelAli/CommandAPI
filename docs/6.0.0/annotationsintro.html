@@ -194,7 +194,7 @@
 <h2><a class="header" href="#example-a-warp-command" id="example-a-warp-command">Example: A warp command</a></h2>
 <p><em>(So I would put this section in a big green box, but this example is REALLY big and that wouldn't look good)</em></p>
 <p>Let's say we're writing a plugin with the capability to create warps to places on the server. To do this, we'll make a simple command <code>/warp</code>, defined as follows:</p>
-<pre><code>/warp - Shows help
+<pre><code class="language-mccmd">/warp - Shows help
 /warp &lt;warp&gt; - Teleports a player to &lt;warp&gt;
 /warp create &lt;name&gt; - Creates a new warp &lt;name&gt; at the player's location
 </code></pre>
@@ -204,71 +204,71 @@
 
 // /warp
 new CommandAPICommand(&quot;warp&quot;)
-	.executes((sender, args) -&gt; {
-		sender.sendMessage(&quot;--- Warp help ---&quot;);
-		sender.sendMessage(&quot;/warp - Show this help&quot;);
-		sender.sendMessage(&quot;/warp &lt;warp&gt; - Teleport to &lt;warp&gt;&quot;);
-		sender.sendMessage(&quot;/warp create &lt;warpname&gt; - Creates a warp at your current location&quot;);
-	})
-	.register();
+    .executes((sender, args) -&gt; {
+        sender.sendMessage(&quot;--- Warp help ---&quot;);
+        sender.sendMessage(&quot;/warp - Show this help&quot;);
+        sender.sendMessage(&quot;/warp &lt;warp&gt; - Teleport to &lt;warp&gt;&quot;);
+        sender.sendMessage(&quot;/warp create &lt;warpname&gt; - Creates a warp at your current location&quot;);
+    })
+    .register();
 
 // /warp &lt;warp&gt;
 new CommandAPICommand(&quot;warp&quot;)
-	.withArguments(new StringArgument(&quot;warp&quot;).replaceSuggestions(info -&gt; {
-		return warps.keySet().toArray(new String[0]);
-	}))
-	.executesPlayer((player, args) -&gt; {
-		player.teleport(warps.get((String) args[0]));
-	})
-	.register();
+    .withArguments(new StringArgument(&quot;warp&quot;).replaceSuggestions(info -&gt; 
+        warps.keySet().toArray(new String[0])
+    ))
+    .executesPlayer((player, args) -&gt; {
+        player.teleport(warps.get((String) args[0]));
+    })
+    .register();
 
 // /warp create &lt;warpname&gt;
 new CommandAPICommand(&quot;warp&quot;)
     .withSubcommand(
-		new CommandAPICommand(&quot;create&quot;)
-			.withPermission(&quot;warps.create&quot;)
-			.withArguments(new StringArgument(&quot;warpname&quot;))
-			.executesPlayer((player, args) -&gt; {
-				warps.put((String) args[0], player.getLocation());
-			})
-	)
+        new CommandAPICommand(&quot;create&quot;)
+            .withPermission(&quot;warps.create&quot;)
+            .withArguments(new StringArgument(&quot;warpname&quot;))
+            .executesPlayer((player, args) -&gt; {
+                warps.put((String) args[0], player.getLocation());
+            })
+    )
     .register();
 </code></pre>
 <p>Seems fairly straightforward, given everything else covered in this documentation. Now let's compare it to using annotations!</p>
 <h3><a class="header" href="#warp-command-with-annotations" id="warp-command-with-annotations">Warp command (with annotations)</a></h3>
 <p>I think it's best to show the example and the explain it afterwards:</p>
-<pre><code class="language-java">@Command(&quot;warp&quot;)	
+<pre><code class="language-java">@Command(&quot;warp&quot;)    
 public class WarpCommand {
-	
-	// List of warp names and their locations
-	static Map&lt;String, Location&gt; warps = new HashMap&lt;&gt;();
-	
-	@Default
-	public static void warp(CommandSender sender) {
-		sender.sendMessage(&quot;--- Warp help ---&quot;);
-		sender.sendMessage(&quot;/warp - Show this help&quot;);
-		sender.sendMessage(&quot;/warp &lt;warp&gt; - Teleport to &lt;warp&gt;&quot;);
-		sender.sendMessage(&quot;/warp create &lt;warpname&gt; - Creates a warp at your current location&quot;);
-	}
-	
-	@Default
-	public static void warp(Player player, @AStringArgument String warpName) {
-		player.teleport(warps.get(warpName));
-	}
-	
-	@Subcommand(&quot;create&quot;)
-	@Permission(&quot;warps.create&quot;)
-	public static void createWarp(Player player, @AStringArgument String warpName) {
-		warps.put(warpName, player.getLocation());
-	}
-	
+    
+    // List of warp names and their locations
+    static Map&lt;String, Location&gt; warps = new HashMap&lt;&gt;();
+    
+    @Default
+    public static void warp(CommandSender sender) {
+        sender.sendMessage(&quot;--- Warp help ---&quot;);
+        sender.sendMessage(&quot;/warp - Show this help&quot;);
+        sender.sendMessage(&quot;/warp &lt;warp&gt; - Teleport to &lt;warp&gt;&quot;);
+        sender.sendMessage(&quot;/warp create &lt;warpname&gt; - Creates a warp at your current location&quot;);
+    }
+    
+    @Default
+    public static void warp(Player player, @AStringArgument String warpName) {
+        player.teleport(warps.get(warpName));
+    }
+    
+    @Subcommand(&quot;create&quot;)
+    @Permission(&quot;warps.create&quot;)
+    public static void createWarp(Player player, @AStringArgument String warpName) {
+        warps.put(warpName, player.getLocation());
+    }
+    
 }
 </code></pre>
 <pre><code class="language-java">CommandAPI.registerCommand(WarpCommand.class);
 </code></pre>
 <p>As we can see, the code certainly <em>looks</em> very different to the normal registration method. Let's take it apart piece by piece to see what exactly is going on here.</p>
 <h4><a class="header" href="#command-declaration" id="command-declaration">Command declaration</a></h4>
-<pre><code class="language-java">@Command(&quot;warp&quot;)	
+<pre><code class="language-java">@Command(&quot;warp&quot;)    
 public class WarpCommand {
 </code></pre>
 <p>Firstly, we declare our command <code>warp</code>. To do this, we use the <code>@Command</code> annotation and simply state the name of the command in the annotation. This annotation is attached to the class <code>WarpCommand</code>, which basically indicates that the whole class <code>WarpCommand</code> will be housing our command.</p>
@@ -276,10 +276,10 @@ public class WarpCommand {
 <h4><a class="header" href="#default-command" id="default-command">Default command</a></h4>
 <pre><code class="language-java">@Default
 public static void warp(CommandSender sender) {
-	sender.sendMessage(&quot;--- Warp help ---&quot;);
-	sender.sendMessage(&quot;/warp - Show this help&quot;);
-	sender.sendMessage(&quot;/warp &lt;warp&gt; - Teleport to &lt;warp&gt;&quot;);
-	sender.sendMessage(&quot;/warp create &lt;warpname&gt; - Creates a warp at your current location&quot;);
+    sender.sendMessage(&quot;--- Warp help ---&quot;);
+    sender.sendMessage(&quot;/warp - Show this help&quot;);
+    sender.sendMessage(&quot;/warp &lt;warp&gt; - Teleport to &lt;warp&gt;&quot;);
+    sender.sendMessage(&quot;/warp create &lt;warpname&gt; - Creates a warp at your current location&quot;);
 }
 </code></pre>
 <p>Here, declare the main command implementation using the <code>@Default</code> annotation. The <code>@Default</code> annotation basically informs the CommandAPI that the method it is attached to does not have any subcommands. This is basically the same as registering a regular command without using <code>.withSubcommand()</code>.</p>
@@ -287,7 +287,7 @@ public static void warp(CommandSender sender) {
 <h4><a class="header" href="#default-command-again" id="default-command-again">Default command (again!)</a></h4>
 <pre><code class="language-java">@Default
 public static void warp(Player player, @AStringArgument String warpName) {
-	player.teleport(warps.get(warpName));
+    player.teleport(warps.get(warpName));
 }
 </code></pre>
 <p>We also have a second <code>@Default</code> annotated method, which handles our <code>/warp &lt;warp&gt;</code> command. Because this isn't a subcommand (the warp to teleport to is not a subcommand, it's an argument), we still using the <code>@Default</code> annotation. In this method, we include an argument with this command by using the <code>@AStringArgument</code> annotation. This argument uses the <code>StringArgument</code> class, and the name of this argument is &quot;warpName&quot;, which is extracted from the name of the variable. Simply put, <strong>the Annotation for an argument is A</strong> followed by the name of the argument. This is synonymous with using the following:</p>
@@ -299,7 +299,7 @@ public static void warp(Player player, @AStringArgument String warpName) {
 <pre><code class="language-java">@Subcommand(&quot;create&quot;)
 @Permission(&quot;warps.create&quot;)
 public static void createWarp(Player player, @AStringArgument String warpName) {
-	warps.put(warpName, player.getLocation());
+    warps.put(warpName, player.getLocation());
 }
 </code></pre>
 <p>Lastly, we declare a subcommand to allow us to run <code>/warp create &lt;name&gt;</code>. To do this, we simply use the <code>@Subcommand</code> annotation. In this example, we also apply a permission node that is required to run the command by using the <code>@Permission</code> annotation. The rest is fairly straight forward - we declare an argument, in this case it's another <code>StringArgument</code> , so we use <code>@AStringArgument</code> and then declare everything else in a similar fashion to the default command executor.</p>

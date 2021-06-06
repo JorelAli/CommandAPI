@@ -178,23 +178,6 @@
                         
                         <h1><a class="header" href="#troubleshooting" id="troubleshooting">Troubleshooting</a></h1>
 <p>This section basically summarizes the list of things that <em>could</em> go wrong with the CommandAPI and how to mitigate these circumstances.</p>
-<h2><a class="header" href="#my-suggestions-dont-work-or-update" id="my-suggestions-dont-work-or-update">My suggestions don't work or update</a></h2>
-<p>The suggestions need to be deferred so they are evaluated when the user requests it rather than during server start up. See <a href="./argumentsuggestions.html#argument-suggestion-deferral">Argument suggestion deferral</a> which describes this in more detail.</p>
-<h2><a class="header" href="#i-encounter-a-nullpointerexception-when-using-bukkits-scoreboard" id="i-encounter-a-nullpointerexception-when-using-bukkits-scoreboard">I encounter a <code>NullPointerException</code> when using Bukkit's scoreboard</a></h2>
-<p>Shove the scoreboard access inside a lambda, so it is evaluated when commands are executed rather than when the server loads. For example, use:</p>
-<pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
-            	
-arguments.add(new TeamArgument(&quot;team&quot;).safeOverrideSuggestions(s -&gt;
-    Bukkit.getScoreboardManager().getMainScoreboard().getTeams().toArray(new Team[0]))
-);
-</code></pre>
-<p>as opposed to:</p>
-<pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
-            	
-arguments.add(new TeamArgument(&quot;team&quot;).safeOverrideSuggestions(
-    Bukkit.getScoreboardManager().getMainScoreboard().getTeams().toArray(new Team[0]))
-);
-</code></pre>
 <h2><a class="header" href="#server-errors-when-loading-datapacks-in-116" id="server-errors-when-loading-datapacks-in-116">Server errors when loading datapacks in 1.16+</a></h2>
 <p>If you get an error at the very start of the server's startup sequence along the lines of:</p>
 <pre><code class="language-log">[15:57:29] [Worker-Main-5/ERROR]: Failed to load function mycustomnamespace:test

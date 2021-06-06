@@ -49,14 +49,14 @@ I hope these examples help understand how the CommandAPI can help with registeri
 
 Say we wanted to add a predicate to the `/execute` command. In this example, we'll create a predicate which handles random chances. To illustrate this, we want to be able to run commands such as:
 
-```
+```mccmd
 /execute if randomchance 1 4 run say Hello!
 ```
 
 In this scenario, if we ran this command, we would expect "Hello!" to appear in the chat with a \\(\frac{1}{4}\\) chance. In particular, this is what we're trying to achieve:
 
 * We want to create a predicate (true/false value) for the following syntax:
-  ```
+  ```mccmd
   randomchance <numerator> <denominator>
   ```
 

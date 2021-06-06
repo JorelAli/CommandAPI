@@ -182,10 +182,10 @@
 <p>The CommandAPI's documentation is the place to search for anything! In the top left corner of this documentation, you can find this <i class="fas fa-search"></i> icon. You can pretty much search for anything - it'll find it!</p>
 <h2><a class="header" href="#does-the-commandapi-support-optional-arguments" id="does-the-commandapi-support-optional-arguments">Does the CommandAPI support optional arguments?</a></h2>
 <p>Currently, no. Adding optional arguments is actually a surprisingly difficult task because of how Brigadier handles &quot;argument conflicts&quot;. For example, if I made a command (where arguments in brackets <code>()</code> are optional):</p>
-<pre><code>/mycommand (string) (integer)
+<pre><code class="language-mccmd">/mycommand (string) (integer)
 </code></pre>
 <p>We could then run any of the following:</p>
-<pre><code>/mycommand
+<pre><code class="language-mccmd">/mycommand
 /mycommand hello
 /mycommand hello 10
 /mycommand 10

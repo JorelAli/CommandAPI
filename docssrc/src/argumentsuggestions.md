@@ -1,6 +1,6 @@
 # Argument suggestions
 
-Sometimes, you want to override the list of suggestions that are provided by an argument. To handle this, CommandAPI arguments have two methods:
+Sometimes, you want to replace the list of suggestions that are provided by an argument. To handle this, CommandAPI arguments have two methods:
 
 ```java
 Argument replaceSuggestions(Function<SuggestionInfo, String[]> suggestions);
@@ -30,9 +30,9 @@ The first method, `replaceSuggestions(Function<SuggestionInfo, String[]>)`, allo
 
 <div class="example">
 
-### Example - Teleport to worlds by overriding suggestions
+### Example - Teleport to worlds by replacing suggestions
 
-Say we're creating a plugin with the ability to teleport to different warps on the server. If we were to retrieve a list of warps, we would be able to override the suggestions of a typical `StringArgument` to teleport to that warp. Let's create a command with the following syntax:
+Say we're creating a plugin with the ability to teleport to different warps on the server. If we were to retrieve a list of warps, we would be able to replace the suggestions of a typical `StringArgument` to teleport to that warp. Let's create a command with the following syntax:
 
 ```mccmd
 /warp <warp>
@@ -55,9 +55,9 @@ The `replaceSuggestions(Function<SuggestionInfo, String[]>)` method allows you t
 <div class="example">
 
 
-### Example - Friend list by overriding suggestions
+### Example - Friend list by replacing suggestions
 
-Say you have a plugin which has a "friend list" for players. If you want to teleport to a friend in that list, you could use a `PlayerArgument`, which has the list of suggestions overridden with the list of friends that that player has. Since the list of friends *depends on the sender*, we can use the function to determine what our suggestions should be. Let's use the following command to teleport to a friend from our friend list:
+Say you have a plugin which has a "friend list" for players. If you want to teleport to a friend in that list, you could use a `PlayerArgument`, which has the list of suggestions replaced with the list of friends that that player has. Since the list of friends *depends on the sender*, we can use the function to determine what our suggestions should be. Let's use the following command to teleport to a friend from our friend list:
 
 ```mccmd
 /friendtp <friend>

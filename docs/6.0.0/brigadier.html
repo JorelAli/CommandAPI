@@ -211,12 +211,12 @@ public static SuggestionProvider toSuggestions(String nodeName, List&lt;Argument
 <div class="example">
 <h3><a class="header" href="#example---adding-a-predicate-to-the-execute-command" id="example---adding-a-predicate-to-the-execute-command">Example - Adding a predicate to the 'execute' command</a></h3>
 <p>Say we wanted to add a predicate to the <code>/execute</code> command. In this example, we'll create a predicate which handles random chances. To illustrate this, we want to be able to run commands such as:</p>
-<pre><code>/execute if randomchance 1 4 run say Hello!
+<pre><code class="language-mccmd">/execute if randomchance 1 4 run say Hello!
 </code></pre>
 <p>In this scenario, if we ran this command, we would expect &quot;Hello!&quot; to appear in the chat with a \(\frac{1}{4}\) chance. In particular, this is what we're trying to achieve:</p>
 <ul>
 <li>We want to create a predicate (true/false value) for the following syntax:
-<pre><code>randomchance &lt;numerator&gt; &lt;denominator&gt;
+<pre><code class="language-mccmd">randomchance &lt;numerator&gt; &lt;denominator&gt;
 </code></pre>
 </li>
 </ul>

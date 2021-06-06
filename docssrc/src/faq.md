@@ -10,13 +10,13 @@ The CommandAPI's documentation is the place to search for anything! In the top l
 
 Currently, no. Adding optional arguments is actually a surprisingly difficult task because of how Brigadier handles "argument conflicts". For example, if I made a command (where arguments in brackets `()` are optional):
 
-```
+```mccmd
 /mycommand (string) (integer)
 ```
 
 We could then run any of the following:
 
-```
+```mccmd
 /mycommand
 /mycommand hello
 /mycommand hello 10

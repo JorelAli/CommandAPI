@@ -184,13 +184,13 @@
 <div class="example">
 <h3><a class="header" href="#example---permission-system-with-subcommands" id="example---permission-system-with-subcommands">Example - Permission system with subcommands</a></h3>
 <p>Say we wanted to write a permission management system. To do this, we'll use the following command structsyntaxure:</p>
-<pre><code>/perm group add &lt;permission&gt; &lt;groupName&gt;
+<pre><code class="language-mccmd">/perm group add &lt;permission&gt; &lt;groupName&gt;
 /perm group remove &lt;permission&gt; &lt;groupName&gt;
 /perm user add &lt;permission&gt; &lt;userName&gt;
 /perm user remove &lt;permission&gt; &lt;userName&gt;
 </code></pre>
 <p>Let's start with the simplest example - the <code>/perm group ...</code> command. We have one command which is basically the following:</p>
-<pre><code>add &lt;permission&gt; &lt;groupName&gt;
+<pre><code class="language-mccmd">add &lt;permission&gt; &lt;groupName&gt;
 </code></pre>
 <p>We can implement this by creating a <code>CommandAPICommand</code> with the command name <code>add</code>:</p>
 <pre><code class="language-java">CommandAPICommand groupAdd = new CommandAPICommand(&quot;add&quot;)

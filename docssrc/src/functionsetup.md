@@ -67,14 +67,13 @@ server/
 
 To execute the `test` function, you would run the following command:
 
-```
+```mccmd
 /function mycustomnamespace:test
 ```
 
 To execute the `mytag` tag, you would run the following command:
 
-```
+```mccmd
 /function #mycustomnamespace:mytag
 ```
-
 

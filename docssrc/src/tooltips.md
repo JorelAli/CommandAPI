@@ -115,7 +115,7 @@ Say we wanted to create a custom teleport command which suggestions a few key lo
 /warp <location>
 ```
 
-First, we'll declare our arguments. Here, we use a `LocationArgument` and use the `safeOverrideSuggestionsT` method, with a parameter for the command sender, so we can get information about the world. We populate the suggestions with tooltips using `Tooltip.of(Location, String)` and collate them together with `Tooltip.arrayOf(Tooltip<Location>...)`:
+First, we'll declare our arguments. Here, we use a `LocationArgument` and use the `replaceWithSafeSuggestionsT` method, with a parameter for the command sender, so we can get information about the world. We populate the suggestions with tooltips using `Tooltip.of(Location, String)` and collate them together with `Tooltip.arrayOf(Tooltip<Location>...)`:
 
 ```java
 {{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:SafeTooltips}}

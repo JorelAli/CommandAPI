@@ -37,66 +37,66 @@ import dev.jorel.commandapi.arguments.StringArgument;
 
 /* ANCHOR: warps */
 /* ANCHOR: warps_command */
-@Command("warp")	
+@Command("warp")    
 public class WarpCommand {
 /* ANCHOR_END: warps_command */
-	
-	// List of warp names and their locations
-	static Map<String, Location> warps = new HashMap<>();
-	
-	@Default
-	public static void warp(CommandSender sender) {
-		sender.sendMessage("--- Warp help ---");
-		sender.sendMessage("/warp - Show this help");
-		sender.sendMessage("/warp <warp> - Teleport to <warp>");
-		sender.sendMessage("/warp create <warpname> - Creates a warp at your current location");
-	}
-	
-	@Default
-	public static void warp(Player player, @AStringArgument String warpName) {
-		player.teleport(warps.get(warpName));
-	}
-	
-	@Subcommand("create")
-	@Permission("warps.create")
-	public static void createWarp(Player player, @AStringArgument String warpName) {
-		warps.put(warpName, player.getLocation());
-	}
-	
+    
+    // List of warp names and their locations
+    static Map<String, Location> warps = new HashMap<>();
+    
+    @Default
+    public static void warp(CommandSender sender) {
+        sender.sendMessage("--- Warp help ---");
+        sender.sendMessage("/warp - Show this help");
+        sender.sendMessage("/warp <warp> - Teleport to <warp>");
+        sender.sendMessage("/warp create <warpname> - Creates a warp at your current location");
+    }
+    
+    @Default
+    public static void warp(Player player, @AStringArgument String warpName) {
+        player.teleport(warps.get(warpName));
+    }
+    
+    @Subcommand("create")
+    @Permission("warps.create")
+    public static void createWarp(Player player, @AStringArgument String warpName) {
+        warps.put(warpName, player.getLocation());
+    }
+    
 }
 /* ANCHOR_END: warps */
 
 class  A {
-	{ 
+    { 
 /* ANCHOR: warps_register */
 CommandAPI.registerCommand(WarpCommand.class);
 /* ANCHOR_END: warps_register */
-	}
-	
-	static Map<String, Location> warps = new HashMap<>();
-	
+    }
+    
+    static Map<String, Location> warps = new HashMap<>();
+    
 /* ANCHOR: warps_help */
 @Default
 public static void warp(CommandSender sender) {
-	sender.sendMessage("--- Warp help ---");
-	sender.sendMessage("/warp - Show this help");
-	sender.sendMessage("/warp <warp> - Teleport to <warp>");
-	sender.sendMessage("/warp create <warpname> - Creates a warp at your current location");
+    sender.sendMessage("--- Warp help ---");
+    sender.sendMessage("/warp - Show this help");
+    sender.sendMessage("/warp <warp> - Teleport to <warp>");
+    sender.sendMessage("/warp create <warpname> - Creates a warp at your current location");
 }
 /* ANCHOR_END: warps_help */
-	
+    
 /* ANCHOR: warps_warp */
 @Default
 public static void warp(Player player, @AStringArgument String warpName) {
-	player.teleport(warps.get(warpName));
+    player.teleport(warps.get(warpName));
 }
 /* ANCHOR_END: warps_warp */
-	
+    
 /* ANCHOR: warps_create */
 @Subcommand("create")
 @Permission("warps.create")
 public static void createWarp(Player player, @AStringArgument String warpName) {
-	warps.put(warpName, player.getLocation());
+    warps.put(warpName, player.getLocation());
 }
 /* ANCHOR_END: warps_create */
 
@@ -109,47 +109,47 @@ Map<String, Location> warps = new HashMap<>();
 
 // /warp
 new CommandAPICommand("warp")
-	.executes((sender, args) -> {
-		sender.sendMessage("--- Warp help ---");
-		sender.sendMessage("/warp - Show this help");
-		sender.sendMessage("/warp <warp> - Teleport to <warp>");
-		sender.sendMessage("/warp create <warpname> - Creates a warp at your current location");
-	})
-	.register();
+    .executes((sender, args) -> {
+        sender.sendMessage("--- Warp help ---");
+        sender.sendMessage("/warp - Show this help");
+        sender.sendMessage("/warp <warp> - Teleport to <warp>");
+        sender.sendMessage("/warp create <warpname> - Creates a warp at your current location");
+    })
+    .register();
 
 // /warp <warp>
 new CommandAPICommand("warp")
-	.withArguments(new StringArgument("warp").replaceSuggestions(info -> {
-		return warps.keySet().toArray(new String[0]);
-	}))
-	.executesPlayer((player, args) -> {
-		player.teleport(warps.get((String) args[0]));
-	})
-	.register();
+    .withArguments(new StringArgument("warp").replaceSuggestions(info -> 
+        warps.keySet().toArray(new String[0])
+    ))
+    .executesPlayer((player, args) -> {
+        player.teleport(warps.get((String) args[0]));
+    })
+    .register();
 
 // /warp create <warpname>
 new CommandAPICommand("warp")
     .withSubcommand(
-		new CommandAPICommand("create")
-			.withPermission("warps.create")
-			.withArguments(new StringArgument("warpname"))
-			.executesPlayer((player, args) -> {
-				warps.put((String) args[0], player.getLocation());
-			})
-	)
+        new CommandAPICommand("create")
+            .withPermission("warps.create")
+            .withArguments(new StringArgument("warpname"))
+            .executesPlayer((player, args) -> {
+                warps.put((String) args[0], player.getLocation());
+            })
+    )
     .register();
 /* ANCHOR_END: old_warps */
 }
 
 /* ANCHOR: warp_register2 */
 class MyPlugin extends JavaPlugin {
-	
-	@Override
-	public void onLoad() {
-		CommandAPI.registerCommand(WarpCommand.class);
-	}
-	
+    
+    @Override
+    public void onLoad() {
+        CommandAPI.registerCommand(WarpCommand.class);
+    }
+    
 }
 /* ANCHOR_END: warp_register2 */
-	
+    
 }

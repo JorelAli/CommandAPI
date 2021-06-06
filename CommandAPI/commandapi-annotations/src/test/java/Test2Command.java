@@ -44,29 +44,29 @@ import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
 
 /* ANCHOR: teleport_command */
-@Command("teleport")	
+@Command("teleport")    
 @Alias({"tp", "tele"})
 public class Test2Command {
 /* ANCHOR_END: teleport_command */
-	
-	{
-		{
+    
+    {
+        {
 /* ANCHOR: teleport_command_needsop */
-@Command("teleport")	
+@Command("teleport")    
 @NeedsOp
 class TeleportCommand {
 /* ANCHOR_END: teleport_command_needsop */
 }
-		}
-		{
+        }
+        {
 /* ANCHOR: teleport_command_perms */
-@Command("teleport")	
+@Command("teleport")    
 @Permission("myplugin.tp")
 class TeleportCommand {
 /* ANCHOR_END: teleport_command_perms */
 }
-		}
-	}
+        }
+    }
 }
 
 @Command("aa")
@@ -74,22 +74,22 @@ class AA {
 /* ANCHOR: number_arguments */
 @Default
 public static void command(CommandSender sender, 
-	@ADoubleArgument(min = 0.0, max = 10.0) double someDouble,
-	@AFloatArgument(min = 5.0f, max = 10.0f) float someFloat,
-	@AIntegerArgument(max = 100) int someInt,
-	@ALongArgument(min = -10) long someLong
+    @ADoubleArgument(min = 0.0, max = 10.0) double someDouble,
+    @AFloatArgument(min = 5.0f, max = 10.0f) float someFloat,
+    @AIntegerArgument(max = 100) int someInt,
+    @ALongArgument(min = -10) long someLong
 ) {
-	// Command implementation here
+    // Command implementation here
 }
 /* ANCHOR_END: number_arguments */
 
 /* ANCHOR: literal_arguments */
 @Default
 public static void command(CommandSender sender, 
-	@ALiteralArgument("myliteral") String literal,
-	@AMultiLiteralArgument({"literal", "anotherliteral"}) String multipleLiterals
+    @ALiteralArgument("myliteral") String literal,
+    @AMultiLiteralArgument({"literal", "anotherliteral"}) String multipleLiterals
 ) {
-	// Command implementation here
+    // Command implementation here
 }
 /* ANCHOR_END: literal_arguments */
 
@@ -97,12 +97,12 @@ public static void command(CommandSender sender,
 /* ANCHOR: other_arguments */
 @Default
 public static void command(CommandSender sender, 
-	@ALocationArgument(LocationType.BLOCK_POSITION) Location location,
-	@ALocation2DArgument(LocationType.PRECISE_POSITION) Location location2d,
-	@AEntitySelectorArgument(EntitySelector.MANY_ENTITIES) Collection<Entity> entities,
-	@AScoreHolderArgument(ScoreHolderType.MULTIPLE) Collection<String> scoreHolders
+    @ALocationArgument(LocationType.BLOCK_POSITION) Location location,
+    @ALocation2DArgument(LocationType.PRECISE_POSITION) Location location2d,
+    @AEntitySelectorArgument(EntitySelector.MANY_ENTITIES) Collection<Entity> entities,
+    @AScoreHolderArgument(ScoreHolderType.MULTIPLE) Collection<String> scoreHolders
 ) {
-	// Command implementation here
+    // Command implementation here
 }
 /* ANCHOR_END: other_arguments */
 

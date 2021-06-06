@@ -4,7 +4,7 @@ To represent Minecraft functions and tags, the CommandAPI uses the `SimpleFuncti
 
 > **Developer's Note**
 >
-> The `SimpleFunctionWrapper` class only represents on Minecraft function. As a result, to represent a Minecraft "tag", which is a collection of Minecraft functions, the CommandAPI simply uses a `SimpleFunctionWrapper[]`.
+> The `SimpleFunctionWrapper` class represents a Minecraft function. In order to represent a Minecraft "tag", which is a collection of Minecraft functions, the CommandAPI simply uses a `SimpleFunctionWrapper[]`.
 
 ## SimpleFunctionWrapper methods
 

@@ -243,12 +243,13 @@ arguments.add(new PlayerArgument(&quot;target&quot;));
 <div class="example">
 <h3><a class="header" href="#example---using-istringtooltip-for-custom-items" id="example---using-istringtooltip-for-custom-items">Example - Using <code>IStringTooltip</code> for custom items</a></h3>
 <p>Let's say we've created a simple plugin which has custom items. For a custom item, we'll have a super simple class <code>CustomItem</code> that sets its name, lore and attached itemstack:</p>
-<pre><code class="language-java">public class CustomItem implements IStringTooltip {
+<pre><code class="language-java">public @SuppressWarnings(&quot;deprecation&quot;)
+class CustomItem implements IStringTooltip {
 
     private ItemStack itemstack;
     private String name;
     
-    public CustomItem(ItemStack itemstack, String name, String lore) {
+	public CustomItem(ItemStack itemstack, String name, String lore) {
         ItemMeta meta = itemstack.getItemMeta();
         meta.setDisplayName(name);
         meta.setLore(Arrays.asList(lore));
@@ -317,7 +318,7 @@ Tooltip&lt;S&gt;[] arrayOf(Tooltip&lt;S&gt;... tooltips);
 <p>Say we wanted to create a custom teleport command which suggestions a few key locations. In this example, we'll use the following command syntax:</p>
 <pre><code class="language-mccmd">/warp &lt;location&gt;
 </code></pre>
-<p>First, we'll declare our arguments. Here, we use a <code>LocationArgument</code> and use the <code>safeOverrideSuggestionsT</code> method, with a parameter for the command sender, so we can get information about the world. We populate the suggestions with tooltips using <code>Tooltip.of(Location, String)</code> and collate them together with <code>Tooltip.arrayOf(Tooltip&lt;Location&gt;...)</code>:</p>
+<p>First, we'll declare our arguments. Here, we use a <code>LocationArgument</code> and use the <code>replaceWithSafeSuggestionsT</code> method, with a parameter for the command sender, so we can get information about the world. We populate the suggestions with tooltips using <code>Tooltip.of(Location, String)</code> and collate them together with <code>Tooltip.arrayOf(Tooltip&lt;Location&gt;...)</code>:</p>
 <pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
 arguments.add(new LocationArgument(&quot;location&quot;)
     .replaceWithSafeSuggestionsT(info -&gt; {
