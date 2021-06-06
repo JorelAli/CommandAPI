@@ -207,16 +207,12 @@
 <div class="example">
 <h2><a class="header" href="#example---searching-chests-for-certain-items" id="example---searching-chests-for-certain-items">Example - Searching chests for certain items</a></h2>
 <p>Say you're working on a plugin for server administrators to help them find restricted items. A method of doing so would be to search chests in a given radius for certain items. As such, we can use the following syntax:</p>
-<pre><code>/searchchests &lt;range&gt; &lt;item&gt;
+<pre><code class="language-mccmd">/searchchests &lt;range&gt; &lt;item&gt;
 </code></pre>
 <p>Now, we simply create our arguments using <code>IntegerRangeArgument</code> for our range and <code>ItemStackArgument</code> as the item to search for. We can then find all chests in a given area and determine if it is within the range provided by the command sender by using <code>range.isInRange(distance)</code>:</p>
-<pre><code class="language-java">// Declare our arguments for /searchrange &lt;IntegerRange&gt; &lt;ItemStack&gt;
-List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
-arguments.add(new IntegerRangeArgument(&quot;range&quot;));
-arguments.add(new ItemStackArgument(&quot;item&quot;));
-
-new CommandAPICommand(&quot;searchrange&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;searchrange&quot;)
+    .withArguments(new IntegerRangeArgument(&quot;range&quot;)) // Range argument
+    .withArguments(new ItemStackArgument(&quot;item&quot;))     // The item to search for
     .executesPlayer((player, args) -&gt; {
         // Retrieve the range from the arguments
         IntegerRange range = (IntegerRange) args[0];
@@ -236,9 +232,8 @@ new CommandAPICommand(&quot;searchrange&quot;)
                 if(range.isInRange(distance)) {
 
                     // Check if the tile entity is a chest
-                    if(blockState instanceof Chest) {
-                        Chest chest = (Chest) blockState;
-
+                    if(blockState instanceof Chest chest) {
+                    	
                         // Check if the chest contains the item specified by the player
                         if(chest.getInventory().contains(itemStack.getType())) {
                             locations.add(chest.getLocation());

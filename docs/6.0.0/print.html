@@ -2006,6 +2006,7 @@ arguments.add(new LocationArgument(&quot;location&quot;)
 </code></pre>
 <p>In this scenario, the argument <code>&lt;value&gt;</code> is not present in the <code>Object args[]</code> for the executor.</p>
 </div><h1><a class="header" href="#argument-types" id="argument-types">Argument types</a></h1>
+<p>For more information on argument casting types, see <a href="./arguments.html#argument-casting">Argument Casting</a>. This section is primarily about use cases for each argument and any implementation notes.</p>
 <h1><a class="header" href="#primitive-arguments" id="primitive-arguments">Primitive arguments</a></h1>
 <p>Primitive arguments are arguments that represent Java primitive types, such as <code>int</code>, <code>float</code>, <code>double</code>, <code>boolean</code> and <code>long</code>. These arguments are defined in their respective classes:</p>
 <table><thead><tr><th>Primitive type</th><th>CommandAPI class</th></tr></thead><tbody>
@@ -2023,20 +2024,16 @@ arguments.add(new LocationArgument(&quot;location&quot;)
 <div class="example">
 <h3><a class="header" href="#example---config-editing-plugin" id="example---config-editing-plugin">Example - Config editing plugin</a></h3>
 <p>Say we want to create a plugin that lets you edit its own <code>config.yml</code> file using a command. To do this, let's create a command with the following syntax:</p>
-<pre><code>/editconfig &lt;config-key&gt; &lt;value&gt;
+<pre><code class="language-mccmd">/editconfig &lt;config-key&gt; &lt;value&gt;
 </code></pre>
-<p>We first retrieve the keys from the configuration file using the typical Bukkit API. We construct our <code>List</code> to hold our arguments, with the first parameter being a String key (in the form of a <code>TextArgument</code>, <a href="TODO">overridden with an array of suggestions</a>). Finally, we register our command and update the config, ensuring that we cast the <code>BooleanArgument</code> to <code>boolean</code>: </p>
+<p>We first retrieve the keys from the configuration file using the typical Bukkit API. We construct our <code>List</code> to hold our arguments, with the first parameter being a String key (in the form of a <code>TextArgument</code>, <a href="./argumentsuggestions.html">overridden with an array of suggestions</a>). Finally, we register our command and update the config, ensuring that we cast the <code>BooleanArgument</code> to <code>boolean</code>: </p>
 <pre><code class="language-java">// Load keys from config file
 String[] configKeys = getConfig().getKeys(true).toArray(new String[0]);
 
-// Create arguments with the config key and a boolean value to set it to
-List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
-arguments.add(new TextArgument(&quot;config-key&quot;).overrideSuggestions(configKeys));
-arguments.add(new BooleanArgument(&quot;value&quot;));
-
 // Register our command
 new CommandAPICommand(&quot;editconfig&quot;)
-    .withArguments(arguments)
+    .withArguments(new TextArgument(&quot;config-key&quot;).replaceSuggestions(info -&gt; configKeys))
+    .withArguments(new BooleanArgument(&quot;value&quot;))
     .executes((sender, args) -&gt; {
         // Update the config with the boolean argument
         getConfig().set((String) args[0], (boolean) args[1]);
@@ -2092,16 +2089,12 @@ new CommandAPICommand(&quot;editconfig&quot;)
 <div class="example">
 <h2><a class="header" href="#example---searching-chests-for-certain-items" id="example---searching-chests-for-certain-items">Example - Searching chests for certain items</a></h2>
 <p>Say you're working on a plugin for server administrators to help them find restricted items. A method of doing so would be to search chests in a given radius for certain items. As such, we can use the following syntax:</p>
-<pre><code>/searchchests &lt;range&gt; &lt;item&gt;
+<pre><code class="language-mccmd">/searchchests &lt;range&gt; &lt;item&gt;
 </code></pre>
 <p>Now, we simply create our arguments using <code>IntegerRangeArgument</code> for our range and <code>ItemStackArgument</code> as the item to search for. We can then find all chests in a given area and determine if it is within the range provided by the command sender by using <code>range.isInRange(distance)</code>:</p>
-<pre><code class="language-java">// Declare our arguments for /searchrange &lt;IntegerRange&gt; &lt;ItemStack&gt;
-List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
-arguments.add(new IntegerRangeArgument(&quot;range&quot;));
-arguments.add(new ItemStackArgument(&quot;item&quot;));
-
-new CommandAPICommand(&quot;searchrange&quot;)
-    .withArguments(arguments)
+<pre><code class="language-java">new CommandAPICommand(&quot;searchrange&quot;)
+    .withArguments(new IntegerRangeArgument(&quot;range&quot;)) // Range argument
+    .withArguments(new ItemStackArgument(&quot;item&quot;))     // The item to search for
     .executesPlayer((player, args) -&gt; {
         // Retrieve the range from the arguments
         IntegerRange range = (IntegerRange) args[0];
@@ -2121,9 +2114,8 @@ new CommandAPICommand(&quot;searchrange&quot;)
                 if(range.isInRange(distance)) {
 
                     // Check if the tile entity is a chest
-                    if(blockState instanceof Chest) {
-                        Chest chest = (Chest) blockState;
-
+                    if(blockState instanceof Chest chest) {
+                    	
                         // Check if the chest contains the item specified by the player
                         if(chest.getInventory().contains(itemStack.getType())) {
                             locations.add(chest.getLocation());

@@ -26,11 +26,11 @@ The `BooleanArgument` class represents the Boolean values `true` and `false`.
 
 Say we want to create a plugin that lets you edit its own `config.yml` file using a command. To do this, let's create a command with the following syntax:
 
-```
+```mccmd
 /editconfig <config-key> <value>
 ```
 
-We first retrieve the keys from the configuration file using the typical Bukkit API. We construct our `List` to hold our arguments, with the first parameter being a String key (in the form of a `TextArgument`, [overridden with an array of suggestions](TODO)). Finally, we register our command and update the config, ensuring that we cast the `BooleanArgument` to `boolean`: 
+We first retrieve the keys from the configuration file using the typical Bukkit API. We construct our `List` to hold our arguments, with the first parameter being a String key (in the form of a `TextArgument`, [overridden with an array of suggestions](./argumentsuggestions.md)). Finally, we register our command and update the config, ensuring that we cast the `BooleanArgument` to `boolean`: 
 
 ```java
 {{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:booleanargs}}
@@ -60,5 +60,4 @@ Each numerical argument can have ranges applied to them, which restricts the use
 | `new IntegerArgument(min, max)` | Values greater than or equal to `min` and less than or equal to `max` |
 
 Each range is _inclusive_, so it includes the number given to it. If the minimum value provided is larger than the maximum value, an `InvalidRangeException` is thrown.
-
 

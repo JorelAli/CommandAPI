@@ -174,14 +174,10 @@ new CommandAPICommand("gamemode")
 // Load keys from config file
 String[] configKeys = getConfig().getKeys(true).toArray(new String[0]);
 
-// Create arguments with the config key and a boolean value to set it to
-List<Argument> arguments = new ArrayList<>();
-arguments.add(new TextArgument("config-key").overrideSuggestions(configKeys));
-arguments.add(new BooleanArgument("value"));
-
 // Register our command
 new CommandAPICommand("editconfig")
-    .withArguments(arguments)
+    .withArguments(new TextArgument("config-key").replaceSuggestions(info -> configKeys))
+    .withArguments(new BooleanArgument("value"))
     .executes((sender, args) -> {
         // Update the config with the boolean argument
         getConfig().set((String) args[0], (boolean) args[1]);
@@ -192,13 +188,9 @@ new CommandAPICommand("editconfig")
 
 {
 /* ANCHOR: rangedarguments */
-// Declare our arguments for /searchrange <IntegerRange> <ItemStack>
-List<Argument> arguments = new ArrayList<>();
-arguments.add(new IntegerRangeArgument("range"));
-arguments.add(new ItemStackArgument("item"));
-
 new CommandAPICommand("searchrange")
-    .withArguments(arguments)
+    .withArguments(new IntegerRangeArgument("range")) // Range argument
+    .withArguments(new ItemStackArgument("item"))     // The item to search for
     .executesPlayer((player, args) -> {
         // Retrieve the range from the arguments
         IntegerRange range = (IntegerRange) args[0];
@@ -218,9 +210,8 @@ new CommandAPICommand("searchrange")
                 if(range.isInRange(distance)) {
 
                     // Check if the tile entity is a chest
-                    if(blockState instanceof Chest) {
-                        Chest chest = (Chest) blockState;
-
+                    if(blockState instanceof Chest chest) {
+                    	
                         // Check if the chest contains the item specified by the player
                         if(chest.getInventory().contains(itemStack.getType())) {
                             locations.add(chest.getLocation());

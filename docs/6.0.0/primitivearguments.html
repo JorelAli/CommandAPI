@@ -193,20 +193,16 @@
 <div class="example">
 <h3><a class="header" href="#example---config-editing-plugin" id="example---config-editing-plugin">Example - Config editing plugin</a></h3>
 <p>Say we want to create a plugin that lets you edit its own <code>config.yml</code> file using a command. To do this, let's create a command with the following syntax:</p>
-<pre><code>/editconfig &lt;config-key&gt; &lt;value&gt;
+<pre><code class="language-mccmd">/editconfig &lt;config-key&gt; &lt;value&gt;
 </code></pre>
-<p>We first retrieve the keys from the configuration file using the typical Bukkit API. We construct our <code>List</code> to hold our arguments, with the first parameter being a String key (in the form of a <code>TextArgument</code>, <a href="TODO">overridden with an array of suggestions</a>). Finally, we register our command and update the config, ensuring that we cast the <code>BooleanArgument</code> to <code>boolean</code>: </p>
+<p>We first retrieve the keys from the configuration file using the typical Bukkit API. We construct our <code>List</code> to hold our arguments, with the first parameter being a String key (in the form of a <code>TextArgument</code>, <a href="./argumentsuggestions.html">overridden with an array of suggestions</a>). Finally, we register our command and update the config, ensuring that we cast the <code>BooleanArgument</code> to <code>boolean</code>: </p>
 <pre><code class="language-java">// Load keys from config file
 String[] configKeys = getConfig().getKeys(true).toArray(new String[0]);
 
-// Create arguments with the config key and a boolean value to set it to
-List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
-arguments.add(new TextArgument(&quot;config-key&quot;).overrideSuggestions(configKeys));
-arguments.add(new BooleanArgument(&quot;value&quot;));
-
 // Register our command
 new CommandAPICommand(&quot;editconfig&quot;)
-    .withArguments(arguments)
+    .withArguments(new TextArgument(&quot;config-key&quot;).replaceSuggestions(info -&gt; configKeys))
+    .withArguments(new BooleanArgument(&quot;value&quot;))
     .executes((sender, args) -&gt; {
         // Update the config with the boolean argument
         getConfig().set((String) args[0], (boolean) args[1]);
