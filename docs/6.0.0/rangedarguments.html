@@ -233,7 +233,7 @@
 
                     // Check if the tile entity is a chest
                     if(blockState instanceof Chest chest) {
-                    	
+                        
                         // Check if the chest contains the item specified by the player
                         if(chest.getInventory().contains(itemStack.getType())) {
                             locations.add(chest.getLocation());

@@ -182,7 +182,7 @@
 <div class="example">
 <h3><a class="header" href="#example---giving-a-player-a-potion-effect" id="example---giving-a-player-a-potion-effect">Example - Giving a player a potion effect</a></h3>
 <p>Say we wanted to have a command that gives a player a potion effect. For this command, we'll use the following syntax:</p>
-<pre><code>/potion &lt;target&gt; &lt;potion&gt; &lt;duration&gt; &lt;strength&gt;
+<pre><code class="language-mccmd">/potion &lt;target&gt; &lt;potion&gt; &lt;duration&gt; &lt;strength&gt;
 </code></pre>
 <p>In this example, we utilize some of the other arguments that we've described earlier, such as the <code>PlayerArgument</code> and <code>TimeArgument</code>. Since duration for the <code>PotionEffect</code> constructor is in ticks, this is perfectly fit for the <code>TimeArgument</code>, which is represented in ticks.</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;potion&quot;)

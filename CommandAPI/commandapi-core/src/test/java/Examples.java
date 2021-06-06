@@ -212,7 +212,7 @@ new CommandAPICommand("searchrange")
 
                     // Check if the tile entity is a chest
                     if(blockState instanceof Chest chest) {
-                    	
+                        
                         // Check if the chest contains the item specified by the player
                         if(chest.getInventory().contains(itemStack.getType())) {
                             locations.add(chest.getLocation());
@@ -362,6 +362,7 @@ new CommandAPICommand("pbroadcast")
         
         // Broadcast the message to everyone with broadcast permissions.
         Bukkit.getServer().broadcast(message, Server.BROADCAST_CHANNEL_USERS);
+        Bukkit.getServer().broadcast(message);
     })
     .register();
 /* ANCHOR_END: ArgumentAdventureChat */
@@ -416,6 +417,25 @@ new CommandAPICommand("reward")
     })
     .register();
 /* ANCHOR_END: scoreholderargument */
+}
+
+{
+Object[] args = new Object[0];
+@SuppressWarnings("unchecked")
+// This example isn't used because for some reason, mdbook doesn't render it properly
+/* ANCHOR: scoreholderargument_2 */
+Collection<String> entitiesAndPlayers = (Collection<String>) args[0];
+for(String str : entitiesAndPlayers) {
+    try {
+        UUID uuid = UUID.fromString(str);
+        // Is a UUID, so it must by an entity
+        Bukkit.getEntity(uuid);
+    } catch(IllegalArgumentException exception) {
+        // Not a UUID, so it must be a player name
+        Bukkit.getPlayer(str); 
+    }
+}
+/* ANCHOR_END: scoreholderargument_2 */
 }
 
 {
@@ -646,7 +666,7 @@ new CommandAPICommand("potion")
 new CommandAPICommand("giverecipe")
     .withArguments(new RecipeArgument("recipe"))
     .executesPlayer((player, args) -> {
-        Recipe recipe = (Recipe) args[0];
+        ComplexRecipe recipe = (ComplexRecipe) args[0];
         player.getInventory().addItem(recipe.getResult());
     })
     .register();
@@ -660,16 +680,9 @@ new CommandAPICommand("unlockrecipe")
     .withArguments(new RecipeArgument("recipe"))
     .executes((sender, args) -> {
         Player target = (Player) args[0];
-        Recipe recipe = (Recipe) args[1];
-        
-        //Check if we're running 1.15+
-        if(recipe instanceof ComplexRecipe) {
-            ComplexRecipe complexRecipe = (ComplexRecipe) recipe;
-            target.discoverRecipe(complexRecipe.getKey());
-        } else {
-            //Error here, can't unlock recipe for player
-            CommandAPI.fail("Cannot unlock recipe for player (Are you using version 1.15 or above?)");
-        }
+        ComplexRecipe recipe = (ComplexRecipe) args[1];
+
+        target.discoverRecipe(recipe.getKey());
     })
     .register();
 /* ANCHOR_END: recipearguments2 */
@@ -1167,7 +1180,8 @@ new CommandAPICommand("kill")
 /* ANCHOR_END: argumentkillcmd2 */
 }
 
-{
+@SuppressWarnings("unused")
+public void argumentCasting() {
 /* ANCHOR: argumentcasting */
 List<Argument> arguments = new ArrayList<>();
 arguments.add(new StringArgument("arg0"));
@@ -1567,8 +1581,8 @@ new CommandAPICommand("giveitem")
 List<Argument> arguments = new ArrayList<>();
 arguments.add(new LocationArgument("location")
     .replaceWithSafeSuggestionsT(info -> {
-    	// We know the sender is a player if we use .executesPlayer()
-    	Player player = (Player) info.sender();
+        // We know the sender is a player if we use .executesPlayer()
+        Player player = (Player) info.sender();
         return Tooltip.arrayOf(
             Tooltip.of(player.getWorld().getSpawnLocation(), "World spawn"),
             Tooltip.of(player.getBedSpawnLocation(), "Your bed"),

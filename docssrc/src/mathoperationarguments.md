@@ -47,14 +47,14 @@ These methods are used to provide a basic implementation of these math operation
 
 Say we wanted to create a player's level. Typically, this is implemented in the following manner:
 
-```
+```mccmd
 /xp set <player> <level>
 /xp add <player> <levels>
 ```
 
 Using the `MathOperationArgument`, we can extend the functionality of adding and setting a player's level by allowing the user to choose what operation they desire. To do this, we'll use the following syntax:
 
-```
+```mccmd
 /changelevel <player> <operation> <value>
 ```
 
@@ -70,19 +70,19 @@ There are various applications for the `changelevel` command based on what the u
 
 - To set the player _Notch_ to level 10:
 
-  ```
+  ```mccmd
   /changelevel Notch = 10
   ```
 
 - To double the player _Notch's_ level:
 
-  ```
+  ```mccmd
   /changelevel Notch *= 2
   ```
 
 - To set the player _Notch_'s level to 20, or keep it as their current level if it is higher than 20:
 
-  ```
+  ```mccmd
   /changelevel Notch > 20
   ```
 

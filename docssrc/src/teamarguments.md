@@ -8,7 +8,7 @@ The `TeamArgument` class interacts with the Minecraft scoreboard and represents 
 
 Let's say we want to create a command to toggle the state of friendly fire in a team. We want a command of the following form
 
-```
+```mccmd
 /togglepvp <team>
 ```
 

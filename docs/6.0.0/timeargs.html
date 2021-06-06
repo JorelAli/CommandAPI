@@ -180,10 +180,6 @@
 <p><img src="./images/arguments/time.png" alt="" /></p>
 <p>The <code>TimeArgument</code> class represents in-game time, <em>in the number of in-game ticks</em>. This allows command senders to specify a certain number of ticks in a simpler way, by including the characters <code>d</code> to specify the numbers of days, <code>s</code> to specify the number of seconds or <code>t</code> to specify a number of ticks.</p>
 <p>The CommandAPI converts the inputs provided by the command sender into a number of ticks as an integer.</p>
-<div class="warning">
-<p><strong>Note:</strong></p>
-<p>The <code>TimeArgument</code> is only supported in Minecraft versions 1.14 and later, meaning it <em>will not work</em> on Minecraft versions 1.13, 1.13.1 or 1.13.2. This is due to the fact that Minecraft added the time argument in 1.14. Attempting to use the <code>TimeArgument</code> on an incompatible version will throw a <code>TimeArgumentException</code>.</p>
-</div>
 <blockquote>
 <p><strong>Developer's Note:</strong></p>
 <p>The <code>TimeArgument</code> provides inputs such as <code>2d</code> (2 in-game days), <code>10s</code> (10 seconds) and <code>20t</code> (20 ticks), but does <strong>not</strong> let you combine them, such as <code>2d10s</code>.</p>
@@ -191,7 +187,7 @@
 <div class="example">
 <h3><a class="header" href="#example---displaying-a-server-wide-announcement" id="example---displaying-a-server-wide-announcement">Example - Displaying a server-wide announcement</a></h3>
 <p>Say we have a command <code>bigmsg</code> that displays a title message to all players for a certain duration:</p>
-<pre><code>/bigmsg &lt;duration&gt; &lt;message&gt;
+<pre><code class="language-mccmd">/bigmsg &lt;duration&gt; &lt;message&gt;
 </code></pre>
 <pre><code class="language-java">new CommandAPICommand(&quot;bigmsg&quot;)
     .withArguments(new TimeArgument(&quot;duration&quot;))

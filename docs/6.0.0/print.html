@@ -1962,8 +1962,8 @@ Tooltip&lt;S&gt;[] arrayOf(Tooltip&lt;S&gt;... tooltips);
 <pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
 arguments.add(new LocationArgument(&quot;location&quot;)
     .replaceWithSafeSuggestionsT(info -&gt; {
-    	// We know the sender is a player if we use .executesPlayer()
-    	Player player = (Player) info.sender();
+        // We know the sender is a player if we use .executesPlayer()
+        Player player = (Player) info.sender();
         return Tooltip.arrayOf(
             Tooltip.of(player.getWorld().getSpawnLocation(), &quot;World spawn&quot;),
             Tooltip.of(player.getBedSpawnLocation(), &quot;Your bed&quot;),
@@ -2115,7 +2115,7 @@ new CommandAPICommand(&quot;editconfig&quot;)
 
                     // Check if the tile entity is a chest
                     if(blockState instanceof Chest chest) {
-                    	
+                        
                         // Check if the chest contains the item specified by the player
                         if(chest.getInventory().contains(itemStack.getType())) {
                             locations.add(chest.getLocation());
@@ -2480,6 +2480,7 @@ sender.spigot().sendMessage(BaseComponent[]);
         
         // Broadcast the message to everyone with broadcast permissions.
         Bukkit.getServer().broadcast(message, Server.BROADCAST_CHANNEL_USERS);
+        Bukkit.getServer().broadcast(message);
     })
     .register();
 </code></pre>
@@ -2560,14 +2561,7 @@ sender.spigot().sendMessage(BaseComponent[]);
 </code></pre>
 <p>Note how in this example above, we have to explicitly state <code>Player player, Object[] args</code>. This is due to a limitation of Java's type inference system which is discussed <a href="./commandregistration.html#setting-the-commands-executor">here</a>.</p>
 </div><h1><a class="header" href="#scoreboard-arguments" id="scoreboard-arguments">Scoreboard arguments</a></h1>
-<p>The scoreboard arguments that the CommandAPI provides allows you to interact with various scoreboard elements, such as objectives, teams and score holders. Since commands are registered in the <code>onEnable()</code> or <code>onLoad()</code> method of a plugin, this means that these are registered before Bukkit's main scoreboard is loaded.</p>
-<p>This means that calling <code>Bukkit.getScoreboardManager().getMainScoreboard()</code> will <em>always</em> result in a <code>NullPointerException</code>. To avoid this scenario, try using a lambda which delays the call that gets Bukkit's main scoreboard to the moment when the command is executed, which typically occurs after the server has initialized it. For example, if you wanted to populate a <code>TeamArgument</code> with a list of all registered teams on the server, you should use the following:</p>
-<pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
-	        	
-arguments.add(new TeamArgument(&quot;team&quot;).safeOverrideSuggestions(s -&gt;
-    Bukkit.getScoreboardManager().getMainScoreboard().getTeams().toArray(new Team[0]))
-);
-</code></pre>
+<p>The scoreboard arguments that the CommandAPI provides allows you to interact with various scoreboard elements, such as objectives, teams and score holders.</p>
 <h1><a class="header" href="#scoreboard-arguments-1" id="scoreboard-arguments-1">Scoreboard arguments</a></h1>
 <p>The CommandAPI uses two classes to provide information about a scoreboard:</p>
 <ul>
@@ -2584,11 +2578,11 @@ new ScoreHolderArgument(nodeName, ScoreHolderType.MULTIPLE);
 <div class="example">
 <h3><a class="header" href="#example---rewarding-players-with-scoreboard-objectives" id="example---rewarding-players-with-scoreboard-objectives">Example - Rewarding players with scoreboard objectives</a></h3>
 <p>Say we want to reward all players that fit a certain criteria. We want a command with the following syntax:</p>
-<pre><code>/reward &lt;players&gt;
+<pre><code class="language-mccmd">/reward &lt;players&gt;
 </code></pre>
 <p>Since we could have multiple players that fit a certain criterion, we want to use <code>ScoreHolderType.MULTIPLE</code> as the parameter for the argument's constructor.</p>
 <p>To give this example a bit more context, let's say we want to reward all players that have died less than 10 times in the server. To do this, we will use the following command:</p>
-<pre><code>/reward @e[type=player,scores={deaths=..9}]
+<pre><code class="language-mccmd">/reward @e[type=player,scores={deaths=..9}]
 </code></pre>
 <p>Note how we use <code>..9</code> to represent 9 or less deaths (since ranges are inclusive). Also note how we restrict our input to players via the command using <code>type=player</code>. We can now implement our command:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;reward&quot;)
@@ -2613,10 +2607,10 @@ new ScoreHolderArgument(nodeName, ScoreHolderType.MULTIPLE);
 for(String str : entitiesAndPlayers) {
     try {
         UUID uuid = UUID.fromString(str);
-        //Is a UUID, so it must by an entity
+        // Is a UUID, so it must by an entity
         Bukkit.getEntity(uuid);
     } catch(IllegalArgumentException exception) {
-        //Not a UUID, so it must be a player name
+        // Not a UUID, so it must be a player name
         Bukkit.getPlayer(str); 
     }
 }
@@ -2638,7 +2632,7 @@ for(String str : entitiesAndPlayers) {
 <div class="example">
 <h3><a class="header" href="#example---clearing-objectives-in-a-scoreboard-slot" id="example---clearing-objectives-in-a-scoreboard-slot">Example - Clearing objectives in a scoreboard slot</a></h3>
 <p>Say we want to clear all objectives in a specific scoreboard slot. In this example, we will use the main server scoreboard, which is accessed using <code>Bukkit.getScoreboardManager.getMainScoreboard()</code>. We want a command with the following syntax:</p>
-<pre><code>/clearobjectives &lt;slot&gt;
+<pre><code class="language-mccmd">/clearobjectives &lt;slot&gt;
 </code></pre>
 <p>We implement this simply by using the <code>ScoreboardSlotArgument</code> as our argument, and then we can clear the slot using the scoreboard <code>clearSlot(DisplaySlot)</code> method.</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;clearobjectives&quot;)
@@ -2666,7 +2660,7 @@ for(String str : entitiesAndPlayers) {
 <div class="example">
 <h3><a class="header" href="#example---move-objective-to-sidebar" id="example---move-objective-to-sidebar">Example - Move objective to sidebar</a></h3>
 <p>As an example, let's create a command to move an objective to a player's sidebar. To do this, we will use the following command syntax:</p>
-<pre><code>/sidebar &lt;objective&gt;
+<pre><code class="language-mccmd">/sidebar &lt;objective&gt;
 </code></pre>
 <p>Given that an objective has to be casted to a String, we have to find a way to convert it from its name to a Bukkit <code>Objective</code> object. We can do that by using the <code>getObjective(String)</code> method from a Bukkit <code>Scoreboard</code>:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;sidebar&quot;)
@@ -2690,7 +2684,7 @@ for(String str : entitiesAndPlayers) {
 <div class="example">
 <h3><a class="header" href="#example---unregister-all-objectives-by-criteria" id="example---unregister-all-objectives-by-criteria">Example - Unregister all objectives by criteria</a></h3>
 <p>Say we wanted to create a command to unregister all objectives based on a given criteria. Let's create a command with the following form:</p>
-<pre><code>/unregisterall &lt;objective critera&gt;
+<pre><code class="language-mccmd">/unregisterall &lt;objective critera&gt;
 </code></pre>
 <p>To do this, we're going to take advantage of Bukkit's <code>Scoreboard.getObjectivesByCriteria(String)</code> method</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;unregisterall&quot;)
@@ -2711,7 +2705,7 @@ for(String str : entitiesAndPlayers) {
 <div class="example">
 <h3><a class="header" href="#example---toggling-friendly-fire-in-a-team" id="example---toggling-friendly-fire-in-a-team">Example - Toggling friendly fire in a team</a></h3>
 <p>Let's say we want to create a command to toggle the state of friendly fire in a team. We want a command of the following form</p>
-<pre><code>/togglepvp &lt;team&gt;
+<pre><code class="language-mccmd">/togglepvp &lt;team&gt;
 </code></pre>
 <p>To do this, given a team we want to use the <code>setAllowFriendlyFire(boolean)</code> function. As with the <code>ObjectiveArgument</code>, we must convert the <code>String</code> into a <code>Team</code> object.</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;togglepvp&quot;)
@@ -2741,16 +2735,13 @@ for(String str : entitiesAndPlayers) {
 &amp;0.0 \\
 \end{align}</p>
 <p>The <code>~</code> notation can be used to specify a rotation relative to the executor's yaw angle.</p>
-<div class="warning">
-<p><strong>Note:</strong></p>
-<p>The <code>AngleArgument</code> is only supported in Minecraft versions 1.16.2 and later, meaning it <em>will not work</em> on Minecraft versions 1.16 or 1.16.1. This is due to the fact that Minecraft added the time argument in 1.16.2. Attempting to use the <code>AngleArgument</code> on an incompatible version will throw aa <code>AngleArgumentException</code>.</p>
-</div><h1><a class="header" href="#advancement-arguments" id="advancement-arguments">Advancement arguments</a></h1>
+<h1><a class="header" href="#advancement-arguments" id="advancement-arguments">Advancement arguments</a></h1>
 <p><img src="./images/arguments/advancement.png" alt="" /></p>
 <p>The <code>AdvancementArgument</code> class represents in-game advancements. As expected, the <code>AdvancementArgument</code> can be casted to Bukkit's <code>Advancement</code> class.</p>
 <div class="example">
 <h3><a class="header" href="#example---awarding-a-player-an-advancement" id="example---awarding-a-player-an-advancement">Example - Awarding a player an advancement</a></h3>
 <p>Say we want to award a player an advancement. First, we need the syntax that our command will use:</p>
-<pre><code>/award &lt;player&gt; &lt;advancement&gt;
+<pre><code class="language-mccmd">/award &lt;player&gt; &lt;advancement&gt;
 </code></pre>
 <p>Since we require a player, we will use the <code>PlayerArgument</code> for this example. Given a player, we can simply get the <code>AdvancementProgress</code> for that player, and then award the criteria required to fully complete the provided advancement.</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;award&quot;)
@@ -2771,14 +2762,10 @@ for(String str : entitiesAndPlayers) {
 </div><h1><a class="header" href="#biome-arguments" id="biome-arguments">Biome arguments</a></h1>
 <p><img src="./images/arguments/biome.png" alt="" /></p>
 <p>In Minecraft 1.16, they added the ability to refer to in-game biomes. The CommandAPI implements this using the <code>BiomeArgument</code>. As expected, this returns Bukkit's <code>Biome</code> enum when used.</p>
-<div class="warning">
-<p><strong>Note:</strong></p>
-<p>The <code>BiomeArgument</code> is only supported in Minecraft versions 1.16 and later. Attempting to use the <code>BiomeArgument</code> on an incompatible version of Minecraft will throw a <code>BiomeArgumentException</code>.</p>
-</div>
 <div class="example">
 <h3><a class="header" href="#example---setting-the-biome-of-a-chunk" id="example---setting-the-biome-of-a-chunk">Example - Setting the biome of a chunk</a></h3>
 <p>Say you want to set the biome of the current chunk that a player is in. We can do this using the <code>World.setBiome(x, y, z, biome)</code> method for a given world. We will use this command syntax to set the biome of our current chunk:</p>
-<pre><code>/setbiome &lt;biome&gt;
+<pre><code class="language-mccmd">/setbiome &lt;biome&gt;
 </code></pre>
 <p>And we can set the biome of the current chunk as expected:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;setbiome&quot;)
@@ -2801,7 +2788,7 @@ for(String str : entitiesAndPlayers) {
 <div class="example">
 <h3><a class="header" href="#example---setting-a-block" id="example---setting-a-block">Example - Setting a block</a></h3>
 <p>Say we want a simple command to set the block that you're looking at. We'll use the following command syntax:</p>
-<pre><code>/set &lt;block&gt;
+<pre><code class="language-mccmd">/set &lt;block&gt;
 </code></pre>
 <p>And then we can simply set our block using <code>setBlockData()</code>:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;set&quot;)
@@ -2823,7 +2810,7 @@ for(String str : entitiesAndPlayers) {
 <div class="example">
 <h3><a class="header" href="#example---giving-a-player-an-enchantment-on-their-current-item" id="example---giving-a-player-an-enchantment-on-their-current-item">Example - Giving a player an enchantment on their current item</a></h3>
 <p>Say we want to give a player an enchantment on the item that the player is currently holding. We will use the following command syntax:</p>
-<pre><code>/enchantitem &lt;enchantment&gt; &lt;level&gt;
+<pre><code class="language-mccmd">/enchantitem &lt;enchantment&gt; &lt;level&gt;
 </code></pre>
 <p>Since most enchantment levels range between 1 and 5, we will also make use of the <code>IntegerArgument</code> to restrict the level of the enchantment by usng its range constructor.</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;enchantitem&quot;)
@@ -2842,14 +2829,10 @@ for(String str : entitiesAndPlayers) {
 <h1><a class="header" href="#environment-arguments" id="environment-arguments">Environment arguments</a></h1>
 <p><img src="./images/arguments/environment.png" alt="" /></p>
 <p>The <code>EnvironmentArgument</code> class allows a command sender to refer to a specific world environment, declared in Bukkit's <code>World.Environment</code> class. This includes the following three environments: <code>NORMAL</code>, <code>NETHER</code> and <code>THE_END</code>.</p>
-<div class="warning">
-<p><strong>Note:</strong></p>
-<p>The <code>EnvironmentArgument</code> is only supported in Minecraft versions 1.13.1 and later, meaning it <em>will not work</em> on Minecraft 1.13. This is due to fact that Minecraft added the environment argument in 1.13.1. Attempting to use the <code>EnvironmentArgument</code> on Minecraft 1.13 will throw an <code>EnvironmentArgumentException</code>.</p>
-</div>
 <div class="example">
 <h3><a class="header" href="#example---creating-a-new-world" id="example---creating-a-new-world">Example - Creating a new world</a></h3>
 <p>Say we want to create a new world on our Minecraft server. To do this, we need to know the name of the world, and the type (i.e. overworld, nether or the end). As such, we want to create a command with the following syntax:</p>
-<pre><code>/createworld &lt;worldname&gt; &lt;type&gt;
+<pre><code class="language-mccmd">/createworld &lt;worldname&gt; &lt;type&gt;
 </code></pre>
 <p>Using the world name and the environment of the world, we can use Bukkit's <code>WorldCreator</code> to create a new world that matches our provided specifications:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;createworld&quot;)
@@ -2867,11 +2850,11 @@ for(String str : entitiesAndPlayers) {
 </code></pre>
 </div><h1><a class="header" href="#itemstack-arguments" id="itemstack-arguments">Itemstack arguments</a></h1>
 <p><img src="./images/arguments/itemstack.png" alt="" /></p>
-<p>The <code>ItemStackArgument</code> class represents in-game items. As expected, this should be casted to Bukkit's <code>ItemStack</code> object.</p>
+<p>The <code>ItemStackArgument</code> class represents in-game items. As expected, this should be casted to Bukkit's <code>ItemStack</code> object. The <code>ItemStack</code> which is returned by the <code>ItemStackArgument</code> always has a size of 1.</p>
 <div class="example">
 <h3><a class="header" href="#example---giving-a-player-an-itemstack" id="example---giving-a-player-an-itemstack">Example - Giving a player an itemstack</a></h3>
 <p>Say we want to create a command that gives you items. For this command, we will use the following syntax:</p>
-<pre><code>/item &lt;itemstack&gt;
+<pre><code class="language-mccmd">/item &lt;itemstack&gt;
 </code></pre>
 <p>With this syntax, we can easily create our command:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;item&quot;)
@@ -2937,11 +2920,11 @@ public float apply(float val1, float val2);
 <div class="example">
 <h3><a class="header" href="#example---changing-a-players-level" id="example---changing-a-players-level">Example - Changing a player's level</a></h3>
 <p>Say we wanted to create a player's level. Typically, this is implemented in the following manner:</p>
-<pre><code>/xp set &lt;player&gt; &lt;level&gt;
+<pre><code class="language-mccmd">/xp set &lt;player&gt; &lt;level&gt;
 /xp add &lt;player&gt; &lt;levels&gt;
 </code></pre>
 <p>Using the <code>MathOperationArgument</code>, we can extend the functionality of adding and setting a player's level by allowing the user to choose what operation they desire. To do this, we'll use the following syntax:</p>
-<pre><code>/changelevel &lt;player&gt; &lt;operation&gt; &lt;value&gt;
+<pre><code class="language-mccmd">/changelevel &lt;player&gt; &lt;operation&gt; &lt;value&gt;
 </code></pre>
 <p>As with any command, we declare our arguments, cast them properly and then we write our main code. In this example, we use the <code>apply(int, int)</code> method from our <code>MathOperation</code> to calculate the player's new level.</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;changelevel&quot;)
@@ -2962,17 +2945,17 @@ public float apply(float val1, float val2);
 <ul>
 <li>
 <p>To set the player <em>Notch</em> to level 10:</p>
-<pre><code>/changelevel Notch = 10
+<pre><code class="language-mccmd">/changelevel Notch = 10
 </code></pre>
 </li>
 <li>
 <p>To double the player <em>Notch's</em> level:</p>
-<pre><code>/changelevel Notch *= 2
+<pre><code class="language-mccmd">/changelevel Notch *= 2
 </code></pre>
 </li>
 <li>
 <p>To set the player <em>Notch</em>'s level to 20, or keep it as their current level if it is higher than 20:</p>
-<pre><code>/changelevel Notch &gt; 20
+<pre><code class="language-mccmd">/changelevel Notch &gt; 20
 </code></pre>
 </li>
 </ul>
@@ -2982,7 +2965,7 @@ public float apply(float val1, float val2);
 <div class="example">
 <h3><a class="header" href="#example---show-particles-at-a-players-location" id="example---show-particles-at-a-players-location">Example - Show particles at a player's location</a></h3>
 <p>Say we wanted to have a command that displayed particles at a player's location. We will use the following command syntax:</p>
-<pre><code>/showparticle &lt;particle&gt;
+<pre><code class="language-mccmd">/showparticle &lt;particle&gt;
 </code></pre>
 <p>With this, we can simply spawn the particle using the <code>World.spawnParticle(Particle, Location, int)</code> method:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;showparticle&quot;)
@@ -2998,7 +2981,7 @@ public float apply(float val1, float val2);
 <div class="example">
 <h3><a class="header" href="#example---giving-a-player-a-potion-effect" id="example---giving-a-player-a-potion-effect">Example - Giving a player a potion effect</a></h3>
 <p>Say we wanted to have a command that gives a player a potion effect. For this command, we'll use the following syntax:</p>
-<pre><code>/potion &lt;target&gt; &lt;potion&gt; &lt;duration&gt; &lt;strength&gt;
+<pre><code class="language-mccmd">/potion &lt;target&gt; &lt;potion&gt; &lt;duration&gt; &lt;strength&gt;
 </code></pre>
 <p>In this example, we utilize some of the other arguments that we've described earlier, such as the <code>PlayerArgument</code> and <code>TimeArgument</code>. Since duration for the <code>PotionEffect</code> constructor is in ticks, this is perfectly fit for the <code>TimeArgument</code>, which is represented in ticks.</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;potion&quot;)
@@ -3019,47 +3002,36 @@ public float apply(float val1, float val2);
 </code></pre>
 </div><h1><a class="header" href="#recipe-arguments" id="recipe-arguments">Recipe arguments</a></h1>
 <p><img src="./images/arguments/recipe.png" alt="" /></p>
-<p>The <code>RecipeArgument</code> class lets you retrieve Bukkit's <code>Recipe</code> object. Unlike the other arguments, <strong>this argument has a slightly different implementation for Minecraft 1.15+</strong>.</p>
-<blockquote>
-<p><strong>Developer's Note:</strong></p>
-<p>In Minecraft 1.15 and onwards, Bukkit now has the <a href="https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/inventory/ComplexRecipe.html"><code>ComplexRecipe</code></a> class. This class is a subclass of the typical <code>Recipe</code> class, so casting still works when casting to <code>Recipe</code>. The only major difference is the <code>ComplexRecipe</code> class also inherits the <code>Keyed</code> interface, allowing you to access its <code>NamespacedKey</code>. This is used to grant the recipe to players. (This is shown in the second example below).</p>
-</blockquote>
+<p>The <code>RecipeArgument</code> class lets you retrieve Bukkit's <code>ComplexRecipe</code> object.</p>
 <div class="example">
 <h3><a class="header" href="#example---giving-a-player-the-result-of-a-recipe" id="example---giving-a-player-the-result-of-a-recipe">Example - Giving a player the result of a recipe</a></h3>
-<p>Say we want to give youself the result of a specific recipe. Since Bukkit's <code>Recipe</code> class contains the <code>getResult()</code> method, we will use that in our example. We want to create the following command:</p>
-<pre><code>/giverecipe &lt;recipe&gt;
+<p>Say we want to give yourself the result of a specific recipe. Since Bukkit's <code>Recipe</code> class contains the <code>getResult()</code> method, we will use that in our example. We want to create the following command:</p>
+<pre><code class="language-mccmd">/giverecipe &lt;recipe&gt;
 </code></pre>
 <p>As such, we easily implement it by specifying the <code>RecipeArgument</code>, casting it and adding it to the player's inventory:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;giverecipe&quot;)
     .withArguments(new RecipeArgument(&quot;recipe&quot;))
     .executesPlayer((player, args) -&gt; {
-        Recipe recipe = (Recipe) args[0];
+        ComplexRecipe recipe = (ComplexRecipe) args[0];
         player.getInventory().addItem(recipe.getResult());
     })
     .register();
 </code></pre>
 </div>
 <div class="example">
-<h3><a class="header" href="#example---unlocking-a-recipe-for-a-player-115-only" id="example---unlocking-a-recipe-for-a-player-115-only">Example - Unlocking a recipe for a player (1.15+ only)</a></h3>
-<p>Since 1.15 has the <code>ComplexRecipe</code> class, we will take advantage of this to unlock a recipe for a player. For this command, we'll use the following syntax:</p>
-<pre><code>/unlockrecipe &lt;player&gt; &lt;recipe&gt;
+<h3><a class="header" href="#example---unlocking-a-recipe-for-a-player" id="example---unlocking-a-recipe-for-a-player">Example - Unlocking a recipe for a player</a></h3>
+<p>In this example, we'll use the <code>ComplexRecipe</code>'s <code>getKey()</code> method to write an example to to unlock a recipe for a player. For this command, we'll use the following syntax:</p>
+<pre><code class="language-mccmd">/unlockrecipe &lt;player&gt; &lt;recipe&gt;
 </code></pre>
-<p>Since the <code>discoverRecipe(NamespacedKey)</code> method for a player requires a <code>NamespacedKey</code>, we have to ensure that this recipe is of type <code>ComplexRecipe</code>. This is simply done by using <code>instanceof</code>. If this is the case, then we can unlock the recipe for the player. Otherwise, we cannot, so we fail gracefully using the <code>CommandAPI.fail(String)</code> method;</p>
+<p>This is then implemented trivially as follows:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;unlockrecipe&quot;)
     .withArguments(new PlayerArgument(&quot;player&quot;))
     .withArguments(new RecipeArgument(&quot;recipe&quot;))
     .executes((sender, args) -&gt; {
         Player target = (Player) args[0];
-        Recipe recipe = (Recipe) args[1];
-        
-        //Check if we're running 1.15+
-        if(recipe instanceof ComplexRecipe) {
-            ComplexRecipe complexRecipe = (ComplexRecipe) recipe;
-            target.discoverRecipe(complexRecipe.getKey());
-        } else {
-            //Error here, can't unlock recipe for player
-            CommandAPI.fail(&quot;Cannot unlock recipe for player (Are you using version 1.15 or above?)&quot;);
-        }
+        ComplexRecipe recipe = (ComplexRecipe) args[1];
+
+        target.discoverRecipe(recipe.getKey());
     })
     .register();
 </code></pre>
@@ -3069,7 +3041,7 @@ public float apply(float val1, float val2);
 <div class="example">
 <h3><a class="header" href="#example---playing-sound-to-yourself" id="example---playing-sound-to-yourself">Example - Playing sound to yourself</a></h3>
 <p>Say we want a simple command that plays a specific sound at your location. To do this, we will make the following command:</p>
-<pre><code>/sound &lt;sound&gt;
+<pre><code class="language-mccmd">/sound &lt;sound&gt;
 </code></pre>
 <p>This command simply plays the provided sound to the current player:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;sound&quot;)
@@ -3083,10 +3055,6 @@ public float apply(float val1, float val2);
 <p><img src="./images/arguments/time.png" alt="" /></p>
 <p>The <code>TimeArgument</code> class represents in-game time, <em>in the number of in-game ticks</em>. This allows command senders to specify a certain number of ticks in a simpler way, by including the characters <code>d</code> to specify the numbers of days, <code>s</code> to specify the number of seconds or <code>t</code> to specify a number of ticks.</p>
 <p>The CommandAPI converts the inputs provided by the command sender into a number of ticks as an integer.</p>
-<div class="warning">
-<p><strong>Note:</strong></p>
-<p>The <code>TimeArgument</code> is only supported in Minecraft versions 1.14 and later, meaning it <em>will not work</em> on Minecraft versions 1.13, 1.13.1 or 1.13.2. This is due to the fact that Minecraft added the time argument in 1.14. Attempting to use the <code>TimeArgument</code> on an incompatible version will throw a <code>TimeArgumentException</code>.</p>
-</div>
 <blockquote>
 <p><strong>Developer's Note:</strong></p>
 <p>The <code>TimeArgument</code> provides inputs such as <code>2d</code> (2 in-game days), <code>10s</code> (10 seconds) and <code>20t</code> (20 ticks), but does <strong>not</strong> let you combine them, such as <code>2d10s</code>.</p>
@@ -3094,7 +3062,7 @@ public float apply(float val1, float val2);
 <div class="example">
 <h3><a class="header" href="#example---displaying-a-server-wide-announcement" id="example---displaying-a-server-wide-announcement">Example - Displaying a server-wide announcement</a></h3>
 <p>Say we have a command <code>bigmsg</code> that displays a title message to all players for a certain duration:</p>
-<pre><code>/bigmsg &lt;duration&gt; &lt;message&gt;
+<pre><code class="language-mccmd">/bigmsg &lt;duration&gt; &lt;message&gt;
 </code></pre>
 <pre><code class="language-java">new CommandAPICommand(&quot;bigmsg&quot;)
     .withArguments(new TimeArgument(&quot;duration&quot;))
@@ -3113,10 +3081,6 @@ public float apply(float val1, float val2);
 </code></pre>
 </div><h1><a class="header" href="#uuid-arguments" id="uuid-arguments">UUID arguments</a></h1>
 <p>The UUID argument is used to uniquely identify players, entities and attribute modifiers. As a result, its cast type is Java's <code>UUID</code>.</p>
-<div class="warning">
-<p><strong>Note:</strong></p>
-<p>The UUIDArgument is only compatible with Minecraft version 1.16 and above, since that is the version this argument was introduced. Attempting to use the UUID argument on a version lower than Minecraft 1.16 will throw a <code>UUIDArgumentException</code>.</p>
-</div>
 <h1><a class="header" href="#predicate-arguments" id="predicate-arguments">Predicate arguments</a></h1>
 <h1><a class="header" href="#block-predicate-arguments" id="block-predicate-arguments">Block predicate arguments</a></h1>
 <p>The <code>BlockPredicateArgument</code> is used to represent a &quot;test&quot; for Minecraft blocks. This can consist of tags, such as the ones listed <a href="https://minecraft.gamepedia.com/Tag#Blocks">here on the MinecraftWiki</a>, or individual blocks. If a block matches the tag or block, then the predicate is satisfied.</p>

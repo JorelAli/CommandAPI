@@ -6,14 +6,6 @@ The `TimeArgument` class represents in-game time, _in the number of in-game tick
 
 The CommandAPI converts the inputs provided by the command sender into a number of ticks as an integer.
 
-<div class="warning">
-
-**Note:**
-
-The `TimeArgument` is only supported in Minecraft versions 1.14 and later, meaning it _will not work_ on Minecraft versions 1.13, 1.13.1 or 1.13.2. This is due to the fact that Minecraft added the time argument in 1.14. Attempting to use the `TimeArgument` on an incompatible version will throw a `TimeArgumentException`.
-
-</div>
-
 > **Developer's Note:**
 >
 > The `TimeArgument` provides inputs such as `2d` (2 in-game days), `10s` (10 seconds) and `20t` (20 ticks), but does **not** let you combine them, such as `2d10s`.
@@ -24,7 +16,7 @@ The `TimeArgument` is only supported in Minecraft versions 1.14 and later, meani
 
 Say we have a command `bigmsg` that displays a title message to all players for a certain duration:
 
-```
+```mccmd
 /bigmsg <duration> <message>
 ```
 

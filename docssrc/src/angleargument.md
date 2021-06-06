@@ -13,11 +13,3 @@ The angle argument is used to represent the _yaw_ (horizontal) angle in degrees.
 \end{align}
 
 The `~` notation can be used to specify a rotation relative to the executor's yaw angle.
-
-<div class="warning">
-
-**Note:**
-
-The `AngleArgument` is only supported in Minecraft versions 1.16.2 and later, meaning it _will not work_ on Minecraft versions 1.16 or 1.16.1. This is due to the fact that Minecraft added the time argument in 1.16.2. Attempting to use the `AngleArgument` on an incompatible version will throw aa `AngleArgumentException`.
-
-</div>

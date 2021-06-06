@@ -21,7 +21,7 @@ The objective argument refers to a single scoreboard objective. Unconventionally
 
 As an example, let's create a command to move an objective to a player's sidebar. To do this, we will use the following command syntax:
 
-```
+```mccmd
 /sidebar <objective>
 ```
 
@@ -45,7 +45,7 @@ The `ObjectiveCriteriaArgument` is fairly straight forward - it represents the c
 
 Say we wanted to create a command to unregister all objectives based on a given criteria. Let's create a command with the following form:
 
-```
+```mccmd
 /unregisterall <objective critera>
 ```
 

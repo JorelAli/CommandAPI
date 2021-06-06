@@ -181,7 +181,7 @@
 <div class="example">
 <h3><a class="header" href="#example---toggling-friendly-fire-in-a-team" id="example---toggling-friendly-fire-in-a-team">Example - Toggling friendly fire in a team</a></h3>
 <p>Let's say we want to create a command to toggle the state of friendly fire in a team. We want a command of the following form</p>
-<pre><code>/togglepvp &lt;team&gt;
+<pre><code class="language-mccmd">/togglepvp &lt;team&gt;
 </code></pre>
 <p>To do this, given a team we want to use the <code>setAllowFriendlyFire(boolean)</code> function. As with the <code>ObjectiveArgument</code>, we must convert the <code>String</code> into a <code>Team</code> object.</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;togglepvp&quot;)

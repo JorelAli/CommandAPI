@@ -179,14 +179,10 @@
                         <h1><a class="header" href="#environment-arguments" id="environment-arguments">Environment arguments</a></h1>
 <p><img src="./images/arguments/environment.png" alt="" /></p>
 <p>The <code>EnvironmentArgument</code> class allows a command sender to refer to a specific world environment, declared in Bukkit's <code>World.Environment</code> class. This includes the following three environments: <code>NORMAL</code>, <code>NETHER</code> and <code>THE_END</code>.</p>
-<div class="warning">
-<p><strong>Note:</strong></p>
-<p>The <code>EnvironmentArgument</code> is only supported in Minecraft versions 1.13.1 and later, meaning it <em>will not work</em> on Minecraft 1.13. This is due to fact that Minecraft added the environment argument in 1.13.1. Attempting to use the <code>EnvironmentArgument</code> on Minecraft 1.13 will throw an <code>EnvironmentArgumentException</code>.</p>
-</div>
 <div class="example">
 <h3><a class="header" href="#example---creating-a-new-world" id="example---creating-a-new-world">Example - Creating a new world</a></h3>
 <p>Say we want to create a new world on our Minecraft server. To do this, we need to know the name of the world, and the type (i.e. overworld, nether or the end). As such, we want to create a command with the following syntax:</p>
-<pre><code>/createworld &lt;worldname&gt; &lt;type&gt;
+<pre><code class="language-mccmd">/createworld &lt;worldname&gt; &lt;type&gt;
 </code></pre>
 <p>Using the world name and the environment of the world, we can use Bukkit's <code>WorldCreator</code> to create a new world that matches our provided specifications:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;createworld&quot;)

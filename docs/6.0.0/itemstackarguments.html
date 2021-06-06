@@ -178,11 +178,11 @@
                         
                         <h1><a class="header" href="#itemstack-arguments" id="itemstack-arguments">Itemstack arguments</a></h1>
 <p><img src="./images/arguments/itemstack.png" alt="" /></p>
-<p>The <code>ItemStackArgument</code> class represents in-game items. As expected, this should be casted to Bukkit's <code>ItemStack</code> object.</p>
+<p>The <code>ItemStackArgument</code> class represents in-game items. As expected, this should be casted to Bukkit's <code>ItemStack</code> object. The <code>ItemStack</code> which is returned by the <code>ItemStackArgument</code> always has a size of 1.</p>
 <div class="example">
 <h3><a class="header" href="#example---giving-a-player-an-itemstack" id="example---giving-a-player-an-itemstack">Example - Giving a player an itemstack</a></h3>
 <p>Say we want to create a command that gives you items. For this command, we will use the following syntax:</p>
-<pre><code>/item &lt;itemstack&gt;
+<pre><code class="language-mccmd">/item &lt;itemstack&gt;
 </code></pre>
 <p>With this syntax, we can easily create our command:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;item&quot;)

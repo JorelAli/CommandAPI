@@ -179,14 +179,10 @@
                         <h1><a class="header" href="#biome-arguments" id="biome-arguments">Biome arguments</a></h1>
 <p><img src="./images/arguments/biome.png" alt="" /></p>
 <p>In Minecraft 1.16, they added the ability to refer to in-game biomes. The CommandAPI implements this using the <code>BiomeArgument</code>. As expected, this returns Bukkit's <code>Biome</code> enum when used.</p>
-<div class="warning">
-<p><strong>Note:</strong></p>
-<p>The <code>BiomeArgument</code> is only supported in Minecraft versions 1.16 and later. Attempting to use the <code>BiomeArgument</code> on an incompatible version of Minecraft will throw a <code>BiomeArgumentException</code>.</p>
-</div>
 <div class="example">
 <h3><a class="header" href="#example---setting-the-biome-of-a-chunk" id="example---setting-the-biome-of-a-chunk">Example - Setting the biome of a chunk</a></h3>
 <p>Say you want to set the biome of the current chunk that a player is in. We can do this using the <code>World.setBiome(x, y, z, biome)</code> method for a given world. We will use this command syntax to set the biome of our current chunk:</p>
-<pre><code>/setbiome &lt;biome&gt;
+<pre><code class="language-mccmd">/setbiome &lt;biome&gt;
 </code></pre>
 <p>And we can set the biome of the current chunk as expected:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;setbiome&quot;)

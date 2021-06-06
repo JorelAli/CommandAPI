@@ -192,11 +192,11 @@ new ScoreHolderArgument(nodeName, ScoreHolderType.MULTIPLE);
 <div class="example">
 <h3><a class="header" href="#example---rewarding-players-with-scoreboard-objectives" id="example---rewarding-players-with-scoreboard-objectives">Example - Rewarding players with scoreboard objectives</a></h3>
 <p>Say we want to reward all players that fit a certain criteria. We want a command with the following syntax:</p>
-<pre><code>/reward &lt;players&gt;
+<pre><code class="language-mccmd">/reward &lt;players&gt;
 </code></pre>
 <p>Since we could have multiple players that fit a certain criterion, we want to use <code>ScoreHolderType.MULTIPLE</code> as the parameter for the argument's constructor.</p>
 <p>To give this example a bit more context, let's say we want to reward all players that have died less than 10 times in the server. To do this, we will use the following command:</p>
-<pre><code>/reward @e[type=player,scores={deaths=..9}]
+<pre><code class="language-mccmd">/reward @e[type=player,scores={deaths=..9}]
 </code></pre>
 <p>Note how we use <code>..9</code> to represent 9 or less deaths (since ranges are inclusive). Also note how we restrict our input to players via the command using <code>type=player</code>. We can now implement our command:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;reward&quot;)
@@ -221,10 +221,10 @@ new ScoreHolderArgument(nodeName, ScoreHolderType.MULTIPLE);
 for(String str : entitiesAndPlayers) {
     try {
         UUID uuid = UUID.fromString(str);
-        //Is a UUID, so it must by an entity
+        // Is a UUID, so it must by an entity
         Bukkit.getEntity(uuid);
     } catch(IllegalArgumentException exception) {
-        //Not a UUID, so it must be a player name
+        // Not a UUID, so it must be a player name
         Bukkit.getPlayer(str); 
     }
 }
@@ -246,7 +246,7 @@ for(String str : entitiesAndPlayers) {
 <div class="example">
 <h3><a class="header" href="#example---clearing-objectives-in-a-scoreboard-slot" id="example---clearing-objectives-in-a-scoreboard-slot">Example - Clearing objectives in a scoreboard slot</a></h3>
 <p>Say we want to clear all objectives in a specific scoreboard slot. In this example, we will use the main server scoreboard, which is accessed using <code>Bukkit.getScoreboardManager.getMainScoreboard()</code>. We want a command with the following syntax:</p>
-<pre><code>/clearobjectives &lt;slot&gt;
+<pre><code class="language-mccmd">/clearobjectives &lt;slot&gt;
 </code></pre>
 <p>We implement this simply by using the <code>ScoreboardSlotArgument</code> as our argument, and then we can clear the slot using the scoreboard <code>clearSlot(DisplaySlot)</code> method.</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;clearobjectives&quot;)

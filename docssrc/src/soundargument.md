@@ -10,7 +10,7 @@ The `SoundArgument` class allows a command sender to retrieve the Bukkit `Sound`
 
 Say we want a simple command that plays a specific sound at your location. To do this, we will make the following command:
 
-```
+```mccmd
 /sound <sound>
 ```
 

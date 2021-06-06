@@ -192,7 +192,7 @@
 <div class="example">
 <h3><a class="header" href="#example---move-objective-to-sidebar" id="example---move-objective-to-sidebar">Example - Move objective to sidebar</a></h3>
 <p>As an example, let's create a command to move an objective to a player's sidebar. To do this, we will use the following command syntax:</p>
-<pre><code>/sidebar &lt;objective&gt;
+<pre><code class="language-mccmd">/sidebar &lt;objective&gt;
 </code></pre>
 <p>Given that an objective has to be casted to a String, we have to find a way to convert it from its name to a Bukkit <code>Objective</code> object. We can do that by using the <code>getObjective(String)</code> method from a Bukkit <code>Scoreboard</code>:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;sidebar&quot;)
@@ -216,7 +216,7 @@
 <div class="example">
 <h3><a class="header" href="#example---unregister-all-objectives-by-criteria" id="example---unregister-all-objectives-by-criteria">Example - Unregister all objectives by criteria</a></h3>
 <p>Say we wanted to create a command to unregister all objectives based on a given criteria. Let's create a command with the following form:</p>
-<pre><code>/unregisterall &lt;objective critera&gt;
+<pre><code class="language-mccmd">/unregisterall &lt;objective critera&gt;
 </code></pre>
 <p>To do this, we're going to take advantage of Bukkit's <code>Scoreboard.getObjectivesByCriteria(String)</code> method</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;unregisterall&quot;)

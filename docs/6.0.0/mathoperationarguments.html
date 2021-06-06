@@ -211,11 +211,11 @@ public float apply(float val1, float val2);
 <div class="example">
 <h3><a class="header" href="#example---changing-a-players-level" id="example---changing-a-players-level">Example - Changing a player's level</a></h3>
 <p>Say we wanted to create a player's level. Typically, this is implemented in the following manner:</p>
-<pre><code>/xp set &lt;player&gt; &lt;level&gt;
+<pre><code class="language-mccmd">/xp set &lt;player&gt; &lt;level&gt;
 /xp add &lt;player&gt; &lt;levels&gt;
 </code></pre>
 <p>Using the <code>MathOperationArgument</code>, we can extend the functionality of adding and setting a player's level by allowing the user to choose what operation they desire. To do this, we'll use the following syntax:</p>
-<pre><code>/changelevel &lt;player&gt; &lt;operation&gt; &lt;value&gt;
+<pre><code class="language-mccmd">/changelevel &lt;player&gt; &lt;operation&gt; &lt;value&gt;
 </code></pre>
 <p>As with any command, we declare our arguments, cast them properly and then we write our main code. In this example, we use the <code>apply(int, int)</code> method from our <code>MathOperation</code> to calculate the player's new level.</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;changelevel&quot;)
@@ -236,17 +236,17 @@ public float apply(float val1, float val2);
 <ul>
 <li>
 <p>To set the player <em>Notch</em> to level 10:</p>
-<pre><code>/changelevel Notch = 10
+<pre><code class="language-mccmd">/changelevel Notch = 10
 </code></pre>
 </li>
 <li>
 <p>To double the player <em>Notch's</em> level:</p>
-<pre><code>/changelevel Notch *= 2
+<pre><code class="language-mccmd">/changelevel Notch *= 2
 </code></pre>
 </li>
 <li>
 <p>To set the player <em>Notch</em>'s level to 20, or keep it as their current level if it is higher than 20:</p>
-<pre><code>/changelevel Notch &gt; 20
+<pre><code class="language-mccmd">/changelevel Notch &gt; 20
 </code></pre>
 </li>
 </ul>

@@ -10,7 +10,7 @@ The `AdvancementArgument` class represents in-game advancements. As expected, th
 
 Say we want to award a player an advancement. First, we need the syntax that our command will use:
 
-```
+```mccmd
 /award <player> <advancement>
 ```
 

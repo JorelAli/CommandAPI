@@ -10,7 +10,7 @@ The `ParticleArgument` class represents Minecraft particles. As expected, this i
 
 Say we wanted to have a command that displayed particles at a player's location. We will use the following command syntax:
 
-```
+```mccmd
 /showparticle <particle>
 ```
 

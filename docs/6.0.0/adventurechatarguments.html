@@ -226,6 +226,7 @@
         
         // Broadcast the message to everyone with broadcast permissions.
         Bukkit.getServer().broadcast(message, Server.BROADCAST_CHANNEL_USERS);
+        Bukkit.getServer().broadcast(message);
     })
     .register();
 </code></pre>

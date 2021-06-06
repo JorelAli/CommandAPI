@@ -178,47 +178,36 @@
                         
                         <h1><a class="header" href="#recipe-arguments" id="recipe-arguments">Recipe arguments</a></h1>
 <p><img src="./images/arguments/recipe.png" alt="" /></p>
-<p>The <code>RecipeArgument</code> class lets you retrieve Bukkit's <code>Recipe</code> object. Unlike the other arguments, <strong>this argument has a slightly different implementation for Minecraft 1.15+</strong>.</p>
-<blockquote>
-<p><strong>Developer's Note:</strong></p>
-<p>In Minecraft 1.15 and onwards, Bukkit now has the <a href="https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/inventory/ComplexRecipe.html"><code>ComplexRecipe</code></a> class. This class is a subclass of the typical <code>Recipe</code> class, so casting still works when casting to <code>Recipe</code>. The only major difference is the <code>ComplexRecipe</code> class also inherits the <code>Keyed</code> interface, allowing you to access its <code>NamespacedKey</code>. This is used to grant the recipe to players. (This is shown in the second example below).</p>
-</blockquote>
+<p>The <code>RecipeArgument</code> class lets you retrieve Bukkit's <code>ComplexRecipe</code> object.</p>
 <div class="example">
 <h3><a class="header" href="#example---giving-a-player-the-result-of-a-recipe" id="example---giving-a-player-the-result-of-a-recipe">Example - Giving a player the result of a recipe</a></h3>
-<p>Say we want to give youself the result of a specific recipe. Since Bukkit's <code>Recipe</code> class contains the <code>getResult()</code> method, we will use that in our example. We want to create the following command:</p>
-<pre><code>/giverecipe &lt;recipe&gt;
+<p>Say we want to give yourself the result of a specific recipe. Since Bukkit's <code>Recipe</code> class contains the <code>getResult()</code> method, we will use that in our example. We want to create the following command:</p>
+<pre><code class="language-mccmd">/giverecipe &lt;recipe&gt;
 </code></pre>
 <p>As such, we easily implement it by specifying the <code>RecipeArgument</code>, casting it and adding it to the player's inventory:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;giverecipe&quot;)
     .withArguments(new RecipeArgument(&quot;recipe&quot;))
     .executesPlayer((player, args) -&gt; {
-        Recipe recipe = (Recipe) args[0];
+        ComplexRecipe recipe = (ComplexRecipe) args[0];
         player.getInventory().addItem(recipe.getResult());
     })
     .register();
 </code></pre>
 </div>
 <div class="example">
-<h3><a class="header" href="#example---unlocking-a-recipe-for-a-player-115-only" id="example---unlocking-a-recipe-for-a-player-115-only">Example - Unlocking a recipe for a player (1.15+ only)</a></h3>
-<p>Since 1.15 has the <code>ComplexRecipe</code> class, we will take advantage of this to unlock a recipe for a player. For this command, we'll use the following syntax:</p>
-<pre><code>/unlockrecipe &lt;player&gt; &lt;recipe&gt;
+<h3><a class="header" href="#example---unlocking-a-recipe-for-a-player" id="example---unlocking-a-recipe-for-a-player">Example - Unlocking a recipe for a player</a></h3>
+<p>In this example, we'll use the <code>ComplexRecipe</code>'s <code>getKey()</code> method to write an example to to unlock a recipe for a player. For this command, we'll use the following syntax:</p>
+<pre><code class="language-mccmd">/unlockrecipe &lt;player&gt; &lt;recipe&gt;
 </code></pre>
-<p>Since the <code>discoverRecipe(NamespacedKey)</code> method for a player requires a <code>NamespacedKey</code>, we have to ensure that this recipe is of type <code>ComplexRecipe</code>. This is simply done by using <code>instanceof</code>. If this is the case, then we can unlock the recipe for the player. Otherwise, we cannot, so we fail gracefully using the <code>CommandAPI.fail(String)</code> method;</p>
+<p>This is then implemented trivially as follows:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;unlockrecipe&quot;)
     .withArguments(new PlayerArgument(&quot;player&quot;))
     .withArguments(new RecipeArgument(&quot;recipe&quot;))
     .executes((sender, args) -&gt; {
         Player target = (Player) args[0];
-        Recipe recipe = (Recipe) args[1];
-        
-        //Check if we're running 1.15+
-        if(recipe instanceof ComplexRecipe) {
-            ComplexRecipe complexRecipe = (ComplexRecipe) recipe;
-            target.discoverRecipe(complexRecipe.getKey());
-        } else {
-            //Error here, can't unlock recipe for player
-            CommandAPI.fail(&quot;Cannot unlock recipe for player (Are you using version 1.15 or above?)&quot;);
-        }
+        ComplexRecipe recipe = (ComplexRecipe) args[1];
+
+        target.discoverRecipe(recipe.getKey());
     })
     .register();
 </code></pre>

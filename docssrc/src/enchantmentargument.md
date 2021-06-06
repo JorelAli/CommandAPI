@@ -10,7 +10,7 @@ The `EnchantmentArgument` class lets users input a specific enchantment. As you 
 
 Say we want to give a player an enchantment on the item that the player is currently holding. We will use the following command syntax:
 
-```
+```mccmd
 /enchantitem <enchantment> <level>
 ```
 

@@ -321,8 +321,8 @@ Tooltip&lt;S&gt;[] arrayOf(Tooltip&lt;S&gt;... tooltips);
 <pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
 arguments.add(new LocationArgument(&quot;location&quot;)
     .replaceWithSafeSuggestionsT(info -&gt; {
-    	// We know the sender is a player if we use .executesPlayer()
-    	Player player = (Player) info.sender();
+        // We know the sender is a player if we use .executesPlayer()
+        Player player = (Player) info.sender();
         return Tooltip.arrayOf(
             Tooltip.of(player.getWorld().getSpawnLocation(), &quot;World spawn&quot;),
             Tooltip.of(player.getBedSpawnLocation(), &quot;Your bed&quot;),
