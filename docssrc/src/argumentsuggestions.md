@@ -1,38 +1,32 @@
 # Argument suggestions
 
-Sometimes, you want to override the list of suggestions that are provided by an argument. To handle this, CommandAPI arguments contain three methods to override suggestions:
+Sometimes, you want to override the list of suggestions that are provided by an argument. To handle this, CommandAPI arguments have two methods:
 
 ```java
-Argument overrideSuggestions(String... suggestions);
-Argument overrideSuggestions(Function<CommandSender, String[]> suggestions);
-Argument overrideSuggestions(BiFunction<CommandSender, Object[], String[]> suggestions);
+Argument replaceSuggestions(Function<SuggestionInfo, String[]> suggestions);
+Argument includeSuggestions(Function<SuggestionInfo, String[]> suggestions);
 ```
 
------
+The `replaceSuggestions` method replaces all suggestions with the provided list of suggestions, whereas the `includeSuggestions` method will include the provided suggestions with the suggestions already present by the argument.
 
-## Argument suggestion deferral
-
-Before we go into detail about what the above methods do, we must first describe _suggestion deferral_. When the server loads, arguments that are provided with a String array are fixed, and do not change. However, arguments that are provided using the function and bifunction parameters are evaluated when they are needed - their execution is deferred until requested by the user. As such, if you wanted to retrieve something that isn't available during server load but is available during normal server running, it is recommended to use either of those functions instead of the String array.
-
-For example, instead of doing the following, which retrieves a list of worlds on the server:
+These two methods require a function which takes in `SuggestionInfo` and returns a `String[]` which are the suggestions to provide. The `SuggestionInfo` class is a record which contains the following methods:
 
 ```java
-overrideSuggestions(Bukkit.getWorlds().stream().map(World::getName).toArray(String[]::new))
+public record SuggestionInfo {
+    CommandSender sender();
+    Object[] previousArgs();
+    String currentInput();
+    String currentArg();
+}
 ```
 
-You should defer it using the function parameter:
-
-```java
-overrideSuggestions(sender -> Bukkit.getWorlds().stream().map(World::getName).toArray(String[]::new))
-```
-
-
+These methods can be used to aid with providing context-aware suggestions for users. We'll describe these methods in more detail with the examples below.
 
 -----
 
 ## Suggestions with a String Array
 
-The first method, `overrideSuggestions(String... suggestions)`, allows you to *replace* the suggestions normally associated with that argument with an array of strings. As described above, this doesn't use suggestion deferral, _so this list will not update automatically_.
+The first method, `replaceSuggestions(Function<SuggestionInfo, String[]>)`, allows you to *replace* the suggestions normally associated with that argument with an array of strings.
 
 <div class="example">
 
@@ -40,11 +34,11 @@ The first method, `overrideSuggestions(String... suggestions)`, allows you to *r
 
 Say we're creating a plugin with the ability to teleport to different warps on the server. If we were to retrieve a list of warps, we would be able to override the suggestions of a typical `StringArgument` to teleport to that warp. Let's create a command with the following syntax:
 
-```
+```mccmd
 /warp <warp>
 ```
 
-We then implement our warp teleporting command using `overrideSuggestions()` on the `StringArgument` to provide a list of warps to teleport to:
+We then implement our warp teleporting command using `replaceSuggestions()` on the `StringArgument` to provide a list of warps to teleport to:
 
 ```java
 {{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:ArgumentSuggestions1}}
@@ -56,7 +50,7 @@ We then implement our warp teleporting command using `overrideSuggestions()` on 
 
 ## Suggestions depending on a command sender
 
-The `overrideSuggestions(Function<CommandSender, String[]> suggestions)` method allows you to replace the suggestions normally associated with that argument with an array of strings that are evaluated dynamically using information about the command sender.
+The `replaceSuggestions(Function<SuggestionInfo, String[]>)` method allows you to replace the suggestions normally associated with that argument with an array of strings that are evaluated dynamically using information about the command sender.
 
 <div class="example">
 
@@ -65,7 +59,7 @@ The `overrideSuggestions(Function<CommandSender, String[]> suggestions)` method 
 
 Say you have a plugin which has a "friend list" for players. If you want to teleport to a friend in that list, you could use a `PlayerArgument`, which has the list of suggestions overridden with the list of friends that that player has. Since the list of friends *depends on the sender*, we can use the function to determine what our suggestions should be. Let's use the following command to teleport to a friend from our friend list:
 
-```
+```mccmd
 /friendtp <friend>
 ```
 

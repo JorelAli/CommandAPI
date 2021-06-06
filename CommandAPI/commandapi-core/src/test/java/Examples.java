@@ -1595,15 +1595,14 @@ new CommandAPICommand("localmsg")
 
 {
 /* ANCHOR: ArgumentSuggestions2_2 */
-List<Argument> arguments = new ArrayList<>();
-arguments.add(new PlayerArgument("friend").overrideSuggestions((sender) -> {
-    return Friends.getFriends(sender);
-}));
+List<Argument> arguments = List.of(new PlayerArgument("friend").replaceSuggestions(info ->
+    return Friends.getFriends(info.sender());
+));
 
 new CommandAPICommand("friendtp")
     .withArguments(arguments)
     .executesPlayer((player, args) -> {
-           Player target = (Player) args[0];
+        Player target = (Player) args[0];
         player.teleport(target);
     })
     .register();
@@ -1613,13 +1612,14 @@ new CommandAPICommand("friendtp")
 {
 Map<String, Location> warps = new HashMap<>();
 /* ANCHOR: ArgumentSuggestions1 */
-List<Argument> arguments = new ArrayList<>();
-arguments.add(new StringArgument("world").overrideSuggestions("northland", "eastland", "southland", "westland"));
+List<Argument> arguments = List.of(new StringArgument("world").replaceSuggestions(info -> 
+    new String[] {"northland", "eastland", "southland", "westland" }
+));
 
 new CommandAPICommand("warp")
     .withArguments(arguments)
     .executesPlayer((player, args) -> {
-           String warp = (String) args[0];
+        String warp = (String) args[0];
         player.teleport(warps.get(warp)); // Look up the warp in a map, for example
     })
     .register();
@@ -1702,12 +1702,12 @@ new CommandAPICommand("pbroadcast")
 /* ANCHOR: ArgumentSuggestions2_1 */
 class Friends {
     
-    static Map<UUID, String[]> friends /* = ... */;
+    static Map<UUID, String[]> friends = new HashMap<>();
     
     public static String[] getFriends(CommandSender sender) {
-        if(sender instanceof Player) {
+        if(sender instanceof Player player) {
             //Look up friends in a database or file
-            return friends.get(((Player) sender).getUniqueId());
+            return friends.get(player.getUniqueId());
         } else {
             return new String[0];
         }
