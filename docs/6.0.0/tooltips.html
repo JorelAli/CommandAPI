@@ -181,16 +181,13 @@
 <p>The CommandAPI can also display tooltips for specific argument suggestions. These are shown to the user when they hover over a given suggestion and can be used to provide more context to a user about the suggestions that are shown to them. In this section, we'll outline the two ways of creating suggestions with tooltips: </p>
 <ul>
 <li>Normal (String) suggestions with tooltips</li>
-<li>Safe suggestions with tooltips</li>
+<li>Safely typed suggestions with tooltips</li>
 </ul>
 <p>Tooltips <em>can</em> have formatting to change how the text is displayed by using the <code>ChatColor</code> class.</p>
 <hr />
 <h2><a class="header" href="#tooltips-with-normal-string-suggestions" id="tooltips-with-normal-string-suggestions">Tooltips with normal (String) suggestions</a></h2>
-<p>To use these features, the CommandAPI includes the <code>overrideSuggestionsT</code> methods for arguments, that accept <code>IStringTooltip</code> objects instead of <code>String</code> objects:</p>
-<pre><code class="language-java">Argument overrideSuggestionsT(IStringTooltip... suggestions);
-Argument overrideSuggestionsT(Collection&lt;IStringTooltip&gt; suggestions);
-Argument overrideSuggestionsT(Function&lt;CommandSender, IStringTooltip[]&gt; suggestions);
-Argument overrideSuggestionsT(BiFunction&lt;CommandSender, Object[], IStringTooltip[]&gt; suggestions);
+<p>To use these features, the CommandAPI includes the <code>replaceSuggestionsT</code> methods for arguments, that accept <code>IStringTooltip</code> objects instead of <code>String</code> objects:</p>
+<pre><code class="language-java">Argument replaceSuggestionsT(Function&lt;SuggestionInfo, IStringTooltip[]&gt; suggestions);
 </code></pre>
 <p>The <code>StringTooltip</code> class is the CommandAPI's default implementation of <code>IStringTooltip</code>, which has two static methods to construct it easily:</p>
 <pre><code class="language-java">StringTooltip none(String suggestion);
@@ -199,16 +196,17 @@ StringTooltip of(String suggestion, String tooltip);
 <p>The first method, <code>StringTooltip.none(String)</code> creates a normal suggestion entry with no tooltip, whereas the <code>StringTooltip.of(String, String)</code> method creates a suggestion with the provided tooltip text.</p>
 <div class="example">
 <h3><a class="header" href="#example---an-emotes-command-with-string-suggestion-tooltips" id="example---an-emotes-command-with-string-suggestion-tooltips">Example - An emotes command with string suggestion tooltips</a></h3>
-<p>Say we want to create a simple command to provide ingame emotes between players. For example, if you did <code>/emote wave Bob</code>, you'll &quot;wave&quot; to the player <em>Bob</em>. For this example, we'll use the following command syntax:</p>
-<pre><code>/emote &lt;emote&gt; &lt;target&gt;
+<p>Say we want to create a simple command to provide in-game emotes between players. For example, if you did <code>/emote wave Bob</code>, you'll &quot;wave&quot; to the player <em>Bob</em>. For this example, we'll use the following command syntax:</p>
+<pre><code class="language-mccmd">/emote &lt;emote&gt; &lt;target&gt;
 </code></pre>
-<p>First, we'll declare our arguments. Here, we'll use the <code>overrideSuggestionsT</code> method, along with the <code>StringTooltip.of(String, String)</code> method to create emote suggestions and include suitable descriptions:</p>
+<p>First, we'll declare our arguments. Here, we'll use the <code>replaceSuggestionsT</code> method, along with the <code>StringTooltip.of(String, String)</code> method to create emote suggestions and include suitable descriptions:</p>
 <pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
 arguments.add(new StringArgument(&quot;emote&quot;)
-    .overrideSuggestionsT( 
-        StringTooltip.of(&quot;wave&quot;, &quot;Waves at a player&quot;),
-        StringTooltip.of(&quot;hug&quot;, &quot;Gives a player a hug&quot;),
-        StringTooltip.of(&quot;glare&quot;, &quot;Gives a player the death glare&quot;)
+    .replaceSuggestionsT( info -&gt; new IStringTooltip[] {
+            StringTooltip.of(&quot;wave&quot;, &quot;Waves at a player&quot;),
+            StringTooltip.of(&quot;hug&quot;, &quot;Gives a player a hug&quot;),
+            StringTooltip.of(&quot;glare&quot;, &quot;Gives a player the death glare&quot;)
+        }
     )
 );
 arguments.add(new PlayerArgument(&quot;target&quot;));
@@ -237,8 +235,8 @@ arguments.add(new PlayerArgument(&quot;target&quot;));
 </div>
 <p>The <code>IStringTooltip</code> interface can be implemented by any other class to provide tooltips for custom objects. The <code>IStringTooltip</code> interface has the following methods:</p>
 <pre><code class="language-java">public interface IStringTooltip {
-	public String getSuggestion();
-	public String getTooltip();
+    public String getSuggestion();
+    public String getTooltip();
 }
 </code></pre>
 <p>This is incredibly useful if you are using suggestions with custom objects, such as a plugin that has custom items.</p>
@@ -283,10 +281,10 @@ arguments.add(new PlayerArgument(&quot;target&quot;));
 <pre><code class="language-java">CustomItem[] customItems = new CustomItem[] {
     new CustomItem(new ItemStack(Material.DIAMOND_SWORD), &quot;God sword&quot;, &quot;A sword from the heavens&quot;),
     new CustomItem(new ItemStack(Material.PUMPKIN_PIE), &quot;Sweet pie&quot;, &quot;Just like grandma used to make&quot;)
-};  //
+};
     
 new CommandAPICommand(&quot;giveitem&quot;)
-    .withArguments(new StringArgument(&quot;item&quot;).overrideSuggestionsT(customItems)) // We use customItems[] as the input for our suggestions with tooltips
+    .withArguments(new StringArgument(&quot;item&quot;).replaceSuggestionsT(info -&gt; customItems)) // We use customItems[] as the input for our suggestions with tooltips
     .executesPlayer((player, args) -&gt; {
         String itemName = (String) args[0];
         
@@ -294,6 +292,7 @@ new CommandAPICommand(&quot;giveitem&quot;)
         for(CustomItem item : customItems) {
             if(item.getName().equals(itemName)) {
                 player.getInventory().addItem(item.getItem());
+                break;
             }
         }
     })
@@ -302,33 +301,32 @@ new CommandAPICommand(&quot;giveitem&quot;)
 </div>
 <hr />
 <h2><a class="header" href="#tooltips-with-safe-suggestions" id="tooltips-with-safe-suggestions">Tooltips with safe suggestions</a></h2>
-<p>Using tooltips with safe suggestions is almost identical to the method described above for normal suggestions, except for two things. Firstly, you must use <code>safeOverrideSuggestionsT</code> method instead of the <code>overrideSuggestionsT</code> method and secondly, instead of using <code>StringTooltip</code>, you must use <code>Tooltip&lt;S&gt;</code>. Let's look at these differences in more detail.</p>
-<p>The <code>safeOverrideSuggestionsT</code> methods are fairly similar to the <code>overrideSuggestionsT</code> methods, except instead of using <code>StringTooltip</code>, it simply uses <code>Tooltip&lt;S&gt;</code>.</p>
-<pre><code class="language-java">Argument safeOverrideSuggestionsT(Tooltip&lt;S&gt;... suggestions);
-Argument safeOverrideSuggestionsT(Collection&lt;Tooltip&lt;S&gt;&gt; suggestions);
-Argument safeOverrideSuggestionsT(Function&lt;CommandSender, Tooltip&lt;S&gt;[]&gt; suggestions);
-Argument safeOverrideSuggestionsT(BiFunction&lt;CommandSender, Object[], Tooltip&lt;S&gt;[]&gt; suggestions);
+<p>Using tooltips with safe suggestions is almost identical to the method described above for normal suggestions, except for two things. Firstly, you must use <code>replaceWithSafeSuggestionsT</code> method instead of the <code>replaceSuggestionsT</code> method and secondly, instead of using <code>StringTooltip</code>, you must use <code>Tooltip&lt;S&gt;</code>. Let's look at these differences in more detail.</p>
+<p>The <code>replaceWithSafeSuggestionsT</code> methods are fairly similar to the <code>replaceSuggestionsT</code> methods, except instead of using <code>StringTooltip</code>, it simply uses <code>Tooltip&lt;S&gt;</code>:</p>
+<pre><code class="language-java">Argument replaceWithSafeSuggestionsT(Function&lt;SuggestionInfo, Tooltip&lt;S&gt;[]&gt; suggestions);
 </code></pre>
-<p>The <code>Tooltip&lt;S&gt;</code> class represents a tooltip for a given object <code>S</code>. For example, a tooltip that is for a <code>LocationArgument</code> would be a <code>Tooltip&lt;Location&gt;</code> and a tooltip for an <code>EnchantmentArgument</code> would be a <code>Tooltip&lt;Enchantment&gt;</code>.</p>
+<p>The <code>Tooltip&lt;S&gt;</code> class represents a tooltip for a given object <code>S</code>. For example, a tooltip for a <code>LocationArgument</code> would be a <code>Tooltip&lt;Location&gt;</code> and a tooltip for an <code>EnchantmentArgument</code> would be a <code>Tooltip&lt;Enchantment&gt;</code>.</p>
 <p>Just like the <code>StringTooltip</code> class, the <code>Tooltip&lt;S&gt;</code> class provides the following static methods, which operate exactly the same as the ones in the <code>StringTooltip</code> class:</p>
 <pre><code class="language-java">Tooltip&lt;S&gt; none(S object);
 Tooltip&lt;S&gt; of(S object, String tooltip);
 Tooltip&lt;S&gt;[] arrayOf(Tooltip&lt;S&gt;... tooltips);
 </code></pre>
-<p>The use of <code>arrayOf</code> is heavily recommended as it provides the necessary type safety for Java code to ensure that the correct types are being passed to the <code>safeOverrideSuggestionsT</code> method.</p>
+<p>The use of <code>arrayOf</code> is heavily recommended as it provides the necessary type safety for Java code to ensure that the correct types are being passed to the <code>replaceWithSafeSuggestionsT</code> method.</p>
 <div class="example">
 <h3><a class="header" href="#example---teleportation-command-with-suggestion-descriptions" id="example---teleportation-command-with-suggestion-descriptions">Example - Teleportation command with suggestion descriptions</a></h3>
 <p>Say we wanted to create a custom teleport command which suggestions a few key locations. In this example, we'll use the following command syntax:</p>
-<pre><code>/warp &lt;location&gt;
+<pre><code class="language-mccmd">/warp &lt;location&gt;
 </code></pre>
 <p>First, we'll declare our arguments. Here, we use a <code>LocationArgument</code> and use the <code>safeOverrideSuggestionsT</code> method, with a parameter for the command sender, so we can get information about the world. We populate the suggestions with tooltips using <code>Tooltip.of(Location, String)</code> and collate them together with <code>Tooltip.arrayOf(Tooltip&lt;Location&gt;...)</code>:</p>
 <pre><code class="language-java">List&lt;Argument&gt; arguments = new ArrayList&lt;&gt;();
 arguments.add(new LocationArgument(&quot;location&quot;)
-    .safeOverrideSuggestionsT((sender) -&gt; {
+    .replaceWithSafeSuggestionsT(info -&gt; {
+    	// We know the sender is a player if we use .executesPlayer()
+    	Player player = (Player) info.sender();
         return Tooltip.arrayOf(
-            Tooltip.of(((Player) sender).getWorld().getSpawnLocation(), &quot;World spawn&quot;),
-            Tooltip.of(((Player) sender).getBedSpawnLocation(), &quot;Your bed&quot;),
-            Tooltip.of(((Player) sender).getTargetBlockExact(256).getLocation(), &quot;Target block&quot;)
+            Tooltip.of(player.getWorld().getSpawnLocation(), &quot;World spawn&quot;),
+            Tooltip.of(player.getBedSpawnLocation(), &quot;Your bed&quot;),
+            Tooltip.of(player.getTargetBlockExact(256).getLocation(), &quot;Target block&quot;)
         );
     }));
 </code></pre>

@@ -1482,10 +1482,11 @@ new CommandAPICommand("mycommand")
 /* ANCHOR: Tooltips1 */
 List<Argument> arguments = new ArrayList<>();
 arguments.add(new StringArgument("emote")
-    .overrideSuggestionsT( 
-        StringTooltip.of("wave", "Waves at a player"),
-        StringTooltip.of("hug", "Gives a player a hug"),
-        StringTooltip.of("glare", "Gives a player the death glare")
+    .replaceSuggestionsT( info -> new IStringTooltip[] {
+            StringTooltip.of("wave", "Waves at a player"),
+            StringTooltip.of("hug", "Gives a player a hug"),
+            StringTooltip.of("glare", "Gives a player the death glare")
+        }
     )
 );
 arguments.add(new PlayerArgument("target"));
@@ -1518,10 +1519,10 @@ new CommandAPICommand("emote")
 CustomItem[] customItems = new CustomItem[] {
     new CustomItem(new ItemStack(Material.DIAMOND_SWORD), "God sword", "A sword from the heavens"),
     new CustomItem(new ItemStack(Material.PUMPKIN_PIE), "Sweet pie", "Just like grandma used to make")
-};  //
+};
     
 new CommandAPICommand("giveitem")
-    .withArguments(new StringArgument("item").overrideSuggestionsT(customItems)) // We use customItems[] as the input for our suggestions with tooltips
+    .withArguments(new StringArgument("item").replaceSuggestionsT(info -> customItems)) // We use customItems[] as the input for our suggestions with tooltips
     .executesPlayer((player, args) -> {
         String itemName = (String) args[0];
         
@@ -1529,6 +1530,7 @@ new CommandAPICommand("giveitem")
         for(CustomItem item : customItems) {
             if(item.getName().equals(itemName)) {
                 player.getInventory().addItem(item.getItem());
+                break;
             }
         }
     })
@@ -1540,11 +1542,13 @@ new CommandAPICommand("giveitem")
 /* ANCHOR: SafeTooltips */
 List<Argument> arguments = new ArrayList<>();
 arguments.add(new LocationArgument("location")
-    .safeOverrideSuggestionsT((sender) -> {
+    .replaceWithSafeSuggestionsT(info -> {
+    	// We know the sender is a player if we use .executesPlayer()
+    	Player player = (Player) info.sender();
         return Tooltip.arrayOf(
-            Tooltip.of(((Player) sender).getWorld().getSpawnLocation(), "World spawn"),
-            Tooltip.of(((Player) sender).getBedSpawnLocation(), "Your bed"),
-            Tooltip.of(((Player) sender).getTargetBlockExact(256).getLocation(), "Target block")
+            Tooltip.of(player.getWorld().getSpawnLocation(), "World spawn"),
+            Tooltip.of(player.getBedSpawnLocation(), "Your bed"),
+            Tooltip.of(player.getTargetBlockExact(256).getLocation(), "Target block")
         );
     }));
 /* ANCHOR_END: SafeTooltips */
@@ -1887,8 +1891,8 @@ class MyPlugin extends JavaPlugin {
 
     @Override
     public void onLoad() {
-    	CommandAPIConfig config = new CommandAPIConfig();
-    	config.setVerboseOutput(true);
+        CommandAPIConfig config = new CommandAPIConfig();
+        config.setVerboseOutput(true);
         CommandAPI.onLoad(config); //Load with verbose output
         
         new CommandAPICommand("ping")

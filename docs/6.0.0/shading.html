@@ -218,8 +218,8 @@ CommandAPI.onEnable(Plugin plugin);
 
     @Override
     public void onLoad() {
-    	CommandAPIConfig config = new CommandAPIConfig();
-    	config.setVerboseOutput(true);
+        CommandAPIConfig config = new CommandAPIConfig();
+        config.setVerboseOutput(true);
         CommandAPI.onLoad(config); //Load with verbose output
         
         new CommandAPICommand(&quot;ping&quot;)

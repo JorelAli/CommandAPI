@@ -5,7 +5,7 @@
 The CommandAPI can also display tooltips for specific argument suggestions. These are shown to the user when they hover over a given suggestion and can be used to provide more context to a user about the suggestions that are shown to them. In this section, we'll outline the two ways of creating suggestions with tooltips: 
 
 - Normal (String) suggestions with tooltips
-- Safe suggestions with tooltips
+- Safely typed suggestions with tooltips
 
 Tooltips _can_ have formatting to change how the text is displayed by using the `ChatColor` class.
 
@@ -13,13 +13,10 @@ Tooltips _can_ have formatting to change how the text is displayed by using the 
 
 ## Tooltips with normal (String) suggestions
 
-To use these features, the CommandAPI includes the `overrideSuggestionsT` methods for arguments, that accept `IStringTooltip` objects instead of `String` objects:
+To use these features, the CommandAPI includes the `replaceSuggestionsT` methods for arguments, that accept `IStringTooltip` objects instead of `String` objects:
 
 ```java
-Argument overrideSuggestionsT(IStringTooltip... suggestions);
-Argument overrideSuggestionsT(Collection<IStringTooltip> suggestions);
-Argument overrideSuggestionsT(Function<CommandSender, IStringTooltip[]> suggestions);
-Argument overrideSuggestionsT(BiFunction<CommandSender, Object[], IStringTooltip[]> suggestions);
+Argument replaceSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions);
 ```
 
 The `StringTooltip` class is the CommandAPI's default implementation of `IStringTooltip`, which has two static methods to construct it easily:
@@ -35,13 +32,13 @@ The first method, `StringTooltip.none(String)` creates a normal suggestion entry
 
 ### Example - An emotes command with string suggestion tooltips
 
-Say we want to create a simple command to provide ingame emotes between players. For example, if you did `/emote wave Bob`, you'll "wave" to the player _Bob_. For this example, we'll use the following command syntax:
+Say we want to create a simple command to provide in-game emotes between players. For example, if you did `/emote wave Bob`, you'll "wave" to the player _Bob_. For this example, we'll use the following command syntax:
 
-```
+```mccmd
 /emote <emote> <target>
 ```
 
-First, we'll declare our arguments. Here, we'll use the `overrideSuggestionsT` method, along with the `StringTooltip.of(String, String)` method to create emote suggestions and include suitable descriptions:
+First, we'll declare our arguments. Here, we'll use the `replaceSuggestionsT` method, along with the `StringTooltip.of(String, String)` method to create emote suggestions and include suitable descriptions:
 
 ```java
 {{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:Tooltips1}}
@@ -59,8 +56,8 @@ The `IStringTooltip` interface can be implemented by any other class to provide 
 
 ```java
 public interface IStringTooltip {
-	public String getSuggestion();
-	public String getTooltip();
+    public String getSuggestion();
+    public String getTooltip();
 }
 ```
 
@@ -88,18 +85,15 @@ Let's also say that our plugin has registered lots of `CustomItem`s and has this
 
 ## Tooltips with safe suggestions
 
-Using tooltips with safe suggestions is almost identical to the method described above for normal suggestions, except for two things. Firstly, you must use `safeOverrideSuggestionsT` method instead of the `overrideSuggestionsT` method and secondly, instead of using `StringTooltip`, you must use `Tooltip<S>`. Let's look at these differences in more detail.
+Using tooltips with safe suggestions is almost identical to the method described above for normal suggestions, except for two things. Firstly, you must use `replaceWithSafeSuggestionsT` method instead of the `replaceSuggestionsT` method and secondly, instead of using `StringTooltip`, you must use `Tooltip<S>`. Let's look at these differences in more detail.
 
-The `safeOverrideSuggestionsT` methods are fairly similar to the `overrideSuggestionsT` methods, except instead of using `StringTooltip`, it simply uses `Tooltip<S>`.
+The `replaceWithSafeSuggestionsT` methods are fairly similar to the `replaceSuggestionsT` methods, except instead of using `StringTooltip`, it simply uses `Tooltip<S>`:
 
 ```java
-Argument safeOverrideSuggestionsT(Tooltip<S>... suggestions);
-Argument safeOverrideSuggestionsT(Collection<Tooltip<S>> suggestions);
-Argument safeOverrideSuggestionsT(Function<CommandSender, Tooltip<S>[]> suggestions);
-Argument safeOverrideSuggestionsT(BiFunction<CommandSender, Object[], Tooltip<S>[]> suggestions);
+Argument replaceWithSafeSuggestionsT(Function<SuggestionInfo, Tooltip<S>[]> suggestions);
 ```
 
-The `Tooltip<S>` class represents a tooltip for a given object `S`. For example, a tooltip that is for a `LocationArgument` would be a `Tooltip<Location>` and a tooltip for an `EnchantmentArgument` would be a `Tooltip<Enchantment>`.
+The `Tooltip<S>` class represents a tooltip for a given object `S`. For example, a tooltip for a `LocationArgument` would be a `Tooltip<Location>` and a tooltip for an `EnchantmentArgument` would be a `Tooltip<Enchantment>`.
 
 Just like the `StringTooltip` class, the `Tooltip<S>` class provides the following static methods, which operate exactly the same as the ones in the `StringTooltip` class:
 
@@ -109,7 +103,7 @@ Tooltip<S> of(S object, String tooltip);
 Tooltip<S>[] arrayOf(Tooltip<S>... tooltips);
 ```
 
-The use of `arrayOf` is heavily recommended as it provides the necessary type safety for Java code to ensure that the correct types are being passed to the `safeOverrideSuggestionsT` method.
+The use of `arrayOf` is heavily recommended as it provides the necessary type safety for Java code to ensure that the correct types are being passed to the `replaceWithSafeSuggestionsT` method.
 
 <div class="example">
 
@@ -117,7 +111,7 @@ The use of `arrayOf` is heavily recommended as it provides the necessary type sa
 
 Say we wanted to create a custom teleport command which suggestions a few key locations. In this example, we'll use the following command syntax:
 
-```
+```mccmd
 /warp <location>
 ```
 
