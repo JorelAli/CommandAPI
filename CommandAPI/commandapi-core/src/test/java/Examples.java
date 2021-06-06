@@ -36,6 +36,7 @@ import org.bukkit.Chunk;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -58,6 +59,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ComplexRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -79,6 +81,7 @@ import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.Brigadier;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.CommandAPIConfig;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.Converter;
 import dev.jorel.commandapi.IStringTooltip;
@@ -1561,16 +1564,16 @@ new CommandAPICommand("warp")
 List<Argument> arguments = new ArrayList<>();
 arguments.add(new IntegerArgument("radius"));
 
-// Override the suggestions for the PlayerArgument, using (sender, args) as the parameters
-// sender refers to the command sender that is running this command
-// args refers to the Object[] of PREVIOUSLY DECLARED arguments (in this case, the IntegerArgument radius)
-arguments.add(new PlayerArgument("target").overrideSuggestions((sender, args) -> {
+// Override the suggestions for the PlayerArgument.
+// info.sender() refers to the command sender that is running this command
+// info.previousArgs() refers to the Object[] of previously declared arguments (in this case, the IntegerArgument radius)
+arguments.add(new PlayerArgument("target").replaceSuggestions(info -> {
 
     // Cast the first argument (radius, which is an IntegerArgument) to get its value
-    int radius = (int) args[0];
+    int radius = (int) info.previousArgs()[0];
     
     // Get nearby entities within the provided radius
-    Player player = (Player) sender;
+    Player player = (Player) info.sender();
     Collection<Entity> entities = player.getWorld().getNearbyEntities(player.getLocation(), radius, radius, radius);
     
     // Get player names within that radius
@@ -1595,8 +1598,9 @@ new CommandAPICommand("localmsg")
 
 {
 /* ANCHOR: ArgumentSuggestions2_2 */
-List<Argument> arguments = List.of(new PlayerArgument("friend").replaceSuggestions(info ->
-    return Friends.getFriends(info.sender());
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new PlayerArgument("friend").replaceSuggestions(info ->
+    Friends.getFriends(info.sender())
 ));
 
 new CommandAPICommand("friendtp")
@@ -1612,7 +1616,8 @@ new CommandAPICommand("friendtp")
 {
 Map<String, Location> warps = new HashMap<>();
 /* ANCHOR: ArgumentSuggestions1 */
-List<Argument> arguments = List.of(new StringArgument("world").replaceSuggestions(info -> 
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new StringArgument("world").replaceSuggestions(info -> 
     new String[] {"northland", "eastland", "southland", "westland" }
 ));
 
@@ -1624,6 +1629,109 @@ new CommandAPICommand("warp")
     })
     .register();
 /* ANCHOR_END: ArgumentSuggestions1 */
+}
+
+{
+    //{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:resultingcommandexecutor2}}
+/* ANCHOR: SafeRecipeArguments */
+// Create our itemstack
+ItemStack emeraldSword = new ItemStack(Material.DIAMOND_SWORD);
+ItemMeta meta = emeraldSword.getItemMeta();
+meta.setDisplayName("Emerald Sword");
+meta.setUnbreakable(true);
+emeraldSword.setItemMeta(meta);
+
+// Create and register our recipe
+ShapedRecipe emeraldSwordRecipe = new ShapedRecipe(new NamespacedKey(this, "emerald_sword"), emeraldSword);
+emeraldSwordRecipe.shape(
+    "AEA", 
+    "AEA", 
+    "ABA"
+);
+emeraldSwordRecipe.setIngredient('A', Material.AIR);
+emeraldSwordRecipe.setIngredient('E', Material.EMERALD);
+emeraldSwordRecipe.setIngredient('B', Material.BLAZE_ROD);
+getServer().addRecipe(emeraldSwordRecipe);
+
+// Omitted, more itemstacks and recipes
+/* ANCHOR_END: SafeRecipeArguments */
+
+/* ANCHOR: SafeRecipeArguments_2 */
+// Safely override with the recipe we've defined
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new RecipeArgument("recipe").replaceWithSafeSuggestions(info -> 
+    new Recipe[] { emeraldSwordRecipe, /* Other recipes here */ }
+));
+
+// Register our command
+new CommandAPICommand("giverecipe")
+    .withArguments(arguments)
+    .executesPlayer((player, args) -> {
+        Recipe recipe = (Recipe) args[0];
+        player.getInventory().addItem(recipe.getResult());
+    })
+    .register();
+/* ANCHOR_END: SafeRecipeArguments_2 */
+}
+
+{
+/* ANCHOR: SafeMobSpawnArguments */
+EntityType[] forbiddenMobs = new EntityType[] {EntityType.ENDER_DRAGON, EntityType.WITHER};
+List<EntityType> allowedMobs = new ArrayList<>(Arrays.asList(EntityType.values()));
+allowedMobs.removeAll(Arrays.asList(forbiddenMobs)); // Now contains everything except enderdragon and wither
+/* ANCHOR_END: SafeMobSpawnArguments */
+
+/* ANCHOR: SafeMobSpawnArguments_2 */
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new EntityTypeArgument("mob").replaceWithSafeSuggestions(
+    info -> {
+        if(info.sender().isOp()) {
+            // All entity types
+            return EntityType.values();
+        } else {
+            // Only allowedMobs
+            return allowedMobs.toArray(new EntityType[0]);
+        }
+    })
+);
+/* ANCHOR_END: SafeMobSpawnArguments_2 */
+
+/* ANCHOR: SafeMobSpawnArguments_3 */
+new CommandAPICommand("spawnmob")
+    .withArguments(arguments)
+    .executesPlayer((player, args) -> {
+        EntityType entityType = (EntityType) args[0];
+        player.getWorld().spawnEntity(player.getLocation(), entityType);
+    })
+    .register();
+/* ANCHOR_END: SafeMobSpawnArguments_3 */
+}
+
+{
+/* ANCHOR: SafePotionArguments */
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new EntitySelectorArgument("target", EntitySelector.ONE_PLAYER));
+arguments.add(new PotionEffectArgument("potioneffect").replaceWithSafeSuggestions(
+    info -> {
+        Player target = (Player) info.previousArgs()[0];
+        
+        // Convert PotionEffect[] into PotionEffectType[]
+        return target.getActivePotionEffects().stream()
+            .map(PotionEffect::getType)
+            .toArray(PotionEffectType[]::new);
+    })
+);
+/* ANCHOR_END: SafePotionArguments */
+
+/* ANCHOR: SafePotionArguments_2 */
+new CommandAPICommand("removeeffect")
+    .withArguments(arguments)
+    .executesPlayer((player, args) -> {
+        EntityType entityType = (EntityType) args[0];
+        player.getWorld().spawnEntity(player.getLocation(), entityType);
+    })
+    .register();
+/* ANCHOR_END: SafePotionArguments_2 */
 }
 
 {
@@ -1779,7 +1887,9 @@ class MyPlugin extends JavaPlugin {
 
     @Override
     public void onLoad() {
-        CommandAPI.onLoad(true); //Load with verbose output
+    	CommandAPIConfig config = new CommandAPIConfig();
+    	config.setVerboseOutput(true);
+        CommandAPI.onLoad(config); //Load with verbose output
         
         new CommandAPICommand("ping")
             .executes((sender, args) -> {

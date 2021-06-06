@@ -82,6 +82,7 @@ import dev.jorel.commandapi.annotations.arguments.AMultiLiteralArgument;
 import dev.jorel.commandapi.annotations.arguments.ANBTCompoundArgument;
 import dev.jorel.commandapi.annotations.arguments.AObjectiveArgument;
 import dev.jorel.commandapi.annotations.arguments.AObjectiveCriteriaArgument;
+import dev.jorel.commandapi.annotations.arguments.AOfflinePlayerArgument;
 import dev.jorel.commandapi.annotations.arguments.AParticleArgument;
 import dev.jorel.commandapi.annotations.arguments.APlayerArgument;
 import dev.jorel.commandapi.annotations.arguments.APotionEffectArgument;
@@ -116,7 +117,7 @@ public class Annotations extends AbstractProcessor {
 			AItemStackPredicateArgument.class, ALiteralArgument.class, ALocation2DArgument.class,
 			ALocationArgument.class, ALongArgument.class, ALootTableArgument.class, AMathOperationArgument.class,
 			AMultiLiteralArgument.class, ANBTCompoundArgument.class, AObjectiveArgument.class,
-			AObjectiveCriteriaArgument.class, AParticleArgument.class, APlayerArgument.class,
+			AObjectiveCriteriaArgument.class, AOfflinePlayerArgument.class, AParticleArgument.class, APlayerArgument.class,
 			APotionEffectArgument.class, ARecipeArgument.class, ARotationArgument.class, AScoreboardSlotArgument.class,
 			AScoreHolderArgument.class, ASoundArgument.class, AStringArgument.class, ATeamArgument.class,
 			ATextArgument.class, ATimeArgument.class, AUUIDArgument.class };

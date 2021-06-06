@@ -685,7 +685,17 @@ public class NMS_1_17_R1 implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
-	public OfflinePlayer getPlayer(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
+	public Player getPlayer(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
+		Player target = Bukkit.getPlayer(((GameProfile) ArgumentProfile.a(cmdCtx, str).iterator().next()).getId());
+		if (target == null) {
+			throw ArgumentProfile.a.create();
+		} else {
+			return target;
+		}
+	}
+	
+	@Override
+	public OfflinePlayer getOfflinePlayer(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
 		OfflinePlayer target = Bukkit.getOfflinePlayer(((GameProfile) ArgumentProfile.a(cmdCtx, str).iterator().next()).getId());
 		if (target == null) {
 			throw ArgumentProfile.a.create();

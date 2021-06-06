@@ -33,7 +33,7 @@
   - [Handling command failures](./commandfailures.md)
 - [Arguments (in general)](./arguments.md)
   - [Argument suggestions](./argumentsuggestions.md)
-  - [Safe argument suggestions](./safeargumentsuggestions.md)
+  - [Safely typed argument suggestions](./safeargumentsuggestions.md)
   - [Argument suggestions with tooltips](./tooltips.md)
   - [Listed arguments](./listed.md)
 - [Argument types](./argumenttypes.md)

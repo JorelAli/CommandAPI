@@ -119,7 +119,7 @@ new CommandAPICommand("warp")
 
 // /warp <warp>
 new CommandAPICommand("warp")
-	.withArguments(new StringArgument("warp").overrideSuggestions(sender -> {
+	.withArguments(new StringArgument("warp").replaceSuggestions(info -> {
 		return warps.keySet().toArray(new String[0]);
 	}))
 	.executesPlayer((player, args) -> {

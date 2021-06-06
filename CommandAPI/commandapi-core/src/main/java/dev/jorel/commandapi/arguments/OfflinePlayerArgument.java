@@ -18,15 +18,44 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package dev.jorel.commandapi.annotations.arguments;
+package dev.jorel.commandapi.arguments;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.bukkit.OfflinePlayer;
 
-@Primitive("org.bukkit.entity.Player")
-@Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
-public @interface APlayerArgument {
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
+import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.nms.NMS;
+
+/**
+ * An argument that represents the Bukkit Player object
+ */
+public class OfflinePlayerArgument extends SafeOverrideableArgument<OfflinePlayer> {
+
+	/**
+	 * A Player argument. Produces a single player, regardless of whether
+	 * <code>@a</code>, <code>@p</code>, <code>@r</code> or <code>@e</code> is used.
+	 * 
+	 * @param nodeName the name of the node for this argument
+	 */
+	public OfflinePlayerArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentProfile(), OfflinePlayer::getName);
+	}
+
+	@Override
+	public Class<?> getPrimitiveType() {
+		return OfflinePlayer.class;
+	}
+	
+	@Override
+	public CommandAPIArgumentType getArgumentType() {
+		return CommandAPIArgumentType.OFFLINE_PLAYER;
+	}
+	
+	@Override
+	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		return nms.getOfflinePlayer(cmdCtx, key);
+	}
 }

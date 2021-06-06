@@ -243,7 +243,7 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The AngleArgument
 	 */
-	ANGLE("minecraft:angle");
+	ANGLE("minecraft:angle"), OFFLINE_PLAYER;
 	
 	private String[] internals;
 	

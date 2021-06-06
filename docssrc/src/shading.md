@@ -13,7 +13,6 @@
 > I don't know very much about shading and dealing with shading conflicts. If you decide to use shading, you're on your own!
 >
 > </div>
->
 
 <p align="center"><i>After 2 years, this most requested feature is finally here...</i></p>
 
@@ -47,8 +46,8 @@ The `onLoad(CommandAPIConfig)` method initializes the CommandAPI's loading seque
 class CommandAPIConfig {
     public CommandAPIConfig();
     
-	public boolean isVerboseOutput();
-	public CommandAPIConfig setVerboseOutput(boolean verboseOutput);
+    public boolean isVerboseOutput();
+    public CommandAPIConfig setVerboseOutput(boolean verboseOutput);
 }
 ```
 

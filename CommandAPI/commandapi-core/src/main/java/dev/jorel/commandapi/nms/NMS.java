@@ -269,7 +269,8 @@ public interface NMS<CommandListenerWrapper> {
 
 	Particle getParticle(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
-	OfflinePlayer getPlayer(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	Player getPlayer(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	OfflinePlayer getOfflinePlayer(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
 	PotionEffectType getPotionEffect(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException;

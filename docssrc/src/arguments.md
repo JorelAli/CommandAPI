@@ -85,6 +85,7 @@ The type to cast each argument (declared in the `dev.jorel.commandapi.arguments`
 |                   [`NBTCompoundArgument`](./nbtarguments.md) | `de.tr7zw.nbtapi.NBTContainer`                               |
 | [`ObjectiveArgument`](./objectivearguments.md#objective-argument) | `String`                                                     |
 | [`ObjectiveCriteriaArgument`](./objectivearguments.md#objective-criteria-argument) | `String`                                                     |
+| [`OfflinePlayerArgument`](./entityarguments.md#player-argument) | `org.bukkit.OfflinePlayer`                                   |
 |                 [`ParticleArgument`](./particlearguments.md) | `org.bukkit.Particle`                                        |
 |     [`PlayerArgument`](./entityarguments.md#player-argument) | `org.bukkit.entity.Player`                                   |
 |               [`PotionEffectArgument`](./potionarguments.md) | `org.bukkit.potion.PotionEffectType`                         |

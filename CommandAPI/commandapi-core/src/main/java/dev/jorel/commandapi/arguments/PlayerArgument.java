@@ -20,7 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -31,7 +31,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents the Bukkit Player object
  */
-public class PlayerArgument extends SafeOverrideableArgument<OfflinePlayer> {
+public class PlayerArgument extends SafeOverrideableArgument<Player> {
 
 	/**
 	 * A Player argument. Produces a single player, regardless of whether
@@ -40,12 +40,12 @@ public class PlayerArgument extends SafeOverrideableArgument<OfflinePlayer> {
 	 * @param nodeName the name of the node for this argument
 	 */
 	public PlayerArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentProfile(), OfflinePlayer::getName);
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentProfile(), Player::getName);
 	}
 
 	@Override
 	public Class<?> getPrimitiveType() {
-		return OfflinePlayer.class;
+		return Player.class;
 	}
 	
 	@Override
