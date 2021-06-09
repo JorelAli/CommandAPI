@@ -203,16 +203,17 @@ public abstract class Converter {
 	 * https://www.jorel.dev/blog/Simplifying-Bukkit-CommandSenders/
 	 */
 	private static CommandSender mergeProxySender(ProxiedCommandSender proxySender) {
-		Class<?>[] calleeInterfaces = proxySender.getCallee().getClass().getInterfaces();
-		Class<?>[] interfaces;
-		if(proxySender.getCallee().getClass().isInterface()) {
-			interfaces = new Class<?>[calleeInterfaces.length + 1];
-			System.arraycopy(calleeInterfaces, 0, interfaces, 1, calleeInterfaces.length);
-			interfaces[0] = proxySender.getCallee().getClass();
-		} else {
-			interfaces = calleeInterfaces;
+		Set<Class<?>> calleeInterfacesList = new HashSet<>();
+		Class<?> currentClass = proxySender.getCallee().getClass();
+		if(currentClass.isInterface()) {
+			calleeInterfacesList.add(currentClass);
 		}
-		return (CommandSender) Proxy.newProxyInstance(CommandSender.class.getClassLoader(), interfaces,
+		while(currentClass != null) {
+			calleeInterfacesList.addAll(Arrays.asList(currentClass.getInterfaces()));
+			currentClass = currentClass.getSuperclass();
+		}
+		Class<?>[] calleeInterfaces = calleeInterfacesList.toArray(new Class[0]);
+		return (CommandSender) Proxy.newProxyInstance(CommandSender.class.getClassLoader(), calleeInterfaces,
 				(Object p, Method method, Object[] args) -> method.invoke(
 						CALLER_METHODS.contains(method.getName()) ? proxySender.getCaller() : proxySender.getCallee(),
 						args));
