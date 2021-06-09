@@ -202,13 +202,8 @@
 CommandAPI.onEnable(Plugin plugin);
 </code></pre>
 <h3><a class="header" href="#loading" id="loading">Loading</a></h3>
-<p>The <code>onLoad(CommandAPIConfig)</code> method initializes the CommandAPI's loading sequence. This must be called <em>before</em> you start to access the CommandAPI and must be placed in your plugin's <code>onLoad()</code> method. The argument <code>CommandAPIConfig</code> is used to configure how the CommandAPI. The <code>CommandAPIConfig</code> class has the following methods which let you set how the CommandAPI works similar to the <code>config.yml</code>, which is described <a href="./config.html">here</a></p>
-<pre><code class="language-java">class CommandAPIConfig {
-    public CommandAPIConfig();
-    
-    public boolean isVerboseOutput();
-    public CommandAPIConfig setVerboseOutput(boolean verboseOutput);
-}
+<p>The <code>onLoad(CommandAPIConfig)</code> method initializes the CommandAPI's loading sequence. This must be called <em>before</em> you start to access the CommandAPI and must be placed in your plugin's <code>onLoad()</code> method. The argument <code>CommandAPIConfig</code> is used to configure how the CommandAPI. The <code>CommandAPIConfig</code> record has the following parameters which let you set how the CommandAPI works similar to the <code>config.yml</code>, which is described <a href="./config.html">here</a></p>
+<pre><code class="language-java">public record CommandAPIConfig(boolean verboseOutput) {}
 </code></pre>
 <h3><a class="header" href="#enabling" id="enabling">Enabling</a></h3>
 <p>The <code>onEnable(Plugin)</code> method initializes the CommandAPI's enabling sequence. As with the <code>onLoad(boolean)</code> method, this one must be placed in your plugin's <code>onEnable()</code> method. This isn't as strict as the <code>onLoad(boolean)</code> method, and can be placed anywhere in your <code>onEnable()</code> method. The argument <code>plugin</code> is your current plugin instance.</p>
@@ -218,9 +213,7 @@ CommandAPI.onEnable(Plugin plugin);
 
     @Override
     public void onLoad() {
-        CommandAPIConfig config = new CommandAPIConfig();
-        config.setVerboseOutput(true);
-        CommandAPI.onLoad(config); //Load with verbose output
+        CommandAPI.onLoad(new CommandAPIConfig(true)); //Load with verbose output
         
         new CommandAPICommand(&quot;ping&quot;)
             .executes((sender, args) -&gt; {

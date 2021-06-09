@@ -40,15 +40,10 @@ CommandAPI.onEnable(Plugin plugin);
 
 ### Loading
 
-The `onLoad(CommandAPIConfig)` method initializes the CommandAPI's loading sequence. This must be called _before_ you start to access the CommandAPI and must be placed in your plugin's `onLoad()` method. The argument `CommandAPIConfig` is used to configure how the CommandAPI. The `CommandAPIConfig` class has the following methods which let you set how the CommandAPI works similar to the `config.yml`, which is described [here](./config.md)
+The `onLoad(CommandAPIConfig)` method initializes the CommandAPI's loading sequence. This must be called _before_ you start to access the CommandAPI and must be placed in your plugin's `onLoad()` method. The argument `CommandAPIConfig` is used to configure how the CommandAPI. The `CommandAPIConfig` record has the following parameters which let you set how the CommandAPI works similar to the `config.yml`, which is described [here](./config.md)
 
 ```java
-class CommandAPIConfig {
-    public CommandAPIConfig();
-    
-    public boolean isVerboseOutput();
-    public CommandAPIConfig setVerboseOutput(boolean verboseOutput);
-}
+public record CommandAPIConfig(boolean verboseOutput) {}
 ```
 
 ### Enabling

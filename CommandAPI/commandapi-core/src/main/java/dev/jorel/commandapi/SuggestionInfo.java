@@ -31,5 +31,9 @@ import org.bukkit.command.CommandSender;
  *   - currentInput() - a string representing the full current input (including /)
  *   - currentArg()   - the current partially typed argument. For example "/mycmd tes" will return "tes" 
  */
-public record SuggestionInfo(CommandSender sender, Object[] previousArgs, String currentInput, String currentArg) {
+public record SuggestionInfo(
+	CommandSender sender, 
+	Object[] previousArgs, 
+	String currentInput, 
+	String currentArg) {
 }
