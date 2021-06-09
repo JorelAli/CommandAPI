@@ -63,7 +63,7 @@ public abstract class CommandAPI {
 	 * Returns the CommandAPI's logger
 	 * @return the CommandAPI's logger
 	 */
-	public static Logger getLog() {
+	private static Logger getLog() {
 		if(logger == null) {
 			logger = new Logger("CommandAPI", null) {
 				{
@@ -87,9 +87,26 @@ public abstract class CommandAPI {
 	 * @param message the message to log to the console
 	 */
 	public static void logInfo(String message) {
-		if(CommandAPI.getConfiguration().hasVerboseOutput()) {
-			CommandAPI.getLog().info(message);
+		if(config.hasVerboseOutput() && !config.hasSilentLogs()) {
+			getLog().info(message);
 		}
+	}
+	
+	// Log info, but appears without verbose output enabled
+	public static void logNormal(String message) {
+		if(!config.hasSilentLogs()) {
+			getLog().info(message);			
+		}
+	}
+	
+	public static void logWarning(String message) {
+		if(!config.hasSilentLogs()) {
+			getLog().warning(message);
+		}
+	}
+	
+	public static void logError(String message) {
+		getLog().severe(message);
 	}
 	
 	/**

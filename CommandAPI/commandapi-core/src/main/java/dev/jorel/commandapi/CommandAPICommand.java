@@ -471,7 +471,7 @@ public class CommandAPICommand {
 	 */
 	public void register() {
 		if(!CommandAPI.canRegister()) {
-			CommandAPI.getLog().warning("Command /" + commandName + " is being registered after the server had loaded. Undefined behavior ahead!");
+			CommandAPI.logWarning("Command /" + commandName + " is being registered after the server had loaded. Undefined behavior ahead!");
 		}
 		try {
 			Argument[] argumentsArr = args == null ? new Argument[0] : args.toArray(new Argument[0]);

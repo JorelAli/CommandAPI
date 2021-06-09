@@ -108,7 +108,7 @@ public class AdvancedConverter {
 		try {
 			arguments = parseArguments(command);
 		} catch (UnknownArgumentException | InvalidNumberException e) {
-			CommandAPI.getLog().severe(e.getMessage());
+			CommandAPI.logError(e.getMessage());
 			return;
 		}
 		if(arguments.size() == 0) {
@@ -125,7 +125,7 @@ public class AdvancedConverter {
 		try {
 			arguments = parseArguments(command);
 		} catch (UnknownArgumentException | InvalidNumberException e) {
-			CommandAPI.getLog().severe(e.getMessage());
+			CommandAPI.logError(e.getMessage());
 			return;
 		}
 		if(arguments.size() == 0) {

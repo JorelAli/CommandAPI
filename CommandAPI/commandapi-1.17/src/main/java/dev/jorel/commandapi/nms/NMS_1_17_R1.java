@@ -22,6 +22,8 @@ package dev.jorel.commandapi.nms;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.nio.charset.StandardCharsets;
@@ -37,7 +39,6 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
-import java.util.logging.Level;
 
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
@@ -837,7 +838,7 @@ public class NMS_1_17_R1 implements NMS<CommandListenerWrapper> {
 	@Override
 	public void reloadDataPacks()
 			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		CommandAPI.getLog().info("Reloading datapacks...");
+		CommandAPI.logNormal("Reloading datapacks...");
 
 		// Get previously declared recipes to be re-registered later
 		Iterator<Recipe> recipes = Bukkit.recipeIterator();
@@ -885,11 +886,13 @@ public class NMS_1_17_R1 implements NMS<CommandListenerWrapper> {
 				}
 			}
 
-			CommandAPI.getLog().info("Finished reloading datapacks");
+			CommandAPI.logNormal("Finished reloading datapacks");
 		} catch (Exception e) {
-			CommandAPI.getLog().log(Level.WARNING,
-					"Failed to load datapacks, can't proceed with normal server load procedure. Try fixing your datapacks?",
-					e);
+			StringWriter stringWriter = new StringWriter();
+			PrintWriter printWriter = new PrintWriter(stringWriter);
+			e.printStackTrace(printWriter);
+			
+			CommandAPI.logError("Failed to load datapacks, can't proceed with normal server load procedure. Try fixing your datapacks?\n" + stringWriter.toString());
 		}
 	}
 

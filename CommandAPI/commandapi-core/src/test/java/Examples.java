@@ -1893,7 +1893,7 @@ class MyPlugin extends JavaPlugin {
 
     @Override
     public void onLoad() {
-        CommandAPI.onLoad(new CommandAPIConfig(true)); //Load with verbose output
+        CommandAPI.onLoad(new CommandAPIConfig().verboseOutput(true)); //Load with verbose output
         
         new CommandAPICommand("ping")
             .executes((sender, args) -> {

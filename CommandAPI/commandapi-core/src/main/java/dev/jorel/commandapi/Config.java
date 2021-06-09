@@ -42,6 +42,8 @@ class Config {
 
 	// Output registering and unregistering of commands
 	private final boolean verboseOutput;
+	
+	private final boolean silentLogs;
 
 	// Create a command_registration.json file
 	private final boolean createDispatcherFile;
@@ -52,10 +54,11 @@ class Config {
 	// List of plugins which should ignore proxied senders
 	private final List<String> skipSenderProxy;
 	
-	 private final List<String> commandsToConvert;
+	private final List<String> commandsToConvert;
 	
 	public Config(FileConfiguration fileConfig) {
 		this.verboseOutput = fileConfig.getBoolean("verbose-outputs");
+		this.silentLogs = fileConfig.getBoolean("silent-logs");
 		this.createDispatcherFile = fileConfig.getBoolean("create-dispatcher-json");
 		this.pluginsToConvert = new HashMap<>();
 		this.skipSenderProxy = new ArrayList<>();
@@ -99,6 +102,7 @@ class Config {
 
 	public Config(boolean verbose) {
 		this.verboseOutput = verbose;
+		this.silentLogs = false;
 		this.createDispatcherFile = false;
 		this.pluginsToConvert = new HashMap<>();
 		this.skipSenderProxy = new ArrayList<>();
@@ -106,7 +110,8 @@ class Config {
 	}
 
 	public Config(CommandAPIConfig config) {
-		this.verboseOutput = config.verboseOutput();
+		this.verboseOutput = config.verboseOutput;
+		this.silentLogs = config.silentLogs;
 		this.createDispatcherFile = false; // The dispatcher File is only declared in the plugin version
 		this.pluginsToConvert = new HashMap<>();
 		this.skipSenderProxy = new ArrayList<>();
@@ -115,6 +120,10 @@ class Config {
 
 	public boolean hasVerboseOutput() {
 		return this.verboseOutput;
+	}
+	
+	public boolean hasSilentLogs() {
+		return this.silentLogs;
 	}
 
 	public boolean willCreateDispatcherFile() {

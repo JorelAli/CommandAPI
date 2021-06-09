@@ -136,7 +136,7 @@ public abstract class Converter {
 		Map<String, Object> cmdData = plugin.getDescription().getCommands().get(commandName);
 		
 		if(cmdData == null) {
-			CommandAPI.getLog().severe("Couldn't find /" + commandName + " in " + plugin.getName() + "'s plugin.yml. Are you sure you're not confusing it with an alias?");
+			CommandAPI.logError("Couldn't find /" + commandName + " in " + plugin.getName() + "'s plugin.yml. Are you sure you're not confusing it with an alias?");
 			return;
 		}
 

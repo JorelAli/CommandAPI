@@ -139,29 +139,29 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 		// Checks other dependencies
 		try {
 			Class.forName("de.tr7zw.nbtapi.NBTContainer");
-			CommandAPI.getLog().info("Hooked into the NBTAPI successfully.");
+			CommandAPI.logNormal("Hooked into the NBTAPI successfully.");
 		} catch(ClassNotFoundException e) {
 			if(CommandAPI.getConfiguration().hasVerboseOutput()) {
-				CommandAPI.getLog().warning(
+				CommandAPI.logWarning(
 					"Could not hook into the NBTAPI for NBT support. Download it from https://www.spigotmc.org/resources/nbt-api.7939/");
 			}
 		}
 
 		try {
 			Class.forName("org.spigotmc.SpigotConfig");
-			CommandAPI.getLog().info("Hooked into Spigot successfully for Chat/ChatComponents");
+			CommandAPI.logNormal("Hooked into Spigot successfully for Chat/ChatComponents");
 		} catch (ClassNotFoundException e) {
 			if(CommandAPI.getConfiguration().hasVerboseOutput()) {
-				CommandAPI.getLog().warning("Could not hook into Spigot for Chat/ChatComponents");
+				CommandAPI.logWarning("Could not hook into Spigot for Chat/ChatComponents");
 			}
 		}
 		
 		try {
 			Class.forName("net.kyori.adventure.text.Component");
-			CommandAPI.getLog().info("Hooked into Adventure for AdventureChat/AdventureChatComponents");
+			CommandAPI.logNormal("Hooked into Adventure for AdventureChat/AdventureChatComponents");
 		} catch(ClassNotFoundException e) {
 			if(CommandAPI.getConfiguration().hasVerboseOutput()) {
-				CommandAPI.getLog().warning("Could not hook into Adventure for AdventureChat/AdventureChatComponents");
+				CommandAPI.logWarning("Could not hook into Adventure for AdventureChat/AdventureChatComponents");
 			}
 		}
 	}
@@ -186,7 +186,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	 */
 	void unregister(String commandName, boolean force) {
 		if (CommandAPI.getConfiguration().hasVerboseOutput()) {
-			CommandAPI.getLog().info("Unregistering command /" + commandName);
+			CommandAPI.logInfo("Unregistering command /" + commandName);
 		}
 
 		// Get the child nodes from the loaded dispatcher class
@@ -437,7 +437,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 				map.getCommand(cmdName).setPermission(permNode);
 			}
 		}
-		CommandAPI.getLog().info("Linked " + PERMISSIONS_TO_FIX.size() + " Bukkit permissions to commands");
+		CommandAPI.logNormal("Linked " + PERMISSIONS_TO_FIX.size() + " Bukkit permissions to commands");
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -505,15 +505,15 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 						builder2.append(arg[0]).append("<").append(arg[1]).append("> ");
 					}
 					
-					// Lovely high quality error message formatting (inspired by Elm)
-					CommandAPI.getLog().severe("Failed to register command:");
-					CommandAPI.getLog().severe("");
-					CommandAPI.getLog().severe("  " + commandName + " " + argumentsAsString);
-					CommandAPI.getLog().severe("");
-					CommandAPI.getLog().severe("Because it conflicts with this previously registered command:");
-					CommandAPI.getLog().severe("");
-					CommandAPI.getLog().severe("  " + commandName + " " + builder2.toString());
-					CommandAPI.getLog().severe("");
+					CommandAPI.logError("""
+							Failed to register command:
+							
+							  %s %s
+							  
+							Because it conflicts with this previously registered command:
+							
+							  %s %s
+							""".formatted(commandName, argumentsAsString, commandName, builder2.toString()));
 					return true;
 				}
 			}
