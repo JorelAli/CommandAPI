@@ -9,7 +9,11 @@ Argument includeSuggestions(Function<SuggestionInfo, String[]> suggestions);
 
 The `replaceSuggestions` method replaces all suggestions with the provided list of suggestions, whereas the `includeSuggestions` method will include the provided suggestions with the suggestions already present by the argument.
 
-These two methods require a function which takes in `SuggestionInfo` and returns a `String[]` which are the suggestions to provide. The `SuggestionInfo` class is a record which contains the following methods:
+-----
+
+## The `SuggestionsInfo` record
+
+The two methods above require a function which takes in `SuggestionInfo` and returns a `String[]` which are the suggestions to provide. The `SuggestionInfo` class is a record which contains the following methods:
 
 ```java
 public record SuggestionInfo {
@@ -20,7 +24,31 @@ public record SuggestionInfo {
 }
 ```
 
-These methods can be used to aid with providing context-aware suggestions for users. We'll describe these methods in more detail with the examples below.
+These methods can be used to aid with providing context-aware suggestions for users. The fields are as follows:
+
+```java
+CommandSender sender();
+```
+
+`sender()` represents the command sender which is typing this command and requesting these suggestions. This is normally a `Player`, but can also be a console command sender if using a Paper server.
+
+```java
+Object[] previousArgs();
+```
+
+`previousArgs()` represents a list of previously declared arguments, which are parsed and interpreted as if they were being used to execute the command. See [this example below](./argumentsuggestions.md#suggestions-depending-on-previous-arguments) for an idea of how to utilize this field.
+
+```java
+String currentInput();
+```
+
+`currentInput()` represents the current input that the command sender has entered. This is effectively everything that they have typed, including the leading `/` symbol which is required to start a command. If a user is typing `/mycommand hellowor¦`, the result of `currentInput()` would be `"/mycommand hellowor"`.
+
+```java
+String currentArg();
+```
+
+`currentArg()` represents the current text which the command sender has entered for the argument which you're trying to provide suggestions for. If a user is typing `/mycommand hellowor¦`, the result of `currentArg()` would be `"hellowor"`.
 
 -----
 

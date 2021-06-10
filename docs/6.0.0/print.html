@@ -1517,7 +1517,9 @@ new CommandAPICommand(&quot;kill&quot;)
 Argument includeSuggestions(Function&lt;SuggestionInfo, String[]&gt; suggestions);
 </code></pre>
 <p>The <code>replaceSuggestions</code> method replaces all suggestions with the provided list of suggestions, whereas the <code>includeSuggestions</code> method will include the provided suggestions with the suggestions already present by the argument.</p>
-<p>These two methods require a function which takes in <code>SuggestionInfo</code> and returns a <code>String[]</code> which are the suggestions to provide. The <code>SuggestionInfo</code> class is a record which contains the following methods:</p>
+<hr />
+<h2><a class="header" href="#the-suggestionsinfo-record" id="the-suggestionsinfo-record">The <code>SuggestionsInfo</code> record</a></h2>
+<p>The two methods above require a function which takes in <code>SuggestionInfo</code> and returns a <code>String[]</code> which are the suggestions to provide. The <code>SuggestionInfo</code> class is a record which contains the following methods:</p>
 <pre><code class="language-java">public record SuggestionInfo {
     CommandSender sender();
     Object[] previousArgs();
@@ -1525,7 +1527,19 @@ Argument includeSuggestions(Function&lt;SuggestionInfo, String[]&gt; suggestions
     String currentArg();
 }
 </code></pre>
-<p>These methods can be used to aid with providing context-aware suggestions for users. We'll describe these methods in more detail with the examples below.</p>
+<p>These methods can be used to aid with providing context-aware suggestions for users. The fields are as follows:</p>
+<pre><code class="language-java">CommandSender sender();
+</code></pre>
+<p><code>sender()</code> represents the command sender which is typing this command and requesting these suggestions. This is normally a <code>Player</code>, but can also be a console command sender if using a Paper server.</p>
+<pre><code class="language-java">Object[] previousArgs();
+</code></pre>
+<p><code>previousArgs()</code> represents a list of previously declared arguments, which are parsed and interpreted as if they were being used to execute the command. See <a href="./argumentsuggestions.html#suggestions-depending-on-previous-arguments">this example below</a> for an idea of how to utilize this field.</p>
+<pre><code class="language-java">String currentInput();
+</code></pre>
+<p><code>currentInput()</code> represents the current input that the command sender has entered. This is effectively everything that they have typed, including the leading <code>/</code> symbol which is required to start a command. If a user is typing <code>/mycommand hellowor¦</code>, the result of <code>currentInput()</code> would be <code>&quot;/mycommand hellowor&quot;</code>.</p>
+<pre><code class="language-java">String currentArg();
+</code></pre>
+<p><code>currentArg()</code> represents the current text which the command sender has entered for the argument which you're trying to provide suggestions for. If a user is typing <code>/mycommand hellowor¦</code>, the result of <code>currentArg()</code> would be <code>&quot;hellowor&quot;</code>.</p>
 <hr />
 <h2><a class="header" href="#suggestions-with-a-string-array" id="suggestions-with-a-string-array">Suggestions with a String Array</a></h2>
 <p>The first method, <code>replaceSuggestions(Function&lt;SuggestionInfo, String[]&gt;)</code>, allows you to <em>replace</em> the suggestions normally associated with that argument with an array of strings.</p>
