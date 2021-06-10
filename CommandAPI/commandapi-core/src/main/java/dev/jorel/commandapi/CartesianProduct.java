@@ -20,57 +20,42 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-import static java.util.Optional.of;
-import static java.util.stream.Collectors.toList;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 /**
- * A class to compute the cartesian product of a number of lists. From Rosetta
- * Code:
- * https://rosettacode.org/wiki/Cartesian_product_of_two_or_more_lists#Java
+ * A class to compute the cartesian product of a number of lists.
+ * Source: https://www.programmersought.com/article/86195393650/
  */
 public class CartesianProduct {
 
-	public static List<?> product(List<?>... a) {
-		if (a.length >= 2) {
-			List<?> product = a[0];
-			for (int i = 1; i < a.length; i++) {
-				product = product(product, a[i]);
-			}
-			return product;
-		}
+	public static <T> List<List<T>> getDescartes(List<List<T>> list) {
+        List<List<T>> returnList = new ArrayList<>();
+        descartesRecursive(list, 0, returnList, new ArrayList<T>());
+        return returnList;
+    }
 
-		return emptyList();
-	}
+    /**
+     * Recursive implementation
+           * Principle: traverse sequentially from 0 of the original list to the end
+     *
+           * @param originalList original list
+           * @param position The position of the current recursion in the original list
+           * @param returnList return result
+           * @param cacheList temporarily saved list
+     */
+    private static <T> void descartesRecursive(List<List<T>> originalList, int position, List<List<T>> returnList, List<T> cacheList) {
+        List<T> originalItemList = originalList.get(position);
+        for (int i = 0; i < originalItemList.size(); i++) {
+            //The last one reuses cacheList to save memory
+            List<T> childCacheList = (i == originalItemList.size() - 1) ? cacheList : new ArrayList<>(cacheList);
+            childCacheList.add(originalItemList.get(i));
+            if (position == originalList.size() - 1) {//Exit recursion to the end
+                returnList.add(childCacheList);
+                continue;
+            }
+            descartesRecursive(originalList, position + 1, returnList, childCacheList);
+        }
+    }
 
-	private static <A, B> List<?> product(List<A> a, List<B> b) {
-		return of(a.stream().map(e1 -> of(b.stream().map(e2 -> asList(e1, e2)).collect(toList())).orElse(emptyList()))
-				.flatMap(List::stream).collect(toList())).orElse(emptyList());
-	}
-	
-	public static void flatten(List<List<?>> list) {
-		ListIterator<List<?>> listIterator = list.listIterator();
-		while(listIterator.hasNext()) {
-			List<?> innerList = listIterator.next();
-			listIterator.set(flattenL(innerList));
-		}
-	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static List<?> flattenL(List<?> list) {
-		List returnVal = new ArrayList<>();
-		for(Object o : list) {
-			if(o instanceof List) {
-				returnVal.addAll(flattenL((List) o));
-			} else {
-				returnVal.add(o);
-			}
-		}
-		return returnVal;
-	}
 }

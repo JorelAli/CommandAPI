@@ -26,6 +26,7 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -271,15 +272,10 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 					}
 				}
 				
-				@SuppressWarnings("unchecked")
-				List<List<?>> product = (List<List<?>>) CartesianProduct.product(entityNamesForArgs);
-				CartesianProduct.flatten(product);
+				List<List<String>> product = CartesianProduct.getDescartes(Arrays.asList(entityNamesForArgs));
 				
 				// These objects in obj are List<String>
-				for(Object obj : product) {
-					@SuppressWarnings("unchecked")
-					List<String> strings = (List<String>) obj;
-					
+				for(List<String> strings : product) {					
 					// We assume result.length == strings.length
 					for(int i = 0; i < result.length; i++) {
 						if(strings.get(i) != null) {
