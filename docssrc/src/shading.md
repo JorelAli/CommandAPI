@@ -34,10 +34,19 @@ CommandAPI.onEnable(Plugin plugin);
 
 ### Loading
 
-The `onLoad(CommandAPIConfig)` method initializes the CommandAPI's loading sequence. This must be called _before_ you start to access the CommandAPI and must be placed in your plugin's `onLoad()` method. The argument `CommandAPIConfig` is used to configure how the CommandAPI. The `CommandAPIConfig` record has the following parameters which let you set how the CommandAPI works similar to the `config.yml`, which is described [here](./config.md)
+The `onLoad(CommandAPIConfig)` method initializes the CommandAPI's loading sequence. This must be called _before_ you start to access the CommandAPI and must be placed in your plugin's `onLoad()` method. The argument `CommandAPIConfig` is used to configure how the CommandAPI. The `CommandAPIConfig` class has the following parameters which let you set how the CommandAPI works similar to the `config.yml`, which is described [here](./config.md).
 
 ```java
-public record CommandAPIConfig(boolean verboseOutput) {}
+public class CommandAPIConfig {
+    CommandAPIConfig verboseOutput(boolean value); // Enables verbose logging
+    CommandAPIConfig silentLogs(boolean value);    // Disables ALL logging (except errors)
+}
+```
+
+The `CommandAPIConfig` class follows a typical builder pattern (without you having to run `.build()` at the end), which lets you easily construct configuration instances. For example, to load the CommandAPI with all logging disabled, you can use the following:
+
+```java
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:CommandAPIConfigSilent}}
 ```
 
 ### Enabling

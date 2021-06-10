@@ -199,8 +199,14 @@
 CommandAPI.onEnable(Plugin plugin);
 </code></pre>
 <h3><a class="header" href="#loading" id="loading">Loading</a></h3>
-<p>The <code>onLoad(CommandAPIConfig)</code> method initializes the CommandAPI's loading sequence. This must be called <em>before</em> you start to access the CommandAPI and must be placed in your plugin's <code>onLoad()</code> method. The argument <code>CommandAPIConfig</code> is used to configure how the CommandAPI. The <code>CommandAPIConfig</code> record has the following parameters which let you set how the CommandAPI works similar to the <code>config.yml</code>, which is described <a href="./config.html">here</a></p>
-<pre><code class="language-java">public record CommandAPIConfig(boolean verboseOutput) {}
+<p>The <code>onLoad(CommandAPIConfig)</code> method initializes the CommandAPI's loading sequence. This must be called <em>before</em> you start to access the CommandAPI and must be placed in your plugin's <code>onLoad()</code> method. The argument <code>CommandAPIConfig</code> is used to configure how the CommandAPI. The <code>CommandAPIConfig</code> class has the following parameters which let you set how the CommandAPI works similar to the <code>config.yml</code>, which is described <a href="./config.html">here</a>.</p>
+<pre><code class="language-java">public class CommandAPIConfig {
+    CommandAPIConfig verboseOutput(boolean value); // Enables verbose logging
+    CommandAPIConfig silentLogs(boolean value);    // Disables ALL logging (except errors)
+}
+</code></pre>
+<p>The <code>CommandAPIConfig</code> class follows a typical builder pattern (without you having to run <code>.build()</code> at the end), which lets you easily construct configuration instances. For example, to load the CommandAPI with all logging disabled, you can use the following:</p>
+<pre><code class="language-java">CommandAPI.onLoad(new CommandAPIConfig().silentLogs(true));
 </code></pre>
 <h3><a class="header" href="#enabling" id="enabling">Enabling</a></h3>
 <p>The <code>onEnable(Plugin)</code> method initializes the CommandAPI's enabling sequence. As with the <code>onLoad(boolean)</code> method, this one must be placed in your plugin's <code>onEnable()</code> method. This isn't as strict as the <code>onLoad(boolean)</code> method, and can be placed anywhere in your <code>onEnable()</code> method. The argument <code>plugin</code> is your current plugin instance.</p>

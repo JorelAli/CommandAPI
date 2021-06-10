@@ -1807,6 +1807,12 @@ new CommandAPICommand("removeeffect")
         .register();
 }
 
+{
+/* ANCHOR: CommandAPIConfigSilent */
+CommandAPI.onLoad(new CommandAPIConfig().silentLogs(true));
+/* ANCHOR_END: CommandAPIConfigSilent */
+}
+
 
 } // Examples class end ////////////////////////////////////////////////////////////////////
 
