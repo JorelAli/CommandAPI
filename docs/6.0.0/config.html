@@ -180,6 +180,7 @@
 <p>The CommandAPI has a few configuration options to change how it functions. These options can be configured in the <code>plugins/CommandAPI/config.yml</code> file, which is generated automatically when the CommandAPI runs for the first time.</p>
 <p>The default <code>config.yml</code> is shown below:</p>
 <pre><code class="language-yaml">verbose-outputs: false
+silent-logs: false
 create-dispatcher-json: false
 plugins-to-convert: []
 skip-sender-proxy: []
@@ -189,6 +190,9 @@ other-commands-to-convert: []
 <ul>
 <li>
 <p><strong><code>verbose-outputs</code></strong> - If <code>true</code>, outputs command registration and unregistration logs in the console</p>
+</li>
+<li>
+<p><strong><code>silent-logs</code></strong> - If <code>true</code>, turns of all logging from the CommandAPI, except for errors</p>
 </li>
 <li>
 <p><strong><code>create-dispatcher-json</code></strong> - If <code>true</code>, the CommandAPI creates a <code>command_registration.json</code> file showing the mapping of registered commands. This is designed to be used by developers - setting this to <code>false</code> will improve command registration performance</p>

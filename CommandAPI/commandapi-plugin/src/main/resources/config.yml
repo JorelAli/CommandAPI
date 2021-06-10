@@ -1,4 +1,5 @@
 verbose-outputs: false
+silent-logs: false
 create-dispatcher-json: false
 plugins-to-convert: []
 skip-sender-proxy: []
