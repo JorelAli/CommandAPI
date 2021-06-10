@@ -179,12 +179,9 @@
                         <h1><a class="header" href="#shading-the-commandapi-in-your-plugins" id="shading-the-commandapi-in-your-plugins">Shading the CommandAPI in your plugins</a></h1>
 <blockquote>
 <p><strong>Developer's note:</strong></p>
-<p>Shading the CommandAPI is <strong>not recommended</strong>. The CommandAPI is designed to run as a standalone plugin (similar to Vault or ProtocolLib) because it has to hook into events (which requires a plugin instance), it creates files (<code>config.yml</code>, <code>command_registration.json</code>) and has much better performance (uses one singular cache, only registers an event once etc. etc.). There are reports that multiple plugins with a shaded copy of the CommandAPI can result in plugin conflicts - this is not something that the CommandAPI plans to work on.</p>
+<p>Shading the CommandAPI is <strong>discouraged</strong>. The CommandAPI was initially designed to run as a standalone plugin (similar to Vault or ProtocolLib) because it has to hook into events (which requires a plugin instance), it creates files (<code>config.yml</code>, <code>command_registration.json</code>) and has much better performance (uses one singular cache, only registers an event once etc. etc.). There are reports that multiple plugins with a shaded copy of the CommandAPI can result in plugin conflicts - this is not something that the CommandAPI plans to work on.</p>
 <p>The CommandAPI does not offer the extensive level of support for issues with regards to using the shaded version of the CommandAPI, so consider using the plugin version instead!</p>
-<div class="warning">
-<p><strong>Developer's Note:</strong></p>
-<p>I don't know very much about shading and dealing with shading conflicts. If you decide to use shading, you're on your own!</p>
-</div>
+<p>That said, shading should work perfectly, so don't let this giant box put you off from using it if it's exactly what you need!</p>
 </blockquote>
 <p align="center"><i>After 2 years, this most requested feature is finally here...</i></p>
 <p>The CommandAPI can now be shaded into your own plugins! &quot;Shading&quot; is the process of including the CommandAPI inside your plugin, rather than requiring the CommandAPI as an external plugin. In other words, if you shade the CommandAPI into your plugin, you don't need to include the <code>CommandAPI.jar</code> in your server's plugins folder.</p>
@@ -213,7 +210,7 @@ CommandAPI.onEnable(Plugin plugin);
 
     @Override
     public void onLoad() {
-        CommandAPI.onLoad(new CommandAPIConfig(true)); //Load with verbose output
+        CommandAPI.onLoad(new CommandAPIConfig().verboseOutput(true)); //Load with verbose output
         
         new CommandAPICommand(&quot;ping&quot;)
             .executes((sender, args) -&gt; {

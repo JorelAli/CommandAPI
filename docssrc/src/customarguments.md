@@ -1,30 +1,52 @@
 # Custom arguments
 
-Custom arguments are arguably the most powerful argument that the CommandAPI offers. This argument is used to represent any String, or Minecraft key _(Something of the form `String:String`, such as `minecraft:diamond`)_. They basically represent `StringArgument` with overrideable suggestions and a built-in parser for any object of your choice. They are designed to be used for multiple commands - you define the argument once and can use it wherever you want when declaring commands.
+Custom arguments are an experimental feature which the CommandAPI offers, which allows you to represent any String, or Minecraft key _(Something of the form `String:String`, such as `minecraft:diamond`)_ with a custom parser. They basically represent `StringArgument` with replaced suggestions and a built-in parser for any object of your choice. They are designed to be used for multiple commands - you can define the argument once and can use it wherever you want when declaring commands.
 
 -----
 
-The `CustomArgument<T>` has two constructors, declared as follows:
+The `CustomArgument<T>` has four constructors, declared as follows:
 
 ```java
 public CustomArgument(String nodeName, CustomArgumentFunction<T> parser);
 public CustomArgument(String nodeName, CustomArgumentFunction<T> parser, boolean keyed);
+
+public CustomArgument(String nodeName, CustomArgumentFunction2<T> parser);
+public CustomArgument(String nodeName, CustomArgumentFunction2<T> parser, boolean keyed);
 ```
 
-The second argument is the `CustomArgumentFunction`, which is a lambda that takes in a String and returns some custom object of type `T`. The first constructor will construct a `CustomArgument` which uses the `StringArgument` as a base (thus, only simple strings). The second argument has the field `keyed`. When this field is set to `true`, the `CustomArgument` will use a `Minecraft key` as a base, allowing you to use Minecraft keys as input.
+There are effectively three forms that this can take:
 
-> **Developer's Note:**
->
-> I may have complicated this too much, so let me clarify what I mean. The `CustomArgument` constructor is of the following forms:
->
-> ```java
-> CustomArgument(nodeName, (String) -> { ... return T; });
-> CustomArgument(nodeName, (String) -> { ... return T; }, boolean keyed);
-> ```
->
-> Both constructors take in a **String** as input and return `T`. When enabling `keyed`, it allows the input to be of the form of a Minecraft key, but doesn't change the input type.
+**A custom argument with a simple parser**
+
+The simplest form requires the node name as per any other argument, and a parser which takes in as input a string and returns a custom object of your choice. For example, if you wanted to create a custom argument that represents a World, you can use this to return a Bukkit `World` object.
+
+```java
+new CustomArgument(nodeName, input -> { 
+    // code here
+    return T; 
+});
+```
+
+**A custom argument with a parser with the command sender**
+
+To fine-tune your parser, you can use the (really poorly named) `CustomArgumentFunction2` parser type, which effectively means you can also access the command sender whilst parsing the input.
+
+```java
+new CustomArgument(nodeName, (sender, input) -> { 
+    // code here
+    return T; 
+});
+```
+
+**A custom argument with a parser that takes in a Minecraft Key**
+
+In the two cases above, the `input` is a string, which can take in any string. If you provide `true` to the `keyed` field, the input can be of the form of a Minecraft key (so it can have `:` in the name).
+
+-----
 
 The custom argument requires the type of the target object that the custom argument will return when parsing the arguments for a command. For instance, if you have a `CustomArgument<Player>`, then when parsing the arguments for the command, you would cast it to a `Player` object.
+
+-----
 
 <div class="example">
 
@@ -59,7 +81,7 @@ Since we have defined the method `worldArgument()` which automatically generates
 
 -----
 
-By using a `CustomArgument` (as opposed to a simple `StringArgument` and overriding its suggestions), we are able to provide a much more powerful form of error handling (automatically handled inside the argument), and we can reuse this argument for other commands.
+By using a `CustomArgument` (as opposed to a simple `StringArgument` and replacing its suggestions), we are able to provide a much more powerful form of error handling (automatically handled inside the argument), and we can reuse this argument for other commands.
 
 </div>
 

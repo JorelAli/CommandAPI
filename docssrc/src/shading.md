@@ -2,17 +2,11 @@
 
 > **Developer's note:**
 >
-> Shading the CommandAPI is **not recommended**. The CommandAPI is designed to run as a standalone plugin (similar to Vault or ProtocolLib) because it has to hook into events (which requires a plugin instance), it creates files (`config.yml`, `command_registration.json`) and has much better performance (uses one singular cache, only registers an event once etc. etc.). There are reports that multiple plugins with a shaded copy of the CommandAPI can result in plugin conflicts - this is not something that the CommandAPI plans to work on.
+> Shading the CommandAPI is **discouraged**. The CommandAPI was initially designed to run as a standalone plugin (similar to Vault or ProtocolLib) because it has to hook into events (which requires a plugin instance), it creates files (`config.yml`, `command_registration.json`) and has much better performance (uses one singular cache, only registers an event once etc. etc.). There are reports that multiple plugins with a shaded copy of the CommandAPI can result in plugin conflicts - this is not something that the CommandAPI plans to work on.
 >
 > The CommandAPI does not offer the extensive level of support for issues with regards to using the shaded version of the CommandAPI, so consider using the plugin version instead!
->
-> <div class="warning">
->
-> **Developer's Note:**
->
-> I don't know very much about shading and dealing with shading conflicts. If you decide to use shading, you're on your own!
->
-> </div>
+> 
+> That said, shading should work perfectly, so don't let this giant box put you off from using it if it's exactly what you need!
 
 <p align="center"><i>After 2 years, this most requested feature is finally here...</i></p>
 
