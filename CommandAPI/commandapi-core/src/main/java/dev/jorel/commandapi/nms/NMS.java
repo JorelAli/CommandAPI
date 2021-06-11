@@ -328,7 +328,7 @@ public interface NMS<CommandListenerWrapper> {
 
 	UUID getUUID(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
-	World getWorldForCLW(CommandListenerWrapper clw);
+	World getWorldForCSS(CommandListenerWrapper clw);
 
 	/**
 	 * Checks if a Command is an instance of the OBC VanillaCommandWrapper

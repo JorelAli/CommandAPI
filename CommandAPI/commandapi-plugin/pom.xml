@@ -72,7 +72,7 @@
 							<artifactSet>
 								<includes>
 									<include>dev.jorel:commandapi-1.16.5</include>
-									<include>dev.jorel:commandapi-1.17</include>
+									<include>dev.jorel:commandapi-1.17</include> <!-- I presume I have to use the remapped version here instead of the non-remapped one? -->
 									<include>dev.jorel:commandapi-core</include>
 									<include>dev.jorel:commandapi-vh</include>
 								</includes>

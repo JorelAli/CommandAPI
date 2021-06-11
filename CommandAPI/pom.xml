@@ -108,7 +108,6 @@
 						<annotationProcessor>dev.jorel.commandapi.preprocessor.Preprocessor</annotationProcessor>
 					</annotationProcessors>
 				</configuration>
-
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

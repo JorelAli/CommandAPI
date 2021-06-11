@@ -257,12 +257,12 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public ArgumentType<?> _ArgumentFloatRange() {
-		return new ArgumentCriterionValue.a();
+		return ArgumentCriterionValue.a();
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentIntRange() {
-		return new ArgumentCriterionValue.b();
+		return ArgumentCriterionValue.b();
 	}
 
 	@Override
@@ -627,28 +627,28 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	public Location getLocationBlock(CommandContext<CommandListenerWrapper> cmdCtx, String str)
 			throws CommandSyntaxException {
 		BlockPosition blockPos = ArgumentPosition.a(cmdCtx, str);
-		return new Location(getWorldForCLW(cmdCtx.getSource()), blockPos.getX(), blockPos.getY(), blockPos.getZ());
+		return new Location(getWorldForCSS(cmdCtx.getSource()), blockPos.getX(), blockPos.getY(), blockPos.getZ());
 	}
 	
 	@Override
 	public Location getLocationPrecise(CommandContext<CommandListenerWrapper> cmdCtx, String str)
 			throws CommandSyntaxException {
 		Vec3D vecPos = ArgumentVec3.a(cmdCtx, str);
-		return new Location(getWorldForCLW(cmdCtx.getSource()), vecPos.x, vecPos.y, vecPos.z);
+		return new Location(getWorldForCSS(cmdCtx.getSource()), vecPos.x, vecPos.y, vecPos.z);
 	}
 	
 	@Override
 	public Location2D getLocation2DPrecise(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException {
 		Vec2F vecPos = ArgumentVec2.a(cmdCtx, key);
-		return new Location2D(getWorldForCLW(cmdCtx.getSource()), vecPos.i, vecPos.j);
+		return new Location2D(getWorldForCSS(cmdCtx.getSource()), vecPos.i, vecPos.j);
 	}
 
 	@Override
 	public Location2D getLocation2DBlock(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException {
 		BlockPosition2D blockPos = ArgumentVec2I.a(cmdCtx, key);
-		return new Location2D(getWorldForCLW(cmdCtx.getSource()), blockPos.a, blockPos.b);
+		return new Location2D(getWorldForCSS(cmdCtx.getSource()), blockPos.a, blockPos.b);
 	}
 
 	@Override
@@ -744,7 +744,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		CommandSender sender = clw.getBukkitSender();
 		Vec3D pos = clw.getPosition();
 		Vec2F rot = clw.i();
-		World world = getWorldForCLW(clw);
+		World world = getWorldForCSS(clw);
 		Location location = new Location(world, pos.getX(), pos.getY(), pos.getZ(), rot.j, rot.i);
 
 		Entity proxyEntity = clw.getEntity();
@@ -826,7 +826,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
-	public World getWorldForCLW(CommandListenerWrapper clw) {
+	public World getWorldForCSS(CommandListenerWrapper clw) {
 		return (clw.getWorld() == null) ? null : clw.getWorld().getWorld();
 	}
 
