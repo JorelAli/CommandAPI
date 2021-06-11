@@ -61,6 +61,6 @@ public class ChatComponentArgument extends Argument {
 	@Override
 	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return nms.getAdventureChatComponent(cmdCtx, key);
+		return nms.getChatComponent(cmdCtx, key);
 	}
 }
