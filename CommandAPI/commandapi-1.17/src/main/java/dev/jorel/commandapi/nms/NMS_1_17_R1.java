@@ -161,10 +161,15 @@ import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
-// TODO: These fields break when using remappings
+// Mojang-Mapped reflection
 @RequireField(in = ServerResources.class, name = "functionLibrary", ofType = ServerFunctionLibrary.class)
 @RequireField(in = ServerFunctionLibrary.class, name = "functionCompilationLevel", ofType = int.class)
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
+
+// Spigot-Mapped reflection
+// @RequireField(in = DataPackResources.class, name = "j", ofType = CustomFunctionManager.class)
+// @RequireField(in = CustomFunctionManager.class, name = "h", ofType = int.class)
+// @RequireField(in = EntitySelector.class, name = "o", ofType = boolean.class)
 public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 	
 	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
@@ -174,7 +179,7 @@ public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 	static {
 		VarHandle sfl_fcl = null;
 		 try {
-			 sfl_fcl = MethodHandles.privateLookupIn(ServerFunctionLibrary.class, MethodHandles.lookup()).findVarHandle(ServerFunctionLibrary.class, "functionCompilationLevel", int.class);
+			 sfl_fcl = MethodHandles.privateLookupIn(ServerFunctionLibrary.class, MethodHandles.lookup()).findVarHandle(ServerFunctionLibrary.class, "h", int.class);
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
@@ -512,7 +517,7 @@ public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 		// to be used by anyone that registers a command via the CommandAPI.
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
 		try {
-			CommandAPIHandler.getInstance().getField(EntitySelector.class, "usesSelector").set(argument, false);
+			CommandAPIHandler.getInstance().getField(EntitySelector.class, "o").set(argument, false);
 		} catch (IllegalArgumentException | IllegalAccessException e1) {
 			e1.printStackTrace();
 		}
@@ -842,7 +847,7 @@ public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 				serverResources.commands.getDispatcher()
 			);
 			
-			CommandAPIHandler.getInstance().getField(ServerResources.class, "functionLibrary").set(serverResources, replacement);
+			CommandAPIHandler.getInstance().getField(ServerResources.class, "j").set(serverResources, replacement);
 		} catch (IllegalArgumentException | IllegalAccessException e1) {
 			e1.printStackTrace();
 		}

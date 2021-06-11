@@ -21,13 +21,9 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Map.Entry;
 
 import org.bukkit.plugin.java.JavaPlugin;
-
-import dev.jorel.commandapi.arguments.AdvancementArgument;
-import dev.jorel.commandapi.arguments.PotionEffectArgument;
 
 public class CommandAPIMain extends JavaPlugin {
 	
@@ -62,22 +58,5 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable(this);
-		new CommandAPICommand("mycmd")
-			.withArguments(new PotionEffectArgument("pot").includeSuggestions(info -> {
-				return new String[] { "minecraft:glnwing" };
-			}))
-			.executes((sender, args) -> {
-				System.out.println(Arrays.deepToString(args));
-			})
-			.register();
-		
-		new CommandAPICommand("mycmd2")
-		.withArguments(new AdvancementArgument("pot").includeSuggestionsT(info -> {
-			return new IStringTooltip[] { StringTooltip.of("customsuggestion2", "tooltip2!") };
-		}))
-		.executes((sender, args) -> {
-			System.out.println(Arrays.deepToString(args));
-		})
-		.register();
 	}
 }
