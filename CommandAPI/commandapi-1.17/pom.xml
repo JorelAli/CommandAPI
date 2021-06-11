@@ -39,11 +39,6 @@
 			<classifier>remapped-mojang</classifier>
 		</dependency>
 		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot</artifactId>
-			<version>1.17-R0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-core</artifactId>
 			<version>6.0.0</version>

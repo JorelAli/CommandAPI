@@ -34,7 +34,6 @@
 		<module>commandapi-preprocessor</module>
 
 		<!-- NMS versions -->
-		<module>commandapi-1.16.5</module>
 		<module>commandapi-1.17</module>
 
 		<!-- Main core code + NMS selector -->

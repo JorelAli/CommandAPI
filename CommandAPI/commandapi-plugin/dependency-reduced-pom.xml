@@ -20,7 +20,6 @@
             <configuration>
               <artifactSet>
                 <includes>
-                  <include>dev.jorel:commandapi-1.16.5</include>
                   <include>dev.jorel:commandapi-1.17</include>
                   <include>dev.jorel:commandapi-core</include>
                   <include>dev.jorel:commandapi-vh</include>

@@ -608,6 +608,7 @@ public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 	@Override
 	public Predicate<org.bukkit.inventory.ItemStack> getItemStackPredicate(CommandContext<CommandSourceStack> cmdCtx, String key)
 			throws CommandSyntaxException {
+		// Not inside the lambda because getItemPredicate throws CommandSyntaxException
 		Predicate<ItemStack> predicate = ItemPredicateArgument.getItemPredicate(cmdCtx, key);
 		return item -> predicate.test(CraftItemStack.asNMSCopy(item));
 	}
