@@ -702,16 +702,15 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 		if(argument.getOverriddenSuggestions().isPresent()) {
 			// Override the suggestions
 			return getRequiredArgumentBuilderWithProvider(argument, args, toSuggestions(argument.getNodeName(), args, true));
-		} else {
+		} else if(argument.getIncludedSuggestions().isPresent()) {
 			return getRequiredArgumentBuilderWithProvider(argument, args, (cmdCtx, builder) -> argument.getRawType().listSuggestions(cmdCtx, builder));
+		} else {
+			return getRequiredArgumentBuilderWithProvider(argument, args, null);
 		}
 	}
 
 	// Gets a RequiredArgumentBuilder for an argument, given a SuggestionProvider
 	RequiredArgumentBuilder<CommandListenerWrapper, ?> getRequiredArgumentBuilderWithProvider(Argument argument, Argument[] args, SuggestionProvider<CommandListenerWrapper> provider) {
-		RequiredArgumentBuilder<CommandListenerWrapper, ?> requiredArgumentBuilder = RequiredArgumentBuilder.argument(argument.getNodeName(), argument.getRawType());
-		requiredArgumentBuilder = requiredArgumentBuilder.requires((CommandListenerWrapper clw) -> permissionCheck(NMS.getCommandSenderFromCLW(clw), argument.getArgumentPermission(), argument.getRequirements()));
-		
 		SuggestionProvider<CommandListenerWrapper> newSuggestionsProvider = provider;
 		
 		// If we have suggestions to add, combine provider with the suggestions
@@ -725,7 +724,11 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 			};
 		} 
 		
-		return requiredArgumentBuilder.requires((CommandListenerWrapper clw) -> permissionCheck(NMS.getCommandSenderFromCLW(clw), argument.getArgumentPermission(), argument.getRequirements())).suggests(newSuggestionsProvider);
+		RequiredArgumentBuilder<CommandListenerWrapper, ?> requiredArgumentBuilder = RequiredArgumentBuilder.argument(argument.getNodeName(), argument.getRawType());
+		
+		return requiredArgumentBuilder
+			.requires(clw -> permissionCheck(NMS.getCommandSenderFromCLW(clw), argument.getArgumentPermission(), argument.getRequirements()))
+			.suggests(newSuggestionsProvider);
 	}
 	
 	static Argument getArgument(Argument[] args, String nodeName) {
