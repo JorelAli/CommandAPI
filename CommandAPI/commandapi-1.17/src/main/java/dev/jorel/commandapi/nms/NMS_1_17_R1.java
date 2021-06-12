@@ -393,7 +393,7 @@ public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 
 	//Converts NMS function to SimpleFunctionWrapper
 	private SimpleFunctionWrapper convertFunction(CommandFunction commandFunction) {
-		ToIntFunction<CommandSourceStack> appliedObj = css -> MINECRAFT_SERVER.getFunctions().execute(commandFunction, css);
+		ToIntFunction<CommandSourceStack> appliedObj = (CommandSourceStack css) -> MINECRAFT_SERVER.getFunctions().execute(commandFunction, css);
 
 		Entry[] cArr = commandFunction.getEntries();
 		String[] result = new String[cArr.length];
@@ -570,9 +570,13 @@ public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 		CommandSourceStack css = cmdCtx.getSource().withSuppressedOutput().withMaximumPermission(2);
 		
 		for(CommandFunction commandFunction : FunctionArgument.getFunctions(cmdCtx, str)) {
-			result.add(FunctionWrapper.fromSimpleFunctionWrapper(convertFunction(commandFunction), css, e -> {
-				return cmdCtx.getSource().withEntity(((CraftEntity) e).getHandle());
-			}));
+			result.add(
+				FunctionWrapper.fromSimpleFunctionWrapper(
+					convertFunction(commandFunction), 
+					css, 
+					entity -> cmdCtx.getSource().withEntity(((CraftEntity) entity).getHandle())
+				)
+			);
 		}
 		return result.toArray(new FunctionWrapper[0]);
 	}

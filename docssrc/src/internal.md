@@ -30,7 +30,7 @@ The CommandAPI's arguments are basically representations of the different argume
 | `minecraft:float_range` | [`FloatRangeArgument`](./rangedarguments.md#the-integerrange--floatrange-class) |
 | `minecraft:function` | [`FunctionArgument`](./functionwrapper.md) |
 | `minecraft:game_profile` | [`PlayerArgument`](./entityarguments.md#player-argument) |
-| `minecraft:game_profile` | [`OfflinePlayerArgument`](./entityarguments.md#player-argument) |
+| `minecraft:game_profile` | [`OfflinePlayerArgument`](./entityarguments.md#offlineplayer-argument) |
 | `minecraft:int_range` | [`IntegerRangeArgument`](./rangedarguments.md#the-integerrange--floatrange-class) |
 | `minecraft:item_enchantment` | [`EnchantmentArgument`](./enchantmentargument.md) |
 | `minecraft:item_predicate` | [`ItemStackPredicateArgument`](./itemstackpredicateargs.md) |

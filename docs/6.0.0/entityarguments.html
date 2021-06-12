@@ -225,11 +225,15 @@
 </div>
 <hr />
 <h2><a class="header" href="#player-argument" id="player-argument">Player argument</a></h2>
-<p>The <code>PlayerArgument</code> class is very similar <em>(almost identical)</em> to <code>EntitySelectorArgument</code>, with the <code>EntitySelector.ONE_PLAYER</code>.</p>
+<p>The <code>PlayerArgument</code> class is very similar <em>(almost identical)</em> to <code>EntitySelectorArgument</code>, with the <code>EntitySelector.ONE_PLAYER</code>. It returns a <code>Player</code> object and requires the player to be online.</p>
 <blockquote>
 <p><strong>Developer's Note:</strong> </p>
 <p>The <code>PlayerArgument</code> internally uses the <code>GameProfile</code> class from Mojang's authlib, which means that this argument has a slight performance overhead compared to using <code>EntitySelector.ONE_PLAYER</code></p>
 </blockquote>
+<hr />
+<h2><a class="header" href="#offlineplayer-argument" id="offlineplayer-argument">OfflinePlayer argument</a></h2>
+<p>The <code>OfflinePlayerArgument</code> class is basically identical to the <code>PlayerArgument</code> class, but instead of returning a <code>Player</code> object, it returns an <code>OfflinePlayer</code> object. Internally, this argument makes calls to Mojang servers (via Mojang's authlib), meaning it can be slightly slower than alternative methods (such as using a <code>StringArgument</code> and suggesting a list of existing offline players).</p>
+<p>The <code>OfflinePlayerArgument</code> <em>should</em> be able to retrieve players that have never joined the server before.</p>
 <hr />
 <h2><a class="header" href="#entity-type-argument" id="entity-type-argument">Entity type argument</a></h2>
 <p><img src="./images/arguments/entitytype.png" alt="" /></p>

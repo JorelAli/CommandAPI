@@ -50,12 +50,19 @@ We could then use this to target specific entities, for example:
 
 ## Player argument
 
-The `PlayerArgument` class is very similar _(almost identical)_ to `EntitySelectorArgument`, with the `EntitySelector.ONE_PLAYER`.
+The `PlayerArgument` class is very similar _(almost identical)_ to `EntitySelectorArgument`, with the `EntitySelector.ONE_PLAYER`. It returns a `Player` object and requires the player to be online.
 
 > **Developer's Note:** 
 >
 > The `PlayerArgument` internally uses the `GameProfile` class from Mojang's authlib, which means that this argument has a slight performance overhead compared to using `EntitySelector.ONE_PLAYER`
->
+
+-----
+
+## OfflinePlayer argument
+
+The `OfflinePlayerArgument` class is basically identical to the `PlayerArgument` class, but instead of returning a `Player` object, it returns an `OfflinePlayer` object. Internally, this argument makes calls to Mojang servers (via Mojang's authlib), meaning it can be slightly slower than alternative methods (such as using a `StringArgument` and suggesting a list of existing offline players).
+
+The `OfflinePlayerArgument` _should_ be able to retrieve players that have never joined the server before.
 
 -----
 
