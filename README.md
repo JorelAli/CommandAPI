@@ -19,18 +19,27 @@
 
 **Announcements:**
 
+> ### When is 1.17 support coming out?
+> 
+> The CommandAPI has been in constant development for its 6.0.0 release which will include support for Minecraft 1.17. In version 6.0.0, we've chosen to drop support for 1.16.5 and below and this update will only be compatible with 1.17. If you want to use the CommandAPI for previous versions, consider using the latest supported version (5.12)
+>
+> 6.0.0 release ETA: 15th June 2021
+
 > ### The CommandAPI's Maven repo has moved!
 >
 > Versions 5.12 and onwards will use jitpack.io. To update, simply replace the old repo URL (`https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/`) with the new one (`https://jitpack.io`) and change the group ID from `dev.jorel` to `dev.jorel.CommandAPI`
 
-**Compatible Minecraft versions:** 
+**Compatible Minecraft versions:**
 
-|                   |      |        |        |        |        |   |
-| ----------------- | :--: | :----: | :----: | :----: | :----: | - |
-| **1.13 versions** | 1.13 | 1.13.1 | 1.13.2 |        |        ||
-| **1.14 versions** | 1.14<br>(v2.0+) | 1.14.1 | 1.14.2 | 1.14.3<br>(v2.1+) | 1.14.4 ||
-| **1.15 versions** | 1.15<br>(v2.3a+) | 1.15.1 | 1.15.2 |        |        ||
-| **1.16 versions** |      | 1.16.1<br>(v3.0+) | 1.16.2<br>(v4.0+) | 1.16.3<br>(v4.2+) | 1.16.4<br>(v5.2+) | 1.16.5<br>(v5.7+) |
+The version in brackets represents the minimum to maximum version of the CommandAPI that supports the specified version of Minecraft.
+
+|                   |                        |                         |                         |                         |                         |                         |
+| ----------------- | :--------------------: | :---------------------: | :---------------------: | :---------------------: | :---------------------: | :---------------------: |
+| **1.13 versions** | 1.13                   | 1.13.1                  | 1.13.2                  |                         |                         |                         |
+| **1.14 versions** | 1.14<br>(v2.0 - 5.12)  | 1.14.1                  | 1.14.2                  | 1.14.3<br>(v2.1 - 5.12) | 1.14.4                  |                         |
+| **1.15 versions** | 1.15<br>(v2.3a - 5.12) | 1.15.1                  | 1.15.2                  |                         |                         |                         |
+| **1.16 versions** |                        | 1.16.1<br>(v3.0 - 5.12) | 1.16.2<br>(v4.0 - 5.12) | 1.16.3<br>(v4.2 - 5.12) | 1.16.4<br>(v5.2 - 5.12) | 1.16.5<br>(v5.7 - 5.12) |
+| **1.17 versions** | 1.17<br>_(6.0.0+)_     |                         |                         |                         |                         |                         |
 
 -----
 
