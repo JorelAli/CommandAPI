@@ -29,7 +29,10 @@ import java.util.List;
  */
 public class CartesianProduct {
 
-	public static <T> List<List<T>> getDescartes(List<List<T>> list) {
+	// Shouldn't be instantiated
+	private CartesianProduct() {}
+	
+	public static final <T> List<List<T>> getDescartes(List<List<T>> list) {
         List<List<T>> returnList = new ArrayList<>();
         descartesRecursive(list, 0, returnList, new ArrayList<T>());
         return returnList;
@@ -44,7 +47,7 @@ public class CartesianProduct {
            * @param returnList return result
            * @param cacheList temporarily saved list
      */
-    private static <T> void descartesRecursive(List<List<T>> originalList, int position, List<List<T>> returnList, List<T> cacheList) {
+    private static final <T> void descartesRecursive(List<List<T>> originalList, int position, List<List<T>> returnList, List<T> cacheList) {
         List<T> originalItemList = originalList.get(position);
         for (int i = 0; i < originalItemList.size(); i++) {
             //The last one reuses cacheList to save memory

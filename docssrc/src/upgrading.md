@@ -1,5 +1,59 @@
 # Upgrading guide
 
+## From version 5.x to 6.0.0
+
+> **Developer's Note**
+>
+> In 6.0.0, I've deprecated a number of methods which are no longer recommended for use. **These methods will be removed in 7.0.0**. The primary reason for this change is that these methods were not designed to be extensible and ended up causing much more issues than they solved.
+
+### Suggestions
+
+The `overrideSuggestions` and `overrideSuggestionsT` methods are now deprecated. Instead, this has been replaced with the much more powerful `replaceSuggestions` and `replaceSuggestionsT` methods. Instead of using `sender` or `(sender, args)` to get the sender and the previously declared arguments, you should use the `SuggestionsInfo` class with the `sender()` or `previousArgs()` methods:
+
+```java
+new CommandAPICommand("mycommand")
+    .withArguments(new StringArgument("myargument").overrideSuggestions(sender -> {
+        return new String[] { "hello", "world", sender.getName() };
+    }))
+    .executes((sender, args) -> {
+        // etc.
+    })
+    .register();
+```
+
+\\[\downarrow\\]
+
+```java
+new CommandAPICommand("mycommand")
+    .withArguments(new StringArgument("myargument").replaceSuggestions(info -> {
+        return new String[] { "hello", "world", info.sender().getName() };
+    }))
+    .executes((sender, args) -> {
+        // etc.
+    })
+    .register();
+```
+
+Safe suggestions have also been renamed from `safeOverrideSuggestions` and `safeOverrideSuggestionsT` to `replaceWithSafeSuggestions` and `replaceWithSafeSuggestionsT`
+
+### Loading the CommandAPI (With shading)
+
+Before, to initialize the CommandAPI when shading it into your plugin, you would use `CommandAPI.onLoad(boolean verbose)`, which is now deprecated. Instead, you should use the `CommandAPIConfig` variant, with a suitable CommandAPIConfig instance:
+
+```java
+CommandAPI.onLoad(true);
+```
+
+\\[\downarrow\\]
+
+```java
+CommandAPI.onLoad(new CommandAPIConfig().verboseOutput(true));
+```
+
+
+
+-----
+
 ## From version 4.x to 5.0
 
 ### Argument registration

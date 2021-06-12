@@ -177,6 +177,41 @@
                         <div class="sidetoc"><nav class="pagetoc"></nav></div>
                         
                         <h1><a class="header" href="#upgrading-guide" id="upgrading-guide">Upgrading guide</a></h1>
+<h2><a class="header" href="#from-version-5x-to-600" id="from-version-5x-to-600">From version 5.x to 6.0.0</a></h2>
+<blockquote>
+<p><strong>Developer's Note</strong></p>
+<p>In 6.0.0, I've deprecated a number of methods which are no longer recommended for use. <strong>These methods will be removed in 7.0.0</strong>. The primary reason for this change is that these methods were not designed to be extensible and ended up causing much more issues than they solved.</p>
+</blockquote>
+<h3><a class="header" href="#suggestions" id="suggestions">Suggestions</a></h3>
+<p>The <code>overrideSuggestions</code> and <code>overrideSuggestionsT</code> methods are now deprecated. Instead, this has been replaced with the much more powerful <code>replaceSuggestions</code> and <code>replaceSuggestionsT</code> methods. Instead of using <code>sender</code> or <code>(sender, args)</code> to get the sender and the previously declared arguments, you should use the <code>SuggestionsInfo</code> class with the <code>sender()</code> or <code>previousArgs()</code> methods:</p>
+<pre><code class="language-java">new CommandAPICommand(&quot;mycommand&quot;)
+    .withArguments(new StringArgument(&quot;myargument&quot;).overrideSuggestions(sender -&gt; {
+        return new String[] { &quot;hello&quot;, &quot;world&quot;, sender.getName() };
+    }))
+    .executes((sender, args) -&gt; {
+        // etc.
+    })
+    .register();
+</code></pre>
+<p>\[\downarrow\]</p>
+<pre><code class="language-java">new CommandAPICommand(&quot;mycommand&quot;)
+    .withArguments(new StringArgument(&quot;myargument&quot;).replaceSuggestions(info -&gt; {
+        return new String[] { &quot;hello&quot;, &quot;world&quot;, info.sender().getName() };
+    }))
+    .executes((sender, args) -&gt; {
+        // etc.
+    })
+    .register();
+</code></pre>
+<p>Safe suggestions have also been renamed from <code>safeOverrideSuggestions</code> and <code>safeOverrideSuggestionsT</code> to <code>replaceWithSafeSuggestions</code> and <code>replaceWithSafeSuggestionsT</code></p>
+<h3><a class="header" href="#loading-the-commandapi-with-shading" id="loading-the-commandapi-with-shading">Loading the CommandAPI (With shading)</a></h3>
+<p>Before, to initialize the CommandAPI when shading it into your plugin, you would use <code>CommandAPI.onLoad(boolean verbose)</code>, which is now deprecated. Instead, you should use the <code>CommandAPIConfig</code> variant, with a suitable CommandAPIConfig instance:</p>
+<pre><code class="language-java">CommandAPI.onLoad(true);
+</code></pre>
+<p>\[\downarrow\]</p>
+<pre><code class="language-java">CommandAPI.onLoad(new CommandAPIConfig().verboseOutput(true));
+</code></pre>
+<hr />
 <h2><a class="header" href="#from-version-4x-to-50" id="from-version-4x-to-50">From version 4.x to 5.0</a></h2>
 <h3><a class="header" href="#argument-registration" id="argument-registration">Argument registration</a></h3>
 <p><code>LinkedHashMap</code> is no longer used for argument registration. Instead, use a <code>List</code>, and put the argument's &quot;prompt&quot; as the first parameter in the argument's constructor. For example:</p>

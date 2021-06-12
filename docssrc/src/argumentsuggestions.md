@@ -74,6 +74,8 @@ We then implement our warp teleporting command using `replaceSuggestions()` on t
 
 </div>
 
+The second method, `includeSuggestions(Function<SuggestionInfo, String[]>)`, allows you to _include_ additional suggestions in combination with the list of existing suggestions for a command.
+
 -----
 
 ## Suggestions depending on a command sender

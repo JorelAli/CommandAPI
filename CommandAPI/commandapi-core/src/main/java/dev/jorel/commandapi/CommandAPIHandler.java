@@ -795,7 +795,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 			Field result = null;
 			try {
 				result = clazz.getDeclaredField(name);
-			} catch (NoSuchFieldException | SecurityException e) {
+			} catch (ReflectiveOperationException e) {
 				e.printStackTrace();
 			}
 			result.setAccessible(true);
