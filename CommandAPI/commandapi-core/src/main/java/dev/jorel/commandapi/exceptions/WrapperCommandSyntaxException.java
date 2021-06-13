@@ -28,6 +28,9 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 @SuppressWarnings("serial")
 public class WrapperCommandSyntaxException extends Exception {
 	
+	/**
+	 * The Brigadier CommandSyntaxException that this class wraps
+	 */
 	private CommandSyntaxException exception;
 	
 	/**

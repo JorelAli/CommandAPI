@@ -73,7 +73,6 @@ var annotated_dup =
           [ "executors", "namespacedev_1_1jorel_1_1commandapi_1_1executors.html", "namespacedev_1_1jorel_1_1commandapi_1_1executors" ],
           [ "wrappers", "namespacedev_1_1jorel_1_1commandapi_1_1wrappers.html", "namespacedev_1_1jorel_1_1commandapi_1_1wrappers" ],
           [ "Brigadier", "classdev_1_1jorel_1_1commandapi_1_1_brigadier.html", "classdev_1_1jorel_1_1commandapi_1_1_brigadier" ],
-          [ "CartesianProduct", "classdev_1_1jorel_1_1commandapi_1_1_cartesian_product.html", "classdev_1_1jorel_1_1commandapi_1_1_cartesian_product" ],
           [ "CommandAPI", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i" ],
           [ "CommandAPICommand", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command" ],
           [ "CommandAPIConfig", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config" ],

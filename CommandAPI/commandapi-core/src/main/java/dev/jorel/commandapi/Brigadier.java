@@ -20,7 +20,6 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BiPredicate;
@@ -44,8 +43,11 @@ import dev.jorel.commandapi.arguments.LiteralArgument;
  * so you can use the CommandAPI alongside Mojang's com.mojang.brigadier package
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
-public abstract class Brigadier {
+public final class Brigadier {
 
+	// Cannot be instantiated
+	private Brigadier() {}
+	
 	/**
 	 * Returns the Brigadier CommandDispatcher tree that is used internally by the
 	 * CommandAPI. Modifying this CommandDispatcher tree before the server finishes
@@ -155,9 +157,7 @@ public abstract class Brigadier {
 	 * @return a RequiredArgumentBuilder that represents the provided argument
 	 */
 	public static RequiredArgumentBuilder fromArgument(Argument argument) {
-		List<Argument> arguments = new ArrayList<>();
-		arguments.add(argument);
-		return CommandAPIHandler.getInstance().getRequiredArgumentBuilderDynamic(arguments.toArray(new Argument[0]), argument);
+		return CommandAPIHandler.getInstance().getRequiredArgumentBuilderDynamic(new Argument[] { argument }, argument);
 	}
 
 	/**

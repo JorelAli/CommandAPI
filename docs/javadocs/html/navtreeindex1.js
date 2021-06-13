@@ -246,8 +246,8 @@ var NAVTREEINDEX1 =
 "classdev_1_1jorel_1_1commandapi_1_1_brigadier.html#ae58271fd8274048d3f82b1acec598636":[2,0,1,0,0,5,2],
 "classdev_1_1jorel_1_1commandapi_1_1_brigadier.html#aee61e8e704b8dc3bf99244f8cc42ad98":[2,0,1,0,0,5,0],
 "classdev_1_1jorel_1_1commandapi_1_1_brigadier.html#afe49f5c6dced980b6e4a8a519b86e7bb":[2,0,1,0,0,5,6],
-"classdev_1_1jorel_1_1commandapi_1_1_cartesian_product.html":[2,0,1,0,0,6],
-"classdev_1_1jorel_1_1commandapi_1_1_cartesian_product.html#a14431e3c80f6f56456e2bca64aae89db":[2,0,1,0,0,6,1],
-"classdev_1_1jorel_1_1commandapi_1_1_cartesian_product.html#a3bc34c8037eacb7cfb269ab52ae01681":[2,0,1,0,0,6,0],
-"classdev_1_1jorel_1_1commandapi_1_1_cartesian_product.html#aad368e66d9b99a01bab3b51f0526706a":[2,0,1,0,0,6,2]
+"classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html":[2,0,1,0,0,6],
+"classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a0fbec78135f7187645851ee4e12a74f3":[2,0,1,0,0,6,12],
+"classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a10b6668a659eb55d995e450a07a41d05":[2,0,1,0,0,6,9],
+"classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a386654d2b9a36d863263c6def5430845":[2,0,1,0,0,6,3]
 };

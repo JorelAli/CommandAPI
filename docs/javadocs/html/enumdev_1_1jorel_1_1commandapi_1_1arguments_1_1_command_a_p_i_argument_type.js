@@ -34,6 +34,7 @@ var enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type 
     [ "NBT_COMPOUND", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ae8aed802df31abe3b1d38e3e5e753dca", null ],
     [ "OBJECTIVE", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a0f0dde9643a62fab9bea9483cb09973a", null ],
     [ "OBJECTIVE_CRITERIA", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a88c23c908b311e33a06fae6edfb90e97", null ],
+    [ "OFFLINE_PLAYER", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#aca926ae549b4113409bc20cf00ab309e", null ],
     [ "PARTICLE", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a72c70172767e42477678454eda33e7cb", null ],
     [ "PLAYER", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ac5739032037514f0aa89935f8d9dd2cc", null ],
     [ "POTION_EFFECT", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ac83b55db69689cdc2bf9d527394e46be", null ],

@@ -80,7 +80,7 @@ import dev.jorel.commandapi.preprocessor.RequireField;
  */
 @RequireField(in = CommandNode.class, name = "children", ofType = Map.class)
 @RequireField(in = CommandContext.class, name = "arguments", ofType = Map.class)
-public class CommandAPIHandler<CommandListenerWrapper> {
+public class CommandAPIHandler<CommandSourceStack> {
 	
 	private final static VarHandle COMMANDNODE_CHILDREN;
 	private final static VarHandle COMMANDCONTEXT_ARGUMENTS;
@@ -99,14 +99,29 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 		COMMANDCONTEXT_ARGUMENTS = commandContextArguments;
 	}
 	
-	// I'm not sure that this is the right place to put this function, but it's doing no harm, right?
-	public static <CommandListenerWrapper> String getRawArgumentInput(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		StringRange range = ((Map<String, ParsedArgument<CommandListenerWrapper, ?>>) COMMANDCONTEXT_ARGUMENTS.get(cmdCtx)).get(key).getRange();
+	/**
+	 * Returns the raw input for an argument for a given command context and its
+	 * key. This effectively returns the string value that is currently typed for
+	 * this argument
+	 * 
+	 * @param <CommandSourceStack> the command source type
+	 * @param cmdCtx                   the command context which is used to run this
+	 *                                 command
+	 * @param key                      the node name for the argument
+	 * @return the raw input string for this argument
+	 */
+	public static <CommandSourceStack> String getRawArgumentInput(CommandContext<CommandSourceStack> cmdCtx, String key) {
+		StringRange range = ((Map<String, ParsedArgument<CommandSourceStack, ?>>) COMMANDCONTEXT_ARGUMENTS.get(cmdCtx)).get(key).getRange();
 		return cmdCtx.getInput().substring(range.getStart(), range.getEnd());
 	}
 	
 	private static CommandAPIHandler<?> instance;
 	
+	/**
+	 * Returns the Singleton instance of the CommandAPI's internal handler
+	 * 
+	 * @return the Singleton instance of the CommandAPI's internal handler
+	 */
 	public static CommandAPIHandler<?> getInstance() {
 		if(instance == null) {
 			instance = new CommandAPIHandler<>();
@@ -116,8 +131,8 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	
 	final Map<ClassCache, Field> FIELDS = new HashMap<>();
 	final TreeMap<String, CommandPermission> PERMISSIONS_TO_FIX = new TreeMap<>();
-	final NMS<CommandListenerWrapper> NMS;
-	final CommandDispatcher<CommandListenerWrapper> DISPATCHER;
+	final NMS<CommandSourceStack> NMS;
+	final CommandDispatcher<CommandSourceStack> DISPATCHER;
 	final Map<String, List<String>> registeredCommands; //Keep track of what has been registered for type checking 
 	
 	private CommandAPIHandler() {
@@ -172,7 +187,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	 * 
 	 * @return an instance of NMS
 	 */
-	public NMS<CommandListenerWrapper> getNMS() {
+	public NMS<CommandSourceStack> getNMS() {
 		return NMS;
 	}
 	
@@ -216,7 +231,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	 * @return a brigadier command which is registered internally
 	 * @throws CommandSyntaxException if an error occurs when the command is ran
 	 */
-	Command<CommandListenerWrapper> generateCommand(Argument[] args, CustomCommandExecutor executor, boolean converted)
+	Command<CommandSourceStack> generateCommand(Argument[] args, CustomCommandExecutor executor, boolean converted)
 			throws CommandSyntaxException {
 
 		// Generate our command from executor
@@ -300,7 +315,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	 * @return an Object[] which can be used in (sender, args) -> 
 	 * @throws CommandSyntaxException
 	 */
-	Object[] argsToObjectArr(CommandContext<CommandListenerWrapper> cmdCtx, Argument[] args) throws CommandSyntaxException {
+	Object[] argsToObjectArr(CommandContext<CommandSourceStack> cmdCtx, Argument[] args) throws CommandSyntaxException {
 		// Array for arguments for executor
 		List<Object> argList = new ArrayList<>();
 
@@ -326,7 +341,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	 * @return the standard Bukkit type
 	 * @throws CommandSyntaxException
 	 */
-	Object parseArgument(CommandContext<CommandListenerWrapper> cmdCtx, String key, Argument value) throws CommandSyntaxException {
+	Object parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Argument value) throws CommandSyntaxException {
 		return value.isListed() ? value.parseArgument(NMS, cmdCtx, key) : null;
 	}
 
@@ -348,7 +363,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	 *  	will be used for suggestions for said argument</li></ul>
 	 * @param requirements 
 	 */
-	Predicate<CommandListenerWrapper> generatePermissions(String commandName, CommandPermission permission, Predicate<CommandSender> requirements) {
+	Predicate<CommandSourceStack> generatePermissions(String commandName, CommandPermission permission, Predicate<CommandSender> requirements) {
 		// If we've already registered a permission, set it to the "parent" permission.
 		if (PERMISSIONS_TO_FIX.containsKey(commandName.toLowerCase())) {
 			if (!PERMISSIONS_TO_FIX.get(commandName.toLowerCase()).equals(permission)) {
@@ -369,7 +384,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 			}
 		}
 
-		return (CommandListenerWrapper clw) -> permissionCheck(NMS.getCommandSenderFromCLW(clw), finalPermission, requirements);
+		return (CommandSourceStack css) -> permissionCheck(NMS.getCommandSenderFromCSS(css), finalPermission, requirements);
 	}
 
 	/**
@@ -518,7 +533,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	}
 	
 	// Links arg -> Executor
-	private ArgumentBuilder<CommandListenerWrapper, ?> generateInnerArgument(Command<CommandListenerWrapper> command, Argument[] args) {
+	private ArgumentBuilder<CommandSourceStack, ?> generateInnerArgument(Command<CommandSourceStack> command, Argument[] args) {
 		Argument innerArg = args[args.length - 1];
 
 		// Handle Literal arguments
@@ -540,8 +555,8 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	}
 	
 	// Links arg1 -> arg2 -> ... argN -> innermostArgument
-	private ArgumentBuilder<CommandListenerWrapper, ?> generateOuterArguments(ArgumentBuilder<CommandListenerWrapper, ?> innermostArgument, Argument[] args) {
-		ArgumentBuilder<CommandListenerWrapper, ?> outer = innermostArgument;
+	private ArgumentBuilder<CommandSourceStack, ?> generateOuterArguments(ArgumentBuilder<CommandSourceStack, ?> innermostArgument, Argument[] args) {
+		ArgumentBuilder<CommandSourceStack, ?> outer = innermostArgument;
 		for (int i = args.length - 2; i >= 0; i--) {
 			Argument outerArg = args[i];
 
@@ -595,14 +610,14 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 		CommandAPI.logInfo("Registering command /" + commandName + " " + builder.toString());
 
 		// Generate the actual command
-		Command<CommandListenerWrapper> command = generateCommand(args, executor, converted);
+		Command<CommandSourceStack> command = generateCommand(args, executor, converted);
 
 		/*
 		 * The innermost argument needs to be connected to the executor. Then that argument needs to be connected to
 		 * the previous argument etc. Then the first argument needs to be connected to the command name, so we get:
 		 *   CommandName -> Args1 -> Args2 -> ... -> ArgsN -> Executor
 		 */
-		LiteralCommandNode<CommandListenerWrapper> resultantNode;
+		LiteralCommandNode<CommandSourceStack> resultantNode;
 		if (args.length == 0) {
 			// Link command name to the executor
 			resultantNode = DISPATCHER.register(getLiteralArgumentBuilder(commandName).requires(generatePermissions(commandName, permissions, requirements)).executes(command));
@@ -615,7 +630,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 		} else {
 
 			// Generate all of the arguments, following each other and finally linking to the executor
-			ArgumentBuilder<CommandListenerWrapper, ?> commandArguments = generateOuterArguments(generateInnerArgument(command, args), args);
+			ArgumentBuilder<CommandSourceStack, ?> commandArguments = generateOuterArguments(generateInnerArgument(command, args), args);
 
 			// Link command name to first argument and register
 			resultantNode = DISPATCHER.register(getLiteralArgumentBuilder(commandName).requires(generatePermissions(commandName, permissions, requirements)).then(commandArguments));
@@ -679,7 +694,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	 * @param commandName the name of the literal to create
 	 * @return a brigadier LiteralArgumentBuilder representing a literal
 	 */
-	LiteralArgumentBuilder<CommandListenerWrapper> getLiteralArgumentBuilder(String commandName) {
+	LiteralArgumentBuilder<CommandSourceStack> getLiteralArgumentBuilder(String commandName) {
 		return LiteralArgumentBuilder.literal(commandName);
 	}
 
@@ -690,13 +705,13 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	 * @param permission  the permission required to use this literal
 	 * @return a brigadier LiteralArgumentBuilder representing a literal
 	 */
-	LiteralArgumentBuilder<CommandListenerWrapper> getLiteralArgumentBuilderArgument(String commandName, CommandPermission permission, Predicate<CommandSender> requirements) {
-		LiteralArgumentBuilder<CommandListenerWrapper> builder = LiteralArgumentBuilder.literal(commandName);
-		return builder.requires((CommandListenerWrapper clw) -> permissionCheck(NMS.getCommandSenderFromCLW(clw), permission, requirements));
+	LiteralArgumentBuilder<CommandSourceStack> getLiteralArgumentBuilderArgument(String commandName, CommandPermission permission, Predicate<CommandSender> requirements) {
+		LiteralArgumentBuilder<CommandSourceStack> builder = LiteralArgumentBuilder.literal(commandName);
+		return builder.requires((CommandSourceStack css) -> permissionCheck(NMS.getCommandSenderFromCSS(css), permission, requirements));
 	}
 
 	// Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
-	RequiredArgumentBuilder<CommandListenerWrapper, ?> getRequiredArgumentBuilderDynamic(
+	RequiredArgumentBuilder<CommandSourceStack, ?> getRequiredArgumentBuilderDynamic(
 			final Argument[] args, Argument argument) {
 		
 		if(argument.getOverriddenSuggestions().isPresent()) {
@@ -710,12 +725,12 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	}
 
 	// Gets a RequiredArgumentBuilder for an argument, given a SuggestionProvider
-	RequiredArgumentBuilder<CommandListenerWrapper, ?> getRequiredArgumentBuilderWithProvider(Argument argument, Argument[] args, SuggestionProvider<CommandListenerWrapper> provider) {
-		SuggestionProvider<CommandListenerWrapper> newSuggestionsProvider = provider;
+	RequiredArgumentBuilder<CommandSourceStack, ?> getRequiredArgumentBuilderWithProvider(Argument argument, Argument[] args, SuggestionProvider<CommandSourceStack> provider) {
+		SuggestionProvider<CommandSourceStack> newSuggestionsProvider = provider;
 		
 		// If we have suggestions to add, combine provider with the suggestions
 		if(argument.getIncludedSuggestions().isPresent() && argument.getOverriddenSuggestions().isEmpty()) {
-			SuggestionProvider<CommandListenerWrapper> addedSuggestions = toSuggestions(argument.getNodeName(), args, false);
+			SuggestionProvider<CommandSourceStack> addedSuggestions = toSuggestions(argument.getNodeName(), args, false);
 			
 			newSuggestionsProvider = (cmdCtx, builder) -> {
 				addedSuggestions.getSuggestions(cmdCtx, builder);
@@ -724,10 +739,10 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 			};
 		} 
 		
-		RequiredArgumentBuilder<CommandListenerWrapper, ?> requiredArgumentBuilder = RequiredArgumentBuilder.argument(argument.getNodeName(), argument.getRawType());
+		RequiredArgumentBuilder<CommandSourceStack, ?> requiredArgumentBuilder = RequiredArgumentBuilder.argument(argument.getNodeName(), argument.getRawType());
 		
 		return requiredArgumentBuilder
-			.requires(clw -> permissionCheck(NMS.getCommandSenderFromCLW(clw), argument.getArgumentPermission(), argument.getRequirements()))
+			.requires(css -> permissionCheck(NMS.getCommandSenderFromCSS(css), argument.getArgumentPermission(), argument.getRequirements()))
 			.suggests(newSuggestionsProvider);
 	}
 	
@@ -740,8 +755,8 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 		throw new NoSuchElementException("Could not find argument '" + nodeName + "'");
 	}
 	
-	SuggestionProvider<CommandListenerWrapper> toSuggestions(String nodeName, Argument[] args, boolean overrideSuggestions) {
-		return (CommandContext<CommandListenerWrapper> context, SuggestionsBuilder builder) -> {
+	SuggestionProvider<CommandSourceStack> toSuggestions(String nodeName, Argument[] args, boolean overrideSuggestions) {
+		return (CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) -> {
 			// Populate Object[], which is our previously filled arguments
 			List<Object> previousArguments = new ArrayList<>();
 
@@ -769,15 +784,15 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 				}
 			}
 			
-			SuggestionInfo suggestionInfo = new SuggestionInfo(NMS.getCommandSenderFromCLW(context.getSource()), previousArguments.toArray(), builder.getInput(), builder.getRemaining());
+			SuggestionInfo suggestionInfo = new SuggestionInfo(NMS.getCommandSenderFromCSS(context.getSource()), previousArguments.toArray(), builder.getInput(), builder.getRemaining());
 			Optional<Function<SuggestionInfo, IStringTooltip[]>> suggestionsToAddOrOverride = overrideSuggestions ? getArgument(args, nodeName).getOverriddenSuggestions() : getArgument(args, nodeName).getIncludedSuggestions();
 			return getSuggestionsBuilder(builder, suggestionsToAddOrOverride.orElseGet(() -> o -> new IStringTooltip[0]).apply(suggestionInfo));
 		};
 	}
 	
-	//////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////
 	// SECTION: Reflection //
-	//////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////
 
 	/**
 	 * Caches a field using reflection if it is not already cached, then return the
@@ -802,5 +817,63 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 			FIELDS.put(key, result);
 			return result;
 		}
+	}
+	
+	//////////////////////////////
+	// SECTION: Private classes //
+	//////////////////////////////
+	
+	/**
+	 * Class to store cached methods and fields 
+	 * 
+	 * This is required because each
+	 * key is made up of a class and a field or method name
+	 */
+	private record ClassCache(Class<?> clazz, String name) {}
+	
+	/**
+	 * A class to compute the cartesian product of a number of lists.
+	 * Source: https://www.programmersought.com/article/86195393650/
+	 */
+	private class CartesianProduct {
+
+		// Shouldn't be instantiated
+		private CartesianProduct() {}
+		
+		/**
+		 * Returns the Cartesian product of a list of lists
+		 * @param <T> the underlying type of the list of lists
+		 * @param list the list to calculate the Cartesian product of
+		 * @return a List of lists which represents the Cartesian product of all elements of the input
+		 */
+		public static final <T> List<List<T>> getDescartes(List<List<T>> list) {
+	        List<List<T>> returnList = new ArrayList<>();
+	        descartesRecursive(list, 0, returnList, new ArrayList<T>());
+	        return returnList;
+	    }
+
+	    /**
+	     * Recursive implementation
+	     * Principle: traverse sequentially from 0 of the original list to the end
+	     * @param <T> the underlying type of the list of lists
+	     * @param originalList original list
+	     * @param position The position of the current recursion in the original list
+	     * @param returnList return result
+	     * @param cacheList temporarily saved list
+	     */
+	    private static final <T> void descartesRecursive(List<List<T>> originalList, int position, List<List<T>> returnList, List<T> cacheList) {
+	        List<T> originalItemList = originalList.get(position);
+	        for (int i = 0; i < originalItemList.size(); i++) {
+	            //The last one reuses cacheList to save memory
+	            List<T> childCacheList = (i == originalItemList.size() - 1) ? cacheList : new ArrayList<>(cacheList);
+	            childCacheList.add(originalItemList.get(i));
+	            if (position == originalList.size() - 1) {//Exit recursion to the end
+	                returnList.add(childCacheList);
+	                continue;
+	            }
+	            descartesRecursive(originalList, position + 1, returnList, childCacheList);
+	        }
+	    }
+
 	}
 }

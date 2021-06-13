@@ -1,7 +1,7 @@
 var classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler =
 [
-    [ "getField", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#af97b5fe94c3644242586c62d144a0455", null ],
-    [ "getInstance", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a8f21a4e8fec1297ff259df57e01265e6", null ],
-    [ "getNMS", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a2bd4e2c6f39c28e0ff581b9364a1aa01", null ],
-    [ "getRawArgumentInput", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a6de17ae2a4394dbe8fcb7e3583656705", null ]
+    [ "getField", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a538af0270e651fec5d4b6c768f4ed9e4", null ],
+    [ "getInstance", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a38c22a8cd332c338cdb28a0380645a97", null ],
+    [ "getNMS", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a76d8d149fef577d3a7f5d9895906d956", null ],
+    [ "getRawArgumentInput", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#ad641dfd8034d09c77827e10ceb80f532", null ]
 ];

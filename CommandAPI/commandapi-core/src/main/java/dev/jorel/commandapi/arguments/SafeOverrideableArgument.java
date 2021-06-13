@@ -36,16 +36,34 @@ import dev.jorel.commandapi.Tooltip;
 
 /**
  * An interface declaring methods required to override argument suggestions
+ * 
+ * @param <S> A custom type which is represented by this argument. For example, a {@link LocationArgument} will have a custom type <code>Location</code>
  */
 public abstract class SafeOverrideableArgument<S> extends Argument {
 	
 	private final Function<S, String> mapper;
 
+	/**
+	 * Instantiates this argument and assigns the mapper to the provided mapper
+	 * 
+	 * @param nodeName the node name of this argument
+	 * @param rawType  the NMS raw argument type of this argument
+	 * @param mapper   the mapping function that maps this argument type to a string
+	 *                 for suggestions
+	 */
 	protected SafeOverrideableArgument(String nodeName, ArgumentType<?> rawType, Function<S, String> mapper) {
 		super(nodeName, rawType);
 		this.mapper = mapper;
 	}
 	
+	/**
+	 * Replaces the suggestions of this argument with an array of suggestions.
+	 * 
+	 * @param suggestions a function that takes in {@link SuggestionInfo} and
+	 *                    returns a {@link S} array of suggestions, where S is your custom
+	 *                    type
+	 * @return the current argument
+	 */
 	public final Argument replaceWithSafeSuggestions(Function<SuggestionInfo, S[]> suggestions) {
 		return super.replaceSuggestions(suggestionsInfo -> {
 			S[] sArr = suggestions.apply(suggestionsInfo);
@@ -56,7 +74,15 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 			return result;
 		});
 	}
-	
+
+	/**
+	 * Replaces the suggestions of this argument with an array of suggestions.
+	 * 
+	 * @param suggestions a function that takes in {@link SuggestionInfo} and
+	 *                    returns a {@link Tooltip} array of suggestions,
+	 *                    parameterized over {@link S} where S is your custom type
+	 * @return the current argument
+	 */
 	public final Argument replaceWithSafeSuggestionsT(Function<SuggestionInfo, Tooltip<S>[]> suggestions) {
 		return super.includeSuggestionsT(suggestionsInfo -> {
 			Tooltip<S>[] tArr = suggestions.apply(suggestionsInfo);
@@ -68,6 +94,16 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 		});
 	}
 	
+	/**
+	 * Include suggestions to add to the list of default suggestions represented by
+	 * this argument.
+	 * 
+	 * @param suggestions a function that takes in {@link SuggestionInfo} which
+	 *                    includes information about the current state at the time
+	 *                    the suggestions are run and returns a {@link S} array of
+	 *                    suggestions to add, where S is your custom type
+	 * @return the current argument
+	 */
 	public final Argument includeWithSafeSuggestions(Function<SuggestionInfo, S[]> suggestions) {
 		return super.replaceSuggestions(suggestionsInfo -> {
 			S[] sArr = suggestions.apply(suggestionsInfo);
@@ -78,7 +114,18 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 			return result;
 		});
 	}
-	
+
+	/**
+	 * Include suggestions to add to the list of default suggestions represented by
+	 * this argument.
+	 * 
+	 * @param suggestions a function that takes in {@link SuggestionInfo} which
+	 *                    includes information about the current state at the time
+	 *                    the suggestions are run and returns a {@link Tooltip}
+	 *                    array of suggestions to add, parameterized over {@link S}
+	 *                    where S is your custom type
+	 * @return the current argument
+	 */
 	public final Argument includeWithSafeSuggestionsT(Function<SuggestionInfo, Tooltip<S>[]> suggestions) {
 		return super.includeSuggestionsT(suggestionsInfo -> {
 			Tooltip<S>[] tArr = suggestions.apply(suggestionsInfo);
@@ -95,11 +142,12 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 * 
 	 * @param suggestions the S array to override suggestions with
 	 * @return the current argument
+	 * @deprecated use {@link SafeOverrideableArgument#replaceSuggestions(Function)}
 	 */
 	@Deprecated
 	@SuppressWarnings("unchecked")
 	public final Argument safeOverrideSuggestions(S... suggestions) {
-		return super.overrideSuggestions(sMap0(suggestions));
+		return super.overrideSuggestions((c, m) -> Arrays.stream(suggestions).map(mapper).toArray(String[]::new));
 	}
 	
 	/**
@@ -107,11 +155,12 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 * 
 	 * @param suggestions the <code>Collection&lt;S&gt;</code> to override suggestions with
 	 * @return the current argument
+	 * @deprecated use {@link SafeOverrideableArgument#replaceSuggestions(Function)}
 	 */
 	@Deprecated
 	@SuppressWarnings("unchecked")
 	public final Argument safeOverrideSuggestions(Collection<S> suggestions) {
-		return super.overrideSuggestions(sMap0(suggestions.toArray((S[]) new Object[0])));
+		return this.safeOverrideSuggestions(suggestions.toArray((S[]) new Object[0]));
 	} 
 
 	/**
@@ -120,10 +169,11 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 * 
 	 * @param suggestions the function to override suggestions with
 	 * @return the current argument
+	 * @deprecated use {@link SafeOverrideableArgument#replaceSuggestions(Function)}
 	 */
 	@Deprecated
 	public final Argument safeOverrideSuggestions(Function<CommandSender, S[]> suggestions) {
-		return super.overrideSuggestions(sMap1(suggestions));
+		return super.overrideSuggestions((c, m) -> Arrays.stream(suggestions.apply(c)).map(mapper).toArray(String[]::new));
 	}
 	
 	/**
@@ -132,10 +182,11 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 * 
 	 * @param suggestions the function to override suggestions with
 	 * @return the current argument
+	 * @deprecated use {@link SafeOverrideableArgument#replaceSuggestions(Function)}
 	 */
 	@Deprecated
 	public final Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], S[]> suggestions) {
-		return super.overrideSuggestions(sMap2(suggestions));
+		return super.overrideSuggestions((c, m) -> Arrays.stream(suggestions.apply(c, m)).map(mapper).toArray(String[]::new));
 	}
 	
 	/**
@@ -144,11 +195,12 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 * 
 	 * @param suggestions the suggestions and tooltips to override suggestions with 
 	 * @return the current argument
+	 * @deprecated use {@link SafeOverrideableArgument#replaceSuggestionsT(Function)}
 	 */
 	@Deprecated
 	@SafeVarargs
 	public final Argument safeOverrideSuggestionsT(Tooltip<S>... suggestions) {
-		return super.overrideSuggestionsT(tMap0(suggestions));
+		return super.overrideSuggestionsT((c, m) -> Arrays.stream(suggestions).map(Tooltip.build(mapper)).toArray(IStringTooltip[]::new));
 	};
 	
 	/**
@@ -157,11 +209,12 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 * 
 	 * @param suggestions the suggestions and tooltips to override suggestions with 
 	 * @return the current argument
+	 * @deprecated use {@link SafeOverrideableArgument#replaceSuggestionsT(Function)}
 	 */
 	@Deprecated
 	@SuppressWarnings("unchecked")
 	public final Argument safeOverrideSuggestionsT(Collection<Tooltip<S>> suggestions) {
-		return super.overrideSuggestionsT(tMap0(suggestions.toArray(new Tooltip[0])));
+		return this.safeOverrideSuggestionsT(suggestions.toArray(new Tooltip[0]));
 	};
 	
 	/**
@@ -171,10 +224,11 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 * 
 	 * @param suggestions the suggestions and tooltips to override suggestions with
 	 * @return the current argument
+	 * @deprecated use {@link SafeOverrideableArgument#replaceSuggestionsT(Function)}
 	 */
 	@Deprecated
 	public final Argument safeOverrideSuggestionsT(Function<CommandSender, Tooltip<S>[]> suggestions) {
-		return super.overrideSuggestionsT(tMap1(suggestions));
+		return super.overrideSuggestionsT((c, m) -> Arrays.stream(suggestions.apply(c)).map(Tooltip.build(mapper)).toArray(IStringTooltip[]::new));
 	}
 	
 	/**
@@ -184,10 +238,11 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 * 
 	 * @param suggestions the suggestions and tooltips to override suggestions with
 	 * @return the current argument
+	 * @deprecated use {@link SafeOverrideableArgument#replaceSuggestionsT(Function)}
 	 */
 	@Deprecated
 	public final Argument safeOverrideSuggestionsT(BiFunction<CommandSender, Object[], Tooltip<S>[]> suggestions) {
-		return super.overrideSuggestionsT(tMap2(suggestions));
+		return super.overrideSuggestionsT((c, m) -> Arrays.stream(suggestions.apply(c, m)).map(Tooltip.build(mapper)).toArray(IStringTooltip[]::new));
 	}
 	
 	/**
@@ -197,86 +252,6 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 */
 	static <S> Function<S, String> fromKey(Function<S, NamespacedKey> mapper) {
 		return mapper.andThen(NamespacedKey::toString);
-	}
-	
-	/**
-	 * Safely overrides the suggestions of this argument with a custom array.
-	 * Arguments of type S are guaranteed to succeed in commands if and only if the
-	 * mapping function does not fail.
-	 * 
-	 * @param mapper      the mapping function from S to a String
-	 * @param suggestions a S[] of objects to suggest to the command sender
-	 * @return the current argument
-	 */
-	@Deprecated
-	@SafeVarargs
-	private final BiFunction<CommandSender, Object[], String[]> sMap0(S... suggestions) {
-		return (c, m) -> Arrays.stream(suggestions).map(mapper).toArray(String[]::new);
-	}
-	
-	/**
-	 * Safely overrides the suggestions of this argument with a custom array.
-	 * Arguments of type S are guaranteed to succeed in commands if and only if the
-	 * mapping function does not fail.
-	 * 
-	 * @param mapper      the mapping function from S to a String
-	 * @param suggestions a <code>(sender, args) -&gt; S[]</code> of objects to suggest to the command sender where <code>sender</code> is the command sender
-	 * @return the current argument
-	 */
-	@Deprecated
-	private final BiFunction<CommandSender, Object[], String[]> sMap1(Function<CommandSender, S[]> suggestions) {
-		return (c, m) -> Arrays.stream(suggestions.apply(c)).map(mapper).toArray(String[]::new);
-	}
-	
-	/**
-	 * Safely overrides the suggestions of this argument with a custom array.
-	 * Arguments of type S are guaranteed to succeed in commands if and only if the
-	 * mapping function does not fail.
-	 * 
-	 * @param mapper      the mapping function from S to a String
-	 * @param suggestions a <code>(sender, args) -&gt; S[]</code> of objects to suggest to the command sender where <code>sender</code> is the command sender and <code>args</code> is the array of previously defined arguments 
-	 * @return the current argument
-	 */
-	@Deprecated
-	private final BiFunction<CommandSender, Object[], String[]> sMap2(BiFunction<CommandSender, Object[], S[]> suggestions) {
-		return (c, m) -> Arrays.stream(suggestions.apply(c, m)).map(mapper).toArray(String[]::new);
-	}
-	
-	/**
-	 * sMap0, but for <code>Tooltip&lt;S&gt;</code> instead of Strings
-	 * @param mapper the mapping function from S to a String
-	 * @param suggestions a <code>Tooltip<S>[]</code> of tooltips and suggestions to send to the user
-	 * @return the current argument
-	 * @see SafeOverrideableArgument#sMap0(Function, Object...)
-	 */
-	@Deprecated
-	@SafeVarargs
-	private final BiFunction<CommandSender, Object[], IStringTooltip[]> tMap0(Tooltip<S>... suggestions) {
-		return (c, m) -> Arrays.stream(suggestions).map(Tooltip.build(mapper)).toArray(IStringTooltip[]::new);
-	}
-	
-	/**
-	 * sMap1, but for <code>Tooltip&lt;S&gt;</code> instead of Strings
-	 * @param mapper the mapping function from S to a String
-	 * @param suggestions a <code>(sender) -&gt; Tooltip&lt;S&gt;[]</code> of tooltips and suggestions to send to the user
-	 * @return the current argument
-	 * @see SafeOverrideableArgument#sMap1(Function, Function)
-	 */
-	@Deprecated
-	private final BiFunction<CommandSender, Object[], IStringTooltip[]> tMap1(Function<CommandSender, Tooltip<S>[]> suggestions) {
-		return (c, m) -> Arrays.stream(suggestions.apply(c)).map(Tooltip.build(mapper)).toArray(IStringTooltip[]::new);
-	}
-	
-	/**
-	 * sMap2, but for <code>Tooltip&lt;S&gt;</code> instead of Strings
-	 * @param mapper the mapping function from S to a String
-	 * @param suggestions a <code>(sender, args) -&gt; Tooltip&lt;S&gt;[]</code> of tooltips and suggestions to send to the user
-	 * @return the current argument
-	 * @see SafeOverrideableArgument#sMap2(Function, BiFunction)
-	 */
-	@Deprecated
-	private final BiFunction<CommandSender, Object[], IStringTooltip[]> tMap2(BiFunction<CommandSender, Object[], Tooltip<S>[]> suggestions) {
-		return (c, m) -> Arrays.stream(suggestions.apply(c, m)).map(Tooltip.build(mapper)).toArray(IStringTooltip[]::new);
 	}
 	
 }

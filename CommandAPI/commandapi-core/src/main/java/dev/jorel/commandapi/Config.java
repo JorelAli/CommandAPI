@@ -43,6 +43,7 @@ class Config {
 	// Output registering and unregistering of commands
 	private final boolean verboseOutput;
 	
+	// Whether we should suppress all logs
 	private final boolean silentLogs;
 
 	// Create a command_registration.json file
@@ -54,6 +55,7 @@ class Config {
 	// List of plugins which should ignore proxied senders
 	private final List<String> skipSenderProxy;
 	
+	// List of arbitrary commands to convert
 	private final List<String> commandsToConvert;
 	
 	public Config(FileConfiguration fileConfig) {

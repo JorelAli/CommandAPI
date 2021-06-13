@@ -215,7 +215,7 @@ public interface NMS<CommandListenerWrapper> {
 	 * @param clw The CommandListenerWrapper object
 	 * @return A CommandSender (not proxied) from the command listener wrapper
 	 */
-	CommandSender getCommandSenderFromCLW(CommandListenerWrapper clw);
+	CommandSender getCommandSenderFromCSS(CommandListenerWrapper clw);
 
 	Environment getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 

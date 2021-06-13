@@ -21,7 +21,6 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
@@ -43,7 +42,10 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
  * Class to register commands with the 1.13 command UI
  *
  */
-public abstract class CommandAPI {
+public final class CommandAPI {
+	
+	// Cannot be instantiated
+	private CommandAPI() {}
 	
 	private static boolean canRegister = true;
 	static Config config;
@@ -92,19 +94,36 @@ public abstract class CommandAPI {
 		}
 	}
 	
-	// Log info, but appears without verbose output enabled
+	/**
+	 * Logs a message from the CommandAPI. If silent logs are enabled, this message
+	 * is not logged.
+	 * 
+	 * @param message the message to log
+	 */
 	public static void logNormal(String message) {
 		if(!config.hasSilentLogs()) {
 			getLog().info(message);			
 		}
 	}
 	
+	/**
+	 * Logs a warning from the CommandAPI. If silent logs are enabled, this warning
+	 * is not logged.
+	 * 
+	 * @param message the message to log as a warning
+	 */
 	public static void logWarning(String message) {
 		if(!config.hasSilentLogs()) {
 			getLog().warning(message);
 		}
 	}
 	
+	/**
+	 * Logs an error from the CommandAPI. This always gets logged, even if silent
+	 * logs are enabled.
+	 * 
+	 * @param message the message to log as an error
+	 */
 	public static void logError(String message) {
 		getLog().severe(message);
 	}
@@ -237,9 +256,8 @@ public abstract class CommandAPI {
 	 */
 	public static void registerCommand(Class<?> commandClass) {
 		try {
-			Class<?> command = Class.forName(commandClass.getName() + "$Command");
-			command.getDeclaredMethod("register").invoke(null);
-		} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+			Class.forName(commandClass.getName() + "$Command").getDeclaredMethod("register").invoke(null);
+		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
 	}

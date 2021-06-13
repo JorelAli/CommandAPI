@@ -23,6 +23,7 @@ var classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument =
     [ "overrideSuggestionsT", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html#a93b5de93aea5b624ca883b75081c449d", null ],
     [ "overrideSuggestionsT", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html#a36dbcbd4744c398a055646b00e53c3f5", null ],
     [ "overrideSuggestionsT", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html#af19355b889385c173107290e6e2d045e", null ],
+    [ "parseArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html#adc3f6a120e215235168855ed3be2b01e", null ],
     [ "replaceSuggestions", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html#a136d1fafa00702ec911803427d3c8642", null ],
     [ "replaceSuggestionsT", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html#a4c7f96061fe9761813c9d995cc7aa5f5", null ],
     [ "setListed", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html#a9a03f1f9c14d5c508ccc42e004ae7432", null ],

@@ -46,15 +46,24 @@ public class CustomArgument<T> extends Argument {
 	 * Creates a CustomArgument with a valid parser, defaults to non-keyed argument
 	 * 
 	 * @param nodeName the name of the node for this argument
-	 * @param parser
-	 *            A <code>CustomArgumentParser&lt;T&gt;</code> that maps a String to the object of your choice.
-	 *            The String input is the text that the CommandSender inputs for
-	 *            this argument
+	 * @param parser   A {@link CustomArgumentParser} that maps a String to the
+	 *                 object of your choice. The String input is the text that the
+	 *                 CommandSender inputs for this argument
 	 */
 	public CustomArgument(String nodeName, CustomArgumentParser<T> parser) {
 		this(nodeName, parser, false);
 	}
 	
+	/**
+	 * Creates a CustomArgument with a valid parser, defaults to non-keyed argument
+	 * 
+	 * @param nodeName the name of the node for this argument
+	 * @param parser   A {@link CustomArgumentParser2} that maps a
+	 *                 CommandSender and a String to the object of your choice. The
+	 *                 CommandSender is the sender of this command and the String
+	 *                 input is the text that the CommandSender inputs for this
+	 *                 argument
+	 */
 	public CustomArgument(String nodeName, CustomArgumentParser2<T> parser) {
 		this(nodeName, parser, false);
 	}
@@ -63,12 +72,11 @@ public class CustomArgument<T> extends Argument {
 	 * Creates a CustomArgument with a valid parser
 	 * 
 	 * @param nodeName the name of the node for this argument
-	 * @param parser
-	 *            A CustomArgumentParser that maps a String to the object of your choice.
-	 *            The String input is the text that the CommandSender inputs for
-	 *            this argument
-	 * @param keyed Whether this argument can accept Minecraft's <code>NamespacedKey</code> as
-	 * valid arguments
+	 * @param parser   A {@link CustomArgumentParser} that maps a String to the object of
+	 *                 your choice. The String input is the text that the
+	 *                 CommandSender inputs for this argument
+	 * @param keyed    Whether this argument can accept Minecraft's
+	 *                 <code>NamespacedKey</code> as valid arguments
 	 */
 	public CustomArgument(String nodeName, CustomArgumentParser<T> parser, boolean keyed) {
 		super(nodeName, keyed ? CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered() : StringArgumentType.string());
@@ -76,6 +84,17 @@ public class CustomArgument<T> extends Argument {
 		this.parser = parser;
 	}
 	
+	/**
+	 * Creates a CustomArgument with a valid parser
+	 * 
+	 * @param nodeName the name of the node for this argument
+	 * @param parser   A {@link CustomArgumentParser2} that maps a CommandSender and a
+	 *                 String to the object of your choice. The CommandSender is the
+	 *                 sender of this command and the String input is the text that
+	 *                 the CommandSender inputs for this argument
+	 * @param keyed    Whether this argument can accept Minecraft's
+	 *                 <code>NamespacedKey</code> as valid arguments
+	 */
 	public CustomArgument(String nodeName, CustomArgumentParser2<T> parser, boolean keyed) {
 		super(nodeName, keyed ? CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered() : StringArgumentType.string());
 		this.keyed = keyed;
@@ -103,6 +122,10 @@ public class CustomArgument<T> extends Argument {
 		return parser;
 	}
 	
+	/**
+	 * Returns the parser for this custom argument
+	 * @return the parser for this custom argument
+	 */
 	public CustomArgumentParser2<T> getParser2() {
 		return parser2;
 	}
@@ -126,7 +149,7 @@ public class CustomArgument<T> extends Argument {
 			if(parser != null && parser2 == null) {
 				return parser.apply(customresult);
 			} else {
-				return parser2.apply(nms.getCommandSenderFromCLW(cmdCtx.getSource()), customresult);
+				return parser2.apply(nms.getCommandSenderFromCSS(cmdCtx.getSource()), customresult);
 			}
 		} catch (CustomArgumentException e) {
 			throw e.toCommandSyntax(customresult, cmdCtx);
@@ -272,7 +295,7 @@ public class CustomArgument<T> extends Argument {
 	}
 	
 	/**
-	 * A FunctionalInterface that takes in a String, returns T and can throw a CustomArgumentException
+	 * A FunctionalInterface that takes in a String, returns T and can throw a {@link CustomArgumentException}
 	 * 
 	 * @param <T> the type that is returned when applying this parser
 	 */
@@ -288,8 +311,21 @@ public class CustomArgument<T> extends Argument {
 		public T apply(String input) throws CustomArgumentException;
 	}
 	
+	/**
+	 * A FunctionalInterface that takes in a CommandSender, a String, returns T and can throw a {@link CustomArgumentException}
+	 * 
+	 * @param <T> the type that is returned when applying this parser
+	 */
 	@FunctionalInterface
 	public static interface CustomArgumentParser2<T> {
+		
+		/**
+		 * Applies a CommandSender and a String input to this custom argument parser
+		 * @param sender the CommandSender that will run this command
+		 * @param input the String input to apply
+		 * @return the applied output represented by this FunctionalInterface
+		 * @throws CustomArgumentException if an error occurs during parsing
+		 */
 		public T apply(CommandSender sender, String input) throws CustomArgumentException;
 	}
 }

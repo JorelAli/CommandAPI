@@ -21,21 +21,29 @@
 package dev.jorel.commandapi;
 
 /**
- * A record to contain information about how to configure
- * the CommandAPI during its loading step.
- * 
- * @param verboseOutput - Enables verbose console logging
+ * A class to contain information about how to configure the CommandAPI during
+ * its loading step.
  */
 public class CommandAPIConfig {
 	
 	boolean verboseOutput = false;
 	boolean silentLogs = false;
 	
+	/**
+	 * Sets verbose output logging for the CommandAPI if true.
+	 * @param value whether verbose output should be enabled
+	 * @return this CommandAPIConfig
+	 */
 	public CommandAPIConfig verboseOutput(boolean value) {
 		this.verboseOutput = value;
 		return this;
 	}
 	
+	/**
+	 * Silences all logs (including warnings, but not errors) for the CommandAPI if true.
+	 * @param value whether logging suppression should be enabled 
+	 * @return this CommandAPIConfig
+	 */
 	public CommandAPIConfig silentLogs(boolean value) {
 		this.silentLogs = value;
 		return this;

@@ -30,7 +30,13 @@ import dev.jorel.commandapi.nms.NMS;
  */
 public interface CommandAPIVersionHandler {
 	
-	public static <CommandListenerWrapper> NMS<CommandListenerWrapper> getNMS(String version) {
+	/**
+	 * Returns an instance of the version's implementation of NMS.
+	 * @param <CommandSourceStack> the command source type
+	 * @param version the string of the Minecraft version (e.g. 1.16.5 or 1.17)
+	 * @return an instance of NMS which can run on the specified Minecraft version
+	 */
+	public static <CommandSourceStack> NMS<CommandSourceStack> getNMS(String version) {
 		throw new RuntimeException("You have the wrong copy of the CommandAPI! Make sure to use the one from https://github.com/JorelAli/CommandAPI/releases");
 	}
 	

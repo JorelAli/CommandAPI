@@ -91,20 +91,76 @@ $(document).ready(function(){initNavTree('interfacedev_1_1jorel_1_1commandapi_1_
 <div class="title">dev.jorel.commandapi.arguments.CustomArgument&lt; T &gt;.CustomArgumentParser2&lt; T &gt; Interface Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>A FunctionalInterface that takes in a CommandSender, a String, returns T and can throw a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_exception.html">CustomArgumentException</a>.  
+ <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser2.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a35caa34a784b6c19e4e21b771d183351"><td class="memItemLeft" align="right" valign="top"><a id="a35caa34a784b6c19e4e21b771d183351"></a>
-T&#160;</td><td class="memItemRight" valign="bottom"><b>apply</b> (CommandSender sender, String input)  throws CustomArgumentException</td></tr>
+<tr class="memitem:a35caa34a784b6c19e4e21b771d183351"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser2.html#a35caa34a784b6c19e4e21b771d183351">apply</a> (CommandSender sender, String input)  throws CustomArgumentException</td></tr>
+<tr class="memdesc:a35caa34a784b6c19e4e21b771d183351"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a CommandSender and a String input to this custom argument parser.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser2.html#a35caa34a784b6c19e4e21b771d183351">More...</a><br /></td></tr>
 <tr class="separator:a35caa34a784b6c19e4e21b771d183351"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A FunctionalInterface that takes in a CommandSender, a String, returns T and can throw a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_exception.html">CustomArgumentException</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">&lt;T&gt;</td><td>the type that is returned when applying this parser </td></tr>
+  </table>
+  </dd>
+</dl>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a35caa34a784b6c19e4e21b771d183351"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35caa34a784b6c19e4e21b771d183351">&#9670;&nbsp;</a></span>apply()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">T <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html">dev.jorel.commandapi.arguments.CustomArgument</a>&lt; T &gt;.<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser2.html">CustomArgumentParser2</a>&lt; T &gt;.apply </td>
+          <td>(</td>
+          <td class="paramtype">CommandSender&#160;</td>
+          <td class="paramname"><em>sender</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>input</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> throws <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_exception.html">CustomArgumentException</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Applies a CommandSender and a String input to this custom argument parser. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sender</td><td>the CommandSender that will run this command </td></tr>
+    <tr><td class="paramname">input</td><td>the String input to apply </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the applied output represented by this FunctionalInterface </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_exception.html" title="An exception used to create command-related errors for the CustomArgument.">CustomArgumentException</a></td><td>if an error occurs during parsing </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1arguments.html">arguments</a></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html">CustomArgument</a></li><li class="navelem"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser2.html">CustomArgumentParser2</a></li>
-    <li class="footer">Generated on Mon May 31 2021 23:21:32 for CommandAPI by
+    <li class="footer">Generated on Mon Jun 14 2021 00:18:01 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>

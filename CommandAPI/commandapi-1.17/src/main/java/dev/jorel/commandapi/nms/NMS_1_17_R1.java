@@ -490,7 +490,7 @@ public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public CommandSender getCommandSenderFromCLW(CommandSourceStack css) {
+	public CommandSender getCommandSenderFromCSS(CommandSourceStack css) {
 		try {
 			return css.getBukkitSender();
 		} catch (UnsupportedOperationException e) {

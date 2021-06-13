@@ -53,6 +53,10 @@ public class MultiLiteralArgument extends Argument {
 		return String.class;
 	}
 
+	/**
+	 * Returns the literals that are present in this argument
+	 * @return the literals that are present in this argument
+	 */
 	public String[] getLiterals() {
 		return literals;
 	}

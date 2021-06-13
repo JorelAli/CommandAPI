@@ -41,7 +41,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * The core abstract class for Command API arguments
  */
-public abstract class Argument implements IOverrideableSuggestions {
+public abstract class Argument {
 
 	/**
 	 * Returns the primitive type of the current Argument. After executing a
@@ -98,14 +98,15 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * represents. This is intended for use by the internals of the CommandAPI and
 	 * isn't expected to be used outside the CommandAPI
 	 * 
+	 * @param <CommandSourceStack> the command source type
 	 * @param nms                      an instance of NMS
 	 * @param cmdCtx                   the context which ran this command
 	 * @param key                      the name of the argument node
 	 * @return the parsed object represented by this argument
 	 * @throws CommandSyntaxException if parsing fails
 	 */
-	public abstract <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	public abstract <CommandSourceStack> Object parseArgument(NMS<CommandSourceStack> nms,
+			CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException;
 
 	/////////////////
 	// Suggestions //
@@ -173,10 +174,9 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * 
 	 * @param suggestions the string array to override suggestions with
 	 * @return the current argument
-	 * @deprecated use {@link Argument#overrideSuggestions(Function)}
+	 * @deprecated use {@link Argument#replaceSuggestions(Function)}
 	 */
 	@Deprecated
-	@Override
 	public final Argument overrideSuggestions(String... suggestions) {
 		this.suggestions = Optional.of(suggestionInfo -> fromSuggestions(suggestions));
 		return this;
@@ -187,9 +187,9 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * 
 	 * @param suggestions the collection of suggestions to override suggestions with
 	 * @return the current argument
+	 * @deprecated use {@link Argument#replaceSuggestions(Function)}
 	 */
 	@Deprecated
-	@Override
 	public final Argument overrideSuggestions(Collection<String> suggestions) {
 		this.suggestions = Optional.of(suggestionInfo -> fromSuggestions(suggestions.toArray(new String[0])));
 		return this;
@@ -201,9 +201,9 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * 
 	 * @param suggestions the function to override suggestions with
 	 * @return the current argument
+	 * @deprecated use {@link Argument#replaceSuggestions(Function)}
 	 */
 	@Deprecated
-	@Override
 	public final Argument overrideSuggestions(Function<CommandSender, String[]> suggestions) {
 		this.suggestions =  Optional.of(suggestionInfo -> fromSuggestions(suggestions.apply(suggestionInfo.sender())));
 		return this;
@@ -215,9 +215,9 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * 
 	 * @param suggestions the function to override suggestions with
 	 * @return the current argument
+	 * @deprecated use {@link Argument#replaceSuggestions(Function)}
 	 */
 	@Deprecated
-	@Override
 	public final Argument overrideSuggestions(BiFunction<CommandSender, Object[], String[]> suggestions) {
 		this.suggestions =  Optional.of(suggestionInfo -> fromSuggestions(suggestions.apply(suggestionInfo.sender(), suggestionInfo.previousArgs())));
 		return this;
@@ -228,9 +228,9 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * 
 	 * @param suggestions the collection of IStringTooltip to override suggestions with
 	 * @return the current argument
+	 * @deprecated use {@link Argument#replaceSuggestionsT(Function)}
 	 */
 	@Deprecated
-	@Override
 	public final Argument overrideSuggestionsT(Collection<IStringTooltip> suggestions) {
 		this.suggestions = Optional.of(suggestionInfo -> suggestions.toArray(new IStringTooltip[0]));
 		return this;
@@ -241,9 +241,9 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * 
 	 * @param suggestions the IStringTooltip array to override suggestions with
 	 * @return the current argument
+	 * @deprecated use {@link Argument#replaceSuggestionsT(Function)}
 	 */
 	@Deprecated
-	@Override
 	public final Argument overrideSuggestionsT(IStringTooltip... suggestions) {
 		this.suggestions = Optional.of(suggestionInfo -> suggestions);
 		return this;
@@ -255,9 +255,9 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * 
 	 * @param suggestions the function to override suggestions with
 	 * @return the current argument
+	 * @deprecated use {@link Argument#replaceSuggestionsT(Function)}
 	 */
 	@Deprecated
-	@Override
 	public final Argument overrideSuggestionsT(Function<CommandSender, IStringTooltip[]> suggestions) {
 		this.suggestions =  Optional.of(suggestionInfo -> suggestions.apply(suggestionInfo.sender()));
 		return this;
@@ -269,22 +269,29 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * 
 	 * @param suggestions the function to override suggestions with
 	 * @return the current argument
+	 * @deprecated use {@link Argument#replaceSuggestionsT(Function)}
 	 */
 	@Deprecated
-	@Override
 	public final Argument overrideSuggestionsT(BiFunction<CommandSender, Object[], IStringTooltip[]> suggestions) {
 		this.suggestions =  Optional.of(suggestionInfo -> suggestions.apply(suggestionInfo.sender(), suggestionInfo.previousArgs()));
 		return this;
 	}
 
-	
-	@Override
+	/**
+	 * Replaces the suggestions of this argument with an array of suggestions.
+	 * @param suggestions a function that takes in {@link SuggestionInfo} and returns a {@link String[]} of suggestions
+	 * @return the current argument
+	 */
 	public Argument replaceSuggestions(Function<SuggestionInfo, String[]> suggestions) {
 		this.suggestions = Optional.of(suggestionInfo -> fromSuggestions(suggestions.apply(suggestionInfo)));
 		return this;
 	}
 	
-	@Override
+	/**
+	 * Replaces the suggestions of this argument with an array of suggestions with tooltips.
+	 * @param suggestions a function that takes in {@link SuggestionInfo} and returns a {@link IStringTooltip[]} of suggestions
+	 * @return the current argument
+	 */
 	public Argument replaceSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
 		this.suggestions = Optional.of(suggestions);
 		return this;
@@ -297,7 +304,6 @@ public abstract class Argument implements IOverrideableSuggestions {
 	 * @return a function that provides suggestions, or <code>Optional.empty()</code> if there
 	 *         are no overridden suggestions.
 	 */
-	@Override
 	public final Optional<Function<SuggestionInfo, IStringTooltip[]>> getOverriddenSuggestions() {
 		return suggestions;
 	}

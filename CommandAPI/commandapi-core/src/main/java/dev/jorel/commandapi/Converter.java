@@ -39,7 +39,10 @@ import dev.jorel.commandapi.arguments.GreedyStringArgument;
 /**
  * 'Simple' conversion of Plugin commands
  */
-public abstract class Converter {
+public final class Converter {
+	
+	// Cannot be instantiated
+	private Converter() {}
 	
 	private static final List<Argument> PLAIN_ARGUMENTS = Arrays.asList(new GreedyStringArgument("args"));
 	private static final Set<String> CALLER_METHODS = new HashSet<>(Arrays.asList("isPermissionSet", "hasPermission",
