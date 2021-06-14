@@ -310,7 +310,6 @@ This is the current roadmap for the CommandAPI (as of 16th May 2021):
                 <b>Bug fixes:</b>
                 <ul>
                     <li>Fixes bug with converted commands crashing due to poor interface proxying</li>
-                    <li></li>
                     <li>Adds a way to access the <code>CommandSender</code> for <code>CustomArgument</code> parsing</li>
                     <li>Adds support for Paper's console tab-completion</li>
                     <li>Adds a way to completely silence all CommandAPI logs</li>
