@@ -35,6 +35,7 @@
 
 		<!-- NMS versions -->
 		<module>commandapi-1.17</module>
+		<module>commandapi-1.16.5</module>
 
 		<!-- Main core code + NMS selector -->
 		<module>commandapi-core</module>

@@ -22,12 +22,15 @@ package dev.jorel.commandapi;
 
 import dev.jorel.commandapi.exceptions.UnsupportedVersionException;
 import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.nms.NMS_1_16_R3;
 import dev.jorel.commandapi.nms.NMS_1_17_R1;
 
 public interface CommandAPIVersionHandler {
 
 	public static NMS<?> getNMS(String version) {
 		switch (version) {
+		case "1.16.5":
+			return new NMS_1_16_R3();
 		case "1.17":
 			return new NMS_1_17_R1();
 		default:
