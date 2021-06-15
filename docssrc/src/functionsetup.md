@@ -28,8 +28,8 @@ Tags are json files which contain a list of functions. Tags let you run multiple
 ```json
 {
     "values": [
-    	"mycustomnamespace:test",
-    	"mycustomnamespace:test2"
+        "mycustomnamespace:test",
+        "mycustomnamespace:test2"
     ]
 }
 ```

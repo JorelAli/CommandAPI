@@ -194,8 +194,8 @@ say Killed all living entities on the server
 <p>Tags are json files which contain a list of functions. Tags let you run multiple functions at a time. Say we have a tag called <code>mytag.json</code>:</p>
 <pre><code class="language-json">{
     &quot;values&quot;: [
-    	&quot;mycustomnamespace:test&quot;,
-    	&quot;mycustomnamespace:test2&quot;
+        &quot;mycustomnamespace:test&quot;,
+        &quot;mycustomnamespace:test2&quot;
     ]
 }
 </code></pre>
@@ -268,21 +268,6 @@ say Killed all living entities on the server
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

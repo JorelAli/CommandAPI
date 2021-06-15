@@ -4,8 +4,8 @@ Resulting command executors are very similar to normal command executors, except
 
 ```java
 (sender, args) -> {
-	//Code here
-	return /*some integer here*/ ;
+    //Code here
+    return /*some integer here*/ ;
 };
 ```
 

@@ -203,6 +203,19 @@
 <hr />
 <h2><a class="header" href="#documentation-changelog" id="documentation-changelog">Documentation changelog</a></h2>
 <p>Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.</p>
+<h3><a class="header" href="#documentation-changes-512-rightarrow-600" id="documentation-changes-512-rightarrow-600">Documentation changes 5.12 \(\rightarrow\) 6.0.0:</a></h3>
+<ul>
+<li>Adds entry for <a href="./upgrading.html#from-version-5x-to-600">Upgrading guide</a> to help update from 5.12 to 6.0.0.</li>
+<li>Adds new <code>silent-logs</code> config entry to <a href="./config.html">Configuration for server owners</a></li>
+<li>Update syntax for <code>onLoad(CommandAPIConfig)</code> for <a href="./shading.html">Shading the CommandAPI in your plugins</a></li>
+<li>Update <a href="./argumentsuggestions.html">Argument suggestions</a> including new <code>replaceSuggestions</code> method</li>
+<li>Adds documentation for <a href="./entityarguments.html#offlineplayer-argument">OfflinePlayerArgument</a></li>
+<li>Adds a new section <strong>CommandAPI Contribution</strong> which gives a bit of insight into the project structure of the CommandAPI (Still in progress, not complete yet)</li>
+<li>Fix old documentation typos</li>
+<li>Fix spacing issues in some existing code blocks</li>
+<li>Adds syntax highlighting for Minecraft commands in code blocks</li>
+<li>Fix old code examples which didn't work anymore</li>
+</ul>
 <h3><a class="header" href="#documentation-changes-511-rightarrow-512" id="documentation-changes-511-rightarrow-512">Documentation changes 5.11 \(\rightarrow\) 5.12:</a></h3>
 <blockquote>
 <p><strong>Developer's Note</strong></p>
@@ -377,21 +390,6 @@
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

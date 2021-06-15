@@ -205,6 +205,19 @@
 <hr />
 <h2><a class="header" href="#documentation-changelog" id="documentation-changelog">Documentation changelog</a></h2>
 <p>Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.</p>
+<h3><a class="header" href="#documentation-changes-512-rightarrow-600" id="documentation-changes-512-rightarrow-600">Documentation changes 5.12 \(\rightarrow\) 6.0.0:</a></h3>
+<ul>
+<li>Adds entry for <a href="./upgrading.html#from-version-5x-to-600">Upgrading guide</a> to help update from 5.12 to 6.0.0.</li>
+<li>Adds new <code>silent-logs</code> config entry to <a href="./config.html">Configuration for server owners</a></li>
+<li>Update syntax for <code>onLoad(CommandAPIConfig)</code> for <a href="./shading.html">Shading the CommandAPI in your plugins</a></li>
+<li>Update <a href="./argumentsuggestions.html">Argument suggestions</a> including new <code>replaceSuggestions</code> method</li>
+<li>Adds documentation for <a href="./entityarguments.html#offlineplayer-argument">OfflinePlayerArgument</a></li>
+<li>Adds a new section <strong>CommandAPI Contribution</strong> which gives a bit of insight into the project structure of the CommandAPI (Still in progress, not complete yet)</li>
+<li>Fix old documentation typos</li>
+<li>Fix spacing issues in some existing code blocks</li>
+<li>Adds syntax highlighting for Minecraft commands in code blocks</li>
+<li>Fix old code examples which didn't work anymore</li>
+</ul>
 <h3><a class="header" href="#documentation-changes-511-rightarrow-512" id="documentation-changes-511-rightarrow-512">Documentation changes 5.11 \(\rightarrow\) 5.12:</a></h3>
 <blockquote>
 <p><strong>Developer's Note</strong></p>
@@ -831,8 +844,8 @@ CommandAPI.onEnable(Plugin plugin);
 <h2><a class="header" href="#shading-with-maven" id="shading-with-maven">Shading with Maven</a></h2>
 <p>To shade the CommandAPI into a maven project, you'll need to use the <code>commandapi-shade</code> dependency, which is optimized for shading and doesn't include plugin-specific files <em>(such as <code>plugin.yml</code>)</em>:</p>
 <pre><code class="language-xml">&lt;dependencies&gt;
-	&lt;dependency&gt;
-		&lt;groupId&gt;dev.jorel.CommandAPI&lt;/groupId&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;dev.jorel.CommandAPI&lt;/groupId&gt;
         &lt;artifactId&gt;commandapi-shade&lt;/artifactId&gt;
         &lt;version&gt;6.0.0&lt;/version&gt;
     &lt;/dependency&gt;
@@ -881,9 +894,9 @@ CommandAPI.onEnable(Plugin plugin);
 </code></pre>
 <p>Then we add it to the <code>shadowJar</code> task configuration:</p>
 <pre><code class="language-gradle">shadowJar {
-	dependencies {
-		include dependency(&quot;dev.jorel.CommandAPI:commandapi-shade:6.0.0&quot;)
-	}
+    dependencies {
+        include dependency(&quot;dev.jorel.CommandAPI:commandapi-shade:6.0.0&quot;)
+    }
 }
 </code></pre>
 <p>Finally, we can build the shaded jar using the following command:</p>
@@ -1288,8 +1301,8 @@ public Location getLocation();
 <h1><a class="header" href="#resulting-command-executors" id="resulting-command-executors">Resulting command executors</a></h1>
 <p>Resulting command executors are very similar to normal command executors, except they can return an integer <em>result value</em>.</p>
 <pre><code class="language-java">(sender, args) -&gt; {
-	//Code here
-	return /*some integer here*/ ;
+    //Code here
+    return /*some integer here*/ ;
 };
 </code></pre>
 <p>Similarly, these will return a <em>success value</em> of 1 if it runs successfully, and a <em>success value</em> of 0 if it runs unsuccessfully. <strong>If a success value of 0 occurs, the <em>result value</em> will be 0</strong>. In short:</p>
@@ -3470,8 +3483,8 @@ say Killed all living entities on the server
 <p>Tags are json files which contain a list of functions. Tags let you run multiple functions at a time. Say we have a tag called <code>mytag.json</code>:</p>
 <pre><code class="language-json">{
     &quot;values&quot;: [
-    	&quot;mycustomnamespace:test&quot;,
-    	&quot;mycustomnamespace:test2&quot;
+        &quot;mycustomnamespace:test&quot;,
+        &quot;mycustomnamespace:test2&quot;
     ]
 }
 </code></pre>
@@ -4931,21 +4944,6 @@ Caused by: java.lang.IllegalArgumentException: Whilst parsing command on line 2:
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

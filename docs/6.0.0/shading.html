@@ -239,8 +239,8 @@ CommandAPI.onEnable(Plugin plugin);
 <h2><a class="header" href="#shading-with-maven" id="shading-with-maven">Shading with Maven</a></h2>
 <p>To shade the CommandAPI into a maven project, you'll need to use the <code>commandapi-shade</code> dependency, which is optimized for shading and doesn't include plugin-specific files <em>(such as <code>plugin.yml</code>)</em>:</p>
 <pre><code class="language-xml">&lt;dependencies&gt;
-	&lt;dependency&gt;
-		&lt;groupId&gt;dev.jorel.CommandAPI&lt;/groupId&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;dev.jorel.CommandAPI&lt;/groupId&gt;
         &lt;artifactId&gt;commandapi-shade&lt;/artifactId&gt;
         &lt;version&gt;6.0.0&lt;/version&gt;
     &lt;/dependency&gt;
@@ -289,9 +289,9 @@ CommandAPI.onEnable(Plugin plugin);
 </code></pre>
 <p>Then we add it to the <code>shadowJar</code> task configuration:</p>
 <pre><code class="language-gradle">shadowJar {
-	dependencies {
-		include dependency(&quot;dev.jorel.CommandAPI:commandapi-shade:6.0.0&quot;)
-	}
+    dependencies {
+        include dependency(&quot;dev.jorel.CommandAPI:commandapi-shade:6.0.0&quot;)
+    }
 }
 </code></pre>
 <p>Finally, we can build the shaded jar using the following command:</p>
@@ -336,21 +336,6 @@ CommandAPI.onEnable(Plugin plugin);
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

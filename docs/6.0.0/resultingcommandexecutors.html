@@ -179,8 +179,8 @@
                         <h1><a class="header" href="#resulting-command-executors" id="resulting-command-executors">Resulting command executors</a></h1>
 <p>Resulting command executors are very similar to normal command executors, except they can return an integer <em>result value</em>.</p>
 <pre><code class="language-java">(sender, args) -&gt; {
-	//Code here
-	return /*some integer here*/ ;
+    //Code here
+    return /*some integer here*/ ;
 };
 </code></pre>
 <p>Similarly, these will return a <em>success value</em> of 1 if it runs successfully, and a <em>success value</em> of 0 if it runs unsuccessfully. <strong>If a success value of 0 occurs, the <em>result value</em> will be 0</strong>. In short:</p>
@@ -271,21 +271,6 @@ new CommandAPICommand(&quot;givereward&quot;)
 
         </div>
 
-        
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            var socket = new WebSocket("ws://localhost:3000/__livereload");
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
         
 
         

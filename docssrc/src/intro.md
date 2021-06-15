@@ -36,6 +36,19 @@ Using the search icon in the top left corner, you can search for anything in thi
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 5.12 \\(\rightarrow\\) 6.0.0:
+
+- Adds entry for [Upgrading guide](./upgrading.md#from-version-5x-to-600) to help update from 5.12 to 6.0.0.
+- Adds new `silent-logs` config entry to [Configuration for server owners](./config.md)
+- Update syntax for `onLoad(CommandAPIConfig)` for [Shading the CommandAPI in your plugins](./shading.md)
+- Update [Argument suggestions](./argumentsuggestions.md) including new `replaceSuggestions` method
+- Adds documentation for [OfflinePlayerArgument](./entityarguments.md#offlineplayer-argument)
+- Adds a new section **CommandAPI Contribution** which gives a bit of insight into the project structure of the CommandAPI (Still in progress, not complete yet)
+- Fix old documentation typos
+- Fix spacing issues in some existing code blocks
+- Adds syntax highlighting for Minecraft commands in code blocks
+- Fix old code examples which didn't work anymore
+
 ### Documentation changes 5.11 \\(\rightarrow\\) 5.12:
 
 > **Developer's Note**
