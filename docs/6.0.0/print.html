@@ -1839,8 +1839,9 @@ arguments.add(new PotionEffectArgument(&quot;potioneffect&quot;).replaceWithSafe
 <pre><code class="language-java">new CommandAPICommand(&quot;removeeffect&quot;)
     .withArguments(arguments)
     .executesPlayer((player, args) -&gt; {
-        EntityType entityType = (EntityType) args[0];
-        player.getWorld().spawnEntity(player.getLocation(), entityType);
+    	Player target = (Player) args[0];
+        PotionEffectType potionEffect = (PotionEffectType) args[1];
+        target.removePotionEffect(potionEffect);
     })
     .register();
 </code></pre>
