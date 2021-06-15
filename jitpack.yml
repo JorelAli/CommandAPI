@@ -3,7 +3,5 @@ jdk:
 before_install:
   - wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
   - source install-jdk.sh --feature 16
-  - java -version
-  - git config --global --unset core.autocrlf
   - wget -O BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
   - java -jar BuildTools.jar --rev 1.17 --remapped
