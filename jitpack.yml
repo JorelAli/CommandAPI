@@ -1,2 +1,2 @@
-before_install:
-   - ./jitpacksetup.sh
+jdk:
+  - openjdk16
