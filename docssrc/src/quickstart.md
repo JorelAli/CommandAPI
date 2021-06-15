@@ -1,6 +1,15 @@
 # Setting up your development environment
 
-To use the CommandAPI in your plugins, there are a few methods of adding it to your development environment.
+To use the CommandAPI in your plugins, there are a few methods of adding it to your development environment. First things first, if you're using the CommandAPI plugin, you need to add the CommandAPI has a dependent in your plugin.yml:
+
+```yaml
+name: MyPlugin
+main: some.package.name.Main
+version: 1.0
+depend: [CommandAPI]
+```
+
+
 
 -----
 
@@ -12,9 +21,6 @@ To use the CommandAPI in your plugins, there are a few methods of adding it to y
 
   ![](images/eclipse.jpg)
   
-- Add the CommandAPI as a dependent in the plugin.yml (`depend: [CommandAPI]`)
-
------
 
 ## Using Maven (recommended)
 
@@ -40,14 +46,11 @@ To use the CommandAPI in your plugins, there are a few methods of adding it to y
       <dependency>
           <groupId>dev.jorel.CommandAPI</groupId>
           <artifactId>commandapi-core</artifactId>
-          <version>5.12</version>
+          <version>6.0.0</version>
           <scope>provided</scope>
       </dependency>
   </dependencies>
   ```
-* Add the CommandAPI as a dependent in the `plugin.yml` (`depend: [CommandAPI]`)
-
------
 
 ## Using Gradle
 
@@ -64,9 +67,6 @@ To use the CommandAPI in your plugins, there are a few methods of adding it to y
 
   ```gradle
   dependencies {
-      compileOnly "dev.jorel.CommandAPI:commandapi-core:5.12"
+      compileOnly "dev.jorel.CommandAPI:commandapi-core:6.0.0"
   }
   ```
-
-
-- Add the CommandAPI as a dependent in the `plugin.yml` (`depend: [CommandAPI]`)

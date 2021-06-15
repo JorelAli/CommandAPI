@@ -28,8 +28,8 @@ Tags are json files which contain a list of functions. Tags let you run multiple
 ```json
 {
     "values": [
-    	"mycustomnamespace:test",
-    	"mycustomnamespace:test2"
+        "mycustomnamespace:test",
+        "mycustomnamespace:test2"
     ]
 }
 ```
@@ -67,14 +67,13 @@ server/
 
 To execute the `test` function, you would run the following command:
 
-```
+```mccmd
 /function mycustomnamespace:test
 ```
 
 To execute the `mytag` tag, you would run the following command:
 
-```
+```mccmd
 /function #mycustomnamespace:mytag
 ```
-
 

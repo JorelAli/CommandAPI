@@ -12,7 +12,7 @@ Therefore, if a user supplies a single function, the `FunctionWrapper[]` will be
 
 Since it's a little difficult to demonstrate a custom use for the `FunctionArgument`, we will show how you can implement Vanilla Minecraft's `/function` command. In this example, we want a command that uses the following syntax:
 
-```
+```mccmd
 /runfunction <function>
 ```
 

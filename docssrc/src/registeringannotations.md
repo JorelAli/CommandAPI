@@ -19,7 +19,7 @@ Say we have a simple command `/warp` that is defined as follows:
 We can register this in our `onLoad()` method so we can use this command from within Minecraft functions:
 
 ```java
-{{#include ../../CommandAPI/commandapi-annotations/src/test/java/WarpCommand.java:warp_register2}}
+public {{#include ../../CommandAPI/commandapi-annotations/src/test/java/WarpCommand.java:warp_register2}}
 ```
 
 </div>

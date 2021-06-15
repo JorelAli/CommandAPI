@@ -1,6 +1,25 @@
+/*******************************************************************************
+ * Copyright 2018, 2020 Jorel Ali (Skepter) - MIT License
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *******************************************************************************/
 package dev.jorel.commandapi;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BiPredicate;
@@ -24,8 +43,11 @@ import dev.jorel.commandapi.arguments.LiteralArgument;
  * so you can use the CommandAPI alongside Mojang's com.mojang.brigadier package
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
-public abstract class Brigadier {
+public final class Brigadier {
 
+	// Cannot be instantiated
+	private Brigadier() {}
+	
 	/**
 	 * Returns the Brigadier CommandDispatcher tree that is used internally by the
 	 * CommandAPI. Modifying this CommandDispatcher tree before the server finishes
@@ -82,7 +104,7 @@ public abstract class Brigadier {
 	public static RedirectModifier fromPredicate(BiPredicate<CommandSender, Object[]> predicate, List<Argument> args) {
 		return cmdCtx -> {
 			if (predicate.test(CommandAPIHandler.getInstance().NMS.getSenderForCommand(cmdCtx, false),
-					CommandAPIHandler.getInstance().argsToObjectArr(cmdCtx, args))) {
+					CommandAPIHandler.getInstance().argsToObjectArr(cmdCtx, args.toArray(new Argument[0])))) {
 				return Collections.singleton(cmdCtx.getSource());
 			} else {
 				return Collections.emptyList();
@@ -98,7 +120,7 @@ public abstract class Brigadier {
 	 */
 	public static Command fromCommand(CommandAPICommand command) {
 		try {
-			return CommandAPIHandler.getInstance().generateCommand(command.getArguments(), command.getExecutor(), command.isConverted());
+			return CommandAPIHandler.getInstance().generateCommand(command.getArguments().toArray(new Argument[0]), command.getExecutor(), command.isConverted());
 		} catch (CommandSyntaxException e) {
 			e.printStackTrace();
 		}
@@ -124,7 +146,8 @@ public abstract class Brigadier {
 	 * @return a RequiredArgumentBuilder that represents the provided argument
 	 */
 	public static RequiredArgumentBuilder fromArgument(List<Argument> args, String nodeName) {
-		return CommandAPIHandler.getInstance().getRequiredArgumentBuilderDynamic(args, CommandAPIHandler.getArgument(args, nodeName));
+		Argument[] argsArr = args.toArray(new Argument[0]);
+		return CommandAPIHandler.getInstance().getRequiredArgumentBuilderDynamic(argsArr, CommandAPIHandler.getArgument(argsArr, nodeName));
 	}
 
 	/**
@@ -134,9 +157,7 @@ public abstract class Brigadier {
 	 * @return a RequiredArgumentBuilder that represents the provided argument
 	 */
 	public static RequiredArgumentBuilder fromArgument(Argument argument) {
-		List<Argument> arguments = new ArrayList<>();
-		arguments.add(argument);
-		return CommandAPIHandler.getInstance().getRequiredArgumentBuilderDynamic(arguments, argument);
+		return CommandAPIHandler.getInstance().getRequiredArgumentBuilderDynamic(new Argument[] { argument }, argument);
 	}
 
 	/**
@@ -150,6 +171,6 @@ public abstract class Brigadier {
 	 *         argument declared in the List with key argumentName
 	 */
 	public static SuggestionProvider toSuggestions(String nodeName, List<Argument> args) {
-		return CommandAPIHandler.getInstance().toSuggestions(nodeName, args);
+		return CommandAPIHandler.getInstance().toSuggestions(nodeName, args.toArray(new Argument[0]), true);
 	}
 }

@@ -1,2 +1,2 @@
 #!/bin/sh
-mvn clean install -Dmaven.javadoc.skip=true -Dmaven.source.skip=true -T 6
+mvn clean install -Dmaven.javadoc.skip=true -Dmaven.source.skip=true -T 6 -e

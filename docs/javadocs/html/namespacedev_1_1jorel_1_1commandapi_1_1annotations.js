@@ -36,6 +36,7 @@ var namespacedev_1_1jorel_1_1commandapi_1_1annotations =
       [ "ANBTCompoundArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_n_b_t_compound_argument.html", null ],
       [ "AObjectiveArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_objective_argument.html", null ],
       [ "AObjectiveCriteriaArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_objective_criteria_argument.html", null ],
+      [ "AOfflinePlayerArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_offline_player_argument.html", null ],
       [ "AParticleArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_particle_argument.html", null ],
       [ "APlayerArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_player_argument.html", null ],
       [ "APotionEffectArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_potion_effect_argument.html", null ],

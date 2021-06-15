@@ -1,3 +1,23 @@
+/*******************************************************************************
+ * Copyright 2018, 2020 Jorel Ali (Skepter) - MIT License
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *******************************************************************************/
 package dev.jorel.commandapi.wrappers;
 
 import org.bukkit.ChatColor;
@@ -17,33 +37,15 @@ public class ScoreboardSlot {
 	 */
 	public ScoreboardSlot(int i) {
 		//Initialize displaySlot
-		switch(i) {
-			case 0: displaySlot = DisplaySlot.PLAYER_LIST; break;
-			case 1: displaySlot = DisplaySlot.SIDEBAR; break;
-			case 2: displaySlot = DisplaySlot.BELOW_NAME; break;
-			default: displaySlot = DisplaySlot.SIDEBAR; break;
-		}
+		displaySlot = switch(i) {
+			case 0  -> DisplaySlot.PLAYER_LIST;
+			case 1  -> DisplaySlot.SIDEBAR;
+			case 2  -> DisplaySlot.BELOW_NAME;
+			default -> DisplaySlot.SIDEBAR;
+		};
 		
 		//Initialize teamColor
-		switch(i) {
-			case 3: teamColor = ChatColor.BLACK; break;
-			case 4: teamColor = ChatColor.DARK_BLUE; break;
-			case 5: teamColor = ChatColor.DARK_GREEN; break;
-			case 6: teamColor = ChatColor.DARK_AQUA; break;
-			case 7: teamColor = ChatColor.DARK_RED; break;
-			case 8: teamColor = ChatColor.DARK_PURPLE; break;
-			case 9: teamColor = ChatColor.GOLD; break;
-			case 10: teamColor = ChatColor.GRAY; break;
-			case 11: teamColor = ChatColor.DARK_GRAY; break;
-			case 12: teamColor = ChatColor.BLUE; break;
-			case 13: teamColor = ChatColor.GREEN; break;
-			case 14: teamColor = ChatColor.AQUA; break;
-			case 15: teamColor = ChatColor.RED; break;
-			case 16: teamColor = ChatColor.LIGHT_PURPLE; break;
-			case 17: teamColor = ChatColor.YELLOW; break;
-			case 18: teamColor = ChatColor.WHITE; break;
-			default: teamColor = null; break;
-		}
+		teamColor = ChatColor.getByChar(Integer.toHexString(i - 3));
 	}
 	
 	/**
@@ -52,16 +54,12 @@ public class ScoreboardSlot {
 	 * @return a ScoreboardSlot from the provided DisplaySlot
 	 */
 	public static ScoreboardSlot of(DisplaySlot slot) {
-		switch(slot) {
-		case PLAYER_LIST:
-			return new ScoreboardSlot(0);
-		case SIDEBAR:
-			return new ScoreboardSlot(1);
-		case BELOW_NAME:
-			return new ScoreboardSlot(2);
-		default:
-			return new ScoreboardSlot(1);
-		}
+		return new ScoreboardSlot(switch(slot) {
+		case PLAYER_LIST -> 0;
+		case SIDEBAR     -> 1;
+		case BELOW_NAME  -> 2;
+		default          -> 1;
+		});
 	}
 	
 	/**
@@ -70,40 +68,9 @@ public class ScoreboardSlot {
 	 * @return a ScoreboardSlot from the provided ChatColor
 	 */
 	public static ScoreboardSlot ofTeamColor(ChatColor color) {
-		switch (color) {
-		case BLACK:
-			return new ScoreboardSlot(3);
-		case DARK_BLUE:
-			return new ScoreboardSlot(4);
-		case DARK_GREEN:
-			return new ScoreboardSlot(5);
-		case DARK_AQUA:
-			return new ScoreboardSlot(6);
-		case DARK_RED:
-			return new ScoreboardSlot(7);
-		case DARK_PURPLE:
-			return new ScoreboardSlot(8);
-		case GOLD:
-			return new ScoreboardSlot(9);
-		case GRAY:
-			return new ScoreboardSlot(10);
-		case DARK_GRAY:
-			return new ScoreboardSlot(11);
-		case BLUE:
-			return new ScoreboardSlot(12);
-		case GREEN:
-			return new ScoreboardSlot(13);
-		case AQUA:
-			return new ScoreboardSlot(14);
-		case RED:
-			return new ScoreboardSlot(15);
-		case LIGHT_PURPLE:
-			return new ScoreboardSlot(16);
-		case YELLOW:
-			return new ScoreboardSlot(17);
-		case WHITE:
-			return new ScoreboardSlot(18);
-		default:
+		try {
+			return new ScoreboardSlot(Integer.parseInt(color.toString().substring(1), 16) + 3);
+		} catch (NumberFormatException e) {
 			return new ScoreboardSlot(1);
 		}
 	}
@@ -141,16 +108,12 @@ public class ScoreboardSlot {
 		if(teamColor != null) {
 			return "sidebar.team." + teamColor.name().toLowerCase();
 		} else {
-			switch(displaySlot) {
-			case PLAYER_LIST:
-				return "list";
-			case SIDEBAR:
-				return "sidebar";
-			case BELOW_NAME:
-				return "belowName";
-			default:
-				return "sidebar";
-			}
+			return switch(displaySlot) {
+			case PLAYER_LIST -> "list";
+			case SIDEBAR     -> "sidebar";
+			case BELOW_NAME  -> "belowName";
+			default          -> "sidebar";
+			};
 		}
 	}
 }

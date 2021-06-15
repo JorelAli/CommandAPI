@@ -1,3 +1,23 @@
+/*******************************************************************************
+ * Copyright 2018, 2021 Jorel Ali (Skepter) - MIT License
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *******************************************************************************/
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -16,7 +36,9 @@ import org.bukkit.Chunk;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
+import org.bukkit.Server;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
@@ -38,12 +60,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ComplexRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.loot.LootContext;
 import org.bukkit.loot.LootTable;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -56,10 +78,11 @@ import org.bukkit.util.EulerAngle;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
-import de.tr7zw.changeme.nbtapi.NBTContainer;
+import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.Brigadier;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.CommandAPIConfig;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.Converter;
 import dev.jorel.commandapi.IStringTooltip;
@@ -135,18 +158,27 @@ public class Examples extends JavaPlugin {
  */
 
 {
+/* ANCHOR: commandunregistration */
+//Unregister the gamemode command from the server (by force)
+CommandAPI.unregister("gamemode", true);
+
+// Register our new /gamemode, with survival, creative, adventure and spectator
+new CommandAPICommand("gamemode")
+    .withArguments(new MultiLiteralArgument("survival", "creative", "adventure", "spectator"))
+    .executes((sender, args) -> {
+        //Implementation of our /gamemode command
+    }).register();
+/* ANCHOR_END: commandunregistration */
+}
+{
 /* ANCHOR: booleanargs */
 // Load keys from config file
 String[] configKeys = getConfig().getKeys(true).toArray(new String[0]);
 
-// Create arguments with the config key and a boolean value to set it to
-List<Argument> arguments = new ArrayList<>();
-arguments.add(new TextArgument("config-key").overrideSuggestions(configKeys));
-arguments.add(new BooleanArgument("value"));
-
 // Register our command
 new CommandAPICommand("editconfig")
-    .withArguments(arguments)
+    .withArguments(new TextArgument("config-key").replaceSuggestions(info -> configKeys))
+    .withArguments(new BooleanArgument("value"))
     .executes((sender, args) -> {
         // Update the config with the boolean argument
         getConfig().set((String) args[0], (boolean) args[1]);
@@ -157,13 +189,9 @@ new CommandAPICommand("editconfig")
 
 {
 /* ANCHOR: rangedarguments */
-// Declare our arguments for /searchrange <IntegerRange> <ItemStack>
-List<Argument> arguments = new ArrayList<>();
-arguments.add(new IntegerRangeArgument("range"));
-arguments.add(new ItemStackArgument("item"));
-
 new CommandAPICommand("searchrange")
-    .withArguments(arguments)
+    .withArguments(new IntegerRangeArgument("range")) // Range argument
+    .withArguments(new ItemStackArgument("item"))     // The item to search for
     .executesPlayer((player, args) -> {
         // Retrieve the range from the arguments
         IntegerRange range = (IntegerRange) args[0];
@@ -183,9 +211,8 @@ new CommandAPICommand("searchrange")
                 if(range.isInRange(distance)) {
 
                     // Check if the tile entity is a chest
-                    if(blockState instanceof Chest) {
-                        Chest chest = (Chest) blockState;
-
+                    if(blockState instanceof Chest chest) {
+                        
                         // Check if the chest contains the item specified by the player
                         if(chest.getInventory().contains(itemStack.getType())) {
                             locations.add(chest.getLocation());
@@ -215,12 +242,9 @@ new CommandAPICommand("searchrange")
 
 {
 /* ANCHOR: greedystringarguments */
-List<Argument> arguments = new ArrayList<>();
-arguments.add(new PlayerArgument("target"));
-arguments.add(new GreedyStringArgument("message"));
-
 new CommandAPICommand("message")
-    .withArguments(arguments)
+    .withArguments(new PlayerArgument("target"))
+    .withArguments(new GreedyStringArgument("message"))
     .executes((sender, args) -> {
         ((Player) args[0]).sendMessage((String) args[1]);
     })
@@ -249,16 +273,16 @@ new CommandAPICommand("rotate")
         Rotation rotation = (Rotation) args[0];
         Entity target = (Entity) args[1];
 
-        if(target instanceof ArmorStand) {
-            ArmorStand a = (ArmorStand) target;
-            a.setHeadPose(new EulerAngle(Math.toRadians(rotation.getPitch()), Math.toRadians(rotation.getYaw() - 90), 0));
+        if(target instanceof ArmorStand armorStand) {
+            armorStand.setHeadPose(new EulerAngle(Math.toRadians(rotation.getPitch()), Math.toRadians(rotation.getYaw() - 90), 0));
         }
     })
     .register();
 /* ANCHOR_END: rotationarguments */
 }
 
-{
+@SuppressWarnings("deprecation")
+void chatcolorarguments(){
 /* ANCHOR: chatcolorarguments */
 new CommandAPICommand("namecolor")
     .withArguments(new ChatColorArgument("chatcolor"))
@@ -270,7 +294,8 @@ new CommandAPICommand("namecolor")
 /* ANCHOR_END: chatcolorarguments */
 }
 
-{
+@SuppressWarnings("deprecation")
+void chatcomponentarguments(){
 /* ANCHOR: chatcomponentarguments */
 new CommandAPICommand("makebook")
     .withArguments(new PlayerArgument("player"))
@@ -294,7 +319,8 @@ new CommandAPICommand("makebook")
 /* ANCHOR_END: chatcomponentarguments */
 }
 
-{
+@SuppressWarnings("deprecation")
+void chatarguments() {
 /* ANCHOR: chatarguments */
 new CommandAPICommand("pbroadcast")
     .withArguments(new ChatArgument("message"))
@@ -306,6 +332,43 @@ new CommandAPICommand("pbroadcast")
     })
     .register();
 /* ANCHOR_END: chatarguments */
+}
+
+
+{
+/* ANCHOR: ArgumentAdventureChatComponent */
+new CommandAPICommand("showbook")
+    .withArguments(new PlayerArgument("target"))
+    .withArguments(new TextArgument("title"))
+    .withArguments(new StringArgument("author"))
+    .withArguments(new AdventureChatComponentArgument("contents"))
+    .executes((sender, args) -> {
+        Player target = (Player) args[0];
+        String title = (String) args[1];
+        String author = (String) args[2];
+        Component content = (Component) args[3];
+        
+        // Create a book and show it to the user (Requires Paper)
+        Book mybook = Book.book(Component.text(title), Component.text(author), content);
+        target.openBook(mybook);
+    })
+    .register();
+/* ANCHOR_END: ArgumentAdventureChatComponent */
+}
+
+{
+/* ANCHOR: ArgumentAdventureChat */
+new CommandAPICommand("pbroadcast")
+    .withArguments(new AdventureChatArgument("message"))
+    .executes((sender, args) -> {
+        Component message = (Component) args[0];
+        
+        // Broadcast the message to everyone with broadcast permissions.
+        Bukkit.getServer().broadcast(message, Server.BROADCAST_CHANNEL_USERS);
+        Bukkit.getServer().broadcast(message);
+    })
+    .register();
+/* ANCHOR_END: ArgumentAdventureChat */
 }
 
 {
@@ -357,6 +420,25 @@ new CommandAPICommand("reward")
     })
     .register();
 /* ANCHOR_END: scoreholderargument */
+}
+
+{
+Object[] args = new Object[0];
+@SuppressWarnings("unchecked")
+// This example isn't used because for some reason, mdbook doesn't render it properly
+/* ANCHOR: scoreholderargument_2 */
+Collection<String> entitiesAndPlayers = (Collection<String>) args[0];
+for(String str : entitiesAndPlayers) {
+    try {
+        UUID uuid = UUID.fromString(str);
+        // Is a UUID, so it must by an entity
+        Bukkit.getEntity(uuid);
+    } catch(IllegalArgumentException exception) {
+        // Not a UUID, so it must be a player name
+        Bukkit.getPlayer(str); 
+    }
+}
+/* ANCHOR_END: scoreholderargument_2 */
 }
 
 {
@@ -447,14 +529,14 @@ new CommandAPICommand("award")
 {
 /* ANCHOR: biomearguments */
 new CommandAPICommand("setbiome")
-	.withArguments(new BiomeArgument("biome"))
-	.executesPlayer((player, args) -> {
-		Biome biome = (Biome) args[0];
+    .withArguments(new BiomeArgument("biome"))
+    .executesPlayer((player, args) -> {
+        Biome biome = (Biome) args[0];
 
-		Chunk chunk = player.getLocation().getChunk();
-		player.getWorld().setBiome(chunk.getX(), player.getLocation().getBlockY(), chunk.getZ(), biome);
-	})
-	.register();
+        Chunk chunk = player.getLocation().getChunk();
+        player.getWorld().setBiome(chunk.getX(), player.getLocation().getBlockY(), chunk.getZ(), biome);
+    })
+    .register();
 /* ANCHOR_END: biomearguments */
 }
 
@@ -526,8 +608,8 @@ new CommandAPICommand("giveloottable")
         LootTable lootTable = (LootTable) args[0];
     
         /* Some generated LootContext relating to the lootTable*/
-    	LootContext context = new LootContext.Builder(player.getLocation()).build();
-    	
+        LootContext context = new LootContext.Builder(player.getLocation()).build();
+        
         lootTable.fillInventory(player.getInventory(), new Random(), context);
     })
     .register();
@@ -587,8 +669,8 @@ new CommandAPICommand("potion")
 new CommandAPICommand("giverecipe")
     .withArguments(new RecipeArgument("recipe"))
     .executesPlayer((player, args) -> {
-        Recipe recipe = (Recipe) args[0];
-    	player.getInventory().addItem(recipe.getResult());
+        ComplexRecipe recipe = (ComplexRecipe) args[0];
+        player.getInventory().addItem(recipe.getResult());
     })
     .register();
 /* ANCHOR_END: recipearguments */
@@ -601,16 +683,9 @@ new CommandAPICommand("unlockrecipe")
     .withArguments(new RecipeArgument("recipe"))
     .executes((sender, args) -> {
         Player target = (Player) args[0];
-        Recipe recipe = (Recipe) args[1];
-		
-        //Check if we're running 1.15+
-        if(recipe instanceof ComplexRecipe) {
-            ComplexRecipe complexRecipe = (ComplexRecipe) recipe;
-            target.discoverRecipe(complexRecipe.getKey());
-        } else {
-            //Error here, can't unlock recipe for player
-            CommandAPI.fail("Cannot unlock recipe for player (Are you using version 1.15 or above?)");
-        }
+        ComplexRecipe recipe = (ComplexRecipe) args[1];
+
+        target.discoverRecipe(recipe.getKey());
     })
     .register();
 /* ANCHOR_END: recipearguments2 */
@@ -649,43 +724,43 @@ new CommandAPICommand("bigmsg")
 {
 /* ANCHOR: blockpredicatearguments */
 Argument[] arguments = new Argument[] {
-	new IntegerArgument("radius"),
-	new BlockPredicateArgument("fromBlock"),
-	new BlockStateArgument("toBlock"),
+    new IntegerArgument("radius"),
+    new BlockPredicateArgument("fromBlock"),
+    new BlockStateArgument("toBlock"),
 };
 /* ANCHOR_END: blockpredicatearguments */
 
 /* ANCHOR: blockpredicatearguments2 */
 new CommandAPICommand("replace")
-	.withArguments(arguments)
-	.executesPlayer((player, args) -> {
-	    
-	    // Parse the arguments
-	    int radius = (int) args[0];
-	    @SuppressWarnings("unchecked")
-	    Predicate<Block> predicate = (Predicate<Block>) args[1];
-	    BlockData blockData = (BlockData) args[2];
-	    
-	    // Find a (solid) sphere of blocks around the player with a given radius
-	    Location center = player.getLocation();
-	    for (int Y = -radius; Y < radius; Y++) {
-	        for (int X = -radius; X < radius; X++) {
-	            for (int Z = -radius; Z < radius; Z++) {
-	                if (Math.sqrt((X * X) + (Y * Y) + (Z * Z)) <= radius) {
-	                    Block block = center.getWorld().getBlockAt(X + center.getBlockX(), Y + center.getBlockY(), Z + center.getBlockZ());
-	                    
-	                    // If that block matches a block from the predicate, set it
-	                    if(predicate.test(block)) {
-	                        block.setType(blockData.getMaterial());
-	                        block.setBlockData(blockData);
-	                    }
-	                }
-	            }
-	        }
-	    }
-	    return;
-	})
-	.register();
+    .withArguments(arguments)
+    .executesPlayer((player, args) -> {
+        
+        // Parse the arguments
+        int radius = (int) args[0];
+        @SuppressWarnings("unchecked")
+        Predicate<Block> predicate = (Predicate<Block>) args[1];
+        BlockData blockData = (BlockData) args[2];
+        
+        // Find a (solid) sphere of blocks around the player with a given radius
+        Location center = player.getLocation();
+        for (int x = -radius; x <= radius; x++) {
+            for (int y = -radius; y <= radius; y++) {
+                for (int z = -radius; z <= radius; z++) {
+                    if (Math.sqrt((x * x) + (y * y) + (z * z)) <= radius) {
+                        Block block = center.getWorld().getBlockAt(x + center.getBlockX(), y + center.getBlockY(), z + center.getBlockZ());
+                        
+                        // If that block matches a block from the predicate, set it
+                        if(predicate.test(block)) {
+                            block.setType(blockData.getMaterial());
+                            block.setBlockData(blockData);
+                        }
+                    }
+                }
+            }
+        }
+        return;
+    })
+    .register();
 /* ANCHOR_END: blockpredicatearguments2 */
 }
 
@@ -693,20 +768,20 @@ new CommandAPICommand("replace")
 /* ANCHOR: itemstackpredicatearguments */
 // Register our command
 new CommandAPICommand("rem")
-	.withArguments(new ItemStackPredicateArgument("items"))
-	.executesPlayer((player, args) -> {
-	    
-	    // Get our predicate
-		@SuppressWarnings("unchecked")
-	    Predicate<ItemStack> predicate = (Predicate<ItemStack>) args[0];
-	    
-	    for(ItemStack item : player.getInventory()) {
-	        if(predicate.test(item)) {
-	            player.getInventory().remove(item);
-	        }
-	    }
-	})
-	.register();
+    .withArguments(new ItemStackPredicateArgument("items"))
+    .executesPlayer((player, args) -> {
+        
+        // Get our predicate
+        @SuppressWarnings("unchecked")
+        Predicate<ItemStack> predicate = (Predicate<ItemStack>) args[0];
+        
+        for(ItemStack item : player.getInventory()) {
+            if(predicate.test(item)) {
+                player.getInventory().remove(item);
+            }
+        }
+    })
+    .register();
 /* ANCHOR_END: itemstackpredicatearguments */
 }
 
@@ -758,7 +833,7 @@ for(String key : gamemodes.keySet()) {
             player.setGameMode(gamemodes.get(key));
         })
         .register();
-}	
+}    
 /* ANCHOR_END: literalarguments2 */
 }
 
@@ -799,25 +874,23 @@ new CommandAPICommand("tpworld")
 }
 
 /* ANCHOR: customarguments2 */
-//Function that returns our custom argument
+// Function that returns our custom argument
 public Argument worldArgument(String nodeName) {
-	
-	//Construct our CustomArgument that takes in a String input and returns a World object
-	return new CustomArgument<World>(nodeName, (input) -> {
-	    //Parse the world from our input
-	    World world = Bukkit.getWorld(input);
-	
-	    if(world == null) {
-	        throw new CustomArgumentException(new MessageBuilder("Unknown world: ").appendArgInput());
-	    } else {
-	        return world;
-	    }
-	}).overrideSuggestions(sender -> {
-		//List of worlds on the server, as Strings. We use overrideSuggestions(sender -> ...)
-		//since this evaluates the list of worlds when the player types the command as opposed
-		//to when the plugin starts up
-		return Bukkit.getWorlds().stream().map(World::getName).toArray(String[]::new);
-	});
+    
+    // Construct our CustomArgument that takes in a String input and returns a World object
+    return new CustomArgument<World>(nodeName, (input) -> {
+        // Parse the world from our input
+        World world = Bukkit.getWorld(input);
+    
+        if(world == null) {
+            throw new CustomArgumentException(new MessageBuilder("Unknown world: ").appendArgInput());
+        } else {
+            return world;
+        }
+    }).replaceSuggestions(sender -> {
+        // List of world names on the server
+        return Bukkit.getWorlds().stream().map(World::getName).toArray(String[]::new);
+    });
 }
 /* ANCHOR_END: customarguments2 */
 
@@ -825,7 +898,7 @@ public Argument worldArgument(String nodeName) {
 /* ANCHOR: functionarguments */
 new CommandAPICommand("runfunc")
     .withArguments(new FunctionArgument("function"))
-	.executes((sender, args) -> {
+    .executes((sender, args) -> {
         FunctionWrapper[] functions = (FunctionWrapper[]) args[0];
         for(FunctionWrapper function : functions) {
             function.run(); // The command executor in this case is 'sender'
@@ -874,18 +947,18 @@ new CommandAPICommand("god")
 }
 
 {
-/* ANCHOR: permissions2 */
+/* ANCHOR: permissions3_1 */
 // Register /kill command normally. Since no permissions are applied, anyone can run this command
 new CommandAPICommand("kill")
     .executesPlayer((player, args) -> {
         player.setHealth(0);
     })
     .register();
-/* ANCHOR_END: permissions2 */
+/* ANCHOR_END: permissions3_1 */
 }
 
 {
-/* ANCHOR: permissions3 */
+/* ANCHOR: permissions3_2 */
 // Adds the OP permission to the "target" argument. The sender requires OP to execute /kill <target>
 new CommandAPICommand("kill")
     .withArguments(new PlayerArgument("target").withPermission(CommandPermission.OP))
@@ -893,43 +966,43 @@ new CommandAPICommand("kill")
         ((Player) args[0]).setHealth(0);
     })
     .register();
-/* ANCHOR_END: permissions3 */
+/* ANCHOR_END: permissions3_2 */
 }
 
 {
 /* ANCHOR: aliases */
 new CommandAPICommand("getpos")
-	// Declare your aliases
-	.withAliases("getposition", "getloc", "getlocation", "whereami")
-	  
-	    //Declare your implementation
-	.executesEntity((entity, args) -> {
-	    entity.sendMessage(String.format("You are at %d, %d, %d", 
-	        entity.getLocation().getBlockX(), 
-	        entity.getLocation().getBlockY(), 
-	        entity.getLocation().getBlockZ())
-	    );
-	})
-	.executesCommandBlock((block, args) -> {
-	    block.sendMessage(String.format("You are at %d, %d, %d", 
-	            block.getBlock().getLocation().getBlockX(), 
-	            block.getBlock().getLocation().getBlockY(), 
-	            block.getBlock().getLocation().getBlockZ())
-	        );
-	    })
-	  
-	    //Register the command
-	.register();
+    // Declare your aliases
+    .withAliases("getposition", "getloc", "getlocation", "whereami")
+      
+    // Declare your implementation
+    .executesEntity((entity, args) -> {
+        entity.sendMessage(String.format("You are at %d, %d, %d", 
+            entity.getLocation().getBlockX(), 
+            entity.getLocation().getBlockY(), 
+            entity.getLocation().getBlockZ())
+        );
+    })
+    .executesCommandBlock((block, args) -> {
+        block.sendMessage(String.format("You are at %d, %d, %d", 
+            block.getBlock().getLocation().getBlockX(), 
+            block.getBlock().getLocation().getBlockY(), 
+            block.getBlock().getLocation().getBlockZ())
+        );
+    })
+      
+    // Register the command
+    .register();
 /* ANCHOR_END: aliases */
 }
 
 {
 /* ANCHOR: normalcommandexecutors */
 new CommandAPICommand("suicide")
-	.executesPlayer((player, args) -> {
-	    player.setHealth(0);
-	})
-	.register();
+    .executesPlayer((player, args) -> {
+        player.setHealth(0);
+    })
+    .register();
 /* ANCHOR_END: normalcommandexecutors */
 }
 
@@ -947,7 +1020,8 @@ new CommandAPICommand("suicide")
 /* ANCHOR_END: normalcommandexecutors2 */
 }
 
-{
+@SuppressWarnings("deprecation")
+void normalcommandexecutors3() {
 /* ANCHOR: normalcommandexecutors3 */
 //Create our command
 new CommandAPICommand("broadcastmsg")
@@ -979,11 +1053,8 @@ new CommandAPICommand("killme")
         player.setHealth(0);
     })
     .executesProxy((proxy, args) -> {
-        //Check if the callee is an Entity
-        if(proxy.getCallee() instanceof LivingEntity) {
-
-            //If so, kill the entity
-            LivingEntity target = (LivingEntity) proxy.getCallee();
+        //Check if the callee (target) is an Entity and kill it
+        if(proxy.getCallee() instanceof LivingEntity target) {
             target.setHealth(0);
         }
     })
@@ -995,7 +1066,7 @@ new CommandAPICommand("killme")
 /* ANCHOR: nativesender */
 new CommandAPICommand("break")
     .executesNative((sender, args) -> {
-        Location location = (Location) sender.getLocation();
+        Location location = sender.getLocation();
         if(location != null) {
             location.getBlock().breakNaturally();
         }
@@ -1025,9 +1096,10 @@ new CommandAPICommand("randomnumber")
 /* ANCHOR_END: resultingcommandexecutor2 */
 }
 
-{
+@SuppressWarnings("deprecation")
+void resultingcommandexecutor3(){
 /* ANCHOR: resultingcommandexecutor3 */
-//Register reward giving system for a target player
+// Register reward giving system for a target player
 new CommandAPICommand("givereward")
     .withArguments(new EntitySelectorArgument("target", EntitySelector.ONE_PLAYER))
     .executes((sender, args) -> {
@@ -1041,28 +1113,93 @@ new CommandAPICommand("givereward")
 
 {
 /* ANCHOR: commandfailures */
-//Array of fruit
+// Array of fruit
 String[] fruit = new String[] {"banana", "apple", "orange"};
 
-//Argument accepting a String, suggested with the list of fruit
-List<Argument> arguments = new ArrayList<>();
-arguments.add(new StringArgument("item").overrideSuggestions(fruit));
-
-//Register the command
+// Register the command
 new CommandAPICommand("getfruit")
-    .withArguments(arguments)
+    .withArguments(new StringArgument("item").replaceSuggestions(info -> fruit))
     .executes((sender, args) -> {
         String inputFruit = (String) args[0];
         
         if(Arrays.stream(fruit).anyMatch(inputFruit::equals)) {
-            //Do something with inputFruit
+            // Do something with inputFruit
         } else {
-            //The player's input is not in the list of fruit
+            // The sender's input is not in the list of fruit
             CommandAPI.fail("That fruit doesn't exist!");
         }
     })
     .register();
 /* ANCHOR_END: commandfailures */
+}
+
+{
+/* ANCHOR: argumentsyntax1 */
+new CommandAPICommand("mycommand")
+    .withArguments(new StringArgument("arg0"))
+    .withArguments(new StringArgument("arg1"))
+    .withArguments(new StringArgument("arg2"))
+    // And so on
+/* ANCHOR_END: argumentsyntax1 */
+    ;
+
+/* ANCHOR: argumentsyntax2 */
+new CommandAPICommand("mycommand")
+    .withArguments(new StringArgument("arg0"), new StringArgument("arg1"), new StringArgument("arg2"))
+    // And so on
+/* ANCHOR_END: argumentsyntax2 */
+    ;
+
+/* ANCHOR: argumentsyntax3 */
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new StringArgument("arg0"));
+arguments.add(new StringArgument("arg1"));
+arguments.add(new StringArgument("arg2"));
+
+new CommandAPICommand("mycommand")
+    .withArguments(arguments)
+    // And so on
+/* ANCHOR_END: argumentsyntax3 */
+    ;
+}
+
+{
+/* ANCHOR: argumentkillcmd */
+new CommandAPICommand("kill")
+    .executesPlayer((player, args) -> {
+        player.setHealth(0);
+    })
+    .register();
+/* ANCHOR_END: argumentkillcmd */
+
+/* ANCHOR: argumentkillcmd2 */
+// Register our second /kill <target> command
+new CommandAPICommand("kill")
+    .withArguments(new PlayerArgument("target"))
+    .executesPlayer((player, args) -> {
+        ((Player) args[0]).setHealth(0);
+    })
+    .register();
+/* ANCHOR_END: argumentkillcmd2 */
+}
+
+@SuppressWarnings("unused")
+public void argumentCasting() {
+/* ANCHOR: argumentcasting */
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new StringArgument("arg0"));
+arguments.add(new PotionEffectArgument("arg1"));
+arguments.add(new LocationArgument("arg2"));
+
+new CommandAPICommand("cmd")
+    .withArguments(arguments)
+    .executes((sender, args) -> {
+        String stringArg = (String) args[0];
+        PotionEffectType potionArg = (PotionEffectType) args[1];
+        Location locationArg = (Location) args[2];
+    })
+    .register();
+/* ANCHOR_END: argumentcasting */
 }
 
 {
@@ -1079,7 +1216,7 @@ new CommandAPICommand("repair")
             is.setItemMeta(itemMeta);
         }
         
-        //Subtract 30 levels
+        // Subtract 30 levels
         player.setLevel(player.getLevel() - 30);
     })
     .register();
@@ -1096,105 +1233,99 @@ List<Argument> arguments = new ArrayList<>();
 
 // The "create" literal, with a requirement that a player must have a party
 arguments.add(new LiteralArgument("create")
-	.withRequirement(sender -> {
-		
-		return !partyMembers.containsKey(((Player) sender).getUniqueId());
-		
-	}));
+    .withRequirement(sender -> !partyMembers.containsKey(((Player) sender).getUniqueId()))
+);
 
 arguments.add(new StringArgument("partyName"));
 /* ANCHOR_END: requirements2 */
 
 /* ANCHOR: requirements3 */
 new CommandAPICommand("party")
-	.withArguments(arguments)
-	.executesPlayer((player, args) -> {
-		
-		//Get the name of the party to create
-		String partyName = (String) args[0];
-		
-		partyMembers.put(player.getUniqueId(), partyName);
-	})
-	.register();
+    .withArguments(arguments)
+    .executesPlayer((player, args) -> {
+        
+        //Get the name of the party to create
+        String partyName = (String) args[0];
+        
+        partyMembers.put(player.getUniqueId(), partyName);
+    })
+    .register();
 /* ANCHOR_END: requirements3 */
 
 /* ANCHOR: requirementstp */
 /* ANCHOR: requirements4 */
 arguments = new ArrayList<>();
 arguments.add(new LiteralArgument("tp")
-	.withRequirement(sender -> {
-		
-		return partyMembers.containsKey(((Player) sender).getUniqueId());
-        
-	}));
+    .withRequirement(sender -> partyMembers.containsKey(((Player) sender).getUniqueId()))
+);
 /* ANCHOR_END: requirementstp */
 
 arguments.add(new PlayerArgument("player")
-	.safeOverrideSuggestions((sender) -> {
-		
-		//Store the list of party members to teleport to
-		List<Player> playersToTeleportTo = new ArrayList<>();
-		
-		String partyName = partyMembers.get(((Player) sender).getUniqueId());
-		
-		//Find the party members
-		for(UUID uuid : partyMembers.keySet()) {
-			
-			//Ignore yourself
-			if(uuid.equals(((Player) sender).getUniqueId())) {
-				continue;
-			} else {
-				//If the party member is in the same party as you
-				if(partyMembers.get(uuid).equals(partyName)) {
-					Player target = Bukkit.getPlayer(uuid);
-					if(target.isOnline()) {
-						//Add them if they are online
-						playersToTeleportTo.add(target);
-					}
-				}
-			}
-		}
-		
-		return playersToTeleportTo.toArray(new Player[0]);
-	}));
+    .replaceWithSafeSuggestions(info -> {
+        
+        //Store the list of party members to teleport to
+        List<Player> playersToTeleportTo = new ArrayList<>();
+        
+        String partyName = partyMembers.get(((Player) info.sender()).getUniqueId());
+        
+        //Find the party members
+        for(UUID uuid : partyMembers.keySet()) {
+            
+            //Ignore yourself
+            if(uuid.equals(((Player) info.sender()).getUniqueId())) {
+                continue;
+            } else {
+                //If the party member is in the same party as you
+                if(partyMembers.get(uuid).equals(partyName)) {
+                    Player target = Bukkit.getPlayer(uuid);
+                    if(target.isOnline()) {
+                        //Add them if they are online
+                        playersToTeleportTo.add(target);
+                    }
+                }
+            }
+        }
+        
+        return playersToTeleportTo.toArray(new Player[0]);
+    }));
 /* ANCHOR_END: requirements4 */
 
 /* ANCHOR: requirements5 */
 new CommandAPICommand("party")
-	.withArguments(arguments)
-	.executesPlayer((player, args) -> {
-		Player target = (Player) args[0];
-		player.teleport(target);
-	})
-	.register();
+    .withArguments(arguments)
+    .executesPlayer((player, args) -> {
+        Player target = (Player) args[0];
+        player.teleport(target);
+    })
+    .register();
 /* ANCHOR_END: requirements5 */
 
 /* ANCHOR: updatingrequirements */
 new CommandAPICommand("party")
-	.withArguments(arguments)
-	.executesPlayer((player, args) -> {
-		
-		//Get the name of the party to create
-		String partyName = (String) args[0];
-		
-		partyMembers.put(player.getUniqueId(), partyName);
-	    
-	    CommandAPI.updateRequirements(player);
-	})
-	.register();
+    .withArguments(arguments)
+    .executesPlayer((player, args) -> {
+        
+        //Get the name of the party to create
+        String partyName = (String) args[0];
+        
+        partyMembers.put(player.getUniqueId(), partyName);
+        
+        CommandAPI.updateRequirements(player);
+    })
+    .register();
 /* ANCHOR_END: updatingrequirements */
 }
 
 {
 /* ANCHOR: multiplerequirements */
 new CommandAPICommand("someCommand")
-	.withRequirement(sender -> ((Player) sender).getLevel() >= 30)
-	.withRequirement(sender -> ((Player) sender).getInventory().contains(Material.DIAMOND_PICKAXE))
-	.withRequirement(sender -> ((Player) sender).isInvulnerable())
-	.executesPlayer((player, args) -> {
-		//Code goes here
-	})
-	.register();
+    .withRequirement(sender -> ((Player) sender).getLevel() >= 30)
+    .withRequirement(sender -> ((Player) sender).getInventory().contains(Material.DIAMOND_PICKAXE))
+    .withRequirement(sender -> ((Player) sender).isInvulnerable())
+    .executesPlayer((player, args) -> {
+        //Code goes here
+    })
+    .register();
 /* ANCHOR_END: multiplerequirements */
 }
 
@@ -1220,7 +1351,7 @@ arguments.add(new LiteralArgument("tp").withRequirement(testIfPlayerHasParty));
 
 {
 /* ANCHOR: converter2 */
-Plugin essentials = Bukkit.getPluginManager().getPlugin("Essentials");
+JavaPlugin essentials = (JavaPlugin) Bukkit.getPluginManager().getPlugin("Essentials");
 
 // /speed <speed>
 Converter.convert(essentials, "speed", new IntegerArgument("speed", 0, 10));
@@ -1230,16 +1361,16 @@ Converter.convert(essentials, "speed", new PlayerArgument("target"));
 
 // /speed <walk/fly> <speed>
 Converter.convert(essentials, "speed", 
-	new MultiLiteralArgument("walk", "fly"), 
-	new IntegerArgument("speed", 0, 10)
-	);
+    new MultiLiteralArgument("walk", "fly"), 
+    new IntegerArgument("speed", 0, 10)
+);
 
 // /speed <walk/fly> <speed> <target>
 Converter.convert(essentials, "speed", 
-	new MultiLiteralArgument("walk", "fly"), 
-	new IntegerArgument("speed", 0, 10), 
-	new PlayerArgument("target")
-	);
+    new MultiLiteralArgument("walk", "fly"), 
+    new IntegerArgument("speed", 0, 10), 
+    new PlayerArgument("target")
+);
 /* ANCHOR_END: converter2 */
 }
 
@@ -1291,23 +1422,23 @@ Brigadier.getRootNode().getChild("execute").getChild("if").addChild(randomChance
 
 /* ANCHOR: subcommandspart */
 CommandAPICommand groupAdd = new CommandAPICommand("add")
-	.withArguments(new StringArgument("permission"))
-	.withArguments(new StringArgument("groupName"))
-	.executes((sender, args) -> {
-	    //perm group add code
-	});
+    .withArguments(new StringArgument("permission"))
+    .withArguments(new StringArgument("groupName"))
+    .executes((sender, args) -> {
+        //perm group add code
+    });
 /* ANCHOR_END: subcommandspart */
 /* ANCHOR: subcommands */
 CommandAPICommand groupRemove = new CommandAPICommand("remove")
-	.withArguments(new StringArgument("permission"))
-	.withArguments(new StringArgument("groupName"))
-	.executes((sender, args) -> {
-	    //perm group remove code
-	});
+    .withArguments(new StringArgument("permission"))
+    .withArguments(new StringArgument("groupName"))
+    .executes((sender, args) -> {
+        //perm group remove code
+    });
 
 CommandAPICommand group = new CommandAPICommand("group")
-	.withSubcommand(groupAdd)
-	.withSubcommand(groupRemove);
+    .withSubcommand(groupAdd)
+    .withSubcommand(groupRemove);
 /* ANCHOR_END: subcommands */
 /* ANCHOR: subcommandsend */
 new CommandAPICommand("perm")
@@ -1353,16 +1484,16 @@ new CommandAPICommand("perm")
 }
 
 {
-	//NOTE: This example isn't used!
+    //NOTE: This example isn't used!
 /* ANCHOR: anglearguments */
 new CommandAPICommand("yaw")
-	.withArguments(new AngleArgument("amount"))
-	.executesPlayer((player, args) -> {
-		Location newLocation = player.getLocation();
-		newLocation.setYaw((float) args[0]);
-		player.teleport(newLocation);
-	})
-	.register();
+    .withArguments(new AngleArgument("amount"))
+    .executesPlayer((player, args) -> {
+        Location newLocation = player.getLocation();
+        newLocation.setYaw((float) args[0]);
+        player.teleport(newLocation);
+    })
+    .register();
 /* ANCHOR_END: anglearguments */
 }
 
@@ -1373,9 +1504,9 @@ new CommandAPICommand("mycommand")
     .withArguments(new IntegerArgument("value").setListed(false))
     .withArguments(new GreedyStringArgument("message"))
     .executes((sender, args) -> {
-    	// args == [player, message]
-    	Player player = (Player) args[0];
-    	String message = (String) args[1]; //Note that this is args[1] and NOT args[2]
+        // args == [player, message]
+        Player player = (Player) args[0];
+        String message = (String) args[1]; //Note that this is args[1] and NOT args[2]
         player.sendMessage(message);
     })
     .register();
@@ -1386,57 +1517,59 @@ new CommandAPICommand("mycommand")
 /* ANCHOR: Tooltips1 */
 List<Argument> arguments = new ArrayList<>();
 arguments.add(new StringArgument("emote")
-	.overrideSuggestionsT( 
-        StringTooltip.of("wave", "Waves at a player"),
-        StringTooltip.of("hug", "Gives a player a hug"),
-        StringTooltip.of("glare", "Gives a player the death glare")
-	)
+    .replaceSuggestionsT( info -> new IStringTooltip[] {
+            StringTooltip.of("wave", "Waves at a player"),
+            StringTooltip.of("hug", "Gives a player a hug"),
+            StringTooltip.of("glare", "Gives a player the death glare")
+        }
+    )
 );
 arguments.add(new PlayerArgument("target"));
 /* ANCHOR_END: Tooltips1 */
 /* ANCHOR: Tooltips2 */
 new CommandAPICommand("emote")
-	.withArguments(arguments)
-	.executesPlayer((player, args) -> {
-		String emote = (String) args[0];
-		Player target = (Player) args[1];
-		
-		switch(emote) {
-		case "wave":
-			target.sendMessage(player.getName() + " waves at you!");
-			break;
-		case "hug":
-			target.sendMessage(player.getName() + " hugs you!");
-			break;
-		case "glare":
-			target.sendMessage(player.getName() + " gives you the death glare...");
-			break;
-		}
-	})
-	.register();
+    .withArguments(arguments)
+    .executesPlayer((player, args) -> {
+        String emote = (String) args[0];
+        Player target = (Player) args[1];
+        
+        switch(emote) {
+        case "wave":
+            target.sendMessage(player.getName() + " waves at you!");
+            break;
+        case "hug":
+            target.sendMessage(player.getName() + " hugs you!");
+            break;
+        case "glare":
+            target.sendMessage(player.getName() + " gives you the death glare...");
+            break;
+        }
+    })
+    .register();
 /* ANCHOR_END: Tooltips2 */
 }
 
 {
 /* ANCHOR: Tooltips4 */
 CustomItem[] customItems = new CustomItem[] {
-	new CustomItem(new ItemStack(Material.DIAMOND_SWORD), "God sword", "A sword from the heavens"),
-	new CustomItem(new ItemStack(Material.PUMPKIN_PIE), "Sweet pie", "Just like grandma used to make")
-};  //
-	
+    new CustomItem(new ItemStack(Material.DIAMOND_SWORD), "God sword", "A sword from the heavens"),
+    new CustomItem(new ItemStack(Material.PUMPKIN_PIE), "Sweet pie", "Just like grandma used to make")
+};
+    
 new CommandAPICommand("giveitem")
-	.withArguments(new StringArgument("item").overrideSuggestionsT(customItems)) // We use customItems[] as the input for our suggestions with tooltips
-	.executesPlayer((player, args) -> {
-		String itemName = (String) args[0];
-		
-		//Give them the item
-		for(CustomItem item : customItems) {
-			if(item.getName().equals(itemName)) {
-				player.getInventory().addItem(item.getItem());
-			}
-		}
-	})
-	.register();
+    .withArguments(new StringArgument("item").replaceSuggestionsT(info -> customItems)) // We use customItems[] as the input for our suggestions with tooltips
+    .executesPlayer((player, args) -> {
+        String itemName = (String) args[0];
+        
+        //Give them the item
+        for(CustomItem item : customItems) {
+            if(item.getName().equals(itemName)) {
+                player.getInventory().addItem(item.getItem());
+                break;
+            }
+        }
+    })
+    .register();
 /* ANCHOR_END: Tooltips4 */
 }
 
@@ -1444,21 +1577,23 @@ new CommandAPICommand("giveitem")
 /* ANCHOR: SafeTooltips */
 List<Argument> arguments = new ArrayList<>();
 arguments.add(new LocationArgument("location")
-    .safeOverrideSuggestionsT((sender) -> {
+    .replaceWithSafeSuggestionsT(info -> {
+        // We know the sender is a player if we use .executesPlayer()
+        Player player = (Player) info.sender();
         return Tooltip.arrayOf(
-            Tooltip.of(((Player) sender).getWorld().getSpawnLocation(), "World spawn"),
-            Tooltip.of(((Player) sender).getBedSpawnLocation(), "Your bed"),
-            Tooltip.of(((Player) sender).getTargetBlockExact(256).getLocation(), "Target block")
+            Tooltip.of(player.getWorld().getSpawnLocation(), "World spawn"),
+            Tooltip.of(player.getBedSpawnLocation(), "Your bed"),
+            Tooltip.of(player.getTargetBlockExact(256).getLocation(), "Target block")
         );
     }));
 /* ANCHOR_END: SafeTooltips */
 /* ANCHOR: SafeTooltips2 */
 new CommandAPICommand("warp")
-	.withArguments(arguments)
-	.executesPlayer((player, args) -> {
-	    player.teleport((Location) args[0]);
-	})
-	.register();
+    .withArguments(arguments)
+    .executesPlayer((player, args) -> {
+        player.teleport((Location) args[0]);
+    })
+    .register();
 /* ANCHOR_END: SafeTooltips2 */
 }
 
@@ -1468,50 +1603,50 @@ new CommandAPICommand("warp")
 List<Argument> arguments = new ArrayList<>();
 arguments.add(new IntegerArgument("radius"));
 
-// Override the suggestions for the PlayerArgument, using (sender, args) as the parameters
-// sender refers to the command sender that is running this command
-// args refers to the Object[] of PREVIOUSLY DECLARED arguments (in this case, the IntegerArgument radius)
-arguments.add(new PlayerArgument("target").overrideSuggestions((sender, args) -> {
+// Replace the suggestions for the PlayerArgument.
+// info.sender() refers to the command sender that is running this command
+// info.previousArgs() refers to the Object[] of previously declared arguments (in this case, the IntegerArgument radius)
+arguments.add(new PlayerArgument("target").replaceSuggestions(info -> {
 
     // Cast the first argument (radius, which is an IntegerArgument) to get its value
-	int radius = (int) args[0];
-	
+    int radius = (int) info.previousArgs()[0];
+    
     // Get nearby entities within the provided radius
-	Player player = (Player) sender;
-	Collection<Entity> entities = player.getWorld().getNearbyEntities(player.getLocation(), radius, radius, radius);
-	
+    Player player = (Player) info.sender();
+    Collection<Entity> entities = player.getWorld().getNearbyEntities(player.getLocation(), radius, radius, radius);
+    
     // Get player names within that radius
-	return entities.stream()
-		.filter(e -> e.getType() == EntityType.PLAYER)
-		.map(Entity::getName)
-		.toArray(String[]::new);
+    return entities.stream()
+        .filter(e -> e.getType() == EntityType.PLAYER)
+        .map(Entity::getName)
+        .toArray(String[]::new);
 }));
 arguments.add(new GreedyStringArgument("message"));
 
 // Declare our command as normal
 new CommandAPICommand("localmsg")
-	.withArguments(arguments)
-	.executesPlayer((player, args) -> {
-		Player target = (Player) args[1];
-		String message = (String) args[2];
-		target.sendMessage(message);
-	})
-	.register();
+    .withArguments(arguments)
+    .executesPlayer((player, args) -> {
+        Player target = (Player) args[1];
+        String message = (String) args[2];
+        target.sendMessage(message);
+    })
+    .register();
 /* ANCHOR_END: ArgumentSuggestionsPrevious */
 }
 
 {
 /* ANCHOR: ArgumentSuggestions2_2 */
 List<Argument> arguments = new ArrayList<>();
-arguments.add(new PlayerArgument("friend").overrideSuggestions((sender) -> {
-    return Friends.getFriends(sender);
-}));
+arguments.add(new PlayerArgument("friend").replaceSuggestions(info ->
+    Friends.getFriends(info.sender())
+));
 
 new CommandAPICommand("friendtp")
     .withArguments(arguments)
     .executesPlayer((player, args) -> {
-       	Player target = (Player) args[0];
-		player.teleport(target);
+        Player target = (Player) args[0];
+        player.teleport(target);
     })
     .register();
 /* ANCHOR_END: ArgumentSuggestions2_2 */
@@ -1521,52 +1656,157 @@ new CommandAPICommand("friendtp")
 Map<String, Location> warps = new HashMap<>();
 /* ANCHOR: ArgumentSuggestions1 */
 List<Argument> arguments = new ArrayList<>();
-arguments.add(new StringArgument("world").overrideSuggestions("northland", "eastland", "southland", "westland"));
+arguments.add(new StringArgument("world").replaceSuggestions(info -> 
+    new String[] {"northland", "eastland", "southland", "westland" }
+));
 
 new CommandAPICommand("warp")
     .withArguments(arguments)
     .executesPlayer((player, args) -> {
-       	String warp = (String) args[0];
-		player.teleport(warps.get(warp)); // Look up the warp in a map, for example
+        String warp = (String) args[0];
+        player.teleport(warps.get(warp)); // Look up the warp in a map, for example
     })
     .register();
 /* ANCHOR_END: ArgumentSuggestions1 */
 }
 
-{
-/* ANCHOR: ArgumentAdventureChatComponent */
-new CommandAPICommand("showbook")
-	.withArguments(new PlayerArgument("target"))
-    .withArguments(new TextArgument("title"))
-    .withArguments(new StringArgument("author"))
-    .withArguments(new AdventureChatComponentArgument("contents"))
-    .executes((sender, args) -> {
-    	Player target = (Player) args[0];
-        String title = (String) args[1];
-        String author = (String) args[2];
-        Component content = (Component) args[3];
-        
-        // Create a book and show it to the user (Requires Paper)
-        Book mybook = Book.book(Component.text(title), Component.text(author), content);
-        target.openBook(mybook);
+@SuppressWarnings("deprecation")
+void SafeRecipeArguments() {
+/* ANCHOR: SafeRecipeArguments */
+// Create our itemstack
+ItemStack emeraldSword = new ItemStack(Material.DIAMOND_SWORD);
+ItemMeta meta = emeraldSword.getItemMeta();
+meta.setDisplayName("Emerald Sword");
+meta.setUnbreakable(true);
+emeraldSword.setItemMeta(meta);
+
+// Create and register our recipe
+ShapedRecipe emeraldSwordRecipe = new ShapedRecipe(new NamespacedKey(this, "emerald_sword"), emeraldSword);
+emeraldSwordRecipe.shape(
+    "AEA", 
+    "AEA", 
+    "ABA"
+);
+emeraldSwordRecipe.setIngredient('A', Material.AIR);
+emeraldSwordRecipe.setIngredient('E', Material.EMERALD);
+emeraldSwordRecipe.setIngredient('B', Material.BLAZE_ROD);
+getServer().addRecipe(emeraldSwordRecipe);
+
+// Omitted, more itemstacks and recipes
+/* ANCHOR_END: SafeRecipeArguments */
+
+/* ANCHOR: SafeRecipeArguments_2 */
+// Safely override with the recipe we've defined
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new RecipeArgument("recipe").replaceWithSafeSuggestions(info -> 
+    new Recipe[] { emeraldSwordRecipe, /* Other recipes here */ }
+));
+
+// Register our command
+new CommandAPICommand("giverecipe")
+    .withArguments(arguments)
+    .executesPlayer((player, args) -> {
+        Recipe recipe = (Recipe) args[0];
+        player.getInventory().addItem(recipe.getResult());
     })
     .register();
-/* ANCHOR_END: ArgumentAdventureChatComponent */
+/* ANCHOR_END: SafeRecipeArguments_2 */
 }
 
 {
-/* ANCHOR: ArgumentAdventureChat */
-new CommandAPICommand("pbroadcast")
-	.withArguments(new AdventureChatArgument("message"))
-    .executes((sender, args) -> {
-        Component message = (Component) args[0];
-        
-        // Broadcast the message to everyone with broadcast permissions. Read more info about broadcast
-        // permissions here: https://bukkit.fandom.com/wiki/CraftBukkit_Commands#Additional_Permissions
-        Bukkit.getServer().broadcast(message, "bukkit.broadcast.user");
+/* ANCHOR: SafeMobSpawnArguments */
+EntityType[] forbiddenMobs = new EntityType[] {EntityType.ENDER_DRAGON, EntityType.WITHER};
+List<EntityType> allowedMobs = new ArrayList<>(Arrays.asList(EntityType.values()));
+allowedMobs.removeAll(Arrays.asList(forbiddenMobs)); // Now contains everything except enderdragon and wither
+/* ANCHOR_END: SafeMobSpawnArguments */
+
+/* ANCHOR: SafeMobSpawnArguments_2 */
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new EntityTypeArgument("mob").replaceWithSafeSuggestions(
+    info -> {
+        if(info.sender().isOp()) {
+            // All entity types
+            return EntityType.values();
+        } else {
+            // Only allowedMobs
+            return allowedMobs.toArray(new EntityType[0]);
+        }
+    })
+);
+/* ANCHOR_END: SafeMobSpawnArguments_2 */
+
+/* ANCHOR: SafeMobSpawnArguments_3 */
+new CommandAPICommand("spawnmob")
+    .withArguments(arguments)
+    .executesPlayer((player, args) -> {
+        EntityType entityType = (EntityType) args[0];
+        player.getWorld().spawnEntity(player.getLocation(), entityType);
     })
     .register();
-/* ANCHOR_END: ArgumentAdventureChat */
+/* ANCHOR_END: SafeMobSpawnArguments_3 */
+}
+
+{
+/* ANCHOR: SafePotionArguments */
+List<Argument> arguments = new ArrayList<>();
+arguments.add(new EntitySelectorArgument("target", EntitySelector.ONE_PLAYER));
+arguments.add(new PotionEffectArgument("potioneffect").replaceWithSafeSuggestions(
+    info -> {
+        Player target = (Player) info.previousArgs()[0];
+        
+        // Convert PotionEffect[] into PotionEffectType[]
+        return target.getActivePotionEffects().stream()
+            .map(PotionEffect::getType)
+            .toArray(PotionEffectType[]::new);
+    })
+);
+/* ANCHOR_END: SafePotionArguments */
+
+/* ANCHOR: SafePotionArguments_2 */
+new CommandAPICommand("removeeffect")
+    .withArguments(arguments)
+    .executesPlayer((player, args) -> {
+    	Player target = (Player) args[0];
+        PotionEffectType potionEffect = (PotionEffectType) args[1];
+        target.removePotionEffect(potionEffect);
+    })
+    .register();
+/* ANCHOR_END: SafePotionArguments_2 */
+}
+
+{
+    // A really simple example showing how you can use the new suggestion system
+	final String[] fruits = new String[] { "Apple", "Apricot", "Artichoke", "Asparagus", "Atemoya", "Avocado",
+			"Bamboo Shoots", "Banana", "Bean Sprouts", "Beans", "Beets", "Blackberries", "Blueberries", "Boniato",
+			"Boysenberries", "Broccoflower", "Broccoli", "Cabbage", "Cactus Pear", "Cantaloupe", "Carambola", "Carrots",
+			"Cauliflower", "Celery", "Chayote", "Cherimoya", "Cherries", "Coconuts", "Corn", "Cranberries", "Cucumber",
+			"Dates", "Eggplant", "Endive", "Escarole", "Feijoa", "Fennel", "Figs", "Garlic", "Gooseberries",
+			"Grapefruit", "Grapes", "Greens", "Guava", "Hominy", "Jicama", "Kale", "Kiwifruit", "Kohlrabi", "Kumquat",
+			"Leeks", "Lemons", "Lettuce", "Lima Beans", "Limes", "Longan", "Loquat", "Lychee", "Madarins", "Malanga",
+			"Mangos", "Mulberries", "Mushrooms", "Napa", "Nectarines", "Okra", "Onion", "Oranges", "Papayas", "Parsnip",
+			"Peaches", "Pears", "Peas", "Peppers", "Persimmons", "Pineapple", "Plantains", "Plums", "Pomegranate",
+			"Potatoes", "Prunes", "Pummelo", "Pumpkin", "Quince", "Radicchio", "Radishes", "Raisins", "Raspberries",
+			"Rhubarb", "Rutabaga", "Shallots", "Spinach", "Sprouts", "Squash", "Strawberries", "Tangelo", "Tangerines",
+			"Tomatillo", "Tomato", "Turnip", "Watercress", "Watermelon", "Yams", "Zucchini" };
+    
+    new CommandAPICommand("concept")
+        .withArguments(new StringArgument("text"))
+        .withArguments(new StringArgument("input").replaceSuggestions(suggestions -> {
+            System.out.println(suggestions.currentArg()); // partially typed argument
+            System.out.println(suggestions.currentInput()); // current input (includes the /)
+            return Arrays.stream(fruits).filter(s -> s.toLowerCase().startsWith(suggestions.currentArg().toLowerCase())).toArray(String[]::new);
+        }))
+        .withArguments(new IntegerArgument("int"))
+        .executes((sender, args) -> {
+            //stuff
+        })
+        .register();
+}
+
+{
+/* ANCHOR: CommandAPIConfigSilent */
+CommandAPI.onLoad(new CommandAPIConfig().silentLogs(true));
+/* ANCHOR_END: CommandAPIConfigSilent */
 }
 
 
@@ -1574,13 +1814,13 @@ new CommandAPICommand("pbroadcast")
 
 /* ANCHOR: ArgumentSuggestions2_1 */
 class Friends {
-	
-	static Map<UUID, String[]> friends /* = ... */;
-	
+    
+    static Map<UUID, String[]> friends = new HashMap<>();
+    
     public static String[] getFriends(CommandSender sender) {
-        if(sender instanceof Player) {
-        	//Look up friends in a database or file
-            return friends.get(((Player) sender).getUniqueId());
+        if(sender instanceof Player player) {
+            //Look up friends in a database or file
+            return friends.get(player.getUniqueId());
         } else {
             return new String[0];
         }
@@ -1590,38 +1830,39 @@ class Friends {
 
 
 /* ANCHOR: Tooltips3 */
+@SuppressWarnings("deprecation")
 class CustomItem implements IStringTooltip {
 
-	private ItemStack itemstack;
-	private String name;
-	
+    private ItemStack itemstack;
+    private String name;
+    
 	public CustomItem(ItemStack itemstack, String name, String lore) {
-		ItemMeta meta = itemstack.getItemMeta();
-		meta.setDisplayName(name);
-		meta.setLore(Arrays.asList(lore));
-		itemstack.setItemMeta(meta);
-		this.itemstack = itemstack;
-		this.name = name;
-	}
-	
-	public String getName() {
-		return this.name;
-	}
-	
-	public ItemStack getItem() {
-		return this.itemstack;
-	}
-	
-	@Override
-	public String getSuggestion() {
-		return this.itemstack.getItemMeta().getDisplayName();
-	}
+        ItemMeta meta = itemstack.getItemMeta();
+        meta.setDisplayName(name);
+        meta.setLore(Arrays.asList(lore));
+        itemstack.setItemMeta(meta);
+        this.itemstack = itemstack;
+        this.name = name;
+    }
+    
+    public String getName() {
+        return this.name;
+    }
+    
+    public ItemStack getItem() {
+        return this.itemstack;
+    }
+    
+    @Override
+    public String getSuggestion() {
+        return this.itemstack.getItemMeta().getDisplayName();
+    }
 
-	@Override
-	public String getTooltip() {
-		return this.itemstack.getItemMeta().getLore().get(0);
-	}
-	
+    @Override
+    public String getTooltip() {
+        return this.itemstack.getItemMeta().getLore().get(0);
+    }
+    
 }
 /* ANCHOR_END: Tooltips3 */
 
@@ -1636,7 +1877,7 @@ class Main extends JavaPlugin {
             .executes((sender, args) -> {
                 //Kills all enemies in all worlds
                 Bukkit.getWorlds().forEach(w -> w.getLivingEntities().forEach(e -> e.setHealth(0)));
-        	})
+            })
             .register();
     }
     
@@ -1652,7 +1893,7 @@ class MyPlugin extends JavaPlugin {
 
     @Override
     public void onLoad() {
-        CommandAPI.onLoad(true); //Load with verbose output
+        CommandAPI.onLoad(new CommandAPIConfig().verboseOutput(true)); //Load with verbose output
         
         new CommandAPICommand("ping")
             .executes((sender, args) -> {
@@ -1676,7 +1917,7 @@ class YourPlugin extends JavaPlugin {
     
     @Override
     public void onEnable() {
-        Converter.convert(Bukkit.getPluginManager().getPlugin("TargetPlugin"));
+        Converter.convert((JavaPlugin) Bukkit.getPluginManager().getPlugin("TargetPlugin"));
         //Other code goes here...
     }
     

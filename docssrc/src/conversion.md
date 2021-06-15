@@ -78,7 +78,7 @@ Say we want to convert EssentialsX's `/speed` command using the CommandAPI. The 
 
 From this, we can determine that there are the following commands, where "walk" and "fly" are the different types that the command can take:
 
-```
+```mccmd
 /speed <speed>
 /speed <speed> <target>
 /speed <walk/fly> <speed>

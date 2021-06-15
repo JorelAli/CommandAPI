@@ -44,7 +44,7 @@ As described in the section about [normal command executors](./normalexecutors.m
 
 Say we wanted to make a command that simply sets the current block to air. For this example, we'll use the following command syntax:
 
-```
+```mccmd
 /break
 ```
 
@@ -56,15 +56,15 @@ As you can see, this command takes no arguments. This is fine, since our "argume
 
 This can now be used via the following command examples:
 
-```
+```mccmd
 /execute positioned 100 62 50 run break
 ```
 
-```
+```mccmd
 /execute at @e[type=pig] run break
 ```
 
-```
+```mccmd
 /execute in minecraft:overworld positioned 20 60 -20 run break
 ```
 

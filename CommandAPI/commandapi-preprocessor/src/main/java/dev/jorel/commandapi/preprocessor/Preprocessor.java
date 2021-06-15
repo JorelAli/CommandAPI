@@ -1,3 +1,23 @@
+/*******************************************************************************
+ * Copyright 2018, 2020 Jorel Ali (Skepter) - MIT License
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *******************************************************************************/
 package dev.jorel.commandapi.preprocessor;
 
 import java.lang.reflect.Field;
@@ -46,26 +66,18 @@ public class Preprocessor extends AbstractProcessor {
 	
 	private Class<?> fromMirror(MirroredTypeException e) {
 		if(e.getTypeMirror().getKind().isPrimitive()) {
-			switch(e.getTypeMirror().toString()) {
-			case "void":
-				return void.class;
-			case "boolean":
-				return boolean.class;
-			case "char":
-				return char.class;
-			case "byte":
-				return byte.class;
-			case "short":
-				return short.class;
-			case "int":
-				return int.class;
-			case "long":
-				return long.class;
-			case "float":
-				return float.class;
-			case "double":
-				return double.class;
-			}
+			return switch(e.getTypeMirror().toString()) {
+			case "void"     -> void.class;
+			case "boolean" -> boolean.class;
+			case "char"    -> char.class;
+			case "byte"    -> byte.class;
+			case "short"   -> short.class;
+			case "int"     -> int.class;
+			case "long"    -> long.class;
+			case "float"   -> float.class;
+			case "double"  -> double.class;
+			default        -> throw new IllegalArgumentException("Unexpected value: " + e.getTypeMirror().toString());
+			};
 		}
 		try {
 			return Class.forName(e.getTypeMirror().toString());

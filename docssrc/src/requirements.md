@@ -29,7 +29,7 @@ The `withRequirement` method requires a predicate that determines if the sender 
 
 Say we have a perks-based command system that depends on a player's level. For example, if a player has over 30 levels of experience, they would then be able to run a command that lets them repair the item in their hand in exchange for 30 levels. As such, we'll use the following command syntax:
 
-```
+```mccmd
 /repair
 ```
 
@@ -57,7 +57,7 @@ Let's say that we're working on a plugin that has a system to form groups of pla
 
 For this example, we'll use the following command syntax:
 
-```
+```mccmd
 /party create <partyName>
 /party tp <player>
 ```
@@ -166,7 +166,7 @@ public void onEnable() {
 
 In the [example for a party creation](./requirements.md#example---a-party-creation-and-teleportation-system), we declared two commands:
 
-```
+```mccmd
 /party create <partyName>
 /party tp <player>
 ```

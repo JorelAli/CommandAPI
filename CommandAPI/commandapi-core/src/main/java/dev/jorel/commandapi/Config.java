@@ -1,3 +1,23 @@
+/*******************************************************************************
+ * Copyright 2018, 2021 Jorel Ali (Skepter) - MIT License
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *******************************************************************************/
 package dev.jorel.commandapi;
 
 import java.util.ArrayList;
@@ -11,6 +31,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.InvalidPluginException;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * Configuration wrapper class. The config.yml file used by the CommandAPI is
@@ -21,20 +42,25 @@ class Config {
 
 	// Output registering and unregistering of commands
 	private final boolean verboseOutput;
+	
+	// Whether we should suppress all logs
+	private final boolean silentLogs;
 
 	// Create a command_registration.json file
 	private final boolean createDispatcherFile;
 
 	// List of plugins to convert
-	private final Map<Plugin, String[]> pluginsToConvert;
+	private final Map<JavaPlugin, String[]> pluginsToConvert;
 	
 	// List of plugins which should ignore proxied senders
 	private final List<String> skipSenderProxy;
 	
-	 private final List<String> commandsToConvert;
+	// List of arbitrary commands to convert
+	private final List<String> commandsToConvert;
 	
 	public Config(FileConfiguration fileConfig) {
 		this.verboseOutput = fileConfig.getBoolean("verbose-outputs");
+		this.silentLogs = fileConfig.getBoolean("silent-logs");
 		this.createDispatcherFile = fileConfig.getBoolean("create-dispatcher-json");
 		this.pluginsToConvert = new HashMap<>();
 		this.skipSenderProxy = new ArrayList<>();
@@ -46,22 +72,25 @@ class Config {
 				pluginCommands = new String[0];
 			} else {
 				@SuppressWarnings("unchecked")
-				List<String> commands = (List<String>) map.values().stream().findFirst().get();
+				List<String> commands = (List<String>) map.values().iterator().next();
 				pluginCommands = commands.toArray(new String[0]);
 			}
 			
-			String pluginName = (String) map.keySet().stream().findFirst().get();
+			String pluginName = (String) map.keySet().iterator().next();
 			Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
 			if(plugin != null) { 
-				pluginsToConvert.put(plugin, pluginCommands);
+				if(plugin instanceof JavaPlugin javaPlugin) {
+					pluginsToConvert.put(javaPlugin, pluginCommands);					
+				} else {
+					new InvalidPluginException("Plugin " + pluginName + " is not a JavaPlugin!").printStackTrace();
+				}
 			} else {
 				new InvalidPluginException("Could not find a plugin " + pluginName + "! Has it been loaded properly?").printStackTrace();
 			}
 		}
 		
 		for (String pluginName : fileConfig.getStringList("skip-sender-proxy")) {
-			Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
-			if(plugin != null) { 
+			if(Bukkit.getPluginManager().getPlugin(pluginName) != null) { 
 				this.skipSenderProxy.add(pluginName);
 			} else {
 				new InvalidPluginException("Could not find a plugin " + pluginName + "! Has it been loaded properly?").printStackTrace();
@@ -75,6 +104,7 @@ class Config {
 
 	public Config(boolean verbose) {
 		this.verboseOutput = verbose;
+		this.silentLogs = false;
 		this.createDispatcherFile = false;
 		this.pluginsToConvert = new HashMap<>();
 		this.skipSenderProxy = new ArrayList<>();
@@ -83,6 +113,7 @@ class Config {
 
 	public Config(CommandAPIConfig config) {
 		this.verboseOutput = config.verboseOutput;
+		this.silentLogs = config.silentLogs;
 		this.createDispatcherFile = false; // The dispatcher File is only declared in the plugin version
 		this.pluginsToConvert = new HashMap<>();
 		this.skipSenderProxy = new ArrayList<>();
@@ -92,12 +123,16 @@ class Config {
 	public boolean hasVerboseOutput() {
 		return this.verboseOutput;
 	}
+	
+	public boolean hasSilentLogs() {
+		return this.silentLogs;
+	}
 
 	public boolean willCreateDispatcherFile() {
 		return this.createDispatcherFile;
 	}
 	
-	public Set<Entry<Plugin, String[]>> getPluginsToConvert() {
+	public Set<Entry<JavaPlugin, String[]>> getPluginsToConvert() {
 		return this.pluginsToConvert.entrySet();
 	}
 	

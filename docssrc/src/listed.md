@@ -16,7 +16,7 @@ Argument setListed(boolean listed);
 
 Say we have the following command:
 
-```
+```mccmd
 /mycommand <player> <value> <message>
 ```
 

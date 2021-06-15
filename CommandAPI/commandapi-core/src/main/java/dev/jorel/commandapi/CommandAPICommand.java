@@ -1,11 +1,34 @@
+/*******************************************************************************
+ * Copyright 2018, 2020 Jorel Ali (Skepter) - MIT License
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *******************************************************************************/
 package dev.jorel.commandapi;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
 import org.bukkit.command.CommandSender;
+
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.IGreedyArgument;
@@ -47,6 +70,10 @@ public class CommandAPICommand {
 	 * @param commandName The name of the command to create
 	 */
 	public CommandAPICommand(String commandName) {
+		if(commandName == null || commandName.length() == 0) {
+			throw new InvalidCommandNameException(commandName);
+		}
+		
 		this.commandName = commandName;
 		this.isConverted = false;
 	}
@@ -444,48 +471,35 @@ public class CommandAPICommand {
 	 */
 	public void register() {
 		if(!CommandAPI.canRegister()) {
-			CommandAPI.getLog().severe("Cannot register command /" + commandName + ", because the server has finished loading!");
-			return;
+			CommandAPI.logWarning("Command /" + commandName + " is being registered after the server had loaded. Undefined behavior ahead!");
 		}
 		try {
-			//Sanitize commandNames
-			if(commandName == null || commandName.length() == 0) {
-				throw new InvalidCommandNameException(commandName);
-			}
+			Argument[] argumentsArr = args == null ? new Argument[0] : args.toArray(new Argument[0]);
 			
-			//Make a local copy of args to deal with
-			List<Argument> copyOfArgs = args == null ? new ArrayList<>() : new ArrayList<>(args);
-			
-			//if args contains a GreedyString && args.getLast != GreedyString
-			long numGreedyArgs = copyOfArgs.stream().filter(arg -> arg instanceof IGreedyArgument).count();
-			if(numGreedyArgs >= 1) {
-				//A GreedyString has been found
-				if(!(copyOfArgs.toArray()[copyOfArgs.size() - 1] instanceof IGreedyArgument)) {
-					throw new GreedyArgumentException();
-				}
-				
-				if(numGreedyArgs > 1) {
-					throw new GreedyArgumentException();
+			// Check IGreedyArgument constraints 
+			for(int i = 0, numGreedyArgs = 0; i < argumentsArr.length; i++) {
+				if(argumentsArr[i] instanceof IGreedyArgument) {
+					if(++numGreedyArgs > 1 || i != argumentsArr.length - 1) {
+						throw new GreedyArgumentException();
+					}
 				}
 			}
 			
 			//Assign the command's permissions to arguments if the arguments don't already have one
-			for(Argument argument : copyOfArgs) {
+			for(Argument argument : argumentsArr) {
 				if(argument.getArgumentPermission() == null) {
 					argument.withPermission(permission);
 				}
 			}
 			
 			if(!executor.isEmpty()) {
-				CommandAPIHandler.getInstance().register(commandName, permission, aliases, requirements, copyOfArgs, executor, isConverted);
+				CommandAPIHandler.getInstance().register(commandName, permission, aliases, requirements, argumentsArr, executor, isConverted);
 			}
 			
-			if(this.subcommands.size() > 0) {
-				for(CommandAPICommand subcommand : this.subcommands) {
-					flatten(this, new ArrayList<>(), subcommand);
-				}
+			for(CommandAPICommand subcommand : this.subcommands) {
+				flatten(this, new ArrayList<>(), subcommand);
 			}
-		} catch (Exception e) {
+		} catch (InvalidCommandNameException | GreedyArgumentException | CommandSyntaxException | IOException e) {
 			e.printStackTrace();
 		}
 		

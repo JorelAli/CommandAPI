@@ -14,7 +14,7 @@ The `BlockStateArgument` is used to represent data about blocks in the world. Th
 
 Say we want a simple command to set the block that you're looking at. We'll use the following command syntax:
 
-```
+```mccmd
 /set <block>
 ```
 

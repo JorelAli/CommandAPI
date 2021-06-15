@@ -1,3 +1,23 @@
+/*******************************************************************************
+ * Copyright 2018, 2021 Jorel Ali (Skepter) - MIT License
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
 import java.util.Arrays;
@@ -169,15 +189,43 @@ public enum CommandAPIArgumentType {
 	SCOREBOARD_SLOT("minecraft:scoreboard_slot"), 
 	
 	/**
-	 * Primitive arguments BooleanArgument, DoubleArgument, FloatArgument, IntegerArgument, LongArgument, StringArgument, GreedyStringArgument, TextArgument
+	 * Primitive argument BooleanArgument
 	 */
 	PRIMITIVE_BOOLEAN("brigadier:bool"),
+	
+	/**
+	 * Primitive argument DoubleArgument
+	 */
 	PRIMITIVE_DOUBLE("brigadier:double"),
+	
+	/**
+	 * Primitive argument F;patArgument
+	 */
 	PRIMITIVE_FLOAT("brigadier:float"),
+	
+	/**
+	 * Primitive argument IntegerArgument
+	 */
 	PRIMITIVE_INTEGER("brigadier:integer"),
+	
+	/**
+	 * Primitive argument LongArgument
+	 */
 	PRIMITIVE_LONG("brigadier:long"),
+	
+	/**
+	 * Primitive argument StringArgument
+	 */
 	PRIMITIVE_STRING("brigadier:string"),
+	
+	/**
+	 * Primitive argument GreedyStringArgument
+	 */
 	PRIMITIVE_GREEDY_STRING("api:greedy_string"),
+	
+	/**
+	 * Primitive argument TextArgument
+	 */
 	PRIMITIVE_TEXT("api:text"),
 	
 	/**
@@ -223,7 +271,12 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The AngleArgument
 	 */
-	ANGLE("minecraft:angle");
+	ANGLE("minecraft:angle"), 
+	
+	/**
+	 * The OfflinePlayerArgument
+	 */
+	OFFLINE_PLAYER;
 	
 	private String[] internals;
 	
@@ -239,6 +292,12 @@ public enum CommandAPIArgumentType {
 		this.internals = internals;
 	}
 	
+	/**
+	 * Converts an internal name (e.g. minecraft:time) to a CommandAPIArgumentType
+	 * 
+	 * @param internal the internal name for this argument
+	 * @return the corresponding CommandAPIArgumentType for the given input
+	 */
 	public static CommandAPIArgumentType fromInternal(String internal) {
 		for(CommandAPIArgumentType type : CommandAPIArgumentType.values()) {
 			if(Arrays.asList(type.internals).contains(internal)) {

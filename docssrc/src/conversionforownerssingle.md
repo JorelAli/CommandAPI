@@ -19,7 +19,7 @@ To convert a single command, you need to first populate the `config.yml` with th
 
 Say we're using [EssentialsX](https://www.spigotmc.org/resources/essentialsx.9089/) on our server and we want to be able to use `/afk` and `/hat` in command blocks. This would allow us to use (for example) the following commands in command blocks:
 
-```
+```mccmd
 /execute as @p run afk
 /execute as @p run hat
 ```

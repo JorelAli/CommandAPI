@@ -24,7 +24,7 @@ Depending on which constructor is used, the cast type changes. If you use a `Sco
 
 Say we want to reward all players that fit a certain criteria. We want a command with the following syntax:
 
-```
+```mccmd
 /reward <players>
 ```
 
@@ -32,7 +32,7 @@ Since we could have multiple players that fit a certain criterion, we want to us
 
 To give this example a bit more context, let's say we want to reward all players that have died less than 10 times in the server. To do this, we will use the following command:
 
-```
+```mccmd
 /reward @e[type=player,scores={deaths=..9}]
 ```
 
@@ -53,10 +53,10 @@ Note how we use `..9` to represent 9 or less deaths (since ranges are inclusive)
 > for(String str : entitiesAndPlayers) {
 >     try {
 >         UUID uuid = UUID.fromString(str);
->         //Is a UUID, so it must by an entity
+>         // Is a UUID, so it must by an entity
 >         Bukkit.getEntity(uuid);
 >     } catch(IllegalArgumentException exception) {
->         //Not a UUID, so it must be a player name
+>         // Not a UUID, so it must be a player name
 >         Bukkit.getPlayer(str); 
 >     }
 > }
@@ -90,7 +90,7 @@ The `getDisplaySlot()` method returns the display slot that was chosen. If the d
 
 Say we want to clear all objectives in a specific scoreboard slot. In this example, we will use the main server scoreboard, which is accessed using `Bukkit.getScoreboardManager.getMainScoreboard()`. We want a command with the following syntax:
 
-```
+```mccmd
 /clearobjectives <slot>
 ```
 

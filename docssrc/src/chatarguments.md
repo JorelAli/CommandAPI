@@ -22,7 +22,7 @@ The `ChatColorArgument` class is used to represent a given chat color (e.g. red 
 
 Say we want to create a plugin to change the color of a player's username. We want to create a command of the following form:
 
-```
+```mccmd
 /namecolor <chatcolor>
 ```
 

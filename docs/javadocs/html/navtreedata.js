@@ -27,7 +27,11 @@ var NAVTREE =
   [ "CommandAPI", "index.html", [
     [ "Deprecated List", "deprecated.html", null ],
     [ "Packages", "namespaces.html", [
-      [ "Packages", "namespaces.html", "namespaces_dup" ]
+      [ "Packages", "namespaces.html", "namespaces_dup" ],
+      [ "Package Functions", "namespacemembers.html", [
+        [ "All", "namespacemembers.html", null ],
+        [ "Functions", "namespacemembers_func.html", null ]
+      ] ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
@@ -45,11 +49,14 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exceptions.html#a9612886859ce095984cc3e36cf960afa",
-"classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#a13d427aedb1d7cfa373643e50c25dbbd",
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_scoreboard_slot_argument.html#af65c1928e32d31cb660d780abf35ac05",
-"functions_f.html",
-"namespacedev_1_1jorel_1_1commandapi_1_1annotations.html"
+"classcom_1_1mojang_1_1brigadier_1_1context_1_1_string_range.html",
+"classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a492dcfa8422d9dee82d4afcac4646454",
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_predicate_argument.html#a4c7f96061fe9761813c9d995cc7aa5f5",
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_type_argument.html#a8983d748a2a5e554d69ce4d10b728408",
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_long_argument.html#ae03d7ba36c4d03e92e5713e5080427ec",
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html#a93b5de93aea5b624ca883b75081c449d",
+"classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_native_proxy_command_sender.html#a7f9849f25e1c18e413792dd894d4d40a",
+"interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_dynamic3_command_exception_type_1_1_function.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

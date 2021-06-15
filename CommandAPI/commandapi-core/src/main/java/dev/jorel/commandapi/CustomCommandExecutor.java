@@ -1,7 +1,28 @@
+/*******************************************************************************
+ * Copyright 2018, 2020 Jorel Ali (Skepter) - MIT License
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *******************************************************************************/
 package dev.jorel.commandapi;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
@@ -30,45 +51,12 @@ class CustomCommandExecutor {
 		resultingExecutors = new ArrayList<>();
 	}
 	
-	CustomCommandExecutor mergeExecutor(CustomCommandExecutor executor) {
-		CustomCommandExecutor result = new CustomCommandExecutor();
-		result.normalExecutors = new ArrayList<>(normalExecutors);
-		result.resultingExecutors = new ArrayList<>(resultingExecutors);
-		result.normalExecutors.addAll(executor.normalExecutors);
-		result.resultingExecutors.addAll(executor.resultingExecutors);
-		return result;
-	}
-	
 	public void addNormalExecutor(IExecutorNormal<? extends CommandSender> ex) {
 		this.normalExecutors.add(ex);
 	}
 	
 	public void addResultingExecutor(IExecutorResulting<? extends CommandSender> rEx) {
 		this.resultingExecutors.add(rEx);
-	}
-	
-	public boolean isEmpty() {
-		return normalExecutors.isEmpty() && resultingExecutors.isEmpty();
-	}
-	
-	public boolean isForceNative() {
-		return matches(normalExecutors, ExecutorType.NATIVE) || matches(resultingExecutors, ExecutorType.NATIVE);
-	}
-	
-	public List<IExecutorNormal<? extends CommandSender>> getNormalExecutors() {
-		return normalExecutors;
-	}
-
-	public void setNormalExecutors(List<IExecutorNormal<? extends CommandSender>> normalExecutors) {
-		this.normalExecutors = normalExecutors;
-	}
-
-	public List<IExecutorResulting<? extends CommandSender>> getResultingExecutors() {
-		return resultingExecutors;
-	}
-
-	public void setResultingExecutors(List<IExecutorResulting<? extends CommandSender>> resultingExecutors) {
-		this.resultingExecutors = resultingExecutors;
 	}
 	
 	public int execute(CommandSender sender, Object[] arguments) throws CommandSyntaxException {
@@ -97,14 +85,6 @@ class CustomCommandExecutor {
         }
 	}
 	
-	private int execute(List<? extends IExecutorTyped> executors, CommandSender sender, Object[] args, ExecutorType type) throws WrapperCommandSyntaxException {
-		return executors.stream().filter(o -> o.getType() == type).findFirst().get().executeWith(sender, args);
-	}
-	
-	private boolean matches(List<? extends IExecutorTyped> executors, ExecutorType type) {
-		return executors.stream().map(IExecutorTyped::getType).anyMatch(type::equals);
-	}
-	
 	private int execute(List<? extends IExecutorTyped> executors, CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
 		if(isForceNative()) {
 			return execute(executors, sender, args, ExecutorType.NATIVE);
@@ -125,5 +105,56 @@ class CustomCommandExecutor {
 					"This command has no implementations for " + sender.getClass().getSimpleName().toLowerCase()))
 							.create());
 		}
+	}
+	
+	private int execute(List<? extends IExecutorTyped> executors, CommandSender sender, Object[] args, ExecutorType type) throws WrapperCommandSyntaxException {
+		for(IExecutorTyped executor : executors) {
+			if(executor.getType() == type) {
+				return executor.executeWith(sender, args);
+			}
+		}
+		throw new NoSuchElementException("Executor had no valid executors for type " + type.toString());
+	}
+	
+	public List<IExecutorNormal<? extends CommandSender>> getNormalExecutors() {
+		return normalExecutors;
+	}
+
+	public List<IExecutorResulting<? extends CommandSender>> getResultingExecutors() {
+		return resultingExecutors;
+	}
+
+	public boolean isEmpty() {
+		return normalExecutors.isEmpty() && resultingExecutors.isEmpty();
+	}
+
+	public boolean isForceNative() {
+		return matches(normalExecutors, ExecutorType.NATIVE) || matches(resultingExecutors, ExecutorType.NATIVE);
+	}
+	
+	private boolean matches(List<? extends IExecutorTyped> executors, ExecutorType type) {
+		for(IExecutorTyped executor : executors) {
+			if(executor.getType() == type) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	CustomCommandExecutor mergeExecutor(CustomCommandExecutor executor) {
+		CustomCommandExecutor result = new CustomCommandExecutor();
+		result.normalExecutors = new ArrayList<>(normalExecutors);
+		result.resultingExecutors = new ArrayList<>(resultingExecutors);
+		result.normalExecutors.addAll(executor.normalExecutors);
+		result.resultingExecutors.addAll(executor.resultingExecutors);
+		return result;
+	}
+	
+	public void setNormalExecutors(List<IExecutorNormal<? extends CommandSender>> normalExecutors) {
+		this.normalExecutors = normalExecutors;
+	}
+	
+	public void setResultingExecutors(List<IExecutorResulting<? extends CommandSender>> resultingExecutors) {
+		this.resultingExecutors = resultingExecutors;
 	}
 }

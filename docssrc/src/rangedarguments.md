@@ -47,7 +47,7 @@ class FloatRange {
 
 Say you're working on a plugin for server administrators to help them find restricted items. A method of doing so would be to search chests in a given radius for certain items. As such, we can use the following syntax:
 
-```
+```mccmd
 /searchchests <range> <item>
 ```
 

@@ -7,6 +7,18 @@
   <br>
 </h2>
 
+<div align="center">
+
+![GitHub](https://img.shields.io/github/license/JorelAli/CommandAPI)
+[![CodeFactor](https://www.codefactor.io/repository/github/jorelali/commandapi/badge)](https://www.codefactor.io/repository/github/jorelali/commandapi)
+[![](https://jitpack.io/v/dev.jorel/CommandAPI.svg)](https://jitpack.io/#dev.jorel/CommandAPI)
+[![Join us on Discord](https://img.shields.io/discord/745416925924032523.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/G4SzSxZ)
+<br>
+![Spiget Download Size](https://img.shields.io/spiget/download-size/62353)
+![Spiget Downloads](https://img.shields.io/spiget/downloads/62353?label=Total%20Spigot%20Downloads)
+![GitHub all releases](https://img.shields.io/github/downloads/JorelAli/CommandAPI/total?label=Total%20GitHub%20Downloads)
+</div>
+
 **Support and Project Discussion**:
 
 - <img width="20px" src="https://cdn3.iconfinder.com/data/icons/popular-services-brands-vol-2/512/discord-512.png"></img> [Discord](https://discord.gg/G4SzSxZ)
@@ -31,15 +43,18 @@
 
 **Compatible Minecraft versions:**
 
-The version in brackets represents the minimum to maximum version of the CommandAPI that supports the specified version of Minecraft.
+The list of what version of the CommandAPI you'll need to run on a specific version of Minecraft is as follows:
 
-|                   |                        |                         |                         |                         |                         |                         |
-| ----------------- | :--------------------: | :---------------------: | :---------------------: | :---------------------: | :---------------------: | :---------------------: |
-| **1.13 versions** | 1.13                   | 1.13.1                  | 1.13.2                  |                         |                         |                         |
-| **1.14 versions** | 1.14<br>(v2.0 - 5.12)  | 1.14.1                  | 1.14.2                  | 1.14.3<br>(v2.1 - 5.12) | 1.14.4                  |                         |
-| **1.15 versions** | 1.15<br>(v2.3a - 5.12) | 1.15.1                  | 1.15.2                  |                         |                         |                         |
-| **1.16 versions** |                        | 1.16.1<br>(v3.0 - 5.12) | 1.16.2<br>(v4.0 - 5.12) | 1.16.3<br>(v4.2 - 5.12) | 1.16.4<br>(v5.2 - 5.12) | 1.16.5<br>(v5.7 - 5.12) |
-| **1.17 versions** | 1.17<br>_(6.0.0+)_     |                         |                         |                         |                         |                         |
+- **Minecraft 1.13.x**: CommandAPI v1.0 to 5.12
+- **Minecraft 1.14.1, 1.14.2**: CommandAPI v2.0 to 5.12
+- **Minecraft 1.14.3, 1.14.4**: CommandAPI v2.1 to 5.12
+- **Minecraft 1.15.x**: CommandAPI v2.3a to 5.12
+- **Minecraft 1.16.1**: CommandAPI v3.0 to 5.12
+- **Minecraft 1.16.2**: CommandAPI v4.0 to 5.12
+- **Minecraft 1.16.3**: CommandAPI v4.2 to 5.12
+- **Minecraft 1.16.4**: CommandAPI v5.2 to 5.12
+- **Minecraft 1.16.5**: CommandAPI v5.7 to 6.0.0
+- **Minecraft 1.17**: CommandAPI 6.0.0
 
 -----
 
@@ -234,7 +249,7 @@ The CommandAPI can be built easily, but requires copies of the Spigot server jar
   git clone https://github.com/JorelAli/CommandAPI.git
   ```
 
-- Go into the folder named `CommandAPI` _(Not to be confused with the folder named `CommandAPI`, which is what is cloned)_. You want the folder which contains `pom.xml`.
+- Go into the folder named `CommandAPI` _(Not to be confused with the folder named `CommandAPI`, which is what was just cloned)_. You want the folder which contains `pom.xml`.
 
 - Run `mvn`
 
@@ -244,20 +259,7 @@ The CommandAPI can be built easily, but requires copies of the Spigot server jar
 
 This is the current roadmap for the CommandAPI (as of 16th May 2021):
   
-- **CommandAPI 6.0.0:** Java 16 and Minecraft 1.17 support
-
-  Minecraft 1.17 is due to be released sometime "mid-summer". According to [Minecraft Snapshot 21w19a](https://www.minecraft.net/da-dk/article/minecraft-snapshot-21w19a), Minecraft will use Java 16. As such, the CommandAPI will be built using Java 16 and will no longer run on servers running Java 15 or below. This is simply to prevent the CommandAPI from using legacy software as deemed by Minecraft.
-
-  Additionally, the CommandAPI will drop support for old versions of Bukkit/Spigot. So far, the CommandAPI has been supporting versions 1.13 - 1.16.5, however given that over 80% of servers are running a version which is compatible with the CommandAPI, and over 75% of servers are running Minecraft 1.16 or above, the CommandAPI will no longer support versions below Minecraft 1.16. Due to the severity of the Minecraft 1.16.4 vulnerability, **CommandAPI 6.0.0 will only support Minecraft 1.16.5 and above.**
-
-  This update will also fix minor issues such as Paper's console tab completion bug raised in [Issue #192](https://github.com/JorelAli/CommandAPI/issues/192).
-	
-  **Upcoming list of features/additions/etc.:**
-  - Written in Java 16
-  - Fixes bug where `LocationArgument` and `Location2DArgument` produced errors when using Paper's console tab-completion
-  - Removes support for Minecraft 1.16.4 and below
-  - Improve performance
-  - Adds support for offline players with `PlayerArgument`
+- **CommandAPI 6.1.0:** Bug fixes probably?
 
 - **CommandAPI 7.0.0:** Annotation improvements
 
@@ -286,6 +288,52 @@ This is the current roadmap for the CommandAPI (as of 16th May 2021):
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td valign="top"><b>6.0.0</b></td>
+            <td valign="top">June 2021</td>
+            <td valign="top">
+                <b>Version support changes:</b>
+                <ul>
+                    <li>Adds support for Minecraft 1.17</li>
+                    <li>Drops support for Minecraft 1.16.4 and below</li>
+                    <li>Changes build version from Java 8 to Java 16</li>
+                </ul>
+                <b>Development improvements:</b>
+                <ul>
+                    <li>Switches version convention to use Semanic Versioning</li>
+                    <li>Uses CodeFactor.io for code quality checking</li>
+                </ul>
+                <b>New features:</b>
+                <ul>
+                    <li>Adds <code>OfflinePlayerArgument</code> for offline players</li>
+                    <li>Adds a way to add suggestions to existing vanilla suggestions</li>
+                    <li>Adds a way to access the <code>CommandSender</code> for <code>CustomArgument</code> parsing</li>
+                    <li>Adds support for Paper's console tab-completion</li>
+                    <li>Adds a way to completely silence all CommandAPI logs</li>
+                    <li>Adds access to the current input and current argument input for argument suggestions</li>
+                    <li>Improve API for setting configuration for plugins that shade the CommandAPI</li>
+                </ul>
+                <b>Bug fixes:</b>
+                <ul>
+                    <li>Fixes bug with converted commands crashing due to poor interface proxying</li>
+                    <li>Adds a way to access the <code>CommandSender</code> for <code>CustomArgument</code> parsing</li>
+                    <li>Adds support for Paper's console tab-completion</li>
+                    <li>Adds a way to completely silence all CommandAPI logs</li>
+                    <li>Fix bugs where the NBTAPI wouldn't be hooked into properly</li>
+                    <li>Fixes critical issue where converted commands with entity selectors may sometimes just not run</li>
+                </ul>
+                <b>Other:</b>
+                <ul>
+                    <li>Improves overall performance</li>
+                    <li>Improves performance for the <code>PotionArgument</code></li>
+                    <li>Improves performance for the <code>MathOperationArgument</code></li>
+                    <li>Fixes spacing issues with code blocks in the documentation</li>
+                    <li>Fixes invalid code examples in the documentation</li>
+                    <li>Fixes typos in the documentation</li>
+                    <li>Adds syntax highlighting for command code blocks in the documentation</li>
+                </ul>
+            </td>
+        </tr>
         <tr>
             <td valign="top"><b>5.12</b></td>
             <td valign="top">May 2021</td>

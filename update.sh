@@ -1,8 +1,8 @@
 #!/bin/sh
 echo "Old version: "
-read oldVer
+read -r oldVer
 echo "New version: "
-read newVer
+read -r newVer
 
 sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" docssrc/src/shading.md
 sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" docssrc/src/quickstart.md

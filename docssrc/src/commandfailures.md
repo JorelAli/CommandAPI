@@ -12,7 +12,7 @@ When the CommandAPI calls the fail method, it will cause the command to return a
 
 ### Example - Command failing for element not in a list
 
-Say we have some list containing fruit and the player can choose from it. In order to do that, we can use a `StringArgument` and suggest it to the player using `.overrideSuggestions(String[])`. However, because this only lists _suggestions_ to the player, it does **not** stop the player from entering an option that isn't on the list of suggestions.
+Say we have some list containing fruit and the player can choose from it. In order to do that, we can use a `StringArgument` and suggest it to the player using `.replaceSuggestions(info -> String[])`. However, because this only lists _suggestions_ to the player, it does **not** stop the player from entering an option that isn't on the list of suggestions.
 
 Therefore, to gracefully handle this with a proper error message, we use `CommandAPI.fail(String)` with a meaningful error message which is displayed to the user.
 

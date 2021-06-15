@@ -50,13 +50,19 @@ We could then use this to target specific entities, for example:
 
 ## Player argument
 
-The `PlayerArgument` class is very similar _(almost identical)_ to `EntitySelectorArgument`, with the EntitySelector `ONE_PLAYER`. It also allows you to select a player based on their UUID.
+The `PlayerArgument` class is very similar _(almost identical)_ to `EntitySelectorArgument`, with the `EntitySelector.ONE_PLAYER`. It returns a `Player` object and requires the player to be online.
 
 > **Developer's Note:** 
 >
-> I've not tested the `PlayerArgument` enough to recommend using it over the `EntitySelectorArgument(EntitySelector.ONE_PLAYER)`. There may be other advantages to using this than the regular EntitySelectorArgument, but as of writing this documentation, I know not of the advantages nor disadvantages to using this argument type. Internally, the `PlayerArgument` uses the `GameProfile` class from Mojang's authlib, which may be able to retrieve offline players (untested).
->
-> _(Of course, if anyone is able to confirm any major differences between the `PlayerArgument` and the `EntitySelectorArgument(EntitySelector.ONE_PLAYER)`, I would be more than happy to include your findings in the documentation. If so, feel free to make a documentation amendment [here](https://github.com/JorelAli/CommandAPI/issues/new/choose).)_
+> The `PlayerArgument` internally uses the `GameProfile` class from Mojang's authlib, which means that this argument has a slight performance overhead compared to using `EntitySelector.ONE_PLAYER`
+
+-----
+
+## OfflinePlayer argument
+
+The `OfflinePlayerArgument` class is basically identical to the `PlayerArgument` class, but instead of returning a `Player` object, it returns an `OfflinePlayer` object. Internally, this argument makes calls to Mojang servers (via Mojang's authlib), meaning it can be slightly slower than alternative methods (such as using a `StringArgument` and suggesting a list of existing offline players).
+
+The `OfflinePlayerArgument` _should_ be able to retrieve players that have never joined the server before.
 
 -----
 

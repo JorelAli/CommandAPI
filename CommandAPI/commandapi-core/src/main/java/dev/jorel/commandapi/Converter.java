@@ -1,3 +1,23 @@
+/*******************************************************************************
+ * Copyright 2018, 2021 Jorel Ali (Skepter) - MIT License
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *******************************************************************************/
 package dev.jorel.commandapi;
 
 import java.lang.reflect.Method;
@@ -11,7 +31,6 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ProxiedCommandSender;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.jorel.commandapi.arguments.Argument;
@@ -20,12 +39,55 @@ import dev.jorel.commandapi.arguments.GreedyStringArgument;
 /**
  * 'Simple' conversion of Plugin commands
  */
-public abstract class Converter {
+public final class Converter {
+	
+	// Cannot be instantiated
+	private Converter() {}
 	
 	private static final List<Argument> PLAIN_ARGUMENTS = Arrays.asList(new GreedyStringArgument("args"));
 	private static final Set<String> CALLER_METHODS = new HashSet<>(Arrays.asList("isPermissionSet", "hasPermission",
 			"addAttachment", "removeAttachment", "recalculatePermissions", "getEffectivePermissions", "isOp", "setOp"));
 
+	/**
+	 * Convert all commands stated in Plugin's plugin.yml file into CommandAPI-compatible commands
+	 * @param plugin The plugin which commands are to be converted
+	 */
+	public static void convert(JavaPlugin plugin) {
+		CommandAPI.logInfo("Converting commands for " + plugin.getName() + ":");
+		for(String commandName : plugin.getDescription().getCommands().keySet()) {
+			convertPluginCommand(plugin, commandName, PLAIN_ARGUMENTS);
+		}
+	}
+	
+	/**
+	 * Convert a command stated in Plugin's plugin.yml file into CommandAPI-compatible commands
+	 * @param plugin The plugin where the command is registered
+	 * @param cmdName The command to convert
+	 */
+	public static void convert(JavaPlugin plugin, String cmdName) {
+		convertPluginCommand(plugin, cmdName, PLAIN_ARGUMENTS);
+	}
+	
+	/**
+	 * Convert a command stated in Plugin's plugin.yml file into CommandAPI-compatible commands
+	 * @param plugin The plugin where the command is registered
+	 * @param cmdName The command to convert
+	 * @param arguments The arguments that should be used to parse this command
+	 */
+	public static void convert(JavaPlugin plugin, String cmdName, Argument... arguments) {
+		convertPluginCommand(plugin, cmdName, Arrays.asList(arguments));
+	}
+	
+	/**
+	 * Convert a command stated in Plugin's plugin.yml file into CommandAPI-compatible commands
+	 * @param plugin The plugin where the command is registered
+	 * @param cmdName The command to convert
+	 * @param arguments The arguments that should be used to parse this command
+	 */
+	public static void convert(JavaPlugin plugin, String cmdName, List<Argument> arguments) {
+		convertPluginCommand(plugin, cmdName, arguments);
+	}
+	
 	/**
 	 * Convert the provided command name into a CommandAPI-compatible command
 	 * @param cmdName The name of the command (without the leading /). For commands such as //set in WorldEdit,
@@ -71,51 +133,13 @@ public abstract class Converter {
 		multiArgs.register();
 	}
 	
-	/**
-	 * Convert all commands stated in Plugin's plugin.yml file into CommandAPI-compatible commands
-	 * @param plugin The plugin which commands are to be converted
-	 */
-	public static void convert(Plugin plugin) {
-		CommandAPI.logInfo("Converting commands for " + plugin.getName() + ":");
-		plugin.getDescription().getCommands().keySet().forEach(commandName -> convertPluginCommand((JavaPlugin) plugin, commandName, PLAIN_ARGUMENTS));
-	}
-	
-	/**
-	 * Convert a command stated in Plugin's plugin.yml file into CommandAPI-compatible commands
-	 * @param plugin The plugin where the command is registered
-	 * @param cmdName The command to convert
-	 */
-	public static void convert(Plugin plugin, String cmdName) {
-		convertPluginCommand((JavaPlugin) plugin, cmdName, PLAIN_ARGUMENTS);
-	}
-	
-	/**
-	 * Convert a command stated in Plugin's plugin.yml file into CommandAPI-compatible commands
-	 * @param plugin The plugin where the command is registered
-	 * @param cmdName The command to convert
-	 * @param arguments The arguments that should be used to parse this command
-	 */
-	public static void convert(Plugin plugin, String cmdName, List<Argument> arguments) {
-		convertPluginCommand((JavaPlugin) plugin, cmdName, arguments);
-	}
-	
-	/**
-	 * Convert a command stated in Plugin's plugin.yml file into CommandAPI-compatible commands
-	 * @param plugin The plugin where the command is registered
-	 * @param cmdName The command to convert
-	 * @param arguments The arguments that should be used to parse this command
-	 */
-	public static void convert(Plugin plugin, String cmdName, Argument... arguments) {
-		convertPluginCommand((JavaPlugin) plugin, cmdName, Arrays.asList(arguments));
-	}
-	
 	private static void convertPluginCommand(JavaPlugin plugin, String commandName, List<Argument> arguments) {
 		CommandAPI.logInfo("Converting " + plugin.getName() + " command /" + commandName);
 		/* Parse the commands */
 		Map<String, Object> cmdData = plugin.getDescription().getCommands().get(commandName);
 		
 		if(cmdData == null) {
-			CommandAPI.getLog().severe("Couldn't find /" + commandName + " in " + plugin.getName() + "'s plugin.yml. Are you sure you're not confusing it with an alias?");
+			CommandAPI.logError("Couldn't find /" + commandName + " in " + plugin.getName() + "'s plugin.yml. Are you sure you're not confusing it with an alias?");
 			return;
 		}
 
@@ -182,16 +206,17 @@ public abstract class Converter {
 	 * https://www.jorel.dev/blog/Simplifying-Bukkit-CommandSenders/
 	 */
 	private static CommandSender mergeProxySender(ProxiedCommandSender proxySender) {
-		Class<?>[] calleeInterfaces = proxySender.getCallee().getClass().getInterfaces();
-		Class<?>[] interfaces;
-		if(proxySender.getCallee().getClass().isInterface()) {
-			interfaces = new Class<?>[calleeInterfaces.length + 1];
-			System.arraycopy(calleeInterfaces, 0, interfaces, 1, calleeInterfaces.length);
-			interfaces[0] = proxySender.getCallee().getClass();
-		} else {
-			interfaces = calleeInterfaces;
+		Set<Class<?>> calleeInterfacesList = new HashSet<>();
+		Class<?> currentClass = proxySender.getCallee().getClass();
+		if(currentClass.isInterface()) {
+			calleeInterfacesList.add(currentClass);
 		}
-		return (CommandSender) Proxy.newProxyInstance(CommandSender.class.getClassLoader(), interfaces,
+		while(currentClass != null) {
+			calleeInterfacesList.addAll(Arrays.asList(currentClass.getInterfaces()));
+			currentClass = currentClass.getSuperclass();
+		}
+		Class<?>[] calleeInterfaces = calleeInterfacesList.toArray(new Class[0]);
+		return (CommandSender) Proxy.newProxyInstance(CommandSender.class.getClassLoader(), calleeInterfaces,
 				(Object p, Method method, Object[] args) -> method.invoke(
 						CALLER_METHODS.contains(method.getName()) ? proxySender.getCaller() : proxySender.getCallee(),
 						args));

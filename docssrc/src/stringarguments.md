@@ -36,7 +36,7 @@ yesn't
 
 ## Text argument
 
-The `TextArgument` acts similar to any String in Java. These can be single words, like to the `StringArgument`, or have additional characters (e.g. spaces, symbols) **if surrounded by quotes**. To type quotation marks, you can use `\"` (as similar to Java) to escape these special characters.
+The `TextArgument` acts similar to any String in Java. These can be single words, like the `StringArgument`, or have additional characters (e.g. spaces, symbols) **if surrounded by quotes**. To type quotation marks, you can use `\"` (as similar to Java) to escape these special characters.
 
 Accepted `TextArgument` values:
 
@@ -85,7 +85,7 @@ The `GreedyStringArgument` takes the `TextArgument` a step further. **Any charac
 
 Say we have a simple message command of the following form:
 
-```
+```mccmd
 /message <target> <message>
 ```
 

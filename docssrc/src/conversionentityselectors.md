@@ -8,7 +8,7 @@
 
 EssentialsX includes a command `/ext` which lets you extinguish a player that is currently on fire. The command format is the following:
 
-```
+```mccmd
 /ext
 /ext <player>
 ```
@@ -25,14 +25,14 @@ plugins-to-convert:
 
 Using the above `config.yml` file will support the following commands:
 
-```
+```mccmd
 /ext
 /ext Notch
 ```
 
 However, the above `config.yml` **will not** support the following commands:
 
-```
+```mccmd
 /ext @a[distance=10]
 /ext @p
 ```

@@ -2,13 +2,14 @@
 
 Literal arguments are used to represent "forced options" for a command. For instance, take Minecraft's `/gamemode` command. The syntax consists of the following:
 
-```
-/gamemode <mode> [player]
+```mccmd
+/gamemode <mode>
+/gamemode <mode> <player>
 ```
 
 It consists of a gamemode, followed by an optional player argument. The list of gamemodes are as follows:
 
-```
+```mccmd
 /gamemode survival 
 /gamemode creative
 /gamemode adventure
@@ -39,7 +40,7 @@ Unlike regular arguments that are shown in this chapter, the literal argument is
 
 To illustrate the behavior of literal arguments, we create a command of the following form:
 
-```
+```mccmd
 /mycommand <literal> <text>
 ```
 
@@ -51,7 +52,7 @@ As an example, let's declare the literal "hello" as a valid literal for this com
 
 If I were to run the following command:
 
-```
+```mccmd
 /mycommand hello goodbye
 ```
 
@@ -109,4 +110,4 @@ Each option produces a new "command" in the tree of commands. This means that ha
 
 > **Developer's Note:**
 >
-> Take care when using literal arguments. If your list of arguments is exceptionally large, or contains many nested arguments, the server may be unable to send the command information to the client. If many command argument choices are required, consider using a `StringArgument` and using `.overrideSuggestions()` to create your own list of required arguments.
+> Take care when using literal arguments. If your list of arguments is exceptionally large, or contains many nested arguments, the server may be unable to send the command information to the client. If many command argument choices are required, consider using a `StringArgument` and using `.replaceSuggestions()` to create your own list of required arguments.

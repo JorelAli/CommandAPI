@@ -59,7 +59,7 @@ If a player does not have the required permission:
 
 For example, say we're registering a command `/kill`:
 
-```
+```mccmd
 /kill          - Kills yourself
 /kill <target> - Kills a target player
 ```
@@ -67,13 +67,13 @@ For example, say we're registering a command `/kill`:
 We first declare the command as normal. Nothing fancy is going on here:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:permissions2}}
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:permissions3_1}}
 ```
 
 Now we declare our command with arguments. We use a `PlayerArgument` and apply the permission _to the argument_. After that, we register our command as normal:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:permissions3}}
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:permissions3_2}}
 ```
 
 </div>

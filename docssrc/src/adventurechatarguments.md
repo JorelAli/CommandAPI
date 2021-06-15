@@ -4,7 +4,7 @@
 >
 > The two following classes, `AdventureChatComponentArgument` and `AdventureChatArgument` depend on a Paper based server which has the Adventure library. If you use this class on a server without the Adventure library, it will throw a `PaperAdventureNotFoundException`
 
-From Paper 1.16.5 build #473, it now includes [Kyori's Adventure API](https://github.com/KyoriPowered/adventure-platform). This library is a replacement of the BungeeCord chat API and has all of the same functionality as the BungeeCord chat API (and more!). The documentation for this API can be found [here](https://docs.adventure.kyori.net/index.html).
+From Paper 1.16.5 build #473 onwards, Paper now includes [Kyori's Adventure API](https://github.com/KyoriPowered/adventure-platform). This library is a replacement of the BungeeCord chat API and has all of the same functionality as the BungeeCord chat API (and more!). The documentation for this API can be found [here](https://docs.adventure.kyori.net/index.html).
 
 Since this functions very similar to the Spigot chat arguments, this page won't reiterate everything about how it works, we'll just outline some examples of how to use these arguments instead.
 
@@ -20,7 +20,7 @@ The `AdventureChatComponentArgument` class accepts raw chat-based JSON as valid 
 
 In this example, we'll create a simple command which lets you show a book to a user. The syntax for our command is as follows:
 
-```
+```mccmd
 /showbook <target> <title> <author> <contents>
 ```
 
@@ -44,7 +44,7 @@ The `AdventureChatArgument` class is the equivalent Adventure API class for the 
 
 We'll take the same example from the `ChatArgument` class, but using the `AdventureChatArgument` instead - We want to create a personalized message broadcasted to all users using a chat component that allows entity selectors. For this command, we want the following syntax:
 
-```
+```mccmd
 /pbroadcast <message>
 ```
 

@@ -12,8 +12,8 @@ The `FunctionWrapper` class has the following methods:
 class FunctionWrapper extends SimpleFunctionWrapper {
 
     // Methods specific to this class
-	int run();
-	int runAs(Entity e);
+    int run();
+    int runAs(Entity e);
 
     // Methods inherited from SimpleFunctionWrapper
     static SimpleFunctionWrapper getFunction(NamespacedKey key);

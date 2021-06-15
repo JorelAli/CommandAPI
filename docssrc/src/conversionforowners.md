@@ -25,6 +25,8 @@ To configure command conversion, the CommandAPI reads this information from the 
 - **`config.yml` cannot have tab characters** - The `config.yml` file _must_ only consist of spaces!
 - Indentation is important and should be _two spaces_
 
+If you're uncertain if your configuration is valid (or you're getting weird errors in the console), you can check if your configuration is valid using [YAMLLint](http://www.yamllint.com/).
+
 -----
 
 ### Converting all plugin commands

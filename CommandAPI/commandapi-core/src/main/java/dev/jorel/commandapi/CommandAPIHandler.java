@@ -1,19 +1,44 @@
+/*******************************************************************************
+ * Copyright 2018, 2021 Jorel Ali (Skepter) - MIT License
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *******************************************************************************/
 package dev.jorel.commandapi;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -26,34 +51,26 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.Message;
-import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.context.ParsedArgument;
+import com.mojang.brigadier.context.StringRange;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
-import de.tr7zw.changeme.nbtapi.NBTContainer;
 import dev.jorel.commandapi.arguments.Argument;
-import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
-import dev.jorel.commandapi.arguments.CustomArgument;
-import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
-import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.ICustomProvidedArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
-import dev.jorel.commandapi.arguments.Location2DArgument;
-import dev.jorel.commandapi.arguments.LocationArgument;
-import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
-import dev.jorel.commandapi.arguments.ScoreHolderArgument;
 import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.preprocessor.RequireField;
 
 /**
  * Handles the main backend of the CommandAPI. This constructs brigadier Command
@@ -61,10 +78,50 @@ import dev.jorel.commandapi.nms.NMS;
  * handles permission registration for Bukkit, interactions for NMS and the
  * registration and unregistration of commands.
  */
-public class CommandAPIHandler<CommandListenerWrapper> {
+@RequireField(in = CommandNode.class, name = "children", ofType = Map.class)
+@RequireField(in = CommandContext.class, name = "arguments", ofType = Map.class)
+public class CommandAPIHandler<CommandSourceStack> {
+	
+	private final static VarHandle COMMANDNODE_CHILDREN;
+	private final static VarHandle COMMANDCONTEXT_ARGUMENTS;
+	
+	// Compute all var handles all in one go so we don't do this during main server runtime
+	static {
+		VarHandle commandNodeChildren = null;
+		VarHandle commandContextArguments = null;
+		 try {
+			 commandNodeChildren = MethodHandles.privateLookupIn(CommandNode.class, MethodHandles.lookup()).findVarHandle(CommandNode.class, "children", Map.class);
+			 commandContextArguments = MethodHandles.privateLookupIn(CommandContext.class, MethodHandles.lookup()).findVarHandle(CommandContext.class, "arguments", Map.class);
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
+		} 
+		COMMANDNODE_CHILDREN = commandNodeChildren;
+		COMMANDCONTEXT_ARGUMENTS = commandContextArguments;
+	}
+	
+	/**
+	 * Returns the raw input for an argument for a given command context and its
+	 * key. This effectively returns the string value that is currently typed for
+	 * this argument
+	 * 
+	 * @param <CommandSourceStack> the command source type
+	 * @param cmdCtx                   the command context which is used to run this
+	 *                                 command
+	 * @param key                      the node name for the argument
+	 * @return the raw input string for this argument
+	 */
+	public static <CommandSourceStack> String getRawArgumentInput(CommandContext<CommandSourceStack> cmdCtx, String key) {
+		StringRange range = ((Map<String, ParsedArgument<CommandSourceStack, ?>>) COMMANDCONTEXT_ARGUMENTS.get(cmdCtx)).get(key).getRange();
+		return cmdCtx.getInput().substring(range.getStart(), range.getEnd());
+	}
 	
 	private static CommandAPIHandler<?> instance;
 	
+	/**
+	 * Returns the Singleton instance of the CommandAPI's internal handler
+	 * 
+	 * @return the Singleton instance of the CommandAPI's internal handler
+	 */
 	public static CommandAPIHandler<?> getInstance() {
 		if(instance == null) {
 			instance = new CommandAPIHandler<>();
@@ -74,8 +131,8 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	
 	final Map<ClassCache, Field> FIELDS = new HashMap<>();
 	final TreeMap<String, CommandPermission> PERMISSIONS_TO_FIX = new TreeMap<>();
-	final NMS<CommandListenerWrapper> NMS;
-	final CommandDispatcher<CommandListenerWrapper> DISPATCHER;
+	final NMS<CommandSourceStack> NMS;
+	final CommandDispatcher<CommandSourceStack> DISPATCHER;
 	final Map<String, List<String>> registeredCommands; //Keep track of what has been registered for type checking 
 	
 	private CommandAPIHandler() {
@@ -87,37 +144,41 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	
 	void checkDependencies() {
 		try {
-			@SuppressWarnings("unused")
-			Class<?> commandDispatcherClass = CommandDispatcher.class;
-		} catch (NoClassDefFoundError e) {
-			new ClassNotFoundException("Cannot hook into Brigadier (Are you running Minecraft 1.13 or above?)").printStackTrace();
+			Class.forName("com.mojang.brigadier.CommandDispatcher");
+		} catch (ClassNotFoundException e) {
+			new ClassNotFoundException("Could not hook into Brigadier (Are you running Minecraft 1.13 or above?)").printStackTrace();
 		}
 
 		// Log successful hooks
-		if (CommandAPI.getConfiguration().hasVerboseOutput()) {
-			String compatibleVersions = Arrays.toString(NMS.compatibleVersions());
-			compatibleVersions = compatibleVersions.substring(1, compatibleVersions.length() - 1);
-			CommandAPI.getLog().info(
-					"Hooked into NMS " + NMS.getClass().getName() + " (compatible with " + compatibleVersions + ")");
-		}
+		CommandAPI.logInfo("Hooked into NMS " + NMS.getClass().getName() + " (compatible with " + String.join(", ", NMS.compatibleVersions()) + ")");
 
 		// Checks other dependencies
 		try {
-			@SuppressWarnings("unused")
-			Class<NBTContainer> container = NBTContainer.class;
-			CommandAPI.getLog().info("Hooked into the NBTAPI successfully.");
-		} catch(NoClassDefFoundError e) {
+			Class.forName("de.tr7zw.nbtapi.NBTContainer");
+			CommandAPI.logNormal("Hooked into the NBTAPI successfully.");
+		} catch(ClassNotFoundException e) {
 			if(CommandAPI.getConfiguration().hasVerboseOutput()) {
-				CommandAPI.getLog().warning(
-					"Couldn't hook into the NBTAPI for NBT support. Download it from https://www.spigotmc.org/resources/nbt-api.7939/");
+				CommandAPI.logWarning(
+					"Could not hook into the NBTAPI for NBT support. Download it from https://www.spigotmc.org/resources/nbt-api.7939/");
 			}
 		}
 
 		try {
 			Class.forName("org.spigotmc.SpigotConfig");
-			CommandAPI.getLog().info("Hooked into Spigot successfully for Chat/ChatComponents");
+			CommandAPI.logNormal("Hooked into Spigot successfully for Chat/ChatComponents");
 		} catch (ClassNotFoundException e) {
-			CommandAPI.getLog().warning("Couldn't hook into Spigot for Chat/ChatComponents");
+			if(CommandAPI.getConfiguration().hasVerboseOutput()) {
+				CommandAPI.logWarning("Could not hook into Spigot for Chat/ChatComponents");
+			}
+		}
+		
+		try {
+			Class.forName("net.kyori.adventure.text.Component");
+			CommandAPI.logNormal("Hooked into Adventure for AdventureChat/AdventureChatComponents");
+		} catch(ClassNotFoundException e) {
+			if(CommandAPI.getConfiguration().hasVerboseOutput()) {
+				CommandAPI.logWarning("Could not hook into Adventure for AdventureChat/AdventureChatComponents");
+			}
 		}
 	}
 	
@@ -126,7 +187,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	 * 
 	 * @return an instance of NMS
 	 */
-	public NMS<CommandListenerWrapper> getNMS() {
+	public NMS<CommandSourceStack> getNMS() {
 		return NMS;
 	}
 	
@@ -140,29 +201,24 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	 *                    have been registered by Minecraft, Bukkit or Spigot etc.
 	 */
 	void unregister(String commandName, boolean force) {
-		try {
-			if (CommandAPI.getConfiguration().hasVerboseOutput()) {
-				CommandAPI.getLog().info("Unregistering command /" + commandName);
-			}
-
-			// Get the child nodes from the loaded dispatcher class
-			Field children = getField(CommandNode.class, "children");
-			@SuppressWarnings("unchecked")
-			Map<String, CommandNode<?>> commandNodeChildren = (Map<String, CommandNode<?>>) children.get(DISPATCHER.getRoot());
-
-			if (force) {
-				// Remove them by force
-				List<String> keysToRemove = new ArrayList<>();
-				commandNodeChildren.keySet().stream().filter(s -> s.contains(":"))
-						.filter(s -> s.split(":")[1].equalsIgnoreCase(commandName)).forEach(keysToRemove::add);
-				keysToRemove.forEach(commandNodeChildren::remove);
-			}
-
-			// Otherwise, just remove them normally
-			commandNodeChildren.remove(commandName);
-		} catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
-			e.printStackTrace();
+		if (CommandAPI.getConfiguration().hasVerboseOutput()) {
+			CommandAPI.logInfo("Unregistering command /" + commandName);
 		}
+
+		// Get the child nodes from the loaded dispatcher class
+		Map<String, CommandNode<?>> commandNodeChildren = (Map<String, CommandNode<?>>) COMMANDNODE_CHILDREN.get(DISPATCHER.getRoot());
+
+		if (force) {
+			// Remove them by force
+			for(String key : new HashSet<>(commandNodeChildren.keySet())) {
+				if(key.contains(":") && key.split(":")[1].equalsIgnoreCase(commandName)) {
+					commandNodeChildren.remove(key);
+				}
+			}
+		}
+
+		// Otherwise, just remove them normally
+		commandNodeChildren.remove(commandName);
 	}		
 
 	/**
@@ -175,7 +231,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	 * @return a brigadier command which is registered internally
 	 * @throws CommandSyntaxException if an error occurs when the command is ran
 	 */
-	Command<CommandListenerWrapper> generateCommand(List<Argument> args, CustomCommandExecutor executor, boolean converted)
+	Command<CommandSourceStack> generateCommand(Argument[] args, CustomCommandExecutor executor, boolean converted)
 			throws CommandSyntaxException {
 
 		// Generate our command from executor
@@ -191,48 +247,50 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 				System.arraycopy(argsAndCmd, 1, result, 0, argsAndCmd.length - 1);
 				
 				@SuppressWarnings("unchecked")
-				List<String>[] entityNamesForArgs = new List[args.size()];
+				List<String>[] entityNamesForArgs = new List[args.length];
 				
-				for(int i = 0; i < args.size(); i++) {
-					if(args.get(i) instanceof EntitySelectorArgument) {
-						EntitySelectorArgument entitySelectorArg = (EntitySelectorArgument) args.get(i);
+				for(int i = 0; i < args.length; i++) {
+					if(args[i] instanceof EntitySelectorArgument entitySelectorArg) {
 						switch(entitySelectorArg.getEntitySelector())
 						{
 						case MANY_ENTITIES:
 							@SuppressWarnings("unchecked")
 							List<Entity> entities = (List<Entity>) argObjs[i];
-							entityNamesForArgs[i] = entities.stream().map(Entity::getName).collect(Collectors.toList());
+							List<String> entityNames = new ArrayList<>();
+							for(Entity entity : entities) {
+								entityNames.add(entity.getName());
+							}
+							entityNamesForArgs[i] = entityNames;
 							break;
 						case MANY_PLAYERS:
 							@SuppressWarnings("unchecked")
 							List<Player> players = (List<Player>) argObjs[i];
-							entityNamesForArgs[i] = players.stream().map(Entity::getName).collect(Collectors.toList());
+							List<String> playerNames = new ArrayList<>();
+							for(Player player : players) {
+								playerNames.add(player.getName());
+							}
+							entityNamesForArgs[i] = playerNames;
 							break;
 						case ONE_ENTITY:
 							Entity entity = (Entity) argObjs[i];
-							entityNamesForArgs[i] = Arrays.asList(new String[] {entity.getName()});
+							entityNamesForArgs[i] = List.of(entity.getName());
 							break;
 						case ONE_PLAYER:
 							Player player = (Player) argObjs[i];
-							entityNamesForArgs[i] = Arrays.asList(new String[] {player.getName()});
+							entityNamesForArgs[i] = List.of(player.getName());
 							break;
 						default:
 							break;
 						}
 					} else {
-						entityNamesForArgs[i] = Arrays.asList(new String[] {null});
+						entityNamesForArgs[i] = List.of((String) null);
 					}
 				}
 				
-				@SuppressWarnings("unchecked")
-				List<List<?>> product = (List<List<?>>) CartesianProduct.product(entityNamesForArgs);
-				CartesianProduct.flatten(product);
+				List<List<String>> product = CartesianProduct.getDescartes(Arrays.asList(entityNamesForArgs));
 				
 				// These objects in obj are List<String>
-				for(Object obj : product) {
-					@SuppressWarnings("unchecked")
-					List<String> strings = (List<String>) obj;
-					
+				for(List<String> strings : product) {					
 					// We assume result.length == strings.length
 					for(int i = 0; i < result.length; i++) {
 						if(strings.get(i) != null) {
@@ -257,7 +315,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	 * @return an Object[] which can be used in (sender, args) -> 
 	 * @throws CommandSyntaxException
 	 */
-	Object[] argsToObjectArr(CommandContext<CommandListenerWrapper> cmdCtx, List<Argument> args) throws CommandSyntaxException {
+	Object[] argsToObjectArr(CommandContext<CommandSourceStack> cmdCtx, Argument[] args) throws CommandSyntaxException {
 		// Array for arguments for executor
 		List<Object> argList = new ArrayList<>();
 
@@ -272,6 +330,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 		return argList.toArray();
 	}
 	
+	
 	/**
 	 * Parses an argument and converts it into its standard Bukkit type (as defined in NMS.java)
 	 * @param type the argument type
@@ -282,129 +341,8 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	 * @return the standard Bukkit type
 	 * @throws CommandSyntaxException
 	 */
-	Object parseArgument(CommandContext<CommandListenerWrapper> cmdCtx, String key, Argument value) throws CommandSyntaxException {
-		if(!value.isListed()) {
-			return null;
-		}
-		switch (value.getArgumentType()) {
-		case ANGLE:
-			return NMS.getAngle(cmdCtx, key);
-		case ADVANCEMENT:
-			return NMS.getAdvancement(cmdCtx, key);
-		case AXIS:
-			return NMS.getAxis(cmdCtx, key);
-		case BIOME:
-			return NMS.getBiome(cmdCtx, key);
-		case BLOCK_PREDICATE:
-			return NMS.getBlockPredicate(cmdCtx, key);
-		case BLOCKSTATE:
-			return NMS.getBlockState(cmdCtx, key);
-		case ADVENTURE_CHAT:
-			return NMS.getAdventureChat(cmdCtx, key);
-		case CHAT:
-			return NMS.getChat(cmdCtx, key);
-		case CHATCOLOR:
-			return NMS.getChatColor(cmdCtx, key);
-		case ADVENTURE_CHAT_COMPONENT:
-			return NMS.getAdventureChatComponent(cmdCtx, key);
-		case CHAT_COMPONENT:
-			return NMS.getChatComponent(cmdCtx, key);
-		case CUSTOM:
-			CustomArgument<?> arg = (CustomArgument<?>) value;
-			String customresult;
-			if(arg.isKeyed()) {
-				customresult = getNMS().getKeyedAsString(cmdCtx, key);
-			} else {
-				customresult = cmdCtx.getArgument(key, String.class);
-			}
-			
-			try {
-				return arg.getParser().apply(customresult);
-			} catch (CustomArgumentException e) {
-				throw e.toCommandSyntax(customresult, cmdCtx);
-			} catch (Exception e) {
-				String errorMsg = new MessageBuilder("Error in executing command ").appendFullInput().append(" - ")
-						.appendArgInput().appendHere().toString().replace("%input%", customresult)
-						.replace("%finput%", cmdCtx.getInput());
-				throw new SimpleCommandExceptionType(() -> {
-					return errorMsg;
-				}).create();
-			}
-		case ENCHANTMENT:
-			return NMS.getEnchantment(cmdCtx, key);
-		case ENTITY_SELECTOR:
-			EntitySelectorArgument argument = (EntitySelectorArgument) value;
-			return NMS.getEntitySelector(cmdCtx, key, argument.getEntitySelector());
-		case ENTITY_TYPE:
-			return NMS.getEntityType(cmdCtx, key);
-		case ENVIRONMENT:
-			return NMS.getDimension(cmdCtx, key);
-		case FLOAT_RANGE:
-			return NMS.getFloatRange(cmdCtx, key);
-		case FUNCTION:
-			return NMS.getFunction(cmdCtx, key);
-		case INT_RANGE:
-			return NMS.getIntRange(cmdCtx, key);
-		case ITEMSTACK:
-			return NMS.getItemStack(cmdCtx, key);
-		case ITEMSTACK_PREDICATE:
-			return NMS.getItemStackPredicate(cmdCtx, key);
-		case LITERAL:
-			return ((LiteralArgument) value).getLiteral();
-		case LOCATION:
-			LocationType locationType = ((LocationArgument) value).getLocationType();
-			return NMS.getLocation(cmdCtx, key, locationType);
-		case LOCATION_2D:
-			LocationType locationType2d = ((Location2DArgument) value).getLocationType();
-			return NMS.getLocation2D(cmdCtx, key, locationType2d);
-		case LOOT_TABLE:
-			return NMS.getLootTable(cmdCtx, key);
-		case MATH_OPERATION:
-			return NMS.getMathOperation(cmdCtx, key);
-		case NBT_COMPOUND:
-			return NMS.getNBTCompound(cmdCtx, key);
-		case OBJECTIVE:
-			return NMS.getObjective(cmdCtx, key);
-		case OBJECTIVE_CRITERIA:
-			return NMS.getObjectiveCriteria(cmdCtx, key);
-		case PARTICLE:
-			return NMS.getParticle(cmdCtx, key);
-		case PLAYER:
-			return NMS.getPlayer(cmdCtx, key);
-		case POTION_EFFECT:
-			return NMS.getPotionEffect(cmdCtx, key);
-		case RECIPE:
-			return NMS.getRecipe(cmdCtx, key);
-		case ROTATION:
-			return NMS.getRotation(cmdCtx, key);
-		case SCORE_HOLDER:
-			ScoreHolderArgument scoreHolderArgument = (ScoreHolderArgument) value;
-			return scoreHolderArgument.isSingle() ? NMS.getScoreHolderSingle(cmdCtx, key)
-					: NMS.getScoreHolderMultiple(cmdCtx, key);
-		case SCOREBOARD_SLOT:
-			return NMS.getScoreboardSlot(cmdCtx, key);
-		case MULTI_LITERAL:
-			//This case should NEVER occur!
-			break;
-		case PRIMITIVE_BOOLEAN:
-		case PRIMITIVE_DOUBLE:
-		case PRIMITIVE_FLOAT:
-		case PRIMITIVE_INTEGER:
-		case PRIMITIVE_LONG:
-		case PRIMITIVE_STRING:
-		case PRIMITIVE_GREEDY_STRING:
-		case PRIMITIVE_TEXT:
-			return cmdCtx.getArgument(key, value.getPrimitiveType());
-		case SOUND:
-			return NMS.getSound(cmdCtx, key);
-		case TEAM:
-			return NMS.getTeam(cmdCtx, key);
-		case TIME:
-			return NMS.getTime(cmdCtx, key);
-		case UUID:
-			return NMS.getUUID(cmdCtx, key);
-		}
-		return null;
+	Object parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Argument value) throws CommandSyntaxException {
+		return value.isListed() ? value.parseArgument(NMS, cmdCtx, key) : null;
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -425,7 +363,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	 *  	will be used for suggestions for said argument</li></ul>
 	 * @param requirements 
 	 */
-	Predicate<CommandListenerWrapper> generatePermissions(String commandName, CommandPermission permission, Predicate<CommandSender> requirements) {
+	Predicate<CommandSourceStack> generatePermissions(String commandName, CommandPermission permission, Predicate<CommandSender> requirements) {
 		// If we've already registered a permission, set it to the "parent" permission.
 		if (PERMISSIONS_TO_FIX.containsKey(commandName.toLowerCase())) {
 			if (!PERMISSIONS_TO_FIX.get(commandName.toLowerCase()).equals(permission)) {
@@ -440,13 +378,13 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 
 		// Register it to the Bukkit permissions registry
 		if (finalPermission.getPermission() != null) {
-			try {
-				Bukkit.getPluginManager().addPermission(new Permission(finalPermission.getPermission()));
-			} catch (IllegalArgumentException e) {
+			Permission permissionToAdd = new Permission(finalPermission.getPermission());
+			if(!Bukkit.getPluginManager().getPermissions().contains(permissionToAdd)) {
+				Bukkit.getPluginManager().addPermission(permissionToAdd);
 			}
 		}
 
-		return (CommandListenerWrapper clw) -> permissionCheck(NMS.getCommandSenderForCLW(clw), finalPermission, requirements);
+		return (CommandSourceStack css) -> permissionCheck(NMS.getCommandSenderFromCSS(css), finalPermission, requirements);
 	}
 
 	/**
@@ -510,118 +448,177 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 				map.getCommand(cmdName).setPermission(permNode);
 			}
 		}
-		CommandAPI.getLog().info("Linked " + PERMISSIONS_TO_FIX.size() + " Bukkit permissions to commands");
+		CommandAPI.logNormal("Linked " + PERMISSIONS_TO_FIX.size() + " Bukkit permissions to commands");
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	// SECTION: Registration //
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	/*
+	 * Expands multiliteral arguments and registers all expansions of MultiLiteralArguments throughout
+	 * the provided command. Returns true if multiliteral arguments were present (and expanded) and
+	 * returns false if multiliteral arguments were not present.
+	 */
+	private boolean expandMultiLiterals(String commandName, CommandPermission permissions, String[] aliases, Predicate<CommandSender> requirements,
+			final Argument[] args, CustomCommandExecutor executor, boolean converted) throws CommandSyntaxException, IOException {
+		
+		//"Expands" our MultiLiterals into Literals
+		for(int index = 0; index < args.length; index++) {
+			//Find the first multiLiteral in the for loop
+			if(args[index] instanceof MultiLiteralArgument superArg) {
+				
+				//Add all of its entries
+				for(int i = 0; i < superArg.getLiterals().length; i++) {
+					LiteralArgument litArg = (LiteralArgument) new LiteralArgument(superArg.getLiterals()[i])
+						.setListed(superArg.isListed())
+						.withPermission(superArg.getArgumentPermission())
+						.withRequirement(superArg.getRequirements());
+					
+					//Reconstruct the list of arguments and place in the new literals
+					Argument[] newArgs = new Argument[args.length];
+					for(int j = 0; j < args.length; j++) {
+						newArgs[index] = (j == index) ? litArg : args[j];
+					}
+					register(commandName, permissions, aliases, requirements, newArgs, executor, converted);
+				}
+				return true;
+			}
+			index++;
+		}
+		return false;
+	}
+	
+	// Prevent nodes of the same name but with different types:
+	// allow    /race invite<LiteralArgument> player<PlayerArgument>
+	// disallow /race invite<LiteralArgument> player<EntitySelectorArgument>
+	// Return true if conflict was present, otherwise return false
+	private boolean hasCommandConflict(String commandName, Argument[] args, String argumentsAsString) {
+		List<String[]> regArgs = new ArrayList<>();
+		for(String str : registeredCommands.get(commandName)) {
+			regArgs.add(str.split(":"));
+		}
+		for(int i = 0; i < args.length; i++) {
+			// Avoid IAOOBEs
+			if(regArgs.size() == i && regArgs.size() < args.length) {
+				break;
+			}
+			// We want to ensure all node names are the same
+			if(!regArgs.get(i)[0].equals(args[i].getNodeName())) {
+				break;
+			}
+			// This only applies to the last argument
+			if(i == args.length - 1) {
+				if(!regArgs.get(i)[1].equals(args[i].getClass().getSimpleName())) { 
+					//Command it conflicts with
+					StringBuilder builder2 = new StringBuilder();
+					for(String[] arg : regArgs) {
+						builder2.append(arg[0]).append("<").append(arg[1]).append("> ");
+					}
+					
+					CommandAPI.logError("""
+							Failed to register command:
+							
+							  %s %s
+							  
+							Because it conflicts with this previously registered command:
+							
+							  %s %s
+							""".formatted(commandName, argumentsAsString, commandName, builder2.toString()));
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	// Links arg -> Executor
+	private ArgumentBuilder<CommandSourceStack, ?> generateInnerArgument(Command<CommandSourceStack> command, Argument[] args) {
+		Argument innerArg = args[args.length - 1];
+
+		// Handle Literal arguments
+		if (innerArg instanceof LiteralArgument literalArgument) {
+			return getLiteralArgumentBuilderArgument(literalArgument.getLiteral(), innerArg.getArgumentPermission(), innerArg.getRequirements()).executes(command);
+		}
+
+		// Handle arguments with built-in suggestion providers
+		else if (innerArg instanceof ICustomProvidedArgument customProvidedArg && !innerArg.getOverriddenSuggestions().isPresent()) {
+			return getRequiredArgumentBuilderWithProvider(innerArg, args,
+					NMS.getSuggestionProvider(customProvidedArg.getSuggestionProvider()))
+							.executes(command);
+		}
+
+		// Handle every other type of argument
+		else {
+			return getRequiredArgumentBuilderDynamic(args, innerArg).executes(command);
+		}
+	}
+	
+	// Links arg1 -> arg2 -> ... argN -> innermostArgument
+	private ArgumentBuilder<CommandSourceStack, ?> generateOuterArguments(ArgumentBuilder<CommandSourceStack, ?> innermostArgument, Argument[] args) {
+		ArgumentBuilder<CommandSourceStack, ?> outer = innermostArgument;
+		for (int i = args.length - 2; i >= 0; i--) {
+			Argument outerArg = args[i];
+
+			// Handle Literal arguments
+			if (outerArg instanceof LiteralArgument literalArgument) {
+				outer = getLiteralArgumentBuilderArgument(literalArgument.getLiteral(), outerArg.getArgumentPermission(), outerArg.getRequirements()).then(outer);
+			}
+
+			// Handle arguments with built-in suggestion providers
+			else if (outerArg instanceof ICustomProvidedArgument customProvidedArg && !outerArg.getOverriddenSuggestions().isPresent()) {
+				outer = getRequiredArgumentBuilderWithProvider(outerArg, args,
+						NMS.getSuggestionProvider(customProvidedArg.getSuggestionProvider()))
+								.then(outer);
+			}
+
+			// Handle every other type of argument
+			else {
+				outer = getRequiredArgumentBuilderDynamic(args, outerArg).then(outer);
+			}
+		}
+		return outer;
+	}
+	
 	// Builds our NMS command using the given arguments for this method, then
 	// registers it
 	void register(String commandName, CommandPermission permissions, String[] aliases, Predicate<CommandSender> requirements,
-			final List<Argument> args, CustomCommandExecutor executor, boolean converted) throws Exception {
+			final Argument[] args, CustomCommandExecutor executor, boolean converted) throws CommandSyntaxException, IOException {
 		
 		//"Expands" our MultiLiterals into Literals
-		Predicate<Argument> isMultiLiteral = arg -> arg.getArgumentType() == CommandAPIArgumentType.MULTI_LITERAL;
-		if(args.stream().filter(isMultiLiteral).count() > 0) {
+		if(expandMultiLiterals(commandName, permissions, aliases, requirements, args, executor, converted)) {
+			return;
+		}
 		
-			int index = 0;
-			for(Argument argument : args) {
-				
-				//Find the first multiLiteral in the for loop
-				if(isMultiLiteral.test(argument)) {
-					MultiLiteralArgument superArg = (MultiLiteralArgument) argument;
-					
-					//Add all of its entries
-					for(int i = 0; i < superArg.getLiterals().length; i++) {
-						LiteralArgument litArg = (LiteralArgument) new LiteralArgument(superArg.getLiterals()[i])
-							.setListed(superArg.isListed())
-							.withPermission(superArg.getArgumentPermission())
-							.withRequirement(superArg.getRequirements());
-						
-						//Reconstruct the list of arguments and place in the new literals
-						List<Argument> newArgs = new ArrayList<>();
-						{
-							int j = 0;
-							for(Argument previousEntry : args) {
-								if(j == index) {
-									newArgs.add(litArg);
-								} else {
-									newArgs.add(previousEntry);
-								}
-								j++;
-							}
-						}
-						register(commandName, permissions, aliases, requirements, newArgs, executor, converted);
-					}
-					return;
-				}
-				index++;
+		// Create a list of argument names
+		StringBuilder builder = new StringBuilder();
+		for(Argument arg : args) {
+			builder.append(arg.getNodeName()).append("<").append(arg.getClass().getSimpleName()).append("> ");
+		}
+		
+		// Handle command conflicts
+		if(registeredCommands.containsKey(commandName) && hasCommandConflict(commandName, args, builder.toString())) {
+			return;
+		} else {
+			List<String> argumentsString = new ArrayList<>();
+			for(Argument arg : args) {
+				argumentsString.add(arg.getNodeName() + ":" + arg.getClass().getSimpleName());
 			}
+			registeredCommands.put(commandName, argumentsString);			
 		}
 		
-		// Prevent nodes of the same name but with different types:
-		// allow    /race invite<LiteralArgument> player<PlayerArgument>
-		// disallow /race invite<LiteralArgument> player<EntitySelectorArgument>
-		if(registeredCommands.containsKey(commandName)) {
-			List<String[]> regArgs = registeredCommands.get(commandName).stream().map(s -> s.split(":")).collect(Collectors.toList());
-			for(int i = 0; i < args.size(); i++) {
-				// Avoid IAOOBEs
-				if(regArgs.size() == i && regArgs.size() < args.size()) {
-					break;
-				}
-				// We want to ensure all node names are the same
-				if(!regArgs.get(i)[0].equals(args.get(i).getNodeName())) {
-					break;
-				}
-				// This only applies to the last argument
-				if(i == args.size() - 1) {
-					if(!regArgs.get(i)[1].equals(args.get(i).getClass().getSimpleName())) { 
-						
-						//Command we're trying to register
-						StringBuilder builder = new StringBuilder();
-						args.forEach(arg -> builder.append(arg.getNodeName()).append("<").append(arg.getClass().getSimpleName()).append("> "));
-						
-						//Command it conflicts with
-						StringBuilder builder2 = new StringBuilder();
-						regArgs.forEach(arg -> builder2.append(arg[0]).append("<").append(arg[1]).append("> "));
-						
-						// Lovely high quality error message formatting (inspired by Elm)
-						CommandAPI.getLog().severe("Failed to register command:");
-						CommandAPI.getLog().severe("");
-						CommandAPI.getLog().severe("  " + commandName + " " + builder.toString());
-						CommandAPI.getLog().severe("");
-						CommandAPI.getLog().severe("Because it conflicts with this previously registered command:");
-						CommandAPI.getLog().severe("");
-						CommandAPI.getLog().severe("  " + commandName + " " + builder2.toString());
-						CommandAPI.getLog().severe("");
-						return;
-					}
-				}
-			}
-		}
-		registeredCommands.put(commandName, args.stream().map(arg -> arg.getNodeName() + ":" + arg.getClass().getSimpleName()).collect(Collectors.toList()));
-		
-		if (CommandAPI.getConfiguration().hasVerboseOutput()) {
-			// Create a list of argument names
-			StringBuilder builder = new StringBuilder();
-			args.forEach(arg -> builder.append(arg.getNodeName()).append("<").append(arg.getClass().getSimpleName()).append("> "));
-			CommandAPI.logInfo("Registering command /" + commandName + " " + builder.toString());
-		}
+		CommandAPI.logInfo("Registering command /" + commandName + " " + builder.toString());
 
-		Command<CommandListenerWrapper> command = generateCommand(args, executor, converted);
+		// Generate the actual command
+		Command<CommandSourceStack> command = generateCommand(args, executor, converted);
 
 		/*
-		 * The innermost argument needs to be connected to the executor. Then that
-		 * argument needs to be connected to the previous argument etc. Then the first
-		 * argument needs to be connected to the command name
-		 *
-		 * CommandName -> Args1 -> Args2 -> ... -> ArgsN -> Executor
+		 * The innermost argument needs to be connected to the executor. Then that argument needs to be connected to
+		 * the previous argument etc. Then the first argument needs to be connected to the command name, so we get:
+		 *   CommandName -> Args1 -> Args2 -> ... -> ArgsN -> Executor
 		 */
-
-		LiteralCommandNode<CommandListenerWrapper> resultantNode;
-		if (args.isEmpty()) {
+		LiteralCommandNode<CommandSourceStack> resultantNode;
+		if (args.length == 0) {
 			// Link command name to the executor
 			resultantNode = DISPATCHER.register(getLiteralArgumentBuilder(commandName).requires(generatePermissions(commandName, permissions, requirements)).executes(command));
 
@@ -632,61 +629,11 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 			}
 		} else {
 
-			// List of keys for reverse iteration
-			//ArrayList<String> keys = new ArrayList<>(args.keySet());
-
-			// Link the last element to the executor
-			ArgumentBuilder<CommandListenerWrapper, ?> inner;
-			// New scope used here to prevent innerArg accidentally being used below
-			{
-				Argument innerArg = args.get(args.size() - 1);
-
-				// Handle Literal arguments
-				if (innerArg instanceof LiteralArgument) {
-					String str = ((LiteralArgument) innerArg).getLiteral();
-					inner = getLiteralArgumentBuilderArgument(str, innerArg.getArgumentPermission(), innerArg.getRequirements()).executes(command);
-				}
-
-				// Handle arguments with built-in suggestion providers
-				else if (innerArg instanceof ICustomProvidedArgument
-						&& !innerArg.getOverriddenSuggestions().isPresent()) {
-					inner = getRequiredArgumentBuilderWithProvider(innerArg,
-							NMS.getSuggestionProvider(((ICustomProvidedArgument) innerArg).getSuggestionProvider()))
-									.executes(command);
-				}
-
-				// Handle every other type of argument
-				else {
-					inner = getRequiredArgumentBuilderDynamic(args, innerArg).executes(command);
-				}
-			}
-
-			// Link everything else up, except the first
-			ArgumentBuilder<CommandListenerWrapper, ?> outer = inner;
-			for (int i = args.size() - 2; i >= 0; i--) {
-				Argument outerArg = args.get(i);
-
-				// Handle Literal arguments
-				if (outerArg instanceof LiteralArgument) {
-					String str = ((LiteralArgument) outerArg).getLiteral();
-					outer = getLiteralArgumentBuilderArgument(str, outerArg.getArgumentPermission(), outerArg.getRequirements()).then(outer);
-				}
-
-				// Handle arguments with built-in suggestion providers
-				else if (outerArg instanceof ICustomProvidedArgument && !outerArg.getOverriddenSuggestions().isPresent()) {
-					outer = getRequiredArgumentBuilderWithProvider(outerArg,
-							NMS.getSuggestionProvider(((ICustomProvidedArgument) outerArg).getSuggestionProvider()))
-									.then(outer);
-				}
-
-				// Handle every other type of argument
-				else {
-					outer = getRequiredArgumentBuilderDynamic(args, outerArg).then(outer);
-				}
-			}
+			// Generate all of the arguments, following each other and finally linking to the executor
+			ArgumentBuilder<CommandSourceStack, ?> commandArguments = generateOuterArguments(generateInnerArgument(command, args), args);
 
 			// Link command name to first argument and register
-			resultantNode = DISPATCHER.register(getLiteralArgumentBuilder(commandName).requires(generatePermissions(commandName, permissions, requirements)).then(outer));
+			resultantNode = DISPATCHER.register(getLiteralArgumentBuilder(commandName).requires(generatePermissions(commandName, permissions, requirements)).then(commandArguments));
 
 			// Register aliases
 			for (String alias : aliases) {
@@ -694,11 +641,17 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 					CommandAPI.logInfo("Registering alias /" + alias + " -> " + resultantNode.getName());
 				}
 				
-				DISPATCHER.register(getLiteralArgumentBuilder(alias).requires(generatePermissions(alias, permissions, requirements)).then(outer));
+				DISPATCHER.register(getLiteralArgumentBuilder(alias).requires(generatePermissions(alias, permissions, requirements)).then(commandArguments));
 			}
 		}
 
-		// Produce the commandDispatch.json file for debug purposes
+		// We never know if this is "the last command" and we want dynamic (even if partial)
+		// command registration. Generate the dispatcher file!
+		generateDispatcherFile();
+	}
+	
+	// Produce the commandDispatch.json file for debug purposes
+	private void generateDispatcherFile() throws IOException {
 		if (CommandAPI.getConfiguration().willCreateDispatcherFile()) {
 			File file = CommandAPI.getDispatcherFile();
 			try {
@@ -741,7 +694,7 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	 * @param commandName the name of the literal to create
 	 * @return a brigadier LiteralArgumentBuilder representing a literal
 	 */
-	LiteralArgumentBuilder<CommandListenerWrapper> getLiteralArgumentBuilder(String commandName) {
+	LiteralArgumentBuilder<CommandSourceStack> getLiteralArgumentBuilder(String commandName) {
 		return LiteralArgumentBuilder.literal(commandName);
 	}
 
@@ -752,46 +705,58 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 	 * @param permission  the permission required to use this literal
 	 * @return a brigadier LiteralArgumentBuilder representing a literal
 	 */
-	LiteralArgumentBuilder<CommandListenerWrapper> getLiteralArgumentBuilderArgument(String commandName,
-			CommandPermission permission, Predicate<CommandSender> requirements) {
-		LiteralArgumentBuilder<CommandListenerWrapper> builder = LiteralArgumentBuilder.literal(commandName);
-		return builder.requires((CommandListenerWrapper clw) -> permissionCheck(NMS.getCommandSenderForCLW(clw), permission, requirements));
+	LiteralArgumentBuilder<CommandSourceStack> getLiteralArgumentBuilderArgument(String commandName, CommandPermission permission, Predicate<CommandSender> requirements) {
+		LiteralArgumentBuilder<CommandSourceStack> builder = LiteralArgumentBuilder.literal(commandName);
+		return builder.requires((CommandSourceStack css) -> permissionCheck(NMS.getCommandSenderFromCSS(css), permission, requirements));
 	}
 
 	// Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
-	<T> RequiredArgumentBuilder<CommandListenerWrapper, T> getRequiredArgumentBuilderDynamic(
-			final List<Argument> args, Argument argument) {
-
-		// If there are no changes to the default suggestions, return it as normal
-		if (!argument.getOverriddenSuggestions().isPresent()) {
-			@SuppressWarnings("unchecked")
-			RequiredArgumentBuilder<CommandListenerWrapper, T> builder = RequiredArgumentBuilder.argument(argument.getNodeName(), (ArgumentType<T>) argument.getRawType());
-			return builder.requires(clw -> permissionCheck(NMS.getCommandSenderForCLW(clw), argument.getArgumentPermission(), argument.getRequirements()));
-		}
-
-		// Otherwise, we have to handle arguments of the form BiFunction<CommandSender,
-		// Object[], String[]>
-		else {
-			return getRequiredArgumentBuilderWithProvider(argument, toSuggestions(argument.getNodeName(), args));
+	RequiredArgumentBuilder<CommandSourceStack, ?> getRequiredArgumentBuilderDynamic(
+			final Argument[] args, Argument argument) {
+		
+		if(argument.getOverriddenSuggestions().isPresent()) {
+			// Override the suggestions
+			return getRequiredArgumentBuilderWithProvider(argument, args, toSuggestions(argument.getNodeName(), args, true));
+		} else if(argument.getIncludedSuggestions().isPresent()) {
+			return getRequiredArgumentBuilderWithProvider(argument, args, (cmdCtx, builder) -> argument.getRawType().listSuggestions(cmdCtx, builder));
+		} else {
+			return getRequiredArgumentBuilderWithProvider(argument, args, null);
 		}
 	}
 
 	// Gets a RequiredArgumentBuilder for an argument, given a SuggestionProvider
-	<T> RequiredArgumentBuilder<CommandListenerWrapper, T> getRequiredArgumentBuilderWithProvider(Argument argument,
-			SuggestionProvider<CommandListenerWrapper> provider) {
-		@SuppressWarnings("unchecked")
-		RequiredArgumentBuilder<CommandListenerWrapper, T> builder = RequiredArgumentBuilder
-				.argument(argument.getNodeName(), (ArgumentType<T>) argument.getRawType());
-		return builder.requires(clw -> permissionCheck(NMS.getCommandSenderForCLW(clw),
-				argument.getArgumentPermission(), argument.getRequirements())).suggests(provider);
+	RequiredArgumentBuilder<CommandSourceStack, ?> getRequiredArgumentBuilderWithProvider(Argument argument, Argument[] args, SuggestionProvider<CommandSourceStack> provider) {
+		SuggestionProvider<CommandSourceStack> newSuggestionsProvider = provider;
+		
+		// If we have suggestions to add, combine provider with the suggestions
+		if(argument.getIncludedSuggestions().isPresent() && argument.getOverriddenSuggestions().isEmpty()) {
+			SuggestionProvider<CommandSourceStack> addedSuggestions = toSuggestions(argument.getNodeName(), args, false);
+			
+			newSuggestionsProvider = (cmdCtx, builder) -> {
+				addedSuggestions.getSuggestions(cmdCtx, builder);
+				provider.getSuggestions(cmdCtx, builder);
+				return builder.buildFuture();
+			};
+		} 
+		
+		RequiredArgumentBuilder<CommandSourceStack, ?> requiredArgumentBuilder = RequiredArgumentBuilder.argument(argument.getNodeName(), argument.getRawType());
+		
+		return requiredArgumentBuilder
+			.requires(css -> permissionCheck(NMS.getCommandSenderFromCSS(css), argument.getArgumentPermission(), argument.getRequirements()))
+			.suggests(newSuggestionsProvider);
 	}
 	
-	static Argument getArgument(List<Argument> args, String nodeName) {
-		return args.stream().filter(arg -> arg.getNodeName().equals(nodeName)).findFirst().get();
+	static Argument getArgument(Argument[] args, String nodeName) {
+		for(Argument arg : args) {
+			if(arg.getNodeName().equals(nodeName)) {
+				return arg;
+			}
+		}
+		throw new NoSuchElementException("Could not find argument '" + nodeName + "'");
 	}
 	
-	SuggestionProvider<CommandListenerWrapper> toSuggestions(String nodeName, List<Argument> args) {
-		return (CommandContext<CommandListenerWrapper> context, SuggestionsBuilder builder) -> {
+	SuggestionProvider<CommandSourceStack> toSuggestions(String nodeName, Argument[] args, boolean overrideSuggestions) {
+		return (CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) -> {
 			// Populate Object[], which is our previously filled arguments
 			List<Object> previousArguments = new ArrayList<>();
 
@@ -818,16 +783,16 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 					previousArguments.add(result);
 				}
 			}
-			return getSuggestionsBuilder(builder,
-					getArgument(args, nodeName).getOverriddenSuggestions()
-							.orElseGet(() -> (c, m) -> new IStringTooltip[0])
-							.apply(NMS.getCommandSenderForCLW(context.getSource()), previousArguments.toArray()));
+			
+			SuggestionInfo suggestionInfo = new SuggestionInfo(NMS.getCommandSenderFromCSS(context.getSource()), previousArguments.toArray(), builder.getInput(), builder.getRemaining());
+			Optional<Function<SuggestionInfo, IStringTooltip[]>> suggestionsToAddOrOverride = overrideSuggestions ? getArgument(args, nodeName).getOverriddenSuggestions() : getArgument(args, nodeName).getIncludedSuggestions();
+			return getSuggestionsBuilder(builder, suggestionsToAddOrOverride.orElseGet(() -> o -> new IStringTooltip[0]).apply(suggestionInfo));
 		};
 	}
-
-	//////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/////////////////////////
 	// SECTION: Reflection //
-	//////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////
 
 	/**
 	 * Caches a field using reflection if it is not already cached, then return the
@@ -845,12 +810,70 @@ public class CommandAPIHandler<CommandListenerWrapper> {
 			Field result = null;
 			try {
 				result = clazz.getDeclaredField(name);
-			} catch (NoSuchFieldException | SecurityException e) {
+			} catch (ReflectiveOperationException e) {
 				e.printStackTrace();
 			}
 			result.setAccessible(true);
 			FIELDS.put(key, result);
 			return result;
 		}
+	}
+	
+	//////////////////////////////
+	// SECTION: Private classes //
+	//////////////////////////////
+	
+	/**
+	 * Class to store cached methods and fields 
+	 * 
+	 * This is required because each
+	 * key is made up of a class and a field or method name
+	 */
+	private record ClassCache(Class<?> clazz, String name) {}
+	
+	/**
+	 * A class to compute the cartesian product of a number of lists.
+	 * Source: https://www.programmersought.com/article/86195393650/
+	 */
+	private class CartesianProduct {
+
+		// Shouldn't be instantiated
+		private CartesianProduct() {}
+		
+		/**
+		 * Returns the Cartesian product of a list of lists
+		 * @param <T> the underlying type of the list of lists
+		 * @param list the list to calculate the Cartesian product of
+		 * @return a List of lists which represents the Cartesian product of all elements of the input
+		 */
+		public static final <T> List<List<T>> getDescartes(List<List<T>> list) {
+	        List<List<T>> returnList = new ArrayList<>();
+	        descartesRecursive(list, 0, returnList, new ArrayList<T>());
+	        return returnList;
+	    }
+
+	    /**
+	     * Recursive implementation
+	     * Principle: traverse sequentially from 0 of the original list to the end
+	     * @param <T> the underlying type of the list of lists
+	     * @param originalList original list
+	     * @param position The position of the current recursion in the original list
+	     * @param returnList return result
+	     * @param cacheList temporarily saved list
+	     */
+	    private static final <T> void descartesRecursive(List<List<T>> originalList, int position, List<List<T>> returnList, List<T> cacheList) {
+	        List<T> originalItemList = originalList.get(position);
+	        for (int i = 0; i < originalItemList.size(); i++) {
+	            //The last one reuses cacheList to save memory
+	            List<T> childCacheList = (i == originalItemList.size() - 1) ? cacheList : new ArrayList<>(cacheList);
+	            childCacheList.add(originalItemList.get(i));
+	            if (position == originalList.size() - 1) {//Exit recursion to the end
+	                returnList.add(childCacheList);
+	                continue;
+	            }
+	            descartesRecursive(originalList, position + 1, returnList, childCacheList);
+	        }
+	    }
+
 	}
 }

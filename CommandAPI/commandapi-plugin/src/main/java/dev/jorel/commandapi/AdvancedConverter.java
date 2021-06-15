@@ -1,3 +1,23 @@
+/*******************************************************************************
+ * Copyright 2018, 2021 Jorel Ali (Skepter) - MIT License
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *******************************************************************************/
 package dev.jorel.commandapi;
 
 import java.util.ArrayList;
@@ -5,7 +25,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.jorel.commandapi.arguments.AdvancementArgument;
 import dev.jorel.commandapi.arguments.AngleArgument;
@@ -65,14 +85,14 @@ import dev.jorel.commandapi.exceptions.UnknownArgumentException;
  */
 public class AdvancedConverter {
 
-	private static Pattern argumentPattern = Pattern.compile("<(\\w+)>\\[([a-z:_]+|(?:[0-9\\.]+)?\\.\\.(?:[0-9\\.]+)?)\\]");
-	private static Pattern literalPattern = Pattern.compile("\\((\\w+(?:\\|\\w+)*)\\)");
+	private static final Pattern ARGUMENT_PATTERN = Pattern.compile("<(\\w+)>\\[([a-z:_]+|(?:[0-9\\.]+)?\\.\\.(?:[0-9\\.]+)?)\\]");
+	private static final Pattern LITERAL_PATTERN = Pattern.compile("\\((\\w+(?:\\|\\w+)*)\\)");
 	
-	private final Plugin plugin;
+	private final JavaPlugin plugin;
 	private final String command;
 	private int argumentIndex = 1;
 	
-	public AdvancedConverter(Plugin plugin, String command) {
+	public AdvancedConverter(JavaPlugin plugin, String command) {
 		this.plugin = plugin;
 		this.command = command;
 	}
@@ -88,7 +108,7 @@ public class AdvancedConverter {
 		try {
 			arguments = parseArguments(command);
 		} catch (UnknownArgumentException | InvalidNumberException e) {
-			CommandAPI.getLog().severe(e.getMessage());
+			CommandAPI.logError(e.getMessage());
 			return;
 		}
 		if(arguments.size() == 0) {
@@ -105,7 +125,7 @@ public class AdvancedConverter {
 		try {
 			arguments = parseArguments(command);
 		} catch (UnknownArgumentException | InvalidNumberException e) {
-			CommandAPI.getLog().severe(e.getMessage());
+			CommandAPI.logError(e.getMessage());
 			return;
 		}
 		if(arguments.size() == 0) {
@@ -176,9 +196,62 @@ public class AdvancedConverter {
 		}
 	}
 	
+	private Argument parseDefinedArgumentType(String argumentType, String nodeName) throws UnknownArgumentException {
+		return switch(CommandAPIArgumentType.fromInternal(argumentType)) {
+		case ADVANCEMENT             -> new AdvancementArgument(nodeName);
+		case ANGLE                   -> new AngleArgument(nodeName);
+		case AXIS                    -> new AxisArgument(nodeName);
+		case BIOME                   -> new BiomeArgument(nodeName);
+		case BLOCKSTATE              -> new BlockStateArgument(nodeName);
+		case BLOCK_PREDICATE         -> new BlockPredicateArgument(nodeName);
+		case CHAT                    -> new ChatArgument(nodeName);
+		case CHATCOLOR               -> new ChatColorArgument(nodeName);
+		case CHAT_COMPONENT          -> new ChatComponentArgument(nodeName);
+		case ENCHANTMENT             -> new EnchantmentArgument(nodeName);
+		case ENTITY_SELECTOR         -> new EntitySelectorArgument(nodeName, EntitySelector.ONE_ENTITY);
+		case ENTITY_TYPE             -> new EntityTypeArgument(nodeName);
+		case ENVIRONMENT             -> new EnvironmentArgument(nodeName);
+		case FLOAT_RANGE             -> new FloatRangeArgument(nodeName);
+		case FUNCTION                -> new FunctionArgument(nodeName);
+		case INT_RANGE               -> new IntegerRangeArgument(nodeName);
+		case ITEMSTACK               -> new ItemStackArgument(nodeName);
+		case ITEMSTACK_PREDICATE     -> new ItemStackPredicateArgument(nodeName);
+		case LOCATION                -> new LocationArgument(nodeName, LocationType.BLOCK_POSITION);
+		case LOCATION_2D             -> new Location2DArgument(nodeName, LocationType.BLOCK_POSITION);
+		case LOOT_TABLE              -> new LootTableArgument(nodeName);
+		case MATH_OPERATION          -> new MathOperationArgument(nodeName);
+		case NBT_COMPOUND            -> new NBTCompoundArgument(nodeName);
+		case OBJECTIVE               -> new ObjectiveArgument(nodeName);
+		case OBJECTIVE_CRITERIA      -> new ObjectiveCriteriaArgument(nodeName);
+		case PARTICLE                -> new ParticleArgument(nodeName);
+		case PLAYER                  -> new PlayerArgument(nodeName);
+		case POTION_EFFECT           -> new PotionEffectArgument(nodeName);
+		case RECIPE                  -> new RecipeArgument(nodeName);
+		case ROTATION                -> new RotationArgument(nodeName);
+		case SCOREBOARD_SLOT         -> new ScoreboardSlotArgument(nodeName);
+		case SCORE_HOLDER            -> new ScoreHolderArgument(nodeName, ScoreHolderType.SINGLE);
+		case SOUND                   -> new SoundArgument(nodeName);
+		case TEAM                    -> new TeamArgument(nodeName);
+		case TIME                    -> new TimeArgument(nodeName);
+		case UUID                    -> new UUIDArgument(nodeName);
+		case PRIMITIVE_BOOLEAN       -> new BooleanArgument(nodeName);
+		case PRIMITIVE_DOUBLE        -> new DoubleArgument(nodeName);
+		case PRIMITIVE_FLOAT         -> new FloatArgument(nodeName);
+		case PRIMITIVE_GREEDY_STRING -> new GreedyStringArgument(nodeName);
+		case PRIMITIVE_INTEGER       -> new IntegerArgument(nodeName);
+		case PRIMITIVE_LONG          -> new LongArgument(nodeName);
+		case PRIMITIVE_STRING        -> new StringArgument(nodeName);
+		case PRIMITIVE_TEXT          -> new TextArgument(nodeName);
+		case LITERAL, 
+			 MULTI_LITERAL,
+			 CUSTOM                  -> throw new UnknownArgumentException(argumentType);
+		default                      -> throw new UnknownArgumentException(argumentType);
+		};
+	}
+	
 	private Argument parseArgument(String argument) throws UnknownArgumentException, InvalidNumberException {
-		Matcher literalMatcher = literalPattern.matcher(argument);
-		Matcher argumentMatcher = argumentPattern.matcher(argument);
+		Matcher literalMatcher = LITERAL_PATTERN.matcher(argument);
+		Matcher argumentMatcher = ARGUMENT_PATTERN.matcher(argument);
 		if(literalMatcher.matches()) {
 			//Parse literals
 			String literals = literalMatcher.group(1);
@@ -193,117 +266,15 @@ public class AdvancedConverter {
 				return parseRange(nodeName, argumentType.split("\\.\\."));
 			} else {
 				// We have a few edge cases to handle
-				switch(argumentType) {
-				case "api:entity":
-					return new EntitySelectorArgument(nodeName, EntitySelector.ONE_ENTITY);
-				case "api:entities":
-					return new EntitySelectorArgument(nodeName, EntitySelector.MANY_ENTITIES);
-				case "api:player":
-					return new EntitySelectorArgument(nodeName, EntitySelector.ONE_PLAYER);
-				case "api:players":
-					return new EntitySelectorArgument(nodeName, EntitySelector.MANY_PLAYERS);
-				case "minecraft:vec3":
-					return new LocationArgument(nodeName, LocationType.PRECISE_POSITION);
-				case "minecraft:vec2":
-					return new Location2DArgument(nodeName, LocationType.PRECISE_POSITION);
-				}
-				
-				// Parse everything else
-				switch(CommandAPIArgumentType.fromInternal(argumentType)) {
-				case ADVANCEMENT:
-					return new AdvancementArgument(nodeName);
-				case ANGLE:
-					return new AngleArgument(nodeName);
-				case AXIS:
-					return new AxisArgument(nodeName);
-				case BIOME:
-					return new BiomeArgument(nodeName);
-				case BLOCKSTATE:
-					return new BlockStateArgument(nodeName);
-				case BLOCK_PREDICATE:
-					return new BlockPredicateArgument(nodeName);
-				case CHAT:
-					return new ChatArgument(nodeName);
-				case CHATCOLOR:
-					return new ChatColorArgument(nodeName);
-				case CHAT_COMPONENT:
-					return new ChatComponentArgument(nodeName);
-				case ENCHANTMENT:
-					return new EnchantmentArgument(nodeName);
-				case ENTITY_SELECTOR:
-					return new EntitySelectorArgument(nodeName, EntitySelector.ONE_ENTITY);
-				case ENTITY_TYPE:
-					return new EntityTypeArgument(nodeName);
-				case ENVIRONMENT:
-					return new EnvironmentArgument(nodeName);
-				case FLOAT_RANGE:
-					return new FloatRangeArgument(nodeName);
-				case FUNCTION:
-					return new FunctionArgument(nodeName);
-				case INT_RANGE:
-					return new IntegerRangeArgument(nodeName);
-				case ITEMSTACK:
-					return new ItemStackArgument(nodeName);
-				case ITEMSTACK_PREDICATE:
-					return new ItemStackPredicateArgument(nodeName);
-				case LOCATION:
-					return new LocationArgument(nodeName, LocationType.BLOCK_POSITION);
-				case LOCATION_2D:
-					return new Location2DArgument(nodeName, LocationType.BLOCK_POSITION);
-				case LOOT_TABLE:
-					return new LootTableArgument(nodeName);
-				case MATH_OPERATION:
-					return new MathOperationArgument(nodeName);
-				case NBT_COMPOUND:
-					return new NBTCompoundArgument(nodeName);
-				case OBJECTIVE:
-					return new ObjectiveArgument(nodeName);
-				case OBJECTIVE_CRITERIA:
-					return new ObjectiveCriteriaArgument(nodeName);
-				case PARTICLE:
-					return new ParticleArgument(nodeName);
-				case PLAYER:
-					return new PlayerArgument(nodeName);
-				case POTION_EFFECT:
-					return new PotionEffectArgument(nodeName);
-				case RECIPE:
-					return new RecipeArgument(nodeName);
-				case ROTATION:
-					return new RotationArgument(nodeName);
-				case SCOREBOARD_SLOT:
-					return new ScoreboardSlotArgument(nodeName);
-				case SCORE_HOLDER:
-					return new ScoreHolderArgument(nodeName, ScoreHolderType.SINGLE);
-				case SOUND:
-					return new SoundArgument(nodeName);
-				case TEAM:
-					return new TeamArgument(nodeName);
-				case TIME:
-					return new TimeArgument(nodeName);
-				case UUID:
-					return new UUIDArgument(nodeName);
-				case PRIMITIVE_BOOLEAN:
-					return new BooleanArgument(nodeName);
-				case PRIMITIVE_DOUBLE:
-					return new DoubleArgument(nodeName);
-				case PRIMITIVE_FLOAT:
-					return new FloatArgument(nodeName);
-				case PRIMITIVE_GREEDY_STRING:
-					return new GreedyStringArgument(nodeName);
-				case PRIMITIVE_INTEGER:
-					return new IntegerArgument(nodeName);
-				case PRIMITIVE_LONG:
-					return new LongArgument(nodeName);
-				case PRIMITIVE_STRING:
-					return new StringArgument(nodeName);
-				case PRIMITIVE_TEXT:
-					return new TextArgument(nodeName);
-				case LITERAL:
-				case MULTI_LITERAL:
-				case CUSTOM:
-				default:
-					throw new UnknownArgumentException(argumentType);
-				}
+				return switch(argumentType) {
+				case "api:entity"     -> new EntitySelectorArgument(nodeName, EntitySelector.ONE_ENTITY);
+				case "api:entities"   -> new EntitySelectorArgument(nodeName, EntitySelector.MANY_ENTITIES);
+				case "api:player"     -> new EntitySelectorArgument(nodeName, EntitySelector.ONE_PLAYER);
+				case "api:players"    -> new EntitySelectorArgument(nodeName, EntitySelector.MANY_PLAYERS);
+				case "minecraft:vec3" -> new LocationArgument(nodeName, LocationType.PRECISE_POSITION);
+				case "minecraft:vec2" -> new Location2DArgument(nodeName, LocationType.PRECISE_POSITION);
+				default               -> parseDefinedArgumentType(argumentType, nodeName);
+				};
 			}
 		} else {
 			throw new UnknownArgumentException(argument);

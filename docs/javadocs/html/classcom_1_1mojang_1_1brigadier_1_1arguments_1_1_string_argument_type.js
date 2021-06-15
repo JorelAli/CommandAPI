@@ -6,6 +6,7 @@ var classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_string_argument_type =
     [ "getString", "classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_string_argument_type.html#ac0ad3b451d86d8553becf938bf1e9f8c", null ],
     [ "getType", "classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_string_argument_type.html#a118f3c43fd41dfdd5b234b5b22e2ae12", null ],
     [ "greedyString", "classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_string_argument_type.html#a21f0903e54d65b36baa17ca0f0752bba", null ],
+    [ "listSuggestions", "classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_string_argument_type.html#a46910a3a91fac97bae4eb3eecd6d27f6", null ],
     [ "parse", "classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_string_argument_type.html#ab97c3ceb10cefd9f6b2c4a3ed64ab8be", null ],
     [ "string", "classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_string_argument_type.html#adab952522cc6216a583e6339847a0037", null ],
     [ "toString", "classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_string_argument_type.html#a43ce33888ecdae5fb3e5ccbbd0538ad1", null ],

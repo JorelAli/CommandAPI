@@ -1,16 +1,16 @@
-# Safe argument suggestions
+# Safely typed argument suggestions
 
-So far, we've covered how to override suggestions using the `overrideSuggestions()` method. The issue with using Strings for suggestion listings is that they are prone to errors. As a result, some arguments include the `safeOverrideSuggestions()`, which provides type-safety checks for argument suggestions, as well as automatic "Bukkit-to-suggestion" conversion.
+So far, we've covered how to replace suggestions using the `replaceSuggestions()` method. The issue with using Strings for suggestion listings is that they are prone to errors - it is possible to suggest something which is not actually a valid argument, which makes that suggestion unusable. As a result, some arguments include the `replaceWithSafeSuggestions()`, which provides type-safety checks for argument suggestions, as well as automatic "Bukkit-to-suggestion" conversion.
 
 The whole point of the safe argument suggestions method is that parameters entered in this method are **guaranteed** to work.
 
-The use of the safe override suggestions function is basically the same as `overrideSuggestions()` from the previous section, except instead of returning a `String[]`, you now return a `T[]`, where `T` is the class corresponding to the argument. This is described in more detail in the table below.
+The use of the safe replace suggestions function is basically the same as `replaceSuggestions()` from the previous section, except instead of returning a `String[]`, you now return a `T[]`, where `T` is the class corresponding to the argument. This is described in more detail in the table below.
 
 ```java
-Argument safeOverrideSuggestions(T... suggestions);
-Argument safeOverrideSuggestions(Function<CommandSender, T[]> suggestions);
-Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], T[]> suggestions);
+Argument replaceWithSafeSuggestions(Function<SuggestionInfo, S[]> suggestions);
 ```
+
+-----
 
 ## Supported arguments
 
@@ -43,6 +43,7 @@ The list of supported arguments are displayed in the following table. The parame
 |       [`MathOperationArgument`](./mathoperationarguments.md) | `dev.jorel.commandapi.wrappers.MathOperation`  |
 |                   [`NBTCompoundArgument`](./nbtarguments.md) | `de.tr7zw.nbtapi.NBTContainer`                 |
 | [`ObjectiveArgument`](./objectivearguments.md#objective-argument) | **`org.bukkit.scoreboard.Objective`**          |
+| [`OfflinePlayerArgument`](./entityarguments.md#player-argument) | `org.bukkit.OfflinePlayer`                     |
 |                 [`ParticleArgument`](./particlearguments.md) | `org.bukkit.Particle`                          |
 |     [`PlayerArgument`](./entityarguments.md#player-argument) | `org.bukkit.entity.Player`                     |
 |               [`PotionEffectArgument`](./potionarguments.md) | `org.bukkit.potion.PotionEffectType`           |
@@ -84,7 +85,7 @@ ScoreboardSlot of(DisplaySlot slot);
 ScoreboardSlot ofTeamColor(ChatColor color);
 ```
 
-This allows you to create `ScoreboardSlot` instances which can be used with the safe override suggestions method.
+This allows you to create `ScoreboardSlot` instances which can be used with the safe replace suggestions method.
 
 -----
 
@@ -96,46 +97,22 @@ While this should be fairly straight forward, here's a few examples of how this 
 
 ### Example - Safe recipe arguments
 
-Say we have a plugin that registers custom items which can be crafted. In this example, we use an "emerald sword" with a custom crafting recipe. Now say that we want to have a command that gives the player the item from our declared recipes. To do this, we first register our custom items:
+Say we have a plugin that registers custom items which can be crafted. In this example, we use an "emerald sword" with a custom crafting recipe. Now say that we want to have a command that gives the player the item from our declared recipes, which will have the following syntax:
 
-```java
-// Create our itemstack
-ItemStack emeraldSword = new ItemStack(Material.DIAMOND_SWORD);
-ItemMeta meta = emeraldSword.getItemMeta();
-meta.setDisplayName("Emerald Sword");
-meta.setUnbreakable(true);
-emeraldSword.setItemMeta(meta);
-
-// Create and register our recipe
-ShapedRecipe emeraldSwordRecipe = new ShapedRecipe(new NamespacedKey(this, "emerald_sword"), emeraldSword);
-emeraldSwordRecipe.shape(
-	"AEA", 
-	"AEA", 
-	"ABA"
-);
-emeraldSwordRecipe.setIngredient('A', Material.AIR);
-emeraldSwordRecipe.setIngredient('E', Material.EMERALD);
-emeraldSwordRecipe.setIngredient('B', Material.BLAZE_ROD);
-getServer().addRecipe(emeraldSwordRecipe);
-
-... // Omitted, more itemstacks and recipes
+```mccmd
+/giverecipe <recipe>
 ```
 
-Once we've done that, we can now include them in our command registration. To do this, we use `safeOverrideSuggestions(recipes)` and then register our command as normal:
+To do this, we first register our custom items:
 
 ```java
-// Safely override with the recipe we've defined
-List<Argument> arguments = new ArrayList<>();
-arguments.add(new RecipeArgument("recipe").safeOverrideSuggestions(emeraldSwordRecipe, /* Other recipes */));
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:SafeRecipeArguments}}
+```
 
-// Register our command
-new CommandAPICommand("giverecipe")
-	.withArguments(arguments)
-	.executesPlayer((player, args) -> {
-		Recipe recipe = (Recipe) args[0];
-		player.getInventory().addItem(recipe.getResult());
-	})
-	.register();
+Once we've done that, we can now include them in our command registration. To do this, we use `replaceWithSafeSuggestions(recipes)` and then register our command as normal:
+
+```java
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:SafeRecipeArguments_2}}
 ```
 
 </div>
@@ -146,43 +123,26 @@ new CommandAPICommand("giverecipe")
 
 Say we have a command to spawn mobs:
 
-```
+```mccmd
 /spawnmob <mob>
 ```
 
 Now say that we don't want non-op players to spawn bosses. To do this, we'll create a `List<EntityType>` which is the list of all mobs that non-ops are allowed to spawn:
 
 ```java
-EntityType[] forbiddenMobs = new EntityType[] {EntityType.ENDER_DRAGON, EntityType.WITHER};
-List<EntityType> allowedMobs = new ArrayList<>(Arrays.asList(EntityType.values()));
-allowedMobs.removeAll(Arrays.asList(forbiddenMobs)); //Now contains everything except enderdragon and wither
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:SafeMobSpawnArguments}}
 ```
 
-We then use our safe arguments to return an `EntityType[]` as the list of values that are suggested to the player. In this example, we use the `Function<CommandSender, EntityType[]>` argument to determine if the sender has permissions to view the suggestions:
+We then use our safe arguments to return an `EntityType[]` as the list of values that are suggested to the player. In this example, we use the `sender()` method to determine if the sender has permissions to view the suggestions:
 
 ```java
-List<Argument> arguments = new ArrayList<>();
-arguments.add(new EntityTypeArgument("mob").safeOverrideSuggestions(
-	sender -> {
-		if(sender.isOp()) {
-			return EntityType.values(); //All entity types
-		} else {
-			return allowedMobs.toArray(new EntityType[0]); //Only allowsMobs
-		}
-	})
-);
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:SafeMobSpawnArguments_2}}
 ```
 
 Now we register our command as normal:
 
 ```java
-new CommandAPICommand("spawnmob")
-	.withArguments(arguments)
-	.executesPlayer((player, args) -> {
-		EntityType entityType = (EntityType) args[0];
-		player.getWorld().spawnEntity(player.getLocation(), entityType);
-	})
-	.register();
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:SafeMobSpawnArguments_3}}
 ```
 
 </div>
@@ -193,37 +153,20 @@ new CommandAPICommand("spawnmob")
 
 Say we wanted to remove a potion effect from a player. To do this, we'll use the following command syntax:
 
-```
+```mccmd
 /removeeffect <player> <potioneffect>
 ```
 
-Now, we don't want to remove a potion effect that already exists on a player, so instead we'll use the safe arguments to find a list of potion effects on the target player and then only suggest those potion effects. To do this, we'll use the `BiFunction<CommandSender, Object[], PotionEffectType[]>` parameter, as it allows us to access the previously defined `<player>` argument.
+Now, we don't want to remove a potion effect that already exists on a player, so instead we'll use the safe arguments to find a list of potion effects on the target player and then only suggest those potion effects. To do this, we'll use the `previousArguments()` method, as it allows us to access the previously defined `<player>` argument.
 
 ```java
-List<Argument> arguments = new ArrayList<>();
-arguments.add(new EntitySelectorArgument("target", EntitySelector.ONE_PLAYER));
-arguments.add(new PotionEffectArgument("potioneffect").safeOverrideSuggestions(
-	(sender, prevArgs) -> {
-		Player target = (Player) prevArgs[0];
-        
-        //Convert PotionEffect[] into PotionEffectType[]
-		return target.getActivePotionEffects().stream()
-			.map(PotionEffect::getType)
-			.toArray(PotionEffectType[]::new);
-	})
-);
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:SafePotionArguments}}
 ```
 
 And then we can register our command as normal:
 
 ```java
-new CommandAPICommand("removeeffect")
-	.withArguments(arguments)
-	.executesPlayer((player, args) -> {
-		EntityType entityType = (EntityType) args[0];
-		player.getWorld().spawnEntity(player.getLocation(), entityType);
-	})
-	.register();
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:SafePotionArguments_2}}
 ```
 
 </div>

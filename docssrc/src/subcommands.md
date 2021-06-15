@@ -14,7 +14,7 @@ Using subcommands has no disadvantages to using regular commands with the `Liter
 
 Say we wanted to write a permission management system. To do this, we'll use the following command structsyntaxure:
 
-```
+```mccmd
 /perm group add <permission> <groupName>
 /perm group remove <permission> <groupName>
 /perm user add <permission> <userName>
@@ -23,7 +23,7 @@ Say we wanted to write a permission management system. To do this, we'll use the
 
 Let's start with the simplest example - the `/perm group ...` command. We have one command which is basically the following:
 
-```
+```mccmd
 add <permission> <groupName>
 ```
 

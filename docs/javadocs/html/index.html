@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">CommandAPI
-   &#160;<span id="projectnumber">5.10</span>
+   &#160;<span id="projectnumber">6.0.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -93,7 +93,8 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
  <br  />
  A Bukkit/Spigot API to use the command UI introduced in Minecraft 1.13 <br  />
  </h2>
-<p><b>Support and Project Discussion</b>:</p>
+<div align="center"></div><div align="center"><img src="https://img.shields.io/github/license/JorelAli/CommandAPI" alt="GitHub" class="inline"/> <a href="https://www.codefactor.io/repository/github/jorelali/commandapi"><img src="https://www.codefactor.io/repository/github/jorelali/commandapi/badge" alt="CodeFactor" class="inline"/></a> <a href="https://jitpack.io/#dev.jorel/CommandAPI"><img src="https://jitpack.io/v/dev.jorel/CommandAPI.svg" alt="" style="pointer-events: none;" class="inline"/></a> <a href="https://discord.gg/G4SzSxZ"><img src="https://img.shields.io/discord/745416925924032523.svg?label=&amp;logo=discord&amp;logoColor=ffffff&amp;color=7389D8&amp;labelColor=6A7EC2" alt="Join us on Discord" style="pointer-events: none;" class="inline"/></a> <br  />
+ <img src="https://img.shields.io/spiget/download-size/62353" alt="Spiget Download Size" class="inline"/> <img src="https://img.shields.io/spiget/downloads/62353?label=Total%20Spigot%20Downloads" alt="Spiget Downloads" class="inline"/> <img src="https://img.shields.io/github/downloads/JorelAli/CommandAPI/total?label=Total%20GitHub%20Downloads" alt="GitHub all releases" class="inline"/> </div><p><b>Support and Project Discussion</b>:</p>
 <ul>
 <li><img src="https://cdn3.iconfinder.com/data/icons/popular-services-brands-vol-2/512/discord-512.png" alt="" width="20px" class="inline"/> <a href="https://discord.gg/G4SzSxZ">Discord</a></li>
 <li><img src="https://static.spigotmc.org/img/spigot.png" alt="" width="20px" class="inline"/> <a href="https://www.spigotmc.org/resources/commandapi.62353/">Spigot page</a></li>
@@ -105,7 +106,9 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </ul>
 <p><b>Announcements:</b></p>
 <blockquote class="doxtable">
-<p>:moneybag: <b>The CommandAPI now has a donation link!</b> Feel free to buy me a coffee <a href="https://ko-fi.com/jorelali">here</a>! </p>
+<h3>The CommandAPI's Maven repo has moved!</h3>
+<p></p>
+<p>Versions 5.12 and onwards will use jitpack.io. To update, simply replace the old repo URL (<code><a href="https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/">https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/</a></code>) with the new one (<code><a href="https://jitpack.io">https://jitpack.io</a></code>) and change the group ID from <code>dev.jorel</code> to <code>dev.jorel.CommandAPI</code> </p>
 </blockquote>
 <p><b>Compatible Minecraft versions:</b></p>
 <table class="markdownTable">
@@ -279,78 +282,32 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <div class="fragment"><div class="line">git clone https://github.com/JorelAli/CommandAPI.git</div>
 </div><!-- fragment --><ul>
 <li>Go into the folder named <code>CommandAPI</code> _(Not to be confused with the folder named <code>CommandAPI</code>, which is what is cloned)_. You want the folder which contains <code>pom.xml</code>.</li>
-<li>Ensure you have the required spigot server jars (see below)</li>
 <li>Run <code>mvn</code></li>
 </ul>
-<h3>Spigot Libraries</h3>
-<p>To build the CommandAPI, the following versions of Spigot are required:</p>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone"></th><th class="markdownTableHeadNone"></th><th class="markdownTableHeadNone"></th><th class="markdownTableHeadNone"></th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b>1.13 versions</b> </td><td class="markdownTableBodyNone">1.13 </td><td class="markdownTableBodyNone">1.13.1 </td><td class="markdownTableBodyNone">1.13.2  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><b>1.14 versions</b> </td><td class="markdownTableBodyNone">1.14 </td><td class="markdownTableBodyNone">1.14.3 </td><td class="markdownTableBodyNone">1.14.4  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b>1.15 versions</b> </td><td class="markdownTableBodyNone">1.15 </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><b>1.16 versions</b> </td><td class="markdownTableBodyNone">1.16.1 </td><td class="markdownTableBodyNone">1.16.2 </td><td class="markdownTableBodyNone">1.16.4  </td></tr>
-</table>
-<p>These versions of Minecraft must be installed in your local machine's Maven repository (<code>~/.m2</code>). <b>The easiest way to do this is to build them manually using Spigot's BuildTools, as it automatically adds it to the <code>.m2</code> local repository folder.</b></p>
-<h4>Building them using <em>BuildTools</em> + downloadSpigot file (recommended)</h4>
-<ul>
-<li>Download the <code>BuildTools.jar</code> file from <a href="https://hub.spigotmc.org/jenkins/job/BuildTools/">here</a></li>
-<li>Make sure you have maven installed on your machine. If not, it can be downloaded from <a href="https://maven.apache.org/download.cgi">here</a></li>
-<li>If on Windows:<ul>
-<li>Download the <code>downloadSpigot.bat</code> file <a href="https://raw.githubusercontent.com/JorelAli/CommandAPI/master/downloadSpigot.bat">(right click this link, save as...)</a> and place it in the same folder as the <code>BuildTools.jar</code></li>
-<li>Double click on the <code>downloadSpigot.bat</code> file to run it</li>
-</ul>
-</li>
-<li>If on Linux/MacOS:<ul>
-<li>Download the <code>downloadSpigot.sh</code> file <a href="https://raw.githubusercontent.com/JorelAli/CommandAPI/master/downloadSpigot.sh">(right click this link, save as...)</a> and place it in the same folder as the <code>BuildTools.jar</code></li>
-<li>Open up a terminal in your folder and make the <code>downloadSpigot.sh</code> file executable by using <code>chmod u+x ./downloadSpigot.sh</code></li>
-<li>Run the <code>downloadSpigot</code> file using <code>./downloadSpigot.sh</code></li>
-</ul>
-</li>
-</ul>
-<h4>Building them using <em>BuildTools</em> + manual command line</h4>
-<ul>
-<li>Download the <code>BuildTools.jar</code> file from <a href="https://hub.spigotmc.org/jenkins/job/BuildTools/">here</a> and place it in a separate directory</li>
-<li>Use the command <code>java -jar BuildTools.jar --rev &lt;VERSION&gt;</code> to download the specific version of the Spigot.jar you need. For example, to download Spigot for 1.14.4, use <code>java -jar BuildTools.jar --rev 1.14.4</code></li>
-</ul>
 <hr  />
-<h2>Future project plans + timeline</h2>
-<p>The CommandAPI has somewhat reached a "stable" point in its lifecycle. It can basically do everything that it needs to do and has been able to keep up-to-date with the latest Minecraft versions (e.g. 1.16.5 support released within a day of 1.16.5 being released). The original goal was to release CommandAPI v6.0 sometime early 2021. As you can see, this hasn't happened yet.</p>
-<p>So what went wrong? I over-planned v6.0. The plans for v6.0 was so excessive that it brought down motivation and has made such an update seem forever out of reach. For example, this was the list of all features planned for v6.0:</p>
+<h2>CommandAPI Project Timeline</h2>
+<p>This is the current roadmap for the CommandAPI (as of 16th May 2021):</p>
 <ul>
-<li>A better (refined and rewritten) annotation system</li>
-<li>Optional arguments</li>
-<li>A way to add suggestions to existing suggestions</li>
-<li>Help page support</li>
-<li>Namespace support</li>
-<li>More powerful argument sanitization with earlier fail detection</li>
-<li>A continuous integration suite for public access to dev builds</li>
-<li>A testing suite to determine correctness and accuracy of the CommandAPI</li>
-<li>A rewrite of custom arguments</li>
-<li>More full plugin examples</li>
-<li>Conflicting argument research and documentation on how to avoid them</li>
+<li><p class="startli"><b>Intermediate update:</b> Server owner web tools</p>
+<p class="startli">The CommandAPI's documentation for server owners is "alright" at best. A number of tools would be useful for server owners. This isn't an update in itself, but it's a small ongoing side-project which I think will be worth it in the long term. In particular, I aim to implement:</p><ul>
+<li>A quick way to check the validity of YAML config files (this can be extended to include the CommandAPI's argument syntax and provide full validation on that as well)</li>
+<li>A quick way to upload a <code>.jar</code> file and allow the website to output the name of the plugin and a list of commands that it registers.</li>
 </ul>
-<p>So where do we go from here? It's simple - we do one feature at a time and release one update for each feature. That way, we get more of the new stuff that people want and less of the "absolutely no development is going on". This is the current roadmap for the CommandAPI (as of 28th Feb 2021):</p>
-<ul>
-<li><p class="startli"><b>CommandAPI v5.10:</b> Paper support and deprecations</p>
-<p class="startli">Paper have recently announced that they are moving away from the BungeeCord API and it is pretty important that the CommandAPI updates in order to keep up with things. Additionally, Paper have changed their supported Java version to Java 11, from Java 8. Despite this, to ensure backwards compatibility with older Java versions, the CommandAPI will remain compiled for Java 8.</p>
-<p class="startli">Lastly, in this update I want to deprecate a few methods to do with argument suggestions. The CommandAPI has a number of ways of populating argument suggestions using constant values, but more often than not this causes expected issues. As such, these will be deprecated in this version in favour of the existing lambdas. (Don't worry, updating is really really easy!)</p>
 </li>
-<li><p class="startli"><b>CommandAPI v5.11:</b> CustomArgument improvements</p>
-<p class="startli">The CustomArgument class is fairly flexible, but nowhere near flexible enough. In this update, more attention will be focused on the CustomArgument class to provide it the ability to extend from all other argument types as a base.</p>
+<li><p class="startli"><b>CommandAPI 6.0.0:</b> Java 16 and Minecraft 1.17 support</p>
+<p class="startli">Minecraft 1.17 is due to be released sometime "mid-summer". According to <a href="https://www.minecraft.net/da-dk/article/minecraft-snapshot-21w19a">Minecraft Snapshot 21w19a</a>, Minecraft will use Java 16. As such, the CommandAPI will be built using Java 16 and will no longer run on servers running Java 15 or below. This is simply to prevent the CommandAPI from using legacy software as deemed by Minecraft.</p>
+<p class="startli">Additionally, the CommandAPI will drop support for old versions of Bukkit/Spigot. So far, the CommandAPI has been supporting versions 1.13 - 1.16.5, however given that over 80% of servers are running a version which is compatible with the CommandAPI, and over 75% of servers are running Minecraft 1.16 or above, the CommandAPI will no longer support versions below Minecraft 1.16. Due to the severity of the Minecraft 1.16.4 vulnerability, <b>CommandAPI 6.0.0 will only support Minecraft 1.16.5 and above.</b></p>
+<p class="startli">This update will also fix minor issues such as Paper's console tab completion bug raised in <a href="https://github.com/JorelAli/CommandAPI/issues/192">Issue #192</a>.</p>
 </li>
-<li><p class="startli"><b>CommandAPI v5.12:</b> Annotation improvements</p>
+<li><p class="startli"><b>CommandAPI 7.0.0:</b> Annotation improvements</p>
 <p class="startli">The CommandAPI's annotation system has always been a bit limited and was primarily introduced as a proof-of-concept. In this update, the CommandAPI's annotation system will be improved to be (ideally) as powerful as the non-annotation system and have slightly better type safety.</p>
 </li>
-<li><p class="startli"><b>CommandAPI v5.13:</b> Argument conflict detection</p>
+<li><p class="startli"><b>Future:</b></p>
+<p class="startli"><b>CustomArgument improvements</b></p>
+<p class="startli">The CustomArgument class is fairly flexible, but nowhere near flexible enough. In this update, more attention will be focused on the CustomArgument class to provide it the ability to extend from all other argument types as a base.</p>
+<p class="startli"><b>Argument conflict detection</b></p>
 <p class="startli">The CommandAPI simply uses the Brigadier system under the hood. This system is prone to <em>argument conflicts</em>, which is where certain arguments are given priority over other arguments. (For example "hello" and "123" are both valid string arguments, but if you have a command that has a string argument or an integer argument, Brigadier may ignore the integer argument). In this update, the CommandAPI will try to spot potential conflicts and add a warning in the console. The research required for this is also required in order to implement optional arguments (which is not coming out in this release).</p>
 </li>
-<li><b>CommandAPI v5.14+:</b> TBD</li>
 </ul>
 <hr  />
 <h2>Changelog</h2>
@@ -359,6 +316,22 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <p>Version </p>
 <p>Date </p>
 <p>Features / Changes  &lt;/thead&gt; &lt;tbody&gt; </p>
+<p><b>5.12</b> </p>
+<p>May 2021 </p>
+<ul>
+<li>
+Moves the Maven repo for 5.12 and future updates to jitpack.io </li>
+<li>
+Fixes issue with sound arguments on Minecraft 1.16.4 and 1.16.5 </li>
+</ul>
+<p><b>5.11</b> </p>
+<p>May 2021 </p>
+<ul>
+<li>
+Allows converted commands to use entity selectors in plugin commands </li>
+<li>
+Allows arbitrary commands to be converted with the CommandAPI's converter system </li>
+</ul>
 <p><b>5.10</b> </p>
 <p>May 2021 </p>
 <ul>
@@ -987,7 +960,7 @@ Initial release </li>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sat May 1 2021 13:23:34 for CommandAPI by
+    <li class="footer">Generated on Mon Jun 14 2021 00:18:02 for CommandAPI by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.18 </li>
   </ul>
