@@ -31,11 +31,17 @@
 
 **Announcements:**
 
+> ### When is 1.17 support coming out?
+> 
+> The CommandAPI has been in constant development for its 6.0.0 release which will include support for Minecraft 1.17. In version 6.0.0, we've chosen to drop support for 1.16.5 and below and this update will only be compatible with 1.17. If you want to use the CommandAPI for previous versions, consider using the latest supported version (5.12)
+>
+> 6.0.0 release ETA: 15th June 2021
+
 > ### The CommandAPI's Maven repo has moved!
 >
 > Versions 5.12 and onwards will use jitpack.io. To update, simply replace the old repo URL (`https://raw.githubusercontent.com/JorelAli/CommandAPI/mvn-repo/`) with the new one (`https://jitpack.io`) and change the group ID from `dev.jorel` to `dev.jorel.CommandAPI`
 
-**Compatible Minecraft versions:** 
+**Compatible Minecraft versions:**
 
 The list of what version of the CommandAPI you'll need to run on a specific version of Minecraft is as follows:
 
