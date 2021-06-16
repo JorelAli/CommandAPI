@@ -381,6 +381,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 			try {
 				Bukkit.getPluginManager().addPermission(new Permission(finalPermission.getPermission()));
 			} catch (IllegalArgumentException e) {
+                                assert true; // nop, not an error.
 			}
 		}
 
