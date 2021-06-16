@@ -482,7 +482,6 @@ public class CommandAPIHandler<CommandSourceStack> {
 				}
 				return true;
 			}
-			index++;
 		}
 		return false;
 	}
