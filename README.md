@@ -279,6 +279,15 @@ This is the current roadmap for the CommandAPI (as of 16th May 2021):
     </thead>
     <tbody>
         <tr>
+            <td valign="top"><b>6.0.1</b></td>
+            <td valign="top">June 2021</td>
+            <td valign="top">
+                <ul>
+                    <li>Fix bug where the CommandAPI would crash if it tries to register duplicate permissions</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
             <td valign="top"><b>6.0.0</b></td>
             <td valign="top">June 2021</td>
             <td valign="top">
