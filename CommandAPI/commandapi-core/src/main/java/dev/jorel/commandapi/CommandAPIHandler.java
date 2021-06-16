@@ -476,10 +476,8 @@ public class CommandAPIHandler<CommandSourceStack> {
 						.withRequirement(superArg.getRequirements());
 					
 					//Reconstruct the list of arguments and place in the new literals
-					Argument[] newArgs = new Argument[args.length];
-					for(int j = 0; j < args.length; j++) {
-						newArgs[index] = (j == index) ? litArg : args[j];
-					}
+					Argument[] newArgs = Arrays.copyOf(args, args.length);
+					newArgs[index] = litArg;
 					register(commandName, permissions, aliases, requirements, newArgs, executor, converted);
 				}
 				return true;
