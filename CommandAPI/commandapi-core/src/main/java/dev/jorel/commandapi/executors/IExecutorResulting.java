@@ -20,12 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.executors;
 
-import java.lang.reflect.Method;
-
 import org.bukkit.command.CommandSender;
-
-import com.mojang.brigadier.LiteralMessage;
-import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
@@ -45,22 +40,7 @@ public interface IExecutorResulting<T extends CommandSender> extends IExecutorTy
 	@SuppressWarnings("unchecked")
 	@Override
 	default int executeWith(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
-		Class<?> type = null;
-		for(Method method : this.getClass().getDeclaredMethods()) {
-			if(method.getName().equals("run")) {
-				type = method.getParameterTypes()[0];
-				break;
-			}
-		}
-		if(type.isInstance(sender)) {
-			return this.run((T) type.cast(sender), args);
-		} else {
-			throw new WrapperCommandSyntaxException(
-				new SimpleCommandExceptionType(
-					new LiteralMessage("You must be a " + type.getSimpleName().toLowerCase() + " to run this command")
-				).create()
-			);
-		}
+		return this.run((T) sender, args);
 	}
 
 	/**

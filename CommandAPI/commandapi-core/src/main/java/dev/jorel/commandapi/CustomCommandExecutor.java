@@ -41,21 +41,21 @@ import dev.jorel.commandapi.executors.IExecutorNormal;
 import dev.jorel.commandapi.executors.IExecutorResulting;
 import dev.jorel.commandapi.executors.IExecutorTyped;
 
-class CustomCommandExecutor {
+class CustomCommandExecutor<T extends CommandSender> {
 	
-	private List<IExecutorNormal<? extends CommandSender>> normalExecutors;
-	private List<IExecutorResulting<? extends CommandSender>> resultingExecutors;
+	private List<IExecutorNormal<T>> normalExecutors;
+	private List<IExecutorResulting<T>> resultingExecutors;
 	
 	public CustomCommandExecutor() {
 		normalExecutors = new ArrayList<>();
 		resultingExecutors = new ArrayList<>();
 	}
 	
-	public void addNormalExecutor(IExecutorNormal<? extends CommandSender> ex) {
+	public void addNormalExecutor(IExecutorNormal<T> ex) {
 		this.normalExecutors.add(ex);
 	}
 	
-	public void addResultingExecutor(IExecutorResulting<? extends CommandSender> rEx) {
+	public void addResultingExecutor(IExecutorResulting<T> rEx) {
 		this.resultingExecutors.add(rEx);
 	}
 	
@@ -116,11 +116,11 @@ class CustomCommandExecutor {
 		throw new NoSuchElementException("Executor had no valid executors for type " + type.toString());
 	}
 	
-	public List<IExecutorNormal<? extends CommandSender>> getNormalExecutors() {
+	public List<IExecutorNormal<T>> getNormalExecutors() {
 		return normalExecutors;
 	}
 
-	public List<IExecutorResulting<? extends CommandSender>> getResultingExecutors() {
+	public List<IExecutorResulting<T>> getResultingExecutors() {
 		return resultingExecutors;
 	}
 
@@ -141,8 +141,8 @@ class CustomCommandExecutor {
 		return false;
 	}
 	
-	CustomCommandExecutor mergeExecutor(CustomCommandExecutor executor) {
-		CustomCommandExecutor result = new CustomCommandExecutor();
+	CustomCommandExecutor<T> mergeExecutor(CustomCommandExecutor<T> executor) {
+		CustomCommandExecutor<T> result = new CustomCommandExecutor<>();
 		result.normalExecutors = new ArrayList<>(normalExecutors);
 		result.resultingExecutors = new ArrayList<>(resultingExecutors);
 		result.normalExecutors.addAll(executor.normalExecutors);
@@ -150,11 +150,11 @@ class CustomCommandExecutor {
 		return result;
 	}
 	
-	public void setNormalExecutors(List<IExecutorNormal<? extends CommandSender>> normalExecutors) {
+	public void setNormalExecutors(List<IExecutorNormal<T>> normalExecutors) {
 		this.normalExecutors = normalExecutors;
 	}
 	
-	public void setResultingExecutors(List<IExecutorResulting<? extends CommandSender>> resultingExecutors) {
+	public void setResultingExecutors(List<IExecutorResulting<T>> resultingExecutors) {
 		this.resultingExecutors = resultingExecutors;
 	}
 }
