@@ -279,6 +279,15 @@ This is the current roadmap for the CommandAPI (as of 16th May 2021):
     </thead>
     <tbody>
         <tr>
+            <td valign="top"><b>6.0.3</b></td>
+            <td valign="top">June 2021</td>
+            <td valign="top">
+                <ul>
+                    <li>Fix issue where custom CommandSender subclasses could not run CommandAPI commands</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
             <td valign="top"><b>6.0.2</b></td>
             <td valign="top">June 2021</td>
             <td valign="top">
