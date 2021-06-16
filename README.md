@@ -43,8 +43,8 @@ The list of what version of the CommandAPI you'll need to run on a specific vers
 - **Minecraft 1.16.2**: CommandAPI v4.0 to 5.12
 - **Minecraft 1.16.3**: CommandAPI v4.2 to 5.12
 - **Minecraft 1.16.4**: CommandAPI v5.2 to 5.12
-- **Minecraft 1.16.5**: CommandAPI v5.7 to 6.0.0
-- **Minecraft 1.17**: CommandAPI 6.0.0
+- **Minecraft 1.16.5**: CommandAPI v5.7 to 6.0.x
+- **Minecraft 1.17**: CommandAPI 6.0.x
 
 -----
 
