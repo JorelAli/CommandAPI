@@ -283,7 +283,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 							break;
 						}
 					} else {
-						entityNamesForArgs[i] = List.of((String) null);
+						entityNamesForArgs[i] = Arrays.asList(new String[] { null });
 					}
 				}
 				
