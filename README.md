@@ -279,6 +279,15 @@ This is the current roadmap for the CommandAPI (as of 16th May 2021):
     </thead>
     <tbody>
         <tr>
+            <td valign="top"><b>6.0.5</b></td>
+            <td valign="top">June 2021</td>
+            <td valign="top">
+                <ul>
+                    <li>Fix issue where converted commands which didn't use entity selectors would always fail</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
             <td valign="top"><b>6.0.4</b></td>
             <td valign="top">June 2021</td>
             <td valign="top">
