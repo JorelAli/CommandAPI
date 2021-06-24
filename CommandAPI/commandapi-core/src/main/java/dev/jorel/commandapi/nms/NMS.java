@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -359,5 +360,7 @@ public interface NMS<CommandListenerWrapper> {
 	void resendPackets(Player player);
 
 	HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription, String permission);
+
+	void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd);
 
 }

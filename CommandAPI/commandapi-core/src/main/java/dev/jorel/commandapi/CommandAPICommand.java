@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.bukkit.command.CommandSender;
@@ -64,8 +65,8 @@ public class CommandAPICommand {
 	private List<CommandAPICommand> subcommands = new ArrayList<>();
 	private CustomCommandExecutor executor = new CustomCommandExecutor();
 	private boolean isConverted;
-	String shortDescription = "";
-	String fullDescription = "";
+	Optional<String> shortDescription = Optional.empty();
+	Optional<String> fullDescription = Optional.empty();
 	
 	/**
 	 * Creates a new command builder
@@ -174,12 +175,12 @@ public class CommandAPICommand {
 	}
 	
 	public CommandAPICommand withShortDescription(String description) {
-		this.shortDescription = description;
+		this.shortDescription = Optional.of(description);
 		return this;
 	}
 	
 	public CommandAPICommand withFullDescription(String description) {
-		this.fullDescription = description;
+		this.fullDescription = Optional.of(description);
 		return this;
 	}
 	
