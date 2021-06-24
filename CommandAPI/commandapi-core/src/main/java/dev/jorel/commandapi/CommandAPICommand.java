@@ -64,6 +64,8 @@ public class CommandAPICommand {
 	private List<CommandAPICommand> subcommands = new ArrayList<>();
 	private CustomCommandExecutor executor = new CustomCommandExecutor();
 	private boolean isConverted;
+	String shortDescription = "";
+	String fullDescription = "";
 	
 	/**
 	 * Creates a new command builder
@@ -168,6 +170,16 @@ public class CommandAPICommand {
 	 */
 	public CommandAPICommand withSubcommand(CommandAPICommand subcommand) {
 		this.subcommands.add(subcommand);
+		return this;
+	}
+	
+	public CommandAPICommand withShortDescription(String description) {
+		this.shortDescription = description;
+		return this;
+	}
+	
+	public CommandAPICommand withFullDescription(String description) {
+		this.fullDescription = description;
 		return this;
 	}
 	
