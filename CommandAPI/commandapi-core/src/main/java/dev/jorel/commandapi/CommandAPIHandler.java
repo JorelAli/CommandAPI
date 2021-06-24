@@ -41,10 +41,13 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.help.HelpMap;
+import org.bukkit.help.HelpTopic;
 import org.bukkit.permissions.Permission;
 
 import com.mojang.brigadier.Command;
@@ -139,18 +142,18 @@ public class CommandAPIHandler<CommandSourceStack> {
 		}
 		return instance;
 	}
-	
+		
 	final Map<ClassCache, Field> FIELDS = new HashMap<>();
 	final TreeMap<String, CommandPermission> PERMISSIONS_TO_FIX = new TreeMap<>();
 	final NMS<CommandSourceStack> NMS;
 	final CommandDispatcher<CommandSourceStack> DISPATCHER;
-	final Map<String, List<String>> registeredCommands; //Keep track of what has been registered for type checking 
+	final List<RegisteredCommand> registeredCommands; //Keep track of what has been registered for type checking 
 	
 	private CommandAPIHandler() {
 		String bukkit = Bukkit.getServer().toString();
 		NMS = CommandAPIVersionHandler.getNMS(bukkit.substring(bukkit.indexOf("minecraftVersion") + 17, bukkit.length() - 1));
 		DISPATCHER = NMS.getBrigadierDispatcher();
-		registeredCommands = new HashMap<>();
+		registeredCommands = new ArrayList<>();
 	}
 	
 	void checkDependencies() {
@@ -516,8 +519,16 @@ public class CommandAPIHandler<CommandSourceStack> {
 	// Return true if conflict was present, otherwise return false
 	private boolean hasCommandConflict(String commandName, Argument[] args, String argumentsAsString) {
 		List<String[]> regArgs = new ArrayList<>();
-		for(String str : registeredCommands.get(commandName)) {
-			regArgs.add(str.split(":"));
+		for(RegisteredCommand rCommand : registeredCommands) {
+			if(rCommand.command().equals(commandName)) {
+				for(String str : rCommand.argsAsStr()) {
+					regArgs.add(str.split(":"));
+				}
+				// TODO: To replicate the previous behaviour, we just find the first
+				// entry. We should probably generate a list of all commands and
+				// iterate through all of them instead (recursion is probably not necessary).
+				break;
+			}
 		}
 		for(int i = 0; i < args.length; i++) {
 			// Avoid IAOOBEs
@@ -618,14 +629,18 @@ public class CommandAPIHandler<CommandSourceStack> {
 		}
 		
 		// Handle command conflicts
-		if(registeredCommands.containsKey(commandName) && hasCommandConflict(commandName, args, builder.toString())) {
+		boolean hasRegisteredCommand = false;
+		for(RegisteredCommand rCommand : registeredCommands) {
+			hasRegisteredCommand |= rCommand.command().equals(commandName);
+		}
+		if(hasRegisteredCommand && hasCommandConflict(commandName, args, builder.toString())) {
 			return;
 		} else {
 			List<String> argumentsString = new ArrayList<>();
 			for(Argument arg : args) {
 				argumentsString.add(arg.getNodeName() + ":" + arg.getClass().getSimpleName());
 			}
-			registeredCommands.put(commandName, argumentsString);			
+			registeredCommands.add(new RegisteredCommand(commandName, argumentsString));			
 		}
 		
 		CommandAPI.logInfo("Registering command /" + commandName + " " + builder.toString());
@@ -900,4 +915,73 @@ public class CommandAPIHandler<CommandSourceStack> {
 	    }
 
 	}
+
+	public void updateHelpForCommands() {
+		// TODO Auto-generated method stub
+		
+		List<CommandAPICommand> commands; // TODO: This needs populating!
+		for(CommandAPICommand command : commands) {
+			if (command.getLabel().startsWith("/")) {
+				this.name = command.getLabel();
+			} else {
+				this.name = "/" + command.getLabel();
+			}
+
+			int i = command.getDescription().indexOf(10);
+			if (i > 1) {
+				this.shortText = command.getDescription().substring(0, i - 1);
+			} else {
+				this.shortText = command.getDescription();
+			}
+
+			StringBuilder sb = new StringBuilder();
+			sb.append(ChatColor.GOLD);
+			sb.append("Description: ");
+			sb.append(ChatColor.WHITE);
+			sb.append(command.getDescription());
+			sb.append("\n");
+			sb.append(ChatColor.GOLD);
+			sb.append("Usage: ");
+			sb.append(ChatColor.WHITE);
+			sb.append(command.getUsage().replace("<command>", this.name.substring(1)));
+			if (command.getAliases().size() > 0) {
+				sb.append("\n");
+				sb.append(ChatColor.GOLD);
+				sb.append("Aliases: ");
+				sb.append(ChatColor.WHITE);
+				sb.append(ChatColor.WHITE + StringUtils.join(command.getAliases(), ", "));
+			}
+			//
+//					this.fullText = sb.toString();
+			
+			String permission;
+			if(command.getPermission().getPermission() != null) {
+				permission = command.getPermission().getPermission(); 
+			} else {
+				// TODO: ???
+				permission = null;
+			}
+			NMS.generateHelpTopic("/" + command.getName(), command.shortDescription, sb.toString(), permission);
+		}
+		
+
+		///return new CustomHelpTopic("/mycmd", "Says hello in the console", "full text", "permission");
+		
+//		try {
+////			HelpMap hmap = Bukkit.getServer().getHelpMap();
+////			Field f = hmap.getClass().getDeclaredField("helpTopics");
+////			f.setAccessible(true);
+////			Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) f.get(hmap);
+////
+////			for(String s : registeredCommands.keySet()) {
+////				helpTopics.put("/" + s, NMS.help());
+////			}
+////			System.out.println(helpTopics);
+//		} catch(ReflectiveOperationException e) {
+//
+//		}
+	}
+	
+	private record RegisteredCommand(String command, List<String> argsAsStr) {};
+
 }
