@@ -46,7 +46,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.help.HelpMap;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.permissions.Permission;
 
@@ -99,7 +98,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		VarHandle commandNodeLiterals = null;
 		VarHandle commandNodeArguments = null;
 		VarHandle commandContextArguments = null;
-		 try {
+		try {
 			 commandNodeChildren = MethodHandles.privateLookupIn(CommandNode.class, MethodHandles.lookup()).findVarHandle(CommandNode.class, "children", Map.class);
 			 commandNodeLiterals = MethodHandles.privateLookupIn(CommandNode.class, MethodHandles.lookup()).findVarHandle(CommandNode.class, "literals", Map.class);
 			 commandNodeArguments = MethodHandles.privateLookupIn(CommandNode.class, MethodHandles.lookup()).findVarHandle(CommandNode.class, "arguments", Map.class);
@@ -917,42 +916,51 @@ public class CommandAPIHandler<CommandSourceStack> {
 	}
 
 	public void updateHelpForCommands() {
-		// TODO Auto-generated method stub
+		Map<String, HelpTopic> helpTopicsToAdd = new HashMap<>();
 		
-		List<CommandAPICommand> commands; // TODO: This needs populating!
+		// TODO: This needs populating, with every UNIQUE command!
+		List<CommandAPICommand> commands = null; 
 		for(CommandAPICommand command : commands) {
-			if (command.getLabel().startsWith("/")) {
-				this.name = command.getLabel();
+			
+			// Generate short description
+			final String shortDescription;
+			if(command.shortDescription.isPresent()) {
+				shortDescription = command.shortDescription.get();
+			} else if(command.fullDescription.isPresent()) {
+				int i = command.fullDescription.get().indexOf(10);
+				if (i > 1) {
+					shortDescription = command.fullDescription.get().substring(0, i - 1);
+				} else {
+					shortDescription = command.fullDescription.get();
+				}
 			} else {
-				this.name = "/" + command.getLabel();
+				shortDescription = "A Mojang provided command";
 			}
 
-			int i = command.getDescription().indexOf(10);
-			if (i > 1) {
-				this.shortText = command.getDescription().substring(0, i - 1);
-			} else {
-				this.shortText = command.getDescription();
-			}
-
+			// Generate full description
 			StringBuilder sb = new StringBuilder();
-			sb.append(ChatColor.GOLD);
-			sb.append("Description: ");
-			sb.append(ChatColor.WHITE);
-			sb.append(command.getDescription());
-			sb.append("\n");
+			if(command.fullDescription.isPresent()) {
+				sb.append(ChatColor.GOLD);
+				sb.append("Description: ");
+				sb.append(ChatColor.WHITE);
+				sb.append(command.fullDescription.get());
+				sb.append("\n");
+			}
 			sb.append(ChatColor.GOLD);
 			sb.append("Usage: ");
 			sb.append(ChatColor.WHITE);
-			sb.append(command.getUsage().replace("<command>", this.name.substring(1)));
-			if (command.getAliases().size() > 0) {
-				sb.append("\n");
+			for(RegisteredCommand rCommand : registeredCommands) {
+				if(rCommand.command().equals(command.getName())) {
+					// TODO: Check this output
+					sb.append("/" + command.getName() + " " + String.join(", ", rCommand.argsAsStr()) + "\n");
+				}
+			}
+			if(command.getAliases().length > 0) {
 				sb.append(ChatColor.GOLD);
 				sb.append("Aliases: ");
 				sb.append(ChatColor.WHITE);
-				sb.append(ChatColor.WHITE + StringUtils.join(command.getAliases(), ", "));
+				sb.append(ChatColor.WHITE + String.join(", ", command.getAliases()));
 			}
-			//
-//					this.fullText = sb.toString();
 			
 			String permission;
 			if(command.getPermission().getPermission() != null) {
@@ -961,25 +969,12 @@ public class CommandAPIHandler<CommandSourceStack> {
 				// TODO: ???
 				permission = null;
 			}
-			NMS.generateHelpTopic("/" + command.getName(), command.shortDescription, sb.toString(), permission);
+			
+			helpTopicsToAdd.put("/" + command.getName(),
+					NMS.generateHelpTopic("/" + command.getName(), shortDescription, sb.toString().trim(), permission));
 		}
 		
-
-		///return new CustomHelpTopic("/mycmd", "Says hello in the console", "full text", "permission");
-		
-//		try {
-////			HelpMap hmap = Bukkit.getServer().getHelpMap();
-////			Field f = hmap.getClass().getDeclaredField("helpTopics");
-////			f.setAccessible(true);
-////			Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) f.get(hmap);
-////
-////			for(String s : registeredCommands.keySet()) {
-////				helpTopics.put("/" + s, NMS.help());
-////			}
-////			System.out.println(helpTopics);
-//		} catch(ReflectiveOperationException e) {
-//
-//		}
+		NMS.addToHelpMap(helpTopicsToAdd);
 	}
 	
 	private record RegisteredCommand(String command, List<String> argsAsStr) {};

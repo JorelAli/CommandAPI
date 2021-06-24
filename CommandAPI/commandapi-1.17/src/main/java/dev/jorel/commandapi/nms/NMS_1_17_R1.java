@@ -34,6 +34,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -67,6 +68,7 @@ import org.bukkit.craftbukkit.v1_17_R1.enchantments.CraftEnchantment;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_17_R1.help.CustomHelpTopic;
+import org.bukkit.craftbukkit.v1_17_R1.help.SimpleHelpMap;
 import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_17_R1.potion.CraftPotionEffectType;
 import org.bukkit.craftbukkit.v1_17_R1.util.CraftChatMessage;
@@ -167,20 +169,25 @@ import net.minecraft.world.phys.Vec3;
 @RequireField(in = ServerResources.class, name = "functionLibrary", ofType = ServerFunctionLibrary.class)
 @RequireField(in = ServerFunctionLibrary.class, name = "functionCompilationLevel", ofType = int.class)
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
+@RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
 public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 	
 	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
 	private static final VarHandle ServerFunctionLibrary_functionCompilationLevel;
+	private static final VarHandle SimpleHelpMap_helpTopics;
 	
 	// Compute all var handles all in one go so we don't do this during main server runtime
 	static {
 		VarHandle sfl_fcl = null;
-		 try {
+		VarHandle shm_ht = null;
+		try {
 			 sfl_fcl = MethodHandles.privateLookupIn(ServerFunctionLibrary.class, MethodHandles.lookup()).findVarHandle(ServerFunctionLibrary.class, "h", int.class);
+			 shm_ht = MethodHandles.privateLookupIn(SimpleHelpMap.class, MethodHandles.lookup()).findVarHandle(SimpleHelpMap.class, "helpTopics", Map.class);
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
 		 ServerFunctionLibrary_functionCompilationLevel = sfl_fcl;
+		 SimpleHelpMap_helpTopics = shm_ht;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -906,5 +913,13 @@ public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 	public HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription,
 			String permission) {
 		return new CustomHelpTopic(commandName, shortDescription, fullDescription, permission);
+	}
+
+	@Override
+	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
+		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) SimpleHelpMap_helpTopics.get(Bukkit.getServer().getHelpMap());
+		for(Map.Entry<String, HelpTopic> entry : helpTopicsToAdd.entrySet()) {
+			helpTopics.put(entry.getKey(), entry.getValue());
+		}
 	}
 }
