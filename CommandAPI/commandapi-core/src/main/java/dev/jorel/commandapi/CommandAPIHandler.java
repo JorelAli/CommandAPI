@@ -943,7 +943,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 				// based on when it's converted. If it's converted,
 				// we might be able to get the actual description
 				// from the plugin in which it was converted from
-				shortDescription = "A Mojang provided command";
+				shortDescription = "A Mojang provided command.";
 			}
 
 			// Generate full description
@@ -957,6 +957,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 			}
 			sb.append(ChatColor.GOLD);
 			sb.append("Usage: ");
+			// TODO: Usage output needs to be merged together from other command entries
 			sb.append(ChatColor.WHITE);
 			for(RegisteredCommand rCommand : registeredCommands) {
 				if(rCommand.command().equals(command.commandName())) {
@@ -964,6 +965,10 @@ public class CommandAPIHandler<CommandSourceStack> {
 					sb.append("/" + command.commandName() + " " + String.join(", ", rCommand.argsAsStr()) + "\n");
 				}
 			}
+			
+			// TODO: This needs to be updated for aliases. If I have a command
+			// /mycommand with alias /blah, the help topic for /blah
+			// will still be default
 			if(command.aliases().length > 0) {
 				sb.append(ChatColor.GOLD);
 				sb.append("Aliases: ");
