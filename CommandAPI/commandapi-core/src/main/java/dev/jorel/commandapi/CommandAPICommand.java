@@ -506,7 +506,7 @@ public class CommandAPICommand {
 			}
 			
 			if(!executor.isEmpty()) {
-				CommandAPIHandler.getInstance().register(commandName, permission, aliases, requirements, argumentsArr, executor, isConverted);
+				CommandAPIHandler.getInstance().register(commandName, shortDescription, fullDescription, permission, aliases, requirements, argumentsArr, executor, isConverted);
 			}
 			
 			for(CommandAPICommand subcommand : this.subcommands) {

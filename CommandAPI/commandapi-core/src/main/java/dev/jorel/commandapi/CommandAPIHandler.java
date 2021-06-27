@@ -147,12 +147,14 @@ public class CommandAPIHandler<CommandSourceStack> {
 	final NMS<CommandSourceStack> NMS;
 	final CommandDispatcher<CommandSourceStack> DISPATCHER;
 	final List<RegisteredCommand> registeredCommands; //Keep track of what has been registered for type checking 
+	final List<CommandHelp> commands;
 	
 	private CommandAPIHandler() {
 		String bukkit = Bukkit.getServer().toString();
 		NMS = CommandAPIVersionHandler.getNMS(bukkit.substring(bukkit.indexOf("minecraftVersion") + 17, bukkit.length() - 1));
 		DISPATCHER = NMS.getBrigadierDispatcher();
 		registeredCommands = new ArrayList<>();
+		commands = new ArrayList<>();
 	}
 	
 	void checkDependencies() {
@@ -486,8 +488,10 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 * the provided command. Returns true if multiliteral arguments were present (and expanded) and
 	 * returns false if multiliteral arguments were not present.
 	 */
-	private boolean expandMultiLiterals(String commandName, CommandPermission permissions, String[] aliases, Predicate<CommandSender> requirements,
-			final Argument[] args, CustomCommandExecutor executor, boolean converted) throws CommandSyntaxException, IOException {
+	private boolean expandMultiLiterals(String commandName, Optional<String> shortDescription,
+			Optional<String> fullDescription, CommandPermission permissions, String[] aliases,
+			Predicate<CommandSender> requirements, final Argument[] args,
+			CustomCommandExecutor executor, boolean converted) throws CommandSyntaxException, IOException {
 		
 		//"Expands" our MultiLiterals into Literals
 		for(int index = 0; index < args.length; index++) {
@@ -504,7 +508,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 					//Reconstruct the list of arguments and place in the new literals
 					Argument[] newArgs = Arrays.copyOf(args, args.length);
 					newArgs[index] = litArg;
-					register(commandName, permissions, aliases, requirements, newArgs, executor, converted);
+					register(commandName, shortDescription, fullDescription, permissions, aliases, requirements, newArgs, executor, converted);
 				}
 				return true;
 			}
@@ -613,11 +617,13 @@ public class CommandAPIHandler<CommandSourceStack> {
 	
 	// Builds our NMS command using the given arguments for this method, then
 	// registers it
-	void register(String commandName, CommandPermission permissions, String[] aliases, Predicate<CommandSender> requirements,
-			final Argument[] args, CustomCommandExecutor executor, boolean converted) throws CommandSyntaxException, IOException {
-		
+	void register(String commandName, Optional<String> shortDescription, Optional<String> fullDescription,
+			CommandPermission permission, String[] aliases, Predicate<CommandSender> requirements,
+			final Argument[] args, CustomCommandExecutor executor, boolean converted)
+			throws CommandSyntaxException, IOException {
+
 		//"Expands" our MultiLiterals into Literals
-		if(expandMultiLiterals(commandName, permissions, aliases, requirements, args, executor, converted)) {
+		if(expandMultiLiterals(commandName, shortDescription, fullDescription, permission, aliases, requirements, args, executor, converted)) {
 			return;
 		}
 		
@@ -643,6 +649,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		}
 		
 		CommandAPI.logInfo("Registering command /" + commandName + " " + builder.toString());
+		commands.add(new CommandHelp(commandName, shortDescription, fullDescription, aliases, permission));
 
 		// Generate the actual command
 		Command<CommandSourceStack> command = generateCommand(args, executor, converted);
@@ -655,12 +662,12 @@ public class CommandAPIHandler<CommandSourceStack> {
 		LiteralCommandNode<CommandSourceStack> resultantNode;
 		if (args.length == 0) {
 			// Link command name to the executor
-			resultantNode = DISPATCHER.register(getLiteralArgumentBuilder(commandName).requires(generatePermissions(commandName, permissions, requirements)).executes(command));
+			resultantNode = DISPATCHER.register(getLiteralArgumentBuilder(commandName).requires(generatePermissions(commandName, permission, requirements)).executes(command));
 
 			// Register aliases
 			for (String alias : aliases) {
 				CommandAPI.logInfo("Registering alias /" + alias + " -> " + resultantNode.getName());
-				DISPATCHER.register(getLiteralArgumentBuilder(alias).requires(generatePermissions(alias, permissions, requirements)).executes(command));
+				DISPATCHER.register(getLiteralArgumentBuilder(alias).requires(generatePermissions(alias, permission, requirements)).executes(command));
 			}
 		} else {
 
@@ -668,7 +675,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 			ArgumentBuilder<CommandSourceStack, ?> commandArguments = generateOuterArguments(generateInnerArgument(command, args), args);
 
 			// Link command name to first argument and register
-			resultantNode = DISPATCHER.register(getLiteralArgumentBuilder(commandName).requires(generatePermissions(commandName, permissions, requirements)).then(commandArguments));
+			resultantNode = DISPATCHER.register(getLiteralArgumentBuilder(commandName).requires(generatePermissions(commandName, permission, requirements)).then(commandArguments));
 
 			// Register aliases
 			for (String alias : aliases) {
@@ -676,7 +683,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 					CommandAPI.logInfo("Registering alias /" + alias + " -> " + resultantNode.getName());
 				}
 				
-				DISPATCHER.register(getLiteralArgumentBuilder(alias).requires(generatePermissions(alias, permissions, requirements)).then(commandArguments));
+				DISPATCHER.register(getLiteralArgumentBuilder(alias).requires(generatePermissions(alias, permission, requirements)).then(commandArguments));
 			}
 		}
 
@@ -917,66 +924,71 @@ public class CommandAPIHandler<CommandSourceStack> {
 
 	public void updateHelpForCommands() {
 		Map<String, HelpTopic> helpTopicsToAdd = new HashMap<>();
-		
-		// TODO: This needs populating, with every UNIQUE command!
-		List<CommandAPICommand> commands = null; 
-		for(CommandAPICommand command : commands) {
+		for(CommandHelp command : this.commands) {
 			
 			// Generate short description
 			final String shortDescription;
-			if(command.shortDescription.isPresent()) {
-				shortDescription = command.shortDescription.get();
-			} else if(command.fullDescription.isPresent()) {
-				int i = command.fullDescription.get().indexOf(10);
+			if(command.shortDescription().isPresent()) {
+				shortDescription = command.shortDescription().get();
+			} else if(command.fullDescription().isPresent()) {
+				int i = command.fullDescription().get().indexOf(10);
 				if (i > 1) {
-					shortDescription = command.fullDescription.get().substring(0, i - 1);
+					shortDescription = command.fullDescription().get().substring(0, i - 1);
 				} else {
-					shortDescription = command.fullDescription.get();
+					shortDescription = command.fullDescription().get();
 				}
 			} else {
+				// TODO: Probably something much more meaningful here
+				// based on when it's converted. If it's converted,
+				// we might be able to get the actual description
+				// from the plugin in which it was converted from
 				shortDescription = "A Mojang provided command";
 			}
 
 			// Generate full description
 			StringBuilder sb = new StringBuilder();
-			if(command.fullDescription.isPresent()) {
+			if(command.fullDescription().isPresent()) {
 				sb.append(ChatColor.GOLD);
 				sb.append("Description: ");
 				sb.append(ChatColor.WHITE);
-				sb.append(command.fullDescription.get());
+				sb.append(command.fullDescription().get());
 				sb.append("\n");
 			}
 			sb.append(ChatColor.GOLD);
 			sb.append("Usage: ");
 			sb.append(ChatColor.WHITE);
 			for(RegisteredCommand rCommand : registeredCommands) {
-				if(rCommand.command().equals(command.getName())) {
+				if(rCommand.command().equals(command.commandName())) {
 					// TODO: Check this output
-					sb.append("/" + command.getName() + " " + String.join(", ", rCommand.argsAsStr()) + "\n");
+					sb.append("/" + command.commandName() + " " + String.join(", ", rCommand.argsAsStr()) + "\n");
 				}
 			}
-			if(command.getAliases().length > 0) {
+			if(command.aliases().length > 0) {
 				sb.append(ChatColor.GOLD);
 				sb.append("Aliases: ");
 				sb.append(ChatColor.WHITE);
-				sb.append(ChatColor.WHITE + String.join(", ", command.getAliases()));
+				sb.append(ChatColor.WHITE + String.join(", ", command.aliases()));
 			}
 			
 			String permission;
-			if(command.getPermission().getPermission() != null) {
-				permission = command.getPermission().getPermission(); 
+			if(command.permission().getPermission() != null) {
+				permission = command.permission().getPermission(); 
 			} else {
 				// TODO: ???
 				permission = null;
 			}
 			
-			helpTopicsToAdd.put("/" + command.getName(),
-					NMS.generateHelpTopic("/" + command.getName(), shortDescription, sb.toString().trim(), permission));
+			helpTopicsToAdd.put("/" + command.commandName(),
+					NMS.generateHelpTopic("/" + command.commandName(), shortDescription, sb.toString().trim(), permission));
 		}
 		
 		NMS.addToHelpMap(helpTopicsToAdd);
 	}
 	
 	private record RegisteredCommand(String command, List<String> argsAsStr) {};
+
+	private record CommandHelp(String commandName, Optional<String> shortDescription, Optional<String> fullDescription,
+			String[] aliases, CommandPermission permission) {
+	};
 
 }
