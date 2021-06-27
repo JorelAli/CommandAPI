@@ -51,12 +51,14 @@ class CustomCommandExecutor<T extends CommandSender> {
 		resultingExecutors = new ArrayList<>();
 	}
 	
-	public void addNormalExecutor(IExecutorNormal<T> ex) {
-		this.normalExecutors.add(ex);
+	@SuppressWarnings("unchecked")
+	public <S extends IExecutorNormal<?>> void addNormalExecutor(S executor) {
+		this.normalExecutors.add((IExecutorNormal<T>) executor);
 	}
 	
-	public void addResultingExecutor(IExecutorResulting<T> rEx) {
-		this.resultingExecutors.add(rEx);
+	@SuppressWarnings("unchecked")
+	public <S extends IExecutorResulting<?>> void addResultingExecutor(S executor) {
+		this.resultingExecutors.add((IExecutorResulting<T>) executor);
 	}
 	
 	public int execute(CommandSender sender, Object[] arguments) throws CommandSyntaxException {
