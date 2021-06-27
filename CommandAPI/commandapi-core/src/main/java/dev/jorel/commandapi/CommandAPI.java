@@ -134,7 +134,7 @@ public final class CommandAPI {
 	 * @param verbose if true, enables verbose output for the CommandAPI
 	 * @deprecated Use {@link CommandAPI#onLoad(CommandAPIConfig)} instead
 	 */
-	@Deprecated
+	@Deprecated(forRemoval = true)
 	public static void onLoad(boolean verbose) {
 		if(!loaded) {
 			CommandAPI.config = new Config(verbose);
