@@ -63,7 +63,7 @@ public class CommandAPICommand {
 	private Predicate<CommandSender> requirements = s -> true;
 	private List<Argument> args = new ArrayList<>();
 	private List<CommandAPICommand> subcommands = new ArrayList<>();
-	private CustomCommandExecutor executor = new CustomCommandExecutor();
+	private CustomCommandExecutor<?> executor = new CustomCommandExecutor<>();
 	private boolean isConverted;
 	Optional<String> shortDescription = Optional.empty();
 	Optional<String> fullDescription = Optional.empty();
@@ -428,7 +428,7 @@ public class CommandAPICommand {
 	 * Returns the executors that this command has
 	 * @return the executors that this command has
 	 */
-	public CustomCommandExecutor getExecutor() {
+	public CustomCommandExecutor<? extends CommandSender> getExecutor() {
 		return executor;
 	}
 
@@ -436,7 +436,7 @@ public class CommandAPICommand {
 	 * Sets the executors for this command
 	 * @param executor the executors for this command
 	 */
-	public void setExecutor(CustomCommandExecutor executor) {
+	public void setExecutor(CustomCommandExecutor<? extends CommandSender> executor) {
 		this.executor = executor;
 	}
 

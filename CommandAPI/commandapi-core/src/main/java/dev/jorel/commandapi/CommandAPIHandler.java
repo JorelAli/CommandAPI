@@ -248,7 +248,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 * @return a brigadier command which is registered internally
 	 * @throws CommandSyntaxException if an error occurs when the command is ran
 	 */
-	Command<CommandSourceStack> generateCommand(Argument[] args, CustomCommandExecutor executor, boolean converted)
+	Command<CommandSourceStack> generateCommand(Argument[] args, CustomCommandExecutor<? extends CommandSender> executor, boolean converted)
 			throws CommandSyntaxException {
 
 		// Generate our command from executor
@@ -491,7 +491,8 @@ public class CommandAPIHandler<CommandSourceStack> {
 	private boolean expandMultiLiterals(String commandName, Optional<String> shortDescription,
 			Optional<String> fullDescription, CommandPermission permissions, String[] aliases,
 			Predicate<CommandSender> requirements, final Argument[] args,
-			CustomCommandExecutor executor, boolean converted) throws CommandSyntaxException, IOException {
+			CustomCommandExecutor<? extends CommandSender> executor,
+			boolean converted) throws CommandSyntaxException, IOException {
 		
 		//"Expands" our MultiLiterals into Literals
 		for(int index = 0; index < args.length; index++) {
@@ -619,7 +620,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	// registers it
 	void register(String commandName, Optional<String> shortDescription, Optional<String> fullDescription,
 			CommandPermission permission, String[] aliases, Predicate<CommandSender> requirements,
-			final Argument[] args, CustomCommandExecutor executor, boolean converted)
+			final Argument[] args, CustomCommandExecutor<? extends CommandSender> executor, boolean converted)
 			throws CommandSyntaxException, IOException {
 
 		//"Expands" our MultiLiterals into Literals
