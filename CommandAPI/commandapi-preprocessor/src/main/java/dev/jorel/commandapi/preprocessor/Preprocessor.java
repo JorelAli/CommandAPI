@@ -80,7 +80,7 @@ public class Preprocessor extends AbstractProcessor {
 			};
 		}
 		try {
-			return Class.forName(e.getTypeMirror().toString());
+			return Class.forName(e.getTypeMirror().toString(), false, this.getClass().getClassLoader());
 		} catch (ClassNotFoundException e1) {
 			return null;
 		}

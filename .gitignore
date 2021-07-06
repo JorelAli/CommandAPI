@@ -8,3 +8,5 @@ bin
 .settings
 target
 CommandAPI/logs/latest.log
+CommandAPI/commandapi-plugin/dependency-reduced-pom.xml
+CommandAPI/commandapi-shade/dependency-reduced-pom.xml

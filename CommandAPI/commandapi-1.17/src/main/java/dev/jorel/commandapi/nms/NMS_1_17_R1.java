@@ -165,11 +165,6 @@ import net.minecraft.world.phys.Vec3;
 @RequireField(in = ServerResources.class, name = "functionLibrary", ofType = ServerFunctionLibrary.class)
 @RequireField(in = ServerFunctionLibrary.class, name = "functionCompilationLevel", ofType = int.class)
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
-
-// Spigot-Mapped reflection
-// @RequireField(in = DataPackResources.class, name = "j", ofType = CustomFunctionManager.class)
-// @RequireField(in = CustomFunctionManager.class, name = "h", ofType = int.class)
-// @RequireField(in = EntitySelector.class, name = "o", ofType = boolean.class)
 public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 	
 	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
