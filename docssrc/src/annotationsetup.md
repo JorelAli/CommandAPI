@@ -26,7 +26,7 @@ The annotation system effectively needs to be added twice: Once for compilation 
       <dependency>
           <groupId>dev.jorel.CommandAPI</groupId>
           <artifactId>commandapi-annotations</artifactId>
-          <version>6.0.5</version>
+          <version>6.1.0</version>
           <scope>provided</scope>
       </dependency>
   </dependencies>
@@ -46,7 +46,7 @@ The annotation system effectively needs to be added twice: Once for compilation 
                       <path>
                           <groupId>dev.jorel.CommandAPI</groupId>
                           <artifactId>commandapi-annotations</artifactId>
-                          <version>6.0.5</version>
+                          <version>6.1.0</version>
                       </path>
                   </annotationProcessorPaths>
               </configuration>
