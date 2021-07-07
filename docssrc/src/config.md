@@ -13,7 +13,7 @@ The default `config.yml` is shown below:
 - **`verbose-outputs`** - If `true`, outputs command registration and unregistration logs in the console
 
 
-- **`silent-logs`** - If `true`, turns of all logging from the CommandAPI, except for errors
+- **`silent-logs`** - If `true`, turns off all logging from the CommandAPI, except for errors
 
 
 - **`create-dispatcher-json`** - If `true`, the CommandAPI creates a `command_registration.json` file showing the mapping of registered commands. This is designed to be used by developers - setting this to `false` will improve command registration performance
