@@ -11,6 +11,21 @@ verbose-outputs: false
 silent-logs: false
 
 ################################################################################
+# Messages                                                                     #
+################################################################################
+
+# Messages
+# Controls messages that the CommandAPI displays to players
+messages:
+
+  # Missing executor implementation (default: "This command has no implementations for %s")
+  # The message to display to senders when a command has no executor. Available
+  # parameters are:
+  #   %s - the executor class (lowercase)
+  #   %S - the executor class (normal case)
+  missing-executor-implementation: "This command has no implementations for %s"
+
+################################################################################
 # Debugging                                                                    #
 ################################################################################
 

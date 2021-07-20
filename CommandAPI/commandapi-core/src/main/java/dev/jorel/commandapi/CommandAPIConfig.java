@@ -26,9 +26,12 @@ package dev.jorel.commandapi;
  */
 public class CommandAPIConfig {
 	
+	// The default configuration. This should mirror the commandapi-plugin
+	// config.yml file.
 	boolean verboseOutput = false;
 	boolean silentLogs = false;
 	boolean useLatestNMSVersion = false;
+	String missingExecutorImplementationMessage = "This command has no implementations for %s";
 	
 	/**
 	 * Sets verbose output logging for the CommandAPI if true.
@@ -62,6 +65,20 @@ public class CommandAPIConfig {
 	 */
 	public CommandAPIConfig useLatestNMSVersion(boolean value) {
 		this.useLatestNMSVersion = value;
+		return this;
+	}
+	
+	/**
+	 * Sets the message to display to users when a command has no executor. Available formatting parameters are:
+	 * 
+	 * <ul> <li>%s - the executor class (lowercase)</li>
+	 * <li>%S - the executor class (normal case)</li></ul>
+	 * 
+	 * @param value the message to display when a command has no executor 
+	 * @return this CommandAPIConfig
+	 */
+	public CommandAPIConfig missingExecutorImplementationMessage(String value) {
+		this.missingExecutorImplementationMessage = value;
 		return this;
 	}
 	
