@@ -2,6 +2,14 @@
 
 This section basically summarizes the list of things that _could_ go wrong with the CommandAPI and how to mitigate these circumstances.
 
+## I've registered my command but nothing happens
+
+If you've registered a command, the command should be present in the console if verbose logging is enabled. If this does not appear in the console, check that you've:
+
+- Used `.register()` at the end of your command declaration
+- Added `CommandAPI.onLoad()` and `CommandAPI.onEnable()` to your `onLoad()` and `onEnable()` methods if you're shading the CommandAPI
+- Not added the commands to your `plugin.yml` file if you're not shading the CommandAPI
+
 ## Server errors when loading datapacks in 1.16+
 
 If you get an error at the very start of the server's startup sequence along the lines of:
