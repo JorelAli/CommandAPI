@@ -881,6 +881,8 @@ CommandAPI.onEnable(Plugin plugin);
 <pre><code class="language-java">public class CommandAPIConfig {
     CommandAPIConfig verboseOutput(boolean value); // Enables verbose logging
     CommandAPIConfig silentLogs(boolean value);    // Disables ALL logging (except errors)
+    CommandAPIConfig useLatestNMSVersion(boolean value); // Whether the latest NMS implementation should be used or not
+    CommandAPIConfig missingExecutorImplementationMessage(String value); // Set message to display when executor implementation is missing
 }
 </code></pre>
 <p>The <code>CommandAPIConfig</code> class follows a typical builder pattern (without you having to run <code>.build()</code> at the end), which lets you easily construct configuration instances. For example, to load the CommandAPI with all logging disabled, you can use the following:</p>

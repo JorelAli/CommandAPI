@@ -40,6 +40,8 @@ The `onLoad(CommandAPIConfig)` method initializes the CommandAPI's loading seque
 public class CommandAPIConfig {
     CommandAPIConfig verboseOutput(boolean value); // Enables verbose logging
     CommandAPIConfig silentLogs(boolean value);    // Disables ALL logging (except errors)
+    CommandAPIConfig useLatestNMSVersion(boolean value); // Whether the latest NMS implementation should be used or not
+    CommandAPIConfig missingExecutorImplementationMessage(String value); // Set message to display when executor implementation is missing
 }
 ```
 
