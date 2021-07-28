@@ -2,12 +2,6 @@
 
 The CommandAPI has a few configuration options to change how it functions. These options can be configured in the `plugins/CommandAPI/config.yml` file, which is generated automatically when the CommandAPI runs for the first time.
 
-The default `config.yml` is shown below:
-
-```yaml
-{{#include ../../CommandAPI/commandapi-plugin/src/main/resources/config.yml}}
-```
-
 **Configuration settings:**
 
 - **`verbose-outputs`** - If `true`, outputs command registration and unregistration logs in the console
@@ -26,3 +20,11 @@ The default `config.yml` is shown below:
 
 
 - **`other-commands-to-convert`** - A list of other commands to convert. This should be used for commands which are not declared in a `plugin.yml` file. See [Arbitrary command conversion](./conversionforownerssingle.md#arbitrary-command-conversion) for more information
+
+## Default configuration file
+
+The default `config.yml` is shown below:
+
+```yaml
+{{#include ../../CommandAPI/commandapi-plugin/src/main/resources/config.yml}}
+```
