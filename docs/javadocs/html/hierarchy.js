@@ -60,13 +60,7 @@ var hierarchy =
       [ "dev.jorel.commandapi.arguments.StringArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_string_argument.html", null ],
       [ "dev.jorel.commandapi.arguments.TextArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_text_argument.html", null ]
     ] ],
-    [ "com.mojang.brigadier.builder.ArgumentBuilder< S, T extends ArgumentBuilder< S, T >", "classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html", null ],
-    [ "com.mojang.brigadier.builder.ArgumentBuilder< S, LiteralArgumentBuilder< S > >", "classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html", [
-      [ "com.mojang.brigadier.builder.LiteralArgumentBuilder< S >", "classcom_1_1mojang_1_1brigadier_1_1builder_1_1_literal_argument_builder.html", null ]
-    ] ],
-    [ "com.mojang.brigadier.builder.ArgumentBuilder< S, RequiredArgumentBuilder< S, T > >", "classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html", [
-      [ "com.mojang.brigadier.builder.RequiredArgumentBuilder< S, T >", "classcom_1_1mojang_1_1brigadier_1_1builder_1_1_required_argument_builder.html", null ]
-    ] ],
+    [ "com.mojang.brigadier.builder.ArgumentBuilder< S, T extends ArgumentBuilder", "classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder_3_01_s_00_01_t_01extends_01_argument_builder.html", null ],
     [ "com.mojang.brigadier.arguments.ArgumentType< T >", "interfacecom_1_1mojang_1_1brigadier_1_1arguments_1_1_argument_type.html", null ],
     [ "com.mojang.brigadier.arguments.ArgumentType< Boolean >", "interfacecom_1_1mojang_1_1brigadier_1_1arguments_1_1_argument_type.html", [
       [ "com.mojang.brigadier.arguments.BoolArgumentType", "classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_bool_argument_type.html", null ]
@@ -143,10 +137,10 @@ var hierarchy =
     ] ],
     [ "dev.jorel.commandapi.executors.ExecutorType", "enumdev_1_1jorel_1_1commandapi_1_1executors_1_1_executor_type.html", null ],
     [ "dev.jorel.commandapi.wrappers.FloatRange", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_float_range.html", null ],
+    [ "com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType.Function", "interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_dynamic2_command_exception_type_1_1_function.html", null ],
+    [ "com.mojang.brigadier.exceptions.Dynamic3CommandExceptionType.Function", "interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_dynamic3_command_exception_type_1_1_function.html", null ],
     [ "com.mojang.brigadier.exceptions.Dynamic4CommandExceptionType.Function", "interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_dynamic4_command_exception_type_1_1_function.html", null ],
     [ "com.mojang.brigadier.exceptions.DynamicNCommandExceptionType.Function", "interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_dynamic_n_command_exception_type_1_1_function.html", null ],
-    [ "com.mojang.brigadier.exceptions.Dynamic3CommandExceptionType.Function", "interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_dynamic3_command_exception_type_1_1_function.html", null ],
-    [ "com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType.Function", "interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_dynamic2_command_exception_type_1_1_function.html", null ],
     [ "dev.jorel.commandapi.arguments.ICustomProvidedArgument", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument.html", [
       [ "dev.jorel.commandapi.arguments.AdvancementArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_advancement_argument.html", null ],
       [ "dev.jorel.commandapi.arguments.BiomeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_biome_argument.html", null ],
@@ -354,6 +348,10 @@ var hierarchy =
     [ "dev.jorel.commandapi.Tooltip< S >", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html", null ],
     [ "AbstractProcessor", null, [
       [ "dev.jorel.commandapi.annotations.Annotations", "classdev_1_1jorel_1_1commandapi_1_1annotations_1_1_annotations.html", null ]
+    ] ],
+    [ "ArgumentBuilder", null, [
+      [ "com.mojang.brigadier.builder.LiteralArgumentBuilder< S >", "classcom_1_1mojang_1_1brigadier_1_1builder_1_1_literal_argument_builder.html", null ],
+      [ "com.mojang.brigadier.builder.RequiredArgumentBuilder< S, T >", "classcom_1_1mojang_1_1brigadier_1_1builder_1_1_required_argument_builder.html", null ]
     ] ],
     [ "Keyed", null, [
       [ "dev.jorel.commandapi.wrappers.SimpleFunctionWrapper", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html", [
