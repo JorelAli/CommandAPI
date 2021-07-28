@@ -40,6 +40,8 @@ The `onLoad(CommandAPIConfig)` method initializes the CommandAPI's loading seque
 public class CommandAPIConfig {
     CommandAPIConfig verboseOutput(boolean value); // Enables verbose logging
     CommandAPIConfig silentLogs(boolean value);    // Disables ALL logging (except errors)
+    CommandAPIConfig useLatestNMSVersion(boolean value); // Whether the latest NMS implementation should be used or not
+    CommandAPIConfig missingExecutorImplementationMessage(String value); // Set message to display when executor implementation is missing
 }
 ```
 
@@ -75,12 +77,23 @@ To shade the CommandAPI into a maven project, you'll need to use the `commandapi
     <dependency>
         <groupId>dev.jorel.CommandAPI</groupId>
         <artifactId>commandapi-shade</artifactId>
-        <version>6.1.0</version>
+        <version>6.2.0</version>
     </dependency>
 </dependencies>
 ```
 
-Once you've added this this, you can shade the CommandAPI easily by adding the `maven-shade-plugin` to your build sequence:
+As of the time of writing, the latest stable version of the `maven-shade-plugin` is not compatible with Java 16, which means certain classes such as `record` types cannot be shaded. This can be overcome using the latest snapshot build of the `maven-shade-plugin`. To use the snapshot build, add the following plugin repository to your `pom.xml` file:
+
+```xml
+<pluginRepositories>
+    <pluginRepository>
+        <id>maven-snapshots</id>
+        <url>https://repository.apache.org/content/repositories/snapshots/</url>
+    </pluginRepository>
+</pluginRepositories>
+```
+
+Once you've added this this, you can shade the CommandAPI easily by adding the `maven-shade-plugin` to your build sequence using the snapshot version `3.3.0-SNAPSHOT`:
 
 ```xml
 <build>
@@ -88,7 +101,7 @@ Once you've added this this, you can shade the CommandAPI easily by adding the `
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-shade-plugin</artifactId>
-            <version>3.2.4</version>
+            <version>3.3.0-SNAPSHOT</version>
             <executions>
                 <execution>
                     <id>shade</id>
@@ -129,7 +142,7 @@ Next, we declare our dependencies:
 
 ```gradle
 dependencies {
-    compile "dev.jorel.CommandAPI:commandapi-shade:6.1.0"   
+    compile "dev.jorel.CommandAPI:commandapi-shade:6.2.0"   
 }
 ```
 
@@ -138,7 +151,7 @@ Then we add it to the `shadowJar` task configuration:
 ```gradle
 shadowJar {
     dependencies {
-        include dependency("dev.jorel.CommandAPI:commandapi-shade:6.1.0")
+        include dependency("dev.jorel.CommandAPI:commandapi-shade:6.2.0")
     }
 }
 ```

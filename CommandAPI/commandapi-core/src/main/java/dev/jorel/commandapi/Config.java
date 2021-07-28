@@ -45,6 +45,12 @@ class Config {
 	
 	// Whether we should suppress all logs
 	private final boolean silentLogs;
+	
+	// Whether we should use the latest NMS version (which may not be compatible)
+	private final boolean useLatestNMSVersion;
+	
+	// The message to display when an executor implementation is missing
+	private final String message_missingExecutorImplementation;
 
 	// Create a command_registration.json file
 	private final boolean createDispatcherFile;
@@ -61,6 +67,8 @@ class Config {
 	public Config(FileConfiguration fileConfig) {
 		this.verboseOutput = fileConfig.getBoolean("verbose-outputs");
 		this.silentLogs = fileConfig.getBoolean("silent-logs");
+		this.useLatestNMSVersion = fileConfig.getBoolean("use-latest-nms-version");
+		this.message_missingExecutorImplementation = fileConfig.getString("messages.missing-executor-implementation");
 		this.createDispatcherFile = fileConfig.getBoolean("create-dispatcher-json");
 		this.pluginsToConvert = new HashMap<>();
 		this.skipSenderProxy = new ArrayList<>();
@@ -103,17 +111,14 @@ class Config {
 	}
 
 	public Config(boolean verbose) {
-		this.verboseOutput = verbose;
-		this.silentLogs = false;
-		this.createDispatcherFile = false;
-		this.pluginsToConvert = new HashMap<>();
-		this.skipSenderProxy = new ArrayList<>();
-		this.commandsToConvert = new ArrayList<>();
+		this(new CommandAPIConfig().verboseOutput(verbose));
 	}
 
 	public Config(CommandAPIConfig config) {
 		this.verboseOutput = config.verboseOutput;
 		this.silentLogs = config.silentLogs;
+		this.useLatestNMSVersion = config.useLatestNMSVersion;
+		this.message_missingExecutorImplementation = config.missingExecutorImplementationMessage;
 		this.createDispatcherFile = false; // The dispatcher File is only declared in the plugin version
 		this.pluginsToConvert = new HashMap<>();
 		this.skipSenderProxy = new ArrayList<>();
@@ -126,6 +131,14 @@ class Config {
 	
 	public boolean hasSilentLogs() {
 		return this.silentLogs;
+	}
+	
+	public boolean shouldUseLatestNMSVersion() {
+		return this.useLatestNMSVersion;
+	}
+	
+	public String getMissingImplementationMessage() {
+		return this.message_missingExecutorImplementation;
 	}
 
 	public boolean willCreateDispatcherFile() {

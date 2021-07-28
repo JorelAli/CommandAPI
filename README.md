@@ -280,6 +280,17 @@ This is the current roadmap for the CommandAPI (as of 16th May 2021):
     </thead>
     <tbody>
         <tr>
+            <td valign="top"><b>6.2.0</b></td>
+            <td valign="top">July 2021</td>
+            <td valign="top">
+                <ul>
+                    <li>Adds config option to customize messages</li>
+                    <li>Adds config option to use the latest NMS version</li>
+                    <li>Update documentation instructions for shading with Maven</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
             <td valign="top"><b>6.1.0</b></td>
             <td valign="top">July 2021</td>
             <td valign="top">

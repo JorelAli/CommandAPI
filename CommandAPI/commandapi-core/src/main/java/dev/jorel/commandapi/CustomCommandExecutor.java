@@ -101,9 +101,10 @@ class CustomCommandExecutor<T extends CommandSender> {
 		} else if (matches(executors, ExecutorType.ALL)) {
 			return execute(executors, sender, args, ExecutorType.ALL);
 		} else {
-			throw new WrapperCommandSyntaxException(new SimpleCommandExceptionType(new LiteralMessage(
-					"This command has no implementations for " + sender.getClass().getSimpleName().toLowerCase()))
-							.create());
+			throw new WrapperCommandSyntaxException(new SimpleCommandExceptionType(
+					new LiteralMessage(CommandAPI.getConfiguration().getMissingImplementationMessage()
+							.replace("%s", sender.getClass().getSimpleName().toLowerCase())
+							.replace("%S", sender.getClass().getSimpleName()))).create());
 		}
 	}
 	

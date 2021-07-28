@@ -17,7 +17,8 @@ Welcome to the documentation for the CommandAPI. The CommandAPI lets you create 
 
 The CommandAPI does not follow the "standard" method of registering commands. In other words, commands which are registered with the CommandAPI will be registered as pure vanilla Minecraft commands as opposed to Bukkit or Spigot commands. This means that the following implications exist:
 
-* Commands do not need to be declared in the `plugin.yml` file
+* **Commands should not be declared in the `plugin.yml` file.**
+* Commands are automatically registered under the `minecraft` namespace. For example, if you register a command `/hello`, you can also run it using `/minecraft:hello`.
 * Commands are not "linked" to a certain plugin. In other words, you cannot look up which commands are registered by which plugin.
 
 -----
@@ -35,6 +36,12 @@ Using the search icon in the top left corner, you can search for anything in thi
 ## Documentation changelog
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
+
+### Documentation changes 6.0.0 \\(\rightarrow\\) 6.2.0:
+
+- Update [Configuration for server owners](./config.md) page with new config options `missing-executor-implementation` and `use-latest-nms-version`
+- Update instructions for shading the CommandAPI with maven in [Shading the CommandAPI in your plugins](./shading.md#shading-with-maven) to support Java 16.
+- Mention that commands registered with the CommandAPI appear in the `minecraft:` namespace (see above under "How the CommandAPI works")
 
 ### Documentation changes 5.12 \\(\rightarrow\\) 6.0.0:
 
