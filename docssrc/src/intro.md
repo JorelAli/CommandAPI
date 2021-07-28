@@ -37,6 +37,11 @@ Using the search icon in the top left corner, you can search for anything in thi
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 6.0.0 \\(\rightarrow\\) 6.2.0:
+
+- Update [Configuration for server owners](./config.md) page with new config options `missing-executor-implementation` and `use-latest-nms-version`
+- Update instructions for shading the CommandAPI with maven in [Shading the CommandAPI in your plugins](./shading.md#shading-with-maven) to support Java 16.
+
 ### Documentation changes 5.12 \\(\rightarrow\\) 6.0.0:
 
 - Adds entry for [Upgrading guide](./upgrading.md#from-version-5x-to-600) to help update from 5.12 to 6.0.0.
