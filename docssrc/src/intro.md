@@ -41,6 +41,7 @@ Here's the list of changes to the documentation between each update. You can vie
 
 - Update [Configuration for server owners](./config.md) page with new config options `missing-executor-implementation` and `use-latest-nms-version`
 - Update instructions for shading the CommandAPI with maven in [Shading the CommandAPI in your plugins](./shading.md#shading-with-maven) to support Java 16.
+- Mention that commands registered with the CommandAPI appear in the `minecraft:` namespace (see above under "How the CommandAPI works")
 
 ### Documentation changes 5.12 \\(\rightarrow\\) 6.0.0:
 
