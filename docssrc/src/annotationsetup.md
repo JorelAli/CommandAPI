@@ -72,8 +72,8 @@ The annotation system effectively needs to be added twice: Once for compilation 
 
   ```gradle
   dependencies {
-      compileOnly "dev.jorel.CommandAPI:commandapi-annotations:5.12"
-      annotationProcessor "dev.jorel.CommandAPI:commandapi-annotations:5.12"
+      compileOnly "dev.jorel.CommandAPI:commandapi-annotations:6.2.0"
+      annotationProcessor "dev.jorel.CommandAPI:commandapi-annotations:6.2.0"
   }
   ```
 
