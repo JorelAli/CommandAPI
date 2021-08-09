@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">CommandAPI
-   &#160;<span id="projectnumber">6.2.0</span>
+   &#160;<span id="projectnumber">6.3.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -112,11 +112,8 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_exception.html">CustomArgumentException</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An exception used to create command-related errors for the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html" title="An argument that represents any custom object.">CustomArgument</a>.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_exception.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser.html">CustomArgumentParser</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A FunctionalInterface that takes in a String, returns T and can throw a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_exception.html">CustomArgumentException</a>.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser2.html">CustomArgumentParser2</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A FunctionalInterface that takes in a CommandSender, a String, returns T and can throw a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_exception.html">CustomArgumentException</a>.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser2.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_info_parser.html">CustomArgumentInfoParser</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A FunctionalInterface that takes in a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#aeb62548df4c6f6697bfe9a80e6154a68">CustomArgumentInfo</a>, returns T and can throw a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_exception.html">CustomArgumentException</a>.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_info_parser.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_message_builder.html">MessageBuilder</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_message_builder.html" title="MessageBuilder is used to create error messages for invalid argument inputs.">MessageBuilder</a> is used to create error messages for invalid argument inputs.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_message_builder.html#details">More...</a><br /></td></tr>
@@ -124,33 +121,24 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a63630f1f0e69db2c53422cc1983d20ee"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#a63630f1f0e69db2c53422cc1983d20ee">CustomArgument</a> (String nodeName, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser.html">CustomArgumentParser</a>&lt; T &gt; parser)</td></tr>
-<tr class="memdesc:a63630f1f0e69db2c53422cc1983d20ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html" title="An argument that represents any custom object.">CustomArgument</a> with a valid parser, defaults to non-keyed argument.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#a63630f1f0e69db2c53422cc1983d20ee">More...</a><br /></td></tr>
-<tr class="separator:a63630f1f0e69db2c53422cc1983d20ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a382af4d93b85a5ee8b3e9aabd451ba9c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#a382af4d93b85a5ee8b3e9aabd451ba9c">CustomArgument</a> (String nodeName, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser2.html">CustomArgumentParser2</a>&lt; T &gt; parser)</td></tr>
-<tr class="memdesc:a382af4d93b85a5ee8b3e9aabd451ba9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html" title="An argument that represents any custom object.">CustomArgument</a> with a valid parser, defaults to non-keyed argument.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#a382af4d93b85a5ee8b3e9aabd451ba9c">More...</a><br /></td></tr>
-<tr class="separator:a382af4d93b85a5ee8b3e9aabd451ba9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7e345060098ad1b620ae1923a728f2ae"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#a7e345060098ad1b620ae1923a728f2ae">CustomArgument</a> (String nodeName, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser.html">CustomArgumentParser</a>&lt; T &gt; parser, boolean keyed)</td></tr>
-<tr class="memdesc:a7e345060098ad1b620ae1923a728f2ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html" title="An argument that represents any custom object.">CustomArgument</a> with a valid parser.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#a7e345060098ad1b620ae1923a728f2ae">More...</a><br /></td></tr>
-<tr class="separator:a7e345060098ad1b620ae1923a728f2ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add8da8037e0873c3547879f8f7c7f274"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#add8da8037e0873c3547879f8f7c7f274">CustomArgument</a> (String nodeName, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser2.html">CustomArgumentParser2</a>&lt; T &gt; parser, boolean keyed)</td></tr>
-<tr class="memdesc:add8da8037e0873c3547879f8f7c7f274"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html" title="An argument that represents any custom object.">CustomArgument</a> with a valid parser.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#add8da8037e0873c3547879f8f7c7f274">More...</a><br /></td></tr>
-<tr class="separator:add8da8037e0873c3547879f8f7c7f274"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c321c4f19bdea7a648efa6b792ed197"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#a0c321c4f19bdea7a648efa6b792ed197">CustomArgument</a> (String nodeName, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_info_parser.html">CustomArgumentInfoParser</a>&lt; T &gt; parser)</td></tr>
+<tr class="memdesc:a0c321c4f19bdea7a648efa6b792ed197"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html" title="An argument that represents any custom object.">CustomArgument</a> with a valid parser, defaults to non-keyed argument.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#a0c321c4f19bdea7a648efa6b792ed197">More...</a><br /></td></tr>
+<tr class="separator:a0c321c4f19bdea7a648efa6b792ed197"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a108c95ba91919e6d2d4bfea657d2630f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#a108c95ba91919e6d2d4bfea657d2630f">CustomArgument</a> (String nodeName, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_info_parser.html">CustomArgumentInfoParser</a>&lt; T &gt; parser, boolean keyed)</td></tr>
+<tr class="memdesc:a108c95ba91919e6d2d4bfea657d2630f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html" title="An argument that represents any custom object.">CustomArgument</a> with a valid parser, defaults to non-keyed argument.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#a108c95ba91919e6d2d4bfea657d2630f">More...</a><br /></td></tr>
+<tr class="separator:a108c95ba91919e6d2d4bfea657d2630f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a342b5f375f00e9a1eda425d70a3ca2a7"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#a342b5f375f00e9a1eda425d70a3ca2a7">isKeyed</a> ()</td></tr>
 <tr class="memdesc:a342b5f375f00e9a1eda425d70a3ca2a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this argument is represented by a NamespacedKey.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#a342b5f375f00e9a1eda425d70a3ca2a7">More...</a><br /></td></tr>
 <tr class="separator:a342b5f375f00e9a1eda425d70a3ca2a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b0069147049d02970d7921bda626a2a"><td class="memItemLeft" align="right" valign="top">Class&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#a3b0069147049d02970d7921bda626a2a">getPrimitiveType</a> ()</td></tr>
 <tr class="memdesc:a3b0069147049d02970d7921bda626a2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the primitive type of the current <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html" title="The core abstract class for Command API arguments.">Argument</a>.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#a3b0069147049d02970d7921bda626a2a">More...</a><br /></td></tr>
 <tr class="separator:a3b0069147049d02970d7921bda626a2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed33498ca1a3c49fd1a4b7dcd226fd39"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser.html">CustomArgumentParser</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#aed33498ca1a3c49fd1a4b7dcd226fd39">getParser</a> ()</td></tr>
-<tr class="memdesc:aed33498ca1a3c49fd1a4b7dcd226fd39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the parser for this custom argument.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#aed33498ca1a3c49fd1a4b7dcd226fd39">More...</a><br /></td></tr>
-<tr class="separator:aed33498ca1a3c49fd1a4b7dcd226fd39"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7e7be5b378f87b3a3f4cba86989e1307"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser2.html">CustomArgumentParser2</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#a7e7be5b378f87b3a3f4cba86989e1307">getParser2</a> ()</td></tr>
-<tr class="memdesc:a7e7be5b378f87b3a3f4cba86989e1307"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the parser for this custom argument.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#a7e7be5b378f87b3a3f4cba86989e1307">More...</a><br /></td></tr>
-<tr class="separator:a7e7be5b378f87b3a3f4cba86989e1307"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a238ae04c0009b96b9b3a8f56d4b1c080"><td class="memItemLeft" align="right" valign="top"><a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html">CommandAPIArgumentType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#a238ae04c0009b96b9b3a8f56d4b1c080">getArgumentType</a> ()</td></tr>
 <tr class="memdesc:a238ae04c0009b96b9b3a8f56d4b1c080"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the argument type for this argument.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#a238ae04c0009b96b9b3a8f56d4b1c080">More...</a><br /></td></tr>
 <tr class="separator:a238ae04c0009b96b9b3a8f56d4b1c080"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb62548df4c6f6697bfe9a80e6154a68"><td class="memItemLeft" align="right" valign="top">record&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#aeb62548df4c6f6697bfe9a80e6154a68">CustomArgumentInfo</a> (CommandSender sender, Object[] previousArgs, String input)</td></tr>
+<tr class="memdesc:aeb62548df4c6f6697bfe9a80e6154a68"><td class="mdescLeft">&#160;</td><td class="mdescRight">A record which contains information which can be passed to the custom argument's parser.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#aeb62548df4c6f6697bfe9a80e6154a68">More...</a><br /></td></tr>
+<tr class="separator:aeb62548df4c6f6697bfe9a80e6154a68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad9fe9ad15b0af457f58c9ff2aff5161b"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#ad9fe9ad15b0af457f58c9ff2aff5161b">isListed</a> ()</td></tr>
 <tr class="memdesc:ad9fe9ad15b0af457f58c9ff2aff5161b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this argument will be listed in the Object args[] of the command executor.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#ad9fe9ad15b0af457f58c9ff2aff5161b">More...</a><br /></td></tr>
 <tr class="separator:ad9fe9ad15b0af457f58c9ff2aff5161b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -233,8 +221,8 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a63630f1f0e69db2c53422cc1983d20ee"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a63630f1f0e69db2c53422cc1983d20ee">&#9670;&nbsp;</a></span>CustomArgument() <span class="overload">[1/4]</span></h2>
+<a id="a0c321c4f19bdea7a648efa6b792ed197"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c321c4f19bdea7a648efa6b792ed197">&#9670;&nbsp;</a></span>CustomArgument() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -248,7 +236,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser.html">CustomArgumentParser</a>&lt; T &gt;&#160;</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_info_parser.html">CustomArgumentInfoParser</a>&lt; T &gt;&#160;</td>
           <td class="paramname"><em>parser</em>&#160;</td>
         </tr>
         <tr>
@@ -263,15 +251,15 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">nodeName</td><td>the name of the node for this argument </td></tr>
-    <tr><td class="paramname">parser</td><td>A <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser.html">CustomArgumentParser</a> that maps a String to the object of your choice. The String input is the text that the CommandSender inputs for this argument </td></tr>
+    <tr><td class="paramname">parser</td><td>A <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#aeb62548df4c6f6697bfe9a80e6154a68">CustomArgumentInfo</a> parser object which includes information such as the command sender, previously declared arguments and current input. This parser should return an object of your choice. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a382af4d93b85a5ee8b3e9aabd451ba9c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a382af4d93b85a5ee8b3e9aabd451ba9c">&#9670;&nbsp;</a></span>CustomArgument() <span class="overload">[2/4]</span></h2>
+<a id="a108c95ba91919e6d2d4bfea657d2630f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a108c95ba91919e6d2d4bfea657d2630f">&#9670;&nbsp;</a></span>CustomArgument() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -285,44 +273,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser2.html">CustomArgumentParser2</a>&lt; T &gt;&#160;</td>
-          <td class="paramname"><em>parser</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Creates a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html" title="An argument that represents any custom object.">CustomArgument</a> with a valid parser, defaults to non-keyed argument. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">nodeName</td><td>the name of the node for this argument </td></tr>
-    <tr><td class="paramname">parser</td><td>A <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser2.html">CustomArgumentParser2</a> that maps a CommandSender and a String to the object of your choice. The CommandSender is the sender of this command and the String input is the text that the CommandSender inputs for this argument </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a7e345060098ad1b620ae1923a728f2ae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7e345060098ad1b620ae1923a728f2ae">&#9670;&nbsp;</a></span>CustomArgument() <span class="overload">[3/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html">dev.jorel.commandapi.arguments.CustomArgument</a>&lt; T &gt;.<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html">CustomArgument</a> </td>
-          <td>(</td>
-          <td class="paramtype">String&#160;</td>
-          <td class="paramname"><em>nodeName</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser.html">CustomArgumentParser</a>&lt; T &gt;&#160;</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_info_parser.html">CustomArgumentInfoParser</a>&lt; T &gt;&#160;</td>
           <td class="paramname"><em>parser</em>, </td>
         </tr>
         <tr>
@@ -339,55 +290,11 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Creates a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html" title="An argument that represents any custom object.">CustomArgument</a> with a valid parser. </p>
+<p>Creates a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html" title="An argument that represents any custom object.">CustomArgument</a> with a valid parser, defaults to non-keyed argument. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">nodeName</td><td>the name of the node for this argument </td></tr>
-    <tr><td class="paramname">parser</td><td>A <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser.html">CustomArgumentParser</a> that maps a String to the object of your choice. The String input is the text that the CommandSender inputs for this argument </td></tr>
-    <tr><td class="paramname">keyed</td><td>Whether this argument can accept Minecraft's <code>NamespacedKey</code> as valid arguments </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="add8da8037e0873c3547879f8f7c7f274"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#add8da8037e0873c3547879f8f7c7f274">&#9670;&nbsp;</a></span>CustomArgument() <span class="overload">[4/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html">dev.jorel.commandapi.arguments.CustomArgument</a>&lt; T &gt;.<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html">CustomArgument</a> </td>
-          <td>(</td>
-          <td class="paramtype">String&#160;</td>
-          <td class="paramname"><em>nodeName</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser2.html">CustomArgumentParser2</a>&lt; T &gt;&#160;</td>
-          <td class="paramname"><em>parser</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">boolean&#160;</td>
-          <td class="paramname"><em>keyed</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Creates a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html" title="An argument that represents any custom object.">CustomArgument</a> with a valid parser. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">nodeName</td><td>the name of the node for this argument </td></tr>
-    <tr><td class="paramname">parser</td><td>A <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser2.html">CustomArgumentParser2</a> that maps a CommandSender and a String to the object of your choice. The CommandSender is the sender of this command and the String input is the text that the CommandSender inputs for this argument </td></tr>
+    <tr><td class="paramname">parser</td><td>A <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html#aeb62548df4c6f6697bfe9a80e6154a68">CustomArgumentInfo</a> parser object which includes information such as the command sender, previously declared arguments and current input. This parser should return an object of your choice. </td></tr>
     <tr><td class="paramname">keyed</td><td>Whether this argument can accept Minecraft's <code>NamespacedKey</code> as valid arguments </td></tr>
   </table>
   </dd>
@@ -396,6 +303,50 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="aeb62548df4c6f6697bfe9a80e6154a68"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb62548df4c6f6697bfe9a80e6154a68">&#9670;&nbsp;</a></span>CustomArgumentInfo()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">record <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html">dev.jorel.commandapi.arguments.CustomArgument</a>&lt; T &gt;.CustomArgumentInfo </td>
+          <td>(</td>
+          <td class="paramtype">CommandSender&#160;</td>
+          <td class="paramname"><em>sender</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Object[]&#160;</td>
+          <td class="paramname"><em>previousArgs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>input</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>A record which contains information which can be passed to the custom argument's parser. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sender</td><td>the sender that types this argument </td></tr>
+    <tr><td class="paramname">previousArgs</td><td>an array of previously declared (parsed) arguments. This can be used as if it were arguments in a command executor method </td></tr>
+    <tr><td class="paramname">input</td><td>the current input which the user has typed for this argument </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a358f2f31f1454de941efe64987842741"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a358f2f31f1454de941efe64987842741">&#9670;&nbsp;</a></span>getArgumentPermission()</h2>
 
@@ -527,46 +478,6 @@ Public Member Functions</h2></td></tr>
 
 <p>Returns an optional function that maps the command sender to an <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html" title="A string-based tooltip interface that includes a string suggestion and a string tooltip text to displ...">IStringTooltip</a> array of suggestions for the current command. </p>
 <dl class="section return"><dt>Returns</dt><dd>a function that provides suggestions, or <code>Optional.empty()</code> if there are no overridden suggestions. </dd></dl>
-
-</div>
-</div>
-<a id="aed33498ca1a3c49fd1a4b7dcd226fd39"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aed33498ca1a3c49fd1a4b7dcd226fd39">&#9670;&nbsp;</a></span>getParser()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser.html">CustomArgumentParser</a>&lt;T&gt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html">dev.jorel.commandapi.arguments.CustomArgument</a>&lt; T &gt;.getParser </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Returns the parser for this custom argument. </p>
-<dl class="section return"><dt>Returns</dt><dd>the parser for this custom argument </dd></dl>
-
-</div>
-</div>
-<a id="a7e7be5b378f87b3a3f4cba86989e1307"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7e7be5b378f87b3a3f4cba86989e1307">&#9670;&nbsp;</a></span>getParser2()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser2.html">CustomArgumentParser2</a>&lt;T&gt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html">dev.jorel.commandapi.arguments.CustomArgument</a>&lt; T &gt;.getParser2 </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Returns the parser for this custom argument. </p>
-<dl class="section return"><dt>Returns</dt><dd>the parser for this custom argument </dd></dl>
 
 </div>
 </div>
@@ -1333,7 +1244,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1arguments.html">arguments</a></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html">CustomArgument</a></li>
-    <li class="footer">Generated on Wed Jul 28 2021 12:41:23 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Mon Aug 9 2021 23:00:53 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

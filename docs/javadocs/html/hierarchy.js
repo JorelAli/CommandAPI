@@ -126,8 +126,7 @@ var hierarchy =
       ] ]
     ] ],
     [ "dev.jorel.commandapi.Converter", "classdev_1_1jorel_1_1commandapi_1_1_converter.html", null ],
-    [ "dev.jorel.commandapi.arguments.CustomArgument< T >.CustomArgumentParser< T >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser.html", null ],
-    [ "dev.jorel.commandapi.arguments.CustomArgument< T >.CustomArgumentParser2< T >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser2.html", null ],
+    [ "dev.jorel.commandapi.arguments.CustomArgument< T >.CustomArgumentInfoParser< T >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_info_parser.html", null ],
     [ "dev.jorel.commandapi.annotations.Default", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1_default.html", null ],
     [ "dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html", null ],
     [ "Exception", null, [
