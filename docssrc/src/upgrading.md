@@ -1,5 +1,25 @@
 # Upgrading guide
 
+## From version 6.2.0 to 6.3.0
+
+### Custom Arguments
+
+The CustomArgument constructor syntax has changed, to use a much more powerful record type instead of the constructor which accepts the input and the other constructor which accepts the input and a command sender. The current input can be obtained using the `input()` method from the provided info, and the command sender can be obtained using the `sender()` method. This is described in more detail [here](./customarguments.md#the-customargumentinfoparser-class).
+
+```java
+CustomArgument<Player> myCustomArgument = new CustomArgument("player", input -> {
+    return Bukkit.getPlayer(input);
+});
+```
+
+\\[\downarrow\\]
+
+```java
+CustomArgument<Player> myCustomArgument = new CustomArgument("player", info -> {
+    return Bukkit.getPlayer(info.input());
+});
+```
+
 ## From version 5.x to 6.0.0
 
 > **Developer's Note**

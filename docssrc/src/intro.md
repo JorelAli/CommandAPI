@@ -37,6 +37,11 @@ Using the search icon in the top left corner, you can search for anything in thi
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 6.2.0 \\(\rightarrow\\) 6.3.0:
+
+- Update [Custom arguments](./customarguments.md) page with new custom argument constructor information
+- Adds upgrade info to the [Upgrading guide](./upgrading.md#from-version-620-to-630) to help upgrade any existing custom arguments which you may have.
+
 ### Documentation changes 6.0.0 \\(\rightarrow\\) 6.2.0:
 
 - Update [Configuration for server owners](./config.md) page with new config options `missing-executor-implementation` and `use-latest-nms-version`
