@@ -38,19 +38,19 @@ import dev.jorel.commandapi.nms.NMS;
  */
 public class CustomArgument<T> extends Argument {
 	
-	private CustomArgumentParser<T> parser;
-	private CustomArgumentParser2<T> parser2;
+	private CustomArgumentInfoParser<T> infoParser;
 	private boolean keyed;
 	
 	/**
 	 * Creates a CustomArgument with a valid parser, defaults to non-keyed argument
 	 * 
 	 * @param nodeName the name of the node for this argument
-	 * @param parser   A {@link CustomArgumentParser} that maps a String to the
-	 *                 object of your choice. The String input is the text that the
-	 *                 CommandSender inputs for this argument
+	 * @param parser   A {@link CustomArgumentInfo} parser object which includes
+	 *                 information such as the command sender, previously declared
+	 *                 arguments and current input. This parser should return an
+	 *                 object of your choice.
 	 */
-	public CustomArgument(String nodeName, CustomArgumentParser<T> parser) {
+	public CustomArgument(String nodeName, CustomArgumentInfoParser<T> parser) {
 		this(nodeName, parser, false);
 	}
 	
@@ -58,47 +58,17 @@ public class CustomArgument<T> extends Argument {
 	 * Creates a CustomArgument with a valid parser, defaults to non-keyed argument
 	 * 
 	 * @param nodeName the name of the node for this argument
-	 * @param parser   A {@link CustomArgumentParser2} that maps a
-	 *                 CommandSender and a String to the object of your choice. The
-	 *                 CommandSender is the sender of this command and the String
-	 *                 input is the text that the CommandSender inputs for this
-	 *                 argument
-	 */
-	public CustomArgument(String nodeName, CustomArgumentParser2<T> parser) {
-		this(nodeName, parser, false);
-	}
-	
-	/**
-	 * Creates a CustomArgument with a valid parser
-	 * 
-	 * @param nodeName the name of the node for this argument
-	 * @param parser   A {@link CustomArgumentParser} that maps a String to the object of
-	 *                 your choice. The String input is the text that the
-	 *                 CommandSender inputs for this argument
-	 * @param keyed    Whether this argument can accept Minecraft's
+	 * @param parser   A {@link CustomArgumentInfo} parser object which includes
+	 *                 information such as the command sender, previously declared
+	 *                 arguments and current input. This parser should return an
+	 *                 object of your choice.
+	 * @param keyed     Whether this argument can accept Minecraft's
 	 *                 <code>NamespacedKey</code> as valid arguments
 	 */
-	public CustomArgument(String nodeName, CustomArgumentParser<T> parser, boolean keyed) {
+	public CustomArgument(String nodeName, CustomArgumentInfoParser<T> parser, boolean keyed) {
 		super(nodeName, keyed ? CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered() : StringArgumentType.string());
 		this.keyed = keyed;
-		this.parser = parser;
-	}
-	
-	/**
-	 * Creates a CustomArgument with a valid parser
-	 * 
-	 * @param nodeName the name of the node for this argument
-	 * @param parser   A {@link CustomArgumentParser2} that maps a CommandSender and a
-	 *                 String to the object of your choice. The CommandSender is the
-	 *                 sender of this command and the String input is the text that
-	 *                 the CommandSender inputs for this argument
-	 * @param keyed    Whether this argument can accept Minecraft's
-	 *                 <code>NamespacedKey</code> as valid arguments
-	 */
-	public CustomArgument(String nodeName, CustomArgumentParser2<T> parser, boolean keyed) {
-		super(nodeName, keyed ? CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered() : StringArgumentType.string());
-		this.keyed = keyed;
-		this.parser2 = parser;
+		this.infoParser = parser;
 	}
 	
 	/**
@@ -113,31 +83,14 @@ public class CustomArgument<T> extends Argument {
 	public Class<T> getPrimitiveType() {
 		return null;
 	}
-	
-	/**
-	 * Returns the parser for this custom argument
-	 * @return the parser for this custom argument
-	 */
-	public CustomArgumentParser<T> getParser() {
-		return parser;
-	}
-	
-	/**
-	 * Returns the parser for this custom argument
-	 * @return the parser for this custom argument
-	 */
-	public CustomArgumentParser2<T> getParser2() {
-		return parser2;
-	}
 
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.CUSTOM;
 	}
 	
-	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+	public <CommandListenerWrapper> Object parseCustomArgument(NMS<CommandListenerWrapper> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArguments) throws CommandSyntaxException {
 		String customresult;
 		if(this.keyed) {
 			customresult = nms.getKeyedAsString(cmdCtx, key);
@@ -146,11 +99,9 @@ public class CustomArgument<T> extends Argument {
 		}
 		
 		try {
-			if(parser != null && parser2 == null) {
-				return parser.apply(customresult);
-			} else {
-				return parser2.apply(nms.getCommandSenderFromCSS(cmdCtx.getSource()), customresult);
-			}
+			CustomArgumentInfo info = new CustomArgumentInfo(nms.getCommandSenderFromCSS(cmdCtx.getSource()), previousArguments, 
+					customresult);
+			return infoParser.apply(info);
 		} catch (CustomArgumentException e) {
 			throw e.toCommandSyntax(customresult, cmdCtx);
 		} catch (Exception e) {
@@ -161,6 +112,12 @@ public class CustomArgument<T> extends Argument {
 				return errorMsg;
 			}).create();
 		}
+	}
+	
+	@Override
+	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		throw new RuntimeException("parseArgument() is not implemented for CustomArgument. Did you mean parseCustomArgument()?");
 	}
 	
 	/**
@@ -295,37 +252,38 @@ public class CustomArgument<T> extends Argument {
 	}
 	
 	/**
-	 * A FunctionalInterface that takes in a String, returns T and can throw a {@link CustomArgumentException}
+	 * A record which contains information which can be passed to the custom
+	 * argument's parser.
 	 * 
-	 * @param <T> the type that is returned when applying this parser
+	 * @param sender       the sender that types this argument
+	 * @param previousArgs an array of previously declared (parsed) arguments. This
+	 *                     can be used as if it were arguments in a command executor
+	 *                     method
+	 * @param input        the current input which the user has typed for this
+	 *                     argument
 	 */
-	@FunctionalInterface
-	public static interface CustomArgumentParser<T> {
-		
-		/**
-		 * Applies a String input to this custom argument parser
-		 * @param input the String input to apply
-		 * @return the applied output represented by this FunctionalInterface
-		 * @throws CustomArgumentException if an error occurs during parsing
-		 */
-		public T apply(String input) throws CustomArgumentException;
+	public record CustomArgumentInfo(
+		CommandSender sender, 
+		Object[] previousArgs, 
+		String input) {
 	}
 	
 	/**
-	 * A FunctionalInterface that takes in a CommandSender, a String, returns T and can throw a {@link CustomArgumentException}
+	 * A FunctionalInterface that takes in a {@link CustomArgumentInfo}, returns T
+	 * and can throw a {@link CustomArgumentException}
 	 * 
 	 * @param <T> the type that is returned when applying this parser
 	 */
 	@FunctionalInterface
-	public static interface CustomArgumentParser2<T> {
+	public static interface CustomArgumentInfoParser<T> {
 		
 		/**
-		 * Applies a CommandSender and a String input to this custom argument parser
-		 * @param sender the CommandSender that will run this command
-		 * @param input the String input to apply
+		 * Applies a CustomArgumentInfo input to this custom argument parser
+		 * 
+		 * @param info the custom argument info to apply to this parser
 		 * @return the applied output represented by this FunctionalInterface
 		 * @throws CustomArgumentException if an error occurs during parsing
 		 */
-		public T apply(CommandSender sender, String input) throws CustomArgumentException;
+		public T apply(CustomArgumentInfo info) throws CustomArgumentException;
 	}
 }

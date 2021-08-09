@@ -1,8 +1,5 @@
 var NAVTREEINDEX8 =
 {
-"interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_float_range_argument.html":[2,0,1,0,0,0,0,18],
-"interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_function_argument.html":[2,0,1,0,0,0,0,19],
-"interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_greedy_string_argument.html":[2,0,1,0,0,0,0,20],
 "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_integer_argument.html":[2,0,1,0,0,0,0,21],
 "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_integer_argument.html#a25f80c13b9288b92a2d01bc7aa1df015":[2,0,1,0,0,0,0,21,0],
 "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_integer_argument.html#aa5ea0e00c46e96dabf55ae0e5a58302c":[2,0,1,0,0,0,0,21,1],
@@ -42,10 +39,8 @@ var NAVTREEINDEX8 =
 "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_u_u_i_d_argument.html":[2,0,1,0,0,0,0,48],
 "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_primitive.html":[2,0,1,0,0,0,0,49],
 "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_primitive.html#a587422c5239256177af65880da2abcbd":[2,0,1,0,0,0,0,49,0],
-"interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser.html":[2,0,1,0,0,1,14,1],
-"interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser.html#a7b5a8c1a5f74a8ad0e68f6a61249f593":[2,0,1,0,0,1,14,1,0],
-"interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser2.html":[2,0,1,0,0,1,14,2],
-"interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_parser2.html#a35caa34a784b6c19e4e21b771d183351":[2,0,1,0,0,1,14,2,0],
+"interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_info_parser.html":[2,0,1,0,0,1,14,1],
+"interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_info_parser.html#a366f002b45e2f210e1b8c9536c55768f":[2,0,1,0,0,1,14,1,0],
 "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument.html":[2,0,1,0,0,1,24],
 "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_custom_provided_argument.html#aff7c4fbe27af700ccbde2969a0a5d32a":[2,0,1,0,0,1,24,0],
 "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_greedy_argument.html":[2,0,1,0,0,1,25],

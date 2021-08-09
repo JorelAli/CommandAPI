@@ -44,8 +44,8 @@ The list of what version of the CommandAPI you'll need to run on a specific vers
 - **Minecraft 1.16.3**: CommandAPI v4.2 to 5.12
 - **Minecraft 1.16.4**: CommandAPI v5.2 to 5.12
 - **Minecraft 1.16.5**: CommandAPI v5.7 to 6.1.x
-- **Minecraft 1.17**: CommandAPI 6.0.x to 6.1.x
-- **Minecraft 1.17.1**: CommandAPI 6.1.x
+- **Minecraft 1.17**: CommandAPI 6.0.x to 6.3.x
+- **Minecraft 1.17.1**: CommandAPI 6.3.x
 
 -----
 
@@ -279,6 +279,16 @@ This is the current roadmap for the CommandAPI (as of 16th May 2021):
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td valign="top"><b>6.3.0</b></td>
+            <td valign="top">August 2021</td>
+            <td valign="top">
+                <ul>
+                    <li>Adds a new constructor to <code>CustomArgument</code> which takes in a record containing all inputs</li>
+                    <li>Adds support for <code>CustomArgument</code>'s parser to use previously declared arguments</li>
+                </ul>
+            </td>
+        </tr>
         <tr>
             <td valign="top"><b>6.2.0</b></td>
             <td valign="top">July 2021</td>
