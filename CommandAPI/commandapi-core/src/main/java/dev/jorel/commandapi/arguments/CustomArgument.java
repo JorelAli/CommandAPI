@@ -20,6 +20,8 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import java.util.List;
+
 import org.bukkit.command.CommandSender;
 
 import com.mojang.brigadier.LiteralMessage;
@@ -38,8 +40,7 @@ import dev.jorel.commandapi.nms.NMS;
  */
 public class CustomArgument<T> extends Argument {
 	
-	private CustomArgumentParser<T> parser;
-	private CustomArgumentParser2<T> parser2;
+	private CustomArgumentInfoParser<T> infoParser;
 	private boolean keyed;
 	
 	/**
@@ -50,6 +51,7 @@ public class CustomArgument<T> extends Argument {
 	 *                 object of your choice. The String input is the text that the
 	 *                 CommandSender inputs for this argument
 	 */
+	@Deprecated(forRemoval = true, since = "6.3.0")
 	public CustomArgument(String nodeName, CustomArgumentParser<T> parser) {
 		this(nodeName, parser, false);
 	}
@@ -64,7 +66,12 @@ public class CustomArgument<T> extends Argument {
 	 *                 input is the text that the CommandSender inputs for this
 	 *                 argument
 	 */
+	@Deprecated(forRemoval = true, since = "6.3.0")
 	public CustomArgument(String nodeName, CustomArgumentParser2<T> parser) {
+		this(nodeName, parser, false);
+	}
+	
+	public CustomArgument(String nodeName, CustomArgumentInfoParser<T> parser) {
 		this(nodeName, parser, false);
 	}
 	
@@ -78,10 +85,11 @@ public class CustomArgument<T> extends Argument {
 	 * @param keyed    Whether this argument can accept Minecraft's
 	 *                 <code>NamespacedKey</code> as valid arguments
 	 */
+	@Deprecated(forRemoval = true, since = "6.3.0")
 	public CustomArgument(String nodeName, CustomArgumentParser<T> parser, boolean keyed) {
 		super(nodeName, keyed ? CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered() : StringArgumentType.string());
 		this.keyed = keyed;
-		this.parser = parser;
+		this.infoParser = (info) -> parser.apply(info.input());
 	}
 	
 	/**
@@ -95,10 +103,17 @@ public class CustomArgument<T> extends Argument {
 	 * @param keyed    Whether this argument can accept Minecraft's
 	 *                 <code>NamespacedKey</code> as valid arguments
 	 */
+	@Deprecated(forRemoval = true, since = "6.3.0")
 	public CustomArgument(String nodeName, CustomArgumentParser2<T> parser, boolean keyed) {
 		super(nodeName, keyed ? CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered() : StringArgumentType.string());
 		this.keyed = keyed;
-		this.parser2 = parser;
+		this.infoParser = (info) -> parser.apply(info.sender(), info.input());
+	}
+	
+	public CustomArgument(String nodeName, CustomArgumentInfoParser<T> parser, boolean keyed) {
+		super(nodeName, keyed ? CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered() : StringArgumentType.string());
+		this.keyed = keyed;
+		this.infoParser = parser;
 	}
 	
 	/**
@@ -113,31 +128,14 @@ public class CustomArgument<T> extends Argument {
 	public Class<T> getPrimitiveType() {
 		return null;
 	}
-	
-	/**
-	 * Returns the parser for this custom argument
-	 * @return the parser for this custom argument
-	 */
-	public CustomArgumentParser<T> getParser() {
-		return parser;
-	}
-	
-	/**
-	 * Returns the parser for this custom argument
-	 * @return the parser for this custom argument
-	 */
-	public CustomArgumentParser2<T> getParser2() {
-		return parser2;
-	}
 
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.CUSTOM;
 	}
 	
-	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+	public <CommandListenerWrapper> Object parseCustomArgument(NMS<CommandListenerWrapper> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, List<Object> previousArguments) throws CommandSyntaxException {
 		String customresult;
 		if(this.keyed) {
 			customresult = nms.getKeyedAsString(cmdCtx, key);
@@ -146,11 +144,9 @@ public class CustomArgument<T> extends Argument {
 		}
 		
 		try {
-			if(parser != null && parser2 == null) {
-				return parser.apply(customresult);
-			} else {
-				return parser2.apply(nms.getCommandSenderFromCSS(cmdCtx.getSource()), customresult);
-			}
+			CustomArgumentInfo info = new CustomArgumentInfo(nms.getCommandSenderFromCSS(cmdCtx.getSource()), previousArguments.toArray(), 
+					customresult);
+			return infoParser.apply(info);
 		} catch (CustomArgumentException e) {
 			throw e.toCommandSyntax(customresult, cmdCtx);
 		} catch (Exception e) {
@@ -161,6 +157,12 @@ public class CustomArgument<T> extends Argument {
 				return errorMsg;
 			}).create();
 		}
+	}
+	
+	@Override
+	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		throw new RuntimeException("parseArgument() is not implemented for CustomArgument. Did you mean parseCustomArgument()?");
 	}
 	
 	/**
@@ -292,6 +294,17 @@ public class CustomArgument<T> extends Argument {
 			}
 		}
 		
+	}
+	
+	public record CustomArgumentInfo(
+		CommandSender sender, 
+		Object[] previousArgs, 
+		String input) {
+	}
+	
+	@FunctionalInterface
+	public static interface CustomArgumentInfoParser<T> {
+		public T apply(CustomArgumentInfo info) throws CustomArgumentException;
 	}
 	
 	/**

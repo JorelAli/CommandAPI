@@ -65,6 +65,8 @@ import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
+import dev.jorel.commandapi.arguments.CustomArgument;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.ICustomProvidedArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
@@ -321,7 +323,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 
 		// Populate array
 		for (Argument argument : args) {
-			Object result = parseArgument(cmdCtx, argument.getNodeName(), argument);
+			Object result = parseArgument(cmdCtx, argument.getNodeName(), argument, args);
 			if(result != null) {
 				argList.add(result);
 			}
@@ -341,8 +343,43 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 * @return the standard Bukkit type
 	 * @throws CommandSyntaxException
 	 */
-	Object parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Argument value) throws CommandSyntaxException {
-		return value.isListed() ? value.parseArgument(NMS, cmdCtx, key) : null;
+	Object parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Argument value, Argument[] args) throws CommandSyntaxException {
+		if(value.isListed()) {
+			if(value instanceof CustomArgument<?> customValue) {
+				
+				// Get previous args
+				List<Object> previousArguments = new ArrayList<>();
+				for (Argument arg : args) {
+					if (arg.getNodeName().equals(key)) {
+						break;
+					}
+					
+					Object result;
+					try {
+						result = parseArgument(cmdCtx, arg.getNodeName(), arg, args);
+					} catch(IllegalArgumentException e) {
+						/*
+						 * Redirected commands don't parse previous arguments properly. Simplest way to
+						 * determine what we should do is simply set it to null, since there's nothing
+						 * else we can do. I thought about letting this simply be an empty array, but
+						 * then it's even more annoying to deal with - I wouldn't expect an array of
+						 * size n to suddenly, randomly be 0, but I would expect random NPEs because
+						 * let's be honest, this is Java we're dealing with.
+						 */
+						result = null;
+					}
+					if(result != null) {
+						previousArguments.add(result);
+					}
+				}
+				
+				return customValue.parseCustomArgument(NMS, cmdCtx, key, previousArguments);
+			} else {
+				return value.parseArgument(NMS, cmdCtx, key);
+			}
+		} else {
+			return null;
+		}
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -765,7 +802,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 				
 				Object result;
 				try {
-					result = parseArgument(context, arg.getNodeName(), arg);
+					result = parseArgument(context, arg.getNodeName(), arg, args);
 				} catch(IllegalArgumentException e) {
 					/*
 					 * Redirected commands don't parse previous arguments properly. Simplest way to
