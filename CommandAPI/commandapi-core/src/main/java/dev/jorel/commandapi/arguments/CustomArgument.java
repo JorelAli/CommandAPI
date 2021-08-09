@@ -135,7 +135,7 @@ public class CustomArgument<T> extends Argument {
 	}
 	
 	public <CommandListenerWrapper> Object parseCustomArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, List<Object> previousArguments) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArguments) throws CommandSyntaxException {
 		String customresult;
 		if(this.keyed) {
 			customresult = nms.getKeyedAsString(cmdCtx, key);
@@ -144,7 +144,7 @@ public class CustomArgument<T> extends Argument {
 		}
 		
 		try {
-			CustomArgumentInfo info = new CustomArgumentInfo(nms.getCommandSenderFromCSS(cmdCtx.getSource()), previousArguments.toArray(), 
+			CustomArgumentInfo info = new CustomArgumentInfo(nms.getCommandSenderFromCSS(cmdCtx.getSource()), previousArguments, 
 					customresult);
 			return infoParser.apply(info);
 		} catch (CustomArgumentException e) {
