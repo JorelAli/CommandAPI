@@ -1,0 +1,2 @@
+#!/bin/sh
+mvn clean package -Dmaven.javadoc.skip=true -Dmaven.source.skip=true -T 6 -e
