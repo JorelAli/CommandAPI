@@ -1,9 +1,3 @@
-/* exported pluginDropHandler */
-/* exported configDropHandler */
-/* exported pluginDragHandler */
-/* exported configDragHandler */
-
-
 // https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/File_drag_and_drop
 function handleDrop(event, handler) {
     // Prevent default behavior (Prevent file from being opened)
@@ -139,20 +133,24 @@ function handleConfigFile(file) {
     reader.readAsText(file);
 }
 
-function pluginDropHandler(event) {
+/* eslint-disable no-unused-vars */
+
+var pluginDropHandler = function pluginDropHandler(event) {
     handleDrop(event, handlePluginJar);
 }
 
-function configDropHandler(event) {
+var configDropHandler = function configDropHandler(event) {
     handleDrop(event, handleConfigFile);
 }
 
-function pluginDragHandler(event) {
+var pluginDragHandler = function pluginDragHandler(event) {
     event.preventDefault();
     document.getElementById("plugin_upload_text").innerText = "Drop the file here!";
 }
 
-function configDragHandler(event) {
+var configDragHandler = function configDragHandler(event) {
     event.preventDefault();
     document.getElementById("config_upload_text").innerText = "Drop the file here!";
 }
+
+/* eslint-enable no-unused-vars */

@@ -24,11 +24,11 @@ function handlePluginJar(file) {
     new JSZip().loadAsync(file)
         .then((zip) => {
             zip.file("plugin.yml").async("string").then((plugintext) => {
-                const output = document.getElementById("plugin_upload_output");;
+                const output = document.getElementById("plugin_upload_output");
                 try {
                     const configYAML = YAML.parse(plugintext);
 
-                    const outputContent = mkSuccess("Plugin information for <code class=\"hljs language-undefined\">" + configYAML["name"] + "</code> parsed successfully.")
+                    const outputContent = mkSuccess("Plugin information for <code class=\"hljs language-undefined\">" + configYAML["name"] + "</code> parsed successfully.");
                     const list = document.createElement("ul");
 
                     const commands = document.createElement("p");
@@ -119,13 +119,11 @@ function handleConfigFile(file) {
             output.appendChild(errorMsg);
             hljs.highlightAll();
 
-            let count = 0;
             for (const line of code.children) {
                 if (line.innerText === err.snippet) {
                     line.style.backgroundColor = "var(--warning-bg)";
                     break;
                 }
-                count++;
             }
         }
     };
@@ -135,20 +133,24 @@ function handleConfigFile(file) {
     reader.readAsText(file);
 }
 
-function pluginDropHandler(event) {
+/* eslint-disable no-unused-vars */
+
+var pluginDropHandler = function pluginDropHandler(event) {
     handleDrop(event, handlePluginJar);
 }
 
-function configDropHandler(event) {
+var configDropHandler = function configDropHandler(event) {
     handleDrop(event, handleConfigFile);
 }
 
-function pluginDragHandler(event) {
+var pluginDragHandler = function pluginDragHandler(event) {
     event.preventDefault();
     document.getElementById("plugin_upload_text").innerText = "Drop the file here!";
 }
 
-function configDragHandler(event) {
+var configDragHandler = function configDragHandler(event) {
     event.preventDefault();
     document.getElementById("config_upload_text").innerText = "Drop the file here!";
 }
+
+/* eslint-enable no-unused-vars */
