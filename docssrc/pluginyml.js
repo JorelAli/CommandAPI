@@ -139,20 +139,20 @@ function handleConfigFile(file) {
     reader.readAsText(file);
 }
 
-function pluginDropHandler(event) {
+var pluginDropHandler = function pluginDropHandler(event) {
     handleDrop(event, handlePluginJar);
 }
 
-function configDropHandler(event) {
+var configDropHandler = function configDropHandler(event) {
     handleDrop(event, handleConfigFile);
 }
 
-function pluginDragHandler(event) {
+var pluginDragHandler = function pluginDragHandler(event) {
     event.preventDefault();
     document.getElementById("plugin_upload_text").innerText = "Drop the file here!";
 }
 
-function configDragHandler(event) {
+var configDragHandler = function configDragHandler(event) {
     event.preventDefault();
     document.getElementById("config_upload_text").innerText = "Drop the file here!";
 }
