@@ -1,5 +1,7 @@
 var NAVTREEINDEX5 =
 {
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html#a33feaa3af9efb01b43c7da74503af365":[2,0,1,0,0,1,37,6],
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html#a358f2f31f1454de941efe64987842741":[2,0,1,0,0,1,37,1],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html#a36dbcbd4744c398a055646b00e53c3f5":[2,0,1,0,0,1,37,19],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html#a45618ba438bcedaac2aaf2da366f3350":[2,0,1,0,0,1,37,13],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html#a4c7f96061fe9761813c9d995cc7aa5f5":[2,0,1,0,0,1,37,23],
@@ -247,7 +249,5 @@ var NAVTREEINDEX5 =
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html#af19355b889385c173107290e6e2d045e":[2,0,1,0,0,1,49,22],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_scoreboard_slot_argument.html":[2,0,1,0,0,1,48],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_scoreboard_slot_argument.html#a2d3b7401bebe89cecd366ffe3ac74bda":[2,0,1,0,0,1,48,11],
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_scoreboard_slot_argument.html#a2f0ed384b5c4006f270f0e206b7184c0":[2,0,1,0,0,1,48,4],
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_scoreboard_slot_argument.html#a37b9c1544cfde592e92cff4776191097":[2,0,1,0,0,1,48,13],
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_scoreboard_slot_argument.html#a5ace13eeb9a0e7bebe80e94563cb46c8":[2,0,1,0,0,1,48,5]
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_scoreboard_slot_argument.html#a2f0ed384b5c4006f270f0e206b7184c0":[2,0,1,0,0,1,48,4]
 };

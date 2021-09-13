@@ -1,5 +1,7 @@
 var NAVTREEINDEX8 =
 {
+"interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_function_argument.html":[2,0,1,0,0,0,0,19],
+"interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_greedy_string_argument.html":[2,0,1,0,0,0,0,20],
 "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_integer_argument.html":[2,0,1,0,0,0,0,21],
 "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_integer_argument.html#a25f80c13b9288b92a2d01bc7aa1df015":[2,0,1,0,0,0,0,21,0],
 "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_integer_argument.html#aa5ea0e00c46e96dabf55ae0e5a58302c":[2,0,1,0,0,0,0,21,1],

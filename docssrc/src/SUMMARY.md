@@ -95,6 +95,7 @@
 # CommandAPI Utilities
 
 - [Command conversion](./conversion.md)
+- [Plugin reloading](./reloading.md)
 
 # Internal CommandAPI
 
