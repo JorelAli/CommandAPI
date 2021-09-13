@@ -114,7 +114,7 @@ public final class Converter {
 		new CommandAPICommand(commandName)
 			.withPermission(CommandPermission.NONE)
 			.executesNative((sender, args) -> { 
-				CommandSender proxiedSender = sender.getCallee();
+				CommandSender proxiedSender = mergeProxySender(sender);
 				Bukkit.dispatchCommand(proxiedSender, commandName);
 			})
 			.register();
@@ -125,7 +125,7 @@ public final class Converter {
 			.withArguments(arguments)
 			.executesNative((sender, args) -> { 
 				// We know the args are a String[] because that's how converted things are handled in generateCommand()
-				CommandSender proxiedSender = sender.getCallee();
+				CommandSender proxiedSender = mergeProxySender(sender);
 				Bukkit.dispatchCommand(proxiedSender, commandName + " " +  String.join(" ", (String[]) args));
 			});
 
