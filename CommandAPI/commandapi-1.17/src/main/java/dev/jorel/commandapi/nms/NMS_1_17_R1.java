@@ -461,7 +461,7 @@ public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 
 	@Override
 	public com.mojang.brigadier.CommandDispatcher<CommandSourceStack> getBrigadierDispatcher() {
-		return MINECRAFT_SERVER.getCommands().getDispatcher();
+		return MINECRAFT_SERVER.vanillaCommandDispatcher.getDispatcher();
 	}
 
 	@Override
