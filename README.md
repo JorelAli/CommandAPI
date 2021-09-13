@@ -250,8 +250,6 @@ The CommandAPI can be built easily, but requires copies of the Spigot server jar
 
 This is the current roadmap for the CommandAPI (as of 16th May 2021):
   
-- **CommandAPI 6.1.0:** Bug fixes probably?
-
 - **CommandAPI 7.0.0:** Annotation improvements
 
   The CommandAPI's annotation system has always been a bit limited and was primarily introduced as a proof-of-concept. In this update, the CommandAPI's annotation system will be improved to be (ideally) as powerful as the non-annotation system and have slightly better type safety.
@@ -279,6 +277,17 @@ This is the current roadmap for the CommandAPI (as of 16th May 2021):
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td valign="top"><b>6.3.1</b></td>
+            <td valign="top">September 2021</td>
+            <td valign="top">
+                <ul>
+                    <li>Fixes issue with converted commands where executing as a player with lower permissions fails</li>
+                    <li>Adds very limited support for plugin reloading by unregistering commands on disable</li>
+                    <li>Fixes issue where converted commands with greedy string arguments would almost always fail</li>
+                </ul>
+            </td>
+        </tr>
         <tr>
             <td valign="top"><b>6.3.0</b></td>
             <td valign="top">August 2021</td>
