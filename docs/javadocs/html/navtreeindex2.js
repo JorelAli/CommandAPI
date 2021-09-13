@@ -1,9 +1,11 @@
 var NAVTREEINDEX2 =
 {
-"classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ae5a4bf1048697f05ab049a7875b95538":[2,0,1,0,0,7,35],
-"classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ae96b5e2ad2f71bc1cdd15ca223095919":[2,0,1,0,0,7,38],
-"classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#aee7e8be51b146b2d3bac68612684bb8c":[2,0,1,0,0,7,26],
-"classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#aef2bbaaef06330e8bafbb5424cbfd6d9":[2,0,1,0,0,7,29],
+"classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ad373c8c5eb7377e71ee34207ff262ff8":[2,0,1,0,0,7,13],
+"classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ad8cde78c7184574b0f77135a20f23857":[2,0,1,0,0,7,16],
+"classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ae5a4bf1048697f05ab049a7875b95538":[2,0,1,0,0,7,36],
+"classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ae96b5e2ad2f71bc1cdd15ca223095919":[2,0,1,0,0,7,39],
+"classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#aee7e8be51b146b2d3bac68612684bb8c":[2,0,1,0,0,7,27],
+"classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#aef2bbaaef06330e8bafbb5424cbfd6d9":[2,0,1,0,0,7,30],
 "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#af10331d0d959e2e6c01d9af81e2f6f61":[2,0,1,0,0,7,20],
 "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html":[2,0,1,0,0,8],
 "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html#a3c37f83147344c04668ce953ed4c1a19":[2,0,1,0,0,8,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX2 =
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument.html#adc3f6a120e215235168855ed3be2b01e":[2,0,1,0,0,1,8,20],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument.html#adcaa4e187c665d35020fc681b8750591":[2,0,1,0,0,1,8,7],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument.html#ae91e0239e20332e732d3a694fb6d25ce":[2,0,1,0,0,1,8,0],
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument.html#ae9a53aa98c3776326c063a9f8733979b":[2,0,1,0,0,1,8,25],
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument.html#af19355b889385c173107290e6e2d045e":[2,0,1,0,0,1,8,19],
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_boolean_argument.html":[2,0,1,0,0,1,9]
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument.html#ae9a53aa98c3776326c063a9f8733979b":[2,0,1,0,0,1,8,25]
 };
