@@ -504,5 +504,14 @@ public class CommandAPICommand {
 		}
 		
 	}
+
+	/**
+	 * Overrides a command. Effectively the same as unregistering the command using
+	 * CommandAPI.unregister() and then registering the command using .register()
+	 */
+	public void override() {
+		CommandAPI.unregister(this.commandName, true);
+		register();
+	}
 	
 }
