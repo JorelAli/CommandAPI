@@ -133,24 +133,24 @@ function handleConfigFile(file) {
     reader.readAsText(file);
 }
 
-/* exported pluginDropHandler */
+/* eslint-disable no-unused-vars */
+
 var pluginDropHandler = function pluginDropHandler(event) {
     handleDrop(event, handlePluginJar);
 }
 
-/* exported configDropHandler */
 var configDropHandler = function configDropHandler(event) {
     handleDrop(event, handleConfigFile);
 }
 
-/* exported pluginDragHandler */
 var pluginDragHandler = function pluginDragHandler(event) {
     event.preventDefault();
     document.getElementById("plugin_upload_text").innerText = "Drop the file here!";
 }
 
-/* exported configDragHandler */
 var configDragHandler = function configDragHandler(event) {
     event.preventDefault();
     document.getElementById("config_upload_text").innerText = "Drop the file here!";
 }
+
+/* eslint-enable no-unused-vars */
