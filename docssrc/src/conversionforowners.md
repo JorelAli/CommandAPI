@@ -18,6 +18,51 @@ The CommandAPI has 3 different conversion methods, each one more specific and po
 
 -----
 
+## Auto import plugin
+
+Drag a plugin here to view available commands and plugin info!
+
+<style>
+        #drop_zone_parent {
+            padding: 20px;
+        }
+        
+        #drop_zone {
+            border: 2px solid;
+            border-radius: 20px;
+            padding: 20px;
+            border-style: dashed;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        #drop_zone_output {
+            margin-top: 20px;
+        }
+
+        .drop_zone_text {
+            margin-left: 20px;
+        }
+    </style>
+
+<div id="drop_zone_parent">
+    <div id="drop_zone" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);">
+    <!-- From https://tablericons.com/. Governed by the MIT license. -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-upload" width="32" height="32" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
+  <polyline points="7 9 12 4 17 9" />
+  <line x1="12" y1="4" x2="12" y2="16" />
+</svg><span class="drop_zone_text" id="drop_zone_id"><h3>Drag a plugin .jar file here</h3></span>
+    </div>
+</div>
+
+<div id="drop_zone_output"></div>
+
+-----
+
 ## YAML configuration rules
 
 To configure command conversion, the CommandAPI reads this information from the `config.yml` file. This file has a bit of a weird structure, so to put it simply, these are the following rules:
