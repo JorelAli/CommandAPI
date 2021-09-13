@@ -1,3 +1,9 @@
+/* exported pluginDropHandler */
+/* exported configDropHandler */
+/* exported pluginDragHandler */
+/* exported configDragHandler */
+
+
 // https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/File_drag_and_drop
 function handleDrop(event, handler) {
     // Prevent default behavior (Prevent file from being opened)
@@ -24,11 +30,11 @@ function handlePluginJar(file) {
     new JSZip().loadAsync(file)
         .then((zip) => {
             zip.file("plugin.yml").async("string").then((plugintext) => {
-                const output = document.getElementById("plugin_upload_output");;
+                const output = document.getElementById("plugin_upload_output");
                 try {
                     const configYAML = YAML.parse(plugintext);
 
-                    const outputContent = mkSuccess("Plugin information for <code class=\"hljs language-undefined\">" + configYAML["name"] + "</code> parsed successfully.")
+                    const outputContent = mkSuccess("Plugin information for <code class=\"hljs language-undefined\">" + configYAML["name"] + "</code> parsed successfully.");
                     const list = document.createElement("ul");
 
                     const commands = document.createElement("p");
@@ -119,13 +125,11 @@ function handleConfigFile(file) {
             output.appendChild(errorMsg);
             hljs.highlightAll();
 
-            let count = 0;
             for (const line of code.children) {
                 if (line.innerText === err.snippet) {
                     line.style.backgroundColor = "var(--warning-bg)";
                     break;
                 }
-                count++;
             }
         }
     };
