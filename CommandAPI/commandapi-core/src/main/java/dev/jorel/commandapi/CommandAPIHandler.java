@@ -291,11 +291,13 @@ public class CommandAPIHandler<CommandSourceStack> {
 				List<List<String>> product = CartesianProduct.getDescartes(Arrays.asList(entityNamesForArgs));
 				
 				// These objects in obj are List<String>
-				for(List<String> strings : product) {					
-					// We assume result.length == strings.length
-					for(int i = 0; i < result.length; i++) {
-						if(strings.get(i) != null) {
-							result[i] = strings.get(i);
+				for(List<String> strings : product) {
+					// We assume result.length == strings.size
+					if(result.length == strings.size()) {
+						for(int i = 0; i < result.length; i++) {
+							if(strings.get(i) != null) {
+								result[i] = strings.get(i);
+							}
 						}
 					}
 					resultValue += executor.execute(sender, result);
