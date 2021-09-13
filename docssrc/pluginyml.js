@@ -22,29 +22,37 @@ function handleDrop(event, handler) {
 
 function handlePluginJar(file) {
     new JSZip().loadAsync(file)
-        .then(function(zip) {
-            zip.file("plugin.yml").async("string").then(function(plugintext) {
+        .then((zip) => {
+            zip.file("plugin.yml").async("string").then((plugintext) => {
+                const output = document.getElementById("plugin_upload_output");;
                 try {
-                    let nativeObject = YAML.parse(plugintext);
-                    console.log(nativeObject);
+                    const configYAML = YAML.parse(plugintext);
 
-                    let output = document.getElementById("plugin_upload_output");
-                    output.innerText = "Plugin name: " + nativeObject["name"];
-                    if (nativeObject.commands !== undefined) {
-                        for (let commandName of Object.keys(nativeObject.commands)) {
-                            output.innerText += "\n" + commandName;
+                    const outputContent = mkSuccess("Plugin information for <code class=\"hljs language-undefined\">" + configYAML["name"] + "</code> parsed successfully.")
+                    const list = document.createElement("ul");
+
+                    const commands = document.createElement("p");
+                    commands.innerHTML = "<b>Commands that can be registered:</b>";
+
+                    if (configYAML.commands !== undefined) {
+                        for (let commandName of Object.keys(configYAML.commands)) {
+                            const listElement = document.createElement("li");
+                            listElement.innerHTML = "<b>" + commandName + "</b> - " + configYAML.commands[commandName].description;
+                            list.appendChild(listElement);
                         }
-
                     }
+
+                    outputContent.appendChild(commands);
+                    outputContent.appendChild(list);
+
+                    output.appendChild(outputContent);
                 } catch (err) {
                     let output = document.getElementById("plugin_upload_output");
-                    output.innerText = err.message + " on line " + err.parsedLine + ": " + err.snippet;
+                    output.appendChild(mkErr("The plugin.yml file is invalid. Contact the plugin creator for more info."));
                 }
 
             });
-        }, function() {
-            alert("Not a valid zip file");
-        });
+        }, () => mkErr("This file is not a valid .jar file"));
 }
 
 function mkSuccess(message) {
@@ -54,7 +62,7 @@ function mkSuccess(message) {
 
     outputElem.classList.add("example");
     outputHeading.innerText = "Success!";
-    outputText.innerText = message;
+    outputText.innerHTML = message;
     outputElem.appendChild(outputHeading);
     outputElem.appendChild(outputText);
     return outputElem;
