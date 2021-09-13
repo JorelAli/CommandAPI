@@ -56,11 +56,6 @@ For context, a list of Java versions and their class file version:
 | **Java 14**      | 58.0               |   | **Java 9**       | 53.0               |
 | **Java 13**      | 57.0               |   | **Java 8**       | 52.0               |
 
-
-
-
-
-
 -----
 
 ## Server errors when loading datapacks in 1.16+
