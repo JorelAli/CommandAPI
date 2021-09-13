@@ -37,6 +37,13 @@ Using the search icon in the top left corner, you can search for anything in thi
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 6.3.0 \\(\rightarrow\\) 6.3.1:
+
+- Adds Java 16 error to [Troubleshooting](./troubleshooting.md).
+- Update [FAQ](faq.md).
+- Adds some useful tools to [Command conversion](./conversionforowners.md) to get plugin info and check `config.yml` validity.
+- Adds [Plugin reloading](./reloading.md) page which describes how to add minimal support for `/reload`.
+
 ### Documentation changes 6.2.0 \\(\rightarrow\\) 6.3.0:
 
 - Update [Custom arguments](./customarguments.md) page with new custom argument constructor information

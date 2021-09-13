@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">CommandAPI
-   &#160;<span id="projectnumber">6.3.0</span>
+   &#160;<span id="projectnumber">6.3.1</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -118,7 +118,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <li><b>Minecraft 1.16.4</b>: CommandAPI v5.2 to 5.12</li>
 <li><b>Minecraft 1.16.5</b>: CommandAPI v5.7 to 6.1.x</li>
 <li><b>Minecraft 1.17</b>: CommandAPI 6.0.x to 6.3.x</li>
-<li><b>Minecraft 1.17.1</b>: CommandAPI 6.3.x</li>
+<li><b>Minecraft 1.17.1</b>: CommandAPI 6.1.x to 6.3.x</li>
 </ul>
 <hr  />
 <h2>Purpose</h2>
@@ -277,7 +277,6 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <h2>CommandAPI Project Timeline</h2>
 <p>This is the current roadmap for the CommandAPI (as of 16th May 2021):</p>
 <ul>
-<li><b>CommandAPI 6.1.0:</b> Bug fixes probably?</li>
 <li><p class="startli"><b>CommandAPI 7.0.0:</b> Annotation improvements</p>
 <p class="startli">The CommandAPI's annotation system has always been a bit limited and was primarily introduced as a proof-of-concept. In this update, the CommandAPI's annotation system will be improved to be (ideally) as powerful as the non-annotation system and have slightly better type safety.</p>
 </li>
@@ -295,6 +294,16 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <p>Version </p>
 <p>Date </p>
 <p>Features / Changes  &lt;/thead&gt; &lt;tbody&gt; </p>
+<p><b>6.3.1</b> </p>
+<p>September 2021 </p>
+<ul>
+<li>
+Fixes issue with converted commands where executing as a player with lower permissions fails </li>
+<li>
+Adds very limited support for plugin reloading by unregistering commands on disable </li>
+<li>
+Fixes issue where converted commands with greedy string arguments would almost always fail </li>
+</ul>
 <p><b>6.3.0</b> </p>
 <p>August 2021 </p>
 <ul>
@@ -1064,7 +1073,7 @@ Initial release </li>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Mon Aug 9 2021 23:00:54 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Mon Sep 13 2021 16:19:00 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

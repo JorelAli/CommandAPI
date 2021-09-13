@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">CommandAPI
-   &#160;<span id="projectnumber">6.3.0</span>
+   &#160;<span id="projectnumber">6.3.1</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -215,6 +215,9 @@ Public Member Functions</h2></td></tr>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a56fd6c1a70cbcecdc0fcb8c58fd79150">register</a> ()</td></tr>
 <tr class="memdesc:a56fd6c1a70cbcecdc0fcb8c58fd79150"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers the command. <br /></td></tr>
 <tr class="separator:a56fd6c1a70cbcecdc0fcb8c58fd79150"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ff1527efddf59f8610bf14064389464"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a7ff1527efddf59f8610bf14064389464">override</a> ()</td></tr>
+<tr class="memdesc:a7ff1527efddf59f8610bf14064389464"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overrides a command.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a7ff1527efddf59f8610bf14064389464">More...</a><br /></td></tr>
+<tr class="separator:a7ff1527efddf59f8610bf14064389464"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A builder used to create commands to be registered by the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a>. </p>
@@ -784,6 +787,26 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 </div>
 </div>
+<a id="a7ff1527efddf59f8610bf14064389464"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ff1527efddf59f8610bf14064389464">&#9670;&nbsp;</a></span>override()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void dev.jorel.commandapi.CommandAPICommand.override </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Overrides a command. </p>
+<p>Effectively the same as unregistering the command using <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#af80c6e832cee1fd3e8e7e5ef52f98fb5" title="Unregisters a command.">CommandAPI.unregister()</a> and then registering the command using .<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a56fd6c1a70cbcecdc0fcb8c58fd79150" title="Registers the command.">register()</a> </p>
+
+</div>
+</div>
 <a id="a65b8521ebeb5458da320f3d51e389e39"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a65b8521ebeb5458da320f3d51e389e39">&#9670;&nbsp;</a></span>setAliases()</h2>
 
@@ -1190,7 +1213,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html">CommandAPICommand</a></li>
-    <li class="footer">Generated on Mon Aug 9 2021 23:00:53 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Mon Sep 13 2021 16:18:59 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -1,5 +1,7 @@
 var NAVTREEINDEX6 =
 {
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_scoreboard_slot_argument.html#a37b9c1544cfde592e92cff4776191097":[2,0,1,0,0,1,48,13],
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_scoreboard_slot_argument.html#a5ace13eeb9a0e7bebe80e94563cb46c8":[2,0,1,0,0,1,48,5],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_scoreboard_slot_argument.html#a5ca0a922bf99510dc25dd64a2e0271dc":[2,0,1,0,0,1,48,6],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_scoreboard_slot_argument.html#a7285ee1803a67ac18eeebe1e82530b21":[2,0,1,0,0,1,48,3],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_scoreboard_slot_argument.html#a8983d748a2a5e554d69ce4d10b728408":[2,0,1,0,0,1,48,9],
@@ -247,7 +249,5 @@ var NAVTREEINDEX6 =
 "deprecated.html":[0],
 "enumcom_1_1mojang_1_1brigadier_1_1arguments_1_1_string_argument_type_1_1_string_type.html":[2,0,0,0,0,0,6,0],
 "enumcom_1_1mojang_1_1brigadier_1_1arguments_1_1_string_argument_type_1_1_string_type.html#a2df5b85dc9209b48ff79b447585bdd44":[2,0,0,0,0,0,6,0,4],
-"enumcom_1_1mojang_1_1brigadier_1_1arguments_1_1_string_argument_type_1_1_string_type.html#a45620e5dc94cb73d7e692bf4bf0608cc":[2,0,0,0,0,0,6,0,0],
-"enumcom_1_1mojang_1_1brigadier_1_1arguments_1_1_string_argument_type_1_1_string_type.html#a7dfad98550d90fb6993066ed5efb684f":[2,0,0,0,0,0,6,0,3],
-"enumcom_1_1mojang_1_1brigadier_1_1arguments_1_1_string_argument_type_1_1_string_type.html#ab274fdd16ed42de309e543af2a659bce":[2,0,0,0,0,0,6,0,1]
+"enumcom_1_1mojang_1_1brigadier_1_1arguments_1_1_string_argument_type_1_1_string_type.html#a45620e5dc94cb73d7e692bf4bf0608cc":[2,0,0,0,0,0,6,0,0]
 };

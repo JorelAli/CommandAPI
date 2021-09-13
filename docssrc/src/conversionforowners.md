@@ -18,6 +18,51 @@ The CommandAPI has 3 different conversion methods, each one more specific and po
 
 -----
 
+## Extract plugin info
+
+Drag a plugin here to view a list of available commands which can be registered for the CommandAPI.
+
+<style>
+    .drop_zone_parent {
+        padding: 20px;
+    }
+    
+    .drop_zone {
+        border: 2px solid;
+        border-radius: 20px;
+        padding: 20px;
+        border-style: dashed;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    #drop_zone_output {
+        margin-top: 20px;
+    }
+
+    .drop_zone_text {
+        margin-left: 20px;
+    }
+</style>
+
+<div class="drop_zone_parent">
+    <div class="drop_zone" ondrop="pluginDropHandler(event);" ondragover="pluginDragHandler(event);">
+    <!-- From https://tablericons.com/. Governed by the MIT license. -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-upload" width="32" height="32" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
+  <polyline points="7 9 12 4 17 9" />
+  <line x1="12" y1="4" x2="12" y2="16" />
+</svg><span ><h3 class="drop_zone_text" id="plugin_upload_text" >Drag and drop a plugin .jar file here</h3></span>
+    </div>
+</div>
+
+<div id="plugin_upload_output"></div>
+
+-----
+
 ## YAML configuration rules
 
 To configure command conversion, the CommandAPI reads this information from the `config.yml` file. This file has a bit of a weird structure, so to put it simply, these are the following rules:
@@ -25,7 +70,21 @@ To configure command conversion, the CommandAPI reads this information from the 
 - **`config.yml` cannot have tab characters** - The `config.yml` file _must_ only consist of spaces!
 - Indentation is important and should be _two spaces_
 
-If you're uncertain if your configuration is valid (or you're getting weird errors in the console), you can check if your configuration is valid using [YAMLLint](http://www.yamllint.com/).
+If you're uncertain if your configuration is valid (or you're getting weird errors in the console), you can check if your configuration is valid by dropping your `config.yml` file below:
+
+<div class="drop_zone_parent">
+    <div class="drop_zone" ondrop="configDropHandler(event);" ondragover="configDragHandler(event);">
+    <!-- From https://tablericons.com/. Governed by the MIT license. -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-upload" width="32" height="32" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
+  <polyline points="7 9 12 4 17 9" />
+  <line x1="12" y1="4" x2="12" y2="16" />
+</svg><span ><h3 class="drop_zone_text" id="config_upload_text" >Drag and drop your config.yml here</h3></span>
+    </div>
+</div>
+
+<div id="config_upload_output"></div>
 
 -----
 

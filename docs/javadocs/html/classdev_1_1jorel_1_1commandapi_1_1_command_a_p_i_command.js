@@ -23,6 +23,7 @@ var classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command =
     [ "getRequirements", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#af10331d0d959e2e6c01d9af81e2f6f61", null ],
     [ "getSubcommands", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a1cba278fc6461a025fc632b09d32c8cc", null ],
     [ "isConverted", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a4fbefdb297567ab226da9e11642f9a08", null ],
+    [ "override", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a7ff1527efddf59f8610bf14064389464", null ],
     [ "register", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a56fd6c1a70cbcecdc0fcb8c58fd79150", null ],
     [ "setAliases", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a65b8521ebeb5458da320f3d51e389e39", null ],
     [ "setArguments", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a2fc1456d2c70c38c9153bf689ef5033e", null ],

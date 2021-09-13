@@ -470,7 +470,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> getBrigadierDispatcher() {
-		return MINECRAFT_SERVER.getCommandDispatcher().a();
+		return MINECRAFT_SERVER.vanillaCommandDispatcher.a();
 	}
 
 	@Override

@@ -2,16 +2,16 @@
 authors = ["JorelAli"]
 multilingual = false
 src = "src"
-title = "CommandAPI Documentation v6.3.0"
+title = "CommandAPI Documentation v6.3.1"
 
 [build]
-build-dir = "./../docs/6.3.0"
+build-dir = "./../docs/6.3.1"
 
 [output.html]
 git-repository-url = "https://github.com/JorelAli/CommandAPI"
 default-theme = "rust"
 additional-css = ["style.css"]
-additional-js = ["sidebar.js", "mccmd.js"]
+additional-js = ["sidebar.js", "mccmd.js", "jszip.min.js", "yaml.min.js", "pluginyml.js"]
 mathjax-support = true
 
 [output.html.fold]
