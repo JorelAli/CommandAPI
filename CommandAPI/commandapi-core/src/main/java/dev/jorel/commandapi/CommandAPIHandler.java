@@ -80,23 +80,33 @@ import dev.jorel.commandapi.preprocessor.RequireField;
  * registration and unregistration of commands.
  */
 @RequireField(in = CommandNode.class, name = "children", ofType = Map.class)
+@RequireField(in = CommandNode.class, name = "literals", ofType = Map.class)
+@RequireField(in = CommandNode.class, name = "arguments", ofType = Map.class)
 @RequireField(in = CommandContext.class, name = "arguments", ofType = Map.class)
 public class CommandAPIHandler<CommandSourceStack> {
 	
 	private final static VarHandle COMMANDNODE_CHILDREN;
+	private final static VarHandle COMMANDNODE_LITERALS;
+	private final static VarHandle COMMANDNODE_ARGUMENTS;
 	private final static VarHandle COMMANDCONTEXT_ARGUMENTS;
 	
 	// Compute all var handles all in one go so we don't do this during main server runtime
 	static {
 		VarHandle commandNodeChildren = null;
+		VarHandle commandNodeLiterals = null;
+		VarHandle commandNodeArguments = null;
 		VarHandle commandContextArguments = null;
 		 try {
 			 commandNodeChildren = MethodHandles.privateLookupIn(CommandNode.class, MethodHandles.lookup()).findVarHandle(CommandNode.class, "children", Map.class);
+			 commandNodeLiterals = MethodHandles.privateLookupIn(CommandNode.class, MethodHandles.lookup()).findVarHandle(CommandNode.class, "literals", Map.class);
+			 commandNodeArguments = MethodHandles.privateLookupIn(CommandNode.class, MethodHandles.lookup()).findVarHandle(CommandNode.class, "arguments", Map.class);
 			 commandContextArguments = MethodHandles.privateLookupIn(CommandContext.class, MethodHandles.lookup()).findVarHandle(CommandContext.class, "arguments", Map.class);
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		} 
 		COMMANDNODE_CHILDREN = commandNodeChildren;
+		COMMANDNODE_LITERALS = commandNodeLiterals;
+		COMMANDNODE_ARGUMENTS = commandNodeArguments;
 		COMMANDCONTEXT_ARGUMENTS = commandContextArguments;
 	}
 	
@@ -220,6 +230,8 @@ public class CommandAPIHandler<CommandSourceStack> {
 
 		// Otherwise, just remove them normally
 		commandNodeChildren.remove(commandName);
+		((Map<String, CommandNode<?>>) COMMANDNODE_LITERALS.get(DISPATCHER.getRoot())).remove(commandName);
+		((Map<String, CommandNode<?>>) COMMANDNODE_ARGUMENTS.get(DISPATCHER.getRoot())).remove(commandName);
 	}		
 
 	/**

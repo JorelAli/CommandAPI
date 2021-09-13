@@ -65,7 +65,7 @@ public final class CommandAPI {
 	 * Returns the CommandAPI's logger
 	 * @return the CommandAPI's logger
 	 */
-	private static Logger getLog() {
+	public static Logger getLog() {
 		if(logger == null) {
 			logger = new Logger("CommandAPI", null) {
 				{
