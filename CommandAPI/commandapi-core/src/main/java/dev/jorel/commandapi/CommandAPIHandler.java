@@ -932,9 +932,9 @@ public class CommandAPIHandler<CommandSourceStack> {
 			if(command.shortDescription().isPresent()) {
 				shortDescription = command.shortDescription().get();
 			} else if(command.fullDescription().isPresent()) {
-				int i = command.fullDescription().get().indexOf(10);
-				if (i > 1) {
-					shortDescription = command.fullDescription().get().substring(0, i - 1);
+				final String fullDescription = command.fullDescription().get(); 
+				if(fullDescription.length() > 10) {
+					shortDescription = command.fullDescription().get().substring(0, 9);
 				} else {
 					shortDescription = command.fullDescription().get();
 				}
@@ -980,8 +980,8 @@ public class CommandAPIHandler<CommandSourceStack> {
 			if(command.permission().getPermission() != null) {
 				permission = command.permission().getPermission(); 
 			} else {
-				// TODO: ???
-				permission = null;
+				// Must be empty string, not null as defined by OBC::CustomHelpTopic
+				permission = "";
 			}
 			
 			helpTopicsToAdd.put("/" + command.commandName(),

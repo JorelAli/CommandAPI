@@ -65,8 +65,8 @@ public class CommandAPICommand {
 	private List<CommandAPICommand> subcommands = new ArrayList<>();
 	private CustomCommandExecutor<?> executor = new CustomCommandExecutor<>();
 	private boolean isConverted;
-	Optional<String> shortDescription = Optional.empty();
-	Optional<String> fullDescription = Optional.empty();
+	private Optional<String> shortDescription = Optional.empty();
+	private Optional<String> fullDescription = Optional.empty();
 	
 	/**
 	 * Creates a new command builder
@@ -175,12 +175,12 @@ public class CommandAPICommand {
 	}
 	
 	public CommandAPICommand withShortDescription(String description) {
-		this.shortDescription = Optional.of(description);
+		this.shortDescription = Optional.ofNullable(description);
 		return this;
 	}
 	
 	public CommandAPICommand withFullDescription(String description) {
-		this.fullDescription = Optional.of(description);
+		this.fullDescription = Optional.ofNullable(description);
 		return this;
 	}
 	
