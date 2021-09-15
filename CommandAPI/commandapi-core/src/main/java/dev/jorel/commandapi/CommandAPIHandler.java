@@ -925,6 +925,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 
 	public void updateHelpForCommands() {
 		Map<String, HelpTopic> helpTopicsToAdd = new HashMap<>();
+		
 		for(CommandHelp command : this.commands) {
 			
 			// Generate short description
@@ -932,12 +933,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 			if(command.shortDescription().isPresent()) {
 				shortDescription = command.shortDescription().get();
 			} else if(command.fullDescription().isPresent()) {
-				final String fullDescription = command.fullDescription().get(); 
-				if(fullDescription.length() > 10) {
-					shortDescription = command.fullDescription().get().substring(0, 9);
-				} else {
-					shortDescription = command.fullDescription().get();
-				}
+				shortDescription = command.fullDescription().get();
 			} else {
 				shortDescription = "A Mojang provided command.";
 			}
@@ -980,8 +976,16 @@ public class CommandAPIHandler<CommandSourceStack> {
 				permission = "";
 			}
 			
-			helpTopicsToAdd.put("/" + command.commandName(),
-					NMS.generateHelpTopic("/" + command.commandName(), shortDescription, sb.toString().trim(), permission));
+			// Don't override the plugin help topic
+			if(Bukkit.getPluginCommand(command.commandName()) != null) {
+				helpTopicsToAdd.put("/minecraft:" + command.commandName(),
+						NMS.generateHelpTopic("/minecraft:" + command.commandName(), shortDescription, sb.toString().trim(), permission));
+			}
+			else
+			{
+				helpTopicsToAdd.put("/" + command.commandName(),
+						NMS.generateHelpTopic("/" + command.commandName(), shortDescription, sb.toString().trim(), permission));
+			}
 			
 			for(String alias : command.aliases) {
 				StringBuilder currentAliasSb = new StringBuilder(aliasSb.toString());
@@ -999,8 +1003,17 @@ public class CommandAPIHandler<CommandSourceStack> {
 					
 					currentAliasSb.append(ChatColor.WHITE + String.join(", ", aliases));
 				}
-				helpTopicsToAdd.put("/" + alias,
-						NMS.generateHelpTopic("/" + alias, shortDescription, currentAliasSb.toString().trim(), permission));
+
+				// Don't override the plugin help topic
+				if(Bukkit.getPluginCommand(alias) != null) {
+					helpTopicsToAdd.put("/minecraft:" + alias,
+							NMS.generateHelpTopic("/minecraft:" + alias, shortDescription, currentAliasSb.toString().trim(), permission));
+				}
+				else
+				{
+					helpTopicsToAdd.put("/" + alias,
+							NMS.generateHelpTopic("/" + alias, shortDescription, currentAliasSb.toString().trim(), permission));
+				}
 			}
 		}
 		
