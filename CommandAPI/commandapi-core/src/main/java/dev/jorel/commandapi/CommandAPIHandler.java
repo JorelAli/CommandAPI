@@ -646,7 +646,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 			for(Argument arg : args) {
 				argumentsString.add(arg.getNodeName() + ":" + arg.getClass().getSimpleName());
 			}
-			registeredCommands.add(new RegisteredCommand(commandName, argumentsString));			
+			registeredCommands.add(new RegisteredCommand(commandName, argumentsString));
 		}
 		
 		CommandAPI.logInfo("Registering command /" + commandName + " " + builder.toString());
@@ -927,7 +927,6 @@ public class CommandAPIHandler<CommandSourceStack> {
 		Map<String, HelpTopic> helpTopicsToAdd = new HashMap<>();
 		
 		for(CommandHelp command : this.commands) {
-			
 			// Generate short description
 			final String shortDescription;
 			if(command.shortDescription().isPresent()) {
@@ -949,17 +948,33 @@ public class CommandAPIHandler<CommandSourceStack> {
 			}
 			sb.append(ChatColor.GOLD);
 			sb.append("Usage: ");
-			// TODO: Usage output needs to be merged together from other command entries
 			sb.append(ChatColor.WHITE);
+			
+			// Generate usages
+			List<String> usages = new ArrayList<>();
 			for(RegisteredCommand rCommand : registeredCommands) {
 				if(rCommand.command().equals(command.commandName())) {
-					// TODO: Check this output
-					sb.append("/" + command.commandName() + " " + String.join(", ", rCommand.argsAsStr()) + "\n");
+					StringBuilder usageString = new StringBuilder();
+					usageString.append("/" + command.commandName() + " ");
+					for(String arg : rCommand.argsAsStr()) {
+						usageString.append("<" + arg.split(":")[0] + "> ");
+					}
+					usages.add(usageString.toString());
 				}
 			}
 			
-			// Aliases. We make a second StringBuilder because we want to change
-			// the output when we register aliases
+			// If 1 usage, put it on the same line, otherwise format like a list
+			if(usages.size() == 1) {
+				sb.append(usages.get(0) + "\n");
+			} else if(usages.size() > 1) {
+				sb.append("\n");
+				for(String usage : usages) {
+					sb.append("- " + usage + "\n");
+				}
+			}
+			
+			// Generate aliases. We make a copy of the StringBuilder because we
+			// want to change the output when we register aliases
 			StringBuilder aliasSb = new StringBuilder(sb.toString());
 			if(command.aliases().length > 0) {
 				sb.append(ChatColor.GOLD);
