@@ -174,13 +174,39 @@ public class CommandAPICommand {
 		return this;
 	}
 	
+	/**
+	 * Sets the short description for this command. This is the help which is
+	 * shown in the main /help menu.
+	 * @param description the short description for this command
+	 * @return this command builder
+	 */
 	public CommandAPICommand withShortDescription(String description) {
 		this.shortDescription = Optional.ofNullable(description);
 		return this;
 	}
 	
+	/**
+	 * Sets the full description for this command. This is the help which is
+	 * shown in the specific /help page for this command (e.g. /help mycommand).
+	 * @param description the full description for this command
+	 * @return this command builder
+	 */
 	public CommandAPICommand withFullDescription(String description) {
 		this.fullDescription = Optional.ofNullable(description);
+		return this;
+	}
+	
+	/**
+	 * Sets the short and full description for this command. This is a short-hand
+	 * for the {@link CommandAPICommand#withShortDescription} and 
+	 * {@link CommandAPICommand#withFullDescription} methods.
+	 * @param shortDescription the short description for this command
+	 * @param fullDescription the full description for this command
+	 * @return this command builder
+	 */
+	public CommandAPICommand withHelp(String shortDescription, String fullDescription) {
+		this.shortDescription = Optional.ofNullable(shortDescription);
+		this.fullDescription = Optional.ofNullable(fullDescription);
 		return this;
 	}
 	
