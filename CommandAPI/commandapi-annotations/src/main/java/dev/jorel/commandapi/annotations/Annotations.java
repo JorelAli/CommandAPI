@@ -127,7 +127,7 @@ public class Annotations extends AbstractProcessor {
 	public Set<String> getSupportedAnnotationTypes() {
 		return Stream
 				.concat(Arrays.stream(new Class<?>[] { Alias.class, Command.class, Default.class, NeedsOp.class,
-						Permission.class, Subcommand.class }), Arrays.stream(ARGUMENT_ANNOTATIONS))
+						Permission.class, Subcommand.class, Help.class }), Arrays.stream(ARGUMENT_ANNOTATIONS))
 				.map(Class::getCanonicalName).collect(Collectors.toSet());
 	}
 
@@ -405,6 +405,24 @@ public class Annotations extends AbstractProcessor {
 			out.println(indent(indent) + ".withPermission(CommandPermission.OP)");
 		}
 	}
+	
+	private void emitHelp(PrintWriter out, Element classElement, int indent) {
+		if (classElement.getAnnotation(Help.class) != null) {
+			Help helpAnnotation = classElement.getAnnotation(Help.class);
+			
+			if(helpAnnotation.shortDescription().isEmpty()) {
+				out.print(indent(indent) + ".withFullDescription(\"");
+				out.print(helpAnnotation.value());
+				out.println("\")");
+			} else {
+				out.print(indent(indent) + ".withHelp(\"");
+				out.print(helpAnnotation.shortDescription());
+				out.print("\", \"");
+				out.print(helpAnnotation.value());
+				out.println("\")");
+			}
+		}
+	}
 
 	private <T extends Annotation> void processCommand(RoundEnvironment roundEnv, Element classElement) throws IOException {
 		TypeElement commandClass = (TypeElement) classElement;
@@ -440,6 +458,7 @@ public class Annotations extends AbstractProcessor {
 					emitNeedsOp(out, classElement, indent);    // @NeedsOp
 					emitPermission(out, classElement, indent); // @Permission
 					emitAlias(out, classElement, indent);      // @Alias
+					emitHelp(out, classElement, indent);       // @Help
 					
 					//Maps parameter index to argument's primitive type
 					Map<Integer, String> argumentMapping = null;
