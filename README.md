@@ -244,6 +244,43 @@ The CommandAPI can be built easily, but requires copies of the Spigot server jar
 
 - Run `mvn`
 
+The resulting plugin `.jar` is found in `commandapi-plugin/target/CommandAPIvX.X.X_DATE.jar`
+
+## Building the CommandAPI's documentation
+
+The CommandAPI's documentation is built using a custom version of [mdBook](https://rust-lang.github.io/mdBook/), a command line tool to create "books" with Markdown. This custom version can be found [in my mdBook fork](https://github.com/JorelAli/mdBook/releases).
+
+- (Optional): Build the CommandAPI first, using the instructions above. The documentation pulls information directly from tests in the source code, so it assumes that those tests compile correctly!
+
+- Get a copy of mdbook fork executable.
+  - On Windows, download `mdbook-fa5.exe` from the [mdBook FA5 support](https://github.com/JorelAli/mdBook/releases/tag/v0.4.9) release
+  - On Linux:
+    - Clone my [mdBook fork](https://github.com/JorelAli/mdBook) using your preferred method, or with the command below:
+
+      ```
+      git clone https://github.com/JorelAli/mdBook.git
+      ```
+
+    - Use git to checkout to the `fa5` branch, using the following command:
+
+      ```
+      git checkout fa5
+      ```
+
+    - Build the executable with `cargo` (can be installed using `sudo apt-get install cargo` on Ubuntu distros), using the following command:
+
+      ```
+      cargo build
+      ```
+
+    - Grab the executable `mdbook` from `mdBook/target/debug/`
+
+- Navigate to the `docssrc` folder
+
+- Run `mdbook-fa5.exe build` (or `mdbook build` on Linux)
+
+The resulting compiled documentation is found in `docs/X.X.X`, where `X.X.X` is specified in the `book.toml` file's `build-dir` in the `docssrc` folder.
+
 -----
 
 ## CommandAPI Project Timeline
