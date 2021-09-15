@@ -2,10 +2,10 @@
 authors = ["JorelAli"]
 multilingual = false
 src = "src"
-title = "CommandAPI Documentation v6.3.1"
+title = "CommandAPI Documentation v6.4.0"
 
 [build]
-build-dir = "./../docs/6.3.1"
+build-dir = "./../docs/6.4.0"
 
 [output.html]
 git-repository-url = "https://github.com/JorelAli/CommandAPI"
