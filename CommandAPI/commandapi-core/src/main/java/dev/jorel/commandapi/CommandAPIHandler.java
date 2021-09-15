@@ -939,10 +939,6 @@ public class CommandAPIHandler<CommandSourceStack> {
 					shortDescription = command.fullDescription().get();
 				}
 			} else {
-				// TODO: Probably something much more meaningful here
-				// based on when it's converted. If it's converted,
-				// we might be able to get the actual description
-				// from the plugin in which it was converted from
 				shortDescription = "A Mojang provided command.";
 			}
 
@@ -966,9 +962,9 @@ public class CommandAPIHandler<CommandSourceStack> {
 				}
 			}
 			
-			// TODO: This needs to be updated for aliases. If I have a command
-			// /mycommand with alias /blah, the help topic for /blah
-			// will still be default
+			// Aliases. We make a second StringBuilder because we want to change
+			// the output when we register aliases
+			StringBuilder aliasSb = new StringBuilder(sb.toString());
 			if(command.aliases().length > 0) {
 				sb.append(ChatColor.GOLD);
 				sb.append("Aliases: ");
@@ -986,6 +982,26 @@ public class CommandAPIHandler<CommandSourceStack> {
 			
 			helpTopicsToAdd.put("/" + command.commandName(),
 					NMS.generateHelpTopic("/" + command.commandName(), shortDescription, sb.toString().trim(), permission));
+			
+			for(String alias : command.aliases) {
+				StringBuilder currentAliasSb = new StringBuilder(aliasSb.toString());
+				if(command.aliases().length > 0) {
+					currentAliasSb.append(ChatColor.GOLD);
+					currentAliasSb.append("Aliases: ");
+					currentAliasSb.append(ChatColor.WHITE);
+					
+					// We want to get all aliases (including the original command name),
+					// except for the current alias
+					List<String> aliases = new ArrayList<>();
+					aliases.addAll(Arrays.asList(command.aliases()));
+					aliases.add(command.commandName());
+					aliases.remove(alias);
+					
+					currentAliasSb.append(ChatColor.WHITE + String.join(", ", aliases));
+				}
+				helpTopicsToAdd.put("/" + alias,
+						NMS.generateHelpTopic("/" + alias, shortDescription, currentAliasSb.toString().trim(), permission));
+			}
 		}
 		
 		NMS.addToHelpMap(helpTopicsToAdd);
