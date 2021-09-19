@@ -196,9 +196,8 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		 SimpleHelpMap_helpTopics = shm_ht;
 	}
 
-	@SuppressWarnings("deprecation")
 	private static NamespacedKey fromMinecrafKey(MinecraftKey key) {
-		return new NamespacedKey(key.getNamespace(), key.getKey());
+		return NamespacedKey.fromString(key.getNamespace() + ":" + key.getKey());
 	}
 	
 	@Override

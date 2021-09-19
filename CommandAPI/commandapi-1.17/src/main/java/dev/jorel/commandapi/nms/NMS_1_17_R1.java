@@ -186,9 +186,8 @@ public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 		 SimpleHelpMap_helpTopics = shm_ht;
 	}
 
-	@SuppressWarnings("deprecation")
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
-		return new NamespacedKey(key.getNamespace(), key.getPath());
+		return NamespacedKey.fromString(key.getNamespace() + ":" + key.getPath());
 	}
 	
 	@Override
