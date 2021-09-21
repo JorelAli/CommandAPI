@@ -18,6 +18,8 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
+import com.mojang.brigadier.CommandDispatcher;
+
 import dev.jorel.commandapi.preprocessor.RequireField;
 import net.minecraft.commands.arguments.selector.EntitySelector;
 import net.minecraft.server.CustomFunctionManager;
@@ -25,6 +27,6 @@ import net.minecraft.server.DataPackResources;
 
 //Spigot-Mapped reflection
 @RequireField(in = DataPackResources.class, name = "j", ofType = CustomFunctionManager.class)
-@RequireField(in = CustomFunctionManager.class, name = "h", ofType = int.class)
+@RequireField(in = CustomFunctionManager.class, name = "i", ofType = CommandDispatcher.class)
 @RequireField(in = EntitySelector.class, name = "o", ofType = boolean.class)
 public class SafeReflect {}
