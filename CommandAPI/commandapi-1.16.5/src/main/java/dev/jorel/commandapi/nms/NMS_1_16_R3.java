@@ -83,6 +83,7 @@ import org.bukkit.potion.PotionEffectType;
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
+import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -172,30 +173,26 @@ import net.minecraft.server.v1_16_R3.Vec3D;
 
 @RequireField(in = DataPackResources.class, name = "i", ofType = CustomFunctionManager.class)
 @RequireField(in = DataPackResources.class, name = "b", ofType = IReloadableResourceManager.class)
-@RequireField(in = CustomFunctionManager.class, name = "g", ofType = int.class)
+@RequireField(in = CustomFunctionManager.class, name = "h", ofType = CommandDispatcher.class)
 @RequireField(in = EntitySelector.class, name = "checkPermissions", ofType = boolean.class)
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
 public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	
 	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
 	private static final VarHandle DATAPACKRESOURCES_B;
-	private static final VarHandle CUSTOMFUNCTIONMANAGER_G;
 	private static final VarHandle SimpleHelpMap_helpTopics;
 	
 	// Compute all var handles all in one go so we don't do this during main server runtime
 	static {
 		VarHandle dpr_b = null;
-		VarHandle cfm_g = null;
 		VarHandle shm_ht = null;
 		try {
 			 dpr_b = MethodHandles.privateLookupIn(DataPackResources.class, MethodHandles.lookup()).findVarHandle(DataPackResources.class, "b", IReloadableResourceManager.class);			 
-			 cfm_g = MethodHandles.privateLookupIn(CustomFunctionManager.class, MethodHandles.lookup()).findVarHandle(CustomFunctionManager.class, "g", int.class);
 			 shm_ht = MethodHandles.privateLookupIn(SimpleHelpMap.class, MethodHandles.lookup()).findVarHandle(SimpleHelpMap.class, "helpTopics", Map.class);
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
 		 DATAPACKRESOURCES_B = dpr_b;
-		 CUSTOMFUNCTIONMANAGER_G = cfm_g;
 		 SimpleHelpMap_helpTopics = shm_ht;
 	}
 
@@ -858,17 +855,20 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 		// Update the CustomFunctionManager for the datapackResources which now has the new commandDispatcher
 		try {
-			CommandAPIHandler.getInstance().getField(DataPackResources.class, "i").set(datapackResources,
-					new CustomFunctionManager((int) CUSTOMFUNCTIONMANAGER_G.get(datapackResources.a()),
-							datapackResources.commandDispatcher.a()));
+			CommandAPIHandler.getInstance().getField(CustomFunctionManager.class, "h").set(datapackResources.a(),
+					datapackResources.commandDispatcher.a());
 		} catch (IllegalArgumentException | IllegalAccessException e1) {
 			e1.printStackTrace();
 		}
 
 		// Construct the new CompletableFuture that now uses our updated datapackResources
 		CompletableFuture<?> unitCompletableFuture = ((IReloadableResourceManager) DATAPACKRESOURCES_B
-				.get(datapackResources)).a(SystemUtils.f(), Runnable::run,
-						MINECRAFT_SERVER.getResourcePackRepository().f(), CompletableFuture.completedFuture(null));
+			.get(datapackResources)).a(
+				SystemUtils.f(), 
+				Runnable::run,
+				MINECRAFT_SERVER.getResourcePackRepository().f(),
+				CompletableFuture.completedFuture(null)
+		);
 
 		CompletableFuture<DataPackResources> completablefuture = unitCompletableFuture
 				.whenComplete((Object u, Throwable t) -> {
