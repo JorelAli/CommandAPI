@@ -167,26 +167,21 @@ import net.minecraft.world.phys.Vec3;
 
 // Mojang-Mapped reflection
 @RequireField(in = ServerResources.class, name = "functionLibrary", ofType = ServerFunctionLibrary.class)
-@RequireField(in = ServerFunctionLibrary.class, name = "functionCompilationLevel", ofType = int.class)
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
 public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 	
 	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
-	private static final VarHandle ServerFunctionLibrary_functionCompilationLevel;
 	private static final VarHandle SimpleHelpMap_helpTopics;
 	
 	// Compute all var handles all in one go so we don't do this during main server runtime
 	static {
-		VarHandle sfl_fcl = null;
 		VarHandle shm_ht = null;
 		try {
-			 sfl_fcl = MethodHandles.privateLookupIn(ServerFunctionLibrary.class, MethodHandles.lookup()).findVarHandle(ServerFunctionLibrary.class, "h", int.class);
 			 shm_ht = MethodHandles.privateLookupIn(SimpleHelpMap.class, MethodHandles.lookup()).findVarHandle(SimpleHelpMap.class, "helpTopics", Map.class);
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
-		 ServerFunctionLibrary_functionCompilationLevel = sfl_fcl;
 		 SimpleHelpMap_helpTopics = shm_ht;
 	}
 
@@ -851,10 +846,13 @@ public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 
 		// Update the ServerFunctionLibrary for the server resources which now has the new commandDispatcher
 		try {
+			
+			// getFunctionCompilationLevel() is a constant used throughout the entire
+			// server for all ServerFunctionLibraries. It's used to set CommandSourceStack.permissionLevel
+			// and its value is defined by DedicatedServerProperties.functionPermissionLevel
+			// which is the function-permission-level property in server.properties
 			ServerFunctionLibrary replacement = new ServerFunctionLibrary(
-				(int) ServerFunctionLibrary_functionCompilationLevel.get(serverResources.getFunctionLibrary()),
-				serverResources.commands.getDispatcher()
-			);
+					MINECRAFT_SERVER.getFunctionCompilationLevel(), serverResources.commands.getDispatcher());
 			
 			CommandAPIHandler.getInstance().getField(ServerResources.class, "j").set(serverResources, replacement);
 		} catch (IllegalArgumentException | IllegalAccessException e1) {
