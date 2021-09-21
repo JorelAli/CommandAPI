@@ -82,6 +82,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
+import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -166,7 +167,7 @@ import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 // Mojang-Mapped reflection
-@RequireField(in = ServerResources.class, name = "functionLibrary", ofType = ServerFunctionLibrary.class)
+@RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
 public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
@@ -833,8 +834,7 @@ public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public void reloadDataPacks()
-			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+	public void reloadDataPacks() {
 		CommandAPI.logNormal("Reloading datapacks...");
 
 		// Get previously declared recipes to be re-registered later
@@ -844,28 +844,12 @@ public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 		ServerResources serverResources = MINECRAFT_SERVER.resources;
 		serverResources.commands = MINECRAFT_SERVER.getCommands();
 		
-		ServerFunctionLibrary sfl = serverResources.getFunctionLibrary();
-		// CommandDispatcher
-		
-
-		// Update the ServerFunctionLibrary for the server resources which now has the new commandDispatcher
+		// Update the ServerFunctionLibrary's command dispatcher with the new one
 		try {
-			
-			// getFunctionCompilationLevel() is a constant used throughout the entire
-			// server for all ServerFunctionLibraries. It's used to set CommandSourceStack.permissionLevel
-			// and its value is defined by DedicatedServerProperties.functionPermissionLevel
-			// which is the function-permission-level property in server.properties
-			//ServerFunctionLibrary replacement = new ServerFunctionLibrary(
-			//		MINECRAFT_SERVER.getFunctionCompilationLevel(), serverResources.commands.getDispatcher());
-			
-			// This isn't correct. We don't want to replace this class, we want to forcibly
-			// replace the DISPATCHER inside this class.
-			// This means we need to get serverResources, get its instance of the ServerFunctionLibrary
-			// access the dispatcher and replace THAT 
-			//CommandAPIHandler.getInstance().getField(ServerResources.class, "j").set(serverResources, replacement);
-			CommandAPIHandler.getInstance().getField(ServerFunctionLibrary.class, "i").set(sfl, serverResources.commands.getDispatcher());
-		} catch (IllegalArgumentException | IllegalAccessException e1) {
-			e1.printStackTrace();
+			CommandAPIHandler.getInstance().getField(ServerFunctionLibrary.class, "i")
+					.set(serverResources.getFunctionLibrary(), serverResources.commands.getDispatcher());
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
 		}
 		
 		// Construct the new CompletableFuture that now uses our updated serverResources
