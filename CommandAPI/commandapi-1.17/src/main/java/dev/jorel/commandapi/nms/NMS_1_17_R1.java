@@ -843,6 +843,10 @@ public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 		// Update the commandDispatcher with the current server's commandDispatcher
 		ServerResources serverResources = MINECRAFT_SERVER.resources;
 		serverResources.commands = MINECRAFT_SERVER.getCommands();
+		
+		ServerFunctionLibrary sfl = serverResources.getFunctionLibrary();
+		// CommandDispatcher
+		
 
 		// Update the ServerFunctionLibrary for the server resources which now has the new commandDispatcher
 		try {
@@ -851,10 +855,15 @@ public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 			// server for all ServerFunctionLibraries. It's used to set CommandSourceStack.permissionLevel
 			// and its value is defined by DedicatedServerProperties.functionPermissionLevel
 			// which is the function-permission-level property in server.properties
-			ServerFunctionLibrary replacement = new ServerFunctionLibrary(
-					MINECRAFT_SERVER.getFunctionCompilationLevel(), serverResources.commands.getDispatcher());
+			//ServerFunctionLibrary replacement = new ServerFunctionLibrary(
+			//		MINECRAFT_SERVER.getFunctionCompilationLevel(), serverResources.commands.getDispatcher());
 			
-			CommandAPIHandler.getInstance().getField(ServerResources.class, "j").set(serverResources, replacement);
+			// This isn't correct. We don't want to replace this class, we want to forcibly
+			// replace the DISPATCHER inside this class.
+			// This means we need to get serverResources, get its instance of the ServerFunctionLibrary
+			// access the dispatcher and replace THAT 
+			//CommandAPIHandler.getInstance().getField(ServerResources.class, "j").set(serverResources, replacement);
+			CommandAPIHandler.getInstance().getField(ServerFunctionLibrary.class, "i").set(sfl, serverResources.commands.getDispatcher());
 		} catch (IllegalArgumentException | IllegalAccessException e1) {
 			e1.printStackTrace();
 		}
