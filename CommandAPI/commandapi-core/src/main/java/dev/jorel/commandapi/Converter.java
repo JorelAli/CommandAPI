@@ -35,6 +35,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.GreedyStringArgument;
+import dev.jorel.commandapi.wrappers.SenderGenerator;
 
 /**
  * 'Simple' conversion of Plugin commands
@@ -187,6 +188,7 @@ public final class Converter {
 					command = CommandAPIHandler.getInstance().getNMS().getSimpleCommandMap().getCommand(commandName);
 				}
 				CommandSender proxiedSender = CommandAPI.getConfiguration().shouldSkipSenderProxy(plugin) ? sender.getCallee() : mergeProxySender(sender);
+				proxiedSender = SenderGenerator.simulatePlayer(sender);
 				command.execute(proxiedSender, commandName, new String[0]);
 			})
 			.register();
@@ -204,6 +206,7 @@ public final class Converter {
 					command = CommandAPIHandler.getInstance().getNMS().getSimpleCommandMap().getCommand(commandName);
 				}
 				CommandSender proxiedSender = CommandAPI.getConfiguration().shouldSkipSenderProxy(plugin) ? sender.getCallee() : mergeProxySender(sender);
+				proxiedSender = SenderGenerator.simulatePlayer(sender);
 				command.execute(proxiedSender, commandName, (String[]) args);
 			});
 		
