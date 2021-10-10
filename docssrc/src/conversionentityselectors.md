@@ -44,8 +44,10 @@ verbose-outputs: false
 create-dispatcher-json: false
 plugins-to-convert:
   - Essentials:
-    - ext
     - ext <player>[api:players]
+    - ext
 ```
 
 </div>
+
+Note that we declare `ext <player>[api:players]` _before_ we declare `ext`. This is because more precise commands MUST be declared before lesser precise commands.

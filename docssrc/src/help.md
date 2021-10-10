@@ -18,3 +18,9 @@ This can be seen with the following example, for a command `/mycmd`. This exampl
 The CommandAPI has three methods to register parts of a help. The `withShortDescription()` sets the short description for the command, the `withFullDescription()` sets the full description for the command and `withHelp()` is a simple way to set both the short and full description at the same time. The `withHelp()` method is the recommended method to use to set the help for a command.
 
 If no short description is provided, the CommandAPI will attempt to use the full description if one is present. Note that this may be truncated automatically, so it is recommended to provide your own short description.
+
+```java
+CommandAPICommand withShortDescription(String description);
+```
+
+This simply sets the short description for the command. In the above screenshot, the short description "Says hi"
