@@ -846,7 +846,7 @@ public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 		// Update the ServerFunctionLibrary's command dispatcher with the new one
 		try {
 			CommandAPIHandler.getInstance().getField(ServerFunctionLibrary.class, "i")
-					.set(serverResources.getFunctionLibrary(), serverResources.commands.getDispatcher());
+					.set(serverResources.getFunctionLibrary(), getBrigadierDispatcher());
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
