@@ -37,7 +37,12 @@ function handlePluginJar(file) {
                     if (configYAML.commands !== undefined) {
                         for (let commandName of Object.keys(configYAML.commands)) {
                             const listElement = document.createElement("li");
-                            listElement.innerHTML = "<b>" + commandName + "</b> - " + configYAML.commands[commandName].description;
+                            if ("description" in configYAML.commands[commandName]) {
+                                listElement.innerHTML = "<b>" + commandName + "</b> - " + configYAML.commands[commandName].description;
+                            } else {
+                                listElement.innerHTML = "<b>" + commandName + "</b> ";
+                            }
+
                             list.appendChild(listElement);
                         }
                     }
