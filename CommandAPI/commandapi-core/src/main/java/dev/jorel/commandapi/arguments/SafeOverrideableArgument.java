@@ -22,6 +22,7 @@ package dev.jorel.commandapi.arguments;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -77,6 +78,24 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 
 	/**
 	 * Replaces the suggestions of this argument with an array of suggestions.
+	 *
+	 * @param suggestions a function that takes in {@link SuggestionInfo} and
+	 *                    returns a {@link CompletableFuture} for a {@link S} array of suggestions, where S is your custom
+	 *                    type
+	 * @return the current argument
+	 */
+	public final Argument replaceWithSafeSuggestionsC(Function<SuggestionInfo, CompletableFuture<S[]>> suggestions) {
+		return super.replaceSuggestionsC(suggestionsInfo -> suggestions.apply(suggestionsInfo).thenApply(sArr -> {
+			String[] result = new String[sArr.length];
+			for(int i = 0; i < sArr.length; i++) {
+				result[i] = mapper.apply(sArr[i]);
+			}
+			return result;
+		}));
+	}
+
+	/**
+	 * Replaces the suggestions of this argument with an array of suggestions.
 	 * 
 	 * @param suggestions a function that takes in {@link SuggestionInfo} and
 	 *                    returns a {@link Tooltip} array of suggestions,
@@ -94,6 +113,24 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 		});
 	}
 	
+	/**
+	 * Replaces the suggestions of this argument with an array of suggestions.
+	 *
+	 * @param suggestions a function that takes in {@link SuggestionInfo} and
+	 *                    returns a {@link CompletableFuture} for a {@link Tooltip} array of suggestions,
+	 *                    parameterized over {@link S} where S is your custom type
+	 * @return the current argument
+	 */
+	public final Argument replaceWithSafeSuggestionsTC(Function<SuggestionInfo, CompletableFuture<Tooltip<S>[]>> suggestions) {
+		return super.includeSuggestionsTC(suggestionsInfo -> suggestions.apply(suggestionsInfo).thenApply(tArr ->{
+			IStringTooltip[] result = new IStringTooltip[tArr.length];
+			for(int i = 0; i < tArr.length; i++) {
+				result[i] = Tooltip.build(mapper).apply(tArr[i]);
+			}
+			return result;
+		}));
+	}
+
 	/**
 	 * Include suggestions to add to the list of default suggestions represented by
 	 * this argument.
@@ -118,6 +155,26 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	/**
 	 * Include suggestions to add to the list of default suggestions represented by
 	 * this argument.
+	 *
+	 * @param suggestions a function that takes in {@link SuggestionInfo} which
+	 *                    includes information about the current state at the time
+	 *                    the suggestions are run and returns a {@link CompletableFuture} for a {@link S} array of
+	 *                    suggestions to add, where S is your custom type
+	 * @return the current argument
+	 */
+	public final Argument includeWithSafeSuggestionsC(Function<SuggestionInfo, CompletableFuture<S[]>> suggestions) {
+		return super.replaceSuggestionsC(suggestionsInfo -> suggestions.apply(suggestionsInfo).thenApply(sArr ->{
+			String[] result = new String[sArr.length];
+			for(int i = 0; i < sArr.length; i++) {
+				result[i] = mapper.apply(sArr[i]);
+			}
+			return result;
+		}));
+	}
+
+	/**
+	 * Include suggestions to add to the list of default suggestions represented by
+	 * this argument.
 	 * 
 	 * @param suggestions a function that takes in {@link SuggestionInfo} which
 	 *                    includes information about the current state at the time
@@ -135,6 +192,27 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 			}
 			return result;
 		});
+	}
+
+	/**
+	 * Include suggestions to add to the list of default suggestions represented by
+	 * this argument.
+	 *
+	 * @param suggestions a function that takes in {@link SuggestionInfo} which
+	 *                    includes information about the current state at the time
+	 *                    the suggestions are run and returns a {@link CompletableFuture} for a {@link Tooltip}
+	 *                    array of suggestions to add, parameterized over {@link S}
+	 *                    where S is your custom type
+	 * @return the current argument
+	 */
+	public final Argument includeWithSafeSuggestionsTC(Function<SuggestionInfo, CompletableFuture<Tooltip<S>[]>> suggestions) {
+		return super.includeSuggestionsTC(suggestionsInfo -> suggestions.apply(suggestionsInfo).thenApply(tArr ->{
+			IStringTooltip[] result = new IStringTooltip[tArr.length];
+			for(int i = 0; i < tArr.length; i++) {
+				result[i] = Tooltip.build(mapper).apply(tArr[i]);
+			}
+			return result;
+		}));
 	}
 
 	/**

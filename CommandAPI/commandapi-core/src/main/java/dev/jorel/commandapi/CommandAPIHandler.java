@@ -690,19 +690,21 @@ public class CommandAPIHandler<CommandSourceStack> {
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// NMS ICompletionProvider.a()
-	CompletableFuture<Suggestions> getSuggestionsBuilder(SuggestionsBuilder builder, IStringTooltip[] array) {
-		String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
-		for (int i = 0; i < array.length; i++) {
-			IStringTooltip str = array[i];
-			if (str.getSuggestion().toLowerCase(Locale.ROOT).startsWith(remaining)) {
-				Message tooltipMsg = null;
-				if(str.getTooltip() != null) {
-					tooltipMsg = new LiteralMessage(str.getTooltip());
+	CompletableFuture<Suggestions> getSuggestionsBuilder(SuggestionsBuilder builder, CompletableFuture<IStringTooltip[]> arrayFuture) {
+		return arrayFuture.thenApply(array -> {
+			String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
+			for (int i = 0; i < array.length; i++) {
+				IStringTooltip str = array[i];
+				if (str.getSuggestion().toLowerCase(Locale.ROOT).startsWith(remaining)) {
+					Message tooltipMsg = null;
+					if(str.getTooltip() != null) {
+						tooltipMsg = new LiteralMessage(str.getTooltip());
+					}
+					builder.suggest(str.getSuggestion(), tooltipMsg);
 				}
-				builder.suggest(str.getSuggestion(), tooltipMsg);
 			}
-		}
-		return builder.buildFuture();
+			return builder.build();
+		});
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -809,8 +811,8 @@ public class CommandAPIHandler<CommandSourceStack> {
 	SuggestionProvider<CommandSourceStack> toSuggestions(String nodeName, Argument[] args, boolean overrideSuggestions) {
 		return (CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) -> {
 			SuggestionInfo suggestionInfo = new SuggestionInfo(NMS.getCommandSenderFromCSS(context.getSource()), generatePreviousArguments(context, args, nodeName), builder.getInput(), builder.getRemaining());
-			Optional<Function<SuggestionInfo, IStringTooltip[]>> suggestionsToAddOrOverride = overrideSuggestions ? getArgument(args, nodeName).getOverriddenSuggestions() : getArgument(args, nodeName).getIncludedSuggestions();
-			return getSuggestionsBuilder(builder, suggestionsToAddOrOverride.orElseGet(() -> o -> new IStringTooltip[0]).apply(suggestionInfo));
+			Optional<Function<SuggestionInfo, CompletableFuture<IStringTooltip[]>>> suggestionsToAddOrOverride = overrideSuggestions ? getArgument(args, nodeName).getOverriddenSuggestions() : getArgument(args, nodeName).getIncludedSuggestions();
+			return getSuggestionsBuilder(builder, suggestionsToAddOrOverride.orElseGet(() -> o -> CompletableFuture.completedFuture(new IStringTooltip[0])).apply(suggestionInfo));
 		};
 	}
 	

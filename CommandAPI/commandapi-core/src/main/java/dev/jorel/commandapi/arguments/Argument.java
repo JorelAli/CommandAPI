@@ -22,6 +22,7 @@ package dev.jorel.commandapi.arguments;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -112,8 +113,8 @@ public abstract class Argument {
 	// Suggestions //
 	/////////////////
 
-	private Optional<Function<SuggestionInfo, IStringTooltip[]>> suggestions = Optional.empty();
-	private Optional<Function<SuggestionInfo, IStringTooltip[]>> addedSuggestions = Optional.empty();
+	private Optional<Function<SuggestionInfo, CompletableFuture<IStringTooltip[]>>> suggestions = Optional.empty();
+	private Optional<Function<SuggestionInfo, CompletableFuture<IStringTooltip[]>>> addedSuggestions = Optional.empty();
 		
 	/**
 	 * Maps a String[] of suggestions to a StringTooltip[], using StringTooltip.none.
@@ -141,7 +142,22 @@ public abstract class Argument {
 	 * @return the current argument
 	 */
 	public Argument includeSuggestions(Function<SuggestionInfo, String[]> suggestions) {
-		this.addedSuggestions = Optional.of(suggestionInfo -> fromSuggestions(suggestions.apply(suggestionInfo)));
+		this.addedSuggestions = Optional.of(suggestionInfo -> CompletableFuture.completedFuture(fromSuggestions(suggestions.apply(suggestionInfo))));
+		return this;
+	}
+	
+	/**
+	 * Include suggestions to add to the list of default suggestions represented by
+	 * this argument.
+	 *
+	 * @param suggestions a function that takes in SuggestionInfo which includes
+	 *                    information about the current state at the time the
+	 *                    suggestions are run and returns a CompletableFuture<String[]> of suggestions
+	 *                    to add
+	 * @return the current argument
+	 */
+	public Argument includeSuggestionsC(Function<SuggestionInfo, CompletableFuture<String[]>> suggestions) {
+		this.addedSuggestions = Optional.of(suggestionInfo -> suggestions.apply(suggestionInfo).thenApply(this::fromSuggestions));
 		return this;
 	}
 	
@@ -156,6 +172,21 @@ public abstract class Argument {
 	 * @return the current argument
 	 */
 	public Argument includeSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
+		this.addedSuggestions = Optional.of(suggestionInfo -> CompletableFuture.completedFuture(suggestions.apply(suggestionInfo)));
+		return this;
+	}
+
+	/**
+	 * Include suggestions to add to the list of default suggestions represented by
+	 * this argument.
+	 *
+	 * @param suggestions a function that takes in SuggestionInfo which includes
+	 *                    information about the current state at the time the
+	 *                    suggestions are run and returns a CompletableFuture<IStringTooltip[]> of
+	 *                    suggestions (with tooltips) to add
+	 * @return the current argument
+	 */
+	public Argument includeSuggestionsTC(Function<SuggestionInfo, CompletableFuture<IStringTooltip[]>> suggestions) {
 		this.addedSuggestions = Optional.of(suggestions);
 		return this;
 	}
@@ -165,7 +196,7 @@ public abstract class Argument {
 	 * to existing suggestions.
 	 * @return An Optional containing a function which generates suggestions
 	 */
-	public Optional<Function<SuggestionInfo, IStringTooltip[]>> getIncludedSuggestions() {
+	public Optional<Function<SuggestionInfo, CompletableFuture<IStringTooltip[]>>> getIncludedSuggestions() {
 		return addedSuggestions;
 	}
 	
@@ -178,7 +209,7 @@ public abstract class Argument {
 	 */
 	@Deprecated
 	public final Argument overrideSuggestions(String... suggestions) {
-		this.suggestions = Optional.of(suggestionInfo -> fromSuggestions(suggestions));
+		this.suggestions = Optional.of(suggestionInfo -> CompletableFuture.completedFuture(fromSuggestions(suggestions)));
 		return this;
 	}
 	
@@ -191,7 +222,7 @@ public abstract class Argument {
 	 */
 	@Deprecated
 	public final Argument overrideSuggestions(Collection<String> suggestions) {
-		this.suggestions = Optional.of(suggestionInfo -> fromSuggestions(suggestions.toArray(new String[0])));
+		this.suggestions = Optional.of(suggestionInfo -> CompletableFuture.completedFuture(fromSuggestions(suggestions.toArray(new String[0]))));
 		return this;
 	}
 
@@ -205,7 +236,7 @@ public abstract class Argument {
 	 */
 	@Deprecated
 	public final Argument overrideSuggestions(Function<CommandSender, String[]> suggestions) {
-		this.suggestions =  Optional.of(suggestionInfo -> fromSuggestions(suggestions.apply(suggestionInfo.sender())));
+		this.suggestions =  Optional.of(suggestionInfo -> CompletableFuture.completedFuture(fromSuggestions(suggestions.apply(suggestionInfo.sender()))));
 		return this;
 	}
 	
@@ -219,7 +250,7 @@ public abstract class Argument {
 	 */
 	@Deprecated
 	public final Argument overrideSuggestions(BiFunction<CommandSender, Object[], String[]> suggestions) {
-		this.suggestions =  Optional.of(suggestionInfo -> fromSuggestions(suggestions.apply(suggestionInfo.sender(), suggestionInfo.previousArgs())));
+		this.suggestions =  Optional.of(suggestionInfo -> CompletableFuture.completedFuture(fromSuggestions(suggestions.apply(suggestionInfo.sender(), suggestionInfo.previousArgs()))));
 		return this;
 	}
 	
@@ -232,7 +263,7 @@ public abstract class Argument {
 	 */
 	@Deprecated
 	public final Argument overrideSuggestionsT(Collection<IStringTooltip> suggestions) {
-		this.suggestions = Optional.of(suggestionInfo -> suggestions.toArray(new IStringTooltip[0]));
+		this.suggestions = Optional.of(suggestionInfo -> CompletableFuture.completedFuture(suggestions.toArray(new IStringTooltip[0])));
 		return this;
 	}
 	
@@ -245,7 +276,7 @@ public abstract class Argument {
 	 */
 	@Deprecated
 	public final Argument overrideSuggestionsT(IStringTooltip... suggestions) {
-		this.suggestions = Optional.of(suggestionInfo -> suggestions);
+		this.suggestions = Optional.of(suggestionInfo -> CompletableFuture.completedFuture(suggestions));
 		return this;
 	}
 
@@ -259,7 +290,7 @@ public abstract class Argument {
 	 */
 	@Deprecated
 	public final Argument overrideSuggestionsT(Function<CommandSender, IStringTooltip[]> suggestions) {
-		this.suggestions =  Optional.of(suggestionInfo -> suggestions.apply(suggestionInfo.sender()));
+		this.suggestions =  Optional.of(suggestionInfo -> CompletableFuture.completedFuture(suggestions.apply(suggestionInfo.sender())));
 		return this;
 	}
 	
@@ -273,7 +304,7 @@ public abstract class Argument {
 	 */
 	@Deprecated
 	public final Argument overrideSuggestionsT(BiFunction<CommandSender, Object[], IStringTooltip[]> suggestions) {
-		this.suggestions =  Optional.of(suggestionInfo -> suggestions.apply(suggestionInfo.sender(), suggestionInfo.previousArgs()));
+		this.suggestions =  Optional.of(suggestionInfo -> CompletableFuture.completedFuture(suggestions.apply(suggestionInfo.sender(), suggestionInfo.previousArgs())));
 		return this;
 	}
 
@@ -283,7 +314,17 @@ public abstract class Argument {
 	 * @return the current argument
 	 */
 	public Argument replaceSuggestions(Function<SuggestionInfo, String[]> suggestions) {
-		this.suggestions = Optional.of(suggestionInfo -> fromSuggestions(suggestions.apply(suggestionInfo)));
+		this.suggestions = Optional.of(suggestionInfo -> CompletableFuture.completedFuture(fromSuggestions(suggestions.apply(suggestionInfo))));
+		return this;
+	}
+
+	/**
+	 * Replaces the suggestions of this argument with a promise for an array of suggestions.
+	 * @param suggestions a function that takes in {@link SuggestionInfo} and returns a {@link CompletableFuture} for a {@link String[]} of suggestions
+	 * @return the current argument
+	 */
+	public Argument replaceSuggestionsC(Function<SuggestionInfo, CompletableFuture<String[]>> suggestions) {
+		this.suggestions = Optional.of(suggestionInfo -> suggestions.apply(suggestionInfo).thenApply(this::fromSuggestions));
 		return this;
 	}
 	
@@ -293,6 +334,16 @@ public abstract class Argument {
 	 * @return the current argument
 	 */
 	public Argument replaceSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
+		this.suggestions = Optional.of(suggestionInfo -> CompletableFuture.completedFuture(suggestions.apply(suggestionInfo)));
+		return this;
+	}
+
+	/**
+	 * Replaces the suggestions of this argument with a promise for an array of suggestions with tooltips.
+	 * @param suggestions a function that takes in {@link SuggestionInfo} and returns a {@link CompletableFuture} for a {@link IStringTooltip[]} of suggestions
+	 * @return the current argument
+	 */
+	public Argument replaceSuggestionsTC(Function<SuggestionInfo, CompletableFuture<IStringTooltip[]>> suggestions) {
 		this.suggestions = Optional.of(suggestions);
 		return this;
 	}
@@ -304,7 +355,7 @@ public abstract class Argument {
 	 * @return a function that provides suggestions, or <code>Optional.empty()</code> if there
 	 *         are no overridden suggestions.
 	 */
-	public final Optional<Function<SuggestionInfo, IStringTooltip[]>> getOverriddenSuggestions() {
+	public final Optional<Function<SuggestionInfo, CompletableFuture<IStringTooltip[]>>> getOverriddenSuggestions() {
 		return suggestions;
 	}
 
