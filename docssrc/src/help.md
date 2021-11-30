@@ -25,4 +25,35 @@ These are the following methods that the CommandAPI provides to set the help top
 CommandAPICommand withShortDescription(String description);
 ```
 
-This simply sets the short description for the command. In the above screenshot, the short description "Says hi"
+The `withShortDescription` method simply sets the short description for the command. In the above screenshot, the short description is "Says hi".
+
+```java
+CommandAPICommand withFullDescription(String description);
+```
+
+The `withFullDescription` method sets the full description for the command. In the above screenshot, the full description is "Broadcasts hi to everyone on the server".
+
+```java
+CommandAPICommand withHelp(String shortDescription, String fullDescription);
+```
+
+The `withHelp` method sets both the short description and the full description at the same time.
+
+<div class="example">
+
+### Example - Adding help to a command
+
+In this simple example, we implement the above screenshot's help topic. We register a command `/mycmd` and use the `withShortDescription` and `withFullDescription` methods to create a help topic:
+
+```java
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:help}}
+```
+
+We could also register this command using the `withHelp` method instead:
+
+```java
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:help2}}
+```
+
+</div>
+
