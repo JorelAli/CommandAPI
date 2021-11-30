@@ -7,3 +7,5 @@ before_install:
   - /home/jitpack/jdk-16.0.1/bin/java -jar BuildTools.jar --rev 1.17 --remapped
   - /home/jitpack/jdk-16.0.1/bin/java -jar BuildTools.jar --rev 1.17.1 --remapped
   - /home/jitpack/jdk-17.0.1/bin/java -jar BuildTools.jar --rev 1.18 --remapped
+  - export JAVA_HOME=/home/jitpack/jdk-17.0.1
+  - mvn -version
