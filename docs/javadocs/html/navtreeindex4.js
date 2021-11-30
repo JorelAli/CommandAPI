@@ -1,5 +1,9 @@
 var NAVTREEINDEX4 =
 {
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_float_argument.html#ae03d7ba36c4d03e92e5713e5080427ec":[2,0,1,0,0,1,20,10],
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_float_argument.html#ae4ad105103282b2012ac109829ef48ce":[2,0,1,0,0,1,20,4],
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_float_range_argument.html":[2,0,1,0,0,1,21],
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_float_range_argument.html#a2d3b7401bebe89cecd366ffe3ac74bda":[2,0,1,0,0,1,21,11],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_float_range_argument.html#a2f0ed384b5c4006f270f0e206b7184c0":[2,0,1,0,0,1,21,4],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_float_range_argument.html#a37b9c1544cfde592e92cff4776191097":[2,0,1,0,0,1,21,13],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_float_range_argument.html#a5ace13eeb9a0e7bebe80e94563cb46c8":[2,0,1,0,0,1,21,5],
@@ -245,9 +249,5 @@ var NAVTREEINDEX4 =
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html#a0ab463b04cb4374469cce40f1de07bd2":[2,0,1,0,0,1,37,17],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html#a0fdbb9575a1f5a0c1c8d2a397bafb250":[2,0,1,0,0,1,37,9],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html#a136d1fafa00702ec911803427d3c8642":[2,0,1,0,0,1,37,22],
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html#a13dd1cd3f9ae91577d3411971f043374":[2,0,1,0,0,1,37,10],
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html#a164048fb64180ca8193747db36b240a8":[2,0,1,0,0,1,37,5],
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html#a1c740ac65ed20a963eda6bf875af570c":[2,0,1,0,0,1,37,11],
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html#a2168e67f0a32516350b6b35ce8569130":[2,0,1,0,0,1,37,25],
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html#a32ebae8c2f2eb50a533bb33792f3fe31":[2,0,1,0,0,1,37,16]
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html#a13dd1cd3f9ae91577d3411971f043374":[2,0,1,0,0,1,37,10]
 };

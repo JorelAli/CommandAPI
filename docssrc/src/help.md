@@ -19,6 +19,8 @@ The CommandAPI has three methods to register parts of a help. The `withShortDesc
 
 If no short description is provided, the CommandAPI will attempt to use the full description if one is present. Note that this may be truncated automatically, so it is recommended to provide your own short description.
 
+These are the following methods that the CommandAPI provides to set the help topic for a command:
+
 ```java
 CommandAPICommand withShortDescription(String description);
 ```
