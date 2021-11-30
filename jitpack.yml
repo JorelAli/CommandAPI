@@ -1,14 +1,10 @@
 jdk:
   - openjdk17
 before_install:
-  - wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
+  - wget https://raw.githubusercontent.com/JorelAli/bach/master/install-jdk.sh
   - source install-jdk.sh --feature 16
-  - which java
-  - echo $(which java)
   - source install-jdk.sh --feature 17
-  - which java
-  - echo $(which java)
   - wget -O BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
-  - java -jar BuildTools.jar --rev 1.17 --remapped
-  - java -jar BuildTools.jar --rev 1.17.1 --remapped
-  - java -jar BuildTools.jar --rev 1.18 --remapped
+  - /home/jitpack/jdk-16.0.1/bin/java -jar BuildTools.jar --rev 1.17 --remapped
+  - /home/jitpack/jdk-16.0.1/bin/java -jar BuildTools.jar --rev 1.17.1 --remapped
+  - /home/jitpack/jdk-17.0.1/bin/java -jar BuildTools.jar --rev 1.18 --remapped
