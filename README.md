@@ -43,9 +43,9 @@ The list of what version of the CommandAPI you'll need to run on a specific vers
 - **Minecraft 1.16.2**: CommandAPI v4.0 to 5.12
 - **Minecraft 1.16.3**: CommandAPI v4.2 to 5.12
 - **Minecraft 1.16.4**: CommandAPI v5.2 to 5.12
-- **Minecraft 1.16.5**: CommandAPI v5.7 to 6.1.x
-- **Minecraft 1.17**: CommandAPI 6.0.x to 6.3.x
-- **Minecraft 1.17.1**: CommandAPI 6.1.x to 6.3.x
+- **Minecraft 1.16.5**: CommandAPI v5.7 to 6.4.x
+- **Minecraft 1.17**: CommandAPI 6.0.x to 6.4.x
+- **Minecraft 1.17.1**: CommandAPI 6.1.x to 6.4.x
 
 -----
 
@@ -107,12 +107,12 @@ new CommandAPICommand("enchantitem")
     })
     .register();
 ```
-  
+
 </details>
 
 <details>
 	<summary><b>Potion removing, suggesting potions that a player has currently</b></summary>
-  
+
 ```java
 List<Argument> arguments = new ArrayList<>();
 arguments.add(new EntitySelectorArgument("target", EntitySelector.ONE_PLAYER));
@@ -135,12 +135,12 @@ new CommandAPICommand("removeeffect")
     })
     .register();
 ```
-  
+
 </details>
 
 <details>
 	<summary><b>Subcommands</b></summary>
-  
+
 ```java
 new CommandAPICommand("perm")
     .withSubcommand(new CommandAPICommand("group")
@@ -177,12 +177,12 @@ new CommandAPICommand("perm")
     )
     .register();
 ```
-  
+
 </details>
 
 <details>
 	<summary><b>Annotation-based commands</b></summary>
-  
+
 ```java
 @Command("warp")	
 public class WarpCommand {
@@ -211,12 +211,12 @@ public class WarpCommand {
     
 }
 ```
-  
+
 </details>
 
 <details>
 	<summary><b>Command conversion (no compilation required)</b></summary>
-  
+
 ```yml
 plugins-to-convert:
   - Essentials:
@@ -225,7 +225,7 @@ plugins-to-convert:
     - speed (walk|fly) <speed>[0..10]
     - speed (walk|fly) <speed>[0..10] <target>[minecraft:game_profile]
 ```
-  
+
 </details>
 
 -----
@@ -314,6 +314,18 @@ This is the current roadmap for the CommandAPI (as of 16th May 2021):
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td valign="top"><b>6.4.0</b></td>
+            <td valign="top">November 2021</td>
+            <td valign="top">
+                <ul>
+                    <li>Adds support for CommandAPI command help topics via <code>/help</code></li>
+                    <li>Improve CommandAPI initialization stability</li>
+                    <li>(Hopefully) fix conflicting issues with duplicate Bukkit and CommandAPI command names</li>
+                    <li>Code cleanup (fix a lot of minor warnings)</li>
+                </ul>
+            </td>
+        </tr>
         <tr>
             <td valign="top"><b>6.3.1</b></td>
             <td valign="top">September 2021</td>
@@ -1030,4 +1042,3 @@ This is the current roadmap for the CommandAPI (as of 16th May 2021):
         </tr>
     </tbody>
 </table>
-
