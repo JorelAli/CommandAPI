@@ -40,6 +40,7 @@ Here's the list of changes to the documentation between each update. You can vie
 ### Documentation changes 6.3.1 \\(\rightarrow\\) 6.4.0:
 
 - Adds a section [Help](./help.md) for the new help feature.
+- Update [Annotations](./annotations.md) section to include new `@Help` annotation.
 
 ### Documentation changes 6.3.0 \\(\rightarrow\\) 6.3.1:
 

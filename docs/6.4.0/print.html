@@ -209,6 +209,7 @@
 <h3><a class="header" href="#documentation-changes-631-rightarrow-640" id="documentation-changes-631-rightarrow-640">Documentation changes 6.3.1 \(\rightarrow\) 6.4.0:</a></h3>
 <ul>
 <li>Adds a section <a href="./help.html">Help</a> for the new help feature.</li>
+<li>Update <a href="./annotations.html">Annotations</a> section to include new <code>@Help</code> annotation.</li>
 </ul>
 <h3><a class="header" href="#documentation-changes-630-rightarrow-631" id="documentation-changes-630-rightarrow-631">Documentation changes 6.3.0 \(\rightarrow\) 6.3.1:</a></h3>
 <ul>
@@ -4367,6 +4368,18 @@ class TeleportCommand {
 <p>The <code>@NeedsOp</code> annotation is used to indicate that a command needs to have operator privileges to run it. This annotation has no parameters.</p>
 <pre><code class="language-java">@Command(&quot;teleport&quot;)    
 @NeedsOp
+class TeleportCommand {
+</code></pre>
+<h3><a class="header" href="#helpfull-description" id="helpfull-description"><code>@Help(&quot;Full description&quot;)</code></a></h3>
+<p>The <code>@Help</code> annotation is used to add a help topic to a command. This annotation can take two forms:</p>
+<p>A simple form which just uses a string which is used as the full description for a command:</p>
+<pre><code class="language-java">@Command(&quot;teleport&quot;)
+@Help(&quot;Teleports yourself to another location&quot;)
+class TeleportCommand {
+</code></pre>
+<p>A form with two parameters <code>value</code> and <code>shortDescription</code>, to provide the full description (<code>value</code>) and short description (<code>shortDescription</code>) content for a command:</p>
+<pre><code class="language-java">@Command(&quot;teleport&quot;)    
+@Help(value = &quot;Teleports yourself to another location&quot;, shortDescription = &quot;TP to a location&quot;)
 class TeleportCommand {
 </code></pre>
 <hr />

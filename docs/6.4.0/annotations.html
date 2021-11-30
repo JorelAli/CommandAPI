@@ -203,6 +203,18 @@ class TeleportCommand {
 @NeedsOp
 class TeleportCommand {
 </code></pre>
+<h3><a class="header" href="#helpfull-description" id="helpfull-description"><code>@Help(&quot;Full description&quot;)</code></a></h3>
+<p>The <code>@Help</code> annotation is used to add a help topic to a command. This annotation can take two forms:</p>
+<p>A simple form which just uses a string which is used as the full description for a command:</p>
+<pre><code class="language-java">@Command(&quot;teleport&quot;)
+@Help(&quot;Teleports yourself to another location&quot;)
+class TeleportCommand {
+</code></pre>
+<p>A form with two parameters <code>value</code> and <code>shortDescription</code>, to provide the full description (<code>value</code>) and short description (<code>shortDescription</code>) content for a command:</p>
+<pre><code class="language-java">@Command(&quot;teleport&quot;)    
+@Help(value = &quot;Teleports yourself to another location&quot;, shortDescription = &quot;TP to a location&quot;)
+class TeleportCommand {
+</code></pre>
 <hr />
 <h2><a class="header" href="#annotations-that-go-on-methods" id="annotations-that-go-on-methods">Annotations that go on methods</a></h2>
 <p>To use annotations on methods, <strong>methods must be static</strong>.</p>
