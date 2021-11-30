@@ -702,7 +702,9 @@ new CommandAPICommand("sound")
 /* ANCHOR_END: soundarguments */
 }
 
-{
+
+@SuppressWarnings("deprecation")
+void timearg() {
 /* ANCHOR: timearguments */
 new CommandAPICommand("bigmsg")
     .withArguments(new TimeArgument("duration"))
@@ -1483,7 +1485,8 @@ new CommandAPICommand("perm")
 /* ANCHOR_END: subcommands1 */
 }
 
-{
+@SuppressWarnings("deprecation")
+void help() {
 /* ANCHOR: help */
 new CommandAPICommand("mycmd")
     .withShortDescription("Says hi")

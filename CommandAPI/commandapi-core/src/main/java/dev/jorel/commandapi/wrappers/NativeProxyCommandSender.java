@@ -287,7 +287,7 @@ public class NativeProxyCommandSender implements ProxiedCommandSender {
      * @param messages An array of messages to be displayed
      */
 	@Override
-	public void sendMessage(String[] messages) {
+	public void sendMessage(String... messages) {
 		this.caller.sendMessage(messages);
 	}
 
@@ -309,7 +309,7 @@ public class NativeProxyCommandSender implements ProxiedCommandSender {
      * @param sender The sender of this message
      */
 	@Override
-	public void sendMessage(UUID sender, String[] messages) {
+	public void sendMessage(UUID sender, String... messages) {
 		this.caller.sendMessage(sender, messages);
 	}
 	
