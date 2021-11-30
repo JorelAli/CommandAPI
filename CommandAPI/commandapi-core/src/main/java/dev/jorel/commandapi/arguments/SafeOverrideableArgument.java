@@ -144,7 +144,7 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 * @return the current argument
 	 * @deprecated use {@link SafeOverrideableArgument#replaceSuggestions(Function)}
 	 */
-	@Deprecated
+	@Deprecated(forRemoval = true)
 	@SuppressWarnings("unchecked")
 	public final Argument safeOverrideSuggestions(S... suggestions) {
 		return super.overrideSuggestions((c, m) -> Arrays.stream(suggestions).map(mapper).toArray(String[]::new));
@@ -157,7 +157,7 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 * @return the current argument
 	 * @deprecated use {@link SafeOverrideableArgument#replaceSuggestions(Function)}
 	 */
-	@Deprecated
+	@Deprecated(forRemoval = true)
 	@SuppressWarnings("unchecked")
 	public final Argument safeOverrideSuggestions(Collection<S> suggestions) {
 		return this.safeOverrideSuggestions(suggestions.toArray((S[]) new Object[0]));
@@ -171,7 +171,7 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 * @return the current argument
 	 * @deprecated use {@link SafeOverrideableArgument#replaceSuggestions(Function)}
 	 */
-	@Deprecated
+	@Deprecated(forRemoval = true)
 	public final Argument safeOverrideSuggestions(Function<CommandSender, S[]> suggestions) {
 		return super.overrideSuggestions((c, m) -> Arrays.stream(suggestions.apply(c)).map(mapper).toArray(String[]::new));
 	}
@@ -184,7 +184,7 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 * @return the current argument
 	 * @deprecated use {@link SafeOverrideableArgument#replaceSuggestions(Function)}
 	 */
-	@Deprecated
+	@Deprecated(forRemoval = true)
 	public final Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], S[]> suggestions) {
 		return super.overrideSuggestions((c, m) -> Arrays.stream(suggestions.apply(c, m)).map(mapper).toArray(String[]::new));
 	}
@@ -197,7 +197,7 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 * @return the current argument
 	 * @deprecated use {@link SafeOverrideableArgument#replaceSuggestionsT(Function)}
 	 */
-	@Deprecated
+	@Deprecated(forRemoval = true)
 	@SafeVarargs
 	public final Argument safeOverrideSuggestionsT(Tooltip<S>... suggestions) {
 		return super.overrideSuggestionsT((c, m) -> Arrays.stream(suggestions).map(Tooltip.build(mapper)).toArray(IStringTooltip[]::new));
@@ -211,7 +211,7 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 * @return the current argument
 	 * @deprecated use {@link SafeOverrideableArgument#replaceSuggestionsT(Function)}
 	 */
-	@Deprecated
+	@Deprecated(forRemoval = true)
 	@SuppressWarnings("unchecked")
 	public final Argument safeOverrideSuggestionsT(Collection<Tooltip<S>> suggestions) {
 		return this.safeOverrideSuggestionsT(suggestions.toArray(new Tooltip[0]));
@@ -226,7 +226,7 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 * @return the current argument
 	 * @deprecated use {@link SafeOverrideableArgument#replaceSuggestionsT(Function)}
 	 */
-	@Deprecated
+	@Deprecated(forRemoval = true)
 	public final Argument safeOverrideSuggestionsT(Function<CommandSender, Tooltip<S>[]> suggestions) {
 		return super.overrideSuggestionsT((c, m) -> Arrays.stream(suggestions.apply(c)).map(Tooltip.build(mapper)).toArray(IStringTooltip[]::new));
 	}
@@ -240,7 +240,7 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	 * @return the current argument
 	 * @deprecated use {@link SafeOverrideableArgument#replaceSuggestionsT(Function)}
 	 */
-	@Deprecated
+	@Deprecated(forRemoval = true)
 	public final Argument safeOverrideSuggestionsT(BiFunction<CommandSender, Object[], Tooltip<S>[]> suggestions) {
 		return super.overrideSuggestionsT((c, m) -> Arrays.stream(suggestions.apply(c, m)).map(Tooltip.build(mapper)).toArray(IStringTooltip[]::new));
 	}

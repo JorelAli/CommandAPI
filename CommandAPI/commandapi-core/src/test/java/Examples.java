@@ -1484,6 +1484,27 @@ new CommandAPICommand("perm")
 }
 
 {
+/* ANCHOR: help */
+new CommandAPICommand("mycmd")
+    .withShortDescription("Says hi")
+    .withFullDescription("Broadcasts hi to everyone on the server")
+    .executes((sender, args) -> {
+        Bukkit.broadcastMessage("Hi!");
+    })
+    .register();
+/* ANCHOR_END: help */
+
+/* ANCHOR: help2 */
+new CommandAPICommand("mycmd")
+    .withHelp("Says hi", "Broadcasts hi to everyone on the server")
+    .executes((sender, args) -> {
+        Bukkit.broadcastMessage("Hi!");
+    })
+    .register();
+/* ANCHOR_END: help2 */
+}
+
+{
     //NOTE: This example isn't used!
 /* ANCHOR: anglearguments */
 new CommandAPICommand("yaw")

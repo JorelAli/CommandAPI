@@ -1,5 +1,12 @@
 var NAVTREEINDEX8 =
 {
+"interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_entity_selector_argument.html#a25148a1f967ed3d40c16516d225e4199":[2,0,1,0,0,0,0,14,0],
+"interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_entity_type.html":[2,0,1,0,0,0,0,15],
+"interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_environment_argument.html":[2,0,1,0,0,0,0,16],
+"interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_float_argument.html":[2,0,1,0,0,0,0,17],
+"interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_float_argument.html#a99747e605d7802ceebe1a86dc0c39571":[2,0,1,0,0,0,0,17,1],
+"interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_float_argument.html#ad283fef008d2232cc93b35ad913dc282":[2,0,1,0,0,0,0,17,0],
+"interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_float_range_argument.html":[2,0,1,0,0,0,0,18],
 "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_function_argument.html":[2,0,1,0,0,0,0,19],
 "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_greedy_string_argument.html":[2,0,1,0,0,0,0,20],
 "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_integer_argument.html":[2,0,1,0,0,0,0,21],

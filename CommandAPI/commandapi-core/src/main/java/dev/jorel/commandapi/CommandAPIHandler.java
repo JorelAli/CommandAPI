@@ -41,10 +41,12 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.help.HelpTopic;
 import org.bukkit.permissions.Permission;
 
 import com.mojang.brigadier.Command;
@@ -96,7 +98,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		VarHandle commandNodeLiterals = null;
 		VarHandle commandNodeArguments = null;
 		VarHandle commandContextArguments = null;
-		 try {
+		try {
 			 commandNodeChildren = MethodHandles.privateLookupIn(CommandNode.class, MethodHandles.lookup()).findVarHandle(CommandNode.class, "children", Map.class);
 			 commandNodeLiterals = MethodHandles.privateLookupIn(CommandNode.class, MethodHandles.lookup()).findVarHandle(CommandNode.class, "literals", Map.class);
 			 commandNodeArguments = MethodHandles.privateLookupIn(CommandNode.class, MethodHandles.lookup()).findVarHandle(CommandNode.class, "arguments", Map.class);
@@ -139,18 +141,20 @@ public class CommandAPIHandler<CommandSourceStack> {
 		}
 		return instance;
 	}
-	
+		
 	final Map<ClassCache, Field> FIELDS = new HashMap<>();
 	final TreeMap<String, CommandPermission> PERMISSIONS_TO_FIX = new TreeMap<>();
 	final NMS<CommandSourceStack> NMS;
 	final CommandDispatcher<CommandSourceStack> DISPATCHER;
-	final Map<String, List<String>> registeredCommands; //Keep track of what has been registered for type checking 
+	final List<RegisteredCommand> registeredCommands; //Keep track of what has been registered for type checking 
+	final List<CommandHelp> commands;
 	
 	private CommandAPIHandler() {
 		String bukkit = Bukkit.getServer().toString();
 		NMS = CommandAPIVersionHandler.getNMS(bukkit.substring(bukkit.indexOf("minecraftVersion") + 17, bukkit.length() - 1));
 		DISPATCHER = NMS.getBrigadierDispatcher();
-		registeredCommands = new HashMap<>();
+		registeredCommands = new ArrayList<>();
+		commands = new ArrayList<>();
 	}
 	
 	void checkDependencies() {
@@ -244,7 +248,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 * @return a brigadier command which is registered internally
 	 * @throws CommandSyntaxException if an error occurs when the command is ran
 	 */
-	Command<CommandSourceStack> generateCommand(Argument[] args, CustomCommandExecutor executor, boolean converted)
+	Command<CommandSourceStack> generateCommand(Argument[] args, CustomCommandExecutor<? extends CommandSender> executor, boolean converted)
 			throws CommandSyntaxException {
 
 		// Generate our command from executor
@@ -484,8 +488,11 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 * the provided command. Returns true if multiliteral arguments were present (and expanded) and
 	 * returns false if multiliteral arguments were not present.
 	 */
-	private boolean expandMultiLiterals(String commandName, CommandPermission permissions, String[] aliases, Predicate<CommandSender> requirements,
-			final Argument[] args, CustomCommandExecutor executor, boolean converted) throws CommandSyntaxException, IOException {
+	private boolean expandMultiLiterals(String commandName, Optional<String> shortDescription,
+			Optional<String> fullDescription, CommandPermission permissions, String[] aliases,
+			Predicate<CommandSender> requirements, final Argument[] args,
+			CustomCommandExecutor<? extends CommandSender> executor,
+			boolean converted) throws CommandSyntaxException, IOException {
 		
 		//"Expands" our MultiLiterals into Literals
 		for(int index = 0; index < args.length; index++) {
@@ -502,7 +509,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 					//Reconstruct the list of arguments and place in the new literals
 					Argument[] newArgs = Arrays.copyOf(args, args.length);
 					newArgs[index] = litArg;
-					register(commandName, permissions, aliases, requirements, newArgs, executor, converted);
+					register(commandName, shortDescription, fullDescription, permissions, aliases, requirements, newArgs, executor, converted);
 				}
 				return true;
 			}
@@ -516,8 +523,16 @@ public class CommandAPIHandler<CommandSourceStack> {
 	// Return true if conflict was present, otherwise return false
 	private boolean hasCommandConflict(String commandName, Argument[] args, String argumentsAsString) {
 		List<String[]> regArgs = new ArrayList<>();
-		for(String str : registeredCommands.get(commandName)) {
-			regArgs.add(str.split(":"));
+		for(RegisteredCommand rCommand : registeredCommands) {
+			if(rCommand.command().equals(commandName)) {
+				for(String str : rCommand.argsAsStr()) {
+					regArgs.add(str.split(":"));
+				}
+				// TODO: To replicate the previous behaviour, we just find the first
+				// entry. We should probably generate a list of all commands and
+				// iterate through all of them instead (recursion is probably not necessary).
+				break;
+			}
 		}
 		for(int i = 0; i < args.length; i++) {
 			// Avoid IAOOBEs
@@ -603,11 +618,13 @@ public class CommandAPIHandler<CommandSourceStack> {
 	
 	// Builds our NMS command using the given arguments for this method, then
 	// registers it
-	void register(String commandName, CommandPermission permissions, String[] aliases, Predicate<CommandSender> requirements,
-			final Argument[] args, CustomCommandExecutor executor, boolean converted) throws CommandSyntaxException, IOException {
-		
+	void register(String commandName, Optional<String> shortDescription, Optional<String> fullDescription,
+			CommandPermission permission, String[] aliases, Predicate<CommandSender> requirements,
+			final Argument[] args, CustomCommandExecutor<? extends CommandSender> executor, boolean converted)
+			throws CommandSyntaxException, IOException {
+
 		//"Expands" our MultiLiterals into Literals
-		if(expandMultiLiterals(commandName, permissions, aliases, requirements, args, executor, converted)) {
+		if(expandMultiLiterals(commandName, shortDescription, fullDescription, permission, aliases, requirements, args, executor, converted)) {
 			return;
 		}
 		
@@ -618,17 +635,22 @@ public class CommandAPIHandler<CommandSourceStack> {
 		}
 		
 		// Handle command conflicts
-		if(registeredCommands.containsKey(commandName) && hasCommandConflict(commandName, args, builder.toString())) {
+		boolean hasRegisteredCommand = false;
+		for(RegisteredCommand rCommand : registeredCommands) {
+			hasRegisteredCommand |= rCommand.command().equals(commandName);
+		}
+		if(hasRegisteredCommand && hasCommandConflict(commandName, args, builder.toString())) {
 			return;
 		} else {
 			List<String> argumentsString = new ArrayList<>();
 			for(Argument arg : args) {
 				argumentsString.add(arg.getNodeName() + ":" + arg.getClass().getSimpleName());
 			}
-			registeredCommands.put(commandName, argumentsString);			
+			registeredCommands.add(new RegisteredCommand(commandName, argumentsString));
 		}
 		
 		CommandAPI.logInfo("Registering command /" + commandName + " " + builder.toString());
+		commands.add(new CommandHelp(commandName, shortDescription, fullDescription, aliases, permission));
 
 		// Generate the actual command
 		Command<CommandSourceStack> command = generateCommand(args, executor, converted);
@@ -641,12 +663,12 @@ public class CommandAPIHandler<CommandSourceStack> {
 		LiteralCommandNode<CommandSourceStack> resultantNode;
 		if (args.length == 0) {
 			// Link command name to the executor
-			resultantNode = DISPATCHER.register(getLiteralArgumentBuilder(commandName).requires(generatePermissions(commandName, permissions, requirements)).executes(command));
+			resultantNode = DISPATCHER.register(getLiteralArgumentBuilder(commandName).requires(generatePermissions(commandName, permission, requirements)).executes(command));
 
 			// Register aliases
 			for (String alias : aliases) {
 				CommandAPI.logInfo("Registering alias /" + alias + " -> " + resultantNode.getName());
-				DISPATCHER.register(getLiteralArgumentBuilder(alias).requires(generatePermissions(alias, permissions, requirements)).executes(command));
+				DISPATCHER.register(getLiteralArgumentBuilder(alias).requires(generatePermissions(alias, permission, requirements)).executes(command));
 			}
 		} else {
 
@@ -654,7 +676,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 			ArgumentBuilder<CommandSourceStack, ?> commandArguments = generateOuterArguments(generateInnerArgument(command, args), args);
 
 			// Link command name to first argument and register
-			resultantNode = DISPATCHER.register(getLiteralArgumentBuilder(commandName).requires(generatePermissions(commandName, permissions, requirements)).then(commandArguments));
+			resultantNode = DISPATCHER.register(getLiteralArgumentBuilder(commandName).requires(generatePermissions(commandName, permission, requirements)).then(commandArguments));
 
 			// Register aliases
 			for (String alias : aliases) {
@@ -662,7 +684,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 					CommandAPI.logInfo("Registering alias /" + alias + " -> " + resultantNode.getName());
 				}
 				
-				DISPATCHER.register(getLiteralArgumentBuilder(alias).requires(generatePermissions(alias, permissions, requirements)).then(commandArguments));
+				DISPATCHER.register(getLiteralArgumentBuilder(alias).requires(generatePermissions(alias, permission, requirements)).then(commandArguments));
 			}
 		}
 
@@ -900,4 +922,123 @@ public class CommandAPIHandler<CommandSourceStack> {
 	    }
 
 	}
+
+	public void updateHelpForCommands() {
+		Map<String, HelpTopic> helpTopicsToAdd = new HashMap<>();
+		
+		for(CommandHelp command : this.commands) {
+			// Generate short description
+			final String shortDescription;
+			if(command.shortDescription().isPresent()) {
+				shortDescription = command.shortDescription().get();
+			} else if(command.fullDescription().isPresent()) {
+				shortDescription = command.fullDescription().get();
+			} else {
+				shortDescription = "A Mojang provided command.";
+			}
+
+			// Generate full description
+			StringBuilder sb = new StringBuilder();
+			if(command.fullDescription().isPresent()) {
+				sb.append(ChatColor.GOLD);
+				sb.append("Description: ");
+				sb.append(ChatColor.WHITE);
+				sb.append(command.fullDescription().get());
+				sb.append("\n");
+			}
+			sb.append(ChatColor.GOLD);
+			sb.append("Usage: ");
+			sb.append(ChatColor.WHITE);
+			
+			// Generate usages
+			List<String> usages = new ArrayList<>();
+			for(RegisteredCommand rCommand : registeredCommands) {
+				if(rCommand.command().equals(command.commandName())) {
+					StringBuilder usageString = new StringBuilder();
+					usageString.append("/" + command.commandName() + " ");
+					for(String arg : rCommand.argsAsStr()) {
+						usageString.append("<" + arg.split(":")[0] + "> ");
+					}
+					usages.add(usageString.toString());
+				}
+			}
+			
+			// If 1 usage, put it on the same line, otherwise format like a list
+			if(usages.size() == 1) {
+				sb.append(usages.get(0) + "\n");
+			} else if(usages.size() > 1) {
+				sb.append("\n");
+				for(String usage : usages) {
+					sb.append("- " + usage + "\n");
+				}
+			}
+			
+			// Generate aliases. We make a copy of the StringBuilder because we
+			// want to change the output when we register aliases
+			StringBuilder aliasSb = new StringBuilder(sb.toString());
+			if(command.aliases().length > 0) {
+				sb.append(ChatColor.GOLD);
+				sb.append("Aliases: ");
+				sb.append(ChatColor.WHITE);
+				sb.append(ChatColor.WHITE + String.join(", ", command.aliases()));
+			}
+			
+			String permission;
+			if(command.permission().getPermission() != null) {
+				permission = command.permission().getPermission(); 
+			} else {
+				// Must be empty string, not null as defined by OBC::CustomHelpTopic
+				permission = "";
+			}
+			
+			// Don't override the plugin help topic
+			if(Bukkit.getPluginCommand(command.commandName()) != null) {
+				helpTopicsToAdd.put("/minecraft:" + command.commandName(),
+						NMS.generateHelpTopic("/minecraft:" + command.commandName(), shortDescription, sb.toString().trim(), permission));
+			}
+			else
+			{
+				helpTopicsToAdd.put("/" + command.commandName(),
+						NMS.generateHelpTopic("/" + command.commandName(), shortDescription, sb.toString().trim(), permission));
+			}
+			
+			for(String alias : command.aliases) {
+				StringBuilder currentAliasSb = new StringBuilder(aliasSb.toString());
+				if(command.aliases().length > 0) {
+					currentAliasSb.append(ChatColor.GOLD);
+					currentAliasSb.append("Aliases: ");
+					currentAliasSb.append(ChatColor.WHITE);
+					
+					// We want to get all aliases (including the original command name),
+					// except for the current alias
+					List<String> aliases = new ArrayList<>();
+					aliases.addAll(Arrays.asList(command.aliases()));
+					aliases.add(command.commandName());
+					aliases.remove(alias);
+					
+					currentAliasSb.append(ChatColor.WHITE + String.join(", ", aliases));
+				}
+
+				// Don't override the plugin help topic
+				if(Bukkit.getPluginCommand(alias) != null) {
+					helpTopicsToAdd.put("/minecraft:" + alias,
+							NMS.generateHelpTopic("/minecraft:" + alias, shortDescription, currentAliasSb.toString().trim(), permission));
+				}
+				else
+				{
+					helpTopicsToAdd.put("/" + alias,
+							NMS.generateHelpTopic("/" + alias, shortDescription, currentAliasSb.toString().trim(), permission));
+				}
+			}
+		}
+		
+		NMS.addToHelpMap(helpTopicsToAdd);
+	}
+	
+	private record RegisteredCommand(String command, List<String> argsAsStr) {};
+
+	private record CommandHelp(String commandName, Optional<String> shortDescription, Optional<String> fullDescription,
+			String[] aliases, CommandPermission permission) {
+	};
+
 }

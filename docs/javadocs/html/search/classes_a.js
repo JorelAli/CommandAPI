@@ -1,9 +1,8 @@
 var searchData=
 [
-  ['nativecommandexecutor_813',['NativeCommandExecutor',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_native_command_executor.html',1,'dev::jorel::commandapi::executors']]],
-  ['nativeproxycommandsender_814',['NativeProxyCommandSender',['../classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_native_proxy_command_sender.html',1,'dev::jorel::commandapi::wrappers']]],
-  ['nativeresultingcommandexecutor_815',['NativeResultingCommandExecutor',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_native_resulting_command_executor.html',1,'dev::jorel::commandapi::executors']]],
-  ['nbtapinotfoundexception_816',['NBTAPINotFoundException',['../classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_n_b_t_a_p_i_not_found_exception.html',1,'dev::jorel::commandapi::exceptions']]],
-  ['nbtcompoundargument_817',['NBTCompoundArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_n_b_t_compound_argument.html',1,'dev::jorel::commandapi::arguments']]],
-  ['needsop_818',['NeedsOp',['../interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1_needs_op.html',1,'dev::jorel::commandapi::annotations']]]
+  ['mathoperation_812',['MathOperation',['../enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_math_operation.html',1,'dev::jorel::commandapi::wrappers']]],
+  ['mathoperationargument_813',['MathOperationArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_math_operation_argument.html',1,'dev::jorel::commandapi::arguments']]],
+  ['message_814',['Message',['../interfacecom_1_1mojang_1_1brigadier_1_1_message.html',1,'com::mojang::brigadier']]],
+  ['messagebuilder_815',['MessageBuilder',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_message_builder.html',1,'dev::jorel::commandapi::arguments::CustomArgument']]],
+  ['multiliteralargument_816',['MultiLiteralArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html',1,'dev::jorel::commandapi::arguments']]]
 ];

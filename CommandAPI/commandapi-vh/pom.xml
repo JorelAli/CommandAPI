@@ -26,7 +26,7 @@
 	<parent>
 		<artifactId>commandapi</artifactId>
 		<groupId>dev.jorel</groupId>
-		<version>6.3.1</version>
+		<version>6.4.0</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
@@ -36,12 +36,12 @@
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-1.17</artifactId>
-			<version>6.3.1</version>
+			<version>6.4.0</version>
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-1.16.5</artifactId>
-			<version>6.3.1</version>
+			<version>6.4.0</version>
 		</dependency>
 	</dependencies>
 </project>

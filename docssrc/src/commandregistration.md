@@ -75,6 +75,14 @@ CommandAPICommand withAliases(String... args)
 The `withAliases` method is used to declare a list of aliases that can be used to run this command via. (See [the section on aliases](./aliases.md) for more info).
 
 ```java
+CommandAPICommand withHelp(String shortDescription, fullDescription)
+CommandAPICommand withShortDescription(String shortDescription)
+CommandAPICommand withFullDescription(String fullDescription)
+```
+
+The `withHelp` method, along with its specific `withShortDescription` and `withFullDescription` methods are used to declare the help topic for this command which is displayed in the `/help` command. (See [the section on help](./help.md) for more info).
+
+```java
 CommandAPICommand withSubcommand(CommandAPICommand subcommand)
 ```
 

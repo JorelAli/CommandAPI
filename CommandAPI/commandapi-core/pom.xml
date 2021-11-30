@@ -1,95 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-    Copyright 2018, 2021 Jorel Ali (Skepter) - MIT License
-   
-    Permission is hereby granted, free of charge, to any person obtaining a copy of
-    this software and associated documentation files (the "Software"), to deal in
-    the Software without restriction, including without limitation the rights to
-    use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-    the Software, and to permit persons to whom the Software is furnished to do so,
-    subject to the following conditions:
-   
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-   
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-    FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-    COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-    IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- -->
+<!-- Copyright 2018, 2021 Jorel Ali (Skepter) - MIT License Permission is 
+	hereby granted, free of charge, to any person obtaining a copy of this software 
+	and associated documentation files (the "Software"), to deal in the Software 
+	without restriction, including without limitation the rights to use, copy, 
+	modify, merge, publish, distribute, sublicense, and/or sell copies of the 
+	Software, and to permit persons to whom the Software is furnished to do so, 
+	subject to the following conditions: The above copyright notice and this 
+	permission notice shall be included in all copies or substantial portions 
+	of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY 
+	KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
+	MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN 
+	NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, 
+	DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
+	ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+	DEALINGS IN THE SOFTWARE. -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>commandapi</artifactId>
-        <groupId>dev.jorel</groupId>
-        <version>6.3.1</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<artifactId>commandapi</artifactId>
+		<groupId>dev.jorel</groupId>
+		<version>6.4.0</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
 
-    <artifactId>commandapi-core</artifactId>
-    
-    <repositories>
-        <repository>
-            <id>minecraft-libraries</id>
-            <name>Minecraft Libraries</name>
-            <url>https://libraries.minecraft.net</url>
-        </repository>
-    	<repository>
-            <id>codemc-repo</id>
-            <url>https://repo.codemc.org/repository/maven-public/</url>
-            <layout>default</layout>
-        </repository>
-        <repository>
-		    <id>papermc</id>
-		    <url>https://papermc.io/repo/repository/maven-public/</url>
+	<artifactId>commandapi-core</artifactId>
+
+	<repositories>
+		<repository>
+			<id>minecraft-libraries</id>
+			<name>Minecraft Libraries</name>
+			<url>https://libraries.minecraft.net</url>
 		</repository>
-    </repositories>
+		<repository>
+			<id>codemc-repo</id>
+			<url>https://repo.codemc.org/repository/maven-public/</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
+			<id>papermc</id>
+			<url>https://papermc.io/repo/repository/maven-public/</url>
+		</repository>
+	</repositories>
 
-    <dependencies>
-    	<dependency>
+	<dependencies>
+		<dependency>
 			<groupId>net.kyori</groupId>
 			<artifactId>adventure-platform-bukkit</artifactId>
 			<version>4.0.0-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
-    
-    	<dependency>
+
+		<dependency>
 			<groupId>net.kyori</groupId>
 			<artifactId>adventure-api</artifactId>
 			<version>4.7.0</version>
 		</dependency>
-		
-    	<dependency>
-		    <groupId>com.destroystokyo.paper</groupId>
-		    <artifactId>paper-api</artifactId>
-		    <version>1.16.5-R0.1-SNAPSHOT</version>
+
+		<dependency>
+			<groupId>com.destroystokyo.paper</groupId>
+			<artifactId>paper-api</artifactId>
+			<version>1.16.5-R0.1-SNAPSHOT</version>
 		</dependency>
-        
-        <dependency>
-            <groupId>com.mojang</groupId>
-            <artifactId>brigadier</artifactId>
-            <version>1.0.17</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.mojang</groupId>
-            <artifactId>authlib</artifactId>
-            <version>2.1.28</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.tr7zw</groupId>
-            <artifactId>item-nbt-api-plugin</artifactId>
-            <version>2.8.0</version>
-        </dependency>
-        <dependency>
+
+		<dependency>
+			<groupId>com.mojang</groupId>
+			<artifactId>brigadier</artifactId>
+			<version>1.0.17</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.mojang</groupId>
+			<artifactId>authlib</artifactId>
+			<version>2.1.28</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>de.tr7zw</groupId>
+			<artifactId>item-nbt-api-plugin</artifactId>
+			<version>2.8.0</version>
+		</dependency>
+		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-preprocessor</artifactId>
-			<version>6.3.1</version>
+			<version>6.4.0</version>
 		</dependency>
 	</dependencies>
 </project>

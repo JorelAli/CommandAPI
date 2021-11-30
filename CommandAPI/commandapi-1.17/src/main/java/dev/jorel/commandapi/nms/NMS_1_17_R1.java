@@ -34,6 +34,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -66,18 +67,22 @@ import org.bukkit.craftbukkit.v1_17_R1.command.VanillaCommandWrapper;
 import org.bukkit.craftbukkit.v1_17_R1.enchantments.CraftEnchantment;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_17_R1.help.CustomHelpTopic;
+import org.bukkit.craftbukkit.v1_17_R1.help.SimpleHelpMap;
 import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_17_R1.potion.CraftPotionEffectType;
 import org.bukkit.craftbukkit.v1_17_R1.util.CraftChatMessage;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.ComplexRecipe;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.potion.PotionEffectType;
 
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
+import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -162,28 +167,27 @@ import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 // Mojang-Mapped reflection
-@RequireField(in = ServerResources.class, name = "functionLibrary", ofType = ServerFunctionLibrary.class)
-@RequireField(in = ServerFunctionLibrary.class, name = "functionCompilationLevel", ofType = int.class)
+@RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
+@RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
 public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 	
 	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
-	private static final VarHandle ServerFunctionLibrary_functionCompilationLevel;
+	private static final VarHandle SimpleHelpMap_helpTopics;
 	
 	// Compute all var handles all in one go so we don't do this during main server runtime
 	static {
-		VarHandle sfl_fcl = null;
-		 try {
-			 sfl_fcl = MethodHandles.privateLookupIn(ServerFunctionLibrary.class, MethodHandles.lookup()).findVarHandle(ServerFunctionLibrary.class, "h", int.class);
+		VarHandle shm_ht = null;
+		try {
+			 shm_ht = MethodHandles.privateLookupIn(SimpleHelpMap.class, MethodHandles.lookup()).findVarHandle(SimpleHelpMap.class, "helpTopics", Map.class);
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
-		 ServerFunctionLibrary_functionCompilationLevel = sfl_fcl;
+		 SimpleHelpMap_helpTopics = shm_ht;
 	}
 
-	@SuppressWarnings("deprecation")
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
-		return new NamespacedKey(key.getNamespace(), key.getPath());
+		return NamespacedKey.fromString(key.getNamespace() + ":" + key.getPath());
 	}
 	
 	@Override
@@ -829,8 +833,7 @@ public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public void reloadDataPacks()
-			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+	public void reloadDataPacks() {
 		CommandAPI.logNormal("Reloading datapacks...");
 
 		// Get previously declared recipes to be re-registered later
@@ -839,17 +842,13 @@ public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 		// Update the commandDispatcher with the current server's commandDispatcher
 		ServerResources serverResources = MINECRAFT_SERVER.resources;
 		serverResources.commands = MINECRAFT_SERVER.getCommands();
-
-		// Update the ServerFunctionLibrary for the server resources which now has the new commandDispatcher
+		
+		// Update the ServerFunctionLibrary's command dispatcher with the new one
 		try {
-			ServerFunctionLibrary replacement = new ServerFunctionLibrary(
-				(int) ServerFunctionLibrary_functionCompilationLevel.get(serverResources.getFunctionLibrary()),
-				serverResources.commands.getDispatcher()
-			);
-			
-			CommandAPIHandler.getInstance().getField(ServerResources.class, "j").set(serverResources, replacement);
-		} catch (IllegalArgumentException | IllegalAccessException e1) {
-			e1.printStackTrace();
+			CommandAPIHandler.getInstance().getField(ServerFunctionLibrary.class, "i")
+					.set(serverResources.getFunctionLibrary(), getBrigadierDispatcher());
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
 		}
 		
 		// Construct the new CompletableFuture that now uses our updated serverResources
@@ -898,5 +897,19 @@ public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 	@Override
 	public void resendPackets(Player player) {
 		MINECRAFT_SERVER.getCommands().sendCommands(((CraftPlayer) player).getHandle());
+	}
+
+	@Override
+	public HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription,
+			String permission) {
+		return new CustomHelpTopic(commandName, shortDescription, fullDescription, permission);
+	}
+
+	@Override
+	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
+		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) SimpleHelpMap_helpTopics.get(Bukkit.getServer().getHelpMap());
+		for(Map.Entry<String, HelpTopic> entry : helpTopicsToAdd.entrySet()) {
+			helpTopics.put(entry.getKey(), entry.getValue());
+		}
 	}
 }

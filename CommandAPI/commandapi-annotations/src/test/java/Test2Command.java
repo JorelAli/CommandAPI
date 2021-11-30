@@ -27,6 +27,7 @@ import org.bukkit.entity.Entity;
 import dev.jorel.commandapi.annotations.Alias;
 import dev.jorel.commandapi.annotations.Command;
 import dev.jorel.commandapi.annotations.Default;
+import dev.jorel.commandapi.annotations.Help;
 import dev.jorel.commandapi.annotations.NeedsOp;
 import dev.jorel.commandapi.annotations.Permission;
 import dev.jorel.commandapi.annotations.arguments.ADoubleArgument;
@@ -66,6 +67,23 @@ class TeleportCommand {
 /* ANCHOR_END: teleport_command_perms */
 }
         }
+    }
+    
+    {
+/* ANCHOR: teleport_help */
+@Command("teleport")
+@Help("Teleports yourself to another location")
+class TeleportCommand {
+/* ANCHOR_END: teleport_help */
+}
+    }
+    {
+/* ANCHOR: teleport_full_help */
+@Command("teleport")    
+@Help(value = "Teleports yourself to another location", shortDescription = "TP to a location")
+class TeleportCommand {
+/* ANCHOR_END: teleport_full_help */
+}
     }
 }
 
