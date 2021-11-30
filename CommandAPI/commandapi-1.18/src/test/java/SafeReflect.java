@@ -18,32 +18,15 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package dev.jorel.commandapi;
+import com.mojang.brigadier.CommandDispatcher;
 
-import dev.jorel.commandapi.exceptions.UnsupportedVersionException;
-import dev.jorel.commandapi.nms.NMS;
-import dev.jorel.commandapi.nms.NMS_1_16_R3;
-import dev.jorel.commandapi.nms.NMS_1_17_R1;
-import dev.jorel.commandapi.nms.NMS_1_18_R1;
+import dev.jorel.commandapi.preprocessor.RequireField;
+import net.minecraft.commands.arguments.selector.EntitySelector;
+import net.minecraft.server.CustomFunctionManager;
+import net.minecraft.server.DataPackResources;
 
-public interface CommandAPIVersionHandler {
-
-	public static NMS<?> getNMS(String version) {
-		if(CommandAPI.getConfiguration().shouldUseLatestNMSVersion()) {
-			return new NMS_1_18_R1();
-		} else {
-			switch (version) {
-			case "1.16.5":
-				return new NMS_1_16_R3();
-			case "1.17":
-			case "1.17.1":
-				return new NMS_1_17_R1();
-			case "1.18":
-				return new NMS_1_18_R1();
-			default:
-				throw new UnsupportedVersionException("This version of Minecraft is unsupported: " + version);
-			}
-		}
-	}
-
-}
+//Spigot-Mapped reflection
+@RequireField(in = DataPackResources.class, name = "j", ofType = CustomFunctionManager.class)
+@RequireField(in = CustomFunctionManager.class, name = "i", ofType = CommandDispatcher.class)
+@RequireField(in = EntitySelector.class, name = "o", ofType = boolean.class)
+public class SafeReflect {}
