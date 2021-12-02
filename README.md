@@ -320,7 +320,7 @@ This is the current roadmap for the CommandAPI (as of 16th May 2021):
             <td valign="top">December 2021</td>
             <td valign="top">
                 <ul>
-                    <li>Adds support for Minecraft 1.18</li>
+                    <li>Adds support for Minecraft 1.18 (requires Java 17)</li>
                 </ul>
             </td>
         </tr>
