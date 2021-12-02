@@ -1,8 +1,15 @@
 jdk:
-  - openjdk16
+  - openjdk17
 before_install:
-  - wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
-  - source install-jdk.sh --feature 16
+  - curl https://download.java.net/java/GA/jdk16.0.1/7147401fd7354114ac51ef3e1328291f/9/GPL/openjdk-16.0.1_linux-x64_bin.tar.gz -o jdk-16.tar.gz
+  - curl https://download.java.net/java/GA/jdk17.0.1/2a2082e5a09d4267845be086888add4f/12/GPL/openjdk-17.0.1_linux-x64_bin.tar.gz -o jdk-17.tar.gz
+  - tar -xzf jdk-16.tar.gz
+  - tar -xzf jdk-17.tar.gz
+  - export jdks=$(pwd)
   - wget -O BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
-  - java -jar BuildTools.jar --rev 1.17 --remapped
-  - java -jar BuildTools.jar --rev 1.17.1 --remapped
+  - export JAVA_HOME=$jdks/jdk-16.0.1
+  - /home/jitpack/jdk-16.0.1/bin/java -jar BuildTools.jar --rev 1.17 --remapped
+  - /home/jitpack/jdk-16.0.1/bin/java -jar BuildTools.jar --rev 1.17.1 --remapped
+  - export JAVA_HOME=$jdks/jdk-17.0.1
+  - /home/jitpack/jdk-17.0.1/bin/java -jar BuildTools.jar --rev 1.18 --remapped
+  - mvn -version

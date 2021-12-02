@@ -27,13 +27,14 @@
 
 	<groupId>dev.jorel</groupId>
 	<artifactId>commandapi</artifactId>
-	<version>6.4.0</version>
+	<version>6.5.0</version>
 	<packaging>pom</packaging>
 	<modules>
 		<!-- Compile time reflection checker -->
 		<module>commandapi-preprocessor</module>
 
 		<!-- NMS versions -->
+		<module>commandapi-1.18</module>
 		<module>commandapi-1.17</module>
 		<module>commandapi-1.16.5</module>
 
@@ -59,9 +60,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.build.timestamp.format>dd_MMM_yyyy_(hh-mm-ssa)</maven.build.timestamp.format>
-		<maven.compiler.source>16</maven.compiler.source>
-		<maven.compiler.target>16</maven.compiler.target>
-		<java.version>16</java.version>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+		<java.version>17</java.version>
 	</properties>
 
 	<build>
@@ -92,7 +93,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>3.2.0</version>
+					<version>3.3.1</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
