@@ -84,6 +84,7 @@
 - [Permissions](./permissions.md)
 - [Requirements](./requirements.md)
 - [Aliases](./aliases.md)
+- [Help](./help.md)
 - [Subcommands](./subcommands.md)
 
 # Annotation-based Commands

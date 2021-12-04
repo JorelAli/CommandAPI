@@ -38,6 +38,22 @@ The `@NeedsOp` annotation is used to indicate that a command needs to have opera
 {{#include ../../CommandAPI/commandapi-annotations/src/test/java/Test2Command.java:teleport_command_needsop}}
 ```
 
+### `@Help("Full description")`
+
+The `@Help` annotation is used to add a help topic to a command. This annotation can take two forms:
+
+A simple form which just uses a string which is used as the full description for a command:
+
+```java
+{{#include ../../CommandAPI/commandapi-annotations/src/test/java/Test2Command.java:teleport_help}}
+```
+
+A form with two parameters `value` and `shortDescription`, to provide the full description (`value`) and short description (`shortDescription`) content for a command:
+
+```java
+{{#include ../../CommandAPI/commandapi-annotations/src/test/java/Test2Command.java:teleport_full_help}}
+```
+
 -----
 
 ## Annotations that go on methods

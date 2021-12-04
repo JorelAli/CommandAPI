@@ -43,9 +43,10 @@ The list of what version of the CommandAPI you'll need to run on a specific vers
 - **Minecraft 1.16.2**: CommandAPI v4.0 to 5.12
 - **Minecraft 1.16.3**: CommandAPI v4.2 to 5.12
 - **Minecraft 1.16.4**: CommandAPI v5.2 to 5.12
-- **Minecraft 1.16.5**: CommandAPI v5.7 to 6.1.x
-- **Minecraft 1.17**: CommandAPI 6.0.x to 6.3.x
-- **Minecraft 1.17.1**: CommandAPI 6.1.x to 6.3.x
+- **Minecraft 1.16.5**: CommandAPI v5.7 to 6.4.x
+- **Minecraft 1.17**: CommandAPI 6.0.x to 6.4.x (Java 16) or 6.5.2 (Java 17)
+- **Minecraft 1.17.1**: CommandAPI 6.1.x to 6.4.x (Java 16) or 6.5.2 (Java 17)
+- **Minecraft 1.18**: CommandAPI 6.5.2 (Java 17)
 
 -----
 
@@ -107,12 +108,12 @@ new CommandAPICommand("enchantitem")
     })
     .register();
 ```
-  
+
 </details>
 
 <details>
 	<summary><b>Potion removing, suggesting potions that a player has currently</b></summary>
-  
+
 ```java
 List<Argument> arguments = new ArrayList<>();
 arguments.add(new EntitySelectorArgument("target", EntitySelector.ONE_PLAYER));
@@ -135,12 +136,12 @@ new CommandAPICommand("removeeffect")
     })
     .register();
 ```
-  
+
 </details>
 
 <details>
 	<summary><b>Subcommands</b></summary>
-  
+
 ```java
 new CommandAPICommand("perm")
     .withSubcommand(new CommandAPICommand("group")
@@ -177,12 +178,12 @@ new CommandAPICommand("perm")
     )
     .register();
 ```
-  
+
 </details>
 
 <details>
 	<summary><b>Annotation-based commands</b></summary>
-  
+
 ```java
 @Command("warp")	
 public class WarpCommand {
@@ -211,12 +212,12 @@ public class WarpCommand {
     
 }
 ```
-  
+
 </details>
 
 <details>
 	<summary><b>Command conversion (no compilation required)</b></summary>
-  
+
 ```yml
 plugins-to-convert:
   - Essentials:
@@ -225,7 +226,7 @@ plugins-to-convert:
     - speed (walk|fly) <speed>[0..10]
     - speed (walk|fly) <speed>[0..10] <target>[minecraft:game_profile]
 ```
-  
+
 </details>
 
 -----
@@ -243,6 +244,43 @@ The CommandAPI can be built easily, but requires copies of the Spigot server jar
 - Go into the folder named `CommandAPI` _(Not to be confused with the folder named `CommandAPI`, which is what was just cloned)_. You want the folder which contains `pom.xml`.
 
 - Run `mvn`
+
+The resulting plugin `.jar` is found in `commandapi-plugin/target/CommandAPIvX.X.X_DATE.jar`
+
+## Building the CommandAPI's documentation
+
+The CommandAPI's documentation is built using a custom version of [mdBook](https://rust-lang.github.io/mdBook/), a command line tool to create "books" with Markdown. This custom version can be found [in my mdBook fork](https://github.com/JorelAli/mdBook/releases).
+
+- (Optional): Build the CommandAPI first, using the instructions above. The documentation pulls information directly from tests in the source code, so it assumes that those tests compile correctly!
+
+- Get a copy of mdbook fork executable.
+  - On Windows, download `mdbook-fa5.exe` from the [mdBook FA5 support](https://github.com/JorelAli/mdBook/releases/tag/v0.4.9) release
+  - On Linux:
+    - Clone my [mdBook fork](https://github.com/JorelAli/mdBook) using your preferred method, or with the command below:
+
+      ```
+      git clone https://github.com/JorelAli/mdBook.git
+      ```
+
+    - Use git to checkout to the `fa5` branch, using the following command:
+
+      ```
+      git checkout fa5
+      ```
+
+    - Build the executable with `cargo` (can be installed using `sudo apt-get install cargo` on Ubuntu distros), using the following command:
+
+      ```
+      cargo build
+      ```
+
+    - Grab the executable `mdbook` from `mdBook/target/debug/`
+
+- Navigate to the `docssrc` folder
+
+- Run `mdbook-fa5.exe build` (or `mdbook build` on Linux)
+
+The resulting compiled documentation is found in `docs/X.X.X`, where `X.X.X` is specified in the `book.toml` file's `build-dir` in the `docssrc` folder.
 
 -----
 
@@ -277,6 +315,45 @@ This is the current roadmap for the CommandAPI (as of 16th May 2021):
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td valign="top"><b>6.5.2</b></td>
+            <td valign="top">December 2021</td>
+            <td valign="top">
+                <ul>
+                    <li>Fix Maven build script with 6.5.1, fixing broken CommandAPI annotation builds</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>6.5.1</b></td>
+            <td valign="top">December 2021</td>
+            <td valign="top">
+                <ul>
+                    <li>Fix Maven build script with 6.5.0, fixing broken CommandAPI shaded builds</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>6.5.0</b></td>
+            <td valign="top">December 2021</td>
+            <td valign="top">
+                <ul>
+                    <li>Adds support for Minecraft 1.18 (requires Java 17)</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>6.4.0</b></td>
+            <td valign="top">November 2021</td>
+            <td valign="top">
+                <ul>
+                    <li>Adds support for CommandAPI command help topics via <code>/help</code></li>
+                    <li>Improve CommandAPI initialization stability</li>
+                    <li>(Hopefully) fix conflicting issues with duplicate Bukkit and CommandAPI command names</li>
+                    <li>Code cleanup (fix a lot of minor warnings)</li>
+                </ul>
+            </td>
+        </tr>
         <tr>
             <td valign="top"><b>6.3.1</b></td>
             <td valign="top">September 2021</td>
@@ -993,4 +1070,3 @@ This is the current roadmap for the CommandAPI (as of 16th May 2021):
         </tr>
     </tbody>
 </table>
-

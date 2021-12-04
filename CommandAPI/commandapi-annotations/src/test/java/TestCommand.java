@@ -28,12 +28,14 @@ import org.bukkit.entity.Player;
 
 import dev.jorel.commandapi.annotations.Command;
 import dev.jorel.commandapi.annotations.Default;
+import dev.jorel.commandapi.annotations.Help;
 import dev.jorel.commandapi.annotations.Permission;
 import dev.jorel.commandapi.annotations.Subcommand;
 import dev.jorel.commandapi.annotations.arguments.APlayerArgument;
 import dev.jorel.commandapi.annotations.arguments.AStringArgument;
 
 @Command("warp")	
+@Help(value = "Manages all warps on the server", shortDescription = "Manages warps")
 public class TestCommand {
 	
 	// List of warp names and their locations

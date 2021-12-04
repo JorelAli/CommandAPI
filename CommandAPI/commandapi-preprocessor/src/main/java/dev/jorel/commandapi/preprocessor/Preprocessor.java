@@ -108,6 +108,10 @@ public class Preprocessor extends AbstractProcessor {
 			String message = String.format("Field: %s %s.%s does not exist", type.getSimpleName(), in.getSimpleName(), field.name());
 			super.processingEnv.getMessager().printMessage(Kind.ERROR, message);
 			return;
+		} catch (NullPointerException e) {
+			String message = String.format("Field: %s ??.%s does not exist. The class for this field is also missing!", type.getSimpleName(), field.name());
+			super.processingEnv.getMessager().printMessage(Kind.ERROR, message);
+			return;
 		}
 		
 		if(!classField.getType().getCanonicalName().equals(type.getCanonicalName())) {

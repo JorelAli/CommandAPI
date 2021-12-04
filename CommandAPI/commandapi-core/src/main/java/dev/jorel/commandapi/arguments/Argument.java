@@ -207,7 +207,7 @@ public abstract class Argument {
 	 * @return the current argument
 	 * @deprecated use {@link Argument#replaceSuggestions(Function)}
 	 */
-	@Deprecated
+	@Deprecated(forRemoval = true)
 	public final Argument overrideSuggestions(String... suggestions) {
 		this.suggestions = Optional.of(suggestionInfo -> CompletableFuture.completedFuture(fromSuggestions(suggestions)));
 		return this;
@@ -220,7 +220,7 @@ public abstract class Argument {
 	 * @return the current argument
 	 * @deprecated use {@link Argument#replaceSuggestions(Function)}
 	 */
-	@Deprecated
+	@Deprecated(forRemoval = true)
 	public final Argument overrideSuggestions(Collection<String> suggestions) {
 		this.suggestions = Optional.of(suggestionInfo -> CompletableFuture.completedFuture(fromSuggestions(suggestions.toArray(new String[0]))));
 		return this;
@@ -234,7 +234,7 @@ public abstract class Argument {
 	 * @return the current argument
 	 * @deprecated use {@link Argument#replaceSuggestions(Function)}
 	 */
-	@Deprecated
+	@Deprecated(forRemoval = true)
 	public final Argument overrideSuggestions(Function<CommandSender, String[]> suggestions) {
 		this.suggestions =  Optional.of(suggestionInfo -> CompletableFuture.completedFuture(fromSuggestions(suggestions.apply(suggestionInfo.sender()))));
 		return this;
@@ -248,7 +248,7 @@ public abstract class Argument {
 	 * @return the current argument
 	 * @deprecated use {@link Argument#replaceSuggestions(Function)}
 	 */
-	@Deprecated
+	@Deprecated(forRemoval = true)
 	public final Argument overrideSuggestions(BiFunction<CommandSender, Object[], String[]> suggestions) {
 		this.suggestions =  Optional.of(suggestionInfo -> CompletableFuture.completedFuture(fromSuggestions(suggestions.apply(suggestionInfo.sender(), suggestionInfo.previousArgs()))));
 		return this;
@@ -261,7 +261,7 @@ public abstract class Argument {
 	 * @return the current argument
 	 * @deprecated use {@link Argument#replaceSuggestionsT(Function)}
 	 */
-	@Deprecated
+	@Deprecated(forRemoval = true)
 	public final Argument overrideSuggestionsT(Collection<IStringTooltip> suggestions) {
 		this.suggestions = Optional.of(suggestionInfo -> CompletableFuture.completedFuture(suggestions.toArray(new IStringTooltip[0])));
 		return this;
@@ -274,7 +274,7 @@ public abstract class Argument {
 	 * @return the current argument
 	 * @deprecated use {@link Argument#replaceSuggestionsT(Function)}
 	 */
-	@Deprecated
+	@Deprecated(forRemoval = true)
 	public final Argument overrideSuggestionsT(IStringTooltip... suggestions) {
 		this.suggestions = Optional.of(suggestionInfo -> CompletableFuture.completedFuture(suggestions));
 		return this;
@@ -288,7 +288,7 @@ public abstract class Argument {
 	 * @return the current argument
 	 * @deprecated use {@link Argument#replaceSuggestionsT(Function)}
 	 */
-	@Deprecated
+	@Deprecated(forRemoval = true)
 	public final Argument overrideSuggestionsT(Function<CommandSender, IStringTooltip[]> suggestions) {
 		this.suggestions =  Optional.of(suggestionInfo -> CompletableFuture.completedFuture(suggestions.apply(suggestionInfo.sender())));
 		return this;
@@ -302,7 +302,7 @@ public abstract class Argument {
 	 * @return the current argument
 	 * @deprecated use {@link Argument#replaceSuggestionsT(Function)}
 	 */
-	@Deprecated
+	@Deprecated(forRemoval = true)
 	public final Argument overrideSuggestionsT(BiFunction<CommandSender, Object[], IStringTooltip[]> suggestions) {
 		this.suggestions =  Optional.of(suggestionInfo -> CompletableFuture.completedFuture(suggestions.apply(suggestionInfo.sender(), suggestionInfo.previousArgs())));
 		return this;

@@ -143,7 +143,7 @@ public final class Converter {
 			return;
 		}
 
-		//Convert stupid YAML aliases to a String[] for CommandAPI
+		// Convert stupid YAML aliases to a String[] for CommandAPI
 		String[] aliases = null;
 		Object aliasObj = cmdData.get("aliases");
 		if(aliasObj == null) {
@@ -158,8 +158,15 @@ public final class Converter {
 		if(aliases.length != 0) {
 			CommandAPI.logInfo("Aliases for command /" + commandName + " found. Using aliases " + Arrays.deepToString(aliases));
 		}
+		
+		// Convert YAML to description
+		String fullDescription = null;
+		Object descriptionObj = cmdData.get("description");
+		if(descriptionObj != null && descriptionObj instanceof String) {
+			fullDescription = String.valueOf(descriptionObj);
+		}
 		 
-		//Convert YAML to CommandPermission
+		// Convert YAML to CommandPermission
 		CommandPermission permissionNode = null;
 		String permission = (String) cmdData.get("permission");
 		if(permission == null) {
@@ -169,10 +176,11 @@ public final class Converter {
 			permissionNode = CommandPermission.fromString(permission);
 		}
 		
-		//No arguments
+		// No arguments
 		new CommandAPICommand(commandName)
 			.withPermission(permissionNode)
 			.withAliases(aliases)
+			.withFullDescription(fullDescription)
 			.executesNative((sender, args) -> { 
 				org.bukkit.command.Command command = plugin.getCommand(commandName);
 				if(command == null) {
@@ -188,6 +196,7 @@ public final class Converter {
 			.withPermission(permissionNode)
 			.withAliases(aliases)
 			.withArguments(arguments)
+			.withFullDescription(fullDescription)
 			.executesNative((sender, args) -> { 
 				// We know the args are a String[] because that's how converted things are handled in generateCommand()
 				org.bukkit.command.Command command = plugin.getCommand(commandName);
@@ -197,6 +206,7 @@ public final class Converter {
 				CommandSender proxiedSender = CommandAPI.getConfiguration().shouldSkipSenderProxy(plugin) ? sender.getCallee() : mergeProxySender(sender);
 				command.execute(proxiedSender, commandName, (String[]) args);
 			});
+		
 		// Good grief, what a hack~
 		multiArgs.setConverted(true);
 		multiArgs.register();

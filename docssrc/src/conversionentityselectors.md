@@ -1,6 +1,6 @@
 # Entity selectors
 
-[Entity selectors](https://minecraft.fandom.com/wiki/Commands#Target_selectors) (also known as target selectors) allows you to select certain entities or players which fit a certain criteria when writing a command. Typically, these are of the form `@p`, `@r`, `@a`, `@e` or `@s`. By default, when converting a command without arguments, the CommandAPI will not handle these entity selectors. In order to get entity selectors to cooperate with plugins, they must be declared in the relevant `config.yml` section.
+[Entity selectors](https://minecraft.fandom.com/wiki/Target_selectors) (also known as target selectors) allows you to select certain entities or players which fit a certain criteria when writing a command. Typically, these are of the form `@p`, `@r`, `@a`, `@e` or `@s`. By default, when converting a command without arguments, the CommandAPI will not handle these entity selectors. In order to get entity selectors to cooperate with plugins, they must be declared in the relevant `config.yml` section.
 
 <div class="example">
 
@@ -44,8 +44,10 @@ verbose-outputs: false
 create-dispatcher-json: false
 plugins-to-convert:
   - Essentials:
-    - ext
     - ext <player>[api:players]
+    - ext
 ```
 
 </div>
+
+Note that we declare `ext <player>[api:players]` _before_ we declare `ext`. This is because more precise commands MUST be declared before lesser precise commands.

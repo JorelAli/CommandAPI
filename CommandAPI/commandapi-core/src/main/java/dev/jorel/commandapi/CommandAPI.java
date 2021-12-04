@@ -134,7 +134,7 @@ public final class CommandAPI {
 	 * @param verbose if true, enables verbose output for the CommandAPI
 	 * @deprecated Use {@link CommandAPI#onLoad(CommandAPIConfig)} instead
 	 */
-	@Deprecated
+	@Deprecated(forRemoval = true)
 	public static void onLoad(boolean verbose) {
 		if(!loaded) {
 			CommandAPI.config = new Config(verbose);
@@ -175,9 +175,11 @@ public final class CommandAPI {
 			
 			try {
 				CommandAPIHandler.getInstance().getNMS().reloadDataPacks();
-			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+			} catch (ReflectiveOperationException e) {
 				e.printStackTrace();
 			}
+			
+			CommandAPIHandler.getInstance().updateHelpForCommands();
 		}, 0L);
 		
 		final Listener playerJoinListener = new Listener() {
