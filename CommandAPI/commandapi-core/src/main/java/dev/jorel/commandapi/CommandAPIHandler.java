@@ -778,9 +778,21 @@ public class CommandAPIHandler<CommandSourceStack> {
 			SuggestionProvider<CommandSourceStack> addedSuggestions = toSuggestions(argument.getNodeName(), args, false);
 			
 			newSuggestionsProvider = (cmdCtx, builder) -> {
-				addedSuggestions.getSuggestions(cmdCtx, builder);
-				provider.getSuggestions(cmdCtx, builder);
-				return builder.buildFuture();
+				//Heavily inspired by CommandDispatcher#listSuggestions, with combining multiple CompletableFuture<Suggestions> into one.
+				final CompletableFuture<Suggestions>[] futures = new CompletableFuture[]{
+					addedSuggestions.getSuggestions(cmdCtx, builder), provider.getSuggestions(cmdCtx, builder)
+				};
+				CompletableFuture<Suggestions> result = new CompletableFuture<>();
+				CompletableFuture
+					.allOf(futures)
+					.thenRun(() -> {
+						List<Suggestions> suggestions = new ArrayList<>();
+						for(CompletableFuture<Suggestions> future: futures) {
+							suggestions.add(future.join());
+						}
+						result.complete(Suggestions.merge(cmdCtx.getInput(), suggestions));
+					});
+				return result;
 			};
 		} 
 		
