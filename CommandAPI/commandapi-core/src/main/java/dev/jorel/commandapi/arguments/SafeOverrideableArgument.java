@@ -20,14 +20,14 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import java.util.function.Function;
+
+import org.bukkit.NamespacedKey;
+
 import com.mojang.brigadier.arguments.ArgumentType;
+
 import dev.jorel.commandapi.SuggestionInfo;
 import dev.jorel.commandapi.Tooltip;
-import org.bukkit.NamespacedKey;
-import org.bukkit.command.CommandSender;
-import java.util.Collection;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
 /**
  * An interface declaring methods required to override argument suggestions
@@ -124,114 +124,6 @@ public abstract class SafeOverrideableArgument<S> extends Argument {
 	@Deprecated(forRemoval = true)
 	public final Argument includeWithSafeSuggestionsT(Function<SuggestionInfo, Tooltip<S>[]> suggestions) {
 		return includeSafeSuggestions(SafeSuggestions.tooltips(suggestions));
-	}
-
-	/**
-	 * Override the suggestions of this argument with a custom array.
-	 * 
-	 * @param suggestions the S array to override suggestions with
-	 * @return the current argument
-	 * @deprecated use {@link #replaceSafeSuggestions(SafeSuggestions)}
-	 */
-	@Deprecated(forRemoval = true)
-	@SuppressWarnings("unchecked")
-	public final Argument safeOverrideSuggestions(S... suggestions) {
-		return replaceSafeSuggestions(SafeSuggestions.suggest(suggestions));
-	}
-	
-	/**
-	 * Override the suggestions of this argument with a custom <code>Collection&lt;S&gt;</code>.
-	 * 
-	 * @param suggestions the <code>Collection&lt;S&gt;</code> to override suggestions with
-	 * @return the current argument
-	 * @deprecated use {@link #replaceSafeSuggestions(SafeSuggestions)}
-	 */
-	@Deprecated(forRemoval = true)
-	@SuppressWarnings("unchecked")
-	public final Argument safeOverrideSuggestions(Collection<S> suggestions) {
-		return replaceSafeSuggestions(SafeSuggestions.suggest(suggestions.toArray((S[]) new Object[0])));
-	} 
-
-	/**
-	 * Override the suggestions of this argument with a function that maps the
-	 * command sender to a custom array.
-	 * 
-	 * @param suggestions the function to override suggestions with
-	 * @return the current argument
-	 * @deprecated use {@link #replaceSafeSuggestions(SafeSuggestions)}}
-	 */
-	@Deprecated(forRemoval = true)
-	public final Argument safeOverrideSuggestions(Function<CommandSender, S[]> suggestions) {
-		return this.replaceSafeSuggestions(SafeSuggestions.suggest(info -> suggestions.apply(info.sender())));
-	}
-	
-	/**
-	 * Override the suggestions of this argument with a function that maps the
-	 * command sender to a custom array.
-	 * 
-	 * @param suggestions the function to override suggestions with
-	 * @return the current argument
-	 * @deprecated use {@link #replaceSafeSuggestions(SafeSuggestions)}
-	 */
-	@Deprecated(forRemoval = true)
-	public final Argument safeOverrideSuggestions(BiFunction<CommandSender, Object[], S[]> suggestions) {
-		return replaceSafeSuggestions(SafeSuggestions.suggest(info -> suggestions.apply(info.sender(), info.previousArgs())));
-	}
-	
-	/**
-	 * Override the suggestions of this argument with an array of <code>Tooltip&lt;S&gt;</code>,
-	 * that represents a safe suggestion and a hover tooltip
-	 * 
-	 * @param suggestions the suggestions and tooltips to override suggestions with 
-	 * @return the current argument
-	 * @deprecated use {@link #replaceSafeSuggestions(SafeSuggestions)}
-	 */
-	@Deprecated(forRemoval = true)
-	@SafeVarargs
-	public final Argument safeOverrideSuggestionsT(Tooltip<S>... suggestions) {
-		return replaceSafeSuggestions(SafeSuggestions.tooltips(suggestions));
-	};
-	
-	/**
-	 * Override the suggestions of this argument with a <code>Collection&lt;Tooltip&lt;S&gt;&gt;</code>,
-	 * that represents a safe suggestion and a hover tooltip
-	 * 
-	 * @param suggestions the suggestions and tooltips to override suggestions with 
-	 * @return the current argument
-	 * @deprecated use {@link #replaceSafeSuggestions(SafeSuggestions)}
-	 */
-	@Deprecated(forRemoval = true)
-	@SuppressWarnings("unchecked")
-	public final Argument safeOverrideSuggestionsT(Collection<Tooltip<S>> suggestions) {
-		return replaceSafeSuggestions(SafeSuggestions.tooltips(suggestions.toArray((Tooltip<S>[]) new Object[0])));
-	};
-	
-	/**
-	 * Override the suggestions of this argument with a function mapping the command
-	 * sender to an array of <code>Tooltip&lt;S&gt;</code>, that represents a safe suggestion and a
-	 * hover tooltip
-	 * 
-	 * @param suggestions the suggestions and tooltips to override suggestions with
-	 * @return the current argument
-	 * @deprecated use {@link #replaceSafeSuggestions(SafeSuggestions)}
-	 */
-	@Deprecated(forRemoval = true)
-	public final Argument safeOverrideSuggestionsT(Function<CommandSender, Tooltip<S>[]> suggestions) {
-		return replaceSafeSuggestions(SafeSuggestions.tooltips(info -> suggestions.apply(info.sender())));
-	}
-	
-	/**
-	 * Override the suggestions of this argument with a function mapping the command
-	 * sender an previously declared arguments to an array of <code>Tooltip&lt;S&gt;</code>, that
-	 * represents a safe suggestion and a hover tooltip
-	 * 
-	 * @param suggestions the suggestions and tooltips to override suggestions with
-	 * @return the current argument
-	 * @deprecated use {@link #replaceSafeSuggestions(SafeSuggestions)}
-	 */
-	@Deprecated(forRemoval = true)
-	public final Argument safeOverrideSuggestionsT(BiFunction<CommandSender, Object[], Tooltip<S>[]> suggestions) {
-		return replaceSafeSuggestions(SafeSuggestions.tooltips(info -> suggestions.apply(info.sender(), info.previousArgs())));
 	}
 	
 	/**

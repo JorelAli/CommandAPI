@@ -39,6 +39,7 @@ public interface SafeSuggestions<S> {
 	 * @param <T> type of the values
 	 * @return a SafeSuggestions object suggesting the hardcoded suggestions
 	 */
+	@SafeVarargs
 	static <T> SafeSuggestions<T> suggest(T... suggestions) {
 		return (mapper) -> ArgumentSuggestions.strings(toStrings(mapper, suggestions));
 	}
@@ -71,6 +72,7 @@ public interface SafeSuggestions<S> {
 	 * @param <T> type of the values
 	 * @return a SafeSuggestion object suggesting the hardcoded values
 	 */
+	@SafeVarargs
 	static <T> SafeSuggestions<T> tooltips(Tooltip<T>... suggestions) {
 		return (mapper) -> ArgumentSuggestions.stringsWithTooltips(toStringsWithTooltips(mapper, suggestions));
 	}
@@ -106,6 +108,7 @@ public interface SafeSuggestions<S> {
 	 * @param <T> type of the values
 	 * @return array of strings representing the array of values under the mapping function
 	 */
+	@SafeVarargs
 	private static <T> String[] toStrings(Function<T, String> mapper, T... suggestions) {
 		String[] strings = new String[suggestions.length];
 		for(int i = 0; i < suggestions.length; i++) {
@@ -121,6 +124,7 @@ public interface SafeSuggestions<S> {
 	 * @param <T> type of the values
 	 * @return array of strings with tooltips representing the array of values with tooltips under the mapping function
 	 */
+	@SafeVarargs
 	private static <T> IStringTooltip[] toStringsWithTooltips(Function<T, String> mapper, Tooltip<T>... suggestions) {
 		IStringTooltip[] stringsWithTooltips = new IStringTooltip[suggestions.length];
 		for(int i = 0; i < suggestions.length; i++) {
