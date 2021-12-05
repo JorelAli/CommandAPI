@@ -1,6 +1,7 @@
 package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.LiteralMessage;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import dev.jorel.commandapi.IStringTooltip;
@@ -21,8 +22,11 @@ public interface ArgumentSuggestions {
 	 * @param info The suggestions info
 	 * @param builder The Brigadier {@link SuggestionsBuilder} object
 	 * @return a {@link CompletableFuture} resolving onto a brigadier {@link Suggestions} object.
+	 *
+	 * @throws CommandSyntaxException if there is an error making suggestions
 	 */
-	CompletableFuture<Suggestions> suggest(SuggestionInfo info, SuggestionsBuilder builder);
+	CompletableFuture<Suggestions> suggest(SuggestionInfo info, SuggestionsBuilder builder) throws
+																							CommandSyntaxException;
 
 	/**
 	 * Suggest nothing
