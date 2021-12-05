@@ -30,16 +30,15 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
+import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -51,8 +50,6 @@ import org.bukkit.permissions.Permission;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.LiteralMessage;
-import com.mojang.brigadier.Message;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
@@ -708,28 +705,6 @@ public class CommandAPIHandler<CommandSourceStack> {
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
-	// SECTION: SuggestionProviders //
-	//////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	// NMS ICompletionProvider.a()
-	CompletableFuture<Suggestions> getSuggestionsBuilder(SuggestionsBuilder builder, CompletableFuture<IStringTooltip[]> arrayFuture) {
-		return arrayFuture.thenApply(array -> {
-			String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
-			for (int i = 0; i < array.length; i++) {
-				IStringTooltip str = array[i];
-				if (str.getSuggestion().toLowerCase(Locale.ROOT).startsWith(remaining)) {
-					Message tooltipMsg = null;
-					if(str.getTooltip() != null) {
-						tooltipMsg = new LiteralMessage(str.getTooltip());
-					}
-					builder.suggest(str.getSuggestion(), tooltipMsg);
-				}
-			}
-			return builder.build();
-		});
-	}
-
-	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	// SECTION: Argument Builders //
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -845,8 +820,8 @@ public class CommandAPIHandler<CommandSourceStack> {
 	SuggestionProvider<CommandSourceStack> toSuggestions(String nodeName, Argument[] args, boolean overrideSuggestions) {
 		return (CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) -> {
 			SuggestionInfo suggestionInfo = new SuggestionInfo(NMS.getCommandSenderFromCSS(context.getSource()), generatePreviousArguments(context, args, nodeName), builder.getInput(), builder.getRemaining());
-			Optional<Function<SuggestionInfo, CompletableFuture<IStringTooltip[]>>> suggestionsToAddOrOverride = overrideSuggestions ? getArgument(args, nodeName).getOverriddenSuggestions() : getArgument(args, nodeName).getIncludedSuggestions();
-			return getSuggestionsBuilder(builder, suggestionsToAddOrOverride.orElseGet(() -> o -> CompletableFuture.completedFuture(new IStringTooltip[0])).apply(suggestionInfo));
+			Optional<ArgumentSuggestions> suggestionsToAddOrOverride = overrideSuggestions ? getArgument(args, nodeName).getOverriddenSuggestions() : getArgument(args, nodeName).getIncludedSuggestions();
+			return suggestionsToAddOrOverride.orElse(ArgumentSuggestions.empty()).suggest(suggestionInfo, builder);
 		};
 	}
 	
