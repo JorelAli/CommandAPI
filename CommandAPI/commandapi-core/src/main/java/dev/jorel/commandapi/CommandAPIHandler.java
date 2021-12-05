@@ -754,6 +754,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 			
 			newSuggestionsProvider = (cmdCtx, builder) -> {
 				//Heavily inspired by CommandDispatcher#listSuggestions, with combining multiple CompletableFuture<Suggestions> into one.
+				@SuppressWarnings("unchecked")
 				final CompletableFuture<Suggestions>[] futures = new CompletableFuture[]{
 					addedSuggestions.getSuggestions(cmdCtx, builder), provider.getSuggestions(cmdCtx, builder)
 				};
