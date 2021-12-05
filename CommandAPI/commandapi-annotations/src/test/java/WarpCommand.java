@@ -33,6 +33,7 @@ import dev.jorel.commandapi.annotations.Default;
 import dev.jorel.commandapi.annotations.Permission;
 import dev.jorel.commandapi.annotations.Subcommand;
 import dev.jorel.commandapi.annotations.arguments.AStringArgument;
+import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.StringArgument;
 
 /* ANCHOR: warps */
@@ -119,9 +120,9 @@ new CommandAPICommand("warp")
 
 // /warp <warp>
 new CommandAPICommand("warp")
-    .withArguments(new StringArgument("warp").replaceSuggestions(info -> 
+    .withArguments(new StringArgument("warp").replaceSuggestions(ArgumentSuggestions.strings(info -> 
         warps.keySet().toArray(new String[0])
-    ))
+    )))
     .executesPlayer((player, args) -> {
         player.teleport(warps.get((String) args[0]));
     })
