@@ -26,6 +26,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import dev.jorel.commandapi.ArgumentTree;
 import org.bukkit.command.CommandSender;
 
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -40,7 +41,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * The core abstract class for Command API arguments
  */
-public abstract class Argument {
+public abstract class Argument extends ArgumentTree {
 
 	/**
 	 * Returns the primitive type of the current Argument. After executing a
