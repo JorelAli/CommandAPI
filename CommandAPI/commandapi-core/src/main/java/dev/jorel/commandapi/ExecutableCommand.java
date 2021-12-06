@@ -5,6 +5,11 @@ import org.bukkit.command.CommandSender;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+/**
+ * This is a base class for {@link CommandAPICommand} and {@link CommandTree} command definitions
+ *
+ * @param <T> return type for chain calls
+ */
 abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executable<T> {
 
 	protected final CommandMetaData meta;

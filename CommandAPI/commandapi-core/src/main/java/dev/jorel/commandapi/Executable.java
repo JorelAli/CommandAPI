@@ -16,6 +16,11 @@ import dev.jorel.commandapi.executors.ProxyResultingCommandExecutor;
 import dev.jorel.commandapi.executors.ResultingCommandExecutor;
 import org.bukkit.command.CommandSender;
 
+/**
+ * This class represents something that is executable. This is mostly, {@link CommandAPICommand} instances, or can also be {@link CommandTree} nodes and even {@link Argument} nodes in a tree
+ *
+ * @param <T> return type for chain calls
+ */
 abstract class Executable<T extends Executable<T>> {
 
 	protected CustomCommandExecutor<?> executor = new CustomCommandExecutor<>();
@@ -25,7 +30,7 @@ abstract class Executable<T extends Executable<T>> {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(CommandSender, Object[]) -&gt; ()</code> that will be executed when the command is run
-	 * @return (T) this command builder
+	 * @return this command builder
 	 */
 	public T executes(CommandExecutor executor) {
 		this.executor.addNormalExecutor(executor);
@@ -35,7 +40,7 @@ abstract class Executable<T extends Executable<T>> {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(CommandSender, Object[]) -&gt; int</code> that will be executed when the command is run
-	 * @return (T) this command builder
+	 * @return this command builder
 	 */
 	public T executes(ResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);
@@ -47,7 +52,7 @@ abstract class Executable<T extends Executable<T>> {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(Player, Object[]) -&gt; ()</code> that will be executed when the command is run
-	 * @return (T) this command builder
+	 * @return this command builder
 	 */
 	public T executesPlayer(PlayerCommandExecutor executor) {
 		this.executor.addNormalExecutor(executor);
@@ -57,7 +62,7 @@ abstract class Executable<T extends Executable<T>> {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(Player, Object[]) -&gt; int</code> that will be executed when the command is run
-	 * @return (T) this command builder
+	 * @return this command builder
 	 */
 	public T executesPlayer(PlayerResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);
@@ -69,7 +74,7 @@ abstract class Executable<T extends Executable<T>> {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(Entity, Object[]) -&gt; ()</code> that will be executed when the command is run
-	 * @return (T) this command builder
+	 * @return this command builder
 	 */
 	public T executesEntity(EntityCommandExecutor executor) {
 		this.executor.addNormalExecutor(executor);
@@ -79,7 +84,7 @@ abstract class Executable<T extends Executable<T>> {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(Entity, Object[]) -&gt; int</code> that will be executed when the command is run
-	 * @return (T) this command builder
+	 * @return this command builder
 	 */
 	public T executesEntity(EntityResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);
@@ -91,7 +96,7 @@ abstract class Executable<T extends Executable<T>> {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(Entity, Object[]) -&gt; ()</code> that will be executed when the command is run
-	 * @return (T) this command builder
+	 * @return this command builder
 	 */
 	public T executesProxy(ProxyCommandExecutor executor) {
 		this.executor.addNormalExecutor(executor);
@@ -101,7 +106,7 @@ abstract class Executable<T extends Executable<T>> {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(Entity, Object[]) -&gt; int</code> that will be executed when the command is run
-	 * @return (T) this command builder
+	 * @return this command builder
 	 */
 	public T executesProxy(ProxyResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);
@@ -113,7 +118,7 @@ abstract class Executable<T extends Executable<T>> {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -&gt; ()</code> that will be executed when the command is run
-	 * @return (T) this command builder
+	 * @return this command builder
 	 */
 	public T executesCommandBlock(CommandBlockCommandExecutor executor) {
 		this.executor.addNormalExecutor(executor);
@@ -123,7 +128,7 @@ abstract class Executable<T extends Executable<T>> {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -&gt; int</code> that will be executed when the command is run
-	 * @return (T) this command builder
+	 * @return this command builder
 	 */
 	public T executesCommandBlock(CommandBlockResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);
@@ -135,7 +140,7 @@ abstract class Executable<T extends Executable<T>> {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -&gt; ()</code> that will be executed when the command is run
-	 * @return (T) this command builder
+	 * @return this command builder
 	 */
 	public T executesConsole(ConsoleCommandExecutor executor) {
 		this.executor.addNormalExecutor(executor);
@@ -145,7 +150,7 @@ abstract class Executable<T extends Executable<T>> {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -&gt; int</code> that will be executed when the command is run
-	 * @return (T) this command builder
+	 * @return this command builder
 	 */
 	public T executesConsole(ConsoleResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);
@@ -155,7 +160,7 @@ abstract class Executable<T extends Executable<T>> {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(NativeCommandExecutor, Object[]) -&gt; ()</code> that will be executed when the command is run
-	 * @return (T) this command builder
+	 * @return this command builder
 	 */
 	public T executesNative(NativeCommandExecutor executor) {
 		this.executor.addNormalExecutor(executor);
@@ -165,7 +170,7 @@ abstract class Executable<T extends Executable<T>> {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(NativeCommandExecutor, Object[]) -&gt; int</code> that will be executed when the command is run
-	 * @return (T) this command builder
+	 * @return this command builder
 	 */
 	public T executesNative(NativeResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);

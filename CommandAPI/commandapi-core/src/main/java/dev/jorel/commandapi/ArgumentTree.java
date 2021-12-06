@@ -5,6 +5,9 @@ import dev.jorel.commandapi.arguments.Argument;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * This is a base class for arguments, allowing them to behave as tree nodes in a {@link CommandTree}
+ */
 public class ArgumentTree extends Executable<ArgumentTree> {
 
 	final List<Execution> executions = new LinkedList<>();
@@ -23,8 +26,12 @@ public class ArgumentTree extends Executable<ArgumentTree> {
 		this.executor = argument.executor;
 	}
 
+	/**
+	 * Create a child branch on this node
+	 * @param tree The child branch
+	 * @return this tree node
+	 */
 	public ArgumentTree then(final ArgumentTree tree) {
-
 		//Add all of the executions
 		for(Execution execution : tree.executions) {
 			//Prepend this argument to the arguments of the executions
