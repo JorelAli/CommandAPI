@@ -1,5 +1,9 @@
 var NAVTREEINDEX5 =
 {
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html#a164048fb64180ca8193747db36b240a8":[2,0,1,0,0,1,37,5],
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html#a1c740ac65ed20a963eda6bf875af570c":[2,0,1,0,0,1,37,11],
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html#a2168e67f0a32516350b6b35ce8569130":[2,0,1,0,0,1,37,25],
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html#a32ebae8c2f2eb50a533bb33792f3fe31":[2,0,1,0,0,1,37,16],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html#a33feaa3af9efb01b43c7da74503af365":[2,0,1,0,0,1,37,6],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html#a358f2f31f1454de941efe64987842741":[2,0,1,0,0,1,37,1],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html#a36dbcbd4744c398a055646b00e53c3f5":[2,0,1,0,0,1,37,19],
@@ -245,9 +249,5 @@ var NAVTREEINDEX5 =
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html#ad9fe9ad15b0af457f58c9ff2aff5161b":[2,0,1,0,0,1,49,13],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html#adc3f6a120e215235168855ed3be2b01e":[2,0,1,0,0,1,49,23],
 "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html#adcaa4e187c665d35020fc681b8750591":[2,0,1,0,0,1,49,9],
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html#ae9a53aa98c3776326c063a9f8733979b":[2,0,1,0,0,1,49,28],
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html#af19355b889385c173107290e6e2d045e":[2,0,1,0,0,1,49,22],
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_scoreboard_slot_argument.html":[2,0,1,0,0,1,48],
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_scoreboard_slot_argument.html#a2d3b7401bebe89cecd366ffe3ac74bda":[2,0,1,0,0,1,48,11],
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_scoreboard_slot_argument.html#a2f0ed384b5c4006f270f0e206b7184c0":[2,0,1,0,0,1,48,4]
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html#ae9a53aa98c3776326c063a9f8733979b":[2,0,1,0,0,1,49,28]
 };

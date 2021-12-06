@@ -24,12 +24,13 @@ import dev.jorel.commandapi.exceptions.UnsupportedVersionException;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.nms.NMS_1_16_R3;
 import dev.jorel.commandapi.nms.NMS_1_17_R1;
+import dev.jorel.commandapi.nms.NMS_1_18_R1;
 
 public interface CommandAPIVersionHandler {
 
 	public static NMS<?> getNMS(String version) {
 		if(CommandAPI.getConfiguration().shouldUseLatestNMSVersion()) {
-			return new NMS_1_17_R1();
+			return new NMS_1_18_R1();
 		} else {
 			switch (version) {
 			case "1.16.5":
@@ -37,6 +38,8 @@ public interface CommandAPIVersionHandler {
 			case "1.17":
 			case "1.17.1":
 				return new NMS_1_17_R1();
+			case "1.18":
+				return new NMS_1_18_R1();
 			default:
 				throw new UnsupportedVersionException("This version of Minecraft is unsupported: " + version);
 			}

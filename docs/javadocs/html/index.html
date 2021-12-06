@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">CommandAPI
-   &#160;<span id="projectnumber">6.3.1</span>
+   &#160;<span id="projectnumber">6.4.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -273,6 +273,32 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <li>Go into the folder named <code>CommandAPI</code> _(Not to be confused with the folder named <code>CommandAPI</code>, which is what was just cloned)_. You want the folder which contains <code>pom.xml</code>.</li>
 <li>Run <code>mvn</code></li>
 </ul>
+<p>The resulting plugin <code>.jar</code> is found in <code>commandapi-plugin/target/CommandAPIvX.X.X_DATE.jar</code></p>
+<h2>Building the CommandAPI's documentation</h2>
+<p>The CommandAPI's documentation is built using a custom version of <a href="https://rust-lang.github.io/mdBook/">mdBook</a>, a command line tool to create "books" with Markdown. This custom version can be found <a href="https://github.com/JorelAli/mdBook/releases">in my mdBook fork</a>.</p>
+<ul>
+<li>(Optional): Build the CommandAPI first, using the instructions above. The documentation pulls information directly from tests in the source code, so it assumes that those tests compile correctly!</li>
+<li>Get a copy of mdbook fork executable.<ul>
+<li>On Windows, download <code>mdbook-fa5.exe</code> from the <a href="https://github.com/JorelAli/mdBook/releases/tag/v0.4.9">mdBook FA5 support</a> release</li>
+<li>On Linux:<ul>
+<li><p class="startli">Clone my <a href="https://github.com/JorelAli/mdBook">mdBook fork</a> using your preferred method, or with the command below:</p>
+<p class="startli">``` git clone <a href="https://github.com/JorelAli/mdBook.git">https://github.com/JorelAli/mdBook.git</a> ```</p>
+</li>
+<li><p class="startli">Use git to checkout to the <code>fa5</code> branch, using the following command:</p>
+<p class="startli">``` git checkout fa5 ```</p>
+</li>
+<li><p class="startli">Build the executable with <code>cargo</code> (can be installed using <code>sudo apt-get install cargo</code> on Ubuntu distros), using the following command:</p>
+<p class="startli">``` cargo build ```</p>
+</li>
+<li>Grab the executable <code>mdbook</code> from <code>mdBook/target/debug/</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Navigate to the <code>docssrc</code> folder</li>
+<li>Run <code>mdbook-fa5.exe build</code> (or <code>mdbook build</code> on Linux)</li>
+</ul>
+<p>The resulting compiled documentation is found in <code>docs/X.X.X</code>, where <code>X.X.X</code> is specified in the <code>book.toml</code> file's <code>build-dir</code> in the <code>docssrc</code> folder.</p>
 <hr  />
 <h2>CommandAPI Project Timeline</h2>
 <p>This is the current roadmap for the CommandAPI (as of 16th May 2021):</p>
@@ -1073,7 +1099,7 @@ Initial release </li>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Mon Sep 13 2021 16:19:00 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Nov 30 2021 21:01:26 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

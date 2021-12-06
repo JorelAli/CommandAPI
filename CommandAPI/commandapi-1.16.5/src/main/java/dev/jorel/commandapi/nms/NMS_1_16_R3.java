@@ -196,9 +196,8 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		 SimpleHelpMap_helpTopics = shm_ht;
 	}
 
-	@SuppressWarnings("deprecation")
 	private static NamespacedKey fromMinecrafKey(MinecraftKey key) {
-		return new NamespacedKey(key.getNamespace(), key.getKey());
+		return NamespacedKey.fromString(key.getNamespace() + ":" + key.getKey());
 	}
 	
 	@Override
@@ -856,7 +855,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		// Update the CustomFunctionManager for the datapackResources which now has the new commandDispatcher
 		try {
 			CommandAPIHandler.getInstance().getField(CustomFunctionManager.class, "h").set(datapackResources.a(),
-					datapackResources.commandDispatcher.a());
+					getBrigadierDispatcher());
 		} catch (IllegalArgumentException | IllegalAccessException e1) {
 			e1.printStackTrace();
 		}

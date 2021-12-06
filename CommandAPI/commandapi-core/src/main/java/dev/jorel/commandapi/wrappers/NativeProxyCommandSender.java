@@ -32,6 +32,9 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
+
+import net.kyori.adventure.text.Component;
 
 /**
  * A simple representation of Minecraft's CommandListenerWrapper, in the form of
@@ -284,7 +287,7 @@ public class NativeProxyCommandSender implements ProxiedCommandSender {
      * @param messages An array of messages to be displayed
      */
 	@Override
-	public void sendMessage(String[] messages) {
+	public void sendMessage(String... messages) {
 		this.caller.sendMessage(messages);
 	}
 
@@ -306,7 +309,7 @@ public class NativeProxyCommandSender implements ProxiedCommandSender {
      * @param sender The sender of this message
      */
 	@Override
-	public void sendMessage(UUID sender, String[] messages) {
+	public void sendMessage(UUID sender, String... messages) {
 		this.caller.sendMessage(sender, messages);
 	}
 	
@@ -327,6 +330,11 @@ public class NativeProxyCommandSender implements ProxiedCommandSender {
 	@Override
 	public Spigot spigot() {
 		return this.caller.spigot();
+	}
+
+	@Override
+	public @NotNull Component name() {
+		return this.caller.name();
 	}
 
 }
