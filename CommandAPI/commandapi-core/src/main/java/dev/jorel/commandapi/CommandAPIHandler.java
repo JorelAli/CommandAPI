@@ -30,16 +30,15 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
+import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -51,8 +50,6 @@ import org.bukkit.permissions.Permission;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.LiteralMessage;
-import com.mojang.brigadier.Message;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
@@ -488,9 +485,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 * the provided command. Returns true if multiliteral arguments were present (and expanded) and
 	 * returns false if multiliteral arguments were not present.
 	 */
-	private boolean expandMultiLiterals(String commandName, Optional<String> shortDescription,
-			Optional<String> fullDescription, CommandPermission permissions, String[] aliases,
-			Predicate<CommandSender> requirements, final Argument[] args,
+	private boolean expandMultiLiterals(CommandMetaData meta, final Argument[] args,
 			CustomCommandExecutor<? extends CommandSender> executor,
 			boolean converted) throws CommandSyntaxException, IOException {
 		
@@ -509,7 +504,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 					//Reconstruct the list of arguments and place in the new literals
 					Argument[] newArgs = Arrays.copyOf(args, args.length);
 					newArgs[index] = litArg;
-					register(commandName, shortDescription, fullDescription, permissions, aliases, requirements, newArgs, executor, converted);
+					register(meta, newArgs, executor, converted);
 				}
 				return true;
 			}
@@ -618,13 +613,12 @@ public class CommandAPIHandler<CommandSourceStack> {
 	
 	// Builds our NMS command using the given arguments for this method, then
 	// registers it
-	void register(String commandName, Optional<String> shortDescription, Optional<String> fullDescription,
-			CommandPermission permission, String[] aliases, Predicate<CommandSender> requirements,
+	void register(CommandMetaData meta,
 			final Argument[] args, CustomCommandExecutor<? extends CommandSender> executor, boolean converted)
 			throws CommandSyntaxException, IOException {
 
 		//"Expands" our MultiLiterals into Literals
-		if(expandMultiLiterals(commandName, shortDescription, fullDescription, permission, aliases, requirements, args, executor, converted)) {
+		if(expandMultiLiterals(meta, args, executor, converted)) {
 			return;
 		}
 		
@@ -633,7 +627,15 @@ public class CommandAPIHandler<CommandSourceStack> {
 		for(Argument arg : args) {
 			builder.append(arg.getNodeName()).append("<").append(arg.getClass().getSimpleName()).append("> ");
 		}
-		
+
+		//Expand metaData into named variables
+		String commandName = meta.commandName;
+		CommandPermission permission = meta.permission;
+		String[] aliases = meta.aliases;
+		Predicate<CommandSender> requirements = meta.requirements;
+		Optional<String> shortDescription = meta.shortDescription;
+		Optional<String> fullDescription = meta.fullDescription;
+
 		// Handle command conflicts
 		boolean hasRegisteredCommand = false;
 		for(RegisteredCommand rCommand : registeredCommands) {
@@ -705,28 +707,6 @@ public class CommandAPIHandler<CommandSourceStack> {
 
 			NMS.createDispatcherFile(file, DISPATCHER);
 		}
-	}
-
-	//////////////////////////////////////////////////////////////////////////////////////////////////////
-	// SECTION: SuggestionProviders //
-	//////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	// NMS ICompletionProvider.a()
-	CompletableFuture<Suggestions> getSuggestionsBuilder(SuggestionsBuilder builder, CompletableFuture<IStringTooltip[]> arrayFuture) {
-		return arrayFuture.thenApply(array -> {
-			String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
-			for (int i = 0; i < array.length; i++) {
-				IStringTooltip str = array[i];
-				if (str.getSuggestion().toLowerCase(Locale.ROOT).startsWith(remaining)) {
-					Message tooltipMsg = null;
-					if(str.getTooltip() != null) {
-						tooltipMsg = new LiteralMessage(str.getTooltip());
-					}
-					builder.suggest(str.getSuggestion(), tooltipMsg);
-				}
-			}
-			return builder.build();
-		});
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -845,8 +825,8 @@ public class CommandAPIHandler<CommandSourceStack> {
 	SuggestionProvider<CommandSourceStack> toSuggestions(String nodeName, Argument[] args, boolean overrideSuggestions) {
 		return (CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) -> {
 			SuggestionInfo suggestionInfo = new SuggestionInfo(NMS.getCommandSenderFromCSS(context.getSource()), generatePreviousArguments(context, args, nodeName), builder.getInput(), builder.getRemaining());
-			Optional<Function<SuggestionInfo, CompletableFuture<IStringTooltip[]>>> suggestionsToAddOrOverride = overrideSuggestions ? getArgument(args, nodeName).getOverriddenSuggestions() : getArgument(args, nodeName).getIncludedSuggestions();
-			return getSuggestionsBuilder(builder, suggestionsToAddOrOverride.orElseGet(() -> o -> CompletableFuture.completedFuture(new IStringTooltip[0])).apply(suggestionInfo));
+			Optional<ArgumentSuggestions> suggestionsToAddOrOverride = overrideSuggestions ? getArgument(args, nodeName).getOverriddenSuggestions() : getArgument(args, nodeName).getIncludedSuggestions();
+			return suggestionsToAddOrOverride.orElse(ArgumentSuggestions.empty()).suggest(suggestionInfo, builder);
 		};
 	}
 	
