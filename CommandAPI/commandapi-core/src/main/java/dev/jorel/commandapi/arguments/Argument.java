@@ -24,6 +24,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import dev.jorel.commandapi.ArgumentTree;
 import org.bukkit.command.CommandSender;
 
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -38,7 +39,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * The core abstract class for Command API arguments
  */
-public abstract class Argument {
+public abstract class Argument extends ArgumentTree {
 
 	/**
 	 * Returns the primitive type of the current Argument. After executing a
@@ -166,12 +167,14 @@ public abstract class Argument {
 		return addedSuggestions;
 	}
 
+
 	/**
 	 * Replace the suggestions of this argument.
 	 * @param suggestions An {@link ArgumentSuggestions} object representing the suggestions. Use the static methods in
 	 * ArgumentSuggestions to create these.
 	 * @return the current argument
 	 */
+  
 	public Argument replaceSuggestions(ArgumentSuggestions suggestions) {
 		this.suggestions = Optional.of(suggestions);
 		return this;
