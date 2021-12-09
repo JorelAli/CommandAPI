@@ -38,7 +38,7 @@ public class ArgumentTree extends Executable<ArgumentTree> {
 			execution.arguments().add(0, this.argument);
 			this.executions.add(execution);
 		}
-		if(!tree.executor.isEmpty()) {
+		if(tree.executor.hasAnyExecutors()) {
 			this.executions.add(new Execution(List.of(this.argument, tree.argument), tree.executor));
 		}
 		return this;
