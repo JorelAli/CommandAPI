@@ -21,7 +21,7 @@ public class CommandTree extends ExecutableCommand<CommandTree> {
 	 */
 	public CommandTree then(final ArgumentTree tree) {
 		executions.addAll(tree.executions);
-		if(!tree.executor.isEmpty()) {
+		if(tree.executor.hasAnyExecutors()) {
 			this.executions.add(new Execution(List.of(tree.argument), tree.executor));
 		}
 		return this;
@@ -31,10 +31,12 @@ public class CommandTree extends ExecutableCommand<CommandTree> {
 	 * Registers the command
 	 */
 	public void register() {
-		if(!this.executor.isEmpty()) {
+		if(this.executor.hasAnyExecutors()) {
 			executions.add(new Execution(List.of(), this.executor));
 		}
-		executions.forEach(execution -> execution.register(this.meta));
+		for(Execution execution : executions) {
+			execution.register(this.meta);	
+		}
 	}
 
 }
