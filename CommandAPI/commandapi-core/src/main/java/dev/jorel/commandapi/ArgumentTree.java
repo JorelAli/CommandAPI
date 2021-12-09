@@ -1,5 +1,6 @@
 package dev.jorel.commandapi;
 
+import com.google.common.collect.Lists;
 import dev.jorel.commandapi.arguments.Argument;
 
 import java.util.LinkedList;
@@ -39,7 +40,7 @@ public class ArgumentTree extends Executable<ArgumentTree> {
 			this.executions.add(execution);
 		}
 		if(tree.executor.hasAnyExecutors()) {
-			this.executions.add(new Execution(List.of(this.argument, tree.argument), tree.executor));
+			this.executions.add(new Execution(Lists.newArrayList(this.argument, tree.argument), tree.executor));
 		}
 		return this;
 	}
