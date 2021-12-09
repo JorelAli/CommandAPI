@@ -43,7 +43,7 @@ final class CommandMetaData {
 	 * @throws InvalidCommandNameException if the command name is not valid
 	 */
 	CommandMetaData(final String commandName) {
-		if(commandName == null || commandName.length() == 0) {
+		if(commandName == null || commandName.isEmpty()) {
 			throw new InvalidCommandNameException(commandName);
 		}
 

@@ -22,15 +22,13 @@ package dev.jorel.commandapi.arguments;
 
 
 import java.util.function.Function;
+
 import org.bukkit.NamespacedKey;
+
 import com.mojang.brigadier.arguments.ArgumentType;
+
 import dev.jorel.commandapi.SuggestionInfo;
 import dev.jorel.commandapi.Tooltip;
-import org.bukkit.NamespacedKey;
-import org.bukkit.command.CommandSender;
-import java.util.Collection;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
 /**
  * An interface declaring methods required to override argument suggestions

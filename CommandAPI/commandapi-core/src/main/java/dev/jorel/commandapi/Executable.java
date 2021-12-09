@@ -32,6 +32,7 @@ abstract class Executable<T extends Executable<T>> {
 	 * @param executor A lambda of type <code>(CommandSender, Object[]) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
+	@SuppressWarnings("unchecked")
 	public T executes(CommandExecutor executor) {
 		this.executor.addNormalExecutor(executor);
 		return (T) this;
@@ -42,6 +43,7 @@ abstract class Executable<T extends Executable<T>> {
 	 * @param executor A lambda of type <code>(CommandSender, Object[]) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
+	@SuppressWarnings("unchecked")
 	public T executes(ResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);
 		return (T) this;
@@ -54,6 +56,7 @@ abstract class Executable<T extends Executable<T>> {
 	 * @param executor A lambda of type <code>(Player, Object[]) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
+	@SuppressWarnings("unchecked")
 	public T executesPlayer(PlayerCommandExecutor executor) {
 		this.executor.addNormalExecutor(executor);
 		return (T) this;
@@ -64,6 +67,7 @@ abstract class Executable<T extends Executable<T>> {
 	 * @param executor A lambda of type <code>(Player, Object[]) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
+	@SuppressWarnings("unchecked")
 	public T executesPlayer(PlayerResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);
 		return (T) this;
@@ -76,6 +80,7 @@ abstract class Executable<T extends Executable<T>> {
 	 * @param executor A lambda of type <code>(Entity, Object[]) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
+	@SuppressWarnings("unchecked")
 	public T executesEntity(EntityCommandExecutor executor) {
 		this.executor.addNormalExecutor(executor);
 		return (T) this;
@@ -86,6 +91,7 @@ abstract class Executable<T extends Executable<T>> {
 	 * @param executor A lambda of type <code>(Entity, Object[]) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
+	@SuppressWarnings("unchecked")
 	public T executesEntity(EntityResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);
 		return (T) this;
@@ -98,6 +104,7 @@ abstract class Executable<T extends Executable<T>> {
 	 * @param executor A lambda of type <code>(Entity, Object[]) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
+	@SuppressWarnings("unchecked")
 	public T executesProxy(ProxyCommandExecutor executor) {
 		this.executor.addNormalExecutor(executor);
 		return (T) this;
@@ -108,6 +115,7 @@ abstract class Executable<T extends Executable<T>> {
 	 * @param executor A lambda of type <code>(Entity, Object[]) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
+	@SuppressWarnings("unchecked")
 	public T executesProxy(ProxyResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);
 		return (T) this;
@@ -120,6 +128,7 @@ abstract class Executable<T extends Executable<T>> {
 	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
+	@SuppressWarnings("unchecked")
 	public T executesCommandBlock(CommandBlockCommandExecutor executor) {
 		this.executor.addNormalExecutor(executor);
 		return (T) this;
@@ -130,6 +139,7 @@ abstract class Executable<T extends Executable<T>> {
 	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
+	@SuppressWarnings("unchecked")
 	public T executesCommandBlock(CommandBlockResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);
 		return (T) this;
@@ -142,6 +152,7 @@ abstract class Executable<T extends Executable<T>> {
 	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
+	@SuppressWarnings("unchecked")
 	public T executesConsole(ConsoleCommandExecutor executor) {
 		this.executor.addNormalExecutor(executor);
 		return (T) this;
@@ -152,6 +163,7 @@ abstract class Executable<T extends Executable<T>> {
 	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
+	@SuppressWarnings("unchecked")
 	public T executesConsole(ConsoleResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);
 		return (T) this;
@@ -162,6 +174,7 @@ abstract class Executable<T extends Executable<T>> {
 	 * @param executor A lambda of type <code>(NativeCommandExecutor, Object[]) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
+	@SuppressWarnings("unchecked")
 	public T executesNative(NativeCommandExecutor executor) {
 		this.executor.addNormalExecutor(executor);
 		return (T) this;
@@ -172,6 +185,7 @@ abstract class Executable<T extends Executable<T>> {
 	 * @param executor A lambda of type <code>(NativeCommandExecutor, Object[]) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
+	@SuppressWarnings("unchecked")
 	public T executesNative(NativeResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);
 		return (T) this;
