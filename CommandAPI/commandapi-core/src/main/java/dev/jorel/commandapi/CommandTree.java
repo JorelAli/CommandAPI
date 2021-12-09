@@ -34,7 +34,9 @@ public class CommandTree extends ExecutableCommand<CommandTree> {
 		if(!this.executor.isEmpty()) {
 			executions.add(new Execution(List.of(), this.executor));
 		}
-		executions.forEach(execution -> execution.register(this.meta));
+		for(Execution execution : executions) {
+			execution.register(this.meta);	
+		}
 	}
 
 }

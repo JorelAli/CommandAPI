@@ -35,6 +35,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	 * @param permission The permission node required to execute this command
 	 * @return this command builder
 	 */
+	@SuppressWarnings("unchecked")
 	public T withPermission(CommandPermission permission) {
 		this.meta.permission = permission;
 		return (T) this;
@@ -45,7 +46,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	 * @param permission The permission node required to execute this command
 	 * @return this command builder
 	 */
-	
+	@SuppressWarnings("unchecked")
 	public T withPermission(String permission) {
 		this.meta.permission = CommandPermission.fromString(permission);
 		return (T) this;
@@ -56,6 +57,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	 * @param permission The permission node required to execute this command
 	 * @return this command builder
 	 */
+	@SuppressWarnings("unchecked")
 	public T withoutPermission(CommandPermission permission) {
 		this.meta.permission = permission.negate();
 		return (T) this;
@@ -66,6 +68,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	 * @param permission The permission node required to execute this command
 	 * @return this command builder
 	 */
+	@SuppressWarnings("unchecked")
 	public T withoutPermission(String permission) {
 		this.meta.permission = CommandPermission.fromString(permission).negate();
 		return (T) this;
@@ -79,6 +82,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	 * @param requirement the predicate that must be satisfied to use this command
 	 * @return this command builder
 	 */
+	@SuppressWarnings("unchecked")
 	public T withRequirement(Predicate<CommandSender> requirement) {
 		this.meta.requirements = this.meta.requirements.and(requirement);
 		return (T) this;
@@ -89,6 +93,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	 * @param aliases An array of aliases which can be used to execute this command
 	 * @return this command builder
 	 */
+	@SuppressWarnings("unchecked")
 	public T withAliases(String... aliases) {
 		this.meta.aliases = aliases;
 		return (T) this;
@@ -150,6 +155,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	 * @param description the short description for this command
 	 * @return this command builder
 	 */
+	@SuppressWarnings("unchecked")
 	public T withShortDescription(String description) {
 		this.meta.shortDescription = Optional.ofNullable(description);
 		return (T) this;
@@ -161,6 +167,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	 * @param description the full description for this command
 	 * @return this command builder
 	 */
+	@SuppressWarnings("unchecked")
 	public T withFullDescription(String description) {
 		this.meta.fullDescription = Optional.ofNullable(description);
 		return (T) this;
@@ -174,6 +181,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	 * @param fullDescription the full description for this command
 	 * @return this command builder
 	 */
+	@SuppressWarnings("unchecked")
 	public T withHelp(String shortDescription, String fullDescription) {
 		this.meta.shortDescription = Optional.ofNullable(shortDescription);
 		this.meta.fullDescription = Optional.ofNullable(fullDescription);
