@@ -151,7 +151,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 		
 		prevArguments.add(literal);
 		
-		if(!subcommand.executor.isEmpty()) {	
+		if(subcommand.executor.hasAnyExecutors()) {	
 			rootCommand.args = prevArguments;
 			rootCommand.withArguments(subcommand.args);
 			rootCommand.executor = subcommand.executor;
@@ -191,8 +191,8 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 				}
 			}
 			
-			if(!executor.isEmpty()) {
-				CommandAPIHandler.getInstance().register( meta, argumentsArr, executor, isConverted);
+			if(executor.hasAnyExecutors()) {
+				CommandAPIHandler.getInstance().register(meta, argumentsArr, executor, isConverted);
 			}
 			
 			for(CommandAPICommand subcommand : this.subcommands) {
