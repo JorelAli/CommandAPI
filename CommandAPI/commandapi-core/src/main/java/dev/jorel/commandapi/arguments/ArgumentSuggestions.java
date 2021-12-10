@@ -25,8 +25,8 @@ public interface ArgumentSuggestions {
 	 *
 	 * @throws CommandSyntaxException if there is an error making suggestions
 	 */
-	CompletableFuture<Suggestions> suggest(SuggestionInfo info, SuggestionsBuilder builder) throws
-																							CommandSyntaxException;
+	CompletableFuture<Suggestions> suggest(SuggestionInfo info, SuggestionsBuilder builder)
+			throws CommandSyntaxException;
 
 	/**
 	 * Suggest nothing
