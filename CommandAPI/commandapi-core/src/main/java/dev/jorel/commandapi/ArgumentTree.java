@@ -2,8 +2,8 @@ package dev.jorel.commandapi;
 
 import dev.jorel.commandapi.arguments.Argument;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class ArgumentTree extends Executable<ArgumentTree> {
 
-	final List<Execution> executions = new LinkedList<>();
+	final List<ArgumentTree> arguments = new ArrayList<>();
 	final Argument argument;
 
 	protected ArgumentTree() {
@@ -33,16 +33,24 @@ public class ArgumentTree extends Executable<ArgumentTree> {
 	 * @return this tree node
 	 */
 	public ArgumentTree then(final ArgumentTree tree) {
-		//Add all of the executions
-		for(Execution execution : tree.executions) {
-			//Prepend this argument to the arguments of the executions
-			execution.arguments().add(0, this.argument);
-			this.executions.add(execution);
-		}
-		if(tree.executor.hasAnyExecutors()) {
-			this.executions.add(new Execution(Arrays.asList(this.argument, tree.argument), tree.executor));
-		}
+		this.arguments.add(tree);
 		return this;
+	}
+
+	List<Execution> getExecutions() {
+		List<Execution> executions = new ArrayList<>();
+		//If this is executable, add its execution
+		if(this.executor.hasAnyExecutors()) {
+			executions.add(new Execution(Arrays.asList(this.argument), this.executor));
+		}
+		//Add all executions from all arguments
+		for(ArgumentTree tree: arguments) {
+			for(Execution execution : tree.getExecutions()) {
+				//Prepend this argument to the arguments of the executions
+				executions.add(execution.prependedBy(this.argument));
+			}
+		}
+		return executions;
 	}
 
 }

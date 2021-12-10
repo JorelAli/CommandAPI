@@ -1,10 +1,10 @@
 package dev.jorel.commandapi;
 
 import dev.jorel.commandapi.arguments.Argument;
-
-import java.util.List;
-
 import org.bukkit.command.CommandSender;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A list of arguments which results in an execution. This is used for building branches in a {@link CommandTree}
@@ -19,6 +19,13 @@ record Execution(List<Argument> arguments, CustomCommandExecutor<? extends Comma
 		CommandAPICommand command = new CommandAPICommand(meta).withArguments(arguments);
 		command.setExecutor(executor);
 		command.register();
+	}
+
+	public Execution prependedBy(Argument argument) {
+		List<Argument> arguments = new ArrayList<>();
+		arguments.add(argument);
+		arguments.addAll(arguments());
+		return new Execution(arguments, executor);
 	}
 
 }

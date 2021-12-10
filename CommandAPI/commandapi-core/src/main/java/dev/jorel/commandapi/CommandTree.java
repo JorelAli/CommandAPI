@@ -1,6 +1,7 @@
 package dev.jorel.commandapi;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -8,7 +9,7 @@ import java.util.List;
  */
 public class CommandTree extends ExecutableCommand<CommandTree> {
 
-	private final List<Execution> executions = new ArrayList<>();
+	private final List<ArgumentTree> arguments = new ArrayList<>();
 
 	public CommandTree(final String commandName) {
 		super(commandName);
@@ -20,10 +21,7 @@ public class CommandTree extends ExecutableCommand<CommandTree> {
 	 * @return this root node
 	 */
 	public CommandTree then(final ArgumentTree tree) {
-		executions.addAll(tree.executions);
-		if(tree.executor.hasAnyExecutors()) {
-			this.executions.add(new Execution(List.of(tree.argument), tree.executor));
-		}
+		this.arguments.add(tree);
 		return this;
 	}
 
@@ -31,11 +29,15 @@ public class CommandTree extends ExecutableCommand<CommandTree> {
 	 * Registers the command
 	 */
 	public void register() {
+		List<Execution> executions = new ArrayList<>();
 		if(this.executor.hasAnyExecutors()) {
-			executions.add(new Execution(List.of(), this.executor));
+			executions.add(new Execution(new ArrayList<>(), this.executor));
+		}
+		for(ArgumentTree tree : arguments) {
+			executions.addAll(tree.getExecutions());
 		}
 		for(Execution execution : executions) {
-			execution.register(this.meta);	
+			execution.register(this.meta);
 		}
 	}
 
