@@ -89,6 +89,7 @@
 - [Aliases](./aliases.md)
 - [Help](./help.md)
 - [Subcommands](./subcommands.md)
+- [Command trees](./commandtrees.md)
 
 # Annotation-based Commands
 
