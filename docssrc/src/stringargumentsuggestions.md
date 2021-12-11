@@ -1,7 +1,5 @@
 # String argument suggestions
 
-blah
-
 ## Suggestions with a String Array
 
 The first method, `replaceSuggestions(ArgumentSuggestions suggestions)`, allows you to *replace* the suggestions normally associated with that argument. This can be replaced with an array of strings by using the `strings(String... suggestions)` method.
@@ -30,7 +28,7 @@ The second method, `includeSuggestions(ArgumentSuggestions suggestions)`, allows
 
 ## Suggestions depending on a command sender
 
-The `replaceSuggestions(Function<SuggestionInfo, String[]>)` method allows you to replace the suggestions normally associated with that argument with an array of strings that are evaluated dynamically using information about the command sender, using the `sender()` method.
+The `strings(Function<SuggestionInfo, String[]> suggestions)` method in `ArgumentSuggestions` allows you to modify suggestions normally associated with that argument with an array of strings that are evaluated dynamically using information about the command sender, using the `sender()` method.
 
 <div class="example">
 
@@ -61,7 +59,7 @@ We can then use this to generate our suggested list of friends:
 
 ## Suggestions depending on previous arguments
 
-The `replaceSuggestions(Function<SuggestionInfo, String[]>)` method also has the capability to suggest arguments based on the values of previously inputted arguments, using the `previousArgs()` method. This `previousArgs()` method returns a **list of previous arguments** which are parsed exactly like any regular `CommandAPI` command argument.
+The `strings(Function<SuggestionInfo, String[]>)` method also has the capability to suggest arguments based on the values of previously inputted arguments, using the `previousArgs()` method in `SuggestionInfo`. This `previousArgs()` method returns a **list of previous arguments** which are parsed exactly like any regular CommandAPI command argument.
 
 <div class="warning">
 
@@ -83,7 +81,7 @@ This won't work, because we make use of a redirect:
 
 \\[\texttt{/execute run} \xrightarrow{redirect} \texttt{mycommand arg1 arg2 arg3}\\]
 
-To clarify, by "does not work", I mean that it is not possible to access the `Object[]` of previously declared arguments. **If a command occurs via a redirect, the `Object[]` of previously declared arguments will be null**.
+It is not possible to access the `Object[]` of previously declared arguments. **If a command occurs via a redirect, the `Object[]` of previously declared arguments will be null**.
 
 </div>
 

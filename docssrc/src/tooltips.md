@@ -13,10 +13,11 @@ Tooltips _can_ have formatting to change how the text is displayed by using the 
 
 ## Tooltips with normal (String) suggestions
 
-To use these features, the CommandAPI includes the `replaceSuggestionsT` methods for arguments, that accept `IStringTooltip` objects instead of `String` objects:
+To use these features, the CommandAPI includes the `stringsWithTooltips` methods for arguments, that accept `IStringTooltip` objects instead of `String` objects:
 
 ```java
-Argument replaceSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions);
+ArgumentSuggestions stringsWithTooltips(IStringTooltip... suggestions);
+ArgumentSuggestions stringsWithTooltips(Function<SuggestionInfo, IStringTooltip[]> suggestions);
 ```
 
 The `StringTooltip` class is the CommandAPI's default implementation of `IStringTooltip`, which has two static methods to construct it easily:
@@ -38,7 +39,7 @@ Say we want to create a simple command to provide in-game emotes between players
 /emote <emote> <target>
 ```
 
-First, we'll declare our arguments. Here, we'll use the `replaceSuggestionsT` method, along with the `StringTooltip.of(String, String)` method to create emote suggestions and include suitable descriptions:
+First, we'll declare our arguments. Here, we'll use the `stringsWithTooltips` method, along with the `StringTooltip.of(String, String)` method to create emote suggestions and include suitable descriptions:
 
 ```java
 {{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:Tooltips1}}
@@ -67,7 +68,7 @@ This is incredibly useful if you are using suggestions with custom objects, such
 
 ### Example - Using `IStringTooltip` for custom items
 
-Let's say we've created a simple plugin which has custom items. For a custom item, we'll have a super simple class `CustomItem` that sets its name, lore and attached itemstack:
+Let's say we've created a simple plugin which has custom items. For a custom item, we'll have a simple class `CustomItem` that sets its name, lore and attached itemstack:
 
 ```java
 public {{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:Tooltips3}}
@@ -85,12 +86,13 @@ Let's also say that our plugin has registered lots of `CustomItem`s and has this
 
 ## Tooltips with safe suggestions
 
-Using tooltips with safe suggestions is almost identical to the method described above for normal suggestions, except for two things. Firstly, you must use `replaceWithSafeSuggestionsT` method instead of the `replaceSuggestionsT` method and secondly, instead of using `StringTooltip`, you must use `Tooltip<S>`. Let's look at these differences in more detail.
+Using tooltips with safe suggestions is almost identical to the method described above for normal suggestions, except for two things. Firstly, you must use `tooltips` method instead of the `stringsWithTooltips` method and secondly, instead of using `StringTooltip`, you must use `Tooltip<S>`. Let's look at these differences in more detail.
 
-The `replaceWithSafeSuggestionsT` methods are fairly similar to the `replaceSuggestionsT` methods, except instead of using `StringTooltip`, it simply uses `Tooltip<S>`:
+The `tooltips` methods are fairly similar to the `stringsWithTooltips` methods, except instead of using `StringTooltip`, it simply uses `Tooltip<S>`:
 
 ```java
-Argument replaceWithSafeSuggestionsT(Function<SuggestionInfo, Tooltip<S>[]> suggestions);
+SafeSuggestions<T> tooltips(Tooltip<T>... suggestions);
+SafeSuggestions<T> tooltips(Function<SuggestionInfo, Tooltip<T>[]> suggestions);
 ```
 
 The `Tooltip<S>` class represents a tooltip for a given object `S`. For example, a tooltip for a `LocationArgument` would be a `Tooltip<Location>` and a tooltip for an `EnchantmentArgument` would be a `Tooltip<Enchantment>`.
@@ -103,7 +105,7 @@ Tooltip<S> of(S object, String tooltip);
 Tooltip<S>[] arrayOf(Tooltip<S>... tooltips);
 ```
 
-The use of `arrayOf` is heavily recommended as it provides the necessary type safety for Java code to ensure that the correct types are being passed to the `replaceWithSafeSuggestionsT` method.
+The use of `arrayOf` is heavily recommended as it provides the necessary type safety for Java code to ensure that the correct types are being passed to the `tooltips` method.
 
 <div class="example">
 
@@ -115,7 +117,7 @@ Say we wanted to create a custom teleport command which suggestions a few key lo
 /warp <location>
 ```
 
-First, we'll declare our arguments. Here, we use a `LocationArgument` and use the `replaceWithSafeSuggestionsT` method, with a parameter for the command sender, so we can get information about the world. We populate the suggestions with tooltips using `Tooltip.of(Location, String)` and collate them together with `Tooltip.arrayOf(Tooltip<Location>...)`:
+First, we'll declare our arguments. Here, we use a `LocationArgument` and use the `tooltips` method, with a parameter for the command sender, so we can get information about the world. We populate the suggestions with tooltips using `Tooltip.of(Location, String)` and collate them together with `Tooltip.arrayOf(Tooltip<Location>...)`:
 
 ```java
 {{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:SafeTooltips}}

@@ -25,9 +25,7 @@ CommandSender sender();
 Object[] previousArgs();
 ```
 
-`previousArgs()` represents a list of previously declared arguments, which are parsed and interpreted as if they were being used to execute the command. See [this example below](./argumentsuggestions.md#suggestions-depending-on-previous-arguments) for an idea of how to utilize this field.
-
-TODO: The above link is a derp
+`previousArgs()` represents a list of previously declared arguments, which are parsed and interpreted as if they were being used to execute the command. See [this example on the string argument suggestions page](./stringargumentsuggestions.md#suggestions-depending-on-previous-arguments) for an idea of how to utilize this field.
 
 -----
 
