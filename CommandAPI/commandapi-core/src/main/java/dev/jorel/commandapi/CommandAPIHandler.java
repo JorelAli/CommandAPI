@@ -337,9 +337,8 @@ public class CommandAPIHandler<CommandSourceStack> {
 
 		// Populate array
 		for (Argument argument : args) {
-			Object result = parseArgument(cmdCtx, argument.getNodeName(), argument, args);
-			if(result != null) {
-				argList.add(result);
+			if(argument.isListed()) {
+				argList.add(parseArgument(cmdCtx, argument.getNodeName(), argument, args));
 			}
 		}
 		
@@ -816,7 +815,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 				 */
 				result = null;
 			}
-			if(result != null) {
+			if(arg.isListed()) {
 				previousArguments.add(result);
 			}
 		}
