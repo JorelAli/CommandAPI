@@ -31,6 +31,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.RedirectModifier;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.RootCommandNode;
@@ -172,5 +173,9 @@ public final class Brigadier {
 	 */
 	public static SuggestionProvider toSuggestions(String nodeName, List<Argument> args) {
 		return CommandAPIHandler.getInstance().toSuggestions(nodeName, args.toArray(new Argument[0]), true);
+	}
+	
+	public static Object[] parseArguments(CommandContext cmdCtx, List<Argument> args) throws CommandSyntaxException {
+		return CommandAPIHandler.getInstance().argsToObjectArr(cmdCtx, args.toArray(new Argument[0]));
 	}
 }
