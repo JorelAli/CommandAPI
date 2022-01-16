@@ -104,8 +104,7 @@ public final class Brigadier {
 	 */
 	public static RedirectModifier fromPredicate(BiPredicate<CommandSender, Object[]> predicate, List<Argument> args) {
 		return cmdCtx -> {
-			if (predicate.test(CommandAPIHandler.getInstance().NMS.getSenderForCommand(cmdCtx, false),
-					CommandAPIHandler.getInstance().argsToObjectArr(cmdCtx, args.toArray(new Argument[0])))) {
+			if (predicate.test(getBukkitCommandSenderFromContext(cmdCtx), parseArguments(cmdCtx, args))) {
 				return Collections.singleton(cmdCtx.getSource());
 			} else {
 				return Collections.emptyList();
@@ -177,5 +176,13 @@ public final class Brigadier {
 	
 	public static Object[] parseArguments(CommandContext cmdCtx, List<Argument> args) throws CommandSyntaxException {
 		return CommandAPIHandler.getInstance().argsToObjectArr(cmdCtx, args.toArray(new Argument[0]));
+	}
+	
+	public static Object getBrigadierSourceFromCommandSender(CommandSender sender) {
+		return CommandAPIHandler.getInstance().getNMS().getCLWFromCommandSender(sender);
+	}
+	
+	public static CommandSender getBukkitCommandSenderFromContext(CommandContext cmdCtx) {
+		return CommandAPIHandler.getInstance().NMS.getSenderForCommand(cmdCtx, false);
 	}
 }
