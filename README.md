@@ -286,13 +286,17 @@ The resulting compiled documentation is found in `docs/X.X.X`, where `X.X.X` is 
 
 ## CommandAPI Project Timeline
 
-This is the current roadmap for the CommandAPI (as of 16th May 2021):
+This is the current roadmap for the CommandAPI (as of 25th January 2022):
   
-- **CommandAPI 7.0.0:** Annotation improvements
+- **CommandAPI 7.0.0: Maintenance + API improvements** 
 
-  The CommandAPI's annotation system has always been a bit limited and was primarily introduced as a proof-of-concept. In this update, the CommandAPI's annotation system will be improved to be (ideally) as powerful as the non-annotation system and have slightly better type safety.
+	This update is general maintenance and refactoring of various methods to provide more powerful API functionality. This update greatly reworks the suggestion system and also adds support for asynchronous suggestions. This update exposes more of the inner workings of the CommandAPI via its Brigadier class to make commands outside of the CommandAPI's base functionality easier to write.  
 
 - **Future:**
+	
+  **Annotation improvements**
+	
+  The CommandAPI's annotation system has always been a bit limited and was primarily introduced as a proof-of-concept. In this update, the CommandAPI's annotation system will be improved to be (ideally) as powerful as the non-annotation system and have slightly better type safety, support for non-static methods and better checks to prevent invalid command generation.
 
   **CustomArgument improvements**
 
