@@ -489,9 +489,11 @@ public class CommandAPIHandler<CommandSourceStack> {
 				for(String str : rCommand.argsAsStr()) {
 					regArgs.add(str.split(":"));
 				}
-				// TODO: To replicate the previous behaviour, we just find the first
-				// entry. We should probably generate a list of all commands and
-				// iterate through all of them instead (recursion is probably not necessary).
+				// We just find the first entry that causes a conflict. If this
+				// were some industry-level code, we would probably generate a
+				// list of all commands first, then check for command conflicts
+				// all in one go so we can display EVERY command conflict for
+				// all commands, but this works perfectly and isn't important.
 				break;
 			}
 		}
