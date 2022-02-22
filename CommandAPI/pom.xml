@@ -60,7 +60,7 @@
 
 	<build>
 		<defaultGoal>clean install</defaultGoal>
-		<finalName>CommandAPIv${project.version}_${maven.build.timestamp}</finalName>
+		<finalName>CommandAPIv${project.version}_converted_sender_location_${maven.build.timestamp}</finalName>
 		<pluginManagement>
 			<plugins>
 				<plugin>
