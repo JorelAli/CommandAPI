@@ -30,7 +30,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.jorel.commandapi.arguments.Argument;
@@ -47,8 +49,8 @@ public final class Converter {
 	}
 
 	private static final List<Argument> PLAIN_ARGUMENTS = Arrays.asList(new GreedyStringArgument("args"));
-	private static final Set<String> CALLER_METHODS = new HashSet<>(Arrays.asList("isPermissionSet", "hasPermission",
-			"addAttachment", "removeAttachment", "recalculatePermissions", "getEffectivePermissions", "isOp", "setOp"));
+	private static final Set<String> CALLER_METHODS = Set.of("isPermissionSet", "hasPermission",
+			"addAttachment", "removeAttachment", "recalculatePermissions", "getEffectivePermissions", "isOp", "setOp");
 
 	/**
 	 * Convert all commands stated in Plugin's plugin.yml file into
@@ -228,6 +230,7 @@ public final class Converter {
 	 * https://www.jorel.dev/blog/Simplifying-Bukkit-CommandSenders/
 	 */
 	private static CommandSender mergeProxySender(NativeProxyCommandSender proxySender) {
+		// Add all interfaces
 		Set<Class<?>> calleeInterfacesList = new HashSet<>();
 		Class<?> currentClass = proxySender.getCallee().getClass();
 		if (currentClass.isInterface()) {
@@ -243,6 +246,14 @@ public final class Converter {
 			switch(method.getName()) {
 				case "getLocation":
 					return proxySender.getLocation();
+				case "getEyeLocation":
+					if(proxySender.getCallee() instanceof LivingEntity livingEntity) {
+						Location loc = proxySender.getLocation();
+						loc.setY(loc.getY() + livingEntity.getEyeHeight());
+						return loc;
+					} else {
+						return null; // This case should never happen
+					}
 
 					// Probably also needs other functions such as getBlock?
 				case "getWorld":
