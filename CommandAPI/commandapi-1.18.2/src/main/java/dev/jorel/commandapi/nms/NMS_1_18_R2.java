@@ -33,17 +33,14 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.function.ToIntFunction;
-import java.util.logging.Level;
 
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
@@ -93,6 +90,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.logging.LogUtils;
 
 import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPI;
@@ -862,10 +860,12 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
-		
-		Supplier<Collection<String>> discoverNewPacks = () -> {
+
+		// From MINECRAFT_SERVER.reloadResources //
+		// Discover new packs
+		Collection<String> collection;
+		{
 			List<String> packIDs = new ArrayList<>(MINECRAFT_SERVER.getPackRepository().getSelectedIds());
-			
 			List<String> disabledPacks = MINECRAFT_SERVER.getWorldData().getDataPackConfig().getDisabled();
 			
 			for(String availablePack : MINECRAFT_SERVER.getPackRepository().getAvailableIds()) {
@@ -875,19 +875,19 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 					packIDs.add(availablePack);
 				}
 			}
-			return packIDs;
-		};
-		
-		Collection<String> collection = discoverNewPacks.get();
+			collection = packIDs;
+		}
+
 		Frozen registryAccess = MINECRAFT_SERVER.registryAccess();
 		
-		// Step 1: Construct the pack resource thingy
+		// Step 1: Construct an async supplier of a list of all resource packs to
+		// be loaded in the reload phase
 		CompletableFuture<List<PackResources>> first = CompletableFuture.supplyAsync(() -> {
 			PackRepository serverPackRepository = MINECRAFT_SERVER.getPackRepository();
 			
 			List<PackResources> packResources = new ArrayList<>();
-			for(String blah : collection) {
-				Pack pack = serverPackRepository.getPack(blah);
+			for(String packID : collection) {
+				Pack pack = serverPackRepository.getPack(packID);
 				if(pack != null) {
 					packResources.add(pack.open());
 				}
@@ -895,37 +895,44 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 			return packResources;
 		});
 		
+		// Step 2: Convert all of the resource packs into ReloadableResources which
+		// are replaced by our custom server resources with defined commands
 		CompletableFuture<ReloadableResources> second = first.thenCompose(packResources -> {
 			MultiPackResourceManager resourceManager = new MultiPackResourceManager(PackType.SERVER_DATA, packResources);
-
-			boolean isDebugLoggingEnabled = Bukkit.getLogger().isLoggable(Level.WARNING);
-			Executor executor1 = MINECRAFT_SERVER.executor;
-			Executor executor2 = MINECRAFT_SERVER;
 			
 			// Not using packResources, because we really really want this to work
-			CompletableFuture<Unit> unit = CompletableFuture.completedFuture(Unit.INSTANCE); /* DATA_RELOAD_INITIAL_TASK */
 			CompletableFuture<?> simpleReloadInstance = SimpleReloadInstance
-				.create(resourceManager, serverResources.managers().listeners(), executor1, executor2, unit, isDebugLoggingEnabled)
+				.create(resourceManager,
+					serverResources.managers().listeners(),
+					MINECRAFT_SERVER.executor,
+					MINECRAFT_SERVER,
+					CompletableFuture.completedFuture(Unit.INSTANCE) /* ReloadableServerResources.DATA_RELOAD_INITIAL_TASK */,
+					LogUtils.getLogger().isDebugEnabled())
 				.done();
 			
 			return simpleReloadInstance.thenApply(x -> serverResources);
 		});
-		
-		CompletableFuture<?> third = second.thenAcceptAsync(resources -> {
+
+		// Step 3: Actually load all of the resources
+		CompletableFuture<Void> third = second.thenAcceptAsync(resources -> {
 			MINECRAFT_SERVER.resources.close();
-			MINECRAFT_SERVER.resources = serverResources; //resources;
+			MINECRAFT_SERVER.resources = serverResources;
 			MINECRAFT_SERVER.server.syncCommands();
 			MINECRAFT_SERVER.getPackRepository().setSelected(collection);
 			
-			// MINECRAFT_SERVER::getSelectedPacks
-			Function<PackRepository, DataPackConfig> getSelectedPacks = packRepo -> {
-				Collection<String> c = packRepo.getSelectedIds();
-				List<String> list = ImmutableList.copyOf(c);
-				List<String> list1 = packRepo.getAvailableIds().stream().filter(s -> !c.contains(s)).collect(ImmutableList.toImmutableList());
-				return new DataPackConfig(list, list1);
-			};
+			// MINECRAFT_SERVER.getSelectedPacks
+			Collection<String> selectedIDs = MINECRAFT_SERVER.getPackRepository().getSelectedIds();
+			List<String> enabledIDs = ImmutableList.copyOf(selectedIDs);
+			List<String> disabledIDs = new ArrayList<>(MINECRAFT_SERVER.getPackRepository().getAvailableIds());
 			
-			MINECRAFT_SERVER.getWorldData().setDataPackConfig(getSelectedPacks.apply(MINECRAFT_SERVER.getPackRepository()));
+			ListIterator<String> disabledIDsIterator = disabledIDs.listIterator();
+			while (disabledIDsIterator.hasNext()) {
+				if(enabledIDs.contains(disabledIDsIterator.next())) {
+					disabledIDsIterator.remove();
+				}
+			}
+			
+			MINECRAFT_SERVER.getWorldData().setDataPackConfig(new DataPackConfig(enabledIDs, disabledIDs));
 			MINECRAFT_SERVER.resources.managers().updateRegistryTags(registryAccess);
 			// May need to be commented out, may not. Comment it out just in case.
 			// For some reason, calling getPlayerList().saveAll() may just hang
@@ -935,11 +942,13 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 			// MINECRAFT_SERVER.getFunctions().replaceLibrary(MINECRAFT_SERVER.resources.managers().getFunctionLibrary());
 			MINECRAFT_SERVER.getStructureManager().onResourceManagerReload(MINECRAFT_SERVER.resources.resourceManager());
 		});
+
+		// Step 4: Block the thread until everything's done
 		if (MINECRAFT_SERVER.isSameThread()) {
 			MINECRAFT_SERVER.managedBlock(third::isDone);
 		}
 		
-		// Run the completableFuture (TODO: and bind tags?)
+		// Run the completableFuture (and bind tags?)
 		try {
 			third.get();
 
