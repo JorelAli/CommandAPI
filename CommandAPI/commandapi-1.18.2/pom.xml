@@ -25,10 +25,10 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>commandapi-1.18</artifactId>
+	<artifactId>commandapi-1.18.2</artifactId>
 
 	<properties>
-		<minecraft.mappings>1.18-R0.1-SNAPSHOT</minecraft.mappings>
+		<minecraft.mappings>1.18.2-R0.1-SNAPSHOT</minecraft.mappings>
 	</properties>
 
 	<dependencies>
@@ -36,13 +36,13 @@
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot</artifactId>
-			<version>1.18-R0.1-SNAPSHOT</version>
+			<version>1.18.2-R0.1-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot</artifactId>
-			<version>1.18-R0.1-SNAPSHOT</version>
+			<version>1.18.2-R0.1-SNAPSHOT</version>
 			<classifier>remapped-mojang</classifier>
 		</dependency>
 		<dependency>

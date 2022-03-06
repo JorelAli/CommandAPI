@@ -116,10 +116,10 @@ public class Preprocessor extends AbstractProcessor {
 		
 		if(!classField.getType().getCanonicalName().equals(type.getCanonicalName())) {
 			String message = String.format("Field: %s %s.%s does not exist. Instead found field: %s %s.%s",
-					type.getSimpleName(), 
+					type.getCanonicalName(), 
 					in.getSimpleName(),
 					field.name(), 
-					classField.getType().getSimpleName(),
+					classField.getType().getCanonicalName(),
 					in.getSimpleName(),
 					field.name());
 			super.processingEnv.getMessager().printMessage(Kind.ERROR, message);
