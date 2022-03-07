@@ -366,6 +366,11 @@ public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 	}
 
 	@Override
+	public ArgumentType<?> _ArgumentSyntheticBiome() {
+		return _ArgumentMinecraftKeyRegistered();
+	}
+
+	@Override
 	public String[] compatibleVersions() {
 		return new String[] { "1.17", "1.17.1" };
 	}

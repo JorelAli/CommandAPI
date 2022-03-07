@@ -88,6 +88,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.logging.LogUtils;
@@ -133,6 +134,8 @@ import net.minecraft.commands.arguments.OperationArgument;
 import net.minecraft.commands.arguments.ParticleArgument;
 import net.minecraft.commands.arguments.RangeArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.arguments.ResourceOrTagLocationArgument;
+import net.minecraft.commands.arguments.ResourceOrTagLocationArgument.Result;
 import net.minecraft.commands.arguments.ScoreHolderArgument;
 import net.minecraft.commands.arguments.ScoreboardSlotArgument;
 import net.minecraft.commands.arguments.TeamArgument;
@@ -155,6 +158,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess.Frozen;
 import net.minecraft.network.chat.Component.Serializer;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.MinecraftServer.ReloadableResources;
@@ -376,6 +380,11 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 	}
 
 	@Override
+	public ArgumentType<?> _ArgumentSyntheticBiome() {
+		return ResourceOrTagLocationArgument.resourceOrTag(Registry.BIOME_REGISTRY);
+	}
+
+	@Override
 	public String[] compatibleVersions() {
 		return new String[] { "1.18.2" };
 	}
@@ -455,8 +464,43 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public Biome getBiome(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		return Biome.valueOf(cmdCtx.getArgument(key, ResourceLocation.class).getPath().toUpperCase());
+	public Biome getBiome(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		Result<net.minecraft.world.level.biome.Biome> biomeResult = ResourceOrTagLocationArgument.getBiome(cmdCtx, key);
+		
+		String biome = biomeResult.asPrintable();
+		if(biomeResult.unwrap().left().isPresent()) {
+			// It's a resource key. Unwrap the result, get the resource key (left)
+			// and get its location and return its path. Important information if
+			// anyone ever has to maintain this very complicated code, because this
+			// took about an hour to figure out:
+			
+			// For reference, unwrapping the object like this returns a ResourceKey:
+			//   biomeResult.unwrap().left().get()
+			
+			// This has two important functions:
+			//   location() and registry().
+			
+			// The location() returns a ResourceLocation with a namespace and
+			// path of the biome, for example:
+			//   minecraft:badlands.
+			
+			// The registry() returns a ResourceLocation with a namespace and
+			// path of the registry where the biome is declared in, for example:
+			//   minecraft:worldgen/biome.
+			// This is the same registry that you'll find in registries.json and
+			// in the command_registration.json
+			
+			return Biome.valueOf(biomeResult.unwrap().left().get().location().getPath().toUpperCase());
+		} else {
+			// This isn't a biome, tell the user this.
+			
+			// For reference, unwrapping this gives you the tag's namespace in location()
+			// and a (recursive structure of the) path of the registry, for example
+			//   [minecraft:root / minecraft:worldgen/biome]
+			
+			// ResourceOrTagLocationArgument.ERROR_INVALID_BIOME
+			throw new DynamicCommandExceptionType(x -> new TranslatableComponent("commands.locatebiome.invalid", x)).create(biome);
+		}
 	}
 
 	@Override
@@ -792,7 +836,7 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 			(cmdCtx, builder) -> {
 				return SharedSuggestionProvider.suggestResource(MINECRAFT_SERVER.getLootTables().getIds(), builder);
 			};
-		case BIOMES -> (context, builder) -> Suggestions.empty(); // TODO: net.minecraft.commands.synchronization.SuggestionProviders.AVAILABLE_BIOMES;
+		case BIOMES -> _ArgumentSyntheticBiome()::listSuggestions;
 		case ENTITIES -> net.minecraft.commands.synchronization.SuggestionProviders.SUMMONABLE_ENTITIES;
 		default -> (context, builder) -> Suggestions.empty();
 		};
