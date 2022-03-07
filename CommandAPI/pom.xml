@@ -27,13 +27,14 @@
 
 	<groupId>dev.jorel</groupId>
 	<artifactId>commandapi</artifactId>
-	<version>6.5.3</version>
+	<version>6.5.4</version>
 	<packaging>pom</packaging>
 	<modules>
 		<!-- Compile time reflection checker -->
 		<module>commandapi-preprocessor</module>
 
 		<!-- NMS versions -->
+		<module>commandapi-1.18.2</module>
 		<module>commandapi-1.18</module>
 		<module>commandapi-1.17</module>
 		<module>commandapi-1.16.5</module>

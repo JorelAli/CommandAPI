@@ -37,6 +37,10 @@ Using the search icon in the top left corner, you can search for anything in thi
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 6.4.0 \\(\rightarrow\\) 6.5.4:
+
+- Update the Maven and Gradle pages to say to use CommandAPI version 6.5.4 because this kept confusing everyone.
+
 ### Documentation changes 6.3.1 \\(\rightarrow\\) 6.4.0:
 
 - Adds a section [Help](./help.md) for the new help feature.

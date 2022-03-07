@@ -144,6 +144,15 @@ public interface NMS<CommandListenerWrapper> {
 	ArgumentType<?> _ArgumentVec2();
 
 	ArgumentType<?> _ArgumentVec3();
+	
+	/*
+	 * Synthetic arguments - arguments that don't actually exist, but have
+	 * version-specific implementations, so we can switch their implementation
+	 * as needed. For example, the BiomeArgument is both a _ArgumentMinecraftKeyRegistered
+	 * and a _ArgumentResourceOrTag, but we'll refer to it as an _ArgumentSyntheticBiome
+	 */
+	
+	ArgumentType<?> _ArgumentSyntheticBiome();
 
 	/**
 	 * A String array of Minecraft versions that this NMS implementation is
@@ -183,7 +192,7 @@ public interface NMS<CommandListenerWrapper> {
 
 	EnumSet<Axis> getAxis(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
-	Biome getBiome(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	Biome getBiome(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
 	Predicate<Block> getBlockPredicate(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException;

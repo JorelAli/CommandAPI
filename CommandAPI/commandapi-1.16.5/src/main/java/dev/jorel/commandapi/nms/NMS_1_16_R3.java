@@ -376,6 +376,11 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
+	public ArgumentType<?> _ArgumentSyntheticBiome() {
+		return _ArgumentMinecraftKeyRegistered();
+	}
+
+	@Override
 	public String[] compatibleVersions() {
 		return new String[] { "1.16.5" };
 	}
