@@ -326,6 +326,7 @@ This is the current roadmap for the CommandAPI (as of 25th January 2022):
             <td valign="top">
                 <ul>
                     <li>Support for Minecraft 1.18.2</li>
+                    <li>Improve converted command support for <code>/execute at</code> and <code>/execute positioned</code></li>
                 </ul>
             </td>
         </tr>
