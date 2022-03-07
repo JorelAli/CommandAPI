@@ -46,7 +46,8 @@ The list of what version of the CommandAPI you'll need to run on a specific vers
 - **Minecraft 1.16.5**: CommandAPI v5.7 to 6.4.x
 - **Minecraft 1.17**: CommandAPI 6.0.x to 6.4.x (Java 16) or 6.5.2+ (Java 17)
 - **Minecraft 1.17.1**: CommandAPI 6.1.x to 6.4.x (Java 16) or 6.5.2+ (Java 17)
-- **Minecraft 1.18**: CommandAPI 6.5.2 to 6.5.3 (Java 17)
+- **Minecraft 1.18, 1.18.1**: CommandAPI 6.5.2+ (Java 17)
+- **Minecraft 1.18.2**: CommandAPI 6.5.4 (Java 17)
 
 -----
 
@@ -319,6 +320,15 @@ This is the current roadmap for the CommandAPI (as of 25th January 2022):
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td valign="top"><b>6.5.4</b></td>
+            <td valign="top">March 2022</td>
+            <td valign="top">
+                <ul>
+                    <li>Support for Minecraft 1.18.2</li>
+                </ul>
+            </td>
+        </tr>
         <tr>
             <td valign="top"><b>6.5.3</b></td>
             <td valign="top">December 2021</td>
