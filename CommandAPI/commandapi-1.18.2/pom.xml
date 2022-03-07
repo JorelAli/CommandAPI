@@ -31,8 +31,15 @@
 		<minecraft.mappings>1.18.2-R0.1-SNAPSHOT</minecraft.mappings>
 	</properties>
 
-	<dependencies>
+	<repositories>
+		<repository>
+			<id>codemc-repo-nms</id>
+			<url>https://repo.codemc.org/repository/nms/</url>
+			<layout>default</layout>
+		</repository>
+	</repositories>
 
+	<dependencies>
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot</artifactId>

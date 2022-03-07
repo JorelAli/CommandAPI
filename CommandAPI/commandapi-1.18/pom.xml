@@ -30,19 +30,26 @@
 	<properties>
 		<minecraft.mappings>1.18-R0.1-SNAPSHOT</minecraft.mappings>
 	</properties>
+	
+	<repositories>
+		<repository>
+			<id>codemc-repo-nms</id>
+			<url>https://repo.codemc.org/repository/nms/</url>
+			<layout>default</layout>
+		</repository>
+	</repositories>
 
 	<dependencies>
-
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot</artifactId>
-			<version>1.18-R0.1-SNAPSHOT</version>
+			<version>1.18.1-R0.1-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot</artifactId>
-			<version>1.18-R0.1-SNAPSHOT</version>
+			<version>1.18.1-R0.1-SNAPSHOT</version>
 			<classifier>remapped-mojang</classifier>
 		</dependency>
 		<dependency>
