@@ -466,8 +466,6 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 	@Override
 	public Biome getBiome(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		Result<net.minecraft.world.level.biome.Biome> biomeResult = ResourceOrTagLocationArgument.getBiome(cmdCtx, key);
-		
-		String biome = biomeResult.asPrintable();
 		if(biomeResult.unwrap().left().isPresent()) {
 			// It's a resource key. Unwrap the result, get the resource key (left)
 			// and get its location and return its path. Important information if
@@ -499,7 +497,7 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 			//   [minecraft:root / minecraft:worldgen/biome]
 			
 			// ResourceOrTagLocationArgument.ERROR_INVALID_BIOME
-			throw new DynamicCommandExceptionType(x -> new TranslatableComponent("commands.locatebiome.invalid", x)).create(biome);
+			throw new DynamicCommandExceptionType(x -> new TranslatableComponent("commands.locatebiome.invalid", x)).create(biomeResult.asPrintable());
 		}
 	}
 
