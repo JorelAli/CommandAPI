@@ -474,8 +474,16 @@ public class CommandAPICommand {
 		return isConverted;
 	}
 
-	void setConverted(boolean isConverted) {
+	/**
+	 * Sets a command as "converted". This tells the CommandAPI that this command
+	 * was converted by the CommandAPI's Converter. This should not be used outside
+	 * of the CommandAPI's internal API
+	 * @param isConverted whether this command is converted or not
+	 * @return this command builder
+	 */
+	CommandAPICommand setConverted(boolean isConverted) {
 		this.isConverted = isConverted;
+		return this;
 	}
 	
 	//Expand subcommands into arguments

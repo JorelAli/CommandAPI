@@ -37,6 +37,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.GreedyStringArgument;
+import dev.jorel.commandapi.executors.NativeCommandExecutor;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 
 /**
@@ -128,8 +129,7 @@ public final class Converter {
 
 		// No arguments
 		new CommandAPICommand(commandName).withPermission(CommandPermission.NONE).executesNative((sender, args) -> {
-			CommandSender proxiedSender = mergeProxySender(sender);
-			Bukkit.dispatchCommand(proxiedSender, commandName);
+			Bukkit.dispatchCommand(mergeProxySender(sender), commandName);
 		}).register();
 
 		// Multiple arguments
@@ -161,23 +161,22 @@ public final class Converter {
 		Object aliasObj = cmdData.get("aliases");
 		if (aliasObj == null) {
 			aliases = new String[0];
-		} else if (aliasObj instanceof String) {
-			aliases = new String[] { (String) aliasObj };
-		} else if (aliasObj instanceof List) {
-			@SuppressWarnings("unchecked")
-			List<String> list = (List<String>) aliasObj;
-			aliases = list.toArray(new String[0]);
+		} else if (aliasObj instanceof String aliasStr) {
+			aliases = new String[] { aliasStr };
+		} else if (aliasObj instanceof List<?> aliasList) {
+			aliases = aliasList.toArray(new String[0]);
+		} else {
+			throw new IllegalStateException("Invalid type for aliases. Expected String or List, but got " + aliasObj.getClass().getSimpleName());
 		}
 		if (aliases.length != 0) {
-			CommandAPI.logInfo(
-					"Aliases for command /" + commandName + " found. Using aliases " + Arrays.deepToString(aliases));
+			CommandAPI.logInfo("Aliases for command /" + commandName + " found. Using aliases " + Arrays.deepToString(aliases));
 		}
 
 		// Convert YAML to description
 		String fullDescription = null;
 		Object descriptionObj = cmdData.get("description");
-		if (descriptionObj != null && descriptionObj instanceof String) {
-			fullDescription = String.valueOf(descriptionObj);
+		if (descriptionObj != null && descriptionObj instanceof String descriptionStr) {
+			fullDescription = descriptionStr;
 		}
 
 		// Convert YAML to CommandPermission
@@ -189,41 +188,41 @@ public final class Converter {
 			CommandAPI.logInfo("Permission for command /" + commandName + " found. Using " + permission);
 			permissionNode = CommandPermission.fromString(permission);
 		}
+		
+		NativeCommandExecutor executor = (sender, args) -> {
+			org.bukkit.command.Command command = plugin.getCommand(commandName);
+			
+			if (command == null) {
+				command = CommandAPIHandler.getInstance().getNMS().getSimpleCommandMap()
+						.getCommand(commandName);
+			}
+			
+			CommandSender proxiedSender = CommandAPI.getConfiguration().shouldSkipSenderProxy(plugin)
+					? sender.getCallee()
+					: mergeProxySender(sender);
+			
+			command.execute(proxiedSender, commandName, (String[]) args);
+		};
 
 		// No arguments
-		new CommandAPICommand(commandName).withPermission(permissionNode).withAliases(aliases)
-				.withFullDescription(fullDescription).executesNative((sender, args) -> {
-					org.bukkit.command.Command command = plugin.getCommand(commandName);
-					if (command == null) {
-						command = CommandAPIHandler.getInstance().getNMS().getSimpleCommandMap()
-								.getCommand(commandName);
-					}
-					CommandSender proxiedSender = CommandAPI.getConfiguration().shouldSkipSenderProxy(plugin)
-							? sender.getCallee()
-							: mergeProxySender(sender);
-					command.execute(proxiedSender, commandName, new String[0]);
-				}).register();
+		new CommandAPICommand(commandName)
+			.withPermission(permissionNode)
+			.withAliases(aliases)
+			.withFullDescription(fullDescription)
+			.executesNative((sender, args) -> {
+				executor.executeWith(sender, new String[0]);
+			})
+			.register();
 
 		// Multiple arguments
-		CommandAPICommand multiArgs = new CommandAPICommand(commandName).withPermission(permissionNode)
-				.withAliases(aliases).withArguments(arguments).withFullDescription(fullDescription)
-				.executesNative((sender, args) -> {
-					// We know the args are a String[] because that's how converted things are
-					// handled in generateCommand()
-					org.bukkit.command.Command command = plugin.getCommand(commandName);
-					if (command == null) {
-						command = CommandAPIHandler.getInstance().getNMS().getSimpleCommandMap()
-								.getCommand(commandName);
-					}
-					CommandSender proxiedSender = CommandAPI.getConfiguration().shouldSkipSenderProxy(plugin)
-							? sender.getCallee()
-							: mergeProxySender(sender);
-					command.execute(proxiedSender, commandName, (String[]) args);
-				});
-
-		// Good grief, what a hack~
-		multiArgs.setConverted(true);
-		multiArgs.register();
+		new CommandAPICommand(commandName)
+			.withPermission(permissionNode)
+			.withAliases(aliases)
+			.withArguments(arguments)
+			.withFullDescription(fullDescription)
+			.executesNative(executor)
+			.setConverted(true)
+			.register();
 	}
 
 	/*
@@ -246,16 +245,17 @@ public final class Converter {
 			switch(method.getName()) {
 				case "getLocation":
 					return proxySender.getLocation();
+				case "getBlock":
+					return proxySender.getLocation().getBlock();
 				case "getEyeLocation":
 					if(proxySender.getCallee() instanceof LivingEntity livingEntity) {
 						Location loc = proxySender.getLocation();
 						loc.setY(loc.getY() + livingEntity.getEyeHeight());
 						return loc;
 					} else {
-						return null; // This case should never happen
+						// This case should never happen. If it does, please let me know!
+						return proxySender.getLocation();
 					}
-
-					// Probably also needs other functions such as getBlock?
 				case "getWorld":
 					return proxySender.getWorld();
 				default:
