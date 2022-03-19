@@ -22,11 +22,10 @@
 		<artifactId>commandapi</artifactId>
 		<version>6.5.4</version>
 	</parent>
+
 	<artifactId>commandapi-annotations</artifactId>
-	<name>commandapi-annotations</name>
 
 	<repositories>
-		<!-- This adds the Spigot Maven repository to the build -->
 		<repository>
 			<id>spigot-repo</id>
 			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
@@ -37,7 +36,7 @@
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-core</artifactId>
-			<version>6.5.4</version>
+			<version>${version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.spigotmc</groupId>

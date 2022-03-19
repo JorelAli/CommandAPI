@@ -29,22 +29,46 @@
 
 	<repositories>
 		<repository>
-			<id>codemc-repo-nms</id>
-			<url>https://repo.codemc.org/repository/nms/</url>
-			<layout>default</layout>
+			<id>minecraft-libraries</id>
+			<url>https://libraries.minecraft.net</url>
+		</repository>
+		<repository>
+			<id>codemc-repo</id>
+			<url>https://repo.codemc.org/repository/maven-public/</url>
+		</repository>
+		<repository>
+			<id>papermc</id>
+			<url>https://papermc.io/repo/repository/maven-public/</url>
 		</repository>
 	</repositories>
 
 	<dependencies>
+		<!-- Spigot -->
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot</artifactId>
 			<version>1.16.5-R0.1-SNAPSHOT</version>
 		</dependency>
+
+		<!-- Libraries -->
+		<dependency>
+			<groupId>io.papermc.paper</groupId>
+			<artifactId>paper-api</artifactId>
+			<version>${paper.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>de.tr7zw</groupId>
+			<artifactId>item-nbt-api-plugin</artifactId>
+			<version>${nbtapi.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- CommandAPI core -->
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-core</artifactId>
-			<version>6.5.4</version>
+			<version>${version}</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>

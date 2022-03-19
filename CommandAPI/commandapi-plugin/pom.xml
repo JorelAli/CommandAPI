@@ -34,36 +34,52 @@
 
 	<artifactId>commandapi-plugin</artifactId>
 
+	<repositories>
+		<repository>
+			<id>codemc-repo</id>
+			<url>https://repo.codemc.org/repository/maven-public/</url>
+			<layout>default</layout>
+		</repository>
+	</repositories>
+
 	<dependencies>
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-core</artifactId>
-			<version>6.5.4</version>
+			<version>${version}</version>
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-vh</artifactId>
-			<version>6.5.4</version>
+			<version>${version}</version>
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-1.18.2</artifactId>
-			<version>6.5.4</version>
+			<version>${version}</version>
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-1.18</artifactId>
-			<version>6.5.4</version>
+			<version>${version}</version>
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-1.17</artifactId>
-			<version>6.5.4</version>
+			<version>${version}</version>
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-1.16.5</artifactId>
-			<version>6.5.4</version>
+			<version>${version}</version>
+		</dependency>
+
+		<!-- Implicitly referenced -->
+		<dependency>
+			<groupId>de.tr7zw</groupId>
+			<artifactId>item-nbt-api-plugin</artifactId>
+			<version>${nbtapi.version}</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 

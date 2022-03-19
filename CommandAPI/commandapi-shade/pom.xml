@@ -38,32 +38,32 @@
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-core</artifactId>
-			<version>6.5.4</version>
+			<version>${version}</version>
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-vh</artifactId>
-			<version>6.5.4</version>
+			<version>${version}</version>
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-1.18.2</artifactId>
-			<version>6.5.4</version>
+			<version>${version}</version>
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-1.18</artifactId>
-			<version>6.5.4</version>
+			<version>${version}</version>
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-1.17</artifactId>
-			<version>6.5.4</version>
+			<version>${version}</version>
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-1.16.5</artifactId>
-			<version>6.5.4</version>
+			<version>${version}</version>
 		</dependency>
 	</dependencies>
 

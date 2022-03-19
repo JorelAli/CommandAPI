@@ -30,7 +30,6 @@
 	<repositories>
 		<repository>
 			<id>minecraft-libraries</id>
-			<name>Minecraft Libraries</name>
 			<url>https://libraries.minecraft.net</url>
 		</repository>
 		<repository>
@@ -51,19 +50,12 @@
 			<version>4.1.0</version>
 			<scope>test</scope>
 		</dependency>
-
-		<dependency>
-			<groupId>net.kyori</groupId>
-			<artifactId>adventure-api</artifactId>
-			<version>4.10.1</version>
-		</dependency>
-		
 		<dependency>
 			<groupId>io.papermc.paper</groupId>
 			<artifactId>paper-api</artifactId>
-			<version>1.18.2-R0.1-SNAPSHOT</version>
+			<version>${paper.version}</version>
+			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>com.mojang</groupId>
 			<artifactId>brigadier</artifactId>
@@ -79,12 +71,13 @@
 		<dependency>
 			<groupId>de.tr7zw</groupId>
 			<artifactId>item-nbt-api-plugin</artifactId>
-			<version>2.9.2</version>
+			<version>${nbtapi.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-preprocessor</artifactId>
-			<version>6.5.4</version>
+			<version>${version}</version>
 		</dependency>
 	</dependencies>
 </project>
