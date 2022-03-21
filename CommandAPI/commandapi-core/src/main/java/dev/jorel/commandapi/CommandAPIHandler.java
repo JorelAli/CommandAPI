@@ -618,7 +618,13 @@ public class CommandAPIHandler<CommandSourceStack> {
 			}
 			registeredCommands.add(new RegisteredCommand(commandName, argumentsString));
 		}
-		
+
+		if (Bukkit.getPluginCommand(commandName) != null) {
+			CommandAPI.logWarning("Plugin command /" + commandName + " is registered by Bukkit ("
+					+ Bukkit.getPluginCommand(commandName).getPlugin().getName()
+					+ "). Did you forget to remove this from your plugin.yml file?");
+		}
+
 		CommandAPI.logInfo("Registering command /" + commandName + " " + builder.toString());
 		commands.add(new CommandHelp(commandName, shortDescription, fullDescription, aliases, permission));
 

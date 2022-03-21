@@ -188,7 +188,7 @@ public final class CommandAPI {
 				CommandAPIHandler.getInstance().getNMS().resendPackets(e.getPlayer());
 			}
 		};
-        
+
 		Bukkit.getServer().getPluginManager().registerEvents(playerJoinListener, plugin);  
 	}
 	
