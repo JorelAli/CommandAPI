@@ -1,19 +1,19 @@
 ---
 name: Documentation amendment
-about: 'Report documentation errata '
+about: 'Report documentation issues '
 title: "[Documentation Error]"
 labels: documentation
 assignees: ''
 
 ---
 
-**Chapter Number**
-The chapter which this error is found (numbered on the side of the documentation)
+**Chapter URL page name**
+_The page which this error is found (For example, `https://commandapi.jorel.dev/6.5.4/conversionentityselectors.html` -> `conversionentityselectors`)_
 
 **Section**
-The header where this error is found under (e.g. "Example - Config editing plugin")
+_The header where this error is found under (e.g. "Example - Config editing plugin")_
 
-**Errata**
-The misprint/invalid statement or statements
+**Issue**
+Describe the issue here
 
-**Proposed fix**
+**(Optional) Proposed fix**
