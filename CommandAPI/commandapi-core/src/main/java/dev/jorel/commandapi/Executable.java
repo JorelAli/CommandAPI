@@ -1,5 +1,6 @@
 package dev.jorel.commandapi;
 
+import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.CommandBlockCommandExecutor;
 import dev.jorel.commandapi.executors.CommandBlockResultingCommandExecutor;
 import dev.jorel.commandapi.executors.CommandExecutor;
@@ -7,6 +8,7 @@ import dev.jorel.commandapi.executors.ConsoleCommandExecutor;
 import dev.jorel.commandapi.executors.ConsoleResultingCommandExecutor;
 import dev.jorel.commandapi.executors.EntityCommandExecutor;
 import dev.jorel.commandapi.executors.EntityResultingCommandExecutor;
+import dev.jorel.commandapi.executors.ExecutorType;
 import dev.jorel.commandapi.executors.NativeCommandExecutor;
 import dev.jorel.commandapi.executors.NativeResultingCommandExecutor;
 import dev.jorel.commandapi.executors.PlayerCommandExecutor;
@@ -33,8 +35,25 @@ abstract class Executable<T extends Executable<T>> {
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
-	public T executes(CommandExecutor executor) {
-		this.executor.addNormalExecutor(executor);
+	public T executes(CommandExecutor executor, ExecutorType... types) {
+		if(types == null || types.length == 0) {
+			this.executor.addNormalExecutor(executor);
+		} else {
+			for(ExecutorType type : types) {
+				this.executor.addNormalExecutor(new CommandExecutor() {
+
+					@Override
+					public void run(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
+						executor.executeWith(sender, args);
+					}
+					
+					@Override
+					public ExecutorType getType() {
+						return type;
+					}
+				});
+			}
+		}
 		return (T) this;
 	}
 
@@ -44,8 +63,25 @@ abstract class Executable<T extends Executable<T>> {
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
-	public T executes(ResultingCommandExecutor executor) {
-		this.executor.addResultingExecutor(executor);
+	public T executes(ResultingCommandExecutor executor, ExecutorType... types) {
+		if(types == null || types.length == 0) {
+			this.executor.addResultingExecutor(executor);
+		} else {
+			for(ExecutorType type : types) {
+				this.executor.addResultingExecutor(new ResultingCommandExecutor() {
+
+					@Override
+					public int run(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
+						return executor.executeWith(sender, args);
+					}
+					
+					@Override
+					public ExecutorType getType() {
+						return type;
+					}
+				});
+			}
+		}
 		return (T) this;
 	}
 

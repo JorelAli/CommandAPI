@@ -15,22 +15,27 @@ final class CommandMetaData {
 	 * The command's name
 	 */
 	final String commandName;
+	
 	/**
 	 * The command's permission
 	 */
 	CommandPermission permission = CommandPermission.NONE;
+	
 	/**
 	 * The command's aliases
 	 */
 	String[] aliases = new String[0];
+	
 	/**
 	 * A predicate that a {@link CommandSender} must pass in order to execute the command
 	 */
 	Predicate<CommandSender> requirements = s -> true;
+	
 	/**
 	 * An optional short description for the command
 	 */
 	Optional<String> shortDescription = Optional.empty();
+	
 	/**
 	 * An optional full description for the command
 	 */
