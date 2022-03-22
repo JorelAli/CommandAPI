@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 
@@ -1833,6 +1834,27 @@ new CommandAPICommand("removeeffect")
 /* ANCHOR: CommandAPIConfigSilent */
 CommandAPI.onLoad(new CommandAPIConfig().silentLogs(true));
 /* ANCHOR_END: CommandAPIConfigSilent */
+}
+
+{
+
+JavaPlugin plugin = new JavaPlugin() {};
+/* ANCHOR: asyncreadfile */
+new CommandAPICommand("setconfig")
+    .withArguments(new StringArgument("key").replaceSuggestions(ArgumentSuggestions.stringsAsync(info -> {
+        return CompletableFuture.supplyAsync(() -> {
+            return plugin.getConfig().getKeys(false).toArray(new String[0]);
+        });
+    })))
+    .withArguments(new TextArgument("value"))
+    .executes((sender, args) -> {
+        String key = (String) args[0];
+        String value = (String) args[1];
+        plugin.getConfig().set(key, value);
+    })
+    .register();
+/* ANCHOR_END: asyncreadfile */
+	
 }
 
 

@@ -6,6 +6,8 @@ In addition to normal suggestions, safely-typed suggestions and suggestions with
 - Retrieving information from the web
 - Retrieving suggestions from a file
 
+![asynchronous suggestions](./images/asyncsuggestions.gif)
+
 The asynchronous methods for suggestions are similar in format to normal suggestions, except for two things: the name of the method ends with `Async`, and the return type for the inner function is a `CompletableFuture`:
 
 ```java
@@ -51,10 +53,18 @@ CompletableFuture.supplyAsync(() -> {
 
 <div class="example">
 
-### Something something HTTP request?
+### Reading keys from a config file
+
+Say you wanted to write a command to modify your plugin's config file. Since the config file is an external file, you ideally want to access the file in a separate thread to the main server thread to retain performance for players on the server. We have the following command syntax:
+
+```mccmd
+/setconfig <key> <value>
+```
+
+We make use of the `ArgumentSuggestions.stringsAsync` method to provide asynchronous suggestions. In our completable future implementation, we access the keys from the plugin configuration.
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:asynchttp}}
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:asyncreadfile}}
 ```
 
 </div>

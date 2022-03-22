@@ -31,7 +31,7 @@
   - [Native commandsenders](./native.md)
   - [Resulting command executors](./resultingcommandexecutors.md)
   - [Handling command failures](./commandfailures.md)
-- [Arguments (in general)](./arguments.md)
+- [Command arguments](./arguments.md)
   - [Listed arguments](./listed.md)
   - [Argument suggestions](./argumentsuggestions.md)
     - [The SuggestionsInfo record](./suggestionsinfo.md)
