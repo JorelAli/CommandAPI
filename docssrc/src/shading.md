@@ -70,7 +70,18 @@ public {{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:s
 
 ## Shading with Maven
 
-To shade the CommandAPI into a maven project, you'll need to use the `commandapi-shade` dependency, which is optimized for shading and doesn't include plugin-specific files _(such as `plugin.yml`)_:
+To shade the CommandAPI into a maven project, you'll need to use the `commandapi-shade` dependency, which is optimized for shading and doesn't include plugin-specific files _(such as `plugin.yml`)_. **You do not need to use `commandapi-core` if you are shading**:
+
+Add the repository and dependencies:
+
+```xml
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+```
 
 ```xml
 <dependencies>
@@ -135,6 +146,15 @@ To shade the CommandAPI into a Gradle project, we'll use the [Gradle Shadow Plug
 plugins {
     id 'java'
     id 'com.github.johnrengelman.shadow' version '6.0.0'
+}
+```
+
+Add our repositories:
+
+```gradle
+repositories {
+    maven { url = "https://jitpack.io" }
+    maven { url = "https://repo.codemc.org/repository/maven-public/" }
 }
 ```
 
