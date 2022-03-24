@@ -43,10 +43,10 @@ The list of what version of the CommandAPI you'll need to run on a specific vers
 - **Minecraft 1.16.2**: CommandAPI v4.0 to 5.12
 - **Minecraft 1.16.3**: CommandAPI v4.2 to 5.12
 - **Minecraft 1.16.4**: CommandAPI v5.2 to 5.12
-- **Minecraft 1.16.5**: CommandAPI v5.7 to 6.4.x
-- **Minecraft 1.17**: CommandAPI 6.0.x to 6.4.x (Java 16) or 6.5.2+ (Java 17)
-- **Minecraft 1.17.1**: CommandAPI 6.1.x to 6.4.x (Java 16) or 6.5.2+ (Java 17)
-- **Minecraft 1.18, 1.18.1**: CommandAPI 6.5.2+ (Java 17)
+- **Minecraft 1.16.5**: CommandAPI v5.7 to 6.5.4
+- **Minecraft 1.17**: CommandAPI 6.0.x to 6.4.x (Java 16) or 6.5.4 (Java 17)
+- **Minecraft 1.17.1**: CommandAPI 6.1.x to 6.4.x (Java 16) or 6.5.4 (Java 17)
+- **Minecraft 1.18, 1.18.1**: CommandAPI 6.5.2 to 6.5.4 (Java 17)
 - **Minecraft 1.18.2**: CommandAPI 6.5.4 (Java 17)
 
 -----
@@ -320,6 +320,23 @@ This is the current roadmap for the CommandAPI (as of 25th January 2022):
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td valign="top"><b>7.0.0</b></td>
+            <td valign="top">??? 2022</td>
+            <td valign="top">
+                <ul>
+                    <li>Adds support for using the same command executor for multiple command sender types</li>
+                    <li>Makes the CommandAPI display a warning if it finds commands present in a <code>plugin.yml</code> file</li>
+                    <li>Fix various broken links in the documentation</li>
+                    <li>Adds more helper methods to the Brigadier class</li>
+                    <li>Adds a tree-like syntax for command declarations</li>
+                    <li>Remove various deprecated <code>safeOverrideSuggestions</code> methods</li>
+                    <li>Adds support for asynchronous suggestions</li>
+                    <li>Rewrote how argument suggestions are declared, instead of lots of overloads, require a single object which encompasses the various different suggestion methods</li>
+                    <li>Fix transitive dependencies in the CommandAPI which caused various libraries to be exposed</li>
+                </ul>
+            </td>
+        </tr>
         <tr>
             <td valign="top"><b>6.5.4</b></td>
             <td valign="top">March 2022</td>
