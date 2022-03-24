@@ -23,7 +23,16 @@ package dev.jorel.commandapi;
 import java.io.File;
 import java.util.Map.Entry;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.mojang.brigadier.ParseResults;
+import com.mojang.brigadier.context.StringRange;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.Suggestions;
+
+import dev.jorel.commandapi.arguments.ArgumentSuggestions;
+import dev.jorel.commandapi.arguments.GreedyStringArgument;
 
 public class CommandAPIMain extends JavaPlugin {
 	
@@ -58,5 +67,54 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable(this);
+		
+		ArgumentSuggestions commandSuggestions = (info, builder) -> {
+		    // The current argument, which is a full command
+		    String arg = info.currentArg();
+
+		    // Identify the position of the current argument
+		    int start;
+		    if(arg.contains(" ")) {
+		        // Current argument contains spaces - it starts after the last space and after the start of this argument.
+		        start = builder.getStart() + arg.lastIndexOf(' ') + 1;
+		    } else {
+		        // Input starts at the start of this argument
+		        start = builder.getStart();
+		    }
+		    
+		    // Parse command using brigadier
+		    ParseResults<?> parseResults = Brigadier.getCommandDispatcher()
+		        .parse(info.currentArg(), Brigadier.getBrigadierSourceFromCommandSender(info.sender()));
+		    
+		    // Intercept any parsing errors indicating an invalid command
+		    for(CommandSyntaxException exception : parseResults.getExceptions().values()) {
+		        // Raise the error, with the cursor offset to line up with the argument
+		        throw new CommandSyntaxException(exception.getType(), exception.getRawMessage(), exception.getInput(), exception.getCursor() + start);
+		    }
+
+		    return Brigadier
+		        .getCommandDispatcher()
+		        .getCompletionSuggestions(parseResults)
+		        .thenApply((suggestionsObject) -> {
+		            // Brigadier's suggestions
+		            Suggestions suggestions = (Suggestions) suggestionsObject;
+
+		            return new Suggestions(
+		                // Offset the index range of the suggestions by the start of the current argument
+		                new StringRange(start, start + suggestions.getRange().getLength()),
+		                // Copy the suggestions
+		                suggestions.getList()
+		            );
+		        });
+		};
+		/* ANCHOR_END: BrigadierSuggestions1 */
+
+		/* ANCHOR: BrigadierSuggestions2 */
+		new CommandAPICommand("commandargument")
+		    .withArguments(new GreedyStringArgument("command").replaceSuggestions(commandSuggestions))
+		    .executes((sender, args) -> {
+		        // Run the command using Bukkit.dispatchCommand()
+		        Bukkit.dispatchCommand(sender, (String) args[0]);
+		    }).register();
 	}
 }

@@ -88,7 +88,6 @@ import dev.jorel.commandapi.Brigadier;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandAPIConfig;
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.Converter;
 import dev.jorel.commandapi.IStringTooltip;
@@ -1862,7 +1861,7 @@ new CommandAPICommand("setconfig")
 	
 }
 
-@SuppressWarnings({ "deprecation", "unchecked" })
+@SuppressWarnings({ "unchecked" })
 void brigadierargs() {
 
 /* ANCHOR: BrigadierSuggestions1 */
@@ -1909,12 +1908,13 @@ ArgumentSuggestions commandSuggestions = (info, builder) -> {
 
 /* ANCHOR: BrigadierSuggestions2 */
 new CommandAPICommand("commandargument")
-	.withArguments(new GreedyStringArgument("command").replaceSuggestions(commandSuggestions))
-	.executes((sender, args) -> {
-		Bukkit.broadcastMessage(sender + " sent command: " + args[0]);
-	}).register();
-}
+    .withArguments(new GreedyStringArgument("command").replaceSuggestions(commandSuggestions))
+    .executes((sender, args) -> {
+        // Run the command using Bukkit.dispatchCommand()
+        Bukkit.dispatchCommand(sender, (String) args[0]);
+    }).register();
 /* ANCHOR_END: BrigadierSuggestions2 */
+}
 
 
 } // Examples class end ////////////////////////////////////////////////////////////////////
