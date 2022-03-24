@@ -23,6 +23,9 @@ public static Command fromCommand(CommandAPICommand command);
 public static RequiredArgumentBuilder fromArgument(List<Argument> args, String nodeName);
 public static RequiredArgumentBuilder fromArgument(Argument argument);
 public static SuggestionProvider toSuggestions(String nodeName, List<Argument> args);
+public static Object[] parseArguments(CommandContext cmdCtx, List<Argument> args);
+public static Object getBrigadierSourceFromCommandSender(CommandSender sender);
+public static CommandSender getBukkitCommandSenderFromContext(CommandContext cmdCtx);
 ```
 
 Briefly, here's what each of these functions do (you can view the JavaDocs for more information):
@@ -36,6 +39,9 @@ Briefly, here's what each of these functions do (you can view the JavaDocs for m
 | `fromCommand`          | Converts a `CommandAPICommand` into a brigadier `Command` object |
 | `fromArgument`         | Converts an argument, or a list of arguments, into a `RequiredArgumentBuilder` |
 | `toSuggestions`        | Converts an argument's suggestions into brigadier's `SuggestionProvider`, with a list of previously declared arguments |
+| `parseArguments` | Parses a list of CommandAPI arguments into their respective objects for a provided `CommandContext` |
+| `getBrigadierSourceFromCommandSender` | Converts a Bukkit `CommandSender` into the NMS command sender source object |
+| `getBukkitCommandSenderFromContext` | Converts a Brigadier `CommandContext` into a Bukkit `CommandSender` |
 
 -----
 

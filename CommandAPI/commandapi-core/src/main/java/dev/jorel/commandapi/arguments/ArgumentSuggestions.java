@@ -14,19 +14,23 @@ import java.util.function.Function;
  * This class represents suggestions for an argument. {@link ArgumentSuggestions} objects are best
  * created using the static methods as opposed to functionally.
  */
+// Yes, the following block has spaces instead of tabs. This is by design: DO NOT
+// change the spaces into tabs!
+/* ANCHOR: Declaration */
 @FunctionalInterface
 public interface ArgumentSuggestions {
 
-	/**
-	 * Create a {@link CompletableFuture} resolving onto a brigadier {@link Suggestions} object.
-	 * @param info The suggestions info
-	 * @param builder The Brigadier {@link SuggestionsBuilder} object
-	 * @return a {@link CompletableFuture} resolving onto a brigadier {@link Suggestions} object.
-	 *
-	 * @throws CommandSyntaxException if there is an error making suggestions
-	 */
-	CompletableFuture<Suggestions> suggest(SuggestionInfo info, SuggestionsBuilder builder)
-			throws CommandSyntaxException;
+    /**
+     * Create a {@link CompletableFuture} resolving onto a brigadier {@link Suggestions} object.
+     * @param info The suggestions info
+     * @param builder The Brigadier {@link SuggestionsBuilder} object
+     * @return a {@link CompletableFuture} resolving onto a brigadier {@link Suggestions} object.
+     *
+     * @throws CommandSyntaxException if there is an error making suggestions
+     */
+    CompletableFuture<Suggestions> suggest(SuggestionInfo info, SuggestionsBuilder builder)
+        throws CommandSyntaxException;
+/* ANCHOR_END: Declaration */
 
 	/**
 	 * Suggest nothing
