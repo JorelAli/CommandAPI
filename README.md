@@ -327,6 +327,7 @@ This is the current roadmap for the CommandAPI (as of 25th January 2022):
                 <ul>
                     <li>Adds support for using the same command executor for multiple command sender types</li>
                     <li>Makes the CommandAPI display a warning if it finds commands present in a <code>plugin.yml</code> file</li>
+                    <li>Changed <code>CommandAPI.fail()</code> so it doesn't automatically throw the exception it generates</li>
                     <li>Fix various broken links in the documentation</li>
                     <li>Adds more helper methods to the Brigadier class</li>
                     <li>Adds a tree-like syntax for command declarations</li>
