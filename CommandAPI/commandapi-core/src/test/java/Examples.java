@@ -1976,21 +1976,23 @@ public void signedit(){
 new CommandTree("signedit")
     .then(new LiteralArgument("set")
         .then(new IntegerArgument("line_number", 1, 4)
-            .then(new GreedyStringArgument("text"))
+            .then(new GreedyStringArgument("text")
                 .executesPlayer((player, args) -> {
                     // /signedit set <line_number> <text>
                     Sign sign = getTargetSign(player);
                     int line_number = (int) args[0];
                     String text = (String) args[1];
-                    sign.setLine(line_number, text);
-                 })))
+                    sign.setLine(line_number - 1, text);
+                    sign.update(true);
+                 }))))
     .then(new LiteralArgument("clear")
         .then(new IntegerArgument("line_number", 1, 4)
             .executesPlayer((player, args) -> {
                 // /signedit clear <line_number>
                 Sign sign = getTargetSign(player);
                 int line_number = (int) args[0];
-                sign.setLine(line_number, "");
+                sign.setLine(line_number - 1, "");
+                sign.update(true);
             })))
     .then(new LiteralArgument("copy")
         .then(new IntegerArgument("line_number", 1, 4)
@@ -1998,7 +2000,7 @@ new CommandTree("signedit")
                 // /signedit copy <line_number>
                 Sign sign = getTargetSign(player);
                 int line_number = (int) args[0];
-                player.setMetadata("copied_sign_text", new FixedMetadataValue(this, sign.getLine(line_number)));
+                player.setMetadata("copied_sign_text", new FixedMetadataValue(this, sign.getLine(line_number - 1)));
             })))
     .then(new LiteralArgument("paste")
         .then(new IntegerArgument("line_number", 1, 4)
@@ -2006,15 +2008,16 @@ new CommandTree("signedit")
                 // /signedit copy <line_number>
                 Sign sign = getTargetSign(player);
                 int line_number = (int) args[0];
-                sign.setLine(line_number, player.getMetadata("copied_sign_text").get(0).asString());
+                sign.setLine(line_number - 1, player.getMetadata("copied_sign_text").get(0).asString());
+                sign.update(true);
             })))
     .register();
 /* ANCHOR_END: CommandTree_signedit */
 }
 
 public Sign getTargetSign(Player player) throws WrapperCommandSyntaxException {
-	Block block = player.getTargetBlock(256);
-	if(block != null && block instanceof Sign sign) {
+	Block block = player.getTargetBlock(null, 256);
+	if(block != null && block.getState() instanceof Sign sign) {
 		return sign;
 	} else {
 		CommandAPI.fail("You're not looking at a sign!");
