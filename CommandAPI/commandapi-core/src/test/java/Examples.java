@@ -1139,7 +1139,7 @@ new CommandAPICommand("getfruit")
             // Do something with inputFruit
         } else {
             // The sender's input is not in the list of fruit
-            CommandAPI.fail("That fruit doesn't exist!");
+            throw CommandAPI.fail("That fruit doesn't exist!");
         }
     })
     .register();
@@ -2020,8 +2020,7 @@ public Sign getTargetSign(Player player) throws WrapperCommandSyntaxException {
 	if(block != null && block.getState() instanceof Sign sign) {
 		return sign;
 	} else {
-		CommandAPI.fail("You're not looking at a sign!");
-		return null;
+		throw CommandAPI.fail("You're not looking at a sign!");
 	}
 }
 
