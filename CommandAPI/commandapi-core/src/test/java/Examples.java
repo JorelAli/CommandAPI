@@ -50,6 +50,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
+import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
@@ -67,6 +68,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.loot.LootContext;
 import org.bukkit.loot.LootTable;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -144,6 +146,7 @@ import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.arguments.TeamArgument;
 import dev.jorel.commandapi.arguments.TextArgument;
 import dev.jorel.commandapi.arguments.TimeArgument;
+import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.IntegerRange;
 import dev.jorel.commandapi.wrappers.MathOperation;
@@ -1964,6 +1967,59 @@ new CommandTree("sayhi")
         }))
     .register();
 /* ANCHOR_END: CommandTree_sayhi1 */
+}
+
+@SuppressWarnings("deprecation")
+public void signedit(){
+
+/* ANCHOR: CommandTree_signedit */
+new CommandTree("signedit")
+    .then(new LiteralArgument("set")
+        .then(new IntegerArgument("line_number", 1, 4)
+            .then(new GreedyStringArgument("text"))
+                .executesPlayer((player, args) -> {
+                    // /signedit set <line_number> <text>
+                    Sign sign = getTargetSign(player);
+                    int line_number = (int) args[0];
+                    String text = (String) args[1];
+                    sign.setLine(line_number, text);
+                 })))
+    .then(new LiteralArgument("clear")
+        .then(new IntegerArgument("line_number", 1, 4)
+            .executesPlayer((player, args) -> {
+                // /signedit clear <line_number>
+                Sign sign = getTargetSign(player);
+                int line_number = (int) args[0];
+                sign.setLine(line_number, "");
+            })))
+    .then(new LiteralArgument("copy")
+        .then(new IntegerArgument("line_number", 1, 4)
+            .executesPlayer((player, args) -> {
+                // /signedit copy <line_number>
+                Sign sign = getTargetSign(player);
+                int line_number = (int) args[0];
+                player.setMetadata("copied_sign_text", new FixedMetadataValue(this, sign.getLine(line_number)));
+            })))
+    .then(new LiteralArgument("paste")
+        .then(new IntegerArgument("line_number", 1, 4)
+            .executesPlayer((player, args) -> {
+                // /signedit copy <line_number>
+                Sign sign = getTargetSign(player);
+                int line_number = (int) args[0];
+                sign.setLine(line_number, player.getMetadata("copied_sign_text").get(0).asString());
+            })))
+    .register();
+/* ANCHOR_END: CommandTree_signedit */
+}
+
+public Sign getTargetSign(Player player) throws WrapperCommandSyntaxException {
+	Block block = player.getTargetBlock(256);
+	if(block != null && block instanceof Sign sign) {
+		return sign;
+	} else {
+		CommandAPI.fail("You're not looking at a sign!");
+		return null;
+	}
 }
 
 
