@@ -89,6 +89,7 @@ import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandAPIConfig;
 import dev.jorel.commandapi.CommandPermission;
+import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.Converter;
 import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.StringTooltip;
@@ -1914,6 +1915,55 @@ new CommandAPICommand("commandargument")
         Bukkit.dispatchCommand(sender, (String) args[0]);
     }).register();
 /* ANCHOR_END: BrigadierSuggestions2 */
+}
+
+{
+new CommandTree("treeexample")
+	//Set the aliases as you normally would 
+	.withAliases("treealias")
+	//Set an executor on the command itself
+	.executes((sender, args) -> {
+		sender.sendMessage("Root with no arguments");
+	})
+	//Create a new branch starting with a the literal 'integer'
+	.then(new LiteralArgument("integer")
+		//Execute on the literal itself
+		.executes((sender, args) -> {
+			sender.sendMessage("Integer Branch with no arguments");
+		})
+		//Create a further branch starting with an integer argument, which executes a command
+		.then(new IntegerArgument("integer").executes((sender, args) -> {
+			sender.sendMessage("Integer Branch with integer argument: " + args[0]);
+		})))
+	.then(new LiteralArgument("biome")
+		.executes((sender, args) -> {
+			sender.sendMessage("Biome Branch with no arguments");
+		})
+		.then(new BiomeArgument("biome").executes((sender, args) -> {
+			sender.sendMessage("Biome Branch with biome argument: " + args[0]);
+		})))
+	.then(new LiteralArgument("string")
+		.executes((sender, args) -> {
+			sender.sendMessage("String Branch with no arguments");
+		})
+		.then(new StringArgument("string").executes((sender, args) -> {
+			sender.sendMessage("String Branch with string argument: " + args[0]);
+		})))
+	//Call register to finish as you normally would
+	.register();
+
+/* ANCHOR: CommandTree_sayhi1 */
+new CommandTree("sayhi")
+    .executes((sender, args) -> {
+        sender.sendMessage("Hi!");
+    })
+    .then(new PlayerArgument("target")
+        .executes((sender, args) -> {
+            Player target = (Player) args[0];
+            target.sendMessage("Hi");
+        }))
+    .register();
+/* ANCHOR_END: CommandTree_sayhi1 */
 }
 
 
