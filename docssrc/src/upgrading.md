@@ -2,6 +2,33 @@
 
 ## From version 6.5.2 to 7.0.0
 
+### CommandAPI command failures
+
+The `CommandAPI.fail()` no longer automatically throws the exception that it creates, and instead now requires you to manually throw the exception yourself. This improves upon invalid states in command executors and allows invalid states to be identified more easily at compile time. To update, simply add the `throw` keyword before you call `CommandAPI.fail()`:
+
+```java
+new CommandAPICommand("mycommand")
+    .executes((sender, args) -> {
+        if(!sender.hasPermission("some.permission")) {
+            CommandAPI.fail("You don't have permission to run /mycommand!");
+            return;
+        }
+        sender.sendMessage("Hello!");
+    })
+```
+
+\\[\downarrow\\]
+
+```java
+new CommandAPICommand("mycommand")
+    .executes((sender, args) -> {
+        if(!sender.hasPermission("some.permission")) {
+            throw CommandAPI.fail("You don't have permission to run /mycommand!");
+        }
+        sender.sendMessage("Hello!");
+    })
+```
+
 ### Suggestions
 
 Suggestions have been overhauled and no longer take in a `Function<SuggestionsInfo, String[]>` anymore. Instead, they now take in a `ArgumentSuggestions` object which represents argument suggestions (and whether they are executed asynchronously or have tooltips).
