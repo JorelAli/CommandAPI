@@ -271,7 +271,9 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The AngleArgument
 	 */
-	ANGLE("minecraft:angle"), 
+	ANGLE("minecraft:angle"),
+	
+	_REGEX("minecraft:regex"), 
 	
 	/**
 	 * The OfflinePlayerArgument

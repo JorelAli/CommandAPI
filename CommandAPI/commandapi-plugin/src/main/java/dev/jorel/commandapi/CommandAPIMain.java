@@ -21,14 +21,20 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Map.Entry;
 
+import org.bukkit.command.BlockCommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import dev.jorel.commandapi.arguments.IntegerArgument;
+import dev.jorel.commandapi.arguments._RegexArgument;
 
 public class CommandAPIMain extends JavaPlugin {
 	
 	@Override
-	public void onLoad() {
+	public void onLoad() {		
 		//Config loading
 		saveDefaultConfig();
 		CommandAPI.config = new Config(getConfig());
@@ -53,10 +59,28 @@ public class CommandAPIMain extends JavaPlugin {
 		for(String commandName : CommandAPI.config.getCommandsToConvert()) {
 			new AdvancedConverter(commandName).convertCommand();
 		}
+
+		inject();
 	}
 	
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable(this);
+		
+		String simpleRegex = "(public|private) (static)? void main\\(String args\\[\\]\\) \\{\\}";
+		new CommandAPICommand("hello")
+			.withArguments(new _RegexArgument("val", simpleRegex).withRequirement(sender -> !(sender instanceof Player)))
+			.withArguments(new IntegerArgument("intArg"))
+			.executes((sender, args) -> {
+				System.out.println(sender.getClass().getSimpleName());
+				System.out.println(Arrays.deepToString(args));
+				sender.sendMessage(String.valueOf(args[0]));
+				sender.sendMessage(String.valueOf(args[1]));
+			})
+			.register();
+	}
+	
+	public void inject() {
+		CommandAPIHandler.getInstance().NMS.registerModdedArguments();
 	}
 }

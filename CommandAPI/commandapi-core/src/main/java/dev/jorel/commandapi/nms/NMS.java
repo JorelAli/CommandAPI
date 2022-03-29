@@ -75,6 +75,12 @@ import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 public interface NMS<CommandListenerWrapper> {
+	
+	public default void registerModdedArguments() {};
+	
+	public default String parseRegexArg(CommandContext<CommandListenerWrapper> cmdCtx, String key) { return null; };
+	
+	public default ArgumentType<?> RegexArg(String x) { return null; };
 
 	/* Argument types */
 	ArgumentType<?> _ArgumentAngle();
