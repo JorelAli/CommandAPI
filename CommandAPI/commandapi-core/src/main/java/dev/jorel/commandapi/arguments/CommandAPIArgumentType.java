@@ -179,6 +179,11 @@ public enum CommandAPIArgumentType {
 	ROTATION("minecraft:rotation"), 
 	
 	/**
+	 * The RegexArgument
+	 */
+	REGEX("api:regex"), 
+	
+	/**
 	 * The ScoreHolderArgument
 	 */
 	SCORE_HOLDER("minecraft:score_holder"), 
@@ -272,8 +277,6 @@ public enum CommandAPIArgumentType {
 	 * The AngleArgument
 	 */
 	ANGLE("minecraft:angle"),
-	
-	_REGEX("minecraft:regex"), 
 	
 	/**
 	 * The OfflinePlayerArgument

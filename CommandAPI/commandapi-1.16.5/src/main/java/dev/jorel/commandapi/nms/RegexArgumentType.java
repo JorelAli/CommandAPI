@@ -10,14 +10,14 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
-import net.minecraft.commands.synchronization.ArgumentSerializer;
-import net.minecraft.commands.synchronization.ArgumentTypes;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.v1_16_R3.ArgumentRegistry;
+import net.minecraft.server.v1_16_R3.ArgumentSerializer;
+import net.minecraft.server.v1_16_R3.PacketDataSerializer;
 
 public class RegexArgumentType implements ArgumentType<String> {
 	
 	public static final void register() {
-		ArgumentTypes.register("regex", RegexArgumentType.class, new RegexArgumentSerializer());
+		ArgumentRegistry.a("regex", RegexArgumentType.class, new RegexArgumentSerializer());
 	}
 
 	public Pattern pattern;
@@ -51,20 +51,20 @@ public class RegexArgumentType implements ArgumentType<String> {
 	static class RegexArgumentSerializer implements ArgumentSerializer<RegexArgumentType> {
 
 		@Override
-		public void serializeToNetwork(RegexArgumentType argument, FriendlyByteBuf packetByteBuf) {
-			packetByteBuf.writeByteArray(argument.pattern.pattern().getBytes());
-			packetByteBuf.writeByteArray(argument.errorMessage.getBytes());
+		public void a(RegexArgumentType argument, PacketDataSerializer packetByteBuf) {
+			packetByteBuf.a(argument.pattern.pattern().getBytes());
+			packetByteBuf.a(argument.errorMessage.getBytes());
 		}
 
 		@Override
-		public RegexArgumentType deserializeFromNetwork(FriendlyByteBuf packetByteBuf) {
-			String pattern = new String(packetByteBuf.readByteArray());
-			String errorMessage = new String(packetByteBuf.readByteArray());
+		public RegexArgumentType b(PacketDataSerializer packetByteBuf) {
+			String pattern = new String(packetByteBuf.a());
+			String errorMessage = new String(packetByteBuf.a());
 			return new RegexArgumentType(pattern, errorMessage);
 		}
 
 		@Override
-		public void serializeToJson(RegexArgumentType argument, JsonObject jsonObject) {
+		public void a(RegexArgumentType argument, JsonObject jsonObject) {
 			jsonObject.addProperty("pattern", argument.pattern.pattern());
 			jsonObject.addProperty("message", argument.errorMessage);
 		}

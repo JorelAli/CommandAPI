@@ -316,6 +316,11 @@ public class NMS_1_18_R1 implements NMS<CommandSourceStack> {
 	}
 
 	@Override
+	public ArgumentType<?> _ArgumentRegex(String pattern, String errorMessage) { 
+		return new RegexArgumentType(pattern, errorMessage);
+	}
+
+	@Override
 	public ArgumentType<?> _ArgumentScoreboardCriteria() {
 		return ObjectiveCriteriaArgument.criteria();
 	}
@@ -725,6 +730,11 @@ public class NMS_1_18_R1 implements NMS<CommandSourceStack> {
 	}
 
 	@Override
+	public String getRegex(CommandContext<CommandSourceStack> cmdCtx, String key) {
+		return RegexArgumentType.getString(cmdCtx, key);
+	}
+
+	@Override
 	public ScoreboardSlot getScoreboardSlot(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		return new ScoreboardSlot(ScoreboardSlotArgument.getDisplaySlot(cmdCtx, key));
 	}
@@ -916,5 +926,10 @@ public class NMS_1_18_R1 implements NMS<CommandSourceStack> {
 		for(Map.Entry<String, HelpTopic> entry : helpTopicsToAdd.entrySet()) {
 			helpTopics.put(entry.getKey(), entry.getValue());
 		}
+	}
+	
+	@Override
+	public void registerRegexArgument() {
+		RegexArgumentType.register();
 	}
 }

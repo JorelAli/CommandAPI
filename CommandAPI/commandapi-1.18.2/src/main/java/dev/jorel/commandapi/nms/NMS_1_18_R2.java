@@ -186,21 +186,6 @@ import net.minecraft.world.phys.Vec3;
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
 public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 	
-	@Override
-	public void registerModdedArguments() {
-		ArgumentTypes.register("regex", RegexArgumentType.class, new RegexArgumentSerializer());
-	}
-	
-	@Override
-	public String parseRegexArg(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		return RegexArgumentType.getString(cmdCtx, key);
-	};
-	
-	@Override
-	public ArgumentType<?> RegexArg(String x) { 
-		return new RegexArgumentType(x);
-	};
-	
 	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
 	private static final VarHandle SimpleHelpMap_helpTopics;
 	
@@ -342,6 +327,11 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 	@Override
 	public ArgumentType<?> _ArgumentRotation() {
 		return RotationArgument.rotation();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentRegex(String pattern, String errorMessage) { 
+		return new RegexArgumentType(pattern, errorMessage);
 	}
 
 	@Override
@@ -787,6 +777,11 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 	}
 
 	@Override
+	public String getRegex(CommandContext<CommandSourceStack> cmdCtx, String key) {
+		return RegexArgumentType.getString(cmdCtx, key);
+	}
+
+	@Override
 	public ScoreboardSlot getScoreboardSlot(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		return new ScoreboardSlot(ScoreboardSlotArgument.getDisplaySlot(cmdCtx, key));
 	}
@@ -1050,5 +1045,10 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 		for(Map.Entry<String, HelpTopic> entry : helpTopicsToAdd.entrySet()) {
 			helpTopics.put(entry.getKey(), entry.getValue());
 		}
+	}
+	
+	@Override
+	public void registerRegexArgument() {
+		RegexArgumentType.register();
 	}
 }

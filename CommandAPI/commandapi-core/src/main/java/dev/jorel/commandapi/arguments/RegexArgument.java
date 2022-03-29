@@ -20,6 +20,8 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import java.util.function.Function;
+
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
@@ -27,16 +29,20 @@ import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
 
 /**
- * An argument that represents the Bukkit Enchantment object
+ * An argument that represents a string that matches a regular expression
  */
-public class _RegexArgument extends SafeOverrideableArgument<String> {
+public class RegexArgument extends SafeOverrideableArgument<String> {
 	
 	/**
-	 * An Enchantment argument. Represents an enchantment for items
+	 * A Regex argument. Represents a string that matches a regular expression
 	 * @param nodeName the name of the node for this argument 
 	 */
-	public _RegexArgument(String nodeName, String pattern) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS().RegexArg(pattern), x -> x);
+	public RegexArgument(String nodeName, String pattern) {
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentRegex(pattern, "Input does not match the expected regex"), Function.identity());
+	}
+	
+	public RegexArgument(String nodeName, String pattern, String errorMessage) {
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentRegex(pattern, errorMessage), Function.identity());
 	}
 
 	@Override
@@ -46,12 +52,12 @@ public class _RegexArgument extends SafeOverrideableArgument<String> {
 	
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType._REGEX;
+		return CommandAPIArgumentType.REGEX;
 	}
 	
 	@Override
 	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return nms.parseRegexArg(cmdCtx, key);
+		return nms.getRegex(cmdCtx, key);
 	}
 }

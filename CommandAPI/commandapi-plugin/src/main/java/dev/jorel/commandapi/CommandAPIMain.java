@@ -24,12 +24,10 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Map.Entry;
 
-import org.bukkit.command.BlockCommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.jorel.commandapi.arguments.IntegerArgument;
-import dev.jorel.commandapi.arguments._RegexArgument;
+import dev.jorel.commandapi.arguments.RegexArgument;
 
 public class CommandAPIMain extends JavaPlugin {
 	
@@ -60,16 +58,16 @@ public class CommandAPIMain extends JavaPlugin {
 			new AdvancedConverter(commandName).convertCommand();
 		}
 
-		inject();
+		CommandAPIHandler.getInstance().NMS.registerRegexArgument();
 	}
 	
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable(this);
 		
-		String simpleRegex = "(public|private) (static)? void main\\(String args\\[\\]\\) \\{\\}";
+		String simpleRegex = "(public|private) (static )?void main\\(String\\[\\] args\\) \\{\\}";
 		new CommandAPICommand("hello")
-			.withArguments(new _RegexArgument("val", simpleRegex).withRequirement(sender -> !(sender instanceof Player)))
+			.withArguments(new RegexArgument("val", simpleRegex).withRequirement(sender -> sender == null || !sender.getName().equals("Skepter")))
 			.withArguments(new IntegerArgument("intArg"))
 			.executes((sender, args) -> {
 				System.out.println(sender.getClass().getSimpleName());
@@ -78,9 +76,5 @@ public class CommandAPIMain extends JavaPlugin {
 				sender.sendMessage(String.valueOf(args[1]));
 			})
 			.register();
-	}
-	
-	public void inject() {
-		CommandAPIHandler.getInstance().NMS.registerModdedArguments();
 	}
 }

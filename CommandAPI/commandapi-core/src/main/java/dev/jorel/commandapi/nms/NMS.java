@@ -76,11 +76,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 
 public interface NMS<CommandListenerWrapper> {
 	
-	public default void registerModdedArguments() {};
-	
-	public default String parseRegexArg(CommandContext<CommandListenerWrapper> cmdCtx, String key) { return null; };
-	
-	public default ArgumentType<?> RegexArg(String x) { return null; };
+	public default void registerRegexArgument() {};
 
 	/* Argument types */
 	ArgumentType<?> _ArgumentAngle();
@@ -130,6 +126,8 @@ public interface NMS<CommandListenerWrapper> {
 	ArgumentType<?> _ArgumentProfile();
 
 	ArgumentType<?> _ArgumentRotation();
+	
+	ArgumentType<?> _ArgumentRegex(String pattern, String errorMessage);
 
 	ArgumentType<?> _ArgumentScoreboardCriteria();
 
@@ -294,6 +292,8 @@ public interface NMS<CommandListenerWrapper> {
 
 	Recipe getRecipe(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
+	String getRegex(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	
 	Rotation getRotation(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
 	ScoreboardSlot getScoreboardSlot(CommandContext<CommandListenerWrapper> cmdCtx, String key);
