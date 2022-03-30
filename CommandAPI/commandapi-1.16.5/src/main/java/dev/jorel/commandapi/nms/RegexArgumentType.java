@@ -25,6 +25,7 @@ public class RegexArgumentType implements ArgumentType<String> {
 	
 	public RegexArgumentType(String pattern, String errorMessage) {
 		this.pattern = Pattern.compile(pattern);
+		this.errorMessage = errorMessage;
 	}
 	
 	public static String getString(final CommandContext<?> context, final String name) {
