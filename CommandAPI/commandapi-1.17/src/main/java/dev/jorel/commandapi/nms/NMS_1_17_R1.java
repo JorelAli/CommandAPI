@@ -317,7 +317,7 @@ public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 
 	@Override
 	public ArgumentType<?> _ArgumentRegex(String pattern, String errorMessage) { 
-		return new RegexArgumentType(pattern, errorMessage);
+		return new RegexArgumentType_1_17_R1(pattern, errorMessage);
 	}
 
 	@Override
@@ -731,7 +731,7 @@ public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 
 	@Override
 	public String getRegex(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		return RegexArgumentType.getString(cmdCtx, key);
+		return RegexArgumentType_1_17_R1.getString(cmdCtx, key);
 	}
 
 	@Override
@@ -930,6 +930,6 @@ public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 	
 	@Override
 	public void registerRegexArgument() {
-		RegexArgumentType.register();
+		RegexArgumentType_1_17_R1.register();
 	}
 }

@@ -327,7 +327,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public ArgumentType<?> _ArgumentRegex(String pattern, String errorMessage) { 
-		return new RegexArgumentType(pattern, errorMessage);
+		return new RegexArgumentType_1_16_R3(pattern, errorMessage);
 	}
 
 	@Override
@@ -739,7 +739,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public String getRegex(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		return RegexArgumentType.getString(cmdCtx, key);
+		return RegexArgumentType_1_16_R3.getString(cmdCtx, key);
 	}
 
 	@Override
@@ -940,6 +940,6 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	
 	@Override
 	public void registerRegexArgument() {
-		RegexArgumentType.register();
+		RegexArgumentType_1_16_R3.register();
 	}
 }

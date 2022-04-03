@@ -10,20 +10,20 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
-import net.minecraft.commands.synchronization.ArgumentSerializer;
-import net.minecraft.commands.synchronization.ArgumentTypes;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.v1_16_R3.ArgumentRegistry;
+import net.minecraft.server.v1_16_R3.ArgumentSerializer;
+import net.minecraft.server.v1_16_R3.PacketDataSerializer;
 
-public class RegexArgumentType implements ArgumentType<String> {
+public class RegexArgumentType_1_16_R3 implements ArgumentType<String> {
 	
 	public static final void register() {
-		ArgumentTypes.register("regex", RegexArgumentType.class, new RegexArgumentSerializer());
+		ArgumentRegistry.a("regex", RegexArgumentType_1_16_R3.class, new RegexArgumentSerializer());
 	}
 
 	public Pattern pattern;
 	public String errorMessage;
 	
-	public RegexArgumentType(String pattern, String errorMessage) {
+	public RegexArgumentType_1_16_R3(String pattern, String errorMessage) {
 		this.pattern = Pattern.compile(pattern);
 		this.errorMessage = errorMessage;
 	}
@@ -49,23 +49,23 @@ public class RegexArgumentType implements ArgumentType<String> {
 		return "regex(" + this.pattern.pattern() + ")(" + errorMessage + ")";
 	}
 	
-	static class RegexArgumentSerializer implements ArgumentSerializer<RegexArgumentType> {
+	static class RegexArgumentSerializer implements ArgumentSerializer<RegexArgumentType_1_16_R3> {
 
 		@Override
-		public void serializeToNetwork(RegexArgumentType argument, FriendlyByteBuf packetByteBuf) {
-			packetByteBuf.writeByteArray(argument.pattern.pattern().getBytes());
-			packetByteBuf.writeByteArray(argument.errorMessage.getBytes());
+		public void a(RegexArgumentType_1_16_R3 argument, PacketDataSerializer packetByteBuf) {
+			packetByteBuf.a(argument.pattern.pattern().getBytes());
+			packetByteBuf.a(argument.errorMessage.getBytes());
 		}
 
 		@Override
-		public RegexArgumentType deserializeFromNetwork(FriendlyByteBuf packetByteBuf) {
-			String pattern = new String(packetByteBuf.readByteArray());
-			String errorMessage = new String(packetByteBuf.readByteArray());
-			return new RegexArgumentType(pattern, errorMessage);
+		public RegexArgumentType_1_16_R3 b(PacketDataSerializer packetByteBuf) {
+			String pattern = new String(packetByteBuf.a());
+			String errorMessage = new String(packetByteBuf.a());
+			return new RegexArgumentType_1_16_R3(pattern, errorMessage);
 		}
 
 		@Override
-		public void serializeToJson(RegexArgumentType argument, JsonObject jsonObject) {
+		public void a(RegexArgumentType_1_16_R3 argument, JsonObject jsonObject) {
 			jsonObject.addProperty("pattern", argument.pattern.pattern());
 			jsonObject.addProperty("message", argument.errorMessage);
 		}

@@ -14,16 +14,16 @@ import net.minecraft.commands.synchronization.ArgumentSerializer;
 import net.minecraft.commands.synchronization.ArgumentTypes;
 import net.minecraft.network.FriendlyByteBuf;
 
-public class RegexArgumentType implements ArgumentType<String> {
+public class RegexArgumentType_1_18_R1 implements ArgumentType<String> {
 	
 	public static final void register() {
-		ArgumentTypes.register("regex", RegexArgumentType.class, new RegexArgumentSerializer());
+		ArgumentTypes.register("regex", RegexArgumentType_1_18_R1.class, new RegexArgumentSerializer());
 	}
 
 	public Pattern pattern;
 	public String errorMessage;
 	
-	public RegexArgumentType(String pattern, String errorMessage) {
+	public RegexArgumentType_1_18_R1(String pattern, String errorMessage) {
 		this.pattern = Pattern.compile(pattern);
 		this.errorMessage = errorMessage;
 	}
@@ -49,23 +49,23 @@ public class RegexArgumentType implements ArgumentType<String> {
 		return "regex(" + this.pattern.pattern() + ")(" + errorMessage + ")";
 	}
 	
-	static class RegexArgumentSerializer implements ArgumentSerializer<RegexArgumentType> {
+	static class RegexArgumentSerializer implements ArgumentSerializer<RegexArgumentType_1_18_R1> {
 
 		@Override
-		public void serializeToNetwork(RegexArgumentType argument, FriendlyByteBuf packetByteBuf) {
+		public void serializeToNetwork(RegexArgumentType_1_18_R1 argument, FriendlyByteBuf packetByteBuf) {
 			packetByteBuf.writeByteArray(argument.pattern.pattern().getBytes());
 			packetByteBuf.writeByteArray(argument.errorMessage.getBytes());
 		}
 
 		@Override
-		public RegexArgumentType deserializeFromNetwork(FriendlyByteBuf packetByteBuf) {
+		public RegexArgumentType_1_18_R1 deserializeFromNetwork(FriendlyByteBuf packetByteBuf) {
 			String pattern = new String(packetByteBuf.readByteArray());
 			String errorMessage = new String(packetByteBuf.readByteArray());
-			return new RegexArgumentType(pattern, errorMessage);
+			return new RegexArgumentType_1_18_R1(pattern, errorMessage);
 		}
 
 		@Override
-		public void serializeToJson(RegexArgumentType argument, JsonObject jsonObject) {
+		public void serializeToJson(RegexArgumentType_1_18_R1 argument, JsonObject jsonObject) {
 			jsonObject.addProperty("pattern", argument.pattern.pattern());
 			jsonObject.addProperty("message", argument.errorMessage);
 		}
