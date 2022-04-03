@@ -21,13 +21,9 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Map.Entry;
 
 import org.bukkit.plugin.java.JavaPlugin;
-
-import dev.jorel.commandapi.arguments.IntegerArgument;
-import dev.jorel.commandapi.arguments.RegexArgument;
 
 public class CommandAPIMain extends JavaPlugin {
 	
@@ -64,17 +60,5 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable(this);
-		
-		String simpleRegex = "(public|private) (static )?void main\\(String\\[\\] args\\) \\{\\}";
-		new CommandAPICommand("hello")
-			.withArguments(new RegexArgument("val", simpleRegex).withRequirement(sender -> sender == null || !sender.getName().equals("Skepter")))
-			.withArguments(new IntegerArgument("intArg"))
-			.executes((sender, args) -> {
-				System.out.println(sender.getClass().getSimpleName());
-				System.out.println(Arrays.deepToString(args));
-				sender.sendMessage(String.valueOf(args[0]));
-				sender.sendMessage(String.valueOf(args[1]));
-			})
-			.register();
 	}
 }
