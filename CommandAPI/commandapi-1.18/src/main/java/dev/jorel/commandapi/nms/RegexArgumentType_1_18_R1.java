@@ -34,14 +34,23 @@ public class RegexArgumentType_1_18_R1 implements ArgumentType<String> {
 
 	@Override
 	public String parse(StringReader reader) throws CommandSyntaxException {
-		String input = "";
-		while(reader.canRead() && !this.pattern.matcher(input).matches()) {
-			input = input + reader.read();
+		StringBuilder input = new StringBuilder();
+		String lastEntry = null;
+		int lastEntryCursor = 0;
+		while(reader.canRead()) {
+			input.append(reader.read());
+			if(this.pattern.matcher(input).matches()) {
+				// We have a match! Let's keep going though, there may be more valid matches
+				lastEntry = input.toString();
+				lastEntryCursor = reader.getCursor();
+			}
 		}
-		if(!this.pattern.matcher(input).matches()) {
+		if(lastEntry == null) {
 			throw new SimpleCommandExceptionType(new LiteralMessage(errorMessage)).createWithContext(reader);
+		} else {
+			reader.setCursor(lastEntryCursor);
+			return lastEntry;
 		}
-		return input;
 	}
 
 	@Override
