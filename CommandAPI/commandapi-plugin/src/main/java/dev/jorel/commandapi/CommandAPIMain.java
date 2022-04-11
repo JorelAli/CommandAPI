@@ -66,6 +66,7 @@ public class CommandAPIMain extends JavaPlugin {
 		}
 
 		CommandAPIHandler.getInstance().NMS.registerRegexArgument();
+		CommandAPIHandler.getInstance().NMS.registerCustomArgument();
 	}
 	
 	@Override

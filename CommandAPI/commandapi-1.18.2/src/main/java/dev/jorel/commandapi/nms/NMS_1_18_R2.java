@@ -1051,4 +1051,9 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 	public void registerRegexArgument() {
 		RegexArgumentType_1_18_R2.register();
 	}
+	
+	@Override
+	public void registerCustomArgument() {
+		CustomArgumentType_1_18_R2.register();
+	}
 }

@@ -77,6 +77,8 @@ import net.md_5.bungee.api.chat.BaseComponent;
 public interface NMS<CommandListenerWrapper> {
 	
 	public default void registerRegexArgument() {};
+	
+	public default void registerCustomArgument() {};
 
 	/* Argument types */
 	ArgumentType<?> _ArgumentAngle();
