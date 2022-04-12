@@ -89,31 +89,32 @@ public class EntitySelectorArgument extends Argument {
 	}
 	
 	public List<String> getEntityNames(Object argument) {
-		switch (selector) {
-		case MANY_ENTITIES:
-			@SuppressWarnings("unchecked")
-			List<Entity> entities = (List<Entity>) argument;
-			List<String> entityNames = new ArrayList<>();
-			for (Entity entity : entities) {
-				entityNames.add(entity.getName());
-			}
-			return entityNames;
-		case MANY_PLAYERS:
-			@SuppressWarnings("unchecked")
-			List<Player> players = (List<Player>) argument;
-			List<String> playerNames = new ArrayList<>();
-			for (Player player : players) {
-				playerNames.add(player.getName());
-			}
-			return playerNames;
-		case ONE_ENTITY:
-			Entity entity = (Entity) argument;
-			return List.of(entity.getName());
-		case ONE_PLAYER:
-			Player player = (Player) argument;
-			return List.of(player.getName());
-		}
-		throw new IllegalStateException("Invalid selector " + selector.name());
+		return switch (selector) {
+			case MANY_ENTITIES:
+				@SuppressWarnings("unchecked")
+				List<Entity> entities = (List<Entity>) argument;
+				List<String> entityNames = new ArrayList<>();
+				for (Entity entity : entities) {
+					entityNames.add(entity.getName());
+				}
+				yield entityNames;
+			case MANY_PLAYERS:
+				@SuppressWarnings("unchecked")
+				List<Player> players = (List<Player>) argument;
+				List<String> playerNames = new ArrayList<>();
+				for (Player player : players) {
+					playerNames.add(player.getName());
+				}
+				yield playerNames;
+			case ONE_ENTITY:
+				Entity entity = (Entity) argument;
+				yield List.of(entity.getName());
+			case ONE_PLAYER:
+				Player player = (Player) argument;
+				yield List.of(player.getName());
+			default:
+				throw new IllegalStateException("Invalid selector " + selector.name());
+		};
 	}	
 	
 	/**
