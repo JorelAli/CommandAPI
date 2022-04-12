@@ -61,6 +61,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 
 import de.tr7zw.nbtapi.NBTContainer;
+import dev.jorel.commandapi.StringParser;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.wrappers.FloatRange;
@@ -79,7 +80,9 @@ public interface NMS<CommandListenerWrapper> {
 	public default void registerRegexArgument() {};
 	
 	public default void registerCustomArgument() {};
-
+	public default ArgumentType<?> _ArgumentCust(Class<?> containingClass, StringParser parsingFunction) {return null;};
+	public default String getCust(CommandContext<CommandListenerWrapper> cmdCtx, String key) {return null;};
+	
 	/* Argument types */
 	ArgumentType<?> _ArgumentAngle();
 

@@ -17,6 +17,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import dev.jorel.commandapi.StringParser;
 import net.minecraft.commands.synchronization.ArgumentSerializer;
 import net.minecraft.commands.synchronization.ArgumentTypes;
 import net.minecraft.network.FriendlyByteBuf;
@@ -86,8 +87,10 @@ public class CustomArgumentType_1_18_R2 implements ArgumentType<String> {
 		@Override
 		public CustomArgumentType_1_18_R2 deserializeFromNetwork(FriendlyByteBuf packetByteBuf) {
 			String className = new String(packetByteBuf.readByteArray());
+			System.out.println("Reading class " + className);
 			byte[] classBytes = packetByteBuf.readByteArray();
 			
+			// Load the class. This HAS to be done before we unpack the lambda
 			ByteClassLoader cl = new ByteClassLoader(new URL[0], getClass().getClassLoader(), Map.of(className, classBytes));
 			Class<?> parserClass = null;
 			try {
@@ -96,6 +99,9 @@ public class CustomArgumentType_1_18_R2 implements ArgumentType<String> {
 				e1.printStackTrace();
 			}
 			
+			System.out.println("Found " + parserClass);
+			
+			// Read and unpack the lambda
 			ByteArrayInputStream in = new ByteArrayInputStream(packetByteBuf.readByteArray());
 			try {
 				ObjectInputStream objectInputStream = new ObjectInputStream(in);

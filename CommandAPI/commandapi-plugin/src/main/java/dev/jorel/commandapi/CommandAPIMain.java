@@ -31,10 +31,13 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.RegexArgument;
+import dev.jorel.commandapi.arguments._CustArgument;
 
 public class CommandAPIMain extends JavaPlugin {
 	
@@ -115,5 +118,12 @@ public class CommandAPIMain extends JavaPlugin {
 			.register();
 		
 		// /materials dirt,acacia_boat,acacia_button,acacia_fence,acacia_fence_gate,acacia_leaves 200
+		
+		new CommandAPICommand("cust")
+		.withArguments(new _CustArgument("node", Impl.class, new Impl()))
+		.executes((sender, args) -> {
+			System.out.println(Arrays.deepToString(args));
+		})
+		.register();
 	}
 }

@@ -96,6 +96,7 @@ import com.mojang.logging.LogUtils;
 import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.StringParser;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.wrappers.ComplexRecipeImpl;
@@ -1056,4 +1057,13 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 	public void registerCustomArgument() {
 		CustomArgumentType_1_18_R2.register();
 	}
+	
+	public ArgumentType<?> _ArgumentCust(Class<?> containingClass, StringParser parsingFunction) {
+		return new CustomArgumentType_1_18_R2(containingClass, parsingFunction);
+	}
+	
+	public String getCust(CommandContext<CommandSourceStack> cmdCtx, String key) {
+		return CustomArgumentType_1_18_R2.getString(cmdCtx, key);
+	}
+	
 }

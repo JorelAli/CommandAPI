@@ -26,6 +26,11 @@ import java.util.Arrays;
  * An enum that represents the different arguments declared in the Command API
  */
 public enum CommandAPIArgumentType {
+	
+	/**
+	 * The RegexArgument
+	 */
+	CUST("api:serialized"), 
 
 	/**
 	 * The AdvancementArgument
