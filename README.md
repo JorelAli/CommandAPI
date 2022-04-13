@@ -43,11 +43,11 @@ The list of what version of the CommandAPI you'll need to run on a specific vers
 - **Minecraft 1.16.2**: CommandAPI v4.0 to 5.12
 - **Minecraft 1.16.3**: CommandAPI v4.2 to 5.12
 - **Minecraft 1.16.4**: CommandAPI v5.2 to 5.12
-- **Minecraft 1.16.5**: CommandAPI v5.7 to 6.5.4
-- **Minecraft 1.17**: CommandAPI 6.0.x to 6.4.x (Java 16) or 6.5.4 (Java 17)
-- **Minecraft 1.17.1**: CommandAPI 6.1.x to 6.4.x (Java 16) or 6.5.4 (Java 17)
-- **Minecraft 1.18, 1.18.1**: CommandAPI 6.5.2 to 6.5.4 (Java 17)
-- **Minecraft 1.18.2**: CommandAPI 6.5.4 (Java 17)
+- **Minecraft 1.16.5**: CommandAPI v5.7 to 7.0.0
+- **Minecraft 1.17**: CommandAPI 6.0.x to 6.4.x (Java 16) or 7.0.0 (Java 17)
+- **Minecraft 1.17.1**: CommandAPI 6.1.x to 6.4.x (Java 16) or 7.0.0 (Java 17)
+- **Minecraft 1.18, 1.18.1**: CommandAPI 6.5.2 to 7.0.0 (Java 17)
+- **Minecraft 1.18.2**: CommandAPI 6.5.4 to 7.0.0 (Java 17)
 
 -----
 
@@ -287,11 +287,7 @@ The resulting compiled documentation is found in `docs/X.X.X`, where `X.X.X` is 
 
 ## CommandAPI Project Timeline
 
-This is the current roadmap for the CommandAPI (as of 25th January 2022):
-  
-- **CommandAPI 7.0.0: Maintenance + API improvements** 
-
-	This update is general maintenance and refactoring of various methods to provide more powerful API functionality. This update greatly reworks the suggestion system and also adds support for asynchronous suggestions. This update exposes more of the inner workings of the CommandAPI via its Brigadier class to make commands outside of the CommandAPI's base functionality easier to write.  
+This is the current roadmap for the CommandAPI (as of 13th April 2022):
 
 - **Future:**
 	
@@ -306,6 +302,12 @@ This is the current roadmap for the CommandAPI (as of 25th January 2022):
   **Argument conflict detection**
 
   The CommandAPI simply uses the Brigadier system under the hood. This system is prone to _argument conflicts_, which is where certain arguments are given priority over other arguments. (For example "hello" and "123" are both valid string arguments, but if you have a command that has a string argument or an integer argument, Brigadier may ignore the integer argument). In this update, the CommandAPI will try to spot potential conflicts and add a warning in the console. The research required for this is also required in order to implement optional arguments (which is not coming out in this release).
+
+  **'True' custom arguments and server-side argument implementations**
+
+  Through some brief testing of the [regex-mod branch](https://github.com/JorelAli/CommandAPI/tree/dev/regex-mod) and my [MinecraftRegexArgumentMod](https://github.com/JorelAli/MinecraftRegexArgumentMod) repository, it was discovered that 'true' custom arguments (arguments with a custom implementation of the returned type and parser) are possible with the aid of a client-sided mod. Additionally, this functionality also works _without_ a client-sided mod, assuming this is only used server-side. This can be useful for server-only datapacks, functions and tags, as well as command blocks.
+
+  There are two primary goals of this possible feature:
 
 -----
 
@@ -322,7 +324,7 @@ This is the current roadmap for the CommandAPI (as of 25th January 2022):
     <tbody>
         <tr>
             <td valign="top"><b>7.0.0</b></td>
-            <td valign="top">??? 2022</td>
+            <td valign="top">April 2022</td>
             <td valign="top">
                 <b>Development improvements:</b>
                 <ul>
