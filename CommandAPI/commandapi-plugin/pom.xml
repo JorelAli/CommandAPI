@@ -27,7 +27,7 @@
 	<parent>
 		<artifactId>commandapi</artifactId>
 		<groupId>dev.jorel</groupId>
-		<version>6.5.4</version>
+		<version>7.0.0</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
