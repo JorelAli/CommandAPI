@@ -46,7 +46,7 @@ public enum ExecutorType {
 	BLOCK, 
 	
 	/**
-	 * An executor where the CommandSender is a CommandSender
+	 * An executor where the CommandSender is any CommandSender
 	 */
 	ALL, 
 	
@@ -56,7 +56,7 @@ public enum ExecutorType {
 	PROXY,
 	
 	/**
-	 * An executor where the CommandSender is always a NativeProxyCommandSender
+	 * An executor where the CommandSender is (always) a NativeProxyCommandSender
 	 */
 	NATIVE;
 }

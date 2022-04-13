@@ -127,8 +127,8 @@ class CustomCommandExecutor<T extends CommandSender> {
 		return resultingExecutors;
 	}
 
-	public boolean isEmpty() {
-		return normalExecutors.isEmpty() && resultingExecutors.isEmpty();
+	public boolean hasAnyExecutors() {
+		return !(normalExecutors.isEmpty() && resultingExecutors.isEmpty());
 	}
 
 	public boolean isForceNative() {

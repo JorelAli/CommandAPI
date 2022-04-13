@@ -23,16 +23,34 @@ package dev.jorel.commandapi;
 import org.bukkit.command.CommandSender;
 
 /**
- * A class that represents information which you can use to generate suggestions.
+ * A class that represents information which you can use to generate
+ * suggestions.
  * 
  * @param sender       - the CommandSender typing this command
  * @param previousArgs - the list of previously declared (and parsed) arguments
- * @param currentInput - a string representing the full current input (including /)
- * @param currentArg   - the current partially typed argument. For example "/mycmd tes" will return "tes" 
+ * @param currentInput - a string representing the full current input (including
+ *                     /)
+ * @param currentArg   - the current partially typed argument. For example
+ *                     "/mycmd tes" will return "tes"
  */
 public record SuggestionInfo(
-	CommandSender sender, 
-	Object[] previousArgs, 
-	String currentInput, 
-	String currentArg) {
+		/** @param sender - the CommandSender typing this command */
+		CommandSender sender,
+
+		/**
+		 * @param previousArgs - the list of previously declared (and parsed) arguments
+		 */
+		Object[] previousArgs,
+
+		/**
+		 * @param currentInput - a string representing the full current input (including
+		 *                     /)
+		 */
+		String currentInput,
+
+		/**
+		 * @param currentArg - the current partially typed argument. For example "/mycmd
+		 *                   tes" will return "tes"
+		 */
+		String currentArg) {
 }

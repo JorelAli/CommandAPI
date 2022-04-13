@@ -8,7 +8,6 @@ var classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception =
     [ "getMessage", "classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception.html#aba256380915e0f1d55a69c8e259315d8", null ],
     [ "getRawMessage", "classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception.html#a6268b54e987b3177a4e2145b182c7082", null ],
     [ "getType", "classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception.html#a0ef311e3cfcbe40813feb685acff3c54", null ],
-    [ "BUILT_IN_EXCEPTIONS", "classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception.html#ad0f2e309b475b9b9125be5ad4d8c179a", null ],
     [ "CONTEXT_AMOUNT", "classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception.html#a0533f50bc1d5eeda3af6913da4780929", null ],
     [ "ENABLE_COMMAND_STACK_TRACES", "classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception.html#a89e2e8f3de9caeafeb13f66b6f63a714", null ]
 ];

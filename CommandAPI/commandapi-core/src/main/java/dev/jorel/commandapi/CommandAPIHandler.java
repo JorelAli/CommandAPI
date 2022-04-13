@@ -30,29 +30,23 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.permissions.Permission;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.LiteralMessage;
-import com.mojang.brigadier.Message;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
@@ -67,6 +61,7 @@ import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.CustomArgument;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.ICustomProvidedArgument;
@@ -268,37 +263,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 				
 				for(int i = 0; i < args.length; i++) {
 					if(args[i] instanceof EntitySelectorArgument entitySelectorArg) {
-						switch(entitySelectorArg.getEntitySelector())
-						{
-						case MANY_ENTITIES:
-							@SuppressWarnings("unchecked")
-							List<Entity> entities = (List<Entity>) argObjs[i];
-							List<String> entityNames = new ArrayList<>();
-							for(Entity entity : entities) {
-								entityNames.add(entity.getName());
-							}
-							entityNamesForArgs[i] = entityNames;
-							break;
-						case MANY_PLAYERS:
-							@SuppressWarnings("unchecked")
-							List<Player> players = (List<Player>) argObjs[i];
-							List<String> playerNames = new ArrayList<>();
-							for(Player player : players) {
-								playerNames.add(player.getName());
-							}
-							entityNamesForArgs[i] = playerNames;
-							break;
-						case ONE_ENTITY:
-							Entity entity = (Entity) argObjs[i];
-							entityNamesForArgs[i] = List.of(entity.getName());
-							break;
-						case ONE_PLAYER:
-							Player player = (Player) argObjs[i];
-							entityNamesForArgs[i] = List.of(player.getName());
-							break;
-						default:
-							break;
-						}
+						entityNamesForArgs[i] = entitySelectorArg.getEntityNames(argObjs[i]);
 					} else {
 						entityNamesForArgs[i] = Arrays.asList(new String[] { null });
 					}
@@ -318,7 +283,6 @@ public class CommandAPIHandler<CommandSourceStack> {
 					}
 					resultValue += executor.execute(sender, result);
 				}
-				
 				
 				return resultValue;
 			} else {
@@ -340,9 +304,8 @@ public class CommandAPIHandler<CommandSourceStack> {
 
 		// Populate array
 		for (Argument argument : args) {
-			Object result = parseArgument(cmdCtx, argument.getNodeName(), argument, args);
-			if(result != null) {
-				argList.add(result);
+			if(argument.isListed()) {
+				argList.add(parseArgument(cmdCtx, argument.getNodeName(), argument, args));
 			}
 		}
 		
@@ -408,7 +371,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 			try {
 				Bukkit.getPluginManager().addPermission(new Permission(finalPermission.getPermission()));
 			} catch (IllegalArgumentException e) {
-                                assert true; // nop, not an error.
+				assert true; // nop, not an error.
 			}
 		}
 
@@ -488,9 +451,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 * the provided command. Returns true if multiliteral arguments were present (and expanded) and
 	 * returns false if multiliteral arguments were not present.
 	 */
-	private boolean expandMultiLiterals(String commandName, Optional<String> shortDescription,
-			Optional<String> fullDescription, CommandPermission permissions, String[] aliases,
-			Predicate<CommandSender> requirements, final Argument[] args,
+	private boolean expandMultiLiterals(CommandMetaData meta, final Argument[] args,
 			CustomCommandExecutor<? extends CommandSender> executor,
 			boolean converted) throws CommandSyntaxException, IOException {
 		
@@ -509,7 +470,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 					//Reconstruct the list of arguments and place in the new literals
 					Argument[] newArgs = Arrays.copyOf(args, args.length);
 					newArgs[index] = litArg;
-					register(commandName, shortDescription, fullDescription, permissions, aliases, requirements, newArgs, executor, converted);
+					register(meta, newArgs, executor, converted);
 				}
 				return true;
 			}
@@ -528,9 +489,11 @@ public class CommandAPIHandler<CommandSourceStack> {
 				for(String str : rCommand.argsAsStr()) {
 					regArgs.add(str.split(":"));
 				}
-				// TODO: To replicate the previous behaviour, we just find the first
-				// entry. We should probably generate a list of all commands and
-				// iterate through all of them instead (recursion is probably not necessary).
+				// We just find the first entry that causes a conflict. If this
+				// were some industry-level code, we would probably generate a
+				// list of all commands first, then check for command conflicts
+				// all in one go so we can display EVERY command conflict for
+				// all commands, but this works perfectly and isn't important.
 				break;
 			}
 		}
@@ -618,13 +581,12 @@ public class CommandAPIHandler<CommandSourceStack> {
 	
 	// Builds our NMS command using the given arguments for this method, then
 	// registers it
-	void register(String commandName, Optional<String> shortDescription, Optional<String> fullDescription,
-			CommandPermission permission, String[] aliases, Predicate<CommandSender> requirements,
+	void register(CommandMetaData meta,
 			final Argument[] args, CustomCommandExecutor<? extends CommandSender> executor, boolean converted)
 			throws CommandSyntaxException, IOException {
 
 		//"Expands" our MultiLiterals into Literals
-		if(expandMultiLiterals(commandName, shortDescription, fullDescription, permission, aliases, requirements, args, executor, converted)) {
+		if(expandMultiLiterals(meta, args, executor, converted)) {
 			return;
 		}
 		
@@ -633,7 +595,15 @@ public class CommandAPIHandler<CommandSourceStack> {
 		for(Argument arg : args) {
 			builder.append(arg.getNodeName()).append("<").append(arg.getClass().getSimpleName()).append("> ");
 		}
-		
+
+		//Expand metaData into named variables
+		String commandName = meta.commandName;
+		CommandPermission permission = meta.permission;
+		String[] aliases = meta.aliases;
+		Predicate<CommandSender> requirements = meta.requirements;
+		Optional<String> shortDescription = meta.shortDescription;
+		Optional<String> fullDescription = meta.fullDescription;
+
 		// Handle command conflicts
 		boolean hasRegisteredCommand = false;
 		for(RegisteredCommand rCommand : registeredCommands) {
@@ -648,7 +618,13 @@ public class CommandAPIHandler<CommandSourceStack> {
 			}
 			registeredCommands.add(new RegisteredCommand(commandName, argumentsString));
 		}
-		
+
+		if (Bukkit.getPluginCommand(commandName) != null) {
+			CommandAPI.logWarning("Plugin command /" + commandName + " is registered by Bukkit ("
+					+ Bukkit.getPluginCommand(commandName).getPlugin().getName()
+					+ "). Did you forget to remove this from your plugin.yml file?");
+		}
+
 		CommandAPI.logInfo("Registering command /" + commandName + " " + builder.toString());
 		commands.add(new CommandHelp(commandName, shortDescription, fullDescription, aliases, permission));
 
@@ -708,26 +684,6 @@ public class CommandAPIHandler<CommandSourceStack> {
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
-	// SECTION: SuggestionProviders //
-	//////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	// NMS ICompletionProvider.a()
-	CompletableFuture<Suggestions> getSuggestionsBuilder(SuggestionsBuilder builder, IStringTooltip[] array) {
-		String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
-		for (int i = 0; i < array.length; i++) {
-			IStringTooltip str = array[i];
-			if (str.getSuggestion().toLowerCase(Locale.ROOT).startsWith(remaining)) {
-				Message tooltipMsg = null;
-				if(str.getTooltip() != null) {
-					tooltipMsg = new LiteralMessage(str.getTooltip());
-				}
-				builder.suggest(str.getSuggestion(), tooltipMsg);
-			}
-		}
-		return builder.buildFuture();
-	}
-
-	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	// SECTION: Argument Builders //
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -776,9 +732,22 @@ public class CommandAPIHandler<CommandSourceStack> {
 			SuggestionProvider<CommandSourceStack> addedSuggestions = toSuggestions(argument.getNodeName(), args, false);
 			
 			newSuggestionsProvider = (cmdCtx, builder) -> {
-				addedSuggestions.getSuggestions(cmdCtx, builder);
-				provider.getSuggestions(cmdCtx, builder);
-				return builder.buildFuture();
+				//Heavily inspired by CommandDispatcher#listSuggestions, with combining multiple CompletableFuture<Suggestions> into one.
+				@SuppressWarnings("unchecked")
+				final CompletableFuture<Suggestions>[] futures = new CompletableFuture[]{
+					addedSuggestions.getSuggestions(cmdCtx, builder), provider.getSuggestions(cmdCtx, builder)
+				};
+				CompletableFuture<Suggestions> result = new CompletableFuture<>();
+				CompletableFuture
+					.allOf(futures)
+					.thenRun(() -> {
+						List<Suggestions> suggestions = new ArrayList<>();
+						for(CompletableFuture<Suggestions> future: futures) {
+							suggestions.add(future.join());
+						}
+						result.complete(Suggestions.merge(cmdCtx.getInput(), suggestions));
+					});
+				return result;
 			};
 		} 
 		
@@ -821,7 +790,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 				 */
 				result = null;
 			}
-			if(result != null) {
+			if(arg.isListed()) {
 				previousArguments.add(result);
 			}
 		}
@@ -831,8 +800,8 @@ public class CommandAPIHandler<CommandSourceStack> {
 	SuggestionProvider<CommandSourceStack> toSuggestions(String nodeName, Argument[] args, boolean overrideSuggestions) {
 		return (CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) -> {
 			SuggestionInfo suggestionInfo = new SuggestionInfo(NMS.getCommandSenderFromCSS(context.getSource()), generatePreviousArguments(context, args, nodeName), builder.getInput(), builder.getRemaining());
-			Optional<Function<SuggestionInfo, IStringTooltip[]>> suggestionsToAddOrOverride = overrideSuggestions ? getArgument(args, nodeName).getOverriddenSuggestions() : getArgument(args, nodeName).getIncludedSuggestions();
-			return getSuggestionsBuilder(builder, suggestionsToAddOrOverride.orElseGet(() -> o -> new IStringTooltip[0]).apply(suggestionInfo));
+			Optional<ArgumentSuggestions> suggestionsToAddOrOverride = overrideSuggestions ? getArgument(args, nodeName).getOverriddenSuggestions() : getArgument(args, nodeName).getIncludedSuggestions();
+			return suggestionsToAddOrOverride.orElse(ArgumentSuggestions.empty()).suggest(suggestionInfo, builder);
 		};
 	}
 	
@@ -865,63 +834,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		}
 	}
 	
-	//////////////////////////////
-	// SECTION: Private classes //
-	//////////////////////////////
-	
-	/**
-	 * Class to store cached methods and fields 
-	 * 
-	 * This is required because each
-	 * key is made up of a class and a field or method name
-	 */
-	private record ClassCache(Class<?> clazz, String name) {}
-	
-	/**
-	 * A class to compute the cartesian product of a number of lists.
-	 * Source: https://www.programmersought.com/article/86195393650/
-	 */
-	private class CartesianProduct {
 
-		// Shouldn't be instantiated
-		private CartesianProduct() {}
-		
-		/**
-		 * Returns the Cartesian product of a list of lists
-		 * @param <T> the underlying type of the list of lists
-		 * @param list the list to calculate the Cartesian product of
-		 * @return a List of lists which represents the Cartesian product of all elements of the input
-		 */
-		public static final <T> List<List<T>> getDescartes(List<List<T>> list) {
-	        List<List<T>> returnList = new ArrayList<>();
-	        descartesRecursive(list, 0, returnList, new ArrayList<T>());
-	        return returnList;
-	    }
-
-	    /**
-	     * Recursive implementation
-	     * Principle: traverse sequentially from 0 of the original list to the end
-	     * @param <T> the underlying type of the list of lists
-	     * @param originalList original list
-	     * @param position The position of the current recursion in the original list
-	     * @param returnList return result
-	     * @param cacheList temporarily saved list
-	     */
-	    private static final <T> void descartesRecursive(List<List<T>> originalList, int position, List<List<T>> returnList, List<T> cacheList) {
-	        List<T> originalItemList = originalList.get(position);
-	        for (int i = 0; i < originalItemList.size(); i++) {
-	            //The last one reuses cacheList to save memory
-	            List<T> childCacheList = (i == originalItemList.size() - 1) ? cacheList : new ArrayList<>(cacheList);
-	            childCacheList.add(originalItemList.get(i));
-	            if (position == originalList.size() - 1) {//Exit recursion to the end
-	                returnList.add(childCacheList);
-	                continue;
-	            }
-	            descartesRecursive(originalList, position + 1, returnList, childCacheList);
-	        }
-	    }
-
-	}
 
 	public void updateHelpForCommands() {
 		Map<String, HelpTopic> helpTopicsToAdd = new HashMap<>();
@@ -1035,10 +948,73 @@ public class CommandAPIHandler<CommandSourceStack> {
 		NMS.addToHelpMap(helpTopicsToAdd);
 	}
 	
+	//////////////////////////////
+	// SECTION: Private classes //
+	//////////////////////////////
+	
+	/**
+	 * Class to store cached methods and fields 
+	 * 
+	 * This is required because each
+	 * key is made up of a class and a field or method name
+	 */
+	private record ClassCache(Class<?> clazz, String name) {}
+	
+	/**
+	 * Class to store a registered command which has its command name and a
+	 * list of arguments as a string. The arguments are expected to be of the
+	 * form node_name:class_name, for example value:IntegerArgument
+	 */
 	private record RegisteredCommand(String command, List<String> argsAsStr) {};
 
 	private record CommandHelp(String commandName, Optional<String> shortDescription, Optional<String> fullDescription,
 			String[] aliases, CommandPermission permission) {
 	};
+	
+	/**
+	 * A class to compute the Cartesian product of a number of lists.
+	 * Source: https://www.programmersought.com/article/86195393650/
+	 */
+	private class CartesianProduct {
+
+		// Shouldn't be instantiated
+		private CartesianProduct() {}
+		
+		/**
+		 * Returns the Cartesian product of a list of lists
+		 * @param <T> the underlying type of the list of lists
+		 * @param list the list to calculate the Cartesian product of
+		 * @return a List of lists which represents the Cartesian product of all elements of the input
+		 */
+		public static final <T> List<List<T>> getDescartes(List<List<T>> list) {
+			List<List<T>> returnList = new ArrayList<>();
+			descartesRecursive(list, 0, returnList, new ArrayList<T>());
+			return returnList;
+		}
+
+		/**
+		 * Recursive implementation
+		 * Principle: traverse sequentially from 0 of the original list to the end
+		 * @param <T> the underlying type of the list of lists
+		 * @param originalList original list
+		 * @param position The position of the current recursion in the original list
+		 * @param returnList return result
+		 * @param cacheList temporarily saved list
+		 */
+		private static final <T> void descartesRecursive(List<List<T>> originalList, int position, List<List<T>> returnList, List<T> cacheList) {
+			List<T> originalItemList = originalList.get(position);
+			for (int i = 0; i < originalItemList.size(); i++) {
+				//The last one reuses cacheList to save memory
+				List<T> childCacheList = (i == originalItemList.size() - 1) ? cacheList : new ArrayList<>(cacheList);
+				childCacheList.add(originalItemList.get(i));
+				if (position == originalList.size() - 1) {//Exit recursion to the end
+					returnList.add(childCacheList);
+					continue;
+				}
+				descartesRecursive(originalList, position + 1, returnList, childCacheList);
+			}
+		}
+
+	}
 
 }

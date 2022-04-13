@@ -31,6 +31,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.RedirectModifier;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.RootCommandNode;
@@ -42,12 +43,13 @@ import dev.jorel.commandapi.arguments.LiteralArgument;
  * The Brigadier class is used to access some of the internals of the CommandAPI
  * so you can use the CommandAPI alongside Mojang's com.mojang.brigadier package
  */
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public final class Brigadier {
 
 	// Cannot be instantiated
-	private Brigadier() {}
-	
+	private Brigadier() {
+	}
+
 	/**
 	 * Returns the Brigadier CommandDispatcher tree that is used internally by the
 	 * CommandAPI. Modifying this CommandDispatcher tree before the server finishes
@@ -71,7 +73,7 @@ public final class Brigadier {
 	 * @return The Brigadier CommandDispatcher's root node
 	 */
 	public static RootCommandNode getRootNode() {
-		return CommandAPIHandler.getInstance().DISPATCHER.getRoot();
+		return getCommandDispatcher().getRoot();
 	}
 
 	/**
@@ -103,8 +105,7 @@ public final class Brigadier {
 	 */
 	public static RedirectModifier fromPredicate(BiPredicate<CommandSender, Object[]> predicate, List<Argument> args) {
 		return cmdCtx -> {
-			if (predicate.test(CommandAPIHandler.getInstance().NMS.getSenderForCommand(cmdCtx, false),
-					CommandAPIHandler.getInstance().argsToObjectArr(cmdCtx, args.toArray(new Argument[0])))) {
+			if (predicate.test(getBukkitCommandSenderFromContext(cmdCtx), parseArguments(cmdCtx, args))) {
 				return Collections.singleton(cmdCtx.getSource());
 			} else {
 				return Collections.emptyList();
@@ -120,7 +121,8 @@ public final class Brigadier {
 	 */
 	public static Command fromCommand(CommandAPICommand command) {
 		try {
-			return CommandAPIHandler.getInstance().generateCommand(command.getArguments().toArray(new Argument[0]), command.getExecutor(), command.isConverted());
+			return CommandAPIHandler.getInstance().generateCommand(command.getArguments().toArray(new Argument[0]),
+					command.getExecutor(), command.isConverted());
 		} catch (CommandSyntaxException e) {
 			e.printStackTrace();
 		}
@@ -147,7 +149,8 @@ public final class Brigadier {
 	 */
 	public static RequiredArgumentBuilder fromArgument(List<Argument> args, String nodeName) {
 		Argument[] argsArr = args.toArray(new Argument[0]);
-		return CommandAPIHandler.getInstance().getRequiredArgumentBuilderDynamic(argsArr, CommandAPIHandler.getArgument(argsArr, nodeName));
+		return CommandAPIHandler.getInstance().getRequiredArgumentBuilderDynamic(argsArr,
+				CommandAPIHandler.getArgument(argsArr, nodeName));
 	}
 
 	/**
@@ -172,5 +175,46 @@ public final class Brigadier {
 	 */
 	public static SuggestionProvider toSuggestions(String nodeName, List<Argument> args) {
 		return CommandAPIHandler.getInstance().toSuggestions(nodeName, args.toArray(new Argument[0]), true);
+	}
+
+	/**
+	 * Parses arguments into their respective objects with a given command context.
+	 * This method effectively performs the "parse" step in an argument's class and
+	 * returns an Object[] which maps directly to the input List with the values
+	 * generated via parsing.
+	 * 
+	 * @param cmdCtx the command context used to parse the command arguments
+	 * @param args   the list of arguments to parse
+	 * @return an array of Objects which hold the results of the argument parsing
+	 *         step
+	 * @throws CommandSyntaxException if there was an error during parsing
+	 */
+	public static Object[] parseArguments(CommandContext cmdCtx, List<Argument> args) throws CommandSyntaxException {
+		return CommandAPIHandler.getInstance().argsToObjectArr(cmdCtx, args.toArray(new Argument[0]));
+	}
+
+	/**
+	 * Gets a Brigadier source object (e.g. CommandListenerWrapper or
+	 * CommandSourceStack) from a Bukkit CommandSender. This source object is the
+	 * same object you would get from a command context.
+	 * 
+	 * @param sender the Bukkit CommandSender to convert into a Brigadier source
+	 *               object
+	 * @return a Brigadier source object representing the provided Bukkit
+	 *         CommandSender
+	 */
+	public static Object getBrigadierSourceFromCommandSender(CommandSender sender) {
+		return CommandAPIHandler.getInstance().getNMS().getCLWFromCommandSender(sender);
+	}
+
+	
+	/**
+	 * Returns a Bukkit CommandSender from a Brigadier CommandContext
+	 * 
+	 * @param cmdCtx the command context to get the CommandSender from
+	 * @return a Bukkit CommandSender from the provided Brigadier CommandContext
+	 */
+	public static CommandSender getBukkitCommandSenderFromContext(CommandContext cmdCtx) {
+		return CommandAPIHandler.getInstance().getNMS().getSenderForCommand(cmdCtx, false);
 	}
 }

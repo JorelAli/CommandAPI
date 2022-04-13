@@ -70,8 +70,7 @@ new CommandAPICommand("mycommand")
 new CommandAPICommand("mycommand")
     .executes((sender, args) -> {
         if(!sender.hasPermission("some.permission")) {
-            CommandAPI.fail("You don't have permission to run /mycommand!");
-            return;
+            throw CommandAPI.fail("You don't have permission to run /mycommand!");
         }
         sender.sendMessage("Hello!");
     })

@@ -1,7 +1,5 @@
 var classcom_1_1mojang_1_1brigadier_1_1_string_reader =
 [
-    [ "StringReader", "classcom_1_1mojang_1_1brigadier_1_1_string_reader.html#a94261c492a97eda15c2c51d314467d23", null ],
-    [ "StringReader", "classcom_1_1mojang_1_1brigadier_1_1_string_reader.html#afff919a2bdfa48d3282c023c59531e93", null ],
     [ "canRead", "classcom_1_1mojang_1_1brigadier_1_1_string_reader.html#a2e430065d98ca049dcb12842f140f7b9", null ],
     [ "canRead", "classcom_1_1mojang_1_1brigadier_1_1_string_reader.html#aa2512bff916bc5c83ab7183883bdb110", null ],
     [ "expect", "classcom_1_1mojang_1_1brigadier_1_1_string_reader.html#a7e568b144ba4b7241cbe090453e64399", null ],

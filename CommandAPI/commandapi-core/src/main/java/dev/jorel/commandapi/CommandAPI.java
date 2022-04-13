@@ -188,7 +188,7 @@ public final class CommandAPI {
 				CommandAPIHandler.getInstance().getNMS().resendPackets(e.getPlayer());
 			}
 		};
-        
+
 		Bukkit.getServer().getPluginManager().registerEvents(playerJoinListener, plugin);  
 	}
 	
@@ -218,8 +218,8 @@ public final class CommandAPI {
 	 * @param message Description of the error message
 	 * @throws WrapperCommandSyntaxException which indicates that there was a command failure
 	 */
-	public static void fail(String message) throws WrapperCommandSyntaxException {
-		throw new WrapperCommandSyntaxException(new SimpleCommandExceptionType(new LiteralMessage(message)).create());
+	public static WrapperCommandSyntaxException fail(String message) throws WrapperCommandSyntaxException {
+		return new WrapperCommandSyntaxException(new SimpleCommandExceptionType(new LiteralMessage(message)).create());
 	}
 
 	/**

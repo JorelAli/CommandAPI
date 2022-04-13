@@ -106,3 +106,33 @@ The different command sender priority is the following (from highest priority to
 &\quad\texttt{.executesProxy()} \\\\
 &\quad\texttt{.executes()}
 \end{align}
+
+-----
+
+## Multiple command executors with the same implementation
+
+The CommandAPI also allows you to have multiple command executors with the same command implementation. This is useful for when you want to restrict the command sender required to run a command, but want to run the same code for each different command sender type.
+
+This is achieved using the `.executes(executor, ...)` method, which accepts a variadic array of `ExecutorType` objects. `ExecutorType` has the following values:
+
+| ExecutorType Object        | Who can run this?                                 |
+| -------------------------- | ------------------------------------------------- |
+| `ALL`                      | Any CommandSender                                 |
+| `PLAYER`                   | In-game players only                              |
+| `ENTITY`                   | Entities only                                     |
+| `BLOCK`                    | Command blocks only                               |
+| `CONSOLE`                  | The console only                                  |
+| `PROXY`                    | Proxied senders only<br />(via `/execute as ...`) |
+| `NATIVE`                   | See [Native commandsenders](./native.md)          |
+
+<div class="example">
+
+### Example - A `/suicide` command with the same implementation
+
+Expanding on the suicide example above, we can restrict the command to only players and entities. We know that the command sender is a `LivingEntity`, so we can cast to it safely.
+
+```java
+{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:normalcommandexecutors3}}
+```
+
+</div>

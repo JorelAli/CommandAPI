@@ -37,6 +37,19 @@ Using the search icon in the top left corner, you can search for anything in thi
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 6.5.4 \\(\rightarrow\\) 7.0.0:
+
+- Remove direct link to `CommandAPI.jar` file from [Installation for server owners](./installation.md), in favor of pointing to the latest release page (to allow version numbers to appear in the file name).
+- Rewrite the [Argument suggestions](./argumentsuggestions.md) section to cover the new argument suggestions API.
+- Update the [Upgrading guide](./upgrading.md) for the new changes in 7.0.0.
+- Update repository information in the [Shading the CommandAPI in your plugins](./shading.md) page.
+- Update the [Brigadier + CommandAPI](./brigadier.md) page with updated methods.
+- Adds an example of using Brgiader's `SuggestionsBuilder` in the [Brigadier Suggestions](./brigadiersuggestions.md) section.
+- Updated the colors of links, example blocks and warning blocks to meet accessibility contrast guidelines better.
+- Adds [Command trees](./commandtrees.md) section.
+- Update [Handling command failures](./commandfailures.md) to fit new `throw` requirement for command failures.
+- Updated [Normal command executors](./normalexecutors.md#multiple-command-executors-with-the-same-implementation) with the new multiple command executors with the same implementation feature.
+
 ### Documentation changes 6.4.0 \\(\rightarrow\\) 6.5.4:
 
 - Update the Maven and Gradle pages to say to use CommandAPI version 6.5.4 because this kept confusing everyone.

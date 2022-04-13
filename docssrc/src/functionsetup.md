@@ -17,7 +17,7 @@ killall
 say Killed all living entities on the server
 ```
 
-This will run the custom command killall _(as declared in **Chapter 6 - Functions & Tags**)_, and then broadcast a message to all players stating that all entities were killed.
+This will run the custom command killall _(as declared in [**Example - Registering command for use in a function**](./functions.md#example---registering-command-for-use-in-a-function))_, and then broadcast a message to all players stating that all entities were killed.
 
 -----
 

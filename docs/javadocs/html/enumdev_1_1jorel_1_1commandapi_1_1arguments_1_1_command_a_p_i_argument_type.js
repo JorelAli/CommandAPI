@@ -1,8 +1,5 @@
 var enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type =
 [
-    [ "CommandAPIArgumentType", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a501d65a5dba575e527b83e190938e6e6", null ],
-    [ "CommandAPIArgumentType", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a1a6c823d7125ab937e440fd463b1ca7c", null ],
-    [ "CommandAPIArgumentType", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a15b326f697b5569995d87c5b3f008332", null ],
     [ "fromInternal", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a60022d4baf8ee34b98f5262a632aadd6", null ],
     [ "ADVANCEMENT", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ac779834aaa36e23794202e1790bd4753", null ],
     [ "ADVENTURE_CHAT", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#aedd43293095ddfddac4e6a02dfe78242", null ],

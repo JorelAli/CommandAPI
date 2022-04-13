@@ -1,13 +1,32 @@
 # Safely typed argument suggestions
 
-So far, we've covered how to replace suggestions using the `replaceSuggestions()` method. The issue with using Strings for suggestion listings is that they are prone to errors - it is possible to suggest something which is not actually a valid argument, which makes that suggestion unusable. As a result, some arguments include the `replaceWithSafeSuggestions()`, which provides type-safety checks for argument suggestions, as well as automatic "Bukkit-to-suggestion" conversion.
+So far, we've covered how to replace suggestions using the `replaceSuggestions()` method. The issue with using strings for suggestion listings is that they are prone to errors - it is possible to suggest something which is not actually a valid argument, which makes that suggestion unusable. As a result, some arguments include the `replaceSafeSuggestions()`, which provides type-safety checks for argument suggestions, as well as automatic "Bukkit-to-suggestion" conversion.
 
 The whole point of the safe argument suggestions method is that parameters entered in this method are **guaranteed** to work.
 
 The use of the safe replace suggestions function is basically the same as `replaceSuggestions()` from the previous section, except instead of returning a `String[]`, you now return a `T[]`, where `T` is the class corresponding to the argument. This is described in more detail in the table below.
 
 ```java
-Argument replaceWithSafeSuggestions(Function<SuggestionInfo, S[]> suggestions);
+Argument replaceSafeSuggestions(SafeSuggestions<T> suggestions);
+Argument includeSafeSuggestions(SafeSuggestions<T> suggestions);
+```
+
+-----
+
+## The `SafeSuggestions` interface
+
+Similar to the [`ArgumentSuggestions` interface](./argumentsuggestions.md#the-argumentsuggestions-interface), safe suggestions use the `SafeSuggestions` interface which is a functional interface that takes in a mapping function from an Object to a String and returns some `ArgumentSuggestions` which represent the argument's suggestions. Again, this is typically implemented for anyone that wants to use a more powerful suggestion system.
+
+As with `ArgumentSuggestions`, the CommandAPI provides some methods to generate safe suggestions:
+
+```java
+SafeSuggestions<T> suggest(T... suggestions);
+SafeSuggestions<T> suggest(Function<SuggestionInfo, T[]> suggestions);
+SafeSuggestions<T> suggestAsync(Function<SuggestionInfo, CompletableFuture<T[]>> suggestions);
+
+SafeSuggestions<T> tooltips(Tooltip<T>... suggestions);
+SafeSuggestions<T> tooltips(Function<SuggestionInfo, Tooltip<T>[]> suggestions);
+SafeSuggestions<T> tooltipsAsync(Function<SuggestionInfo, CompletableFuture<Tooltip<T>[]>> suggestions);
 ```
 
 -----
@@ -109,7 +128,7 @@ To do this, we first register our custom items:
 {{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:SafeRecipeArguments}}
 ```
 
-Once we've done that, we can now include them in our command registration. To do this, we use `replaceWithSafeSuggestions(recipes)` and then register our command as normal:
+Once we've done that, we can now include them in our command registration. To do this, we use `replaceSafeSuggestions(recipes)` and then register our command as normal:
 
 ```java
 {{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:SafeRecipeArguments_2}}
