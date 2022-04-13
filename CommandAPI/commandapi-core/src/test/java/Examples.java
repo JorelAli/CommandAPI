@@ -147,6 +147,7 @@ import dev.jorel.commandapi.arguments.TeamArgument;
 import dev.jorel.commandapi.arguments.TextArgument;
 import dev.jorel.commandapi.arguments.TimeArgument;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
+import dev.jorel.commandapi.executors.ExecutorType;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.IntegerRange;
 import dev.jorel.commandapi.wrappers.MathOperation;
@@ -1031,6 +1032,16 @@ new CommandAPICommand("suicide")
     })
     .register();
 /* ANCHOR_END: normalcommandexecutors2 */
+}
+
+{
+/* ANCHOR: normalcommandexecutors3 */
+new CommandAPICommand("suicide")
+    .executes((sender, args) -> {
+        ((LivingEntity) sender).setHealth(0);
+    }, ExecutorType.PLAYER, ExecutorType.ENTITY)
+    .register();
+/* ANCHOR_END: normalcommandexecutors3 */
 }
 
 @SuppressWarnings("deprecation")
