@@ -13,7 +13,7 @@ var namespaces_dup =
             [ "StringArgumentType", "classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_string_argument_type.html", "classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_string_argument_type" ]
           ] ],
           [ "builder", null, [
-            [ "ArgumentBuilder< S, T extends ArgumentBuilder", "classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder_3_01_s_00_01_t_01extends_01_argument_builder.html", null ],
+            [ "ArgumentBuilder", "classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html", "classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder" ],
             [ "LiteralArgumentBuilder", "classcom_1_1mojang_1_1brigadier_1_1builder_1_1_literal_argument_builder.html", "classcom_1_1mojang_1_1brigadier_1_1builder_1_1_literal_argument_builder" ],
             [ "RequiredArgumentBuilder", "classcom_1_1mojang_1_1brigadier_1_1builder_1_1_required_argument_builder.html", "classcom_1_1mojang_1_1brigadier_1_1builder_1_1_required_argument_builder" ]
           ] ],
@@ -26,8 +26,8 @@ var namespaces_dup =
             [ "SuggestionContext", "classcom_1_1mojang_1_1brigadier_1_1context_1_1_suggestion_context.html", "classcom_1_1mojang_1_1brigadier_1_1context_1_1_suggestion_context" ]
           ] ],
           [ "exceptions", null, [
-            [ "BuiltInExceptionProvider", "interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exception_provider.html", "interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exception_provider" ],
-            [ "BuiltInExceptions", "classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exceptions.html", "classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exceptions" ],
+            [ "BuiltInExceptionProvider", "interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exception_provider.html", null ],
+            [ "BuiltInExceptions", "classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_built_in_exceptions.html", null ],
             [ "CommandExceptionType", "interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_exception_type.html", null ],
             [ "CommandSyntaxException", "classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception.html", "classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception" ],
             [ "Dynamic2CommandExceptionType", "classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_dynamic2_command_exception_type.html", "classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_dynamic2_command_exception_type" ],
@@ -72,17 +72,18 @@ var namespaces_dup =
           [ "exceptions", "namespacedev_1_1jorel_1_1commandapi_1_1exceptions.html", "namespacedev_1_1jorel_1_1commandapi_1_1exceptions" ],
           [ "executors", "namespacedev_1_1jorel_1_1commandapi_1_1executors.html", "namespacedev_1_1jorel_1_1commandapi_1_1executors" ],
           [ "wrappers", "namespacedev_1_1jorel_1_1commandapi_1_1wrappers.html", "namespacedev_1_1jorel_1_1commandapi_1_1wrappers" ],
+          [ "ArgumentTree", "classdev_1_1jorel_1_1commandapi_1_1_argument_tree.html", "classdev_1_1jorel_1_1commandapi_1_1_argument_tree" ],
           [ "Brigadier", "classdev_1_1jorel_1_1commandapi_1_1_brigadier.html", "classdev_1_1jorel_1_1commandapi_1_1_brigadier" ],
           [ "CommandAPI", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i" ],
           [ "CommandAPICommand", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command" ],
           [ "CommandAPIConfig", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config" ],
           [ "CommandAPIHandler", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler" ],
           [ "CommandPermission", "classdev_1_1jorel_1_1commandapi_1_1_command_permission.html", "classdev_1_1jorel_1_1commandapi_1_1_command_permission" ],
+          [ "CommandTree", "classdev_1_1jorel_1_1commandapi_1_1_command_tree.html", "classdev_1_1jorel_1_1commandapi_1_1_command_tree" ],
           [ "Converter", "classdev_1_1jorel_1_1commandapi_1_1_converter.html", "classdev_1_1jorel_1_1commandapi_1_1_converter" ],
           [ "IStringTooltip", "interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html", "interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip" ],
           [ "StringTooltip", "classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html", "classdev_1_1jorel_1_1commandapi_1_1_string_tooltip" ],
-          [ "Tooltip", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html", "classdev_1_1jorel_1_1commandapi_1_1_tooltip" ],
-          [ "SuggestionInfo", "_suggestion_info_8java.html#a5d83b0eefed9160467528b780e69862b", null ]
+          [ "Tooltip", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html", "classdev_1_1jorel_1_1commandapi_1_1_tooltip" ]
         ] ]
       ] ]
     ] ]
