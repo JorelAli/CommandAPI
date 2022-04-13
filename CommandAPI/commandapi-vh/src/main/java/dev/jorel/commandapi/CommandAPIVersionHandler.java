@@ -27,8 +27,19 @@ import dev.jorel.commandapi.nms.NMS_1_17_R1;
 import dev.jorel.commandapi.nms.NMS_1_18_R1;
 import dev.jorel.commandapi.nms.NMS_1_18_R2;
 
+/**
+ * This file handles the NMS version to be loaded. The CommandAPIVersionHandler
+ * file within the commandapi-core module is NOT used at compile time. Instead,
+ * the commandapi-vh module is loaded instead, which doesn't use reflection to
+ * load NMS instances.
+ */
 public interface CommandAPIVersionHandler {
 
+	/**
+	 * Returns an instance of the version's implementation of NMS.
+	 * @param version the string of the Minecraft version (e.g. 1.16.5 or 1.17)
+	 * @return an instance of NMS which can run on the specified Minecraft version
+	 */
 	public static NMS<?> getNMS(String version) {
 		if(CommandAPI.getConfiguration().shouldUseLatestNMSVersion()) {
 			return new NMS_1_18_R2();

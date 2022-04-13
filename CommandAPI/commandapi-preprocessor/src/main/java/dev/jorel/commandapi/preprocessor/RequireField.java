@@ -26,6 +26,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * The RequireField determines asserts that a field exists in a specific
+ * location, with a specific name and of a specific type.
+ */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)
 @Repeatable(RequireFields.class)
@@ -33,16 +37,19 @@ public @interface RequireField {
 	
 	/**
 	 * The target class where a field is declared
+	 * @return the target class where this field is declared
 	 */
 	Class<?> in();     //e.g. MinecraftServer.class
 	
 	/**
 	 * The name of the field
+	 * @return the name of this field
 	 */
 	String name();         //e.g. "a"
 	
 	/**
 	 * The type for a field
+	 * @return the type of this field
 	 */
 	Class<?> ofType(); //e.g. String.class
 	

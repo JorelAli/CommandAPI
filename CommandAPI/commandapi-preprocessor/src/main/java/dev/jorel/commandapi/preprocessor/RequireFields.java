@@ -25,10 +25,17 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * The Repeatable annotation of RequireFields.
+ */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)
 public @interface RequireFields {
 	
+	/**
+	 * An array of RequireField annotations
+	 * @return an array of RequireField annotations
+	 */
 	RequireField[] value();
 	
 }

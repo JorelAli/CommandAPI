@@ -33,6 +33,9 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
 import javax.tools.Diagnostic.Kind;
 
+/**
+ * The main entry point for the CommandAPI annotation preprocessor
+ */
 public class Preprocessor extends AbstractProcessor {
 
 	@Override
