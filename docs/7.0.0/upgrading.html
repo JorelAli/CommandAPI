@@ -178,6 +178,10 @@
                         
                         <h1><a class="header" href="#upgrading-guide" id="upgrading-guide">Upgrading guide</a></h1>
 <h2><a class="header" href="#from-version-652-to-700" id="from-version-652-to-700">From version 6.5.2 to 7.0.0</a></h2>
+<h3><a class="header" href="#maven-repository" id="maven-repository">Maven repository</a></h3>
+<p>The Maven repository used to serve the CommandAPI has changed from JitPack.io to Maven Central. For Maven projects, you no longer require wan explicit <code>&lt;repository&gt;</code> entry for the CommandAPI. for Gradle projects, you need to ensure <code>mavenCentral()</code> in present in your <code>repositories</code> section.</p>
+<p><strong>The group ID has changed from <code>dev.jorel.CommandAPI</code> to <code>dev.jorel</code></strong></p>
+<p>More information about setting up your development environment can be found in <a href="./quickstart.html">Setting up your development environment</a>.</p>
 <h3><a class="header" href="#commandapi-command-failures" id="commandapi-command-failures">CommandAPI command failures</a></h3>
 <p>The <code>CommandAPI.fail()</code> no longer automatically throws the exception that it creates, and instead now requires you to manually throw the exception yourself. This improves upon invalid states in command executors and allows invalid states to be identified more easily at compile time. To update, simply add the <code>throw</code> keyword before you call <code>CommandAPI.fail()</code>:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;mycommand&quot;)

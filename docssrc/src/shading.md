@@ -72,21 +72,12 @@ public {{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:s
 
 To shade the CommandAPI into a maven project, you'll need to use the `commandapi-shade` dependency, which is optimized for shading and doesn't include plugin-specific files _(such as `plugin.yml`)_. **You do not need to use `commandapi-core` if you are shading**:
 
-Add the repository and dependencies:
-
-```xml
-<repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
-</repositories>
-```
+Add the CommandAPI shade dependency:
 
 ```xml
 <dependencies>
     <dependency>
-        <groupId>dev.jorel.CommandAPI</groupId>
+        <groupId>dev.jorel</groupId>
         <artifactId>commandapi-shade</artifactId>
         <version>7.0.0</version>
     </dependency>
@@ -153,7 +144,7 @@ Add our repositories:
 
 ```gradle
 repositories {
-    maven { url = "https://jitpack.io" }
+    mavenCentral()
     maven { url = "https://repo.codemc.org/repository/maven-public/" }
 }
 ```
@@ -162,7 +153,7 @@ Next, we declare our dependencies:
 
 ```gradle
 dependencies {
-    compile "dev.jorel.CommandAPI:commandapi-shade:7.0.0"   
+    compile "dev.jorel:commandapi-shade:7.0.0"   
 }
 ```
 
@@ -171,7 +162,7 @@ Then we add it to the `shadowJar` task configuration:
 ```gradle
 shadowJar {
     dependencies {
-        include dependency("dev.jorel.CommandAPI:commandapi-shade:7.0.0")
+        include dependency("dev.jorel:commandapi-shade:7.0.0")
     }
 }
 ```

@@ -240,17 +240,10 @@ CommandAPI.onEnable(Plugin plugin);
 <hr />
 <h2><a class="header" href="#shading-with-maven" id="shading-with-maven">Shading with Maven</a></h2>
 <p>To shade the CommandAPI into a maven project, you'll need to use the <code>commandapi-shade</code> dependency, which is optimized for shading and doesn't include plugin-specific files <em>(such as <code>plugin.yml</code>)</em>. <strong>You do not need to use <code>commandapi-core</code> if you are shading</strong>:</p>
-<p>Add the repository and dependencies:</p>
-<pre><code class="language-xml">&lt;repositories&gt;
-    &lt;repository&gt;
-        &lt;id&gt;jitpack.io&lt;/id&gt;
-        &lt;url&gt;https://jitpack.io&lt;/url&gt;
-    &lt;/repository&gt;
-&lt;/repositories&gt;
-</code></pre>
+<p>Add the CommandAPI shade dependency:</p>
 <pre><code class="language-xml">&lt;dependencies&gt;
     &lt;dependency&gt;
-        &lt;groupId&gt;dev.jorel.CommandAPI&lt;/groupId&gt;
+        &lt;groupId&gt;dev.jorel&lt;/groupId&gt;
         &lt;artifactId&gt;commandapi-shade&lt;/artifactId&gt;
         &lt;version&gt;7.0.0&lt;/version&gt;
     &lt;/dependency&gt;
@@ -302,19 +295,19 @@ CommandAPI.onEnable(Plugin plugin);
 </code></pre>
 <p>Add our repositories:</p>
 <pre><code class="language-gradle">repositories {
-    maven { url = &quot;https://jitpack.io&quot; }
+    mavenCentral()
     maven { url = &quot;https://repo.codemc.org/repository/maven-public/&quot; }
 }
 </code></pre>
 <p>Next, we declare our dependencies:</p>
 <pre><code class="language-gradle">dependencies {
-    compile &quot;dev.jorel.CommandAPI:commandapi-shade:7.0.0&quot;   
+    compile &quot;dev.jorel:commandapi-shade:7.0.0&quot;   
 }
 </code></pre>
 <p>Then we add it to the <code>shadowJar</code> task configuration:</p>
 <pre><code class="language-gradle">shadowJar {
     dependencies {
-        include dependency(&quot;dev.jorel.CommandAPI:commandapi-shade:7.0.0&quot;)
+        include dependency(&quot;dev.jorel:commandapi-shade:7.0.0&quot;)
     }
 }
 </code></pre>

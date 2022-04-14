@@ -183,20 +183,10 @@
 <h2><a class="header" href="#using-maven" id="using-maven">Using Maven</a></h2>
 <ul>
 <li>
-<p>If you haven't already done so, add the maven repository to your <code>pom.xml</code> file:</p>
-<pre><code class="language-xml">&lt;repositories&gt;
-    &lt;repository&gt;
-        &lt;id&gt;jitpack.io&lt;/id&gt;
-        &lt;url&gt;https://jitpack.io&lt;/url&gt;
-    &lt;/repository&gt;
-&lt;/repositories&gt;
-</code></pre>
-</li>
-<li>
 <p>Add the annotation dependency to your <code>pom.xml</code>:</p>
 <pre><code class="language-xml">&lt;dependencies&gt;
     &lt;dependency&gt;
-        &lt;groupId&gt;dev.jorel.CommandAPI&lt;/groupId&gt;
+        &lt;groupId&gt;dev.jorel&lt;/groupId&gt;
         &lt;artifactId&gt;commandapi-annotations&lt;/artifactId&gt;
         &lt;version&gt;7.0.0&lt;/version&gt;
         &lt;scope&gt;provided&lt;/scope&gt;
@@ -215,7 +205,7 @@
             &lt;configuration&gt;
                 &lt;annotationProcessorPaths&gt;
                     &lt;path&gt;
-                        &lt;groupId&gt;dev.jorel.CommandAPI&lt;/groupId&gt;
+                        &lt;groupId&gt;dev.jorel&lt;/groupId&gt;
                         &lt;artifactId&gt;commandapi-annotations&lt;/artifactId&gt;
                         &lt;version&gt;7.0.0&lt;/version&gt;
                     &lt;/path&gt;
@@ -231,9 +221,9 @@
 <h2><a class="header" href="#using-gradle" id="using-gradle">Using Gradle</a></h2>
 <ul>
 <li>
-<p>If you haven't already done so, add the maven repository to your <code>build.gradle</code> file:</p>
+<p>If you haven't already done so, add the maven central repository to your <code>build.gradle</code> file:</p>
 <pre><code class="language-gradle">repositories {
-    maven { url = &quot;https://jitpack.io&quot; }
+    mavenCentral()
     maven { url = &quot;https://repo.codemc.org/repository/maven-public/&quot; }
 }
 </code></pre>
@@ -241,8 +231,8 @@
 <li>
 <p>Add the dependency and annotation processor to your list of dependencies in your <code>build.gradle</code> file:</p>
 <pre><code class="language-gradle">dependencies {
-    compileOnly &quot;dev.jorel.CommandAPI:commandapi-annotations:7.0.0&quot;
-    annotationProcessor &quot;dev.jorel.CommandAPI:commandapi-annotations:7.0.0&quot;
+    compileOnly &quot;dev.jorel:commandapi-annotations:7.0.0&quot;
+    annotationProcessor &quot;dev.jorel:commandapi-annotations:7.0.0&quot;
 }
 </code></pre>
 </li>

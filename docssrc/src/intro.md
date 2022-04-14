@@ -27,9 +27,9 @@ The CommandAPI does not follow the "standard" method of registering commands. In
 
 This documentation is split into the major sections that build up the CommandAPI. It's been designed in such a way that it should be easy to find exactly what you want to help you get started with the CommandAPI, and how to make effective use of it. Each step of the way, the documentation will include examples which showcase how to use the CommandAPI. 
 
-You can use the side bar on the left to access the various sections of the documentation and can change the theme to your liking using the paintbrush icon in the top left corner. 
+You can use the side bar on the left to access the various sections of the documentation and can change the theme to your liking using the palette icon <i class="fas fa-palette"></i> in the top left corner. 
 
-Using the search icon in the top left corner, you can search for anything in this entire documentation. For example, typing "Example" will show a list of examples which are included throughout the documentation.
+Using the search icon <i class="fas fa-search"></i> in the top left corner, you can search for anything in this entire documentation. For example, typing "Example" will show a list of examples which are included throughout the documentation.
 
 -----
 
@@ -39,6 +39,7 @@ Here's the list of changes to the documentation between each update. You can vie
 
 ### Documentation changes 6.5.4 \\(\rightarrow\\) 7.0.0:
 
+- Changed the repo that the CommandAPI is served from JitPack to Maven Central.
 - Remove direct link to `CommandAPI.jar` file from [Installation for server owners](./installation.md), in favor of pointing to the latest release page (to allow version numbers to appear in the file name).
 - Rewrite the [Argument suggestions](./argumentsuggestions.md) section to cover the new argument suggestions API.
 - Update the [Upgrading guide](./upgrading.md) for the new changes in 7.0.0.

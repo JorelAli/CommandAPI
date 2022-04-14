@@ -8,23 +8,12 @@ The annotation system effectively needs to be added twice: Once for compilation 
 
 ## Using Maven
 
-- If you haven't already done so, add the maven repository to your `pom.xml` file:
-
-  ```xml
-  <repositories>
-      <repository>
-          <id>jitpack.io</id>
-          <url>https://jitpack.io</url>
-      </repository>
-  </repositories>
-  ```
-
 - Add the annotation dependency to your `pom.xml`:
 
   ```xml
   <dependencies>
       <dependency>
-          <groupId>dev.jorel.CommandAPI</groupId>
+          <groupId>dev.jorel</groupId>
           <artifactId>commandapi-annotations</artifactId>
           <version>7.0.0</version>
           <scope>provided</scope>
@@ -44,7 +33,7 @@ The annotation system effectively needs to be added twice: Once for compilation 
               <configuration>
                   <annotationProcessorPaths>
                       <path>
-                          <groupId>dev.jorel.CommandAPI</groupId>
+                          <groupId>dev.jorel</groupId>
                           <artifactId>commandapi-annotations</artifactId>
                           <version>7.0.0</version>
                       </path>
@@ -59,11 +48,11 @@ The annotation system effectively needs to be added twice: Once for compilation 
 
 ## Using Gradle
 
-- If you haven't already done so, add the maven repository to your `build.gradle` file:
+- If you haven't already done so, add the maven central repository to your `build.gradle` file:
 
   ```gradle
   repositories {
-      maven { url = "https://jitpack.io" }
+      mavenCentral()
       maven { url = "https://repo.codemc.org/repository/maven-public/" }
   }
   ```
@@ -72,8 +61,8 @@ The annotation system effectively needs to be added twice: Once for compilation 
 
   ```gradle
   dependencies {
-      compileOnly "dev.jorel.CommandAPI:commandapi-annotations:7.0.0"
-      annotationProcessor "dev.jorel.CommandAPI:commandapi-annotations:7.0.0"
+      compileOnly "dev.jorel:commandapi-annotations:7.0.0"
+      annotationProcessor "dev.jorel:commandapi-annotations:7.0.0"
   }
   ```
 

@@ -201,13 +201,14 @@
 <hr />
 <h2><a class="header" href="#how-this-documentation-works" id="how-this-documentation-works">How this documentation works</a></h2>
 <p>This documentation is split into the major sections that build up the CommandAPI. It's been designed in such a way that it should be easy to find exactly what you want to help you get started with the CommandAPI, and how to make effective use of it. Each step of the way, the documentation will include examples which showcase how to use the CommandAPI. </p>
-<p>You can use the side bar on the left to access the various sections of the documentation and can change the theme to your liking using the paintbrush icon in the top left corner. </p>
-<p>Using the search icon in the top left corner, you can search for anything in this entire documentation. For example, typing &quot;Example&quot; will show a list of examples which are included throughout the documentation.</p>
+<p>You can use the side bar on the left to access the various sections of the documentation and can change the theme to your liking using the palette icon <i class="fas fa-palette"></i> in the top left corner. </p>
+<p>Using the search icon <i class="fas fa-search"></i> in the top left corner, you can search for anything in this entire documentation. For example, typing &quot;Example&quot; will show a list of examples which are included throughout the documentation.</p>
 <hr />
 <h2><a class="header" href="#documentation-changelog" id="documentation-changelog">Documentation changelog</a></h2>
 <p>Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.</p>
 <h3><a class="header" href="#documentation-changes-654-rightarrow-700" id="documentation-changes-654-rightarrow-700">Documentation changes 6.5.4 \(\rightarrow\) 7.0.0:</a></h3>
 <ul>
+<li>Changed the repo that the CommandAPI is served from JitPack to Maven Central.</li>
 <li>Remove direct link to <code>CommandAPI.jar</code> file from <a href="./installation.html">Installation for server owners</a>, in favor of pointing to the latest release page (to allow version numbers to appear in the file name).</li>
 <li>Rewrite the <a href="./argumentsuggestions.html">Argument suggestions</a> section to cover the new argument suggestions API.</li>
 <li>Update the <a href="./upgrading.html">Upgrading guide</a> for the new changes in 7.0.0.</li>
@@ -901,20 +902,10 @@ depend: [CommandAPI]
 </blockquote>
 <ul>
 <li>
-<p>Add the maven repository to your <code>pom.xml</code> file:</p>
-<pre><code class="language-xml">&lt;repositories&gt;
-    &lt;repository&gt;
-        &lt;id&gt;jitpack.io&lt;/id&gt;
-        &lt;url&gt;https://jitpack.io&lt;/url&gt;
-    &lt;/repository&gt;
-&lt;/repositories&gt;
-</code></pre>
-</li>
-<li>
 <p>Add the dependency to your <code>pom.xml</code>:</p>
 <pre><code class="language-xml">&lt;dependencies&gt;
     &lt;dependency&gt;
-        &lt;groupId&gt;dev.jorel.CommandAPI&lt;/groupId&gt;
+        &lt;groupId&gt;dev.jorel&lt;/groupId&gt;
         &lt;artifactId&gt;commandapi-core&lt;/artifactId&gt;
         &lt;version&gt;7.0.0&lt;/version&gt;
         &lt;scope&gt;provided&lt;/scope&gt;
@@ -928,7 +919,7 @@ depend: [CommandAPI]
 <li>
 <p>Add the repositories to your <code>build.gradle</code> file (the second repository is required because the CommandAPI depends on the NBT-API):</p>
 <pre><code class="language-gradle">repositories {
-    maven { url = &quot;https://jitpack.io&quot; }
+    mavenCentral()
     maven { url = &quot;https://repo.codemc.org/repository/maven-public/&quot; }
 }
 </code></pre>
@@ -936,7 +927,7 @@ depend: [CommandAPI]
 <li>
 <p>Add the dependency to your list of dependencies in your <code>build.gradle</code> file:</p>
 <pre><code class="language-gradle">dependencies {
-    compileOnly &quot;dev.jorel.CommandAPI:commandapi-core:7.0.0&quot;
+    compileOnly &quot;dev.jorel:commandapi-core:7.0.0&quot;
 }
 </code></pre>
 </li>
@@ -1005,17 +996,10 @@ CommandAPI.onEnable(Plugin plugin);
 <hr />
 <h2><a class="header" href="#shading-with-maven" id="shading-with-maven">Shading with Maven</a></h2>
 <p>To shade the CommandAPI into a maven project, you'll need to use the <code>commandapi-shade</code> dependency, which is optimized for shading and doesn't include plugin-specific files <em>(such as <code>plugin.yml</code>)</em>. <strong>You do not need to use <code>commandapi-core</code> if you are shading</strong>:</p>
-<p>Add the repository and dependencies:</p>
-<pre><code class="language-xml">&lt;repositories&gt;
-    &lt;repository&gt;
-        &lt;id&gt;jitpack.io&lt;/id&gt;
-        &lt;url&gt;https://jitpack.io&lt;/url&gt;
-    &lt;/repository&gt;
-&lt;/repositories&gt;
-</code></pre>
+<p>Add the CommandAPI shade dependency:</p>
 <pre><code class="language-xml">&lt;dependencies&gt;
     &lt;dependency&gt;
-        &lt;groupId&gt;dev.jorel.CommandAPI&lt;/groupId&gt;
+        &lt;groupId&gt;dev.jorel&lt;/groupId&gt;
         &lt;artifactId&gt;commandapi-shade&lt;/artifactId&gt;
         &lt;version&gt;7.0.0&lt;/version&gt;
     &lt;/dependency&gt;
@@ -1067,19 +1051,19 @@ CommandAPI.onEnable(Plugin plugin);
 </code></pre>
 <p>Add our repositories:</p>
 <pre><code class="language-gradle">repositories {
-    maven { url = &quot;https://jitpack.io&quot; }
+    mavenCentral()
     maven { url = &quot;https://repo.codemc.org/repository/maven-public/&quot; }
 }
 </code></pre>
 <p>Next, we declare our dependencies:</p>
 <pre><code class="language-gradle">dependencies {
-    compile &quot;dev.jorel.CommandAPI:commandapi-shade:7.0.0&quot;   
+    compile &quot;dev.jorel:commandapi-shade:7.0.0&quot;   
 }
 </code></pre>
 <p>Then we add it to the <code>shadowJar</code> task configuration:</p>
 <pre><code class="language-gradle">shadowJar {
     dependencies {
-        include dependency(&quot;dev.jorel.CommandAPI:commandapi-shade:7.0.0&quot;)
+        include dependency(&quot;dev.jorel:commandapi-shade:7.0.0&quot;)
     }
 }
 </code></pre>
@@ -1094,20 +1078,10 @@ CommandAPI.onEnable(Plugin plugin);
 <h2><a class="header" href="#using-maven" id="using-maven">Using Maven</a></h2>
 <ul>
 <li>
-<p>If you haven't already done so, add the maven repository to your <code>pom.xml</code> file:</p>
-<pre><code class="language-xml">&lt;repositories&gt;
-    &lt;repository&gt;
-        &lt;id&gt;jitpack.io&lt;/id&gt;
-        &lt;url&gt;https://jitpack.io&lt;/url&gt;
-    &lt;/repository&gt;
-&lt;/repositories&gt;
-</code></pre>
-</li>
-<li>
 <p>Add the annotation dependency to your <code>pom.xml</code>:</p>
 <pre><code class="language-xml">&lt;dependencies&gt;
     &lt;dependency&gt;
-        &lt;groupId&gt;dev.jorel.CommandAPI&lt;/groupId&gt;
+        &lt;groupId&gt;dev.jorel&lt;/groupId&gt;
         &lt;artifactId&gt;commandapi-annotations&lt;/artifactId&gt;
         &lt;version&gt;7.0.0&lt;/version&gt;
         &lt;scope&gt;provided&lt;/scope&gt;
@@ -1126,7 +1100,7 @@ CommandAPI.onEnable(Plugin plugin);
             &lt;configuration&gt;
                 &lt;annotationProcessorPaths&gt;
                     &lt;path&gt;
-                        &lt;groupId&gt;dev.jorel.CommandAPI&lt;/groupId&gt;
+                        &lt;groupId&gt;dev.jorel&lt;/groupId&gt;
                         &lt;artifactId&gt;commandapi-annotations&lt;/artifactId&gt;
                         &lt;version&gt;7.0.0&lt;/version&gt;
                     &lt;/path&gt;
@@ -1142,9 +1116,9 @@ CommandAPI.onEnable(Plugin plugin);
 <h2><a class="header" href="#using-gradle-1" id="using-gradle-1">Using Gradle</a></h2>
 <ul>
 <li>
-<p>If you haven't already done so, add the maven repository to your <code>build.gradle</code> file:</p>
+<p>If you haven't already done so, add the maven central repository to your <code>build.gradle</code> file:</p>
 <pre><code class="language-gradle">repositories {
-    maven { url = &quot;https://jitpack.io&quot; }
+    mavenCentral()
     maven { url = &quot;https://repo.codemc.org/repository/maven-public/&quot; }
 }
 </code></pre>
@@ -1152,8 +1126,8 @@ CommandAPI.onEnable(Plugin plugin);
 <li>
 <p>Add the dependency and annotation processor to your list of dependencies in your <code>build.gradle</code> file:</p>
 <pre><code class="language-gradle">dependencies {
-    compileOnly &quot;dev.jorel.CommandAPI:commandapi-annotations:7.0.0&quot;
-    annotationProcessor &quot;dev.jorel.CommandAPI:commandapi-annotations:7.0.0&quot;
+    compileOnly &quot;dev.jorel:commandapi-annotations:7.0.0&quot;
+    annotationProcessor &quot;dev.jorel:commandapi-annotations:7.0.0&quot;
 }
 </code></pre>
 </li>
@@ -5280,6 +5254,10 @@ arguments.add(new LiteralArgument(&quot;tp&quot;).withRequirement(testIfPlayerHa
 <p>This is the brains behind the documentation. It's a collection of Markdown files which form the CommandAPI documentation and is built using <a href="https://github.com/rust-lang/mdBook">mdBook</a>. For the CommandAPI in particular, it is actually built using my own custom fork of mdBook (<a href="https://github.com/JorelAli/mdBook/tree/fa5">here, in the fa5 branch</a>) which incorporates <a href="https://github.com/rust-lang/mdBook/pull/1225">this pull request</a> which adds support for FontAwesome 5.</p>
 <h1><a class="header" href="#upgrading-guide" id="upgrading-guide">Upgrading guide</a></h1>
 <h2><a class="header" href="#from-version-652-to-700" id="from-version-652-to-700">From version 6.5.2 to 7.0.0</a></h2>
+<h3><a class="header" href="#maven-repository" id="maven-repository">Maven repository</a></h3>
+<p>The Maven repository used to serve the CommandAPI has changed from JitPack.io to Maven Central. For Maven projects, you no longer require wan explicit <code>&lt;repository&gt;</code> entry for the CommandAPI. for Gradle projects, you need to ensure <code>mavenCentral()</code> in present in your <code>repositories</code> section.</p>
+<p><strong>The group ID has changed from <code>dev.jorel.CommandAPI</code> to <code>dev.jorel</code></strong></p>
+<p>More information about setting up your development environment can be found in <a href="./quickstart.html">Setting up your development environment</a>.</p>
 <h3><a class="header" href="#commandapi-command-failures" id="commandapi-command-failures">CommandAPI command failures</a></h3>
 <p>The <code>CommandAPI.fail()</code> no longer automatically throws the exception that it creates, and instead now requires you to manually throw the exception yourself. This improves upon invalid states in command executors and allows invalid states to be identified more easily at compile time. To update, simply add the <code>throw</code> keyword before you call <code>CommandAPI.fail()</code>:</p>
 <pre><code class="language-java">new CommandAPICommand(&quot;mycommand&quot;)
@@ -5566,6 +5544,7 @@ Caused by: java.lang.IllegalArgumentException: Whilst parsing command on line 2:
 <li><a href="https://github.com/Minenash"><strong>Minenash</strong></a>, who was the driving force for the CommandAPI's 3.0 release, which added a plethora of new arguments to the CommandAPI. Minenash's research, code prototypes, documentation examples, bug testing and code review was a tremendous help to make the 3.0 release such a feature-rich version.</li>
 <li><a href="https://github.com/Michael-Ziluck"><strong>Michael-Ziluck</strong></a>, who created an amazing pull request that helped greatly improve the performance of the CommandAPI as well as structure the entire CommandAPI project into a multi-module Maven project which significantly improved the maintainability of the CommandAPI for the future.</li>
 <li><a href="https://github.com/portlek"><strong>portlek</strong></a>, who helped migrate the CommandAPI's repository to <a href="https://jitpack.io/#dev.jorel/CommandAPI">jitpack.io</a>. They helped debug some technical errors with remote building and tested that the repository was working throughout the process.</li>
+<li><strong><a href="https://github.com/469512345">469512345</a></strong>, who redesigned and implemented the suggestions feature for arguments, bringing powerful asynchronous arguments and highly-extensible suggestions to the CommandAPI.  They also implemented the CommandTree feature to bring yet another way for developers to create commands with the CommandAPI.</li>
 </ul>
 <p>I'd also like to give a special mention to the following people that have helped find bugs or have supported the project in some way: aianlinb, Baka-Mitai, Checkium, Comeza, DerpNerb, DogeBogey, endrdragon, EnragedRabisu, i509VCB, KieranGateley, lifespan, Loapu, Marvmallow, MatrixTunnel, Ricky12Awesome, SHsuperCM, SpaceCheetah, The_Gavster, Tinkot, vladfrangu, zedwick</p>
 <hr />

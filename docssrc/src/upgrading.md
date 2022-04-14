@@ -2,6 +2,14 @@
 
 ## From version 6.5.2 to 7.0.0
 
+### Maven repository
+
+The Maven repository used to serve the CommandAPI has changed from JitPack.io to Maven Central. For Maven projects, you no longer require wan explicit `<repository>` entry for the CommandAPI. for Gradle projects, you need to ensure `mavenCentral()` in present in your `repositories` section.
+
+**The group ID has changed from `dev.jorel.CommandAPI` to `dev.jorel`**
+
+More information about setting up your development environment can be found in [Setting up your development environment](./quickstart.md).
+
 ### CommandAPI command failures
 
 The `CommandAPI.fail()` no longer automatically throws the exception that it creates, and instead now requires you to manually throw the exception yourself. This improves upon invalid states in command executors and allows invalid states to be identified more easily at compile time. To update, simply add the `throw` keyword before you call `CommandAPI.fail()`:

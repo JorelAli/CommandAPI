@@ -28,23 +28,12 @@ depend: [CommandAPI]
 >
 > If you've never used maven before, I highly recommend it! It makes it easier to keep your code updated with the latest dependency updates. For information on how to set up a plugin using maven, you can read [Bukkit's plugin tutorial](https://bukkit.gamepedia.com/Plugin_Tutorial).
 
-* Add the maven repository to your `pom.xml` file:
-
-  ```xml
-  <repositories>
-      <repository>
-          <id>jitpack.io</id>
-          <url>https://jitpack.io</url>
-      </repository>
-  </repositories>
-  ```
-
 * Add the dependency to your `pom.xml`:
 
   ```xml
   <dependencies>
       <dependency>
-          <groupId>dev.jorel.CommandAPI</groupId>
+          <groupId>dev.jorel</groupId>
           <artifactId>commandapi-core</artifactId>
           <version>7.0.0</version>
           <scope>provided</scope>
@@ -58,7 +47,7 @@ depend: [CommandAPI]
 
   ```gradle
   repositories {
-      maven { url = "https://jitpack.io" }
+      mavenCentral()
       maven { url = "https://repo.codemc.org/repository/maven-public/" }
   }
   ```
@@ -67,6 +56,6 @@ depend: [CommandAPI]
 
   ```gradle
   dependencies {
-      compileOnly "dev.jorel.CommandAPI:commandapi-core:7.0.0"
+      compileOnly "dev.jorel:commandapi-core:7.0.0"
   }
   ```
