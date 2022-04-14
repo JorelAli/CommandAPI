@@ -29,6 +29,29 @@
 	<artifactId>commandapi</artifactId>
 	<version>7.0.0</version>
 	<packaging>pom</packaging>
+
+	<licenses>
+		<license>
+			<name>MIT License</name>
+			<url>http://www.opensource.org/licenses/mit-license.php</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<id>jorelali</id>
+			<name>Jorel Ali</name>
+			<email>maven@jorel.dev</email>
+			<url>https://jorel.dev/</url>
+		</developer>
+	</developers>
+
+	<scm>
+		<connection>scm:git:git://github.com/JorelAli/CommandAPI.git</connection>
+		<developerConnection>scm:git:ssh://github.com:JorelAli/CommandAPI.git</developerConnection>
+		<url>https://github.com/JorelAli/CommandAPI/tree/master</url>
+	</scm>
+
 	<modules>
 		<!-- Compile time reflection checker -->
 		<module>commandapi-preprocessor</module>
@@ -59,16 +82,16 @@
 		<maven.compiler.target>17</maven.compiler.target>
 		<java.version>17</java.version>
 
-		<!-- Shared libraries. These are declared here so they can be updated
-			 easily. These are present in each module to prevent accidentally
-			 "leaking" these dependencies to dependents of commandapi-core. -->
+		<!-- Shared libraries. These are declared here so they can be updated easily. 
+			These are present in each module to prevent accidentally "leaking" these 
+			dependencies to dependents of commandapi-core. -->
 		<nbtapi.version>2.9.2</nbtapi.version>
 		<paper.version>1.18.2-R0.1-SNAPSHOT</paper.version>
 	</properties>
 
 	<build>
 		<defaultGoal>clean install</defaultGoal>
-		<finalName>CommandAPIv${project.version}_${maven.build.timestamp}</finalName>
+		<finalName>CommandAPI-${project.version}_${maven.build.timestamp}</finalName>
 		<pluginManagement>
 			<plugins>
 				<plugin>
