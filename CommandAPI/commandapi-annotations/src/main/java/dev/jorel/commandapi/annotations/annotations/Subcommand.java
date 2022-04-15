@@ -36,6 +36,6 @@ public @interface Subcommand {
 	 * The names (and thus, aliases) of this subcommand
 	 * @return the names that this subcommand produces
 	 */
-	public String[] value();
+	public String[] value() default {};
 	
 }

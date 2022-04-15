@@ -38,10 +38,23 @@
 			<artifactId>commandapi-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
+		<!-- Testing -->
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
 			<version>1.18.2-R0.1-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.testing.compile</groupId>
+			<artifactId>compile-testing</artifactId>
+			<version>0.19</version>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>5.8.2</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -57,12 +70,17 @@
 							<goal>testCompile</goal>
 						</goals>
 						<configuration>
-							<annotationProcessors>
+							<!--<annotationProcessors>
 								<annotationProcessor>dev.jorel.commandapi.annotations.Annotations</annotationProcessor>
-							</annotationProcessors>
+							</annotationProcessors>-->
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M6</version>
 			</plugin>
 		</plugins>
 	</build>
