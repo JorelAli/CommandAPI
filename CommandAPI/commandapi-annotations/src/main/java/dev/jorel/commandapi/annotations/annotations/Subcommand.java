@@ -28,7 +28,7 @@ import java.lang.annotation.Target;
 /**
  * The annotation to indicate that this method is a subcommand
  */
-@Target(ElementType.METHOD)
+@Target( { ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.SOURCE)
 public @interface Subcommand {
 

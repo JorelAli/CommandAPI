@@ -15,7 +15,7 @@ public class Utils {
 		return element.getAnnotation(annotation) != null;
 	}
 	
-	public static AnnotationEnum[] unpackPresentAnnotations(Element element) {
+	public static AnnotationEnum[] unpackMethodAnnotations(Element element) {
 		List<AnnotationEnum> annotations = new ArrayList<>();
 		
 		for(Class<? extends Annotation> annotation : Annotations.METHOD_ANNOTATIONS) {

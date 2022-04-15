@@ -27,7 +27,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import dev.jorel.commandapi.annotations.annotations.Command;
-import dev.jorel.commandapi.annotations.annotations.Default;
 import dev.jorel.commandapi.annotations.annotations.Help;
 import dev.jorel.commandapi.annotations.annotations.Permission;
 import dev.jorel.commandapi.annotations.annotations.Subcommand;
@@ -41,7 +40,7 @@ public class TestCommand {
 	// List of warp names and their locations
 	static Map<String, Location> warps = new HashMap<>();
 	
-	@Default
+	@Subcommand
 	public static void warp(CommandSender sender) {
 		sender.sendMessage("--- Warp help ---");
 		sender.sendMessage("/warp - Show this help");
@@ -50,7 +49,7 @@ public class TestCommand {
 		sender.sendMessage("/warp tp <player> <warpname> - Teleports a player to a warp");
 	}
 	
-	@Default
+	@Subcommand
 	public static void warp(Player player, @AStringArgument String warpName) {
 		player.teleport(warps.get(warpName));
 	}

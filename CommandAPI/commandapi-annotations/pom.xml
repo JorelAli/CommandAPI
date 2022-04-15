@@ -50,6 +50,7 @@
 			<groupId>com.google.testing.compile</groupId>
 			<artifactId>compile-testing</artifactId>
 			<version>0.19</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -61,22 +62,6 @@
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>testCompile</goal>
-						</goals>
-						<configuration>
-							<!--<annotationProcessors>
-								<annotationProcessor>dev.jorel.commandapi.annotations.Annotations</annotationProcessor>
-							</annotationProcessors>-->
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>

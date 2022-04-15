@@ -50,7 +50,6 @@ import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.annotations.annotations.Alias;
 import dev.jorel.commandapi.annotations.annotations.Command;
-import dev.jorel.commandapi.annotations.annotations.Default;
 import dev.jorel.commandapi.annotations.annotations.Help;
 import dev.jorel.commandapi.annotations.annotations.NeedsOp;
 import dev.jorel.commandapi.annotations.annotations.Permission;
@@ -132,7 +131,7 @@ public class Annotations extends AbstractProcessor {
 			ATeamArgument.class, ATextArgument.class, ATimeArgument.class, AUUIDArgument.class );
 			
 	public static final Set<Class<? extends Annotation>> METHOD_ANNOTATIONS = Set.of(
-		Default.class, Subcommand.class, Suggestion.class
+		Subcommand.class, Suggestion.class
 	);
 	
 	public static final Set<Class<? extends Annotation>> OTHER_ANNOTATIONS = Set.of(Alias.class, Command.class,
@@ -480,8 +479,7 @@ public class Annotations extends AbstractProcessor {
 			indent++;
 
 			for (Element methodElement : classElement.getEnclosedElements()) {
-				if (methodElement.getAnnotation(Default.class) != null
-						|| methodElement.getAnnotation(Subcommand.class) != null) {
+				if (methodElement.getAnnotation(Subcommand.class) != null) {
 					
 					ExecutableType methodType = (ExecutableType) methodElement.asType();
 					if(!methodElement.getModifiers().contains(Modifier.STATIC)) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2018, 2020 Jorel Ali (Skepter) - MIT License
+ * Copyright 2022 Jorel Ali (Skepter) - MIT License
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -26,12 +26,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The annotation to indicate that this method is the default command executor
- * when no subcommands are used.
+ * Explicitly state a node name, instead of using the parameter's name
  */
-@AnnotationType(AnnotationEnum.DEFAULT)
-@Target(ElementType.METHOD)
+
+@Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.SOURCE)
-public @interface Default {
+public @interface NodeName {
+
+	public String value();
 	
 }

@@ -26,10 +26,10 @@ import org.bukkit.entity.Entity;
 
 import dev.jorel.commandapi.annotations.annotations.Alias;
 import dev.jorel.commandapi.annotations.annotations.Command;
-import dev.jorel.commandapi.annotations.annotations.Default;
 import dev.jorel.commandapi.annotations.annotations.Help;
 import dev.jorel.commandapi.annotations.annotations.NeedsOp;
 import dev.jorel.commandapi.annotations.annotations.Permission;
+import dev.jorel.commandapi.annotations.annotations.Subcommand;
 import dev.jorel.commandapi.annotations.arguments.ADoubleArgument;
 import dev.jorel.commandapi.annotations.arguments.AEntitySelectorArgument;
 import dev.jorel.commandapi.annotations.arguments.AFloatArgument;
@@ -47,7 +47,7 @@ import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
 /* ANCHOR: teleport_command */
 @Command("teleport")    
 @Alias({"tp", "tele"})
-public class Test2Command {
+public class DocumentationExample {
 /* ANCHOR_END: teleport_command */
     
     {
@@ -90,7 +90,7 @@ class TeleportCommand {
 @Command("aa")
 class AA {
 /* ANCHOR: number_arguments */
-@Default
+@Subcommand
 public static void command(CommandSender sender, 
     @ADoubleArgument(min = 0.0, max = 10.0) double someDouble,
     @AFloatArgument(min = 5.0f, max = 10.0f) float someFloat,
@@ -102,7 +102,7 @@ public static void command(CommandSender sender,
 /* ANCHOR_END: number_arguments */
 
 /* ANCHOR: literal_arguments */
-@Default
+@Subcommand
 public static void command(CommandSender sender, 
     @ALiteralArgument("myliteral") String literal,
     @AMultiLiteralArgument({"literal", "anotherliteral"}) String multipleLiterals
@@ -113,7 +113,7 @@ public static void command(CommandSender sender,
 
 
 /* ANCHOR: other_arguments */
-@Default
+@Subcommand
 public static void command(CommandSender sender, 
     @ALocationArgument(LocationType.BLOCK_POSITION) Location location,
     @ALocation2DArgument(LocationType.PRECISE_POSITION) Location location2d,

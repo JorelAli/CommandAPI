@@ -29,7 +29,6 @@ import org.bukkit.entity.Player;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.annotations.annotations.Command;
-import dev.jorel.commandapi.annotations.annotations.Default;
 import dev.jorel.commandapi.annotations.annotations.Executors;
 import dev.jorel.commandapi.annotations.annotations.Help;
 import dev.jorel.commandapi.annotations.annotations.Permission;

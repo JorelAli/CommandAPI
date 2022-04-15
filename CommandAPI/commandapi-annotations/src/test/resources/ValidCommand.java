@@ -27,20 +27,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.annotations.annotations.Command;
-import dev.jorel.commandapi.annotations.annotations.Default;
 import dev.jorel.commandapi.annotations.annotations.Executors;
 import dev.jorel.commandapi.annotations.annotations.Help;
 import dev.jorel.commandapi.annotations.annotations.Permission;
 import dev.jorel.commandapi.annotations.annotations.Subcommand;
-import dev.jorel.commandapi.annotations.annotations.Suggestion;
-import dev.jorel.commandapi.annotations.annotations.Suggests;
 import dev.jorel.commandapi.annotations.arguments.APlayerArgument;
 import dev.jorel.commandapi.annotations.arguments.AStringArgument;
-import dev.jorel.commandapi.arguments.ArgumentSuggestions;
-import dev.jorel.commandapi.arguments.SafeSuggestions;
-import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.ExecutorType;
 
 @Command("warp")	
@@ -70,30 +63,38 @@ public class ValidCommand {
 		player.teleport(warps.get(warpName));
 	}
 	
-	@Suggestion("blah")
-	public ArgumentSuggestions aaaaa() {
-		return ArgumentSuggestions.strings("hi", "bye");
-	}
-	
-	public SafeSuggestions<Location> aaaaaaaaaaa() {
-		return SafeSuggestions.suggest(new Location(null, 1, 2, 3));
-	}
-	
 	@Subcommand("create")
-	@Permission("warps.create")
-	@Executors({ExecutorType.ENTITY, ExecutorType.PLAYER})
-	public void createWarp(CommandSender sender, @Suggests("blah") @AStringArgument String warpName) throws WrapperCommandSyntaxException {
-		warps.put(warpName, ((LivingEntity) sender).getLocation());
-		throw CommandAPI.fail("");
-	}
-	
-	@Subcommand("create")
-	@Permission("warps.create")
-	public void tpWarp(CommandSender sender, @APlayerArgument OfflinePlayer target, @AStringArgument String warpName) {
-		if(target.isOnline() && target instanceof Player onlineTarget) {
-			onlineTarget.teleport(warps.get(warpName));
+	class WarpCreate {
+
+		// /warp create <warpName>
+		@Subcommand
+		@Permission("warps.create")
+		@Executors({ExecutorType.ENTITY, ExecutorType.PLAYER})
+		public void createWarp(CommandSender sender, @AStringArgument String warpName) {
+			warps.put(warpName, ((LivingEntity) sender).getLocation());
 		}
+
 	}
 	
+	@Subcommand("tp")
+	class WarpTp {
+		
+		// /warp tp <warpName>
+		@Subcommand
+		@Permission("warps.tp")
+		public void tpWarp(Player player, @AStringArgument String warpName) {
+			player.teleport(warps.get(warpName));
+		}
+
+		// /warp tp <player> <warpName>
+		@Subcommand
+		@Permission("warps.tp.other")
+		public void tpWarp(CommandSender sender, @APlayerArgument OfflinePlayer target, @AStringArgument String warpName) {
+			if(target.isOnline() && target instanceof Player onlineTarget) {
+				onlineTarget.teleport(warps.get(warpName));
+			}
+		}
+
+	}
 	
 }

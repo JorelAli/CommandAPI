@@ -27,35 +27,28 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.annotations.annotations.Command;
-import dev.jorel.commandapi.annotations.annotations.Default;
 import dev.jorel.commandapi.annotations.annotations.Executors;
 import dev.jorel.commandapi.annotations.annotations.Help;
 import dev.jorel.commandapi.annotations.annotations.Permission;
 import dev.jorel.commandapi.annotations.annotations.Subcommand;
-import dev.jorel.commandapi.annotations.annotations.Suggestion;
-import dev.jorel.commandapi.annotations.annotations.Suggests;
 import dev.jorel.commandapi.annotations.arguments.APlayerArgument;
 import dev.jorel.commandapi.annotations.arguments.AStringArgument;
-import dev.jorel.commandapi.arguments.ArgumentSuggestions;
-import dev.jorel.commandapi.arguments.SafeSuggestions;
-import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.ExecutorType;
 
 @Command("warp")	
 @Help(value = "Manages all warps on the server", shortDescription = "Manages warps")
-public class TestCommand2 {
+public class FlattenedCommand {
 	
 	// List of warp names and their locations
 	final Map<String, Location> warps;
 	
-	
-	public TestCommand2() {
+	public FlattenedCommand() {
 		warps = new HashMap<>();
 	}
 	
-	@Default
+	// /warp
+	@Subcommand
 	public void warp(CommandSender sender) {
 		sender.sendMessage("--- Warp help ---");
 		sender.sendMessage("/warp - Show this help");
@@ -64,41 +57,34 @@ public class TestCommand2 {
 		sender.sendMessage("/warp tp <player> <warpname> - Teleports a player to a warp");
 	}
 	
-	@Default
+	// /warp <warpname> 
+	@Subcommand
 	public void warp(Player player, @AStringArgument String warpName) {
 		player.teleport(warps.get(warpName));
 	}
 	
-	// You can't have two defaults!
-	@Default
-	public void blah() {
-		
-	}
-	
-	@Suggestion("blah")
-	public ArgumentSuggestions aaaaa() {
-		return ArgumentSuggestions.strings("hi", "bye");
-	}
-	
-	public SafeSuggestions<Location> aaaaaaaaaaa() {
-		return SafeSuggestions.suggest(new Location(null, 1, 2, 3));
-	}
-	
+	// /warp create <warpName>
 	@Subcommand("create")
 	@Permission("warps.create")
 	@Executors({ExecutorType.ENTITY, ExecutorType.PLAYER})
-	public void createWarp(CommandSender sender, @Suggests("blah") @AStringArgument String warpName) throws WrapperCommandSyntaxException {
+	public void createWarp(CommandSender sender, @AStringArgument String warpName) {
 		warps.put(warpName, ((LivingEntity) sender).getLocation());
-		throw CommandAPI.fail("");
 	}
 	
-	@Subcommand("create")
-	@Permission("warps.create")
+	// /warp tp <warpName>
+	@Subcommand("tp")
+	@Permission("warps.tp")
+	public void tpWarp(Player player, @AStringArgument String warpName) {
+		player.teleport(warps.get(warpName));
+	}
+
+	// /warp tp <player> <warpName>
+	@Subcommand("tp")
+	@Permission("warps.tp.other")
 	public void tpWarp(CommandSender sender, @APlayerArgument OfflinePlayer target, @AStringArgument String warpName) {
 		if(target.isOnline() && target instanceof Player onlineTarget) {
 			onlineTarget.teleport(warps.get(warpName));
 		}
 	}
-	
 	
 }
