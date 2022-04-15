@@ -18,7 +18,7 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package dev.jorel.commandapi.annotations;
+package dev.jorel.commandapi.annotations.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -26,16 +26,16 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The annotation to represent the aliases for a given base command.
+ * The annotation to indicate that this class is a command
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)
-public @interface Alias {
-	
+public @interface Command {
+
 	/**
-	 * The list of aliases to apply to the base command
-	 * @return the list of aliases to apply to the base command
+	 * The name of the command that this class represents
+	 * @return the name of the command that this class represents
 	 */
-	public String[] value();
+	public String value();
 	
 }

@@ -24,25 +24,39 @@ import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
+import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.annotations.annotations.Command;
 import dev.jorel.commandapi.annotations.annotations.Default;
+import dev.jorel.commandapi.annotations.annotations.Executors;
 import dev.jorel.commandapi.annotations.annotations.Help;
 import dev.jorel.commandapi.annotations.annotations.Permission;
 import dev.jorel.commandapi.annotations.annotations.Subcommand;
+import dev.jorel.commandapi.annotations.annotations.Suggestion;
+import dev.jorel.commandapi.annotations.annotations.Suggests;
 import dev.jorel.commandapi.annotations.arguments.APlayerArgument;
 import dev.jorel.commandapi.annotations.arguments.AStringArgument;
+import dev.jorel.commandapi.arguments.ArgumentSuggestions;
+import dev.jorel.commandapi.arguments.SafeSuggestions;
+import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
+import dev.jorel.commandapi.executors.ExecutorType;
 
 @Command("warp")	
 @Help(value = "Manages all warps on the server", shortDescription = "Manages warps")
-public class TestCommand {
+public class TestCommand2 {
 	
 	// List of warp names and their locations
-	static Map<String, Location> warps = new HashMap<>();
+	final Map<String, Location> warps;
+	
+	
+	public TestCommand2() {
+		warps = new HashMap<>();
+	}
 	
 	@Default
-	public static void warp(CommandSender sender) {
+	public void warp(CommandSender sender) {
 		sender.sendMessage("--- Warp help ---");
 		sender.sendMessage("/warp - Show this help");
 		sender.sendMessage("/warp <warp> - Teleport to <warp>");
@@ -51,21 +65,38 @@ public class TestCommand {
 	}
 	
 	@Default
-	public static void warp(Player player, @AStringArgument String warpName) {
+	public void warp(Player player, @AStringArgument String warpName) {
 		player.teleport(warps.get(warpName));
 	}
 	
-	@Subcommand("create")
-	@Permission("warps.create")
-	public static void createWarp(Player player, @AStringArgument String warpName) {
-		warps.put(warpName, player.getLocation());
+	// You can't have two defaults!
+	@Default
+	public void blah() {
+		
+	}
+	
+	@Suggestion("blah")
+	public ArgumentSuggestions aaaaa() {
+		return ArgumentSuggestions.strings("hi", "bye");
+	}
+	
+	public SafeSuggestions<Location> aaaaaaaaaaa() {
+		return SafeSuggestions.suggest(new Location(null, 1, 2, 3));
 	}
 	
 	@Subcommand("create")
 	@Permission("warps.create")
-	public static void tpWarp(CommandSender sender, @APlayerArgument OfflinePlayer target, @AStringArgument String warpName) {
+	@Executors({ExecutorType.ENTITY, ExecutorType.PLAYER})
+	public void createWarp(CommandSender sender, @Suggests("blah") @AStringArgument String warpName) throws WrapperCommandSyntaxException {
+		warps.put(warpName, ((LivingEntity) sender).getLocation());
+		throw CommandAPI.fail("");
+	}
+	
+	@Subcommand("create")
+	@Permission("warps.create")
+	public void tpWarp(CommandSender sender, @APlayerArgument OfflinePlayer target, @AStringArgument String warpName) {
 		if(target.isOnline() && target instanceof Player onlineTarget) {
-			onlineTarget.teleport(warps.get(warpName));			
+			onlineTarget.teleport(warps.get(warpName));
 		}
 	}
 	

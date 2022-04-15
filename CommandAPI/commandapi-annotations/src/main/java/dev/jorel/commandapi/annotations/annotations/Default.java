@@ -18,7 +18,7 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package dev.jorel.commandapi.annotations;
+package dev.jorel.commandapi.annotations.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -26,16 +26,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The annotation to indicate that this method is a subcommand
+ * The annotation to indicate that this method is the default command executor
+ * when no subcommands are used.
  */
+@AnnotationType(AnnotationEnum.DEFAULT)
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.SOURCE)
-public @interface Subcommand {
-
-	/**
-	 * The names (and thus, aliases) of this subcommand
-	 * @return the names that this subcommand produces
-	 */
-	public String[] value();
+public @interface Default {
 	
 }

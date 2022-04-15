@@ -18,27 +18,18 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
+package dev.jorel.commandapi.annotations.annotations;
 
-import dev.jorel.commandapi.annotations.annotations.Alias;
-import dev.jorel.commandapi.annotations.annotations.Command;
-import dev.jorel.commandapi.annotations.annotations.Subcommand;
-import dev.jorel.commandapi.annotations.arguments.APlayerArgument;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-/* ANCHOR: teleport_command */
-@Command("teleport")    
-@Alias({"tp", "tele"})
-public class TeleportCommand {
-/* ANCHOR_END: teleport_command */
-    
-/* ANCHOR: teleport_subcommand */
-@Subcommand({"teleport", "tp"})
-public static void teleport(Player player, @APlayerArgument OfflinePlayer target) {
-    if(target.isOnline() && target instanceof Player onlineTarget) {
-        player.teleport(onlineTarget);
-    }
-}
-/* ANCHOR_END: teleport_subcommand */
-
+/**
+ * The annotation to apply to indicate that a command or subcommand requires
+ * being OP to use.
+ */
+@Target({ElementType.METHOD, ElementType.TYPE})
+@Retention(RetentionPolicy.SOURCE)
+public @interface NeedsOp {
 }

@@ -24,12 +24,12 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 
-import dev.jorel.commandapi.annotations.Alias;
-import dev.jorel.commandapi.annotations.Command;
-import dev.jorel.commandapi.annotations.Default;
-import dev.jorel.commandapi.annotations.Help;
-import dev.jorel.commandapi.annotations.NeedsOp;
-import dev.jorel.commandapi.annotations.Permission;
+import dev.jorel.commandapi.annotations.annotations.Alias;
+import dev.jorel.commandapi.annotations.annotations.Command;
+import dev.jorel.commandapi.annotations.annotations.Default;
+import dev.jorel.commandapi.annotations.annotations.Help;
+import dev.jorel.commandapi.annotations.annotations.NeedsOp;
+import dev.jorel.commandapi.annotations.annotations.Permission;
 import dev.jorel.commandapi.annotations.arguments.ADoubleArgument;
 import dev.jorel.commandapi.annotations.arguments.AEntitySelectorArgument;
 import dev.jorel.commandapi.annotations.arguments.AFloatArgument;

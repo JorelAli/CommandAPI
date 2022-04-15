@@ -28,10 +28,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.annotations.Command;
-import dev.jorel.commandapi.annotations.Default;
-import dev.jorel.commandapi.annotations.Permission;
-import dev.jorel.commandapi.annotations.Subcommand;
+import dev.jorel.commandapi.annotations.annotations.Command;
+import dev.jorel.commandapi.annotations.annotations.Default;
+import dev.jorel.commandapi.annotations.annotations.Permission;
+import dev.jorel.commandapi.annotations.annotations.Subcommand;
 import dev.jorel.commandapi.annotations.arguments.AStringArgument;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.StringArgument;
