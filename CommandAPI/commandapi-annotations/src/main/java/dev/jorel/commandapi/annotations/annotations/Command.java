@@ -36,6 +36,6 @@ public @interface Command {
 	 * The name of the command that this class represents
 	 * @return the name of the command that this class represents
 	 */
-	public String value();
+	public String[] value();
 	
 }

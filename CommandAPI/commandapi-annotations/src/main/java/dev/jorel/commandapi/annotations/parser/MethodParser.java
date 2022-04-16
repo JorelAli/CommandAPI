@@ -18,19 +18,19 @@ public class MethodParser {
 	}
 	
 	public void parseAllMethods() {
-		for(Element methodElement : classElement.getEnclosedElements()) {
-			
-			for(AnnotationEnum annotation : Utils.unpackMethodAnnotations(classElement)) {
-				switch(annotation) {
-					case SUBCOMMAND:
-						break;
-					case SUGGESTION:
-						break;
-					default:
-						break;
-				}
-			}			
-		}
+//		for(Element methodElement : classElement.getEnclosedElements()) {
+//			
+//			for(AnnotationEnum annotation : Utils.unpackMethodAnnotations(classElement)) {
+//				switch(annotation) {
+//					case SUBCOMMAND:
+//						break;
+//					case SUGGESTION:
+//						break;
+//					default:
+//						break;
+//				}
+//			}			
+//		}
 	}
 	
 	public void parse() {

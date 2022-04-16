@@ -1,0 +1,2 @@
+#!/bin/sh
+mvn clean package -pl commandapi-annotations -Dmaven.javadoc.skip=true -Dmaven.source.skip=true

@@ -5,6 +5,8 @@ import java.util.Map.Entry;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.NestingKind;
+import javax.lang.model.element.TypeElement;
 
 public class Semantics {
 
@@ -21,10 +23,14 @@ public class Semantics {
 		 */
 
 		for (Entry<Element, Context> contextEntry : allContext.entrySet()) {
-			Element classElement = contextEntry.getKey();
+			TypeElement classElement = (TypeElement) contextEntry.getKey();
 			Context context = contextEntry.getValue();
 
 			if (classElement.getKind() == ElementKind.CLASS) {
+				if(classElement.getNestingKind() == NestingKind.TOP_LEVEL) {
+					
+				}
+				
 				if(classElement.getEnclosingElement().getKind() == ElementKind.PACKAGE) {
 					
 				} else {
