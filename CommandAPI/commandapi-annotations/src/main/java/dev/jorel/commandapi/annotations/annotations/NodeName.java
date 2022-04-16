@@ -29,7 +29,7 @@ import java.lang.annotation.Target;
  * Explicitly state a node name, instead of using the parameter's name
  */
 
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 @Retention(RetentionPolicy.SOURCE)
 public @interface NodeName {
 

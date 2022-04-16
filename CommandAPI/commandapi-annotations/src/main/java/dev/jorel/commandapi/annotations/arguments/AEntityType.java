@@ -27,6 +27,6 @@ import java.lang.annotation.Target;
 
 @Primitive("org.bukkit.entity.EntityType")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface AEntityType {		
 }

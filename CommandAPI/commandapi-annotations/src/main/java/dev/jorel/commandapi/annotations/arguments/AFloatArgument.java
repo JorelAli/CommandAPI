@@ -27,7 +27,7 @@ import java.lang.annotation.Target;
 
 @Primitive("float")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface AFloatArgument {
 	
 	public float min() default -Float.MAX_VALUE;

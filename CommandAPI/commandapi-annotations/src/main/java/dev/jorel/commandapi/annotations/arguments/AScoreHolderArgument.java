@@ -31,7 +31,7 @@ import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
 		"String" // ScoreHolderType.SINGLE
 })
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface AScoreHolderArgument {
 
 	ScoreHolderType value() default ScoreHolderType.SINGLE;

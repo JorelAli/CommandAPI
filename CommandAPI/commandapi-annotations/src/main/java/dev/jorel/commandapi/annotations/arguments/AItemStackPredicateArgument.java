@@ -27,6 +27,6 @@ import java.lang.annotation.Target;
 
 @Primitive("java.util.function.Predicate<org.bukkit.inventory.ItemStack>")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface AItemStackPredicateArgument {
 }

@@ -27,6 +27,6 @@ import java.lang.annotation.Target;
 
 @Primitive("java.util.EnumSet<org.bukkit.Axis>")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface AAxisArgument {		
 }

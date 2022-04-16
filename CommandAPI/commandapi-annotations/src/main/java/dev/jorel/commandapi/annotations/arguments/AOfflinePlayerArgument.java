@@ -27,6 +27,6 @@ import java.lang.annotation.Target;
 
 @Primitive("org.bukkit.OfflinePlayer")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface AOfflinePlayerArgument {
 }

@@ -27,7 +27,7 @@ import java.lang.annotation.Target;
 
 @Primitive("String")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface ALiteralArgument {
 	
 	String value();

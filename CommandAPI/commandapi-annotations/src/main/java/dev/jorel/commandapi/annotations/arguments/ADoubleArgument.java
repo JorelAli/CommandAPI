@@ -27,7 +27,7 @@ import java.lang.annotation.Target;
 
 @Primitive("double")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface ADoubleArgument {
 	
 	public double min() default -Double.MAX_VALUE;

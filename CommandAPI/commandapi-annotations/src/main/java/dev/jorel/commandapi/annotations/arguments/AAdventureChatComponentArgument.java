@@ -27,6 +27,6 @@ import java.lang.annotation.Target;
 
 @Primitive("net.kyori.adventure.text.Component")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface AAdventureChatComponentArgument {		
 }

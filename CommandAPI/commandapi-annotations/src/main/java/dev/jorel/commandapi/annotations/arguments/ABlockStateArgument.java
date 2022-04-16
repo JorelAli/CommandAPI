@@ -27,6 +27,6 @@ import java.lang.annotation.Target;
 
 @Primitive("org.bukkit.block.data.BlockData")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface ABlockStateArgument {		
 }

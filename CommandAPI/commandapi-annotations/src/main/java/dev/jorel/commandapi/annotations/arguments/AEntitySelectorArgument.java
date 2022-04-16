@@ -33,7 +33,7 @@ import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
 		"org.bukkit.entity.Player" // ONE_PLAYER
 })
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface AEntitySelectorArgument {
 	
 	EntitySelector value() default EntitySelector.ONE_ENTITY;
