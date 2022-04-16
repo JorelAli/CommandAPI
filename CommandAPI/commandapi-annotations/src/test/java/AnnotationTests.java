@@ -23,20 +23,41 @@ public class AnnotationTests {
 	}
 	
 	@Test
-	void aaaaaaa() {
+	void hordeTest() {
 		Compilation compilation = javac()
 			.withProcessors(new Annotations())
-			.compile(JavaFileObjects.forResource("Test2Command.java"));
+			.compile(JavaFileObjects.forResource("HordeCommand.java"));
 		assertThat(compilation).succeeded();
 	}
 	
 	@Test
-	void bb() {
+	void nonTopLevelCommandTest() {
 		Compilation compilation = javac()
 			.withProcessors(new Annotations())
-			.compile(JavaFileObjects.forResource("InvalidCommand.java"));
-		assertThat(compilation).failed();
+			.compile(JavaFileObjects.forResource("CommandOnNonTopLevel.java"));
+		
+		assertThat(compilation)
+			.hadErrorContaining("@Command can only go on a top level class")
+			.inFile(JavaFileObjects.forResource("CommandOnNonTopLevel.java"))
+			.onLine(7);
 	}
+	
+	
+//	@Test
+//	void aaaaaaa() {
+//		Compilation compilation = javac()
+//			.withProcessors(new Annotations())
+//			.compile(JavaFileObjects.forResource("ValidCommand.java"));
+//		assertThat(compilation).succeeded();
+//	}
+	
+//	@Test
+//	void bb() {
+//		Compilation compilation = javac()
+//			.withProcessors(new Annotations())
+//			.compile(JavaFileObjects.forResource("InvalidCommand.java"));
+//		assertThat(compilation).failed();
+//	}
 	
 	
 }

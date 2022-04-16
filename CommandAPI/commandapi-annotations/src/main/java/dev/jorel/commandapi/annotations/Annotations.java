@@ -114,6 +114,8 @@ import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
  * The main annotation processor for annotation-based arguments
  */
 public class Annotations extends AbstractProcessor {
+	
+	Logging logging;
 
 	public static final Set<Class<? extends Annotation>> ARGUMENT_ANNOTATIONS = Set.of( AAdvancementArgument.class,
 			AAdventureChatArgument.class, AAdventureChatComponentArgument.class, AAngleArgument.class,
@@ -155,6 +157,8 @@ public class Annotations extends AbstractProcessor {
 
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+		logging = new Logging(processingEnv);
+		
 		Set<? extends Element> commandClasses = roundEnv.getElementsAnnotatedWith(Command.class);
 		
 		// We need to do multiple "phases". Firstly, we need to construct a context
@@ -167,17 +171,17 @@ public class Annotations extends AbstractProcessor {
 		// annotations, type checking of annotations to method parameter types, ensuring
 		// suggestions map to what they should)
 		
-		Semantics.analyze(context);
+		new Semantics(logging).analyze(context);
 		
 		// We finally generate the equivalent source code.
 		
-		for(Element element : commandClasses) {
-			try {
-				processCommand(roundEnv, element);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+//		for(Element element : commandClasses) {
+//			try {
+//				processCommand(roundEnv, element);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//		}
 
 		return true;
 	}
