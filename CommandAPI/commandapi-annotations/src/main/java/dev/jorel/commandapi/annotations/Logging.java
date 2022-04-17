@@ -7,8 +7,8 @@ import javax.tools.Diagnostic.Kind;
 
 public class Logging {
 
-	boolean errorsLogged;
-	ProcessingEnvironment processingEnv;
+	private boolean errorsLogged;
+	private ProcessingEnvironment processingEnv;
 
 	public Logging(ProcessingEnvironment processor) {
 		this.processingEnv = processor;
@@ -24,12 +24,16 @@ public class Logging {
 		processingEnv.getMessager().printMessage(Kind.MANDATORY_WARNING, message, element);
 	}
 	
-	public void info(String message) {
-		processingEnv.getMessager().printMessage(Kind.MANDATORY_WARNING, message);
+	public void info(Object message) {
+		processingEnv.getMessager().printMessage(Kind.MANDATORY_WARNING, String.valueOf(message));
 	}
 	
 	public Messager getMessager() {
 		return processingEnv.getMessager();	
+	}
+	
+	public boolean didLogErrors() {
+		return errorsLogged;
 	}
 	
 	/*

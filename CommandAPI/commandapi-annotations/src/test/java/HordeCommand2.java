@@ -69,6 +69,28 @@ public class HordeCommand2 {
 		public void toggle() {
 		}
 	}
+	
+
+	
+	@Suggestion
+	class EnableSuggestions implements Supplier<ArgumentSuggestions> {
+
+		@Override
+		public ArgumentSuggestions get() {
+			return ArgumentSuggestions.strings("fire", "water", "poison");
+		}
+		
+	}
+	
+	@Suggestion
+	class LocationSuggestions implements Supplier<SafeSuggestions<Location>> {
+
+		@Override
+		public SafeSuggestions<Location> get() {
+			return SafeSuggestions.suggest(new Location[0]);
+		}
+		
+	}
 
 	@Subcommand("enable")
 	public void enable(Player sender) {

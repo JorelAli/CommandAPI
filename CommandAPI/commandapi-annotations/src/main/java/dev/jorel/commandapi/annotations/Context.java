@@ -6,13 +6,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Supplier;
 
-import javax.annotation.processing.RoundEnvironment;
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.Types;
 
 import dev.jorel.commandapi.annotations.annotations.Command;
 import dev.jorel.commandapi.annotations.annotations.Subcommand;
@@ -20,7 +24,7 @@ import dev.jorel.commandapi.annotations.annotations.Suggestion;
 
 public class Context {
 	
-	private RoundEnvironment roundEnv;
+	private ProcessingEnvironment processingEnv;
 	private Logging logging;
 	
 	private List<TypeElement> subcommandClasses;
@@ -28,8 +32,8 @@ public class Context {
 	private List<ExecutableElement> suggestionMethods;
 	
 	// Construct some context :)
-	public Context(Element classElement, RoundEnvironment roundEnv, Logging logging) {
-		this.roundEnv = roundEnv;
+	public Context(Element classElement, ProcessingEnvironment roundEnv, Logging logging) {
+		this.processingEnv = roundEnv;
 		this.logging = logging;
 		
 		this.subcommandClasses = new ArrayList<>();
@@ -62,15 +66,16 @@ public class Context {
 							if(typeElementChild.getAnnotation(Subcommand.class) != null) {
 								parseSubcommandClass((TypeElement) typeElementChild);
 							}
+
+							// Parse @Suggestion classes
+							if(typeElementChild.getAnnotation(Suggestion.class) != null) {
+								parseSuggestionMethod((TypeElement) typeElementChild);
+							}
 							break;
 						case METHOD:
 							// Parse methods with @Subcommand
 							if(typeElementChild.getAnnotation(Subcommand.class) != null) {
 								parseSubcommandMethod((ExecutableElement) typeElementChild);
-							}
-							
-							if(typeElementChild.getAnnotation(Suggestion.class) != null) {
-								parseSuggestionMethod((ExecutableElement) typeElementChild);
 							}
 							break;
 						default:
@@ -98,6 +103,7 @@ public class Context {
 			return;
 		}
 
+		// Check if the first parameter is a CommandSender (or instance thereof)
 		try {
 			if(!Utils.isValidSender(parameters.get(0).asType())) {
 				logging.complain(methodElement, parameters.get(0).asType() + " is not a valid CommandSender");
@@ -108,36 +114,58 @@ public class Context {
 			e.printStackTrace();
 			return;
 		}
-		
-		logging.info(parameters.get(0).getSimpleName().toString());
-		logging.info(parameters.get(0).asType().toString());
-// org.bukkit.command.CommandSender
-		
-//			String[] firstParam = methodType.getParameterTypes().get(0).toString().split("\\.");
-//			out.print(indent(indent));
-//			switch (firstParam[firstParam.length - 1]) {
-//			case "Player" -> out.print(".executesPlayer");
-//			case "ConsoleCommandSender" -> out.print(".executesConsole");
-//			case "BlockCommandSender" -> out.print(".executesCommandBlock");
-//			case "ProxiedCommandSender" -> out.print(".executesProxy");
-//			case "NativeProxyCommandSender" -> out.print(".executesNative");
-//			case "Entity" -> out.print(".executesEntity");
-//			case "CommandSender" -> out.print(".executes");
-//			default -> out.print(".executes");
 	}
 
-	private void parseSuggestionMethod(ExecutableElement typeElementChild) {
-		// TODO Auto-generated method stub
+	private void parseSuggestionMethod(TypeElement typeElement) {
+		Suggestion suggestionAnnotation = typeElement.getAnnotation(Suggestion.class);
+		logging.info(typeElement, "Parsing '" + typeElement.getSimpleName() + "' class");
+		
+		// java.util.function.Supplier<dev.jorel.commandapi.arguments.ArgumentSuggestions>
+		// java.util.function.Supplier<dev.jorel.commandapi.arguments.SafeSuggestions<org.bukkit.Location>>
+
+		// Get the interfaces (e.g. Supplier<ArgumentSuggestions> or
+		// Supplier<SafeSuggestions<Location>>)
+		
+		TypeMirror supplierMirror = null;
+		
+		for(TypeMirror mirror : typeElement.getInterfaces()) {
+			
+			final TypeMirror supplier = processingEnv.getElementUtils().getTypeElement(Supplier.class.getCanonicalName()).asType();
+			Types types = processingEnv.getTypeUtils();
+			if(!types.isSameType(types.erasure(supplier), types.erasure(mirror))) {
+				logging.complain(types.asElement(mirror), "@Suggestion must implement java.util.function.Supplier");
+			}
+			
+			supplierMirror = mirror; 
+
+			processingEnv.getTypeUtils().erasure(supplier);
+			System.out.println("Supplier: " + supplier );
+			System.out.println("Mirror: " + mirror);
+			System.out.println(processingEnv.getTypeUtils().isSameType(mirror, supplier));
+			
+			// We want to inspect the generics (e.g. ArgumentSuggestions or
+			// SafeSuggestions<Location>
+			if(mirror instanceof DeclaredType declaredType) {
+				for(TypeMirror typeArgument : declaredType.getTypeArguments()) {
+					System.out.println(typeArgument);
+				}
+			}
+		}
+		
+		if(supplierMirror == null) {
+			logging.complain(typeElement, "@Suggestion must implement java.util.function.Supplier");
+		}
+		logging.info(typeElement.getInterfaces());
 		
 	}
 
 	public static Map<Element, Context> generateContexts(Set<? extends Element> commandClasses,
-			RoundEnvironment roundEnv, Logging logging) {
+			ProcessingEnvironment processingEnv, Logging logging) {
 		
 		Map<Element, Context> contextMap = new HashMap<>();
 		for(Element classElement : commandClasses) {
 			
-			contextMap.put(classElement, new Context(classElement, roundEnv, logging));
+			contextMap.put(classElement, new Context(classElement, processingEnv, logging));
 		}
 		
 		return contextMap;

@@ -165,7 +165,7 @@ public class Annotations extends AbstractProcessor {
 		// for each @Command class, which outlines the list of suggestion methods, its
 		// varying types, etc. You can think of this as a lexing/syntax analysis step.
 		
-		Map<Element, Context> context = Context.generateContexts(commandClasses, roundEnv, logging);
+		Map<Element, Context> context = Context.generateContexts(commandClasses, processingEnv, logging);
 		
 		// We then perform out semantic analysis (checking that we've not got two @Default
 		// annotations, type checking of annotations to method parameter types, ensuring
