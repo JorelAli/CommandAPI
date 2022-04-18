@@ -124,8 +124,7 @@ public class Context {
 		} else if(varElement.getAnnotation(Permission.class) != null) {
 			permission = CommandPermission.fromString(varElement.getAnnotation(Permission.class).value());
 		} else if(varElement.getAnnotation(WithoutPermission.class) != null) {
-			permission = CommandPermission.fromString(varElement.getAnnotation(WithoutPermission.class).value());
-			// TODO: permission.negate()
+			permission = CommandPermission.fromString(varElement.getAnnotation(WithoutPermission.class).value()).negate();
 		} else {
 			permission = CommandPermission.NONE;
 		}

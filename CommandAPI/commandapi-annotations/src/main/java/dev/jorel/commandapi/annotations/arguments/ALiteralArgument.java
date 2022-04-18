@@ -28,6 +28,7 @@ import java.lang.annotation.Target;
 @Primitive("String")
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.PARAMETER, ElementType.FIELD})
+@Deprecated(forRemoval = false, since = "8.0.0")
 public @interface ALiteralArgument {
 	
 	String value();

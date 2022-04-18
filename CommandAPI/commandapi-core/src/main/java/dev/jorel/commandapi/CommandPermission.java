@@ -20,6 +20,8 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
+import javax.annotation.Nullable;
+
 /**
  * A representation of permission nodes for commands. Represents permission nodes, being op and having all permissions
  */
@@ -75,8 +77,8 @@ public class CommandPermission {
 		return new CommandPermission(permission);
 	}
 
-	private String permission;
-	private PermissionNode permissionNode;
+	private @Nullable String permission;
+	private @Nullable PermissionNode permissionNode;
 	private boolean negated = false;
 	
 	/**
@@ -97,7 +99,8 @@ public class CommandPermission {
 		this.permissionNode = permissionNode;
 	}
 	
-	String getPermission() {
+	@Nullable
+	public String getPermission() {
 		return this.permission;
 	}
 	
@@ -105,11 +108,11 @@ public class CommandPermission {
 		return this.permissionNode;
 	}
 	
-	boolean isNegated() {
+	public boolean isNegated() {
 		return this.negated;
 	}
 	
-	CommandPermission negate() {
+	public CommandPermission negate() {
 		this.negated = true;
 		return this;
 	}

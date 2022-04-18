@@ -111,12 +111,20 @@ public class ArgumentData extends Emittable {
 		} else if(permission.equals(CommandPermission.OP)) {
 			out.print(".withPermission(CommandPermission.OP)");
 		} else {
-			out.print(".withPermission(\"");
-			// TODO: We need to take into account whether this is negated or not
-			//out.print(permission.toString());
+			if(permission.isNegated()) {
+				out.print(".withoutPermission(\"");
+			} else {
+				out.print(".withPermission(\"");
+			}
+			out.println(permission.getPermission());
 			out.println("\")");
 		}
 		
+		if(suggestions.isPresent()) {
+			// TODO: Implement suggestions for arguments
+		}
+		
+		// Argument listing. Only applies to @LiteralArgument
 		if (argumentAnnotation instanceof ALiteralArgument) {
 			out.print(".setListed(true)");
 		}
