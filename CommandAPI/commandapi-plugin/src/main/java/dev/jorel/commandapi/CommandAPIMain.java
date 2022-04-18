@@ -61,7 +61,5 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable(this);
-		new LocationArgument("").replaceSafeSuggestions(null);
-		new StringArgument("").replaceSuggestions(null);
 	}
 }
