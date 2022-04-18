@@ -140,9 +140,11 @@ public class Context {
 		}
 		
 		// Parse suggestions, via @Suggests
-		final Optional<Class<? extends Supplier<?>>> suggests = Optional.empty();
+		final Optional<Class<? extends Supplier<?>>> suggests;
 		if(varElement.getAnnotation(Suggests.class) != null) {
 			suggests = Optional.of(varElement.getAnnotation(Suggests.class).value());
+		} else {
+			suggests = Optional.empty();
 		}
 
 		// Add to command data

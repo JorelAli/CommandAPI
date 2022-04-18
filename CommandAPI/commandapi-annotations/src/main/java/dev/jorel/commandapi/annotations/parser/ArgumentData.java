@@ -102,7 +102,6 @@ public class ArgumentData extends CommandElement {
 					return true;
 				}
 			}
-			suggestions.primitive();
 		} else {
 			// Normal suggestions, we can link against it with no issues
 			this.suggestions = Optional.of(suggestions);
