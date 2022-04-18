@@ -172,6 +172,8 @@ public class Annotations extends AbstractProcessor {
 		
 		new Semantics(logging).analyze(context);
 		
+		// Linking step, where we link suggestions to arguments that suggest them.
+		
 		// We finally generate the equivalent source code.
 		
 //		for(Element element : commandClasses) {

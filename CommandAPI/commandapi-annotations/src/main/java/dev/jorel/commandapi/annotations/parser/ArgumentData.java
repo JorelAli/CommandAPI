@@ -4,12 +4,14 @@ import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 
 import dev.jorel.commandapi.CommandPermission;
-import dev.jorel.commandapi.annotations.annotations.Permission;
 import dev.jorel.commandapi.annotations.arguments.ADoubleArgument;
 import dev.jorel.commandapi.annotations.arguments.AEntitySelectorArgument;
 import dev.jorel.commandapi.annotations.arguments.AFloatArgument;
@@ -21,11 +23,11 @@ import dev.jorel.commandapi.annotations.arguments.ALongArgument;
 import dev.jorel.commandapi.annotations.arguments.AMultiLiteralArgument;
 import dev.jorel.commandapi.annotations.arguments.AScoreHolderArgument;
 import dev.jorel.commandapi.annotations.arguments.Primitive;
-import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
+import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
 
-public class ArgumentData extends Emittable {
+public class ArgumentData extends CommandElement {
 
 	private final VariableElement varElement;
 
@@ -33,27 +35,81 @@ public class ArgumentData extends Emittable {
 
 	private final Annotation argumentAnnotation;
 
-	// The relevant class for suggestions that @Suggests points to.
-	// This isn't populated in the constructor, instead this is populated during the
-	// linking step // TODO: Implement during linking
-	private final Optional<SuggestionClass> suggestions;
+	/**
+	 * The relevant class for suggestions that @Suggests points to. This isn't
+	 * populated in the constructor, instead this is populated during the linking
+	 * step // TODO: Implement during linking
+	 */
+	private Optional<SuggestionClass> suggestions;
 
-	// Permission for this argument, if any. Implemented from @NeedsOp or
-	// @Permission
+	/**
+	 * Permission for this argument, if any. Implemented from @NeedsOp
+	 * or @Permission
+	 */
 	private final CommandPermission permission;
 
-	// The argument node's name. Retrieved from the parameter/field name, or
-	// @NodeName annotation if declared
+	/**
+	 * The argument node's name. Retrieved from the parameter/field name,
+	 * or @NodeName annotation if declared
+	 */
 	private final String nodeName;
 
+	/**
+	 * The class that this argument @Suggests, if any. This is almost certainly
+	 * going to be a TypeMirror (so be aware that we'll have to be dealing with
+	 * TypeMirrors when dealing with the value of this optional)
+	 */
+	private final Optional<Class<? extends Supplier<?>>> suggests;
+
 	public ArgumentData(VariableElement varElement, Annotation annotation, CommandPermission permission,
-			String nodeName) {
+			String nodeName, Optional<Class<? extends Supplier<?>>> suggests) {
 		this.varElement = varElement;
-		this.primitiveTypes = annotation.getClass().getAnnotation(Primitive.class).value();
+		this.primitiveTypes = annotation.annotationType().getAnnotation(Primitive.class).value();
 		this.argumentAnnotation = annotation;
 		this.suggestions = Optional.empty();
 		this.permission = permission;
 		this.nodeName = nodeName;
+		this.suggests = suggests;
+	}
+
+	/**
+	 * If the suggestions parameter is suitable for this argument, it links it.
+	 * Otherwise, it doesn't. Returns true if linking was successful 
+	 * @param suggestions
+	 */
+	public boolean linkSuggestion(ProcessingEnvironment processingEnv, SuggestionClass suggestions) {
+		// If this argument doesn't have @Suggests, we don't care
+		if(!suggests.isPresent()) {
+			return false;
+		}
+
+		TypeElement typeElement = processingEnv.getElementUtils().getTypeElement(suggests.get().getCanonicalName());
+
+		// Check that @Suggests and SuggestionClass are matching the right class. If not, we can't link it
+		if(!processingEnv.getTypeUtils().isSameType(typeElement.asType(), suggestions.typeElement().asType())) {
+			return false;
+		}
+
+		if(suggestions.isSafeSuggestions()) {
+			// Safe suggestions requires type checking. Ensure that the types match
+			// TODO: We actually have to do a little bit more complex type checking here. If
+			// this.primitiveTypes.length > 1, then we have to individually check what the
+			// type is corresponding to the type of this argument (e.g. Player, Players).
+			// This is where we use varElement
+			for(String primitive : this.primitiveTypes) {
+				if(suggestions.primitive().equals(primitive)) {
+					this.suggestions = Optional.of(suggestions);
+					return true;
+				}
+			}
+			suggestions.primitive();
+		} else {
+			// Normal suggestions, we can link against it with no issues
+			this.suggestions = Optional.of(suggestions);
+			return true;
+		}
+		
+		return false;
 	}
 
 	@Override
@@ -106,24 +162,37 @@ public class ArgumentData extends Emittable {
 		out.print(")"); // End argument constructor parameters
 
 		// Permissions
-		if(permission.equals(CommandPermission.NONE)) {
+		if (permission.equals(CommandPermission.NONE)) {
 			// Do nothing
-		} else if(permission.equals(CommandPermission.OP)) {
+		} else if (permission.equals(CommandPermission.OP)) {
 			out.print(".withPermission(CommandPermission.OP)");
 		} else {
-			if(permission.isNegated()) {
+			if (permission.isNegated()) {
 				out.print(".withoutPermission(\"");
 			} else {
 				out.print(".withPermission(\"");
 			}
-			out.println(permission.getPermission());
+			out.print(permission.getPermission());
 			out.println("\")");
 		}
-		
-		if(suggestions.isPresent()) {
-			// TODO: Implement suggestions for arguments
+
+		// Suggestions
+		if (suggestions.isPresent()) {
+			SuggestionClass suggestion = suggestions.get();
+			if (suggestion.isSafeSuggestions()) {
+				// TODO: Semantics must check that whatever we're applying these suggestions to
+				// implements SafeOverrideableArgument.
+				// TODO: Semantics must check that the type argument of
+				// SafeOverrideableArgument<?> matches this.primitive
+				out.print(".replaceSafeSuggestions(new ");
+			} else {
+				out.print(".replaceSuggestions(new ");
+			}
+
+			out.print(suggestion.typeElement().getQualifiedName());
+			out.print("().get())");
 		}
-		
+
 		// Argument listing. Only applies to @LiteralArgument
 		if (argumentAnnotation instanceof ALiteralArgument) {
 			out.print(".setListed(true)");

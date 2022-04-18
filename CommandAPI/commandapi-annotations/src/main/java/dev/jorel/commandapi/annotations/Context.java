@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -24,6 +25,7 @@ import dev.jorel.commandapi.annotations.annotations.NodeName;
 import dev.jorel.commandapi.annotations.annotations.Permission;
 import dev.jorel.commandapi.annotations.annotations.Subcommand;
 import dev.jorel.commandapi.annotations.annotations.Suggestion;
+import dev.jorel.commandapi.annotations.annotations.Suggests;
 import dev.jorel.commandapi.annotations.annotations.WithoutPermission;
 import dev.jorel.commandapi.annotations.parser.ArgumentData;
 import dev.jorel.commandapi.annotations.parser.CommandData;
@@ -136,9 +138,15 @@ public class Context {
 		} else {
 			nodeName = varElement.getSimpleName().toString();
 		}
+		
+		// Parse suggestions, via @Suggests
+		final Optional<Class<? extends Supplier<?>>> suggests = Optional.empty();
+		if(varElement.getAnnotation(Suggests.class) != null) {
+			suggests = Optional.of(varElement.getAnnotation(Suggests.class).value());
+		}
 
 		// Add to command data
-		commandData.addArgument(new ArgumentData(varElement, annotation, permission, nodeName));		
+		commandData.addArgument(new ArgumentData(varElement, annotation, permission, nodeName, suggests));
 	}
 
 	private void parseSubcommandMethod(ExecutableElement methodElement, Subcommand subcommandAnnotation) {

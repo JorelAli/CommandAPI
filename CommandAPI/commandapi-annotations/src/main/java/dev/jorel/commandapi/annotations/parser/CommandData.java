@@ -1,5 +1,6 @@
 package dev.jorel.commandapi.annotations.parser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import dev.jorel.commandapi.CommandPermission;
@@ -33,6 +34,13 @@ public class CommandData {
 	// Help, if any. Retrieved from @Help
 	private String help;
 	private String shortDescriptionHelp;
+	
+	public CommandData() {
+		this.arguments = new ArrayList<>();
+		this.subcommandClasses = new ArrayList<>();
+		this.subcommandMethods = new ArrayList<>();
+		this.suggestionClasses = new ArrayList<>();
+	}
 	
 	// GETTERS and SETTERS
 

@@ -29,6 +29,9 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface Primitive {
 
+	/**
+	 * The canonical name of the type of this primitive, including any generic type parameters
+	 */
 	public String[] value();
 	
 }

@@ -68,7 +68,7 @@ public class HordeCommand2 {
 		}
 
 		@Subcommand("toggle")
-		public void toggle() {
+		public void toggle(CommandSender sender) {
 		}
 	}
 	
