@@ -36,7 +36,7 @@ public class Utils {
 	}
 	
 	/**
-	 * Get the Class<?> object from an annotation which has a value of type class
+	 * Get the TypeMirror from an annotation which has a value of type class
 	 */
 	public static TypeMirror getAnnotationClassValue(Element element, Class<? extends Annotation> annotationClass) {		
 		String className = annotationClass.getCanonicalName();
