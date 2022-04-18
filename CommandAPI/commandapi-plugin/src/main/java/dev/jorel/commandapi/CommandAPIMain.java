@@ -25,6 +25,9 @@ import java.util.Map.Entry;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import dev.jorel.commandapi.arguments.LocationArgument;
+import dev.jorel.commandapi.arguments.StringArgument;
+
 public class CommandAPIMain extends JavaPlugin {
 	
 	@Override
@@ -58,5 +61,7 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable(this);
+		new LocationArgument("").replaceSafeSuggestions(null);
+		new StringArgument("").replaceSuggestions(null);
 	}
 }

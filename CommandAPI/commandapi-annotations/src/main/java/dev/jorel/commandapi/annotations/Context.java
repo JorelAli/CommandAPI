@@ -24,6 +24,7 @@ import dev.jorel.commandapi.annotations.annotations.NodeName;
 import dev.jorel.commandapi.annotations.annotations.Permission;
 import dev.jorel.commandapi.annotations.annotations.Subcommand;
 import dev.jorel.commandapi.annotations.annotations.Suggestion;
+import dev.jorel.commandapi.annotations.annotations.WithoutPermission;
 import dev.jorel.commandapi.annotations.parser.ArgumentData;
 import dev.jorel.commandapi.annotations.parser.CommandData;
 
@@ -122,6 +123,9 @@ public class Context {
 			permission = CommandPermission.OP;
 		} else if(varElement.getAnnotation(Permission.class) != null) {
 			permission = CommandPermission.fromString(varElement.getAnnotation(Permission.class).value());
+		} else if(varElement.getAnnotation(WithoutPermission.class) != null) {
+			permission = CommandPermission.fromString(varElement.getAnnotation(WithoutPermission.class).value());
+			// TODO: permission.negate()
 		} else {
 			permission = CommandPermission.NONE;
 		}

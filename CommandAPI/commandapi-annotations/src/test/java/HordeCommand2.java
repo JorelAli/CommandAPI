@@ -5,6 +5,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import dev.jorel.commandapi.annotations.annotations.Command;
+import dev.jorel.commandapi.annotations.annotations.Permission;
 import dev.jorel.commandapi.annotations.annotations.Subcommand;
 import dev.jorel.commandapi.annotations.annotations.Suggestion;
 import dev.jorel.commandapi.annotations.annotations.Suggests;
@@ -30,6 +31,7 @@ public class HordeCommand2 {
 		@Subcommand("modify")
 		class ModifyCommand {
 
+			@Permission("hello")
 			@Suggests(HazardSuggestions.class)
 			@AStringArgument
 			String name;
