@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
@@ -140,9 +141,9 @@ public class Context {
 		}
 		
 		// Parse suggestions, via @Suggests
-		final Optional<Class<? extends Supplier<?>>> suggests;
+		final Optional<TypeMirror> suggests;
 		if(varElement.getAnnotation(Suggests.class) != null) {
-			suggests = Optional.of(varElement.getAnnotation(Suggests.class).value());
+			suggests = Optional.of(Utils.getAnnotationClassValue(varElement, Suggests.class));
 		} else {
 			suggests = Optional.empty();
 		}

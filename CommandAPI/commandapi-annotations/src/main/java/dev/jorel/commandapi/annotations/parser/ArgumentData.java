@@ -4,12 +4,11 @@ import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.TypeMirror;
 
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.annotations.arguments.ADoubleArgument;
@@ -55,14 +54,13 @@ public class ArgumentData extends CommandElement {
 	private final String nodeName;
 
 	/**
-	 * The class that this argument @Suggests, if any. This is almost certainly
-	 * going to be a TypeMirror (so be aware that we'll have to be dealing with
-	 * TypeMirrors when dealing with the value of this optional)
+	 * The class that this argument @Suggests, if any. We should assume that this
+	 * type element is something of type Class<? extends Supplier<?>>.
 	 */
-	private final Optional<Class<? extends Supplier<?>>> suggests;
+	private final Optional<TypeMirror> suggests;
 
 	public ArgumentData(VariableElement varElement, Annotation annotation, CommandPermission permission,
-			String nodeName, Optional<Class<? extends Supplier<?>>> suggests) {
+			String nodeName, Optional<TypeMirror> suggests) {
 		this.varElement = varElement;
 		this.primitiveTypes = annotation.annotationType().getAnnotation(Primitive.class).value();
 		this.argumentAnnotation = annotation;
@@ -83,10 +81,8 @@ public class ArgumentData extends CommandElement {
 			return false;
 		}
 
-		TypeElement typeElement = processingEnv.getElementUtils().getTypeElement(suggests.get().getCanonicalName());
-
 		// Check that @Suggests and SuggestionClass are matching the right class. If not, we can't link it
-		if(!processingEnv.getTypeUtils().isSameType(typeElement.asType(), suggestions.typeElement().asType())) {
+		if(!processingEnv.getTypeUtils().isSameType(suggests.get(), suggestions.typeElement().asType())) {
 			return false;
 		}
 

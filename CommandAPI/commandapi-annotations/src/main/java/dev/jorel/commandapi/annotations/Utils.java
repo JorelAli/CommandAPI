@@ -1,8 +1,12 @@
 package dev.jorel.commandapi.annotations;
 
 import java.lang.annotation.Annotation;
+import java.util.Map.Entry;
 
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.type.TypeMirror;
 
 import org.bukkit.command.CommandSender;
@@ -29,6 +33,35 @@ public class Utils {
 			}
 		}
 		return annotation;
+	}
+	
+	/**
+	 * Get the Class<?> object from an annotation which has a value of type class
+	 */
+	public static TypeMirror getAnnotationClassValue(Element element, Class<? extends Annotation> annotationClass) {		
+		String className = annotationClass.getCanonicalName();
+		AnnotationMirror annotationMirror = null;
+		for(AnnotationMirror mirror : element.getAnnotationMirrors()) {
+			if(mirror.getAnnotationType().toString().equals(className)) {
+				annotationMirror = mirror;
+				break;
+			}
+		}
+
+		if(annotationMirror != null) {
+			AnnotationValue annotationValue = null;
+			for(Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : annotationMirror.getElementValues().entrySet() ) {
+				if(entry.getKey().getSimpleName().toString().equals("value")) {
+					annotationValue = entry.getValue();
+				}
+			}
+			
+			if(annotationValue != null) {
+				return (TypeMirror) annotationValue.getValue();
+			}
+		}
+
+		return null;
 	}
 	
 }
