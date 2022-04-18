@@ -48,7 +48,6 @@ import javax.tools.JavaFileObject;
 
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandPermission;
-import dev.jorel.commandapi.annotations.annotations.Alias;
 import dev.jorel.commandapi.annotations.annotations.Command;
 import dev.jorel.commandapi.annotations.annotations.Help;
 import dev.jorel.commandapi.annotations.annotations.NeedsOp;
@@ -136,7 +135,7 @@ public class Annotations extends AbstractProcessor {
 		Subcommand.class, Suggestion.class
 	);
 	
-	public static final Set<Class<? extends Annotation>> OTHER_ANNOTATIONS = Set.of(Alias.class, Command.class,
+	public static final Set<Class<? extends Annotation>> OTHER_ANNOTATIONS = Set.of(Command.class,
 			NeedsOp.class, Permission.class, Help.class);
 
 	// List of stuff we can deal with
@@ -433,14 +432,14 @@ public class Annotations extends AbstractProcessor {
 		}
 	}
 	
-	private void emitAlias(PrintWriter out, Element classElement, int indent) {
-		if (classElement.getAnnotation(Alias.class) != null) {
-			out.print(indent(indent) + ".withAliases(");
-			out.print(Arrays.stream(classElement.getAnnotation(Alias.class).value())
-					.map(x -> "\"" + x + "\"").collect(Collectors.joining(", ")));
-			out.println(")");
-		}
-	}
+//	private void emitAlias(PrintWriter out, Element classElement, int indent) {
+//		if (classElement.getAnnotation(Alias.class) != null) {
+//			out.print(indent(indent) + ".withAliases(");
+//			out.print(Arrays.stream(classElement.getAnnotation(Alias.class).value())
+//					.map(x -> "\"" + x + "\"").collect(Collectors.joining(", ")));
+//			out.println(")");
+//		}
+//	}
 	
 	private void emitNeedsOp(PrintWriter out, Element classElement, int indent) {
 		if (classElement.getAnnotation(NeedsOp.class) != null) {
@@ -498,7 +497,7 @@ public class Annotations extends AbstractProcessor {
 					indent = emitSubcommand(out, methodElement, indent); // @Subcommand (Also handle @Alias for @Subcommand)
 					emitNeedsOp(out, classElement, indent);    // @NeedsOp
 					emitPermission(out, classElement, indent); // @Permission
-					emitAlias(out, classElement, indent);      // @Alias
+//					emitAlias(out, classElement, indent);      // @Alias
 					emitHelp(out, classElement, indent);       // @Help
 					
 					//Maps parameter index to argument's primitive type

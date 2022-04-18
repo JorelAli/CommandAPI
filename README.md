@@ -234,7 +234,7 @@ plugins-to-convert:
 
 ## Building the CommandAPI
 
-The CommandAPI can be built easily, but requires copies of the Spigot server jars to be present locally on your machine in order to be compatible with any Minecraft version. The CommandAPI is built using the Maven build tool - if you don't have it, you can download it [here](https://maven.apache.org/download.cgi).
+To build the CommandAPI, you will need a JDK 17 and Maven (you can download Maven [here](https://maven.apache.org/download.cgi)).
 
 - Clone the repository using your preferred method, or with the command below:
 
@@ -246,7 +246,7 @@ The CommandAPI can be built easily, but requires copies of the Spigot server jar
 
 - Run `mvn`
 
-The resulting plugin `.jar` is found in `commandapi-plugin/target/CommandAPIvX.X.X_DATE.jar`
+The resulting plugin `.jar` is found in `commandapi-plugin/target/CommandAPI-X.X.X_DATE.jar`
 
 ## Building the CommandAPI's documentation
 

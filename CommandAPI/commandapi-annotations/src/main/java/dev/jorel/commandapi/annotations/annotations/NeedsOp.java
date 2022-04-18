@@ -29,7 +29,7 @@ import java.lang.annotation.Target;
  * The annotation to apply to indicate that a command or subcommand requires
  * being OP to use.
  */
-@Target({ElementType.METHOD, ElementType.TYPE})
+@Target({ElementType.METHOD, ElementType.TYPE, ElementType.FIELD})
 @Retention(RetentionPolicy.SOURCE)
 public @interface NeedsOp {
 }

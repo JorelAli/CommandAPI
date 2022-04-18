@@ -17,20 +17,18 @@ public class Utils {
 		return CommandSender.class.isAssignableFrom(Class.forName(typeMirror.toString()));
 	}
 	
-//	public static AnnotationEnum[] unpackMethodAnnotations(Element element) {
-//		List<AnnotationEnum> annotations = new ArrayList<>();
-//		
-//		for(Class<? extends Annotation> annotation : Annotations.METHOD_ANNOTATIONS) {
-//			Annotation declaredAnnotation = element.getAnnotation(annotation);
-//			if(declaredAnnotation != null) {
-//				AnnotationType annotationType = declaredAnnotation.annotationType().getAnnotation(null);
-//				if(annotationType != null) {
-//					annotations.add(annotationType.value());
-//				}
-//			}
-//		}
-//		
-//		return annotations.toArray(new AnnotationEnum[0]);
-//	}
+	public static Annotation getArgumentAnnotation(Element element) {
+		Annotation annotation = null;
+		for(Class<? extends Annotation> annotationClass : Annotations.ARGUMENT_ANNOTATIONS) {
+			annotation = element.getAnnotation(annotationClass);
+			
+			// We've found an annotation. We don't care about multiple argument annotations,
+			// this is covered by semantics // TODO: Implement in semantics
+			if(annotation != null) {
+				break;
+			}
+		}
+		return annotation;
+	}
 	
 }
