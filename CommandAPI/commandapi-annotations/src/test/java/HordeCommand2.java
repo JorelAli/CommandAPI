@@ -1,17 +1,23 @@
 import java.util.function.Supplier;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import dev.jorel.commandapi.annotations.annotations.ArgumentParser;
 import dev.jorel.commandapi.annotations.annotations.Command;
 import dev.jorel.commandapi.annotations.annotations.Permission;
 import dev.jorel.commandapi.annotations.annotations.Subcommand;
 import dev.jorel.commandapi.annotations.annotations.Suggestion;
 import dev.jorel.commandapi.annotations.annotations.Suggests;
+import dev.jorel.commandapi.annotations.arguments.ACustomArgument;
 import dev.jorel.commandapi.annotations.arguments.AIntegerArgument;
 import dev.jorel.commandapi.annotations.arguments.AStringArgument;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
+import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
+import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentInfo;
+import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentInfoParser;
 import dev.jorel.commandapi.arguments.SafeSuggestions;
 
 @Command("horde")
@@ -100,5 +106,21 @@ public class HordeCommand2 {
 	
 	@Subcommand("disable")
 	public void disable(CommandSender sender) {
+	}
+	
+	@ArgumentParser
+	class WorldArgument implements CustomArgumentInfoParser<World> {
+
+		@Override
+		public World apply(CustomArgumentInfo info) throws CustomArgumentException {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+	}
+	
+	@Subcommand("custom")
+	public void custom(CommandSender sender, @ACustomArgument(WorldArgument.class) World world) {
+		
 	}
 }

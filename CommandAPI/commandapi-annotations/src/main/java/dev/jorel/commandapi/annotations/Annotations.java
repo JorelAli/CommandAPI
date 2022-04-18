@@ -48,12 +48,14 @@ import javax.tools.JavaFileObject;
 
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandPermission;
+import dev.jorel.commandapi.annotations.annotations.ArgumentParser;
 import dev.jorel.commandapi.annotations.annotations.Command;
 import dev.jorel.commandapi.annotations.annotations.Help;
 import dev.jorel.commandapi.annotations.annotations.NeedsOp;
 import dev.jorel.commandapi.annotations.annotations.Permission;
 import dev.jorel.commandapi.annotations.annotations.Subcommand;
 import dev.jorel.commandapi.annotations.annotations.Suggestion;
+import dev.jorel.commandapi.annotations.annotations.Suggests;
 import dev.jorel.commandapi.annotations.arguments.AAdvancementArgument;
 import dev.jorel.commandapi.annotations.arguments.AAdventureChatArgument;
 import dev.jorel.commandapi.annotations.arguments.AAdventureChatComponentArgument;
@@ -130,20 +132,16 @@ public class Annotations extends AbstractProcessor {
 			APlayerArgument.class, APotionEffectArgument.class, ARecipeArgument.class, ARotationArgument.class,
 			AScoreboardSlotArgument.class, AScoreHolderArgument.class, ASoundArgument.class, AStringArgument.class,
 			ATeamArgument.class, ATextArgument.class, ATimeArgument.class, AUUIDArgument.class );
-			
-	public static final Set<Class<? extends Annotation>> METHOD_ANNOTATIONS = Set.of(
-		Subcommand.class, Suggestion.class
-	);
+		
 	
 	public static final Set<Class<? extends Annotation>> OTHER_ANNOTATIONS = Set.of(Command.class,
-			NeedsOp.class, Permission.class, Help.class);
+			NeedsOp.class, Permission.class, Help.class, Suggestion.class, ArgumentParser.class, Subcommand.class, Suggests.class);
 
 	// List of stuff we can deal with
 	@Override
 	public Set<String> getSupportedAnnotationTypes() {
 		List<Class<?>> annotations = new ArrayList<>();
 		annotations.addAll(ARGUMENT_ANNOTATIONS);
-		annotations.addAll(METHOD_ANNOTATIONS);
 		annotations.addAll(OTHER_ANNOTATIONS);
 		
 		return annotations.stream().map(Class::getCanonicalName).collect(Collectors.toSet());
