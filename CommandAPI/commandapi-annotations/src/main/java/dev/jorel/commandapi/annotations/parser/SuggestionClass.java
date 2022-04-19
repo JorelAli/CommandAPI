@@ -18,7 +18,7 @@ public record SuggestionClass(
 	}
 	
 	/**
-	 * Safe suggestions (SafeSuggestions<>) or normal suggestions
+	 * Safe suggestions (SafeSuggestions) or normal suggestions
 	 * (ArgumentSuggestions)?
 	 */
 	public boolean isSafeSuggestions() {

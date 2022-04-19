@@ -35,26 +35,26 @@ public class ArgumentData extends CommandElement {
 	private final Annotation argumentAnnotation;
 
 	/**
-	 * The relevant class for suggestions that @Suggests points to. This isn't
+	 * The relevant class for suggestions that {@code @Suggests} points to. This isn't
 	 * populated in the constructor, instead this is populated during the linking
 	 * step // TODO: Implement during linking
 	 */
 	private Optional<SuggestionClass> suggestions;
 
 	/**
-	 * Permission for this argument, if any. Implemented from @NeedsOp
-	 * or @Permission
+	 * Permission for this argument, if any. Implemented from {@code @NeedsOp}
+	 * or {@code @Permission}
 	 */
 	private final CommandPermission permission;
 
 	/**
 	 * The argument node's name. Retrieved from the parameter/field name,
-	 * or @NodeName annotation if declared
+	 * or {@code @NodeName} annotation if declared
 	 */
 	private final String nodeName;
 
 	/**
-	 * The class that this argument @Suggests, if any. We should assume that this
+	 * The class that this argument {@code @Suggests}, if any. We should assume that this
 	 * type element is something of type Class<? extends Supplier<?>>.
 	 */
 	private final Optional<TypeMirror> suggests;
@@ -74,7 +74,6 @@ public class ArgumentData extends CommandElement {
 	/**
 	 * If the suggestions parameter is suitable for this argument, it links it.
 	 * Otherwise, it doesn't. Returns true if linking was successful 
-	 * @param suggestions
 	 */
 	public boolean validateSuggestionsClass(ProcessingEnvironment processingEnv) {
 		// If this argument doesn't have @Suggests, we don't care
