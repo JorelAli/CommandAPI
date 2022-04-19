@@ -1,13 +1,15 @@
 package dev.jorel.commandapi.annotations;
 
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 
 import dev.jorel.commandapi.annotations.annotations.Command;
 import dev.jorel.commandapi.annotations.annotations.NeedsOp;
 import dev.jorel.commandapi.annotations.annotations.Permission;
+import dev.jorel.commandapi.annotations.annotations.Subcommand;
 
-public class AnnotationValidator {
+public class Validator {
 
 	/**
 	 * Return true if the @Command annotation is valid
@@ -24,6 +26,24 @@ public class AnnotationValidator {
 		for(String value : commandAnnotation.value()) {
 			if(value.isBlank()) {
 				logging.complain(typeElement, "@Command annotation value cannot be blank");
+				return false;
+			}
+		}
+		
+		// TODO: Possibly have to check whether the command has invalid characters (e.g. whitespace)
+		
+		return true;
+	}
+	
+	public static boolean validateSubCommand(ExecutableElement methodElement, Subcommand commandAnnotation, Logging logging) {
+		if(commandAnnotation.value().length == 0) {
+			logging.complain(methodElement, "@Command annotation must have at least one value");
+			return false;
+		}
+		
+		for(String value : commandAnnotation.value()) {
+			if(value.isBlank()) {
+				logging.complain(methodElement, "@Command annotation value cannot be blank");
 				return false;
 			}
 		}

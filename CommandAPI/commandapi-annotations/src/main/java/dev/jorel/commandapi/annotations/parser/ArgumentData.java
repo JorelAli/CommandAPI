@@ -161,19 +161,7 @@ public class ArgumentData extends CommandElement {
 		out.print(")"); // End argument constructor parameters
 
 		// Permissions
-		if (permission.equals(CommandPermission.NONE)) {
-			// Do nothing
-		} else if (permission.equals(CommandPermission.OP)) {
-			out.print(".withPermission(CommandPermission.OP)");
-		} else {
-			if (permission.isNegated()) {
-				out.print(".withoutPermission(\"");
-			} else {
-				out.print(".withPermission(\"");
-			}
-			out.print(permission.getPermission());
-			out.println("\")");
-		}
+		emitPermission(out, permission);
 
 		// Suggestions
 		if (suggestions.isPresent()) {

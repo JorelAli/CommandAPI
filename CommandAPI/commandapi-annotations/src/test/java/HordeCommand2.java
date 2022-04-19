@@ -52,6 +52,11 @@ public class HordeCommand2 {
 			public void area(CommandSender sender, @AIntegerArgument int size) {
 			}
 			
+			// TODO: This should fail because String is not an IntegerArgument!
+//			@Subcommand("area")
+//			public void area2(CommandSender sender, @AIntegerArgument String size) {
+//			}
+			
 			@Suggestion
 			class HazardSuggestions implements Supplier<ArgumentSuggestions> {
 
@@ -108,6 +113,7 @@ public class HordeCommand2 {
 	public void disable(CommandSender sender) {
 	}
 	
+	// TODO: When testing, try moving this to its own separate .java file and see if that links properly
 	@ArgumentParser
 	class WorldArgument implements CustomArgumentInfoParser<World> {
 

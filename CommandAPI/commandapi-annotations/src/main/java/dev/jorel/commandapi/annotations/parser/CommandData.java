@@ -1,11 +1,12 @@
 package dev.jorel.commandapi.annotations.parser;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 import dev.jorel.commandapi.CommandPermission;
 
-public class CommandData {
+public class CommandData extends CommandElement {
 
 	// The name of the command
 	private String name;
@@ -35,11 +36,13 @@ public class CommandData {
 	private String help;
 	private String shortDescriptionHelp;
 	
-	public CommandData() {
+	public CommandData(boolean isSubcommand) {
 		this.arguments = new ArrayList<>();
 		this.subcommandClasses = new ArrayList<>();
 		this.subcommandMethods = new ArrayList<>();
 		this.suggestionClasses = new ArrayList<>();
+		
+		this.isSubcommand = isSubcommand;
 	}
 	
 	// GETTERS and SETTERS
@@ -84,14 +87,6 @@ public class CommandData {
 		this.subcommandMethods.add(subcommandMethod);
 	}
 
-	public boolean isSubcommand() {
-		return isSubcommand;
-	}
-
-	public void setSubcommand(boolean isSubcommand) {
-		this.isSubcommand = isSubcommand;
-	}
-
 	public List<SuggestionClass> getSuggestionClasses() {
 		return suggestionClasses;
 	}
@@ -108,20 +103,13 @@ public class CommandData {
 		this.permission = permission;
 	}
 
-	public String getHelp() {
-		return help;
-	}
-
-	public void setHelp(String help) {
+	public void setHelp(String help, String shortDescription) {
 		this.help = help;
+		this.shortDescriptionHelp = shortDescription;
 	}
 
-	public String getShortDescriptionHelp() {
-		return shortDescriptionHelp;
-	}
-
-	public void setShortDescriptionHelp(String shortDescriptionHelp) {
-		this.shortDescriptionHelp = shortDescriptionHelp;
+	@Override
+	public void emit(PrintWriter out) {
 	}
 
 }
