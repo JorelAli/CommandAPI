@@ -9,6 +9,12 @@ import com.google.testing.compile.JavaFileObjects;
 import dev.jorel.commandapi.annotations.Annotations;
 
 public class AnnotationTests {
+	
+	{
+		new HordeCommand2().new HazardCommand().new CreateCommand().fire(null, null);
+		HordeCommand2 hc2 = new HordeCommand2();
+		hc2.new HazardCommand();
+	}
 
 	@Test
 	void googleCompileTestingInit() {

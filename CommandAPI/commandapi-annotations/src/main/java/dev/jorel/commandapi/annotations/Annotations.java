@@ -178,7 +178,7 @@ public class Annotations extends AbstractProcessor {
 		// We then perform out semantic analysis (checking that we've not got two
 		// @Default
 		// annotations, type checking of annotations to method parameter types, ensuring
-		// suggestions map to what they should)
+		// suggestions map to what they should), ensuring we've not got two commands of the same name...
 
 		new Semantics(logging).analyze(context);
 
