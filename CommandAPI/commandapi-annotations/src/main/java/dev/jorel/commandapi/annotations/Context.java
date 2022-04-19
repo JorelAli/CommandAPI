@@ -10,7 +10,6 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
@@ -25,11 +24,13 @@ import dev.jorel.commandapi.annotations.annotations.NeedsOp;
 import dev.jorel.commandapi.annotations.annotations.NodeName;
 import dev.jorel.commandapi.annotations.annotations.Permission;
 import dev.jorel.commandapi.annotations.annotations.Subcommand;
-import dev.jorel.commandapi.annotations.annotations.Suggestion;
 import dev.jorel.commandapi.annotations.annotations.Suggests;
 import dev.jorel.commandapi.annotations.annotations.WithoutPermission;
 import dev.jorel.commandapi.annotations.parser.ArgumentData;
 import dev.jorel.commandapi.annotations.parser.CommandData;
+import dev.jorel.commandapi.annotations.parser.SuggestionClass;
+import dev.jorel.commandapi.arguments.ArgumentSuggestions;
+import dev.jorel.commandapi.arguments.SafeSuggestions;
 
 public class Context {
 	
@@ -82,11 +83,14 @@ public class Context {
 						commandData.addSubcommandClass(subCommandContext.commandData);
 					}
 
+					// DON'T parse @Suggestion - this annotation is effectively redundant, we
+					// get all of the information about this from @Suggests, by linking to the
+					// relevant type mirror instead :)
 					// Parse @Suggestion classes
-					typeElementChild.getAnnotation(Suggestion.class);
-					if(typeElementChild.getAnnotation(Suggestion.class) != null) {
-						parseSuggestionMethod((TypeElement) typeElementChild);
-					}
+//					typeElementChild.getAnnotation(Suggestion.class);
+//					if(typeElementChild.getAnnotation(Suggestion.class) != null) {
+//						typeCheckSuggestionClass((TypeElement) typeElementChild);
+//					}
 					break;
 				case METHOD:
 					// Parse methods with @Subcommand
@@ -142,14 +146,22 @@ public class Context {
 		
 		// Parse suggestions, via @Suggests
 		final Optional<TypeMirror> suggests;
+		final Optional<SuggestionClass> suggestionsClass;
 		if(varElement.getAnnotation(Suggests.class) != null) {
-			suggests = Optional.of(Utils.getAnnotationClassValue(varElement, Suggests.class));
+			TypeMirror suggestsMirror = Utils.getAnnotationClassValue(varElement, Suggests.class);
+			suggests = Optional.of(suggestsMirror);
+			suggestionsClass = Optional.of(typeCheckSuggestionClass((TypeElement) processingEnv.getTypeUtils().asElement(suggestsMirror)));
 		} else {
 			suggests = Optional.empty();
+			suggestionsClass = Optional.empty();
 		}
 
 		// Add to command data
-		commandData.addArgument(new ArgumentData(varElement, annotation, permission, nodeName, suggests));
+		ArgumentData argumentData = new ArgumentData(varElement, annotation, permission, nodeName, suggests, suggestionsClass);
+		if(suggestionsClass.isPresent()) {
+			argumentData.validateSuggestionsClass(processingEnv);
+		}
+		commandData.addArgument(argumentData);
 	}
 
 	private void parseSubcommandMethod(ExecutableElement methodElement, Subcommand subcommandAnnotation) {
@@ -177,8 +189,8 @@ public class Context {
 		// commandData.addSubcommandMethod(null);
 	}
 
-	private void parseSuggestionMethod(TypeElement typeElement) {
-		logging.info(typeElement, "Parsing '" + typeElement.getSimpleName() + "' class");
+	private SuggestionClass typeCheckSuggestionClass(TypeElement typeElement) {
+		logging.info(typeElement, "Checking type signature for @Suggests class '" + typeElement.getSimpleName() + "' class");
 		
 		// java.util.function.Supplier<dev.jorel.commandapi.arguments.ArgumentSuggestions>
 		// java.util.function.Supplier<dev.jorel.commandapi.arguments.SafeSuggestions<org.bukkit.Location>>
@@ -186,39 +198,42 @@ public class Context {
 		// Get the interfaces (e.g. Supplier<ArgumentSuggestions> or
 		// Supplier<SafeSuggestions<Location>>)
 		
+		Types types = processingEnv.getTypeUtils();
+		TypeMirror argumentSuggestionsMirror = processingEnv.getElementUtils().getTypeElement(ArgumentSuggestions.class.getCanonicalName()).asType();
+		TypeMirror safeSuggestionsMirror = processingEnv.getElementUtils().getTypeElement(SafeSuggestions.class.getCanonicalName()).asType();
+		
 		TypeMirror supplierMirror = null;
 		
 		for(TypeMirror mirror : typeElement.getInterfaces()) {
 			
 			final TypeMirror supplier = processingEnv.getElementUtils().getTypeElement(Supplier.class.getCanonicalName()).asType();
-			Types types = processingEnv.getTypeUtils();
 			if(!types.isSameType(types.erasure(supplier), types.erasure(mirror))) {
-				logging.complain(types.asElement(mirror), "@Suggestion must implement java.util.function.Supplier");
+				logging.complain(types.asElement(mirror), "@Suggests class must implement java.util.function.Supplier directly");
 			}
 			
-			supplierMirror = mirror; 
-
-			processingEnv.getTypeUtils().erasure(supplier);
-			System.out.println("Supplier: " + supplier );
-			System.out.println("Mirror: " + mirror);
-			System.out.println(processingEnv.getTypeUtils().isSameType(mirror, supplier));
-			
-			// We want to inspect the generics (e.g. ArgumentSuggestions or
-			// SafeSuggestions<Location>
-			if(mirror instanceof DeclaredType declaredType) {
-				for(TypeMirror typeArgument : declaredType.getTypeArguments()) {
-					System.out.println(typeArgument);
+			supplierMirror = mirror;
+		}
+		
+		if(supplierMirror == null) {
+			logging.complain(typeElement, "@Suggests class must implement java.util.function.Supplier");
+		}
+		
+		// We want to inspect the generics (e.g. ArgumentSuggestions or
+		// SafeSuggestions<Location>
+		if(supplierMirror instanceof DeclaredType declaredType) {
+			for(TypeMirror typeArgument : declaredType.getTypeArguments()) {
+				if(types.isSameType(argumentSuggestionsMirror, typeArgument)) {
+					return new SuggestionClass(typeElement);
+				} else if(types.isSameType(types.erasure(safeSuggestionsMirror), types.erasure(typeArgument))) {
+					// TODO: More type checking here
+					return new SuggestionClass(typeElement);
+				} else {
+					logging.complain(typeElement, "@Suggests class's Supplier has an invalid type argument. Expected Supplier<ArgumentSuggestions> or Supplier<SafeSuggestions>");
 				}
 			}
 		}
 		
-		if(supplierMirror == null) {
-			logging.complain(typeElement, "@Suggestion must implement java.util.function.Supplier");
-		}
-		logging.info(typeElement.getInterfaces());
-		
-		// SuggestionClass suggestion = new SuggestionClass();
-		// commandData.addSuggestionClass(suggestion);		
+		return null;
 	}
 
 	/**

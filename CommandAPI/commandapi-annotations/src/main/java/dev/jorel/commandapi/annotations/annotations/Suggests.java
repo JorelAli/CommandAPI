@@ -26,12 +26,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.function.Supplier;
 
-import dev.jorel.commandapi.arguments.ArgumentSuggestions;
+import dev.jorel.commandapi.arguments.ISuggestions;
 
 @Target({ElementType.PARAMETER, ElementType.FIELD})
 @Retention(RetentionPolicy.SOURCE)
 public @interface Suggests {
 
-	public Class<? extends Supplier<ArgumentSuggestions>> value();
+	public Class<? extends Supplier<? extends ISuggestions>> value();
 	
 }

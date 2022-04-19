@@ -60,7 +60,7 @@ public class ArgumentData extends CommandElement {
 	private final Optional<TypeMirror> suggests;
 
 	public ArgumentData(VariableElement varElement, Annotation annotation, CommandPermission permission,
-			String nodeName, Optional<TypeMirror> suggests) {
+			String nodeName, Optional<TypeMirror> suggests, Optional<SuggestionClass> suggestions) {
 		this.varElement = varElement;
 		this.primitiveTypes = annotation.annotationType().getAnnotation(Primitive.class).value();
 		this.argumentAnnotation = annotation;
@@ -68,6 +68,7 @@ public class ArgumentData extends CommandElement {
 		this.permission = permission;
 		this.nodeName = nodeName;
 		this.suggests = suggests;
+		this.suggestions = suggestions;
 	}
 
 	/**
@@ -75,16 +76,19 @@ public class ArgumentData extends CommandElement {
 	 * Otherwise, it doesn't. Returns true if linking was successful 
 	 * @param suggestions
 	 */
-	public boolean linkSuggestion(ProcessingEnvironment processingEnv, SuggestionClass suggestions) {
+	public boolean validateSuggestionsClass(ProcessingEnvironment processingEnv) {
 		// If this argument doesn't have @Suggests, we don't care
-		if(!suggests.isPresent()) {
+		if(suggests.isEmpty() || this.suggestions.isEmpty()) {
 			return false;
 		}
+		
+		SuggestionClass suggestions = this.suggestions.get();
 
+		// This is already validated in Context:
 		// Check that @Suggests and SuggestionClass are matching the right class. If not, we can't link it
-		if(!processingEnv.getTypeUtils().isSameType(suggests.get(), suggestions.typeElement().asType())) {
-			return false;
-		}
+//		if(!processingEnv.getTypeUtils().isSameType(suggests.get(), suggestions.typeElement().asType())) {
+//			return false;
+//		}
 
 		if(suggestions.isSafeSuggestions()) {
 			// Safe suggestions requires type checking. Ensure that the types match

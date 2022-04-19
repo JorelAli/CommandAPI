@@ -14,7 +14,7 @@ import java.util.function.Function;
  * @param <S> the type of the suggestions
  */
 @FunctionalInterface
-public interface SafeSuggestions<S> {
+public non-sealed interface SafeSuggestions<S> extends ISuggestions {
 
 	/**
 	 * Convert this {@link SafeSuggestions} object into an {@link ArgumentSuggestions} by mapping the values with a string

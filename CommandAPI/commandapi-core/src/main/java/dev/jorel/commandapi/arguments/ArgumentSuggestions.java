@@ -18,7 +18,7 @@ import java.util.function.Function;
 // change the spaces into tabs!
 /* ANCHOR: Declaration */
 @FunctionalInterface
-public interface ArgumentSuggestions {
+public non-sealed interface ArgumentSuggestions extends ISuggestions {
 
     /**
      * Create a {@link CompletableFuture} resolving onto a brigadier {@link Suggestions} object.
