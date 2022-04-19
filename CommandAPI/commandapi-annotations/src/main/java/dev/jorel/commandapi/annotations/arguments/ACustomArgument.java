@@ -27,7 +27,7 @@ import java.lang.annotation.Target;
 
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentInfoParser;
 
-@Primitive("TODO: Provide a primitive here?")
+@Primitive("void")
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface ACustomArgument {

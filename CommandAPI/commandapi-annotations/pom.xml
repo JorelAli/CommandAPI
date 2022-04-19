@@ -25,6 +25,11 @@
 
 	<repositories>
 		<repository>
+			<id>codemc-repo</id>
+			<url>https://repo.codemc.org/repository/maven-public/</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
 			<id>spigot-repo</id>
 			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 		</repository>
@@ -37,9 +42,19 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>net.kyori</groupId>
+			<artifactId>adventure-platform-bukkit</artifactId>
+			<version>4.1.0</version>
+		</dependency>
+		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
 			<version>1.18.2-R0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>de.tr7zw</groupId>
+			<artifactId>item-nbt-api-plugin</artifactId>
+			<version>${nbtapi.version}</version>
 		</dependency>
 
 		<!-- Testing -->

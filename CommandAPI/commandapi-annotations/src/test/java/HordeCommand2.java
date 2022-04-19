@@ -52,7 +52,7 @@ public class HordeCommand2 {
 			public void area(CommandSender sender, @AIntegerArgument int size) {
 			}
 			
-			// TODO: This should fail because String is not an IntegerArgument!
+			// TODO: This should fail because String is not an 
 //			@Subcommand("area")
 //			public void area2(CommandSender sender, @AIntegerArgument String size) {
 //			}

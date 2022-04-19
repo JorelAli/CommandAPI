@@ -25,7 +25,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Primitive("String")
+@Primitive("java.lang.String")
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.PARAMETER, ElementType.FIELD})
 @Deprecated(forRemoval = false, since = "8.0.0")

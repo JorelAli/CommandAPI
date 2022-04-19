@@ -28,7 +28,7 @@ import java.lang.annotation.Target;
 import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
 
 @Primitive({ "java.util.Collection<String>", // ScoreHolderType.MULTIPLE
-		"String" // ScoreHolderType.SINGLE
+		"java.lang.String" // ScoreHolderType.SINGLE
 })
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.PARAMETER, ElementType.FIELD})

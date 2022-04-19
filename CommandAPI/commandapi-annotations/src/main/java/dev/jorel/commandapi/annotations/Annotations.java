@@ -159,6 +159,13 @@ public class Annotations extends AbstractProcessor {
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 		logging = new Logging(processingEnv);
+		
+		// TODO: This check doesn't go here, but it's very important for testing. Move this to a test suite when ready
+//		ARGUMENT_ANNOTATIONS.stream().forEach(annotation -> {
+//			System.out.print(annotation.getSimpleName() + ": ");
+//			Utils.getPrimitiveTypeMirror(annotation.getAnnotation(Primitive.class), processingEnv);
+//			System.out.println();
+//		});
 
 		Set<? extends Element> commandClasses = roundEnv.getElementsAnnotatedWith(Command.class);
 

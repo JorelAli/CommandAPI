@@ -8,9 +8,10 @@ import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
-import javax.lang.model.util.Types;
 
 import org.bukkit.command.CommandSender;
 
@@ -39,9 +40,48 @@ public class Utils {
 		}
 		return annotation;
 	}
+	
+	public static TypeMirror[] getPrimitiveTypeMirror(Primitive primitive, ProcessingEnvironment processingEnv) {
+		TypeMirror[] result = new TypeMirror[primitive.value().length];
+		for(int i = 0; i < primitive.value().length; i++) {
+			String p = primitive.value()[i];
+			TypeElement element = processingEnv.getElementUtils().getTypeElement(p);
+			
+			// Check if it's a primitive (e.g. int, boolean etc.)?
+			if(element == null) {
+				for(TypeKind kind : TypeKind.values()) {
+					if(kind.isPrimitive() && kind.name().equalsIgnoreCase(p)) {
+						// TODO: Is Boxing really the right thing to do here?
+						element = processingEnv.getTypeUtils().boxedClass(processingEnv.getTypeUtils().getPrimitiveType(kind));
+						break;
+					}
+				}
+			}
+			
+			// TODO: This is where things get a little messy. Until we figure out how to do this, we ignore arrays and generics
+			if(element == null) {
+				if(p.contains("<")) {
+					p = p.substring(0, p.indexOf("<"));
+				}
+				if(p.contains("[")) {
+					p = p.substring(0, p.indexOf("["));
+				}
+				element = processingEnv.getElementUtils().getTypeElement(p);
+			}
+			
+			if(element == null) {
+				// Oh no, we've got a missing type here!
+				System.out.println(p);
+			} else {
+				result[i] = element.asType();
+			}
+			
+		}
+		return result;
+	}
 
 	/**
-	 * Get the TypeMirror from an annotation which has a value of type class
+	 * Get the TypeMirror from an annotation which has a value of type {@code Class<>}
 	 */
 	public static TypeMirror getAnnotationClassValue(Element element, Class<? extends Annotation> annotationClass) {
 		String className = annotationClass.getCanonicalName();

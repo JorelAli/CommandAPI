@@ -31,6 +31,8 @@ import dev.jorel.commandapi.annotations.annotations.Permission;
 import dev.jorel.commandapi.annotations.annotations.Subcommand;
 import dev.jorel.commandapi.annotations.annotations.Suggests;
 import dev.jorel.commandapi.annotations.annotations.WithoutPermission;
+import dev.jorel.commandapi.annotations.arguments.ACustomArgument;
+import dev.jorel.commandapi.annotations.arguments.Primitive;
 import dev.jorel.commandapi.annotations.parser.ArgumentData;
 import dev.jorel.commandapi.annotations.parser.CommandData;
 import dev.jorel.commandapi.annotations.parser.SubcommandMethod;
@@ -169,7 +171,7 @@ public class Context {
 
 	/**
 	 * Parses argument fields - any class fields or method parameters with any
-	 * argument annotation declared in Annotations.ARGUEMNT_ANNOTATIONS
+	 * argument annotation declared in Annotations.ARGUMENT_ANNOTATIONS
 	 */
 	private ArgumentData parseArgumentField(VariableElement varElement, Annotation annotation) {
 		// Validate
@@ -193,16 +195,32 @@ public class Context {
 			suggests = Optional.empty();
 			suggestionsClass = Optional.empty();
 		}
+		
+		// Validate argument type
+		
+		if(!annotation.annotationType().equals(ACustomArgument.class)) {
+			TypeMirror[] primitives = Utils.getPrimitiveTypeMirror(annotation.annotationType().getAnnotation(Primitive.class), processingEnv);
+			final TypeMirror varType = varElement.asType(); // TODO: Apply type erasure
+			
+			System.out.println(Arrays.deepToString(primitives) + " c.f. " + varType );
+			
+			if(!Arrays.stream(primitives).anyMatch((TypeMirror x) -> {
+				if(varType.getKind().isPrimitive()) {
+					return processingEnv.getTypeUtils().isSameType(processingEnv.getTypeUtils().boxedClass(processingEnv.getTypeUtils().getPrimitiveType(varType.getKind())).asType(), x);
+				} else {
+					return processingEnv.getTypeUtils().isSameType(x, varType);
+				}
+			})) {
+				logging.complain(varElement, "Mismatched argument types. This argument of type " + varType + " does not match @" + Utils.getArgumentAnnotation(varElement).annotationType().getSimpleName());
+			}
+		}
 
-		// Add to command data
+		// Create ArgumentData
 		ArgumentData argumentData = new ArgumentData(varElement, annotation, permission, nodeName, suggests,
 				suggestionsClass);
 		if (suggestionsClass.isPresent()) {
 			argumentData.validateSuggestionsClass(processingEnv);
 		}
-		PrintWriter w = new PrintWriter(System.out);
-		argumentData.emit(w);
-		w.flush();
 		
 		return argumentData;
 	}

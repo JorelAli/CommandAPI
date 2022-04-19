@@ -68,7 +68,7 @@ public class Validator {
 			if(permission != null) {
 				// TODO: Validate @Permission value
 			}
-		} else {
+		} else if(needsOp != null && permission != null){
 			logging.complain(element, "Cannot have both @NeedsOp and @Permission");
 			return false;
 		}
