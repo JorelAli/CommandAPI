@@ -1,6 +1,5 @@
 package dev.jorel.commandapi.annotations;
 
-import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,7 +16,6 @@ import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.DeclaredType;
-import javax.lang.model.type.NoType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Types;
@@ -53,7 +51,7 @@ public class Context {
 		this.processingEnv = processingEnv;
 		this.logging = logging;
 
-		this.commandData = new CommandData(classElement, subCommandClass);
+		this.commandData = new CommandData(classElement, subCommandClass, processingEnv);
 
 		parseCommandClass(classElement, subCommandClass);
 	}
@@ -144,7 +142,7 @@ public class Context {
 				case FIELD:
 					annotation = Utils.getArgumentAnnotation(typeElementChild);
 					if (annotation != null) {
-						commandData.addArgument(parseArgumentField((VariableElement) typeElementChild, annotation));
+						commandData.addArgument(parseArgumentField((VariableElement) typeElementChild, annotation, true));
 					}
 					break;
 				default:
@@ -201,7 +199,7 @@ public class Context {
 	 * Parses argument fields - any class fields or method parameters with any
 	 * argument annotation declared in Annotations.ARGUMENT_ANNOTATIONS
 	 */
-	private ArgumentData parseArgumentField(VariableElement varElement, Annotation annotation) {
+	private ArgumentData parseArgumentField(VariableElement varElement, Annotation annotation, boolean classArgument) {
 		// Validate
 		Validator.validatePermissions(varElement, logging);
 
@@ -245,7 +243,7 @@ public class Context {
 
 		// Create ArgumentData
 		ArgumentData argumentData = new ArgumentData(varElement, annotation, permission, nodeName, suggests,
-				suggestionsClass, commandData);
+				suggestionsClass, commandData, classArgument);
 		if (suggestionsClass.isPresent()) {
 			argumentData.validateSuggestionsClass(processingEnv);
 		}
@@ -302,7 +300,7 @@ public class Context {
 			if(annotation == null) {
 				logging.complain(parameter, "Argument is missing a CommandAPI argument annotation. " + Utils.predictAnnotation(parameter));
 			} else {
-				arguments.add(parseArgumentField(parameter, annotation));
+				arguments.add(parseArgumentField(parameter, annotation, false));
 			}
 		}
 		
@@ -316,7 +314,7 @@ public class Context {
 			return null;
 		}
 
-		return new SubcommandMethod(methodElement, name, aliases, permission, arguments, isResulting);
+		return new SubcommandMethod(methodElement, name, aliases, permission, arguments, isResulting, this.commandData);
 	}
 
 	private SuggestionClass typeCheckSuggestionClass(TypeElement typeElement) {

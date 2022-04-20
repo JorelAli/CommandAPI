@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.TypeElement;
 
 import dev.jorel.commandapi.CommandPermission;
@@ -46,11 +47,13 @@ public class CommandData extends CommandElement {
 	
 	private CommandData parent = null;
 	
+	private final ProcessingEnvironment processingEnv;
+	
 	public CommandData getParent() {
 		return parent;
 	}
 
-	public CommandData(TypeElement classElement, boolean isSubcommand) {
+	public CommandData(TypeElement classElement, boolean isSubcommand, ProcessingEnvironment processingEnv) {
 		this.typeElement = classElement;
 		this.arguments = new ArrayList<>();
 		this.subcommandClasses = new ArrayList<>();
@@ -58,8 +61,13 @@ public class CommandData extends CommandElement {
 		this.suggestionClasses = new ArrayList<>();
 		
 		this.isSubcommand = isSubcommand;
+		this.processingEnv = processingEnv;
 	}
 
+	public ProcessingEnvironment getProcessingEnv() {
+		return this.processingEnv;
+	}
+	
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -102,7 +110,7 @@ public class CommandData extends CommandElement {
 		this.shortDescriptionHelp = shortDescription;
 	}
 	
-	private List<ArgumentData> getInheritedArguments() {
+	public List<ArgumentData> getInheritedArguments() {
 		List<ArgumentData> inheritedArguments = new ArrayList<>();
 		CommandData current = this.parent;
 		while(current != null) {

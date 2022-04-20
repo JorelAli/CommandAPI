@@ -136,6 +136,15 @@ public class HordeCommand2 {
 		
 	}
 	
+//	static void blah(Object[] args) {
+//		HordeCommand2 command = new HordeCommand2();
+//		command.byeeeeee = (int) args[0];
+//		command.hiiiiii = (String) args[1];
+//		HordeCommand2.HazardCommand.ModifyCommand command1 = command.new HazardCommand().new ModifyCommand();
+//		command1.name = (String) args[2];
+//		command1.area((Player) null, 2);
+//	}
+	
 //	static void a(HordeCommand2 command){
 //		new CommandAPICommand("modify")
 //	    .withArguments(new StringArgument("hiiiiii"))

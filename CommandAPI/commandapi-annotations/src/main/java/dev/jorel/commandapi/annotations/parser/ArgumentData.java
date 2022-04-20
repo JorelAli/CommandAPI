@@ -60,9 +60,15 @@ public class ArgumentData extends CommandElement {
 	private final Optional<TypeMirror> suggests;
 	
 	private final CommandData parent;
+	
+	/**
+	 * Is this argument an argument bound to a class field (as opposed to being an
+	 * argument declared in the arguments of a method)?
+	 */
+	private final boolean classArgument;
 
 	public ArgumentData(VariableElement varElement, Annotation annotation, CommandPermission permission,
-			String nodeName, Optional<TypeMirror> suggests, Optional<SuggestionClass> suggestions, CommandData parent) {
+			String nodeName, Optional<TypeMirror> suggests, Optional<SuggestionClass> suggestions, CommandData parent, boolean classArgument) {
 		this.varElement = varElement;
 		this.primitiveTypes = annotation.annotationType().getAnnotation(Primitive.class).value();
 		this.argumentAnnotation = annotation;
@@ -72,6 +78,15 @@ public class ArgumentData extends CommandElement {
 		this.suggests = suggests;
 		this.suggestions = suggestions;
 		this.parent = parent;
+		this.classArgument = classArgument;
+	}
+	
+	public boolean isClassArgument() {
+		return this.classArgument;
+	}
+	
+	public CommandData getParent() {
+		return this.parent;
 	}
 
 	/**
