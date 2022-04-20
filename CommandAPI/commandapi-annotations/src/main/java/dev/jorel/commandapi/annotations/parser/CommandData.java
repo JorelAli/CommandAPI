@@ -4,10 +4,14 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.lang.model.element.TypeElement;
+
 import dev.jorel.commandapi.CommandPermission;
 
 public class CommandData extends CommandElement {
 
+	private final TypeElement typeElement;
+	
 	// The name of the command
 	private String name;
 
@@ -36,7 +40,8 @@ public class CommandData extends CommandElement {
 	private String help;
 	private String shortDescriptionHelp;
 	
-	public CommandData(boolean isSubcommand) {
+	public CommandData(TypeElement classElement, boolean isSubcommand) {
+		this.typeElement = classElement;
 		this.arguments = new ArrayList<>();
 		this.subcommandClasses = new ArrayList<>();
 		this.subcommandMethods = new ArrayList<>();
@@ -44,19 +49,9 @@ public class CommandData extends CommandElement {
 		
 		this.isSubcommand = isSubcommand;
 	}
-	
-	// GETTERS and SETTERS
-
-	public String getName() {
-		return name;
-	}
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String[] getAliases() {
-		return aliases;
 	}
 
 	public void setAliases(String[] aliases) {
@@ -109,7 +104,27 @@ public class CommandData extends CommandElement {
 	}
 
 	@Override
-	public void emit(PrintWriter out) {
+	public void emit(PrintWriter out, int currentIndentation) {
+		// Here, we're just writing the command itself (new CommandAPICommand ...) and nothing else?
+
+		out.println("public void register(" + typeElement.getSimpleName() + " command) {");
+		out.println();
+		indent();
+		
+		for(SubcommandMethod method : subcommandMethods) {
+			out.println(indentation() + "new CommandAPICommand(\"" + name + "\")");
+			indent();
+			for(ArgumentData argument : arguments) {
+				argument.emit(out, indentation);
+			}
+			method.emit(out, indentation);
+			
+			out.println();
+			dedent();
+		}
+		
+		dedent();
+		out.println("}"); // End public void register()
 	}
 
 }

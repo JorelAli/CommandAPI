@@ -46,16 +46,20 @@ public class Context {
 	private Logging logging;
 
 	private CommandData commandData;
-
+	
 	// Construct some context :)
 	public Context(TypeElement classElement, ProcessingEnvironment processingEnv, Logging logging,
 			boolean subCommandClass) {
 		this.processingEnv = processingEnv;
 		this.logging = logging;
 
-		this.commandData = new CommandData(subCommandClass);
+		this.commandData = new CommandData(classElement, subCommandClass);
 
 		parseCommandClass(classElement, subCommandClass);
+	}
+	
+	public CommandData getCommandData() {
+		return this.commandData;
 	}
 
 	private void parseCommandClass(TypeElement typeElement, boolean subCommandClass) {
@@ -76,6 +80,17 @@ public class Context {
 			if (!Validator.validateCommand(typeElement, commandAnnotation, logging)) {
 				return;
 			}
+			
+			final String name = commandAnnotation.value()[0];
+			final String[] aliases;
+			if (commandAnnotation.value().length == 1) {
+				aliases = new String[0];
+			} else {
+				aliases = new String[commandAnnotation.value().length - 1];
+				System.arraycopy(commandAnnotation.value(), 1, aliases, 0, commandAnnotation.value().length - 1);
+			}
+			commandData.setName(name);
+			commandData.setAliases(aliases);
 		}
 
 		// Parse annotations on inner fields, classes and methods
@@ -110,7 +125,7 @@ public class Context {
 					// Parse methods with @Subcommand
 					annotation = typeElementChild.getAnnotation(Subcommand.class);
 					if (annotation != null) {
-						parseSubcommandMethod((ExecutableElement) typeElementChild, (Subcommand) annotation);
+						commandData.addSubcommandMethod(parseSubcommandMethod((ExecutableElement) typeElementChild, (Subcommand) annotation));
 					}
 					break;
 				case FIELD:
@@ -202,7 +217,7 @@ public class Context {
 			TypeMirror[] primitives = Utils.getPrimitiveTypeMirror(annotation.annotationType().getAnnotation(Primitive.class), processingEnv);
 			final TypeMirror varType = varElement.asType(); // TODO: Apply type erasure
 			
-			System.out.println(Arrays.deepToString(primitives) + " c.f. " + varType );
+//			System.out.println(Arrays.deepToString(primitives) + " c.f. " + varType );
 			
 			if(!Arrays.stream(primitives).anyMatch((TypeMirror x) -> {
 				if(varType.getKind().isPrimitive()) {
@@ -225,31 +240,31 @@ public class Context {
 		return argumentData;
 	}
 
-	private void parseSubcommandMethod(ExecutableElement methodElement, Subcommand subcommandAnnotation) {
+	private SubcommandMethod parseSubcommandMethod(ExecutableElement methodElement, Subcommand subcommandAnnotation) {
 		logging.info(methodElement, "Parsing '" + Arrays.toString(subcommandAnnotation.value()) + "' method");
 
 		// Check that there is at least one parameter
 		List<? extends VariableElement> parameters = methodElement.getParameters();
 		if (parameters.isEmpty()) {
 			logging.complain(methodElement, "This method has no valid CommandSender parameter!");
-			return;
+			return null;
 		}
 
 		// Check if the first parameter is a CommandSender (or instance thereof)
 		try {
 			if (!Utils.isValidSender(parameters.get(0).asType())) {
 				logging.complain(methodElement, parameters.get(0).asType() + " is not a valid CommandSender");
-				return;
+				return null;
 			}
 		} catch (ClassNotFoundException e) {
 			logging.complain(methodElement,
 					"Could not load class information for '" + parameters.get(0).asType() + "'");
 			e.printStackTrace();
-			return;
+			return null;
 		}
 
 		if (!Validator.validateSubCommand(methodElement, subcommandAnnotation, logging)) {
-			return;
+			return null;
 		}
 
 		final String name = subcommandAnnotation.value()[0];
@@ -285,12 +300,10 @@ public class Context {
 			isResulting = true;
 		} else {
 			logging.complain(methodElement, "@Subcommand method return type must be 'void' or 'int'");
-			return;
+			return null;
 		}
 
-		SubcommandMethod method = new SubcommandMethod(methodElement, name, aliases, permission, arguments, isResulting);
-
-		// commandData.addSubcommandMethod(null);
+		return new SubcommandMethod(methodElement, name, aliases, permission, arguments, isResulting);
 	}
 
 	private SuggestionClass typeCheckSuggestionClass(TypeElement typeElement) {

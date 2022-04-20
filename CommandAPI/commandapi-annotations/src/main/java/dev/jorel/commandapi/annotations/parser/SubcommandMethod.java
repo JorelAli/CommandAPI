@@ -28,7 +28,7 @@ public class SubcommandMethod extends CommandElement {
 	private CommandPermission permission;
 	
 	/**
-	 * Arguments, including arguments "inherited" from the current (and parent(s)) class(es)
+	 * Arguments, including arguments "inherited" from the current (and parent(s)) class(es)?
 	 */
 	private List<ArgumentData> arguments;
 	
@@ -45,8 +45,9 @@ public class SubcommandMethod extends CommandElement {
 	}
 
 	@Override
-	public void emit(PrintWriter out) {
-
+	public void emit(PrintWriter out, int currentIndentation) {
+		this.indentation = currentIndentation;
+		
 		if (methodElement.getAnnotation(Subcommand.class) != null) {
 			
 			// MultiLiteralArgument representing this command
@@ -63,8 +64,19 @@ public class SubcommandMethod extends CommandElement {
 			emitPermission(out, permission);
 			
 			dedent();
-			dedent();
 			out.println(indentation() + ")");
+			
+			dedent();
+			// TODO: executor type
+			out.println(indentation() + ".executes((sender, args) -> {");
+			indent();
+			
+			out.println(indentation() + "command." + methodElement.getSimpleName() + "(sender, args[0]);");
+			
+			dedent();
+			out.println(indentation() + "}");
+		} else {
+			// TODO: Assert. This object should never have been constructed!
 		}
 	}
 	

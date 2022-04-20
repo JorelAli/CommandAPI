@@ -21,11 +21,11 @@ public class Logging {
 	}
 	
 	public void info(Element element, String message) {
-		processingEnv.getMessager().printMessage(Kind.MANDATORY_WARNING, message, element);
+		//processingEnv.getMessager().printMessage(Kind.MANDATORY_WARNING, message, element);
 	}
 	
 	public void info(Object message) {
-		processingEnv.getMessager().printMessage(Kind.MANDATORY_WARNING, String.valueOf(message));
+		//processingEnv.getMessager().printMessage(Kind.MANDATORY_WARNING, String.valueOf(message));
 	}
 	
 	public Messager getMessager() {

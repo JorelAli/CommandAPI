@@ -23,6 +23,12 @@ import dev.jorel.commandapi.arguments.SafeSuggestions;
 @Command("horde")
 public class HordeCommand2 {
 
+	@AStringArgument
+	String hiiiiii;
+	
+	@AIntegerArgument
+	int byeeeeee;
+
 	@Subcommand("hazard")
 	class HazardCommand {
 

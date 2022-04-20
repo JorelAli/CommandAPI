@@ -1,13 +1,8 @@
 package dev.jorel.commandapi.annotations.parser;
 
-import java.io.PrintWriter;
-
 public abstract class CommandElement implements Emittable {
 	
 	public int indentation;
-	
-	@Override
-	public abstract void emit(PrintWriter out);
 	
 	public String indentation() {
 		StringBuilder builder = new StringBuilder();
@@ -23,6 +18,9 @@ public abstract class CommandElement implements Emittable {
 	
 	public void dedent() {
 		indentation--;
+		if(indentation < 0) {
+			indentation = 0;
+		}
 	}
 
 }

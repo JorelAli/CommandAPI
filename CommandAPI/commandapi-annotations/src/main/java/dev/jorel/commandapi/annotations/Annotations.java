@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -181,6 +182,14 @@ public class Annotations extends AbstractProcessor {
 		// suggestions map to what they should), ensuring we've not got two commands of the same name...
 
 		new Semantics(logging).analyze(context);
+		
+		PrintWriter out = new PrintWriter(System.out);
+		for(Entry<Element, Context> entry : context.entrySet()) {
+			entry.getValue().getCommandData().emit(out, 0);
+			out.flush();
+			System.out.println();
+			System.out.println();
+		}
 
 		// Linking step, where we link suggestions to arguments that suggest them?
 

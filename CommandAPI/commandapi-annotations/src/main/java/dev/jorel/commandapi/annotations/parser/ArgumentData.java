@@ -111,7 +111,8 @@ public class ArgumentData extends CommandElement {
 	}
 
 	@Override
-	public void emit(PrintWriter out) {
+	public void emit(PrintWriter out, int currentIndentation) {
+		this.indentation = currentIndentation;
 		out.print(indentation() + ".withArguments(new ");
 
 		// We're assuming that the name of the argument MUST be "A" + the same name
