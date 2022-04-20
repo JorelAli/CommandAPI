@@ -369,7 +369,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		// Register it to the Bukkit permissions registry
 		if (finalPermission.getPermission() != null) {
 			try {
-				Bukkit.getPluginManager().addPermission(new Permission(finalPermission.getPermission()));
+				Bukkit.getPluginManager().addPermission(new Permission(finalPermission.getPermission().get()));
 			} catch (IllegalArgumentException e) {
 				assert true; // nop, not an error.
 			}
@@ -395,7 +395,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 			} else if (permission.equals(CommandPermission.OP)) {
 				satisfiesPermissions = sender.isOp();
 			} else {
-				satisfiesPermissions = sender.hasPermission(permission.getPermission());
+				satisfiesPermissions = sender.hasPermission(permission.getPermission().get());
 			}
 		}
 		if(permission.isNegated()) {
@@ -420,7 +420,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 			CommandPermission perm = entry.getValue();
 			CommandAPI.logInfo(perm.toString() + " -> /" + cmdName);
 			
-			String permNode = (perm.equals(CommandPermission.NONE) || perm.isNegated()) ? "" : perm.getPermission();
+			String permNode = (perm.equals(CommandPermission.NONE) || perm.isNegated()) ? "" : perm.getPermission().get();
 			
 			/*
 			 * Sets the permission. If you have to be OP to run this command,
@@ -834,7 +834,35 @@ public class CommandAPIHandler<CommandSourceStack> {
 		}
 	}
 	
-
+	private String generateCommandHelpPrefix(String command) {
+		return (Bukkit.getPluginCommand(command) == null ? "/" : "/minecraft:") + command;
+	}
+	
+	private void generateHelpUsage(StringBuilder sb, CommandHelp command) {
+		sb.append(ChatColor.GOLD + "Usage: " + ChatColor.WHITE);
+		
+		// Generate usages
+		List<String> usages = new ArrayList<>();
+		for(RegisteredCommand rCommand : registeredCommands) {
+			if(rCommand.command().equals(command.commandName())) {
+				StringBuilder usageString = new StringBuilder();
+				usageString.append("/" + command.commandName() + " ");
+				for(String arg : rCommand.argsAsStr()) {
+					usageString.append("<" + arg.split(":")[0] + "> ");
+				}
+				usages.add(usageString.toString());
+			}
+		}
+		
+		// If 1 usage, put it on the same line, otherwise format like a list
+		if(usages.size() == 1) {
+			sb.append(usages.get(0));
+		} else if(usages.size() > 1) {
+			for(String usage : usages) {
+				sb.append("\n- " + usage);
+			}
+		}
+	}
 
 	public void updateHelpForCommands() {
 		Map<String, HelpTopic> helpTopicsToAdd = new HashMap<>();
@@ -853,79 +881,34 @@ public class CommandAPIHandler<CommandSourceStack> {
 			// Generate full description
 			StringBuilder sb = new StringBuilder();
 			if(command.fullDescription().isPresent()) {
-				sb.append(ChatColor.GOLD);
-				sb.append("Description: ");
-				sb.append(ChatColor.WHITE);
-				sb.append(command.fullDescription().get());
-				sb.append("\n");
+				sb.append(ChatColor.GOLD + "Description: " + ChatColor.WHITE + command.fullDescription().get() + "\n");
 			}
-			sb.append(ChatColor.GOLD);
-			sb.append("Usage: ");
-			sb.append(ChatColor.WHITE);
-			
-			// Generate usages
-			List<String> usages = new ArrayList<>();
-			for(RegisteredCommand rCommand : registeredCommands) {
-				if(rCommand.command().equals(command.commandName())) {
-					StringBuilder usageString = new StringBuilder();
-					usageString.append("/" + command.commandName() + " ");
-					for(String arg : rCommand.argsAsStr()) {
-						usageString.append("<" + arg.split(":")[0] + "> ");
-					}
-					usages.add(usageString.toString());
-				}
-			}
-			
-			// If 1 usage, put it on the same line, otherwise format like a list
-			if(usages.size() == 1) {
-				sb.append(usages.get(0) + "\n");
-			} else if(usages.size() > 1) {
-				sb.append("\n");
-				for(String usage : usages) {
-					sb.append("- " + usage + "\n");
-				}
-			}
+
+			generateHelpUsage(sb, command);
+			sb.append("\n");
 			
 			// Generate aliases. We make a copy of the StringBuilder because we
 			// want to change the output when we register aliases
 			StringBuilder aliasSb = new StringBuilder(sb.toString());
 			if(command.aliases().length > 0) {
-				sb.append(ChatColor.GOLD);
-				sb.append("Aliases: ");
-				sb.append(ChatColor.WHITE);
-				sb.append(ChatColor.WHITE + String.join(", ", command.aliases()));
+				sb.append(ChatColor.GOLD + "Aliases: " + ChatColor.WHITE + String.join(", ", command.aliases()));
 			}
 			
-			String permission;
-			if(command.permission().getPermission() != null) {
-				permission = command.permission().getPermission(); 
-			} else {
-				// Must be empty string, not null as defined by OBC::CustomHelpTopic
-				permission = "";
-			}
+			// Must be empty string, not null as defined by OBC::CustomHelpTopic
+			String permission = command.permission().getPermission().orElseGet(() -> "");
 			
 			// Don't override the plugin help topic
-			if(Bukkit.getPluginCommand(command.commandName()) != null) {
-				helpTopicsToAdd.put("/minecraft:" + command.commandName(),
-						NMS.generateHelpTopic("/minecraft:" + command.commandName(), shortDescription, sb.toString().trim(), permission));
-			}
-			else
-			{
-				helpTopicsToAdd.put("/" + command.commandName(),
-						NMS.generateHelpTopic("/" + command.commandName(), shortDescription, sb.toString().trim(), permission));
-			}
+			String commandPrefix = generateCommandHelpPrefix(command.commandName);
+			helpTopicsToAdd.put(commandPrefix, NMS.generateHelpTopic(commandPrefix, shortDescription, sb.toString().trim(), permission));
 			
 			for(String alias : command.aliases) {
 				StringBuilder currentAliasSb = new StringBuilder(aliasSb.toString());
 				if(command.aliases().length > 0) {
-					currentAliasSb.append(ChatColor.GOLD);
-					currentAliasSb.append("Aliases: ");
-					currentAliasSb.append(ChatColor.WHITE);
+					currentAliasSb.append(ChatColor.GOLD + "Aliases: " + ChatColor.WHITE);
 					
 					// We want to get all aliases (including the original command name),
 					// except for the current alias
-					List<String> aliases = new ArrayList<>();
-					aliases.addAll(Arrays.asList(command.aliases()));
+					List<String> aliases = new ArrayList<>(Arrays.asList(command.aliases()));
 					aliases.add(command.commandName());
 					aliases.remove(alias);
 					
@@ -933,15 +916,8 @@ public class CommandAPIHandler<CommandSourceStack> {
 				}
 
 				// Don't override the plugin help topic
-				if(Bukkit.getPluginCommand(alias) != null) {
-					helpTopicsToAdd.put("/minecraft:" + alias,
-							NMS.generateHelpTopic("/minecraft:" + alias, shortDescription, currentAliasSb.toString().trim(), permission));
-				}
-				else
-				{
-					helpTopicsToAdd.put("/" + alias,
-							NMS.generateHelpTopic("/" + alias, shortDescription, currentAliasSb.toString().trim(), permission));
-				}
+				commandPrefix = generateCommandHelpPrefix(alias);
+				helpTopicsToAdd.put(commandPrefix, NMS.generateHelpTopic(commandPrefix, shortDescription, currentAliasSb.toString().trim(), permission));
 			}
 		}
 		
