@@ -18,6 +18,8 @@ import org.bukkit.command.CommandSender;
 import dev.jorel.commandapi.annotations.arguments.Primitive;
 
 public class Utils {
+	
+	public final static String COMMAND_VAR_NAME = "command";
 
 	public static <T extends Annotation> boolean hasAnnotation(Element element, Class<T> annotation) {
 		return element.getAnnotation(annotation) != null;

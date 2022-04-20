@@ -88,6 +88,14 @@ public class ArgumentData extends CommandElement {
 	public CommandData getParent() {
 		return this.parent;
 	}
+	
+	public TypeMirror getTypeMirror() {
+		return this.varElement.asType();
+	}
+	
+	public String getArgumentVariableName() {
+		return this.varElement.getSimpleName().toString();
+	}
 
 	/**
 	 * If the suggestions parameter is suitable for this argument, it links it.

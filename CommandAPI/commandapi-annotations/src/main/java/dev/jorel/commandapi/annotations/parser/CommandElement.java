@@ -6,10 +6,10 @@ import java.util.Stack;
 
 import javax.lang.model.element.NestingKind;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Types;
 
 import dev.jorel.commandapi.CommandPermission;
+import dev.jorel.commandapi.annotations.Utils;
 
 public abstract class CommandElement {
 
@@ -108,7 +108,7 @@ public abstract class CommandElement {
 				}
 				
 				// TODO: We should probably store this variable name somewhere in a static final location
-				out.print("command");
+				out.print(Utils.COMMAND_VAR_NAME);
 				for(TypeElement typeElement : typeStack) {
 					out.print(".new " + typeElement.getSimpleName() + "()");
 				}

@@ -136,14 +136,35 @@ public class HordeCommand2 {
 		
 	}
 	
-//	static void blah(Object[] args) {
-//		HordeCommand2 command = new HordeCommand2();
-//		command.byeeeeee = (int) args[0];
-//		command.hiiiiii = (String) args[1];
-//		HordeCommand2.HazardCommand.ModifyCommand command1 = command.new HazardCommand().new ModifyCommand();
-//		command1.name = (String) args[2];
-//		command1.area((Player) null, 2);
-//	}
+	static void blah(Object[] args) {
+		HordeCommand2 command = new HordeCommand2();
+		{
+			// Optimal
+			command.byeeeeee = (int) args[0];
+			command.hiiiiii = (String) args[1];
+			HordeCommand2.HazardCommand.ModifyCommand command1 = command.new HazardCommand().new ModifyCommand();
+			command1.name = (String) args[2];
+			command1.area((Player) null, 2);
+		}
+		{
+			// Suboptimal, but should be much much easier to implement
+			command.byeeeeee = (int) args[0];
+			command.hiiiiii = (String) args[1];
+			HordeCommand2.HazardCommand command1 = command.new HazardCommand();
+			// command1 initialization (not needed here)
+			HordeCommand2.HazardCommand.ModifyCommand command2 = command1.new ModifyCommand();
+			command2.name = (String) args[2];
+			command2.area((Player) null, 2);
+		}
+		{
+			// Simplest (but bad practice)
+			command.byeeeeee = (int) args[0];
+			command.hiiiiii = (String) args[1];
+			command.new HazardCommand() {{}}.new ModifyCommand() {{this.name = (String) args[2]; }}.area((Player) null, 2);
+		}
+		
+		
+	}
 	
 //	static void a(HordeCommand2 command){
 //		new CommandAPICommand("modify")
