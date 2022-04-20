@@ -58,9 +58,11 @@ public class ArgumentData extends CommandElement {
 	 * type element is something of type Class<? extends Supplier<?>>.
 	 */
 	private final Optional<TypeMirror> suggests;
+	
+	private final CommandData parent;
 
 	public ArgumentData(VariableElement varElement, Annotation annotation, CommandPermission permission,
-			String nodeName, Optional<TypeMirror> suggests, Optional<SuggestionClass> suggestions) {
+			String nodeName, Optional<TypeMirror> suggests, Optional<SuggestionClass> suggestions, CommandData parent) {
 		this.varElement = varElement;
 		this.primitiveTypes = annotation.annotationType().getAnnotation(Primitive.class).value();
 		this.argumentAnnotation = annotation;
@@ -69,6 +71,7 @@ public class ArgumentData extends CommandElement {
 		this.nodeName = nodeName;
 		this.suggests = suggests;
 		this.suggestions = suggestions;
+		this.parent = parent;
 	}
 
 	/**
@@ -160,25 +163,15 @@ public class ArgumentData extends CommandElement {
 
 		out.print(")"); // End argument constructor parameters
 
+		indent();
+		
 		// Permissions
 		emitPermission(out, permission);
 
 		// Suggestions
-		if (suggestions.isPresent()) {
-			SuggestionClass suggestion = suggestions.get();
-			if (suggestion.isSafeSuggestions()) {
-				// TODO: Semantics must check that whatever we're applying these suggestions to
-				// implements SafeOverrideableArgument.
-				// TODO: Semantics must check that the type argument of
-				// SafeOverrideableArgument<?> matches this.primitive
-				out.print(".replaceSafeSuggestions(new ");
-			} else {
-				out.print(".replaceSuggestions(new ");
-			}
-
-			out.print(suggestion.typeElement().getQualifiedName());
-			out.print("().get())");
-		}
+		emitSuggestion(out, suggestions, parent);
+		
+		dedent();
 
 		// Argument listing. Only applies to @LiteralArgument
 		if (argumentAnnotation instanceof ALiteralArgument) {

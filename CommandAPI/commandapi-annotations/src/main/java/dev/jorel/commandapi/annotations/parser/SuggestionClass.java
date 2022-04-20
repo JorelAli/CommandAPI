@@ -1,5 +1,6 @@
 package dev.jorel.commandapi.annotations.parser;
 
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.TypeElement;
 
 public record SuggestionClass(
@@ -10,11 +11,17 @@ public record SuggestionClass(
 
 		/**
 		 * In the case of SafeSuggestions, the class that it's parameterized over
+		 * TODO: Why is primitive null?
 		 */
-		String primitive) {
+		String primitive, 
+		
+		/**
+		 * Being passed here because we need it to emit suggestions
+		 */
+		ProcessingEnvironment processingEnv) {
 
-	public SuggestionClass(TypeElement typeElement) {
-		this(typeElement, null);
+	public SuggestionClass(TypeElement typeElement, ProcessingEnvironment processingEnv) {
+		this(typeElement, null, processingEnv);
 	}
 	
 	/**

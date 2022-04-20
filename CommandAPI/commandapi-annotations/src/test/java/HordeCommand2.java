@@ -135,4 +135,20 @@ public class HordeCommand2 {
 	public void custom(CommandSender sender, @ACustomArgument(WorldArgument.class) World world) {
 		
 	}
+	
+//	static void a(HordeCommand2 command){
+//		new CommandAPICommand("modify")
+//	    .withArguments(new StringArgument("hiiiiii"))
+//	    .withArguments(new IntegerArgument("byeeeeee", -2147483648, 2147483647))
+//	    .withArguments(new StringArgument("name").withPermission("hello")
+//	.replaceSuggestions(new HordeCommand2().new HazardCommand().new ModifyCommand().new HazardSuggestions().get()))
+//	    .withArguments(
+//	        new MultiLiteralArgument("area")
+//	            .setListed(false)
+//	        )
+//	    .executes((sender, args) -> {
+//	        command.area(sender, args[0]);
+//	    }
+//
+//	}
 }

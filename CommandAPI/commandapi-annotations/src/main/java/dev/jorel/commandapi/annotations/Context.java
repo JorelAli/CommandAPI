@@ -107,8 +107,21 @@ public class Context {
 					// Parse @Subcommand classes
 					annotation = typeElementChild.getAnnotation(Subcommand.class);
 					if (annotation != null) {
+
+						Subcommand subcommandAnnotation = typeElementChild.getAnnotation(Subcommand.class);
+						final String name = subcommandAnnotation.value()[0];
+						final String[] aliases;
+						if (subcommandAnnotation.value().length == 1) {
+							aliases = new String[0];
+						} else {
+							aliases = new String[subcommandAnnotation.value().length - 1];
+							System.arraycopy(subcommandAnnotation.value(), 1, aliases, 0, subcommandAnnotation.value().length - 1);
+						}
+						
 						Context subCommandContext = new Context((TypeElement) typeElementChild, processingEnv, logging,
 								true);
+						subCommandContext.commandData.setName(name);
+						subCommandContext.commandData.setAliases(aliases);
 						commandData.addSubcommandClass(subCommandContext.commandData);
 					}
 
@@ -232,7 +245,7 @@ public class Context {
 
 		// Create ArgumentData
 		ArgumentData argumentData = new ArgumentData(varElement, annotation, permission, nodeName, suggests,
-				suggestionsClass);
+				suggestionsClass, commandData);
 		if (suggestionsClass.isPresent()) {
 			argumentData.validateSuggestionsClass(processingEnv);
 		}
@@ -345,10 +358,10 @@ public class Context {
 		if (supplierMirror instanceof DeclaredType declaredType) {
 			for (TypeMirror typeArgument : declaredType.getTypeArguments()) {
 				if (types.isSameType(argumentSuggestionsMirror, typeArgument)) {
-					return new SuggestionClass(typeElement);
+					return new SuggestionClass(typeElement, processingEnv);
 				} else if (types.isSameType(types.erasure(safeSuggestionsMirror), types.erasure(typeArgument))) {
 					// TODO: More type checking here
-					return new SuggestionClass(typeElement);
+					return new SuggestionClass(typeElement, processingEnv);
 				} else {
 					logging.complain(typeElement,
 							"@Suggests class's Supplier has an invalid type argument. Expected Supplier<ArgumentSuggestions> or Supplier<SafeSuggestions>");

@@ -74,7 +74,8 @@ public class SubcommandMethod extends CommandElement {
 			out.println(indentation() + "command." + methodElement.getSimpleName() + "(sender, args[0]);");
 			
 			dedent();
-			out.println(indentation() + "}");
+			out.println(indentation() + "})");
+			out.println(indentation() + ".register();");
 		} else {
 			// TODO: Assert. This object should never have been constructed!
 		}

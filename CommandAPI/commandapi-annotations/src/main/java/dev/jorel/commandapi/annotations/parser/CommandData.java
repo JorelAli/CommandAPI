@@ -12,6 +12,10 @@ public class CommandData extends CommandElement {
 
 	private final TypeElement typeElement;
 	
+	public TypeElement getTypeElement() {
+		return typeElement;
+	}
+
 	// The name of the command
 	private String name;
 
@@ -40,6 +44,12 @@ public class CommandData extends CommandElement {
 	private String help;
 	private String shortDescriptionHelp;
 	
+	private CommandData parent = null;
+	
+	public CommandData getParent() {
+		return parent;
+	}
+
 	public CommandData(TypeElement classElement, boolean isSubcommand) {
 		this.typeElement = classElement;
 		this.arguments = new ArrayList<>();
@@ -66,33 +76,22 @@ public class CommandData extends CommandElement {
 		this.arguments.add(argument);
 	}
 
-	public List<CommandData> getSubcommandClasses() {
-		return subcommandClasses;
-	}
-
 	public void addSubcommandClass(CommandData subcommandClass) {
+		subcommandClass.parent = this;
 		this.subcommandClasses.add(subcommandClass);
-	}
-
-	public List<SubcommandMethod> getSubcommandMethods() {
-		return subcommandMethods;
 	}
 
 	public void addSubcommandMethod(SubcommandMethod subcommandMethod) {
 		this.subcommandMethods.add(subcommandMethod);
 	}
 
-	public List<SuggestionClass> getSuggestionClasses() {
-		return suggestionClasses;
-	}
-
-	public void addSuggestionClass(SuggestionClass suggestionClass) {
-		this.suggestionClasses.add(suggestionClass);
-	}
-
-	public CommandPermission getPermission() {
-		return permission;
-	}
+//	public List<SuggestionClass> getSuggestionClasses() {
+//		return suggestionClasses;
+//	}
+//
+//	public void addSuggestionClass(SuggestionClass suggestionClass) {
+//		this.suggestionClasses.add(suggestionClass);
+//	}
 
 	public void setPermission(CommandPermission permission) {
 		this.permission = permission;
@@ -102,19 +101,37 @@ public class CommandData extends CommandElement {
 		this.help = help;
 		this.shortDescriptionHelp = shortDescription;
 	}
+	
+	private List<ArgumentData> getInheritedArguments() {
+		List<ArgumentData> inheritedArguments = new ArrayList<>();
+		CommandData current = this.parent;
+		while(current != null) {
+			inheritedArguments.addAll(0, current.arguments);
+			current = current.parent;
+		}
+		return inheritedArguments;
+	}
 
 	@Override
 	public void emit(PrintWriter out, int currentIndentation) {
+		this.indentation = currentIndentation;
 		// Here, we're just writing the command itself (new CommandAPICommand ...) and nothing else?
 
-		out.println("public void register(" + typeElement.getSimpleName() + " command) {");
-		out.println();
-		indent();
+		if(!isSubcommand) {
+			out.println("public void register(" + typeElement.getSimpleName() + " command) {");
+			out.println();
+			indent();
+		}
 		
+		// Subcommand methods
 		for(SubcommandMethod method : subcommandMethods) {
 			out.println(indentation() + "new CommandAPICommand(\"" + name + "\")");
 			indent();
-			for(ArgumentData argument : arguments) {
+			
+			List<ArgumentData> allArguments = getInheritedArguments();
+			allArguments.addAll(arguments);
+			
+			for(ArgumentData argument : allArguments) {
 				argument.emit(out, indentation);
 			}
 			method.emit(out, indentation);
@@ -123,8 +140,14 @@ public class CommandData extends CommandElement {
 			dedent();
 		}
 		
-		dedent();
-		out.println("}"); // End public void register()
+		for(CommandData subcommand : subcommandClasses) {
+			subcommand.emit(out, indentation);
+		}
+		
+		if(!isSubcommand) {
+			dedent();
+			out.println("}"); // End public void register()
+		}
 	}
 
 }
