@@ -65,19 +65,18 @@ public class SubcommandMethod extends CommandElement {
 
 			out.print(Arrays.stream(Utils.strCons(subcommandName, aliases))
 					.map(Utils::quote).collect(Collectors.joining(", ")));
-			out.print(")");
-			out.print(".setListed(false)");
+			out.println(")");
+			indent();
+			out.print(indentation() + ".setListed(false)");
 
 			// Permissions
 			if(permission == null || permission == CommandPermission.NONE) {
-				out.print(")");
 				out.println();
 			} else {
-				indent();
 				emitPermission(out, permission);
-				dedent();
-				out.println(indentation() + ")");
 			}
+			dedent();
+			out.println(indentation() + ")");
 			
 			for(ArgumentData argument : arguments) {
 				argument.emit(out, currentIndentation);
