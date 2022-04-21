@@ -131,6 +131,8 @@ public class CommandData extends CommandElement {
 			indent();
 		}
 		
+		// TODO: (URGENT): We're missing intermediate multiliteral argument subcommands!!!
+		
 		// Subcommand methods
 		for(SubcommandMethod method : subcommandMethods) {
 			out.println(indentation() + "new CommandAPICommand(\"" + name + "\")");

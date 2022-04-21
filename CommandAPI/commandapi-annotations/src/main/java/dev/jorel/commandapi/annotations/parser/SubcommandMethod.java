@@ -92,8 +92,6 @@ public class SubcommandMethod extends CommandElement {
 	}
 
 	private void emitMethodCallArguments(PrintWriter out) {
-		List<ArgumentData> allArguments = parent.getInheritedArguments();
-		allArguments.addAll(arguments);
 
 		// We need to derive the path of classes required to get to this suggestion
 		// class, from the top-level @Command class
@@ -109,24 +107,9 @@ public class SubcommandMethod extends CommandElement {
 
 		// TODO: Please, use some data structure (stack?), don't use Collections.reverse
 		Collections.reverse(commandTree);
-		
-		// TODO: We can be smart here and reduce unused redundancies. Take for example:
-		
-	//        command.hiiiiii = (java.lang.String) args[0];
-	//        command.byeeeeee = (int) args[1];
-	//        HordeCommand2.HazardCommand command1 = command.new HazardCommand();
-	//        HordeCommand2.HazardCommand.CreateCommand command2 = command1.new CreateCommand();
-		// In this example ^, we don't use command1 and command2 because we know that
-		// they have no arguments. We can reverse from the tree, if we have an argument
-		// with no thingies, remove it
 
-		System.out.println("PRINTING TREE");
-		commandTree.stream().forEach(x -> System.out.println(x.getTypeElement().toString()));
-		
+		// TODO: Comments describing what's going on here
 		int argumentIndex = 0;
-
-		// TODO: Initialize top level command arguments
-		
 		int commandDataIndex = 0;
 		for(CommandData commandData : commandTree) {
 			
@@ -160,54 +143,21 @@ public class SubcommandMethod extends CommandElement {
 			}
 			commandDataIndex++;
 		}
-
-		// The same code from suggestion emitting in CommandElement.java
-//		Stack<TypeElement> typeStack = new Stack<>();
-//		TypeElement currentTypeElement = parent.getTypeElement();
-//		Types types = parent.getProcessingEnv().getTypeUtils();
-//
-//		while (!types.isSameType(currentTypeElement.asType(), topLevelCommand.getTypeElement().asType())) {
-//			typeStack.add(currentTypeElement);
-//
-//			if (currentTypeElement.getNestingKind() == NestingKind.TOP_LEVEL) {
-//				break;
-//			} else {
-//				// TODO: We've assumed it's a type element. It's possible that the enclosing
-//				// element is an executable element if we've declared this class inside a
-//				// function (very very improbable, but possible!)
-//				currentTypeElement = (TypeElement) currentTypeElement.getEnclosingElement();
-//			}
-//		}
-//
-//		for(TypeElement )
-//			for(ArgumentData topLevelClassArgument = 
-
-
-			// TODO: We should probably store this variable name somewhere in a static final location
-			//		out.print(indentation() + "command");
-			//		for(TypeElement typeElement : typeStack) {
-			//			out.print(".new " + typeElement.getSimpleName() + "()");
-			//		}
-			//		out.print("." + methodElement.getSimpleName() + "(sender");
-
-			//		for (int i = 0, len = allArguments.size(); i < len; i++) {
-			//			ArgumentData argument = allArguments.get(i);
-			//			
-			//			out.print(", (" + argument.getTypeMirror() + ") args[" + i + "]");
-			//		}
-			//		
-			//		out.println(");");
-
-			// Yeah, we have to bind these variables somehow:
-
-			//		// Somehow, and I have absolutely no idea how, we're supposed to generate this function:
-			////		HordeCommand2 command = new HordeCommand2();
-			////		command.byeeeeee = (int) args[0];
-			////		command.hiiiiii = (String) args[1];
-			////		HordeCommand2.HazardCommand.ModifyCommand command1 = command.new HazardCommand().new ModifyCommand();
-			////		command1.name = (String) args[2];
-			////		command1.area((Player) null, 2);
-			//
+		commandDataIndex--;
+		
+		out.println();
+		out.print(indentation());
+		if(commandDataIndex == 0) {
+			out.print(Utils.COMMAND_VAR_NAME + ".");
+		} else {
+			out.print(Utils.COMMAND_VAR_NAME + commandDataIndex + ".");
+		}
+		out.print(methodElement.getSimpleName() + "(sender");
+		for(int i = 0; i < this.arguments.size(); i++) {
+			ArgumentData argument = this.arguments.get(i);
+			out.print(", (" + argument.getTypeMirror().toString() + ") args[" + i + "]");
+		}
+		out.println(");");
 	}
 
 }
