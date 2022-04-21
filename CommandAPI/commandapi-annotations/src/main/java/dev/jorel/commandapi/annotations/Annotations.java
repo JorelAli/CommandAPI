@@ -108,6 +108,7 @@ import dev.jorel.commandapi.annotations.arguments.ATextArgument;
 import dev.jorel.commandapi.annotations.arguments.ATimeArgument;
 import dev.jorel.commandapi.annotations.arguments.AUUIDArgument;
 import dev.jorel.commandapi.annotations.arguments.Primitive;
+import dev.jorel.commandapi.annotations.parser.Parser;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
@@ -175,7 +176,7 @@ public class Annotations extends AbstractProcessor {
 		// for each @Command class, which outlines the list of suggestion methods, its
 		// varying types, etc. You can think of this as a lexing/syntax analysis step.
 
-		Map<Element, Context> context = Context.generateContexts(commandClasses, processingEnv, logging);
+		Map<Element, Parser> context = Parser.generateContexts(commandClasses, processingEnv, logging);
 
 		// We then perform out semantic analysis (checking that we've not got two
 		// @Default
@@ -185,7 +186,7 @@ public class Annotations extends AbstractProcessor {
 		new Semantics(logging).analyze(context);
 		
 		PrintWriter out = new PrintWriter(System.out);
-		for(Entry<Element, Context> entry : context.entrySet()) {
+		for(Entry<Element, Parser> entry : context.entrySet()) {
 			entry.getValue().getCommandData().emit(out, 0);
 			out.flush();
 			System.out.println();

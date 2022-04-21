@@ -8,6 +8,8 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.NestingKind;
 import javax.lang.model.element.TypeElement;
 
+import dev.jorel.commandapi.annotations.parser.Parser;
+
 public class Semantics {
 
 	Logging logging;
@@ -16,15 +18,15 @@ public class Semantics {
 		this.logging = logging;
 	}
 
-	public void analyze(Map<Element, Context> allContext) {
+	public void analyze(Map<Element, Parser> allContext) {
 
 		/*
 		 * Rules that must be met - Subcommands can only go on inner classes
 		 */
 
-		for (Entry<Element, Context> contextEntry : allContext.entrySet()) {
+		for (Entry<Element, Parser> contextEntry : allContext.entrySet()) {
 			TypeElement classElement = (TypeElement) contextEntry.getKey();
-			Context context = contextEntry.getValue();
+			Parser context = contextEntry.getValue();
 
 			if (classElement.getKind() == ElementKind.CLASS) {
 				if(classElement.getNestingKind() == NestingKind.TOP_LEVEL) {

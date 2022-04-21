@@ -43,14 +43,16 @@ public abstract class CommandElement {
 		}
 	}
 
-	public void emitPermission(PrintWriter out, CommandPermission permission) {
+	public boolean emitPermission(PrintWriter out, CommandPermission permission) {
 		
 		// TODO: We shouldn't be passing null here - this originates from CommandData's multiliteral argument construction
 		if (permission == null || permission.equals(CommandPermission.NONE)) {
 			// Do nothing
+			return false;
 		} else if (permission.equals(CommandPermission.OP)) {
 			out.println();
 			out.print(indentation() + ".withPermission(CommandPermission.OP)");
+			return true;
 		} else {
 			out.println();
 			if (permission.isNegated()) {
@@ -60,10 +62,11 @@ public abstract class CommandElement {
 			}
 			out.print(permission.getPermission());
 			out.println("\")");
+			return true;
 		}
 	}
 
-	public void emitSuggestion(PrintWriter out, Optional<SuggestionClass> suggestions, CommandData parent) {
+	public boolean emitSuggestion(PrintWriter out, Optional<SuggestionClass> suggestions, CommandData parent) {
 		if (suggestions.isPresent()) {
 			SuggestionClass suggestion = suggestions.get();
 
@@ -121,6 +124,7 @@ public abstract class CommandElement {
 				out.print(".get())");
 			}
 		}
+		return suggestions.isPresent();
 	}
 
 }

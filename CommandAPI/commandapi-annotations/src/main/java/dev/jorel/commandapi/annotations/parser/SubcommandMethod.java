@@ -57,6 +57,8 @@ public class SubcommandMethod extends CommandElement {
 
 		if (methodElement.getAnnotation(Subcommand.class) != null) {
 
+			// TODO: Just use CommandData's MultiLiteralArgument generator and run emit on its ArgumentData!
+			
 			// MultiLiteralArgument representing this command
 			out.print(indentation() + ".withArguments(");
 			out.print("new MultiLiteralArgument(");
@@ -67,9 +69,15 @@ public class SubcommandMethod extends CommandElement {
 			out.print(".setListed(false)");
 
 			// Permissions
-			emitPermission(out, permission);
-
-			out.println(")");
+			if(permission == null || permission == CommandPermission.NONE) {
+				out.print(")");
+				out.println();
+			} else {
+				indent();
+				emitPermission(out, permission);
+				dedent();
+				out.println(indentation() + ")");
+			}
 			
 			for(ArgumentData argument : arguments) {
 				argument.emit(out, currentIndentation);

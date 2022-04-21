@@ -108,10 +108,24 @@ public class CommandData extends CommandElement {
 		this.shortDescriptionHelp = shortDescription;
 	}
 	
+	private static Annotation asMultiLiteralAnnotation(CommandData data) {
+		return new AMultiLiteralArgument() {
+			
+			@Override
+			public Class<? extends Annotation> annotationType() {
+				return AMultiLiteralArgument.class;
+			}
+			
+			@Override
+			public String[] value() {
+				return Utils.strCons(data.name, data.aliases);
+			}
+		};
+	}
+	
 	private List<ArgumentData> getInheritedArguments() {
 		List<ArgumentData> inheritedArguments = new ArrayList<>();
 		CommandData current = this;
-		System.out.println();
 		while(current != null) {
 			
 
@@ -120,20 +134,7 @@ public class CommandData extends CommandElement {
 			
 			// Convert @Subcommand into a multiliteral argument
 			if(current.isSubcommand) {
-				final CommandData currentFinal = current;
-				Annotation multiLiteralArgumentAnnotation = new AMultiLiteralArgument() {
-					
-					@Override
-					public Class<? extends Annotation> annotationType() {
-						return AMultiLiteralArgument.class;
-					}
-					
-					@Override
-					public String[] value() {
-						return Utils.strCons(currentFinal.name, currentFinal.aliases);
-					}
-				};
-				System.out.println("Adding " + current.typeElement.toString());
+				Annotation multiLiteralArgumentAnnotation = asMultiLiteralAnnotation(current);
 				inheritedArguments.add(0, new ArgumentData(current.typeElement, multiLiteralArgumentAnnotation, current.permission, current.name, Optional.empty(), Optional.empty(), current, false));
 			}
 			
@@ -156,14 +157,8 @@ public class CommandData extends CommandElement {
 		// TODO: Don't forget aliases, permissions, help
 		// TODO: Are we going to support requirements?
 		
-		// TODO: traverse upwards if we're a subcommand, get the hierarchy of arguments
-		
-		// TODO: (URGENT): We're missing intermediate multiliteral argument subcommands!!!
-		
 		Deque<CommandData> commandTree = new ArrayDeque<>();
-
 		CommandData topLevelCommand = this;
-		
 		do {
 			commandTree.push(topLevelCommand);
 			topLevelCommand = topLevelCommand.getParent();
@@ -174,9 +169,10 @@ public class CommandData extends CommandElement {
 			out.println(indentation() + "new CommandAPICommand(\"" + commandTree.peek().name + "\")");
 			indent();
 			
-			List<ArgumentData> allArguments = getInheritedArguments();
+			// TODO: Handle formatting of this properly
+			emitPermission(out, permission);
 			
-			for(ArgumentData argument : allArguments) {
+			for(ArgumentData argument : getInheritedArguments()) {
 				argument.emit(out, indentation);
 			}
 			method.emit(out, indentation);
@@ -185,6 +181,7 @@ public class CommandData extends CommandElement {
 			dedent();
 		}
 		
+		// Do all subcommand classes and their stuff
 		for(CommandData subcommand : subcommandClasses) {
 			subcommand.emit(out, indentation);
 		}

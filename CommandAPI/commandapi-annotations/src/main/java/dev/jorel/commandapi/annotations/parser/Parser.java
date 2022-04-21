@@ -1,4 +1,4 @@
-package dev.jorel.commandapi.annotations;
+package dev.jorel.commandapi.annotations.parser;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -21,6 +21,9 @@ import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Types;
 
 import dev.jorel.commandapi.CommandPermission;
+import dev.jorel.commandapi.annotations.Logging;
+import dev.jorel.commandapi.annotations.Utils;
+import dev.jorel.commandapi.annotations.Validator;
 import dev.jorel.commandapi.annotations.annotations.Command;
 import dev.jorel.commandapi.annotations.annotations.Help;
 import dev.jorel.commandapi.annotations.annotations.NeedsOp;
@@ -31,22 +34,17 @@ import dev.jorel.commandapi.annotations.annotations.Suggests;
 import dev.jorel.commandapi.annotations.annotations.WithoutPermission;
 import dev.jorel.commandapi.annotations.arguments.ACustomArgument;
 import dev.jorel.commandapi.annotations.arguments.Primitive;
-import dev.jorel.commandapi.annotations.parser.ArgumentData;
-import dev.jorel.commandapi.annotations.parser.CommandData;
-import dev.jorel.commandapi.annotations.parser.SubcommandMethod;
-import dev.jorel.commandapi.annotations.parser.SuggestionClass;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.SafeSuggestions;
 
-public class Context {
+public class Parser {
 
 	private ProcessingEnvironment processingEnv;
 	private Logging logging;
-
 	private CommandData commandData;
 	
 	// Construct some context :)
-	public Context(TypeElement classElement, ProcessingEnvironment processingEnv, Logging logging,
+	public Parser(TypeElement classElement, ProcessingEnvironment processingEnv, Logging logging,
 			boolean subCommandClass, CommandData parent) {
 		this.processingEnv = processingEnv;
 		this.logging = logging;
@@ -116,7 +114,7 @@ public class Context {
 							System.arraycopy(subcommandAnnotation.value(), 1, aliases, 0, subcommandAnnotation.value().length - 1);
 						}
 						
-						Context subCommandContext = new Context((TypeElement) typeElementChild, processingEnv, logging, true, commandData);
+						Parser subCommandContext = new Parser((TypeElement) typeElementChild, processingEnv, logging, true, commandData);
 						subCommandContext.commandData.setName(name);
 						subCommandContext.commandData.setAliases(aliases);
 						
@@ -377,11 +375,11 @@ public class Context {
 	 * @param logging        logging class
 	 * @return
 	 */
-	public static Map<Element, Context> generateContexts(Set<? extends Element> commandClasses,
+	public static Map<Element, Parser> generateContexts(Set<? extends Element> commandClasses,
 			ProcessingEnvironment processingEnv, Logging logging) {
-		Map<Element, Context> contextMap = new HashMap<>();
+		Map<Element, Parser> contextMap = new HashMap<>();
 		for (Element classElement : commandClasses) {
-			contextMap.put(classElement, new Context((TypeElement) classElement, processingEnv, logging, false, null));
+			contextMap.put(classElement, new Parser((TypeElement) classElement, processingEnv, logging, false, null));
 		}
 		return contextMap;
 	}

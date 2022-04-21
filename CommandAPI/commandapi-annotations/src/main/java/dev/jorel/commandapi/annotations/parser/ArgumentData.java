@@ -190,20 +190,40 @@ public class ArgumentData extends CommandElement {
 
 		indent();
 		
+		boolean printedAnyOptionalFeatures = false;
+		boolean printedPermission = false;
+		
 		// Permissions
-		emitPermission(out, permission);
+		if(!(permission == null || permission == CommandPermission.NONE)) {
+			emitPermission(out, permission);
+			printedAnyOptionalFeatures = true;
+			printedPermission = true;
+		}
 
 		// Suggestions
-		emitSuggestion(out, suggestions, parent);
-		
-		dedent();
+		if(suggestions.isPresent()) {
+			if(!printedPermission) {
+				out.println();
+			}
+			emitSuggestion(out, suggestions, parent);
+			printedAnyOptionalFeatures = true;
+		}
 
 		// Argument listing. Only applies to @LiteralArgument
 		if (argumentAnnotation instanceof ALiteralArgument) {
-			out.print(".setListed(true)");
+			out.println(indentation() + ".setListed(true)");
+		}
+		
+		dedent();
+		
+		if(printedAnyOptionalFeatures) {
+			out.println();
+			out.println(indentation() + ")"); // End .withArguments
+		} else {
+			out.println(")");
 		}
 
-		out.println(")"); // End .withArguments
+		
 	}
 
 }

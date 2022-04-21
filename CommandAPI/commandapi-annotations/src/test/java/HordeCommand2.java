@@ -58,6 +58,7 @@ public class HordeCommand2 {
 			}
 
 			// horde hazard modify <name> area <size>
+			@Permission("hoard.hazard.modify.area")
 			@Subcommand("area")
 			public void area(CommandSender sender, @AIntegerArgument int size) {
 			}
