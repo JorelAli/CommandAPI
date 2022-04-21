@@ -47,11 +47,11 @@ public class Context {
 	
 	// Construct some context :)
 	public Context(TypeElement classElement, ProcessingEnvironment processingEnv, Logging logging,
-			boolean subCommandClass) {
+			boolean subCommandClass, CommandData parent) {
 		this.processingEnv = processingEnv;
 		this.logging = logging;
 
-		this.commandData = new CommandData(classElement, subCommandClass, processingEnv);
+		this.commandData = new CommandData(classElement, subCommandClass, processingEnv, parent);
 
 		parseCommandClass(classElement, subCommandClass);
 	}
@@ -116,10 +116,10 @@ public class Context {
 							System.arraycopy(subcommandAnnotation.value(), 1, aliases, 0, subcommandAnnotation.value().length - 1);
 						}
 						
-						Context subCommandContext = new Context((TypeElement) typeElementChild, processingEnv, logging,
-								true);
+						Context subCommandContext = new Context((TypeElement) typeElementChild, processingEnv, logging, true, commandData);
 						subCommandContext.commandData.setName(name);
 						subCommandContext.commandData.setAliases(aliases);
+						
 						commandData.addSubcommandClass(subCommandContext.commandData);
 					}
 
@@ -289,10 +289,7 @@ public class Context {
 		
 		final CommandPermission permission = parsePermission(methodElement);
 		
-		// Arguments inherited from fields. TODO: This needs to have some sort of
-		// recursive implementation, with some parent-child relationship to get the
-		// arguments from previous stuff up the tree
-		List<ArgumentData> arguments = new ArrayList<>(commandData.getArguments());
+		List<ArgumentData> arguments = new ArrayList<>();
 		
 		for(int i = 1; i < parameters.size(); i++) {
 			VariableElement parameter = parameters.get(i);
@@ -384,7 +381,7 @@ public class Context {
 			ProcessingEnvironment processingEnv, Logging logging) {
 		Map<Element, Context> contextMap = new HashMap<>();
 		for (Element classElement : commandClasses) {
-			contextMap.put(classElement, new Context((TypeElement) classElement, processingEnv, logging, false));
+			contextMap.put(classElement, new Context((TypeElement) classElement, processingEnv, logging, false, null));
 		}
 		return contextMap;
 	}

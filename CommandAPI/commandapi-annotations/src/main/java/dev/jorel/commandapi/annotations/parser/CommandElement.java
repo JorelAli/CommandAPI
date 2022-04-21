@@ -1,8 +1,10 @@
 package dev.jorel.commandapi.annotations.parser;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
-import java.util.Stack;
 
 import javax.lang.model.element.NestingKind;
 import javax.lang.model.element.TypeElement;
@@ -89,7 +91,8 @@ public abstract class CommandElement {
 					topLevelCommand = topLevelCommand.getParent();
 				}
 
-				Stack<TypeElement> typeStack = new Stack<>();
+				List<TypeElement> typeStack = new ArrayList<>();
+				
 
 				TypeElement currentTypeElement = suggestion.typeElement();
 				Types types = suggestion.processingEnv().getTypeUtils();
@@ -98,6 +101,8 @@ public abstract class CommandElement {
 					typeStack.add(currentTypeElement);
 
 					if (currentTypeElement.getNestingKind() == NestingKind.TOP_LEVEL) {
+						// Stop, otherwise we'll keep going forever.
+						// TODO: Error here
 						break;
 					} else {
 						// TODO: We've assumed it's a type element. It's possible that the enclosing
@@ -107,7 +112,9 @@ public abstract class CommandElement {
 					}
 				}
 				
-				// TODO: We should probably store this variable name somewhere in a static final location
+				Collections.reverse(typeStack);
+
+
 				out.print(Utils.COMMAND_VAR_NAME);
 				for(TypeElement typeElement : typeStack) {
 					out.print(".new " + typeElement.getSimpleName() + "()");

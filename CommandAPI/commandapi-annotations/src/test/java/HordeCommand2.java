@@ -5,6 +5,7 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.annotations.annotations.ArgumentParser;
 import dev.jorel.commandapi.annotations.annotations.Command;
 import dev.jorel.commandapi.annotations.annotations.Permission;
@@ -18,7 +19,10 @@ import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentInfo;
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentInfoParser;
+import dev.jorel.commandapi.arguments.IntegerArgument;
+import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.SafeSuggestions;
+import dev.jorel.commandapi.arguments.StringArgument;
 
 @Command("horde")
 public class HordeCommand2 {
@@ -136,49 +140,56 @@ public class HordeCommand2 {
 		
 	}
 	
-	static void blah(Object[] args) {
+	static void blah() {
 		HordeCommand2 command = new HordeCommand2();
-		{
-			// Optimal
-			command.byeeeeee = (int) args[0];
-			command.hiiiiii = (String) args[1];
-			HordeCommand2.HazardCommand.ModifyCommand command1 = command.new HazardCommand().new ModifyCommand();
-			command1.name = (String) args[2];
-			command1.area((Player) null, 2);
-		}
-		{
-			// Suboptimal, but should be much much easier to implement
-			command.byeeeeee = (int) args[0];
-			command.hiiiiii = (String) args[1];
-			HordeCommand2.HazardCommand command1 = command.new HazardCommand();
-			// command1 initialization (not needed here)
-			HordeCommand2.HazardCommand.ModifyCommand command2 = command1.new ModifyCommand();
-			command2.name = (String) args[2];
-			command2.area((Player) null, 2);
-		}
-		{
-			// Simplest (but bad practice)
-			command.byeeeeee = (int) args[0];
-			command.hiiiiii = (String) args[1];
-			command.new HazardCommand() {{}}.new ModifyCommand() {{this.name = (String) args[2]; }}.area((Player) null, 2);
-		}
+//		{
+//			// Optimal
+//			command.byeeeeee = (int) args[0];
+//			command.hiiiiii = (String) args[1];
+//			HordeCommand2.HazardCommand.ModifyCommand command1 = command.new HazardCommand().new ModifyCommand();
+//			command1.name = (String) args[2];
+//			command1.area((Player) null, 2);
+//		}
+//		{
+//			// Suboptimal, but should be much much easier to implement
+//			command.byeeeeee = (int) args[0];
+//			command.hiiiiii = (String) args[1];
+//			HordeCommand2.HazardCommand command1 = command.new HazardCommand();
+//			// command1 initialization (not needed here)
+//			HordeCommand2.HazardCommand.ModifyCommand command2 = command1.new ModifyCommand();
+//			command2.name = (String) args[2];
+//			command2.area((Player) null, 2);
+//		}
+//		{
+//			// Simplest (but bad practice)
+//			command.byeeeeee = (int) args[0];
+//			command.hiiiiii = (String) args[1];
+//			command.new HazardCommand() {{}}.new ModifyCommand() {{this.name = (String) args[2]; }}.area((Player) null, 2);
+//		}
 		
-		
+		{
+		    new CommandAPICommand("modify")
+	        .withArguments(new StringArgument("hiiiiii"))
+	        .withArguments(new IntegerArgument("byeeeeee", -2147483648, 2147483647))
+	        .withArguments(new StringArgument("name")
+	            .withPermission("hello")
+	            .replaceSuggestions(command.new HazardCommand().new ModifyCommand().new HazardSuggestions().get()))
+	        .withArguments(
+	            new MultiLiteralArgument("area")
+	                .setListed(false)
+	            )
+	        .executes((sender, args) -> {
+	            command.hiiiiii = (java.lang.String) args[0];
+	            command.byeeeeee = (int) args[1];
+	            HordeCommand2.HazardCommand command1 = command.new HazardCommand();
+	            HordeCommand2.HazardCommand.ModifyCommand command2 = command1.new ModifyCommand();
+	            command2.name = (java.lang.String) args[2];
+
+	            command2.area(sender, (int) args[0]);
+	        })
+	        .register();
+
+
+		}
 	}
-	
-//	static void a(HordeCommand2 command){
-//		new CommandAPICommand("modify")
-//	    .withArguments(new StringArgument("hiiiiii"))
-//	    .withArguments(new IntegerArgument("byeeeeee", -2147483648, 2147483647))
-//	    .withArguments(new StringArgument("name").withPermission("hello")
-//	.replaceSuggestions(new HordeCommand2().new HazardCommand().new ModifyCommand().new HazardSuggestions().get()))
-//	    .withArguments(
-//	        new MultiLiteralArgument("area")
-//	            .setListed(false)
-//	        )
-//	    .executes((sender, args) -> {
-//	        command.area(sender, args[0]);
-//	    }
-//
-//	}
 }

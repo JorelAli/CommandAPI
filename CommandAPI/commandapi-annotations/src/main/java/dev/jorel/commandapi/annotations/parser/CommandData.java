@@ -45,7 +45,7 @@ public class CommandData extends CommandElement {
 	private String help;
 	private String shortDescriptionHelp;
 	
-	private CommandData parent = null;
+	private final CommandData parent;
 	
 	private final ProcessingEnvironment processingEnv;
 	
@@ -53,7 +53,7 @@ public class CommandData extends CommandElement {
 		return parent;
 	}
 
-	public CommandData(TypeElement classElement, boolean isSubcommand, ProcessingEnvironment processingEnv) {
+	public CommandData(TypeElement classElement, boolean isSubcommand, ProcessingEnvironment processingEnv, CommandData parent) {
 		this.typeElement = classElement;
 		this.arguments = new ArrayList<>();
 		this.subcommandClasses = new ArrayList<>();
@@ -62,6 +62,7 @@ public class CommandData extends CommandElement {
 		
 		this.isSubcommand = isSubcommand;
 		this.processingEnv = processingEnv;
+		this.parent = parent;
 	}
 
 	public ProcessingEnvironment getProcessingEnv() {
@@ -85,7 +86,6 @@ public class CommandData extends CommandElement {
 	}
 
 	public void addSubcommandClass(CommandData subcommandClass) {
-		subcommandClass.parent = this;
 		this.subcommandClasses.add(subcommandClass);
 	}
 
@@ -130,6 +130,8 @@ public class CommandData extends CommandElement {
 			out.println();
 			indent();
 		}
+		
+		// TODO: traverse upwards if we're a subcommand, get the hierarchy of arguments
 		
 		// TODO: (URGENT): We're missing intermediate multiliteral argument subcommands!!!
 		

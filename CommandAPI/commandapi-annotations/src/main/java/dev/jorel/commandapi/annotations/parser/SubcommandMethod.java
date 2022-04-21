@@ -31,7 +31,7 @@ public class SubcommandMethod extends CommandElement {
 	private CommandPermission permission;
 
 	/**
-	 * Arguments, including arguments "inherited" from the current (and parent(s)) class(es)?
+	 * Arguments for this executable element (doesn't include inherited arguments)
 	 */
 	private List<ArgumentData> arguments;
 
@@ -144,8 +144,10 @@ public class SubcommandMethod extends CommandElement {
 			commandDataIndex++;
 		}
 		commandDataIndex--;
-		
+
 		out.println();
+		
+		// Print the actual method call
 		out.print(indentation());
 		if(commandDataIndex == 0) {
 			out.print(Utils.COMMAND_VAR_NAME + ".");
