@@ -20,6 +20,17 @@ import dev.jorel.commandapi.annotations.arguments.Primitive;
 public class Utils {
 	
 	public final static String COMMAND_VAR_NAME = "command";
+	
+	public static String quote(String str) {
+		return "\"" + str + "\"";
+	}
+	
+	public static String[] strCons(String str, String[] strArr) {
+		String[] result = new String[1 + strArr.length];
+		result[0] = str;
+		System.arraycopy(strArr, 0, result, 1, strArr.length);
+		return result;
+	}
 
 	public static <T extends Annotation> boolean hasAnnotation(Element element, Class<T> annotation) {
 		return element.getAnnotation(annotation) != null;

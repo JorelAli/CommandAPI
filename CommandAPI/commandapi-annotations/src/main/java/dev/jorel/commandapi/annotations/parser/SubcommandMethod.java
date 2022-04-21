@@ -1,9 +1,10 @@
 package dev.jorel.commandapi.annotations.parser;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -57,22 +58,23 @@ public class SubcommandMethod extends CommandElement {
 		if (methodElement.getAnnotation(Subcommand.class) != null) {
 
 			// MultiLiteralArgument representing this command
-			out.println(indentation() + ".withArguments(");
-			indent();
-			out.print(indentation() + "new MultiLiteralArgument(");
-			out.print(Streams.concat(Stream.of(subcommandName), Arrays.stream(aliases))
-					.map(x -> "\"" + x + "\"").collect(Collectors.joining(", ")));
-			out.println(")");
-			indent();
-			out.println(indentation() + ".setListed(false)");
+			out.print(indentation() + ".withArguments(");
+			out.print("new MultiLiteralArgument(");
+
+			out.print(Arrays.stream(Utils.strCons(subcommandName, aliases))
+					.map(Utils::quote).collect(Collectors.joining(", ")));
+			out.print(")");
+			out.print(".setListed(false)");
 
 			// Permissions
 			emitPermission(out, permission);
 
-			dedent();
-			out.println(indentation() + ")");
+			out.println(")");
+			
+			for(ArgumentData argument : arguments) {
+				argument.emit(out, currentIndentation);
+			}
 
-			dedent();
 			// TODO: executor type
 			out.println(indentation() + ".executes((sender, args) -> {");
 			indent();
@@ -96,17 +98,14 @@ public class SubcommandMethod extends CommandElement {
 		// We need to derive the path of classes required to get to this suggestion
 		// class, from the top-level @Command class
 		
-		List<CommandData> commandTree = new ArrayList<>();
+		Deque<CommandData> commandTree = new ArrayDeque<>();
 
 		CommandData topLevelCommand = parent;
 		while (topLevelCommand.getParent() != null) {
-			commandTree.add(topLevelCommand);
+			commandTree.push(topLevelCommand);
 			topLevelCommand = topLevelCommand.getParent();
 		}
-		commandTree.add(topLevelCommand);
-
-		// TODO: Please, use some data structure (stack?), don't use Collections.reverse
-		Collections.reverse(commandTree);
+		commandTree.push(topLevelCommand);
 
 		// TODO: Comments describing what's going on here
 		int argumentIndex = 0;
@@ -157,7 +156,7 @@ public class SubcommandMethod extends CommandElement {
 		out.print(methodElement.getSimpleName() + "(sender");
 		for(int i = 0; i < this.arguments.size(); i++) {
 			ArgumentData argument = this.arguments.get(i);
-			out.print(", (" + argument.getTypeMirror().toString() + ") args[" + i + "]");
+			out.print(", (" + argument.getTypeMirror().toString() + ") args[" + (i + argumentIndex) + "]");
 		}
 		out.println(");");
 	}

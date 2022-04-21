@@ -2,7 +2,9 @@ package dev.jorel.commandapi.annotations.parser;
 
 import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,6 +12,7 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.TypeElement;
 
 import dev.jorel.commandapi.CommandPermission;
+import dev.jorel.commandapi.annotations.Utils;
 import dev.jorel.commandapi.annotations.arguments.AMultiLiteralArgument;
 
 public class CommandData extends CommandElement {
@@ -107,8 +110,13 @@ public class CommandData extends CommandElement {
 	
 	private List<ArgumentData> getInheritedArguments() {
 		List<ArgumentData> inheritedArguments = new ArrayList<>();
-		CommandData current = this.parent;
+		CommandData current = this;
+		System.out.println();
 		while(current != null) {
+			
+
+			//System.out.println("Current: " + current.name + " Args: " + current.arguments.stream().map(x -> x.getArgumentVariableName()).toList());
+			inheritedArguments.addAll(0, current.arguments);
 			
 			// Convert @Subcommand into a multiliteral argument
 			if(current.isSubcommand) {
@@ -122,16 +130,13 @@ public class CommandData extends CommandElement {
 					
 					@Override
 					public String[] value() {
-						String[] names = new String[1 + currentFinal.aliases.length];
-						names[0] = currentFinal.name;
-						System.arraycopy(currentFinal.aliases, 0, names, 1, currentFinal.aliases.length);
-						return names;
+						return Utils.strCons(currentFinal.name, currentFinal.aliases);
 					}
 				};
+				System.out.println("Adding " + current.typeElement.toString());
 				inheritedArguments.add(0, new ArgumentData(current.typeElement, multiLiteralArgumentAnnotation, current.permission, current.name, Optional.empty(), Optional.empty(), current, false));
 			}
 			
-			inheritedArguments.addAll(0, current.arguments);
 			current = current.parent;
 		}
 		return inheritedArguments;
@@ -155,13 +160,21 @@ public class CommandData extends CommandElement {
 		
 		// TODO: (URGENT): We're missing intermediate multiliteral argument subcommands!!!
 		
+		Deque<CommandData> commandTree = new ArrayDeque<>();
+
+		CommandData topLevelCommand = this;
+		
+		do {
+			commandTree.push(topLevelCommand);
+			topLevelCommand = topLevelCommand.getParent();
+		} while(topLevelCommand != null);
+		
 		// Subcommand methods
 		for(SubcommandMethod method : subcommandMethods) {
-			out.println(indentation() + "new CommandAPICommand(\"" + name + "\")");
+			out.println(indentation() + "new CommandAPICommand(\"" + commandTree.peek().name + "\")");
 			indent();
 			
 			List<ArgumentData> allArguments = getInheritedArguments();
-			allArguments.addAll(arguments);
 			
 			for(ArgumentData argument : allArguments) {
 				argument.emit(out, indentation);

@@ -1,9 +1,9 @@
 package dev.jorel.commandapi.annotations.parser;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.util.ArrayDeque;
 import java.util.Collections;
-import java.util.List;
+import java.util.Deque;
 import java.util.Optional;
 
 import javax.lang.model.element.NestingKind;
@@ -93,14 +93,14 @@ public abstract class CommandElement {
 					topLevelCommand = topLevelCommand.getParent();
 				}
 
-				List<TypeElement> typeStack = new ArrayList<>();
+				Deque<TypeElement> typeStack = new ArrayDeque<>();
 				
 
 				TypeElement currentTypeElement = suggestion.typeElement();
 				Types types = suggestion.processingEnv().getTypeUtils();
 
 				while (!types.isSameType(currentTypeElement.asType(), topLevelCommand.getTypeElement().asType())) {
-					typeStack.add(currentTypeElement);
+					typeStack.push(currentTypeElement);
 
 					if (currentTypeElement.getNestingKind() == NestingKind.TOP_LEVEL) {
 						// Stop, otherwise we'll keep going forever.
@@ -113,9 +113,6 @@ public abstract class CommandElement {
 						currentTypeElement = (TypeElement) currentTypeElement.getEnclosingElement();
 					}
 				}
-				
-				Collections.reverse(typeStack);
-
 
 				out.print(Utils.COMMAND_VAR_NAME);
 				for(TypeElement typeElement : typeStack) {
