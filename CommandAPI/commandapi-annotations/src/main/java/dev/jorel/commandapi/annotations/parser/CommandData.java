@@ -1,13 +1,16 @@
 package dev.jorel.commandapi.annotations.parser;
 
 import java.io.PrintWriter;
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.TypeElement;
 
 import dev.jorel.commandapi.CommandPermission;
+import dev.jorel.commandapi.annotations.arguments.AMultiLiteralArgument;
 
 public class CommandData extends CommandElement {
 
@@ -102,10 +105,32 @@ public class CommandData extends CommandElement {
 		this.shortDescriptionHelp = shortDescription;
 	}
 	
-	public List<ArgumentData> getInheritedArguments() {
+	private List<ArgumentData> getInheritedArguments() {
 		List<ArgumentData> inheritedArguments = new ArrayList<>();
 		CommandData current = this.parent;
 		while(current != null) {
+			
+			// Convert @Subcommand into a multiliteral argument
+			if(current.isSubcommand) {
+				final CommandData currentFinal = current;
+				Annotation multiLiteralArgumentAnnotation = new AMultiLiteralArgument() {
+					
+					@Override
+					public Class<? extends Annotation> annotationType() {
+						return AMultiLiteralArgument.class;
+					}
+					
+					@Override
+					public String[] value() {
+						String[] names = new String[1 + currentFinal.aliases.length];
+						names[0] = currentFinal.name;
+						System.arraycopy(currentFinal.aliases, 0, names, 1, currentFinal.aliases.length);
+						return names;
+					}
+				};
+				inheritedArguments.add(0, new ArgumentData(current.typeElement, multiLiteralArgumentAnnotation, current.permission, current.name, Optional.empty(), Optional.empty(), current, false));
+			}
+			
 			inheritedArguments.addAll(0, current.arguments);
 			current = current.parent;
 		}

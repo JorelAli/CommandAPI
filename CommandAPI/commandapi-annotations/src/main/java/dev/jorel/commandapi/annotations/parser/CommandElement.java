@@ -44,7 +44,9 @@ public abstract class CommandElement {
 	}
 
 	public void emitPermission(PrintWriter out, CommandPermission permission) {
-		if (permission.equals(CommandPermission.NONE)) {
+		
+		// TODO: We shouldn't be passing null here - this originates from CommandData's multiliteral argument construction
+		if (permission == null || permission.equals(CommandPermission.NONE)) {
 			// Do nothing
 		} else if (permission.equals(CommandPermission.OP)) {
 			out.println();
