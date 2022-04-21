@@ -26,6 +26,7 @@ import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
 
+@SuppressWarnings("deprecation")
 public class ArgumentData extends CommandElement {
 
 	private final VariableElement varElement;

@@ -116,6 +116,7 @@ import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
 /**
  * The main annotation processor for annotation-based arguments
  */
+@SuppressWarnings("deprecation")
 public class Annotations extends AbstractProcessor {
 
 	Logging logging;

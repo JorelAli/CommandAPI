@@ -93,14 +93,6 @@ public class CommandData extends CommandElement {
 		this.subcommandMethods.add(subcommandMethod);
 	}
 
-//	public List<SuggestionClass> getSuggestionClasses() {
-//		return suggestionClasses;
-//	}
-//
-//	public void addSuggestionClass(SuggestionClass suggestionClass) {
-//		this.suggestionClasses.add(suggestionClass);
-//	}
-
 	public void setPermission(CommandPermission permission) {
 		this.permission = permission;
 	}
@@ -130,6 +122,9 @@ public class CommandData extends CommandElement {
 			out.println();
 			indent();
 		}
+		
+		// TODO: Don't forget aliases, permissions, help
+		// TODO: Are we going to support requirements?
 		
 		// TODO: traverse upwards if we're a subcommand, get the hierarchy of arguments
 		
