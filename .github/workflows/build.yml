@@ -56,3 +56,12 @@ jobs:
             CommandAPI/commandapi-shade/target/CommandAPI*.jar
             !CommandAPI/commandapi-shade/target/*sources.jar
             !CommandAPI/commandapi-shade/target/*javadoc.jar
+      - name: CommandAPI annotations artifact
+        if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from latest java on one OS
+        uses: actions/upload-artifact@v2
+        with:
+          name: CommandAPI (annotations)
+          path: |
+            CommandAPI/commandapi-annotations/target/CommandAPI*.jar
+            !CommandAPI/commandapi-annotations/target/*sources.jar
+            !CommandAPI/commandapi-annotations/target/*javadoc.jar
