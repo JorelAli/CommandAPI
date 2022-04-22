@@ -108,6 +108,7 @@ import dev.jorel.commandapi.annotations.arguments.ATextArgument;
 import dev.jorel.commandapi.annotations.arguments.ATimeArgument;
 import dev.jorel.commandapi.annotations.arguments.AUUIDArgument;
 import dev.jorel.commandapi.annotations.arguments.Primitive;
+import dev.jorel.commandapi.annotations.parser.ClassGenerator;
 import dev.jorel.commandapi.annotations.parser.Parser;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
 import dev.jorel.commandapi.arguments.LocationType;
@@ -186,13 +187,12 @@ public class Annotations extends AbstractProcessor {
 		new Semantics(logging).analyze(context);
 		
 		PrintWriter out = new PrintWriter(System.out);
-		for(Entry<Element, Parser> entry : context.entrySet()) {
-			entry.getValue().getCommandData().emit(out, 0);
-			out.flush();
-			System.out.println();
-			System.out.println();
+		try {
+			new ClassGenerator(processingEnv).generateClass("Commands", context);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-
+		
 		// Linking step, where we link suggestions to arguments that suggest them?
 
 		// We finally generate the equivalent source code.

@@ -136,10 +136,12 @@ public class HordeCommand2 {
 		
 	}
 	
-	@Subcommand("custom")
-	public void custom(CommandSender sender, @ACustomArgument(WorldArgument.class) World world) {
-		
-	}
+	// TODO: For both custom arguments and suggestions, we should have a check to see if there are
+	// any unused @ArgumentParser or @Suggestion classes
+//	@Subcommand("custom")
+//	public void custom(CommandSender sender, @ACustomArgument(WorldArgument.class) World world) {
+//		
+//	}
 	
 	static void blah() {
 		HordeCommand2 command = new HordeCommand2();

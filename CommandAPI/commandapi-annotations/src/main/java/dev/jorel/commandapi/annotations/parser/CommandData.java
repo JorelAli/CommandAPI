@@ -149,7 +149,7 @@ public class CommandData extends CommandElement {
 		// Here, we're just writing the command itself (new CommandAPICommand ...) and nothing else?
 
 		if(!isSubcommand) {
-			out.println("public void register(" + typeElement.getSimpleName() + " command) {");
+			out.println(indentation() + "public void register(" + typeElement.getSimpleName() + " command) {");
 			out.println();
 			indent();
 		}
@@ -188,7 +188,7 @@ public class CommandData extends CommandElement {
 		
 		if(!isSubcommand) {
 			dedent();
-			out.println("}"); // End public void register()
+			out.println(indentation() + "}"); // End public void register()
 		}
 	}
 
