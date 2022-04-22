@@ -20,11 +20,19 @@ import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Types;
 
+import org.bukkit.command.BlockCommandSender;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.ProxiedCommandSender;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.annotations.Logging;
 import dev.jorel.commandapi.annotations.Utils;
 import dev.jorel.commandapi.annotations.Validator;
 import dev.jorel.commandapi.annotations.annotations.Command;
+import dev.jorel.commandapi.annotations.annotations.Executors;
 import dev.jorel.commandapi.annotations.annotations.Help;
 import dev.jorel.commandapi.annotations.annotations.NeedsOp;
 import dev.jorel.commandapi.annotations.annotations.NodeName;
@@ -36,14 +44,29 @@ import dev.jorel.commandapi.annotations.arguments.ACustomArgument;
 import dev.jorel.commandapi.annotations.arguments.Primitive;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.SafeSuggestions;
+import dev.jorel.commandapi.executors.ExecutorType;
+import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 
 public class Parser {
 
 	private ProcessingEnvironment processingEnv;
 	private Logging logging;
 	private CommandData commandData;
-	
-	// Construct some context :)
+
+	/**
+	 * Creates a parser for a class with the {@code @Command} annotation present on
+	 * it. This generates a {@link CommandData} which holds the representation of a
+	 * {@link dev.jorel.commandapi.CommandAPICommand}
+	 * 
+	 * @param classElement    the TypeElement of the class with {@code @Command}
+	 * @param processingEnv   the current annotation processing environment
+	 * @param logging         logging information
+	 * @param subCommandClass true if this is an inner class with
+	 *                        {@code @Subcommand} instead of a class with
+	 *                        {@code @Command}
+	 * @param parent          the parent {@code @Subcommand} or {@code @Command}
+	 *                        class, or null if this is a {@code @Command} class
+	 */
 	public Parser(TypeElement classElement, ProcessingEnvironment processingEnv, Logging logging,
 			boolean subCommandClass, CommandData parent) {
 		this.processingEnv = processingEnv;
@@ -53,7 +76,7 @@ public class Parser {
 
 		parseCommandClass(classElement, subCommandClass);
 	}
-	
+
 	public CommandData getCommandData() {
 		return this.commandData;
 	}
@@ -76,7 +99,7 @@ public class Parser {
 			if (!Validator.validateCommand(typeElement, commandAnnotation, logging)) {
 				return;
 			}
-			
+
 			final String name = commandAnnotation.value()[0];
 			final String[] aliases;
 			if (commandAnnotation.value().length == 1) {
@@ -111,13 +134,15 @@ public class Parser {
 							aliases = new String[0];
 						} else {
 							aliases = new String[subcommandAnnotation.value().length - 1];
-							System.arraycopy(subcommandAnnotation.value(), 1, aliases, 0, subcommandAnnotation.value().length - 1);
+							System.arraycopy(subcommandAnnotation.value(), 1, aliases, 0,
+									subcommandAnnotation.value().length - 1);
 						}
-						
-						Parser subCommandContext = new Parser((TypeElement) typeElementChild, processingEnv, logging, true, commandData);
+
+						Parser subCommandContext = new Parser((TypeElement) typeElementChild, processingEnv, logging,
+								true, commandData);
 						subCommandContext.commandData.setName(name);
 						subCommandContext.commandData.setAliases(aliases);
-						
+
 						commandData.addSubcommandClass(subCommandContext.commandData);
 					}
 
@@ -134,13 +159,15 @@ public class Parser {
 					// Parse methods with @Subcommand
 					annotation = typeElementChild.getAnnotation(Subcommand.class);
 					if (annotation != null) {
-						commandData.addSubcommandMethod(parseSubcommandMethod((ExecutableElement) typeElementChild, (Subcommand) annotation));
+						commandData.addSubcommandMethod(
+								parseSubcommandMethod((ExecutableElement) typeElementChild, (Subcommand) annotation));
 					}
 					break;
 				case FIELD:
 					annotation = Utils.getArgumentAnnotation(typeElementChild);
 					if (annotation != null) {
-						commandData.addArgument(parseArgumentField((VariableElement) typeElementChild, annotation, true));
+						commandData
+								.addArgument(parseArgumentField((VariableElement) typeElementChild, annotation, true));
 					}
 					break;
 				default:
@@ -155,10 +182,10 @@ public class Parser {
 	 * <ul>
 	 * <li>If this element has {@code @Permission}, this method returns a
 	 * CommandPermission from that.</li>
-	 * <li>If this element has {@code @WithoutPermission}, this method returns a negated
-	 * CommandPermission.</li>
-	 * <li>If this element has {@code @NeedsOp}, this method returns a CommandPermission
-	 * with operator privileges.</li>
+	 * <li>If this element has {@code @WithoutPermission}, this method returns a
+	 * negated CommandPermission.</li>
+	 * <li>If this element has {@code @NeedsOp}, this method returns a
+	 * CommandPermission with operator privileges.</li>
 	 * <li>If this element does not have any permission-related annotations, this
 	 * method returns CommandPermission.NONE</li>
 	 * </ul>
@@ -179,9 +206,11 @@ public class Parser {
 			return CommandPermission.NONE;
 		}
 	}
-	
+
 	/**
-	 * Returns the node name for this element, using the {@code @NodeName} element if one is present. 
+	 * Returns the node name for this element, using the {@code @NodeName} element
+	 * if one is present.
+	 * 
 	 * @param element
 	 * @return
 	 */
@@ -190,6 +219,51 @@ public class Parser {
 			return element.getAnnotation(NodeName.class).value();
 		} else {
 			return element.getSimpleName().toString();
+		}
+	}
+
+	/**
+	 * Returns the ExecutorType[] provided by the {@code @Executors} annotation.
+	 * This DOES infer the executor type from the first parameter of the method
+	 * element, so only run this after checking that the first parameter of this
+	 * method element is a CommandSender instance (See {@link Utils#isValidSender})
+	 * 
+	 * @param methodElement
+	 * @return
+	 */
+	private ExecutorType[] parseExecutorTypes(ExecutableElement methodElement) {
+		final ExecutorType commandSender;
+		Class<?> commandSenderClass = null;
+		
+		try {
+			commandSenderClass = Class.forName(methodElement.getParameters().get(0).asType().toString());
+		} catch (ClassNotFoundException e) {
+		}
+		
+		if(commandSenderClass == null) {
+			commandSender = ExecutorType.ALL;
+		} else {
+			if(NativeProxyCommandSender.class.isAssignableFrom(commandSenderClass)) {
+				commandSender = ExecutorType.NATIVE;
+			} else if(Player.class.isAssignableFrom(commandSenderClass)) {
+				commandSender = ExecutorType.PLAYER;
+			} else if(Entity.class.isAssignableFrom(commandSenderClass)) {
+				commandSender = ExecutorType.ENTITY;
+			} else if(ConsoleCommandSender.class.isAssignableFrom(commandSenderClass)) {
+				commandSender = ExecutorType.CONSOLE;
+			} else if(BlockCommandSender.class.isAssignableFrom(commandSenderClass)) {
+				commandSender = ExecutorType.BLOCK;
+			} else if(ProxiedCommandSender.class.isAssignableFrom(commandSenderClass)) {
+				commandSender = ExecutorType.PROXY;
+			} else {
+				commandSender = ExecutorType.ALL;
+			}
+		}
+
+		if(methodElement.getAnnotation(Executors.class) != null) {
+			return Utils.executorTypeCons(commandSender, methodElement.getAnnotation(Executors.class).value());
+		} else {
+			return new ExecutorType[] { commandSender };
 		}
 	}
 
@@ -219,23 +293,27 @@ public class Parser {
 			suggests = Optional.empty();
 			suggestionsClass = Optional.empty();
 		}
-		
+
 		// Validate argument type
-		
-		if(!annotation.annotationType().equals(ACustomArgument.class)) {
-			TypeMirror[] primitives = Utils.getPrimitiveTypeMirror(annotation.annotationType().getAnnotation(Primitive.class), processingEnv);
+
+		if (!annotation.annotationType().equals(ACustomArgument.class)) {
+			TypeMirror[] primitives = Utils
+					.getPrimitiveTypeMirror(annotation.annotationType().getAnnotation(Primitive.class), processingEnv);
 			final TypeMirror varType = varElement.asType(); // TODO: Apply type erasure
-			
+
 //			System.out.println(Arrays.deepToString(primitives) + " c.f. " + varType );
-			
-			if(!Arrays.stream(primitives).anyMatch((TypeMirror x) -> {
-				if(varType.getKind().isPrimitive()) {
-					return processingEnv.getTypeUtils().isSameType(processingEnv.getTypeUtils().boxedClass(processingEnv.getTypeUtils().getPrimitiveType(varType.getKind())).asType(), x);
+
+			if (!Arrays.stream(primitives).anyMatch((TypeMirror x) -> {
+				if (varType.getKind().isPrimitive()) {
+					return processingEnv.getTypeUtils().isSameType(processingEnv.getTypeUtils()
+							.boxedClass(processingEnv.getTypeUtils().getPrimitiveType(varType.getKind())).asType(), x);
 				} else {
 					return processingEnv.getTypeUtils().isSameType(x, varType);
 				}
 			})) {
-				logging.complain(varElement, "Mismatched argument types. This argument of type " + varType + " does not match @" + Utils.getArgumentAnnotation(varElement).annotationType().getSimpleName());
+				logging.complain(varElement,
+						"Mismatched argument types. This argument of type " + varType + " does not match @"
+								+ Utils.getArgumentAnnotation(varElement).annotationType().getSimpleName());
 			}
 		}
 
@@ -245,7 +323,7 @@ public class Parser {
 		if (suggestionsClass.isPresent()) {
 			argumentData.validateSuggestionsClass(processingEnv);
 		}
-		
+
 		return argumentData;
 	}
 
@@ -271,11 +349,14 @@ public class Parser {
 			e.printStackTrace();
 			return null;
 		}
+		
+		ExecutorType[] executorTypes = parseExecutorTypes(methodElement);
 
 		if (!Validator.validateSubCommand(methodElement, subcommandAnnotation, logging)) {
 			return null;
 		}
 
+		// Deconstruct subcommand name from its aliases
 		final String name = subcommandAnnotation.value()[0];
 		final String[] aliases;
 		if (subcommandAnnotation.value().length == 1) {
@@ -284,32 +365,36 @@ public class Parser {
 			aliases = new String[subcommandAnnotation.value().length - 1];
 			System.arraycopy(subcommandAnnotation.value(), 1, aliases, 0, subcommandAnnotation.value().length - 1);
 		}
-		
+
+		// Parse permissions
 		final CommandPermission permission = parsePermission(methodElement);
-		
+
+		// Parse arguments for the subcommand. The first argument is a CommandSender
+		// instance, so we start from 1
 		List<ArgumentData> arguments = new ArrayList<>();
-		
-		for(int i = 1; i < parameters.size(); i++) {
+		for (int i = 1; i < parameters.size(); i++) {
 			VariableElement parameter = parameters.get(i);
 			Annotation annotation = Utils.getArgumentAnnotation(parameter);
-			if(annotation == null) {
-				logging.complain(parameter, "Argument is missing a CommandAPI argument annotation. " + Utils.predictAnnotation(parameter));
+			if (annotation == null) {
+				logging.complain(parameter,
+						"Argument is missing a CommandAPI argument annotation. " + Utils.predictAnnotation(parameter));
 			} else {
 				arguments.add(parseArgumentField(parameter, annotation, false));
 			}
 		}
-		
+
+		// Figure out if we're a resulting method or not
 		boolean isResulting;
-		if(methodElement.getReturnType().getKind() == TypeKind.VOID) {
+		if (methodElement.getReturnType().getKind() == TypeKind.VOID) {
 			isResulting = false;
-		} else if(methodElement.getReturnType().getKind() == TypeKind.INT) {
+		} else if (methodElement.getReturnType().getKind() == TypeKind.INT) {
 			isResulting = true;
 		} else {
 			logging.complain(methodElement, "@Subcommand method return type must be 'void' or 'int'");
 			return null;
 		}
 
-		return new SubcommandMethod(methodElement, name, aliases, permission, arguments, isResulting, this.commandData);
+		return new SubcommandMethod(methodElement, name, aliases, executorTypes, permission, arguments, isResulting, this.commandData);
 	}
 
 	private SuggestionClass typeCheckSuggestionClass(TypeElement typeElement) {

@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
@@ -172,6 +173,9 @@ public class Annotations extends AbstractProcessor {
 //		});
 
 		Set<? extends Element> commandClasses = roundEnv.getElementsAnnotatedWith(Command.class);
+		if(commandClasses.isEmpty()) {
+			return false;
+		}
 
 		// We need to do multiple "phases". Firstly, we need to construct a context
 		// for each @Command class, which outlines the list of suggestion methods, its
@@ -186,24 +190,11 @@ public class Annotations extends AbstractProcessor {
 
 		new Semantics(logging).analyze(context);
 		
-		PrintWriter out = new PrintWriter(System.out);
 		try {
 			new ClassGenerator(processingEnv).generateClass("Commands", context);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		// Linking step, where we link suggestions to arguments that suggest them?
-
-		// We finally generate the equivalent source code.
-
-//		for(Element element : commandClasses) {
-//			try {
-//				processCommand(roundEnv, element);
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//		}
 
 		return true;
 	}

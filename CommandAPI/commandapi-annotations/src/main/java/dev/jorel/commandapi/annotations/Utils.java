@@ -16,6 +16,7 @@ import javax.lang.model.type.TypeMirror;
 import org.bukkit.command.CommandSender;
 
 import dev.jorel.commandapi.annotations.arguments.Primitive;
+import dev.jorel.commandapi.executors.ExecutorType;
 
 public class Utils {
 	
@@ -29,6 +30,13 @@ public class Utils {
 		String[] result = new String[1 + strArr.length];
 		result[0] = str;
 		System.arraycopy(strArr, 0, result, 1, strArr.length);
+		return result;
+	}
+	
+	public static ExecutorType[] executorTypeCons(ExecutorType type, ExecutorType[] types) {
+		ExecutorType[] result = new ExecutorType[1 + types.length];
+		result[0] = type;
+		System.arraycopy(types, 0, result, 1, types.length);
 		return result;
 	}
 

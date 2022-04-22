@@ -3,15 +3,11 @@ package dev.jorel.commandapi.annotations.parser;
 import java.io.PrintWriter;
 import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.lang.model.element.ExecutableElement;
-
-import com.google.common.collect.Streams;
 
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.annotations.Utils;
@@ -23,7 +19,7 @@ public class SubcommandMethod extends CommandElement {
 	private final ExecutableElement methodElement;
 
 	// The executor types. Inferred from the first argument of the method, or explicitly declared via @Executors
-	private ExecutorType[] executorTypes;
+	private final ExecutorType[] executorTypes;
 
 	private final String subcommandName;
 
@@ -41,10 +37,11 @@ public class SubcommandMethod extends CommandElement {
 
 	private final CommandData parent;
 
-	public SubcommandMethod(ExecutableElement methodElement, String name, String[] aliases, CommandPermission permission, List<ArgumentData> arguments, boolean isResulting, CommandData parent) {
+	public SubcommandMethod(ExecutableElement methodElement, String name, String[] aliases, ExecutorType[] executorTypes, CommandPermission permission, List<ArgumentData> arguments, boolean isResulting, CommandData parent) {
 		this.methodElement = methodElement;
 		this.subcommandName = name;
 		this.aliases = aliases;
+		this.executorTypes = executorTypes;
 		this.permission = permission;
 		this.arguments = arguments;
 		this.resulting = isResulting;
@@ -82,8 +79,23 @@ public class SubcommandMethod extends CommandElement {
 				argument.emit(out, currentIndentation);
 			}
 
-			// TODO: executor type
-			out.println(indentation() + ".executes((sender, args) -> {");
+			// Executor type
+			out.print(indentation() + ".");
+			if(executorTypes.length == 1) {
+				out.print(switch (executorTypes[0]) {
+					case ALL -> "executes";
+					case BLOCK -> "executesBlock";
+					case CONSOLE -> "executesConsole";
+					case ENTITY -> "executesEntity";
+					case NATIVE -> "executesNative";
+					case PLAYER -> "executesPlayer";
+					case PROXY -> "executesProxy";
+					default -> "executes";
+				});
+			} else {
+				out.print("executes");
+			}
+			out.println("((sender, args) -> {");
 			indent();
 
 			if(resulting) {
@@ -93,7 +105,13 @@ public class SubcommandMethod extends CommandElement {
 			emitMethodCallArguments(out);
 
 			dedent();
-			out.println(indentation() + "})");
+			out.print(indentation() + "}");
+			if(executorTypes.length > 1) {
+				// Emit executor type 
+				out.print(", ");
+				out.print(Arrays.stream(executorTypes).map(x -> "ExecutorType." + x.name()).collect(Collectors.joining(", ")));
+			}
+			out.println(")");
 			out.println(indentation() + ".register();");
 		} else {
 			// TODO: Assert. This object should never have been constructed!
