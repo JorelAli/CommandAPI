@@ -8,10 +8,10 @@ import java.util.stream.Collectors;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 
 import dev.jorel.commandapi.CommandPermission;
+import dev.jorel.commandapi.annotations.Logging;
 import dev.jorel.commandapi.annotations.arguments.ADoubleArgument;
 import dev.jorel.commandapi.annotations.arguments.AEntitySelectorArgument;
 import dev.jorel.commandapi.annotations.arguments.AFloatArgument;
@@ -69,8 +69,9 @@ public class ArgumentData extends CommandElement {
 	 */
 	private final boolean classArgument;
 
-	public ArgumentData(Element varElement, Annotation annotation, CommandPermission permission,
+	public ArgumentData(Logging logging, Element varElement, Annotation annotation, CommandPermission permission,
 			String nodeName, Optional<TypeMirror> suggests, Optional<SuggestionClass> suggestions, CommandData parent, boolean classArgument) {
+		super(logging);
 		this.varElement = varElement;
 		this.primitiveTypes = annotation.annotationType().getAnnotation(Primitive.class).value();
 		this.argumentAnnotation = annotation;

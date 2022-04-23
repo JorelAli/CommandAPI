@@ -1,4 +1,4 @@
-package dev.jorel.commandapi.annotations.parser;
+package dev.jorel.commandapi.annotations;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,6 +13,8 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.tools.JavaFileObject;
+
+import dev.jorel.commandapi.annotations.parser.Parser;
 
 public class ClassGenerator {
 

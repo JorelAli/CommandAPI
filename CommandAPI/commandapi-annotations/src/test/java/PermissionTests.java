@@ -10,7 +10,7 @@ import static com.google.testing.compile.JavaFileObjects.forResource;
 
 import dev.jorel.commandapi.annotations.Annotations;
 
-public class AnnotationTests {
+public class PermissionTests {
 
 	Compilation compile(String classToCompile) {
 		return javac().withProcessors(new Annotations(true)).compile(forResource(classToCompile));
@@ -49,17 +49,6 @@ public class AnnotationTests {
 			.hadErrorContaining("@Command can only go on a top level class")
 			.inFile(forResource("NestedCommand.java"))
 			.onLine(7);
-	}
-	
-	@Test
-	/**
-	 * Testing that a {@code @Command} class has at least one executor
-	 */
-	void checkCommandHasExecutor() {
-		assertThat(compile("ClassWithNoExecutor.java"))
-			.hadWarningContaining("Command has no command executors")
-			.inFile(forResource("ClassWithNoExecutor.java"))
-			.onLine(4);
 	}
 	
 	

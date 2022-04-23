@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import javax.lang.model.element.ExecutableElement;
 
 import dev.jorel.commandapi.CommandPermission;
+import dev.jorel.commandapi.annotations.Logging;
 import dev.jorel.commandapi.annotations.Utils;
 import dev.jorel.commandapi.annotations.annotations.Subcommand;
 import dev.jorel.commandapi.executors.ExecutorType;
@@ -37,7 +38,8 @@ public class SubcommandMethod extends CommandElement {
 
 	private final CommandData parent;
 
-	public SubcommandMethod(ExecutableElement methodElement, String name, String[] aliases, ExecutorType[] executorTypes, CommandPermission permission, List<ArgumentData> arguments, boolean isResulting, CommandData parent) {
+	public SubcommandMethod(Logging logging, ExecutableElement methodElement, String name, String[] aliases, ExecutorType[] executorTypes, CommandPermission permission, List<ArgumentData> arguments, boolean isResulting, CommandData parent) {
+		super(logging);
 		this.methodElement = methodElement;
 		this.subcommandName = name;
 		this.aliases = aliases;

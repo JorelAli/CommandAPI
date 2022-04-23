@@ -2,7 +2,6 @@ package dev.jorel.commandapi.annotations.parser;
 
 import java.io.PrintWriter;
 import java.util.ArrayDeque;
-import java.util.Collections;
 import java.util.Deque;
 import java.util.Optional;
 
@@ -11,9 +10,16 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Types;
 
 import dev.jorel.commandapi.CommandPermission;
+import dev.jorel.commandapi.annotations.Logging;
 import dev.jorel.commandapi.annotations.Utils;
 
 public abstract class CommandElement {
+	
+	public Logging logging;
+	
+	public CommandElement(Logging logging) {
+		this.logging = logging;
+	}
 
 	/**
 	 * Emits the current ADT.

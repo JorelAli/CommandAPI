@@ -20,6 +20,10 @@ public class Logging {
 		processingEnv.getMessager().printMessage(Kind.ERROR, message, element);
 	}
 	
+	public void warn(Element element, String message) {
+		processingEnv.getMessager().printMessage(Kind.MANDATORY_WARNING, message, element);
+	}
+	
 	public void info(Element element, String message) {
 		//processingEnv.getMessager().printMessage(Kind.MANDATORY_WARNING, message, element);
 	}

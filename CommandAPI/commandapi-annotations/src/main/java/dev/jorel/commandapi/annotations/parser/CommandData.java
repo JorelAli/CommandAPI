@@ -12,6 +12,7 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.TypeElement;
 
 import dev.jorel.commandapi.CommandPermission;
+import dev.jorel.commandapi.annotations.Logging;
 import dev.jorel.commandapi.annotations.Utils;
 import dev.jorel.commandapi.annotations.arguments.AMultiLiteralArgument;
 
@@ -59,7 +60,8 @@ public class CommandData extends CommandElement {
 		return parent;
 	}
 
-	public CommandData(TypeElement classElement, boolean isSubcommand, ProcessingEnvironment processingEnv, CommandData parent) {
+	public CommandData(Logging logging, TypeElement classElement, boolean isSubcommand, ProcessingEnvironment processingEnv, CommandData parent) {
+		super(logging);
 		this.typeElement = classElement;
 		this.arguments = new ArrayList<>();
 		this.subcommandClasses = new ArrayList<>();
@@ -135,7 +137,7 @@ public class CommandData extends CommandElement {
 			// Convert @Subcommand into a multiliteral argument
 			if(current.isSubcommand) {
 				Annotation multiLiteralArgumentAnnotation = asMultiLiteralAnnotation(current);
-				inheritedArguments.add(0, new ArgumentData(current.typeElement, multiLiteralArgumentAnnotation, current.permission, current.name, Optional.empty(), Optional.empty(), current, false));
+				inheritedArguments.add(0, new ArgumentData(super.logging, current.typeElement, multiLiteralArgumentAnnotation, current.permission, current.name, Optional.empty(), Optional.empty(), current, false));
 			}
 			
 			current = current.parent;
@@ -143,10 +145,19 @@ public class CommandData extends CommandElement {
 		return inheritedArguments;
 	}
 
+	/**
+	 * Here, we're just writing the command itself, as well as any nested subcommands
+	 */
 	@Override
 	public void emit(PrintWriter out, int currentIndentation) {
 		this.indentation = currentIndentation;
-		// Here, we're just writing the command itself (new CommandAPICommand ...) and nothing else?
+
+		// Check that we're going to emit some commands. If not, throw an error 
+		if(!isSubcommand) {
+			if(subcommandMethods.isEmpty() && subcommandClasses.isEmpty()) {
+				logging.warn(typeElement, "Command has no command executors");
+			}
+		}
 
 		if(!isSubcommand) {
 			out.println(indentation() + "public void register(" + typeElement.getSimpleName() + " command) {");

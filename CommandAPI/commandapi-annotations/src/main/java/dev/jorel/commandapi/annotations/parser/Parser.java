@@ -72,7 +72,7 @@ public class Parser {
 		this.processingEnv = processingEnv;
 		this.logging = logging;
 
-		this.commandData = new CommandData(classElement, subCommandClass, processingEnv, parent);
+		this.commandData = new CommandData(logging, classElement, subCommandClass, processingEnv, parent);
 
 		parseCommandClass(classElement, subCommandClass);
 	}
@@ -318,7 +318,7 @@ public class Parser {
 		}
 
 		// Create ArgumentData
-		ArgumentData argumentData = new ArgumentData(varElement, annotation, permission, nodeName, suggests,
+		ArgumentData argumentData = new ArgumentData(logging, varElement, annotation, permission, nodeName, suggests,
 				suggestionsClass, commandData, classArgument);
 		if (suggestionsClass.isPresent()) {
 			argumentData.validateSuggestionsClass(processingEnv);
@@ -394,7 +394,7 @@ public class Parser {
 			return null;
 		}
 
-		return new SubcommandMethod(methodElement, name, aliases, executorTypes, permission, arguments, isResulting, this.commandData);
+		return new SubcommandMethod(logging, methodElement, name, aliases, executorTypes, permission, arguments, isResulting, this.commandData);
 	}
 
 	private SuggestionClass typeCheckSuggestionClass(TypeElement typeElement) {
