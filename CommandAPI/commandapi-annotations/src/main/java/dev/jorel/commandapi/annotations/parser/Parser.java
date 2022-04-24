@@ -3,11 +3,10 @@ package dev.jorel.commandapi.annotations.parser;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
+import java.util.SortedSet;
 import java.util.function.Supplier;
 
 import javax.annotation.processing.ProcessingEnvironment;
@@ -21,7 +20,6 @@ import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Types;
 
 import org.bukkit.command.BlockCommandSender;
-import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.entity.Entity;
@@ -159,6 +157,7 @@ public class Parser {
 					// Parse methods with @Subcommand
 					annotation = typeElementChild.getAnnotation(Subcommand.class);
 					if (annotation != null) {
+						System.out.println(typeElementChild);
 						commandData.addSubcommandMethod(
 								parseSubcommandMethod((ExecutableElement) typeElementChild, (Subcommand) annotation));
 					}
@@ -353,17 +352,25 @@ public class Parser {
 		ExecutorType[] executorTypes = parseExecutorTypes(methodElement);
 
 		if (!Validator.validateSubCommand(methodElement, subcommandAnnotation, logging)) {
+			logging.complain(methodElement, "Failed method validation checks");
 			return null;
 		}
 
 		// Deconstruct subcommand name from its aliases
-		final String name = subcommandAnnotation.value()[0];
+		final String name;
 		final String[] aliases;
-		if (subcommandAnnotation.value().length == 1) {
-			aliases = new String[0];
+		
+		if(subcommandAnnotation.value().length > 0) {
+			name = subcommandAnnotation.value()[0];
+			if (subcommandAnnotation.value().length == 1) {
+				aliases = new String[0];
+			} else {
+				aliases = new String[subcommandAnnotation.value().length - 1];
+				System.arraycopy(subcommandAnnotation.value(), 1, aliases, 0, subcommandAnnotation.value().length - 1);
+			}
 		} else {
-			aliases = new String[subcommandAnnotation.value().length - 1];
-			System.arraycopy(subcommandAnnotation.value(), 1, aliases, 0, subcommandAnnotation.value().length - 1);
+			name = null;
+			aliases = new String[0];
 		}
 
 		// Parse permissions
@@ -460,11 +467,11 @@ public class Parser {
 	 * @param logging        logging class
 	 * @return
 	 */
-	public static Map<Element, Parser> generateContexts(Set<? extends Element> commandClasses,
+	public static LinkedHashMap<TypeElement, Parser> generateContexts(SortedSet<TypeElement> commandClasses,
 			ProcessingEnvironment processingEnv, Logging logging) {
-		Map<Element, Parser> contextMap = new HashMap<>();
-		for (Element classElement : commandClasses) {
-			contextMap.put(classElement, new Parser((TypeElement) classElement, processingEnv, logging, false, null));
+		LinkedHashMap<TypeElement, Parser> contextMap = new LinkedHashMap<>();
+		for (TypeElement classElement : commandClasses) {
+			contextMap.put(classElement, new Parser(classElement, processingEnv, logging, false, null));
 		}
 		return contextMap;
 	}

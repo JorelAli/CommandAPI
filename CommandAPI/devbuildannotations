@@ -1,2 +1,2 @@
 #!/bin/sh
-mvn clean package -pl commandapi-annotations -e -Dmaven.javadoc.skip=true -Dmaven.source.skip=true
+mvn clean install -pl commandapi-annotations -e -Dmaven.javadoc.skip=true -Dmaven.source.skip=true

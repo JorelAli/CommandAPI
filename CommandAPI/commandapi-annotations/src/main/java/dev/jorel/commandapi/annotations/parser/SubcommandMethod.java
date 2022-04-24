@@ -55,28 +55,34 @@ public class SubcommandMethod extends CommandElement {
 		this.indentation = currentIndentation;
 
 		if (methodElement.getAnnotation(Subcommand.class) != null) {
-
-			// TODO: Just use CommandData's MultiLiteralArgument generator and run emit on its ArgumentData!
 			
-			// MultiLiteralArgument representing this command
-			out.print(indentation() + ".withArguments(");
-			out.print("new MultiLiteralArgument(");
-
-			out.print(Arrays.stream(Utils.strCons(subcommandName, aliases))
-					.map(Utils::quote).collect(Collectors.joining(", ")));
-			out.println(")");
-			indent();
-			out.print(indentation() + ".setListed(false)");
-
-			// Permissions
-			if(permission == null || permission == CommandPermission.NONE) {
-				out.println();
-			} else {
-				emitPermission(out, permission);
+			// If the @Subcommand name is null, we're not actually emitting the argument.
+			// TODO: We should probably have semantic checks to ensure nobody adds @Permission (etc.)
+			// to this @Subcommand in the case when it has no name - the argument never gets emitted so
+			// we technically can't apply these rules to this "subcommand"
+			if(subcommandName != null) {
+				// TODO: Just use CommandData's MultiLiteralArgument generator and run emit on its ArgumentData!
+				
+				// MultiLiteralArgument representing this command
+				out.print(indentation() + ".withArguments(");
+				out.print("new MultiLiteralArgument(");
+	
+				out.print(Arrays.stream(Utils.strCons(subcommandName, aliases))
+						.map(Utils::quote).collect(Collectors.joining(", ")));
+				out.println(")"); // End MultiLiteralArgument
+				indent();
+				out.print(indentation() + ".setListed(false)");
+	
+				// Permissions
+				if(permission == null || permission == CommandPermission.NONE) {
+					out.println();
+				} else {
+					emitPermission(out, permission);
+				}
+				dedent();
+				out.println(indentation() + ")"); // End .withArguments
 			}
-			dedent();
-			out.println(indentation() + ")");
-			
+				
 			for(ArgumentData argument : arguments) {
 				argument.emit(out, currentIndentation);
 			}
@@ -113,7 +119,8 @@ public class SubcommandMethod extends CommandElement {
 				out.print(", ");
 				out.print(Arrays.stream(executorTypes).map(x -> "ExecutorType." + x.name()).collect(Collectors.joining(", ")));
 			}
-			out.println(")");
+			out.println(")"); // End .executes
+			
 			out.println(indentation() + ".register();");
 		} else {
 			// TODO: Assert. This object should never have been constructed!

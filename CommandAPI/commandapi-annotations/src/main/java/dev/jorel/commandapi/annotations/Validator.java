@@ -36,14 +36,14 @@ public class Validator {
 	}
 	
 	public static boolean validateSubCommand(ExecutableElement methodElement, Subcommand commandAnnotation, Logging logging) {
-		if(commandAnnotation.value().length == 0) {
-			logging.complain(methodElement, "@Command annotation must have at least one value");
-			return false;
-		}
+//		if(commandAnnotation.value().length == 0) {
+//			logging.complain(methodElement, "@Subommand annotation must have at least one value");
+//			return false;
+//		}
 		
 		for(String value : commandAnnotation.value()) {
 			if(value.isBlank()) {
-				logging.complain(methodElement, "@Command annotation value cannot be blank");
+				logging.complain(methodElement, "@Subcmmand annotation value cannot be blank");
 				return false;
 			}
 		}

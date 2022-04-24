@@ -21,15 +21,11 @@
 package dev.jorel.commandapi.annotations;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -38,18 +34,9 @@ import java.util.stream.Collectors;
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
-import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.element.VariableElement;
-import javax.lang.model.type.ExecutableType;
-import javax.tools.Diagnostic.Kind;
-import javax.tools.JavaFileObject;
 
-import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.annotations.annotations.ArgumentParser;
 import dev.jorel.commandapi.annotations.annotations.Command;
 import dev.jorel.commandapi.annotations.annotations.Help;
@@ -108,12 +95,7 @@ import dev.jorel.commandapi.annotations.arguments.ATeamArgument;
 import dev.jorel.commandapi.annotations.arguments.ATextArgument;
 import dev.jorel.commandapi.annotations.arguments.ATimeArgument;
 import dev.jorel.commandapi.annotations.arguments.AUUIDArgument;
-import dev.jorel.commandapi.annotations.arguments.Primitive;
 import dev.jorel.commandapi.annotations.parser.Parser;
-import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
-import dev.jorel.commandapi.arguments.LocationType;
-import dev.jorel.commandapi.arguments.MultiLiteralArgument;
-import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
 
 /**
  * The main annotation processor for annotation-based arguments
@@ -190,16 +172,28 @@ public class Annotations extends AbstractProcessor {
 //			System.out.println();
 //		});
 
-		Set<? extends Element> commandClasses = roundEnv.getElementsAnnotatedWith(Command.class);
-		if(commandClasses.isEmpty()) {
+		// We want things sorted :)
+		SortedSet<TypeElement> commandClasses = new TreeSet<>((TypeElement elem1, TypeElement elem2) -> {
+			return elem1.getQualifiedName().toString().compareTo(elem2.getQualifiedName().toString());
+		});
+		
+		Set<? extends Element> commandElements = roundEnv.getElementsAnnotatedWith(Command.class);
+		if(commandElements.isEmpty()) {
 			return false;
 		}
+		
+		for(Element element : commandElements) {
+			commandClasses.add((TypeElement) element);
+		}
+		
+		// Change the type of commandClasses - we're asserting it's a TypeElement (it literally can't be anything else)
+		
 
 		// We need to do multiple "phases". Firstly, we need to construct a context
 		// for each @Command class, which outlines the list of suggestion methods, its
 		// varying types, etc. You can think of this as a lexing/syntax analysis step.
 
-		Map<Element, Parser> context = Parser.generateContexts(commandClasses, processingEnv, logging);
+		LinkedHashMap<TypeElement, Parser> context = Parser.generateContexts(commandClasses, processingEnv, logging);
 
 		// We then perform out semantic analysis (checking that we've not got two
 		// @Default

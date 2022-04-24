@@ -1,9 +1,8 @@
 package dev.jorel.commandapi.annotations;
 
-import java.util.Map;
+import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
-import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.NestingKind;
 import javax.lang.model.element.TypeElement;
@@ -18,14 +17,14 @@ public class Semantics {
 		this.logging = logging;
 	}
 
-	public void analyze(Map<Element, Parser> allContext) {
+	public void analyze(LinkedHashMap<TypeElement, Parser> allContext) {
 
 		/*
 		 * Rules that must be met - Subcommands can only go on inner classes
 		 */
 
-		for (Entry<Element, Parser> contextEntry : allContext.entrySet()) {
-			TypeElement classElement = (TypeElement) contextEntry.getKey();
+		for (Entry<TypeElement, Parser> contextEntry : allContext.entrySet()) {
+			TypeElement classElement = contextEntry.getKey();
 			Parser context = contextEntry.getValue();
 
 			if (classElement.getKind() == ElementKind.CLASS) {
