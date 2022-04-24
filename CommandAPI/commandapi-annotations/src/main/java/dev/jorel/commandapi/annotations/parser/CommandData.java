@@ -160,7 +160,7 @@ public class CommandData extends CommandElement {
 		}
 
 		if(!isSubcommand) {
-			out.println(indentation() + "public void register(" + typeElement.getSimpleName() + " command) {");
+			out.println(indentation() + "public static void register(" + typeElement.getSimpleName() + " command) {");
 			out.println();
 			indent();
 		}
