@@ -12,6 +12,7 @@ import java.util.function.Supplier;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.DeclaredType;
@@ -157,7 +158,6 @@ public class Parser {
 					// Parse methods with @Subcommand
 					annotation = typeElementChild.getAnnotation(Subcommand.class);
 					if (annotation != null) {
-						System.out.println(typeElementChild);
 						commandData.addSubcommandMethod(
 								parseSubcommandMethod((ExecutableElement) typeElementChild, (Subcommand) annotation));
 					}
@@ -273,7 +273,12 @@ public class Parser {
 	private ArgumentData parseArgumentField(VariableElement varElement, Annotation annotation, boolean classArgument) {
 		// Validate
 		Validator.validatePermissions(varElement, logging);
-
+		
+		// Fields can't be final
+		if(varElement.getModifiers().contains(Modifier.FINAL) ) {
+			logging.complain(varElement, "Variable " + varElement.getSimpleName() + " cannot be final");
+		}
+		
 		// Parse permissions
 		final CommandPermission permission = parsePermission(varElement);
 
