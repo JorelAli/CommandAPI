@@ -22,7 +22,6 @@ package dev.jorel.commandapi;
 
 import dev.jorel.commandapi.exceptions.UnsupportedVersionException;
 import dev.jorel.commandapi.nms.NMS;
-import dev.jorel.commandapi.nms.NMS_1_16_R3;
 import dev.jorel.commandapi.nms.NMS_1_17_R1;
 import dev.jorel.commandapi.nms.NMS_1_18_R1;
 import dev.jorel.commandapi.nms.NMS_1_18_R2;
@@ -45,8 +44,6 @@ public interface CommandAPIVersionHandler {
 			return new NMS_1_18_R2();
 		} else {
 			switch (version) {
-			case "1.16.5":
-				return new NMS_1_16_R3();
 			case "1.17":
 			case "1.17.1":
 				return new NMS_1_17_R1();
