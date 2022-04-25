@@ -367,7 +367,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		final CommandPermission finalPermission = permission;
 
 		// Register it to the Bukkit permissions registry
-		if (finalPermission.getPermission() != null) {
+		if (finalPermission.getPermission().isPresent()) {
 			try {
 				Bukkit.getPluginManager().addPermission(new Permission(finalPermission.getPermission().get()));
 			} catch (IllegalArgumentException e) {

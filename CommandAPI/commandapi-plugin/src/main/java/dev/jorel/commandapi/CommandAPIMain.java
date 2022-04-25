@@ -21,9 +21,13 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Map.Entry;
 
+import org.bukkit.Particle;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import dev.jorel.commandapi.arguments.ParticleArgument;
 
 public class CommandAPIMain extends JavaPlugin {
 	
@@ -58,5 +62,15 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable(this);
+		
+		new CommandAPICommand("dparticle")
+	        .withArguments(new ParticleArgument("particle"))
+	        .executesPlayer(((sender, args) -> {
+	        	System.out.println(Arrays.toString(args));
+	            Particle particle = (Particle) args[0];
+	            
+	            sender.getWorld().spawnParticle(particle, sender.getLocation(), 1, particle.getDataType());
+	        }))
+	        .register();
 	}
 }
