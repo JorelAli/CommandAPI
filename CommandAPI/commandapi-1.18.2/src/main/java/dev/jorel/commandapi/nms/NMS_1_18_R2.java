@@ -216,8 +216,7 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 		VarHandle eps_se = null;
 		try {
 			 shm_ht = MethodHandles.privateLookupIn(SimpleHelpMap.class, MethodHandles.lookup()).findVarHandle(SimpleHelpMap.class, "helpTopics", Map.class);
-			 shm_ht = MethodHandles.privateLookupIn(EntityPositionSource.class, MethodHandles.lookup()).findVarHandle(EntityPositionSource.class, "d", Optional.class);
-		} catch (ReflectiveOperationException e) {
+			 eps_se = MethodHandles.privateLookupIn(EntityPositionSource.class, MethodHandles.lookup()).findVarHandle(EntityPositionSource.class, "d", Optional.class);		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
 		 SimpleHelpMap_helpTopics = shm_ht;
@@ -758,51 +757,6 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 		final ParticleOptions particleOptions = ParticleArgument.getParticle(cmdCtx, str);
 		final Level level = cmdCtx.getSource().getLevel();
 		
-		final Particle particle = CraftParticle.toBukkit(particleOptions);
-		if(particleOptions instanceof SimpleParticleType options) {
-			return new ParticleData<Void>(particle, null);
-		}
-		if(particleOptions instanceof BlockParticleOption options) {
-			return new ParticleData<BlockData>(particle, CraftBlockData.fromData(options.getState()));
-		}
-		if(particleOptions instanceof DustColorTransitionOptions options) {
-			final Color color = Color.fromRGB((int) (options.getColor().x() * 255.0F), (int) (options.getColor().y() * 255.0F), (int) (options.getColor().z() * 255.0F));
-			final Color toColor = Color.fromRGB((int) (options.getToColor().x() * 255.0F), (int) (options.getToColor().y() * 255.0F), (int) (options.getToColor().z() * 255.0F));
-			return new ParticleData<DustTransition>(particle, new DustTransition(color, toColor, options.getScale()));
-		}
-		if(particleOptions instanceof DustParticleOptions options) {
-			final Color color = Color.fromRGB((int) (options.getColor().x() * 255.0F), (int) (options.getColor().y() * 255.0F), (int) (options.getColor().z() * 255.0F));
-			return new ParticleData<DustOptions>(particle, new DustOptions(color, options.getScale()));
-		}
-		if(particleOptions instanceof ItemParticleOption options) {
-			return new ParticleData<org.bukkit.inventory.ItemStack>(particle, CraftItemStack.asBukkitCopy(options.getItem()));
-		}
-		if(particleOptions instanceof VibrationParticleOption options) {
-			final BlockPos origin = options.getVibrationPath().getOrigin();
-			final Location from = new Location(level.getWorld(), origin.getX(), origin.getY(), origin.getZ());
-			final Destination destination;
-			if(options.getVibrationPath().getDestination() instanceof BlockPositionSource positionSource) {
-				BlockPos to = positionSource.getPosition(level).get();
-				destination = new BlockDestination(new Location(level.getWorld(), to.getX(), to.getY(), to.getZ()));
-			} else if(options.getVibrationPath().getDestination() instanceof EntityPositionSource positionSource) {
-				positionSource.getPosition(level); // Populate Optional sourceEntity
-				Optional<Entity> entity = (Optional<Entity>) EntityPositionSource_sourceEntity.get(positionSource);
-				destination = new EntityDestination(entity.get().getBukkitEntity());
-			} else {
-				CommandAPI.getLog().warning("Unknown vibration destination " + options.getVibrationPath().getDestination());
-				return new ParticleData<Void>(particle, null);
-			}
-			return new ParticleData<Vibration>(particle, new Vibration(from, destination, options.getVibrationPath().getArrivalInTicks()));
-		}
-		CommandAPI.getLog().warning("Invalid particle data type for " + particle.getDataType().toString());
-		return new ParticleData<Void>(particle, null);
-	}
-	
-	/**
-	 * The inverse of {@code CraftParticle.toNMS(Particle particle, T obj)}.
-	 * Converts NMS's {@link ParticleOptions} into Bukkit's corresponding data object
-	 */
-	public ParticleData<?> getParticleData(ParticleOptions particleOptions, Level level) {
 		final Particle particle = CraftParticle.toBukkit(particleOptions);
 		if(particleOptions instanceof SimpleParticleType options) {
 			return new ParticleData<Void>(particle, null);

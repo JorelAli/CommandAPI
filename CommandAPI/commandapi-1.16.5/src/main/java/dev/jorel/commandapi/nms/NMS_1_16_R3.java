@@ -44,11 +44,13 @@ import java.util.function.ToIntFunction;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Keyed;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Particle;
+import org.bukkit.Particle.DustOptions;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
@@ -102,6 +104,7 @@ import dev.jorel.commandapi.wrappers.IntegerRange;
 import dev.jorel.commandapi.wrappers.Location2D;
 import dev.jorel.commandapi.wrappers.MathOperation;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
+import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
@@ -158,6 +161,7 @@ import net.minecraft.server.v1_16_R3.EntityPlayer;
 import net.minecraft.server.v1_16_R3.EntitySelector;
 import net.minecraft.server.v1_16_R3.EntityTypes;
 import net.minecraft.server.v1_16_R3.EnumDirection.EnumAxis;
+import net.minecraft.server.v1_16_R3.IBlockData;
 import net.minecraft.server.v1_16_R3.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_16_R3.ICompletionProvider;
 import net.minecraft.server.v1_16_R3.IRecipe;
@@ -166,34 +170,44 @@ import net.minecraft.server.v1_16_R3.IReloadableResourceManager;
 import net.minecraft.server.v1_16_R3.ItemStack;
 import net.minecraft.server.v1_16_R3.MinecraftKey;
 import net.minecraft.server.v1_16_R3.MinecraftServer;
+import net.minecraft.server.v1_16_R3.ParticleParam;
+import net.minecraft.server.v1_16_R3.ParticleParamBlock;
+import net.minecraft.server.v1_16_R3.ParticleParamItem;
+import net.minecraft.server.v1_16_R3.ParticleParamRedstone;
 import net.minecraft.server.v1_16_R3.ShapeDetectorBlock;
 import net.minecraft.server.v1_16_R3.SystemUtils;
 import net.minecraft.server.v1_16_R3.Vec2F;
 import net.minecraft.server.v1_16_R3.Vec3D;
+import net.minecraft.server.v1_16_R3.WorldServer;
 
 @RequireField(in = DataPackResources.class, name = "i", ofType = CustomFunctionManager.class)
 @RequireField(in = DataPackResources.class, name = "b", ofType = IReloadableResourceManager.class)
 @RequireField(in = CustomFunctionManager.class, name = "h", ofType = CommandDispatcher.class)
 @RequireField(in = EntitySelector.class, name = "checkPermissions", ofType = boolean.class)
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
+@RequireField(in = ParticleParamBlock.class, name = "c", ofType = IBlockData.class)
 public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	
 	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
 	private static final VarHandle DATAPACKRESOURCES_B;
 	private static final VarHandle SimpleHelpMap_helpTopics;
+	private static final VarHandle ParticleParamBlock_c;
 	
 	// Compute all var handles all in one go so we don't do this during main server runtime
 	static {
 		VarHandle dpr_b = null;
 		VarHandle shm_ht = null;
+		VarHandle ppb_c = null;
 		try {
 			 dpr_b = MethodHandles.privateLookupIn(DataPackResources.class, MethodHandles.lookup()).findVarHandle(DataPackResources.class, "b", IReloadableResourceManager.class);			 
 			 shm_ht = MethodHandles.privateLookupIn(SimpleHelpMap.class, MethodHandles.lookup()).findVarHandle(SimpleHelpMap.class, "helpTopics", Map.class);
+			 ppb_c = MethodHandles.privateLookupIn(ParticleParamBlock.class, MethodHandles.lookup()).findVarHandle(ParticleParamBlock.class, "c", IBlockData.class);
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
 		 DATAPACKRESOURCES_B = dpr_b;
 		 SimpleHelpMap_helpTopics = shm_ht;
+		 ParticleParamBlock_c = ppb_c;
 	}
 
 	private static NamespacedKey fromMinecrafKey(MinecraftKey key) {
@@ -691,8 +705,30 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
-	public Particle getParticle(CommandContext<CommandListenerWrapper> cmdCtx, String str) {
-		return CraftParticle.toBukkit(ArgumentParticle.a(cmdCtx, str));
+	public ParticleData<?> getParticle(CommandContext<CommandListenerWrapper> cmdCtx, String str) {
+		final ParticleParam particleOptions = ArgumentParticle.a(cmdCtx, str);
+		final WorldServer level = cmdCtx.getSource().getWorld();
+		
+		final Particle particle = CraftParticle.toBukkit(particleOptions);
+		if(particleOptions instanceof ParticleParamBlock options) {
+			IBlockData blockData = (IBlockData) ParticleParamBlock_c.get(options);
+			return new ParticleData<BlockData>(particle, CraftBlockData.fromData(blockData));
+		}
+		if(particleOptions instanceof ParticleParamRedstone options) {
+			String optionsStr = options.a(); // Of the format "particle_type float float float"
+			String[] optionsArr = optionsStr.split(" ");
+			final float red = Float.parseFloat(optionsArr[1]);
+			final float green = Float.parseFloat(optionsArr[2]);
+			final float blue = Float.parseFloat(optionsArr[3]);
+
+			final Color color = Color.fromRGB((int) (red * 255.0F), (int) (green * 255.0F), (int) (blue * 255.0F));
+			return new ParticleData<DustOptions>(particle, new DustOptions(color, options.getScale()));
+		}
+		if(particleOptions instanceof ParticleParamItem options) {
+			return new ParticleData<org.bukkit.inventory.ItemStack>(particle, CraftItemStack.asBukkitCopy(options.getItem()));
+		}
+		CommandAPI.getLog().warning("Invalid particle data type for " + particle.getDataType().toString());
+		return new ParticleData<Void>(particle, null);
 	}
 
 	@Override
