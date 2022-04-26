@@ -65,6 +65,13 @@ public class WrapperCommandSyntaxException extends Exception {
 		return this.exception.fillInStackTrace();
 	}
 
+	/**
+	 * Returns the message together with the position it occurred on and some
+	 * context.
+	 *
+	 * @return the message together with the position it occurred on and some
+	 *         context
+	 */
 	@Override
 	public String getMessage() {
 		return this.exception.getMessage();
@@ -94,17 +101,17 @@ public class WrapperCommandSyntaxException extends Exception {
 	public void printStackTrace() {
 		this.exception.printStackTrace();
 	}
-	
+
 	@Override
 	public void printStackTrace(PrintStream s) {
 		this.exception.printStackTrace(s);
 	}
-	
+
 	@Override
 	public void printStackTrace(PrintWriter s) {
 		this.exception.printStackTrace(s);
 	}
-	
+
 	@Override
 	public void setStackTrace(StackTraceElement[] stackTrace) {
 		this.exception.setStackTrace(stackTrace);
@@ -112,22 +119,52 @@ public class WrapperCommandSyntaxException extends Exception {
 
 	// CommandSyntaxException implemented methods
 
+	/**
+	 * Returns the raw message, not including positional information
+	 *
+	 * @return the raw message without any formatting or positional information
+	 */
 	public Message getRawMessage() {
 		return this.exception.getRawMessage();
 	}
 
+	/**
+	 * Returns some contextual information about where the error occurred.
+	 * <p>
+	 * This is done by returning a few characters
+	 * ({@value CommandSyntaxException#CONTEXT_AMOUNT}) of the faulty
+	 * {@link #getInput()} and a pointer to where the exception happened.
+	 *
+	 * @return some contextual information about where the error occurred or null if
+	 *         {@link #getInput()} or {@link #getCursor()} are null/0.
+	 */
 	public String getContext() {
 		return this.exception.getContext();
 	}
 
+	/**
+	 * Returns the type of the exception.
+	 *
+	 * @return the type of the exception
+	 */
 	public CommandExceptionType getType() {
 		return this.exception.getType();
 	}
 
+	/**
+	 * Returns the input that caused the CommandSyntaxException.
+	 *
+	 * @return the input that caused the CommandSyntaxException or null if not set
+	 */
 	public String getInput() {
 		return this.exception.getInput();
 	}
 
+	/**
+	 * Returns the cursor position.
+	 *
+	 * @return the cursor position or -1 if not set
+	 */
 	public int getCursor() {
 		return this.exception.getCursor();
 	}
