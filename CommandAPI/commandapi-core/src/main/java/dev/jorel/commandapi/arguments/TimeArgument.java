@@ -30,7 +30,7 @@ import dev.jorel.commandapi.wrappers.Time;
 /**
  * An argument that represents a duration of time in ticks
  */
-public class TimeArgument extends SafeOverrideableArgument<Time> {
+public class TimeArgument extends SafeOverrideableArgument<Integer, Time> {
 	
 	/**
 	 * A Time argument. Represents the number of in game ticks
@@ -41,7 +41,7 @@ public class TimeArgument extends SafeOverrideableArgument<Time> {
 	}
 
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<Integer> getPrimitiveType() {
 		return int.class;
 	}
 	
@@ -51,7 +51,7 @@ public class TimeArgument extends SafeOverrideableArgument<Time> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Integer parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getTime(cmdCtx, key);
 	}

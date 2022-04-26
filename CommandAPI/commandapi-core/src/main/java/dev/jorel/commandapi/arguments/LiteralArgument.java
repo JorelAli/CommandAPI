@@ -29,7 +29,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * A pseudo-argument representing a single literal string
  */
-public class LiteralArgument extends Argument {
+public class LiteralArgument extends Argument<String> {
 
 	private String literal;
 	
@@ -58,7 +58,7 @@ public class LiteralArgument extends Argument {
 	
 
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<String> getPrimitiveType() {
 		return String.class;
 	}
 
@@ -76,7 +76,7 @@ public class LiteralArgument extends Argument {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> String parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return literal;
 	}

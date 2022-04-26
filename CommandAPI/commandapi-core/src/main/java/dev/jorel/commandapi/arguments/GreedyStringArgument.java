@@ -29,7 +29,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents arbitrary strings
  */
-public class GreedyStringArgument extends SafeOverrideableArgument<String> implements IGreedyArgument {
+public class GreedyStringArgument extends SafeOverrideableArgument<String, String> implements IGreedyArgument {
 	
 	/**
 	 * A string argument for a string of any length
@@ -40,7 +40,7 @@ public class GreedyStringArgument extends SafeOverrideableArgument<String> imple
 	}
 
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<String> getPrimitiveType() {
 		return String.class;
 	}
 
@@ -50,7 +50,7 @@ public class GreedyStringArgument extends SafeOverrideableArgument<String> imple
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> String parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}

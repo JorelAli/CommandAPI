@@ -36,7 +36,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents a selection of entities
  */
-public class EntitySelectorArgument extends Argument {
+public class EntitySelectorArgument<T> extends Argument<T> {
 	
 	private final EntitySelector selector;
 	
@@ -58,9 +58,10 @@ public class EntitySelectorArgument extends Argument {
 		this.selector = selector;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Class<?> getPrimitiveType() {	
-		return switch(selector) {
+	public Class<T> getPrimitiveType() {
+		return (Class<T>) switch(selector) {
 			case MANY_ENTITIES, 
 			   MANY_PLAYERS -> Collection.class;
 			case ONE_ENTITY -> Entity.class;
@@ -82,10 +83,11 @@ public class EntitySelectorArgument extends Argument {
 		return CommandAPIArgumentType.ENTITY_SELECTOR;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> T parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return nms.getEntitySelector(cmdCtx, key, selector);
+		return (T) nms.getEntitySelector(cmdCtx, key, selector);
 	}
 	
 	public List<String> getEntityNames(Object argument) {

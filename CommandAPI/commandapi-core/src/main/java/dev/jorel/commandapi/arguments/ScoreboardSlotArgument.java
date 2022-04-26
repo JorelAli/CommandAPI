@@ -30,7 +30,7 @@ import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 /**
  * An argument that represents the Bukkit ScoreboardSlot object
  */
-public class ScoreboardSlotArgument extends SafeOverrideableArgument<ScoreboardSlot> {
+public class ScoreboardSlotArgument extends SafeOverrideableArgument<ScoreboardSlot, ScoreboardSlot> {
 
 	/**
 	 * A Display slot argument. Represents scoreboard slots
@@ -41,7 +41,7 @@ public class ScoreboardSlotArgument extends SafeOverrideableArgument<ScoreboardS
 	}
 
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<ScoreboardSlot> getPrimitiveType() {
 		return ScoreboardSlot.class;
 	}
 	
@@ -51,7 +51,7 @@ public class ScoreboardSlotArgument extends SafeOverrideableArgument<ScoreboardS
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> ScoreboardSlot parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getScoreboardSlot(cmdCtx, key);
 	}

@@ -33,7 +33,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents the Bukkit ChatColor object
  */
-public class ChatColorArgument extends SafeOverrideableArgument<ChatColor> {
+public class ChatColorArgument extends SafeOverrideableArgument<ChatColor, ChatColor> {
 
 	/**
 	 * Constructs a ChatColor argument with a given node name. Represents a color or
@@ -46,7 +46,7 @@ public class ChatColorArgument extends SafeOverrideableArgument<ChatColor> {
 	}
 	
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<ChatColor> getPrimitiveType() {
 		return ChatColor.class;
 	}
 	
@@ -56,7 +56,7 @@ public class ChatColorArgument extends SafeOverrideableArgument<ChatColor> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> ChatColor parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getChatColor(cmdCtx, key);
 	}

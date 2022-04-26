@@ -29,7 +29,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents a simple String
  */
-public class StringArgument extends Argument {
+public class StringArgument extends Argument<String> {
 
 	/**
 	 * A string argument for one word
@@ -40,7 +40,7 @@ public class StringArgument extends Argument {
 	}
 
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<String> getPrimitiveType() {
 		return String.class;
 	}
 
@@ -50,7 +50,7 @@ public class StringArgument extends Argument {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> String parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}

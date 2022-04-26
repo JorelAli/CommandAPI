@@ -33,7 +33,8 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents x, y and z axes as an EnumSet of Axis
  */
-public class AxisArgument extends SafeOverrideableArgument<EnumSet<Axis>> {
+@SuppressWarnings("rawtypes")
+public class AxisArgument<T> extends SafeOverrideableArgument<EnumSet, EnumSet<Axis>> {
 
 	/**
 	 * Constructs an AxisArgument with a given node name. Represents the axes x, y and z
@@ -44,7 +45,7 @@ public class AxisArgument extends SafeOverrideableArgument<EnumSet<Axis>> {
 	}
 
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<EnumSet> getPrimitiveType() {
 		return EnumSet.class;
 	}
 	
@@ -54,7 +55,7 @@ public class AxisArgument extends SafeOverrideableArgument<EnumSet<Axis>> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> EnumSet<Axis> parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getAxis(cmdCtx, key);
 	}

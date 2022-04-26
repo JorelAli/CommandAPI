@@ -33,7 +33,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents the Bukkit Biome object
  */
-public class BiomeArgument extends SafeOverrideableArgument<Biome> implements ICustomProvidedArgument {
+public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome> implements ICustomProvidedArgument {
 	
 	/**
 	 * Constructs a BiomeArgument with a given node name.
@@ -44,7 +44,7 @@ public class BiomeArgument extends SafeOverrideableArgument<Biome> implements IC
 	}
 
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<Biome> getPrimitiveType() {
 		return Biome.class;
 	}
 	
@@ -59,7 +59,7 @@ public class BiomeArgument extends SafeOverrideableArgument<Biome> implements IC
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Biome parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getBiome(cmdCtx, key);
 	}

@@ -29,7 +29,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents primitive Java booleans
  */
-public class BooleanArgument extends SafeOverrideableArgument<Boolean> {
+public class BooleanArgument extends SafeOverrideableArgument<Boolean, Boolean> {
 	
 	/**
 	 * Constructs a Boolean argument with a given node name
@@ -40,7 +40,7 @@ public class BooleanArgument extends SafeOverrideableArgument<Boolean> {
 	}
 
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<Boolean> getPrimitiveType() {
 		return boolean.class;
 	}
 	
@@ -50,7 +50,7 @@ public class BooleanArgument extends SafeOverrideableArgument<Boolean> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Boolean parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}

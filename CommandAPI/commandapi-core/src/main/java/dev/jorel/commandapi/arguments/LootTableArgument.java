@@ -32,7 +32,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents the Bukkit LootTable object
  */
-public class LootTableArgument extends SafeOverrideableArgument<LootTable> implements ICustomProvidedArgument {
+public class LootTableArgument extends SafeOverrideableArgument<LootTable, LootTable> implements ICustomProvidedArgument {
 	
 	/**
 	 * A LootTable argument that represents a Bukkit LootTable.
@@ -43,7 +43,7 @@ public class LootTableArgument extends SafeOverrideableArgument<LootTable> imple
 	}
 	
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<LootTable> getPrimitiveType() {
 		return LootTable.class;
 	}
 	
@@ -58,7 +58,7 @@ public class LootTableArgument extends SafeOverrideableArgument<LootTable> imple
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> LootTable parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getLootTable(cmdCtx, key);
 	}

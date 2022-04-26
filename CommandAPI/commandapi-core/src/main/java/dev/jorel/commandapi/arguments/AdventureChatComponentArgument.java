@@ -31,7 +31,7 @@ import net.kyori.adventure.text.Component;
 /**
  * An argument that represents raw JSON text
  */
-public class AdventureChatComponentArgument extends Argument {
+public class AdventureChatComponentArgument extends Argument<Component> {
 
 	/**
 	 * Constructs a ChatComponnent argument with a given node name. Represents raw JSON text, used in Book MetaData, Chat and other various areas of Minecraft
@@ -49,7 +49,7 @@ public class AdventureChatComponentArgument extends Argument {
 	}
 	
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<Component> getPrimitiveType() {
 		return Component.class;
 	}
 	
@@ -59,7 +59,7 @@ public class AdventureChatComponentArgument extends Argument {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Component parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getAdventureChatComponent(cmdCtx, key);
 	}

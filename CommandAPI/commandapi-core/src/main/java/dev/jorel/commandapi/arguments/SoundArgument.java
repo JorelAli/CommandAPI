@@ -31,7 +31,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents the Bukkit Sound object
  */
-public class SoundArgument extends SafeOverrideableArgument<Sound> implements ICustomProvidedArgument {
+public class SoundArgument extends SafeOverrideableArgument<Sound, Sound> implements ICustomProvidedArgument {
 	
 	/**
 	 * A Sound argument. Represents Bukkit's Sound object
@@ -42,7 +42,7 @@ public class SoundArgument extends SafeOverrideableArgument<Sound> implements IC
 	}
 
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<Sound> getPrimitiveType() {
 		return Sound.class;
 	}
 
@@ -57,7 +57,7 @@ public class SoundArgument extends SafeOverrideableArgument<Sound> implements IC
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Sound parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getSound(cmdCtx, key);
 	}

@@ -30,7 +30,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents an NBTContainer from the NBTAPI
  */
-public class NBTCompoundArgument extends SafeOverrideableArgument<NBTContainer> {
+public class NBTCompoundArgument extends SafeOverrideableArgument<NBTContainer, NBTContainer> {
 
 	/**
 	 * An NBT Compound Argument. Represents Minecraft's NBT Compound Tag using the NBT API
@@ -41,7 +41,7 @@ public class NBTCompoundArgument extends SafeOverrideableArgument<NBTContainer> 
 	}
 	
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<NBTContainer> getPrimitiveType() {
 		return NBTContainer.class;
 	}
 	
@@ -51,7 +51,7 @@ public class NBTCompoundArgument extends SafeOverrideableArgument<NBTContainer> 
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> NBTContainer parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getNBTCompound(cmdCtx, key);
 	}

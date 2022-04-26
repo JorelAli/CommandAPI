@@ -30,7 +30,7 @@ import dev.jorel.commandapi.wrappers.Location2D;
 /**
  * An argument that represents the Bukkit Location object in x and z directions
  */
-public class Location2DArgument extends SafeOverrideableArgument<Location2D> {
+public class Location2DArgument extends SafeOverrideableArgument<Location2D, Location2D> {
 
 	/**
 	 * A Location argument. Represents Minecraft locations in 2D space. Defaults to LocationType.PRECISE_POSITION
@@ -64,7 +64,7 @@ public class Location2DArgument extends SafeOverrideableArgument<Location2D> {
 	}
 	
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<Location2D> getPrimitiveType() {
 		return Location2D.class;
 	}
 
@@ -74,7 +74,7 @@ public class Location2DArgument extends SafeOverrideableArgument<Location2D> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Location2D parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return isPrecise ? nms.getLocation2DPrecise(cmdCtx, key) : nms.getLocation2DBlock(cmdCtx, key);
 	}

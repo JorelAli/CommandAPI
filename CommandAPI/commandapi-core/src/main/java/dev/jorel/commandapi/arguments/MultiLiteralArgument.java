@@ -29,7 +29,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents multiple LiteralArguments
  */
-public class MultiLiteralArgument extends Argument {
+public class MultiLiteralArgument extends Argument<String> {
 
 	private String[] literals;
 	
@@ -49,7 +49,7 @@ public class MultiLiteralArgument extends Argument {
 	}
 
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<String> getPrimitiveType() {
 		return String.class;
 	}
 
@@ -67,7 +67,7 @@ public class MultiLiteralArgument extends Argument {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> String parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		throw new IllegalStateException("Cannot parse MultiLiteralArgument");
 	}

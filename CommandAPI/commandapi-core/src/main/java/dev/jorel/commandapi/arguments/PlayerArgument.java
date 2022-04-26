@@ -31,7 +31,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents the Bukkit Player object
  */
-public class PlayerArgument extends SafeOverrideableArgument<Player> {
+public class PlayerArgument extends SafeOverrideableArgument<Player, Player> {
 
 	/**
 	 * A Player argument. Produces a single player, regardless of whether
@@ -44,7 +44,7 @@ public class PlayerArgument extends SafeOverrideableArgument<Player> {
 	}
 
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<Player> getPrimitiveType() {
 		return Player.class;
 	}
 	
@@ -54,7 +54,7 @@ public class PlayerArgument extends SafeOverrideableArgument<Player> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Player parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getPlayer(cmdCtx, key);
 	}

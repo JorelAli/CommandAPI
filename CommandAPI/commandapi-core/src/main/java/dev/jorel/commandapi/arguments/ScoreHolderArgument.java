@@ -31,7 +31,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents a scoreholder's name, or a collection of scoreholder names
  */
-public class ScoreHolderArgument extends Argument {
+public class ScoreHolderArgument<T> extends Argument<T> {
 		
 	private final boolean single;
 	
@@ -62,9 +62,10 @@ public class ScoreHolderArgument extends Argument {
 		return this.single;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	public Class<?> getPrimitiveType() {
-		return single ? String.class : Collection.class;
+	public Class<T> getPrimitiveType() {
+		return (Class<T>) (single ? String.class : Collection.class);
 	}
 	
 	@Override
@@ -72,10 +73,11 @@ public class ScoreHolderArgument extends Argument {
 		return CommandAPIArgumentType.SCORE_HOLDER;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> T parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return single ? nms.getScoreHolderSingle(cmdCtx, key) : nms.getScoreHolderMultiple(cmdCtx, key);
+		return (T) (single ? nms.getScoreHolderSingle(cmdCtx, key) : nms.getScoreHolderMultiple(cmdCtx, key));
 	}
 
 	/**

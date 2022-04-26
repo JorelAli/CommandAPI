@@ -30,7 +30,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents primitive Java doubles
  */
-public class DoubleArgument extends SafeOverrideableArgument<Double> {
+public class DoubleArgument extends SafeOverrideableArgument<Double, Double> {
 
 	/**
 	 * A double argument
@@ -63,7 +63,7 @@ public class DoubleArgument extends SafeOverrideableArgument<Double> {
 	}
 
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<Double> getPrimitiveType() {
 		return double.class;
 	}
 
@@ -73,7 +73,7 @@ public class DoubleArgument extends SafeOverrideableArgument<Double> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Double parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}

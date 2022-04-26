@@ -30,7 +30,7 @@ import dev.jorel.commandapi.wrappers.MathOperation;
 /**
  * An argument that represents Minecraft scoreboard math operations
  */
-public class MathOperationArgument extends SafeOverrideableArgument<MathOperation> {
+public class MathOperationArgument extends SafeOverrideableArgument<MathOperation, MathOperation> {
 
 	/**
 	 * A MathOperation argument. Represents a math operation (e.g. addition, subtraction etc.)
@@ -41,7 +41,7 @@ public class MathOperationArgument extends SafeOverrideableArgument<MathOperatio
 	}
 	
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<MathOperation> getPrimitiveType() {
 		return MathOperation.class;
 	}
 	
@@ -51,7 +51,7 @@ public class MathOperationArgument extends SafeOverrideableArgument<MathOperatio
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> MathOperation parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getMathOperation(cmdCtx, key);
 	}

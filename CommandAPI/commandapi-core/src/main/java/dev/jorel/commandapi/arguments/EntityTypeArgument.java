@@ -31,7 +31,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents the Bukkit EntityType object
  */
-public class EntityTypeArgument extends SafeOverrideableArgument<EntityType> implements ICustomProvidedArgument {
+public class EntityTypeArgument extends SafeOverrideableArgument<EntityType, EntityType> implements ICustomProvidedArgument {
 
 	/**
 	 * An EntityType argument. Represents the type of an Entity
@@ -42,7 +42,7 @@ public class EntityTypeArgument extends SafeOverrideableArgument<EntityType> imp
 	}
 
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<EntityType> getPrimitiveType() {
 		return EntityType.class;
 	}
 
@@ -57,7 +57,7 @@ public class EntityTypeArgument extends SafeOverrideableArgument<EntityType> imp
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> EntityType parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getEntityType(cmdCtx, key);
 	}

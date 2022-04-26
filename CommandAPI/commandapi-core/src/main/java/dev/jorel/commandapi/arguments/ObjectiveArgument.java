@@ -31,7 +31,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents the name of a scoreboard objective
  */
-public class ObjectiveArgument extends SafeOverrideableArgument<Objective> {
+public class ObjectiveArgument extends SafeOverrideableArgument<String, Objective> {
 
 	/**
 	 * An Objective argument. Represents a scoreboard objective
@@ -42,7 +42,7 @@ public class ObjectiveArgument extends SafeOverrideableArgument<Objective> {
 	}
 
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<String> getPrimitiveType() {
 		return String.class;
 	}
 	
@@ -52,7 +52,7 @@ public class ObjectiveArgument extends SafeOverrideableArgument<Objective> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> String parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getObjective(cmdCtx, key);
 	}

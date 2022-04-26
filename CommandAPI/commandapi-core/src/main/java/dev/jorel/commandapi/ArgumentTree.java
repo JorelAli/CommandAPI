@@ -12,16 +12,16 @@ import java.util.List;
 public class ArgumentTree extends Executable<ArgumentTree> {
 
 	final List<ArgumentTree> arguments = new ArrayList<>();
-	final Argument argument;
+	final Argument<?> argument;
 
 	protected ArgumentTree() {
-		if(!(this instanceof Argument argument)) {
+		if(!(this instanceof Argument<?> argument)) {
 			throw new IllegalArgumentException("Implicit inherited constructor must be from Argument");
 		}
 		this.argument = argument;
 	}
 
-	public ArgumentTree(final Argument argument) {
+	public ArgumentTree(final Argument<?> argument) {
 		this.argument = argument;
 		//Copy the executor in case any executions were defined on the argument
 		this.executor = argument.executor;

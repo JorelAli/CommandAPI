@@ -30,7 +30,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents primitive Java longs
  */
-public class LongArgument extends SafeOverrideableArgument<Long> {
+public class LongArgument extends SafeOverrideableArgument<Long, Long> {
 
 	/**
 	 * A long argument
@@ -63,7 +63,7 @@ public class LongArgument extends SafeOverrideableArgument<Long> {
 	}
 	
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<Long> getPrimitiveType() {
 		return long.class;
 	}
 	
@@ -73,7 +73,7 @@ public class LongArgument extends SafeOverrideableArgument<Long> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Long parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
