@@ -27,7 +27,7 @@ The particle argument requires additional data for a particle depending on what 
 | BLOCK_MARKER          | `block_marker block_id`<br>`block_marker block_id[block_state=value]` |
 | FALLING_DUST          | `falling_dust block_id`<br>`falling_dust block_id[block_state=value]` |
 | REDSTONE              | `dust red green blue size`                                            |
-| DUST_COLOR_TRANSITION | `dust_color_transition red1 green1 blue1 red2 green2 blue2 size`      |
+| DUST_COLOR_TRANSITION | `dust_color_transition red1 green1 blue1 size red2 green2 blue2`      |
 | ITEM_CRACK            | `item item_id`<br>`item item_id{NBT}`                                 |
 | VIBRATION             | `vibration x y z ticks`                                               |
 
