@@ -30,7 +30,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents primitive Java floats
  */
-public class FloatArgument extends SafeOverrideableArgument<Float> {
+public class FloatArgument extends SafeOverrideableArgument<Float, Float> {
 
 	/**
 	 * A float argument
@@ -63,7 +63,7 @@ public class FloatArgument extends SafeOverrideableArgument<Float> {
 	}
 
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<Float> getPrimitiveType() {
 		return float.class;
 	}
 	
@@ -73,7 +73,7 @@ public class FloatArgument extends SafeOverrideableArgument<Float> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Float parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}

@@ -31,7 +31,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents the Bukkit PotionEffectType object
  */
-public class PotionEffectArgument extends SafeOverrideableArgument<PotionEffectType> {
+public class PotionEffectArgument extends SafeOverrideableArgument<PotionEffectType, PotionEffectType> {
 
 	/**
 	 * A PotionEffect argument. Represents status/potion effects
@@ -42,7 +42,7 @@ public class PotionEffectArgument extends SafeOverrideableArgument<PotionEffectT
 	}
 
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<PotionEffectType> getPrimitiveType() {
 		return PotionEffectType.class;
 	}
 
@@ -52,7 +52,7 @@ public class PotionEffectArgument extends SafeOverrideableArgument<PotionEffectT
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> PotionEffectType parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getPotionEffect(cmdCtx, key);
 	}

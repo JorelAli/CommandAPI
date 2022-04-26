@@ -31,7 +31,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents the Bukkit BlockData object
  */
-public class BlockStateArgument extends Argument {
+public class BlockStateArgument extends Argument<BlockData> {
 
 	/**
 	 * Constructs a BlockStateArgument with a given node name.
@@ -42,7 +42,7 @@ public class BlockStateArgument extends Argument {
 	}
 
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<BlockData> getPrimitiveType() {
 		return BlockData.class;
 	}
 
@@ -52,7 +52,7 @@ public class BlockStateArgument extends Argument {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> BlockData parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getBlockState(cmdCtx, key);
 	}

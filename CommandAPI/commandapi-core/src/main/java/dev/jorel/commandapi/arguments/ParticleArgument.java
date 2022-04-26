@@ -20,8 +20,6 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import org.bukkit.Particle;
-
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
@@ -32,7 +30,8 @@ import dev.jorel.commandapi.wrappers.ParticleData;
 /**
  * An argument that represents the Bukkit Particle object
  */
-public class ParticleArgument extends SafeOverrideableArgument<Particle> {
+@SuppressWarnings("rawtypes")
+public class ParticleArgument extends SafeOverrideableArgument<ParticleData, ParticleData<?>> {
 
 	/**
 	 * A Particle argument. Represents Minecraft particles
@@ -43,7 +42,7 @@ public class ParticleArgument extends SafeOverrideableArgument<Particle> {
 	}
 
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<ParticleData> getPrimitiveType() {
 		return ParticleData.class;
 	}
 	
@@ -53,7 +52,7 @@ public class ParticleArgument extends SafeOverrideableArgument<Particle> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> ParticleData<?> parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getParticle(cmdCtx, key);
 	}

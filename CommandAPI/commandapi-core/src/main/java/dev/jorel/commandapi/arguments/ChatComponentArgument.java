@@ -31,7 +31,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 /**
  * An argument that represents raw JSON text
  */
-public class ChatComponentArgument extends Argument {
+public class ChatComponentArgument extends Argument<BaseComponent[]> {
 
 	/**
 	 * Constructs a ChatComponnent argument with a given node name. Represents raw JSON text, used in Book MetaData, Chat and other various areas of Minecraft
@@ -49,7 +49,7 @@ public class ChatComponentArgument extends Argument {
 	}
 	
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<BaseComponent[]> getPrimitiveType() {
 		return BaseComponent[].class;
 	}
 	
@@ -59,7 +59,7 @@ public class ChatComponentArgument extends Argument {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> BaseComponent[] parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getChatComponent(cmdCtx, key);
 	}

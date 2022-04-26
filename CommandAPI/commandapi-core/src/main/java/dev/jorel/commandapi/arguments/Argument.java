@@ -38,8 +38,10 @@ import dev.jorel.commandapi.nms.NMS;
 
 /**
  * The core abstract class for Command API arguments
+ * 
+ * @param <T> The type of the underlying object that this argument casts to
  */
-public abstract class Argument extends ArgumentTree {
+public abstract class Argument<T> extends ArgumentTree {
 
 	/**
 	 * Returns the primitive type of the current Argument. After executing a
@@ -47,7 +49,7 @@ public abstract class Argument extends ArgumentTree {
 	 * 
 	 * @return the type that this argument yields when the command is run
 	 */
-	public abstract Class<?> getPrimitiveType();
+	public abstract Class<T> getPrimitiveType();
 
 	/**
 	 * Returns the argument type for this argument.
@@ -103,7 +105,7 @@ public abstract class Argument extends ArgumentTree {
 	 * @return the parsed object represented by this argument
 	 * @throws CommandSyntaxException if parsing fails
 	 */
-	public abstract <CommandSourceStack> Object parseArgument(NMS<CommandSourceStack> nms,
+	public abstract <CommandSourceStack> T parseArgument(NMS<CommandSourceStack> nms,
 			CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException;
 
 	/////////////////
@@ -121,7 +123,7 @@ public abstract class Argument extends ArgumentTree {
 	 *
 	 * @return the current argument
 	 */
-	public Argument includeSuggestions(ArgumentSuggestions suggestions) {
+	public Argument<T> includeSuggestions(ArgumentSuggestions suggestions) {
 		this.addedSuggestions = Optional.of(suggestions);
 		return this;
 	}
@@ -138,7 +140,7 @@ public abstract class Argument extends ArgumentTree {
 	 * @deprecated use {@link #includeSuggestions(ArgumentSuggestions)} instead
 	 */
 	@Deprecated(forRemoval = true)
-	public Argument includeSuggestions(Function<SuggestionInfo, String[]> suggestions) {
+	public Argument<T> includeSuggestions(Function<SuggestionInfo, String[]> suggestions) {
 		return includeSuggestions(ArgumentSuggestions.strings(suggestions));
 	}
 
@@ -154,7 +156,7 @@ public abstract class Argument extends ArgumentTree {
 	 * @deprecated use {@link #includeSuggestions(ArgumentSuggestions)} instead
 	 */
 	@Deprecated(forRemoval = true)
-	public Argument includeSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
+	public Argument<T> includeSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
 		return includeSuggestions(ArgumentSuggestions.stringsWithTooltips(suggestions));
 	}
 
@@ -175,7 +177,7 @@ public abstract class Argument extends ArgumentTree {
 	 * @return the current argument
 	 */
   
-	public Argument replaceSuggestions(ArgumentSuggestions suggestions) {
+	public Argument<T> replaceSuggestions(ArgumentSuggestions suggestions) {
 		this.suggestions = Optional.of(suggestions);
 		return this;
 	}
@@ -187,7 +189,7 @@ public abstract class Argument extends ArgumentTree {
 	 * @deprecated use {@link #replaceSuggestions(ArgumentSuggestions)} instead
 	 */
 	@Deprecated(forRemoval = true)
-	public Argument replaceSuggestions(Function<SuggestionInfo, String[]> suggestions) {
+	public Argument<T> replaceSuggestions(Function<SuggestionInfo, String[]> suggestions) {
 		return replaceSuggestions(ArgumentSuggestions.strings(suggestions));
 	}
 
@@ -198,7 +200,7 @@ public abstract class Argument extends ArgumentTree {
 	 * @deprecated use {@link #replaceSuggestions(ArgumentSuggestions)} instead
 	 */
 	@Deprecated(forRemoval = true)
-	public Argument replaceSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
+	public Argument<T> replaceSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
 		return replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(suggestions));
 	}
 
@@ -225,7 +227,7 @@ public abstract class Argument extends ArgumentTree {
 	 * @param permission the permission required to execute this command
 	 * @return this current argument
 	 */
-	public final Argument withPermission(CommandPermission permission) {
+	public final Argument<T> withPermission(CommandPermission permission) {
 		this.permission = permission;
 		return this;
 	}
@@ -236,7 +238,7 @@ public abstract class Argument extends ArgumentTree {
 	 * @param permission the permission required to execute this command
 	 * @return this current argument
 	 */
-	public final Argument withPermission(String permission) {
+	public final Argument<T> withPermission(String permission) {
 		this.permission = CommandPermission.fromString(permission);
 		return this;
 	}
@@ -271,7 +273,7 @@ public abstract class Argument extends ArgumentTree {
 	 * @param requirement the predicate that must be satisfied to use this argument
 	 * @return this current argument
 	 */
-	public final Argument withRequirement(Predicate<CommandSender> requirement) {
+	public final Argument<T> withRequirement(Predicate<CommandSender> requirement) {
 		this.requirements = this.requirements.and(requirement);
 		return this;
 	}
@@ -295,7 +297,7 @@ public abstract class Argument extends ArgumentTree {
 	 * @param listed if true, this argument will be included in the Object args[] of the command executor
 	 * @return this current argument
 	 */
-	public Argument setListed(boolean listed) {
+	public Argument<T> setListed(boolean listed) {
 		this.isListed = listed;
 		return this;
 	}

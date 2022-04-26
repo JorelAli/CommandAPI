@@ -36,7 +36,7 @@ import dev.jorel.commandapi.nms.NMS;
  *
  * @param <T> the return type of this argument
  */
-public class CustomArgument<T> extends Argument {
+public class CustomArgument<T> extends Argument<T> {
 	
 	private CustomArgumentInfoParser<T> infoParser;
 	private boolean keyed;
@@ -115,7 +115,7 @@ public class CustomArgument<T> extends Argument {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> T parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		throw new RuntimeException("parseArgument() is not implemented for CustomArgument. Did you mean parseCustomArgument()?");
 	}

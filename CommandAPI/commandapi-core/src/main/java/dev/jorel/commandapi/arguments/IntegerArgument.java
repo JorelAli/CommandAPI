@@ -30,7 +30,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents primitive Java ints
  */
-public class IntegerArgument extends SafeOverrideableArgument<Integer> {
+public class IntegerArgument extends SafeOverrideableArgument<Integer, Integer> {
 
 	/**
 	 * An integer argument
@@ -63,7 +63,7 @@ public class IntegerArgument extends SafeOverrideableArgument<Integer> {
 	}
 	
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<Integer> getPrimitiveType() {
 		return int.class;
 	}
 	
@@ -73,7 +73,7 @@ public class IntegerArgument extends SafeOverrideableArgument<Integer> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Integer parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}

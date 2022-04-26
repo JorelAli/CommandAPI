@@ -33,7 +33,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents the Bukkit Environment object
  */
-public class EnvironmentArgument extends SafeOverrideableArgument<Environment> {
+public class EnvironmentArgument extends SafeOverrideableArgument<Environment, Environment> {
 	
 	/**
 	 * An Environment argument. Represents Bukkit's Environment object
@@ -44,7 +44,7 @@ public class EnvironmentArgument extends SafeOverrideableArgument<Environment> {
 	}
 	
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<Environment> getPrimitiveType() {
 		return Environment.class;
 	}
 	
@@ -54,7 +54,7 @@ public class EnvironmentArgument extends SafeOverrideableArgument<Environment> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Environment parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getDimension(cmdCtx, key);
 	}

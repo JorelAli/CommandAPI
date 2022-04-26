@@ -31,7 +31,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents the Bukkit Location object
  */
-public class LocationArgument extends SafeOverrideableArgument<Location> {
+public class LocationArgument extends SafeOverrideableArgument<Location, Location> {
 	
 	/**
 	 * A Location argument. Represents Minecraft locations. Defaults to LocationType.PRECISE_POSITION
@@ -66,7 +66,7 @@ public class LocationArgument extends SafeOverrideableArgument<Location> {
 	}
 	
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<Location> getPrimitiveType() {
 		return Location.class;
 	}
 	
@@ -76,7 +76,7 @@ public class LocationArgument extends SafeOverrideableArgument<Location> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Location parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return isPrecise ? nms.getLocationPrecise(cmdCtx, key) : nms.getLocationBlock(cmdCtx, key);
 	}

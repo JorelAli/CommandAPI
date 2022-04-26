@@ -32,7 +32,7 @@ import dev.jorel.commandapi.wrappers.FunctionWrapper;
 /**
  * An argument that represents Minecraft functions and tags
  */
-public class FunctionArgument extends SafeOverrideableArgument<NamespacedKey> implements ICustomProvidedArgument {
+public class FunctionArgument extends SafeOverrideableArgument<FunctionWrapper[], NamespacedKey> implements ICustomProvidedArgument {
 
 	/**
 	 * A Minecraft function. Plugin commands which plan to be used INSIDE a Minecraft
@@ -45,7 +45,7 @@ public class FunctionArgument extends SafeOverrideableArgument<NamespacedKey> im
 	}
 
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<FunctionWrapper[]> getPrimitiveType() {
 		return FunctionWrapper[].class;
 	}
 	
@@ -60,7 +60,7 @@ public class FunctionArgument extends SafeOverrideableArgument<NamespacedKey> im
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> FunctionWrapper[] parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getFunction(cmdCtx, key);
 	}

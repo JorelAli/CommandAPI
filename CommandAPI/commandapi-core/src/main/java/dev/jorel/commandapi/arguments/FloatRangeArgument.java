@@ -30,7 +30,7 @@ import dev.jorel.commandapi.wrappers.FloatRange;
 /**
  * An argument that represents a range of float values
  */
-public class FloatRangeArgument extends SafeOverrideableArgument<FloatRange> {
+public class FloatRangeArgument extends SafeOverrideableArgument<FloatRange, FloatRange> {
 
 	/**
 	 * A FloatRange argument that represents a range of floating-point values
@@ -41,7 +41,7 @@ public class FloatRangeArgument extends SafeOverrideableArgument<FloatRange> {
 	}
 
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<FloatRange> getPrimitiveType() {
 		return FloatRange.class;
 	}
 
@@ -51,7 +51,7 @@ public class FloatRangeArgument extends SafeOverrideableArgument<FloatRange> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> FloatRange parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getFloatRange(cmdCtx, key);
 	}

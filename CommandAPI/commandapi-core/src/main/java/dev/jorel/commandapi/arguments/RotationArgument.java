@@ -30,7 +30,7 @@ import dev.jorel.commandapi.wrappers.Rotation;
 /**
  * An argument that represents rotation as pitch and yaw
  */
-public class RotationArgument extends SafeOverrideableArgument<Rotation> {
+public class RotationArgument extends SafeOverrideableArgument<Rotation, Rotation> {
 
 	/**
 	 * A Rotation argument. Represents pitch and yaw
@@ -41,7 +41,7 @@ public class RotationArgument extends SafeOverrideableArgument<Rotation> {
 	}
 	
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<Rotation> getPrimitiveType() {
 		return Rotation.class;
 	}
 	
@@ -51,7 +51,7 @@ public class RotationArgument extends SafeOverrideableArgument<Rotation> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Rotation parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getRotation(cmdCtx, key);
 	}

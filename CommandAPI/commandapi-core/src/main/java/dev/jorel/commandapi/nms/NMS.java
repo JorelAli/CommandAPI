@@ -34,7 +34,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
@@ -167,7 +166,7 @@ public interface NMS<CommandListenerWrapper> {
 
 	String convert(ItemStack is);
 
-	String convert(Particle particle);
+	String convert(ParticleData<?> particle);
 
 	String convert(PotionEffectType potion);
 

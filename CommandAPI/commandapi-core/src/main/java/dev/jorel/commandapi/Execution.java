@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * A list of arguments which results in an execution. This is used for building branches in a {@link CommandTree}
  */
-record Execution(List<Argument> arguments, CustomCommandExecutor<? extends CommandSender> executor) {
+record Execution(List<Argument<?>> arguments, CustomCommandExecutor<? extends CommandSender> executor) {
 
 	/**
 	 * Register a command with the given arguments and executor to brigadier, by converting it into a {@link CommandAPICommand}
@@ -21,8 +21,8 @@ record Execution(List<Argument> arguments, CustomCommandExecutor<? extends Comma
 		command.register();
 	}
 
-	public Execution prependedBy(Argument argument) {
-		List<Argument> arguments = new ArrayList<>();
+	public Execution prependedBy(Argument<?> argument) {
+		List<Argument<?>> arguments = new ArrayList<>();
 		arguments.add(argument);
 		arguments.addAll(arguments());
 		return new Execution(arguments, executor);

@@ -31,7 +31,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents the name of a scoreboard Team
  */
-public class TeamArgument extends SafeOverrideableArgument<Team> {
+public class TeamArgument extends SafeOverrideableArgument<String, Team> {
 
 	/**
 	 * A Team argument. Represents a scoreboard Team
@@ -42,7 +42,7 @@ public class TeamArgument extends SafeOverrideableArgument<Team> {
 	}
 
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<String> getPrimitiveType() {
 		return String.class;
 	}
 	
@@ -52,7 +52,7 @@ public class TeamArgument extends SafeOverrideableArgument<Team> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> String parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getTeam(cmdCtx, key);
 	}

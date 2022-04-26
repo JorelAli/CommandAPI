@@ -31,7 +31,7 @@ import net.kyori.adventure.text.Component;
 /**
  * An argument that represents chat with entity selectors
  */
-public class AdventureChatArgument extends Argument implements IGreedyArgument {
+public class AdventureChatArgument extends Argument<Component> implements IGreedyArgument {
 
 	/**
 	 * Constructs a Chat argument with a given node name. Represents fancy greedy
@@ -50,7 +50,7 @@ public class AdventureChatArgument extends Argument implements IGreedyArgument {
 	}
 
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<Component> getPrimitiveType() {
 		return Component.class;
 	}
 	
@@ -60,7 +60,7 @@ public class AdventureChatArgument extends Argument implements IGreedyArgument {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Component parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getAdventureChat(cmdCtx, key);
 	}

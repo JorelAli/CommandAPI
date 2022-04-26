@@ -30,7 +30,7 @@ import dev.jorel.commandapi.wrappers.IntegerRange;
 /**
  * An argument that represents a range of integer values
  */
-public class IntegerRangeArgument extends SafeOverrideableArgument<IntegerRange> {
+public class IntegerRangeArgument extends SafeOverrideableArgument<IntegerRange, IntegerRange> {
 
 	/**
 	 * An IntegerRange argument. Represents a range of whole numbers
@@ -41,7 +41,7 @@ public class IntegerRangeArgument extends SafeOverrideableArgument<IntegerRange>
 	}
 	
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<IntegerRange> getPrimitiveType() {
 		return IntegerRange.class;
 	}
 	
@@ -51,7 +51,7 @@ public class IntegerRangeArgument extends SafeOverrideableArgument<IntegerRange>
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> IntegerRange parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getIntRange(cmdCtx, key);
 	}

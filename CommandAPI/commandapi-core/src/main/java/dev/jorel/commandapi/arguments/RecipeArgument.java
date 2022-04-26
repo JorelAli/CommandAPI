@@ -32,7 +32,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents the Bukkit Recipe object
  */
-public class RecipeArgument extends SafeOverrideableArgument<Recipe> implements ICustomProvidedArgument {
+public class RecipeArgument extends SafeOverrideableArgument<Recipe, Recipe> implements ICustomProvidedArgument {
 
 	/**
 	 * A Recipe argument. Represents a Bukkit Recipe or ComplexRecipe
@@ -43,7 +43,7 @@ public class RecipeArgument extends SafeOverrideableArgument<Recipe> implements 
 	}
 
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<Recipe> getPrimitiveType() {
 		return Recipe.class;
 	}
 
@@ -58,7 +58,7 @@ public class RecipeArgument extends SafeOverrideableArgument<Recipe> implements 
 	}	
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Recipe parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getRecipe(cmdCtx, key);
 	}

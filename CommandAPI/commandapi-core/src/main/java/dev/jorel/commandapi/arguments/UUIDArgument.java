@@ -31,7 +31,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents a UUID
  */
-public class UUIDArgument extends SafeOverrideableArgument<UUID> {
+public class UUIDArgument extends SafeOverrideableArgument<UUID, UUID> {
 	
 	/**
 	 * A UUID argument. Represents an in-game entity UUID
@@ -42,7 +42,7 @@ public class UUIDArgument extends SafeOverrideableArgument<UUID> {
 	}
 
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<UUID> getPrimitiveType() {
 		return UUID.class;
 	}
 	
@@ -52,7 +52,7 @@ public class UUIDArgument extends SafeOverrideableArgument<UUID> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> UUID parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getUUID(cmdCtx, key);
 	}

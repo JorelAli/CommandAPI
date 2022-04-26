@@ -38,7 +38,7 @@ import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
  */
 public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 
-	private List<Argument> args = new ArrayList<>();
+	private List<Argument<?>> args = new ArrayList<>();
 	private List<CommandAPICommand> subcommands = new ArrayList<>();
 	private boolean isConverted;
 	
@@ -61,7 +61,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 	 * @param args A <code>List</code> that represents the arguments that this command can accept
 	 * @return this command builder
 	 */
-	public CommandAPICommand withArguments(List<Argument> args) {
+	public CommandAPICommand withArguments(List<Argument<?>> args) {
 		this.args.addAll(args);
 		return this;
 	}
@@ -71,7 +71,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 	 * @param args Arguments that this command can accept
 	 * @return this command builder
 	 */
-	public CommandAPICommand withArguments(Argument... args) {
+	public CommandAPICommand withArguments(Argument<?>... args) {
 		this.args.addAll(Arrays.asList(args));
 		return this;
 	}
@@ -90,7 +90,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 	 * Returns the list of arguments that this command has
 	 * @return the list of arguments that this command has
 	 */
-	public List<Argument> getArguments() {
+	public List<Argument<?>> getArguments() {
 		return args;
 	}
 
@@ -98,7 +98,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 	 * Sets the arguments that this command has
 	 * @param args the arguments that this command has
 	 */
-	public void setArguments(List<Argument> args) {
+	public void setArguments(List<Argument<?>> args) {
 		this.args = args;
 	}
 
@@ -139,7 +139,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 	}
 	
 	//Expand subcommands into arguments
-	private void flatten(CommandAPICommand rootCommand, List<Argument> prevArguments, CommandAPICommand subcommand) {
+	private void flatten(CommandAPICommand rootCommand, List<Argument<?>> prevArguments, CommandAPICommand subcommand) {
 		
 		String[] literals = new String[subcommand.meta.aliases.length + 1];
 		literals[0] = subcommand.meta.commandName;
@@ -173,7 +173,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 			CommandAPI.logWarning("Command /" + meta.commandName + " is being registered after the server had loaded. Undefined behavior ahead!");
 		}
 		try {
-			Argument[] argumentsArr = args == null ? new Argument[0] : args.toArray(new Argument[0]);
+			Argument<?>[] argumentsArr = args == null ? new Argument[0] : args.toArray(new Argument[0]);
 			
 			// Check IGreedyArgument constraints 
 			for(int i = 0, numGreedyArgs = 0; i < argumentsArr.length; i++) {
@@ -185,7 +185,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 			}
 			
 			//Assign the command's permissions to arguments if the arguments don't already have one
-			for(Argument argument : argumentsArr) {
+			for(Argument<?> argument : argumentsArr) {
 				if(argument.getArgumentPermission() == null) {
 					argument.withPermission(meta.permission);
 				}

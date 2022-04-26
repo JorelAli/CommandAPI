@@ -31,7 +31,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 /**
  * An argument that represents chat with entity selectors
  */
-public class ChatArgument extends Argument implements IGreedyArgument {
+public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyArgument {
 
 	/**
 	 * Constructs a Chat argument with a given node name. Represents fancy greedy
@@ -50,7 +50,7 @@ public class ChatArgument extends Argument implements IGreedyArgument {
 	}
 
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<BaseComponent[]> getPrimitiveType() {
 		return BaseComponent[].class;
 	}
 	
@@ -60,7 +60,7 @@ public class ChatArgument extends Argument implements IGreedyArgument {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> BaseComponent[] parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getChat(cmdCtx, key);
 	}

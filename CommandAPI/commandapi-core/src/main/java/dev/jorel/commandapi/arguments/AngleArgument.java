@@ -33,7 +33,7 @@ import dev.jorel.commandapi.nms.NMS;
  * -180.0. Tilde notation can be used to specify a rotation relative to the
  * executor's yaw angle.
  */
-public class AngleArgument extends SafeOverrideableArgument<Float> {
+public class AngleArgument extends SafeOverrideableArgument<Float, Float> {
 
 	/**
 	 * Constructs an AngleArgument with a given node name
@@ -44,7 +44,7 @@ public class AngleArgument extends SafeOverrideableArgument<Float> {
 	}
 
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<Float> getPrimitiveType() {
 		return float.class;
 	}
 	
@@ -54,7 +54,7 @@ public class AngleArgument extends SafeOverrideableArgument<Float> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Float parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getAngle(cmdCtx, key);
 	}

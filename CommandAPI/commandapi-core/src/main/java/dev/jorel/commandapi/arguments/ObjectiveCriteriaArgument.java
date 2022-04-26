@@ -29,7 +29,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents the name of an objective criteria
  */
-public class ObjectiveCriteriaArgument extends Argument {
+public class ObjectiveCriteriaArgument extends Argument<String> {
 
 	/**
 	 * An Objective criteria argument. Represents an objective criteria
@@ -40,7 +40,7 @@ public class ObjectiveCriteriaArgument extends Argument {
 	}
 	
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<String> getPrimitiveType() {
 		return String.class;
 	}
 
@@ -50,7 +50,7 @@ public class ObjectiveCriteriaArgument extends Argument {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> String parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getObjectiveCriteria(cmdCtx, key);
 	}

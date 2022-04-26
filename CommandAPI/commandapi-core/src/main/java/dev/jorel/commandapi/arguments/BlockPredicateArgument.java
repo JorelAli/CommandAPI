@@ -31,7 +31,8 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents a <code>Predicate&lt;Block&gt;</code>
  */
-public class BlockPredicateArgument extends Argument {
+@SuppressWarnings("rawtypes")
+public class BlockPredicateArgument extends Argument<Predicate> {
 	
 	/**
 	 * Constructs a BlockPredicateArgument with a given node name. Represents a predicate for blocks 
@@ -42,7 +43,7 @@ public class BlockPredicateArgument extends Argument {
 	}
 
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<Predicate> getPrimitiveType() {
 		return Predicate.class;
 	}
 	
@@ -52,7 +53,7 @@ public class BlockPredicateArgument extends Argument {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Predicate<?> parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getBlockPredicate(cmdCtx, key);
 	}

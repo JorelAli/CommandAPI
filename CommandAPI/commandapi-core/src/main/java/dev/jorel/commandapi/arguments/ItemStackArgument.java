@@ -31,7 +31,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents the Bukkit ItemStack object
  */
-public class ItemStackArgument extends SafeOverrideableArgument<ItemStack> {
+public class ItemStackArgument extends SafeOverrideableArgument<ItemStack, ItemStack> {
 
 	/**
 	 * An ItemStack argument. Always returns an itemstack of size 1
@@ -42,7 +42,7 @@ public class ItemStackArgument extends SafeOverrideableArgument<ItemStack> {
 	}
 
 	@Override
-	public Class<?> getPrimitiveType() {
+	public Class<ItemStack> getPrimitiveType() {
 		return ItemStack.class;
 	}
 
@@ -52,7 +52,7 @@ public class ItemStackArgument extends SafeOverrideableArgument<ItemStack> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Object parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> ItemStack parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getItemStack(cmdCtx, key);
 	}
