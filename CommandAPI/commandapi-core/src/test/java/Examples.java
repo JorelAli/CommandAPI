@@ -280,7 +280,7 @@ new CommandAPICommand("break")
 /* ANCHOR: rotationarguments */
 new CommandAPICommand("rotate")
     .withArguments(new RotationArgument("rotation"))
-    .withArguments(new EntitySelectorArgument("target", EntitySelector.ONE_ENTITY))
+    .withArguments(new EntitySelectorArgument<Entity>("target", EntitySelector.ONE_ENTITY))
     .executes((sender, args) -> {
         Rotation rotation = (Rotation) args[0];
         Entity target = (Entity) args[1];
@@ -387,7 +387,7 @@ new CommandAPICommand("pbroadcast")
 /* ANCHOR: entityselectorarguments */
 new CommandAPICommand("remove")
     //Using a collective entity selector to select multiple entities
-    .withArguments(new EntitySelectorArgument("entities", EntitySelector.MANY_ENTITIES))
+    .withArguments(new EntitySelectorArgument<Collection<Entity>>("entities", EntitySelector.MANY_ENTITIES))
     .executes((sender, args) -> {
         //Parse the argument as a collection of entities (as stated above in the documentation)
         @SuppressWarnings("unchecked")
@@ -420,7 +420,7 @@ new CommandAPICommand("spawnmob")
 /* ANCHOR: scoreholderargument */
 new CommandAPICommand("reward")
     //We want multiple players, so we use ScoreHolderType.MULTIPLE in the constructor
-    .withArguments(new ScoreHolderArgument("players", ScoreHolderType.MULTIPLE))
+    .withArguments(new ScoreHolderArgument<Collection<Player>>("players", ScoreHolderType.MULTIPLE))
     .executes((sender, args) -> {
         //Get player names by casting to Collection<String>
         @SuppressWarnings("unchecked")
@@ -748,7 +748,7 @@ new CommandAPICommand("bigmsg")
 
 {
 /* ANCHOR: blockpredicatearguments */
-Argument[] arguments = new Argument[] {
+Argument<?>[] arguments = new Argument[] {
     new IntegerArgument("radius"),
     new BlockPredicateArgument("fromBlock"),
     new BlockStateArgument("toBlock"),
@@ -900,7 +900,7 @@ new CommandAPICommand("tpworld")
 
 /* ANCHOR: customarguments2 */
 // Function that returns our custom argument
-public Argument worldArgument(String nodeName) {
+public Argument<World> worldArgument(String nodeName) {
     
     // Construct our CustomArgument that takes in a String input and returns a World object
     return new CustomArgument<World>(nodeName, info -> {
@@ -1136,7 +1136,7 @@ void resultingcommandexecutor3(){
 /* ANCHOR: resultingcommandexecutor3 */
 // Register reward giving system for a target player
 new CommandAPICommand("givereward")
-    .withArguments(new EntitySelectorArgument("target", EntitySelector.ONE_PLAYER))
+    .withArguments(new EntitySelectorArgument<Player>("target", EntitySelector.ONE_PLAYER))
     .executes((sender, args) -> {
         Player player = (Player) args[0];
         player.getInventory().addItem(new ItemStack(Material.DIAMOND, 64));
@@ -1186,7 +1186,7 @@ new CommandAPICommand("mycommand")
     ;
 
 /* ANCHOR: argumentsyntax3 */
-List<Argument> arguments = new ArrayList<>();
+List<Argument<?>> arguments = new ArrayList<>();
 arguments.add(new StringArgument("arg0"));
 arguments.add(new StringArgument("arg1"));
 arguments.add(new StringArgument("arg2"));
@@ -1221,7 +1221,7 @@ new CommandAPICommand("kill")
 @SuppressWarnings("unused")
 public void argumentCasting() {
 /* ANCHOR: argumentcasting */
-List<Argument> arguments = new ArrayList<>();
+List<Argument<?>> arguments = new ArrayList<>();
 arguments.add(new StringArgument("arg0"));
 arguments.add(new PotionEffectArgument("arg1"));
 arguments.add(new LocationArgument("arg2"));
@@ -1264,7 +1264,7 @@ Map<UUID, String> partyMembers = new HashMap<>();
 /* ANCHOR_END: requirementsmap */
 
 /* ANCHOR: requirements2 */
-List<Argument> arguments = new ArrayList<>();
+List<Argument<?>> arguments = new ArrayList<>();
 
 // The "create" literal, with a requirement that a player must have a party
 arguments.add(new LiteralArgument("create")
@@ -1373,7 +1373,7 @@ Predicate<CommandSender> testIfPlayerHasParty = sender -> {
 /* ANCHOR_END: predicatetips */
 
 /* ANCHOR: predicatetips2 */
-List<Argument> arguments = new ArrayList<>();
+List<Argument<?>> arguments = new ArrayList<>();
 arguments.add(new LiteralArgument("create").withRequirement(testIfPlayerHasParty.negate()));
 arguments.add(new StringArgument("partyName"));
 /* ANCHOR_END: predicatetips2 */
@@ -1572,7 +1572,7 @@ new CommandAPICommand("mycommand")
 
 {
 /* ANCHOR: Tooltips1 */
-List<Argument> arguments = new ArrayList<>();
+List<Argument<?>> arguments = new ArrayList<>();
 arguments.add(new StringArgument("emote")
     .replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(info -> new IStringTooltip[] {
             StringTooltip.of("wave", "Waves at a player"),
@@ -1632,7 +1632,7 @@ new CommandAPICommand("giveitem")
 
 {
 /* ANCHOR: SafeTooltips */
-List<Argument> arguments = new ArrayList<>();
+List<Argument<?>> arguments = new ArrayList<>();
 arguments.add(new LocationArgument("location")
     .replaceSafeSuggestions(SafeSuggestions.tooltips(info -> {
         // We know the sender is a player if we use .executesPlayer()
@@ -1657,7 +1657,7 @@ new CommandAPICommand("warp")
 {
 /* ANCHOR: ArgumentSuggestionsPrevious */
 // Declare our arguments as normal
-List<Argument> arguments = new ArrayList<>();
+List<Argument<?>> arguments = new ArrayList<>();
 arguments.add(new IntegerArgument("radius"));
 
 // Replace the suggestions for the PlayerArgument.
@@ -1694,7 +1694,7 @@ new CommandAPICommand("localmsg")
 
 {
 /* ANCHOR: ArgumentSuggestions2_2 */
-List<Argument> arguments = new ArrayList<>();
+List<Argument<?>> arguments = new ArrayList<>();
 arguments.add(new PlayerArgument("friend").replaceSuggestions(ArgumentSuggestions.strings(info ->
     Friends.getFriends(info.sender())
 )));
@@ -1712,7 +1712,7 @@ new CommandAPICommand("friendtp")
 {
 Map<String, Location> warps = new HashMap<>();
 /* ANCHOR: ArgumentSuggestions1 */
-List<Argument> arguments = new ArrayList<>();
+List<Argument<?>> arguments = new ArrayList<>();
 arguments.add(new StringArgument("world").replaceSuggestions(ArgumentSuggestions.strings( 
     "northland", "eastland", "southland", "westland"
 )));
@@ -1754,7 +1754,7 @@ getServer().addRecipe(emeraldSwordRecipe);
 
 /* ANCHOR: SafeRecipeArguments_2 */
 // Safely override with the recipe we've defined
-List<Argument> arguments = new ArrayList<>();
+List<Argument<?>> arguments = new ArrayList<>();
 arguments.add(new RecipeArgument("recipe").replaceSafeSuggestions(SafeSuggestions.suggest(info -> 
     new Recipe[] { emeraldSwordRecipe, /* Other recipes here */ }
 )));
@@ -1778,7 +1778,7 @@ allowedMobs.removeAll(Arrays.asList(forbiddenMobs)); // Now contains everything 
 /* ANCHOR_END: SafeMobSpawnArguments */
 
 /* ANCHOR: SafeMobSpawnArguments_2 */
-List<Argument> arguments = new ArrayList<>();
+List<Argument<?>> arguments = new ArrayList<>();
 arguments.add(new EntityTypeArgument("mob").replaceSafeSuggestions(SafeSuggestions.suggest(
     info -> {
         if(info.sender().isOp()) {
@@ -1805,8 +1805,8 @@ new CommandAPICommand("spawnmob")
 
 {
 /* ANCHOR: SafePotionArguments */
-List<Argument> arguments = new ArrayList<>();
-arguments.add(new EntitySelectorArgument("target", EntitySelector.ONE_PLAYER));
+List<Argument<?>> arguments = new ArrayList<>();
+arguments.add(new EntitySelectorArgument<Player>("target", EntitySelector.ONE_PLAYER));
 arguments.add(new PotionEffectArgument("potioneffect").replaceSafeSuggestions(SafeSuggestions.suggest(
     info -> {
         Player target = (Player) info.previousArgs()[0];
