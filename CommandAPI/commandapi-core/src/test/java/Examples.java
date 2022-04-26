@@ -420,7 +420,7 @@ new CommandAPICommand("spawnmob")
 /* ANCHOR: scoreholderargument */
 new CommandAPICommand("reward")
     //We want multiple players, so we use ScoreHolderType.MULTIPLE in the constructor
-    .withArguments(new ScoreHolderArgument<Collection<Player>>("players", ScoreHolderType.MULTIPLE))
+    .withArguments(new ScoreHolderArgument<Collection<String>>("players", ScoreHolderType.MULTIPLE))
     .executes((sender, args) -> {
         //Get player names by casting to Collection<String>
         @SuppressWarnings("unchecked")
