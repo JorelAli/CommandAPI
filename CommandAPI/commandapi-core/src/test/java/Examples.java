@@ -38,7 +38,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.Particle;
 import org.bukkit.Server;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -151,6 +150,7 @@ import dev.jorel.commandapi.executors.ExecutorType;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.IntegerRange;
 import dev.jorel.commandapi.wrappers.MathOperation;
+import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import net.kyori.adventure.inventory.Book;
@@ -650,10 +650,21 @@ new CommandAPICommand("changelevel")
 new CommandAPICommand("showparticle")
     .withArguments(new ParticleArgument("particle"))
     .executesPlayer((player, args) -> {
-        player.getWorld().spawnParticle((Particle) args[0], player.getLocation(), 1);
+        ParticleData<?> particleData = (ParticleData<?>) args[0];
+        player.getWorld().spawnParticle(particleData.particle(), player.getLocation(), 1);
     })
     .register();
 /* ANCHOR_END: particlearguments */
+
+/* ANCHOR: particlearguments2 */
+new CommandAPICommand("showparticle")
+    .withArguments(new ParticleArgument("particle"))
+    .executesPlayer((player, args) -> {
+        ParticleData<?> particleData = (ParticleData<?>) args[0];
+        player.getWorld().spawnParticle(particleData.particle(), player.getLocation(), 1, particleData.data());
+    })
+    .register();
+/* ANCHOR_END: particlearguments2 */
 }
 
 {
