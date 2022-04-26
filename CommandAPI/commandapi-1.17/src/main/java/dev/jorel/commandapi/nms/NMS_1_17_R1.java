@@ -405,8 +405,8 @@ public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public String convert(Particle particle) {
-		return CraftParticle.toNMS(particle).writeToString();
+	public String convert(ParticleData<?> particle) {
+		return CraftParticle.toNMS(particle.particle(), particle.data()).writeToString();
 	}
 
 	@Override

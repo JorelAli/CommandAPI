@@ -34,7 +34,7 @@ import dev.jorel.commandapi.nms.NMS;
  * An argument that represents x, y and z axes as an EnumSet of Axis
  */
 @SuppressWarnings("rawtypes")
-public class AxisArgument<T> extends SafeOverrideableArgument<EnumSet, EnumSet<Axis>> {
+public class AxisArgument extends SafeOverrideableArgument<EnumSet, EnumSet<Axis>> {
 
 	/**
 	 * Constructs an AxisArgument with a given node name. Represents the axes x, y and z
