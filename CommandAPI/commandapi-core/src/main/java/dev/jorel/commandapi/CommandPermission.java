@@ -20,6 +20,8 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
+import java.util.Optional;
+
 /**
  * A representation of permission nodes for commands. Represents permission nodes, being op and having all permissions
  */
@@ -97,8 +99,8 @@ public class CommandPermission {
 		this.permissionNode = permissionNode;
 	}
 	
-	String getPermission() {
-		return this.permission;
+	Optional<String> getPermission() {
+		return Optional.ofNullable(this.permission);
 	}
 	
 	PermissionNode getPermissionNode() {

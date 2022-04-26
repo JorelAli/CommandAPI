@@ -74,6 +74,10 @@ class Config {
 		this.skipSenderProxy = new ArrayList<>();
 		this.commandsToConvert = new ArrayList<>();
 
+		if(!fileConfig.getList("plugins-to-convert").isEmpty() && fileConfig.getMapList("plugins-to-convert").isEmpty()) {
+			CommandAPI.getLog().severe("plugins-to-convert has an invalid type. Did you miss a colon (:) after a plugin name?");
+		}
+
 		for (Map<?, ?> map : fileConfig.getMapList("plugins-to-convert")) {
 			String[] pluginCommands;
 			if (map.values() == null || (map.values().size() == 1 && map.values().iterator().next() == null)) {

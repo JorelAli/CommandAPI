@@ -10,5 +10,6 @@ var namespacedev_1_1jorel_1_1commandapi_1_1wrappers =
     [ "ScoreboardSlot", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_scoreboard_slot.html", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_scoreboard_slot" ],
     [ "SimpleFunctionWrapper", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper" ],
     [ "Time", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_time.html", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_time" ],
-    [ "ComplexRecipeImpl", "namespacedev_1_1jorel_1_1commandapi_1_1wrappers.html#a4ff6e31ed1b0773fb119c3a61cefbe81", null ]
+    [ "ComplexRecipeImpl", "namespacedev_1_1jorel_1_1commandapi_1_1wrappers.html#a4ff6e31ed1b0773fb119c3a61cefbe81", null ],
+    [ "ParticleData< T >", "namespacedev_1_1jorel_1_1commandapi_1_1wrappers.html#a939e0f1696d8a80e75dc655255941137", null ]
 ];

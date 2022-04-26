@@ -68,6 +68,7 @@ import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.IntegerRange;
 import dev.jorel.commandapi.wrappers.Location2D;
 import dev.jorel.commandapi.wrappers.MathOperation;
+import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
@@ -278,7 +279,7 @@ public interface NMS<CommandListenerWrapper> {
 
 	String getObjectiveCriteria(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
-	Particle getParticle(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	ParticleData<?> getParticle(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
 	Player getPlayer(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 	OfflinePlayer getOfflinePlayer(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
