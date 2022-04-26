@@ -33,9 +33,11 @@ The particle argument requires additional data for a particle depending on what 
 
 ## ParticleArgument examples
 
-<div class="example">
+Because certain particles (in the table above) require additional data, it is no longer recommended to spawn a particle without its corresponding data. This can result in particles not showing due to missing requirements.
 
-### Example - Show particles at a player's location
+<div class="warning">
+
+### Example - Show particles at a player's location (without data)
 
 Say we wanted to have a command that displayed particles at a player's location. We will use the following command syntax:
 
@@ -49,13 +51,15 @@ With this, we can simply spawn the particle using the `World.spawnParticle(Parti
 {{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:particlearguments}}
 ```
 
+Running this can result in errors due to missing requirements. If you provide a particle that has additional requirements, Bukkit will throw an error and the particle will not be displayed. Instead, the example below should be used.
+
 </div>
 
 <div class="example">
 
-### Example - Show particles with data
+### Example - Show particles  at a player's location (with data)
 
-We can expand the example above by providing the data of the argument using the `ParticleData` record:
+We can fix the issues with the example above by providing the data of the argument using the `ParticleData` record:
 
 ```mccmd
 /showparticle <particle>
@@ -65,6 +69,13 @@ In this case, we'll use the `World.spawnParticle(Particle particle, Location loc
 
 ```java
 {{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:particlearguments2}}
+```
+
+This can be used with commands such as:
+
+```mccmd
+/showparticle minecraft:dust_color_transition 0 0 0 20 1 0 0
+/showparticle minecraft:block_marker diamond_block
 ```
 
 </div>
