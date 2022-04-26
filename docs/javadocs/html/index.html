@@ -26,7 +26,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;7.0.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.0.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -92,7 +92,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
  <br  />
  A Bukkit/Spigot API to use the command UI introduced in Minecraft 1.13 <br  />
  </h2>
-<div align="center"></div><div align="center"><img src="https://img.shields.io/github/license/JorelAli/CommandAPI" alt="GitHub" class="inline"/> <a href="https://www.codefactor.io/repository/github/jorelali/commandapi"><img src="https://www.codefactor.io/repository/github/jorelali/commandapi/badge" alt="CodeFactor" class="inline"/></a> <a href="https://jitpack.io/#dev.jorel/CommandAPI"><img src="https://jitpack.io/v/dev.jorel/CommandAPI.svg" alt="" style="pointer-events: none;" class="inline"/></a> <a href="https://discord.gg/G4SzSxZ"><img src="https://img.shields.io/discord/745416925924032523.svg?label=&amp;logo=discord&amp;logoColor=ffffff&amp;color=7389D8&amp;labelColor=6A7EC2" alt="Join us on Discord" style="pointer-events: none;" class="inline"/></a> <br  />
+<div align="center"></div><div align="center"><img src="https://img.shields.io/github/license/JorelAli/CommandAPI" alt="GitHub" class="inline"/> <a href="https://www.codefactor.io/repository/github/jorelali/commandapi"><img src="https://www.codefactor.io/repository/github/jorelali/commandapi/badge" alt="CodeFactor" class="inline"/></a> <img src="https://img.shields.io/maven-central/v/dev.jorel/commandapi" alt="Maven Central" class="inline"/> <a href="https://discord.gg/G4SzSxZ"><img src="https://img.shields.io/discord/745416925924032523.svg?label=&amp;logo=discord&amp;logoColor=ffffff&amp;color=7389D8&amp;labelColor=6A7EC2" alt="Join us on Discord" style="pointer-events: none;" class="inline"/></a> <br  />
  <img src="https://img.shields.io/spiget/download-size/62353" alt="Spiget Download Size" class="inline"/> <img src="https://img.shields.io/spiget/downloads/62353?label=Total%20Spigot%20Downloads" alt="Spiget Downloads" class="inline"/> <img src="https://img.shields.io/github/downloads/JorelAli/CommandAPI/total?label=Total%20GitHub%20Downloads" alt="GitHub all releases" class="inline"/> </div><p ><b>Support and Project Discussion</b>:</p>
 <ul>
 <li><img src="https://cdn3.iconfinder.com/data/icons/popular-services-brands-vol-2/512/discord-512.png" alt="" width="20px" class="inline"/> <a href="https://discord.gg/G4SzSxZ">Discord</a></li>
@@ -115,11 +115,17 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <li><b>Minecraft 1.16.2</b>: CommandAPI v4.0 to 5.12</li>
 <li><b>Minecraft 1.16.3</b>: CommandAPI v4.2 to 5.12</li>
 <li><b>Minecraft 1.16.4</b>: CommandAPI v5.2 to 5.12</li>
-<li><b>Minecraft 1.16.5</b>: CommandAPI v5.7 to 6.5.4</li>
-<li><b>Minecraft 1.17</b>: CommandAPI 6.0.x to 6.4.x (Java 16) or 6.5.4 (Java 17)</li>
-<li><b>Minecraft 1.17.1</b>: CommandAPI 6.1.x to 6.4.x (Java 16) or 6.5.4 (Java 17)</li>
-<li><b>Minecraft 1.18, 1.18.1</b>: CommandAPI 6.5.2 to 6.5.4 (Java 17)</li>
-<li><b>Minecraft 1.18.2</b>: CommandAPI 6.5.4 (Java 17)</li>
+<li><b>Minecraft 1.16.5</b>: CommandAPI v5.7 to 7.0.0</li>
+<li><em><b>For Minecraft 1.17 or higher, you'll need Java 16 or higher</b></em><ul>
+<li><b>Minecraft 1.17</b>: CommandAPI 6.0.x to 6.4.x (Java 16) or 7.0.0 to 8.0.0 (Java 17)</li>
+<li><b>Minecraft 1.17.1</b>: CommandAPI 6.1.x to 6.4.x (Java 16) or 7.0.0 to 8.0.0 (Java 17)</li>
+</ul>
+</li>
+<li><em><b>For Minecraft 1.18 or higher, you'll need Java 17 or higher</b></em><ul>
+<li><b>Minecraft 1.18, 1.18.1</b>: CommandAPI 6.5.2 to 8.0.0</li>
+<li><b>Minecraft 1.18.2</b>: CommandAPI 6.5.4 to 8.0.0</li>
+</ul>
+</li>
 </ul>
 <hr  />
 <h2>Purpose</h2>
@@ -332,12 +338,8 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <p >The resulting compiled documentation is found in <code>docs/X.X.X</code>, where <code>X.X.X</code> is specified in the <code>book.toml</code> file's <code>build-dir</code> in the <code>docssrc</code> folder.</p>
 <hr  />
 <h2>CommandAPI Project Timeline</h2>
-<p >This is the current roadmap for the CommandAPI (as of 25th January 2022):</p>
+<p >This is the current roadmap for the CommandAPI (as of 13th April 2022):</p>
 <ul>
-<li><p class="startli"><b>CommandAPI 7.0.0: Maintenance + API improvements</b></p>
-<p class="startli">This update is general maintenance and refactoring of various methods to provide more powerful API functionality. This update greatly reworks the suggestion system and also adds support for asynchronous suggestions. This update exposes more of the inner workings of the CommandAPI via its Brigadier class to make commands outside of the CommandAPI's base functionality easier to write. <br  />
-</p>
-</li>
 <li><p class="startli"><b>Future:</b></p>
 <p class="startli"><b>Annotation improvements</b></p>
 <p class="startli">The CommandAPI's annotation system has always been a bit limited and was primarily introduced as a proof-of-concept. In this update, the CommandAPI's annotation system will be improved to be (ideally) as powerful as the non-annotation system and have slightly better type safety, support for non-static methods and better checks to prevent invalid command generation.</p>
@@ -345,6 +347,8 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <p class="startli">The CustomArgument class is fairly flexible, but nowhere near flexible enough. In this update, more attention will be focused on the CustomArgument class to provide it the ability to extend from all other argument types as a base.</p>
 <p class="startli"><b>Argument conflict detection</b></p>
 <p class="startli">The CommandAPI simply uses the Brigadier system under the hood. This system is prone to <em>argument conflicts</em>, which is where certain arguments are given priority over other arguments. (For example "hello" and "123" are both valid string arguments, but if you have a command that has a string argument or an integer argument, Brigadier may ignore the integer argument). In this update, the CommandAPI will try to spot potential conflicts and add a warning in the console. The research required for this is also required in order to implement optional arguments (which is not coming out in this release).</p>
+<p class="startli">**'True' custom arguments and server-side argument implementations**</p>
+<p class="startli">Through some brief testing of the <a href="https://github.com/JorelAli/CommandAPI/tree/dev/regex-mod">regex-mod branch</a> and my <a href="https://github.com/JorelAli/MinecraftRegexArgumentMod">MinecraftRegexArgumentMod</a> repository, it was discovered that 'true' custom arguments (arguments with a custom implementation of the returned type and parser) are possible with the aid of a client-sided mod. Additionally, this functionality also works <em>without</em> a client-sided mod, assuming this is only used server-side. This can be useful for server-only datapacks, functions and tags, as well as command blocks.</p>
 </li>
 </ul>
 <hr  />
@@ -354,11 +358,23 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <p >Version </p>
 <p >Date </p>
 <p >Features / Changes  &lt;/thead&gt; &lt;tbody&gt; </p>
+<p ><b>8.0.0</b> </p>
+<p >April 2022 </p>
+<ul>
+<li>
+<b>Note: This version is incompatible with existing plugins that use the particle argument (See documentation for more information)</b> </li>
+<li>
+Improved support for particle arguments, now supporting particle data (e.g. color, size) </li>
+<li>
+Dropped support for Minecraft 1.16.5 </li>
+</ul>
 <p ><b>7.0.0</b> </p>
-<p >??? 2022 </p>
+<p >April 2022 </p>
 <p ><b>Development improvements:</b> </p><ul>
 <li>
 Adds a GitHub action to build the CommandAPI (and share it's lovely artifacts) </li>
+<li>
+Moves the Maven repo for 7.0.0 and future updates to Maven Central </li>
 </ul>
 <p><b>New features:</b> </p><ul>
 <li>
@@ -1233,7 +1249,7 @@ Initial release </li>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Apr 13 2022 16:55:18 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Tue Apr 26 2022 21:38:48 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

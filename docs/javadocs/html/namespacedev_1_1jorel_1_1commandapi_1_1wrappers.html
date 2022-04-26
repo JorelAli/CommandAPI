@@ -26,7 +26,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;7.0.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.0.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -132,6 +132,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a4ff6e31ed1b0773fb119c3a61cefbe81"><td class="memItemLeft" align="right" valign="top">record&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1wrappers.html#a4ff6e31ed1b0773fb119c3a61cefbe81">ComplexRecipeImpl</a> (NamespacedKey key, Recipe recipe) implements ComplexRecipe</td></tr>
 <tr class="memdesc:a4ff6e31ed1b0773fb119c3a61cefbe81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a ComplexRecipe based on a NamespacedKey and a Recipe object.  <a href="namespacedev_1_1jorel_1_1commandapi_1_1wrappers.html#a4ff6e31ed1b0773fb119c3a61cefbe81">More...</a><br /></td></tr>
 <tr class="separator:a4ff6e31ed1b0773fb119c3a61cefbe81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a939e0f1696d8a80e75dc655255941137"><td class="memItemLeft" align="right" valign="top">record&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1wrappers.html#a939e0f1696d8a80e75dc655255941137">ParticleData&lt; T &gt;</a> (Particle particle, T data)</td></tr>
+<tr class="memdesc:a939e0f1696d8a80e75dc655255941137"><td class="mdescLeft">&#160;</td><td class="mdescRight">A data structure that stores a particle and its corresponding data (or null if no data is present)  <a href="namespacedev_1_1jorel_1_1commandapi_1_1wrappers.html#a939e0f1696d8a80e75dc655255941137">More...</a><br /></td></tr>
+<tr class="separator:a939e0f1696d8a80e75dc655255941137"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Classes that are wrappers for various vanilla-related command features. </p>
@@ -177,13 +180,50 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a939e0f1696d8a80e75dc655255941137" name="a939e0f1696d8a80e75dc655255941137"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a939e0f1696d8a80e75dc655255941137">&#9670;&nbsp;</a></span>ParticleData&lt; T &gt;()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">record dev.jorel.commandapi.wrappers.ParticleData&lt; T &gt; </td>
+          <td>(</td>
+          <td class="paramtype">Particle&#160;</td>
+          <td class="paramname"><em>particle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>data</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>A data structure that stores a particle and its corresponding data (or null if no data is present) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">particle</td><td>The particle that this data structure is storing. </td></tr>
+    <tr><td class="paramname">data</td><td>The data that this particle contains, or null if no data is present. This can be passed to <code><a class="el" href="">org.bukkit.World#spawnParticle</a></code> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1wrappers.html">wrappers</a></li>
-    <li class="footer">Generated on Wed Apr 13 2022 16:55:18 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Tue Apr 26 2022 21:38:48 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>
