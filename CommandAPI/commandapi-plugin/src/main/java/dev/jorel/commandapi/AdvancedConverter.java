@@ -21,10 +21,13 @@
 package dev.jorel.commandapi;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.jorel.commandapi.arguments.AdvancementArgument;
@@ -104,7 +107,7 @@ public class AdvancedConverter {
 	
 	public void convert() {
 		String commandName = command.split(" ")[0];
-		List<Argument> arguments;
+		List<Argument<?>> arguments;
 		try {
 			arguments = parseArguments(command);
 		} catch (UnknownArgumentException | InvalidNumberException e) {
@@ -121,7 +124,7 @@ public class AdvancedConverter {
 	
 	public void convertCommand() {
 		String commandName = command.split(" ")[0];
-		List<Argument> arguments;
+		List<Argument<?>> arguments;
 		try {
 			arguments = parseArguments(command);
 		} catch (UnknownArgumentException | InvalidNumberException e) {
@@ -143,11 +146,11 @@ public class AdvancedConverter {
 	 *     - speed (walk|fly) <speed>[0..10]
 	 *     - speed (walk|fly) <speed>[0..10] <target>[minecraft:game_profile]
 	 */
-	private List<Argument> parseArguments(String command) throws UnknownArgumentException, InvalidNumberException {
-		List<Argument> arguments = new ArrayList<>();
+	private List<Argument<?>> parseArguments(String command) throws UnknownArgumentException, InvalidNumberException {
+		List<Argument<?>> arguments = new ArrayList<>();
 		String[] parts = command.split(" ");
 		for (argumentIndex = 1; argumentIndex < parts.length; argumentIndex++) {
-			Argument argument = parseArgument(parts[argumentIndex]);
+			Argument<?> argument = parseArgument(parts[argumentIndex]);
 			if(argument != null) {
 				arguments.add(argument);
 			}
@@ -167,7 +170,7 @@ public class AdvancedConverter {
 		}
 	}
 	
-	private Argument parseRange(String nodeName, String[] bounds) throws InvalidNumberException {		
+	private Argument<?> parseRange(String nodeName, String[] bounds) throws InvalidNumberException {		
 		if(bounds.length == 1) {
 			//x..
 			double value = parseValue(bounds[0]);
@@ -196,7 +199,7 @@ public class AdvancedConverter {
 		}
 	}
 	
-	private Argument parseDefinedArgumentType(String argumentType, String nodeName) throws UnknownArgumentException {
+	private Argument<?> parseDefinedArgumentType(String argumentType, String nodeName) throws UnknownArgumentException {
 		return switch(CommandAPIArgumentType.fromInternal(argumentType)) {
 		case ADVANCEMENT             -> new AdvancementArgument(nodeName);
 		case ANGLE                   -> new AngleArgument(nodeName);
@@ -208,7 +211,7 @@ public class AdvancedConverter {
 		case CHATCOLOR               -> new ChatColorArgument(nodeName);
 		case CHAT_COMPONENT          -> new ChatComponentArgument(nodeName);
 		case ENCHANTMENT             -> new EnchantmentArgument(nodeName);
-		case ENTITY_SELECTOR         -> new EntitySelectorArgument(nodeName, EntitySelector.ONE_ENTITY);
+		case ENTITY_SELECTOR         -> new EntitySelectorArgument<Entity>(nodeName, EntitySelector.ONE_ENTITY);
 		case ENTITY_TYPE             -> new EntityTypeArgument(nodeName);
 		case ENVIRONMENT             -> new EnvironmentArgument(nodeName);
 		case FLOAT_RANGE             -> new FloatRangeArgument(nodeName);
@@ -229,7 +232,7 @@ public class AdvancedConverter {
 		case RECIPE                  -> new RecipeArgument(nodeName);
 		case ROTATION                -> new RotationArgument(nodeName);
 		case SCOREBOARD_SLOT         -> new ScoreboardSlotArgument(nodeName);
-		case SCORE_HOLDER            -> new ScoreHolderArgument(nodeName, ScoreHolderType.SINGLE);
+		case SCORE_HOLDER            -> new ScoreHolderArgument<String>(nodeName, ScoreHolderType.SINGLE);
 		case SOUND                   -> new SoundArgument(nodeName);
 		case TEAM                    -> new TeamArgument(nodeName);
 		case TIME                    -> new TimeArgument(nodeName);
@@ -249,7 +252,7 @@ public class AdvancedConverter {
 		};
 	}
 	
-	private Argument parseArgument(String argument) throws UnknownArgumentException, InvalidNumberException {
+	private Argument<?> parseArgument(String argument) throws UnknownArgumentException, InvalidNumberException {
 		Matcher literalMatcher = LITERAL_PATTERN.matcher(argument);
 		Matcher argumentMatcher = ARGUMENT_PATTERN.matcher(argument);
 		if(literalMatcher.matches()) {
@@ -267,10 +270,10 @@ public class AdvancedConverter {
 			} else {
 				// We have a few edge cases to handle
 				return switch(argumentType) {
-				case "api:entity"     -> new EntitySelectorArgument(nodeName, EntitySelector.ONE_ENTITY);
-				case "api:entities"   -> new EntitySelectorArgument(nodeName, EntitySelector.MANY_ENTITIES);
-				case "api:player"     -> new EntitySelectorArgument(nodeName, EntitySelector.ONE_PLAYER);
-				case "api:players"    -> new EntitySelectorArgument(nodeName, EntitySelector.MANY_PLAYERS);
+				case "api:entity"     -> new EntitySelectorArgument<Entity>(nodeName, EntitySelector.ONE_ENTITY);
+				case "api:entities"   -> new EntitySelectorArgument<Collection<Entity>>(nodeName, EntitySelector.MANY_ENTITIES);
+				case "api:player"     -> new EntitySelectorArgument<Player>(nodeName, EntitySelector.ONE_PLAYER);
+				case "api:players"    -> new EntitySelectorArgument<Collection<Player>>(nodeName, EntitySelector.MANY_PLAYERS);
 				case "minecraft:vec3" -> new LocationArgument(nodeName, LocationType.PRECISE_POSITION);
 				case "minecraft:vec2" -> new Location2DArgument(nodeName, LocationType.PRECISE_POSITION);
 				default               -> parseDefinedArgumentType(argumentType, nodeName);
