@@ -327,6 +327,7 @@ This is the current roadmap for the CommandAPI (as of 13th April 2022):
             <td valign="top">April 2022</td>
             <td valign="top">
                 <ul>
+                    <li><b>Note: This version is incompatible with existing plugins that use the particle argument (See documentation for more information)</b></li>
                     <li>Improved support for particle arguments, now supporting particle data (e.g. color, size)</li>
                     <li>Dropped support for Minecraft 1.16.5</li>
                 </ul>
