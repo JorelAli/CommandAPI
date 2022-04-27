@@ -21,7 +21,7 @@ Say we wanted to write a permission management system. To do this, we'll use the
 /perm user remove <permission> <userName>
 ```
 
-Let's start with the simplest example - the `/perm group ...` command. We have one command which is basically the following:
+Let's start with the simplest example - the `/perm group ...` command. We have one command which is the following:
 
 ```mccmd
 add <permission> <groupName>

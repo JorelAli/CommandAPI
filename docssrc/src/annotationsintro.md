@@ -59,7 +59,7 @@ As we can see, the code certainly _looks_ very different to the normal registrat
 {{#include ../../CommandAPI/commandapi-annotations/src/test/java/WarpCommand.java:warps_command}}
 ```
 
-Firstly, we declare our command `warp`. To do this, we use the `@Command` annotation and simply state the name of the command in the annotation. This annotation is attached to the class `WarpCommand`, which basically indicates that the whole class `WarpCommand` will be housing our command.
+Firstly, we declare our command `warp`. To do this, we use the `@Command` annotation and simply state the name of the command in the annotation. This annotation is attached to the class `WarpCommand`, which indicates that the whole class `WarpCommand` will be housing our command.
 
 The annotation framework is designed in such a way that an entire command is represented by a single class. This provides a more modular approach to command declaration that allows you to easily contain the methods of a command in one location.
 
@@ -69,7 +69,7 @@ The annotation framework is designed in such a way that an entire command is rep
 {{#include ../../CommandAPI/commandapi-annotations/src/test/java/WarpCommand.java:warps_help}}
 ```
 
-Here, declare the main command implementation using the `@Default` annotation. The `@Default` annotation basically informs the CommandAPI that the method it is attached to does not have any subcommands. This is basically the same as registering a regular command without using `.withSubcommand()`.
+Here, declare the main command implementation using the `@Default` annotation. The `@Default` annotation informs the CommandAPI that the method it is attached to does not have any subcommands. This is effectively the same as registering a regular command without using `.withSubcommand()`.
 
 Here, we simply write what happens when no arguments are run (i.e. the user just runs `/warp` on its own). As such, we don't include any parameters to our method.
 

@@ -8,7 +8,7 @@ The multi literal argument has all of the same benefits of a regular literal arg
 
 > **Developer's Note:**
 >
-> The only reason that `LiteralArgument` still exists is for legacy purposes. `MultiLiteralArgument` is much more recommended because it's easier to understand and implement. The `LiteralArgument` has a very slight performance improvement over the `MultiLiteralArgument`, but it's basically unnoticeable.
+> The only reason that `LiteralArgument` still exists is for legacy purposes. `MultiLiteralArgument` is much more recommended because it's easier to understand and implement. The `LiteralArgument` has a very slight performance improvement over the `MultiLiteralArgument`, but it's effectively unnoticeable.
 
 <div class="example">
 

@@ -4,7 +4,7 @@ So far, we've been using only the CommandAPI to register commands. As a result, 
 
 > **Developer's Note:**
 >
-> For those that are unaware, [brigadier](https://github.com/Mojang/brigadier) is Mojang's command parser and dispatching framework. This is basically what the CommandAPI wraps around and is the main underlying source of its functionality.
+> For those that are unaware, [brigadier](https://github.com/Mojang/brigadier) is Mojang's command parser and dispatching framework. This is what the CommandAPI wraps around and is the main underlying source of its functionality.
 
 The CommandAPI has been designed in such a way that you shouldn't have to access NMS in order to make use of the more "advanced" arguments and features - if you find that NMS is required to do something, [please make a new issue](https://github.com/JorelAli/CommandAPI/issues/new/choose)!
 

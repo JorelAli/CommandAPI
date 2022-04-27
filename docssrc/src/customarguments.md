@@ -1,6 +1,6 @@
 # Custom arguments
 
-Custom arguments are an experimental feature which the CommandAPI offers, which allows you to represent any String, or Minecraft key _(Something of the form `String:String`, such as `minecraft:diamond`)_ with a custom parser. They basically represent `StringArgument` with replaced suggestions and a built-in parser for any object of your choice. They are designed to be used for multiple commands - you can define the argument once and can use it wherever you want when declaring commands.
+Custom arguments are an experimental feature which the CommandAPI offers, which allows you to represent any String, or Minecraft key _(Something of the form `String:String`, such as `minecraft:diamond`)_ with a custom parser. They represent `StringArgument` with replaced suggestions and a built-in parser for any object of your choice. They are designed to be used for multiple commands - you can define the argument once and can use it wherever you want when declaring commands.
 
 -----
 
@@ -85,7 +85,7 @@ String input();
 
 ### Example - World argument
 
-Say we want to create an argument to represents the list of available worlds on the server. We basically want to have an argument which always returns a Bukkit `World` object as the result. Here, we create a method `worldArgument()` that returns our custom argument that returns a `World`. First, we retrieve our `String[]` of world names to be used for our suggestions. We then write our custom argument that creates a `World` object from the input (in this case, we simply convert the input to a `World` using `Bukkit.getWorld(String)`). We perform error handling before returning our result:
+Say we want to create an argument to represents the list of available worlds on the server. We want to have an argument which always returns a Bukkit `World` object as the result. Here, we create a method `worldArgument()` that returns our custom argument that returns a `World`. First, we retrieve our `String[]` of world names to be used for our suggestions. We then write our custom argument that creates a `World` object from the input (in this case, we simply convert the input to a `World` using `Bukkit.getWorld(String)`). We perform error handling before returning our result:
 
 ```java
 {{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:customarguments2}}

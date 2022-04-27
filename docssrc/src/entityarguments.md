@@ -60,7 +60,7 @@ The `PlayerArgument` class is very similar _(almost identical)_ to `EntitySelect
 
 ## OfflinePlayer argument
 
-The `OfflinePlayerArgument` class is basically identical to the `PlayerArgument` class, but instead of returning a `Player` object, it returns an `OfflinePlayer` object. Internally, this argument makes calls to Mojang servers (via Mojang's authlib), meaning it can be slightly slower than alternative methods (such as using a `StringArgument` and suggesting a list of existing offline players).
+The `OfflinePlayerArgument` class is identical to the `PlayerArgument` class, but instead of returning a `Player` object, it returns an `OfflinePlayer` object. Internally, this argument makes calls to Mojang servers (via Mojang's authlib), meaning it can be slightly slower than alternative methods (such as using a `StringArgument` and suggesting a list of existing offline players).
 
 The `OfflinePlayerArgument` _should_ be able to retrieve players that have never joined the server before.
 
