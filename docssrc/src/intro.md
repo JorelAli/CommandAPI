@@ -37,6 +37,11 @@ Using the search icon <i class="fas fa-search"></i> in the top left corner, you 
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 7.0.0 \\(\rightarrow\\) 8.0.0:
+
+- Updated particle arguments in the [Particle arguments](./particlearguments.md) section.
+- Update the [Upgrading guide](./upgrading.md) for the new changes in 8.0.0.
+
 ### Documentation changes 6.5.4 \\(\rightarrow\\) 7.0.0:
 
 - Changed the repo that the CommandAPI is served from JitPack to Maven Central.

@@ -1,5 +1,39 @@
 # Upgrading guide
 
+## From version 7.0.0 to 8.0.0
+
+### Particle arguments
+
+Particle arguments no longer return Bukkit's `org.bukkit.Particle` enum, but now return a wrapper `dev.jorel.commandapi.wrappers.ParticleData` instead. More information about this wrapper class and how to use it can be found on the [particle arguments page](./particlearguments.md). To update, change any `Particle` casts into a `ParticleData` cast instead:
+
+```java
+new CommandAPICommand("mycommand")
+    .withArgument(new ParticleArgument("particle"))
+    .executes((sender, args) -> {
+        Particle particle = (Particle) args[0];
+        // Do stuff with particle
+    })
+    .register();
+```
+
+\\[\downarrow\\]
+
+```java
+new CommandAPICommand("mycommand")
+    .withArgument(new ParticleArgument("particle"))
+    .executes((sender, args) -> {
+        ParticleData particleData = (ParticleData) args[0];
+
+        Particle particle = particleData.particle();
+        Object data = particleData.data();
+
+        // Do stuff with particle and data
+    })
+    .register();
+```
+
+-----
+
 ## From version 6.5.2 to 7.0.0
 
 ### Maven repository

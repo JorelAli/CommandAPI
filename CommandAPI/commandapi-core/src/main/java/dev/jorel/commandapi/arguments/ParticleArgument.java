@@ -27,6 +27,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.wrappers.ParticleData;
 
 /**
  * An argument that represents the Bukkit Particle object
@@ -43,7 +44,7 @@ public class ParticleArgument extends SafeOverrideableArgument<Particle> {
 
 	@Override
 	public Class<?> getPrimitiveType() {
-		return Particle.class;
+		return ParticleData.class;
 	}
 	
 	@Override
