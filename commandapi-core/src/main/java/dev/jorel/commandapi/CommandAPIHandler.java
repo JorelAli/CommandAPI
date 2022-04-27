@@ -210,7 +210,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 *                    all instances of the command, regardless of whether they
 	 *                    have been registered by Minecraft, Bukkit or Spigot etc.
 	 */
-	void unregister(String commandName, boolean force) {
+	void unregister(String commandName) {
 		if (CommandAPI.getConfiguration().hasVerboseOutput()) {
 			CommandAPI.logInfo("Unregistering command /" + commandName);
 		}
@@ -218,12 +218,10 @@ public class CommandAPIHandler<CommandSourceStack> {
 		// Get the child nodes from the loaded dispatcher class
 		Map<String, CommandNode<?>> commandNodeChildren = (Map<String, CommandNode<?>>) COMMANDNODE_CHILDREN.get(DISPATCHER.getRoot());
 
-		if (force) {
-			// Remove them by force
-			for(String key : new HashSet<>(commandNodeChildren.keySet())) {
-				if(key.contains(":") && key.split(":")[1].equalsIgnoreCase(commandName)) {
-					commandNodeChildren.remove(key);
-				}
+		// Remove them and anything else with a specified namespace
+		for(String key : new HashSet<>(commandNodeChildren.keySet())) {
+			if(key.contains(":") && key.split(":")[1].equalsIgnoreCase(commandName)) {
+				commandNodeChildren.remove(key);
 			}
 		}
 
@@ -231,7 +229,11 @@ public class CommandAPIHandler<CommandSourceStack> {
 		commandNodeChildren.remove(commandName);
 		((Map<String, CommandNode<?>>) COMMANDNODE_LITERALS.get(DISPATCHER.getRoot())).remove(commandName);
 		((Map<String, CommandNode<?>>) COMMANDNODE_ARGUMENTS.get(DISPATCHER.getRoot())).remove(commandName);
-	}		
+	}
+	
+	void unregisterBukkit(String commandName) {
+		getNMS().unregisterBukkit(commandName);
+	}
 
 	/**
 	 * Generates a command to be registered by the CommandAPI.

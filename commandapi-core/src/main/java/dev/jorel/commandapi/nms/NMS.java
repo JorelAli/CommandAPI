@@ -372,4 +372,6 @@ public interface NMS<CommandListenerWrapper> {
 
 	void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd);
 
+	void unregisterBukkit(String commandName);
+
 }

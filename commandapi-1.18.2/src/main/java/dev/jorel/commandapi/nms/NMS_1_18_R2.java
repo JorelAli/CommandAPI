@@ -26,6 +26,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,6 +39,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
@@ -65,6 +68,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.v1_18_R2.CraftLootTable;
@@ -215,12 +219,13 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 		VarHandle shm_ht = null;
 		VarHandle eps_se = null;
 		try {
-			 shm_ht = MethodHandles.privateLookupIn(SimpleHelpMap.class, MethodHandles.lookup()).findVarHandle(SimpleHelpMap.class, "helpTopics", Map.class);
-			 eps_se = MethodHandles.privateLookupIn(EntityPositionSource.class, MethodHandles.lookup()).findVarHandle(EntityPositionSource.class, "d", Optional.class);		} catch (ReflectiveOperationException e) {
+			shm_ht = MethodHandles.privateLookupIn(SimpleHelpMap.class, MethodHandles.lookup()).findVarHandle(SimpleHelpMap.class, "helpTopics", Map.class);
+			eps_se = MethodHandles.privateLookupIn(EntityPositionSource.class, MethodHandles.lookup()).findVarHandle(EntityPositionSource.class, "d", Optional.class);
+		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
-		 SimpleHelpMap_helpTopics = shm_ht;
-		 EntityPositionSource_sourceEntity = eps_se;
+		SimpleHelpMap_helpTopics = shm_ht;
+		EntityPositionSource_sourceEntity = eps_se;
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
@@ -1097,6 +1102,56 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) SimpleHelpMap_helpTopics.get(Bukkit.getServer().getHelpMap());
 		for(Map.Entry<String, HelpTopic> entry : helpTopicsToAdd.entrySet()) {
 			helpTopics.put(entry.getKey(), entry.getValue());
+		}
+	}
+
+	@Override
+	public void unregisterBukkit(String commandName) {
+		CommandMap map = ((CraftServer) Bukkit.getServer()).getCommandMap();
+		SortedSet<String> commandsToRemove = new TreeSet<>();
+		try {
+			Field f = SimpleCommandMap.class.getDeclaredField("knownCommands");
+			f.setAccessible(true);
+			@SuppressWarnings("unchecked")
+			Map<String, Command> knownCommands = (Map<String, Command>) f.get(map);
+			
+			if(commandName == null) {
+				knownCommands.keySet().stream().sorted().forEach(System.out::println);
+				return;
+			}
+			
+			for(String command : knownCommands.keySet()) {
+				if(command.equals(commandName.toLowerCase())) {
+					commandsToRemove.add(command);
+					commandsToRemove.addAll(knownCommands.get(command).getAliases());
+				}
+				if(command.contains(":")) {
+					if(command.split(":")[1].equals(commandName)) {
+						commandsToRemove.add(command);
+						commandsToRemove.addAll(knownCommands.get(command).getAliases());
+						
+						// Each alias can also have its alias with a prefix
+						for(String alias : knownCommands.get(command).getAliases()) {
+							String aliasWithPrefix = command.split(":")[0] + ":" + alias;
+							if(knownCommands.containsKey(aliasWithPrefix)) {
+								commandsToRemove.add(aliasWithPrefix);
+							}
+						}
+					}
+				}
+			}
+			
+			if(commandsToRemove.isEmpty()) {
+				CommandAPI.logWarning("Could not unregister /" + commandName + " because this command does not exist");
+			} else {
+				for(String commandToRemove : commandsToRemove) {
+					CommandAPI.logInfo("Unregistering Bukkit command /" + commandName +  ": /" + commandToRemove);
+					knownCommands.remove(commandToRemove).unregister(map);
+				}
+			}
+			
+		} catch(ReflectiveOperationException e) {
+			e.printStackTrace();
 		}
 	}
 }

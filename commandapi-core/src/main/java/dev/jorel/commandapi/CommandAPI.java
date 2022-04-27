@@ -235,7 +235,23 @@ public final class CommandAPI {
 	 * @param command the name of the command to unregister
 	 */
 	public static void unregister(String command) {
-		CommandAPIHandler.getInstance().unregister(command, false);
+		CommandAPIHandler.getInstance().unregister(command);
+	}
+	
+	/**
+	 * Unregisters a Bukkit command. This requires the qualified name of the
+	 * command, including its plugin/Bukkit prefix, without the leading forward
+	 * slash. Examples:
+	 * 
+	 * <ul>
+	 * <li><code>CommandAPI.unregisterBukkit("bukkit:help");</code></li>
+	 * <li><code>CommandAPI.unregisterBukkit("myplugin:mycommand");</code></li>
+	 * </ul>
+	 * 
+	 * @param command the qualified name of the command to unregister
+	 */
+	public static void unregisterBukkit(String command) {
+		CommandAPIHandler.getInstance().unregisterBukkit(command);
 	}
 	
 	/**
@@ -244,12 +260,14 @@ public final class CommandAPI {
 	 * @param command the name of the command to unregister
 	 * @param force   if true, attempt to unregister all instances of the command
 	 *                across all plugins as well as minecraft, bukkit and spigot
+	 * @deprecated Use {@link #unregister(String)} instead, they do the same thing.
 	 */
+	@Deprecated(forRemoval = true)
 	public static void unregister(String command, boolean force) {
 		if(!canRegister()) {
 			getLog().warning("Unexpected unregistering of /" + command + ", as server is loaded! Unregistering anyway, but this can lead to unstable results!");
 		}
-		CommandAPIHandler.getInstance().unregister(command, force);
+		CommandAPIHandler.getInstance().unregister(command);
 	}
 
 	/**

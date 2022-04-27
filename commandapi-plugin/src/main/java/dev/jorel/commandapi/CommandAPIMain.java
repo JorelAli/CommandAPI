@@ -58,5 +58,10 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable(this);
+		
+		CommandAPI.unregisterBukkit("help");
+		CommandAPI.unregisterBukkit("version");
+		CommandAPI.unregisterBukkit("reload");
+		CommandAPI.unregisterBukkit(null);
 	}
 }

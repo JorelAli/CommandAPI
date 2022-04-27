@@ -64,6 +64,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.v1_18_R1.CraftLootTable;
@@ -980,5 +981,11 @@ public class NMS_1_18_R1 implements NMS<CommandSourceStack> {
 		for(Map.Entry<String, HelpTopic> entry : helpTopicsToAdd.entrySet()) {
 			helpTopics.put(entry.getKey(), entry.getValue());
 		}
+	}
+
+	@Override
+	public void unregisterBukkit(String commandName) {
+		CommandMap map = ((CraftServer) Bukkit.getServer()).getCommandMap();
+		map.getCommand(commandName).unregister(map);
 	}
 }
