@@ -179,7 +179,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 			for(int i = 0, numGreedyArgs = 0; i < argumentsArr.length; i++) {
 				if(argumentsArr[i] instanceof IGreedyArgument) {
 					if(++numGreedyArgs > 1 || i != argumentsArr.length - 1) {
-						throw new GreedyArgumentException();
+						throw new GreedyArgumentException(argumentsArr);
 					}
 				}
 			}
