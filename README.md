@@ -247,11 +247,9 @@ The CommandAPI can be built easily, but requires copies of the Spigot server jar
   git clone https://github.com/JorelAli/CommandAPI.git
   ```
 
-- Go into the folder named `CommandAPI` _(Not to be confused with the folder named `CommandAPI`, which is what was just cloned)_. You want the folder which contains `pom.xml`.
-
 - Run `mvn`
 
-The resulting plugin `.jar` is found in `commandapi-plugin/target/CommandAPIvX.X.X_DATE.jar`
+The resulting plugin `.jar` is found in `commandapi-plugin/target/CommandAPI-X.X.X_DATE.jar`
 
 ## Building the CommandAPI's documentation
 
