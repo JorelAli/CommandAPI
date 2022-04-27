@@ -50,25 +50,25 @@ public abstract class CommandElement {
 	}
 
 	public boolean emitPermission(PrintWriter out, CommandPermission permission) {
-		
-		// TODO: We shouldn't be passing null here - this originates from CommandData's multiliteral argument construction
-		if (permission == null || permission.equals(CommandPermission.NONE)) {
+		if (permission.equals(CommandPermission.NONE)) {
 			// Do nothing
 			return false;
 		} else if (permission.equals(CommandPermission.OP)) {
 			out.println();
 			out.print(indentation() + ".withPermission(CommandPermission.OP)");
 			return true;
-		} else {
+		} else if(permission.getPermission().isPresent()) {
 			out.println();
 			if (permission.isNegated()) {
 				out.print(indentation() + ".withoutPermission(\"");
 			} else {
 				out.print(indentation() + ".withPermission(\"");
 			}
-			out.print(permission.getPermission());
+			out.print(permission.getPermission().get());
 			out.println("\")");
 			return true;
+		} else {
+			return false;
 		}
 	}
 
