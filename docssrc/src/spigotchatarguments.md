@@ -94,7 +94,7 @@ Now we can create our book command. We use the player as the main target by usin
 >
 > The `ChatArgument` class is an argument similar to the [`GreedyStringArgument`](./stringarguments.html#greedy-string-argument), in the sense that it has no terminator and must be defined at the end of your `List` of arguments. For more information on this, please read the section on [Greedy arguments](./stringarguments.html#greedy-string-argument).
 
-The `ChatArgument` is basically identical to the `GreedyStringArgument`, with the added functionality of enabling _entity selectors_, such as `@e`, `@p` and so on. The `ChatArgument` also returns a `BaseComponent[]`, similar to the `ChatComponentArgument`.
+The `ChatArgument` is identical to the `GreedyStringArgument`, with the added functionality of enabling _entity selectors_, such as `@e`, `@p` and so on. The `ChatArgument` also returns a `BaseComponent[]`, similar to the `ChatComponentArgument`.
 
 <div class="example">
 

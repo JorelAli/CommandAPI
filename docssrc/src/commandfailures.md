@@ -1,6 +1,6 @@
 # Handling command failures
 
-Sometimes, you want your command to fail on purpose. This is basically the way to "gracefully" handle errors in your command execution. This is performed by throwing the following method:
+Sometimes, you want your command to fail on purpose. This is the way to "gracefully" handle errors in your command execution. This is performed by throwing the following method:
 
 ```java
 throw CommandAPI.fail("Error message goes here");

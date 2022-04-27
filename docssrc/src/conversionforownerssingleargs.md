@@ -77,7 +77,7 @@ To have multiple different literals, place a pipe symbol `|` between each entry 
 
 Named arguments must have a name, declared in angled brackets `<name>`, followed by the type of the argument in square brackets `[type]`. In the example above, we had a named argument `<target>`, with the argument type as a player: `[minecraft:game_profile]`.
 
-The name in the argument can basically be whatever you want, but it is highly recommended to keep it as a lowercase value consisting only of letters.
+The name in the argument can be whatever you want, but it is recommended to keep it as a lowercase value consisting only of letters.
 
 **The following argument types are highly recommended** and are very likely to be compatible with every plugin command that you may want to convert:
 

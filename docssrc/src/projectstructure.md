@@ -4,7 +4,7 @@ The CommandAPI is a relatively large project (especially from the standpoint of 
 
 -----
 
-## `CommandAPI` folder
+## CommandAPI submodule folders
 
 This is where all of the code is for the CommandAPI. The CommandAPI is a Maven project with multiple modules which each serve a different purpose:
 
@@ -20,7 +20,7 @@ This is where all of the code is for the CommandAPI. The CommandAPI is a Maven p
 
 - `commandapi-shade` - It's the CommandAPI, but in shade-able format. It has none of the features of the CommandAPI plugin variant and can be shaded into your own plugins. Effectively, it's `commandapi-core` + `commandapi-vh` with all of the `commandapi-x.x.x` NMS implementations included.
 
-- `commandapi-annotations` - The CommandAPI annotations project is a small compile-time annotation processer that basically writes CommandAPI code for you. Using a compile-time annotation processor makes the server run so much faster than using a runtime-annotation processor, because annotation processing requires reflection to inspect class metadata.
+- `commandapi-annotations` - The CommandAPI annotations project is a small compile-time annotation processer that writes CommandAPI code for you. Using a compile-time annotation processor makes the server run so much faster than using a runtime-annotation processor, because annotation processing requires reflection to inspect class metadata.
 
 ## `docs` folder
 

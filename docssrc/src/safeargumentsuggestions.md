@@ -4,7 +4,7 @@ So far, we've covered how to replace suggestions using the `replaceSuggestions()
 
 The whole point of the safe argument suggestions method is that parameters entered in this method are **guaranteed** to work.
 
-The use of the safe replace suggestions function is basically the same as `replaceSuggestions()` from the previous section, except instead of returning a `String[]`, you now return a `T[]`, where `T` is the class corresponding to the argument. This is described in more detail in the table below.
+The use of the safe replace suggestions function is the same as `replaceSuggestions()` from the previous section, except instead of returning a `String[]`, you now return a `T[]`, where `T` is the class corresponding to the argument. This is described in more detail in the table below.
 
 ```java
 Argument replaceSafeSuggestions(SafeSuggestions<T> suggestions);
