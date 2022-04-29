@@ -420,7 +420,15 @@ public class CommandAPIHandler<CommandSourceStack> {
 			CommandPermission perm = entry.getValue();
 			CommandAPI.logInfo(perm.toString() + " -> /" + cmdName);
 			
-			String permNode = (perm.equals(CommandPermission.NONE) || perm.isNegated()) ? "" : perm.getPermission().get();
+			final String permNode;
+			if(perm.isNegated() || perm.equals(CommandPermission.NONE) || perm.equals(CommandPermission.OP)) {
+				permNode = "";
+			} else if(perm.getPermission().isPresent()) {
+				permNode = perm.getPermission().get();
+			} else {
+				// This case should never occur. Worth testing this with some assertion
+				permNode = null;
+			}
 			
 			/*
 			 * Sets the permission. If you have to be OP to run this command,
