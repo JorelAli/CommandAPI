@@ -54,6 +54,10 @@ public final class CommandAPI {
 	private static boolean loaded = false;
 
 	static Config getConfiguration() {
+		if(config == null) {
+			getLog().severe("Could not find any configuration for the CommandAPI. Loading basic built-in configuration. Did you forget to call CommandAPI.onLoad(config)?");
+			CommandAPI.onLoad(new CommandAPIConfig());
+		}
 		return config;
 	}
 	
