@@ -1095,6 +1095,8 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 	@Override
 	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
 		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) SimpleHelpMap_helpTopics.get(Bukkit.getServer().getHelpMap());
+		// We have to use VarHandles to use helpTopics.put (instead of .addTopic)
+		// becausewe're updating an existing help topic, not adding a new help topic
 		for(Map.Entry<String, HelpTopic> entry : helpTopicsToAdd.entrySet()) {
 			helpTopics.put(entry.getKey(), entry.getValue());
 		}
