@@ -46,13 +46,13 @@ The `withHelp` method sets both the short description and the full description a
 In this simple example, we implement the above screenshot's help topic. We register a command `/mycmd` and use the `withShortDescription` and `withFullDescription` methods to create a help topic:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:help}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:help}}
 ```
 
 We could also register this command using the `withHelp` method instead:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:help2}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:help2}}
 ```
 
 </div>

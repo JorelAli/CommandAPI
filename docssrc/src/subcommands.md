@@ -29,19 +29,19 @@ add <permission> <groupName>
 
 We can implement this by creating a `CommandAPICommand` with the command name `add`:
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:subcommandspart}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:subcommandspart}}
 ```
 
 Similarly, we have another part `remove <permission> <groupName>`. We can declare this similar to our `add` command. Once we've done that, we can now join everything up together. Here, we create a command `group` which adds the two other subcommands:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:subcommands}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:subcommands}}
 ```
 
 Finally, we can link everything up together to the `perm` command and register the whole thing together:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:subcommandsend}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:subcommandsend}}
 ```
 
 -----
@@ -49,7 +49,7 @@ Finally, we can link everything up together to the `perm` command and register t
 Another, more intuitive method, is to shove everything in one go without creating lots of variables all over the place:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:subcommands1}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:subcommands1}}
 ```
 
 </div>

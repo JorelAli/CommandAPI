@@ -23,7 +23,7 @@ Say we have the following command:
 Let's also say that in our implementation of this command, we don't actually perform any processing for `<value>`. Hence, listing it in the `Object args[]` is unnecessary. 
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:listed}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:listed}}
 ```
 
 In this scenario, the argument `<value>` is not present in the `Object args[]` for the executor.

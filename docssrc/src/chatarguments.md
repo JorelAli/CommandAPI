@@ -29,7 +29,7 @@ Say we want to create a plugin to change the color of a player's username. We wa
 We then use the `ChatColorArgument` to change the player's name color:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:chatcolorarguments}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:chatcolorarguments}}
 ```
 
 </div>

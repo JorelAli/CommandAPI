@@ -81,7 +81,7 @@ Now let's define our command. Since book text is typically very large - too larg
 Now we can create our book command. We use the player as the main target by using their name for the author field, as well as their inventory to place the book. We finally construct our book using the `.setPages(BaseComponent[])` method:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:chatcomponentarguments}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:chatcomponentarguments}}
 ```
 
 </div>
@@ -115,7 +115,7 @@ Say we're on a server with 2 players: _Bob_ and _Michael_. If I were to use the 
 _Bob_ would receive the message "Hello Bob", whereas _Michael_ would receive the message "Hello Michael". We can use the `ChatArgument` to create this "personalized" broadcast:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:chatarguments}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:chatarguments}}
 ```
 
 </div>

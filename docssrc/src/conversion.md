@@ -40,7 +40,7 @@ commands:
 As you can see, it declares 3 commands: `/gmc`, `/gms` and `/i`. We can now begin writing your plugin that uses the CommandAPI converter. We will call this plugin "YourPlugin":
 
 ```java
-public {{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:converter}}
+public {{#include ../../commandapi-core/src/test/java/Examples.java:converter}}
 ```
 
 When this is run, the commands `/gmc`, `/gm1`, `/gms` and `/i` will all be registered by the CommandAPI.
@@ -88,7 +88,7 @@ From this, we can determine that there are the following commands, where "walk" 
 With the EssentialsX plugin, the `<speed>` value can only take numbers between 0 and 10. As such, we'll ensure to apply these limits using the `IntegerArgument`. In addition, since the speed type can only be "walk" or "fly", we'll add that to our converter as well using a `MultiLiteralArgument`:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:converter2}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:converter2}}
 ```
 
 ![](./images/speed.gif)

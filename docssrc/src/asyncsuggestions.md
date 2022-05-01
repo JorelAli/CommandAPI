@@ -64,7 +64,7 @@ Say you wanted to write a command to modify your plugin's config file. Since the
 We make use of the `ArgumentSuggestions.stringsAsync` method to provide asynchronous suggestions. In our completable future implementation, we access the keys from the plugin configuration.
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:asyncreadfile}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:asyncreadfile}}
 ```
 
 </div>

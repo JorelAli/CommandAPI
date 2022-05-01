@@ -34,7 +34,7 @@ Let's say we're writing a plugin with the capability to create warps to places o
 Using the regular CommandAPI, this is one way we can create this command. In the code below, we use StringArguments to represent the warp names. To teleport to a warp, we also populate it with suggestions (deferred so it updates), and also use a subcommand to represent `/warp create`:
 
 ```java
-{{#include ../../CommandAPI/commandapi-annotations/src/test/java/WarpCommand.java:old_warps}}
+{{#include ../../commandapi-annotations/src/test/java/WarpCommand.java:old_warps}}
 ```
 
 Seems fairly straightforward, given everything else covered in this documentation. Now let's compare it to using annotations!
@@ -44,11 +44,11 @@ Seems fairly straightforward, given everything else covered in this documentatio
 I think it's best to show the example and the explain it afterwards:
 
 ```java
-{{#include ../../CommandAPI/commandapi-annotations/src/test/java/WarpCommand.java:warps}}
+{{#include ../../commandapi-annotations/src/test/java/WarpCommand.java:warps}}
 ```
 
 ```java
-{{#include ../../CommandAPI/commandapi-annotations/src/test/java/WarpCommand.java:warps_register}}
+{{#include ../../commandapi-annotations/src/test/java/WarpCommand.java:warps_register}}
 ```
 
 As we can see, the code certainly _looks_ very different to the normal registration method. Let's take it apart piece by piece to see what exactly is going on here.
@@ -56,7 +56,7 @@ As we can see, the code certainly _looks_ very different to the normal registrat
 #### Command declaration
 
 ```java
-{{#include ../../CommandAPI/commandapi-annotations/src/test/java/WarpCommand.java:warps_command}}
+{{#include ../../commandapi-annotations/src/test/java/WarpCommand.java:warps_command}}
 ```
 
 Firstly, we declare our command `warp`. To do this, we use the `@Command` annotation and simply state the name of the command in the annotation. This annotation is attached to the class `WarpCommand`, which indicates that the whole class `WarpCommand` will be housing our command.
@@ -66,7 +66,7 @@ The annotation framework is designed in such a way that an entire command is rep
 #### Default command
 
 ```java
-{{#include ../../CommandAPI/commandapi-annotations/src/test/java/WarpCommand.java:warps_help}}
+{{#include ../../commandapi-annotations/src/test/java/WarpCommand.java:warps_help}}
 ```
 
 Here, declare the main command implementation using the `@Default` annotation. The `@Default` annotation informs the CommandAPI that the method it is attached to does not have any subcommands. This is effectively the same as registering a regular command without using `.withSubcommand()`.
@@ -76,7 +76,7 @@ Here, we simply write what happens when no arguments are run (i.e. the user just
 #### Default command (again!)
 
 ```java
-{{#include ../../CommandAPI/commandapi-annotations/src/test/java/WarpCommand.java:warps_warp}}
+{{#include ../../commandapi-annotations/src/test/java/WarpCommand.java:warps_warp}}
 ```
 
 We also have a second `@Default` annotated method, which handles our `/warp <warp>` command. Because this isn't a subcommand (the warp to teleport to is not a subcommand, it's an argument), we still using the `@Default` annotation. In this method, we include an argument with this command by using the `@AStringArgument` annotation. This argument uses the `StringArgument` class, and the name of this argument is "warpName", which is extracted from the name of the variable. Simply put, **the Annotation for an argument is A** followed by the name of the argument. This is synonymous with using the following:
@@ -92,7 +92,7 @@ The second argument is a `String` object, which represents the result of our arg
 #### Subcommand
 
 ```java
-{{#include ../../CommandAPI/commandapi-annotations/src/test/java/WarpCommand.java:warps_create}}
+{{#include ../../commandapi-annotations/src/test/java/WarpCommand.java:warps_create}}
 ```
 
 Lastly, we declare a subcommand to allow us to run `/warp create <name>`. To do this, we simply use the `@Subcommand` annotation. In this example, we also apply a permission node that is required to run the command by using the `@Permission` annotation. The rest is fairly straight forward - we declare an argument, in this case it's another `StringArgument` , so we use `@AStringArgument` and then declare everything else in a similar fashion to the default command executor.
@@ -102,7 +102,7 @@ Lastly, we declare a subcommand to allow us to run `/warp create <name>`. To do 
 Registering the command is fairly simple and is a one liner:
 
 ```java
-{{#include ../../CommandAPI/commandapi-annotations/src/test/java/WarpCommand.java:warps_register}}
+{{#include ../../commandapi-annotations/src/test/java/WarpCommand.java:warps_register}}
 ```
 
 This line can be placed in your `onEnable()` or `onLoad()` method like you were registering a normal command.

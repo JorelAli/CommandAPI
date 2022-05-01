@@ -24,15 +24,15 @@ The String value is the node that is registered into Minecraft's internal comman
 The CommandAPI is very flexible when it comes to registering arguments, and lets you use a number of different methods to suit your preference:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:argumentsyntax1}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:argumentsyntax1}}
 ```
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:argumentsyntax2}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:argumentsyntax2}}
 ```
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:argumentsyntax3}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:argumentsyntax3}}
 ```
 
 -----
@@ -42,7 +42,7 @@ The CommandAPI is very flexible when it comes to registering arguments, and lets
 To access arguments, they have to be casted to the type that the argument represents. The order of the arguments in the `args[]` is the same as the order in which the arguments were declared.
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:argumentcasting}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:argumentcasting}}
 ```
 
 The type to cast each argument (declared in the `dev.jorel.commandapi.arguments` package) is listed below:
@@ -127,13 +127,13 @@ For example, say we're registering a command `/kill`:
 We first register the first `/kill` command as normal:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:argumentkillcmd}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:argumentkillcmd}}
 ```
 
 Now we declare our command with arguments for our second command. Then, we can register our second command `/kill <target>` as usual:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:argumentkillcmd2}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:argumentkillcmd2}}
 ```
 
 This gives us the ability to run both `/kill` and `/kill <target>` with the same command name "kill", but have different results based on the arguments used.

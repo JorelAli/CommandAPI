@@ -17,7 +17,7 @@ Say we want to create a new world on our Minecraft server. To do this, we need t
 Using the world name and the environment of the world, we can use Bukkit's `WorldCreator` to create a new world that matches our provided specifications:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:environmentarguments}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:environmentarguments}}
 ```
 
 </div>
