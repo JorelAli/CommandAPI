@@ -212,7 +212,7 @@ For instance, instead of unregistering `/gamemode`, you could register a command
 To replace a command, we can first unregister it and then register our implementation of that command.
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:commandunregistration}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:commandunregistration}}
 ```
 
 </div>

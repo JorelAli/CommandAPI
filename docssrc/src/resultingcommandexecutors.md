@@ -25,7 +25,7 @@ The concept of result values are better explained through examples:
 Say we want a command that returns a random number as a result. This can then be used by vanilla Minecraft's `/execute store result ...` command, which can be used for other command block chains.
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:resultingcommandexecutor}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:resultingcommandexecutor}}
 ```
 
 This returns a **success value of 1** _(Because no errors or `CommandAPI.fail(String)` was thrown)_ and a **result value of a random number**.
@@ -48,13 +48,13 @@ To do this, we'll declare two commands:
 Since we're declaring commands that are to be used in `/execute`, we must ensure that these commands are registered in your plugin's `onLoad()` method. First, we write our implementation for `/randomnumber`. It is fairly straight forward using Java's `ThreadLocalRandom` to generate a random number:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:resultingcommandexecutor2}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:resultingcommandexecutor2}}
 ```
 
 Now we write our implementation for `/givereward`. In this example, we use the `EntitySelectorArgument` to select a single player. We cast it to `Player` and then add the items to their inventory.
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:resultingcommandexecutor3}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:resultingcommandexecutor3}}
 ```
 
 -----

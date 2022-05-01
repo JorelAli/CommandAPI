@@ -36,5 +36,5 @@ The CommandAPI has a few configuration options to change how it functions. These
 The default `config.yml` is shown below:
 
 ```yaml
-{{#include ../../CommandAPI/commandapi-plugin/src/main/resources/config.yml}}
+{{#include ../../commandapi-plugin/src/main/resources/config.yml}}
 ```

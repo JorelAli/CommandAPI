@@ -3,7 +3,7 @@
 As described in [The ArgumentSuggestions interface](./argumentsuggestions.md#the-argumentsuggestions-interface), the `ArgumentSuggestions` interface has the following default method:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/main/java/dev/jorel/commandapi/arguments/ArgumentSuggestions.java:Declaration}}
+{{#include ../../commandapi-core/src/main/java/dev/jorel/commandapi/arguments/ArgumentSuggestions.java:Declaration}}
 
 }
 ```
@@ -23,7 +23,7 @@ Courtesy of [469512345](https://github.com/469512345), the following example sho
 For this command, we'll use a `GreedyStringArgument` because that allows users to enter any combination of characters (which therefore, allows users to enter any command). First, we start by defining the suggestions that we'll use for the `GreedyStringArgument`. We'll use the `ArgumentSuggestions` functional interface described above:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:BrigadierSuggestions1}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:BrigadierSuggestions1}}
 ```
 
 There's a lot to unpack there, but it's generally split up into 4 key sections:
@@ -45,7 +45,7 @@ Now that we've declared our arguments suggestions, we can then create our simple
 We use the command suggestions declared above by using the `replaceSuggestions` method in our `GreedyStringArgument`, and write a simple executor which runs the command that the user provided:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:BrigadierSuggestions2}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:BrigadierSuggestions2}}
 ```
 
 </div>

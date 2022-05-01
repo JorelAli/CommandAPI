@@ -28,12 +28,12 @@ To add a permission to a command, you can use the `withPermission(CommandPermiss
 Say we created a command `/god` that sets a player as being invulnerable. Since this is a pretty non-survival command, we want to restrict who can run this command. As such, we want our player to have the permission `command.god` in order to run this command. To do this, we simply use the `withPermission(CommandPermission)` method from our command builder:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:permissions}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:permissions}}
 ```
 
 As stated above, it is possible to assign a permission using a String instead of using `CommandPermission.fromString()`:
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:permissions2}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:permissions2}}
 ```
 
 </div>
@@ -67,13 +67,13 @@ For example, say we're registering a command `/kill`:
 We first declare the command as normal. Nothing fancy is going on here:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:permissions3_1}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:permissions3_1}}
 ```
 
 Now we declare our command with arguments. We use a `PlayerArgument` and apply the permission _to the argument_. After that, we register our command as normal:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:permissions3_2}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:permissions3_2}}
 ```
 
 </div>

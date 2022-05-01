@@ -17,7 +17,7 @@ Say we want a simple command that plays a specific sound at your location. To do
 This command simply plays the provided sound to the current player:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:soundarguments}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:soundarguments}}
 ```
 
 </div>

@@ -19,7 +19,7 @@ Since it's a little difficult to demonstrate a custom use for the `FunctionArgum
 When provided with a function, it will execute that function. If instead a tag is provided, it will execute that tag (i.e. execute all functions declared in that tag).
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:functionarguments2}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:functionarguments2}}
 ```
 
 </div>

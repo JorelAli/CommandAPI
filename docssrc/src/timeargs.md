@@ -21,7 +21,7 @@ Say we have a command `bigmsg` that displays a title message to all players for 
 ```
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:timearguments}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:timearguments}}
 ```
 
 </div>

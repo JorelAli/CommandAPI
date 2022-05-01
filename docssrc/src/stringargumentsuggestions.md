@@ -17,7 +17,7 @@ Say we're creating a plugin with the ability to teleport to different warps on t
 We then implement our warp teleporting command using `replaceSuggestions()` on the `StringArgument` to provide a list of warps to teleport to:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:ArgumentSuggestions1}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:ArgumentSuggestions1}}
 ```
 
 </div>
@@ -44,13 +44,13 @@ Say you have a plugin which has a "friend list" for players. If you want to tele
 Let's say we have a simple class to get the friends of a command sender:
 
 ```java
-public {{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:ArgumentSuggestions2_1}}
+public {{#include ../../commandapi-core/src/test/java/Examples.java:ArgumentSuggestions2_1}}
 ```
 
 We can then use this to generate our suggested list of friends:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:ArgumentSuggestions2_2}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:ArgumentSuggestions2_2}}
 ```
 
 </div>
@@ -101,7 +101,7 @@ Say we wanted to create a command that lets you send a message to a specific pla
 When run, this command will send a message to a target player within the provided radius. To help identify which players are within a radius, we can replace the suggestions on the `<target>` argument to include a list of players within the provided radius. We do this with the following code:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:ArgumentSuggestionsPrevious}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:ArgumentSuggestionsPrevious}}
 ```
 
 As shown in this code, we use the `previousArgs()` method access the previously declared arguments. In this example, `info.previousArgs()` will be `{ int }`, where this `int` refers to the radius. Note how this object array only has the previously declared arguments (and not for example `{ int, Player, String }`).
