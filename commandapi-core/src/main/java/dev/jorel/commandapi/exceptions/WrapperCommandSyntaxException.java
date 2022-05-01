@@ -60,11 +60,6 @@ public class WrapperCommandSyntaxException extends Exception {
 	// Overrides. Because this exception is effectively a CommandSyntaxException, we
 	// pass all Exception-related methods to this.exception
 
-	@Override
-	public synchronized Throwable fillInStackTrace() {
-		return this.exception.fillInStackTrace();
-	}
-
 	/**
 	 * Returns the message together with the position it occurred on and some
 	 * context.
