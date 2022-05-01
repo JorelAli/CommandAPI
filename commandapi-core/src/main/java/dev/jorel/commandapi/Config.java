@@ -74,11 +74,9 @@ class Config {
 		this.skipSenderProxy = new ArrayList<>();
 		this.commandsToConvert = new ArrayList<>();
 
-		// TODO: This works for the specific case, but doesn't work for the general case. This should
-		// not trigger if there is a list of plugins (and no specific commands)
-//		if(!fileConfig.getList("plugins-to-convert").isEmpty() && fileConfig.getMapList("plugins-to-convert").isEmpty()) {
-//			CommandAPI.getLog().severe("plugins-to-convert has an invalid type. Did you miss a colon (:) after a plugin name?");
-//		}
+		if(!fileConfig.getList("plugins-to-convert").isEmpty() && fileConfig.getMapList("plugins-to-convert").isEmpty()) {
+			CommandAPI.getLog().severe("plugins-to-convert has an invalid type. Did you miss a colon (:) after a plugin name?");
+		}
 
 		for (Map<?, ?> map : fileConfig.getMapList("plugins-to-convert")) {
 			String[] pluginCommands;
