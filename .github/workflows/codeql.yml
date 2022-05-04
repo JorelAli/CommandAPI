@@ -42,7 +42,7 @@ jobs:
       with:
         distribution: 'adopt'
         java-version: '17'
-    
+
     - name: Checkout repository
       uses: actions/checkout@v3
 
