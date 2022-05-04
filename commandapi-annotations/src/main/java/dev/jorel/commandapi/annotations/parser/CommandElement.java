@@ -50,6 +50,10 @@ public abstract class CommandElement {
 	}
 
 	public boolean emitPermission(PrintWriter out, CommandPermission permission) {
+		// TODO: This case should never occur
+		if(permission == null) {
+			return false;
+		}
 		if (permission.equals(CommandPermission.NONE)) {
 			// Do nothing
 			return false;

@@ -69,27 +69,27 @@ public class InvalidCommand {
 		player.teleport(warps.get(warpName));
 	}
 	
-	@Suggestion
-	public ArgumentSuggestions aaaaa() {
-		return ArgumentSuggestions.strings("hi", "bye");
-	}
+//	@Suggestion
+//	public ArgumentSuggestions aaaaa() {
+//		return ArgumentSuggestions.strings("hi", "bye");
+//	}
 	
 	public SafeSuggestions<Location> aaaaaaaaaaa() {
 		return SafeSuggestions.suggest(new Location(null, 1, 2, 3));
 	}
 	
-	@Subcommand("create")
-	@Permission("warps.create")
-	@Executors({ExecutorType.ENTITY, ExecutorType.PLAYER})
-	public void createWarp(
-			CommandSender sender, 
-			@Suggests("aaaaa") @AStringArgument String warpName
-	) throws WrapperCommandSyntaxException {
-		
-		warps.put(warpName, ((LivingEntity) sender).getLocation());
-		throw CommandAPI.fail("");
-		
-	}
+//	@Subcommand("create")
+//	@Permission("warps.create")
+//	@Executors({ExecutorType.ENTITY, ExecutorType.PLAYER})
+//	public void createWarp(
+//			CommandSender sender, 
+//			@Suggests("aaaaa") @AStringArgument String warpName
+//	) throws WrapperCommandSyntaxException {
+//		
+//		warps.put(warpName, ((LivingEntity) sender).getLocation());
+//		throw CommandAPI.fail("");
+//		
+//	}
 	
 	@Subcommand("create")
 	@Permission("warps.create")
