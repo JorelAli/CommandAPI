@@ -8,10 +8,7 @@ import com.google.devtools.ksp.symbol.*
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.annotations.*
 import dev.jorel.commandapi.annotations.arguments.*
-import dev.jorel.commandapi.arguments.EntitySelectorArgument
-import dev.jorel.commandapi.arguments.LocationType
-import dev.jorel.commandapi.arguments.MultiLiteralArgument
-import dev.jorel.commandapi.arguments.ScoreHolderArgument
+import dev.jorel.commandapi.arguments.*
 import java.io.OutputStreamWriter
 import kotlin.reflect.KClass
 

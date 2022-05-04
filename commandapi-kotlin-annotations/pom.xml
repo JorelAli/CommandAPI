@@ -53,18 +53,38 @@
 			<artifactId>symbol-processing-api</artifactId>
 			<version>${kotlin.version}-${ksp.version}</version>
 		</dependency>
+		<!-- Testing libraries -->
+		<dependency>
+			<groupId>org.jetbrains.kotlin</groupId>
+			<artifactId>kotlin-test-junit</artifactId>
+			<version>${kotlin.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>5.8.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot-api</artifactId>
+			<version>1.18.2-R0.1-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<properties>
 		<kotlin.version>1.6.21</kotlin.version>
-		<kotlin.compiler.incremental>true</kotlin.compiler.incremental>
+		<!-- Even though this may sound nice, this must be turned off for tests to work! -->
+		<kotlin.compiler.incremental>false</kotlin.compiler.incremental>
 		<ksp.version>1.0.5</ksp.version>
 		<kspm.version>1.2.1</kspm.version>
 	</properties>
 
 	<build>
-		<sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
-		<testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
+		<sourceDirectory>src/main/kotlin</sourceDirectory>
+		<testSourceDirectory>src/test/kotlin</testSourceDirectory>
 		<plugins>
 			<plugin>
 				<groupId>org.jetbrains.kotlin</groupId>
@@ -72,15 +92,18 @@
 				<version>${kotlin.version}</version>
 				<executions>
 					<execution>
-						<id>compile</id>
+						<id>test-compile</id>
+						<phase>test-compile</phase>
 						<goals>
-							<goal>compile</goal>
+							<goal>test-compile</goal>
 						</goals>
 					</execution>
 					<execution>
-						<id>test-compile</id>
+						<id>compile</id>
+						<!--suppress KotlinMavenPluginPhase -->
+						<phase>compile</phase>
 						<goals>
-							<goal>test-compile</goal>
+							<goal>compile</goal>
 						</goals>
 					</execution>
 				</executions>
@@ -91,6 +114,7 @@
 					<compilerPlugins>
 						<compilerPlugin>ksp</compilerPlugin>
 					</compilerPlugins>
+					<jvmTarget>1.8</jvmTarget>
 				</configuration>
 				<dependencies>
 					<dependency>
@@ -98,7 +122,17 @@
 						<artifactId>kotlin-maven-symbol-processing</artifactId>
 						<version>${kspm.version}</version>
 					</dependency>
+					<dependency>
+						<groupId>dev.jorel</groupId>
+						<artifactId>commandapi-kotlin-annotations</artifactId>
+						<version>${project.version}</version>
+					</dependency>
 				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.1</version>
 			</plugin>
 		</plugins>
 	</build>

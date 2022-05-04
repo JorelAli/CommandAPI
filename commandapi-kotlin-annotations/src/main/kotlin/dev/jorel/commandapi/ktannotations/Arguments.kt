@@ -1,6 +1,7 @@
 package dev.jorel.commandapi.ktannotations
 
 import dev.jorel.commandapi.annotations.arguments.*
+import dev.jorel.commandapi.arguments.PlayerArgument
 
 val argumentAnnotations = arrayOf(
 	AAdvancementArgument::class,
@@ -54,4 +55,4 @@ val argumentAnnotations = arrayOf(
 	AUUIDArgument::class
 )
 
-val argumentsPackage = APlayerArgument::class.java.packageName
+val argumentsPackage: String = PlayerArgument::class.java.packageName
