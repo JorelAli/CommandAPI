@@ -26,7 +26,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.0.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.1.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -92,7 +92,8 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
  <br  />
  A Bukkit/Spigot API to use the command UI introduced in Minecraft 1.13 <br  />
  </h2>
-<div align="center"></div><div align="center"><img src="https://img.shields.io/github/license/JorelAli/CommandAPI" alt="GitHub" class="inline"/> <a href="https://www.codefactor.io/repository/github/jorelali/commandapi"><img src="https://www.codefactor.io/repository/github/jorelali/commandapi/badge" alt="CodeFactor" class="inline"/></a> <img src="https://img.shields.io/maven-central/v/dev.jorel/commandapi" alt="Maven Central" class="inline"/> <a href="https://discord.gg/G4SzSxZ"><img src="https://img.shields.io/discord/745416925924032523.svg?label=&amp;logo=discord&amp;logoColor=ffffff&amp;color=7389D8&amp;labelColor=6A7EC2" alt="Join us on Discord" style="pointer-events: none;" class="inline"/></a> <br  />
+<div align="center"></div><div align="center"><img src="https://img.shields.io/github/license/JorelAli/CommandAPI" alt="GitHub" class="inline"/> <img src="https://img.shields.io/maven-central/v/dev.jorel/commandapi" alt="Maven Central" class="inline"/> <a href="https://discord.gg/G4SzSxZ"><img src="https://img.shields.io/discord/745416925924032523.svg?label=&amp;logo=discord&amp;logoColor=ffffff&amp;color=7389D8&amp;labelColor=6A7EC2" alt="Join us on Discord" style="pointer-events: none;" class="inline"/></a> <br  />
+ <a href="https://www.codefactor.io/repository/github/jorelali/commandapi"><img src="https://www.codefactor.io/repository/github/jorelali/commandapi/badge" alt="CodeFactor" class="inline"/></a> <img src="https://img.shields.io/github/workflow/status/JorelAli/CommandAPI/build/master" alt="GitHub Workflow Status (master)" class="inline"/> <img src="https://img.shields.io/github/workflow/status/JorelAli/CommandAPI/build/dev/dev?label=dev%20build" alt="GitHub Workflow Status (dev/dev)" class="inline"/> <br  />
  <img src="https://img.shields.io/spiget/download-size/62353" alt="Spiget Download Size" class="inline"/> <img src="https://img.shields.io/spiget/downloads/62353?label=Total%20Spigot%20Downloads" alt="Spiget Downloads" class="inline"/> <img src="https://img.shields.io/github/downloads/JorelAli/CommandAPI/total?label=Total%20GitHub%20Downloads" alt="GitHub all releases" class="inline"/> </div><p ><b>Support and Project Discussion</b>:</p>
 <ul>
 <li><img src="https://cdn3.iconfinder.com/data/icons/popular-services-brands-vol-2/512/discord-512.png" alt="" width="20px" class="inline"/> <a href="https://discord.gg/G4SzSxZ">Discord</a></li>
@@ -117,13 +118,13 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <li><b>Minecraft 1.16.4</b>: CommandAPI v5.2 to 5.12</li>
 <li><b>Minecraft 1.16.5</b>: CommandAPI v5.7 to 7.0.0</li>
 <li><em><b>For Minecraft 1.17 or higher, you'll need Java 16 or higher</b></em><ul>
-<li><b>Minecraft 1.17</b>: CommandAPI 6.0.x to 6.4.x (Java 16) or 7.0.0 to 8.0.0 (Java 17)</li>
-<li><b>Minecraft 1.17.1</b>: CommandAPI 6.1.x to 6.4.x (Java 16) or 7.0.0 to 8.0.0 (Java 17)</li>
+<li><b>Minecraft 1.17</b>: CommandAPI 6.0.x to 6.4.x (Java 16) or 7.0.0 to 8.1.0 (Java 17)</li>
+<li><b>Minecraft 1.17.1</b>: CommandAPI 6.1.x to 6.4.x (Java 16) or 7.0.0 to 8.1.0 (Java 17)</li>
 </ul>
 </li>
 <li><em><b>For Minecraft 1.18 or higher, you'll need Java 17 or higher</b></em><ul>
-<li><b>Minecraft 1.18, 1.18.1</b>: CommandAPI 6.5.2 to 8.0.0</li>
-<li><b>Minecraft 1.18.2</b>: CommandAPI 6.5.4 to 8.0.0</li>
+<li><b>Minecraft 1.18, 1.18.1</b>: CommandAPI 6.5.2 to 8.1.0</li>
+<li><b>Minecraft 1.18.2</b>: CommandAPI 6.5.4 to 8.1.0</li>
 </ul>
 </li>
 </ul>
@@ -307,10 +308,9 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <li><p class="startli">Clone the repository using your preferred method, or with the command below:</p>
 <div class="fragment"><div class="line">git clone https://github.com/JorelAli/CommandAPI.git</div>
 </div><!-- fragment --></li>
-<li>Go into the folder named <code>CommandAPI</code> _(Not to be confused with the folder named <code>CommandAPI</code>, which is what was just cloned)_. You want the folder which contains <code>pom.xml</code>.</li>
 <li>Run <code>mvn</code></li>
 </ul>
-<p >The resulting plugin <code>.jar</code> is found in <code>commandapi-plugin/target/CommandAPIvX.X.X_DATE.jar</code></p>
+<p >The resulting plugin <code>.jar</code> is found in <code>commandapi-plugin/target/CommandAPI-X.X.X_DATE.jar</code></p>
 <h2>Building the CommandAPI's documentation</h2>
 <p >The CommandAPI's documentation is built using a custom version of <a href="https://rust-lang.github.io/mdBook/">mdBook</a>, a command line tool to create "books" with Markdown. This custom version can be found <a href="https://github.com/JorelAli/mdBook/releases">in my mdBook fork</a>.</p>
 <ul>
@@ -358,6 +358,22 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <p >Version </p>
 <p >Date </p>
 <p >Features / Changes  &lt;/thead&gt; &lt;tbody&gt; </p>
+<p ><b>8.1.0</b> </p>
+<p >May 2022 </p>
+<ul>
+<li>
+Adds generic types to arguments to improve compile-time type checking </li>
+<li>
+Fix particle data safe suggestions crashing the CommandAPI </li>
+<li>
+Improves error logging of greedy string arguments </li>
+<li>
+Fix bug with <code>CommandPermission.OP</code> throwing a null pointer exception </li>
+<li>
+Prevent the CommandAPI crashing when shaded plugins don't call <code>CommandAPI.onLoad()</code> </li>
+<li>
+Fix initialization of <code>WrapperCommandSyntaxException</code> bug </li>
+</ul>
 <p ><b>8.0.0</b> </p>
 <p >April 2022 </p>
 <ul>
@@ -367,6 +383,10 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 Improved support for particle arguments, now supporting particle data (e.g. color, size) </li>
 <li>
 Dropped support for Minecraft 1.16.5 </li>
+<li>
+Adds an error message if the <code>config.yml</code>'s <code>plugins-to-convert</code> option has an invalid type </li>
+<li>
+Improve <code>WrapperCommandSyntaxException</code> to include passthrough methods to access the underlying exception </li>
 </ul>
 <p ><b>7.0.0</b> </p>
 <p >April 2022 </p>
@@ -1249,7 +1269,7 @@ Initial release </li>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Apr 26 2022 21:38:48 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Wed May 4 2022 14:13:39 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

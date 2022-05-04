@@ -25,14 +25,6 @@
 var NAVTREE =
 [
   [ "CommandAPI", "index.html", [
-    [ "Deprecated List", "deprecated.html", null ],
-    [ "Packages", "namespaces.html", [
-      [ "Packages", "namespaces.html", "namespaces_dup" ],
-      [ "Package Functions", "namespacemembers.html", [
-        [ "All", "namespacemembers.html", null ],
-        [ "Functions", "namespacemembers_func.html", null ]
-      ] ]
-    ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
@@ -49,18 +41,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"classcom_1_1mojang_1_1brigadier_1_1builder_1_1_literal_argument_builder.html#aba9697a347007a4ac393c3dd80c08840",
-"classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestion.html#a6626519f81e6aabb0746a701fea245c5",
-"classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a0fbec78135f7187645851ee4e12a74f3",
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a136d1fafa00702ec911803427d3c8642",
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_chat_component_argument.html#a2168e67f0a32516350b6b35ce8569130",
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_float_range_argument.html#a7285ee1803a67ac18eeebe1e82530b21",
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_math_operation_argument.html#a2f0ed384b5c4006f270f0e206b7184c0",
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html#a629f16eee93df35d839f046fd05ed6a9",
-"classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_greedy_argument_exception.html",
-"enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a4535ee872eb09f7b4b67d58db32aa2f7",
-"interfacecom_1_1mojang_1_1brigadier_1_1_message.html",
-"interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_console_command_executor.html#a07e4949cad5fd9a8c08d2681a5c94227"
+"classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestion.html#a6626519f81e6aabb0746a701fea245c5"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
