@@ -73,7 +73,8 @@
 		<module>commandapi-plugin</module>
 		<module>commandapi-shade</module>
 		<module>commandapi-annotations</module>
-	</modules>
+        <module>commandapi-kotlin-annotations</module>
+    </modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
