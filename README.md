@@ -48,11 +48,11 @@ The list of what version of the CommandAPI you'll need to run on a specific vers
 - **Minecraft 1.16.4**: CommandAPI v5.2 to 5.12
 - **Minecraft 1.16.5**: CommandAPI v5.7 to 7.0.0
 - _**For Minecraft 1.17 or higher, you'll need Java 16 or higher**_
-  - **Minecraft 1.17**: CommandAPI 6.0.x to 6.4.x (Java 16) or 7.0.0 to 8.0.0 (Java 17)
-  - **Minecraft 1.17.1**: CommandAPI 6.1.x to 6.4.x (Java 16) or 7.0.0 to 8.0.0 (Java 17)
+  - **Minecraft 1.17**: CommandAPI 6.0.x to 6.4.x (Java 16) or 7.0.0 to 8.1.0 (Java 17)
+  - **Minecraft 1.17.1**: CommandAPI 6.1.x to 6.4.x (Java 16) or 7.0.0 to 8.1.0 (Java 17)
 - _**For Minecraft 1.18 or higher, you'll need Java 17 or higher**_
-  - **Minecraft 1.18, 1.18.1**: CommandAPI 6.5.2 to 8.0.0
-  - **Minecraft 1.18.2**: CommandAPI 6.5.4 to 8.0.0
+  - **Minecraft 1.18, 1.18.1**: CommandAPI 6.5.2 to 8.1.0
+  - **Minecraft 1.18.2**: CommandAPI 6.5.4 to 8.1.0
 
 -----
 
@@ -323,6 +323,19 @@ This is the current roadmap for the CommandAPI (as of 13th April 2022):
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td valign="top"><b>8.1.0</b></td>
+            <td valign="top">May 2022</td>
+            <td valign="top">
+                <ul>
+                    <li>Adds generic types to arguments to improve compile-time type checking</li>
+                    <li>Improves error logging of greedy string arguments</li>
+                    <li>Fix bug with <code>CommandPermission.OP</code> throwing a null pointer exception</li>
+                    <li>Prevent the CommandAPI crashing when shaded plugins don't call <code>CommandAPI.onLoad()</code></li>
+                    <li>Fix initialization of <code>WrapperCommandSyntaxException</code> bug</li>
+                </ul>
+            </td>
+        </tr>
         <tr>
             <td valign="top"><b>8.0.0</b></td>
             <td valign="top">April 2022</td>
