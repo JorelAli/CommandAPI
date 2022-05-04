@@ -9,7 +9,7 @@ Since this argument depends on the NBT API, if this is used and the NBT API is n
 ### Example - ???
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:nbtcompoundarguments}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:nbtcompoundarguments}}
 ```
 
 </div>

@@ -4,7 +4,7 @@ So far, we've been using only the CommandAPI to register commands. As a result, 
 
 > **Developer's Note:**
 >
-> For those that are unaware, [brigadier](https://github.com/Mojang/brigadier) is Mojang's command parser and dispatching framework. This is basically what the CommandAPI wraps around and is the main underlying source of its functionality.
+> For those that are unaware, [brigadier](https://github.com/Mojang/brigadier) is Mojang's command parser and dispatching framework. This is what the CommandAPI wraps around and is the main underlying source of its functionality.
 
 The CommandAPI has been designed in such a way that you shouldn't have to access NMS in order to make use of the more "advanced" arguments and features - if you find that NMS is required to do something, [please make a new issue](https://github.com/JorelAli/CommandAPI/issues/new/choose)!
 
@@ -95,37 +95,37 @@ In this scenario, if we ran this command, we would expect "Hello!" to appear in 
 Now that we've established what we want, we can finally begin writing the code! First we want to create a literal `randomchance`. It's a literal because literal values don't change (similar to say `run` or `if` from the `/execute` command). To create a literal, we'll use the `fromLiteralArgument` method described above, and then build it using the `.build()` method:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:declareliteral}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:declareliteral}}
 ```
 
 With that completed, we can now create our "argument" to this predicate. To do this, we'll use the regular declaration of arguments that we would normally use for commands. In this example, because we're computing \\(\frac{numerator}{denominator}\\), we want our numerator to be 0 or greater and our denominator to be 1 or greater (we don't want any negative numbers or division by zero!):
 
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:declarearguments}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:declarearguments}}
 ```
 Now we're going to get into the very nitty-gritty part - the predicate declaration. First, we'll create some variables `numerator` and `denominator` to represent the brigadier instances of these arguments. This can be handled by using the `Brigadier.argBuildOf` function:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:declareargumentbuilders}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:declareargumentbuilders}}
 ```
 
 Now we'll define our predicate. Since this is sort of a "meta-command" (it directly affects the outcome of the `run` command), we need to use the `ArgumentBuilder`'s `fork` method. Remember that after we run this predicate, we want to link back to `execute` again, so our first argument is the `CommandNode` for `execute`, which we can get using `Brigadier.getRootNode().getChild("execute")`. Then, we can simply use `Brigadier.fromPredicate` to finish our declaration:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:declarefork}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:declarefork}}
 ```
 
 Finally, we can now link everything up. We know that `numerator` comes first, **then** `denominator`, so we have to have `numerator.then(denominator)`. We also know that these arguments are the **children** of the `randomChance` literal, so we use the following code to state all of this:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:declarerandomchance}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:declarerandomchance}}
 ```
 
 Finally, we "register" the command. In this case, we're actually just adding the `randomChance` node under \\(\texttt{execute}\rightarrow\texttt{if}\\), which we can add using the following code:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:injectintoroot}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:injectintoroot}}
 ```
 
 -----
@@ -135,7 +135,7 @@ Finally, we "register" the command. In this case, we're actually just adding the
 So, hopefully that wasn't too confusing! If you're still lost, here's the whole code that we wrote:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:brigadier}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:brigadier}}
 ```
 
 

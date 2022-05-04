@@ -17,7 +17,7 @@ Say we want to create a command that gives you items. For this command, we will 
 With this syntax, we can easily create our command:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:itemstackarguments}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:itemstackarguments}}
 ```
 
 </div>

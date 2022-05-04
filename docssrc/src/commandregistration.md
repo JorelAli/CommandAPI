@@ -177,7 +177,7 @@ Registers the command.
 
 ## Command loading order
 
-In order to register commands properly, **commands must be registered before the server finishes loading**. The CommandAPI will output a warning if you register a command after the server has loaded. This basically means that all command registration must occur during a plugin's `onLoad()` or `onEnable()` method. With the CommandAPI, depending on whether you use `onLoad()` or `onEnable()` to load your commands depends on whether your plugin is used with Minecraft's functions:
+In order to register commands properly, **commands must be registered before the server finishes loading**. The CommandAPI will output a warning if you register a command after the server has loaded. This means that all command registration must occur during a plugin's `onLoad()` or `onEnable()` method. With the CommandAPI, depending on whether you use `onLoad()` or `onEnable()` to load your commands depends on whether your plugin is used with Minecraft's functions:
 
 | When to load        | What to do                                                                                                     |
 | ------------------- | -------------------------------------------------------------------------------------------------------------- |
@@ -212,7 +212,7 @@ For instance, instead of unregistering `/gamemode`, you could register a command
 To replace a command, we can first unregister it and then register our implementation of that command.
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:commandunregistration}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:commandunregistration}}
 ```
 
 </div>

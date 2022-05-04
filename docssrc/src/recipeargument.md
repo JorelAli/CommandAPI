@@ -17,7 +17,7 @@ Say we want to give yourself the result of a specific recipe. Since Bukkit's `Re
 As such, we easily implement it by specifying the `RecipeArgument`, casting it and adding it to the player's inventory:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:recipearguments}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:recipearguments}}
 ```
 
 </div>
@@ -35,7 +35,7 @@ In this example, we'll use the `ComplexRecipe`'s `getKey()` method to write an e
 This is then implemented trivially as follows:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:recipearguments2}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:recipearguments2}}
 ```
 
 </div>

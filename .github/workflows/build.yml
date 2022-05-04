@@ -26,42 +26,40 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
       - name: build CommandAPI using maven
-        run: |
-          cd CommandAPI
-          mvn clean package
+        run: mvn clean package
       - name: CommandAPI plugin artifact
         if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from latest java on one OS
         uses: actions/upload-artifact@v2
         with:
           name: CommandAPI (plugin)
           path: |
-            CommandAPI/commandapi-plugin/target/CommandAPI*.jar
-            !CommandAPI/commandapi-plugin/target/*sources.jar
-            !CommandAPI/commandapi-plugin/target/*javadoc.jar
+            commandapi-plugin/target/CommandAPI*.jar
+            !commandapi-plugin/target/*sources.jar
+            !commandapi-plugin/target/*javadoc.jar
       - name: CommandAPI core artifact
         if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from latest java on one OS
         uses: actions/upload-artifact@v2
         with:
           name: CommandAPI (core)
           path: |
-            CommandAPI/commandapi-core/target/CommandAPI*.jar
-            !CommandAPI/commandapi-core/target/*sources.jar
-            !CommandAPI/commandapi-core/target/*javadoc.jar
+            commandapi-core/target/CommandAPI*.jar
+            !commandapi-core/target/*sources.jar
+            !commandapi-core/target/*javadoc.jar
       - name: CommandAPI shade artifact
         if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from latest java on one OS
         uses: actions/upload-artifact@v2
         with:
           name: CommandAPI (shade)
           path: |
-            CommandAPI/commandapi-shade/target/CommandAPI*.jar
-            !CommandAPI/commandapi-shade/target/*sources.jar
-            !CommandAPI/commandapi-shade/target/*javadoc.jar
+            commandapi-shade/target/CommandAPI*.jar
+            !commandapi-shade/target/*sources.jar
+            !commandapi-shade/target/*javadoc.jar
       - name: CommandAPI annotations artifact
         if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from latest java on one OS
         uses: actions/upload-artifact@v2
         with:
           name: CommandAPI (annotations)
           path: |
-            CommandAPI/commandapi-annotations/target/CommandAPI*.jar
-            !CommandAPI/commandapi-annotations/target/*sources.jar
-            !CommandAPI/commandapi-annotations/target/*javadoc.jar
+            commandapi-annotations/target/CommandAPI*.jar
+            !commandapi-annotations/target/*sources.jar
+            !commandapi-annotations/target/*javadoc.jar

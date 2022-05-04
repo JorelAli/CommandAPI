@@ -9,7 +9,7 @@ The `LootTableArgument` class can be used to get a Bukkit `LootTable` object.
 ### Example - Filling an inventory with loot table contents
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:loottablearguments}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:loottablearguments}}
 ```
 
 > **Developer's Note:**
