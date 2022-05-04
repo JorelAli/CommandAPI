@@ -329,6 +329,7 @@ This is the current roadmap for the CommandAPI (as of 13th April 2022):
             <td valign="top">
                 <ul>
                     <li>Adds generic types to arguments to improve compile-time type checking</li>
+                    <li>Fix particle data safe suggestions crashing the CommandAPI</li>
                     <li>Improves error logging of greedy string arguments</li>
                     <li>Fix bug with <code>CommandPermission.OP</code> throwing a null pointer exception</li>
                     <li>Prevent the CommandAPI crashing when shaded plugins don't call <code>CommandAPI.onLoad()</code></li>
