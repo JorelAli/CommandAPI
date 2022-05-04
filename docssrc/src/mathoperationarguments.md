@@ -61,7 +61,7 @@ Using the `MathOperationArgument`, we can extend the functionality of adding and
 As with any command, we declare our arguments, cast them properly and then we write our main code. In this example, we use the `apply(int, int)` method from our `MathOperation` to calculate the player's new level.
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:mathoperationarguments}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:mathoperationarguments}}
 ```
 
 -----

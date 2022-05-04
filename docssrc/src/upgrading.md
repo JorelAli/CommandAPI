@@ -1,5 +1,39 @@
 # Upgrading guide
 
+## From 8.0.0 to 8.1.0
+
+Arguments are now parameterized over a generic type. This does very little in terms of the running of the CommandAPI, but does ensure type safety with its internals. Instances of the `Argument` type now have to be parameterized. In general, this basically means:
+
+```java
+Argument myArgument = new GreedyStringArgument("arg");
+```
+
+\\[\downarrow\\]
+
+```java
+Argument<?> myArgument = new GreedyStringArgument("arg");
+```
+
+Arguments that have multiple return types also need to be parameterized over their return type. This includes:
+
+- `CustomArgument`
+- `EntitySelectorArgument`
+- `ScoreholderArgument`
+
+For example:
+
+```java
+new EntitySelectorArgument("target", EntitySelector.ONE_PLAYER);
+```
+
+\\[\downarrow\\]
+
+```java
+new EntitySelectorArgument<Player>("target", EntitySelector.ONE_PLAYER);
+```
+
+-----
+
 ## From version 7.0.0 to 8.0.0
 
 ### Particle arguments

@@ -48,7 +48,7 @@ Say we wanted to have a command that displayed particles at a player's location.
 With this, we can simply spawn the particle using the `World.spawnParticle(Particle, Location, int)` method:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:particlearguments}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:particlearguments}}
 ```
 
 Running this can result in errors due to missing requirements. If you provide a particle that has additional requirements, Bukkit will throw an error and the particle will not be displayed. Instead, the example below should be used.
@@ -68,7 +68,7 @@ We can fix the issues with the example above by providing the data of the argume
 In this case, we'll use the `World.spawnParticle(Particle particle, Location location, int count, T data)` method which accepts some particle data:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:particlearguments2}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:particlearguments2}}
 ```
 
 This can be used with commands such as:

@@ -48,7 +48,7 @@ public class CommandAPIConfig {
 The `CommandAPIConfig` class follows a typical builder pattern (without you having to run `.build()` at the end), which lets you easily construct configuration instances. For example, to load the CommandAPI with all logging disabled, you can use the following:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:CommandAPIConfigSilent}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:CommandAPIConfigSilent}}
 ```
 
 ### Enabling
@@ -60,7 +60,7 @@ The `onEnable(Plugin)` method initializes the CommandAPI's enabling sequence. As
 ### Example - Setting up the CommandAPI in your plugin
 
 ```java
-public {{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:shading}}
+public {{#include ../../commandapi-core/src/test/java/Examples.java:shading}}
 ```
 
 
@@ -79,7 +79,7 @@ Add the CommandAPI shade dependency:
     <dependency>
         <groupId>dev.jorel</groupId>
         <artifactId>commandapi-shade</artifactId>
-        <version>8.0.0</version>
+        <version>8.1.0</version>
     </dependency>
 </dependencies>
 ```
@@ -153,7 +153,7 @@ Next, we declare our dependencies:
 
 ```gradle
 dependencies {
-    compile "dev.jorel:commandapi-shade:8.0.0"   
+    compile "dev.jorel:commandapi-shade:8.1.0"   
 }
 ```
 
@@ -162,7 +162,7 @@ Then we add it to the `shadowJar` task configuration:
 ```gradle
 shadowJar {
     dependencies {
-        include dependency("dev.jorel:commandapi-shade:8.0.0")
+        include dependency("dev.jorel:commandapi-shade:8.1.0")
     }
 }
 ```

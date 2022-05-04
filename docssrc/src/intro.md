@@ -146,7 +146,7 @@ Here's the list of changes to the documentation between each update. You can vie
 >
 > Lots and lots and lots of changes occurred in version 5.0! I highly recommend reading the [Upgrading guide](./upgrading.html) section which covers the changes in more detail and how to update your plugin for this version.
 
-Basically every page has been rewritten in this update and checked for errors. In general, this is the list of new additions:
+Every page has been rewritten in this update and checked for errors. In general, this is the list of new additions:
 
 - New section [3. Command conversion](./conversionforowners.md) dedicated to command conversion via the `config.yml`
 - New section [8.4. Listed arguments](./listed.md)

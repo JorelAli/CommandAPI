@@ -1,6 +1,6 @@
 # Handling command failures
 
-Sometimes, you want your command to fail on purpose. This is basically the way to "gracefully" handle errors in your command execution. This is performed by throwing the following method:
+Sometimes, you want your command to fail on purpose. This is the way to "gracefully" handle errors in your command execution. This is performed by throwing the following method:
 
 ```java
 throw CommandAPI.fail("Error message goes here");
@@ -17,7 +17,7 @@ Say we have some list containing fruit and the player can choose from it. In ord
 Therefore, to gracefully handle this with a proper error message, we use `CommandAPI.fail(String)` with a meaningful error message which is displayed to the user.
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:commandfailures}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:commandfailures}}
 ```
 
 </div>

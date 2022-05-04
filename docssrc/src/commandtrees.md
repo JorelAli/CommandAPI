@@ -65,7 +65,7 @@ Say we want to take our `/sayhi` command from above and also have an argument wh
 We can do this by adding a `PlayerArgument` to our command. As described above, to add this argument, we must use the `then()` method:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:CommandTree_sayhi1}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:CommandTree_sayhi1}}
 ```
 
 In this example, we have our normal `/sayhi` command using the `executes()` method. We then add a new argument (a new "branch" in our "tree"), the `PlayerArgument`, using the `then()` method. **We want to make this branch executable, so we also use the `executes()` method _on the argument itself_**. To register the full command tree (which includes both `/sayhi` and `/sayhi <target>`), we call `register()` on the `CommandTree` object.
@@ -94,7 +94,7 @@ Say we wanted to create a plugin to let a user edit signs. We have a single comm
 
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:CommandTree_signedit}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:CommandTree_signedit}}
 ```
 
 </div>

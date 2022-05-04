@@ -4,7 +4,7 @@ So far, we've covered how to replace suggestions using the `replaceSuggestions()
 
 The whole point of the safe argument suggestions method is that parameters entered in this method are **guaranteed** to work.
 
-The use of the safe replace suggestions function is basically the same as `replaceSuggestions()` from the previous section, except instead of returning a `String[]`, you now return a `T[]`, where `T` is the class corresponding to the argument. This is described in more detail in the table below.
+The use of the safe replace suggestions function is the same as `replaceSuggestions()` from the previous section, except instead of returning a `String[]`, you now return a `T[]`, where `T` is the class corresponding to the argument. This is described in more detail in the table below.
 
 ```java
 Argument replaceSafeSuggestions(SafeSuggestions<T> suggestions);
@@ -125,13 +125,13 @@ Say we have a plugin that registers custom items which can be crafted. In this e
 To do this, we first register our custom items:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:SafeRecipeArguments}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:SafeRecipeArguments}}
 ```
 
 Once we've done that, we can now include them in our command registration. To do this, we use `replaceSafeSuggestions(recipes)` and then register our command as normal:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:SafeRecipeArguments_2}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:SafeRecipeArguments_2}}
 ```
 
 </div>
@@ -149,19 +149,19 @@ Say we have a command to spawn mobs:
 Now say that we don't want non-op players to spawn bosses. To do this, we'll create a `List<EntityType>` which is the list of all mobs that non-ops are allowed to spawn:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:SafeMobSpawnArguments}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:SafeMobSpawnArguments}}
 ```
 
 We then use our safe arguments to return an `EntityType[]` as the list of values that are suggested to the player. In this example, we use the `sender()` method to determine if the sender has permissions to view the suggestions:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:SafeMobSpawnArguments_2}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:SafeMobSpawnArguments_2}}
 ```
 
 Now we register our command as normal:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:SafeMobSpawnArguments_3}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:SafeMobSpawnArguments_3}}
 ```
 
 </div>
@@ -179,13 +179,13 @@ Say we wanted to remove a potion effect from a player. To do this, we'll use the
 Now, we don't want to remove a potion effect that already exists on a player, so instead we'll use the safe arguments to find a list of potion effects on the target player and then only suggest those potion effects. To do this, we'll use the `previousArguments()` method, as it allows us to access the previously defined `<player>` argument.
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:SafePotionArguments}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:SafePotionArguments}}
 ```
 
 And then we can register our command as normal:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:SafePotionArguments_2}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:SafePotionArguments_2}}
 ```
 
 </div>

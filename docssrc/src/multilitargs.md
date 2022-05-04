@@ -8,7 +8,7 @@ The multi literal argument has all of the same benefits of a regular literal arg
 
 > **Developer's Note:**
 >
-> The only reason that `LiteralArgument` still exists is for legacy purposes. `MultiLiteralArgument` is much more recommended because it's easier to understand and implement. The `LiteralArgument` has a very slight performance improvement over the `MultiLiteralArgument`, but it's basically unnoticeable.
+> The only reason that `LiteralArgument` still exists is for legacy purposes. `MultiLiteralArgument` is much more recommended because it's easier to understand and implement. The `LiteralArgument` has a very slight performance improvement over the `MultiLiteralArgument`, but it's effectively unnoticeable.
 
 <div class="example">
 
@@ -17,7 +17,7 @@ The multi literal argument has all of the same benefits of a regular literal arg
 In this example, we'll show how to use multi literals to declare Minecraft's `/gamemode` command. As you can see from the example code below, the argument declaration and command declaration is the same as if you were declaring any normal argument or command.
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:multiliteralarguments}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:multiliteralarguments}}
 ```
 
 </div>

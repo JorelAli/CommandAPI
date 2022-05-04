@@ -6,7 +6,7 @@ The CommandAPI does a lot of stuff "behind the scenes". This internal CommandAPI
 
 ## Argument identifiers
 
-The CommandAPI's arguments are basically representations of the different arguments that the Minecraft Command Data protocol handles. These are outlined in the table below:
+The CommandAPI's arguments are representations of the different arguments that the Minecraft Command Data protocol handles. These are outlined in the table below:
 
 | Identifier | CommandAPI argument |
 |-|-|

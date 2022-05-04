@@ -36,7 +36,7 @@ Say we have a perks-based command system that depends on a player's level. For e
 We want to put a requirement on this command that the player needs to have at least 30 levels of experience in order to run the command - if the player has less than 30 levels, the player should not be able to run the command. The easiest way to make the player not able to run the command is to literally tell the user that the command doesn't exist. That's what requirements do in the CommandAPI:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:requirements}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:requirements}}
 ```
 
 It's important to note that in this example, we case the `sender` to a `player` for the requirement method. We know that the sender is definitely a player because we use `executesPlayer()`, which ensures that this is the case. Now that we've got this, **we need to make sure we update the player's requirements _when their exp changes_**. This is covered in more detail in the section about updating requirements below.
@@ -65,13 +65,13 @@ For this example, we'll use the following command syntax:
 To represent our party in code, we'll use a simple `Map` called `partyMembers` which maps the player's UUID to the name of their registered party:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:requirementsmap}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:requirementsmap}}
 ```
 
 To begin with, let's create the `/party create <partyName>` command. First, we must declare our arguments:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:requirements2}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:requirements2}}
 ```
 
 In this argument declaration, we put a requirement on the literal `create`, where the player does not have a party. In other words, if the player does not have a party, they are allowed to run `/party create <partyName>`. If a player already has a party, then they won't be allowed to run this command. 
@@ -79,7 +79,7 @@ In this argument declaration, we put a requirement on the literal `create`, wher
 Now that we've declared our arguments, we can now declare our main command `/party create <partyName>`. We populate it with the arguments, and we create an entry in our `partyMembers` with the player's UUID and the name of the party that they created. Since this updates the requirements of the player, we'll have to make sure we update it (which is covered in more detail in the section about updating requirements below) - until then, I'll omit this from the code:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:requirements3}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:requirements3}}
 ```
 
 -----
@@ -87,7 +87,7 @@ Now that we've declared our arguments, we can now declare our main command `/par
 So now we've added the ability to create a party if we're not already in it. Now we need to implement our `party tp <player>` command. Again, we must start by declaring our arguments:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:requirements4}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:requirements4}}
 ```
 
 Notice something here? There's some code repetition for the `withRequirement` method - this is the same predicate that we used earlier, except we remove the negation. If you are interested, you can view the section [Predicate tips](./predicatetips.md) for a method to improve code reuse.
@@ -95,7 +95,7 @@ Notice something here? There's some code repetition for the `withRequirement` me
 Once the arguments have been declared, we can now implement our party teleportation command:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:requirements5}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:requirements5}}
 ```
 
 -----
@@ -174,7 +174,7 @@ In the [example for a party creation](./requirements.md#example---a-party-creati
 When a player creates a new party, we need to ensure that their requirements are updated _when they create the party_. As such, we simply add this to our party creation command executor:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:updatingrequirements}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:updatingrequirements}}
 ```
 
 That's it!
@@ -194,7 +194,7 @@ The CommandAPI lets you handle multiple requirements really easily! The `withReq
 For example, you can apply multiple requirements for a command by calling the `withRequirement` method multiple times:
 
 ```java
-{{#include ../../CommandAPI/commandapi-core/src/test/java/Examples.java:multiplerequirements}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:multiplerequirements}}
 ```
 
 </div>
