@@ -73,6 +73,7 @@
 		<module>commandapi-plugin</module>
 		<module>commandapi-shade</module>
 		<module>commandapi-annotations</module>
+		<module>commandapi-kotlin-annotations</module>
 	</modules>
 
 	<properties>
