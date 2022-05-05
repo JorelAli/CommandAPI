@@ -113,6 +113,8 @@ public enum CommandAPIArgumentType {
 	 */
 	ITEMSTACK("minecraft:item_stack"), 
 	
+	LIST,
+	
 	/**
 	 * The LiteralArgument
 	 */

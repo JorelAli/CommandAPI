@@ -21,9 +21,13 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map.Entry;
 
 import org.bukkit.plugin.java.JavaPlugin;
+
+import dev.jorel.commandapi.arguments.ListArgument.ListArgumentBuilder;
 
 public class CommandAPIMain extends JavaPlugin {
 	
@@ -58,5 +62,13 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable(this);
+		
+		List<String> list = List.of("apple", "banana", "cat", "dog", "elephant");
+		new CommandAPICommand("blah")
+			.withArguments(new ListArgumentBuilder<String>("node", " ").withList(list).withStringMapper().build())
+			.executes((sender, args) -> {
+				System.out.println(Arrays.toString(args));
+			})
+			.register();
 	}
 }
