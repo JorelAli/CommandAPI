@@ -29,7 +29,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
+
+import org.bukkit.command.CommandSender;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -39,15 +40,15 @@ import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.nms.NMS;
 
 @SuppressWarnings("rawtypes")
-public class ListArgument<T> extends SafeOverrideableArgument<Collection, Collection<T>> {
+public class ListArgument<T> extends Argument<Collection> {
 
 	private final String delimiter;
 	private final boolean allowDuplicates;
-	private final Supplier<Collection<T>> supplier;
+	private final Function<CommandSender, Collection<T>> supplier;
 	private final Function<T, String> mapper;
 
-	private ListArgument(String nodeName, String delimiter, boolean allowDuplicates, /* TODO: This could be a standard collection, we'll use a builder for this*/Supplier<Collection<T>> supplier, Function<T, String> suggestionsMapper) {
-		super(nodeName, StringArgumentType.greedyString(), c -> c.stream().map(suggestionsMapper::apply).collect(Collectors.joining(delimiter)));
+	private ListArgument(String nodeName, String delimiter, boolean allowDuplicates, Function<CommandSender, Collection<T>> supplier, Function<T, String> suggestionsMapper) {
+		super(nodeName, StringArgumentType.greedyString());
 		this.delimiter = delimiter;
 		this.allowDuplicates = allowDuplicates;
 		this.supplier = supplier;
@@ -57,13 +58,11 @@ public class ListArgument<T> extends SafeOverrideableArgument<Collection, Collec
 	}
 
 	private void applySuggestions() {
-		// We use normal suggestions instead of sage suggestions because we're assuming
-		// that this code is valid (and thus, don't have to do additional mapping checks)
 		this.replaceSuggestions(ArgumentSuggestions.strings(info -> {
 			String currentArg = info.currentArg();
 
 			Set<String> values = new HashSet<>();
-			for(T object : supplier.get()) {
+			for(T object : supplier.apply(info.sender())) {
 				values.add(mapper.apply(object));
 			}
 
@@ -123,7 +122,7 @@ public class ListArgument<T> extends SafeOverrideableArgument<Collection, Collec
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		// Get the list of values which this can take
 		Map<String, T> values = new HashMap<>();
-		for(T object : supplier.get()) {
+		for(T object : supplier.apply(nms.getCommandSenderFromCSS(cmdCtx.getSource()))) {
 			values.put(mapper.apply(object), object);
 		}
 
@@ -153,24 +152,28 @@ public class ListArgument<T> extends SafeOverrideableArgument<Collection, Collec
 			this.delimiter = delimiter;
 		}
 
-		public ListArgumentBuilder allowDuplicates(boolean allowDuplicates) {
+		public ListArgumentBuilder<T> allowDuplicates(boolean allowDuplicates) {
 			this.allowDuplicates = allowDuplicates;
 			return this;
 		}
 
-		public ListArgumentBuilderSuggests withList(Supplier<Collection<T>> list) {
+		public ListArgumentBuilderSuggests withList(Function<CommandSender, Collection<T>> list) {
 			return new ListArgumentBuilderSuggests(list);
+		}
+		
+		public ListArgumentBuilderSuggests withList(Supplier<Collection<T>> list) {
+			return withList(info -> list.get());
 		}
 
 		public ListArgumentBuilderSuggests withList(Collection<T> list) {
-			return new ListArgumentBuilderSuggests(() -> list);
+			return withList(info -> list);
 		}
 
 		public class ListArgumentBuilderSuggests {
 
-			private final Supplier<Collection<T>> supplier;
+			private final Function<CommandSender, Collection<T>> supplier;
 
-			private ListArgumentBuilderSuggests(Supplier<Collection<T>> list) {
+			private ListArgumentBuilderSuggests(Function<CommandSender, Collection<T>> list) {
 				this.supplier = list;
 			}
 
@@ -182,6 +185,7 @@ public class ListArgument<T> extends SafeOverrideableArgument<Collection, Collec
 				return new ListArgumentBuilderFinished(mapper);
 			}
 
+			// TODO: Implement this
 			public ListArgumentBuilderFinished withTooltipMapper(Function<T, IStringTooltip> mapper) {
 				return new ListArgumentBuilderFinished(null);
 			}
@@ -194,7 +198,7 @@ public class ListArgument<T> extends SafeOverrideableArgument<Collection, Collec
 					this.mapper = mapper;
 				}
 
-				public ListArgument build() {
+				public ListArgument<T> build() {
 					return new ListArgument<>(nodeName, delimiter, allowDuplicates, supplier, mapper);
 				}
 			}
