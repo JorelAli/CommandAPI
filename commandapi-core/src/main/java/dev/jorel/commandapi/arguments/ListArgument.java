@@ -21,16 +21,15 @@
 package dev.jorel.commandapi.arguments;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-
-import org.bukkit.Bukkit;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -63,44 +62,48 @@ public class ListArgument<T> extends SafeOverrideableArgument<Collection, Collec
 		this.replaceSuggestions(ArgumentSuggestions.strings(info -> {
 			String currentArg = info.currentArg();
 
-			Map<String, T> values = new HashMap<>();
+			Set<String> values = new HashSet<>();
 			for(T object : supplier.get()) {
-				values.put(mapper.apply(object), object);
+				values.add(mapper.apply(object));
 			}
 
-			List<String> currentArgList = Arrays.asList(currentArg.split(delimiter));
+			List<String> currentArgList = new ArrayList<>();
+			for(String str : currentArg.split(delimiter)) {
+				currentArgList.add(str);
+			}
+
+			if(!allowDuplicates) {
+				for(String str : currentArgList) {
+					values.remove(str);
+				}
+			}
 
 			// If we end with the specified delimiter, we prompt for the next entry
 			if(currentArg.endsWith(delimiter)) {
-
-				if(!allowDuplicates) {
-					for(String str : currentArgList) {
-						values.remove(str);
-					}
-				}
-
 				// 'values' now contains a set of all objects that are NOT in
 				// the current list that the user is typing. We want to return
 				// a list of the current argument + each value that isn't
 				// in the list (i.e. each key in 'values')
 				String[] returnValues = new String[values.size()];
 				int i = 0;
-				for(String str : values.keySet()) {
+				for(String str : values) {
 					returnValues[i] = currentArg + str;
 					i++;
 				}
 				return returnValues;
 			} else {
-
-				// Auto-complete the current player that the user is typing
+				// Auto-complete the current value that the user is typing
 				// Remove the last argument and turn it into a string as the base for suggestions
-				String nameStart = currentArgList.remove(currentArgList.size() - 1);
-				String suggestionBase = currentArgList.isEmpty() ? "" : String.join(" ", currentArgList) + " ";
+				String valueStart = currentArgList.remove(currentArgList.size() - 1);
+				String suggestionBase = currentArgList.isEmpty() ? "" : String.join(delimiter, currentArgList) + delimiter;
 
-				return Bukkit.getOnlinePlayers().stream()
-						.filter(player -> player.getName().startsWith(nameStart))
-						.map(player -> suggestionBase + player.getName())
-						.toArray(String[]::new);
+				List<String> returnValues = new ArrayList<>();
+				for(String str : values) {
+					if(str.startsWith(valueStart)) {
+						returnValues.add(suggestionBase + str);
+					}
+				}
+				return returnValues.toArray(new String[0]);
 			}
 		}));
 	}
@@ -170,7 +173,7 @@ public class ListArgument<T> extends SafeOverrideableArgument<Collection, Collec
 			private ListArgumentBuilderSuggests(Supplier<Collection<T>> list) {
 				this.supplier = list;
 			}
-			
+
 			public ListArgumentBuilderFinished withStringMapper() {
 				return new ListArgumentBuilderFinished(x -> String.valueOf(x));
 			}
@@ -178,7 +181,7 @@ public class ListArgument<T> extends SafeOverrideableArgument<Collection, Collec
 			public ListArgumentBuilderFinished withMapper(Function<T, String> mapper) {
 				return new ListArgumentBuilderFinished(mapper);
 			}
-			
+
 			public ListArgumentBuilderFinished withTooltipMapper(Function<T, IStringTooltip> mapper) {
 				return new ListArgumentBuilderFinished(null);
 			}
