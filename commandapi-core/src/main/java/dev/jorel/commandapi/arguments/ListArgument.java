@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 
 import org.bukkit.command.CommandSender;
 
@@ -37,6 +38,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.IStringTooltip;
+import dev.jorel.commandapi.StringTooltip;
 import dev.jorel.commandapi.nms.NMS;
 
 @SuppressWarnings("rawtypes")
@@ -45,9 +47,9 @@ public class ListArgument<T> extends Argument<Collection> {
 	private final String delimiter;
 	private final boolean allowDuplicates;
 	private final Function<CommandSender, Collection<T>> supplier;
-	private final Function<T, String> mapper;
+	private final Function<T, IStringTooltip> mapper;
 
-	private ListArgument(String nodeName, String delimiter, boolean allowDuplicates, Function<CommandSender, Collection<T>> supplier, Function<T, String> suggestionsMapper) {
+	private ListArgument(String nodeName, String delimiter, boolean allowDuplicates, Function<CommandSender, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper) {
 		super(nodeName, StringArgumentType.greedyString());
 		this.delimiter = delimiter;
 		this.allowDuplicates = allowDuplicates;
@@ -58,22 +60,31 @@ public class ListArgument<T> extends Argument<Collection> {
 	}
 
 	private void applySuggestions() {
-		this.replaceSuggestions(ArgumentSuggestions.strings(info -> {
+		this.replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(info -> {
 			String currentArg = info.currentArg();
 
-			Set<String> values = new HashSet<>();
+			Set<IStringTooltip> values = new HashSet<>();
 			for(T object : supplier.apply(info.sender())) {
 				values.add(mapper.apply(object));
 			}
 
 			List<String> currentArgList = new ArrayList<>();
-			for(String str : currentArg.split(delimiter)) {
+			for(String str : currentArg.split(Pattern.quote(delimiter))) {
 				currentArgList.add(str);
 			}
 
 			if(!allowDuplicates) {
 				for(String str : currentArgList) {
-					values.remove(str);
+					IStringTooltip valueToRemove = null;
+					for(IStringTooltip value : values) {
+						if(value.getSuggestion().equals(str)) {
+							valueToRemove = value;
+							break;
+						}
+					}
+					if(valueToRemove != null) {
+						values.remove(valueToRemove);
+					}
 				}
 			}
 
@@ -83,10 +94,10 @@ public class ListArgument<T> extends Argument<Collection> {
 				// the current list that the user is typing. We want to return
 				// a list of the current argument + each value that isn't
 				// in the list (i.e. each key in 'values')
-				String[] returnValues = new String[values.size()];
+				IStringTooltip[] returnValues = new IStringTooltip[values.size()];
 				int i = 0;
-				for(String str : values) {
-					returnValues[i] = currentArg + str;
+				for(IStringTooltip str : values) {
+					returnValues[i] = StringTooltip.of(currentArg + str.getSuggestion(), str.getTooltip());
 					i++;
 				}
 				return returnValues;
@@ -96,13 +107,13 @@ public class ListArgument<T> extends Argument<Collection> {
 				String valueStart = currentArgList.remove(currentArgList.size() - 1);
 				String suggestionBase = currentArgList.isEmpty() ? "" : String.join(delimiter, currentArgList) + delimiter;
 
-				List<String> returnValues = new ArrayList<>();
-				for(String str : values) {
-					if(str.startsWith(valueStart)) {
-						returnValues.add(suggestionBase + str);
+				List<IStringTooltip> returnValues = new ArrayList<>();
+				for(IStringTooltip str : values) {
+					if(str.getSuggestion().startsWith(valueStart)) {
+						returnValues.add(StringTooltip.of(suggestionBase + str, str.getTooltip()));
 					}
 				}
-				return returnValues.toArray(new String[0]);
+				return returnValues.toArray(new IStringTooltip[0]);
 			}
 		}));
 	}
@@ -121,17 +132,20 @@ public class ListArgument<T> extends Argument<Collection> {
 	public <CommandListenerWrapper> Collection<T> parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		// Get the list of values which this can take
-		Map<String, T> values = new HashMap<>();
+		Map<IStringTooltip, T> values = new HashMap<>();
 		for(T object : supplier.apply(nms.getCommandSenderFromCSS(cmdCtx.getSource()))) {
 			values.put(mapper.apply(object), object);
 		}
 
 		// If the argument argument's value is in the list of values, include it
 		List<T> list = new ArrayList<>();
-		String[] strArr = cmdCtx.getArgument(key, String.class).split(delimiter);
+		String[] strArr = cmdCtx.getArgument(key, String.class).split(Pattern.quote(delimiter));
 		for(String str : strArr) {
-			if(values.containsKey(str)) {
-				list.add(values.get(str));
+			// Yes, this isn't an instant lookup HashMap, but this is the best we can do
+			for(IStringTooltip value : values.keySet()) {
+				if(value.getSuggestion().equals(str)) {
+					list.add(values.get(value));
+				}
 			}
 		}
 		return list;
@@ -178,23 +192,22 @@ public class ListArgument<T> extends Argument<Collection> {
 			}
 
 			public ListArgumentBuilderFinished withStringMapper() {
-				return new ListArgumentBuilderFinished(x -> String.valueOf(x));
+				return withTooltipMapper(t -> StringTooltip.none(String.valueOf(t)));
 			}
 
 			public ListArgumentBuilderFinished withMapper(Function<T, String> mapper) {
-				return new ListArgumentBuilderFinished(mapper);
+				return withTooltipMapper(t -> StringTooltip.none(mapper.apply(t)));
 			}
 
-			// TODO: Implement this
 			public ListArgumentBuilderFinished withTooltipMapper(Function<T, IStringTooltip> mapper) {
-				return new ListArgumentBuilderFinished(null);
+				return new ListArgumentBuilderFinished(mapper);
 			}
 
 			public class ListArgumentBuilderFinished {
 
-				private final Function<T, String> mapper;
+				private final Function<T, IStringTooltip> mapper;
 
-				private ListArgumentBuilderFinished(Function<T, String> mapper) {
+				private ListArgumentBuilderFinished(Function<T, IStringTooltip> mapper) {
 					this.mapper = mapper;
 				}
 
