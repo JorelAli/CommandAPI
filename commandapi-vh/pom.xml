@@ -48,5 +48,10 @@
 			<artifactId>commandapi-1.17</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-1.16.5</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>
