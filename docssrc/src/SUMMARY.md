@@ -79,6 +79,7 @@
       - [Literal arguments](./literalarguments.md)
       - [Multi literal arguments](./multilitargs.md)
     - [Custom arguments](./customarguments.md)
+    - [List arguments](./listarguments.md)
 - [Functions & Tags](./functions.md)
   - [Setting up functions & tags](./functionsetup.md)
   - [The SimpleFunctionWrapper class](./simplefunctionwrapper.md)

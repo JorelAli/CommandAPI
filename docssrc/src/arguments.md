@@ -75,6 +75,7 @@ The type to cast each argument (declared in the `dev.jorel.commandapi.arguments`
 | [`IntegerRangeArgument`](./rangedarguments.md#the-integerrange--floatrange-class) | `dev.jorel.commandapi.wrappers.IntegerRange`                 |
 |               [`ItemStackArgument`](./itemstackarguments.md) | `org.bukkit.inventory.ItemStack`                             |
 |  [`ItemStackPredicateArgument`](./itemstackpredicateargs.md) | `java.util.function.Predicate<org.bukkit.inventory.ItemStack>` |
+|                   [`ListArgument`](./listarguments.md) | `java.util.Collection<T>`                                                         |
 |                   [`LiteralArgument`](./literalarguments.md) | N/A                                                          |
 | [`Location2DArgument`](./locationargument.md#location-2d-space) | `dev.jorel.commandapi.wrappers.Location2D`                   |
 | [`LocationArgument`](./locationargument.md#location-3d-space) | `org.bukkit.Location`                                        |
@@ -86,7 +87,7 @@ The type to cast each argument (declared in the `dev.jorel.commandapi.arguments`
 | [`ObjectiveArgument`](./objectivearguments.md#objective-argument) | `String`                                                     |
 | [`ObjectiveCriteriaArgument`](./objectivearguments.md#objective-criteria-argument) | `String`                                                     |
 | [`OfflinePlayerArgument`](./entityarguments.md#offlineplayer-argument) | `org.bukkit.OfflinePlayer`                                   |
-|                 [`ParticleArgument`](./particlearguments.md) | `org.bukkit.Particle`                                        |
+|                 [`ParticleArgument`](./particlearguments.md) | `dev.jorel.commandapi.wrappers.ParticleData`                                        |
 |     [`PlayerArgument`](./entityarguments.md#player-argument) | `org.bukkit.entity.Player`                                   |
 |               [`PotionEffectArgument`](./potionarguments.md) | `org.bukkit.potion.PotionEffectType`                         |
 |                      [`RecipeArgument`](./recipeargument.md) | The cast type changes depending on your Minecraft version:<br><ul><li>Version 1.14.4 and below - `org.bukkit.inventory.Recipe`</li><br /><li>1.15 and above - `org.bukkit.inventory.ComplexRecipe` </li></ul> |

@@ -15,12 +15,12 @@ The `LocationArgument` constructor requires a `LocationType`, which specifies th
 ### `LocationType.BLOCK_POSITION`
 `BLOCK_POSITION` refers to integer block coordinates. When in-game as a player, the suggested location is the coordinates of block you are looking at when you type the command.
 
-![BLOCK_POSITION](https://user-images.githubusercontent.com/42968178/50574833-92ef9e00-0df0-11e9-9ae5-59235b1bb8cb.png)
+![BLOCK_POSITION](./images/arguments/locationargument_blockposition.png)
 
 ### `LocationType.PRECISE_POSITION`
 `PRECISE_PRECISION` uses exact coordinates, using the `double` primitive type. When in-game as a player, the suggested location is the exact coordinates of where your cursor is pointing at when you type the command.
 
- ![PRECISE_POSITION](https://user-images.githubusercontent.com/42968178/50574841-b6b2e400-0df0-11e9-9003-481b139d190f.png)
+ ![PRECISE_POSITION](./images/arguments/locationargument_preciseposition.png)
 
 If no `LocationType` is provided, **the `LocationArgument` will use `PRECISE_POSITION` by default**.
 
