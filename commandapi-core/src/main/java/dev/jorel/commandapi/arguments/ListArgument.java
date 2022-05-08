@@ -42,7 +42,7 @@ import dev.jorel.commandapi.StringTooltip;
 import dev.jorel.commandapi.nms.NMS;
 
 @SuppressWarnings("rawtypes")
-public class ListArgument<T> extends Argument<Collection> {
+public class ListArgument<T> extends Argument<Collection> implements IGreedyArgument {
 
 	private final String delimiter;
 	private final boolean allowDuplicates;
@@ -63,6 +63,8 @@ public class ListArgument<T> extends Argument<Collection> {
 		this.replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(info -> {
 			String currentArg = info.currentArg();
 
+			// This need not be a sorted map because entries in suggestions are
+			// automatically sorted anyway
 			Set<IStringTooltip> values = new HashSet<>();
 			for(T object : supplier.apply(info.sender())) {
 				values.add(mapper.apply(object));
@@ -192,14 +194,14 @@ public class ListArgument<T> extends Argument<Collection> {
 			}
 
 			public ListArgumentBuilderFinished withStringMapper() {
-				return withTooltipMapper(t -> StringTooltip.none(String.valueOf(t)));
+				return withStringTooltipMapper(t -> StringTooltip.none(String.valueOf(t)));
 			}
 
 			public ListArgumentBuilderFinished withMapper(Function<T, String> mapper) {
-				return withTooltipMapper(t -> StringTooltip.none(mapper.apply(t)));
+				return withStringTooltipMapper(t -> StringTooltip.none(mapper.apply(t)));
 			}
 
-			public ListArgumentBuilderFinished withTooltipMapper(Function<T, IStringTooltip> mapper) {
+			public ListArgumentBuilderFinished withStringTooltipMapper(Function<T, IStringTooltip> mapper) {
 				return new ListArgumentBuilderFinished(mapper);
 			}
 
@@ -216,6 +218,5 @@ public class ListArgument<T> extends Argument<Collection> {
 				}
 			}
 		}
-
 	}
 }
