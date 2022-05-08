@@ -112,7 +112,7 @@ public class ListArgument<T> extends Argument<Collection> implements IGreedyArgu
 				List<IStringTooltip> returnValues = new ArrayList<>();
 				for(IStringTooltip str : values) {
 					if(str.getSuggestion().startsWith(valueStart)) {
-						returnValues.add(StringTooltip.of(suggestionBase + str, str.getTooltip()));
+						returnValues.add(StringTooltip.of(suggestionBase + str.getSuggestion(), str.getTooltip()));
 					}
 				}
 				return returnValues.toArray(new IStringTooltip[0]);
