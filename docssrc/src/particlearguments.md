@@ -1,6 +1,6 @@
 # Particle arguments
 
-![](./images/arguments/particle.png)
+![A particle argument suggesting a list of Minecraft particle effects](./images/arguments/particle.png)
 
 The `ParticleArgument` class represents Minecraft particles. As expected, this is casted to the CommandAPI's `ParticleData` class.
 

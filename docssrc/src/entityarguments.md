@@ -2,16 +2,16 @@
 
 ## Entity selector argument
 
-![](./images/arguments/entityselector.png)
+![An image of an entity selector argument with a list of suggestions including entity selectors and a player name](./images/arguments/entityselector.png)
 
 Minecraft's [target selectors](https://minecraft.gamepedia.com/Commands#Target_selectors) (e.g. `@a` or `@e`) are implemented using the `EntitySelectorArgument` class. This allows you to select specific entities based on certain attributes.
 
 The `EntitySelectorArgument` constructor requires an `EntitySelector` argument to determine what type of data to return. There are 4 types of entity selections which are available:
 
-* `EntitySelector.ONE_ENTITY` - A single entity, which returns a `Entity` object.
-* `EntitySelector.MANY_ENTITIES`  - A collection of many entities, which returns a `Collection<Entity>` object.
-* `EntitySelector.ONE_PLAYER` - A single player, which returns a `Player` object.
-* `EntitySelector.MANY_PLAYERS` - A collection of players, which returns a `Collection<Player>` object.
+- `EntitySelector.ONE_ENTITY` - A single entity, which returns a `Entity` object.
+- `EntitySelector.MANY_ENTITIES`  - A collection of many entities, which returns a `Collection<Entity>` object.
+- `EntitySelector.ONE_PLAYER` - A single player, which returns a `Player` object.
+- `EntitySelector.MANY_PLAYERS` - A collection of players, which returns a `Collection<Player>` object.
 
 The return type is the type to be cast when retrieved from the `Object[] args` in the command declaration.
 
@@ -21,7 +21,7 @@ The return type is the type to be cast when retrieved from the `Object[] args` i
 
 Say we want a command to remove certain types of entities. Typically, this would be implemented using a simple command like:
 
-```
+```mccmd
 /remove <player>
 /remove <mob type>
 /remove <radius>
@@ -35,12 +35,15 @@ Instead, we can combine all of these into one by using the `EntitySelectorArgume
 
 We could then use this to target specific entities, for example:
 
-* To remove all cows:
-  ```
+- To remove all cows:
+
+  ```mccmd
   /remove @e[type=cow]
   ```
-* To remove the 10 furthest pigs from the command sender:
-  ```
+
+- To remove the 10 furthest pigs from the command sender:
+
+  ```mccmd
   /remove @e[type=pig,limit=10,sort=furthest]
   ```
 
@@ -52,7 +55,7 @@ We could then use this to target specific entities, for example:
 
 The `PlayerArgument` class is very similar _(almost identical)_ to `EntitySelectorArgument`, with the `EntitySelector.ONE_PLAYER`. It returns a `Player` object and requires the player to be online.
 
-> **Developer's Note:** 
+> **Developer's Note:**
 >
 > The `PlayerArgument` internally uses the `GameProfile` class from Mojang's authlib, which means that this argument has a slight performance overhead compared to using `EntitySelector.ONE_PLAYER`
 
@@ -68,7 +71,7 @@ The `OfflinePlayerArgument` _should_ be able to retrieve players that have never
 
 ## Entity type argument
 
-![](./images/arguments/entitytype.png)
+![An image of an entity argument displaying a list of entity type suggestions](./images/arguments/entitytype.png)
 
 The `EntityTypeArgument` class is used to retrieve a type of entity as defined in the [`EntityType`](https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html) enum. In other words, this is an entity type, for example a pig or a zombie.
 
@@ -78,7 +81,7 @@ The `EntityTypeArgument` class is used to retrieve a type of entity as defined i
 
 Say we want a command to spawn a specific type of entity, similar to the `/summon` command in Vanilla Minecraft, with the addition of specifying how many entities to spawn. We want to create a command of the following form:
 
-```
+```mccmd
 /spawnmob <entity> <amount>
 ```
 

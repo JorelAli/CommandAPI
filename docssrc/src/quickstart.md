@@ -9,8 +9,6 @@ version: 1.0
 depend: [CommandAPI]
 ```
 
-
-
 -----
 
 ## Manually using the .jar
@@ -19,8 +17,7 @@ depend: [CommandAPI]
 
 - Add the CommandAPI.jar file to your project/environment's build path:
 
-  ![](images/eclipse.jpg)
-  
+  ![An image of some context menu entries in Eclipse after right clicking a project. Displays the highlighted options "Build Path", followed by "Add External Archives..."](images/eclipse.jpg)
 
 ## Using Maven (recommended)
 
@@ -28,7 +25,7 @@ depend: [CommandAPI]
 >
 > If you've never used maven before, I highly recommend it! It makes it easier to keep your code updated with the latest dependency updates. For information on how to set up a plugin using maven, you can read [Bukkit's plugin tutorial](https://bukkit.gamepedia.com/Plugin_Tutorial).
 
-* Add the dependency to your `pom.xml`:
+- Add the dependency to your `pom.xml`:
 
   ```xml
   <dependencies>
@@ -43,7 +40,7 @@ depend: [CommandAPI]
 
 ## Using Gradle
 
-* Add the repositories to your `build.gradle` file (the second repository is required because the CommandAPI depends on the NBT-API):
+- Add the repositories to your `build.gradle` file (the second repository is required because the CommandAPI depends on the NBT-API):
 
   ```gradle
   repositories {
@@ -52,7 +49,7 @@ depend: [CommandAPI]
   }
   ```
   
-* Add the dependency to your list of dependencies in your `build.gradle` file:
+- Add the dependency to your list of dependencies in your `build.gradle` file:
 
   ```gradle
   dependencies {

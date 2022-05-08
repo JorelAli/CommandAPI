@@ -1,6 +1,6 @@
 # BlockState arguments
 
-![](./images/arguments/blockstate.png)
+![A block state argument with suggestions for Minecraft items](./images/arguments/blockstate.png)
 
 The `BlockStateArgument` is used to represent data about blocks in the world. These refer to any blocks that have data or states, such as dispensers, signs, doors and pistons. The `BlockStateArgument` creates a Bukkit `BlockData` object when used.
 
@@ -25,4 +25,3 @@ And then we can simply set our block using `setBlockData()`:
 ```
 
 </div>
-

@@ -13,22 +13,22 @@ public CustomArgument(String nodeName, CustomArgumentInfoParser<T> parser, boole
 
 There are effectively two forms that this can take:
 
-**A custom argument with a string-based parser**
+- **A custom argument with a string-based parser**
 
-The simplest form requires the node name as per any other argument, and a parser which takes in as input a record of info and returns a custom object of your choice. For example, if you wanted to create a custom argument that represents a World, you can use this to return a Bukkit `World` object.
+  The simplest form requires the node name as per any other argument, and a parser which takes in as input a record of info and returns a custom object of your choice. For example, if   you wanted to create a custom argument that represents a World, you can use this to return a Bukkit `World` object.
+  
+  ```java
+  new CustomArgument(nodeName, inputInfo -> { 
+      // code here
+      return T; 
+  });
+  ```
 
-```java
-new CustomArgument(nodeName, inputInfo -> { 
-    // code here
-    return T; 
-});
-```
+  The CommandAPI will use an underlying `StringArgument` to parse this custom argument, so the limitations of string arguments will apply to this argument (it can only contain alphanumeric characters (A-Z, a-z and 0-9), and the underscore character (_)).
 
-The CommandAPI will use an underlying `StringArgument` to parse this custom argument, so the limitations of string arguments will apply to this argument (it can only contain alphanumeric characters (A-Z, a-z and 0-9), and the underscore character (_)).
+- **A custom argument with a parser that takes in a Minecraft Key**
 
-**A custom argument with a parser that takes in a Minecraft Key**
-
-With the second constructor, if you provide `true` to the `keyed` field, the input can be of the form of a Minecraft key (so it can have `:` in the name).
+  With the second constructor, if you provide `true` to the `keyed` field, the input can be of the form of a Minecraft key (so it can have `:` in the name).
 
 ### Type params
 
@@ -102,7 +102,7 @@ new CustomArgumentException(MessageBuilder message);
 
 We can use our custom argument like any other argument. Say we wanted to write a command to teleport to a specific world. We will create a command of the following syntax:
 
-```
+```mccmd
 /tpworld <world>
 ```
 

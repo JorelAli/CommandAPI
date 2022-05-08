@@ -1,6 +1,6 @@
 # List arguments
 
-![](./images/arguments/listargument.png)
+![A list argument with the command "/multigive @p stone grass_block dirt" and Minecraft suggestions with a list of Minecraft items](./images/arguments/listargument.png)
 
 List arguments allows users to provide a list of values. This argument uses an underlying `GreedyStringArgument`, so the greedy string argument rule applies - **this argument can only be used at the end of an argument list**.
 
@@ -8,13 +8,11 @@ List arguments allows users to provide a list of values. This argument uses an u
 
 ## The `ListArgumentBuilder`
 
-Unlike other arguments, because this argument can be interpreted in various different ways, this argument can only be created using a `ListArgumentBuilder`, instead of directly accessing the `ListArgument` constructor. The `ListArgumentBuilder` follows the following format:
+Unlike other arguments, because this argument can be interpreted in various different ways, this argument can only be created using a `ListArgumentBuilder`, instead of directly accessing the `ListArgument` constructor. The `ListArgumentBuilder` loosely follows the following format:
 
 \begin{align}
-&\quad\texttt{Create } \\\\
-\rightarrow&\quad\texttt{Datapacks load} \\\\
-\rightarrow&\quad\texttt{Plugins load} \\\\
-\rightarrow&\quad\texttt{Server finishes loading} \\\\
-\rightarrow&\quad\texttt{Datapacks are reloaded} && \texttt{(by the CommandAPI)} \\\\
-\rightarrow&\quad\texttt{Recipes are reloaded} && \texttt{(by the CommandAPI)}
+&\quad\texttt{Create a ListArgumentBuilder} \\\\
+\rightarrow&\quad\texttt{Provide the list to pull suggestions from} \\\\
+\rightarrow&\quad\texttt{Provide the mapper of the list items to a string} \\\\
+\rightarrow&\quad\texttt{Build the ListArgument}
 \end{align}

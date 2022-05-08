@@ -1,6 +1,6 @@
 # Recipe arguments
 
-![](./images/arguments/recipe.png)
+![A recipe argument command with the suggestions for Minecraft items](./images/arguments/recipe.png)
 
 The `RecipeArgument` class lets you retrieve Bukkit's `ComplexRecipe` object.
 

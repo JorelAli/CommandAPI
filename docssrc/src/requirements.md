@@ -74,7 +74,7 @@ To begin with, let's create the `/party create <partyName>` command. First, we m
 {{#include ../../commandapi-core/src/test/java/Examples.java:requirements2}}
 ```
 
-In this argument declaration, we put a requirement on the literal `create`, where the player does not have a party. In other words, if the player does not have a party, they are allowed to run `/party create <partyName>`. If a player already has a party, then they won't be allowed to run this command. 
+In this argument declaration, we put a requirement on the literal `create`, where the player does not have a party. In other words, if the player does not have a party, they are allowed to run `/party create <partyName>`. If a player already has a party, then they won't be allowed to run this command.
 
 Now that we've declared our arguments, we can now declare our main command `/party create <partyName>`. We populate it with the arguments, and we create an entry in our `partyMembers` with the player's UUID and the name of the party that they created. Since this updates the requirements of the player, we'll have to make sure we update it (which is covered in more detail in the section about updating requirements below) - until then, I'll omit this from the code:
 
@@ -116,7 +116,7 @@ When a player has less than 30 levels, they are unable to execute the `/repair` 
 
 The CommandAPI handles this in a very simple method call:
 
-```
+```java
 CommandAPI.updateRequirements(player);
 ```
 
@@ -125,10 +125,8 @@ CommandAPI.updateRequirements(player);
 **Developer's Note:**
 
 The `CommandAPI.updateRequirements(player);` method can be used anywhere, **except** for the `withRequirement` method. Using it inside this method will crash the server. This is by design - just make sure you don't use it within the `withRequirement` method and everything will be fine!
-    
+
 </div>
-
-
 
 To illustrate how to use this, we'll go over the two examples above:
 
@@ -198,8 +196,3 @@ For example, you can apply multiple requirements for a command by calling the `w
 ```
 
 </div>
-
-
-
-
-

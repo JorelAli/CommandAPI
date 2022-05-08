@@ -2,7 +2,7 @@
 
 ## Suggestions with a String Array
 
-The first method, `replaceSuggestions(ArgumentSuggestions suggestions)`, allows you to *replace* the suggestions normally associated with that argument. This can be replaced with an array of strings by using the `strings(String... suggestions)` method.
+The first method, `replaceSuggestions(ArgumentSuggestions suggestions)`, allows you to _replace_ the suggestions normally associated with that argument. This can be replaced with an array of strings by using the `strings(String... suggestions)` method.
 
 <div class="example">
 
@@ -32,10 +32,9 @@ The `strings(Function<SuggestionInfo, String[]> suggestions)` method in `Argumen
 
 <div class="example">
 
-
 ### Example - Friend list by replacing suggestions
 
-Say you have a plugin which has a "friend list" for players. If you want to teleport to a friend in that list, you could use a `PlayerArgument`, which has the list of suggestions replaced with the list of friends that that player has. Since the list of friends *depends on the sender*, we can use the function to determine what our suggestions should be. Let's use the following command to teleport to a friend from our friend list:
+Say you have a plugin which has a "friend list" for players. If you want to teleport to a friend in that list, you could use a `PlayerArgument`, which has the list of suggestions replaced with the list of friends that that player has. Since the list of friends _depends on the sender_, we can use the function to determine what our suggestions should be. Let's use the following command to teleport to a friend from our friend list:
 
 ```mccmd
 /friendtp <friend>
@@ -85,9 +84,6 @@ It is not possible to access the `Object[]` of previously declared arguments. **
 
 </div>
 
-
-
-
 <div class="example">
 
 ### Example - Sending a message to a nearby player
@@ -107,4 +103,3 @@ When run, this command will send a message to a target player within the provide
 As shown in this code, we use the `previousArgs()` method access the previously declared arguments. In this example, `info.previousArgs()` will be `{ int }`, where this `int` refers to the radius. Note how this object array only has the previously declared arguments (and not for example `{ int, Player, String }`).
 
 </div>
-

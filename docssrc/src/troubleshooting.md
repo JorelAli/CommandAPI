@@ -17,6 +17,7 @@ If you've registered a command, the command should be present in the console if 
 ## The CommandAPI doesn't load, something about `UnsupportedClassVersionError` and "class file version 60.0"
 
 If you're getting an error which looks something like this (key thing to look for is `class file version 60.0`), then you're running an old and unsupported version of Java:
+
 ```log
 [06.09 16:48:26] [Server] [Server thread/ERROR]: Could not load 'plugins/CommandAPI.jar' in folder 'plugins'
 org.bukkit.plugin.InvalidPluginExceptionjava.lang.UnsupportedClassVersionError: dev/jorel/commandapi/CommandAPIMain has been compiled by a more recent version of the Java Runtime (class file version 60.0), this version of the Java Runtime only recognizes class file versions up to 52.0
@@ -95,6 +96,6 @@ If players cannot connect, this could be due to the size of the command data pac
 
 -----
 
-## My issue isn't on here, what do I do?!
+## My issue isn't on here, what do I do?
 
 If you've found a bug that isn't solved here, submit a bug report on [the CommandAPI's issues page](https://github.com/JorelAli/CommandAPI/issues/new/choose) and I'll try my best to resolve the issue!

@@ -1,8 +1,8 @@
 # Location arguments
 
-![](./images/arguments/loc.png)
+![A Location argument showing the options '~', '~ ~' and '~ ~ ~'](./images/arguments/loc.png)
 
-In the CommandAPI, there are two arguments used to represent location. The `LocationArgument` argument, which represents a 3D location \\( (x, y, z) \\) and the `Location2DArgument`, which represents 2D location \\( (x, z) \\). 
+In the CommandAPI, there are two arguments used to represent location. The `LocationArgument` argument, which represents a 3D location \\( (x, y, z) \\) and the `Location2DArgument`, which represents 2D location \\( (x, z) \\).
 
 -----
 
@@ -13,11 +13,13 @@ The `LocationArgument` class is used to specify a location in the **command send
 The `LocationArgument` constructor requires a `LocationType`, which specifies the type of location that is accepted by the command. The `LocationType` enum consists of two values:
 
 ### `LocationType.BLOCK_POSITION`
+
 `BLOCK_POSITION` refers to integer block coordinates. When in-game as a player, the suggested location is the coordinates of block you are looking at when you type the command.
 
 ![BLOCK_POSITION](./images/arguments/locationargument_blockposition.png)
 
 ### `LocationType.PRECISE_POSITION`
+
 `PRECISE_PRECISION` uses exact coordinates, using the `double` primitive type. When in-game as a player, the suggested location is the exact coordinates of where your cursor is pointing at when you type the command.
 
  ![PRECISE_POSITION](./images/arguments/locationargument_preciseposition.png)
@@ -48,6 +50,6 @@ Simply put, given the coordinates provided to the command, "break" the block by 
 
 ## Location (2D space)
 
-![](./images/arguments/loc2d.png)
+![A location 2D argument showing the options '~' and '~ ~'](./images/arguments/loc2d.png)
 
 The `Location2DArgument` is pretty much identical in use to the `LocationArgument` for 3D coordinates, except instead of returning a `Location` object, it instead returns a `Location2D` object that extends `Location` (thus, being compatible anywhere you would normally be able to use `Location`).

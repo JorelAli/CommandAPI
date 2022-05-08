@@ -29,4 +29,3 @@ And we can use it again for our code for teleporting to party members:
 ```java
 {{#include ../../commandapi-core/src/test/java/Examples.java:predicatetips3}}
 ```
-

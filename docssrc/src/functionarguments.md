@@ -1,6 +1,6 @@
 # Function arguments
 
-![](./images/arguments/functions.png)
+![An image of a function argument showing a list of Minecraft functions and tags that are available to run](./images/arguments/functions.png)
 
 The `FunctionArgument` class is used to represent a function or a tag in Minecraft. When retrieving an instance of the argument, it will return a `FunctionWrapper[]`, where each `FunctionWrapper` consists of a Minecraft function.
 

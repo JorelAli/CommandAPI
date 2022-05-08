@@ -1,6 +1,6 @@
 # Objective arguments
 
-In the CommandAPI, objectives are split into two classes: 
+In the CommandAPI, objectives are split into two classes:
 
 - The `ObjectiveArgument` class, which represents objectives as a whole
 - The `ObjectiveCriteriaArgument` class, which represents objective criteria
