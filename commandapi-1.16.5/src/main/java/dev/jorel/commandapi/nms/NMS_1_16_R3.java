@@ -178,7 +178,6 @@ import net.minecraft.server.v1_16_R3.ShapeDetectorBlock;
 import net.minecraft.server.v1_16_R3.SystemUtils;
 import net.minecraft.server.v1_16_R3.Vec2F;
 import net.minecraft.server.v1_16_R3.Vec3D;
-import net.minecraft.server.v1_16_R3.WorldServer;
 
 @RequireField(in = DataPackResources.class, name = "i", ofType = CustomFunctionManager.class)
 @RequireField(in = DataPackResources.class, name = "b", ofType = IReloadableResourceManager.class)
@@ -186,28 +185,38 @@ import net.minecraft.server.v1_16_R3.WorldServer;
 @RequireField(in = EntitySelector.class, name = "checkPermissions", ofType = boolean.class)
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
 @RequireField(in = ParticleParamBlock.class, name = "c", ofType = IBlockData.class)
+@RequireField(in = ParticleParamItem.class, name = "c", ofType = ItemStack.class)
+@RequireField(in = ParticleParamRedstone.class, name = "g", ofType = float.class)
 public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	
 	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
 	private static final VarHandle DATAPACKRESOURCES_B;
 	private static final VarHandle SimpleHelpMap_helpTopics;
 	private static final VarHandle ParticleParamBlock_c;
+	private static final VarHandle ParticleParamItem_c;
+	private static final VarHandle ParticleParamRedstone_g;
 	
 	// Compute all var handles all in one go so we don't do this during main server runtime
 	static {
 		VarHandle dpr_b = null;
 		VarHandle shm_ht = null;
 		VarHandle ppb_c = null;
+		VarHandle ppi_c = null;
+		VarHandle ppr_g = null;
 		try {
 			 dpr_b = MethodHandles.privateLookupIn(DataPackResources.class, MethodHandles.lookup()).findVarHandle(DataPackResources.class, "b", IReloadableResourceManager.class);			 
 			 shm_ht = MethodHandles.privateLookupIn(SimpleHelpMap.class, MethodHandles.lookup()).findVarHandle(SimpleHelpMap.class, "helpTopics", Map.class);
 			 ppb_c = MethodHandles.privateLookupIn(ParticleParamBlock.class, MethodHandles.lookup()).findVarHandle(ParticleParamBlock.class, "c", IBlockData.class);
+			 ppb_c = MethodHandles.privateLookupIn(ParticleParamItem.class, MethodHandles.lookup()).findVarHandle(ParticleParamItem.class, "c", ItemStack.class);
+			 ppr_g = MethodHandles.privateLookupIn(ParticleParamRedstone.class, MethodHandles.lookup()).findVarHandle(ParticleParamRedstone.class, "g", float.class);
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
 		 DATAPACKRESOURCES_B = dpr_b;
 		 SimpleHelpMap_helpTopics = shm_ht;
 		 ParticleParamBlock_c = ppb_c;
+		 ParticleParamItem_c = ppi_c;
+		 ParticleParamRedstone_g = ppr_g;
 	}
 
 	private static NamespacedKey fromMinecrafKey(MinecraftKey key) {
@@ -405,8 +414,9 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
-	public String convert(Particle particle) {
-		return CraftParticle.toNMS(particle).a();
+	public String convert(ParticleData<?> particle) {
+		return CraftParticle.toNMS(particle.particle(), particle.data()).a();
+
 	}
 
 	@Override
@@ -707,7 +717,6 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	@Override
 	public ParticleData<?> getParticle(CommandContext<CommandListenerWrapper> cmdCtx, String str) {
 		final ParticleParam particleOptions = ArgumentParticle.a(cmdCtx, str);
-		final WorldServer level = cmdCtx.getSource().getWorld();
 		
 		final Particle particle = CraftParticle.toBukkit(particleOptions);
 		if(particleOptions instanceof ParticleParamBlock options) {
@@ -722,10 +731,10 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 			final float blue = Float.parseFloat(optionsArr[3]);
 
 			final Color color = Color.fromRGB((int) (red * 255.0F), (int) (green * 255.0F), (int) (blue * 255.0F));
-			return new ParticleData<DustOptions>(particle, new DustOptions(color, options.getScale()));
+			return new ParticleData<DustOptions>(particle, new DustOptions(color, (float) ParticleParamRedstone_g.get(options)));
 		}
 		if(particleOptions instanceof ParticleParamItem options) {
-			return new ParticleData<org.bukkit.inventory.ItemStack>(particle, CraftItemStack.asBukkitCopy(options.getItem()));
+			return new ParticleData<org.bukkit.inventory.ItemStack>(particle, CraftItemStack.asBukkitCopy((ItemStack) ParticleParamItem_c.get(options)));
 		}
 		CommandAPI.getLog().warning("Invalid particle data type for " + particle.getDataType().toString());
 		return new ParticleData<Void>(particle, null);
