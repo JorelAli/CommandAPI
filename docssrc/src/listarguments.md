@@ -12,6 +12,7 @@ Unlike other arguments, because this argument can be interpreted in various diff
 
 \begin{align}
 &\quad\texttt{Create a ListArgumentBuilder} \\\\
+\rightarrow&\quad\texttt{\(Provide the list delimiter\)} \\\\
 \rightarrow&\quad\texttt{Provide the list to pull suggestions from} \\\\
 \rightarrow&\quad\texttt{Provide the mapper of the list items to a string} \\\\
 \rightarrow&\quad\texttt{Build the ListArgument}

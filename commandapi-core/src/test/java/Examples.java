@@ -52,6 +52,7 @@ import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -1049,8 +1050,14 @@ new CommandAPICommand("suicide")
 /* ANCHOR: normalcommandexecutors3 */
 new CommandAPICommand("suicide")
     .executes((sender, args) -> {
-        ((LivingEntity) sender).setHealth(0);
-    }, ExecutorType.PLAYER, ExecutorType.ENTITY)
+        LivingEntity entity;
+        if(sender instanceof ProxiedCommandSender proxy) {
+            entity = (LivingEntity) proxy.getCallee();
+        } else {
+            entity = (LivingEntity) sender;
+        }
+        entity.setHealth(0);
+    }, ExecutorType.PLAYER, ExecutorType.PROXY)
     .register();
 /* ANCHOR_END: normalcommandexecutors3 */
 }
