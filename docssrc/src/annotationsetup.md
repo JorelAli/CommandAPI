@@ -1,6 +1,6 @@
 # Using the annotation system
 
-The annotation system is a separate part of the CommandAPI, and as a result it needs to be included as an additional dependency to your project. 
+The annotation system is a separate part of the CommandAPI, and as a result it needs to be included as an additional dependency to your project.
 
 The annotation system effectively needs to be added twice: Once for compilation and again to invoke the annotation processor itself.
 
@@ -15,7 +15,7 @@ The annotation system effectively needs to be added twice: Once for compilation 
       <dependency>
           <groupId>dev.jorel</groupId>
           <artifactId>commandapi-annotations</artifactId>
-          <version>8.1.0</version>
+          <version>8.2.0</version>
           <scope>provided</scope>
       </dependency>
   </dependencies>
@@ -35,7 +35,7 @@ The annotation system effectively needs to be added twice: Once for compilation 
                       <path>
                           <groupId>dev.jorel</groupId>
                           <artifactId>commandapi-annotations</artifactId>
-                          <version>8.1.0</version>
+                          <version>8.2.0</version>
                       </path>
                   </annotationProcessorPaths>
               </configuration>
@@ -61,9 +61,7 @@ The annotation system effectively needs to be added twice: Once for compilation 
 
   ```gradle
   dependencies {
-      compileOnly "dev.jorel:commandapi-annotations:8.1.0"
-      annotationProcessor "dev.jorel:commandapi-annotations:8.1.0"
+      compileOnly "dev.jorel:commandapi-annotations:8.2.0"
+      annotationProcessor "dev.jorel:commandapi-annotations:8.2.0"
   }
   ```
-
-  

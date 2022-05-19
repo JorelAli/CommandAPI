@@ -23,4 +23,3 @@ public {{#include ../../commandapi-annotations/src/test/java/WarpCommand.java:wa
 ```
 
 </div>
-

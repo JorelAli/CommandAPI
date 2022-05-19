@@ -1,6 +1,6 @@
 # Enchantment argument
 
-![](./images/arguments/enchantment.png)
+![An enchantment argument suggesting a list of Minecraft enchantments](./images/arguments/enchantment.png)
 
 The `EnchantmentArgument` class lets users input a specific enchantment. As you would expect, the cast type is Bukkit's `Enchantment` class.
 
@@ -21,4 +21,3 @@ Since most enchantment levels range between 1 and 5, we will also make use of th
 ```
 
 </div>
-

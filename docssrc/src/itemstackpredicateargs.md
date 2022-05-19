@@ -18,6 +18,4 @@ We implement this with a simple for loop over the player's inventory and remove 
 {{#include ../../commandapi-core/src/test/java/Examples.java:itemstackpredicatearguments}}
 ```
 
-
 </div>
-

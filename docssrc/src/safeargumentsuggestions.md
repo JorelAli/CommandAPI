@@ -189,4 +189,3 @@ And then we can register our command as normal:
 ```
 
 </div>
-

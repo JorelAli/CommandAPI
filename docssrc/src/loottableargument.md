@@ -1,6 +1,6 @@
 # LootTable argument
 
-![](./images/arguments/loottable.png)
+![A loot table argument showing a list of Minecraft loot tables as suggestions](./images/arguments/loottable.png)
 
 The `LootTableArgument` class can be used to get a Bukkit `LootTable` object.
 

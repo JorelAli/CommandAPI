@@ -1,6 +1,6 @@
 # Biome arguments
 
-![](./images/arguments/biome.png)
+![A biome argument suggesting a list of Minecraft biomes](./images/arguments/biome.png)
 
 In Minecraft 1.16, they added the ability to refer to in-game biomes. The CommandAPI implements this using the `BiomeArgument`. As expected, this returns Bukkit's `Biome` enum when used.
 

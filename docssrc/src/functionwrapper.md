@@ -38,4 +38,4 @@ The `run()` method runs the function. The command executor that runs this functi
 
 ### `runAs(Entity)`
 
-The `runAs(Entity)` is the same as the `run()` method, but it allows you to change the command executor to another entity. 
+The `runAs(Entity)` is the same as the `run()` method, but it allows you to change the command executor to another entity.

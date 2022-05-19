@@ -6,7 +6,7 @@ So far in this documentation, we've described many different ways to register co
 
 ## The `executes()` and `then()` methods
 
-The Command Tree represents command structures in a tree-like fashion, in a very similar way that Brigadier's API lets you declare commands. Command tree commands effectively revolve around two methods: 
+The Command Tree represents command structures in a tree-like fashion, in a very similar way that Brigadier's API lets you declare commands. Command tree commands effectively revolve around two methods:
 
 ```java
 public T executes(CommandExecutor executor);
@@ -90,8 +90,6 @@ Say we wanted to create a plugin to let a user edit signs. We have a single comm
 /signedit copy <line_number>       - Copies the current text from a line on a sign
 /signedit paste <line_number>      - Pastes the copied text onto a line on a sign
 ```
-
-
 
 ```java
 {{#include ../../commandapi-core/src/test/java/Examples.java:CommandTree_signedit}}

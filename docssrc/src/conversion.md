@@ -91,6 +91,6 @@ With the EssentialsX plugin, the `<speed>` value can only take numbers between 0
 {{#include ../../commandapi-core/src/test/java/Examples.java:converter2}}
 ```
 
-![](./images/speed.gif)
+![An image showing /execute run for EssentialsX's /speed command](./images/speed.gif)
 
 </div>

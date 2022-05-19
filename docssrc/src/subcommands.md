@@ -28,6 +28,7 @@ add <permission> <groupName>
 ```
 
 We can implement this by creating a `CommandAPICommand` with the command name `add`:
+
 ```java
 {{#include ../../commandapi-core/src/test/java/Examples.java:subcommandspart}}
 ```
