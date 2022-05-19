@@ -94,7 +94,7 @@ As of the time of writing, the latest stable version of the `maven-shade-plugin`
 </pluginRepositories>
 ```
 
-Once you've added this this, you can shade the CommandAPI easily by adding the `maven-shade-plugin` to your build sequence using the snapshot version `3.3.0-SNAPSHOT`:
+Once you've added this this, you can shade the CommandAPI easily by adding the `maven-shade-plugin` to your build sequence using the snapshot version `3.3.1-SNAPSHOT`:
 
 ```xml
 <build>
@@ -102,7 +102,7 @@ Once you've added this this, you can shade the CommandAPI easily by adding the `
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-shade-plugin</artifactId>
-            <version>3.3.0-SNAPSHOT</version>
+            <version>3.3.1-SNAPSHOT</version>
             <executions>
                 <execution>
                     <id>shade</id>

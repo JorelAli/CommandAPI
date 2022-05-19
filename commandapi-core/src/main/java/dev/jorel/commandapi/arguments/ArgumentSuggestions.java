@@ -7,6 +7,7 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.SuggestionInfo;
 
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
@@ -106,7 +107,9 @@ public interface ArgumentSuggestions {
 	 */
 	private static Suggestions toSuggestions(SuggestionsBuilder builder, String... suggestions) {
 		for(String suggestion : suggestions) {
-			builder.suggest(suggestion);
+			if(suggestion.toLowerCase(Locale.ROOT).startsWith(builder.getRemainingLowerCase())) {
+				builder.suggest(suggestion);
+			}
 		}
 		return builder.build();
 	}
@@ -119,6 +122,10 @@ public interface ArgumentSuggestions {
 	 */
 	private static Suggestions toSuggestions(SuggestionsBuilder builder, IStringTooltip... suggestions) {
 		for(IStringTooltip suggestion : suggestions) {
+			if(!suggestion.getSuggestion().toLowerCase(Locale.ROOT).startsWith(builder.getRemainingLowerCase())) {
+				continue;
+			}
+
 			if(suggestion.getTooltip() == null) {
 				builder.suggest(suggestion.getSuggestion());
 			} else {

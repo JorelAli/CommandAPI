@@ -13,19 +13,17 @@ The CommandAPI repository consists of a multi-module Maven project and some docu
 
 ### Main logic
 
-- [`commandapi-core`](https://github.com/JorelAli/CommandAPI/tree/master/CommandAPI/commandapi-core) - the main bulk of the CommandAPI. Houses the developer-facing API and the main backend logic.
+- [`commandapi-core`](https://github.com/JorelAli/CommandAPI/tree/master/commandapi-core) - the main bulk of the CommandAPI. Houses the developer-facing API and the main backend logic.
 - `commandapi-x.x.x` - the NMS implementation for various versions of Minecraft
 
-### Outputs
+**Outputs**
+- [`commandapi-plugin`](https://github.com/JorelAli/CommandAPI/tree/master/commandapi-plugin) - the CommandAPI as a standalone plugin with the `JavaPlugin` entrypoint and `config.yml` command converter.
+- [`commandapi-shade`](https://github.com/JorelAli/CommandAPI/tree/master/commandapi-shade) - the dependency required to shade the CommandAPI.
+- [`commandapi-annotations`](https://github.com/JorelAli/CommandAPI/tree/master/commandapi-annotations) - a compile-time annotation processor for commands declared using Java's annotations.
 
-- [`commandapi-plugin`](https://github.com/JorelAli/CommandAPI/tree/master/CommandAPI/commandapi-plugin) - the CommandAPI as a standalone plugin with the `JavaPlugin` entrypoint and `config.yml` command converter.
-- [`commandapi-shade`](https://github.com/JorelAli/CommandAPI/tree/master/CommandAPI/commandapi-shade) - the dependency required to shade the CommandAPI.
-- [`commandapi-annotations`](https://github.com/JorelAli/CommandAPI/tree/master/CommandAPI/commandapi-annotations) - a compile-time annotation processor for commands declared using Java's annotations.
-
-### Helpers
-
-- [`commandapi-vh`](https://github.com/JorelAli/CommandAPI/tree/master/CommandAPI/commandapi-vh) - a Maven module that links the various NMS modules together for `commandapi-shade` and `commandapi-plugin`.
-- [`commandapi-preprocessor`](https://github.com/JorelAli/CommandAPI/tree/master/CommandAPI/commandapi-preprocessor) - an annotation processor used internally in the CommandAPI to perform compile-time field reflection checks.
+**Helpers**
+- [`commandapi-vh`](https://github.com/JorelAli/CommandAPI/tree/master/commandapi-vh) - a Maven module that links the various NMS modules together for `commandapi-shade` and `commandapi-plugin`.
+- [`commandapi-preprocessor`](https://github.com/JorelAli/CommandAPI/tree/master/commandapi-preprocessor) - an annotation processor used internally in the CommandAPI to perform compile-time field reflection checks.
 
 ### Documentation
 
@@ -47,12 +45,14 @@ Pull requests should:
 
 If the pull request is a new feature, some documentation for the feature should be provided in a new Markdown file in `docssrc/src` if the feature is relatively complex, requiring various steps to use the feature. If the feature is simple enough to explain with a few examples, please include these in your pull request description instead of creating a Markdown documentation file.
 
+If the pull request is a cosmetic change (e.g. fixing whitespace or code formatting), since cosmetic changes don't add anything of value to the CommandAPI's functionality or stability, these will generally not be accepted.
+
 ## Coding conventions
 
 We don't have any overly strict conventions, but these are a must:
 
 - Use tabs instead of spaces, except for documentation-facing example code (such as `commandapi-core/src/main/test/Examples.java`).
-- Avoiding Java's Streams API, in favour of for loops or while loops.
+- Avoiding Java's Streams API, in favour of for loops or while loops for code that will run on a Minecraft server.
 - Avoid the use of `null` wherever possible. If `null` must be used, consider using optionals.
 - If using reflection or otherwise, all required fields must be declared at the top of the file with `@RequireField`.
 - If you are adding a new developer-facing API method, suitable JavaDocs must be provided.
@@ -63,8 +63,10 @@ Additionally, the following are recommended but not overly enforced:
 - Avoiding the use of reflection, in favour of `VarHandles`.
 - If a field in a method will be used a lot and isn't going to be modified, make it `final`.
 
-## Common pull request pitfalls
+## Contributing to the documentation
 
-**Did you fix whitespace, formatting or a purely cosmetic change?**
+The documentation is stored in `docssrc` and uses a custom build of [mdBook](https://rust-lang.github.io/mdBook/). Instructions on how to use this can be found [here](https://github.com/JorelAli/CommandAPI#building-the-commandapis-documentation) on the main README file.
 
-Cosmetic changes don't add anything of value to the CommandAPI's functionality or stability and will generally not be accepted.
+To set up a development mdBook server (where you can see changes live), run `mdbook-fa5.exe serve` (`mdbook serve` on Linux) and navigate to `localhost:3000`. You can then edit files in `docssrc/src` and see your changes appears automatically.
+
+When making contributions to the main documentation, _do not_ include changes to the `docs` folder - please restrict changes to the source code (the `docssrc` folder).
