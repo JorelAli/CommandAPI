@@ -52,6 +52,30 @@ public ListArgumentBuilder<T>(String nodeName, String delimiter);
 >
 > ![List arguments with duplicates disabled](./images/arguments/listargument_without_duplicates.gif)
 
+\\[\downarrow\\]
+
 ### Providing the list
 
-The `ListArgument` requires a list that is displayed as suggestions to the user.
+The `ListArgument` requires a list that the list argument can pull suggestions and validation from. The `ListArgument` does not support values which are not present in the provided list. There are three methods that can be used to provide a list for the `ListArgument`:
+
+- Providing an immutable list (a list that doesn't change) using the `Collection<T>` parameter:
+
+  ```java
+  public ListArgumentBuilderSuggests withList(Collection<T> list);
+  ```
+
+- Providing a list that is determined when suggestions are being displayed to the user and before the command has been executed using the `Supplier<Collection<T>>` parameter:
+
+  ```java
+  public ListArgumentBuilderSuggests withList(Supplier<Collection<T>> list);
+  ```
+
+- Providing a list that is determined when suggestions are being displayed to the user and before the command has been executed, that also depends on the `CommandSender` running the command, using the `Function<CommandSender, Collection<T>>` parameter:
+
+  ```java
+  public ListArgumentBuilderSuggests withList(Function<CommandSender, Collection<T>> list);
+  ```
+
+\\[\downarrow\\]
+
+### Providing a list mapping function
