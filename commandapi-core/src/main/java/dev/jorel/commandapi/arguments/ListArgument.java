@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 import org.bukkit.command.CommandSender;
@@ -50,13 +49,15 @@ public class ListArgument<T> extends Argument<Collection> implements IGreedyArgu
 
 	private final String delimiter;
 	private final boolean allowDuplicates;
+	private final boolean allowUnlisted;
 	private final Function<CommandSender, Collection<T>> supplier;
 	private final Function<T, IStringTooltip> mapper;
 
-	private ListArgument(String nodeName, String delimiter, boolean allowDuplicates, Function<CommandSender, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper) {
+	ListArgument(String nodeName, String delimiter, boolean allowDuplicates, boolean allowUnlisted, Function<CommandSender, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper) {
 		super(nodeName, StringArgumentType.greedyString());
 		this.delimiter = delimiter;
 		this.allowDuplicates = allowDuplicates;
+		this.allowUnlisted = allowUnlisted;
 		this.supplier = supplier;
 		this.mapper = suggestionsMapper;
 
@@ -149,140 +150,15 @@ public class ListArgument<T> extends Argument<Collection> implements IGreedyArgu
 		for(String str : strArr) {
 			// Yes, this isn't an instant lookup HashMap, but this is the best we can do
 			for(IStringTooltip value : values.keySet()) {
-				if(value.getSuggestion().equals(str)) {
-					list.add(values.get(value));
+				if(value.getSuggestion().equals(str) || allowUnlisted) {
+					if(allowDuplicates) {
+						list.add(values.get(value));
+					} else if(!list.contains(values.get(value))) {
+						list.add(values.get(value));
+					}
 				}
 			}
 		}
 		return list;
-	}
-
-	/**
-	 * A builder to create a ListArgument
-	 * @param <T> the type that the list argument generates a list of.
-	 */
-	public static class ListArgumentBuilder<T> {
-
-		private final String nodeName;
-		private final String delimiter;
-		private boolean allowDuplicates = false;
-
-		/**
-		 * Creates a new ListArgumentBuilder with a specified node name. Defaults the
-		 * delimiter for each element in the list to a space
-		 * 
-		 * @param nodeName the name of the node for this argument
-		 */
-		public ListArgumentBuilder(String nodeName) {
-			this(nodeName, " ");
-		}
-
-		/**
-		 * Creates a new ListArgumentBuilder with a specified node name
-		 * @param nodeName the name of the node for this argument
-		 * @param delimiter the separator for each element in the list (for example, a space or a comma)
-		 */
-		public ListArgumentBuilder(String nodeName, String delimiter) {
-			this.nodeName = nodeName;
-			this.delimiter = delimiter;
-		}
-
-		public ListArgumentBuilder<T> allowDuplicates(boolean allowDuplicates) {
-			this.allowDuplicates = allowDuplicates;
-			return this;
-		}
-
-		/**
-		 * Specifies the list to use to generate suggestions for the list argument
-		 * 
-		 * @param list a function that accepts a CommandSender and returns a collection
-		 *             of elements to suggest for this list argument
-		 * @return this list argument builder
-		 */
-		public ListArgumentBuilderSuggests withList(Function<CommandSender, Collection<T>> list) {
-			return new ListArgumentBuilderSuggests(list);
-		}
-		
-		/**
-		 * Specifies the list to use to generate suggestions for the list argument
-		 * 
-		 * @param list a supplier that returns a collection of elements to suggest for
-		 *             this list argument
-		 * @return this list argument builder
-		 */
-		public ListArgumentBuilderSuggests withList(Supplier<Collection<T>> list) {
-			return withList(info -> list.get());
-		}
-
-		/**
-		 * Specifies the list to use to generate suggestions for the list argument
-		 * 
-		 * @param list a collection of elements to suggest for this list argument
-		 * @return this list argument builder
-		 */
-		public ListArgumentBuilderSuggests withList(Collection<T> list) {
-			return withList(info -> list);
-		}
-
-		/**
-		 * An intermediary class for the ListArgumentBuilder
-		 */
-		public class ListArgumentBuilderSuggests {
-
-			private final Function<CommandSender, Collection<T>> supplier;
-
-			private ListArgumentBuilderSuggests(Function<CommandSender, Collection<T>> list) {
-				this.supplier = list;
-			}
-
-			/**
-			 * Specifies that the mapping function for this argument calls the <code>toString()</code> method.
-			 * @return this list argument builder
-			 */
-			public ListArgumentBuilderFinished withStringMapper() {
-				return withStringTooltipMapper(t -> StringTooltip.none(String.valueOf(t)));
-			}
-
-			/**
-			 * Specifies the mapping function of the specific type <code>T</code> to a
-			 * <code>String</code> so an element can be shown to a user as suggestions.
-			 * 
-			 * @return this list argument builder
-			 */
-			public ListArgumentBuilderFinished withMapper(Function<T, String> mapper) {
-				return withStringTooltipMapper(t -> StringTooltip.none(mapper.apply(t)));
-			}
-
-			/**
-			 * Specifies the mapping function of the specific type <code>T</code> to a
-			 * {@link IStringTooltip} so an element can be shown to a user as a suggestion
-			 * with a tooltip.
-			 * 
-			 * @return this list argument builder
-			 */
-			public ListArgumentBuilderFinished withStringTooltipMapper(Function<T, IStringTooltip> mapper) {
-				return new ListArgumentBuilderFinished(mapper);
-			}
-
-			/**
-			 * An intermediary class for the ListArgumentBuilder
-			 */
-			public class ListArgumentBuilderFinished {
-
-				private final Function<T, IStringTooltip> mapper;
-
-				private ListArgumentBuilderFinished(Function<T, IStringTooltip> mapper) {
-					this.mapper = mapper;
-				}
-
-				/**
-				 * Builds this list argument.
-				 * @return a {@link ListArgument}
-				 */
-				public ListArgument<T> build() {
-					return new ListArgument<>(nodeName, delimiter, allowDuplicates, supplier, mapper);
-				}
-			}
-		}
 	}
 }
