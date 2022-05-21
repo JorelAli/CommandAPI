@@ -324,6 +324,18 @@ This is the current roadmap for the CommandAPI (as of 13th April 2022):
     </thead>
     <tbody>
         <tr>
+            <td valign="top"><b>8.2.0</b></td>
+            <td valign="top">May 2022</td>
+            <td valign="top">
+                <ul>
+                    <li>Adds a list argument</li>
+                    <li>Brings back support for Minecraft 1.16.5</li>
+                    <li>Fixes documentation bug with multiple executor types</li>
+                    <li>Fixes bug where suggestions wouldn't "filter" while being typed in chat</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
             <td valign="top"><b>8.1.0</b></td>
             <td valign="top">May 2022</td>
             <td valign="top">
