@@ -18,7 +18,6 @@ public class ListArgumentBuilder<T> {
 	private final String nodeName;
 	private final String delimiter;
 	private boolean allowDuplicates = false;
-	private boolean allowUnlisted = false;
 
 	/**
 	 * Creates a new ListArgumentBuilder with a specified node name. Defaults the
@@ -49,11 +48,6 @@ public class ListArgumentBuilder<T> {
 	 */
 	public ListArgumentBuilder<T> allowDuplicates(boolean allowDuplicates) {
 		this.allowDuplicates = allowDuplicates;
-		return this;
-	}
-
-	public ListArgumentBuilder<T> allowUnlisted(boolean allowUnlisted) {
-		this.allowUnlisted = allowUnlisted;
 		return this;
 	}
 
@@ -145,7 +139,7 @@ public class ListArgumentBuilder<T> {
 			 * @return a {@link ListArgument}
 			 */
 			public ListArgument<T> build() {
-				return new ListArgument<>(nodeName, delimiter, allowDuplicates, allowUnlisted, supplier, mapper);
+				return new ListArgument<>(nodeName, delimiter, allowDuplicates, supplier, mapper);
 			}
 		}
 	}

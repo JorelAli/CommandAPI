@@ -49,15 +49,13 @@ public class ListArgument<T> extends Argument<Collection> implements IGreedyArgu
 
 	private final String delimiter;
 	private final boolean allowDuplicates;
-	private final boolean allowUnlisted;
 	private final Function<CommandSender, Collection<T>> supplier;
 	private final Function<T, IStringTooltip> mapper;
 
-	ListArgument(String nodeName, String delimiter, boolean allowDuplicates, boolean allowUnlisted, Function<CommandSender, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper) {
+	ListArgument(String nodeName, String delimiter, boolean allowDuplicates, Function<CommandSender, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper) {
 		super(nodeName, StringArgumentType.greedyString());
 		this.delimiter = delimiter;
 		this.allowDuplicates = allowDuplicates;
-		this.allowUnlisted = allowUnlisted;
 		this.supplier = supplier;
 		this.mapper = suggestionsMapper;
 
@@ -150,7 +148,7 @@ public class ListArgument<T> extends Argument<Collection> implements IGreedyArgu
 		for(String str : strArr) {
 			// Yes, this isn't an instant lookup HashMap, but this is the best we can do
 			for(IStringTooltip value : values.keySet()) {
-				if(value.getSuggestion().equals(str) || allowUnlisted) {
+				if(value.getSuggestion().equals(str)) {
 					if(allowDuplicates) {
 						list.add(values.get(value));
 					} else if(!list.contains(values.get(value))) {
