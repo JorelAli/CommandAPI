@@ -45,7 +45,7 @@ import dev.jorel.commandapi.nms.NMS;
  * @param <T> the type that this list argument generates a list of.
  */
 @SuppressWarnings("rawtypes")
-public class ListArgument<T> extends Argument<Collection> implements IGreedyArgument {
+public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 
 	private final String delimiter;
 	private final boolean allowDuplicates;
@@ -124,8 +124,8 @@ public class ListArgument<T> extends Argument<Collection> implements IGreedyArgu
 	}
 
 	@Override
-	public Class<Collection> getPrimitiveType() {
-		return Collection.class;
+	public Class<List> getPrimitiveType() {
+		return List.class;
 	}
 
 	@Override
@@ -134,7 +134,7 @@ public class ListArgument<T> extends Argument<Collection> implements IGreedyArgu
 	}
 
 	@Override
-	public <CommandListenerWrapper> Collection<T> parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> List<T> parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		// Get the list of values which this can take
 		Map<IStringTooltip, T> values = new HashMap<>();

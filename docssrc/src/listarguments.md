@@ -61,21 +61,75 @@ The `ListArgument` requires a list that the list argument can pull suggestions a
 - Providing an immutable list (a list that doesn't change) using the `Collection<T>` parameter:
 
   ```java
-  public ListArgumentBuilderSuggests withList(Collection<T> list);
+  public ListArgumentBuilder withList(Collection<T> list);
   ```
 
 - Providing a list that is determined when suggestions are being displayed to the user and before the command has been executed using the `Supplier<Collection<T>>` parameter:
 
   ```java
-  public ListArgumentBuilderSuggests withList(Supplier<Collection<T>> list);
+  public ListArgumentBuilder withList(Supplier<Collection<T>> list);
   ```
 
 - Providing a list that is determined when suggestions are being displayed to the user and before the command has been executed, that also depends on the `CommandSender` running the command, using the `Function<CommandSender, Collection<T>>` parameter:
 
   ```java
-  public ListArgumentBuilderSuggests withList(Function<CommandSender, Collection<T>> list);
+  public ListArgumentBuilder withList(Function<CommandSender, Collection<T>> list);
   ```
 
 \\[\downarrow\\]
 
 ### Providing a list mapping function
+
+In order to display suggestions, the `ListArgument` needs to know how to convert a list entry to a string. For example, a `Location` may be converted into `"x,y,z"`. The `ListArgumentBuilder` provides three methods for providing a mapping function:
+
+- The `withStringMapper()` method converts the object to a string using the object's `.toString()` method. If the object is null, this method will populate it with the string `"null"`:
+
+  ```java
+  public ListArgumentBuilder withStringMapper();
+  ```
+
+- The `withMapper()` method requires a function that maps the object to a string:
+
+  ```java
+  public ListArgumentBuilder withMapper(Function<T, String> mapper);
+  ```
+
+- The `withStringTooltipMapper()` method requires a function that maps the object to an `IStringTooltip`. This allows you to also provide hover tooltips for the current item:
+
+  ```java
+  public ListArgumentBuilder withStringTooltipMapper(Function<T, IStringTooltip> mapper);
+  ```
+
+\\[\downarrow\\]
+
+### Building the `ListArgumentBuilder`
+
+To finish building the `ListArgument`, call the `build()` method:
+
+```java
+public ListArgument<T> build();
+```
+
+-----
+
+## Examples
+
+<div class="example">
+
+### Example - Multi-give command
+
+Say you wanted to give yourself multiple items in a single command. For this command, we'll use the following syntax, which lets you provide the number of items to give, and a list of materials:
+
+```mccmd
+/multigive <amount> <materials>
+```
+
+To do this, we create a command with an `IntegerArgument` to specify the amount (between 1 and 64), and a `ListArgument` that accepts a list of `Material` objects. We use the `ListArgumentBuilder` to provide a list of materials as well as a mapping function that converts the material's name to a lowercase string. By default, we use a space delimiter (separator) for arguments in the list.
+
+```java
+{{#include ../../commandapi-core/src/test/java/Examples.java:ListArgument_MultiGive}}
+```
+
+![A /multigive argument gif where a user types "/multigive 64 stone dirt cobblestone grass_block" and suggestions appear automatically. Running the command gives the player 64 stone, dirt, cobblestone and grass_block items in their hotbar](./images/arguments/listargument_multigive.gif)
+
+</div>
