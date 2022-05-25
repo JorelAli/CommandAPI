@@ -32,27 +32,31 @@
 - <img width="20px" src="https://icon-icons.com/icons2/2348/PNG/512/download_arrow_icon_143023.png"></img> [All downloads](https://github.com/JorelAli/CommandAPI/releases)
 - <img width="20px" src="https://icon-icons.com/icons2/2348/PNG/512/books_icon_143050.png"></img> [Documentation (includes usage for server owners!)](https://www.jorel.dev/CommandAPI/)
 
-**Announcements:**
-
 **Compatible Minecraft versions:**
 
 The list of what version of the CommandAPI you'll need to run on a specific version of Minecraft is as follows:
 
-- **Minecraft 1.13.x**: CommandAPI v1.0 to 5.12
-- **Minecraft 1.14.1, 1.14.2**: CommandAPI v2.0 to 5.12
-- **Minecraft 1.14.3, 1.14.4**: CommandAPI v2.1 to 5.12
-- **Minecraft 1.15.x**: CommandAPI v2.3a to 5.12
-- **Minecraft 1.16.1**: CommandAPI v3.0 to 5.12
-- **Minecraft 1.16.2**: CommandAPI v4.0 to 5.12
-- **Minecraft 1.16.3**: CommandAPI v4.2 to 5.12
-- **Minecraft 1.16.4**: CommandAPI v5.2 to 5.12
-- **Minecraft 1.16.5**: CommandAPI v5.7 to 7.0.0 or 8.2.0 (Java 17)
-- _**For Minecraft 1.17 or higher, you'll need Java 16 or higher**_
-  - **Minecraft 1.17**: CommandAPI 6.0.x to 6.4.x (Java 16) or 7.0.0 to 8.1.0 (Java 17)
-  - **Minecraft 1.17.1**: CommandAPI 6.1.x to 6.4.x (Java 16) or 7.0.0 to 8.1.0 (Java 17)
-- _**For Minecraft 1.18 or higher, you'll need Java 17 or higher**_
-  - **Minecraft 1.18, 1.18.1**: CommandAPI 6.5.2 to 8.1.0
-  - **Minecraft 1.18.2**: CommandAPI 6.5.4 to 8.1.0
+| Minecraft version  | Compatible versions | Latest compatible version | Minimum Java version to run latest version |
+|--------------------|---------------------|---------------------------|--------------------------------------------|
+| **1.13.x**         | v1.0 - 5.12         | 5.12                      | 8                                          |
+| **1.14.1, 1.14.2** | v2.0 - 5.12         | 5.12                      | 8                                          |
+| **1.14.3, 1.14.4** | v2.1 - 5.12         | 5.12                      | 8                                          |
+| **1.15.x**         | v2.3a - 5.12        | 5.12                      | 8                                          |
+| **1.16.1**         | v3.0 - 5.12         | 5.12                      | 8                                          |
+| **1.16.2**         | v4.0 - 5.12         | 5.12                      | 8                                          |
+| **1.16.3**         | v4.2 - 5.12         | 5.12                      | 8                                          |
+| **1.16.4**         | v5.2 - 5.12         | 5.12                      | 8                                          |
+| **1.16.5**         | v5.7 - 7.0.0, 8.2.0 | 8.2.0                     | 17                                         |
+| **1.17**           | 6.0.x - 8.2.0       | 8.2.0                     | 17                                         |
+| **1.17.1**         | 6.1.x - 8.2.0       | 8.2.0                     | 17                                         |
+| **1.18, 1.18.1**   | 6.5.2 - 8.2.0       | 8.2.0                     | 17                                         |
+| **1.18.2**         | 6.5.4 - 8.2.0       | 8.2.0                     | 17                                         |
+
+> Certain versions of Minecraft (1.16.5) cannot run on Java 17 by default. On 1.16.5 Paper servers, this can be bypassed using the following command:
+>
+> ```sh
+> java -DPaper.IgnoreJavaVersion=true -jar paper-server.jar
+> ```
 
 -----
 
