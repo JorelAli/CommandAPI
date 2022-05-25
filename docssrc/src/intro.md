@@ -37,6 +37,11 @@ Using the search icon <i class="fas fa-search"></i> in the top left corner, you 
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 8.0.0 \\(\rightarrow\\) 8.2.0
+
+- Adds [List arguments](./listarguments.md) section.
+- Fix bug with [Multiple command executors with the same implementation](./normalexecutors.md#multiple-command-executors-with-the-same-implementation) example.
+
 ### Documentation changes 7.0.0 \\(\rightarrow\\) 8.0.0
 
 - Updated particle arguments in the [Particle arguments](./particlearguments.md) section.
