@@ -26,7 +26,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.1.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.2.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -116,7 +116,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <li><b>Minecraft 1.16.2</b>: CommandAPI v4.0 to 5.12</li>
 <li><b>Minecraft 1.16.3</b>: CommandAPI v4.2 to 5.12</li>
 <li><b>Minecraft 1.16.4</b>: CommandAPI v5.2 to 5.12</li>
-<li><b>Minecraft 1.16.5</b>: CommandAPI v5.7 to 7.0.0</li>
+<li><b>Minecraft 1.16.5</b>: CommandAPI v5.7 to 7.0.0 or 8.2.0 (Java 17)</li>
 <li><em><b>For Minecraft 1.17 or higher, you'll need Java 16 or higher</b></em><ul>
 <li><b>Minecraft 1.17</b>: CommandAPI 6.0.x to 6.4.x (Java 16) or 7.0.0 to 8.1.0 (Java 17)</li>
 <li><b>Minecraft 1.17.1</b>: CommandAPI 6.1.x to 6.4.x (Java 16) or 7.0.0 to 8.1.0 (Java 17)</li>
@@ -255,7 +255,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
  <summary><b>Annotation-based commands</b></summary></details>
 </p>
 <p ><details>
-</p><div class="fragment"><div class="line">@Command(<span class="stringliteral">&quot;warp&quot;</span>)    </div>
+</p><div class="fragment"><div class="line">@Command(<span class="stringliteral">&quot;warp&quot;</span>)</div>
 <div class="line">public class WarpCommand {</div>
 <div class="line">    </div>
 <div class="line">    <span class="comment">// List of warp names and their locations</span></div>
@@ -322,10 +322,10 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <div class="fragment"><div class="line">git clone https://github.com/JorelAli/mdBook.git</div>
 </div><!-- fragment --></li>
 <li><p class="startli">Use git to checkout to the <code>fa5</code> branch, using the following command:</p>
-<p class="startli">``` git checkout fa5 ```</p>
+<p class="startli">```bash git checkout fa5 ```</p>
 </li>
 <li><p class="startli">Build the executable with <code>cargo</code> (can be installed using <code>sudo apt-get install cargo</code> on Ubuntu distros), using the following command:</p>
-<p class="startli">``` cargo build ```</p>
+<p class="startli">```bash cargo build ```</p>
 </li>
 <li>Grab the executable <code>mdbook</code> from <code>mdBook/target/debug/</code></li>
 </ul>
@@ -358,6 +358,18 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <p >Version </p>
 <p >Date </p>
 <p >Features / Changes  &lt;/thead&gt; &lt;tbody&gt; </p>
+<p ><b>8.2.0</b> </p>
+<p >May 2022 </p>
+<ul>
+<li>
+Adds a list argument </li>
+<li>
+Brings back support for Minecraft 1.16.5 </li>
+<li>
+Fixes documentation bug with multiple executor types </li>
+<li>
+Fixes bug where suggestions wouldn't "filter" while being typed in chat </li>
+</ul>
 <p ><b>8.1.0</b> </p>
 <p >May 2022 </p>
 <ul>
@@ -1269,7 +1281,7 @@ Initial release </li>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed May 4 2022 14:13:39 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Wed May 25 2022 10:09:07 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>
