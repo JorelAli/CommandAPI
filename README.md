@@ -25,7 +25,7 @@
 **Support and Project Discussion**:
 
 - <img width="20px" src="https://cdn3.iconfinder.com/data/icons/popular-services-brands-vol-2/512/discord-512.png"></img> [Discord](https://discord.gg/G4SzSxZ)
-- <img width="20px" src="https://static.spigotmc.org/img/spigot.png"></img> [Spigot page](https://www.spigotmc.org/resources/commandapi.62353/) 
+- <img width="20px" src="https://static.spigotmc.org/img/spigot.png"></img> [Spigot page](https://www.spigotmc.org/resources/commandapi.62353/)
 
 **Downloads & Documentation:**
 
@@ -46,7 +46,7 @@ The list of what version of the CommandAPI you'll need to run on a specific vers
 - **Minecraft 1.16.2**: CommandAPI v4.0 to 5.12
 - **Minecraft 1.16.3**: CommandAPI v4.2 to 5.12
 - **Minecraft 1.16.4**: CommandAPI v5.2 to 5.12
-- **Minecraft 1.16.5**: CommandAPI v5.7 to 7.0.0
+- **Minecraft 1.16.5**: CommandAPI v5.7 to 7.0.0 or 8.2.0 (Java 17)
 - _**For Minecraft 1.17 or higher, you'll need Java 16 or higher**_
   - **Minecraft 1.17**: CommandAPI 6.0.x to 6.4.x (Java 16) or 7.0.0 to 8.1.0 (Java 17)
   - **Minecraft 1.17.1**: CommandAPI 6.1.x to 6.4.x (Java 16) or 7.0.0 to 8.1.0 (Java 17)
@@ -60,31 +60,31 @@ The list of what version of the CommandAPI you'll need to run on a specific vers
 
 This project provides an API to help Bukkit/Spigot developers use the Minecraft 1.13 command UI, which includes:
 
-* **Better commands** - Prevent players from running invalid commands, making it easier for developers
+- **Better commands** - Prevent players from running invalid commands, making it easier for developers
 
   ![better commands](./images/printnumber.gif)
 
-* **Better arguments** - Easily switch from Location arguments to raw JSON, fully supported with built-in error checking
+- **Better arguments** - Easily switch from Location arguments to raw JSON, fully supported with built-in error checking
 
   ![better arguments](./images/explode.gif)
 
-* **Support for proxied command senders** - Run your command as other entities using `/execute as ... run command`
+- **Support for proxied command senders** - Run your command as other entities using `/execute as ... run command`
 
   ![proxied senders](./images/selfdestruct.gif)
   
-* **Argument tooltips** - Let your users know exactly what their command will do
+- **Argument tooltips** - Let your users know exactly what their command will do
 
   ![argument tooltips](./docssrc/src/images/warps.gif)
 
-* **Support for the `/execute` command** - Let your command to be executed by the built in `/execute` command
+- **Support for the `/execute` command** - Let your command to be executed by the built in `/execute` command
 
-* **Support for Minecraft's functions** - Allow your command to be executed from Minecraft's functions and tags
+- **Support for Minecraft's functions** - Allow your command to be executed from Minecraft's functions and tags
 
-* **No plugin.yml registration** - Commands don't need to be registered in the `plugin.yml` file anymore
+- **No plugin.yml registration** - Commands don't need to be registered in the `plugin.yml` file anymore
 
-* **You don't need Brigadier** - You don't need to import Brigadier in your projects to use the CommandAPI
+- **You don't need Brigadier** - You don't need to import Brigadier in your projects to use the CommandAPI
 
-* **No tracking** - The CommandAPI don't collect any stats about its plugin; what you see is what you get!
+- **No tracking** - The CommandAPI don't collect any stats about its plugin; what you see is what you get!
 
 In addition to all of the above:
 
@@ -99,8 +99,8 @@ In addition to all of the above:
 _(I always like to see code examples on GitHub repos, so here's what CommandAPI code looks like):_
 
 <details>
-	<summary><b>Simple command registration</b></summary>
-  
+    <summary><b>Simple command registration</b></summary>
+
 ```java
 new CommandAPICommand("enchantitem")
     .withArguments(new EnchantmentArgument("enchantment"))
@@ -118,7 +118,7 @@ new CommandAPICommand("enchantitem")
 </details>
 
 <details>
-	<summary><b>Potion removing, suggesting potions that a player has currently</b></summary>
+    <summary><b>Potion removing, suggesting potions that a player has currently</b></summary>
 
 ```java
 List<Argument> arguments = new ArrayList<>();
@@ -146,7 +146,7 @@ new CommandAPICommand("removeeffect")
 </details>
 
 <details>
-	<summary><b>Subcommands</b></summary>
+    <summary><b>Subcommands</b></summary>
 
 ```java
 new CommandAPICommand("perm")
@@ -188,10 +188,10 @@ new CommandAPICommand("perm")
 </details>
 
 <details>
-	<summary><b>Annotation-based commands</b></summary>
+    <summary><b>Annotation-based commands</b></summary>
 
 ```java
-@Command("warp")	
+@Command("warp")
 public class WarpCommand {
     
     // List of warp names and their locations
@@ -222,7 +222,7 @@ public class WarpCommand {
 </details>
 
 <details>
-	<summary><b>Command conversion (no compilation required)</b></summary>
+    <summary><b>Command conversion (no compilation required)</b></summary>
 
 ```yml
 plugins-to-convert:
@@ -243,7 +243,7 @@ The CommandAPI can be built easily, but requires copies of the Spigot server jar
 
 - Clone the repository using your preferred method, or with the command below:
 
-  ```
+  ```bash
   git clone https://github.com/JorelAli/CommandAPI.git
   ```
 
@@ -262,19 +262,19 @@ The CommandAPI's documentation is built using a custom version of [mdBook](https
   - On Linux:
     - Clone my [mdBook fork](https://github.com/JorelAli/mdBook) using your preferred method, or with the command below:
 
-      ```
+      ```bash
       git clone https://github.com/JorelAli/mdBook.git
       ```
 
     - Use git to checkout to the `fa5` branch, using the following command:
 
-      ```
+      ```bash
       git checkout fa5
       ```
 
     - Build the executable with `cargo` (can be installed using `sudo apt-get install cargo` on Ubuntu distros), using the following command:
 
-      ```
+      ```bash
       cargo build
       ```
 
@@ -293,9 +293,9 @@ The resulting compiled documentation is found in `docs/X.X.X`, where `X.X.X` is 
 This is the current roadmap for the CommandAPI (as of 13th April 2022):
 
 - **Future:**
-	
+
   **Annotation improvements**
-	
+
   The CommandAPI's annotation system has always been a bit limited and was primarily introduced as a proof-of-concept. In this update, the CommandAPI's annotation system will be improved to be (ideally) as powerful as the non-annotation system and have slightly better type safety, support for non-static methods and better checks to prevent invalid command generation.
 
   **CustomArgument improvements**
@@ -323,6 +323,18 @@ This is the current roadmap for the CommandAPI (as of 13th April 2022):
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td valign="top"><b>8.2.0</b></td>
+            <td valign="top">May 2022</td>
+            <td valign="top">
+                <ul>
+                    <li>Adds a list argument</li>
+                    <li>Brings back support for Minecraft 1.16.5</li>
+                    <li>Fixes documentation bug with multiple executor types</li>
+                    <li>Fixes bug where suggestions wouldn't "filter" while being typed in chat</li>
+                </ul>
+            </td>
+        </tr>
         <tr>
             <td valign="top"><b>8.1.0</b></td>
             <td valign="top">May 2022</td>
@@ -666,7 +678,7 @@ This is the current roadmap for the CommandAPI (as of 13th April 2022):
                     <li>Adds an annotation-based command framework</li>
                     <li>Fix minor documentation inaccuracies</li>
                     <li>Fix bug where converted commands didn't apply multiple parameters</li>
-					<li>The fields in <code>CommandAPICommand</code> can now be accessed via getters and setters</li>
+                    <li>The fields in <code>CommandAPICommand</code> can now be accessed via getters and setters</li>
                 </ul>
             </td>
         </tr>
@@ -784,7 +796,7 @@ This is the current roadmap for the CommandAPI (as of 13th April 2022):
                     <li>Adds support for Minecraft 1.16.3</li>
                     <li>Fixes a bug where shading the CommandAPI and the NBT-API together causes the CommandAPI to incorrectly think that the NBT-API isn't present</li>
                     <li>Fixes a bug where commands with redirects (4.0+ aliases and redirects from /execute) that have two consecutive arguments with suggestions would spam the console and not provide suggestions</li>
-					<li>Adds <code>NativeProxyCommandSender</code> which lets you access the location and world of a command sender via <code>/execute in|positioned|at|facing|rotated</code></li>
+                    <li>Adds <code>NativeProxyCommandSender</code> which lets you access the location and world of a command sender via <code>/execute in|positioned|at|facing|rotated</code></li>
                 </ul>
             </td>
         </tr>

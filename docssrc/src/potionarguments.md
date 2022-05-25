@@ -1,6 +1,6 @@
 # Potion effect arguments
 
-![](./images/arguments/potion.png)
+![An image of a potion argument with a list of potion effect suggestions](./images/arguments/potion.png)
 
 The `PotionEffectArgument` class represents Minecraft potion effects. When used, this argument is casted to Bukkit's `PotionEffectType` class.
 

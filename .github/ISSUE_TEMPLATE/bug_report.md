@@ -17,7 +17,7 @@ assignees: ''
 
 **Actual result:**
 
-```
+```txt
 Stuff that happened when I did it (post error logs here for example)
 ```
 

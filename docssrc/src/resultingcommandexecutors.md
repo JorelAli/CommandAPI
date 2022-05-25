@@ -66,6 +66,7 @@ Now that we've declared these commands, we can now use them in practice. We can 
 ```
 
 To check if the random number is equal to 1, we can use the `/execute if` command. If their score stored in `randVal` matches 1, then we run the `/givereward` command.
+
 ```mccmd
 /execute if score SomePlayer randVal matches 1 run givereward SomePlayer
 ```

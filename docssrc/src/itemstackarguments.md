@@ -1,6 +1,6 @@
 # Itemstack arguments
 
-![](./images/arguments/itemstack.png)
+![An item stack argument with suggestions for Minecraft items](./images/arguments/itemstack.png)
 
 The `ItemStackArgument` class represents in-game items. As expected, this should be casted to Bukkit's `ItemStack` object. The `ItemStack` which is returned by the `ItemStackArgument` always has a size of 1.
 

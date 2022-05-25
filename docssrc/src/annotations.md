@@ -2,7 +2,7 @@
 
 This page outlines in detail the list of all annotations that the CommandAPI's annotation-based command system includes.
 
----
+-----
 
 ## Annotations that go on classes
 
@@ -137,7 +137,7 @@ The following numerical arguments can take both a `min` and `max` value. Both of
 
 #### Literal arguments
 
-Both the `LiteralArgument` and `MultiLiteralArgument` can be used. When these are used, the name of the variable assigned to the parameter is *ignored* and not used as the argument's name.
+Both the `LiteralArgument` and `MultiLiteralArgument` can be used. When these are used, the name of the variable assigned to the parameter is _ignored_ and not used as the argument's name.
 
 For the `@ALiteralArgument` annotation, the parameter is the literal to be used for the command. For the `@AMultiLiteralArgument`, the parameter can be an array of multiple literals to use:
 
@@ -152,4 +152,3 @@ The `LocationArgument`, `Location2DArgument`, `EntitySelectorArgument` and `Scor
 ```java
 {{#include ../../commandapi-annotations/src/test/java/Test2Command.java:other_arguments}}
 ```
-

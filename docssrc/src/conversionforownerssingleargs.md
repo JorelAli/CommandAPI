@@ -45,11 +45,11 @@ plugins-to-convert:
 
 Using this, we can display options, such as "fly" and "walk", as well as optional targets ("Skepter"):
 
-![](./images/speedoptions.png)
+![A command "/execute run speed" with argument suggestions for entity selectors, as well as "fly" and "walk"](./images/speedoptions.png)
 
 Additionally, we can apply limits to the numbers that can be provided. For example, here we limit the number to a value between 0 to 10. If a value is outside of that range, and error is shown to the user:
 
-![](./images/speedlimit.png)
+![A command "/execute run speed walk 15" with an error displaying "Long must not be more than 10, found 15 at position 24: ...peed walk <--[HERE]](./images/speedlimit.png)
 
 </div>
 
@@ -63,13 +63,13 @@ The argument syntax is a little tricky to get the hang of at the beginning, but 
 
 Literal arguments are arguments with "fixed" values, such as `walk` or `fly` from our example above. To declare a literal value, place brackets around the value. For example:
 
-```
+```mccmd
 (walk)
 ```
 
 To have multiple different literals, place a pipe symbol `|` between each entry within the brackets. For example:
 
-```
+```mccmd
 (walk|fly)
 ```
 
@@ -96,7 +96,7 @@ The name in the argument can be whatever you want, but it is recommended to keep
 | `brigadier:string`    | A single word                                                |
 | `minecraft:block_pos` | A location of x, y and z coordinates (whole numbers)         |
 
-In the example above, we used the a "range type" in the form `[0..10]`. This is a special argument type that will conform to `brigader:long` or `brigader:double` and apply a limit to the values that can be entered. 
+In the example above, we used the a "range type" in the form `[0..10]`. This is a special argument type that will conform to `brigader:long` or `brigader:double` and apply a limit to the values that can be entered.
 
 <div class="example">
 
@@ -104,31 +104,31 @@ In the example above, we used the a "range type" in the form `[0..10]`. This is 
 
 To declare the range \\(10 \le x \le 50\\) (a value must be between 10 and 50 (inclusive)):
 
-```
+```mccmd
 <name>[10..50]
 ```
 
 To declare the range \\(10 \le x\\) (a value must be bigger than or equal to 10):
 
-```
+```mccmd
 <name>[10..]
 ```
 
 To declare the range \\(x \le 50\\) (a value must be less than or equal to 50):
 
-```
+```mccmd
 <name>[..50]
 ```
 
 To declare the range \\(0 \le x \le 1\\), where \\(x\\) is a decimal value:
 
-```
+```mccmd
 <name>[0.0..1.0]
 ```
 
 To declare a value \\(x\\) that can take any range of values and is a decimal number:
 
-```
+```mccmd
 <name>[brigadier:double]
 ```
 

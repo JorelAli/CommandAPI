@@ -61,7 +61,8 @@ Say we wanted to add a predicate to the `/execute` command. In this example, we'
 
 In this scenario, if we ran this command, we would expect "Hello!" to appear in the chat with a \\(\frac{1}{4}\\) chance. In particular, this is what we're trying to achieve:
 
-* We want to create a predicate (true/false value) for the following syntax:
+- We want to create a predicate (true/false value) for the following syntax:
+
   ```mccmd
   randomchance <numerator> <denominator>
   ```
@@ -69,7 +70,7 @@ In this scenario, if we ran this command, we would expect "Hello!" to appear in 
 - We also want this predicate to come _after_ `execute if`:
 
   \\[
-  \texttt{execute}\\\\ 
+  \texttt{execute}\\\\
   \downarrow\\\\
   \texttt{if}\\\\
   \downarrow\\\\
@@ -79,7 +80,7 @@ In this scenario, if we ran this command, we would expect "Hello!" to appear in 
 - After entering our predicate, we want to route back to `execute` (because the argument after `execute` is `run`, which is used in our example command above):
 
   \\[
-  \texttt{execute}\\\\ 
+  \texttt{execute}\\\\
   \downarrow\\\\
   \texttt{if}\\\\
   \downarrow\\\\
@@ -100,10 +101,10 @@ Now that we've established what we want, we can finally begin writing the code! 
 
 With that completed, we can now create our "argument" to this predicate. To do this, we'll use the regular declaration of arguments that we would normally use for commands. In this example, because we're computing \\(\frac{numerator}{denominator}\\), we want our numerator to be 0 or greater and our denominator to be 1 or greater (we don't want any negative numbers or division by zero!):
 
-
 ```java
 {{#include ../../commandapi-core/src/test/java/Examples.java:declarearguments}}
 ```
+
 Now we're going to get into the very nitty-gritty part - the predicate declaration. First, we'll create some variables `numerator` and `denominator` to represent the brigadier instances of these arguments. This can be handled by using the `Brigadier.argBuildOf` function:
 
 ```java
@@ -138,7 +139,4 @@ So, hopefully that wasn't too confusing! If you're still lost, here's the whole 
 {{#include ../../commandapi-core/src/test/java/Examples.java:brigadier}}
 ```
 
-
-
 </div>
-

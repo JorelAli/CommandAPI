@@ -23,4 +23,3 @@ margin-right: auto;">Download latest CommandAPI plugin</a>
 
 - If you use NBT data, you'll also need the [NBT API](https://www.spigotmc.org/resources/nbt-api.7939/). (You can find out from your developers if you need this or not)
 - If you are using raw JSON chat data, you'll need to be running [Spigot](https://www.spigotmc.org/wiki/about-spigot/) or a Paper-based server such as [Paper](https://papermc.io/) or [Purpur](https://purpur.pl3x.net/). (Again, you can find out from your developers if you need this or not)
-

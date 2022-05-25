@@ -27,7 +27,7 @@
 
 	<groupId>dev.jorel</groupId>
 	<artifactId>commandapi</artifactId>
-	<version>8.1.0</version>
+	<version>8.2.0</version>
 	<packaging>pom</packaging>
 	
 	<name>commandapi</name>
@@ -64,6 +64,7 @@
 		<module>commandapi-1.18.2</module>
 		<module>commandapi-1.18</module>
 		<module>commandapi-1.17</module>
+		<module>commandapi-1.16.5</module>
 
 		<!-- Main core code + NMS selector -->
 		<module>commandapi-core</module>

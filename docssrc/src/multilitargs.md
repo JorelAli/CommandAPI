@@ -21,4 +21,3 @@ In this example, we'll show how to use multi literals to declare Minecraft's `/g
 ```
 
 </div>
-

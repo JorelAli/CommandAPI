@@ -27,7 +27,7 @@
 	<parent>
 		<artifactId>commandapi</artifactId>
 		<groupId>dev.jorel</groupId>
-		<version>8.1.0</version>
+		<version>8.2.0</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
@@ -60,6 +60,11 @@
 			<artifactId>commandapi-1.17</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-1.16.5</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -79,6 +84,7 @@
 									<include>dev.jorel:commandapi-1.18.2</include>
 									<include>dev.jorel:commandapi-1.18</include>
 									<include>dev.jorel:commandapi-1.17</include>
+									<include>dev.jorel:commandapi-1.16.5</include>
 									<include>dev.jorel:commandapi-core</include>
 									<include>dev.jorel:commandapi-vh</include>
 								</includes>

@@ -68,4 +68,3 @@ We make use of the `ArgumentSuggestions.stringsAsync` method to provide asynchro
 ```
 
 </div>
-

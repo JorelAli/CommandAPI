@@ -15,15 +15,18 @@ It all started as a simple idea that can be summarized in 3 bullet points:
 - Create an API to use the new command UI that was introduced in Minecraft 1.13
 - Make it so the developers don't have to understand/use Mojang's brigadier
 - Make it similar to Bukkit's existing API
+
 -----
 After the release of version 1.2, two days after the initial release, I received my first GitHub issue. This was quite a shock to me - version 1.2 only had 11 total downloads so it seemed odd that someone managed to stumble upon it despite the fact that I did nothing to promote the CommandAPI. Little did I know that that one issue was the main motivation to keep this API alive after its initial release.
 
 I would never have possible imagined in my wildest dreams that 2 years later, I would still be in contact with them and know that if I had not chosen to create this API, their server would not have survived beyond Minecraft 1.13, let alone Minecraft 1.15, two major Minecraft versions later.
 
 -----
+
 This project has been insane. Absolutely, utterly insane. At over 1000 commits and over 1,000,000 additions (that includes things such as lines of code, lines of generated HTML documentation etc.), I can say without a doubt that this is indeed my biggest project ever.
 
 -----
+
 Anyway, I digress. I'd like to give credit to all of the people that have opened issues on the CommandAPI GitHub, for without these people, the CommandAPI would have only remained a shadow of what it is now. I'd like to give credit to [the people that have starred](https://github.com/JorelAli/CommandAPI/stargazers) the CommandAPI on its GitHub page, and all of the members of the [CommandAPI Discord server](https://discord.com/invite/G4SzSxZ).
 
 I would like to personally give thanks to the following people - these are people that have made a significant contribution to the project in terms of ideas or support:

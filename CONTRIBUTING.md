@@ -3,6 +3,7 @@
 Thanks for considering contributing to the CommandAPI! We're always happy to receive new improvements from developers to create a powerful and sustainable Minecraft API.
 
 Useful resources:
+
 - If you haven't joined [the CommandAPI Discord](https://discord.com/invite/G4SzSxZ), feel free to come find us! We can assure you that we don't bite.
 - Found a bug or have a suggestion and aren't quite sure how to tackle it? Open a [GitHub issue](https://github.com/JorelAli/CommandAPI/issues) and we can work it out together.
 
@@ -10,7 +11,7 @@ Useful resources:
 
 The CommandAPI repository consists of a multi-module Maven project and some documentation. Here's where everything is situated:
 
-**Main logic**
+### Main logic
 
 - [`commandapi-core`](https://github.com/JorelAli/CommandAPI/tree/master/commandapi-core) - the main bulk of the CommandAPI. Houses the developer-facing API and the main backend logic.
 - `commandapi-x.x.x` - the NMS implementation for various versions of Minecraft
@@ -24,19 +25,20 @@ The CommandAPI repository consists of a multi-module Maven project and some docu
 - [`commandapi-vh`](https://github.com/JorelAli/CommandAPI/tree/master/commandapi-vh) - a Maven module that links the various NMS modules together for `commandapi-shade` and `commandapi-plugin`.
 - [`commandapi-preprocessor`](https://github.com/JorelAli/CommandAPI/tree/master/commandapi-preprocessor) - an annotation processor used internally in the CommandAPI to perform compile-time field reflection checks.
 
-**Documentation**
+### Documentation
+
 - [`docssrc`](https://github.com/JorelAli/CommandAPI/tree/master/docssrc) - the [mdBook](https://rust-lang.github.io/mdBook/) source for the CommandAPI's documentation website
 - [`docs`](https://github.com/JorelAli/CommandAPI/tree/master/docs)
   - `docs/x.x.x` - the compiled mdBook website for the CommandAPI's documentation
   - [`docs/javadocs/html`](https://github.com/JorelAli/CommandAPI/tree/master/docs/javadocs/html) - Generated [Doxygen](https://www.doxygen.nl/index.html) JavaDocs for the CommandAPI
   - [`docs/index.html`](https://github.com/JorelAli/CommandAPI/blob/master/docs/index.html) - the frontend documentation website for [commandapi.jorel.dev](https://commandapi.jorel.dev/)
 
-
 ## Submitting changes
 
 To submit new changes, open a new [pull request](https://github.com/JorelAli/CommandAPI/pulls) to the `dev/dev` branch with a list of what you've done - please _do not_ open a pull request to the `master` branch!
 
 Pull requests should:
+
 - Have suitable commit messages that describes the changes in the commit.
 - Compile successfully (this will be checked automatically when a pull request is made).
 - Have been tested in a Minecraft server enviroment if necessary (e.g. the latest compatible version of Minecraft and using Spigot or Paper).

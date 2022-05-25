@@ -1,6 +1,6 @@
 # Time arguments
 
-![](./images/arguments/time.png)
+![A time argument with Minecraft suggestions 'd', 's' and 't'](./images/arguments/time.png)
 
 The `TimeArgument` class represents in-game time, _in the number of in-game ticks_. This allows command senders to specify a certain number of ticks in a simpler way, by including the characters `d` to specify the numbers of days, `s` to specify the number of seconds or `t` to specify a number of ticks.
 
