@@ -88,7 +88,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 	
 	/**
 	 * Adds subcommands to this command builder
-	 * @param subcommands the subcommands to add as a children of this command 
+	 * @param subcommands the subcommands to add as children of this command 
 	 * @return this command builder
 	 */
 	public CommandAPICommand withSubcommands(CommandAPICommand... subcommands) {
