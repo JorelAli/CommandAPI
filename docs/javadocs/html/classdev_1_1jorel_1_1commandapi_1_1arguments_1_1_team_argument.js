@@ -1,9 +1,9 @@
 var classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_team_argument =
 [
     [ "TeamArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_team_argument.html#a605ea4077cde91bbaf08a390bc619cb3", null ],
-    [ "includeSafeSuggestions", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_team_argument.html#a9ef5c66042f01757a16ff146c5a30061", null ],
-    [ "includeWithSafeSuggestions", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_team_argument.html#a7285ee1803a67ac18eeebe1e82530b21", null ],
-    [ "includeWithSafeSuggestionsT", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_team_argument.html#a2f0ed384b5c4006f270f0e206b7184c0", null ],
-    [ "replaceWithSafeSuggestions", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_team_argument.html#a5ace13eeb9a0e7bebe80e94563cb46c8", null ],
-    [ "replaceWithSafeSuggestionsT", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_team_argument.html#a5ca0a922bf99510dc25dd64a2e0271dc", null ]
+    [ "includeSafeSuggestions", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_team_argument.html#a0a8af4f677c1c736bc10a08f5ef6c420", null ],
+    [ "includeWithSafeSuggestions", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_team_argument.html#a0c172462db17f842589e288f43dde4a6", null ],
+    [ "includeWithSafeSuggestionsT", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_team_argument.html#a53be4c945c22ab14c2ba68c35c185230", null ],
+    [ "replaceWithSafeSuggestions", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_team_argument.html#af44294b35aeff156218f1978de2f7377", null ],
+    [ "replaceWithSafeSuggestionsT", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_team_argument.html#ae21e679af531c76e673d0312d88a1795", null ]
 ];

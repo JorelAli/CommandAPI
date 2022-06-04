@@ -25,6 +25,14 @@
 var NAVTREE =
 [
   [ "CommandAPI", "index.html", [
+    [ "Deprecated List", "deprecated.html", null ],
+    [ "Packages", "namespaces.html", [
+      [ "Packages", "namespaces.html", "namespaces_dup" ],
+      [ "Package Functions", "namespacemembers.html", [
+        [ "All", "namespacemembers.html", null ],
+        [ "Functions", "namespacemembers_func.html", null ]
+      ] ]
+    ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
@@ -41,7 +49,18 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestion.html#a6626519f81e6aabb0746a701fea245c5"
+"classcom_1_1mojang_1_1brigadier_1_1builder_1_1_literal_argument_builder.html#aba9697a347007a4ac393c3dd80c08840",
+"classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestion.html#a6626519f81e6aabb0746a701fea245c5",
+"classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a0fbec78135f7187645851ee4e12a74f3",
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a2152a5fe14baee00d87fe509ddb96772",
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html",
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_greedy_string_argument.html#af44294b35aeff156218f1978de2f7377",
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_loot_table_argument.html#a0a8af4f677c1c736bc10a08f5ef6c420",
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html#a4b1028432eb0291ac8ae52d0a8daf82d",
+"classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_invalid_command_name_exception.html#ac0fe657c03aa69499fa5a7f306a082e2",
+"enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a4f8704291dbbe3a3700db9ceefc8d555",
+"interfacecom_1_1mojang_1_1brigadier_1_1_redirect_modifier.html",
+"interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_console_command_executor.html#a896e43ea6ff79394b65baa50138a3254"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

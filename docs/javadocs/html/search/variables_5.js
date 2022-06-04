@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['single_5fsuccess_0',['SINGLE_SUCCESS',['../interfacecom_1_1mojang_1_1brigadier_1_1_command.html#a602708aa2bd793f5825fa95fb09bec21',1,'com::mojang::brigadier::Command']]],
-  ['single_5fword_1',['SINGLE_WORD',['../enumcom_1_1mojang_1_1brigadier_1_1arguments_1_1_string_argument_type_1_1_string_type.html#a2df5b85dc9209b48ff79b447585bdd44',1,'com::mojang::brigadier::arguments::StringArgumentType::StringType']]]
+  ['float_5frange_0',['FLOAT_RANGE',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a004ac2cb4bee537fe8e82217c5ac8677',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
+  ['function_1',['FUNCTION',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ad501697b32694925ec869e5467b98178',1,'dev.jorel.commandapi.arguments.CommandAPIArgumentType.FUNCTION()'],['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_suggestion_providers.html#ad419467acd515ee10d3128bf52f065a6',1,'dev.jorel.commandapi.arguments.SuggestionProviders.FUNCTION()']]]
 ];
