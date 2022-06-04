@@ -1,16 +1,6 @@
 # Shading the CommandAPI in your plugins
 
-> **Developer's note:**
->
-> Shading the CommandAPI is **discouraged**. The CommandAPI was initially designed to run as a standalone plugin (similar to Vault or ProtocolLib) because it has to hook into events (which requires a plugin instance), it creates files (`config.yml`, `command_registration.json`) and has much better performance (uses one singular cache, only registers an event once etc. etc.). There are reports that multiple plugins with a shaded copy of the CommandAPI can result in plugin conflicts - this is not something that the CommandAPI plans to work on.
->
-> The CommandAPI does not offer the extensive level of support for issues with regards to using the shaded version of the CommandAPI, so consider using the plugin version instead!
->
-> That said, shading should work perfectly, so don't let this giant box put you off from using it if it's exactly what you need!
-
-<p align="center"><i>After 2 years, this most requested feature is finally here...</i></p>
-
-The CommandAPI can now be shaded into your own plugins! "Shading" is the process of including the CommandAPI inside your plugin, rather than requiring the CommandAPI as an external plugin. In other words, if you shade the CommandAPI into your plugin, you don't need to include the `CommandAPI.jar` in your server's plugins folder.
+"Shading" is the process of including the CommandAPI inside your plugin, rather than requiring the CommandAPI as an external plugin. In other words, if you shade the CommandAPI into your plugin, you don't need to include the `CommandAPI.jar` in your server's plugins folder.
 
 -----
 
@@ -88,7 +78,7 @@ Add the CommandAPI shade dependency:
     <dependency>
         <groupId>dev.jorel</groupId>
         <artifactId>commandapi-shade</artifactId>
-        <version>8.3.0</version>
+        <version>8.2.1</version>
     </dependency>
 </dependencies>
 ```
@@ -164,7 +154,7 @@ Next, we declare our dependencies:
 
 ```gradle
 dependencies {
-    compile "dev.jorel:commandapi-shade:8.3.0"
+    compile "dev.jorel:commandapi-shade:8.2.1"
 }
 ```
 
@@ -173,7 +163,7 @@ Then we add it to the `shadowJar` task configuration and relocate the CommandAPI
 ```gradle
 shadowJar {
     dependencies {
-        include dependency("dev.jorel:commandapi-shade:8.3.0")
+        include dependency("dev.jorel:commandapi-shade:8.2.1")
     }
 
     // TODO: Change this to my own package name
