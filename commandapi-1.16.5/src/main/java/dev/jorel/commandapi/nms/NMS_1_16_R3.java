@@ -736,7 +736,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		if(particleOptions instanceof ParticleParamItem options) {
 			return new ParticleData<org.bukkit.inventory.ItemStack>(particle, CraftItemStack.asBukkitCopy((ItemStack) ParticleParamItem_c.get(options)));
 		}
-		CommandAPI.getLog().warning("Invalid particle data type for " + particle.getDataType().toString());
+		CommandAPI.getLogger().warning("Invalid particle data type for " + particle.getDataType().toString());
 		return new ParticleData<Void>(particle, null);
 	}
 
