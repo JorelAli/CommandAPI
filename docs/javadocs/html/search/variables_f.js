@@ -2,7 +2,7 @@ var searchData=
 [
   ['score_5fholder_0',['SCORE_HOLDER',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a60588e9a9ad67f5f57d8d45a23563693',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
   ['scoreboard_5fslot_1',['SCOREBOARD_SLOT',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a6678226820275646611b86a611fdf560',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],
-  ['single_2',['SINGLE',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument_1_1_score_holder_type.html#a2468e6dca775cc941d456db92ae6e047',1,'dev::jorel::commandapi::arguments::ScoreHolderArgument::ScoreHolderType']]],
+  ['single_2',['SINGLE',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument_1_1_score_holder_type.html#a279bb4cb9a941533f2a1f825dbf223d2',1,'dev::jorel::commandapi::arguments::ScoreHolderArgument::ScoreHolderType']]],
   ['single_5fsuccess_3',['SINGLE_SUCCESS',['../interfacecom_1_1mojang_1_1brigadier_1_1_command.html#a602708aa2bd793f5825fa95fb09bec21',1,'com::mojang::brigadier::Command']]],
   ['single_5fword_4',['SINGLE_WORD',['../enumcom_1_1mojang_1_1brigadier_1_1arguments_1_1_string_argument_type_1_1_string_type.html#a2df5b85dc9209b48ff79b447585bdd44',1,'com::mojang::brigadier::arguments::StringArgumentType::StringType']]],
   ['sound_5',['SOUND',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a50202c583ee37d556add1cf10d2cbf95',1,'dev::jorel::commandapi::arguments::CommandAPIArgumentType']]],

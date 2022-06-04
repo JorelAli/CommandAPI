@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['message_0',['Message',['../interfacecom_1_1mojang_1_1brigadier_1_1_message.html',1,'com::mojang::brigadier']]]
+  ['help_0',['Help',['../interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1_help.html',1,'dev::jorel::commandapi::annotations']]]
 ];

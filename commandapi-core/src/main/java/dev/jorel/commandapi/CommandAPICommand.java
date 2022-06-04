@@ -85,6 +85,16 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 		this.subcommands.add(subcommand);
 		return this;
 	}
+	
+	/**
+	 * Adds subcommands to this command builder
+	 * @param subcommands the subcommands to add as children of this command 
+	 * @return this command builder
+	 */
+	public CommandAPICommand withSubcommands(CommandAPICommand... subcommands) {
+		this.subcommands.addAll(Arrays.asList(subcommands));
+		return this;
+	}
 
 	/**
 	 * Returns the list of arguments that this command has

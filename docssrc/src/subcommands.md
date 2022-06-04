@@ -4,6 +4,7 @@ Subcommands is another method for registering commands that makes use of creatin
 
 ```java
 CommandAPICommand withSubcommand(CommandAPICommand subcommand);
+CommandAPICommand withSubcommands(CommandAPICommand... subcommands);
 ```
 
 Using subcommands has no disadvantages to using regular commands with the `LiteralArgument` or `MultiLiteralArgument`, and should be slightly more intuitive to implement if you've used other command frameworks before.

@@ -1,16 +1,6 @@
 # Shading the CommandAPI in your plugins
 
-> **Developer's note:**
->
-> Shading the CommandAPI is **discouraged**. The CommandAPI was initially designed to run as a standalone plugin (similar to Vault or ProtocolLib) because it has to hook into events (which requires a plugin instance), it creates files (`config.yml`, `command_registration.json`) and has much better performance (uses one singular cache, only registers an event once etc. etc.). There are reports that multiple plugins with a shaded copy of the CommandAPI can result in plugin conflicts - this is not something that the CommandAPI plans to work on.
->
-> The CommandAPI does not offer the extensive level of support for issues with regards to using the shaded version of the CommandAPI, so consider using the plugin version instead!
->
-> That said, shading should work perfectly, so don't let this giant box put you off from using it if it's exactly what you need!
-
-<p align="center"><i>After 2 years, this most requested feature is finally here...</i></p>
-
-The CommandAPI can now be shaded into your own plugins! "Shading" is the process of including the CommandAPI inside your plugin, rather than requiring the CommandAPI as an external plugin. In other words, if you shade the CommandAPI into your plugin, you don't need to include the `CommandAPI.jar` in your server's plugins folder.
+"Shading" is the process of including the CommandAPI inside your plugin, rather than requiring the CommandAPI as an external plugin. In other words, if you shade the CommandAPI into your plugin, you don't need to include the `CommandAPI.jar` in your server's plugins folder.
 
 -----
 
@@ -67,6 +57,16 @@ public {{#include ../../commandapi-core/src/test/java/Examples.java:shading}}
 
 -----
 
+## A note about relocating
+
+By default, the CommandAPI is written in the `dev.jorel.commandapi` package. It is **highly recommended** to "relocate" the shaded copy of the CommandAPI to your own package instead to prevent package clashes with other projects that shade the CommandAPI:
+
+\begin{align}
+&\qquad\texttt{dev.jorel.commandapi} \rightarrow \texttt{my.custom.package.commandapi} \\\\
+\end{align}
+
+-----
+
 ## Shading with Maven
 
 To shade the CommandAPI into a maven project, you'll need to use the `commandapi-shade` dependency, which is optimized for shading and doesn't include plugin-specific files _(such as `plugin.yml`)_. **You do not need to use `commandapi-core` if you are shading**:
@@ -78,7 +78,7 @@ Add the CommandAPI shade dependency:
     <dependency>
         <groupId>dev.jorel</groupId>
         <artifactId>commandapi-shade</artifactId>
-        <version>8.2.0</version>
+        <version>8.2.1</version>
     </dependency>
 </dependencies>
 ```
@@ -115,7 +115,9 @@ Once you've added this this, you can shade the CommandAPI easily by adding the `
             <configuration>
                 <relocations>
                     <relocation>
-                        <pattern>dev.jorel.commandapi-shade</pattern>
+                        <pattern>dev.jorel.commandapi</pattern>
+                        <!-- TODO: Change this to my own package name -->
+                        <shadedPattern>my.custom.package.commandapi</shadedPattern>
                     </relocation>
                 </relocations>
             </configuration>
@@ -135,7 +137,7 @@ To shade the CommandAPI into a Gradle project, we'll use the [Gradle Shadow Plug
 ```gradle
 plugins {
     id 'java'
-    id 'com.github.johnrengelman.shadow' version '6.0.0'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 ```
 
@@ -152,17 +154,20 @@ Next, we declare our dependencies:
 
 ```gradle
 dependencies {
-    compile "dev.jorel:commandapi-shade:8.2.0"   
+    compile "dev.jorel:commandapi-shade:8.2.1"
 }
 ```
 
-Then we add it to the `shadowJar` task configuration:
+Then we add it to the `shadowJar` task configuration and relocate the CommandAPI to your desired location:
 
 ```gradle
 shadowJar {
     dependencies {
-        include dependency("dev.jorel:commandapi-shade:8.2.0")
+        include dependency("dev.jorel:commandapi-shade:8.2.1")
     }
+
+    // TODO: Change this to my own package name
+    relocate("dev.jorel.commandapi", "my.custom.package.commandapi")
 }
 ```
 
@@ -172,4 +177,4 @@ Finally, we can build the shaded jar using the following command:
 gradlew build shadowJar
 ```
 
-Again, as we're shading the CommandAPI into your plugin, we don't need to add `depend: [CommandAPI]` to your `plugin.yml` file.
+Again, as we're shading the CommandAPI into your plugin, we **don't** need to add `depend: [CommandAPI]` to your `plugin.yml` file.

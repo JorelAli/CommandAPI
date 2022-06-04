@@ -75,7 +75,7 @@ class Config {
 		this.commandsToConvert = new ArrayList<>();
 
 		if(!fileConfig.getList("plugins-to-convert").isEmpty() && fileConfig.getMapList("plugins-to-convert").isEmpty()) {
-			CommandAPI.getLog().severe("plugins-to-convert has an invalid type. Did you miss a colon (:) after a plugin name?");
+			CommandAPI.getLogger().severe("plugins-to-convert has an invalid type. Did you miss a colon (:) after a plugin name?");
 		}
 
 		for (Map<?, ?> map : fileConfig.getMapList("plugins-to-convert")) {
