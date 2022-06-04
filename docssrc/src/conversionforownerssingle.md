@@ -2,7 +2,7 @@
 
 Often, you don't want to convert _every single command_ that a plugin declares, and instead you only want to convert a few commands that a plugin has.
 
-The CommandAPI has two ways of doing this: 
+The CommandAPI has two ways of doing this:
 
 - Plugin command conversion: This converts a command which is declared in a plugin's `plugin.yml` file
 - Arbitrary command conversion: This converts a command which is not declared in a plugin's `plugin.yml` file
@@ -78,7 +78,7 @@ This can be used for any of the following (and more):
 - Commands created using [MyCommand](https://dev.bukkit.org/projects/mycommand)
 - Commands which are not registered in a `plugin.yml`, such as [WorldEdit](https://dev.bukkit.org/projects/worldedit) commands
 
-To add commands to be converted, simply add them under the `other-command-to-convert` section in the CommandAPI's `config.yml`. 
+To add commands to be converted, simply add them under the `other-command-to-convert` section in the CommandAPI's `config.yml`.
 
 <div class="example">
 
@@ -95,5 +95,5 @@ other-commands-to-convert:
   - /set
   - mycommand
 ```
-</div>
 
+</div>

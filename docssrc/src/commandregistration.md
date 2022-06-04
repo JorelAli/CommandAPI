@@ -16,7 +16,7 @@ new CommandAPICommand("broadcastmsg")
     }).register();
 ```
 
-- First, we create a new `CommandAPICommand`, with the name of the command that the sender must enter to run it. 
+- First, we create a new `CommandAPICommand`, with the name of the command that the sender must enter to run it.
 
 - When, we create an argument to add to the command using `withArguments`. This is described in more detail in [the section on arguments](./arguments.html).
 
@@ -148,7 +148,7 @@ Executes a command regardless of what the command sender is, using the `NativePr
 >
 > The Java type inference system cannot determine what the type of the lambda `(player, args) -> ()` is, therefore it produces the following compilation error:
 >
-> ```
+> ```txt
 > The method executesPlayer(PlayerCommandExecutor) is ambiguous for the type CommandAPICommand
 > ```
 >
@@ -173,7 +173,6 @@ void register()
 Registers the command.
 
 -----
-
 
 ## Command loading order
 

@@ -1,6 +1,6 @@
 # Environment arguments
 
-![](./images/arguments/environment.png)
+![An environment argument with the suggestions minecraft:overworld, minecraft:the_end and minecraft:the_nether](./images/arguments/environment.png)
 
 The `EnvironmentArgument` class allows a command sender to refer to a specific world environment, declared in Bukkit's `World.Environment` class. This includes the following three environments: `NORMAL`, `NETHER` and `THE_END`.
 

@@ -10,7 +10,7 @@ The `StringArgument` class is used to represent a single word. These words **can
 
 Accepted `StringArgument` values:
 
-```
+```txt
 Hello
 123
 hello123
@@ -19,16 +19,16 @@ Hello_world
 
 Rejected `StringArgument` values:
 
-```
+```txt
 hello@email.com
 yesn't
 ```
 
 <div class="example">
 
-### Examples of StringArgument uses:
+### Examples of StringArgument uses
 
-* Entering strings to identify offline players
+- Entering strings to identify offline players
 
 </div>
 
@@ -40,7 +40,7 @@ The `TextArgument` acts similar to any String in Java. These can be single words
 
 Accepted `TextArgument` values:
 
-```
+```txt
 hello
 "hello world!"
 "hello@gmail.com"
@@ -49,7 +49,7 @@ hello
 
 Rejected `TextArgument` values:
 
-```
+```txt
 hello world
 私
 "speech marks: ""
@@ -57,11 +57,10 @@ hello world
 
 <div class="example">
 
+### Examples of TextArgument uses
 
-### Examples of TextArgument uses:
-
-* Editing the contents of a sign
-* A command that requires multiple text arguments (say, username and password?)
+- Editing the contents of a sign
+- A command that requires multiple text arguments (say, username and password?)
 
 </div>
 
@@ -97,7 +96,7 @@ This would be ideal for a greedy string, since it can consume all text after the
 
 Any text entered after the `<target>` argument would be sent to the player. For example, the command could be used as follows:
 
-```
+```mccmd
 /message Skepter This is some incredibly long string with "symbols" and $p3c!aL characters~
 ```
 
@@ -107,7 +106,7 @@ Note how this only works if the greedy string argument is _at the end_. If, say,
 
 <div class="example">
 
-### Examples of GreedyStringArgument uses:
+### Examples of GreedyStringArgument uses
 
 - A messaging/whisper command (as shown in the example above)
 - A mailing command
@@ -116,4 +115,3 @@ Note how this only works if the greedy string argument is _at the end_. If, say,
 - Any command where you want to parse arguments similar to how regular Bukkit would
 
 </div>
-

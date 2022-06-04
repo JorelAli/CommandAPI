@@ -16,7 +16,7 @@ These arguments simply cast to their primitive type and don't need any extra wor
 
 ## Boolean arguments
 
-![](./images/arguments/boolean.png)
+![A boolean argument showing the suggestions 'false' and 'true'](./images/arguments/boolean.png)
 
 The `BooleanArgument` class represents the Boolean values `true` and `false`.
 
@@ -30,7 +30,7 @@ Say we want to create a plugin that lets you edit its own `config.yml` file usin
 /editconfig <config-key> <value>
 ```
 
-We first retrieve the keys from the configuration file using the typical Bukkit API. We construct our `List` to hold our arguments, with the first parameter being a String key (in the form of a `TextArgument`, [overridden with an array of suggestions](./argumentsuggestions.md)). Finally, we register our command and update the config, ensuring that we cast the `BooleanArgument` to `boolean`: 
+We first retrieve the keys from the configuration file using the typical Bukkit API. We construct our `List` to hold our arguments, with the first parameter being a String key (in the form of a `TextArgument`, [overridden with an array of suggestions](./argumentsuggestions.md)). Finally, we register our command and update the config, ensuring that we cast the `BooleanArgument` to `boolean`:
 
 ```java
 {{#include ../../commandapi-core/src/test/java/Examples.java:booleanargs}}
@@ -60,4 +60,3 @@ Each numerical argument can have ranges applied to them, which restricts the use
 | `new IntegerArgument(min, max)` | Values greater than or equal to `min` and less than or equal to `max` |
 
 Each range is _inclusive_, so it includes the number given to it. If the minimum value provided is larger than the maximum value, an `InvalidRangeException` is thrown.
-

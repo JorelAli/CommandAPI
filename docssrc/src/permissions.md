@@ -32,6 +32,7 @@ Say we created a command `/god` that sets a player as being invulnerable. Since 
 ```
 
 As stated above, it is possible to assign a permission using a String instead of using `CommandPermission.fromString()`:
+
 ```java
 {{#include ../../commandapi-core/src/test/java/Examples.java:permissions2}}
 ```
@@ -42,16 +43,15 @@ As stated above, it is possible to assign a permission using a String instead of
 
 ## Adding permissions to arguments
 
-For further fine-tuning of permission management, the CommandAPI allows you to add permissions to individual arguments. This prevents the user from executing a command *with a specific argument* if they do not have a specific permission.
+For further fine-tuning of permission management, the CommandAPI allows you to add permissions to individual arguments. This prevents the user from executing a command _with a specific argument_ if they do not have a specific permission.
 
 This is done by using the `withPermission(CommandPermission)` method _at the end of an argument_.
 
-
 If a player does not have the required permission:
 
-* The argument hover text which suggests what the command is will not be shown
-* The player will receive an error if they try to type something in for that argument
-* Suggestions, such as a list of materials or players, will not be shown
+- The argument hover text which suggests what the command is will not be shown
+- The player will receive an error if they try to type something in for that argument
+- Suggestions, such as a list of materials or players, will not be shown
 
 <div class="example">
 
@@ -82,6 +82,6 @@ Now we declare our command with arguments. We use a `PlayerArgument` and apply t
 
 > **Developer's Note:**
 >
-> As you can see, there are multiple ways of applying permissions to commands with arguments. In the `/god` command shown above, the permission was applied to the whole command. In the `/kill` command shown above, the permission was applied to the argument. 
+> As you can see, there are multiple ways of applying permissions to commands with arguments. In the `/god` command shown above, the permission was applied to the whole command. In the `/kill` command shown above, the permission was applied to the argument.
 >
 > There's not really much difference between the two methods, but I personally would use _argument permissions_ as it has greater control over arguments.

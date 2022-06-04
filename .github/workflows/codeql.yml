@@ -14,9 +14,9 @@ name: "CodeQL"
 on:
   push:
     branches: [ master, dev/dev, mvn-repo ]
-  pull_request:
-    # The branches below must be a subset of the branches above
-    branches: [ master ]
+#  pull_request:
+#    # The branches below must be a subset of the branches above
+#    branches: [ master ]
   schedule:
     - cron: '20 2 * * 5'
 
@@ -42,7 +42,7 @@ jobs:
       with:
         distribution: 'adopt'
         java-version: '17'
-    
+
     - name: Checkout repository
       uses: actions/checkout@v3
 

@@ -19,8 +19,6 @@ Before we go into too much detail, let's take a look at an example of what this 
 
 ## Example: A warp command
 
-_(So I would put this section in a big green box, but this example is REALLY big and that wouldn't look good)_
-
 Let's say we're writing a plugin with the capability to create warps to places on the server. To do this, we'll make a simple command `/warp`, defined as follows:
 
 ```mccmd

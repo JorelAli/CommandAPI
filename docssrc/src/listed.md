@@ -1,6 +1,6 @@
 # Listed arguments
 
-Arguments have a setting which determine whether or not they are present in the `Object[] args` that is populated when executing a command. 
+Arguments have a setting which determine whether or not they are present in the `Object[] args` that is populated when executing a command.
 
 By default, the `LiteralArgument` has this setting set to `false`, hence the literal values are _not_ present in the `Object[] args`.
 
@@ -20,7 +20,7 @@ Say we have the following command:
 /mycommand <player> <value> <message>
 ```
 
-Let's also say that in our implementation of this command, we don't actually perform any processing for `<value>`. Hence, listing it in the `Object args[]` is unnecessary. 
+Let's also say that in our implementation of this command, we don't actually perform any processing for `<value>`. Hence, listing it in the `Object args[]` is unnecessary.
 
 ```java
 {{#include ../../commandapi-core/src/test/java/Examples.java:listed}}

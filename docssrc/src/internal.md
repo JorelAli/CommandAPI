@@ -73,4 +73,3 @@ During the initialization of Minecraft 1.16+ servers, the CommandAPI uses a cust
 ```java
 CommandAPI.reloadDatapacks();
 ```
-

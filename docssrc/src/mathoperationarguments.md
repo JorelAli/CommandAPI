@@ -1,6 +1,6 @@
 # MathOperation arguments
 
-![](./images/arguments/mathop.png)
+![An image of the math operation argument, with suggestions "%=", "*=", "+=", "-=", "/=", "<", "=", ">" and "><"](./images/arguments/mathop.png)
 
 The CommandAPI's `MathOperationArgument` is used to represent the Minecraft scoreboard arithmetic operation to alter scoreboard scores. Since there is no default representation in the Bukkit API, the CommandAPI provides the `MathOperation` class to represent each operation:
 

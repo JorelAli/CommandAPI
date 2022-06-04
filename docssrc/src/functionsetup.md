@@ -12,7 +12,7 @@ This section explains how functions are declared and set up for use in a Minecra
 
 Functions are text files _(with the `.mcfunction` extension)_ which contains lists of functions which are executed one after another. Each line of the file is a valid Minecraft command. Say we have `text.mcfunction`:
 
-```
+```mccmd
 killall
 say Killed all living entities on the server
 ```
@@ -42,7 +42,7 @@ This will run the function `test` and the function `test2`, which are in the nam
 
 The following hierarchy explains where functions and tags go. In this diagram, the two functions `test` and `test2` are in a directory called `functions`. There is also a tag called `mytag` which is placed in the `tags` directory under `functions`. These are all under the _namespace_ called `mycustomnamespace`
 
-```
+```txt
 server/
 ├── world/
 │   ├── advancements/
@@ -76,4 +76,3 @@ To execute the `mytag` tag, you would run the following command:
 ```mccmd
 /function #mycustomnamespace:mytag
 ```
-

@@ -8,11 +8,11 @@ The CommandAPI has 3 different conversion methods, each one more specific and po
 
   Converts all commands from a plugin into Vanilla compatible commands
 
-- [**Single command conversion**](./conversionforownerssingle.md) 
+- [**Single command conversion**](./conversionforownerssingle.md)
 
   Converts a single command into a Vanilla compatible command
 
-- [**Single command conversion with custom arguments**](./conversionforownerssingleargs.md) 
+- [**Single command conversion with custom arguments**](./conversionforownerssingleargs.md)
 
   Converts a single command from a plugin into a Vanilla compatible command, whilst also declaring what the arguments to the command are
 
@@ -26,7 +26,7 @@ Drag a plugin here to view a list of available commands which can be registered 
     .drop_zone_parent {
         padding: 20px;
     }
-    
+
     .drop_zone {
         border: 2px solid;
         border-radius: 20px;
@@ -37,7 +37,7 @@ Drag a plugin here to view a list of available commands which can be registered 
         justify-content: center;
         align-items: center;
     }
-    
+
     #drop_zone_output {
         margin-top: 20px;
     }

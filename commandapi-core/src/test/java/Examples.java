@@ -52,6 +52,7 @@ import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -122,6 +123,7 @@ import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.IntegerRangeArgument;
 import dev.jorel.commandapi.arguments.ItemStackArgument;
 import dev.jorel.commandapi.arguments.ItemStackPredicateArgument;
+import dev.jorel.commandapi.arguments.ListArgumentBuilder;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.LocationArgument;
 import dev.jorel.commandapi.arguments.LocationType;
@@ -1049,8 +1051,14 @@ new CommandAPICommand("suicide")
 /* ANCHOR: normalcommandexecutors3 */
 new CommandAPICommand("suicide")
     .executes((sender, args) -> {
-        ((LivingEntity) sender).setHealth(0);
-    }, ExecutorType.PLAYER, ExecutorType.ENTITY)
+        LivingEntity entity;
+        if(sender instanceof ProxiedCommandSender proxy) {
+            entity = (LivingEntity) proxy.getCallee();
+        } else {
+            entity = (LivingEntity) sender;
+        }
+        entity.setHealth(0);
+    }, ExecutorType.PLAYER, ExecutorType.PROXY)
     .register();
 /* ANCHOR_END: normalcommandexecutors3 */
 }
@@ -1885,6 +1893,29 @@ new CommandAPICommand("setconfig")
     .register();
 /* ANCHOR_END: asyncreadfile */
 	
+}
+
+@SuppressWarnings("unchecked")
+void listargument() {
+
+/* ANCHOR: ListArgument_MultiGive */
+new CommandAPICommand("multigive")
+    .withArguments(new IntegerArgument("amount", 1, 64))
+    .withArguments(new ListArgumentBuilder<Material>("materials")
+        .withList(List.of(Material.values()))
+        .withMapper(material -> material.name().toLowerCase())
+        .build()
+    )
+    .executesPlayer((player, args) -> {
+        int amount = (int) args[0];
+        List<Material> theList = (List<Material>) args[1];
+        
+        for(Material item : theList) {
+            player.getInventory().addItem(new ItemStack(item, amount));
+        }
+    })
+    .register();
+/* ANCHOR_END: ListArgument_MultiGive */
 }
 
 @SuppressWarnings({ "unchecked" })

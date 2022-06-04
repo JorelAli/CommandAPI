@@ -1,8 +1,8 @@
 # Argument suggestions with tooltips
 
-![](./images/warps.gif)
+![A /warp command with suggestions of various locations. Hovering over the suggestions with the mouse cursor displays tooltips describing what the locations are](./images/warps.gif)
 
-The CommandAPI can also display tooltips for specific argument suggestions. These are shown to the user when they hover over a given suggestion and can be used to provide more context to a user about the suggestions that are shown to them. In this section, we'll outline the two ways of creating suggestions with tooltips: 
+The CommandAPI can also display tooltips for specific argument suggestions. These are shown to the user when they hover over a given suggestion and can be used to provide more context to a user about the suggestions that are shown to them. In this section, we'll outline the two ways of creating suggestions with tooltips:
 
 - Normal (String) suggestions with tooltips
 - Safely typed suggestions with tooltips
@@ -130,4 +130,3 @@ In the arguments declaration, we've casted the command sender to a player. To en
 ```
 
 </div>
-

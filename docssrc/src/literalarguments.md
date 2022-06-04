@@ -26,8 +26,6 @@ There is a simpler alternative to the `LiteralArgument` class! Instead of having
 
 </div>
 
-
-
 -----
 
 ## Literal arguments vs regular arguments

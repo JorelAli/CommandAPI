@@ -55,4 +55,3 @@ In order to broadcast an Adventure `Component` to all players on the server, we 
 ```
 
 </div>
-

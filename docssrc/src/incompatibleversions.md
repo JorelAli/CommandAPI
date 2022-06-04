@@ -30,6 +30,7 @@ To resolve this, the CommandAPI reloads datapacks _and recipes_ at the end:
 \end{align}
 
 By doing this, this means:
+
 - Custom functions from datapacks are loaded twice
 - Recipes are reloaded twice, _including_ recipes defined by other plugins
 

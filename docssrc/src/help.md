@@ -56,4 +56,3 @@ We could also register this command using the `withHelp` method instead:
 ```
 
 </div>
-
