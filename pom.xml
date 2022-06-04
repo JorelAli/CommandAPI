@@ -27,7 +27,7 @@
 
 	<groupId>dev.jorel</groupId>
 	<artifactId>commandapi</artifactId>
-	<version>8.2.0</version>
+	<version>9.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	
 	<name>commandapi</name>
