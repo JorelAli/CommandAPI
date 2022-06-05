@@ -55,9 +55,9 @@ public final class CommandAPI {
 
 	static Config getConfiguration() {
 		if (config == null) {
+			CommandAPI.onLoad(new CommandAPIConfig());
 			logWarning(
 					"Could not find any configuration for the CommandAPI. Loading basic built-in configuration. Did you forget to call CommandAPI.onLoad(config)?");
-			CommandAPI.onLoad(new CommandAPIConfig());
 		}
 		return config;
 	}
