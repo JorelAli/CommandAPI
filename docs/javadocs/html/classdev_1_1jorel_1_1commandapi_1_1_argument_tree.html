@@ -26,7 +26,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.0.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.3.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -101,31 +101,19 @@ $(document).ready(function(){initNavTree('classdev_1_1jorel_1_1commandapi_1_1_ar
  <div class="center">
   <img src="classdev_1_1jorel_1_1commandapi_1_1_argument_tree.png" usemap="#dev.jorel.commandapi.ArgumentTree_map" alt=""/>
   <map id="dev.jorel.commandapi.ArgumentTree_map" name="dev.jorel.commandapi.ArgumentTree_map">
-<area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html" title="The core abstract class for Command API arguments." alt="dev.jorel.commandapi.arguments.Argument" shape="rect" coords="0,112,404,136"/>
-<area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_argument.html" title="An argument that represents chat with entity selectors." alt="dev.jorel.commandapi.arguments.AdventureChatArgument" shape="rect" coords="414,168,818,192"/>
-<area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_component_argument.html" title="An argument that represents raw JSON text." alt="dev.jorel.commandapi.arguments.AdventureChatComponentArgument" shape="rect" coords="414,224,818,248"/>
-<area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_predicate_argument.html" title="An argument that represents a Predicate&lt;Block&gt;" alt="dev.jorel.commandapi.arguments.BlockPredicateArgument" shape="rect" coords="414,280,818,304"/>
-<area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument.html" title="An argument that represents the Bukkit BlockData object." alt="dev.jorel.commandapi.arguments.BlockStateArgument" shape="rect" coords="414,336,818,360"/>
-<area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_chat_argument.html" title="An argument that represents chat with entity selectors." alt="dev.jorel.commandapi.arguments.ChatArgument" shape="rect" coords="414,392,818,416"/>
-<area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_chat_component_argument.html" title="An argument that represents raw JSON text." alt="dev.jorel.commandapi.arguments.ChatComponentArgument" shape="rect" coords="414,448,818,472"/>
-<area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html" title="An argument that represents any custom object." alt="dev.jorel.commandapi.arguments.CustomArgument&lt; T &gt;" shape="rect" coords="414,504,818,528"/>
-<area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument.html" title="An argument that represents a selection of entities." alt="dev.jorel.commandapi.arguments.EntitySelectorArgument" shape="rect" coords="414,560,818,584"/>
-<area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_item_stack_predicate_argument.html" title="An argument that represents a Predicate&lt;ItemStack&gt;" alt="dev.jorel.commandapi.arguments.ItemStackPredicateArgument" shape="rect" coords="414,616,818,640"/>
-<area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html" title="A pseudo-argument representing a single literal string." alt="dev.jorel.commandapi.arguments.LiteralArgument" shape="rect" coords="414,672,818,696"/>
-<area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html" title="An argument that represents multiple LiteralArguments." alt="dev.jorel.commandapi.arguments.MultiLiteralArgument" shape="rect" coords="414,728,818,752"/>
-<area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_objective_criteria_argument.html" title="An argument that represents the name of an objective criteria." alt="dev.jorel.commandapi.arguments.ObjectiveCriteriaArgument" shape="rect" coords="414,784,818,808"/>
-<area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html" title="An interface declaring methods required to override argument suggestions." alt="dev.jorel.commandapi.arguments.SafeOverrideableArgument&lt; S &gt;" shape="rect" coords="414,840,818,864"/>
-<area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html" title="An argument that represents a scoreholder&#39;s name, or a collection of scoreholder names." alt="dev.jorel.commandapi.arguments.ScoreHolderArgument" shape="rect" coords="414,896,818,920"/>
-<area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_string_argument.html" title="An argument that represents a simple String." alt="dev.jorel.commandapi.arguments.StringArgument" shape="rect" coords="414,952,818,976"/>
-<area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_text_argument.html" title="An argument that represents text, encased in quotes." alt="dev.jorel.commandapi.arguments.TextArgument" shape="rect" coords="414,1008,818,1032"/>
+<area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html" title="The core abstract class for Command API arguments." alt="dev.jorel.commandapi.arguments.Argument&lt; T &gt;" shape="rect" coords="622,112,1027,136"/>
+<area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html" title="An argument that represents any custom object." alt="dev.jorel.commandapi.arguments.CustomArgument&lt; T &gt;" shape="rect" coords="0,168,405,192"/>
+<area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument.html" title="An argument that represents a selection of entities." alt="dev.jorel.commandapi.arguments.EntitySelectorArgument&lt; T &gt;" shape="rect" coords="415,168,820,192"/>
+<area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html" title="An interface declaring methods required to override argument suggestions." alt="dev.jorel.commandapi.arguments.SafeOverrideableArgument&lt; T, S &gt;" shape="rect" coords="830,168,1235,192"/>
+<area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html" title="An argument that represents a scoreholder&#39;s name, or a collection of scoreholder names." alt="dev.jorel.commandapi.arguments.ScoreHolderArgument&lt; T &gt;" shape="rect" coords="1245,168,1650,192"/>
   </map>
 </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a704e9b77ec8ff8381edcd902b3f17869"><td class="memItemLeft" align="right" valign="top"><a id="a704e9b77ec8ff8381edcd902b3f17869" name="a704e9b77ec8ff8381edcd902b3f17869"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ArgumentTree</b> (final <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a> argument)</td></tr>
-<tr class="separator:a704e9b77ec8ff8381edcd902b3f17869"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac23948fd356e59ba165454a3683feec7"><td class="memItemLeft" align="right" valign="top"><a id="ac23948fd356e59ba165454a3683feec7" name="ac23948fd356e59ba165454a3683feec7"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>ArgumentTree</b> (final <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>&lt;?&gt; argument)</td></tr>
+<tr class="separator:ac23948fd356e59ba165454a3683feec7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acbad971fb86810c539f37ed93a34c503"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_argument_tree.html">ArgumentTree</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_argument_tree.html#acbad971fb86810c539f37ed93a34c503">then</a> (final <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_argument_tree.html">ArgumentTree</a> tree)</td></tr>
 <tr class="memdesc:acbad971fb86810c539f37ed93a34c503"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a child branch on this node.  <a href="classdev_1_1jorel_1_1commandapi_1_1_argument_tree.html#acbad971fb86810c539f37ed93a34c503">More...</a><br /></td></tr>
 <tr class="separator:acbad971fb86810c539f37ed93a34c503"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -166,7 +154,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_argument_tree.html">ArgumentTree</a></li>
-    <li class="footer">Generated on Tue Apr 26 2022 21:38:48 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Sat Jun 4 2022 18:30:32 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

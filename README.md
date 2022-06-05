@@ -46,11 +46,11 @@ The list of what version of the CommandAPI you'll need to run on a specific vers
 | **1.16.2**         | v4.0 - 5.12         | 5.12                      | 8                                          |
 | **1.16.3**         | v4.2 - 5.12         | 5.12                      | 8                                          |
 | **1.16.4**         | v5.2 - 5.12         | 5.12                      | 8                                          |
-| **1.16.5**         | v5.7 - 7.0.0, 8.2.0 | 8.2.0                     | 17                                         |
-| **1.17**           | 6.0.x - 8.2.0       | 8.2.0                     | 17                                         |
-| **1.17.1**         | 6.1.x - 8.2.0       | 8.2.0                     | 17                                         |
-| **1.18, 1.18.1**   | 6.5.2 - 8.2.0       | 8.2.0                     | 17                                         |
-| **1.18.2**         | 6.5.4 - 8.2.0       | 8.2.0                     | 17                                         |
+| **1.16.5**         | v5.7 - 7.0.0, 8.2.1 | 8.2.1                     | 17                                         |
+| **1.17**           | 6.0.x - 8.2.1       | 8.2.1                     | 17                                         |
+| **1.17.1**         | 6.1.x - 8.2.1       | 8.2.1                     | 17                                         |
+| **1.18, 1.18.1**   | 6.5.2 - 8.2.1       | 8.2.1                     | 17                                         |
+| **1.18.2**         | 6.5.4 - 8.2.1       | 8.2.1                     | 17                                         |
 
 > Certain versions of Minecraft (1.16.5) cannot run on Java 17 by default. On 1.16.5 Paper servers, this can be bypassed using the following command:
 >
@@ -327,6 +327,17 @@ This is the current roadmap for the CommandAPI (as of 13th April 2022):
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td valign="top"><b>8.2.1</b></td>
+            <td valign="top">June 2022</td>
+            <td valign="top">
+                <ul>
+                    <li>Adds a <code>.withSubcommands()</code> method to add multiple subcommands in one go</li>
+                    <li>Exposed <code>registeredCommands</code> field in the CommandAPIHandler to get a list of registered commands</li>
+                    <li>Fixed CommandAPI logging prefix twice in shaded versions of the CommandAPI</li>
+                </ul>
+            </td>
+        </tr>
         <tr>
             <td valign="top"><b>8.2.0</b></td>
             <td valign="top">May 2022</td>

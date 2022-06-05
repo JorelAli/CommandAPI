@@ -141,11 +141,11 @@ public class CommandAPIHandler<CommandSourceStack> {
 	final TreeMap<String, CommandPermission> PERMISSIONS_TO_FIX = new TreeMap<>();
 	final NMS<CommandSourceStack> NMS;
 	final CommandDispatcher<CommandSourceStack> DISPATCHER;
-	final List<RegisteredCommand> registeredCommands; //Keep track of what has been registered for type checking 
-	final List<CommandHelp> commands;
+	public final List<RegisteredCommand> registeredCommands; //Keep track of what has been registered for type checking 
+	public final List<CommandHelp> commands;
 	
 	private CommandAPIHandler() {
-		String bukkit = Bukkit.getServer().toString();
+		final String bukkit = Bukkit.getServer().toString();
 		NMS = CommandAPIVersionHandler.getNMS(bukkit.substring(bukkit.indexOf("minecraftVersion") + 17, bukkit.length() - 1));
 		DISPATCHER = NMS.getBrigadierDispatcher();
 		registeredCommands = new ArrayList<>();
@@ -949,9 +949,9 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 * list of arguments as a string. The arguments are expected to be of the
 	 * form node_name:class_name, for example value:IntegerArgument
 	 */
-	private record RegisteredCommand(String command, List<String> argsAsStr) {};
+	public record RegisteredCommand(String command, List<String> argsAsStr) {};
 
-	private record CommandHelp(String commandName, Optional<String> shortDescription, Optional<String> fullDescription,
+	public record CommandHelp(String commandName, Optional<String> shortDescription, Optional<String> fullDescription,
 			String[] aliases, CommandPermission permission) {
 	};
 	

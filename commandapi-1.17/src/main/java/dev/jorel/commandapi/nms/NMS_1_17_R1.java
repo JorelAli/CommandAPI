@@ -742,12 +742,12 @@ public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 				Optional<Entity> entity = (Optional<Entity>) EntityPositionSource_sourceEntity.get(positionSource);
 				destination = new EntityDestination(entity.get().getBukkitEntity());
 			} else {
-				CommandAPI.getLog().warning("Unknown vibration destination " + options.getVibrationPath().getDestination());
+				CommandAPI.getLogger().warning("Unknown vibration destination " + options.getVibrationPath().getDestination());
 				return new ParticleData<Void>(particle, null);
 			}
 			return new ParticleData<Vibration>(particle, new Vibration(from, destination, options.getVibrationPath().getArrivalInTicks()));
 		}
-		CommandAPI.getLog().warning("Invalid particle data type for " + particle.getDataType().toString());
+		CommandAPI.getLogger().warning("Invalid particle data type for " + particle.getDataType().toString());
 		return new ParticleData<Void>(particle, null);
 	}
 

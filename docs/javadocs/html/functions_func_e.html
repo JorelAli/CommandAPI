@@ -26,7 +26,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.2.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.3.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -87,11 +87,17 @@ $(document).ready(function(){initNavTree('functions_func_e.html',''); initResiza
 &#160;
 
 <h3><a id="index_e" name="index_e"></a>- e -</h3><ul>
-<li>empty()&#160;:&#160;<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions.html#a14e242f62ecacb867db8cbf0513b6e98">com.mojang.brigadier.suggestion.Suggestions</a></li>
+<li>empty()&#160;:&#160;<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions.html#a14e242f62ecacb867db8cbf0513b6e98">com.mojang.brigadier.suggestion.Suggestions</a>, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#aff76067e3260f892f2b6ededbb54f5d7">dev.jorel.commandapi.arguments.ArgumentSuggestions</a>, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_suggestions.html#a6678ac89f78fe9a08f312b93c6162c72">dev.jorel.commandapi.arguments.SafeSuggestions&lt; S &gt;</a></li>
+<li>EmptyExecutorException()&#160;:&#160;<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_empty_executor_exception.html#a72c0e9252c3da0a2528edf8b2d9968c3">dev.jorel.commandapi.exceptions.EmptyExecutorException</a></li>
+<li>EnchantmentArgument()&#160;:&#160;<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_enchantment_argument.html#a5a05811100de949d92dd32e23b0a7120">dev.jorel.commandapi.arguments.EnchantmentArgument</a></li>
 <li>encompassing()&#160;:&#160;<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_string_range.html#aa495538fa1c54cee4861904bfeda9c4a">com.mojang.brigadier.context.StringRange</a></li>
+<li>EntitySelectorArgument()&#160;:&#160;<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument.html#a8b48b9764166ca4930d95024d3e197d1">dev.jorel.commandapi.arguments.EntitySelectorArgument&lt; T &gt;</a></li>
+<li>EntityTypeArgument()&#160;:&#160;<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_type_argument.html#acacc8edcacc6f888135979ba4a72dace">dev.jorel.commandapi.arguments.EntityTypeArgument</a></li>
+<li>EnvironmentArgument()&#160;:&#160;<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_environment_argument.html#a5a12a0234634f97d561ed126f2fddcd4">dev.jorel.commandapi.arguments.EnvironmentArgument</a></li>
 <li>escapeIfRequired()&#160;:&#160;<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_string_argument_type.html#a0c33b0ccbd7810e3656e94e03767e83a">com.mojang.brigadier.arguments.StringArgumentType</a></li>
 <li>execute()&#160;:&#160;<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_command_dispatcher.html#a8443e7ff61dae843193e3d930c2d0655">com.mojang.brigadier.CommandDispatcher&lt; S &gt;</a></li>
 <li>executes()&#160;:&#160;<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#ab7150fe8dddba54047a20556cab712c1">com.mojang.brigadier.builder.ArgumentBuilder</a></li>
+<li>executeWith()&#160;:&#160;<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_i_executor_normal.html#a3abe06c21ca1628f03849aa4a4ee89a1">dev.jorel.commandapi.executors.IExecutorNormal&lt; T extends CommandSender &gt;</a>, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_i_executor_resulting.html#a35a810c2c519396a3f4c8cbba2e9ba78">dev.jorel.commandapi.executors.IExecutorResulting&lt; T extends CommandSender &gt;</a>, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_i_executor_typed.html#ae177f3930a0328f50c889b796da2eca5">dev.jorel.commandapi.executors.IExecutorTyped</a></li>
 <li>expand()&#160;:&#160;<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestion.html#a6c29fc347ad568a456c7b9c2e3d2f068">com.mojang.brigadier.suggestion.Suggestion</a></li>
 <li>expect()&#160;:&#160;<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_string_reader.html#a7e568b144ba4b7241cbe090453e64399">com.mojang.brigadier.StringReader</a></li>
 </ul>
@@ -100,7 +106,7 @@ $(document).ready(function(){initNavTree('functions_func_e.html',''); initResiza
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed May 25 2022 10:09:07 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Sat Jun 4 2022 18:30:33 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

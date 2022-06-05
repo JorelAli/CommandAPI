@@ -31,6 +31,8 @@ var namespacedev_1_1jorel_1_1commandapi_1_1arguments =
     [ "IntegerRangeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_integer_range_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_integer_range_argument" ],
     [ "ItemStackArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_item_stack_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_item_stack_argument" ],
     [ "ItemStackPredicateArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_item_stack_predicate_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_item_stack_predicate_argument" ],
+    [ "ListArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_list_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_list_argument" ],
+    [ "ListArgumentBuilder", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_list_argument_builder.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_list_argument_builder" ],
     [ "LiteralArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument" ],
     [ "Location2DArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location2_d_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location2_d_argument" ],
     [ "LocationArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_argument" ],
