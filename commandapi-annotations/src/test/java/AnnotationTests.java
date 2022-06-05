@@ -8,6 +8,7 @@ import com.google.testing.compile.Compilation;
 import static com.google.testing.compile.JavaFileObjects.forSourceString;
 import static com.google.testing.compile.JavaFileObjects.forResource;
 
+import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.annotations.Annotations;
 
 public class AnnotationTests {
@@ -61,6 +62,5 @@ public class AnnotationTests {
 			.inFile(forResource("ClassWithNoExecutor.java"))
 			.onLine(4);
 	}
-	
 	
 }

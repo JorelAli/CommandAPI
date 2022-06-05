@@ -259,10 +259,11 @@ public final class CommandAPI {
 	/**
 	 * Registers a command. Used with the CommandAPI's Annotation API.
 	 * @param commandClass the class to register
+	 * @param instance the instance of the class to use
 	 */
-	public static void registerCommand(Class<?> commandClass) {
+	public static <T> void registerCommand(Class<T> commandClass, T instance) {
 		try {
-			Class.forName(commandClass.getName() + "$Command").getDeclaredMethod("register").invoke(null);
+			Class.forName(commandClass.getName() + "$Command").getDeclaredMethod("register", commandClass).invoke(instance);
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}

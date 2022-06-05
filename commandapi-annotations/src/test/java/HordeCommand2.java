@@ -26,6 +26,13 @@ import dev.jorel.commandapi.arguments.StringArgument;
 
 @Command("horde")
 public class HordeCommand2 {
+	
+	final int val;
+	
+	// Some constructor
+	public HordeCommand2(int val) {
+		this.val = val;
+	}
 
 	@AStringArgument
 	String hiiiiii;
