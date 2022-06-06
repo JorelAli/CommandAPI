@@ -78,6 +78,7 @@ import dev.jorel.commandapi.exceptions.BiomeArgumentException;
 import dev.jorel.commandapi.exceptions.EnvironmentArgumentException;
 import dev.jorel.commandapi.exceptions.TimeArgumentException;
 import dev.jorel.commandapi.exceptions.UUIDArgumentException;
+import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
@@ -152,6 +153,7 @@ import net.minecraft.server.v1_13_R1.ShapeDetectorBlock;
 import net.minecraft.server.v1_13_R1.Vec2F;
 import net.minecraft.server.v1_13_R1.Vec3D;
 
+@NMSMeta(compatibleWith = "1.13")
 @RequireField(in = CraftSound.class, name = "minecraftKey", ofType = String.class)
 @RequireField(in = EntitySelector.class, name = "m", ofType = boolean.class)
 @RequireField(in = LootTableRegistry.class, name = "e", ofType = Map.class)
@@ -458,12 +460,11 @@ public class NMS_1_13 implements NMS<CommandListenerWrapper> {
 		EnumSet<Axis> set = EnumSet.noneOf(Axis.class);
 		EnumSet<EnumAxis> parsedEnumSet = ArgumentRotationAxis.a(cmdCtx, key);
 		for (EnumAxis element : parsedEnumSet) {
-			switch (element) {
-			case X -> set.add(Axis.X);
-			case Y -> set.add(Axis.Y);
-			case Z -> set.add(Axis.Z);
-			default -> throw new IllegalArgumentException("Unexpected value: " + element);
-			}
+			set.add(switch(element) {
+				case X -> Axis.X;
+				case Y -> Axis.Y;
+				case Z -> Axis.Z;
+			});
 		}
 		return set;
 	}

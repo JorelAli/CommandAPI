@@ -26,18 +26,17 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Literally just a fancy comment that I can put next to stuff to know how it
- * differs from previous versions
+ * Annotation that describes the target Minecraft versions of this NMS class
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.CLASS)
-public @interface Source {
+public @interface NMSMeta {
 	
 	/**
 	 * A list of versions that this method differs from. This need not be
 	 * exhaustive - the previous version is sufficient
 	 * @return versions that this method differs from
 	 */
-	String[] value();
+	String[] compatibleWith();
 	
 }

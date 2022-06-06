@@ -68,6 +68,7 @@ import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.ICustomProvidedArgument.SuggestionProviders;
 import dev.jorel.commandapi.arguments.LocationType;
+import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
@@ -151,6 +152,7 @@ import net.minecraft.server.v1_16_R2.Vec2F;
 import net.minecraft.server.v1_16_R2.Vec3D;
 import net.minecraft.server.v1_16_R2.WorldServer;
 
+@NMSMeta(compatibleWith = {"1.16.2", "1.16.3"})
 @RequireField(in = DataPackResources.class, name = "i", ofType = CustomFunctionManager.class)
 @RequireField(in = DataPackResources.class, name = "b", ofType = IReloadableResourceManager.class)
 @RequireField(in = DataPackResources.class, name = "a", ofType = CompletableFuture.class)

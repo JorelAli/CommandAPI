@@ -75,13 +75,7 @@
 					<includeTestClasses>false</includeTestClasses>
 					<transformerClasses>
 						<transformerClass>
-							<className>dev.jorel.commandapi.preprocessor.Test</className>
-							<properties>
-								<property>
-									<name>append.value</name>
-									<value> and ToStringTransformer</value>
-								</property>
-							</properties>
+							<className>dev.jorel.commandapi.preprocessor.ProcessNMSMeta</className>
 						</transformerClass>
 					</transformerClasses>
 				</configuration>
