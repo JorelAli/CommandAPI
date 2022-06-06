@@ -414,8 +414,8 @@ public class NMS_1_14_3 implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
-	public String convert(Particle particle) {
-		return CraftParticle.toNMS(particle).a();
+	public String convert(ParticleData<?> particle) {
+		return CraftParticle.toNMS(particle.particle(), particle.data()).a();
 	}
 
 	@SuppressWarnings("deprecation")

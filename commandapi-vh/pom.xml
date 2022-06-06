@@ -20,9 +20,7 @@
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<parent>
 		<artifactId>commandapi</artifactId>
 		<groupId>dev.jorel</groupId>
@@ -53,5 +51,56 @@
 			<artifactId>commandapi-1.16.5</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-1.16.4</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-1.16.2</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-1.16.1</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-1.15</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-1.14.4</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-1.14.3</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-1.14</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-1.13.2</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-1.13.1</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-1.13</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
 	</dependencies>
 </project>

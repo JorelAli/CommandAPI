@@ -22,6 +22,16 @@ package dev.jorel.commandapi;
 
 import dev.jorel.commandapi.exceptions.UnsupportedVersionException;
 import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.nms.NMS_1_13;
+import dev.jorel.commandapi.nms.NMS_1_13_1;
+import dev.jorel.commandapi.nms.NMS_1_13_2;
+import dev.jorel.commandapi.nms.NMS_1_14;
+import dev.jorel.commandapi.nms.NMS_1_14_3;
+import dev.jorel.commandapi.nms.NMS_1_14_4;
+import dev.jorel.commandapi.nms.NMS_1_15;
+import dev.jorel.commandapi.nms.NMS_1_16_4_R3;
+import dev.jorel.commandapi.nms.NMS_1_16_R1;
+import dev.jorel.commandapi.nms.NMS_1_16_R2;
 import dev.jorel.commandapi.nms.NMS_1_16_R3;
 import dev.jorel.commandapi.nms.NMS_1_17_R1;
 import dev.jorel.commandapi.nms.NMS_1_18_R1;
@@ -37,27 +47,31 @@ public interface CommandAPIVersionHandler {
 
 	/**
 	 * Returns an instance of the version's implementation of NMS.
+	 * 
 	 * @param version the string of the Minecraft version (e.g. 1.16.5 or 1.17)
 	 * @return an instance of NMS which can run on the specified Minecraft version
 	 */
 	public static NMS<?> getNMS(String version) {
-		if(CommandAPI.getConfiguration().shouldUseLatestNMSVersion()) {
+		if (CommandAPI.getConfiguration().shouldUseLatestNMSVersion()) {
 			return new NMS_1_18_R2();
 		} else {
-			switch (version) {
-			case "1.16.5":
-				return new NMS_1_16_R3();
-			case "1.17":
-			case "1.17.1":
-				return new NMS_1_17_R1();
-			case "1.18":
-			case "1.18.1":
-				return new NMS_1_18_R1();
-			case "1.18.2":
-				return new NMS_1_18_R2();
-			default:
-				throw new UnsupportedVersionException("This version of Minecraft is unsupported: " + version);
-			}
+			return switch (version) {
+				case "1.13" -> new NMS_1_13();
+				case "1.13.1" -> new NMS_1_13_1();
+				case "1.13.2" -> new NMS_1_13_2();
+				case "1.14", "1.14.1", "1.14.2" -> new NMS_1_14();
+				case "1.14.3" -> new NMS_1_14_3();
+				case "1.14.4" -> new NMS_1_14_4();
+				case "1.15", "1.15.1", "1.15.2" -> new NMS_1_15();
+				case "1.16.1" -> new NMS_1_16_R1();
+				case "1.16.2", "1.16.3" -> new NMS_1_16_R2();
+				case "1.16.4" -> new NMS_1_16_4_R3();
+				case "1.16.5" -> new NMS_1_16_R3();
+				case "1.17", "1.17.1" -> new NMS_1_17_R1();
+				case "1.18", "1.18.1" -> new NMS_1_18_R1();
+				case "1.18.2" -> new NMS_1_18_R2();
+				default -> throw new UnsupportedVersionException(version);
+			};
 		}
 	}
 

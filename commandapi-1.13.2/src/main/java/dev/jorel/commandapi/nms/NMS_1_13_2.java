@@ -56,8 +56,8 @@ import com.mojang.brigadier.suggestion.Suggestions;
 
 import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.arguments.ICustomProvidedArgument.SuggestionProviders;
 import dev.jorel.commandapi.arguments.LocationType;
+import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.exceptions.AngleArgumentException;
 import dev.jorel.commandapi.exceptions.BiomeArgumentException;
 import dev.jorel.commandapi.exceptions.TimeArgumentException;
@@ -410,8 +410,8 @@ public class NMS_1_13_2 implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
-	public String convert(Particle particle) {
-		return CraftParticle.toNMS(particle).a();
+	public String convert(ParticleData<?> particle) {
+		return CraftParticle.toNMS(particle.particle(), particle.data()).a();
 	}
 
 	@SuppressWarnings("deprecation")
