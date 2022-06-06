@@ -967,7 +967,7 @@ public class NMS_1_17_R1 implements NMS<CommandSourceStack> {
 
 	@Override
 	public void resendPackets(Player player) {
-		MINECRAFT_SERVER.getCommands().sendCommands(((CraftPlayer) player).getHandle());
+		MINECRAFT_SERVER.vanillaCommandDispatcher.sendCommands(((CraftPlayer) player).getHandle());
 	}
 
 	@Override

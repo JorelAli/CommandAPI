@@ -219,7 +219,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		ParticleParamRedstone_g = ppr_g;
 	}
 
-	private static NamespacedKey fromMinecrafKey(MinecraftKey key) {
+	private static NamespacedKey fromMinecraftKey(MinecraftKey key) {
 		return NamespacedKey.fromString(key.getNamespace() + ":" + key.getKey());
 	}
 
@@ -445,7 +445,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		for(int i = 0, size = cArr.length; i < size; i++) {
 			result[i] = cArr[i].toString();
 		}
-		return new SimpleFunctionWrapper(fromMinecrafKey(customFunction.a()), appliedObj, result);
+		return new SimpleFunctionWrapper(fromMinecraftKey(customFunction.a()), appliedObj, result);
 	}
 
 	@Override
@@ -641,7 +641,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	public Set<NamespacedKey> getFunctions() {
 		Set<NamespacedKey> result = new HashSet<>();
 		for(MinecraftKey minecraftKey : MINECRAFT_SERVER.getFunctionData().f()) {
-			result.add(fromMinecrafKey(minecraftKey));
+			result.add(fromMinecraftKey(minecraftKey));
 		}
 		return result;
 	}
@@ -703,7 +703,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	@Override
 	public org.bukkit.loot.LootTable getLootTable(CommandContext<CommandListenerWrapper> cmdCtx, String str) {
 		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.e(cmdCtx, str);
-		return new CraftLootTable(fromMinecrafKey(minecraftKey), MINECRAFT_SERVER.getLootTableRegistry().getLootTable(minecraftKey));
+		return new CraftLootTable(fromMinecraftKey(minecraftKey), MINECRAFT_SERVER.getLootTableRegistry().getLootTable(minecraftKey));
 	}
 
 	@Override
@@ -783,7 +783,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	@Override
 	public ComplexRecipe getRecipe(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		IRecipe<?> recipe = ArgumentMinecraftKeyRegistered.b(cmdCtx, key);
-		return new ComplexRecipeImpl(fromMinecrafKey(recipe.getKey()), recipe.toBukkitRecipe());
+		return new ComplexRecipeImpl(fromMinecraftKey(recipe.getKey()), recipe.toBukkitRecipe());
 	}
 
 	@Override
@@ -875,7 +875,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	public Set<NamespacedKey> getTags() {
 		Set<NamespacedKey> result = new HashSet<>();
 		for(MinecraftKey minecraftKey : MINECRAFT_SERVER.getFunctionData().g()) {
-			result.add(fromMinecrafKey(minecraftKey));
+			result.add(fromMinecraftKey(minecraftKey));
 		}
 		return result;
 	}
@@ -970,6 +970,6 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public void resendPackets(Player player) {
-		MINECRAFT_SERVER.getCommandDispatcher().a(((CraftPlayer) player).getHandle());
+		MINECRAFT_SERVER.vanillaCommandDispatcher.a(((CraftPlayer) player).getHandle());
 	}
 }

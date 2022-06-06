@@ -41,6 +41,7 @@ import org.bukkit.craftbukkit.v1_13_R1.CraftLootTable;
 import org.bukkit.craftbukkit.v1_13_R1.CraftParticle;
 import org.bukkit.craftbukkit.v1_13_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_13_R1.CraftSound;
+import org.bukkit.craftbukkit.v1_13_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_13_R1.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_13_R1.command.CraftBlockCommandSender;
 import org.bukkit.craftbukkit.v1_13_R1.command.ProxiedNativeCommandSender;
@@ -238,10 +239,10 @@ public class NMS_1_13 implements NMS<CommandListenerWrapper> {
 	@Override
 	public ArgumentType<?> _ArgumentEntity(dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector selector) {
 		return switch (selector) {
-		case MANY_ENTITIES -> ArgumentEntity.b();
-		case MANY_PLAYERS -> ArgumentEntity.d();
-		case ONE_ENTITY -> ArgumentEntity.a();
-		case ONE_PLAYER -> ArgumentEntity.c();
+			case MANY_ENTITIES -> ArgumentEntity.b();
+			case MANY_PLAYERS -> ArgumentEntity.d();
+			case ONE_ENTITY -> ArgumentEntity.a();
+			case ONE_PLAYER -> ArgumentEntity.c();
 		};
 	}
 
@@ -407,7 +408,7 @@ public class NMS_1_13 implements NMS<CommandListenerWrapper> {
 	//Converts NMS function to SimpleFunctionWrapper
 	// TODO: Go over this again
 	private SimpleFunctionWrapper convertFunction(CustomFunction customFunction) {
-		NamespacedKey minecraftKey = fromMinecrafKey(customFunction.a());
+		NamespacedKey minecraftKey = fromMinecraftKey(customFunction.a());
 
 		CustomFunctionData customFunctionData = MINECRAFT_SERVER.getFunctionData();
 
@@ -515,7 +516,7 @@ public class NMS_1_13 implements NMS<CommandListenerWrapper> {
 		} else if (sender instanceof CraftMinecartCommand minecartCommandSender) {
 			return minecartCommandSender.getHandle().getCommandBlock().getWrapper();
 		} else if (sender instanceof RemoteConsoleCommandSender) {
-			return ((DedicatedServer) ((CraftServer) Bukkit.getServer()).getServer()).remoteControlCommandListener.f();
+			return ((DedicatedServer) MINECRAFT_SERVER).remoteControlCommandListener.f();
 		} else if (sender instanceof ConsoleCommandSender) {
 			return MINECRAFT_SERVER.getServerCommandListener();
 		} else if (sender instanceof ProxiedNativeCommandSender proxiedCommandSender) {
@@ -582,9 +583,11 @@ public class NMS_1_13 implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
-	public EntityType getEntityType(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
-		return EntityTypes.a((cmdCtx.getSource().getWorld().getWorld()).getHandle(),
-				ArgumentEntitySummon.a(cmdCtx, str)).getBukkitEntity().getType();
+	public EntityType getEntityType(CommandContext<CommandListenerWrapper> cmdCtx, String str)
+			throws CommandSyntaxException {
+		return EntityTypes
+				.a(((CraftWorld) getWorldForCSS(cmdCtx.getSource())).getHandle(), ArgumentEntitySummon.a(cmdCtx, str))
+				.getBukkitEntity().getType();
 	}
 
 	@Override
@@ -618,7 +621,7 @@ public class NMS_1_13 implements NMS<CommandListenerWrapper> {
 	public Set<NamespacedKey> getFunctions() {
 		Set<NamespacedKey> functions = new HashSet<>();
 		for(MinecraftKey key : MINECRAFT_SERVER.getFunctionData().c().keySet()) {
-			functions.add(fromMinecrafKey(key));
+			functions.add(fromMinecraftKey(key));
 		}
 		return functions;
 	}
@@ -680,7 +683,7 @@ public class NMS_1_13 implements NMS<CommandListenerWrapper> {
 	@Override
 	public org.bukkit.loot.LootTable getLootTable(CommandContext<CommandListenerWrapper> cmdCtx, String str) {
 		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.c(cmdCtx, str);
-		return new CraftLootTable(fromMinecrafKey(minecraftKey), MINECRAFT_SERVER.aP().a(minecraftKey));
+		return new CraftLootTable(fromMinecraftKey(minecraftKey), MINECRAFT_SERVER.aP().a(minecraftKey));
 	}
 
 	@Override
@@ -864,7 +867,7 @@ public class NMS_1_13 implements NMS<CommandListenerWrapper> {
 	public Set<NamespacedKey> getTags() {
 		Set<NamespacedKey> functions = new HashSet<>();
 		for(MinecraftKey key : MINECRAFT_SERVER.getFunctionData().g().a()) {
-			functions.add(fromMinecrafKey(key));
+			functions.add(fromMinecraftKey(key));
 		}
 		return functions;
 	}
@@ -901,11 +904,11 @@ public class NMS_1_13 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public void resendPackets(Player player) {
-		MINECRAFT_SERVER.getCommandDispatcher().a(((CraftPlayer) player).getHandle());
+		 MINECRAFT_SERVER.vanillaCommandDispatcher.a(((CraftPlayer) player).getHandle());
 	}
 	
 	@SuppressWarnings("deprecation")
-	private static NamespacedKey fromMinecrafKey(MinecraftKey key) {
+	private static NamespacedKey fromMinecraftKey(MinecraftKey key) {
 		return new NamespacedKey(key.b(), key.getKey());
 	}
 }
