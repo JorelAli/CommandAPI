@@ -20,9 +20,7 @@
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<parent>
 		<groupId>dev.jorel</groupId>
@@ -33,7 +31,20 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>commandapi-preprocessor</artifactId>
-	
+
+	<dependencies>
+		<dependency>
+			<groupId>org.javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>3.29.0-GA</version>
+		</dependency>
+		<dependency>
+			<groupId>de.icongmbh.oss.maven.plugins</groupId>
+			<artifactId>javassist-maven-plugin</artifactId>
+			<version>2.0.2</version>
+		</dependency>
+	</dependencies>
+
 	<build>
 		<plugins>
 			<plugin>

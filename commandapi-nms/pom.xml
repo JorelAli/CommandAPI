@@ -20,20 +20,16 @@
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
+	<parent>
 		<artifactId>commandapi</artifactId>
 		<groupId>dev.jorel</groupId>
 		<version>8.2.1</version>
 	</parent>
 
-	<groupId>dev.jorel</groupId>
 	<artifactId>commandapi-nms</artifactId>
-	<version>8.2.1</version>
 	<packaging>pom</packaging>
 
 	<modules>
@@ -53,12 +49,12 @@
 		<module>commandapi-1.13.1</module>
 		<module>commandapi-1.13</module>
 
-        <!-- The thing you actually include -->
-        <module>commandapi-nms-dependency</module>
+		<!-- The thing you actually include -->
+		<module>commandapi-nms-dependency</module>
 	</modules>
 
-    <build>
-        <plugins>
+	<build>
+		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -71,6 +67,40 @@
 					</annotationProcessors>
 				</configuration>
 			</plugin>
-        </plugins>
-    </build>
+			<plugin>
+				<groupId>de.icongmbh.oss.maven.plugins</groupId>
+				<artifactId>javassist-maven-plugin</artifactId>
+				<version>2.0.2</version>
+				<configuration>
+					<includeTestClasses>false</includeTestClasses>
+					<transformerClasses>
+						<transformerClass>
+							<className>dev.jorel.commandapi.preprocessor.Test</className>
+							<properties>
+								<property>
+									<name>append.value</name>
+									<value> and ToStringTransformer</value>
+								</property>
+							</properties>
+						</transformerClass>
+					</transformerClasses>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>javassist</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>dev.jorel</groupId>
+						<artifactId>commandapi-preprocessor</artifactId>
+						<version>8.2.1</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
 </project>
