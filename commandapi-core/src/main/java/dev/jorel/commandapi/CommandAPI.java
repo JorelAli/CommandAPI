@@ -181,13 +181,7 @@ public final class CommandAPI {
 
 			// Sort out permissions after the server has finished registering them all
 			CommandAPIHandler.getInstance().fixPermissions();
-
-			try {
-				CommandAPIHandler.getInstance().getNMS().reloadDataPacks();
-			} catch (ReflectiveOperationException e) {
-				e.printStackTrace();
-			}
-
+			CommandAPIHandler.getInstance().getNMS().reloadDataPacks();
 			CommandAPIHandler.getInstance().updateHelpForCommands();
 		}, 0L);
 
@@ -216,11 +210,7 @@ public final class CommandAPI {
 	 * running /minecraft:reload, NOT before.
 	 */
 	public static void reloadDatapacks() {
-		try {
-			CommandAPIHandler.getInstance().getNMS().reloadDataPacks();
-		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-			e.printStackTrace();
-		}
+		CommandAPIHandler.getInstance().getNMS().reloadDataPacks();
 	}
 
 	/**

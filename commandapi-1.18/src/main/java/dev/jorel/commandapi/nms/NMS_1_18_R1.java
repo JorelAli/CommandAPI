@@ -443,11 +443,13 @@ public class NMS_1_18_R1 implements NMS<CommandSourceStack> {
 		return ResourceLocationArgument.getAdvancement(cmdCtx, key).bukkit;
 	}
 
+	@SuppressWarnings("removal")
 	@Override
 	public Component getAdventureChat(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException  {
 		return PaperComponents.gsonSerializer().deserialize(Serializer.toJson(MessageArgument.getMessage(cmdCtx, key)));
 	}
 
+	@SuppressWarnings("removal")
 	@Override
 	public Component getAdventureChatComponent(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		return PaperComponents.gsonSerializer().deserialize(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, key)));
