@@ -19,13 +19,13 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<parent>
-		<artifactId>commandapi</artifactId>
+		<artifactId>commandapi-nms</artifactId>
 		<groupId>dev.jorel</groupId>
 		<version>8.2.1</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>commandapi-1.14</artifactId>
+	<artifactId>commandapi-1.13</artifactId>
 
 	<repositories>
 		<repository>
@@ -47,7 +47,7 @@
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot</artifactId>
-			<version>1.14.2-R0.1-SNAPSHOT</version>
+			<version>1.13-R0.1-SNAPSHOT</version>
 		</dependency>
 
 		<!-- Libraries -->

@@ -61,20 +61,7 @@
 		<module>commandapi-preprocessor</module>
 
 		<!-- NMS versions -->
-		<module>commandapi-1.18.2</module>
-		<module>commandapi-1.18</module>
-		<module>commandapi-1.17</module>
-		<module>commandapi-1.16.5</module>
-		<module>commandapi-1.16.4</module>
-		<module>commandapi-1.16.2</module>
-		<module>commandapi-1.16.1</module>
-		<module>commandapi-1.15</module>
-		<module>commandapi-1.14.4</module>
-		<module>commandapi-1.14.3</module>
-		<module>commandapi-1.14</module>
-		<module>commandapi-1.13.2</module>
-		<module>commandapi-1.13.1</module>
-		<module>commandapi-1.13</module>
+		<module>commandapi-nms</module>
 
 		<!-- Main core code + NMS selector -->
 		<module>commandapi-core</module>
@@ -143,9 +130,6 @@
 					<compilerArgs>
 						<arg>-Xlint</arg>
 					</compilerArgs>
-					<annotationProcessors>
-						<annotationProcessor>dev.jorel.commandapi.preprocessor.Preprocessor</annotationProcessor>
-					</annotationProcessors>
 				</configuration>
 			</plugin>
 			<plugin>
