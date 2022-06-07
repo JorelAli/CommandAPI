@@ -744,16 +744,16 @@ public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
 		CommandSender sender = clw.getBukkitSender();
 		Vec3D pos = clw.getPosition();
 		Vec2F rot = clw.i();
-		World world = clw.getWorld().getWorld();
+		World world = getWorldForCSS(clw);
 		Location location = new Location(clw.getWorld().getWorld(), pos.getX(), pos.getY(), pos.getZ(), rot.j, rot.i);
 
 		Entity proxyEntity = clw.getEntity();
 		CommandSender proxy = proxyEntity == null ? null : ((Entity) proxyEntity).getBukkitEntity();
 		if (isNative || (proxy != null && !sender.equals(proxy))) {
-			sender = new NativeProxyCommandSender(sender, proxy, location, world);
+			return new NativeProxyCommandSender(sender, proxy, location, world);
+		} else {
+			return sender;
 		}
-
-		return sender;
 	}
 
 	@Override
