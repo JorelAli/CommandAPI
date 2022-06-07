@@ -8,18 +8,17 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
-import java.util.function.ToIntBiFunction;
 import java.util.function.ToIntFunction;
 
 import org.bukkit.Axis;
@@ -421,10 +420,9 @@ public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
 		return CraftParticle.toNMS(particle.particle(), particle.data()).a();
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public String convert(PotionEffectType potion) {
-		return IRegistry.MOB_EFFECT.getKey(IRegistry.MOB_EFFECT.fromId(potion.getId())).toString();
+		return potion.getName().toLowerCase(Locale.ENGLISH);
 	}
 
 	@Override
@@ -434,15 +432,15 @@ public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
 
 	// Converts NMS function to SimpleFunctionWrapper
 	private SimpleFunctionWrapper convertFunction(CustomFunction customFunction) {
-		NamespacedKey minecraftKey = fromMinecraftKey(customFunction.a());
+		ToIntFunction<CommandListenerWrapper> appliedObj = clw -> MINECRAFT_SERVER.getFunctionData().a(customFunction,
+				clw);
 
-		CustomFunctionData customFunctionData = MINECRAFT_SERVER.getFunctionData();
-
-		ToIntBiFunction<CustomFunction, CommandListenerWrapper> obj = customFunctionData::a;
-		ToIntFunction<CommandListenerWrapper> appliedObj = clw -> obj.applyAsInt(customFunction, clw);
-
-		return new SimpleFunctionWrapper(minecraftKey, appliedObj,
-				Arrays.stream(customFunction.b()).map(Object::toString).toArray(String[]::new));
+		Object[] cArr = customFunction.b();
+		String[] result = new String[cArr.length];
+		for (int i = 0, size = cArr.length; i < size; i++) {
+			result[i] = cArr[i].toString();
+		}
+		return new SimpleFunctionWrapper(fromMinecraftKey(customFunction.a()), appliedObj, result);
 	}
 
 	@Override
@@ -606,11 +604,11 @@ public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
 		};
 	}
 
+	@Differs(from = "1.16.1", by = "Uses deprecated EntityType.fromName instead of IRegistry.ENTITY_TYPE")
 	@SuppressWarnings("deprecation")
 	@Override
 	public EntityType getEntityType(CommandContext<CommandListenerWrapper> cmdCtx, String str)
 			throws CommandSyntaxException {
-		// TODO: Bubble up.
 		return EntityType
 				.fromName(EntityTypes.getName(IRegistry.ENTITY_TYPE.get(ArgumentEntitySummon.a(cmdCtx, str))).getKey());
 	}

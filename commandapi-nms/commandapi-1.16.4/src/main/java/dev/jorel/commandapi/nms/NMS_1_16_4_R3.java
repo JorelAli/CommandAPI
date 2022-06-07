@@ -441,10 +441,8 @@ public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
 		return CraftParticle.toNMS(particle.particle(), particle.data()).a();
 	}
 
-	@Differs(from = "1.16.2", by = "Use of potion.getName().toLowerCase(Locale.ENGLISH)")
 	@Override
 	public String convert(PotionEffectType potion) {
-		// TODO: Bubble up.
 		return potion.getName().toLowerCase(Locale.ENGLISH);
 	}
 
@@ -456,7 +454,6 @@ public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
 
 	// Converts NMS function to SimpleFunctionWrapper
 	private SimpleFunctionWrapper convertFunction(CustomFunction customFunction) {
-		// TODO: Bubble this up to all previous NMS versions
 		ToIntFunction<CommandListenerWrapper> appliedObj = clw -> MINECRAFT_SERVER.getFunctionData().a(customFunction,
 				clw);
 
@@ -487,6 +484,7 @@ public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
 		return ArgumentMinecraftKeyRegistered.a(cmdCtx, key).bukkit;
 	}
 
+	@Differs(from = "1.16.2", by = "Use PaperComponents instead of GsonComponentSerializer")
 	@SuppressWarnings("removal")
 	@Override
 	public Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key)
@@ -494,6 +492,7 @@ public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
 		return PaperComponents.gsonSerializer().deserialize(ChatSerializer.a(ArgumentChat.a(cmdCtx, key)));
 	}
 
+	@Differs(from = "1.16.2", by = "Use PaperComponents instead of GsonComponentSerializer")
 	@SuppressWarnings("removal")
 	@Override
 	public Component getAdventureChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
@@ -773,6 +772,7 @@ public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
 		}
 	}
 
+	@Differs(from = "1.16.2", by = "ParticleParamRedstone.f -> ParticleParamRedstone.g")
 	@Override
 	public ParticleData<?> getParticle(CommandContext<CommandListenerWrapper> cmdCtx, String str) {
 		final ParticleParam particleOptions = ArgumentParticle.a(cmdCtx, str);
@@ -855,7 +855,6 @@ public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
 		Vec3D pos = clw.getPosition();
 		Vec2F rot = clw.i();
 		World world = getWorldForCSS(clw);
-		// TODO: Check 1.13.* implementations of this!
 		Location location = new Location(world, pos.getX(), pos.getY(), pos.getZ(), rot.j, rot.i);
 
 		Entity proxyEntity = clw.getEntity();
@@ -889,7 +888,6 @@ public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
 			case RECIPES -> CompletionProviders.b;
 			case SOUNDS -> CompletionProviders.c;
 			case ADVANCEMENTS -> (cmdCtx, builder) -> {
-				// TODO: Check implementation of this for 1.14.4 and below
 				return ICompletionProvider.a(
 						MINECRAFT_SERVER.getAdvancementData().getAdvancements().stream().map(Advancement::getName),
 						builder);
@@ -948,6 +946,7 @@ public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
 		return command instanceof VanillaCommandWrapper;
 	}
 
+	@Differs(from = "1.16.2", by = "CustomFunctionManager.g -> CustomFunctionManager.h")
 	@Override
 	public void reloadDataPacks() {
 		CommandAPI.logNormal("Reloading datapacks...");

@@ -4,16 +4,15 @@ import java.io.File;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
-import java.util.function.ToIntBiFunction;
 import java.util.function.ToIntFunction;
 
 import org.bukkit.Axis;
@@ -134,7 +133,6 @@ import net.minecraft.server.v1_13_R2.IBlockData;
 import net.minecraft.server.v1_13_R2.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_13_R2.ICompletionProvider;
 import net.minecraft.server.v1_13_R2.IRegistry;
-import net.minecraft.server.v1_13_R2.IVectorPosition;
 import net.minecraft.server.v1_13_R2.ItemStack;
 import net.minecraft.server.v1_13_R2.LootTable;
 import net.minecraft.server.v1_13_R2.LootTableRegistry;
@@ -404,10 +402,9 @@ public class NMS_1_13_2 implements NMS<CommandListenerWrapper> {
 		return CraftParticle.toNMS(particle.particle(), particle.data()).a();
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public String convert(PotionEffectType potion) {
-		return IRegistry.MOB_EFFECT.getKey(IRegistry.MOB_EFFECT.fromId(potion.getId())).toString();
+		return potion.getName().toLowerCase(Locale.ENGLISH);
 	}
 
 	@Override
@@ -417,15 +414,15 @@ public class NMS_1_13_2 implements NMS<CommandListenerWrapper> {
 
 	// Converts NMS function to SimpleFunctionWrapper
 	private SimpleFunctionWrapper convertFunction(CustomFunction customFunction) {
-		NamespacedKey minecraftKey = fromMinecraftKey(customFunction.a());
+		ToIntFunction<CommandListenerWrapper> appliedObj = clw -> MINECRAFT_SERVER.getFunctionData().a(customFunction,
+				clw);
 
-		CustomFunctionData customFunctionData = MINECRAFT_SERVER.getFunctionData();
-
-		ToIntBiFunction<CustomFunction, CommandListenerWrapper> obj = customFunctionData::a;
-		ToIntFunction<CommandListenerWrapper> appliedObj = clw -> obj.applyAsInt(customFunction, clw);
-
-		return new SimpleFunctionWrapper(minecraftKey, appliedObj,
-				Arrays.stream(customFunction.b()).map(Object::toString).toArray(String[]::new));
+		Object[] cArr = customFunction.b();
+		String[] result = new String[cArr.length];
+		for (int i = 0, size = cArr.length; i < size; i++) {
+			result[i] = cArr[i].toString();
+		}
+		return new SimpleFunctionWrapper(fromMinecraftKey(customFunction.a()), appliedObj, result);
 	}
 
 	@Override
@@ -821,7 +818,7 @@ public class NMS_1_13_2 implements NMS<CommandListenerWrapper> {
 		Vec3D pos = clw.getPosition();
 		Vec2F rot = clw.i();
 		World world = getWorldForCSS(clw);
-		Location location = new Location(clw.getWorld().getWorld(), pos.x, pos.y, pos.z, rot.j, rot.i);
+		Location location = new Location(world, pos.x, pos.y, pos.z, rot.j, rot.i);
 
 		Entity proxyEntity = clw.getEntity();
 		CommandSender proxy = proxyEntity == null ? null : proxyEntity.getBukkitEntity();
@@ -864,8 +861,8 @@ public class NMS_1_13_2 implements NMS<CommandListenerWrapper> {
 			case RECIPES -> CompletionProviders.b;
 			case SOUNDS -> CompletionProviders.c;
 			case ADVANCEMENTS -> (cmdCtx, builder) -> {
-				Collection<Advancement> advancements = MINECRAFT_SERVER.getAdvancementData().b();
-				return ICompletionProvider.a(advancements.stream().map(Advancement::getName), builder);
+				return ICompletionProvider
+						.a(MINECRAFT_SERVER.getAdvancementData().b().stream().map(Advancement::getName), builder);
 			};
 			case LOOT_TABLES -> (cmdCtx, builder) -> {
 				Map<MinecraftKey, LootTable> map = (Map<MinecraftKey, LootTable>) LootTableRegistry_e
