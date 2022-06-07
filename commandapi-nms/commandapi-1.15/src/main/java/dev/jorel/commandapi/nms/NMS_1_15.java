@@ -354,8 +354,7 @@ public class NMS_1_15 implements NMS<CommandListenerWrapper> {
 
 	//Converts NMS function to SimpleFunctionWrapper
 	private SimpleFunctionWrapper convertFunction(CustomFunction customFunction) {
-		@SuppressWarnings("deprecation")
-		NamespacedKey minecraftKey = new NamespacedKey(customFunction.a().getNamespace(), customFunction.a().getKey());
+		NamespacedKey minecraftKey = fromMinecraftKey(customFunction.a());
 
 		CustomFunctionData customFunctionData = MINECRAFT_SERVER.getFunctionData();
 
@@ -400,17 +399,11 @@ public class NMS_1_15 implements NMS<CommandListenerWrapper> {
 		EnumSet<Axis> set = EnumSet.noneOf(Axis.class);
 		EnumSet<EnumAxis> parsedEnumSet = ArgumentRotationAxis.a(cmdCtx, key);
 		for (EnumAxis element : parsedEnumSet) {
-			switch (element) {
-			case X:
-				set.add(Axis.X);
-				break;
-			case Y:
-				set.add(Axis.Y);
-				break;
-			case Z:
-				set.add(Axis.Z);
-				break;
-			}
+			set.add(switch(element) {
+				case X -> Axis.X;
+				case Y -> Axis.Y;
+				case Z -> Axis.Z;
+			});
 		}
 		return set;
 	}
@@ -471,15 +464,12 @@ public class NMS_1_15 implements NMS<CommandListenerWrapper> {
 	@Override
 	public Environment getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		DimensionManager manager = ArgumentDimension.a(cmdCtx, key);
-		switch (manager.getDimensionID()) {
-		case 0:
-			return Environment.NORMAL;
-		case -1:
-			return Environment.NETHER;
-		case 1:
-			return Environment.THE_END;
-		}
-		return null;
+		return switch (manager.getDimensionID()) {
+			case 0 -> Environment.NORMAL;
+			case -1 -> Environment.NETHER;
+			case 1 -> Environment.THE_END;
+			default -> null;
+		};
 	}
 
 	@Override
@@ -631,12 +621,8 @@ public class NMS_1_15 implements NMS<CommandListenerWrapper> {
 	@SuppressWarnings("deprecation")
 	@Override
 	public org.bukkit.loot.LootTable getLootTable(CommandContext<CommandListenerWrapper> cmdCtx, String str) {
-		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.d(cmdCtx, str);
-		String namespace = minecraftKey.getNamespace();
-		String key = minecraftKey.getKey();
+		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.d(cmdCtx, str);		return new CraftLootTable(fromMinecraftKey(minecraftKey), MINECRAFT_SERVER.getLootTableRegistry().getLootTable(minecraftKey));
 
-		LootTable lootTable = MINECRAFT_SERVER.getLootTableRegistry().getLootTable(minecraftKey);
-		return new CraftLootTable(new NamespacedKey(namespace, key), lootTable);
 	}
 
 	@Override
@@ -833,10 +819,7 @@ public class NMS_1_15 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public void resendPackets(Player player) {
-		CraftPlayer craftPlayer = (CraftPlayer) player;
-		CraftServer craftServer = (CraftServer) Bukkit.getServer();
-		CommandDispatcher nmsDispatcher = craftServer.getServer().getCommandDispatcher();
-		nmsDispatcher.a(craftPlayer.getHandle());
+		MINECRAFT_SERVER.vanillaCommandDispatcher.a(((CraftPlayer) player).getHandle());
 	}
 
 }

@@ -175,8 +175,7 @@ public class NMS_1_16_R1 implements NMS<CommandListenerWrapper> {
 	
 	//Converts NMS function to SimpleFunctionWrapper
 	private SimpleFunctionWrapper convertFunction(CustomFunction customFunction) {
-		@SuppressWarnings("deprecation")
-		NamespacedKey minecraftKey = new NamespacedKey(customFunction.a().getNamespace(), customFunction.a().getKey());
+		NamespacedKey minecraftKey = fromMinecraftKey(customFunction.a());
 
 		CustomFunctionData customFunctionData = MINECRAFT_SERVER.getFunctionData();
 
@@ -468,17 +467,11 @@ public class NMS_1_16_R1 implements NMS<CommandListenerWrapper> {
 		EnumSet<Axis> set = EnumSet.noneOf(Axis.class);
 		EnumSet<EnumAxis> parsedEnumSet = ArgumentRotationAxis.a(cmdCtx, key);
 		for (EnumAxis element : parsedEnumSet) {
-			switch (element) {
-			case X:
-				set.add(Axis.X);
-				break;
-			case Y:
-				set.add(Axis.Y);
-				break;
-			case Z:
-				set.add(Axis.Z);
-				break;
-			}
+			set.add(switch(element) {
+				case X -> Axis.X;
+				case Y -> Axis.Y;
+				case Z -> Axis.Z;
+			});
 		}
 		return set;
 	}
@@ -657,12 +650,8 @@ public class NMS_1_16_R1 implements NMS<CommandListenerWrapper> {
 	@SuppressWarnings("deprecation")
 	@Override
 	public org.bukkit.loot.LootTable getLootTable(CommandContext<CommandListenerWrapper> cmdCtx, String str) {
-		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.e(cmdCtx, str);
-		String namespace = minecraftKey.getNamespace();
-		String key = minecraftKey.getKey();
+		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.e(cmdCtx, str);		return new CraftLootTable(fromMinecraftKey(minecraftKey), MINECRAFT_SERVER.getLootTableRegistry().getLootTable(minecraftKey));
 
-		LootTable lootTable = MINECRAFT_SERVER.getLootTableRegistry().getLootTable(minecraftKey);
-		return new CraftLootTable(new NamespacedKey(namespace, key), lootTable);
 	}
 
 	@Override
@@ -918,10 +907,7 @@ public class NMS_1_16_R1 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public void resendPackets(Player player) {
-		CraftPlayer craftPlayer = (CraftPlayer) player;
-		CraftServer craftServer = (CraftServer) Bukkit.getServer();
-		CommandDispatcher nmsDispatcher = craftServer.getServer().getCommandDispatcher();
-		nmsDispatcher.a(craftPlayer.getHandle());
+		MINECRAFT_SERVER.vanillaCommandDispatcher.a(((CraftPlayer) player).getHandle());
 	}
 
 }
