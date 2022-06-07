@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.AnnotationMirror;
@@ -44,6 +45,8 @@ import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.ExecutableType;
 import javax.tools.Diagnostic.Kind;
 import javax.tools.JavaFileObject;
+
+import com.google.auto.service.AutoService;
 
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandPermission;
@@ -105,6 +108,7 @@ import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
 /**
  * The main annotation processor for annotation-based arguments
  */
+@AutoService(Processor.class)
 public class Annotations extends AbstractProcessor {
 
 	private final Class<?>[] ARGUMENT_ANNOTATIONS = new Class<?>[] { AAdvancementArgument.class,

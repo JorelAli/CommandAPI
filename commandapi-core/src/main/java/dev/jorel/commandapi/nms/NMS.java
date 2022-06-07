@@ -351,15 +351,8 @@ public interface NMS<CommandListenerWrapper> {
 
 	/**
 	 * Reloads the datapacks by using the updated the commandDispatcher tree
-	 * 
-	 * @throws SecurityException        reflection exception
-	 * @throws NoSuchFieldException     reflection exception
-	 * @throws IllegalAccessException   reflection exception
-	 * @throws IllegalArgumentException reflection exception
 	 */
-	default void reloadDataPacks()
-			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-	}
+	void reloadDataPacks();
 
 	/**
 	 * Resends the command dispatcher's set of commands to a player.
@@ -371,5 +364,5 @@ public interface NMS<CommandListenerWrapper> {
 	HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription, String permission);
 
 	void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd);
-
+	
 }
