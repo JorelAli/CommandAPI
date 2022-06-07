@@ -54,6 +54,10 @@ import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.Particle.DustTransition;
 import org.bukkit.Sound;
+import org.bukkit.Vibration;
+import org.bukkit.Vibration.Destination;
+import org.bukkit.Vibration.Destination.BlockDestination;
+import org.bukkit.Vibration.Destination.EntityDestination;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
@@ -182,6 +186,7 @@ import net.minecraft.server.MinecraftServer.ReloadableResources;
 import net.minecraft.server.ServerFunctionLibrary;
 import net.minecraft.server.ServerFunctionManager;
 import net.minecraft.server.level.ColumnPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
@@ -195,6 +200,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.DataPackConfig;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
+import net.minecraft.world.level.gameevent.BlockPositionSource;
 import net.minecraft.world.level.gameevent.EntityPositionSource;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
@@ -826,6 +832,7 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 		}
 	}
 
+	@Differs(from = "1.18.2", by = "VibrationParticleOption, ShriekParticleOption, SculkChargeParticleOptions")
 	@Override
 	public ParticleData<?> getParticle(CommandContext<CommandSourceStack> cmdCtx, String str) {
 		final ParticleOptions particleOptions = ParticleArgument.getParticle(cmdCtx, str);
@@ -855,22 +862,44 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 					CraftItemStack.asBukkitCopy(options.getItem()));
 		}
 		if (particleOptions instanceof VibrationParticleOption options) {
-//			final BlockPos origin = options.getVibrationPath().getOrigin();
-//			final Location from = new Location(level.getWorld(), origin.getX(), origin.getY(), origin.getZ());
-//			final Destination destination;
-//			if (options.getDestination() instanceof BlockPositionSource positionSource) {
-//				BlockPos to = positionSource.getPosition(level).get();
-//				destination = new BlockDestination(new Location(level.getWorld(), to.getX(), to.getY(), to.getZ()));
-//			} else if (options.getDestination() instanceof EntityPositionSource positionSource) {
-//				positionSource.getPosition(level); // Populate Optional sourceEntity
-//				Optional<Entity> entity = (Optional<Entity>) EntityPositionSource_sourceEntity.get(positionSource);
-//				destination = new EntityDestination(entity.get().getBukkitEntity());
-//			} else {
-//				CommandAPI.getLogger()
-//						.warning("Unknown vibration destination " + options.getVibrationPath().getDestination());
+			// The "from" part of the Vibration object in Bukkit is completely ignored now,
+			// so we just populate it with some "feasible" information
+			final Vec3 origin = cmdCtx.getSource().getPosition();
+			Location from = new Location(level.getWorld(), origin.x, origin.y, origin.z);
+			final Destination destination;
+			if (options.getDestination() instanceof BlockPositionSource positionSource) {
+				Vec3 to = positionSource.getPosition(level).get();
+				destination = new BlockDestination(new Location(level.getWorld(), to.x(), to.y(), to.z()));
+			} else if (options.getDestination() instanceof EntityPositionSource positionSource) {
+				positionSource.getPosition(level); // Populate Optional sourceEntity
+				Either<Entity, Either<UUID, Integer>> entity = (Either<Entity, Either<UUID, Integer>>) EntityPositionSource_sourceEntity
+						.get(positionSource);
+				if (entity.left().isPresent()) {
+					destination = new EntityDestination(entity.left().get().getBukkitEntity());
+				} else {
+					Either<UUID, Integer> id = entity.right().get();
+					if (id.left().isPresent()) {
+						destination = new EntityDestination(Bukkit.getEntity(id.left().get()));
+					} else {
+						// Do an entity lookup by numerical ID. There's no "helper function"
+						// like Bukkit.getEntity() to do this for us, so we just have to do it
+						// manually
+						Entity foundEntity = null;
+						for (ServerLevel world : MINECRAFT_SERVER.getAllLevels()) {
+							Entity entityById = world.getEntity(id.right().get());
+							if (entityById != null) {
+								foundEntity = entityById;
+								break;
+							}
+						}
+						destination = new EntityDestination(foundEntity.getBukkitEntity());
+					}
+				}
+			} else {
+				CommandAPI.getLogger().warning("Unknown vibration destination " + options.getDestination());
 				return new ParticleData<Void>(particle, null);
-//			}
-//			return new ParticleData<Vibration>(particle, new Vibration(from, destination, options.getArrivalInTicks()));
+			}
+			return new ParticleData<Vibration>(particle, new Vibration(from, destination, options.getArrivalInTicks()));
 		}
 		if (particleOptions instanceof ShriekParticleOption options) {
 			// CraftBukkit implements shriek particles as a (boxed) Integer object
