@@ -124,9 +124,12 @@ import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.Commands.CommandSelection;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.AngleArgument;
 import net.minecraft.commands.arguments.ColorArgument;
@@ -167,6 +170,7 @@ import net.minecraft.commands.arguments.selector.EntitySelector;
 import net.minecraft.commands.synchronization.ArgumentTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.RegistryAccess.Frozen;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustColorTransitionOptions;
@@ -214,6 +218,9 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 
 	// From net.minecraft.server.commands.LocateCommand
 	private static final DynamicCommandExceptionType ERROR_BIOME_INVALID;
+	
+	// Derived from net.minecraft.commands.Commands;
+	private static final CommandBuildContext COMMAND_BUILD_CONTEXT;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
@@ -231,6 +238,15 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 		SimpleHelpMap_helpTopics = shm_ht;
 		EntityPositionSource_sourceEntity = eps_se;
 		ERROR_BIOME_INVALID = new DynamicCommandExceptionType(arg -> net.minecraft.network.chat.Component.translatable("commands.locate.biome.invalid", arg));
+
+		// Construct the command build context to use for all commands - I presume this
+		// lets you decide what happens when a tag isn't present by specifying the
+		// MissingTagAccessPolicy. This policy has three options: RETURN_EMPTY,
+		// CREATE_NEW or FAIL. We'll go with RETURN_EMPTY for now. Whether we decide to
+		// add support for letting developers fine-tune their missing tag access policy
+		// is something to decide at a later date.
+		COMMAND_BUILD_CONTEXT = new CommandBuildContext(RegistryAccess.BUILTIN.get());
+		COMMAND_BUILD_CONTEXT.missingTagAccessPolicy(CommandBuildContext.MissingTagAccessPolicy.RETURN_EMPTY);
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
@@ -247,14 +263,16 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 		return SwizzleArgument.swizzle();
 	}
 
+	@Differs(from = "1.18.2", by = "Adds COMMAND_BUILD_CONTEXT")
 	@Override
 	public ArgumentType<?> _ArgumentBlockPredicate() {
-		return BlockPredicateArgument.blockPredicate();
+		return BlockPredicateArgument.blockPredicate(COMMAND_BUILD_CONTEXT);
 	}
 
+	@Differs(from = "1.18.2", by = "Adds COMMAND_BUILD_CONTEXT")
 	@Override
 	public ArgumentType<?> _ArgumentBlockState() {
-		return BlockStateArgument.block();
+		return BlockStateArgument.block(COMMAND_BUILD_CONTEXT);
 	}
 
 	@Override
@@ -308,14 +326,16 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 		return RangeArgument.intRange();
 	}
 
+	@Differs(from = "1.18.2", by = "Adds COMMAND_BUILD_CONTEXT")
 	@Override
 	public ArgumentType<?> _ArgumentItemPredicate() {
-		return ItemPredicateArgument.itemPredicate();
+		return ItemPredicateArgument.itemPredicate(COMMAND_BUILD_CONTEXT);
 	}
 
+	@Differs(from = "1.18.2", by = "Adds COMMAND_BUILD_CONTEXT")
 	@Override
 	public ArgumentType<?> _ArgumentItemStack() {
-		return ItemArgument.item();
+		return ItemArgument.item(COMMAND_BUILD_CONTEXT);
 	}
 
 	@Override
