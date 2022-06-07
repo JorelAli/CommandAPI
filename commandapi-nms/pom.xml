@@ -34,6 +34,7 @@
 
 	<modules>
 		<!-- NMS versions -->
+		<module>commandapi-1.19</module>
 		<module>commandapi-1.18.2</module>
 		<module>commandapi-1.18</module>
 		<module>commandapi-1.17</module>

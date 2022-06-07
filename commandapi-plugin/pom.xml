@@ -97,6 +97,7 @@
 									<include>dev.jorel:commandapi-1.17</include>
 									<include>dev.jorel:commandapi-1.18</include>
 									<include>dev.jorel:commandapi-1.18.2</include>
+									<include>dev.jorel:commandapi-1.19</include>
 								</includes>
 							</artifactSet>
 							<filters>
