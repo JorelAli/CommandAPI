@@ -105,8 +105,9 @@ import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
-import dev.jorel.commandapi.preprocessor.RequireField;
+import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
+import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.wrappers.ComplexRecipeImpl;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
@@ -384,6 +385,7 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 		return single ? ScoreHolderArgument.scoreHolder() : ScoreHolderArgument.scoreHolders();
 	}
 
+	@Differs(from = "1.18", by = "Implementation of synthetic biome argument")
 	@Override
 	public ArgumentType<?> _ArgumentSyntheticBiome() {
 		return ResourceOrTagLocationArgument.resourceOrTag(Registry.BIOME_REGISTRY);
@@ -515,6 +517,7 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 		return set;
 	}
 
+	@Differs(from = "1.18", by = "Implement biome argument which contains either a biome or a tag (instead of just a biome)")
 	@Override
 	public Biome getBiome(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		Result<net.minecraft.world.level.biome.Biome> biomeResult = ResourceOrTagLocationArgument.getBiome(cmdCtx, key);
@@ -928,6 +931,7 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 		return CraftSound.getBukkit(Registry.SOUND_EVENT.get(ResourceLocationArgument.getId(cmdCtx, key)));
 	}
 
+	@Differs(from = "1.18", by = "Use of argument synthetic biome's listSuggestions method")
 	@Override
 	public SuggestionProvider<CommandSourceStack> getSuggestionProvider(SuggestionProviders provider) {
 		return switch (provider) {
@@ -996,6 +1000,7 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 		return command instanceof VanillaCommandWrapper;
 	}
 
+	@Differs(from = "1.18", by = "Completely rewritten way of reloading datapacks")
 	@Override
 	public void reloadDataPacks() {
 		CommandAPI.logNormal("Reloading datapacks...");
