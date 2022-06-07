@@ -128,8 +128,6 @@ import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.Commands;
-import net.minecraft.commands.Commands.CommandSelection;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.AngleArgument;
 import net.minecraft.commands.arguments.ColorArgument;
@@ -167,7 +165,7 @@ import net.minecraft.commands.arguments.item.FunctionArgument;
 import net.minecraft.commands.arguments.item.ItemArgument;
 import net.minecraft.commands.arguments.item.ItemPredicateArgument;
 import net.minecraft.commands.arguments.selector.EntitySelector;
-import net.minecraft.commands.synchronization.ArgumentTypes;
+import net.minecraft.commands.synchronization.ArgumentUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -487,11 +485,12 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 		return new SimpleFunctionWrapper(fromResourceLocation(commandFunction.getId()), appliedObj, result);
 	}
 
+	@Differs(from = "1.18.2", by = "ArgumentTypes -> ArgumentUtils")
 	@Override
 	public void createDispatcherFile(File file, com.mojang.brigadier.CommandDispatcher<CommandSourceStack> dispatcher)
 			throws IOException {
 		Files.asCharSink(file, StandardCharsets.UTF_8).write(new GsonBuilder().setPrettyPrinting().create()
-				.toJson(ArgumentTypes.serializeNodeToJson(dispatcher, dispatcher.getRoot())));
+				.toJson(ArgumentUtils.serializeNodeToJson(dispatcher, dispatcher.getRoot())));
 	}
 
 	@Override
