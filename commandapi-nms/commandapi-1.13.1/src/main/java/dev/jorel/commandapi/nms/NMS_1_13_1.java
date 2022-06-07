@@ -162,7 +162,7 @@ import net.minecraft.server.v1_13_R2.Vec3D;
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
 @RequireField(in = ParticleParamBlock.class, name = "c", ofType = IBlockData.class)
 @RequireField(in = ParticleParamItem.class, name = "c", ofType = ItemStack.class)
-@RequireField(in = ParticleParamRedstone.class, name = "g", ofType = float.class)
+@RequireField(in = ParticleParamRedstone.class, name = "f", ofType = float.class)
 public class NMS_1_13_1 implements NMS<CommandListenerWrapper> {
 	
 	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
@@ -170,7 +170,7 @@ public class NMS_1_13_1 implements NMS<CommandListenerWrapper> {
 	private static final VarHandle SimpleHelpMap_helpTopics;
 	private static final VarHandle ParticleParamBlock_c;
 	private static final VarHandle ParticleParamItem_c;
-	private static final VarHandle ParticleParamRedstone_g;
+	private static final VarHandle ParticleParamRedstone_f;
 
 	// Compute all var handles all in one go so we don't do this during main server runtime
 	static {
@@ -184,7 +184,7 @@ public class NMS_1_13_1 implements NMS<CommandListenerWrapper> {
 			shm_ht = MethodHandles.privateLookupIn(SimpleHelpMap.class, MethodHandles.lookup()).findVarHandle(SimpleHelpMap.class, "helpTopics", Map.class);
 			ppb_c = MethodHandles.privateLookupIn(ParticleParamBlock.class, MethodHandles.lookup()).findVarHandle(ParticleParamBlock.class, "c", IBlockData.class);
 			ppb_c = MethodHandles.privateLookupIn(ParticleParamItem.class, MethodHandles.lookup()).findVarHandle(ParticleParamItem.class, "c", ItemStack.class);
-			ppr_g = MethodHandles.privateLookupIn(ParticleParamRedstone.class, MethodHandles.lookup()).findVarHandle(ParticleParamRedstone.class, "g", float.class);
+			ppr_g = MethodHandles.privateLookupIn(ParticleParamRedstone.class, MethodHandles.lookup()).findVarHandle(ParticleParamRedstone.class, "f", float.class);
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
@@ -192,7 +192,7 @@ public class NMS_1_13_1 implements NMS<CommandListenerWrapper> {
 		SimpleHelpMap_helpTopics = shm_ht;
 		ParticleParamBlock_c = ppb_c;
 		ParticleParamItem_c = ppi_c;
-		ParticleParamRedstone_g = ppr_g;
+		ParticleParamRedstone_f = ppr_g;
 	}
 	
 	@Override
@@ -751,7 +751,7 @@ public class NMS_1_13_1 implements NMS<CommandListenerWrapper> {
 			final float blue = Float.parseFloat(optionsArr[3]);
 
 			final Color color = Color.fromRGB((int) (red * 255.0F), (int) (green * 255.0F), (int) (blue * 255.0F));
-			return new ParticleData<DustOptions>(particle, new DustOptions(color, (float) ParticleParamRedstone_g.get(options)));
+			return new ParticleData<DustOptions>(particle, new DustOptions(color, (float) ParticleParamRedstone_f.get(options)));
 		}
 		if(particleOptions instanceof ParticleParamItem options) {
 			return new ParticleData<org.bukkit.inventory.ItemStack>(particle, CraftItemStack.asBukkitCopy((ItemStack) ParticleParamItem_c.get(options)));

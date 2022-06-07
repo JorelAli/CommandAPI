@@ -442,8 +442,7 @@ public class NMS_1_15 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public BaseComponent[] getChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		String resultantString = ChatSerializer.a(ArgumentChat.a(cmdCtx, key));
-		return ComponentSerializer.parse(resultantString);
+		return ComponentSerializer.parse(ChatSerializer.a(ArgumentChat.a(cmdCtx, key)));
 	}
 
 	@Override
@@ -453,8 +452,7 @@ public class NMS_1_15 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public BaseComponent[] getChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String str) {
-		String resultantString = ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, str));
-		return ComponentSerializer.parse(resultantString);
+		return ComponentSerializer.parse(ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, str)));
 	}
 
 	private CommandListenerWrapper getCLW(CommandContext<CommandListenerWrapper> cmdCtx) {
@@ -467,7 +465,7 @@ public class NMS_1_15 implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
-	public CommandSender getCommandSenderForCLW(CommandListenerWrapper clw) {
+	public CommandSender getCommandSenderFromCSS(CommandListenerWrapper clw) {
 		try {
 			return clw.getBukkitSender();
 		} catch (UnsupportedOperationException e) {
