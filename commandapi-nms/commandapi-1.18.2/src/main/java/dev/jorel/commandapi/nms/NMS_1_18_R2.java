@@ -506,12 +506,11 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 		EnumSet<Axis> set = EnumSet.noneOf(Axis.class);
 		EnumSet<net.minecraft.core.Direction.Axis> parsedEnumSet = SwizzleArgument.getSwizzle(cmdCtx, key);
 		for (net.minecraft.core.Direction.Axis element : parsedEnumSet) {
-			switch (element) {
-				case X -> set.add(Axis.X);
-				case Y -> set.add(Axis.Y);
-				case Z -> set.add(Axis.Z);
-				default -> throw new IllegalArgumentException("Unexpected value: " + element);
-			}
+			set.add(switch (element) {
+				case X -> Axis.X;
+				case Y -> Axis.Y;
+				case Z -> Axis.Z;
+			});
 		}
 		return set;
 	}
@@ -655,9 +654,9 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 					yield new ArrayList<Player>();
 				}
 			case ONE_ENTITY:
-				yield (org.bukkit.entity.Entity) argument.findSingleEntity(cmdCtx.getSource()).getBukkitEntity();
+				yield argument.findSingleEntity(cmdCtx.getSource()).getBukkitEntity();
 			case ONE_PLAYER:
-				yield (Player) argument.findSinglePlayer(cmdCtx.getSource()).getBukkitEntity();
+				yield argument.findSinglePlayer(cmdCtx.getSource()).getBukkitEntity();
 		};
 	}
 

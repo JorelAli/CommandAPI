@@ -56,15 +56,15 @@ public interface CommandAPIVersionHandler {
 			return new NMS_1_18_R2();
 		} else {
 			return switch (version) {
-				case "1.13" -> new NMS_1_13();
-				case "1.13.1" -> new NMS_1_13_1();
-				case "1.13.2" -> new NMS_1_13_2();
-				case "1.14", "1.14.1", "1.14.2" -> new NMS_1_14();
-				case "1.14.3" -> new NMS_1_14_3();
-				case "1.14.4" -> new NMS_1_14_4();
-				case "1.15", "1.15.1", "1.15.2" -> new NMS_1_15();
-				case "1.16.1" -> new NMS_1_16_R1();
-				case "1.16.2", "1.16.3" -> new NMS_1_16_R2();
+//				case "1.13" -> new NMS_1_13();
+//				case "1.13.1" -> new NMS_1_13_1();
+//				case "1.13.2" -> new NMS_1_13_2();
+//				case "1.14", "1.14.1", "1.14.2" -> new NMS_1_14();
+//				case "1.14.3" -> new NMS_1_14_3();
+//				case "1.14.4" -> new NMS_1_14_4();
+//				case "1.15", "1.15.1", "1.15.2" -> new NMS_1_15();
+//				case "1.16.1" -> new NMS_1_16_R1();
+				case "1.16.2", "1.16.3" -> new NMS_1_16_R2(); // TODO: This has a leaky dependency!
 				case "1.16.4" -> new NMS_1_16_4_R3();
 				case "1.16.5" -> new NMS_1_16_R3();
 				case "1.17", "1.17.1" -> new NMS_1_17_R1();

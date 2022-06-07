@@ -227,6 +227,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		ParticleParamRedstone_g = ppr_g;
 	}
 
+	@Differs(from = "1.16.4", by = "Use of non-deprecated NamespacedKey.fromString method")
 	private static NamespacedKey fromMinecraftKey(MinecraftKey key) {
 		return NamespacedKey.fromString(key.getNamespace() + ":" + key.getKey());
 	}
@@ -501,12 +502,11 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		EnumSet<Axis> set = EnumSet.noneOf(Axis.class);
 		EnumSet<EnumAxis> parsedEnumSet = ArgumentRotationAxis.a(cmdCtx, key);
 		for (EnumAxis element : parsedEnumSet) {
-			switch (element) {
-				case X -> set.add(Axis.X);
-				case Y -> set.add(Axis.Y);
-				case Z -> set.add(Axis.Z);
-				default -> throw new IllegalArgumentException("Unexpected value: " + element);
-			}
+			set.add(switch (element) {
+				case X -> Axis.X;
+				case Y -> Axis.Y;
+				case Z -> Axis.Z;
+			});
 		}
 		return set;
 	}
@@ -581,7 +581,6 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	public Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String str,
 			dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector selector)
 			throws CommandSyntaxException {
-
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
 		try {
 			CommandAPIHandler.getInstance().getField(EntitySelector.class, "checkPermissions").set(argument, false);
@@ -661,11 +660,11 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public Set<NamespacedKey> getFunctions() {
-		Set<NamespacedKey> result = new HashSet<>();
-		for (MinecraftKey minecraftKey : MINECRAFT_SERVER.getFunctionData().f()) {
-			result.add(fromMinecraftKey(minecraftKey));
+		Set<NamespacedKey> functions = new HashSet<>();
+		for (MinecraftKey key : MINECRAFT_SERVER.getFunctionData().f()) {
+			functions.add(fromMinecraftKey(key));
 		}
-		return result;
+		return functions;
 	}
 
 	@Override
@@ -906,11 +905,11 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public Set<NamespacedKey> getTags() {
-		Set<NamespacedKey> result = new HashSet<>();
-		for (MinecraftKey minecraftKey : MINECRAFT_SERVER.getFunctionData().g()) {
-			result.add(fromMinecraftKey(minecraftKey));
+		Set<NamespacedKey> functions = new HashSet<>();
+		for (MinecraftKey key : MINECRAFT_SERVER.getFunctionData().g()) {
+			functions.add(fromMinecraftKey(key));
 		}
-		return result;
+		return functions;
 	}
 
 	@Override
