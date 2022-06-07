@@ -333,8 +333,7 @@ public class NMS_1_15 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public String convert(org.bukkit.inventory.ItemStack is) {
-		ItemStack nmsItemStack = CraftItemStack.asNMSCopy(is);
-		return is.getType().getKey().toString() + nmsItemStack.getOrCreateTag().asString();
+		return is.getType().getKey().toString() + CraftItemStack.asNMSCopy(is).getOrCreateTag().toString();
 	}
 
 	@Override
@@ -358,7 +357,7 @@ public class NMS_1_15 implements NMS<CommandListenerWrapper> {
 		@SuppressWarnings("deprecation")
 		NamespacedKey minecraftKey = new NamespacedKey(customFunction.a().getNamespace(), customFunction.a().getKey());
 
-		CustomFunctionData customFunctionData = ((CraftServer) Bukkit.getServer()).getServer().getFunctionData();
+		CustomFunctionData customFunctionData = MINECRAFT_SERVER.getFunctionData();
 
 		ToIntBiFunction<CustomFunction, CommandListenerWrapper> obj = customFunctionData::a;
 		ToIntFunction<CommandListenerWrapper> appliedObj = clw -> obj.applyAsInt(customFunction, clw);
@@ -425,7 +424,7 @@ public class NMS_1_15 implements NMS<CommandListenerWrapper> {
 	public Predicate<Block> getBlockPredicate(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		Predicate<ShapeDetectorBlock> predicate = ArgumentBlockPredicate.a(cmdCtx, key);
 		return (Block block) -> {
-			return predicate.test(new ShapeDetectorBlock(getCLW(cmdCtx).getWorld(),
+			return predicate.test(new ShapeDetectorBlock(cmdCtx.getSource().getWorld(),
 					new BlockPosition(block.getX(), block.getY(), block.getZ()), true));
 		};
 	}
@@ -437,7 +436,7 @@ public class NMS_1_15 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> getBrigadierDispatcher() {
-		return ((MinecraftServer) ((CraftServer) Bukkit.getServer()).getServer()).getCommandDispatcher().a();
+		return ((MinecraftServer) MINECRAFT_SERVER).getCommandDispatcher().a();
 	}
 
 	@Override
@@ -453,10 +452,6 @@ public class NMS_1_15 implements NMS<CommandListenerWrapper> {
 	@Override
 	public BaseComponent[] getChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String str) {
 		return ComponentSerializer.parse(ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, str)));
-	}
-
-	private CommandListenerWrapper getCLW(CommandContext<CommandListenerWrapper> cmdCtx) {
-		return (CommandListenerWrapper) cmdCtx.getSource();
 	}
 
 	@Override
@@ -533,7 +528,7 @@ public class NMS_1_15 implements NMS<CommandListenerWrapper> {
 	@Override
 	public EntityType getEntityType(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
 		Entity entity = IRegistry.ENTITY_TYPE.get(ArgumentEntitySummon.a(cmdCtx, str))
-				.a((getCLW(cmdCtx).getWorld().getWorld()).getHandle());
+				.a((cmdCtx.getSource().getWorld().getWorld()).getHandle());
 		return entity.getBukkitEntity().getType();
 	}
 
@@ -550,12 +545,12 @@ public class NMS_1_15 implements NMS<CommandListenerWrapper> {
 	public FunctionWrapper[] getFunction(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
 		Collection<CustomFunction> customFuncList = ArgumentTag.a(cmdCtx, str);
 		FunctionWrapper[] result = new FunctionWrapper[customFuncList.size()];
-		CommandListenerWrapper commandListenerWrapper = getCLW(cmdCtx).a().b(2);
+		CommandListenerWrapper commandListenerWrapper = cmdCtx.getSource().a().b(2);
 
 		int count = 0;
 		for (CustomFunction customFunction : customFuncList) { 
 			result[count++] = FunctionWrapper.fromSimpleFunctionWrapper(convertFunction(customFunction), commandListenerWrapper, e -> {
-				return getCLW(cmdCtx).a(((CraftEntity) e).getHandle());
+				return cmdCtx.getSource().a(((CraftEntity) e).getHandle());
 			});
 		}
 
@@ -564,16 +559,14 @@ public class NMS_1_15 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public SimpleFunctionWrapper getFunction(NamespacedKey key) {
-		MinecraftKey minecraftKey = new MinecraftKey(key.getNamespace(), key.getKey());
-		CustomFunctionData functionData = ((CraftServer) Bukkit.getServer()).getServer().getFunctionData();
-		return convertFunction(functionData.a(minecraftKey).get());
+		return convertFunction(MINECRAFT_SERVER.getFunctionData().a(new MinecraftKey(key.getNamespace(), key.getKey())).get());
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
 	public Set<NamespacedKey> getFunctions() {
 		Set<NamespacedKey> functions = new HashSet<>();
-		for(MinecraftKey key : ((CraftServer) Bukkit.getServer()).getServer().getFunctionData().c().keySet()) {
+		for(MinecraftKey key : MINECRAFT_SERVER.getFunctionData().c().keySet()) {
 			functions.add(new NamespacedKey(key.getNamespace(), key.getKey()));
 		}
 		return functions;
@@ -612,11 +605,11 @@ public class NMS_1_15 implements NMS<CommandListenerWrapper> {
 		switch (locationType) {
 		case BLOCK_POSITION:
 			BlockPosition blockPos = ArgumentPosition.a(cmdCtx, str);
-			return new Location(getCLW(cmdCtx).getWorld().getWorld(), blockPos.getX(), blockPos.getY(),
+			return new Location(cmdCtx.getSource().getWorld().getWorld(), blockPos.getX(), blockPos.getY(),
 					blockPos.getZ());
 		case PRECISE_POSITION:
 			Vec3D vecPos = ArgumentVec3.a(cmdCtx, str);
-			return new Location(getCLW(cmdCtx).getWorld().getWorld(), vecPos.x, vecPos.y, vecPos.z);
+			return new Location(cmdCtx.getSource().getWorld().getWorld(), vecPos.x, vecPos.y, vecPos.z);
 		}
 		return null;
 	}
@@ -627,10 +620,10 @@ public class NMS_1_15 implements NMS<CommandListenerWrapper> {
 		switch (locationType2d) {
 		case BLOCK_POSITION:
 			BlockPosition2D blockPos = ArgumentVec2I.a(cmdCtx, key);
-			return new Location2D(getCLW(cmdCtx).getWorld().getWorld(), blockPos.a, blockPos.b);
+			return new Location2D(cmdCtx.getSource().getWorld().getWorld(), blockPos.a, blockPos.b);
 		case PRECISE_POSITION:
 			Vec2F vecPos = ArgumentVec2.a(cmdCtx, key);
-			return new Location2D(getCLW(cmdCtx).getWorld().getWorld(), vecPos.i, vecPos.j);
+			return new Location2D(cmdCtx.getSource().getWorld().getWorld(), vecPos.i, vecPos.j);
 		}
 		return null;
 	}
@@ -642,47 +635,15 @@ public class NMS_1_15 implements NMS<CommandListenerWrapper> {
 		String namespace = minecraftKey.getNamespace();
 		String key = minecraftKey.getKey();
 
-		LootTable lootTable = getCLW(cmdCtx).getServer().getLootTableRegistry().getLootTable(minecraftKey);
+		LootTable lootTable = MINECRAFT_SERVER.getLootTableRegistry().getLootTable(minecraftKey);
 		return new CraftLootTable(new NamespacedKey(namespace, key), lootTable);
 	}
 
 	@Override
 	public MathOperation getMathOperation(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		ArgumentMathOperation.a result = ArgumentMathOperation.a(cmdCtx, key);
-		Scoreboard board = new Scoreboard();
-		ScoreboardScore tester_left = new ScoreboardScore(board, null, null);
-		ScoreboardScore tester_right = new ScoreboardScore(board, null, null);
-
-		tester_left.setScore(6);
-		tester_right.setScore(2);
-		result.apply(tester_left, tester_right);
-
-		switch (tester_left.getScore()) {
-		case 8:
-			return MathOperation.ADD;
-		case 4:
-			return MathOperation.SUBTRACT;
-		case 12:
-			return MathOperation.MULTIPLY;
-		case 3:
-			return MathOperation.DIVIDE;
-		case 0:
-			return MathOperation.MOD;
-		case 6:
-			return MathOperation.MAX;
-
-		case 2: {
-			if (tester_right.getScore() == 6)
-				return MathOperation.SWAP;
-			tester_left.setScore(2);
-			tester_right.setScore(6);
-			result.apply(tester_left, tester_right);
-			if (tester_left.getScore() == 2)
-				return MathOperation.MIN;
-			return MathOperation.ASSIGN;
-		}
-		}
-		return null;
+		// We run this to ensure the argument exists/parses properly
+		ArgumentMathOperation.a(cmdCtx, key);
+		return MathOperation.fromString(CommandAPIHandler.getRawArgumentInput(cmdCtx, key));
 	}
 
 	@Override
@@ -742,7 +703,7 @@ public class NMS_1_15 implements NMS<CommandListenerWrapper> {
 	@Override
 	public Rotation getRotation(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		IVectorPosition pos = ArgumentRotation.a(cmdCtx, key);
-		Vec2F vec = pos.b(getCLW(cmdCtx));
+		Vec2F vec = pos.b(cmdCtx.getSource());
 		return new Rotation(vec.i, vec.j);
 	}
 
@@ -763,7 +724,7 @@ public class NMS_1_15 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public CommandSender getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean isNative) {
-		CommandListenerWrapper clw = getCLW(cmdCtx);
+		CommandListenerWrapper clw = cmdCtx.getSource();
 
 		CommandSender sender = clw.getBukkitSender();
 		Vec3D pos = clw.getPosition();
@@ -806,7 +767,7 @@ public class NMS_1_15 implements NMS<CommandListenerWrapper> {
 		switch (provider) {
 		case FUNCTION:
 			return (context, builder) -> {
-				CustomFunctionData functionData = getCLW(context).getServer().getFunctionData();
+				CustomFunctionData functionData = MINECRAFT_SERVER.getFunctionData();
 				ICompletionProvider.a(functionData.h().a(), builder, "#");
 				return ICompletionProvider.a(functionData.c().keySet(), builder);
 			};
@@ -816,13 +777,13 @@ public class NMS_1_15 implements NMS<CommandListenerWrapper> {
 			return CompletionProviders.c;
 		case ADVANCEMENTS:
 			return (cmdCtx, builder) -> {
-				Collection<Advancement> advancements = ((CommandListenerWrapper) cmdCtx.getSource()).getServer()
+				Collection<Advancement> advancements = MINECRAFT_SERVER
 						.getAdvancementData().getAdvancements();
 				return ICompletionProvider.a(advancements.stream().map(Advancement::getName), builder);
 			};
 		case LOOT_TABLES:
 			return (context, builder) -> {
-				LootTableRegistry lootTables = getCLW(context).getServer().getLootTableRegistry();
+				LootTableRegistry lootTables = MINECRAFT_SERVER.getLootTableRegistry();
 				return ICompletionProvider.a(lootTables.a(), builder);
 			};
 		case ENTITIES:
@@ -836,7 +797,7 @@ public class NMS_1_15 implements NMS<CommandListenerWrapper> {
 	@Override
 	public SimpleFunctionWrapper[] getTag(NamespacedKey key) {
 		MinecraftKey minecraftKey = new MinecraftKey(key.getNamespace(), key.getKey());
-		CustomFunctionData functionData = ((CraftServer) Bukkit.getServer()).getServer().getFunctionData();
+		CustomFunctionData functionData = MINECRAFT_SERVER.getFunctionData();
 		return functionData.h().b(minecraftKey).a().stream().map(this::convertFunction).toArray(SimpleFunctionWrapper[]::new);
 	}
 
@@ -844,7 +805,7 @@ public class NMS_1_15 implements NMS<CommandListenerWrapper> {
 	@Override
 	public Set<NamespacedKey> getTags() {
 		Set<NamespacedKey> functions = new HashSet<>();
-		for(MinecraftKey key : ((CraftServer) Bukkit.getServer()).getServer().getFunctionData().h().a()) {
+		for(MinecraftKey key : MINECRAFT_SERVER.getFunctionData().h().a()) {
 			functions.add(new NamespacedKey(key.getNamespace(), key.getKey()));
 		}
 		return functions;
