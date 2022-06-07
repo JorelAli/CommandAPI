@@ -175,6 +175,8 @@ import net.minecraft.core.particles.DustColorTransitionOptions;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.SculkChargeParticleOptions;
+import net.minecraft.core.particles.ShriekParticleOption;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.particles.VibrationParticleOption;
 import net.minecraft.network.chat.Component.Serializer;
@@ -216,7 +218,7 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 
 	// From net.minecraft.server.commands.LocateCommand
 	private static final DynamicCommandExceptionType ERROR_BIOME_INVALID;
-	
+
 	// Derived from net.minecraft.commands.Commands;
 	private static final CommandBuildContext COMMAND_BUILD_CONTEXT;
 
@@ -235,7 +237,8 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 		}
 		SimpleHelpMap_helpTopics = shm_ht;
 		EntityPositionSource_sourceEntity = eps_se;
-		ERROR_BIOME_INVALID = new DynamicCommandExceptionType(arg -> net.minecraft.network.chat.Component.translatable("commands.locate.biome.invalid", arg));
+		ERROR_BIOME_INVALID = new DynamicCommandExceptionType(
+				arg -> net.minecraft.network.chat.Component.translatable("commands.locate.biome.invalid", arg));
 
 		// Construct the command build context to use for all commands - I presume this
 		// lets you decide what happens when a tag isn't present by specifying the
@@ -541,7 +544,8 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 	@Differs(from = "1.18.2", by = "Biomes now go via the registry. Also have to manually implement ERROR_BIOME_INVALID")
 	@Override
 	public Biome getBiome(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		Result<net.minecraft.world.level.biome.Biome> biomeResult = ResourceOrTagLocationArgument.getRegistryType(cmdCtx, key, Registry.BIOME_REGISTRY, ERROR_BIOME_INVALID);
+		Result<net.minecraft.world.level.biome.Biome> biomeResult = ResourceOrTagLocationArgument
+				.getRegistryType(cmdCtx, key, Registry.BIOME_REGISTRY, ERROR_BIOME_INVALID);
 		if (biomeResult.unwrap().left().isPresent()) {
 			// It's a resource key. Unwrap the result, get the resource key (left)
 			// and get its location and return its path. Important information if
@@ -871,8 +875,15 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 						.warning("Unknown vibration destination " + options.getVibrationPath().getDestination());
 				return new ParticleData<Void>(particle, null);
 			}
-			return new ParticleData<Vibration>(particle,
-					new Vibration(from, destination, options.getArrivalInTicks()));
+			return new ParticleData<Vibration>(particle, new Vibration(from, destination, options.getArrivalInTicks()));
+		}
+		if (particleOptions instanceof ShriekParticleOption options) {
+			// CraftBukkit implements shriek particles as a (boxed) Integer object
+			return new ParticleData<Integer>(particle, Integer.valueOf(options.getDelay()));
+		}
+		if (particleOptions instanceof SculkChargeParticleOptions options) {
+			// CraftBukkit implements sculk charge particles as a (boxed) Float object
+			return new ParticleData<Float>(particle, Float.valueOf(options.roll()));
 		}
 		CommandAPI.getLogger().warning("Invalid particle data type for " + particle.getDataType().toString());
 		return new ParticleData<Void>(particle, null);
