@@ -194,6 +194,11 @@ public class NMS_1_13_2 implements NMS<CommandListenerWrapper> {
 		ParticleParamRedstone_f = ppr_g;
 	}
 
+	@SuppressWarnings("deprecation")
+	private static NamespacedKey fromMinecraftKey(MinecraftKey key) {
+		return new NamespacedKey(key.b(), key.getKey());
+	}
+
 	@Override
 	public ArgumentType<?> _ArgumentAngle() {
 		throw new AngleArgumentException();
@@ -786,8 +791,7 @@ public class NMS_1_13_2 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public Rotation getRotation(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		IVectorPosition pos = ArgumentRotation.a(cmdCtx, key);
-		Vec2F vec = pos.b(cmdCtx.getSource());
+		Vec2F vec = ArgumentRotation.a(cmdCtx, key).b(cmdCtx.getSource());
 		return new Rotation(vec.i, vec.j);
 	}
 
@@ -820,7 +824,7 @@ public class NMS_1_13_2 implements NMS<CommandListenerWrapper> {
 		Location location = new Location(clw.getWorld().getWorld(), pos.x, pos.y, pos.z, rot.j, rot.i);
 
 		Entity proxyEntity = clw.getEntity();
-		CommandSender proxy = proxyEntity == null ? null : ((Entity) proxyEntity).getBukkitEntity();
+		CommandSender proxy = proxyEntity == null ? null : proxyEntity.getBukkitEntity();
 		if (isNative || (proxy != null && !sender.equals(proxy))) {
 			return new NativeProxyCommandSender(sender, proxy, location, world);
 		} else {
@@ -863,7 +867,7 @@ public class NMS_1_13_2 implements NMS<CommandListenerWrapper> {
 				Collection<Advancement> advancements = MINECRAFT_SERVER.getAdvancementData().b();
 				return ICompletionProvider.a(advancements.stream().map(Advancement::getName), builder);
 			};
-			case LOOT_TABLES -> (context, builder) -> {
+			case LOOT_TABLES -> (cmdCtx, builder) -> {
 				Map<MinecraftKey, LootTable> map = (Map<MinecraftKey, LootTable>) LootTableRegistry_e
 						.get(MINECRAFT_SERVER.getLootTableRegistry());
 				return ICompletionProvider.a(map.keySet(), builder);
@@ -926,10 +930,5 @@ public class NMS_1_13_2 implements NMS<CommandListenerWrapper> {
 	@Override
 	public void resendPackets(Player player) {
 		MINECRAFT_SERVER.vanillaCommandDispatcher.a(((CraftPlayer) player).getHandle());
-	}
-
-	@SuppressWarnings("deprecation")
-	private static NamespacedKey fromMinecraftKey(MinecraftKey key) {
-		return new NamespacedKey(key.b(), key.getKey());
 	}
 }

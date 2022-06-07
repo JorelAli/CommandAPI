@@ -207,33 +207,37 @@ import net.minecraft.world.phys.Vec3;
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
 @RequireField(in = EntityPositionSource.class, name = "sourceEntity", ofType = Optional.class)
 public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
-	
+
 	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
 	private static final VarHandle SimpleHelpMap_helpTopics;
 	private static final VarHandle EntityPositionSource_sourceEntity;
-	
-	// Compute all var handles all in one go so we don't do this during main server runtime
+
+	// Compute all var handles all in one go so we don't do this during main server
+	// runtime
 	static {
 		VarHandle shm_ht = null;
 		VarHandle eps_se = null;
 		try {
-			 shm_ht = MethodHandles.privateLookupIn(SimpleHelpMap.class, MethodHandles.lookup()).findVarHandle(SimpleHelpMap.class, "helpTopics", Map.class);
-			 eps_se = MethodHandles.privateLookupIn(EntityPositionSource.class, MethodHandles.lookup()).findVarHandle(EntityPositionSource.class, "d", Optional.class);		} catch (ReflectiveOperationException e) {
+			shm_ht = MethodHandles.privateLookupIn(SimpleHelpMap.class, MethodHandles.lookup())
+					.findVarHandle(SimpleHelpMap.class, "helpTopics", Map.class);
+			eps_se = MethodHandles.privateLookupIn(EntityPositionSource.class, MethodHandles.lookup())
+					.findVarHandle(EntityPositionSource.class, "d", Optional.class);
+		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
-		 SimpleHelpMap_helpTopics = shm_ht;
-		 EntityPositionSource_sourceEntity = eps_se;
+		SimpleHelpMap_helpTopics = shm_ht;
+		EntityPositionSource_sourceEntity = eps_se;
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
 		return NamespacedKey.fromString(key.getNamespace() + ":" + key.getPath());
 	}
-	
+
 	@Override
 	public ArgumentType<?> _ArgumentAngle() {
 		return AngleArgument.angle();
 	}
-	
+
 	@Override
 	public ArgumentType<?> _ArgumentAxis() {
 		return SwizzleArgument.swizzle();
@@ -275,12 +279,13 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public ArgumentType<?> _ArgumentEntity(dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector selector) {
+	public ArgumentType<?> _ArgumentEntity(
+			dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector selector) {
 		return switch (selector) {
-		case MANY_ENTITIES -> EntityArgument.entities();
-		case MANY_PLAYERS  -> EntityArgument.players();
-		case ONE_ENTITY    -> EntityArgument.entity();
-		case ONE_PLAYER    -> EntityArgument.player();
+			case MANY_ENTITIES -> EntityArgument.entities();
+			case MANY_PLAYERS -> EntityArgument.players();
+			case ONE_ENTITY -> EntityArgument.entity();
+			case ONE_PLAYER -> EntityArgument.player();
 		};
 	}
 
@@ -380,6 +385,11 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 	}
 
 	@Override
+	public ArgumentType<?> _ArgumentSyntheticBiome() {
+		return ResourceOrTagLocationArgument.resourceOrTag(Registry.BIOME_REGISTRY);
+	}
+
+	@Override
 	public ArgumentType<?> _ArgumentTag() {
 		return FunctionArgument.functions();
 	}
@@ -405,8 +415,14 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public ArgumentType<?> _ArgumentSyntheticBiome() {
-		return ResourceOrTagLocationArgument.resourceOrTag(Registry.BIOME_REGISTRY);
+	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
+		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) SimpleHelpMap_helpTopics
+				.get(Bukkit.getServer().getHelpMap());
+		// We have to use VarHandles to use helpTopics.put (instead of .addTopic)
+		// because we're updating an existing help topic, not adding a new help topic
+		for (Map.Entry<String, HelpTopic> entry : helpTopicsToAdd.entrySet()) {
+			helpTopics.put(entry.getKey(), entry.getValue());
+		}
 	}
 
 	@Override
@@ -434,22 +450,30 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 		return sound.getKey().toString();
 	}
 
-	//Converts NMS function to SimpleFunctionWrapper
+	// Converts NMS function to SimpleFunctionWrapper
 	private SimpleFunctionWrapper convertFunction(CommandFunction commandFunction) {
-		ToIntFunction<CommandSourceStack> appliedObj = (CommandSourceStack css) -> MINECRAFT_SERVER.getFunctions().execute(commandFunction, css);
+		ToIntFunction<CommandSourceStack> appliedObj = (CommandSourceStack css) -> MINECRAFT_SERVER.getFunctions()
+				.execute(commandFunction, css);
 
 		Entry[] cArr = commandFunction.getEntries();
 		String[] result = new String[cArr.length];
-		for(int i = 0, size = cArr.length; i < size; i++) {
+		for (int i = 0, size = cArr.length; i < size; i++) {
 			result[i] = cArr[i].toString();
 		}
 		return new SimpleFunctionWrapper(fromResourceLocation(commandFunction.getId()), appliedObj, result);
 	}
 
 	@Override
-	public void createDispatcherFile(File file, com.mojang.brigadier.CommandDispatcher<CommandSourceStack> dispatcher) throws IOException {
+	public void createDispatcherFile(File file, com.mojang.brigadier.CommandDispatcher<CommandSourceStack> dispatcher)
+			throws IOException {
 		Files.asCharSink(file, StandardCharsets.UTF_8).write(new GsonBuilder().setPrettyPrinting().create()
 				.toJson(ArgumentTypes.serializeNodeToJson(dispatcher, dispatcher.getRoot())));
+	}
+
+	@Override
+	public HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription,
+			String permission) {
+		return new CustomHelpTopic(commandName, shortDescription, fullDescription, permission);
 	}
 
 	@Override
@@ -460,14 +484,16 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 
 	@SuppressWarnings("removal")
 	@Override
-	public Component getAdventureChat(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException  {
+	public Component getAdventureChat(CommandContext<CommandSourceStack> cmdCtx, String key)
+			throws CommandSyntaxException {
 		return PaperComponents.gsonSerializer().deserialize(Serializer.toJson(MessageArgument.getMessage(cmdCtx, key)));
 	}
 
 	@SuppressWarnings("removal")
 	@Override
 	public Component getAdventureChatComponent(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		return PaperComponents.gsonSerializer().deserialize(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, key)));
+		return PaperComponents.gsonSerializer()
+				.deserialize(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, key)));
 	}
 
 	@Override
@@ -481,10 +507,10 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 		EnumSet<net.minecraft.core.Direction.Axis> parsedEnumSet = SwizzleArgument.getSwizzle(cmdCtx, key);
 		for (net.minecraft.core.Direction.Axis element : parsedEnumSet) {
 			switch (element) {
-			case X -> set.add(Axis.X);
-			case Y -> set.add(Axis.Y);
-			case Z -> set.add(Axis.Z);
-			default -> throw new IllegalArgumentException("Unexpected value: " + element);
+				case X -> set.add(Axis.X);
+				case Y -> set.add(Axis.Y);
+				case Z -> set.add(Axis.Z);
+				default -> throw new IllegalArgumentException("Unexpected value: " + element);
 			}
 		}
 		return set;
@@ -493,43 +519,45 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 	@Override
 	public Biome getBiome(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		Result<net.minecraft.world.level.biome.Biome> biomeResult = ResourceOrTagLocationArgument.getBiome(cmdCtx, key);
-		if(biomeResult.unwrap().left().isPresent()) {
+		if (biomeResult.unwrap().left().isPresent()) {
 			// It's a resource key. Unwrap the result, get the resource key (left)
 			// and get its location and return its path. Important information if
 			// anyone ever has to maintain this very complicated code, because this
 			// took about an hour to figure out:
-			
+
 			// For reference, unwrapping the object like this returns a ResourceKey:
-			//   biomeResult.unwrap().left().get()
-			
+			// biomeResult.unwrap().left().get()
+
 			// This has two important functions:
-			//   location() and registry().
-			
+			// location() and registry().
+
 			// The location() returns a ResourceLocation with a namespace and
 			// path of the biome, for example:
-			//   minecraft:badlands.
-			
+			// minecraft:badlands.
+
 			// The registry() returns a ResourceLocation with a namespace and
 			// path of the registry where the biome is declared in, for example:
-			//   minecraft:worldgen/biome.
+			// minecraft:worldgen/biome.
 			// This is the same registry that you'll find in registries.json and
 			// in the command_registration.json
-			
+
 			return Biome.valueOf(biomeResult.unwrap().left().get().location().getPath().toUpperCase());
 		} else {
 			// This isn't a biome, tell the user this.
-			
+
 			// For reference, unwrapping this gives you the tag's namespace in location()
 			// and a (recursive structure of the) path of the registry, for example
-			//   [minecraft:root / minecraft:worldgen/biome]
-			
+			// [minecraft:root / minecraft:worldgen/biome]
+
 			// ResourceOrTagLocationArgument.ERROR_INVALID_BIOME
-			throw new DynamicCommandExceptionType(x -> new TranslatableComponent("commands.locatebiome.invalid", x)).create(biomeResult.asPrintable());
+			throw new DynamicCommandExceptionType(x -> new TranslatableComponent("commands.locatebiome.invalid", x))
+					.create(biomeResult.asPrintable());
 		}
 	}
 
 	@Override
-	public Predicate<Block> getBlockPredicate(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+	public Predicate<Block> getBlockPredicate(CommandContext<CommandSourceStack> cmdCtx, String key)
+			throws CommandSyntaxException {
 		Predicate<BlockInWorld> predicate = BlockPredicateArgument.getBlockPredicate(cmdCtx, key);
 		return (Block block) -> {
 			return predicate.test(new BlockInWorld(cmdCtx.getSource().getLevel(),
@@ -548,7 +576,8 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public BaseComponent[] getChat(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+	public BaseComponent[] getChat(CommandContext<CommandSourceStack> cmdCtx, String key)
+			throws CommandSyntaxException {
 		return ComponentSerializer.parse(Serializer.toJson(MessageArgument.getMessage(cmdCtx, key)));
 	}
 
@@ -577,7 +606,8 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public Environment getDimension(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+	public Environment getDimension(CommandContext<CommandSourceStack> cmdCtx, String key)
+			throws CommandSyntaxException {
 		return DimensionArgument.getDimension(cmdCtx, key).getWorld().getEnvironment();
 	}
 
@@ -585,13 +615,16 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 	public Enchantment getEnchantment(CommandContext<CommandSourceStack> cmdCtx, String str) {
 		return new CraftEnchantment(ItemEnchantmentArgument.getEnchantment(cmdCtx, str));
 	}
-	
+
 	@Override
-	public Object getEntitySelector(CommandContext<CommandSourceStack> cmdCtx, String str, dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector selector)
+	public Object getEntitySelector(CommandContext<CommandSourceStack> cmdCtx, String str,
+			dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector selector)
 			throws CommandSyntaxException {
-		
-		// We override the rule whereby players need "minecraft.command.selector" and have to have
-		// level 2 permissions in order to use entity selectors. We're trying to allow entity selectors
+
+		// We override the rule whereby players need "minecraft.command.selector" and
+		// have to have
+		// level 2 permissions in order to use entity selectors. We're trying to allow
+		// entity selectors
 		// to be used by anyone that registers a command via the CommandAPI.
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
 		try {
@@ -599,41 +632,43 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 		} catch (IllegalArgumentException | IllegalAccessException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		return switch (selector) {
-		case MANY_ENTITIES:
-			try {
-				List<org.bukkit.entity.Entity> result = new ArrayList<>();
-				for(Entity entity : argument.findEntities(cmdCtx.getSource())) {
-					result.add(entity.getBukkitEntity());
+			case MANY_ENTITIES:
+				try {
+					List<org.bukkit.entity.Entity> result = new ArrayList<>();
+					for (Entity entity : argument.findEntities(cmdCtx.getSource())) {
+						result.add(entity.getBukkitEntity());
+					}
+					yield result;
+				} catch (CommandSyntaxException e) {
+					yield new ArrayList<org.bukkit.entity.Entity>();
 				}
-				yield result;
-			} catch (CommandSyntaxException e) {
-				yield new ArrayList<org.bukkit.entity.Entity>();
-			}
-		case MANY_PLAYERS:
-			try {
-				List<Player> result = new ArrayList<>();
-				for(ServerPlayer player : argument.findPlayers(cmdCtx.getSource())) {
-					result.add(player.getBukkitEntity());
+			case MANY_PLAYERS:
+				try {
+					List<Player> result = new ArrayList<>();
+					for (ServerPlayer player : argument.findPlayers(cmdCtx.getSource())) {
+						result.add(player.getBukkitEntity());
+					}
+					yield result;
+				} catch (CommandSyntaxException e) {
+					yield new ArrayList<Player>();
 				}
-				yield result;
-			} catch (CommandSyntaxException e) {
-				yield new ArrayList<Player>();
-			}
-		case ONE_ENTITY:
-			yield (org.bukkit.entity.Entity) argument.findSingleEntity(cmdCtx.getSource()).getBukkitEntity();
-		case ONE_PLAYER:
-			yield (Player) argument.findSinglePlayer(cmdCtx.getSource()).getBukkitEntity();
+			case ONE_ENTITY:
+				yield (org.bukkit.entity.Entity) argument.findSingleEntity(cmdCtx.getSource()).getBukkitEntity();
+			case ONE_PLAYER:
+				yield (Player) argument.findSinglePlayer(cmdCtx.getSource()).getBukkitEntity();
 		};
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	@Override
-	public EntityType getEntityType(CommandContext<CommandSourceStack> cmdCtx, String str) throws CommandSyntaxException {
-		return EntityType.fromName(net.minecraft.world.entity.EntityType.getKey(Registry.ENTITY_TYPE.get(EntitySummonArgument.getSummonableEntity(cmdCtx, str))).getPath());
+	public EntityType getEntityType(CommandContext<CommandSourceStack> cmdCtx, String str)
+			throws CommandSyntaxException {
+		return EntityType.fromName(net.minecraft.world.entity.EntityType
+				.getKey(Registry.ENTITY_TYPE.get(EntitySummonArgument.getSummonableEntity(cmdCtx, str))).getPath());
 	}
-	
+
 	@Override
 	public FloatRange getFloatRange(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		MinMaxBounds.Doubles range = RangeArgument.Floats.getRange(cmdCtx, key);
@@ -641,33 +676,30 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 		double high = range.getMax() == null ? Float.MAX_VALUE : range.getMax();
 		return new FloatRange((float) low, (float) high);
 	}
-	
+
 	@Override
-	public FunctionWrapper[] getFunction(CommandContext<CommandSourceStack> cmdCtx, String str) throws CommandSyntaxException {
+	public FunctionWrapper[] getFunction(CommandContext<CommandSourceStack> cmdCtx, String str)
+			throws CommandSyntaxException {
 		List<FunctionWrapper> result = new ArrayList<>();
 		CommandSourceStack css = cmdCtx.getSource().withSuppressedOutput().withMaximumPermission(2);
-		
-		for(CommandFunction commandFunction : FunctionArgument.getFunctions(cmdCtx, str)) {
-			result.add(
-				FunctionWrapper.fromSimpleFunctionWrapper(
-					convertFunction(commandFunction), 
-					css, 
-					entity -> cmdCtx.getSource().withEntity(((CraftEntity) entity).getHandle())
-				)
-			);
+
+		for (CommandFunction commandFunction : FunctionArgument.getFunctions(cmdCtx, str)) {
+			result.add(FunctionWrapper.fromSimpleFunctionWrapper(convertFunction(commandFunction), css,
+					entity -> cmdCtx.getSource().withEntity(((CraftEntity) entity).getHandle())));
 		}
 		return result.toArray(new FunctionWrapper[0]);
 	}
-	
+
 	@Override
 	public SimpleFunctionWrapper getFunction(NamespacedKey key) {
-		return convertFunction(MINECRAFT_SERVER.getFunctions().get(new ResourceLocation(key.getNamespace(), key.getKey())).get());
+		return convertFunction(
+				MINECRAFT_SERVER.getFunctions().get(new ResourceLocation(key.getNamespace(), key.getKey())).get());
 	}
-	
+
 	@Override
 	public Set<NamespacedKey> getFunctions() {
 		Set<NamespacedKey> result = new HashSet<>();
-		for(ResourceLocation resourceLocation : MINECRAFT_SERVER.getFunctions().getFunctionNames()) {
+		for (ResourceLocation resourceLocation : MINECRAFT_SERVER.getFunctions().getFunctionNames()) {
 			result.add(fromResourceLocation(resourceLocation));
 		}
 		return result;
@@ -688,37 +720,17 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public Predicate<org.bukkit.inventory.ItemStack> getItemStackPredicate(CommandContext<CommandSourceStack> cmdCtx, String key)
-			throws CommandSyntaxException {
+	public Predicate<org.bukkit.inventory.ItemStack> getItemStackPredicate(CommandContext<CommandSourceStack> cmdCtx,
+			String key) throws CommandSyntaxException {
 		// Not inside the lambda because getItemPredicate throws CommandSyntaxException
 		Predicate<ItemStack> predicate = ItemPredicateArgument.getItemPredicate(cmdCtx, key);
 		return item -> predicate.test(CraftItemStack.asNMSCopy(item));
 	}
 
 	@Override
-	public String getKeyedAsString(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+	public String getKeyedAsString(CommandContext<CommandSourceStack> cmdCtx, String key)
+			throws CommandSyntaxException {
 		return ResourceLocationArgument.getId(cmdCtx, key).toString();
-	}
-
-	@Override
-	public Location getLocationBlock(CommandContext<CommandSourceStack> cmdCtx, String str)
-			throws CommandSyntaxException {
-		BlockPos blockPos = BlockPosArgument.getLoadedBlockPos(cmdCtx, str);
-		return new Location(getWorldForCSS(cmdCtx.getSource()), blockPos.getX(), blockPos.getY(), blockPos.getZ());
-	}
-	
-	@Override
-	public Location getLocationPrecise(CommandContext<CommandSourceStack> cmdCtx, String str)
-			throws CommandSyntaxException {
-		Vec3 vecPos = Vec3Argument.getCoordinates(cmdCtx, str).getPosition(cmdCtx.getSource());
-		return new Location(getWorldForCSS(cmdCtx.getSource()), vecPos.x(), vecPos.y(), vecPos.z());
-	}
-	
-	@Override
-	public Location2D getLocation2DPrecise(CommandContext<CommandSourceStack> cmdCtx, String key)
-			throws CommandSyntaxException {
-		Vec2 vecPos = Vec2Argument.getVec2(cmdCtx, key);
-		return new Location2D(getWorldForCSS(cmdCtx.getSource()), vecPos.x, vecPos.y);
 	}
 
 	@Override
@@ -729,14 +741,37 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public org.bukkit.loot.LootTable getLootTable(CommandContext<CommandSourceStack> cmdCtx, String str) {
-		ResourceLocation resourceLocation = ResourceLocationArgument.getId(cmdCtx, str);
-		return new CraftLootTable(fromResourceLocation(resourceLocation), MINECRAFT_SERVER.getLootTables().get(resourceLocation));
+	public Location2D getLocation2DPrecise(CommandContext<CommandSourceStack> cmdCtx, String key)
+			throws CommandSyntaxException {
+		Vec2 vecPos = Vec2Argument.getVec2(cmdCtx, key);
+		return new Location2D(getWorldForCSS(cmdCtx.getSource()), vecPos.x, vecPos.y);
 	}
 
 	@Override
-	public MathOperation getMathOperation(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		// We run this to ensure the argument exists/parses properly 
+	public Location getLocationBlock(CommandContext<CommandSourceStack> cmdCtx, String str)
+			throws CommandSyntaxException {
+		BlockPos blockPos = BlockPosArgument.getLoadedBlockPos(cmdCtx, str);
+		return new Location(getWorldForCSS(cmdCtx.getSource()), blockPos.getX(), blockPos.getY(), blockPos.getZ());
+	}
+
+	@Override
+	public Location getLocationPrecise(CommandContext<CommandSourceStack> cmdCtx, String str)
+			throws CommandSyntaxException {
+		Vec3 vecPos = Vec3Argument.getCoordinates(cmdCtx, str).getPosition(cmdCtx.getSource());
+		return new Location(getWorldForCSS(cmdCtx.getSource()), vecPos.x(), vecPos.y(), vecPos.z());
+	}
+
+	@Override
+	public org.bukkit.loot.LootTable getLootTable(CommandContext<CommandSourceStack> cmdCtx, String str) {
+		ResourceLocation resourceLocation = ResourceLocationArgument.getId(cmdCtx, str);
+		return new CraftLootTable(fromResourceLocation(resourceLocation),
+				MINECRAFT_SERVER.getLootTables().get(resourceLocation));
+	}
+
+	@Override
+	public MathOperation getMathOperation(CommandContext<CommandSourceStack> cmdCtx, String key)
+			throws CommandSyntaxException {
+		// We run this to ensure the argument exists/parses properly
 		OperationArgument.getOperation(cmdCtx, key);
 		return MathOperation.fromString(CommandAPIHandler.getRawArgumentInput(cmdCtx, key));
 	}
@@ -757,45 +792,63 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 	}
 
 	@Override
+	public OfflinePlayer getOfflinePlayer(CommandContext<CommandSourceStack> cmdCtx, String str)
+			throws CommandSyntaxException {
+		OfflinePlayer target = Bukkit
+				.getOfflinePlayer(GameProfileArgument.getGameProfiles(cmdCtx, str).iterator().next().getId());
+		if (target == null) {
+			throw GameProfileArgument.ERROR_UNKNOWN_PLAYER.create();
+		} else {
+			return target;
+		}
+	}
+
+	@Override
 	public ParticleData<?> getParticle(CommandContext<CommandSourceStack> cmdCtx, String str) {
 		final ParticleOptions particleOptions = ParticleArgument.getParticle(cmdCtx, str);
 		final Level level = cmdCtx.getSource().getLevel();
-		
+
 		final Particle particle = CraftParticle.toBukkit(particleOptions);
-		if(particleOptions instanceof SimpleParticleType options) {
+		if (particleOptions instanceof SimpleParticleType options) {
 			return new ParticleData<Void>(particle, null);
 		}
-		if(particleOptions instanceof BlockParticleOption options) {
+		if (particleOptions instanceof BlockParticleOption options) {
 			return new ParticleData<BlockData>(particle, CraftBlockData.fromData(options.getState()));
 		}
-		if(particleOptions instanceof DustColorTransitionOptions options) {
-			final Color color = Color.fromRGB((int) (options.getColor().x() * 255.0F), (int) (options.getColor().y() * 255.0F), (int) (options.getColor().z() * 255.0F));
-			final Color toColor = Color.fromRGB((int) (options.getToColor().x() * 255.0F), (int) (options.getToColor().y() * 255.0F), (int) (options.getToColor().z() * 255.0F));
+		if (particleOptions instanceof DustColorTransitionOptions options) {
+			final Color color = Color.fromRGB((int) (options.getColor().x() * 255.0F),
+					(int) (options.getColor().y() * 255.0F), (int) (options.getColor().z() * 255.0F));
+			final Color toColor = Color.fromRGB((int) (options.getToColor().x() * 255.0F),
+					(int) (options.getToColor().y() * 255.0F), (int) (options.getToColor().z() * 255.0F));
 			return new ParticleData<DustTransition>(particle, new DustTransition(color, toColor, options.getScale()));
 		}
-		if(particleOptions instanceof DustParticleOptions options) {
-			final Color color = Color.fromRGB((int) (options.getColor().x() * 255.0F), (int) (options.getColor().y() * 255.0F), (int) (options.getColor().z() * 255.0F));
+		if (particleOptions instanceof DustParticleOptions options) {
+			final Color color = Color.fromRGB((int) (options.getColor().x() * 255.0F),
+					(int) (options.getColor().y() * 255.0F), (int) (options.getColor().z() * 255.0F));
 			return new ParticleData<DustOptions>(particle, new DustOptions(color, options.getScale()));
 		}
-		if(particleOptions instanceof ItemParticleOption options) {
-			return new ParticleData<org.bukkit.inventory.ItemStack>(particle, CraftItemStack.asBukkitCopy(options.getItem()));
+		if (particleOptions instanceof ItemParticleOption options) {
+			return new ParticleData<org.bukkit.inventory.ItemStack>(particle,
+					CraftItemStack.asBukkitCopy(options.getItem()));
 		}
-		if(particleOptions instanceof VibrationParticleOption options) {
+		if (particleOptions instanceof VibrationParticleOption options) {
 			final BlockPos origin = options.getVibrationPath().getOrigin();
 			final Location from = new Location(level.getWorld(), origin.getX(), origin.getY(), origin.getZ());
 			final Destination destination;
-			if(options.getVibrationPath().getDestination() instanceof BlockPositionSource positionSource) {
+			if (options.getVibrationPath().getDestination() instanceof BlockPositionSource positionSource) {
 				BlockPos to = positionSource.getPosition(level).get();
 				destination = new BlockDestination(new Location(level.getWorld(), to.getX(), to.getY(), to.getZ()));
-			} else if(options.getVibrationPath().getDestination() instanceof EntityPositionSource positionSource) {
+			} else if (options.getVibrationPath().getDestination() instanceof EntityPositionSource positionSource) {
 				positionSource.getPosition(level); // Populate Optional sourceEntity
 				Optional<Entity> entity = (Optional<Entity>) EntityPositionSource_sourceEntity.get(positionSource);
 				destination = new EntityDestination(entity.get().getBukkitEntity());
 			} else {
-				CommandAPI.getLogger().warning("Unknown vibration destination " + options.getVibrationPath().getDestination());
+				CommandAPI.getLogger()
+						.warning("Unknown vibration destination " + options.getVibrationPath().getDestination());
 				return new ParticleData<Void>(particle, null);
 			}
-			return new ParticleData<Vibration>(particle, new Vibration(from, destination, options.getVibrationPath().getArrivalInTicks()));
+			return new ParticleData<Vibration>(particle,
+					new Vibration(from, destination, options.getVibrationPath().getArrivalInTicks()));
 		}
 		CommandAPI.getLogger().warning("Invalid particle data type for " + particle.getDataType().toString());
 		return new ParticleData<Void>(particle, null);
@@ -810,24 +863,16 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 			return target;
 		}
 	}
-	
-	@Override
-	public OfflinePlayer getOfflinePlayer(CommandContext<CommandSourceStack> cmdCtx, String str) throws CommandSyntaxException {
-		OfflinePlayer target = Bukkit.getOfflinePlayer(GameProfileArgument.getGameProfiles(cmdCtx, str).iterator().next().getId());
-		if (target == null) {
-			throw GameProfileArgument.ERROR_UNKNOWN_PLAYER.create();
-		} else {
-			return target;
-		}
-	}
 
 	@Override
-	public PotionEffectType getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String str) throws CommandSyntaxException {
+	public PotionEffectType getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String str)
+			throws CommandSyntaxException {
 		return new CraftPotionEffectType(MobEffectArgument.getEffect(cmdCtx, str));
 	}
 
 	@Override
-	public ComplexRecipe getRecipe(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+	public ComplexRecipe getRecipe(CommandContext<CommandSourceStack> cmdCtx, String key)
+			throws CommandSyntaxException {
 		net.minecraft.world.item.crafting.Recipe<?> recipe = ResourceLocationArgument.getRecipe(cmdCtx, key);
 		return new ComplexRecipeImpl(fromResourceLocation(recipe.getId()), recipe.toBukkitRecipe());
 	}
@@ -844,12 +889,14 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public Collection<String> getScoreHolderMultiple(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+	public Collection<String> getScoreHolderMultiple(CommandContext<CommandSourceStack> cmdCtx, String key)
+			throws CommandSyntaxException {
 		return ScoreHolderArgument.getNames(cmdCtx, key);
 	}
 
 	@Override
-	public String getScoreHolderSingle(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+	public String getScoreHolderSingle(CommandContext<CommandSourceStack> cmdCtx, String key)
+			throws CommandSyntaxException {
 		return ScoreHolderArgument.getName(cmdCtx, key);
 	}
 
@@ -885,33 +932,32 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 	@Override
 	public SuggestionProvider<CommandSourceStack> getSuggestionProvider(SuggestionProviders provider) {
 		return switch (provider) {
-		case FUNCTION -> 
-			(context, builder) -> {
+			case FUNCTION -> (context, builder) -> {
 				ServerFunctionManager functionData = MINECRAFT_SERVER.getFunctions();
 				SharedSuggestionProvider.suggestResource(functionData.getTagNames(), builder, "#");
 				return SharedSuggestionProvider.suggestResource(functionData.getFunctionNames(), builder);
 			};
-		case RECIPES -> net.minecraft.commands.synchronization.SuggestionProviders.ALL_RECIPES;
-		case SOUNDS -> net.minecraft.commands.synchronization.SuggestionProviders.AVAILABLE_SOUNDS;
-		case ADVANCEMENTS ->
-			(cmdCtx, builder) -> {
-				return SharedSuggestionProvider.suggestResource(MINECRAFT_SERVER.getAdvancements().getAllAdvancements().stream().map(net.minecraft.advancements.Advancement::getId), builder);
+			case RECIPES -> net.minecraft.commands.synchronization.SuggestionProviders.ALL_RECIPES;
+			case SOUNDS -> net.minecraft.commands.synchronization.SuggestionProviders.AVAILABLE_SOUNDS;
+			case ADVANCEMENTS -> (cmdCtx, builder) -> {
+				return SharedSuggestionProvider.suggestResource(MINECRAFT_SERVER.getAdvancements().getAllAdvancements()
+						.stream().map(net.minecraft.advancements.Advancement::getId), builder);
 			};
-		case LOOT_TABLES ->
-			(cmdCtx, builder) -> {
+			case LOOT_TABLES -> (cmdCtx, builder) -> {
 				return SharedSuggestionProvider.suggestResource(MINECRAFT_SERVER.getLootTables().getIds(), builder);
 			};
-		case BIOMES -> _ArgumentSyntheticBiome()::listSuggestions;
-		case ENTITIES -> net.minecraft.commands.synchronization.SuggestionProviders.SUMMONABLE_ENTITIES;
-		default -> (context, builder) -> Suggestions.empty();
+			case BIOMES -> _ArgumentSyntheticBiome()::listSuggestions;
+			case ENTITIES -> net.minecraft.commands.synchronization.SuggestionProviders.SUMMONABLE_ENTITIES;
+			default -> (context, builder) -> Suggestions.empty();
 		};
 	}
 
 	@Override
 	public SimpleFunctionWrapper[] getTag(NamespacedKey key) {
-		List<CommandFunction> customFunctions = MINECRAFT_SERVER.getFunctions().getTag(new ResourceLocation(key.getNamespace(), key.getKey())).getValues();
+		List<CommandFunction> customFunctions = MINECRAFT_SERVER.getFunctions()
+				.getTag(new ResourceLocation(key.getNamespace(), key.getKey())).getValues();
 		SimpleFunctionWrapper[] result = new SimpleFunctionWrapper[customFunctions.size()];
-		for(int i = 0, size = customFunctions.size(); i < size; i++) {
+		for (int i = 0, size = customFunctions.size(); i < size; i++) {
 			result[i] = convertFunction(customFunctions.get(i));
 		}
 		return result;
@@ -920,7 +966,7 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 	@Override
 	public Set<NamespacedKey> getTags() {
 		Set<NamespacedKey> result = new HashSet<>();
-		for(ResourceLocation resourceLocation : MINECRAFT_SERVER.getFunctions().getFunctionNames()) {
+		for (ResourceLocation resourceLocation : MINECRAFT_SERVER.getFunctions().getFunctionNames()) {
 			result.add(fromResourceLocation(resourceLocation));
 		}
 		return result;
@@ -976,11 +1022,11 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 		{
 			List<String> packIDs = new ArrayList<>(MINECRAFT_SERVER.getPackRepository().getSelectedIds());
 			List<String> disabledPacks = MINECRAFT_SERVER.getWorldData().getDataPackConfig().getDisabled();
-			
-			for(String availablePack : MINECRAFT_SERVER.getPackRepository().getAvailableIds()) {
+
+			for (String availablePack : MINECRAFT_SERVER.getPackRepository().getAvailableIds()) {
 				// Add every other available pack that is not disabled
 				// and is not already in the list of existing packs
-				if(!disabledPacks.contains(availablePack) && !packIDs.contains(availablePack)) {
+				if (!disabledPacks.contains(availablePack) && !packIDs.contains(availablePack)) {
 					packIDs.add(availablePack);
 				}
 			}
@@ -988,37 +1034,35 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 		}
 
 		Frozen registryAccess = MINECRAFT_SERVER.registryAccess();
-		
+
 		// Step 1: Construct an async supplier of a list of all resource packs to
 		// be loaded in the reload phase
 		CompletableFuture<List<PackResources>> first = CompletableFuture.supplyAsync(() -> {
 			PackRepository serverPackRepository = MINECRAFT_SERVER.getPackRepository();
-			
+
 			List<PackResources> packResources = new ArrayList<>();
-			for(String packID : collection) {
+			for (String packID : collection) {
 				Pack pack = serverPackRepository.getPack(packID);
-				if(pack != null) {
+				if (pack != null) {
 					packResources.add(pack.open());
 				}
 			}
 			return packResources;
 		});
-		
+
 		// Step 2: Convert all of the resource packs into ReloadableResources which
 		// are replaced by our custom server resources with defined commands
 		CompletableFuture<ReloadableResources> second = first.thenCompose(packResources -> {
-			MultiPackResourceManager resourceManager = new MultiPackResourceManager(PackType.SERVER_DATA, packResources);
-			
+			MultiPackResourceManager resourceManager = new MultiPackResourceManager(PackType.SERVER_DATA,
+					packResources);
+
 			// Not using packResources, because we really really want this to work
-			CompletableFuture<?> simpleReloadInstance = SimpleReloadInstance
-				.create(resourceManager,
-					serverResources.managers().listeners(),
-					MINECRAFT_SERVER.executor,
-					MINECRAFT_SERVER,
-					CompletableFuture.completedFuture(Unit.INSTANCE) /* ReloadableServerResources.DATA_RELOAD_INITIAL_TASK */,
-					LogUtils.getLogger().isDebugEnabled())
-				.done();
-			
+			CompletableFuture<?> simpleReloadInstance = SimpleReloadInstance.create(
+					resourceManager, serverResources.managers().listeners(), MINECRAFT_SERVER.executor,
+					MINECRAFT_SERVER, CompletableFuture
+							.completedFuture(Unit.INSTANCE) /* ReloadableServerResources.DATA_RELOAD_INITIAL_TASK */,
+					LogUtils.getLogger().isDebugEnabled()).done();
+
 			return simpleReloadInstance.thenApply(x -> serverResources);
 		});
 
@@ -1028,19 +1072,19 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 			MINECRAFT_SERVER.resources = serverResources;
 			MINECRAFT_SERVER.server.syncCommands();
 			MINECRAFT_SERVER.getPackRepository().setSelected(collection);
-			
+
 			// MINECRAFT_SERVER.getSelectedPacks
 			Collection<String> selectedIDs = MINECRAFT_SERVER.getPackRepository().getSelectedIds();
 			List<String> enabledIDs = ImmutableList.copyOf(selectedIDs);
 			List<String> disabledIDs = new ArrayList<>(MINECRAFT_SERVER.getPackRepository().getAvailableIds());
-			
+
 			ListIterator<String> disabledIDsIterator = disabledIDs.listIterator();
 			while (disabledIDsIterator.hasNext()) {
-				if(enabledIDs.contains(disabledIDsIterator.next())) {
+				if (enabledIDs.contains(disabledIDsIterator.next())) {
 					disabledIDsIterator.remove();
 				}
 			}
-			
+
 			MINECRAFT_SERVER.getWorldData().setDataPackConfig(new DataPackConfig(enabledIDs, disabledIDs));
 			MINECRAFT_SERVER.resources.managers().updateRegistryTags(registryAccess);
 			// May need to be commented out, may not. Comment it out just in case.
@@ -1049,21 +1093,23 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 			// MINECRAFT_SERVER.getPlayerList().saveAll();
 			// MINECRAFT_SERVER.getPlayerList().reloadResources();
 			// MINECRAFT_SERVER.getFunctions().replaceLibrary(MINECRAFT_SERVER.resources.managers().getFunctionLibrary());
-			MINECRAFT_SERVER.getStructureManager().onResourceManagerReload(MINECRAFT_SERVER.resources.resourceManager());
+			MINECRAFT_SERVER.getStructureManager()
+					.onResourceManagerReload(MINECRAFT_SERVER.resources.resourceManager());
 		});
 
 		// Step 4: Block the thread until everything's done
 		if (MINECRAFT_SERVER.isSameThread()) {
 			MINECRAFT_SERVER.managedBlock(third::isDone);
 		}
-		
+
 		// Run the completableFuture (and bind tags?)
 		try {
 			third.get();
 
-			// Register recipes again because reloading datapacks removes all non-vanilla recipes
+			// Register recipes again because reloading datapacks removes all non-vanilla
+			// recipes
 			Recipe recipe;
-			while(recipes.hasNext()) {
+			while (recipes.hasNext()) {
 				recipe = recipes.next();
 				try {
 					Bukkit.addRecipe(recipe);
@@ -1080,29 +1126,15 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 			StringWriter stringWriter = new StringWriter();
 			PrintWriter printWriter = new PrintWriter(stringWriter);
 			e.printStackTrace(printWriter);
-			
-			CommandAPI.logError("Failed to load datapacks, can't proceed with normal server load procedure. Try fixing your datapacks?\n" + stringWriter.toString());
+
+			CommandAPI.logError(
+					"Failed to load datapacks, can't proceed with normal server load procedure. Try fixing your datapacks?\n"
+							+ stringWriter.toString());
 		}
 	}
 
 	@Override
 	public void resendPackets(Player player) {
 		MINECRAFT_SERVER.vanillaCommandDispatcher.sendCommands(((CraftPlayer) player).getHandle());
-	}
-
-	@Override
-	public HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription,
-			String permission) {
-		return new CustomHelpTopic(commandName, shortDescription, fullDescription, permission);
-	}
-
-	@Override
-	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
-		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) SimpleHelpMap_helpTopics.get(Bukkit.getServer().getHelpMap());
-		// We have to use VarHandles to use helpTopics.put (instead of .addTopic)
-		// because we're updating an existing help topic, not adding a new help topic
-		for(Map.Entry<String, HelpTopic> entry : helpTopicsToAdd.entrySet()) {
-			helpTopics.put(entry.getKey(), entry.getValue());
-		}
 	}
 }

@@ -192,6 +192,11 @@ public class NMS_1_14 implements NMS<CommandListenerWrapper> {
 		ParticleParamRedstone_f = ppr_g;
 	}
 
+	@SuppressWarnings("deprecation")
+	private static NamespacedKey fromMinecraftKey(MinecraftKey key) {
+		return new NamespacedKey(key.b(), key.getKey());
+	}
+
 	@Override
 	public ArgumentType<?> _ArgumentAngle() {
 		throw new AngleArgumentException();
@@ -427,7 +432,7 @@ public class NMS_1_14 implements NMS<CommandListenerWrapper> {
 	@Override
 	public void createDispatcherFile(File file,
 			com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> dispatcher) throws IOException {
-		Files.write((new GsonBuilder()).setPrettyPrinting().create()
+		Files.write(new GsonBuilder().setPrettyPrinting().create()
 				.toJson(ArgumentRegistry.a(dispatcher, dispatcher.getRoot())), file, StandardCharsets.UTF_8);
 	}
 
@@ -788,8 +793,7 @@ public class NMS_1_14 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public Rotation getRotation(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		IVectorPosition pos = ArgumentRotation.a(cmdCtx, key);
-		Vec2F vec = pos.b(cmdCtx.getSource());
+		Vec2F vec = ArgumentRotation.a(cmdCtx, key).b(cmdCtx.getSource());
 		return new Rotation(vec.i, vec.j);
 	}
 
@@ -819,10 +823,10 @@ public class NMS_1_14 implements NMS<CommandListenerWrapper> {
 		Vec3D pos = clw.getPosition();
 		Vec2F rot = clw.i();
 		World world = getWorldForCSS(clw);
-		Location location = new Location(clw.getWorld().getWorld(), pos.getX(), pos.getY(), pos.getZ(), rot.j, rot.i);
+		Location location = new Location(world, pos.getX(), pos.getY(), pos.getZ(), rot.j, rot.i);
 
 		Entity proxyEntity = clw.getEntity();
-		CommandSender proxy = proxyEntity == null ? null : ((Entity) proxyEntity).getBukkitEntity();
+		CommandSender proxy = proxyEntity == null ? null : proxyEntity.getBukkitEntity();
 		if (isNative || (proxy != null && !sender.equals(proxy))) {
 			return new NativeProxyCommandSender(sender, proxy, location, world);
 		} else {
@@ -866,7 +870,7 @@ public class NMS_1_14 implements NMS<CommandListenerWrapper> {
 				Collection<Advancement> advancements = MINECRAFT_SERVER.getAdvancementData().b();
 				return ICompletionProvider.a(advancements.stream().map(Advancement::getName), builder);
 			};
-			case LOOT_TABLES -> (context, builder) -> {
+			case LOOT_TABLES -> (cmdCtx, builder) -> {
 				return ICompletionProvider.a(MINECRAFT_SERVER.getLootTableRegistry().a(), builder);
 			};
 			case ENTITIES -> CompletionProviders.d;
@@ -928,10 +932,5 @@ public class NMS_1_14 implements NMS<CommandListenerWrapper> {
 	@Override
 	public void resendPackets(Player player) {
 		MINECRAFT_SERVER.vanillaCommandDispatcher.a(((CraftPlayer) player).getHandle());
-	}
-
-	@SuppressWarnings("deprecation")
-	private static NamespacedKey fromMinecraftKey(MinecraftKey key) {
-		return new NamespacedKey(key.b(), key.getKey());
 	}
 }

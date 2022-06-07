@@ -96,6 +96,7 @@ import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
+import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.wrappers.ComplexRecipeImpl;
@@ -293,11 +294,13 @@ public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
 		return ArgumentEntitySummon.a();
 	}
 
+	@Differs(from = "1.16.2", by = "new ArgumentCriterionValue.a() -> ArgumentCriterionValue.a()")
 	@Override
 	public ArgumentType<?> _ArgumentFloatRange() {
 		return ArgumentCriterionValue.a();
 	}
 
+	@Differs(from = "1.16.2", by = "new ArgumentCriterionValue.b() -> ArgumentCriterionValue.b()")
 	@Override
 	public ArgumentType<?> _ArgumentIntRange() {
 		return ArgumentCriterionValue.b();
@@ -384,6 +387,11 @@ public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
+	public ArgumentType<?> _ArgumentSyntheticBiome() {
+		return _ArgumentMinecraftKeyRegistered();
+	}
+
+	@Override
 	public ArgumentType<?> _ArgumentTag() {
 		return ArgumentTag.a();
 	}
@@ -409,8 +417,12 @@ public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
-	public ArgumentType<?> _ArgumentSyntheticBiome() {
-		return _ArgumentMinecraftKeyRegistered();
+	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
+		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) SimpleHelpMap_helpTopics
+				.get(Bukkit.getServer().getHelpMap());
+		for (Map.Entry<String, HelpTopic> entry : helpTopicsToAdd.entrySet()) {
+			helpTopics.put(entry.getKey(), entry.getValue());
+		}
 	}
 
 	@Override
@@ -418,6 +430,7 @@ public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
 		return new String[] { "1.16.4", "1.16.5" };
 	}
 
+	@Differs(from = "1.16.2", by = "Use of .asString() instead of .toString()")
 	@Override
 	public String convert(org.bukkit.inventory.ItemStack is) {
 		return is.getType().getKey().toString() + CraftItemStack.asNMSCopy(is).getOrCreateTag().asString();
@@ -426,14 +439,16 @@ public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
 	@Override
 	public String convert(ParticleData<?> particle) {
 		return CraftParticle.toNMS(particle.particle(), particle.data()).a();
-
 	}
 
+	@Differs(from = "1.16.2", by = "Use of potion.getName().toLowerCase(Locale.ENGLISH)")
 	@Override
 	public String convert(PotionEffectType potion) {
+		// TODO: Bubble up.
 		return potion.getName().toLowerCase(Locale.ENGLISH);
 	}
 
+	@Differs(from = "1.16.2", by = "Use of sound.getKey().toString() instead of CraftSound.getSound()")
 	@Override
 	public String convert(Sound sound) {
 		return sound.getKey().toString();
@@ -441,6 +456,7 @@ public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
 
 	// Converts NMS function to SimpleFunctionWrapper
 	private SimpleFunctionWrapper convertFunction(CustomFunction customFunction) {
+		// TODO: Bubble this up to all previous NMS versions
 		ToIntFunction<CommandListenerWrapper> appliedObj = clw -> MINECRAFT_SERVER.getFunctionData().a(customFunction,
 				clw);
 
@@ -457,6 +473,12 @@ public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
 			com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> dispatcher) throws IOException {
 		Files.write(new GsonBuilder().setPrettyPrinting().create()
 				.toJson(ArgumentRegistry.a(dispatcher, dispatcher.getRoot())), file, StandardCharsets.UTF_8);
+	}
+
+	@Override
+	public HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription,
+			String permission) {
+		return new CustomHelpTopic(commandName, shortDescription, fullDescription, permission);
 	}
 
 	@Override
@@ -488,12 +510,11 @@ public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
 		EnumSet<Axis> set = EnumSet.noneOf(Axis.class);
 		EnumSet<EnumAxis> parsedEnumSet = ArgumentRotationAxis.a(cmdCtx, key);
 		for (EnumAxis element : parsedEnumSet) {
-			switch (element) {
-				case X -> set.add(Axis.X);
-				case Y -> set.add(Axis.Y);
-				case Z -> set.add(Axis.Z);
-				default -> throw new IllegalArgumentException("Unexpected value: " + element);
-			}
+			set.add(switch (element) {
+				case X -> Axis.X;
+				case Y -> Axis.Y;
+				case Z -> Axis.Z;
+			});
 		}
 		return set;
 	}
@@ -568,7 +589,6 @@ public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
 	public Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String str,
 			dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector selector)
 			throws CommandSyntaxException {
-
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
 		try {
 			CommandAPIHandler.getInstance().getField(EntitySelector.class, "checkPermissions").set(argument, false);
@@ -601,10 +621,10 @@ public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
 				}
 			case ONE_ENTITY:
 				// ArgumentEntity.a -> EntitySelector.a
-				yield (org.bukkit.entity.Entity) argument.a(cmdCtx.getSource()).getBukkitEntity();
+				yield argument.a(cmdCtx.getSource()).getBukkitEntity();
 			case ONE_PLAYER:
 				// ArgumentEntity.e -> EntitySelector.c
-				yield (Player) argument.c(cmdCtx.getSource()).getBukkitEntity();
+				yield argument.c(cmdCtx.getSource()).getBukkitEntity();
 		};
 	}
 
@@ -648,11 +668,11 @@ public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public Set<NamespacedKey> getFunctions() {
-		Set<NamespacedKey> result = new HashSet<>();
-		for (MinecraftKey minecraftKey : MINECRAFT_SERVER.getFunctionData().f()) {
-			result.add(fromMinecraftKey(minecraftKey));
+		Set<NamespacedKey> functions = new HashSet<>();
+		for (MinecraftKey key : MINECRAFT_SERVER.getFunctionData().f()) {
+			functions.add(fromMinecraftKey(key));
 		}
-		return result;
+		return functions;
 	}
 
 	@Override
@@ -683,6 +703,20 @@ public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
+	public Location2D getLocation2DBlock(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException {
+		BlockPosition2D blockPos = ArgumentVec2I.a(cmdCtx, key);
+		return new Location2D(getWorldForCSS(cmdCtx.getSource()), blockPos.a, blockPos.b);
+	}
+
+	@Override
+	public Location2D getLocation2DPrecise(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException {
+		Vec2F vecPos = ArgumentVec2.a(cmdCtx, key);
+		return new Location2D(getWorldForCSS(cmdCtx.getSource()), vecPos.i, vecPos.j);
+	}
+
+	@Override
 	public Location getLocationBlock(CommandContext<CommandListenerWrapper> cmdCtx, String str)
 			throws CommandSyntaxException {
 		BlockPosition blockPos = ArgumentPosition.a(cmdCtx, str);
@@ -694,20 +728,6 @@ public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
 			throws CommandSyntaxException {
 		Vec3D vecPos = ArgumentVec3.a(cmdCtx, str);
 		return new Location(getWorldForCSS(cmdCtx.getSource()), vecPos.x, vecPos.y, vecPos.z);
-	}
-
-	@Override
-	public Location2D getLocation2DPrecise(CommandContext<CommandListenerWrapper> cmdCtx, String key)
-			throws CommandSyntaxException {
-		Vec2F vecPos = ArgumentVec2.a(cmdCtx, key);
-		return new Location2D(getWorldForCSS(cmdCtx.getSource()), vecPos.i, vecPos.j);
-	}
-
-	@Override
-	public Location2D getLocation2DBlock(CommandContext<CommandListenerWrapper> cmdCtx, String key)
-			throws CommandSyntaxException {
-		BlockPosition2D blockPos = ArgumentVec2I.a(cmdCtx, key);
-		return new Location2D(getWorldForCSS(cmdCtx.getSource()), blockPos.a, blockPos.b);
 	}
 
 	@Override
@@ -742,6 +762,18 @@ public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
+	public OfflinePlayer getOfflinePlayer(CommandContext<CommandListenerWrapper> cmdCtx, String str)
+			throws CommandSyntaxException {
+		OfflinePlayer target = Bukkit
+				.getOfflinePlayer(((GameProfile) ArgumentProfile.a(cmdCtx, str).iterator().next()).getId());
+		if (target == null) {
+			throw ArgumentProfile.a.create();
+		} else {
+			return target;
+		}
+	}
+
+	@Override
 	public ParticleData<?> getParticle(CommandContext<CommandListenerWrapper> cmdCtx, String str) {
 		final ParticleParam particleOptions = ArgumentParticle.a(cmdCtx, str);
 
@@ -772,18 +804,6 @@ public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
 	@Override
 	public Player getPlayer(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
 		Player target = Bukkit.getPlayer(((GameProfile) ArgumentProfile.a(cmdCtx, str).iterator().next()).getId());
-		if (target == null) {
-			throw ArgumentProfile.a.create();
-		} else {
-			return target;
-		}
-	}
-
-	@Override
-	public OfflinePlayer getOfflinePlayer(CommandContext<CommandListenerWrapper> cmdCtx, String str)
-			throws CommandSyntaxException {
-		OfflinePlayer target = Bukkit
-				.getOfflinePlayer(((GameProfile) ArgumentProfile.a(cmdCtx, str).iterator().next()).getId());
 		if (target == null) {
 			throw ArgumentProfile.a.create();
 		} else {
@@ -835,6 +855,7 @@ public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
 		Vec3D pos = clw.getPosition();
 		Vec2F rot = clw.i();
 		World world = getWorldForCSS(clw);
+		// TODO: Check 1.13.* implementations of this!
 		Location location = new Location(world, pos.getX(), pos.getY(), pos.getZ(), rot.j, rot.i);
 
 		Entity proxyEntity = clw.getEntity();
@@ -851,6 +872,7 @@ public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
 		return ((CraftServer) Bukkit.getServer()).getCommandMap();
 	}
 
+	@Differs(from = "1.16.2", by = "Use of CraftSound.getBukkit()")
 	@Override
 	public Sound getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		return CraftSound.getBukkit(IRegistry.SOUND_EVENT.get(ArgumentMinecraftKeyRegistered.e(cmdCtx, key)));
@@ -867,6 +889,7 @@ public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
 			case RECIPES -> CompletionProviders.b;
 			case SOUNDS -> CompletionProviders.c;
 			case ADVANCEMENTS -> (cmdCtx, builder) -> {
+				// TODO: Check implementation of this for 1.14.4 and below
 				return ICompletionProvider.a(
 						MINECRAFT_SERVER.getAdvancementData().getAdvancements().stream().map(Advancement::getName),
 						builder);
@@ -882,8 +905,8 @@ public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public SimpleFunctionWrapper[] getTag(NamespacedKey key) {
-		List<CustomFunction> customFunctions = MINECRAFT_SERVER.getFunctionData()
-				.b(new MinecraftKey(key.getNamespace(), key.getKey())).getTagged();
+		List<CustomFunction> customFunctions = new ArrayList<>(
+				MINECRAFT_SERVER.getFunctionData().b(new MinecraftKey(key.getNamespace(), key.getKey())).getTagged());
 		SimpleFunctionWrapper[] result = new SimpleFunctionWrapper[customFunctions.size()];
 		for (int i = 0, size = customFunctions.size(); i < size; i++) {
 			result[i] = convertFunction(customFunctions.get(i));
@@ -893,11 +916,11 @@ public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public Set<NamespacedKey> getTags() {
-		Set<NamespacedKey> result = new HashSet<>();
-		for (MinecraftKey minecraftKey : MINECRAFT_SERVER.getFunctionData().g()) {
-			result.add(fromMinecraftKey(minecraftKey));
+		Set<NamespacedKey> functions = new HashSet<>();
+		for (MinecraftKey key : MINECRAFT_SERVER.getFunctionData().g()) {
+			functions.add(fromMinecraftKey(key));
 		}
-		return result;
+		return functions;
 	}
 
 	@Override
@@ -992,20 +1015,5 @@ public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
 	@Override
 	public void resendPackets(Player player) {
 		MINECRAFT_SERVER.vanillaCommandDispatcher.a(((CraftPlayer) player).getHandle());
-	}
-
-	@Override
-	public HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription,
-			String permission) {
-		return new CustomHelpTopic(commandName, shortDescription, fullDescription, permission);
-	}
-
-	@Override
-	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
-		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) SimpleHelpMap_helpTopics
-				.get(Bukkit.getServer().getHelpMap());
-		for (Map.Entry<String, HelpTopic> entry : helpTopicsToAdd.entrySet()) {
-			helpTopics.put(entry.getKey(), entry.getValue());
-		}
 	}
 }

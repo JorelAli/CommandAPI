@@ -45,7 +45,6 @@ import org.bukkit.craftbukkit.v1_16_R2.CraftLootTable;
 import org.bukkit.craftbukkit.v1_16_R2.CraftParticle;
 import org.bukkit.craftbukkit.v1_16_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_16_R2.CraftSound;
-import org.bukkit.craftbukkit.v1_16_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_16_R2.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_16_R2.command.VanillaCommandWrapper;
 import org.bukkit.craftbukkit.v1_16_R2.enchantments.CraftEnchantment;
@@ -143,6 +142,7 @@ import net.minecraft.server.v1_16_R2.DataPackResources;
 import net.minecraft.server.v1_16_R2.Entity;
 import net.minecraft.server.v1_16_R2.EntityPlayer;
 import net.minecraft.server.v1_16_R2.EntitySelector;
+import net.minecraft.server.v1_16_R2.EntityTypes;
 import net.minecraft.server.v1_16_R2.EnumDirection.EnumAxis;
 import net.minecraft.server.v1_16_R2.IBlockData;
 import net.minecraft.server.v1_16_R2.IChatBaseComponent.ChatSerializer;
@@ -150,7 +150,6 @@ import net.minecraft.server.v1_16_R2.ICompletionProvider;
 import net.minecraft.server.v1_16_R2.IRecipe;
 import net.minecraft.server.v1_16_R2.IRegistry;
 import net.minecraft.server.v1_16_R2.IReloadableResourceManager;
-import net.minecraft.server.v1_16_R2.IVectorPosition;
 import net.minecraft.server.v1_16_R2.ItemStack;
 import net.minecraft.server.v1_16_R2.MinecraftKey;
 import net.minecraft.server.v1_16_R2.MinecraftServer;
@@ -209,6 +208,11 @@ public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
 		ParticleParamBlock_c = ppb_c;
 		ParticleParamItem_c = ppi_c;
 		ParticleParamRedstone_f = ppr_g;
+	}
+
+	@SuppressWarnings("deprecation")
+	private static NamespacedKey fromMinecraftKey(MinecraftKey key) {
+		return new NamespacedKey(key.getNamespace(), key.getKey());
 	}
 
 	@Differs(from = "1.16.1", by = "Adds AngleArgument")
@@ -444,7 +448,7 @@ public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
 	@Override
 	public void createDispatcherFile(File file,
 			com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> dispatcher) throws IOException {
-		Files.write((new GsonBuilder()).setPrettyPrinting().create()
+		Files.write(new GsonBuilder().setPrettyPrinting().create()
 				.toJson(ArgumentRegistry.a(dispatcher, dispatcher.getRoot())), file, StandardCharsets.UTF_8);
 	}
 
@@ -602,11 +606,13 @@ public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
 		};
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public EntityType getEntityType(CommandContext<CommandListenerWrapper> cmdCtx, String str)
 			throws CommandSyntaxException {
-		return IRegistry.ENTITY_TYPE.get(ArgumentEntitySummon.a(cmdCtx, str))
-				.a(((CraftWorld) getWorldForCSS(cmdCtx.getSource())).getHandle()).getBukkitEntity().getType();
+		// TODO: Bubble up.
+		return EntityType
+				.fromName(EntityTypes.getName(IRegistry.ENTITY_TYPE.get(ArgumentEntitySummon.a(cmdCtx, str))).getKey());
 	}
 
 	@Override
@@ -800,8 +806,7 @@ public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public Rotation getRotation(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		IVectorPosition pos = ArgumentRotation.a(cmdCtx, key);
-		Vec2F vec = pos.b(cmdCtx.getSource());
+		Vec2F vec = ArgumentRotation.a(cmdCtx, key).b(cmdCtx.getSource());
 		return new Rotation(vec.i, vec.j);
 	}
 
@@ -830,10 +835,10 @@ public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
 		Vec3D pos = clw.getPosition();
 		Vec2F rot = clw.i();
 		World world = getWorldForCSS(clw);
-		Location location = new Location(clw.getWorld().getWorld(), pos.getX(), pos.getY(), pos.getZ(), rot.j, rot.i);
+		Location location = new Location(world, pos.getX(), pos.getY(), pos.getZ(), rot.j, rot.i);
 
 		Entity proxyEntity = clw.getEntity();
-		CommandSender proxy = proxyEntity == null ? null : ((Entity) proxyEntity).getBukkitEntity();
+		CommandSender proxy = proxyEntity == null ? null : proxyEntity.getBukkitEntity();
 		if (isNative || (proxy != null && !sender.equals(proxy))) {
 			return new NativeProxyCommandSender(sender, proxy, location, world);
 		} else {
@@ -873,10 +878,11 @@ public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
 			case RECIPES -> CompletionProviders.b;
 			case SOUNDS -> CompletionProviders.c;
 			case ADVANCEMENTS -> (cmdCtx, builder) -> {
-				Collection<Advancement> advancements = MINECRAFT_SERVER.getAdvancementData().getAdvancements();
-				return ICompletionProvider.a(advancements.stream().map(Advancement::getName), builder);
+				return ICompletionProvider.a(
+						MINECRAFT_SERVER.getAdvancementData().getAdvancements().stream().map(Advancement::getName),
+						builder);
 			};
-			case LOOT_TABLES -> (context, builder) -> {
+			case LOOT_TABLES -> (cmdCtx, builder) -> {
 				return ICompletionProvider.a(MINECRAFT_SERVER.getLootTableRegistry().a(), builder);
 			};
 			case BIOMES -> CompletionProviders.d;
@@ -969,16 +975,18 @@ public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
 
 			// Register recipes again because reloading datapacks removes all non-vanilla
 			// recipes
-			recipes.forEachRemaining(recipe -> {
+			Recipe recipe;
+			while (recipes.hasNext()) {
+				recipe = recipes.next();
 				try {
 					Bukkit.addRecipe(recipe);
-					if (recipe instanceof Keyed) {
-						CommandAPI.logInfo("Re-registering recipe: " + ((Keyed) recipe).getKey());
+					if (recipe instanceof Keyed keyedRecipe) {
+						CommandAPI.logInfo("Re-registering recipe: " + keyedRecipe.getKey());
 					}
 				} catch (Exception e) {
-					// Can't re-register registered recipes. Not an error.
+					continue; // Can't re-register registered recipes. Not an error.
 				}
-			});
+			}
 
 			CommandAPI.getLogger().info("Finished reloading datapacks");
 		} catch (Exception e) {
@@ -995,10 +1003,5 @@ public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
 	@Override
 	public void resendPackets(Player player) {
 		MINECRAFT_SERVER.vanillaCommandDispatcher.a(((CraftPlayer) player).getHandle());
-	}
-
-	@SuppressWarnings("deprecation")
-	private static NamespacedKey fromMinecraftKey(MinecraftKey key) {
-		return new NamespacedKey(key.getNamespace(), key.getKey());
 	}
 }
