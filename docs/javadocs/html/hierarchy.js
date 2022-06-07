@@ -252,15 +252,20 @@ var hierarchy =
     [ "com.mojang.brigadier.ResultConsumer< S >", "interfacecom_1_1mojang_1_1brigadier_1_1_result_consumer.html", null ],
     [ "dev.jorel.commandapi.wrappers.Rotation", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_rotation.html", null ],
     [ "RuntimeException", null, [
+      [ "dev.jorel.commandapi.exceptions.AngleArgumentException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_angle_argument_exception.html", null ],
       [ "dev.jorel.commandapi.exceptions.BadLiteralException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_bad_literal_exception.html", null ],
+      [ "dev.jorel.commandapi.exceptions.BiomeArgumentException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_biome_argument_exception.html", null ],
       [ "dev.jorel.commandapi.exceptions.ConflictingPermissionsException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_conflicting_permissions_exception.html", null ],
       [ "dev.jorel.commandapi.exceptions.EmptyExecutorException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_empty_executor_exception.html", null ],
+      [ "dev.jorel.commandapi.exceptions.EnvironmentArgumentException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_environment_argument_exception.html", null ],
       [ "dev.jorel.commandapi.exceptions.GreedyArgumentException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_greedy_argument_exception.html", null ],
       [ "dev.jorel.commandapi.exceptions.InvalidCommandNameException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_invalid_command_name_exception.html", null ],
       [ "dev.jorel.commandapi.exceptions.InvalidRangeException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_invalid_range_exception.html", null ],
       [ "dev.jorel.commandapi.exceptions.NBTAPINotFoundException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_n_b_t_a_p_i_not_found_exception.html", null ],
       [ "dev.jorel.commandapi.exceptions.PaperAdventureNotFoundException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_paper_adventure_not_found_exception.html", null ],
-      [ "dev.jorel.commandapi.exceptions.SpigotNotFoundException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_spigot_not_found_exception.html", null ]
+      [ "dev.jorel.commandapi.exceptions.SpigotNotFoundException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_spigot_not_found_exception.html", null ],
+      [ "dev.jorel.commandapi.exceptions.TimeArgumentException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_time_argument_exception.html", null ],
+      [ "dev.jorel.commandapi.exceptions.UUIDArgumentException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_u_u_i_d_argument_exception.html", null ]
     ] ],
     [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< Advancement, Advancement >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
       [ "dev.jorel.commandapi.arguments.AdvancementArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_advancement_argument.html", null ]
