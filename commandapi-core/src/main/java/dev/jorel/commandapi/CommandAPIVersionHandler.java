@@ -24,7 +24,7 @@ import dev.jorel.commandapi.nms.NMS;
 
 /**
  * This file handles the NMS version to be loaded. The CommandAPIVersionHandler
- * file within the commandapi-core module is NOT used at compile time. Instead,
+ * file within the commandapi-core module is NOT used at run time. Instead,
  * the commandapi-vh module is loaded instead, which doesn't use reflection to
  * load NMS instances.
  */
@@ -37,7 +37,7 @@ public interface CommandAPIVersionHandler {
 	 * @return an instance of NMS which can run on the specified Minecraft version
 	 */
 	public static <CommandSourceStack> NMS<CommandSourceStack> getNMS(String version) {
-		throw new RuntimeException("You have the wrong copy of the CommandAPI! Make sure to use the one from https://github.com/JorelAli/CommandAPI/releases");
+		throw new RuntimeException("You have the wrong copy of the CommandAPI! If you're shading, did you use commandapi-core instead of commandapi-shade?");
 	}
 	
 }

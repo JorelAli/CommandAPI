@@ -20,16 +20,14 @@
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>dev.jorel</groupId>
 	<artifactId>commandapi</artifactId>
 	<version>8.2.1</version>
 	<packaging>pom</packaging>
-	
+
 	<name>commandapi</name>
 	<description>A Bukkit/Spigot API for the command UI introduced in Minecraft 1.13</description>
 	<url>https://github.com/JorelAli/CommandAPI</url>
@@ -88,6 +86,7 @@
 			dependencies to dependents of commandapi-core. -->
 		<nbtapi.version>2.9.2</nbtapi.version>
 		<paper.version>1.18.2-R0.1-SNAPSHOT</paper.version>
+		<auto-service.version>1.0.1</auto-service.version>
 	</properties>
 
 	<build>

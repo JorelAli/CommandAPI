@@ -153,6 +153,8 @@ import net.minecraft.server.v1_13_R2.ShapeDetectorBlock;
 import net.minecraft.server.v1_13_R2.Vec2F;
 import net.minecraft.server.v1_13_R2.Vec3D;
 
+abstract class NMSWrapper_1_13_1 implements NMS<CommandListenerWrapper> {}
+
 @NMSMeta(compatibleWith = "1.13.1")
 @RequireField(in = CraftSound.class, name = "minecraftKey", ofType = String.class)
 @RequireField(in = EntitySelector.class, name = "m", ofType = boolean.class)
@@ -161,7 +163,7 @@ import net.minecraft.server.v1_13_R2.Vec3D;
 @RequireField(in = ParticleParamBlock.class, name = "c", ofType = IBlockData.class)
 @RequireField(in = ParticleParamItem.class, name = "c", ofType = ItemStack.class)
 @RequireField(in = ParticleParamRedstone.class, name = "f", ofType = float.class)
-public class NMS_1_13_1 implements NMS<CommandListenerWrapper> {
+public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 
 	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
 	private static final VarHandle LootTableRegistry_e;

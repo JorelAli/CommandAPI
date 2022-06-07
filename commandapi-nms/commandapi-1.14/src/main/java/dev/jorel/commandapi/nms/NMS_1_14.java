@@ -150,6 +150,8 @@ import net.minecraft.server.v1_14_R1.ShapeDetectorBlock;
 import net.minecraft.server.v1_14_R1.Vec2F;
 import net.minecraft.server.v1_14_R1.Vec3D;
 
+abstract class NMSWrapper_1_14 implements NMS<CommandListenerWrapper> {}
+
 @NMSMeta(compatibleWith = { "1.14", "1.14.1", "1.14.2" })
 @RequireField(in = CraftSound.class, name = "minecraftKey", ofType = String.class)
 @RequireField(in = EntitySelector.class, name = "checkPermissions", ofType = boolean.class)
@@ -157,7 +159,7 @@ import net.minecraft.server.v1_14_R1.Vec3D;
 @RequireField(in = ParticleParamBlock.class, name = "c", ofType = IBlockData.class)
 @RequireField(in = ParticleParamItem.class, name = "c", ofType = ItemStack.class)
 @RequireField(in = ParticleParamRedstone.class, name = "f", ofType = float.class)
-public class NMS_1_14 implements NMS<CommandListenerWrapper> {
+public class NMS_1_14 extends NMSWrapper_1_14 {
 
 	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
 	private static final VarHandle SimpleHelpMap_helpTopics;

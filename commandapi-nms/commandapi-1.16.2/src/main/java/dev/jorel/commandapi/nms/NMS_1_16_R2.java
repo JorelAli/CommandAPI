@@ -162,16 +162,18 @@ import net.minecraft.server.v1_16_R2.Unit;
 import net.minecraft.server.v1_16_R2.Vec2F;
 import net.minecraft.server.v1_16_R2.Vec3D;
 
+abstract class NMSWrapper_1_16_R2 implements NMS<CommandListenerWrapper> {}
+
 @NMSMeta(compatibleWith = { "1.16.2", "1.16.3" })
 @RequireField(in = DataPackResources.class, name = "b", ofType = IReloadableResourceManager.class)
-@RequireField(in = CustomFunctionManager.class, name = "g", ofType = CommandDispatcher.class)
+@RequireField(in = CustomFunctionManager.class, name = "h", ofType = CommandDispatcher.class)
 @RequireField(in = CraftSound.class, name = "minecraftKey", ofType = String.class)
 @RequireField(in = EntitySelector.class, name = "checkPermissions", ofType = boolean.class)
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
 @RequireField(in = ParticleParamBlock.class, name = "c", ofType = IBlockData.class)
 @RequireField(in = ParticleParamItem.class, name = "c", ofType = ItemStack.class)
 @RequireField(in = ParticleParamRedstone.class, name = "f", ofType = float.class)
-public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
+public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 
 	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
 	private static final VarHandle DataPackResources_b;
@@ -948,7 +950,7 @@ public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
 		// Update the CustomFunctionManager for the datapackResources which now has the
 		// new commandDispatcher
 		try {
-			CommandAPIHandler.getInstance().getField(CustomFunctionManager.class, "g").set(datapackResources.a(),
+			CommandAPIHandler.getInstance().getField(CustomFunctionManager.class, "h").set(datapackResources.a(),
 					getBrigadierDispatcher());
 		} catch (IllegalArgumentException | IllegalAccessException e1) {
 			e1.printStackTrace();

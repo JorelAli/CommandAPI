@@ -20,9 +20,7 @@
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<parent>
 		<artifactId>commandapi</artifactId>
@@ -47,8 +45,9 @@
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-nms</artifactId>
+			<artifactId>commandapi-nms-dependency</artifactId>
 			<version>${project.version}</version>
+			<type>pom</type>
 		</dependency>
 	</dependencies>
 
@@ -66,12 +65,22 @@
 						<configuration>
 							<artifactSet>
 								<includes>
-									<include>dev.jorel:commandapi-1.18.2</include>
-									<include>dev.jorel:commandapi-1.18</include>
-									<include>dev.jorel:commandapi-1.17</include>
-									<include>dev.jorel:commandapi-1.16.5</include>
 									<include>dev.jorel:commandapi-core</include>
 									<include>dev.jorel:commandapi-vh</include>
+									<include>dev.jorel:commandapi-1.13</include>
+									<include>dev.jorel:commandapi-1.13.1</include>
+									<include>dev.jorel:commandapi-1.13.2</include>
+									<include>dev.jorel:commandapi-1.14</include>
+									<include>dev.jorel:commandapi-1.14.3</include>
+									<include>dev.jorel:commandapi-1.14.4</include>
+									<include>dev.jorel:commandapi-1.15</include>
+									<include>dev.jorel:commandapi-1.16.1</include>
+									<include>dev.jorel:commandapi-1.16.2</include>
+									<include>dev.jorel:commandapi-1.16.4</include>
+									<include>dev.jorel:commandapi-1.16.5</include>
+									<include>dev.jorel:commandapi-1.17</include>
+									<include>dev.jorel:commandapi-1.18</include>
+									<include>dev.jorel:commandapi-1.18.2</include>
 								</includes>
 							</artifactSet>
 							<filters>
