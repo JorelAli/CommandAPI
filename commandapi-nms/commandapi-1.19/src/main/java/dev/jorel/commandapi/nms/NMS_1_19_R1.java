@@ -36,7 +36,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -55,10 +54,6 @@ import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.Particle.DustTransition;
 import org.bukkit.Sound;
-import org.bukkit.Vibration;
-import org.bukkit.Vibration.Destination;
-import org.bukkit.Vibration.Destination.BlockDestination;
-import org.bukkit.Vibration.Destination.EntityDestination;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
@@ -99,6 +94,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
 
 import de.tr7zw.nbtapi.NBTContainer;
@@ -199,7 +195,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.DataPackConfig;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
-import net.minecraft.world.level.gameevent.BlockPositionSource;
 import net.minecraft.world.level.gameevent.EntityPositionSource;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
@@ -209,7 +204,7 @@ import net.minecraft.world.phys.Vec3;
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
-@RequireField(in = EntityPositionSource.class, name = "sourceEntity", ofType = Optional.class)
+@RequireField(in = EntityPositionSource.class, name = "entityOrUuidOrId", ofType = Either.class)
 public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 
 	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
@@ -231,7 +226,7 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 			shm_ht = MethodHandles.privateLookupIn(SimpleHelpMap.class, MethodHandles.lookup())
 					.findVarHandle(SimpleHelpMap.class, "helpTopics", Map.class);
 			eps_se = MethodHandles.privateLookupIn(EntityPositionSource.class, MethodHandles.lookup())
-					.findVarHandle(EntityPositionSource.class, "d", Optional.class);
+					.findVarHandle(EntityPositionSource.class, "c", Either.class);
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
@@ -860,22 +855,22 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 					CraftItemStack.asBukkitCopy(options.getItem()));
 		}
 		if (particleOptions instanceof VibrationParticleOption options) {
-			final BlockPos origin = options.getVibrationPath().getOrigin();
-			final Location from = new Location(level.getWorld(), origin.getX(), origin.getY(), origin.getZ());
-			final Destination destination;
-			if (options.getDestination() instanceof BlockPositionSource positionSource) {
-				BlockPos to = positionSource.getPosition(level).get();
-				destination = new BlockDestination(new Location(level.getWorld(), to.getX(), to.getY(), to.getZ()));
-			} else if (options.getDestination() instanceof EntityPositionSource positionSource) {
-				positionSource.getPosition(level); // Populate Optional sourceEntity
-				Optional<Entity> entity = (Optional<Entity>) EntityPositionSource_sourceEntity.get(positionSource);
-				destination = new EntityDestination(entity.get().getBukkitEntity());
-			} else {
-				CommandAPI.getLogger()
-						.warning("Unknown vibration destination " + options.getVibrationPath().getDestination());
+//			final BlockPos origin = options.getVibrationPath().getOrigin();
+//			final Location from = new Location(level.getWorld(), origin.getX(), origin.getY(), origin.getZ());
+//			final Destination destination;
+//			if (options.getDestination() instanceof BlockPositionSource positionSource) {
+//				BlockPos to = positionSource.getPosition(level).get();
+//				destination = new BlockDestination(new Location(level.getWorld(), to.getX(), to.getY(), to.getZ()));
+//			} else if (options.getDestination() instanceof EntityPositionSource positionSource) {
+//				positionSource.getPosition(level); // Populate Optional sourceEntity
+//				Optional<Entity> entity = (Optional<Entity>) EntityPositionSource_sourceEntity.get(positionSource);
+//				destination = new EntityDestination(entity.get().getBukkitEntity());
+//			} else {
+//				CommandAPI.getLogger()
+//						.warning("Unknown vibration destination " + options.getVibrationPath().getDestination());
 				return new ParticleData<Void>(particle, null);
-			}
-			return new ParticleData<Vibration>(particle, new Vibration(from, destination, options.getArrivalInTicks()));
+//			}
+//			return new ParticleData<Vibration>(particle, new Vibration(from, destination, options.getArrivalInTicks()));
 		}
 		if (particleOptions instanceof ShriekParticleOption options) {
 			// CraftBukkit implements shriek particles as a (boxed) Integer object

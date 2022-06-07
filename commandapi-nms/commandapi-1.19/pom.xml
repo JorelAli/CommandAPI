@@ -48,20 +48,19 @@
 	</repositories>
 
 	<dependencies>
-
-		<!-- Spigot compilation -->
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot</artifactId>
-			<version>${spigot.version}</version>
-			<classifier>remapped-mojang</classifier>
-		</dependency>
 		<!-- Spigot testing (for reflection checks) -->
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot</artifactId>
 			<version>${spigot.version}</version>
 			<scope>test</scope>
+		</dependency>
+		<!-- Spigot compilation -->
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot</artifactId>
+			<version>${spigot.version}</version>
+			<classifier>remapped-mojang</classifier>
 		</dependency>
 
 		<!-- Libraries -->

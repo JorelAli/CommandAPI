@@ -18,19 +18,21 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
+import java.util.Map;
 import java.util.Optional;
+
+import org.bukkit.craftbukkit.v1_18_R1.help.SimpleHelpMap;
 
 import com.mojang.brigadier.CommandDispatcher;
 
 import dev.jorel.commandapi.preprocessor.RequireField;
 import net.minecraft.commands.arguments.selector.EntitySelector;
 import net.minecraft.server.CustomFunctionManager;
-import net.minecraft.server.DataPackResources;
 import net.minecraft.world.level.gameevent.EntityPositionSource;
 
 //Spigot-Mapped reflection
-@RequireField(in = DataPackResources.class, name = "j", ofType = CustomFunctionManager.class)
 @RequireField(in = CustomFunctionManager.class, name = "i", ofType = CommandDispatcher.class)
 @RequireField(in = EntitySelector.class, name = "o", ofType = boolean.class)
+@RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
 @RequireField(in = EntityPositionSource.class, name = "d", ofType = Optional.class)
 public class SafeReflect {}
