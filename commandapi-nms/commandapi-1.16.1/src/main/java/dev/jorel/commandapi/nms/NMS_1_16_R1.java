@@ -2,6 +2,10 @@ package dev.jorel.commandapi.nms;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -10,6 +14,8 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -22,10 +28,13 @@ import java.util.stream.Collectors;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Keyed;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Particle;
+import org.bukkit.Particle.DustOptions;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
@@ -39,17 +48,21 @@ import org.bukkit.craftbukkit.v1_16_R1.CraftLootTable;
 import org.bukkit.craftbukkit.v1_16_R1.CraftParticle;
 import org.bukkit.craftbukkit.v1_16_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_16_R1.CraftSound;
+import org.bukkit.craftbukkit.v1_16_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_16_R1.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_16_R1.command.VanillaCommandWrapper;
 import org.bukkit.craftbukkit.v1_16_R1.enchantments.CraftEnchantment;
 import org.bukkit.craftbukkit.v1_16_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_16_R1.help.CustomHelpTopic;
+import org.bukkit.craftbukkit.v1_16_R1.help.SimpleHelpMap;
 import org.bukkit.craftbukkit.v1_16_R1.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_16_R1.potion.CraftPotionEffectType;
 import org.bukkit.craftbukkit.v1_16_R1.util.CraftChatMessage;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.ComplexRecipe;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.potion.PotionEffectType;
@@ -57,6 +70,7 @@ import org.bukkit.potion.PotionEffectType;
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
+import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -66,17 +80,20 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.arguments.ICustomProvidedArgument.SuggestionProviders;
-import dev.jorel.commandapi.arguments.LocationType;
+import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.exceptions.AngleArgumentException;
+import dev.jorel.commandapi.exceptions.BiomeArgumentException;
+import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
+import dev.jorel.commandapi.wrappers.ComplexRecipeImpl;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.IntegerRange;
 import dev.jorel.commandapi.wrappers.Location2D;
 import dev.jorel.commandapi.wrappers.MathOperation;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
+import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
@@ -120,7 +137,6 @@ import net.minecraft.server.v1_16_R1.ArgumentVec2I;
 import net.minecraft.server.v1_16_R1.ArgumentVec3;
 import net.minecraft.server.v1_16_R1.BlockPosition;
 import net.minecraft.server.v1_16_R1.BlockPosition2D;
-import net.minecraft.server.v1_16_R1.CommandDispatcher;
 import net.minecraft.server.v1_16_R1.CommandListenerWrapper;
 import net.minecraft.server.v1_16_R1.CompletionProviders;
 import net.minecraft.server.v1_16_R1.CriterionConditionValue;
@@ -132,6 +148,7 @@ import net.minecraft.server.v1_16_R1.DedicatedServer;
 import net.minecraft.server.v1_16_R1.Entity;
 import net.minecraft.server.v1_16_R1.EntitySelector;
 import net.minecraft.server.v1_16_R1.EnumDirection.EnumAxis;
+import net.minecraft.server.v1_16_R1.IBlockData;
 import net.minecraft.server.v1_16_R1.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_16_R1.ICompletionProvider;
 import net.minecraft.server.v1_16_R1.IRecipe;
@@ -139,136 +156,90 @@ import net.minecraft.server.v1_16_R1.IRegistry;
 import net.minecraft.server.v1_16_R1.IReloadableResourceManager;
 import net.minecraft.server.v1_16_R1.IVectorPosition;
 import net.minecraft.server.v1_16_R1.ItemStack;
-import net.minecraft.server.v1_16_R1.LootTable;
 import net.minecraft.server.v1_16_R1.LootTableRegistry;
 import net.minecraft.server.v1_16_R1.MinecraftKey;
 import net.minecraft.server.v1_16_R1.MinecraftServer;
-import net.minecraft.server.v1_16_R1.Scoreboard;
-import net.minecraft.server.v1_16_R1.ScoreboardScore;
+import net.minecraft.server.v1_16_R1.ParticleParam;
+import net.minecraft.server.v1_16_R1.ParticleParamBlock;
+import net.minecraft.server.v1_16_R1.ParticleParamItem;
+import net.minecraft.server.v1_16_R1.ParticleParamRedstone;
 import net.minecraft.server.v1_16_R1.ShapeDetectorBlock;
 import net.minecraft.server.v1_16_R1.SystemUtils;
 import net.minecraft.server.v1_16_R1.Unit;
 import net.minecraft.server.v1_16_R1.Vec2F;
 import net.minecraft.server.v1_16_R1.Vec3D;
-import net.minecraft.server.v1_16_R1.WorldServer;
 
 @NMSMeta(compatibleWith = "1.16.1")
-@RequireField(in = DataPackResources.class, name = "i", ofType = CustomFunctionManager.class)
 @RequireField(in = DataPackResources.class, name = "b", ofType = IReloadableResourceManager.class)
-@RequireField(in = DataPackResources.class, name = "a", ofType = CompletableFuture.class)
-@RequireField(in = CustomFunctionManager.class, name = "f", ofType = int.class)
+@RequireField(in = CustomFunctionManager.class, name = "g", ofType = CommandDispatcher.class)
 @RequireField(in = CraftSound.class, name = "minecraftKey", ofType = String.class)
 @RequireField(in = EntitySelector.class, name = "checkPermissions", ofType = boolean.class)
+@RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
+@RequireField(in = ParticleParamBlock.class, name = "c", ofType = IBlockData.class)
+@RequireField(in = ParticleParamItem.class, name = "c", ofType = ItemStack.class)
+@RequireField(in = ParticleParamRedstone.class, name = "f", ofType = float.class)
 public class NMS_1_16_R1 implements NMS<CommandListenerWrapper> {
 
-	@Override
-	public Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException  {
-		String jsonString = ChatSerializer.a(ArgumentChat.a(cmdCtx, key));
-		return GsonComponentSerializer.gson().deserialize(jsonString);
-	}
-	
-	@Override
-	public Component getAdventureChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		String jsonString = ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, key));
-		return GsonComponentSerializer.gson().deserialize(jsonString);
-	}
-	
-	//Converts NMS function to SimpleFunctionWrapper
-	private SimpleFunctionWrapper convertFunction(CustomFunction customFunction) {
-		NamespacedKey minecraftKey = fromMinecraftKey(customFunction.a());
+	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
+	private static final VarHandle DataPackResources_b;
+	private static final VarHandle SimpleHelpMap_helpTopics;
+	private static final VarHandle ParticleParamBlock_c;
+	private static final VarHandle ParticleParamItem_c;
+	private static final VarHandle ParticleParamRedstone_f;
 
-		CustomFunctionData customFunctionData = MINECRAFT_SERVER.getFunctionData();
-
-		ToIntBiFunction<CustomFunction, CommandListenerWrapper> obj = customFunctionData::a;
-		ToIntFunction<CommandListenerWrapper> appliedObj = clw -> obj.applyAsInt(customFunction, clw);
-
-		return new SimpleFunctionWrapper(minecraftKey, appliedObj,
-				Arrays.stream(customFunction.b()).map(Object::toString).toArray(String[]::new));
-	}
-	
-	@SuppressWarnings("deprecation")
-	@Override
-	public Set<NamespacedKey> getFunctions() {
-		Set<NamespacedKey> functions = new HashSet<>();
-		for(MinecraftKey key : MINECRAFT_SERVER.getFunctionData().f()) {
-			functions.add(new NamespacedKey(key.getNamespace(), key.getKey()));
+	// Compute all var handles all in one go so we don't do this during main server runtime
+	static {
+		VarHandle dpr_b = null;
+		VarHandle shm_ht = null;
+		VarHandle ppb_c = null;
+		VarHandle ppi_c = null;
+		VarHandle ppr_g = null;
+		try {
+			dpr_b = MethodHandles.privateLookupIn(DataPackResources.class, MethodHandles.lookup()).findVarHandle(DataPackResources.class, "b", IReloadableResourceManager.class);
+			shm_ht = MethodHandles.privateLookupIn(SimpleHelpMap.class, MethodHandles.lookup()).findVarHandle(SimpleHelpMap.class, "helpTopics", Map.class);
+			ppb_c = MethodHandles.privateLookupIn(ParticleParamBlock.class, MethodHandles.lookup()).findVarHandle(ParticleParamBlock.class, "c", IBlockData.class);
+			ppb_c = MethodHandles.privateLookupIn(ParticleParamItem.class, MethodHandles.lookup()).findVarHandle(ParticleParamItem.class, "c", ItemStack.class);
+			ppr_g = MethodHandles.privateLookupIn(ParticleParamRedstone.class, MethodHandles.lookup()).findVarHandle(ParticleParamRedstone.class, "f", float.class);
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
 		}
-		return functions;
-	}
-	
-	@SuppressWarnings("deprecation")
-	@Override
-	public Set<NamespacedKey> getTags() {
-		Set<NamespacedKey> functions = new HashSet<>();
-		for(MinecraftKey key : MINECRAFT_SERVER.getFunctionData().g()) {
-			functions.add(new NamespacedKey(key.getNamespace(), key.getKey()));
-		}
-		return functions;
-	}
-	
-	@Override
-	public SimpleFunctionWrapper[] getTag(NamespacedKey key) {
-		MinecraftKey minecraftKey = new MinecraftKey(key.getNamespace(), key.getKey());
-		CustomFunctionData functionData = MINECRAFT_SERVER.getFunctionData();
-		return functionData.b(minecraftKey).getTagged().stream().map(this::convertFunction).toArray(SimpleFunctionWrapper[]::new);
-	}
-	
-	@Override
-	public SimpleFunctionWrapper getFunction(NamespacedKey key) {
-		return convertFunction(MINECRAFT_SERVER.getFunctionData().a(new MinecraftKey(key.getNamespace(), key.getKey())).get());
+		DataPackResources_b = dpr_b;
+		SimpleHelpMap_helpTopics = shm_ht;
+		ParticleParamBlock_c = ppb_c;
+		ParticleParamItem_c = ppi_c;
+		ParticleParamRedstone_f = ppr_g;
 	}
 
-	@Override
-	public FunctionWrapper[] getFunction(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
-		Collection<CustomFunction> customFuncList = ArgumentTag.a(cmdCtx, str);
-		FunctionWrapper[] result = new FunctionWrapper[customFuncList.size()];
-		CommandListenerWrapper commandListenerWrapper = cmdCtx.getSource().a().b(2);
-
-		int count = 0;
-		for (CustomFunction customFunction : customFuncList) { 
-			result[count++] = FunctionWrapper.fromSimpleFunctionWrapper(convertFunction(customFunction), commandListenerWrapper, e -> {
-				return cmdCtx.getSource().a(((CraftEntity) e).getHandle());
-			});
-		}
-
-		return result;
-	}
-	
-	@Override
-	public CommandListenerWrapper getCLWFromCommandSender(CommandSender sender) {
-		return VanillaCommandWrapper.getListener(sender);
-	}
-	
 	@Override
 	public ArgumentType<?> _ArgumentAngle() {
 		throw new AngleArgumentException();
 	}
-
+	
 	@Override
 	public ArgumentType<?> _ArgumentAxis() {
 		return ArgumentRotationAxis.a();
 	}
-
+	
 	@Override
 	public ArgumentType<?> _ArgumentBlockPredicate() {
 		return ArgumentBlockPredicate.a();
 	}
-
+	
 	@Override
 	public ArgumentType<?> _ArgumentBlockState() {
 		return ArgumentTile.a();
 	}
-
+	
 	@Override
 	public ArgumentType<?> _ArgumentChat() {
 		return ArgumentChat.a();
 	}
-
+	
 	@Override
 	public ArgumentType<?> _ArgumentChatComponent() {
 		return ArgumentChatComponent.a();
 	}
-
+	
 	@Override
 	public ArgumentType<?> _ArgumentChatFormat() {
 		return ArgumentChatFormat.a();
@@ -278,25 +249,20 @@ public class NMS_1_16_R1 implements NMS<CommandListenerWrapper> {
 	public ArgumentType<?> _ArgumentDimension() {
 		return ArgumentDimension.a();
 	}
-
+	
 	@Override
 	public ArgumentType<?> _ArgumentEnchantment() {
 		return ArgumentEnchantment.a();
 	}
-
+	
 	@Override
 	public ArgumentType<?> _ArgumentEntity(dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector selector) {
-		switch (selector) {
-		case MANY_ENTITIES:
-			return ArgumentEntity.multipleEntities();
-		case MANY_PLAYERS:
-			return ArgumentEntity.d();
-		case ONE_ENTITY:
-			return ArgumentEntity.a();
-		case ONE_PLAYER:
-			return ArgumentEntity.c();
-		}
-		return null;
+		return switch (selector) {
+			case MANY_ENTITIES -> ArgumentEntity.multipleEntities();
+			case MANY_PLAYERS -> ArgumentEntity.d();
+			case ONE_ENTITY -> ArgumentEntity.a();
+			case ONE_PLAYER -> ArgumentEntity.c();
+		};
 	}
 
 	@Override
@@ -395,6 +361,11 @@ public class NMS_1_16_R1 implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
+	public ArgumentType<?> _ArgumentSyntheticBiome() {
+		throw new BiomeArgumentException();
+	}
+
+	@Override
 	public ArgumentType<?> _ArgumentTag() {
 		return ArgumentTag.a();
 	}
@@ -404,6 +375,7 @@ public class NMS_1_16_R1 implements NMS<CommandListenerWrapper> {
 		return ArgumentTime.a();
 	}
 
+	@Differs(from = "1.15", by = "Implements UUIDArgument")
 	@Override
 	public ArgumentType<?> _ArgumentUUID() {
 		return ArgumentUUID.a();
@@ -417,6 +389,14 @@ public class NMS_1_16_R1 implements NMS<CommandListenerWrapper> {
 	@Override
 	public ArgumentType<?> _ArgumentVec3() {
 		return ArgumentVec3.a();
+	}
+
+	@Override
+	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
+		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) SimpleHelpMap_helpTopics.get(Bukkit.getServer().getHelpMap());
+		for(Map.Entry<String, HelpTopic> entry : helpTopicsToAdd.entrySet()) {
+			helpTopics.put(entry.getKey(), entry.getValue());
+		}
 	}
 
 	@Override
@@ -445,6 +425,19 @@ public class NMS_1_16_R1 implements NMS<CommandListenerWrapper> {
 		return CraftSound.getSound(sound);
 	}
 
+	//Converts NMS function to SimpleFunctionWrapper
+	private SimpleFunctionWrapper convertFunction(CustomFunction customFunction) {
+		NamespacedKey minecraftKey = fromMinecraftKey(customFunction.a());
+
+		CustomFunctionData customFunctionData = MINECRAFT_SERVER.getFunctionData();
+
+		ToIntBiFunction<CustomFunction, CommandListenerWrapper> obj = customFunctionData::a;
+		ToIntFunction<CommandListenerWrapper> appliedObj = clw -> obj.applyAsInt(customFunction, clw);
+
+		return new SimpleFunctionWrapper(minecraftKey, appliedObj,
+				Arrays.stream(customFunction.b()).map(Object::toString).toArray(String[]::new));
+	}
+
 	@Override
 	public void createDispatcherFile(File file, com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> dispatcher) throws IOException {
 		Files.write((new GsonBuilder()).setPrettyPrinting().create()
@@ -452,9 +445,27 @@ public class NMS_1_16_R1 implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
+	public HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription,
+			String permission) {
+		return new CustomHelpTopic(commandName, shortDescription, fullDescription, permission);
+	}
+
+	@Override
 	public org.bukkit.advancement.Advancement getAdvancement(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException {
 		return ArgumentMinecraftKeyRegistered.a(cmdCtx, key).bukkit;
+	}
+
+	@Override
+	public Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException  {
+		String jsonString = ChatSerializer.a(ArgumentChat.a(cmdCtx, key));
+		return GsonComponentSerializer.gson().deserialize(jsonString);
+	}
+
+	@Override
+	public Component getAdventureChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		String jsonString = ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, key));
+		return GsonComponentSerializer.gson().deserialize(jsonString);
 	}
 
 	@Override
@@ -476,10 +487,10 @@ public class NMS_1_16_R1 implements NMS<CommandListenerWrapper> {
 		return set;
 	}
 
+	@Differs(from = "1.15", by = "Implement BiomeArgument")
 	@Override
 	public Biome getBiome(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		MinecraftKey minecraftKey = (MinecraftKey) cmdCtx.getArgument(key, MinecraftKey.class);
-		return Biome.valueOf(minecraftKey.getKey().toUpperCase());
+		return Biome.valueOf(cmdCtx.getArgument(key, MinecraftKey.class).getKey().toUpperCase());
 	}
 
 	@Override
@@ -498,7 +509,7 @@ public class NMS_1_16_R1 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> getBrigadierDispatcher() {
-		return ((MinecraftServer) MINECRAFT_SERVER).getCommandDispatcher().a();
+		return MINECRAFT_SERVER.vanillaCommandDispatcher.a();
 	}
 
 	@Override
@@ -517,6 +528,11 @@ public class NMS_1_16_R1 implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
+	public CommandListenerWrapper getCLWFromCommandSender(CommandSender sender) {
+		return VanillaCommandWrapper.getListener(sender);
+	}
+
+	@Override
 	public CommandSender getCommandSenderFromCSS(CommandListenerWrapper clw) {
 		try {
 			return clw.getBukkitSender();
@@ -525,10 +541,10 @@ public class NMS_1_16_R1 implements NMS<CommandListenerWrapper> {
 		}
 	}
 
+	@Differs(from = "1.15", by = "Implement EnvironmentArgument for all environments")
 	@Override
 	public Environment getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		WorldServer worldServer = ArgumentDimension.a(cmdCtx, key);
-		return worldServer.getWorld().getEnvironment();
+		return ArgumentDimension.a(cmdCtx, key).getWorld().getEnvironment();
 	}
 
 	@Override
@@ -539,7 +555,6 @@ public class NMS_1_16_R1 implements NMS<CommandListenerWrapper> {
 	@Override
 	public Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String str, dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector selector)
 			throws CommandSyntaxException {
-		
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
 		try {
 			CommandAPIHandler.getInstance().getField(EntitySelector.class, "checkPermissions").set(argument, false);
@@ -547,39 +562,38 @@ public class NMS_1_16_R1 implements NMS<CommandListenerWrapper> {
 			e1.printStackTrace();
 		}
 		
-		switch (selector) {
-		case MANY_ENTITIES:
-			// ArgumentEntity.c -> EntitySelector.getEntities
-			try {
-				return argument.getEntities(cmdCtx.getSource()).stream()
-						.map(entity -> (org.bukkit.entity.Entity) ((Entity) entity).getBukkitEntity())
-						.collect(Collectors.toList());
-			} catch (CommandSyntaxException e) {
-				return new ArrayList<org.bukkit.entity.Entity>();
-			}
-		case MANY_PLAYERS:
-			// ArgumentEntity.d -> EntitySelector.d
-			try {
-				return argument.d(cmdCtx.getSource()).stream()
-						.map(player -> (Player) ((Entity) player).getBukkitEntity()).collect(Collectors.toList());
-			} catch (CommandSyntaxException e) {
-				return new ArrayList<Player>();
-			}
-		case ONE_ENTITY:
-			// ArgumentEntity.a -> EntitySelector.a
-			return (org.bukkit.entity.Entity) argument.a(cmdCtx.getSource()).getBukkitEntity();
-		case ONE_PLAYER:
-			// ArgumentEntity.e -> EntitySelector.c
-			return (Player) argument.c(cmdCtx.getSource()).getBukkitEntity();
-		}
-		throw new IllegalStateException("A serious error has occurred! Contact the author of the CommandAPI");
+		return switch (selector) {
+			case MANY_ENTITIES:
+				// ArgumentEntity.c -> EntitySelector.getEntities
+				try {
+					yield argument.getEntities(cmdCtx.getSource()).stream()
+							.map(entity -> (org.bukkit.entity.Entity) ((Entity) entity).getBukkitEntity())
+							.collect(Collectors.toList());
+				} catch (CommandSyntaxException e) {
+					yield new ArrayList<org.bukkit.entity.Entity>();
+				}
+			case MANY_PLAYERS:
+				// ArgumentEntity.d -> EntitySelector.d
+				try {
+					yield argument.d(cmdCtx.getSource()).stream()
+							.map(player -> (Player) ((Entity) player).getBukkitEntity()).collect(Collectors.toList());
+				} catch (CommandSyntaxException e) {
+					yield new ArrayList<Player>();
+				}
+			case ONE_ENTITY:
+				// ArgumentEntity.a -> EntitySelector.a
+				yield (org.bukkit.entity.Entity) argument.a(cmdCtx.getSource()).getBukkitEntity();
+			case ONE_PLAYER:
+				// ArgumentEntity.e -> EntitySelector.c
+				yield (Player) argument.c(cmdCtx.getSource()).getBukkitEntity();
+		};
 	}
 
 	@Override
-	public EntityType getEntityType(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
-		Entity entity = IRegistry.ENTITY_TYPE.get(ArgumentEntitySummon.a(cmdCtx, str))
-				.a((cmdCtx.getSource().getWorld().getWorld()).getHandle());
-		return entity.getBukkitEntity().getType();
+	public EntityType getEntityType(CommandContext<CommandListenerWrapper> cmdCtx, String str)
+			throws CommandSyntaxException {
+		return IRegistry.ENTITY_TYPE.get(ArgumentEntitySummon.a(cmdCtx, str))
+				.a(((CraftWorld) getWorldForCSS(cmdCtx.getSource())).getHandle()).getBukkitEntity().getType();
 	}
 
 	@Override
@@ -589,6 +603,35 @@ public class NMS_1_16_R1 implements NMS<CommandListenerWrapper> {
 		float low = range.a() == null ? -Float.MAX_VALUE : range.a();
 		float high = range.b() == null ? Float.MAX_VALUE : range.b();
 		return new FloatRange(low, high);
+	}
+
+	@Override
+	public FunctionWrapper[] getFunction(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
+		List<FunctionWrapper> result = new ArrayList<>();
+		CommandListenerWrapper commandListenerWrapper = cmdCtx.getSource().a().b(2);
+
+		for (CustomFunction customFunction : ArgumentTag.a(cmdCtx, str)) { 
+			result.add(FunctionWrapper.fromSimpleFunctionWrapper(convertFunction(customFunction), commandListenerWrapper, e -> {
+				return cmdCtx.getSource().a(((CraftEntity) e).getHandle());
+			}));
+		}
+
+		return result.toArray(new FunctionWrapper[0]);
+	}
+
+	@Override
+	public SimpleFunctionWrapper getFunction(NamespacedKey key) {
+		return convertFunction(MINECRAFT_SERVER.getFunctionData().a(new MinecraftKey(key.getNamespace(), key.getKey())).get());
+	}
+
+	@Differs(from = "1.15", by = "MINECRAFT_SERVER.getFunctionData().c().keySet() -> MINECRAFT_SERVER.getFunctionData().f()")
+	@Override
+	public Set<NamespacedKey> getFunctions() {
+		Set<NamespacedKey> functions = new HashSet<>();
+		for(MinecraftKey key : MINECRAFT_SERVER.getFunctionData().f()) {
+			functions.add(fromMinecraftKey(key));
+		}
+		return functions;
 	}
 
 	@Override
@@ -612,46 +655,45 @@ public class NMS_1_16_R1 implements NMS<CommandListenerWrapper> {
 		return item -> predicate.test(CraftItemStack.asNMSCopy(item));
 	}
 
+	@Differs(from = "1.14.4", by = "ArgumentMinecraftKeyRegistered.d() -> ArgumentMinecraftKeyRegistered.e()")
 	@Override
 	public String getKeyedAsString(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.e(cmdCtx, key);
-		return minecraftKey.toString();
+		return ArgumentMinecraftKeyRegistered.e(cmdCtx, key).toString();
 	}
 
 	@Override
-	public Location getLocation(CommandContext<CommandListenerWrapper> cmdCtx, String str, LocationType locationType)
+	public Location2D getLocation2DBlock(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException {
-		switch (locationType) {
-		case BLOCK_POSITION:
-			BlockPosition blockPos = ArgumentPosition.a(cmdCtx, str);
-			return new Location(cmdCtx.getSource().getWorld().getWorld(), blockPos.getX(), blockPos.getY(),
-					blockPos.getZ());
-		case PRECISE_POSITION:
-			Vec3D vecPos = ArgumentVec3.a(cmdCtx, str);
-			return new Location(cmdCtx.getSource().getWorld().getWorld(), vecPos.x, vecPos.y, vecPos.z);
-		}
-		return null;
+		BlockPosition2D blockPos = ArgumentVec2I.a(cmdCtx, key);
+		return new Location2D(getWorldForCSS(cmdCtx.getSource()), blockPos.a, blockPos.b);
 	}
 
 	@Override
-	public Location2D getLocation2D(CommandContext<CommandListenerWrapper> cmdCtx, String key, LocationType locationType2d)
+	public Location2D getLocation2DPrecise(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException {
-		switch (locationType2d) {
-		case BLOCK_POSITION:
-			BlockPosition2D blockPos = ArgumentVec2I.a(cmdCtx, key);
-			return new Location2D(cmdCtx.getSource().getWorld().getWorld(), blockPos.a, blockPos.b);
-		case PRECISE_POSITION:
-			Vec2F vecPos = ArgumentVec2.a(cmdCtx, key);
-			return new Location2D(cmdCtx.getSource().getWorld().getWorld(), vecPos.i, vecPos.j);
-		}
-		return null;
+		Vec2F vecPos = ArgumentVec2.a(cmdCtx, key);
+		return new Location2D(getWorldForCSS(cmdCtx.getSource()), vecPos.i, vecPos.j);
 	}
 
-	@SuppressWarnings("deprecation")
+	@Override
+	public Location getLocationBlock(CommandContext<CommandListenerWrapper> cmdCtx, String str)
+			throws CommandSyntaxException {
+		BlockPosition blockPos = ArgumentPosition.a(cmdCtx, str);
+		return new Location(getWorldForCSS(cmdCtx.getSource()), blockPos.getX(), blockPos.getY(), blockPos.getZ());
+	}
+
+	@Override
+	public Location getLocationPrecise(CommandContext<CommandListenerWrapper> cmdCtx, String str)
+			throws CommandSyntaxException {
+		Vec3D vecPos = ArgumentVec3.a(cmdCtx, str);
+		return new Location(getWorldForCSS(cmdCtx.getSource()), vecPos.x, vecPos.y, vecPos.z);
+	}
+
+	@Differs(from = "1.14.4", by = "ArgumentMinecraftKeyRegistered.d() -> ArgumentMinecraftKeyRegistered.e()")
 	@Override
 	public org.bukkit.loot.LootTable getLootTable(CommandContext<CommandListenerWrapper> cmdCtx, String str) {
-		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.e(cmdCtx, str);		return new CraftLootTable(fromMinecraftKey(minecraftKey), MINECRAFT_SERVER.getLootTableRegistry().getLootTable(minecraftKey));
-
+		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.e(cmdCtx, str);
+		return new CraftLootTable(fromMinecraftKey(minecraftKey), MINECRAFT_SERVER.getLootTableRegistry().getLootTable(minecraftKey));
 	}
 
 	@Override
@@ -678,8 +720,39 @@ public class NMS_1_16_R1 implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
-	public Particle getParticle(CommandContext<CommandListenerWrapper> cmdCtx, String str) {
-		return CraftParticle.toBukkit(ArgumentParticle.a(cmdCtx, str));
+	public OfflinePlayer getOfflinePlayer(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
+		OfflinePlayer target = Bukkit.getOfflinePlayer(((GameProfile) ArgumentProfile.a(cmdCtx, str).iterator().next()).getId());
+		if (target == null) {
+			throw ArgumentProfile.a.create();
+		} else {
+			return target;
+		}
+	}
+
+	@Override
+	public ParticleData<?> getParticle(CommandContext<CommandListenerWrapper> cmdCtx, String str) {
+		final ParticleParam particleOptions = ArgumentParticle.a(cmdCtx, str);
+
+		final Particle particle = CraftParticle.toBukkit(particleOptions);
+		if(particleOptions instanceof ParticleParamBlock options) {
+			IBlockData blockData = (IBlockData) ParticleParamBlock_c.get(options);
+			return new ParticleData<BlockData>(particle, CraftBlockData.fromData(blockData));
+		}
+		if(particleOptions instanceof ParticleParamRedstone options) {
+			String optionsStr = options.a(); // Of the format "particle_type float float float"
+			String[] optionsArr = optionsStr.split(" ");
+			final float red = Float.parseFloat(optionsArr[1]);
+			final float green = Float.parseFloat(optionsArr[2]);
+			final float blue = Float.parseFloat(optionsArr[3]);
+
+			final Color color = Color.fromRGB((int) (red * 255.0F), (int) (green * 255.0F), (int) (blue * 255.0F));
+			return new ParticleData<DustOptions>(particle, new DustOptions(color, (float) ParticleParamRedstone_f.get(options)));
+		}
+		if(particleOptions instanceof ParticleParamItem options) {
+			return new ParticleData<org.bukkit.inventory.ItemStack>(particle, CraftItemStack.asBukkitCopy((ItemStack) ParticleParamItem_c.get(options)));
+		}
+		CommandAPI.getLogger().warning("Invalid particle data type for " + particle.getDataType().toString());
+		return new ParticleData<Void>(particle, null);
 	}
 
 	@Override
@@ -700,19 +773,7 @@ public class NMS_1_16_R1 implements NMS<CommandListenerWrapper> {
 	@Override
 	public ComplexRecipe getRecipe(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		IRecipe<?> recipe = ArgumentMinecraftKeyRegistered.b(cmdCtx, key);
-		return new ComplexRecipe() {
-
-			@SuppressWarnings("deprecation")
-			@Override
-			public NamespacedKey getKey() {
-				return new NamespacedKey(recipe.getKey().getNamespace(), recipe.getKey().getKey());
-			}
-
-			@Override
-			public org.bukkit.inventory.ItemStack getResult() {
-				return recipe.toBukkitRecipe().getResult();
-			}
-		};
+		return new ComplexRecipeImpl(fromMinecraftKey(recipe.getKey()), recipe.toBukkitRecipe());
 	}
 
 	@Override
@@ -777,37 +838,57 @@ public class NMS_1_16_R1 implements NMS<CommandListenerWrapper> {
 		return null;
 	}
 
+	@Differs(from = "1.15", by = """
+			functionData.h().a() -> functionData.g()
+			functionData.c().keySet() -> functionData.f()
+			CompletionProviders.d -> CompletionProviders.e
+			Implement BIOMES case
+			""")
 	@Override
 	public SuggestionProvider<CommandListenerWrapper> getSuggestionProvider(SuggestionProviders provider) {
-		switch (provider) {
-		case FUNCTION:
-			return (context, builder) -> {
-				CustomFunctionData functionData = MINECRAFT_SERVER.getFunctionData();
-				ICompletionProvider.a(functionData.g(), builder, "#");
-				return ICompletionProvider.a(functionData.f(), builder);
-			};
-		case RECIPES:
-			return CompletionProviders.b;
-		case SOUNDS:
-			return CompletionProviders.c;
-		case ADVANCEMENTS:
-			return (cmdCtx, builder) -> {
-				Collection<Advancement> advancements = MINECRAFT_SERVER
-						.getAdvancementData().getAdvancements();
-				return ICompletionProvider.a(advancements.stream().map(Advancement::getName), builder);
-			};
-		case LOOT_TABLES:
-			return (context, builder) -> {
-				LootTableRegistry lootTables = MINECRAFT_SERVER.getLootTableRegistry();
-				return ICompletionProvider.a(lootTables.a(), builder);
-			};
-		case BIOMES:
-			return CompletionProviders.d;
-		case ENTITIES:
-			return CompletionProviders.e;
-		default:
-			return (context, builder) -> Suggestions.empty();
+		return switch (provider) {
+			case FUNCTION ->
+				(context, builder) -> {
+					CustomFunctionData functionData = MINECRAFT_SERVER.getFunctionData();
+					ICompletionProvider.a(functionData.g(), builder, "#");
+					return ICompletionProvider.a(functionData.f(), builder);
+				};
+			case RECIPES -> CompletionProviders.b;
+			case SOUNDS -> CompletionProviders.c;
+			case ADVANCEMENTS ->
+				(cmdCtx, builder) -> {
+					Collection<Advancement> advancements = MINECRAFT_SERVER.getAdvancementData().getAdvancements();
+					return ICompletionProvider.a(advancements.stream().map(Advancement::getName), builder);
+				};
+			case LOOT_TABLES ->
+				(context, builder) -> {
+					return ICompletionProvider.a(MINECRAFT_SERVER.getLootTableRegistry().a(), builder);
+				};
+			case BIOMES -> CompletionProviders.d;
+			case ENTITIES -> CompletionProviders.e;
+			default -> (context, builder) -> Suggestions.empty();
+		};
+	}
+
+	@Differs(from = "1.15", by = "getFunctionData().h().b().a() -> getFunctionData().b().getTagged()")
+	@Override
+	public SimpleFunctionWrapper[] getTag(NamespacedKey key) {
+		List<CustomFunction> customFunctions = new ArrayList<>(MINECRAFT_SERVER.getFunctionData().b(new MinecraftKey(key.getNamespace(), key.getKey())).getTagged());
+		SimpleFunctionWrapper[] result = new SimpleFunctionWrapper[customFunctions.size()];
+		for(int i = 0, size = customFunctions.size(); i < size; i++) {
+			result[i] = convertFunction(customFunctions.get(i));
 		}
+		return result;
+	}
+
+	@Differs(from = "1.15", by = "MINECRAFT_SERVER.getFunctionData().h().a() -> MINECRAFT_SERVER.getFunctionData().g()")
+	@Override
+	public Set<NamespacedKey> getTags() {
+		Set<NamespacedKey> functions = new HashSet<>();
+		for(MinecraftKey key : MINECRAFT_SERVER.getFunctionData().g()) {
+			functions.add(fromMinecraftKey(key));
+		}
+		return functions;
 	}
 
 	@Override
@@ -820,9 +901,15 @@ public class NMS_1_16_R1 implements NMS<CommandListenerWrapper> {
 		return (Integer) cmdCtx.getArgument(key, Integer.class);
 	}
 
+	@Differs(from = "1.15", by = "Implements UUIDArgument")
 	@Override
 	public UUID getUUID(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		return ArgumentUUID.a(cmdCtx, key);
+	}
+
+	@Override
+	public World getWorldForCSS(CommandListenerWrapper clw) {
+		return (clw.getWorld() == null) ? null : clw.getWorld().getWorld();
 	}
 
 	@Override
@@ -830,59 +917,44 @@ public class NMS_1_16_R1 implements NMS<CommandListenerWrapper> {
 		return command instanceof VanillaCommandWrapper;
 	}
 
+	@Differs(from = "1.15", by = "Implement datapack reloading")
 	@Override
-	public void reloadDataPacks()
-			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		CommandAPI.getLog().info("Reloading datapacks...");
-
-		// Get the NMS server
-		DedicatedServer server = ((CraftServer) Bukkit.getServer()).getHandle().getServer();
+	public void reloadDataPacks() {
+		CommandAPI.getLogger().info("Reloading datapacks...");
 
 		// Get previously declared recipes to be re-registered later
 		Iterator<Recipe> recipes = Bukkit.recipeIterator();
 
 		// Update the commandDispatcher with the current server's commandDispatcher
-		DataPackResources datapackResources = server.dataPackResources;
-		datapackResources.commandDispatcher = server.getCommandDispatcher();
+		DataPackResources datapackResources = MINECRAFT_SERVER.dataPackResources;
+		datapackResources.commandDispatcher = MINECRAFT_SERVER.getCommandDispatcher();
 
-		// Reflection doesn't need to be cached because this only executes once at
-		// server startup
-		Field i = DataPackResources.class.getDeclaredField("i");
-		i.setAccessible(true);
+		// Update the CustomFunctionManager for the datapackResources which now has the new commandDispatcher
+		try {
+			CommandAPIHandler.getInstance().getField(CustomFunctionManager.class, "g").set(datapackResources.a(),
+					getBrigadierDispatcher());
+		} catch (IllegalArgumentException | IllegalAccessException e1) {
+			e1.printStackTrace();
+		}
 
-		Field fField = CustomFunctionManager.class.getDeclaredField("f");
-		fField.setAccessible(true);
-		int f = (int) fField.get(datapackResources.a()); // Related to the permission required to run this function?
-
-		// Update the CustomFunctionManager for the datapackResources which now has the
-		// new commandDispatcher
-		i.set(datapackResources, new CustomFunctionManager(f, datapackResources.commandDispatcher.a()));
-
-		// Construct the new CompletableFuture that now uses datapackResources
-		Field b = DataPackResources.class.getDeclaredField("b");
-		b.setAccessible(true);
-		IReloadableResourceManager reloadableResourceManager = (IReloadableResourceManager) b.get(datapackResources);
-		Field a = DataPackResources.class.getDeclaredField("a");
-		a.setAccessible(true);
-
-		@SuppressWarnings("unchecked")
-		CompletableFuture<Unit> unit = (CompletableFuture<Unit>) a.get(null);
-		CompletableFuture<Unit> unitCompletableFuture = reloadableResourceManager.a(SystemUtils.f(), Runnable::run,
-				server.getResourcePackRepository().f(), unit);
+		// Construct the new CompletableFuture that now uses our updated datapackResources
+		CompletableFuture<Unit> unitCompletableFuture = ((IReloadableResourceManager) DataPackResources_b.get(datapackResources)).a(
+				SystemUtils.f(),
+				Runnable::run,
+				MINECRAFT_SERVER.getResourcePackRepository().f(),
+				CompletableFuture.completedFuture(null)
+				);
 
 		CompletableFuture<DataPackResources> completablefuture = unitCompletableFuture
 				.whenComplete((Unit u, Throwable t) -> {
 					if (t != null) {
 						datapackResources.close();
 					}
-
-				}).thenApply((Unit u) -> {
-					return datapackResources;
-				});
+				}).thenApply((Unit u) -> datapackResources);
 
 		// Run the completableFuture and bind tags
 		try {
-			((DataPackResources) completablefuture.get()).i();
+			completablefuture.get().i();
 
 			// Register recipes again because reloading datapacks removes all non-vanilla
 			// recipes
@@ -897,11 +969,13 @@ public class NMS_1_16_R1 implements NMS<CommandListenerWrapper> {
 				}
 			});
 
-			CommandAPI.getLog().info("Finished reloading datapacks");
+			CommandAPI.getLogger().info("Finished reloading datapacks");
 		} catch (Exception e) {
-			CommandAPI.getLog().log(Level.WARNING,
-					"Failed to load datapacks, can't proceed with normal server load procedure. Try fixing your datapacks?",
-					e);
+			StringWriter stringWriter = new StringWriter();
+			PrintWriter printWriter = new PrintWriter(stringWriter);
+			e.printStackTrace(printWriter);
+
+			CommandAPI.logError("Failed to load datapacks, can't proceed with normal server load procedure. Try fixing your datapacks?\n" + stringWriter.toString());
 		}
 	}
 
@@ -910,4 +984,8 @@ public class NMS_1_16_R1 implements NMS<CommandListenerWrapper> {
 		MINECRAFT_SERVER.vanillaCommandDispatcher.a(((CraftPlayer) player).getHandle());
 	}
 
+	@SuppressWarnings("deprecation")
+	private static NamespacedKey fromMinecraftKey(MinecraftKey key) {
+		return new NamespacedKey(key.getNamespace(), key.getKey());
+	}
 }

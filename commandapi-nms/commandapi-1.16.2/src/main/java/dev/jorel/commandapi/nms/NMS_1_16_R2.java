@@ -510,10 +510,10 @@ public class NMS_1_16_R2 implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
-	public EntityType getEntityType(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
-		Entity entity = IRegistry.ENTITY_TYPE.get(ArgumentEntitySummon.a(cmdCtx, str))
-				.a((cmdCtx.getSource().getWorld().getWorld()).getHandle());
-		return entity.getBukkitEntity().getType();
+	public EntityType getEntityType(CommandContext<CommandListenerWrapper> cmdCtx, String str)
+			throws CommandSyntaxException {
+		return IRegistry.ENTITY_TYPE.get(ArgumentEntitySummon.a(cmdCtx, str))
+				.a(((CraftWorld) getWorldForCSS(cmdCtx.getSource())).getHandle()).getBukkitEntity().getType();
 	}
 
 	@Override

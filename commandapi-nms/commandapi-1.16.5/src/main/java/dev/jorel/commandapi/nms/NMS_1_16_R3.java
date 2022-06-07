@@ -929,7 +929,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 		// Construct the new CompletableFuture that now uses our updated datapackResources
 		CompletableFuture<?> unitCompletableFuture = ((IReloadableResourceManager) DATAPACKRESOURCES_B
 				.get(datapackResources)).a(
-						SystemUtils.f(), 
+						SystemUtils.f(),
 						Runnable::run,
 						MINECRAFT_SERVER.getResourcePackRepository().f(),
 						CompletableFuture.completedFuture(null)
