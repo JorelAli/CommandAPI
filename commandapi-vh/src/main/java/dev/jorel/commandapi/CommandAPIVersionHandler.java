@@ -36,6 +36,7 @@ import dev.jorel.commandapi.nms.NMS_1_16_R3;
 import dev.jorel.commandapi.nms.NMS_1_17_R1;
 import dev.jorel.commandapi.nms.NMS_1_18_R1;
 import dev.jorel.commandapi.nms.NMS_1_18_R2;
+import dev.jorel.commandapi.nms.NMS_1_19_R1;
 
 /**
  * This file handles the NMS version to be loaded. The CommandAPIVersionHandler
@@ -64,7 +65,7 @@ public interface CommandAPIVersionHandler {
 	 */
 	public static NMS<?> getNMS(String version) {
 		if (CommandAPI.getConfiguration().shouldUseLatestNMSVersion()) {
-			return new NMS_1_18_R2();
+			return new NMS_1_19_R1();
 		} else {
 			return switch (version) {
 				case "1.13" -> new NMS_1_13();
@@ -81,6 +82,7 @@ public interface CommandAPIVersionHandler {
 				case "1.17", "1.17.1" -> new NMS_1_17_R1();
 				case "1.18", "1.18.1" -> new NMS_1_18_R1();
 				case "1.18.2" -> new NMS_1_18_R2();
+				case "1.19" -> new NMS_1_19_R1();
 				default -> throw new UnsupportedVersionException(version);
 			};
 		}

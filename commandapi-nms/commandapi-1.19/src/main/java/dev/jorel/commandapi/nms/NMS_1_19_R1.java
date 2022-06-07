@@ -449,7 +449,7 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 
 	@Override
 	public String[] compatibleVersions() {
-		return new String[] { "1.18.2" };
+		return new String[] { "1.19" };
 	}
 
 	@Override
