@@ -67,20 +67,20 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.craftbukkit.v1_18_R2.CraftLootTable;
-import org.bukkit.craftbukkit.v1_18_R2.CraftParticle;
-import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_18_R2.CraftSound;
-import org.bukkit.craftbukkit.v1_18_R2.block.data.CraftBlockData;
-import org.bukkit.craftbukkit.v1_18_R2.command.VanillaCommandWrapper;
-import org.bukkit.craftbukkit.v1_18_R2.enchantments.CraftEnchantment;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_18_R2.help.CustomHelpTopic;
-import org.bukkit.craftbukkit.v1_18_R2.help.SimpleHelpMap;
-import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_18_R2.potion.CraftPotionEffectType;
-import org.bukkit.craftbukkit.v1_18_R2.util.CraftChatMessage;
+import org.bukkit.craftbukkit.v1_19_R1.CraftLootTable;
+import org.bukkit.craftbukkit.v1_19_R1.CraftParticle;
+import org.bukkit.craftbukkit.v1_19_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_19_R1.CraftSound;
+import org.bukkit.craftbukkit.v1_19_R1.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_19_R1.command.VanillaCommandWrapper;
+import org.bukkit.craftbukkit.v1_19_R1.enchantments.CraftEnchantment;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_19_R1.help.CustomHelpTopic;
+import org.bukkit.craftbukkit.v1_19_R1.help.SimpleHelpMap;
+import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_19_R1.potion.CraftPotionEffectType;
+import org.bukkit.craftbukkit.v1_19_R1.util.CraftChatMessage;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -176,7 +176,6 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.particles.VibrationParticleOption;
 import net.minecraft.network.chat.Component.Serializer;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.MinecraftServer.ReloadableResources;
@@ -213,6 +212,9 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 	private static final VarHandle SimpleHelpMap_helpTopics;
 	private static final VarHandle EntityPositionSource_sourceEntity;
 
+	// From net.minecraft.server.commands.LocateCommand
+	private static final DynamicCommandExceptionType ERROR_BIOME_INVALID;
+
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
@@ -228,6 +230,7 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 		}
 		SimpleHelpMap_helpTopics = shm_ht;
 		EntityPositionSource_sourceEntity = eps_se;
+		ERROR_BIOME_INVALID = new DynamicCommandExceptionType(arg -> net.minecraft.network.chat.Component.translatable("commands.locate.biome.invalid", arg));
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
@@ -385,7 +388,6 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 		return single ? ScoreHolderArgument.scoreHolder() : ScoreHolderArgument.scoreHolders();
 	}
 
-	@Differs(from = "1.18", by = "Implementation of synthetic biome argument")
 	@Override
 	public ArgumentType<?> _ArgumentSyntheticBiome() {
 		return ResourceOrTagLocationArgument.resourceOrTag(Registry.BIOME_REGISTRY);
@@ -517,10 +519,10 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 		return set;
 	}
 
-	@Differs(from = "1.18", by = "Implement biome argument which contains either a biome or a tag (instead of just a biome)")
+	@Differs(from = "1.18.2", by = "Biomes now go via the registry. Also have to manually implement ERROR_BIOME_INVALID")
 	@Override
 	public Biome getBiome(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		Result<net.minecraft.world.level.biome.Biome> biomeResult = ResourceOrTagLocationArgument.getBiome(cmdCtx, key);
+		Result<net.minecraft.world.level.biome.Biome> biomeResult = ResourceOrTagLocationArgument.getRegistryType(cmdCtx, key, Registry.BIOME_REGISTRY, ERROR_BIOME_INVALID);
 		if (biomeResult.unwrap().left().isPresent()) {
 			// It's a resource key. Unwrap the result, get the resource key (left)
 			// and get its location and return its path. Important information if
@@ -552,8 +554,8 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 			// [minecraft:root / minecraft:worldgen/biome]
 
 			// ResourceOrTagLocationArgument.ERROR_INVALID_BIOME
-			throw new DynamicCommandExceptionType(x -> new TranslatableComponent("commands.locatebiome.invalid", x))
-					.create(biomeResult.asPrintable());
+
+			throw ERROR_BIOME_INVALID.create(biomeResult.asPrintable());
 		}
 	}
 
@@ -735,11 +737,12 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 		return ResourceLocationArgument.getId(cmdCtx, key).toString();
 	}
 
+	@Differs(from = "1.18.2", by = "blockPos.x -> blockPos.x(); blockPos.z -> blockPos.z()")
 	@Override
 	public Location2D getLocation2DBlock(CommandContext<CommandSourceStack> cmdCtx, String key)
 			throws CommandSyntaxException {
 		ColumnPos blockPos = ColumnPosArgument.getColumnPos(cmdCtx, key);
-		return new Location2D(getWorldForCSS(cmdCtx.getSource()), blockPos.x, blockPos.z);
+		return new Location2D(getWorldForCSS(cmdCtx.getSource()), blockPos.x(), blockPos.z());
 	}
 
 	@Override
@@ -837,10 +840,10 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 			final BlockPos origin = options.getVibrationPath().getOrigin();
 			final Location from = new Location(level.getWorld(), origin.getX(), origin.getY(), origin.getZ());
 			final Destination destination;
-			if (options.getVibrationPath().getDestination() instanceof BlockPositionSource positionSource) {
+			if (options.getDestination() instanceof BlockPositionSource positionSource) {
 				BlockPos to = positionSource.getPosition(level).get();
 				destination = new BlockDestination(new Location(level.getWorld(), to.getX(), to.getY(), to.getZ()));
-			} else if (options.getVibrationPath().getDestination() instanceof EntityPositionSource positionSource) {
+			} else if (options.getDestination() instanceof EntityPositionSource positionSource) {
 				positionSource.getPosition(level); // Populate Optional sourceEntity
 				Optional<Entity> entity = (Optional<Entity>) EntityPositionSource_sourceEntity.get(positionSource);
 				destination = new EntityDestination(entity.get().getBukkitEntity());
@@ -850,7 +853,7 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 				return new ParticleData<Void>(particle, null);
 			}
 			return new ParticleData<Vibration>(particle,
-					new Vibration(from, destination, options.getVibrationPath().getArrivalInTicks()));
+					new Vibration(from, destination, options.getArrivalInTicks()));
 		}
 		CommandAPI.getLogger().warning("Invalid particle data type for " + particle.getDataType().toString());
 		return new ParticleData<Void>(particle, null);
@@ -931,7 +934,6 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 		return CraftSound.getBukkit(Registry.SOUND_EVENT.get(ResourceLocationArgument.getId(cmdCtx, key)));
 	}
 
-	@Differs(from = "1.18", by = "Use of argument synthetic biome's listSuggestions method")
 	@Override
 	public SuggestionProvider<CommandSourceStack> getSuggestionProvider(SuggestionProviders provider) {
 		return switch (provider) {
@@ -955,15 +957,12 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 		};
 	}
 
+	@Differs(from = "1.18.2", by = "getTag() now returns a Collection<> instead of a Tag<>, so don't have to call .getValues()")
 	@Override
 	public SimpleFunctionWrapper[] getTag(NamespacedKey key) {
-		List<CommandFunction> customFunctions = MINECRAFT_SERVER.getFunctions()
-				.getTag(new ResourceLocation(key.getNamespace(), key.getKey())).getValues();
-		SimpleFunctionWrapper[] result = new SimpleFunctionWrapper[customFunctions.size()];
-		for (int i = 0, size = customFunctions.size(); i < size; i++) {
-			result[i] = convertFunction(customFunctions.get(i));
-		}
-		return result;
+		Collection<CommandFunction> customFunctions = MINECRAFT_SERVER.getFunctions()
+				.getTag(new ResourceLocation(key.getNamespace(), key.getKey()));
+		return customFunctions.toArray(new SimpleFunctionWrapper[0]);
 	}
 
 	@Override
@@ -1000,7 +999,6 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 		return command instanceof VanillaCommandWrapper;
 	}
 
-	@Differs(from = "1.18", by = "Completely rewritten way of reloading datapacks")
 	@Override
 	public void reloadDataPacks() {
 		CommandAPI.logNormal("Reloading datapacks...");

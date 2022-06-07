@@ -28,8 +28,8 @@
 	<artifactId>commandapi-1.19</artifactId>
 
 	<properties>
-		<minecraft.mappings>1.18.2-R0.1-SNAPSHOT</minecraft.mappings>
-		<spigot.version>1.18.2-R0.1-SNAPSHOT</spigot.version>
+		<minecraft.mappings>1.19-R0.1-SNAPSHOT</minecraft.mappings>
+		<spigot.version>1.19-R0.1-SNAPSHOT</spigot.version>
 	</properties>
 
 	<repositories>
@@ -48,13 +48,6 @@
 	</repositories>
 
 	<dependencies>
-		<!-- Spigot testing (for reflection checks) -->
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot</artifactId>
-			<version>${spigot.version}</version>
-			<scope>test</scope>
-		</dependency>
 
 		<!-- Spigot compilation -->
 		<dependency>
@@ -62,6 +55,13 @@
 			<artifactId>spigot</artifactId>
 			<version>${spigot.version}</version>
 			<classifier>remapped-mojang</classifier>
+		</dependency>
+		<!-- Spigot testing (for reflection checks) -->
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot</artifactId>
+			<version>${spigot.version}</version>
+			<scope>test</scope>
 		</dependency>
 
 		<!-- Libraries -->
