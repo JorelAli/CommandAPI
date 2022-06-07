@@ -38,25 +38,19 @@ The list of what version of the CommandAPI you'll need to run on a specific vers
 
 | Minecraft version  | Compatible versions | Latest compatible version | Minimum Java version to run latest version |
 |--------------------|---------------------|---------------------------|--------------------------------------------|
-| **1.13.x**         | v1.0 - 5.12         | 5.12                      | 8                                          |
-| **1.14.1, 1.14.2** | v2.0 - 5.12         | 5.12                      | 8                                          |
-| **1.14.3, 1.14.4** | v2.1 - 5.12         | 5.12                      | 8                                          |
-| **1.15.x**         | v2.3a - 5.12        | 5.12                      | 8                                          |
-| **1.16.1**         | v3.0 - 5.12         | 5.12                      | 8                                          |
-| **1.16.2**         | v4.0 - 5.12         | 5.12                      | 8                                          |
-| **1.16.3**         | v4.2 - 5.12         | 5.12                      | 8                                          |
-| **1.16.4**         | v5.2 - 5.12         | 5.12                      | 8                                          |
-| **1.16.5**         | v5.7 - 7.0.0, 8.2.1 | 8.2.1                     | 17                                         |
-| **1.17**           | 6.0.x - 8.2.1       | 8.2.1                     | 17                                         |
-| **1.17.1**         | 6.1.x - 8.2.1       | 8.2.1                     | 17                                         |
-| **1.18, 1.18.1**   | 6.5.2 - 8.2.1       | 8.2.1                     | 17                                         |
-| **1.18.2**         | 6.5.4 - 8.2.1       | 8.2.1                     | 17                                         |
-
-> Certain versions of Minecraft (1.16.5) cannot run on Java 17 by default. On 1.16.5 Paper servers, this can be bypassed using the following command:
->
-> ```sh
-> java -DPaper.IgnoreJavaVersion=true -jar paper-server.jar
-> ```
+| **1.13.x**         | v1.0 - 5.12, 8.3.0  | 8.3.0                     | 16                                         |
+| **1.14.1, 1.14.2** | v2.0 - 5.12, 8.3.0  | 8.3.0                     | 16                                         |
+| **1.14.3, 1.14.4** | v2.1 - 5.12, 8.3.0  | 8.3.0                     | 16                                         |
+| **1.15.x**         | v2.3a - 5.12, 8.3.0 | 8.3.0                     | 16                                         |
+| **1.16.1**         | v3.0 - 5.12, 8.3.0  | 8.3.0                     | 16                                         |
+| **1.16.2**         | v4.0 - 5.12, 8.3.0  | 8.3.0                     | 16                                         |
+| **1.16.3**         | v4.2 - 5.12, 8.3.0  | 8.3.0                     | 16                                         |
+| **1.16.4**         | v5.2 - 5.12, 8.3.0  | 8.3.0                     | 16                                         |
+| **1.16.5**         | v5.7 - 7.0.0, 8.3.0 | 8.3.0                     | 16                                         |
+| **1.17**           | 6.0.x - 8.3.0       | 8.3.0                     | 16                                         |
+| **1.17.1**         | 6.1.x - 8.3.0       | 8.3.0                     | 16                                         |
+| **1.18, 1.18.1**   | 6.5.2 - 8.3.0       | 8.3.0                     | 16                                         |
+| **1.18.2**         | 6.5.4 - 8.3.0       | 8.3.0                     | 16                                         |
 
 -----
 
@@ -327,6 +321,17 @@ This is the current roadmap for the CommandAPI (as of 13th April 2022):
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td valign="top"><b>8.3.0</b></td>
+            <td valign="top">June 2022</td>
+            <td valign="top">
+                <ul>
+                    <li>Change Java target version to Java 16 instead of Java 17</li>
+                    <li>Adds support for old Minecraft versions (1.13 - 1.16.4) again</li>
+                    <li>Adds support for Minecraft 1.19</li>
+                </ul>
+            </td>
+        </tr>
         <tr>
             <td valign="top"><b>8.2.1</b></td>
             <td valign="top">June 2022</td>
