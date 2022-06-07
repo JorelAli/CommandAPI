@@ -42,6 +42,11 @@
 			<version>${auto-service.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot</artifactId>
+			<version>${paper.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
