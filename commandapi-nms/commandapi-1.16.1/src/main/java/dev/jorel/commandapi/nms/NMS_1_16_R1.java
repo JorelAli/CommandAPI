@@ -6,7 +6,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
-import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,8 +21,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.function.ToIntBiFunction;
 import java.util.function.ToIntFunction;
-import java.util.logging.Level;
-import java.util.stream.Collectors;
 
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
@@ -82,7 +79,6 @@ import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.exceptions.AngleArgumentException;
-import dev.jorel.commandapi.exceptions.BiomeArgumentException;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
@@ -144,8 +140,8 @@ import net.minecraft.server.v1_16_R1.CustomFunction;
 import net.minecraft.server.v1_16_R1.CustomFunctionData;
 import net.minecraft.server.v1_16_R1.CustomFunctionManager;
 import net.minecraft.server.v1_16_R1.DataPackResources;
-import net.minecraft.server.v1_16_R1.DedicatedServer;
 import net.minecraft.server.v1_16_R1.Entity;
+import net.minecraft.server.v1_16_R1.EntityPlayer;
 import net.minecraft.server.v1_16_R1.EntitySelector;
 import net.minecraft.server.v1_16_R1.EnumDirection.EnumAxis;
 import net.minecraft.server.v1_16_R1.IBlockData;
@@ -156,7 +152,6 @@ import net.minecraft.server.v1_16_R1.IRegistry;
 import net.minecraft.server.v1_16_R1.IReloadableResourceManager;
 import net.minecraft.server.v1_16_R1.IVectorPosition;
 import net.minecraft.server.v1_16_R1.ItemStack;
-import net.minecraft.server.v1_16_R1.LootTableRegistry;
 import net.minecraft.server.v1_16_R1.MinecraftKey;
 import net.minecraft.server.v1_16_R1.MinecraftServer;
 import net.minecraft.server.v1_16_R1.ParticleParam;
@@ -360,9 +355,10 @@ public class NMS_1_16_R1 implements NMS<CommandListenerWrapper> {
 		return single ? ArgumentScoreholder.a() : ArgumentScoreholder.b();
 	}
 
+	@Differs(from = "1.15", by = "Implements BiomeArgument")
 	@Override
 	public ArgumentType<?> _ArgumentSyntheticBiome() {
-		throw new BiomeArgumentException();
+		return _ArgumentMinecraftKeyRegistered();
 	}
 
 	@Override
@@ -566,26 +562,31 @@ public class NMS_1_16_R1 implements NMS<CommandListenerWrapper> {
 			case MANY_ENTITIES:
 				// ArgumentEntity.c -> EntitySelector.getEntities
 				try {
-					yield argument.getEntities(cmdCtx.getSource()).stream()
-							.map(entity -> (org.bukkit.entity.Entity) ((Entity) entity).getBukkitEntity())
-							.collect(Collectors.toList());
+					List<org.bukkit.entity.Entity> result = new ArrayList<>();
+					for(Entity entity : argument.getEntities(cmdCtx.getSource())) {
+						result.add(entity.getBukkitEntity());
+					}
+					yield result;
 				} catch (CommandSyntaxException e) {
 					yield new ArrayList<org.bukkit.entity.Entity>();
 				}
 			case MANY_PLAYERS:
 				// ArgumentEntity.d -> EntitySelector.d
 				try {
-					yield argument.d(cmdCtx.getSource()).stream()
-							.map(player -> (Player) ((Entity) player).getBukkitEntity()).collect(Collectors.toList());
+					List<Player> result = new ArrayList<>();
+					for(EntityPlayer player : argument.d(cmdCtx.getSource())) {
+						result.add(player.getBukkitEntity());
+					}
+					yield result;
 				} catch (CommandSyntaxException e) {
 					yield new ArrayList<Player>();
 				}
 			case ONE_ENTITY:
 				// ArgumentEntity.a -> EntitySelector.a
-				yield (org.bukkit.entity.Entity) argument.a(cmdCtx.getSource()).getBukkitEntity();
+				yield argument.a(cmdCtx.getSource()).getBukkitEntity();
 			case ONE_PLAYER:
 				// ArgumentEntity.e -> EntitySelector.c
-				yield (Player) argument.c(cmdCtx.getSource()).getBukkitEntity();
+				yield argument.c(cmdCtx.getSource()).getBukkitEntity();
 		};
 	}
 

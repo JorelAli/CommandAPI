@@ -599,10 +599,10 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 				}
 			case ONE_ENTITY:
 				// ArgumentEntity.a -> EntitySelector.a
-				yield (org.bukkit.entity.Entity) argument.a(cmdCtx.getSource()).getBukkitEntity();
+				yield argument.a(cmdCtx.getSource()).getBukkitEntity();
 			case ONE_PLAYER:
 				// ArgumentEntity.e -> EntitySelector.c
-				yield (Player) argument.c(cmdCtx.getSource()).getBukkitEntity();
+				yield argument.c(cmdCtx.getSource()).getBukkitEntity();
 		};
 	}
 
@@ -865,7 +865,7 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public SimpleFunctionWrapper[] getTag(NamespacedKey key) {
-		List<CustomFunction> customFunctions = MINECRAFT_SERVER.getFunctionData().b(new MinecraftKey(key.getNamespace(), key.getKey())).getTagged();
+		List<CustomFunction> customFunctions = new ArrayList<>(MINECRAFT_SERVER.getFunctionData().b(new MinecraftKey(key.getNamespace(), key.getKey())).getTagged());
 		SimpleFunctionWrapper[] result = new SimpleFunctionWrapper[customFunctions.size()];
 		for(int i = 0, size = customFunctions.size(); i < size; i++) {
 			result[i] = convertFunction(customFunctions.get(i));

@@ -15,7 +15,6 @@ import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.function.ToIntBiFunction;
 import java.util.function.ToIntFunction;
-import java.util.stream.Collectors;
 
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
@@ -132,6 +131,7 @@ import net.minecraft.server.v1_13_R1.CustomFunction;
 import net.minecraft.server.v1_13_R1.CustomFunctionData;
 import net.minecraft.server.v1_13_R1.DedicatedServer;
 import net.minecraft.server.v1_13_R1.Entity;
+import net.minecraft.server.v1_13_R1.EntityPlayer;
 import net.minecraft.server.v1_13_R1.EntitySelector;
 import net.minecraft.server.v1_13_R1.EntityTypes;
 import net.minecraft.server.v1_13_R1.EnumDirection.EnumAxis;
@@ -557,29 +557,34 @@ public class NMS_1_13 implements NMS<CommandListenerWrapper> {
 		}
 		
 		return switch (selector) {
-		case MANY_ENTITIES:
-			// ArgumentEntity.c -> EntitySelector.b
-			try {
-				yield argument.b(cmdCtx.getSource()).stream()
-						.map(entity -> (org.bukkit.entity.Entity) ((Entity) entity).getBukkitEntity())
-						.collect(Collectors.toList());
-			} catch (CommandSyntaxException e) {
-				yield new ArrayList<org.bukkit.entity.Entity>();
-			}
-		case MANY_PLAYERS:
-			// ArgumentEntity.d -> EntitySelector.d
-			try {
-				yield argument.d(cmdCtx.getSource()).stream()
-						.map(player -> (Player) ((Entity) player).getBukkitEntity()).collect(Collectors.toList());
-			} catch (CommandSyntaxException e) {
-				yield new ArrayList<Player>();
-			}
-		case ONE_ENTITY:
-			// ArgumentEntity.a -> EntitySelector.a
-			yield (org.bukkit.entity.Entity) argument.a(cmdCtx.getSource()).getBukkitEntity();
-		case ONE_PLAYER:
-			// ArgumentEntity.e -> EntitySelector.c
-			yield (Player) argument.c(cmdCtx.getSource()).getBukkitEntity();
+			case MANY_ENTITIES:
+				// ArgumentEntity.c -> EntitySelector.b
+				try {
+					List<org.bukkit.entity.Entity> result = new ArrayList<>();
+					for(Entity entity : argument.b(cmdCtx.getSource())) {
+						result.add(entity.getBukkitEntity());
+					}
+					yield result;
+				} catch (CommandSyntaxException e) {
+					yield new ArrayList<org.bukkit.entity.Entity>();
+				}
+			case MANY_PLAYERS:
+				// ArgumentEntity.d -> EntitySelector.d
+				try {
+					List<Player> result = new ArrayList<>();
+					for(EntityPlayer player : argument.d(cmdCtx.getSource())) {
+						result.add(player.getBukkitEntity());
+					}
+					yield result;
+				} catch (CommandSyntaxException e) {
+					yield new ArrayList<Player>();
+				}
+			case ONE_ENTITY:
+				// ArgumentEntity.a -> EntitySelector.a
+				yield argument.a(cmdCtx.getSource()).getBukkitEntity();
+			case ONE_PLAYER:
+				// ArgumentEntity.e -> EntitySelector.c
+				yield argument.c(cmdCtx.getSource()).getBukkitEntity();
 		};
 	}
 
