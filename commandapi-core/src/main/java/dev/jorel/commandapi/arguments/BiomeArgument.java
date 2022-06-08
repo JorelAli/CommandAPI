@@ -60,7 +60,7 @@ public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome> implem
 	
 	@Override
 	public <CommandListenerWrapper> Biome parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getBiome(cmdCtx, key);
 	}
 }

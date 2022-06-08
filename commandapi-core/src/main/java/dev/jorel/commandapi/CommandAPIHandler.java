@@ -62,7 +62,6 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
-import dev.jorel.commandapi.arguments.CustomArgument;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.ICustomProvidedArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
@@ -325,11 +324,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 */
 	Object parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Argument<?> value, Argument<?>[] args) throws CommandSyntaxException {
 		if(value.isListed()) {
-			if(value instanceof CustomArgument<?> customValue) {
-				return customValue.parseCustomArgument(NMS, cmdCtx, key, generatePreviousArguments(cmdCtx, args, key));
-			} else {
-				return value.parseArgument(NMS, cmdCtx, key);
-			}
+			return value.parseArgument(NMS, cmdCtx, key, generatePreviousArguments(cmdCtx, args, key));
 		} else {
 			return null;
 		}

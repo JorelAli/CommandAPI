@@ -53,7 +53,7 @@ public class BlockStateArgument extends Argument<BlockData> {
 	
 	@Override
 	public <CommandListenerWrapper> BlockData parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getBlockState(cmdCtx, key);
 	}
 }

@@ -99,14 +99,15 @@ public abstract class Argument<T> extends ArgumentTree {
 	 * isn't expected to be used outside the CommandAPI
 	 * 
 	 * @param <CommandSourceStack> the command source type
-	 * @param nms                      an instance of NMS
-	 * @param cmdCtx                   the context which ran this command
-	 * @param key                      the name of the argument node
+	 * @param nms                  an instance of NMS
+	 * @param cmdCtx               the context which ran this command
+	 * @param key                  the name of the argument node
+	 * @param previousArgs         an array of previously declared arguments
 	 * @return the parsed object represented by this argument
 	 * @throws CommandSyntaxException if parsing fails
 	 */
 	public abstract <CommandSourceStack> T parseArgument(NMS<CommandSourceStack> nms,
-			CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException;
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException;
 
 	/////////////////
 	// Suggestions //

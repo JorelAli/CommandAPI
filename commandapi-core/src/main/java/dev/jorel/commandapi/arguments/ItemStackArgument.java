@@ -53,7 +53,7 @@ public class ItemStackArgument extends SafeOverrideableArgument<ItemStack, ItemS
 	
 	@Override
 	public <CommandListenerWrapper> ItemStack parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getItemStack(cmdCtx, key);
 	}
 }

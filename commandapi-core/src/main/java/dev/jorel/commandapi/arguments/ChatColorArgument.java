@@ -57,7 +57,7 @@ public class ChatColorArgument extends SafeOverrideableArgument<ChatColor, ChatC
 	
 	@Override
 	public <CommandListenerWrapper> ChatColor parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getChatColor(cmdCtx, key);
 	}
 }

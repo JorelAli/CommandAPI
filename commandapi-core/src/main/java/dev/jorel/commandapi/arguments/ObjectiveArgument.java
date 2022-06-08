@@ -53,7 +53,7 @@ public class ObjectiveArgument extends SafeOverrideableArgument<String, Objectiv
 	
 	@Override
 	public <CommandListenerWrapper> String parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getObjective(cmdCtx, key);
 	}
 }

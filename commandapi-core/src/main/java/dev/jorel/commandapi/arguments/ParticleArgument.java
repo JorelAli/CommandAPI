@@ -53,7 +53,7 @@ public class ParticleArgument extends SafeOverrideableArgument<ParticleData, Par
 	
 	@Override
 	public <CommandListenerWrapper> ParticleData<?> parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getParticle(cmdCtx, key);
 	}
 }

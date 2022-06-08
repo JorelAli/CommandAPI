@@ -52,7 +52,7 @@ public class IntegerRangeArgument extends SafeOverrideableArgument<IntegerRange,
 	
 	@Override
 	public <CommandListenerWrapper> IntegerRange parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getIntRange(cmdCtx, key);
 	}
 }

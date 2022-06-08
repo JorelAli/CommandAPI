@@ -60,7 +60,7 @@ public class AdventureChatComponentArgument extends Argument<Component> {
 	
 	@Override
 	public <CommandListenerWrapper> Component parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getAdventureChatComponent(cmdCtx, key);
 	}
 }

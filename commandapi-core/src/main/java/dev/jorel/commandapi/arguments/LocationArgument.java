@@ -77,7 +77,7 @@ public class LocationArgument extends SafeOverrideableArgument<Location, Locatio
 	
 	@Override
 	public <CommandListenerWrapper> Location parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return isPrecise ? nms.getLocationPrecise(cmdCtx, key) : nms.getLocationBlock(cmdCtx, key);
 	}
 }

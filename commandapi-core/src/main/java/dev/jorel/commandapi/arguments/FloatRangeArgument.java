@@ -52,7 +52,7 @@ public class FloatRangeArgument extends SafeOverrideableArgument<FloatRange, Flo
 	
 	@Override
 	public <CommandListenerWrapper> FloatRange parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getFloatRange(cmdCtx, key);
 	}
 }

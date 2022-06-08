@@ -89,8 +89,9 @@ public class CustomArgument<T> extends Argument<T> {
 		return CommandAPIArgumentType.CUSTOM;
 	}
 	
-	public <CommandListenerWrapper> Object parseCustomArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArguments) throws CommandSyntaxException {
+	@Override
+	public <CommandListenerWrapper> T parseArgument(NMS<CommandListenerWrapper> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		String customresult;
 		if(this.keyed) {
 			customresult = nms.getKeyedAsString(cmdCtx, key);
@@ -99,7 +100,7 @@ public class CustomArgument<T> extends Argument<T> {
 		}
 		
 		try {
-			CustomArgumentInfo info = new CustomArgumentInfo(nms.getCommandSenderFromCSS(cmdCtx.getSource()), previousArguments, 
+			CustomArgumentInfo info = new CustomArgumentInfo(nms.getCommandSenderFromCSS(cmdCtx.getSource()), previousArgs, 
 					customresult);
 			return infoParser.apply(info);
 		} catch (CustomArgumentException e) {
@@ -112,12 +113,6 @@ public class CustomArgument<T> extends Argument<T> {
 				return errorMsg;
 			}).create();
 		}
-	}
-	
-	@Override
-	public <CommandListenerWrapper> T parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		throw new RuntimeException("parseArgument() is not implemented for CustomArgument. Did you mean parseCustomArgument()?");
 	}
 	
 	/**
