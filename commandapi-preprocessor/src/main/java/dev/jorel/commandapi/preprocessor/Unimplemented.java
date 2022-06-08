@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2018, 2021 Jorel Ali (Skepter) - MIT License
+ * Copyright 2018, 2020 Jorel Ali (Skepter) - MIT License
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -18,21 +18,42 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-import java.util.Map;
-import java.util.Optional;
+package dev.jorel.commandapi.preprocessor;
 
-import org.bukkit.craftbukkit.v1_17_R1.help.SimpleHelpMap;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import com.mojang.brigadier.CommandDispatcher;
+/**
+ * Literally just a fancy comment that I can put next to stuff to know why
+ * something wasn't implemented. Retention Policy is source, so it doesn't get
+ * carried over to the compiled code. Again, literally just a fancy comment.
+ */
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.SOURCE)
+public @interface Unimplemented {
 
-import dev.jorel.commandapi.preprocessor.RequireField;
-import net.minecraft.commands.arguments.selector.EntitySelector;
-import net.minecraft.server.CustomFunctionManager;
-import net.minecraft.world.level.gameevent.EntityPositionSource;
+	/**
+	 * A reason why this method hasn't been implemented
+	 * 
+	 * @return a reason why this method hasn't been implemented
+	 */
+	REASON[] because();
 
-//Spigot-Mapped reflection
-@RequireField(in = CustomFunctionManager.class, name = "i", ofType = CommandDispatcher.class)
-@RequireField(in = EntitySelector.class, name = "o", ofType = boolean.class)
-@RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
-@RequireField(in = EntityPositionSource.class, name = "d", ofType = Optional.class)
-public class SafeReflect {}
+	String from() default "";
+
+	String to() default "";
+
+	String in() default "";
+
+	String introducedIn() default "";
+
+	String classNamed() default "";
+
+	enum REASON {
+		REQUIRES_CRAFTBUKKIT, NAME_CHANGED, VERSION_SPECIFIC_IMPLEMENTATION,
+		REQUIRES_CSS, REQUIRES_MINECRAFT_SERVER
+	}
+
+}

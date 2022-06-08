@@ -33,6 +33,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -45,7 +46,6 @@ import org.bukkit.Color;
 import org.bukkit.Keyed;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.Particle.DustTransition;
@@ -71,6 +71,7 @@ import org.bukkit.craftbukkit.v1_19_R1.enchantments.CraftEnchantment;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_19_R1.help.CustomHelpTopic;
+import org.bukkit.craftbukkit.v1_19_R1.help.SimpleHelpMap;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_19_R1.potion.CraftPotionEffectType;
 import org.bukkit.craftbukkit.v1_19_R1.util.CraftChatMessage;
@@ -109,8 +110,6 @@ import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import io.papermc.paper.text.PaperComponents;
 import net.kyori.adventure.text.Component;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
@@ -120,7 +119,6 @@ import net.minecraft.commands.arguments.ColorArgument;
 import net.minecraft.commands.arguments.ComponentArgument;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.EntitySummonArgument;
-import net.minecraft.commands.arguments.GameProfileArgument;
 import net.minecraft.commands.arguments.ItemEnchantmentArgument;
 import net.minecraft.commands.arguments.MessageArgument;
 import net.minecraft.commands.arguments.MobEffectArgument;
@@ -189,6 +187,7 @@ import net.minecraft.world.phys.Vec3;
 public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 
 	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
+	private static final VarHandle SimpleHelpMap_helpTopics;
 	private static final VarHandle EntityPositionSource_sourceEntity;
 
 	// From net.minecraft.server.commands.LocateCommand
@@ -200,13 +199,17 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
+		VarHandle shm_ht = null;
 		VarHandle eps_se = null;
 		try {
+			shm_ht = MethodHandles.privateLookupIn(SimpleHelpMap.class, MethodHandles.lookup())
+					.findVarHandle(SimpleHelpMap.class, "helpTopics", Map.class);
 			eps_se = MethodHandles.privateLookupIn(EntityPositionSource.class, MethodHandles.lookup())
 					.findVarHandle(EntityPositionSource.class, "c", Either.class);
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
+		SimpleHelpMap_helpTopics = shm_ht;
 		EntityPositionSource_sourceEntity = eps_se;
 		ERROR_BIOME_INVALID = new DynamicCommandExceptionType(
 				arg -> net.minecraft.network.chat.Component.translatable("commands.locate.biome.invalid", arg));
@@ -263,6 +266,17 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 	@Override
 	public ArgumentType<?> _ArgumentSyntheticBiome() {
 		return ResourceOrTagLocationArgument.resourceOrTag(Registry.BIOME_REGISTRY);
+	}
+	
+	@Override
+	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
+		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) SimpleHelpMap_helpTopics
+				.get(Bukkit.getServer().getHelpMap());
+		// We have to use VarHandles to use helpTopics.put (instead of .addTopic)
+		// because we're updating an existing help topic, not adding a new help topic
+		for (Map.Entry<String, HelpTopic> entry : helpTopicsToAdd.entrySet()) {
+			helpTopics.put(entry.getKey(), entry.getValue());
+		}
 	}
 
 	@Override
@@ -383,19 +397,8 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 	}
 
 	@Override
-	public BaseComponent[] getChat(CommandContext<CommandSourceStack> cmdCtx, String key)
-			throws CommandSyntaxException {
-		return ComponentSerializer.parse(Serializer.toJson(MessageArgument.getMessage(cmdCtx, key)));
-	}
-
-	@Override
 	public ChatColor getChatColor(CommandContext<CommandSourceStack> cmdCtx, String str) {
 		return CraftChatMessage.getColor(ColorArgument.getColor(cmdCtx, str));
-	}
-
-	@Override
-	public BaseComponent[] getChatComponent(CommandContext<CommandSourceStack> cmdCtx, String str) {
-		return ComponentSerializer.parse(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, str)));
 	}
 
 	@Override
@@ -558,18 +561,6 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 		return ObjectiveCriteriaArgument.getCriteria(cmdCtx, key).getName();
 	}
 
-	@Override
-	public OfflinePlayer getOfflinePlayer(CommandContext<CommandSourceStack> cmdCtx, String str)
-			throws CommandSyntaxException {
-		OfflinePlayer target = Bukkit
-				.getOfflinePlayer(GameProfileArgument.getGameProfiles(cmdCtx, str).iterator().next().getId());
-		if (target == null) {
-			throw GameProfileArgument.ERROR_UNKNOWN_PLAYER.create();
-		} else {
-			return target;
-		}
-	}
-
 	@Differs(from = "1.18.2", by = "VibrationParticleOption, ShriekParticleOption, SculkChargeParticleOptions")
 	@Override
 	public ParticleData<?> getParticle(CommandContext<CommandSourceStack> cmdCtx, String str) {
@@ -649,16 +640,6 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 		}
 		CommandAPI.getLogger().warning("Invalid particle data type for " + particle.getDataType().toString());
 		return new ParticleData<Void>(particle, null);
-	}
-
-	@Override
-	public Player getPlayer(CommandContext<CommandSourceStack> cmdCtx, String str) throws CommandSyntaxException {
-		Player target = Bukkit.getPlayer(GameProfileArgument.getGameProfiles(cmdCtx, str).iterator().next().getId());
-		if (target == null) {
-			throw GameProfileArgument.ERROR_UNKNOWN_PLAYER.create();
-		} else {
-			return target;
-		}
 	}
 
 	@Override

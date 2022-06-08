@@ -84,6 +84,13 @@
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-nms-common</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
