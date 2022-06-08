@@ -154,7 +154,7 @@ Next, we declare our dependencies:
 
 ```gradle
 dependencies {
-    compile "dev.jorel:commandapi-shade:8.3.0"
+    implementation "dev.jorel:commandapi-shade:8.3.0"
 }
 ```
 
