@@ -816,7 +816,7 @@ new CommandAPICommand("rem")
 void b(){
 /* ANCHOR: nbtcompoundarguments */
 new CommandAPICommand("award")
-    .withArguments(new NBTCompoundArgument("nbt"))
+    .withArguments(new NBTCompoundArgument<NBTContainer>("nbt", NBTContainer.class, NBTContainer::new))
     .executes((sender, args) -> {
         NBTContainer nbt = (NBTContainer) args[0];
         

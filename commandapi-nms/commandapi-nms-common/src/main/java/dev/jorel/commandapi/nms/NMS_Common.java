@@ -34,6 +34,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.bukkit.Axis;
@@ -67,7 +68,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 
-import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.EntitySelector;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
@@ -428,10 +428,11 @@ public abstract class NMS_Common<T> implements NMS<T> {
 		ArgumentMathOperation.a(cmdCtx, key);
 		return MathOperation.fromString(CommandAPIHandler.getRawArgumentInput(cmdCtx, key));
 	}
-
+	
 	@Override
-	public final NBTContainer getNBTCompound(CommandContext cmdCtx, String key) {
-		return new NBTContainer(ArgumentNBTTag.a(cmdCtx, key));
+	public <NBTContainer> Object getNBTCompound(CommandContext<T> cmdCtx, String key,
+			Function<Object, NBTContainer> nbtContainerConstructor) {
+		return nbtContainerConstructor.apply(ArgumentNBTTag.a(cmdCtx, key));
 	}
 
 	@Override

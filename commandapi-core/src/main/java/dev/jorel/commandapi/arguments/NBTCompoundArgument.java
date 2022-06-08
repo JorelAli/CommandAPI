@@ -20,39 +20,87 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import java.util.function.Function;
+
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
 
 /**
- * An argument that represents an NBTContainer from the NBTAPI
+ * An argument that represents an NBTContainer from the NBT API
  */
-public class NBTCompoundArgument extends SafeOverrideableArgument<NBTContainer, NBTContainer> {
+public class NBTCompoundArgument<NBTContainer> extends SafeOverrideableArgument<NBTContainer, NBTContainer> {
+
+	private static Class<?> nbtContainerClass;
+	private static Function<Object, ?> nbtContainerConstructor;
 
 	/**
-	 * An NBT Compound Argument. Represents Minecraft's NBT Compound Tag using the NBT API
+	 * Initializes the NBTCompoundArgument with an instance of the NBT API's
+	 * NBTContainer class and NBTContainer constructor
+	 * 
+	 * @param <NBTContainer>
+	 * @param nbtContainerClass       the NBTContainer class that you'd like to use.
+	 *                                This is typically {@code NBTContainer.class}
+	 * @param nbtContainerConstructor the constructor of the NBTContainer class, as
+	 *                                a function. This is typically
+	 *                                {@code NBTContainer::new}
+	 */
+	public static <NBTContainer> void initializeNBTCompoundArgument(Class<NBTContainer> nbtContainerClass,
+			Function<Object, NBTContainer> nbtContainerConstructor) {
+		NBTCompoundArgument.nbtContainerClass = nbtContainerClass;
+		NBTCompoundArgument.nbtContainerConstructor = nbtContainerConstructor;
+	}
+
+	/**
+	 * An NBT Compound Argument. Represents Minecraft's NBT Compound Tag using the
+	 * NBT API
+	 * 
 	 * @param nodeName the name of the node for this argument
 	 */
 	public NBTCompoundArgument(String nodeName) {
 		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentNBTCompound(), NBTContainer::toString);
+		if (NBTCompoundArgument.nbtContainerClass == null || NBTCompoundArgument.nbtContainerConstructor == null) {
+			throw new NullPointerException(
+					"The NBTCompoundargument hasn't been initialized properly! Use NBTCompoundArgument.initializeNBTCompoundArgument()");
+		}
 	}
-	
+
+	/**
+	 * An NBT Compound Argument. Represents Minecraft's NBT Compound Tag using the
+	 * NBT API
+	 * 
+	 * @param nodeName                the name of the node for this argument
+	 * @param nbtContainerClass       the NBTContainer class that you'd like to use.
+	 *                                This is typically {@code NBTContainer.class}
+	 * @param nbtContainerConstructor the constructor of the NBTContainer class, as
+	 *                                a function. This is typically
+	 *                                {@code NBTContainer::new}
+	 */
+	public NBTCompoundArgument(String nodeName, Class<NBTContainer> nbtContainerClass,
+			Function<Object, NBTContainer> nbtContainerConstructor) {
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentNBTCompound(), NBTContainer::toString);
+		NBTCompoundArgument.nbtContainerClass = nbtContainerClass;
+		NBTCompoundArgument.nbtContainerConstructor = nbtContainerConstructor;
+	}
+
+	@SuppressWarnings("unchecked")
 	@Override
 	public Class<NBTContainer> getPrimitiveType() {
-		return NBTContainer.class;
+		return (Class<NBTContainer>) nbtContainerClass;
 	}
-	
+
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.NBT_COMPOUND;
 	}
-	
+
+	@SuppressWarnings("unchecked")
 	@Override
 	public <CommandListenerWrapper> NBTContainer parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return nms.getNBTCompound(cmdCtx, key);
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
+			throws CommandSyntaxException {
+		return (NBTContainer) nms.getNBTCompound(cmdCtx, key, nbtContainerConstructor);
 	}
 }

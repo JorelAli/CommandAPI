@@ -63,7 +63,6 @@
 			<groupId>de.tr7zw</groupId>
 			<artifactId>item-nbt-api-plugin</artifactId>
 			<version>${nbtapi.version}</version>
-			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
@@ -81,6 +80,7 @@
 						<configuration>
 							<artifactSet>
 								<includes>
+									<include>de.tr7zw:item-nbt-api-plugin</include>
 									<include>dev.jorel:commandapi-core</include>
 									<include>dev.jorel:commandapi-vh</include>
 									<include>dev.jorel:commandapi-nms-common</include>
@@ -110,6 +110,13 @@
 									</excludes>
 								</filter>
 							</filters>
+							<relocations>
+								<relocation>
+									<pattern>dev.jorel.commandapi</pattern>
+									<!-- TODO: Change this to my own package name -->
+									<shadedPattern>my.custom.package.commandapi</shadedPattern>
+								</relocation>
+							</relocations>
 						</configuration>
 					</execution>
 				</executions>

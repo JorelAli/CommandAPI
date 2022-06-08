@@ -162,6 +162,8 @@ public class CommandAPIHandler<CommandSourceStack> {
 
 		// Checks other dependencies
 		try {
+			// TODO: Add a hook for this in the CommandAPIConfig or something
+			// Don't do the mega derpy NBT argument generic thing
 			Class.forName("de.tr7zw.nbtapi.NBTContainer");
 			CommandAPI.logNormal("Hooked into the NBTAPI successfully.");
 		} catch(ClassNotFoundException e) {
