@@ -62,7 +62,6 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
-import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.ICustomProvidedArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
@@ -261,11 +260,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 				List<String>[] entityNamesForArgs = new List[args.length];
 				
 				for(int i = 0; i < args.length; i++) {
-					if(args[i] instanceof EntitySelectorArgument<?> entitySelectorArg) {
-						entityNamesForArgs[i] = entitySelectorArg.getEntityNames(argObjs[i]);
-					} else {
-						entityNamesForArgs[i] = Arrays.asList(new String[] { null });
-					}
+					entityNamesForArgs[i] = args[i].getEntityNames(argObjs[i]);
 				}
 				
 				List<List<String>> product = CartesianProduct.getDescartes(Arrays.asList(entityNamesForArgs));

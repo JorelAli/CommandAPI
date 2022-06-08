@@ -25,7 +25,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
+import dev.jorel.commandapi.arguments.EntitySelector;
 
 @Primitive({ "java.util.Collection<org.bukkit.entity.Entity>", // MANY_ENTITIES
 		"java.util.Collection<org.bukkit.entity.Player>", // MANY_PLAYERS

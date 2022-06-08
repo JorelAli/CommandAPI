@@ -244,7 +244,7 @@ public class NMS_1_13_2 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public ArgumentType<?> _ArgumentEntity(
-			dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector selector) {
+			dev.jorel.commandapi.arguments.EntitySelector selector) {
 		return switch (selector) {
 			case MANY_ENTITIES -> ArgumentEntity.b();
 			case MANY_PLAYERS -> ArgumentEntity.d();
@@ -549,7 +549,7 @@ public class NMS_1_13_2 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String str,
-			dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector selector)
+			dev.jorel.commandapi.arguments.EntitySelector selector)
 			throws CommandSyntaxException {
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
 		try {

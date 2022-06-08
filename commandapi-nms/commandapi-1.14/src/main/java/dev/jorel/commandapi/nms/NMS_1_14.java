@@ -245,7 +245,7 @@ public class NMS_1_14 extends NMSWrapper_1_14 {
 	@Differs(from = "1.13.2", by = "ArgumentEntity.b() -> ArgumentEntity.multipleEntities()")
 	@Override
 	public ArgumentType<?> _ArgumentEntity(
-			dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector selector) {
+			dev.jorel.commandapi.arguments.EntitySelector selector) {
 		return switch (selector) {
 			case MANY_ENTITIES -> ArgumentEntity.multipleEntities();
 			case MANY_PLAYERS -> ArgumentEntity.d();
@@ -553,7 +553,7 @@ public class NMS_1_14 extends NMSWrapper_1_14 {
 	@Differs(from = "1.13.2", by = "EntitySelector.b() -> EntitySelector.getEntities(). Now accesses EntitySelector.m -> EntitySelector.checkPermissions")
 	@Override
 	public Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String str,
-			dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector selector)
+			dev.jorel.commandapi.arguments.EntitySelector selector)
 			throws CommandSyntaxException {
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
 		try {

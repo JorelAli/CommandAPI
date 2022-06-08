@@ -20,6 +20,8 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -301,6 +303,24 @@ public abstract class Argument<T> extends ArgumentTree {
 	public Argument<T> setListed(boolean listed) {
 		this.isListed = listed;
 		return this;
+	}
+	
+	///////////
+	// Other //
+	///////////
+	
+	/**
+	 * Gets a list of entity names for the current provided argument. This is
+	 * expected to be implemented by EntitySelectorArgument, see
+	 * {@link EntitySelectorArgument#getEntityNames(Object)}
+	 * 
+	 * @param argument a parsed (Bukkit) object representing the entity selector
+	 *                 type. This is either a List, an Entity or a Player
+	 * @return a list of strings representing the names of the entity or entities
+	 *         from {@code argument}
+	 */
+	public List<String> getEntityNames(Object argument) {
+		return Arrays.asList(new String[] { null });
 	}
 	
 
