@@ -27,6 +27,14 @@
 	<packaging>pom</packaging>
 
 	<dependencies>
+		<!-- Common NMS for 1.17+ -->
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-nms-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- NMS-specific implementations -->
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-1.19</artifactId>

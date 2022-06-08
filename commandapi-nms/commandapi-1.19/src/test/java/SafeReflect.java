@@ -33,6 +33,8 @@ import net.minecraft.world.level.gameevent.EntityPositionSource;
 //Spigot-Mapped reflection
 @RequireField(in = CustomFunctionManager.class, name = "i", ofType = CommandDispatcher.class)
 @RequireField(in = EntitySelector.class, name = "o", ofType = boolean.class)
+
+// Inherited from NMS_Common
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
 @RequireField(in = EntityPositionSource.class, name = "c", ofType = Either.class)
 public class SafeReflect {}

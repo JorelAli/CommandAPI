@@ -67,6 +67,7 @@
 								<includes>
 									<include>dev.jorel:commandapi-core</include>
 									<include>dev.jorel:commandapi-vh</include>
+									<include>dev.jorel:commandapi-nms-common</include>
 									<include>dev.jorel:commandapi-1.13</include>
 									<include>dev.jorel:commandapi-1.13.1</include>
 									<include>dev.jorel:commandapi-1.13.2</include>

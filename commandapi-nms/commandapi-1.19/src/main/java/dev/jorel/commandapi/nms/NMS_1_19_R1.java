@@ -29,20 +29,16 @@ import java.lang.invoke.VarHandle;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
-import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -59,7 +55,6 @@ import org.bukkit.Vibration.Destination;
 import org.bukkit.Vibration.Destination.BlockDestination;
 import org.bukkit.Vibration.Destination.EntityDestination;
 import org.bukkit.World;
-import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -76,7 +71,6 @@ import org.bukkit.craftbukkit.v1_19_R1.enchantments.CraftEnchantment;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_19_R1.help.CustomHelpTopic;
-import org.bukkit.craftbukkit.v1_19_R1.help.SimpleHelpMap;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_19_R1.potion.CraftPotionEffectType;
 import org.bukkit.craftbukkit.v1_19_R1.util.CraftChatMessage;
@@ -101,7 +95,6 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
 
-import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
@@ -109,31 +102,22 @@ import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.wrappers.ComplexRecipeImpl;
-import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
-import dev.jorel.commandapi.wrappers.IntegerRange;
 import dev.jorel.commandapi.wrappers.Location2D;
-import dev.jorel.commandapi.wrappers.MathOperation;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import dev.jorel.commandapi.wrappers.ParticleData;
-import dev.jorel.commandapi.wrappers.Rotation;
-import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import io.papermc.paper.text.PaperComponents;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
-import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.commands.arguments.AngleArgument;
 import net.minecraft.commands.arguments.ColorArgument;
 import net.minecraft.commands.arguments.ComponentArgument;
-import net.minecraft.commands.arguments.CompoundTagArgument;
-import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.EntitySummonArgument;
 import net.minecraft.commands.arguments.GameProfileArgument;
@@ -142,23 +126,15 @@ import net.minecraft.commands.arguments.MessageArgument;
 import net.minecraft.commands.arguments.MobEffectArgument;
 import net.minecraft.commands.arguments.ObjectiveArgument;
 import net.minecraft.commands.arguments.ObjectiveCriteriaArgument;
-import net.minecraft.commands.arguments.OperationArgument;
 import net.minecraft.commands.arguments.ParticleArgument;
-import net.minecraft.commands.arguments.RangeArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.commands.arguments.ResourceOrTagLocationArgument;
 import net.minecraft.commands.arguments.ResourceOrTagLocationArgument.Result;
-import net.minecraft.commands.arguments.ScoreHolderArgument;
-import net.minecraft.commands.arguments.ScoreboardSlotArgument;
 import net.minecraft.commands.arguments.TeamArgument;
-import net.minecraft.commands.arguments.TimeArgument;
-import net.minecraft.commands.arguments.UuidArgument;
 import net.minecraft.commands.arguments.blocks.BlockPredicateArgument;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.commands.arguments.coordinates.ColumnPosArgument;
-import net.minecraft.commands.arguments.coordinates.RotationArgument;
-import net.minecraft.commands.arguments.coordinates.SwizzleArgument;
 import net.minecraft.commands.arguments.coordinates.Vec2Argument;
 import net.minecraft.commands.arguments.coordinates.Vec3Argument;
 import net.minecraft.commands.arguments.item.FunctionArgument;
@@ -209,12 +185,10 @@ import net.minecraft.world.phys.Vec3;
 @NMSMeta(compatibleWith = "1.19")
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
-@RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
 @RequireField(in = EntityPositionSource.class, name = "entityOrUuidOrId", ofType = Either.class)
-public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
+public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 
 	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
-	private static final VarHandle SimpleHelpMap_helpTopics;
 	private static final VarHandle EntityPositionSource_sourceEntity;
 
 	// From net.minecraft.server.commands.LocateCommand
@@ -226,17 +200,13 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
-		VarHandle shm_ht = null;
 		VarHandle eps_se = null;
 		try {
-			shm_ht = MethodHandles.privateLookupIn(SimpleHelpMap.class, MethodHandles.lookup())
-					.findVarHandle(SimpleHelpMap.class, "helpTopics", Map.class);
 			eps_se = MethodHandles.privateLookupIn(EntityPositionSource.class, MethodHandles.lookup())
 					.findVarHandle(EntityPositionSource.class, "c", Either.class);
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
-		SimpleHelpMap_helpTopics = shm_ht;
 		EntityPositionSource_sourceEntity = eps_se;
 		ERROR_BIOME_INVALID = new DynamicCommandExceptionType(
 				arg -> net.minecraft.network.chat.Component.translatable("commands.locate.biome.invalid", arg));
@@ -255,16 +225,6 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 		return NamespacedKey.fromString(key.getNamespace() + ":" + key.getPath());
 	}
 
-	@Override
-	public ArgumentType<?> _ArgumentAngle() {
-		return AngleArgument.angle();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentAxis() {
-		return SwizzleArgument.swizzle();
-	}
-
 	@Differs(from = "1.18.2", by = "Adds COMMAND_BUILD_CONTEXT")
 	@Override
 	public ArgumentType<?> _ArgumentBlockPredicate() {
@@ -278,31 +238,6 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public ArgumentType<?> _ArgumentChat() {
-		return MessageArgument.message();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentChatComponent() {
-		return ComponentArgument.textComponent();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentChatFormat() {
-		return ColorArgument.color();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentDimension() {
-		return DimensionArgument.dimension();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentEnchantment() {
-		return ItemEnchantmentArgument.enchantment();
-	}
-
-	@Override
 	public ArgumentType<?> _ArgumentEntity(
 			dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector selector) {
 		return switch (selector) {
@@ -311,21 +246,6 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 			case ONE_ENTITY -> EntityArgument.entity();
 			case ONE_PLAYER -> EntityArgument.player();
 		};
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentEntitySummon() {
-		return EntitySummonArgument.id();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentFloatRange() {
-		return RangeArgument.floatRange();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentIntRange() {
-		return RangeArgument.intRange();
 	}
 
 	@Differs(from = "1.18.2", by = "Adds COMMAND_BUILD_CONTEXT")
@@ -341,114 +261,8 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public ArgumentType<?> _ArgumentMathOperation() {
-		return OperationArgument.operation();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentMinecraftKeyRegistered() {
-		return ResourceLocationArgument.id();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentMobEffect() {
-		return MobEffectArgument.effect();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentNBTCompound() {
-		return CompoundTagArgument.compoundTag();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentParticle() {
-		return ParticleArgument.particle();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentPosition() {
-		return BlockPosArgument.blockPos();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentPosition2D() {
-		return ColumnPosArgument.columnPos();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentProfile() {
-		return GameProfileArgument.gameProfile();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentRotation() {
-		return RotationArgument.rotation();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentScoreboardCriteria() {
-		return ObjectiveCriteriaArgument.criteria();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentScoreboardObjective() {
-		return ObjectiveArgument.objective();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentScoreboardSlot() {
-		return ScoreboardSlotArgument.displaySlot();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentScoreboardTeam() {
-		return TeamArgument.team();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentScoreholder(boolean single) {
-		return single ? ScoreHolderArgument.scoreHolder() : ScoreHolderArgument.scoreHolders();
-	}
-
-	@Override
 	public ArgumentType<?> _ArgumentSyntheticBiome() {
 		return ResourceOrTagLocationArgument.resourceOrTag(Registry.BIOME_REGISTRY);
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentTag() {
-		return FunctionArgument.functions();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentTime() {
-		return TimeArgument.time();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentUUID() {
-		return UuidArgument.uuid();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentVec2() {
-		return Vec2Argument.vec2();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentVec3() {
-		return Vec3Argument.vec3();
-	}
-
-	@Override
-	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
-		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) SimpleHelpMap_helpTopics
-				.get(Bukkit.getServer().getHelpMap());
-		// We have to use VarHandles to use helpTopics.put (instead of .addTopic)
-		// because we're updating an existing help topic, not adding a new help topic
-		for (Map.Entry<String, HelpTopic> entry : helpTopicsToAdd.entrySet()) {
-			helpTopics.put(entry.getKey(), entry.getValue());
-		}
 	}
 
 	@Override
@@ -464,16 +278,6 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 	@Override
 	public String convert(ParticleData<?> particle) {
 		return CraftParticle.toNMS(particle.particle(), particle.data()).writeToString();
-	}
-
-	@Override
-	public String convert(PotionEffectType potion) {
-		return potion.getName().toLowerCase(Locale.ENGLISH);
-	}
-
-	@Override
-	public String convert(Sound sound) {
-		return sound.getKey().toString();
 	}
 
 	// Converts NMS function to SimpleFunctionWrapper
@@ -503,12 +307,6 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 		return new CustomHelpTopic(commandName, shortDescription, fullDescription, permission);
 	}
 
-	@Override
-	public org.bukkit.advancement.Advancement getAdvancement(CommandContext<CommandSourceStack> cmdCtx, String key)
-			throws CommandSyntaxException {
-		return ResourceLocationArgument.getAdvancement(cmdCtx, key).bukkit;
-	}
-
 	@SuppressWarnings("removal")
 	@Override
 	public Component getAdventureChat(CommandContext<CommandSourceStack> cmdCtx, String key)
@@ -521,25 +319,6 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 	public Component getAdventureChatComponent(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		return PaperComponents.gsonSerializer()
 				.deserialize(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, key)));
-	}
-
-	@Override
-	public float getAngle(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		return AngleArgument.getAngle(cmdCtx, key);
-	}
-
-	@Override
-	public EnumSet<Axis> getAxis(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		EnumSet<Axis> set = EnumSet.noneOf(Axis.class);
-		EnumSet<net.minecraft.core.Direction.Axis> parsedEnumSet = SwizzleArgument.getSwizzle(cmdCtx, key);
-		for (net.minecraft.core.Direction.Axis element : parsedEnumSet) {
-			set.add(switch (element) {
-				case X -> Axis.X;
-				case Y -> Axis.Y;
-				case Z -> Axis.Z;
-			});
-		}
-		return set;
 	}
 
 	@Differs(from = "1.18.2", by = "Biomes now go via the registry. Also have to manually implement ERROR_BIOME_INVALID")
@@ -634,12 +413,6 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public Environment getDimension(CommandContext<CommandSourceStack> cmdCtx, String key)
-			throws CommandSyntaxException {
-		return DimensionArgument.getDimension(cmdCtx, key).getWorld().getEnvironment();
-	}
-
-	@Override
 	public Enchantment getEnchantment(CommandContext<CommandSourceStack> cmdCtx, String str) {
 		return new CraftEnchantment(ItemEnchantmentArgument.getEnchantment(cmdCtx, str));
 	}
@@ -698,14 +471,6 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public FloatRange getFloatRange(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		MinMaxBounds.Doubles range = RangeArgument.Floats.getRange(cmdCtx, key);
-		double low = range.getMin() == null ? -Float.MAX_VALUE : range.getMin();
-		double high = range.getMax() == null ? Float.MAX_VALUE : range.getMax();
-		return new FloatRange((float) low, (float) high);
-	}
-
-	@Override
 	public FunctionWrapper[] getFunction(CommandContext<CommandSourceStack> cmdCtx, String str)
 			throws CommandSyntaxException {
 		List<FunctionWrapper> result = new ArrayList<>();
@@ -734,14 +499,6 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public IntegerRange getIntRange(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		MinMaxBounds.Ints range = RangeArgument.Ints.getRange(cmdCtx, key);
-		int low = range.getMin() == null ? Integer.MIN_VALUE : range.getMin();
-		int high = range.getMax() == null ? Integer.MAX_VALUE : range.getMax();
-		return new IntegerRange(low, high);
-	}
-
-	@Override
 	public org.bukkit.inventory.ItemStack getItemStack(CommandContext<CommandSourceStack> cmdCtx, String str)
 			throws CommandSyntaxException {
 		return CraftItemStack.asBukkitCopy(ItemArgument.getItem(cmdCtx, str).createItemStack(1, false));
@@ -753,12 +510,6 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 		// Not inside the lambda because getItemPredicate throws CommandSyntaxException
 		Predicate<ItemStack> predicate = ItemPredicateArgument.getItemPredicate(cmdCtx, key);
 		return item -> predicate.test(CraftItemStack.asNMSCopy(item));
-	}
-
-	@Override
-	public String getKeyedAsString(CommandContext<CommandSourceStack> cmdCtx, String key)
-			throws CommandSyntaxException {
-		return ResourceLocationArgument.getId(cmdCtx, key).toString();
 	}
 
 	@Differs(from = "1.18.2", by = "blockPos.x -> blockPos.x(); blockPos.z -> blockPos.z()")
@@ -795,19 +546,6 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 		ResourceLocation resourceLocation = ResourceLocationArgument.getId(cmdCtx, str);
 		return new CraftLootTable(fromResourceLocation(resourceLocation),
 				MINECRAFT_SERVER.getLootTables().get(resourceLocation));
-	}
-
-	@Override
-	public MathOperation getMathOperation(CommandContext<CommandSourceStack> cmdCtx, String key)
-			throws CommandSyntaxException {
-		// We run this to ensure the argument exists/parses properly
-		OperationArgument.getOperation(cmdCtx, key);
-		return MathOperation.fromString(CommandAPIHandler.getRawArgumentInput(cmdCtx, key));
-	}
-
-	@Override
-	public NBTContainer getNBTCompound(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		return new NBTContainer(CompoundTagArgument.getCompoundTag(cmdCtx, key));
 	}
 
 	@Override
@@ -937,29 +675,6 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public Rotation getRotation(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		Vec2 rotation = RotationArgument.getRotation(cmdCtx, key).getRotation(cmdCtx.getSource());
-		return new Rotation(rotation.x, rotation.y);
-	}
-
-	@Override
-	public ScoreboardSlot getScoreboardSlot(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		return new ScoreboardSlot(ScoreboardSlotArgument.getDisplaySlot(cmdCtx, key));
-	}
-
-	@Override
-	public Collection<String> getScoreHolderMultiple(CommandContext<CommandSourceStack> cmdCtx, String key)
-			throws CommandSyntaxException {
-		return ScoreHolderArgument.getNames(cmdCtx, key);
-	}
-
-	@Override
-	public String getScoreHolderSingle(CommandContext<CommandSourceStack> cmdCtx, String key)
-			throws CommandSyntaxException {
-		return ScoreHolderArgument.getName(cmdCtx, key);
-	}
-
-	@Override
 	public CommandSender getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean isNative) {
 		CommandSourceStack css = cmdCtx.getSource();
 
@@ -1031,16 +746,6 @@ public class NMS_1_19_R1 implements NMS<CommandSourceStack> {
 	@Override
 	public String getTeam(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		return TeamArgument.getTeam(cmdCtx, key).getName();
-	}
-
-	@Override
-	public int getTime(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		return (Integer) cmdCtx.getArgument(key, Integer.class);
-	}
-
-	@Override
-	public UUID getUUID(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		return UuidArgument.getUuid(cmdCtx, key);
 	}
 
 	@Override
