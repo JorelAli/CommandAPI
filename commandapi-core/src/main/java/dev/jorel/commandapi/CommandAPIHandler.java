@@ -161,15 +161,13 @@ public class CommandAPIHandler<CommandSourceStack> {
 		CommandAPI.logInfo("Hooked into NMS " + NMS.getClass().getName() + " (compatible with " + String.join(", ", NMS.compatibleVersions()) + ")");
 
 		// Checks other dependencies
-		try {
-			// TODO: Add a hook for this in the CommandAPIConfig or something
-			// Don't do the mega derpy NBT argument generic thing
-			Class.forName("de.tr7zw.nbtapi.NBTContainer");
-			CommandAPI.logNormal("Hooked into the NBTAPI successfully.");
-		} catch(ClassNotFoundException e) {
+		Class<?> nbtContainerClass = CommandAPI.getConfiguration().getNBTContainerClass();
+		if(nbtContainerClass != null && CommandAPI.getConfiguration().getNBTContainerConstructor() != null) {
+			CommandAPI.logNormal("Hooked into an NBT API with class " + nbtContainerClass.getName());
+		} else {
 			if(CommandAPI.getConfiguration().hasVerboseOutput()) {
 				CommandAPI.logWarning(
-					"Could not hook into the NBTAPI for NBT support. Download it from https://www.spigotmc.org/resources/nbt-api.7939/");
+					"Could not hook into the NBT API for NBT support. Download it from https://www.spigotmc.org/resources/nbt-api.7939/");
 			}
 		}
 

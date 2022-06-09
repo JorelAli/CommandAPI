@@ -25,13 +25,15 @@ import java.util.Map.Entry;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import de.tr7zw.changeme.nbtapi.NBTContainer;
+
 public class CommandAPIMain extends JavaPlugin {
 	
 	@Override
 	public void onLoad() {
 		//Config loading
 		saveDefaultConfig();
-		CommandAPI.config = new Config(getConfig());
+		CommandAPI.config = new InternalConfig(getConfig(), NBTContainer.class, NBTContainer::new);
 		CommandAPI.dispatcherFile = new File(getDataFolder(), "command_registration.json");
 		CommandAPI.logger = getLogger();
 		

@@ -181,6 +181,8 @@ import net.minecraft.server.v1_16_R3.SystemUtils;
 import net.minecraft.server.v1_16_R3.Vec2F;
 import net.minecraft.server.v1_16_R3.Vec3D;
 
+abstract class NMSWrapper_1_16_4_R3 implements NMS<CommandListenerWrapper> {}
+
 @NMSMeta(compatibleWith = "1.16.4")
 @RequireField(in = DataPackResources.class, name = "i", ofType = CustomFunctionManager.class)
 @RequireField(in = DataPackResources.class, name = "b", ofType = IReloadableResourceManager.class)
@@ -190,7 +192,7 @@ import net.minecraft.server.v1_16_R3.Vec3D;
 @RequireField(in = ParticleParamBlock.class, name = "c", ofType = IBlockData.class)
 @RequireField(in = ParticleParamItem.class, name = "c", ofType = ItemStack.class)
 @RequireField(in = ParticleParamRedstone.class, name = "g", ofType = float.class)
-public class NMS_1_16_4_R3 implements NMS<CommandListenerWrapper> {
+public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 
 	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
 	private static final VarHandle DATAPACKRESOURCES_B;

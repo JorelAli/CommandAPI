@@ -85,7 +85,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
-import de.tr7zw.nbtapi.NBTContainer;
+import de.tr7zw.changeme.nbtapi.NBTContainer;
 import dev.jorel.commandapi.Brigadier;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
@@ -816,7 +816,7 @@ new CommandAPICommand("rem")
 void b(){
 /* ANCHOR: nbtcompoundarguments */
 new CommandAPICommand("award")
-    .withArguments(new NBTCompoundArgument<NBTContainer>("nbt", NBTContainer.class, NBTContainer::new))
+    .withArguments(new NBTCompoundArgument<NBTContainer>("nbt"))
     .executes((sender, args) -> {
         NBTContainer nbt = (NBTContainer) args[0];
         

@@ -20,6 +20,8 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
+import java.util.function.Function;
+
 /**
  * A class to contain information about how to configure the CommandAPI during
  * its loading step.
@@ -32,6 +34,10 @@ public class CommandAPIConfig {
 	boolean silentLogs = false;
 	boolean useLatestNMSVersion = false;
 	String missingExecutorImplementationMessage = "This command has no implementations for %s";
+
+	// NBT API
+	Class<?> nbtContainerClass = null;
+	Function<Object, ?> nbtContainerConstructor = null;
 	
 	/**
 	 * Sets verbose output logging for the CommandAPI if true.
@@ -79,6 +85,12 @@ public class CommandAPIConfig {
 	 */
 	public CommandAPIConfig missingExecutorImplementationMessage(String value) {
 		this.missingExecutorImplementationMessage = value;
+		return this;
+	}
+	
+	public <T> CommandAPIConfig initializeNBTAPI(Class<T> nbtContainerClass, Function<Object, T> nbtContainerConstructor) {
+		this.nbtContainerClass = nbtContainerClass;
+		this.nbtContainerConstructor = nbtContainerConstructor;
 		return this;
 	}
 	

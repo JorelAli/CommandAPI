@@ -30,6 +30,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import de.tr7zw.changeme.nbtapi.NBTContainer;
 import dev.jorel.commandapi.arguments.AdvancementArgument;
 import dev.jorel.commandapi.arguments.AngleArgument;
 import dev.jorel.commandapi.arguments.Argument;
@@ -223,7 +224,7 @@ public class AdvancedConverter {
 		case LOCATION_2D             -> new Location2DArgument(nodeName, LocationType.BLOCK_POSITION);
 		case LOOT_TABLE              -> new LootTableArgument(nodeName);
 		case MATH_OPERATION          -> new MathOperationArgument(nodeName);
-		case NBT_COMPOUND            -> new NBTCompoundArgument(nodeName);
+		case NBT_COMPOUND            -> new NBTCompoundArgument<NBTContainer>(nodeName);
 		case OBJECTIVE               -> new ObjectiveArgument(nodeName);
 		case OBJECTIVE_CRITERIA      -> new ObjectiveCriteriaArgument(nodeName);
 		case PARTICLE                -> new ParticleArgument(nodeName);

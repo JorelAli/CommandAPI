@@ -84,7 +84,6 @@
 		<!-- Shared libraries. These are declared here so they can be updated easily. 
 			These are present in each module to prevent accidentally "leaking" these 
 			dependencies to dependents of commandapi-core. -->
-		<nbtapi.version>2.9.2</nbtapi.version>
 		<paper.version>1.18.2-R0.1-SNAPSHOT</paper.version>
 		<auto-service.version>1.0.1</auto-service.version>
 	</properties>

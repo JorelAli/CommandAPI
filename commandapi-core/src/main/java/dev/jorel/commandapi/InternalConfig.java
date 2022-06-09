@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Function;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
@@ -38,7 +39,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * only ever read from, nothing is ever written to it. That's why there's only
  * getter methods.
  */
-class Config {
+public class InternalConfig {
 
 	// Output registering and unregistering of commands
 	private final boolean verboseOutput;
@@ -64,7 +65,10 @@ class Config {
 	// List of arbitrary commands to convert
 	private final List<String> commandsToConvert;
 	
-	public Config(FileConfiguration fileConfig) {
+	private final Class<?> nbtContainerClass;
+	private final Function<Object, ?> nbtContainerConstructor;
+	
+	public InternalConfig(FileConfiguration fileConfig, Class<?> nbtContainerClass, Function<Object, ?> nbtContainerConstructor) {
 		this.verboseOutput = fileConfig.getBoolean("verbose-outputs");
 		this.silentLogs = fileConfig.getBoolean("silent-logs");
 		this.useLatestNMSVersion = fileConfig.getBoolean("use-latest-nms-version");
@@ -73,6 +77,8 @@ class Config {
 		this.pluginsToConvert = new HashMap<>();
 		this.skipSenderProxy = new ArrayList<>();
 		this.commandsToConvert = new ArrayList<>();
+		this.nbtContainerClass = nbtContainerClass;
+		this.nbtContainerConstructor = nbtContainerConstructor;
 
 		if(!fileConfig.getList("plugins-to-convert").isEmpty() && fileConfig.getMapList("plugins-to-convert").isEmpty()) {
 			CommandAPI.getLogger().severe("plugins-to-convert has an invalid type. Did you miss a colon (:) after a plugin name?");
@@ -114,11 +120,12 @@ class Config {
 		}
 	}
 
-	public Config(boolean verbose) {
+	@Deprecated(forRemoval = true)
+	public InternalConfig(boolean verbose) {
 		this(new CommandAPIConfig().verboseOutput(verbose));
 	}
 
-	public Config(CommandAPIConfig config) {
+	public InternalConfig(CommandAPIConfig config) {
 		this.verboseOutput = config.verboseOutput;
 		this.silentLogs = config.silentLogs;
 		this.useLatestNMSVersion = config.useLatestNMSVersion;
@@ -127,6 +134,8 @@ class Config {
 		this.pluginsToConvert = new HashMap<>();
 		this.skipSenderProxy = new ArrayList<>();
 		this.commandsToConvert = new ArrayList<>();
+		this.nbtContainerClass = config.nbtContainerClass;
+		this.nbtContainerConstructor = config.nbtContainerConstructor;
 	}
 
 	public boolean hasVerboseOutput() {
@@ -163,6 +172,14 @@ class Config {
 	
 	public List<String> getCommandsToConvert() {
 		return this.commandsToConvert;
+	}
+	
+	public Class<?> getNBTContainerClass() {
+		return this.nbtContainerClass;
+	}
+	
+	public Function<Object, ?> getNBTContainerConstructor() {
+		return this.nbtContainerConstructor;
 	}
 
 }

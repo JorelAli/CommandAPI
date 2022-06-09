@@ -48,12 +48,12 @@ public final class CommandAPI {
 	}
 
 	private static boolean canRegister = true;
-	static Config config;
+	static InternalConfig config;
 	static File dispatcherFile;
 	static Logger logger;
 	private static boolean loaded = false;
 
-	static Config getConfiguration() {
+	public static InternalConfig getConfiguration() {
 		if (config == null) {
 			CommandAPI.onLoad(new CommandAPIConfig());
 			logWarning(
@@ -144,7 +144,7 @@ public final class CommandAPI {
 	@Deprecated(forRemoval = true)
 	public static void onLoad(boolean verbose) {
 		if (!loaded) {
-			CommandAPI.config = new Config(verbose);
+			CommandAPI.config = new InternalConfig(verbose);
 			CommandAPIHandler.getInstance().checkDependencies();
 			loaded = true;
 		} else {
@@ -160,7 +160,7 @@ public final class CommandAPI {
 	 */
 	public static void onLoad(CommandAPIConfig config) {
 		if (!loaded) {
-			CommandAPI.config = new Config(config);
+			CommandAPI.config = new InternalConfig(config);
 			CommandAPIHandler.getInstance().checkDependencies();
 			loaded = true;
 		} else {
