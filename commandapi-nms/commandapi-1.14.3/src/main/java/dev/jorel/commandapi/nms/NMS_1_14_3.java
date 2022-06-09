@@ -922,6 +922,6 @@ public class NMS_1_14_3 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public void resendPackets(Player player) {
-		MINECRAFT_SERVER.vanillaCommandDispatcher.a(((CraftPlayer) player).getHandle());
+		MINECRAFT_SERVER.getCommandDispatcher().a(((CraftPlayer) player).getHandle());
 	}
 }
