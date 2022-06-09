@@ -951,6 +951,6 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 
 	@Override
 	public void resendPackets(Player player) {
-		MINECRAFT_SERVER.vanillaCommandDispatcher.a(((CraftPlayer) player).getHandle());
+		MINECRAFT_SERVER.getCommandDispatcher().a(((CraftPlayer) player).getHandle());
 	}
 }
