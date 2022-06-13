@@ -41,7 +41,7 @@ public enum CommandAPIArgumentType {
 	 * The BiomeArgument
 	 */
 	BIOME("api:biome"),
-	
+
 	/**
 	 * The ChatArgument (with Paper Adventure backend)
 	 */
@@ -56,7 +56,7 @@ public enum CommandAPIArgumentType {
 	 * The ChatComponentArgument (with BaseComponent backend)
 	 */
 	CHAT_COMPONENT("minecraft:component"),
-	
+
 	/**
 	 * The ChatComponentArgument (with Paper Adventure backend)
 	 */
@@ -65,238 +65,243 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The ChatColorArgument
 	 */
-	CHATCOLOR("minecraft:color"), 
-	
+	CHATCOLOR("minecraft:color"),
+
 	/**
 	 * The CustomArgument
 	 */
-	CUSTOM, 
-	
+	CUSTOM,
+
 	/**
 	 * The EnchantmentArgument
 	 * 
 	 */
-	ENCHANTMENT("minecraft:item_enchantment"), 
-	
+	ENCHANTMENT("minecraft:item_enchantment"),
+
 	/**
 	 * The EntitySelectorArgument
 	 */
-	ENTITY_SELECTOR("minecraft:entity"), 
-	
+	ENTITY_SELECTOR("minecraft:entity"),
+
 	/**
 	 * The EntityTypeArgument
 	 */
-	ENTITY_TYPE("minecraft:entity_summon"), 
-	
+	ENTITY_TYPE("minecraft:entity_summon"),
+
 	/**
 	 * The EnvironmentArgument
 	 */
-	ENVIRONMENT("minecraft:dimension"), 
-	
+	ENVIRONMENT("minecraft:dimension"),
+
 	/**
 	 * The FloatRangeArgument
 	 */
-	FLOAT_RANGE("minecraft:float_range"), 
-	
+	FLOAT_RANGE("minecraft:float_range"),
+
 	/**
 	 * The FunctionArgument
 	 */
-	FUNCTION("minecraft:function"), 
-	
+	FUNCTION("minecraft:function"),
+
 	/**
 	 * The IntegerRangeArgument
 	 */
 	INT_RANGE("minecraft:int_range"),
-	
+
 	/**
 	 * The ItemStackArgument
 	 */
-	ITEMSTACK("minecraft:item_stack"), 
-	
+	ITEMSTACK("minecraft:item_stack"),
+
 	/**
 	 * The ListArgument
 	 */
 	LIST,
-	
+
 	/**
 	 * The LiteralArgument
 	 */
-	LITERAL, 
-	
+	LITERAL,
+
 	/**
 	 * The LocationArgument
 	 */
-	LOCATION(new String[] {"minecraft:vec3", "minecraft:block_pos"}), 
-	
+	LOCATION(new String[] { "minecraft:vec3", "minecraft:block_pos" }),
+
 	/**
 	 * The Location2dArgument
 	 */
-	LOCATION_2D(new String[] {"minecraft:vec2", "minecraft:column_pos"}), 
-	
+	LOCATION_2D(new String[] { "minecraft:vec2", "minecraft:column_pos" }),
+
 	/**
 	 * The LootTableArgument
 	 */
-	LOOT_TABLE("api:loot_table"), 
-	
+	LOOT_TABLE("api:loot_table"),
+
 	/**
 	 * The MathOperationArgument
 	 */
-	MATH_OPERATION("minecraft:operation"), 
+	MATH_OPERATION("minecraft:operation"),
 	
+	/**
+	 * The {@link MinecraftKeyArgument}
+	 */
+	MINECRAFT_KEY("minecraft:resource_location"),
+
 	/**
 	 * The NBTCompoundArgument
 	 */
-	NBT_COMPOUND("minecraft:nbt_compound_tag"), 
-	
+	NBT_COMPOUND("minecraft:nbt_compound_tag"),
+
 	/**
 	 * The ObjectiveArgument
 	 */
-	OBJECTIVE("minecraft:objective"), 
-	
+	OBJECTIVE("minecraft:objective"),
+
 	/**
 	 * The ObjectiveCriteriaArgument
 	 */
 	OBJECTIVE_CRITERIA("minecraft:objective_criteria"),
-	
+
 	/**
 	 * The ParticleArgument
 	 */
-	PARTICLE("minecraft:particle"), 
-	
+	PARTICLE("minecraft:particle"),
+
 	/**
 	 * The PlayerArgument
 	 */
-	PLAYER("minecraft:game_profile"), 
-	
+	PLAYER("minecraft:game_profile"),
+
 	/**
 	 * The PotionEffectArgument
 	 */
-	POTION_EFFECT("minecraft:mob_effect"), 
-	
+	POTION_EFFECT("minecraft:mob_effect"),
+
 	/**
-	 * The RecipeArgument	
+	 * The RecipeArgument
 	 */
-	RECIPE("api:recipe"), 
-	
+	RECIPE("api:recipe"),
+
 	/**
 	 * The RotationArgument
 	 */
-	ROTATION("minecraft:rotation"), 
-	
+	ROTATION("minecraft:rotation"),
+
 	/**
 	 * The ScoreHolderArgument
 	 */
-	SCORE_HOLDER("minecraft:score_holder"), 
-	
+	SCORE_HOLDER("minecraft:score_holder"),
+
 	/**
 	 * The ScoreboardSlotArgument
 	 */
-	SCOREBOARD_SLOT("minecraft:scoreboard_slot"), 
-	
+	SCOREBOARD_SLOT("minecraft:scoreboard_slot"),
+
 	/**
 	 * Primitive argument BooleanArgument
 	 */
 	PRIMITIVE_BOOLEAN("brigadier:bool"),
-	
+
 	/**
 	 * Primitive argument DoubleArgument
 	 */
 	PRIMITIVE_DOUBLE("brigadier:double"),
-	
+
 	/**
 	 * Primitive argument F;patArgument
 	 */
 	PRIMITIVE_FLOAT("brigadier:float"),
-	
+
 	/**
 	 * Primitive argument IntegerArgument
 	 */
 	PRIMITIVE_INTEGER("brigadier:integer"),
-	
+
 	/**
 	 * Primitive argument LongArgument
 	 */
 	PRIMITIVE_LONG("brigadier:long"),
-	
+
 	/**
 	 * Primitive argument StringArgument
 	 */
 	PRIMITIVE_STRING("brigadier:string"),
-	
+
 	/**
 	 * Primitive argument GreedyStringArgument
 	 */
 	PRIMITIVE_GREEDY_STRING("api:greedy_string"),
-	
+
 	/**
 	 * Primitive argument TextArgument
 	 */
 	PRIMITIVE_TEXT("api:text"),
-	
+
 	/**
 	 * The SoundArgument
 	 */
-	SOUND("api:sound"), 
-	
+	SOUND("api:sound"),
+
 	/**
 	 * The TeamArgument
 	 */
-	TEAM("minecraft:team"), 
-	
+	TEAM("minecraft:team"),
+
 	/**
 	 * The TimeArgument
 	 */
-	TIME("minecraft:time"), 
-	
+	TIME("minecraft:time"),
+
 	/**
 	 * The BlockStateArgument
 	 */
-	BLOCKSTATE("minecraft:block_state"), 
-	
+	BLOCKSTATE("minecraft:block_state"),
+
 	/**
 	 * The UUIDArgument
 	 */
-	UUID("minecraft:uuid"), 
-	
+	UUID("minecraft:uuid"),
+
 	/**
 	 * The ItemStackPredicateArgument
 	 */
-	ITEMSTACK_PREDICATE("minecraft:item_predicate"), 
-	
+	ITEMSTACK_PREDICATE("minecraft:item_predicate"),
+
 	/**
 	 * The BlockPredicateArgument
 	 */
-	BLOCK_PREDICATE("minecraft:block_predicate"), 
-	
+	BLOCK_PREDICATE("minecraft:block_predicate"),
+
 	/**
 	 * The MultiLiteralArgument
 	 */
-	MULTI_LITERAL, 
-	
+	MULTI_LITERAL,
+
 	/**
 	 * The AngleArgument
 	 */
-	ANGLE("minecraft:angle"), 
-	
+	ANGLE("minecraft:angle"),
+
 	/**
 	 * The OfflinePlayerArgument
 	 */
 	OFFLINE_PLAYER;
-	
+
 	private String[] internals;
-	
+
 	CommandAPIArgumentType() {
 		internals = new String[0];
 	}
-	
+
 	CommandAPIArgumentType(String internal) {
-		this.internals = new String[] {internal};
+		this.internals = new String[] { internal };
 	}
-	
+
 	CommandAPIArgumentType(String[] internals) {
 		this.internals = internals;
 	}
-	
+
 	/**
 	 * Converts an internal name (e.g. minecraft:time) to a CommandAPIArgumentType
 	 * 
@@ -304,8 +309,8 @@ public enum CommandAPIArgumentType {
 	 * @return the corresponding CommandAPIArgumentType for the given input
 	 */
 	public static CommandAPIArgumentType fromInternal(String internal) {
-		for(CommandAPIArgumentType type : CommandAPIArgumentType.values()) {
-			if(Arrays.asList(type.internals).contains(internal)) {
+		for (CommandAPIArgumentType type : CommandAPIArgumentType.values()) {
+			if (Arrays.asList(type.internals).contains(internal)) {
 				return type;
 			}
 		}

@@ -728,6 +728,14 @@ public class NMS_1_16_R1 extends NMSWrapper_1_16_R1 {
 		return MathOperation.fromString(CommandAPIHandler.getRawArgumentInput(cmdCtx, key));
 	}
 
+	@Differs(from = "1.15", by = "ArgumentMinecraftKeyRegistered.d() -> ArgumentMinecraftKeyRegistered.e()")
+	@SuppressWarnings("deprecation")
+	@Override
+	public NamespacedKey getMinecraftKey(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		MinecraftKey resourceLocation = ArgumentMinecraftKeyRegistered.e(cmdCtx, key);
+		return new NamespacedKey(resourceLocation.getNamespace(), resourceLocation.getKey());
+	}
+
 	@Override
 	public <NBTContainer> Object getNBTCompound(CommandContext<CommandListenerWrapper> cmdCtx, String key,
 			Function<Object, NBTContainer> nbtContainerConstructor) {

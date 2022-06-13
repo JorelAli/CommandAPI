@@ -706,6 +706,14 @@ public class NMS_1_14_4 implements NMS<CommandListenerWrapper> {
 		return MathOperation.fromString(CommandAPIHandler.getRawArgumentInput(cmdCtx, key));
 	}
 
+	@Differs(from = "1.14.3", by = "MinecraftKey.b() -> MinecraftKey.getNamespace()")
+	@SuppressWarnings("deprecation")
+	@Override
+	public NamespacedKey getMinecraftKey(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		MinecraftKey resourceLocation = ArgumentMinecraftKeyRegistered.c(cmdCtx, key);
+		return new NamespacedKey(resourceLocation.getNamespace(), resourceLocation.getKey());
+	}
+
 	@Override
 	public <NBTContainer> Object getNBTCompound(CommandContext<CommandListenerWrapper> cmdCtx, String key,
 			Function<Object, NBTContainer> nbtContainerConstructor) {

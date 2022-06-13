@@ -115,6 +115,7 @@ import net.minecraft.commands.arguments.coordinates.ArgumentVec3;
 import net.minecraft.commands.arguments.item.ArgumentTag;
 import net.minecraft.core.EnumDirection;
 import net.minecraft.network.chat.IChatBaseComponent;
+import net.minecraft.resources.MinecraftKey;
 import net.minecraft.world.phys.Vec2F;
 
 /**
@@ -419,7 +420,12 @@ public abstract class NMS_Common<T> implements NMS<T> {
 
 	@Override
 	public final String getKeyedAsString(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return ArgumentMinecraftKeyRegistered.e(cmdCtx, key).toString();
+		// XXX: In 1.17, Spigot/Minecraft/whoever introduced a bug where getting the
+		// value of ResourceLocation.toString() returns namespace:namespace instead of
+		// namespace:key. We fix this by constructing it manually instead of using the
+		// ResourceLocation.toString() method!
+		MinecraftKey resourceLocation = ArgumentMinecraftKeyRegistered.e(cmdCtx, key);
+		return resourceLocation.b() + ":" + resourceLocation.a();
 	}
 
 	@Override
@@ -428,7 +434,14 @@ public abstract class NMS_Common<T> implements NMS<T> {
 		ArgumentMathOperation.a(cmdCtx, key);
 		return MathOperation.fromString(CommandAPIHandler.getRawArgumentInput(cmdCtx, key));
 	}
-	
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public NamespacedKey getMinecraftKey(CommandContext cmdCtx, String key) {
+		MinecraftKey resourceLocation = ArgumentMinecraftKeyRegistered.e(cmdCtx, key);
+		return new NamespacedKey(resourceLocation.b(), resourceLocation.a());
+	}
+
 	@Override
 	public <NBTContainer> Object getNBTCompound(CommandContext<T> cmdCtx, String key,
 			Function<Object, NBTContainer> nbtContainerConstructor) {

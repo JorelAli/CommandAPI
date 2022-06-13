@@ -589,7 +589,7 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 	@Override
 	public Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String str,
 			dev.jorel.commandapi.arguments.EntitySelector selector)
-			throws CommandSyntaxException {
+					throws CommandSyntaxException {
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
 		try {
 			CommandAPIHandler.getInstance().getField(EntitySelector.class, "checkPermissions").set(argument, false);
@@ -744,6 +744,13 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 		// We run this to ensure the argument exists/parses properly
 		ArgumentMathOperation.a(cmdCtx, key);
 		return MathOperation.fromString(CommandAPIHandler.getRawArgumentInput(cmdCtx, key));
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public NamespacedKey getMinecraftKey(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		MinecraftKey resourceLocation = ArgumentMinecraftKeyRegistered.e(cmdCtx, key);
+		return new NamespacedKey(resourceLocation.getNamespace(), resourceLocation.getKey());
 	}
 
 	@Override

@@ -144,14 +144,15 @@ public interface NMS<CommandListenerWrapper> {
 	ArgumentType<?> _ArgumentVec2();
 
 	ArgumentType<?> _ArgumentVec3();
-	
+
 	/*
 	 * Synthetic arguments - arguments that don't actually exist, but have
-	 * version-specific implementations, so we can switch their implementation
-	 * as needed. For example, the BiomeArgument is both a _ArgumentMinecraftKeyRegistered
-	 * and a _ArgumentResourceOrTag, but we'll refer to it as an _ArgumentSyntheticBiome
+	 * version-specific implementations, so we can switch their implementation as
+	 * needed. For example, the BiomeArgument is both a
+	 * _ArgumentMinecraftKeyRegistered and a _ArgumentResourceOrTag, but we'll refer
+	 * to it as an _ArgumentSyntheticBiome
 	 */
-	
+
 	ArgumentType<?> _ArgumentSyntheticBiome();
 
 	/**
@@ -257,7 +258,7 @@ public interface NMS<CommandListenerWrapper> {
 
 	Location2D getLocation2DBlock(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException;
-	
+
 	Location2D getLocation2DPrecise(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException;
 
@@ -271,7 +272,10 @@ public interface NMS<CommandListenerWrapper> {
 	MathOperation getMathOperation(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException;
 
-	<NBTContainer> Object getNBTCompound(CommandContext<CommandListenerWrapper> cmdCtx, String key, Function<Object, NBTContainer> nbtContainerConstructor);
+	NamespacedKey getMinecraftKey(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+
+	<NBTContainer> Object getNBTCompound(CommandContext<CommandListenerWrapper> cmdCtx, String key,
+			Function<Object, NBTContainer> nbtContainerConstructor);
 
 	String getObjective(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws IllegalArgumentException, CommandSyntaxException;
@@ -281,7 +285,9 @@ public interface NMS<CommandListenerWrapper> {
 	ParticleData<?> getParticle(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
 	Player getPlayer(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
-	OfflinePlayer getOfflinePlayer(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+
+	OfflinePlayer getOfflinePlayer(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException;
 
 	PotionEffectType getPotionEffect(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException;
@@ -364,5 +370,5 @@ public interface NMS<CommandListenerWrapper> {
 	HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription, String permission);
 
 	void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd);
-	
+
 }
