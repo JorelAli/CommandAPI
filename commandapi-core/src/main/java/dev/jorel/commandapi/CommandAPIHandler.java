@@ -40,8 +40,8 @@ import java.util.function.Predicate;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.permissions.Permission;
 
@@ -141,6 +141,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	final CommandDispatcher<CommandSourceStack> DISPATCHER;
 	public final List<RegisteredCommand> registeredCommands; //Keep track of what has been registered for type checking 
 	public final List<CommandHelp> commands;
+	private PaperImplementations paper;
 	
 	private CommandAPIHandler() {
 		final String bukkit = Bukkit.getServer().toString();
@@ -148,6 +149,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		DISPATCHER = NMS.getBrigadierDispatcher();
 		registeredCommands = new ArrayList<>();
 		commands = new ArrayList<>();
+		this.paper = new PaperImplementations(false, NMS);
 	}
 	
 	void checkDependencies() {
@@ -188,6 +190,16 @@ public class CommandAPIHandler<CommandSourceStack> {
 				CommandAPI.logWarning("Could not hook into Adventure for AdventureChat/AdventureChatComponents");
 			}
 		}
+		
+		try {
+			Class.forName("io.papermc.paper.event.server.ServerResourcesReloadedEvent");
+			paper = new PaperImplementations(true, NMS);
+			CommandAPI.logNormal("Hooked into Paper for paper-specific API implementations");
+		} catch (ClassNotFoundException e) {
+			if(CommandAPI.getConfiguration().hasVerboseOutput()) {
+				CommandAPI.logWarning("Could not hook into Paper for /minecraft:reload. Consider upgrading to Paper: https://papermc.io/");
+			}
+		}
 	}
 	
 	/**
@@ -196,7 +208,11 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 * @return an instance of NMS
 	 */
 	public NMS<CommandSourceStack> getNMS() {
-		return NMS;
+		return this.NMS;
+	}
+	
+	public PaperImplementations getPaper() {
+		return this.paper;
 	}
 	
 	/**
@@ -399,7 +415,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 */
 	void fixPermissions() {
 		// Get the command map to find registered commands
-		SimpleCommandMap map = NMS.getSimpleCommandMap();
+		CommandMap map = paper.getCommandMap();
 
 		if(!PERMISSIONS_TO_FIX.isEmpty()) {
 			CommandAPI.logInfo("Linking permissions to commands:");

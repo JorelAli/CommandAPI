@@ -193,6 +193,7 @@ public final class CommandAPI {
 		};
 
 		Bukkit.getServer().getPluginManager().registerEvents(playerJoinListener, plugin);
+		CommandAPIHandler.getInstance().getPaper().registerReloadHandler(plugin);
 	}
 
 	/**
