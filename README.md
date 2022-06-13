@@ -236,6 +236,14 @@ plugins-to-convert:
 
 -----
 
+## Dependencies
+
+Bukkit plugin (shaded) dependencies:
+
+- [Item-NBT-API](https://github.com/tr7zw/Item-NBT-API) (MIT License)
+
+-----
+
 ## Building the CommandAPI
 
 The CommandAPI can be built easily, but requires copies of the Spigot server jars to be present locally on your machine in order to be compatible with any Minecraft version. The CommandAPI is built using the Maven build tool - if you don't have it, you can download it [here](https://maven.apache.org/download.cgi).
@@ -297,10 +305,6 @@ This is the current roadmap for the CommandAPI (as of 13th April 2022):
 
   The CommandAPI's annotation system has always been a bit limited and was primarily introduced as a proof-of-concept. In this update, the CommandAPI's annotation system will be improved to be (ideally) as powerful as the non-annotation system and have slightly better type safety, support for non-static methods and better checks to prevent invalid command generation.
 
-  **CustomArgument improvements**
-
-  The CustomArgument class is fairly flexible, but nowhere near flexible enough. In this update, more attention will be focused on the CustomArgument class to provide it the ability to extend from all other argument types as a base.
-
   **Argument conflict detection**
 
   The CommandAPI simply uses the Brigadier system under the hood. This system is prone to _argument conflicts_, which is where certain arguments are given priority over other arguments. (For example "hello" and "123" are both valid string arguments, but if you have a command that has a string argument or an integer argument, Brigadier may ignore the integer argument). In this update, the CommandAPI will try to spot potential conflicts and add a warning in the console. The research required for this is also required in order to implement optional arguments (which is not coming out in this release).
@@ -322,6 +326,27 @@ This is the current roadmap for the CommandAPI (as of 13th April 2022):
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td valign="top"><b>8.4.0</b></td>
+            <td valign="top">June 2022</td>
+            <td valign="top">
+                <b>Jar minimization improvements:</b>
+                <ul>
+                    <li>Decouples CustomArgument from CommandAPIHandler</li>
+                    <li>Decouples EntitySelector from EntitySelectorArgument</li>
+                </ul>
+				<b>NBT API Support:</b>
+                <ul>
+					<li>Allow developers to shade their own copy of an NBT API framework (e.g. NBT API or PowerNBT)</li>
+					<li>Includes the NBT API built-in for plugin versions</li>
+                </ul>
+				<b>Other:</b>
+                <ul>
+                    <li>Implement base arguments for CustomArguments, allowing more powerful parsing</li>
+                    <li>Implement common NMS code for 1.17+</li>
+                </ul>
+            </td>
+        </tr>
         <tr>
             <td valign="top"><b>8.3.1</b></td>
             <td valign="top">June 2022</td>
