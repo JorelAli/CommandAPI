@@ -58,6 +58,7 @@
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot</artifactId>
 			<version>${spigot.version}</version>
+			<scope>provided</scope>
 			<!-- <classifier>remapped-mojang</classifier> -->
 		</dependency>
 
@@ -89,6 +90,7 @@
 					<groupId>org.spigotmc</groupId>
 					<artifactId>spigot</artifactId>
 					<version>1.19-R0.1-SNAPSHOT</version>
+					<scope>provided</scope>
 				</dependency>
 			</dependencies>
 		</profile>
@@ -99,6 +101,7 @@
 					<groupId>org.spigotmc</groupId>
 					<artifactId>spigot</artifactId>
 					<version>1.18.2-R0.1-SNAPSHOT</version>
+					<scope>provided</scope>
 				</dependency>
 			</dependencies>
 		</profile>
@@ -109,6 +112,7 @@
 					<groupId>org.spigotmc</groupId>
 					<artifactId>spigot</artifactId>
 					<version>1.18-R0.1-SNAPSHOT</version>
+					<scope>provided</scope>
 				</dependency>
 			</dependencies>
 		</profile>
@@ -119,6 +123,7 @@
 					<groupId>org.spigotmc</groupId>
 					<artifactId>spigot</artifactId>
 					<version>1.17-R0.1-SNAPSHOT</version>
+					<scope>provided</scope>
 				</dependency>
 			</dependencies>
 		</profile>

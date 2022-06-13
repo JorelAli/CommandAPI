@@ -63,7 +63,7 @@
 							<goal>shade</goal>
 						</goals>
 						<configuration>
-							<artifactSet>
+							<!--<artifactSet>
 								<includes>
 									<include>dev.jorel:commandapi-core</include>
 									<include>dev.jorel:commandapi-vh</include>
@@ -84,7 +84,7 @@
 									<include>dev.jorel:commandapi-1.18.2</include>
 									<include>dev.jorel:commandapi-1.19</include>
 								</includes>
-							</artifactSet>
+							</artifactSet>-->
 							<filters>
 								<filter>
 									<artifact>dev.jorel:commandapi-core</artifact>

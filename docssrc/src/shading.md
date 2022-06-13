@@ -83,18 +83,7 @@ Add the CommandAPI shade dependency:
 </dependencies>
 ```
 
-As of the time of writing, the latest stable version of the `maven-shade-plugin` is not compatible with Java 16, which means certain classes such as `record` types cannot be shaded. This can be overcome using the latest snapshot build of the `maven-shade-plugin`. To use the snapshot build, add the following plugin repository to your `pom.xml` file:
-
-```xml
-<pluginRepositories>
-    <pluginRepository>
-        <id>maven-snapshots</id>
-        <url>https://repository.apache.org/content/repositories/snapshots/</url>
-    </pluginRepository>
-</pluginRepositories>
-```
-
-Once you've added this this, you can shade the CommandAPI easily by adding the `maven-shade-plugin` to your build sequence using the snapshot version `3.3.1-SNAPSHOT`:
+You can shade the CommandAPI easily by adding the `maven-shade-plugin` to your build sequence using version `3.3.0` (compatible with Java 16):
 
 ```xml
 <build>
@@ -102,7 +91,7 @@ Once you've added this this, you can shade the CommandAPI easily by adding the `
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-shade-plugin</artifactId>
-            <version>3.3.1-SNAPSHOT</version>
+            <version>3.3.0</version>
             <executions>
                 <execution>
                     <id>shade</id>
@@ -126,7 +115,7 @@ Once you've added this this, you can shade the CommandAPI easily by adding the `
 </build>
 ```
 
-Of course, if you shade the CommandAPI into your plugin, you don't need to add `depend: [CommandAPI]` to your `plugin.yml` file.
+As we're shading the CommandAPI into your plugin, you **don't** need to add `depend: [CommandAPI]` to your `plugin.yml` file.
 
 -----
 
@@ -177,4 +166,4 @@ Finally, we can build the shaded jar using the following command:
 gradlew build shadowJar
 ```
 
-Again, as we're shading the CommandAPI into your plugin, we **don't** need to add `depend: [CommandAPI]` to your `plugin.yml` file.
+As we're shading the CommandAPI into your plugin, we **don't** need to add `depend: [CommandAPI]` to your `plugin.yml` file.

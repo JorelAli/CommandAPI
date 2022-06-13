@@ -61,6 +61,7 @@
 			<artifactId>spigot</artifactId>
 			<version>${spigot.version}</version>
 			<classifier>remapped-mojang</classifier>
+			<scope>provided</scope>
 		</dependency>
 
 		<!-- Libraries -->
