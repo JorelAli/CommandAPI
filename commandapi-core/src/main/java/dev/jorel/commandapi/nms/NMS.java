@@ -254,8 +254,6 @@ public interface NMS<CommandListenerWrapper> {
 	Predicate<ItemStack> getItemStackPredicate(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException;
 
-	String getKeyedAsString(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
-
 	Location2D getLocation2DBlock(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException;
 

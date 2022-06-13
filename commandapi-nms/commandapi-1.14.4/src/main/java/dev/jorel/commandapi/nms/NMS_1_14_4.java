@@ -658,12 +658,6 @@ public class NMS_1_14_4 implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
-	public String getKeyedAsString(CommandContext<CommandListenerWrapper> cmdCtx, String key)
-			throws CommandSyntaxException {
-		return ArgumentMinecraftKeyRegistered.c(cmdCtx, key).toString();
-	}
-
-	@Override
 	public Location2D getLocation2DBlock(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException {
 		BlockPosition2D blockPos = ArgumentVec2I.a(cmdCtx, key);

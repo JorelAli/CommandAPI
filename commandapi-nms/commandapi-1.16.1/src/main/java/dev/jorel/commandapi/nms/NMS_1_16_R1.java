@@ -677,13 +677,6 @@ public class NMS_1_16_R1 extends NMSWrapper_1_16_R1 {
 		return item -> predicate.test(CraftItemStack.asNMSCopy(item));
 	}
 
-	@Differs(from = "1.14.4", by = "ArgumentMinecraftKeyRegistered.d() -> ArgumentMinecraftKeyRegistered.e()")
-	@Override
-	public String getKeyedAsString(CommandContext<CommandListenerWrapper> cmdCtx, String key)
-			throws CommandSyntaxException {
-		return ArgumentMinecraftKeyRegistered.e(cmdCtx, key).toString();
-	}
-
 	@Override
 	public Location2D getLocation2DBlock(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException {

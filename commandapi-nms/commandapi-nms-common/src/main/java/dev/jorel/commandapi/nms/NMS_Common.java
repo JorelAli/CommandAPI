@@ -419,16 +419,6 @@ public abstract class NMS_Common<T> implements NMS<T> {
 	public abstract ItemStack getItemStack(CommandContext<T> cmdCtx, String key) throws CommandSyntaxException;
 
 	@Override
-	public final String getKeyedAsString(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		// XXX: In 1.17, Spigot/Minecraft/whoever introduced a bug where getting the
-		// value of ResourceLocation.toString() returns namespace:namespace instead of
-		// namespace:key. We fix this by constructing it manually instead of using the
-		// ResourceLocation.toString() method!
-		MinecraftKey resourceLocation = ArgumentMinecraftKeyRegistered.e(cmdCtx, key);
-		return resourceLocation.b() + ":" + resourceLocation.a();
-	}
-
-	@Override
 	public final MathOperation getMathOperation(CommandContext cmdCtx, String key) throws CommandSyntaxException {
 		// We run this to ensure the argument exists/parses properly
 		ArgumentMathOperation.a(cmdCtx, key);

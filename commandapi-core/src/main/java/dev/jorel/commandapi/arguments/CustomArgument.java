@@ -49,6 +49,9 @@ public class CustomArgument<T> extends Argument<T> {
 	 *                 information such as the command sender, previously declared
 	 *                 arguments and current input. This parser should return an
 	 *                 object of your choice.
+	 * @deprecated Use
+	 *             {@link CustomArgument#CustomArgument(Argument, CustomArgumentInfoParser)}
+	 *             with {@link TextArgument} instead
 	 */
 	public CustomArgument(String nodeName, CustomArgumentInfoParser<T> parser) {
 		this(nodeName, parser, false);
@@ -64,16 +67,31 @@ public class CustomArgument<T> extends Argument<T> {
 	 *                 object of your choice.
 	 * @param keyed    Whether this argument can accept Minecraft's
 	 *                 <code>NamespacedKey</code> as valid arguments
-	 * @deprecated Use {@link CustomArgument#CustomArgument(String, CustomArgumentInfoParser, Argument)} with {@link TextArgument} instead
+	 * @deprecated Use
+	 *             {@link CustomArgument#CustomArgument(Argument, CustomArgumentInfoParser)}
+	 *             with {@link TextArgument} or {@link MinecraftKeyArgument} instead
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Deprecated
 	public CustomArgument(String nodeName, CustomArgumentInfoParser<T> parser, boolean keyed) {
-		this(nodeName, parser, new DummyArgument(keyed ? StringArgumentType.string() : CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered()));
+		this(new DummyArgument(nodeName, keyed ? StringArgumentType.string()
+				: CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered()), parser);
 	}
 
-	public CustomArgument(String nodeName, CustomArgumentInfoParser<T> parser, Argument<?> base) {
-		super(nodeName, base.getRawType());
+	/**
+	 * Creates a CustomArgument with a valid parser, with an underlying base
+	 * argument as its parsing implementation.
+	 * 
+	 * @param base   the base argument to use for this custom argument. This base
+	 *               argument will represent the parsing implementation for
+	 *               client side and server side parsing.
+	 * @param parser A {@link CustomArgumentInfo} parser object which includes
+	 *               information such as the command sender, previously declared
+	 *               arguments and current input. This parser should return an
+	 *               object of your choice.
+	 */
+	public CustomArgument(Argument<?> base, CustomArgumentInfoParser<T> parser) {
+		super(base.getNodeName(), base.getRawType());
 	}
 
 	@Override
@@ -290,12 +308,12 @@ public class CustomArgument<T> extends Argument<T> {
 		 */
 		public T apply(CustomArgumentInfo info) throws CustomArgumentException;
 	}
-	
+
 	@Deprecated
 	private static class DummyArgument<D> extends Argument<D> {
-		
-		private DummyArgument(ArgumentType<?> type) {
-			super(null, type);
+
+		private DummyArgument(String nodeName, ArgumentType<?> type) {
+			super(nodeName, type);
 		}
 
 		@Override
@@ -315,4 +333,4 @@ public class CustomArgument<T> extends Argument<T> {
 			return null;
 		}
 	}
-} 
+}
