@@ -37,5 +37,14 @@
 			<version>${project.version}</version>
 			<type>pom</type>
 		</dependency>
+		
+		<!-- Implementation of CommandSourceStack -->
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot</artifactId>
+			<version>${paper.version}</version>
+			<classifier>remapped-mojang</classifier>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 </project>

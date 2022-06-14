@@ -63,6 +63,7 @@
 							<goal>shade</goal>
 						</goals>
 						<configuration>
+							<promoteTransitiveDependencies>true</promoteTransitiveDependencies>
 							<filters>
 								<filter>
 									<artifact>dev.jorel:commandapi-core</artifact>
