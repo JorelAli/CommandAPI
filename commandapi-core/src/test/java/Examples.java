@@ -905,7 +905,7 @@ new CommandAPICommand("tpworld")
 public Argument<World> worldArgument(String nodeName) {
     
     // Construct our CustomArgument that takes in a String input and returns a World object
-    return new CustomArgument<World>(new StringArgument(nodeName), info -> {
+    return new CustomArgument<World, String>(new StringArgument(nodeName), info -> {
         // Parse the world from our input
         World world = Bukkit.getWorld(info.input());
     

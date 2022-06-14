@@ -23,23 +23,27 @@ package dev.jorel.commandapi.arguments;
 import org.bukkit.command.CommandSender;
 
 import com.mojang.brigadier.LiteralMessage;
-import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
+import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
 
 /**
  * An argument that represents any custom object
  *
- * @param <T> the return type of this argument
+ * @param <T> the return type of this custom argument when it is used
+ * @param <B> the return type of the underlying base argument {@code base}. For
+ *            example, this would be {@code Integer} for an
+ *            {@link IntegerArgument}
  */
-public class CustomArgument<T> extends Argument<T> {
+public class CustomArgument<T, B> extends Argument<T> {
 
-	private CustomArgumentInfoParser<T> infoParser;
+	private final CustomArgumentInfoParser<T, B> infoParser;
+	private final Argument<B> base;
 
 	/**
 	 * Creates a CustomArgument with a valid parser, defaults to non-keyed argument
@@ -53,7 +57,8 @@ public class CustomArgument<T> extends Argument<T> {
 	 *             {@link CustomArgument#CustomArgument(Argument, CustomArgumentInfoParser)}
 	 *             with {@link TextArgument} instead
 	 */
-	public CustomArgument(String nodeName, CustomArgumentInfoParser<T> parser) {
+	@Deprecated(forRemoval = true)
+	public CustomArgument(String nodeName, CustomArgumentInfoParser<T, String> parser) {
 		this(nodeName, parser, false);
 	}
 
@@ -71,11 +76,16 @@ public class CustomArgument<T> extends Argument<T> {
 	 *             {@link CustomArgument#CustomArgument(Argument, CustomArgumentInfoParser)}
 	 *             with {@link TextArgument} or {@link MinecraftKeyArgument} instead
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Deprecated
-	public CustomArgument(String nodeName, CustomArgumentInfoParser<T> parser, boolean keyed) {
-		this(new DummyArgument(nodeName, keyed ? StringArgumentType.string()
-				: CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered()), parser);
+	@SuppressWarnings("unchecked")
+	@Deprecated(forRemoval = true)
+	public CustomArgument(String nodeName, CustomArgumentInfoParser<T, String> parser, boolean keyed) {
+		super(nodeName, keyed ? StringArgumentType.string()
+				: CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered());
+		this.base = (Argument<B>) new DummyArgument(nodeName, keyed);
+		this.infoParser = (CustomArgumentInfoParser<T, B>) parser;
+		CommandAPI.logWarning(
+				"Registering CustomArgument " + nodeName + " with legacy registeration method. This may not work!\n"
+						+ "Consider using new CustomArgument(Argument, CustomArgumentInfoParser)");
 	}
 
 	/**
@@ -83,15 +93,22 @@ public class CustomArgument<T> extends Argument<T> {
 	 * argument as its parsing implementation.
 	 * 
 	 * @param base   the base argument to use for this custom argument. This base
-	 *               argument will represent the parsing implementation for
-	 *               client side and server side parsing.
+	 *               argument will represent the parsing implementation for client
+	 *               side and server side parsing.
 	 * @param parser A {@link CustomArgumentInfo} parser object which includes
 	 *               information such as the command sender, previously declared
 	 *               arguments and current input. This parser should return an
 	 *               object of your choice.
+	 * 
+	 * @param <T>    the return type of this custom argument when it is used
+	 * @param <B>    the return type of the underlying base argument {@code base}.
+	 *               For example, this would be {@code Integer} for an
+	 *               {@link IntegerArgument}
 	 */
-	public CustomArgument(Argument<?> base, CustomArgumentInfoParser<T> parser) {
+	public CustomArgument(Argument<B> base, CustomArgumentInfoParser<T, B> parser) {
 		super(base.getNodeName(), base.getRawType());
+		this.base = base;
+		this.infoParser = parser;
 	}
 
 	@Override
@@ -108,11 +125,13 @@ public class CustomArgument<T> extends Argument<T> {
 	public <CommandListenerWrapper> T parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
+		// Get the raw input and parsed input
 		final String customresult = CommandAPIHandler.getRawArgumentInput(cmdCtx, key);
+		final B parsedInput = base.parseArgument(nms, cmdCtx, key, previousArgs);
 
 		try {
-			return infoParser.apply(new CustomArgumentInfo(nms.getCommandSenderFromCSS(cmdCtx.getSource()),
-					previousArgs, customresult));
+			return infoParser.apply(new CustomArgumentInfo<B>(nms.getCommandSenderFromCSS(cmdCtx.getSource()),
+					previousArgs, customresult, parsedInput));
 		} catch (CustomArgumentException e) {
 			throw e.toCommandSyntax(customresult, cmdCtx);
 		} catch (Exception e) {
@@ -287,7 +306,28 @@ public class CustomArgument<T> extends Argument<T> {
 	 * @param input        the current input which the user has typed for this
 	 *                     argument
 	 */
-	public record CustomArgumentInfo(CommandSender sender, Object[] previousArgs, String input) {
+	public record CustomArgumentInfo<B> (
+			/**
+			 * sender - the sender that types this argument
+			 */
+			CommandSender sender,
+
+			/**
+			 * previousArgs - an array of previously declared (parsed) arguments. This can
+			 * be used as if it were arguments in a command executor method
+			 */
+			Object[] previousArgs,
+
+			/**
+			 * input - the current input which the user has typed for this argument
+			 */
+			String input,
+
+			/**
+			 * currentInput - the current input, when parsed with the underlying base
+			 * argument.
+			 */
+			B currentInput) {
 	}
 
 	/**
@@ -297,7 +337,7 @@ public class CustomArgument<T> extends Argument<T> {
 	 * @param <T> the type that is returned when applying this parser
 	 */
 	@FunctionalInterface
-	public static interface CustomArgumentInfoParser<T> {
+	public static interface CustomArgumentInfoParser<T, B> {
 
 		/**
 		 * Applies a CustomArgumentInfo input to this custom argument parser
@@ -306,31 +346,35 @@ public class CustomArgument<T> extends Argument<T> {
 		 * @return the applied output represented by this FunctionalInterface
 		 * @throws CustomArgumentException if an error occurs during parsing
 		 */
-		public T apply(CustomArgumentInfo info) throws CustomArgumentException;
+		public T apply(CustomArgumentInfo<B> info) throws CustomArgumentException;
 	}
 
 	@Deprecated
-	private static class DummyArgument<D> extends Argument<D> {
+	private static class DummyArgument extends Argument<String> {
 
-		private DummyArgument(String nodeName, ArgumentType<?> type) {
-			super(nodeName, type);
+		private final boolean keyed;
+
+		private DummyArgument(String nodeName, boolean keyed) {
+			super(nodeName, keyed ? StringArgumentType.string()
+					: CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered());
+			this.keyed = keyed;
 		}
 
 		@Override
-		public Class<D> getPrimitiveType() {
-			return null;
+		public Class<String> getPrimitiveType() {
+			return String.class;
 		}
 
 		@Override
 		public CommandAPIArgumentType getArgumentType() {
-			return null;
+			return keyed ? CommandAPIArgumentType.PRIMITIVE_STRING : CommandAPIArgumentType.MINECRAFT_KEY;
 		}
 
 		@Override
-		public <CommandSourceStack> D parseArgument(NMS<CommandSourceStack> nms,
+		public <CommandSourceStack> String parseArgument(NMS<CommandSourceStack> nms,
 				CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 				throws CommandSyntaxException {
-			return null;
+			return keyed ? nms.getMinecraftKey(cmdCtx, key).toString() : cmdCtx.getArgument(key, String.class);
 		}
 	}
 }
