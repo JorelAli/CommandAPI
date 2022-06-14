@@ -218,10 +218,8 @@ public final class CommandAPI {
 	 * Forces a command to return a success value of 0
 	 * 
 	 * @param message Description of the error message
-	 * @throws WrapperCommandSyntaxException which indicates that there was a
-	 *                                       command failure
 	 */
-	public static WrapperCommandSyntaxException fail(String message) throws WrapperCommandSyntaxException {
+	public static WrapperCommandSyntaxException fail(String message) {
 		return new WrapperCommandSyntaxException(new SimpleCommandExceptionType(new LiteralMessage(message)).create());
 	}
 
