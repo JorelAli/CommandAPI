@@ -305,6 +305,8 @@ public class CustomArgument<T, B> extends Argument<T> {
 	 *                     method
 	 * @param input        the current input which the user has typed for this
 	 *                     argument
+	 * @param currentInput the current input, when parsed with the underlying base
+	 *                     argument.
 	 */
 	public record CustomArgumentInfo<B> (
 			/**

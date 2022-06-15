@@ -102,6 +102,7 @@ You can shade the CommandAPI easily by adding the `maven-shade-plugin` to your b
                 </execution>
             </executions>
             <configuration>
+                <minimizeJar>true</minimizeJar>
                 <relocations>
                     <relocation>
                         <pattern>dev.jorel.commandapi</pattern>
@@ -135,6 +136,8 @@ Add our repositories:
 ```gradle
 repositories {
     mavenCentral()
+
+    // If you want to shade the NBT API as well
     maven { url = "https://repo.codemc.org/repository/maven-public/" }
 }
 ```
