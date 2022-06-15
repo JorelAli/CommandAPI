@@ -99,11 +99,13 @@ public class CustomArgument<T, B> extends Argument<T> {
 	 *               information such as the command sender, previously declared
 	 *               arguments and current input. This parser should return an
 	 *               object of your choice.
-	 * 
-	 * @param <T>    the return type of this custom argument when it is used
-	 * @param <B>    the return type of the underlying base argument {@code base}.
-	 *               For example, this would be {@code Integer} for an
-	 *               {@link IntegerArgument}
+	 *               <p>
+	 *               <b>{@code <T>}</b> the return type of this custom argument when
+	 *               it is used <br>
+	 *               <b>{@code <B>}</b> the return type of the underlying base
+	 *               argument {@code base}. For example, this would be
+	 *               {@code Integer} for an {@link IntegerArgument}
+	 *               </p>
 	 */
 	public CustomArgument(Argument<B> base, CustomArgumentInfoParser<T, B> parser) {
 		super(base.getNodeName(), base.getRawType());
