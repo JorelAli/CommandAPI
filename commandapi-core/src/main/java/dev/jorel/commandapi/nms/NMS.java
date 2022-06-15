@@ -369,4 +369,8 @@ public interface NMS<CommandListenerWrapper> {
 
 	void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd);
 
+	default ArgumentType<?> instanceWrapArgumentType(ArgumentType<?> rawType) {
+		return rawType;
+	}
+
 }

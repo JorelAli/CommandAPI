@@ -26,6 +26,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -87,12 +88,14 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
 
@@ -139,8 +142,12 @@ import net.minecraft.commands.arguments.item.FunctionArgument;
 import net.minecraft.commands.arguments.item.ItemArgument;
 import net.minecraft.commands.arguments.item.ItemPredicateArgument;
 import net.minecraft.commands.arguments.selector.EntitySelector;
+import net.minecraft.commands.synchronization.ArgumentTypeInfo;
+import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.commands.synchronization.ArgumentUtils;
+import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.RegistryAccess.Frozen;
@@ -154,6 +161,7 @@ import net.minecraft.core.particles.ShriekParticleOption;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.particles.VibrationParticleOption;
 import net.minecraft.network.chat.Component.Serializer;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.MinecraftServer.ReloadableResources;
@@ -185,6 +193,59 @@ import net.minecraft.world.phys.Vec3;
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = EntityPositionSource.class, name = "entityOrUuidOrId", ofType = Either.class)
 public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
+	
+	private static <A extends com.mojang.brigadier.arguments.ArgumentType<?>, T extends ArgumentTypeInfo.Template<A>> ArgumentTypeInfo<A, T> reg(Registry<ArgumentTypeInfo<?, ?>> var0, String var1, Class<? extends A> var2, ArgumentTypeInfo<A, T> var3) {
+	    return (ArgumentTypeInfo<A, T>)Registry.<ArgumentTypeInfo<?, ?>>register(var0, var1, var3);
+	  }
+	
+	@Override
+	public ArgumentType<?> instanceWrapArgumentType(ArgumentType<?> rawType) {
+		Field f;
+		try {
+			f = ArgumentTypeInfos.class.getDeclaredField("a");
+			f.setAccessible(true);
+			Map map = (Map) f.get(null);
+			
+			@SuppressWarnings("rawtypes")
+			ArgumentType<?> customArg = new ArgumentType() {
+	
+				@Override
+				public Object parse(StringReader reader) throws CommandSyntaxException {
+					
+					try {
+						return rawType.parse(reader);
+					} catch(CommandSyntaxException e) {
+						throw CommandAPI.fail("AAAAAAA").getException();
+					}
+				}
+				
+				@Override
+				public Collection<String> getExamples() {
+					return rawType.getExamples();
+				}
+				
+				@Override
+				public CompletableFuture listSuggestions(CommandContext context, SuggestionsBuilder builder) {
+					return rawType.listSuggestions(context, builder);
+				}
+			};
+			ResourceKey registry = Registry.COMMAND_ARGUMENT_TYPE_REGISTRY;
+			
+			ArgumentTypeInfo info = SingletonArgumentInfo.contextFree(() -> customArg);
+			map.put(customArg.getClass(), info);
+			
+			Field f1 = MappedRegistry.class.getDeclaredField("ca"); // frozen
+			f1.setAccessible(true);
+			f1.set(Registry.COMMAND_ARGUMENT_TYPE, false);
+			
+			reg(Registry.COMMAND_ARGUMENT_TYPE, "brigadier:integer", customArg.getClass(), info);
+			
+			return customArg;
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
+		}
+		return rawType;
+	}
 
 	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
 	private static final VarHandle SimpleHelpMap_helpTopics;

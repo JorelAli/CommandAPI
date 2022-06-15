@@ -21,12 +21,17 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Map.Entry;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.tr7zw.changeme.nbtapi.NBTContainer;
 import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
+import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.CustomArgument;
+import dev.jorel.commandapi.arguments.IntegerArgument;
 
 public class CommandAPIMain extends JavaPlugin {
 
@@ -68,5 +73,15 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable(this);
+		
+		
+		Argument<String> arg = new CustomArgument<String, Integer>(new IntegerArgument("hello", 2, 4000), info -> {
+			Bukkit.broadcastMessage("Value: " + info.currentInput());
+			return info.input();
+		});
+		
+		new CommandAPICommand("cmd").withArguments(arg).executes((sender, args) -> {
+			Bukkit.broadcastMessage("Ran with " + Arrays.toString(args));
+		}).register();
 	}
 }
