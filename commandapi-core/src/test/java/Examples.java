@@ -812,6 +812,19 @@ new CommandAPICommand("rem")
 /* ANCHOR_END: itemstackpredicatearguments */
 }
 
+class NBTTest extends JavaPlugin {
+
+/* ANCHOR: nbtcompoundargumentonload */
+@Override
+public void onLoad() {
+    CommandAPI.onLoad(new CommandAPIConfig()
+        .initializeNBTAPI(NBTContainer.class, NBTContainer::new)
+    );
+}
+/* ANCHOR_END: nbtcompoundargumentonload */
+	
+}
+
 @SuppressWarnings("unused")
 void b(){
 /* ANCHOR: nbtcompoundarguments */
