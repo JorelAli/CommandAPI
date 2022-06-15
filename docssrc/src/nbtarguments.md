@@ -12,7 +12,7 @@ By default, the CommandAPI plugin includes a copy of the [NBT API by tr7zw](http
 
 In order to use the `NBTCompoundArgument`, you will have to use an NBT API that can create an NBT Compound object from an `Object` (ideally a `net.minecraft.nbt.NBTTagCompound` object). Examples of NBT APIs that can do this are _(these are not sponsored in any way)_:
 
-- [NBT API](https://www.spigotmc.org/resources/nbt-api.7939/), via the [`new NBTContainer(Object)`](https://github.com/tr7zw/Item-NBT-API/blob/master/item-nbt-api/src/main/java/de/tr7zw/changeme/nbtapi/NBTContainer.java#L33) constructor
+- [NBT API](https://www.spigotmc.org/resources/nbt-api.7939/), via the [`new NBTContainer(Object)`](https://tr7zw.github.io/Item-NBT-API/de/tr7zw/changeme/nbtapi/NBTContainer.html#NBTContainer-java.lang.Object-) constructor
 - [PowerNBT](https://www.spigotmc.org/resources/powernbt.9098/), via the [`NBTCompound.forNBT(Object)`](https://flinbein.github.io/PowerNBT/apidocs/me/dpohvar/powernbt/api/NBTCompound.html#forNBT-java.lang.Object-) static method
 
 ### Hooking into an NBT API
@@ -35,7 +35,7 @@ The `initializeNBTAPI(Class<T>, Function<Object, T>)` takes in two arguments:
 
 Say we want to use the [NBT API](https://www.spigotmc.org/resources/nbt-api.7939/) as our implementation of NBT compounds. First, we have to shade the NBT API into our project (view the official documentation for how to do this for [Maven](https://github.com/tr7zw/Item-NBT-API/wiki/Using-Maven#option-2-shading-the-nbt-api-into-your-plugin) or [Gradle](https://github.com/tr7zw/Item-NBT-API/wiki/Using-Gradle#option-2-shading-the-nbt-api-into-your-plugin)).
 
-Now, we can configure the CommandAPI using the `CommandAPI.onLoad()` method to use the `NBTContainer` class, and the [`NBTContainer` constructor that takes in an `Object`](https://github.com/tr7zw/Item-NBT-API/blob/master/item-nbt-api/src/main/java/de/tr7zw/changeme/nbtapi/NBTContainer.java#L33):
+Now, we can configure the CommandAPI using the `CommandAPI.onLoad()` method to use the `NBTContainer` class, and the [`NBTContainer` constructor that takes in an `Object`](https://tr7zw.github.io/Item-NBT-API/de/tr7zw/changeme/nbtapi/NBTContainer.html#NBTContainer-java.lang.Object-):
 
 ```java
 {{#include ../../commandapi-core/src/test/java/Examples.java:nbtcompoundargumentonload}}
