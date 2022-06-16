@@ -36,7 +36,7 @@
 
 The list of what version of the CommandAPI you'll need to run on a specific version of Minecraft is as follows:
 
-| Minecraft version  | Compatible versions         | Latest compatible version | Minimum Java version to run latest version |
+| Minecraft version  | Compatible versions         | Latest compatible<br>version | Minimum Java<br>version required<br>to run latest version |
 |--------------------|-----------------------------|---------------------------|--------------------------------------------|
 | **1.13.x**         | v1.0 - 5.12, 8.3.0  - 8.3.1 | 8.3.1                     | 16                                         |
 | **1.14.1, 1.14.2** | v2.0 - 5.12, 8.3.0  - 8.3.1 | 8.3.1                     | 16                                         |
