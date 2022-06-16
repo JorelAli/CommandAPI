@@ -32,6 +32,10 @@
 - <img width="20px" src="https://icon-icons.com/icons2/2348/PNG/512/download_arrow_icon_143023.png"></img> [All downloads](https://github.com/JorelAli/CommandAPI/releases)
 - <img width="20px" src="https://icon-icons.com/icons2/2348/PNG/512/books_icon_143050.png"></img> [Documentation (includes usage for server owners!)](https://www.jorel.dev/CommandAPI/)
 
+**Other**
+
+- <img width="20px" src="https://github.githubassets.com/images/modules/site/icons/funding_platforms/ko_fi.svg"></img> [Buy me a coffee](https://ko-fi.com/jorelali)
+
 **Compatible Minecraft versions:**
 
 The list of what version of the CommandAPI you'll need to run on a specific version of Minecraft is as follows:
@@ -59,11 +63,11 @@ The list of what version of the CommandAPI you'll need to run on a specific vers
 
 This project provides an API to help Bukkit/Spigot developers use the Minecraft 1.13 command UI, which includes:
 
-- **Better commands** - Prevent players from running invalid commands, making it easier for developers
+- **Better commands** - Prevent players from running invalid commands, making it easier for developers - you won't get dodgy input!
 
   ![better commands](./images/printnumber.gif)
 
-- **Better arguments** - Easily switch from Location arguments to raw JSON, fully supported with built-in error checking
+- **Better arguments** - Choose from over 50 arguments including location arguments, raw JSON, enchantments, lists, particles... all fully supported with built-in error checking!
 
   ![better arguments](./images/explode.gif)
 
@@ -71,31 +75,34 @@ This project provides an API to help Bukkit/Spigot developers use the Minecraft 
 
   ![proxied senders](./images/selfdestruct.gif)
   
-- **Argument tooltips** - Let your users know exactly what their command will do
+- **Argument tooltips** - Let your users know exactly what their command will do using argument tooltips
 
   ![argument tooltips](./docssrc/src/images/warps.gif)
 
-- **Support for the `/execute` command** - Let your command to be executed by the built in `/execute` command
+- **Support for the `/execute` command** - Let your command to be executed by the built in `/execute` command, as well as command blocks!
 
 - **Support for Minecraft's functions** - Allow your command to be executed from Minecraft's functions and tags
 
 - **No plugin.yml registration** - Commands don't need to be registered in the `plugin.yml` file anymore
 
-- **You don't need Brigadier** - You don't need to import Brigadier in your projects to use the CommandAPI
+- **No need for Brigadier** - You don't need to import Brigadier in your projects to use the CommandAPI
 
 - **No tracking** - The CommandAPI don't collect any stats about its plugin; what you see is what you get!
 
-In addition to all of the above:
+Still not convinced? In addition to all of the above, the CommandAPI also provides:
 
-- **Built-in command converter** - Convert regular plugin commands into `/execute`-compatible ones - no coding experience required!
-- **Optional compile-time annotation-based framework** - Don't like writing lots of code with builders? You don't have to if you don't want to!
+- **Built-in command converter** - Convert other plugin commands into `/execute`-compatible ones - no code required!
+- **Compile-time annotation framework** - Don't like writing lots of code with builders? You don't have to!
+- **Tree-structure command registration** - Like Brigadier's code format? We've got you covered with `CommandTree`
+- **Powerful suggestion generation** - Generate new suggestions for each argument, or add to existing suggestions
+- **Safe suggestion generation** - The CommandAPI offers compile-time type safety for specific arguments
+- **Precise permission support** - Apply permissions to specific arguments - you need perms to even _see_ the argument
+- **Fast updates** - Consistently supports new Minecraft versions within a week of their release
 - [**Insanely detailed documentation**](https://www.jorel.dev/CommandAPI/) - Trust me, you've never seen a plugin documentation look so good.
 
 -----
 
 ## Code examples
-
-_(I always like to see code examples on GitHub repos, so here's what CommandAPI code looks like):_
 
 <details>
     <summary><b>Simple command registration</b></summary>
@@ -246,7 +253,7 @@ Bukkit plugin (shaded) dependencies:
 
 ## Building the CommandAPI
 
-The CommandAPI can be built easily, but requires copies of the Spigot server jars to be present locally on your machine in order to be compatible with any Minecraft version. The CommandAPI is built using the Maven build tool - if you don't have it, you can download it [here](https://maven.apache.org/download.cgi).
+The CommandAPI is built using the Maven build tool - if you don't have it, you can download it [here](https://maven.apache.org/download.cgi).
 
 - Clone the repository using your preferred method, or with the command below:
 
