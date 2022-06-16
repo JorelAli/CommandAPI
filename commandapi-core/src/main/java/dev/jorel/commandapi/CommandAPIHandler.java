@@ -685,8 +685,8 @@ public class CommandAPIHandler<CommandSourceStack> {
 	
 	// Produce the commandDispatch.json file for debug purposes
 	private void generateDispatcherFile() throws IOException {
-		if (CommandAPI.getConfiguration().willCreateDispatcherFile()) {
-			File file = CommandAPI.getDispatcherFile();
+		if (CommandAPI.getConfiguration().getDispatcherFile() != null) {
+			File file = CommandAPI.getConfiguration().getDispatcherFile();
 			try {
 				file.createNewFile();
 			} catch (IOException e) {

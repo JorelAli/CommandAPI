@@ -20,13 +20,14 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.function.Function;
 import java.util.Set;
+import java.util.function.Function;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -43,45 +44,48 @@ public class InternalConfig {
 
 	// Output registering and unregistering of commands
 	private final boolean verboseOutput;
-	
+
 	// Whether we should suppress all logs
 	private final boolean silentLogs;
-	
+
 	// Whether we should use the latest NMS version (which may not be compatible)
 	private final boolean useLatestNMSVersion;
-	
+
 	// The message to display when an executor implementation is missing
 	private final String message_missingExecutorImplementation;
 
 	// Create a command_registration.json file
-	private final boolean createDispatcherFile;
+	private final File dispatcherFile;
 
 	// List of plugins to convert
 	private final Map<JavaPlugin, String[]> pluginsToConvert;
-	
+
 	// List of plugins which should ignore proxied senders
 	private final List<String> skipSenderProxy;
-	
+
 	// List of arbitrary commands to convert
 	private final List<String> commandsToConvert;
-	
+
 	private final Class<?> nbtContainerClass;
 	private final Function<Object, ?> nbtContainerConstructor;
-	
-	public InternalConfig(FileConfiguration fileConfig, Class<?> nbtContainerClass, Function<Object, ?> nbtContainerConstructor) {
+
+	InternalConfig(FileConfiguration fileConfig, Class<?> nbtContainerClass,
+			Function<Object, ?> nbtContainerConstructor, File dispatcherFile) {
 		this.verboseOutput = fileConfig.getBoolean("verbose-outputs");
 		this.silentLogs = fileConfig.getBoolean("silent-logs");
 		this.useLatestNMSVersion = fileConfig.getBoolean("use-latest-nms-version");
 		this.message_missingExecutorImplementation = fileConfig.getString("messages.missing-executor-implementation");
-		this.createDispatcherFile = fileConfig.getBoolean("create-dispatcher-json");
+		this.dispatcherFile = fileConfig.getBoolean("create-dispatcher-json") ? dispatcherFile : null;
 		this.pluginsToConvert = new HashMap<>();
 		this.skipSenderProxy = new ArrayList<>();
 		this.commandsToConvert = new ArrayList<>();
 		this.nbtContainerClass = nbtContainerClass;
 		this.nbtContainerConstructor = nbtContainerConstructor;
 
-		if(!fileConfig.getList("plugins-to-convert").isEmpty() && fileConfig.getMapList("plugins-to-convert").isEmpty()) {
-			CommandAPI.getLogger().severe("plugins-to-convert has an invalid type. Did you miss a colon (:) after a plugin name?");
+		if (!fileConfig.getList("plugins-to-convert").isEmpty()
+				&& fileConfig.getMapList("plugins-to-convert").isEmpty()) {
+			CommandAPI.getLogger()
+					.severe("plugins-to-convert has an invalid type. Did you miss a colon (:) after a plugin name?");
 		}
 
 		for (Map<?, ?> map : fileConfig.getMapList("plugins-to-convert")) {
@@ -93,28 +97,30 @@ public class InternalConfig {
 				List<String> commands = (List<String>) map.values().iterator().next();
 				pluginCommands = commands.toArray(new String[0]);
 			}
-			
+
 			String pluginName = (String) map.keySet().iterator().next();
 			Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
-			if(plugin != null) { 
-				if(plugin instanceof JavaPlugin javaPlugin) {
-					pluginsToConvert.put(javaPlugin, pluginCommands);					
+			if (plugin != null) {
+				if (plugin instanceof JavaPlugin javaPlugin) {
+					pluginsToConvert.put(javaPlugin, pluginCommands);
 				} else {
 					new InvalidPluginException("Plugin " + pluginName + " is not a JavaPlugin!").printStackTrace();
 				}
 			} else {
-				new InvalidPluginException("Could not find a plugin " + pluginName + "! Has it been loaded properly?").printStackTrace();
+				new InvalidPluginException("Could not find a plugin " + pluginName + "! Has it been loaded properly?")
+						.printStackTrace();
 			}
 		}
-		
+
 		for (String pluginName : fileConfig.getStringList("skip-sender-proxy")) {
-			if(Bukkit.getPluginManager().getPlugin(pluginName) != null) { 
+			if (Bukkit.getPluginManager().getPlugin(pluginName) != null) {
 				this.skipSenderProxy.add(pluginName);
 			} else {
-				new InvalidPluginException("Could not find a plugin " + pluginName + "! Has it been loaded properly?").printStackTrace();
+				new InvalidPluginException("Could not find a plugin " + pluginName + "! Has it been loaded properly?")
+						.printStackTrace();
 			}
 		}
-		
+
 		for (String commandName : fileConfig.getStringList("other-commands-to-convert")) {
 			this.commandsToConvert.add(commandName);
 		}
@@ -130,7 +136,7 @@ public class InternalConfig {
 		this.silentLogs = config.silentLogs;
 		this.useLatestNMSVersion = config.useLatestNMSVersion;
 		this.message_missingExecutorImplementation = config.missingExecutorImplementationMessage;
-		this.createDispatcherFile = false; // The dispatcher File is only declared in the plugin version
+		this.dispatcherFile = config.dispatcherFile;
 		this.pluginsToConvert = new HashMap<>();
 		this.skipSenderProxy = new ArrayList<>();
 		this.commandsToConvert = new ArrayList<>();
@@ -141,43 +147,43 @@ public class InternalConfig {
 	public boolean hasVerboseOutput() {
 		return this.verboseOutput;
 	}
-	
+
 	public boolean hasSilentLogs() {
 		return this.silentLogs;
 	}
-	
+
 	public boolean shouldUseLatestNMSVersion() {
 		return this.useLatestNMSVersion;
 	}
-	
+
 	public String getMissingImplementationMessage() {
 		return this.message_missingExecutorImplementation;
 	}
 
-	public boolean willCreateDispatcherFile() {
-		return this.createDispatcherFile;
+	public File getDispatcherFile() {
+		return this.dispatcherFile;
 	}
-	
+
 	public Set<Entry<JavaPlugin, String[]>> getPluginsToConvert() {
 		return this.pluginsToConvert.entrySet();
 	}
-	
+
 	public boolean shouldSkipSenderProxy(Plugin plugin) {
 		return this.skipSenderProxy.contains(plugin.getName());
 	}
-	
+
 	public boolean shouldSkipSenderProxy(String commandName) {
 		return this.skipSenderProxy.contains(commandName);
 	}
-	
+
 	public List<String> getCommandsToConvert() {
 		return this.commandsToConvert;
 	}
-	
+
 	public Class<?> getNBTContainerClass() {
 		return this.nbtContainerClass;
 	}
-	
+
 	public Function<Object, ?> getNBTContainerConstructor() {
 		return this.nbtContainerConstructor;
 	}

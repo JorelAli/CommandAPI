@@ -20,7 +20,6 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
-import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,7 +48,6 @@ public final class CommandAPI {
 
 	private static boolean canRegister = true;
 	static InternalConfig config;
-	static File dispatcherFile;
 	static Logger logger;
 	private static boolean loaded = false;
 
@@ -60,10 +58,6 @@ public final class CommandAPI {
 					"Could not find any configuration for the CommandAPI. Loading basic built-in configuration. Did you forget to call CommandAPI.onLoad(config)?");
 		}
 		return config;
-	}
-
-	static File getDispatcherFile() {
-		return dispatcherFile;
 	}
 	
 	private static class CommandAPILogger extends Logger {

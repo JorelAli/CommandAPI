@@ -41,8 +41,7 @@ public class CommandAPIMain extends JavaPlugin {
 
 		// Config loading
 		saveDefaultConfig();
-		CommandAPI.config = new InternalConfig(getConfig(), NBTContainer.class, NBTContainer::new);
-		CommandAPI.dispatcherFile = new File(getDataFolder(), "command_registration.json");
+		CommandAPI.config = new InternalConfig(getConfig(), NBTContainer.class, NBTContainer::new, new File(getDataFolder(), "command_registration.json"));
 		CommandAPI.logger = getLogger();
 
 		// Check dependencies for CommandAPI

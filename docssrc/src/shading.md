@@ -32,6 +32,7 @@ public class CommandAPIConfig {
     CommandAPIConfig silentLogs(boolean value);    // Disables ALL logging (except errors)
     CommandAPIConfig useLatestNMSVersion(boolean value); // Whether the latest NMS implementation should be used or not
     CommandAPIConfig missingExecutorImplementationMessage(String value); // Set message to display when executor implementation is missing
+    CommandAPIConfig dispatcherFile(File file); // If not null, the CommandAPI will create a JSON file with Brigadier's command tree
 
     <T> CommandAPIConfig initializeNBTAPI(Class<T> nbtContainerClass, Function<Object, T> nbtContainerConstructor); // Initializes hooks with an NBT API. See NBT arguments documentation page for more info
 }
