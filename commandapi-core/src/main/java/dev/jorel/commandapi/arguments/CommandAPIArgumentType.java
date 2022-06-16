@@ -33,6 +33,21 @@ public enum CommandAPIArgumentType {
 	ADVANCEMENT("api:advancement"),
 
 	/**
+	 * The ChatArgument (with Paper Adventure backend)
+	 */
+	ADVENTURE_CHAT,
+
+	/**
+	 * The ChatComponentArgument (with Paper Adventure backend)
+	 */
+	ADVENTURE_CHAT_COMPONENT,
+
+	/**
+	 * The AngleArgument
+	 */
+	ANGLE("minecraft:angle"),
+
+	/**
 	 * The AxisArgument
 	 */
 	AXIS("minecraft:swizzle"),
@@ -43,9 +58,14 @@ public enum CommandAPIArgumentType {
 	BIOME("api:biome"),
 
 	/**
-	 * The ChatArgument (with Paper Adventure backend)
+	 * The BlockPredicateArgument
 	 */
-	ADVENTURE_CHAT,
+	BLOCK_PREDICATE("minecraft:block_predicate"),
+
+	/**
+	 * The BlockStateArgument
+	 */
+	BLOCKSTATE("minecraft:block_state"),
 
 	/**
 	 * The ChatArgument (with BaseComponent backend)
@@ -56,11 +76,6 @@ public enum CommandAPIArgumentType {
 	 * The ChatComponentArgument (with BaseComponent backend)
 	 */
 	CHAT_COMPONENT("minecraft:component"),
-
-	/**
-	 * The ChatComponentArgument (with Paper Adventure backend)
-	 */
-	ADVENTURE_CHAT_COMPONENT,
 
 	/**
 	 * The ChatColorArgument
@@ -114,6 +129,11 @@ public enum CommandAPIArgumentType {
 	ITEMSTACK("minecraft:item_stack"),
 
 	/**
+	 * The ItemStackPredicateArgument
+	 */
+	ITEMSTACK_PREDICATE("minecraft:item_predicate"),
+
+	/**
 	 * The ListArgument
 	 */
 	LIST,
@@ -122,7 +142,7 @@ public enum CommandAPIArgumentType {
 	 * The LiteralArgument
 	 */
 	LITERAL,
-
+	
 	/**
 	 * The LocationArgument
 	 */
@@ -142,11 +162,16 @@ public enum CommandAPIArgumentType {
 	 * The MathOperationArgument
 	 */
 	MATH_OPERATION("minecraft:operation"),
-	
+
 	/**
-	 * The {@link MinecraftKeyArgument}
+	 * The MultiLiteralArgument
 	 */
-	MINECRAFT_KEY("minecraft:resource_location"),
+	MULTI_LITERAL,
+
+	/**
+	 * The {@link NamespacedKeyArgument}
+	 */
+	NAMESPACED_KEY("minecraft:resource_location"),
 
 	/**
 	 * The NBTCompoundArgument
@@ -164,6 +189,11 @@ public enum CommandAPIArgumentType {
 	OBJECTIVE_CRITERIA("minecraft:objective_criteria"),
 
 	/**
+	 * The OfflinePlayerArgument
+	 */
+	OFFLINE_PLAYER,
+
+	/**
 	 * The ParticleArgument
 	 */
 	PARTICLE("minecraft:particle"),
@@ -177,6 +207,46 @@ public enum CommandAPIArgumentType {
 	 * The PotionEffectArgument
 	 */
 	POTION_EFFECT("minecraft:mob_effect"),
+
+	/**
+	 * Primitive argument BooleanArgument
+	 */
+	PRIMITIVE_BOOLEAN("brigadier:bool"),
+
+	/**
+	 * Primitive argument DoubleArgument
+	 */
+	PRIMITIVE_DOUBLE("brigadier:double"),
+
+	/**
+	 * Primitive argument F;patArgument
+	 */
+	PRIMITIVE_FLOAT("brigadier:float"),
+
+	/**
+	 * Primitive argument GreedyStringArgument
+	 */
+	PRIMITIVE_GREEDY_STRING("api:greedy_string"),
+
+	/**
+	 * Primitive argument IntegerArgument
+	 */
+	PRIMITIVE_INTEGER("brigadier:integer"),
+
+	/**
+	 * Primitive argument LongArgument
+	 */
+	PRIMITIVE_LONG("brigadier:long"),
+
+	/**
+	 * Primitive argument StringArgument
+	 */
+	PRIMITIVE_STRING("brigadier:string"),
+
+	/**
+	 * Primitive argument TextArgument
+	 */
+	PRIMITIVE_TEXT("api:text"),
 
 	/**
 	 * The RecipeArgument
@@ -199,46 +269,6 @@ public enum CommandAPIArgumentType {
 	SCOREBOARD_SLOT("minecraft:scoreboard_slot"),
 
 	/**
-	 * Primitive argument BooleanArgument
-	 */
-	PRIMITIVE_BOOLEAN("brigadier:bool"),
-
-	/**
-	 * Primitive argument DoubleArgument
-	 */
-	PRIMITIVE_DOUBLE("brigadier:double"),
-
-	/**
-	 * Primitive argument F;patArgument
-	 */
-	PRIMITIVE_FLOAT("brigadier:float"),
-
-	/**
-	 * Primitive argument IntegerArgument
-	 */
-	PRIMITIVE_INTEGER("brigadier:integer"),
-
-	/**
-	 * Primitive argument LongArgument
-	 */
-	PRIMITIVE_LONG("brigadier:long"),
-
-	/**
-	 * Primitive argument StringArgument
-	 */
-	PRIMITIVE_STRING("brigadier:string"),
-
-	/**
-	 * Primitive argument GreedyStringArgument
-	 */
-	PRIMITIVE_GREEDY_STRING("api:greedy_string"),
-
-	/**
-	 * Primitive argument TextArgument
-	 */
-	PRIMITIVE_TEXT("api:text"),
-
-	/**
 	 * The SoundArgument
 	 */
 	SOUND("api:sound"),
@@ -254,53 +284,9 @@ public enum CommandAPIArgumentType {
 	TIME("minecraft:time"),
 
 	/**
-	 * The BlockStateArgument
-	 */
-	BLOCKSTATE("minecraft:block_state"),
-
-	/**
 	 * The UUIDArgument
 	 */
-	UUID("minecraft:uuid"),
-
-	/**
-	 * The ItemStackPredicateArgument
-	 */
-	ITEMSTACK_PREDICATE("minecraft:item_predicate"),
-
-	/**
-	 * The BlockPredicateArgument
-	 */
-	BLOCK_PREDICATE("minecraft:block_predicate"),
-
-	/**
-	 * The MultiLiteralArgument
-	 */
-	MULTI_LITERAL,
-
-	/**
-	 * The AngleArgument
-	 */
-	ANGLE("minecraft:angle"),
-
-	/**
-	 * The OfflinePlayerArgument
-	 */
-	OFFLINE_PLAYER;
-
-	private String[] internals;
-
-	CommandAPIArgumentType() {
-		internals = new String[0];
-	}
-
-	CommandAPIArgumentType(String internal) {
-		this.internals = new String[] { internal };
-	}
-
-	CommandAPIArgumentType(String[] internals) {
-		this.internals = internals;
-	}
+	UUID("minecraft:uuid");
 
 	/**
 	 * Converts an internal name (e.g. minecraft:time) to a CommandAPIArgumentType
@@ -315,6 +301,20 @@ public enum CommandAPIArgumentType {
 			}
 		}
 		return null;
+	}
+
+	private String[] internals;
+
+	CommandAPIArgumentType() {
+		internals = new String[0];
+	}
+
+	CommandAPIArgumentType(String internal) {
+		this.internals = new String[] { internal };
+	}
+
+	CommandAPIArgumentType(String[] internals) {
+		this.internals = internals;
 	}
 
 }

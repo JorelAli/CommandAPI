@@ -74,7 +74,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 	 *                 <code>NamespacedKey</code> as valid arguments
 	 * @deprecated Use
 	 *             {@link CustomArgument#CustomArgument(Argument, CustomArgumentInfoParser)}
-	 *             with {@link TextArgument} or {@link MinecraftKeyArgument} instead
+	 *             with {@link TextArgument} or {@link NamespacedKeyArgument} instead
 	 */
 	@SuppressWarnings("unchecked")
 	@Deprecated(forRemoval = true)
@@ -371,7 +371,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 
 		@Override
 		public CommandAPIArgumentType getArgumentType() {
-			return keyed ? CommandAPIArgumentType.PRIMITIVE_STRING : CommandAPIArgumentType.MINECRAFT_KEY;
+			return keyed ? CommandAPIArgumentType.PRIMITIVE_STRING : CommandAPIArgumentType.NAMESPACED_KEY;
 		}
 
 		@Override

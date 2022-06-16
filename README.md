@@ -344,6 +344,7 @@ This is the current roadmap for the CommandAPI (as of 13th April 2022):
                 <ul>
                     <li>Implement base arguments for CustomArguments, allowing more powerful parsing</li>
                     <li>Implement common NMS code for 1.17+</li>
+                    <li>Adds <code>NamespacedKeyArgument</code></li>
                 </ul>
             </td>
         </tr>

@@ -29,16 +29,19 @@ import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
 
 /**
- * An argument that represents a Minecraft (namespaced key) argument
+ * An argument that represents a Minecraft resource location (or namespaced key)
+ * in the form namespace:key. The namespace and path can contain characters
+ * {@code 0-9}, {@code a-z}, {@code _} (underscore), {@code -} (hyphen),
+ * {@code .} (dot). The key can also contain {@code /} (forward slash)
  */
-public class MinecraftKeyArgument extends SafeOverrideableArgument<NamespacedKey, NamespacedKey> {
+public class NamespacedKeyArgument extends SafeOverrideableArgument<NamespacedKey, NamespacedKey> {
 
 	/**
 	 * Constructs a MinecraftKeyArgument with a given node name.
 	 * 
 	 * @param nodeName the name of the node for argument
 	 */
-	public MinecraftKeyArgument(String nodeName) {
+	public NamespacedKeyArgument(String nodeName) {
 		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered(),
 				NamespacedKey::toString);
 	}
@@ -50,7 +53,7 @@ public class MinecraftKeyArgument extends SafeOverrideableArgument<NamespacedKey
 
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.MINECRAFT_KEY;
+		return CommandAPIArgumentType.NAMESPACED_KEY;
 	}
 
 	@Override
