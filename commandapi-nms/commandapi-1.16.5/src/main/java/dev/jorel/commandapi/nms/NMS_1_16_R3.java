@@ -183,6 +183,9 @@ import net.minecraft.server.v1_16_R3.Vec3D;
 
 abstract class NMSWrapper_1_16_R3 implements NMS<CommandListenerWrapper> {}
 
+/**
+ * NMS implementation for Minecraft 1.16.5
+ */
 @NMSMeta(compatibleWith = "1.16.5")
 @RequireField(in = DataPackResources.class, name = "i", ofType = CustomFunctionManager.class)
 @RequireField(in = DataPackResources.class, name = "b", ofType = IReloadableResourceManager.class)

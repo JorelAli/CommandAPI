@@ -159,6 +159,9 @@ import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 // Mojang-Mapped reflection
+/**
+ * NMS implementation for Minecraft 1.17 and 1.17.1
+ */
 @NMSMeta(compatibleWith = { "1.17", "1.17.1" })
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)

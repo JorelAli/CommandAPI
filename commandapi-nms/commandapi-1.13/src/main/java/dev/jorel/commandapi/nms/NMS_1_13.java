@@ -152,6 +152,9 @@ import net.minecraft.server.v1_13_R1.Vec3D;
 
 abstract class NMSWrapper_1_13 implements NMS<CommandListenerWrapper> {}
 
+/**
+ * NMS implementation for Minecraft 1.13
+ */
 @NMSMeta(compatibleWith = "1.13")
 @RequireField(in = CraftSound.class, name = "minecraftKey", ofType = String.class)
 @RequireField(in = EntitySelector.class, name = "m", ofType = boolean.class)

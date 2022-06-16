@@ -154,6 +154,9 @@ import net.minecraft.server.v1_15_R1.Vec3D;
 
 abstract class NMSWrapper_1_15 implements NMS<CommandListenerWrapper> {}
 
+/**
+ * NMS implementation for Minecraft 1.15, 1.15.1 and 1.15.2
+ */
 @NMSMeta(compatibleWith = { "1.15", "1.15.1", "1.15.2" })
 @RequireField(in = CraftSound.class, name = "minecraftKey", ofType = String.class)
 @RequireField(in = EntitySelector.class, name = "checkPermissions", ofType = boolean.class)

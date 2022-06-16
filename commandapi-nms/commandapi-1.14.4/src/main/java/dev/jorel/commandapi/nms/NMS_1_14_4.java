@@ -150,6 +150,9 @@ import net.minecraft.server.v1_14_R1.ShapeDetectorBlock;
 import net.minecraft.server.v1_14_R1.Vec2F;
 import net.minecraft.server.v1_14_R1.Vec3D;
 
+/**
+ * NMS implementation for Minecraft 1.14.4
+ */
 @NMSMeta(compatibleWith = "1.14.4")
 @RequireField(in = CraftSound.class, name = "minecraftKey", ofType = String.class)
 @RequireField(in = EntitySelector.class, name = "checkPermissions", ofType = boolean.class)
