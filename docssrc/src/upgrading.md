@@ -1,5 +1,61 @@
 # Upgrading guide
 
+## From 8.3.1 to 8.4.0
+
+### Entity selector arguments
+
+The import for `EntitySelector` for the `EntitySelectorArgument` has moved to improve CommandAPI shading support with jar minimization:
+
+```java
+dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector
+```
+
+\\[\downarrow\\]
+
+```java
+dev.jorel.commandapi.arguments.EntitySelector
+```
+
+### Custom arguments
+
+TODO: Coming soon
+
+### NBT arguments
+
+NBT arguments now have a different implementation if you're using the plugin version of the CommandAPI or shading the CommandAPI.
+
+NBTCompoundArguments are now parameterized over their implemented NBTCompound implementation. For the NBT API, this means:
+
+```java
+new NBTCompoundArgument("nbt");
+```
+
+\\[\downarrow\\]
+
+```java
+new NBTCompoundArgument<NBTContainer>("nbt");
+```
+
+#### If you're using the plugin version of the CommandAPI
+
+You no longer have to include the NBT API separately, the CommandAPI comes with the NBT API built-in:
+
+```java
+de.tr7zw.nbtapi.NBTContainer
+```
+
+\\[\downarrow\\]
+
+```java
+dev.jorel.commandapi.nbtapi
+```
+
+#### If you're shading the CommandAPI
+
+You now need to shade the NBT API into your plugin (as well as the CommandAPI). So the CommandAPI knows how to use the underlying implementation of the NBT API, you have to configure it using the `CommandAPIConfig.initializeNBTAPI()` method in `CommandAPI.onLoad()`. More information on how to do that can be found on the [NBT arguments page, under Shading usage setup](./nbtarguments.md#shading-usage-setup).
+
+-----
+
 ## From 8.0.0 to 8.1.0
 
 Arguments are now parameterized over a generic type. This does very little in terms of the running of the CommandAPI, but does ensure type safety with its internals. Instances of the `Argument` type now have to be parameterized. In general, this basically means:

@@ -353,6 +353,7 @@ This is the current roadmap for the CommandAPI (as of 13th April 2022):
                     <li>Implement common NMS code for 1.17+</li>
                     <li>Adds <code>NamespacedKeyArgument</code></li>
                     <li>Adds support for shaded versions of the CommandAPI to create their own <code>command_registration.json</code> files for debugging</li>
+                    <li>Fixes bug where <code>WrapperCommandSyntaxException</code> wouldn't work as intended</li>
                 </ul>
             </td>
         </tr>
