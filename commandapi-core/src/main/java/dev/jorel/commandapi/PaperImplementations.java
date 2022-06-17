@@ -14,11 +14,24 @@ public class PaperImplementations {
 	private final boolean isPaperPresent;
 	private final NMS<?> nmsInstance;
 
+	/**
+	 * Constructs a PaperImplementations object
+	 * 
+	 * @param isPaperPresent Whether this is a Paper server or not
+	 * @param nmsInstance    The instance of NMS
+	 */
 	public PaperImplementations(boolean isPaperPresent, NMS<?> nmsInstance) {
 		this.isPaperPresent = isPaperPresent;
 		this.nmsInstance = nmsInstance;
 	}
 
+	/**
+	 * Hooks into Paper's {@link ServerResourcesReloadedEvent} to detect if
+	 * {@code /minecraft:reload} is called, and registers a reload handler that
+	 * automatically calls the CommandAPI's internal datapack reloading function
+	 * 
+	 * @param plugin the plugin that the CommandAPI is being used from
+	 */
 	public void registerReloadHandler(Plugin plugin) {
 		if (isPaperPresent) {
 			Bukkit.getServer().getPluginManager().registerEvents(new Listener() {
@@ -32,7 +45,10 @@ public class PaperImplementations {
 			}, plugin);
 		}
 	}
-	
+
+	/**
+	 * @return Bukkit's {@link CommandMap}
+	 */
 	public CommandMap getCommandMap() {
 		if (isPaperPresent) {
 			return Bukkit.getServer().getCommandMap();

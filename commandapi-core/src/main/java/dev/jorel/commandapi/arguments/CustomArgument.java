@@ -249,8 +249,8 @@ public class CustomArgument<T, B> extends Argument<T> {
 	@SuppressWarnings("serial")
 	public static class CustomArgumentException extends Exception {
 
-		final String errorMessage;
-		final MessageBuilder errorMessageBuilder;
+		private final String errorMessage;
+		private final MessageBuilder errorMessageBuilder;
 
 		/**
 		 * Constructs a CustomArgumentException with a given error message

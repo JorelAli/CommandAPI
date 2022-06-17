@@ -73,3 +73,30 @@ During the initialization of Minecraft 1.16+ servers, the CommandAPI uses a cust
 ```java
 CommandAPI.reloadDatapacks();
 ```
+
+-----
+
+## Getting a list of registered commands
+
+The CommandAPI doesn't store the `CommandAPICommand` objects during the main running of the server because it simply doesn't need to. Instead, it stores a list of `RegisteredCommand` objects which are defined as the following, which should be fairly self-explanatory:
+
+```java
+public record RegisteredCommand {
+    String commandName();
+    List<String> argsAsStr();
+    Optional<String> shortDescription();
+    Optional<String> fullDescription();
+    String[] aliases();
+    CommandPermission permission();
+}
+```
+
+The `argsAsStr()` method returns a list of arguments in a string format, of the form `argName:SimpleClassName`, where `argName` is the name of the argument (the argument's node name) and `SimpleClassName` is the name of the argument class that was used to construct it (such as `IntegerArgument`).
+
+A `List<RegisteredCommand>` can be acquired using the following method:
+
+```java
+CommandAPI.getRegisteredCommands();
+```
+
+> Note that this list does not update when commands are _unregistered_, only when commands are registered.

@@ -146,8 +146,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	final TreeMap<String, CommandPermission> PERMISSIONS_TO_FIX = new TreeMap<>();
 	final NMS<CommandSourceStack> NMS;
 	final CommandDispatcher<CommandSourceStack> DISPATCHER;
-	public final List<RegisteredCommand> registeredCommands; // Keep track of what has been registered for type checking
-	public final List<CommandHelp> commands;
+	final List<RegisteredCommand> registeredCommands; // Keep track of what has been registered for type checking
 	private PaperImplementations paper;
 
 	private CommandAPIHandler() {
@@ -156,7 +155,6 @@ public class CommandAPIHandler<CommandSourceStack> {
 				.getNMS(bukkit.substring(bukkit.indexOf("minecraftVersion") + 17, bukkit.length() - 1));
 		DISPATCHER = NMS.getBrigadierDispatcher();
 		registeredCommands = new ArrayList<>();
-		commands = new ArrayList<>();
 		this.paper = new PaperImplementations(false, NMS);
 	}
 
@@ -289,14 +287,12 @@ public class CommandAPIHandler<CommandSourceStack> {
 				String[] result = new String[argsAndCmd.length - 1];
 				System.arraycopy(argsAndCmd, 1, result, 0, argsAndCmd.length - 1);
 
-				@SuppressWarnings("unchecked")
-				List<String>[] entityNamesForArgs = new List[args.length];
-
+				List<List<String>> entityNamesForArgs = new ArrayList<>();
 				for (int i = 0; i < args.length; i++) {
-					entityNamesForArgs[i] = args[i].getEntityNames(argObjs[i]);
+					entityNamesForArgs.set(i, args[i].getEntityNames(argObjs[i]));
 				}
 
-				List<List<String>> product = CartesianProduct.getDescartes(Arrays.asList(entityNamesForArgs));
+				List<List<String>> product = CartesianProduct.getDescartes(entityNamesForArgs);
 
 				// These objects in obj are List<String>
 				for (List<String> strings : product) {
@@ -526,7 +522,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	private boolean hasCommandConflict(String commandName, Argument<?>[] args, String argumentsAsString) {
 		List<String[]> regArgs = new ArrayList<>();
 		for (RegisteredCommand rCommand : registeredCommands) {
-			if (rCommand.command().equals(commandName)) {
+			if (rCommand.commandName().equals(commandName)) {
 				for (String str : rCommand.argsAsStr()) {
 					regArgs.add(str.split(":"));
 				}
@@ -652,7 +648,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		// Handle command conflicts
 		boolean hasRegisteredCommand = false;
 		for (RegisteredCommand rCommand : registeredCommands) {
-			hasRegisteredCommand |= rCommand.command().equals(commandName);
+			hasRegisteredCommand |= rCommand.commandName().equals(commandName);
 		}
 		if (hasRegisteredCommand && hasCommandConflict(commandName, args, builder.toString())) {
 			return;
@@ -661,7 +657,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 			for (Argument<?> arg : args) {
 				argumentsString.add(arg.getNodeName() + ":" + arg.getClass().getSimpleName());
 			}
-			registeredCommands.add(new RegisteredCommand(commandName, argumentsString));
+			registeredCommands.add(new RegisteredCommand(commandName, argumentsString, shortDescription, fullDescription, aliases, permission));
 		}
 
 		if (Bukkit.getPluginCommand(commandName) != null) {
@@ -671,7 +667,6 @@ public class CommandAPIHandler<CommandSourceStack> {
 		}
 
 		CommandAPI.logInfo("Registering command /" + commandName + " " + builder.toString());
-		commands.add(new CommandHelp(commandName, shortDescription, fullDescription, aliases, permission));
 
 		// Generate the actual command
 		Command<CommandSourceStack> command = generateCommand(args, executor, converted);
@@ -793,15 +788,15 @@ public class CommandAPIHandler<CommandSourceStack> {
 			newSuggestionsProvider = (cmdCtx, builder) -> {
 				// Heavily inspired by CommandDispatcher#listSuggestions, with combining
 				// multiple CompletableFuture<Suggestions> into one.
-				@SuppressWarnings("unchecked")
-				final CompletableFuture<Suggestions>[] futures = new CompletableFuture[] {
-						addedSuggestions.getSuggestions(cmdCtx, builder), provider.getSuggestions(cmdCtx, builder) };
+
+				CompletableFuture<Suggestions> addedSuggestionsFuture = addedSuggestions.getSuggestions(cmdCtx,
+						builder);
+				CompletableFuture<Suggestions> providerSuggestionsFuture = provider.getSuggestions(cmdCtx, builder);
 				CompletableFuture<Suggestions> result = new CompletableFuture<>();
-				CompletableFuture.allOf(futures).thenRun(() -> {
+				CompletableFuture.allOf(addedSuggestionsFuture, providerSuggestionsFuture).thenRun(() -> {
 					List<Suggestions> suggestions = new ArrayList<>();
-					for (CompletableFuture<Suggestions> future : futures) {
-						suggestions.add(future.join());
-					}
+					suggestions.add(addedSuggestionsFuture.join());
+					suggestions.add(providerSuggestionsFuture.join());
 					result.complete(Suggestions.merge(cmdCtx.getInput(), suggestions));
 				});
 				return result;
@@ -900,13 +895,13 @@ public class CommandAPIHandler<CommandSourceStack> {
 		return (Bukkit.getPluginCommand(command) == null ? "/" : "/minecraft:") + command;
 	}
 
-	private void generateHelpUsage(StringBuilder sb, CommandHelp command) {
+	private void generateHelpUsage(StringBuilder sb, RegisteredCommand command) {
 		sb.append(ChatColor.GOLD + "Usage: " + ChatColor.WHITE);
 
 		// Generate usages
 		List<String> usages = new ArrayList<>();
 		for (RegisteredCommand rCommand : registeredCommands) {
-			if (rCommand.command().equals(command.commandName())) {
+			if (rCommand.commandName().equals(command.commandName())) {
 				StringBuilder usageString = new StringBuilder();
 				usageString.append("/" + command.commandName() + " ");
 				for (String arg : rCommand.argsAsStr()) {
@@ -929,7 +924,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	void updateHelpForCommands() {
 		Map<String, HelpTopic> helpTopicsToAdd = new HashMap<>();
 
-		for (CommandHelp command : this.commands) {
+		for (RegisteredCommand command : this.registeredCommands) {
 			// Generate short description
 			final String shortDescription;
 			if (command.shortDescription().isPresent()) {
@@ -960,11 +955,11 @@ public class CommandAPIHandler<CommandSourceStack> {
 			String permission = command.permission().getPermission().orElseGet(() -> "");
 
 			// Don't override the plugin help topic
-			String commandPrefix = generateCommandHelpPrefix(command.commandName);
+			String commandPrefix = generateCommandHelpPrefix(command.commandName());
 			helpTopicsToAdd.put(commandPrefix,
 					NMS.generateHelpTopic(commandPrefix, shortDescription, sb.toString().trim(), permission));
 
-			for (String alias : command.aliases) {
+			for (String alias : command.aliases()) {
 				StringBuilder currentAliasSb = new StringBuilder(aliasSb.toString());
 				if (command.aliases().length > 0) {
 					currentAliasSb.append(ChatColor.GOLD + "Aliases: " + ChatColor.WHITE);
@@ -1000,18 +995,6 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 */
 	private record ClassCache(Class<?> clazz, String name) {
 	}
-
-	/**
-	 * Class to store a registered command which has its command name and a list of
-	 * arguments as a string. The arguments are expected to be of the form
-	 * node_name:class_name, for example value:IntegerArgument
-	 */
-	public record RegisteredCommand(String command, List<String> argsAsStr) {
-	};
-
-	public record CommandHelp(String commandName, Optional<String> shortDescription, Optional<String> fullDescription,
-			String[] aliases, CommandPermission permission) {
-	};
 
 	/**
 	 * A class to compute the Cartesian product of a number of lists. Source:

@@ -185,7 +185,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 			CommandAPI.logWarning("Command /" + meta.commandName + " is being registered after the server had loaded. Undefined behavior ahead!");
 		}
 		try {
-			Argument<?>[] argumentsArr = args == null ? new Argument[0] : args.toArray(new Argument[0]);
+			Argument<?>[] argumentsArr = args == null ? new Argument<?>[0] : args.toArray(new Argument<?>[0]);
 			
 			// Check IGreedyArgument constraints 
 			for(int i = 0, numGreedyArgs = 0; i < argumentsArr.length; i++) {

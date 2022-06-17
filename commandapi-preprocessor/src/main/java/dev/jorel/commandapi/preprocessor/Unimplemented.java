@@ -41,19 +41,59 @@ public @interface Unimplemented {
 	 */
 	REASON[] because();
 
+	/**
+	 * @return description
+	 */
 	String from() default "";
 
+	/**
+	 * @return description
+	 */
 	String to() default "";
 
+	/**
+	 * @return description
+	 */
 	String in() default "";
 
+	/**
+	 * @return description
+	 */
 	String introducedIn() default "";
 
+	/**
+	 * @return description
+	 */
 	String classNamed() default "";
 
+	/**
+	 * The reason why this method was unimplemented
+	 */
 	enum REASON {
-		REQUIRES_CRAFTBUKKIT, NAME_CHANGED, VERSION_SPECIFIC_IMPLEMENTATION,
-		REQUIRES_CSS, REQUIRES_MINECRAFT_SERVER
+		/**
+		 * This method requires importing {@code org.bukkit.craftbukkit}
+		 */
+		REQUIRES_CRAFTBUKKIT,
+
+		/**
+		 * A method or field name changed
+		 */
+		NAME_CHANGED,
+
+		/**
+		 * The implementation of this feature is specific to a given Minecraft version
+		 */
+		VERSION_SPECIFIC_IMPLEMENTATION,
+
+		/**
+		 * Requires access to CommandSourceStack (CommandListenerWrapper)
+		 */
+		REQUIRES_CSS,
+
+		/**
+		 * Requires access to the NMS Minecraft server
+		 */
+		REQUIRES_MINECRAFT_SERVER
 	}
 
 }

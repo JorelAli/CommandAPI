@@ -750,7 +750,7 @@ new CommandAPICommand("bigmsg")
 
 {
 /* ANCHOR: blockpredicatearguments */
-Argument<?>[] arguments = new Argument[] {
+Argument<?>[] arguments = new Argument<?>[] {
     new IntegerArgument("radius"),
     new BlockPredicateArgument("fromBlock"),
     new BlockStateArgument("toBlock"),

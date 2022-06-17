@@ -20,6 +20,8 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -144,7 +146,7 @@ public final class CommandAPI {
 	@Deprecated(forRemoval = true)
 	public static void onLoad(boolean verbose) {
 		if (!loaded) {
-			CommandAPI.config = new InternalConfig(verbose);
+			CommandAPI.config = new InternalConfig(new CommandAPIConfig().verboseOutput(verbose));
 			CommandAPIHandler.getInstance().checkDependencies();
 			loaded = true;
 		} else {
@@ -269,5 +271,13 @@ public final class CommandAPI {
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * @return A list of all {@link RegisteredCommand}{@code s} that have been
+	 *         registered by the CommandAPI so far. The returned list is immutable.
+	 */
+	public static List<RegisteredCommand> getRegisteredCommands() {
+		return Collections.unmodifiableList(CommandAPIHandler.getInstance().registeredCommands);
 	}
 }

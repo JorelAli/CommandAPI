@@ -10,12 +10,18 @@ public class CommandTree extends ExecutableCommand<CommandTree> {
 
 	private final List<ArgumentTree> arguments = new ArrayList<>();
 
+	/**
+	 * Creates a main root node for a command tree with a given command name
+	 * 
+	 * @param commandName The name of the command to create
+	 */
 	public CommandTree(final String commandName) {
 		super(commandName);
 	}
 
 	/**
 	 * Create a child branch on the tree
+	 * 
 	 * @param tree the child node
 	 * @return this root node
 	 */
@@ -29,13 +35,13 @@ public class CommandTree extends ExecutableCommand<CommandTree> {
 	 */
 	public void register() {
 		List<Execution> executions = new ArrayList<>();
-		if(this.executor.hasAnyExecutors()) {
+		if (this.executor.hasAnyExecutors()) {
 			executions.add(new Execution(new ArrayList<>(), this.executor));
 		}
-		for(ArgumentTree tree : arguments) {
+		for (ArgumentTree tree : arguments) {
 			executions.addAll(tree.getExecutions());
 		}
-		for(Execution execution : executions) {
+		for (Execution execution : executions) {
 			execution.register(this.meta);
 		}
 	}
