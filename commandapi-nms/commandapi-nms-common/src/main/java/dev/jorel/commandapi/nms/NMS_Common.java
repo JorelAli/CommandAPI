@@ -132,7 +132,7 @@ import net.minecraft.world.phys.Vec2F;
  * Any of these that do not work should be removed or implemented otherwise
  * (introducing another NMS_Common module perhaps?
  */
-@SuppressWarnings({ "unchecked", "rawtypes" })
+@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
 public abstract class NMS_Common<T> implements NMS<T> {
 
 	@Override
@@ -425,7 +425,6 @@ public abstract class NMS_Common<T> implements NMS<T> {
 		return MathOperation.fromString(CommandAPIHandler.getRawArgumentInput(cmdCtx, key));
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public NamespacedKey getMinecraftKey(CommandContext cmdCtx, String key) {
 		MinecraftKey resourceLocation = ArgumentMinecraftKeyRegistered.e(cmdCtx, key);
