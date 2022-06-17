@@ -51,6 +51,10 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 		this.isConverted = false;
 	}
 
+	/**
+	 * Creates a new Command builder
+	 * @param metaData The metadata of the command to create
+	 */
 	protected CommandAPICommand(CommandMetaData metaData) {
 		super(metaData);
 		this.isConverted = false;
@@ -175,9 +179,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 		}
 	}
 	
-	/**
-	 * Registers the command
-	 */
+	@Override
 	public void register() {
 		if(!CommandAPI.canRegister()) {
 			CommandAPI.logWarning("Command /" + meta.commandName + " is being registered after the server had loaded. Undefined behavior ahead!");

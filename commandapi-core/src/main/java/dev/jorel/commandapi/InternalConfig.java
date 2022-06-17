@@ -144,46 +144,84 @@ public class InternalConfig {
 		this.nbtContainerConstructor = config.nbtContainerConstructor;
 	}
 
+	/**
+	 * @return Whether verbose output is enabled
+	 */
 	public boolean hasVerboseOutput() {
 		return this.verboseOutput;
 	}
 
+	/**
+	 * @return Whether silent logs is enabled
+	 */
 	public boolean hasSilentLogs() {
 		return this.silentLogs;
 	}
 
+	/**
+	 * @return Whether the CommandAPI should use the latest available NMS version
+	 */
 	public boolean shouldUseLatestNMSVersion() {
 		return this.useLatestNMSVersion;
 	}
 
+	/**
+	 * @return The message to display if a command executor does not have an
+	 *         implementation for a given type
+	 */
 	public String getMissingImplementationMessage() {
 		return this.message_missingExecutorImplementation;
 	}
 
+	/**
+	 * @return The {@link File} which should be used to create a JSON representation
+	 *         of Brigadier's command tree
+	 */
 	public File getDispatcherFile() {
 		return this.dispatcherFile;
 	}
 
+	/**
+	 * @return A set of plugins and a list of commands to convert
+	 */
 	public Set<Entry<JavaPlugin, String[]>> getPluginsToConvert() {
 		return this.pluginsToConvert.entrySet();
 	}
 
+	/**
+	 * @param plugin A plugin where sender proxying should be skipped
+	 * @return Whether sender proxying should be skipped for a given plugin
+	 */
 	public boolean shouldSkipSenderProxy(Plugin plugin) {
 		return this.skipSenderProxy.contains(plugin.getName());
 	}
 
+	/**
+	 * @param commandName A command where sender proxying should be skipped
+	 * @return Whether sender proxying should be skipped for a given command
+	 */
 	public boolean shouldSkipSenderProxy(String commandName) {
 		return this.skipSenderProxy.contains(commandName);
 	}
 
+	/**
+	 * @return A list of commands to convert to Vanilla-compatible commands
+	 */
 	public List<String> getCommandsToConvert() {
 		return this.commandsToConvert;
 	}
 
+	/**
+	 * @return The NBT Tag Compound implementation class
+	 */
 	public Class<?> getNBTContainerClass() {
 		return this.nbtContainerClass;
 	}
 
+	/**
+	 * @return A function that takes in an Object (NMS NBTTagCompound) and returns
+	 *         an implementation of an NBT Tag Compound
+	 */
 	public Function<Object, ?> getNBTContainerConstructor() {
 		return this.nbtContainerConstructor;
 	}

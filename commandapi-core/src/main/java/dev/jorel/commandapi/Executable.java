@@ -25,6 +25,9 @@ import org.bukkit.command.CommandSender;
  */
 abstract class Executable<T extends Executable<T>> {
 
+	/**
+	 * The CustomCommandExecutor for this executable implementation
+	 */
 	protected CustomCommandExecutor<?> executor = new CustomCommandExecutor<>();
 
 	// Regular command executor
@@ -32,6 +35,7 @@ abstract class Executable<T extends Executable<T>> {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(CommandSender, Object[]) -&gt; ()</code> that will be executed when the command is run
+	 * @param types A list of executor types to use this executes method for.
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -60,6 +64,7 @@ abstract class Executable<T extends Executable<T>> {
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(CommandSender, Object[]) -&gt; int</code> that will be executed when the command is run
+	 * @param types A list of executor types to use this executes method for.
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")

@@ -32,6 +32,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 
 import com.mojang.brigadier.LiteralMessage;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
@@ -51,6 +52,11 @@ public final class CommandAPI {
 	static Logger logger;
 	private static boolean loaded = false;
 
+	/**
+	 * Returns the internal configuration used to manage the CommandAPI
+	 * 
+	 * @return the internal configuration used to manage the CommandAPI
+	 */
 	public static InternalConfig getConfiguration() {
 		if (config == null) {
 			CommandAPI.onLoad(new CommandAPIConfig());
@@ -59,7 +65,7 @@ public final class CommandAPI {
 		}
 		return config;
 	}
-	
+
 	private static class CommandAPILogger extends Logger {
 
 		protected CommandAPILogger() {
@@ -67,7 +73,7 @@ public final class CommandAPI {
 			setParent(Bukkit.getServer().getLogger());
 			setLevel(Level.ALL);
 		}
-		
+
 	}
 
 	/**
@@ -212,6 +218,8 @@ public final class CommandAPI {
 	 * Forces a command to return a success value of 0
 	 * 
 	 * @param message Description of the error message
+	 * @return a {@link WrapperCommandSyntaxException} that wraps Brigadier's
+	 *         {@link CommandSyntaxException}
 	 */
 	public static WrapperCommandSyntaxException fail(String message) {
 		return new WrapperCommandSyntaxException(new SimpleCommandExceptionType(new LiteralMessage(message)).create());

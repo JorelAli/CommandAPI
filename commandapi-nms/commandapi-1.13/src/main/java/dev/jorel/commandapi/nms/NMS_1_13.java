@@ -149,8 +149,6 @@ import net.minecraft.server.v1_13_R1.ShapeDetectorBlock;
 import net.minecraft.server.v1_13_R1.Vec2F;
 import net.minecraft.server.v1_13_R1.Vec3D;
 
-abstract class NMSWrapper_1_13 implements NMS<CommandListenerWrapper> {}
-
 /**
  * NMS implementation for Minecraft 1.13
  */

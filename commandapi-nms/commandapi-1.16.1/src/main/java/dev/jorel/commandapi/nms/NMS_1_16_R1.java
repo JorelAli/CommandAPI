@@ -161,8 +161,6 @@ import net.minecraft.server.v1_16_R1.Unit;
 import net.minecraft.server.v1_16_R1.Vec2F;
 import net.minecraft.server.v1_16_R1.Vec3D;
 
-abstract class NMSWrapper_1_16_R1 implements NMS<CommandListenerWrapper> {}
-
 /**
  * NMS implementation for Minecraft 1.16.1
  */
