@@ -18,6 +18,7 @@ var classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument 
     [ "includeWithSafeSuggestionsT", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html#a53be4c945c22ab14c2ba68c35c185230", null ],
     [ "isListed", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html#a226bf35233c235708220f359a3eadf52", null ],
     [ "parseArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html#ab19ac2116452cbd12c502106d4803a03", null ],
+    [ "replaceSafeSuggestions", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html#ae222f0750ac994b0381b8edc1b6d8ed9", null ],
     [ "replaceSuggestions", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html#a4b1028432eb0291ac8ae52d0a8daf82d", null ],
     [ "replaceSuggestions", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html#a085b5f8ea1de970065bb9e1c62ce36f5", null ],
     [ "replaceSuggestionsT", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html#a8ab1c1059619e96153e6619cae9f8382", null ],
