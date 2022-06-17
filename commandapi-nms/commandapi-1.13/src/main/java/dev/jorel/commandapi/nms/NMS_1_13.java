@@ -61,7 +61,6 @@ import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.potion.PotionEffectType;
 
-import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -744,7 +743,7 @@ public class NMS_1_13 extends NMSWrapper_1_13 {
 	public OfflinePlayer getOfflinePlayer(CommandContext<CommandListenerWrapper> cmdCtx, String str)
 			throws CommandSyntaxException {
 		OfflinePlayer target = Bukkit
-				.getOfflinePlayer(((GameProfile) ArgumentProfile.a(cmdCtx, str).iterator().next()).getId());
+				.getOfflinePlayer((ArgumentProfile.a(cmdCtx, str).iterator().next()).getId());
 		if (target == null) {
 			throw ArgumentProfile.a.create();
 		} else {
@@ -782,7 +781,7 @@ public class NMS_1_13 extends NMSWrapper_1_13 {
 
 	@Override
 	public Player getPlayer(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
-		Player target = Bukkit.getPlayer(((GameProfile) ArgumentProfile.a(cmdCtx, str).iterator().next()).getId());
+		Player target = Bukkit.getPlayer((ArgumentProfile.a(cmdCtx, str).iterator().next()).getId());
 		if (target == null) {
 			throw ArgumentProfile.a.create();
 		} else {

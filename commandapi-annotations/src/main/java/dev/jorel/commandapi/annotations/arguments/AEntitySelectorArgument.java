@@ -26,7 +26,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import dev.jorel.commandapi.arguments.EntitySelector;
+import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 
+/**
+ * Annotation equivalent of the {@link EntitySelectorArgument}
+ */
 @Primitive({ "java.util.Collection<org.bukkit.entity.Entity>", // MANY_ENTITIES
 		"java.util.Collection<org.bukkit.entity.Player>", // MANY_PLAYERS
 		"org.bukkit.entity.Entity", // ONE_ENTITY
@@ -36,6 +40,9 @@ import dev.jorel.commandapi.arguments.EntitySelector;
 @Target(ElementType.PARAMETER)
 public @interface AEntitySelectorArgument {
 	
+	/**
+	 * @return the entity selector for this argument
+	 */
 	EntitySelector value() default EntitySelector.ONE_ENTITY;
 	
 }

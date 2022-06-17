@@ -30,6 +30,7 @@ import net.kyori.adventure.text.Component;
 
 /**
  * An argument that represents raw JSON text
+ * @apiNote Returns a {@link Component} object
  */
 public class AdventureChatComponentArgument extends Argument<Component> {
 

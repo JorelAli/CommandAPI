@@ -37,7 +37,7 @@ public class ScoreHolderArgument<T> extends Argument<T> {
 	
 	/**
 	 * A Score Holder argument. Represents a single score holder or a collection of score holders.
-	 * Defaults to using ScoreHolderType.SINGLE
+	 * Defaults to using {@link ScoreHolderType#SINGLE}
 	 * @param nodeName the name of the node for this argument
 	 */
 	public ScoreHolderArgument(String nodeName) {

@@ -39,6 +39,7 @@ import dev.jorel.commandapi.nms.NMS;
  * @param <B> the return type of the underlying base argument {@code base}. For
  *            example, this would be {@code Integer} for an
  *            {@link IntegerArgument}
+ * @apiNote Returns a {@link T} object
  */
 public class CustomArgument<T, B> extends Argument<T> {
 

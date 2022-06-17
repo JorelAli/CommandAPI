@@ -60,7 +60,6 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
-import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -245,8 +244,7 @@ public class NMS_1_14_4 implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
-	public ArgumentType<?> _ArgumentEntity(
-			dev.jorel.commandapi.arguments.EntitySelector selector) {
+	public ArgumentType<?> _ArgumentEntity(dev.jorel.commandapi.arguments.EntitySelector selector) {
 		return switch (selector) {
 			case MANY_ENTITIES -> ArgumentEntity.multipleEntities();
 			case MANY_PLAYERS -> ArgumentEntity.d();
@@ -551,8 +549,7 @@ public class NMS_1_14_4 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String str,
-			dev.jorel.commandapi.arguments.EntitySelector selector)
-			throws CommandSyntaxException {
+			dev.jorel.commandapi.arguments.EntitySelector selector) throws CommandSyntaxException {
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
 		try {
 			CommandAPIHandler.getInstance().getField(EntitySelector.class, "checkPermissions").set(argument, false);
@@ -601,8 +598,7 @@ public class NMS_1_14_4 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public FloatRange getFloatRange(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		CriterionConditionValue.FloatRange range = (CriterionConditionValue.FloatRange) cmdCtx.getArgument(key,
-				CriterionConditionValue.FloatRange.class);
+		CriterionConditionValue.FloatRange range = cmdCtx.getArgument(key, CriterionConditionValue.FloatRange.class);
 		float low = range.a() == null ? -Float.MAX_VALUE : range.a();
 		float high = range.b() == null ? Float.MAX_VALUE : range.b();
 		return new FloatRange(low, high);
@@ -732,7 +728,7 @@ public class NMS_1_14_4 implements NMS<CommandListenerWrapper> {
 	public OfflinePlayer getOfflinePlayer(CommandContext<CommandListenerWrapper> cmdCtx, String str)
 			throws CommandSyntaxException {
 		OfflinePlayer target = Bukkit
-				.getOfflinePlayer(((GameProfile) ArgumentProfile.a(cmdCtx, str).iterator().next()).getId());
+				.getOfflinePlayer((ArgumentProfile.a(cmdCtx, str).iterator().next()).getId());
 		if (target == null) {
 			throw ArgumentProfile.a.create();
 		} else {
@@ -770,7 +766,7 @@ public class NMS_1_14_4 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public Player getPlayer(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
-		Player target = Bukkit.getPlayer(((GameProfile) ArgumentProfile.a(cmdCtx, str).iterator().next()).getId());
+		Player target = Bukkit.getPlayer((ArgumentProfile.a(cmdCtx, str).iterator().next()).getId());
 		if (target == null) {
 			throw ArgumentProfile.a.create();
 		} else {
@@ -901,7 +897,7 @@ public class NMS_1_14_4 implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public int getTime(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		return (Integer) cmdCtx.getArgument(key, Integer.class);
+		return cmdCtx.getArgument(key, Integer.class);
 	}
 
 	@Override

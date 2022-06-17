@@ -25,6 +25,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.TimeArgument;
+
+/**
+ * Annotation equivalent of the {@link TimeArgument}
+ */
 @Primitive("int")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)

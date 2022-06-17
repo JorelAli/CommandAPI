@@ -30,6 +30,8 @@ import dev.jorel.commandapi.nms.NMS;
 
 /**
  * An argument that represents the Bukkit Enchantment object
+ * 
+ * @apiNote Returns an {@link Enchantment} object
  */
 public class EnchantmentArgument extends SafeOverrideableArgument<Enchantment, Enchantment> {
 	

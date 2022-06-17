@@ -32,31 +32,37 @@ import dev.jorel.commandapi.nms.NMS;
 
 /**
  * An argument that represents x, y and z axes as an EnumSet of Axis
+ * 
+ * @apiNote Returns a {@link EnumSet}{@code <}{@link Axis}{@code >} object
  */
 @SuppressWarnings("rawtypes")
 public class AxisArgument extends SafeOverrideableArgument<EnumSet, EnumSet<Axis>> {
 
 	/**
-	 * Constructs an AxisArgument with a given node name. Represents the axes x, y and z
+	 * Constructs an AxisArgument with a given node name. Represents the axes x, y
+	 * and z
+	 * 
 	 * @param nodeName the name of the node for argument
 	 */
 	public AxisArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentAxis(), e -> e.stream().map(Axis::name).map(String::toLowerCase).reduce(String::concat).get());
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentAxis(),
+				e -> e.stream().map(Axis::name).map(String::toLowerCase).reduce(String::concat).get());
 	}
 
 	@Override
 	public Class<EnumSet> getPrimitiveType() {
 		return EnumSet.class;
 	}
-	
+
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.AXIS;
 	}
-	
+
 	@Override
 	public <CommandListenerWrapper> EnumSet<Axis> parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
+			throws CommandSyntaxException {
 		return nms.getAxis(cmdCtx, key);
 	}
 }

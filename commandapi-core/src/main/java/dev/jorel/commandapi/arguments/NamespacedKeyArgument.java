@@ -33,6 +33,7 @@ import dev.jorel.commandapi.nms.NMS;
  * in the form namespace:key. The namespace and path can contain characters
  * {@code 0-9}, {@code a-z}, {@code _} (underscore), {@code -} (hyphen),
  * {@code .} (dot). The key can also contain {@code /} (forward slash)
+ * @apiNote Returns a {@link NamespacedKey} object
  */
 public class NamespacedKeyArgument extends SafeOverrideableArgument<NamespacedKey, NamespacedKey> {
 

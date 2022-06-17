@@ -30,6 +30,8 @@ import net.md_5.bungee.api.chat.BaseComponent;
 
 /**
  * An argument that represents chat with entity selectors
+ * 
+ * @apiNote Returns a {@link BaseComponent}{@code []} object
  */
 public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyArgument {
 

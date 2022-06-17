@@ -25,6 +25,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.EnchantmentArgument;
+
+/**
+ * Annotation equivalent of the {@link EnchantmentArgument}
+ */
 @Primitive("org.bukkit.enchantments.Enchantment")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)

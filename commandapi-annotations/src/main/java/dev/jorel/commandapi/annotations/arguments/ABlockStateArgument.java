@@ -25,8 +25,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.BlockStateArgument;
+
+/**
+ * Annotation equivalent of the {@link BlockStateArgument}
+ */
 @Primitive("org.bukkit.block.data.BlockData")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)
-public @interface ABlockStateArgument {		
+public @interface ABlockStateArgument {
 }

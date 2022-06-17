@@ -25,6 +25,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.RotationArgument;
+
+/**
+ * Annotation equivalent of the {@link RotationArgument}
+ */
 @Primitive("dev.jorel.commandapi.wrappers.Rotation")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)

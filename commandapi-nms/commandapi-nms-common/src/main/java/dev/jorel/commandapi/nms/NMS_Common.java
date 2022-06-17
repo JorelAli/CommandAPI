@@ -461,7 +461,7 @@ public abstract class NMS_Common<T> implements NMS<T> {
 
 	@Override
 	public final int getTime(CommandContext cmdCtx, String key) {
-		return (Integer) cmdCtx.getArgument(key, Integer.class);
+		return (int) cmdCtx.getArgument(key, Integer.class);
 	}
 
 	@Override

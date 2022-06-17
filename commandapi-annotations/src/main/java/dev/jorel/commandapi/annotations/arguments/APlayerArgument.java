@@ -25,6 +25,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.PlayerArgument;
+
+/**
+ * Annotation equivalent of the {@link PlayerArgument}
+ */
 @Primitive("org.bukkit.entity.Player")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)

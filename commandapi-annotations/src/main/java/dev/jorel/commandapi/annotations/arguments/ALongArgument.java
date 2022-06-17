@@ -25,12 +25,24 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.LongArgument;
+
+/**
+ * Annotation equivalent of the {@link LongArgument}
+ */
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)
 @Primitive("long")
 public @interface ALongArgument {
-	
+
+	/**
+	 * @return The minimum value this argument can take (inclusive)
+	 */
 	public long min() default Long.MIN_VALUE;
+
+	/**
+	 * @return The maximum value this argument can take (inclusive)
+	 */
 	public long max() default Long.MAX_VALUE;
-	
+
 }

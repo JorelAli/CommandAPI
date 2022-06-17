@@ -29,12 +29,13 @@ import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
 
 /**
- * An argument that represents the Bukkit Location object
+ * An argument that represents the Bukkit {@link Location} object
+ * @apiNote Returns a {@link Location} object
  */
 public class LocationArgument extends SafeOverrideableArgument<Location, Location> {
 	
 	/**
-	 * A Location argument. Represents Minecraft locations. Defaults to LocationType.PRECISE_POSITION
+	 * A Location argument. Represents Minecraft locations. Defaults to {@link LocationType#PRECISE_POSITION}
 	 * @param nodeName the name of the node for this argument
 	 */
 	public LocationArgument(String nodeName) {
@@ -44,7 +45,7 @@ public class LocationArgument extends SafeOverrideableArgument<Location, Locatio
 	/**
 	 * A Location argument. Represents Minecraft locations
 	 * @param nodeName the name of the node for this argument
-	 * @param type the location type of this location, either LocationType.BLOCK_POSITION or LocationType.PRECISE_POSITION
+	 * @param type the location type of this location, either {@link LocationType#BLOCK_POSITION} or {@link LocationType#PRECISE_POSITION}
 	 */
 	public LocationArgument(String nodeName, LocationType type) {
 		super(nodeName, type == LocationType.BLOCK_POSITION ? CommandAPIHandler.getInstance().getNMS()._ArgumentPosition()
@@ -58,7 +59,7 @@ public class LocationArgument extends SafeOverrideableArgument<Location, Locatio
 	private final boolean isPrecise;
 
 	/**
-	 * Returns whether this argument is LocationType.BLOCK_POSITION or LocationType.PRECISE_POSITION 
+	 * Returns whether this argument is {@link LocationType#BLOCK_POSITION} or {@link LocationType#PRECISE_POSITION}
 	 * @return the location type of this argument
 	 */
 	public LocationType getLocationType() {

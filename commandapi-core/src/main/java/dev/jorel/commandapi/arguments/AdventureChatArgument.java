@@ -30,6 +30,7 @@ import net.kyori.adventure.text.Component;
 
 /**
  * An argument that represents chat with entity selectors
+ * @apiNote Returns a {@link Component} object
  */
 public class AdventureChatArgument extends Argument<Component> implements IGreedyArgument {
 

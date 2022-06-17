@@ -22,6 +22,8 @@ package dev.jorel.commandapi.arguments;
 
 import java.util.function.Predicate;
 
+import org.bukkit.block.Block;
+
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
@@ -30,12 +32,16 @@ import dev.jorel.commandapi.nms.NMS;
 
 /**
  * An argument that represents a <code>Predicate&lt;Block&gt;</code>
+ * 
+ * @apiNote Returns a {@link Predicate}{@code <}{@link Block}{@code >} object
  */
 @SuppressWarnings("rawtypes")
 public class BlockPredicateArgument extends Argument<Predicate> {
-	
+
 	/**
-	 * Constructs a BlockPredicateArgument with a given node name. Represents a predicate for blocks 
+	 * Constructs a BlockPredicateArgument with a given node name. Represents a
+	 * predicate for blocks
+	 * 
 	 * @param nodeName the name of the node for argument
 	 */
 	public BlockPredicateArgument(String nodeName) {
@@ -46,15 +52,16 @@ public class BlockPredicateArgument extends Argument<Predicate> {
 	public Class<Predicate> getPrimitiveType() {
 		return Predicate.class;
 	}
-	
+
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.BLOCK_PREDICATE;
 	}
-	
+
 	@Override
 	public <CommandListenerWrapper> Predicate<?> parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
+			throws CommandSyntaxException {
 		return nms.getBlockPredicate(cmdCtx, key);
 	}
 }

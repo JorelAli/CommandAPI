@@ -25,8 +25,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.StringArgument;
+
+/**
+ * Annotation equivalent of the {@link StringArgument}
+ */
 @Primitive("String")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)
-public @interface AStringArgument {		
+public @interface AStringArgument {
 }

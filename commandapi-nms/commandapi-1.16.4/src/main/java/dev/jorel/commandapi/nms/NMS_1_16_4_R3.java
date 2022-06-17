@@ -85,7 +85,6 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
-import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -642,7 +641,7 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 
 	@Override
 	public FloatRange getFloatRange(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		CriterionConditionValue.FloatRange range = (CriterionConditionValue.FloatRange) cmdCtx.getArgument(key,
+		CriterionConditionValue.FloatRange range = cmdCtx.getArgument(key,
 				CriterionConditionValue.FloatRange.class);
 		float low = range.a() == null ? -Float.MAX_VALUE : range.a();
 		float high = range.b() == null ? Float.MAX_VALUE : range.b();
@@ -771,7 +770,7 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 	public OfflinePlayer getOfflinePlayer(CommandContext<CommandListenerWrapper> cmdCtx, String str)
 			throws CommandSyntaxException {
 		OfflinePlayer target = Bukkit
-				.getOfflinePlayer(((GameProfile) ArgumentProfile.a(cmdCtx, str).iterator().next()).getId());
+				.getOfflinePlayer((ArgumentProfile.a(cmdCtx, str).iterator().next()).getId());
 		if (target == null) {
 			throw ArgumentProfile.a.create();
 		} else {
@@ -810,7 +809,7 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 
 	@Override
 	public Player getPlayer(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
-		Player target = Bukkit.getPlayer(((GameProfile) ArgumentProfile.a(cmdCtx, str).iterator().next()).getId());
+		Player target = Bukkit.getPlayer((ArgumentProfile.a(cmdCtx, str).iterator().next()).getId());
 		if (target == null) {
 			throw ArgumentProfile.a.create();
 		} else {
@@ -935,7 +934,7 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 
 	@Override
 	public int getTime(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		return (Integer) cmdCtx.getArgument(key, Integer.class);
+		return cmdCtx.getArgument(key, Integer.class);
 	}
 
 	@Override

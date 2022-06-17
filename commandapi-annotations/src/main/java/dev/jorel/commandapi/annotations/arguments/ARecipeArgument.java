@@ -25,6 +25,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.RecipeArgument;
+
+/**
+ * Annotation equivalent of the {@link RecipeArgument}
+ */
 @Primitive("org.bukkit.inventory.Recipe")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)

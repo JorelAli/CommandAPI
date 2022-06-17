@@ -65,7 +65,7 @@ import dev.jorel.commandapi.annotations.arguments.AChatComponentArgument;
 import dev.jorel.commandapi.annotations.arguments.ADoubleArgument;
 import dev.jorel.commandapi.annotations.arguments.AEnchantmentArgument;
 import dev.jorel.commandapi.annotations.arguments.AEntitySelectorArgument;
-import dev.jorel.commandapi.annotations.arguments.AEntityType;
+import dev.jorel.commandapi.annotations.arguments.AEntityTypeArgument;
 import dev.jorel.commandapi.annotations.arguments.AEnvironmentArgument;
 import dev.jorel.commandapi.annotations.arguments.AFloatArgument;
 import dev.jorel.commandapi.annotations.arguments.AFloatRangeArgument;
@@ -83,6 +83,7 @@ import dev.jorel.commandapi.annotations.arguments.ALootTableArgument;
 import dev.jorel.commandapi.annotations.arguments.AMathOperationArgument;
 import dev.jorel.commandapi.annotations.arguments.AMultiLiteralArgument;
 import dev.jorel.commandapi.annotations.arguments.ANBTCompoundArgument;
+import dev.jorel.commandapi.annotations.arguments.ANamespacedKeyArgument;
 import dev.jorel.commandapi.annotations.arguments.AObjectiveArgument;
 import dev.jorel.commandapi.annotations.arguments.AObjectiveCriteriaArgument;
 import dev.jorel.commandapi.annotations.arguments.AOfflinePlayerArgument;
@@ -115,12 +116,12 @@ public class Annotations extends AbstractProcessor {
 			AAdventureChatArgument.class, AAdventureChatComponentArgument.class, AAngleArgument.class,
 			AAxisArgument.class, ABiomeArgument.class, ABlockPredicateArgument.class, ABlockStateArgument.class,
 			ABooleanArgument.class, AChatArgument.class, AChatColorArgument.class, AChatComponentArgument.class,
-			ADoubleArgument.class, AEnchantmentArgument.class, AEntitySelectorArgument.class, AEntityType.class,
+			ADoubleArgument.class, AEnchantmentArgument.class, AEntitySelectorArgument.class, AEntityTypeArgument.class,
 			AEnvironmentArgument.class, AFloatArgument.class, AFloatRangeArgument.class, AFunctionArgument.class,
 			AGreedyStringArgument.class, AIntegerArgument.class, AIntegerRangeArgument.class, AItemStackArgument.class,
 			AItemStackPredicateArgument.class, ALiteralArgument.class, ALocation2DArgument.class,
 			ALocationArgument.class, ALongArgument.class, ALootTableArgument.class, AMathOperationArgument.class,
-			AMultiLiteralArgument.class, ANBTCompoundArgument.class, AObjectiveArgument.class,
+			AMultiLiteralArgument.class, ANamespacedKeyArgument.class, ANBTCompoundArgument.class, AObjectiveArgument.class,
 			AObjectiveCriteriaArgument.class, AOfflinePlayerArgument.class, AParticleArgument.class, APlayerArgument.class,
 			APotionEffectArgument.class, ARecipeArgument.class, ARotationArgument.class, AScoreboardSlotArgument.class,
 			AScoreHolderArgument.class, ASoundArgument.class, AStringArgument.class, ATeamArgument.class,

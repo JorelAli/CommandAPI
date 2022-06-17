@@ -32,11 +32,14 @@ import dev.jorel.commandapi.nms.NMS;
  * due west, to 179.9 for just west of due north, before wrapping back around to
  * -180.0. Tilde notation can be used to specify a rotation relative to the
  * executor's yaw angle.
+ * 
+ * @apiNote Returns a {@link float}
  */
 public class AngleArgument extends SafeOverrideableArgument<Float, Float> {
 
 	/**
 	 * Constructs an AngleArgument with a given node name
+	 * 
 	 * @param nodeName the name of the node for argument
 	 */
 	public AngleArgument(String nodeName) {
@@ -47,15 +50,16 @@ public class AngleArgument extends SafeOverrideableArgument<Float, Float> {
 	public Class<Float> getPrimitiveType() {
 		return float.class;
 	}
-	
+
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.ANGLE;
 	}
-	
+
 	@Override
 	public <CommandListenerWrapper> Float parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
+			throws CommandSyntaxException {
 		return nms.getAngle(cmdCtx, key);
 	}
 }

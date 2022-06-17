@@ -25,7 +25,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Primitive("de.tr7zw.nbtapi.NBTContainer")
+import dev.jorel.commandapi.arguments.NBTCompoundArgument;
+
+/**
+ * Annotation equivalent of the {@link NBTCompoundArgument}
+ */
+@Primitive("dev.jorel.commandapi.nbtapi.NBTContainer")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)
 public @interface ANBTCompoundArgument {

@@ -25,8 +25,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.AdventureChatArgument;
+
+/**
+ * Annotation equivalent of the {@link AdventureChatArgument}
+ */
 @Primitive("net.kyori.adventure.text.Component")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)
-public @interface AAdventureChatArgument {		
+public @interface AAdventureChatArgument {
 }

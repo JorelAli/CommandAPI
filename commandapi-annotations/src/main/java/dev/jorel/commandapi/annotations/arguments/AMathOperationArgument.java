@@ -25,6 +25,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.MathOperationArgument;
+
+/**
+ * Annotation equivalent of the {@link MathOperationArgument}
+ */
 @Primitive("dev.jorel.commandapi.wrappers.MathOperation")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)

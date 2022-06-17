@@ -28,11 +28,14 @@ import dev.jorel.commandapi.nms.NMS;
 
 /**
  * An argument that represents primitive Java booleans
+ * 
+ * @apiNote Returns a {@link boolean}
  */
 public class BooleanArgument extends SafeOverrideableArgument<Boolean, Boolean> {
-	
+
 	/**
 	 * Constructs a Boolean argument with a given node name
+	 * 
 	 * @param nodeName the name of the node for argument
 	 */
 	public BooleanArgument(String nodeName) {
@@ -43,16 +46,17 @@ public class BooleanArgument extends SafeOverrideableArgument<Boolean, Boolean> 
 	public Class<Boolean> getPrimitiveType() {
 		return boolean.class;
 	}
-	
+
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.PRIMITIVE_BOOLEAN;
 	}
-	
+
 	@Override
 	public <CommandListenerWrapper> Boolean parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
+			throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
-	
+
 }
