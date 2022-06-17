@@ -91,6 +91,15 @@
 	<build>
 		<defaultGoal>clean install</defaultGoal>
 		<finalName>CommandAPI-${project.version}_${maven.build.timestamp}</finalName>
+		<resources>
+			<resource>
+				<filtering>false</filtering>
+				<directory>.</directory>
+				<includes>
+					<include>LICENSE</include>
+				</includes>
+			</resource>
+		</resources>
 		<pluginManagement>
 			<plugins>
 				<plugin>

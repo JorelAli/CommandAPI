@@ -96,6 +96,11 @@
 									<shadedPattern>dev.jorel.commandapi.nbtapi</shadedPattern>
 								</relocation>
 							</relocations>
+							<transformers>
+								<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+									<resource>LICENSE</resource>
+								</transformer>
+							</transformers>
 						</configuration>
 					</execution>
 				</executions>
