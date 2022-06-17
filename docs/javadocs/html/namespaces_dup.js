@@ -81,7 +81,9 @@ var namespaces_dup =
           [ "CommandPermission", "classdev_1_1jorel_1_1commandapi_1_1_command_permission.html", "classdev_1_1jorel_1_1commandapi_1_1_command_permission" ],
           [ "CommandTree", "classdev_1_1jorel_1_1commandapi_1_1_command_tree.html", "classdev_1_1jorel_1_1commandapi_1_1_command_tree" ],
           [ "Converter", "classdev_1_1jorel_1_1commandapi_1_1_converter.html", "classdev_1_1jorel_1_1commandapi_1_1_converter" ],
+          [ "InternalConfig", "classdev_1_1jorel_1_1commandapi_1_1_internal_config.html", null ],
           [ "IStringTooltip", "interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html", "interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip" ],
+          [ "PaperImplementations", "classdev_1_1jorel_1_1commandapi_1_1_paper_implementations.html", null ],
           [ "StringTooltip", "classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html", "classdev_1_1jorel_1_1commandapi_1_1_string_tooltip" ],
           [ "Tooltip", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html", "classdev_1_1jorel_1_1commandapi_1_1_tooltip" ]
         ] ]

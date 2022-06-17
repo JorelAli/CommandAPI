@@ -148,6 +148,7 @@ var annotated_dup =
             [ "CustomArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument" ],
             [ "DoubleArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_double_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_double_argument" ],
             [ "EnchantmentArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_enchantment_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_enchantment_argument" ],
+            [ "EntitySelector", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector.html", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector" ],
             [ "EntitySelectorArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument" ],
             [ "EntityTypeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_type_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_type_argument" ],
             [ "EnvironmentArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_environment_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_environment_argument" ],
@@ -171,6 +172,7 @@ var annotated_dup =
             [ "LootTableArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_loot_table_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_loot_table_argument" ],
             [ "MathOperationArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_math_operation_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_math_operation_argument" ],
             [ "MultiLiteralArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument" ],
+            [ "NamespacedKeyArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_namespaced_key_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_namespaced_key_argument" ],
             [ "NBTCompoundArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_n_b_t_compound_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_n_b_t_compound_argument" ],
             [ "ObjectiveArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_objective_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_objective_argument" ],
             [ "ObjectiveCriteriaArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_objective_criteria_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_objective_criteria_argument" ],
@@ -250,7 +252,9 @@ var annotated_dup =
           [ "CommandPermission", "classdev_1_1jorel_1_1commandapi_1_1_command_permission.html", "classdev_1_1jorel_1_1commandapi_1_1_command_permission" ],
           [ "CommandTree", "classdev_1_1jorel_1_1commandapi_1_1_command_tree.html", "classdev_1_1jorel_1_1commandapi_1_1_command_tree" ],
           [ "Converter", "classdev_1_1jorel_1_1commandapi_1_1_converter.html", "classdev_1_1jorel_1_1commandapi_1_1_converter" ],
+          [ "InternalConfig", "classdev_1_1jorel_1_1commandapi_1_1_internal_config.html", null ],
           [ "IStringTooltip", "interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html", "interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip" ],
+          [ "PaperImplementations", "classdev_1_1jorel_1_1commandapi_1_1_paper_implementations.html", null ],
           [ "StringTooltip", "classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html", "classdev_1_1jorel_1_1commandapi_1_1_string_tooltip" ],
           [ "Tooltip", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html", "classdev_1_1jorel_1_1commandapi_1_1_tooltip" ]
         ] ]

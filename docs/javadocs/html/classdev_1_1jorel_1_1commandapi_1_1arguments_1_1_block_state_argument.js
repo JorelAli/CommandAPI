@@ -2,6 +2,7 @@ var classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument =
 [
     [ "BlockStateArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument.html#ae91e0239e20332e732d3a694fb6d25ce", null ],
     [ "getArgumentPermission", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument.html#a2216e5bd7c9e2c08dfddcac97e10ff9d", null ],
+    [ "getEntityNames", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument.html#a48b7e2c2d3dfd3b0c8c639034ddcdd03", null ],
     [ "getIncludedSuggestions", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument.html#a171d90580224f0b493980509549ddb5e", null ],
     [ "getNodeName", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument.html#abcf7ec6ba4643d45bd71c90cc481c731", null ],
     [ "getOverriddenSuggestions", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument.html#a2bfff4945cfc596936135dccdb628345", null ],
@@ -11,7 +12,7 @@ var classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument =
     [ "includeSuggestions", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument.html#a936ec8464fe65642205e24bdbd827973", null ],
     [ "includeSuggestionsT", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument.html#a15dce222962f4c60c89df3c812a3c379", null ],
     [ "isListed", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument.html#a226bf35233c235708220f359a3eadf52", null ],
-    [ "parseArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument.html#ae59553a5cc36a4f8624f214fffc59908", null ],
+    [ "parseArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument.html#ab19ac2116452cbd12c502106d4803a03", null ],
     [ "replaceSuggestions", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument.html#a4b1028432eb0291ac8ae52d0a8daf82d", null ],
     [ "replaceSuggestions", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument.html#a085b5f8ea1de970065bb9e1c62ce36f5", null ],
     [ "replaceSuggestionsT", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_block_state_argument.html#a8ab1c1059619e96153e6619cae9f8382", null ],

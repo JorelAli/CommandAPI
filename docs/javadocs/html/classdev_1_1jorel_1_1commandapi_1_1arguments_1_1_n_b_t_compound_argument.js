@@ -1,6 +1,6 @@
 var classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_n_b_t_compound_argument =
 [
-    [ "NBTCompoundArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_n_b_t_compound_argument.html#accfa31768f32b1fbf90b718c6ce5440e", null ],
+    [ "NBTCompoundArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_n_b_t_compound_argument.html#a684df02781017e5edc536aa7355bcdf8", null ],
     [ "includeSafeSuggestions", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_n_b_t_compound_argument.html#a0a8af4f677c1c736bc10a08f5ef6c420", null ],
     [ "includeWithSafeSuggestions", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_n_b_t_compound_argument.html#a0c172462db17f842589e288f43dde4a6", null ],
     [ "includeWithSafeSuggestionsT", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_n_b_t_compound_argument.html#a53be4c945c22ab14c2ba68c35c185230", null ],

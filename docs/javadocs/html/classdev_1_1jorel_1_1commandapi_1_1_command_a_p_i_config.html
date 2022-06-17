@@ -26,7 +26,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.3.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.4.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -108,10 +108,40 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3c37f83147344c04668ce953ed4c1a19"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html">CommandAPIConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html#a3c37f83147344c04668ce953ed4c1a19">missingExecutorImplementationMessage</a> (String value)</td></tr>
 <tr class="memdesc:a3c37f83147344c04668ce953ed4c1a19"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the message to display to users when a command has no executor.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html#a3c37f83147344c04668ce953ed4c1a19">More...</a><br /></td></tr>
 <tr class="separator:a3c37f83147344c04668ce953ed4c1a19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a2659da9888afae7670eb7f19bcf69b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html">CommandAPIConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html#a6a2659da9888afae7670eb7f19bcf69b">dispatcherFile</a> (File file)</td></tr>
+<tr class="memdesc:a6a2659da9888afae7670eb7f19bcf69b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies the location for the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> to store the internal representation of <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_brigadier.html" title="The Brigadier class is used to access some of the internals of the CommandAPI so you can use the Comm...">Brigadier</a>'s command tree.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html#a6a2659da9888afae7670eb7f19bcf69b">More...</a><br /></td></tr>
+<tr class="separator:a6a2659da9888afae7670eb7f19bcf69b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >A class to contain information about how to configure the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> during its loading step. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a6a2659da9888afae7670eb7f19bcf69b" name="a6a2659da9888afae7670eb7f19bcf69b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a2659da9888afae7670eb7f19bcf69b">&#9670;&nbsp;</a></span>dispatcherFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html">CommandAPIConfig</a> dev.jorel.commandapi.CommandAPIConfig.dispatcherFile </td>
+          <td>(</td>
+          <td class="paramtype">File&#160;</td>
+          <td class="paramname"><em>file</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Specifies the location for the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> to store the internal representation of <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_brigadier.html" title="The Brigadier class is used to access some of the internals of the CommandAPI so you can use the Comm...">Brigadier</a>'s command tree. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">file</td><td>a file pointing to where to store <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_brigadier.html" title="The Brigadier class is used to access some of the internals of the CommandAPI so you can use the Comm...">Brigadier</a>'s JSON command dispatcher, for example <code class="JavaDocCode">new File(getDataFolder(), "command_registration.json")</code>. If this argument is <code class="JavaDocCode">null</code>, this file will not be created. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html" title="A class to contain information about how to configure the CommandAPI during its loading step.">CommandAPIConfig</a> </dd></dl>
+
+</div>
+</div>
 <a id="a3c37f83147344c04668ce953ed4c1a19" name="a3c37f83147344c04668ce953ed4c1a19"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3c37f83147344c04668ce953ed4c1a19">&#9670;&nbsp;</a></span>missingExecutorImplementationMessage()</h2>
 
@@ -134,7 +164,7 @@ Public Member Functions</h2></td></tr>
 <li>
 s - the executor class (lowercase) </li>
 <li>
-S - the executor class (normal case)</li>
+S - the executor class (normal case) </li>
 </ul>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -234,7 +264,7 @@ S - the executor class (normal case)</li>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html">CommandAPIConfig</a></li>
-    <li class="footer">Generated on Tue Jun 7 2022 20:29:29 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Fri Jun 17 2022 12:44:56 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>
