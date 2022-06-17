@@ -18,7 +18,43 @@ dev.jorel.commandapi.arguments.EntitySelector
 
 ### Custom arguments
 
-TODO: Coming soon
+Custom arguments are no longer restricted to a string-based argument or a keyed-based argument and can now be implemented over any existing argument "base". This argument is now parameterized over two types: the first type being the return type of this custom argument and the second type being the return type of the "base" argument. Custom arguments should now use the new constructor that accepts an argument - more information on how to do that can be found on the [Custom arguments page](./customarguments.md). It's recommended to review your implementation of custom arguments and upgrade them if you feel that you need a more powerful argument parser (for example, you might want to use a greedy string argument as the base argument instead of a string argument).
+
+Custom arguments that are _not_ keyed can be drop-in replaced with a `StringArgument`:
+
+```java
+new CustomArgument<T>("nodename", inputInfo -> {
+    // Code here
+    return T;
+});
+```
+
+\\[\downarrow\\]
+
+```java
+new CustomArgument<T, String>(new StringArgument("nodename"), inputInfo -> {
+    // Code here
+    return T;
+});
+```
+
+Keyed custom arguments can be drop-in replaced with a `NamespacedKeyArgument`:
+
+```java
+new CustomArgument<T>("nodename", inputInfo -> {
+    // Code here
+    return T;
+}, true);
+```
+
+\\[\downarrow\\]
+
+```java
+new CustomArgument<T, NamespacedKey>(new NamespacedKeyArgument("nodename"), inputInfo -> {
+    // Code here
+    return T;
+});
+```
 
 ### NBT arguments
 
@@ -47,7 +83,7 @@ de.tr7zw.nbtapi.NBTContainer
 \\[\downarrow\\]
 
 ```java
-dev.jorel.commandapi.nbtapi
+dev.jorel.commandapi.nbtapi.NBTContainer
 ```
 
 #### If you're shading the CommandAPI
@@ -56,7 +92,7 @@ You now need to shade the NBT API into your plugin (as well as the CommandAPI). 
 
 -----
 
-## From 8.0.0 to 8.1.0
+## From 8.0.0 or earlier to 8.1.0
 
 Arguments are now parameterized over a generic type. This does very little in terms of the running of the CommandAPI, but does ensure type safety with its internals. Instances of the `Argument` type now have to be parameterized. In general, this basically means:
 
