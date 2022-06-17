@@ -93,11 +93,15 @@
 		<finalName>CommandAPI-${project.version}_${maven.build.timestamp}</finalName>
 		<resources>
 			<resource>
-				<filtering>false</filtering>
 				<directory>.</directory>
+				<filtering>false</filtering>
 				<includes>
 					<include>LICENSE</include>
 				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
 			</resource>
 		</resources>
 		<pluginManagement>
