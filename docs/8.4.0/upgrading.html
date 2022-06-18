@@ -178,6 +178,13 @@
                         
                         <h1><a class="header" href="#upgrading-guide" id="upgrading-guide">Upgrading guide</a></h1>
 <h2><a class="header" href="#from-831-to-840" id="from-831-to-840">From 8.3.1 to 8.4.0</a></h2>
+<h3><a class="header" href="#getting-a-list-of-registered-commands" id="getting-a-list-of-registered-commands">Getting a list of registered commands</a></h3>
+<p>In 8.2.1, the CommandAPI exposed <code>CommandAPIHandler.getInstance().registeredCommands</code> to get a list of registered commands. This has now been changed and properly implemented as a getter method which can be accessed from <code>CommandAPI</code>:</p>
+<pre><code class="language-java">CommandAPIHandler.getInstance().registeredCommands
+</code></pre>
+<p>\[\downarrow\]</p>
+<pre><code class="language-java">CommandAPI.getRegisteredCommands()
+</code></pre>
 <h3><a class="header" href="#entity-selector-arguments" id="entity-selector-arguments">Entity selector arguments</a></h3>
 <p>The import for <code>EntitySelector</code> for the <code>EntitySelectorArgument</code> has moved to improve CommandAPI shading support with jar minimization:</p>
 <pre><code class="language-java">dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector

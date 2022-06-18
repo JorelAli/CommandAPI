@@ -2,6 +2,20 @@
 
 ## From 8.3.1 to 8.4.0
 
+### Getting a list of registered commands
+
+In 8.2.1, the CommandAPI exposed `CommandAPIHandler.getInstance().registeredCommands` to get a list of registered commands. This has now been changed and properly implemented as a getter method which can be accessed from `CommandAPI`:
+
+```java
+CommandAPIHandler.getInstance().registeredCommands
+```
+
+\\[\downarrow\\]
+
+```java
+CommandAPI.getRegisteredCommands()
+```
+
 ### Entity selector arguments
 
 The import for `EntitySelector` for the `EntitySelectorArgument` has moved to improve CommandAPI shading support with jar minimization:

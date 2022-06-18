@@ -206,6 +206,16 @@
 <hr />
 <h2><a class="header" href="#documentation-changelog" id="documentation-changelog">Documentation changelog</a></h2>
 <p>Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.</p>
+<h3><a class="header" href="#documentation-changes-830-rightarrow-840" id="documentation-changes-830-rightarrow-840">Documentation changes 8.3.0 \(\rightarrow\) 8.4.0</a></h3>
+<ul>
+<li>Updated <a href="./shading.html#shading-with-maven">Shading with Maven</a> with updated <code>maven-shade-plugin</code> version</li>
+<li>Adds <a href="./namespacedkeyarg.html">NamespacedKey arguments</a> section</li>
+<li>Update <a href="./arguments.html#argument-casting">Argument Casting</a> section with new arguments and types</li>
+<li>Update <a href="./nbtarguments.html">NBT arguments</a> page with new NBT arguments information</li>
+<li>Update <a href="./customarguments.html">Custom arguments</a> page with new custom arguments information</li>
+<li>Adds <a href="./internal.html#getting-a-list-of-registered-commands">Getting a list of registered commands</a> section to the Internal CommandAPI page</li>
+<li>Update <a href="./upgrading.html">Upgrading guide</a> for 8.4.0 changes</li>
+</ul>
 <h3><a class="header" href="#documentation-changes-820-rightarrow-821" id="documentation-changes-820-rightarrow-821">Documentation changes 8.2.0 \(\rightarrow\) 8.2.1</a></h3>
 <ul>
 <li>Adds <code>withSubcommands</code> method to <a href="./subcommands.html">Subcommands</a> section.</li>
@@ -3509,7 +3519,7 @@ public float apply(float val1, float val2);
 </code></pre>
 <p>Of course, we could simply use a <code>BlockStateArgument</code> or even an <code>ItemStackArgument</code> as our <code>&lt;fromBlock&gt;</code> in order to get the material to replace, but the block predicate argument provides a test for a given block, which if satisfied, allows certain code to be executed.</p>
 <p>First, we declare our arguments. We want to use the <code>BlockPredicateArgument</code> since it also allows us to use Minecraft tags to identify blocks, as well as individual blocks. We then use <code>BlockStateArgument</code> to set the block to a given type. The <code>BlockStateArgument</code> also allows the user to provide any block data (e.g. contents of a chest or a stair's orientation).</p>
-<pre><code class="language-java">Argument&lt;?&gt;[] arguments = new Argument[] {
+<pre><code class="language-java">Argument&lt;?&gt;[] arguments = new Argument&lt;?&gt;[] {
     new IntegerArgument(&quot;radius&quot;),
     new BlockPredicateArgument(&quot;fromBlock&quot;),
     new BlockStateArgument(&quot;toBlock&quot;),
@@ -5223,6 +5233,25 @@ Converter.convert(essentials, &quot;speed&quot;,
 <p>During the initialization of Minecraft 1.16+ servers, the CommandAPI uses a custom datapack reloading sequence as opposed to the normal Vanilla Minecraft datapack reloading method. The CommandAPI's method uses the server's current command dispatcher object as opposed to a new one, which allows datapacks to use commands registered by the CommandAPI. This can be invoked using the following method:</p>
 <pre><code class="language-java">CommandAPI.reloadDatapacks();
 </code></pre>
+<hr />
+<h2><a class="header" href="#getting-a-list-of-registered-commands" id="getting-a-list-of-registered-commands">Getting a list of registered commands</a></h2>
+<p>The CommandAPI doesn't store the <code>CommandAPICommand</code> objects during the main running of the server because it simply doesn't need to. Instead, it stores a list of <code>RegisteredCommand</code> objects which are defined as the following, which should be fairly self-explanatory:</p>
+<pre><code class="language-java">public record RegisteredCommand {
+    String commandName();
+    List&lt;String&gt; argsAsStr();
+    Optional&lt;String&gt; shortDescription();
+    Optional&lt;String&gt; fullDescription();
+    String[] aliases();
+    CommandPermission permission();
+}
+</code></pre>
+<p>The <code>argsAsStr()</code> method returns a list of arguments in a string format, of the form <code>argName:SimpleClassName</code>, where <code>argName</code> is the name of the argument (the argument's node name) and <code>SimpleClassName</code> is the name of the argument class that was used to construct it (such as <code>IntegerArgument</code>).</p>
+<p>A <code>List&lt;RegisteredCommand&gt;</code> can be acquired using the following method:</p>
+<pre><code class="language-java">CommandAPI.getRegisteredCommands();
+</code></pre>
+<blockquote>
+<p>Note that this list does not update when commands are <em>unregistered</em>, only when commands are registered.</p>
+</blockquote>
 <h1><a class="header" href="#brigadier--commandapi" id="brigadier--commandapi">Brigadier + CommandAPI</a></h1>
 <p>So far, we've been using only the CommandAPI to register commands. As a result, this makes the CommandAPI's features limited by whatever the CommandAPI has implemented. To push past these limits, the CommandAPI includes some extra methods to help with invoking brigadier methods. Of course, to use these methods, brigadier is required. The brigadier dependency's installation instructions can be found <a href="https://github.com/Mojang/brigadier#installation">here</a>.</p>
 <blockquote>
@@ -5533,6 +5562,13 @@ arguments.add(new LiteralArgument(&quot;tp&quot;).withRequirement(testIfPlayerHa
 <p>This is the brains behind the documentation. It's a collection of Markdown files which form the CommandAPI documentation and is built using <a href="https://github.com/rust-lang/mdBook">mdBook</a>. For the CommandAPI in particular, it is actually built using my own custom fork of mdBook (<a href="https://github.com/JorelAli/mdBook/tree/fa5">here, in the fa5 branch</a>) which incorporates <a href="https://github.com/rust-lang/mdBook/pull/1225">this pull request</a> which adds support for FontAwesome 5.</p>
 <h1><a class="header" href="#upgrading-guide" id="upgrading-guide">Upgrading guide</a></h1>
 <h2><a class="header" href="#from-831-to-840" id="from-831-to-840">From 8.3.1 to 8.4.0</a></h2>
+<h3><a class="header" href="#getting-a-list-of-registered-commands-1" id="getting-a-list-of-registered-commands-1">Getting a list of registered commands</a></h3>
+<p>In 8.2.1, the CommandAPI exposed <code>CommandAPIHandler.getInstance().registeredCommands</code> to get a list of registered commands. This has now been changed and properly implemented as a getter method which can be accessed from <code>CommandAPI</code>:</p>
+<pre><code class="language-java">CommandAPIHandler.getInstance().registeredCommands
+</code></pre>
+<p>\[\downarrow\]</p>
+<pre><code class="language-java">CommandAPI.getRegisteredCommands()
+</code></pre>
 <h3><a class="header" href="#entity-selector-arguments" id="entity-selector-arguments">Entity selector arguments</a></h3>
 <p>The import for <code>EntitySelector</code> for the <code>EntitySelectorArgument</code> has moved to improve CommandAPI shading support with jar minimization:</p>
 <pre><code class="language-java">dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector

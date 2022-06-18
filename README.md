@@ -355,6 +355,7 @@ This is the current roadmap for the CommandAPI (as of 13th April 2022):
                     <li>Adds support for shaded versions of the CommandAPI to create their own <code>command_registration.json</code> files for debugging</li>
                     <li>Fixes bug where <code>WrapperCommandSyntaxException</code> wouldn't work as intended</li>
                     <li>Adds support for <code>/minecraft:reload</code> on paper servers</li>
+                    <li>Adds <code>CommandAPI.getRegisteredCommands()</code> to get a list of registered commands</li>
                 </ul>
             </td>
         </tr>

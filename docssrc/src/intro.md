@@ -37,6 +37,16 @@ Using the search icon <i class="fas fa-search"></i> in the top left corner, you 
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 8.3.0 \\(\rightarrow\\) 8.4.0
+
+- Updated [Shading with Maven](./shading.md#shading-with-maven) with updated `maven-shade-plugin` version
+- Adds [NamespacedKey arguments](./namespacedkeyarg.md) section
+- Update [Argument Casting](./arguments.md#argument-casting) section with new arguments and types
+- Update [NBT arguments](./nbtarguments.md) page with new NBT arguments information
+- Update [Custom arguments](./customarguments.md) page with new custom arguments information
+- Adds [Getting a list of registered commands](./internal.md#getting-a-list-of-registered-commands) section to the Internal CommandAPI page
+- Update [Upgrading guide](./upgrading.md) for 8.4.0 changes
+
 ### Documentation changes 8.2.0 \\(\rightarrow\\) 8.2.1
 
 - Adds `withSubcommands` method to [Subcommands](./subcommands.md) section.

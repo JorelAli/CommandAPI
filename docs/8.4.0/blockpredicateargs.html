@@ -187,7 +187,7 @@
 </code></pre>
 <p>Of course, we could simply use a <code>BlockStateArgument</code> or even an <code>ItemStackArgument</code> as our <code>&lt;fromBlock&gt;</code> in order to get the material to replace, but the block predicate argument provides a test for a given block, which if satisfied, allows certain code to be executed.</p>
 <p>First, we declare our arguments. We want to use the <code>BlockPredicateArgument</code> since it also allows us to use Minecraft tags to identify blocks, as well as individual blocks. We then use <code>BlockStateArgument</code> to set the block to a given type. The <code>BlockStateArgument</code> also allows the user to provide any block data (e.g. contents of a chest or a stair's orientation).</p>
-<pre><code class="language-java">Argument&lt;?&gt;[] arguments = new Argument[] {
+<pre><code class="language-java">Argument&lt;?&gt;[] arguments = new Argument&lt;?&gt;[] {
     new IntegerArgument(&quot;radius&quot;),
     new BlockPredicateArgument(&quot;fromBlock&quot;),
     new BlockStateArgument(&quot;toBlock&quot;),

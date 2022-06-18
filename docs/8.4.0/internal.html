@@ -246,6 +246,25 @@
 <p>During the initialization of Minecraft 1.16+ servers, the CommandAPI uses a custom datapack reloading sequence as opposed to the normal Vanilla Minecraft datapack reloading method. The CommandAPI's method uses the server's current command dispatcher object as opposed to a new one, which allows datapacks to use commands registered by the CommandAPI. This can be invoked using the following method:</p>
 <pre><code class="language-java">CommandAPI.reloadDatapacks();
 </code></pre>
+<hr />
+<h2><a class="header" href="#getting-a-list-of-registered-commands" id="getting-a-list-of-registered-commands">Getting a list of registered commands</a></h2>
+<p>The CommandAPI doesn't store the <code>CommandAPICommand</code> objects during the main running of the server because it simply doesn't need to. Instead, it stores a list of <code>RegisteredCommand</code> objects which are defined as the following, which should be fairly self-explanatory:</p>
+<pre><code class="language-java">public record RegisteredCommand {
+    String commandName();
+    List&lt;String&gt; argsAsStr();
+    Optional&lt;String&gt; shortDescription();
+    Optional&lt;String&gt; fullDescription();
+    String[] aliases();
+    CommandPermission permission();
+}
+</code></pre>
+<p>The <code>argsAsStr()</code> method returns a list of arguments in a string format, of the form <code>argName:SimpleClassName</code>, where <code>argName</code> is the name of the argument (the argument's node name) and <code>SimpleClassName</code> is the name of the argument class that was used to construct it (such as <code>IntegerArgument</code>).</p>
+<p>A <code>List&lt;RegisteredCommand&gt;</code> can be acquired using the following method:</p>
+<pre><code class="language-java">CommandAPI.getRegisteredCommands();
+</code></pre>
+<blockquote>
+<p>Note that this list does not update when commands are <em>unregistered</em>, only when commands are registered.</p>
+</blockquote>
 
                     </main>
 
