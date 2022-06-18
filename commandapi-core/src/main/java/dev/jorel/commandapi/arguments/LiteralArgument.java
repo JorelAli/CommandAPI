@@ -77,7 +77,7 @@ public class LiteralArgument extends Argument<String> {
 	
 	@Override
 	public <CommandListenerWrapper> String parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return literal;
 	}
 }

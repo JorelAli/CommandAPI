@@ -25,6 +25,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.TeamArgument;
+
+/**
+ * Annotation equivalent of the {@link TeamArgument}
+ */
 @Primitive("String")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)

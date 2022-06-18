@@ -25,8 +25,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.AxisArgument;
+
+/**
+ * Annotation equivalent of the {@link AxisArgument}
+ */
 @Primitive("java.util.EnumSet<org.bukkit.Axis>")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)
-public @interface AAxisArgument {		
+public @interface AAxisArgument {
 }

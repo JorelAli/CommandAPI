@@ -32,6 +32,9 @@ public class CommandAPIConfig {
     CommandAPIConfig silentLogs(boolean value);    // Disables ALL logging (except errors)
     CommandAPIConfig useLatestNMSVersion(boolean value); // Whether the latest NMS implementation should be used or not
     CommandAPIConfig missingExecutorImplementationMessage(String value); // Set message to display when executor implementation is missing
+    CommandAPIConfig dispatcherFile(File file); // If not null, the CommandAPI will create a JSON file with Brigadier's command tree
+
+    <T> CommandAPIConfig initializeNBTAPI(Class<T> nbtContainerClass, Function<Object, T> nbtContainerConstructor); // Initializes hooks with an NBT API. See NBT arguments documentation page for more info
 }
 ```
 
@@ -78,23 +81,12 @@ Add the CommandAPI shade dependency:
     <dependency>
         <groupId>dev.jorel</groupId>
         <artifactId>commandapi-shade</artifactId>
-        <version>8.3.1</version>
+        <version>8.4.0</version>
     </dependency>
 </dependencies>
 ```
 
-As of the time of writing, the latest stable version of the `maven-shade-plugin` is not compatible with Java 16, which means certain classes such as `record` types cannot be shaded. This can be overcome using the latest snapshot build of the `maven-shade-plugin`. To use the snapshot build, add the following plugin repository to your `pom.xml` file:
-
-```xml
-<pluginRepositories>
-    <pluginRepository>
-        <id>maven-snapshots</id>
-        <url>https://repository.apache.org/content/repositories/snapshots/</url>
-    </pluginRepository>
-</pluginRepositories>
-```
-
-Once you've added this this, you can shade the CommandAPI easily by adding the `maven-shade-plugin` to your build sequence using the snapshot version `3.3.1-SNAPSHOT`:
+You can shade the CommandAPI easily by adding the `maven-shade-plugin` to your build sequence using version `3.3.0` (compatible with Java 16):
 
 ```xml
 <build>
@@ -102,7 +94,7 @@ Once you've added this this, you can shade the CommandAPI easily by adding the `
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-shade-plugin</artifactId>
-            <version>3.3.1-SNAPSHOT</version>
+            <version>3.3.0</version>
             <executions>
                 <execution>
                     <id>shade</id>
@@ -113,6 +105,7 @@ Once you've added this this, you can shade the CommandAPI easily by adding the `
                 </execution>
             </executions>
             <configuration>
+                <minimizeJar>true</minimizeJar>
                 <relocations>
                     <relocation>
                         <pattern>dev.jorel.commandapi</pattern>
@@ -126,7 +119,7 @@ Once you've added this this, you can shade the CommandAPI easily by adding the `
 </build>
 ```
 
-Of course, if you shade the CommandAPI into your plugin, you don't need to add `depend: [CommandAPI]` to your `plugin.yml` file.
+As we're shading the CommandAPI into your plugin, you **don't** need to add `depend: [CommandAPI]` to your `plugin.yml` file.
 
 -----
 
@@ -146,6 +139,8 @@ Add our repositories:
 ```gradle
 repositories {
     mavenCentral()
+
+    // If you want to shade the NBT API as well
     maven { url = "https://repo.codemc.org/repository/maven-public/" }
 }
 ```
@@ -154,7 +149,7 @@ Next, we declare our dependencies:
 
 ```gradle
 dependencies {
-    implementation "dev.jorel:commandapi-shade:8.3.1"
+    implementation "dev.jorel:commandapi-shade:8.4.0"
 }
 ```
 
@@ -163,7 +158,7 @@ Then we add it to the `shadowJar` task configuration and relocate the CommandAPI
 ```gradle
 shadowJar {
     dependencies {
-        include dependency("dev.jorel:commandapi-shade:8.3.1")
+        include dependency("dev.jorel:commandapi-shade:8.4.0")
     }
 
     // TODO: Change this to my own package name
@@ -177,4 +172,4 @@ Finally, we can build the shaded jar using the following command:
 gradlew build shadowJar
 ```
 
-Again, as we're shading the CommandAPI into your plugin, we **don't** need to add `depend: [CommandAPI]` to your `plugin.yml` file.
+As we're shading the CommandAPI into your plugin, we **don't** need to add `depend: [CommandAPI]` to your `plugin.yml` file.

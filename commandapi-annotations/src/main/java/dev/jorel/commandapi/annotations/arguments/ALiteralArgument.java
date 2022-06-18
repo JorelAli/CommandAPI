@@ -25,11 +25,19 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.LiteralArgument;
+
+/**
+ * Annotation equivalent of the {@link LiteralArgument}
+ */
 @Primitive("String")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)
 public @interface ALiteralArgument {
-	
+
+	/**
+	 * @return the string literal that this argument will represent
+	 */
 	String value();
-	
+
 }

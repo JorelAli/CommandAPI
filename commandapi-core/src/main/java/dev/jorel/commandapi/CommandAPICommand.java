@@ -51,6 +51,10 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 		this.isConverted = false;
 	}
 
+	/**
+	 * Creates a new Command builder
+	 * @param metaData The metadata of the command to create
+	 */
 	protected CommandAPICommand(CommandMetaData metaData) {
 		super(metaData);
 		this.isConverted = false;
@@ -175,15 +179,13 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 		}
 	}
 	
-	/**
-	 * Registers the command
-	 */
+	@Override
 	public void register() {
 		if(!CommandAPI.canRegister()) {
 			CommandAPI.logWarning("Command /" + meta.commandName + " is being registered after the server had loaded. Undefined behavior ahead!");
 		}
 		try {
-			Argument<?>[] argumentsArr = args == null ? new Argument[0] : args.toArray(new Argument[0]);
+			Argument<?>[] argumentsArr = args == null ? new Argument<?>[0] : args.toArray(new Argument<?>[0]);
 			
 			// Check IGreedyArgument constraints 
 			for(int i = 0, numGreedyArgs = 0; i < argumentsArr.length; i++) {

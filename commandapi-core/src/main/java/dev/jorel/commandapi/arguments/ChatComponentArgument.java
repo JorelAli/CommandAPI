@@ -30,37 +30,43 @@ import net.md_5.bungee.api.chat.BaseComponent;
 
 /**
  * An argument that represents raw JSON text
+ * 
+ * @apiNote Returns a {@link BaseComponent}{@code []} object
  */
 public class ChatComponentArgument extends Argument<BaseComponent[]> {
 
 	/**
-	 * Constructs a ChatComponnent argument with a given node name. Represents raw JSON text, used in Book MetaData, Chat and other various areas of Minecraft
-	 * @see <a href="https://minecraft.gamepedia.com/Commands#Raw_JSON_text">Raw JSON text</a> 
+	 * Constructs a ChatComponnent argument with a given node name. Represents raw
+	 * JSON text, used in Book MetaData, Chat and other various areas of Minecraft
+	 * 
+	 * @see <a href="https://minecraft.gamepedia.com/Commands#Raw_JSON_text">Raw
+	 *      JSON text</a>
 	 * @param nodeName the name of the node for argument
 	 */
 	public ChatComponentArgument(String nodeName) {
 		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentChatComponent());
-		
+
 		try {
 			Class.forName("org.spigotmc.SpigotConfig");
-		} catch(ClassNotFoundException e) {
+		} catch (ClassNotFoundException e) {
 			throw new SpigotNotFoundException(this.getClass());
 		}
 	}
-	
+
 	@Override
 	public Class<BaseComponent[]> getPrimitiveType() {
 		return BaseComponent[].class;
 	}
-	
+
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.CHAT_COMPONENT;
 	}
-	
+
 	@Override
 	public <CommandListenerWrapper> BaseComponent[] parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
+			throws CommandSyntaxException {
 		return nms.getChatComponent(cmdCtx, key);
 	}
 }

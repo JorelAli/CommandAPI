@@ -25,13 +25,23 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.Location2DArgument;
 import dev.jorel.commandapi.arguments.LocationType;
 
+/**
+ * Annotation equivalent of the {@link Location2DArgument}
+ */
 @Primitive("dev.jorel.commandapi.wrappers.Location2D")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)
 public @interface ALocation2DArgument {
-	
+
+	/**
+	 * @return the location type of this location, either
+	 *         {@link LocationType#BLOCK_POSITION} or
+	 *         {@link LocationType#PRECISE_POSITION}. Defaults to
+	 *         {@link LocationType#PRECISE_POSITION}
+	 */
 	LocationType value() default LocationType.PRECISE_POSITION;
-	
+
 }

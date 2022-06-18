@@ -25,8 +25,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.BooleanArgument;
+
+/**
+ * Annotation equivalent of the {@link BooleanArgument}
+ */
 @Primitive("boolean")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)
-public @interface ABooleanArgument {		
+public @interface ABooleanArgument {
 }

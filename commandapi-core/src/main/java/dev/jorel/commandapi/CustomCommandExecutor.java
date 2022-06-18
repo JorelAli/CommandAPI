@@ -41,54 +41,63 @@ import dev.jorel.commandapi.executors.IExecutorNormal;
 import dev.jorel.commandapi.executors.IExecutorResulting;
 import dev.jorel.commandapi.executors.IExecutorTyped;
 
+/**
+ * CustomCommandExecutor is the main executor implementation for command
+ * executors. It contains a list of all executors (normal and resulting
+ * executors) and switches its execution implementation based on the provided
+ * command executor types.
+ *
+ * @param <T> a command sender
+ */
 class CustomCommandExecutor<T extends CommandSender> {
-	
+
 	private List<IExecutorNormal<T>> normalExecutors;
 	private List<IExecutorResulting<T>> resultingExecutors;
-	
+
 	public CustomCommandExecutor() {
 		normalExecutors = new ArrayList<>();
 		resultingExecutors = new ArrayList<>();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public <S extends IExecutorNormal<?>> void addNormalExecutor(S executor) {
 		this.normalExecutors.add((IExecutorNormal<T>) executor);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public <S extends IExecutorResulting<?>> void addResultingExecutor(S executor) {
 		this.resultingExecutors.add((IExecutorResulting<T>) executor);
 	}
-	
+
 	public int execute(CommandSender sender, Object[] arguments) throws CommandSyntaxException {
-		
-		//Parse executor type
-        if (!resultingExecutors.isEmpty()) {
-            //Run resulting executor
-            try {
-                return execute(resultingExecutors, sender, arguments);
-            } catch (WrapperCommandSyntaxException e) {
-                throw e.getException();
-            } catch (Exception e) {
-                e.printStackTrace(System.out);
-                return 0;
-            }
-        } else {
-            //Run normal executor
-            try {
-                return execute(normalExecutors, sender, arguments);
-            } catch (WrapperCommandSyntaxException e) {
-                throw e.getException();
-            } catch (Exception e) {
-                e.printStackTrace(System.out);
-                return 0;
-            }
-        }
+
+		// Parse executor type
+		if (!resultingExecutors.isEmpty()) {
+			// Run resulting executor
+			try {
+				return execute(resultingExecutors, sender, arguments);
+			} catch (WrapperCommandSyntaxException e) {
+				throw e.getException();
+			} catch (Exception e) {
+				e.printStackTrace(System.out);
+				return 0;
+			}
+		} else {
+			// Run normal executor
+			try {
+				return execute(normalExecutors, sender, arguments);
+			} catch (WrapperCommandSyntaxException e) {
+				throw e.getException();
+			} catch (Exception e) {
+				e.printStackTrace(System.out);
+				return 0;
+			}
+		}
 	}
-	
-	private int execute(List<? extends IExecutorTyped> executors, CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
-		if(isForceNative()) {
+
+	private int execute(List<? extends IExecutorTyped> executors, CommandSender sender, Object[] args)
+			throws WrapperCommandSyntaxException {
+		if (isForceNative()) {
 			return execute(executors, sender, args, ExecutorType.NATIVE);
 		} else if (sender instanceof Player && matches(executors, ExecutorType.PLAYER)) {
 			return execute(executors, sender, args, ExecutorType.PLAYER);
@@ -109,16 +118,17 @@ class CustomCommandExecutor<T extends CommandSender> {
 							.replace("%S", sender.getClass().getSimpleName()))).create());
 		}
 	}
-	
-	private int execute(List<? extends IExecutorTyped> executors, CommandSender sender, Object[] args, ExecutorType type) throws WrapperCommandSyntaxException {
-		for(IExecutorTyped executor : executors) {
-			if(executor.getType() == type) {
+
+	private int execute(List<? extends IExecutorTyped> executors, CommandSender sender, Object[] args,
+			ExecutorType type) throws WrapperCommandSyntaxException {
+		for (IExecutorTyped executor : executors) {
+			if (executor.getType() == type) {
 				return executor.executeWith(sender, args);
 			}
 		}
 		throw new NoSuchElementException("Executor had no valid executors for type " + type.toString());
 	}
-	
+
 	public List<IExecutorNormal<T>> getNormalExecutors() {
 		return normalExecutors;
 	}
@@ -134,16 +144,16 @@ class CustomCommandExecutor<T extends CommandSender> {
 	public boolean isForceNative() {
 		return matches(normalExecutors, ExecutorType.NATIVE) || matches(resultingExecutors, ExecutorType.NATIVE);
 	}
-	
+
 	private boolean matches(List<? extends IExecutorTyped> executors, ExecutorType type) {
-		for(IExecutorTyped executor : executors) {
-			if(executor.getType() == type) {
+		for (IExecutorTyped executor : executors) {
+			if (executor.getType() == type) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	CustomCommandExecutor<T> mergeExecutor(CustomCommandExecutor<T> executor) {
 		CustomCommandExecutor<T> result = new CustomCommandExecutor<>();
 		result.normalExecutors = new ArrayList<>(normalExecutors);
@@ -152,11 +162,11 @@ class CustomCommandExecutor<T extends CommandSender> {
 		result.resultingExecutors.addAll(executor.resultingExecutors);
 		return result;
 	}
-	
+
 	public void setNormalExecutors(List<IExecutorNormal<T>> normalExecutors) {
 		this.normalExecutors = normalExecutors;
 	}
-	
+
 	public void setResultingExecutors(List<IExecutorResulting<T>> resultingExecutors) {
 		this.resultingExecutors = resultingExecutors;
 	}

@@ -25,6 +25,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.IntegerRangeArgument;
+
+/**
+ * Annotation equivalent of the {@link IntegerRangeArgument}
+ */
 @Primitive("dev.jorel.commandapi.wrappers.IntegerRange")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)

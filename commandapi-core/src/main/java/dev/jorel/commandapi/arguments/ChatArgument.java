@@ -30,6 +30,8 @@ import net.md_5.bungee.api.chat.BaseComponent;
 
 /**
  * An argument that represents chat with entity selectors
+ * 
+ * @apiNote Returns a {@link BaseComponent}{@code []} object
  */
 public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyArgument {
 
@@ -61,7 +63,7 @@ public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyAr
 	
 	@Override
 	public <CommandListenerWrapper> BaseComponent[] parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getChat(cmdCtx, key);
 	}
 }

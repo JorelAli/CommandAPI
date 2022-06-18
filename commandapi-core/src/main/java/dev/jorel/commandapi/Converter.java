@@ -239,7 +239,7 @@ public final class Converter {
 			calleeInterfacesList.addAll(Arrays.asList(currentClass.getInterfaces()));
 			currentClass = currentClass.getSuperclass();
 		}
-		Class<?>[] calleeInterfaces = calleeInterfacesList.toArray(new Class[0]);
+		Class<?>[] calleeInterfaces = calleeInterfacesList.toArray(new Class<?>[0]);
 
 		InvocationHandler handler = (Object p, Method method, Object[] args) -> {
 			switch(method.getName()) {

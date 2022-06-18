@@ -20,21 +20,31 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
+import java.io.File;
+import java.util.function.Function;
+
 /**
  * A class to contain information about how to configure the CommandAPI during
  * its loading step.
  */
 public class CommandAPIConfig {
-	
+
 	// The default configuration. This should mirror the commandapi-plugin
 	// config.yml file.
 	boolean verboseOutput = false;
 	boolean silentLogs = false;
 	boolean useLatestNMSVersion = false;
 	String missingExecutorImplementationMessage = "This command has no implementations for %s";
-	
+
+	// NBT API
+	Class<?> nbtContainerClass = null;
+	Function<Object, ?> nbtContainerConstructor = null;
+
+	File dispatcherFile = null;
+
 	/**
 	 * Sets verbose output logging for the CommandAPI if true.
+	 * 
 	 * @param value whether verbose output should be enabled
 	 * @return this CommandAPIConfig
 	 */
@@ -42,10 +52,12 @@ public class CommandAPIConfig {
 		this.verboseOutput = value;
 		return this;
 	}
-	
+
 	/**
-	 * Silences all logs (including warnings, but not errors) for the CommandAPI if true.
-	 * @param value whether logging suppression should be enabled 
+	 * Silences all logs (including warnings, but not errors) for the CommandAPI if
+	 * true.
+	 * 
+	 * @param value whether logging suppression should be enabled
 	 * @return this CommandAPIConfig
 	 */
 	public CommandAPIConfig silentLogs(boolean value) {
@@ -67,19 +79,58 @@ public class CommandAPIConfig {
 		this.useLatestNMSVersion = value;
 		return this;
 	}
-	
+
 	/**
-	 * Sets the message to display to users when a command has no executor. Available formatting parameters are:
+	 * Sets the message to display to users when a command has no executor.
+	 * Available formatting parameters are:
 	 * 
-	 * <ul> <li>%s - the executor class (lowercase)</li>
-	 * <li>%S - the executor class (normal case)</li></ul>
+	 * <ul>
+	 * <li>%s - the executor class (lowercase)</li>
+	 * <li>%S - the executor class (normal case)</li>
+	 * </ul>
 	 * 
-	 * @param value the message to display when a command has no executor 
+	 * @param value the message to display when a command has no executor
 	 * @return this CommandAPIConfig
 	 */
 	public CommandAPIConfig missingExecutorImplementationMessage(String value) {
 		this.missingExecutorImplementationMessage = value;
 		return this;
 	}
-	
+
+	/**
+	 * Initializes the CommandAPI's implementation of an NBT API.
+	 * 
+	 * @param <T>                     the type that the NBT compound container class
+	 *                                is
+	 * @param nbtContainerClass       the NBT compound container class. For example,
+	 *                                {@code NBTContainer.class}
+	 * @param nbtContainerConstructor a function that takes an Object (NMS
+	 *                                {@code NBTTagCompound}) and returns an
+	 *                                instance of the provided NBT compound
+	 *                                container. For example,
+	 *                                {@code NBTContainer::new}.
+	 * @return this CommandAPIConfig
+	 */
+	public <T> CommandAPIConfig initializeNBTAPI(Class<T> nbtContainerClass,
+			Function<Object, T> nbtContainerConstructor) {
+		this.nbtContainerClass = nbtContainerClass;
+		this.nbtContainerConstructor = nbtContainerConstructor;
+		return this;
+	}
+
+	/**
+	 * Specifies the location for the CommandAPI to store the internal
+	 * representation of Brigadier's command tree.
+	 * 
+	 * @param file a file pointing to where to store Brigadier's JSON command
+	 *             dispatcher, for example
+	 *             {@code new File(getDataFolder(), "command_registration.json")}.
+	 *             If this argument is {@code null}, this file will not be created.
+	 * @return this CommandAPIConfig
+	 */
+	public CommandAPIConfig dispatcherFile(File file) {
+		this.dispatcherFile = file;
+		return this;
+	}
+
 }

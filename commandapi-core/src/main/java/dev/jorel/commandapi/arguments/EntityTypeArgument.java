@@ -58,7 +58,7 @@ public class EntityTypeArgument extends SafeOverrideableArgument<EntityType, Ent
 	
 	@Override
 	public <CommandListenerWrapper> EntityType parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getEntityType(cmdCtx, key);
 	}
 }

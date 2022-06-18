@@ -25,8 +25,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.ChatComponentArgument;
+
+/**
+ * Annotation equivalent of the {@link ChatComponentArgument}
+ */
 @Primitive("net.md_5.bungee.api.chat.BaseComponent[]")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)
-public @interface AChatComponentArgument {		
+public @interface AChatComponentArgument {
 }

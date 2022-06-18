@@ -53,7 +53,7 @@ public class PotionEffectArgument extends SafeOverrideableArgument<PotionEffectT
 	
 	@Override
 	public <CommandListenerWrapper> PotionEffectType parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getPotionEffect(cmdCtx, key);
 	}
 }

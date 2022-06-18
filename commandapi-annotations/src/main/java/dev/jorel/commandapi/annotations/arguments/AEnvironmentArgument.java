@@ -25,8 +25,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.EnvironmentArgument;
+
+/**
+ * Annotation equivalent of the {@link EnvironmentArgument}
+ */
 @Primitive("org.bukkit.World.Environment")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)
-public @interface AEnvironmentArgument {		
+public @interface AEnvironmentArgument {
 }

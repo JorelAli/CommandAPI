@@ -30,11 +30,15 @@ import dev.jorel.commandapi.nms.NMS;
 
 /**
  * An argument that represents the Bukkit BlockData object
+ * 
+ * @apiNote Returns a {@link BlockData} object
+ * 
  */
 public class BlockStateArgument extends Argument<BlockData> {
 
 	/**
 	 * Constructs a BlockStateArgument with a given node name.
+	 * 
 	 * @param nodeName the name of the node for argument
 	 */
 	public BlockStateArgument(String nodeName) {
@@ -50,10 +54,11 @@ public class BlockStateArgument extends Argument<BlockData> {
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.BLOCKSTATE;
 	}
-	
+
 	@Override
 	public <CommandListenerWrapper> BlockData parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
+			throws CommandSyntaxException {
 		return nms.getBlockState(cmdCtx, key);
 	}
 }

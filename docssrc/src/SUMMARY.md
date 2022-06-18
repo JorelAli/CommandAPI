@@ -65,6 +65,7 @@
       - [Itemstack arguments](./itemstackarguments.md)
       - [LootTable argument](./loottableargument.md)
       - [MathOperation arguments](./mathoperationarguments.md)
+      - [NamespacedKey arguments](./namespacedkeyarg.md)
       - [Particle arguments](./particlearguments.md)
       - [Potion effect arguments](./potionarguments.md)
       - [Recipe arguments](./recipeargument.md)

@@ -52,7 +52,7 @@ public class ScoreboardSlotArgument extends SafeOverrideableArgument<ScoreboardS
 	
 	@Override
 	public <CommandListenerWrapper> ScoreboardSlot parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getScoreboardSlot(cmdCtx, key);
 	}
 }

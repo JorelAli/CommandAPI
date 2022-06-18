@@ -30,6 +30,8 @@ import dev.jorel.commandapi.nms.NMS;
 
 /**
  * An argument that represents the Bukkit Enchantment object
+ * 
+ * @apiNote Returns an {@link Enchantment} object
  */
 public class EnchantmentArgument extends SafeOverrideableArgument<Enchantment, Enchantment> {
 	
@@ -53,7 +55,7 @@ public class EnchantmentArgument extends SafeOverrideableArgument<Enchantment, E
 	
 	@Override
 	public <CommandListenerWrapper> Enchantment parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getEnchantment(cmdCtx, key);
 	}
 }

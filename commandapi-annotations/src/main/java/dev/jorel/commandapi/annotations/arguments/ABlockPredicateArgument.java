@@ -25,8 +25,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.BlockPredicateArgument;
+
+/**
+ * Annotation equivalent of the {@link BlockPredicateArgument}
+ */
 @Primitive("java.util.function.Predicate<org.bukkit.block.Block>")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)
-public @interface ABlockPredicateArgument {		
+public @interface ABlockPredicateArgument {
 }

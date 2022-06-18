@@ -25,36 +25,45 @@ import java.util.Map.Entry;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import de.tr7zw.changeme.nbtapi.NBTContainer;
+import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
+
 public class CommandAPIMain extends JavaPlugin {
-	
+
 	@Override
 	public void onLoad() {
-		//Config loading
+		// Configure the NBT API - we're not allowing tracking at all, according
+		// to the CommandAPI's design principles. The CommandAPI isn't used very
+		// much, so this tiny proportion of servers makes very little impact to
+		// the NBT API's stats.
+		MinecraftVersion.disableBStats();
+		MinecraftVersion.disableUpdateCheck();
+
+		// Config loading
 		saveDefaultConfig();
-		CommandAPI.config = new Config(getConfig());
-		CommandAPI.dispatcherFile = new File(getDataFolder(), "command_registration.json");
+		CommandAPI.config = new InternalConfig(getConfig(), NBTContainer.class, NBTContainer::new, new File(getDataFolder(), "command_registration.json"));
 		CommandAPI.logger = getLogger();
-		
-		//Check dependencies for CommandAPI
+
+		// Check dependencies for CommandAPI
 		CommandAPIHandler.getInstance().checkDependencies();
-		
-		//Convert all plugins to be converted
-		for(Entry<JavaPlugin, String[]> pluginToConvert : CommandAPI.config.getPluginsToConvert()) {
-			if(pluginToConvert.getValue().length == 0) {
+
+		// Convert all plugins to be converted
+		for (Entry<JavaPlugin, String[]> pluginToConvert : CommandAPI.config.getPluginsToConvert()) {
+			if (pluginToConvert.getValue().length == 0) {
 				Converter.convert(pluginToConvert.getKey());
 			} else {
-				for(String command : pluginToConvert.getValue()) {
+				for (String command : pluginToConvert.getValue()) {
 					new AdvancedConverter(pluginToConvert.getKey(), command).convert();
 				}
 			}
 		}
-		
-		// Convert all arbitrary commands		
-		for(String commandName : CommandAPI.config.getCommandsToConvert()) {
+
+		// Convert all arbitrary commands
+		for (String commandName : CommandAPI.config.getCommandsToConvert()) {
 			new AdvancedConverter(commandName).convertCommand();
 		}
 	}
-	
+
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable(this);

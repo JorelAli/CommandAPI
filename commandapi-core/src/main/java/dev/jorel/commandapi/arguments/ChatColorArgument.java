@@ -32,6 +32,8 @@ import dev.jorel.commandapi.nms.NMS;
 
 /**
  * An argument that represents the Bukkit ChatColor object
+ * 
+ * @apiNote Returns a {@link ChatColor} object
  */
 public class ChatColorArgument extends SafeOverrideableArgument<ChatColor, ChatColor> {
 
@@ -57,7 +59,7 @@ public class ChatColorArgument extends SafeOverrideableArgument<ChatColor, ChatC
 	
 	@Override
 	public <CommandListenerWrapper> ChatColor parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getChatColor(cmdCtx, key);
 	}
 }

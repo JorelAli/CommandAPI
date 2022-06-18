@@ -12,6 +12,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
@@ -60,14 +61,12 @@ import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.potion.PotionEffectType;
 
-import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 
-import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
@@ -155,6 +154,9 @@ import net.minecraft.server.v1_13_R2.Vec3D;
 
 abstract class NMSWrapper_1_13_1 implements NMS<CommandListenerWrapper> {}
 
+/**
+ * NMS implementation for Minecraft 1.13.1
+ */
 @NMSMeta(compatibleWith = "1.13.1")
 @RequireField(in = CraftSound.class, name = "minecraftKey", ofType = String.class)
 @RequireField(in = EntitySelector.class, name = "m", ofType = boolean.class)
@@ -254,7 +256,7 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 
 	@Override
 	public ArgumentType<?> _ArgumentEntity(
-			dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector selector) {
+			dev.jorel.commandapi.arguments.EntitySelector selector) {
 		return switch (selector) {
 			case MANY_ENTITIES -> ArgumentEntity.b();
 			case MANY_PLAYERS -> ArgumentEntity.d();
@@ -574,7 +576,7 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 
 	@Override
 	public Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String str,
-			dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector selector)
+			dev.jorel.commandapi.arguments.EntitySelector selector)
 			throws CommandSyntaxException {
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
 		try {
@@ -683,12 +685,6 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 		return item -> predicate.test(CraftItemStack.asNMSCopy(item));
 	}
 
-	@Override
-	public String getKeyedAsString(CommandContext<CommandListenerWrapper> cmdCtx, String key)
-			throws CommandSyntaxException {
-		return ArgumentMinecraftKeyRegistered.c(cmdCtx, key).toString();
-	}
-
 	@Differs(from = "1.13", by = "uses ArgumentVec2I instead of ArgumentVec2")
 	@Override
 	public Location2D getLocation2DBlock(CommandContext<CommandListenerWrapper> cmdCtx, String key)
@@ -734,9 +730,17 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 		return MathOperation.fromString(CommandAPIHandler.getRawArgumentInput(cmdCtx, key));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public NBTContainer getNBTCompound(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		return new NBTContainer(ArgumentNBTTag.a(cmdCtx, key));
+	public NamespacedKey getMinecraftKey(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		MinecraftKey resourceLocation = ArgumentMinecraftKeyRegistered.c(cmdCtx, key);
+		return new NamespacedKey(resourceLocation.b(), resourceLocation.getKey());
+	}
+
+	@Override
+	public <NBTContainer> Object getNBTCompound(CommandContext<CommandListenerWrapper> cmdCtx, String key,
+			Function<Object, NBTContainer> nbtContainerConstructor) {
+		return nbtContainerConstructor.apply(ArgumentNBTTag.a(cmdCtx, key));
 	}
 
 	@Override
@@ -754,7 +758,7 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 	public OfflinePlayer getOfflinePlayer(CommandContext<CommandListenerWrapper> cmdCtx, String str)
 			throws CommandSyntaxException {
 		OfflinePlayer target = Bukkit
-				.getOfflinePlayer(((GameProfile) ArgumentProfile.a(cmdCtx, str).iterator().next()).getId());
+				.getOfflinePlayer((ArgumentProfile.a(cmdCtx, str).iterator().next()).getId());
 		if (target == null) {
 			throw ArgumentProfile.a.create();
 		} else {
@@ -792,7 +796,7 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 
 	@Override
 	public Player getPlayer(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
-		Player target = Bukkit.getPlayer(((GameProfile) ArgumentProfile.a(cmdCtx, str).iterator().next()).getId());
+		Player target = Bukkit.getPlayer((ArgumentProfile.a(cmdCtx, str).iterator().next()).getId());
 		if (target == null) {
 			throw ArgumentProfile.a.create();
 		} else {

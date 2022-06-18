@@ -25,6 +25,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.ObjectiveCriteriaArgument;
+
+/**
+ * Annotation equivalent of the {@link ObjectiveCriteriaArgument}
+ */
 @Primitive("String")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)

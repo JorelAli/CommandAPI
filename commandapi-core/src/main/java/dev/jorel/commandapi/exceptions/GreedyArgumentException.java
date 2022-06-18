@@ -31,6 +31,9 @@ public class GreedyArgumentException extends RuntimeException {
 
 	/**
 	 * Creates a GreedyArgumentException
+	 * 
+	 * @param arguments the list of arguments that have been used for this command
+	 *                  (including the greedy string argument)
 	 */
 	public GreedyArgumentException(Argument<?>[] arguments) {
 		super("Only one GreedyStringArgument or ChatArgument can be declared, at the end of a List. Found arguments: "

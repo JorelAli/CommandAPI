@@ -1,6 +1,112 @@
 # Upgrading guide
 
-## From 8.0.0 to 8.1.0
+## From 8.3.1 to 8.4.0
+
+### Getting a list of registered commands
+
+In 8.2.1, the CommandAPI exposed `CommandAPIHandler.getInstance().registeredCommands` to get a list of registered commands. This has now been changed and properly implemented as a getter method which can be accessed from `CommandAPI`:
+
+```java
+CommandAPIHandler.getInstance().registeredCommands
+```
+
+\\[\downarrow\\]
+
+```java
+CommandAPI.getRegisteredCommands()
+```
+
+### Entity selector arguments
+
+The import for `EntitySelector` for the `EntitySelectorArgument` has moved to improve CommandAPI shading support with jar minimization:
+
+```java
+dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector
+```
+
+\\[\downarrow\\]
+
+```java
+dev.jorel.commandapi.arguments.EntitySelector
+```
+
+### Custom arguments
+
+Custom arguments are no longer restricted to a string-based argument or a keyed-based argument and can now be implemented over any existing argument "base". This argument is now parameterized over two types: the first type being the return type of this custom argument and the second type being the return type of the "base" argument. Custom arguments should now use the new constructor that accepts an argument - more information on how to do that can be found on the [Custom arguments page](./customarguments.md). It's recommended to review your implementation of custom arguments and upgrade them if you feel that you need a more powerful argument parser (for example, you might want to use a greedy string argument as the base argument instead of a string argument).
+
+Custom arguments that are _not_ keyed can be drop-in replaced with a `StringArgument`:
+
+```java
+new CustomArgument<T>("nodename", inputInfo -> {
+    // Code here
+    return T;
+});
+```
+
+\\[\downarrow\\]
+
+```java
+new CustomArgument<T, String>(new StringArgument("nodename"), inputInfo -> {
+    // Code here
+    return T;
+});
+```
+
+Keyed custom arguments can be drop-in replaced with a `NamespacedKeyArgument`:
+
+```java
+new CustomArgument<T>("nodename", inputInfo -> {
+    // Code here
+    return T;
+}, true);
+```
+
+\\[\downarrow\\]
+
+```java
+new CustomArgument<T, NamespacedKey>(new NamespacedKeyArgument("nodename"), inputInfo -> {
+    // Code here
+    return T;
+});
+```
+
+### NBT arguments
+
+NBT arguments now have a different implementation if you're using the plugin version of the CommandAPI or shading the CommandAPI.
+
+NBTCompoundArguments are now parameterized over their implemented NBTCompound implementation. For the NBT API, this means:
+
+```java
+new NBTCompoundArgument("nbt");
+```
+
+\\[\downarrow\\]
+
+```java
+new NBTCompoundArgument<NBTContainer>("nbt");
+```
+
+#### If you're using the plugin version of the CommandAPI
+
+You no longer have to include the NBT API separately, the CommandAPI comes with the NBT API built-in:
+
+```java
+de.tr7zw.nbtapi.NBTContainer
+```
+
+\\[\downarrow\\]
+
+```java
+dev.jorel.commandapi.nbtapi.NBTContainer
+```
+
+#### If you're shading the CommandAPI
+
+You now need to shade the NBT API into your plugin (as well as the CommandAPI). So the CommandAPI knows how to use the underlying implementation of the NBT API, you have to configure it using the `CommandAPIConfig.initializeNBTAPI()` method in `CommandAPI.onLoad()`. More information on how to do that can be found on the [NBT arguments page, under Shading usage setup](./nbtarguments.md#shading-usage-setup).
+
+-----
+
+## From 8.0.0 or earlier to 8.1.0
 
 Arguments are now parameterized over a generic type. This does very little in terms of the running of the CommandAPI, but does ensure type safety with its internals. Instances of the `Argument` type now have to be parameterized. In general, this basically means:
 

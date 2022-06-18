@@ -27,6 +27,7 @@ import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.bukkit.Axis;
@@ -59,8 +60,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 
-import de.tr7zw.nbtapi.NBTContainer;
-import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
+import dev.jorel.commandapi.arguments.EntitySelector;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
@@ -144,14 +144,15 @@ public interface NMS<CommandListenerWrapper> {
 	ArgumentType<?> _ArgumentVec2();
 
 	ArgumentType<?> _ArgumentVec3();
-	
+
 	/*
 	 * Synthetic arguments - arguments that don't actually exist, but have
-	 * version-specific implementations, so we can switch their implementation
-	 * as needed. For example, the BiomeArgument is both a _ArgumentMinecraftKeyRegistered
-	 * and a _ArgumentResourceOrTag, but we'll refer to it as an _ArgumentSyntheticBiome
+	 * version-specific implementations, so we can switch their implementation as
+	 * needed. For example, the BiomeArgument is both a
+	 * _ArgumentMinecraftKeyRegistered and a _ArgumentResourceOrTag, but we'll refer
+	 * to it as an _ArgumentSyntheticBiome
 	 */
-	
+
 	ArgumentType<?> _ArgumentSyntheticBiome();
 
 	/**
@@ -253,11 +254,9 @@ public interface NMS<CommandListenerWrapper> {
 	Predicate<ItemStack> getItemStackPredicate(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException;
 
-	String getKeyedAsString(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
-
 	Location2D getLocation2DBlock(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException;
-	
+
 	Location2D getLocation2DPrecise(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException;
 
@@ -271,7 +270,10 @@ public interface NMS<CommandListenerWrapper> {
 	MathOperation getMathOperation(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException;
 
-	NBTContainer getNBTCompound(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	NamespacedKey getMinecraftKey(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+
+	<NBTContainer> Object getNBTCompound(CommandContext<CommandListenerWrapper> cmdCtx, String key,
+			Function<Object, NBTContainer> nbtContainerConstructor);
 
 	String getObjective(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws IllegalArgumentException, CommandSyntaxException;
@@ -281,7 +283,9 @@ public interface NMS<CommandListenerWrapper> {
 	ParticleData<?> getParticle(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
 	Player getPlayer(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
-	OfflinePlayer getOfflinePlayer(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+
+	OfflinePlayer getOfflinePlayer(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException;
 
 	PotionEffectType getPotionEffect(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException;
@@ -364,5 +368,5 @@ public interface NMS<CommandListenerWrapper> {
 	HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription, String permission);
 
 	void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd);
-	
+
 }

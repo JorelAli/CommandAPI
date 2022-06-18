@@ -12,6 +12,9 @@ import java.util.function.Predicate;
  */
 abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executable<T> {
 
+	/**
+	 * The Command's meta data for this executable command
+	 */
 	protected final CommandMetaData meta;
 
 	ExecutableCommand(final String commandName) {
@@ -197,6 +200,9 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 		register();
 	}
 
+	/**
+	 * Registers this command
+	 */
 	public abstract void register();
 	
 }

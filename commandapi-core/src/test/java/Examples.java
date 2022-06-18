@@ -85,7 +85,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
-import de.tr7zw.nbtapi.NBTContainer;
+import de.tr7zw.changeme.nbtapi.NBTContainer;
 import dev.jorel.commandapi.Brigadier;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
@@ -113,8 +113,8 @@ import dev.jorel.commandapi.arguments.CustomArgument;
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
 import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
 import dev.jorel.commandapi.arguments.EnchantmentArgument;
+import dev.jorel.commandapi.arguments.EntitySelector;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
-import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
 import dev.jorel.commandapi.arguments.EntityTypeArgument;
 import dev.jorel.commandapi.arguments.EnvironmentArgument;
 import dev.jorel.commandapi.arguments.FunctionArgument;
@@ -750,7 +750,7 @@ new CommandAPICommand("bigmsg")
 
 {
 /* ANCHOR: blockpredicatearguments */
-Argument<?>[] arguments = new Argument[] {
+Argument<?>[] arguments = new Argument<?>[] {
     new IntegerArgument("radius"),
     new BlockPredicateArgument("fromBlock"),
     new BlockStateArgument("toBlock"),
@@ -812,11 +812,24 @@ new CommandAPICommand("rem")
 /* ANCHOR_END: itemstackpredicatearguments */
 }
 
+class NBTTest extends JavaPlugin {
+
+/* ANCHOR: nbtcompoundargumentonload */
+@Override
+public void onLoad() {
+    CommandAPI.onLoad(new CommandAPIConfig()
+        .initializeNBTAPI(NBTContainer.class, NBTContainer::new)
+    );
+}
+/* ANCHOR_END: nbtcompoundargumentonload */
+	
+}
+
 @SuppressWarnings("unused")
 void b(){
 /* ANCHOR: nbtcompoundarguments */
 new CommandAPICommand("award")
-    .withArguments(new NBTCompoundArgument("nbt"))
+    .withArguments(new NBTCompoundArgument<NBTContainer>("nbt"))
     .executes((sender, args) -> {
         NBTContainer nbt = (NBTContainer) args[0];
         
@@ -905,7 +918,7 @@ new CommandAPICommand("tpworld")
 public Argument<World> worldArgument(String nodeName) {
     
     // Construct our CustomArgument that takes in a String input and returns a World object
-    return new CustomArgument<World>(nodeName, info -> {
+    return new CustomArgument<World, String>(new StringArgument(nodeName), info -> {
         // Parse the world from our input
         World world = Bukkit.getWorld(info.input());
     

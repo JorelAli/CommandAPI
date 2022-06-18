@@ -32,22 +32,26 @@ import dev.jorel.commandapi.nms.NMS;
 
 /**
  * An argument that represents the Bukkit Biome object
+ * 
+ * @apiNote Returns a {@link Biome} object
  */
 public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome> implements ICustomProvidedArgument {
-	
+
 	/**
 	 * Constructs a BiomeArgument with a given node name.
+	 * 
 	 * @param nodeName the name of the node for argument
 	 */
 	public BiomeArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentSyntheticBiome(),((Function<Biome, String>) Biome::name).andThen(String::toLowerCase));
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentSyntheticBiome(),
+				((Function<Biome, String>) Biome::name).andThen(String::toLowerCase));
 	}
 
 	@Override
 	public Class<Biome> getPrimitiveType() {
 		return Biome.class;
 	}
-	
+
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.BIOME;
@@ -57,10 +61,11 @@ public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome> implem
 	public SuggestionProviders getSuggestionProvider() {
 		return SuggestionProviders.BIOMES;
 	}
-	
+
 	@Override
 	public <CommandListenerWrapper> Biome parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
+			throws CommandSyntaxException {
 		return nms.getBiome(cmdCtx, key);
 	}
 }
