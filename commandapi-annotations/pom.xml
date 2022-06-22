@@ -44,8 +44,9 @@
 		</dependency>
 		<dependency>
 			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot</artifactId>
+			<artifactId>spigot-api</artifactId>
 			<version>${paper.version}</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 	<build>
