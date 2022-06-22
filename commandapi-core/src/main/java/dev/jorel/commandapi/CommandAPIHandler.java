@@ -287,12 +287,14 @@ public class CommandAPIHandler<CommandSourceStack> {
 				String[] result = new String[argsAndCmd.length - 1];
 				System.arraycopy(argsAndCmd, 1, result, 0, argsAndCmd.length - 1);
 
-				List<List<String>> entityNamesForArgs = new ArrayList<>();
+				// As stupid as it sounds, it's more performant and safer to use
+				// a List<?>[] instead of a List<List<?>>, due to NPEs and AIOOBEs.
+				@SuppressWarnings("unchecked")
+				List<String>[] entityNamesForArgs = new List[args.length];
 				for (int i = 0; i < args.length; i++) {
-					entityNamesForArgs.set(i, args[i].getEntityNames(argObjs[i]));
+					entityNamesForArgs[i] = args[i].getEntityNames(argObjs[i]);
 				}
-
-				List<List<String>> product = CartesianProduct.getDescartes(entityNamesForArgs);
+				List<List<String>> product = CartesianProduct.getDescartes(Arrays.asList(entityNamesForArgs));
 
 				// These objects in obj are List<String>
 				for (List<String> strings : product) {
