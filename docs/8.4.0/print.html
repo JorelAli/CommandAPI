@@ -932,7 +932,7 @@ depend: [CommandAPI]
     &lt;dependency&gt;
         &lt;groupId&gt;dev.jorel&lt;/groupId&gt;
         &lt;artifactId&gt;commandapi-core&lt;/artifactId&gt;
-        &lt;version&gt;8.4.0&lt;/version&gt;
+        &lt;version&gt;8.4.1&lt;/version&gt;
         &lt;scope&gt;provided&lt;/scope&gt;
     &lt;/dependency&gt;
 &lt;/dependencies&gt;
@@ -952,7 +952,7 @@ depend: [CommandAPI]
 <li>
 <p>Add the dependency to your list of dependencies in your <code>build.gradle</code> file:</p>
 <pre><code class="language-gradle">dependencies {
-    compileOnly &quot;dev.jorel:commandapi-core:8.4.0&quot;
+    compileOnly &quot;dev.jorel:commandapi-core:8.4.1&quot;
 }
 </code></pre>
 </li>
@@ -964,7 +964,6 @@ depend: [CommandAPI]
 <p>The CommandAPI plugin has a few slight differences with the shaded CommandAPI jar file. The CommandAPI plugin has the following extra features that are not present in the shaded version:</p>
 <ul>
 <li>Command conversion via a <code>config.yml</code> file</li>
-<li>Creation of the <code>command_registration.json</code> file to show the Brigadier command graph</li>
 </ul>
 <hr />
 <h2><a class="header" href="#shading-requirements" id="shading-requirements">Shading requirements</a></h2>
@@ -1028,7 +1027,7 @@ CommandAPI.onEnable(Plugin plugin);
     &lt;dependency&gt;
         &lt;groupId&gt;dev.jorel&lt;/groupId&gt;
         &lt;artifactId&gt;commandapi-shade&lt;/artifactId&gt;
-        &lt;version&gt;8.4.0&lt;/version&gt;
+        &lt;version&gt;8.4.1&lt;/version&gt;
     &lt;/dependency&gt;
 &lt;/dependencies&gt;
 </code></pre>
@@ -1081,13 +1080,13 @@ CommandAPI.onEnable(Plugin plugin);
 </code></pre>
 <p>Next, we declare our dependencies:</p>
 <pre><code class="language-gradle">dependencies {
-    implementation &quot;dev.jorel:commandapi-shade:8.4.0&quot;
+    implementation &quot;dev.jorel:commandapi-shade:8.4.1&quot;
 }
 </code></pre>
 <p>Then we add it to the <code>shadowJar</code> task configuration and relocate the CommandAPI to your desired location:</p>
 <pre><code class="language-gradle">shadowJar {
     dependencies {
-        include dependency(&quot;dev.jorel:commandapi-shade:8.4.0&quot;)
+        include dependency(&quot;dev.jorel:commandapi-shade:8.4.1&quot;)
     }
 
     // TODO: Change this to my own package name
@@ -1110,7 +1109,7 @@ CommandAPI.onEnable(Plugin plugin);
     &lt;dependency&gt;
         &lt;groupId&gt;dev.jorel&lt;/groupId&gt;
         &lt;artifactId&gt;commandapi-annotations&lt;/artifactId&gt;
-        &lt;version&gt;8.4.0&lt;/version&gt;
+        &lt;version&gt;8.4.1&lt;/version&gt;
         &lt;scope&gt;provided&lt;/scope&gt;
     &lt;/dependency&gt;
 &lt;/dependencies&gt;
@@ -1129,7 +1128,7 @@ CommandAPI.onEnable(Plugin plugin);
                     &lt;path&gt;
                         &lt;groupId&gt;dev.jorel&lt;/groupId&gt;
                         &lt;artifactId&gt;commandapi-annotations&lt;/artifactId&gt;
-                        &lt;version&gt;8.4.0&lt;/version&gt;
+                        &lt;version&gt;8.4.1&lt;/version&gt;
                     &lt;/path&gt;
                 &lt;/annotationProcessorPaths&gt;
             &lt;/configuration&gt;
@@ -1153,8 +1152,8 @@ CommandAPI.onEnable(Plugin plugin);
 <li>
 <p>Add the dependency and annotation processor to your list of dependencies in your <code>build.gradle</code> file:</p>
 <pre><code class="language-gradle">dependencies {
-    compileOnly &quot;dev.jorel:commandapi-annotations:8.4.0&quot;
-    annotationProcessor &quot;dev.jorel:commandapi-annotations:8.4.0&quot;
+    compileOnly &quot;dev.jorel:commandapi-annotations:8.4.1&quot;
+    annotationProcessor &quot;dev.jorel:commandapi-annotations:8.4.1&quot;
 }
 </code></pre>
 </li>
