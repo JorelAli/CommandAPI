@@ -7,15 +7,18 @@ assignees: ''
 
 ---
 
-**CommandAPI version:** _5.12_
+**CommandAPI version:** 8.4.1
 
-**Minecraft version:** _1.16.5_
+**Minecraft version:** 1.19
+
+<!-- Are you shading the CommandAPI? If you don't know, leave this as "no" -->
+**Shading the CommandAPI?** no
 
 **What I did:**
 
 - List of stuff that I did
 
-**Actual result:**
+**What actually happened:**
 
 ```txt
 Stuff that happened when I did it (post error logs here for example)
