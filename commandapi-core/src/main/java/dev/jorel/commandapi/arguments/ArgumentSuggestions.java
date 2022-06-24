@@ -107,7 +107,7 @@ public interface ArgumentSuggestions {
 	 */
 	private static Suggestions toSuggestions(SuggestionsBuilder builder, String... suggestions) {
 		for(String suggestion : suggestions) {
-			if(suggestion.toLowerCase(Locale.ROOT).startsWith(builder.getRemainingLowerCase())) {
+			if(suggestion.toLowerCase(Locale.ROOT).startsWith(builder.getRemaining().toLowerCase(Locale.ROOT))) {
 				builder.suggest(suggestion);
 			}
 		}
@@ -122,7 +122,7 @@ public interface ArgumentSuggestions {
 	 */
 	private static Suggestions toSuggestions(SuggestionsBuilder builder, IStringTooltip... suggestions) {
 		for(IStringTooltip suggestion : suggestions) {
-			if(!suggestion.getSuggestion().toLowerCase(Locale.ROOT).startsWith(builder.getRemainingLowerCase())) {
+			if(!suggestion.getSuggestion().toLowerCase(Locale.ROOT).startsWith(builder.getRemaining().toLowerCase(Locale.ROOT))) {
 				continue;
 			}
 
