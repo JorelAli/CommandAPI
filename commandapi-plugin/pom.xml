@@ -20,9 +20,7 @@
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<parent>
 		<artifactId>commandapi</artifactId>
@@ -40,6 +38,10 @@
 			<url>https://repo.codemc.org/repository/maven-public/</url>
 			<layout>default</layout>
 		</repository>
+		<repository>
+			<id>spigot-repo</id>
+			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -55,30 +57,19 @@
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-1.18.2</artifactId>
+			<artifactId>commandapi-nms-dependency</artifactId>
 			<version>${project.version}</version>
+			<type>pom</type>
 		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-1.18</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-1.17</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-1.16.5</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<!-- Implicitly referenced -->
 		<dependency>
 			<groupId>de.tr7zw</groupId>
-			<artifactId>item-nbt-api-plugin</artifactId>
-			<version>${nbtapi.version}</version>
+			<artifactId>item-nbt-api</artifactId>
+			<version>2.10.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot-api</artifactId>
+			<version>${paper.version}</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
@@ -95,16 +86,6 @@
 							<goal>shade</goal>
 						</goals>
 						<configuration>
-							<artifactSet>
-								<includes>
-									<include>dev.jorel:commandapi-1.18.2</include>
-									<include>dev.jorel:commandapi-1.18</include>
-									<include>dev.jorel:commandapi-1.17</include>
-									<include>dev.jorel:commandapi-1.16.5</include>
-									<include>dev.jorel:commandapi-core</include>
-									<include>dev.jorel:commandapi-vh</include>
-								</includes>
-							</artifactSet>
 							<filters>
 								<filter>
 									<artifact>dev.jorel:commandapi-core</artifact>
@@ -113,6 +94,17 @@
 									</excludes>
 								</filter>
 							</filters>
+							<relocations>
+								<relocation>
+									<pattern>de.tr7zw.changeme.nbtapi</pattern>
+									<shadedPattern>dev.jorel.commandapi.nbtapi</shadedPattern>
+								</relocation>
+							</relocations>
+							<transformers>
+								<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+									<resource>LICENSE</resource>
+								</transformer>
+							</transformers>
 						</configuration>
 					</execution>
 				</executions>

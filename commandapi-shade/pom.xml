@@ -20,9 +20,7 @@
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<parent>
 		<artifactId>commandapi</artifactId>
@@ -47,23 +45,9 @@
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-1.18.2</artifactId>
+			<artifactId>commandapi-nms-dependency</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-1.18</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-1.17</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-1.16.5</artifactId>
-			<version>${project.version}</version>
+			<type>pom</type>
 		</dependency>
 	</dependencies>
 
@@ -79,16 +63,7 @@
 							<goal>shade</goal>
 						</goals>
 						<configuration>
-							<artifactSet>
-								<includes>
-									<include>dev.jorel:commandapi-1.18.2</include>
-									<include>dev.jorel:commandapi-1.18</include>
-									<include>dev.jorel:commandapi-1.17</include>
-									<include>dev.jorel:commandapi-1.16.5</include>
-									<include>dev.jorel:commandapi-core</include>
-									<include>dev.jorel:commandapi-vh</include>
-								</includes>
-							</artifactSet>
+							<promoteTransitiveDependencies>true</promoteTransitiveDependencies>
 							<filters>
 								<filter>
 									<artifact>dev.jorel:commandapi-core</artifact>

@@ -30,6 +30,7 @@ import net.kyori.adventure.text.Component;
 
 /**
  * An argument that represents raw JSON text
+ * @apiNote Returns a {@link Component} object
  */
 public class AdventureChatComponentArgument extends Argument<Component> {
 
@@ -60,7 +61,7 @@ public class AdventureChatComponentArgument extends Argument<Component> {
 	
 	@Override
 	public <CommandListenerWrapper> Component parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getAdventureChatComponent(cmdCtx, key);
 	}
 }

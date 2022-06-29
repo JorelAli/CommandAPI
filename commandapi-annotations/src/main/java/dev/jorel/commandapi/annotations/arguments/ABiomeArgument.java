@@ -25,6 +25,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.BiomeArgument;
+
+/**
+ * Annotation equivalent of the {@link BiomeArgument}
+ */
 @Primitive("org.bukkit.block.Biome")
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.PARAMETER, ElementType.FIELD})

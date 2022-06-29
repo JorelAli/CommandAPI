@@ -41,8 +41,10 @@ public class Preprocessor extends AbstractProcessor {
 	@Override
 	public Set<String> getSupportedAnnotationTypes() {
 		return new HashSet<String>(Arrays.asList(
-			RequireField.class.getCanonicalName(), 
-			RequireFields.class.getCanonicalName()
+			RequireField.class.getCanonicalName(),
+			RequireFields.class.getCanonicalName(),
+			NMSMeta.class.getCanonicalName(),
+			Differs.class.getCanonicalName()
 		));
 	}
 

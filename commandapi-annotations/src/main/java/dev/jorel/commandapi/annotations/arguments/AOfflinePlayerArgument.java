@@ -25,6 +25,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.OfflinePlayerArgument;
+
+/**
+ * Annotation equivalent of the {@link OfflinePlayerArgument}
+ */
 @Primitive("org.bukkit.OfflinePlayer")
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.PARAMETER, ElementType.FIELD})

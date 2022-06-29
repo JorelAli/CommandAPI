@@ -25,13 +25,18 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Tells the annotation processor that this primitive argument's casting type is
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface Primitive {
 
 	/**
-	 * The canonical name of the type of this primitive, including any generic type parameters
+	 * @return The class or classes that this argument represents. This should be
+	 *         fully qualified (with dots) and include any generics (also fully
+	 *         qualified)
 	 */
 	public String[] value();
-	
+
 }

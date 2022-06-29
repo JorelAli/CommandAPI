@@ -1,38 +1,28 @@
 # Custom arguments
 
-Custom arguments are an experimental feature which the CommandAPI offers, which allows you to represent any String, or Minecraft key _(Something of the form `String:String`, such as `minecraft:diamond`)_ with a custom parser. They represent `StringArgument` with replaced suggestions and a built-in parser for any object of your choice. They are designed to be used for multiple commands - you can define the argument once and can use it wherever you want when declaring commands.
+Custom arguments are a quality-of-life feature that the CommandAPI offers which allows you to perform pre-processing on an argument in the argument instance rather than in your `executes()` method for a command. They are designed to be used for multiple commands - you can define the argument once and can use it wherever you want when declaring commands.
 
 -----
 
-The `CustomArgument<T>` has the following two constructors:
+The `CustomArgument<T, B>` has the following constructor:
 
 ```java
-public CustomArgument(String nodeName, CustomArgumentInfoParser<T> parser);
-public CustomArgument(String nodeName, CustomArgumentInfoParser<T> parser, boolean keyed);
+public CustomArgument(Argument<B> base, CustomArgumentInfoParser<T, B> parser);
 ```
 
-There are effectively two forms that this can take:
+This constructor takes in two parameters:
 
-- **A custom argument with a string-based parser**
+- A "base argument", which is the argument that it'll use as the underlying parser. For example, if this is a `StringArgument`, it'll use the StringArgument's parsing rules ( alphanumeric characters (A-Z, a-z and 0-9), and the underscore character) and if this is a `LocationArgument`, it'll take three numerical values.
 
-  The simplest form requires the node name as per any other argument, and a parser which takes in as input a record of info and returns a custom object of your choice. For example, if   you wanted to create a custom argument that represents a World, you can use this to return a Bukkit `World` object.
-  
-  ```java
-  new CustomArgument(nodeName, inputInfo -> { 
-      // code here
-      return T; 
-  });
-  ```
-
-  The CommandAPI will use an underlying `StringArgument` to parse this custom argument, so the limitations of string arguments will apply to this argument (it can only contain alphanumeric characters (A-Z, a-z and 0-9), and the underscore character (_)).
-
-- **A custom argument with a parser that takes in a Minecraft Key**
-
-  With the second constructor, if you provide `true` to the `keyed` field, the input can be of the form of a Minecraft key (so it can have `:` in the name).
+- A "parser", which lets you process the argument based on its input. This is described in more detail below.
 
 ### Type params
 
-The custom argument requires the type of the target object that the custom argument will return when parsing the arguments for a command. For instance, if you have a `CustomArgument<Player>`, then when parsing the arguments for the command, you would cast it to a `Player` object.
+The custom argument requires two type parameters, `<T>` and `<B>`:
+
+- `<T>` refers to the type that this argument will return when parsing the arguments for a command. For instance, if you have a `CustomArgument<Player, ...>`, then when parsing the arguments for the command, you would cast it to a `Player` object.
+
+- `<B>` refers to the type that the base argument will return. This can be found in the [Argument Casting](./arguments.md#argument-casting) section. For example, if the base argument is a `StringArgument`, you'd have `CustomArgument<..., String>`.
 
 -----
 
@@ -42,9 +32,9 @@ To create a parser for a `CustomArgument`, you need to provide a `CustomArgument
 
 ```java
 @FunctionalInterface
-public static interface CustomArgumentInfoParser<T> {
+public interface CustomArgumentInfoParser<T, B> {
 
-    public T apply(CustomArgumentInfo info) throws CustomArgumentException;
+    public T apply(CustomArgumentInfo<B> info) throws CustomArgumentException;
 
 }
 ```
@@ -52,32 +42,39 @@ public static interface CustomArgumentInfoParser<T> {
 The `CustomArgumentInfo` record is very similar to the `SuggestionInfo` record for declaring argument suggestions. This record contains the following methods:
 
 ```java
-public record CustomArgumentInfo {
+public record CustomArgumentInfo<B> {
     CommandSender sender();
     Object[] previousArgs(); 
     String input();
+    B currentInput();
 }
 ```
 
 These fields are as follows:
 
-```java
-CommandSender sender();
-```
+- ```java
+  CommandSender sender();
+  ```
 
-`sender()` represents the command sender that is typing the command. This is normally a `Player`, but can also be a console command sender if using a Paper server.
+  `sender()` represents the command sender that is typing the command. This is normally a `Player`, but can also be a console command sender if using a Paper server.
 
-```java
-Object[] previousArgs();
-```
+- ```java
+  Object[] previousArgs();
+  ```
 
-`previousArgs()` represents a list of previously declared arguments, which are parsed and interpreted as if they were being used to execute the command.
+  `previousArgs()` represents a list of previously declared arguments, which are parsed and interpreted as if they were being used to execute the command.
 
-```java
-String input();
-```
+- ```java
+  String input();
+  ```
 
-`input()` represents the current input _for the custom argument_ that the user has typed. For example, if a user is typing `/mycommand hello` and the first argument is a CustomArgument, the `input()` would return `"hello"`.
+  `input()` represents the current input _for the custom argument_ that the user has typed. For example, if a user is typing `/mycommand hello` and the first argument is a CustomArgument, the `input()` would return `"hello"`.
+
+- ```java
+  B currentInput();
+  ```
+
+  `currentInput()` represents the current input, as parsed by the base argument. For example, if your base argument was an `IntegerArgument`, the return type of `currentInput()` would be an `int`.
 
 -----
 

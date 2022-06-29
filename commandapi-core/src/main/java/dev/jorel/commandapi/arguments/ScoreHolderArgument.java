@@ -37,7 +37,7 @@ public class ScoreHolderArgument<T> extends Argument<T> {
 	
 	/**
 	 * A Score Holder argument. Represents a single score holder or a collection of score holders.
-	 * Defaults to using ScoreHolderType.SINGLE
+	 * Defaults to using {@link ScoreHolderType#SINGLE}
 	 * @param nodeName the name of the node for this argument
 	 */
 	public ScoreHolderArgument(String nodeName) {
@@ -76,7 +76,7 @@ public class ScoreHolderArgument<T> extends Argument<T> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <CommandListenerWrapper> T parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return (T) (single ? nms.getScoreHolderSingle(cmdCtx, key) : nms.getScoreHolderMultiple(cmdCtx, key));
 	}
 

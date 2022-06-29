@@ -25,12 +25,24 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.FloatArgument;
+
+/**
+ * Annotation equivalent of the {@link FloatArgument}
+ */
 @Primitive("float")
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface AFloatArgument {
-	
+
+	/**
+	 * @return The minimum value this argument can take (inclusive)
+	 */
 	public float min() default -Float.MAX_VALUE;
+
+	/**
+	 * @return The maximum value this argument can take (inclusive)
+	 */
 	public float max() default Float.MAX_VALUE;
-	
+
 }

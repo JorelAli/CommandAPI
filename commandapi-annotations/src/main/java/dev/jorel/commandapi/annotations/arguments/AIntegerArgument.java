@@ -25,12 +25,24 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.IntegerArgument;
+
+/**
+ * Annotation equivalent of the {@link IntegerArgument}
+ */
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.PARAMETER, ElementType.FIELD})
 @Primitive("int")
 public @interface AIntegerArgument {
-	
+
+	/**
+	 * @return The minimum value this argument can take (inclusive)
+	 */
 	public int min() default Integer.MIN_VALUE;
+
+	/**
+	 * @return The maximum value this argument can take (inclusive)
+	 */
 	public int max() default Integer.MAX_VALUE;
-	
+
 }

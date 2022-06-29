@@ -25,6 +25,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.ParticleArgument;
+
+/**
+ * Annotation equivalent of the {@link ParticleArgument}
+ */
 @Primitive("org.bukkit.Particle")
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.PARAMETER, ElementType.FIELD})

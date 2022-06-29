@@ -52,7 +52,7 @@ public class MathOperationArgument extends SafeOverrideableArgument<MathOperatio
 	
 	@Override
 	public <CommandListenerWrapper> MathOperation parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getMathOperation(cmdCtx, key);
 	}
 }

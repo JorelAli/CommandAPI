@@ -20,7 +20,8 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
-import java.io.File;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,6 +34,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 
 import com.mojang.brigadier.LiteralMessage;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
@@ -48,24 +50,24 @@ public final class CommandAPI {
 	}
 
 	private static boolean canRegister = true;
-	static Config config;
-	static File dispatcherFile;
+	static InternalConfig config;
 	static Logger logger;
 	private static boolean loaded = false;
 
-	static Config getConfiguration() {
+	/**
+	 * Returns the internal configuration used to manage the CommandAPI
+	 * 
+	 * @return the internal configuration used to manage the CommandAPI
+	 */
+	public static InternalConfig getConfiguration() {
 		if (config == null) {
+			CommandAPI.onLoad(new CommandAPIConfig());
 			logWarning(
 					"Could not find any configuration for the CommandAPI. Loading basic built-in configuration. Did you forget to call CommandAPI.onLoad(config)?");
-			CommandAPI.onLoad(new CommandAPIConfig());
 		}
 		return config;
 	}
 
-	static File getDispatcherFile() {
-		return dispatcherFile;
-	}
-	
 	private static class CommandAPILogger extends Logger {
 
 		protected CommandAPILogger() {
@@ -73,7 +75,7 @@ public final class CommandAPI {
 			setParent(Bukkit.getServer().getLogger());
 			setLevel(Level.ALL);
 		}
-		
+
 	}
 
 	/**
@@ -144,7 +146,7 @@ public final class CommandAPI {
 	@Deprecated(forRemoval = true)
 	public static void onLoad(boolean verbose) {
 		if (!loaded) {
-			CommandAPI.config = new Config(verbose);
+			CommandAPI.config = new InternalConfig(new CommandAPIConfig().verboseOutput(verbose));
 			CommandAPIHandler.getInstance().checkDependencies();
 			loaded = true;
 		} else {
@@ -160,7 +162,7 @@ public final class CommandAPI {
 	 */
 	public static void onLoad(CommandAPIConfig config) {
 		if (!loaded) {
-			CommandAPI.config = new Config(config);
+			CommandAPI.config = new InternalConfig(config);
 			CommandAPIHandler.getInstance().checkDependencies();
 			loaded = true;
 		} else {
@@ -181,13 +183,7 @@ public final class CommandAPI {
 
 			// Sort out permissions after the server has finished registering them all
 			CommandAPIHandler.getInstance().fixPermissions();
-
-			try {
-				CommandAPIHandler.getInstance().getNMS().reloadDataPacks();
-			} catch (ReflectiveOperationException e) {
-				e.printStackTrace();
-			}
-
+			CommandAPIHandler.getInstance().getNMS().reloadDataPacks();
 			CommandAPIHandler.getInstance().updateHelpForCommands();
 		}, 0L);
 
@@ -199,6 +195,7 @@ public final class CommandAPI {
 		};
 
 		Bukkit.getServer().getPluginManager().registerEvents(playerJoinListener, plugin);
+		CommandAPIHandler.getInstance().getPaper().registerReloadHandler(plugin);
 	}
 
 	/**
@@ -216,21 +213,17 @@ public final class CommandAPI {
 	 * running /minecraft:reload, NOT before.
 	 */
 	public static void reloadDatapacks() {
-		try {
-			CommandAPIHandler.getInstance().getNMS().reloadDataPacks();
-		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-			e.printStackTrace();
-		}
+		CommandAPIHandler.getInstance().getNMS().reloadDataPacks();
 	}
 
 	/**
 	 * Forces a command to return a success value of 0
 	 * 
 	 * @param message Description of the error message
-	 * @throws WrapperCommandSyntaxException which indicates that there was a
-	 *                                       command failure
+	 * @return a {@link WrapperCommandSyntaxException} that wraps Brigadier's
+	 *         {@link CommandSyntaxException}
 	 */
-	public static WrapperCommandSyntaxException fail(String message) throws WrapperCommandSyntaxException {
+	public static WrapperCommandSyntaxException fail(String message) {
 		return new WrapperCommandSyntaxException(new SimpleCommandExceptionType(new LiteralMessage(message)).create());
 	}
 
@@ -279,5 +272,13 @@ public final class CommandAPI {
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * @return A list of all {@link RegisteredCommand}{@code s} that have been
+	 *         registered by the CommandAPI so far. The returned list is immutable.
+	 */
+	public static List<RegisteredCommand> getRegisteredCommands() {
+		return Collections.unmodifiableList(CommandAPIHandler.getInstance().registeredCommands);
 	}
 }

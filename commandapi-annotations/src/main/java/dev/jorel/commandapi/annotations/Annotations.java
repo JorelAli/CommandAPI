@@ -32,6 +32,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
@@ -45,6 +46,10 @@ import dev.jorel.commandapi.annotations.annotations.Permission;
 import dev.jorel.commandapi.annotations.annotations.Subcommand;
 import dev.jorel.commandapi.annotations.annotations.Suggestion;
 import dev.jorel.commandapi.annotations.annotations.Suggests;
+import com.google.auto.service.AutoService;
+
+import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.annotations.arguments.AAdvancementArgument;
 import dev.jorel.commandapi.annotations.arguments.AAdventureChatArgument;
 import dev.jorel.commandapi.annotations.arguments.AAdventureChatComponentArgument;
@@ -61,7 +66,7 @@ import dev.jorel.commandapi.annotations.arguments.ACustomArgument;
 import dev.jorel.commandapi.annotations.arguments.ADoubleArgument;
 import dev.jorel.commandapi.annotations.arguments.AEnchantmentArgument;
 import dev.jorel.commandapi.annotations.arguments.AEntitySelectorArgument;
-import dev.jorel.commandapi.annotations.arguments.AEntityType;
+import dev.jorel.commandapi.annotations.arguments.AEntityTypeArgument;
 import dev.jorel.commandapi.annotations.arguments.AEnvironmentArgument;
 import dev.jorel.commandapi.annotations.arguments.AFloatArgument;
 import dev.jorel.commandapi.annotations.arguments.AFloatRangeArgument;
@@ -79,6 +84,7 @@ import dev.jorel.commandapi.annotations.arguments.ALootTableArgument;
 import dev.jorel.commandapi.annotations.arguments.AMathOperationArgument;
 import dev.jorel.commandapi.annotations.arguments.AMultiLiteralArgument;
 import dev.jorel.commandapi.annotations.arguments.ANBTCompoundArgument;
+import dev.jorel.commandapi.annotations.arguments.ANamespacedKeyArgument;
 import dev.jorel.commandapi.annotations.arguments.AObjectiveArgument;
 import dev.jorel.commandapi.annotations.arguments.AObjectiveCriteriaArgument;
 import dev.jorel.commandapi.annotations.arguments.AOfflinePlayerArgument;
@@ -100,7 +106,7 @@ import dev.jorel.commandapi.annotations.parser.Parser;
 /**
  * The main annotation processor for annotation-based arguments
  */
-@SuppressWarnings("deprecation")
+@AutoService(Processor.class)
 public class Annotations extends AbstractProcessor {
 
 	Logging logging;
@@ -114,12 +120,12 @@ public class Annotations extends AbstractProcessor {
 			AAdventureChatArgument.class, AAdventureChatComponentArgument.class, AAngleArgument.class,
 			AAxisArgument.class, ABiomeArgument.class, ABlockPredicateArgument.class, ABlockStateArgument.class,
 			ABooleanArgument.class, AChatArgument.class, AChatColorArgument.class, AChatComponentArgument.class,
-			ACustomArgument.class, ADoubleArgument.class, AEnchantmentArgument.class, AEntitySelectorArgument.class,
+			ADoubleArgument.class, AEnchantmentArgument.class, AEntitySelectorArgument.class,
 			AEntityType.class, AEnvironmentArgument.class, AFloatArgument.class, AFloatRangeArgument.class,
 			AFunctionArgument.class, AGreedyStringArgument.class, AIntegerArgument.class, AIntegerRangeArgument.class,
 			AItemStackArgument.class, AItemStackPredicateArgument.class, ALiteralArgument.class,
 			ALocation2DArgument.class, ALocationArgument.class, ALongArgument.class, ALootTableArgument.class,
-			AMathOperationArgument.class, AMultiLiteralArgument.class, ANBTCompoundArgument.class,
+			AMathOperationArgument.class, AMultiLiteralArgument.class, ANamespacedKeyArgument.class, ANBTCompoundArgument.class,
 			AObjectiveArgument.class, AObjectiveCriteriaArgument.class, AOfflinePlayerArgument.class,
 			AParticleArgument.class, APlayerArgument.class, APotionEffectArgument.class, ARecipeArgument.class,
 			ARotationArgument.class, AScoreboardSlotArgument.class, AScoreHolderArgument.class, ASoundArgument.class,

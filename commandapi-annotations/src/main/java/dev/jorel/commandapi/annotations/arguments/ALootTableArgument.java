@@ -25,6 +25,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.LootTableArgument;
+
+/**
+ * Annotation equivalent of the {@link LootTableArgument}
+ */
 @Primitive("org.bukkit.loot.LootTable")
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.PARAMETER, ElementType.FIELD})

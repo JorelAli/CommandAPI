@@ -52,7 +52,7 @@ public class RotationArgument extends SafeOverrideableArgument<Rotation, Rotatio
 	
 	@Override
 	public <CommandListenerWrapper> Rotation parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getRotation(cmdCtx, key);
 	}
 }

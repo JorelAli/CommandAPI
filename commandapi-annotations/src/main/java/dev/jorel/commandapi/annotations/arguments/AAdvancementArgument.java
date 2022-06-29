@@ -25,6 +25,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.AdvancementArgument;
+
+/**
+ * Annotation equivalent of the {@link AdvancementArgument}
+ */
 @Primitive("org.bukkit.advancement.Advancement")
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.PARAMETER, ElementType.FIELD})

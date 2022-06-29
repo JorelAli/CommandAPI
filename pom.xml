@@ -20,16 +20,14 @@
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>dev.jorel</groupId>
 	<artifactId>commandapi</artifactId>
 	<version>9.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	
+
 	<name>commandapi</name>
 	<description>A Bukkit/Spigot API for the command UI introduced in Minecraft 1.13</description>
 	<url>https://github.com/JorelAli/CommandAPI</url>
@@ -61,10 +59,7 @@
 		<module>commandapi-preprocessor</module>
 
 		<!-- NMS versions -->
-		<module>commandapi-1.18.2</module>
-		<module>commandapi-1.18</module>
-		<module>commandapi-1.17</module>
-		<module>commandapi-1.16.5</module>
+		<module>commandapi-nms</module>
 
 		<!-- Main core code + NMS selector -->
 		<module>commandapi-core</module>
@@ -82,20 +77,33 @@
 
 		<maven.build.timestamp.format>dd_MMM_yyyy_(hh-mm-ssa)</maven.build.timestamp.format>
 
-		<maven.compiler.source>17</maven.compiler.source>
-		<maven.compiler.target>17</maven.compiler.target>
-		<java.version>17</java.version>
+		<maven.compiler.source>16</maven.compiler.source>
+		<maven.compiler.target>16</maven.compiler.target>
+		<java.version>16</java.version>
 
 		<!-- Shared libraries. These are declared here so they can be updated easily. 
 			These are present in each module to prevent accidentally "leaking" these 
 			dependencies to dependents of commandapi-core. -->
-		<nbtapi.version>2.9.2</nbtapi.version>
-		<paper.version>1.18.2-R0.1-SNAPSHOT</paper.version>
+		<paper.version>1.19-R0.1-SNAPSHOT</paper.version>
+		<auto-service.version>1.0.1</auto-service.version>
 	</properties>
 
 	<build>
 		<defaultGoal>clean install</defaultGoal>
 		<finalName>CommandAPI-${project.version}_${maven.build.timestamp}</finalName>
+		<resources>
+			<resource>
+				<directory>.</directory>
+				<filtering>false</filtering>
+				<includes>
+					<include>LICENSE</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+			</resource>
+		</resources>
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -130,12 +138,10 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
+					<showWarnings>true</showWarnings>
 					<compilerArgs>
 						<arg>-Xlint</arg>
 					</compilerArgs>
-					<annotationProcessors>
-						<annotationProcessor>dev.jorel.commandapi.preprocessor.Preprocessor</annotationProcessor>
-					</annotationProcessors>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -172,6 +178,15 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<tags>
+						<tag>
+							<name>apiNote</name>
+							<placement>a</placement>
+							<head>API Note:</head>
+						</tag>
+					</tags>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

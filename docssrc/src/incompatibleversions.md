@@ -4,6 +4,42 @@ There are a few arguments that are incompatible with various versions of Minecra
 
 -----
 
+## Argument changes with respect to Minecraft version
+
+### AngleArgument
+
+Incompatible with Minecraft versions **less than 1.16.2** (1.13.x, 1.14.x, 1.15.x, 1.16, 1.16.1)
+
+### BiomeArgument
+
+Incompatible with Minecraft versions **less than 1.16** _(1.13.x, 1.14.x, 1.15.x)_
+
+### ChatArgument
+
+Incompatible with Minecraft version **1.16.1** (Works on 1.16.2)
+
+### EnvironmentArgument
+
+Incompatible with Minecraft version **1.13** (Works on 1.13.1 and 1.13.2)
+
+### LocationArgument2D
+
+If you're using LocationArgument2D with `LocationType.PRECISE_POSITION`, then it is incompatible with Minecraft version **1.13** (Works on 1.13.1 and 1.13.2)
+
+### RecipeArgument
+
+If you use Minecraft versions **less than 1.15**, this argument will return a `Recipe`. If you are using Minecraft version 1.15 or greater, this argument will return a `ComplexRecipe` (which is a subclass of `Recipe`).
+
+### TimeArgument
+
+Incompatible with Minecraft versions **less than 1.14** _(1.13.x)_
+
+### UUIDArgument
+
+Incompatible with Minecraft versions **less than 1.16** _(1.13.x, 1.14.x, 1.15.x)_
+
+-----
+
 ## CommandAPI behavior with respect to Minecraft version
 
 ### Minecraft version 1.16 and beyond

@@ -4,6 +4,17 @@ This section summarizes the list of things that _could_ go wrong with the Comman
 
 -----
 
+## Permissions don't work (shading the CommandAPI)
+
+If you're shading the CommandAPI and any of the following occur:
+
+- Players with no permissions cannot run CommandAPI commands
+- `.withPermission(CommandPermission.NONE)` doesn't work, even if a player has no permissions
+
+You've probably not initialized the CommandAPI correctly. To assign permissions to a command, you have to add `CommandAPI.onEnable()` to your plugin's `onEnable()` method.
+
+-----
+
 ## I've registered my command but nothing happens
 
 If you've registered a command, the command should be present in the console if verbose logging is enabled. If this does not appear in the console, check that you've:
@@ -84,7 +95,7 @@ You can safely ignore it - the CommandAPI fixes this later. This is described in
 
 -----
 
-## Running /reload doesn't work
+## Running `/reload` doesn't work
 
 See [Plugin reloading](./reloading.md)
 

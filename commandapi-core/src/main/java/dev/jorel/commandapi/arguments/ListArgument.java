@@ -135,7 +135,7 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 
 	@Override
 	public <CommandListenerWrapper> List<T> parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		// Get the list of values which this can take
 		Map<IStringTooltip, T> values = new HashMap<>();
 		for(T object : supplier.apply(nms.getCommandSenderFromCSS(cmdCtx.getSource()))) {

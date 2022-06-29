@@ -30,6 +30,7 @@ import dev.jorel.commandapi.nms.NMS;
 
 /**
  * An argument that represents the Bukkit Advancement object
+ * @apiNote Returns an {@link Advancement} object
  */
 public class AdvancementArgument extends SafeOverrideableArgument<Advancement, Advancement> implements ICustomProvidedArgument {
 	
@@ -58,7 +59,7 @@ public class AdvancementArgument extends SafeOverrideableArgument<Advancement, A
 
 	@Override
 	public <CommandListenerWrapper> Advancement parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getAdvancement(cmdCtx, key);
 	}
 

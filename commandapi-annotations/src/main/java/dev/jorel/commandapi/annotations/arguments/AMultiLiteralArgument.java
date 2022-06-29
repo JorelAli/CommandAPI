@@ -25,11 +25,19 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Primitive("java.lang.String")
+import dev.jorel.commandapi.arguments.MultiLiteralArgument;
+
+/**
+ * Annotation equivalent of the {@link MultiLiteralArgument}
+ */
+@Primitive("String")
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface AMultiLiteralArgument {
 	
+	/**
+	 * @return the literals that this argument represents
+	 */
 	String[] value();
 	
 }

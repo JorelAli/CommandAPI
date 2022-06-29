@@ -25,12 +25,24 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.DoubleArgument;
+
+/**
+ * Annotation equivalent of the {@link DoubleArgument}
+ */
 @Primitive("double")
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface ADoubleArgument {
-	
+
+	/**
+	 * @return The minimum value this argument can take (inclusive)
+	 */
 	public double min() default -Double.MAX_VALUE;
+
+	/**
+	 * @return The maximum value this argument can take (inclusive)
+	 */
 	public double max() default Double.MAX_VALUE;
-	
+
 }

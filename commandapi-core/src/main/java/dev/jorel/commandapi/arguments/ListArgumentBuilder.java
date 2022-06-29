@@ -11,6 +11,7 @@ import dev.jorel.commandapi.StringTooltip;
 
 /**
  * A builder to create a ListArgument
+ * 
  * @param <T> the type that the list argument generates a list of.
  */
 public class ListArgumentBuilder<T> {
@@ -31,8 +32,10 @@ public class ListArgumentBuilder<T> {
 
 	/**
 	 * Creates a new ListArgumentBuilder with a specified node name
-	 * @param nodeName the name of the node for this argument
-	 * @param delimiter the separator for each element in the list (for example, a space or a comma)
+	 * 
+	 * @param nodeName  the name of the node for this argument
+	 * @param delimiter the separator for each element in the list (for example, a
+	 *                  space or a comma)
 	 */
 	public ListArgumentBuilder(String nodeName, String delimiter) {
 		this.nodeName = nodeName;
@@ -61,7 +64,7 @@ public class ListArgumentBuilder<T> {
 	public ListArgumentBuilderSuggests withList(Function<CommandSender, Collection<T>> list) {
 		return new ListArgumentBuilderSuggests(list);
 	}
-	
+
 	/**
 	 * Specifies the list to use to generate suggestions for the list argument
 	 * 
@@ -84,7 +87,7 @@ public class ListArgumentBuilder<T> {
 	}
 
 	/**
-	 * An intermediary class for the ListArgumentBuilder
+	 * An intermediary class for the {@link ListArgumentBuilder}
 	 */
 	public class ListArgumentBuilderSuggests {
 
@@ -95,7 +98,9 @@ public class ListArgumentBuilder<T> {
 		}
 
 		/**
-		 * Specifies that the mapping function for this argument calls the <code>toString()</code> method.
+		 * Specifies that the mapping function for this argument calls the
+		 * <code>toString()</code> method.
+		 * 
 		 * @return this list argument builder
 		 */
 		public ListArgumentBuilderFinished withStringMapper() {
@@ -106,6 +111,7 @@ public class ListArgumentBuilder<T> {
 		 * Specifies the mapping function of the specific type <code>T</code> to a
 		 * <code>String</code> so an element can be shown to a user as suggestions.
 		 * 
+		 * @param mapper the mapping function that creates a {@link String}
 		 * @return this list argument builder
 		 */
 		public ListArgumentBuilderFinished withMapper(Function<T, String> mapper) {
@@ -117,6 +123,7 @@ public class ListArgumentBuilder<T> {
 		 * {@link IStringTooltip} so an element can be shown to a user as a suggestion
 		 * with a tooltip.
 		 * 
+		 * @param mapper the mapping function that creates an {@link IStringTooltip}
 		 * @return this list argument builder
 		 */
 		public ListArgumentBuilderFinished withStringTooltipMapper(Function<T, IStringTooltip> mapper) {
@@ -124,7 +131,7 @@ public class ListArgumentBuilder<T> {
 		}
 
 		/**
-		 * An intermediary class for the ListArgumentBuilder
+		 * An intermediary class for the {@link ListArgumentBuilder}
 		 */
 		public class ListArgumentBuilderFinished {
 
@@ -136,6 +143,7 @@ public class ListArgumentBuilder<T> {
 
 			/**
 			 * Builds this list argument.
+			 * 
 			 * @return a {@link ListArgument}
 			 */
 			public ListArgument<T> build() {

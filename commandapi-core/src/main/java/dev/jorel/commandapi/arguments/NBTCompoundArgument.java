@@ -23,36 +23,45 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import de.tr7zw.nbtapi.NBTContainer;
+import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
 
 /**
- * An argument that represents an NBTContainer from the NBTAPI
+ * An argument that represents an NBTContainer from the NBT API
  */
-public class NBTCompoundArgument extends SafeOverrideableArgument<NBTContainer, NBTContainer> {
+public class NBTCompoundArgument<NBTContainer> extends SafeOverrideableArgument<NBTContainer, NBTContainer> {
 
 	/**
-	 * An NBT Compound Argument. Represents Minecraft's NBT Compound Tag using the NBT API
+	 * An NBT Compound Argument. Represents Minecraft's NBT Compound Tag using the
+	 * NBT API
+	 * 
 	 * @param nodeName the name of the node for this argument
 	 */
 	public NBTCompoundArgument(String nodeName) {
 		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentNBTCompound(), NBTContainer::toString);
+		if (CommandAPI.getConfiguration().getNBTContainerClass() == null || CommandAPI.getConfiguration().getNBTContainerConstructor() == null) {
+			throw new NullPointerException(
+					"The NBTCompoundArgument hasn't been initialized properly! Use CommandAPIConfig.initializeNBTAPI() in your onLoad() method");
+		}
 	}
-	
+
+	@SuppressWarnings("unchecked")
 	@Override
 	public Class<NBTContainer> getPrimitiveType() {
-		return NBTContainer.class;
+		return (Class<NBTContainer>) CommandAPI.getConfiguration().getNBTContainerClass();
 	}
-	
+
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.NBT_COMPOUND;
 	}
-	
+
+	@SuppressWarnings("unchecked")
 	@Override
 	public <CommandListenerWrapper> NBTContainer parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return nms.getNBTCompound(cmdCtx, key);
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
+			throws CommandSyntaxException {
+		return (NBTContainer) nms.getNBTCompound(cmdCtx, key, CommandAPI.getConfiguration().getNBTContainerConstructor());
 	}
 }

@@ -25,6 +25,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.ItemStackPredicateArgument;
+
+/**
+ * Annotation equivalent of the {@link ItemStackPredicateArgument}
+ */
 @Primitive("java.util.function.Predicate<org.bukkit.inventory.ItemStack>")
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.PARAMETER, ElementType.FIELD})

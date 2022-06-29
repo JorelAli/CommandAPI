@@ -55,7 +55,7 @@ public class EnvironmentArgument extends SafeOverrideableArgument<Environment, E
 	
 	@Override
 	public <CommandListenerWrapper> Environment parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getDimension(cmdCtx, key);
 	}
 }

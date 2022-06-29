@@ -20,6 +20,8 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import org.bukkit.Location;
+
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
@@ -28,12 +30,13 @@ import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.Location2D;
 
 /**
- * An argument that represents the Bukkit Location object in x and z directions
+ * An argument that represents the Bukkit {@link Location} object in x and z directions
+ * @apiNote Returns a {@link Location2D} object
  */
 public class Location2DArgument extends SafeOverrideableArgument<Location2D, Location2D> {
 
 	/**
-	 * A Location argument. Represents Minecraft locations in 2D space. Defaults to LocationType.PRECISE_POSITION
+	 * A Location argument. Represents Minecraft locations in 2D space. Defaults to {@link LocationType#PRECISE_POSITION}
 	 * @param nodeName the name of the node for this argument
 	 */
 	public Location2DArgument(String nodeName) {
@@ -43,7 +46,7 @@ public class Location2DArgument extends SafeOverrideableArgument<Location2D, Loc
 	/**
 	 * A Location argument. Represents Minecraft locations in 2D space
 	 * @param nodeName the name of the node for this argument
-	 * @param type the location type of this location, either LocationType.BLOCK_POSITION or LocationType.PRECISE_POSITION
+	 * @param type the location type of this location, either {@link LocationType#BLOCK_POSITION} or {@link LocationType#PRECISE_POSITION}
 	 */
 	public Location2DArgument(String nodeName, LocationType type) {
 		super(nodeName, type == LocationType.BLOCK_POSITION ? CommandAPIHandler.getInstance().getNMS()._ArgumentPosition2D()
@@ -56,7 +59,7 @@ public class Location2DArgument extends SafeOverrideableArgument<Location2D, Loc
 	private final boolean isPrecise;
 
 	/**
-	 * Returns whether this argument is LocationType.BLOCK_POSITION or LocationType.PRECISE_POSITION 
+	 * Returns whether this argument is {@link LocationType#BLOCK_POSITION} or {@link LocationType#PRECISE_POSITION}
 	 * @return the location type of this argument
 	 */
 	public LocationType getLocationType() {
@@ -75,7 +78,7 @@ public class Location2DArgument extends SafeOverrideableArgument<Location2D, Loc
 	
 	@Override
 	public <CommandListenerWrapper> Location2D parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return isPrecise ? nms.getLocation2DPrecise(cmdCtx, key) : nms.getLocation2DBlock(cmdCtx, key);
 	}
 }

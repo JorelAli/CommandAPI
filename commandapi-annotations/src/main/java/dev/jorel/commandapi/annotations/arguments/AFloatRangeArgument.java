@@ -25,6 +25,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import dev.jorel.commandapi.arguments.FloatRangeArgument;
+
+/**
+ * Annotation equivalent of the {@link FloatRangeArgument}
+ */
 @Primitive("dev.jorel.commandapi.wrappers.FloatRange")
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.PARAMETER, ElementType.FIELD})

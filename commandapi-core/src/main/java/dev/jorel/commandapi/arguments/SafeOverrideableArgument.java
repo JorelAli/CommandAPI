@@ -20,7 +20,6 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-
 import java.util.function.Function;
 
 import org.bukkit.NamespacedKey;
@@ -34,10 +33,12 @@ import dev.jorel.commandapi.Tooltip;
  * An interface declaring methods required to override argument suggestions
  * 
  * @param <T> The type of the underlying object that this argument casts to
- * @param <S> A custom type which is represented by this argument. For example, a {@link LocationArgument} will have a custom type <code>Location</code>
+ * @param <S> A custom type which is represented by this argument. For example,
+ *            a {@link LocationArgument} will have a custom type
+ *            <code>Location</code>
  */
 public abstract class SafeOverrideableArgument<T, S> extends Argument<T> {
-	
+
 	private final Function<S, String> mapper;
 
 	/**
@@ -53,17 +54,24 @@ public abstract class SafeOverrideableArgument<T, S> extends Argument<T> {
 		this.mapper = mapper;
 	}
 
+	/**
+	 * Replaces the suggestions with a safe {@link SafeSuggestions} object. Use the
+	 * static methods in {@link SafeSuggestions} to create safe suggestions.
+	 * 
+	 * @param suggestions The safe suggestions to use
+	 * @return the current argument
+	 */
 	public final Argument<T> replaceSafeSuggestions(SafeSuggestions<S> suggestions) {
 		replaceSuggestions(suggestions.toSuggestions(mapper));
 		return this;
 	}
-	
+
 	/**
 	 * Replaces the suggestions of this argument with an array of suggestions.
 	 * 
 	 * @param suggestions a function that takes in {@link SuggestionInfo} and
-	 *                    returns a {@link S} array of suggestions, where S is your custom
-	 *                    type
+	 *                    returns a {@link S} array of suggestions, where S is your
+	 *                    custom type
 	 * @return the current argument
 	 * @deprecated use {@link #replaceSafeSuggestions(SafeSuggestions)}
 	 */
@@ -85,9 +93,12 @@ public abstract class SafeOverrideableArgument<T, S> extends Argument<T> {
 	public final Argument<T> replaceWithSafeSuggestionsT(Function<SuggestionInfo, Tooltip<S>[]> suggestions) {
 		return replaceSafeSuggestions(SafeSuggestions.tooltips(suggestions));
 	}
-	
+
 	/**
-	 * Replaces the suggestions with a safe {@link SafeSuggestions} object. Use the static methods in safe suggestions to create safe suggestions.
+	 * Includes the suggestions provided with the existing suggestions for this
+	 * argument. Use the static methods in {@link SafeSuggestions} to create safe
+	 * suggestions.
+	 * 
 	 * @param suggestions The safe suggestions to use
 	 * @return the current argument
 	 */
@@ -122,20 +133,24 @@ public abstract class SafeOverrideableArgument<T, S> extends Argument<T> {
 	 *                    where S is your custom type
 	 * @return the current argument
 	 * @deprecated use {@link #includeSafeSuggestions(SafeSuggestions)}
-
+	 * 
 	 */
 	@Deprecated(forRemoval = true)
 	public final Argument<T> includeWithSafeSuggestionsT(Function<SuggestionInfo, Tooltip<S>[]> suggestions) {
 		return includeSafeSuggestions(SafeSuggestions.tooltips(suggestions));
 	}
-	
+
 	/**
-	 * Composes a <code>S</code> to a <code>NamespacedKey</code> mapping function to convert <code>S</code> to a <code>String</code>
-	 * @param mapper the mapping function from <code>S</code> to <code>NamespacedKey</code>
-	 * @return a composed function that converts <code>S</code> to <code>String</code>
+	 * Composes a <code>S</code> to a <code>NamespacedKey</code> mapping function to
+	 * convert <code>S</code> to a <code>String</code>
+	 * 
+	 * @param mapper the mapping function from <code>S</code> to
+	 *               <code>NamespacedKey</code>
+	 * @return a composed function that converts <code>S</code> to
+	 *         <code>String</code>
 	 */
 	static <S> Function<S, String> fromKey(Function<S, NamespacedKey> mapper) {
 		return mapper.andThen(NamespacedKey::toString);
 	}
-	
+
 }

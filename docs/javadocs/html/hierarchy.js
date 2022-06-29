@@ -15,7 +15,7 @@ var hierarchy =
     [ "dev.jorel.commandapi.annotations.arguments.ADoubleArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_double_argument.html", null ],
     [ "dev.jorel.commandapi.annotations.arguments.AEnchantmentArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_enchantment_argument.html", null ],
     [ "dev.jorel.commandapi.annotations.arguments.AEntitySelectorArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_entity_selector_argument.html", null ],
-    [ "dev.jorel.commandapi.annotations.arguments.AEntityType", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_entity_type.html", null ],
+    [ "dev.jorel.commandapi.annotations.arguments.AEntityTypeArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_entity_type_argument.html", null ],
     [ "dev.jorel.commandapi.annotations.arguments.AEnvironmentArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_environment_argument.html", null ],
     [ "dev.jorel.commandapi.annotations.arguments.AFloatArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_float_argument.html", null ],
     [ "dev.jorel.commandapi.annotations.arguments.AFloatRangeArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_float_range_argument.html", null ],
@@ -34,6 +34,7 @@ var hierarchy =
     [ "dev.jorel.commandapi.annotations.arguments.AMathOperationArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_math_operation_argument.html", null ],
     [ "com.mojang.brigadier.AmbiguityConsumer< S >", "interfacecom_1_1mojang_1_1brigadier_1_1_ambiguity_consumer.html", null ],
     [ "dev.jorel.commandapi.annotations.arguments.AMultiLiteralArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_multi_literal_argument.html", null ],
+    [ "dev.jorel.commandapi.annotations.arguments.ANamespacedKeyArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_namespaced_key_argument.html", null ],
     [ "dev.jorel.commandapi.annotations.arguments.ANBTCompoundArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_n_b_t_compound_argument.html", null ],
     [ "dev.jorel.commandapi.annotations.arguments.AObjectiveArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_objective_argument.html", null ],
     [ "dev.jorel.commandapi.annotations.arguments.AObjectiveCriteriaArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_objective_criteria_argument.html", null ],
@@ -42,6 +43,7 @@ var hierarchy =
     [ "dev.jorel.commandapi.annotations.arguments.APlayerArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_player_argument.html", null ],
     [ "dev.jorel.commandapi.annotations.arguments.APotionEffectArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_potion_effect_argument.html", null ],
     [ "dev.jorel.commandapi.annotations.arguments.ARecipeArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_recipe_argument.html", null ],
+    [ "dev.jorel.commandapi.arguments.Argument< B >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html", null ],
     [ "dev.jorel.commandapi.arguments.Argument< BaseComponent[]>", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html", [
       [ "dev.jorel.commandapi.arguments.ChatArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_chat_argument.html", null ],
       [ "dev.jorel.commandapi.arguments.ChatComponentArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_chat_component_argument.html", null ]
@@ -140,18 +142,18 @@ var hierarchy =
       ] ]
     ] ],
     [ "dev.jorel.commandapi.Converter", "classdev_1_1jorel_1_1commandapi_1_1_converter.html", null ],
-    [ "dev.jorel.commandapi.arguments.CustomArgument< T >.CustomArgumentInfoParser< T >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_info_parser.html", null ],
+    [ "dev.jorel.commandapi.arguments.CustomArgument< T, B >.CustomArgumentInfoParser< T, B >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_info_parser.html", null ],
     [ "dev.jorel.commandapi.annotations.Default", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1_default.html", null ],
-    [ "dev.jorel.commandapi.arguments.EntitySelectorArgument< T >.EntitySelector", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_entity_selector.html", null ],
+    [ "dev.jorel.commandapi.arguments.EntitySelector", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector.html", null ],
     [ "Exception", null, [
       [ "com.mojang.brigadier.exceptions.CommandSyntaxException", "classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_syntax_exception.html", null ],
-      [ "dev.jorel.commandapi.arguments.CustomArgument< T >.CustomArgumentException", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_exception.html", null ],
+      [ "dev.jorel.commandapi.arguments.CustomArgument< T, B >.CustomArgumentException", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_exception.html", null ],
       [ "dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_wrapper_command_syntax_exception.html", null ]
     ] ],
     [ "Executable", null, [
       [ "dev.jorel.commandapi.ArgumentTree", "classdev_1_1jorel_1_1commandapi_1_1_argument_tree.html", [
         [ "dev.jorel.commandapi.arguments.Argument< T >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html", [
-          [ "dev.jorel.commandapi.arguments.CustomArgument< T >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html", null ],
+          [ "dev.jorel.commandapi.arguments.CustomArgument< T, B >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html", null ],
           [ "dev.jorel.commandapi.arguments.EntitySelectorArgument< T >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument.html", null ],
           [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< T, S >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", null ],
           [ "dev.jorel.commandapi.arguments.ScoreHolderArgument< T >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html", null ]
@@ -230,6 +232,7 @@ var hierarchy =
       [ "com.mojang.brigadier.StringReader", "classcom_1_1mojang_1_1brigadier_1_1_string_reader.html", null ]
     ] ],
     [ "dev.jorel.commandapi.wrappers.IntegerRange", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_integer_range.html", null ],
+    [ "dev.jorel.commandapi.InternalConfig", "classdev_1_1jorel_1_1commandapi_1_1_internal_config.html", null ],
     [ "dev.jorel.commandapi.IStringTooltip", "interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html", [
       [ "dev.jorel.commandapi.StringTooltip", "classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html", null ]
     ] ],
@@ -241,8 +244,9 @@ var hierarchy =
     [ "com.mojang.brigadier.Message", "interfacecom_1_1mojang_1_1brigadier_1_1_message.html", [
       [ "com.mojang.brigadier.LiteralMessage", "classcom_1_1mojang_1_1brigadier_1_1_literal_message.html", null ]
     ] ],
-    [ "dev.jorel.commandapi.arguments.CustomArgument< T >.MessageBuilder", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_message_builder.html", null ],
+    [ "dev.jorel.commandapi.arguments.CustomArgument< T, B >.MessageBuilder", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_message_builder.html", null ],
     [ "dev.jorel.commandapi.annotations.NeedsOp", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1_needs_op.html", null ],
+    [ "dev.jorel.commandapi.PaperImplementations", "classdev_1_1jorel_1_1commandapi_1_1_paper_implementations.html", null ],
     [ "com.mojang.brigadier.context.ParsedArgument< S, T >", "classcom_1_1mojang_1_1brigadier_1_1context_1_1_parsed_argument.html", null ],
     [ "com.mojang.brigadier.context.ParsedCommandNode< S >", "classcom_1_1mojang_1_1brigadier_1_1context_1_1_parsed_command_node.html", null ],
     [ "com.mojang.brigadier.ParseResults< S >", "classcom_1_1mojang_1_1brigadier_1_1_parse_results.html", null ],
@@ -252,15 +256,20 @@ var hierarchy =
     [ "com.mojang.brigadier.ResultConsumer< S >", "interfacecom_1_1mojang_1_1brigadier_1_1_result_consumer.html", null ],
     [ "dev.jorel.commandapi.wrappers.Rotation", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_rotation.html", null ],
     [ "RuntimeException", null, [
+      [ "dev.jorel.commandapi.exceptions.AngleArgumentException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_angle_argument_exception.html", null ],
       [ "dev.jorel.commandapi.exceptions.BadLiteralException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_bad_literal_exception.html", null ],
+      [ "dev.jorel.commandapi.exceptions.BiomeArgumentException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_biome_argument_exception.html", null ],
       [ "dev.jorel.commandapi.exceptions.ConflictingPermissionsException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_conflicting_permissions_exception.html", null ],
       [ "dev.jorel.commandapi.exceptions.EmptyExecutorException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_empty_executor_exception.html", null ],
+      [ "dev.jorel.commandapi.exceptions.EnvironmentArgumentException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_environment_argument_exception.html", null ],
       [ "dev.jorel.commandapi.exceptions.GreedyArgumentException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_greedy_argument_exception.html", null ],
       [ "dev.jorel.commandapi.exceptions.InvalidCommandNameException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_invalid_command_name_exception.html", null ],
       [ "dev.jorel.commandapi.exceptions.InvalidRangeException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_invalid_range_exception.html", null ],
       [ "dev.jorel.commandapi.exceptions.NBTAPINotFoundException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_n_b_t_a_p_i_not_found_exception.html", null ],
       [ "dev.jorel.commandapi.exceptions.PaperAdventureNotFoundException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_paper_adventure_not_found_exception.html", null ],
-      [ "dev.jorel.commandapi.exceptions.SpigotNotFoundException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_spigot_not_found_exception.html", null ]
+      [ "dev.jorel.commandapi.exceptions.SpigotNotFoundException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_spigot_not_found_exception.html", null ],
+      [ "dev.jorel.commandapi.exceptions.TimeArgumentException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_time_argument_exception.html", null ],
+      [ "dev.jorel.commandapi.exceptions.UUIDArgumentException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_u_u_i_d_argument_exception.html", null ]
     ] ],
     [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< Advancement, Advancement >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
       [ "dev.jorel.commandapi.arguments.AdvancementArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_advancement_argument.html", null ]
@@ -326,8 +335,11 @@ var hierarchy =
     [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< MathOperation, MathOperation >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
       [ "dev.jorel.commandapi.arguments.MathOperationArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_math_operation_argument.html", null ]
     ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< NamespacedKey, NamespacedKey >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.NamespacedKeyArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_namespaced_key_argument.html", null ]
+    ] ],
     [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< NBTContainer, NBTContainer >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
-      [ "dev.jorel.commandapi.arguments.NBTCompoundArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_n_b_t_compound_argument.html", null ]
+      [ "dev.jorel.commandapi.arguments.NBTCompoundArgument< NBTContainer >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_n_b_t_compound_argument.html", null ]
     ] ],
     [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< OfflinePlayer, OfflinePlayer >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
       [ "dev.jorel.commandapi.arguments.OfflinePlayerArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_offline_player_argument.html", null ]
