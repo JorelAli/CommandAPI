@@ -23,7 +23,7 @@ import dev.jorel.commandapi.annotations.arguments.ALongArgument;
 import dev.jorel.commandapi.annotations.arguments.AMultiLiteralArgument;
 import dev.jorel.commandapi.annotations.arguments.AScoreHolderArgument;
 import dev.jorel.commandapi.annotations.arguments.Primitive;
-import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
+import dev.jorel.commandapi.arguments.EntitySelector;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
 

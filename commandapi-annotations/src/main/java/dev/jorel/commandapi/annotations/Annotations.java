@@ -38,6 +38,8 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 
+import com.google.auto.service.AutoService;
+
 import dev.jorel.commandapi.annotations.annotations.ArgumentParser;
 import dev.jorel.commandapi.annotations.annotations.Command;
 import dev.jorel.commandapi.annotations.annotations.Help;
@@ -46,10 +48,6 @@ import dev.jorel.commandapi.annotations.annotations.Permission;
 import dev.jorel.commandapi.annotations.annotations.Subcommand;
 import dev.jorel.commandapi.annotations.annotations.Suggestion;
 import dev.jorel.commandapi.annotations.annotations.Suggests;
-import com.google.auto.service.AutoService;
-
-import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.annotations.arguments.AAdvancementArgument;
 import dev.jorel.commandapi.annotations.arguments.AAdventureChatArgument;
 import dev.jorel.commandapi.annotations.arguments.AAdventureChatComponentArgument;
@@ -62,7 +60,6 @@ import dev.jorel.commandapi.annotations.arguments.ABooleanArgument;
 import dev.jorel.commandapi.annotations.arguments.AChatArgument;
 import dev.jorel.commandapi.annotations.arguments.AChatColorArgument;
 import dev.jorel.commandapi.annotations.arguments.AChatComponentArgument;
-import dev.jorel.commandapi.annotations.arguments.ACustomArgument;
 import dev.jorel.commandapi.annotations.arguments.ADoubleArgument;
 import dev.jorel.commandapi.annotations.arguments.AEnchantmentArgument;
 import dev.jorel.commandapi.annotations.arguments.AEntitySelectorArgument;
@@ -121,7 +118,7 @@ public class Annotations extends AbstractProcessor {
 			AAxisArgument.class, ABiomeArgument.class, ABlockPredicateArgument.class, ABlockStateArgument.class,
 			ABooleanArgument.class, AChatArgument.class, AChatColorArgument.class, AChatComponentArgument.class,
 			ADoubleArgument.class, AEnchantmentArgument.class, AEntitySelectorArgument.class,
-			AEntityType.class, AEnvironmentArgument.class, AFloatArgument.class, AFloatRangeArgument.class,
+			AEntityTypeArgument.class, AEnvironmentArgument.class, AFloatArgument.class, AFloatRangeArgument.class,
 			AFunctionArgument.class, AGreedyStringArgument.class, AIntegerArgument.class, AIntegerRangeArgument.class,
 			AItemStackArgument.class, AItemStackPredicateArgument.class, ALiteralArgument.class,
 			ALocation2DArgument.class, ALocationArgument.class, ALongArgument.class, ALootTableArgument.class,

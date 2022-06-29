@@ -32,7 +32,7 @@ import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentInfoParser;
 @Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface ACustomArgument {
 	
-	public Class<? extends CustomArgumentInfoParser<?>> value();
+	public Class<? extends CustomArgumentInfoParser<?, ?>> value();
 	
 	public boolean keyed() default false;
 	

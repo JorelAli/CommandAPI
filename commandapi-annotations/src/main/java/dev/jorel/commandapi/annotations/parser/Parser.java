@@ -308,6 +308,10 @@ public class Parser {
 //			System.out.println(Arrays.deepToString(primitives) + " c.f. " + varType );
 
 			if (!Arrays.stream(primitives).anyMatch((TypeMirror x) -> {
+				if(x == null) {
+					// TODO: Why is this case arising? Why are we getting nulls here?
+					return false;
+				}
 				if (varType.getKind().isPrimitive()) {
 					return processingEnv.getTypeUtils().isSameType(processingEnv.getTypeUtils()
 							.boxedClass(processingEnv.getTypeUtils().getPrimitiveType(varType.getKind())).asType(), x);

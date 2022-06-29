@@ -75,11 +75,11 @@
 			<version>${paper.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>de.tr7zw</groupId>
 			<artifactId>item-nbt-api-plugin</artifactId>
 			<version>${nbtapi.version}</version>
-		</dependency>
+		</dependency> -->
 
 		<!-- Testing -->
 		<dependency>

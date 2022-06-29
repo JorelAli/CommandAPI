@@ -30,7 +30,7 @@ import dev.jorel.commandapi.arguments.TeamArgument;
 /**
  * Annotation equivalent of the {@link TeamArgument}
  */
-@Primitive("String")
+@Primitive("java.lang.String")
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface ATeamArgument {

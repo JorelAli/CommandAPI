@@ -133,10 +133,10 @@ public class HordeCommand2 {
 	
 	// TODO: When testing, try moving this to its own separate .java file and see if that links properly
 	@ArgumentParser
-	class WorldArgument implements CustomArgumentInfoParser<World> {
+	class WorldArgument implements CustomArgumentInfoParser<World, String> {
 
 		@Override
-		public World apply(CustomArgumentInfo info) throws CustomArgumentException {
+		public World apply(CustomArgumentInfo<String> info) throws CustomArgumentException {
 			// TODO Auto-generated method stub
 			return null;
 		}
