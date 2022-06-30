@@ -6,7 +6,10 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.mockito.Mockito;
 
 import com.google.common.io.Files;
@@ -20,7 +23,10 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import be.seeseemelk.mockbukkit.WorldMock;
+import dev.jorel.commandapi.wrappers.Location2D;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandListenerWrapper;
 import net.minecraft.commands.arguments.ArgumentAnchor;
@@ -72,6 +78,10 @@ import net.minecraft.commands.synchronization.brigadier.DoubleArgumentInfo;
 import net.minecraft.commands.synchronization.brigadier.FloatArgumentInfo;
 import net.minecraft.commands.synchronization.brigadier.IntegerArgumentInfo;
 import net.minecraft.commands.synchronization.brigadier.LongArgumentInfo;
+import net.minecraft.core.BlockPosition;
+import net.minecraft.server.level.BlockPosition2D;
+import net.minecraft.world.phys.Vec2F;
+import net.minecraft.world.phys.Vec3D;
 
 public class CustomNMS extends BlankNMS {
 
@@ -102,6 +112,11 @@ public class CustomNMS extends BlankNMS {
 	public CommandListenerWrapper getCLWFromCommandSender(CommandSender sender) {
 		CommandListenerWrapper clw = Mockito.mock(CommandListenerWrapper.class);
 		Mockito.when(clw.getBukkitSender()).thenReturn(sender);
+		
+		if(sender instanceof Player player) {
+			Location loc = player.getLocation();
+			Mockito.when(clw.e()).thenReturn(new Vec3D(loc.getX(), loc.getY(), loc.getZ()));
+		}
 		return clw;
 	}
 
@@ -185,6 +200,39 @@ public class CustomNMS extends BlankNMS {
 		map.put(TemplateMirrorArgument.class, SingletonArgumentInfo.a(TemplateMirrorArgument::a));
 		map.put(TemplateRotationArgument.class, SingletonArgumentInfo.a(TemplateRotationArgument::a));
 		map.put(ArgumentUUID.class, SingletonArgumentInfo.a(ArgumentUUID::a));
+	}
+
+	@Override
+	public Location2D getLocation2DBlock(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException {
+		BlockPosition2D blockPos = ArgumentVec2I.a(cmdCtx, key);
+		return new Location2D(getWorldForCSS(cmdCtx.getSource()), blockPos.c(), blockPos.d());
+	}
+
+	@Override
+	public Location2D getLocation2DPrecise(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException {
+		Vec2F vecPos = ArgumentVec2.a(cmdCtx, key);
+		return new Location2D(getWorldForCSS(cmdCtx.getSource()), vecPos.i, vecPos.j);
+	}
+
+	@Override
+	public Location getLocationBlock(CommandContext<CommandListenerWrapper> cmdCtx, String str)
+			throws CommandSyntaxException {
+		BlockPosition blockPos = ArgumentPosition.a(cmdCtx, str);
+		return new Location(getWorldForCSS(cmdCtx.getSource()), blockPos.u(), blockPos.v(), blockPos.w());
+	}
+
+	@Override
+	public Location getLocationPrecise(CommandContext<CommandListenerWrapper> cmdCtx, String str)
+			throws CommandSyntaxException {
+		Vec3D vecPos = ArgumentVec3.a(cmdCtx, str);
+		return new Location(getWorldForCSS(cmdCtx.getSource()), vecPos.c, vecPos.d, vecPos.e);
+	}
+	
+	@Override
+	public World getWorldForCSS(CommandListenerWrapper clw) {
+		return new WorldMock();
 	}
 
 }
