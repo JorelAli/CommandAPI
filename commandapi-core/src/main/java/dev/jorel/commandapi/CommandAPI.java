@@ -178,7 +178,7 @@ public final class CommandAPI {
 	 */
 	public static void onEnable(Plugin plugin) {
 		// Prevent command registration after server has loaded
-		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+		Bukkit.getScheduler().runTaskLater(plugin, () -> {
 			canRegister = false;
 
 			// Sort out permissions after the server has finished registering them all
