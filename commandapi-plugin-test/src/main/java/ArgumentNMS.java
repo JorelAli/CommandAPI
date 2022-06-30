@@ -6,6 +6,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.block.Biome;
@@ -31,22 +32,18 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 
 import dev.jorel.commandapi.arguments.EntitySelector;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
-import dev.jorel.commandapi.nms.NMS;
-import dev.jorel.commandapi.nms.NMS_1_19_R1;
-import dev.jorel.commandapi.nms.NMS_Common;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.kyori.adventure.text.Component;
 import net.minecraft.commands.CommandListenerWrapper;
 
-public abstract class BlankNMS extends NMS_Common<CommandListenerWrapper> {
-
-	public static final NMS<?> BASE_NMS = new NMS_1_19_R1();
+@SuppressWarnings("unchecked")
+public abstract class ArgumentNMS extends BlankNMS {
 	
 	@Override
 	public ArgumentType<?> _ArgumentBlockPredicate() {
-		return new NMS_1_19_R1()._ArgumentBlockPredicate();
+		return BASE_NMS._ArgumentBlockPredicate();
 	}
 
 	@Override
@@ -107,8 +104,7 @@ public abstract class BlankNMS extends NMS_Common<CommandListenerWrapper> {
 	@Override
 	public Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException {
-		// TODO Auto-generated method stub
-		return null;
+		return BASE_NMS.getAdventureChat((CommandContext) cmdCtx, key);
 	}
 
 	@Override
@@ -325,4 +321,9 @@ public abstract class BlankNMS extends NMS_Common<CommandListenerWrapper> {
 		
 	}
 
+	@Override
+	public Location getLocationPrecise(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
+		return BASE_NMS.getLocationPrecise((CommandContext) cmdCtx, str);
+	}
+	
 }

@@ -83,7 +83,7 @@ import net.minecraft.server.level.BlockPosition2D;
 import net.minecraft.world.phys.Vec2F;
 import net.minecraft.world.phys.Vec3D;
 
-public class CustomNMS extends BlankNMS {
+public class CustomNMS extends ArgumentNMS {
 
 	public CustomNMS() {
 		try {
@@ -223,12 +223,12 @@ public class CustomNMS extends BlankNMS {
 		return new Location(getWorldForCSS(cmdCtx.getSource()), blockPos.u(), blockPos.v(), blockPos.w());
 	}
 
-	@Override
-	public Location getLocationPrecise(CommandContext<CommandListenerWrapper> cmdCtx, String str)
-			throws CommandSyntaxException {
-		Vec3D vecPos = ArgumentVec3.a(cmdCtx, str);
-		return new Location(getWorldForCSS(cmdCtx.getSource()), vecPos.c, vecPos.d, vecPos.e);
-	}
+//	@Override
+//	public Location getLocationPrecise(CommandContext<CommandListenerWrapper> cmdCtx, String str)
+//			throws CommandSyntaxException {
+//		Vec3D vecPos = ArgumentVec3.a(cmdCtx, str);
+//		return new Location(getWorldForCSS(cmdCtx.getSource()), vecPos.c, vecPos.d, vecPos.e);
+//	}
 	
 	@Override
 	public World getWorldForCSS(CommandListenerWrapper clw) {

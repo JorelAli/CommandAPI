@@ -189,7 +189,7 @@ import net.minecraft.world.phys.Vec3;
 @RequireField(in = EntityPositionSource.class, name = "entityOrUuidOrId", ofType = Either.class)
 public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 
-	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
+	private static final MinecraftServer MINECRAFT_SERVER;
 	private static final VarHandle SimpleHelpMap_helpTopics;
 	private static final VarHandle EntityPositionSource_sourceEntity;
 
@@ -202,6 +202,21 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
+		if(Bukkit.getServer() instanceof CraftServer server) {
+			MINECRAFT_SERVER = server.getServer();
+			// Construct the command build context to use for all commands - I presume this
+			// lets you decide what happens when a tag isn't present by specifying the
+			// MissingTagAccessPolicy. This policy has three options: RETURN_EMPTY,
+			// CREATE_NEW or FAIL. We'll go with RETURN_EMPTY for now. Whether we decide to
+			// add support for letting developers fine-tune their missing tag access policy
+			// is something to decide at a later date.
+			COMMAND_BUILD_CONTEXT = new CommandBuildContext(RegistryAccess.BUILTIN.get());
+			COMMAND_BUILD_CONTEXT.missingTagAccessPolicy(CommandBuildContext.MissingTagAccessPolicy.RETURN_EMPTY);
+		} else {
+			MINECRAFT_SERVER = null;
+			COMMAND_BUILD_CONTEXT = null;
+		}
+		
 		VarHandle shm_ht = null;
 		VarHandle eps_se = null;
 		try {
@@ -216,15 +231,6 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 		EntityPositionSource_sourceEntity = eps_se;
 		ERROR_BIOME_INVALID = new DynamicCommandExceptionType(
 				arg -> net.minecraft.network.chat.Component.translatable("commands.locate.biome.invalid", arg));
-
-		// Construct the command build context to use for all commands - I presume this
-		// lets you decide what happens when a tag isn't present by specifying the
-		// MissingTagAccessPolicy. This policy has three options: RETURN_EMPTY,
-		// CREATE_NEW or FAIL. We'll go with RETURN_EMPTY for now. Whether we decide to
-		// add support for letting developers fine-tune their missing tag access policy
-		// is something to decide at a later date.
-		COMMAND_BUILD_CONTEXT = new CommandBuildContext(RegistryAccess.BUILTIN.get());
-		COMMAND_BUILD_CONTEXT.missingTagAccessPolicy(CommandBuildContext.MissingTagAccessPolicy.RETURN_EMPTY);
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
