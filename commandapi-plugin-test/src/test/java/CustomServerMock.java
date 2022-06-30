@@ -11,8 +11,7 @@ import dev.jorel.commandapi.Brigadier;
 public class CustomServerMock extends ServerMock {
 
 	@SuppressWarnings("unchecked")
-	@Override
-	public boolean dispatchCommand(CommandSender sender, String commandLine) {
+	public boolean dispatchThrowableCommand(CommandSender sender, String commandLine) throws CommandSyntaxException{
 		String[] commands = commandLine.split(" ");
 		String commandLabel = commands[0];
 		Command command = getCommandMap().getCommand(commandLabel);
@@ -24,17 +23,17 @@ public class CustomServerMock extends ServerMock {
 			@SuppressWarnings("rawtypes")
 			CommandDispatcher dispatcher = Brigadier.getCommandDispatcher();
 			Object css = Brigadier.getBrigadierSourceFromCommandSender(sender);
-			try {
-				return dispatcher.execute(commandLine, css) != 0;
-			} catch (CommandSyntaxException e) {
-				e.printStackTrace();
-			}
-			return false;
+			return dispatcher.execute(commandLine, css) != 0;
 		}
 	}
 	
-	public void die() {
-		
+	@Override
+	public boolean dispatchCommand(CommandSender sender, String commandLine) {
+		try {
+			return dispatchThrowableCommand(sender, commandLine);
+		} catch (CommandSyntaxException e1) {
+			return false;
+		}
 	}
 	
 }

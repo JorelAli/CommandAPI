@@ -1,6 +1,7 @@
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,8 +12,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.BooleanArgument;
@@ -20,7 +22,7 @@ import dev.jorel.commandapi.arguments.StringArgument;
 
 public class TestFile {
 
-	private ServerMock server;
+	private CustomServerMock server;
 	private Main plugin;
 
 	private String getDispatcherString() {
@@ -121,6 +123,7 @@ public class TestFile {
 		server.dispatchCommand(player, "test false");
 		assertEquals("success true", player.nextMessage());
 		assertEquals("success false", player.nextMessage());
+		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "test aaaaa"));
 	}
 
 }
