@@ -32,6 +32,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -48,11 +49,15 @@ public final class CommandAPI {
 	// Cannot be instantiated
 	private CommandAPI() {
 	}
+	
+	static {
+		onDisable();
+	}
 
-	private static boolean canRegister = true;
+	private static boolean canRegister;
 	static InternalConfig config;
 	static Logger logger;
-	private static boolean loaded = false;
+	private static boolean loaded;
 
 	/**
 	 * Returns the internal configuration used to manage the CommandAPI
@@ -76,6 +81,17 @@ public final class CommandAPI {
 			setLevel(Level.ALL);
 		}
 
+	}
+	
+	/**
+	 * Unloads the CommandAPI. This should go in your plugin's
+	 * {@link JavaPlugin#onDisable} method.
+	 */
+	public static void onDisable() {
+		CommandAPI.canRegister = true;
+		CommandAPI.config = null;
+		CommandAPI.logger = null;
+		CommandAPI.loaded = false;
 	}
 
 	/**
