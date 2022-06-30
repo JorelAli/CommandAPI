@@ -149,10 +149,15 @@ public class CommandAPIHandler<CommandSourceStack> {
 	final List<RegisteredCommand> registeredCommands; // Keep track of what has been registered for type checking
 	private PaperImplementations paper;
 
+	@SuppressWarnings("unchecked")
 	private CommandAPIHandler() {
 		final String bukkit = Bukkit.getServer().toString();
-		NMS = CommandAPIVersionHandler
-				.getNMS(bukkit.substring(bukkit.indexOf("minecraftVersion") + 17, bukkit.length() - 1));
+		if(CommandAPI.getConfiguration().getCustomNMS() != null) {
+			NMS = (NMS<CommandSourceStack>) CommandAPI.getConfiguration().getCustomNMS();
+		} else {
+			NMS = CommandAPIVersionHandler
+					.getNMS(bukkit.substring(bukkit.indexOf("minecraftVersion") + 17, bukkit.length() - 1));
+		}
 		DISPATCHER = NMS.getBrigadierDispatcher();
 		registeredCommands = new ArrayList<>();
 		this.paper = new PaperImplementations(false, NMS);

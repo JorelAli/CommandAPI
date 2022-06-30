@@ -23,7 +23,9 @@ package dev.jorel.commandapi;
 import java.io.File;
 import java.util.Map.Entry;
 
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.JavaPluginLoader;
 
 import de.tr7zw.changeme.nbtapi.NBTContainer;
 import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
