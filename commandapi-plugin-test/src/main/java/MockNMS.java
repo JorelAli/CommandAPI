@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -33,6 +34,8 @@ import be.seeseemelk.mockbukkit.WorldMock;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.ParticleData;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.Advancements;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandListenerWrapper;
 import net.minecraft.commands.arguments.ArgumentAnchor;
@@ -84,6 +87,9 @@ import net.minecraft.commands.synchronization.brigadier.DoubleArgumentInfo;
 import net.minecraft.commands.synchronization.brigadier.FloatArgumentInfo;
 import net.minecraft.commands.synchronization.brigadier.IntegerArgumentInfo;
 import net.minecraft.commands.synchronization.brigadier.LongArgumentInfo;
+import net.minecraft.resources.MinecraftKey;
+import net.minecraft.server.AdvancementDataWorld;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.phys.Vec3D;
 
 public class MockNMS extends ArgumentNMS {
@@ -120,8 +126,31 @@ public class MockNMS extends ArgumentNMS {
 		if(sender instanceof Player player) {
 			Location loc = player.getLocation();
 			Mockito.when(clw.e()).thenReturn(new Vec3D(loc.getX(), loc.getY(), loc.getZ()));
+			
+			MinecraftServer ms = Mockito.mock(MinecraftServer.class);
+			Mockito.when(ms.az()).thenReturn(mockAdvancementDataWorld());
+			Mockito.when(clw.m()).thenReturn(ms);
 		}
 		return clw;
+	}
+	
+	public AdvancementDataWorld mockAdvancementDataWorld() {
+		AdvancementDataWorld advancementDataWorld = new AdvancementDataWorld(null);
+		Advancements advancements = (Advancements) getField(AdvancementDataWorld.class, "c", advancementDataWorld);
+		
+		advancements.b.put(new MinecraftKey("my:advancement"), new Advancement(new MinecraftKey("my:advancement"), null, null, null, new HashMap<>(), null));
+		advancements.b.put(new MinecraftKey("my:advancement2"), new Advancement(new MinecraftKey("my:advancement2"), null, null, null, new HashMap<>(), null));
+		return advancementDataWorld;
+	}
+	
+	public Object getField(Class<?> className, String fieldName, Object instance) {
+		try {
+			Field field = className.getDeclaredField(fieldName);
+			field.setAccessible(true);
+			return field.get(instance);
+		} catch (ReflectiveOperationException e) {
+			return null;
+		}
 	}
 
 	@Override

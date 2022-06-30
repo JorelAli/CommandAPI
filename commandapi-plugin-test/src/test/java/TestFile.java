@@ -9,6 +9,7 @@ import java.nio.file.Files;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.advancement.Advancement;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,10 +20,13 @@ import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.arguments.AdvancementArgument;
 import dev.jorel.commandapi.arguments.BooleanArgument;
+import dev.jorel.commandapi.arguments.Location2DArgument;
 import dev.jorel.commandapi.arguments.LocationArgument;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.StringArgument;
+import dev.jorel.commandapi.wrappers.Location2D;
 
 public class TestFile {
 
@@ -131,22 +135,80 @@ public class TestFile {
 	}
 	
 	@Test
-	public void executionTestWithLocationArgument() {
-		new CommandAPICommand("test")
+	public void executionTestWithAdvancementArgument() {
+		new CommandAPICommand("adv")
+			.withArguments(new AdvancementArgument("value"))
+			.executesPlayer((player, args) -> {
+				Advancement advancement = (Advancement) args[0];
+				player.sendMessage(advancement.getKey().asString());
+			})
+			.register();
+		
+		PlayerMock player = server.addPlayer();
+		
+		/** Add advancements in {@link MockNMS#mockAdvancementDataWorld} */
+		server.dispatchCommand(player, "adv my:advancement");
+		server.dispatchCommand(player, "adv my:advancement2");
+		server.dispatchCommand(player, "adv my:advancement3");
+		assertEquals("my:advancement", player.nextMessage());
+		assertEquals("my:advancement2", player.nextMessage());
+		assertEquals(null, player.nextMessage());
+	}
+	
+	@Test
+	public void executionTestWithLocationArguments() {
+		new CommandAPICommand("loc3")
 			.withArguments(new LocationArgument("value", LocationType.PRECISE_POSITION))
 			.executesPlayer((player, args) -> {
 				Location value = (Location) args[0];
 				player.sendMessage(value.getX() + ", " + value.getY() + ", " + value.getZ());
 			})
 			.register();
+		
+//		new CommandAPICommand("loc3b")
+//			.withArguments(new LocationArgument("value", LocationType.BLOCK_POSITION))
+//			.executesPlayer((player, args) -> {
+//				Location value = (Location) args[0];
+//				player.sendMessage(value.getX() + ", " + value.getY() + ", " + value.getZ());
+//			})
+//			.register();
+		
+		new CommandAPICommand("loc2")
+			.withArguments(new Location2DArgument("value", LocationType.PRECISE_POSITION))
+			.executesPlayer((player, args) -> {
+				Location2D value = (Location2D) args[0];
+				player.sendMessage(value.getX() + ", " + value.getZ());
+			})
+			.register();
+		
+//		new CommandAPICommand("loc2b")
+//			.withArguments(new Location2DArgument("value", LocationType.BLOCK_POSITION))
+//			.executesPlayer((player, args) -> {
+//				Location2D value = (Location2D) args[0];
+//				player.sendMessage(value.getX() + ", " + value.getZ());
+//			})
+//			.register();
 
 		PlayerMock player = server.addPlayer();
-		server.dispatchCommand(player, "test 1 10 15");
+		
+		server.dispatchCommand(player, "loc3 1 10 15");
+//		server.dispatchCommand(player, "loc3b 1 10 15");
+		server.dispatchCommand(player, "loc2 1 15");
+//		server.dispatchCommand(player, "loc2b 1 15");
 		assertEquals("1.5, 10.0, 15.5", player.nextMessage());
+//		assertEquals("1, 10, 15", player.nextMessage());
+		assertEquals("1.5, 15.5", player.nextMessage());
+//		assertEquals("1, 15", player.nextMessage());
 		
 		player.setLocation(new Location(new WorldMock(), 2, 2, 2));
-		server.dispatchCommand(player, "test ~ ~5 ~");
+		server.dispatchCommand(player, "loc3 ~ ~5 ~");
+//		server.dispatchCommand(player, "loc3b ~ ~5 ~");
+		server.dispatchCommand(player, "loc2 ~ ~5");
+//		server.dispatchCommand(player, "loc2b ~ ~5");
 		assertEquals("2.0, 7.0, 2.0", player.nextMessage());
+//		assertEquals("2, 7, 2", player.nextMessage());
+		assertEquals("2.0, 7.0", player.nextMessage());
+//		assertEquals("2, 7", player.nextMessage());
 	}
 
 }
