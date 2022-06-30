@@ -110,6 +110,14 @@
 			<version>${paper.version}</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<!-- This is literally just for testing, we're not actually packaging this -->
+		<dependency>
+			<groupId>de.tr7zw</groupId>
+			<artifactId>item-nbt-api</artifactId>
+			<version>2.10.0</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

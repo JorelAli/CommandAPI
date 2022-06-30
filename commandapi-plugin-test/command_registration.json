@@ -1,0 +1,19 @@
+{
+  "type": "root",
+  "children": {
+    "test": {
+      "type": "literal",
+      "children": {
+        "value": {
+          "type": "argument",
+          "parser": "brigadier:string",
+          "properties": {
+            "type": "word"
+          },
+          "executable": true
+        }
+      },
+      "executable": true
+    }
+  }
+}

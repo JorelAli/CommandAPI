@@ -4,6 +4,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 
+import de.tr7zw.changeme.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIConfig;
 
@@ -14,6 +15,8 @@ public class Main extends JavaPlugin {
 		CommandAPI.onLoad(new CommandAPIConfig()
 			.useLatestNMSVersion(true)
 			.verboseOutput(true)
+			.dispatcherFile(new File("command_registration.json"))
+			.initializeNBTAPI(NBTContainer.class, NBTContainer::new)
 			.setCustomNMS(new CustomNMS())
 		);
 	}
