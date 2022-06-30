@@ -92,6 +92,7 @@ public final class CommandAPI {
 		CommandAPI.config = null;
 		CommandAPI.logger = null;
 		CommandAPI.loaded = false;
+		CommandAPIHandler.onDisable();
 	}
 
 	/**

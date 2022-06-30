@@ -15,6 +15,7 @@ import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.arguments.BooleanArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 
 public class TestFile {
@@ -39,14 +40,17 @@ public class TestFile {
 	@AfterEach
 	public void tearDown() {
 		Bukkit.getScheduler().cancelTasks(plugin);
+		plugin.onDisable();
 		MockBukkit.unmock();
 	}
 
 	@Test
 	public void executionTest() {
-		new CommandAPICommand("test").executesPlayer((player, args) -> {
-			player.sendMessage("success");
-		}).register();
+		new CommandAPICommand("test")
+			.executesPlayer((player, args) -> {
+				player.sendMessage("success");
+			})
+			.register();
 
 		PlayerMock player = server.addPlayer();
 		boolean commandResult = server.dispatchCommand(player, "test");
@@ -56,10 +60,13 @@ public class TestFile {
 
 	@Test
 	public void executionTestWithStringArg() {
-		new CommandAPICommand("test").withArguments(new StringArgument("value")).executesPlayer((player, args) -> {
-			String value = (String) args[0];
-			player.sendMessage("success " + value);
-		}).register();
+		new CommandAPICommand("test")
+			.withArguments(new StringArgument("value"))
+			.executesPlayer((player, args) -> {
+				String value = (String) args[0];
+				player.sendMessage("success " + value);
+			})
+			.register();
 
 		PlayerMock player = server.addPlayer();
 		boolean commandResult = server.dispatchCommand(player, "test myvalue");
@@ -85,7 +92,7 @@ public class TestFile {
 				  }
 				}""");
 	}
-	
+
 	@Test
 	public void executionTestWithStringArgNegative() {
 		new CommandAPICommand("test").withArguments(new StringArgument("value")).executesPlayer((player, args) -> {
@@ -97,6 +104,23 @@ public class TestFile {
 		server.dispatchCommand(player, "test myvalue");
 		// Test "the thing", then test "not the thing"
 		assertNotEquals("success blah", player.nextMessage());
+	}
+
+	@Test
+	public void executionTestWithBoolean() {
+		new CommandAPICommand("test")
+			.withArguments(new BooleanArgument("value"))
+			.executesPlayer((player, args) -> {
+				boolean value = (boolean) args[0];
+				player.sendMessage("success " + value);
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+		server.dispatchCommand(player, "test true");
+		server.dispatchCommand(player, "test false");
+		assertEquals("success true", player.nextMessage());
+		assertEquals("success false", player.nextMessage());
 	}
 
 }

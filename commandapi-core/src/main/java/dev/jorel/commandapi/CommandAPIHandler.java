@@ -141,6 +141,10 @@ public class CommandAPIHandler<CommandSourceStack> {
 		}
 		return instance;
 	}
+	
+	static void onDisable() {
+		instance = null;
+	}
 
 	final Map<ClassCache, Field> FIELDS = new HashMap<>();
 	final TreeMap<String, CommandPermission> PERMISSIONS_TO_FIX = new TreeMap<>();

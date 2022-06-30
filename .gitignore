@@ -11,3 +11,4 @@ logs/latest.log
 commandapi-plugin/dependency-reduced-pom.xml
 commandapi-shade/dependency-reduced-pom.xml
 .vscode/settings.json
+commandapi-plugin-test/command_registration.json
