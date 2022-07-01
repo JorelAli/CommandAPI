@@ -36,6 +36,7 @@ import dev.jorel.commandapi.arguments.ListArgumentBuilder;
 import dev.jorel.commandapi.arguments.Location2DArgument;
 import dev.jorel.commandapi.arguments.LocationArgument;
 import dev.jorel.commandapi.arguments.LocationType;
+import dev.jorel.commandapi.arguments.PlayerArgument;
 import dev.jorel.commandapi.arguments.PotionEffectArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.wrappers.Location2D;
@@ -393,6 +394,24 @@ public class ArgumentTests {
 		assertEquals(List.of("cat", "wolf", "axolotl"), type.get());
 		assertEquals(List.of("axolotl", "wolf"), type.get());
 		assertEquals(List.of("axolotl", "wolf", sender.getName()), type.get());
+	}
+	
+	@Test
+	public void executionTestWithPlayerArgument() {
+		Mut<Player> type = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new PlayerArgument("target"))
+			.executesPlayer((player, args) -> {
+				type.set((Player) args[0]);
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer("APlayer");
+		server.dispatchCommand(player, "test APlayer");
+		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "test BPlayer"));
+		assertEquals(player, type.get());
+		assertEquals(null, type.get());
 	}
 
 }

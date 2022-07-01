@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -30,6 +31,7 @@ import org.mockito.Mockito;
 
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
+import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.BoolArgumentType;
@@ -108,6 +110,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.server.players.PlayerList;
+import net.minecraft.server.players.UserCache;
 import net.minecraft.world.phys.Vec3D;
 
 public class MockNMS extends ArgumentNMS {
@@ -209,12 +212,12 @@ public class MockNMS extends ArgumentNMS {
 			Mockito.when(minecraftServerMock.az()).thenReturn(mockAdvancementDataWorld());
 			Mockito.when(clw.m()).thenReturn(minecraftServerMock);
 
-
 			// Entity selector argument
 			for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {
 				EntityPlayer entityPlayerMock = Mockito.mock(EntityPlayer.class);
 				CraftPlayer craftPlayerMock = Mockito.mock(CraftPlayer.class);
 				Mockito.when(craftPlayerMock.getName()).thenReturn(onlinePlayer.getName());
+				Mockito.when(craftPlayerMock.getUniqueId()).thenReturn(onlinePlayer.getUniqueId());
 				Mockito.when(entityPlayerMock.getBukkitEntity()).thenReturn(craftPlayerMock);
 				players.add(entityPlayerMock);
 			}
@@ -232,8 +235,21 @@ public class MockNMS extends ArgumentNMS {
 				});
 			}
 			
-			Mockito.when(clw.m().ac()).thenReturn(playerListMock);
-			Mockito.when(clw.m().ac().t()).thenReturn(players);
+			Mockito.when(minecraftServerMock.ac()).thenReturn(playerListMock);
+			Mockito.when(minecraftServerMock.ac().t()).thenReturn(players);
+			
+			// Player argument
+			UserCache userCacheMock = Mockito.mock(UserCache.class);
+			Mockito.when(userCacheMock.a(anyString())).thenAnswer(invocation -> {
+				String playerName = invocation.getArgument(0);
+				for(EntityPlayer onlinePlayer : players) {
+					if(onlinePlayer.getBukkitEntity().getName().equals(playerName)) {
+						return Optional.of(new GameProfile(onlinePlayer.getBukkitEntity().getUniqueId(), playerName));
+					}
+				}
+				return Optional.empty();
+			});
+			Mockito.when(minecraftServerMock.ap()).thenReturn(userCacheMock);
 		}
 		return clw;
 	}
