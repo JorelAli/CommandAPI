@@ -42,7 +42,8 @@ public class SuggestionsTests {
 			.register();
 
 		PlayerMock player = server.addPlayer();
-		assertEquals(List.of("minecraft:absorption",
+		assertEquals(List.of(
+			"minecraft:absorption",
 			"minecraft:bad_omen",
 			"minecraft:blindness",
 			"minecraft:conduit_power",
@@ -75,6 +76,20 @@ public class SuggestionsTests {
 			"minecraft:water_breathing",
 			"minecraft:weakness",
 			"minecraft:wither"), server.getSuggestions(player, "test minecraft:"));
+
+		assertEquals(List.of(
+			"minecraft:saturation",
+			"minecraft:slow_falling",
+			"minecraft:slowness",
+			"minecraft:speed",
+			"minecraft:strength"), server.getSuggestions(player, "test minecraft:s"));
+		
+		assertEquals(List.of(
+			"minecraft:saturation",
+			"minecraft:slow_falling",
+			"minecraft:slowness",
+			"minecraft:speed",
+			"minecraft:strength"), server.getSuggestions(player, "test s"));
 	}
 
 }

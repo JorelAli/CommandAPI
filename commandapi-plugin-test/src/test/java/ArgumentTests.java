@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
@@ -31,6 +32,7 @@ import dev.jorel.commandapi.arguments.BooleanArgument;
 import dev.jorel.commandapi.arguments.EntitySelector;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.GreedyStringArgument;
+import dev.jorel.commandapi.arguments.ListArgumentBuilder;
 import dev.jorel.commandapi.arguments.Location2DArgument;
 import dev.jorel.commandapi.arguments.LocationArgument;
 import dev.jorel.commandapi.arguments.LocationType;
@@ -300,6 +302,97 @@ public class ArgumentTests {
 		assertEquals(PotionEffectType.SPEED, type.get());
 		assertEquals(PotionEffectType.SPEED, type.get());
 		assertEquals(null, type.get());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void executionTestWithListArgument() {
+		Mut<List<String>> type = Mut.of();
+
+		PlayerMock sender = server.addPlayer("APlayer");
+		
+		// Typical usage of a list argument
+
+		new CommandAPICommand("list")
+			.withArguments(new ListArgumentBuilder<>("values", ", ")
+				.withList(() -> List.of("cat", "wolf", "axolotl"))
+				.withStringMapper()
+				.build())
+			.executesPlayer((player, args) -> {
+				type.set((List<String>) args[0]);
+			})
+			.register();
+
+		server.dispatchCommand(sender, "list cat, wolf, axolotl");
+		server.dispatchCommand(sender, "list cat, wolf, axolotl, chicken");
+		server.dispatchCommand(sender, "list axolotl, wolf, chicken, axolotl");
+
+		assertEquals(List.of("cat", "wolf", "axolotl"), type.get());
+		assertEquals(List.of("cat", "wolf", "axolotl"), type.get());
+		assertEquals(List.of("axolotl", "wolf"), type.get());
+		
+		// List argument, with duplicates
+
+		new CommandAPICommand("listdup")
+			.withArguments(new ListArgumentBuilder<>("values", ", ")
+				.allowDuplicates(true)
+				.withList(() -> List.of("cat", "wolf", "axolotl"))
+				.withStringMapper()
+				.build())
+			.executesPlayer((player, args) -> {
+				type.set((List<String>) args[0]);
+			})
+			.register();
+
+		server.dispatchCommand(sender, "listdup cat, wolf, axolotl, cat, wolf");
+		server.dispatchCommand(sender, "listdup cat, wolf, axolotl, chicken, cat");
+		server.dispatchCommand(sender, "listdup axolotl, wolf, chicken, axolotl, axolotl, axolotl, axolotl, axolotl, wolf");
+
+		assertEquals(List.of("cat", "wolf", "axolotl", "cat", "wolf"), type.get());
+		assertEquals(List.of("cat", "wolf", "axolotl", "cat"), type.get());
+		assertEquals(List.of("axolotl", "wolf", "axolotl", "axolotl", "axolotl", "axolotl", "axolotl", "wolf"), type.get());
+
+		// List argument, with a constant list (not using a supplier)
+		
+		new CommandAPICommand("listconst")
+			.withArguments(new ListArgumentBuilder<>("values", ", ")
+				.withList(List.of("cat", "wolf", "axolotl"))
+				.withStringMapper()
+				.build())
+			.executesPlayer((player, args) -> {
+				type.set((List<String>) args[0]);
+			})
+			.register();
+
+		server.dispatchCommand(sender, "listconst cat, wolf, axolotl");
+		server.dispatchCommand(sender, "listconst cat, wolf, axolotl, chicken");
+		server.dispatchCommand(sender, "listconst axolotl, wolf, chicken, axolotl");
+
+		assertEquals(List.of("cat", "wolf", "axolotl"), type.get());
+		assertEquals(List.of("cat", "wolf", "axolotl"), type.get());
+		assertEquals(List.of("axolotl", "wolf"), type.get());
+		
+		// List argument using a function
+		
+		new CommandAPICommand("listfunc")
+			.withArguments(new ListArgumentBuilder<>("values", ", ")
+				.withList(player -> List.of("cat", "wolf", "axolotl", player.getName()))
+				.withStringMapper()
+				.build())
+			.executesPlayer((player, args) -> {
+				type.set((List<String>) args[0]);
+			})
+			.register();
+	
+		server.dispatchCommand(sender, "listfunc cat, wolf, axolotl");
+		server.dispatchCommand(sender, "listfunc cat, wolf, axolotl, chicken");
+		server.dispatchCommand(sender, "listfunc axolotl, wolf, chicken, axolotl");
+		server.dispatchCommand(sender, "listfunc axolotl, wolf, chicken, axolotl, " + sender.getName());
+	
+		assertEquals(List.of("cat", "wolf", "axolotl"), type.get());
+		assertEquals(List.of("cat", "wolf", "axolotl"), type.get());
+		assertEquals(List.of("axolotl", "wolf"), type.get());
+		assertEquals(List.of("axolotl", "wolf", sender.getName()), type.get());
 	}
 
 }
