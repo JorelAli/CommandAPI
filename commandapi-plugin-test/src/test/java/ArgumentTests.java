@@ -27,14 +27,18 @@ import dev.jorel.commandapi.arguments.AdvancementArgument;
 import dev.jorel.commandapi.arguments.BooleanArgument;
 import dev.jorel.commandapi.arguments.EntitySelector;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
+import dev.jorel.commandapi.arguments.GreedyStringArgument;
 import dev.jorel.commandapi.arguments.Location2DArgument;
 import dev.jorel.commandapi.arguments.LocationArgument;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.wrappers.Location2D;
 
-public class TestFile {
-
+/**
+ * Tests for the 40+ arguments in dev.jorel.commandapi.arguments
+ */
+public class ArgumentTests {
+	
 	private CustomServerMock server;
 	private Main plugin;
 
@@ -110,10 +114,13 @@ public class TestFile {
 
 	@Test
 	public void executionTestWithStringArgNegative() {
-		new CommandAPICommand("test").withArguments(new StringArgument("value")).executesPlayer((player, args) -> {
-			String value = (String) args[0];
-			player.sendMessage("success " + value);
-		}).register();
+		new CommandAPICommand("test")
+			.withArguments(new StringArgument("value"))
+			.executesPlayer((player, args) -> {
+				String value = (String) args[0];
+				player.sendMessage("success " + value);
+			})
+			.register();
 
 		PlayerMock player = server.addPlayer();
 		server.dispatchCommand(player, "test myvalue");
@@ -161,7 +168,7 @@ public class TestFile {
 	}
 	
 	@Test
-	public void executionTestWithLocationArguments() {
+	public void executionTestWithLocationArgument() {
 		new CommandAPICommand("loc3")
 			.withArguments(new LocationArgument("value", LocationType.PRECISE_POSITION))
 			.executesPlayer((player, args) -> {
@@ -247,6 +254,23 @@ public class TestFile {
 		assertEquals("APlayer", player.nextMessage());
 		// TODO: Why do we have APlayer here twice?
 		assertEquals("APlayer, APlayer, APlayer1, APlayer2, APlayer3, APlayer4", player.nextMessage());
+	}
+	
+	@Test
+	public void executionTestWithGreedyStringArgument() {
+		new CommandAPICommand("test")
+			.withArguments(new GreedyStringArgument("value"))
+			.executesPlayer((player, args) -> {
+				String value = (String) args[0];
+				player.sendMessage(value);
+			})
+			.register();
+		
+		String stringArgValue = "3$Hy)zSn7YchMgH=jR*}@?4HdZK{Uf Du}W+yGGSM)fBAJV-5k6&:5E)3+dwd 8.u6a[dCBR8c#{L+qN:%H-";
+		
+		PlayerMock player = server.addPlayer("APlayer");
+		server.dispatchCommand(player, "test " + stringArgValue);
+		assertEquals(stringArgValue, player.nextMessage());
 	}
 
 }
