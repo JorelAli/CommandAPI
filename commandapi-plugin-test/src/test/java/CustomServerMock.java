@@ -1,8 +1,15 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.Suggestion;
+import com.mojang.brigadier.suggestion.Suggestions;
 
 import be.seeseemelk.mockbukkit.AsyncCatcher;
 import be.seeseemelk.mockbukkit.ServerMock;
@@ -36,4 +43,24 @@ public class CustomServerMock extends ServerMock {
 		}
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public List<String> getSuggestions(CommandSender sender, String commandLine) {
+		AsyncCatcher.catchOp("command tabcomplete");
+		CommandDispatcher dispatcher = Brigadier.getCommandDispatcher();
+		Object css = Brigadier.getBrigadierSourceFromCommandSender(sender);
+		ParseResults parseResults = dispatcher.parse(commandLine, css);
+		Suggestions suggestions = null;
+		try {
+			suggestions = (Suggestions) dispatcher.getCompletionSuggestions(parseResults).get();
+		} catch (InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
+		
+		List<String> suggestionsAsStrings = new ArrayList<>();
+		for(Suggestion suggestion : suggestions.getList()) {
+			suggestionsAsStrings.add(suggestion.getText());
+		}
+		
+		return suggestionsAsStrings;
+	}
 }
