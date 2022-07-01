@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
@@ -98,11 +98,13 @@ import net.minecraft.commands.synchronization.brigadier.DoubleArgumentInfo;
 import net.minecraft.commands.synchronization.brigadier.FloatArgumentInfo;
 import net.minecraft.commands.synchronization.brigadier.IntegerArgumentInfo;
 import net.minecraft.commands.synchronization.brigadier.LongArgumentInfo;
+import net.minecraft.core.BlockPosition;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.server.AdvancementDataWorld;
 import net.minecraft.server.DispenserRegistry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.EntityPlayer;
+import net.minecraft.server.level.WorldServer;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.world.phys.Vec3D;
 
@@ -181,6 +183,10 @@ public class MockNMS extends ArgumentNMS {
 		return this.dispatcher;
 	}
 
+	List<EntityPlayer> players = new ArrayList<>();
+	PlayerList playerListMock;
+	
+	@SuppressWarnings("deprecation")
 	@Override
 	public CommandListenerWrapper getCLWFromCommandSender(CommandSender sender) {
 		CommandListenerWrapper clw = Mockito.mock(CommandListenerWrapper.class);
@@ -190,24 +196,41 @@ public class MockNMS extends ArgumentNMS {
 			// Location argument
 			Location loc = player.getLocation();
 			Mockito.when(clw.e()).thenReturn(new Vec3D(loc.getX(), loc.getY(), loc.getZ()));
+			
+			WorldServer worldServerMock = Mockito.mock(WorldServer.class);
+			Mockito.when(clw.f()).thenReturn(worldServerMock);
+			Mockito.when(clw.f().E(any(BlockPosition.class))).thenReturn(true);
+			Mockito.when(clw.f().j(any(BlockPosition.class))).thenReturn(true);
 
 			// Advancement argument
-			MinecraftServer ms = Mockito.mock(MinecraftServer.class);
-			Mockito.when(ms.az()).thenReturn(mockAdvancementDataWorld());
-			Mockito.when(clw.m()).thenReturn(ms);
+			MinecraftServer minecraftServerMock = Mockito.mock(MinecraftServer.class);
+			Mockito.when(minecraftServerMock.az()).thenReturn(mockAdvancementDataWorld());
+			Mockito.when(clw.m()).thenReturn(minecraftServerMock);
+
 
 			// Entity selector argument
-			EntityPlayer testPlayer = Mockito.mock(EntityPlayer.class);
-			CraftPlayer craftPlayer = Mockito.mock(CraftPlayer.class);
-			Mockito.when(craftPlayer.getName()).thenReturn("APlayer");
-			Mockito.when(testPlayer.getBukkitEntity()).thenReturn(craftPlayer);
+			for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+				EntityPlayer entityPlayerMock = Mockito.mock(EntityPlayer.class);
+				CraftPlayer craftPlayerMock = Mockito.mock(CraftPlayer.class);
+				Mockito.when(craftPlayerMock.getName()).thenReturn(onlinePlayer.getName());
+				Mockito.when(entityPlayerMock.getBukkitEntity()).thenReturn(craftPlayerMock);
+				players.add(entityPlayerMock);
+			}
 			
-			PlayerList pl = Mockito.mock(PlayerList.class);
-			Mockito.when(pl.a(anyString())).thenReturn(testPlayer);
-			Mockito.when(clw.m().ac()).thenReturn(pl);
-
-			List<EntityPlayer> players = new ArrayList<>();
-			players.add(testPlayer);
+			if(playerListMock == null) {
+				playerListMock = Mockito.mock(PlayerList.class);
+				Mockito.when(playerListMock.a(anyString())).thenAnswer(invocation -> {
+					String playerName = invocation.getArgument(0);
+					for(EntityPlayer onlinePlayer : players) {
+						if(onlinePlayer.getBukkitEntity().getName().equals(playerName)) {
+							return onlinePlayer;
+						}
+					}
+					return null;
+				});
+			}
+			
+			Mockito.when(clw.m().ac()).thenReturn(playerListMock);
 			Mockito.when(clw.m().ac().t()).thenReturn(players);
 		}
 		return clw;

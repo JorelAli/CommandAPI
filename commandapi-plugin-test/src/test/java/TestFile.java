@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -168,13 +170,13 @@ public class TestFile {
 			})
 			.register();
 		
-//		new CommandAPICommand("loc3b")
-//			.withArguments(new LocationArgument("value", LocationType.BLOCK_POSITION))
-//			.executesPlayer((player, args) -> {
-//				Location value = (Location) args[0];
-//				player.sendMessage(value.getX() + ", " + value.getY() + ", " + value.getZ());
-//			})
-//			.register();
+		new CommandAPICommand("loc3b")
+			.withArguments(new LocationArgument("value", LocationType.BLOCK_POSITION))
+			.executesPlayer((player, args) -> {
+				Location value = (Location) args[0];
+				player.sendMessage(value.getX() + ", " + value.getY() + ", " + value.getZ());
+			})
+			.register();
 		
 		new CommandAPICommand("loc2")
 			.withArguments(new Location2DArgument("value", LocationType.PRECISE_POSITION))
@@ -184,34 +186,34 @@ public class TestFile {
 			})
 			.register();
 		
-//		new CommandAPICommand("loc2b")
-//			.withArguments(new Location2DArgument("value", LocationType.BLOCK_POSITION))
-//			.executesPlayer((player, args) -> {
-//				Location2D value = (Location2D) args[0];
-//				player.sendMessage(value.getX() + ", " + value.getZ());
-//			})
-//			.register();
+		new CommandAPICommand("loc2b")
+			.withArguments(new Location2DArgument("value", LocationType.BLOCK_POSITION))
+			.executesPlayer((player, args) -> {
+				Location2D value = (Location2D) args[0];
+				player.sendMessage(value.getX() + ", " + value.getZ());
+			})
+			.register();
 
 		PlayerMock player = server.addPlayer();
 		
 		server.dispatchCommand(player, "loc3 1 10 15");
-//		server.dispatchCommand(player, "loc3b 1 10 15");
+		server.dispatchCommand(player, "loc3b 1 10 15");
 		server.dispatchCommand(player, "loc2 1 15");
-//		server.dispatchCommand(player, "loc2b 1 15");
+		server.dispatchCommand(player, "loc2b 1 15");
 		assertEquals("1.5, 10.0, 15.5", player.nextMessage());
-//		assertEquals("1, 10, 15", player.nextMessage());
+		assertEquals("1.0, 10.0, 15.0", player.nextMessage());
 		assertEquals("1.5, 15.5", player.nextMessage());
-//		assertEquals("1, 15", player.nextMessage());
+		assertEquals("1.0, 15.0", player.nextMessage());
 		
 		player.setLocation(new Location(new WorldMock(), 2, 2, 2));
 		server.dispatchCommand(player, "loc3 ~ ~5 ~");
-//		server.dispatchCommand(player, "loc3b ~ ~5 ~");
+		server.dispatchCommand(player, "loc3b ~ ~5 ~");
 		server.dispatchCommand(player, "loc2 ~ ~5");
-//		server.dispatchCommand(player, "loc2b ~ ~5");
+		server.dispatchCommand(player, "loc2b ~ ~5");
 		assertEquals("2.0, 7.0, 2.0", player.nextMessage());
-//		assertEquals("2, 7, 2", player.nextMessage());
+		assertEquals("2.0, 7.0, 2.0", player.nextMessage());
 		assertEquals("2.0, 7.0", player.nextMessage());
-//		assertEquals("2, 7", player.nextMessage());
+		assertEquals("2.0, 7.0", player.nextMessage());
 	}
 	
 	@Test
@@ -220,14 +222,31 @@ public class TestFile {
 			.withArguments(new EntitySelectorArgument<Player>("value", EntitySelector.ONE_PLAYER))
 			.executesPlayer((player, args) -> {
 				Player value = (Player) args[0];
-				player.sendMessage("success " + value.getName());
+				player.sendMessage(value.getName());
+			})
+			.register();
+
+		new CommandAPICommand("testall")
+			.withArguments(new EntitySelectorArgument<Collection<Player>>("value", EntitySelector.MANY_PLAYERS))
+			.executesPlayer((player, args) -> {
+				@SuppressWarnings("unchecked")
+				Collection<Player> value = (Collection<Player>) args[0];
+				player.sendMessage(value.stream().map(Player::getName).collect(Collectors.joining(", ")));
 			})
 			.register();
 
 		PlayerMock player = server.addPlayer("APlayer");
 		server.dispatchCommand(player, "test APlayer");
+		
+		server.addPlayer("APlayer1");
+		server.addPlayer("APlayer2");
+		server.addPlayer("APlayer3");
+		server.addPlayer("APlayer4");
+		server.dispatchCommand(player, "testall @a");
 
-		assertEquals("success APlayer", player.nextMessage());
+		assertEquals("APlayer", player.nextMessage());
+		// TODO: Why do we have APlayer here twice?
+		assertEquals("APlayer, APlayer, APlayer1, APlayer2, APlayer3, APlayer4", player.nextMessage());
 	}
 
 }
