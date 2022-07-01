@@ -7,14 +7,17 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Collection;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -31,6 +34,7 @@ import dev.jorel.commandapi.arguments.GreedyStringArgument;
 import dev.jorel.commandapi.arguments.Location2DArgument;
 import dev.jorel.commandapi.arguments.LocationArgument;
 import dev.jorel.commandapi.arguments.LocationType;
+import dev.jorel.commandapi.arguments.PotionEffectArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.wrappers.Location2D;
 
@@ -78,7 +82,7 @@ public class ArgumentTests {
 	}
 
 	@Test
-	public void executionTestWithStringArg() {
+	public void executionTestWithStringArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new StringArgument("value"))
 			.executesPlayer((player, args) -> {
@@ -113,7 +117,7 @@ public class ArgumentTests {
 	}
 
 	@Test
-	public void executionTestWithStringArgNegative() {
+	public void executionTestWithStringArgumentNegative() {
 		new CommandAPICommand("test")
 			.withArguments(new StringArgument("value"))
 			.executesPlayer((player, args) -> {
@@ -129,7 +133,7 @@ public class ArgumentTests {
 	}
 
 	@Test
-	public void executionTestWithBoolean() {
+	public void executionTestWithBooleanArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new BooleanArgument("value"))
 			.executesPlayer((player, args) -> {
@@ -256,7 +260,7 @@ public class ArgumentTests {
 		assertEquals("APlayer, APlayer, APlayer1, APlayer2, APlayer3, APlayer4", player.nextMessage());
 	}
 	
-	@Test
+	@RepeatedTest(10)
 	public void executionTestWithGreedyStringArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new GreedyStringArgument("value"))
@@ -266,11 +270,36 @@ public class ArgumentTests {
 			})
 			.register();
 		
-		String stringArgValue = "3$Hy)zSn7YchMgH=jR*}@?4HdZK{Uf Du}W+yGGSM)fBAJV-5k6&:5E)3+dwd 8.u6a[dCBR8c#{L+qN:%H-";
+		StringBuilder builder = new StringBuilder();
+		for(int i = 0; i < 100; i++) {
+			builder.append((char) ThreadLocalRandom.current().nextInt(32, 127));
+		}
+		String stringArgValue = builder.toString();
 		
 		PlayerMock player = server.addPlayer("APlayer");
 		server.dispatchCommand(player, "test " + stringArgValue);
 		assertEquals(stringArgValue, player.nextMessage());
+	}
+	
+	@Test
+	public void executionTestWithPotionEffectArgument() {
+		Mut<PotionEffectType> type = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new PotionEffectArgument("potion"))
+			.executesPlayer((player, args) -> {
+				type.set((PotionEffectType) args[0]);
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+		server.dispatchCommand(player, "test speed");
+		server.dispatchCommand(player, "test minecraft:speed");
+		server.dispatchCommand(player, "test bukkit:speed");
+
+		assertEquals(PotionEffectType.SPEED, type.get());
+		assertEquals(PotionEffectType.SPEED, type.get());
+		assertEquals(null, type.get());
 	}
 
 }

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -44,6 +45,7 @@ import be.seeseemelk.mockbukkit.WorldMock;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.ParticleData;
+import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.minecraft.SharedConstants;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.Advancements;
@@ -394,6 +396,30 @@ public class MockNMS extends ArgumentNMS {
 	public void resendPackets(Player player) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public SimpleFunctionWrapper getFunction(NamespacedKey key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Set<NamespacedKey> getFunctions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public SimpleFunctionWrapper[] getTag(NamespacedKey key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Set<NamespacedKey> getTags() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

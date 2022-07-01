@@ -1,10 +1,8 @@
-import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
@@ -25,7 +23,6 @@ import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.Location2D;
 import dev.jorel.commandapi.wrappers.ParticleData;
-import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.kyori.adventure.text.Component;
 import net.minecraft.commands.CommandListenerWrapper;
 
@@ -77,39 +74,33 @@ public abstract class ArgumentNMS extends BlankNMS {
 
 	@Override
 	public Component getAdventureChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		// TODO Auto-generated method stub
-		return null;
+		return BASE_NMS.getAdventureChatComponent((CommandContext) cmdCtx, key);
 	}
 
 	@Override
 	public Biome getBiome(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		// TODO Auto-generated method stub
-		return null;
+		return BASE_NMS.getBiome((CommandContext) cmdCtx, key);
 	}
 
 	@Override
 	public Predicate<Block> getBlockPredicate(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException {
-		// TODO Auto-generated method stub
-		return null;
+		return BASE_NMS.getBlockPredicate((CommandContext) cmdCtx, key);
 	}
 
 	@Override
 	public BlockData getBlockState(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		// TODO Auto-generated method stub
-		return null;
+		return BASE_NMS.getBlockState((CommandContext) cmdCtx, key);
 	}
 
 	@Override
 	public ChatColor getChatColor(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		// TODO Auto-generated method stub
-		return null;
+		return BASE_NMS.getChatColor((CommandContext) cmdCtx, key);
 	}
 
 	@Override
 	public Enchantment getEnchantment(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		// TODO Auto-generated method stub
-		return null;
+		return BASE_NMS.getEnchantment((CommandContext) cmdCtx, key);
 	}
 
 	@Override
@@ -121,41 +112,25 @@ public abstract class ArgumentNMS extends BlankNMS {
 	@Override
 	public EntityType getEntityType(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException {
-		// TODO Auto-generated method stub
-		return null;
+		return BASE_NMS.getEntityType((CommandContext) cmdCtx, key);
 	}
 
 	@Override
 	public FunctionWrapper[] getFunction(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public SimpleFunctionWrapper getFunction(NamespacedKey key) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Set<NamespacedKey> getFunctions() {
-		// TODO Auto-generated method stub
-		return null;
+		return BASE_NMS.getFunction((CommandContext) cmdCtx, key);
 	}
 
 	@Override
 	public ItemStack getItemStack(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException {
-		// TODO Auto-generated method stub
-		return null;
+		return BASE_NMS.getItemStack((CommandContext) cmdCtx, key);
 	}
 
 	@Override
 	public Predicate<ItemStack> getItemStackPredicate(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException {
-		// TODO Auto-generated method stub
-		return null;
+		return BASE_NMS.getItemStackPredicate((CommandContext) cmdCtx, key);
 	}
 
 	@Override
@@ -181,71 +156,50 @@ public abstract class ArgumentNMS extends BlankNMS {
 
 	@Override
 	public LootTable getLootTable(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		// TODO Auto-generated method stub
-		return null;
+		return BASE_NMS.getLootTable((CommandContext) cmdCtx, key);
 	}
 
 	@Override
 	public <NBTContainer> Object getNBTCompound(CommandContext<CommandListenerWrapper> cmdCtx, String key,
 			Function<Object, NBTContainer> nbtContainerConstructor) {
-		// TODO Auto-generated method stub
-		return null;
+		return BASE_NMS.getParticle((CommandContext) cmdCtx, key);
 	}
 
 	@Override
 	public String getObjective(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws IllegalArgumentException, CommandSyntaxException {
-		// TODO Auto-generated method stub
-		return null;
+		return BASE_NMS.getObjective((CommandContext) cmdCtx, key);
 	}
 
 	@Override
 	public String getObjectiveCriteria(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		// TODO Auto-generated method stub
-		return null;
+		return BASE_NMS.getObjectiveCriteria((CommandContext) cmdCtx, key);
 	}
 
 	@Override
 	public ParticleData<?> getParticle(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		// TODO Auto-generated method stub
-		return null;
+		return BASE_NMS.getParticle((CommandContext) cmdCtx, key);
 	}
 
 	@Override
 	public PotionEffectType getPotionEffect(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException {
-		// TODO Auto-generated method stub
-		return null;
+		return BASE_NMS.getPotionEffect((CommandContext) cmdCtx, key);
 	}
 
 	@Override
 	public Recipe getRecipe(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		// TODO Auto-generated method stub
-		return null;
+		return BASE_NMS.getRecipe((CommandContext) cmdCtx, key);
 	}
 
 	@Override
 	public Sound getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public SimpleFunctionWrapper[] getTag(NamespacedKey key) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Set<NamespacedKey> getTags() {
-		// TODO Auto-generated method stub
-		return null;
+		return BASE_NMS.getSound((CommandContext) cmdCtx, key);
 	}
 
 	@Override
 	public String getTeam(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		// TODO Auto-generated method stub
-		return null;
+		return BASE_NMS.getTeam((CommandContext) cmdCtx, key);
 	}
 
 }
