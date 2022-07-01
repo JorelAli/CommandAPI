@@ -51,8 +51,7 @@ public abstract class ArgumentNMS extends BlankNMS {
 
 	@Override
 	public ArgumentType<?> _ArgumentEntity(EntitySelector selector) {
-		// TODO Auto-generated method stub
-		return null;
+		return BASE_NMS._ArgumentEntity(selector);
 	}
 
 	@Override
@@ -116,8 +115,7 @@ public abstract class ArgumentNMS extends BlankNMS {
 	@Override
 	public Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String key, EntitySelector selector)
 			throws CommandSyntaxException {
-		// TODO Auto-generated method stub
-		return null;
+		return BASE_NMS.getEntitySelector((CommandContext) cmdCtx, key, selector);
 	}
 
 	@Override

@@ -1,20 +1,30 @@
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 import org.mockito.Mockito;
 
 import com.google.common.io.Files;
@@ -34,6 +44,7 @@ import be.seeseemelk.mockbukkit.WorldMock;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.ParticleData;
+import net.minecraft.SharedConstants;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.Advancements;
 import net.minecraft.commands.CommandBuildContext;
@@ -89,7 +100,10 @@ import net.minecraft.commands.synchronization.brigadier.IntegerArgumentInfo;
 import net.minecraft.commands.synchronization.brigadier.LongArgumentInfo;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.server.AdvancementDataWorld;
+import net.minecraft.server.DispenserRegistry;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.EntityPlayer;
+import net.minecraft.server.players.PlayerList;
 import net.minecraft.world.phys.Vec3D;
 
 public class MockNMS extends ArgumentNMS {
@@ -98,8 +112,57 @@ public class MockNMS extends ArgumentNMS {
 		super(baseNMS);
 		try {
 			initializeArgumentsInArgumentTypeInfos();
+
+			// Initialize WorldVersion (game version)
+			SharedConstants.a();
+
+			// MockBukkit is very helpful and registers all of the potion
+			// effects and enchantments for us. We need to not do this.
+			unregisterAllEnchantments();
+			unregisterAllPotionEffects();
+
+			// Invoke Minecraft's registry (I think that's what this does anyway)
+			DispenserRegistry.a();
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void unregisterAllPotionEffects() {
+		PotionEffectType[] byId = (PotionEffectType[]) getField(PotionEffectType.class, "byId", null);
+		for (int i = 0; i < 34; i++) {
+			byId[i] = null;
+		}
+
+		Map<String, PotionEffectType> byName = (Map<String, PotionEffectType>) getField(PotionEffectType.class, "byName", null);
+		byName.clear();
+
+		Map<NamespacedKey, PotionEffectType> byKey = (Map<NamespacedKey, PotionEffectType>) getField(PotionEffectType.class, "byKey", null);
+		byKey.clear();
+
+		try {
+			Field field = PotionEffectType.class.getDeclaredField("acceptingNew");
+			field.setAccessible(true);
+			field.set(null, true);
+		} catch (ReflectiveOperationException e) {
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void unregisterAllEnchantments() {
+
+		Map<String, Enchantment> byName = (Map<String, Enchantment>) getField(Enchantment.class, "byName", null);
+		byName.clear();
+
+		Map<NamespacedKey, Enchantment> byKey = (Map<NamespacedKey, Enchantment>) getField(Enchantment.class, "byKey", null);
+		byKey.clear();
+
+		try {
+			Field field = Enchantment.class.getDeclaredField("acceptingNew");
+			field.setAccessible(true);
+			field.set(null, true);
+		} catch (ReflectiveOperationException e) {
 		}
 	}
 
@@ -122,27 +185,43 @@ public class MockNMS extends ArgumentNMS {
 	public CommandListenerWrapper getCLWFromCommandSender(CommandSender sender) {
 		CommandListenerWrapper clw = Mockito.mock(CommandListenerWrapper.class);
 		Mockito.when(clw.getBukkitSender()).thenReturn(sender);
-		
-		if(sender instanceof Player player) {
+
+		if (sender instanceof Player player) {
+			// Location argument
 			Location loc = player.getLocation();
 			Mockito.when(clw.e()).thenReturn(new Vec3D(loc.getX(), loc.getY(), loc.getZ()));
-			
+
+			// Advancement argument
 			MinecraftServer ms = Mockito.mock(MinecraftServer.class);
 			Mockito.when(ms.az()).thenReturn(mockAdvancementDataWorld());
 			Mockito.when(clw.m()).thenReturn(ms);
+
+			// Entity selector argument
+			EntityPlayer testPlayer = Mockito.mock(EntityPlayer.class);
+			CraftPlayer craftPlayer = Mockito.mock(CraftPlayer.class);
+			Mockito.when(craftPlayer.getName()).thenReturn("APlayer");
+			Mockito.when(testPlayer.getBukkitEntity()).thenReturn(craftPlayer);
+			
+			PlayerList pl = Mockito.mock(PlayerList.class);
+			Mockito.when(pl.a(anyString())).thenReturn(testPlayer);
+			Mockito.when(clw.m().ac()).thenReturn(pl);
+
+			List<EntityPlayer> players = new ArrayList<>();
+			players.add(testPlayer);
+			Mockito.when(clw.m().ac().t()).thenReturn(players);
 		}
 		return clw;
 	}
-	
+
 	public AdvancementDataWorld mockAdvancementDataWorld() {
 		AdvancementDataWorld advancementDataWorld = new AdvancementDataWorld(null);
 		Advancements advancements = (Advancements) getField(AdvancementDataWorld.class, "c", advancementDataWorld);
-		
+
 		advancements.b.put(new MinecraftKey("my:advancement"), new Advancement(new MinecraftKey("my:advancement"), null, null, null, new HashMap<>(), null));
 		advancements.b.put(new MinecraftKey("my:advancement2"), new Advancement(new MinecraftKey("my:advancement2"), null, null, null, new HashMap<>(), null));
 		return advancementDataWorld;
 	}
-	
+
 	public Object getField(Class<?> className, String fieldName, Object instance) {
 		try {
 			Field field = className.getDeclaredField(fieldName);
@@ -234,7 +313,7 @@ public class MockNMS extends ArgumentNMS {
 		map.put(TemplateRotationArgument.class, SingletonArgumentInfo.a(TemplateRotationArgument::a));
 		map.put(ArgumentUUID.class, SingletonArgumentInfo.a(ArgumentUUID::a));
 	}
-	
+
 	@Override
 	public World getWorldForCSS(CommandListenerWrapper clw) {
 		return new WorldMock();
@@ -249,7 +328,7 @@ public class MockNMS extends ArgumentNMS {
 	@Override
 	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -285,13 +364,13 @@ public class MockNMS extends ArgumentNMS {
 	@Override
 	public void reloadDataPacks() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resendPackets(Player player) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

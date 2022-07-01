@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.advancement.Advancement;
+import org.bukkit.entity.Player;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,8 @@ import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.AdvancementArgument;
 import dev.jorel.commandapi.arguments.BooleanArgument;
+import dev.jorel.commandapi.arguments.EntitySelector;
+import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.Location2DArgument;
 import dev.jorel.commandapi.arguments.LocationArgument;
 import dev.jorel.commandapi.arguments.LocationType;
@@ -209,6 +212,22 @@ public class TestFile {
 //		assertEquals("2, 7, 2", player.nextMessage());
 		assertEquals("2.0, 7.0", player.nextMessage());
 //		assertEquals("2, 7", player.nextMessage());
+	}
+	
+	@Test
+	public void executionTestWithEntitySelectorArgument() {
+		new CommandAPICommand("test")
+			.withArguments(new EntitySelectorArgument<Player>("value", EntitySelector.ONE_PLAYER))
+			.executesPlayer((player, args) -> {
+				Player value = (Player) args[0];
+				player.sendMessage("success " + value.getName());
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer("APlayer");
+		server.dispatchCommand(player, "test APlayer");
+
+		assertEquals("success APlayer", player.nextMessage());
 	}
 
 }
