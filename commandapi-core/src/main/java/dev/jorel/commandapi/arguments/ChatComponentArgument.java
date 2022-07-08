@@ -32,7 +32,9 @@ import net.md_5.bungee.api.chat.BaseComponent;
  * An argument that represents raw JSON text
  * 
  * @apiNote Returns a {@link BaseComponent}{@code []} object
+ * @deprecated Use {@link AdventureChatComponentArgument instead}
  */
+@Deprecated
 public class ChatComponentArgument extends Argument<BaseComponent[]> {
 
 	/**

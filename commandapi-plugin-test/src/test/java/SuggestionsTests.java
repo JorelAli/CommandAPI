@@ -91,5 +91,30 @@ public class SuggestionsTests {
 			"minecraft:speed",
 			"minecraft:strength"), server.getSuggestions(player, "test s"));
 	}
+	
+//	@Test
+//	public void testAxisArgumentSuggestions() {
+//		new CommandAPICommand("test")
+//			.withArguments(new AxisArgument("axis"))
+//			.executesPlayer((player, args) -> {
+//			})
+//			.register();
+//
+//		PlayerMock player = server.addPlayer();
+//		assertEquals(List.of(
+//			"x",
+//			"xy",
+//			"xyz",
+//			"xz",
+//			"y",
+//			"yz",
+//			"z"), server.getSuggestions(player, "test "));
+//		
+//		assertEquals(List.of(
+//			"x",
+//			"xy",
+//			"xyz",
+//			"xz"), server.getSuggestions(player, "test x"));
+//	}
 
 }

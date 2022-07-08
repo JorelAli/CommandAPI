@@ -1,3 +1,4 @@
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -28,7 +29,9 @@ import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.AdvancementArgument;
+import dev.jorel.commandapi.arguments.AdventureChatComponentArgument;
 import dev.jorel.commandapi.arguments.BooleanArgument;
+import dev.jorel.commandapi.arguments.ChatComponentArgument;
 import dev.jorel.commandapi.arguments.EntitySelector;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.GreedyStringArgument;
@@ -40,6 +43,16 @@ import dev.jorel.commandapi.arguments.PlayerArgument;
 import dev.jorel.commandapi.arguments.PotionEffectArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.wrappers.Location2D;
+import io.papermc.paper.text.PaperComponents;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.BaseComponentSerializer;
 
 /**
  * Tests for the 40+ arguments in dev.jorel.commandapi.arguments
@@ -117,22 +130,24 @@ public class ArgumentTests {
 				    }
 				  }
 				}""");
-	}
-
-	@Test
-	public void executionTestWithStringArgumentNegative() {
-		new CommandAPICommand("test")
-			.withArguments(new StringArgument("value"))
-			.executesPlayer((player, args) -> {
-				String value = (String) args[0];
-				player.sendMessage("success " + value);
-			})
-			.register();
-
-		PlayerMock player = server.addPlayer();
+		
+		// Negative test
 		server.dispatchCommand(player, "test myvalue");
-		// Test "the thing", then test "not the thing"
 		assertNotEquals("success blah", player.nextMessage());
+		
+		// Tests from the documentation
+		assertDoesNotThrow(() -> assertTrue(server.dispatchThrowableCommand(player, "test Hello")));
+		assertDoesNotThrow(() -> assertTrue(server.dispatchThrowableCommand(player, "test 123")));
+		assertDoesNotThrow(() -> assertTrue(server.dispatchThrowableCommand(player, "test hello123")));
+		assertDoesNotThrow(() -> assertTrue(server.dispatchThrowableCommand(player, "test Hello_world")));
+		assertEquals("success Hello", player.nextMessage());
+		assertEquals("success 123", player.nextMessage());
+		assertEquals("success hello123", player.nextMessage());
+		assertEquals("success Hello_world", player.nextMessage());
+
+		// Negative tests from the documentation
+		assertThrows(CommandSyntaxException.class, () -> assertTrue(server.dispatchThrowableCommand(player, "test hello@email.com")));
+		assertThrows(CommandSyntaxException.class, () -> assertTrue(server.dispatchThrowableCommand(player, "test yesn't")));
 	}
 
 	@Test
@@ -412,6 +427,56 @@ public class ArgumentTests {
 		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "test BPlayer"));
 		assertEquals(player, type.get());
 		assertEquals(null, type.get());
+	}
+	
+	@Test
+	public void executionTestWithChatComponentArgument() {
+		Mut<BaseComponent[]> spigot = Mut.of();
+		Mut<Component> adventure = Mut.of();
+
+		new CommandAPICommand("spigot")
+			.withArguments(new ChatComponentArgument("text"))
+			.executesPlayer((player, args) -> {
+				spigot.set((BaseComponent[]) args[0]);
+			})
+			.register();
+		
+		new CommandAPICommand("adventure")
+			.withArguments(new AdventureChatComponentArgument("text"))
+			.executesPlayer((player, args) -> {
+				adventure.set((Component) args[0]);
+			})
+			.register();
+		
+		//	["", {
+		//	    "text": "Once upon a time, there was a guy call "
+		//	}, {
+		//	    "text": "Skepter",
+		//	    "color": "light_purple",
+		//	    "hoverEvent": {
+		//	        "action": "show_entity",
+		//	        "value": "Skepter"
+		//	    }
+		//	}, {
+		//	    "text": " and he created the "
+		//	}, {
+		//	    "text": "CommandAPI",
+		//	    "underlined": true,
+		//	    "clickEvent": {
+		//	        "action": "open_url",
+		//	        "value": "https://github.com/JorelAli/CommandAPI"
+		//	    }
+		//	}]
+
+		PlayerMock player = server.addPlayer("Skepter");
+		server.dispatchCommand(player, "spigot [\"[\\\"\\\",{\\\"text\\\":\\\"Once upon a time, there was a guy call \\\"},{\\\"text\\\":\\\"Skepter\\\",\\\"color\\\":\\\"light_purple\\\",\\\"hoverEvent\\\":{\\\"action\\\":\\\"show_entity\\\",\\\"value\\\":\\\"Skepter\\\"}},{\\\"text\\\":\\\" and he created the \\\"},{\\\"text\\\":\\\"CommandAPI\\\",\\\"underlined\\\":true,\\\"clickEvent\\\":{\\\"action\\\":\\\"open_url\\\",\\\"value\\\":\\\"https://github.com/JorelAli/CommandAPI\\\"}}]\"]");
+		server.dispatchCommand(player, "adventure [\"[\\\"\\\",{\\\"text\\\":\\\"Once upon a time, there was a guy call \\\"},{\\\"text\\\":\\\"Skepter\\\",\\\"color\\\":\\\"light_purple\\\",\\\"hoverEvent\\\":{\\\"action\\\":\\\"show_entity\\\",\\\"value\\\":\\\"Skepter\\\"}},{\\\"text\\\":\\\" and he created the \\\"},{\\\"text\\\":\\\"CommandAPI\\\",\\\"underlined\\\":true,\\\"clickEvent\\\":{\\\"action\\\":\\\"open_url\\\",\\\"value\\\":\\\"https://github.com/JorelAli/CommandAPI\\\"}}]\"]");
+		
+		// We literally cannot test the result of Spigot's BaseComponent[], so
+		// we only test Adventure's Component
+		
+		Component expectedAdventureComponent = GsonComponentSerializer.gson().deserialize("[\"[\\\"\\\",{\\\"text\\\":\\\"Once upon a time, there was a guy call \\\"},{\\\"text\\\":\\\"Skepter\\\",\\\"color\\\":\\\"light_purple\\\",\\\"hoverEvent\\\":{\\\"action\\\":\\\"show_entity\\\",\\\"value\\\":\\\"Skepter\\\"}},{\\\"text\\\":\\\" and he created the \\\"},{\\\"text\\\":\\\"CommandAPI\\\",\\\"underlined\\\":true,\\\"clickEvent\\\":{\\\"action\\\":\\\"open_url\\\",\\\"value\\\":\\\"https://github.com/JorelAli/CommandAPI\\\"}}]\"]");
+		assertEquals(expectedAdventureComponent, adventure.get());
 	}
 
 }
