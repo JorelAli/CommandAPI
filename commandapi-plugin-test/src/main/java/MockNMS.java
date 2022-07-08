@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 
 import be.seeseemelk.mockbukkit.WorldMock;
@@ -48,11 +50,14 @@ import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
+import io.papermc.paper.text.PaperComponents;
+import net.kyori.adventure.text.Component;
 import net.minecraft.SharedConstants;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.Advancements;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandListenerWrapper;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.ArgumentAnchor;
 import net.minecraft.commands.arguments.ArgumentAngle;
 import net.minecraft.commands.arguments.ArgumentChat;
@@ -79,6 +84,7 @@ import net.minecraft.commands.arguments.ArgumentScoreboardTeam;
 import net.minecraft.commands.arguments.ArgumentScoreholder;
 import net.minecraft.commands.arguments.ArgumentTime;
 import net.minecraft.commands.arguments.ArgumentUUID;
+import net.minecraft.commands.arguments.MessageArgument;
 import net.minecraft.commands.arguments.ResourceKeyArgument;
 import net.minecraft.commands.arguments.ResourceOrTagLocationArgument;
 import net.minecraft.commands.arguments.TemplateMirrorArgument;
@@ -103,6 +109,7 @@ import net.minecraft.commands.synchronization.brigadier.FloatArgumentInfo;
 import net.minecraft.commands.synchronization.brigadier.IntegerArgumentInfo;
 import net.minecraft.commands.synchronization.brigadier.LongArgumentInfo;
 import net.minecraft.core.BlockPosition;
+import net.minecraft.network.chat.Component.Serializer;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.server.AdvancementDataWorld;
 import net.minecraft.server.DispenserRegistry;
@@ -130,6 +137,24 @@ public class MockNMS extends ArgumentNMS {
 
 			// Invoke Minecraft's registry (I think that's what this does anyway)
 			DispenserRegistry.a();
+			
+			if(playerListMock == null) {
+				playerListMock = Mockito.mock(PlayerList.class);
+				Mockito.when(playerListMock.a(anyString())).thenAnswer(invocation -> {
+					String playerName = invocation.getArgument(0);
+					for(EntityPlayer onlinePlayer : players) {
+						if(onlinePlayer.getBukkitEntity().getName().equals(playerName)) {
+							return onlinePlayer;
+						}
+					}
+					return null;
+				});
+				Mockito.when(playerListMock.e(Mockito.any(GameProfile.class))).thenAnswer(invocation -> {
+					System.out.println("Checking if op...");
+					new RuntimeException().printStackTrace(System.out);
+					return true;
+				});
+			}
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
@@ -189,7 +214,7 @@ public class MockNMS extends ArgumentNMS {
 	}
 
 	List<EntityPlayer> players = new ArrayList<>();
-	PlayerList playerListMock;
+	PlayerList playerListMock; // AAAAAAA
 	
 	@SuppressWarnings("deprecation")
 	@Override
@@ -222,19 +247,6 @@ public class MockNMS extends ArgumentNMS {
 				players.add(entityPlayerMock);
 			}
 			
-			if(playerListMock == null) {
-				playerListMock = Mockito.mock(PlayerList.class);
-				Mockito.when(playerListMock.a(anyString())).thenAnswer(invocation -> {
-					String playerName = invocation.getArgument(0);
-					for(EntityPlayer onlinePlayer : players) {
-						if(onlinePlayer.getBukkitEntity().getName().equals(playerName)) {
-							return onlinePlayer;
-						}
-					}
-					return null;
-				});
-			}
-			
 			Mockito.when(minecraftServerMock.ac()).thenReturn(playerListMock);
 			Mockito.when(minecraftServerMock.ac().t()).thenReturn(players);
 			
@@ -250,8 +262,42 @@ public class MockNMS extends ArgumentNMS {
 				return Optional.empty();
 			});
 			Mockito.when(minecraftServerMock.ap()).thenReturn(userCacheMock);
+			
+			Mockito.when(minecraftServerMock.h()).thenReturn(4);
 		}
 		return clw;
+	}
+	
+	@SuppressWarnings("removal")
+	@Override
+	public Component getAdventureChat(CommandContext cmdCtx, String key)
+			throws CommandSyntaxException {
+		
+//		CommandListenerWrapper wrapper = (CommandListenerWrapper) Mockito.spy(cmdCtx.getSource());
+//		
+//		Mockito.when(wrapper.c(Mockito.anyInt())).thenAnswer(invocation -> {
+//			boolean currentValue = (boolean) invocation.callRealMethod();
+//			System.out.println("Current permission status: " + currentValue);
+//			new RuntimeException().printStackTrace(System.out);
+//			System.out.println("Overriding invocation with " + invocation.getArgument(0));
+//			return true;
+//		});
+
+//		cmdCtx = cmdCtx.copyFor(((CommandListenerWrapper) cmdCtx.getSource()).a(4));
+		ArgumentChat.b b = (ArgumentChat.b) cmdCtx.getArgument(key, ArgumentChat.b.class);
+		for(ArgumentChat.c c : b.b()) {
+			System.out.println("Unpacking: " + c);
+			try {
+				System.out.println(c.a((CommandListenerWrapper) cmdCtx.getSource()));
+			} catch(CommandSyntaxException e) {
+				e.printStackTrace(System.out);
+			}
+		}
+		
+		
+		System.out.println("RESULT: " + ArgumentChat.a(cmdCtx, key));
+		return super.getAdventureChat(cmdCtx, key);
+		// return PaperComponents.gsonSerializer().deserialize(Serializer.toJson(MessageArgument.getMessage(cmdCtx, key)));
 	}
 
 	public AdvancementDataWorld mockAdvancementDataWorld() {

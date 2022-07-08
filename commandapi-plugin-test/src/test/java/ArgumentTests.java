@@ -16,7 +16,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
@@ -25,12 +27,15 @@ import org.junit.jupiter.api.Test;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
+import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.AdvancementArgument;
+import dev.jorel.commandapi.arguments.AdventureChatArgument;
 import dev.jorel.commandapi.arguments.AdventureChatComponentArgument;
 import dev.jorel.commandapi.arguments.BooleanArgument;
+import dev.jorel.commandapi.arguments.ChatArgument;
 import dev.jorel.commandapi.arguments.ChatComponentArgument;
 import dev.jorel.commandapi.arguments.EntitySelector;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
@@ -43,16 +48,9 @@ import dev.jorel.commandapi.arguments.PlayerArgument;
 import dev.jorel.commandapi.arguments.PotionEffectArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.wrappers.Location2D;
-import io.papermc.paper.text.PaperComponents;
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.event.HoverEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.chat.BaseComponentSerializer;
 
 /**
  * Tests for the 40+ arguments in dev.jorel.commandapi.arguments
@@ -75,7 +73,7 @@ public class ArgumentTests {
 		server = MockBukkit.mock(new CustomServerMock());
 		plugin = MockBukkit.load(Main.class);
 	}
-
+	
 	@AfterEach
 	public void tearDown() {
 		Bukkit.getScheduler().cancelTasks(plugin);
@@ -476,6 +474,59 @@ public class ArgumentTests {
 		// we only test Adventure's Component
 		
 		Component expectedAdventureComponent = GsonComponentSerializer.gson().deserialize("[\"[\\\"\\\",{\\\"text\\\":\\\"Once upon a time, there was a guy call \\\"},{\\\"text\\\":\\\"Skepter\\\",\\\"color\\\":\\\"light_purple\\\",\\\"hoverEvent\\\":{\\\"action\\\":\\\"show_entity\\\",\\\"value\\\":\\\"Skepter\\\"}},{\\\"text\\\":\\\" and he created the \\\"},{\\\"text\\\":\\\"CommandAPI\\\",\\\"underlined\\\":true,\\\"clickEvent\\\":{\\\"action\\\":\\\"open_url\\\",\\\"value\\\":\\\"https://github.com/JorelAli/CommandAPI\\\"}}]\"]");
+		assertEquals(expectedAdventureComponent, adventure.get());
+	}
+	
+	@Test
+	public void executionTestWithChatArgument() {
+		Mut<BaseComponent[]> spigot = Mut.of();
+		Mut<Component> adventure = Mut.of();
+
+		new CommandAPICommand("spigot")
+			.withArguments(new ChatArgument("text"))
+			.executesPlayer((player, args) -> {
+				spigot.set((BaseComponent[]) args[0]);
+			})
+			.register();
+		
+		new CommandAPICommand("adventure")
+			.withArguments(new AdventureChatArgument("text"))
+			.executesPlayer((player, args) -> {
+				adventure.set((Component) args[0]);
+			})
+			.register();
+
+		class OpPlayer extends PlayerMock {
+			OpPlayer(String name) {
+				super(server, name);
+			}
+			
+			@Override
+			public boolean isOp() {
+				return true;
+			}
+
+			@Override
+			public boolean hasPermission(@NotNull Permission perm) {
+				return true;
+			}
+			
+			@Override
+			public boolean hasPermission(@NotNull String name) {
+				return true;
+			}
+		}
+		
+		PlayerMock player = new OpPlayer("Skepter");
+		server.addPlayer(player);
+//		PlayerMock player = server.addPlayer(new OpPlayer("Skepter"));
+		server.dispatchCommand(player, "spigot Hello @p");
+		server.dispatchCommand(player, "adventure Hello @p");
+
+//		BaseComponent[] expectedSpigotComponent = new ComponentBuilder(new TextComponent("Hello Skepter")).create();
+//		assertEquals(expectedSpigotComponent, spigot.get());
+
+		Component expectedAdventureComponent = Component.text("Hello Skepter");
 		assertEquals(expectedAdventureComponent, adventure.get());
 	}
 
