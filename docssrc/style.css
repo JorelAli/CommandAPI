@@ -28,6 +28,23 @@ h1 {
     text-align: center;
 }
 
+.multi-pre pre {
+    margin-top: 0;
+}
+
+button.language-selector {
+    border: none;
+    background-color: var(--bg);
+    color: var(--inline-code-color);
+    padding: 10px 20px;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+button.language-selector.selected {
+    background-color: var(--code-bg);
+}
+
 @media only screen and (max-width:1439px) {
     .sidetoc {
         display: none;

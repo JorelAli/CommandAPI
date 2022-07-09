@@ -11,7 +11,14 @@ build-dir = "./../docs/8.4.1"
 git-repository-url = "https://github.com/JorelAli/CommandAPI"
 default-theme = "rust"
 additional-css = ["style.css"]
-additional-js = ["sidebar.js", "mccmd.js", "jszip.min.js", "yaml.min.js", "pluginyml.js"]
+additional-js = [
+    "sidebar.js",
+    "mccmd.js",
+    "kotlin-dsl.js",
+    "jszip.min.js",
+    "yaml.min.js",
+    "pluginyml.js"
+]
 mathjax-support = true
 
 [output.html.fold]
