@@ -10,7 +10,7 @@ body:
     attributes:
       label: CommandAPI version
       description: What version of the CommandAPI are you using?
-      placeholder: 8.4.1
+      placeholder: "8.4.1"
     validations:
       required: true
   - type: input
@@ -18,7 +18,7 @@ body:
     attributes:
       label: Miencraft version
       description: What version of Minecraft are you using?
-      placeholder: 1.19
+      placeholder: "1.19"
     validations:
       required: true
   - type: dropdown
@@ -27,8 +27,8 @@ body:
       label: Are you shading the CommandAPI? (If you don't know, leave this as "no")
       multiple: false
       options:
-        - No
-        - Yes
+        - "No"
+        - "Yes"
     validations:
       required: true
   - type: textarea
