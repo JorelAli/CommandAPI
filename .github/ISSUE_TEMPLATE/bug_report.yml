@@ -4,7 +4,7 @@ labels: ["bug"]
 body:
   - type: markdown
     attributes:
-      value: "Thanks for taking the time to raise a bug!"
+      value: "Thanks for taking the time to raise a bug! Try to be as detailed as possible to get the best support for your issue as possible."
   - type: input
     id: commandapi-version
     attributes:
