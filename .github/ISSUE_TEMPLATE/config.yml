@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 🏃 Get quick support
+    url: https://discord.com/invite/G4SzSxZ
+    about: The CommandAPI Discord is the primary place to go to get quick support for the CommandAPI. If you have a question or need help, drop by and we can work through you issue together!
