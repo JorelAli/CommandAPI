@@ -65,7 +65,7 @@ body:
     id: logs
     attributes:
       label: Server logs and CommandAPI config
-      description: If you think it will be helpful, please include any server logs. If you are using the CommandAPI plugin version, please include the CommandAPI's `config.yml` file from `plugins/CommandAPI/config.yml`. If you are providing logs, it's recommended to set `verbose-outputs: true` in the `config.yml` first!
+      description: "If you think it will be helpful, please include any server logs. If you are using the CommandAPI plugin version, please include the CommandAPI's `config.yml` file from `plugins/CommandAPI/config.yml`. If you are providing logs, it's recommended to set `verbose-outputs: true` in the `config.yml` first!"
       placeholder: Logs and configs (if you think it'll help!)
     validations:
       required: false
