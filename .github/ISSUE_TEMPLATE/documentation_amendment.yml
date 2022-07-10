@@ -7,7 +7,7 @@ body:
     attributes:
       label: Documentation URL
       description: Which page of the documentation has an issue?
-      placeholder: 'https://commandapi.jorel.dev/8.4.0/installation.html#additional-dependencies'
+      placeholder: 'https://commandapi.jorel.dev/8.4.0/installation.html'
     validations:
       required: true
   - type: textarea
