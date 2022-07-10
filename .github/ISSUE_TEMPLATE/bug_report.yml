@@ -13,12 +13,20 @@ body:
       placeholder: "8.4.1"
     validations:
       required: true
-  - type: input
+  - type: dropdown
     id: minecraft-version
     attributes:
       label: Minecraft version
-      description: What version of Minecraft are you using?
-      placeholder: "1.19"
+      description: What version of Minecraft are you using? _(If using a minor, such as 1.18.1, just select the main release version such as 1.18)_
+      multiple: false
+      options:
+        - "1.19"
+        - "1.18"
+        - "1.17"
+        - "1.16"
+        - "1.15"
+        - "1.14"
+        - "1.13"
     validations:
       required: true
   - type: dropdown
