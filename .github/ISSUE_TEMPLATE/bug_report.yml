@@ -17,7 +17,7 @@ body:
     id: minecraft-version
     attributes:
       label: Minecraft version
-      description: What version of Minecraft are you using? _(If using a minor, such as 1.18.1, just select the main release version such as 1.18)_
+      description: What version of Minecraft are you using? _(If using a minor update, such as 1.18.1, just select the major update version such as 1.18)_
       multiple: false
       options:
         - "1.19"
