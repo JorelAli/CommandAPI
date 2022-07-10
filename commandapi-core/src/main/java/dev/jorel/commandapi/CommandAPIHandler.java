@@ -341,7 +341,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		// Populate array
 		for (Argument<?> argument : args) {
 			if (argument.isListed()) {
-				argList.add(parseArgument(cmdCtx, argument.getNodeName(), argument, args));
+				argList.add(parseArgument(cmdCtx, argument.getNodeName(), argument, argList.toArray()));
 			}
 		}
 
@@ -360,10 +360,10 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 * @return the standard Bukkit type
 	 * @throws CommandSyntaxException
 	 */
-	Object parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Argument<?> value, Argument<?>[] args)
+	Object parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Argument<?> value, Object[] previousArgs)
 			throws CommandSyntaxException {
 		if (value.isListed()) {
-			return value.parseArgument(NMS, cmdCtx, key, generatePreviousArguments(cmdCtx, args, key));
+			return value.parseArgument(NMS, cmdCtx, key, previousArgs);
 		} else {
 			return null;
 		}
@@ -842,7 +842,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 
 			Object result;
 			try {
-				result = parseArgument(context, arg.getNodeName(), arg, args);
+				result = parseArgument(context, arg.getNodeName(), arg, previousArguments.toArray());
 			} catch (IllegalArgumentException e) {
 				/*
 				 * Redirected commands don't parse previous arguments properly. Simplest way to
