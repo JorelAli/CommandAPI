@@ -16,7 +16,7 @@ body:
   - type: input
     id: minecraft-version
     attributes:
-      label: Miencraft version
+      label: Minecraft version
       description: What version of Minecraft are you using?
       placeholder: "1.19"
     validations:
@@ -24,7 +24,8 @@ body:
   - type: dropdown
     id: shading
     attributes:
-      label: Are you shading the CommandAPI? (If you don't know, leave this as "no")
+      label: Are you shading the CommandAPI?
+      description: Are you shading the CommandAPI into a plugin? (If you don't know, set this to "No")
       multiple: false
       options:
         - "No"
@@ -65,7 +66,10 @@ body:
     id: logs
     attributes:
       label: Server logs and CommandAPI config
-      description: "If you think it will be helpful, please include any server logs. If you are using the CommandAPI plugin version, please include the CommandAPI's `config.yml` file from `plugins/CommandAPI/config.yml`. If you are providing logs, it's recommended to set `verbose-outputs: true` in the `config.yml` first!"
+      description: |
+        If you think it will be helpful, please include any server logs.
+        If you are using the CommandAPI plugin version, please include the CommandAPI's `config.yml` file from `plugins/CommandAPI/config.yml`.
+        If you are providing logs, it's recommended to set `verbose-outputs: true` in the `config.yml` first!
       placeholder: Logs and configs (if you think it'll help!)
     validations:
       required: false
