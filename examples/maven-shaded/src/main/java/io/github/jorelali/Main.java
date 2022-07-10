@@ -25,7 +25,9 @@ public class Main extends JavaPlugin {
 		// Enable the CommandAPI
 		CommandAPI.onEnable(this);
 		
-		new MyCommands(this).registerAllCommands();
+		MyCommands myCommands = new MyCommands(this);
+		myCommands.registerAllCommands();
+		myCommands.registerAllCommandTrees();
 	}
 
 }
