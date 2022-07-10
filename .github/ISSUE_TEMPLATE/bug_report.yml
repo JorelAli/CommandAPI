@@ -36,8 +36,8 @@ body:
       description: Are you shading the CommandAPI into a plugin? (If you don't know, set this to "No")
       multiple: false
       options:
-        - "No"
         - "Yes"
+        - "No"
     validations:
       required: true
   - type: textarea
