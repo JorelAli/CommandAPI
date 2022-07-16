@@ -126,16 +126,29 @@ As we're shading the CommandAPI into your plugin, you **don't** need to add `dep
 
 To shade the CommandAPI into a Gradle project, we'll use the [Gradle Shadow Plugin](https://imperceptiblethoughts.com/shadow/). Add this to your list of plugins:
 
-```gradle
+<div class="multi-pre">
+
+```groovy,build.gradle
 plugins {
     id 'java'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 ```
 
+```kotlin,build.gradle.kts
+plugins {
+    java
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+}
+```
+
+</div>
+
 Add our repositories:
 
-```gradle
+<div class="multi-pre">
+
+```groovy,build.gradle
 repositories {
     mavenCentral()
 
@@ -144,17 +157,40 @@ repositories {
 }
 ```
 
+```kotlin,build.gradle.kts
+repositories {
+    mavenCentral()
+
+    // If you want to shade the NBT API as well
+    maven(url = "https://repo.codemc.org/repository/maven-public/")
+}
+```
+
+</div>
+
 Next, we declare our dependencies:
 
-```gradle
+<div class="multi-pre">
+
+```groovy,build.gradle
 dependencies {
     implementation "dev.jorel:commandapi-shade:8.4.1"
 }
 ```
 
+```kotlin,build.gradle.kts
+dependencies {
+    implementation("dev.jorel:commandapi-shade:8.4.1")
+}
+```
+
+</div>
+
 Then we add it to the `shadowJar` task configuration and relocate the CommandAPI to your desired location:
 
-```gradle
+<div class="multi-pre">
+
+```groovy,build.gradle
 shadowJar {
     dependencies {
         include dependency("dev.jorel:commandapi-shade:8.4.1")
@@ -164,6 +200,19 @@ shadowJar {
     relocate("dev.jorel.commandapi", "my.custom.package.commandapi")
 }
 ```
+
+```kotlin,build.gradle.kts
+shadowJar {
+    dependencies {
+        include dependency("dev.jorel:commandapi-shade:8.4.1")
+    }
+
+    // TODO: Change this to my own package name
+    relocate("dev.jorel.commandapi", "my.custom.package.commandapi")
+}
+```
+
+</div>
 
 Finally, we can build the shaded jar using the following command:
 

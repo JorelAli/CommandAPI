@@ -43,6 +43,7 @@
     --example-border: hsl(114, 99%, 36%);
     --warning-bg: #370000;
     --warning-border: hsl(0, 99%, 36%);
+    --code-bg: #191f26;
 }
 
 .coal {
@@ -78,6 +79,7 @@
     --example-border: hsl(114, 99%, 36%);
     --warning-bg: #370000;
     --warning-border: hsl(0, 99%, 36%);
+    --code-bg: #1d1f21;
 }
 
 .light {
@@ -113,6 +115,7 @@
     --example-border: hsl(114, 99%, 36%);
     --warning-bg: #ff9e9e;
     --warning-border: hsl(0, 99%, 36%);
+    --code-bg: #f1f1f1;
 }
 
 .navy {
@@ -148,6 +151,7 @@
     --example-border: hsl(114, 99%, 36%);
     --warning-bg: #370000;
     --warning-border: hsl(0, 99%, 36%);
+    --code-bg: #1d1f21;
 }
 
 .skepter {
@@ -183,6 +187,7 @@
     --example-border: #da06ef;
     --warning-bg: #370000;
     --warning-border: hsl(0, 99%, 36%);
+    --code-bg: #1d1f21;
 }
 
 .rust {
@@ -218,6 +223,7 @@
     --example-border: hsl(114, 99%, 36%);
     --warning-bg: #ff9e9e;
     --warning-border: hsl(0, 99%, 36%);
+    --code-bg: #f1f1f1;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -254,5 +260,6 @@
         --example-border: hsl(114, 99%, 36%);
         --warning-bg: #370000;
         --warning-border: hsl(0, 99%, 36%);
+        --code-bg: #1d1f21;
     }
 }

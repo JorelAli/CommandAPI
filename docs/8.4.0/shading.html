@@ -284,26 +284,49 @@ CommandAPI.onEnable(Plugin plugin);
 <hr />
 <h2><a class="header" href="#shading-with-gradle" id="shading-with-gradle">Shading with Gradle</a></h2>
 <p>To shade the CommandAPI into a Gradle project, we'll use the <a href="https://imperceptiblethoughts.com/shadow/">Gradle Shadow Plugin</a>. Add this to your list of plugins:</p>
-<pre><code class="language-gradle">plugins {
+<div class="multi-pre">
+<pre><code class="language-groovy build.gradle">plugins {
     id 'java'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 </code></pre>
+<pre><code class="language-kotlin build.gradle.kts">plugins {
+    java
+    id(&quot;com.github.johnrengelman.shadow&quot;) version &quot;7.1.2&quot;
+}
+</code></pre>
+</div>
 <p>Add our repositories:</p>
-<pre><code class="language-gradle">repositories {
+<div class="multi-pre">
+<pre><code class="language-groovy build.gradle">repositories {
     mavenCentral()
 
     // If you want to shade the NBT API as well
     maven { url = &quot;https://repo.codemc.org/repository/maven-public/&quot; }
 }
 </code></pre>
+<pre><code class="language-kotlin build.gradle.kts">repositories {
+    mavenCentral()
+
+    // If you want to shade the NBT API as well
+    maven(url = &quot;https://repo.codemc.org/repository/maven-public/&quot;)
+}
+</code></pre>
+</div>
 <p>Next, we declare our dependencies:</p>
-<pre><code class="language-gradle">dependencies {
+<div class="multi-pre">
+<pre><code class="language-groovy build.gradle">dependencies {
     implementation &quot;dev.jorel:commandapi-shade:8.4.1&quot;
 }
 </code></pre>
+<pre><code class="language-kotlin build.gradle.kts">dependencies {
+    implementation(&quot;dev.jorel:commandapi-shade:8.4.1&quot;)
+}
+</code></pre>
+</div>
 <p>Then we add it to the <code>shadowJar</code> task configuration and relocate the CommandAPI to your desired location:</p>
-<pre><code class="language-gradle">shadowJar {
+<div class="multi-pre">
+<pre><code class="language-groovy build.gradle">shadowJar {
     dependencies {
         include dependency(&quot;dev.jorel:commandapi-shade:8.4.1&quot;)
     }
@@ -312,6 +335,16 @@ CommandAPI.onEnable(Plugin plugin);
     relocate(&quot;dev.jorel.commandapi&quot;, &quot;my.custom.package.commandapi&quot;)
 }
 </code></pre>
+<pre><code class="language-kotlin build.gradle.kts">shadowJar {
+    dependencies {
+        include dependency(&quot;dev.jorel:commandapi-shade:8.4.1&quot;)
+    }
+
+    // TODO: Change this to my own package name
+    relocate(&quot;dev.jorel.commandapi&quot;, &quot;my.custom.package.commandapi&quot;)
+}
+</code></pre>
+</div>
 <p>Finally, we can build the shaded jar using the following command:</p>
 <pre><code class="language-bash">gradlew build shadowJar
 </code></pre>
@@ -383,6 +416,8 @@ CommandAPI.onEnable(Plugin plugin);
         <script type="text/javascript" src="sidebar.js"></script>
         
         <script type="text/javascript" src="mccmd.js"></script>
+        
+        <script type="text/javascript" src="kotlin-dsl.js"></script>
         
         <script type="text/javascript" src="jszip.min.js"></script>
         

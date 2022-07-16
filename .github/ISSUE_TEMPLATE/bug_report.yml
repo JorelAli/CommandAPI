@@ -1,0 +1,91 @@
+name: 🐜 Bug report
+description: Found something that doesn't work as expected? Raise it here!
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: "Thanks for taking the time to raise a bug! Try to be as detailed as possible to get the best support for your issue as possible."
+  - type: input
+    id: commandapi-version
+    attributes:
+      label: CommandAPI version
+      description: What version of the CommandAPI are you using?
+      placeholder: "8.4.1"
+    validations:
+      required: true
+  - type: dropdown
+    id: minecraft-version
+    attributes:
+      label: Minecraft version
+      description: What version of Minecraft are you using? _(If using a minor update, such as 1.18.1, just select the major update version such as 1.18)_
+      multiple: false
+      options:
+        - "1.19"
+        - "1.18"
+        - "1.17"
+        - "1.16"
+        - "1.15"
+        - "1.14"
+        - "1.13"
+    validations:
+      required: true
+  - type: dropdown
+    id: shading
+    attributes:
+      label: Are you shading the CommandAPI?
+      description: Are you shading the CommandAPI into a plugin? (If you don't know, set this to "No")
+      multiple: false
+      options:
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+  - type: textarea
+    id: what-i-did
+    attributes:
+      label: What I did
+      description: What did you do to encounter this bug? Please be as detailed as possible!
+      placeholder: |
+        - I added this code in my onEnable() method:
+          ```java
+          // Code snippet here
+          ```
+        - I joined the game
+        - I ran the command `/mycommand text`
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What actually happened
+      description: What happened when you did the steps above?
+      placeholder: Describe what happened when you performed the steps above.
+    validations:
+      required: true
+  - type: textarea
+    id: what-should-happen
+    attributes:
+      label: What should have happened
+      description: What should have happened when you did the steps above?
+      placeholder: Describe what you would expect to happen when you perform the steps above.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Server logs and CommandAPI config
+      description: |
+        If you think it will be helpful, please include any server logs.
+        If you are using the CommandAPI plugin version, please include the CommandAPI's `config.yml` file from `plugins/CommandAPI/config.yml`.
+        If you are providing logs, it's recommended to set `verbose-outputs: true` in the `config.yml` first!
+      placeholder: Logs and configs (if you think it'll help!)
+    validations:
+      required: false
+  - type: textarea
+    id: other
+    attributes:
+      label: Other
+      description: Is there anything else that you think will be relevant in helping to debug this issue?
+      placeholder: It only works on my machine.
+    validations:
+      required: false

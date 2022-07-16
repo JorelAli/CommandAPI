@@ -1,0 +1,27 @@
+name: 💡 Suggestion or enhancement
+description: Suggest a new feature or enhancement for the CommandAPI
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Please provide a clear and concise description of what the suggestion is.
+      placeholder: I'd like it if the CommandAPI would let you do...
+    validations:
+      required: true
+  - type: textarea
+    id: expected-code
+    attributes:
+      label: Expected code
+      description: If this suggestion or enhancement is for adding a new API method, please supply some code samples of how you envision using this feature if it were implemented.
+      placeholder: First, call CommandAPI.myCoolNewSuggestion()
+    validations:
+      required: false
+  - type: textarea
+    id: other
+    attributes:
+      label: Extra details
+      description: Please provide any other information in the space below.
+    validations:
+      required: false
