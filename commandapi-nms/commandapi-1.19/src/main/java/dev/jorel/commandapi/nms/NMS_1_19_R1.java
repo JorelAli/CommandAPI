@@ -40,7 +40,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
-import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -83,6 +82,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.ComplexRecipe;
 import org.bukkit.inventory.Recipe;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 
 import com.google.common.collect.ImmutableList;
@@ -92,6 +92,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.context.ParsedCommandNode;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
@@ -112,6 +113,7 @@ import dev.jorel.commandapi.wrappers.Location2D;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.papermc.paper.text.PaperComponents;
@@ -753,6 +755,49 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 		return (css.getLevel() == null) ? null : css.getLevel().getWorld();
 	}
 
+	@Differs(from = "1.18.2", by = "Chat preview!")
+	@Override
+	public void hookChatPreview(Plugin plugin, Player player) {
+		final ServerGamePacketListenerImpl impl = ((CraftPlayer) player).getHandle().connection;
+		if (impl.connection.channel.pipeline().get("CommandAPI_" + player.getName()) == null) {
+			// Not sure why it's called packet_handler, but apparently every example online
+			// uses this!
+			impl.connection.channel.pipeline().addBefore("packet_handler", "CommandAPI_" + player.getName(), new ChannelDuplexHandler() {
+
+				// Note to self: If we ever wanted to handle outgoing (clientbound) packets,
+				// we'd use the write() method
+
+				@Override
+				public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+					if (msg instanceof ServerboundChatPreviewPacket chatPreview) {
+						// Substring 1 because we want to get rid of the leading /
+						ParseResults<CommandSourceStack> results = getBrigadierDispatcher().parse(chatPreview.query().substring(1), getCLWFromCommandSender(player));
+
+						// Generate the path for lookup
+						List<String> path = new ArrayList<>();
+						for(ParsedCommandNode<CommandSourceStack> commandNode : results.getContext().getNodes()) {
+							path.add(commandNode.getNode().getName());
+						}
+						Function<PreviewInfo, Component> preview = CommandAPIHandler.getInstance().lookupPreviewable(path);
+
+						// Calculate the (argument) input and generate the component to send
+						String input = results.getContext().getNodes().get(results.getContext().getNodes().size() - 1).getRange().get(chatPreview.query().substring(1));
+						Component component = preview.apply(new PreviewInfo(player, input, chatPreview.query()));
+						if (component != null) {
+							Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> 
+								impl.connection.send(new ClientboundChatPreviewPacket(chatPreview.queryId(), Serializer.fromJson(GsonComponentSerializer.gson().serialize(component))))
+							);
+						}
+					}
+
+					// Normal packet handling
+					super.channelRead(ctx, msg);
+				}
+
+			});
+		}
+	}
+
 	@Override
 	public boolean isVanillaCommandWrapper(Command command) {
 		return command instanceof VanillaCommandWrapper;
@@ -893,49 +938,18 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 							+ stringWriter.toString());
 		}
 	}
-
+	
 	@Override
 	public void resendPackets(Player player) {
 		MINECRAFT_SERVER.getCommands().sendCommands(((CraftPlayer) player).getHandle());
 	}
 	
+	@Differs(from = "1.18.2", by = "Chat preview!")
 	@Override
-	public void hook(Player player) {
-		System.out.println("Hooking " + player);
-		final ServerGamePacketListenerImpl impl = ((CraftPlayer) player).getHandle().connection;
-		if (impl.connection.channel.pipeline().get("CommandAPI_" + player.getName()) == null) {
-			// Not sure why it's called packet_handler, but apparently every example online
-			// uses this!
-			impl.connection.channel.pipeline().addBefore("packet_handler", "CommandAPI_" + player.getName(), new ChannelDuplexHandler() {
-
-				// Note to self: If we ever wanted to handle outgoing (clientbound) packets,
-				// we'd use the write() method
-
-				@Override
-				public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-					if (msg instanceof ServerboundChatPreviewPacket chatPreview) {
-						// We want to get the command (argument) node for this command
-
-						// Substring 1 because we want to get rid of the leading /
-						ParseResults<CommandSourceStack> results = getBrigadierDispatcher().parse(chatPreview.query().substring(1), getCLWFromCommandSender(player));
-
-						// TODO: No stream
-						List<String> path = results.getContext().getNodes().stream().map(node -> node.getNode().getName()).collect(Collectors.toList());
-						Function<PreviewInfo, Component> preview = CommandAPIHandler.getInstance().lookupPreviewable(path);
-
-						String input = results.getContext().getNodes().get(results.getContext().getNodes().size() - 1).getRange().get(chatPreview.query().substring(1));
-						Component component = preview.apply(new PreviewInfo(player, input, chatPreview.query()));
-						if (component != null) {
-							// TODO: Sending must be asynchronous!
-							impl.connection.send(new ClientboundChatPreviewPacket(chatPreview.queryId(), Serializer.fromJson(GsonComponentSerializer.gson().serialize(component))));
-						}
-					}
-
-					// Normal packet handling
-					super.channelRead(ctx, msg);
-				}
-
-			});
+	public void unhookChatPreview(Player player) {
+		final Channel channel = ((CraftPlayer) player).getHandle().connection.connection.channel;
+		if (channel.pipeline().get("CommandAPI_" + player.getName()) != null) {
+			channel.eventLoop().submit(() -> channel.pipeline().remove("CommandAPI_" + player.getName()));
 		}
 	}
 }

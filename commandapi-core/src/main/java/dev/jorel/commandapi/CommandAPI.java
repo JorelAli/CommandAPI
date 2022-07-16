@@ -31,6 +31,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -92,6 +93,7 @@ public final class CommandAPI {
 		CommandAPI.config = null;
 		CommandAPI.logger = null;
 		CommandAPI.loaded = false;
+
 		CommandAPIHandler.onDisable();
 	}
 
@@ -208,7 +210,12 @@ public final class CommandAPI {
 			@EventHandler(priority = EventPriority.MONITOR)
 			public void onPlayerJoin(PlayerJoinEvent e) {
 				CommandAPIHandler.getInstance().getNMS().resendPackets(e.getPlayer());
-				CommandAPIHandler.getInstance().getNMS().hook(e.getPlayer());
+				CommandAPIHandler.getInstance().getNMS().hookChatPreview(plugin, e.getPlayer());
+			}
+			
+			@EventHandler
+			public void onPlayerQuit(PlayerQuitEvent e) {
+				CommandAPIHandler.getInstance().getNMS().unhookChatPreview(e.getPlayer());
 			}
 		};
 

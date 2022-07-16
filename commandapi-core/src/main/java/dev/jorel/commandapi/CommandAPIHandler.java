@@ -43,6 +43,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.permissions.Permission;
 
@@ -147,6 +148,12 @@ public class CommandAPIHandler<CommandSourceStack> {
 	}
 	
 	static void onDisable() {
+		if(instance != null) {
+			for(Player player : Bukkit.getOnlinePlayers()) {
+				instance.NMS.unhookChatPreview(player);
+			}
+		}
+		
 		instance = null;
 	}
 
@@ -685,11 +692,14 @@ public class CommandAPIHandler<CommandSourceStack> {
 			for(Argument<?> arg : args) {
 				path.add(arg.getNodeName());
 			}
+			previewableArguments.put(List.copyOf(path), previewable.getPreview());
+
+			// And aliases
 			for(String alias : aliases) {
-				// TODO: Do the same for aliases as well
+				path.remove(0);
+				path.add(alias);
+				previewableArguments.put(List.copyOf(path), previewable.getPreview());
 			}
-			
-			previewableArguments.put(path, previewable.getPreview());
 		}
 
 		if (Bukkit.getPluginCommand(commandName) != null) {
@@ -894,13 +904,20 @@ public class CommandAPIHandler<CommandSourceStack> {
 		};
 	}
 	
-	public Function<PreviewInfo, Component> lookupPreviewable(List<String> keySet) {
-		System.out.println("Looking for " + keySet + " in " + previewableArguments);
-		Optional<Function<PreviewInfo, Component>> function = previewableArguments.getOrDefault(keySet, Optional.empty());
-		if(function.isPresent()) {
-			System.out.println("Found value!");
-		}
-		return function.orElseGet(() -> info -> null);
+	/**
+	 * Looks up the function to generate a chat preview for a path of nodes in the
+	 * command tree. This is a method internal to the CommandAPI and isn't expected
+	 * to be used by plugin developers (but you're more than welcome to use it as
+	 * you see fit).
+	 * 
+	 * @param path a list of Strings representing the path (names of command nodes)
+	 *             to (and including) the previewable argument
+	 * @return a function that takes in a {@link PreviewInfo} and returns a
+	 *         {@link Component}. If such a function is not available, this will
+	 *         return a function that always returns null.
+	 */
+	public Function<PreviewInfo, Component> lookupPreviewable(List<String> path) {
+		return previewableArguments.getOrDefault(path, Optional.empty()).orElseGet(() -> info -> null);
 	}
 
 	/////////////////////////

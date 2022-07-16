@@ -52,6 +52,7 @@ import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 
 import com.mojang.brigadier.CommandDispatcher;
@@ -75,8 +76,6 @@ import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 public interface NMS<CommandListenerWrapper> {
-	
-	public default void hook(Player player) {};
 
 	/* Argument types */
 	ArgumentType<?> _ArgumentAngle();
@@ -346,6 +345,20 @@ public interface NMS<CommandListenerWrapper> {
 	UUID getUUID(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
 	World getWorldForCSS(CommandListenerWrapper clw);
+	
+	/**
+	 * Hooks into the chat previewing system for 1.19+
+	 * @param plugin the plugin (for async calls)
+	 * @param player the player to hook
+	 */
+	default void hookChatPreview(Plugin plugin, Player player) {};
+	
+	/**
+	 * Unhooks a player from the chat previewing system for 1.19+. This should
+	 * be called when the player quits and when the plugin is disabled
+	 * @param player the player to unhook
+	 */
+	default void unhookChatPreview(Player player) {};
 
 	/**
 	 * Checks if a Command is an instance of the OBC VanillaCommandWrapper
