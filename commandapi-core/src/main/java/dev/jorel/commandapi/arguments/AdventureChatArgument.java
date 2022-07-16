@@ -20,6 +20,9 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import java.util.Optional;
+import java.util.function.Function;
+
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
@@ -30,9 +33,12 @@ import net.kyori.adventure.text.Component;
 
 /**
  * An argument that represents chat with entity selectors
+ * 
  * @apiNote Returns a {@link Component} object
  */
-public class AdventureChatArgument extends Argument<Component> implements IGreedyArgument {
+public class AdventureChatArgument extends Argument<Component> implements IGreedyArgument, IPreviewable<AdventureChatArgument> {
+
+	private Function<PreviewInfo, Component> preview;
 
 	/**
 	 * Constructs a Chat argument with a given node name. Represents fancy greedy
@@ -42,10 +48,10 @@ public class AdventureChatArgument extends Argument<Component> implements IGreed
 	 */
 	public AdventureChatArgument(String nodeName) {
 		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentChat());
-		
+
 		try {
 			Class.forName("net.kyori.adventure.text.Component");
-		} catch(ClassNotFoundException e) {
+		} catch (ClassNotFoundException e) {
 			throw new PaperAdventureNotFoundException(this.getClass());
 		}
 	}
@@ -54,15 +60,26 @@ public class AdventureChatArgument extends Argument<Component> implements IGreed
 	public Class<Component> getPrimitiveType() {
 		return Component.class;
 	}
-	
+
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.ADVENTURE_CHAT;
 	}
-	
+
 	@Override
 	public <CommandListenerWrapper> Component parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getAdventureChat(cmdCtx, key);
+	}
+
+	@Override
+	public AdventureChatArgument withPreview(Function<PreviewInfo, Component> preview) {
+		this.preview = preview;
+		return this;
+	}
+
+	@Override
+	public Optional<Function<PreviewInfo, Component>> getPreview() {
+		return Optional.ofNullable(preview);
 	}
 }

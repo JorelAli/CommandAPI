@@ -20,12 +20,16 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import java.util.Optional;
+import java.util.function.Function;
+
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.exceptions.SpigotNotFoundException;
 import dev.jorel.commandapi.nms.NMS;
+import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 /**
@@ -33,8 +37,10 @@ import net.md_5.bungee.api.chat.BaseComponent;
  * 
  * @apiNote Returns a {@link BaseComponent}{@code []} object
  */
-public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyArgument {
+public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyArgument, IPreviewable<ChatArgument> {
 
+	private Function<PreviewInfo, Component> preview;
+	
 	/**
 	 * Constructs a Chat argument with a given node name. Represents fancy greedy
 	 * strings that can parse entity selectors
@@ -65,5 +71,16 @@ public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyAr
 	public <CommandListenerWrapper> BaseComponent[] parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getChat(cmdCtx, key);
+	}
+
+	@Override
+	public ChatArgument withPreview(Function<PreviewInfo, Component> preview) {
+		this.preview = preview;
+		return this;
+	}
+
+	@Override
+	public Optional<Function<PreviewInfo, Component>> getPreview() {
+		return Optional.ofNullable(preview);
 	}
 }

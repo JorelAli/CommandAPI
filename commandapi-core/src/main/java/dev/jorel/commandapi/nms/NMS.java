@@ -75,6 +75,8 @@ import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 public interface NMS<CommandListenerWrapper> {
+	
+	public default void hook(Player player) {};
 
 	/* Argument types */
 	ArgumentType<?> _ArgumentAngle();

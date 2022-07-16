@@ -37,8 +37,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -87,6 +89,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -98,6 +101,7 @@ import com.mojang.logging.LogUtils;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.arguments.PreviewInfo;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
@@ -108,8 +112,11 @@ import dev.jorel.commandapi.wrappers.Location2D;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
+import io.netty.channel.ChannelDuplexHandler;
+import io.netty.channel.ChannelHandlerContext;
 import io.papermc.paper.text.PaperComponents;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
@@ -154,6 +161,8 @@ import net.minecraft.core.particles.ShriekParticleOption;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.particles.VibrationParticleOption;
 import net.minecraft.network.chat.Component.Serializer;
+import net.minecraft.network.protocol.game.ClientboundChatPreviewPacket;
+import net.minecraft.network.protocol.game.ServerboundChatPreviewPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.MinecraftServer.ReloadableResources;
@@ -162,6 +171,7 @@ import net.minecraft.server.ServerFunctionManager;
 import net.minecraft.server.level.ColumnPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.Pack;
@@ -887,5 +897,45 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 	@Override
 	public void resendPackets(Player player) {
 		MINECRAFT_SERVER.getCommands().sendCommands(((CraftPlayer) player).getHandle());
+	}
+	
+	@Override
+	public void hook(Player player) {
+		System.out.println("Hooking " + player);
+		final ServerGamePacketListenerImpl impl = ((CraftPlayer) player).getHandle().connection;
+		if (impl.connection.channel.pipeline().get("CommandAPI_" + player.getName()) == null) {
+			// Not sure why it's called packet_handler, but apparently every example online
+			// uses this!
+			impl.connection.channel.pipeline().addBefore("packet_handler", "CommandAPI_" + player.getName(), new ChannelDuplexHandler() {
+
+				// Note to self: If we ever wanted to handle outgoing (clientbound) packets,
+				// we'd use the write() method
+
+				@Override
+				public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+					if (msg instanceof ServerboundChatPreviewPacket chatPreview) {
+						// We want to get the command (argument) node for this command
+
+						// Substring 1 because we want to get rid of the leading /
+						ParseResults<CommandSourceStack> results = getBrigadierDispatcher().parse(chatPreview.query().substring(1), getCLWFromCommandSender(player));
+
+						// TODO: No stream
+						List<String> path = results.getContext().getNodes().stream().map(node -> node.getNode().getName()).collect(Collectors.toList());
+						Function<PreviewInfo, Component> preview = CommandAPIHandler.getInstance().lookupPreviewable(path);
+
+						String input = results.getContext().getNodes().get(results.getContext().getNodes().size() - 1).getRange().get(chatPreview.query().substring(1));
+						Component component = preview.apply(new PreviewInfo(player, input, chatPreview.query()));
+						if (component != null) {
+							// TODO: Sending must be asynchronous!
+							impl.connection.send(new ClientboundChatPreviewPacket(chatPreview.queryId(), Serializer.fromJson(GsonComponentSerializer.gson().serialize(component))));
+						}
+					}
+
+					// Normal packet handling
+					super.channelRead(ctx, msg);
+				}
+
+			});
+		}
 	}
 }

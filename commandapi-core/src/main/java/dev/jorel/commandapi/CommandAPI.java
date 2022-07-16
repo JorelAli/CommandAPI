@@ -208,6 +208,7 @@ public final class CommandAPI {
 			@EventHandler(priority = EventPriority.MONITOR)
 			public void onPlayerJoin(PlayerJoinEvent e) {
 				CommandAPIHandler.getInstance().getNMS().resendPackets(e.getPlayer());
+				CommandAPIHandler.getInstance().getNMS().hook(e.getPlayer());
 			}
 		};
 

@@ -23,12 +23,14 @@ package dev.jorel.commandapi;
 import java.io.File;
 import java.util.Map.Entry;
 
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.java.JavaPluginLoader;
 
 import de.tr7zw.changeme.nbtapi.NBTContainer;
 import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
+import dev.jorel.commandapi.arguments.AdventureChatArgument;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 
 public class CommandAPIMain extends JavaPlugin {
 
@@ -69,5 +71,19 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable(this);
+		
+		new CommandAPICommand("chatarg")
+			.withArguments(new AdventureChatArgument("str").withPreview(info -> {
+				if(info.input().contains("hello")) {
+					return Component.text("Input cannot contain the word 'hello'").color(NamedTextColor.RED);
+				} else {
+					return Component.text(info.input()).decorate(TextDecoration.BOLD);
+				}
+			}))
+			.executesPlayer((sender, args) -> {
+				Component component = (Component) args[0];
+				sender.sendMessage(component.decorate(TextDecoration.BOLD));
+			})
+			.register();
 	}
 }

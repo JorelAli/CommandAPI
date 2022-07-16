@@ -36,6 +36,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.bukkit.Bukkit;
@@ -63,10 +64,13 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.ICustomProvidedArgument;
+import dev.jorel.commandapi.arguments.IPreviewable;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
+import dev.jorel.commandapi.arguments.PreviewInfo;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.preprocessor.RequireField;
+import net.kyori.adventure.text.Component;
 
 /**
  * Handles the main backend of the CommandAPI. This constructs brigadier Command
@@ -151,6 +155,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	final NMS<CommandSourceStack> NMS;
 	final CommandDispatcher<CommandSourceStack> DISPATCHER;
 	final List<RegisteredCommand> registeredCommands; // Keep track of what has been registered for type checking
+	final Map<List<String>, Optional<Function<PreviewInfo, Component>>> previewableArguments; // Arguments with previewable chat
 	private PaperImplementations paper;
 
 	@SuppressWarnings("unchecked")
@@ -164,6 +169,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		}
 		DISPATCHER = NMS.getBrigadierDispatcher();
 		registeredCommands = new ArrayList<>();
+		previewableArguments = new HashMap<>();
 		this.paper = new PaperImplementations(false, NMS);
 	}
 
@@ -670,6 +676,21 @@ public class CommandAPIHandler<CommandSourceStack> {
 			}
 			registeredCommands.add(new RegisteredCommand(commandName, argumentsString, shortDescription, fullDescription, aliases, permission));
 		}
+		
+		// Handle previewable arguments
+		if(args.length > 0 && args[args.length - 1] instanceof IPreviewable<?> previewable) {
+			List<String> path = new ArrayList<>();
+			
+			path.add(commandName);
+			for(Argument<?> arg : args) {
+				path.add(arg.getNodeName());
+			}
+			for(String alias : aliases) {
+				// TODO: Do the same for aliases as well
+			}
+			
+			previewableArguments.put(path, previewable.getPreview());
+		}
 
 		if (Bukkit.getPluginCommand(commandName) != null) {
 			CommandAPI.logWarning("Plugin command /" + commandName + " is registered by Bukkit ("
@@ -871,6 +892,15 @@ public class CommandAPIHandler<CommandSourceStack> {
 					: getArgument(args, nodeName).getIncludedSuggestions();
 			return suggestionsToAddOrOverride.orElse(ArgumentSuggestions.empty()).suggest(suggestionInfo, builder);
 		};
+	}
+	
+	public Function<PreviewInfo, Component> lookupPreviewable(List<String> keySet) {
+		System.out.println("Looking for " + keySet + " in " + previewableArguments);
+		Optional<Function<PreviewInfo, Component>> function = previewableArguments.getOrDefault(keySet, Optional.empty());
+		if(function.isPresent()) {
+			System.out.println("Found value!");
+		}
+		return function.orElseGet(() -> info -> null);
 	}
 
 	/////////////////////////
