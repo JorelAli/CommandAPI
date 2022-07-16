@@ -23,6 +23,7 @@ package dev.jorel.commandapi;
 import java.io.File;
 import java.util.Map.Entry;
 
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.tr7zw.changeme.nbtapi.NBTContainer;
@@ -75,7 +76,8 @@ public class CommandAPIMain extends JavaPlugin {
 		new CommandAPICommand("chatarg")
 			.withArguments(new AdventureChatArgument("str").withPreview(info -> {
 				if(info.input().contains("hello")) {
-					return Component.text("Input cannot contain the word 'hello'").color(NamedTextColor.RED);
+					throw CommandAPI.fail(ChatColor.RED + "Input cannot contain the word 'hello'");
+					// return Component.text("Input cannot contain the word 'hello'").color(NamedTextColor.RED);
 				} else {
 					return Component.text(info.input()).decorate(TextDecoration.BOLD);
 				}

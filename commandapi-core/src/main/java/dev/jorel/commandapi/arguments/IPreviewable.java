@@ -1,9 +1,8 @@
 package dev.jorel.commandapi.arguments;
 
 import java.util.Optional;
-import java.util.function.Function;
 
-import net.kyori.adventure.text.Component;
+import dev.jorel.commandapi.wrappers.Preview;
 
 /**
  * An interface representing that the argument can be previewed using
@@ -12,8 +11,8 @@ import net.kyori.adventure.text.Component;
  */
 public interface IPreviewable<T extends Argument<?>> {
 
-	public T withPreview(Function<PreviewInfo, Component> preview);
+	public T withPreview(Preview preview);
 	
-	public Optional<Function<PreviewInfo, Component>> getPreview();
+	public Optional<Preview> getPreview();
 	
 }

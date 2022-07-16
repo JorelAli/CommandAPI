@@ -37,7 +37,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
@@ -104,6 +103,7 @@ import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.PreviewInfo;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
+import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
@@ -112,6 +112,7 @@ import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.Location2D;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import dev.jorel.commandapi.wrappers.ParticleData;
+import dev.jorel.commandapi.wrappers.Preview;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelDuplexHandler;
@@ -778,14 +779,26 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 						for(ParsedCommandNode<CommandSourceStack> commandNode : results.getContext().getNodes()) {
 							path.add(commandNode.getNode().getName());
 						}
-						Function<PreviewInfo, Component> preview = CommandAPIHandler.getInstance().lookupPreviewable(path);
+						Preview preview = CommandAPIHandler.getInstance().lookupPreviewable(path);
 
 						// Calculate the (argument) input and generate the component to send
 						String input = results.getContext().getNodes().get(results.getContext().getNodes().size() - 1).getRange().get(chatPreview.query().substring(1));
-						Component component = preview.apply(new PreviewInfo(player, input, chatPreview.query()));
-						if (component != null) {
+						
+						final Component finalComponent;
+						{
+							Component component;
+							try {
+								component = preview.generatePreview(new PreviewInfo(player, input, chatPreview.query()));
+							} catch(WrapperCommandSyntaxException e) {
+								// TODO: We may have to do legacy chat format parsing here
+								component = Component.text(e.getMessage());
+							}
+							finalComponent = component;
+						}
+							
+						if (finalComponent != null) {
 							Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> 
-								impl.connection.send(new ClientboundChatPreviewPacket(chatPreview.queryId(), Serializer.fromJson(GsonComponentSerializer.gson().serialize(component))))
+								impl.connection.send(new ClientboundChatPreviewPacket(chatPreview.queryId(), Serializer.fromJson(GsonComponentSerializer.gson().serialize(finalComponent))))
 							);
 						}
 					}

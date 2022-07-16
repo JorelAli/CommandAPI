@@ -36,7 +36,6 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.bukkit.Bukkit;
@@ -71,6 +70,7 @@ import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.PreviewInfo;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.preprocessor.RequireField;
+import dev.jorel.commandapi.wrappers.Preview;
 import net.kyori.adventure.text.Component;
 
 /**
@@ -162,7 +162,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	final NMS<CommandSourceStack> NMS;
 	final CommandDispatcher<CommandSourceStack> DISPATCHER;
 	final List<RegisteredCommand> registeredCommands; // Keep track of what has been registered for type checking
-	final Map<List<String>, Optional<Function<PreviewInfo, Component>>> previewableArguments; // Arguments with previewable chat
+	final Map<List<String>, Optional<Preview>> previewableArguments; // Arguments with previewable chat
 	private PaperImplementations paper;
 
 	@SuppressWarnings("unchecked")
@@ -916,7 +916,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 *         {@link Component}. If such a function is not available, this will
 	 *         return a function that always returns null.
 	 */
-	public Function<PreviewInfo, Component> lookupPreviewable(List<String> path) {
+	public Preview lookupPreviewable(List<String> path) {
 		return previewableArguments.getOrDefault(path, Optional.empty()).orElseGet(() -> info -> null);
 	}
 

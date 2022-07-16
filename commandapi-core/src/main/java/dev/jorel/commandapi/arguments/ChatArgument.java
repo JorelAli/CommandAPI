@@ -21,15 +21,18 @@
 package dev.jorel.commandapi.arguments;
 
 import java.util.Optional;
-import java.util.function.Function;
+
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.exceptions.SpigotNotFoundException;
+import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.nms.NMS;
-import net.kyori.adventure.text.Component;
+import dev.jorel.commandapi.wrappers.Preview;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 /**
@@ -39,7 +42,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
  */
 public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyArgument, IPreviewable<ChatArgument> {
 
-	private Function<PreviewInfo, Component> preview;
+	private Preview preview;
 	
 	/**
 	 * Constructs a Chat argument with a given node name. Represents fancy greedy
@@ -70,17 +73,25 @@ public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyAr
 	@Override
 	public <CommandListenerWrapper> BaseComponent[] parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		final CommandSender sender = nms.getCommandSenderFromCSS(cmdCtx.getSource());
+		if(getPreview().isPresent() && sender instanceof Player player) {
+			try {
+				getPreview().get().generatePreview(new PreviewInfo(player, CommandAPIHandler.getRawArgumentInput(cmdCtx, key), cmdCtx.getInput()));
+			} catch (WrapperCommandSyntaxException e) {
+				throw e.getException();
+			}
+		}
 		return nms.getChat(cmdCtx, key);
 	}
 
 	@Override
-	public ChatArgument withPreview(Function<PreviewInfo, Component> preview) {
+	public ChatArgument withPreview(Preview preview) {
 		this.preview = preview;
 		return this;
 	}
 
 	@Override
-	public Optional<Function<PreviewInfo, Component>> getPreview() {
+	public Optional<Preview> getPreview() {
 		return Optional.ofNullable(preview);
 	}
 }

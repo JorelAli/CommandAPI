@@ -21,14 +21,18 @@
 package dev.jorel.commandapi.arguments;
 
 import java.util.Optional;
-import java.util.function.Function;
+
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.exceptions.PaperAdventureNotFoundException;
+import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.wrappers.Preview;
 import net.kyori.adventure.text.Component;
 
 /**
@@ -38,7 +42,7 @@ import net.kyori.adventure.text.Component;
  */
 public class AdventureChatArgument extends Argument<Component> implements IGreedyArgument, IPreviewable<AdventureChatArgument> {
 
-	private Function<PreviewInfo, Component> preview;
+	private Preview preview;
 
 	/**
 	 * Constructs a Chat argument with a given node name. Represents fancy greedy
@@ -69,17 +73,25 @@ public class AdventureChatArgument extends Argument<Component> implements IGreed
 	@Override
 	public <CommandListenerWrapper> Component parseArgument(NMS<CommandListenerWrapper> nms,
 		CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		final CommandSender sender = nms.getCommandSenderFromCSS(cmdCtx.getSource());
+		if(getPreview().isPresent() && sender instanceof Player player) {
+			try {
+				getPreview().get().generatePreview(new PreviewInfo(player, CommandAPIHandler.getRawArgumentInput(cmdCtx, key), cmdCtx.getInput()));
+			} catch (WrapperCommandSyntaxException e) {
+				throw e.getException();
+			}
+		}
 		return nms.getAdventureChat(cmdCtx, key);
 	}
 
 	@Override
-	public AdventureChatArgument withPreview(Function<PreviewInfo, Component> preview) {
+	public AdventureChatArgument withPreview(Preview preview) {
 		this.preview = preview;
 		return this;
 	}
 
 	@Override
-	public Optional<Function<PreviewInfo, Component>> getPreview() {
+	public Optional<Preview> getPreview() {
 		return Optional.ofNullable(preview);
 	}
 }
