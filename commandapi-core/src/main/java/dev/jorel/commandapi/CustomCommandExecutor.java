@@ -49,7 +49,7 @@ import dev.jorel.commandapi.executors.IExecutorTyped;
  *
  * @param <T> a command sender
  */
-class CustomCommandExecutor<T extends CommandSender> {
+public class CustomCommandExecutor<T extends CommandSender> {
 
 	private List<IExecutorNormal<T>> normalExecutors;
 	private List<IExecutorResulting<T>> resultingExecutors;
