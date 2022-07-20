@@ -59,6 +59,10 @@ public final class CommandAPI {
 	static Logger logger;
 	private static boolean loaded;
 
+	public static boolean isLoaded(){
+		return loaded;
+	}
+
 	/**
 	 * Returns the internal configuration used to manage the CommandAPI
 	 * 
