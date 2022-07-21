@@ -42,6 +42,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.permissions.Permission;
 
@@ -63,10 +64,14 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.ICustomProvidedArgument;
+import dev.jorel.commandapi.arguments.IPreviewable;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
+import dev.jorel.commandapi.arguments.PreviewInfo;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.preprocessor.RequireField;
+import dev.jorel.commandapi.wrappers.Preview;
+import net.kyori.adventure.text.Component;
 
 /**
  * Handles the main backend of the CommandAPI. This constructs brigadier Command
@@ -143,6 +148,12 @@ public class CommandAPIHandler<CommandSourceStack> {
 	}
 	
 	static void onDisable() {
+		if(instance != null) {
+			for(Player player : Bukkit.getOnlinePlayers()) {
+				instance.NMS.unhookChatPreview(player);
+			}
+		}
+		
 		instance = null;
 	}
 
@@ -151,6 +162,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	final NMS<CommandSourceStack> NMS;
 	final CommandDispatcher<CommandSourceStack> DISPATCHER;
 	final List<RegisteredCommand> registeredCommands; // Keep track of what has been registered for type checking
+	final Map<List<String>, Optional<Preview>> previewableArguments; // Arguments with previewable chat
 	private PaperImplementations paper;
 
 	@SuppressWarnings("unchecked")
@@ -164,6 +176,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		}
 		DISPATCHER = NMS.getBrigadierDispatcher();
 		registeredCommands = new ArrayList<>();
+		previewableArguments = new HashMap<>();
 		this.paper = new PaperImplementations(false, NMS);
 	}
 
@@ -670,6 +683,24 @@ public class CommandAPIHandler<CommandSourceStack> {
 			}
 			registeredCommands.add(new RegisteredCommand(commandName, argumentsString, shortDescription, fullDescription, aliases, permission));
 		}
+		
+		// Handle previewable arguments
+		if(args.length > 0 && args[args.length - 1] instanceof IPreviewable<?> previewable) {
+			List<String> path = new ArrayList<>();
+			
+			path.add(commandName);
+			for(Argument<?> arg : args) {
+				path.add(arg.getNodeName());
+			}
+			previewableArguments.put(List.copyOf(path), previewable.getPreview());
+
+			// And aliases
+			for(String alias : aliases) {
+				path.remove(0);
+				path.add(alias);
+				previewableArguments.put(List.copyOf(path), previewable.getPreview());
+			}
+		}
 
 		if (Bukkit.getPluginCommand(commandName) != null) {
 			CommandAPI.logWarning("Plugin command /" + commandName + " is registered by Bukkit ("
@@ -871,6 +902,22 @@ public class CommandAPIHandler<CommandSourceStack> {
 					: getArgument(args, nodeName).getIncludedSuggestions();
 			return suggestionsToAddOrOverride.orElse(ArgumentSuggestions.empty()).suggest(suggestionInfo, builder);
 		};
+	}
+	
+	/**
+	 * Looks up the function to generate a chat preview for a path of nodes in the
+	 * command tree. This is a method internal to the CommandAPI and isn't expected
+	 * to be used by plugin developers (but you're more than welcome to use it as
+	 * you see fit).
+	 * 
+	 * @param path a list of Strings representing the path (names of command nodes)
+	 *             to (and including) the previewable argument
+	 * @return a function that takes in a {@link PreviewInfo} and returns a
+	 *         {@link Component}. If such a function is not available, this will
+	 *         return a function that always returns null.
+	 */
+	public Preview lookupPreviewable(List<String> path) {
+		return previewableArguments.getOrDefault(path, Optional.empty()).orElseGet(() -> info -> null);
 	}
 
 	/////////////////////////

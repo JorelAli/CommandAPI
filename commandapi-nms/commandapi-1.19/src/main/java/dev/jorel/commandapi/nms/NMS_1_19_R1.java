@@ -81,6 +81,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.ComplexRecipe;
 import org.bukkit.inventory.Recipe;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 
 import com.google.common.collect.ImmutableList;
@@ -108,6 +109,7 @@ import dev.jorel.commandapi.wrappers.Location2D;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
+import io.netty.channel.Channel;
 import io.papermc.paper.text.PaperComponents;
 import net.kyori.adventure.text.Component;
 import net.minecraft.commands.CommandBuildContext;
@@ -743,6 +745,16 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 		return (css.getLevel() == null) ? null : css.getLevel().getWorld();
 	}
 
+	@Differs(from = "1.18.2", by = "Chat preview!")
+	@Override
+	public void hookChatPreview(Plugin plugin, Player player) {
+		final Channel playerChannel = ((CraftPlayer) player).getHandle().connection.connection.channel;
+		if (playerChannel.pipeline().get("CommandAPI_" + player.getName()) == null) {
+			// Not sure why it's called packet_handler, but every example online uses this!
+			playerChannel.pipeline().addBefore("packet_handler", "CommandAPI_" + player.getName(), new NMS_1_19_R1_ChatPreviewHandler(this, plugin, player));
+		}
+	}
+
 	@Override
 	public boolean isVanillaCommandWrapper(Command command) {
 		return command instanceof VanillaCommandWrapper;
@@ -883,9 +895,18 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 							+ stringWriter.toString());
 		}
 	}
-
+	
 	@Override
 	public void resendPackets(Player player) {
 		MINECRAFT_SERVER.getCommands().sendCommands(((CraftPlayer) player).getHandle());
+	}
+	
+	@Differs(from = "1.18.2", by = "Chat preview!")
+	@Override
+	public void unhookChatPreview(Player player) {
+		final Channel channel = ((CraftPlayer) player).getHandle().connection.connection.channel;
+		if (channel.pipeline().get("CommandAPI_" + player.getName()) != null) {
+			channel.eventLoop().submit(() -> channel.pipeline().remove("CommandAPI_" + player.getName()));
+		}
 	}
 }
