@@ -1,5 +1,10 @@
 package dev.jorel.commandapi;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
+import org.bukkit.command.CommandSender;
+
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.CommandBlockCommandExecutor;
 import dev.jorel.commandapi.executors.CommandBlockResultingCommandExecutor;
@@ -16,8 +21,6 @@ import dev.jorel.commandapi.executors.PlayerResultingCommandExecutor;
 import dev.jorel.commandapi.executors.ProxyCommandExecutor;
 import dev.jorel.commandapi.executors.ProxyResultingCommandExecutor;
 import dev.jorel.commandapi.executors.ResultingCommandExecutor;
-import org.bukkit.command.CommandSender;
-import java.util.Collections;
 
 /**
  * This class represents something that is executable. This is mostly, {@link CommandAPICommand} instances, or can also be {@link CommandTree} nodes and even {@link Argument} nodes in a tree
@@ -254,9 +257,9 @@ abstract class Executable<T extends Executable<T>> {
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
-	public T clearExecutors(){
-		this.executor.setNormalExecutors(Collections.emptyList());
-		this.executor.setResultingExecutors(Collections.emptyList());
+	public T clearExecutors() {
+		this.executor.setNormalExecutors(new ArrayList<>());
+		this.executor.setResultingExecutors(new ArrayList<>());
 		return (T) this;
 	}
 

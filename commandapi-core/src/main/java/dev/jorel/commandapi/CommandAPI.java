@@ -59,7 +59,14 @@ public final class CommandAPI {
 	static Logger logger;
 	private static boolean loaded;
 
-	public static boolean isLoaded(){
+	/**
+	 * Returns whether the CommandAPI is currently loaded. This should be true when
+	 * {@link CommandAPI#onLoad(CommandAPIConfig)} is called. If the CommandAPI is
+	 * loaded, commands are available to register.
+	 * 
+	 * @return whether the CommandAPI has been loaded properly
+	 */
+	public static boolean isLoaded() {
 		return loaded;
 	}
 
@@ -155,24 +162,6 @@ public final class CommandAPI {
 	 */
 	public static void logError(String message) {
 		getLogger().severe(message);
-	}
-
-	/**
-	 * Initializes the CommandAPI for loading. This should be placed at the start of
-	 * your <code>onLoad()</code> method.
-	 * 
-	 * @param verbose if true, enables verbose output for the CommandAPI
-	 * @deprecated Use {@link CommandAPI#onLoad(CommandAPIConfig)} instead
-	 */
-	@Deprecated(forRemoval = true)
-	public static void onLoad(boolean verbose) {
-		if (!loaded) {
-			CommandAPI.config = new InternalConfig(new CommandAPIConfig().verboseOutput(verbose));
-			CommandAPIHandler.getInstance().checkDependencies();
-			loaded = true;
-		} else {
-			getLogger().severe("You've tried to call the CommandAPI's onLoad() method more than once!");
-		}
 	}
 
 	/**
