@@ -1,10 +1,10 @@
 package dev.jorel.commandapi;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import org.bukkit.command.CommandSender;
 
+import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.CommandBlockCommandExecutor;
 import dev.jorel.commandapi.executors.CommandBlockResultingCommandExecutor;
