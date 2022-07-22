@@ -23,6 +23,7 @@ package dev.jorel.commandapi;
 import java.io.File;
 import java.util.Map.Entry;
 
+import dev.jorel.commandapi.exceptions.PaperAdventureNotFoundException;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -71,20 +72,25 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable(this);
-		
-		new CommandAPICommand("chatarg")
-			.withArguments(new AdventureChatArgument("str").withPreview(info -> {
-				if(info.input().contains("hello")) {
-					throw CommandAPI.fail(ChatColor.RED + "Input cannot contain the word 'hello'");
-					// return Component.text("Input cannot contain the word 'hello'").color(NamedTextColor.RED);
-				} else {
-					return Component.text(info.input()).decorate(TextDecoration.BOLD);
-				}
-			}))
-			.executesPlayer((sender, args) -> {
-				Component component = (Component) args[0];
-				sender.sendMessage(component.decorate(TextDecoration.BOLD));
-			})
-			.register();
+
+		try {
+			new CommandAPICommand("chatarg")
+				.withArguments(new AdventureChatArgument("str").withPreview(info -> {
+					if (info.input().contains("hello")) {
+						throw CommandAPI.fail(ChatColor.RED + "Input cannot contain the word 'hello'");
+						// return Component.text("Input cannot contain the word 'hello'").color(NamedTextColor.RED);
+					} else {
+						return Component.text(info.input()).decorate(TextDecoration.BOLD);
+					}
+				}))
+				.executesPlayer((sender, args) -> {
+					Component component = (Component) args[0];
+					sender.sendMessage(component.decorate(TextDecoration.BOLD));
+				})
+				.register();
+		} catch (PaperAdventureNotFoundException ignored){
+			// just not using paper, not a problem
+			// example planned to be removed
+		}
 	}
 }

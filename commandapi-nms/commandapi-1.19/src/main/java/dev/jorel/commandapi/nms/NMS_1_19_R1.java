@@ -748,10 +748,12 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 	@Differs(from = "1.18.2", by = "Chat preview!")
 	@Override
 	public void hookChatPreview(Plugin plugin, Player player) {
-		final Channel playerChannel = ((CraftPlayer) player).getHandle().connection.connection.channel;
-		if (playerChannel.pipeline().get("CommandAPI_" + player.getName()) == null) {
-			// Not sure why it's called packet_handler, but every example online uses this!
-			playerChannel.pipeline().addBefore("packet_handler", "CommandAPI_" + player.getName(), new NMS_1_19_R1_ChatPreviewHandler(this, plugin, player));
+		if(Bukkit.shouldSendChatPreviews()) {
+			final Channel playerChannel = ((CraftPlayer) player).getHandle().connection.connection.channel;
+			if (playerChannel.pipeline().get("CommandAPI_" + player.getName()) == null) {
+				// Not sure why it's called packet_handler, but every example online uses this!
+				playerChannel.pipeline().addBefore("packet_handler", "CommandAPI_" + player.getName(), new NMS_1_19_R1_ChatPreviewHandler(this, plugin, player));
+			}
 		}
 	}
 
@@ -904,9 +906,11 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 	@Differs(from = "1.18.2", by = "Chat preview!")
 	@Override
 	public void unhookChatPreview(Player player) {
-		final Channel channel = ((CraftPlayer) player).getHandle().connection.connection.channel;
-		if (channel.pipeline().get("CommandAPI_" + player.getName()) != null) {
-			channel.eventLoop().submit(() -> channel.pipeline().remove("CommandAPI_" + player.getName()));
+		if(Bukkit.shouldSendChatPreviews()) {
+			final Channel channel = ((CraftPlayer) player).getHandle().connection.connection.channel;
+			if (channel.pipeline().get("CommandAPI_" + player.getName()) != null) {
+				channel.eventLoop().submit(() -> channel.pipeline().remove("CommandAPI_" + player.getName()));
+			}
 		}
 	}
 }

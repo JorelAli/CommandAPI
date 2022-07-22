@@ -203,16 +203,12 @@ public final class CommandAPI {
 			@EventHandler(priority = EventPriority.MONITOR)
 			public void onPlayerJoin(PlayerJoinEvent e) {
 				CommandAPIHandler.getInstance().getNMS().resendPackets(e.getPlayer());
-				if(Bukkit.shouldSendChatPreviews()) {
-					CommandAPIHandler.getInstance().getNMS().hookChatPreview(plugin, e.getPlayer());
-				}
+				CommandAPIHandler.getInstance().getNMS().hookChatPreview(plugin, e.getPlayer());
 			}
 			
 			@EventHandler
 			public void onPlayerQuit(PlayerQuitEvent e) {
-				if(Bukkit.shouldSendChatPreviews()) {
-					CommandAPIHandler.getInstance().getNMS().unhookChatPreview(e.getPlayer());
-				}
+				CommandAPIHandler.getInstance().getNMS().unhookChatPreview(e.getPlayer());
 			}
 		};
 
