@@ -20,6 +20,15 @@
  *******************************************************************************/
 package dev.jorel.commandapi.nms;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Iterator;
+import java.util.concurrent.CompletableFuture;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Keyed;
+import org.bukkit.inventory.Recipe;
+
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
@@ -27,23 +36,16 @@ import net.minecraft.Util;
 import net.minecraft.server.ServerFunctionLibrary;
 import net.minecraft.server.ServerResources;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
-import org.bukkit.Bukkit;
-import org.bukkit.Keyed;
-import org.bukkit.inventory.Recipe;
-
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Iterator;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * NMS implementation for Minecraft 1.17
  */
-@NMSMeta(compatibleWith = { "1.17"})
+@NMSMeta(compatibleWith = { "1.17" })
 public class NMS_1_17 extends NMS_1_17_Common {
+
 	@Override
 	public String[] compatibleVersions() {
-		return new String[] { "1.17"};
+		return new String[] { "1.17" };
 	}
 
 	@Override

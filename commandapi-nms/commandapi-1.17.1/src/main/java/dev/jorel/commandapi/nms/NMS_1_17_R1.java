@@ -39,8 +39,9 @@ import java.util.concurrent.CompletableFuture;
 /**
  * NMS implementation for Minecraft 1.17.1
  */
-@NMSMeta(compatibleWith = { "1.17.1"})
+@NMSMeta(compatibleWith = { "1.17.1" })
 public class NMS_1_17_R1 extends NMS_1_17_Common {
+
 	@Override
 	public String[] compatibleVersions() {
 		return new String[] { "1.17.1" };
