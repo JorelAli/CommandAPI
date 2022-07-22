@@ -195,9 +195,7 @@ public abstract class NMS_1_17_Common extends NMS_Common<CommandSourceStack> {
 	}
 
 	@Override
-	public String[] compatibleVersions() {
-		return new String[] { "1.17", "1.17.1" };
-	}
+	public abstract String[] compatibleVersions();
 
 	@Override
 	public String convert(org.bukkit.inventory.ItemStack is) {

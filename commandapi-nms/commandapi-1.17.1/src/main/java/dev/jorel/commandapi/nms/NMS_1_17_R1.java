@@ -42,6 +42,11 @@ import java.util.concurrent.CompletableFuture;
 @NMSMeta(compatibleWith = { "1.17.1"})
 public class NMS_1_17_R1 extends NMS_1_17_Common {
 	@Override
+	public String[] compatibleVersions() {
+		return new String[] { "1.17.1" };
+	}
+
+	@Override
 	public void reloadDataPacks() {
 		CommandAPI.logNormal("Reloading datapacks...");
 
