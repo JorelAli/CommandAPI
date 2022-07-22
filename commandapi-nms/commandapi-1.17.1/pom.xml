@@ -16,8 +16,8 @@
 	DEALINGS IN THE SOFTWARE. -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<parent>
 		<artifactId>commandapi-nms</artifactId>
 		<groupId>dev.jorel</groupId>
@@ -25,10 +25,10 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>commandapi-1.17</artifactId>
+	<artifactId>commandapi-1.17.1</artifactId>
 
 	<properties>
-		<minecraft.mappings>1.17-R0.1-SNAPSHOT</minecraft.mappings>
+		<minecraft.mappings>1.17.1-R0.1-SNAPSHOT</minecraft.mappings>
 		<spigot.version>1.17.1-R0.1-SNAPSHOT</spigot.version>
 	</properties>
 
