@@ -35,6 +35,10 @@
 	
 	<repositories>
 		<repository>
+			<id>codemc-repo</id>
+			<url>https://repo.codemc.io/repository/nms/</url>
+		</repository>
+		<repository>
 			<id>papermc</id>
 			<url>https://papermc.io/repo/repository/maven-public/</url>
 		</repository>
