@@ -231,7 +231,7 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 	}
 
 	@SuppressWarnings("deprecation")
-	private static NamespacedKey fromMinecraftKey(MinecraftKey key) {
+	protected NamespacedKey fromMinecraftKey(MinecraftKey key) {
 		return new NamespacedKey(key.getNamespace(), key.getKey());
 	}
 
