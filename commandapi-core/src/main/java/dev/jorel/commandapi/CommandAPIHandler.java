@@ -37,6 +37,7 @@ import java.util.Optional;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -294,14 +295,14 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 * @return a brigadier command which is registered internally
 	 * @throws CommandSyntaxException if an error occurs when the command is ran
 	 */
-	Command<CommandSourceStack> generateCommand(Argument<?>[] args,
+	Command<CommandSourceStack> generateCommand(CommandMetaData meta, Argument<?>[] args,
 			CustomCommandExecutor<? extends CommandSender> executor, boolean converted) throws CommandSyntaxException {
 
 		// Generate our command from executor
 		return (cmdCtx) -> {
 			CommandSender sender = NMS.getSenderForCommand(cmdCtx, executor.isForceNative());
 			if (converted) {
-				Object[] argObjs = argsToObjectArr(cmdCtx, args);
+				Object[] argObjs = argsToObjectArr(cmdCtx, meta.defaultValues, args);
 				int resultValue = 0;
 
 				// Return a String[] of arguments for converted commands
@@ -333,7 +334,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 
 				return resultValue;
 			} else {
-				return executor.execute(sender, argsToObjectArr(cmdCtx, args));
+				return executor.execute(sender, argsToObjectArr(cmdCtx, meta.defaultValues, args));
 			}
 		};
 	}
@@ -342,19 +343,51 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 * Converts the List&lt;Argument> into an Object[] for command execution
 	 * 
 	 * @param cmdCtx the command context that will execute this command
+	 * @param defaultValues 
 	 * @param args   the map of strings to arguments
 	 * @return an Object[] which can be used in (sender, args) ->
 	 * @throws CommandSyntaxException
 	 */
-	Object[] argsToObjectArr(CommandContext<CommandSourceStack> cmdCtx, Argument<?>[] args)
+	Object[] argsToObjectArr(CommandContext<CommandSourceStack> cmdCtx, Optional<Supplier>[] defaultValues, Argument<?>[] args)
 			throws CommandSyntaxException {
 		// Array for arguments for executor
 		List<Object> argList = new ArrayList<>();
-
-		// Populate array
-		for (Argument<?> argument : args) {
-			if (argument.isListed()) {
-				argList.add(parseArgument(cmdCtx, argument.getNodeName(), argument, argList.toArray()));
+		
+//		Thread.dumpStack();
+		
+		// TODO: Merge the arguments array with the default value array
+		List<Argument<?>> arguments = new ArrayList<>();
+		
+		if(defaultValues.length > args.length) {
+			
+			int nextArgumentPtr = 0;
+			
+			System.out.println("Expanding...");
+			// Expandy boi
+			System.out.println(Arrays.toString(args));
+			System.out.println(Arrays.toString(defaultValues));
+			for(int i = 0; i < defaultValues.length; i++) {
+				if(defaultValues[i].isEmpty()) {
+					arguments.add(args[nextArgumentPtr]);
+					nextArgumentPtr++;
+				} else {
+					arguments.add(null);
+				}
+			}
+		} else {
+			arguments.addAll(Arrays.asList(args));
+		}
+		
+		System.out.println("Generated arguments: " + arguments);
+		
+		for (int i = 0, size = arguments.size(); i < size; i++) {
+			Argument<?> argument = arguments.get(i);
+			if(argument == null) {
+				argList.add(defaultValues[i].get().get());
+			} else {
+				if (argument.isListed()) {
+					argList.add(parseArgument(cmdCtx, argument.getNodeName(), argument, argList.toArray()));
+				}
 			}
 		}
 
@@ -507,15 +540,22 @@ public class CommandAPIHandler<CommandSourceStack> {
 	// SECTION: Registration //
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	/*
-	 * Expands multiliteral arguments and registers all expansions of
-	 * MultiLiteralArguments throughout the provided command. Returns true if
-	 * multiliteral arguments were present (and expanded) and returns false if
-	 * multiliteral arguments were not present.
+	/**
+	 * Expands {@link MultiLiteralArgument}s and registers all expansions of
+	 * {@link MultiLiteralArgument} throughout the provided command. Returns true if
+	 * {@link MultiLiteralArgument}s were present (and expanded) and returns false
+	 * if {@link MultiLiteralArgument}s were not present.
+	 * 
+	 * @param meta      CommandMetaData for the command
+	 * @param args      the array of arguments for this command
+	 * @param executor  the command's executor
+	 * @param converted whether this command is a converted command (via the plugin)
+	 * @return true if a {@link MultiLiteralArgument} was present (and expanded)
+	 * @throws CommandSyntaxException
+	 * @throws IOException
 	 */
 	private boolean expandMultiLiterals(CommandMetaData meta, final Argument<?>[] args,
-			CustomCommandExecutor<? extends CommandSender> executor, boolean converted)
-			throws CommandSyntaxException, IOException {
+		CustomCommandExecutor<? extends CommandSender> executor, boolean converted) throws CommandSyntaxException, IOException {
 
 		// "Expands" our MultiLiterals into Literals
 		for (int index = 0; index < args.length; index++) {
@@ -654,6 +694,8 @@ public class CommandAPIHandler<CommandSourceStack> {
 		if (expandMultiLiterals(meta, args, executor, converted)) {
 			return;
 		}
+		
+		forkOptionalArguments(meta, args, executor, converted);
 
 		// Create a list of argument names
 		StringBuilder builder = new StringBuilder();
@@ -711,7 +753,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		CommandAPI.logInfo("Registering command /" + commandName + " " + builder.toString());
 
 		// Generate the actual command
-		Command<CommandSourceStack> command = generateCommand(args, executor, converted);
+		Command<CommandSourceStack> command = generateCommand(meta, args, executor, converted);
 
 		/*
 		 * The innermost argument needs to be connected to the executor. Then that
@@ -757,6 +799,29 @@ public class CommandAPIHandler<CommandSourceStack> {
 		// partial)
 		// command registration. Generate the dispatcher file!
 		generateDispatcherFile();
+	}
+
+	private boolean forkOptionalArguments(CommandMetaData meta, Argument<?>[] args, CustomCommandExecutor<? extends CommandSender> executor, boolean converted)
+		throws CommandSyntaxException, IOException {
+		// "Expands" our MultiLiterals into Literals
+		for (int index = 0; index < args.length; index++) {
+			// Find the first multiLiteral in the for loop
+			if(args[index].isOptional()) {
+				// Create an Argument[] without the optional argument
+				Argument<?>[] newArgsNoOptional = new Argument[args.length - 1];
+				System.arraycopy(args, 0, newArgsNoOptional, 0, index);
+				System.arraycopy(args, index + 1, newArgsNoOptional, index, args.length - index - 1);
+				
+				Optional[] defaultValues = new Optional[args.length];
+				for(int i = 0; i < args.length; i++) {
+					defaultValues[i] = args[i].defaultValue;
+				}
+				meta.defaultValues = defaultValues;
+				register(meta, newArgsNoOptional, executor, converted);
+				return true;
+			}
+		}
+		return false;
 	}
 
 	// Produce the commandDispatch.json file for debug purposes

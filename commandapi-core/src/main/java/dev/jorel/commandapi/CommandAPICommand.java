@@ -23,7 +23,10 @@ package dev.jorel.commandapi;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
@@ -40,9 +43,11 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 	private List<Argument<?>> args = new ArrayList<>();
 	private List<CommandAPICommand> subcommands = new ArrayList<>();
 	private boolean isConverted;
-	
+	public Map<Integer, Supplier<Object>> optionalDefaultValues = new HashMap<>();
+
 	/**
 	 * Creates a new command builder
+	 * 
 	 * @param commandName The name of the command to create
 	 */
 	public CommandAPICommand(String commandName) {
@@ -52,25 +57,29 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 
 	/**
 	 * Creates a new Command builder
+	 * 
 	 * @param metaData The metadata of the command to create
 	 */
 	protected CommandAPICommand(CommandMetaData metaData) {
 		super(metaData);
 		this.isConverted = false;
 	}
-	
+
 	/**
 	 * Appends the arguments to the current command builder
-	 * @param args A <code>List</code> that represents the arguments that this command can accept
+	 * 
+	 * @param args A <code>List</code> that represents the arguments that this
+	 *             command can accept
 	 * @return this command builder
 	 */
 	public CommandAPICommand withArguments(List<Argument<?>> args) {
 		this.args.addAll(args);
 		return this;
 	}
-	
+
 	/**
 	 * Appends the argument(s) to the current command builder
+	 * 
 	 * @param args Arguments that this command can accept
 	 * @return this command builder
 	 */
@@ -79,19 +88,33 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 		return this;
 	}
 	
+	public <ArgReturnType> CommandAPICommand withOptionalArgument(Argument<ArgReturnType> arg, ArgReturnType defaultValue) {
+		arg.setOptional(true, () -> defaultValue);
+		this.args.add(arg);
+		return this;
+	}
+	
+	public <ArgReturnType> CommandAPICommand withOptionalArgument(Argument<ArgReturnType> arg, Supplier<ArgReturnType> defaultValue) {
+		arg.setOptional(true, defaultValue);
+		this.args.add(arg);
+		return this;
+	}
+
 	/**
 	 * Adds a subcommand to this command builder
-	 * @param subcommand the subcommand to add as a child of this command 
+	 * 
+	 * @param subcommand the subcommand to add as a child of this command
 	 * @return this command builder
 	 */
 	public CommandAPICommand withSubcommand(CommandAPICommand subcommand) {
 		this.subcommands.add(subcommand);
 		return this;
 	}
-	
+
 	/**
 	 * Adds subcommands to this command builder
-	 * @param subcommands the subcommands to add as children of this command 
+	 * 
+	 * @param subcommands the subcommands to add as children of this command
 	 * @return this command builder
 	 */
 	public CommandAPICommand withSubcommands(CommandAPICommand... subcommands) {
@@ -101,6 +124,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 
 	/**
 	 * Returns the list of arguments that this command has
+	 * 
 	 * @return the list of arguments that this command has
 	 */
 	public List<Argument<?>> getArguments() {
@@ -109,6 +133,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 
 	/**
 	 * Sets the arguments that this command has
+	 * 
 	 * @param args the arguments that this command has
 	 */
 	public void setArguments(List<Argument<?>> args) {
@@ -117,6 +142,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 
 	/**
 	 * Returns the list of subcommands that this command has
+	 * 
 	 * @return the list of subcommands that this command has
 	 */
 	public List<CommandAPICommand> getSubcommands() {
@@ -125,6 +151,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 
 	/**
 	 * Sets the list of subcommands that this command has
+	 * 
 	 * @param subcommands the list of subcommands that this command has
 	 */
 	public void setSubcommands(List<CommandAPICommand> subcommands) {
@@ -133,6 +160,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 
 	/**
 	 * Returns whether this command is an automatically converted command
+	 * 
 	 * @return whether this command is an automatically converted command
 	 */
 	public boolean isConverted() {
@@ -143,6 +171,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 	 * Sets a command as "converted". This tells the CommandAPI that this command
 	 * was converted by the CommandAPI's Converter. This should not be used outside
 	 * of the CommandAPI's internal API
+	 * 
 	 * @param isConverted whether this command is converted or not
 	 * @return this command builder
 	 */
@@ -150,10 +179,10 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 		this.isConverted = isConverted;
 		return this;
 	}
-	
-	//Expand subcommands into arguments
+
+	// Expand subcommands into arguments
 	private void flatten(CommandAPICommand rootCommand, List<Argument<?>> prevArguments, CommandAPICommand subcommand) {
-		
+
 		String[] literals = new String[subcommand.meta.aliases.length + 1];
 		literals[0] = subcommand.meta.commandName;
 		System.arraycopy(subcommand.meta.aliases, 0, literals, 1, subcommand.meta.aliases.length);
@@ -161,58 +190,59 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 			.withPermission(subcommand.meta.permission)
 			.withRequirement(subcommand.meta.requirements)
 			.setListed(false);
-		
+
 		prevArguments.add(literal);
-		
-		if(subcommand.executor.hasAnyExecutors()) {	
+
+		if (subcommand.executor.hasAnyExecutors()) {
 			rootCommand.args = prevArguments;
 			rootCommand.withArguments(subcommand.args);
 			rootCommand.executor = subcommand.executor;
-			
+
 			rootCommand.subcommands = new ArrayList<>();
 			rootCommand.register();
 		}
-		
-		for(CommandAPICommand subsubcommand : new ArrayList<>(subcommand.subcommands)) {
+
+		for (CommandAPICommand subsubcommand : new ArrayList<>(subcommand.subcommands)) {
 			flatten(rootCommand, new ArrayList<>(prevArguments), subsubcommand);
 		}
 	}
-	
+
 	@Override
 	public void register() {
-		if(!CommandAPI.canRegister()) {
+		if (!CommandAPI.canRegister()) {
 			CommandAPI.logWarning("Command /" + meta.commandName + " is being registered after the server had loaded. Undefined behavior ahead!");
 		}
 		try {
 			Argument<?>[] argumentsArr = args == null ? new Argument<?>[0] : args.toArray(new Argument<?>[0]);
-			
-			// Check IGreedyArgument constraints 
-			for(int i = 0, numGreedyArgs = 0; i < argumentsArr.length; i++) {
-				if(argumentsArr[i] instanceof IGreedyArgument) {
-					if(++numGreedyArgs > 1 || i != argumentsArr.length - 1) {
+
+			// Check IGreedyArgument constraints
+			for (int i = 0, numGreedyArgs = 0; i < argumentsArr.length; i++) {
+				if (argumentsArr[i] instanceof IGreedyArgument) {
+					if (++numGreedyArgs > 1 || i != argumentsArr.length - 1) {
 						throw new GreedyArgumentException(argumentsArr);
 					}
 				}
 			}
-			
-			//Assign the command's permissions to arguments if the arguments don't already have one
-			for(Argument<?> argument : argumentsArr) {
-				if(argument.getArgumentPermission() == null) {
+
+			// Assign the command's permissions to arguments if the arguments don't already
+			// have one
+			for (Argument<?> argument : argumentsArr) {
+				if (argument.getArgumentPermission() == null) {
 					argument.withPermission(meta.permission);
 				}
 			}
-			
-			if(executor.hasAnyExecutors()) {
+
+			if (executor.hasAnyExecutors()) {
 				CommandAPIHandler.getInstance().register(meta, argumentsArr, executor, isConverted);
 			}
-			
-			for(CommandAPICommand subcommand : this.subcommands) {
+
+			for (CommandAPICommand subcommand : this.subcommands) {
 				flatten(this, new ArrayList<>(), subcommand);
 			}
 		} catch (CommandSyntaxException | IOException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 }

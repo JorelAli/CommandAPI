@@ -22,6 +22,7 @@ package dev.jorel.commandapi;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiPredicate;
 
 import org.bukkit.command.CommandSender;
@@ -121,7 +122,7 @@ public final class Brigadier {
 	 */
 	public static Command fromCommand(CommandAPICommand command) {
 		try {
-			return CommandAPIHandler.getInstance().generateCommand(command.getArguments().toArray(new Argument[0]),
+			return CommandAPIHandler.getInstance().generateCommand(command.meta, command.getArguments().toArray(new Argument[0]),
 					command.getExecutor(), command.isConverted());
 		} catch (CommandSyntaxException e) {
 			e.printStackTrace();
@@ -190,7 +191,7 @@ public final class Brigadier {
 	 * @throws CommandSyntaxException if there was an error during parsing
 	 */
 	public static Object[] parseArguments(CommandContext cmdCtx, List<Argument> args) throws CommandSyntaxException {
-		return CommandAPIHandler.getInstance().argsToObjectArr(cmdCtx, args.toArray(new Argument[0]));
+		return CommandAPIHandler.getInstance().argsToObjectArr(cmdCtx, new Optional[0], args.toArray(new Argument[0]));
 	}
 
 	/**

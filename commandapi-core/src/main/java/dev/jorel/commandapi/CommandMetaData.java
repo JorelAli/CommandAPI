@@ -41,6 +41,8 @@ final class CommandMetaData {
 	 */
 	Optional<String> fullDescription = Optional.empty();
 
+	Optional[] defaultValues = new Optional[0];
+
 	/**
 	 * Create command metadata
 	 * @param commandName The command's name

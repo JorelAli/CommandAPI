@@ -25,14 +25,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
-import dev.jorel.commandapi.ArgumentTree;
 import org.bukkit.command.CommandSender;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import dev.jorel.commandapi.ArgumentTree;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.SuggestionInfo;
@@ -302,6 +303,31 @@ public abstract class Argument<T> extends ArgumentTree {
 	 */
 	public Argument<T> setListed(boolean listed) {
 		this.isListed = listed;
+		return this;
+	}
+	
+	/////////////////
+	// Optionality //
+	/////////////////
+	
+	private boolean isOptional = false;
+	public Optional<Supplier<T>> defaultValue = Optional.empty();
+	
+	/**
+	* @return true if this argument is optional when running the command
+	*/
+	public boolean isOptional() {
+		return this.isOptional;
+	}
+	
+	/**
+	* Sets whether this argument is optional when running the command
+	* @param optional if true, this argument will be optional when running the command
+	* @return this current argument
+	*/
+	public Argument<T> setOptional(boolean optional, Supplier<T> defaultValue) {
+		this.isOptional = optional;
+		this.defaultValue = Optional.of(defaultValue);
 		return this;
 	}
 	
