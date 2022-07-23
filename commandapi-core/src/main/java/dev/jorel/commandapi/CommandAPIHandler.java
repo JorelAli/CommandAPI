@@ -302,7 +302,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		return (cmdCtx) -> {
 			CommandSender sender = NMS.getSenderForCommand(cmdCtx, executor.isForceNative());
 			if (converted) {
-				Object[] argObjs = argsToObjectArr(cmdCtx, meta.defaultValues, args);
+				Object[] argObjs = argsToObjectArr(cmdCtx, meta, args);
 				int resultValue = 0;
 
 				// Return a String[] of arguments for converted commands
@@ -334,7 +334,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 
 				return resultValue;
 			} else {
-				return executor.execute(sender, argsToObjectArr(cmdCtx, meta.defaultValues, args));
+				return executor.execute(sender, argsToObjectArr(cmdCtx, meta, args));
 			}
 		};
 	}
@@ -343,12 +343,12 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 * Converts the List&lt;Argument> into an Object[] for command execution
 	 * 
 	 * @param cmdCtx the command context that will execute this command
-	 * @param defaultValues 
+	 * @param meta 
 	 * @param args   the map of strings to arguments
 	 * @return an Object[] which can be used in (sender, args) ->
 	 * @throws CommandSyntaxException
 	 */
-	Object[] argsToObjectArr(CommandContext<CommandSourceStack> cmdCtx, Optional<Supplier>[] defaultValues, Argument<?>[] args)
+	Object[] argsToObjectArr(CommandContext<CommandSourceStack> cmdCtx, CommandMetaData meta, Argument<?>[] args)
 			throws CommandSyntaxException {
 		// Array for arguments for executor
 		List<Object> argList = new ArrayList<>();
@@ -358,16 +358,16 @@ public class CommandAPIHandler<CommandSourceStack> {
 		// TODO: Merge the arguments array with the default value array
 		List<Argument<?>> arguments = new ArrayList<>();
 		
-		if(defaultValues.length > args.length) {
+		if(meta.defaultValues.length > args.length) {
 			
 			int nextArgumentPtr = 0;
 			
 			System.out.println("Expanding...");
 			// Expandy boi
-			System.out.println(Arrays.toString(args));
-			System.out.println(Arrays.toString(defaultValues));
-			for(int i = 0; i < defaultValues.length; i++) {
-				if(defaultValues[i].isEmpty()) {
+			System.out.println("Arguments: " + Arrays.toString(args));
+			System.out.println("Default values: " + Arrays.toString(meta.defaultValues));
+			for(int i = 0; i < meta.defaultValues.length; i++) {
+				if(meta.defaultValues[i].isEmpty()) {
 					arguments.add(args[nextArgumentPtr]);
 					nextArgumentPtr++;
 				} else {
@@ -378,12 +378,12 @@ public class CommandAPIHandler<CommandSourceStack> {
 			arguments.addAll(Arrays.asList(args));
 		}
 		
-		System.out.println("Generated arguments: " + arguments);
+		System.out.println("Generated arguments for " + meta.commandName + ": " + arguments);
 		
 		for (int i = 0, size = arguments.size(); i < size; i++) {
 			Argument<?> argument = arguments.get(i);
 			if(argument == null) {
-				argList.add(defaultValues[i].get().get());
+				argList.add(((Supplier) meta.defaultValues[i].get()).get());
 			} else {
 				if (argument.isListed()) {
 					argList.add(parseArgument(cmdCtx, argument.getNodeName(), argument, argList.toArray()));

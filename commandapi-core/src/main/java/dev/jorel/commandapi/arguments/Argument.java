@@ -349,5 +349,9 @@ public abstract class Argument<T> extends ArgumentTree {
 		return Arrays.asList(new String[] { null });
 	}
 	
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName() + "<" + nodeName + ">";
+	}
 
 }
