@@ -43,16 +43,9 @@ import dev.jorel.commandapi.arguments.PlayerArgument;
 import dev.jorel.commandapi.arguments.PotionEffectArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.wrappers.Location2D;
-import io.papermc.paper.text.PaperComponents;
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.event.HoverEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.chat.BaseComponentSerializer;
 
 /**
  * Tests for the 40+ arguments in dev.jorel.commandapi.arguments
@@ -429,6 +422,7 @@ public class ArgumentTests {
 		assertEquals(null, type.get());
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Test
 	public void executionTestWithChatComponentArgument() {
 		Mut<BaseComponent[]> spigot = Mut.of();
