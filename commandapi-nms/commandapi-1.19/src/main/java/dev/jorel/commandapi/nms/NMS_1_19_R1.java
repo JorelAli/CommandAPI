@@ -290,6 +290,12 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 		}
 	}
 
+	@Differs(from = "1.18.2", by = "Introduction of chat preview")
+	@Override
+	public boolean canUseChatPreview() {
+		return Bukkit.shouldSendChatPreviews();
+	}
+
 	@Override
 	public String[] compatibleVersions() {
 		return new String[] { "1.19" };

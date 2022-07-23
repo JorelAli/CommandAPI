@@ -63,4 +63,9 @@ public class CustomServerMock extends ServerMock {
 		
 		return suggestionsAsStrings;
 	}
+	
+	@Override
+	public boolean shouldSendChatPreviews() {
+		return true;
+	}
 }

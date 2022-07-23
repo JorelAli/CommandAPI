@@ -199,24 +199,38 @@ public final class CommandAPI {
 			CommandAPIHandler.getInstance().updateHelpForCommands();
 		}, 0L);
 
-		final Listener playerJoinListener = new Listener() {
+		// (Re)send command graph packet to players when they join
+		Bukkit.getServer().getPluginManager().registerEvents(new Listener() {
+
+			// For some reason, any other priority doesn't work
 			@EventHandler(priority = EventPriority.MONITOR)
 			public void onPlayerJoin(PlayerJoinEvent e) {
 				CommandAPIHandler.getInstance().getNMS().resendPackets(e.getPlayer());
-				if(Bukkit.shouldSendChatPreviews()) {
-					CommandAPIHandler.getInstance().getNMS().hookChatPreview(plugin, e.getPlayer());
-				}
 			}
-			
-			@EventHandler
-			public void onPlayerQuit(PlayerQuitEvent e) {
-				if(Bukkit.shouldSendChatPreviews()) {
-					CommandAPIHandler.getInstance().getNMS().unhookChatPreview(e.getPlayer());
-				}
-			}
-		};
 
-		Bukkit.getServer().getPluginManager().registerEvents(playerJoinListener, plugin);
+		}, plugin);
+
+		// On 1.19+, enable chat preview if the server allows it
+		if(CommandAPIHandler.getInstance().getNMS().canUseChatPreview()) {
+			Bukkit.getServer().getPluginManager().registerEvents(new Listener() {
+	
+				@EventHandler
+				public void onPlayerJoin(PlayerJoinEvent e) {
+					if(Bukkit.shouldSendChatPreviews()) {
+						CommandAPIHandler.getInstance().getNMS().hookChatPreview(plugin, e.getPlayer());
+					}
+				}
+				
+				@EventHandler
+				public void onPlayerQuit(PlayerQuitEvent e) {
+					if(Bukkit.shouldSendChatPreviews()) {
+						CommandAPIHandler.getInstance().getNMS().unhookChatPreview(e.getPlayer());
+					}
+				}
+	
+			}, plugin);
+		}
+
 		CommandAPIHandler.getInstance().getPaper().registerReloadHandler(plugin);
 	}
 
