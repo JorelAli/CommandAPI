@@ -32,7 +32,7 @@ import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.exceptions.SpigotNotFoundException;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.nms.NMS;
-import dev.jorel.commandapi.wrappers.Preview;
+import dev.jorel.commandapi.wrappers.PreviewableFunction;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 /**
@@ -40,9 +40,9 @@ import net.md_5.bungee.api.chat.BaseComponent;
  * 
  * @apiNote Returns a {@link BaseComponent}{@code []} object
  */
-public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyArgument, IPreviewable<ChatArgument> {
+public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyArgument, IPreviewable<ChatArgument, BaseComponent[]> {
 
-	private Preview preview;
+	private PreviewableFunction<BaseComponent[]> preview;
 	
 	/**
 	 * Constructs a Chat argument with a given node name. Represents fancy greedy
@@ -85,13 +85,13 @@ public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyAr
 	}
 
 	@Override
-	public ChatArgument withPreview(Preview preview) {
+	public ChatArgument withPreview(PreviewableFunction<BaseComponent[]> preview) {
 		this.preview = preview;
 		return this;
 	}
 
 	@Override
-	public Optional<Preview> getPreview() {
+	public Optional<PreviewableFunction<BaseComponent[]>> getPreview() {
 		return Optional.ofNullable(preview);
 	}
 }

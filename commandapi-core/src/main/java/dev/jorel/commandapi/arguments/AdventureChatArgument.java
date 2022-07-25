@@ -32,7 +32,7 @@ import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.exceptions.PaperAdventureNotFoundException;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.nms.NMS;
-import dev.jorel.commandapi.wrappers.Preview;
+import dev.jorel.commandapi.wrappers.PreviewableFunction;
 import net.kyori.adventure.text.Component;
 
 /**
@@ -40,9 +40,9 @@ import net.kyori.adventure.text.Component;
  * 
  * @apiNote Returns a {@link Component} object
  */
-public class AdventureChatArgument extends Argument<Component> implements IGreedyArgument, IPreviewable<AdventureChatArgument> {
+public class AdventureChatArgument extends Argument<Component> implements IGreedyArgument, IPreviewable<AdventureChatArgument, Component> {
 
-	private Preview preview;
+	private PreviewableFunction<Component> preview;
 
 	/**
 	 * Constructs a Chat argument with a given node name. Represents fancy greedy
@@ -85,13 +85,14 @@ public class AdventureChatArgument extends Argument<Component> implements IGreed
 	}
 
 	@Override
-	public AdventureChatArgument withPreview(Preview preview) {
+	public AdventureChatArgument withPreview(PreviewableFunction<Component> preview) {
 		this.preview = preview;
 		return this;
 	}
 
 	@Override
-	public Optional<Preview> getPreview() {
+	public Optional<PreviewableFunction<Component>> getPreview() {
 		return Optional.ofNullable(preview);
 	}
+
 }

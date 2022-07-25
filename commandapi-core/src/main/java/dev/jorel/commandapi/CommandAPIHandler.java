@@ -70,7 +70,8 @@ import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.PreviewInfo;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.preprocessor.RequireField;
-import dev.jorel.commandapi.wrappers.Preview;
+import dev.jorel.commandapi.wrappers.PreviewLegacy;
+import dev.jorel.commandapi.wrappers.PreviewableFunction;
 import net.kyori.adventure.text.Component;
 
 /**
@@ -162,7 +163,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	final NMS<CommandSourceStack> NMS;
 	final CommandDispatcher<CommandSourceStack> DISPATCHER;
 	final List<RegisteredCommand> registeredCommands; // Keep track of what has been registered for type checking
-	final Map<List<String>, Optional<Preview>> previewableArguments; // Arguments with previewable chat
+	final Map<List<String>, Optional<PreviewableFunction<?>>> previewableArguments; // Arguments with previewable chat
 	private PaperImplementations paper;
 
 	@SuppressWarnings("unchecked")
@@ -643,6 +644,33 @@ public class CommandAPIHandler<CommandSourceStack> {
 		}
 		return outer;
 	}
+	
+	/**
+	 * Handles previewable arguments. This stores the path to previewable arguments
+	 * in {@link CommandAPIHandler#previewableArguments} for runtime resolving
+	 * @param commandName the name of the command
+	 * @param args the declared arguments
+	 * @param aliases the command's aliases
+	 */
+	@SuppressWarnings("unchecked")
+	private void handlePreviewableArguments(String commandName, Argument<?>[] args, String[] aliases) {
+		if(args.length > 0 && args[args.length - 1] instanceof IPreviewable<?, ?> previewable) {
+			final Optional<?> optionalPreviewable = previewable.getPreview();
+			List<String> path = new ArrayList<>();
+			
+			path.add(commandName);
+			for(Argument<?> arg : args) {
+				path.add(arg.getNodeName());
+			}
+			previewableArguments.put(List.copyOf(path), (Optional<PreviewableFunction<?>>) optionalPreviewable);
+
+			// And aliases
+			for(String alias : aliases) {
+				path.set(0, alias);
+				previewableArguments.put(List.copyOf(path), (Optional<PreviewableFunction<?>>) optionalPreviewable);
+			}
+		}
+	}
 
 	// Builds our NMS command using the given arguments for this method, then
 	// registers it
@@ -685,22 +713,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		}
 		
 		// Handle previewable arguments
-		if(args.length > 0 && args[args.length - 1] instanceof IPreviewable<?> previewable) {
-			List<String> path = new ArrayList<>();
-			
-			path.add(commandName);
-			for(Argument<?> arg : args) {
-				path.add(arg.getNodeName());
-			}
-			previewableArguments.put(List.copyOf(path), previewable.getPreview());
-
-			// And aliases
-			for(String alias : aliases) {
-				path.remove(0);
-				path.add(alias);
-				previewableArguments.put(List.copyOf(path), previewable.getPreview());
-			}
-		}
+		handlePreviewableArguments(commandName, args, aliases);
 
 		if (Bukkit.getPluginCommand(commandName) != null) {
 			CommandAPI.logWarning("Plugin command /" + commandName + " is registered by Bukkit ("
@@ -916,8 +929,8 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 *         {@link Component}. If such a function is not available, this will
 	 *         return a function that always returns null.
 	 */
-	public Preview lookupPreviewable(List<String> path) {
-		return previewableArguments.getOrDefault(path, Optional.empty()).orElseGet(() -> info -> null);
+	public PreviewableFunction<?> lookupPreviewable(List<String> path) {
+		return previewableArguments.getOrDefault(path, Optional.empty()).orElseGet(() -> (PreviewLegacy)(info -> null));
 	}
 
 	/////////////////////////
