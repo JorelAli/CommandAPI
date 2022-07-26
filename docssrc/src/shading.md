@@ -80,7 +80,7 @@ Add the CommandAPI shade dependency:
     <dependency>
         <groupId>dev.jorel</groupId>
         <artifactId>commandapi-shade</artifactId>
-        <version>8.4.1</version>
+        <version>8.5.0</version>
     </dependency>
 </dependencies>
 ```
@@ -174,13 +174,13 @@ Next, we declare our dependencies:
 
 ```groovy,build.gradle
 dependencies {
-    implementation "dev.jorel:commandapi-shade:8.4.1"
+    implementation "dev.jorel:commandapi-shade:8.5.0"
 }
 ```
 
 ```kotlin,build.gradle.kts
 dependencies {
-    implementation("dev.jorel:commandapi-shade:8.4.1")
+    implementation("dev.jorel:commandapi-shade:8.5.0")
 }
 ```
 
@@ -193,7 +193,7 @@ Then we add it to the `shadowJar` task configuration and relocate the CommandAPI
 ```groovy,build.gradle
 shadowJar {
     dependencies {
-        include dependency("dev.jorel:commandapi-shade:8.4.1")
+        include dependency("dev.jorel:commandapi-shade:8.5.0")
     }
 
     // TODO: Change this to my own package name
@@ -204,7 +204,7 @@ shadowJar {
 ```kotlin,build.gradle.kts
 shadowJar {
     dependencies {
-        include dependency("dev.jorel:commandapi-shade:8.4.1")
+        include dependency("dev.jorel:commandapi-shade:8.5.0")
     }
 
     // TODO: Change this to my own package name
