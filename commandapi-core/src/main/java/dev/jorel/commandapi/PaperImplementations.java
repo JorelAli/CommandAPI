@@ -56,5 +56,12 @@ public class PaperImplementations {
 			return nmsInstance.getSimpleCommandMap();
 		}
 	}
+	
+	/**
+	 * @return whether we're using paper or not
+	 */
+	public boolean isPresent() {
+		return this.isPaperPresent;
+	}
 
 }

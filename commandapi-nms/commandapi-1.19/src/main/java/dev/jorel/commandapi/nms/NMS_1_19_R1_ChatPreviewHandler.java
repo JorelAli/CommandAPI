@@ -14,8 +14,6 @@ import com.mojang.brigadier.context.ParsedCommandNode;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.PreviewInfo;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
-import dev.jorel.commandapi.wrappers.Preview;
-import dev.jorel.commandapi.wrappers.PreviewLegacy;
 import dev.jorel.commandapi.wrappers.PreviewableFunction;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -62,25 +60,28 @@ public class NMS_1_19_R1_ChatPreviewHandler extends ChannelDuplexHandler {
 			String input = results.getContext().getNodes().get(results.getContext().getNodes().size() - 1).getRange().get(fullInput);
 
 			final String jsonToSend;
-			if (preview instanceof PreviewLegacy legacyPreview) {
-				BaseComponent[] component;
-				try {
-					component = legacyPreview.generatePreview(new PreviewInfo(this.player, input, chatPreview.query()));
-				} catch (WrapperCommandSyntaxException e) {
-					component = TextComponent.fromLegacyText(e.getMessage());
+			
+			Object component = null;
+			try {
+				component = preview.generatePreview(new PreviewInfo(this.player, input, chatPreview.query()));
+			} catch (WrapperCommandSyntaxException e) {
+				component = TextComponent.fromLegacyText(e.getMessage() == null ? "" : e.getMessage());
+			}
+			
+			if(component != null) {
+				if(component instanceof BaseComponent[] baseComponent) {
+					jsonToSend = ComponentSerializer.toString(baseComponent);
+				} else if(CommandAPIHandler.getInstance().getPaper().isPresent()) {
+					if(component instanceof Component adventureComponent) {
+						jsonToSend = GsonComponentSerializer.gson().serialize(adventureComponent);
+					} else {
+						throw new IllegalArgumentException("Unexpected type returned from chat preview, got: " + component.getClass().getSimpleName());
+					}
+				} else {
+					throw new IllegalArgumentException("Unexpected type returned from chat preview, got: " + component.getClass().getSimpleName());
 				}
-				jsonToSend = ComponentSerializer.toString(component);
-			} else if (preview instanceof Preview adventurePreview) {
-				Component component;
-				try {
-					component = adventurePreview.generatePreview(new PreviewInfo(this.player, input, chatPreview.query()));
-				} catch (WrapperCommandSyntaxException e) {
-					// TODO: We may have to do legacy chat format parsing here
-					component = Component.text(e.getMessage());
-				}
-				jsonToSend = GsonComponentSerializer.gson().serialize(component);
 			} else {
-				throw new IllegalArgumentException("Invalid PreviewableFunction type provided. Expected Preview or PreviewLegacy, but got: " + preview.getClass().getSimpleName());
+				throw new NullPointerException("Returned value from chat preview was null");
 			}
 
 			if (jsonToSend != null) {
