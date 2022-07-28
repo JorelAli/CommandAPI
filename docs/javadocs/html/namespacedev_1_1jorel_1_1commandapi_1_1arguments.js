@@ -30,6 +30,7 @@ var namespacedev_1_1jorel_1_1commandapi_1_1arguments =
     [ "IGreedyArgument", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_greedy_argument.html", null ],
     [ "IntegerArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_integer_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_integer_argument" ],
     [ "IntegerRangeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_integer_range_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_integer_range_argument" ],
+    [ "IPreviewable< T extends Argument", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_previewable_3_01_t_01extends_01_argument.html", null ],
     [ "ItemStackArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_item_stack_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_item_stack_argument" ],
     [ "ItemStackPredicateArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_item_stack_predicate_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_item_stack_predicate_argument" ],
     [ "ListArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_list_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_list_argument" ],
@@ -62,5 +63,6 @@ var namespacedev_1_1jorel_1_1commandapi_1_1arguments =
     [ "TeamArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_team_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_team_argument" ],
     [ "TextArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_text_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_text_argument" ],
     [ "TimeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_time_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_time_argument" ],
-    [ "UUIDArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_u_u_i_d_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_u_u_i_d_argument" ]
+    [ "UUIDArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_u_u_i_d_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_u_u_i_d_argument" ],
+    [ "PreviewInfo< T >", "namespacedev_1_1jorel_1_1commandapi_1_1arguments.html#acb068426a282b7ce4a05a55b380ab089", null ]
 ];

@@ -26,7 +26,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.4.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.5.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -91,7 +91,7 @@ $(document).ready(function(){initNavTree('classdev_1_1jorel_1_1commandapi_1_1arg
 </div><!--header-->
 <div class="contents">
 
-<p>An argument that represents chat with entity selectors @apiNote Returns a <code><a class="el" href="">Component</a></code> object.  
+<p>An argument that represents chat with entity selectors.  
  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_argument.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for dev.jorel.commandapi.arguments.AdventureChatArgument:</div>
@@ -101,8 +101,8 @@ $(document).ready(function(){initNavTree('classdev_1_1jorel_1_1commandapi_1_1arg
  <div class="center">
   <img src="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_argument.png" usemap="#dev.jorel.commandapi.arguments.AdventureChatArgument_map" alt=""/>
   <map id="dev.jorel.commandapi.arguments.AdventureChatArgument_map" name="dev.jorel.commandapi.arguments.AdventureChatArgument_map">
-<area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html" alt="dev.jorel.commandapi.arguments.Argument&lt; Component &gt;" shape="rect" coords="0,0,343,24"/>
-<area href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_greedy_argument.html" title="An interface indicating that an argument consumes all available characters." alt="dev.jorel.commandapi.arguments.IGreedyArgument" shape="rect" coords="353,0,696,24"/>
+<area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html" alt="dev.jorel.commandapi.arguments.Argument&lt; Component &gt;" shape="rect" coords="0,0,518,24"/>
+<area href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_greedy_argument.html" title="An interface indicating that an argument consumes all available characters." alt="dev.jorel.commandapi.arguments.IGreedyArgument" shape="rect" coords="528,0,1046,24"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -117,6 +117,18 @@ Class&lt; Component &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>g
 <tr class="memitem:a0b1bbd7fa65b20d42310617aebc72bf8"><td class="memItemLeft" align="right" valign="top"><a id="a0b1bbd7fa65b20d42310617aebc72bf8" name="a0b1bbd7fa65b20d42310617aebc72bf8"></a>
 <a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html">CommandAPIArgumentType</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getArgumentType</b> ()</td></tr>
 <tr class="separator:a0b1bbd7fa65b20d42310617aebc72bf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59c037664cb74537c5c14d9a3854e064"><td class="memItemLeft" align="right" valign="top"><a id="a59c037664cb74537c5c14d9a3854e064" name="a59c037664cb74537c5c14d9a3854e064"></a>
+<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_argument.html">AdventureChatArgument</a>&#160;</td><td class="memItemRight" valign="bottom"><b>withPreview</b> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1wrappers_1_1_previewable_function.html">PreviewableFunction</a>&lt; Component &gt; preview)</td></tr>
+<tr class="separator:a59c037664cb74537c5c14d9a3854e064"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e74bf356b55dede480b8fd8256e4a58"><td class="memItemLeft" align="right" valign="top"><a id="a4e74bf356b55dede480b8fd8256e4a58" name="a4e74bf356b55dede480b8fd8256e4a58"></a>
+Optional&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1wrappers_1_1_previewable_function.html">PreviewableFunction</a>&lt; Component &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getPreview</b> ()</td></tr>
+<tr class="separator:a4e74bf356b55dede480b8fd8256e4a58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3796c692a8751475c0627172c7258787"><td class="memItemLeft" align="right" valign="top"><a id="a3796c692a8751475c0627172c7258787" name="a3796c692a8751475c0627172c7258787"></a>
+boolean&#160;</td><td class="memItemRight" valign="bottom"><b>isLegacy</b> ()</td></tr>
+<tr class="separator:a3796c692a8751475c0627172c7258787"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad467f25c30e88a82008f97b4102bea1e"><td class="memItemLeft" align="right" valign="top"><a id="ad467f25c30e88a82008f97b4102bea1e" name="ad467f25c30e88a82008f97b4102bea1e"></a>
+<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_argument.html">AdventureChatArgument</a>&#160;</td><td class="memItemRight" valign="bottom"><b>usePreview</b> (boolean usePreview)</td></tr>
+<tr class="separator:ad467f25c30e88a82008f97b4102bea1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a226bf35233c235708220f359a3eadf52"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a226bf35233c235708220f359a3eadf52">isListed</a> ()</td></tr>
 <tr class="memdesc:a226bf35233c235708220f359a3eadf52"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this argument will be listed in the Object args[] of the command executor.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a226bf35233c235708220f359a3eadf52">More...</a><br /></td></tr>
 <tr class="separator:a226bf35233c235708220f359a3eadf52"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -176,7 +188,8 @@ Class&lt; Component &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>g
 <tr class="separator:a48b7e2c2d3dfd3b0c8c639034ddcdd03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p >An argument that represents chat with entity selectors @apiNote Returns a <code><a class="el" href="">Component</a></code> object. </p>
+<div class="textblock"><p >An argument that represents chat with entity selectors. </p>
+<p >@apiNote Returns a <code><a class="el" href="">Component</a></code> object </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a8ea81f1820f6221d57b06c37d830b3e8" name="a8ea81f1820f6221d57b06c37d830b3e8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8ea81f1820f6221d57b06c37d830b3e8">&#9670;&nbsp;</a></span>AdventureChatArgument()</h2>
@@ -867,7 +880,7 @@ Class&lt; Component &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>g
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1arguments.html">arguments</a></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_argument.html">AdventureChatArgument</a></li>
-    <li class="footer">Generated on Fri Jun 17 2022 23:12:56 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Thu Jul 28 2022 22:11:13 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

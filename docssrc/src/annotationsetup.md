@@ -15,7 +15,7 @@ The annotation system effectively needs to be added twice: Once for compilation 
       <dependency>
           <groupId>dev.jorel</groupId>
           <artifactId>commandapi-annotations</artifactId>
-          <version>8.4.1</version>
+          <version>8.5.0</version>
           <scope>provided</scope>
       </dependency>
   </dependencies>
@@ -35,7 +35,7 @@ The annotation system effectively needs to be added twice: Once for compilation 
                       <path>
                           <groupId>dev.jorel</groupId>
                           <artifactId>commandapi-annotations</artifactId>
-                          <version>8.4.1</version>
+                          <version>8.5.0</version>
                       </path>
                   </annotationProcessorPaths>
               </configuration>
@@ -50,18 +50,40 @@ The annotation system effectively needs to be added twice: Once for compilation 
 
 - If you haven't already done so, add the maven central repository to your `build.gradle` file:
 
-  ```gradle
+  <div class="multi-pre">
+  
+  ```groovy,build.gradle
   repositories {
       mavenCentral()
       maven { url = "https://repo.codemc.org/repository/maven-public/" }
   }
   ```
-
-- Add the dependency and annotation processor to your list of dependencies in your `build.gradle` file:
-
-  ```gradle
-  dependencies {
-      compileOnly "dev.jorel:commandapi-annotations:8.4.1"
-      annotationProcessor "dev.jorel:commandapi-annotations:8.4.1"
+  
+  ```kotlin,build.gradle.kts
+  repositories {
+      mavenCentral()
+      maven(url = "https://repo.codemc.org/repository/maven-public/")
   }
   ```
+  
+  </div>
+
+- Add the dependency and annotation processor to your list of dependencies in your `build.gradle` file:
+  
+  <div class="multi-pre">
+  
+  ```groovy,build.gradle
+  dependencies {
+      compileOnly "dev.jorel:commandapi-annotations:8.5.0"
+      annotationProcessor "dev.jorel:commandapi-annotations:8.5.0"
+  }
+  ```
+  
+  ```kotlin,build.gradle.kts
+  dependencies {
+      compileOnly("dev.jorel:commandapi-annotations:8.5.0")
+      annotationProcessor("dev.jorel:commandapi-annotations:8.5.0")
+  }
+  ```
+  
+  </div>

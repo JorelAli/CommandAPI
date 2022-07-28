@@ -37,6 +37,12 @@ Using the search icon <i class="fas fa-search"></i> in the top left corner, you 
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 8.4.0 \\(\rightarrow\\) 8.5.0
+
+- Adds [Chat preview](./chatpreview.md) section
+- Adds Kotlin-DSL `build.gradle.kts` instructions for using the CommandAPI
+- Adds `CommandAPI.onDisable()` method to [Shading the CommandAPI in your plugins](./shading.md#disabling)
+
 ### Documentation changes 8.3.0 \\(\rightarrow\\) 8.4.0
 
 - Updated [Shading with Maven](./shading.md#shading-with-maven) with updated `maven-shade-plugin` version

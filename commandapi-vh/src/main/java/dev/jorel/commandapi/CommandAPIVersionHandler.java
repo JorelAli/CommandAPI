@@ -33,6 +33,7 @@ import dev.jorel.commandapi.nms.NMS_1_16_4_R3;
 import dev.jorel.commandapi.nms.NMS_1_16_R1;
 import dev.jorel.commandapi.nms.NMS_1_16_R2;
 import dev.jorel.commandapi.nms.NMS_1_16_R3;
+import dev.jorel.commandapi.nms.NMS_1_17;
 import dev.jorel.commandapi.nms.NMS_1_17_R1;
 import dev.jorel.commandapi.nms.NMS_1_18_R1;
 import dev.jorel.commandapi.nms.NMS_1_18_R2;
@@ -79,10 +80,11 @@ public interface CommandAPIVersionHandler {
 				case "1.16.2", "1.16.3" -> new NMS_1_16_R2();
 				case "1.16.4" -> new NMS_1_16_4_R3();
 				case "1.16.5" -> new NMS_1_16_R3();
-				case "1.17", "1.17.1" -> new NMS_1_17_R1();
+				case "1.17" -> new NMS_1_17();
+				case "1.17.1" -> new NMS_1_17_R1();
 				case "1.18", "1.18.1" -> new NMS_1_18_R1();
 				case "1.18.2" -> new NMS_1_18_R2();
-				case "1.19" -> new NMS_1_19_R1();
+				case "1.19", "1.19.1" -> new NMS_1_19_R1();
 				default -> throw new UnsupportedVersionException(version);
 			};
 		}

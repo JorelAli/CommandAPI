@@ -167,7 +167,7 @@ abstract class NMSWrapper_1_13_1 implements NMS<CommandListenerWrapper> {}
 @RequireField(in = ParticleParamRedstone.class, name = "f", ofType = float.class)
 public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 
-	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
+	protected static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
 	private static final VarHandle LootTableRegistry_e;
 	private static final VarHandle SimpleHelpMap_helpTopics;
 	private static final VarHandle ParticleParamBlock_c;
@@ -204,7 +204,7 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 	}
 
 	@SuppressWarnings("deprecation")
-	private static NamespacedKey fromMinecraftKey(MinecraftKey key) {
+	protected static NamespacedKey fromMinecraftKey(MinecraftKey key) {
 		return new NamespacedKey(key.b(), key.getKey());
 	}
 

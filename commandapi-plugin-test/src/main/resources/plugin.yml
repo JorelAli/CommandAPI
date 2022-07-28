@@ -1,0 +1,8 @@
+name: CommandAPITest
+main: Main
+version: 8.4.1
+description: An API to use Minecraft 1.13s new command UI
+author: Skepter
+website: https://www.jorel.dev/CommandAPI/
+softdepend: [NBTAPI]
+api-version: 1.13

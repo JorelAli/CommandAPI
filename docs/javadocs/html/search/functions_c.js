@@ -6,6 +6,7 @@ var searchData=
   ['offlineplayerargument_3',['OfflinePlayerArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_offline_player_argument.html#aed2fd890e0f924350b19ac618815b5e8',1,'dev::jorel::commandapi::arguments::OfflinePlayerArgument']]],
   ['ofteamcolor_4',['ofTeamColor',['../classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_scoreboard_slot.html#ad7b3c50b19c04861896dc2c7aa607ea5',1,'dev::jorel::commandapi::wrappers::ScoreboardSlot']]],
   ['oncommandcomplete_5',['onCommandComplete',['../interfacecom_1_1mojang_1_1brigadier_1_1_result_consumer.html#ac029a0bbb094f02cf1cd4af0d2e7c22f',1,'com::mojang::brigadier::ResultConsumer']]],
-  ['onenable_6',['onEnable',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#abaaeec30c996adb7a07999cbee39bfa7',1,'dev::jorel::commandapi::CommandAPI']]],
-  ['onload_7',['onLoad',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a99b3b35daa96cb9781ead26a7729cd5e',1,'dev.jorel.commandapi.CommandAPI.onLoad(boolean verbose)'],['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#af1dd48702add1d831d2d35b7e1084ac1',1,'dev.jorel.commandapi.CommandAPI.onLoad(CommandAPIConfig config)']]]
+  ['ondisable_6',['onDisable',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a2b6cd61ef43ca9b69d8c17420d229fc1',1,'dev::jorel::commandapi::CommandAPI']]],
+  ['onenable_7',['onEnable',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#abaaeec30c996adb7a07999cbee39bfa7',1,'dev::jorel::commandapi::CommandAPI']]],
+  ['onload_8',['onLoad',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#af1dd48702add1d831d2d35b7e1084ac1',1,'dev::jorel::commandapi::CommandAPI']]]
 ];

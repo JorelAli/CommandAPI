@@ -11,7 +11,12 @@ var searchData=
   ['playercommandexecutor_8',['PlayerCommandExecutor',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_player_command_executor.html',1,'dev::jorel::commandapi::executors']]],
   ['playerresultingcommandexecutor_9',['PlayerResultingCommandExecutor',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_player_resulting_command_executor.html',1,'dev::jorel::commandapi::executors']]],
   ['potioneffectargument_10',['PotionEffectArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_potion_effect_argument.html',1,'dev::jorel::commandapi::arguments']]],
-  ['primitive_11',['Primitive',['../interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_primitive.html',1,'dev::jorel::commandapi::annotations::arguments']]],
-  ['proxycommandexecutor_12',['ProxyCommandExecutor',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_command_executor.html',1,'dev::jorel::commandapi::executors']]],
-  ['proxyresultingcommandexecutor_13',['ProxyResultingCommandExecutor',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_resulting_command_executor.html',1,'dev::jorel::commandapi::executors']]]
+  ['preview_11',['Preview',['../interfacedev_1_1jorel_1_1commandapi_1_1wrappers_1_1_preview.html',1,'dev::jorel::commandapi::wrappers']]],
+  ['previewablefunction_12',['PreviewableFunction',['../interfacedev_1_1jorel_1_1commandapi_1_1wrappers_1_1_previewable_function.html',1,'dev::jorel::commandapi::wrappers']]],
+  ['previewablefunction_3c_20basecomponent_5b_5d_3e_13',['PreviewableFunction&lt; BaseComponent[]&gt;',['../interfacedev_1_1jorel_1_1commandapi_1_1wrappers_1_1_previewable_function.html',1,'dev::jorel::commandapi::wrappers']]],
+  ['previewablefunction_3c_20component_20_3e_14',['PreviewableFunction&lt; Component &gt;',['../interfacedev_1_1jorel_1_1commandapi_1_1wrappers_1_1_previewable_function.html',1,'dev::jorel::commandapi::wrappers']]],
+  ['previewlegacy_15',['PreviewLegacy',['../interfacedev_1_1jorel_1_1commandapi_1_1wrappers_1_1_preview_legacy.html',1,'dev::jorel::commandapi::wrappers']]],
+  ['primitive_16',['Primitive',['../interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_primitive.html',1,'dev::jorel::commandapi::annotations::arguments']]],
+  ['proxycommandexecutor_17',['ProxyCommandExecutor',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_command_executor.html',1,'dev::jorel::commandapi::executors']]],
+  ['proxyresultingcommandexecutor_18',['ProxyResultingCommandExecutor',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_resulting_command_executor.html',1,'dev::jorel::commandapi::executors']]]
 ];

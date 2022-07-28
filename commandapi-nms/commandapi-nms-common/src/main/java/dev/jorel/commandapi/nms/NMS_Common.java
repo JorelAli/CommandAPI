@@ -295,20 +295,6 @@ public abstract class NMS_Common<T> implements NMS<T> {
 		return ArgumentUUID.a();
 	}
 
-//	@SuppressWarnings("removal")
-//	@Override
-//	public final Component getAdventureChat(CommandContext cmdCtx, String key)
-//			throws CommandSyntaxException {
-//		return PaperComponents.gsonSerializer().deserialize(Serializer.toJson(MessageArgument.getMessage(cmdCtx, key)));
-//	}
-//
-//	@SuppressWarnings("removal")
-//	@Override
-//	public final Component getAdventureChatComponent(CommandContext cmdCtx, String key) {
-//		return PaperComponents.gsonSerializer()
-//				.deserialize(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, key)));
-//	}
-
 	@Override
 	public final ArgumentType<?> _ArgumentVec2() {
 		return ArgumentVec2.a();

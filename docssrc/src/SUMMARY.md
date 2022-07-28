@@ -50,6 +50,7 @@
     - [Chat arguments](./chatarguments.md)
       - [Spigot chat arguments](./spigotchatarguments.md)
       - [Adventure chat arguments](./adventurechatarguments.md)
+      - [Chat preview](./chatpreview.md)
     - [Entity & player arguments](./entityarguments.md)
     - [Scoreboard arguments](./scoreboardargs.md)
       - [Scoreboard arguments](./scoreboardarguments.md)

@@ -25,7 +25,7 @@
 
 	<groupId>dev.jorel</groupId>
 	<artifactId>commandapi</artifactId>
-	<version>8.4.1</version>
+	<version>8.5.0</version>
 	<packaging>pom</packaging>
 
 	<name>commandapi</name>
@@ -67,6 +67,7 @@
 
 		<!-- Outputs -->
 		<module>commandapi-plugin</module>
+		<module>commandapi-plugin-test</module>
 		<module>commandapi-shade</module>
 		<module>commandapi-annotations</module>
 	</modules>
@@ -84,7 +85,7 @@
 		<!-- Shared libraries. These are declared here so they can be updated easily. 
 			These are present in each module to prevent accidentally "leaking" these 
 			dependencies to dependents of commandapi-core. -->
-		<paper.version>1.19-R0.1-SNAPSHOT</paper.version>
+		<paper.version>1.19.1-R0.1-SNAPSHOT</paper.version>
 		<auto-service.version>1.0.1</auto-service.version>
 	</properties>
 
@@ -138,7 +139,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<showWarnings>true</showWarnings>
+					<!--<showWarnings>true</showWarnings>-->
 					<compilerArgs>
 						<arg>-Xlint</arg>
 					</compilerArgs>

@@ -26,7 +26,7 @@
 	<parent>
 		<artifactId>commandapi</artifactId>
 		<groupId>dev.jorel</groupId>
-		<version>8.4.1</version>
+		<version>8.5.0</version>
 	</parent>
 
 	<artifactId>commandapi-nms</artifactId>
@@ -38,7 +38,9 @@
 		<module>commandapi-1.19</module>
 		<module>commandapi-1.18.2</module>
 		<module>commandapi-1.18</module>
+		<module>commandapi-1.17-common</module>
 		<module>commandapi-1.17</module>
+		<module>commandapi-1.17.1</module>
 		<module>commandapi-1.16.5</module>
 		<module>commandapi-1.16.4</module>
 		<module>commandapi-1.16.2</module>

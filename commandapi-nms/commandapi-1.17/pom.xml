@@ -21,22 +21,19 @@
 	<parent>
 		<artifactId>commandapi-nms</artifactId>
 		<groupId>dev.jorel</groupId>
-		<version>8.4.1</version>
+		<version>8.5.0</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>commandapi-1.17</artifactId>
 
 	<properties>
-		<minecraft.mappings>1.17.1-R0.1-SNAPSHOT</minecraft.mappings>
-		<spigot.version>1.17.1-R0.1-SNAPSHOT</spigot.version>
+		<minecraft.mappings>1.17-R0.1-SNAPSHOT</minecraft.mappings>
+		<spigot.version>1.17-R0.1-SNAPSHOT</spigot.version>
+		<paper.version>1.17-R0.1-SNAPSHOT</paper.version>
 	</properties>
-
+	
 	<repositories>
-		<repository>
-			<id>minecraft-libraries</id>
-			<url>https://libraries.minecraft.net</url>
-		</repository>
 		<repository>
 			<id>codemc-repo</id>
 			<url>https://repo.codemc.io/repository/nms/</url>
@@ -48,20 +45,25 @@
 	</repositories>
 
 	<dependencies>
-		<!-- Spigot testing (for reflection checks) -->
 		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot</artifactId>
-			<version>${spigot.version}</version>
-			<scope>test</scope>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-1.17-common</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 
 		<!-- Spigot compilation -->
+		<!-- Include both mojang mapped and unmapped spigot so 1_17 common can be accessed before and after it is remapped -->
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot</artifactId>
 			<version>${spigot.version}</version>
 			<classifier>remapped-mojang</classifier>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot</artifactId>
+			<version>${spigot.version}</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -71,21 +73,6 @@
 			<artifactId>paper-api</artifactId>
 			<version>${paper.version}</version>
 			<scope>provided</scope>
-		</dependency>
-
-		<!-- CommandAPI core -->
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-core</artifactId>
-			<version>${project.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-nms-common</artifactId>
-			<version>${project.version}</version>
-			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 

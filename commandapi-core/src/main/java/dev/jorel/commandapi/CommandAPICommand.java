@@ -31,7 +31,6 @@ import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.IGreedyArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
-import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
 
 /**
  * A builder used to create commands to be registered by the CommandAPI.
@@ -210,7 +209,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 			for(CommandAPICommand subcommand : this.subcommands) {
 				flatten(this, new ArrayList<>(), subcommand);
 			}
-		} catch (InvalidCommandNameException | GreedyArgumentException | CommandSyntaxException | IOException e) {
+		} catch (CommandSyntaxException | IOException e) {
 			e.printStackTrace();
 		}
 		

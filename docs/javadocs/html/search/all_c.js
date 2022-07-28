@@ -9,9 +9,10 @@ var searchData=
   ['offlineplayerargument_6',['OfflinePlayerArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_offline_player_argument.html',1,'dev.jorel.commandapi.arguments.OfflinePlayerArgument'],['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_offline_player_argument.html#aed2fd890e0f924350b19ac618815b5e8',1,'dev.jorel.commandapi.arguments.OfflinePlayerArgument.OfflinePlayerArgument()']]],
   ['ofteamcolor_7',['ofTeamColor',['../classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_scoreboard_slot.html#ad7b3c50b19c04861896dc2c7aa607ea5',1,'dev::jorel::commandapi::wrappers::ScoreboardSlot']]],
   ['oncommandcomplete_8',['onCommandComplete',['../interfacecom_1_1mojang_1_1brigadier_1_1_result_consumer.html#ac029a0bbb094f02cf1cd4af0d2e7c22f',1,'com::mojang::brigadier::ResultConsumer']]],
-  ['one_5fentity_9',['ONE_ENTITY',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector.html#abf178ed031e3fd7f235c9032f8bfd306',1,'dev::jorel::commandapi::arguments::EntitySelector']]],
-  ['one_5fplayer_10',['ONE_PLAYER',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector.html#a2479a690d12ce17e6149e3116e5baf89',1,'dev::jorel::commandapi::arguments::EntitySelector']]],
-  ['onenable_11',['onEnable',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#abaaeec30c996adb7a07999cbee39bfa7',1,'dev::jorel::commandapi::CommandAPI']]],
-  ['onload_12',['onLoad',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a99b3b35daa96cb9781ead26a7729cd5e',1,'dev.jorel.commandapi.CommandAPI.onLoad(boolean verbose)'],['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#af1dd48702add1d831d2d35b7e1084ac1',1,'dev.jorel.commandapi.CommandAPI.onLoad(CommandAPIConfig config)']]],
-  ['op_13',['OP',['../classdev_1_1jorel_1_1commandapi_1_1_command_permission.html#a06ad29ef4670e4d520ae4f2bb452b2ba',1,'dev::jorel::commandapi::CommandPermission']]]
+  ['ondisable_9',['onDisable',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a2b6cd61ef43ca9b69d8c17420d229fc1',1,'dev::jorel::commandapi::CommandAPI']]],
+  ['one_5fentity_10',['ONE_ENTITY',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector.html#abf178ed031e3fd7f235c9032f8bfd306',1,'dev::jorel::commandapi::arguments::EntitySelector']]],
+  ['one_5fplayer_11',['ONE_PLAYER',['../enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector.html#a2479a690d12ce17e6149e3116e5baf89',1,'dev::jorel::commandapi::arguments::EntitySelector']]],
+  ['onenable_12',['onEnable',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#abaaeec30c996adb7a07999cbee39bfa7',1,'dev::jorel::commandapi::CommandAPI']]],
+  ['onload_13',['onLoad',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#af1dd48702add1d831d2d35b7e1084ac1',1,'dev::jorel::commandapi::CommandAPI']]],
+  ['op_14',['OP',['../classdev_1_1jorel_1_1commandapi_1_1_command_permission.html#a06ad29ef4670e4d520ae4f2bb452b2ba',1,'dev::jorel::commandapi::CommandPermission']]]
 ];

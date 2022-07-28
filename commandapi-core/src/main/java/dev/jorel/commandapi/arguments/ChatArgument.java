@@ -20,12 +20,19 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import java.util.Optional;
+
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.exceptions.SpigotNotFoundException;
+import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.wrappers.PreviewableFunction;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 /**
@@ -33,7 +40,10 @@ import net.md_5.bungee.api.chat.BaseComponent;
  * 
  * @apiNote Returns a {@link BaseComponent}{@code []} object
  */
-public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyArgument {
+public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyArgument, IPreviewable<ChatArgument, BaseComponent[]> {
+
+	private PreviewableFunction<BaseComponent[]> preview;
+	private boolean usePreview;
 
 	/**
 	 * Constructs a Chat argument with a given node name. Represents fancy greedy
@@ -43,10 +53,10 @@ public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyAr
 	 */
 	public ChatArgument(String nodeName) {
 		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentChat());
-		
+
 		try {
 			Class.forName("org.spigotmc.SpigotConfig");
-		} catch(ClassNotFoundException e) {
+		} catch (ClassNotFoundException e) {
 			throw new SpigotNotFoundException(this.getClass());
 		}
 	}
@@ -55,15 +65,52 @@ public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyAr
 	public Class<BaseComponent[]> getPrimitiveType() {
 		return BaseComponent[].class;
 	}
-	
+
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.CHAT;
 	}
-	
+
 	@Override
 	public <CommandListenerWrapper> BaseComponent[] parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return nms.getChat(cmdCtx, key);
+		CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		final CommandSender sender = nms.getCommandSenderFromCSS(cmdCtx.getSource());
+		BaseComponent[] component = nms.getChat(cmdCtx, key);
+
+		if (getPreview().isPresent() && sender instanceof Player player) {
+			try {
+				BaseComponent[] previewComponent = getPreview().get()
+					.generatePreview(new PreviewInfo<BaseComponent[]>(player, CommandAPIHandler.getRawArgumentInput(cmdCtx, key), cmdCtx.getInput(), component));
+
+				if (this.usePreview) {
+					component = previewComponent;
+				}
+			} catch (WrapperCommandSyntaxException e) {
+				throw e.getException();
+			}
+		}
+		return component;
+	}
+
+	@Override
+	public ChatArgument withPreview(PreviewableFunction<BaseComponent[]> preview) {
+		this.preview = preview;
+		return this;
+	}
+
+	@Override
+	public Optional<PreviewableFunction<BaseComponent[]>> getPreview() {
+		return Optional.ofNullable(preview);
+	}
+
+	@Override
+	public boolean isLegacy() {
+		return true;
+	}
+
+	@Override
+	public ChatArgument usePreview(boolean usePreview) {
+		this.usePreview = usePreview;
+		return this;
 	}
 }

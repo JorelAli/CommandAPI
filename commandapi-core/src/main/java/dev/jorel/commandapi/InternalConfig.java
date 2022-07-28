@@ -35,6 +35,8 @@ import org.bukkit.plugin.InvalidPluginException;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import dev.jorel.commandapi.nms.NMS;
+
 /**
  * Configuration wrapper class. The config.yml file used by the CommandAPI is
  * only ever read from, nothing is ever written to it. That's why there's only
@@ -68,6 +70,8 @@ public class InternalConfig {
 
 	private final Class<?> nbtContainerClass;
 	private final Function<Object, ?> nbtContainerConstructor;
+	
+	private final NMS<?> customNMS;
 
 	InternalConfig(FileConfiguration fileConfig, Class<?> nbtContainerClass,
 			Function<Object, ?> nbtContainerConstructor, File dispatcherFile) {
@@ -81,6 +85,7 @@ public class InternalConfig {
 		this.commandsToConvert = new ArrayList<>();
 		this.nbtContainerClass = nbtContainerClass;
 		this.nbtContainerConstructor = nbtContainerConstructor;
+		this.customNMS = null;
 
 		if (!fileConfig.getList("plugins-to-convert").isEmpty()
 				&& fileConfig.getMapList("plugins-to-convert").isEmpty()) {
@@ -152,6 +157,7 @@ public class InternalConfig {
 		this.commandsToConvert = new ArrayList<>();
 		this.nbtContainerClass = config.nbtContainerClass;
 		this.nbtContainerConstructor = config.nbtContainerConstructor;
+		this.customNMS = config.customNMS;
 	}
 
 	/**
@@ -234,6 +240,10 @@ public class InternalConfig {
 	 */
 	public Function<Object, ?> getNBTContainerConstructor() {
 		return this.nbtContainerConstructor;
+	}
+
+	public NMS<?> getCustomNMS() {
+		return this.customNMS;
 	}
 
 }

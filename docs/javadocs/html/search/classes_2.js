@@ -28,5 +28,6 @@ var searchData=
   ['converter_25',['Converter',['../classdev_1_1jorel_1_1commandapi_1_1_converter.html',1,'dev::jorel::commandapi']]],
   ['customargument_26',['CustomArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html',1,'dev::jorel::commandapi::arguments']]],
   ['customargumentexception_27',['CustomArgumentException',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_exception.html',1,'dev::jorel::commandapi::arguments::CustomArgument']]],
-  ['customargumentinfoparser_28',['CustomArgumentInfoParser',['../interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_info_parser.html',1,'dev::jorel::commandapi::arguments::CustomArgument']]]
+  ['customargumentinfoparser_28',['CustomArgumentInfoParser',['../interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_info_parser.html',1,'dev::jorel::commandapi::arguments::CustomArgument']]],
+  ['customcommandexecutor_29',['CustomCommandExecutor',['../classdev_1_1jorel_1_1commandapi_1_1_custom_command_executor.html',1,'dev::jorel::commandapi']]]
 ];

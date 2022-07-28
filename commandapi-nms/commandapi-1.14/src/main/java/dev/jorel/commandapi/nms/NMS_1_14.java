@@ -161,7 +161,7 @@ import net.minecraft.server.v1_14_R1.Vec3D;
 @RequireField(in = ParticleParamRedstone.class, name = "f", ofType = float.class)
 public class NMS_1_14 extends NMSWrapper_1_14 {
 
-	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
+	protected static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
 	private static final VarHandle SimpleHelpMap_helpTopics;
 	private static final VarHandle ParticleParamBlock_c;
 	private static final VarHandle ParticleParamItem_c;
@@ -193,7 +193,7 @@ public class NMS_1_14 extends NMSWrapper_1_14 {
 	}
 
 	@SuppressWarnings("deprecation")
-	private static NamespacedKey fromMinecraftKey(MinecraftKey key) {
+	protected NamespacedKey fromMinecraftKey(MinecraftKey key) {
 		return new NamespacedKey(key.b(), key.getKey());
 	}
 
@@ -415,7 +415,7 @@ public class NMS_1_14 extends NMSWrapper_1_14 {
 	}
 
 	// Converts NMS function to SimpleFunctionWrapper
-	private SimpleFunctionWrapper convertFunction(CustomFunction customFunction) {
+	protected SimpleFunctionWrapper convertFunction(CustomFunction customFunction) {
 		ToIntFunction<CommandListenerWrapper> appliedObj = clw -> MINECRAFT_SERVER.getFunctionData().a(customFunction,
 				clw);
 

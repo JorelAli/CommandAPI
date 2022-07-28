@@ -157,7 +157,10 @@ import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import net.kyori.adventure.inventory.Book;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class Examples extends JavaPlugin {
 
@@ -346,6 +349,72 @@ new CommandAPICommand("pbroadcast")
     })
     .register();
 /* ANCHOR_END: chatarguments */
+
+/* ANCHOR: chatpreviewspigot */
+new CommandAPICommand("broadcast")
+    .withArguments(new ChatArgument("message").withPreview(info -> {
+        // Convert parsed BaseComponent[] to plain text
+        String plainText = BaseComponent.toPlainText((BaseComponent[]) info.parsedInput());
+
+        // Translate the & in plain text and generate a new BaseComponent[]
+        return TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', plainText));
+    }))
+    .executesPlayer((player, args) -> {
+        // The user still entered legacy text. We need to properly convert this
+        // to a BaseComponent[] by converting to plain text then to BaseComponent[]
+        String plainText = BaseComponent.toPlainText((BaseComponent[]) args[0]);
+        Bukkit.spigot().broadcast(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', plainText)));
+    })
+    .register();
+/* ANCHOR_END: chatpreviewspigot */
+
+/* ANCHOR: chatpreviewadventure */
+new CommandAPICommand("broadcast")
+    .withArguments(new AdventureChatArgument("message").withPreview(info -> {
+        // Convert parsed Component to plain text
+        String plainText = PlainTextComponentSerializer.plainText().serialize((Component) info.parsedInput());
+
+        // Translate the & in plain text and generate a new Component
+        return LegacyComponentSerializer.legacyAmpersand().deserialize(plainText);
+    }))
+    .executesPlayer((player, args) -> {
+        // The user still entered legacy text. We need to properly convert this
+        // to a Component by converting to plain text then to Component
+        String plainText = PlainTextComponentSerializer.plainText().serialize((Component) args[0]);
+        Bukkit.broadcast(LegacyComponentSerializer.legacyAmpersand().deserialize(plainText));
+    })
+    .register();
+/* ANCHOR_END: chatpreviewadventure */
+
+/* ANCHOR: chatpreviewspigotusepreview */
+new CommandAPICommand("broadcast")
+    .withArguments(new ChatArgument("message").usePreview(true).withPreview(info -> {
+        // Convert parsed BaseComponent[] to plain text
+        String plainText = BaseComponent.toPlainText((BaseComponent[]) info.parsedInput());
+
+        // Translate the & in plain text and generate a new BaseComponent[]
+        return TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', plainText));
+    }))
+    .executesPlayer((player, args) -> {
+        Bukkit.spigot().broadcast((BaseComponent[]) args[0]);
+    })
+    .register();
+/* ANCHOR_END: chatpreviewspigotusepreview */
+
+/* ANCHOR: chatpreviewadventureusepreview */
+new CommandAPICommand("broadcast")
+    .withArguments(new AdventureChatArgument("message").usePreview(true).withPreview(info -> {
+        // Convert parsed Component to plain text
+        String plainText = PlainTextComponentSerializer.plainText().serialize((Component) info.parsedInput());
+
+        // Translate the & in plain text and generate a new Component
+        return LegacyComponentSerializer.legacyAmpersand().deserialize(plainText);
+    }))
+    .executesPlayer((player, args) -> {
+        Bukkit.broadcast((Component) args[0]);
+    })
+    .register();
+/* ANCHOR_END: chatpreviewadventureusepreview */
 }
 
 

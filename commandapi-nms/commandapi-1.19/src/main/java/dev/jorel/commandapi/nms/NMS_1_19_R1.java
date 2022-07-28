@@ -81,6 +81,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.ComplexRecipe;
 import org.bukkit.inventory.Recipe;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 
 import com.google.common.collect.ImmutableList;
@@ -108,6 +109,7 @@ import dev.jorel.commandapi.wrappers.Location2D;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
+import io.netty.channel.Channel;
 import io.papermc.paper.text.PaperComponents;
 import net.kyori.adventure.text.Component;
 import net.minecraft.commands.CommandBuildContext;
@@ -181,15 +183,15 @@ import net.minecraft.world.phys.Vec3;
 
 // Mojang-Mapped reflection
 /**
- * NMS implementation for Minecraft 1.19
+ * NMS implementation for Minecraft 1.19 and 1.19.1
  */
-@NMSMeta(compatibleWith = "1.19")
+@NMSMeta(compatibleWith = { "1.19", "1.19.1" })
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = EntityPositionSource.class, name = "entityOrUuidOrId", ofType = Either.class)
 public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 
-	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
+	private static final MinecraftServer MINECRAFT_SERVER;
 	private static final VarHandle SimpleHelpMap_helpTopics;
 	private static final VarHandle EntityPositionSource_sourceEntity;
 
@@ -202,6 +204,21 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
+		if(Bukkit.getServer() instanceof CraftServer server) {
+			MINECRAFT_SERVER = server.getServer();
+			// Construct the command build context to use for all commands - I presume this
+			// lets you decide what happens when a tag isn't present by specifying the
+			// MissingTagAccessPolicy. This policy has three options: RETURN_EMPTY,
+			// CREATE_NEW or FAIL. We'll go with RETURN_EMPTY for now. Whether we decide to
+			// add support for letting developers fine-tune their missing tag access policy
+			// is something to decide at a later date.
+			COMMAND_BUILD_CONTEXT = new CommandBuildContext(RegistryAccess.BUILTIN.get());
+			COMMAND_BUILD_CONTEXT.missingTagAccessPolicy(CommandBuildContext.MissingTagAccessPolicy.RETURN_EMPTY);
+		} else {
+			MINECRAFT_SERVER = null;
+			COMMAND_BUILD_CONTEXT = null;
+		}
+		
 		VarHandle shm_ht = null;
 		VarHandle eps_se = null;
 		try {
@@ -216,15 +233,6 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 		EntityPositionSource_sourceEntity = eps_se;
 		ERROR_BIOME_INVALID = new DynamicCommandExceptionType(
 				arg -> net.minecraft.network.chat.Component.translatable("commands.locate.biome.invalid", arg));
-
-		// Construct the command build context to use for all commands - I presume this
-		// lets you decide what happens when a tag isn't present by specifying the
-		// MissingTagAccessPolicy. This policy has three options: RETURN_EMPTY,
-		// CREATE_NEW or FAIL. We'll go with RETURN_EMPTY for now. Whether we decide to
-		// add support for letting developers fine-tune their missing tag access policy
-		// is something to decide at a later date.
-		COMMAND_BUILD_CONTEXT = new CommandBuildContext(RegistryAccess.BUILTIN.get());
-		COMMAND_BUILD_CONTEXT.missingTagAccessPolicy(CommandBuildContext.MissingTagAccessPolicy.RETURN_EMPTY);
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
@@ -282,9 +290,15 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 		}
 	}
 
+	@Differs(from = "1.18.2", by = "Introduction of chat preview")
+	@Override
+	public boolean canUseChatPreview() {
+		return Bukkit.shouldSendChatPreviews();
+	}
+
 	@Override
 	public String[] compatibleVersions() {
-		return new String[] { "1.19" };
+		return new String[] { "1.19", "1.19.1" };
 	}
 
 	@Override
@@ -737,6 +751,16 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 		return (css.getLevel() == null) ? null : css.getLevel().getWorld();
 	}
 
+	@Differs(from = "1.18.2", by = "Chat preview!")
+	@Override
+	public void hookChatPreview(Plugin plugin, Player player) {
+		final Channel playerChannel = ((CraftPlayer) player).getHandle().connection.connection.channel;
+		if (playerChannel.pipeline().get("CommandAPI_" + player.getName()) == null) {
+			// Not sure why it's called packet_handler, but every example online uses this!
+			playerChannel.pipeline().addBefore("packet_handler", "CommandAPI_" + player.getName(), new NMS_1_19_R1_ChatPreviewHandler(this, plugin, player));
+		}
+	}
+
 	@Override
 	public boolean isVanillaCommandWrapper(Command command) {
 		return command instanceof VanillaCommandWrapper;
@@ -877,9 +901,18 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 							+ stringWriter.toString());
 		}
 	}
-
+	
 	@Override
 	public void resendPackets(Player player) {
 		MINECRAFT_SERVER.getCommands().sendCommands(((CraftPlayer) player).getHandle());
+	}
+	
+	@Differs(from = "1.18.2", by = "Chat preview!")
+	@Override
+	public void unhookChatPreview(Player player) {
+		final Channel channel = ((CraftPlayer) player).getHandle().connection.connection.channel;
+		if (channel.pipeline().get("CommandAPI_" + player.getName()) != null) {
+			channel.eventLoop().submit(() -> channel.pipeline().remove("CommandAPI_" + player.getName()));
+		}
 	}
 }

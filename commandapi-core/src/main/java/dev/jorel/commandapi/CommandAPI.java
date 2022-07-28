@@ -31,7 +31,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -48,13 +50,24 @@ public final class CommandAPI {
 	// Cannot be instantiated
 	private CommandAPI() {
 	}
+	
+	static {
+		onDisable();
+	}
 
-	private static boolean canRegister = true;
+	private static boolean canRegister;
 	static InternalConfig config;
 	static Logger logger;
-	private static boolean loaded = false;
+	private static boolean loaded;
 
-	public static boolean isLoaded(){
+	/**
+	 * Returns whether the CommandAPI is currently loaded. This should be true when
+	 * {@link CommandAPI#onLoad(CommandAPIConfig)} is called. If the CommandAPI is
+	 * loaded, commands are available to register.
+	 * 
+	 * @return whether the CommandAPI has been loaded properly
+	 */
+	public static boolean isLoaded() {
 		return loaded;
 	}
 
@@ -80,6 +93,19 @@ public final class CommandAPI {
 			setLevel(Level.ALL);
 		}
 
+	}
+	
+	/**
+	 * Unloads the CommandAPI. This should go in your plugin's
+	 * {@link JavaPlugin#onDisable} method.
+	 */
+	public static void onDisable() {
+		CommandAPI.canRegister = true;
+		CommandAPI.config = null;
+		CommandAPI.logger = null;
+		CommandAPI.loaded = false;
+
+		CommandAPIHandler.onDisable();
 	}
 
 	/**
@@ -144,24 +170,6 @@ public final class CommandAPI {
 	 * Initializes the CommandAPI for loading. This should be placed at the start of
 	 * your <code>onLoad()</code> method.
 	 * 
-	 * @param verbose if true, enables verbose output for the CommandAPI
-	 * @deprecated Use {@link CommandAPI#onLoad(CommandAPIConfig)} instead
-	 */
-	@Deprecated(forRemoval = true)
-	public static void onLoad(boolean verbose) {
-		if (!loaded) {
-			CommandAPI.config = new InternalConfig(new CommandAPIConfig().verboseOutput(verbose));
-			CommandAPIHandler.getInstance().checkDependencies();
-			loaded = true;
-		} else {
-			getLogger().severe("You've tried to call the CommandAPI's onLoad() method more than once!");
-		}
-	}
-
-	/**
-	 * Initializes the CommandAPI for loading. This should be placed at the start of
-	 * your <code>onLoad()</code> method.
-	 * 
 	 * @param config the configuration to use for the CommandAPI
 	 */
 	public static void onLoad(CommandAPIConfig config) {
@@ -182,7 +190,7 @@ public final class CommandAPI {
 	 */
 	public static void onEnable(Plugin plugin) {
 		// Prevent command registration after server has loaded
-		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+		Bukkit.getScheduler().runTaskLater(plugin, () -> {
 			canRegister = false;
 
 			// Sort out permissions after the server has finished registering them all
@@ -191,14 +199,38 @@ public final class CommandAPI {
 			CommandAPIHandler.getInstance().updateHelpForCommands();
 		}, 0L);
 
-		final Listener playerJoinListener = new Listener() {
+		// (Re)send command graph packet to players when they join
+		Bukkit.getServer().getPluginManager().registerEvents(new Listener() {
+
+			// For some reason, any other priority doesn't work
 			@EventHandler(priority = EventPriority.MONITOR)
 			public void onPlayerJoin(PlayerJoinEvent e) {
 				CommandAPIHandler.getInstance().getNMS().resendPackets(e.getPlayer());
 			}
-		};
 
-		Bukkit.getServer().getPluginManager().registerEvents(playerJoinListener, plugin);
+		}, plugin);
+
+		// On 1.19+, enable chat preview if the server allows it
+		if(CommandAPIHandler.getInstance().getNMS().canUseChatPreview()) {
+			Bukkit.getServer().getPluginManager().registerEvents(new Listener() {
+	
+				@EventHandler
+				public void onPlayerJoin(PlayerJoinEvent e) {
+					if(Bukkit.shouldSendChatPreviews()) {
+						CommandAPIHandler.getInstance().getNMS().hookChatPreview(plugin, e.getPlayer());
+					}
+				}
+				
+				@EventHandler
+				public void onPlayerQuit(PlayerQuitEvent e) {
+					if(Bukkit.shouldSendChatPreviews()) {
+						CommandAPIHandler.getInstance().getNMS().unhookChatPreview(e.getPlayer());
+					}
+				}
+	
+			}, plugin);
+		}
+
 		CommandAPIHandler.getInstance().getPaper().registerReloadHandler(plugin);
 	}
 

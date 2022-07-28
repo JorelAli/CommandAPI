@@ -26,7 +26,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.4.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.5.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -104,6 +104,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a00af2df58a46a1c2c82d3d4fd84e786e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_paper_implementations.html">PaperImplementations</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a00af2df58a46a1c2c82d3d4fd84e786e">getPaper</a> ()</td></tr>
 <tr class="memdesc:a00af2df58a46a1c2c82d3d4fd84e786e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an instance of <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_paper_implementations.html">PaperImplementations</a>.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a00af2df58a46a1c2c82d3d4fd84e786e">More...</a><br /></td></tr>
 <tr class="separator:a00af2df58a46a1c2c82d3d4fd84e786e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a595779a791286827ddb623a632b2b65a"><td class="memItemLeft" align="right" valign="top">Optional&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1wrappers_1_1_previewable_function.html">PreviewableFunction</a>&lt;?&gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a595779a791286827ddb623a632b2b65a">lookupPreviewable</a> (List&lt; String &gt; path)</td></tr>
+<tr class="memdesc:a595779a791286827ddb623a632b2b65a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Looks up the function to generate a chat preview for a path of nodes in the command tree.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a595779a791286827ddb623a632b2b65a">More...</a><br /></td></tr>
+<tr class="separator:a595779a791286827ddb623a632b2b65a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81c2e5146d954269245848f8c07c35d3"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a81c2e5146d954269245848f8c07c35d3">lookupPreviewableLegacyStatus</a> (List&lt; String &gt; path)</td></tr>
+<tr class="separator:a81c2e5146d954269245848f8c07c35d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a538af0270e651fec5d4b6c768f4ed9e4"><td class="memItemLeft" align="right" valign="top">Field&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a538af0270e651fec5d4b6c768f4ed9e4">getField</a> (Class&lt;?&gt; clazz, String name)</td></tr>
 <tr class="memdesc:a538af0270e651fec5d4b6c768f4ed9e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Caches a field using reflection if it is not already cached, then return the field of a given class.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a538af0270e651fec5d4b6c768f4ed9e4">More...</a><br /></td></tr>
 <tr class="separator:a538af0270e651fec5d4b6c768f4ed9e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -276,13 +281,66 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a595779a791286827ddb623a632b2b65a" name="a595779a791286827ddb623a632b2b65a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a595779a791286827ddb623a632b2b65a">&#9670;&nbsp;</a></span>lookupPreviewable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Optional&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1wrappers_1_1_previewable_function.html">PreviewableFunction</a>&lt;?&gt; &gt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html">dev.jorel.commandapi.CommandAPIHandler</a>&lt; CommandSourceStack &gt;.lookupPreviewable </td>
+          <td>(</td>
+          <td class="paramtype">List&lt; String &gt;&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Looks up the function to generate a chat preview for a path of nodes in the command tree. </p>
+<p >This is a method internal to the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> and isn't expected to be used by plugin developers (but you're more than welcome to use it as you see fit).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>a list of Strings representing the path (names of command nodes) to (and including) the previewable argument </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a function that takes in a <code><a class="el" href="">PreviewInfo</a></code> and returns a <code><a class="el" href="">Component</a></code>. If such a function is not available, this will return a function that always returns null. </dd></dl>
+
+</div>
+</div>
+<a id="a81c2e5146d954269245848f8c07c35d3" name="a81c2e5146d954269245848f8c07c35d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81c2e5146d954269245848f8c07c35d3">&#9670;&nbsp;</a></span>lookupPreviewableLegacyStatus()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">boolean <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html">dev.jorel.commandapi.CommandAPIHandler</a>&lt; CommandSourceStack &gt;.lookupPreviewableLegacyStatus </td>
+          <td>(</td>
+          <td class="paramtype">List&lt; String &gt;&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>a list of Strings representing the path (names of command nodes) to (and including) the previewable argument </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether a previewable is legacy (non-Adventure) or not </dd></dl>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html">CommandAPIHandler</a></li>
-    <li class="footer">Generated on Fri Jun 17 2022 23:12:56 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Thu Jul 28 2022 22:11:13 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

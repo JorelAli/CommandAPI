@@ -95,7 +95,8 @@ public class CustomArgument<T, B> extends Argument<T> {
 	 * 
 	 * @param base   the base argument to use for this custom argument. This base
 	 *               argument will represent the parsing implementation for client
-	 *               side and server side parsing.
+	 *               side and server side parsing. This base argument cannot be a
+	 *               {@link LiteralArgument} or {@link MultiLiteralArgument}
 	 * @param parser A {@link CustomArgumentInfo} parser object which includes
 	 *               information such as the command sender, previously declared
 	 *               arguments and current input. This parser should return an
@@ -110,6 +111,10 @@ public class CustomArgument<T, B> extends Argument<T> {
 	 */
 	public CustomArgument(Argument<B> base, CustomArgumentInfoParser<T, B> parser) {
 		super(base.getNodeName(), base.getRawType());
+		if (base instanceof LiteralArgument || base instanceof MultiLiteralArgument) {
+			// TODO: Use type-level check with an interface(s) to improve jar minimization
+			throw new IllegalArgumentException(base.getClass().getSimpleName() + " is not a suitable base argument type for a CustomArgument");
+		}
 		this.base = base;
 		this.infoParser = parser;
 	}
