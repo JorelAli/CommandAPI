@@ -43,6 +43,7 @@ import net.kyori.adventure.text.Component;
 public class AdventureChatArgument extends Argument<Component> implements IGreedyArgument, IPreviewable<AdventureChatArgument, Component> {
 
 	private PreviewableFunction<Component> preview;
+	private boolean usePreview;
 
 	/**
 	 * Constructs a Chat argument with a given node name. Represents fancy greedy
@@ -74,10 +75,16 @@ public class AdventureChatArgument extends Argument<Component> implements IGreed
 	public <CommandListenerWrapper> Component parseArgument(NMS<CommandListenerWrapper> nms,
 		CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		final CommandSender sender = nms.getCommandSenderFromCSS(cmdCtx.getSource());
-		final Component component = nms.getAdventureChat(cmdCtx, key);
-		if(getPreview().isPresent() && sender instanceof Player player) {
+		Component component = nms.getAdventureChat(cmdCtx, key);
+
+		if (getPreview().isPresent() && sender instanceof Player player) {
 			try {
-				getPreview().get().generatePreview(new PreviewInfo<Component>(player, CommandAPIHandler.getRawArgumentInput(cmdCtx, key), cmdCtx.getInput(), component));
+				Component previewComponent = getPreview().get()
+					.generatePreview(new PreviewInfo<Component>(player, CommandAPIHandler.getRawArgumentInput(cmdCtx, key), cmdCtx.getInput(), component));
+
+				if (this.usePreview) {
+					component = previewComponent;
+				}
 			} catch (WrapperCommandSyntaxException e) {
 				throw e.getException();
 			}
@@ -99,6 +106,12 @@ public class AdventureChatArgument extends Argument<Component> implements IGreed
 	@Override
 	public boolean isLegacy() {
 		return false;
+	}
+
+	@Override
+	public AdventureChatArgument usePreview(boolean usePreview) {
+		this.usePreview = usePreview;
+		return this;
 	}
 
 }

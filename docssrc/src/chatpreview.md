@@ -29,10 +29,11 @@ public T generatePreview(PreviewInfo info) throws WrapperCommandSyntaxException;
 The `PreviewInfo` class is a record containing the following:
 
 ```java
-public record PreviewInfo {
+public record PreviewInfo<T> {
     Player player();
     String input();
     String fullInput();
+    T parsedInput();
 }
 ```
 
@@ -62,6 +63,38 @@ String fullInput();
 
 -----
 
+```java
+T parsedInput();
+```
+
+`parsedInput()` is similar to `input()`, except it has been parsed by the CommandAPI's argument parser. This is a representation of what the argument in the executor would look like. For a `ChatArgument` the return type is `BaseComponent[]`, and for `AdventureChatArgument` the return type is `Component`.
+
+-----
+
 ## Chat preview examples
 
-Say we wanted to make our own `/broadcast` command that allowed the user to use `&` chat colors. As such, we also want the users to see what their command would look like...
+<div class="example">
+
+Say we wanted to make our own `/broadcast` command that allowed the user to use `&` chat colors. We can use chat preview to show users what the result of their `/broadcast` command would look like before running the command.
+
+```mccmd
+/broadcast <message>
+```
+
+Because the `ChatArgument` and `AdventureChatArgument` can support entity selectors (such as `@p`), it's best to use the `info.parsedInput()` method to handle parsed entity selectors. In our code, we use the `.withPreview()` method and take the parsed input and convert it to plain text. We then convert the plain text with `&` characters into component text to be displayed to the user.
+
+For execution, we do the same procedure, because the text that the user enters still has `&` characters
+
+<div class="multi-pre">
+
+```java,Spigot
+{{#include ../../commandapi-core/src/test/java/Examples.java:chatpreviewspigot}}
+```
+
+```java,Paper
+{{#include ../../commandapi-core/src/test/java/Examples.java:chatpreviewadventure}}
+```
+
+</div>
+
+</div>

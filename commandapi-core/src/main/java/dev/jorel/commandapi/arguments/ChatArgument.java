@@ -43,7 +43,8 @@ import net.md_5.bungee.api.chat.BaseComponent;
 public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyArgument, IPreviewable<ChatArgument, BaseComponent[]> {
 
 	private PreviewableFunction<BaseComponent[]> preview;
-	
+	private boolean usePreview;
+
 	/**
 	 * Constructs a Chat argument with a given node name. Represents fancy greedy
 	 * strings that can parse entity selectors
@@ -52,10 +53,10 @@ public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyAr
 	 */
 	public ChatArgument(String nodeName) {
 		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentChat());
-		
+
 		try {
 			Class.forName("org.spigotmc.SpigotConfig");
-		} catch(ClassNotFoundException e) {
+		} catch (ClassNotFoundException e) {
 			throw new SpigotNotFoundException(this.getClass());
 		}
 	}
@@ -64,21 +65,26 @@ public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyAr
 	public Class<BaseComponent[]> getPrimitiveType() {
 		return BaseComponent[].class;
 	}
-	
+
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.CHAT;
 	}
-	
+
 	@Override
 	public <CommandListenerWrapper> BaseComponent[] parseArgument(NMS<CommandListenerWrapper> nms,
 		CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		final CommandSender sender = nms.getCommandSenderFromCSS(cmdCtx.getSource());
-		final BaseComponent[] component = nms.getChat(cmdCtx, key);
+		BaseComponent[] component = nms.getChat(cmdCtx, key);
 
 		if (getPreview().isPresent() && sender instanceof Player player) {
 			try {
-				getPreview().get().generatePreview(new PreviewInfo<BaseComponent[]>(player, CommandAPIHandler.getRawArgumentInput(cmdCtx, key), cmdCtx.getInput(), component));
+				BaseComponent[] previewComponent = getPreview().get()
+					.generatePreview(new PreviewInfo<BaseComponent[]>(player, CommandAPIHandler.getRawArgumentInput(cmdCtx, key), cmdCtx.getInput(), component));
+
+				if (this.usePreview) {
+					component = previewComponent;
+				}
 			} catch (WrapperCommandSyntaxException e) {
 				throw e.getException();
 			}
@@ -100,5 +106,11 @@ public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyAr
 	@Override
 	public boolean isLegacy() {
 		return true;
+	}
+
+	@Override
+	public ChatArgument usePreview(boolean usePreview) {
+		this.usePreview = usePreview;
+		return this;
 	}
 }
