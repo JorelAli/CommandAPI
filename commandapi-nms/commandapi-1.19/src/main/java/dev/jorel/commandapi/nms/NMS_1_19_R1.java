@@ -183,9 +183,9 @@ import net.minecraft.world.phys.Vec3;
 
 // Mojang-Mapped reflection
 /**
- * NMS implementation for Minecraft 1.19
+ * NMS implementation for Minecraft 1.19 and 1.19.1
  */
-@NMSMeta(compatibleWith = "1.19")
+@NMSMeta(compatibleWith = { "1.19", "1.19.1" })
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = EntityPositionSource.class, name = "entityOrUuidOrId", ofType = Either.class)
@@ -298,7 +298,7 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 
 	@Override
 	public String[] compatibleVersions() {
-		return new String[] { "1.19" };
+		return new String[] { "1.19", "1.19.1" };
 	}
 
 	@Override

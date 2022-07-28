@@ -47,52 +47,55 @@ public class NMS_1_19_R1_ChatPreviewHandler extends ChannelDuplexHandler {
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		if (msg instanceof ServerboundChatPreviewPacket chatPreview) {
-			// We want to run this synchronously, just in case there's some funky async stuff going on here
-			Bukkit.getScheduler().runTask(this.plugin, () -> {
-				// Substring 1 because we want to get rid of the leading /
-				final String fullInput = chatPreview.query().substring(1);
-				ParseResults<CommandSourceStack> results = nms.getBrigadierDispatcher().parse(fullInput, nms.getCLWFromCommandSender(this.player));
+			
+			if(!chatPreview.query().isEmpty() && chatPreview.query().charAt(0) == '/') {
+				// We want to run this synchronously, just in case there's some funky async stuff going on here
+				Bukkit.getScheduler().runTask(this.plugin, () -> {
+					// Substring 1 because we want to get rid of the leading /
+					final String fullInput = chatPreview.query().substring(1);
+					ParseResults<CommandSourceStack> results = nms.getBrigadierDispatcher().parse(fullInput, nms.getCLWFromCommandSender(this.player));
 
-				// Generate the path for lookup
-				List<String> path = new ArrayList<>();
-				for (ParsedCommandNode<CommandSourceStack> commandNode : results.getContext().getNodes()) {
-					path.add(commandNode.getNode().getName());
-				}
-				PreviewableFunction<?> preview = CommandAPIHandler.getInstance().lookupPreviewable(path);
+					// Generate the path for lookup
+					List<String> path = new ArrayList<>();
+					for (ParsedCommandNode<CommandSourceStack> commandNode : results.getContext().getNodes()) {
+						path.add(commandNode.getNode().getName());
+					}
+					PreviewableFunction<?> preview = CommandAPIHandler.getInstance().lookupPreviewable(path);
 
-				// Calculate the (argument) input and generate the component to send
-				String input = results.getContext().getNodes().get(results.getContext().getNodes().size() - 1).getRange().get(fullInput);
+					// Calculate the (argument) input and generate the component to send
+					String input = results.getContext().getNodes().get(results.getContext().getNodes().size() - 1).getRange().get(fullInput);
 
-				final String jsonToSend;
-				
-				Object component = null;
-				try {
-					component = preview.generatePreview(new PreviewInfo(this.player, input, chatPreview.query()));
-				} catch (WrapperCommandSyntaxException e) {
-					component = TextComponent.fromLegacyText(e.getMessage() == null ? "" : e.getMessage());
-				}
-				
-				if(component != null) {
-					if(component instanceof BaseComponent[] baseComponent) {
-						jsonToSend = ComponentSerializer.toString(baseComponent);
-					} else if(CommandAPIHandler.getInstance().getPaper().isPresent()) {
-						if(component instanceof Component adventureComponent) {
-							jsonToSend = GsonComponentSerializer.gson().serialize(adventureComponent);
+					final String jsonToSend;
+					
+					Object component = null;
+					try {
+						component = preview.generatePreview(new PreviewInfo(this.player, input, chatPreview.query()));
+					} catch (WrapperCommandSyntaxException e) {
+						component = TextComponent.fromLegacyText(e.getMessage() == null ? "" : e.getMessage());
+					}
+					
+					if(component != null) {
+						if(component instanceof BaseComponent[] baseComponent) {
+							jsonToSend = ComponentSerializer.toString(baseComponent);
+						} else if(CommandAPIHandler.getInstance().getPaper().isPresent()) {
+							if(component instanceof Component adventureComponent) {
+								jsonToSend = GsonComponentSerializer.gson().serialize(adventureComponent);
+							} else {
+								throw new IllegalArgumentException("Unexpected type returned from chat preview, got: " + component.getClass().getSimpleName());
+							}
 						} else {
 							throw new IllegalArgumentException("Unexpected type returned from chat preview, got: " + component.getClass().getSimpleName());
 						}
 					} else {
-						throw new IllegalArgumentException("Unexpected type returned from chat preview, got: " + component.getClass().getSimpleName());
+						throw new NullPointerException("Returned value from chat preview was null");
 					}
-				} else {
-					throw new NullPointerException("Returned value from chat preview was null");
-				}
 
-				if (jsonToSend != null) {
-					Packet<ClientGamePacketListener> packet = new ClientboundChatPreviewPacket(chatPreview.queryId(), Serializer.fromJson(jsonToSend));
-					Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> this.connection.send(packet));
-				}
-			});
+					if (jsonToSend != null) {
+						Packet<ClientGamePacketListener> packet = new ClientboundChatPreviewPacket(chatPreview.queryId(), Serializer.fromJson(jsonToSend));
+						Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> this.connection.send(packet));
+					}
+				});
+			}
 		}
 
 		// Normal packet handling
