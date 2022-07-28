@@ -55,7 +55,7 @@ The list of what version of the CommandAPI you'll need to run on a specific vers
 | **1.17.1**         | 6.1.x - 8.4.1               | 8.4.1                        | 16                                                        |
 | **1.18, 1.18.1**   | 6.5.2 - 8.4.1               | 8.4.1                        | 16                                                        |
 | **1.18.2**         | 6.5.4 - 8.4.1               | 8.4.1                        | 16                                                        |
-| **1.19**           | 8.3.0 - 8.4.1               | 8.4.1                        | 16                                                        |
+| **1.19, 1.19.1**   | 8.3.0 - 8.4.1               | 8.4.1                        | 16                                                        |
 
 -----
 
@@ -304,9 +304,13 @@ The resulting compiled documentation is found in `docs/X.X.X`, where `X.X.X` is 
 
 ## CommandAPI Project Timeline
 
-This is the current roadmap for the CommandAPI (as of 13th April 2022):
+This is the current roadmap for the CommandAPI (as of 28th July 2022):
 
 - **Future:**
+
+  **Optional arguments**
+
+  One of the most requested features: adding support for optional arguments! This isn't a simple task, but development has begun into looking at how optional arguments can be incorporated into the CommandAPI.
 
   **Annotation improvements**
 
@@ -318,7 +322,7 @@ This is the current roadmap for the CommandAPI (as of 13th April 2022):
 
   **'True' custom arguments and server-side argument implementations**
 
-  Through some brief testing of the [regex-mod branch](https://github.com/JorelAli/CommandAPI/tree/dev/regex-mod) and my [MinecraftRegexArgumentMod](https://github.com/JorelAli/MinecraftRegexArgumentMod) repository, it was discovered that 'true' custom arguments (arguments with a custom implementation of the returned type and parser) are possible with the aid of a client-sided mod. Additionally, this functionality also works _without_ a client-sided mod, assuming this is only used server-side. This can be useful for server-only datapacks, functions and tags, as well as command blocks.
+  Through some brief testing of the [regex-mod branch](https://github.com/JorelAli/CommandAPI/tree/dev/regex-mod) and my [MinecraftRegexArgumentMod](https://github.com/JorelAli/MinecraftRegexArgumentMod) repository, it was discovered that 'true' custom arguments (arguments with a custom implementation of the returned type and parser) are possible with the aid of a client-sided mod. Additionally, this functionality also works _without_ a client-sided mod, assuming this is only used server-side. This can be useful for server-only datapacks, functions and tags, as well as command blocks. It is possible that this may lead into being ported to Fabric, but there are no concrete plans to do so as of now.
 
 -----
 
@@ -333,6 +337,34 @@ This is the current roadmap for the CommandAPI (as of 13th April 2022):
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td valign="top"><b>8.5.0</b></td>
+            <td valign="top">July 2022</td>
+            <td valign="top">
+                <b>Development improvements:</b>
+                <ul>
+                    <li>Improves the issue templates on GitHub for creating bug reports and feature requests</li>
+                    <li>Adds a testing suite for the CommandAPI which can test for successful command registration and execution</li>
+                    <li>Adds an example of shading the CommandAPI with Maven in <code>examples/maven-shaded/</code></li>
+                </ul>
+                <b>Bug fixes:</b>
+                <ul>
+                    <li>Fixes suggestions not working in 1.16.5 and below due to Brigadier implementation versions</li>
+                    <li>Fixes the CommandAPI allowing spaces in command names</li>
+                    <li>Fixes datapack reloading on 1.17.1</li>
+                </ul>
+                <b>New features/improvements:</b>
+                <ul>
+                    <li>Adds support for Minecraft 1.19.1</li>
+                    <li>Adds support for chat preview with <code>ChatArgument</code> and <code>AdventureChatArgument</code></li>
+                    <li>Adds a <code>CommandAPI.onDisable()</code> method to disable the CommandAPI gracefully</li>
+                    <li>Adds Kotlin-DSL gradle to the documentation</li>
+                    <li>Prevents the CommandAPI re-parsing previous arguments multiple times when running a command</li>
+                    <li>Adds <code>CommandAPI.isLoaded()</code> to check if the CommandAPI is loaded</li>
+                    <li>Shares NMS code for 1.13.x and 1.14.x, reducing the jar size</li>
+                </ul>
+            </td>
+        </tr>
         <tr>
             <td valign="top"><b>8.4.1</b></td>
             <td valign="top">June 2022</td>
