@@ -33,8 +33,8 @@
 	<artifactId>commandapi-plugin-test</artifactId>
 
 	<properties>
-		<minecraft.mappings>1.19.1-R0.1-SNAPSHOT</minecraft.mappings>
-		<spigot.version>1.19.1-R0.1-SNAPSHOT</spigot.version>
+		<minecraft.mappings>1.19-R0.1-SNAPSHOT</minecraft.mappings>
+		<spigot.version>1.19-R0.1-SNAPSHOT</spigot.version>
 		<powermock.version>2.0.2</powermock.version>
 	</properties>
 

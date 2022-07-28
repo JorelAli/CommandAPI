@@ -10,6 +10,7 @@ import org.bukkit.plugin.Plugin;
 
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.context.ParsedCommandNode;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.PreviewInfo;
@@ -69,7 +70,26 @@ public class NMS_1_19_R1_ChatPreviewHandler extends ChannelDuplexHandler {
 					
 					Object component = null;
 					try {
-						component = preview.generatePreview(new PreviewInfo(this.player, input, chatPreview.query()));
+						final PreviewInfo<?> previewInfo;
+						if(CommandAPIHandler.getInstance().lookupPreviewableLegacyStatus(path)) {
+							Component parsedInput = null;
+							try {
+								parsedInput = nms.getAdventureChat(results.getContext().build(fullInput), path.get(path.size() - 1));
+							} catch (CommandSyntaxException e) {
+								throw new WrapperCommandSyntaxException(e);
+							}
+							previewInfo = new PreviewInfo<Component>(this.player, input, chatPreview.query(), parsedInput);
+						} else {
+							BaseComponent[] parsedInput = null;
+							try {
+								parsedInput = nms.getChat(results.getContext().build(fullInput), path.get(path.size() - 1));
+							} catch (CommandSyntaxException e) {
+								throw new WrapperCommandSyntaxException(e);
+							}
+							previewInfo = new PreviewInfo<BaseComponent[]>(this.player, input, chatPreview.query(), parsedInput);
+						}
+
+						component = preview.generatePreview(previewInfo);
 					} catch (WrapperCommandSyntaxException e) {
 						component = TextComponent.fromLegacyText(e.getMessage() == null ? "" : e.getMessage());
 					}
@@ -91,7 +111,7 @@ public class NMS_1_19_R1_ChatPreviewHandler extends ChannelDuplexHandler {
 					}
 
 					if (jsonToSend != null) {
-						Packet<ClientGamePacketListener> packet = new ClientboundChatPreviewPacket(chatPreview.queryId(), Serializer.fromJson(jsonToSend));
+						final Packet<ClientGamePacketListener> packet = new ClientboundChatPreviewPacket(chatPreview.queryId(), Serializer.fromJson(jsonToSend));
 						Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> this.connection.send(packet));
 					}
 				});

@@ -21,6 +21,8 @@ CommandAPI.onLoad(CommandAPIConfig config);
 CommandAPI.onEnable(Plugin plugin);
 ```
 
+If you want to handle reloading, the CommandAPI has minimal support for it with the `onDisable()` method, which can go in your plugin. This is optional and is not required if you don't plan on reloading the server.
+
 ### Loading
 
 The `onLoad(CommandAPIConfig)` method initializes the CommandAPI's loading sequence. This must be called _before_ you start to access the CommandAPI and must be placed in your plugin's `onLoad()` method. The argument `CommandAPIConfig` is used to configure how the CommandAPI. The `CommandAPIConfig` class has the following parameters which let you set how the CommandAPI works similar to the `config.yml`, which is described [here](./config.md).
@@ -56,6 +58,10 @@ public {{#include ../../commandapi-core/src/test/java/Examples.java:shading}}
 ```
 
 </div>
+
+### Disabling
+
+The `onDisable()` method disables the CommandAPI gracefully. This should be placed in your plugin's `onDisable()` method. This doesn't unregister commands, so commands may persist during reloads - this can be mitigated using the `CommandAPI.unregister()` method.
 
 -----
 

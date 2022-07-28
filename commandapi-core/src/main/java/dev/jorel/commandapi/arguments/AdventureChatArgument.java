@@ -74,14 +74,15 @@ public class AdventureChatArgument extends Argument<Component> implements IGreed
 	public <CommandListenerWrapper> Component parseArgument(NMS<CommandListenerWrapper> nms,
 		CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		final CommandSender sender = nms.getCommandSenderFromCSS(cmdCtx.getSource());
+		final Component component = nms.getAdventureChat(cmdCtx, key);
 		if(getPreview().isPresent() && sender instanceof Player player) {
 			try {
-				getPreview().get().generatePreview(new PreviewInfo(player, CommandAPIHandler.getRawArgumentInput(cmdCtx, key), cmdCtx.getInput()));
+				getPreview().get().generatePreview(new PreviewInfo<Component>(player, CommandAPIHandler.getRawArgumentInput(cmdCtx, key), cmdCtx.getInput(), component));
 			} catch (WrapperCommandSyntaxException e) {
 				throw e.getException();
 			}
 		}
-		return nms.getAdventureChat(cmdCtx, key);
+		return component;
 	}
 
 	@Override
@@ -93,6 +94,11 @@ public class AdventureChatArgument extends Argument<Component> implements IGreed
 	@Override
 	public Optional<PreviewableFunction<Component>> getPreview() {
 		return Optional.ofNullable(preview);
+	}
+
+	@Override
+	public boolean isLegacy() {
+		return false;
 	}
 
 }

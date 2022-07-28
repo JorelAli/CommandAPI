@@ -15,4 +15,6 @@ public interface IPreviewable<T extends Argument<?>, A> {
 	
 	public Optional<PreviewableFunction<A>> getPreview();
 	
+	public boolean isLegacy();
+	
 }

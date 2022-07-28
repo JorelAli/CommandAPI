@@ -72,16 +72,18 @@ public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyAr
 	
 	@Override
 	public <CommandListenerWrapper> BaseComponent[] parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		final CommandSender sender = nms.getCommandSenderFromCSS(cmdCtx.getSource());
-		if(getPreview().isPresent() && sender instanceof Player player) {
+		final BaseComponent[] component = nms.getChat(cmdCtx, key);
+
+		if (getPreview().isPresent() && sender instanceof Player player) {
 			try {
-				getPreview().get().generatePreview(new PreviewInfo(player, CommandAPIHandler.getRawArgumentInput(cmdCtx, key), cmdCtx.getInput()));
+				getPreview().get().generatePreview(new PreviewInfo<BaseComponent[]>(player, CommandAPIHandler.getRawArgumentInput(cmdCtx, key), cmdCtx.getInput(), component));
 			} catch (WrapperCommandSyntaxException e) {
 				throw e.getException();
 			}
 		}
-		return nms.getChat(cmdCtx, key);
+		return component;
 	}
 
 	@Override
@@ -93,5 +95,10 @@ public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyAr
 	@Override
 	public Optional<PreviewableFunction<BaseComponent[]>> getPreview() {
 		return Optional.ofNullable(preview);
+	}
+
+	@Override
+	public boolean isLegacy() {
+		return true;
 	}
 }
