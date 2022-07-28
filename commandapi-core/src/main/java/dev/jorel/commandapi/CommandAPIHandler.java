@@ -927,12 +927,15 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 *         {@link Component}. If such a function is not available, this will
 	 *         return a function that always returns null.
 	 */
-	public PreviewableFunction<?> lookupPreviewable(List<String> path) {
+	public Optional<PreviewableFunction<?>> lookupPreviewable(List<String> path) {
 		final IPreviewable<? extends Argument<?>, ?> previewable = previewableArguments.get(path);
 		if(previewable != null && previewable.getPreview().isPresent()) {
-			return previewable.getPreview().get();
+			// Yeah, don't even question this logic of getting the value of an
+			// optional and then wrapping it in an optional again. Java likes it
+			// and complains if you don't do this. Not sure why.
+			return Optional.of(previewable.getPreview().get());
 		} else {
-			return (PreviewLegacy) info -> null;
+			return Optional.empty();
 		}
 	}
 	

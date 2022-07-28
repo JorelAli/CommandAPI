@@ -16,7 +16,7 @@ previews-chat=true
 ...
 ```
 
-For players that want to use chat preview, they must have `Chat Preview: ON` enabled in `Options > Chat Settings...`
+For players that want to use chat preview, they must have `Chat Preview` enabled in `Options > Chat Settings...`
 
 -----
 

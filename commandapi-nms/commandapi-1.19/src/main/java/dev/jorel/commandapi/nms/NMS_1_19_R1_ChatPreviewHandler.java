@@ -2,6 +2,7 @@ package dev.jorel.commandapi.nms;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
@@ -26,8 +27,6 @@ import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component.Serializer;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundChatPreviewPacket;
 import net.minecraft.network.protocol.game.ServerboundChatPreviewPacket;
 
@@ -49,7 +48,6 @@ public class NMS_1_19_R1_ChatPreviewHandler extends ChannelDuplexHandler {
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		if (msg instanceof ServerboundChatPreviewPacket chatPreview) {
-			
 			if(!chatPreview.query().isEmpty() && chatPreview.query().charAt(0) == '/') {
 				// We want to run this synchronously, just in case there's some funky async stuff going on here
 				Bukkit.getScheduler().runTask(this.plugin, () -> {
@@ -62,59 +60,59 @@ public class NMS_1_19_R1_ChatPreviewHandler extends ChannelDuplexHandler {
 					for (ParsedCommandNode<CommandSourceStack> commandNode : results.getContext().getNodes()) {
 						path.add(commandNode.getNode().getName());
 					}
-					PreviewableFunction<?> preview = CommandAPIHandler.getInstance().lookupPreviewable(path);
+					Optional<PreviewableFunction<?>> preview = CommandAPIHandler.getInstance().lookupPreviewable(path);
+					if(preview.isPresent()) {
+						// Calculate the (argument) input and generate the component to send
+						String input = results.getContext().getNodes().get(results.getContext().getNodes().size() - 1).getRange().get(fullInput);
 
-					// Calculate the (argument) input and generate the component to send
-					String input = results.getContext().getNodes().get(results.getContext().getNodes().size() - 1).getRange().get(fullInput);
+						final String jsonToSend;
+						
+						Object component = null;
+						try {
+							@SuppressWarnings("rawtypes")
+							final PreviewInfo previewInfo;
+							if(CommandAPIHandler.getInstance().lookupPreviewableLegacyStatus(path)) {
+								BaseComponent[] parsedInput = null;
+								try {
+									parsedInput = nms.getChat(results.getContext().build(fullInput), path.get(path.size() - 1));
+								} catch (CommandSyntaxException e) {
+									throw new WrapperCommandSyntaxException(e);
+								}
+								previewInfo = new PreviewInfo<BaseComponent[]>(this.player, input, chatPreview.query(), parsedInput);
+							} else {
+								Component parsedInput = null;
+								try {
+									parsedInput = nms.getAdventureChat(results.getContext().build(fullInput), path.get(path.size() - 1));
+								} catch (CommandSyntaxException e) {
+									throw new WrapperCommandSyntaxException(e);
+								}
+								previewInfo = new PreviewInfo<Component>(this.player, input, chatPreview.query(), parsedInput);
+							}
 
-					final String jsonToSend;
-					
-					Object component = null;
-					try {
-						@SuppressWarnings("rawtypes")
-						final PreviewInfo previewInfo;
-						if(CommandAPIHandler.getInstance().lookupPreviewableLegacyStatus(path)) {
-							BaseComponent[] parsedInput = null;
-							try {
-								parsedInput = nms.getChat(results.getContext().build(fullInput), path.get(path.size() - 1));
-							} catch (CommandSyntaxException e) {
-								throw new WrapperCommandSyntaxException(e);
-							}
-							previewInfo = new PreviewInfo<BaseComponent[]>(this.player, input, chatPreview.query(), parsedInput);
-						} else {
-							Component parsedInput = null;
-							try {
-								parsedInput = nms.getAdventureChat(results.getContext().build(fullInput), path.get(path.size() - 1));
-							} catch (CommandSyntaxException e) {
-								throw new WrapperCommandSyntaxException(e);
-							}
-							previewInfo = new PreviewInfo<Component>(this.player, input, chatPreview.query(), parsedInput);
+							component = preview.get().generatePreview(previewInfo);
+						} catch (WrapperCommandSyntaxException e) {
+							component = TextComponent.fromLegacyText(e.getMessage() == null ? "" : e.getMessage());
 						}
-
-						component = preview.generatePreview(previewInfo);
-					} catch (WrapperCommandSyntaxException e) {
-						component = TextComponent.fromLegacyText(e.getMessage() == null ? "" : e.getMessage());
-					}
-					
-					if(component != null) {
-						if(component instanceof BaseComponent[] baseComponent) {
-							jsonToSend = ComponentSerializer.toString(baseComponent);
-						} else if(CommandAPIHandler.getInstance().getPaper().isPresent()) {
-							if(component instanceof Component adventureComponent) {
-								jsonToSend = GsonComponentSerializer.gson().serialize(adventureComponent);
+						
+						if(component != null) {
+							if(component instanceof BaseComponent[] baseComponent) {
+								jsonToSend = ComponentSerializer.toString(baseComponent);
+							} else if(CommandAPIHandler.getInstance().getPaper().isPresent()) {
+								if(component instanceof Component adventureComponent) {
+									jsonToSend = GsonComponentSerializer.gson().serialize(adventureComponent);
+								} else {
+									throw new IllegalArgumentException("Unexpected type returned from chat preview, got: " + component.getClass().getSimpleName());
+								}
 							} else {
 								throw new IllegalArgumentException("Unexpected type returned from chat preview, got: " + component.getClass().getSimpleName());
 							}
 						} else {
-							throw new IllegalArgumentException("Unexpected type returned from chat preview, got: " + component.getClass().getSimpleName());
+							throw new NullPointerException("Returned value from chat preview was null");
 						}
-					} else {
-						throw new NullPointerException("Returned value from chat preview was null");
-					}
 
-					if (jsonToSend != null) {
-						final Packet<ClientGamePacketListener> packet = new ClientboundChatPreviewPacket(chatPreview.queryId(), Serializer.fromJson(jsonToSend));
-						Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> this.connection.send(packet));
+						if (jsonToSend != null) {
+							this.connection.send(new ClientboundChatPreviewPacket(chatPreview.queryId(), Serializer.fromJson(jsonToSend)));
+						}
 					}
 				});
 			}
