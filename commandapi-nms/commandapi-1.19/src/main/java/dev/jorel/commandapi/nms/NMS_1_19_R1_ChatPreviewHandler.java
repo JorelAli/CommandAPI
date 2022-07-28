@@ -72,14 +72,6 @@ public class NMS_1_19_R1_ChatPreviewHandler extends ChannelDuplexHandler {
 					try {
 						final PreviewInfo<?> previewInfo;
 						if(CommandAPIHandler.getInstance().lookupPreviewableLegacyStatus(path)) {
-							Component parsedInput = null;
-							try {
-								parsedInput = nms.getAdventureChat(results.getContext().build(fullInput), path.get(path.size() - 1));
-							} catch (CommandSyntaxException e) {
-								throw new WrapperCommandSyntaxException(e);
-							}
-							previewInfo = new PreviewInfo<Component>(this.player, input, chatPreview.query(), parsedInput);
-						} else {
 							BaseComponent[] parsedInput = null;
 							try {
 								parsedInput = nms.getChat(results.getContext().build(fullInput), path.get(path.size() - 1));
@@ -87,6 +79,14 @@ public class NMS_1_19_R1_ChatPreviewHandler extends ChannelDuplexHandler {
 								throw new WrapperCommandSyntaxException(e);
 							}
 							previewInfo = new PreviewInfo<BaseComponent[]>(this.player, input, chatPreview.query(), parsedInput);
+						} else {
+							Component parsedInput = null;
+							try {
+								parsedInput = nms.getAdventureChat(results.getContext().build(fullInput), path.get(path.size() - 1));
+							} catch (CommandSyntaxException e) {
+								throw new WrapperCommandSyntaxException(e);
+							}
+							previewInfo = new PreviewInfo<Component>(this.player, input, chatPreview.query(), parsedInput);
 						}
 
 						component = preview.generatePreview(previewInfo);
