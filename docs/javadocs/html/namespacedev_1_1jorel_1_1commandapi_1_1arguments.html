@@ -26,7 +26,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.4.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.5.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -85,7 +85,8 @@ $(document).ready(function(){initNavTree('namespacedev_1_1jorel_1_1commandapi_1_
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a>  </div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">Package dev.jorel.commandapi.arguments</div></div>
 </div><!--header-->
 <div class="contents">
@@ -99,7 +100,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An argument that represents the Bukkit Advancement object @apiNote Returns an <code><a class="el" href="">Advancement</a></code> object.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_advancement_argument.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_argument.html">AdventureChatArgument</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An argument that represents chat with entity selectors @apiNote Returns a <code><a class="el" href="">Component</a></code> object.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_argument.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An argument that represents chat with entity selectors.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_argument.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_component_argument.html">AdventureChatComponentArgument</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An argument that represents raw JSON text @apiNote Returns a <code><a class="el" href="">Component</a></code> object.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_component_argument.html#details">More...</a><br /></td></tr>
@@ -184,6 +185,9 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_integer_range_argument.html">IntegerRangeArgument</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An argument that represents a range of integer values.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_integer_range_argument.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_previewable_3_01_t_01extends_01_argument.html">IPreviewable&lt; T extends Argument</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An interface representing that the argument can be previewed using Minecraft's chat preview feature.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_previewable_3_01_t_01extends_01_argument.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_item_stack_argument.html">ItemStackArgument</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An argument that represents the Bukkit ItemStack object.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_item_stack_argument.html#details">More...</a><br /></td></tr>
@@ -284,16 +288,75 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_u_u_i_d_argument.html">UUIDArgument</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An argument that represents a UUID.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_u_u_i_d_argument.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:acb068426a282b7ce4a05a55b380ab089"><td class="memItemLeft" align="right" valign="top">record&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1arguments.html#acb068426a282b7ce4a05a55b380ab089">PreviewInfo&lt; T &gt;</a> (Player player, String input, String fullInput, T parsedInput)</td></tr>
+<tr class="separator:acb068426a282b7ce4a05a55b380ab089"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Classes to be used as arguments for commands. </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="acb068426a282b7ce4a05a55b380ab089" name="acb068426a282b7ce4a05a55b380ab089"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb068426a282b7ce4a05a55b380ab089">&#9670;&nbsp;</a></span>PreviewInfo&lt; T &gt;()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">record dev.jorel.commandapi.arguments.PreviewInfo&lt; T &gt; </td>
+          <td>(</td>
+          <td class="paramtype">Player&#160;</td>
+          <td class="paramname"><em>player</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>input</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>fullInput</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>parsedInput</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">player</td><td></td></tr>
+    <tr><td class="paramname">player</td><td>the Player typing this command </td></tr>
+    <tr><td class="paramname">input</td><td></td></tr>
+    <tr><td class="paramname">input</td><td>the current partially typed argument. For example "/mycmd tes" will return "tes" </td></tr>
+    <tr><td class="paramname">fullInput</td><td></td></tr>
+    <tr><td class="paramname">fullInput</td><td>a string representing the full current input (including /) </td></tr>
+    <tr><td class="paramname">parsedInput</td><td></td></tr>
+    <tr><td class="paramname">parsedInput</td><td>the parsed input as a BaseComponent[] (spigot) or Component (paper) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1arguments.html">arguments</a></li>
-    <li class="footer">Generated on Fri Jun 17 2022 23:12:56 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Thu Jul 28 2022 22:11:13 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

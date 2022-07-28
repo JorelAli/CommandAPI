@@ -26,7 +26,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.4.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.5.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -101,8 +101,8 @@ $(document).ready(function(){initNavTree('classdev_1_1jorel_1_1commandapi_1_1arg
  <div class="center">
   <img src="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_chat_argument.png" usemap="#dev.jorel.commandapi.arguments.ChatArgument_map" alt=""/>
   <map id="dev.jorel.commandapi.arguments.ChatArgument_map" name="dev.jorel.commandapi.arguments.ChatArgument_map">
-<area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html" alt="dev.jorel.commandapi.arguments.Argument&lt; BaseComponent[]&gt;" shape="rect" coords="0,0,372,24"/>
-<area href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_greedy_argument.html" title="An interface indicating that an argument consumes all available characters." alt="dev.jorel.commandapi.arguments.IGreedyArgument" shape="rect" coords="382,0,754,24"/>
+<area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html" alt="dev.jorel.commandapi.arguments.Argument&lt; BaseComponent[]&gt;" shape="rect" coords="0,0,488,24"/>
+<area href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_greedy_argument.html" title="An interface indicating that an argument consumes all available characters." alt="dev.jorel.commandapi.arguments.IGreedyArgument" shape="rect" coords="498,0,986,24"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -117,6 +117,18 @@ Class&lt; BaseComponent[]&gt;&#160;</td><td class="memItemRight" valign="bottom"
 <tr class="memitem:a538242303b6996f1e5408f2b91db8be7"><td class="memItemLeft" align="right" valign="top"><a id="a538242303b6996f1e5408f2b91db8be7" name="a538242303b6996f1e5408f2b91db8be7"></a>
 <a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html">CommandAPIArgumentType</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getArgumentType</b> ()</td></tr>
 <tr class="separator:a538242303b6996f1e5408f2b91db8be7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac631fe42edc63f215ec3d38e6fa1e2c0"><td class="memItemLeft" align="right" valign="top"><a id="ac631fe42edc63f215ec3d38e6fa1e2c0" name="ac631fe42edc63f215ec3d38e6fa1e2c0"></a>
+<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_chat_argument.html">ChatArgument</a>&#160;</td><td class="memItemRight" valign="bottom"><b>withPreview</b> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1wrappers_1_1_previewable_function.html">PreviewableFunction</a>&lt; BaseComponent[]&gt; preview)</td></tr>
+<tr class="separator:ac631fe42edc63f215ec3d38e6fa1e2c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4c06003808555f07baed11fe7432340"><td class="memItemLeft" align="right" valign="top"><a id="ad4c06003808555f07baed11fe7432340" name="ad4c06003808555f07baed11fe7432340"></a>
+Optional&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1wrappers_1_1_previewable_function.html">PreviewableFunction</a>&lt; BaseComponent[]&gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getPreview</b> ()</td></tr>
+<tr class="separator:ad4c06003808555f07baed11fe7432340"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c74165f9432847b3efddf590a33bf7e"><td class="memItemLeft" align="right" valign="top"><a id="a2c74165f9432847b3efddf590a33bf7e" name="a2c74165f9432847b3efddf590a33bf7e"></a>
+boolean&#160;</td><td class="memItemRight" valign="bottom"><b>isLegacy</b> ()</td></tr>
+<tr class="separator:a2c74165f9432847b3efddf590a33bf7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad56fedade29cd560f53623f7ac26c789"><td class="memItemLeft" align="right" valign="top"><a id="ad56fedade29cd560f53623f7ac26c789" name="ad56fedade29cd560f53623f7ac26c789"></a>
+<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_chat_argument.html">ChatArgument</a>&#160;</td><td class="memItemRight" valign="bottom"><b>usePreview</b> (boolean usePreview)</td></tr>
+<tr class="separator:ad56fedade29cd560f53623f7ac26c789"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a226bf35233c235708220f359a3eadf52"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a226bf35233c235708220f359a3eadf52">isListed</a> ()</td></tr>
 <tr class="memdesc:a226bf35233c235708220f359a3eadf52"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this argument will be listed in the Object args[] of the command executor.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a226bf35233c235708220f359a3eadf52">More...</a><br /></td></tr>
 <tr class="separator:a226bf35233c235708220f359a3eadf52"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -868,7 +880,7 @@ Class&lt; BaseComponent[]&gt;&#160;</td><td class="memItemRight" valign="bottom"
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1arguments.html">arguments</a></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_chat_argument.html">ChatArgument</a></li>
-    <li class="footer">Generated on Fri Jun 17 2022 23:12:56 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Thu Jul 28 2022 22:11:13 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

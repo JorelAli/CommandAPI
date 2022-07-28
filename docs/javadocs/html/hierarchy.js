@@ -143,6 +143,7 @@ var hierarchy =
     ] ],
     [ "dev.jorel.commandapi.Converter", "classdev_1_1jorel_1_1commandapi_1_1_converter.html", null ],
     [ "dev.jorel.commandapi.arguments.CustomArgument< T, B >.CustomArgumentInfoParser< T, B >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_info_parser.html", null ],
+    [ "dev.jorel.commandapi.CustomCommandExecutor< T extends CommandSender >", "classdev_1_1jorel_1_1commandapi_1_1_custom_command_executor.html", null ],
     [ "dev.jorel.commandapi.annotations.Default", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1_default.html", null ],
     [ "dev.jorel.commandapi.arguments.EntitySelector", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector.html", null ],
     [ "Exception", null, [
@@ -233,6 +234,7 @@ var hierarchy =
     ] ],
     [ "dev.jorel.commandapi.wrappers.IntegerRange", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_integer_range.html", null ],
     [ "dev.jorel.commandapi.InternalConfig", "classdev_1_1jorel_1_1commandapi_1_1_internal_config.html", null ],
+    [ "dev.jorel.commandapi.arguments.IPreviewable< T extends Argument", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_previewable_3_01_t_01extends_01_argument.html", null ],
     [ "dev.jorel.commandapi.IStringTooltip", "interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html", [
       [ "dev.jorel.commandapi.StringTooltip", "classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html", null ]
     ] ],
@@ -251,6 +253,13 @@ var hierarchy =
     [ "com.mojang.brigadier.context.ParsedCommandNode< S >", "classcom_1_1mojang_1_1brigadier_1_1context_1_1_parsed_command_node.html", null ],
     [ "com.mojang.brigadier.ParseResults< S >", "classcom_1_1mojang_1_1brigadier_1_1_parse_results.html", null ],
     [ "dev.jorel.commandapi.annotations.Permission", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1_permission.html", null ],
+    [ "dev.jorel.commandapi.wrappers.PreviewableFunction< T >", "interfacedev_1_1jorel_1_1commandapi_1_1wrappers_1_1_previewable_function.html", null ],
+    [ "dev.jorel.commandapi.wrappers.PreviewableFunction< BaseComponent[]>", "interfacedev_1_1jorel_1_1commandapi_1_1wrappers_1_1_previewable_function.html", [
+      [ "dev.jorel.commandapi.wrappers.PreviewLegacy", "interfacedev_1_1jorel_1_1commandapi_1_1wrappers_1_1_preview_legacy.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.wrappers.PreviewableFunction< Component >", "interfacedev_1_1jorel_1_1commandapi_1_1wrappers_1_1_previewable_function.html", [
+      [ "dev.jorel.commandapi.wrappers.Preview", "interfacedev_1_1jorel_1_1commandapi_1_1wrappers_1_1_preview.html", null ]
+    ] ],
     [ "dev.jorel.commandapi.annotations.arguments.Primitive", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_primitive.html", null ],
     [ "com.mojang.brigadier.RedirectModifier< S >", "interfacecom_1_1mojang_1_1brigadier_1_1_redirect_modifier.html", null ],
     [ "com.mojang.brigadier.ResultConsumer< S >", "interfacecom_1_1mojang_1_1brigadier_1_1_result_consumer.html", null ],
@@ -393,6 +402,10 @@ var hierarchy =
     [ "dev.jorel.commandapi.Tooltip< S >", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html", null ],
     [ "AbstractProcessor", null, [
       [ "dev.jorel.commandapi.annotations.Annotations", "classdev_1_1jorel_1_1commandapi_1_1annotations_1_1_annotations.html", null ]
+    ] ],
+    [ "IPreviewable", null, [
+      [ "dev.jorel.commandapi.arguments.AdventureChatArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_argument.html", null ],
+      [ "dev.jorel.commandapi.arguments.ChatArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_chat_argument.html", null ]
     ] ],
     [ "Keyed", null, [
       [ "dev.jorel.commandapi.wrappers.SimpleFunctionWrapper", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html", [

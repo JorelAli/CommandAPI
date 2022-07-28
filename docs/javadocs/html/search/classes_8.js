@@ -26,7 +26,8 @@ var searchData=
   ['internalconfig_23',['InternalConfig',['../classdev_1_1jorel_1_1commandapi_1_1_internal_config.html',1,'dev::jorel::commandapi']]],
   ['invalidcommandnameexception_24',['InvalidCommandNameException',['../classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_invalid_command_name_exception.html',1,'dev::jorel::commandapi::exceptions']]],
   ['invalidrangeexception_25',['InvalidRangeException',['../classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_invalid_range_exception.html',1,'dev::jorel::commandapi::exceptions']]],
-  ['istringtooltip_26',['IStringTooltip',['../interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html',1,'dev::jorel::commandapi']]],
-  ['itemstackargument_27',['ItemStackArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_item_stack_argument.html',1,'dev::jorel::commandapi::arguments']]],
-  ['itemstackpredicateargument_28',['ItemStackPredicateArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_item_stack_predicate_argument.html',1,'dev::jorel::commandapi::arguments']]]
+  ['ipreviewable_3c_20t_20extends_20argument_26',['IPreviewable&lt; T extends Argument',['../interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_previewable_3_01_t_01extends_01_argument.html',1,'dev::jorel::commandapi::arguments']]],
+  ['istringtooltip_27',['IStringTooltip',['../interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html',1,'dev::jorel::commandapi']]],
+  ['itemstackargument_28',['ItemStackArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_item_stack_argument.html',1,'dev::jorel::commandapi::arguments']]],
+  ['itemstackpredicateargument_29',['ItemStackPredicateArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_item_stack_predicate_argument.html',1,'dev::jorel::commandapi::arguments']]]
 ];
