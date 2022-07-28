@@ -11,12 +11,37 @@ import dev.jorel.commandapi.wrappers.PreviewableFunction;
  */
 public interface IPreviewable<T extends Argument<?>, A> {
 
+	/**
+	 * Sets the {@link PreviewableFunction} for this argument. This function will
+	 * run when a player requests a chat preview from the server. The function's
+	 * {@link PreviewInfo} will be populated based on the input for the relevant
+	 * player that requests the chat preview.
+	 * 
+	 * @param preview the function to use for chat preview generation
+	 * @return the current argument
+	 */
 	public T withPreview(PreviewableFunction<A> preview);
-	
+
+	/**
+	 * @return the {@link PreviewableFunction} for this argument, as an
+	 *         {@link Optional}.
+	 */
 	public Optional<PreviewableFunction<A>> getPreview();
-	
+
+	/**
+	 * Whether this argument should use the preview result as the argument value for
+	 * execution. If set to true, accessing this argument in {@code args} will
+	 * return the same value generated from
+	 * {@link IPreviewable#withPreview(PreviewableFunction)}
+	 * 
+	 * @param usePreview whether to use the preview as the value for this argument
+	 * @return the current argument
+	 */
 	public T usePreview(boolean usePreview);
-	
+
+	/**
+	 * @return whether this argument uses legacy chat component APIs
+	 */
 	public boolean isLegacy();
-	
+
 }

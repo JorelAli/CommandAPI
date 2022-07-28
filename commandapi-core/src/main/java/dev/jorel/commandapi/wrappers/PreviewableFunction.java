@@ -5,6 +5,6 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
 public interface PreviewableFunction<T> {
 
-	public T generatePreview(PreviewInfo info) throws WrapperCommandSyntaxException;
+	public T generatePreview(PreviewInfo<T> info) throws WrapperCommandSyntaxException;
 	
 }

@@ -45,6 +45,7 @@ public class NMS_1_19_R1_ChatPreviewHandler extends ChannelDuplexHandler {
 		this.connection = ((CraftPlayer) player).getHandle().connection.connection;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		if (msg instanceof ServerboundChatPreviewPacket chatPreview) {
@@ -70,7 +71,8 @@ public class NMS_1_19_R1_ChatPreviewHandler extends ChannelDuplexHandler {
 					
 					Object component = null;
 					try {
-						final PreviewInfo<?> previewInfo;
+						@SuppressWarnings("rawtypes")
+						final PreviewInfo previewInfo;
 						if(CommandAPIHandler.getInstance().lookupPreviewableLegacyStatus(path)) {
 							BaseComponent[] parsedInput = null;
 							try {

@@ -385,6 +385,36 @@ new CommandAPICommand("broadcast")
     })
     .register();
 /* ANCHOR_END: chatpreviewadventure */
+
+/* ANCHOR: chatpreviewspigotusepreview */
+new CommandAPICommand("broadcast")
+    .withArguments(new ChatArgument("message").usePreview(true).withPreview(info -> {
+        // Convert parsed BaseComponent[] to plain text
+        String plainText = BaseComponent.toPlainText((BaseComponent[]) info.parsedInput());
+
+        // Translate the & in plain text and generate a new BaseComponent[]
+        return TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', plainText));
+    }))
+    .executesPlayer((player, args) -> {
+        Bukkit.spigot().broadcast((BaseComponent[]) args[0]);
+    })
+    .register();
+/* ANCHOR_END: chatpreviewspigotusepreview */
+
+/* ANCHOR: chatpreviewadventureusepreview */
+new CommandAPICommand("broadcast")
+    .withArguments(new AdventureChatArgument("message").usePreview(true).withPreview(info -> {
+        // Convert parsed Component to plain text
+        String plainText = PlainTextComponentSerializer.plainText().serialize((Component) info.parsedInput());
+
+        // Translate the & in plain text and generate a new Component
+        return LegacyComponentSerializer.legacyAmpersand().deserialize(plainText);
+    }))
+    .executesPlayer((player, args) -> {
+        Bukkit.broadcast((Component) args[0]);
+    })
+    .register();
+/* ANCHOR_END: chatpreviewadventureusepreview */
 }
 
 

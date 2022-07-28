@@ -77,18 +77,17 @@ public class AdventureChatArgument extends Argument<Component> implements IGreed
 		final CommandSender sender = nms.getCommandSenderFromCSS(cmdCtx.getSource());
 		Component component = nms.getAdventureChat(cmdCtx, key);
 
-		if (getPreview().isPresent() && sender instanceof Player player) {
+		if (this.usePreview && getPreview().isPresent() && sender instanceof Player player) {
 			try {
 				Component previewComponent = getPreview().get()
 					.generatePreview(new PreviewInfo<Component>(player, CommandAPIHandler.getRawArgumentInput(cmdCtx, key), cmdCtx.getInput(), component));
 
-				if (this.usePreview) {
-					component = previewComponent;
-				}
+				component = previewComponent;
 			} catch (WrapperCommandSyntaxException e) {
 				throw e.getException();
 			}
 		}
+		
 		return component;
 	}
 
