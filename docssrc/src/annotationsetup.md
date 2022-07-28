@@ -50,18 +50,40 @@ The annotation system effectively needs to be added twice: Once for compilation 
 
 - If you haven't already done so, add the maven central repository to your `build.gradle` file:
 
-  ```gradle
+  <div class="multi-pre">
+  
+  ```groovy,build.gradle
   repositories {
       mavenCentral()
       maven { url = "https://repo.codemc.org/repository/maven-public/" }
   }
   ```
+  
+  ```kotlin,build.gradle.kts
+  repositories {
+      mavenCentral()
+      maven(url = "https://repo.codemc.org/repository/maven-public/")
+  }
+  ```
+  
+  </div>
 
 - Add the dependency and annotation processor to your list of dependencies in your `build.gradle` file:
-
-  ```gradle
+  
+  <div class="multi-pre">
+  
+  ```groovy,build.gradle
   dependencies {
       compileOnly "dev.jorel:commandapi-annotations:8.5.0"
       annotationProcessor "dev.jorel:commandapi-annotations:8.5.0"
   }
   ```
+  
+  ```kotlin,build.gradle.kts
+  dependencies {
+      compileOnly("dev.jorel:commandapi-annotations:8.5.0")
+      annotationProcessor("dev.jorel:commandapi-annotations:8.5.0")
+  }
+  ```
+  
+  </div>

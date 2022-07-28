@@ -222,19 +222,33 @@
 <ul>
 <li>
 <p>If you haven't already done so, add the maven central repository to your <code>build.gradle</code> file:</p>
-<pre><code class="language-gradle">repositories {
+<div class="multi-pre">
+<pre><code class="language-groovy build.gradle">repositories {
     mavenCentral()
     maven { url = &quot;https://repo.codemc.org/repository/maven-public/&quot; }
 }
 </code></pre>
+<pre><code class="language-kotlin build.gradle.kts">repositories {
+    mavenCentral()
+    maven(url = &quot;https://repo.codemc.org/repository/maven-public/&quot;)
+}
+</code></pre>
+</div>
 </li>
 <li>
 <p>Add the dependency and annotation processor to your list of dependencies in your <code>build.gradle</code> file:</p>
-<pre><code class="language-gradle">dependencies {
+<div class="multi-pre">
+<pre><code class="language-groovy build.gradle">dependencies {
     compileOnly &quot;dev.jorel:commandapi-annotations:8.5.0&quot;
     annotationProcessor &quot;dev.jorel:commandapi-annotations:8.5.0&quot;
 }
 </code></pre>
+<pre><code class="language-kotlin build.gradle.kts">dependencies {
+    compileOnly(&quot;dev.jorel:commandapi-annotations:8.5.0&quot;)
+    annotationProcessor(&quot;dev.jorel:commandapi-annotations:8.5.0&quot;)
+}
+</code></pre>
+</div>
 </li>
 </ul>
 

@@ -206,6 +206,12 @@
 <hr />
 <h2><a class="header" href="#documentation-changelog" id="documentation-changelog">Documentation changelog</a></h2>
 <p>Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.</p>
+<h3><a class="header" href="#documentation-changes-840-rightarrow-850" id="documentation-changes-840-rightarrow-850">Documentation changes 8.4.0 \(\rightarrow\) 8.5.0</a></h3>
+<ul>
+<li>Adds <a href="./chatpreview.html">Chat preview</a> section</li>
+<li>Adds Kotlin-DSL <code>build.gradle.kts</code> instructions for using the CommandAPI</li>
+<li>Adds <code>CommandAPI.onDisable()</code> method to <a href="./shading.html#disabling">Shading the CommandAPI in your plugins</a></li>
+</ul>
 <h3><a class="header" href="#documentation-changes-830-rightarrow-840" id="documentation-changes-830-rightarrow-840">Documentation changes 8.3.0 \(\rightarrow\) 8.4.0</a></h3>
 <ul>
 <li>Updated <a href="./shading.html#shading-with-maven">Shading with Maven</a> with updated <code>maven-shade-plugin</code> version</li>
@@ -1179,19 +1185,33 @@ CommandAPI.onEnable(Plugin plugin);
 <ul>
 <li>
 <p>If you haven't already done so, add the maven central repository to your <code>build.gradle</code> file:</p>
-<pre><code class="language-gradle">repositories {
+<div class="multi-pre">
+<pre><code class="language-groovy build.gradle">repositories {
     mavenCentral()
     maven { url = &quot;https://repo.codemc.org/repository/maven-public/&quot; }
 }
 </code></pre>
+<pre><code class="language-kotlin build.gradle.kts">repositories {
+    mavenCentral()
+    maven(url = &quot;https://repo.codemc.org/repository/maven-public/&quot;)
+}
+</code></pre>
+</div>
 </li>
 <li>
 <p>Add the dependency and annotation processor to your list of dependencies in your <code>build.gradle</code> file:</p>
-<pre><code class="language-gradle">dependencies {
+<div class="multi-pre">
+<pre><code class="language-groovy build.gradle">dependencies {
     compileOnly &quot;dev.jorel:commandapi-annotations:8.5.0&quot;
     annotationProcessor &quot;dev.jorel:commandapi-annotations:8.5.0&quot;
 }
 </code></pre>
+<pre><code class="language-kotlin build.gradle.kts">dependencies {
+    compileOnly(&quot;dev.jorel:commandapi-annotations:8.5.0&quot;)
+    annotationProcessor(&quot;dev.jorel:commandapi-annotations:8.5.0&quot;)
+}
+</code></pre>
+</div>
 </li>
 </ul>
 <h1><a class="header" href="#command-registration" id="command-registration">Command registration</a></h1>
@@ -2889,7 +2909,7 @@ sender.spigot().sendMessage(BaseComponent[]);
 previews-chat=true
 ...
 </code></pre>
-<p>For players that want to use chat preview, they must have <code>Chat Preview: ON</code> enabled in <code>Options &gt; Chat Settings...</code></p>
+<p>For players that want to use chat preview, they must have <code>Chat Preview</code> enabled in <code>Options &gt; Chat Settings...</code></p>
 <hr />
 <h2><a class="header" href="#specifying-a-chat-preview-function" id="specifying-a-chat-preview-function">Specifying a chat preview function</a></h2>
 <p>The <code>ChatArgument</code> and <code>AdventureChatArgument</code> classes include a method, <code>withPreview</code>:</p>
