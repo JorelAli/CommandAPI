@@ -756,7 +756,6 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 	public void hookChatPreview(Plugin plugin, Player player) {
 		final Channel playerChannel = ((CraftPlayer) player).getHandle().connection.connection.channel;
 		if (playerChannel.pipeline().get("CommandAPI_" + player.getName()) == null) {
-			// Not sure why it's called packet_handler, but every example online uses this!
 			playerChannel.pipeline().addBefore("packet_handler", "CommandAPI_" + player.getName(), new NMS_1_19_R1_ChatPreviewHandler(this, plugin, player));
 		}
 	}
