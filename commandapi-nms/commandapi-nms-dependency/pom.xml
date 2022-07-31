@@ -37,6 +37,11 @@
 		<!-- NMS-specific implementations -->
 		<dependency>
 			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-1.19.1</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-1.19</artifactId>
 			<version>${project.version}</version>
 		</dependency>

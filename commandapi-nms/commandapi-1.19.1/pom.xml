@@ -25,11 +25,11 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>commandapi-1.19</artifactId>
+	<artifactId>commandapi-1.19.1</artifactId>
 
 	<properties>
-		<minecraft.mappings>1.19-R0.1-SNAPSHOT</minecraft.mappings>
-		<spigot.version>1.19-R0.1-SNAPSHOT</spigot.version>
+		<minecraft.mappings>1.19.1-R0.1-SNAPSHOT</minecraft.mappings>
+		<spigot.version>1.19.1-R0.1-SNAPSHOT</spigot.version>
 	</properties>
 
 	<repositories>
