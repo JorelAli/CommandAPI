@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
@@ -680,10 +681,39 @@ public class CommandAPIHandler<CommandSourceStack> {
 			return;
 		}
 
-		// Create a list of argument names
-		StringBuilder builder = new StringBuilder();
-		for (Argument<?> arg : args) {
-			builder.append(arg.getNodeName()).append("<").append(arg.getClass().getSimpleName()).append("> ");
+		// Create the human-readable command syntax of arguments
+		final String humanReadableCommandArgSyntax; {
+			StringBuilder builder = new StringBuilder();
+			for (Argument<?> arg : args) {
+				builder.append(arg.toString()).append(" ");
+			}
+			humanReadableCommandArgSyntax = builder.toString().trim();
+		}
+		
+		// #312 Safeguard against duplicate node names. This only applies to
+		// required arguments (i.e. not literal arguments)
+		{
+			Set<String> argumentNames = new HashSet<>();
+			for(Argument<?> arg : args) {
+				// We shouldn't find MultiLiteralArguments at this point, only
+				// LiteralArguments
+				if(!(arg instanceof LiteralArgument)) {
+					if(argumentNames.contains(arg.getNodeName())) {
+						CommandAPI.logError("""
+							Failed to register command:
+
+							  %s %s
+
+							Because the following argument shares the same node name as another argument:
+
+							  %s
+							""".formatted(meta.commandName, humanReadableCommandArgSyntax, arg.toString()));
+						return;
+					} else {
+						argumentNames.add(arg.getNodeName());
+					}
+				}
+			}
 		}
 
 		// Expand metaData into named variables
@@ -699,7 +729,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		for (RegisteredCommand rCommand : registeredCommands) {
 			hasRegisteredCommand |= rCommand.commandName().equals(commandName);
 		}
-		if (hasRegisteredCommand && hasCommandConflict(commandName, args, builder.toString())) {
+		if (hasRegisteredCommand && hasCommandConflict(commandName, args, humanReadableCommandArgSyntax)) {
 			return;
 		} else {
 			List<String> argumentsString = new ArrayList<>();
@@ -718,7 +748,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 					+ "). Did you forget to remove this from your plugin.yml file?");
 		}
 
-		CommandAPI.logInfo("Registering command /" + commandName + " " + builder.toString());
+		CommandAPI.logInfo("Registering command /" + commandName + " " + humanReadableCommandArgSyntax);
 
 		// Generate the actual command
 		Command<CommandSourceStack> command = generateCommand(args, executor, converted);
@@ -877,7 +907,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		List<Object> previousArguments = new ArrayList<>();
 
 		for (Argument<?> arg : args) {
-			if (arg.getNodeName().equals(nodeName)) {
+			if (arg.getNodeName().equals(nodeName) && !(arg instanceof LiteralArgument)) {
 				break;
 			}
 
