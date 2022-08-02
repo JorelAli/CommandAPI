@@ -892,9 +892,9 @@ public class CommandAPIHandler<CommandSourceStack> {
 				argument.getArgumentPermission(), argument.getRequirements())).suggests(newSuggestionsProvider);
 	}
 
-	static Argument<?> getArgument(Argument<?>[] args, String nodeName) {
+	static Argument<?> getRequiredArgument(Argument<?>[] args, String nodeName) {
 		for (Argument<?> arg : args) {
-			if (arg.getNodeName().equals(nodeName)) {
+			if (arg.getNodeName().equals(nodeName) && !(arg instanceof LiteralArgument)) {
 				return arg;
 			}
 		}
@@ -938,8 +938,8 @@ public class CommandAPIHandler<CommandSourceStack> {
 			SuggestionInfo suggestionInfo = new SuggestionInfo(NMS.getCommandSenderFromCSS(context.getSource()),
 					generatePreviousArguments(context, args, nodeName), builder.getInput(), builder.getRemaining());
 			Optional<ArgumentSuggestions> suggestionsToAddOrOverride = overrideSuggestions
-					? getArgument(args, nodeName).getOverriddenSuggestions()
-					: getArgument(args, nodeName).getIncludedSuggestions();
+					? getRequiredArgument(args, nodeName).getOverriddenSuggestions()
+					: getRequiredArgument(args, nodeName).getIncludedSuggestions();
 			return suggestionsToAddOrOverride.orElse(ArgumentSuggestions.empty()).suggest(suggestionInfo, builder);
 		};
 	}

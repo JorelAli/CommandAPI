@@ -150,7 +150,7 @@ public final class Brigadier {
 	public static RequiredArgumentBuilder fromArgument(List<Argument> args, String nodeName) {
 		Argument[] argsArr = args.toArray(new Argument[0]);
 		return CommandAPIHandler.getInstance().getRequiredArgumentBuilderDynamic(argsArr,
-				CommandAPIHandler.getArgument(argsArr, nodeName));
+				CommandAPIHandler.getRequiredArgument(argsArr, nodeName));
 	}
 
 	/**
