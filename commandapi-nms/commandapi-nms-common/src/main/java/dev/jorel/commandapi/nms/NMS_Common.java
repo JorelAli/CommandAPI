@@ -105,6 +105,7 @@ import net.minecraft.commands.arguments.ArgumentScoreboardObjective;
 import net.minecraft.commands.arguments.ArgumentScoreboardSlot;
 import net.minecraft.commands.arguments.ArgumentScoreboardTeam;
 import net.minecraft.commands.arguments.ArgumentScoreholder;
+import net.minecraft.commands.arguments.ArgumentTime;
 import net.minecraft.commands.arguments.ArgumentUUID;
 import net.minecraft.commands.arguments.coordinates.ArgumentPosition;
 import net.minecraft.commands.arguments.coordinates.ArgumentRotation;
@@ -287,7 +288,7 @@ public abstract class NMS_Common<T> implements NMS<T> {
 
 	@Override
 	public final ArgumentType<?> _ArgumentTime() {
-		return ArgumentTag.a();
+		return ArgumentTime.a();
 	}
 
 	@Override
