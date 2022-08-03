@@ -40,7 +40,6 @@ import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.potion.MockPotionEffectType;
 import dev.jorel.commandapi.nms.NMS;
@@ -133,6 +132,7 @@ public class MockNMS extends ArgumentNMS {
 			// doesn't work. At this point, we'll use the ServerMock#createPotionEffectTypes
 			// method (which unfortunately is private and pure, so instead of using reflection
 			// we'll just implement it right here instead)
+			@SuppressWarnings("unchecked")
 			Map<NamespacedKey, PotionEffectType> byKey = (Map<NamespacedKey, PotionEffectType>) getField(PotionEffectType.class, "byKey", null);
 			if(byKey.isEmpty()) {
 				createPotionEffectTypes();

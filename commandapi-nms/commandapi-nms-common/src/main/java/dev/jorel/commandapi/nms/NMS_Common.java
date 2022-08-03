@@ -594,7 +594,6 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	@Override
 	public final PotionEffectType getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String key)
 		throws CommandSyntaxException {
-		// TODO: Requires testing
 		return PotionEffectType.getByKey(fromResourceLocation(Registry.MOB_EFFECT.getKey(MobEffectArgument.getEffect(cmdCtx, key))));
 	}
 
