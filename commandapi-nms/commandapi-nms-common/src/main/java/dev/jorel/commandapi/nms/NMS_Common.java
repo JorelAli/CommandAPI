@@ -116,8 +116,10 @@ import net.minecraft.commands.arguments.coordinates.SwizzleArgument;
 import net.minecraft.commands.arguments.coordinates.Vec2Argument;
 import net.minecraft.commands.arguments.coordinates.Vec3Argument;
 import net.minecraft.commands.arguments.item.FunctionArgument;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component.Serializer;
 import net.minecraft.resources.MinecraftKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec2;
 
 /**
@@ -489,8 +491,11 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	public abstract CommandSender getCommandSenderFromCSS(T clw);
 
 	@Override
-	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftEnchantment")
-	public abstract Enchantment getEnchantment(CommandContext<CommandSourceStack> cmdCtx, String key);
+	public Enchantment getEnchantment(CommandContext<CommandSourceStack> cmdCtx, String key) {
+		/* TODO: Requires testing */
+		ResourceLocation enchantment = Registry.ENCHANTMENT.getKey(ItemEnchantmentArgument.getEnchantment(cmdCtx, key));
+		return Enchantment.getByKey(NamespacedKey.fromString(enchantment.getNamespace() + ":" + enchantment.getPath()));
+	}
 
 	@Override
 	public abstract Object getEntitySelector(CommandContext<CommandSourceStack> cmdCtx, String key, EntitySelector selector)
