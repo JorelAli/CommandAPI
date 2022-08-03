@@ -194,8 +194,11 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	// TODO:
-	@Unimplemented(because = NAME_CHANGED, from = "??", to = "b")
+	// I mean... really? Why?
+	@Unimplemented(because = NAME_CHANGED, info = "a (1.17)                -> entity   (1.18) -> a (1.19)")
+	@Unimplemented(because = NAME_CHANGED, info = "multipleEntities (1.17) -> entities (1.18) -> b (1.19)")
+	@Unimplemented(because = NAME_CHANGED, info = "c (1.17)                -> player   (1.18) -> c (1.19)")
+	@Unimplemented(because = NAME_CHANGED, info = "d (1.17)                -> players  (1.18) -> d (1.19)")
 	public abstract ArgumentType<?> _ArgumentEntity(EntitySelector selector);
 
 	@Override

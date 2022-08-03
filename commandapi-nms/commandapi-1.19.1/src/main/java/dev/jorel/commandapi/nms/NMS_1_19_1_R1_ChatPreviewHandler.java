@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -91,8 +92,11 @@ public class NMS_1_19_1_R1_ChatPreviewHandler extends ChannelDuplexHandler {
 		super.channelRead(ctx, msg);
 	}
 
+	@SuppressWarnings("unchecked")
 	private CompletableFuture<net.minecraft.network.chat.Component> generateComponentToSend(String chatPreviewQuery) {
-		CompletableFuture<net.minecraft.network.chat.Component> result = CompletableFuture.supplyAsync(() -> {
+		CompletableFuture<net.minecraft.network.chat.Component> result = new CompletableFuture<>();
+		
+		Bukkit.getScheduler().runTask(this.plugin, () -> {
 
 			// Substring 1 because we want to get rid of the leading /
 			final String fullInput = chatPreviewQuery.substring(1);
@@ -154,12 +158,12 @@ public class NMS_1_19_1_R1_ChatPreviewHandler extends ChannelDuplexHandler {
 				}
 
 				if (jsonToSend != null) {
-					return (net.minecraft.network.chat.Component) Serializer.fromJson(jsonToSend);
+					result.complete(Serializer.fromJson(jsonToSend));
 				}
 			}
 
 			// It seems happy to return null, so we'll do that
-			return null;
+			result.complete(null);
 		});
 
 		result.thenAcceptAsync(component -> {

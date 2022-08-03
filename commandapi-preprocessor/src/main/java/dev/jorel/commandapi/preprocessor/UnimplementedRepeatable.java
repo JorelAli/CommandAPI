@@ -21,7 +21,6 @@
 package dev.jorel.commandapi.preprocessor;
 
 import java.lang.annotation.ElementType;
-import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -33,74 +32,12 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.SOURCE)
-@Repeatable(UnimplementedRepeatable.class)
-public @interface Unimplemented {
+public @interface UnimplementedRepeatable {
 
 	/**
-	 * A reason why this method hasn't been implemented
-	 * 
-	 * @return a reason why this method hasn't been implemented
+	 * More syntactic sugar
+	 * @return an array of unimplemented annotations
 	 */
-	REASON[] because();
-
-	/**
-	 * @return description
-	 */
-	String from() default "";
-
-	/**
-	 * @return description
-	 */
-	String to() default "";
-
-	/**
-	 * @return description
-	 */
-	String in() default "";
-
-	/**
-	 * @return description
-	 */
-	String introducedIn() default "";
-
-	/**
-	 * @return description
-	 */
-	String classNamed() default "";
-	
-	/**
-	 * @return description
-	 */
-	String info() default "";
-
-	/**
-	 * The reason why this method was unimplemented
-	 */
-	enum REASON {
-		/**
-		 * This method requires importing {@code org.bukkit.craftbukkit}
-		 */
-		REQUIRES_CRAFTBUKKIT,
-
-		/**
-		 * A method or field name changed
-		 */
-		NAME_CHANGED,
-
-		/**
-		 * The implementation of this feature is specific to a given Minecraft version
-		 */
-		VERSION_SPECIFIC_IMPLEMENTATION,
-
-		/**
-		 * Requires access to CommandSourceStack (CommandListenerWrapper)
-		 */
-		REQUIRES_CSS,
-
-		/**
-		 * Requires access to the NMS Minecraft server
-		 */
-		REQUIRES_MINECRAFT_SERVER
-	}
+	Unimplemented[] value();
 
 }
