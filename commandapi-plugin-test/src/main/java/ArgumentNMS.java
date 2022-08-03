@@ -45,6 +45,12 @@ public abstract class ArgumentNMS extends BlankNMS {
 	public final ArgumentType<?> _ArgumentBlockState() {
 		return BASE_NMS._ArgumentBlockState();
 	}
+	
+	@Override
+	public ArgumentType<?> _ArgumentChat() {
+		// TODO Auto-generated method stub
+		return super._ArgumentChat();
+	}
 
 	@Override
 	public ArgumentType<?> _ArgumentEntity(EntitySelector selector) {

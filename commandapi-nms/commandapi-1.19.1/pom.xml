@@ -84,7 +84,8 @@
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-nms-common</artifactId>
 			<version>${project.version}</version>
-			<scope>compile</scope>
+			<classifier>mojang-mapped</classifier>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 

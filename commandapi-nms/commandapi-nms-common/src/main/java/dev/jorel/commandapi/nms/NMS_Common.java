@@ -27,11 +27,9 @@ import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.VERSION_SPE
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -55,7 +53,6 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftEntity;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -377,6 +374,7 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 		return ResourceLocationArgument.getAdvancement(cmdCtx, key).bukkit;
 	}
 
+	@SuppressWarnings("removal")
 	@Override
 	public final Component getAdventureChat(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		return PaperComponents.gsonSerializer().deserialize(Serializer.toJson(MessageArgument.getMessage(cmdCtx, key)));
@@ -416,6 +414,7 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftBlockData")
 	public abstract BlockData getBlockState(CommandContext<CommandSourceStack> cmdCtx, String key);
 
+	@SuppressWarnings("resource")
 	@Override
 	public CommandDispatcher<CommandSourceStack> getBrigadierDispatcher() {
 		return getMinecraftServer().vanillaCommandDispatcher.getDispatcher();
@@ -476,17 +475,8 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public FunctionWrapper[] getFunction(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		List<FunctionWrapper> result = new ArrayList<>();
-		CommandSourceStack css = cmdCtx.getSource().withSuppressedOutput().withMaximumPermission(2);
-
-		for (CommandFunction commandFunction : FunctionArgument.getFunctions(cmdCtx, key)) {
-			result.add(FunctionWrapper.fromSimpleFunctionWrapper(convertFunction(commandFunction), css,
-				// TODO: We can't access CraftEntity here
-				entity -> cmdCtx.getSource().withEntity(((CraftEntity) entity).getHandle())));
-		}
-		return result.toArray(new FunctionWrapper[0]);
-	}
+	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftEntity")
+	public abstract FunctionWrapper[] getFunction(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException;
 
 	@Override
 	public final SimpleFunctionWrapper getFunction(NamespacedKey key) {
@@ -663,7 +653,10 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftSound")
 	public abstract Sound getSound(CommandContext<CommandSourceStack> cmdCtx, String key);
 
+	// TODO: This differs from 1.18 -> 1.18.2 due to biome suggestions. Need to ensure
+	// this doesn't blow up, but it should be covered by the default case (empty)
 	@Override
+	@Differs(from = "1.18", by = "Use of argument synthetic biome's listSuggestions method")
 	public final SuggestionProvider<CommandSourceStack> getSuggestionProvider(SuggestionProviders provider) {
 		return switch (provider) {
 			case FUNCTION -> (context, builder) -> {

@@ -6,18 +6,25 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
@@ -41,13 +48,20 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 
 import be.seeseemelk.mockbukkit.WorldMock;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.wrappers.FloatRange;
+import dev.jorel.commandapi.wrappers.IntegerRange;
+import dev.jorel.commandapi.wrappers.MathOperation;
 import dev.jorel.commandapi.wrappers.ParticleData;
+import dev.jorel.commandapi.wrappers.Rotation;
+import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.SharedConstants;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.Advancements;
@@ -358,84 +372,6 @@ public class MockNMS extends ArgumentNMS {
 	@Override
 	public World getWorldForCSS(CommandListenerWrapper clw) {
 		return new WorldMock();
-	}
-
-	@Override
-	public SimpleCommandMap getSimpleCommandMap() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public String convert(ItemStack is) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String convert(ParticleData<?> particle) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription, String permission) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public SuggestionProvider<CommandListenerWrapper> getSuggestionProvider(SuggestionProviders provider) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean isVanillaCommandWrapper(Command command) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void reloadDataPacks() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void resendPackets(Player player) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public SimpleFunctionWrapper getFunction(NamespacedKey key) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Set<NamespacedKey> getFunctions() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public SimpleFunctionWrapper[] getTag(NamespacedKey key) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Set<NamespacedKey> getTags() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }
