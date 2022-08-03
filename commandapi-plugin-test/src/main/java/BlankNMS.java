@@ -21,6 +21,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.mojang.brigadier.suggestion.Suggestions;
 
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.nms.NMS;
@@ -39,24 +40,30 @@ import net.minecraft.commands.arguments.ArgumentChatComponent;
 import net.minecraft.commands.arguments.ArgumentMinecraftKeyRegistered;
 import net.minecraft.commands.arguments.ArgumentMobEffect;
 import net.minecraft.commands.arguments.ArgumentProfile;
-import net.minecraft.commands.arguments.ComponentArgument;
 import net.minecraft.commands.arguments.GameProfileArgument;
 import net.minecraft.commands.arguments.coordinates.ArgumentPosition;
+import net.minecraft.commands.arguments.coordinates.ArgumentVec2;
+import net.minecraft.commands.arguments.coordinates.ArgumentVec2I;
 import net.minecraft.commands.arguments.coordinates.ArgumentVec3;
-import net.minecraft.network.chat.Component.Serializer;
+import net.minecraft.network.chat.IChatBaseComponent;
 
+/**
+ * This class is effectively identical to NMS_Common, except we want to be able
+ * to override some of its methods. Yes, we could remove the final modifiers on
+ * the NMS_Common overridden methods, however we do that to ensure that we're
+ * not re-overriding those methods in the underlying NMS implementations. The
+ * choice between having safer runtime code compared to having safer testing
+ * code is to have safer runtime code instead.
+ */
 public abstract class BlankNMS implements NMS<CommandListenerWrapper> {
 
 	public final NMS<?> BASE_NMS;
-	
+
 	public BlankNMS(NMS<?> baseNMS) {
 		this.BASE_NMS = baseNMS;
 	}
-	
-	
-	// TODO: All of this stuff needs to be implemented at some point
-	
 
+	// TODO: All of this stuff needs to be implemented at some point
 
 	@Override
 	public SimpleCommandMap getSimpleCommandMap() {
@@ -90,8 +97,7 @@ public abstract class BlankNMS implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public SuggestionProvider<CommandListenerWrapper> getSuggestionProvider(SuggestionProviders provider) {
-		// TODO Auto-generated method stub
-		throw new RuntimeException("unimplemented");
+		return (context, builder) -> Suggestions.empty();
 	}
 
 	@Override
@@ -229,8 +235,7 @@ public abstract class BlankNMS implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public ArgumentType<?> _ArgumentPosition2D() {
-		// TODO Auto-generated method stub
-		throw new RuntimeException("unimplemented");
+		return ArgumentVec2I.a();
 	}
 
 	@Override
@@ -294,8 +299,7 @@ public abstract class BlankNMS implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public ArgumentType<?> _ArgumentVec2() {
-		// TODO Auto-generated method stub
-		throw new RuntimeException("unimplemented");
+		return ArgumentVec2.a();
 	}
 
 	@Override
@@ -317,8 +321,7 @@ public abstract class BlankNMS implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public org.bukkit.advancement.Advancement getAdvancement(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		// TODO Auto-generated method stub
-		throw new RuntimeException("unimplemented");
+		return ArgumentMinecraftKeyRegistered.a(cmdCtx, key).bukkit;
 	}
 
 	@Override
@@ -339,10 +342,9 @@ public abstract class BlankNMS implements NMS<CommandListenerWrapper> {
 		throw new RuntimeException("unimplemented");
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public BaseComponent[] getChatComponent(CommandContext cmdCtx, String key) {
-		return ComponentSerializer.parse(Serializer.toJson(ArgumentChatComponent.a(cmdCtx, key)));
+	public BaseComponent[] getChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return ComponentSerializer.parse(IChatBaseComponent.ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, key)));
 	}
 
 	@Override
@@ -377,7 +379,7 @@ public abstract class BlankNMS implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public Player getPlayer(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		Player target = Bukkit.getPlayer(GameProfileArgument.getGameProfiles(cmdCtx, key).iterator().next().getId());
+		Player target = Bukkit.getPlayer(ArgumentProfile.a(cmdCtx, key).iterator().next().getId());
 		if (target == null) {
 			throw GameProfileArgument.ERROR_UNKNOWN_PLAYER.create();
 		} else {
