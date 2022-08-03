@@ -74,7 +74,9 @@ public class ArgumentTests {
 	@AfterEach
 	public void tearDown() {
 		Bukkit.getScheduler().cancelTasks(plugin);
-		plugin.onDisable();
+		if(plugin != null) {
+			plugin.onDisable();
+		}
 		MockBukkit.unmock();
 	}
 
