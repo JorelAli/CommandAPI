@@ -84,40 +84,41 @@ import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
-import net.minecraft.advancements.critereon.CriterionConditionValue;
-import net.minecraft.commands.CommandListenerWrapper;
-import net.minecraft.commands.arguments.ArgumentAngle;
-import net.minecraft.commands.arguments.ArgumentChat;
-import net.minecraft.commands.arguments.ArgumentChatComponent;
-import net.minecraft.commands.arguments.ArgumentChatFormat;
-import net.minecraft.commands.arguments.ArgumentCriterionValue;
-import net.minecraft.commands.arguments.ArgumentDimension;
-import net.minecraft.commands.arguments.ArgumentEnchantment;
-import net.minecraft.commands.arguments.ArgumentEntitySummon;
-import net.minecraft.commands.arguments.ArgumentMathOperation;
+import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.AngleArgument;
 import net.minecraft.commands.arguments.ArgumentMinecraftKeyRegistered;
-import net.minecraft.commands.arguments.ArgumentMobEffect;
-import net.minecraft.commands.arguments.ArgumentNBTTag;
-import net.minecraft.commands.arguments.ArgumentParticle;
 import net.minecraft.commands.arguments.ArgumentProfile;
-import net.minecraft.commands.arguments.ArgumentScoreboardCriteria;
-import net.minecraft.commands.arguments.ArgumentScoreboardObjective;
-import net.minecraft.commands.arguments.ArgumentScoreboardSlot;
-import net.minecraft.commands.arguments.ArgumentScoreboardTeam;
-import net.minecraft.commands.arguments.ArgumentScoreholder;
-import net.minecraft.commands.arguments.ArgumentTime;
-import net.minecraft.commands.arguments.ArgumentUUID;
-import net.minecraft.commands.arguments.coordinates.ArgumentPosition;
-import net.minecraft.commands.arguments.coordinates.ArgumentRotation;
-import net.minecraft.commands.arguments.coordinates.ArgumentRotationAxis;
-import net.minecraft.commands.arguments.coordinates.ArgumentVec2;
-import net.minecraft.commands.arguments.coordinates.ArgumentVec2I;
-import net.minecraft.commands.arguments.coordinates.ArgumentVec3;
-import net.minecraft.commands.arguments.item.ArgumentTag;
-import net.minecraft.core.EnumDirection;
-import net.minecraft.network.chat.IChatBaseComponent;
+import net.minecraft.commands.arguments.ColorArgument;
+import net.minecraft.commands.arguments.ComponentArgument;
+import net.minecraft.commands.arguments.CompoundTagArgument;
+import net.minecraft.commands.arguments.DimensionArgument;
+import net.minecraft.commands.arguments.EntitySummonArgument;
+import net.minecraft.commands.arguments.GameProfileArgument;
+import net.minecraft.commands.arguments.ItemEnchantmentArgument;
+import net.minecraft.commands.arguments.MessageArgument;
+import net.minecraft.commands.arguments.MobEffectArgument;
+import net.minecraft.commands.arguments.ObjectiveArgument;
+import net.minecraft.commands.arguments.ObjectiveCriteriaArgument;
+import net.minecraft.commands.arguments.OperationArgument;
+import net.minecraft.commands.arguments.ParticleArgument;
+import net.minecraft.commands.arguments.RangeArgument;
+import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.arguments.ScoreHolderArgument;
+import net.minecraft.commands.arguments.ScoreboardSlotArgument;
+import net.minecraft.commands.arguments.TeamArgument;
+import net.minecraft.commands.arguments.TimeArgument;
+import net.minecraft.commands.arguments.UuidArgument;
+import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
+import net.minecraft.commands.arguments.coordinates.ColumnPosArgument;
+import net.minecraft.commands.arguments.coordinates.RotationArgument;
+import net.minecraft.commands.arguments.coordinates.SwizzleArgument;
+import net.minecraft.commands.arguments.coordinates.Vec2Argument;
+import net.minecraft.commands.arguments.coordinates.Vec3Argument;
+import net.minecraft.commands.arguments.item.FunctionArgument;
+import net.minecraft.network.chat.Component.Serializer;
 import net.minecraft.resources.MinecraftKey;
-import net.minecraft.world.phys.Vec2F;
+import net.minecraft.world.phys.Vec2;
 
 /**
  * Common NMS code To ensure that this code actually works across all versions
@@ -134,16 +135,16 @@ import net.minecraft.world.phys.Vec2F;
  * (introducing another NMS_Common module perhaps?
  */
 @SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
-public abstract class NMS_Common<T> implements NMS<T> {
+public abstract class NMS_Common implements NMS<CommandSourceStack> {
 
 	@Override
 	public final ArgumentType<?> _ArgumentAngle() {
-		return ArgumentAngle.a();
+		return AngleArgument.angle();
 	}
 
 	@Override
 	public final ArgumentType<?> _ArgumentAxis() {
-		return ArgumentRotationAxis.a();
+		return SwizzleArgument.swizzle();
 	}
 
 	@Override
@@ -156,27 +157,27 @@ public abstract class NMS_Common<T> implements NMS<T> {
 
 	@Override
 	public final ArgumentType<?> _ArgumentChat() {
-		return ArgumentChat.a();
+		return MessageArgument.message();
 	}
 
 	@Override
 	public final ArgumentType<?> _ArgumentChatComponent() {
-		return ArgumentChatComponent.a();
+		return ComponentArgument.textComponent();
 	}
 
 	@Override
 	public final ArgumentType<?> _ArgumentChatFormat() {
-		return ArgumentChatFormat.a();
+		return ColorArgument.color();
 	}
 
 	@Override
 	public final ArgumentType<?> _ArgumentDimension() {
-		return ArgumentDimension.a();
+		return DimensionArgument.dimension();
 	}
 
 	@Override
 	public final ArgumentType<?> _ArgumentEnchantment() {
-		return ArgumentEnchantment.a();
+		return ItemEnchantmentArgument.enchantment();
 	}
 
 	@Override
@@ -186,17 +187,17 @@ public abstract class NMS_Common<T> implements NMS<T> {
 
 	@Override
 	public final ArgumentType<?> _ArgumentEntitySummon() {
-		return ArgumentEntitySummon.a();
+		return EntitySummonArgument.id();
 	}
 
 	@Override
 	public final ArgumentType<?> _ArgumentFloatRange() {
-		return ArgumentCriterionValue.b();
+		return RangeArgument.floatRange();
 	}
 
 	@Override
 	public final ArgumentType<?> _ArgumentIntRange() {
-		return ArgumentCriterionValue.a();
+		return RangeArgument.intRange();
 	}
 
 	@Override
@@ -209,72 +210,72 @@ public abstract class NMS_Common<T> implements NMS<T> {
 
 	@Override
 	public final ArgumentType<?> _ArgumentMathOperation() {
-		return ArgumentMathOperation.a();
+		return OperationArgument.operation();
 	}
 
 	@Override
 	public final ArgumentType<?> _ArgumentMinecraftKeyRegistered() {
-		return ArgumentMinecraftKeyRegistered.a();
+		return ResourceLocationArgument.id();
 	}
 
 	@Override
 	public final ArgumentType<?> _ArgumentMobEffect() {
-		return ArgumentMobEffect.a();
+		return MobEffectArgument.effect();
 	}
 
 	@Override
 	public final ArgumentType<?> _ArgumentNBTCompound() {
-		return ArgumentNBTTag.a();
+		return CompoundTagArgument.compoundTag();
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentParticle() {
-		return ArgumentParticle.a();
+	public ArgumentType<?> _ArgumentParticle() {
+		return ParticleArgument.particle();
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentPosition() {
-		return ArgumentPosition.a();
+	public ArgumentType<?> _ArgumentPosition() {
+		return BlockPosArgument.blockPos();
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentPosition2D() {
-		return ArgumentVec2I.a();
+	public ArgumentType<?> _ArgumentPosition2D() {
+		return ColumnPosArgument.columnPos();
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentProfile() {
-		return ArgumentProfile.a();
+	public ArgumentType<?> _ArgumentProfile() {
+		return GameProfileArgument.gameProfile();
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentRotation() {
-		return ArgumentRotation.a();
+	public ArgumentType<?> _ArgumentRotation() {
+		return RotationArgument.rotation();
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentScoreboardCriteria() {
-		return ArgumentScoreboardCriteria.a();
+	public ArgumentType<?> _ArgumentScoreboardCriteria() {
+		return ObjectiveCriteriaArgument.criteria();
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentScoreboardObjective() {
-		return ArgumentScoreboardObjective.a();
+	public ArgumentType<?> _ArgumentScoreboardObjective() {
+		return ObjectiveArgument.objective();
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentScoreboardSlot() {
-		return ArgumentScoreboardSlot.a();
+	public ArgumentType<?> _ArgumentScoreboardSlot() {
+		return ScoreboardSlotArgument.displaySlot();
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentScoreboardTeam() {
-		return ArgumentScoreboardTeam.a();
+	public ArgumentType<?> _ArgumentScoreboardTeam() {
+		return TeamArgument.team();
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentScoreholder(boolean single) {
-		return single ? ArgumentScoreholder.a() : ArgumentScoreholder.b();
+	public ArgumentType<?> _ArgumentScoreholder(boolean single) {
+		return single ? ScoreHolderArgument.scoreHolder() : ScoreHolderArgument.scoreHolders();
 	}
 
 	@Override
@@ -282,38 +283,38 @@ public abstract class NMS_Common<T> implements NMS<T> {
 	public abstract ArgumentType<?> _ArgumentSyntheticBiome();
 
 	@Override
-	public final ArgumentType<?> _ArgumentTag() {
-		return ArgumentTag.a();
+	public ArgumentType<?> _ArgumentTag() {
+		return FunctionArgument.functions();
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentTime() {
-		return ArgumentTime.a();
+	public ArgumentType<?> _ArgumentTime() {
+		return TimeArgument.time();
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentUUID() {
-		return ArgumentUUID.a();
+	public ArgumentType<?> _ArgumentUUID() {
+		return UuidArgument.uuid();
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentVec2() {
-		return ArgumentVec2.a();
+	public ArgumentType<?> _ArgumentVec2() {
+		return Vec2Argument.vec2();
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentVec3() {
-		return ArgumentVec3.a();
+	public ArgumentType<?> _ArgumentVec3() {
+		return Vec3Argument.vec3();
 	}
 
 	@Override
-	public final BaseComponent[] getChat(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return ComponentSerializer.parse(IChatBaseComponent.ChatSerializer.a(ArgumentChat.a(cmdCtx, key)));
+	public final BaseComponent[] getChat(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		return ComponentSerializer.parse(Serializer.toJson(MessageArgument.getMessage(cmdCtx, key)));
 	}
 
 	@Override
-	public final BaseComponent[] getChatComponent(CommandContext cmdCtx, String str) {
-		return ComponentSerializer.parse(IChatBaseComponent.ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, str)));
+	public final BaseComponent[] getChatComponent(CommandContext<CommandSourceStack> cmdCtx, String str) {
+		return ComponentSerializer.parse(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, str)));
 	}
 
 	@Override
@@ -344,143 +345,144 @@ public abstract class NMS_Common<T> implements NMS<T> {
 
 	@Override
 	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19")
-	public abstract void createDispatcherFile(File file, CommandDispatcher<T> dispatcher) throws IOException;
+	public abstract void createDispatcherFile(File file, CommandDispatcher<CommandSourceStack> dispatcher) throws IOException;
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CustomHelpTopic")
 	public abstract HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription,
-			String permission);
+		String permission);
 
 	@Override
-	public final org.bukkit.advancement.Advancement getAdvancement(CommandContext cmdCtx, String key)
-			throws CommandSyntaxException {
-		return ArgumentMinecraftKeyRegistered.a(cmdCtx, key).bukkit;
+	public final org.bukkit.advancement.Advancement getAdvancement(CommandContext<CommandSourceStack> cmdCtx, String key)
+		throws CommandSyntaxException {
+		return ResourceLocationArgument.getAdvancement(cmdCtx, key).bukkit;
 	}
 
 	@Override
-	public final float getAngle(CommandContext cmdCtx, String key) {
-		return ArgumentAngle.a(cmdCtx, key);
+	public final float getAngle(CommandContext<CommandSourceStack> cmdCtx, String key) {
+		return AngleArgument.getAngle(cmdCtx, key);
 	}
 
 	@Override
-	public final EnumSet<Axis> getAxis(CommandContext cmdCtx, String key) {
+	public final EnumSet<Axis> getAxis(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		EnumSet<Axis> set = EnumSet.noneOf(Axis.class);
-		EnumSet<EnumDirection.EnumAxis> parsedEnumSet = ArgumentRotationAxis.a(cmdCtx, key);
-		for (EnumDirection.EnumAxis element : parsedEnumSet) {
+		EnumSet<net.minecraft.core.Direction.Axis> parsedEnumSet = SwizzleArgument.getSwizzle(cmdCtx, key);
+		for (net.minecraft.core.Direction.Axis element : parsedEnumSet) {
 			set.add(switch (element) {
-				case a -> Axis.X;
-				case b -> Axis.Y;
-				case c -> Axis.Z;
+				case X -> Axis.X;
+				case Y -> Axis.Y;
+				case Z -> Axis.Z;
 			});
 		}
 		return set;
 	}
 
 	@Override
-	@Unimplemented(because = REQUIRES_CSS)
-	public abstract T getCLWFromCommandSender(CommandSender sender);
+	public abstract CommandSourceStack getCLWFromCommandSender(CommandSender sender);
 
 	@Override
-	public final Environment getDimension(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return ArgumentDimension.a(cmdCtx, key).getWorld().getEnvironment();
+	public final Environment getDimension(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		return DimensionArgument.getDimension(cmdCtx, key).getWorld().getEnvironment();
 	}
 
 	@Override
-	public final FloatRange getFloatRange(CommandContext cmdCtx, String key) {
-		CriterionConditionValue.DoubleRange range = ArgumentCriterionValue.a.a(cmdCtx, key);
-		double low = range.a() == null ? -Float.MAX_VALUE : range.a();
-		double high = range.b() == null ? Float.MAX_VALUE : range.b();
+	public final FloatRange getFloatRange(CommandContext<CommandSourceStack> cmdCtx, String key) {
+		MinMaxBounds.Doubles range = RangeArgument.Floats.getRange(cmdCtx, key);
+		double low = range.getMin() == null ? -Float.MAX_VALUE : range.getMin();
+		double high = range.getMax() == null ? Float.MAX_VALUE : range.getMax();
 		return new FloatRange((float) low, (float) high);
 	}
 
 	@Override
-	public final IntegerRange getIntRange(CommandContext cmdCtx, String key) {
-		CriterionConditionValue.IntegerRange range = ArgumentCriterionValue.b.a(cmdCtx, key);
-		int low = (range.a() == null) ? Integer.MIN_VALUE : ((Integer) range.a()).intValue();
-		int high = (range.b() == null) ? Integer.MAX_VALUE : ((Integer) range.b()).intValue();
+	public final IntegerRange getIntRange(CommandContext<CommandSourceStack> cmdCtx, String key) {
+		MinMaxBounds.Ints range = RangeArgument.Ints.getRange(cmdCtx, key);
+		int low = range.getMin() == null ? Integer.MIN_VALUE : range.getMin();
+		int high = range.getMax() == null ? Integer.MAX_VALUE : range.getMax();
 		return new IntegerRange(low, high);
 	}
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftItemStack")
-	public abstract ItemStack getItemStack(CommandContext<T> cmdCtx, String key) throws CommandSyntaxException;
+	public abstract ItemStack getItemStack(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException;
 
 	@Override
-	public final MathOperation getMathOperation(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+	public final MathOperation getMathOperation(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		// We run this to ensure the argument exists/parses properly
-		ArgumentMathOperation.a(cmdCtx, key);
+		OperationArgument.getOperation(cmdCtx, key);
 		return MathOperation.fromString(CommandAPIHandler.getRawArgumentInput(cmdCtx, key));
 	}
 
 	@Override
-	public NamespacedKey getMinecraftKey(CommandContext cmdCtx, String key) {
+	public NamespacedKey getMinecraftKey(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		MinecraftKey resourceLocation = ArgumentMinecraftKeyRegistered.e(cmdCtx, key);
 		return new NamespacedKey(resourceLocation.b(), resourceLocation.a());
 	}
 
 	@Override
-	public <NBTContainer> Object getNBTCompound(CommandContext<T> cmdCtx, String key,
-			Function<Object, NBTContainer> nbtContainerConstructor) {
-		return nbtContainerConstructor.apply(ArgumentNBTTag.a(cmdCtx, key));
+	public <NBTContainer> Object getNBTCompound(CommandContext<CommandSourceStack> cmdCtx, String key,
+		Function<Object, NBTContainer> nbtContainerConstructor) {
+		return nbtContainerConstructor.apply(CompoundTagArgument.getCompoundTag(cmdCtx, key));
 	}
 
 	@Override
-	public final Rotation getRotation(CommandContext cmdCtx, String key) {
-		Vec2F rotation = ArgumentRotation.a(cmdCtx, key).b((CommandListenerWrapper) cmdCtx.getSource());
-		return new Rotation(rotation.i, rotation.j);
+	public final Rotation getRotation(CommandContext<CommandSourceStack> cmdCtx, String key) {
+		Vec2 rotation = RotationArgument.getRotation(cmdCtx, key).getRotation(cmdCtx.getSource());
+		return new Rotation(rotation.x, rotation.y);
 	}
 
 	@Override
-	public final ScoreboardSlot getScoreboardSlot(CommandContext cmdCtx, String key) {
-		return new ScoreboardSlot(ArgumentScoreboardSlot.a(cmdCtx, key));
+	public final ScoreboardSlot getScoreboardSlot(CommandContext<CommandSourceStack> cmdCtx, String key) {
+		return new ScoreboardSlot(ScoreboardSlotArgument.getDisplaySlot(cmdCtx, key));
 	}
 
 	@Override
-	public final Collection<String> getScoreHolderMultiple(CommandContext cmdCtx, String key)
-			throws CommandSyntaxException {
-		return ArgumentScoreholder.b(cmdCtx, key);
+	public final Collection<String> getScoreHolderMultiple(CommandContext<CommandSourceStack> cmdCtx, String key)
+		throws CommandSyntaxException {
+		return ScoreHolderArgument.getNames(cmdCtx, key);
 	}
 
 	@Override
-	public final String getScoreHolderSingle(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return ArgumentScoreholder.a(cmdCtx, key);
+	public final String getScoreHolderSingle(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		return ScoreHolderArgument.getName(cmdCtx, key);
 	}
 
 	@Override
-	public final int getTime(CommandContext cmdCtx, String key) {
+	public final int getTime(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		return (int) cmdCtx.getArgument(key, Integer.class);
 	}
 
 	@Override
-	public final UUID getUUID(CommandContext cmdCtx, String key) {
-		return ArgumentUUID.a(cmdCtx, key);
+	public final UUID getUUID(CommandContext<CommandSourceStack> cmdCtx, String key) {
+		return UuidArgument.getUuid(cmdCtx, key);
 	}
 
 	@Override
-	public abstract Component getAdventureChat(CommandContext<T> cmdCtx, String key) throws CommandSyntaxException;
+	public abstract Component getAdventureChat(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException;
 
 	@Override
-	public abstract Component getAdventureChatComponent(CommandContext<T> cmdCtx, String key);
+	public abstract Component getAdventureChatComponent(CommandContext<CommandSourceStack> cmdCtx, String key);
 
 	@Override
-	public abstract Biome getBiome(CommandContext<T> cmdCtx, String key) throws CommandSyntaxException;
+	public abstract Biome getBiome(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException;
 
 	@Override
 	@Unimplemented(because = NAME_CHANGED, from = "getWorld()", to = "f()", in = "1.19")
-	public abstract Predicate<Block> getBlockPredicate(CommandContext<T> cmdCtx, String key)
-			throws CommandSyntaxException;
+	public abstract Predicate<Block> getBlockPredicate(CommandContext<CommandSourceStack> cmdCtx, String key)
+		throws CommandSyntaxException;
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftBlockData")
-	public abstract BlockData getBlockState(CommandContext<T> cmdCtx, String key);
+	public abstract BlockData getBlockState(CommandContext<CommandSourceStack> cmdCtx, String key);
 
 	@Override
 	@Unimplemented(because = REQUIRES_MINECRAFT_SERVER)
 	public abstract CommandDispatcher<T> getBrigadierDispatcher();
 
+	
 	@Override
-	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftChatMessage")
-	public abstract ChatColor getChatColor(CommandContext<T> cmdCtx, String key);
+	public ChatColor getChatColor(CommandContext<CommandSourceStack> cmdCtx, String key) {
+		return ChatColor.getByChar(ColorArgument.getColor(cmdCtx, key).code);
+	}
 
 	@Override
 	@Unimplemented(because = REQUIRES_CSS)
@@ -488,19 +490,19 @@ public abstract class NMS_Common<T> implements NMS<T> {
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftEnchantment")
-	public abstract Enchantment getEnchantment(CommandContext<T> cmdCtx, String key);
+	public abstract Enchantment getEnchantment(CommandContext<CommandSourceStack> cmdCtx, String key);
 
 	@Override
-	public abstract Object getEntitySelector(CommandContext<T> cmdCtx, String key, EntitySelector selector)
-			throws CommandSyntaxException;
+	public abstract Object getEntitySelector(CommandContext<CommandSourceStack> cmdCtx, String key, EntitySelector selector)
+		throws CommandSyntaxException;
 
 	@Override
 	@Unimplemented(because = NAME_CHANGED, from = "getKey()", to = "a()", in = "1.19")
-	public abstract EntityType getEntityType(CommandContext<T> cmdCtx, String key) throws CommandSyntaxException;
+	public abstract EntityType getEntityType(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException;
 
 	@Override
 	@Unimplemented(because = REQUIRES_CSS)
-	public abstract FunctionWrapper[] getFunction(CommandContext<T> cmdCtx, String key) throws CommandSyntaxException;
+	public abstract FunctionWrapper[] getFunction(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException;
 
 	@Override
 	@Unimplemented(because = REQUIRES_MINECRAFT_SERVER)
@@ -511,39 +513,39 @@ public abstract class NMS_Common<T> implements NMS<T> {
 	public abstract Set<NamespacedKey> getFunctions();
 
 	@Override
-	public abstract Predicate<ItemStack> getItemStackPredicate(CommandContext<T> cmdCtx, String key)
-			throws CommandSyntaxException;
+	public abstract Predicate<ItemStack> getItemStackPredicate(CommandContext<CommandSourceStack> cmdCtx, String key)
+		throws CommandSyntaxException;
 
 	@Override
 	@Unimplemented(because = { NAME_CHANGED, REQUIRES_CSS }, from = "a, b", to = "c(), d()")
-	public abstract Location2D getLocation2DBlock(CommandContext<T> cmdCtx, String key) throws CommandSyntaxException;
+	public abstract Location2D getLocation2DBlock(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException;
 
 	@Override
 	@Unimplemented(because = REQUIRES_CSS)
-	public abstract Location2D getLocation2DPrecise(CommandContext<T> cmdCtx, String key) throws CommandSyntaxException;
+	public abstract Location2D getLocation2DPrecise(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException;
 
 	@Override
 	@Unimplemented(because = { NAME_CHANGED, REQUIRES_CSS }, from = "getX(), getY(), getZ()", to = "u(), v(), w()")
-	public abstract Location getLocationBlock(CommandContext<T> cmdCtx, String str) throws CommandSyntaxException;
+	public abstract Location getLocationBlock(CommandContext<CommandSourceStack> cmdCtx, String str) throws CommandSyntaxException;
 
 	@Override
 	@Unimplemented(because = { NAME_CHANGED, REQUIRES_CSS }, from = "getX(), getY(), getZ()", to = "a(), b(), c()")
-	public abstract Location getLocationPrecise(CommandContext<T> cmdCtx, String str) throws CommandSyntaxException;
+	public abstract Location getLocationPrecise(CommandContext<CommandSourceStack> cmdCtx, String str) throws CommandSyntaxException;
 
 	@Override
-	public abstract LootTable getLootTable(CommandContext<T> cmdCtx, String key);
+	public abstract LootTable getLootTable(CommandContext<CommandSourceStack> cmdCtx, String key);
 
 	@Override
-	public abstract String getObjective(CommandContext<T> cmdCtx, String key)
-			throws IllegalArgumentException, CommandSyntaxException;
+	public abstract String getObjective(CommandContext<CommandSourceStack> cmdCtx, String key)
+		throws IllegalArgumentException, CommandSyntaxException;
 
 	@Override
-	public abstract String getObjectiveCriteria(CommandContext<T> cmdCtx, String key);
+	public abstract String getObjectiveCriteria(CommandContext<CommandSourceStack> cmdCtx, String key);
 
 	@Override
-	public final OfflinePlayer getOfflinePlayer(CommandContext cmdCtx, String str) throws CommandSyntaxException {
+	public final OfflinePlayer getOfflinePlayer(CommandContext<CommandSourceStack> cmdCtx, String str) throws CommandSyntaxException {
 		OfflinePlayer target = Bukkit
-				.getOfflinePlayer(((GameProfile) ArgumentProfile.a(cmdCtx, str).iterator().next()).getId());
+			.getOfflinePlayer(((GameProfile) ArgumentProfile.a(cmdCtx, str).iterator().next()).getId());
 		if (target == null)
 			throw ArgumentProfile.a.create();
 		return target;
@@ -551,10 +553,10 @@ public abstract class NMS_Common<T> implements NMS<T> {
 
 	@Override
 	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.18, 1.19")
-	public abstract ParticleData<?> getParticle(CommandContext<T> cmdCtx, String key);
+	public abstract ParticleData<?> getParticle(CommandContext<CommandSourceStack> cmdCtx, String key);
 
 	@Override
-	public final Player getPlayer(CommandContext cmdCtx, String str) throws CommandSyntaxException {
+	public final Player getPlayer(CommandContext<CommandSourceStack> cmdCtx, String str) throws CommandSyntaxException {
 		Player target = Bukkit.getPlayer(((GameProfile) ArgumentProfile.a(cmdCtx, str).iterator().next()).getId());
 		if (target == null)
 			throw ArgumentProfile.a.create();
@@ -562,15 +564,15 @@ public abstract class NMS_Common<T> implements NMS<T> {
 	}
 
 	@Override
-	public abstract PotionEffectType getPotionEffect(CommandContext<T> cmdCtx, String key)
-			throws CommandSyntaxException;
+	public abstract PotionEffectType getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String key)
+		throws CommandSyntaxException;
 
 	@Override
-	public abstract Recipe getRecipe(CommandContext<T> cmdCtx, String key) throws CommandSyntaxException;
+	public abstract Recipe getRecipe(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException;
 
 	@Override
 	@Unimplemented(because = REQUIRES_CSS)
-	public abstract CommandSender getSenderForCommand(CommandContext<T> cmdCtx, boolean forceNative);
+	public abstract CommandSender getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean forceNative);
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftServer")
@@ -578,7 +580,7 @@ public abstract class NMS_Common<T> implements NMS<T> {
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftSound")
-	public abstract Sound getSound(CommandContext<T> cmdCtx, String key);
+	public abstract Sound getSound(CommandContext<CommandSourceStack> cmdCtx, String key);
 
 	@Override
 	public abstract SuggestionProvider<T> getSuggestionProvider(SuggestionProviders provider);
@@ -592,7 +594,7 @@ public abstract class NMS_Common<T> implements NMS<T> {
 	public abstract Set<NamespacedKey> getTags();
 
 	@Override
-	public abstract String getTeam(CommandContext<T> cmdCtx, String key) throws CommandSyntaxException;
+	public abstract String getTeam(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException;
 
 	@Override
 	@Unimplemented(because = REQUIRES_CSS)
