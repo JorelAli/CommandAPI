@@ -8,25 +8,23 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.help.HelpTopic;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 import org.mockito.Mockito;
 
 import com.google.common.io.Files;
@@ -41,13 +39,10 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.suggestion.SuggestionProvider;
 
 import be.seeseemelk.mockbukkit.WorldMock;
-import dev.jorel.commandapi.arguments.SuggestionProviders;
+import be.seeseemelk.mockbukkit.potion.MockPotionEffectType;
 import dev.jorel.commandapi.nms.NMS;
-import dev.jorel.commandapi.wrappers.ParticleData;
-import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.minecraft.SharedConstants;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.Advancements;
@@ -124,19 +119,88 @@ public class MockNMS extends ArgumentNMS {
 			SharedConstants.a();
 
 			// MockBukkit is very helpful and registers all of the potion
-			// effects and enchantments for us. We need to not do this.
+			// effects and enchantments for us. We need to not do this (because
+			// we call DispenserRegistry.a() below which does the same thing)
 			unregisterAllEnchantments();
 			unregisterAllPotionEffects();
 
 			// Invoke Minecraft's registry (I think that's what this does anyway)
 			DispenserRegistry.a();
+			
+			// Sometimes, and I have no idea why, DispenserRegistry.a() only works
+			// on the very first test in the test suite. After that, everything else
+			// doesn't work. At this point, we'll use the ServerMock#createPotionEffectTypes
+			// method (which unfortunately is private and pure, so instead of using reflection
+			// we'll just implement it right here instead)
+			@SuppressWarnings("unchecked")
+			Map<NamespacedKey, PotionEffectType> byKey = (Map<NamespacedKey, PotionEffectType>) getField(PotionEffectType.class, "byKey", null);
+			if(byKey.isEmpty()) {
+				createPotionEffectTypes();
+			}
+//			System.out.println(byKey);
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	private static void registerPotionEffectType(int id, @NotNull String name, boolean instant, int rgb) {
+		NamespacedKey key = NamespacedKey.minecraft(name.toLowerCase(Locale.ROOT));
+		PotionEffectType type = new MockPotionEffectType(key, id, name, instant, Color.fromRGB(rgb));
+		PotionEffectType.registerPotionEffectType(type);
+	}
+	
+	/**
+	 * This registers Minecrafts default {@link PotionEffectType PotionEffectTypes}. It also prevents any new effects to
+	 * be created afterwards.
+	 */
+	public static void createPotionEffectTypes() {
+		for (PotionEffectType type : PotionEffectType.values()) {
+			// We probably already registered all Potion Effects
+			// otherwise this would be null
+			if (type != null) {
+				// This is not perfect, but it works.
+				return;
+			}
+		}
+
+		registerPotionEffectType(1, "SPEED", false, 8171462);
+		registerPotionEffectType(2, "SLOWNESS", false, 5926017);
+		registerPotionEffectType(3, "HASTE", false, 14270531);
+		registerPotionEffectType(4, "MINING_FATIGUE", false, 4866583);
+		registerPotionEffectType(5, "STRENGTH", false, 9643043);
+		registerPotionEffectType(6, "INSTANT_HEALTH", true, 16262179);
+		registerPotionEffectType(7, "INSTANT_DAMAGE", true, 4393481);
+		registerPotionEffectType(8, "JUMP_BOOST", false, 2293580);
+		registerPotionEffectType(9, "NAUSEA", false, 5578058);
+		registerPotionEffectType(10, "REGENERATION", false, 13458603);
+		registerPotionEffectType(11, "RESISTANCE", false, 10044730);
+		registerPotionEffectType(12, "FIRE_RESISTANCE", false, 14981690);
+		registerPotionEffectType(13, "WATER_BREATHING", false, 3035801);
+		registerPotionEffectType(14, "INVISIBILITY", false, 8356754);
+		registerPotionEffectType(15, "BLINDNESS", false, 2039587);
+		registerPotionEffectType(16, "NIGHT_VISION", false, 2039713);
+		registerPotionEffectType(17, "HUNGER", false, 5797459);
+		registerPotionEffectType(18, "WEAKNESS", false, 4738376);
+		registerPotionEffectType(19, "POISON", false, 5149489);
+		registerPotionEffectType(20, "WITHER", false, 3484199);
+		registerPotionEffectType(21, "HEALTH_BOOST", false, 16284963);
+		registerPotionEffectType(22, "ABSORPTION", false, 2445989);
+		registerPotionEffectType(23, "SATURATION", true, 16262179);
+		registerPotionEffectType(24, "GLOWING", false, 9740385);
+		registerPotionEffectType(25, "LEVITATION", false, 13565951);
+		registerPotionEffectType(26, "LUCK", false, 3381504);
+		registerPotionEffectType(27, "UNLUCK", false, 12624973);
+		registerPotionEffectType(28, "SLOW_FALLING", false, 16773073);
+		registerPotionEffectType(29, "CONDUIT_POWER", false, 1950417);
+		registerPotionEffectType(30, "DOLPHINS_GRACE", false, 8954814);
+		registerPotionEffectType(31, "BAD_OMEN", false, 745784);
+		registerPotionEffectType(32, "HERO_OF_THE_VILLAGE", false, 4521796);
+		registerPotionEffectType(33, "DARKNESS", false, 2696993);
+		PotionEffectType.stopAcceptingRegistrations();
+	}
 
 	@SuppressWarnings("unchecked")
-	private void unregisterAllPotionEffects() {
+	public static void unregisterAllPotionEffects() {
 		PotionEffectType[] byId = (PotionEffectType[]) getField(PotionEffectType.class, "byId", null);
 		for (int i = 0; i < 34; i++) {
 			byId[i] = null;
@@ -263,7 +327,7 @@ public class MockNMS extends ArgumentNMS {
 		return advancementDataWorld;
 	}
 
-	public Object getField(Class<?> className, String fieldName, Object instance) {
+	public static Object getField(Class<?> className, String fieldName, Object instance) {
 		try {
 			Field field = className.getDeclaredField(fieldName);
 			field.setAccessible(true);
@@ -358,84 +422,6 @@ public class MockNMS extends ArgumentNMS {
 	@Override
 	public World getWorldForCSS(CommandListenerWrapper clw) {
 		return new WorldMock();
-	}
-
-	@Override
-	public SimpleCommandMap getSimpleCommandMap() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public String convert(ItemStack is) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String convert(ParticleData<?> particle) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription, String permission) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public SuggestionProvider<CommandListenerWrapper> getSuggestionProvider(SuggestionProviders provider) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean isVanillaCommandWrapper(Command command) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void reloadDataPacks() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void resendPackets(Player player) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public SimpleFunctionWrapper getFunction(NamespacedKey key) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Set<NamespacedKey> getFunctions() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public SimpleFunctionWrapper[] getTag(NamespacedKey key) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Set<NamespacedKey> getTags() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

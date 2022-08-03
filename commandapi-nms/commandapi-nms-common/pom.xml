@@ -59,7 +59,7 @@
 			<artifactId>spigot</artifactId>
 			<version>${spigot.version}</version>
 			<scope>provided</scope>
-			<!-- <classifier>remapped-mojang</classifier> -->
+			<classifier>remapped-mojang</classifier>
 		</dependency>
 
 		<!-- Libraries -->
@@ -79,6 +79,59 @@
 		</dependency>
 	</dependencies>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>Mojang-Mapped</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+							<classifier>mojang-mapped</classifier>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>net.md-5</groupId>
+				<artifactId>specialsource-maven-plugin</artifactId>
+				<version>1.2.4</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>remap</goal>
+						</goals>
+						<id>remap-obf</id>
+						<configuration>
+							<srgIn>org.spigotmc:minecraft-server:${minecraft.mappings}:txt:maps-mojang</srgIn>
+							<reverse>true</reverse>
+							<remappedDependencies>org.spigotmc:spigot:${minecraft.mappings}:jar:remapped-mojang</remappedDependencies>
+							<remappedArtifactAttached>true</remappedArtifactAttached>
+							<remappedClassifierName>remapped-obf</remappedClassifierName>
+						</configuration>
+					</execution>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>remap</goal>
+						</goals>
+						<id>remap-spigot</id>
+						<configuration>
+							<inputFile>${project.build.directory}/${project.artifactId}-${project.version}-remapped-obf.jar</inputFile>
+							<srgIn>org.spigotmc:minecraft-server:${minecraft.mappings}:csrg:maps-spigot</srgIn>
+							<remappedDependencies>org.spigotmc:spigot:${minecraft.mappings}:jar:remapped-obf</remappedDependencies>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
 	<profiles>
 		<profile>
 			<id>Spigot_1_19_R1</id>
@@ -90,6 +143,7 @@
 					<groupId>org.spigotmc</groupId>
 					<artifactId>spigot</artifactId>
 					<version>1.19-R0.1-SNAPSHOT</version>
+					<classifier>remapped-mojang</classifier>
 					<scope>provided</scope>
 				</dependency>
 			</dependencies>
@@ -101,6 +155,7 @@
 					<groupId>org.spigotmc</groupId>
 					<artifactId>spigot</artifactId>
 					<version>1.18.2-R0.1-SNAPSHOT</version>
+					<classifier>remapped-mojang</classifier>
 					<scope>provided</scope>
 				</dependency>
 			</dependencies>
@@ -112,6 +167,7 @@
 					<groupId>org.spigotmc</groupId>
 					<artifactId>spigot</artifactId>
 					<version>1.18-R0.1-SNAPSHOT</version>
+					<classifier>remapped-mojang</classifier>
 					<scope>provided</scope>
 				</dependency>
 			</dependencies>
@@ -123,6 +179,7 @@
 					<groupId>org.spigotmc</groupId>
 					<artifactId>spigot</artifactId>
 					<version>1.17-R0.1-SNAPSHOT</version>
+					<classifier>remapped-mojang</classifier>
 					<scope>provided</scope>
 				</dependency>
 			</dependencies>

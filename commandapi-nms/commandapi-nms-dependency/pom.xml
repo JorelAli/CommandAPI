@@ -30,7 +30,18 @@
 		<!-- Common NMS for 1.17+ -->
 		<dependency>
 			<groupId>dev.jorel</groupId>
+			<!-- TODO: We need to make sure we're NOT using the mapped dependency - ENSURE all dependents of this are doing so without compile scope!!!!!!! -->
 			<artifactId>commandapi-nms-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-1.19-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-1.17-common</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
