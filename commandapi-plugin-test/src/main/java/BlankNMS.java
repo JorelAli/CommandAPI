@@ -5,7 +5,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Axis;
-import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
@@ -20,10 +19,7 @@ import org.bukkit.potion.PotionEffectType;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.brigadier.suggestion.Suggestions;
 
-import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.IntegerRange;
@@ -35,26 +31,9 @@ import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.commands.CommandListenerWrapper;
-import net.minecraft.commands.arguments.ArgumentChat;
 import net.minecraft.commands.arguments.ArgumentChatComponent;
-import net.minecraft.commands.arguments.ArgumentMinecraftKeyRegistered;
-import net.minecraft.commands.arguments.ArgumentMobEffect;
-import net.minecraft.commands.arguments.ArgumentProfile;
-import net.minecraft.commands.arguments.GameProfileArgument;
-import net.minecraft.commands.arguments.coordinates.ArgumentPosition;
-import net.minecraft.commands.arguments.coordinates.ArgumentVec2;
-import net.minecraft.commands.arguments.coordinates.ArgumentVec2I;
-import net.minecraft.commands.arguments.coordinates.ArgumentVec3;
 import net.minecraft.network.chat.IChatBaseComponent;
 
-/**
- * This class is effectively identical to NMS_Common, except we want to be able
- * to override some of its methods. Yes, we could remove the final modifiers on
- * the NMS_Common overridden methods, however we do that to ensure that we're
- * not re-overriding those methods in the underlying NMS implementations. The
- * choice between having safer runtime code compared to having safer testing
- * code is to have safer runtime code instead.
- */
 public abstract class BlankNMS implements NMS<CommandListenerWrapper> {
 
 	public final NMS<?> BASE_NMS;
@@ -74,7 +53,7 @@ public abstract class BlankNMS implements NMS<CommandListenerWrapper> {
 	@Override
 	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
 		// TODO Auto-generated method stub
-
+		throw new RuntimeException("unimplemented");
 	}
 
 	@Override
@@ -96,26 +75,21 @@ public abstract class BlankNMS implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
-	public SuggestionProvider<CommandListenerWrapper> getSuggestionProvider(SuggestionProviders provider) {
-		return (context, builder) -> Suggestions.empty();
-	}
-
-	@Override
 	public boolean isVanillaCommandWrapper(Command command) {
 		// TODO Auto-generated method stub
-		return false;
+		throw new RuntimeException("unimplemented");
 	}
 
 	@Override
 	public void reloadDataPacks() {
 		// TODO Auto-generated method stub
-
+		throw new RuntimeException("unimplemented");
 	}
 
 	@Override
 	public void resendPackets(Player player) {
 		// TODO Auto-generated method stub
-
+		throw new RuntimeException("unimplemented");
 	}
 
 	@Override
@@ -152,16 +126,6 @@ public abstract class BlankNMS implements NMS<CommandListenerWrapper> {
 	public ArgumentType<?> _ArgumentAxis() {
 		// TODO Auto-generated method stub
 		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentChat() {
-		return ArgumentChat.a();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentChatComponent() {
-		return ArgumentChatComponent.a();
 	}
 
 	@Override
@@ -207,16 +171,6 @@ public abstract class BlankNMS implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
-	public ArgumentType<?> _ArgumentMinecraftKeyRegistered() {
-		return ArgumentMinecraftKeyRegistered.a();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentMobEffect() {
-		return ArgumentMobEffect.a();
-	}
-
-	@Override
 	public ArgumentType<?> _ArgumentNBTCompound() {
 		// TODO Auto-generated method stub
 		throw new RuntimeException("unimplemented");
@@ -226,21 +180,6 @@ public abstract class BlankNMS implements NMS<CommandListenerWrapper> {
 	public ArgumentType<?> _ArgumentParticle() {
 		// TODO Auto-generated method stub
 		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentPosition() {
-		return ArgumentPosition.a();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentPosition2D() {
-		return ArgumentVec2I.a();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentProfile() {
-		return ArgumentProfile.a();
 	}
 
 	@Override
@@ -298,16 +237,6 @@ public abstract class BlankNMS implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
-	public ArgumentType<?> _ArgumentVec2() {
-		return ArgumentVec2.a();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentVec3() {
-		return ArgumentVec3.a();
-	}
-
-	@Override
 	public String convert(PotionEffectType potion) {
 		// TODO Auto-generated method stub
 		throw new RuntimeException("unimplemented");
@@ -320,14 +249,9 @@ public abstract class BlankNMS implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
-	public org.bukkit.advancement.Advancement getAdvancement(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return ArgumentMinecraftKeyRegistered.a(cmdCtx, key).bukkit;
-	}
-
-	@Override
 	public float getAngle(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		// TODO Auto-generated method stub
-		return 0;
+		throw new RuntimeException("unimplemented");
 	}
 
 	@Override
@@ -378,16 +302,6 @@ public abstract class BlankNMS implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
-	public Player getPlayer(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		Player target = Bukkit.getPlayer(ArgumentProfile.a(cmdCtx, key).iterator().next().getId());
-		if (target == null) {
-			throw GameProfileArgument.ERROR_UNKNOWN_PLAYER.create();
-		} else {
-			return target;
-		}
-	}
-
-	@Override
 	public OfflinePlayer getOfflinePlayer(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		// TODO Auto-generated method stub
 		throw new RuntimeException("unimplemented");
@@ -420,7 +334,7 @@ public abstract class BlankNMS implements NMS<CommandListenerWrapper> {
 	@Override
 	public int getTime(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		// TODO Auto-generated method stub
-		return 0;
+		throw new RuntimeException("unimplemented");
 	}
 
 	@Override

@@ -18,45 +18,21 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package dev.jorel.commandapi.nms;
+import java.util.Map;
 
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.craftbukkit.v1_19_R1.help.SimpleHelpMap;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.datafixers.util.Either;
 
-import dev.jorel.commandapi.preprocessor.Differs;
-import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
-import io.netty.channel.Channel;
 import net.minecraft.commands.arguments.selector.EntitySelector;
-import net.minecraft.server.ServerFunctionLibrary;
+import net.minecraft.server.CustomFunctionManager;
 import net.minecraft.world.level.gameevent.EntityPositionSource;
 
-// Mojang-Mapped reflection
-/**
- * NMS implementation for Minecraft 1.19.1
- */
-@NMSMeta(compatibleWith = "1.19.1")
-@RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
-@RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
-@RequireField(in = EntityPositionSource.class, name = "entityOrUuidOrId", ofType = Either.class)
-public class NMS_1_19_1_R1 extends NMS_1_19_Common {
-
-	@Override
-	public String[] compatibleVersions() {
-		return new String[] { "1.19.1" };
-	}
-
-	@Differs(from = "1.19", by = "Use of 1.19.1 chat preview handler")
-	@Override
-	public void hookChatPreview(Plugin plugin, Player player) {
-		final Channel playerChannel = ((CraftPlayer) player).getHandle().connection.connection.channel;
-		if (playerChannel.pipeline().get("CommandAPI_" + player.getName()) == null) {
-			playerChannel.pipeline().addBefore("packet_handler", "CommandAPI_" + player.getName(), new NMS_1_19_1_R1_ChatPreviewHandler(this, plugin, player));
-		}
-	}
-
-}
+//Spigot-Mapped reflection
+@RequireField(in = CustomFunctionManager.class, name = "i", ofType = CommandDispatcher.class)
+@RequireField(in = EntitySelector.class, name = "o", ofType = boolean.class)
+@RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
+@RequireField(in = EntityPositionSource.class, name = "c", ofType = Either.class)
+public class SafeReflect {}

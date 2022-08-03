@@ -25,11 +25,11 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>commandapi-1.19.1</artifactId>
+	<artifactId>commandapi-1.19-common</artifactId>
 
 	<properties>
-		<minecraft.mappings>1.19.1-R0.1-SNAPSHOT</minecraft.mappings>
-		<spigot.version>1.19.1-R0.1-SNAPSHOT</spigot.version>
+		<minecraft.mappings>1.19-R0.1-SNAPSHOT</minecraft.mappings>
+		<spigot.version>1.19-R0.1-SNAPSHOT</spigot.version>
 	</properties>
 
 	<repositories>
@@ -55,6 +55,7 @@
 			<version>${spigot.version}</version>
 			<scope>test</scope>
 		</dependency>
+
 		<!-- Spigot compilation -->
 		<dependency>
 			<groupId>org.spigotmc</groupId>
@@ -82,14 +83,6 @@
 		
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-1.19-common</artifactId>
-			<version>${project.version}</version>
-			<classifier>mojang-mapped</classifier>
-			<scope>provided</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-nms-common</artifactId>
 			<version>${project.version}</version>
 			<classifier>mojang-mapped</classifier>
@@ -99,6 +92,21 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>Mojang-Mapped</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+							<classifier>mojang-mapped</classifier>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>net.md-5</groupId>
 				<artifactId>specialsource-maven-plugin</artifactId>

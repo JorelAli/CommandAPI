@@ -424,7 +424,6 @@ public class ArgumentTests {
 		assertEquals(null, type.get());
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Test
 	public void executionTestWithChatComponentArgument() {
 		Mut<BaseComponent[]> spigot = Mut.of();

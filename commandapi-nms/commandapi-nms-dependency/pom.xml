@@ -34,11 +34,11 @@
 			<artifactId>commandapi-nms-common</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- <dependency>
+		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-1.19-common</artifactId>
 			<version>${project.version}</version>
-		</dependency> -->
+		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-1.17-common</artifactId>
