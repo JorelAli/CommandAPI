@@ -431,8 +431,8 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public final BaseComponent[] getChatComponent(CommandContext<CommandSourceStack> cmdCtx, String str) {
-		return ComponentSerializer.parse(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, str)));
+	public final BaseComponent[] getChatComponent(CommandContext<CommandSourceStack> cmdCtx, String key) {
+		return ComponentSerializer.parse(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, key)));
 	}
 
 	@Override
@@ -522,11 +522,11 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 
 	@Override
 	@Unimplemented(because = { NAME_CHANGED, REQUIRES_CSS }, from = "getX(), getY(), getZ()", to = "u(), v(), w()")
-	public abstract Location getLocationBlock(CommandContext<CommandSourceStack> cmdCtx, String str) throws CommandSyntaxException;
+	public abstract Location getLocationBlock(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException;
 
 	@Override
 	@Unimplemented(because = { NAME_CHANGED, REQUIRES_CSS }, from = "getX(), getY(), getZ()", to = "a(), b(), c()")
-	public abstract Location getLocationPrecise(CommandContext<CommandSourceStack> cmdCtx, String str) throws CommandSyntaxException;
+	public abstract Location getLocationPrecise(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException;
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftLootTable")
@@ -567,9 +567,9 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public final OfflinePlayer getOfflinePlayer(CommandContext<CommandSourceStack> cmdCtx, String str) throws CommandSyntaxException {
+	public final OfflinePlayer getOfflinePlayer(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		OfflinePlayer target = Bukkit
-			.getOfflinePlayer(GameProfileArgument.getGameProfiles(cmdCtx, str).iterator().next().getId());
+			.getOfflinePlayer(GameProfileArgument.getGameProfiles(cmdCtx, key).iterator().next().getId());
 		if (target == null) {
 			throw GameProfileArgument.ERROR_UNKNOWN_PLAYER.create();
 		} else {
@@ -582,8 +582,8 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	public abstract ParticleData<?> getParticle(CommandContext<CommandSourceStack> cmdCtx, String key);
 
 	@Override
-	public final Player getPlayer(CommandContext<CommandSourceStack> cmdCtx, String str) throws CommandSyntaxException {
-		Player target = Bukkit.getPlayer(GameProfileArgument.getGameProfiles(cmdCtx, str).iterator().next().getId());
+	public final Player getPlayer(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		Player target = Bukkit.getPlayer(GameProfileArgument.getGameProfiles(cmdCtx, key).iterator().next().getId());
 		if (target == null) {
 			throw GameProfileArgument.ERROR_UNKNOWN_PLAYER.create();
 		} else {
