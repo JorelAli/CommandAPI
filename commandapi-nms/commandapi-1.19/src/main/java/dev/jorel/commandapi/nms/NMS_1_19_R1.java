@@ -29,12 +29,10 @@ import java.lang.invoke.VarHandle;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
@@ -54,7 +52,6 @@ import org.bukkit.Vibration;
 import org.bukkit.Vibration.Destination;
 import org.bukkit.Vibration.Destination.BlockDestination;
 import org.bukkit.Vibration.Destination.EntityDestination;
-import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -73,16 +70,13 @@ import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_19_R1.help.CustomHelpTopic;
 import org.bukkit.craftbukkit.v1_19_R1.help.SimpleHelpMap;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_19_R1.potion.CraftPotionEffectType;
 import org.bukkit.craftbukkit.v1_19_R1.util.CraftChatMessage;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
-import org.bukkit.inventory.ComplexRecipe;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.potion.PotionEffectType;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
@@ -92,21 +86,16 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
-import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
-import dev.jorel.commandapi.wrappers.ComplexRecipeImpl;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.Location2D;
-import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import io.netty.channel.Channel;
@@ -116,21 +105,15 @@ import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.ColorArgument;
 import net.minecraft.commands.arguments.ComponentArgument;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.EntitySummonArgument;
 import net.minecraft.commands.arguments.ItemEnchantmentArgument;
-import net.minecraft.commands.arguments.MessageArgument;
-import net.minecraft.commands.arguments.MobEffectArgument;
-import net.minecraft.commands.arguments.ObjectiveArgument;
-import net.minecraft.commands.arguments.ObjectiveCriteriaArgument;
 import net.minecraft.commands.arguments.ParticleArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.commands.arguments.ResourceOrTagLocationArgument;
 import net.minecraft.commands.arguments.ResourceOrTagLocationArgument.Result;
-import net.minecraft.commands.arguments.TeamArgument;
 import net.minecraft.commands.arguments.blocks.BlockPredicateArgument;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
@@ -160,7 +143,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.MinecraftServer.ReloadableResources;
 import net.minecraft.server.ServerFunctionLibrary;
-import net.minecraft.server.ServerFunctionManager;
 import net.minecraft.server.level.ColumnPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -189,7 +171,7 @@ import net.minecraft.world.phys.Vec3;
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = EntityPositionSource.class, name = "entityOrUuidOrId", ofType = Either.class)
-public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
+public class NMS_1_19_R1 extends NMS_Common {
 
 	private static final MinecraftServer MINECRAFT_SERVER;
 	private static final VarHandle SimpleHelpMap_helpTopics;
@@ -336,13 +318,6 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 	public HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription,
 			String permission) {
 		return new CustomHelpTopic(commandName, shortDescription, fullDescription, permission);
-	}
-
-	@SuppressWarnings("removal")
-	@Override
-	public Component getAdventureChat(CommandContext<CommandSourceStack> cmdCtx, String key)
-			throws CommandSyntaxException {
-		return PaperComponents.gsonSerializer().deserialize(Serializer.toJson(MessageArgument.getMessage(cmdCtx, key)));
 	}
 
 	@SuppressWarnings("removal")
@@ -504,21 +479,6 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 	}
 
 	@Override
-	public SimpleFunctionWrapper getFunction(NamespacedKey key) {
-		return convertFunction(
-				MINECRAFT_SERVER.getFunctions().get(new ResourceLocation(key.getNamespace(), key.getKey())).get());
-	}
-
-	@Override
-	public Set<NamespacedKey> getFunctions() {
-		Set<NamespacedKey> result = new HashSet<>();
-		for (ResourceLocation resourceLocation : MINECRAFT_SERVER.getFunctions().getFunctionNames()) {
-			result.add(fromResourceLocation(resourceLocation));
-		}
-		return result;
-	}
-
-	@Override
 	public org.bukkit.inventory.ItemStack getItemStack(CommandContext<CommandSourceStack> cmdCtx, String str)
 			throws CommandSyntaxException {
 		return CraftItemStack.asBukkitCopy(ItemArgument.getItem(cmdCtx, str).createItemStack(1, false));
@@ -566,16 +526,6 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 		ResourceLocation resourceLocation = ResourceLocationArgument.getId(cmdCtx, str);
 		return new CraftLootTable(fromResourceLocation(resourceLocation),
 				MINECRAFT_SERVER.getLootTables().get(resourceLocation));
-	}
-
-	@Override
-	public String getObjective(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		return ObjectiveArgument.getObjective(cmdCtx, key).getName();
-	}
-
-	@Override
-	public String getObjectiveCriteria(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		return ObjectiveCriteriaArgument.getCriteria(cmdCtx, key).getName();
 	}
 
 	@Differs(from = "1.18.2", by = "VibrationParticleOption, ShriekParticleOption, SculkChargeParticleOptions")
@@ -660,38 +610,6 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 	}
 
 	@Override
-	public PotionEffectType getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String str)
-			throws CommandSyntaxException {
-		return new CraftPotionEffectType(MobEffectArgument.getEffect(cmdCtx, str));
-	}
-
-	@Override
-	public ComplexRecipe getRecipe(CommandContext<CommandSourceStack> cmdCtx, String key)
-			throws CommandSyntaxException {
-		net.minecraft.world.item.crafting.Recipe<?> recipe = ResourceLocationArgument.getRecipe(cmdCtx, key);
-		return new ComplexRecipeImpl(fromResourceLocation(recipe.getId()), recipe.toBukkitRecipe());
-	}
-
-	@Override
-	public CommandSender getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean isNative) {
-		CommandSourceStack css = cmdCtx.getSource();
-
-		CommandSender sender = css.getBukkitSender();
-		Vec3 pos = css.getPosition();
-		Vec2 rot = css.getRotation();
-		World world = getWorldForCSS(css);
-		Location location = new Location(world, pos.x(), pos.y(), pos.z(), rot.x, rot.y);
-
-		Entity proxyEntity = css.getEntity();
-		CommandSender proxy = proxyEntity == null ? null : proxyEntity.getBukkitEntity();
-		if (isNative || (proxy != null && !sender.equals(proxy))) {
-			return new NativeProxyCommandSender(sender, proxy, location, world);
-		} else {
-			return sender;
-		}
-	}
-
-	@Override
 	public SimpleCommandMap getSimpleCommandMap() {
 		return ((CraftServer) Bukkit.getServer()).getCommandMap();
 	}
@@ -701,54 +619,12 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 		return CraftSound.getBukkit(Registry.SOUND_EVENT.get(ResourceLocationArgument.getId(cmdCtx, key)));
 	}
 
-	@Override
-	public SuggestionProvider<CommandSourceStack> getSuggestionProvider(SuggestionProviders provider) {
-		return switch (provider) {
-			case FUNCTION -> (context, builder) -> {
-				ServerFunctionManager functionData = MINECRAFT_SERVER.getFunctions();
-				SharedSuggestionProvider.suggestResource(functionData.getTagNames(), builder, "#");
-				return SharedSuggestionProvider.suggestResource(functionData.getFunctionNames(), builder);
-			};
-			case RECIPES -> net.minecraft.commands.synchronization.SuggestionProviders.ALL_RECIPES;
-			case SOUNDS -> net.minecraft.commands.synchronization.SuggestionProviders.AVAILABLE_SOUNDS;
-			case ADVANCEMENTS -> (cmdCtx, builder) -> {
-				return SharedSuggestionProvider.suggestResource(MINECRAFT_SERVER.getAdvancements().getAllAdvancements()
-						.stream().map(net.minecraft.advancements.Advancement::getId), builder);
-			};
-			case LOOT_TABLES -> (cmdCtx, builder) -> {
-				return SharedSuggestionProvider.suggestResource(MINECRAFT_SERVER.getLootTables().getIds(), builder);
-			};
-			case BIOMES -> _ArgumentSyntheticBiome()::listSuggestions;
-			case ENTITIES -> net.minecraft.commands.synchronization.SuggestionProviders.SUMMONABLE_ENTITIES;
-			default -> (context, builder) -> Suggestions.empty();
-		};
-	}
-
 	@Differs(from = "1.18.2", by = "getTag() now returns a Collection<> instead of a Tag<>, so don't have to call .getValues()")
 	@Override
 	public SimpleFunctionWrapper[] getTag(NamespacedKey key) {
 		Collection<CommandFunction> customFunctions = MINECRAFT_SERVER.getFunctions()
 				.getTag(new ResourceLocation(key.getNamespace(), key.getKey()));
 		return customFunctions.toArray(new SimpleFunctionWrapper[0]);
-	}
-
-	@Override
-	public Set<NamespacedKey> getTags() {
-		Set<NamespacedKey> result = new HashSet<>();
-		for (ResourceLocation resourceLocation : MINECRAFT_SERVER.getFunctions().getFunctionNames()) {
-			result.add(fromResourceLocation(resourceLocation));
-		}
-		return result;
-	}
-
-	@Override
-	public String getTeam(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		return TeamArgument.getTeam(cmdCtx, key).getName();
-	}
-
-	@Override
-	public World getWorldForCSS(CommandSourceStack css) {
-		return (css.getLevel() == null) ? null : css.getLevel().getWorld();
 	}
 
 	@Differs(from = "1.18.2", by = "Chat preview!")
@@ -913,5 +789,10 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 		if (channel.pipeline().get("CommandAPI_" + player.getName()) != null) {
 			channel.eventLoop().submit(() -> channel.pipeline().remove("CommandAPI_" + player.getName()));
 		}
+	}
+
+	@Override
+	public MinecraftServer getMinecraftServer() {
+		return MINECRAFT_SERVER;
 	}
 }
