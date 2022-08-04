@@ -144,7 +144,7 @@ public final class Brigadier {
 	 * 
 	 * @param args     the List of arguments which you typically declare for
 	 *                 commands
-	 * @param nodeName the argument you want to specify
+	 * @param argument the argument you want to specify
 	 * @return a RequiredArgumentBuilder that represents the provided argument
 	 */
 	public static RequiredArgumentBuilder fromArgument(List<Argument> args, Argument<?> argument) {
@@ -165,7 +165,7 @@ public final class Brigadier {
 	 * Converts an argument and a list of arguments to a Brigadier
 	 * SuggestionProvider
 	 * 
-	 * @param nodeName the argument to convert to suggestions
+	 * @param argument the argument to convert to suggestions
 	 * @param args     the list of arguments
 	 * @return a SuggestionProvider that suggests the overridden suggestions for the
 	 *         specified argument
