@@ -20,12 +20,13 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
-import de.tr7zw.changeme.nbtapi.NBTContainer;
-import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import java.io.File;
 import java.util.Map.Entry;
+
+import org.bukkit.plugin.java.JavaPlugin;
+
+import de.tr7zw.changeme.nbtapi.NBTContainer;
+import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
 
 public class CommandAPIMain extends JavaPlugin {
 
