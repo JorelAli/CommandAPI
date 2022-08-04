@@ -1509,16 +1509,19 @@ LiteralCommandNode randomChance = Brigadier.fromLiteralArgument(new LiteralArgum
 
 /* ANCHOR: declarearguments */
 //Declare arguments like normal
+Argument<Integer> numeratorArgument = new IntegerArgument("numerator", 0);
+Argument<Integer> denominatorArgument = new IntegerArgument("denominator", 1);
+
 List<Argument> arguments = new ArrayList<>();
-arguments.add(new IntegerArgument("numerator", 0));
-arguments.add(new IntegerArgument("denominator", 1));
+arguments.add(numeratorArgument);
+arguments.add(denominatorArgument);
 /* ANCHOR_END: declarearguments */
 
 //Get brigadier argument objects
 /* ANCHOR: declareargumentbuilders */
-ArgumentBuilder numerator = Brigadier.fromArgument(arguments, "numerator");
+ArgumentBuilder numerator = Brigadier.fromArgument(numeratorArgument);
 /* ANCHOR: declarefork */
-ArgumentBuilder denominator = Brigadier.fromArgument(arguments, "denominator")
+ArgumentBuilder denominator = Brigadier.fromArgument(denominatorArgument)
 /* ANCHOR_END: declareargumentbuilders */
     //Fork redirecting to "execute" and state our predicate
     .fork(Brigadier.getRootNode().getChild("execute"), Brigadier.fromPredicate((sender, args) -> {

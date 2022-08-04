@@ -32,7 +32,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
@@ -848,7 +847,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		if (argument.getOverriddenSuggestions().isPresent()) {
 			// Override the suggestions
 			return getRequiredArgumentBuilderWithProvider(argument, args,
-					toSuggestions(argument.getNodeName(), args, true));
+					toSuggestions(argument, args, true));
 		} else if (argument.getIncludedSuggestions().isPresent()) {
 			return getRequiredArgumentBuilderWithProvider(argument, args,
 					(cmdCtx, builder) -> argument.getRawType().listSuggestions(cmdCtx, builder));
@@ -864,7 +863,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 
 		// If we have suggestions to add, combine provider with the suggestions
 		if (argument.getIncludedSuggestions().isPresent() && argument.getOverriddenSuggestions().isEmpty()) {
-			SuggestionProvider<CommandSourceStack> addedSuggestions = toSuggestions(argument.getNodeName(), args,
+			SuggestionProvider<CommandSourceStack> addedSuggestions = toSuggestions(argument, args,
 					false);
 
 			newSuggestionsProvider = (cmdCtx, builder) -> {
@@ -890,15 +889,6 @@ public class CommandAPIHandler<CommandSourceStack> {
 
 		return requiredArgumentBuilder.requires(css -> permissionCheck(NMS.getCommandSenderFromCSS(css),
 				argument.getArgumentPermission(), argument.getRequirements())).suggests(newSuggestionsProvider);
-	}
-
-	static Argument<?> getRequiredArgument(Argument<?>[] args, String nodeName) {
-		for (Argument<?> arg : args) {
-			if (arg.getNodeName().equals(nodeName) && !(arg instanceof LiteralArgument)) {
-				return arg;
-			}
-		}
-		throw new NoSuchElementException("Could not find argument '" + nodeName + "'");
 	}
 
 	Object[] generatePreviousArguments(CommandContext<CommandSourceStack> context, Argument<?>[] args, String nodeName)
@@ -932,14 +922,17 @@ public class CommandAPIHandler<CommandSourceStack> {
 		return previousArguments.toArray();
 	}
 
-	SuggestionProvider<CommandSourceStack> toSuggestions(String nodeName, Argument<?>[] args,
+	SuggestionProvider<CommandSourceStack> toSuggestions(Argument<?> theArgument, Argument<?>[] args,
 			boolean overrideSuggestions) {
 		return (CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) -> {
+			// Construct the suggestion info
 			SuggestionInfo suggestionInfo = new SuggestionInfo(NMS.getCommandSenderFromCSS(context.getSource()),
-					generatePreviousArguments(context, args, nodeName), builder.getInput(), builder.getRemaining());
+					generatePreviousArguments(context, args, theArgument.getNodeName()), builder.getInput(), builder.getRemaining());
+			
+			// Get the suggestions
 			Optional<ArgumentSuggestions> suggestionsToAddOrOverride = overrideSuggestions
-					? getRequiredArgument(args, nodeName).getOverriddenSuggestions()
-					: getRequiredArgument(args, nodeName).getIncludedSuggestions();
+					? theArgument.getOverriddenSuggestions()
+					: theArgument.getIncludedSuggestions();
 			return suggestionsToAddOrOverride.orElse(ArgumentSuggestions.empty()).suggest(suggestionInfo, builder);
 		};
 	}
