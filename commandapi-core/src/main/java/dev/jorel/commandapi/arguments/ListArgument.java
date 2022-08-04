@@ -98,7 +98,10 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 
 			// 'values' is a set of all objects that need to be suggested
 			for(IStringTooltip str: values) {
-				builder.suggest(str.getSuggestion(), new LiteralMessage(str.getTooltip()));
+				if(str.getTooltip() == null)
+					builder.suggest(str.getSuggestion());
+				else
+					builder.suggest(str.getSuggestion(), new LiteralMessage(str.getTooltip()));
 			}
 
 			return builder.buildFuture();
