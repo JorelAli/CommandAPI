@@ -20,16 +20,12 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
-import java.io.File;
-import java.util.List;
-import java.util.Map.Entry;
-
-import dev.jorel.commandapi.arguments.ListArgument;
-import dev.jorel.commandapi.arguments.ListArgumentBuilder;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import de.tr7zw.changeme.nbtapi.NBTContainer;
 import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.util.Map.Entry;
 
 public class CommandAPIMain extends JavaPlugin {
 
