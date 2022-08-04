@@ -843,17 +843,19 @@ public class CommandAPIHandler<CommandSourceStack> {
 	// Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
 	RequiredArgumentBuilder<CommandSourceStack, ?> getRequiredArgumentBuilderDynamic(final Argument<?>[] args,
 			Argument<?> argument) {
+		
+		final SuggestionProvider<CommandSourceStack> suggestions;
 
 		if (argument.getOverriddenSuggestions().isPresent()) {
-			// Override the suggestions
-			return getRequiredArgumentBuilderWithProvider(argument, args,
-					toSuggestions(argument, args, true));
+			suggestions = toSuggestions(argument, args, true);
 		} else if (argument.getIncludedSuggestions().isPresent()) {
-			return getRequiredArgumentBuilderWithProvider(argument, args,
-					(cmdCtx, builder) -> argument.getRawType().listSuggestions(cmdCtx, builder));
+			// TODO(#317): Merge the suggestions included here instead?
+			suggestions = (cmdCtx, builder) -> argument.getRawType().listSuggestions(cmdCtx, builder);
 		} else {
-			return getRequiredArgumentBuilderWithProvider(argument, args, null);
+			suggestions = null;
 		}
+		
+		return getRequiredArgumentBuilderWithProvider(argument, args, suggestions);
 	}
 
 	// Gets a RequiredArgumentBuilder for an argument, given a SuggestionProvider
