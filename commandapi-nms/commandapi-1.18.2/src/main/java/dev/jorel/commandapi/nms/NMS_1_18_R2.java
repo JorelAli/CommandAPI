@@ -647,8 +647,6 @@ public class NMS_1_18_R2 extends NMS_Common {
 
 		// Run the completableFuture (and bind tags?)
 		try {
-			third.get();
-
 			// Register recipes again because reloading datapacks removes all non-vanilla
 			// recipes
 			Recipe recipe;
