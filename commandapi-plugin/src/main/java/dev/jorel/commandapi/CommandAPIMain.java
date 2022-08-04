@@ -70,16 +70,5 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable(this);
-
-		new CommandAPICommand("listargument")
-			.withArguments(
-				new ListArgumentBuilder<String>("list", ", ")
-				.allowDuplicates(true)
-				.withList("alice", "bob", "charlie")
-				.withMapper(s -> s)
-				.build()
-			).executes((sender, args) -> {
-				sender.sendMessage(args[0].toString());
-			}).register();
 	}
 }
