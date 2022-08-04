@@ -25,6 +25,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.IStringTooltip;
+import dev.jorel.commandapi.StringTooltip;
 import dev.jorel.commandapi.nms.NMS;
 import org.bukkit.command.CommandSender;
 
@@ -65,9 +66,15 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 				values.add(mapper.apply(object));
 			}
 
+			String[] splitArguments = currentArg.split(Pattern.quote(delimiter));
+			// if an argument is finished, suggest the deliminator
+			String lastArgument = splitArguments[splitArguments.length - 1];
+			if(!currentArg.endsWith(delimiter) && values.stream().map(IStringTooltip::getSuggestion).anyMatch(lastArgument::equals))
+				values.add(StringTooltip.of(lastArgument + delimiter, null));
+
 			if (!allowDuplicates) {
 				// filter out values already given
-				for (String str : currentArg.split(Pattern.quote(delimiter))) {
+				for (String str : splitArguments) {
 					IStringTooltip valueToRemove = null;
 					for (IStringTooltip value : values) {
 						if (value.getSuggestion().equals(str)) {
