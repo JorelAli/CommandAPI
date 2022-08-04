@@ -30,6 +30,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
+import com.mojang.brigadier.LiteralMessage;
 import org.bukkit.command.CommandSender;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -63,7 +64,7 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 	}
 
 	private void applySuggestions() {
-		this.replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(info -> {
+		this.replaceSuggestions((info, builder) -> {
 			String currentArg = info.currentArg();
 
 			// This need not be a sorted map because entries in suggestions are
@@ -73,12 +74,10 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 				values.add(mapper.apply(object));
 			}
 
-			List<String> currentArgList = new ArrayList<>();
-			for(String str : currentArg.split(Pattern.quote(delimiter))) {
-				currentArgList.add(str);
-			}
+			List<String> currentArgList = new ArrayList<>(List.of(currentArg.split(Pattern.quote(delimiter))));
 
 			if(!allowDuplicates) {
+				// filter out values already given
 				for(String str : currentArgList) {
 					IStringTooltip valueToRemove = null;
 					for(IStringTooltip value : values) {
@@ -93,34 +92,17 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 				}
 			}
 
-			// If we end with the specified delimiter, we prompt for the next entry
-			if(currentArg.endsWith(delimiter)) {
-				// 'values' now contains a set of all objects that are NOT in
-				// the current list that the user is typing. We want to return
-				// a list of the current argument + each value that isn't
-				// in the list (i.e. each key in 'values')
-				IStringTooltip[] returnValues = new IStringTooltip[values.size()];
-				int i = 0;
-				for(IStringTooltip str : values) {
-					returnValues[i] = StringTooltip.of(currentArg + str.getSuggestion(), str.getTooltip());
-					i++;
-				}
-				return returnValues;
-			} else {
-				// Auto-complete the current value that the user is typing
-				// Remove the last argument and turn it into a string as the base for suggestions
-				String valueStart = currentArgList.remove(currentArgList.size() - 1);
-				String suggestionBase = currentArgList.isEmpty() ? "" : String.join(delimiter, currentArgList) + delimiter;
+			// offset builder to just after the last argument
+			if(currentArg.contains(delimiter))
+				builder = builder.createOffset(builder.getStart() + currentArg.lastIndexOf(delimiter) + delimiter.length() + 1);
 
-				List<IStringTooltip> returnValues = new ArrayList<>();
-				for(IStringTooltip str : values) {
-					if(str.getSuggestion().startsWith(valueStart)) {
-						returnValues.add(StringTooltip.of(suggestionBase + str.getSuggestion(), str.getTooltip()));
-					}
-				}
-				return returnValues.toArray(new IStringTooltip[0]);
+			// 'values' is a set of all objects that need to be suggested
+			for(IStringTooltip str: values) {
+				builder.suggest(str.getSuggestion(), new LiteralMessage(str.getTooltip()));
 			}
-		}));
+
+			return builder.buildFuture();
+		});
 	}
 
 	@Override

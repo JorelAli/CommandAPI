@@ -21,8 +21,11 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map.Entry;
 
+import dev.jorel.commandapi.arguments.ListArgument;
+import dev.jorel.commandapi.arguments.ListArgumentBuilder;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.tr7zw.changeme.nbtapi.NBTContainer;
@@ -67,5 +70,16 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable(this);
+
+		new CommandAPICommand("listargument")
+			.withArguments(
+				new ListArgumentBuilder<String>("list", ", ")
+				.allowDuplicates(true)
+				.withList("alice", "bob", "charlie")
+				.withMapper(s -> s)
+				.build()
+			).executes((sender, args) -> {
+				sender.sendMessage(args[0].toString());
+			}).register();
 	}
 }
