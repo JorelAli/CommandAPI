@@ -20,26 +20,17 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.regex.Pattern;
-
 import com.mojang.brigadier.LiteralMessage;
-import org.bukkit.command.CommandSender;
-
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import dev.jorel.commandapi.IStringTooltip;
-import dev.jorel.commandapi.StringTooltip;
 import dev.jorel.commandapi.nms.NMS;
+import org.bukkit.command.CommandSender;
+
+import java.util.*;
+import java.util.function.Function;
+import java.util.regex.Pattern;
 
 /**
  * An argument that accepts a list of objects
@@ -74,11 +65,9 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 				values.add(mapper.apply(object));
 			}
 
-			List<String> currentArgList = new ArrayList<>(List.of(currentArg.split(Pattern.quote(delimiter))));
-
 			if(!allowDuplicates) {
 				// filter out values already given
-				for(String str : currentArgList) {
+				for(String str : currentArg.split(Pattern.quote(delimiter))) {
 					IStringTooltip valueToRemove = null;
 					for(IStringTooltip value : values) {
 						if(value.getSuggestion().equals(str)) {
