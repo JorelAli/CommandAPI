@@ -61,36 +61,38 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 			// This need not be a sorted map because entries in suggestions are
 			// automatically sorted anyway
 			Set<IStringTooltip> values = new HashSet<>();
-			for(T object : supplier.apply(info.sender())) {
+			for (T object : supplier.apply(info.sender())) {
 				values.add(mapper.apply(object));
 			}
 
-			if(!allowDuplicates) {
+			if (!allowDuplicates) {
 				// filter out values already given
-				for(String str : currentArg.split(Pattern.quote(delimiter))) {
+				for (String str : currentArg.split(Pattern.quote(delimiter))) {
 					IStringTooltip valueToRemove = null;
-					for(IStringTooltip value : values) {
-						if(value.getSuggestion().equals(str)) {
+					for (IStringTooltip value : values) {
+						if (value.getSuggestion().equals(str)) {
 							valueToRemove = value;
 							break;
 						}
 					}
-					if(valueToRemove != null) {
+					if (valueToRemove != null) {
 						values.remove(valueToRemove);
 					}
 				}
 			}
 
 			// offset builder to just after the last argument
-			if(currentArg.contains(delimiter))
+			if (currentArg.contains(delimiter))
 				builder = builder.createOffset(builder.getStart() + currentArg.lastIndexOf(delimiter) + delimiter.length());
 
 			// 'values' is a set of all objects that need to be suggested
-			for(IStringTooltip str: values) {
-				if(str.getTooltip() == null)
-					builder.suggest(str.getSuggestion());
-				else
-					builder.suggest(str.getSuggestion(), new LiteralMessage(str.getTooltip()));
+			for (IStringTooltip str : values) {
+				if (str.getSuggestion().startsWith(builder.getRemaining())) {
+					if (str.getTooltip() == null)
+						builder.suggest(str.getSuggestion());
+					else
+						builder.suggest(str.getSuggestion(), new LiteralMessage(str.getTooltip()));
+				}
 			}
 
 			return builder.buildFuture();
@@ -109,23 +111,23 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 
 	@Override
 	public <CommandListenerWrapper> List<T> parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+														  CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		// Get the list of values which this can take
 		Map<IStringTooltip, T> values = new HashMap<>();
-		for(T object : supplier.apply(nms.getCommandSenderFromCSS(cmdCtx.getSource()))) {
+		for (T object : supplier.apply(nms.getCommandSenderFromCSS(cmdCtx.getSource()))) {
 			values.put(mapper.apply(object), object);
 		}
 
-		// If the argument argument's value is in the list of values, include it
+		// If the argument's value is in the list of values, include it
 		List<T> list = new ArrayList<>();
 		String[] strArr = cmdCtx.getArgument(key, String.class).split(Pattern.quote(delimiter));
-		for(String str : strArr) {
+		for (String str : strArr) {
 			// Yes, this isn't an instant lookup HashMap, but this is the best we can do
-			for(IStringTooltip value : values.keySet()) {
-				if(value.getSuggestion().equals(str)) {
-					if(allowDuplicates) {
+			for (IStringTooltip value : values.keySet()) {
+				if (value.getSuggestion().equals(str)) {
+					if (allowDuplicates) {
 						list.add(values.get(value));
-					} else if(!list.contains(values.get(value))) {
+					} else if (!list.contains(values.get(value))) {
 						list.add(values.get(value));
 					}
 				}
