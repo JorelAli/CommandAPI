@@ -83,7 +83,7 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 
 			// offset builder to just after the last argument
 			if(currentArg.contains(delimiter))
-				builder = builder.createOffset(builder.getStart() + currentArg.lastIndexOf(delimiter) + delimiter.length() + 1);
+				builder = builder.createOffset(builder.getStart() + currentArg.lastIndexOf(delimiter) + delimiter.length());
 
 			// 'values' is a set of all objects that need to be suggested
 			for(IStringTooltip str: values) {
