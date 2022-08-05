@@ -4,10 +4,8 @@ import java.util.Collection;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.bukkit.command.CommandSender;
-
-import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.StringTooltip;
+import org.bukkit.command.CommandSender;
 
 /**
  * A builder to create a ListArgument
@@ -120,13 +118,13 @@ public class ListArgumentBuilder<T> {
 
 		/**
 		 * Specifies the mapping function of the specific type <code>T</code> to a
-		 * {@link IStringTooltip} so an element can be shown to a user as a suggestion
+		 * {@link StringTooltip} so an element can be shown to a user as a suggestion
 		 * with a tooltip.
 		 * 
-		 * @param mapper the mapping function that creates an {@link IStringTooltip}
+		 * @param mapper the mapping function that creates an {@link StringTooltip}
 		 * @return this list argument builder
 		 */
-		public ListArgumentBuilderFinished withStringTooltipMapper(Function<T, IStringTooltip> mapper) {
+		public ListArgumentBuilderFinished withStringTooltipMapper(Function<T, StringTooltip> mapper) {
 			return new ListArgumentBuilderFinished(mapper);
 		}
 
@@ -135,9 +133,9 @@ public class ListArgumentBuilder<T> {
 		 */
 		public class ListArgumentBuilderFinished {
 
-			private final Function<T, IStringTooltip> mapper;
+			private final Function<T, StringTooltip> mapper;
 
-			private ListArgumentBuilderFinished(Function<T, IStringTooltip> mapper) {
+			private ListArgumentBuilderFinished(Function<T, StringTooltip> mapper) {
 				this.mapper = mapper;
 			}
 

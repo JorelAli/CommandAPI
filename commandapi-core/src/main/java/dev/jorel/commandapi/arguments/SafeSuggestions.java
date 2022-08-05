@@ -1,6 +1,6 @@
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.IStringTooltip;
+import dev.jorel.commandapi.StringTooltip;
 import dev.jorel.commandapi.SuggestionInfo;
 import dev.jorel.commandapi.Tooltip;
 
@@ -125,8 +125,8 @@ public interface SafeSuggestions<S> {
 	 * @return array of strings with tooltips representing the array of values with tooltips under the mapping function
 	 */
 	@SafeVarargs
-	private static <T> IStringTooltip[] toStringsWithTooltips(Function<T, String> mapper, Tooltip<T>... suggestions) {
-		IStringTooltip[] stringsWithTooltips = new IStringTooltip[suggestions.length];
+	private static <T> StringTooltip[] toStringsWithTooltips(Function<T, String> mapper, Tooltip<T>... suggestions) {
+		StringTooltip[] stringsWithTooltips = new StringTooltip[suggestions.length];
 		for(int i = 0; i < suggestions.length; i++) {
 			stringsWithTooltips[i] = Tooltip
 				.build(mapper)

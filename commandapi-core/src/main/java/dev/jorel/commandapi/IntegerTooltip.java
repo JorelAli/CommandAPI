@@ -26,23 +26,28 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import java.util.function.Function;
 
 /**
- * A string-based tooltip interface that includes a string suggestion and a string tooltip text to display when hovering
+ * A integer-based tooltip interface that includes a string suggestion and a string tooltip text to display when hovering
  * over the suggestion
  */
-public interface StringTooltip extends Tooltip<String> {
+public interface IntegerTooltip extends Tooltip<Integer> {
 
-	static StringTooltip none(String suggestion) {
+	/**
+	 * Suggest an integer with no tooltip
+	 * @param suggestion
+	 * @return
+	 */
+	static IntegerTooltip none(int suggestion) {
 		return of(suggestion, (Message) null);
 	}
 
-	static StringTooltip of(String suggestion, String tooltip) {
+	static IntegerTooltip of(int suggestion, String tooltip) {
 		return of(suggestion, Tooltip.messageFrom(tooltip));
 	}
-	static StringTooltip of(String suggestion, Message message) {
-		return new StringTooltip() {
+	static IntegerTooltip of(int suggestion, Message message) {
+		return new IntegerTooltip() {
 
 			@Override
-			public String getSuggestion() {
+			public Integer getSuggestion() {
 				return suggestion;
 			}
 
@@ -54,34 +59,34 @@ public interface StringTooltip extends Tooltip<String> {
 	}
 
 	/**
-	 * Constructs a {@link StringTooltip} with a suggestion and a formatted tooltip
+	 * Constructs a {@link IntegerTooltip} with a suggestion and a formatted tooltip
 	 *
 	 * @param suggestion the suggestion to provide to the user
 	 * @param components bungee chat components for the formatted tooltip
 	 *
-	 * @return a {@link StringTooltip} representing this suggestion and tooltip
+	 * @return a {@link IntegerTooltip} representing this suggestion and tooltip
 	 */
-	static StringTooltip of(String suggestion, BaseComponent... components) {
+	static IntegerTooltip of(int suggestion, BaseComponent... components) {
 		return of(suggestion, Tooltip.messageFrom(components));
 	}
 
-	static StringTooltip[] none(String... suggestions) {
-		StringTooltip[] tooltips = new StringTooltip[suggestions.length];
+	static IntegerTooltip[] none(int... suggestions) {
+		IntegerTooltip[] tooltips = new IntegerTooltip[suggestions.length];
 		for(int i = 0; i < suggestions.length; i++) {
 			tooltips[i] = none(suggestions[i]);
 		}
 		return tooltips;
 	}
 
-	static StringTooltip[] ofStrings(Function<String, String> mapper, String... suggestions) {
-		StringTooltip[] tooltips = new StringTooltip[suggestions.length];
+	static IntegerTooltip[] ofStrings(Function<Integer, String> mapper, int... suggestions) {
+		IntegerTooltip[] tooltips = new IntegerTooltip[suggestions.length];
 		for(int i = 0; i < suggestions.length; i++) {
 			tooltips[i] = of(suggestions[i], mapper.apply(suggestions[i]));
 		}
 		return tooltips;
 	}
-	static StringTooltip[] ofMessages(Function<String, Message> mapper, String... suggestions) {
-		StringTooltip[] tooltips = new StringTooltip[suggestions.length];
+	static IntegerTooltip[] ofMessages(Function<Integer, Message> mapper, int... suggestions) {
+		IntegerTooltip[] tooltips = new IntegerTooltip[suggestions.length];
 		for(int i = 0; i < suggestions.length; i++) {
 			tooltips[i] = of(suggestions[i], mapper.apply(suggestions[i]));
 		}
@@ -89,16 +94,16 @@ public interface StringTooltip extends Tooltip<String> {
 	}
 
 	/**
-	 * Constructs a {@link StringTooltip}[] from an array of suggestions, and a function mapping a suggestion to a
+	 * Constructs a {@link IntegerTooltip}[] from an array of suggestions, and a function mapping a suggestion to a
 	 * formatted tooltip using bungee chat components.
 	 *
 	 * @param suggestions the suggestions to provide to the user
 	 * @param mapper a function mapping a suggestion onto its formatted tooltip using bungee components
 	 *
-	 * @return a {@link StringTooltip}[] representing the suggestions with tooltips
+	 * @return a {@link IntegerTooltip}[] representing the suggestions with tooltips
 	 */
-	static StringTooltip[] ofComponents(Function<String, BaseComponent[]> mapper, String... suggestions) {
-		StringTooltip[] tooltips = new StringTooltip[suggestions.length];
+	static IntegerTooltip[] ofComponents(Function<Integer, BaseComponent[]> mapper, int... suggestions) {
+		IntegerTooltip[] tooltips = new IntegerTooltip[suggestions.length];
 		for(int i = 0; i < suggestions.length; i++) {
 			tooltips[i] = of(suggestions[i], mapper.apply(suggestions[i]));
 		}

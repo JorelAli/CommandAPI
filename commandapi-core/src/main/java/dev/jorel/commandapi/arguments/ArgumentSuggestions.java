@@ -1,10 +1,9 @@
 package dev.jorel.commandapi.arguments;
 
-import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import dev.jorel.commandapi.IStringTooltip;
+import dev.jorel.commandapi.StringTooltip;
 import dev.jorel.commandapi.SuggestionInfo;
 
 import java.util.Locale;
@@ -75,7 +74,7 @@ public interface ArgumentSuggestions {
 	 * @param suggestions array of hardcoded strings with tooltips
 	 * @return an {@link ArgumentSuggestions} object suggesting the hardcoded strings with tooltips
 	 */
-	static ArgumentSuggestions stringsWithTooltips(IStringTooltip... suggestions) {
+	static ArgumentSuggestions stringsWithTooltips(StringTooltip... suggestions) {
 		return (info, builder) -> future(toSuggestions(builder, suggestions));
 	}
 
@@ -84,7 +83,7 @@ public interface ArgumentSuggestions {
 	 * @param suggestions function providing the strings with tooltips
 	 * @return an {@link ArgumentSuggestions} object suggesting the result of the function
 	 */
-	static ArgumentSuggestions stringsWithTooltips(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
+	static ArgumentSuggestions stringsWithTooltips(Function<SuggestionInfo, StringTooltip[]> suggestions) {
 		return (info, builder) -> future(toSuggestions(builder, suggestions.apply(info)));
 	}
 
@@ -93,7 +92,7 @@ public interface ArgumentSuggestions {
 	 * @param suggestions function providing the strings with tooltips asynchronously
 	 * @return an {@link ArgumentSuggestions} object suggesting the result of the asynchronous function
 	 */
-	static ArgumentSuggestions stringsWithTooltipsAsync(Function<SuggestionInfo, CompletableFuture<IStringTooltip[]>> suggestions) {
+	static ArgumentSuggestions stringsWithTooltipsAsync(Function<SuggestionInfo, CompletableFuture<StringTooltip[]>> suggestions) {
 		return (info, builder) -> suggestions
 			.apply(info)
 			.thenApply(stringsWithTooltips -> toSuggestions(builder, stringsWithTooltips));
@@ -120,8 +119,8 @@ public interface ArgumentSuggestions {
 	 * @param suggestions array of strings with tooltips
 	 * @return a brigadier {@link Suggestions} object suggesting the array of strings with tooltips
 	 */
-	private static Suggestions toSuggestions(SuggestionsBuilder builder, IStringTooltip... suggestions) {
-		for(IStringTooltip suggestion : suggestions) {
+	private static Suggestions toSuggestions(SuggestionsBuilder builder, StringTooltip... suggestions) {
+		for(StringTooltip suggestion : suggestions) {
 			if(!suggestion.getSuggestion().toLowerCase(Locale.ROOT).startsWith(builder.getRemainingLowerCase())) {
 				continue;
 			}
@@ -129,7 +128,7 @@ public interface ArgumentSuggestions {
 			if(suggestion.getTooltip() == null) {
 				builder.suggest(suggestion.getSuggestion());
 			} else {
-				builder.suggest(suggestion.getSuggestion(), new LiteralMessage(suggestion.getTooltip()));
+				builder.suggest(suggestion.getSuggestion(), suggestion.getTooltip());
 			}
 		}
 		return builder.build();

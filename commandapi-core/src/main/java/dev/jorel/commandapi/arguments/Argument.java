@@ -27,6 +27,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import dev.jorel.commandapi.ArgumentTree;
+import dev.jorel.commandapi.StringTooltip;
 import org.bukkit.command.CommandSender;
 
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -34,7 +35,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandPermission;
-import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.SuggestionInfo;
 import dev.jorel.commandapi.nms.NMS;
 
@@ -153,13 +153,13 @@ public abstract class Argument<T> extends ArgumentTree {
 	 * 
 	 * @param suggestions a function that takes in SuggestionInfo which includes
 	 *                    information about the current state at the time the
-	 *                    suggestions are run and returns an IStringTooltip[] of
+	 *                    suggestions are run and returns an StringTooltip[] of
 	 *                    suggestions (with tooltips) to add
 	 * @return the current argument
 	 * @deprecated use {@link #includeSuggestions(ArgumentSuggestions)} instead
 	 */
 	@Deprecated(forRemoval = true)
-	public Argument<T> includeSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
+	public Argument<T> includeSuggestionsT(Function<SuggestionInfo, StringTooltip[]> suggestions) {
 		return includeSuggestions(ArgumentSuggestions.stringsWithTooltips(suggestions));
 	}
 
@@ -198,17 +198,17 @@ public abstract class Argument<T> extends ArgumentTree {
 
 	/**
 	 * Replaces the suggestions of this argument with an array of suggestions with tooltips.
-	 * @param suggestions a function that takes in {@link SuggestionInfo} and returns a {@link IStringTooltip[]} of suggestions
+	 * @param suggestions a function that takes in {@link SuggestionInfo} and returns a {@link StringTooltip[]} of suggestions
 	 * @return the current argument
 	 * @deprecated use {@link #replaceSuggestions(ArgumentSuggestions)} instead
 	 */
 	@Deprecated(forRemoval = true)
-	public Argument<T> replaceSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
+	public Argument<T> replaceSuggestionsT(Function<SuggestionInfo, StringTooltip[]> suggestions) {
 		return replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(suggestions));
 	}
 
 	/**
-	 * Returns an optional function that maps the command sender to an IStringTooltip array of
+	 * Returns an optional function that maps the command sender to an StringTooltip array of
 	 * suggestions for the current command
 	 * 
 	 * @return a function that provides suggestions, or <code>Optional.empty()</code> if there

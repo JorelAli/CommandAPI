@@ -40,6 +40,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import com.mojang.brigadier.Message;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -882,4 +885,10 @@ public class NMS_1_19_R1 extends NMS_Common<CommandSourceStack> {
 	public void resendPackets(Player player) {
 		MINECRAFT_SERVER.getCommands().sendCommands(((CraftPlayer) player).getHandle());
 	}
+
+	@Override
+	public Message toBrigadierMessage(final BaseComponent... components) {
+		return Serializer.fromJson(ComponentSerializer.toString(components));
+	}
+
 }

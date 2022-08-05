@@ -30,14 +30,13 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
+import dev.jorel.commandapi.StringTooltip;
 import org.bukkit.command.CommandSender;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.IStringTooltip;
-import dev.jorel.commandapi.StringTooltip;
 import dev.jorel.commandapi.nms.NMS;
 
 /**
@@ -50,9 +49,9 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 	private final String delimiter;
 	private final boolean allowDuplicates;
 	private final Function<CommandSender, Collection<T>> supplier;
-	private final Function<T, IStringTooltip> mapper;
+	private final Function<T, StringTooltip> mapper;
 
-	ListArgument(String nodeName, String delimiter, boolean allowDuplicates, Function<CommandSender, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper) {
+	ListArgument(String nodeName, String delimiter, boolean allowDuplicates, Function<CommandSender, Collection<T>> supplier, Function<T, StringTooltip> suggestionsMapper) {
 		super(nodeName, StringArgumentType.greedyString());
 		this.delimiter = delimiter;
 		this.allowDuplicates = allowDuplicates;
@@ -68,7 +67,7 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 
 			// This need not be a sorted map because entries in suggestions are
 			// automatically sorted anyway
-			Set<IStringTooltip> values = new HashSet<>();
+			Set<StringTooltip> values = new HashSet<>();
 			for(T object : supplier.apply(info.sender())) {
 				values.add(mapper.apply(object));
 			}
@@ -80,8 +79,8 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 
 			if(!allowDuplicates) {
 				for(String str : currentArgList) {
-					IStringTooltip valueToRemove = null;
-					for(IStringTooltip value : values) {
+					StringTooltip valueToRemove = null;
+					for(StringTooltip value : values) {
 						if(value.getSuggestion().equals(str)) {
 							valueToRemove = value;
 							break;
@@ -99,9 +98,9 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 				// the current list that the user is typing. We want to return
 				// a list of the current argument + each value that isn't
 				// in the list (i.e. each key in 'values')
-				IStringTooltip[] returnValues = new IStringTooltip[values.size()];
+				StringTooltip[] returnValues = new StringTooltip[values.size()];
 				int i = 0;
-				for(IStringTooltip str : values) {
+				for(StringTooltip str : values) {
 					returnValues[i] = StringTooltip.of(currentArg + str.getSuggestion(), str.getTooltip());
 					i++;
 				}
@@ -112,13 +111,13 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 				String valueStart = currentArgList.remove(currentArgList.size() - 1);
 				String suggestionBase = currentArgList.isEmpty() ? "" : String.join(delimiter, currentArgList) + delimiter;
 
-				List<IStringTooltip> returnValues = new ArrayList<>();
-				for(IStringTooltip str : values) {
+				List<StringTooltip> returnValues = new ArrayList<>();
+				for(StringTooltip str : values) {
 					if(str.getSuggestion().startsWith(valueStart)) {
 						returnValues.add(StringTooltip.of(suggestionBase + str.getSuggestion(), str.getTooltip()));
 					}
 				}
-				return returnValues.toArray(new IStringTooltip[0]);
+				return returnValues.toArray(new StringTooltip[0]);
 			}
 		}));
 	}
@@ -137,7 +136,7 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 	public <CommandListenerWrapper> List<T> parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		// Get the list of values which this can take
-		Map<IStringTooltip, T> values = new HashMap<>();
+		Map<StringTooltip, T> values = new HashMap<>();
 		for(T object : supplier.apply(nms.getCommandSenderFromCSS(cmdCtx.getSource()))) {
 			values.put(mapper.apply(object), object);
 		}
@@ -147,7 +146,7 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 		String[] strArr = cmdCtx.getArgument(key, String.class).split(Pattern.quote(delimiter));
 		for(String str : strArr) {
 			// Yes, this isn't an instant lookup HashMap, but this is the best we can do
-			for(IStringTooltip value : values.keySet()) {
+			for(StringTooltip value : values.keySet()) {
 				if(value.getSuggestion().equals(str)) {
 					if(allowDuplicates) {
 						list.add(values.get(value));

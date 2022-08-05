@@ -18,6 +18,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import com.mojang.brigadier.Message;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -933,5 +934,10 @@ public class NMS_1_14 extends NMSWrapper_1_14 {
 	@Override
 	public void resendPackets(Player player) {
 		MINECRAFT_SERVER.getCommandDispatcher().a(((CraftPlayer) player).getHandle());
+	}
+
+	@Override
+	public Message toBrigadierMessage(final BaseComponent... components) {
+		return ChatSerializer.a(ComponentSerializer.toString(components));
 	}
 }

@@ -31,6 +31,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 
+import com.mojang.brigadier.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -93,7 +94,6 @@ import dev.jorel.commandapi.CommandAPIConfig;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.Converter;
-import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.StringTooltip;
 import dev.jorel.commandapi.Tooltip;
 import dev.jorel.commandapi.arguments.AdvancementArgument;
@@ -1595,10 +1595,10 @@ new CommandAPICommand("mycommand")
 /* ANCHOR: Tooltips1 */
 List<Argument<?>> arguments = new ArrayList<>();
 arguments.add(new StringArgument("emote")
-    .replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(info -> new IStringTooltip[] {
-            StringTooltip.of("wave", "Waves at a player"),
-            StringTooltip.of("hug", "Gives a player a hug"),
-            StringTooltip.of("glare", "Gives a player the death glare")
+    .replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(info -> new StringTooltip[] {
+		StringTooltip.of("wave", "Waves at a player"),
+		StringTooltip.of("hug", "Gives a player a hug"),
+		StringTooltip.of("glare", "Gives a player the death glare")
         }
     ))
 );
@@ -2112,7 +2112,7 @@ class Friends {
 
 /* ANCHOR: Tooltips3 */
 @SuppressWarnings("deprecation")
-class CustomItem implements IStringTooltip {
+class CustomItem implements StringTooltip {
 
     private ItemStack itemstack;
     private String name;
@@ -2140,8 +2140,8 @@ class CustomItem implements IStringTooltip {
     }
 
     @Override
-    public String getTooltip() {
-        return this.itemstack.getItemMeta().getLore().get(0);
+    public Message getTooltip() {
+        return Tooltip.messageFrom(this.itemstack.getItemMeta().getLore().get(0));
     }
     
 }
