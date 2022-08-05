@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.mojang.brigadier.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -260,7 +261,18 @@ public final class CommandAPI {
 	 *         {@link CommandSyntaxException}
 	 */
 	public static WrapperCommandSyntaxException fail(String message) {
-		return new WrapperCommandSyntaxException(new SimpleCommandExceptionType(new LiteralMessage(message)).create());
+		return fail(new LiteralMessage(message));
+	}
+
+	/**
+	 * Forces a command to return a success value of 0
+	 *
+	 * @param message Description of the error message, formatted as a brigadier message
+	 * @return a {@link WrapperCommandSyntaxException} that wraps Brigadier's
+	 *         {@link CommandSyntaxException}
+	 */
+	public static WrapperCommandSyntaxException fail(Message message) {
+		return new WrapperCommandSyntaxException(new SimpleCommandExceptionType(message).create());
 	}
 
 	/**
