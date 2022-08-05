@@ -70,7 +70,7 @@ public interface Tooltip<S> {
 	 * @return a {@link Tooltip<S>} representing this suggestion and tooltip
 	 */
 	static <S> Tooltip<S> of(S suggestion, String tooltip) {
-		return of(suggestion, messageFrom(tooltip));
+		return of(suggestion, toMessage(tooltip));
 	}
 
 	/**
@@ -106,7 +106,7 @@ public interface Tooltip<S> {
 	 * @return a {@link Tooltip<S>} representing this suggestion and tooltip
 	 */
 	static <S> Tooltip<S> of(S suggestion, BaseComponent... components) {
-		return of(suggestion, messageFrom(components));
+		return of(suggestion, toMessage(components));
 	}
 
 	/**
@@ -218,8 +218,8 @@ public interface Tooltip<S> {
 	 *
 	 * @return a {@link Message} from the input string.
 	 */
-	static Message messageFrom(String string) {
-		return messageFrom(TextComponent.fromLegacyText(string));
+	static Message toMessage(String string) {
+		return toMessage(TextComponent.fromLegacyText(string));
 	}
 
 	/**
@@ -228,7 +228,7 @@ public interface Tooltip<S> {
 	 *
 	 * @return a {@link Message} from the bungee chat components.
 	 */
-	static Message messageFrom(BaseComponent... components) {
+	static Message toMessage(BaseComponent... components) {
 		return CommandAPIHandler.getInstance().getNMS().toBrigadierMessage(components);
 	}
 

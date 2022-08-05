@@ -36,7 +36,7 @@ public interface StringTooltip extends Tooltip<String> {
 	}
 
 	static StringTooltip of(String suggestion, String tooltip) {
-		return of(suggestion, Tooltip.messageFrom(tooltip));
+		return of(suggestion, Tooltip.toMessage(tooltip));
 	}
 	static StringTooltip of(String suggestion, Message message) {
 		return new StringTooltip() {
@@ -62,7 +62,7 @@ public interface StringTooltip extends Tooltip<String> {
 	 * @return a {@link StringTooltip} representing this suggestion and tooltip
 	 */
 	static StringTooltip of(String suggestion, BaseComponent... components) {
-		return of(suggestion, Tooltip.messageFrom(components));
+		return of(suggestion, Tooltip.toMessage(components));
 	}
 
 	static StringTooltip[] none(String... suggestions) {

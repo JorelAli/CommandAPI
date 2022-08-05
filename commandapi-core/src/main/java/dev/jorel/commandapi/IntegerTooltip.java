@@ -41,7 +41,7 @@ public interface IntegerTooltip extends Tooltip<Integer> {
 	}
 
 	static IntegerTooltip of(int suggestion, String tooltip) {
-		return of(suggestion, Tooltip.messageFrom(tooltip));
+		return of(suggestion, Tooltip.toMessage(tooltip));
 	}
 	static IntegerTooltip of(int suggestion, Message message) {
 		return new IntegerTooltip() {
@@ -67,7 +67,7 @@ public interface IntegerTooltip extends Tooltip<Integer> {
 	 * @return a {@link IntegerTooltip} representing this suggestion and tooltip
 	 */
 	static IntegerTooltip of(int suggestion, BaseComponent... components) {
-		return of(suggestion, Tooltip.messageFrom(components));
+		return of(suggestion, Tooltip.toMessage(components));
 	}
 
 	static IntegerTooltip[] none(int... suggestions) {
