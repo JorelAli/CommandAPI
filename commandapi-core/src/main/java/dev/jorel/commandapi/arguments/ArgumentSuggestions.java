@@ -3,6 +3,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import dev.jorel.commandapi.IntegerTooltip;
 import dev.jorel.commandapi.StringTooltip;
 import dev.jorel.commandapi.SuggestionInfo;
 
@@ -11,8 +12,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 /**
- * This class represents suggestions for an argument. {@link ArgumentSuggestions} objects are best
- * created using the static methods as opposed to functionally.
+ * This class represents suggestions for an argument. {@link ArgumentSuggestions} objects are best created using the
+ * static methods as opposed to functionally.
  */
 // Yes, the following block has spaces instead of tabs. This is by design: DO NOT
 // change the spaces into tabs!
@@ -20,20 +21,23 @@ import java.util.function.Function;
 @FunctionalInterface
 public interface ArgumentSuggestions {
 
-    /**
-     * Create a {@link CompletableFuture} resolving onto a brigadier {@link Suggestions} object.
-     * @param info The suggestions info
-     * @param builder The Brigadier {@link SuggestionsBuilder} object
-     * @return a {@link CompletableFuture} resolving onto a brigadier {@link Suggestions} object.
-     *
-     * @throws CommandSyntaxException if there is an error making suggestions
-     */
-    CompletableFuture<Suggestions> suggest(SuggestionInfo info, SuggestionsBuilder builder)
-        throws CommandSyntaxException;
-/* ANCHOR_END: Declaration */
+	/**
+	 * Create a {@link CompletableFuture} resolving onto a brigadier {@link Suggestions} object.
+	 *
+	 * @param info The suggestions info
+	 * @param builder The Brigadier {@link SuggestionsBuilder} object
+	 *
+	 * @return a {@link CompletableFuture} resolving onto a brigadier {@link Suggestions} object.
+	 *
+	 * @throws CommandSyntaxException if there is an error making suggestions
+	 */
+	CompletableFuture<Suggestions> suggest(SuggestionInfo info, SuggestionsBuilder builder) throws
+																							CommandSyntaxException;
+	/* ANCHOR_END: Declaration */
 
 	/**
 	 * Suggest nothing
+	 *
 	 * @return an {@link ArgumentSuggestions} object suggesting nothing.
 	 */
 	static ArgumentSuggestions empty() {
@@ -42,7 +46,9 @@ public interface ArgumentSuggestions {
 
 	/**
 	 * Suggest hardcoded strings
+	 *
 	 * @param suggestions array of hardcoded strings
+	 *
 	 * @return an {@link ArgumentSuggestions} object suggesting hardcoded strings
 	 */
 	static ArgumentSuggestions strings(String... suggestions) {
@@ -51,7 +57,9 @@ public interface ArgumentSuggestions {
 
 	/**
 	 * Suggest strings as the result of a function
+	 *
 	 * @param suggestions function providing the strings
+	 *
 	 * @return an {@link ArgumentSuggestions} object suggesting the result of the function
 	 */
 	static ArgumentSuggestions strings(Function<SuggestionInfo, String[]> suggestions) {
@@ -60,18 +68,21 @@ public interface ArgumentSuggestions {
 
 	/**
 	 * Suggest strings asynchronously
+	 *
 	 * @param suggestions function providing the strings asynchronously
+	 *
 	 * @return an {@link ArgumentSuggestions} object suggesting the result of the asynchronous function
 	 */
 	static ArgumentSuggestions stringsAsync(Function<SuggestionInfo, CompletableFuture<String[]>> suggestions) {
-		return (info, builder) -> suggestions
-			.apply(info)
+		return (info, builder) -> suggestions.apply(info)
 			.thenApply(strings -> toSuggestions(builder, strings));
 	}
 
 	/**
 	 * Suggest hardcoded strings with tooltips
+	 *
 	 * @param suggestions array of hardcoded strings with tooltips
+	 *
 	 * @return an {@link ArgumentSuggestions} object suggesting the hardcoded strings with tooltips
 	 */
 	static ArgumentSuggestions stringsWithTooltips(StringTooltip... suggestions) {
@@ -80,7 +91,9 @@ public interface ArgumentSuggestions {
 
 	/**
 	 * Suggest strings with tooltips as the result of a function
+	 *
 	 * @param suggestions function providing the strings with tooltips
+	 *
 	 * @return an {@link ArgumentSuggestions} object suggesting the result of the function
 	 */
 	static ArgumentSuggestions stringsWithTooltips(Function<SuggestionInfo, StringTooltip[]> suggestions) {
@@ -89,24 +102,96 @@ public interface ArgumentSuggestions {
 
 	/**
 	 * Suggest strings with tooltips asynchronously
+	 *
 	 * @param suggestions function providing the strings with tooltips asynchronously
+	 *
 	 * @return an {@link ArgumentSuggestions} object suggesting the result of the asynchronous function
 	 */
 	static ArgumentSuggestions stringsWithTooltipsAsync(Function<SuggestionInfo, CompletableFuture<StringTooltip[]>> suggestions) {
-		return (info, builder) -> suggestions
-			.apply(info)
+		return (info, builder) -> suggestions.apply(info)
 			.thenApply(stringsWithTooltips -> toSuggestions(builder, stringsWithTooltips));
 	}
 
 	/**
+	 * Suggest hardcoded ints
+	 *
+	 * @param suggestions array of hardcoded ints
+	 *
+	 * @return an {@link ArgumentSuggestions} object suggesting hardcoded ints
+	 */
+	static ArgumentSuggestions ints(int... suggestions) {
+		return (info, builder) -> future(toSuggestions(builder, suggestions));
+	}
+
+	/**
+	 * Suggest ints as the result of a function
+	 *
+	 * @param suggestions function providing the ints
+	 *
+	 * @return an {@link ArgumentSuggestions} object suggesting the result of the function
+	 */
+	static ArgumentSuggestions ints(Function<SuggestionInfo, int[]> suggestions) {
+		return (info, builder) -> future(toSuggestions(builder, suggestions.apply(info)));
+	}
+
+	/**
+	 * Suggest ints asynchronously
+	 *
+	 * @param suggestions function providing the ints asynchronously
+	 *
+	 * @return an {@link ArgumentSuggestions} object suggesting the result of the asynchronous function
+	 */
+	static ArgumentSuggestions intsAsync(Function<SuggestionInfo, CompletableFuture<int[]>> suggestions) {
+		return (info, builder) -> suggestions.apply(info)
+			.thenApply(ints -> toSuggestions(builder, ints));
+	}
+
+	/**
+	 * Suggest hardcoded ints with tooltips
+	 *
+	 * @param suggestions array of hardcoded ints with tooltips
+	 *
+	 * @return an {@link ArgumentSuggestions} object suggesting the hardcoded ints with tooltips
+	 */
+	static ArgumentSuggestions intsWithTooltips(IntegerTooltip... suggestions) {
+		return (info, builder) -> future(toSuggestions(builder, suggestions));
+	}
+
+	/**
+	 * Suggest ints with tooltips as the result of a function
+	 *
+	 * @param suggestions function providing the ints with tooltips
+	 *
+	 * @return an {@link ArgumentSuggestions} object suggesting the result of the function
+	 */
+	static ArgumentSuggestions intsWithTooltips(Function<SuggestionInfo, IntegerTooltip[]> suggestions) {
+		return (info, builder) -> future(toSuggestions(builder, suggestions.apply(info)));
+	}
+
+	/**
+	 * Suggest ints with tooltips asynchronously
+	 *
+	 * @param suggestions function providing the ints with tooltips asynchronously
+	 *
+	 * @return an {@link ArgumentSuggestions} object suggesting the result of the asynchronous function
+	 */
+	static ArgumentSuggestions intsWithTooltipsAsync(Function<SuggestionInfo, CompletableFuture<IntegerTooltip[]>> suggestions) {
+		return (info, builder) -> suggestions.apply(info)
+			.thenApply(intsWithTooltips -> toSuggestions(builder, intsWithTooltips));
+	}
+
+	/**
 	 * Convert an array of strings into a brigadier {@link Suggestions} object
+	 *
 	 * @param builder brigadier {@link SuggestionsBuilder} object for building the suggestions
 	 * @param suggestions array of strings
+	 *
 	 * @return a brigadier {@link Suggestions} object suggesting the array of strings
 	 */
 	private static Suggestions toSuggestions(SuggestionsBuilder builder, String... suggestions) {
 		for(String suggestion : suggestions) {
-			if(suggestion.toLowerCase(Locale.ROOT).startsWith(builder.getRemainingLowerCase())) {
+			if(suggestion.toLowerCase(Locale.ROOT)
+				.startsWith(builder.getRemainingLowerCase())) {
 				builder.suggest(suggestion);
 			}
 		}
@@ -115,13 +200,17 @@ public interface ArgumentSuggestions {
 
 	/**
 	 * Convert an array of strings with tooltips into a brigadier {@link Suggestions} object
+	 *
 	 * @param builder brigadier {@link SuggestionsBuilder} object for building the suggestions
 	 * @param suggestions array of strings with tooltips
+	 *
 	 * @return a brigadier {@link Suggestions} object suggesting the array of strings with tooltips
 	 */
 	private static Suggestions toSuggestions(SuggestionsBuilder builder, StringTooltip... suggestions) {
 		for(StringTooltip suggestion : suggestions) {
-			if(!suggestion.getSuggestion().toLowerCase(Locale.ROOT).startsWith(builder.getRemainingLowerCase())) {
+			if(!suggestion.getSuggestion()
+				.toLowerCase(Locale.ROOT)
+				.startsWith(builder.getRemainingLowerCase())) {
 				continue;
 			}
 
@@ -135,9 +224,45 @@ public interface ArgumentSuggestions {
 	}
 
 	/**
+	 * Convert an array of ints into a brigadier {@link Suggestions} object
+	 *
+	 * @param builder brigadier {@link SuggestionsBuilder} object for building the suggestions
+	 * @param suggestions array of ints
+	 *
+	 * @return a brigadier {@link Suggestions} object suggesting the array of ints
+	 */
+	private static Suggestions toSuggestions(SuggestionsBuilder builder, int... suggestions) {
+		for(int suggestion : suggestions) {
+			builder.suggest(suggestion);
+		}
+		return builder.build();
+	}
+
+	/**
+	 * Convert an array of ints with tooltips into a brigadier {@link Suggestions} object
+	 *
+	 * @param builder brigadier {@link SuggestionsBuilder} object for building the suggestions
+	 * @param suggestions array of ints with tooltips
+	 *
+	 * @return a brigadier {@link Suggestions} object suggesting the array of ints with tooltips
+	 */
+	private static Suggestions toSuggestions(SuggestionsBuilder builder, IntegerTooltip... suggestions) {
+		for(IntegerTooltip suggestion : suggestions) {
+			if(suggestion.getTooltip() == null) {
+				builder.suggest(suggestion.getSuggestion());
+			} else {
+				builder.suggest(suggestion.getSuggestion(), suggestion.getTooltip());
+			}
+		}
+		return builder.build();
+	}
+
+	/**
 	 * Wrap a value in a {@link CompletableFuture}
+	 *
 	 * @param value the value
 	 * @param <T> type of the value
+	 *
 	 * @return a {@link CompletableFuture} resolving instantly in the value
 	 */
 	private static <T> CompletableFuture<T> future(T value) {

@@ -27,6 +27,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 
 	/**
 	 * Returns the name of this command
+	 *
 	 * @return the name of this command
 	 */
 	public String getName() {
@@ -35,7 +36,9 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 
 	/**
 	 * Applies a permission to the current command builder
+	 *
 	 * @param permission The permission node required to execute this command
+	 *
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -46,18 +49,21 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 
 	/**
 	 * Applies a permission to the current command builder
+	 *
 	 * @param permission The permission node required to execute this command
+	 *
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
 	public T withPermission(String permission) {
-		this.meta.permission = CommandPermission.fromString(permission);
-		return (T) this;
+		return withPermission(CommandPermission.fromString(permission));
 	}
 
 	/**
 	 * Applies a permission to the current command builder
+	 *
 	 * @param permission The permission node required to execute this command
+	 *
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -68,21 +74,22 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 
 	/**
 	 * Applies a permission to the current command builder
+	 *
 	 * @param permission The permission node required to execute this command
+	 *
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
 	public T withoutPermission(String permission) {
-		this.meta.permission = CommandPermission.fromString(permission).negate();
-		return (T) this;
+		return withoutPermission(CommandPermission.fromString(permission));
 	}
 
 	/**
-	 * Adds a requirement that has to be satisfied to use this command. This method
-	 * can be used multiple times and each use of this method will AND its
-	 * requirement with the previously declared ones
+	 * Adds a requirement that has to be satisfied to use this command. This method can be used multiple times and each
+	 * use of this method will AND its requirement with the previously declared ones
 	 *
 	 * @param requirement the predicate that must be satisfied to use this command
+	 *
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -93,7 +100,9 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 
 	/**
 	 * Adds an array of aliases to the current command builder
+	 *
 	 * @param aliases An array of aliases which can be used to execute this command
+	 *
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -102,10 +111,9 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 		return (T) this;
 	}
 
-
-
 	/**
 	 * Returns the permission associated with this command
+	 *
 	 * @return the permission associated with this command
 	 */
 	public CommandPermission getPermission() {
@@ -114,6 +122,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 
 	/**
 	 * Sets the permission required to run this command
+	 *
 	 * @param permission the permission required to run this command
 	 */
 	public void setPermission(CommandPermission permission) {
@@ -122,6 +131,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 
 	/**
 	 * Returns an array of aliases that can be used to run this command
+	 *
 	 * @return an array of aliases that can be used to run this command
 	 */
 	public String[] getAliases() {
@@ -130,6 +140,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 
 	/**
 	 * Sets the aliases for this command
+	 *
 	 * @param aliases the aliases for this command
 	 */
 	public void setAliases(String[] aliases) {
@@ -138,6 +149,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 
 	/**
 	 * Returns the requirements that must be satisfied to run this command
+	 *
 	 * @return the requirements that must be satisfied to run this command
 	 */
 	public Predicate<CommandSender> getRequirements() {
@@ -146,6 +158,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 
 	/**
 	 * Sets the requirements that must be satisfied to run this command
+	 *
 	 * @param requirements the requirements that must be satisfied to run this command
 	 */
 	public void setRequirements(Predicate<CommandSender> requirements) {
@@ -153,9 +166,10 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	}
 
 	/**
-	 * Sets the short description for this command. This is the help which is
-	 * shown in the main /help menu.
+	 * Sets the short description for this command. This is the help which is shown in the main /help menu.
+	 *
 	 * @param description the short description for this command
+	 *
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -165,9 +179,11 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	}
 
 	/**
-	 * Sets the full description for this command. This is the help which is
-	 * shown in the specific /help page for this command (e.g. /help mycommand).
+	 * Sets the full description for this command. This is the help which is shown in the specific /help page for this
+	 * command (e.g. /help mycommand).
+	 *
 	 * @param description the full description for this command
+	 *
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -177,11 +193,12 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	}
 
 	/**
-	 * Sets the short and full description for this command. This is a short-hand
-	 * for the {@link ExecutableCommand#withShortDescription} and
-	 * {@link ExecutableCommand#withFullDescription} methods.
+	 * Sets the short and full description for this command. This is a short-hand for the
+	 * {@link ExecutableCommand#withShortDescription} and {@link ExecutableCommand#withFullDescription} methods.
+	 *
 	 * @param shortDescription the short description for this command
 	 * @param fullDescription the full description for this command
+	 *
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -192,8 +209,8 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	}
 
 	/**
-	 * Overrides a command. Effectively the same as unregistering the command using
-	 * CommandAPI.unregister() and then registering the command using .register()
+	 * Overrides a command. Effectively the same as unregistering the command using CommandAPI.unregister() and then
+	 * registering the command using .register()
 	 */
 	public void override() {
 		CommandAPI.unregister(this.meta.commandName, true);
@@ -204,5 +221,5 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	 * Registers this command
 	 */
 	public abstract void register();
-	
+
 }
