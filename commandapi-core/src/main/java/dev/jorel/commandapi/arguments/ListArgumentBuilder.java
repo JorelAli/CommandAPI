@@ -1,6 +1,7 @@
 package dev.jorel.commandapi.arguments;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -83,6 +84,18 @@ public class ListArgumentBuilder<T> {
 	 * @return this list argument builder
 	 */
 	public ListArgumentBuilderSuggests withList(Collection<T> list) {
+		return withList(info -> list);
+	}
+
+	/**
+	 * Specifies the list to use to generate suggestions for the list argument
+	 *
+	 * @param array an array of elements to suggest for this list argument
+	 * @return this list argument builder
+	 */
+	@SafeVarargs
+	public final ListArgumentBuilderSuggests withList(T... array) {
+		List<T> list = List.of(array);
 		return withList(info -> list);
 	}
 
