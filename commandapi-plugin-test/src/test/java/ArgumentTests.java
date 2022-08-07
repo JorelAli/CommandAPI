@@ -1,10 +1,3 @@
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -48,6 +41,8 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for the 40+ arguments in dev.jorel.commandapi.arguments
@@ -336,13 +331,13 @@ public class ArgumentTests {
 			})
 			.register();
 
-		server.dispatchCommand(sender, "list cat, wolf, axolotl");
-		server.dispatchCommand(sender, "list cat, wolf, axolotl, chicken");
-		server.dispatchCommand(sender, "list axolotl, wolf, chicken, axolotl");
+		server.dispatchCommand(sender, "list cat, wolf, axolotl"); // normal list
+		server.dispatchCommand(sender, "list cat, wolf, axolotl, wolf"); // don't allow duplicates
+		server.dispatchCommand(sender, "list axolotl, wolf, chicken, cat"); // don't allow unknown items
 
 		assertEquals(List.of("cat", "wolf", "axolotl"), type.get());
-		assertEquals(List.of("cat", "wolf", "axolotl"), type.get());
-		assertEquals(List.of("axolotl", "wolf"), type.get());
+		assertNull(type.get());
+		assertNull(type.get());
 		
 		// List argument, with duplicates
 
@@ -357,13 +352,11 @@ public class ArgumentTests {
 			})
 			.register();
 
-		server.dispatchCommand(sender, "listdup cat, wolf, axolotl, cat, wolf");
-		server.dispatchCommand(sender, "listdup cat, wolf, axolotl, chicken, cat");
-		server.dispatchCommand(sender, "listdup axolotl, wolf, chicken, axolotl, axolotl, axolotl, axolotl, axolotl, wolf");
+		server.dispatchCommand(sender, "listdup cat, wolf, axolotl, cat, wolf"); // allow duplicates
+		server.dispatchCommand(sender, "listdup cat, wolf, axolotl, chicken, cat"); // don't allow unknown items
 
 		assertEquals(List.of("cat", "wolf", "axolotl", "cat", "wolf"), type.get());
-		assertEquals(List.of("cat", "wolf", "axolotl", "cat"), type.get());
-		assertEquals(List.of("axolotl", "wolf", "axolotl", "axolotl", "axolotl", "axolotl", "axolotl", "wolf"), type.get());
+		assertNull(type.get());
 
 		// List argument, with a constant list (not using a supplier)
 		
@@ -377,13 +370,13 @@ public class ArgumentTests {
 			})
 			.register();
 
-		server.dispatchCommand(sender, "listconst cat, wolf, axolotl");
-		server.dispatchCommand(sender, "listconst cat, wolf, axolotl, chicken");
-		server.dispatchCommand(sender, "listconst axolotl, wolf, chicken, axolotl");
+		server.dispatchCommand(sender, "listconst cat, wolf, axolotl"); // normal list
+		server.dispatchCommand(sender, "listconst cat, wolf, axolotl, wolf"); // don't allow duplicates
+		server.dispatchCommand(sender, "listconst axolotl, wolf, chicken, cat"); // don't allow unknown items
 
 		assertEquals(List.of("cat", "wolf", "axolotl"), type.get());
-		assertEquals(List.of("cat", "wolf", "axolotl"), type.get());
-		assertEquals(List.of("axolotl", "wolf"), type.get());
+		assertNull(type.get());
+		assertNull(type.get());
 		
 		// List argument using a function
 		
@@ -396,18 +389,18 @@ public class ArgumentTests {
 				type.set((List<String>) args[0]);
 			})
 			.register();
-	
-		server.dispatchCommand(sender, "listfunc cat, wolf, axolotl");
-		server.dispatchCommand(sender, "listfunc cat, wolf, axolotl, chicken");
-		server.dispatchCommand(sender, "listfunc axolotl, wolf, chicken, axolotl");
-		server.dispatchCommand(sender, "listfunc axolotl, wolf, chicken, axolotl, " + sender.getName());
-	
+
+		server.dispatchCommand(sender, "listfunc cat, wolf, axolotl"); // normal list
+		server.dispatchCommand(sender, "listfunc cat, wolf, axolotl, wolf"); // don't allow duplicates
+		server.dispatchCommand(sender, "listfunc axolotl, wolf, chicken, cat"); // don't allow unknown items
+		server.dispatchCommand(sender, "listfunc axolotl, wolf, " + sender.getName()); // sender name
+
 		assertEquals(List.of("cat", "wolf", "axolotl"), type.get());
-		assertEquals(List.of("cat", "wolf", "axolotl"), type.get());
-		assertEquals(List.of("axolotl", "wolf"), type.get());
 		assertEquals(List.of("axolotl", "wolf", sender.getName()), type.get());
+		assertNull(type.get());
+		assertNull(type.get());
 	}
-	
+
 	@Test
 	public void executionTestWithPlayerArgument() {
 		Mut<Player> type = Mut.of();
