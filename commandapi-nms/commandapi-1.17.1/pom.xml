@@ -19,7 +19,7 @@
 	<parent>
 		<artifactId>commandapi-nms</artifactId>
 		<groupId>dev.jorel</groupId>
-		<version>8.5.0</version>
+		<version>8.5.1-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
@@ -47,6 +47,17 @@
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-1.17-common</artifactId>
 			<version>${project.version}</version>
+			<classifier>mojang-mapped</classifier>
+			<scope>provided</scope>
+		</dependency>
+		
+		<!-- We don't naturally inherit nms-common, so we declare it here -->
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-nms-common</artifactId>
+			<version>${project.version}</version>
+			<classifier>mojang-mapped</classifier>
+			<scope>provided</scope>
 		</dependency>
 
 		<!-- Spigot compilation -->

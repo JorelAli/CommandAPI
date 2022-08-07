@@ -1,5 +1,6 @@
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Optional;
 
 /**
  * A mutable wrapper of an object, as a list
@@ -16,7 +17,7 @@ public class Mut<T> {
 		return new Mut<T>(obj);
 	}
 	
-	private final Deque<T> value;
+	private final Deque<Optional<T>> value;
 	
 	private Mut() {
 		value = new ArrayDeque<>();
@@ -28,14 +29,14 @@ public class Mut<T> {
 	}
 	
 	public void set(T obj) {
-		this.value.add(obj);
+		this.value.add(Optional.ofNullable(obj));
 	}
 	
 	public T get() {
 		if(this.value.size() == 0) {
 			return null;
 		} else {
-			return this.value.remove();
+			return this.value.remove().orElseGet(() -> null);
 		}
 	}
 	

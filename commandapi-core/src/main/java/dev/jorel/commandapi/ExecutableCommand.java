@@ -151,6 +151,14 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	public void setRequirements(Predicate<CommandSender> requirements) {
 		this.meta.requirements = requirements;
 	}
+	
+	/**
+	 * Returns the short description for this command
+	 * @return the short description for this command
+	 */
+	public String getShortDescription() {
+		return this.meta.shortDescription.isPresent() ? this.meta.shortDescription.get() : null;
+	}
 
 	/**
 	 * Sets the short description for this command. This is the help which is
@@ -162,6 +170,14 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	public T withShortDescription(String description) {
 		this.meta.shortDescription = Optional.ofNullable(description);
 		return (T) this;
+	}
+	
+	/**
+	 * Returns the full description for this command
+	 * @return the full description for this command
+	 */
+	public String getFullDescription() {
+		return this.meta.fullDescription.isPresent() ? this.meta.fullDescription.get() : null;
 	}
 
 	/**

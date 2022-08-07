@@ -112,7 +112,6 @@ public class CustomArgument<T, B> extends Argument<T> {
 	public CustomArgument(Argument<B> base, CustomArgumentInfoParser<T, B> parser) {
 		super(base.getNodeName(), base.getRawType());
 		if (base instanceof LiteralArgument || base instanceof MultiLiteralArgument) {
-			// TODO: Use type-level check with an interface(s) to improve jar minimization
 			throw new IllegalArgumentException(base.getClass().getSimpleName() + " is not a suitable base argument type for a CustomArgument");
 		}
 		this.base = base;

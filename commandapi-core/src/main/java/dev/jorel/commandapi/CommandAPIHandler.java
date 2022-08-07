@@ -32,8 +32,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
@@ -680,10 +680,39 @@ public class CommandAPIHandler<CommandSourceStack> {
 			return;
 		}
 
-		// Create a list of argument names
-		StringBuilder builder = new StringBuilder();
-		for (Argument<?> arg : args) {
-			builder.append(arg.getNodeName()).append("<").append(arg.getClass().getSimpleName()).append("> ");
+		// Create the human-readable command syntax of arguments
+		final String humanReadableCommandArgSyntax; {
+			StringBuilder builder = new StringBuilder();
+			for (Argument<?> arg : args) {
+				builder.append(arg.toString()).append(" ");
+			}
+			humanReadableCommandArgSyntax = builder.toString().trim();
+		}
+		
+		// #312 Safeguard against duplicate node names. This only applies to
+		// required arguments (i.e. not literal arguments)
+		{
+			Set<String> argumentNames = new HashSet<>();
+			for(Argument<?> arg : args) {
+				// We shouldn't find MultiLiteralArguments at this point, only
+				// LiteralArguments
+				if(!(arg instanceof LiteralArgument)) {
+					if(argumentNames.contains(arg.getNodeName())) {
+						CommandAPI.logError("""
+							Failed to register command:
+
+							  %s %s
+
+							Because the following argument shares the same node name as another argument:
+
+							  %s
+							""".formatted(meta.commandName, humanReadableCommandArgSyntax, arg.toString()));
+						return;
+					} else {
+						argumentNames.add(arg.getNodeName());
+					}
+				}
+			}
 		}
 
 		// Expand metaData into named variables
@@ -699,7 +728,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		for (RegisteredCommand rCommand : registeredCommands) {
 			hasRegisteredCommand |= rCommand.commandName().equals(commandName);
 		}
-		if (hasRegisteredCommand && hasCommandConflict(commandName, args, builder.toString())) {
+		if (hasRegisteredCommand && hasCommandConflict(commandName, args, humanReadableCommandArgSyntax)) {
 			return;
 		} else {
 			List<String> argumentsString = new ArrayList<>();
@@ -718,7 +747,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 					+ "). Did you forget to remove this from your plugin.yml file?");
 		}
 
-		CommandAPI.logInfo("Registering command /" + commandName + " " + builder.toString());
+		CommandAPI.logInfo("Registering command /" + commandName + " " + humanReadableCommandArgSyntax);
 
 		// Generate the actual command
 		Command<CommandSourceStack> command = generateCommand(args, executor, converted);
@@ -814,17 +843,19 @@ public class CommandAPIHandler<CommandSourceStack> {
 	// Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
 	RequiredArgumentBuilder<CommandSourceStack, ?> getRequiredArgumentBuilderDynamic(final Argument<?>[] args,
 			Argument<?> argument) {
+		
+		final SuggestionProvider<CommandSourceStack> suggestions;
 
 		if (argument.getOverriddenSuggestions().isPresent()) {
-			// Override the suggestions
-			return getRequiredArgumentBuilderWithProvider(argument, args,
-					toSuggestions(argument.getNodeName(), args, true));
+			suggestions = toSuggestions(argument, args, true);
 		} else if (argument.getIncludedSuggestions().isPresent()) {
-			return getRequiredArgumentBuilderWithProvider(argument, args,
-					(cmdCtx, builder) -> argument.getRawType().listSuggestions(cmdCtx, builder));
+			// TODO(#317): Merge the suggestions included here instead?
+			suggestions = (cmdCtx, builder) -> argument.getRawType().listSuggestions(cmdCtx, builder);
 		} else {
-			return getRequiredArgumentBuilderWithProvider(argument, args, null);
+			suggestions = null;
 		}
+		
+		return getRequiredArgumentBuilderWithProvider(argument, args, suggestions);
 	}
 
 	// Gets a RequiredArgumentBuilder for an argument, given a SuggestionProvider
@@ -834,7 +865,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 
 		// If we have suggestions to add, combine provider with the suggestions
 		if (argument.getIncludedSuggestions().isPresent() && argument.getOverriddenSuggestions().isEmpty()) {
-			SuggestionProvider<CommandSourceStack> addedSuggestions = toSuggestions(argument.getNodeName(), args,
+			SuggestionProvider<CommandSourceStack> addedSuggestions = toSuggestions(argument, args,
 					false);
 
 			newSuggestionsProvider = (cmdCtx, builder) -> {
@@ -862,22 +893,13 @@ public class CommandAPIHandler<CommandSourceStack> {
 				argument.getArgumentPermission(), argument.getRequirements())).suggests(newSuggestionsProvider);
 	}
 
-	static Argument<?> getArgument(Argument<?>[] args, String nodeName) {
-		for (Argument<?> arg : args) {
-			if (arg.getNodeName().equals(nodeName)) {
-				return arg;
-			}
-		}
-		throw new NoSuchElementException("Could not find argument '" + nodeName + "'");
-	}
-
 	Object[] generatePreviousArguments(CommandContext<CommandSourceStack> context, Argument<?>[] args, String nodeName)
 			throws CommandSyntaxException {
 		// Populate Object[], which is our previously filled arguments
 		List<Object> previousArguments = new ArrayList<>();
 
 		for (Argument<?> arg : args) {
-			if (arg.getNodeName().equals(nodeName)) {
+			if (arg.getNodeName().equals(nodeName) && !(arg instanceof LiteralArgument)) {
 				break;
 			}
 
@@ -902,14 +924,17 @@ public class CommandAPIHandler<CommandSourceStack> {
 		return previousArguments.toArray();
 	}
 
-	SuggestionProvider<CommandSourceStack> toSuggestions(String nodeName, Argument<?>[] args,
+	SuggestionProvider<CommandSourceStack> toSuggestions(Argument<?> theArgument, Argument<?>[] args,
 			boolean overrideSuggestions) {
 		return (CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) -> {
+			// Construct the suggestion info
 			SuggestionInfo suggestionInfo = new SuggestionInfo(NMS.getCommandSenderFromCSS(context.getSource()),
-					generatePreviousArguments(context, args, nodeName), builder.getInput(), builder.getRemaining());
+					generatePreviousArguments(context, args, theArgument.getNodeName()), builder.getInput(), builder.getRemaining());
+			
+			// Get the suggestions
 			Optional<ArgumentSuggestions> suggestionsToAddOrOverride = overrideSuggestions
-					? getArgument(args, nodeName).getOverriddenSuggestions()
-					: getArgument(args, nodeName).getIncludedSuggestions();
+					? theArgument.getOverriddenSuggestions()
+					: theArgument.getIncludedSuggestions();
 			return suggestionsToAddOrOverride.orElse(ArgumentSuggestions.empty()).suggest(suggestionInfo, builder);
 		};
 	}

@@ -138,8 +138,8 @@ public class CommandAPIConfig {
 	
 	/**
 	 * Internal. Do not use.
-	 * @param customNMS
-	 * @return
+	 * @param customNMS the NMS implementation to use instead of any existing implementations
+	 * @return this CommandAPIConfig
 	 */
 	public CommandAPIConfig setCustomNMS(NMS<?> customNMS) {
 		this.customNMS = customNMS;

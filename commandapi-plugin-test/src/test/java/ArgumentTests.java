@@ -74,7 +74,9 @@ public class ArgumentTests {
 	@AfterEach
 	public void tearDown() {
 		Bukkit.getScheduler().cancelTasks(plugin);
-		plugin.onDisable();
+		if(plugin != null) {
+			plugin.onDisable();
+		}
 		MockBukkit.unmock();
 	}
 
@@ -424,7 +426,6 @@ public class ArgumentTests {
 		assertEquals(null, type.get());
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Test
 	public void executionTestWithChatComponentArgument() {
 		Mut<BaseComponent[]> spigot = Mut.of();
