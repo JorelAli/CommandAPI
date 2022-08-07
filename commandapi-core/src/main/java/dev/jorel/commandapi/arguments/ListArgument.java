@@ -35,6 +35,7 @@ import java.util.regex.Pattern;
 
 /**
  * An argument that accepts a list of objects
+ * 
  * @param <T> the type that this list argument generates a list of.
  */
 @SuppressWarnings("rawtypes")
@@ -67,13 +68,14 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 			}
 
 			String[] splitArguments = currentArg.split(Pattern.quote(delimiter));
-			// if an argument is finished, suggest the deliminator
+			// If an argument is finished, suggest the delimiter
 			String lastArgument = splitArguments[splitArguments.length - 1];
-			if(!currentArg.endsWith(delimiter) && values.stream().map(IStringTooltip::getSuggestion).anyMatch(lastArgument::equals))
+			if (!currentArg.endsWith(delimiter) && values.stream().map(IStringTooltip::getSuggestion).anyMatch(lastArgument::equals)) {
 				values.add(StringTooltip.of(lastArgument + delimiter, null));
+			}
 
 			if (!allowDuplicates) {
-				// filter out values already given
+				// Filter out values already given
 				for (String str : splitArguments) {
 					IStringTooltip valueToRemove = null;
 					for (IStringTooltip value : values) {
@@ -88,9 +90,10 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 				}
 			}
 
-			// offset builder to just after the last argument
-			if (currentArg.contains(delimiter))
+			// Offset builder to just after the last argument
+			if (currentArg.contains(delimiter)) {
 				builder = builder.createOffset(builder.getStart() + currentArg.lastIndexOf(delimiter) + delimiter.length());
+			}
 
 			// 'values' is a set of all objects that need to be suggested
 			for (IStringTooltip str : values) {
@@ -118,7 +121,7 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 
 	@Override
 	public <CommandListenerWrapper> List<T> parseArgument(NMS<CommandListenerWrapper> nms,
-														  CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		// Get the list of values which this can take
 		Map<IStringTooltip, T> values = new HashMap<>();
 		for (T object : supplier.apply(nms.getCommandSenderFromCSS(cmdCtx.getSource()))) {
