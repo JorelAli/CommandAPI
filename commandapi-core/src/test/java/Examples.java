@@ -49,6 +49,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
+import org.bukkit.block.Container;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.CommandSender;
@@ -66,8 +67,8 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.loot.LootContext;
 import org.bukkit.loot.LootTable;
+import org.bukkit.loot.Lootable;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
@@ -687,13 +688,19 @@ new CommandAPICommand("item")
 /* ANCHOR: loottablearguments */
 new CommandAPICommand("giveloottable")
     .withArguments(new LootTableArgument("loottable"))
-    .executesPlayer((player, args) -> {
+    .withArguments(new LocationArgument("location", LocationType.BLOCK_POSITION))
+    .executes((sender, args) -> {
         LootTable lootTable = (LootTable) args[0];
-    
-        /* Some generated LootContext relating to the lootTable*/
-        LootContext context = new LootContext.Builder(player.getLocation()).build();
-        
-        lootTable.fillInventory(player.getInventory(), new Random(), context);
+        Location location = (Location) args[1];
+
+        BlockState state = location.getBlock().getState();
+
+        // Check if the input block is a container (e.g. chest)
+        if(state instanceof Container container && state instanceof Lootable lootable) {
+            // Apply the loot table to the chest
+            lootable.setLootTable(lootTable);
+            container.update();
+        }
     })
     .register();
 /* ANCHOR_END: loottablearguments */
