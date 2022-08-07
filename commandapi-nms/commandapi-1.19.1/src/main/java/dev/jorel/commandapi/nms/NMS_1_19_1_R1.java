@@ -39,7 +39,7 @@ import net.minecraft.world.level.gameevent.EntityPositionSource;
 /**
  * NMS implementation for Minecraft 1.19.1
  */
-@NMSMeta(compatibleWith = "1.19.1")
+@NMSMeta(compatibleWith = { "1.19.1", "1.19.2" })
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = EntityPositionSource.class, name = "entityOrUuidOrId", ofType = Either.class)
@@ -47,7 +47,7 @@ public class NMS_1_19_1_R1 extends NMS_1_19_Common {
 
 	@Override
 	public String[] compatibleVersions() {
-		return new String[] { "1.19.1" };
+		return new String[] { "1.19.1", "1.19.2" };
 	}
 
 	@Differs(from = "1.19", by = "Use of 1.19.1 chat preview handler")
