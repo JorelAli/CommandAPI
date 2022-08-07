@@ -31,6 +31,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 
+import com.mojang.brigadier.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -1665,9 +1666,9 @@ new CommandAPICommand("mycommand")
 List<Argument<?>> arguments = new ArrayList<>();
 arguments.add(new StringArgument("emote")
     .replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(info -> new IStringTooltip[] {
-            StringTooltip.of("wave", "Waves at a player"),
-            StringTooltip.of("hug", "Gives a player a hug"),
-            StringTooltip.of("glare", "Gives a player the death glare")
+            StringTooltip.ofString("wave", "Waves at a player"),
+            StringTooltip.ofString("hug", "Gives a player a hug"),
+            StringTooltip.ofString("glare", "Gives a player the death glare")
         }
     ))
 );
@@ -2209,8 +2210,8 @@ class CustomItem implements IStringTooltip {
     }
 
     @Override
-    public String getTooltip() {
-        return this.itemstack.getItemMeta().getLore().get(0);
+    public Message getTooltip() {
+        return Tooltip.toMessage(this.itemstack.getItemMeta().getLore().get(0));
     }
     
 }

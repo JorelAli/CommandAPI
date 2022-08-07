@@ -20,6 +20,11 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
+import com.mojang.brigadier.LiteralMessage;
+import com.mojang.brigadier.Message;
+import net.md_5.bungee.api.chat.BaseComponent;
+
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
@@ -34,13 +39,42 @@ import java.util.function.Function;
 public class Tooltip<S> {
 
 	private final S object;
-	private final String tooltip;
-	
-	private Tooltip(S object, String tooltip) {
+	private final Message tooltip;
+
+	 protected Tooltip(S object, Message tooltip) {
 		this.object = object;
 		this.tooltip = tooltip;
 	}
-	
+
+	/**
+	 * Gets the suggestion for this object
+	 * @return the suggestion for this object
+	 */
+	public S getSuggestion() {
+		return object;
+	}
+
+	/**
+	 * Gets the formatted tooltip for this object
+	 * @return the formatted tooltip for this object
+	 */
+	public Message getTooltip() {
+		return tooltip;
+	}
+
+	/**
+	 * Constructs a <code>Tooltip&lt;S&gt;</code> with a suggestion and a tooltip
+	 *
+	 * @param <S> the object that the argument suggestions use
+	 * @param object the suggestion to provide to the user
+	 * @param tooltip    the tooltip to show to the user when they hover over the
+	 *                   suggestion
+	 * @return a <code>Tooltip&lt;S&gt;</code> representing this suggestion and tooltip
+	 */
+	public static <S> Tooltip<S> of(S object, String tooltip) {
+		return of(object, toMessage(tooltip));
+	}
+
 	/**
 	 * Constructs a <code>Tooltip&lt;S&gt;</code> with a suggestion and a tooltip
 	 * 
@@ -50,10 +84,23 @@ public class Tooltip<S> {
 	 *                   suggestion
 	 * @return a <code>Tooltip&lt;S&gt;</code> representing this suggestion and tooltip
 	 */
-	public static <S> Tooltip<S> of(S object, String tooltip) {
+	public static <S> Tooltip<S> of(S object, Message tooltip) {
 		return new Tooltip<S>(object, tooltip);
 	}
-	
+
+	/**
+	 * Constructs a <code>Tooltip&lt;S&gt;</code> with a suggestion and a formatted tooltip
+	 *
+	 * @param <S> the object that the argument suggestions use
+	 * @param object the suggestion to provide to the user
+	 * @param tooltip    the formatted tooltip to show to the user when they hover over the
+	 *                   suggestion
+	 * @return a <code>Tooltip&lt;S&gt;</code> representing this suggestion and tooltip
+	 */
+	public static <S> Tooltip<S> of(S object, BaseComponent... tooltip) {
+		return of(object, toMessage(tooltip));
+	}
+
 	/**
 	 * Constructs a <code>Tooltip&lt;S&gt;</code> with a suggestion and no tooltip
 	 * 
@@ -62,9 +109,83 @@ public class Tooltip<S> {
 	 * @return a <code>Tooltip&lt;S&gt;</code> representing this suggestion
 	 */
 	public static <S> Tooltip<S> none(S object) {
-		return new Tooltip<S>(object, null);
+		return new Tooltip<>(object, null);
 	}
-	
+
+	/**
+	 * Constructs an array of {@link Tooltip<S>} objects from an array of suggestions, and no tooltips
+	 *
+	 * @param <S> the object that the argument suggestions use
+	 * @param suggestions array of suggestions to provide to the user
+	 * @return an array of {@link Tooltip<S>} objects from the suggestions, with no tooltips
+	 */
+	@SafeVarargs
+	public static <S> Tooltip<S>[] none(S... suggestions) {
+		return generate(S::toString, (s, t) -> Tooltip.none(s), suggestions);
+	}
+
+	/**
+	 * Constructs an array of {@link Tooltip<S>} objects from an array of suggestions,
+	 * and a function which generates a string tooltip for each suggestion
+	 *
+	 * @param <S> the object that the argument suggestions use
+	 * @param tooltipGenerator function which returns a string tooltip for the suggestion
+	 * @param suggestions array of suggestions to provide to the user
+	 * @return an array of {@link Tooltip<S>} objects from the provided suggestions, with the generated string tooltips
+	 */
+	@SafeVarargs
+	public static <S> Tooltip<S>[] generateStrings(Function<S, String> tooltipGenerator, S... suggestions) {
+		return generate(tooltipGenerator, Tooltip::of, suggestions);
+	}
+
+	/**
+	 * Constructs an array of {@link Tooltip<S>} objects from an array of suggestions,
+	 * and a function which generates a formatted tooltip for each suggestion
+	 *
+	 * @param <S> the object that the argument suggestions use
+	 * @param tooltipGenerator function which returns a formatted tooltip for the suggestion
+	 * @param suggestions array of suggestions to provide to the user
+	 * @return an array of {@link Tooltip<S>} objects from the provided suggestions, with the generated formatted tooltips
+	 */
+	@SafeVarargs
+	public static <S> Tooltip<S>[] generateMessages(Function<S, Message> tooltipGenerator, S... suggestions) {
+		return generate(tooltipGenerator, Tooltip::of, suggestions);
+	}
+
+	/**
+	 * Constructs an array of {@link Tooltip<S>} objects from an array of suggestions,
+	 * and a function which generates a formatted tooltip for each suggestion
+	 *
+	 * @param <S> the object that the argument suggestions use
+	 * @param tooltipGenerator function which returns a formatted tooltip for the suggestion
+	 * @param suggestions array of suggestions to provide to the user
+	 * @return an array of {@link Tooltip<S>} objects from the provided suggestions, with the generated formatted tooltips
+	 */
+	@SafeVarargs
+	public static <S> Tooltip<S>[] generateComponents(Function<S, BaseComponent[]> tooltipGenerator, S... suggestions) {
+		return generate(tooltipGenerator, Tooltip::of, suggestions);
+	}
+
+	/**
+	 * Internal base method for the other generation types
+	 *
+	 * @param <S> the object that the argument suggestions use
+	 * @param <T> the type of the tooltip
+	 * @param tooltipGenerator tooltip generation function
+	 * @param tooltipWrapper function which wraps suggestion and tooltip into a {@link Tooltip<S>} object
+	 * @param suggestions array of suggestions to provide to the user
+	 * @return an array of {@link Tooltip<S>} objects from the provided suggestion, wrapped using the above functions
+	 */
+	@SafeVarargs
+	private static <S, T> Tooltip<S>[] generate(Function<S, T> tooltipGenerator, BiFunction<S, T, Tooltip<S>> tooltipWrapper, S... suggestions) {
+		Tooltip<?>[] tooltips = new Tooltip<?>[suggestions.length];
+		for(int i = 0; i < suggestions.length; i++) {
+			S suggestion = suggestions[i];
+			tooltips[i] = tooltipWrapper.apply(suggestion, tooltipGenerator.apply(suggestion));
+		}
+		return (Tooltip<S>[]) tooltips;
+	}
+
 	/**
 	 * Constructs a <code>Tooltip&lt;S&gt;</code>[] from an array of <code>Tooltip&lt;S&gt;</code> via varargs. This
 	 * method takes advantage of Java's varargs to construct a generic array
@@ -90,7 +211,36 @@ public class Tooltip<S> {
 	 * @return the mapping function from this tooltip into a StringTooltip
 	 */
 	public static <S> Function<Tooltip<S>, StringTooltip> build(Function<S, String> mapper) {
-		return t -> StringTooltip.of(mapper.apply(t.object), t.tooltip);
+		return t -> StringTooltip.ofMessage(mapper.apply(t.object), t.tooltip);
 	}
-	
+
+	/**
+	 * Converts an unformatted string to an unformatted tooltip by wrapping as with a {@link LiteralMessage}.
+	 *
+	 * If formatting is required, please see {@link #toMessage(BaseComponent...)},
+	 * or consider using the more modern adventure text api.
+	 *
+	 * @param string unformatted string tooltip
+	 * @return wrapped tooltip as a {@link LiteralMessage}
+	 */
+	public static Message toMessage(String string) {
+		return new LiteralMessage(string);
+	}
+
+	/**
+	 * Converts a formatted bungee text component to a native minecraft text component which can be used natively by brigadier.
+	 *
+	 * This supports all forms of formatting including entity selectors, scores,
+	 * click &amp; hover events, translations, keybinds and more.
+	 *
+	 * Note: the bungee component api is deprecated, and the adventure text component api should be used instead
+	 *
+	 * @param components array of bungee text components
+	 * @return native minecraft message object which can be used natively by brigadier.
+	 */
+	@Deprecated
+	public static Message toMessage(BaseComponent... components) {
+		return CommandAPIHandler.getInstance().getNMS().componentsToMessage(components);
+	}
+
 }

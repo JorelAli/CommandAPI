@@ -1,6 +1,8 @@
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import com.mojang.brigadier.Message;
+import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -200,6 +202,11 @@ public abstract class ArgumentNMS extends BlankNMS {
 	@Override
 	public String getTeam(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return BASE_NMS.getTeam((CommandContext) cmdCtx, key);
+	}
+
+	@Override
+	public Message componentsToMessage(final BaseComponent... components) {
+		return BASE_NMS.componentsToMessage(components);
 	}
 
 }

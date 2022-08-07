@@ -129,7 +129,7 @@ public interface ArgumentSuggestions {
 			if(suggestion.getTooltip() == null) {
 				builder.suggest(suggestion.getSuggestion());
 			} else {
-				builder.suggest(suggestion.getSuggestion(), new LiteralMessage(suggestion.getTooltip()));
+				builder.suggest(suggestion.getSuggestion(), suggestion.getTooltip());
 			}
 		}
 		return builder.build();

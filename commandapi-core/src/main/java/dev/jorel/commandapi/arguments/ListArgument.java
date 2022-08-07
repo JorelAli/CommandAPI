@@ -102,7 +102,7 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 				IStringTooltip[] returnValues = new IStringTooltip[values.size()];
 				int i = 0;
 				for(IStringTooltip str : values) {
-					returnValues[i] = StringTooltip.of(currentArg + str.getSuggestion(), str.getTooltip());
+					returnValues[i] = StringTooltip.ofMessage(currentArg + str.getSuggestion(), str.getTooltip());
 					i++;
 				}
 				return returnValues;
@@ -115,7 +115,7 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 				List<IStringTooltip> returnValues = new ArrayList<>();
 				for(IStringTooltip str : values) {
 					if(str.getSuggestion().startsWith(valueStart)) {
-						returnValues.add(StringTooltip.of(suggestionBase + str.getSuggestion(), str.getTooltip()));
+						returnValues.add(StringTooltip.ofMessage(suggestionBase + str.getSuggestion(), str.getTooltip()));
 					}
 				}
 				return returnValues.toArray(new IStringTooltip[0]);
