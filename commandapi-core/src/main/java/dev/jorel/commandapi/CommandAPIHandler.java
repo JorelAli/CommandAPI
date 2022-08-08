@@ -189,7 +189,18 @@ public class CommandAPIHandler<CommandSourceStack> {
 		}
 
 		// Log successful hooks
-		CommandAPI.logInfo("Hooked into NMS " + NMS.getClass().getName() + " (compatible with "
+		final String nmsClassHierarchy;
+		{
+			List<String> nmsClassHierarchyList = new ArrayList<>();
+			Class<?> nmsClass = NMS.getClass();
+			while(nmsClass.getSuperclass() != null) {
+				nmsClassHierarchyList.add(nmsClass.getSimpleName());
+				nmsClass = nmsClass.getSuperclass();
+			}
+			nmsClassHierarchy = String.join(" > ", nmsClassHierarchyList);
+		}
+		
+		CommandAPI.logInfo("Hooked into NMS " + nmsClassHierarchy + " (compatible with "
 				+ String.join(", ", NMS.compatibleVersions()) + ")");
 
 		// Checks other dependencies
