@@ -73,6 +73,7 @@ import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.EntitySelector;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.preprocessor.Differs;
+import dev.jorel.commandapi.preprocessor.Overridden;
 import dev.jorel.commandapi.preprocessor.Unimplemented;
 import dev.jorel.commandapi.wrappers.ComplexRecipeImpl;
 import dev.jorel.commandapi.wrappers.FloatRange;
@@ -540,7 +541,8 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public final NamespacedKey getMinecraftKey(CommandContext<CommandSourceStack> cmdCtx, String key) {
+	@Overridden(in = "1.17 common", because = "1.17 uses ArgumentMinecraftKeyRegistered.f instead of ArgumentMinecraftKeyRegistered.e")
+	public NamespacedKey getMinecraftKey(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		return fromResourceLocation(ResourceLocationArgument.getId(cmdCtx, key));
 	}
 
@@ -626,7 +628,12 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	@Unimplemented(because = NAME_CHANGED, info = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+	// Whyyyyyyyyyyyyyyyyyyy
+	@Unimplemented(because = NAME_CHANGED, info = "CommandListenerWrapper changes:")
+	@Unimplemented(because = NAME_CHANGED, info = "getPosition (1.17)  -> getPosition (1.18) -> e (1.19)")
+	@Unimplemented(because = NAME_CHANGED, info = "i (1.17)            -> getRotation (1.18) -> l (1.19)")
+	@Unimplemented(because = NAME_CHANGED, info = "getEntity (1.17)    -> getEntity (1.18)   -> g (1.19)")
+	@Unimplemented(because = NAME_CHANGED, info = "getWorld (1.17)     -> getLevel (1.18)    -> f (1.19)")
 	public abstract CommandSender getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean isNative);
 
 	@Override

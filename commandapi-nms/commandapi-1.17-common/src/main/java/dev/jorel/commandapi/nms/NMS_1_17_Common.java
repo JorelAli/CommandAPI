@@ -403,6 +403,11 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	}
 
 	@Override
+	public NamespacedKey getMinecraftKey(CommandContext<CommandSourceStack> cmdCtx, String key) {
+		return fromResourceLocation(ResourceLocationArgument.getId(cmdCtx, key));
+	}
+
+	@Override
 	public ParticleData<?> getParticle(CommandContext<CommandSourceStack> cmdCtx, String str) {
 		final ParticleOptions particleOptions = ParticleArgument.getParticle(cmdCtx, str);
 		final Level level = cmdCtx.getSource().getLevel();
