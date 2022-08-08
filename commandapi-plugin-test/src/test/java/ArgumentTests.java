@@ -36,6 +36,7 @@ import dev.jorel.commandapi.arguments.ChatComponentArgument;
 import dev.jorel.commandapi.arguments.EntitySelector;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.GreedyStringArgument;
+import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.ListArgumentBuilder;
 import dev.jorel.commandapi.arguments.Location2DArgument;
 import dev.jorel.commandapi.arguments.LocationArgument;
@@ -473,6 +474,87 @@ public class ArgumentTests {
 		
 		assertArrayEquals(ComponentSerializer.parse(json), spigot.get());
 		assertEquals(GsonComponentSerializer.gson().deserialize(json), adventure.get());
+	}
+	
+	@Test // Pre-#321 
+	public void executionTwoCommandsSameArgumentDifferentName() {
+		Mut<String> str1 = Mut.of();
+		Mut<String> str2 = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new StringArgument("str_1"))
+			.executesPlayer((player, args) -> {
+				str1.set((String) args[0]);
+			})
+			.register();
+		
+		new CommandAPICommand("test")
+			.withArguments(new StringArgument("str_2"))
+			.executesPlayer((player, args) -> {
+				str2.set((String) args[0]);
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer("APlayer");
+		server.dispatchCommand(player, "test hello");
+		server.dispatchCommand(player, "test world");
+		assertEquals("hello", str1.get());
+		assertEquals("world", str1.get());
+	}
+	
+	@Test // Pre-#321
+	public void executionTwoCommandsSameArgumentDifferentNameDifferentImplementation() {
+		Mut<Integer> int1 = Mut.of();
+		Mut<Integer> int2 = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new IntegerArgument("int_1", 1, 10))
+			.executesPlayer((player, args) -> {
+				int1.set((int) args[0]);
+			})
+			.register();
+		
+		new CommandAPICommand("test")
+			.withArguments(new IntegerArgument("str_2", 50, 100))
+			.executesPlayer((player, args) -> {
+				int2.set((int) args[0]);
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer("APlayer");
+		server.dispatchCommand(player, "test 5");
+		server.dispatchCommand(player, "test 60");
+		assertEquals(5, int1.get());
+		assertEquals(60, int2.get());
+	}
+	
+	@Test // Pre-#321
+	public void executionTwoCommandsSameArgumentDifferentNameDifferentImplementation2() {
+		Mut<Integer> int1 = Mut.of();
+		Mut<Integer> int2 = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new IntegerArgument("int_1", 1, 100))
+			.executesPlayer((player, args) -> {
+				int1.set((int) args[0]);
+			})
+			.register();
+		
+		new CommandAPICommand("test")
+			.withArguments(new IntegerArgument("str_2", 50, 100))
+			.executesPlayer((player, args) -> {
+				int2.set((int) args[0]);
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer("APlayer");
+		server.dispatchCommand(player, "test 5");
+		server.dispatchCommand(player, "test 60");
+		assertEquals(5, int1.get());
+		assertEquals(60, int1.get());
+		assertEquals(null, int2.get());
+		
+		
 	}
 
 }
