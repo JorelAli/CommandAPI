@@ -80,7 +80,6 @@ import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.IntegerRange;
 import dev.jorel.commandapi.wrappers.Location2D;
 import dev.jorel.commandapi.wrappers.MathOperation;
-import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
@@ -126,9 +125,7 @@ import net.minecraft.network.chat.Component.Serializer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.ServerFunctionManager;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec2;
-import net.minecraft.world.phys.Vec3;
 
 /**
  * Common NMS code To ensure that this code actually works across all versions
@@ -629,23 +626,8 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public final CommandSender getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean isNative) {
-		CommandSourceStack css = cmdCtx.getSource();
-
-		CommandSender sender = css.getBukkitSender();
-		Vec3 pos = css.getPosition();
-		Vec2 rot = css.getRotation();
-		World world = getWorldForCSS(css);
-		Location location = new Location(world, pos.x(), pos.y(), pos.z(), rot.x, rot.y);
-
-		Entity proxyEntity = css.getEntity();
-		CommandSender proxy = proxyEntity == null ? null : proxyEntity.getBukkitEntity();
-		if (isNative || (proxy != null && !sender.equals(proxy))) {
-			return new NativeProxyCommandSender(sender, proxy, location, world);
-		} else {
-			return sender;
-		}
-	}
+	@Unimplemented(because = NAME_CHANGED, info = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+	public abstract CommandSender getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean isNative);
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftServer")
@@ -711,9 +693,7 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public final World getWorldForCSS(CommandSourceStack css) {
-		return (css.getLevel() == null) ? null : css.getLevel().getWorld();
-	}
+	public abstract World getWorldForCSS(CommandSourceStack css);
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "VanillaCommandWrapper")
