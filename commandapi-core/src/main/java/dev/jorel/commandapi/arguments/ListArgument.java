@@ -156,7 +156,7 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 			}
 			if(!addedItem) {
 				context.setCursor(cursor);
-				throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownArgument().createWithContext(context);
+				throw new SimpleCommandExceptionType(new LiteralMessage("Item is not allowed in list")).createWithContext(context);
 			}
 			cursor += str.length() + delimiter.length();
 		}
