@@ -1,10 +1,3 @@
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,12 +9,14 @@ import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.advancement.Advancement;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
@@ -64,6 +59,10 @@ public class ArgumentTests {
 		} catch (IOException e) {
 			return "";
 		}
+	}
+
+	public void assertInvalidSyntax(CommandSender sender, String command) {
+		assertThrows(CommandSyntaxException.class, () -> assertTrue(server.dispatchThrowableCommand(sender,command)));
 	}
 
 	@BeforeEach
@@ -144,8 +143,8 @@ public class ArgumentTests {
 		assertEquals("success Hello_world", player.nextMessage());
 
 		// Negative tests from the documentation
-		assertThrows(CommandSyntaxException.class, () -> assertTrue(server.dispatchThrowableCommand(player, "test hello@email.com")));
-		assertThrows(CommandSyntaxException.class, () -> assertTrue(server.dispatchThrowableCommand(player, "test yesn't")));
+		assertInvalidSyntax(player, "test hello@email.com");
+		assertInvalidSyntax(player, "test yesn't");
 	}
 
 	@Test
@@ -163,7 +162,7 @@ public class ArgumentTests {
 		server.dispatchCommand(player, "test false");
 		assertEquals("success true", player.nextMessage());
 		assertEquals("success false", player.nextMessage());
-		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "test aaaaa"));
+		assertInvalidSyntax(player, "test aaaaa");
 	}
 	
 	@Test
@@ -317,7 +316,7 @@ public class ArgumentTests {
 		assertEquals(PotionEffectType.SPEED, type.get());
 		assertEquals(null, type.get());
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Test
 	public void executionTestWithListArgument() {
@@ -337,13 +336,11 @@ public class ArgumentTests {
 			})
 			.register();
 
-		server.dispatchCommand(sender, "list cat, wolf, axolotl");
-		server.dispatchCommand(sender, "list cat, wolf, axolotl, chicken");
-		server.dispatchCommand(sender, "list axolotl, wolf, chicken, axolotl");
+		server.dispatchCommand(sender, "list cat, wolf, axolotl"); // normal list
+		assertInvalidSyntax(sender, "list cat, wolf, axolotl, wolf"); // don't allow duplicates
+		assertInvalidSyntax(sender, "list axolotl, wolf, chicken, cat"); // don't allow unknown items
 
 		assertEquals(List.of("cat", "wolf", "axolotl"), type.get());
-		assertEquals(List.of("cat", "wolf", "axolotl"), type.get());
-		assertEquals(List.of("axolotl", "wolf"), type.get());
 		
 		// List argument, with duplicates
 
@@ -358,13 +355,10 @@ public class ArgumentTests {
 			})
 			.register();
 
-		server.dispatchCommand(sender, "listdup cat, wolf, axolotl, cat, wolf");
-		server.dispatchCommand(sender, "listdup cat, wolf, axolotl, chicken, cat");
-		server.dispatchCommand(sender, "listdup axolotl, wolf, chicken, axolotl, axolotl, axolotl, axolotl, axolotl, wolf");
+		server.dispatchCommand(sender, "listdup cat, wolf, axolotl, cat, wolf"); // allow duplicates
+		assertInvalidSyntax(sender, "listdup cat, wolf, axolotl, chicken, cat"); // don't allow unknown items
 
 		assertEquals(List.of("cat", "wolf", "axolotl", "cat", "wolf"), type.get());
-		assertEquals(List.of("cat", "wolf", "axolotl", "cat"), type.get());
-		assertEquals(List.of("axolotl", "wolf", "axolotl", "axolotl", "axolotl", "axolotl", "axolotl", "wolf"), type.get());
 
 		// List argument, with a constant list (not using a supplier)
 		
@@ -378,13 +372,11 @@ public class ArgumentTests {
 			})
 			.register();
 
-		server.dispatchCommand(sender, "listconst cat, wolf, axolotl");
-		server.dispatchCommand(sender, "listconst cat, wolf, axolotl, chicken");
-		server.dispatchCommand(sender, "listconst axolotl, wolf, chicken, axolotl");
+		server.dispatchCommand(sender, "listconst cat, wolf, axolotl"); // normal list
+		assertInvalidSyntax(sender, "listconst cat, wolf, axolotl, wolf"); // don't allow duplicates
+		assertInvalidSyntax(sender, "listconst axolotl, wolf, chicken, cat"); // don't allow unknown items
 
 		assertEquals(List.of("cat", "wolf", "axolotl"), type.get());
-		assertEquals(List.of("cat", "wolf", "axolotl"), type.get());
-		assertEquals(List.of("axolotl", "wolf"), type.get());
 		
 		// List argument using a function
 		
@@ -397,18 +389,16 @@ public class ArgumentTests {
 				type.set((List<String>) args[0]);
 			})
 			.register();
-	
-		server.dispatchCommand(sender, "listfunc cat, wolf, axolotl");
-		server.dispatchCommand(sender, "listfunc cat, wolf, axolotl, chicken");
-		server.dispatchCommand(sender, "listfunc axolotl, wolf, chicken, axolotl");
-		server.dispatchCommand(sender, "listfunc axolotl, wolf, chicken, axolotl, " + sender.getName());
-	
+
+		server.dispatchCommand(sender, "listfunc cat, wolf, axolotl"); // normal list
+		assertInvalidSyntax(sender, "listfunc cat, wolf, axolotl, wolf"); // don't allow duplicates
+		assertInvalidSyntax(sender, "listfunc axolotl, wolf, chicken, cat"); // don't allow unknown items
+		server.dispatchCommand(sender, "listfunc axolotl, wolf, " + sender.getName()); // sender name
+
 		assertEquals(List.of("cat", "wolf", "axolotl"), type.get());
-		assertEquals(List.of("cat", "wolf", "axolotl"), type.get());
-		assertEquals(List.of("axolotl", "wolf"), type.get());
 		assertEquals(List.of("axolotl", "wolf", sender.getName()), type.get());
 	}
-	
+
 	@Test
 	public void executionTestWithPlayerArgument() {
 		Mut<Player> type = Mut.of();
@@ -422,7 +412,7 @@ public class ArgumentTests {
 
 		PlayerMock player = server.addPlayer("APlayer");
 		server.dispatchCommand(player, "test APlayer");
-		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "test BPlayer"));
+		assertInvalidSyntax(player, "test BPlayer");
 		assertEquals(player, type.get());
 		assertEquals(null, type.get());
 	}

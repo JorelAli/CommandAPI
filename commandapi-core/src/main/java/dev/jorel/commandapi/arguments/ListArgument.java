@@ -21,9 +21,11 @@
 package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.LiteralMessage;
+import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.StringTooltip;
 import dev.jorel.commandapi.nms.NMS;
@@ -130,18 +132,33 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 
 		// If the argument's value is in the list of values, include it
 		List<T> list = new ArrayList<>();
-		String[] strArr = cmdCtx.getArgument(key, String.class).split(Pattern.quote(delimiter));
+		String argument = cmdCtx.getArgument(key, String.class);
+		String[] strArr = argument.split(Pattern.quote(delimiter));
+		StringReader context = new StringReader(argument);
+		int cursor = 0;
 		for (String str : strArr) {
+			boolean addedItem = false;
 			// Yes, this isn't an instant lookup HashMap, but this is the best we can do
 			for (IStringTooltip value : values.keySet()) {
 				if (value.getSuggestion().equals(str)) {
 					if (allowDuplicates) {
 						list.add(values.get(value));
-					} else if (!list.contains(values.get(value))) {
-						list.add(values.get(value));
+					} else {
+						if (!list.contains(values.get(value))) {
+							list.add(values.get(value));
+						} else {
+							context.setCursor(cursor);
+							throw new SimpleCommandExceptionType(new LiteralMessage("Duplicate arguments are not allowed")).createWithContext(context);
+						}
 					}
+					addedItem = true;
 				}
 			}
+			if(!addedItem) {
+				context.setCursor(cursor);
+				throw new SimpleCommandExceptionType(new LiteralMessage("Item is not allowed in list")).createWithContext(context);
+			}
+			cursor += str.length() + delimiter.length();
 		}
 		return list;
 	}
