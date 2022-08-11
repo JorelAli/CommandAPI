@@ -144,13 +144,11 @@ public final class Brigadier {
 	 * 
 	 * @param args     the List of arguments which you typically declare for
 	 *                 commands
-	 * @param nodeName the name of the argument you want to specify
+	 * @param argument the argument you want to specify
 	 * @return a RequiredArgumentBuilder that represents the provided argument
 	 */
-	public static RequiredArgumentBuilder fromArgument(List<Argument> args, String nodeName) {
-		Argument[] argsArr = args.toArray(new Argument[0]);
-		return CommandAPIHandler.getInstance().getRequiredArgumentBuilderDynamic(argsArr,
-				CommandAPIHandler.getArgument(argsArr, nodeName));
+	public static RequiredArgumentBuilder fromArgument(List<Argument> args, Argument<?> argument) {
+		return CommandAPIHandler.getInstance().getRequiredArgumentBuilderDynamic(args.toArray(new Argument[0]), argument);
 	}
 
 	/**
@@ -164,17 +162,16 @@ public final class Brigadier {
 	}
 
 	/**
-	 * Converts an argument name and a list of arguments to a Brigadier
+	 * Converts an argument and a list of arguments to a Brigadier
 	 * SuggestionProvider
 	 * 
-	 * @param nodeName the name (prompt) of the argument as declared by its node
-	 *                 name
+	 * @param argument the argument to convert to suggestions
 	 * @param args     the list of arguments
 	 * @return a SuggestionProvider that suggests the overridden suggestions for the
-	 *         argument declared in the List with key argumentName
+	 *         specified argument
 	 */
-	public static SuggestionProvider toSuggestions(String nodeName, List<Argument> args) {
-		return CommandAPIHandler.getInstance().toSuggestions(nodeName, args.toArray(new Argument[0]), true);
+	public static SuggestionProvider toSuggestions(Argument<?> argument, List<Argument> args) {
+		return CommandAPIHandler.getInstance().toSuggestions(argument, args.toArray(new Argument[0]), true);
 	}
 
 	/**

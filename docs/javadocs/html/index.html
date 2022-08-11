@@ -26,7 +26,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.5.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.5.1</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -387,6 +387,34 @@ to run latest version    </th></tr>
 <p >Version </p>
 <p >Date </p>
 <p >Features / Changes  &lt;/thead&gt; &lt;tbody&gt; </p>
+<p ><b>8.5.1</b> </p>
+<p >August 2022 </p>
+<ul>
+<li>
+<a href="https://github.com/JorelAli/CommandAPI/issues/311">https://github.com/JorelAli/CommandAPI/issues/311</a> Fix packets with invalid signatures kicking the client when sending certain commands with a chat preview enabled argument </li>
+<li>
+<a href="https://github.com/JorelAli/CommandAPI/issues/312">https://github.com/JorelAli/CommandAPI/issues/312</a> Safeguards against command paths with duplicate node names which could cause the client to crash </li>
+<li>
+<a href="https://github.com/JorelAli/CommandAPI/issues/313">https://github.com/JorelAli/CommandAPI/issues/313</a> Fix subcommand information being overwritten after a command has been registered </li>
+<li>
+<a href="https://github.com/JorelAli/CommandAPI/issues/314">https://github.com/JorelAli/CommandAPI/issues/314</a> Fix <code>TimeArgument</code> not working as intended </li>
+<li>
+<a href="https://github.com/JorelAli/CommandAPI/issues/316">https://github.com/JorelAli/CommandAPI/issues/316</a> Fix server reloading on Spigot throwing asynchronous-related exceptions in the console </li>
+<li>
+<a href="https://github.com/JorelAli/CommandAPI/issues/323">https://github.com/JorelAli/CommandAPI/issues/323</a> Fix <code>NamespacedKeyArgument</code> not working in 1.17 </li>
+<li>
+Fix various command issues with Minecraft versions before 1.19 </li>
+<li>
+Fix argument suggestions not working if a subcommand's node name is the same as the argument's node name </li>
+<li>
+Improves the underlying implementation of chatcolor, enchantment and potion arguments in 1.17+ </li>
+<li>
+Improves NMS code sharing between 1.19, 1.19.1 and 1.19.2 </li>
+<li>
+Improves the implementation of the list argument to only display suggestions for the last item in the list and prevent unlisted items being entered </li>
+<li>
+Adds support for Minecraft 1.19.2 </li>
+</ul>
 <p ><b>8.5.0</b> </p>
 <p >July 2022 </p>
 <p ><b>Development improvements:</b> </p><ul>
@@ -1408,7 +1436,7 @@ Initial release </li>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Jul 28 2022 22:11:14 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Thu Aug 11 2022 21:39:57 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

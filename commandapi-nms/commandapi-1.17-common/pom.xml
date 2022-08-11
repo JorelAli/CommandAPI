@@ -21,7 +21,7 @@
 	<parent>
 		<artifactId>commandapi-nms</artifactId>
 		<groupId>dev.jorel</groupId>
-		<version>8.5.0</version>
+		<version>8.5.1</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
@@ -85,12 +85,28 @@
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-nms-common</artifactId>
 			<version>${project.version}</version>
-			<scope>compile</scope>
+			<classifier>mojang-mapped</classifier>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>Mojang-Mapped</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+							<classifier>mojang-mapped</classifier>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>net.md-5</groupId>
 				<artifactId>specialsource-maven-plugin</artifactId>

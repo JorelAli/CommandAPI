@@ -21,15 +21,15 @@
 	<parent>
 		<artifactId>commandapi-nms</artifactId>
 		<groupId>dev.jorel</groupId>
-		<version>8.5.0</version>
+		<version>8.5.1</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>commandapi-1.19</artifactId>
 
 	<properties>
-		<minecraft.mappings>1.19.1-R0.1-SNAPSHOT</minecraft.mappings>
-		<spigot.version>1.19.1-R0.1-SNAPSHOT</spigot.version>
+		<minecraft.mappings>1.19-R0.1-SNAPSHOT</minecraft.mappings>
+		<spigot.version>1.19-R0.1-SNAPSHOT</spigot.version>
 	</properties>
 
 	<repositories>
@@ -82,9 +82,18 @@
 		
 		<dependency>
 			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-1.19-common</artifactId>
+			<version>${project.version}</version>
+			<classifier>mojang-mapped</classifier>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-nms-common</artifactId>
 			<version>${project.version}</version>
-			<scope>compile</scope>
+			<classifier>mojang-mapped</classifier>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 

@@ -17,6 +17,7 @@ sed -i "s/version: $oldVer/version: $newVer/" commandapi-plugin/src/main/resourc
 
 sed -i "s/PROJECT_NUMBER         = $oldVer/PROJECT_NUMBER         = $newVer/" Doxyfile
 sed -i "s/$oldVer/$newVer/" docssrc/book.toml
+sed -i "s/$oldVer/$newVer/" docs/latest.html
 
 mvn versions:set -DnewVersion=$newVer
 mvn versions:commit

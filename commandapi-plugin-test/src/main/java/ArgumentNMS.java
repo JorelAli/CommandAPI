@@ -9,6 +9,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
@@ -17,8 +18,10 @@ import org.bukkit.potion.PotionEffectType;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
 
 import dev.jorel.commandapi.arguments.EntitySelector;
+import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.Location2D;
@@ -45,6 +48,16 @@ public abstract class ArgumentNMS extends BlankNMS {
 	public final ArgumentType<?> _ArgumentBlockState() {
 		return BASE_NMS._ArgumentBlockState();
 	}
+	
+	@Override
+	public ArgumentType<?> _ArgumentChat() {
+		return BASE_NMS._ArgumentChat();
+	}
+	
+	@Override
+	public ArgumentType<?> _ArgumentChatComponent() {
+		return BASE_NMS._ArgumentChatComponent();
+	}
 
 	@Override
 	public ArgumentType<?> _ArgumentEntity(EntitySelector selector) {
@@ -60,10 +73,50 @@ public abstract class ArgumentNMS extends BlankNMS {
 	public final ArgumentType<?> _ArgumentItemStack() {
 		return BASE_NMS._ArgumentItemStack();
 	}
+	
+	@Override
+	public ArgumentType<?> _ArgumentMinecraftKeyRegistered() {
+		return BASE_NMS._ArgumentMinecraftKeyRegistered();
+	}
 
+	@Override
+	public ArgumentType<?> _ArgumentMobEffect() {
+		return BASE_NMS._ArgumentMobEffect();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentPosition() {
+		return BASE_NMS._ArgumentPosition();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentPosition2D() {
+		return BASE_NMS._ArgumentPosition2D();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentProfile() {
+		return BASE_NMS._ArgumentProfile();
+	}
+	
 	@Override
 	public final ArgumentType<?> _ArgumentSyntheticBiome() {
 		return BASE_NMS._ArgumentSyntheticBiome();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentVec2() {
+		return BASE_NMS._ArgumentVec2();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentVec3() {
+		return BASE_NMS._ArgumentVec3();
+	}
+
+	@Override
+	public org.bukkit.advancement.Advancement getAdvancement(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		return BASE_NMS.getAdvancement((CommandContext) cmdCtx, key);
 	}
 
 	@Override
@@ -180,6 +233,11 @@ public abstract class ArgumentNMS extends BlankNMS {
 	public ParticleData<?> getParticle(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		return BASE_NMS.getParticle((CommandContext) cmdCtx, key);
 	}
+	
+	@Override
+	public Player getPlayer(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		return BASE_NMS.getPlayer((CommandContext) cmdCtx, key);
+	}
 
 	@Override
 	public PotionEffectType getPotionEffect(CommandContext<CommandListenerWrapper> cmdCtx, String key)
@@ -187,6 +245,11 @@ public abstract class ArgumentNMS extends BlankNMS {
 		return BASE_NMS.getPotionEffect((CommandContext) cmdCtx, key);
 	}
 
+	@Override
+	public SuggestionProvider getSuggestionProvider(SuggestionProviders provider) {
+		return BASE_NMS.getSuggestionProvider(provider);
+	}
+	
 	@Override
 	public Recipe getRecipe(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return BASE_NMS.getRecipe((CommandContext) cmdCtx, key);
