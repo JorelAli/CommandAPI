@@ -1,5 +1,31 @@
 # Upgrading guide
 
+## From 8.5.0 to 8.5.1
+
+### Brigadier arguments
+
+In 8.5.1, the methods `Brigadier.fromArgument` and `Brigadier.toSuggestions` were changed to use `Argument` based parameters instead of `String` based parameters. Instead of providing the node name, you now have to provide the whole argument:
+
+```java
+Argument<?> myArgument = new StringArgument("myargument");
+List<Argument<?>> argumentList = List.of(myArgument);
+
+Brigadier.fromArgument(argumentList, "myargument");
+Brigadier.toSuggestions("myargument", argumentList);
+```
+
+\\[\downarrow\\]
+
+```java
+Argument<?> myArgument = new StringArgument("myargument");
+List<Argument<?>> argumentList = List.of(myArgument);
+
+Brigadier.fromArgument(argumentList, myArgument);
+Brigadier.toSuggestions(myArgument, argumentList);
+```
+
+-----
+
 ## From 8.3.1 to 8.4.0
 
 ### Getting a list of registered commands

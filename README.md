@@ -348,10 +348,12 @@ This is the current roadmap for the CommandAPI (as of 28th July 2022):
                     <li>https://github.com/JorelAli/CommandAPI/issues/313 Fix subcommand information being overwritten after a command has been registered</li>
                     <li>https://github.com/JorelAli/CommandAPI/issues/314 Fix <code>TimeArgument</code> not working as intended</li>
                     <li>https://github.com/JorelAli/CommandAPI/issues/316 Fix server reloading on Spigot throwing asynchronous-related exceptions in the console</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/323 Fix <code>NamespacedKeyArgument</code> not working in 1.17</li>
+                    <li>Fix various command issues with Minecraft versions before 1.19</li>
                     <li>Fix argument suggestions not working if a subcommand's node name is the same as the argument's node name</li>
                     <li>Improves the underlying implementation of chatcolor, enchantment and potion arguments in 1.17+</li>
                     <li>Improves NMS code sharing between 1.19, 1.19.1 and 1.19.2</li>
-                    <li>Improves the implementation of the list argument to only display suggestions for the last item in the list</li>
+                    <li>Improves the implementation of the list argument to only display suggestions for the last item in the list and prevent unlisted items being entered</li>
                     <li>Adds support for Minecraft 1.19.2</li>
                 </ul>
             </td>
