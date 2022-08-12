@@ -48,6 +48,7 @@ import org.bukkit.Particle.DustOptions;
 import org.bukkit.Particle.DustTransition;
 import org.bukkit.Sound;
 import org.bukkit.Vibration;
+import org.bukkit.World;
 import org.bukkit.Vibration.Destination;
 import org.bukkit.Vibration.Destination.BlockDestination;
 import org.bukkit.Vibration.Destination.EntityDestination;
@@ -91,6 +92,7 @@ import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.Location2D;
+import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import io.netty.channel.Channel;
@@ -573,6 +575,25 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 	}
 
 	@Override
+	public CommandSender getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean isNative) {
+		CommandSourceStack css = cmdCtx.getSource();
+
+		CommandSender sender = css.getBukkitSender();
+		Vec3 pos = css.getPosition();
+		Vec2 rot = css.getRotation();
+		World world = getWorldForCSS(css);
+		Location location = new Location(world, pos.x(), pos.y(), pos.z(), rot.x, rot.y);
+
+		Entity proxyEntity = css.getEntity();
+		CommandSender proxy = proxyEntity == null ? null : proxyEntity.getBukkitEntity();
+		if (isNative || (proxy != null && !sender.equals(proxy))) {
+			return new NativeProxyCommandSender(sender, proxy, location, world);
+		} else {
+			return sender;
+		}
+	}
+
+	@Override
 	public final SimpleCommandMap getSimpleCommandMap() {
 		return ((CraftServer) Bukkit.getServer()).getCommandMap();
 	}
@@ -587,6 +608,11 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		Collection<CommandFunction> customFunctions = MINECRAFT_SERVER.getFunctions()
 			.getTag(new ResourceLocation(key.getNamespace(), key.getKey()));
 		return customFunctions.toArray(new SimpleFunctionWrapper[0]);
+	}
+	
+	@Override
+	public World getWorldForCSS(CommandSourceStack css) {
+		return (css.getLevel() == null) ? null : css.getLevel().getWorld();
 	}
 
 	@Differs(from = "1.19", by = "Use of 1.19.1 chat preview handler")

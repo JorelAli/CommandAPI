@@ -37,6 +37,10 @@ Using the search icon <i class="fas fa-search"></i> in the top left corner, you 
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 8.5.0 \\(\rightarrow\\) 8.5.1
+
+- Update [Brigadier + CommandAPI](./brigadier.md) with function parameter changes. See [Upgrading](./upgrading.md) for more info.
+
 ### Documentation changes 8.4.0 \\(\rightarrow\\) 8.5.0
 
 - Adds [Chat preview](./chatpreview.md) section

@@ -42,21 +42,22 @@ The list of what version of the CommandAPI you'll need to run on a specific vers
 
 | Minecraft version  | Compatible versions         | Latest compatible<br>version | Minimum Java<br>version required<br>to run latest version |
 |--------------------|-----------------------------|------------------------------|-----------------------------------------------------------|
-| **1.13.x**         | v1.0 - 5.12, 8.3.0  - 8.5.0 | 8.5.0                        | 16                                                        |
-| **1.14.1, 1.14.2** | v2.0 - 5.12, 8.3.0  - 8.5.0 | 8.5.0                        | 16                                                        |
-| **1.14.3, 1.14.4** | v2.1 - 5.12, 8.3.0  - 8.5.0 | 8.5.0                        | 16                                                        |
-| **1.15.x**         | v2.3a - 5.12, 8.3.0 - 8.5.0 | 8.5.0                        | 16                                                        |
-| **1.16.1**         | v3.0 - 5.12, 8.3.0  - 8.5.0 | 8.5.0                        | 16                                                        |
-| **1.16.2**         | v4.0 - 5.12, 8.3.0  - 8.5.0 | 8.5.0                        | 16                                                        |
-| **1.16.3**         | v4.2 - 5.12, 8.3.0  - 8.5.0 | 8.5.0                        | 16                                                        |
-| **1.16.4**         | v5.2 - 5.12, 8.3.0  - 8.5.0 | 8.5.0                        | 16                                                        |
-| **1.16.5**         | v5.7 - 7.0.0, 8.3.0 - 8.5.0 | 8.5.0                        | 16                                                        |
-| **1.17**           | 6.0.x - 8.5.0               | 8.5.0                        | 16                                                        |
-| **1.17.1**         | 6.1.x - 8.5.0               | 8.5.0                        | 16                                                        |
-| **1.18, 1.18.1**   | 6.5.2 - 8.5.0               | 8.5.0                        | 16                                                        |
-| **1.18.2**         | 6.5.4 - 8.5.0               | 8.5.0                        | 16                                                        |
-| **1.19**           | 8.3.0 - 8.5.0               | 8.5.0                        | 16                                                        |
-| **1.19.1**         | 8.5.0                       | 8.5.0                        | 16                                                        |
+| **1.13.x**         | v1.0 - 5.12, 8.3.0  - 8.5.1 | 8.5.1                        | 16                                                        |
+| **1.14.1, 1.14.2** | v2.0 - 5.12, 8.3.0  - 8.5.1 | 8.5.1                        | 16                                                        |
+| **1.14.3, 1.14.4** | v2.1 - 5.12, 8.3.0  - 8.5.1 | 8.5.1                        | 16                                                        |
+| **1.15.x**         | v2.3a - 5.12, 8.3.0 - 8.5.1 | 8.5.1                        | 16                                                        |
+| **1.16.1**         | v3.0 - 5.12, 8.3.0  - 8.5.1 | 8.5.1                        | 16                                                        |
+| **1.16.2**         | v4.0 - 5.12, 8.3.0  - 8.5.1 | 8.5.1                        | 16                                                        |
+| **1.16.3**         | v4.2 - 5.12, 8.3.0  - 8.5.1 | 8.5.1                        | 16                                                        |
+| **1.16.4**         | v5.2 - 5.12, 8.3.0  - 8.5.1 | 8.5.1                        | 16                                                        |
+| **1.16.5**         | v5.7 - 7.0.0, 8.3.0 - 8.5.1 | 8.5.1                        | 16                                                        |
+| **1.17**           | 6.0.x - 8.5.1               | 8.5.1                        | 16                                                        |
+| **1.17.1**         | 6.1.x - 8.5.1               | 8.5.1                        | 16                                                        |
+| **1.18, 1.18.1**   | 6.5.2 - 8.5.1               | 8.5.1                        | 16                                                        |
+| **1.18.2**         | 6.5.4 - 8.5.1               | 8.5.1                        | 16                                                        |
+| **1.19**           | 8.3.0 - 8.5.1               | 8.5.1                        | 16                                                        |
+| **1.19.1**         | 8.5.0 - 8.5.1               | 8.5.1                        | 16                                                        |
+| **1.19.2**         | 8.5.1                       | 8.5.1                        | 16                                                        |
 
 -----
 
@@ -348,10 +349,12 @@ This is the current roadmap for the CommandAPI (as of 28th July 2022):
                     <li>https://github.com/JorelAli/CommandAPI/issues/313 Fix subcommand information being overwritten after a command has been registered</li>
                     <li>https://github.com/JorelAli/CommandAPI/issues/314 Fix <code>TimeArgument</code> not working as intended</li>
                     <li>https://github.com/JorelAli/CommandAPI/issues/316 Fix server reloading on Spigot throwing asynchronous-related exceptions in the console</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/323 Fix <code>NamespacedKeyArgument</code> not working in 1.17</li>
+                    <li>Fix various command issues with Minecraft versions before 1.19</li>
                     <li>Fix argument suggestions not working if a subcommand's node name is the same as the argument's node name</li>
                     <li>Improves the underlying implementation of chatcolor, enchantment and potion arguments in 1.17+</li>
                     <li>Improves NMS code sharing between 1.19, 1.19.1 and 1.19.2</li>
-                    <li>Improves the implementation of the list argument to only display suggestions for the last item in the list</li>
+                    <li>Improves the implementation of the list argument to only display suggestions for the last item in the list and prevent unlisted items being entered</li>
                     <li>Adds support for Minecraft 1.19.2</li>
                 </ul>
             </td>
