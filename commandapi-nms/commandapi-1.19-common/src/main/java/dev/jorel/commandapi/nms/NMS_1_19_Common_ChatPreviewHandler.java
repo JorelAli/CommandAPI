@@ -45,9 +45,23 @@ public abstract class NMS_1_19_Common_ChatPreviewHandler extends ChannelDuplexHa
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		if (msg instanceof ServerboundChatPreviewPacket chatPreview) {
 			// make sure the result is worth consuming here
+			// Is command
 			if (!chatPreview.query().isEmpty() && chatPreview.query().charAt(0) == '/') {
-				handleChatPreviewPacket(chatPreview);
-				return;
+				final String fullInput = chatPreview.query().substring(1);
+				ParseResults<CommandSourceStack> results = nms.getBrigadierDispatcher().parse(fullInput, nms.getCLWFromCommandSender(this.player));
+
+				// Generate the path for lookup
+				List<String> path = new ArrayList<>();
+				for (ParsedCommandNode<CommandSourceStack> commandNode : results.getContext().getNodes()) {
+					path.add(commandNode.getNode().getName());
+				}
+				Optional<PreviewableFunction<?>> preview = CommandAPIHandler.getInstance().lookupPreviewable(path);
+
+				// Is previewable argument
+				if (preview.isPresent()) {
+					handleChatPreviewPacket(chatPreview);
+					return;
+				}
 			}
 		}
 
