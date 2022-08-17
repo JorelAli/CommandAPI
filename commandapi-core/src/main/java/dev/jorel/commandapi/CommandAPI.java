@@ -230,8 +230,9 @@ public final class CommandAPI {
 	
 			}, plugin);
 			logNormal("Chat preview enabled");
-		} else
+		} else {
 			logNormal("Chat preview is not available");
+		}
 
 		CommandAPIHandler.getInstance().getPaper().registerReloadHandler(plugin);
 	}

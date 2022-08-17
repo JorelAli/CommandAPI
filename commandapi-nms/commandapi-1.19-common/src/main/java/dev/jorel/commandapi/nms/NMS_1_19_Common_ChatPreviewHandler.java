@@ -82,8 +82,9 @@ public abstract class NMS_1_19_Common_ChatPreviewHandler extends ChannelDuplexHa
 			path.add(commandNode.getNode().getName());
 		}
 		Optional<PreviewableFunction<?>> preview = CommandAPIHandler.getInstance().lookupPreviewable(path);
-		if (preview.isEmpty())
+		if (preview.isEmpty()) {
 			return null;
+		}
 		// Calculate the (argument) input and generate the component to send
 		String input = results.getContext().getNodes().get(results.getContext().getNodes().size() - 1).getRange().get(fullInput);
 
