@@ -41,7 +41,7 @@ public class NMS_1_19_1_R1_ChatPreviewHandler extends NMS_1_19_Common_ChatPrevie
 			CompletableFuture<net.minecraft.network.chat.Component> result = new CompletableFuture<>();
 
 			// get preview
-			Bukkit.getScheduler().runTask(this.plugin, () -> result.complete(chatPreviewQueryToJson(chatPreview.query())));
+			Bukkit.getScheduler().runTask(this.plugin, () -> result.complete(parseChatPreviewQuery(chatPreview.query())));
 
 			// update player's ChatPreviewCache
 			result.thenAcceptAsync(component -> {

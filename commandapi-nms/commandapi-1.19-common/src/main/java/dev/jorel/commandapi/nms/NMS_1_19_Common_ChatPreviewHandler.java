@@ -71,7 +71,7 @@ public abstract class NMS_1_19_Common_ChatPreviewHandler extends ChannelDuplexHa
 
 	protected abstract void handleChatPreviewPacket(ServerboundChatPreviewPacket chatPreview);
 
-	public MutableComponent chatPreviewQueryToJson(String chatPreviewQuery) {
+	public MutableComponent parseChatPreviewQuery(String chatPreviewQuery) {
 		// Substring 1 to get rid of the leading /
 		final String fullInput = chatPreviewQuery.substring(1);
 		ParseResults<CommandSourceStack> results = nms.getBrigadierDispatcher().parse(fullInput, nms.getCLWFromCommandSender(this.player));
