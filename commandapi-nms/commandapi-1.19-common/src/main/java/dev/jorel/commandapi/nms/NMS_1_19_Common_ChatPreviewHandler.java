@@ -3,6 +3,7 @@ package dev.jorel.commandapi.nms;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.context.ParsedCommandNode;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.PreviewInfo;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
@@ -47,18 +48,8 @@ public abstract class NMS_1_19_Common_ChatPreviewHandler extends ChannelDuplexHa
 			// make sure the result is worth consuming here
 			// Is command
 			if (!chatPreview.query().isEmpty() && chatPreview.query().charAt(0) == '/') {
-				final String fullInput = chatPreview.query().substring(1);
-				ParseResults<CommandSourceStack> results = nms.getBrigadierDispatcher().parse(fullInput, nms.getCLWFromCommandSender(this.player));
-
-				// Generate the path for lookup
-				List<String> path = new ArrayList<>();
-				for (ParsedCommandNode<CommandSourceStack> commandNode : results.getContext().getNodes()) {
-					path.add(commandNode.getNode().getName());
-				}
-				Optional<PreviewableFunction<?>> preview = CommandAPIHandler.getInstance().lookupPreviewable(path);
-
 				// Is previewable argument
-				if (preview.isPresent()) {
+				if(InitialParse.processChatPreviewQuery(chatPreview.query(), nms, player).preview.isPresent()){
 					handleChatPreviewPacket(chatPreview);
 					return;
 				}
@@ -72,19 +63,16 @@ public abstract class NMS_1_19_Common_ChatPreviewHandler extends ChannelDuplexHa
 	protected abstract void handleChatPreviewPacket(ServerboundChatPreviewPacket chatPreview);
 
 	public MutableComponent parseChatPreviewQuery(String chatPreviewQuery) {
-		// Substring 1 to get rid of the leading /
-		final String fullInput = chatPreviewQuery.substring(1);
-		ParseResults<CommandSourceStack> results = nms.getBrigadierDispatcher().parse(fullInput, nms.getCLWFromCommandSender(this.player));
-
-		// Generate the path for lookup
-		List<String> path = new ArrayList<>();
-		for (ParsedCommandNode<CommandSourceStack> commandNode : results.getContext().getNodes()) {
-			path.add(commandNode.getNode().getName());
-		}
-		Optional<PreviewableFunction<?>> preview = CommandAPIHandler.getInstance().lookupPreviewable(path);
+		final InitialParse ip = InitialParse.processChatPreviewQuery(chatPreviewQuery, nms, player);
+		final Optional<PreviewableFunction<?>> preview = ip.preview;
 		if (preview.isEmpty()) {
 			return null;
 		}
+
+		final String fullInput = ip.fullInput;
+		final ParseResults<CommandSourceStack> results = ip.results;
+		final List<String> path = ip.path;
+
 		// Calculate the (argument) input and generate the component to send
 		String input = results.getContext().getNodes().get(results.getContext().getNodes().size() - 1).getRange().get(fullInput);
 
@@ -133,5 +121,31 @@ public abstract class NMS_1_19_Common_ChatPreviewHandler extends ChannelDuplexHa
 		}
 
 		return Serializer.fromJson(jsonToSend);
+	}
+
+	private record InitialParse(String fullInput, ParseResults<CommandSourceStack> results, List<String> path, Optional<PreviewableFunction<?>> preview){
+		private static InitialParse cachedResult = null;
+		public static InitialParse processChatPreviewQuery(String chatPreviewQuery, NMS<CommandSourceStack> nms, Player player){
+			// Substring 1 to get rid of the leading /
+			final String fullInput = chatPreviewQuery.substring(1);
+
+			CommandAPI.logNormal("Processing input: " + fullInput);
+			if(cachedResult != null && cachedResult.fullInput.equals(fullInput)) {
+				CommandAPI.logNormal("Using cache");
+				return cachedResult;
+			}
+
+			ParseResults<CommandSourceStack> results = nms.getBrigadierDispatcher().parse(fullInput, nms.getCLWFromCommandSender(player));
+
+			// Generate the path for lookup
+			List<String> path = new ArrayList<>();
+			for (ParsedCommandNode<CommandSourceStack> commandNode : results.getContext().getNodes()) {
+				path.add(commandNode.getNode().getName());
+			}
+			Optional<PreviewableFunction<?>> preview = CommandAPIHandler.getInstance().lookupPreviewable(path);
+
+			cachedResult = new InitialParse(fullInput, results, path, preview);
+			return cachedResult;
+		}
 	}
 }
