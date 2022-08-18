@@ -129,11 +129,7 @@ public abstract class NMS_1_19_Common_ChatPreviewHandler extends ChannelDuplexHa
 			// Substring 1 to get rid of the leading /
 			final String fullInput = chatPreviewQuery.substring(1);
 
-			CommandAPI.logNormal("Processing input: " + fullInput);
-			if(cachedResult != null && cachedResult.fullInput.equals(fullInput)) {
-				CommandAPI.logNormal("Using cache");
-				return cachedResult;
-			}
+			if(cachedResult != null && cachedResult.fullInput.equals(fullInput)) return cachedResult;
 
 			ParseResults<CommandSourceStack> results = nms.getBrigadierDispatcher().parse(fullInput, nms.getCLWFromCommandSender(player));
 
