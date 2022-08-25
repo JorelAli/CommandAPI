@@ -40,11 +40,12 @@ public class NMS_1_19_1_R1_ChatPreviewHandler extends NMS_1_19_Common_ChatPrevie
 			int i = chatPreview.queryId();
 			CompletableFuture<net.minecraft.network.chat.Component> result = new CompletableFuture<>();
 
-			// get preview
+			// Get preview
 			Bukkit.getScheduler().runTask(this.plugin, () -> result.complete(parseChatPreviewQuery(chatPreview.query())));
 
-			// update player's ChatPreviewCache
+			// Update player's ChatPreviewCache
 			result.thenAcceptAsync(component -> {
+				if(component == null) return;
 				try {
 					Field f = ServerGamePacketListenerImpl.class.getDeclaredField("L");
 					f.setAccessible(true);
@@ -55,12 +56,15 @@ public class NMS_1_19_1_R1_ChatPreviewHandler extends NMS_1_19_Common_ChatPrevie
 				}
 			});
 
-			// send ChatPreviewPacket
+			// Send ChatPreviewPacket using the throttler
 			return result.thenAccept(
-				component -> connection.send(
-					new ClientboundChatPreviewPacket(i, component),
-					PacketSendListener.exceptionallySend(() -> new ClientboundChatPreviewPacket(i, null))
-				)
+				component -> {
+					if(component == null) return;
+					connection.send(
+						new ClientboundChatPreviewPacket(i, component),
+						PacketSendListener.exceptionallySend(() -> new ClientboundChatPreviewPacket(i, null))
+					);
+				}
 			);
 		});
 	}
