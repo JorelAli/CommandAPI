@@ -9,7 +9,7 @@
 	src: url("MinecraftRegular-Bmg3.otf") format("opentype");
 }
 
-p, #error-chatbox-bg {
+#chatbox, #error-box, #suggestions-box {
 	font-family: CustomFont;
 	color: #a8a8a8;
 	font-size: 28pt;
@@ -25,11 +25,11 @@ span {
 .bg {
 	background-color: #7daaff;
 	padding: 20px 5px 5px 5px;
-	height: 300px;
+	height: 500px;
 	position: relative;
 }
 
-.chatbox-bg {
+#chatbox {
 	background-color: #3f567f;
 	padding-left: 8px;
 	/* 8px padding left, 10px margin (left), 10px margin (right) */
@@ -40,7 +40,7 @@ span {
 	margin: 10px;
 }
 
-#error-chatbox-bg {
+#error-box, #suggestions-box {
 	background-color: #161e2c;
 	padding-left: 8px;
 	/* 8px padding left, 10px margin (left), 10px margin (right) */
@@ -49,6 +49,12 @@ span {
 	bottom: 49px;
 	left: 0;
 	margin: 10px;
+}
+
+#suggestions-box {
+	left: 28px; /* This position will have to change over time, we'll figure that out later*/
+	width: unset;
+	padding-right: 8px;
 }
 
 /****************

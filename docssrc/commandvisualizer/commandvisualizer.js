@@ -4,7 +4,8 @@ document.getElementById("cmd-input").oninput = function() {
 
 	/** @type HTMLElement */
 	const commandInput = this;
-	const errorMessageBox = document.getElementById("error-chatbox-bg");
+	const errorMessageBox = document.getElementById("error-box");
+	const suggestionsBox = document.getElementById("suggestions-box");
 
 	/**
 	 * Gets the current cursor position.
@@ -32,7 +33,6 @@ document.getElementById("cmd-input").oninput = function() {
 	 * @param {number} index the number of characters into the current element
 	 * to place the cursor at
 	 */
-	// 
 	function setCurrentCursorPosition(index) {
 		if (index >= 0) {
 			const createRange = (/** @type Node */ node, /** @type {{count: number}} */ chars, /** @type Range */ range) => {
@@ -68,7 +68,7 @@ document.getElementById("cmd-input").oninput = function() {
 	
 			// We wrap index in an object so that recursive calls can use the
 			// "new" value which is updated inside the object itself
-			let range = createRange(commandInput.parentNode, { count: index });
+			let range = createRange(commandInput, { count: index });
 	
 			if (range) {
 				range.collapse(false);
@@ -80,8 +80,7 @@ document.getElementById("cmd-input").oninput = function() {
 	};
 
 	let cursorPos = cursorPosition();
-
-	let commands = ["say", "tp"]
+	let commands = ["say", "tp", "w", "weather", "whitelist", "worldborder"];
 
 	/** @type string */
 	let rawText = commandInput.innerText;
@@ -91,14 +90,21 @@ document.getElementById("cmd-input").oninput = function() {
 	element.innerText = "/";
 
 	let errorText = "";
+	let suggestions = [];
 
+	// Render colors
 	if(rawText.startsWith("/")) {
-		if(!(commands.some((x) => rawText.startsWith("/" + x)))) {
+		// Parse the raw text
+		const rawTextNoSlash = rawText.slice(1);
+		const command = rawTextNoSlash.split(" ")[0];
+		const rawArgs = rawText.split(" ").slice(1);
+
+		if(!(commands.some((x) => x === command))) {
 			// The command is invalid (the command doesn't exist). Make the
 			// whole text red.
 			let redText = document.createElement("span");
 			redText.className = "red";
-			redText.innerText = rawText.slice(1);
+			redText.innerText = rawTextNoSlash;
 			element.append(redText);
 
 			errorText = "Unknown or incomplete command, see below for error at position 1: /<--[HERE]";
@@ -115,27 +121,105 @@ document.getElementById("cmd-input").oninput = function() {
 			cyanText.innerText = " " + rawTextElements.slice(1).join(" ");
 			element.append(cyanText);
 		}
+
+		suggestions = commands.filter((x) => x.startsWith(rawTextNoSlash) && x !== rawTextNoSlash);
 	}
-	commandInput.innerText = "";
+
+	// Reset the text and add the new text.
 	commandInput.innerHTML = "";
 	commandInput.appendChild(element);
+
+	// Set the cursor back to where it was. Since commands always start with a
+	// forward slash, the only possible "starting caret position" is position 1
+	// (in front of the slash)
+	if(cursorPos === 0) {
+		cursorPos = 1;
+	}
 	setCurrentCursorPosition(cursorPos);
 	commandInput.focus();
 
+	// If any errors appear, display them
 	if(errorText.length !== 0) {
 		errorMessageBox.innerText = errorText;
 		errorMessageBox.hidden = false;
 	} else {
 		errorMessageBox.hidden = true;
 	}
+
+	const constructSuggestionsHTML = (suggestions) => {
+		let nodesToAdd = [];
+		for(let i = 0; i < suggestions.length; i++) {
+			const suggestionElement = document.createElement("span");
+			suggestionElement.innerText = suggestions[i];
+			if(i === 0) {
+				suggestionElement.className = "yellow";
+			}
+			if(i !== suggestions.length - 1) {
+				suggestionElement.innerText += "\n";
+			}
+			nodesToAdd.push(suggestionElement);
+		}
+
+		return nodesToAdd;
+	};
+
+	// If suggestions are present, display them
+	if(suggestions.length !== 0) {
+		suggestionsBox.innerHTML = "";
+		for(let suggestionElement of constructSuggestionsHTML(suggestions)) {
+			suggestionsBox.appendChild(suggestionElement);
+		}
+		suggestionsBox.hidden = false;
+		errorMessageBox.hidden = true;
+	} else {
+		suggestionsBox.hidden = true;
+	}
 }
 
 // We really really don't want new lines in our single-lined command!
 document.getElementById("cmd-input").addEventListener('keydown', (evt) => {
-	if (evt.key === "Enter") {
-		evt.preventDefault();
+	switch(evt.key) {
+		case "Enter":
+			evt.preventDefault();
+			break;
+		case "ArrowDown":
+		case "ArrowUp": {
+			const suggestionsBox = document.getElementById("suggestions-box");
+			if(!suggestionsBox.hidden) {
+				for(let i = 0; i < suggestionsBox.childNodes.length; i++) {
+					if(suggestionsBox.childNodes[i].className === "yellow") {
+						suggestionsBox.childNodes[i].className = "";
+
+						if(evt.key == "ArrowDown") {
+							if(i === suggestionsBox.childNodes.length - 1) {
+								suggestionsBox.childNodes[0].className = "yellow";
+							} else {
+								suggestionsBox.childNodes[i + 1].className = "yellow";
+							}
+						} else {
+							if(i === 0) {
+								suggestionsBox.childNodes[suggestionsBox.childNodes.length - 1].className = "yellow";
+							} else {
+								suggestionsBox.childNodes[i - 1].className = "yellow";
+							}
+						}
+						
+						break;
+					}
+				}
+			}
+			break;
+		}
+		default:
+			// console.log(evt.key)
+			break;
 	}
 });
+
+// If you click on the chat box, focus the current text input area 
+document.getElementById("chatbox").onclick = function() {
+	document.getElementById("cmd-input").focus();
+};
 
 // Run syntax highlighter
 document.getElementById("cmd-input").oninput();
