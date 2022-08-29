@@ -1,0 +1,91 @@
+/**
+ * Minecraft font: https://www.fontspace.com/minecraft-font-f28180
+ * Free for personal use (commercial use requires donation). Since the
+ * CommandAPI is strictly a free-for-all product (and has no commercial
+ * implications), we're allowed to use this!
+ */
+@font-face {
+	font-family: "CustomFont";
+	src: url("MinecraftRegular-Bmg3.otf") format("opentype");
+}
+
+p, #error-chatbox-bg {
+	font-family: CustomFont;
+	color: #a8a8a8;
+	font-size: 28pt;
+	margin: 0;
+	text-shadow: 5px 5px #292929;
+}
+
+span {
+	outline: 0px solid transparent; /* No contenteditable border */
+	/** caret-color: transparent; */
+}
+
+.bg {
+	background-color: #7daaff;
+	padding: 20px 5px 5px 5px;
+	height: 300px;
+	position: relative;
+}
+
+.chatbox-bg {
+	background-color: #3f567f;
+	padding-left: 8px;
+	/* 8px padding left, 10px margin (left), 10px margin (right) */
+	width: calc(100% - 8px - 10px - 10px);
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	margin: 10px;
+}
+
+#error-chatbox-bg {
+	background-color: #161e2c;
+	padding-left: 8px;
+	/* 8px padding left, 10px margin (left), 10px margin (right) */
+	width: calc(100% - 8px - 10px - 10px);
+	position: absolute;
+	bottom: 49px;
+	left: 0;
+	margin: 10px;
+}
+
+/****************
+ * Colors!
+ */
+.red {
+	color: #fc5454;
+	text-shadow: 5px 5px #3e1515;
+}
+.cyan {
+	color: #54fcfc;
+	text-shadow: 5px 5px #153e3e;
+}
+.yellow {
+	color: #fbfb54;
+	text-shadow: 5px 5px #3e3e15;
+}
+
+/****************
+ * Typing caret
+ * https://css-tricks.com/almanac/properties/c/caret-shape/
+ * It's a good start, but I'll probably use a JavaScript solution for more fine-
+ * tuning instead
+ */
+@keyframes blink {
+	from, to {
+		border-color: transparent;
+	}
+	50% {
+		border-color: #fff;
+	}
+}
+
+.cursor {
+	animation: blink 1s step-end infinite;
+    border-bottom: 4px solid white;
+    left: -10px;
+    bottom: 5px;
+    position: relative;
+}
