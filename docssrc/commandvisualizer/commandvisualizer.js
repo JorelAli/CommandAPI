@@ -2,6 +2,7 @@
 
 /** @type HTMLElement */
 const commandInput = document.getElementById("cmd-input");
+const commandInputAutocomplete = document.getElementById("cmd-input-autocomplete");
 const errorMessageBox = document.getElementById("error-box");
 const suggestionsBox = document.getElementById("suggestions-box");
 
@@ -99,7 +100,7 @@ const ChatColor = {
 	LIGHT_PURPLE: "\u00A7d",
 	YELLOW: "\u00A7e",
 	WHITE: "\u00A7f",
-}
+};
 
 const ChatColorCSS = {
 	"0": "black",
@@ -118,19 +119,28 @@ const ChatColorCSS = {
 	"d": "light_purple",
 	"e": "yellow",
 	"f": "white"
+};
+const ChatColorCSSReversed = {};
+for (let key in ChatColorCSS) {
+    ChatColorCSSReversed[ChatColorCSS[key]] = key;
 }
 
 /**
  * Takes Minecraft text and renders it in the chat box
  */
-function setText(minecraftCodedText) {
+function setText(minecraftCodedText, target = null) {
+	if(!target) {
+		target = commandInput;
+	}
 	// Reset the text
-	commandInput.innerHTML = "";
+	target.innerHTML = "";
 
-	// Command forward slash. Always present, we don't want to remove this!
-	let element = document.createElement("span");
-	element.innerText = "/";
-	commandInput.appendChild(element);
+	if(target === commandInput) {
+		// Command forward slash. Always present, we don't want to remove this!
+		let element = document.createElement("span");
+		element.innerText = "/";
+		target.appendChild(element);
+	}
 
 	let buffer = "";
 	let currentColor = "";
@@ -140,7 +150,7 @@ function setText(minecraftCodedText) {
 			let elem = document.createElement("span");
 			elem.className = currentColor;
 			elem.innerText = buffer;
-			commandInput.appendChild(elem);
+			target.appendChild(elem);
 			buffer = "";
 		}
 	};
@@ -159,8 +169,15 @@ function setText(minecraftCodedText) {
 	writeBuffer();
 }
 
-function getText(minecraftCodedText) {
-
+function getText(withStyling = true) {
+	let buffer = "";
+	for(let child of commandInput.children) {
+		if(child.className && withStyling) {
+			buffer += "\u00A7" + ChatColorCSSReversed[child.className];
+		}
+		buffer += child.innerText;
+	}
+	return buffer;
 }
 
 document.getElementById("cmd-input").oninput = function() {
@@ -185,7 +202,7 @@ document.getElementById("cmd-input").oninput = function() {
 			setText(ChatColor.RED + rawTextNoSlash);
 			errorText = "Unknown or incomplete command, see below for error at position 1: /<--[HERE]";
 		} else {
-			setText(command + " " + ChatColor.AQUA + rawArgs.join(" "));
+			setText(command + (rawArgs.length > 0 ? " " + ChatColor.AQUA + rawArgs.join(" ") : ""));
 		}
 
 		suggestions = commands.filter((x) => x.startsWith(rawTextNoSlash) && x !== rawTextNoSlash);
@@ -197,7 +214,7 @@ document.getElementById("cmd-input").oninput = function() {
 	if(cursorPos === 0 && rawText.length > 0) {
 		cursorPos = 1;
 	}
-	setCursorPosition(cursorPos, document.getElementById("cmd-input"));
+	setCursorPosition(cursorPos, commandInput);
 	commandInput.focus();
 
 	// If any errors appear, display them
@@ -236,6 +253,7 @@ document.getElementById("cmd-input").oninput = function() {
 	} else {
 		suggestionsBox.hidden = true;
 	}
+	window.dispatchEvent(new Event("suggestionsUpdated"));
 }
 
 // We really really don't want new lines in our single-lined command!
@@ -278,6 +296,12 @@ document.getElementById("cmd-input").addEventListener('keydown', (evt) => {
 				evt.preventDefault();
 			}
 			break;
+		case "Tab":
+			evt.preventDefault();
+			setText(getText(false).slice(1) + commandInputAutocomplete.innerText);
+			document.getElementById("cmd-input").oninput();
+			setCursorPosition(commandInput.innerText.length, commandInput);
+			break;
 		default:
 			break;
 	}
@@ -295,8 +319,15 @@ window.addEventListener("suggestionsUpdated", (event) => {
 		let selectedSuggestionText = getSelectedSuggestion().innerText.trim();
 		// TODO: This obviously needs to be specific to the current suggestions, not the whole input
 		if(rawText !== selectedSuggestionText) {
-
+			let cursorPosition = getCursorPosition();
+			setText(ChatColor.DARK_GRAY + selectedSuggestionText.slice(rawText.length - 1), commandInputAutocomplete);
+			setCursorPosition(cursorPosition, commandInput);
+			commandInput.focus();
+		} else {
+			setText("", commandInputAutocomplete);
 		}
+	} else {
+		setText("", commandInputAutocomplete);
 	}
 });
 

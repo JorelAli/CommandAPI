@@ -21,6 +21,14 @@ span {
 	outline: 0px solid transparent; /* No contenteditable border */
 	/** caret-color: transparent; */
 }
+#cmd-input-autocomplete {
+	/* Not entirely sure why, but this has some random gap between this and the
+	 * previous element when there shouldn't be one. Get rid of it! */
+	margin-left: -15px;
+}
+#cmd-input {
+	display: inline-block;
+}
 
 .bg {
 	background-color: #7daaff;
@@ -75,6 +83,9 @@ span {
 .gray {
 	color: #a8a8a8;
 	text-shadow: 5px 5px #292929;
+}
+.dark_gray {
+	color: #555555;
 }
 
 /****************
