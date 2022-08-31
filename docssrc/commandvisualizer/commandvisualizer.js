@@ -1,4 +1,6 @@
-"use strict";
+import * as brigadier from "./node_modules/node-brigadier/dist/index.js"
+
+console.log(brigadier);
 
 /******************************************************************************
  * Constants                                                                  *

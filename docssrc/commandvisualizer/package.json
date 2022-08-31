@@ -1,0 +1,17 @@
+{
+  "name": "commandvisualizer",
+  "version": "1.0.0",
+  "description": "Web-based Minecraft command viewer",
+  "main": "commandvisualizer.js",
+  "dependencies": {
+    "node-brigadier": "^0.0.12",
+    "webpack-cli": "^4.10.0",
+    "webpack": "^5.74.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
