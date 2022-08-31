@@ -1,4 +1,4 @@
-import { SimpleCommandExceptionType } from "./node_modules/node-brigadier/dist/index.js"
+import { SimpleCommandExceptionType, LiteralMessage } from "./node_modules/node-brigadier/dist/index.js"
 
 export class LocationArgument {
 
@@ -45,7 +45,7 @@ export class PlayerArgument {
 		this.username = reader.getString().slice(start, reader.getCursor());
 
 		if(!this.username.match(/[A-Za-z_]+/)) {
-			throw new SimpleCommandExceptionType("AAAAA").createWithContext(reader);
+			throw new SimpleCommandExceptionType(new LiteralMessage(this.username + " is not a valid username")).createWithContext(reader);
 		}
 
 		return this;
@@ -80,7 +80,7 @@ export class MultiLiteralArgument {
 		this.selectedLiteral = reader.getString().slice(start, reader.getCursor());
 
 		if(!this.literals.includes(this.selectedLiteral)) {
-			throw new SimpleCommandExceptionType("nope lol").createWithContext(reader);
+			throw new SimpleCommandExceptionType(new LiteralMessage(this.selectedLiteral + " is not one of " + this.literals)).createWithContext(reader);
 		}
 
 		return this;

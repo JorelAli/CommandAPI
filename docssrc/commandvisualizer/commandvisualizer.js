@@ -107,7 +107,6 @@ function registerCommand(configCommand) {
 		if(matchedLiteral) {
 			// It's a literal argument
 			const literals = matchedLiteral[1].split("|");
-			console.log(literals);
 		} else if(matchedArgument) {
 			// It's a regular argument
 			const nodeName = matchedArgument[1];
@@ -120,9 +119,6 @@ function registerCommand(configCommand) {
 			argument("pos1", new LocationArgument()).then(
 				argument("pos2", new LocationArgument()).then(
 					argument("block", string()).executes(context => {
-						console.log(context.getArgument("pos1"))
-						console.log(context.getArgument("pos2"))
-						console.log(context.getArgument("block"))
 						return 0;
 					})
 				)
@@ -135,9 +131,6 @@ function registerCommand(configCommand) {
 			argument("type", new MultiLiteralArgument(["walk", "fly"])).then(
 				argument("speed", integer(0, 10)).then(
 					argument("target", new PlayerArgument()).executes(context => {
-						console.log(context.getArgument("type"))
-						console.log(context.getArgument("speed"))
-						console.log(context.getArgument("target"))
 						return 0;
 					})
 				)
@@ -145,17 +138,17 @@ function registerCommand(configCommand) {
 		)
 	)
 
-	const parsedCommand = dispatcher.parse("fill 3 4 5 10 11 12 air", {})
-	console.log(parsedCommand)
-	console.log(new Argument("pos1", "").getRange(parsedCommand))
-
-	const parsedCommand1 = dispatcher.parse("speed walk 2 Skepter", {})
-	console.log(parsedCommand1)
-	try {
-		dispatcher.execute(parsedCommand);
-	} catch (ex) {
-		console.error(ex);
-	}
+//	const parsedCommand = dispatcher.parse("fill 3 4 5 10 11 12 air", {})
+//	console.log(parsedCommand)
+//	console.log(new Argument("pos1", "").getRange(parsedCommand))
+//
+//	const parsedCommand1 = dispatcher.parse("speed walk 2 Skepter", {})
+//	console.log(parsedCommand1)
+//	try {
+//		dispatcher.execute(parsedCommand);
+//	} catch (ex) {
+//		console.error(ex);
+//	}
 
 	// plugins-to-convert:
 	//   - Essentials:
@@ -324,12 +317,30 @@ commandInput.oninput = function() {
 		const command = rawTextNoSlash.split(" ")[0];
 		const rawArgs = rawText.split(" ").slice(1);
 
-		if(!(commands.some((x) => x === command))) {
+		// Brigadier
+		const parsedCommand = dispatcher.parse(rawTextNoSlash, {})
+		console.log(parsedCommand);
+
+		//if(!(commands.some((x) => x === command))) {
+		if(parsedCommand.exceptions.size > 0) {
 			// The command is invalid (the command doesn't exist). Make the whole text red.
 			setText(ChatColor.RED + rawTextNoSlash);
-			errorText = "Unknown or incomplete command, see below for error at position 1: /<--[HERE]";
+			
+			/** @type {Map<any, String>} */
+			const exceptions = parsedCommand.exceptions;
+			errorText = exceptions.entries().next().value[1].message;
 		} else {
-			setText(command + (rawArgs.length > 0 ? " " + ChatColor.AQUA + rawArgs.join(" ") : ""));
+			// Brigadier is "happy" with the input. Let's run it and see!
+			try {
+				dispatcher.execute(parsedCommand);
+			} catch (ex) {
+				setText(ChatColor.RED + rawTextNoSlash);
+				errorText = ex.message;
+			}
+			
+			if(errorText === "") {
+				setText(command + (rawArgs.length > 0 ? " " + ChatColor.AQUA + rawArgs.join(" ") : ""));
+			}
 		}
 
 		suggestions = commands.filter((x) => x.startsWith(rawTextNoSlash) && x !== rawTextNoSlash);
