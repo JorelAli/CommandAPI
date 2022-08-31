@@ -72,6 +72,10 @@ span {
 	color: #fbfb54;
 	text-shadow: 5px 5px #3e3e15;
 }
+.gray {
+	color: #a8a8a8;
+	text-shadow: 5px 5px #292929;
+}
 
 /****************
  * Typing caret

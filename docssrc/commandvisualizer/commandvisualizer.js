@@ -124,6 +124,14 @@ const ChatColorCSS = {
  * Takes Minecraft text and renders it in the chat box
  */
 function setText(minecraftCodedText) {
+	// Reset the text
+	commandInput.innerHTML = "";
+
+	// Command forward slash. Always present, we don't want to remove this!
+	let element = document.createElement("span");
+	element.innerText = "/";
+	commandInput.appendChild(element);
+
 	let buffer = "";
 	let currentColor = "";
 
@@ -151,20 +159,16 @@ function setText(minecraftCodedText) {
 	writeBuffer();
 }
 
+function getText(minecraftCodedText) {
+
+}
+
 document.getElementById("cmd-input").oninput = function() {
 	let cursorPos = getCursorPosition();
 	let commands = ["say", "tp", "w", "weather", "whitelist", "worldborder"];
 
 	/** @type string */
-	let rawText = commandInput.innerText;
-
-	// Reset the text
-	commandInput.innerHTML = "";
-
-	// Command forward slash
-	let element = document.createElement("span");
-	element.innerText = "/";
-	commandInput.appendChild(element);
+	let rawText = commandInput.innerText.replace("\n", "");
 
 	let errorText = "";
 	let suggestions = [];
@@ -190,7 +194,7 @@ document.getElementById("cmd-input").oninput = function() {
 	// Set the cursor back to where it was. Since commands always start with a
 	// forward slash, the only possible "starting caret position" is position 1
 	// (in front of the slash)
-	if(cursorPos === 0) {
+	if(cursorPos === 0 && rawText.length > 0) {
 		cursorPos = 1;
 	}
 	setCursorPosition(cursorPos, document.getElementById("cmd-input"));
@@ -242,7 +246,6 @@ document.getElementById("cmd-input").addEventListener('keydown', (evt) => {
 			break;
 		case "ArrowDown":
 		case "ArrowUp": {
-			const suggestionsBox = document.getElementById("suggestions-box");
 			if(!suggestionsBox.hidden) {
 				for(let i = 0; i < suggestionsBox.childNodes.length; i++) {
 					if(suggestionsBox.childNodes[i].className === "yellow") {
@@ -270,8 +273,12 @@ document.getElementById("cmd-input").addEventListener('keydown', (evt) => {
 			}
 			break;
 		}
+		case "Backspace":
+			if(commandInput.innerText.replace("\n", "").length === 0) {
+				evt.preventDefault();
+			}
+			break;
 		default:
-			// console.log(evt.key)
 			break;
 	}
 });
