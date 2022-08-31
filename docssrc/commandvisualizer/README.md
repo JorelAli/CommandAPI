@@ -6,13 +6,13 @@ A JavaScript-based embedded Minecraft command viewing interface.
 
 - Get [Node.js](https://nodejs.org/en/) if you don't already have it
 - Run `npm install`
-- Run `npx webpack ./commandvisualizer.js ./node_modules/node-brigadier/index.js -o .`
+- Run `npx webpack ./commandvisualizer.js -o .`
 
 ## Testing (e.g. how to use in your local browser)
 
 - Run `npm install http-server`
 - Run `npx http-server .`
-- Run the `npx webpack` command above when necessary to update changes from `commandvisualizer.js`
+- Run `npx webpack ./commandvisualizer.js -o . -d source-map` command above when necessary to update local JavaScript changes
 
 ## Acknowledgements
 

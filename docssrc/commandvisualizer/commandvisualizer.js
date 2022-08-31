@@ -1,6 +1,5 @@
-import * as brigadier from "./node_modules/node-brigadier/dist/index.js"
-
-console.log(brigadier);
+import { CommandDispatcher, literal, argument, string } from "./node_modules/node-brigadier/dist/index.js"
+import { LocationArgument, PlayerArgument } from "./arguments.js"
 
 /******************************************************************************
  * Constants                                                                  *
@@ -10,6 +9,8 @@ const commandInput = document.getElementById("cmd-input");
 const commandInputAutocomplete = document.getElementById("cmd-input-autocomplete");
 const errorMessageBox = document.getElementById("error-box");
 const suggestionsBox = document.getElementById("suggestions-box");
+
+const dispatcher = new CommandDispatcher();
 
 /******************************************************************************
  * Enums                                                                      *
@@ -59,61 +60,8 @@ for (let key in ChatColorCSS) {
     ChatColorCSSReversed[ChatColorCSS[key]] = key;
 }
 
-// Argument types, with the argument and a matching function that returns if the
-// input provided is a valid match
 const ArgumentType = {
-	AdvancementArgument: ["AdvancementArgument", (input) => {}],
-	AdventureChatArgument: ["AdventureChatArgument", (input) => {}],
-	AdventureChatComponentArgument: ["AdventureChatComponentArgument", (input) => {}],
-	AngleArgument: ["AngleArgument", (input) => {}],
-	AxisArgument: ["AxisArgument", (input) => {}],
-	BiomeArgument: ["BiomeArgument", (input) => {}],
-	BlockPredicateArgument: ["BlockPredicateArgument", (input) => {}],
-	BlockStateArgument: ["BlockStateArgument", (input) => {}],
-	BooleanArgument: ["BooleanArgument", (input) => {}],
-	ChatArgument: ["ChatArgument", (input) => {}],
-	ChatColorArgument: ["ChatColorArgument", (input) => {}],
-	ChatComponentArgument: ["ChatComponentArgument", (input) => {}],
-	CustomArgument: ["CustomArgument", (input) => {}],
-	DoubleArgument: ["DoubleArgument", (input) => {}],
-	EnchantmentArgument: ["EnchantmentArgument", (input) => {}],
-	EntitySelectorArgument: ["EntitySelectorArgument", (input) => {}],
-	EntityTypeArgument: ["EntityTypeArgument", (input) => {}],
-	EnvironmentArgument: ["EnvironmentArgument", (input) => {}],
-	FloatArgument: ["FloatArgument", (input) => {}],
-	FloatRangeArgument: ["FloatRangeArgument", (input) => {}],
-	FunctionArgument: ["FunctionArgument", (input) => {}],
-	GreedyStringArgument: ["GreedyStringArgument", (input) => {}],
-	IntegerArgument: ["IntegerArgument", (input) => {}],
-	IntegerRangeArgument: ["IntegerRangeArgument", (input) => {}],
-	IPreviewable: ["IPreviewable", (input) => {}],
-	ItemStackArgument: ["ItemStackArgument", (input) => {}],
-	ItemStackPredicateArgument: ["ItemStackPredicateArgument", (input) => {}],
-	LiteralArgument: ["LiteralArgument", (input) => {}],
-	Location2DArgument: ["Location2DArgument", (input) => {}],
-	LocationArgument: ["LocationArgument", (input) => {}],
-	LongArgument: ["LongArgument", (input) => {}],
-	LootTableArgument: ["LootTableArgument", (input) => {}],
-	MathOperationArgument: ["MathOperationArgument", (input) => {}],
-	MultiLiteralArgument: ["MultiLiteralArgument", (input) => {}],
-	NamespacedKeyArgument: ["NamespacedKeyArgument", (input) => {}],
-	NBTCompoundArgument: ["NBTCompoundArgument", (input) => {}],
-	ObjectiveArgument: ["ObjectiveArgument", (input) => {}],
-	ObjectiveCriteriaArgument: ["ObjectiveCriteriaArgument", (input) => {}],
-	OfflinePlayerArgument: ["OfflinePlayerArgument", (input) => {}],
-	ParticleArgument: ["ParticleArgument", (input) => {}],
-	PlayerArgument: ["PlayerArgument", (input) => {}],
-	PotionEffectArgument: ["PotionEffectArgument", (input) => {}],
-	RecipeArgument: ["RecipeArgument", (input) => {}],
-	RotationArgument: ["RotationArgument", (input) => {}],
-	ScoreboardSlotArgument: ["ScoreboardSlotArgument", (input) => {}],
-	ScoreHolderArgument: ["ScoreHolderArgument", (input) => {}],
-	SoundArgument: ["SoundArgument", (input) => {}],
-	StringArgument: ["StringArgument", (input) => {}],
-	TeamArgument: ["TeamArgument", (input) => {}],
-	TextArgument: ["TextArgument", (input) => {}],
-	TimeArgument: ["TimeArgument", (input) => {}],
-	UUIDArgument: ["UUIDArgument", (input) => {}],
+	"minecraft:game_profile": () => new PlayerArgument()
 };
 
 /******************************************************************************
@@ -121,14 +69,85 @@ const ArgumentType = {
  ******************************************************************************/
 
 class Argument {
-	constructor(argumentType) {
-		this.argumentType = argumentType;
+	constructor(nodeName, type) {
+		this.nodeName = nodeName;
+	}
+
+	/**
+	 * Gets the range for this argument from a parsed command
+	 * @param {ParseResults<any>} parsedCommand a parsed command from dispatcher.parse
+	 */
+	getRange(parsedCommand) {
+		return parsedCommand.context.args.get(this.nodeName)?.range ?? {start:0, end: 0};
 	}
 }
 
 /******************************************************************************
  * Helpers                                                                    *
  ******************************************************************************/
+
+/**
+ * Registers a command into the global command dispatcher
+ * @param {string} configCommand the command to register, as declared using the
+ * CommandAPI config.yml's command declaration syntax (See
+ * https://commandapi.jorel.dev/8.5.1/conversionforownerssingleargs.html)
+ */
+function registerCommand(configCommand) {
+
+	const command = configCommand.split(" ")[0];
+	const args = configCommand.split(" ").slice(1);
+
+	// From dev/jorel/commandapi/AdvancedConverter.java
+	const literalPattern = RegExp(/\((\w+(?:\|\w+)*)\)/);
+	const argumentPattern = RegExp(/<(\w+)>\[([a-z:_]+|(?:[0-9\.]+)?\.\.(?:[0-9\.]+)?)\]/);
+
+	for(let arg of args) {
+		const matchedLiteral = arg.match(literalPattern);
+		const matchedArgument = arg.match(argumentPattern);
+		if(matchedLiteral) {
+			// It's a literal argument
+			const literals = matchedLiteral[1].split("|");
+			console.log(literals);
+		} else if(matchedArgument) {
+			// It's a regular argument
+			const nodeName = matchedArgument[1];
+			const argumentType = matchedArgument[2];
+		}
+	}
+
+	dispatcher.register(
+		literal("fill").then(
+			argument("pos1", new LocationArgument()).then(
+				argument("pos2", new LocationArgument()).then(
+					argument("block", string()).executes(context => {
+						console.log(context.getArgument("pos1"))
+						console.log(context.getArgument("pos2"))
+						console.log(context.getArgument("block"))
+						return 0;
+					})
+				)
+			)
+		)
+	)
+
+	const parsedCommand = dispatcher.parse("fill 3 4 5 10 11 12 air", {})
+	console.log(parsedCommand)
+	console.log(new Argument("pos1", "").getRange(parsedCommand))
+	try {
+		dispatcher.execute(parsedCommand);
+	} catch (ex) {
+		console.error(ex);
+	}
+
+	// plugins-to-convert:
+	//   - Essentials:
+	//     - speed <speed>[0..10]
+	//     - speed <target>[minecraft:game_profile]
+	//     - speed (walk|fly) <speed>[0..10]
+	//     - speed (walk|fly) <speed>[0..10] <target>[minecraft:game_profile]
+}
+
+registerCommand("speed (walk|fly) <speed>[0..10] <target>[minecraft:game_profile]");
 
 /**
  * Gets the current cursor position.
