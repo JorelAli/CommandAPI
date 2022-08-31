@@ -44,7 +44,7 @@ export class PlayerArgument {
 
 		this.username = reader.getString().slice(start, reader.getCursor());
 
-		if(!this.username.match(/A-Za-z_/)) {
+		if(!this.username.match(/[A-Za-z_]+/)) {
 			throw new SimpleCommandExceptionType("AAAAA").createWithContext(reader);
 		}
 
@@ -57,5 +57,43 @@ export class PlayerArgument {
 
 	getExamples() {
 		return ["Skepter"];
+	}
+}
+
+export class MultiLiteralArgument {
+	/**
+	 * @param {Array<String>} literals 
+	 */
+	 constructor(literals) {
+		/** @type {Array<String>} */
+		this.literals = literals;
+		/** @type {string} */
+		this.selectedLiteral = "";
+	}
+
+	parse(reader) {
+		const start = reader.getCursor();
+		while(reader.canRead() && reader.peek() !== " ") {
+			reader.skip();
+		}
+
+		this.selectedLiteral = reader.getString().slice(start, reader.getCursor());
+
+		if(!this.literals.includes(this.selectedLiteral)) {
+			throw new SimpleCommandExceptionType("nope lol").createWithContext(reader);
+		}
+
+		return this;
+	}
+
+	listSuggestions(context, builder) {
+		for(let literal of literals) {
+			builder.suggest(literal);
+		}
+		return builder.build();
+	}
+
+	getExamples() {
+		return ["blah"];
 	}
 }

@@ -1,5 +1,5 @@
-import { CommandDispatcher, literal, argument, string } from "./node_modules/node-brigadier/dist/index.js"
-import { LocationArgument, PlayerArgument } from "./arguments.js"
+import { CommandDispatcher, literal, argument, string, integer } from "./node_modules/node-brigadier/dist/index.js"
+import { LocationArgument, PlayerArgument, MultiLiteralArgument } from "./arguments.js"
 
 /******************************************************************************
  * Constants                                                                  *
@@ -128,11 +128,29 @@ function registerCommand(configCommand) {
 				)
 			)
 		)
+	);
+
+	dispatcher.register(
+		literal("speed").then(
+			argument("type", new MultiLiteralArgument(["walk", "fly"])).then(
+				argument("speed", integer(0, 10)).then(
+					argument("target", new PlayerArgument()).executes(context => {
+						console.log(context.getArgument("type"))
+						console.log(context.getArgument("speed"))
+						console.log(context.getArgument("target"))
+						return 0;
+					})
+				)
+			)
+		)
 	)
 
 	const parsedCommand = dispatcher.parse("fill 3 4 5 10 11 12 air", {})
 	console.log(parsedCommand)
 	console.log(new Argument("pos1", "").getRange(parsedCommand))
+
+	const parsedCommand1 = dispatcher.parse("speed walk 2 Skepter", {})
+	console.log(parsedCommand1)
 	try {
 		dispatcher.execute(parsedCommand);
 	} catch (ex) {
@@ -145,6 +163,8 @@ function registerCommand(configCommand) {
 	//     - speed <target>[minecraft:game_profile]
 	//     - speed (walk|fly) <speed>[0..10]
 	//     - speed (walk|fly) <speed>[0..10] <target>[minecraft:game_profile]
+
+	// Color order: aqua, yellow, green, light purple, gold
 }
 
 registerCommand("speed (walk|fly) <speed>[0..10] <target>[minecraft:game_profile]");
