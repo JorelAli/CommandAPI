@@ -1,10 +1,132 @@
 "use strict";
 
-/** @type HTMLElement */
+/******************************************************************************
+ * Constants                                                                  *
+ ******************************************************************************/
+
 const commandInput = document.getElementById("cmd-input");
 const commandInputAutocomplete = document.getElementById("cmd-input-autocomplete");
 const errorMessageBox = document.getElementById("error-box");
 const suggestionsBox = document.getElementById("suggestions-box");
+
+/******************************************************************************
+ * Enums                                                                      *
+ ******************************************************************************/
+
+const ChatColor = {
+	// Uses the section symbol (§), just like Minecraft
+	BLACK: "\u00A70",
+	DARK_BLUE: "\u00A71",
+	DARK_GREEN: "\u00A72",
+	DARK_AQUA: "\u00A73",
+	DARK_RED: "\u00A74",
+	DARK_PURPLE: "\u00A75",
+	GOLD: "\u00A76",
+	GRAY: "\u00A77",
+	DARK_GRAY: "\u00A78",
+	BLUE: "\u00A79",
+	GREEN: "\u00A7a",
+	AQUA: "\u00A7b",
+	RED: "\u00A7c",
+	LIGHT_PURPLE: "\u00A7d",
+	YELLOW: "\u00A7e",
+	WHITE: "\u00A7f",
+};
+
+const ChatColorCSS = {
+	"0": "black",
+	"1": "dark_blue",
+	"2": "dark_green",
+	"3": "dark_aqua",
+	"4": "dark_red",
+	"5": "dark_purple",
+	"6": "gold",
+	"7": "gray",
+	"8": "dark_gray",
+	"9": "blue",
+	"a": "green",
+	"b": "aqua",
+	"c": "red",
+	"d": "light_purple",
+	"e": "yellow",
+	"f": "white"
+};
+
+const ChatColorCSSReversed = {};
+for (let key in ChatColorCSS) {
+    ChatColorCSSReversed[ChatColorCSS[key]] = key;
+}
+
+// Argument types, with the argument and a matching function that returns if the
+// input provided is a valid match
+const ArgumentType = {
+	AdvancementArgument: ["AdvancementArgument", (input) => {}],
+	AdventureChatArgument: ["AdventureChatArgument", (input) => {}],
+	AdventureChatComponentArgument: ["AdventureChatComponentArgument", (input) => {}],
+	AngleArgument: ["AngleArgument", (input) => {}],
+	AxisArgument: ["AxisArgument", (input) => {}],
+	BiomeArgument: ["BiomeArgument", (input) => {}],
+	BlockPredicateArgument: ["BlockPredicateArgument", (input) => {}],
+	BlockStateArgument: ["BlockStateArgument", (input) => {}],
+	BooleanArgument: ["BooleanArgument", (input) => {}],
+	ChatArgument: ["ChatArgument", (input) => {}],
+	ChatColorArgument: ["ChatColorArgument", (input) => {}],
+	ChatComponentArgument: ["ChatComponentArgument", (input) => {}],
+	CustomArgument: ["CustomArgument", (input) => {}],
+	DoubleArgument: ["DoubleArgument", (input) => {}],
+	EnchantmentArgument: ["EnchantmentArgument", (input) => {}],
+	EntitySelectorArgument: ["EntitySelectorArgument", (input) => {}],
+	EntityTypeArgument: ["EntityTypeArgument", (input) => {}],
+	EnvironmentArgument: ["EnvironmentArgument", (input) => {}],
+	FloatArgument: ["FloatArgument", (input) => {}],
+	FloatRangeArgument: ["FloatRangeArgument", (input) => {}],
+	FunctionArgument: ["FunctionArgument", (input) => {}],
+	GreedyStringArgument: ["GreedyStringArgument", (input) => {}],
+	IntegerArgument: ["IntegerArgument", (input) => {}],
+	IntegerRangeArgument: ["IntegerRangeArgument", (input) => {}],
+	IPreviewable: ["IPreviewable", (input) => {}],
+	ItemStackArgument: ["ItemStackArgument", (input) => {}],
+	ItemStackPredicateArgument: ["ItemStackPredicateArgument", (input) => {}],
+	LiteralArgument: ["LiteralArgument", (input) => {}],
+	Location2DArgument: ["Location2DArgument", (input) => {}],
+	LocationArgument: ["LocationArgument", (input) => {}],
+	LongArgument: ["LongArgument", (input) => {}],
+	LootTableArgument: ["LootTableArgument", (input) => {}],
+	MathOperationArgument: ["MathOperationArgument", (input) => {}],
+	MultiLiteralArgument: ["MultiLiteralArgument", (input) => {}],
+	NamespacedKeyArgument: ["NamespacedKeyArgument", (input) => {}],
+	NBTCompoundArgument: ["NBTCompoundArgument", (input) => {}],
+	ObjectiveArgument: ["ObjectiveArgument", (input) => {}],
+	ObjectiveCriteriaArgument: ["ObjectiveCriteriaArgument", (input) => {}],
+	OfflinePlayerArgument: ["OfflinePlayerArgument", (input) => {}],
+	ParticleArgument: ["ParticleArgument", (input) => {}],
+	PlayerArgument: ["PlayerArgument", (input) => {}],
+	PotionEffectArgument: ["PotionEffectArgument", (input) => {}],
+	RecipeArgument: ["RecipeArgument", (input) => {}],
+	RotationArgument: ["RotationArgument", (input) => {}],
+	ScoreboardSlotArgument: ["ScoreboardSlotArgument", (input) => {}],
+	ScoreHolderArgument: ["ScoreHolderArgument", (input) => {}],
+	SoundArgument: ["SoundArgument", (input) => {}],
+	StringArgument: ["StringArgument", (input) => {}],
+	TeamArgument: ["TeamArgument", (input) => {}],
+	TextArgument: ["TextArgument", (input) => {}],
+	TimeArgument: ["TimeArgument", (input) => {}],
+	UUIDArgument: ["UUIDArgument", (input) => {}],
+};
+
+/******************************************************************************
+ * Classes                                                                    *
+ ******************************************************************************/
+
+class Argument {
+	constructor(argumentType) {
+		this.argumentType = argumentType;
+	}
+}
+
+/******************************************************************************
+ * Helpers                                                                    *
+ ******************************************************************************/
 
 /**
  * Gets the current cursor position.
@@ -83,47 +205,7 @@ function getSelectedSuggestion() {
 	return document.querySelector(".yellow");
 }
 
-const ChatColor = {
-	BLACK: "\u00A70",
-	DARK_BLUE: "\u00A71",
-	DARK_GREEN: "\u00A72",
-	DARK_AQUA: "\u00A73",
-	DARK_RED: "\u00A74",
-	DARK_PURPLE: "\u00A75",
-	GOLD: "\u00A76",
-	GRAY: "\u00A77",
-	DARK_GRAY: "\u00A78",
-	BLUE: "\u00A79",
-	GREEN: "\u00A7a",
-	AQUA: "\u00A7b",
-	RED: "\u00A7c",
-	LIGHT_PURPLE: "\u00A7d",
-	YELLOW: "\u00A7e",
-	WHITE: "\u00A7f",
-};
 
-const ChatColorCSS = {
-	"0": "black",
-	"1": "dark_blue",
-	"2": "dark_green",
-	"3": "dark_aqua",
-	"4": "dark_red",
-	"5": "dark_purple",
-	"6": "gold",
-	"7": "gray",
-	"8": "dark_gray",
-	"9": "blue",
-	"a": "green",
-	"b": "aqua",
-	"c": "red",
-	"d": "light_purple",
-	"e": "yellow",
-	"f": "white"
-};
-const ChatColorCSSReversed = {};
-for (let key in ChatColorCSS) {
-    ChatColorCSSReversed[ChatColorCSS[key]] = key;
-}
 
 /**
  * Takes Minecraft text and renders it in the chat box
@@ -180,7 +262,11 @@ function getText(withStyling = true) {
 	return buffer;
 }
 
-document.getElementById("cmd-input").oninput = function() {
+/******************************************************************************
+ * Events                                                                     *
+ ******************************************************************************/
+
+commandInput.oninput = function() {
 	let cursorPos = getCursorPosition();
 	let commands = ["say", "tp", "w", "weather", "whitelist", "worldborder"];
 
@@ -257,7 +343,7 @@ document.getElementById("cmd-input").oninput = function() {
 }
 
 // We really really don't want new lines in our single-lined command!
-document.getElementById("cmd-input").addEventListener('keydown', (evt) => {
+commandInput.addEventListener('keydown', (evt) => {
 	switch(evt.key) {
 		case "Enter":
 			evt.preventDefault();
@@ -337,4 +423,4 @@ document.getElementById("chatbox").onclick = function() {
 };
 
 // Run syntax highlighter
-document.getElementById("cmd-input").oninput();
+commandInput.oninput();
