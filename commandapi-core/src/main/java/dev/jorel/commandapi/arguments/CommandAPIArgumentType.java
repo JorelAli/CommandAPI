@@ -83,6 +83,11 @@ public enum CommandAPIArgumentType {
 	CHATCOLOR("minecraft:color"),
 
 	/**
+	 * The CommandArgument
+	 */
+	COMMAND,
+
+	/**
 	 * The CustomArgument
 	 */
 	CUSTOM,

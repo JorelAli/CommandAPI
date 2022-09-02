@@ -23,6 +23,8 @@ package dev.jorel.commandapi;
 import java.io.File;
 import java.util.Map.Entry;
 
+import dev.jorel.commandapi.arguments.CommandArgument;
+import dev.jorel.commandapi.arguments.CommandResult;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.tr7zw.changeme.nbtapi.NBTContainer;
@@ -67,5 +69,11 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable(this);
+
+		new CommandAPICommand("commandargument")
+			.withArguments(new CommandArgument("command"))
+			.executes((sender, args) -> {
+				((CommandResult)args[0]).execute(sender);
+			}).register();
 	}
 }
