@@ -7,12 +7,17 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
+import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.arguments.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.advancement.Advancement;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
@@ -570,6 +575,75 @@ public class ArgumentTests {
 		
 		assertArrayEquals(ComponentSerializer.parse(json), spigot.get());
 		assertEquals(GsonComponentSerializer.gson().deserialize(json), adventure.get());
+	}
+
+	@Test
+	public void executionTestWithCommandArgument() {
+		Mut<CommandResult> results = Mut.of();
+
+		PlayerMock player = server.addPlayer("APlayer");
+		CommandMap commandMap = CommandAPIHandler.getInstance().getNMS().getSimpleCommandMap();
+
+		new CommandAPICommand("commandargument")
+			.withArguments(new CommandArgument("command"))
+			.executesPlayer((sender, args) -> {
+				results.set((CommandResult) args[0]);
+			}).register();
+		// ServerMock doesn't update commandMap to include CommandAPICommands itself
+		commandMap.register("minecraft", new Command("commandargument") {
+			@Override
+			public boolean execute(@NotNull CommandSender commandSender, @NotNull String s, @NotNull String[] strings) {
+				return false;
+			}
+		});
+
+		// Check retrieval of commands
+		server.dispatchCommand(player, "commandargument version");
+		server.dispatchCommand(player, "commandargument commandargument");
+
+		assertEquals(new CommandResult(commandMap.getCommand("version"), new String[]{}), results.get());
+		assertEquals(new CommandResult(commandMap.getCommand("commandargument"), new String[]{}), results.get());
+
+		new CommandAPICommand("restrictedcommand")
+			.withArguments(new CommandArgument("command")
+				.replaceSuggestions(
+					ArgumentSuggestions.strings("give"),
+					ArgumentSuggestions.strings(info -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new)),
+					ArgumentSuggestions.strings("diamond", "minecraft:diamond"),
+					ArgumentSuggestions.empty()
+				)
+			).executesPlayer((sender, args) -> {
+				results.set((CommandResult) args[0]);
+			}).register();
+
+		// ServerMock doesn't include vanilla commands
+		new CommandAPICommand("give").executes((sender, args) -> {}).register();
+		commandMap.register("minecraft", new Command("give") {
+			@Override
+			public boolean execute(@NotNull CommandSender commandSender, @NotNull String s, @NotNull String[] strings) {
+				return false;
+			}
+		});
+
+		server.addPlayer("BPlayer");
+
+		// Valid commands based on suggestions
+		server.dispatchCommand(player, "restrictedcommand give APlayer diamond");
+		server.dispatchCommand(player, "restrictedcommand give BPlayer diamond");
+		server.dispatchCommand(player, "restrictedcommand give APlayer minecraft:diamond");
+
+		assertEquals(new CommandResult(commandMap.getCommand("give"), new String[]{"APlayer", "diamond"}), results.get());
+		assertEquals(new CommandResult(commandMap.getCommand("give"), new String[]{"BPlayer", "diamond"}), results.get());
+		assertEquals(new CommandResult(commandMap.getCommand("give"), new String[]{"APlayer", "minecraft:diamond"}), results.get());
+
+		// Invalid commands
+		assertInvalidSyntax(player, "restrictedcommand data get entity APlayer");
+		assertInvalidSyntax(player, "restrictedcommand give CPlayer diamond");
+		assertInvalidSyntax(player, "restrictedcommand give APlayer dirt");
+		assertInvalidSyntax(player, "restrictedcommand give APlayer diamond 64");
+		assertInvalidSyntax(player, "restrictedcommand give APlayer");
+
+		assertNull(results.get());
 	}
 	
 	@Test // Pre-#321 

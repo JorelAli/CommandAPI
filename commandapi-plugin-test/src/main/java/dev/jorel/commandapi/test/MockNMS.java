@@ -15,12 +15,10 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
-import org.bukkit.World;
+import be.seeseemelk.mockbukkit.ServerMock;
+import org.bukkit.*;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -251,6 +249,11 @@ public class MockNMS extends ArgumentNMS {
 			this.dispatcher = new CommandDispatcher<>();
 		}
 		return this.dispatcher;
+	}
+
+	@Override
+	public SimpleCommandMap getSimpleCommandMap() {
+		return ((ServerMock) Bukkit.getServer()).getCommandMap();
 	}
 
 	List<EntityPlayer> players = new ArrayList<>();
