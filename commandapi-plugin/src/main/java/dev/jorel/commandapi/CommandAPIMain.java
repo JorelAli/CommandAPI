@@ -20,17 +20,13 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
-import de.tr7zw.changeme.nbtapi.NBTContainer;
-import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
-import dev.jorel.commandapi.arguments.ArgumentSuggestions;
-import dev.jorel.commandapi.arguments.CommandArgument;
-import dev.jorel.commandapi.arguments.CommandResult;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import java.io.File;
 import java.util.Map.Entry;
+
+import org.bukkit.plugin.java.JavaPlugin;
+
+import de.tr7zw.changeme.nbtapi.NBTContainer;
+import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
 
 public class CommandAPIMain extends JavaPlugin {
 
@@ -71,26 +67,5 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable(this);
-
-		new CommandAPICommand("commandargument")
-			.withArguments(new CommandArgument("command"))
-			.executes((sender, args) -> {
-				((CommandResult) args[0]).execute(sender);
-			}).register();
-
-		new CommandAPICommand("restrictedCommand")
-			.withArguments(new CommandArgument("command")
-				.replaceSuggestions(
-					ArgumentSuggestions.strings("give"),
-					ArgumentSuggestions.strings(info -> {
-						CommandAPI.logInfo("Online players: " + Bukkit.getOnlinePlayers());
-						return Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new);
-					}),
-					ArgumentSuggestions.strings("diamond", "minecraft:diamond"),
-					ArgumentSuggestions.empty()
-				)
-			).executes((sender, args) -> {
-				((CommandResult) args[0]).execute(sender);
-			}).register();
 	}
 }
