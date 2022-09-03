@@ -201,4 +201,3 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 		return new CommandResult(target, Arrays.copyOfRange(arguments, 1, arguments.length));
 	}
 }
-
