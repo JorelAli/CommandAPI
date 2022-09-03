@@ -1,9 +1,11 @@
 package dev.jorel.commandapi.arguments;
 
+import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestion;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
@@ -76,7 +78,8 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 
 				Suggestions suggestions = argumentBuilder.build();
 				CommandAPI.logInfo("Received suggestions: " + suggestions.getList().toString());
-				if (suggestions.getList().stream().map(Suggestion::getText).noneMatch(commandLabel::equals)) {
+				List<String> results = suggestions.getList().stream().map(Suggestion::getText).toList();
+				if (!results.contains(commandLabel)) {
 					CommandAPI.logInfo("Rejected label");
 					throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownCommand().createWithContext(context);
 				}
@@ -85,7 +88,7 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 
 			// Enforce argument suggestions
 			String[] arguments = command.substring(command.indexOf(" ") + 1).split(" ");
-			if(!arguments[0].isEmpty() && command.endsWith(" ")) {
+			if (!arguments[0].isEmpty() && command.endsWith(" ")) {
 				arguments = Arrays.copyOf(arguments, arguments.length + 1);
 				arguments[arguments.length - 1] = "";
 			}
@@ -104,7 +107,8 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 					Suggestions suggestions = argumentBuilder.build();
 
 					CommandAPI.logInfo("Received suggestions: " + suggestions.getList().toString());
-					if (suggestions.getList().stream().map(Suggestion::getText).noneMatch(currentArgument::equals)) {
+					List<String> results = suggestions.getList().stream().map(Suggestion::getText).toList();
+					if (!results.contains(currentArgument)) {
 						CommandAPI.logInfo("Rejected argument");
 						throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownArgument().createWithContext(context);
 					}
@@ -137,7 +141,7 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 		});
 	}
 
-	private boolean hasReplacement(int index){
+	private boolean hasReplacement(int index) {
 		return replacements.length > index && replacements[index] != null;
 	}
 
@@ -168,18 +172,55 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 		// Extract information
 		String command = cmdCtx.getArgument(key, String.class);
 		CommandMap commandMap = nms.getSimpleCommandMap();
-//		CommandSender sender = nms.getSenderForCommand(cmdCtx, false);
+		CommandSender sender = nms.getSenderForCommand(cmdCtx, false);
 
 		StringReader context = new StringReader(command);
 
 		// Verify command
-		String commandLabel = command.substring(0, command.indexOf(" "));
+		String[] arguments = command.split(" ");
+		String commandLabel = arguments[0];
 		Command target = commandMap.getCommand(commandLabel);
 		if (target == null)
 			throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownCommand().createWithContext(context);
 
-		String[] arguments = command.substring(command.indexOf(" ") + 1).split(" ");
-		return new CommandResult(target, arguments);
+		// Verify replacements
+		List<String> previousArguments = new ArrayList<>();
+		StringBuilder currentInput = new StringBuilder();
+
+		CommandAPI.logInfo("Arguments: " + Arrays.toString(arguments));
+		for (int i = 0; i < replacements.length; i++) {
+			String currentArgument = "";
+			if (i < arguments.length)
+				currentArgument = arguments[i];
+
+			SuggestionsBuilder argumentBuilder = new SuggestionsBuilder(currentInput.toString(), currentInput.length());
+			if (hasReplacement(i)) {
+				CommandAPI.logInfo("Checking argument #" + i);
+				replacements[i].suggest(new SuggestionInfo(sender, previousArguments.toArray(), currentInput.toString(), ""), argumentBuilder);
+				Suggestions suggestions = argumentBuilder.build();
+
+				CommandAPI.logInfo("Received suggestions: " + suggestions.getList().toString());
+				List<String> results = suggestions.getList().stream().map(Suggestion::getText).toList();
+				if(i < arguments.length) {
+					if (!results.contains(currentArgument)) {
+						if(i == 0)
+							throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownCommand().createWithContext(context);
+						else
+							throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownArgument().createWithContext(context);
+					}
+				} else {
+					if(results.size() != 0)
+						throw new SimpleCommandExceptionType(new LiteralMessage("Expected more arguments")).createWithContext(context);
+					else
+						break;
+				}
+			}
+			currentInput.append(" ").append(currentArgument);
+			previousArguments.add(currentArgument);
+			context.setCursor(currentInput.length());
+		}
+
+		return new CommandResult(target, Arrays.copyOfRange(arguments, 1, arguments.length));
 	}
 }
 
