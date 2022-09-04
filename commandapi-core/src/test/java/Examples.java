@@ -1739,9 +1739,9 @@ arguments.add(new LocationArgument("location")
         // We know the sender is a player if we use .executesPlayer()
         Player player = (Player) info.sender();
         return Tooltip.arrayOf(
-            Tooltip.of(player.getWorld().getSpawnLocation(), "World spawn"),
-            Tooltip.of(player.getBedSpawnLocation(), "Your bed"),
-            Tooltip.of(player.getTargetBlockExact(256).getLocation(), "Target block")
+            Tooltip.ofString(player.getWorld().getSpawnLocation(), "World spawn"),
+            Tooltip.ofString(player.getBedSpawnLocation(), "Your bed"),
+            Tooltip.ofString(player.getTargetBlockExact(256).getLocation(), "Target block")
         );
     })));
 /* ANCHOR_END: SafeTooltips */

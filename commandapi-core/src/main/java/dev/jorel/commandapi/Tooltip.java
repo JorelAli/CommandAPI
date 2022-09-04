@@ -74,8 +74,8 @@ public class Tooltip<S> {
 	 *                   suggestion
 	 * @return a <code>Tooltip&lt;S&gt;</code> representing this suggestion and tooltip
 	 */
-	public static <S> Tooltip<S> of(S object, String tooltip) {
-		return of(object, toMessage(tooltip));
+	public static <S> Tooltip<S> ofString(S object, String tooltip) {
+		return ofMessage(object, toMessage(tooltip));
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class Tooltip<S> {
 	 *                   suggestion
 	 * @return a <code>Tooltip&lt;S&gt;</code> representing this suggestion and tooltip
 	 */
-	public static <S> Tooltip<S> of(S object, Message tooltip) {
+	public static <S> Tooltip<S> ofMessage(S object, Message tooltip) {
 		return new Tooltip<S>(object, tooltip);
 	}
 
@@ -100,8 +100,8 @@ public class Tooltip<S> {
 	 *                   suggestion
 	 * @return a <code>Tooltip&lt;S&gt;</code> representing this suggestion and tooltip
 	 */
-	public static <S> Tooltip<S> of(S object, BaseComponent... tooltip) {
-		return of(object, toMessage(tooltip));
+	public static <S> Tooltip<S> ofBungeeComponents(S object, BaseComponent... tooltip) {
+		return ofMessage(object, toMessage(tooltip));
 	}
 
 	/**
@@ -113,8 +113,8 @@ public class Tooltip<S> {
 	 *                   suggestion
 	 * @return a <code>Tooltip&lt;S&gt;</code> representing this suggestion and tooltip
 	 */
-	public static <S> Tooltip<S> of(S object, Component tooltip) {
-		return of(object, toMessage(tooltip));
+	public static <S> Tooltip<S> ofAdventureComponnent(S object, Component tooltip) {
+		return ofMessage(object, toMessage(tooltip));
 	}
 
 	/**
@@ -151,7 +151,7 @@ public class Tooltip<S> {
 	 */
 	@SafeVarargs
 	public static <S> Tooltip<S>[] generateStrings(Function<S, String> tooltipGenerator, S... suggestions) {
-		return generate(tooltipGenerator, Tooltip::of, suggestions);
+		return generate(tooltipGenerator, Tooltip::ofString, suggestions);
 	}
 
 	/**
@@ -165,7 +165,7 @@ public class Tooltip<S> {
 	 */
 	@SafeVarargs
 	public static <S> Tooltip<S>[] generateMessages(Function<S, Message> tooltipGenerator, S... suggestions) {
-		return generate(tooltipGenerator, Tooltip::of, suggestions);
+		return generate(tooltipGenerator, Tooltip::ofMessage, suggestions);
 	}
 
 	/**
@@ -179,7 +179,7 @@ public class Tooltip<S> {
 	 */
 	@SafeVarargs
 	public static <S> Tooltip<S>[] generateBungeeComponents(Function<S, BaseComponent[]> tooltipGenerator, S... suggestions) {
-		return generate(tooltipGenerator, Tooltip::of, suggestions);
+		return generate(tooltipGenerator, Tooltip::ofBungeeComponents, suggestions);
 	}
 
 	/**
@@ -193,7 +193,7 @@ public class Tooltip<S> {
 	 */
 	@SafeVarargs
 	public static <S> Tooltip<S>[] generateAdvenureComponents(Function<S, Component> tooltipGenerator, S... suggestions) {
-		return generate(tooltipGenerator, Tooltip::of, suggestions);
+		return generate(tooltipGenerator, Tooltip::ofAdventureComponnent, suggestions);
 	}
 
 	/**
