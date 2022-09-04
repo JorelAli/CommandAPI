@@ -1,5 +1,18 @@
-import { CommandDispatcher, literal, argument, string as stringArgument, integer as integerArgument, float as floatArgument } from "./node_modules/node-brigadier/dist/index.js"
-import { BlockPosArgument, PlayerArgument, MultiLiteralArgument } from "./arguments.js"
+import {
+	CommandDispatcher,
+	RootCommandNode,
+	literal,
+	argument,
+	string as stringArgument,
+	integer as integerArgument,
+	float as floatArgument
+} from "./node_modules/node-brigadier/dist/index.js"
+
+import {
+	BlockPosArgument,
+	PlayerArgument,
+	MultiLiteralArgument
+} from "./arguments.js"
 
 /******************************************************************************
  * Constants                                                                  *
@@ -11,6 +24,14 @@ const errorMessageBox = document.getElementById("error-box");
 const suggestionsBox = document.getElementById("suggestions-box");
 
 const dispatcher = new CommandDispatcher();
+
+/******************************************************************************
+ * Prototypes                                                                 *
+ ******************************************************************************/
+
+CommandDispatcher.prototype.deleteAll = function deleteAll() {
+	this.root = new RootCommandNode();
+};
 
 /******************************************************************************
  * Enums                                                                      *
@@ -138,6 +159,11 @@ class Argument {
  * https://commandapi.jorel.dev/8.5.1/conversionforownerssingleargs.html)
  */
 function registerCommand(configCommand) {
+
+	// No blank commands
+	if(configCommand.trim().length === 0) {
+		return;
+	}
 
 	function convertArgument(argumentType) {
 		if(argumentType.includes("..")) {
@@ -411,6 +437,8 @@ commandInput.oninput = async function() {
 				setText(ChatColor.RED + rawTextNoSlash);
 				errorText = ex.message;
 
+				// TODO: We actually need to take into account the case when the
+				// command IS ACTUALLY unknown!
 				if(errorText.startsWith("Unknown command at position")) {
 					errorText = usage;
 				}
@@ -421,8 +449,6 @@ commandInput.oninput = async function() {
 				errorText = "All good! 👍"
 			}
 		}
-		// TODO: Render usage at some point
-		// errorText = usage;
 
 		const suggestionsResult = await dispatcher.getCompletionSuggestions(parsedCommand);
 		suggestions = suggestionsResult.suggestions.map((x) => x.text);
@@ -557,41 +583,22 @@ document.getElementById("chatbox").onclick = function() {
 	setCursorPosition(commandInput.innerText.length, commandInput);
 };
 
+document.getElementById("register-commands-button").onclick = function() {
+	dispatcher.deleteAll();
+	document.getElementById("commands").value.split("\n").forEach(registerCommand);
+	commandInput.oninput(); // Run syntax highlighter
+}
+
+
 /******************************************************************************
  * Entrypoint                                                                 *
  ******************************************************************************/
 
-// Register dummy commands
-//dispatcher.register(
-//	literal("fill").then(
-//		argument("pos1", new BlockPosArgument()).then(
-//			argument("pos2", new BlockPosArgument()).then(
-//				argument("block", stringArgument()).executes(context => {
-//					return 0;
-//				})
-//			)
-//		)
-//	)
-//);
-// 
-// dispatcher.register(
-// 	literal("speed").then(
-// 		argument("type", new MultiLiteralArgument(["walk", "fly"])).then(
-// 			argument("speed", integerArgument(0, 10)).then(
-// 				argument("target", new PlayerArgument()).executes(context => {
-// 					return 0;
-// 				})
-// 			)
-// 		)
-// 	)
-// )
+// Default commands
+document.getElementById("commands").value = `fill <pos1>[minecraft:block_pos] <pos2>[minecraft:block_pos] <block>[brigadier:string]
+speed (walk|fly) <speed>[0..10] <target>[minecraft:game_profile]
+hello <val>[1..20]`;
 
-registerCommand("fill <pos1>[minecraft:block_pos] <pos2>[minecraft:block_pos] <block>[brigadier:string]");
-registerCommand("speed (walk|fly) <speed>[0..10] <target>[minecraft:game_profile]");
-registerCommand("hello <val>[1..20]");
-
-// Run syntax highlighter
-commandInput.oninput();
-
-console.log(dispatcher.getRoot())
+document.getElementById("register-commands-button").onclick();
+console.log("Dispatcher", dispatcher.getRoot())
 

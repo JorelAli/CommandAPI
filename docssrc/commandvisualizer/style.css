@@ -68,6 +68,36 @@ span {
 	padding-right: 8px;
 }
 
+#commands {
+	margin-top: 8px;
+	width: 100%;
+	height: 150px;
+	font-family: monospace;
+}
+
+/* From https://codepen.io/joexmdq/pen/EOMLzg */
+#register-commands-button {
+	background: #999 url('./bgbtn.png');
+	padding: 10px 30px 10px 30px;
+	margin-top: 8px;
+	font-family: CustomFont;
+	color: #DDD;
+	font-size: 20pt;
+	text-shadow: 2px 2px #000A;
+	box-shadow: inset -2px -4px #0006, inset 2px 2px #FFF7;
+	image-rendering: pixelated;
+	border: 2px solid #000;
+}
+
+#register-commands-button:hover {
+	background: #b2b6ff url('./bgbtnhov.png');
+	text-shadow: 2px 2px #202013CC;
+	color: #FFFFA0;
+}
+#register-commands-button:active {
+	box-shadow: inset -2px -4px #0004, inset 2px 2px #FFF5;
+}
+
 /****************
  * Colors!
  */
