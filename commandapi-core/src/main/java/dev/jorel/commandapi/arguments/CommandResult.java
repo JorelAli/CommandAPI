@@ -4,7 +4,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
-import java.util.Objects;
 
 public record CommandResult(Command command, String[] args) {
 	public void execute(CommandSender sender) {

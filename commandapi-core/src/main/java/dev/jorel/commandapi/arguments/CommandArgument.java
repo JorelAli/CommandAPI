@@ -179,15 +179,15 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 				replacements[i].suggest(new SuggestionInfo(sender, previousArguments.toArray(), currentInput.toString(), ""), argumentBuilder);
 				Suggestions suggestions = argumentBuilder.build();
 				List<String> results = suggestions.getList().stream().map(Suggestion::getText).toList();
-				if(i < arguments.length) {
+				if (i < arguments.length) {
 					if (!results.contains(currentArgument)) {
-						if(i == 0)
+						if (i == 0)
 							throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownCommand().createWithContext(context);
 						else
 							throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownArgument().createWithContext(context);
 					}
 				} else {
-					if(results.size() != 0)
+					if (results.size() != 0)
 						throw new SimpleCommandExceptionType(new LiteralMessage("Expected more arguments")).createWithContext(context);
 					else
 						break;
