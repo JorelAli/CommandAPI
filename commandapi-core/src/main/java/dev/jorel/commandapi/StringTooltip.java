@@ -21,6 +21,7 @@
 package dev.jorel.commandapi;
 
 import com.mojang.brigadier.Message;
+import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 import java.util.function.BiFunction;
@@ -46,8 +47,8 @@ public class StringTooltip implements IStringTooltip {
 	 *                   suggestion
 	 * @return a StringTooltip representing this suggestion and tooltip
 	 */
-	public static StringTooltip ofString(String suggestion, String tooltip) {
-		return ofMessage(suggestion, Tooltip.toMessage(tooltip));
+	public static StringTooltip of(String suggestion, String tooltip) {
+		return of(suggestion, Tooltip.toMessage(tooltip));
 	}
 
 	/**
@@ -58,7 +59,7 @@ public class StringTooltip implements IStringTooltip {
 	 *                   suggestion
 	 * @return a StringTooltip representing this suggestion and tooltip
 	 */
-	public static StringTooltip ofMessage(String suggestion, Message tooltip) {
+	public static StringTooltip of(String suggestion, Message tooltip) {
 		return tooltip == null ? none(suggestion) : new StringTooltip(suggestion, tooltip);
 	}
 
@@ -70,8 +71,20 @@ public class StringTooltip implements IStringTooltip {
 	 *                   suggestion
 	 * @return a StringTooltip representing this suggestion and tooltip
 	 */
-	public static StringTooltip ofComponents(String suggestion, BaseComponent... tooltip) {
-		return ofMessage(suggestion, Tooltip.toMessage(tooltip));
+	public static StringTooltip of(String suggestion, BaseComponent... tooltip) {
+		return of(suggestion, Tooltip.toMessage(tooltip));
+	}
+
+	/**
+	 * Constructs a StringTooltip with a suggestion and a formatted adventure text component tooltip
+	 *
+	 * @param suggestion the suggestion to provide to the user
+	 * @param tooltip    the formatted tooltip to show to the user when they hover over the
+	 *                   suggestion
+	 * @return a StringTooltip representing this suggestion and tooltip
+	 */
+	public static StringTooltip of(String suggestion, Component tooltip) {
+		return of(suggestion, Tooltip.toMessage(tooltip));
 	}
 
 	/**
@@ -103,7 +116,7 @@ public class StringTooltip implements IStringTooltip {
 	 * @return an array of {@link StringTooltip} objects from the provided suggestions, with the generated string tooltips
 	 */
 	public static StringTooltip[] generateStrings(Function<String, String> tooltipGenerator, String... suggestions) {
-		return generate(tooltipGenerator, StringTooltip::ofString, suggestions);
+		return generate(tooltipGenerator, StringTooltip::of, suggestions);
 	}
 
 	/**
@@ -115,7 +128,7 @@ public class StringTooltip implements IStringTooltip {
 	 * @return an array of {@link StringTooltip} objects from the provided suggestions, with the generated formatted tooltips
 	 */
 	public static StringTooltip[] generateMessages(Function<String, Message> tooltipGenerator, String... suggestions) {
-		return generate(tooltipGenerator, StringTooltip::ofMessage, suggestions);
+		return generate(tooltipGenerator, StringTooltip::of, suggestions);
 	}
 
 	/**
@@ -128,8 +141,22 @@ public class StringTooltip implements IStringTooltip {
 	 * @return an array of {@link StringTooltip} objects from the provided suggestions,
 	 * with the generated formatted tooltips
 	 */
-	public static StringTooltip[] generateComponents(Function<String, BaseComponent[]> tooltipGenerator, String... suggestions) {
-		return generate(tooltipGenerator, StringTooltip::ofComponents, suggestions);
+	public static StringTooltip[] generateBungeeComponents(Function<String, BaseComponent[]> tooltipGenerator, String... suggestions) {
+		return generate(tooltipGenerator, StringTooltip::of, suggestions);
+	}
+
+	/**
+	 * Constructs an array of {@link StringTooltip} objects from an array of suggestions,
+	 * and a function which generates a formatted tooltip for each suggestion
+	 *
+	 * @param tooltipGenerator function which returns a formatted tooltip for the suggestion,
+	 * as an array of adventure text components
+	 * @param suggestions array of suggestions to provide to the user
+	 * @return an array of {@link StringTooltip} objects from the provided suggestions,
+	 * with the generated formatted tooltips
+	 */
+	public static StringTooltip[] generateAdventureComponents(Function<String, Component> tooltipGenerator, String... suggestions) {
+		return generate(tooltipGenerator, StringTooltip::of, suggestions);
 	}
 
 	/**

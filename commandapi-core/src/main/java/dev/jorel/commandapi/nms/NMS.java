@@ -386,7 +386,7 @@ public interface NMS<CommandListenerWrapper> {
 
 	void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd);
 
-	Message componentsToMessage(BaseComponent... components);
+	Message generateMessageFromJson(String json);
 	
 	/**
 	 * @return Whether the server can use chat preview. This is always false for

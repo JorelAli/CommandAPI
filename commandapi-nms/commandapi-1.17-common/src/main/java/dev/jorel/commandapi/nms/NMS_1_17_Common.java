@@ -520,8 +520,8 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	}
 
 	@Override
-	public Message componentsToMessage(final BaseComponent... components) {
-		return Serializer.fromJson(ComponentSerializer.toString(components));
+	public Message generateMessageFromJson(String json) {
+		return Serializer.fromJson(json);
 	}
 
   @Override

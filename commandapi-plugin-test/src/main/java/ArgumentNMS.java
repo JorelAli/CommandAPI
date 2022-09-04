@@ -268,8 +268,8 @@ public abstract class ArgumentNMS extends BlankNMS {
 	}
 
 	@Override
-	public Message componentsToMessage(final BaseComponent... components) {
-		return BASE_NMS.componentsToMessage(components);
+	public Message generateMessageFromJson(final String json) {
+		return BASE_NMS.generateMessageFromJson(json);
 	}
 
 }

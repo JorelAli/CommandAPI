@@ -937,8 +937,8 @@ public class NMS_1_14 extends NMSWrapper_1_14 {
 	}
 
 	@Override
-	public Message componentsToMessage(final BaseComponent... components) {
-		return ChatSerializer.a(ComponentSerializer.toString(components));
+	public Message generateMessageFromJson(String json) {
+		return ChatSerializer.a(json);
 	}
 
 }

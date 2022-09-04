@@ -22,7 +22,10 @@ package dev.jorel.commandapi;
 
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.Message;
+import net.kyori.adventure.platform.bukkit.BukkitComponentSerializer;
+import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -102,6 +105,19 @@ public class Tooltip<S> {
 	}
 
 	/**
+	 * Constructs a <code>Tooltip&lt;S&gt;</code> with a suggestion and a formatted tooltip
+	 *
+	 * @param <S> the object that the argument suggestions use
+	 * @param object the suggestion to provide to the user
+	 * @param tooltip    the formatted tooltip to show to the user when they hover over the
+	 *                   suggestion
+	 * @return a <code>Tooltip&lt;S&gt;</code> representing this suggestion and tooltip
+	 */
+	public static <S> Tooltip<S> of(S object, Component tooltip) {
+		return of(object, toMessage(tooltip));
+	}
+
+	/**
 	 * Constructs a <code>Tooltip&lt;S&gt;</code> with a suggestion and no tooltip
 	 * 
 	 * @param <S> the object that the argument suggestions use
@@ -162,7 +178,21 @@ public class Tooltip<S> {
 	 * @return an array of {@link Tooltip<S>} objects from the provided suggestions, with the generated formatted tooltips
 	 */
 	@SafeVarargs
-	public static <S> Tooltip<S>[] generateComponents(Function<S, BaseComponent[]> tooltipGenerator, S... suggestions) {
+	public static <S> Tooltip<S>[] generateBungeeComponents(Function<S, BaseComponent[]> tooltipGenerator, S... suggestions) {
+		return generate(tooltipGenerator, Tooltip::of, suggestions);
+	}
+
+	/**
+	 * Constructs an array of {@link Tooltip<S>} objects from an array of suggestions,
+	 * and a function which generates a formatted tooltip for each suggestion
+	 *
+	 * @param <S> the object that the argument suggestions use
+	 * @param tooltipGenerator function which returns a formatted tooltip for the suggestion
+	 * @param suggestions array of suggestions to provide to the user
+	 * @return an array of {@link Tooltip<S>} objects from the provided suggestions, with the generated formatted tooltips
+	 */
+	@SafeVarargs
+	public static <S> Tooltip<S>[] generateAdvenureComponents(Function<S, Component> tooltipGenerator, S... suggestions) {
 		return generate(tooltipGenerator, Tooltip::of, suggestions);
 	}
 
@@ -211,7 +241,7 @@ public class Tooltip<S> {
 	 * @return the mapping function from this tooltip into a StringTooltip
 	 */
 	public static <S> Function<Tooltip<S>, StringTooltip> build(Function<S, String> mapper) {
-		return t -> StringTooltip.ofMessage(mapper.apply(t.object), t.tooltip);
+		return t -> StringTooltip.of(mapper.apply(t.object), t.tooltip);
 	}
 
 	/**
@@ -240,7 +270,20 @@ public class Tooltip<S> {
 	 */
 	@Deprecated
 	public static Message toMessage(BaseComponent... components) {
-		return CommandAPIHandler.getInstance().getNMS().componentsToMessage(components);
+		return CommandAPIHandler.getInstance().getNMS().generateMessageFromJson(ComponentSerializer.toString(components));
+	}
+
+	/**
+	 * Converts a formatted adventure text component to a native minecraft text component which can be used natively by brigadier.
+	 *
+	 * This supports all forms of formatting including entity selectors, scores,
+	 * click &amp; hover events, translations, keybinds and more.
+	 **
+	 * @param component adventure text component
+	 * @return native minecraft message object which can be used natively by brigadier.
+	 */
+	public static Message toMessage(Component component) {
+		return CommandAPIHandler.getInstance().getNMS().generateMessageFromJson(BukkitComponentSerializer.gson().serialize(component));
 	}
 
 }
