@@ -142,13 +142,31 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 
 	ArgumentSuggestions[] replacements = new ArgumentSuggestions[0];
 
-	public CommandArgument replaceSuggestions(ArgumentSuggestions... suggestions) {
+	/**
+	 * Replaces the default command suggestions provided by the server with custom suggestions for each argument in the
+	 * command, starting with the command's name. If a suggestion is null or the array is too short, the suggestions in
+	 * that position will not be overridden.
+	 *
+	 * @param suggestions An array of {@link ArgumentSuggestions} representing the suggestions. Use the static methods in
+	 * ArgumentSuggestions to create these.
+	 * @return the current argument
+	 */
+	public Argument<CommandResult> replaceSuggestions(ArgumentSuggestions... suggestions) {
 		this.replacements = suggestions;
 		return this;
 	}
 
+	/**
+	 * Replaces the default command suggestions provided by the server with custom suggestions for each argument in the
+	 * command, starting with the command's name. If a suggestion is null or the array is too short, the suggestions in
+	 * that position will not be overridden.
+	 *
+	 * @param suggestions An array of {@link ArgumentSuggestions} representing the suggestions. Use the static methods in
+	 * ArgumentSuggestions to create these.
+	 * @return the current argument
+	 */
 	@Override
-	public CommandArgument replaceSuggestions(ArgumentSuggestions suggestions) {
+	public Argument<CommandResult> replaceSuggestions(ArgumentSuggestions suggestions) {
 		return replaceSuggestions(new ArgumentSuggestions[]{suggestions});
 	}
 
