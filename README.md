@@ -16,10 +16,11 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/jorelali/commandapi/badge)](https://www.codefactor.io/repository/github/jorelali/commandapi)
 ![GitHub Workflow Status (master)](https://img.shields.io/github/workflow/status/JorelAli/CommandAPI/build/master)
 ![GitHub Workflow Status (dev/dev)](https://img.shields.io/github/workflow/status/JorelAli/CommandAPI/build/dev/dev?label=dev%20build)
-<br>
 ![Spiget Download Size](https://img.shields.io/spiget/download-size/62353)
+<br>
 ![Spiget Downloads](https://img.shields.io/spiget/downloads/62353?label=Total%20Spigot%20Downloads)
 ![GitHub all releases](https://img.shields.io/github/downloads/JorelAli/CommandAPI/total?label=Total%20GitHub%20Downloads)
+![Modrinth Downloads](https://img.shields.io/modrinth/dt/commandapi?label=Total%20Modrinth%20Downloads)
 </div>
 
 **Support and Project Discussion**:
