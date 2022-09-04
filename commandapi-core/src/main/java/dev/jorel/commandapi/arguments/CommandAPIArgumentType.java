@@ -85,7 +85,7 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The CommandArgument
 	 */
-	COMMAND,
+	COMMAND("api:command"),
 
 	/**
 	 * The CustomArgument
