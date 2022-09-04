@@ -68,6 +68,14 @@ public class ArgumentTests {
 		}
 	}
 
+	public <T> void assertStoresResult(CommandSender sender, String command, Mut<T> queue, T expected) {
+		assertDoesNotThrow(() -> assertTrue(
+			server.dispatchThrowableCommand(sender, command),
+			"Expected command dispatch to return true, but it gave false")
+		);
+		assertEquals(expected, queue.get());
+	}
+
 	public void assertInvalidSyntax(CommandSender sender, String command) {
 		assertThrows(CommandSyntaxException.class, () -> assertTrue(server.dispatchThrowableCommand(sender,command)));
 	}
@@ -589,20 +597,10 @@ public class ArgumentTests {
 			.executesPlayer((sender, args) -> {
 				results.set((CommandResult) args[0]);
 			}).register();
-		// ServerMock doesn't update commandMap to include CommandAPICommands itself
-		commandMap.register("minecraft", new Command("commandargument") {
-			@Override
-			public boolean execute(@NotNull CommandSender commandSender, @NotNull String s, @NotNull String[] strings) {
-				return false;
-			}
-		});
 
 		// Check retrieval of commands
-		server.dispatchCommand(player, "commandargument version");
-		server.dispatchCommand(player, "commandargument commandargument");
-
-		assertEquals(new CommandResult(commandMap.getCommand("version"), new String[]{}), results.get());
-		assertEquals(new CommandResult(commandMap.getCommand("commandargument"), new String[]{}), results.get());
+		assertStoresResult(player, "commandargument version",
+			results, new CommandResult(commandMap.getCommand("version"), new String[]{}));
 
 		new CommandAPICommand("restrictedcommand")
 			.withArguments(new CommandArgument("command")
@@ -616,28 +614,37 @@ public class ArgumentTests {
 				results.set((CommandResult) args[0]);
 			}).register();
 
-		// ServerMock doesn't include vanilla commands
-		new CommandAPICommand("give").executes((sender, args) -> {}).register();
-		commandMap.register("minecraft", new Command("give") {
-			@Override
-			public boolean execute(@NotNull CommandSender commandSender, @NotNull String s, @NotNull String[] strings) {
-				return false;
+		// CommandArgument expects to find commands in the commandMap
+		commandMap.registerAll("test", List.of(
+			new Command("give") {
+				@Override
+				public boolean execute(@NotNull CommandSender commandSender, @NotNull String s, @NotNull String[] strings) {
+					return true;
+				}
+			},
+			new Command("data") {
+				@Override
+				public boolean execute(@NotNull CommandSender commandSender, @NotNull String s, @NotNull String[] strings) {
+					return true;
+				}
 			}
-		});
+		));
 
 		server.addPlayer("BPlayer");
 
 		// Valid commands based on suggestions
-		server.dispatchCommand(player, "restrictedcommand give APlayer diamond");
-		server.dispatchCommand(player, "restrictedcommand give BPlayer diamond");
-		server.dispatchCommand(player, "restrictedcommand give APlayer minecraft:diamond");
+		assertStoresResult(player, "restrictedcommand give APlayer diamond",
+			results, new CommandResult(commandMap.getCommand("give"), new String[]{"APlayer", "diamond"}));
 
-		assertEquals(new CommandResult(commandMap.getCommand("give"), new String[]{"APlayer", "diamond"}), results.get());
-		assertEquals(new CommandResult(commandMap.getCommand("give"), new String[]{"BPlayer", "diamond"}), results.get());
-		assertEquals(new CommandResult(commandMap.getCommand("give"), new String[]{"APlayer", "minecraft:diamond"}), results.get());
+		assertStoresResult(player, "restrictedcommand give BPlayer diamond",
+			results, new CommandResult(commandMap.getCommand("give"), new String[]{"BPlayer", "diamond"}));
+
+		assertStoresResult(player, "restrictedcommand give APlayer minecraft:diamond",
+			results, new CommandResult(commandMap.getCommand("give"), new String[]{"APlayer", "minecraft:diamond"}));
 
 		// Invalid commands
 		assertInvalidSyntax(player, "restrictedcommand data get entity APlayer");
+		assertInvalidSyntax(player, "restrictedcommand notacommand a b");
 		assertInvalidSyntax(player, "restrictedcommand give CPlayer diamond");
 		assertInvalidSyntax(player, "restrictedcommand give APlayer dirt");
 		assertInvalidSyntax(player, "restrictedcommand give APlayer diamond 64");
