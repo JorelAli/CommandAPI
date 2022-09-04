@@ -241,7 +241,7 @@ public class Tooltip<S> {
 	 * @return the mapping function from this tooltip into a StringTooltip
 	 */
 	public static <S> Function<Tooltip<S>, StringTooltip> build(Function<S, String> mapper) {
-		return t -> StringTooltip.of(mapper.apply(t.object), t.tooltip);
+		return t -> StringTooltip.ofMessage(mapper.apply(t.object), t.tooltip);
 	}
 
 	/**

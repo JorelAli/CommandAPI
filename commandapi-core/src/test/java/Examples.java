@@ -1676,9 +1676,9 @@ new CommandAPICommand("mycommand")
 List<Argument<?>> arguments = new ArrayList<>();
 arguments.add(new StringArgument("emote")
     .replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(info -> new IStringTooltip[] {
-            StringTooltip.of("wave", "Waves at a player"),
-            StringTooltip.of("hug", "Gives a player a hug"),
-            StringTooltip.of("glare", "Gives a player the death glare")
+            StringTooltip.ofString("wave", "Waves at a player"),
+            StringTooltip.ofString("hug", "Gives a player a hug"),
+            StringTooltip.ofString("glare", "Gives a player the death glare")
         }
     ))
 );

@@ -47,8 +47,8 @@ public class StringTooltip implements IStringTooltip {
 	 *                   suggestion
 	 * @return a StringTooltip representing this suggestion and tooltip
 	 */
-	public static StringTooltip of(String suggestion, String tooltip) {
-		return of(suggestion, Tooltip.toMessage(tooltip));
+	public static StringTooltip ofString(String suggestion, String tooltip) {
+		return ofMessage(suggestion, Tooltip.toMessage(tooltip));
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class StringTooltip implements IStringTooltip {
 	 *                   suggestion
 	 * @return a StringTooltip representing this suggestion and tooltip
 	 */
-	public static StringTooltip of(String suggestion, Message tooltip) {
+	public static StringTooltip ofMessage(String suggestion, Message tooltip) {
 		return tooltip == null ? none(suggestion) : new StringTooltip(suggestion, tooltip);
 	}
 
@@ -71,8 +71,8 @@ public class StringTooltip implements IStringTooltip {
 	 *                   suggestion
 	 * @return a StringTooltip representing this suggestion and tooltip
 	 */
-	public static StringTooltip of(String suggestion, BaseComponent... tooltip) {
-		return of(suggestion, Tooltip.toMessage(tooltip));
+	public static StringTooltip ofBungeeComponents(String suggestion, BaseComponent... tooltip) {
+		return ofMessage(suggestion, Tooltip.toMessage(tooltip));
 	}
 
 	/**
@@ -83,8 +83,8 @@ public class StringTooltip implements IStringTooltip {
 	 *                   suggestion
 	 * @return a StringTooltip representing this suggestion and tooltip
 	 */
-	public static StringTooltip of(String suggestion, Component tooltip) {
-		return of(suggestion, Tooltip.toMessage(tooltip));
+	public static StringTooltip ofAdventureComponent(String suggestion, Component tooltip) {
+		return ofMessage(suggestion, Tooltip.toMessage(tooltip));
 	}
 
 	/**
@@ -116,7 +116,7 @@ public class StringTooltip implements IStringTooltip {
 	 * @return an array of {@link StringTooltip} objects from the provided suggestions, with the generated string tooltips
 	 */
 	public static StringTooltip[] generateStrings(Function<String, String> tooltipGenerator, String... suggestions) {
-		return generate(tooltipGenerator, StringTooltip::of, suggestions);
+		return generate(tooltipGenerator, StringTooltip::ofString, suggestions);
 	}
 
 	/**
@@ -128,7 +128,7 @@ public class StringTooltip implements IStringTooltip {
 	 * @return an array of {@link StringTooltip} objects from the provided suggestions, with the generated formatted tooltips
 	 */
 	public static StringTooltip[] generateMessages(Function<String, Message> tooltipGenerator, String... suggestions) {
-		return generate(tooltipGenerator, StringTooltip::of, suggestions);
+		return generate(tooltipGenerator, StringTooltip::ofMessage, suggestions);
 	}
 
 	/**
@@ -142,7 +142,7 @@ public class StringTooltip implements IStringTooltip {
 	 * with the generated formatted tooltips
 	 */
 	public static StringTooltip[] generateBungeeComponents(Function<String, BaseComponent[]> tooltipGenerator, String... suggestions) {
-		return generate(tooltipGenerator, StringTooltip::of, suggestions);
+		return generate(tooltipGenerator, StringTooltip::ofBungeeComponents, suggestions);
 	}
 
 	/**
@@ -156,7 +156,7 @@ public class StringTooltip implements IStringTooltip {
 	 * with the generated formatted tooltips
 	 */
 	public static StringTooltip[] generateAdventureComponents(Function<String, Component> tooltipGenerator, String... suggestions) {
-		return generate(tooltipGenerator, StringTooltip::of, suggestions);
+		return generate(tooltipGenerator, StringTooltip::ofAdventureComponent, suggestions);
 	}
 
 	/**

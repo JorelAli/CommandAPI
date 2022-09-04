@@ -73,7 +73,7 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 			// If an argument is finished, suggest the delimiter
 			String lastArgument = splitArguments[splitArguments.length - 1];
 			if (!currentArg.endsWith(delimiter) && values.stream().map(IStringTooltip::getSuggestion).anyMatch(lastArgument::equals)) {
-				values.add(StringTooltip.of(lastArgument + delimiter, (String) null));
+				values.add(StringTooltip.ofMessage(lastArgument + delimiter, null));
 			}
 
 			if (!allowDuplicates) {
