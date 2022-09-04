@@ -69,46 +69,23 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 			if (target == null)
 				throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownCommand().createWithContext(context);
 
-			SuggestionsBuilder argumentBuilder = new SuggestionsBuilder("", 0);
-			if (hasReplacement(0)) {
-				replacements[0].suggest(new SuggestionInfo(sender, new Object[0], "", ""), argumentBuilder);
-				Suggestions suggestions = argumentBuilder.build();
-				List<String> results = suggestions.getList().stream().map(Suggestion::getText).toList();
-				if (!results.contains(commandLabel))
-					throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownCommand().createWithContext(context);
-			}
-
 			// Enforce argument suggestions
-			String[] arguments = command.substring(command.indexOf(" ") + 1).split(" ");
+			String[] arguments = command.split(" ");
 			if (!arguments[0].isEmpty() && command.endsWith(" ")) {
+				// If command ends with space add an empty argument
 				arguments = Arrays.copyOf(arguments, arguments.length + 1);
 				arguments[arguments.length - 1] = "";
 			}
 
-			List<String> previousArguments = new ArrayList<>();
-			StringBuilder currentInput = new StringBuilder(commandLabel);
-			context.setCursor(currentInput.length());
+			// Check all previous arguments
+			enforceReplacements(sender, context, arguments, arguments.length - 1);
 
-			for (int i = 0; i < arguments.length - 1; i++) {
-				String currentArgument = arguments[i];
-				argumentBuilder = new SuggestionsBuilder(currentInput.toString(), currentInput.length());
-				if (hasReplacement(i + 1)) {
-					replacements[i + 1].suggest(new SuggestionInfo(sender, previousArguments.toArray(), currentInput.toString(), ""), argumentBuilder);
-					Suggestions suggestions = argumentBuilder.build();
-					List<String> results = suggestions.getList().stream().map(Suggestion::getText).toList();
-					if (!results.contains(currentArgument))
-						throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownArgument().createWithContext(context);
-				}
-				currentInput.append(" ").append(currentArgument);
-				previousArguments.add(currentArgument);
-				context.setCursor(currentInput.length());
-			}
-
+			// Build suggestion
 			builder = builder.createOffset(builder.getStart() + command.lastIndexOf(" ") + 1);
 
 			int lastIndex = arguments.length - 1;
-			if (hasReplacement(lastIndex + 1))
-				return replacements[lastIndex + 1].suggest(new SuggestionInfo(sender, Arrays.copyOf(arguments, lastIndex), command, arguments[lastIndex]), builder);
+			if (hasReplacement(lastIndex))
+				return replacements[lastIndex].suggest(new SuggestionInfo(sender, Arrays.copyOf(arguments, lastIndex), command, arguments[lastIndex]), builder);
 
 			// Get location sender is looking at if they are a Player, matching vanilla behavior
 			// No builtin Commands use the location parameter, but they could
@@ -126,6 +103,41 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 
 	private boolean hasReplacement(int index) {
 		return replacements.length > index && replacements[index] != null;
+	}
+
+	private void enforceReplacements(CommandSender sender, StringReader context, String[] arguments, int range) throws CommandSyntaxException {
+		List<String> previousArguments = new ArrayList<>();
+		StringBuilder currentInput = new StringBuilder();
+		for (int i = 0; i < range; i++) {
+			String currentArgument = "";
+			if (i < arguments.length)
+				currentArgument = arguments[i];
+
+			if (hasReplacement(i)) {
+				SuggestionsBuilder argumentBuilder = new SuggestionsBuilder(currentInput.toString(), currentInput.length());
+				replacements[i].suggest(new SuggestionInfo(sender, previousArguments.toArray(), currentInput.toString(), ""), argumentBuilder);
+				Suggestions suggestions = argumentBuilder.build();
+				List<String> results = suggestions.getList().stream().map(Suggestion::getText).toList();
+				if (i < arguments.length) {
+					if (!results.contains(currentArgument)) {
+						if (i == 0)
+							throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownCommand().createWithContext(context);
+						else
+							throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownArgument().createWithContext(context);
+					}
+				} else {
+					if (results.size() != 0)
+						throw new SimpleCommandExceptionType(new LiteralMessage("Expected more arguments")).createWithContext(context);
+					else
+						break;
+				}
+			}
+
+			if (i != 0) currentInput.append(" ");
+			currentInput.append(currentArgument);
+			previousArguments.add(currentArgument);
+			context.setCursor(currentInput.length());
+		}
 	}
 
 	ArgumentSuggestions[] replacements = new ArgumentSuggestions[0];
@@ -166,37 +178,8 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 		if (target == null)
 			throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownCommand().createWithContext(context);
 
-		// Verify replacements
-		List<String> previousArguments = new ArrayList<>();
-		StringBuilder currentInput = new StringBuilder();
-		for (int i = 0; i < replacements.length; i++) {
-			String currentArgument = "";
-			if (i < arguments.length)
-				currentArgument = arguments[i];
-
-			SuggestionsBuilder argumentBuilder = new SuggestionsBuilder(currentInput.toString(), currentInput.length());
-			if (hasReplacement(i)) {
-				replacements[i].suggest(new SuggestionInfo(sender, previousArguments.toArray(), currentInput.toString(), ""), argumentBuilder);
-				Suggestions suggestions = argumentBuilder.build();
-				List<String> results = suggestions.getList().stream().map(Suggestion::getText).toList();
-				if (i < arguments.length) {
-					if (!results.contains(currentArgument)) {
-						if (i == 0)
-							throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownCommand().createWithContext(context);
-						else
-							throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownArgument().createWithContext(context);
-					}
-				} else {
-					if (results.size() != 0)
-						throw new SimpleCommandExceptionType(new LiteralMessage("Expected more arguments")).createWithContext(context);
-					else
-						break;
-				}
-			}
-			currentInput.append(" ").append(currentArgument);
-			previousArguments.add(currentArgument);
-			context.setCursor(currentInput.length());
-		}
+		// check all replacements
+		enforceReplacements(sender, context, arguments, replacements.length);
 
 		return new CommandResult(target, Arrays.copyOfRange(arguments, 1, arguments.length));
 	}
