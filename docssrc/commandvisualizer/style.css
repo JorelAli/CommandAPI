@@ -101,24 +101,69 @@ span {
 /****************
  * Colors!
  */
-.red {
-	color: #fc5454;
-	text-shadow: 5px 5px #3e1515;
+.black {
+	color: #000000;
+	text-shadow: 5px 5px #000000;
 }
-.aqua {
-	color: #54fcfc;
-	text-shadow: 5px 5px #153e3e;
+.dark_blue {
+	color: #0000aa;
+	text-shadow: 5px 5px #00002a;
 }
-.yellow {
-	color: #fbfb54;
-	text-shadow: 5px 5px #3e3e15;
+.dark_green {
+	color: #00aa00;
+	text-shadow: 5px 5px #002a00;
+}
+.dark_aqua {
+	color: #00aaaa;
+	text-shadow: 5px 5px #002a2a;
+}
+.dark_red {
+	color: #AA0000;
+	text-shadow: 5px 5px #2a0000;
+}
+.dark_purple {
+	color: #AA00AA;
+	text-shadow: 5px 5px #2a002a;
+}
+.gold {
+	color: #ffaa00;
+	text-shadow: 5px 5px #2a2a00;
 }
 .gray {
-	color: #a8a8a8;
+	color: #AAAAAA;
 	text-shadow: 5px 5px #292929;
 }
 .dark_gray {
 	color: #555555;
+	text-shadow: 5px 5px #151515;
+}
+.blue {
+	color: #5555ff;
+	text-shadow: 5px 5px #15153f;
+}
+.green {
+	color: #55FF55;
+	text-shadow: 5px 5px #002a00;
+}
+.aqua {
+	color: #55FFFF;
+	text-shadow: 5px 5px #153e3e;
+}
+.red {
+	color: #FF5555;
+	text-shadow: 5px 5px #3e1515;
+}
+.light_purple {
+	color: #ff55ff;
+	text-shadow: 5px 5px #3f153f;
+}
+.yellow {
+	color: #FFFF55;
+	text-shadow: 5px 5px #3e3e15;
+}
+.white {
+	color: #FFFFFF;
+	text-shadow: 5px 5px #3f3f3f;
 }
 
 /****************

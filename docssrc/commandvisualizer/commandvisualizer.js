@@ -81,6 +81,14 @@ for (let key in ChatColorCSS) {
     ChatColorCSSReversed[ChatColorCSS[key]] = key;
 }
 
+const ArgumentColors = {
+	0: ChatColor.AQUA,
+	1: ChatColor.YELLOW,
+	2: ChatColor.GREEN,
+	3: ChatColor.LIGHT_PURPLE,
+	4: ChatColor.GOLD
+}
+
 // As implemented by https://commandapi.jorel.dev/8.5.1/internal.html
 const ArgumentType = {
 	"brigadier:bool": () => null,
@@ -249,8 +257,6 @@ function registerCommand(configCommand) {
 	//     - speed <target>[minecraft:game_profile]
 	//     - speed (walk|fly) <speed>[0..10]
 	//     - speed (walk|fly) <speed>[0..10] <target>[minecraft:game_profile]
-
-	// Color order: aqua, yellow, green, light purple, gold
 }
 
 /**
@@ -331,9 +337,39 @@ function getSelectedSuggestion() {
 }
 
 
+/**
+  * Uses canvas.measureText to compute and return the width of the given text of given font in pixels.
+  * 
+  * @param {String} text The text to be rendered.
+  * @param {String} font The css font descriptor that text is to be rendered with (e.g. "bold 14px verdana").
+  * 
+  * @see https://stackoverflow.com/questions/118241/calculate-text-width-with-javascript/21015393#21015393
+  */
+function getTextWidth(text, element) {
+
+	function getCssStyle(element, prop) {
+		return window.getComputedStyle(element, null).getPropertyValue(prop);
+	}
+
+	function getCanvasFont(el = document.body) {
+		const fontWeight = getCssStyle(el, 'font-weight') || 'normal';
+		const fontSize = getCssStyle(el, 'font-size') || '16px';
+		const fontFamily = getCssStyle(el, 'font-family') || 'Times New Roman';
+		
+		return `${fontWeight} ${fontSize} ${fontFamily}`;
+	}
+
+	// re-use canvas object for better performance
+	const canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
+	const context = canvas.getContext("2d");
+	context.font = element.currentFont || (element.currentFont = getCanvasFont(element));
+	const metrics = context.measureText(text);
+	return metrics.width;
+}
 
 /**
- * Takes Minecraft text and renders it in the chat box
+ * Takes Minecraft text and renders it in the chat box. This will automatically
+ * add the leading / character, so you don't have to do that yourself!
  * @param {string} minecraftCodedText
  * @param {Node | null} target
  */
@@ -400,6 +436,7 @@ commandInput.oninput = async function() {
 	/** @type string */
 	let rawText = commandInput.innerText.replace("\n", "");
 
+	let showUsageText = false;
 	let errorText = "";
 	let suggestions = [];
 
@@ -413,7 +450,7 @@ commandInput.oninput = async function() {
 		// Brigadier
 		const parsedCommand = dispatcher.parse(rawTextNoSlash, {});
 		const parsedCommandNoTrailing = dispatcher.parse(rawTextNoSlash.trimEnd(), {});
-		// console.log(parsedCommand);
+		console.log(parsedCommand);
 
 		let lastNode = parsedCommandNoTrailing.context.rootNode;
 		if(parsedCommandNoTrailing.context.nodes.length > 0) {
@@ -421,7 +458,10 @@ commandInput.oninput = async function() {
 		}
 		const usage = dispatcher.getAllUsage(lastNode, {}, false).join(" ");
 
-		//if(!(commands.some((x) => x === command))) {
+		// Reset text
+		setText(rawTextNoSlash);
+		let commandValid = false;
+
 		if(parsedCommand.exceptions.size > 0) {
 			// The command is invalid (the command doesn't exist). Make the whole text red.
 			setText(ChatColor.RED + rawTextNoSlash);
@@ -441,13 +481,33 @@ commandInput.oninput = async function() {
 				// command IS ACTUALLY unknown!
 				if(errorText.startsWith("Unknown command at position")) {
 					errorText = usage;
+					showUsageText = true;
 				}
 			}
 			
 			if(errorText === "") {
-				setText(command + (rawArgs.length > 0 ? " " + ChatColor.AQUA + rawArgs.join(" ") : ""));
-				errorText = "All good! 👍"
+				errorText = ChatColor.GREEN + "This command is valid ✅";
+				commandValid = true;
 			}
+		}
+
+		// Colorize existing arguments
+		if (showUsageText || commandValid) {
+			let newText = command;
+			let parsedArgumentIndex = 0;
+			for(const [key, value] of parsedCommand.context.args) {
+				if(parsedArgumentIndex > Object.keys(ArgumentColors).length) {
+					parsedArgumentIndex = 0;
+				}
+
+				newText += " ";
+				newText += ArgumentColors[parsedArgumentIndex];
+				newText += rawTextNoSlash.slice(value.range.start, value.range.end);
+
+				parsedArgumentIndex++;
+			}
+			newText += "".padEnd(rawTextNoSlash.length - rawTextNoSlash.trimEnd().length);
+			setText(newText);
 		}
 
 		const suggestionsResult = await dispatcher.getCompletionSuggestions(parsedCommand);
@@ -465,10 +525,20 @@ commandInput.oninput = async function() {
 
 	// If any errors appear, display them
 	if(errorText.length !== 0) {
-		errorMessageBox.innerText = errorText;
+		setText(errorText, errorMessageBox);
 		errorMessageBox.hidden = false;
 	} else {
 		errorMessageBox.hidden = true;
+	}
+
+	if(showUsageText) {
+		errorMessageBox.style.left = getTextWidth(rawText, commandInput) + "px";
+		// 8px padding, 10px margin left, 10px margin right = -28px
+		// Plus an extra 10px for good luck, why not
+		errorMessageBox.style.width = `calc(100% - ${errorMessageBox.style.left} - 28px + 10px)`;
+	} else {
+		errorMessageBox.style.left = 0;
+		errorMessageBox.style.width = "unset";
 	}
 
 	const constructSuggestionsHTML = (suggestions) => {
