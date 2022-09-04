@@ -1,7 +1,7 @@
 import {
 	CommandDispatcher,
 	RootCommandNode,
-	literal,
+	literal as literalArgument,
 	argument,
 	string as stringArgument,
 	integer as integerArgument,
@@ -190,13 +190,12 @@ function registerCommand(configCommand) {
 				upperBound = Number.parseFloat(upperBound);
 			}
 
-			// Inclusive upper bound
-			upperBound += 1;
-
 			// We've got a decimal number, use a float argument
 			if(lowerBound % 1 !== 0 || upperBound % 1 !== 0) {
 				return floatArgument(lowerBound, upperBound);
 			} else {
+				// Inclusive upper bound
+				upperBound += 1;
 				return integerArgument(lowerBound, upperBound);
 			}
 		} else {
@@ -212,7 +211,7 @@ function registerCommand(configCommand) {
 	const command = configCommand.split(" ")[0];
 	const args = configCommand.split(" ").slice(1);
 
-	let commandToRegister = literal(command);
+	let commandToRegister = literalArgument(command);
 	let argumentsToRegister = [];
 
 	// From dev/jorel/commandapi/AdvancedConverter.java
@@ -225,7 +224,11 @@ function registerCommand(configCommand) {
 		if(matchedLiteral) {
 			// It's a literal argument
 			const literals = matchedLiteral[1].split("|");
-			// TODO: Parse literals
+			if(literals.length === 1) {
+				argumentsToRegister.unshift(literalArgument(literals[0]));
+			} else if(literals.length > 1) {
+				argumentsToRegister.unshift(argument(matchedLiteral[1], new MultiLiteralArgument(literals)));
+			}
 		} else if(matchedArgument) {
 			// It's a regular argument
 			const nodeName = matchedArgument[1];
@@ -559,11 +562,15 @@ commandInput.oninput = async function() {
 	};
 
 	// If suggestions are present, display them
+	suggestionsBox.style.left = 0;
 	if(suggestions.length !== 0) {
 		suggestionsBox.innerHTML = "";
 		for(let suggestionElement of constructSuggestionsHTML(suggestions)) {
 			suggestionsBox.appendChild(suggestionElement);
 		}
+		suggestionsBox.style.left = getTextWidth(rawText, commandInput) + "px";
+		// 8px padding, 10px margin left, 10px margin right = -28px
+		// Plus an extra 10px for good luck, why not
 		suggestionsBox.hidden = false;
 		errorMessageBox.hidden = true;
 	} else {
