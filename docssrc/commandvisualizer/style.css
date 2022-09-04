@@ -25,9 +25,12 @@ span {
 	/* Not entirely sure why, but this has some random gap between this and the
 	 * previous element when there shouldn't be one. Get rid of it! */
 	margin-left: -15px;
+	-webkit-user-select: none; /* Safari */
+	user-select: none; /* Everything else */
 }
 #cmd-input {
 	display: inline-block;
+	min-width: 1px; /* If this has a width of 0, the cursor won't display! */
 }
 
 .bg {

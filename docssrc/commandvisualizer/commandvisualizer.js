@@ -1,5 +1,5 @@
-import { CommandDispatcher, literal, argument, string, integer } from "./node_modules/node-brigadier/dist/index.js"
-import { LocationArgument, PlayerArgument, MultiLiteralArgument } from "./arguments.js"
+import { CommandDispatcher, literal, argument, string as stringArgument, integer as integerArgument, float as floatArgument } from "./node_modules/node-brigadier/dist/index.js"
+import { BlockPosArgument, PlayerArgument, MultiLiteralArgument } from "./arguments.js"
 
 /******************************************************************************
  * Constants                                                                  *
@@ -60,8 +60,53 @@ for (let key in ChatColorCSS) {
     ChatColorCSSReversed[ChatColorCSS[key]] = key;
 }
 
+// As implemented by https://commandapi.jorel.dev/8.5.1/internal.html
 const ArgumentType = {
-	"minecraft:game_profile": () => new PlayerArgument()
+	"brigadier:bool": () => null,
+	"brigadier:double": () => null,
+	"brigadier:float": () => null,
+	"brigadier:integer": () => null,
+	"brigadier:long": () => null,
+	"brigadier:string": () => stringArgument(),
+	"minecraft:angle": () => null,
+	"minecraft:block_pos": () => new BlockPosArgument(),
+	"minecraft:block_predicate": () => null,
+	"minecraft:block_state": () => null,
+	"minecraft:color": () => null,
+	"minecraft:column_pos": () => null,
+	"minecraft:component": () => null,
+	"minecraft:dimension": () => null,
+	"minecraft:entity": () => null,
+	"minecraft:entity_anchor": () => null,
+	"minecraft:entity_summon": () => null,
+	"minecraft:float_range": () => null,
+	"minecraft:function": () => null,
+	"minecraft:game_profile": () => new PlayerArgument(),
+	"minecraft:int_range": () => null,
+	"minecraft:item_enchantment": () => null,
+	"minecraft:item_predicate": () => null,
+	"minecraft:item_slot": () => null,
+	"minecraft:item_stack": () => null,
+	"minecraft:message": () => null,
+	"minecraft:mob_effect": () => null,
+	"minecraft:nbt": () => null,
+	"minecraft:nbt_compound_tag": () => null,
+	"minecraft:nbt_path": () => null,
+	"minecraft:nbt_tag": () => null,
+	"minecraft:objective": () => null,
+	"minecraft:objective_criteria": () => null,
+	"minecraft:operation": () => null,
+	"minecraft:particle": () => null,
+	"minecraft:resource_location": () => null,
+	"minecraft:rotation": () => null,
+	"minecraft:score_holder": () => null,
+	"minecraft:scoreboard_slot": () => null,
+	"minecraft:swizzle": () => null,
+	"minecraft:team": () => null,
+	"minecraft:time": () => null,
+	"minecraft:uuid": () => null,
+	"minecraft:vec2": () => null,
+	"minecraft:vec3": () => null,
 };
 
 /******************************************************************************
@@ -94,8 +139,47 @@ class Argument {
  */
 function registerCommand(configCommand) {
 
+	function convertArgument(argumentType) {
+		if(argumentType.includes("..")) {
+			let lowerBound = argumentType.split("..")[0];
+			let upperBound = argumentType.split("..")[1];
+
+			if(lowerBound.length === 0) {
+				lowerBound = Number.MIN_SAFE_INTEGER;
+			} else {
+				lowerBound = Number.parseFloat(lowerBound);
+			}
+
+			if(upperBound.length === 0) {
+				upperBound = Number.MAX_SAFE_INTEGER;
+			} else {
+				upperBound = Number.parseFloat(upperBound);
+			}
+
+			// Inclusive upper bound
+			upperBound += 1;
+
+			// We've got a decimal number, use a float argument
+			if(lowerBound % 1 !== 0 || upperBound % 1 !== 0) {
+				return floatArgument(lowerBound, upperBound);
+			} else {
+				return integerArgument(lowerBound, upperBound);
+			}
+		} else {
+			const argumentGeneratorFunction = ArgumentType[argumentType];
+			if(argumentGeneratorFunction()) {
+				return argumentGeneratorFunction();
+			} else {
+				console.error("Unimplemented argument: " + argumentType);
+			}
+		}
+	}
+
 	const command = configCommand.split(" ")[0];
 	const args = configCommand.split(" ").slice(1);
+
+	let commandToRegister = literal(command);
+	let argumentsToRegister = [];
 
 	// From dev/jorel/commandapi/AdvancedConverter.java
 	const literalPattern = RegExp(/\((\w+(?:\|\w+)*)\)/);
@@ -107,49 +191,32 @@ function registerCommand(configCommand) {
 		if(matchedLiteral) {
 			// It's a literal argument
 			const literals = matchedLiteral[1].split("|");
+			// TODO: Parse literals
 		} else if(matchedArgument) {
 			// It's a regular argument
 			const nodeName = matchedArgument[1];
 			const argumentType = matchedArgument[2];
+			
+			let convertedArgumentType = convertArgument(argumentType);
+
+			// We're adding arguments in reverse order (last arguments appear
+			// at the beginning of the array) because it's much much easier to process
+			argumentsToRegister.unshift(argument(nodeName, convertedArgumentType));
 		}
 	}
 
-	dispatcher.register(
-		literal("fill").then(
-			argument("pos1", new LocationArgument()).then(
-				argument("pos2", new LocationArgument()).then(
-					argument("block", string()).executes(context => {
-						return 0;
-					})
-				)
-			)
-		)
-	);
+	if(argumentsToRegister.length > 0) {
+		const lastArgument = argumentsToRegister[0].executes(context => {
+			return 0;
+		});
 
-	dispatcher.register(
-		literal("speed").then(
-			argument("type", new MultiLiteralArgument(["walk", "fly"])).then(
-				argument("speed", integer(0, 10)).then(
-					argument("target", new PlayerArgument()).executes(context => {
-						return 0;
-					})
-				)
-			)
-		)
-	)
+		// Flame on. Reduce.
+		argumentsToRegister.shift();
+		const reducedArguments = argumentsToRegister.reduce((prev, current) => current.then(prev), lastArgument);
+		commandToRegister = commandToRegister.then(reducedArguments);
+	}
 
-//	const parsedCommand = dispatcher.parse("fill 3 4 5 10 11 12 air", {})
-//	console.log(parsedCommand)
-//	console.log(new Argument("pos1", "").getRange(parsedCommand))
-//
-//	const parsedCommand1 = dispatcher.parse("speed walk 2 Skepter", {})
-//	console.log(parsedCommand1)
-//	try {
-//		dispatcher.execute(parsedCommand);
-//	} catch (ex) {
-//		console.error(ex);
-//	}
-
+	dispatcher.register(commandToRegister);
 	// plugins-to-convert:
 	//   - Essentials:
 	//     - speed <speed>[0..10]
@@ -159,8 +226,6 @@ function registerCommand(configCommand) {
 
 	// Color order: aqua, yellow, green, light purple, gold
 }
-
-registerCommand("speed (walk|fly) <speed>[0..10] <target>[minecraft:game_profile]");
 
 /**
  * Gets the current cursor position.
@@ -243,6 +308,8 @@ function getSelectedSuggestion() {
 
 /**
  * Takes Minecraft text and renders it in the chat box
+ * @param {string} minecraftCodedText
+ * @param {Node | null} target
  */
 function setText(minecraftCodedText, target = null) {
 	if(!target) {
@@ -300,7 +367,7 @@ function getText(withStyling = true) {
  * Events                                                                     *
  ******************************************************************************/
 
-commandInput.oninput = function() {
+commandInput.oninput = async function() {
 	let cursorPos = getCursorPosition();
 	let commands = ["say", "tp", "w", "weather", "whitelist", "worldborder"];
 
@@ -318,8 +385,15 @@ commandInput.oninput = function() {
 		const rawArgs = rawText.split(" ").slice(1);
 
 		// Brigadier
-		const parsedCommand = dispatcher.parse(rawTextNoSlash, {})
-		console.log(parsedCommand);
+		const parsedCommand = dispatcher.parse(rawTextNoSlash, {});
+		const parsedCommandNoTrailing = dispatcher.parse(rawTextNoSlash.trimEnd(), {});
+		// console.log(parsedCommand);
+
+		let lastNode = parsedCommandNoTrailing.context.rootNode;
+		if(parsedCommandNoTrailing.context.nodes.length > 0) {
+			lastNode = parsedCommandNoTrailing.context.nodes[parsedCommandNoTrailing.context.nodes.length - 1].node;
+		}
+		const usage = dispatcher.getAllUsage(lastNode, {}, false).join(" ");
 
 		//if(!(commands.some((x) => x === command))) {
 		if(parsedCommand.exceptions.size > 0) {
@@ -336,14 +410,22 @@ commandInput.oninput = function() {
 			} catch (ex) {
 				setText(ChatColor.RED + rawTextNoSlash);
 				errorText = ex.message;
+
+				if(errorText.startsWith("Unknown command at position")) {
+					errorText = usage;
+				}
 			}
 			
 			if(errorText === "") {
 				setText(command + (rawArgs.length > 0 ? " " + ChatColor.AQUA + rawArgs.join(" ") : ""));
+				errorText = "All good! 👍"
 			}
 		}
+		// TODO: Render usage at some point
+		// errorText = usage;
 
-		suggestions = commands.filter((x) => x.startsWith(rawTextNoSlash) && x !== rawTextNoSlash);
+		const suggestionsResult = await dispatcher.getCompletionSuggestions(parsedCommand);
+		suggestions = suggestionsResult.suggestions.map((x) => x.text);
 	}
 
 	// Set the cursor back to where it was. Since commands always start with a
@@ -472,7 +554,44 @@ window.addEventListener("suggestionsUpdated", (event) => {
 // If you click on the chat box, focus the current text input area 
 document.getElementById("chatbox").onclick = function() {
 	document.getElementById("cmd-input").focus();
+	setCursorPosition(commandInput.innerText.length, commandInput);
 };
+
+/******************************************************************************
+ * Entrypoint                                                                 *
+ ******************************************************************************/
+
+// Register dummy commands
+//dispatcher.register(
+//	literal("fill").then(
+//		argument("pos1", new BlockPosArgument()).then(
+//			argument("pos2", new BlockPosArgument()).then(
+//				argument("block", stringArgument()).executes(context => {
+//					return 0;
+//				})
+//			)
+//		)
+//	)
+//);
+// 
+// dispatcher.register(
+// 	literal("speed").then(
+// 		argument("type", new MultiLiteralArgument(["walk", "fly"])).then(
+// 			argument("speed", integerArgument(0, 10)).then(
+// 				argument("target", new PlayerArgument()).executes(context => {
+// 					return 0;
+// 				})
+// 			)
+// 		)
+// 	)
+// )
+
+registerCommand("fill <pos1>[minecraft:block_pos] <pos2>[minecraft:block_pos] <block>[brigadier:string]");
+registerCommand("speed (walk|fly) <speed>[0..10] <target>[minecraft:game_profile]");
+registerCommand("hello <val>[1..20]");
 
 // Run syntax highlighter
 commandInput.oninput();
+
+console.log(dispatcher.getRoot())
+

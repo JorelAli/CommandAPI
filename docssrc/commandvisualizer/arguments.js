@@ -1,6 +1,38 @@
-import { SimpleCommandExceptionType, LiteralMessage } from "./node_modules/node-brigadier/dist/index.js"
+import { SimpleCommandExceptionType, LiteralMessage, Suggestions, StringReader, CommandSyntaxException } from "./node_modules/node-brigadier/dist/index.js"
 
-export class LocationArgument {
+StringReader.prototype.readLocationLiteral = function readLocationLiteral(reader) {
+
+	function isAllowedLocationLiteral(c) {
+		return c == '~' || c == '^';
+	}
+
+	let start = this.cursor;
+	while (this.canRead() && (StringReader.isAllowedNumber(this.peek()) || isAllowedLocationLiteral(this.peek()))) {
+		this.skip();
+	}
+	let number = this.string.substring(start, this.cursor);
+	if (number.length === 0) {
+		throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.readerExpectedInt().createWithContext(this);
+	}
+
+	if(number.startsWith("~") || number.startsWith("^")) {
+		if(number.length === 1) {
+			// Accept.
+			return number;
+		} else {
+			number = number.slice(1);
+		}
+	}
+	const result = parseInt(number);
+	if (isNaN(result) || result !== parseFloat(number)) {
+		this.cursor = start;
+		throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.readerInvalidInt().createWithContext(this, number);
+	} else {
+		return result;
+	}
+}
+
+export class BlockPosArgument {
 
 	constructor(x = 0, y = 0, z = 0) {
 		this.x = x;
@@ -9,11 +41,11 @@ export class LocationArgument {
 	}
 
 	parse(reader) {
-		this.x = reader.readInt();
+		this.x = reader.readLocationLiteral();
 		reader.skip();
-		this.y = reader.readInt();
+		this.y = reader.readLocationLiteral();
 		reader.skip();
-		this.z = reader.readInt();
+		this.z = reader.readLocationLiteral();
 		return this;
 	}
 
@@ -79,6 +111,11 @@ export class MultiLiteralArgument {
 
 		this.selectedLiteral = reader.getString().slice(start, reader.getCursor());
 
+		if(this.selectedLiteral.endsWith(" ")) {
+			this.selectedLiteral.trimEnd();
+			reader.setCursor(reader.getCursor() - 1);
+		}
+
 		if(!this.literals.includes(this.selectedLiteral)) {
 			throw new SimpleCommandExceptionType(new LiteralMessage(this.selectedLiteral + " is not one of " + this.literals)).createWithContext(reader);
 		}
@@ -87,10 +124,11 @@ export class MultiLiteralArgument {
 	}
 
 	listSuggestions(context, builder) {
-		for(let literal of literals) {
+		for(let literal of this.literals) {
 			builder.suggest(literal);
 		}
-		return builder.build();
+		let result = builder.buildPromise();
+		return result;
 	}
 
 	getExamples() {
