@@ -1,4 +1,12 @@
-import { SimpleCommandExceptionType, LiteralMessage, Suggestions, StringReader, CommandSyntaxException } from "./node_modules/node-brigadier/dist/index.js"
+import {
+	SimpleCommandExceptionType,
+	LiteralMessage,
+	Suggestions,
+	StringReader,
+	CommandSyntaxException,
+	CommandContext,
+	SuggestionsBuilder
+} from "./node_modules/node-brigadier/dist/index.js"
 
 StringReader.prototype.readLocationLiteral = function readLocationLiteral(reader) {
 
@@ -32,6 +40,97 @@ StringReader.prototype.readLocationLiteral = function readLocationLiteral(reader
 	}
 }
 
+/**
+ * Helper for generating Promise<Suggestions>
+ */
+class SuggestionProvider {
+	/**
+	 * 
+	 * @param {String[]} suggestions
+	 * @param {SuggestionsBuilder} builder
+	 * @return {Promise<Suggestions>}
+	 */
+	static suggest(suggestions, builder) {
+		let remainingLowercase = builder.getRemaining().toLowerCase();
+		for(let suggestion of suggestions) {
+			if(SuggestionProvider.matchesSubStr(remainingLowercase, suggestion.toLowerCase())) {
+				builder.suggest(suggestion);
+			}
+		}
+		return builder.buildPromise();
+	}
+
+	/**
+	 * 
+	 * @param {String} remaining 
+	 * @param {String} suggestion 
+	 * @returns {boolean}
+	 */
+	static matchesSubStr(remaining, suggestion) {
+		let index = 0;
+		while (!suggestion.startsWith(remaining, index)) {
+			index = suggestion.indexOf('_', index);
+			if (index < 0) {
+				return false; 
+			}
+			index++;
+		} 
+		return true;
+	}
+}
+
+export class TimeArgument {
+	
+	/** @type {Map<String, Number} */
+	static UNITS = new Map();
+
+	static {
+		TimeArgument.UNITS.set("d", 24000);
+		TimeArgument.UNITS.set("s", 20);
+		TimeArgument.UNITS.set("t", 1);
+		TimeArgument.UNITS.set("", 1);
+	}
+
+	constructor(ticks = 0) {
+		this.ticks = ticks;
+	}
+
+	parse(/** @type {StringReader} */ reader) {
+		const numericalValue = reader.readFloat();
+		const unit = reader.readUnquotedString();
+		const unitMultiplier = TimeArgument.UNITS.get(unit) ?? 0;
+		if(unitMultiplier === 0) {
+			throw new SimpleCommandExceptionType(new LiteralMessage(`Invalid unit "${unit}"`)).createWithContext(reader);
+		}
+		const ticks = Math.round(numericalValue * unitMultiplier);
+		if(ticks < 0) {
+			throw new SimpleCommandExceptionType(new LiteralMessage("Tick count must be non-negative")).createWithContext(reader);
+		}
+		this.ticks = ticks;
+		return this;
+	}
+
+	/**
+	 * 
+	 * @param {CommandContext} context 
+	 * @param {SuggestionsBuilder} builder 
+	 * @returns {Promise<Suggestions>}
+	 */
+	listSuggestions(context, builder) {
+		let reader = new StringReader(builder.getRemaining());
+		try {
+			reader.readFloat();
+		} catch(ex) {
+			return reader.buildPromise();
+		}
+		return SuggestionProvider.suggest([...TimeArgument.UNITS.keys()], builder.createOffset(builder.getStart() + reader.getCursor()));
+	}
+
+	getExamples() {
+		return ["0d", "0s", "0t", "0"];
+	}
+}
+
 export class BlockPosArgument {
 
 	constructor(x = 0, y = 0, z = 0) {
@@ -40,7 +139,7 @@ export class BlockPosArgument {
 		this.z = z;
 	}
 
-	parse(reader) {
+	parse(/** @type {StringReader} */ reader) {
 		this.x = reader.readLocationLiteral();
 		reader.skip();
 		this.y = reader.readLocationLiteral();
@@ -49,12 +148,52 @@ export class BlockPosArgument {
 		return this;
 	}
 
+	/**
+	 * 
+	 * @param {CommandContext} context 
+	 * @param {SuggestionsBuilder} builder 
+	 * @returns {Promise<Suggestions>}
+	 */
 	listSuggestions(context, builder) {
-		return Suggestions.empty();
+		builder.suggest("~");
+		builder.suggest("~ ~");
+		builder.suggest("~ ~ ~");
+		return builder.buildPromise();
 	}
 
 	getExamples() {
 		return ["1 2 3"];
+	}
+}
+
+export class ColumnPosArgument {
+
+	constructor(x = 0, z = 0) {
+		this.x = x;
+		this.z = z;
+	}
+
+	parse(/** @type {StringReader} */ reader) {
+		this.x = reader.readLocationLiteral();
+		reader.skip();
+		this.z = reader.readLocationLiteral();
+		return this;
+	}
+
+	/**
+	 * 
+	 * @param {CommandContext} context 
+	 * @param {SuggestionsBuilder} builder 
+	 * @returns {Promise<Suggestions>}
+	 */
+	listSuggestions(context, builder) {
+		builder.suggest("~");
+		builder.suggest("~ ~");
+		return builder.buildPromise();
+	}
+
+	getExamples() {
+		return ["1 2"];
 	}
 }
 
@@ -63,12 +202,12 @@ export class PlayerArgument {
 	 * 
 	 * @param {string} username 
 	 */
-	constructor(username) {
+	constructor(username = "") {
 		/** @type string */
 		this.username = username;
 	}
 
-	parse(reader) {
+	parse(/** @type {StringReader} */ reader) {
 		const start = reader.getCursor();
 		while(reader.canRead() && reader.peek() !== " ") {
 			reader.skip();
@@ -83,6 +222,12 @@ export class PlayerArgument {
 		return this;
 	}
 
+	/**
+	 * 
+	 * @param {CommandContext} context 
+	 * @param {SuggestionsBuilder} builder 
+	 * @returns {Promise<Suggestions>}
+	 */
 	listSuggestions(context, builder) {
 		return Suggestions.empty();
 	}
@@ -103,7 +248,7 @@ export class MultiLiteralArgument {
 		this.selectedLiteral = "";
 	}
 
-	parse(reader) {
+	parse(/** @type {StringReader} */ reader) {
 		const start = reader.getCursor();
 		while(reader.canRead() && reader.peek() !== " ") {
 			reader.skip();
@@ -123,12 +268,17 @@ export class MultiLiteralArgument {
 		return this;
 	}
 
+	/**
+	 * 
+	 * @param {CommandContext} context 
+	 * @param {SuggestionsBuilder} builder 
+	 * @returns {Promise<Suggestions>}
+	 */
 	listSuggestions(context, builder) {
 		for(let literal of this.literals) {
 			builder.suggest(literal);
 		}
-		let result = builder.buildPromise();
-		return result;
+		return builder.buildPromise();
 	}
 
 	getExamples() {

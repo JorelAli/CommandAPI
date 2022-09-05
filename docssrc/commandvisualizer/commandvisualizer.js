@@ -5,13 +5,16 @@ import {
 	argument,
 	string as stringArgument,
 	integer as integerArgument,
-	float as floatArgument
+	float as floatArgument,
+	bool as boolArgument
 } from "./node_modules/node-brigadier/dist/index.js"
 
 import {
 	BlockPosArgument,
 	PlayerArgument,
-	MultiLiteralArgument
+	MultiLiteralArgument,
+	ColumnPosArgument,
+	TimeArgument
 } from "./arguments.js"
 
 /******************************************************************************
@@ -91,18 +94,18 @@ const ArgumentColors = {
 
 // As implemented by https://commandapi.jorel.dev/8.5.1/internal.html
 const ArgumentType = {
-	"brigadier:bool": () => null,
-	"brigadier:double": () => null,
-	"brigadier:float": () => null,
-	"brigadier:integer": () => null,
-	"brigadier:long": () => null,
+	"brigadier:bool": () => boolArgument(),
+	"brigadier:double": () => floatArgument(),
+	"brigadier:float": () => floatArgument(),
+	"brigadier:integer": () => integerArgument(),
+	"brigadier:long": () => integerArgument(),
 	"brigadier:string": () => stringArgument(),
 	"minecraft:angle": () => null,
 	"minecraft:block_pos": () => new BlockPosArgument(),
 	"minecraft:block_predicate": () => null,
 	"minecraft:block_state": () => null,
 	"minecraft:color": () => null,
-	"minecraft:column_pos": () => null,
+	"minecraft:column_pos": () => new ColumnPosArgument(),
 	"minecraft:component": () => null,
 	"minecraft:dimension": () => null,
 	"minecraft:entity": () => null,
@@ -132,7 +135,7 @@ const ArgumentType = {
 	"minecraft:scoreboard_slot": () => null,
 	"minecraft:swizzle": () => null,
 	"minecraft:team": () => null,
-	"minecraft:time": () => null,
+	"minecraft:time": () => new TimeArgument(),
 	"minecraft:uuid": () => null,
 	"minecraft:vec2": () => null,
 	"minecraft:vec3": () => null,
