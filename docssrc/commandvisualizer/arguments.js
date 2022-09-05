@@ -43,7 +43,7 @@ StringReader.prototype.readLocationLiteral = function readLocationLiteral(reader
 /**
  * Helper for generating Promise<Suggestions>
  */
-class SuggestionProvider {
+class HelperSuggestionProvider {
 	/**
 	 * 
 	 * @param {String[]} suggestions
@@ -53,7 +53,7 @@ class SuggestionProvider {
 	static suggest(suggestions, builder) {
 		let remainingLowercase = builder.getRemaining().toLowerCase();
 		for(let suggestion of suggestions) {
-			if(SuggestionProvider.matchesSubStr(remainingLowercase, suggestion.toLowerCase())) {
+			if(HelperSuggestionProvider.matchesSubStr(remainingLowercase, suggestion.toLowerCase())) {
 				builder.suggest(suggestion);
 			}
 		}
@@ -123,7 +123,7 @@ export class TimeArgument {
 		} catch(ex) {
 			return reader.buildPromise();
 		}
-		return SuggestionProvider.suggest([...TimeArgument.UNITS.keys()], builder.createOffset(builder.getStart() + reader.getCursor()));
+		return HelperSuggestionProvider.suggest([...TimeArgument.UNITS.keys()], builder.createOffset(builder.getStart() + reader.getCursor()));
 	}
 
 	getExamples() {
@@ -283,5 +283,59 @@ export class MultiLiteralArgument {
 
 	getExamples() {
 		return ["blah"];
+	}
+}
+
+export class ColorArgument {
+
+	static ChatColor = {
+		// Uses the section symbol (§), just like Minecraft
+		black: "\u00A70",
+		dark_blue: "\u00A71",
+		dark_green: "\u00A72",
+		dark_aqua: "\u00A73",
+		dark_red: "\u00A74",
+		dark_purple: "\u00A75",
+		gold: "\u00A76",
+		gray: "\u00A77",
+		dark_gray: "\u00A78",
+		blue: "\u00A79",
+		green: "\u00A7a",
+		aqua: "\u00A7b",
+		red: "\u00A7c",
+		light_purple: "\u00A7d",
+		yellow: "\u00A7e",
+		white: "\u00A7f",
+	};
+
+	/**
+	 * @param {Array<String>} literals 
+	 */
+	constructor(chatcolor) {
+		this.chatcolor = chatcolor;
+	}
+
+	parse(/** @type {StringReader} */ reader) {
+		let input = reader.readUnquotedString();
+		let chatFormat = ColorArgument.ChatColor[input.toLowerCase()];
+		if(chatFormat === undefined) {
+			throw new SimpleCommandExceptionType(new LiteralMessage(`Unknown colour '${input}'`)).createWithContext(reader);
+		}
+		this.chatcolor = chatFormat;
+		return this;
+	}
+
+	/**
+	 * 
+	 * @param {CommandContext} context 
+	 * @param {SuggestionsBuilder} builder 
+	 * @returns {Promise<Suggestions>}
+	 */
+	listSuggestions(context, builder) {
+		return HelperSuggestionProvider.suggest(Object.keys(ColorArgument.ChatColor), builder);
+	}
+
+	getExamples() {
+		return ["red", "green"];
 	}
 }

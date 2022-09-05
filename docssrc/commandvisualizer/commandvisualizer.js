@@ -6,7 +6,8 @@ import {
 	string as stringArgument,
 	integer as integerArgument,
 	float as floatArgument,
-	bool as boolArgument
+	bool as boolArgument,
+	greedyString as greedyStringArgument
 } from "./node_modules/node-brigadier/dist/index.js"
 
 import {
@@ -14,7 +15,8 @@ import {
 	PlayerArgument,
 	MultiLiteralArgument,
 	ColumnPosArgument,
-	TimeArgument
+	TimeArgument,
+	ColorArgument
 } from "./arguments.js"
 
 /******************************************************************************
@@ -94,17 +96,27 @@ const ArgumentColors = {
 
 // As implemented by https://commandapi.jorel.dev/8.5.1/internal.html
 const ArgumentType = {
+	// CommandAPI separation
+	"api:entity": () => null,
+	"api:entities": () => null,
+	"api:player": () => null,
+	"api:players": () => null,
+	"api:greedy_string": () => greedyStringArgument(),
+
+	// Brigadier arguments
 	"brigadier:bool": () => boolArgument(),
 	"brigadier:double": () => floatArgument(),
 	"brigadier:float": () => floatArgument(),
 	"brigadier:integer": () => integerArgument(),
 	"brigadier:long": () => integerArgument(),
 	"brigadier:string": () => stringArgument(),
+
+	// Minecraft arguments
 	"minecraft:angle": () => null,
 	"minecraft:block_pos": () => new BlockPosArgument(),
 	"minecraft:block_predicate": () => null,
 	"minecraft:block_state": () => null,
-	"minecraft:color": () => null,
+	"minecraft:color": () => new ColorArgument(),
 	"minecraft:column_pos": () => new ColumnPosArgument(),
 	"minecraft:component": () => null,
 	"minecraft:dimension": () => null,
