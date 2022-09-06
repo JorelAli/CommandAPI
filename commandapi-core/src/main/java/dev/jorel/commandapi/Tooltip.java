@@ -73,6 +73,22 @@ public class Tooltip<S> {
 	 * @param tooltip    the tooltip to show to the user when they hover over the
 	 *                   suggestion
 	 * @return a <code>Tooltip&lt;S&gt;</code> representing this suggestion and tooltip
+	 *
+	 * @deprecated Please use {@link Tooltip#ofString(Object, String)} instead
+	 */
+	@Deprecated
+	public static <S> Tooltip<S> of(S object, String tooltip) {
+		return ofString(object, tooltip);
+	}
+
+	/**
+	 * Constructs a <code>Tooltip&lt;S&gt;</code> with a suggestion and a tooltip
+	 *
+	 * @param <S> the object that the argument suggestions use
+	 * @param object the suggestion to provide to the user
+	 * @param tooltip    the tooltip to show to the user when they hover over the
+	 *                   suggestion
+	 * @return a <code>Tooltip&lt;S&gt;</code> representing this suggestion and tooltip
 	 */
 	public static <S> Tooltip<S> ofString(S object, String tooltip) {
 		return ofMessage(object, toMessage(tooltip));
