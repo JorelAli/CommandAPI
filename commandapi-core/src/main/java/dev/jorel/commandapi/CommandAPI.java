@@ -26,6 +26,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.mojang.brigadier.Message;
+import net.kyori.adventure.text.Component;
+import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -273,6 +275,28 @@ public final class CommandAPI {
 	 */
 	public static WrapperCommandSyntaxException fail(Message message) {
 		return new WrapperCommandSyntaxException(new SimpleCommandExceptionType(message).create());
+	}
+
+	/**
+	 * Forces a command to return a success value of 0
+	 *
+	 * @param message Description of the error message, formatted as an array of base components
+	 * @return a {@link WrapperCommandSyntaxException} that wraps Brigadier's
+	 *         {@link CommandSyntaxException}
+	 */
+	public static WrapperCommandSyntaxException fail(BaseComponent... message) {
+		return fail(Tooltip.toMessage(message));
+	}
+
+	/**
+	 * Forces a command to return a success value of 0
+	 *
+	 * @param message Description of the error message, formatted as an adventure chat component
+	 * @return a {@link WrapperCommandSyntaxException} that wraps Brigadier's
+	 *         {@link CommandSyntaxException}
+	 */
+	public static WrapperCommandSyntaxException fail(Component message) {
+		return fail(Tooltip.toMessage(message));
 	}
 
 	/**
