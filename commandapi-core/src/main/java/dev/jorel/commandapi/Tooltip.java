@@ -129,7 +129,7 @@ public class Tooltip<S> {
 	 *                   suggestion
 	 * @return a <code>Tooltip&lt;S&gt;</code> representing this suggestion and tooltip
 	 */
-	public static <S> Tooltip<S> ofAdventureComponnent(S object, Component tooltip) {
+	public static <S> Tooltip<S> ofAdventureComponent(S object, Component tooltip) {
 		return ofMessage(object, toMessage(tooltip));
 	}
 
@@ -209,7 +209,7 @@ public class Tooltip<S> {
 	 */
 	@SafeVarargs
 	public static <S> Tooltip<S>[] generateAdvenureComponents(Function<S, Component> tooltipGenerator, S... suggestions) {
-		return generate(tooltipGenerator, Tooltip::ofAdventureComponnent, suggestions);
+		return generate(tooltipGenerator, Tooltip::ofAdventureComponent, suggestions);
 	}
 
 	/**
