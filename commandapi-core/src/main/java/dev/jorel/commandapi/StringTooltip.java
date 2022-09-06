@@ -46,6 +46,21 @@ public class StringTooltip implements IStringTooltip {
 	 * @param tooltip    the string tooltip to show to the user when they hover over the
 	 *                   suggestion
 	 * @return a StringTooltip representing this suggestion and tooltip
+	 *
+	 * @deprecated please use {@link StringTooltip#ofString(String, String)} instead
+	 */
+	@Deprecated(forRemoval = true)
+	public static StringTooltip of(String suggestion, String tooltip) {
+		return ofString(suggestion, tooltip);
+	}
+
+	/**
+	 * Constructs a StringTooltip with a suggestion and a string tooltip
+	 *
+	 * @param suggestion the suggestion to provide to the user
+	 * @param tooltip    the string tooltip to show to the user when they hover over the
+	 *                   suggestion
+	 * @return a StringTooltip representing this suggestion and tooltip
 	 */
 	public static StringTooltip ofString(String suggestion, String tooltip) {
 		return ofMessage(suggestion, Tooltip.toMessage(tooltip));
