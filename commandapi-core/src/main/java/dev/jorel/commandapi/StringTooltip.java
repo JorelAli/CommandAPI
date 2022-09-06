@@ -71,7 +71,7 @@ public class StringTooltip implements IStringTooltip {
 	 *                   suggestion
 	 * @return a StringTooltip representing this suggestion and tooltip
 	 */
-	public static StringTooltip ofBungeeComponents(String suggestion, BaseComponent... tooltip) {
+	public static StringTooltip ofBaseComponents(String suggestion, BaseComponent... tooltip) {
 		return ofMessage(suggestion, Tooltip.toMessage(tooltip));
 	}
 
@@ -141,8 +141,8 @@ public class StringTooltip implements IStringTooltip {
 	 * @return an array of {@link StringTooltip} objects from the provided suggestions,
 	 * with the generated formatted tooltips
 	 */
-	public static StringTooltip[] generateBungeeComponents(Function<String, BaseComponent[]> tooltipGenerator, String... suggestions) {
-		return generate(tooltipGenerator, StringTooltip::ofBungeeComponents, suggestions);
+	public static StringTooltip[] generateBaseComponents(Function<String, BaseComponent[]> tooltipGenerator, String... suggestions) {
+		return generate(tooltipGenerator, StringTooltip::ofBaseComponents, suggestions);
 	}
 
 	/**

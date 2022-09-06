@@ -116,7 +116,7 @@ public class Tooltip<S> {
 	 *                   suggestion
 	 * @return a <code>Tooltip&lt;S&gt;</code> representing this suggestion and tooltip
 	 */
-	public static <S> Tooltip<S> ofBungeeComponents(S object, BaseComponent... tooltip) {
+	public static <S> Tooltip<S> ofBaseComponents(S object, BaseComponent... tooltip) {
 		return ofMessage(object, toMessage(tooltip));
 	}
 
@@ -194,8 +194,8 @@ public class Tooltip<S> {
 	 * @return an array of {@link Tooltip<S>} objects from the provided suggestions, with the generated formatted tooltips
 	 */
 	@SafeVarargs
-	public static <S> Tooltip<S>[] generateBungeeComponents(Function<S, BaseComponent[]> tooltipGenerator, S... suggestions) {
-		return generate(tooltipGenerator, Tooltip::ofBungeeComponents, suggestions);
+	public static <S> Tooltip<S>[] generateBaseComponents(Function<S, BaseComponent[]> tooltipGenerator, S... suggestions) {
+		return generate(tooltipGenerator, Tooltip::ofBaseComponents, suggestions);
 	}
 
 	/**
