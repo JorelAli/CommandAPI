@@ -182,6 +182,20 @@ public interface ArgumentSuggestions {
 	}
 
 	/**
+	 * Merge suggestions from multiple {@link ArgumentSuggestions} together
+	 * @param suggestions The {@link ArgumentSuggestions} to be merged
+	 * @return an {@link ArgumentSuggestions} object suggesting everything suggested by the input suggestions
+	 */
+	static ArgumentSuggestions merge(ArgumentSuggestions... suggestions) {
+		return (info, builder) -> {
+			for(ArgumentSuggestions suggestion : suggestions) {
+				suggestion.suggest(info, builder);
+			}
+			return builder.buildFuture();
+		};
+	}
+
+	/**
 	 * Convert an array of strings into a brigadier {@link Suggestions} object
 	 *
 	 * @param builder brigadier {@link SuggestionsBuilder} object for building the suggestions
