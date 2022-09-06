@@ -267,6 +267,9 @@ public class Tooltip<S> {
 	 *
 	 * @param components array of bungee text components
 	 * @return native minecraft message object which can be used natively by brigadier.
+	 *
+	 * @deprecated the BaseComponent api is deprecated, consider using the
+	 * <a href="https://docs.adventure.kyori.net/text.html">Adventure API</a> instead
 	 */
 	@Deprecated
 	public static Message toMessage(BaseComponent... components) {
