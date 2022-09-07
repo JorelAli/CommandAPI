@@ -41,7 +41,7 @@ StringReader.prototype.readLocationLiteral = function readLocationLiteral(reader
 }
 
 /**
- * Helper for generating Promise<Suggestions>
+ * Helper for generating Promise<Suggestions>, from SharedSuggestionProvider.java
  */
 class HelperSuggestionProvider {
 	/**

@@ -392,6 +392,7 @@ function getTextWidth(text, element) {
  * @param {Node | null} target
  */
 function setText(minecraftCodedText, target = null) {
+	minecraftCodedText = minecraftCodedText.replaceAll(" ", "\u00A0"); // Replace normal spaces with &nbsp; for HTML
 	if(!target) {
 		target = commandInput;
 	}
@@ -453,10 +454,11 @@ commandInput.oninput = async function() {
 
 	/** @type string */
 	let rawText = commandInput.innerText.replace("\n", "");
+	rawText = rawText.replaceAll("\u00A0", " "); // Replace &nbsp; with normal spaces for Brigadier
 
 	let showUsageText = false;
 	let errorText = "";
-	let suggestions = [];
+	/** @type {string[]} */ let suggestions = [];
 
 	// Render colors
 	if(rawText.startsWith("/")) {
@@ -529,7 +531,10 @@ commandInput.oninput = async function() {
 		}
 
 		const suggestionsResult = await dispatcher.getCompletionSuggestions(parsedCommand);
-		suggestions = suggestionsResult.suggestions.map((x) => x.text);
+		suggestions = suggestionsResult.getList().map((x) => x.getText());
+		if(commandValid) {
+			suggestions = [];
+		}
 	}
 
 	// Set the cursor back to where it was. Since commands always start with a
@@ -689,7 +694,7 @@ document.getElementById("register-commands-button").onclick = function() {
 // Default commands
 document.getElementById("commands").value = `fill <pos1>[minecraft:block_pos] <pos2>[minecraft:block_pos] <block>[brigadier:string]
 speed (walk|fly) <speed>[0..10] <target>[minecraft:game_profile]
-hello <val>[1..20]`;
+hello <val>[1..20] <color>[minecraft:color]`;
 
 document.getElementById("register-commands-button").onclick();
 console.log("Dispatcher", dispatcher.getRoot())
