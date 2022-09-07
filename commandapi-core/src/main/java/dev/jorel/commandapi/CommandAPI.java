@@ -25,6 +25,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.mojang.brigadier.Message;
+import net.kyori.adventure.text.Component;
+import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,7 +38,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
@@ -261,9 +263,56 @@ public final class CommandAPI {
 	 * @param message Description of the error message
 	 * @return a {@link WrapperCommandSyntaxException} that wraps Brigadier's
 	 *         {@link CommandSyntaxException}
+	 *
+	 * @deprecated Please use {@link CommandAPI#failWithString(String)} instead
 	 */
+	@Deprecated
 	public static WrapperCommandSyntaxException fail(String message) {
-		return new WrapperCommandSyntaxException(new SimpleCommandExceptionType(new LiteralMessage(message)).create());
+		return failWithString(message);
+	}
+
+	/**
+	 * Forces a command to return a success value of 0
+	 *
+	 * @param message Description of the error message
+	 * @return a {@link WrapperCommandSyntaxException} that wraps Brigadier's
+	 *         {@link CommandSyntaxException}
+	 */
+	public static WrapperCommandSyntaxException failWithString(String message) {
+		return failWithMessage(Tooltip.messageFromString(message));
+	}
+
+	/**
+	 * Forces a command to return a success value of 0
+	 *
+	 * @param message Description of the error message, formatted as a brigadier message
+	 * @return a {@link WrapperCommandSyntaxException} that wraps Brigadier's
+	 *         {@link CommandSyntaxException}
+	 */
+	public static WrapperCommandSyntaxException failWithMessage(Message message) {
+		return new WrapperCommandSyntaxException(new SimpleCommandExceptionType(message).create());
+	}
+
+	/**
+	 * Forces a command to return a success value of 0
+	 *
+	 * @param message Description of the error message, formatted as an array of base components
+	 * @return a {@link WrapperCommandSyntaxException} that wraps Brigadier's
+	 *         {@link CommandSyntaxException}
+	 */
+	public static WrapperCommandSyntaxException failWithBaseComponents(BaseComponent... message) {
+		return failWithMessage(Tooltip.messageFromBaseComponents(message));
+	}
+
+	/**
+	 * Forces a command to return a success value of 0
+	 *
+	 * @param message Description of the error message, formatted as an adventure chat component
+	 * @return a {@link WrapperCommandSyntaxException} that wraps Brigadier's
+	 *         {@link CommandSyntaxException}
+	 */
+	public static WrapperCommandSyntaxException failWithAdventureComponent(Component message) {
+		return failWithMessage(Tooltip.messageFromAdventureComponent(message));
 	}
 
 	/**

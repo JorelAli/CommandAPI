@@ -69,6 +69,7 @@ import org.bukkit.help.HelpTopic;
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.Message;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -83,6 +84,8 @@ import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import io.papermc.paper.text.PaperComponents;
 import net.kyori.adventure.text.Component;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
 import net.minecraft.commands.CommandSourceStack;
@@ -517,7 +520,13 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	}
 
 	@Override
+	public Message generateMessageFromJson(String json) {
+		return Serializer.fromJson(json);
+	}
+
+  @Override
 	public MinecraftServer getMinecraftServer() {
 		return MINECRAFT_SERVER;
 	}
+
 }

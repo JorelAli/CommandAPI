@@ -10,19 +10,23 @@ body:
     attributes:
       label: CommandAPI version
       description: What version of the CommandAPI are you using?
-      placeholder: "8.4.1"
+      placeholder: "8.5.0"
     validations:
       required: true
   - type: dropdown
     id: minecraft-version
     attributes:
       label: Minecraft version
-      description: What version of Minecraft are you using? _(If using a minor update, such as 1.18.1, just select the major update version such as 1.18)_
+      description: What version of Minecraft are you using? _(If using a minor version that isn't specified, such as 1.18.1, just select the latest version below it such as 1.18)_
       multiple: false
       options:
+        - "1.19.2"
+        - "1.19.1"
         - "1.19"
+        - "1.18.2"
         - "1.18"
         - "1.17"
+        - "1.16.5"
         - "1.16"
         - "1.15"
         - "1.14"

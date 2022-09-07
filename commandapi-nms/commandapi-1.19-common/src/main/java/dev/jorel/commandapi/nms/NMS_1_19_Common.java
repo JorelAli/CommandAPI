@@ -79,6 +79,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.Message;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -98,6 +99,8 @@ import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import io.netty.channel.Channel;
 import io.papermc.paper.text.PaperComponents;
 import net.kyori.adventure.text.Component;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
@@ -769,6 +772,11 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		if (channel.pipeline().get("CommandAPI_" + player.getName()) != null) {
 			channel.eventLoop().submit(() -> channel.pipeline().remove("CommandAPI_" + player.getName()));
 		}
+	}
+
+	@Override
+	public Message generateMessageFromJson(String json) {
+		return Serializer.fromJson(json);
 	}
 
 	@Override

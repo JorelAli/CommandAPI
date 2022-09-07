@@ -30,6 +30,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import com.mojang.brigadier.Message;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -384,6 +385,8 @@ public interface NMS<CommandListenerWrapper> {
 	HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription, String permission);
 
 	void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd);
+
+	Message generateMessageFromJson(String json);
 	
 	/**
 	 * @return Whether the server can use chat preview. This is always false for

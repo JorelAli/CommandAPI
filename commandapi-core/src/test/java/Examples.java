@@ -31,6 +31,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 
+import com.mojang.brigadier.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -1675,9 +1676,9 @@ new CommandAPICommand("mycommand")
 List<Argument<?>> arguments = new ArrayList<>();
 arguments.add(new StringArgument("emote")
     .replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(info -> new IStringTooltip[] {
-            StringTooltip.of("wave", "Waves at a player"),
-            StringTooltip.of("hug", "Gives a player a hug"),
-            StringTooltip.of("glare", "Gives a player the death glare")
+            StringTooltip.ofString("wave", "Waves at a player"),
+            StringTooltip.ofString("hug", "Gives a player a hug"),
+            StringTooltip.ofString("glare", "Gives a player the death glare")
         }
     ))
 );
@@ -1738,9 +1739,9 @@ arguments.add(new LocationArgument("location")
         // We know the sender is a player if we use .executesPlayer()
         Player player = (Player) info.sender();
         return Tooltip.arrayOf(
-            Tooltip.of(player.getWorld().getSpawnLocation(), "World spawn"),
-            Tooltip.of(player.getBedSpawnLocation(), "Your bed"),
-            Tooltip.of(player.getTargetBlockExact(256).getLocation(), "Target block")
+            Tooltip.ofString(player.getWorld().getSpawnLocation(), "World spawn"),
+            Tooltip.ofString(player.getBedSpawnLocation(), "Your bed"),
+            Tooltip.ofString(player.getTargetBlockExact(256).getLocation(), "Target block")
         );
     })));
 /* ANCHOR_END: SafeTooltips */
@@ -2219,8 +2220,8 @@ class CustomItem implements IStringTooltip {
     }
 
     @Override
-    public String getTooltip() {
-        return this.itemstack.getItemMeta().getLore().get(0);
+    public Message getTooltip() {
+        return Tooltip.messageFromString(this.itemstack.getItemMeta().getLore().get(0));
     }
     
 }
