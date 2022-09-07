@@ -38,7 +38,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
@@ -261,9 +260,23 @@ public final class CommandAPI {
 	 * @param message Description of the error message
 	 * @return a {@link WrapperCommandSyntaxException} that wraps Brigadier's
 	 *         {@link CommandSyntaxException}
+	 *
+	 * @deprecated Please use {@link CommandAPI#failWithString(String)} instead
 	 */
+	@Deprecated
 	public static WrapperCommandSyntaxException fail(String message) {
-		return fail(new LiteralMessage(message));
+		return failWithString(message);
+	}
+
+	/**
+	 * Forces a command to return a success value of 0
+	 *
+	 * @param message Description of the error message
+	 * @return a {@link WrapperCommandSyntaxException} that wraps Brigadier's
+	 *         {@link CommandSyntaxException}
+	 */
+	public static WrapperCommandSyntaxException failWithString(String message) {
+		return failWithMessage(Tooltip.messageFromString(message));
 	}
 
 	/**
@@ -273,7 +286,7 @@ public final class CommandAPI {
 	 * @return a {@link WrapperCommandSyntaxException} that wraps Brigadier's
 	 *         {@link CommandSyntaxException}
 	 */
-	public static WrapperCommandSyntaxException fail(Message message) {
+	public static WrapperCommandSyntaxException failWithMessage(Message message) {
 		return new WrapperCommandSyntaxException(new SimpleCommandExceptionType(message).create());
 	}
 
@@ -284,8 +297,8 @@ public final class CommandAPI {
 	 * @return a {@link WrapperCommandSyntaxException} that wraps Brigadier's
 	 *         {@link CommandSyntaxException}
 	 */
-	public static WrapperCommandSyntaxException fail(BaseComponent... message) {
-		return fail(Tooltip.toMessage(message));
+	public static WrapperCommandSyntaxException failWithBaseComponents(BaseComponent... message) {
+		return failWithMessage(Tooltip.messageFromBaseComponents(message));
 	}
 
 	/**
@@ -295,8 +308,8 @@ public final class CommandAPI {
 	 * @return a {@link WrapperCommandSyntaxException} that wraps Brigadier's
 	 *         {@link CommandSyntaxException}
 	 */
-	public static WrapperCommandSyntaxException fail(Component message) {
-		return fail(Tooltip.toMessage(message));
+	public static WrapperCommandSyntaxException failWithAdventureComponent(Component message) {
+		return failWithMessage(Tooltip.messageFromAdventureComponent(message));
 	}
 
 	/**

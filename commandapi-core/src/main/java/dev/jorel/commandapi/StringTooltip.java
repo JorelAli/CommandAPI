@@ -63,7 +63,7 @@ public class StringTooltip implements IStringTooltip {
 	 * @return a StringTooltip representing this suggestion and tooltip
 	 */
 	public static StringTooltip ofString(String suggestion, String tooltip) {
-		return ofMessage(suggestion, Tooltip.toMessage(tooltip));
+		return ofMessage(suggestion, Tooltip.messageFromString(tooltip));
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class StringTooltip implements IStringTooltip {
 	 * @return a StringTooltip representing this suggestion and tooltip
 	 */
 	public static StringTooltip ofBaseComponents(String suggestion, BaseComponent... tooltip) {
-		return ofMessage(suggestion, Tooltip.toMessage(tooltip));
+		return ofMessage(suggestion, Tooltip.messageFromBaseComponents(tooltip));
 	}
 
 	/**
@@ -99,7 +99,7 @@ public class StringTooltip implements IStringTooltip {
 	 * @return a StringTooltip representing this suggestion and tooltip
 	 */
 	public static StringTooltip ofAdventureComponent(String suggestion, Component tooltip) {
-		return ofMessage(suggestion, Tooltip.toMessage(tooltip));
+		return ofMessage(suggestion, Tooltip.messageFromAdventureComponent(tooltip));
 	}
 
 	/**

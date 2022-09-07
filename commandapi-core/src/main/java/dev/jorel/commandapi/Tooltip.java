@@ -91,7 +91,7 @@ public class Tooltip<S> {
 	 * @return a <code>Tooltip&lt;S&gt;</code> representing this suggestion and tooltip
 	 */
 	public static <S> Tooltip<S> ofString(S object, String tooltip) {
-		return ofMessage(object, toMessage(tooltip));
+		return ofMessage(object, messageFromString(tooltip));
 	}
 
 	/**
@@ -117,7 +117,7 @@ public class Tooltip<S> {
 	 * @return a <code>Tooltip&lt;S&gt;</code> representing this suggestion and tooltip
 	 */
 	public static <S> Tooltip<S> ofBaseComponents(S object, BaseComponent... tooltip) {
-		return ofMessage(object, toMessage(tooltip));
+		return ofMessage(object, messageFromBaseComponents(tooltip));
 	}
 
 	/**
@@ -130,7 +130,7 @@ public class Tooltip<S> {
 	 * @return a <code>Tooltip&lt;S&gt;</code> representing this suggestion and tooltip
 	 */
 	public static <S> Tooltip<S> ofAdventureComponent(S object, Component tooltip) {
-		return ofMessage(object, toMessage(tooltip));
+		return ofMessage(object, messageFromAdventureComponent(tooltip));
 	}
 
 	/**
@@ -263,13 +263,13 @@ public class Tooltip<S> {
 	/**
 	 * Converts an unformatted string to an unformatted tooltip by wrapping as with a {@link LiteralMessage}.
 	 *
-	 * If formatting is required, please see {@link #toMessage(BaseComponent...)},
+	 * If formatting is required, please see {@link #messageFromBaseComponents(BaseComponent...)},
 	 * or consider using the more modern adventure text api.
 	 *
 	 * @param string unformatted string tooltip
 	 * @return wrapped tooltip as a {@link LiteralMessage}
 	 */
-	public static Message toMessage(String string) {
+	public static Message messageFromString(String string) {
 		return new LiteralMessage(string);
 	}
 
@@ -284,7 +284,7 @@ public class Tooltip<S> {
 	 * @param components array of bungee text components
 	 * @return native minecraft message object which can be used natively by brigadier.
 	 */
-	public static Message toMessage(BaseComponent... components) {
+	public static Message messageFromBaseComponents(BaseComponent... components) {
 		return CommandAPIHandler.getInstance().getNMS().generateMessageFromJson(ComponentSerializer.toString(components));
 	}
 
@@ -297,7 +297,7 @@ public class Tooltip<S> {
 	 * @param component adventure text component
 	 * @return native minecraft message object which can be used natively by brigadier.
 	 */
-	public static Message toMessage(Component component) {
+	public static Message messageFromAdventureComponent(Component component) {
 		return CommandAPIHandler.getInstance().getNMS().generateMessageFromJson(BukkitComponentSerializer.gson().serialize(component));
 	}
 

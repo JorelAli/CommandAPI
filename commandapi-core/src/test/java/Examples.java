@@ -2221,7 +2221,7 @@ class CustomItem implements IStringTooltip {
 
     @Override
     public Message getTooltip() {
-        return Tooltip.toMessage(this.itemstack.getItemMeta().getLore().get(0));
+        return Tooltip.messageFromString(this.itemstack.getItemMeta().getLore().get(0));
     }
     
 }
