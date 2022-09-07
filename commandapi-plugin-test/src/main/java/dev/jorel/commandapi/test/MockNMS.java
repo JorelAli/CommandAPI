@@ -424,5 +424,11 @@ public class MockNMS extends ArgumentNMS {
 	public World getWorldForCSS(CommandListenerWrapper clw) {
 		return new WorldMock();
 	}
+	
+	@Override
+	public void resendPackets(Player player) {
+		// There's nothing to do here, we can't "send packets to players"
+		return;
+	}
 
 }
