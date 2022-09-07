@@ -7,7 +7,11 @@ import {
 	integer as integerArgument,
 	float as floatArgument,
 	bool as boolArgument,
-	greedyString as greedyStringArgument
+	greedyString as greedyStringArgument,
+
+	// Typing
+	RequiredArgumentBuilder,
+	LiteralArgumentBuilder
 } from "./node_modules/node-brigadier/dist/index.js"
 
 import {
@@ -27,6 +31,7 @@ const commandInput = document.getElementById("cmd-input");
 const commandInputAutocomplete = document.getElementById("cmd-input-autocomplete");
 const errorMessageBox = document.getElementById("error-box");
 const suggestionsBox = document.getElementById("suggestions-box");
+const validBox = document.getElementById("valid-box");
 
 const dispatcher = new CommandDispatcher();
 
@@ -227,6 +232,7 @@ function registerCommand(configCommand) {
 	const args = configCommand.split(" ").slice(1);
 
 	let commandToRegister = literalArgument(command);
+	/** @type {(LiteralArgumentBuilder<any> | RequiredArgumentBuilder<any, any>)[]} */
 	let argumentsToRegister = [];
 
 	// From dev/jorel/commandapi/AdvancedConverter.java
@@ -459,6 +465,7 @@ commandInput.oninput = async function() {
 	let showUsageText = false;
 	let errorText = "";
 	/** @type {string[]} */ let suggestions = [];
+	let commandValid = false;
 
 	// Render colors
 	if(rawText.startsWith("/")) {
@@ -480,7 +487,6 @@ commandInput.oninput = async function() {
 
 		// Reset text
 		setText(rawTextNoSlash);
-		let commandValid = false;
 
 		if(parsedCommand.exceptions.size > 0) {
 			// The command is invalid (the command doesn't exist). Make the whole text red.
@@ -506,7 +512,6 @@ commandInput.oninput = async function() {
 			}
 			
 			if(errorText === "") {
-				errorText = ChatColor.GREEN + "This command is valid ✅";
 				commandValid = true;
 			}
 		}
@@ -532,9 +537,7 @@ commandInput.oninput = async function() {
 
 		const suggestionsResult = await dispatcher.getCompletionSuggestions(parsedCommand);
 		suggestions = suggestionsResult.getList().map((x) => x.getText());
-		if(commandValid) {
-			suggestions = [];
-		}
+		console.log(suggestions)
 	}
 
 	// Set the cursor back to where it was. Since commands always start with a
@@ -562,6 +565,13 @@ commandInput.oninput = async function() {
 	} else {
 		errorMessageBox.style.left = 0;
 		errorMessageBox.style.width = "unset";
+	}
+
+	if(commandValid) {
+		setText(ChatColor.GREEN + "This command is valid ✅", validBox);
+		validBox.hidden = false;
+	} else {
+		validBox.hidden = true;
 	}
 
 	const constructSuggestionsHTML = (suggestions) => {
