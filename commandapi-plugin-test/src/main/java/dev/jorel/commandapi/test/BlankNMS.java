@@ -1,3 +1,4 @@
+package dev.jorel.commandapi.test;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Map;

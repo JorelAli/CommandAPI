@@ -1,3 +1,4 @@
+package dev.jorel.commandapi.test;
 import java.io.File;
 
 import org.bukkit.plugin.PluginDescriptionFile;

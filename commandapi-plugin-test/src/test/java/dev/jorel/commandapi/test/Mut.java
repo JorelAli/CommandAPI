@@ -1,3 +1,4 @@
+package dev.jorel.commandapi.test;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Optional;

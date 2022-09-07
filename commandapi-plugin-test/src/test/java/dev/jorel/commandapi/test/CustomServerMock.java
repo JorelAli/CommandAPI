@@ -1,3 +1,4 @@
+package dev.jorel.commandapi.test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;

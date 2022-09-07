@@ -1,3 +1,4 @@
+package dev.jorel.commandapi.test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 

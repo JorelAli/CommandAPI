@@ -1,3 +1,4 @@
+package dev.jorel.commandapi.test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.PotionEffectArgument;
+import dev.jorel.commandapi.test.Main;
 
 /**
  * Tests for suggestions

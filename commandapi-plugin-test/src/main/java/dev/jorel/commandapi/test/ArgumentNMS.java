@@ -1,3 +1,4 @@
+package dev.jorel.commandapi.test;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
