@@ -5,10 +5,11 @@
   "main": "commandvisualizer.js",
   "dependencies": {
     "node-brigadier": "^0.0.12",
-    "webpack-cli": "^4.10.0",
     "webpack": "^5.74.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "webpack-cli": "^4.10.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
