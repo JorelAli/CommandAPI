@@ -687,7 +687,6 @@ window.addEventListener("suggestionsUpdated", (event) => {
 // If you click on the chat box, focus the current text input area 
 document.getElementById("chatbox").onclick = function() {
 	document.getElementById("cmd-input").focus();
-	setCursorPosition(commandInput.innerText.length, commandInput);
 };
 
 document.getElementById("register-commands-button").onclick = function() {

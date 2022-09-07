@@ -213,9 +213,12 @@ export class PlayerArgument {
 			reader.skip();
 		}
 
-		this.username = reader.getString().slice(start, reader.getCursor());
+		const string = reader.getString();
+		const currentCursor = reader.getCursor();
 
-		if(!this.username.match(/[A-Za-z_]+/)) {
+		this.username = string.slice(start, currentCursor);
+
+		if(!this.username.match(/^[A-Za-z0-9_]{2,16}$/)) {
 			throw new SimpleCommandExceptionType(new LiteralMessage(this.username + " is not a valid username")).createWithContext(reader);
 		}
 
