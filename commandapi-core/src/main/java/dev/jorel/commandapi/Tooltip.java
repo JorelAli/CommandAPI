@@ -22,8 +22,8 @@ package dev.jorel.commandapi;
 
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.Message;
-import net.kyori.adventure.platform.bukkit.BukkitComponentSerializer;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 
@@ -298,7 +298,7 @@ public class Tooltip<S> {
 	 * @return native minecraft message object which can be used natively by brigadier.
 	 */
 	public static Message messageFromAdventureComponent(Component component) {
-		return CommandAPIHandler.getInstance().getNMS().generateMessageFromJson(BukkitComponentSerializer.gson().serialize(component));
+		return CommandAPIHandler.getInstance().getNMS().generateMessageFromJson(GsonComponentSerializer.gson().serialize(component));
 	}
 
 }
