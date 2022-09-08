@@ -5,7 +5,10 @@ import {
 	StringReader,
 	CommandSyntaxException,
 	CommandContext,
-	SuggestionsBuilder
+	SuggestionsBuilder,
+
+	// Typing
+	ArgumentType
 } from "./node_modules/node-brigadier/dist/index.js"
 
 StringReader.prototype.readLocationLiteral = function readLocationLiteral(reader) {
@@ -79,6 +82,9 @@ class HelperSuggestionProvider {
 	}
 }
 
+/**
+ * @extends {ArgumentType}
+ */
 export class TimeArgument {
 	
 	/** @type {Map<String, Number} */
@@ -131,6 +137,9 @@ export class TimeArgument {
 	}
 }
 
+/**
+ * @extends {ArgumentType}
+ */
 export class BlockPosArgument {
 
 	constructor(x = 0, y = 0, z = 0) {
@@ -166,6 +175,9 @@ export class BlockPosArgument {
 	}
 }
 
+/**
+ * @extends {ArgumentType}
+ */
 export class ColumnPosArgument {
 
 	constructor(x = 0, z = 0) {
@@ -197,6 +209,9 @@ export class ColumnPosArgument {
 	}
 }
 
+/**
+ * @extends {ArgumentType}
+ */
 export class PlayerArgument {
 	/**
 	 * 
@@ -240,6 +255,9 @@ export class PlayerArgument {
 	}
 }
 
+/**
+ * @extends {ArgumentType}
+ */
 export class MultiLiteralArgument {
 	/**
 	 * @param {Array<String>} literals 
@@ -251,6 +269,7 @@ export class MultiLiteralArgument {
 		this.selectedLiteral = "";
 	}
 
+	/** @override */
 	parse(/** @type {StringReader} */ reader) {
 		const start = reader.getCursor();
 		while(reader.canRead() && reader.peek() !== " ") {
@@ -277,6 +296,7 @@ export class MultiLiteralArgument {
 	 * @param {SuggestionsBuilder} builder 
 	 * @returns {Promise<Suggestions>}
 	 */
+	/** @override */
 	listSuggestions(context, builder) {
 		for(let literal of this.literals) {
 			builder.suggest(literal);
@@ -284,11 +304,15 @@ export class MultiLiteralArgument {
 		return builder.buildPromise();
 	}
 
+	/** @override */
 	getExamples() {
 		return ["blah"];
 	}
 }
 
+/**
+ * @extends {ArgumentType}
+ */
 export class ColorArgument {
 
 	static ChatColor = {
@@ -314,7 +338,7 @@ export class ColorArgument {
 	/**
 	 * @param {Array<String>} literals 
 	 */
-	constructor(chatcolor) {
+	constructor(chatcolor = null) {
 		this.chatcolor = chatcolor;
 	}
 

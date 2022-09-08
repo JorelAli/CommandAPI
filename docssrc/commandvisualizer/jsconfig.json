@@ -1,0 +1,13 @@
+{
+    // Note to self: JSDoc types are found here: https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html
+    "compilerOptions": {
+        "lib": [
+          "ES2021",
+          "ES2015",
+          "DOM",
+          "DOM.Iterable"
+        ],
+        "target": "ES2021",
+        "sourceMap": true,
+    }
+}

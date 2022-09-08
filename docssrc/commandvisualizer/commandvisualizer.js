@@ -1,3 +1,4 @@
+// @ts-check
 import {
 	CommandDispatcher,
 	RootCommandNode,
@@ -11,7 +12,10 @@ import {
 
 	// Typing
 	RequiredArgumentBuilder,
-	LiteralArgumentBuilder
+	LiteralArgumentBuilder,
+	ParseResults,
+	CommandSyntaxException,
+	CommandNode
 } from "./node_modules/node-brigadier/dist/index.js"
 
 import {
@@ -27,11 +31,11 @@ import {
  * Constants                                                                  *
  ******************************************************************************/
 
-const commandInput = document.getElementById("cmd-input");
-const commandInputAutocomplete = document.getElementById("cmd-input-autocomplete");
-const errorMessageBox = document.getElementById("error-box");
-const suggestionsBox = document.getElementById("suggestions-box");
-const validBox = document.getElementById("valid-box");
+const commandInput = document.getElementById("cmd-input") ?? new HTMLElement();
+const commandInputAutocomplete = document.getElementById("cmd-input-autocomplete") ?? new HTMLElement();
+const errorMessageBox = document.getElementById("error-box") ?? new HTMLElement();
+const suggestionsBox = document.getElementById("suggestions-box") ?? new HTMLElement();
+const validBox = document.getElementById("valid-box") ?? new HTMLElement();
 
 const dispatcher = new CommandDispatcher();
 
@@ -39,14 +43,14 @@ const dispatcher = new CommandDispatcher();
  * Prototypes                                                                 *
  ******************************************************************************/
 
-CommandDispatcher.prototype.deleteAll = function deleteAll() {
-	this.root = new RootCommandNode();
-};
+// @ts-ignore
+CommandDispatcher.prototype.deleteAll = function deleteAll() { this.root = new RootCommandNode(); };
 
 /******************************************************************************
  * Enums                                                                      *
  ******************************************************************************/
 
+/** @enum {String} */
 const ChatColor = {
 	// Uses the section symbol (§), just like Minecraft
 	BLACK: "\u00A70",
@@ -67,6 +71,7 @@ const ChatColor = {
 	WHITE: "\u00A7f",
 };
 
+/** @enum {String} */
 const ChatColorCSS = {
 	"0": "black",
 	"1": "dark_blue",
@@ -86,11 +91,13 @@ const ChatColorCSS = {
 	"f": "white"
 };
 
+/** @enum {String} */
 const ChatColorCSSReversed = {};
 for (let key in ChatColorCSS) {
     ChatColorCSSReversed[ChatColorCSS[key]] = key;
 }
 
+/** @enum {ChatColor} */
 const ArgumentColors = {
 	0: ChatColor.AQUA,
 	1: ChatColor.YELLOW,
@@ -100,6 +107,9 @@ const ArgumentColors = {
 }
 
 // As implemented by https://commandapi.jorel.dev/8.5.1/internal.html
+/**
+ * @enum { () => import("./node_modules/node-brigadier/dist/index.js").ArgumentType | function(): null }
+ */
 const ArgumentType = {
 	// CommandAPI separation
 	"api:entity": () => null,
@@ -172,7 +182,7 @@ class Argument {
 	 * @param {ParseResults<any>} parsedCommand a parsed command from dispatcher.parse
 	 */
 	getRange(parsedCommand) {
-		return parsedCommand.context.args.get(this.nodeName)?.range ?? {start:0, end: 0};
+		return parsedCommand.getContext().getArguments().get(this.nodeName)?.getRange() ?? {start:0, end: 0};
 	}
 }
 
@@ -291,9 +301,13 @@ function registerCommand(configCommand) {
  */
 function getCursorPosition() {
 	const sel = document.getSelection();
+	// @ts-ignore
 	sel.modify("extend", "backward", "paragraphboundary");
+	// @ts-ignore
 	const pos = sel.toString().length;
+	// @ts-ignore
 	if (sel.anchorNode !== undefined && sel.anchorNode !== null) {
+		// @ts-ignore
 		sel.collapseToEnd();
 	}
 	return pos;
@@ -323,8 +337,9 @@ function setCursorPosition(index, element) {
 				range.setEnd(node, chars.count);
 			} else if (node && chars.count > 0) {
 				if (node.nodeType === Node.TEXT_NODE) {
-					if (node.textContent.length < chars.count) {
-						chars.count -= node.textContent.length;
+					const nodeTextContentLength = node.textContent?.length ?? 0;
+					if (nodeTextContentLength < chars.count) {
+						chars.count -= nodeTextContentLength;
 					} else {
 						range.setEnd(node, chars.count);
 						chars.count = 0;
@@ -350,14 +365,18 @@ function setCursorPosition(index, element) {
 		if (range) {
 			range.collapse(false);
 			let selection = window.getSelection();
-			selection.removeAllRanges();
-			selection.addRange(range);
+			selection?.removeAllRanges();
+			selection?.addRange(range);
 		}
 	}
 };
 
+/**
+ * 
+ * @returns {HTMLElement}
+ */
 function getSelectedSuggestion() {
-	return document.querySelector(".yellow");
+	return document.querySelector(".yellow") ?? new HTMLElement();
 }
 
 
@@ -365,7 +384,7 @@ function getSelectedSuggestion() {
   * Uses canvas.measureText to compute and return the width of the given text of given font in pixels.
   * 
   * @param {String} text The text to be rendered.
-  * @param {String} font The css font descriptor that text is to be rendered with (e.g. "bold 14px verdana").
+  * @param {HTMLElement} element the element
   * 
   * @see https://stackoverflow.com/questions/118241/calculate-text-width-with-javascript/21015393#21015393
   */
@@ -384,8 +403,10 @@ function getTextWidth(text, element) {
 	}
 
 	// re-use canvas object for better performance
+	// @ts-ignore
 	const canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
 	const context = canvas.getContext("2d");
+	// @ts-ignore
 	context.font = element.currentFont || (element.currentFont = getCanvasFont(element));
 	const metrics = context.measureText(text);
 	return metrics.width;
@@ -395,13 +416,16 @@ function getTextWidth(text, element) {
  * Takes Minecraft text and renders it in the chat box. This will automatically
  * add the leading / character, so you don't have to do that yourself!
  * @param {string} minecraftCodedText
- * @param {Node | null} target
+ * @param {HTMLElement | null} target
  */
 function setText(minecraftCodedText, target = null) {
 	minecraftCodedText = minecraftCodedText.replaceAll(" ", "\u00A0"); // Replace normal spaces with &nbsp; for HTML
 	if(!target) {
 		target = commandInput;
 	}
+
+	target = target ?? new HTMLElement();
+
 	// Reset the text
 	target.innerHTML = "";
 
@@ -415,7 +439,7 @@ function setText(minecraftCodedText, target = null) {
 	let buffer = "";
 	let currentColor = "";
 
-	function writeBuffer() {
+	function writeBuffer(/** @type {HTMLElement} */target) {
 		if(buffer.length > 0) {
 			let elem = document.createElement("span");
 			elem.className = currentColor;
@@ -427,7 +451,7 @@ function setText(minecraftCodedText, target = null) {
 
 	for(let i = 0; i < minecraftCodedText.length; i++) {
 		if(minecraftCodedText[i] === "\u00A7") {
-			writeBuffer();
+			writeBuffer(target);
 			currentColor = ChatColorCSS[minecraftCodedText[i + 1]];
 			i++;
 			continue;
@@ -436,7 +460,7 @@ function setText(minecraftCodedText, target = null) {
 		}
 	}
 
-	writeBuffer();
+	writeBuffer(target);
 }
 
 function getText(withStyling = true) {
@@ -445,6 +469,7 @@ function getText(withStyling = true) {
 		if(child.className && withStyling) {
 			buffer += "\u00A7" + ChatColorCSSReversed[child.className];
 		}
+		// @ts-ignore
 		buffer += child.innerText;
 	}
 	return buffer;
@@ -460,7 +485,7 @@ commandInput.oninput = async function() {
 
 	/** @type string */
 	let rawText = commandInput.innerText.replace("\n", "");
-	rawText = rawText.replaceAll("\u00A0", " "); // Replace &nbsp; with normal spaces for Brigadier
+	rawText = rawText.replaceAll("\u00a0", " "); // Replace &nbsp; with normal spaces for Brigadier
 
 	let showUsageText = false;
 	let errorText = "";
@@ -479,21 +504,21 @@ commandInput.oninput = async function() {
 		const parsedCommandNoTrailing = dispatcher.parse(rawTextNoSlash.trimEnd(), {});
 		console.log(parsedCommand);
 
-		let lastNode = parsedCommandNoTrailing.context.rootNode;
-		if(parsedCommandNoTrailing.context.nodes.length > 0) {
-			lastNode = parsedCommandNoTrailing.context.nodes[parsedCommandNoTrailing.context.nodes.length - 1].node;
+		let lastNode = parsedCommandNoTrailing.getContext().getRootNode();
+		if(parsedCommandNoTrailing.getContext().getNodes().length > 0) {
+			lastNode = parsedCommandNoTrailing.getContext().getNodes()[parsedCommandNoTrailing.getContext().getNodes().length - 1].getNode();
 		}
 		const usage = dispatcher.getAllUsage(lastNode, {}, false).join(" ");
 
 		// Reset text
 		setText(rawTextNoSlash);
 
-		if(parsedCommand.exceptions.size > 0) {
+		if(parsedCommand.getExceptions().size > 0) {
 			// The command is invalid (the command doesn't exist). Make the whole text red.
 			setText(ChatColor.RED + rawTextNoSlash);
 			
-			/** @type {Map<any, String>} */
-			const exceptions = parsedCommand.exceptions;
+			/** @type {Map<CommandNode<any>, CommandSyntaxException>} */
+			const exceptions = parsedCommand.getExceptions();
 			errorText = exceptions.entries().next().value[1].message;
 		} else {
 			// Brigadier is "happy" with the input. Let's run it and see!
@@ -520,14 +545,14 @@ commandInput.oninput = async function() {
 		if (showUsageText || commandValid) {
 			let newText = command;
 			let parsedArgumentIndex = 0;
-			for(const [key, value] of parsedCommand.context.args) {
+			for(const [key, value] of parsedCommand.getContext().getArguments()) {
 				if(parsedArgumentIndex > Object.keys(ArgumentColors).length) {
 					parsedArgumentIndex = 0;
 				}
 
 				newText += " ";
 				newText += ArgumentColors[parsedArgumentIndex];
-				newText += rawTextNoSlash.slice(value.range.start, value.range.end);
+				newText += rawTextNoSlash.slice(value.getRange().getStart(), value.getRange().getEnd());
 
 				parsedArgumentIndex++;
 			}
@@ -563,7 +588,7 @@ commandInput.oninput = async function() {
 		// Plus an extra 10px for good luck, why not
 		errorMessageBox.style.width = `calc(100% - ${errorMessageBox.style.left} - 28px + 10px)`;
 	} else {
-		errorMessageBox.style.left = 0;
+		errorMessageBox.style.left = "0";
 		errorMessageBox.style.width = "unset";
 	}
 
@@ -592,7 +617,7 @@ commandInput.oninput = async function() {
 	};
 
 	// If suggestions are present, display them
-	suggestionsBox.style.left = 0;
+	suggestionsBox.style.left = "0";
 	if(suggestions.length !== 0) {
 		suggestionsBox.innerHTML = "";
 		for(let suggestionElement of constructSuggestionsHTML(suggestions)) {
@@ -618,21 +643,21 @@ commandInput.addEventListener('keydown', (evt) => {
 		case "ArrowDown":
 		case "ArrowUp": {
 			if(!suggestionsBox.hidden) {
-				for(let i = 0; i < suggestionsBox.childNodes.length; i++) {
-					if(suggestionsBox.childNodes[i].className === "yellow") {
-						suggestionsBox.childNodes[i].className = "";
+				for(let i = 0; i < suggestionsBox.children.length; i++) {
+					if(suggestionsBox.children[i].className === "yellow") {
+						suggestionsBox.children[i].className = "";
 
 						if(evt.key == "ArrowDown") {
-							if(i === suggestionsBox.childNodes.length - 1) {
-								suggestionsBox.childNodes[0].className = "yellow";
+							if(i === suggestionsBox.children.length - 1) {
+								suggestionsBox.children[0].className = "yellow";
 							} else {
-								suggestionsBox.childNodes[i + 1].className = "yellow";
+								suggestionsBox.children[i + 1].className = "yellow";
 							}
 						} else {
 							if(i === 0) {
-								suggestionsBox.childNodes[suggestionsBox.childNodes.length - 1].className = "yellow";
+								suggestionsBox.children[suggestionsBox.children.length - 1].className = "yellow";
 							} else {
-								suggestionsBox.childNodes[i - 1].className = "yellow";
+								suggestionsBox.children[i - 1].className = "yellow";
 							}
 						}
 
@@ -652,6 +677,7 @@ commandInput.addEventListener('keydown', (evt) => {
 		case "Tab":
 			evt.preventDefault();
 			setText(getText(false).slice(1) + commandInputAutocomplete.innerText);
+			// @ts-ignore
 			document.getElementById("cmd-input").oninput();
 			setCursorPosition(commandInput.innerText.length, commandInput);
 			break;
@@ -686,13 +712,15 @@ window.addEventListener("suggestionsUpdated", (event) => {
 
 // If you click on the chat box, focus the current text input area 
 document.getElementById("chatbox").onclick = function() {
-	document.getElementById("cmd-input").focus();
+	document.getElementById("cmd-input")?.focus();
 };
 
 document.getElementById("register-commands-button").onclick = function() {
+	// @ts-expect-error
 	dispatcher.deleteAll();
-	document.getElementById("commands").value.split("\n").forEach(registerCommand);
-	commandInput.oninput(); // Run syntax highlighter
+	// @ts-expect-error
+	document.getElementById("commands")?.value.split("\n").forEach(registerCommand);
+	commandInput.oninput(null); // Run syntax highlighter
 }
 
 
@@ -701,10 +729,11 @@ document.getElementById("register-commands-button").onclick = function() {
  ******************************************************************************/
 
 // Default commands
+// @ts-expect-error
 document.getElementById("commands").value = `fill <pos1>[minecraft:block_pos] <pos2>[minecraft:block_pos] <block>[brigadier:string]
 speed (walk|fly) <speed>[0..10] <target>[minecraft:game_profile]
 hello <val>[1..20] <color>[minecraft:color]`;
 
-document.getElementById("register-commands-button").onclick();
+document.getElementById("register-commands-button")?.onclick(null);
 console.log("Dispatcher", dispatcher.getRoot())
 
