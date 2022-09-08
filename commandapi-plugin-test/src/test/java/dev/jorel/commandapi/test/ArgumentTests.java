@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
+import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.*;
 import org.bukkit.Bukkit;
@@ -592,28 +593,6 @@ public class ArgumentTests {
 		PlayerMock player = server.addPlayer("APlayer");
 		CommandMap commandMap = CommandAPIHandler.getInstance().getNMS().getSimpleCommandMap();
 
-		new CommandAPICommand("commandargument")
-			.withArguments(new CommandArgument("command"))
-			.executesPlayer((sender, args) -> {
-				results.set((CommandResult) args[0]);
-			}).register();
-
-		// Check retrieval of commands
-		assertStoresResult(player, "commandargument version",
-			results, new CommandResult(commandMap.getCommand("version"), new String[]{}));
-
-		new CommandAPICommand("restrictedcommand")
-			.withArguments(new CommandArgument("command")
-				.replaceSuggestions(
-					ArgumentSuggestions.strings("give"),
-					ArgumentSuggestions.strings(info -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new)),
-					ArgumentSuggestions.strings("diamond", "minecraft:diamond"),
-					ArgumentSuggestions.empty()
-				)
-			).executesPlayer((sender, args) -> {
-				results.set((CommandResult) args[0]);
-			}).register();
-
 		// CommandArgument expects to find commands in the commandMap
 		commandMap.registerAll("test", List.of(
 			new Command("give") {
@@ -627,12 +606,41 @@ public class ArgumentTests {
 				public boolean execute(@NotNull CommandSender commandSender, @NotNull String s, @NotNull String[] strings) {
 					return true;
 				}
+			},
+			new Command("tp") {
+				@Override
+				public boolean execute(@NotNull CommandSender commandSender, @NotNull String s, @NotNull String[] strings) {
+					return true;
+				}
 			}
 		));
 
+		// Check command retrieval from CommandMap
+		new CommandAPICommand("commandargument")
+			.withArguments(new CommandArgument("command"))
+			.executesPlayer((sender, args) -> {
+				results.set((CommandResult) args[0]);
+			}).register();
+
+		assertStoresResult(player, "commandargument version",
+			results, new CommandResult(commandMap.getCommand("version"), new String[]{}));
+
+		// Check replaceSuggestions
+		new CommandAPICommand("restrictedcommand")
+			.withArguments(new CommandArgument("command")
+				.replaceSuggestions(
+					ArgumentSuggestions.strings("give"),
+					ArgumentSuggestions.strings(info -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new)),
+					ArgumentSuggestions.strings("diamond", "minecraft:diamond"),
+					ArgumentSuggestions.empty()
+				)
+			).executesPlayer((sender, args) -> {
+				results.set((CommandResult) args[0]);
+			}).register();
+
 		server.addPlayer("BPlayer");
 
-		// Valid commands based on suggestions
+		// Valid commands
 		assertStoresResult(player, "restrictedcommand give APlayer diamond",
 			results, new CommandResult(commandMap.getCommand("give"), new String[]{"APlayer", "diamond"}));
 
@@ -643,14 +651,72 @@ public class ArgumentTests {
 			results, new CommandResult(commandMap.getCommand("give"), new String[]{"APlayer", "minecraft:diamond"}));
 
 		// Invalid commands
-		assertInvalidSyntax(player, "restrictedcommand data get entity APlayer");
-		assertInvalidSyntax(player, "restrictedcommand notacommand a b");
+		assertInvalidSyntax(player, "restrictedcommand data APlayer diamond");
+		assertInvalidSyntax(player, "restrictedcommand notacommand APlayer diamond");
 		assertInvalidSyntax(player, "restrictedcommand give CPlayer diamond");
 		assertInvalidSyntax(player, "restrictedcommand give APlayer dirt");
 		assertInvalidSyntax(player, "restrictedcommand give APlayer diamond 64");
 		assertInvalidSyntax(player, "restrictedcommand give APlayer");
 
-		assertNull(results.get());
+		// Check branching suggestions
+		new CommandAPICommand("multiplecommands")
+			.withArguments(
+				new CommandArgument("command")
+					.branchSuggestions(
+						SuggestionsBranch.suggest(
+							ArgumentSuggestions.strings("give"),
+							ArgumentSuggestions.strings(info -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new))
+						).branch(
+							SuggestionsBranch.suggest(
+								ArgumentSuggestions.strings("diamond", "minecraft:diamond"),
+								ArgumentSuggestions.empty()
+							),
+							SuggestionsBranch.suggest(
+								ArgumentSuggestions.strings("dirt", "minecraft:dirt"),
+								null,
+								ArgumentSuggestions.empty()
+							)
+						),
+						SuggestionsBranch.suggest(
+							ArgumentSuggestions.strings("tp"),
+							ArgumentSuggestions.strings(info -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new)),
+							ArgumentSuggestions.strings(info -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new))
+						)
+					)
+			).executes((sender, args) -> {
+				results.set((CommandResult) args[0]);
+			}).register();
+
+		// Valid commands
+		assertStoresResult(player, "multiplecommands give APlayer diamond",
+			results, new CommandResult(commandMap.getCommand("give"), new String[]{"APlayer", "diamond"}));
+		assertStoresResult(player, "multiplecommands give BPlayer diamond",
+			results, new CommandResult(commandMap.getCommand("give"), new String[]{"BPlayer", "diamond"}));
+		assertStoresResult(player, "multiplecommands give APlayer minecraft:diamond",
+			results, new CommandResult(commandMap.getCommand("give"), new String[]{"APlayer", "minecraft:diamond"}));
+		assertStoresResult(player, "multiplecommands give APlayer dirt",
+			results, new CommandResult(commandMap.getCommand("give"), new String[]{"APlayer", "dirt"}));
+		assertStoresResult(player, "multiplecommands give APlayer dirt 64",
+			results, new CommandResult(commandMap.getCommand("give"), new String[]{"APlayer", "dirt", "64"}));
+
+		assertStoresResult(player, "multiplecommands tp APlayer BPlayer",
+			results, new CommandResult(commandMap.getCommand("tp"), new String[]{"APlayer", "BPlayer"}));
+		assertStoresResult(player, "multiplecommands tp BPlayer APlayer",
+			results, new CommandResult(commandMap.getCommand("tp"), new String[]{"BPlayer", "APlayer"}));
+
+		// Invalid commands
+		assertInvalidSyntax(player, "multiplecommands data get entity APlayer");
+		assertInvalidSyntax(player, "multiplecommands notacommand APlayer diamond");
+		assertInvalidSyntax(player, "multiplecommands give CPlayer diamond");
+		assertInvalidSyntax(player, "multiplecommands give APlayer stone");
+		assertInvalidSyntax(player, "multiplecommands give APlayer diamond 64");
+		assertInvalidSyntax(player, "multiplecommands give APlayer");
+		assertInvalidSyntax(player, "multiplecommands tp APlayer CPlayer");
+		assertInvalidSyntax(player, "multiplecommands tp CPlayer APlayer");
+		assertInvalidSyntax(player, "multiplecommands tp APlayer");
+
+
+		assertNull(results.get(), "Expected there to be no results left, but at least one was found");
 	}
 	
 	@Test // Pre-#321 

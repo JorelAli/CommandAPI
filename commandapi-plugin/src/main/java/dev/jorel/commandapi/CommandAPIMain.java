@@ -20,18 +20,13 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
-import de.tr7zw.changeme.nbtapi.NBTContainer;
-import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
-import dev.jorel.commandapi.arguments.ArgumentSuggestions;
-import dev.jorel.commandapi.arguments.CommandArgument;
-import dev.jorel.commandapi.arguments.CommandResult;
-import dev.jorel.commandapi.arguments.SuggestionsBranch;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import java.io.File;
 import java.util.Map.Entry;
+
+import org.bukkit.plugin.java.JavaPlugin;
+
+import de.tr7zw.changeme.nbtapi.NBTContainer;
+import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
 
 public class CommandAPIMain extends JavaPlugin {
 
@@ -72,59 +67,5 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable(this);
-
-		// TODO: Move these test commands to ArgumentTests
-		new CommandAPICommand("commandargument")
-			.withArguments(new CommandArgument("command"))
-			.executes((sender, args) -> {
-				CommandAPI.logInfo("Argument parsed successfully");
-				((CommandResult) args[0]).execute(sender);
-			}).register();
-
-		new CommandAPICommand("multipleCommands")
-			.withArguments(
-				new CommandArgument("command")
-					.branchSuggestions(
-						SuggestionsBranch.suggest(
-								ArgumentSuggestions.strings("give"),
-								suggestOnlinePlayers()
-							).branch(
-								SuggestionsBranch.suggest(
-									ArgumentSuggestions.strings("diamond", "minecraft:diamond"),
-									ArgumentSuggestions.empty()
-								),
-								SuggestionsBranch.suggest(
-									ArgumentSuggestions.strings("dirt", "minecraft:dirt"),
-									null,
-									ArgumentSuggestions.empty()
-								)
-							),
-						SuggestionsBranch.suggest(
-							ArgumentSuggestions.strings("tp"),
-							suggestOnlinePlayers(),
-							suggestOnlinePlayers()
-						)
-					)
-			).executes((sender, args) -> {
-				CommandAPI.logInfo("Argument parsed successfully");
-				((CommandResult) args[0]).execute(sender);
-			}).register();
-
-		new CommandAPICommand("restrictedcommand")
-			.withArguments(new CommandArgument("command")
-				.replaceSuggestions(
-					ArgumentSuggestions.strings("give"),
-					ArgumentSuggestions.strings(info -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new)),
-					ArgumentSuggestions.strings("diamond", "minecraft:diamond"),
-					ArgumentSuggestions.empty()
-				)
-			).executesPlayer((sender, args) -> {
-				CommandAPI.logInfo("Argument parsed successfully");
-				((CommandResult) args[0]).execute(sender);
-			}).register();
-	}
-
-	private ArgumentSuggestions suggestOnlinePlayers() {
-		return ArgumentSuggestions.strings(info -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new));
 	}
 }
