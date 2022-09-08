@@ -24,8 +24,11 @@ import com.mojang.brigadier.Message;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * Represents a suggestion for an argument with a hover tooltip text for that
@@ -113,64 +116,136 @@ public class StringTooltip implements IStringTooltip {
 	}
 	
 	/**
-	 * Constructs an array of {@link StringTooltip} objects from an array of suggestions, and no tooltips
+	 * Constructs a collection of {@link StringTooltip} objects from an array of suggestions, and no tooltips
 	 *
 	 * @param suggestions array of suggestions to provide to the user
-	 * @return an array of {@link StringTooltip} objects from the suggestions, with no tooltips
+	 *
+	 * @return a collection of {@link StringTooltip} objects from the suggestions, with no tooltips
 	 */
-	public static StringTooltip[] none(String... suggestions) {
+	public static Collection<StringTooltip> none(String... suggestions) {
 		return generate(String::toString, (s, t) -> StringTooltip.none(s), suggestions);
 	}
 
 	/**
-	 * Constructs an array of {@link StringTooltip} objects from an array of suggestions,
-	 * and a function which generates a string tooltip for each suggestion
+	 * Constructs a collection of {@link StringTooltip} objects from a collection of suggestions, and no tooltips
+	 *
+	 * @param suggestions collection of suggestions to provide to the user
+	 *
+	 * @return a collection of {@link StringTooltip} objects from the suggestions, with no tooltips
+	 */
+	public static Collection<StringTooltip> none(Collection<String> suggestions) {
+		return generate(String::toString, (s, t) -> StringTooltip.none(s), suggestions);
+	}
+
+	/**
+	 * Constructs a collection of {@link StringTooltip} objects from an array of suggestions, and a function which generates
+	 * a string tooltip for each suggestion
 	 *
 	 * @param tooltipGenerator function which returns a string tooltip for the suggestion
 	 * @param suggestions array of suggestions to provide to the user
-	 * @return an array of {@link StringTooltip} objects from the provided suggestions, with the generated string tooltips
+	 *
+	 * @return a collection of {@link StringTooltip} objects from the provided suggestions, with the generated string
+	 * 	tooltips
 	 */
-	public static StringTooltip[] generateStrings(Function<String, String> tooltipGenerator, String... suggestions) {
+	public static Collection<StringTooltip> generateStrings(Function<String, String> tooltipGenerator, String... suggestions) {
 		return generate(tooltipGenerator, StringTooltip::ofString, suggestions);
 	}
 
 	/**
-	 * Constructs an array of {@link StringTooltip} objects from an array of suggestions,
-	 * and a function which generates a formatted tooltip for each suggestion
+	 * Constructs a collection of {@link StringTooltip} objects from a collection of suggestions, and a function which generates
+	 * a string tooltip for each suggestion
+	 *
+	 * @param tooltipGenerator function which returns a string tooltip for the suggestion
+	 * @param suggestions collection of suggestions to provide to the user
+	 *
+	 * @return a collection of {@link StringTooltip} objects from the provided suggestions, with the generated string
+	 * 	tooltips
+	 */
+	public static Collection<StringTooltip> generateStrings(Function<String, String> tooltipGenerator, Collection<String> suggestions) {
+		return generate(tooltipGenerator, StringTooltip::ofString, suggestions);
+	}
+
+	/**
+	 * Constructs a collection of {@link StringTooltip} objects from an array of suggestions, and a function which generates
+	 * a formatted tooltip for each suggestion
 	 *
 	 * @param tooltipGenerator function which returns a formatted tooltip for the suggestion
 	 * @param suggestions array of suggestions to provide to the user
-	 * @return an array of {@link StringTooltip} objects from the provided suggestions, with the generated formatted tooltips
+	 *
+	 * @return a collection of {@link StringTooltip} objects from the provided suggestions, with the generated formatted
+	 * 	tooltips
 	 */
-	public static StringTooltip[] generateMessages(Function<String, Message> tooltipGenerator, String... suggestions) {
+	public static Collection<StringTooltip> generateMessages(Function<String, Message> tooltipGenerator, String... suggestions) {
 		return generate(tooltipGenerator, StringTooltip::ofMessage, suggestions);
 	}
 
 	/**
-	 * Constructs an array of {@link StringTooltip} objects from an array of suggestions,
-	 * and a function which generates a formatted tooltip for each suggestion
+	 * Constructs a collection of {@link StringTooltip} objects from a collection of suggestions, and a function which generates
+	 * a formatted tooltip for each suggestion
 	 *
-	 * @param tooltipGenerator function which returns a formatted tooltip for the suggestion,
-	 * as an array of bungee text components
-	 * @param suggestions array of suggestions to provide to the user
-	 * @return an array of {@link StringTooltip} objects from the provided suggestions,
-	 * with the generated formatted tooltips
+	 * @param tooltipGenerator function which returns a formatted tooltip for the suggestion
+	 * @param suggestions collection of suggestions to provide to the user
+	 *
+	 * @return a collection of {@link StringTooltip} objects from the provided suggestions, with the generated formatted
+	 * 	tooltips
 	 */
-	public static StringTooltip[] generateBaseComponents(Function<String, BaseComponent[]> tooltipGenerator, String... suggestions) {
+	public static Collection<StringTooltip> generateMessages(Function<String, Message> tooltipGenerator, Collection<String> suggestions) {
+		return generate(tooltipGenerator, StringTooltip::ofMessage, suggestions);
+	}
+
+	/**
+	 * Constructs a collection of {@link StringTooltip} objects from an array of suggestions, and a function which generates
+	 * a formatted tooltip for each suggestion
+	 *
+	 * @param tooltipGenerator function which returns a formatted tooltip for the suggestion, an array of {@link BaseComponent}s
+	 * @param suggestions array of suggestions to provide to the user
+	 *
+	 * @return a collection of {@link StringTooltip} objects from the provided suggestions, with the generated formatted
+	 * 	tooltips
+	 */
+	public static Collection<StringTooltip> generateBaseComponents(Function<String, BaseComponent[]> tooltipGenerator, String... suggestions) {
 		return generate(tooltipGenerator, StringTooltip::ofBaseComponents, suggestions);
 	}
 
 	/**
-	 * Constructs an array of {@link StringTooltip} objects from an array of suggestions,
-	 * and a function which generates a formatted tooltip for each suggestion
+	 * Constructs a collection of {@link StringTooltip} objects from a collection of suggestions, and a function which generates
+	 * a formatted tooltip for each suggestion
 	 *
-	 * @param tooltipGenerator function which returns a formatted tooltip for the suggestion,
-	 * as an array of adventure text components
-	 * @param suggestions array of suggestions to provide to the user
-	 * @return an array of {@link StringTooltip} objects from the provided suggestions,
-	 * with the generated formatted tooltips
+	 * @param tooltipGenerator function which returns a formatted tooltip for the suggestion, an array of {@link BaseComponent}s
+	 * @param suggestions collection of suggestions to provide to the user
+	 *
+	 * @return a collection of {@link StringTooltip} objects from the provided suggestions, with the generated formatted
+	 * 	tooltips
 	 */
-	public static StringTooltip[] generateAdventureComponents(Function<String, Component> tooltipGenerator, String... suggestions) {
+	public static Collection<StringTooltip> generateBaseComponents(Function<String, BaseComponent[]> tooltipGenerator, Collection<String> suggestions) {
+		return generate(tooltipGenerator, StringTooltip::ofBaseComponents, suggestions);
+	}
+
+	/**
+	 * Constructs a collection of {@link StringTooltip} objects from an array of suggestions, and a function which generates
+	 * a tooltip formatted as an adventure {@link Component} for each suggestion
+	 *
+	 * @param tooltipGenerator function which returns a formatted tooltip for the suggestion, an adventure {@link Component}
+	 * @param suggestions array of suggestions to provide to the user
+	 *
+	 * @return a collection of {@link StringTooltip} objects from the provided suggestions, with the generated formatted
+	 * 	tooltips
+	 */
+	public static Collection<StringTooltip> generateAdventureComponents(Function<String, Component> tooltipGenerator, String... suggestions) {
+		return generate(tooltipGenerator, StringTooltip::ofAdventureComponent, suggestions);
+	}
+
+	/**
+	 * Constructs a collection of {@link StringTooltip} objects from a collection of suggestions, and a function which generates
+	 * a tooltip formatted as an adventure {@link Component} for each suggestion
+	 *
+	 * @param tooltipGenerator function which returns a formatted tooltip for the suggestion, an adventure {@link Component}
+	 * @param suggestions collection of suggestions to provide to the user
+	 *
+	 * @return a collection of {@link StringTooltip} objects from the provided suggestions, with the generated formatted
+	 * 	tooltips
+	 */
+	public static Collection<StringTooltip> generateAdventureComponents(Function<String, Component> tooltipGenerator, Collection<String> suggestions) {
 		return generate(tooltipGenerator, StringTooltip::ofAdventureComponent, suggestions);
 	}
 
@@ -181,15 +256,37 @@ public class StringTooltip implements IStringTooltip {
 	 * @param tooltipGenerator tooltip generation function
 	 * @param tooltipWrapper function which wraps suggestion and tooltip into a {@link StringTooltip} object
 	 * @param suggestions array of suggestions to provide to the user
-	 * @return an array of {@link StringTooltip} objects from the provided suggestion, wrapped using the above functions
+	 * @return a collection of {@link StringTooltip} objects from the provided suggestion, wrapped using the above functions
 	 */
-	private static <T> StringTooltip[] generate(Function<String, T> tooltipGenerator, BiFunction<String, T, StringTooltip> tooltipWrapper, String... suggestions) {
-		StringTooltip[] tooltips = new StringTooltip[suggestions.length];
-		for(int i = 0; i < suggestions.length; i++) {
-			String suggestion = suggestions[i];
-			tooltips[i] = tooltipWrapper.apply(suggestion, tooltipGenerator.apply(suggestion));
-		}
-		return tooltips;
+	private static <T> Collection<StringTooltip> generate(Function<String, T> tooltipGenerator, BiFunction<String, T, StringTooltip> tooltipWrapper, String... suggestions) {
+		return generate(tooltipGenerator, tooltipWrapper, Arrays.stream(suggestions));
+	}
+
+	/**
+	 * Internal base method for the other generation types
+	 *
+	 * @param <T> the type of the tooltip
+	 * @param tooltipGenerator tooltip generation function
+	 * @param tooltipWrapper function which wraps suggestion and tooltip into a {@link StringTooltip} object
+	 * @param suggestions collection of suggestions to provide to the user
+	 * @return a collection of {@link StringTooltip} objects from the provided suggestion, wrapped using the above functions
+	 */
+	private static <T> Collection<StringTooltip> generate(Function<String, T> tooltipGenerator, BiFunction<String, T, StringTooltip> tooltipWrapper, Collection<String> suggestions) {
+		return generate(tooltipGenerator, tooltipWrapper, suggestions.stream());
+	}
+
+	/**
+	 * Internal base method for the other generation types
+	 *
+	 * @param <T> the type of the tooltip
+	 * @param tooltipGenerator tooltip generation function
+	 * @param tooltipWrapper function which wraps suggestion and tooltip into a {@link StringTooltip} object
+	 * @param suggestions stream of suggestions to provide to the user
+	 * @return a collection of {@link StringTooltip} objects from the provided suggestion, wrapped using the above functions
+	 */
+	private static <T> Collection<StringTooltip> generate(Function<String, T> tooltipGenerator, BiFunction<String, T, StringTooltip> tooltipWrapper, Stream<String> suggestions) {
+		Function<String, StringTooltip> builder = suggestion -> tooltipWrapper.apply(suggestion, tooltipGenerator.apply(suggestion));
+		return suggestions.map(builder).toList();
 	}
 
 	private StringTooltip(String suggestion, Message tooltip) {
