@@ -90,7 +90,7 @@ This project provides an API to help Bukkit/Spigot developers use the Minecraft 
 
 - **No need for Brigadier** - You don't need to import Brigadier in your projects to use the CommandAPI
 
-- **No tracking** - The CommandAPI don't collect any stats about its plugin; what you see is what you get!
+- **No tracking** - The CommandAPI doesn't collect any stats about its plugin; what you see is what you get!
 
 Still not convinced? In addition to all of the above, the CommandAPI also provides:
 
@@ -189,6 +189,27 @@ new CommandAPICommand("perm")
             .executes((sender, args) -> {
                 //perm user remove code
             })
+        )
+    )
+    .register();
+```
+
+</details>
+
+<details>
+    <summary><b>Command trees</b></summary>
+	
+```java
+new CommandTree("perm")
+    .then(new MultiLiteralArgument("group", "user")
+        .then(new MultiLiteralArgument("add", "remove")
+            .then(new StringArgument("permission")
+                .then(new StringArgument("groupName")
+                    .executes((sender, args) -> {
+                        // args = ["group" or "user", "add" or "remove", permission, groupName]
+                    })
+                )
+            )
         )
     )
     .register();
