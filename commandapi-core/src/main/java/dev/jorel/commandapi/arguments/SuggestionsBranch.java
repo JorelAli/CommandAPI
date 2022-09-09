@@ -14,6 +14,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * This class represents a branch in the suggestions of an argument. Use {@link SuggestionsBranch#suggest(ArgumentSuggestions...)}
+ * to add suggestions, then {@link SuggestionsBranch#branch(SuggestionsBranch...)} to add more branches.
+ */
 public class SuggestionsBranch {
 	private final List<ArgumentSuggestions> suggestions;
 	private final List<SuggestionsBranch> branches = new ArrayList<>();
@@ -22,22 +26,46 @@ public class SuggestionsBranch {
 		this.suggestions = suggestions;
 	}
 
+	/**
+	 * Creates a {@link SuggestionsBranch} starting with the given suggestions. If a suggestions is null, the suggestions
+	 * at that position will not be overridden.
+	 *
+	 * @param suggestions An array of {@link ArgumentSuggestions} representing the suggestions. Use the static methods in
+	 *                    ArgumentSuggestions to create these.
+	 * @return a new {@link SuggestionsBranch} starting with the given suggestions
+	 */
 	public static SuggestionsBranch suggest(ArgumentSuggestions... suggestions) {
 		// Arrays#asList allows null elements
 		return new SuggestionsBranch(Arrays.asList(suggestions));
 	}
 
+	/**
+	 * Adds further branches to this {@link SuggestionsBranch}. After going through the suggestions provided by
+	 * {@link SuggestionsBranch#suggest(ArgumentSuggestions...)} the suggestions of these branches will be used.
+	 *
+	 * @param branches An array of {@link SuggestionsBranch} representing the branching suggestions. Use
+	 *                 {@link SuggestionsBranch#suggest(ArgumentSuggestions...)} to start creating these.
+	 * @return the current {@link SuggestionsBranch}
+	 */
 	public SuggestionsBranch branch(SuggestionsBranch... branches) {
 		// List#of does not allow null elements
 		this.branches.addAll(List.of(branches));
 		return this;
 	}
 
-	public ArgumentSuggestions getNextSuggestion(CommandSender sender, StringReader errorContext, String... previousArguments) throws CommandSyntaxException {
-		return getNextSuggestion(sender, errorContext, previousArguments, new ArrayList<>(), new StringBuilder());
+	/**
+	 * Gets the next {@link ArgumentSuggestions} based on the previous arguments.
+	 *
+	 * @param sender The {@link CommandSender} the suggestions are being built for
+	 * @param previousArguments An array of previously given arguments that is used to find the next {@link ArgumentSuggestions}
+	 * @return The next {@link ArgumentSuggestions} given by this {@link SuggestionsBranch}
+	 * @throws CommandSyntaxException if the given previous arguments don't match the paths of this {@link SuggestionsBranch}
+	 */
+	public ArgumentSuggestions getNextSuggestion(CommandSender sender, String... previousArguments) throws CommandSyntaxException {
+		return getNextSuggestion(sender, previousArguments, new StringReader(String.join(" ", previousArguments)), new ArrayList<>(), new StringBuilder());
 	}
 
-	private ArgumentSuggestions getNextSuggestion(CommandSender sender, StringReader errorContext, String[] previousArguments, List<String> processedArguments, StringBuilder currentInput) throws CommandSyntaxException {
+	private ArgumentSuggestions getNextSuggestion(CommandSender sender, String[] previousArguments, StringReader errorContext, List<String> processedArguments, StringBuilder currentInput) throws CommandSyntaxException {
 		if (branches.size() == 0 && suggestions.size() == 0) return null;
 		for (ArgumentSuggestions currentSuggestion : suggestions) {
 			// If all the arguments were processed, this suggestion is next
@@ -65,7 +93,7 @@ public class SuggestionsBranch {
 		for (SuggestionsBranch branch : branches) {
 			try {
 				mergedBranches.add(branch.getNextSuggestion(
-					sender, errorContext, previousArguments, new ArrayList<>(processedArguments), new StringBuilder(currentInput)
+					sender, previousArguments, errorContext, new ArrayList<>(processedArguments), new StringBuilder(currentInput)
 				));
 			} catch (CommandSyntaxException ignored) {
 			}
@@ -92,8 +120,15 @@ public class SuggestionsBranch {
 		}
 	}
 
-	public void enforceReplacements(CommandSender sender, StringReader errorContext, String... arguments) throws CommandSyntaxException {
-		EnforceReplacementsResult result = enforceReplacements(sender, errorContext, arguments, new ArrayList<>(), new StringBuilder());
+	/**
+	 * Makes sure the given arguments correspond to the suggestions of this {@link SuggestionsBranch}
+	 *
+	 * @param sender The {@link CommandSender} the suggestions are being built for
+	 * @param arguments An array of arguments to check against the suggestions of this {@link SuggestionsBranch}
+	 * @throws CommandSyntaxException if there are no valid paths for the given arguments
+	 */
+	public void enforceReplacements(CommandSender sender, String... arguments) throws CommandSyntaxException {
+		EnforceReplacementsResult result = enforceReplacements(sender, arguments, new StringReader(String.join(" ", arguments)), new ArrayList<>(), new StringBuilder());
 		if(result.type != ExceptionType.NO_ERROR) throw result.exception;
 	}
 
@@ -122,7 +157,7 @@ public class SuggestionsBranch {
 		UNKNOWN
 	}
 
-	private EnforceReplacementsResult enforceReplacements(CommandSender sender, StringReader errorContext, String[] arguments, List<String> processedArguments, StringBuilder currentInput) {
+	private EnforceReplacementsResult enforceReplacements(CommandSender sender, String[] arguments, StringReader errorContext, List<String> processedArguments, StringBuilder currentInput) {
 		if (branches.size() == 0 && suggestions.size() == 0)
 			return new EnforceReplacementsResult(ExceptionType.NO_ERROR, null);
 
@@ -166,7 +201,7 @@ public class SuggestionsBranch {
 		// Check the branches to see if the arguments fit and try to choose an appropriate response
 		EnforceReplacementsResult finalResult = EnforceReplacementsResult.withContext(ExceptionType.UNKNOWN, errorContext);
 		for (SuggestionsBranch branch : branches) {
-			EnforceReplacementsResult result = branch.enforceReplacements(sender, errorContext, arguments, new ArrayList<>(processedArguments), new StringBuilder(currentInput));
+			EnforceReplacementsResult result = branch.enforceReplacements(sender, arguments, errorContext, new ArrayList<>(processedArguments), new StringBuilder(currentInput));
 			if (result.isHigherPriority(finalResult)) {
 				finalResult = result;
 			}

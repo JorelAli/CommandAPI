@@ -37,7 +37,7 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 
 			if (!command.contains(" ")) {
 				// Suggesting command name
-				ArgumentSuggestions replacement = replacements.getNextSuggestion(sender, context);
+				ArgumentSuggestions replacement = replacements.getNextSuggestion(sender);
 				if (replacement != null)
 					return replacement.suggest(new SuggestionInfo(sender, new Object[0], command, command), builder);
 
@@ -75,7 +75,7 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 
 			int lastIndex = arguments.length - 1;
 			String[] previousArguments = Arrays.copyOf(arguments, lastIndex);
-			ArgumentSuggestions replacement = replacements.getNextSuggestion(sender, context, previousArguments);
+			ArgumentSuggestions replacement = replacements.getNextSuggestion(sender, previousArguments);
 			if (replacement != null)
 				return replacement.suggest(new SuggestionInfo(sender, previousArguments, command, arguments[lastIndex]), builder);
 
@@ -95,16 +95,42 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 
 	SuggestionsBranch replacements = SuggestionsBranch.suggest();
 
+	/**
+	 * Replaces the default command suggestions provided by the server with custom suggestions for each argument in the
+	 * command, starting with the command's name. If a suggestion is null or there isn't any suggestions given for that
+	 * argument, the suggestions will not be overridden.
+	 *
+	 * @param suggestions An array of {@link ArgumentSuggestions} representing the suggestions. Use the static methods in
+	 *                    ArgumentSuggestions to create these.
+	 * @return the current argument
+	 */
 	public CommandArgument replaceSuggestions(ArgumentSuggestions... suggestions) {
 		replacements = SuggestionsBranch.suggest(suggestions);
 		return this;
 	}
 
+	/**
+	 * Replaces the default command suggestions provided by the server with custom suggestions for each argument in the
+	 * command, starting with the command's name. If a suggestion is null or there isn't any suggestions given for that
+	 * argument, the suggestions will not be overridden.
+	 *
+	 * @param suggestions An array of {@link ArgumentSuggestions} representing the suggestions. Use the static methods in
+	 *                    ArgumentSuggestions to create these.
+	 * @return the current argument
+	 */
 	@Override
 	public CommandArgument replaceSuggestions(ArgumentSuggestions suggestions) {
 		return replaceSuggestions(new ArgumentSuggestions[]{suggestions});
 	}
 
+	/**
+	 * Adds {@link SuggestionsBranch} to this CommandArgument. After going through the suggestions provided by
+	 * {@link CommandArgument#replaceSuggestions(ArgumentSuggestions...)} the suggestions of these branches will be used.
+	 *
+	 * @param branches An array of {@link SuggestionsBranch} representing the branching suggestions. Use
+	 *                 {@link SuggestionsBranch#suggest(ArgumentSuggestions...)} to start creating these.
+	 * @return the current argument
+	 */
 	public Argument<CommandResult> branchSuggestions(SuggestionsBranch... branches) {
 		replacements.branch(branches);
 		return this;
@@ -137,7 +163,7 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 			throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownCommand().createWithContext(context);
 
 		// check all replacements
-		replacements.enforceReplacements(sender, context, arguments);
+		replacements.enforceReplacements(sender, arguments);
 
 		return new CommandResult(target, Arrays.copyOfRange(arguments, 1, arguments.length));
 	}
