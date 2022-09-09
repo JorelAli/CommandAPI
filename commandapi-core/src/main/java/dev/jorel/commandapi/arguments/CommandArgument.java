@@ -162,7 +162,7 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 		if (target == null)
 			throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownCommand().createWithContext(context);
 
-		// check all replacements
+		// Check all replacements
 		replacements.enforceReplacements(sender, arguments);
 
 		return new CommandResult(target, Arrays.copyOfRange(arguments, 1, arguments.length));

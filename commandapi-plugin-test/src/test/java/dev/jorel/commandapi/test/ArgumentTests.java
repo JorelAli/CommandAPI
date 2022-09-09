@@ -643,10 +643,8 @@ public class ArgumentTests {
 		// Valid commands
 		assertStoresResult(player, "restrictedcommand give APlayer diamond",
 			results, new CommandResult(commandMap.getCommand("give"), new String[]{"APlayer", "diamond"}));
-
 		assertStoresResult(player, "restrictedcommand give BPlayer diamond",
 			results, new CommandResult(commandMap.getCommand("give"), new String[]{"BPlayer", "diamond"}));
-
 		assertStoresResult(player, "restrictedcommand give APlayer minecraft:diamond",
 			results, new CommandResult(commandMap.getCommand("give"), new String[]{"APlayer", "minecraft:diamond"}));
 
