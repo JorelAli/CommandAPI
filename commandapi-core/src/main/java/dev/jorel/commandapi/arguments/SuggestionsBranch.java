@@ -58,8 +58,8 @@ public class SuggestionsBranch {
 	 *
 	 * @param sender            The {@link CommandSender} the suggestions are being built for
 	 * @param previousArguments An array of previously given arguments that is used to find the next {@link ArgumentSuggestions}
-	 * @return The next {@link ArgumentSuggestions} given by this {@link SuggestionsBranch}
-	 * @throws CommandSyntaxException if the given previous arguments don't match the paths of this {@link SuggestionsBranch}
+	 * @return The next {@link ArgumentSuggestions} given by this {@link SuggestionsBranch} or null if the suggestions should not be overridden
+	 * @throws CommandSyntaxException if the given previous arguments don't lead to a valid path for this {@link SuggestionsBranch}
 	 */
 	public ArgumentSuggestions getNextSuggestion(CommandSender sender, String... previousArguments) throws CommandSyntaxException {
 		return getNextSuggestion(sender, previousArguments, new StringReader(String.join(" ", previousArguments)), new ArrayList<>(), new StringBuilder());
@@ -125,7 +125,7 @@ public class SuggestionsBranch {
 	 *
 	 * @param sender    The {@link CommandSender} the suggestions are being built for
 	 * @param arguments An array of arguments to check against the suggestions of this {@link SuggestionsBranch}
-	 * @throws CommandSyntaxException if there are no valid paths for the given arguments
+	 * @throws CommandSyntaxException if the given arguments don't lead to a valid path for this {@link SuggestionsBranch}
 	 */
 	public void enforceReplacements(CommandSender sender, String... arguments) throws CommandSyntaxException {
 		EnforceReplacementsResult result = enforceReplacements(sender, arguments, new StringReader(String.join(" ", arguments)), new ArrayList<>(), new StringBuilder());
