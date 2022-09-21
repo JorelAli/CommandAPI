@@ -155,14 +155,14 @@ val configKeys : Array<String> = getConfig().getKeys(true).toTypedArray();
 
 // Register our command
 CommandAPICommand("editconfig")
-    .withArguments(TextArgument("config-key").replaceSuggestions(ArgumentSuggestions.strings({ _ -> configKeys })))
+    .withArguments(TextArgument("config-key").replaceSuggestions(ArgumentSuggestions.strings { _ -> configKeys }))
     .withArguments(BooleanArgument("value"))
-    .executes({ _ : CommandSender, args : Array<Any> ->
+    .executes(CommandExecutor { _, args ->
         // Update the config with the boolean argument
         getConfig().set(args[0] as String, args[1] as Boolean)
-    } as CommandExecutor)
-    .register();
-}
+    })
+    .register()
 /* ANCHOR_END: booleanargs */
+}
 
 }
