@@ -34,7 +34,7 @@ To illustrate this, let's take a look at a simple message broadcasting command. 
 We use an argument "message" to hold the message to broadcast, we provide some aliases and set a permission required to run the command. Then we declare our main command body by using the `.executes()` method, before finally registering the command:
 
 ```java
-{{#include ../../commandapi-core/src/test/java/Examples.java:normalcommandexecutors3}}
+{{#include ../../commandapi-core/src/test/java/Examples.java:normalcommandexecutors3_1}}
 ```
 
 Note how when we finish up our implementation of `.executes()`, we don't return anything. This is unlike commands in the standard Bukkit API where the `onCommand` method returns a Boolean value:

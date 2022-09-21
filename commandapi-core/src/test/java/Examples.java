@@ -1156,7 +1156,7 @@ new CommandAPICommand("suicide")
 
 @SuppressWarnings("deprecation")
 void normalcommandexecutors3() {
-/* ANCHOR: normalcommandexecutors3 */
+/* ANCHOR: normalcommandexecutors3_1 */
 //Create our command
 new CommandAPICommand("broadcastmsg")
     .withArguments(new GreedyStringArgument("message")) // The arguments
@@ -1167,7 +1167,7 @@ new CommandAPICommand("broadcastmsg")
         Bukkit.getServer().broadcastMessage(message);
     })
     .register();
-/* ANCHOR_END: normalcommandexecutors3 */
+/* ANCHOR_END: normalcommandexecutors3_1 */
 }
 
 {
