@@ -44,6 +44,8 @@ We first retrieve the keys from the configuration file using the typical Bukkit 
 
 </div>
 
+</div>
+
 -----
 
 ## Numerical arguments

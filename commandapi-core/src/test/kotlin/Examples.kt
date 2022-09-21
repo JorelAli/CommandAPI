@@ -133,6 +133,7 @@ import dev.jorel.commandapi.arguments.TimeArgument;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.CommandExecutor;
 import dev.jorel.commandapi.executors.ExecutorType;
+import dev.jorel.commandapi.executors.PlayerCommandExecutor;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.IntegerRange;
 import dev.jorel.commandapi.wrappers.MathOperation;
@@ -147,6 +148,21 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 
 class Examples : JavaPlugin() {
+
+fun commandunregistration() {
+/* ANCHOR: commandunregistration */
+//Unregister the gamemode command from the server (by force)
+CommandAPI.unregister("gamemode", true)
+
+// Register our new /gamemode, with survival, creative, adventure and spectator
+CommandAPICommand("gamemode")
+    .withArguments(MultiLiteralArgument("survival", "creative", "adventure", "spectator"))
+    .executes(CommandExecutor { sender, args ->
+        //Implementation of our /gamemode command
+    })
+    .register()
+/* ANCHOR_END: commandunregistration */
+}
 
 fun booleanargs() {
 /* ANCHOR: booleanargs */
@@ -163,6 +179,56 @@ CommandAPICommand("editconfig")
     })
     .register()
 /* ANCHOR_END: booleanargs */
+}
+
+fun rangedarguments() {
+/* ANCHOR: rangedarguments */
+CommandAPICommand("searchrange")
+    .withArguments(IntegerRangeArgument("range")) // Range argument
+    .withArguments(ItemStackArgument("item"))     // The item to search for
+    .executesPlayer(PlayerCommandExecutor { player, args ->
+        // Retrieve the range from the arguments
+        val range = args[0] as IntegerRange
+        val itemStack = args[1] as ItemStack
+
+        // Store the locations of chests with certain items
+        val locations = mutableListOf<Location>()
+
+        // Iterate through all chunks, and then all tile entities within each chunk
+        for(chunk in player.world.loadedChunks) {
+            for(blockState in chunk.tileEntities) {
+
+                // The distance between the block and the player
+                val distance = blockState.location.distance(player.location) as Int
+
+                // Check if the distance is within the specified range
+                if(range.isInRange(distance)) {
+
+                    // Check if the tile entity is a chest
+                    if(blockState is Chest) {
+
+                        // Check if the chest contains the item specified by the player
+                        if(blockState.inventory.contains(itemStack.type)) {
+                            locations.add(blockState.location)
+                        }
+                    }
+                }
+
+            }
+        }
+
+        // Output the locations of the chests, or whether no chests were found
+        if(locations.isEmpty()) {
+            player.sendMessage("No chests were found")
+        } else {
+            player.sendMessage("Found ${locations.size} chests:")
+            locations.forEach({
+                player.sendMessage("  Found at: ${it.getX()}, ${it.getY()}, ${it.getZ()}");
+            });
+        }
+    })
+    .register()
+/* ANCHOR_END: rangedarguments */
 }
 
 }

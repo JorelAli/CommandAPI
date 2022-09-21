@@ -186,7 +186,8 @@ new CommandAPICommand("gamemode")
     .withArguments(new MultiLiteralArgument("survival", "creative", "adventure", "spectator"))
     .executes((sender, args) -> {
         //Implementation of our /gamemode command
-    }).register();
+    })
+    .register();
 /* ANCHOR_END: commandunregistration */
 }
 {

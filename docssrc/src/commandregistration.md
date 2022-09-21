@@ -210,8 +210,16 @@ For instance, instead of unregistering `/gamemode`, you could register a command
 
 To replace a command, we can first unregister it and then register our implementation of that command.
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:commandunregistration}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:commandunregistration}}
+```
+
+</div>
 
 </div>
