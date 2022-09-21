@@ -132,6 +132,8 @@ import dev.jorel.commandapi.executors.CommandExecutor
 import dev.jorel.commandapi.executors.EntityCommandExecutor
 import dev.jorel.commandapi.executors.ExecutorType
 import dev.jorel.commandapi.executors.PlayerCommandExecutor
+import dev.jorel.commandapi.executors.ProxyCommandExecutor
+import dev.jorel.commandapi.executors.ResultingCommandExecutor
 import dev.jorel.commandapi.wrappers.FunctionWrapper
 import dev.jorel.commandapi.wrappers.IntegerRange
 import dev.jorel.commandapi.wrappers.MathOperation
@@ -798,7 +800,7 @@ CommandAPICommand("bigmsg")
 
 fun blockpredicatearguments() {
 /* ANCHOR: blockpredicatearguments */
-Array<Argument<Any>> arguments = arrayOf(
+val arguments = arrayOf(
     IntegerArgument("radius"),
     BlockPredicateArgument("fromBlock"),
     BlockStateArgument("toBlock"),
@@ -867,7 +869,7 @@ override fun onLoad() {
     )
 }
 /* ANCHOR_END: nbtcompoundargumentonload */
-	
+    
 }
 
 @Suppress("unused")
@@ -966,10 +968,10 @@ fun worldArgument(nodeName : String) : Argument<World> {
         } else {
             return world
         }
-    }).replaceSuggestions(ArgumentSuggestions.strings { info -> 
+    }).replaceSuggestions(ArgumentSuggestions.strings { _ -> 
         // List of world names on the server
-        Bukkit.worlds.map { it.name }.toTypedArray()
-    }
+        Bukkit.worlds.map{ it.name }.toTypedArray()
+    })
 }
 /* ANCHOR_END: customarguments2 */
 
@@ -1114,7 +1116,7 @@ CommandAPICommand("broadcastmsg")
     .withAliases("broadcast", "broadcastmessage")       // Command aliases
     .withPermission(CommandPermission.OP)               // Required permissions
     .executes(CommandExecutor { sender, args ->
-        String message = (String) args[0]
+        val message = args[0] as String
         Bukkit.getServer().broadcastMessage(message)
     })
     .register()
@@ -1131,15 +1133,15 @@ CommandAPICommand("killme")
 /* ANCHOR_END: proxysender */
 }
 
-{
+fun proxysender2() {
 /* ANCHOR: proxysender2 */
 CommandAPICommand("killme")
     .executesPlayer(PlayerCommandExecutor { player, args ->
         player.setHealth(0)
     })
-    .executesProxy((proxy, args) -> {
+    .executesProxy(ProxyCommandExecutor { proxy, args ->
         //Check if the callee (target) is an Entity and kill it
-        if (proxy.getCallee() instanceof LivingEntity target) {
+        if (proxy.callee is LivingEntity) {
             target.setHealth(0)
         }
     })
@@ -1147,35 +1149,33 @@ CommandAPICommand("killme")
 /* ANCHOR_END: proxysender2 */
 }
 
-{
+fun nativesender() {
 /* ANCHOR: nativesender */
 CommandAPICommand("break")
     .executesNative(CommandExecutor { sender, args ->
-        Location location = sender.getLocation()
-        if (location != null) {
-            location.getBlock().breakNaturally()
-        }
+        val location = sender.location
+        location?.block.breakNaturally()
     })
     .register()
 /* ANCHOR_END: nativesender */
 }
 
-{
+fun resultingcommandexecutor() {
 /* ANCHOR: resultingcommandexecutor */
 CommandAPICommand("randnum")
-    .executes(CommandExecutor { sender, args ->
-        return Random().nextInt()
+    .executes(ResultingCommandExecutor { sender, args ->
+        return Random.nextInt()
     })
     .register()
 /* ANCHOR_END: resultingcommandexecutor */
 }
 
-{
+fun resultingcommandexecutor2() {
 /* ANCHOR: resultingcommandexecutor2 */
 //Register random number generator command from 1 to 99 (inclusive)
 CommandAPICommand("randomnumber")
-    .executes(CommandExecutor { sender, args ->
-        return ThreadLocalRandom.current().nextInt(1, 100) //Returns random number from 1 <= x < 100
+    .executes(ResultingCommandExecutor { sender, args ->
+        return Random.nextInt(1, 100) // Returns random number from 1 <= x < 100
     })
     .register()
 /* ANCHOR_END: resultingcommandexecutor2 */
@@ -1188,26 +1188,26 @@ fun resultingcommandexecutor3(){
 CommandAPICommand("givereward")
     .withArguments(EntitySelectorArgument<Player>("target", EntitySelector.ONE_PLAYER))
     .executes(CommandExecutor { sender, args ->
-        Player player = (Player) args[0]
-        player.getInventory().addItem(ItemStack(Material.DIAMOND, 64))
-        Bukkit.broadcastMessage(player.getName() + " won a rare 64 diamonds from a loot box!")
+        val player = args[0] as Player
+        player.inventory.addItem(ItemStack(Material.DIAMOND, 64))
+        Bukkit.broadcastMessage("${player.name} won a rare 64 diamonds from a loot box!")
     })
     .register()
 /* ANCHOR_END: resultingcommandexecutor3 */
 }
 
-{
+fun commandfailures() {
 /* ANCHOR: commandfailures */
 // Array of fruit
-String[] fruit = String[] {"banana", "apple", "orange"}
+val fruit = arrayOf<String>("banana", "apple", "orange")
 
 // Register the command
 CommandAPICommand("getfruit")
     .withArguments(StringArgument("item").replaceSuggestions(ArgumentSuggestions.strings(fruit)))
     .executes(CommandExecutor { sender, args ->
-        String inputFruit = (String) args[0]
-        
-        if (Arrays.stream(fruit).anyMatch(inputFruit::equals)) {
+        val inputFruit = args[0] as String
+
+        if(fruit.any { it == inputFruit }) {
             // Do something with inputFruit
         } else {
             // The sender's input is not in the list of fruit
@@ -1218,7 +1218,7 @@ CommandAPICommand("getfruit")
 /* ANCHOR_END: commandfailures */
 }
 
-{
+fun argumentsyntax1() {
 /* ANCHOR: argumentsyntax1 */
 CommandAPICommand("mycommand")
     .withArguments(StringArgument("arg0"))
@@ -1236,19 +1236,19 @@ CommandAPICommand("mycommand")
     
 
 /* ANCHOR: argumentsyntax3 */
-List<Argument<?>> arguments = ArrayList<>()
-arguments.add(StringArgument("arg0"))
-arguments.add(StringArgument("arg1"))
-arguments.add(StringArgument("arg2"))
+val arguments = listOf(
+    StringArgument("arg0"),
+    StringArgument("arg1"),
+    StringArgument("arg2")
+)
 
 CommandAPICommand("mycommand")
     .withArguments(arguments)
     // And so on
 /* ANCHOR_END: argumentsyntax3 */
-    
 }
 
-{
+fun argumentkillcmd() {
 /* ANCHOR: argumentkillcmd */
 CommandAPICommand("kill")
     .executesPlayer(PlayerCommandExecutor { player, args ->
@@ -1262,7 +1262,7 @@ CommandAPICommand("kill")
 CommandAPICommand("kill")
     .withArguments(PlayerArgument("target"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        ((Player) args[0]).setHealth(0)
+        (args[0] as Player).setHealth(0)
     })
     .register()
 /* ANCHOR_END: argumentkillcmd2 */
@@ -1271,54 +1271,55 @@ CommandAPICommand("kill")
 @Suppress("unused")
 public fun argumentCasting() {
 /* ANCHOR: argumentcasting */
-List<Argument<?>> arguments = ArrayList<>()
-arguments.add(StringArgument("arg0"))
-arguments.add(PotionEffectArgument("arg1"))
-arguments.add(LocationArgument("arg2"))
+val arguments = listOf(
+    StringArgument("arg0"),
+    PotionEffectArgument("arg1"),
+    LocationArgument("arg2")
+)
 
 CommandAPICommand("cmd")
     .withArguments(arguments)
     .executes(CommandExecutor { sender, args ->
-        String stringArg = (String) args[0]
-        PotionEffectType potionArg = (PotionEffectType) args[1]
-        Location locationArg = (Location) args[2]
+        val stringArg = args[0] as String
+        val potionArg = args[1] as PotionEffectType
+        val locationArg = args[2] as Location
     })
     .register()
 /* ANCHOR_END: argumentcasting */
 }
 
-{
+fun requirements() {
 /* ANCHOR: requirements */
 CommandAPICommand("repair")
-    .withRequirement(sender -> ((Player) sender).getLevel() >= 30)
+    .withRequirement { (it as Player).level >= 30 }
     .executesPlayer(PlayerCommandExecutor { player, args ->
         
         //Repair the item back to full durability
-        ItemStack is = player.getInventory().getItemInMainHand()
-        ItemMeta itemMeta = is.getItemMeta()
-        if (itemMeta instanceof Damageable) {
-            ((Damageable) itemMeta).setDamage(0)
+        val is = player.inventory.getItemInMainHand()
+        val itemMeta = is.getItemMeta
+        if (itemMeta is Damageable) {
+            itemMeta.setDamage(0)
             is.setItemMeta(itemMeta)
         }
         
         // Subtract 30 levels
-        player.setLevel(player.getLevel() - 30)
+        player.setLevel(player.level - 30)
     })
     .register()
 /* ANCHOR_END: requirements */
 }
 
-{
+fun requirementsmap() {
 /* ANCHOR: requirementsmap */
-Map<UUID, String> partyMembers = HashMap<>()
+val partyMembers = mutableMapOf<UUID, String>()
 /* ANCHOR_END: requirementsmap */
 
 /* ANCHOR: requirements2 */
-List<Argument<?>> arguments = ArrayList<>()
+var arguments = mutableListOf<Argument<Any>>()
 
 // The "create" literal, with a requirement that a player must have a party
 arguments.add(LiteralArgument("create")
-    .withRequirement(sender -> !partyMembers.containsKey(((Player) sender).getUniqueId()))
+    .withRequirement { !partyMembers.containsKey((it as Player).uniqueId) }
 )
 
 arguments.add(StringArgument("partyName"))
@@ -1329,40 +1330,40 @@ CommandAPICommand("party")
     .withArguments(arguments)
     .executesPlayer(PlayerCommandExecutor { player, args ->
         
-        //Get the name of the party to create
-        String partyName = (String) args[0]
+        // Get the name of the party to create
+        partyName = args[0] as String
         
-        partyMembers.put(player.getUniqueId(), partyName)
+        partyMembers.put(player.uniqueId, partyName)
     })
     .register()
 /* ANCHOR_END: requirements3 */
 
 /* ANCHOR: requirementstp */
 /* ANCHOR: requirements4 */
-arguments = ArrayList<>()
+arguments = mutableListOf()
 arguments.add(LiteralArgument("tp")
-    .withRequirement(sender -> partyMembers.containsKey(((Player) sender).getUniqueId()))
+    .withRequirement({ partyMembers.containsKey((it as Player).uniqueId) })
 )
 /* ANCHOR_END: requirementstp */
 
 arguments.add(PlayerArgument("player")
-    .replaceSafeSuggestions(SafeSuggestions.suggest(info -> {
+    .replaceSafeSuggestions(SafeSuggestions.suggest({ info ->
         
-        //Store the list of party members to teleport to
-        List<Player> playersToTeleportTo = ArrayList<>()
+        // Store the list of party members to teleport to
+        val playersToTeleportTo = mutableListOf<Player>()
         
-        String partyName = partyMembers.get(((Player) info.sender()).getUniqueId())
+        val partyName = partyMembers[(info.sender() as Player).uniqueId]
         
-        //Find the party members
-        for (UUID uuid : partyMembers.keySet()) {
+        // Find the party members
+        for ((uuid, party) in partyMembers.keySet()) {
             
-            //Ignore yourself
-            if (uuid.equals(((Player) info.sender()).getUniqueId())) {
+            // Ignore yourself
+            if (uuid == (info.sender() as Player).uniqueId) {
                 continue
             } else {
-                //If the party member is in the same party as you
-                if (partyMembers.get(uuid).equals(partyName)) {
-                    Player target = Bukkit.getPlayer(uuid)
+                // If the party member is in the same party as you
+                if (party == partyName) {
+                    val target = Bukkit.getPlayer(uuid)
                     if (target.isOnline()) {
                         //Add them if they are online
                         playersToTeleportTo.add(target)
@@ -1371,7 +1372,7 @@ arguments.add(PlayerArgument("player")
             }
         }
         
-        return playersToTeleportTo.toArray(Player[0])
+        return playersToTeleportTo.toTypedArray()
     })))
 /* ANCHOR_END: requirements4 */
 
@@ -1379,7 +1380,7 @@ arguments.add(PlayerArgument("player")
 CommandAPICommand("party")
     .withArguments(arguments)
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        Player target = (Player) args[0]
+        val target = args[0] as Player
         player.teleport(target)
     })
     .register()
@@ -1390,10 +1391,10 @@ CommandAPICommand("party")
     .withArguments(arguments)
     .executesPlayer(PlayerCommandExecutor { player, args ->
         
-        //Get the name of the party to create
-        String partyName = (String) args[0]
+        // Get the name of the party to create
+        val partyName = args[0] as String
         
-        partyMembers.put(player.getUniqueId(), partyName)
+        partyMembers.put(player.uniqueId, partyName)
         
         CommandAPI.updateRequirements(player)
     })
@@ -1401,12 +1402,12 @@ CommandAPICommand("party")
 /* ANCHOR_END: updatingrequirements */
 }
 
-{
+fun multiplerequirements() {
 /* ANCHOR: multiplerequirements */
 CommandAPICommand("someCommand")
-    .withRequirement(sender -> ((Player) sender).getLevel() >= 30)
-    .withRequirement(sender -> ((Player) sender).getInventory().contains(Material.DIAMOND_PICKAXE))
-    .withRequirement(sender -> ((Player) sender).isInvulnerable())
+    .withRequirement({ (it as Player).level >= 30 })
+    .withRequirement({ (it as Player).inventory.contains(Material.DIAMOND_PICKAXE) })
+    .withRequirement({ (it as Player).isInvulnerable() })
     .executesPlayer(PlayerCommandExecutor { player, args ->
         //Code goes here
     })
@@ -1414,29 +1415,29 @@ CommandAPICommand("someCommand")
 /* ANCHOR_END: multiplerequirements */
 }
 
-{
-Map<UUID, String> partyMembers = HashMap<>()
+fun predicatetips() {
+val partyMembers = mutableMapOf<UUID, String>()
 /* ANCHOR: predicatetips */
-Predicate<CommandSender> testIfPlayerHasParty = sender -> {
-    return partyMembers.containsKey(((Player) sender).getUniqueId())
+val testIfPlayerHasParty : Predicate<CommandSender> = { sender ->
+    return partyMembers.containsKey((sender as Player).uniqueId
 }
 /* ANCHOR_END: predicatetips */
 
 /* ANCHOR: predicatetips2 */
-List<Argument<?>> arguments = ArrayList<>()
-arguments.add(LiteralArgument("create").withRequirement(testIfPlayerHasParty.negate()))
-arguments.add(StringArgument("partyName"))
+var arguments = listOf<Argument<Any>>(
+    LiteralArgument("create").withRequirement(testIfPlayerHasParty.negate()),
+    StringArgument("partyName")
+)
 /* ANCHOR_END: predicatetips2 */
 
 /* ANCHOR: predicatetips3 */
-arguments = ArrayList<>()
-arguments.add(LiteralArgument("tp").withRequirement(testIfPlayerHasParty))
+arguments = listOf<Argument<Any>>(LiteralArgument("tp").withRequirement(testIfPlayerHasParty))
 /* ANCHOR_END: predicatetips3 */
 }
 
-{
+fun converter2() {
 /* ANCHOR: converter2 */
-JavaPlugin essentials = (JavaPlugin) Bukkit.getPluginManager().getPlugin("Essentials")
+val essentials = Bukkit.pluginManager.getPlugin("Essentials") as JavaPlugin
 
 // /speed <speed>
 Converter.convert(essentials, "speed", IntegerArgument("speed", 0, 10))
@@ -1459,35 +1460,32 @@ Converter.convert(essentials, "speed",
 /* ANCHOR_END: converter2 */
 }
 
-@Suppress({ "rawtypes", "unchecked" })
-fun a(){
+fun brigadier(){
 /* ANCHOR: brigadier */
 /* ANCHOR: declareliteral */
-//Register literal "randomchance"
+// Register literal "randomchance"
 LiteralCommandNode randomChance = Brigadier.fromLiteralArgument(LiteralArgument("randomchance")).build()
 /* ANCHOR_END: declareliteral */
 
 /* ANCHOR: declarearguments */
-//Declare arguments like normal
-Argument<Integer> numeratorArgument = IntegerArgument("numerator", 0)
-Argument<Integer> denominatorArgument = IntegerArgument("denominator", 1)
+// Declare arguments like normal
+val numeratorArgument = IntegerArgument("numerator", 0)
+val denominatorArgument = IntegerArgument("denominator", 1)
 
-List<Argument> arguments = ArrayList<>()
-arguments.add(numeratorArgument)
-arguments.add(denominatorArgument)
+val arguments = listOf<Argument<Any>>(numeratorArgument, denominatorArgument)
 /* ANCHOR_END: declarearguments */
 
 //Get brigadier argument objects
 /* ANCHOR: declareargumentbuilders */
-ArgumentBuilder numerator = Brigadier.fromArgument(numeratorArgument)
+val numerator : ArgumentBuilder = Brigadier.fromArgument(numeratorArgument)
 /* ANCHOR: declarefork */
-ArgumentBuilder denominator = Brigadier.fromArgument(denominatorArgument)
+val denominator : ArgumentBuilder = Brigadier.fromArgument(denominatorArgument)
 /* ANCHOR_END: declareargumentbuilders */
     //Fork redirecting to "execute" and state our predicate
-    .fork(Brigadier.getRootNode().getChild("execute"), Brigadier.fromPredicate(CommandExecutor { sender, args ->
+    .fork(Brigadier.rootNode.getChild("execute"), Brigadier.fromPredicate(CommandExecutor { sender, args ->
         //Parse arguments like normal
-        int num = (int) args[0]
-        int denom = (int) args[1]
+        val num = args[0] as Int
+        val denom = args[1] as Int
         
         //Return boolean with a num/denom chance
         return Math.ceil(Math.random() * (double) denom) <= (double) num
@@ -1501,15 +1499,15 @@ randomChance.addChild(numerator.then(denominator).build())
 
 /* ANCHOR: injectintoroot */
 //Add (randomchance <numerator> <denominator>) as a child of (execute -> if)
-Brigadier.getRootNode().getChild("execute").getChild("if").addChild(randomChance)
+Brigadier.rootNode.getChild("execute").getChild("if").addChild(randomChance)
 /* ANCHOR_END: injectintoroot */
 /* ANCHOR_END: brigadier */
 }
 
-{
+fun subcommands() {
 
 /* ANCHOR: subcommandspart */
-CommandAPICommand groupAdd = CommandAPICommand("add")
+val groupAdd = CommandAPICommand("add")
     .withArguments(StringArgument("permission"))
     .withArguments(StringArgument("groupName"))
     .executes(CommandExecutor { sender, args ->
@@ -1517,14 +1515,14 @@ CommandAPICommand groupAdd = CommandAPICommand("add")
     })
 /* ANCHOR_END: subcommandspart */
 /* ANCHOR: subcommands */
-CommandAPICommand groupRemove = CommandAPICommand("remove")
+val groupRemove = CommandAPICommand("remove")
     .withArguments(StringArgument("permission"))
     .withArguments(StringArgument("groupName"))
     .executes(CommandExecutor { sender, args ->
         //perm group remove code
     })
 
-CommandAPICommand group = CommandAPICommand("group")
+val group = CommandAPICommand("group")
     .withSubcommand(groupAdd)
     .withSubcommand(groupRemove)
 /* ANCHOR_END: subcommands */
@@ -1593,21 +1591,21 @@ CommandAPICommand("mycmd")
 /* ANCHOR_END: help2 */
 }
 
-{
-    //NOTE: This example isn't used!
+fun anglearguments() {
+    // TODO: This example isn't used!
 /* ANCHOR: anglearguments */
 CommandAPICommand("yaw")
     .withArguments(AngleArgument("amount"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        Location newLocation = player.getLocation()
-        newLocation.setYaw((float) args[0])
+        val newLocation = player.location
+        newLocation.setYaw(args[0] as Float)
         player.teleport(newLocation)
     })
     .register()
 /* ANCHOR_END: anglearguments */
 }
 
-{
+fun listed() {
 /* ANCHOR: listed */
 CommandAPICommand("mycommand")
     .withArguments(PlayerArgument("player"))
@@ -1615,24 +1613,25 @@ CommandAPICommand("mycommand")
     .withArguments(GreedyStringArgument("message"))
     .executes(CommandExecutor { sender, args ->
         // args == [player, message]
-        Player player = (Player) args[0]
-        String message = (String) args[1] //Note that this is args[1] and NOT args[2]
+        val player = args[0] as Player
+        val message = args[1] as String // Note that this is args[1] and NOT args[2]
         player.sendMessage(message)
     })
     .register()
 /* ANCHOR_END: listed */
 }
 
-{
+fun tooltips1() {
 /* ANCHOR: Tooltips1 */
-List<Argument<?>> arguments = ArrayList<>()
+val arguments = mutableListOf<Argument<Any>>()
 arguments.add(StringArgument("emote")
-    .replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(info -> IStringTooltip[] {
+    .replaceSuggestions(ArgumentSuggestions.stringsWithTooltips { info ->
+        arrayOf<IStringTooltip>(
             StringTooltip.ofString("wave", "Waves at a player"),
             StringTooltip.ofString("hug", "Gives a player a hug"),
             StringTooltip.ofString("glare", "Gives a player the death glare")
-        }
-    ))
+        )
+    })
 )
 arguments.add(PlayerArgument("target"))
 /* ANCHOR_END: Tooltips1 */
@@ -1640,41 +1639,35 @@ arguments.add(PlayerArgument("target"))
 CommandAPICommand("emote")
     .withArguments(arguments)
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        String emote = (String) args[0]
-        Player target = (Player) args[1]
-        
-        switch(emote) {
-        case "wave":
-            target.sendMessage(player.getName() + " waves at you!")
-            break
-        case "hug":
-            target.sendMessage(player.getName() + " hugs you!")
-            break
-        case "glare":
-            target.sendMessage(player.getName() + " gives you the death glare...")
-            break
+        val emote = args[0] as String
+        val target = args[1] as Player
+
+        when (emote) {
+            "wave" -> target.sendMessage("${player.name} waves at you!")
+            "hug" -> target.sendMessage("${player.name} hugs you!")
+            "glare" -> target.sendMessage("${player.name} gives you the death glare...")
         }
     })
     .register()
 /* ANCHOR_END: Tooltips2 */
 }
 
-{
+fun tooltips4() {
 /* ANCHOR: Tooltips4 */
-CustomItem[] customItems = CustomItem[] {
+val customItems = arrayOf<CustomItem>(
     CustomItem(ItemStack(Material.DIAMOND_SWORD), "God sword", "A sword from the heavens"),
     CustomItem(ItemStack(Material.PUMPKIN_PIE), "Sweet pie", "Just like grandma used to make")
-}
+)
     
 CommandAPICommand("giveitem")
     .withArguments(StringArgument("item").replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(customItems))) // We use customItems[] as the input for our suggestions with tooltips
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        String itemName = (String) args[0]
+        val itemName = args[0] as String
         
         //Give them the item
-        for (CustomItem item : customItems) {
-            if (item.getName().equals(itemName)) {
-                player.getInventory().addItem(item.getItem())
+        for (item in customItems) {
+            if (item.name == itemName) {
+                player.inventory.addItem(item.item)
                 break
             }
         }
@@ -1683,53 +1676,54 @@ CommandAPICommand("giveitem")
 /* ANCHOR_END: Tooltips4 */
 }
 
-{
+fun safetooltips() {
 /* ANCHOR: SafeTooltips */
-List<Argument<?>> arguments = ArrayList<>()
-arguments.add(LocationArgument("location")
-    .replaceSafeSuggestions(SafeSuggestions.tooltips(info -> {
-        // We know the sender is a player if we use .executesPlayer()
-        Player player = (Player) info.sender()
-        return Tooltip.arrayOf(
-            Tooltip.ofString(player.getWorld().getSpawnLocation(), "World spawn"),
-            Tooltip.ofString(player.getBedSpawnLocation(), "Your bed"),
-            Tooltip.ofString(player.getTargetBlockExact(256).getLocation(), "Target block")
-        )
-    })))
+val arguments = listOf<Argument<Any>>(
+    LocationArgument("location")
+        .replaceSafeSuggestions(SafeSuggestions.tooltips({ info ->
+            // We know the sender is a player if we use .executesPlayer()
+            val player = info.sender() as Player
+            return Tooltip.arrayOf(
+                Tooltip.ofString(player.world.spawnLocation, "World spawn"),
+                Tooltip.ofString(player.bedSpawnLocation, "Your bed"),
+                Tooltip.ofString(player.getTargetBlockExact(256).location, "Target block")
+            )
+        }))
+)
 /* ANCHOR_END: SafeTooltips */
 /* ANCHOR: SafeTooltips2 */
 CommandAPICommand("warp")
     .withArguments(arguments)
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        player.teleport((Location) args[0])
+        player.teleport(args[0] as Location)
     })
     .register()
 /* ANCHOR_END: SafeTooltips2 */
 }
 
-{
+fun argumentsuggestionsprevious() {
 /* ANCHOR: ArgumentSuggestionsPrevious */
 // Declare our arguments as normal
-List<Argument<?>> arguments = ArrayList<>()
+val arguments = mutableListOf<Argument<Any>>()
 arguments.add(IntegerArgument("radius"))
 
 // Replace the suggestions for the PlayerArgument.
 // info.sender() refers to the command sender that is running this command
 // info.previousArgs() refers to the Object[] of previously declared arguments (in this case, the IntegerArgument radius)
-arguments.add(PlayerArgument("target").replaceSuggestions(ArgumentSuggestions.strings(info -> {
+arguments.add(PlayerArgument("target").replaceSuggestions(ArgumentSuggestions.strings({ info ->
 
     // Cast the first argument (radius, which is an IntegerArgument) to get its value
-    int radius = (int) info.previousArgs()[0]
+    val radius = info.previousArgs()[0] as Int
     
     // Get nearby entities within the provided radius
-    Player player = (Player) info.sender()
-    Collection<Entity> entities = player.getWorld().getNearbyEntities(player.getLocation(), radius, radius, radius)
+    val player = info.sender() as Player
+    val entities = player.world.getNearbyEntities(player.location, radius, radius, radius)
     
     // Get player names within that radius
-    return entities.stream()
-        .filter(e -> e.getType() == EntityType.PLAYER)
-        .map(Entity::getName)
-        .toArray(String[]::new)
+    return entities
+        .filter { it.type == EntityType.PLAYER }
+        .map { it.name }
+        .toTypedArray()
 })))
 arguments.add(GreedyStringArgument("message"))
 
@@ -1737,44 +1731,46 @@ arguments.add(GreedyStringArgument("message"))
 CommandAPICommand("localmsg")
     .withArguments(arguments)
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        Player target = (Player) args[1]
-        String message = (String) args[2]
+        val target = args[1] as Player
+        val message = args[2] as String
         target.sendMessage(message)
     })
     .register()
 /* ANCHOR_END: ArgumentSuggestionsPrevious */
 }
 
-{
+fun argumentsuggestions2_2() {
 /* ANCHOR: ArgumentSuggestions2_2 */
-List<Argument<?>> arguments = ArrayList<>()
-arguments.add(PlayerArgument("friend").replaceSuggestions(ArgumentSuggestions.strings(info ->
-    Friends.getFriends(info.sender())
-)))
+val arguments = listOf<Argument<Any>>(
+    PlayerArgument("friend").replaceSuggestions(ArgumentSuggestions.strings({ info ->
+        Friends.getFriends(info.sender())
+    }))
+)
 
 CommandAPICommand("friendtp")
     .withArguments(arguments)
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        Player target = (Player) args[0]
+        val target = args[0] as Player
         player.teleport(target)
     })
     .register()
 /* ANCHOR_END: ArgumentSuggestions2_2 */
 }
 
-{
-Map<String, Location> warps = HashMap<>()
+fun argumentsuggestions1() {
+val warps = mutableMapOf<String, Location>()
 /* ANCHOR: ArgumentSuggestions1 */
-List<Argument<?>> arguments = ArrayList<>()
-arguments.add(StringArgument("world").replaceSuggestions(ArgumentSuggestions.strings( 
-    "northland", "eastland", "southland", "westland"
-)))
+val arguments = listOf<Argument<Any>>(
+    StringArgument("world").replaceSuggestions(ArgumentSuggestions.strings( 
+        "northland", "eastland", "southland", "westland"
+    ))
+)
 
 CommandAPICommand("warp")
     .withArguments(arguments)
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        String warp = (String) args[0]
-        player.teleport(warps.get(warp)) // Look up the warp in a map, for example
+        val warp = args[0] as String
+        player.teleport(warps[warp]) // Look up the warp in a map, for example
     })
     .register()
 /* ANCHOR_END: ArgumentSuggestions1 */
@@ -1784,14 +1780,14 @@ CommandAPICommand("warp")
 fun SafeRecipeArguments() {
 /* ANCHOR: SafeRecipeArguments */
 // Create our itemstack
-ItemStack emeraldSword = ItemStack(Material.DIAMOND_SWORD)
-ItemMeta meta = emeraldSword.getItemMeta()
+val emeraldSword = ItemStack(Material.DIAMOND_SWORD)
+val meta = emeraldSword.getItemMeta()
 meta.setDisplayName("Emerald Sword")
 meta.setUnbreakable(true)
 emeraldSword.setItemMeta(meta)
 
 // Create and register our recipe
-ShapedRecipe emeraldSwordRecipe = ShapedRecipe(NamespacedKey(this, "emerald_sword"), emeraldSword)
+val emeraldSwordRecipe = ShapedRecipe(NamespacedKey(this, "emerald_sword"), emeraldSword)
 emeraldSwordRecipe.shape(
     "AEA", 
     "AEA", 
@@ -1807,104 +1803,106 @@ getServer().addRecipe(emeraldSwordRecipe)
 
 /* ANCHOR: SafeRecipeArguments_2 */
 // Safely override with the recipe we've defined
-List<Argument<?>> arguments = ArrayList<>()
-arguments.add(RecipeArgument("recipe").replaceSafeSuggestions(SafeSuggestions.suggest(info -> 
-    Recipe[] { emeraldSwordRecipe, /* Other recipes here */ }
-)))
+val arguments = listOf<Argument<Any>>(
+    RecipeArgument("recipe").replaceSafeSuggestions(SafeSuggestions.suggest {
+        arrayOf(emeraldSwordRecipe, /* Other recipes here */)
+    })
+)
 
 // Register our command
 CommandAPICommand("giverecipe")
     .withArguments(arguments)
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        Recipe recipe = (Recipe) args[0]
-        player.getInventory().addItem(recipe.getResult())
+        val recipe = args[0] as Recipe
+        player.inventory.addItem(recipe.result)
     })
     .register()
 /* ANCHOR_END: SafeRecipeArguments_2 */
 }
 
-{
+fun safemobspawnarguments() {
 /* ANCHOR: SafeMobSpawnArguments */
-EntityType[] forbiddenMobs = EntityType[] {EntityType.ENDER_DRAGON, EntityType.WITHER}
-List<EntityType> allowedMobs = ArrayList<>(Arrays.asList(EntityType.values()))
+val forbiddenMobs = arrayOf<EntityType>(EntityType.ENDER_DRAGON, EntityType.WITHER)
+val allowedMobs = mutableListOf<EntityType>(Arrays.asList(EntityType.values())) // TODO: There might be a better way to do this in Kotlin
 allowedMobs.removeAll(Arrays.asList(forbiddenMobs)) // Now contains everything except enderdragon and wither
 /* ANCHOR_END: SafeMobSpawnArguments */
 
 /* ANCHOR: SafeMobSpawnArguments_2 */
-List<Argument<?>> arguments = ArrayList<>()
-arguments.add(EntityTypeArgument("mob").replaceSafeSuggestions(SafeSuggestions.suggest(
-    info -> {
-        if (info.sender().isOp()) {
-            // All entity types
-            return EntityType.values()
-        } else {
-            // Only allowedMobs
-            return allowedMobs.toArray(EntityType[0])
+val arguments = listOf<Argument<Any>>(
+    EntityTypeArgument("mob").replaceSafeSuggestions(SafeSuggestions.suggest{
+        info ->
+            if (info.sender().isOp()) {
+                // All entity types
+                return EntityType.values()
+            } else {
+                // Only allowedMobs
+                return allowedMobs.toTypedArray()
+            }
         }
-    })
-))
+    )
+)
 /* ANCHOR_END: SafeMobSpawnArguments_2 */
 
 /* ANCHOR: SafeMobSpawnArguments_3 */
 CommandAPICommand("spawnmob")
     .withArguments(arguments)
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        EntityType entityType = (EntityType) args[0]
-        player.getWorld().spawnEntity(player.getLocation(), entityType)
+        val entityType = args[0] as EntityType
+        player.world.spawnEntity(player.location, entityType)
     })
     .register()
 /* ANCHOR_END: SafeMobSpawnArguments_3 */
 }
 
-{
+fun safepotionarguments() {
 /* ANCHOR: SafePotionArguments */
-List<Argument<?>> arguments = ArrayList<>()
+val arguments = mutableListOf<Argument<Any>>()
 arguments.add(EntitySelectorArgument<Player>("target", EntitySelector.ONE_PLAYER))
-arguments.add(PotionEffectArgument("potioneffect").replaceSafeSuggestions(SafeSuggestions.suggest(
-    info -> {
-        Player target = (Player) info.previousArgs()[0]
+arguments.add(PotionEffectArgument("potioneffect").replaceSafeSuggestions(SafeSuggestions.suggest{
+    info ->
+        target = info.previousArgs()[0] as Player
         
         // Convert PotionEffect[] into PotionEffectType[]
-        return target.getActivePotionEffects().stream()
-            .map(PotionEffect::getType)
-            .toArray(PotionEffectType[]::new)
+        return target.activePotionEffects.map{ it.type }.toTypedArray()
     })
-))
+)
 /* ANCHOR_END: SafePotionArguments */
 
 /* ANCHOR: SafePotionArguments_2 */
 CommandAPICommand("removeeffect")
     .withArguments(arguments)
     .executesPlayer(PlayerCommandExecutor { player, args ->
-    	Player target = (Player) args[0]
-        PotionEffectType potionEffect = (PotionEffectType) args[1]
+        val target = args[0] as Player
+        val potionEffect = args[1] as PotionEffectType
         target.removePotionEffect(potionEffect)
     })
     .register()
 /* ANCHOR_END: SafePotionArguments_2 */
 }
 
-{
+// TODO: Why does this example never get used????
+fun fruits() {
     // A really simple example showing how you can use the new suggestion system
-	final String[] fruits = String[] { "Apple", "Apricot", "Artichoke", "Asparagus", "Atemoya", "Avocado",
-			"Bamboo Shoots", "Banana", "Bean Sprouts", "Beans", "Beets", "Blackberries", "Blueberries", "Boniato",
-			"Boysenberries", "Broccoflower", "Broccoli", "Cabbage", "Cactus Pear", "Cantaloupe", "Carambola", "Carrots",
-			"Cauliflower", "Celery", "Chayote", "Cherimoya", "Cherries", "Coconuts", "Corn", "Cranberries", "Cucumber",
-			"Dates", "Eggplant", "Endive", "Escarole", "Feijoa", "Fennel", "Figs", "Garlic", "Gooseberries",
-			"Grapefruit", "Grapes", "Greens", "Guava", "Hominy", "Jicama", "Kale", "Kiwifruit", "Kohlrabi", "Kumquat",
-			"Leeks", "Lemons", "Lettuce", "Lima Beans", "Limes", "Longan", "Loquat", "Lychee", "Madarins", "Malanga",
-			"Mangos", "Mulberries", "Mushrooms", "Napa", "Nectarines", "Okra", "Onion", "Oranges", "Papayas", "Parsnip",
-			"Peaches", "Pears", "Peas", "Peppers", "Persimmons", "Pineapple", "Plantains", "Plums", "Pomegranate",
-			"Potatoes", "Prunes", "Pummelo", "Pumpkin", "Quince", "Radicchio", "Radishes", "Raisins", "Raspberries",
-			"Rhubarb", "Rutabaga", "Shallots", "Spinach", "Sprouts", "Squash", "Strawberries", "Tangelo", "Tangerines",
-			"Tomatillo", "Tomato", "Turnip", "Watercress", "Watermelon", "Yams", "Zucchini" }
+    val fruits = arrayOf<String>( "Apple", "Apricot", "Artichoke", "Asparagus", "Atemoya", "Avocado",
+            "Bamboo Shoots", "Banana", "Bean Sprouts", "Beans", "Beets", "Blackberries", "Blueberries", "Boniato",
+            "Boysenberries", "Broccoflower", "Broccoli", "Cabbage", "Cactus Pear", "Cantaloupe", "Carambola", "Carrots",
+            "Cauliflower", "Celery", "Chayote", "Cherimoya", "Cherries", "Coconuts", "Corn", "Cranberries", "Cucumber",
+            "Dates", "Eggplant", "Endive", "Escarole", "Feijoa", "Fennel", "Figs", "Garlic", "Gooseberries",
+            "Grapefruit", "Grapes", "Greens", "Guava", "Hominy", "Jicama", "Kale", "Kiwifruit", "Kohlrabi", "Kumquat",
+            "Leeks", "Lemons", "Lettuce", "Lima Beans", "Limes", "Longan", "Loquat", "Lychee", "Madarins", "Malanga",
+            "Mangos", "Mulberries", "Mushrooms", "Napa", "Nectarines", "Okra", "Onion", "Oranges", "Papayas", "Parsnip",
+            "Peaches", "Pears", "Peas", "Peppers", "Persimmons", "Pineapple", "Plantains", "Plums", "Pomegranate",
+            "Potatoes", "Prunes", "Pummelo", "Pumpkin", "Quince", "Radicchio", "Radishes", "Raisins", "Raspberries",
+            "Rhubarb", "Rutabaga", "Shallots", "Spinach", "Sprouts", "Squash", "Strawberries", "Tangelo", "Tangerines",
+            "Tomatillo", "Tomato", "Turnip", "Watercress", "Watermelon", "Yams", "Zucchini" )
     
     CommandAPICommand("concept")
         .withArguments(StringArgument("text"))
-        .withArguments(StringArgument("input").replaceSuggestions(ArgumentSuggestions.strings(info -> {
-            System.out.println(info.currentArg()) // partially typed argument
-            System.out.println(info.currentInput()) // current input (includes the /)
-            return Arrays.stream(fruits).filter(s -> s.toLowerCase().startsWith(info.currentArg().toLowerCase())).toArray(String[]::new)
+        .withArguments(StringArgument("input").replaceSuggestions(ArgumentSuggestions.strings({info ->
+            println(info.currentArg()) // partially typed argument
+            println(info.currentInput()) // current input (includes the /)
+
+            return fruits.filter{ it.toLowerCase().startsWith(info.currentArg().toLowerCase()) }.toTypedArray()
         })))
         .withArguments(IntegerArgument("int"))
         .executes(CommandExecutor { sender, args ->
@@ -1913,31 +1911,30 @@ CommandAPICommand("removeeffect")
         .register()
 }
 
-{
+fun commandapiconfigsilent() {
 /* ANCHOR: CommandAPIConfigSilent */
 CommandAPI.onLoad(CommandAPIConfig().silentLogs(true))
 /* ANCHOR_END: CommandAPIConfigSilent */
 }
 
-{
+fun asyncreadfile() {
 
-JavaPlugin plugin = JavaPlugin() {}
+val plugin : JavaPlugin = JavaPlugin() {}
 /* ANCHOR: asyncreadfile */
 CommandAPICommand("setconfig")
-    .withArguments(StringArgument("key").replaceSuggestions(ArgumentSuggestions.stringsAsync(info -> {
+    .withArguments(StringArgument("key").replaceSuggestions(ArgumentSuggestions.stringsAsync({ info ->
         return CompletableFuture.supplyAsync(() -> {
-            return plugin.getConfig().getKeys(false).toArray(String[0])
+            return plugin.config.getKeys(false).toTypedArray()
         })
     })))
     .withArguments(TextArgument("value"))
     .executes(CommandExecutor { sender, args ->
-        String key = (String) args[0]
-        String value = (String) args[1]
-        plugin.getConfig().set(key, value)
+        key = args[0] as String
+        value = args[1] as String
+        plugin.config.set(key, value)
     })
     .register()
 /* ANCHOR_END: asyncreadfile */
-	
 }
 
 @Suppress("unchecked")
@@ -1947,16 +1944,16 @@ fun listargument() {
 CommandAPICommand("multigive")
     .withArguments(IntegerArgument("amount", 1, 64))
     .withArguments(ListArgumentBuilder<Material>("materials")
-        .withList(List.of(Material.values()))
-        .withMapper(material -> material.name().toLowerCase())
+        .withList(Material.values().toList())
+        .withMapper { material -> material.name().toLowerCase() }
         .build()
     )
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        int amount = (int) args[0]
-        List<Material> theList = (List<Material>) args[1]
-        
-        for (Material item : theList) {
-            player.getInventory().addItem(ItemStack(item, amount))
+        val amount = args[0] as Int
+        val theList = args[1] as List<Material>
+
+        for (item in theList) {
+            player.inventory.addItem(ItemStack(item, amount))
         }
     })
     .register()
@@ -2020,38 +2017,38 @@ CommandAPICommand("commandargument")
 
 {
 CommandTree("treeexample")
-	//Set the aliases as you normally would 
-	.withAliases("treealias")
-	//Set an executor on the command itself
-	.executes(CommandExecutor { sender, args ->
-		sender.sendMessage("Root with no arguments")
-	})
-	//Create a new branch starting with a the literal 'integer'
-	.then(LiteralArgument("integer")
-		//Execute on the literal itself
-		.executes(CommandExecutor { sender, args ->
-			sender.sendMessage("Integer Branch with no arguments")
-		})
-		//Create a further branch starting with an integer argument, which executes a command
-		.then(IntegerArgument("integer").executes(CommandExecutor { sender, args ->
-			sender.sendMessage("Integer Branch with integer argument: " + args[0])
-		})))
-	.then(LiteralArgument("biome")
-		.executes(CommandExecutor { sender, args ->
-			sender.sendMessage("Biome Branch with no arguments")
-		})
-		.then(BiomeArgument("biome").executes(CommandExecutor { sender, args ->
-			sender.sendMessage("Biome Branch with biome argument: " + args[0])
-		})))
-	.then(LiteralArgument("string")
-		.executes(CommandExecutor { sender, args ->
-			sender.sendMessage("String Branch with no arguments")
-		})
-		.then(StringArgument("string").executes(CommandExecutor { sender, args ->
-			sender.sendMessage("String Branch with string argument: " + args[0])
-		})))
-	//Call register to finish as you normally would
-	.register()
+    //Set the aliases as you normally would 
+    .withAliases("treealias")
+    //Set an executor on the command itself
+    .executes(CommandExecutor { sender, args ->
+        sender.sendMessage("Root with no arguments")
+    })
+    //Create a new branch starting with a the literal 'integer'
+    .then(LiteralArgument("integer")
+        //Execute on the literal itself
+        .executes(CommandExecutor { sender, args ->
+            sender.sendMessage("Integer Branch with no arguments")
+        })
+        //Create a further branch starting with an integer argument, which executes a command
+        .then(IntegerArgument("integer").executes(CommandExecutor { sender, args ->
+            sender.sendMessage("Integer Branch with integer argument: " + args[0])
+        })))
+    .then(LiteralArgument("biome")
+        .executes(CommandExecutor { sender, args ->
+            sender.sendMessage("Biome Branch with no arguments")
+        })
+        .then(BiomeArgument("biome").executes(CommandExecutor { sender, args ->
+            sender.sendMessage("Biome Branch with biome argument: " + args[0])
+        })))
+    .then(LiteralArgument("string")
+        .executes(CommandExecutor { sender, args ->
+            sender.sendMessage("String Branch with no arguments")
+        })
+        .then(StringArgument("string").executes(CommandExecutor { sender, args ->
+            sender.sendMessage("String Branch with string argument: " + args[0])
+        })))
+    //Call register to finish as you normally would
+    .register()
 
 /* ANCHOR: CommandTree_sayhi1 */
 CommandTree("sayhi")
@@ -2114,12 +2111,12 @@ CommandTree("signedit")
 }
 
 public Sign getTargetSign(Player player) throws WrapperCommandSyntaxException {
-	Block block = player.getTargetBlock(null, 256)
-	if (block != null && block.getState() instanceof Sign sign) {
-		return sign
-	} else {
-		throw CommandAPI.fail("You're not looking at a sign!")
-	}
+    Block block = player.getTargetBlock(null, 256)
+    if (block != null && block.getState() instanceof Sign sign) {
+        return sign
+    } else {
+        throw CommandAPI.fail("You're not looking at a sign!")
+    }
 }
 
 
@@ -2149,7 +2146,7 @@ class CustomItem implements IStringTooltip {
     private ItemStack itemstack
     private String name
     
-	public CustomItem(ItemStack itemstack, String name, String lore) {
+    public CustomItem(ItemStack itemstack, String name, String lore) {
         ItemMeta meta = itemstack.getItemMeta()
         meta.setDisplayName(name)
         meta.setLore(Arrays.asList(lore))

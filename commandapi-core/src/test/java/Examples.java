@@ -1925,7 +1925,7 @@ arguments.add(new PotionEffectArgument("potioneffect").replaceSafeSuggestions(Sa
 new CommandAPICommand("removeeffect")
     .withArguments(arguments)
     .executesPlayer((player, args) -> {
-    	Player target = (Player) args[0];
+        Player target = (Player) args[0];
         PotionEffectType potionEffect = (PotionEffectType) args[1];
         target.removePotionEffect(potionEffect);
     })
