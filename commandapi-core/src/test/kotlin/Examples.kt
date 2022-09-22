@@ -155,7 +155,7 @@ CommandAPICommand("broadcastmsg")
     .withArguments(GreedyStringArgument("message")) // The arguments
     .withAliases("broadcast", "broadcastmessage")   // Command aliases
     .withPermission(CommandPermission.OP)           // Required permissions
-    .executes( { sender, args ->
+    .executes(CommandExecutor { sender, args ->
         val message = args[0] as String;
         Bukkit.getServer().broadcastMessage(message);
     })
