@@ -63,8 +63,16 @@ Say you wanted to write a command to modify your plugin's config file. Since the
 
 We make use of the `ArgumentSuggestions.stringsAsync` method to provide asynchronous suggestions. In our completable future implementation, we access the keys from the plugin configuration.
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:asyncreadfile}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:asyncreadfile}}
+```
+
+</div>
 
 </div>

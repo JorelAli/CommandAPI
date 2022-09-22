@@ -26,9 +26,17 @@ In this example, we'll create a simple command which lets you show a book to a u
 
 We can construct a book using the Adventure API's `Book.book(Component, Component, Component...)` method. In order to convert our strings into `Component` objects, we use the `Component.text(String)` method. Since Paper supports the Adventure API natively, we can then send this book to a player using the `openBook(Book)` method:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:ArgumentAdventureChatComponent}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:ArgumentAdventureChatComponent}}
+```
+
+</div>
 
 </div>
 
@@ -50,8 +58,16 @@ We'll take the same example from the `ChatArgument` class, but using the `Advent
 
 In order to broadcast an Adventure `Component` to all players on the server, we have to use Paper's `broadcast(Component, String)` method. This method requires a permission node which all players must have in order to receive the broadcasted message. By default, Bukkit-based servers (Spigot and Paper) use the `bukkit.broadcast.user` permission, which is described [here](https://bukkit.fandom.com/wiki/CraftBukkit_Commands#Additional_Permissions):
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:ArgumentAdventureChat}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:ArgumentAdventureChat}}
+```
+
+</div>
 
 </div>

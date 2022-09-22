@@ -32,9 +32,17 @@ Say we want to create a plugin that lets you edit its own `config.yml` file usin
 
 We first retrieve the keys from the configuration file using the typical Bukkit API. We construct our `List` to hold our arguments, with the first parameter being a String key (in the form of a `TextArgument`, [overridden with an array of suggestions](./argumentsuggestions.md)). Finally, we register our command and update the config, ensuring that we cast the `BooleanArgument` to `boolean`:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:booleanargs}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:booleanargs}}
+```
+
+</div>
 
 </div>
 

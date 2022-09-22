@@ -41,15 +41,31 @@ Say we want to create a simple command to provide in-game emotes between players
 
 First, we'll declare our arguments. Here, we'll use the `stringsWithTooltips` method, along with the `StringTooltip.of(String, String)` method to create emote suggestions and include suitable descriptions:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:Tooltips1}}
 ```
 
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:Tooltips1}}
+```
+
+</div>
+
 Finally, we declare our command as normal:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:Tooltips2}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:Tooltips2}}
+```
+
+</div>
 
 </div>
 
@@ -70,15 +86,31 @@ This is incredibly useful if you are using suggestions with custom objects, such
 
 Let's say we've created a simple plugin which has custom items. For a custom item, we'll have a simple class `CustomItem` that sets its name, lore and attached itemstack:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 public {{#include ../../commandapi-core/src/test/java/Examples.java:Tooltips3}}
 ```
 
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:Tooltips3}}
+```
+
+</div>
+
 Let's also say that our plugin has registered lots of `CustomItem`s and has this stored in a `CustomItem[]` in our plugin. We could then use this as our input for suggestions:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:Tooltips4}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:Tooltips4}}
+```
+
+</div>
 
 </div>
 
@@ -119,14 +151,30 @@ Say we wanted to create a custom teleport command which suggestions a few key lo
 
 First, we'll declare our arguments. Here, we use a `LocationArgument` and use the `tooltips` method, with a parameter for the command sender, so we can get information about the world. We populate the suggestions with tooltips using `Tooltip.of(Location, String)` and collate them together with `Tooltip.arrayOf(Tooltip<Location>...)`:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:SafeTooltips}}
 ```
 
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:SafeTooltips}}
+```
+
+</div>
+
 In the arguments declaration, we've casted the command sender to a player. To ensure that the command sender is definitely a player, we'll use the `executesPlayer` command execution method in our command declaration:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:SafeTooltips2}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:SafeTooltips2}}
+```
+
+</div>
 
 </div>

@@ -4,17 +4,17 @@ To register commands with the CommandAPI, we use the `CommandAPICommand` class. 
 
 I think the easiest way to explain it is with an example:
 
-```java
-//Create our command
-new CommandAPICommand("broadcastmsg")
-    .withArguments(new GreedyStringArgument("message")) // The arguments
-    .withAliases("broadcast", "broadcastmessage")       // Command aliases
-    .withPermission(CommandPermission.OP)               // Required permissions
-    .executes((sender, args) -> {
-        String message = (String) args[0];
-        Bukkit.getServer().broadcastMessage(message);
-    }).register();
+<div class="multi-pre">
+
+```java,Java
+{{#include ../../commandapi-core/src/test/java/Examples.java:commandregistration}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:commandregistration}}
+```
+
+</div>
 
 - First, we create a new `CommandAPICommand`, with the name of the command that the sender must enter to run it.
 
@@ -210,8 +210,16 @@ For instance, instead of unregistering `/gamemode`, you could register a command
 
 To replace a command, we can first unregister it and then register our implementation of that command.
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:commandunregistration}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:commandunregistration}}
+```
+
+</div>
 
 </div>

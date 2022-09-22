@@ -16,8 +16,16 @@ The multi literal argument has all of the same benefits of a regular literal arg
 
 In this example, we'll show how to use multi literals to declare Minecraft's `/gamemode` command. As you can see from the example code below, the argument declaration and command declaration is the same as if you were declaring any normal argument or command.
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:multiliteralarguments}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:multiliteralarguments}}
+```
+
+</div>
 
 </div>

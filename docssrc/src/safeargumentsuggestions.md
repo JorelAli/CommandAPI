@@ -124,15 +124,31 @@ Say we have a plugin that registers custom items which can be crafted. In this e
 
 To do this, we first register our custom items:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:SafeRecipeArguments}}
 ```
 
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:SafeRecipeArguments}}
+```
+
+</div>
+
 Once we've done that, we can now include them in our command registration. To do this, we use `replaceSafeSuggestions(recipes)` and then register our command as normal:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:SafeRecipeArguments_2}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:SafeRecipeArguments_2}}
+```
+
+</div>
 
 </div>
 
@@ -148,21 +164,45 @@ Say we have a command to spawn mobs:
 
 Now say that we don't want non-op players to spawn bosses. To do this, we'll create a `List<EntityType>` which is the list of all mobs that non-ops are allowed to spawn:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:SafeMobSpawnArguments}}
 ```
 
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:SafeMobSpawnArguments}}
+```
+
+</div>
+
 We then use our safe arguments to return an `EntityType[]` as the list of values that are suggested to the player. In this example, we use the `sender()` method to determine if the sender has permissions to view the suggestions:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:SafeMobSpawnArguments_2}}
 ```
 
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:SafeMobSpawnArguments_2}}
+```
+
+</div>
+
 Now we register our command as normal:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:SafeMobSpawnArguments_3}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:SafeMobSpawnArguments_3}}
+```
+
+</div>
 
 </div>
 
@@ -178,14 +218,30 @@ Say we wanted to remove a potion effect from a player. To do this, we'll use the
 
 Now, we don't want to remove a potion effect that already exists on a player, so instead we'll use the safe arguments to find a list of potion effects on the target player and then only suggest those potion effects. To do this, we'll use the `previousArguments()` method, as it allows us to access the previously defined `<player>` argument.
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:SafePotionArguments}}
 ```
 
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:SafePotionArguments}}
+```
+
+</div>
+
 And then we can register our command as normal:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:SafePotionArguments_2}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:SafePotionArguments_2}}
+```
+
+</div>
 
 </div>

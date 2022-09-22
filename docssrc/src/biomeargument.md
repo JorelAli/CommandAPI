@@ -16,8 +16,16 @@ Say you want to set the biome of the current chunk that a player is in. We can d
 
 And we can set the biome of the current chunk as expected:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:biomearguments}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:biomearguments}}
+```
+
+</div>
 
 </div>

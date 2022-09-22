@@ -44,9 +44,17 @@ To illustrate the behavior of literal arguments, we create a command of the foll
 
 As an example, let's declare the literal "hello" as a valid literal for this command. When we retrieve the result from `args[0]`, it returns the value of the `TextArgument`, as opposed to the literal "hello":
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:literalarguments}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:literalarguments}}
+```
+
+</div>
 
 If I were to run the following command:
 
@@ -64,9 +72,17 @@ The value of `text` in the code above would be "goodbye".
 
 This is a demonstration of how you could create a command similar to Minecraft's `/gamemode` command by using literal arguments. To do this, we are effectively registering 4 separate commands, each called `/gamemode`, but with different literal arguments.
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:literalarguments2}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:literalarguments2}}
+```
+
+</div>
 
 Note how, since we don't have access to the literal from `args`, we must access the provided gamemode from elsewhere.
 

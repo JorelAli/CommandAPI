@@ -32,9 +32,17 @@ These methods allow you to interact with the Minecraft function that this class 
 
 The `run()` method runs the function. The command executor that runs this function is the command executor that was used to retrieve it. For example, if a player in-game populated this argument, then the player will be filled in for `@p` and the player's location would be used for things such as `~ ~ ~`:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:functionarguments}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:functionarguments}}
+```
+
+</div>
 
 ### `runAs(Entity)`
 

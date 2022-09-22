@@ -50,9 +50,17 @@ Say we wanted to make a command that simply sets the current block to air. For t
 
 As you can see, this command takes no arguments. This is fine, since our "argument" will be the sender's location. We can access the sender's location using the `getLocation()` method from the `NativeProxyCommandSender` object, available from the `.executesNative()` method:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:nativesender}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:nativesender}}
+```
+
+</div>
 
 This can now be used via the following command examples:
 

@@ -13,6 +13,14 @@ In short, the CommandAPI's annotation-based system:
 >
 > Currently, the annotation framework is in its infancy, so any suggestions or improvements are heavily appreciated!
 
+<div class="warning">
+
+**Developer's Note:**
+
+As of the time of writing, annotation-based commands are **not** compatible with the Kotlin programming language! The CommandAPI does have plans to support Kotlin using annotations, or using a CommandAPI command Kotlin DSL instead.
+
+</div>
+
 Before we go into too much detail, let's take a look at an example of what this annotation framework looks like, and compare this to the existing method.
 
 -----

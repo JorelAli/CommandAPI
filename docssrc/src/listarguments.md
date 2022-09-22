@@ -126,9 +126,17 @@ Say you wanted to give yourself multiple items in a single command. For this com
 
 To do this, we create a command with an `IntegerArgument` to specify the amount (between 1 and 64), and a `ListArgument` that accepts a list of `Material` objects. We use the `ListArgumentBuilder` to provide a list of materials as well as a mapping function that converts the material's name to a lowercase string. By default, we use a space delimiter (separator) for arguments in the list.
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:ListArgument_MultiGive}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:ListArgument_MultiGive}}
+```
+
+</div>
 
 ![A /multigive argument gif where a user types "/multigive 64 stone dirt cobblestone grass_block" and suggestions appear automatically. Running the command gives the player 64 stone, dirt, cobblestone and grass_block items in their hotbar](./images/arguments/listargument_multigive.gif)
 

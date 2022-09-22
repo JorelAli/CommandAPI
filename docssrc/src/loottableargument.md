@@ -16,8 +16,16 @@ Say we wanted to write a command that populates a chest with some loot table con
 
 We ensure that the location provided is a container (such as a chest or shulkerbox) and then update the contents of that container:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:loottablearguments}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:loottablearguments}}
+```
+
+</div>
 
 </div>
