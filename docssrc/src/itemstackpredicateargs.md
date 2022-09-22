@@ -14,8 +14,16 @@ Say we wanted to remove items in your inventory _(I know, the `/clear` command d
 
 We implement this with a simple for loop over the player's inventory and remove items that satisfy the predicate.
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:itemstackpredicatearguments}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:itemstackpredicatearguments}}
+```
+
+</div>
 
 </div>

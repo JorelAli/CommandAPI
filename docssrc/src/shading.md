@@ -41,9 +41,17 @@ public class CommandAPIConfig {
 
 The `CommandAPIConfig` class follows a typical builder pattern (without you having to run `.build()` at the end), which lets you easily construct configuration instances. For example, to load the CommandAPI with all logging disabled, you can use the following:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:CommandAPIConfigSilent}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:CommandAPIConfigSilent}}
+```
+
+</div>
 
 ### Enabling
 
@@ -53,9 +61,17 @@ The `onEnable(Plugin)` method initializes the CommandAPI's enabling sequence. As
 
 ### Example - Setting up the CommandAPI in your plugin
 
-```java
+<div class="multi-pre">
+
+```java,Java
 public {{#include ../../commandapi-core/src/test/java/Examples.java:shading}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:shading}}
+```
+
+</div>
 
 </div>
 

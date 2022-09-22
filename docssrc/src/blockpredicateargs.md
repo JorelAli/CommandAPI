@@ -20,9 +20,17 @@ Of course, we could simply use a `BlockStateArgument` or even an `ItemStackArgum
 
 First, we declare our arguments. We want to use the `BlockPredicateArgument` since it also allows us to use Minecraft tags to identify blocks, as well as individual blocks. We then use `BlockStateArgument` to set the block to a given type. The `BlockStateArgument` also allows the user to provide any block data (e.g. contents of a chest or a stair's orientation).
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:blockpredicatearguments}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:blockpredicatearguments}}
+```
+
+</div>
 
 We then register our `/replace` command. First, we parse the arguments making sure to cast to `Predicate<Block>` and `BlockData` (and not `BlockState`). After that, we use a few simple for loops to find the blocks within a radius sphere from the player.
 
@@ -30,8 +38,16 @@ In our most nested loop, we can then check if the block meets the requirements o
 
 Lastly, we register our command as normal using the `register()` method.
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:blockpredicatearguments2}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:blockpredicatearguments2}}
+```
+
+</div>
 
 </div>

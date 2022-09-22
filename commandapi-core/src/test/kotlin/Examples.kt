@@ -148,6 +148,21 @@ import net.md_5.bungee.api.chat.TextComponent
 
 class Examples : JavaPlugin() {
 
+fun commandregistration() {
+/* ANCHOR: commandregistration */
+// Create our command
+CommandAPICommand("broadcastmsg")
+    .withArguments(GreedyStringArgument("message")) // The arguments
+    .withAliases("broadcast", "broadcastmessage")   // Command aliases
+    .withPermission(CommandPermission.OP)           // Required permissions
+    .executes( { sender, args ->
+        val message = args[0] as String;
+        Bukkit.getServer().broadcastMessage(message);
+    })
+    .register();
+/* ANCHOR_END: commandregistration */
+}
+
 fun commandunregistration() {
 /* ANCHOR: commandunregistration */
 // Unregister the gamemode command from the server (by force)

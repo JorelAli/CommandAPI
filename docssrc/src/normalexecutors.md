@@ -33,9 +33,17 @@ To illustrate this, let's take a look at a simple message broadcasting command. 
 
 We use an argument "message" to hold the message to broadcast, we provide some aliases and set a permission required to run the command. Then we declare our main command body by using the `.executes()` method, before finally registering the command:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:normalcommandexecutors3_1}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:normalcommandexecutors3_1}}
+```
+
+</div>
 
 Note how when we finish up our implementation of `.executes()`, we don't return anything. This is unlike commands in the standard Bukkit API where the `onCommand` method returns a Boolean value:
 
@@ -69,9 +77,17 @@ The `CommandAPICommand` class has multiple different `executes...()` methods tha
 
 Say we wanted to create a command `/suicide`, which kills the player that executes it. Since this command can't be used by non-players (you can't kill a command block!), we can restrict it so only players can execute this command. Since it's a player, we can use the `.executesPlayer()` method:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:normalcommandexecutors}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:normalcommandexecutors}}
+```
+
+</div>
 
 </div>
 
@@ -87,9 +103,17 @@ Extending on the suicide example above, we could write another implementation fo
 
 ### Example - A `/suicide` command with different implementations
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:normalcommandexecutors2}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:normalcommandexecutors2}}
+```
+
+</div>
 
 This saves having to use `instanceof` multiple times to check the type of the `CommandSender`.
 
@@ -131,8 +155,16 @@ This is achieved using the `.executes(executor, ...)` method, which accepts a va
 
 Expanding on the suicide example above, we can restrict the command to only players and entities. We know that the command sender is a `LivingEntity`, so we can cast to it safely.
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:normalcommandexecutors3}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:normalcommandexecutors3}}
+```
+
+</div>
 
 </div>

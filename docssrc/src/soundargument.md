@@ -16,8 +16,16 @@ Say we want a simple command that plays a specific sound at your location. To do
 
 This command simply plays the provided sound to the current player:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:soundarguments}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:soundarguments}}
+```
+
+</div>
 
 </div>

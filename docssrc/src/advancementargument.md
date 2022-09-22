@@ -16,8 +16,16 @@ Say we want to award a player an advancement. First, we need the syntax that our
 
 Since we require a player, we will use the `PlayerArgument` for this example. Given a player, we can simply get the `AdvancementProgress` for that player, and then award the criteria required to fully complete the provided advancement.
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:advancementarguments}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:advancementarguments}}
+```
+
+</div>
 
 </div>

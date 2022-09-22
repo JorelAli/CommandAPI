@@ -28,8 +28,16 @@ In order to use a command from your plugin in a `.mcfunction` file, you must reg
 
 Say we have a command `/killall` that simply kills all entities in all worlds on the server. If we were to register this in our `onLoad()` method, this would allow us to use the `/killall` command in Minecraft functions and tags.
 
-```java
+<div class="multi-pre">
+
+```java,Java
 public {{#include ../../commandapi-core/src/test/java/Examples.java:functionregistration}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:functionregistration}}
+```
+
+</div>
 
 </div>

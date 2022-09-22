@@ -95,39 +95,87 @@ In this scenario, if we ran this command, we would expect "Hello!" to appear in 
 
 Now that we've established what we want, we can finally begin writing the code! First we want to create a literal `randomchance`. It's a literal because literal values don't change (similar to say `run` or `if` from the `/execute` command). To create a literal, we'll use the `fromLiteralArgument` method described above, and then build it using the `.build()` method:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:declareliteral}}
 ```
 
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:declareliteral}}
+```
+
+</div>
+
 With that completed, we can now create our "argument" to this predicate. To do this, we'll use the regular declaration of arguments that we would normally use for commands. In this example, because we're computing \\(\frac{numerator}{denominator}\\), we want our numerator to be 0 or greater and our denominator to be 1 or greater (we don't want any negative numbers or division by zero!):
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:declarearguments}}
 ```
 
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:declarearguments}}
+```
+
+</div>
+
 Now we're going to get into the very nitty-gritty part - the predicate declaration. First, we'll create some variables `numerator` and `denominator` to represent the brigadier instances of these arguments. This can be handled by using the `Brigadier.argBuildOf` function:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:declareargumentbuilders}}
 ```
 
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:declareargumentbuilders}}
+```
+
+</div>
+
 Now we'll define our predicate. Since this is sort of a "meta-command" (it directly affects the outcome of the `run` command), we need to use the `ArgumentBuilder`'s `fork` method. Remember that after we run this predicate, we want to link back to `execute` again, so our first argument is the `CommandNode` for `execute`, which we can get using `Brigadier.getRootNode().getChild("execute")`. Then, we can simply use `Brigadier.fromPredicate` to finish our declaration:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:declarefork}}
 ```
 
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:declarefork}}
+```
+
+</div>
+
 Finally, we can now link everything up. We know that `numerator` comes first, **then** `denominator`, so we have to have `numerator.then(denominator)`. We also know that these arguments are the **children** of the `randomChance` literal, so we use the following code to state all of this:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:declarerandomchance}}
 ```
 
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:declarerandomchance}}
+```
+
+</div>
+
 Finally, we "register" the command. In this case, we're actually just adding the `randomChance` node under \\(\texttt{execute}\rightarrow\texttt{if}\\), which we can add using the following code:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:injectintoroot}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:injectintoroot}}
+```
+
+</div>
 
 -----
 
@@ -135,8 +183,16 @@ Finally, we "register" the command. In this case, we're actually just adding the
 
 So, hopefully that wasn't too confusing! If you're still lost, here's the whole code that we wrote:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:brigadier}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:brigadier}}
+```
+
+</div>
 
 </div>

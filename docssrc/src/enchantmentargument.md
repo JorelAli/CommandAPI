@@ -16,8 +16,16 @@ Say we want to give a player an enchantment on the item that the player is curre
 
 Since most enchantment levels range between 1 and 5, we will also make use of the `IntegerArgument` to restrict the level of the enchantment by usng its range constructor.
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:enchantmentarguments}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:enchantmentarguments}}
+```
+
+</div>
 
 </div>

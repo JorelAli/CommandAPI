@@ -23,17 +23,41 @@ The String value is the node that is registered into Minecraft's internal comman
 
 The CommandAPI is very flexible when it comes to registering arguments, and lets you use a number of different methods to suit your preference:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:argumentsyntax1}}
 ```
 
-```java
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:argumentsyntax1}}
+```
+
+</div>
+
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:argumentsyntax2}}
 ```
 
-```java
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:argumentsyntax2}}
+```
+
+</div>
+
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:argumentsyntax3}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:argumentsyntax3}}
+```
+
+</div>
 
 -----
 
@@ -41,9 +65,17 @@ The CommandAPI is very flexible when it comes to registering arguments, and lets
 
 To access arguments, they have to be casted to the type that the argument represents. The order of the arguments in the `args[]` is the same as the order in which the arguments were declared.
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:argumentcasting}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:argumentcasting}}
+```
+
+</div>
 
 The type to cast each argument (declared in the `dev.jorel.commandapi.arguments` package) is listed below:
 
@@ -128,15 +160,31 @@ For example, say we're registering a command `/kill`:
 
 We first register the first `/kill` command as normal:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:argumentkillcmd}}
 ```
 
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:argumentkillcmd}}
+```
+
+</div>
+
 Now we declare our command with arguments for our second command. Then, we can register our second command `/kill <target>` as usual:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:argumentkillcmd2}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:argumentkillcmd2}}
+```
+
+</div>
 
 This gives us the ability to run both `/kill` and `/kill <target>` with the same command name "kill", but have different results based on the arguments used.
 
