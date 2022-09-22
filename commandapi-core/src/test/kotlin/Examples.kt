@@ -1104,7 +1104,6 @@ CommandAPICommand("suicide")
 /* ANCHOR_END: normalcommandexecutors2 */
 }
 
-// TODO: Why do we have two normalcommandexecutors3 ?!?!?!
 fun normalcommandexecutors3() {
 /* ANCHOR: normalcommandexecutors3 */
 CommandAPICommand("suicide")
