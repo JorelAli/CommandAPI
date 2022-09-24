@@ -53,9 +53,11 @@ The `CommandAPIConfig` class follows a typical builder pattern (without you havi
 
 </div>
 
-### Enabling
+### Enabling & Disabling
 
 The `onEnable(Plugin)` method initializes the CommandAPI's enabling sequence. As with the `onLoad(boolean)` method, this one must be placed in your plugin's `onEnable()` method. This isn't as strict as the `onLoad(boolean)` method, and can be placed anywhere in your `onEnable()` method. The argument `plugin` is your current plugin instance.
+
+The `onDisable()` method disables the CommandAPI gracefully. This should be placed in your plugin's `onDisable()` method. This doesn't unregister commands, so commands may persist during reloads - this can be mitigated using the `CommandAPI.unregister()` method.
 
 <div class="example">
 
@@ -74,10 +76,6 @@ public {{#include ../../commandapi-core/src/test/java/Examples.java:shading}}
 </div>
 
 </div>
-
-### Disabling
-
-The `onDisable()` method disables the CommandAPI gracefully. This should be placed in your plugin's `onDisable()` method. This doesn't unregister commands, so commands may persist during reloads - this can be mitigated using the `CommandAPI.unregister()` method.
 
 -----
 

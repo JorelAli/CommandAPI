@@ -2285,6 +2285,11 @@ class MyPlugin extends JavaPlugin {
         
         // Register commands, listeners etc.
     }
+    
+    @Override
+    public void onDisable() {
+        CommandAPI.onDisable();
+    }
 
 }
 /* ANCHOR_END: shading */

@@ -2207,6 +2207,10 @@ class MyPlugin : JavaPlugin() {
         // Register commands, listeners etc.
     }
 
+    override fun onDisable() {
+        CommandAPI.onDisable();
+    }
+
 }
 /* ANCHOR_END: shading */
 
