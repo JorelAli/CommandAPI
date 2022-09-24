@@ -233,19 +233,18 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 
 			// Convert subcommands into multiliteral arguments
 			for (CommandAPICommand subcommand : new ArrayList<>(this.subcommands)) {
-				flatten(cloned(), new ArrayList<>(), subcommand);
+				flatten(new CommandAPICommand(this), new ArrayList<>(), subcommand);
 			}
 		} catch (CommandSyntaxException | IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private CommandAPICommand cloned() {
-		final CommandAPICommand cloned = new CommandAPICommand(this.meta);
-		cloned.args = new ArrayList<>(this.args);
-		cloned.subcommands = new ArrayList<>(this.subcommands);
-		cloned.isConverted = this.isConverted;
-		return cloned;
+	public CommandAPICommand(CommandAPICommand original) {
+		this(new CommandMetaData(original.meta));
+		this.args = new ArrayList<>(original.args);
+		this.subcommands = new ArrayList<>(original.subcommands);
+		this.isConverted = original.isConverted;
 	}
 
 }

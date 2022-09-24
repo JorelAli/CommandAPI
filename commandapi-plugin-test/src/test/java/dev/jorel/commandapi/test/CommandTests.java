@@ -77,7 +77,7 @@ public class CommandTests {
 	@Test
 	public void testInvalidCommandName() {
 		assertThrows(InvalidCommandNameException.class, () -> {
-			new CommandAPICommand(null)
+			new CommandAPICommand((String) null)
 				.withArguments(new StringArgument("arg1"))
 				.executes((sender, args) -> {
 					String arg1 = (String) args[0];
