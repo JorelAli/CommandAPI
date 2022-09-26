@@ -84,7 +84,7 @@ export class TimeArgument implements ArgumentType<TimeArgument> {
 		["", 1]
 	]);
 
-	private ticks: number;
+	public ticks: number;
 
 	constructor(ticks: number = 0) {
 		this.ticks = ticks;
@@ -105,7 +105,7 @@ export class TimeArgument implements ArgumentType<TimeArgument> {
 		return this;
 	}
 
-	public listSuggestions(context: CommandContext<any>, builder: SuggestionsBuilder): Promise<Suggestions> {
+	public listSuggestions(_context: CommandContext<any>, builder: SuggestionsBuilder): Promise<Suggestions> {
 		let reader: StringReader = new StringReader(builder.getRemaining());
 		try {
 			reader.readFloat();
@@ -122,9 +122,9 @@ export class TimeArgument implements ArgumentType<TimeArgument> {
 
 export class BlockPosArgument implements ArgumentType<BlockPosArgument> {
 
-	private x: number;
-	private y: number;
-	private z: number;
+	public x: number;
+	public y: number;
+	public z: number;
 
 	constructor(x: number = 0, y: number = 0, z: number = 0) {
 		this.x = x;
@@ -141,7 +141,7 @@ export class BlockPosArgument implements ArgumentType<BlockPosArgument> {
 		return this;
 	}
 
-	public listSuggestions(context: CommandContext<any>, builder: SuggestionsBuilder): Promise<Suggestions> {
+	public listSuggestions(_context: CommandContext<any>, builder: SuggestionsBuilder): Promise<Suggestions> {
 		builder.suggest("~");
 		builder.suggest("~ ~");
 		builder.suggest("~ ~ ~");
@@ -155,8 +155,8 @@ export class BlockPosArgument implements ArgumentType<BlockPosArgument> {
 
 export class ColumnPosArgument implements ArgumentType<ColumnPosArgument> {
 
-	private x: number;
-	private z: number;
+	public x: number;
+	public z: number;
 
 	constructor(x = 0, z = 0) {
 		this.x = x;
@@ -170,7 +170,7 @@ export class ColumnPosArgument implements ArgumentType<ColumnPosArgument> {
 		return this;
 	}
 
-	public listSuggestions(context: CommandContext<any>, builder: SuggestionsBuilder): Promise<Suggestions> {
+	public listSuggestions(_context: CommandContext<any>, builder: SuggestionsBuilder): Promise<Suggestions> {
 		builder.suggest("~");
 		builder.suggest("~ ~");
 		return builder.buildPromise();
@@ -183,7 +183,7 @@ export class ColumnPosArgument implements ArgumentType<ColumnPosArgument> {
 
 export class PlayerArgument implements ArgumentType<PlayerArgument> {
 
-	private username: string;
+	public username: string;
 
 	constructor(username: string = "") {
 		this.username = username;
@@ -207,7 +207,7 @@ export class PlayerArgument implements ArgumentType<PlayerArgument> {
 		return this;
 	}
 
-	public listSuggestions(context: CommandContext<any>, builder: SuggestionsBuilder): Promise<Suggestions> {
+	public listSuggestions(_context: CommandContext<any>, _builder: SuggestionsBuilder): Promise<Suggestions> {
 		return Suggestions.empty();
 	}
 
@@ -219,7 +219,7 @@ export class PlayerArgument implements ArgumentType<PlayerArgument> {
 export class MultiLiteralArgument implements ArgumentType<MultiLiteralArgument> {
 
 	private literals: string[];
-	private selectedLiteral: string;
+	public selectedLiteral: string;
 
 	 constructor(literals: string[]) {
 		this.literals = literals;
@@ -246,7 +246,7 @@ export class MultiLiteralArgument implements ArgumentType<MultiLiteralArgument> 
 		return this;
 	}
 
-	public listSuggestions(context: CommandContext<any>, builder: SuggestionsBuilder): Promise<Suggestions> {
+	public listSuggestions(_context: CommandContext<any>, builder: SuggestionsBuilder): Promise<Suggestions> {
 		for(let literal of this.literals) {
 			builder.suggest(literal);
 		}
@@ -280,7 +280,7 @@ export class ColorArgument implements ArgumentType<ColorArgument> {
 		white: "\u00A7f",
 	} as const;
 
-	private chatcolor: string;
+	public chatcolor: string;
 
 	constructor(chatcolor: string = null) {
 		this.chatcolor = chatcolor;
@@ -296,7 +296,7 @@ export class ColorArgument implements ArgumentType<ColorArgument> {
 		return this;
 	}
 
-	 public listSuggestions(context: CommandContext<any>, builder: SuggestionsBuilder): Promise<Suggestions> {
+	public listSuggestions(_context: CommandContext<any>, builder: SuggestionsBuilder): Promise<Suggestions> {
 		return HelperSuggestionProvider.suggest(Object.keys(ColorArgument.ChatColor), builder);
 	}
 

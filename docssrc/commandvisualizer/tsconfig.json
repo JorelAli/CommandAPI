@@ -9,6 +9,8 @@
         "moduleResolution": "node",
         "alwaysStrict": true,
         "declaration": true,
-        // "noImplicitOverride": true
+        "noImplicitOverride": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
     }
 }

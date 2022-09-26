@@ -9,9 +9,6 @@ import {
 	float as floatArgument,
 	bool as boolArgument,
 	greedyString as greedyStringArgument,
-
-	// Typing
-	RequiredArgumentBuilder,
 	LiteralArgumentBuilder,
 	ParseResults,
 	CommandSyntaxException,
@@ -31,7 +28,7 @@ import {
 } from "./arguments"
 
 /******************************************************************************
- * Classes                                                                    *
+ * Classes & Interfaces                                                       *
  ******************************************************************************/
 
 class MyCommandDispatcher<S> extends CommandDispatcher<S> {
@@ -43,18 +40,22 @@ class MyCommandDispatcher<S> extends CommandDispatcher<S> {
 		this.root = root;
 	}
 
-	/**
-	 * deleteAll
-	 */
 	public deleteAll(): void {
 		this.root = new RootCommandNode(undefined, undefined, undefined, undefined, undefined);
 	}
 
-	/** @override */
-	public getRoot(): RootCommandNode<S> {
+	public override getRoot(): RootCommandNode<S> {
 		return this.root;
 	}
 
+}
+
+/**
+ * `Selection.modify()` is not part of [the official spec](https://developer.mozilla.org/en-US/docs/Web/API/Selection/modify#specifications),
+ * but it exists in all browsers. See [Microsoft/TypeScript#12296](https://github.com/Microsoft/TypeScript/issues/12296)
+ */
+type SelectionWithModify = Selection & {
+	modify(s: string, t: string, u: string): void;
 }
 
 // We need a "filler" type for our command source. Since we're never actually
@@ -67,11 +68,11 @@ const SOURCE: Source = undefined as never;
  * Constants                                                                  *
  ******************************************************************************/
 
-const commandInput: HTMLSpanElement = document.getElementById("cmd-input");
-const commandInputAutocomplete = document.getElementById("cmd-input-autocomplete");
-const errorMessageBox = document.getElementById("error-box");
-const suggestionsBox = document.getElementById("suggestions-box");
-const validBox = document.getElementById("valid-box");
+const COMMAND_INPUT: HTMLSpanElement = document.getElementById("cmd-input");
+const COMMAND_INPUT_AUTOCOMPLETE = document.getElementById("cmd-input-autocomplete");
+const ERROR_MESSAGE_BOX = document.getElementById("error-box");
+const SUGGESTIONS_BOX = document.getElementById("suggestions-box");
+const VALID_BOX = document.getElementById("valid-box");
 const COMMANDS: HTMLTextAreaElement = document.getElementById("commands") as HTMLTextAreaElement;
 
 const dispatcher = new MyCommandDispatcher<Source>();
@@ -131,17 +132,13 @@ for(let [key, value] of ChatColorCSS) {
 	ChatColorCSSReversed.set(value, key);
 }
 
-type ArgumentColors = {
-	[colorIndex: number]: String
-}
-
-const ArgumentColors: ArgumentColors = {
+const ArgumentColors: { [colorIndex: number]: String } = {
 	0: ChatColor.AQUA,
 	1: ChatColor.YELLOW,
 	2: ChatColor.GREEN,
 	3: ChatColor.LIGHT_PURPLE,
 	4: ChatColor.GOLD
-}
+} as const;
 
 // As implemented by https://commandapi.jorel.dev/8.5.1/internal.html
 const ArgumentType = new Map<String, () => BrigadierArgumentType<unknown> | null>([
@@ -201,27 +198,6 @@ const ArgumentType = new Map<String, () => BrigadierArgumentType<unknown> | null
 	["minecraft:vec2", () => null],
 	["minecraft:vec3", () => null],
 ]);
-
-/******************************************************************************
- * Classes                                                                    *
- ******************************************************************************/
-
-class Argument<S> {
-
-	nodeName: string;
-
-	constructor(nodeName: string, type: any) {
-		this.nodeName = nodeName;
-	}
-
-	/**
-	 * Gets the range for this argument from a parsed command
-	 * @param {ParseResults<any>} parsedCommand a parsed command from dispatcher.parse
-	 */
-	getRange(parsedCommand: ParseResults<S>) {
-		return parsedCommand.getContext().getArguments().get(this.nodeName)?.getRange() ?? {start:0, end: 0};
-	}
-}
 
 /******************************************************************************
  * Helpers                                                                    *
@@ -313,7 +289,7 @@ function registerCommand(configCommand: string) {
 	}
 
 	if(argumentsToRegister.length > 0) {
-		const lastArgument: BrigadierArgumentType<unknown> = argumentsToRegister[0].executes(context => 0);
+		const lastArgument: BrigadierArgumentType<unknown> = argumentsToRegister[0].executes(_context => 0);
 
 		// Flame on. Reduce.
 		argumentsToRegister.shift();
@@ -337,14 +313,10 @@ function registerCommand(configCommand: string) {
  * @returns The current cursor position for the current element
  */
 function getCursorPosition() {
-	const sel = document.getSelection();
-	// @ts-ignore
+	const sel: SelectionWithModify = document.getSelection() as SelectionWithModify;
 	sel.modify("extend", "backward", "paragraphboundary");
-	// @ts-ignore
 	const pos = sel.toString().length;
-	// @ts-ignore
 	if (sel.anchorNode !== undefined && sel.anchorNode !== null) {
-		// @ts-ignore
 		sel.collapseToEnd();
 	}
 	return pos;
@@ -390,7 +362,7 @@ function setCursorPosition(index: number, element: Node): void {
 						}
 					}
 				}
-			} 
+			}
 		
 			return range;
 		};
@@ -458,13 +430,13 @@ class TextWidth {
 function setText(minecraftCodedText: string, target: HTMLElement = null) {
 	minecraftCodedText = minecraftCodedText.replaceAll(" ", "\u00A0"); // Replace normal spaces with &nbsp; for HTML
 	if(!target) {
-		target = commandInput;
+		target = COMMAND_INPUT;
 	}
 
 	// Reset the text
 	target.innerHTML = "";
 
-	if(target === commandInput) {
+	if(target === COMMAND_INPUT) {
 		// Command forward slash. Always present, we don't want to remove this!
 		let element: HTMLSpanElement = document.createElement("span");
 		element.innerText = "/";
@@ -500,7 +472,7 @@ function setText(minecraftCodedText: string, target: HTMLElement = null) {
 
 function getText(withStyling: boolean = true): string {
 	let buffer: string = "";
-	for(let child of commandInput.children) {
+	for(let child of COMMAND_INPUT.children) {
 		if(child.className && withStyling) {
 			buffer += "\u00A7" + ChatColorCSSReversed.get(child.className);
 		}
@@ -513,11 +485,10 @@ function getText(withStyling: boolean = true): string {
  * Events                                                                     *
  ******************************************************************************/
 
-commandInput.oninput = async function onCommandInput(): Promise<void> {
+ COMMAND_INPUT.oninput = async function onCommandInput(): Promise<void> {
 	let cursorPos: number = getCursorPosition();
-	let commands: string[] = ["say", "tp", "w", "weather", "whitelist", "worldborder"];
 
-	let rawText: string = commandInput.innerText.replace("\n", "");
+	let rawText: string = COMMAND_INPUT.innerText.replace("\n", "");
 	rawText = rawText.replaceAll("\u00a0", " "); // Replace &nbsp; with normal spaces for Brigadier
 
 	let showUsageText: boolean = false;
@@ -530,7 +501,6 @@ commandInput.oninput = async function onCommandInput(): Promise<void> {
 		// Parse the raw text
 		const rawTextNoSlash: string = rawText.slice(1);
 		const command: string = rawTextNoSlash.split(" ")[0];
-		const rawArgs: string[] = rawText.split(" ").slice(1);
 
 		// Brigadier
 		const parsedCommand: ParseResults<Source> = dispatcher.parse(rawTextNoSlash, SOURCE);
@@ -577,7 +547,7 @@ commandInput.oninput = async function onCommandInput(): Promise<void> {
 		if (showUsageText || commandValid) {
 			let newText: string = command;
 			let parsedArgumentIndex: number = 0;
-			for(const [key, value] of parsedCommand.getContext().getArguments()) {
+			for(const [_key, value] of parsedCommand.getContext().getArguments()) {
 				if(parsedArgumentIndex > Object.keys(ArgumentColors).length) {
 					parsedArgumentIndex = 0;
 				}
@@ -603,32 +573,32 @@ commandInput.oninput = async function onCommandInput(): Promise<void> {
 	if(cursorPos === 0 && rawText.length > 0) {
 		cursorPos = 1;
 	}
-	setCursorPosition(cursorPos, commandInput);
-	commandInput.focus();
+	setCursorPosition(cursorPos, COMMAND_INPUT);
+	COMMAND_INPUT.focus();
 
 	// If any errors appear, display them
 	if(errorText.length !== 0) {
-		setText(errorText, errorMessageBox);
-		errorMessageBox.hidden = false;
+		setText(errorText, ERROR_MESSAGE_BOX);
+		ERROR_MESSAGE_BOX.hidden = false;
 	} else {
-		errorMessageBox.hidden = true;
+		ERROR_MESSAGE_BOX.hidden = true;
 	}
 
 	if(showUsageText) {
-		errorMessageBox.style.left = TextWidth.getTextWidth(rawText, commandInput as CachedFontHTMLElement) + "px";
+		ERROR_MESSAGE_BOX.style.left = TextWidth.getTextWidth(rawText, COMMAND_INPUT as CachedFontHTMLElement) + "px";
 		// 8px padding, 10px margin left, 10px margin right = -28px
 		// Plus an extra 10px for good luck, why not
-		errorMessageBox.style.width = `calc(100% - ${errorMessageBox.style.left} - 28px + 10px)`;
+		ERROR_MESSAGE_BOX.style.width = `calc(100% - ${ERROR_MESSAGE_BOX.style.left} - 28px + 10px)`;
 	} else {
-		errorMessageBox.style.left = "0";
-		errorMessageBox.style.width = "unset";
+		ERROR_MESSAGE_BOX.style.left = "0";
+		ERROR_MESSAGE_BOX.style.width = "unset";
 	}
 
 	if(commandValid) {
-		setText(ChatColor.GREEN + "This command is valid ✅", validBox);
-		validBox.hidden = false;
+		setText(ChatColor.GREEN + "This command is valid ✅", VALID_BOX);
+		VALID_BOX.hidden = false;
 	} else {
-		validBox.hidden = true;
+		VALID_BOX.hidden = true;
 	}
 
 	const constructSuggestionsHTML = (suggestions: string[]): HTMLSpanElement[] => {
@@ -649,47 +619,47 @@ commandInput.oninput = async function onCommandInput(): Promise<void> {
 	};
 
 	// If suggestions are present, display them
-	suggestionsBox.style.left = "0";
+	SUGGESTIONS_BOX.style.left = "0";
 	if(suggestions.length !== 0) {
-		suggestionsBox.innerHTML = "";
+		SUGGESTIONS_BOX.innerHTML = "";
 		for(let suggestionElement of constructSuggestionsHTML(suggestions)) {
-			suggestionsBox.appendChild(suggestionElement);
+			SUGGESTIONS_BOX.appendChild(suggestionElement);
 		}
-		suggestionsBox.style.left = TextWidth.getTextWidth(rawText, commandInput as CachedFontHTMLElement) + "px";
+		SUGGESTIONS_BOX.style.left = TextWidth.getTextWidth(rawText, COMMAND_INPUT as CachedFontHTMLElement) + "px";
 		// 8px padding, 10px margin left, 10px margin right = -28px
 		// Plus an extra 10px for good luck, why not
-		suggestionsBox.hidden = false;
-		errorMessageBox.hidden = true;
+		SUGGESTIONS_BOX.hidden = false;
+		ERROR_MESSAGE_BOX.hidden = true;
 	} else {
-		suggestionsBox.hidden = true;
+		SUGGESTIONS_BOX.hidden = true;
 	}
 	window.dispatchEvent(new Event("suggestionsUpdated"));
 }
 
 // We really really don't want new lines in our single-lined command!
-commandInput.addEventListener('keydown', (evt) => {
+COMMAND_INPUT.addEventListener('keydown', (evt: KeyboardEvent) => {
 	switch(evt.key) {
 		case "Enter":
 			evt.preventDefault();
 			break;
 		case "ArrowDown":
 		case "ArrowUp": {
-			if(!suggestionsBox.hidden) {
-				for(let i = 0; i < suggestionsBox.children.length; i++) {
-					if(suggestionsBox.children[i].className === "yellow") {
-						suggestionsBox.children[i].className = "";
+			if(!SUGGESTIONS_BOX.hidden) {
+				for(let i = 0; i < SUGGESTIONS_BOX.children.length; i++) {
+					if(SUGGESTIONS_BOX.children[i].className === "yellow") {
+						SUGGESTIONS_BOX.children[i].className = "";
 
 						if(evt.key == "ArrowDown") {
-							if(i === suggestionsBox.children.length - 1) {
-								suggestionsBox.children[0].className = "yellow";
+							if(i === SUGGESTIONS_BOX.children.length - 1) {
+								SUGGESTIONS_BOX.children[0].className = "yellow";
 							} else {
-								suggestionsBox.children[i + 1].className = "yellow";
+								SUGGESTIONS_BOX.children[i + 1].className = "yellow";
 							}
 						} else {
 							if(i === 0) {
-								suggestionsBox.children[suggestionsBox.children.length - 1].className = "yellow";
+								SUGGESTIONS_BOX.children[SUGGESTIONS_BOX.children.length - 1].className = "yellow";
 							} else {
-								suggestionsBox.children[i - 1].className = "yellow";
+								SUGGESTIONS_BOX.children[i - 1].className = "yellow";
 							}
 						}
 
@@ -702,55 +672,50 @@ commandInput.addEventListener('keydown', (evt) => {
 			break;
 		}
 		case "Backspace":
-			if(commandInput.innerText.replace("\n", "").length === 0) {
+			if(COMMAND_INPUT.innerText.replace("\n", "").length === 0) {
 				evt.preventDefault();
 			}
 			break;
 		case "Tab":
 			evt.preventDefault();
-			setText(getText(false).slice(1) + commandInputAutocomplete.innerText);
-			// @ts-ignore
-			document.getElementById("cmd-input").oninput();
-			setCursorPosition(commandInput.innerText.length, commandInput);
+			setText(getText(false).slice(1) + COMMAND_INPUT_AUTOCOMPLETE.innerText);
+			COMMAND_INPUT.oninput(null);
+			setCursorPosition(COMMAND_INPUT.innerText.length, COMMAND_INPUT);
 			break;
 		default:
 			break;
 	}
 });
 
-window.addEventListener("suggestionsUpdated", (event) => {
-	/** @type string */
-	let rawText = commandInput.innerText;
+window.addEventListener("suggestionsUpdated", (_event: Event) => {
+	let rawText: string = COMMAND_INPUT.innerText;
 
-	let errorText = "";
-	let suggestions = [];
+	if(!SUGGESTIONS_BOX.hidden) {
+		let selectedSuggestionText: string = getSelectedSuggestion().innerText.trim();
 
-	if(!suggestionsBox.hidden) {
-		/** @type string */
-		let selectedSuggestionText = getSelectedSuggestion().innerText.trim();
 		// TODO: This obviously needs to be specific to the current suggestions, not the whole input
 		if(rawText !== selectedSuggestionText) {
 			let cursorPosition = getCursorPosition();
-			setText(ChatColor.DARK_GRAY + selectedSuggestionText.slice(rawText.length - 1), commandInputAutocomplete);
-			setCursorPosition(cursorPosition, commandInput);
-			commandInput.focus();
+			setText(ChatColor.DARK_GRAY + selectedSuggestionText.slice(rawText.length - 1), COMMAND_INPUT_AUTOCOMPLETE);
+			setCursorPosition(cursorPosition, COMMAND_INPUT);
+			COMMAND_INPUT.focus();
 		} else {
-			setText("", commandInputAutocomplete);
+			setText("", COMMAND_INPUT_AUTOCOMPLETE);
 		}
 	} else {
-		setText("", commandInputAutocomplete);
+		setText("", COMMAND_INPUT_AUTOCOMPLETE);
 	}
 });
 
 // If you click on the chat box, focus the current text input area 
 document.getElementById("chatbox").onclick = function onChatBoxClicked() {
-	document.getElementById("cmd-input")?.focus();
+	COMMAND_INPUT.focus();
 };
 
 document.getElementById("register-commands-button").onclick = function onRegisterCommandsButtonClicked() {
 	dispatcher.deleteAll();
 	COMMANDS.value.split("\n").forEach(registerCommand);
-	commandInput.oninput(null); // Run syntax highlighter
+	COMMAND_INPUT.oninput(null); // Run syntax highlighter
 }
 
 
@@ -759,8 +724,7 @@ document.getElementById("register-commands-button").onclick = function onRegiste
  ******************************************************************************/
 
 // Default commands
-// @ts-expect-error
-document.getElementById("commands").value = `fill <pos1>[minecraft:block_pos] <pos2>[minecraft:block_pos] <block>[brigadier:string]
+COMMANDS.value = `fill <pos1>[minecraft:block_pos] <pos2>[minecraft:block_pos] <block>[brigadier:string]
 speed (walk|fly) <speed>[0..10] <target>[minecraft:game_profile]
 hello <val>[1..20] <color>[minecraft:color]`;
 
