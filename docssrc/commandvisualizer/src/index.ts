@@ -128,7 +128,7 @@ const ChatColorCSS: Map<string, string> = new Map([
 ]);
 
 const ChatColorCSSReversed: Map<string, string> = new Map();
-for(let [key, value] of ChatColorCSS) {
+for (let [key, value] of ChatColorCSS) {
 	ChatColorCSSReversed.set(value, key);
 }
 
@@ -212,32 +212,32 @@ const ArgumentType = new Map<String, () => BrigadierArgumentType<unknown> | null
 function registerCommand(configCommand: string) {
 
 	// No blank commands
-	if(configCommand.trim().length === 0) {
+	if (configCommand.trim().length === 0) {
 		return;
 	}
 
 	function convertArgument(argumentType: string): BrigadierArgumentType<unknown> {
-		if(argumentType.includes("..")) {
+		if (argumentType.includes("..")) {
 			let lowerBound: string = argumentType.split("..")[0];
 			let upperBound: string = argumentType.split("..")[1];
 
 			let lowerBoundNum: number = Number.MIN_SAFE_INTEGER;
 			let upperBoundNum: number = Number.MAX_SAFE_INTEGER;
 
-			if(lowerBound.length === 0) {
+			if (lowerBound.length === 0) {
 				lowerBoundNum = Number.MIN_SAFE_INTEGER;
 			} else {
 				lowerBoundNum = Number.parseFloat(lowerBound);
 			}
 
-			if(upperBound.length === 0) {
+			if (upperBound.length === 0) {
 				upperBoundNum = Number.MAX_SAFE_INTEGER;
 			} else {
 				upperBoundNum = Number.parseFloat(upperBound);
 			}
 
 			// We've got a decimal number, use a float argument
-			if(lowerBoundNum % 1 !== 0 || upperBoundNum % 1 !== 0) {
+			if (lowerBoundNum % 1 !== 0 || upperBoundNum % 1 !== 0) {
 				return floatArgument(lowerBoundNum, upperBoundNum);
 			} else {
 				// Inclusive upper bound
@@ -246,10 +246,11 @@ function registerCommand(configCommand: string) {
 			}
 		} else {
 			const argumentGeneratorFunction = ArgumentType.get(argumentType);
-			if(argumentGeneratorFunction()) {
+			if (argumentGeneratorFunction()) {
 				return argumentGeneratorFunction();
 			} else {
 				console.error("Unimplemented argument: " + argumentType);
+				return null;
 			}
 		}
 	}
@@ -264,22 +265,22 @@ function registerCommand(configCommand: string) {
 	const literalPattern: RegExp = RegExp(/\((\w+(?:\|\w+)*)\)/);
 	const argumentPattern: RegExp = RegExp(/<(\w+)>\[([a-z:_]+|(?:[0-9\.]+)?\.\.(?:[0-9\.]+)?)\]/);
 
-	for(let arg of args) {
+	for (let arg of args) {
 		const matchedLiteral: RegExpMatchArray = arg.match(literalPattern);
 		const matchedArgument: RegExpMatchArray = arg.match(argumentPattern);
-		if(matchedLiteral) {
+		if (matchedLiteral) {
 			// It's a literal argument
 			const literals: string[] = matchedLiteral[1].split("|");
-			if(literals.length === 1) {
+			if (literals.length === 1) {
 				argumentsToRegister.unshift(literalArgument(literals[0]));
-			} else if(literals.length > 1) {
+			} else if (literals.length > 1) {
 				argumentsToRegister.unshift(argument(matchedLiteral[1], new MultiLiteralArgument(literals)));
 			}
-		} else if(matchedArgument) {
+		} else if (matchedArgument) {
 			// It's a regular argument
 			const nodeName: string = matchedArgument[1];
 			const argumentType: string = matchedArgument[2];
-			
+
 			let convertedArgumentType: BrigadierArgumentType<unknown> = convertArgument(argumentType);
 
 			// We're adding arguments in reverse order (last arguments appear
@@ -288,7 +289,7 @@ function registerCommand(configCommand: string) {
 		}
 	}
 
-	if(argumentsToRegister.length > 0) {
+	if (argumentsToRegister.length > 0) {
 		const lastArgument: BrigadierArgumentType<unknown> = argumentsToRegister[0].executes(_context => 0);
 
 		// Flame on. Reduce.
@@ -335,13 +336,13 @@ function getCursorPosition() {
  */
 function setCursorPosition(index: number, element: Node): void {
 	if (index >= 0) {
-		const createRange = (node: Node, chars: {count: number}, range?: Range): Range => {
+		const createRange = (node: Node, chars: { count: number }, range?: Range): Range => {
 			if (!range) {
 				range = document.createRange();
 				range.selectNode(node);
 				range.setStart(node, 0);
 			}
-		
+
 			if (chars.count === 0) {
 				range.setEnd(node, chars.count);
 			} else if (node && chars.count > 0) {
@@ -356,14 +357,14 @@ function setCursorPosition(index: number, element: Node): void {
 				} else {
 					for (let lp: number = 0; lp < node.childNodes.length; lp++) {
 						range = createRange(node.childNodes[lp], chars, range);
-		
+
 						if (chars.count === 0) {
 							break;
 						}
 					}
 				}
 			}
-		
+
 			return range;
 		};
 
@@ -402,7 +403,7 @@ class TextWidth {
 		// re-use canvas object for better performance
 		const canvas: HTMLCanvasElement = TextWidth.canvas || (TextWidth.canvas = document.createElement("canvas"));
 		const context: CanvasRenderingContext2D = canvas.getContext("2d");
-		
+
 		context.font = element.currentFont || (element.currentFont = TextWidth.getCanvasFont(element));
 		return context.measureText(text).width;
 	}
@@ -411,11 +412,11 @@ class TextWidth {
 		return window.getComputedStyle(element).getPropertyValue(prop);
 	}
 
-	private static getCanvasFont(el:HTMLElement = document.body): string {
+	private static getCanvasFont(el: HTMLElement = document.body): string {
 		const fontWeight = TextWidth.getCssStyle(el, 'font-weight') || 'normal';
 		const fontSize = TextWidth.getCssStyle(el, 'font-size') || '16px';
 		const fontFamily = TextWidth.getCssStyle(el, 'font-family') || 'Times New Roman';
-		
+
 		return `${fontWeight} ${fontSize} ${fontFamily}`;
 	}
 
@@ -429,14 +430,14 @@ class TextWidth {
  */
 function setText(minecraftCodedText: string, target: HTMLElement = null) {
 	minecraftCodedText = minecraftCodedText.replaceAll(" ", "\u00A0"); // Replace normal spaces with &nbsp; for HTML
-	if(!target) {
+	if (!target) {
 		target = COMMAND_INPUT;
 	}
 
 	// Reset the text
 	target.innerHTML = "";
 
-	if(target === COMMAND_INPUT) {
+	if (target === COMMAND_INPUT) {
 		// Command forward slash. Always present, we don't want to remove this!
 		let element: HTMLSpanElement = document.createElement("span");
 		element.innerText = "/";
@@ -447,7 +448,7 @@ function setText(minecraftCodedText: string, target: HTMLElement = null) {
 	let currentColor: string = "";
 
 	function writeBuffer(target: HTMLElement): void {
-		if(buffer.length > 0) {
+		if (buffer.length > 0) {
 			let elem: HTMLSpanElement = document.createElement("span");
 			elem.className = currentColor;
 			elem.innerText = buffer;
@@ -456,8 +457,8 @@ function setText(minecraftCodedText: string, target: HTMLElement = null) {
 		}
 	};
 
-	for(let i: number = 0; i < minecraftCodedText.length; i++) {
-		if(minecraftCodedText[i] === "\u00A7") {
+	for (let i: number = 0; i < minecraftCodedText.length; i++) {
+		if (minecraftCodedText[i] === "\u00A7") {
 			writeBuffer(target);
 			currentColor = ChatColorCSS.get(minecraftCodedText[i + 1]);
 			i++;
@@ -472,8 +473,8 @@ function setText(minecraftCodedText: string, target: HTMLElement = null) {
 
 function getText(withStyling: boolean = true): string {
 	let buffer: string = "";
-	for(let child of COMMAND_INPUT.children) {
-		if(child.className && withStyling) {
+	for (let child of COMMAND_INPUT.children) {
+		if (child.className && withStyling) {
 			buffer += "\u00A7" + ChatColorCSSReversed.get(child.className);
 		}
 		buffer += (child as HTMLElement).innerText;
@@ -485,7 +486,7 @@ function getText(withStyling: boolean = true): string {
  * Events                                                                     *
  ******************************************************************************/
 
- COMMAND_INPUT.oninput = async function onCommandInput(): Promise<void> {
+COMMAND_INPUT.oninput = async function onCommandInput(): Promise<void> {
 	let cursorPos: number = getCursorPosition();
 
 	let rawText: string = COMMAND_INPUT.innerText.replace("\n", "");
@@ -497,7 +498,7 @@ function getText(withStyling: boolean = true): string {
 	let commandValid: boolean = false;
 
 	// Render colors
-	if(rawText.startsWith("/")) {
+	if (rawText.startsWith("/")) {
 		// Parse the raw text
 		const rawTextNoSlash: string = rawText.slice(1);
 		const command: string = rawTextNoSlash.split(" ")[0];
@@ -508,7 +509,7 @@ function getText(withStyling: boolean = true): string {
 		console.log(parsedCommand);
 
 		let lastNode: CommandNode<Source> = parsedCommandNoTrailing.getContext().getRootNode();
-		if(parsedCommandNoTrailing.getContext().getNodes().length > 0) {
+		if (parsedCommandNoTrailing.getContext().getNodes().length > 0) {
 			lastNode = parsedCommandNoTrailing.getContext().getNodes()[parsedCommandNoTrailing.getContext().getNodes().length - 1].getNode();
 		}
 		const usage: string = dispatcher.getAllUsage(lastNode, SOURCE, false).join(" ");
@@ -516,10 +517,10 @@ function getText(withStyling: boolean = true): string {
 		// Reset text
 		setText(rawTextNoSlash);
 
-		if(parsedCommand.getExceptions().size > 0) {
+		if (parsedCommand.getExceptions().size > 0) {
 			// The command is invalid (the command doesn't exist). Make the whole text red.
 			setText(ChatColor.RED + rawTextNoSlash);
-			
+
 			const exceptions: Map<CommandNode<Source>, CommandSyntaxException> = parsedCommand.getExceptions();
 			errorText = exceptions.entries().next().value[1].message;
 		} else {
@@ -532,13 +533,13 @@ function getText(withStyling: boolean = true): string {
 
 				// TODO: We actually need to take into account the case when the
 				// command IS ACTUALLY unknown!
-				if(errorText.startsWith("Unknown command at position")) {
+				if (errorText.startsWith("Unknown command at position")) {
 					errorText = usage;
 					showUsageText = true;
 				}
 			}
-			
-			if(errorText === "") {
+
+			if (errorText === "") {
 				commandValid = true;
 			}
 		}
@@ -547,8 +548,8 @@ function getText(withStyling: boolean = true): string {
 		if (showUsageText || commandValid) {
 			let newText: string = command;
 			let parsedArgumentIndex: number = 0;
-			for(const [_key, value] of parsedCommand.getContext().getArguments()) {
-				if(parsedArgumentIndex > Object.keys(ArgumentColors).length) {
+			for (const [_key, value] of parsedCommand.getContext().getArguments()) {
+				if (parsedArgumentIndex > Object.keys(ArgumentColors).length) {
 					parsedArgumentIndex = 0;
 				}
 
@@ -570,21 +571,21 @@ function getText(withStyling: boolean = true): string {
 	// Set the cursor back to where it was. Since commands always start with a
 	// forward slash, the only possible "starting caret position" is position 1
 	// (in front of the slash)
-	if(cursorPos === 0 && rawText.length > 0) {
+	if (cursorPos === 0 && rawText.length > 0) {
 		cursorPos = 1;
 	}
 	setCursorPosition(cursorPos, COMMAND_INPUT);
 	COMMAND_INPUT.focus();
 
 	// If any errors appear, display them
-	if(errorText.length !== 0) {
+	if (errorText.length !== 0) {
 		setText(errorText, ERROR_MESSAGE_BOX);
 		ERROR_MESSAGE_BOX.hidden = false;
 	} else {
 		ERROR_MESSAGE_BOX.hidden = true;
 	}
 
-	if(showUsageText) {
+	if (showUsageText) {
 		ERROR_MESSAGE_BOX.style.left = TextWidth.getTextWidth(rawText, COMMAND_INPUT as CachedFontHTMLElement) + "px";
 		// 8px padding, 10px margin left, 10px margin right = -28px
 		// Plus an extra 10px for good luck, why not
@@ -594,7 +595,7 @@ function getText(withStyling: boolean = true): string {
 		ERROR_MESSAGE_BOX.style.width = "unset";
 	}
 
-	if(commandValid) {
+	if (commandValid) {
 		setText(ChatColor.GREEN + "This command is valid ✅", VALID_BOX);
 		VALID_BOX.hidden = false;
 	} else {
@@ -603,13 +604,13 @@ function getText(withStyling: boolean = true): string {
 
 	const constructSuggestionsHTML = (suggestions: string[]): HTMLSpanElement[] => {
 		let nodesToAdd: HTMLSpanElement[] = [];
-		for(let i: number = 0; i < suggestions.length; i++) {
+		for (let i: number = 0; i < suggestions.length; i++) {
 			const suggestionElement: HTMLSpanElement = document.createElement("span");
 			suggestionElement.innerText = suggestions[i];
-			if(i === 0) {
+			if (i === 0) {
 				suggestionElement.className = "yellow";
 			}
-			if(i !== suggestions.length - 1) {
+			if (i !== suggestions.length - 1) {
 				suggestionElement.innerText += "\n";
 			}
 			nodesToAdd.push(suggestionElement);
@@ -620,9 +621,9 @@ function getText(withStyling: boolean = true): string {
 
 	// If suggestions are present, display them
 	SUGGESTIONS_BOX.style.left = "0";
-	if(suggestions.length !== 0) {
+	if (suggestions.length !== 0) {
 		SUGGESTIONS_BOX.innerHTML = "";
-		for(let suggestionElement of constructSuggestionsHTML(suggestions)) {
+		for (let suggestionElement of constructSuggestionsHTML(suggestions)) {
 			SUGGESTIONS_BOX.appendChild(suggestionElement);
 		}
 		SUGGESTIONS_BOX.style.left = TextWidth.getTextWidth(rawText, COMMAND_INPUT as CachedFontHTMLElement) + "px";
@@ -638,25 +639,25 @@ function getText(withStyling: boolean = true): string {
 
 // We really really don't want new lines in our single-lined command!
 COMMAND_INPUT.addEventListener('keydown', (evt: KeyboardEvent) => {
-	switch(evt.key) {
+	switch (evt.key) {
 		case "Enter":
 			evt.preventDefault();
 			break;
 		case "ArrowDown":
 		case "ArrowUp": {
-			if(!SUGGESTIONS_BOX.hidden) {
-				for(let i = 0; i < SUGGESTIONS_BOX.children.length; i++) {
-					if(SUGGESTIONS_BOX.children[i].className === "yellow") {
+			if (!SUGGESTIONS_BOX.hidden) {
+				for (let i = 0; i < SUGGESTIONS_BOX.children.length; i++) {
+					if (SUGGESTIONS_BOX.children[i].className === "yellow") {
 						SUGGESTIONS_BOX.children[i].className = "";
 
-						if(evt.key == "ArrowDown") {
-							if(i === SUGGESTIONS_BOX.children.length - 1) {
+						if (evt.key == "ArrowDown") {
+							if (i === SUGGESTIONS_BOX.children.length - 1) {
 								SUGGESTIONS_BOX.children[0].className = "yellow";
 							} else {
 								SUGGESTIONS_BOX.children[i + 1].className = "yellow";
 							}
 						} else {
-							if(i === 0) {
+							if (i === 0) {
 								SUGGESTIONS_BOX.children[SUGGESTIONS_BOX.children.length - 1].className = "yellow";
 							} else {
 								SUGGESTIONS_BOX.children[i - 1].className = "yellow";
@@ -664,7 +665,7 @@ COMMAND_INPUT.addEventListener('keydown', (evt: KeyboardEvent) => {
 						}
 
 						window.dispatchEvent(new Event("suggestionsUpdated"));
-						
+
 						break;
 					}
 				}
@@ -672,7 +673,7 @@ COMMAND_INPUT.addEventListener('keydown', (evt: KeyboardEvent) => {
 			break;
 		}
 		case "Backspace":
-			if(COMMAND_INPUT.innerText.replace("\n", "").length === 0) {
+			if (COMMAND_INPUT.innerText.replace("\n", "").length === 0) {
 				evt.preventDefault();
 			}
 			break;
@@ -690,11 +691,11 @@ COMMAND_INPUT.addEventListener('keydown', (evt: KeyboardEvent) => {
 window.addEventListener("suggestionsUpdated", (_event: Event) => {
 	let rawText: string = COMMAND_INPUT.innerText;
 
-	if(!SUGGESTIONS_BOX.hidden) {
+	if (!SUGGESTIONS_BOX.hidden) {
 		let selectedSuggestionText: string = getSelectedSuggestion().innerText.trim();
 
 		// TODO: This obviously needs to be specific to the current suggestions, not the whole input
-		if(rawText !== selectedSuggestionText) {
+		if (rawText !== selectedSuggestionText) {
 			let cursorPosition = getCursorPosition();
 			setText(ChatColor.DARK_GRAY + selectedSuggestionText.slice(rawText.length - 1), COMMAND_INPUT_AUTOCOMPLETE);
 			setCursorPosition(cursorPosition, COMMAND_INPUT);
