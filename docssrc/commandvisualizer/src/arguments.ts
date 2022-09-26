@@ -11,6 +11,8 @@ import {
 	ArgumentType
 } from "node-brigadier"
 
+import mojangson from "mojangson-parser"
+
 class ExtendedStringReader {
 
 	public static readLocationLiteral(reader: StringReader): number {
@@ -485,10 +487,27 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 		return false;
 	}
 
-	static Options: { [option: string]: Modifier } = {
+	// EntitySelectorParser + EntitySelectorOptions
+	private entityUUID: string;
+	private includesEntities: boolean;
+	private playerName: string;
+	private maxResults: number;
+	private isLimited: boolean; // This might be identical to the synthetic limitedToPlayers, try using this instead
+	private limitedToPlayers: boolean; // players only?
+	private currentEntity: boolean;
+	private worldLimited: boolean;
+	private order: string; // Not BiConsumer<Vec, List<? extends Entity>> because effort
+	private isSorted: boolean; // Is this entity selector sorted?
+	private hasGamemodeEquals: boolean; // Has gamemode ... equals?
+	private hasGamemodeNotEquals: boolean; // uhh...
+
+	// EntityArgument
+	private single: boolean;
+
+	private Options: { [option: string]: Modifier } = {
 		name: (reader: StringReader): void => {
 			const start: number = reader.getCursor();
-			const shouldInvert: boolean = this.shouldInvertValue(reader);
+			const shouldInvert: boolean = EntitySelectorArgument.shouldInvertValue(reader);
 			// const _s: string = reader.readString();
 			if(/* STUB: this.hasNameNotEquals() */ !shouldInvert) {
 				reader.setCursor(start);
@@ -511,13 +530,68 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 		dz: (reader: StringReader): void => { reader.readFloat() },
 		x_rotation: (_reader: StringReader): void => {},
 		y_rotation: (_reader: StringReader): void => {},
-		limit: (_reader: StringReader): void => {},
-		sort: (_reader: StringReader): void => {},
-		gamemode: (_reader: StringReader): void => {},
+		limit: (reader: StringReader): void => {
+			const start: number = reader.getCursor();
+			const limit: number = reader.readInt();
+			if(limit < 1) {
+				reader.setCursor(start);
+				// throw argument.entity.options.limit.toosmall
+			}
+			this.maxResults = limit;
+			this.isLimited = true;
+		},
+		sort: (reader: StringReader): void => {
+			const start: number = reader.getCursor();
+			const sortType: string = reader.readUnquotedString(); // word
+			if(["nearest", "furthest", "random", "arbitrary"].includes(sortType)) {
+				this.order = sortType;
+				this.isSorted = true;
+			} else {
+				reader.setCursor(start);
+				// throw argument.entity.options.sort.irreversible
+			}
+		},
+		gamemode: (reader: StringReader): void => {
+			const start: number = reader.getCursor();
+			const shouldInvert: boolean = EntitySelectorArgument.shouldInvertValue(reader);
+			// stub: if this.hasGamemodeNotEquals() && !shouldInvert {
+			//     reset to start, ERROR_INAPPLICABLE_OPTION
+			// }
+			const gamemode: string = reader.readUnquotedString();
+			if(!["survival", "creative", "adventure", "spectator"].includes(gamemode)) {
+				reader.setCursor(start);
+				// throw argument.entity.options.mode.invalid
+			} else {
+				this.includesEntities = false;
+				if(shouldInvert) {
+					this.hasGamemodeNotEquals = true;
+				} else {
+					this.hasGamemodeEquals = true;
+				}
+			}
+		},
 		team: (_reader: StringReader): void => {},
 		type: (_reader: StringReader): void => {},
 		tag: (_reader: StringReader): void => {},
-		nbt: (_reader: StringReader): void => {},
+		nbt: (reader: StringReader): void => {
+			const start: number = reader.getCursor();
+			const shouldInvert: boolean = EntitySelectorArgument.shouldInvertValue(reader);
+			let nbt: string = "";
+			while(reader.canRead()) {
+				nbt += reader.read();
+				try {
+					mojangson(nbt);
+					break;
+				} catch(error) {
+				}
+			}
+			try {
+				mojangson(nbt);
+			} catch(error) {
+				reader.setCursor(start);
+				throw new SimpleCommandExceptionType(new LiteralMessage(`Why would you do this to me :(`)).createWithContext(reader);
+			}
+		},
 		scores: (_reader: StringReader): void => {},
 		advancements: (_reader: StringReader): void => {},
 		predicate: (_reader: StringReader): void => {}
@@ -527,22 +601,14 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 
 		// uuuuuuuuuuuugh, I so totally didn't want to implement this big chungus argument, but here we go!
 
-		let entityUUID: string;
-		let includesEntities: boolean;
-		let playerName: string;
-		let maxResults: number;
-		let limitedToPlayers: boolean; // players only?
-		let currentEntity: boolean;
-		let single: boolean;
-
-		function parseOptions(): void {
+		const parseOptions: () => void = () => {
 			reader.skipWhitespace();
 			while(reader.canRead() && reader.peek() !== "]") {
 				reader.skipWhitespace();
 				let start: number = reader.getCursor();
 				let s: string = reader.readString();
 
-				let modifier: Modifier = EntitySelectorArgument.Options[s];
+				let modifier: Modifier = this.Options[s];
 				if(modifier === null) {
 					reader.setCursor(start);
 					throw new SimpleCommandExceptionType(new LiteralMessage(`Unknown option '${s}'`)).createWithContext(reader);
@@ -575,7 +641,7 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 			throw new SimpleCommandExceptionType(new LiteralMessage("Expected end of options")).createWithContext(reader);
 		}
 
-		function parseSelector(): void {
+		const parseSelector: () => void = () => {
 			if(!reader.canRead()) {
 				throw new SimpleCommandExceptionType(new LiteralMessage("Missing selector type")).createWithContext(reader);
 			}
@@ -584,28 +650,28 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 			let selectorChar: string = reader.read();
 			switch(selectorChar) {
 				case "p":
-					maxResults = 1;
-					includesEntities = false;
-					limitedToPlayers = true;
+					this.maxResults = 1;
+					this.includesEntities = false;
+					this.limitedToPlayers = true;
 					break;
 				case "a":
-					maxResults = Number.MAX_SAFE_INTEGER;
-					includesEntities = false;
-					limitedToPlayers = true;
+					this.maxResults = Number.MAX_SAFE_INTEGER;
+					this.includesEntities = false;
+					this.limitedToPlayers = true;
 					break;
 				case "r":
-					maxResults = 1;
-					includesEntities = false;
-					limitedToPlayers = true;
+					this.maxResults = 1;
+					this.includesEntities = false;
+					this.limitedToPlayers = true;
 					break;
 				case "s":
-					maxResults = 1;
-					includesEntities = true;
-					currentEntity = true;
+					this.maxResults = 1;
+					this.includesEntities = true;
+					this.currentEntity = true;
 					break;
 				case "e":
-					maxResults = Number.MAX_SAFE_INTEGER;
-					includesEntities = true;
+					this.maxResults = Number.MAX_SAFE_INTEGER;
+					this.includesEntities = true;
 					break;
 				default:
 					reader.setCursor(start);
@@ -618,25 +684,25 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 			}
 		}
 
-		function parseNameOrUUID(): void {
+		const parseNameOrUUID: () => void = () => {
 			let i: number = reader.getCursor();
 			let s: string = reader.readString();
 
 			// Regex for a UUID: https://stackoverflow.com/a/13653180/4779071
 			if(s.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i) !== null) {
-				entityUUID = s;
-				includesEntities = true;
+				this.entityUUID = s;
+				this.includesEntities = true;
 			} else if(s.length === 0 || s.length > 16) {
 				reader.setCursor(i);
 				throw new SimpleCommandExceptionType(new LiteralMessage("Invalid name or UUID")).createWithContext(reader);
 			} else {
-				playerName = s;
-				includesEntities = false;
+				this.playerName = s;
+				this.includesEntities = false;
 			}
 
 			// We're only allowing 1 result because we've specified a player or
 			// UUID, and not an @ selector
-			maxResults = 1;
+			this.maxResults = 1;
 		}
 
 		let startPosition: number = reader.getCursor();
@@ -648,15 +714,15 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 		}
 
 		// Final checks...
-		if(maxResults > 0 && single) {
+		if(this.maxResults > 0 && this.single) {
 			reader.setCursor(0);
-			if(limitedToPlayers) {
+			if(this.limitedToPlayers) {
 				// throw throw ERROR_NOT_SINGLE_PLAYER.createWithContext(stringreader);
 			} else {
 				// throw ERROR_NOT_SINGLE_ENTITY.createWithContext(stringreader);
 			}
 		}
-		if(includesEntities && limitedToPlayers /* STUB: !isSelfSelector() */) {
+		if(this.includesEntities && this.limitedToPlayers /* STUB: !isSelfSelector() */) {
 			reader.setCursor(0);
 			// throw ERROR_ONLY_PLAYERS_ALLOWED.createWithContext(stringreader);
 		}

@@ -253,7 +253,7 @@ function registerCommand(configCommand: string) {
 			}
 		} else {
 			const argumentGeneratorFunction = ArgumentType.get(argumentType);
-			if(argumentGeneratorFunction === null) {
+			if(argumentGeneratorFunction === undefined) {
 				// TODO: Error, this argument type doesn't exist!
 				console.error("Argument type " + argumentType + " doesn't exist");
 			}
@@ -741,7 +741,7 @@ COMMANDS.value = `fill <pos1>[minecraft:block_pos] <pos2>[minecraft:block_pos] <
 speed (walk|fly) <speed>[0..10] <target>[minecraft:game_profile]
 hello <val>[1..20] <color>[minecraft:color]
 myfunc <val>[minecraft:mob_effect]
-entity <vala>[minecraft:entities]`;
+entity <vala>[api:entities]`;
 
 document.getElementById("register-commands-button")?.onclick(null);
 console.log("Dispatcher", dispatcher.getRoot())
