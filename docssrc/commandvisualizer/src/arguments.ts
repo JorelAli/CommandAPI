@@ -10,51 +10,51 @@ import {
 	// Typing
 	ArgumentType
 } from "node-brigadier"
+import { Argument } from "webpack";
 
-StringReader.prototype.readLocationLiteral = function readLocationLiteral(reader) {
+class ExtendedStringReader extends StringReader {
 
-	function isAllowedLocationLiteral(c) {
-		return c == '~' || c == '^';
-	}
+    public readLocationLiteral(): number {
 
-	let start = this.cursor;
-	while (this.canRead() && (StringReader.isAllowedNumber(this.peek()) || isAllowedLocationLiteral(this.peek()))) {
-		this.skip();
-	}
-	let number = this.string.substring(start, this.cursor);
-	if (number.length === 0) {
-		throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.readerExpectedInt().createWithContext(this);
-	}
+        function isAllowedLocationLiteral(c: string) {
+            return c == '~' || c == '^';
+        }
+    
+        let start = this.getCursor();
+        while (this.canRead() && (StringReader.isAllowedNumber(this.peek()) || isAllowedLocationLiteral(this.peek()))) {
+            this.skip();
+        }
+        let number = this.getString().substring(start, this.getCursor());
+        if (number.length === 0) {
+            throw (CommandSyntaxException as any).BUILT_IN_EXCEPTIONS.readerExpectedInt().createWithContext(this);
+        }
+    
+        if(number.startsWith("~") || number.startsWith("^")) {
+            if(number.length === 1) {
+                // Accept.
+                return 0;
+            } else {
+                number = number.slice(1);
+            }
+        }
+        const result = parseInt(number);
+        if (isNaN(result) || result !== parseFloat(number)) {
+            this.setCursor(start);
+            throw (CommandSyntaxException as any).BUILT_IN_EXCEPTIONS.readerInvalidInt().createWithContext(this, number);
+        } else {
+            return result;
+        }
+    }
 
-	if(number.startsWith("~") || number.startsWith("^")) {
-		if(number.length === 1) {
-			// Accept.
-			return number;
-		} else {
-			number = number.slice(1);
-		}
-	}
-	const result = parseInt(number);
-	if (isNaN(result) || result !== parseFloat(number)) {
-		this.cursor = start;
-		throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.readerInvalidInt().createWithContext(this, number);
-	} else {
-		return result;
-	}
 }
 
 /**
  * Helper for generating Promise<Suggestions>, from SharedSuggestionProvider.java
  */
 class HelperSuggestionProvider {
-	/**
-	 * 
-	 * @param {String[]} suggestions
-	 * @param {SuggestionsBuilder} builder
-	 * @return {Promise<Suggestions>}
-	 */
-	static suggest(suggestions, builder) {
-		let remainingLowercase = builder.getRemaining().toLowerCase();
+
+	public static suggest(suggestions: string[], builder: SuggestionsBuilder): Promise<Suggestions> {
+		let remainingLowercase: string = builder.getRemaining().toLowerCase();
 		for(let suggestion of suggestions) {
 			if(HelperSuggestionProvider.matchesSubStr(remainingLowercase, suggestion.toLowerCase())) {
 				builder.suggest(suggestion);
@@ -63,14 +63,8 @@ class HelperSuggestionProvider {
 		return builder.buildPromise();
 	}
 
-	/**
-	 * 
-	 * @param {String} remaining 
-	 * @param {String} suggestion 
-	 * @returns {boolean}
-	 */
-	static matchesSubStr(remaining, suggestion) {
-		let index = 0;
+	public static matchesSubStr(remaining: string, suggestion: string): boolean {
+		let index: number = 0;
 		while (!suggestion.startsWith(remaining, index)) {
 			index = suggestion.indexOf('_', index);
 			if (index < 0) {
@@ -85,30 +79,29 @@ class HelperSuggestionProvider {
 /**
  * @extends {ArgumentType}
  */
-export class TimeArgument {
-	
-	/** @type {Map<String, Number} */
-	static UNITS = new Map();
+export class TimeArgument implements ArgumentType<TimeArgument> {
 
-	static {
-		TimeArgument.UNITS.set("d", 24000);
-		TimeArgument.UNITS.set("s", 20);
-		TimeArgument.UNITS.set("t", 1);
-		TimeArgument.UNITS.set("", 1);
-	}
+	static UNITS: Map<string, number> = new Map([
+		["d", 24000],
+		["s", 20],
+		["t", 1],
+		["", 1]
+	]);
 
-	constructor(ticks = 0) {
+	private ticks: number;
+
+	constructor(ticks: number = 0) {
 		this.ticks = ticks;
 	}
 
-	parse(/** @type {StringReader} */ reader) {
-		const numericalValue = reader.readFloat();
-		const unit = reader.readUnquotedString();
-		const unitMultiplier = TimeArgument.UNITS.get(unit) ?? 0;
+	public /* override */ parse(reader: StringReader): TimeArgument {
+		const numericalValue: number = reader.readFloat();
+		const unit: string = reader.readUnquotedString();
+		const unitMultiplier: number = TimeArgument.UNITS.get(unit);
 		if(unitMultiplier === 0) {
 			throw new SimpleCommandExceptionType(new LiteralMessage(`Invalid unit "${unit}"`)).createWithContext(reader);
 		}
-		const ticks = Math.round(numericalValue * unitMultiplier);
+		const ticks: number = Math.round(numericalValue * unitMultiplier);
 		if(ticks < 0) {
 			throw new SimpleCommandExceptionType(new LiteralMessage("Tick count must be non-negative")).createWithContext(reader);
 		}
@@ -122,33 +115,34 @@ export class TimeArgument {
 	 * @param {SuggestionsBuilder} builder 
 	 * @returns {Promise<Suggestions>}
 	 */
-	listSuggestions(context, builder) {
-		let reader = new StringReader(builder.getRemaining());
+	public listSuggestions(context: CommandContext<any>, builder: SuggestionsBuilder): Promise<Suggestions> {
+		let reader: StringReader = new StringReader(builder.getRemaining());
 		try {
 			reader.readFloat();
 		} catch(ex) {
-			return reader.buildPromise();
+			return builder.buildPromise();
 		}
 		return HelperSuggestionProvider.suggest([...TimeArgument.UNITS.keys()], builder.createOffset(builder.getStart() + reader.getCursor()));
 	}
 
-	getExamples() {
+	public getExamples(): string[] {
 		return ["0d", "0s", "0t", "0"];
 	}
 }
 
-/**
- * @extends {ArgumentType}
- */
-export class BlockPosArgument {
+export class BlockPosArgument implements ArgumentType<BlockPosArgument> {
 
-	constructor(x = 0, y = 0, z = 0) {
+	private x: number;
+	private y: number;
+	private z: number;
+
+	constructor(x: number = 0, y: number = 0, z: number = 0) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 
-	parse(/** @type {StringReader} */ reader) {
+	public parse(reader: ExtendedStringReader): BlockPosArgument {
 		this.x = reader.readLocationLiteral();
 		reader.skip();
 		this.y = reader.readLocationLiteral();
@@ -157,79 +151,62 @@ export class BlockPosArgument {
 		return this;
 	}
 
-	/**
-	 * 
-	 * @param {CommandContext} context 
-	 * @param {SuggestionsBuilder} builder 
-	 * @returns {Promise<Suggestions>}
-	 */
-	listSuggestions(context, builder) {
+	public listSuggestions(context: CommandContext<any>, builder: SuggestionsBuilder): Promise<Suggestions> {
 		builder.suggest("~");
 		builder.suggest("~ ~");
 		builder.suggest("~ ~ ~");
 		return builder.buildPromise();
 	}
 
-	getExamples() {
+	public getExamples(): string[] {
 		return ["1 2 3"];
 	}
 }
 
-/**
- * @extends {ArgumentType}
- */
-export class ColumnPosArgument {
+export class ColumnPosArgument implements ArgumentType<ColumnPosArgument> {
+
+	private x: number;
+	private z: number;
 
 	constructor(x = 0, z = 0) {
 		this.x = x;
 		this.z = z;
 	}
 
-	parse(/** @type {StringReader} */ reader) {
+	public parse(reader: ExtendedStringReader): ColumnPosArgument {
 		this.x = reader.readLocationLiteral();
 		reader.skip();
 		this.z = reader.readLocationLiteral();
 		return this;
 	}
 
-	/**
-	 * 
-	 * @param {CommandContext} context 
-	 * @param {SuggestionsBuilder} builder 
-	 * @returns {Promise<Suggestions>}
-	 */
-	listSuggestions(context, builder) {
+	public listSuggestions(context: CommandContext<any>, builder: SuggestionsBuilder): Promise<Suggestions> {
 		builder.suggest("~");
 		builder.suggest("~ ~");
 		return builder.buildPromise();
 	}
 
-	getExamples() {
+	public getExamples(): string[] {
 		return ["1 2"];
 	}
 }
 
-/**
- * @extends {ArgumentType}
- */
-export class PlayerArgument {
-	/**
-	 * 
-	 * @param {string} username 
-	 */
-	constructor(username = "") {
-		/** @type string */
+export class PlayerArgument implements ArgumentType<PlayerArgument> {
+
+	private username: string;
+
+	constructor(username: string = "") {
 		this.username = username;
 	}
 
-	parse(/** @type {StringReader} */ reader) {
-		const start = reader.getCursor();
+	public parse(reader: StringReader): PlayerArgument {
+		const start: number = reader.getCursor();
 		while(reader.canRead() && reader.peek() !== " ") {
 			reader.skip();
 		}
 
-		const string = reader.getString();
-		const currentCursor = reader.getCursor();
+		const string: string = reader.getString();
+		const currentCursor: number = reader.getCursor();
 
 		this.username = string.slice(start, currentCursor);
 
@@ -240,38 +217,27 @@ export class PlayerArgument {
 		return this;
 	}
 
-	/**
-	 * 
-	 * @param {CommandContext} context 
-	 * @param {SuggestionsBuilder} builder 
-	 * @returns {Promise<Suggestions>}
-	 */
-	listSuggestions(context, builder) {
+	public listSuggestions(context: CommandContext<any>, builder: SuggestionsBuilder): Promise<Suggestions> {
 		return Suggestions.empty();
 	}
 
-	getExamples() {
+	public getExamples(): string[] {
 		return ["Skepter"];
 	}
 }
 
-/**
- * @extends {ArgumentType}
- */
-export class MultiLiteralArgument {
-	/**
-	 * @param {Array<String>} literals 
-	 */
-	 constructor(literals) {
-		/** @type {Array<String>} */
+export class MultiLiteralArgument implements ArgumentType<MultiLiteralArgument> {
+
+	private literals: string[];
+	private selectedLiteral: string;
+
+	 constructor(literals: string[]) {
 		this.literals = literals;
-		/** @type {string} */
 		this.selectedLiteral = "";
 	}
 
-	/** @override */
-	parse(/** @type {StringReader} */ reader) {
-		const start = reader.getCursor();
+	public parse(reader: StringReader) {
+		const start: number = reader.getCursor();
 		while(reader.canRead() && reader.peek() !== " ") {
 			reader.skip();
 		}
@@ -290,32 +256,21 @@ export class MultiLiteralArgument {
 		return this;
 	}
 
-	/**
-	 * 
-	 * @param {CommandContext} context 
-	 * @param {SuggestionsBuilder} builder 
-	 * @returns {Promise<Suggestions>}
-	 */
-	/** @override */
-	listSuggestions(context, builder) {
+	public listSuggestions(context: CommandContext<any>, builder: SuggestionsBuilder): Promise<Suggestions> {
 		for(let literal of this.literals) {
 			builder.suggest(literal);
 		}
 		return builder.buildPromise();
 	}
 
-	/** @override */
-	getExamples() {
+	public getExamples(): string[] {
 		return ["blah"];
 	}
 }
 
-/**
- * @extends {ArgumentType}
- */
-export class ColorArgument {
+export class ColorArgument implements ArgumentType<ColorArgument> {
 
-	static ChatColor = {
+	static ChatColor: { [color: string]: string } = {
 		// Uses the section symbol (§), just like Minecraft
 		black: "\u00A70",
 		dark_blue: "\u00A71",
@@ -333,18 +288,17 @@ export class ColorArgument {
 		light_purple: "\u00A7d",
 		yellow: "\u00A7e",
 		white: "\u00A7f",
-	};
+	} as const;
 
-	/**
-	 * @param {Array<String>} literals 
-	 */
-	constructor(chatcolor = null) {
+	private chatcolor: string;
+
+	constructor(chatcolor: string = null) {
 		this.chatcolor = chatcolor;
 	}
 
-	parse(/** @type {StringReader} */ reader) {
+	public parse(reader: StringReader) {
 		let input = reader.readUnquotedString();
-		let chatFormat = ColorArgument.ChatColor[input.toLowerCase()];
+		let chatFormat: string = ColorArgument.ChatColor[input.toLowerCase()];
 		if(chatFormat === undefined) {
 			throw new SimpleCommandExceptionType(new LiteralMessage(`Unknown colour '${input}'`)).createWithContext(reader);
 		}
@@ -352,17 +306,11 @@ export class ColorArgument {
 		return this;
 	}
 
-	/**
-	 * 
-	 * @param {CommandContext} context 
-	 * @param {SuggestionsBuilder} builder 
-	 * @returns {Promise<Suggestions>}
-	 */
-	listSuggestions(context, builder) {
+	 public listSuggestions(context: CommandContext<any>, builder: SuggestionsBuilder): Promise<Suggestions> {
 		return HelperSuggestionProvider.suggest(Object.keys(ColorArgument.ChatColor), builder);
 	}
 
-	getExamples() {
+	public getExamples(): string[] {
 		return ["red", "green"];
 	}
 }

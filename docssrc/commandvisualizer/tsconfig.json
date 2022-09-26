@@ -8,6 +8,7 @@
         "allowJs": false,
         "moduleResolution": "node",
         "alwaysStrict": true,
-        "declaration": true
+        "declaration": true,
+        // "noImplicitOverride": true
     }
 }
