@@ -27,6 +27,7 @@ import java.lang.invoke.VarHandle;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -42,6 +43,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.permissions.Permission;
@@ -147,7 +149,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		return instance;
 	}
 	
-	static void onDisable() {
+	public static void onDisable() {
 		if(instance != null) {
 			for(Player player : Bukkit.getOnlinePlayers()) {
 				instance.NMS.unhookChatPreview(player);
@@ -752,10 +754,14 @@ public class CommandAPIHandler<CommandSourceStack> {
 		// Handle previewable arguments
 		handlePreviewableArguments(commandName, args, aliases);
 
-		if (Bukkit.getPluginCommand(commandName) != null) {
-			CommandAPI.logWarning("Plugin command /" + commandName + " is registered by Bukkit ("
-					+ Bukkit.getPluginCommand(commandName).getPlugin().getName()
-					+ "). Did you forget to remove this from your plugin.yml file?");
+		// Warn if the command we're registering already exists in this plugin's
+		// plugin.yml file
+		{
+			final PluginCommand pluginCommand = Bukkit.getPluginCommand(commandName);
+			if (pluginCommand != null) {
+				CommandAPI.logWarning("Plugin command /%s is registered by Bukkit (%s). Did you forget to remove this from your plugin.yml file?".formatted(commandName,
+					pluginCommand.getPlugin().getName()));
+			}
 		}
 
 		CommandAPI.logInfo("Registering command /" + commandName + " " + humanReadableCommandArgSyntax);
@@ -802,6 +808,16 @@ public class CommandAPIHandler<CommandSourceStack> {
 						.requires(generatePermissions(alias, permission, requirements)).then(commandArguments));
 			}
 		}
+
+		DISPATCHER.findAmbiguities(
+			(CommandNode<CommandSourceStack> parent,
+				CommandNode<CommandSourceStack> child,
+				CommandNode<CommandSourceStack> sibling,
+				Collection<String> inputs) -> {
+					if(resultantNode.equals(parent)) {
+						// Byeeeeeeeeeeeeeeeeeeeee~
+					}
+			});
 
 		// We never know if this is "the last command" and we want dynamic (even if
 		// partial)
