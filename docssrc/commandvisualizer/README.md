@@ -10,9 +10,8 @@ A TypeScript-based embedded Minecraft command viewing interface.
 
 ## Testing (e.g. how to use in your local browser)
 
-- Run `npm install http-server`
-- Run `npx http-server dist`
-- Run `npx webpack` command above when necessary to update local TypeScript changes
+- Run `npx webpack serve`
+- Navigate to `http://localhost:8080`
 
 ## Acknowledgements
 

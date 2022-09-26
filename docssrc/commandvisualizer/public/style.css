@@ -9,6 +9,10 @@
 	src: url("MinecraftRegular-Bmg3.otf") format("opentype");
 }
 
+body {
+	background-color: black;
+}
+
 #chatbox, #error-box, #suggestions-box, #valid-box {
 	font-family: CustomFont;
 	color: #a8a8a8;
@@ -78,6 +82,9 @@ span {
 	width: 100%;
 	height: 150px;
 	font-family: monospace;
+	font-size: 16pt;
+	color: white;
+	background-color: #161e2c;
 }
 
 /* From https://codepen.io/joexmdq/pen/EOMLzg */

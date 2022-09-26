@@ -740,7 +740,8 @@ document.getElementById("register-commands-button").onclick = function onRegiste
 COMMANDS.value = `fill <pos1>[minecraft:block_pos] <pos2>[minecraft:block_pos] <block>[brigadier:string]
 speed (walk|fly) <speed>[0..10] <target>[minecraft:game_profile]
 hello <val>[1..20] <color>[minecraft:color]
-myfunc <val>[minecraft:mob_effect]`;
+myfunc <val>[minecraft:mob_effect]
+entity <vala>[minecraft:entities]`;
 
 document.getElementById("register-commands-button")?.onclick(null);
 console.log("Dispatcher", dispatcher.getRoot())
