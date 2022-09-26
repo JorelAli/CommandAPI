@@ -577,6 +577,7 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 			const start: number = reader.getCursor();
 			const shouldInvert: boolean = EntitySelectorArgument.shouldInvertValue(reader);
 			let nbt: string = "";
+			// Keep reading until we have valid NBT. If not, we can at least say we tried
 			while(reader.canRead()) {
 				nbt += reader.read();
 				try {
@@ -589,7 +590,7 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 				mojangson(nbt);
 			} catch(error) {
 				reader.setCursor(start);
-				throw new SimpleCommandExceptionType(new LiteralMessage(`Why would you do this to me :(`)).createWithContext(reader);
+				throw new SimpleCommandExceptionType(new LiteralMessage(`${error}`)).createWithContext(reader);
 			}
 		},
 		scores: (_reader: StringReader): void => {},
