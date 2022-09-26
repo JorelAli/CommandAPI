@@ -10,23 +10,22 @@ import {
 	// Typing
 	ArgumentType
 } from "node-brigadier"
-import { Argument } from "webpack";
 
-class ExtendedStringReader extends StringReader {
+class ExtendedStringReader {
 
-    public readLocationLiteral(): number {
+    public static readLocationLiteral(reader: StringReader): number {
 
         function isAllowedLocationLiteral(c: string) {
             return c == '~' || c == '^';
         }
     
-        let start = this.getCursor();
-        while (this.canRead() && (StringReader.isAllowedNumber(this.peek()) || isAllowedLocationLiteral(this.peek()))) {
-            this.skip();
+        let start = reader.getCursor();
+        while (reader.canRead() && (StringReader.isAllowedNumber(reader.peek()) || isAllowedLocationLiteral(reader.peek()))) {
+            reader.skip();
         }
-        let number = this.getString().substring(start, this.getCursor());
+        let number = reader.getString().substring(start, reader.getCursor());
         if (number.length === 0) {
-            throw (CommandSyntaxException as any).BUILT_IN_EXCEPTIONS.readerExpectedInt().createWithContext(this);
+            throw (CommandSyntaxException as any).BUILT_IN_EXCEPTIONS.readerExpectedInt().createWithContext(reader);
         }
     
         if(number.startsWith("~") || number.startsWith("^")) {
@@ -39,8 +38,8 @@ class ExtendedStringReader extends StringReader {
         }
         const result = parseInt(number);
         if (isNaN(result) || result !== parseFloat(number)) {
-            this.setCursor(start);
-            throw (CommandSyntaxException as any).BUILT_IN_EXCEPTIONS.readerInvalidInt().createWithContext(this, number);
+            reader.setCursor(start);
+            throw (CommandSyntaxException as any).BUILT_IN_EXCEPTIONS.readerInvalidInt().createWithContext(reader, number);
         } else {
             return result;
         }
@@ -76,9 +75,6 @@ class HelperSuggestionProvider {
 	}
 }
 
-/**
- * @extends {ArgumentType}
- */
 export class TimeArgument implements ArgumentType<TimeArgument> {
 
 	static UNITS: Map<string, number> = new Map([
@@ -94,7 +90,7 @@ export class TimeArgument implements ArgumentType<TimeArgument> {
 		this.ticks = ticks;
 	}
 
-	public /* override */ parse(reader: StringReader): TimeArgument {
+	public parse(reader: StringReader): TimeArgument {
 		const numericalValue: number = reader.readFloat();
 		const unit: string = reader.readUnquotedString();
 		const unitMultiplier: number = TimeArgument.UNITS.get(unit);
@@ -109,12 +105,6 @@ export class TimeArgument implements ArgumentType<TimeArgument> {
 		return this;
 	}
 
-	/**
-	 * 
-	 * @param {CommandContext} context 
-	 * @param {SuggestionsBuilder} builder 
-	 * @returns {Promise<Suggestions>}
-	 */
 	public listSuggestions(context: CommandContext<any>, builder: SuggestionsBuilder): Promise<Suggestions> {
 		let reader: StringReader = new StringReader(builder.getRemaining());
 		try {
@@ -142,12 +132,12 @@ export class BlockPosArgument implements ArgumentType<BlockPosArgument> {
 		this.z = z;
 	}
 
-	public parse(reader: ExtendedStringReader): BlockPosArgument {
-		this.x = reader.readLocationLiteral();
+	public parse(reader: StringReader): BlockPosArgument {
+		this.x = ExtendedStringReader.readLocationLiteral(reader);
 		reader.skip();
-		this.y = reader.readLocationLiteral();
+		this.y = ExtendedStringReader.readLocationLiteral(reader);
 		reader.skip();
-		this.z = reader.readLocationLiteral();
+		this.z = ExtendedStringReader.readLocationLiteral(reader);
 		return this;
 	}
 
@@ -173,10 +163,10 @@ export class ColumnPosArgument implements ArgumentType<ColumnPosArgument> {
 		this.z = z;
 	}
 
-	public parse(reader: ExtendedStringReader): ColumnPosArgument {
-		this.x = reader.readLocationLiteral();
+	public parse(reader: StringReader): ColumnPosArgument {
+		this.x = ExtendedStringReader.readLocationLiteral(reader);
 		reader.skip();
-		this.z = reader.readLocationLiteral();
+		this.z = ExtendedStringReader.readLocationLiteral(reader);
 		return this;
 	}
 
