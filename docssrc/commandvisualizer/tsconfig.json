@@ -10,7 +10,7 @@
         "alwaysStrict": true,
         "declaration": false,
         "noImplicitOverride": true,
-        "noUnusedLocals": true,
+        "noUnusedLocals": false,
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true,
         "noImplicitThis": true,

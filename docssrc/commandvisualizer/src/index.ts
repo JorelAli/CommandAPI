@@ -28,7 +28,8 @@ import {
 	ColorArgument,
 	PotionEffectArgument,
 	AngleArgument,
-	UUIDArgument
+	UUIDArgument,
+	EntitySelectorArgument
 } from "./arguments"
 
 /******************************************************************************
@@ -146,11 +147,11 @@ const ArgumentColors: { [colorIndex: number]: String } = {
 
 // As implemented by https://commandapi.jorel.dev/8.5.1/internal.html
 const ArgumentType = new Map<String, () => BrigadierArgumentType<unknown> | null>([
-	// CommandAPI separation
-	["api:entity", () => null],
-	["api:entities", () => null],
-	["api:player", () => null],
-	["api:players", () => null],
+	// CommandAPI separation. These are the various EntitySelectorArgument<> types
+	["api:entity", () => new EntitySelectorArgument()],
+	["api:entities", () => new EntitySelectorArgument()],
+	["api:player", () => new EntitySelectorArgument()],
+	["api:players", () => new EntitySelectorArgument()],
 	["api:greedy_string", () => greedyStringArgument()],
 
 	// A note about Brigadier String types:
@@ -252,6 +253,10 @@ function registerCommand(configCommand: string) {
 			}
 		} else {
 			const argumentGeneratorFunction = ArgumentType.get(argumentType);
+			if(argumentGeneratorFunction === null) {
+				// TODO: Error, this argument type doesn't exist!
+				console.error("Argument type " + argumentType + " doesn't exist");
+			}
 			if (argumentGeneratorFunction()) {
 				return argumentGeneratorFunction();
 			} else {

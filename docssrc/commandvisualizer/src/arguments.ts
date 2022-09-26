@@ -470,3 +470,201 @@ export class UUIDArgument implements ArgumentType<UUIDArgument> {
 		return ["dd12be42-52a9-4a91-a8a1-11c01849e498"];
 	}
 }
+
+type Modifier = (reader: StringReader) => void;
+
+export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgument> {
+
+	static shouldInvertValue(reader: StringReader): boolean {
+		reader.skipWhitespace();
+		if (reader.canRead() && reader.peek() === '!') {
+			reader.skip();
+			reader.skipWhitespace();
+			return true;
+		}
+		return false;
+	}
+
+	static Options: { [option: string]: Modifier } = {
+		name: (reader: StringReader): void => {
+			const start: number = reader.getCursor();
+			const shouldInvert: boolean = this.shouldInvertValue(reader);
+			// const _s: string = reader.readString();
+			if(/* STUB: this.hasNameNotEquals() */ !shouldInvert) {
+				reader.setCursor(start);
+				throw new SimpleCommandExceptionType(new LiteralMessage(`Option 'name' isn't applicable here`)).createWithContext(reader);
+			}
+			if(shouldInvert) {
+				// stub: setHasNameNotEqual(true)
+			} else {
+				// stub: setHasNameEquals(true)
+			}
+			// Predicate?
+		},
+		distance: (_reader: StringReader): void => {},
+		level: (_reader: StringReader): void => {},
+		x: (reader: StringReader): void => { reader.readFloat() },
+		y: (reader: StringReader): void => { reader.readFloat() },
+		z: (reader: StringReader): void => { reader.readFloat() },
+		dx: (reader: StringReader): void => { reader.readFloat() },
+		dy: (reader: StringReader): void => { reader.readFloat() },
+		dz: (reader: StringReader): void => { reader.readFloat() },
+		x_rotation: (_reader: StringReader): void => {},
+		y_rotation: (_reader: StringReader): void => {},
+		limit: (_reader: StringReader): void => {},
+		sort: (_reader: StringReader): void => {},
+		gamemode: (_reader: StringReader): void => {},
+		team: (_reader: StringReader): void => {},
+		type: (_reader: StringReader): void => {},
+		tag: (_reader: StringReader): void => {},
+		nbt: (_reader: StringReader): void => {},
+		scores: (_reader: StringReader): void => {},
+		advancements: (_reader: StringReader): void => {},
+		predicate: (_reader: StringReader): void => {}
+	} as const;
+
+	public parse(reader: StringReader): EntitySelectorArgument {
+
+		// uuuuuuuuuuuugh, I so totally didn't want to implement this big chungus argument, but here we go!
+
+		let entityUUID: string;
+		let includesEntities: boolean;
+		let playerName: string;
+		let maxResults: number;
+		let limitedToPlayers: boolean; // players only?
+		let currentEntity: boolean;
+		let single: boolean;
+
+		function parseOptions(): void {
+			reader.skipWhitespace();
+			while(reader.canRead() && reader.peek() !== "]") {
+				reader.skipWhitespace();
+				let start: number = reader.getCursor();
+				let s: string = reader.readString();
+
+				let modifier: Modifier = EntitySelectorArgument.Options[s];
+				if(modifier === null) {
+					reader.setCursor(start);
+					throw new SimpleCommandExceptionType(new LiteralMessage(`Unknown option '${s}'`)).createWithContext(reader);
+				}
+
+				reader.skipWhitespace();
+				if(!reader.canRead() || reader.peek() !== "=") {
+					reader.setCursor(start);
+					throw new SimpleCommandExceptionType(new LiteralMessage(`Expected value for option '${s}'`)).createWithContext(reader);
+				}
+				reader.skip();
+				reader.skipWhitespace();
+				modifier(reader);
+				reader.skipWhitespace();
+				if(!reader.canRead()) {
+					continue;
+				}
+				if(reader.peek() === ",") {
+					reader.skip();
+					continue;
+				}
+				if(reader.peek() !== "]") {
+					throw new SimpleCommandExceptionType(new LiteralMessage("Expected end of options")).createWithContext(reader);
+				}
+			}
+			if (reader.canRead()) {
+				reader.skip();
+				return;
+			}
+			throw new SimpleCommandExceptionType(new LiteralMessage("Expected end of options")).createWithContext(reader);
+		}
+
+		function parseSelector(): void {
+			if(!reader.canRead()) {
+				throw new SimpleCommandExceptionType(new LiteralMessage("Missing selector type")).createWithContext(reader);
+			}
+
+			let start: number = reader.getCursor();
+			let selectorChar: string = reader.read();
+			switch(selectorChar) {
+				case "p":
+					maxResults = 1;
+					includesEntities = false;
+					limitedToPlayers = true;
+					break;
+				case "a":
+					maxResults = Number.MAX_SAFE_INTEGER;
+					includesEntities = false;
+					limitedToPlayers = true;
+					break;
+				case "r":
+					maxResults = 1;
+					includesEntities = false;
+					limitedToPlayers = true;
+					break;
+				case "s":
+					maxResults = 1;
+					includesEntities = true;
+					currentEntity = true;
+					break;
+				case "e":
+					maxResults = Number.MAX_SAFE_INTEGER;
+					includesEntities = true;
+					break;
+				default:
+					reader.setCursor(start);
+					throw new SimpleCommandExceptionType(new LiteralMessage(`Unknown selector type '${selectorChar}'`)).createWithContext(reader);
+			}
+
+			if (reader.canRead() && reader.peek() === "[") {
+				reader.skip();
+				parseOptions();
+			}
+		}
+
+		function parseNameOrUUID(): void {
+			let i: number = reader.getCursor();
+			let s: string = reader.readString();
+
+			// Regex for a UUID: https://stackoverflow.com/a/13653180/4779071
+			if(s.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i) !== null) {
+				entityUUID = s;
+				includesEntities = true;
+			} else if(s.length === 0 || s.length > 16) {
+				reader.setCursor(i);
+				throw new SimpleCommandExceptionType(new LiteralMessage("Invalid name or UUID")).createWithContext(reader);
+			} else {
+				playerName = s;
+				includesEntities = false;
+			}
+
+			// We're only allowing 1 result because we've specified a player or
+			// UUID, and not an @ selector
+			maxResults = 1;
+		}
+
+		let startPosition: number = reader.getCursor();
+		if(reader.canRead() && reader.peek() === "@") {
+			reader.skip();
+			parseSelector()
+		} else {
+			parseNameOrUUID();
+		}
+
+		// Final checks...
+		if(maxResults > 0 && single) {
+			reader.setCursor(0);
+			if(limitedToPlayers) {
+				// throw throw ERROR_NOT_SINGLE_PLAYER.createWithContext(stringreader);
+			} else {
+				// throw ERROR_NOT_SINGLE_ENTITY.createWithContext(stringreader);
+			}
+		}
+		if(includesEntities && limitedToPlayers /* STUB: !isSelfSelector() */) {
+			reader.setCursor(0);
+			// throw ERROR_ONLY_PLAYERS_ALLOWED.createWithContext(stringreader);
+		}
+
+		return this;
+	}
+
+	public getExamples(): string[] {
+		return ["dd12be42-52a9-4a91-a8a1-11c01849e498"];
+	}
+}
