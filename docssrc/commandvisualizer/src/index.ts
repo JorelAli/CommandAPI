@@ -4,7 +4,8 @@ import {
 	RootCommandNode,
 	literal as literalArgument,
 	argument,
-	string as stringArgument,
+	word as singleWordArgument, // A single word (e.g. StringArgument or unquoted string)
+	string as stringArgument, // A quotable phrase (e.g. TextArgument or "string")
 	integer as integerArgument,
 	float as floatArgument,
 	bool as boolArgument,
@@ -25,7 +26,9 @@ import {
 	ColumnPosArgument,
 	TimeArgument,
 	ColorArgument,
-	PotionEffectArgument
+	PotionEffectArgument,
+	AngleArgument,
+	UUIDArgument
 } from "./arguments"
 
 /******************************************************************************
@@ -150,6 +153,8 @@ const ArgumentType = new Map<String, () => BrigadierArgumentType<unknown> | null
 	["api:players", () => null],
 	["api:greedy_string", () => greedyStringArgument()],
 
+	// A note about Brigadier String types:
+
 	// Brigadier arguments
 	["brigadier:bool", () => boolArgument()],
 	["brigadier:double", () => floatArgument()],
@@ -159,7 +164,7 @@ const ArgumentType = new Map<String, () => BrigadierArgumentType<unknown> | null
 	["brigadier:string", () => stringArgument()],
 
 	// Minecraft arguments
-	["minecraft:angle", () => null],
+	["minecraft:angle", () => new AngleArgument()],
 	["minecraft:block_pos", () => new BlockPosArgument()],
 	["minecraft:block_predicate", () => null],
 	["minecraft:block_state", () => null],
@@ -178,7 +183,7 @@ const ArgumentType = new Map<String, () => BrigadierArgumentType<unknown> | null
 	["minecraft:item_predicate", () => null],
 	["minecraft:item_slot", () => null],
 	["minecraft:item_stack", () => null],
-	["minecraft:message", () => null],
+	["minecraft:message", () => greedyStringArgument()], // Close enough
 	["minecraft:mob_effect", () => new PotionEffectArgument()],
 	["minecraft:nbt", () => null],
 	["minecraft:nbt_compound_tag", () => null],
@@ -193,9 +198,9 @@ const ArgumentType = new Map<String, () => BrigadierArgumentType<unknown> | null
 	["minecraft:score_holder", () => null],
 	["minecraft:scoreboard_slot", () => null],
 	["minecraft:swizzle", () => null],
-	["minecraft:team", () => null],
+	["minecraft:team", () => singleWordArgument()],
 	["minecraft:time", () => new TimeArgument()],
-	["minecraft:uuid", () => null],
+	["minecraft:uuid", () => new UUIDArgument()],
 	["minecraft:vec2", () => null],
 	["minecraft:vec3", () => null],
 ]);

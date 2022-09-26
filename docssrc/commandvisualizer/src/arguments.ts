@@ -263,10 +263,6 @@ export class PlayerArgument implements ArgumentType<PlayerArgument> {
 		return this;
 	}
 
-	public listSuggestions(_context: CommandContext<any>, _builder: SuggestionsBuilder): Promise<Suggestions> {
-		return Suggestions.empty();
-	}
-
 	public getExamples(): string[] {
 		return ["Skepter"];
 	}
@@ -421,5 +417,56 @@ export class PotionEffectArgument implements ArgumentType<PotionEffectArgument> 
 
 	public getExamples(): string[] {
 		return ["spooky", "effect"];
+	}
+}
+
+export class AngleArgument implements ArgumentType<AngleArgument> {
+
+	public angle: number;
+	public relative: boolean;
+
+	public parse(reader: StringReader): AngleArgument {
+		if(!reader.canRead()) {
+			throw new SimpleCommandExceptionType(new LiteralMessage("Incomplete (expected 1 angle)")).createWithContext(reader);
+		}
+		// Read relative ~
+		if (reader.peek() === '~') {
+			this.relative = true;
+			reader.skip();
+		} else {
+			this.relative = false;
+		}
+		this.angle = (reader.canRead() && reader.peek() !== ' ') ? reader.readFloat() : 0.0;
+		if(isNaN(this.angle) || !isFinite(this.angle)) {
+			throw new SimpleCommandExceptionType(new LiteralMessage("Invalid angle")).createWithContext(reader);
+		}
+		return this;
+	}
+
+	public getExamples(): string[] {
+		return ["0", "~", "~-5"];
+	}
+}
+
+export class UUIDArgument implements ArgumentType<UUIDArgument> {
+
+	public uuid: string;
+
+	public parse(reader: StringReader): UUIDArgument {
+		const remaining: string = reader.getRemaining();
+		const matchedResults = remaining.match(/^([-A-Fa-f0-9]+)/);
+		if(matchedResults !== null) {
+			this.uuid = matchedResults[1];
+			// Regex for a UUID: https://stackoverflow.com/a/13653180/4779071
+			if(this.uuid.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i) !== null) {
+				reader.setCursor(reader.getCursor() + this.uuid.length);
+				return this;
+			}
+		}
+		throw new SimpleCommandExceptionType(new LiteralMessage("Invalid UUID")).createWithContext(reader);
+	}
+
+	public getExamples(): string[] {
+		return ["dd12be42-52a9-4a91-a8a1-11c01849e498"];
 	}
 }
