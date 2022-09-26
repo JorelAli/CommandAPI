@@ -24,7 +24,8 @@ import {
 	MultiLiteralArgument,
 	ColumnPosArgument,
 	TimeArgument,
-	ColorArgument
+	ColorArgument,
+	PotionEffectArgument
 } from "./arguments"
 
 /******************************************************************************
@@ -178,7 +179,7 @@ const ArgumentType = new Map<String, () => BrigadierArgumentType<unknown> | null
 	["minecraft:item_slot", () => null],
 	["minecraft:item_stack", () => null],
 	["minecraft:message", () => null],
-	["minecraft:mob_effect", () => null],
+	["minecraft:mob_effect", () => new PotionEffectArgument()],
 	["minecraft:nbt", () => null],
 	["minecraft:nbt_compound_tag", () => null],
 	["minecraft:nbt_path", () => null],
@@ -689,15 +690,16 @@ COMMAND_INPUT.addEventListener('keydown', (evt: KeyboardEvent) => {
 });
 
 window.addEventListener("suggestionsUpdated", (_event: Event) => {
-	let rawText: string = COMMAND_INPUT.innerText;
+	const rawText: string = COMMAND_INPUT.innerText.replaceAll("\u00a0", " "); // Replace &nbsp; with normal spaces
 
 	if (!SUGGESTIONS_BOX.hidden) {
-		let selectedSuggestionText: string = getSelectedSuggestion().innerText.trim();
+		const selectedSuggestionText: string = getSelectedSuggestion().innerText.trim();
 
 		// TODO: This obviously needs to be specific to the current suggestions, not the whole input
 		if (rawText !== selectedSuggestionText) {
-			let cursorPosition = getCursorPosition();
-			setText(ChatColor.DARK_GRAY + selectedSuggestionText.slice(rawText.length - 1), COMMAND_INPUT_AUTOCOMPLETE);
+			const cursorPosition: number = getCursorPosition();
+			const lastSpaceIndex: number = rawText.lastIndexOf(" ") === -1 ? 1 : rawText.lastIndexOf(" ") + 1;
+			setText(ChatColor.DARK_GRAY + selectedSuggestionText.slice(rawText.slice(lastSpaceIndex).length), COMMAND_INPUT_AUTOCOMPLETE);
 			setCursorPosition(cursorPosition, COMMAND_INPUT);
 			COMMAND_INPUT.focus();
 		} else {
@@ -727,7 +729,8 @@ document.getElementById("register-commands-button").onclick = function onRegiste
 // Default commands
 COMMANDS.value = `fill <pos1>[minecraft:block_pos] <pos2>[minecraft:block_pos] <block>[brigadier:string]
 speed (walk|fly) <speed>[0..10] <target>[minecraft:game_profile]
-hello <val>[1..20] <color>[minecraft:color]`;
+hello <val>[1..20] <color>[minecraft:color]
+myfunc <val>[minecraft:mob_effect]`;
 
 document.getElementById("register-commands-button")?.onclick(null);
 console.log("Dispatcher", dispatcher.getRoot())
