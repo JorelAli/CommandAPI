@@ -103,6 +103,69 @@ class ExtendedStringReader {
 		return resourceLocation;
 	}
 
+	public static readMinMaxBounds(reader: StringReader): [number, number] {
+		if(!reader.canRead()) {
+			throw new SimpleCommandExceptionType(new LiteralMessage(`Expected value or range of values`)).createWithContext(reader);
+		}
+
+		const start = reader.getCursor();
+		let min: number | null = null;
+		let max: number | null = null;
+
+		try {
+			min = reader.readFloat();
+		} catch(error) {
+			// ignore it
+		}
+
+		if (reader.canRead(2) && reader.peek() == '.' && reader.peek(1) == '.') {
+			reader.skip();
+			reader.skip();
+
+			try {
+				max = reader.readFloat();
+			} catch(error) {
+				// ignore it
+			}
+		} else {
+			max = min;
+		}
+
+		if(min === null && max === null) {
+			reader.setCursor(start);
+			throw new SimpleCommandExceptionType(new LiteralMessage(`Expected value or range of values`)).createWithContext(reader);
+		} else {
+			if(min === null) {
+				min = Number.MIN_SAFE_INTEGER;
+			}
+			if(max === null) {
+				max = Number.MAX_SAFE_INTEGER;
+			}
+		}
+
+		return [min, max];
+	}
+
+	public static readNBT(reader: StringReader): string {
+		const start: number = reader.getCursor();
+		let nbt: string = "";
+		while(reader.canRead()) {
+			nbt += reader.read();
+			try {
+				mojangson(nbt);
+				break;
+			} catch(error) {
+			}
+		}
+		try {
+			mojangson(nbt);
+		} catch(error) {
+			reader.setCursor(start);
+			throw new SimpleCommandExceptionType(new LiteralMessage(`${error}`)).createWithContext(reader);
+		}
+		return nbt;
+	}
+
 }
 
 /**
@@ -475,6 +538,7 @@ export class UUIDArgument implements ArgumentType<UUIDArgument> {
 
 type Modifier = (reader: StringReader) => void;
 
+// Effectively a giant merge of EntityArgument, EntitySelectorParser and EntitySelectorOptions
 export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgument> {
 
 	static shouldInvertValue(reader: StringReader): boolean {
@@ -486,6 +550,9 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 		}
 		return false;
 	}
+
+	// EntitySelectorParser suggestions
+	private suggestions: string[];
 
 	// EntitySelectorParser + EntitySelectorOptions
 	private entityUUID: string;
@@ -500,11 +567,13 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 	private isSorted: boolean; // Is this entity selector sorted?
 	private hasGamemodeEquals: boolean; // Has gamemode ... equals?
 	private hasGamemodeNotEquals: boolean; // uhh...
+	private hasScores: boolean; 
 
 	// EntityArgument
 	private single: boolean;
+	private playersOnly: boolean;
 
-	private Options: { [option: string]: Modifier } = {
+	private readonly Options: { [option: string]: Modifier } = {
 		name: (reader: StringReader): void => {
 			const start: number = reader.getCursor();
 			const shouldInvert: boolean = EntitySelectorArgument.shouldInvertValue(reader);
@@ -528,14 +597,14 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 		dx: (reader: StringReader): void => { reader.readFloat() },
 		dy: (reader: StringReader): void => { reader.readFloat() },
 		dz: (reader: StringReader): void => { reader.readFloat() },
-		x_rotation: (_reader: StringReader): void => {},
-		y_rotation: (_reader: StringReader): void => {},
+		x_rotation: (reader: StringReader): void => { ExtendedStringReader.readMinMaxBounds(reader) },
+		y_rotation: (reader: StringReader): void => { ExtendedStringReader.readMinMaxBounds(reader) },
 		limit: (reader: StringReader): void => {
 			const start: number = reader.getCursor();
 			const limit: number = reader.readInt();
 			if(limit < 1) {
 				reader.setCursor(start);
-				// throw argument.entity.options.limit.toosmall
+				throw new SimpleCommandExceptionType(new LiteralMessage(`Limit must be at least 1`)).createWithContext(reader);
 			}
 			this.maxResults = limit;
 			this.isLimited = true;
@@ -548,7 +617,7 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 				this.isSorted = true;
 			} else {
 				reader.setCursor(start);
-				// throw argument.entity.options.sort.irreversible
+				throw new SimpleCommandExceptionType(new LiteralMessage(`Invalid or unknown sort type '${sortType}'`)).createWithContext(reader);
 			}
 		},
 		gamemode: (reader: StringReader): void => {
@@ -560,7 +629,7 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 			const gamemode: string = reader.readUnquotedString();
 			if(!["survival", "creative", "adventure", "spectator"].includes(gamemode)) {
 				reader.setCursor(start);
-				// throw argument.entity.options.mode.invalid
+				throw new SimpleCommandExceptionType(new LiteralMessage(`Invalid or unknown game mode '${gamemode}'`)).createWithContext(reader);
 			} else {
 				this.includesEntities = false;
 				if(shouldInvert) {
@@ -572,35 +641,48 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 		},
 		team: (_reader: StringReader): void => {},
 		type: (_reader: StringReader): void => {},
-		tag: (_reader: StringReader): void => {},
+		tag: (reader: StringReader): void => {
+			EntitySelectorArgument.shouldInvertValue(reader);
+			reader.readUnquotedString();
+		},
 		nbt: (reader: StringReader): void => {
 			const start: number = reader.getCursor();
 			const shouldInvert: boolean = EntitySelectorArgument.shouldInvertValue(reader);
-			let nbt: string = "";
-			// Keep reading until we have valid NBT. If not, we can at least say we tried
-			while(reader.canRead()) {
-				nbt += reader.read();
-				try {
-					mojangson(nbt);
-					break;
-				} catch(error) {
-				}
-			}
 			try {
-				mojangson(nbt);
+				ExtendedStringReader.readNBT(reader);
 			} catch(error) {
 				reader.setCursor(start);
-				throw new SimpleCommandExceptionType(new LiteralMessage(`${error}`)).createWithContext(reader);
+				throw error;
 			}
 		},
-		scores: (_reader: StringReader): void => {},
-		advancements: (_reader: StringReader): void => {},
-		predicate: (_reader: StringReader): void => {}
+		scores: (reader: StringReader): void => {
+			// @e[scores={foo=10,bar=1..5}]
+			reader.expect("{");
+			reader.skipWhitespace();
+			while (reader.canRead() && reader.peek() != '}') {
+				reader.skipWhitespace();
+				const str: string = reader.readUnquotedString();
+				reader.skipWhitespace();
+				reader.expect('=');
+				reader.skipWhitespace();
+				ExtendedStringReader.readMinMaxBounds(reader);
+				reader.skipWhitespace();
+				if (reader.canRead() && reader.peek() == ',') {
+					reader.skip(); 
+				}
+			}
+			reader.expect('}');
+			this.hasScores = true;
+		},
+		advancements: (reader: StringReader): void => {
+			throw new SimpleCommandExceptionType(new LiteralMessage("This command visualizer doesn't support 'advancements'")).createWithContext(reader);
+		},
+		predicate: (reader: StringReader): void => {
+			throw new SimpleCommandExceptionType(new LiteralMessage("This command visualizer doesn't support 'predicate'")).createWithContext(reader);
+		}
 	} as const;
 
 	public parse(reader: StringReader): EntitySelectorArgument {
-
-		// uuuuuuuuuuuugh, I so totally didn't want to implement this big chungus argument, but here we go!
 
 		const parseOptions: () => void = () => {
 			reader.skipWhitespace();
@@ -706,7 +788,7 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 			this.maxResults = 1;
 		}
 
-		let startPosition: number = reader.getCursor();
+		let start: number = reader.getCursor();
 		if(reader.canRead() && reader.peek() === "@") {
 			reader.skip();
 			parseSelector()
@@ -716,19 +798,26 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 
 		// Final checks...
 		if(this.maxResults > 0 && this.single) {
-			reader.setCursor(0);
-			if(this.limitedToPlayers) {
-				// throw throw ERROR_NOT_SINGLE_PLAYER.createWithContext(stringreader);
+			reader.setCursor(start);
+			if(this.playersOnly) {
+				throw new SimpleCommandExceptionType(new LiteralMessage("Only one player is allowed, but the provided selector allows more than one")).createWithContext(reader);
 			} else {
-				// throw ERROR_NOT_SINGLE_ENTITY.createWithContext(stringreader);
+				throw new SimpleCommandExceptionType(new LiteralMessage("Only one entity is allowed, but the provided selector allows more than one")).createWithContext(reader);
 			}
 		}
-		if(this.includesEntities && this.limitedToPlayers /* STUB: !isSelfSelector() */) {
-			reader.setCursor(0);
-			// throw ERROR_ONLY_PLAYERS_ALLOWED.createWithContext(stringreader);
+		if(this.includesEntities && this.playersOnly /* STUB: !isSelfSelector() */) {
+			reader.setCursor(start);
+			throw new SimpleCommandExceptionType(new LiteralMessage("Only players may be affected by this command, but the provided selector includes entities")).createWithContext(reader);
 		}
 
 		return this;
+	}
+
+	public listSuggestions(context: CommandContext<any>, builder: SuggestionsBuilder): Promise<Suggestions> {
+		try {
+			this.parse(new StringReader(builder.getInput() as string))
+		} catch(exception) {}
+		return Suggestions.empty();
 	}
 
 	public getExamples(): string[] {
