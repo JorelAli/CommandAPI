@@ -8,12 +8,13 @@ import {
 	SuggestionsBuilder,
 
 	// Typing
-	ArgumentType
+	ArgumentType,
+	ArgumentBuilder
 } from "node-brigadier"
 
 import mojangson from "mojangson-parser"
 
-class ExtendedStringReader {
+class StringReaderHelper {
 
 	public static readLocationLiteral(reader: StringReader): number {
 
@@ -47,7 +48,7 @@ class ExtendedStringReader {
 		}
 	}
 
-	public static readResourceLocation(reader: StringReader): string {
+	public static readResourceLocation(reader: StringReader): [string, string] {
 
 		function isAllowedInResourceLocation(c: string): boolean {
 			return ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'z') || c === '_' || c === ':' || c === '/' || c === '.' || c === '-');
@@ -86,7 +87,7 @@ class ExtendedStringReader {
 				if (!isValid(resourceLocationParts[0], validPathChar)) {
 					throw new SimpleCommandExceptionType(new LiteralMessage("Non [a-z0-9/._-] character in path of location: " + resourceLocation)).createWithContext(reader);
 				}
-				resourceLocation = `minecraft:${resourceLocation}`;
+				return ["minecraft", resourceLocation];
 				break;
 			case 2:
 				// Check namespace
@@ -99,8 +100,7 @@ class ExtendedStringReader {
 				}
 				break;
 		}
-
-		return resourceLocation;
+		return [resourceLocationParts[0], resourceLocationParts[1]];
 	}
 
 	public static readMinMaxBounds(reader: StringReader): [number, number] {
@@ -164,6 +164,30 @@ class ExtendedStringReader {
 			throw new SimpleCommandExceptionType(new LiteralMessage(`${error}`)).createWithContext(reader);
 		}
 		return nbt;
+	}
+
+	/**
+	 * @param reader StringReader
+	 * @returns true if a negation character was read
+	 */
+	public static readNegationCharacter(reader: StringReader): boolean {
+		reader.skipWhitespace();
+		if (reader.canRead() && reader.peek() === '!') {
+			reader.skip();
+			reader.skipWhitespace();
+			return true;
+		}
+		return false;
+	}
+
+	public static readTagCharacter(reader: StringReader): boolean {
+		reader.skipWhitespace();
+		if (reader.canRead() && reader.peek() === '#') {
+			reader.skip();
+			reader.skipWhitespace();
+			return true;
+		}
+		return false;
 	}
 
 }
@@ -254,11 +278,11 @@ export class BlockPosArgument implements ArgumentType<BlockPosArgument> {
 	}
 
 	public parse(reader: StringReader): BlockPosArgument {
-		this.x = ExtendedStringReader.readLocationLiteral(reader);
+		this.x = StringReaderHelper.readLocationLiteral(reader);
 		reader.skip();
-		this.y = ExtendedStringReader.readLocationLiteral(reader);
+		this.y = StringReaderHelper.readLocationLiteral(reader);
 		reader.skip();
-		this.z = ExtendedStringReader.readLocationLiteral(reader);
+		this.z = StringReaderHelper.readLocationLiteral(reader);
 		return this;
 	}
 
@@ -285,9 +309,9 @@ export class ColumnPosArgument implements ArgumentType<ColumnPosArgument> {
 	}
 
 	public parse(reader: StringReader): ColumnPosArgument {
-		this.x = ExtendedStringReader.readLocationLiteral(reader);
+		this.x = StringReaderHelper.readLocationLiteral(reader);
 		reader.skip();
-		this.z = ExtendedStringReader.readLocationLiteral(reader);
+		this.z = StringReaderHelper.readLocationLiteral(reader);
 		return this;
 	}
 
@@ -467,7 +491,8 @@ export class PotionEffectArgument implements ArgumentType<PotionEffectArgument> 
 	}
 
 	public parse(reader: StringReader): PotionEffectArgument {
-		const input = ExtendedStringReader.readResourceLocation(reader);
+		const resourceLocation: [string, string] = StringReaderHelper.readResourceLocation(reader);
+		const input = resourceLocation[0] + ":" + resourceLocation[1];
 		const isValidPotionEffect: boolean = PotionEffectArgument.PotionEffects.includes(input.toLowerCase());
 		if (!isValidPotionEffect) {
 			throw new SimpleCommandExceptionType(new LiteralMessage(`Unknown effect '${input}'`)).createWithContext(reader);
@@ -537,19 +562,69 @@ export class UUIDArgument implements ArgumentType<UUIDArgument> {
 }
 
 type Modifier = (reader: StringReader) => void;
+type OptionsType =
+	"name" | "distance" | "level" | "x" | "y" | "z" | "dx" | "dy" | "dz" |
+	"x_rotation" | "y_rotation" | "limit" | "sort" | "gamemode" | "team" |
+	"type" | "tag" | "nbt" | "scores" | "advancements" | "predicate";
+
+const entityTypes = [
+	"area_effect_cloud", "armor_stand", "arrow", "axolotl", "bat", "bee", "blaze",
+	"boat", "cat", "cave_spider", "chicken", "cod", "cow", "creeper", "dolphin",
+	"donkey", "dragon_fireball", "drowned", "elder_guardian", "end_crystal", "ender_dragon",
+	"enderman", "endermite", "evoker", "evoker_fangs", "experience_orb", "eye_of_ender",
+	"falling_block", "firework_rocket", "fox", "ghast", "giant", "glow_item_frame",
+	"glow_squid", "goat", "guardian", "hoglin", "horse", "husk", "illusioner", "iron_golem",
+	"item", "item_frame", "fireball", "leash_knot", "lightning_bolt", "llama", "llama_spit",
+	"magma_cube", "marker", "minecart", "chest_minecart", "command_block_minecart",
+	"furnace_minecart", "hopper_minecart", "spawner_minecart", "tnt_minecart", "mule",
+	"mooshroom", "ocelot", "painting", "panda", "parrot", "phantom", "pig", "piglin",
+	"piglin_brute", "pillager", "polar_bear", "tnt", "pufferfish", "rabbit", "ravager",
+	"salmon", "sheep", "shulker", "shulker_bullet", "silverfish", "skeleton", "skeleton_horse",
+	"slime", "small_fireball", "snow_golem", "snowball", "spectral_arrow", "spider", "squid",
+	"stray", "strider", "egg", "ender_pearl", "experience_bottle", "potion", "trident",
+	"trader_llama", "tropical_fish", "turtle", "vex", "villager", "vindicator",
+	"wandering_trader", "witch", "wither", "wither_skeleton", "wither_skull", "wolf",
+	"zoglin", "zombie", "zombie_horse", "zombie_villager", "zombified_piglin", "player", "fishing_bobber"
+] as const;
+type EntityType = typeof entityTypes[number];
+
+const EntityTags: readonly string[] = [
+	"arrows", "axolotl_always_hostiles", "axolotl_hunt_targets", "beehive_inhabitors",
+	"freeze_hurts_extra_types", "freeze_immune_entity_types", "frog_food", "impact_projectiles",
+	"powder_snow_walkable_mobs", "raiders", "skeletons"
+]
+
+
+class SuggestionsHelper {
+
+	public static shouldSuggest(remaining: string, suggestion: string): boolean {
+		let i: number = 0;
+		while(!suggestion.startsWith(remaining, i)) {
+			i = suggestion.indexOf("_", i);
+			if(i < 0) {
+				return false;
+			}
+			i++;
+		}
+		return true;
+	}
+
+	public static suggestMatching(reader: StringReader, suggestions: string[]): string[] {
+		let newSuggestions: string[] = [];
+		const remaining: string = reader.getRemaining().toLocaleLowerCase();
+		for(let suggestion of suggestions) {
+			if(!SuggestionsHelper.shouldSuggest(remaining, suggestion.toLocaleLowerCase())) {
+				continue;
+			}
+			newSuggestions.push(suggestion);
+		}
+		return newSuggestions;
+	}
+
+}
 
 // Effectively a giant merge of EntityArgument, EntitySelectorParser and EntitySelectorOptions
 export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgument> {
-
-	static shouldInvertValue(reader: StringReader): boolean {
-		reader.skipWhitespace();
-		if (reader.canRead() && reader.peek() === '!') {
-			reader.skip();
-			reader.skipWhitespace();
-			return true;
-		}
-		return false;
-	}
 
 	// EntitySelectorParser suggestions
 	private suggestions: string[];
@@ -560,7 +635,10 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 	private playerName: string;
 	private maxResults: number;
 	private isLimited: boolean; // This might be identical to the synthetic limitedToPlayers, try using this instead
+
 	private limitedToPlayers: boolean; // players only?
+	private entityType: EntityType;
+
 	private currentEntity: boolean;
 	private worldLimited: boolean;
 	private order: string; // Not BiConsumer<Vec, List<? extends Entity>> because effort
@@ -568,15 +646,63 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 	private hasGamemodeEquals: boolean; // Has gamemode ... equals?
 	private hasGamemodeNotEquals: boolean; // uhh...
 	private hasScores: boolean; 
+	private typeInverse: boolean; // isTypeLimitedInversely AKA excludesEntityType
 
 	// EntityArgument
 	private single: boolean;
 	private playersOnly: boolean;
 
-	private readonly Options: { [option: string]: Modifier } = {
+	private suggestionGenerator(reader: StringReader, type: OptionsType): string[] {
+		let suggestions = [];
+		switch(type) {
+			case "gamemode": {
+				let string: string = reader.getRemaining().toLowerCase();
+				let bool: boolean = this.hasGamemodeNotEquals;
+				let negating: boolean = true;
+				if(string.length !== 0) {
+					if(string.charAt(0) === "!") {
+						bool = false;
+						string = string.slice(1);
+					} else {
+						negating = false;
+					}
+				}
+
+				for(let gamemode of ["survival", "creative", "adventure", "spectator"]) {
+					if(!gamemode.toLowerCase().startsWith(string)) {
+						continue;
+					}
+					if(negating) {
+						suggestions.push("!" + gamemode);
+					}
+					if(!bool) {
+						continue;
+					}
+					suggestions.push(gamemode);
+				}
+				break;
+			}
+			case "sort": {
+				suggestions.push(...SuggestionsHelper.suggestMatching(reader, ["nearest", "furthest", "random", "arbitrary"]));
+				break;
+			}
+			case "type": {
+				suggestions.push(...SuggestionsHelper.suggestMatching(reader, entityTypes.map(entity => `!${entity}`)));
+				suggestions.push(...SuggestionsHelper.suggestMatching(reader, EntityTags.map(entity => `!#${entity}`)));
+				if(!this.typeInverse) {
+					suggestions.push(...SuggestionsHelper.suggestMatching(reader, [...entityTypes]));
+					suggestions.push(...SuggestionsHelper.suggestMatching(reader, EntityTags.map(entity => `#${entity}`)));
+				}
+				break;
+			}
+		}
+		return suggestions;
+	}
+
+	private readonly Options: { [option in OptionsType]: Modifier } = {
 		name: (reader: StringReader): void => {
 			const start: number = reader.getCursor();
-			const shouldInvert: boolean = EntitySelectorArgument.shouldInvertValue(reader);
+			const shouldInvert: boolean = StringReaderHelper.readNegationCharacter(reader);
 			// const _s: string = reader.readString();
 			if(/* STUB: this.hasNameNotEquals() */ !shouldInvert) {
 				reader.setCursor(start);
@@ -587,7 +713,6 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 			} else {
 				// stub: setHasNameEquals(true)
 			}
-			// Predicate?
 		},
 		distance: (_reader: StringReader): void => {},
 		level: (_reader: StringReader): void => {},
@@ -597,8 +722,8 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 		dx: (reader: StringReader): void => { reader.readFloat() },
 		dy: (reader: StringReader): void => { reader.readFloat() },
 		dz: (reader: StringReader): void => { reader.readFloat() },
-		x_rotation: (reader: StringReader): void => { ExtendedStringReader.readMinMaxBounds(reader) },
-		y_rotation: (reader: StringReader): void => { ExtendedStringReader.readMinMaxBounds(reader) },
+		x_rotation: (reader: StringReader): void => { StringReaderHelper.readMinMaxBounds(reader) },
+		y_rotation: (reader: StringReader): void => { StringReaderHelper.readMinMaxBounds(reader) },
 		limit: (reader: StringReader): void => {
 			const start: number = reader.getCursor();
 			const limit: number = reader.readInt();
@@ -621,11 +746,13 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 			}
 		},
 		gamemode: (reader: StringReader): void => {
+			this.suggestions = this.suggestionGenerator(reader, "gamemode");
 			const start: number = reader.getCursor();
-			const shouldInvert: boolean = EntitySelectorArgument.shouldInvertValue(reader);
-			// stub: if this.hasGamemodeNotEquals() && !shouldInvert {
-			//     reset to start, ERROR_INAPPLICABLE_OPTION
-			// }
+			const shouldInvert: boolean = StringReaderHelper.readNegationCharacter(reader);
+			if(this.hasGamemodeNotEquals && !shouldInvert) {
+				reader.setCursor(start);
+				throw new SimpleCommandExceptionType(new LiteralMessage(`Option 'gamemode' isn't applicable here`)).createWithContext(reader);
+			}
 			const gamemode: string = reader.readUnquotedString();
 			if(!["survival", "creative", "adventure", "spectator"].includes(gamemode)) {
 				reader.setCursor(start);
@@ -639,17 +766,46 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 				}
 			}
 		},
-		team: (_reader: StringReader): void => {},
-		type: (_reader: StringReader): void => {},
+		team: (reader: StringReader): void => {
+			StringReaderHelper.readNegationCharacter(reader);
+			reader.readUnquotedString();
+		},
+		type: (reader: StringReader): void => {
+			this.suggestions = this.suggestionGenerator(reader, "type");
+			let start: number = reader.getCursor();
+			let shouldInvert: boolean = StringReaderHelper.readNegationCharacter(reader);
+			if(this.typeInverse && !shouldInvert) {
+				reader.setCursor(start);
+				throw new SimpleCommandExceptionType(new LiteralMessage(`Option 'type' isn't applicable here`)).createWithContext(reader);
+			}
+			if(shouldInvert) {
+				this.typeInverse = true;
+			}
+			if(StringReaderHelper.readTagCharacter(reader)) {
+				// Yay, we've got a tag. Read everything matching 0 - 9, a - z, _, :, /, . or -
+				StringReaderHelper.readResourceLocation(reader);
+			} else {
+				const [namespace, key]: [string, string] = StringReaderHelper.readResourceLocation(reader);
+				if(!entityTypes.includes(key as EntityType)) { // Uh... yes... this totally won't fail...
+					throw new SimpleCommandExceptionType(new LiteralMessage(`${key} is not a valid entity type`)).createWithContext(reader);
+				}
+				if("player" === (key as EntityType) && !shouldInvert ) {
+					this.includesEntities = true;
+				}
+				if(!shouldInvert) {
+					this.entityType = key as EntityType;
+				}
+			}
+		},
 		tag: (reader: StringReader): void => {
-			EntitySelectorArgument.shouldInvertValue(reader);
+			StringReaderHelper.readNegationCharacter(reader);
 			reader.readUnquotedString();
 		},
 		nbt: (reader: StringReader): void => {
 			const start: number = reader.getCursor();
-			const shouldInvert: boolean = EntitySelectorArgument.shouldInvertValue(reader);
+			const shouldInvert: boolean = StringReaderHelper.readNegationCharacter(reader);
 			try {
-				ExtendedStringReader.readNBT(reader);
+				StringReaderHelper.readNBT(reader);
 			} catch(error) {
 				reader.setCursor(start);
 				throw error;
@@ -665,7 +821,7 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 				reader.skipWhitespace();
 				reader.expect('=');
 				reader.skipWhitespace();
-				ExtendedStringReader.readMinMaxBounds(reader);
+				StringReaderHelper.readMinMaxBounds(reader);
 				reader.skipWhitespace();
 				if (reader.canRead() && reader.peek() == ',') {
 					reader.skip(); 
@@ -689,18 +845,18 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 			while(reader.canRead() && reader.peek() !== "]") {
 				reader.skipWhitespace();
 				let start: number = reader.getCursor();
-				let s: string = reader.readString();
+				let optionsType: OptionsType = reader.readString() as OptionsType;
 
-				let modifier: Modifier = this.Options[s];
+				let modifier: Modifier = this.Options[optionsType];
 				if(modifier === null) {
 					reader.setCursor(start);
-					throw new SimpleCommandExceptionType(new LiteralMessage(`Unknown option '${s}'`)).createWithContext(reader);
+					throw new SimpleCommandExceptionType(new LiteralMessage(`Unknown option '${optionsType}'`)).createWithContext(reader);
 				}
 
 				reader.skipWhitespace();
 				if(!reader.canRead() || reader.peek() !== "=") {
 					reader.setCursor(start);
-					throw new SimpleCommandExceptionType(new LiteralMessage(`Expected value for option '${s}'`)).createWithContext(reader);
+					throw new SimpleCommandExceptionType(new LiteralMessage(`Expected value for option '${optionsType}'`)).createWithContext(reader);
 				}
 				reader.skip();
 				reader.skipWhitespace();
@@ -813,11 +969,24 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 		return this;
 	}
 
-	public listSuggestions(context: CommandContext<any>, builder: SuggestionsBuilder): Promise<Suggestions> {
+	public listSuggestions(_context: CommandContext<any>, builder: SuggestionsBuilder): Promise<Suggestions> {
 		try {
 			this.parse(new StringReader(builder.getInput() as string))
-		} catch(exception) {}
-		return Suggestions.empty();
+		} catch(exception) {
+
+		}
+
+		if(this.suggestions.length > 0) {
+			// We don't use HelperSuggestionProvider because we've already
+			// pre-generated suggestions for the specific context, so we don't
+			// need to check if it matches or anything, just suggest it!
+			for (let suggestion of this.suggestions) {
+				builder.suggest(suggestion);
+			}
+			return builder.buildPromise();
+		} else {
+			return Suggestions.empty();
+		}
 	}
 
 	public getExamples(): string[] {
