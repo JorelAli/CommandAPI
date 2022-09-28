@@ -27,7 +27,7 @@ declare module "node-brigadier" {
 		readResourceLocation(): [string, string];
 		readMinMaxBounds(): [number, number];
 		readNBT(): string;
-		
+
 		/** @returns true if a negation character `!` was read */
 		readNegationCharacter(): boolean;
 		/** @returns true if a negation character `#` was read */
@@ -74,6 +74,7 @@ StringReader.prototype.readLocationLiteral = function readLocationLiteral(): num
 };
 
 StringReader.prototype.readResourceLocation = function readResourceLocation(): [string, string] {
+
 	function isValid(string: string, predicate: (c: string) => boolean): boolean {
 		for (let i: number = 0; i < string.length; i++) {
 			if (!predicate(string.charAt(i))) {
@@ -91,37 +92,41 @@ StringReader.prototype.readResourceLocation = function readResourceLocation(): [
 	let resourceLocation: string = this.getString().substring(start, this.getCursor());
 
 	const resourceLocationParts: string[] | undefined = resourceLocation.split(":");
-	if(resourceLocationParts === undefined) {
+	if (resourceLocationParts === undefined) {
 		throw new SimpleCommandExceptionType(new LiteralMessage(resourceLocation + " is not a valid Resource")).createWithContext(this);
 	}
 
-	switch (resourceLocationParts.length) {
-		case 0:
-			throw new SimpleCommandExceptionType(new LiteralMessage(resourceLocation + " is not a valid Resource")).createWithContext(this);
-		case 1:
-			// Check path
-			if (!isValid(resourceLocationParts[0]!, this.isValidPathChar)) {
-				throw new SimpleCommandExceptionType(new LiteralMessage("Non [a-z0-9/._-] character in path of location: " + resourceLocation)).createWithContext(this);
-			}
-			return ["minecraft", resourceLocation];
-		case 2:
-			// Check namespace
-			if (!isValid(resourceLocationParts[0]!, this.isValidNamespaceChar)) {
-				throw new SimpleCommandExceptionType(new LiteralMessage("Non [a-z0-9_.-] character in namespace of location: " + resourceLocation)).createWithContext(this);
-			}
-			// Check path
-			if (!isValid(resourceLocationParts[1]!, this.isValidPathChar)) {
-				throw new SimpleCommandExceptionType(new LiteralMessage("Non [a-z0-9/._-] character in path of location: " + resourceLocation)).createWithContext(this);
-			}
-			break;
-		default:
-			throw new SimpleCommandExceptionType(new LiteralMessage(resourceLocation + " is not a valid Resource")).createWithContext(this);
+	// Please excuse the abomination that is this Array.has(x : number between 0 and 2)
+	// I'd use a switch statement, but TypeScript's type predicates don't pass through that
+	// And I think this funky derpy solution is neater than using ! all over the place. It's
+	// better to get the compiler to perform array indexing checks than try to tell it "yeah"
+	if (resourceLocationParts.has(0)) {
+		throw new SimpleCommandExceptionType(new LiteralMessage(resourceLocation + " is not a valid Resource")).createWithContext(this);
 	}
-	return [resourceLocationParts[0]!, resourceLocationParts[1]!];
+	else if (resourceLocationParts.has(1)) {
+		if (!isValid(resourceLocationParts[0], this.isValidPathChar)) {
+			throw new SimpleCommandExceptionType(new LiteralMessage("Non [a-z0-9/._-] character in path of location: " + resourceLocation)).createWithContext(this);
+		}
+		return ["minecraft", resourceLocation];
+	}
+	else if (resourceLocationParts.has(2)) {
+		// Check namespace
+		if (!isValid(resourceLocationParts[0], this.isValidNamespaceChar)) {
+			throw new SimpleCommandExceptionType(new LiteralMessage("Non [a-z0-9_.-] character in namespace of location: " + resourceLocation)).createWithContext(this);
+		}
+		// Check path
+		if (!isValid(resourceLocationParts[1], this.isValidPathChar)) {
+			throw new SimpleCommandExceptionType(new LiteralMessage("Non [a-z0-9/._-] character in path of location: " + resourceLocation)).createWithContext(this);
+		}
+	}
+	else {
+		throw new SimpleCommandExceptionType(new LiteralMessage(resourceLocation + " is not a valid Resource")).createWithContext(this);
+	}
+	return [resourceLocationParts[0], resourceLocationParts[1]];
 };
 
 StringReader.prototype.readMinMaxBounds = function readMinMaxBounds(): [number, number] {
-	if(!this.canRead()) {
+	if (!this.canRead()) {
 		throw new SimpleCommandExceptionType(new LiteralMessage(`Expected value or range of values`)).createWithContext(this);
 	}
 
@@ -131,7 +136,7 @@ StringReader.prototype.readMinMaxBounds = function readMinMaxBounds(): [number, 
 
 	try {
 		min = this.readFloat();
-	} catch(error) {
+	} catch (error) {
 		// ignore it
 	}
 
@@ -141,21 +146,21 @@ StringReader.prototype.readMinMaxBounds = function readMinMaxBounds(): [number, 
 
 		try {
 			max = this.readFloat();
-		} catch(error) {
+		} catch (error) {
 			// ignore it
 		}
 	} else {
 		max = min;
 	}
 
-	if(min === null && max === null) {
+	if (min === null && max === null) {
 		this.setCursor(start);
 		throw new SimpleCommandExceptionType(new LiteralMessage(`Expected value or range of values`)).createWithContext(this);
 	} else {
-		if(min === null) {
+		if (min === null) {
 			min = Number.MIN_SAFE_INTEGER;
 		}
-		if(max === null) {
+		if (max === null) {
 			max = Number.MAX_SAFE_INTEGER;
 		}
 	}
@@ -166,17 +171,17 @@ StringReader.prototype.readMinMaxBounds = function readMinMaxBounds(): [number, 
 StringReader.prototype.readNBT = function readNBT(): string {
 	const start: number = this.getCursor();
 	let nbt: string = "";
-	while(this.canRead()) {
+	while (this.canRead()) {
 		nbt += this.read();
 		try {
 			mojangson(nbt);
 			break;
-		} catch(error) {
+		} catch (error) {
 		}
 	}
 	try {
 		mojangson(nbt);
-	} catch(error) {
+	} catch (error) {
 		this.setCursor(start);
 		throw new SimpleCommandExceptionType(new LiteralMessage(`${error}`)).createWithContext(this);
 	}
