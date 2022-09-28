@@ -325,8 +325,8 @@ function registerCommand(configCommand: string) {
  * @returns The current cursor position for the current element
  */
 function getCursorPosition() {
-	const sel: Selection = document.getSelection(); // as SelectionWithModify;
-	(<any>sel).modify("extend", "backward", "paragraphboundary");
+	const sel: SelectionWithModify = document.getSelection() as SelectionWithModify;
+	(<any>sel).modify("extend", "backward", "lineboundary");
 	const pos = sel.toString().length;
 	if (sel.anchorNode !== undefined && sel.anchorNode !== null) {
 		sel.collapseToEnd();
@@ -786,6 +786,6 @@ test_c
 test_d
 test_e`;
 
-document.getElementById("register-commands-button")?.onclick(null);
+document.getElementById("register-commands-button").onclick(null);
 console.log("Dispatcher", dispatcher.getRoot())
 

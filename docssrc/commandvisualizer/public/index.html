@@ -17,7 +17,15 @@
         <textarea id="commands" spellcheck="false"></textarea>
         <button id="register-commands-button">Press to register commands</button>
 
-        <!-- From commandvisualizer.js, built using webpack -->
+        <script>
+            // Error.captureStackTrace is a V8 function only, and doesn't exist on Firefox
+            // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error#static_methods
+            if(!Error.hasOwnProperty("captureStackTrace")) {
+                Error.captureStackTrace = function() {};
+            }
+        </script>
+
+        <!-- From index.ts, built using webpack -->
         <script type="module" src="./main.js"></script>
     </body>
 </html>

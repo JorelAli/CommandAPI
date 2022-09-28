@@ -71,7 +71,7 @@ span {
 	width: unset;
 	padding-right: 24px;
 	max-height: 400px;
-	overflow: overlay;
+	overflow: auto;
 }
 
 /* width */
