@@ -657,6 +657,11 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 	private single: boolean;
 	private playersOnly: boolean;
 
+	constructor(single: boolean, playersOnly: boolean) {
+		this.single = single;
+		this.playersOnly = playersOnly;
+	}
+
 	private suggestionGenerator(reader: StringReader, type: OptionsType): string[] {
 		let suggestions = [];
 		switch(type) {
@@ -971,7 +976,7 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 		}
 
 		// Final checks...
-		if(this.maxResults > 0 && this.single) {
+		if(this.maxResults > 1 && this.single) {
 			reader.setCursor(start);
 			if(this.playersOnly) {
 				throw new SimpleCommandExceptionType(new LiteralMessage("Only one player is allowed, but the provided selector allows more than one")).createWithContext(reader);

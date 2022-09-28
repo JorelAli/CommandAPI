@@ -148,10 +148,10 @@ const ArgumentColors: { [colorIndex: number]: String } = {
 // As implemented by https://commandapi.jorel.dev/8.5.1/internal.html
 const ArgumentType = new Map<String, () => BrigadierArgumentType<unknown> | null>([
 	// CommandAPI separation. These are the various EntitySelectorArgument<> types
-	["api:entity", () => new EntitySelectorArgument()],
-	["api:entities", () => new EntitySelectorArgument()],
-	["api:player", () => new EntitySelectorArgument()],
-	["api:players", () => new EntitySelectorArgument()],
+	["api:entity", () => new EntitySelectorArgument(true, false)],
+	["api:entities", () => new EntitySelectorArgument(false, false)],
+	["api:player", () => new EntitySelectorArgument(true, true)],
+	["api:players", () => new EntitySelectorArgument(false, true)],
 	["api:greedy_string", () => greedyStringArgument()],
 
 	// A note about Brigadier String types:
@@ -326,7 +326,7 @@ function registerCommand(configCommand: string) {
  */
 function getCursorPosition() {
 	const sel: SelectionWithModify = document.getSelection() as SelectionWithModify;
-	(<any>sel).modify("extend", "backward", "lineboundary");
+	sel.modify("extend", "backward", "lineboundary");
 	const pos = sel.toString().length;
 	if (sel.anchorNode !== undefined && sel.anchorNode !== null) {
 		sel.collapseToEnd();
@@ -779,7 +779,8 @@ COMMANDS.value = `fill <pos1>[minecraft:block_pos] <pos2>[minecraft:block_pos] <
 speed (walk|fly) <speed>[0..10] <target>[minecraft:game_profile]
 hello <val>[1..20] <color>[minecraft:color]
 myfunc <val>[minecraft:mob_effect]
-entity <vala>[api:entities]
+entity <val>[api:entities]
+player <val>[api:player]
 test_a
 test_b
 test_c
