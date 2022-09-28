@@ -346,7 +346,6 @@ function getCursorPosition() {
  * @param element the element to set the cursor for
  */
 function setCursorPosition(index: number, element: Node): void {
-	console.log("Setting cursor pos to " + index)
 	if (index > 0) {
 		const createRange = (node: Node, chars: { count: number }, range?: Range): Range => {
 			if (!range) {
@@ -584,7 +583,7 @@ COMMAND_INPUT.oninput = async function onCommandInput(): Promise<void> {
 	// forward slash, the only possible "starting caret position" is position 1
 	// (in front of the slash)
 	if (cursorPos === 0 && rawText.length > 0) {
-		cursorPos = 1;
+		cursorPos = rawText.length;
 	}
 	setCursorPosition(cursorPos, COMMAND_INPUT);
 	COMMAND_INPUT.focus();
@@ -658,23 +657,28 @@ COMMAND_INPUT.addEventListener('keydown', (evt: KeyboardEvent) => {
 		case "ArrowDown":
 		case "ArrowUp": {
 			if (!SUGGESTIONS_BOX.hidden) {
+				evt.preventDefault();
 				for (let i = 0; i < SUGGESTIONS_BOX.children.length; i++) {
 					if (SUGGESTIONS_BOX.children[i].className === "yellow") {
 						SUGGESTIONS_BOX.children[i].className = "";
 
+						let selectedElement: Element;
 						if (evt.key == "ArrowDown") {
 							if (i === SUGGESTIONS_BOX.children.length - 1) {
-								SUGGESTIONS_BOX.children[0].className = "yellow";
+								selectedElement = SUGGESTIONS_BOX.children[0];
 							} else {
-								SUGGESTIONS_BOX.children[i + 1].className = "yellow";
+								selectedElement = SUGGESTIONS_BOX.children[i + 1];
 							}
 						} else {
 							if (i === 0) {
-								SUGGESTIONS_BOX.children[SUGGESTIONS_BOX.children.length - 1].className = "yellow";
+								selectedElement = SUGGESTIONS_BOX.children[SUGGESTIONS_BOX.children.length - 1];
 							} else {
-								SUGGESTIONS_BOX.children[i - 1].className = "yellow";
+								selectedElement = SUGGESTIONS_BOX.children[i - 1];
 							}
 						}
+						selectedElement.className = "yellow";
+						selectedElement.scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"});
+
 
 						window.dispatchEvent(new Event("suggestionsUpdated"));
 
@@ -693,7 +697,7 @@ COMMAND_INPUT.addEventListener('keydown', (evt: KeyboardEvent) => {
 			evt.preventDefault();
 			setText(getText(false).slice(1) + COMMAND_INPUT_AUTOCOMPLETE.innerText);
 			COMMAND_INPUT.oninput(null);
-			setCursorPosition(COMMAND_INPUT.innerText.length - 1, COMMAND_INPUT);
+			setCursorPosition(COMMAND_INPUT.innerText.length, COMMAND_INPUT);
 			break;
 		default:
 			break;
@@ -727,23 +731,18 @@ window.addEventListener("suggestionsUpdated", (_event: Event) => {
 			let suggestionText = "";
 			if(selectedSuggestionText.length > 0) {
 				const lastIndexOfStartOfSuggestion: number = rawText.lastIndexOf(selectedSuggestionText[0]);
+				console.log(`Last index of ${selectedSuggestionText[0]} is at index ${lastIndexOfStartOfSuggestion}`);
 
 				// If we can start with it, just display it
 				if(lastIndexOfStartOfSuggestion === -1) {
 					suggestionText = selectedSuggestionText;
 				} else {
-					// Iterate over until we reach a stopping point
-					let foundSlice = false;
-					let i = 0;
-					for(; i < rawText.length; i++) {
-						if(selectedSuggestionText[i] !== rawText[i + lastIndexOfStartOfSuggestion]) {
+					// Show whatever the rawText doesn't have that starts with whatever the suggestion text is
+					for(let i = 0; i < selectedSuggestionText.length; i++) {
+						if(rawText.endsWith(selectedSuggestionText.slice(0, i))) {
+							// suggest the end
 							suggestionText = selectedSuggestionText.slice(i);
-							foundSlice = true;
-							break;
 						}
-					}
-					if(!foundSlice) {
-						suggestionText = selectedSuggestionText.slice(i);
 					}
 				}
 			}
@@ -780,7 +779,12 @@ COMMANDS.value = `fill <pos1>[minecraft:block_pos] <pos2>[minecraft:block_pos] <
 speed (walk|fly) <speed>[0..10] <target>[minecraft:game_profile]
 hello <val>[1..20] <color>[minecraft:color]
 myfunc <val>[minecraft:mob_effect]
-entity <vala>[api:entities]`;
+entity <vala>[api:entities]
+test_a
+test_b
+test_c
+test_d
+test_e`;
 
 document.getElementById("register-commands-button")?.onclick(null);
 console.log("Dispatcher", dispatcher.getRoot())

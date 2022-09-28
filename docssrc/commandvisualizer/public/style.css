@@ -74,6 +74,21 @@ span {
 	overflow: overlay;
 }
 
+/* width */
+#suggestions-box::-webkit-scrollbar {
+	width: 15px;
+}
+
+/* Handle */
+#suggestions-box::-webkit-scrollbar-thumb {
+	background: gray;
+}
+
+/* Handle on hover */
+#suggestions-box::-webkit-scrollbar-thumb:hover {
+	background: #555555; 
+}
+
 #valid-box {
 	bottom: calc(49px + 49px);
 	width: unset;

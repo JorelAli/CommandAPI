@@ -740,6 +740,7 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 			this.isLimited = true;
 		},
 		sort: (reader: StringReader): void => {
+			this.suggestions = this.suggestionGenerator(reader, "sort");
 			const start: number = reader.getCursor();
 			const sortType: string = reader.readUnquotedString(); // word
 			if(["nearest", "furthest", "random", "arbitrary"].includes(sortType)) {
@@ -846,7 +847,7 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 	public parse(reader: StringReader): EntitySelectorArgument {
 
 		const parseOptions: () => void = () => {
-			this.suggestions = SuggestionsHelper.suggestMatching(reader, [...Object.keys(this.Options)]); // TODO: So this isn't exactly correct, we need to not list existing names, but that'll require a bit of a refactor
+			this.suggestions = SuggestionsHelper.suggestMatching(reader, [...Object.keys(this.Options).map(x => `${x}=`)]); // TODO: So this isn't exactly correct, we need to not list existing names, but that'll require a bit of a refactor
 			reader.skipWhitespace();
 			while(reader.canRead() && reader.peek() !== "]") {
 				reader.skipWhitespace();
@@ -875,7 +876,7 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 				}
 				if(reader.peek() === ",") {
 					reader.skip();
-					this.suggestions = SuggestionsHelper.suggestMatching(reader, [...Object.keys(this.Options)]); // TODO: So this isn't exactly correct, we need to not list existing names, but that'll require a bit of a refactor
+					this.suggestions = SuggestionsHelper.suggestMatching(reader, [...Object.keys(this.Options)].map(x => `${x}=`)); // TODO: So this isn't exactly correct, we need to not list existing names, but that'll require a bit of a refactor
 					continue;
 				}
 				if(reader.peek() !== "]") {
@@ -933,7 +934,7 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 			if (reader.canRead() && reader.peek() === "[") {
 				reader.skip();
 				this.suggestionsModifier = null;
-				this.suggestions = ["]", ...Object.keys(this.Options)]; // TODO: So this isn't exactly correct, we need to not list existing names, but that'll require a bit of a refactor
+				this.suggestions = ["]", ...Object.keys(this.Options).map(x => `${x}=`)]; // TODO: So this isn't exactly correct, we need to not list existing names, but that'll require a bit of a refactor
 				parseOptions();
 			}
 		}
