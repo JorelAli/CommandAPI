@@ -42,11 +42,12 @@ class MyCommandDispatcher<S> extends CommandDispatcher<S> {
 
 	constructor(root?: RootCommandNode<S>) {
 		super(root);
-		this.root = root;
+		this.root = super.getRoot();
 	}
 
 	public deleteAll(): void {
-		this.root = new RootCommandNode(undefined, undefined, undefined, undefined, undefined);
+		// @ts-ignore - We can't access the default RootCommandNode, so just sudo do it
+		this.root = new RootCommandNode();
 	}
 
 	public override getRoot(): RootCommandNode<S> {
@@ -73,12 +74,14 @@ const SOURCE: Source = undefined as never;
  * Constants                                                                  *
  ******************************************************************************/
 
-const COMMAND_INPUT: HTMLSpanElement = document.getElementById("cmd-input");
-const COMMAND_INPUT_AUTOCOMPLETE = document.getElementById("cmd-input-autocomplete");
-const ERROR_MESSAGE_BOX = document.getElementById("error-box");
-const SUGGESTIONS_BOX = document.getElementById("suggestions-box");
-const VALID_BOX = document.getElementById("valid-box");
+const COMMAND_INPUT: HTMLSpanElement = document.getElementById("cmd-input") as HTMLSpanElement;
+const COMMAND_INPUT_AUTOCOMPLETE: HTMLSpanElement = document.getElementById("cmd-input-autocomplete") as HTMLSpanElement;
+const ERROR_MESSAGE_BOX: HTMLDivElement = document.getElementById("error-box") as HTMLDivElement;
+const SUGGESTIONS_BOX: HTMLDivElement = document.getElementById("suggestions-box") as HTMLDivElement;
+const VALID_BOX: HTMLDivElement = document.getElementById("valid-box") as HTMLDivElement;
 const COMMANDS: HTMLTextAreaElement = document.getElementById("commands") as HTMLTextAreaElement;
+const CHAT_BOX: HTMLDivElement = document.getElementById("chatbox") as HTMLDivElement;
+const REGISTER_COMMANDS_BUTTON: HTMLButtonElement = document.getElementById("register-commands-button") as HTMLButtonElement;
 
 const dispatcher = new MyCommandDispatcher<Source>();
 
@@ -225,8 +228,8 @@ function registerCommand(configCommand: string) {
 
 	function convertArgument(argumentType: string): BrigadierArgumentType<unknown> {
 		if (argumentType.includes("..")) {
-			let lowerBound: string = argumentType.split("..")[0];
-			let upperBound: string = argumentType.split("..")[1];
+			let lowerBound: string = argumentType.split("..")[0]!;
+			let upperBound: string = argumentType.split("..")[1]!;
 
 			let lowerBoundNum: number = Number.MIN_SAFE_INTEGER;
 			let upperBoundNum: number = Number.MAX_SAFE_INTEGER;
@@ -254,19 +257,21 @@ function registerCommand(configCommand: string) {
 		} else {
 			const argumentGeneratorFunction = ArgumentType.get(argumentType);
 			if(argumentGeneratorFunction === undefined) {
-				// TODO: Error, this argument type doesn't exist!
-				console.error("Argument type " + argumentType + " doesn't exist");
+				throw new Error("Argument type " + argumentType + " doesn't exist");
 			}
-			if (argumentGeneratorFunction()) {
-				return argumentGeneratorFunction();
+			const argumentGeneratorFunctionResult: BrigadierArgumentType<unknown> | null = argumentGeneratorFunction();
+			if (argumentGeneratorFunctionResult !== null) {
+				return argumentGeneratorFunctionResult;
 			} else {
-				console.error("Unimplemented argument: " + argumentType);
-				return null;
+				throw new Error("Unimplemented argument: " + argumentType);
 			}
 		}
 	}
 
-	const command: string = configCommand.split(" ")[0];
+	const command: string | undefined = configCommand.split(" ")[0];
+	if(command === undefined) {
+		throw new Error("Command name doesn't exist!")
+	}
 	const args: string[] = configCommand.split(" ").slice(1);
 
 	let commandToRegister: LiteralArgumentBuilder<Source> = literalArgument(command);
@@ -277,20 +282,20 @@ function registerCommand(configCommand: string) {
 	const argumentPattern: RegExp = RegExp(/<(\w+)>\[([a-z:_]+|(?:[0-9\.]+)?\.\.(?:[0-9\.]+)?)\]/);
 
 	for (let arg of args) {
-		const matchedLiteral: RegExpMatchArray = arg.match(literalPattern);
-		const matchedArgument: RegExpMatchArray = arg.match(argumentPattern);
-		if (matchedLiteral) {
+		const matchedLiteral: RegExpMatchArray | null = arg.match(literalPattern);
+		const matchedArgument: RegExpMatchArray | null = arg.match(argumentPattern);
+		if (matchedLiteral !== null) {
 			// It's a literal argument
-			const literals: string[] = matchedLiteral[1].split("|");
+			const literals: string[] = matchedLiteral[1]!.split("|");
 			if (literals.length === 1) {
-				argumentsToRegister.unshift(literalArgument(literals[0]));
+				argumentsToRegister.unshift(literalArgument(literals[0]!));
 			} else if (literals.length > 1) {
-				argumentsToRegister.unshift(argument(matchedLiteral[1], new MultiLiteralArgument(literals)));
+				argumentsToRegister.unshift(argument(matchedLiteral[1]!, new MultiLiteralArgument(literals)));
 			}
-		} else if (matchedArgument) {
+		} else if (matchedArgument !== null) {
 			// It's a regular argument
-			const nodeName: string = matchedArgument[1];
-			const argumentType: string = matchedArgument[2];
+			const nodeName: string = matchedArgument[1]!;
+			const argumentType: string = matchedArgument[2]!;
 
 			let convertedArgumentType: BrigadierArgumentType<unknown> = convertArgument(argumentType);
 
@@ -301,7 +306,7 @@ function registerCommand(configCommand: string) {
 	}
 
 	if (argumentsToRegister.length > 0) {
-		const lastArgument: BrigadierArgumentType<unknown> = argumentsToRegister[0].executes(_context => 0);
+		const lastArgument: BrigadierArgumentType<unknown> = argumentsToRegister[0]!.executes(_context => 0);
 
 		// Flame on. Reduce.
 		argumentsToRegister.shift();
@@ -358,7 +363,7 @@ function setCursorPosition(index: number, element: Node): void {
 				range.setEnd(node, chars.count);
 			} else if (node && chars.count > 0) {
 				if (node.nodeType === Node.TEXT_NODE) {
-					const nodeTextContentLength: number = node.textContent.length;
+					const nodeTextContentLength: number = node.textContent?.length ?? 0;
 					if (nodeTextContentLength < chars.count) {
 						chars.count -= nodeTextContentLength;
 					} else {
@@ -367,7 +372,7 @@ function setCursorPosition(index: number, element: Node): void {
 					}
 				} else {
 					for (let lp: number = 0; lp < node.childNodes.length; lp++) {
-						range = createRange(node.childNodes[lp], chars, range);
+						range = createRange(node.childNodes[lp]!, chars, range);
 
 						if (chars.count === 0) {
 							break;
@@ -385,15 +390,17 @@ function setCursorPosition(index: number, element: Node): void {
 
 		if (range) {
 			range.collapse(false);
-			let selection: Selection = window.getSelection();
-			selection.removeAllRanges();
-			selection.addRange(range);
+			let selection: Selection | null = window.getSelection();
+			if(selection !== null) {
+				selection.removeAllRanges();
+				selection.addRange(range);
+			}
 		}
 	}
 };
 
 function getSelectedSuggestion(): HTMLElement {
-	return document.querySelector(".yellow");
+	return document.querySelector(".yellow")!;
 }
 
 type CachedFontHTMLElement = HTMLElement & { currentFont: string }
@@ -413,7 +420,7 @@ class TextWidth {
 	static getTextWidth(text: string, element: CachedFontHTMLElement): number {
 		// re-use canvas object for better performance
 		const canvas: HTMLCanvasElement = TextWidth.canvas || (TextWidth.canvas = document.createElement("canvas"));
-		const context: CanvasRenderingContext2D = canvas.getContext("2d");
+		const context: CanvasRenderingContext2D = canvas.getContext("2d")!;
 
 		context.font = element.currentFont || (element.currentFont = TextWidth.getCanvasFont(element));
 		return context.measureText(text).width;
@@ -439,7 +446,7 @@ class TextWidth {
  * @param {string} minecraftCodedText
  * @param {HTMLElement | null} target
  */
-function setText(minecraftCodedText: string, target: HTMLElement = null) {
+function setText(minecraftCodedText: string, target: HTMLElement | null = null) {
 	minecraftCodedText = minecraftCodedText.replaceAll(" ", "\u00A0"); // Replace normal spaces with &nbsp; for HTML
 	if (!target) {
 		target = COMMAND_INPUT;
@@ -471,7 +478,7 @@ function setText(minecraftCodedText: string, target: HTMLElement = null) {
 	for (let i: number = 0; i < minecraftCodedText.length; i++) {
 		if (minecraftCodedText[i] === "\u00A7") {
 			writeBuffer(target);
-			currentColor = ChatColorCSS.get(minecraftCodedText[i + 1]);
+			currentColor = ChatColorCSS.get(minecraftCodedText[i + 1]!)!;
 			i++;
 			continue;
 		} else {
@@ -497,7 +504,7 @@ function getText(withStyling: boolean = true): string {
  * Events                                                                     *
  ******************************************************************************/
 
-COMMAND_INPUT.oninput = async function onCommandInput(): Promise<void> {
+const onCommandInput = async function (): Promise<void> {
 	let cursorPos: number = getCursorPosition();
 
 	let rawText: string = COMMAND_INPUT.innerText.replace("\n", "");
@@ -512,7 +519,7 @@ COMMAND_INPUT.oninput = async function onCommandInput(): Promise<void> {
 	if (rawText.startsWith("/")) {
 		// Parse the raw text
 		const rawTextNoSlash: string = rawText.slice(1);
-		const command: string = rawTextNoSlash.split(" ")[0];
+		const command: string | undefined = rawTextNoSlash.split(" ")[0];
 
 		// Brigadier
 		const parsedCommand: ParseResults<Source> = dispatcher.parse(rawTextNoSlash, SOURCE);
@@ -521,7 +528,7 @@ COMMAND_INPUT.oninput = async function onCommandInput(): Promise<void> {
 
 		let lastNode: CommandNode<Source> = parsedCommandNoTrailing.getContext().getRootNode();
 		if (parsedCommandNoTrailing.getContext().getNodes().length > 0) {
-			lastNode = parsedCommandNoTrailing.getContext().getNodes()[parsedCommandNoTrailing.getContext().getNodes().length - 1].getNode();
+			lastNode = parsedCommandNoTrailing.getContext().getNodes()[parsedCommandNoTrailing.getContext().getNodes().length - 1]!.getNode();
 		}
 		const usage: string = dispatcher.getAllUsage(lastNode, SOURCE, false).join(" ");
 
@@ -557,7 +564,7 @@ COMMAND_INPUT.oninput = async function onCommandInput(): Promise<void> {
 
 		// Colorize existing arguments
 		if (showUsageText || commandValid) {
-			let newText: string = command;
+			let newText: string = command ?? "";
 			let parsedArgumentIndex: number = 0;
 			for (const [_key, value] of parsedCommand.getContext().getArguments()) {
 				if (parsedArgumentIndex > Object.keys(ArgumentColors).length) {
@@ -617,7 +624,7 @@ COMMAND_INPUT.oninput = async function onCommandInput(): Promise<void> {
 		let nodesToAdd: HTMLSpanElement[] = [];
 		for (let i: number = 0; i < suggestions.length; i++) {
 			const suggestionElement: HTMLSpanElement = document.createElement("span");
-			suggestionElement.innerText = suggestions[i];
+			suggestionElement.innerText = suggestions[i]!;
 			if (i === 0) {
 				suggestionElement.className = "yellow";
 			}
@@ -646,7 +653,9 @@ COMMAND_INPUT.oninput = async function onCommandInput(): Promise<void> {
 		SUGGESTIONS_BOX.hidden = true;
 	}
 	window.dispatchEvent(new Event("suggestionsUpdated"));
-}
+};
+
+COMMAND_INPUT.oninput = onCommandInput;
 
 // We really really don't want new lines in our single-lined command!
 COMMAND_INPUT.addEventListener('keydown', (evt: KeyboardEvent) => {
@@ -659,21 +668,21 @@ COMMAND_INPUT.addEventListener('keydown', (evt: KeyboardEvent) => {
 			if (!SUGGESTIONS_BOX.hidden) {
 				evt.preventDefault();
 				for (let i = 0; i < SUGGESTIONS_BOX.children.length; i++) {
-					if (SUGGESTIONS_BOX.children[i].className === "yellow") {
-						SUGGESTIONS_BOX.children[i].className = "";
+					if (SUGGESTIONS_BOX.children[i]!.className === "yellow") {
+						SUGGESTIONS_BOX.children[i]!.className = "";
 
 						let selectedElement: Element;
 						if (evt.key == "ArrowDown") {
 							if (i === SUGGESTIONS_BOX.children.length - 1) {
-								selectedElement = SUGGESTIONS_BOX.children[0];
+								selectedElement = SUGGESTIONS_BOX.children[0]!;
 							} else {
-								selectedElement = SUGGESTIONS_BOX.children[i + 1];
+								selectedElement = SUGGESTIONS_BOX.children[i + 1]!;
 							}
 						} else {
 							if (i === 0) {
-								selectedElement = SUGGESTIONS_BOX.children[SUGGESTIONS_BOX.children.length - 1];
+								selectedElement = SUGGESTIONS_BOX.children[SUGGESTIONS_BOX.children.length - 1]!;
 							} else {
-								selectedElement = SUGGESTIONS_BOX.children[i - 1];
+								selectedElement = SUGGESTIONS_BOX.children[i - 1]!;
 							}
 						}
 						selectedElement.className = "yellow";
@@ -696,7 +705,7 @@ COMMAND_INPUT.addEventListener('keydown', (evt: KeyboardEvent) => {
 		case "Tab":
 			evt.preventDefault();
 			setText(getText(false).slice(1) + COMMAND_INPUT_AUTOCOMPLETE.innerText);
-			COMMAND_INPUT.oninput(null);
+			onCommandInput();
 			setCursorPosition(COMMAND_INPUT.innerText.length, COMMAND_INPUT);
 			break;
 		default:
@@ -708,8 +717,8 @@ SUGGESTIONS_BOX.addEventListener("mouseover", (evt: MouseEvent) => {
 	if(!SUGGESTIONS_BOX.hidden) {
 		if([...SUGGESTIONS_BOX.children].includes(evt.target as Element)) {
 			for (let i = 0; i < SUGGESTIONS_BOX.children.length; i++) {
-				if (SUGGESTIONS_BOX.children[i].className === "yellow") {
-					SUGGESTIONS_BOX.children[i].className = "";
+				if (SUGGESTIONS_BOX.children[i]!.className === "yellow") {
+					SUGGESTIONS_BOX.children[i]!.className = "";
 				}
 			}
 			(evt.target as Element).className = "yellow";
@@ -730,7 +739,7 @@ window.addEventListener("suggestionsUpdated", (_event: Event) => {
 
 			let suggestionText = "";
 			if(selectedSuggestionText.length > 0) {
-				const lastIndexOfStartOfSuggestion: number = rawText.lastIndexOf(selectedSuggestionText[0]);
+				const lastIndexOfStartOfSuggestion: number = rawText.lastIndexOf(selectedSuggestionText[0]!);
 				console.log(`Last index of ${selectedSuggestionText[0]} is at index ${lastIndexOfStartOfSuggestion}`);
 
 				// If we can start with it, just display it
@@ -759,15 +768,17 @@ window.addEventListener("suggestionsUpdated", (_event: Event) => {
 });
 
 // If you click on the chat box, focus the current text input area 
-document.getElementById("chatbox").onclick = function onChatBoxClicked() {
+CHAT_BOX.onclick = function onChatBoxClicked() {
 	COMMAND_INPUT.focus();
 };
 
-document.getElementById("register-commands-button").onclick = function onRegisterCommandsButtonClicked() {
+const onRegisterCommandsButtonClicked = function() {
 	dispatcher.deleteAll();
 	COMMANDS.value.split("\n").forEach(registerCommand);
-	COMMAND_INPUT.oninput(null); // Run syntax highlighter
+	onCommandInput(); // Run syntax highlighter
 }
+
+REGISTER_COMMANDS_BUTTON.onclick = onRegisterCommandsButtonClicked;
 
 
 /******************************************************************************
@@ -787,6 +798,6 @@ test_c
 test_d
 test_e`;
 
-document.getElementById("register-commands-button").onclick(null);
+onRegisterCommandsButtonClicked();
 console.log("Dispatcher", dispatcher.getRoot())
 

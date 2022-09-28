@@ -90,28 +90,34 @@ StringReader.prototype.readResourceLocation = function readResourceLocation(): [
 
 	let resourceLocation: string = this.getString().substring(start, this.getCursor());
 
-	const resourceLocationParts: string[] = resourceLocation.split(":");
+	const resourceLocationParts: string[] | undefined = resourceLocation.split(":");
+	if(resourceLocationParts === undefined) {
+		throw new SimpleCommandExceptionType(new LiteralMessage(resourceLocation + " is not a valid Resource")).createWithContext(this);
+	}
+
 	switch (resourceLocationParts.length) {
 		case 0:
 			throw new SimpleCommandExceptionType(new LiteralMessage(resourceLocation + " is not a valid Resource")).createWithContext(this);
 		case 1:
 			// Check path
-			if (!isValid(resourceLocationParts[0], this.isValidPathChar)) {
+			if (!isValid(resourceLocationParts[0]!, this.isValidPathChar)) {
 				throw new SimpleCommandExceptionType(new LiteralMessage("Non [a-z0-9/._-] character in path of location: " + resourceLocation)).createWithContext(this);
 			}
 			return ["minecraft", resourceLocation];
 		case 2:
 			// Check namespace
-			if (!isValid(resourceLocationParts[0], this.isValidNamespaceChar)) {
+			if (!isValid(resourceLocationParts[0]!, this.isValidNamespaceChar)) {
 				throw new SimpleCommandExceptionType(new LiteralMessage("Non [a-z0-9_.-] character in namespace of location: " + resourceLocation)).createWithContext(this);
 			}
 			// Check path
-			if (!isValid(resourceLocationParts[1], this.isValidPathChar)) {
+			if (!isValid(resourceLocationParts[1]!, this.isValidPathChar)) {
 				throw new SimpleCommandExceptionType(new LiteralMessage("Non [a-z0-9/._-] character in path of location: " + resourceLocation)).createWithContext(this);
 			}
 			break;
+		default:
+			throw new SimpleCommandExceptionType(new LiteralMessage(resourceLocation + " is not a valid Resource")).createWithContext(this);
 	}
-	return [resourceLocationParts[0], resourceLocationParts[1]];
+	return [resourceLocationParts[0]!, resourceLocationParts[1]!];
 };
 
 StringReader.prototype.readMinMaxBounds = function readMinMaxBounds(): [number, number] {

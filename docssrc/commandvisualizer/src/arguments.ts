@@ -58,8 +58,8 @@ export class TimeArgument implements ArgumentType<TimeArgument> {
 	public parse(reader: StringReader): TimeArgument {
 		const numericalValue: number = reader.readFloat();
 		const unit: string = reader.readUnquotedString();
-		const unitMultiplier: number = TimeArgument.UNITS.get(unit);
-		if (unitMultiplier === 0) {
+		const unitMultiplier: number | undefined = TimeArgument.UNITS.get(unit);
+		if(unitMultiplier === undefined) {
 			throw new SimpleCommandExceptionType(new LiteralMessage(`Invalid unit "${unit}"`)).createWithContext(reader);
 		}
 		const ticks: number = Math.round(numericalValue * unitMultiplier);
@@ -87,15 +87,9 @@ export class TimeArgument implements ArgumentType<TimeArgument> {
 
 export class BlockPosArgument implements ArgumentType<BlockPosArgument> {
 
-	public x: number;
-	public y: number;
-	public z: number;
-
-	constructor(x: number = 0, y: number = 0, z: number = 0) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-	}
+	public x: number = 0;
+	public y: number = 0;
+	public z: number = 0;
 
 	public parse(reader: StringReader): BlockPosArgument {
 		this.x = reader.readLocationLiteral();
@@ -120,13 +114,8 @@ export class BlockPosArgument implements ArgumentType<BlockPosArgument> {
 
 export class ColumnPosArgument implements ArgumentType<ColumnPosArgument> {
 
-	public x: number;
-	public z: number;
-
-	constructor(x = 0, z = 0) {
-		this.x = x;
-		this.z = z;
-	}
+	public x: number = 0;
+	public z: number = 0;
 
 	public parse(reader: StringReader): ColumnPosArgument {
 		this.x = reader.readLocationLiteral();
@@ -148,11 +137,7 @@ export class ColumnPosArgument implements ArgumentType<ColumnPosArgument> {
 
 export class PlayerArgument implements ArgumentType<PlayerArgument> {
 
-	public username: string;
-
-	constructor(username: string = "") {
-		this.username = username;
-	}
+	public username: string = "";
 
 	public parse(reader: StringReader): PlayerArgument {
 		const start: number = reader.getCursor();
@@ -180,11 +165,10 @@ export class PlayerArgument implements ArgumentType<PlayerArgument> {
 export class MultiLiteralArgument implements ArgumentType<MultiLiteralArgument> {
 
 	private literals: string[];
-	public selectedLiteral: string;
+	public selectedLiteral: string = "";
 
 	constructor(literals: string[]) {
 		this.literals = literals;
-		this.selectedLiteral = "";
 	}
 
 	public parse(reader: StringReader) {
@@ -241,15 +225,11 @@ export class ColorArgument implements ArgumentType<ColorArgument> {
 		white: "\u00A7f",
 	} as const;
 
-	public chatcolor: string;
-
-	constructor(chatcolor: string = "") {
-		this.chatcolor = chatcolor;
-	}
+	public chatcolor: string = "";
 
 	public parse(reader: StringReader) {
 		let input = reader.readUnquotedString();
-		let chatFormat: string = ColorArgument.ChatColor[input.toLowerCase()];
+		let chatFormat: string | undefined = ColorArgument.ChatColor[input.toLowerCase()];
 		if (chatFormat === undefined) {
 			throw new SimpleCommandExceptionType(new LiteralMessage(`Unknown colour '${input}'`)).createWithContext(reader);
 		}
@@ -304,11 +284,7 @@ export class PotionEffectArgument implements ArgumentType<PotionEffectArgument> 
 		"minecraft:darkness",
 	] as const;
 
-	public potionEffect: string;
-
-	constructor(potionEffect: string = "") {
-		this.potionEffect = potionEffect;
-	}
+	public potionEffect: string = "";
 
 	public parse(reader: StringReader): PotionEffectArgument {
 		const resourceLocation: [string, string] = reader.readResourceLocation();
@@ -365,7 +341,7 @@ export class UUIDArgument implements ArgumentType<UUIDArgument> {
 	public parse(reader: StringReader): UUIDArgument {
 		const remaining: string = reader.getRemaining();
 		const matchedResults = remaining.match(/^([-A-Fa-f0-9]+)/);
-		if(matchedResults !== null) {
+		if(matchedResults !== null && matchedResults[1] !== undefined) {
 			this.uuid = matchedResults[1];
 			// Regex for a UUID: https://stackoverflow.com/a/13653180/4779071
 			if(this.uuid.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i) !== null) {
