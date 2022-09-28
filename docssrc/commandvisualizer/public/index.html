@@ -21,6 +21,7 @@
         <script>
             // Error.captureStackTrace is a V8 function only, and doesn't exist on Firefox
             // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error#static_methods
+            // https://github.com/remtori/brigadier/issues/2
             if(!Error.hasOwnProperty("captureStackTrace")) {
                 Error.captureStackTrace = function() {};
             }

@@ -3,7 +3,7 @@
         "outDir": "./public/",
         "sourceMap": true,
         "noImplicitAny": true,
-        "module": "ES6",
+        "module": "ESNext",
         "target": "ESNext",
         "allowJs": false,
         "moduleResolution": "node",

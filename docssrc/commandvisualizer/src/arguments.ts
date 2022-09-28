@@ -14,39 +14,9 @@ import {
 
 import mojangson from "mojangson-parser"
 
+import "./brigadier_extensions"
+
 class StringReaderHelper {
-
-	public static readLocationLiteral(reader: StringReader): number {
-
-		function isAllowedLocationLiteral(c: string): boolean {
-			return c === '~' || c === '^';
-		}
-
-		let start = reader.getCursor();
-		while (reader.canRead() && (StringReader.isAllowedNumber(reader.peek()) || isAllowedLocationLiteral(reader.peek()))) {
-			reader.skip();
-		}
-		let number = reader.getString().substring(start, reader.getCursor());
-		if (number.length === 0) {
-			throw (CommandSyntaxException as any).BUILT_IN_EXCEPTIONS.readerExpectedInt().createWithContext(reader);
-		}
-
-		if (number.startsWith("~") || number.startsWith("^")) {
-			if (number.length === 1) {
-				// Accept.
-				return 0;
-			} else {
-				number = number.slice(1);
-			}
-		}
-		const result = parseInt(number);
-		if (isNaN(result) || result !== parseFloat(number)) {
-			reader.setCursor(start);
-			throw (CommandSyntaxException as any).BUILT_IN_EXCEPTIONS.readerInvalidInt().createWithContext(reader, number);
-		} else {
-			return result;
-		}
-	}
 
 	public static readResourceLocation(reader: StringReader): [string, string] {
 
@@ -278,11 +248,11 @@ export class BlockPosArgument implements ArgumentType<BlockPosArgument> {
 	}
 
 	public parse(reader: StringReader): BlockPosArgument {
-		this.x = StringReaderHelper.readLocationLiteral(reader);
+		this.x = reader.readLocationLiteral();
 		reader.skip();
-		this.y = StringReaderHelper.readLocationLiteral(reader);
+		this.y = reader.readLocationLiteral();
 		reader.skip();
-		this.z = StringReaderHelper.readLocationLiteral(reader);
+		this.z = reader.readLocationLiteral();
 		return this;
 	}
 
@@ -309,9 +279,9 @@ export class ColumnPosArgument implements ArgumentType<ColumnPosArgument> {
 	}
 
 	public parse(reader: StringReader): ColumnPosArgument {
-		this.x = StringReaderHelper.readLocationLiteral(reader);
+		this.x = reader.readLocationLiteral();
 		reader.skip();
-		this.z = StringReaderHelper.readLocationLiteral(reader);
+		this.z = reader.readLocationLiteral();
 		return this;
 	}
 
@@ -423,7 +393,7 @@ export class ColorArgument implements ArgumentType<ColorArgument> {
 
 	public chatcolor: string;
 
-	constructor(chatcolor: string = null) {
+	constructor(chatcolor: string = "") {
 		this.chatcolor = chatcolor;
 	}
 
@@ -486,7 +456,7 @@ export class PotionEffectArgument implements ArgumentType<PotionEffectArgument> 
 
 	public potionEffect: string;
 
-	constructor(potionEffect: string = null) {
+	constructor(potionEffect: string = "") {
 		this.potionEffect = potionEffect;
 	}
 
@@ -663,7 +633,7 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 	}
 
 	private suggestionGenerator(reader: StringReader, type: OptionsType): string[] {
-		let suggestions = [];
+		let suggestions: string[] = [];
 		switch(type) {
 			case "gamemode": {
 				let string: string = reader.getRemaining().toLowerCase();
