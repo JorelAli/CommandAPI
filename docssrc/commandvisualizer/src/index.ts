@@ -325,8 +325,8 @@ function registerCommand(configCommand: string) {
  * @returns The current cursor position for the current element
  */
 function getCursorPosition() {
-	const sel: SelectionWithModify = document.getSelection() as SelectionWithModify;
-	sel.modify("extend", "backward", "paragraphboundary");
+	const sel: Selection = document.getSelection(); // as SelectionWithModify;
+	(<any>sel).modify("extend", "backward", "paragraphboundary");
 	const pos = sel.toString().length;
 	if (sel.anchorNode !== undefined && sel.anchorNode !== null) {
 		sel.collapseToEnd();
@@ -346,7 +346,8 @@ function getCursorPosition() {
  * @param element the element to set the cursor for
  */
 function setCursorPosition(index: number, element: Node): void {
-	if (index >= 0) {
+	console.log("Setting cursor pos to " + index)
+	if (index > 0) {
 		const createRange = (node: Node, chars: { count: number }, range?: Range): Range => {
 			if (!range) {
 				range = document.createRange();
@@ -517,7 +518,7 @@ COMMAND_INPUT.oninput = async function onCommandInput(): Promise<void> {
 		// Brigadier
 		const parsedCommand: ParseResults<Source> = dispatcher.parse(rawTextNoSlash, SOURCE);
 		const parsedCommandNoTrailing: ParseResults<Source> = dispatcher.parse(rawTextNoSlash.trimEnd(), SOURCE);
-		console.log(parsedCommand);
+		// console.log(parsedCommand);
 
 		let lastNode: CommandNode<Source> = parsedCommandNoTrailing.getContext().getRootNode();
 		if (parsedCommandNoTrailing.getContext().getNodes().length > 0) {
@@ -576,7 +577,7 @@ COMMAND_INPUT.oninput = async function onCommandInput(): Promise<void> {
 
 		const suggestionsResult: Suggestions = await dispatcher.getCompletionSuggestions(parsedCommand);
 		suggestions = suggestionsResult.getList().map((x) => x.getText());
-		console.log(suggestions)
+		// console.log(suggestions)
 	}
 
 	// Set the cursor back to where it was. Since commands always start with a
@@ -692,10 +693,24 @@ COMMAND_INPUT.addEventListener('keydown', (evt: KeyboardEvent) => {
 			evt.preventDefault();
 			setText(getText(false).slice(1) + COMMAND_INPUT_AUTOCOMPLETE.innerText);
 			COMMAND_INPUT.oninput(null);
-			setCursorPosition(COMMAND_INPUT.innerText.length, COMMAND_INPUT);
+			setCursorPosition(COMMAND_INPUT.innerText.length - 1, COMMAND_INPUT);
 			break;
 		default:
 			break;
+	}
+});
+
+SUGGESTIONS_BOX.addEventListener("mouseover", (evt: MouseEvent) => {
+	if(!SUGGESTIONS_BOX.hidden) {
+		if([...SUGGESTIONS_BOX.children].includes(evt.target as Element)) {
+			for (let i = 0; i < SUGGESTIONS_BOX.children.length; i++) {
+				if (SUGGESTIONS_BOX.children[i].className === "yellow") {
+					SUGGESTIONS_BOX.children[i].className = "";
+				}
+			}
+			(evt.target as Element).className = "yellow";
+			window.dispatchEvent(new Event("suggestionsUpdated"));
+		}
 	}
 });
 
@@ -708,8 +723,32 @@ window.addEventListener("suggestionsUpdated", (_event: Event) => {
 		// TODO: This obviously needs to be specific to the current suggestions, not the whole input
 		if (rawText !== selectedSuggestionText) {
 			const cursorPosition: number = getCursorPosition();
-			const lastSpaceIndex: number = rawText.lastIndexOf(" ") === -1 ? 1 : rawText.lastIndexOf(" ") + 1;
-			setText(ChatColor.DARK_GRAY + selectedSuggestionText.slice(rawText.slice(lastSpaceIndex).length), COMMAND_INPUT_AUTOCOMPLETE);
+
+			let suggestionText = "";
+			if(selectedSuggestionText.length > 0) {
+				const lastIndexOfStartOfSuggestion: number = rawText.lastIndexOf(selectedSuggestionText[0]);
+
+				// If we can start with it, just display it
+				if(lastIndexOfStartOfSuggestion === -1) {
+					suggestionText = selectedSuggestionText;
+				} else {
+					// Iterate over until we reach a stopping point
+					let foundSlice = false;
+					let i = 0;
+					for(; i < rawText.length; i++) {
+						if(selectedSuggestionText[i] !== rawText[i + lastIndexOfStartOfSuggestion]) {
+							suggestionText = selectedSuggestionText.slice(i);
+							foundSlice = true;
+							break;
+						}
+					}
+					if(!foundSlice) {
+						suggestionText = selectedSuggestionText.slice(i);
+					}
+				}
+			}
+			// console.log(rawText + " c.f. " + selectedSuggestionText);
+			setText(ChatColor.DARK_GRAY + suggestionText, COMMAND_INPUT_AUTOCOMPLETE);
 			setCursorPosition(cursorPosition, COMMAND_INPUT);
 			COMMAND_INPUT.focus();
 		} else {

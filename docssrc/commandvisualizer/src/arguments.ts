@@ -628,6 +628,7 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 
 	// EntitySelectorParser suggestions
 	private suggestions: string[];
+	private suggestionsModifier: ((builder: SuggestionsBuilder) => void) | null = null;
 
 	// EntitySelectorParser + EntitySelectorOptions
 	private entityUUID: string;
@@ -643,8 +644,12 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 	private worldLimited: boolean;
 	private order: string; // Not BiConsumer<Vec, List<? extends Entity>> because effort
 	private isSorted: boolean; // Is this entity selector sorted?
-	private hasGamemodeEquals: boolean; // Has gamemode ... equals?
-	private hasGamemodeNotEquals: boolean; // uhh...
+
+	private selectsGamemode: boolean = false;
+	private excludesGamemode: boolean = false;
+
+	private hasNameEquals: boolean;
+	private hasNameNotEquals: boolean;
 	private hasScores: boolean; 
 	private typeInverse: boolean; // isTypeLimitedInversely AKA excludesEntityType
 
@@ -657,7 +662,7 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 		switch(type) {
 			case "gamemode": {
 				let string: string = reader.getRemaining().toLowerCase();
-				let bool: boolean = this.hasGamemodeNotEquals;
+				let bool: boolean = !this.excludesGamemode;
 				let negating: boolean = true;
 				if(string.length !== 0) {
 					if(string.charAt(0) === "!") {
@@ -703,15 +708,15 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 		name: (reader: StringReader): void => {
 			const start: number = reader.getCursor();
 			const shouldInvert: boolean = StringReaderHelper.readNegationCharacter(reader);
-			// const _s: string = reader.readString();
-			if(/* STUB: this.hasNameNotEquals() */ !shouldInvert) {
+			const _s: string = reader.readString();
+			if(this.hasNameNotEquals && !shouldInvert) {
 				reader.setCursor(start);
 				throw new SimpleCommandExceptionType(new LiteralMessage(`Option 'name' isn't applicable here`)).createWithContext(reader);
 			}
 			if(shouldInvert) {
-				// stub: setHasNameNotEqual(true)
+				this.hasNameNotEquals = true;
 			} else {
-				// stub: setHasNameEquals(true)
+				this.hasNameEquals = true;
 			}
 		},
 		distance: (_reader: StringReader): void => {},
@@ -749,7 +754,7 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 			this.suggestions = this.suggestionGenerator(reader, "gamemode");
 			const start: number = reader.getCursor();
 			const shouldInvert: boolean = StringReaderHelper.readNegationCharacter(reader);
-			if(this.hasGamemodeNotEquals && !shouldInvert) {
+			if(this.excludesGamemode && !shouldInvert) {
 				reader.setCursor(start);
 				throw new SimpleCommandExceptionType(new LiteralMessage(`Option 'gamemode' isn't applicable here`)).createWithContext(reader);
 			}
@@ -760,9 +765,9 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 			} else {
 				this.includesEntities = false;
 				if(shouldInvert) {
-					this.hasGamemodeNotEquals = true;
+					this.excludesGamemode = true;
 				} else {
-					this.hasGamemodeEquals = true;
+					this.selectsGamemode = true;
 				}
 			}
 		},
@@ -831,7 +836,7 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 			this.hasScores = true;
 		},
 		advancements: (reader: StringReader): void => {
-			throw new SimpleCommandExceptionType(new LiteralMessage("This command visualizer doesn't support 'advancements'")).createWithContext(reader);
+			throw new SimpleCommandExceptionType(new LiteralMessage("This command visualizer doesn't support 'advancements'")).createWithContext(reader); 
 		},
 		predicate: (reader: StringReader): void => {
 			throw new SimpleCommandExceptionType(new LiteralMessage("This command visualizer doesn't support 'predicate'")).createWithContext(reader);
@@ -841,6 +846,7 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 	public parse(reader: StringReader): EntitySelectorArgument {
 
 		const parseOptions: () => void = () => {
+			this.suggestions = SuggestionsHelper.suggestMatching(reader, [...Object.keys(this.Options)]); // TODO: So this isn't exactly correct, we need to not list existing names, but that'll require a bit of a refactor
 			reader.skipWhitespace();
 			while(reader.canRead() && reader.peek() !== "]") {
 				reader.skipWhitespace();
@@ -860,13 +866,16 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 				}
 				reader.skip();
 				reader.skipWhitespace();
+				this.suggestions = [];
 				modifier(reader);
 				reader.skipWhitespace();
+				this.suggestions = [",", "]"];
 				if(!reader.canRead()) {
 					continue;
 				}
 				if(reader.peek() === ",") {
 					reader.skip();
+					this.suggestions = SuggestionsHelper.suggestMatching(reader, [...Object.keys(this.Options)]); // TODO: So this isn't exactly correct, we need to not list existing names, but that'll require a bit of a refactor
 					continue;
 				}
 				if(reader.peek() !== "]") {
@@ -875,12 +884,15 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 			}
 			if (reader.canRead()) {
 				reader.skip();
+				this.suggestions = [];
 				return;
 			}
 			throw new SimpleCommandExceptionType(new LiteralMessage("Expected end of options")).createWithContext(reader);
 		}
 
 		const parseSelector: () => void = () => {
+			this.suggestionsModifier = (builder: SuggestionsBuilder) => { builder.createOffset(builder.getStart() - 1) };
+			this.suggestions = ["@p", "@a", "@r", "@s", "@e"];
 			if(!reader.canRead()) {
 				throw new SimpleCommandExceptionType(new LiteralMessage("Missing selector type")).createWithContext(reader);
 			}
@@ -916,9 +928,12 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 					reader.setCursor(start);
 					throw new SimpleCommandExceptionType(new LiteralMessage(`Unknown selector type '${selectorChar}'`)).createWithContext(reader);
 			}
-
+			this.suggestionsModifier = null;
+			this.suggestions = ["["];
 			if (reader.canRead() && reader.peek() === "[") {
 				reader.skip();
+				this.suggestionsModifier = null;
+				this.suggestions = ["]", ...Object.keys(this.Options)]; // TODO: So this isn't exactly correct, we need to not list existing names, but that'll require a bit of a refactor
 				parseOptions();
 			}
 		}
@@ -945,9 +960,11 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 		}
 
 		let start: number = reader.getCursor();
+		// For some reason, setting these suggestions here triggers twice(?), so don't do that.
+		// this.suggestions = ["@p", "@a", "@r", "@s", "@e", "Skepter"];// TODO: Name or selector
 		if(reader.canRead() && reader.peek() === "@") {
 			reader.skip();
-			parseSelector()
+			parseSelector();
 		} else {
 			parseNameOrUUID();
 		}
@@ -977,6 +994,11 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 		}
 
 		if(this.suggestions.length > 0) {
+
+			if(this.suggestionsModifier !== null) {
+				this.suggestionsModifier(builder);
+			}
+
 			// We don't use HelperSuggestionProvider because we've already
 			// pre-generated suggestions for the specific context, so we don't
 			// need to check if it matches or anything, just suggest it!

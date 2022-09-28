@@ -69,7 +69,9 @@ span {
 #suggestions-box {
 	left: 28px; /* This position will have to change over time, we'll figure that out later*/
 	width: unset;
-	padding-right: 8px;
+	padding-right: 24px;
+	max-height: 400px;
+	overflow: overlay;
 }
 
 #valid-box {
