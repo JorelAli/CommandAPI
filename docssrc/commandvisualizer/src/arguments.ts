@@ -12,156 +12,6 @@ import {
 	ArgumentBuilder
 } from "node-brigadier"
 
-import mojangson from "mojangson-parser"
-
-import "./brigadier_extensions"
-
-class StringReaderHelper {
-
-	public static readResourceLocation(reader: StringReader): [string, string] {
-
-		function isAllowedInResourceLocation(c: string): boolean {
-			return ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'z') || c === '_' || c === ':' || c === '/' || c === '.' || c === '-');
-		}
-
-		function validPathChar(c: string): boolean {
-			return (c === '_' || c === '-' || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c === '/' || c === '.');
-		}
-
-		function validNamespaceChar(c: string): boolean {
-			return (c === '_' || c === '-' || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c === '.');
-		}
-
-		function isValid(string: string, predicate: (c: string) => boolean): boolean {
-			for (let i: number = 0; i < string.length; i++) {
-				if (!predicate(string.charAt(i))) {
-					return false;
-				}
-			}
-			return true;
-		}
-
-		const start = reader.getCursor();
-		while (reader.canRead() && isAllowedInResourceLocation(reader.peek())) {
-			reader.skip();
-		}
-
-		let resourceLocation: string = reader.getString().substring(start, reader.getCursor());
-
-		const resourceLocationParts: string[] = resourceLocation.split(":");
-		switch (resourceLocationParts.length) {
-			case 0:
-				throw new SimpleCommandExceptionType(new LiteralMessage(resourceLocation + " is not a valid Resource")).createWithContext(reader);
-			case 1:
-				// Check path
-				if (!isValid(resourceLocationParts[0], validPathChar)) {
-					throw new SimpleCommandExceptionType(new LiteralMessage("Non [a-z0-9/._-] character in path of location: " + resourceLocation)).createWithContext(reader);
-				}
-				return ["minecraft", resourceLocation];
-				break;
-			case 2:
-				// Check namespace
-				if (!isValid(resourceLocationParts[0], validNamespaceChar)) {
-					throw new SimpleCommandExceptionType(new LiteralMessage("Non [a-z0-9_.-] character in namespace of location: " + resourceLocation)).createWithContext(reader);
-				}
-				// Check path
-				if (!isValid(resourceLocationParts[1], validPathChar)) {
-					throw new SimpleCommandExceptionType(new LiteralMessage("Non [a-z0-9/._-] character in path of location: " + resourceLocation)).createWithContext(reader);
-				}
-				break;
-		}
-		return [resourceLocationParts[0], resourceLocationParts[1]];
-	}
-
-	public static readMinMaxBounds(reader: StringReader): [number, number] {
-		if(!reader.canRead()) {
-			throw new SimpleCommandExceptionType(new LiteralMessage(`Expected value or range of values`)).createWithContext(reader);
-		}
-
-		const start = reader.getCursor();
-		let min: number | null = null;
-		let max: number | null = null;
-
-		try {
-			min = reader.readFloat();
-		} catch(error) {
-			// ignore it
-		}
-
-		if (reader.canRead(2) && reader.peek() == '.' && reader.peek(1) == '.') {
-			reader.skip();
-			reader.skip();
-
-			try {
-				max = reader.readFloat();
-			} catch(error) {
-				// ignore it
-			}
-		} else {
-			max = min;
-		}
-
-		if(min === null && max === null) {
-			reader.setCursor(start);
-			throw new SimpleCommandExceptionType(new LiteralMessage(`Expected value or range of values`)).createWithContext(reader);
-		} else {
-			if(min === null) {
-				min = Number.MIN_SAFE_INTEGER;
-			}
-			if(max === null) {
-				max = Number.MAX_SAFE_INTEGER;
-			}
-		}
-
-		return [min, max];
-	}
-
-	public static readNBT(reader: StringReader): string {
-		const start: number = reader.getCursor();
-		let nbt: string = "";
-		while(reader.canRead()) {
-			nbt += reader.read();
-			try {
-				mojangson(nbt);
-				break;
-			} catch(error) {
-			}
-		}
-		try {
-			mojangson(nbt);
-		} catch(error) {
-			reader.setCursor(start);
-			throw new SimpleCommandExceptionType(new LiteralMessage(`${error}`)).createWithContext(reader);
-		}
-		return nbt;
-	}
-
-	/**
-	 * @param reader StringReader
-	 * @returns true if a negation character was read
-	 */
-	public static readNegationCharacter(reader: StringReader): boolean {
-		reader.skipWhitespace();
-		if (reader.canRead() && reader.peek() === '!') {
-			reader.skip();
-			reader.skipWhitespace();
-			return true;
-		}
-		return false;
-	}
-
-	public static readTagCharacter(reader: StringReader): boolean {
-		reader.skipWhitespace();
-		if (reader.canRead() && reader.peek() === '#') {
-			reader.skip();
-			reader.skipWhitespace();
-			return true;
-		}
-		return false;
-	}
-
-}
-
 /**
  * Helper for generating Promise<Suggestions>, from SharedSuggestionProvider.java
  */
@@ -461,7 +311,7 @@ export class PotionEffectArgument implements ArgumentType<PotionEffectArgument> 
 	}
 
 	public parse(reader: StringReader): PotionEffectArgument {
-		const resourceLocation: [string, string] = StringReaderHelper.readResourceLocation(reader);
+		const resourceLocation: [string, string] = reader.readResourceLocation();
 		const input = resourceLocation[0] + ":" + resourceLocation[1];
 		const isValidPotionEffect: boolean = PotionEffectArgument.PotionEffects.includes(input.toLowerCase());
 		if (!isValidPotionEffect) {
@@ -682,7 +532,7 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 	private readonly Options: { [option in OptionsType]: Modifier } = {
 		name: (reader: StringReader): void => {
 			const start: number = reader.getCursor();
-			const shouldInvert: boolean = StringReaderHelper.readNegationCharacter(reader);
+			const shouldInvert: boolean = reader.readNegationCharacter();
 			const _s: string = reader.readString();
 			if(this.hasNameNotEquals && !shouldInvert) {
 				reader.setCursor(start);
@@ -702,8 +552,8 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 		dx: (reader: StringReader): void => { reader.readFloat() },
 		dy: (reader: StringReader): void => { reader.readFloat() },
 		dz: (reader: StringReader): void => { reader.readFloat() },
-		x_rotation: (reader: StringReader): void => { StringReaderHelper.readMinMaxBounds(reader) },
-		y_rotation: (reader: StringReader): void => { StringReaderHelper.readMinMaxBounds(reader) },
+		x_rotation: (reader: StringReader): void => { reader.readMinMaxBounds() },
+		y_rotation: (reader: StringReader): void => { reader.readMinMaxBounds() },
 		limit: (reader: StringReader): void => {
 			const start: number = reader.getCursor();
 			const limit: number = reader.readInt();
@@ -729,7 +579,7 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 		gamemode: (reader: StringReader): void => {
 			this.suggestions = this.suggestionGenerator(reader, "gamemode");
 			const start: number = reader.getCursor();
-			const shouldInvert: boolean = StringReaderHelper.readNegationCharacter(reader);
+			const shouldInvert: boolean = reader.readNegationCharacter();
 			if(this.excludesGamemode && !shouldInvert) {
 				reader.setCursor(start);
 				throw new SimpleCommandExceptionType(new LiteralMessage(`Option 'gamemode' isn't applicable here`)).createWithContext(reader);
@@ -748,13 +598,13 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 			}
 		},
 		team: (reader: StringReader): void => {
-			StringReaderHelper.readNegationCharacter(reader);
+			reader.readNegationCharacter();
 			reader.readUnquotedString();
 		},
 		type: (reader: StringReader): void => {
 			this.suggestions = this.suggestionGenerator(reader, "type");
 			let start: number = reader.getCursor();
-			let shouldInvert: boolean = StringReaderHelper.readNegationCharacter(reader);
+			let shouldInvert: boolean = reader.readNegationCharacter();
 			if(this.typeInverse && !shouldInvert) {
 				reader.setCursor(start);
 				throw new SimpleCommandExceptionType(new LiteralMessage(`Option 'type' isn't applicable here`)).createWithContext(reader);
@@ -762,11 +612,11 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 			if(shouldInvert) {
 				this.typeInverse = true;
 			}
-			if(StringReaderHelper.readTagCharacter(reader)) {
+			if(reader.readTagCharacter()) {
 				// Yay, we've got a tag. Read everything matching 0 - 9, a - z, _, :, /, . or -
-				StringReaderHelper.readResourceLocation(reader);
+				reader.readResourceLocation();
 			} else {
-				const [namespace, key]: [string, string] = StringReaderHelper.readResourceLocation(reader);
+				const [namespace, key]: [string, string] = reader.readResourceLocation();
 				if(!entityTypes.includes(key as EntityType)) { // Uh... yes... this totally won't fail...
 					throw new SimpleCommandExceptionType(new LiteralMessage(`${key} is not a valid entity type`)).createWithContext(reader);
 				}
@@ -779,14 +629,14 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 			}
 		},
 		tag: (reader: StringReader): void => {
-			StringReaderHelper.readNegationCharacter(reader);
+			reader.readNegationCharacter();
 			reader.readUnquotedString();
 		},
 		nbt: (reader: StringReader): void => {
 			const start: number = reader.getCursor();
-			const shouldInvert: boolean = StringReaderHelper.readNegationCharacter(reader);
+			const shouldInvert: boolean = reader.readNegationCharacter();
 			try {
-				StringReaderHelper.readNBT(reader);
+				reader.readNBT();
 			} catch(error) {
 				reader.setCursor(start);
 				throw error;
@@ -802,7 +652,7 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 				reader.skipWhitespace();
 				reader.expect('=');
 				reader.skipWhitespace();
-				StringReaderHelper.readMinMaxBounds(reader);
+				reader.readMinMaxBounds();
 				reader.skipWhitespace();
 				if (reader.canRead() && reader.peek() == ',') {
 					reader.skip(); 
