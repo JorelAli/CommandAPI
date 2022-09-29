@@ -1,12 +1,14 @@
 /**
  * https://www.typescriptlang.org/docs/handbook/declaration-merging.html#module-augmentation
+ *
  * This is an example of module augmentation. We want to modify the exising
  * module node-brigadier with our own extensions. We do that by declaring the
  * module "node-brigadier", our types that we want to augment and our new
  * methods. TypeScript will automatically update them. This lets you use the new
  * methods without TypeScript complaining that they don't exist. These new
  * methods can be used by importing this file (or if it's in the same folder,
- * you don't have to do anything), e.g.:
+ * you don't have to do anything, unless you're using webpack because webpack
+ * needs to know it exists), e.g.:
  * 
  *   import "./brigadier_extensions"
  */

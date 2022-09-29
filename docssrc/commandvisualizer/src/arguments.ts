@@ -12,6 +12,9 @@ import {
 	ArgumentBuilder
 } from "node-brigadier"
 
+import "./brigadier-extensions"
+import "./array-extensions"
+
 /**
  * Helper for generating Promise<Suggestions>, from SharedSuggestionProvider.java
  */
