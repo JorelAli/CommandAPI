@@ -29,7 +29,9 @@ import {
 	PotionEffectArgument,
 	AngleArgument,
 	UUIDArgument,
-	EntitySelectorArgument
+	EntitySelectorArgument,
+	UnimplementedArgument,
+	MathOperationArgument
 } from "./arguments"
 
 /******************************************************************************
@@ -149,7 +151,7 @@ const ArgumentColors: { [colorIndex: number]: String } = {
 } as const;
 
 // As implemented by https://commandapi.jorel.dev/8.5.1/internal.html
-const ArgumentType = new Map<String, () => BrigadierArgumentType<unknown> | null>([
+const ArgumentType = new Map<String, () => BrigadierArgumentType<unknown>>([
 	// CommandAPI separation. These are the various EntitySelectorArgument<> types
 	["api:entity", () => new EntitySelectorArgument(true, false)],
 	["api:entities", () => new EntitySelectorArgument(false, false)],
@@ -170,43 +172,43 @@ const ArgumentType = new Map<String, () => BrigadierArgumentType<unknown> | null
 	// Minecraft arguments
 	["minecraft:angle", () => new AngleArgument()],
 	["minecraft:block_pos", () => new BlockPosArgument()],
-	["minecraft:block_predicate", () => null],
-	["minecraft:block_state", () => null],
+	["minecraft:block_predicate", () => new UnimplementedArgument()],
+	["minecraft:block_state", () => new UnimplementedArgument()],
 	["minecraft:color", () => new ColorArgument()],
 	["minecraft:column_pos", () => new ColumnPosArgument()],
-	["minecraft:component", () => null],
-	["minecraft:dimension", () => null],
-	["minecraft:entity", () => null],
-	["minecraft:entity_anchor", () => null],
-	["minecraft:entity_summon", () => null],
-	["minecraft:float_range", () => null],
-	["minecraft:function", () => null],
+	["minecraft:component", () => new UnimplementedArgument()],
+	["minecraft:dimension", () => new UnimplementedArgument()],
+	["minecraft:entity", () => new UnimplementedArgument()],
+	["minecraft:entity_anchor", () => new UnimplementedArgument()],
+	["minecraft:entity_summon", () => new UnimplementedArgument()],
+	["minecraft:float_range", () => new UnimplementedArgument()],
+	["minecraft:function", () => new UnimplementedArgument()],
 	["minecraft:game_profile", () => new PlayerArgument()],
-	["minecraft:int_range", () => null],
-	["minecraft:item_enchantment", () => null],
-	["minecraft:item_predicate", () => null],
-	["minecraft:item_slot", () => null],
-	["minecraft:item_stack", () => null],
+	["minecraft:int_range", () => new UnimplementedArgument()],
+	["minecraft:item_enchantment", () => new UnimplementedArgument()],
+	["minecraft:item_predicate", () => new UnimplementedArgument()],
+	["minecraft:item_slot", () => new UnimplementedArgument()],
+	["minecraft:item_stack", () => new UnimplementedArgument()],
 	["minecraft:message", () => greedyStringArgument()], // Close enough
 	["minecraft:mob_effect", () => new PotionEffectArgument()],
-	["minecraft:nbt", () => null],
-	["minecraft:nbt_compound_tag", () => null],
-	["minecraft:nbt_path", () => null],
-	["minecraft:nbt_tag", () => null],
-	["minecraft:objective", () => null],
-	["minecraft:objective_criteria", () => null],
-	["minecraft:operation", () => null],
-	["minecraft:particle", () => null],
-	["minecraft:resource_location", () => null],
-	["minecraft:rotation", () => null],
-	["minecraft:score_holder", () => null],
-	["minecraft:scoreboard_slot", () => null],
-	["minecraft:swizzle", () => null],
+	["minecraft:nbt", () => new UnimplementedArgument()],
+	["minecraft:nbt_compound_tag", () => new UnimplementedArgument()],
+	["minecraft:nbt_path", () => new UnimplementedArgument()],
+	["minecraft:nbt_tag", () => new UnimplementedArgument()],
+	["minecraft:objective", () => new UnimplementedArgument()],
+	["minecraft:objective_criteria", () => new UnimplementedArgument()],
+	["minecraft:operation", () => new MathOperationArgument()],
+	["minecraft:particle", () => new UnimplementedArgument()],
+	["minecraft:resource_location", () => new UnimplementedArgument()],
+	["minecraft:rotation", () => new UnimplementedArgument()],
+	["minecraft:score_holder", () => new UnimplementedArgument()],
+	["minecraft:scoreboard_slot", () => new UnimplementedArgument()],
+	["minecraft:swizzle", () => new UnimplementedArgument()],
 	["minecraft:team", () => singleWordArgument()],
 	["minecraft:time", () => new TimeArgument()],
 	["minecraft:uuid", () => new UUIDArgument()],
-	["minecraft:vec2", () => null],
-	["minecraft:vec3", () => null],
+	["minecraft:vec2", () => new UnimplementedArgument()],
+	["minecraft:vec3", () => new UnimplementedArgument()],
 ]);
 
 /******************************************************************************
@@ -302,6 +304,8 @@ function registerCommand(configCommand: string) {
 			// We're adding arguments in reverse order (last arguments appear
 			// at the beginning of the array) because it's much much easier to process
 			argumentsToRegister.unshift(argument(nodeName, convertedArgumentType));
+		} else {
+			console.error(`${arg} has invalid syntax!`)
 		}
 	}
 

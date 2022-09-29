@@ -15,11 +15,14 @@ import {
 import "./brigadier-extensions"
 import "./array-extensions"
 
+/******************************************************************************
+ * Helper classes                                                             *
+ ******************************************************************************/
+
 /**
  * Helper for generating Promise<Suggestions>, from SharedSuggestionProvider.java
  */
 class HelperSuggestionProvider {
-
 	public static suggest(suggestions: string[], builder: SuggestionsBuilder): Promise<Suggestions> {
 		let remainingLowercase: string = builder.getRemaining().toLowerCase();
 		for (let suggestion of suggestions) {
@@ -43,6 +46,47 @@ class HelperSuggestionProvider {
 	}
 }
 
+class SuggestionsHelper {
+	public static shouldSuggest(remaining: string, suggestion: string): boolean {
+		let i: number = 0;
+		while(!suggestion.startsWith(remaining, i)) {
+			i = suggestion.indexOf("_", i);
+			if(i < 0) {
+				return false;
+			}
+			i++;
+		}
+		return true;
+	}
+
+	public static suggestMatching(reader: StringReader, suggestions: string[]): string[] {
+		let newSuggestions: string[] = [];
+		const remaining: string = reader.getRemaining().toLocaleLowerCase();
+		for(let suggestion of suggestions) {
+			if(!SuggestionsHelper.shouldSuggest(remaining, suggestion.toLocaleLowerCase())) {
+				continue;
+			}
+			newSuggestions.push(suggestion);
+		}
+		return newSuggestions;
+	}
+}
+
+/******************************************************************************
+ * Argument implementation classes                                            *
+ ******************************************************************************/
+
+/**
+ * @deprecated Placeholder, avoid use in production
+ */
+export class UnimplementedArgument implements ArgumentType<UnimplementedArgument> {
+
+	public parse(_reader: StringReader): UnimplementedArgument {
+		throw new SimpleCommandExceptionType(new LiteralMessage("This argument hasn't been implemented")).create();
+	}
+
+}
+
 export class TimeArgument implements ArgumentType<TimeArgument> {
 
 	static UNITS: Map<string, number> = new Map([
@@ -52,11 +96,7 @@ export class TimeArgument implements ArgumentType<TimeArgument> {
 		["", 1]
 	]);
 
-	public ticks: number;
-
-	constructor(ticks: number = 0) {
-		this.ticks = ticks;
-	}
+	public ticks: number = 0;
 
 	public parse(reader: StringReader): TimeArgument {
 		const numericalValue: number = reader.readFloat();
@@ -138,11 +178,9 @@ export class ColumnPosArgument implements ArgumentType<ColumnPosArgument> {
 	}
 }
 
-export class PlayerArgument implements ArgumentType<PlayerArgument> {
+export class PlayerArgument implements ArgumentType<string> {
 
-	public username: string = "";
-
-	public parse(reader: StringReader): PlayerArgument {
+	public parse(reader: StringReader): string {
 		const start: number = reader.getCursor();
 		while (reader.canRead() && reader.peek() !== " ") {
 			reader.skip();
@@ -151,13 +189,13 @@ export class PlayerArgument implements ArgumentType<PlayerArgument> {
 		const string: string = reader.getString();
 		const currentCursor: number = reader.getCursor();
 
-		this.username = string.slice(start, currentCursor);
+		const username: string = string.slice(start, currentCursor);
 
-		if (!this.username.match(/^[A-Za-z0-9_]{2,16}$/)) {
-			throw new SimpleCommandExceptionType(new LiteralMessage(this.username + " is not a valid username")).createWithContext(reader);
+		if (!username.match(/^[A-Za-z0-9_]{2,16}$/)) {
+			throw new SimpleCommandExceptionType(new LiteralMessage(username + " is not a valid username")).createWithContext(reader);
 		}
 
-		return this;
+		return username;
 	}
 
 	public getExamples(): string[] {
@@ -165,33 +203,32 @@ export class PlayerArgument implements ArgumentType<PlayerArgument> {
 	}
 }
 
-export class MultiLiteralArgument implements ArgumentType<MultiLiteralArgument> {
+export class MultiLiteralArgument implements ArgumentType<string> {
 
 	private literals: string[];
-	public selectedLiteral: string = "";
 
 	constructor(literals: string[]) {
 		this.literals = literals;
 	}
 
-	public parse(reader: StringReader) {
+	public parse(reader: StringReader): string {
 		const start: number = reader.getCursor();
 		while (reader.canRead() && reader.peek() !== " ") {
 			reader.skip();
 		}
 
-		this.selectedLiteral = reader.getString().slice(start, reader.getCursor());
+		let selectedLiteral = reader.getString().slice(start, reader.getCursor());
 
-		if (this.selectedLiteral.endsWith(" ")) {
-			this.selectedLiteral.trimEnd();
+		if (selectedLiteral.endsWith(" ")) {
+			selectedLiteral = selectedLiteral.trimEnd();
 			reader.setCursor(reader.getCursor() - 1);
 		}
 
-		if (!this.literals.includes(this.selectedLiteral)) {
-			throw new SimpleCommandExceptionType(new LiteralMessage(this.selectedLiteral + " is not one of " + this.literals)).createWithContext(reader);
+		if (!this.literals.includes(selectedLiteral)) {
+			throw new SimpleCommandExceptionType(new LiteralMessage(selectedLiteral + " is not one of " + this.literals)).createWithContext(reader);
 		}
 
-		return this;
+		return selectedLiteral;
 	}
 
 	public listSuggestions(_context: CommandContext<any>, builder: SuggestionsBuilder): Promise<Suggestions> {
@@ -206,7 +243,7 @@ export class MultiLiteralArgument implements ArgumentType<MultiLiteralArgument> 
 	}
 }
 
-export class ColorArgument implements ArgumentType<ColorArgument> {
+export class ColorArgument implements ArgumentType<string> {
 
 	static ChatColor: { [color: string]: string } = {
 		// Uses the section symbol (§), just like Minecraft
@@ -226,18 +263,15 @@ export class ColorArgument implements ArgumentType<ColorArgument> {
 		light_purple: "\u00A7d",
 		yellow: "\u00A7e",
 		white: "\u00A7f",
-	} as const;
+	};
 
-	public chatcolor: string = "";
-
-	public parse(reader: StringReader) {
+	public parse(reader: StringReader): string {
 		let input = reader.readUnquotedString();
-		let chatFormat: string | undefined = ColorArgument.ChatColor[input.toLowerCase()];
-		if (chatFormat === undefined) {
+		let chatColor: string | undefined = ColorArgument.ChatColor[input.toLowerCase()];
+		if (chatColor === undefined) {
 			throw new SimpleCommandExceptionType(new LiteralMessage(`Unknown colour '${input}'`)).createWithContext(reader);
 		}
-		this.chatcolor = chatFormat;
-		return this;
+		return chatColor;
 	}
 
 	public listSuggestions(_context: CommandContext<any>, builder: SuggestionsBuilder): Promise<Suggestions> {
@@ -249,7 +283,7 @@ export class ColorArgument implements ArgumentType<ColorArgument> {
 	}
 }
 
-export class PotionEffectArgument implements ArgumentType<PotionEffectArgument> {
+export class PotionEffectArgument implements ArgumentType<string> {
 
 	static readonly PotionEffects: readonly string[] = [
 		"minecraft:speed",
@@ -285,19 +319,16 @@ export class PotionEffectArgument implements ArgumentType<PotionEffectArgument> 
 		"minecraft:bad_omen",
 		"minecraft:hero_of_the_village",
 		"minecraft:darkness",
-	] as const;
+	];
 
-	public potionEffect: string = "";
-
-	public parse(reader: StringReader): PotionEffectArgument {
+	public parse(reader: StringReader): string {
 		const resourceLocation: [string, string] = reader.readResourceLocation();
-		const input = resourceLocation[0] + ":" + resourceLocation[1];
-		const isValidPotionEffect: boolean = PotionEffectArgument.PotionEffects.includes(input.toLowerCase());
+		const potionEffect = resourceLocation[0] + ":" + resourceLocation[1];
+		const isValidPotionEffect: boolean = PotionEffectArgument.PotionEffects.includes(potionEffect.toLowerCase());
 		if (!isValidPotionEffect) {
-			throw new SimpleCommandExceptionType(new LiteralMessage(`Unknown effect '${input}'`)).createWithContext(reader);
+			throw new SimpleCommandExceptionType(new LiteralMessage(`Unknown effect '${potionEffect}'`)).createWithContext(reader);
 		}
-		this.potionEffect = input;
-		return this;
+		return potionEffect;
 	}
 
 	public listSuggestions(_context: CommandContext<any>, builder: SuggestionsBuilder): Promise<Suggestions> {
@@ -309,7 +340,7 @@ export class PotionEffectArgument implements ArgumentType<PotionEffectArgument> 
 	}
 }
 
-export class AngleArgument implements ArgumentType<AngleArgument> {
+export class AngleArgument implements ArgumentType<{ angle: number, relative: boolean }> {
 
 	public angle: number;
 	public relative: boolean;
@@ -337,22 +368,48 @@ export class AngleArgument implements ArgumentType<AngleArgument> {
 	}
 }
 
-export class UUIDArgument implements ArgumentType<UUIDArgument> {
+export class UUIDArgument implements ArgumentType<string> {
 
-	public uuid: string;
-
-	public parse(reader: StringReader): UUIDArgument {
+	public parse(reader: StringReader): string {
 		const remaining: string = reader.getRemaining();
 		const matchedResults = remaining.match(/^([-A-Fa-f0-9]+)/);
 		if(matchedResults !== null && matchedResults[1] !== undefined) {
-			this.uuid = matchedResults[1];
+			const uuid = matchedResults[1];
 			// Regex for a UUID: https://stackoverflow.com/a/13653180/4779071
-			if(this.uuid.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i) !== null) {
-				reader.setCursor(reader.getCursor() + this.uuid.length);
-				return this;
+			if(uuid.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i) !== null) {
+				reader.setCursor(reader.getCursor() + uuid.length);
+				return uuid;
 			}
 		}
 		throw new SimpleCommandExceptionType(new LiteralMessage("Invalid UUID")).createWithContext(reader);
+	}
+
+	public getExamples(): string[] {
+		return ["dd12be42-52a9-4a91-a8a1-11c01849e498"];
+	}
+}
+
+const MathOperations = ["=", "+=", "-=", "*=", "/=", "%=", "<", ">", "><"] as const;
+export type MathOperation = typeof MathOperations[number];
+
+export class MathOperationArgument implements ArgumentType<MathOperation> {
+
+	public parse(reader: StringReader): MathOperation {
+		if (reader.canRead()) {
+			let start: number = reader.getCursor();
+			while (reader.canRead() && reader.peek() != ' ') {
+				reader.skip();
+			}
+			const mathOperation = reader.getString().substring(start, reader.getCursor());
+			if(MathOperations.includes(mathOperation as MathOperation)) {
+				return mathOperation as MathOperation;
+			}
+		}
+		throw new SimpleCommandExceptionType(new LiteralMessage("Invalid operation")).createWithContext(reader);
+	}
+
+	public listSuggestions(_context: CommandContext<any>, builder: SuggestionsBuilder): Promise<Suggestions> {
+		return HelperSuggestionProvider.suggest([...MathOperations], builder);
 	}
 
 	public getExamples(): string[] {
@@ -387,40 +444,11 @@ const entityTypes = [
 ] as const;
 type EntityType = typeof entityTypes[number];
 
-const EntityTags: readonly string[] = [
+const EntityTags = [
 	"arrows", "axolotl_always_hostiles", "axolotl_hunt_targets", "beehive_inhabitors",
 	"freeze_hurts_extra_types", "freeze_immune_entity_types", "frog_food", "impact_projectiles",
 	"powder_snow_walkable_mobs", "raiders", "skeletons"
-]
-
-
-class SuggestionsHelper {
-
-	public static shouldSuggest(remaining: string, suggestion: string): boolean {
-		let i: number = 0;
-		while(!suggestion.startsWith(remaining, i)) {
-			i = suggestion.indexOf("_", i);
-			if(i < 0) {
-				return false;
-			}
-			i++;
-		}
-		return true;
-	}
-
-	public static suggestMatching(reader: StringReader, suggestions: string[]): string[] {
-		let newSuggestions: string[] = [];
-		const remaining: string = reader.getRemaining().toLocaleLowerCase();
-		for(let suggestion of suggestions) {
-			if(!SuggestionsHelper.shouldSuggest(remaining, suggestion.toLocaleLowerCase())) {
-				continue;
-			}
-			newSuggestions.push(suggestion);
-		}
-		return newSuggestions;
-	}
-
-}
+] as const;
 
 // Effectively a giant merge of EntityArgument, EntitySelectorParser and EntitySelectorOptions
 export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgument> {
