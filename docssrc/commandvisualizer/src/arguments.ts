@@ -413,7 +413,7 @@ export class MathOperationArgument implements ArgumentType<MathOperation> {
 	}
 
 	public getExamples(): string[] {
-		return ["dd12be42-52a9-4a91-a8a1-11c01849e498"];
+		return ["=", ">", "<"];
 	}
 }
 

@@ -84,6 +84,7 @@ const VALID_BOX: HTMLDivElement = document.getElementById("valid-box") as HTMLDi
 const COMMANDS: HTMLTextAreaElement = document.getElementById("commands") as HTMLTextAreaElement;
 const CHAT_BOX: HTMLDivElement = document.getElementById("chatbox") as HTMLDivElement;
 const REGISTER_COMMANDS_BUTTON: HTMLButtonElement = document.getElementById("register-commands-button") as HTMLButtonElement;
+const APP_ERROR_BOX: HTMLDivElement = document.getElementById("app-error-box") as HTMLDivElement;
 
 const dispatcher = new MyCommandDispatcher<Source>();
 
@@ -305,7 +306,7 @@ function registerCommand(configCommand: string) {
 			// at the beginning of the array) because it's much much easier to process
 			argumentsToRegister.unshift(argument(nodeName, convertedArgumentType));
 		} else {
-			console.error(`${arg} has invalid syntax!`)
+			throw new Error(`${arg} has invalid syntax!`);
 		}
 	}
 
@@ -785,13 +786,28 @@ CHAT_BOX.onclick = function onChatBoxClicked() {
 	COMMAND_INPUT.focus();
 };
 
-const onRegisterCommandsButtonClicked = function() {
+const onRegisterCommandsButtonClicked = function onRegisterCommandsButtonClicked() {
 	dispatcher.deleteAll();
 	COMMANDS.value.split("\n").forEach(registerCommand);
 	onCommandInput(); // Run syntax highlighter
 }
 
 REGISTER_COMMANDS_BUTTON.onclick = onRegisterCommandsButtonClicked;
+
+window.onerror = function onError(_event, _source, _lineno, _colno, error) {
+	const errorElement: HTMLSpanElement = document.createElement("span");
+	errorElement.className = "errorEntry";
+	errorElement.innerText = `${error?.name}: ${error?.message}`;
+
+	const closeButton: HTMLSpanElement = document.createElement("span");
+	closeButton.innerText = "❌ ";
+	closeButton.onclick = function onCloseError(mouseEvent: MouseEvent) {
+		(mouseEvent.target as Element).parentElement?.remove();
+	};
+
+	errorElement.prepend(closeButton);
+	APP_ERROR_BOX.appendChild(errorElement);
+}
 
 
 /******************************************************************************

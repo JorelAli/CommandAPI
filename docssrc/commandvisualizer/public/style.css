@@ -13,7 +13,7 @@ body {
 	background-color: black;
 }
 
-#chatbox, #error-box, #suggestions-box, #valid-box {
+#chatbox, #error-box, #suggestions-box, #valid-box, #app-error-box {
 	font-family: CustomFont;
 	color: #a8a8a8;
 	font-size: 28pt;
@@ -89,7 +89,7 @@ span {
 	background: #555555; 
 }
 
-#valid-box {
+#valid-box, #app-error-box {
 	bottom: calc(49px + 49px);
 	width: unset;
 	background-color: #161e2c;
@@ -131,6 +131,11 @@ span {
 }
 #register-commands-button:active {
 	box-shadow: inset -2px -4px #0004, inset 2px 2px #FFF5;
+}
+
+.errorEntry {
+	display: block;
+	font-size: 20pt;
 }
 
 /****************
