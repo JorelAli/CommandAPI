@@ -727,6 +727,15 @@ SUGGESTIONS_BOX.addEventListener("mouseover", (evt: MouseEvent) => {
 	}
 });
 
+SUGGESTIONS_BOX.addEventListener("mousedown", (evt: MouseEvent) => {
+	if(!SUGGESTIONS_BOX.hidden && [...SUGGESTIONS_BOX.children].includes(evt.target as Element)) {
+		evt.preventDefault();
+		setText(getText(false).slice(1) + COMMAND_INPUT_AUTOCOMPLETE.innerText);
+		onCommandInput();
+		setCursorPosition(COMMAND_INPUT.innerText.length, COMMAND_INPUT);
+	}
+});
+
 window.addEventListener("suggestionsUpdated", (_event: Event) => {
 	const rawText: string = COMMAND_INPUT.innerText.replaceAll("\u00a0", " "); // Replace &nbsp; with normal spaces
 

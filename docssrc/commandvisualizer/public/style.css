@@ -55,7 +55,7 @@ span {
 	margin: 10px;
 }
 
-#error-box, #suggestions-box, #valid-box {
+#error-box, #suggestions-box {
 	background-color: #161e2c;
 	padding-left: 8px;
 	/* 8px padding left, 10px margin (left), 10px margin (right) */
@@ -92,6 +92,12 @@ span {
 #valid-box {
 	bottom: calc(49px + 49px);
 	width: unset;
+	background-color: #161e2c;
+	padding-left: 8px;
+	/* 8px padding left */
+	width: calc(100% - 8px);
+	bottom: 49px;
+	left: 0;
 }
 
 #commands {
