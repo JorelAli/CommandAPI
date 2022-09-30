@@ -531,6 +531,146 @@ export class FunctionArgument implements ArgumentType<{ isTag: boolean, resource
 	}
 }
 
+export class ItemSlotArgument implements ArgumentType<string> {
+
+	static slotNames: string[] = [
+		...[...Array(54).keys()].map(x => `container.${x}`),
+		...[...Array(9).keys()].map(x => `hotbar.${x}`),
+		...[...Array(27).keys()].map(x => `inventory.${x}`),
+		...[...Array(27).keys()].map(x => `enderchest.${x}`),
+		...[...Array(8).keys()].map(x => `villager.${x}`),
+		...[...Array(15).keys()].map(x => `horse.${x}`),
+		"weapon", 
+		"weapon.mainhand", 
+		"weapon.offhand", 
+		"armor.head", 
+		"armor.chest", 
+		"armor.legs", 
+		"armor.feet", 
+		"horse.saddle", 
+		"horse.armor",
+		"horse.chest",
+	];
+
+	public parse(reader: StringReader): string {
+		const slot: string = reader.readUnquotedString();
+		if(!ItemSlotArgument.slotNames.includes(slot)) {
+			throw new SimpleCommandExceptionType(new LiteralMessage(`Unknown slot '${slot}'`)).createWithContext(reader);
+		}
+		return slot;
+	}
+
+	public listSuggestions(_context: CommandContext<any>, builder: SuggestionsBuilder): Promise<Suggestions> {
+		return HelperSuggestionProvider.suggest(ItemSlotArgument.slotNames, builder);
+	}
+
+	public getExamples(): string[] {
+		return ["container.5", "12", "weapon"];
+	}
+}
+
+export class ResourceLocationArgument implements ArgumentType<[string, string]> {
+
+	public parse(reader: StringReader): [string, string] {
+		return reader.readResourceLocation();
+	}
+
+	public getExamples(): string[] {
+		return ["foo", "foo:bar", "012"];
+	}
+}
+
+export type Rotation = [{ value: number, relative: boolean }, { value: number, relative: boolean }];
+export class RotationArgument implements ArgumentType<Rotation> {
+
+	public parse(reader: StringReader): Rotation {
+		const start: number = reader.getCursor();
+		if(!reader.canRead()) {
+			throw new SimpleCommandExceptionType(new LiteralMessage("Incomplete (expected 2 coordinates)")).createWithContext(reader);
+		}
+
+		// TODO: This needs support FLOATS
+		reader.readLocationLiteral();
+
+		if (!reader.canRead() || reader.peek() != " ") {
+			reader.setCursor(start);
+			throw new SimpleCommandExceptionType(new LiteralMessage("Incomplete (expected 2 coordinates)")).createWithContext(reader);
+		}
+
+		reader.skip();
+		// TODO: This needs support FLOATS
+		reader.readLocationLiteral();
+
+		// TODO: Implement actual values
+		return [{ value: 0, relative: false }, { value: 0, relative: false }];
+	}
+
+	public getExamples(): string[] {
+		return ["0 0", "~ ~", "~-5 ~5"];
+	}
+}
+
+export class ScoreboardSlotArgument implements ArgumentType<number> {
+
+	static chatFormatNames: string[] = [
+		"black",
+		"dark_blue",
+		"dark_green",
+		"dark_aqua",
+		"dark_red",
+		"dark_purple",
+		"gold",
+		"gray",
+		"dark_gray",
+		"blue",
+		"green",
+		"aqua",
+		"red",
+		"light_purple",
+		"yellow",
+		"white"
+	];
+
+	public parse(reader: StringReader): number {
+		const input: string = reader.readUnquotedString().toLowerCase();
+
+		switch(input) {
+			case "list": return 0;
+			case "sidebar": return 1;
+			case "belowname": return 2; // belowName
+			default: {
+				if(input.startsWith("sidebar.team.")) {
+					const index: number = ScoreboardSlotArgument.chatFormatNames.indexOf(input.slice("sidebar.team.".length));
+					if(index >= 0) {
+						return index + 3;
+					}
+				}
+			}
+		}
+
+		throw new SimpleCommandExceptionType(new LiteralMessage(`Unknown display slot '${input}'`)).createWithContext(reader);
+	}
+
+	public getExamples(): string[] {
+		return ["sidebar", "foo.bar"];
+	}
+}
+
+export class DimensionArgument implements ArgumentType<[string, string]> {
+
+	public parse(reader: StringReader): [string, string] {
+		return reader.readResourceLocation();
+	}
+
+	public listSuggestions(_context: CommandContext<any>, builder: SuggestionsBuilder): Promise<Suggestions> {
+		return HelperSuggestionProvider.suggest(this.getExamples(), builder);
+	}
+
+	public getExamples(): string[] {
+		return ["overworld", "the_nether", "the_end"];
+	}
+}
+
 type Modifier = (reader: StringReader) => void;
 type OptionsType =
 	"name" | "distance" | "level" | "x" | "y" | "z" | "dx" | "dy" | "dz" |

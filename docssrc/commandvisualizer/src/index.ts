@@ -35,7 +35,12 @@ import {
 	NBTCompoundArgument,
 	EnchantmentArgument,
 	RangeArgument,
-	FunctionArgument
+	FunctionArgument,
+	ItemSlotArgument,
+	ResourceLocationArgument,
+	RotationArgument,
+	ScoreboardSlotArgument,
+	DimensionArgument
 } from "./arguments"
 
 /******************************************************************************
@@ -182,8 +187,8 @@ const ArgumentType = new Map<string, () => BrigadierArgumentType<unknown>>([
 	["minecraft:color", () => new ColorArgument()],
 	["minecraft:column_pos", () => new ColumnPosArgument()],
 	["minecraft:component", () => new UnimplementedArgument()],
-	["minecraft:dimension", () => new UnimplementedArgument()],
-	["minecraft:entity", () => new UnimplementedArgument()],
+	["minecraft:dimension", () => new DimensionArgument()],
+	["minecraft:entity", () => new EntitySelectorArgument(true, false)], // Identical to api:entity
 	["minecraft:entity_anchor", () => new UnimplementedArgument()],
 	["minecraft:entity_summon", () => new UnimplementedArgument()],
 	["minecraft:float_range", () => new RangeArgument(true)],
@@ -192,7 +197,7 @@ const ArgumentType = new Map<string, () => BrigadierArgumentType<unknown>>([
 	["minecraft:int_range", () => new RangeArgument(false)],
 	["minecraft:item_enchantment", () => new EnchantmentArgument()],
 	["minecraft:item_predicate", () => new UnimplementedArgument()],
-	["minecraft:item_slot", () => new UnimplementedArgument()],
+	["minecraft:item_slot", () => new ItemSlotArgument()],
 	["minecraft:item_stack", () => new UnimplementedArgument()],
 	["minecraft:message", () => greedyStringArgument()], // Close enough
 	["minecraft:mob_effect", () => new PotionEffectArgument()],
@@ -204,10 +209,10 @@ const ArgumentType = new Map<string, () => BrigadierArgumentType<unknown>>([
 	["minecraft:objective_criteria", () => new UnimplementedArgument()],
 	["minecraft:operation", () => new MathOperationArgument()],
 	["minecraft:particle", () => new UnimplementedArgument()],
-	["minecraft:resource_location", () => new UnimplementedArgument()],
-	["minecraft:rotation", () => new UnimplementedArgument()],
+	["minecraft:resource_location", () => new ResourceLocationArgument()],
+	["minecraft:rotation", () => new RotationArgument()],
 	["minecraft:score_holder", () => new UnimplementedArgument()],
-	["minecraft:scoreboard_slot", () => new UnimplementedArgument()],
+	["minecraft:scoreboard_slot", () => new ScoreboardSlotArgument()],
 	["minecraft:swizzle", () => new UnimplementedArgument()],
 	["minecraft:team", () => singleWordArgument()], // Examples: ["foo", "123"]
 	["minecraft:time", () => new TimeArgument()],
