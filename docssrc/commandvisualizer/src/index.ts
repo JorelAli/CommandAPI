@@ -31,7 +31,11 @@ import {
 	UUIDArgument,
 	EntitySelectorArgument,
 	UnimplementedArgument,
-	MathOperationArgument
+	MathOperationArgument,
+	NBTCompoundArgument,
+	EnchantmentArgument,
+	RangeArgument,
+	FunctionArgument
 } from "./arguments"
 
 /******************************************************************************
@@ -152,7 +156,7 @@ const ArgumentColors: { [colorIndex: number]: String } = {
 } as const;
 
 // As implemented by https://commandapi.jorel.dev/8.5.1/internal.html
-const ArgumentType = new Map<String, () => BrigadierArgumentType<unknown>>([
+const ArgumentType = new Map<string, () => BrigadierArgumentType<unknown>>([
 	// CommandAPI separation. These are the various EntitySelectorArgument<> types
 	["api:entity", () => new EntitySelectorArgument(true, false)],
 	["api:entities", () => new EntitySelectorArgument(false, false)],
@@ -182,21 +186,21 @@ const ArgumentType = new Map<String, () => BrigadierArgumentType<unknown>>([
 	["minecraft:entity", () => new UnimplementedArgument()],
 	["minecraft:entity_anchor", () => new UnimplementedArgument()],
 	["minecraft:entity_summon", () => new UnimplementedArgument()],
-	["minecraft:float_range", () => new UnimplementedArgument()],
-	["minecraft:function", () => new UnimplementedArgument()],
+	["minecraft:float_range", () => new RangeArgument(true)],
+	["minecraft:function", () => new FunctionArgument()],
 	["minecraft:game_profile", () => new PlayerArgument()],
-	["minecraft:int_range", () => new UnimplementedArgument()],
-	["minecraft:item_enchantment", () => new UnimplementedArgument()],
+	["minecraft:int_range", () => new RangeArgument(false)],
+	["minecraft:item_enchantment", () => new EnchantmentArgument()],
 	["minecraft:item_predicate", () => new UnimplementedArgument()],
 	["minecraft:item_slot", () => new UnimplementedArgument()],
 	["minecraft:item_stack", () => new UnimplementedArgument()],
 	["minecraft:message", () => greedyStringArgument()], // Close enough
 	["minecraft:mob_effect", () => new PotionEffectArgument()],
 	["minecraft:nbt", () => new UnimplementedArgument()],
-	["minecraft:nbt_compound_tag", () => new UnimplementedArgument()],
+	["minecraft:nbt_compound_tag", () => new NBTCompoundArgument()],
 	["minecraft:nbt_path", () => new UnimplementedArgument()],
 	["minecraft:nbt_tag", () => new UnimplementedArgument()],
-	["minecraft:objective", () => new UnimplementedArgument()],
+	["minecraft:objective", () => singleWordArgument()], // Examples: ["foo", "*", "012"]
 	["minecraft:objective_criteria", () => new UnimplementedArgument()],
 	["minecraft:operation", () => new MathOperationArgument()],
 	["minecraft:particle", () => new UnimplementedArgument()],
@@ -205,7 +209,7 @@ const ArgumentType = new Map<String, () => BrigadierArgumentType<unknown>>([
 	["minecraft:score_holder", () => new UnimplementedArgument()],
 	["minecraft:scoreboard_slot", () => new UnimplementedArgument()],
 	["minecraft:swizzle", () => new UnimplementedArgument()],
-	["minecraft:team", () => singleWordArgument()],
+	["minecraft:team", () => singleWordArgument()], // Examples: ["foo", "123"]
 	["minecraft:time", () => new TimeArgument()],
 	["minecraft:uuid", () => new UUIDArgument()],
 	["minecraft:vec2", () => new UnimplementedArgument()],
@@ -306,7 +310,7 @@ function registerCommand(configCommand: string) {
 			// at the beginning of the array) because it's much much easier to process
 			argumentsToRegister.unshift(argument(nodeName, convertedArgumentType));
 		} else {
-			throw new Error(`${arg} has invalid syntax!`);
+			throw new Error(`${arg} has invalid syntax! Valid syntax examples: (literal|literal), <arg>[minecraft:]`);
 		}
 	}
 

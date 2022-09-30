@@ -340,6 +340,69 @@ export class PotionEffectArgument implements ArgumentType<string> {
 	}
 }
 
+export class EnchantmentArgument implements ArgumentType<string> {
+
+	static readonly Enchantments: readonly string[] = [
+		"minecraft:protection",
+		"minecraft:fire_protection",
+		"minecraft:feather_falling",
+		"minecraft:blast_protection",
+		"minecraft:projectile_protection",
+		"minecraft:respiration",
+		"minecraft:aqua_affinity",
+		"minecraft:thorns",
+		"minecraft:depth_strider",
+		"minecraft:frost_walker",
+		"minecraft:binding_curse",
+		"minecraft:soul_speed",
+		"minecraft:swift_sneak",
+		"minecraft:sharpness",
+		"minecraft:smite",
+		"minecraft:bane_of_arthropods",
+		"minecraft:knockback",
+		"minecraft:fire_aspect",
+		"minecraft:looting",
+		"minecraft:sweeping",
+		"minecraft:efficiency",
+		"minecraft:silk_touch",
+		"minecraft:unbreaking",
+		"minecraft:fortune",
+		"minecraft:power",
+		"minecraft:punch",
+		"minecraft:flame",
+		"minecraft:infinity",
+		"minecraft:luck_of_the_sea",
+		"minecraft:lure",
+		"minecraft:loyalty",
+		"minecraft:impaling",
+		"minecraft:riptide",
+		"minecraft:channeling",
+		"minecraft:multishot",
+		"minecraft:quick_charge",
+		"minecraft:piercing",
+		"minecraft:mending",
+		"minecraft:vanishing_curse",
+	];
+
+	public parse(reader: StringReader): string {
+		const resourceLocation: [string, string] = reader.readResourceLocation();
+		const enchantment = resourceLocation[0] + ":" + resourceLocation[1];
+		const isValidEnchantment: boolean = EnchantmentArgument.Enchantments.includes(enchantment.toLowerCase());
+		if (!isValidEnchantment) {
+			throw new SimpleCommandExceptionType(new LiteralMessage(`Unknown enchantment '${enchantment}'`)).createWithContext(reader);
+		}
+		return enchantment;
+	}
+
+	public listSuggestions(_context: CommandContext<any>, builder: SuggestionsBuilder): Promise<Suggestions> {
+		return HelperSuggestionProvider.suggest([...EnchantmentArgument.Enchantments], builder);
+	}
+
+	public getExamples(): string[] {
+		return ["unbreaking", "silk_touch"];
+	}
+}
+
 export class AngleArgument implements ArgumentType<{ angle: number, relative: boolean }> {
 
 	public angle: number;
@@ -414,6 +477,57 @@ export class MathOperationArgument implements ArgumentType<MathOperation> {
 
 	public getExamples(): string[] {
 		return ["=", ">", "<"];
+	}
+}
+
+export class NBTCompoundArgument implements ArgumentType<string> {
+
+	public parse(reader: StringReader): string {
+		return reader.readNBT();
+	}
+
+	public getExamples(): string[] {
+		return ["{}", "{foo=bar}"];
+	}
+}
+
+export class RangeArgument implements ArgumentType<[number, number]> {
+
+	private allowFloats: boolean;
+
+	constructor(allowFloats: boolean) {
+		this.allowFloats = allowFloats;
+	}
+
+	public parse(reader: StringReader): [number, number] {
+		return reader.readMinMaxBounds(this.allowFloats);
+	}
+
+	public getExamples(): string[] {
+		if(this.allowFloats) {
+			return ["0..5.2", "0", "-5.4", "-100.76..", "..100"];
+		} else {
+			return ["0..5", "0", "-5", "-100..", "..100"];
+		}
+	}
+}
+
+export class FunctionArgument implements ArgumentType<{ isTag: boolean, resource: [string, string] }> {
+
+	public parse(reader: StringReader): { isTag: boolean, resource: [string, string] } {
+		let isTag = false;
+		if(reader.canRead() && reader.peek() === "#") {
+			reader.skip();
+			isTag = true;
+		}
+		return {
+			isTag: isTag,
+			resource: reader.readResourceLocation()
+		};
+	}
+
+	public getExamples(): string[] {
+		return ["{}", "{foo=bar}"];
 	}
 }
 
@@ -559,8 +673,8 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 		dx: (reader: StringReader): void => { reader.readFloat() },
 		dy: (reader: StringReader): void => { reader.readFloat() },
 		dz: (reader: StringReader): void => { reader.readFloat() },
-		x_rotation: (reader: StringReader): void => { reader.readMinMaxBounds() },
-		y_rotation: (reader: StringReader): void => { reader.readMinMaxBounds() },
+		x_rotation: (reader: StringReader): void => { reader.readMinMaxBounds(true) },
+		y_rotation: (reader: StringReader): void => { reader.readMinMaxBounds(true) },
 		limit: (reader: StringReader): void => {
 			const start: number = reader.getCursor();
 			const limit: number = reader.readInt();
@@ -659,7 +773,7 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 				reader.skipWhitespace();
 				reader.expect('=');
 				reader.skipWhitespace();
-				reader.readMinMaxBounds();
+				reader.readMinMaxBounds(false);
 				reader.skipWhitespace();
 				if (reader.canRead() && reader.peek() == ',') {
 					reader.skip(); 

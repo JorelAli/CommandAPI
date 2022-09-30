@@ -17,6 +17,7 @@
         "noImplicitReturns": true,
         "noPropertyAccessFromIndexSignature": true,
         "noUncheckedIndexedAccess": true,
-        "strictNullChecks": true
+        "strictNullChecks": true,
+        "allowUnreachableCode": false
     }
 }

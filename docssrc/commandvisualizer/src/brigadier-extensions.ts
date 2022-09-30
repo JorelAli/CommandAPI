@@ -27,7 +27,7 @@ declare module "node-brigadier" {
 		// New reading methods
 		readLocationLiteral(): number;
 		readResourceLocation(): [string, string];
-		readMinMaxBounds(): [number, number];
+		readMinMaxBounds(allowFloats: boolean): [number, number];
 		readNBT(): string;
 
 		/** @returns true if a negation character `!` was read */
@@ -127,7 +127,7 @@ StringReader.prototype.readResourceLocation = function readResourceLocation(): [
 	return [resourceLocationParts[0], resourceLocationParts[1]];
 };
 
-StringReader.prototype.readMinMaxBounds = function readMinMaxBounds(): [number, number] {
+StringReader.prototype.readMinMaxBounds = function readMinMaxBounds(allowFloats: boolean): [number, number] {
 	if (!this.canRead()) {
 		throw new SimpleCommandExceptionType(new LiteralMessage(`Expected value or range of values`)).createWithContext(this);
 	}
@@ -137,7 +137,7 @@ StringReader.prototype.readMinMaxBounds = function readMinMaxBounds(): [number, 
 	let max: number | null = null;
 
 	try {
-		min = this.readFloat();
+		min = allowFloats ? this.readFloat() : this.readInt();
 	} catch (error) {
 		// ignore it
 	}
@@ -147,7 +147,7 @@ StringReader.prototype.readMinMaxBounds = function readMinMaxBounds(): [number, 
 		this.skip();
 
 		try {
-			max = this.readFloat();
+			max = allowFloats ? this.readFloat() : this.readInt();
 		} catch (error) {
 			// ignore it
 		}
