@@ -20,31 +20,30 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import org.bukkit.advancement.Advancement;
-
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.polyfills.AdvancementPolyfill;
 
 /**
  * An argument that represents the Bukkit Advancement object
  * @apiNote Returns an {@link Advancement} object
  */
-public class AdvancementArgument extends SafeOverrideableArgument<Advancement, Advancement> implements ICustomProvidedArgument {
+public class AdvancementArgument extends SafeOverrideableArgument<AdvancementPolyfill, AdvancementPolyfill> implements ICustomProvidedArgument {
 	
 	/**
 	 * Constructs an AdvancementArgument with a given node name
 	 * @param nodeName the name of the node for argument
 	 */
 	public AdvancementArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered(), fromKey(Advancement::getKey));
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered(), fromKey(AdvancementPolyfill::getKey));
 	}
 
 	@Override
-	public Class<Advancement> getPrimitiveType() {
-		return Advancement.class;
+	public Class<AdvancementPolyfill> getPrimitiveType() {
+		return AdvancementPolyfill.class;
 	}
 	
 	@Override
@@ -58,7 +57,7 @@ public class AdvancementArgument extends SafeOverrideableArgument<Advancement, A
 	}
 
 	@Override
-	public <CommandListenerWrapper> Advancement parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> AdvancementPolyfill parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getAdvancement(cmdCtx, key);
 	}
