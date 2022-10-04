@@ -9,7 +9,11 @@
 	src: url("MinecraftRegular-Bmg3.otf") format("opentype");
 }
 
-#chatbox, #error-box, #suggestions-box, #valid-box {
+body {
+	background-color: black;
+}
+
+#chatbox, #error-box, #suggestions-box, #valid-box, #app-error-box {
 	font-family: CustomFont;
 	color: #a8a8a8;
 	font-size: 28pt;
@@ -51,7 +55,7 @@ span {
 	margin: 10px;
 }
 
-#error-box, #suggestions-box, #valid-box {
+#error-box, #suggestions-box {
 	background-color: #161e2c;
 	padding-left: 8px;
 	/* 8px padding left, 10px margin (left), 10px margin (right) */
@@ -65,12 +69,35 @@ span {
 #suggestions-box {
 	left: 28px; /* This position will have to change over time, we'll figure that out later*/
 	width: unset;
-	padding-right: 8px;
+	padding-right: 24px;
+	max-height: 400px;
+	overflow: auto;
 }
 
-#valid-box {
+/* width */
+#suggestions-box::-webkit-scrollbar {
+	width: 15px;
+}
+
+/* Handle */
+#suggestions-box::-webkit-scrollbar-thumb {
+	background: gray;
+}
+
+/* Handle on hover */
+#suggestions-box::-webkit-scrollbar-thumb:hover {
+	background: #555555; 
+}
+
+#valid-box, #app-error-box {
 	bottom: calc(49px + 49px);
 	width: unset;
+	background-color: #161e2c;
+	padding-left: 8px;
+	/* 8px padding left */
+	width: calc(100% - 8px);
+	bottom: 49px;
+	left: 0;
 }
 
 #commands {
@@ -78,6 +105,9 @@ span {
 	width: 100%;
 	height: 150px;
 	font-family: monospace;
+	font-size: 16pt;
+	color: white;
+	background-color: #161e2c;
 }
 
 /* From https://codepen.io/joexmdq/pen/EOMLzg */
@@ -101,6 +131,11 @@ span {
 }
 #register-commands-button:active {
 	box-shadow: inset -2px -4px #0004, inset 2px 2px #FFF5;
+}
+
+.errorEntry {
+	display: block;
+	font-size: 20pt;
 }
 
 /****************

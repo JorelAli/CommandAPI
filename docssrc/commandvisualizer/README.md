@@ -1,18 +1,17 @@
 # Command Visualizer
 
-A JavaScript-based embedded Minecraft command viewing interface.
+A TypeScript-based embedded Minecraft command viewing interface.
 
 ## Building
 
 - Get [Node.js](https://nodejs.org/en/) if you don't already have it
 - Run `npm install`
-- Run `npx webpack ./commandvisualizer.js -o .`
+- Run `npx webpack`
 
 ## Testing (e.g. how to use in your local browser)
 
-- Run `npm install http-server`
-- Run `npx http-server .`
-- Run `npx webpack ./commandvisualizer.js -o . -d source-map` command above when necessary to update local JavaScript changes
+- Run `npx webpack serve`
+- Navigate to `http://localhost:8080`
 
 ## Acknowledgements
 

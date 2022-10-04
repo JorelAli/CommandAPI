@@ -10,6 +10,6 @@ target
 logs/latest.log
 commandapi-plugin/dependency-reduced-pom.xml
 commandapi-shade/dependency-reduced-pom.xml
-.vscode/settings.json
+.vscode
 commandapi-plugin-test/command_registration.json
 commandapi-plugin-test/logs/*

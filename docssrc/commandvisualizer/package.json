@@ -4,14 +4,19 @@
   "description": "Web-based Minecraft command viewer",
   "main": "commandvisualizer.js",
   "dependencies": {
+    "mojangson-parser": "^2.1.5",
     "node-brigadier": "^0.0.12",
     "webpack": "^5.74.0"
   },
   "devDependencies": {
-    "webpack-cli": "^4.10.0"
+    "ts-loader": "^9.4.1",
+    "typescript": "^4.8.3",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.11.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "echo hi"
   },
   "author": "",
   "license": "ISC"
