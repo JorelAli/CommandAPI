@@ -58,17 +58,13 @@
 		<!-- Compile time reflection checker -->
 		<module>commandapi-preprocessor</module>
 
-		<!-- NMS versions -->
-		<module>commandapi-nms</module>
-
-		<!-- Main core code + NMS selector -->
+		<!-- Main core code -->
 		<module>commandapi-core</module>
-		<module>commandapi-vh</module>
+
+		<!-- Platform implementions -->
+		<module>commandapi-platforms</module>
 
 		<!-- Outputs -->
-		<module>commandapi-plugin</module>
-		<module>commandapi-plugin-test</module>
-		<module>commandapi-shade</module>
 		<module>commandapi-annotations</module>
 	</modules>
 
