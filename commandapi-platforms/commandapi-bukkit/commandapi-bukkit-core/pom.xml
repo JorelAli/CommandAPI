@@ -11,4 +11,19 @@
 	</parent>
 
 	<artifactId>commandapi-bukkit-core</artifactId>
+
+	<dependencies>
+		<dependency>
+			<groupId>net.kyori</groupId>
+			<artifactId>adventure-platform-bukkit</artifactId>
+			<version>4.1.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.papermc.paper</groupId>
+			<artifactId>paper-api</artifactId>
+			<version>${paper.version}</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
 </project>
