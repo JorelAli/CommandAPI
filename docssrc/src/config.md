@@ -1,33 +1,197 @@
 # Configuration for server owners
 
-The CommandAPI has a few configuration options to change how it functions. These options can be configured in the `plugins/CommandAPI/config.yml` file, which is generated automatically when the CommandAPI runs for the first time.
+The CommandAPI has a few configuration options to change how it functions. These options can be set in the `plugins/CommandAPI/config.yml` file, which is generated automatically when the CommandAPI runs for the first time.
 
-**Configuration settings:**
-
-- **`verbose-outputs`** - If `true`, outputs command registration and unregistration logs in the console
-
-- **`silent-logs`** - If `true`, turns off all logging from the CommandAPI, except for errors
-
-- **`missing-executor-implementation`** - Sets the text to display when a command is run by an executor which has not been implemented (for example, if a command can only be run by the console and a player tries to run the command).
-
-- **`create-dispatcher-json`** - If `true`, the CommandAPI creates a `command_registration.json` file showing the mapping of registered commands. This is designed to be used by developers - setting this to `false` will improve command registration performance
-
-- **`use-latest-nms-version`** - If `true`, the CommandAPI will always use the latest NMS implementation.
-
-  > **Developer's Note:**
-  >
-  > This can be used to run the CommandAPI on versions higher than it can support. For example, if the CommandAPI supports Minecraft 1.18 and Minecraft 1.18.1 comes out, you can use this to enable support for 1.18.1 before an official CommandAPI release comes out that supports 1.18.1. This feature is not guaranteed to work in every case, so beware!
-
-- **`plugins-to-convert`** - Controls the list of plugins to process for command conversion. See [Command conversion](./conversionforowners.md) for more information!
-
-- **`skip-sender-proxy`** - Determines whether the proxy sender should be skipped when converting a command. See [Skipping proxy senders](./skippingproxysenders.md) for more information!
-
-- **`other-commands-to-convert`** - A list of other commands to convert. This should be used for commands which are not declared in a `plugin.yml` file. See [Arbitrary command conversion](./conversionforownerssingle.md#arbitrary-command-conversion) for more information
-
-## Default configuration file
+## Default `config.yml` file
 
 The default `config.yml` is shown below:
 
+<details>
+  <summary><b>config.yml</b></summary>
+
 ```yaml
 {{#include ../../commandapi-plugin/src/main/resources/config.yml}}
+```
+
+</details>
+
+## Configuration settings
+
+-----
+
+### `verbose-outputs`
+
+If `true`, outputs command registration and unregistration logs in the console. This is primarily used for developers to identify issues with command registration.
+
+**Default value**
+
+```yml
+verbose-outputs: false
+```
+
+**Example value**
+
+```yml
+verbose-outputs: true
+```
+
+-----
+
+### `silent-logs`
+
+If `true`, turns off all logging from the CommandAPI, except for errors.
+
+**Default value**
+
+```yml
+silent-logs: false
+```
+
+**Example value**
+
+```yml
+silent-logs: true
+```
+
+-----
+
+### `messages`
+
+Controls messages that the CommandAPI displays to players. Available messages:
+
+- `missing-executor-implementation` - the message to display to senders when a command has no executor. This message supports format parameters:
+  - `%s` - the executor class (lowercase). For example "craftplayer"
+  - `%S` - the executor class (normal case). For example "CraftPlayer"
+
+**Default value**
+
+```yml
+messages:
+  missing-executor-implementation: "This command has no implementations for %s"
+```
+
+-----
+
+### `create-dispatcher-json`
+
+Controls whether the CommandAPI should generate a `command_registration.json` file showing the mapping of registered commands.
+
+This is primarily designed to be used by developers. Setting this to `false` will slightly improve command registration performance.
+
+The `command_registration.json` JSON representation of commands is in the same format as Minecraft's [_Data Generators_ Commands report](https://wiki.vg/Data_Generators#Commands_report). The format is Brigadier's command graph - more information about the JSON format can be found [here](https://wiki.vg/Command_Data).
+
+**Default value**
+
+```yml
+create-dispatcher-json: false
+```
+
+**Example value**
+
+```yml
+create-dispatcher-json: true
+```
+
+-----
+
+### `use-latest-nms-version`
+
+Controls whether the CommandAPI should use the latest NMS implementation for command registration and execution.
+
+This setting can be used to run the CommandAPI on Minecraft versions higher than it can support. For example, if the CommandAPI supports Minecraft 1.18 and Minecraft 1.18.1 comes out, you can use this to enable support for 1.18.1 before an official CommandAPI release comes out that supports 1.18.1.
+
+<div class="warning">
+
+This feature is very experimental and should only be used if you know what you are doing. In almost every case, it is better to wait for an official CommandAPI release that supports the latest version of Minecraft. Using `use-latest-nms-version` is _not_ guaranteed to work and can cause unexpected side-effects!
+
+</div>
+
+**Default value**
+
+```yml
+use-latest-nms-version: false
+```
+
+**Example value**
+
+```yml
+use-latest-nms-version: true
+```
+
+-----
+
+### `plugins-to-convert`
+
+Controls the list of plugins to process for command conversion. See [Command conversion](./conversionforowners.md) for more information.
+
+**Default value**
+
+```yml
+plugins-to-convert: []
+```
+
+**Example values**
+
+```yml
+plugins-to-convert:
+  - Essentials: ~
+```
+
+```yml
+plugins-to-convert:
+  - Essentials:
+    - speed
+    - hat
+  - MyPlugin:
+    - mycommand
+  - MyOtherPlugin: ~
+```
+
+```yml
+plugins-to-convert:
+  - Essentials:
+    - speed <speed>[0..10]
+    - speed <target>[minecraft:game_profile]
+    - speed (walk|fly) <speed>[0..10]
+    - speed (walk|fly) <speed>[0..10] <target>[minecraft:game_profile]
+```
+
+-----
+
+### `skip-sender-proxy`
+
+Determines whether the proxy sender should be skipped when converting a command. See [Skipping proxy senders](./skippingproxysenders.md) for more information.
+
+**Default value**
+
+```yml
+skip-sender-proxy: []
+```
+
+**Example value**
+
+```yml
+skip-sender-proxy:
+  - SkinsRestorer
+  - MyPlugin
+```
+
+-----
+
+### `other-commands-to-convert`
+
+A list of other commands to convert. This should be used for commands which are not declared in a `plugin.yml` file. See [Arbitrary command conversion](./conversionforownerssingle.md#arbitrary-command-conversion) for more information.
+
+**Default value**
+
+```yml
+other-commands-to-convert: []
+```
+
+**Example value**
+
+```yml
+other-commands-to-convert:
+  - /set
+  - mycommand
 ```
