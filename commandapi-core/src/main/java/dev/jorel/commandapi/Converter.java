@@ -36,6 +36,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.GreedyStringArgument;
 import dev.jorel.commandapi.executors.NativeCommandExecutor;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
@@ -49,7 +50,6 @@ public final class Converter {
 	private Converter() {
 	}
 
-	private static final List<Argument<?>> PLAIN_ARGUMENTS = Arrays.asList(new GreedyStringArgument("args"));
 	private static final Set<String> CALLER_METHODS = Set.of("isPermissionSet", "hasPermission",
 			"addAttachment", "removeAttachment", "recalculatePermissions", "getEffectivePermissions", "isOp", "setOp");
 
@@ -62,7 +62,10 @@ public final class Converter {
 	public static void convert(JavaPlugin plugin) {
 		CommandAPI.logInfo("Converting commands for " + plugin.getName() + ":");
 		for (String commandName : plugin.getDescription().getCommands().keySet()) {
-			convertPluginCommand(plugin, commandName, PLAIN_ARGUMENTS);
+			List<Argument<?>> args = List.of(new GreedyStringArgument("args").replaceSuggestions(ArgumentSuggestions.strings(info -> {
+				return Bukkit.getPluginCommand(commandName).tabComplete(info.sender(), commandName, info.currentArg().split(" ")).toArray(new String[0]);
+			})));
+			convertPluginCommand(plugin, commandName, args);
 		}
 	}
 
@@ -74,7 +77,12 @@ public final class Converter {
 	 * @param cmdName The command to convert
 	 */
 	public static void convert(JavaPlugin plugin, String cmdName) {
-		convertPluginCommand(plugin, cmdName, PLAIN_ARGUMENTS);
+		
+		List<Argument<?>> args = List.of(new GreedyStringArgument("args").replaceSuggestions(ArgumentSuggestions.strings(info -> {
+			return Bukkit.getPluginCommand(cmdName).tabComplete(info.sender(), cmdName, info.currentArg().split(" ")).toArray(new String[0]);
+		})));
+		
+		convertPluginCommand(plugin, cmdName, args);
 	}
 
 	/**
@@ -108,7 +116,7 @@ public final class Converter {
 	 *                such as //set in WorldEdit, this parameter should be "/set"
 	 */
 	public static void convert(String cmdName) {
-		convertCommand(cmdName, PLAIN_ARGUMENTS);
+		convertCommand(cmdName, List.of(new GreedyStringArgument("args")));
 	}
 
 	/**
