@@ -37,6 +37,11 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-bukkit-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>com.google.auto.service</groupId>
 			<artifactId>auto-service</artifactId>
 			<version>${auto-service.version}</version>
