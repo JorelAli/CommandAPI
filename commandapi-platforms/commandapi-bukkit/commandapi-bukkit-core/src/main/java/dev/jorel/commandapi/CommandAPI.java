@@ -48,6 +48,7 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
  *
  */
 public final class CommandAPI {
+	// TODO: Figure out what here gets moved to the common implementation and what is platform-specific
 
 	// Cannot be instantiated
 	private CommandAPI() {

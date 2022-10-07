@@ -86,6 +86,7 @@ import net.kyori.adventure.text.Component;
 @RequireField(in = CommandNode.class, name = "arguments", ofType = Map.class)
 @RequireField(in = CommandContext.class, name = "arguments", ofType = Map.class)
 public class CommandAPIHandler<CommandSourceStack> {
+	// TODO: Figure out what here gets moved to the common implementation and what is platform-specific
 
 	private final static VarHandle COMMANDNODE_CHILDREN;
 	private final static VarHandle COMMANDNODE_LITERALS;
