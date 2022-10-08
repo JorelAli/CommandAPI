@@ -1,6 +1,6 @@
 package dev.jorel.commandapi.abstractions;
 
-public interface AbstractCommandSender {
+public interface AbstractCommandSender<Source> {
 	// TODO: figure out what features this and the subclasses of this class need
 	
 	// We're assuming all command senders have some form of "permission" system
@@ -11,11 +11,10 @@ public interface AbstractCommandSender {
 	// If no permission system is present, we assume the command sender is always
 	// able to run the command
 
-	public default boolean hasPermission(String permissionNode) {
-		return true;
-	}
+	public boolean hasPermission(String permissionNode);
 	
-	public default boolean isOp() {
-		return true;
-	}
+	public boolean isOp();
+	
+	// Need to be able to get the underlying command sender!
+	public Source getSource();
 }

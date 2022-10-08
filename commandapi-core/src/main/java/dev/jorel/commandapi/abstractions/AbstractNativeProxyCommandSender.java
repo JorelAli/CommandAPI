@@ -1,4 +1,4 @@
 package dev.jorel.commandapi.abstractions;
 
-public class AbstractNativeProxyCommandSender implements AbstractCommandSender{
+public abstract class AbstractNativeProxyCommandSender<Source> implements AbstractCommandSender<Source> {
 }

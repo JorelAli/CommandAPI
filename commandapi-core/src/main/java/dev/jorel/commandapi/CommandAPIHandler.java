@@ -53,7 +53,7 @@ import dev.jorel.commandapi.wrappers.PreviewableFunction;
 // and I'm not sure if we can use the Adventure API on Fabric, so let's
 // assume we can't until we figure that out.
 
-public abstract class CommandAPIHandler<CommandSource> {
+public class CommandAPIHandler<CommandSource> {
 	// TODO: Figure out what here gets moved to the common implementation and what
 	// is platform-specific
 
@@ -90,30 +90,22 @@ public abstract class CommandAPIHandler<CommandSource> {
 		return cmdCtx.getInput().substring(range.getStart(), range.getEnd());
 	}
 
-	// For Bukkit, chat preview has to be unhooked
-	public abstract void onDisable();
-
 	final Map<ClassCache, Field> FIELDS = new HashMap<>();
 	final TreeMap<String, CommandPermission> PERMISSIONS_TO_FIX = new TreeMap<>();
-	final AbstractPlatform<CommandSource> platform;
+	final AbstractPlatform platform;
 	final List<RegisteredCommand> registeredCommands; // Keep track of what has been registered for type checking
 	final Map<List<String>, IPreviewable<? extends Argument<?>, ?>> previewableArguments; // Arguments with previewable chat
 
-	private CommandAPIHandler() {
-		this.platform = null; // TODO: Implement platform.
+	// TODO: Wait, how do we instantiate this?
+	private CommandAPIHandler(AbstractPlatform platform) {
+		this.platform = platform;
 		this.registeredCommands = new ArrayList<>();
 		this.previewableArguments = new HashMap<>();
 	}
 
-	public AbstractPlatform<CommandSource> getPlatform() {
+	public AbstractPlatform getPlatform() {
 		return this.platform;
 	}
-
-	/**
-	 * Unregisters a command. For Bukkit, this is as complex as unregistering it from
-	 * the CommandDispatcher. For Velocity, this is as simple as commandManager.unregister(commandName)
-	 */
-	public abstract void unregister(String commandName);
 
 	/**
 	 * Generates a command to be registered by the CommandAPI.
@@ -126,11 +118,11 @@ public abstract class CommandAPIHandler<CommandSource> {
 	 * @throws CommandSyntaxException if an error occurs when the command is ran
 	 */
 	Command<CommandSource> generateCommand(Argument<?>[] args,
-			CustomCommandExecutor<? extends AbstractCommandSender> executor, boolean converted) throws CommandSyntaxException {
+			CustomCommandExecutor<? extends AbstractCommandSender<CommandSource>> executor, boolean converted) throws CommandSyntaxException {
 
 		// Generate our command from executor
 		return (cmdCtx) -> {
-			AbstractCommandSender sender = platform.getSenderForCommand(cmdCtx, executor.isForceNative());
+			AbstractCommandSender<CommandSource> sender = platform.getSenderForCommand(cmdCtx, executor.isForceNative());
 			if (converted) {
 				Object[] argObjs = argsToObjectArr(cmdCtx, args);
 				int resultValue = 0;
@@ -238,7 +230,7 @@ public abstract class CommandAPIHandler<CommandSource> {
 	 * @param requirements
 	 */
 	Predicate<CommandSource> generatePermissions(String commandName, CommandPermission permission,
-			Predicate<AbstractCommandSender> requirements) {
+			Predicate<AbstractCommandSender<?>> requirements) {
 		// If we've already registered a permission, set it to the "parent" permission.
 		if (PERMISSIONS_TO_FIX.containsKey(commandName.toLowerCase())) {
 			if (!PERMISSIONS_TO_FIX.get(commandName.toLowerCase()).equals(permission)) {
@@ -267,7 +259,7 @@ public abstract class CommandAPIHandler<CommandSource> {
 	 * @param permission the CommandAPI CommandPermission permission to check
 	 * @return true if the sender satisfies the provided permission
 	 */
-	boolean permissionCheck(AbstractCommandSender sender, CommandPermission permission, Predicate<AbstractCommandSender> requirements) {
+	static boolean permissionCheck(AbstractCommandSender<?> sender, CommandPermission permission, Predicate<AbstractCommandSender<?>> requirements) {
 		boolean satisfiesPermissions;
 		if (sender == null) {
 			satisfiesPermissions = true;
@@ -296,7 +288,7 @@ public abstract class CommandAPIHandler<CommandSource> {
 	 * multiliteral arguments were not present.
 	 */
 	private boolean expandMultiLiterals(CommandMetaData meta, final Argument<?>[] args,
-			CustomCommandExecutor<? extends AbstractCommandSender> executor, boolean converted)
+			CustomCommandExecutor<? extends AbstractCommandSender<CommandSource>> executor, boolean converted)
 			throws CommandSyntaxException, IOException {
 
 		// "Expands" our MultiLiterals into Literals
@@ -455,7 +447,7 @@ public abstract class CommandAPIHandler<CommandSource> {
 	// Builds our platform command using the given arguments for this method, then
 	// registers it
 	void register(CommandMetaData meta, final Argument<?>[] args,
-			CustomCommandExecutor<? extends AbstractCommandSender> executor, boolean converted)
+			CustomCommandExecutor<? extends AbstractCommandSender<CommandSource>> executor, boolean converted)
 			throws CommandSyntaxException, IOException {
 
 		// "Expands" our MultiLiterals into Literals
@@ -503,7 +495,7 @@ public abstract class CommandAPIHandler<CommandSource> {
 		String commandName = meta.commandName;
 		CommandPermission permission = meta.permission;
 		String[] aliases = meta.aliases;
-		Predicate<AbstractCommandSender> requirements = meta.requirements;
+		Predicate<AbstractCommandSender<?>> requirements = meta.requirements;
 		Optional<String> shortDescription = meta.shortDescription;
 		Optional<String> fullDescription = meta.fullDescription;
 
@@ -552,13 +544,13 @@ public abstract class CommandAPIHandler<CommandSource> {
 		List<LiteralCommandNode<CommandSource>> aliasNodes = new ArrayList<>();
 		if (args.length == 0) {
 			// Link command name to the executor
-			resultantNode = this.registerCommandNode(getLiteralArgumentBuilder(commandName)
+			resultantNode = platform.registerCommandNode(getLiteralArgumentBuilder(commandName)
 					.requires(generatePermissions(commandName, permission, requirements)).executes(command));
 
 			// Register aliases
 			for (String alias : aliases) {
 //				CommandAPI.logInfo("Registering alias /" + alias + " -> " + resultantNode.getName());
-				aliasNodes.add(this.registerCommandNode(getLiteralArgumentBuilder(alias)
+				aliasNodes.add(platform.registerCommandNode(getLiteralArgumentBuilder(alias)
 						.requires(generatePermissions(alias, permission, requirements)).executes(command)));
 			}
 		} else {
@@ -569,7 +561,7 @@ public abstract class CommandAPIHandler<CommandSource> {
 					generateInnerArgument(command, args), args);
 
 			// Link command name to first argument and register
-			resultantNode = this.registerCommandNode(getLiteralArgumentBuilder(commandName)
+			resultantNode = platform.registerCommandNode(getLiteralArgumentBuilder(commandName)
 					.requires(generatePermissions(commandName, permission, requirements)).then(commandArguments));
 
 			// Register aliases
@@ -578,30 +570,13 @@ public abstract class CommandAPIHandler<CommandSource> {
 //					CommandAPI.logInfo("Registering alias /" + alias + " -> " + resultantNode.getName());
 //				}
 
-				aliasNodes.add(this.registerCommandNode(getLiteralArgumentBuilder(alias)
+				aliasNodes.add(platform.registerCommandNode(getLiteralArgumentBuilder(alias)
 						.requires(generatePermissions(alias, permission, requirements)).then(commandArguments)));
 			}
 		}
 		
-		this.postCommandRegistration(resultantNode, aliasNodes);
+		platform.postCommandRegistration(resultantNode, aliasNodes);
 	}
-	
-	/**
-	 * Stuff to run after a command has been generated. For Bukkit, this involves
-	 * finding command ambiguities for logging and generating the command JSON
-	 * dispatcher file. If we're being fancy, we could also create a "registered
-	 * a command" event (which can't be cancelled)
-	 * @param aliasNodes any alias nodes that were also registered as a part of this registration process
-	 * @param resultantNode the node that was registered
-	 */
-	public abstract void postCommandRegistration(LiteralCommandNode<CommandSource> resultantNode , List<LiteralCommandNode<CommandSource>> aliasNodes);
-
-	/**
-	 * Registers a Brigadier command node. For Bukkit, this requires using reflection to
-	 * access the CommandDispatcher (DISPATCHER), then registering it directly using
-	 * DISPATCHER.register. For Velocity, this is as simple as commandManager.register(new BrigadierCommand( node ))
-	 */
-	public abstract LiteralCommandNode<CommandSource>  registerCommandNode(LiteralArgumentBuilder<CommandSource> node);
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	// SECTION: Argument Builders //
@@ -625,7 +600,7 @@ public abstract class CommandAPIHandler<CommandSource> {
 	 * @return a brigadier LiteralArgumentBuilder representing a literal
 	 */
 	LiteralArgumentBuilder<CommandSource> getLiteralArgumentBuilderArgument(String commandName,
-			CommandPermission permission, Predicate<AbstractCommandSender> requirements) {
+			CommandPermission permission, Predicate<AbstractCommandSender<?>> requirements) {
 		LiteralArgumentBuilder<CommandSource> builder = LiteralArgumentBuilder.literal(commandName);
 		return builder.requires((CommandSource css) -> permissionCheck(platform.getCommandSenderFromCommandSource(css),
 				permission, requirements));
@@ -797,10 +772,6 @@ public abstract class CommandAPIHandler<CommandSource> {
 			return result;
 		}
 	}
-
-	// We probabbbbbbbbly need to register some form of help for commands? I'm not
-	// sure if 
-	public abstract void registerHelp();
 
 	//////////////////////////////
 	// SECTION: Private classes //

@@ -1,4 +1,4 @@
 package dev.jorel.commandapi.abstractions;
 
-public class AbstractEntity implements AbstractCommandSender{
+public abstract class AbstractEntity<Source> implements AbstractCommandSender<Source> {
 }

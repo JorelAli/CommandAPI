@@ -1,4 +1,4 @@
 package dev.jorel.commandapi.abstractions;
 
-public class AbstractBlockCommandSender implements AbstractCommandSender{
+public abstract class AbstractBlockCommandSender implements AbstractCommandSender {
 }

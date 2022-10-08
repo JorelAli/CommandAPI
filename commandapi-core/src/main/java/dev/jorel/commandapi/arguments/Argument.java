@@ -258,13 +258,13 @@ public abstract class Argument<T> extends ArgumentTree {
 	// Requirements //
 	//////////////////
 	
-	private Predicate<AbstractCommandSender> requirements = s -> true;
+	private Predicate<AbstractCommandSender<?>> requirements = s -> true;
 		
 	/**
 	 * Returns the requirements required to run this command
 	 * @return the requirements required to run this command
 	 */
-	public final Predicate<AbstractCommandSender> getRequirements() {
+	public final Predicate<AbstractCommandSender<?>> getRequirements() {
 		return this.requirements;
 	}
 	
@@ -276,7 +276,7 @@ public abstract class Argument<T> extends ArgumentTree {
 	 * @param requirement the predicate that must be satisfied to use this argument
 	 * @return this current argument
 	 */
-	public final Argument<T> withRequirement(Predicate<AbstractCommandSender> requirement) {
+	public final Argument<T> withRequirement(Predicate<AbstractCommandSender<?>> requirement) {
 		this.requirements = this.requirements.and(requirement);
 		return this;
 	}

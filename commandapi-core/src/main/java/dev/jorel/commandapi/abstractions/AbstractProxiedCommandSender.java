@@ -1,4 +1,4 @@
 package dev.jorel.commandapi.abstractions;
 
-public class AbstractProxiedCommandSender implements AbstractCommandSender{
+public abstract class AbstractProxiedCommandSender<Source> implements AbstractCommandSender<Source> {
 }

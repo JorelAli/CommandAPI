@@ -30,7 +30,7 @@ final class CommandMetaData {
 	/**
 	 * A predicate that a {@link AbstractCommandSender} must pass in order to execute the command
 	 */
-	Predicate<AbstractCommandSender> requirements = s -> true;
+	Predicate<AbstractCommandSender<?>> requirements = s -> true;
 	
 	/**
 	 * An optional short description for the command

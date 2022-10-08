@@ -1,4 +1,4 @@
 package dev.jorel.commandapi.abstractions;
 
-public class AbstractPlayer implements AbstractCommandSender{
+public abstract class AbstractPlayer<Source> implements AbstractCommandSender<Source> {
 }
