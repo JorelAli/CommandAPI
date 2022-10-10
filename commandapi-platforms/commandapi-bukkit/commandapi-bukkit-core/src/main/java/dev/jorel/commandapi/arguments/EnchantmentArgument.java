@@ -26,7 +26,8 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
 /**
  * An argument that represents the Bukkit Enchantment object
@@ -40,7 +41,7 @@ public class EnchantmentArgument extends SafeOverrideableArgument<Enchantment, E
 	 * @param nodeName the name of the node for this argument 
 	 */
 	public EnchantmentArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentEnchantment(), fromKey(Enchantment::getKey));
+		super(nodeName, BukkitPlatform.get()._ArgumentEnchantment(), fromKey(Enchantment::getKey));
 	}
 
 	@Override
@@ -54,8 +55,8 @@ public class EnchantmentArgument extends SafeOverrideableArgument<Enchantment, E
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Enchantment parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return nms.getEnchantment(cmdCtx, key);
+	public <CommandSourceStack> Enchantment parseArgument(AbstractPlatform<CommandSourceStack> platform,
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return ((BukkitPlatform<CommandSourceStack>) platform).getEnchantment(cmdCtx, key);
 	}
 }

@@ -27,7 +27,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.attributes.KeyedObject;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
 /**
  * An argument that represents the Bukkit Advancement object
@@ -40,7 +41,7 @@ public class AdvancementArgument extends SafeOverrideableArgument<KeyedObject, K
 	 * @param nodeName the name of the node for argument
 	 */
 	public AdvancementArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered(), fromKey(KeyedObject::getKey));
+		super(nodeName, BukkitPlatform.get()._ArgumentMinecraftKeyRegistered(), fromKey(KeyedObject::getKey));
 	}
 
 	@Override
@@ -59,9 +60,9 @@ public class AdvancementArgument extends SafeOverrideableArgument<KeyedObject, K
 	}
 
 	@Override
-	public <CommandListenerWrapper> KeyedObject parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return nms.getAdvancement(cmdCtx, key);
+	public <CommandSourceStack> KeyedObject parseArgument(AbstractPlatform<CommandSourceStack> platform,
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return ((BukkitPlatform<CommandSourceStack>) platform).getAdvancement(cmdCtx, key);
 	}
 
 }

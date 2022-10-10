@@ -24,7 +24,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.BukkitPlatform;
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
 /**
@@ -44,7 +43,7 @@ public class AngleArgument extends SafeOverrideableArgument<Float, Float> {
 	 * @param nodeName the name of the node for argument
 	 */
 	public AngleArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentAngle(), String::valueOf);
+		super(nodeName, BukkitPlatform.get()._ArgumentAngle(), String::valueOf);
 	}
 
 	@Override

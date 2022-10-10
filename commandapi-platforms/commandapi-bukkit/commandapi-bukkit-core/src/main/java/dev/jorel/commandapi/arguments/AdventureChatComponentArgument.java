@@ -23,9 +23,9 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.exceptions.PaperAdventureNotFoundException;
-import dev.jorel.commandapi.nms.NMS;
 import net.kyori.adventure.text.Component;
 
 /**
@@ -40,7 +40,7 @@ public class AdventureChatComponentArgument extends Argument<Component> {
 	 * @param nodeName the name of the node for argument
 	 */
 	public AdventureChatComponentArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentChatComponent());
+		super(nodeName, BukkitPlatform.get()._ArgumentChatComponent());
 		
 		try {
 			Class.forName("net.kyori.adventure.text.Component");
@@ -60,8 +60,8 @@ public class AdventureChatComponentArgument extends Argument<Component> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Component parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return nms.getAdventureChatComponent(cmdCtx, key);
+	public <CommandSourceStack> Component parseArgument(AbstractPlatform<CommandSourceStack> platform,
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return ((BukkitPlatform<CommandSourceStack>) platform).getAdventureChatComponent(cmdCtx, key);
 	}
 }

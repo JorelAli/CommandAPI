@@ -25,8 +25,8 @@ import org.bukkit.Location;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
 /**
  * An argument that represents the Bukkit {@link Location} object
@@ -48,8 +48,8 @@ public class LocationArgument extends SafeOverrideableArgument<Location, Locatio
 	 * @param type the location type of this location, either {@link LocationType#BLOCK_POSITION} or {@link LocationType#PRECISE_POSITION}
 	 */
 	public LocationArgument(String nodeName, LocationType type) {
-		super(nodeName, type == LocationType.BLOCK_POSITION ? CommandAPIHandler.getInstance().getNMS()._ArgumentPosition()
-				: CommandAPIHandler.getInstance().getNMS()._ArgumentVec3(),
+		super(nodeName, type == LocationType.BLOCK_POSITION ? BukkitPlatform.get()._ArgumentPosition()
+				: BukkitPlatform.get()._ArgumentVec3(),
 				type == LocationType.BLOCK_POSITION
 						? (Location l) -> l.getBlockX() + " " + l.getBlockY() + " " + l.getBlockZ()
 						: (Location l) -> l.getX() + " " + l.getY() + " " + l.getZ());
@@ -77,8 +77,8 @@ public class LocationArgument extends SafeOverrideableArgument<Location, Locatio
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Location parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return isPrecise ? nms.getLocationPrecise(cmdCtx, key) : nms.getLocationBlock(cmdCtx, key);
+	public <CommandSourceStack> Location parseArgument(AbstractPlatform<CommandSourceStack> platform,
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return isPrecise ? ((BukkitPlatform<CommandSourceStack>) platform).getLocationPrecise(cmdCtx, key) : ((BukkitPlatform<CommandSourceStack>) platform).getLocationBlock(cmdCtx, key);
 	}
 }

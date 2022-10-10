@@ -28,10 +28,12 @@ import org.bukkit.entity.Player;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import dev.jorel.commandapi.commandsenders.BukkitPlayer;
 import dev.jorel.commandapi.exceptions.SpigotNotFoundException;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
-import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.PreviewableFunction;
 import net.md_5.bungee.api.chat.BaseComponent;
 
@@ -52,7 +54,7 @@ public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyAr
 	 * @param nodeName the name of the node for argument
 	 */
 	public ChatArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentChat());
+		super(nodeName, BukkitPlatform.get()._ArgumentChat());
 
 		try {
 			Class.forName("org.spigotmc.SpigotConfig");
@@ -72,15 +74,15 @@ public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyAr
 	}
 
 	@Override
-	public <CommandListenerWrapper> BaseComponent[] parseArgument(NMS<CommandListenerWrapper> nms,
-		CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		final CommandSender sender = nms.getCommandSenderFromCSS(cmdCtx.getSource());
-		BaseComponent[] component = nms.getChat(cmdCtx, key);
+	public <CommandSourceStack> BaseComponent[] parseArgument(AbstractPlatform<CommandSourceStack> platform,
+		CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		final CommandSender sender = ((BukkitPlatform<CommandSourceStack>) platform).getCommandSenderFromCSS(cmdCtx.getSource());
+		BaseComponent[] component = ((BukkitPlatform<CommandSourceStack>) platform).getChat(cmdCtx, key);
 
 		if (getPreview().isPresent() && sender instanceof Player player) {
 			try {
 				BaseComponent[] previewComponent = getPreview().get()
-					.generatePreview(new PreviewInfo<BaseComponent[]>(player, CommandAPIHandler.getRawArgumentInput(cmdCtx, key), cmdCtx.getInput(), component));
+					.generatePreview(new PreviewInfo<BaseComponent[]>(new BukkitPlayer(player), CommandAPIHandler.getRawArgumentInput(cmdCtx, key), cmdCtx.getInput(), component));
 
 				if (this.usePreview) {
 					component = previewComponent;

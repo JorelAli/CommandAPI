@@ -27,8 +27,8 @@ import org.bukkit.block.Biome;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
 /**
  * An argument that represents the Bukkit Biome object
@@ -43,7 +43,7 @@ public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome> implem
 	 * @param nodeName the name of the node for argument
 	 */
 	public BiomeArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentSyntheticBiome(),
+		super(nodeName, BukkitPlatform.get()._ArgumentSyntheticBiome(),
 				((Function<Biome, String>) Biome::name).andThen(String::toLowerCase));
 	}
 
@@ -63,9 +63,9 @@ public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome> implem
 	}
 
 	@Override
-	public <CommandListenerWrapper> Biome parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
+	public <CommandSourceStack> Biome parseArgument(AbstractPlatform<CommandSourceStack> platform,
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
-		return nms.getBiome(cmdCtx, key);
+		return ((BukkitPlatform<CommandSourceStack>) platform).getBiome(cmdCtx, key);
 	}
 }

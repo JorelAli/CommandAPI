@@ -27,8 +27,8 @@ import org.bukkit.block.Block;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
 /**
  * An argument that represents a <code>Predicate&lt;Block&gt;</code>
@@ -45,7 +45,7 @@ public class BlockPredicateArgument extends Argument<Predicate> {
 	 * @param nodeName the name of the node for argument
 	 */
 	public BlockPredicateArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentBlockPredicate());
+		super(nodeName, BukkitPlatform.get()._ArgumentBlockPredicate());
 	}
 
 	@Override
@@ -59,9 +59,9 @@ public class BlockPredicateArgument extends Argument<Predicate> {
 	}
 
 	@Override
-	public <CommandListenerWrapper> Predicate<?> parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
+	public <CommandSourceStack> Predicate<?> parseArgument(AbstractPlatform<CommandSourceStack> platform,
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
-		return nms.getBlockPredicate(cmdCtx, key);
+		return ((BukkitPlatform<CommandSourceStack>) platform).getBlockPredicate(cmdCtx, key);
 	}
 }

@@ -26,7 +26,8 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
 /**
  * An argument that represents the Bukkit EntityType object
@@ -38,7 +39,7 @@ public class EntityTypeArgument extends SafeOverrideableArgument<EntityType, Ent
 	 * @param nodeName the name of the node for this argument
 	 */
 	public EntityTypeArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentEntitySummon(), fromKey(EntityType::getKey));
+		super(nodeName, BukkitPlatform.get()._ArgumentEntitySummon(), fromKey(EntityType::getKey));
 	}
 
 	@Override
@@ -57,8 +58,8 @@ public class EntityTypeArgument extends SafeOverrideableArgument<EntityType, Ent
 	}
 	
 	@Override
-	public <CommandListenerWrapper> EntityType parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return nms.getEntityType(cmdCtx, key);
+	public <CommandSourceStack> EntityType parseArgument(AbstractPlatform<CommandSourceStack> platform,
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return ((BukkitPlatform<CommandSourceStack>) platform).getEntityType(cmdCtx, key);
 	}
 }

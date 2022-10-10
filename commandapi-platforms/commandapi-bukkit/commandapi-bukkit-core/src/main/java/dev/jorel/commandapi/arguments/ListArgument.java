@@ -28,7 +28,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.StringTooltip;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import org.bukkit.command.CommandSender;
 
 import java.util.*;
@@ -65,7 +66,7 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 			// This need not be a sorted map because entries in suggestions are
 			// automatically sorted anyway
 			Set<IStringTooltip> values = new HashSet<>();
-			for (T object : supplier.apply(info.sender())) {
+			for (T object : supplier.apply((CommandSender) info.sender().getSource())) {
 				values.add(mapper.apply(object));
 			}
 
@@ -123,11 +124,11 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 	}
 
 	@Override
-	public <CommandListenerWrapper> List<T> parseArgument(NMS<CommandListenerWrapper> nms,
-		CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> List<T> parseArgument(AbstractPlatform<CommandSourceStack> platform,
+		CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		// Get the list of values which this can take
 		Map<IStringTooltip, T> values = new HashMap<>();
-		for (T object : supplier.apply(nms.getCommandSenderFromCSS(cmdCtx.getSource()))) {
+		for (T object : supplier.apply(((BukkitPlatform<CommandSourceStack>) platform).getCommandSenderFromCSS(cmdCtx.getSource()))) {
 			values.put(mapper.apply(object), object);
 		}
 

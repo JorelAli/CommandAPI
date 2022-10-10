@@ -25,8 +25,8 @@ import org.bukkit.NamespacedKey;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
 /**
  * An argument that represents a Minecraft resource location (or namespaced key)
@@ -43,7 +43,7 @@ public class NamespacedKeyArgument extends SafeOverrideableArgument<NamespacedKe
 	 * @param nodeName the name of the node for argument
 	 */
 	public NamespacedKeyArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered(),
+		super(nodeName, BukkitPlatform.get()._ArgumentMinecraftKeyRegistered(),
 				NamespacedKey::toString);
 	}
 
@@ -58,9 +58,9 @@ public class NamespacedKeyArgument extends SafeOverrideableArgument<NamespacedKe
 	}
 
 	@Override
-	public <CommandListenerWrapper> NamespacedKey parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
+	public <CommandSourceStack> NamespacedKey parseArgument(AbstractPlatform<CommandSourceStack> platform,
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
-		return nms.getMinecraftKey(cmdCtx, key);
+		return ((BukkitPlatform<CommandSourceStack>) platform).getMinecraftKey(cmdCtx, key);
 	}
 }

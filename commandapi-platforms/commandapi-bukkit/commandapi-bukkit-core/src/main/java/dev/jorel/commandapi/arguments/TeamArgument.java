@@ -25,8 +25,8 @@ import org.bukkit.scoreboard.Team;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
 /**
  * An argument that represents the name of a scoreboard Team
@@ -38,7 +38,7 @@ public class TeamArgument extends SafeOverrideableArgument<String, Team> {
 	 * @param nodeName the name of the node for this argument
 	 */
 	public TeamArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentScoreboardTeam(), Team::getName);
+		super(nodeName, BukkitPlatform.get()._ArgumentScoreboardTeam(), Team::getName);
 	}
 
 	@Override
@@ -52,8 +52,8 @@ public class TeamArgument extends SafeOverrideableArgument<String, Team> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> String parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return nms.getTeam(cmdCtx, key);
+	public <CommandSourceStack> String parseArgument(AbstractPlatform<CommandSourceStack> platform,
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return ((BukkitPlatform<CommandSourceStack>) platform).getTeam(cmdCtx, key);
 	}
 }

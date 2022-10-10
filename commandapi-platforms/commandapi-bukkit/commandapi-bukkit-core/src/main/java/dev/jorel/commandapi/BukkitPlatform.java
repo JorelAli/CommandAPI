@@ -16,6 +16,13 @@ import dev.jorel.commandapi.nms.NMS;
 // NMS, so it implements NMS. Our implementation of BukkitPlatform is now derived
 // using the version handler (and thus, deferred to our NMS-specific implementations)
 public abstract class BukkitPlatform<Source> extends AbstractPlatform<Source> implements NMS<Source> {
+	
+	// Blah blah access instance directly and all of that stuff
+	private static BukkitPlatform<?> instance;
+	
+	public static BukkitPlatform<?> get() {
+		return instance;
+	}
 
 	@Override
 	public AbstractCommandSender<? extends Source> getSenderForCommand(CommandContext<Source> cmdCtx, boolean forceNative) {

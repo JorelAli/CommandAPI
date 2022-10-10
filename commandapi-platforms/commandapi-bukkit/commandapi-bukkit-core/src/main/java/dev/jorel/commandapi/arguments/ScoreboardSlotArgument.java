@@ -23,8 +23,8 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 
 /**
@@ -37,7 +37,7 @@ public class ScoreboardSlotArgument extends SafeOverrideableArgument<ScoreboardS
 	 * @param nodeName the name of the node for this argument
 	 */
 	public ScoreboardSlotArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentScoreboardSlot(), ScoreboardSlot::toString);
+		super(nodeName, BukkitPlatform.get()._ArgumentScoreboardSlot(), ScoreboardSlot::toString);
 	}
 
 	@Override
@@ -51,8 +51,8 @@ public class ScoreboardSlotArgument extends SafeOverrideableArgument<ScoreboardS
 	}
 	
 	@Override
-	public <CommandListenerWrapper> ScoreboardSlot parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return nms.getScoreboardSlot(cmdCtx, key);
+	public <CommandSourceStack> ScoreboardSlot parseArgument(AbstractPlatform<CommandSourceStack> platform,
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return ((BukkitPlatform<CommandSourceStack>) platform).getScoreboardSlot(cmdCtx, key);
 	}
 }

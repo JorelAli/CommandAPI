@@ -27,8 +27,8 @@ import org.bukkit.ChatColor;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
 /**
  * An argument that represents the Bukkit ChatColor object
@@ -44,7 +44,7 @@ public class ChatColorArgument extends SafeOverrideableArgument<ChatColor, ChatC
 	 * @param nodeName the name of the node for argument
 	 */
 	public ChatColorArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentChatFormat(), ((Function<ChatColor, String>) ChatColor::name).andThen(String::toLowerCase));
+		super(nodeName, BukkitPlatform.get()._ArgumentChatFormat(), ((Function<ChatColor, String>) ChatColor::name).andThen(String::toLowerCase));
 	}
 	
 	@Override
@@ -58,8 +58,8 @@ public class ChatColorArgument extends SafeOverrideableArgument<ChatColor, ChatC
 	}
 	
 	@Override
-	public <CommandListenerWrapper> ChatColor parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return nms.getChatColor(cmdCtx, key);
+	public <CommandSourceStack> ChatColor parseArgument(AbstractPlatform<CommandSourceStack> platform,
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return ((BukkitPlatform<CommandSourceStack>) platform).getChatColor(cmdCtx, key);
 	}
 }

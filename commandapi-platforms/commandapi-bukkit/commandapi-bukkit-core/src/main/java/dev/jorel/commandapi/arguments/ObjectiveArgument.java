@@ -25,8 +25,8 @@ import org.bukkit.scoreboard.Objective;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
 /**
  * An argument that represents the name of a scoreboard objective
@@ -38,7 +38,7 @@ public class ObjectiveArgument extends SafeOverrideableArgument<String, Objectiv
 	 * @param nodeName the name of the node for this argument
 	 */
 	public ObjectiveArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentScoreboardObjective(), Objective::getName);
+		super(nodeName, BukkitPlatform.get()._ArgumentScoreboardObjective(), Objective::getName);
 	}
 
 	@Override
@@ -52,8 +52,8 @@ public class ObjectiveArgument extends SafeOverrideableArgument<String, Objectiv
 	}
 	
 	@Override
-	public <CommandListenerWrapper> String parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return nms.getObjective(cmdCtx, key);
+	public <CommandSourceStack> String parseArgument(AbstractPlatform<CommandSourceStack> platform,
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return ((BukkitPlatform<CommandSourceStack>) platform).getObjective(cmdCtx, key);
 	}
 }

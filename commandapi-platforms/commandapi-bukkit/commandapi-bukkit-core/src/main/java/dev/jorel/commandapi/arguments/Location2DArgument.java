@@ -25,8 +25,8 @@ import org.bukkit.Location;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.wrappers.Location2D;
 
 /**
@@ -49,8 +49,8 @@ public class Location2DArgument extends SafeOverrideableArgument<Location2D, Loc
 	 * @param type the location type of this location, either {@link LocationType#BLOCK_POSITION} or {@link LocationType#PRECISE_POSITION}
 	 */
 	public Location2DArgument(String nodeName, LocationType type) {
-		super(nodeName, type == LocationType.BLOCK_POSITION ? CommandAPIHandler.getInstance().getNMS()._ArgumentPosition2D()
-				: CommandAPIHandler.getInstance().getNMS()._ArgumentVec2(),
+		super(nodeName, type == LocationType.BLOCK_POSITION ? BukkitPlatform.get()._ArgumentPosition2D()
+				: BukkitPlatform.get()._ArgumentVec2(),
 				type == LocationType.BLOCK_POSITION ? (Location2D l) -> l.getBlockX() + " " + l.getBlockZ()
 						: (Location2D l) -> l.getX() + " " + l.getZ());
 		isPrecise = type == LocationType.PRECISE_POSITION;
@@ -77,8 +77,8 @@ public class Location2DArgument extends SafeOverrideableArgument<Location2D, Loc
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Location2D parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return isPrecise ? nms.getLocation2DPrecise(cmdCtx, key) : nms.getLocation2DBlock(cmdCtx, key);
+	public <CommandSourceStack> Location2D parseArgument(AbstractPlatform<CommandSourceStack> platform,
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return isPrecise ? ((BukkitPlatform<CommandSourceStack>) platform).getLocation2DPrecise(cmdCtx, key) : ((BukkitPlatform<CommandSourceStack>) platform).getLocation2DBlock(cmdCtx, key);
 	}
 }

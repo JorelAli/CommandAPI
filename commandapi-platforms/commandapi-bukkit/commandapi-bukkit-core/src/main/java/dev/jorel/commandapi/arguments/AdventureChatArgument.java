@@ -28,10 +28,12 @@ import org.bukkit.entity.Player;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import dev.jorel.commandapi.commandsenders.BukkitPlayer;
 import dev.jorel.commandapi.exceptions.PaperAdventureNotFoundException;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
-import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.PreviewableFunction;
 import net.kyori.adventure.text.Component;
 
@@ -52,7 +54,7 @@ public class AdventureChatArgument extends Argument<Component> implements IGreed
 	 * @param nodeName the name of the node for argument
 	 */
 	public AdventureChatArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentChat());
+		super(nodeName, BukkitPlatform.get()._ArgumentChat());
 
 		try {
 			Class.forName("net.kyori.adventure.text.Component");
@@ -72,15 +74,15 @@ public class AdventureChatArgument extends Argument<Component> implements IGreed
 	}
 
 	@Override
-	public <CommandListenerWrapper> Component parseArgument(NMS<CommandListenerWrapper> nms,
-		CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		final CommandSender sender = nms.getCommandSenderFromCSS(cmdCtx.getSource());
-		Component component = nms.getAdventureChat(cmdCtx, key);
+	public <CommandSourceStack> Component parseArgument(AbstractPlatform<CommandSourceStack> platform,
+		CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		final CommandSender sender = ((BukkitPlatform<CommandSourceStack>) platform).getCommandSenderFromCSS(cmdCtx.getSource());
+		Component component = ((BukkitPlatform<CommandSourceStack>) platform).getAdventureChat(cmdCtx, key);
 
 		if (this.usePreview && getPreview().isPresent() && sender instanceof Player player) {
 			try {
 				Component previewComponent = getPreview().get()
-					.generatePreview(new PreviewInfo<Component>(player, CommandAPIHandler.getRawArgumentInput(cmdCtx, key), cmdCtx.getInput(), component));
+					.generatePreview(new PreviewInfo<Component>(new BukkitPlayer(player), CommandAPIHandler.getRawArgumentInput(cmdCtx, key), cmdCtx.getInput(), component));
 
 				component = previewComponent;
 			} catch (WrapperCommandSyntaxException e) {

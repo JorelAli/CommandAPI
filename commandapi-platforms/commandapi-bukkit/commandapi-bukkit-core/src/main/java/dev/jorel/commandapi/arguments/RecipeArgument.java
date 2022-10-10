@@ -27,7 +27,8 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
 /**
  * An argument that represents the Bukkit Recipe object
@@ -39,7 +40,7 @@ public class RecipeArgument extends SafeOverrideableArgument<Recipe, Recipe> imp
 	 * @param nodeName the name of the node for this argument
 	 */
 	public RecipeArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered(), fromKey((Recipe r) -> ((Keyed) r).getKey()));
+		super(nodeName, BukkitPlatform.get()._ArgumentMinecraftKeyRegistered(), fromKey((Recipe r) -> ((Keyed) r).getKey()));
 	}
 
 	@Override
@@ -58,9 +59,9 @@ public class RecipeArgument extends SafeOverrideableArgument<Recipe, Recipe> imp
 	}	
 	
 	@Override
-	public <CommandListenerWrapper> Recipe parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return nms.getRecipe(cmdCtx, key);
+	public <CommandSourceStack> Recipe parseArgument(AbstractPlatform<CommandSourceStack> platform,
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return ((BukkitPlatform<CommandSourceStack>) platform).getRecipe(cmdCtx, key);
 	}
 	
 }

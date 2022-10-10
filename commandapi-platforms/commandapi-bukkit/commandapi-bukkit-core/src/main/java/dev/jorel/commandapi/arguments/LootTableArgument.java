@@ -27,7 +27,8 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
 /**
  * An argument that represents the Bukkit LootTable object
@@ -39,7 +40,7 @@ public class LootTableArgument extends SafeOverrideableArgument<LootTable, LootT
 	 * @param nodeName the name of the node for this argument
 	 */
 	public LootTableArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered(), fromKey(Keyed::getKey));
+		super(nodeName, BukkitPlatform.get()._ArgumentMinecraftKeyRegistered(), fromKey(Keyed::getKey));
 	}
 	
 	@Override
@@ -58,8 +59,8 @@ public class LootTableArgument extends SafeOverrideableArgument<LootTable, LootT
 	}
 	
 	@Override
-	public <CommandListenerWrapper> LootTable parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return nms.getLootTable(cmdCtx, key);
+	public <CommandSourceStack> LootTable parseArgument(AbstractPlatform<CommandSourceStack> platform,
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return ((BukkitPlatform<CommandSourceStack>) platform).getLootTable(cmdCtx, key);
 	}
 }

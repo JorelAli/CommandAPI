@@ -25,8 +25,8 @@ import org.bukkit.potion.PotionEffectType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
 /**
  * An argument that represents the Bukkit PotionEffectType object
@@ -38,7 +38,7 @@ public class PotionEffectArgument extends SafeOverrideableArgument<PotionEffectT
 	 * @param nodeName the name of the node for this argument
 	 */
 	public PotionEffectArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMobEffect(), CommandAPIHandler.getInstance().getNMS()::convert);
+		super(nodeName, BukkitPlatform.get()._ArgumentMobEffect(), BukkitPlatform.get()::convert);
 	}
 
 	@Override
@@ -52,8 +52,8 @@ public class PotionEffectArgument extends SafeOverrideableArgument<PotionEffectT
 	}
 	
 	@Override
-	public <CommandListenerWrapper> PotionEffectType parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return nms.getPotionEffect(cmdCtx, key);
+	public <CommandSourceStack> PotionEffectType parseArgument(AbstractPlatform<CommandSourceStack> platform,
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return ((BukkitPlatform<CommandSourceStack>) platform).getPotionEffect(cmdCtx, key);
 	}
 }

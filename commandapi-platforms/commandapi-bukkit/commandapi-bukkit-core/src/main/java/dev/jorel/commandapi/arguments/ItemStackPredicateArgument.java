@@ -27,8 +27,8 @@ import org.bukkit.inventory.ItemStack;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
 /**
  * An argument that represents a <code>Predicate&lt;ItemStack&gt;</code>
@@ -41,7 +41,7 @@ public class ItemStackPredicateArgument extends Argument<Predicate> {
 	 * @param nodeName the name of the node for this argument 
 	 */
 	public ItemStackPredicateArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentItemPredicate());
+		super(nodeName, BukkitPlatform.get()._ArgumentItemPredicate());
 	}
 
 	@Override
@@ -55,8 +55,8 @@ public class ItemStackPredicateArgument extends Argument<Predicate> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Predicate<ItemStack> parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return nms.getItemStackPredicate(cmdCtx, key);
+	public <CommandSourceStack> Predicate<ItemStack> parseArgument(AbstractPlatform<CommandSourceStack> platform,
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return ((BukkitPlatform<CommandSourceStack>) platform).getItemStackPredicate(cmdCtx, key);
 	}
 }

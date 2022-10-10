@@ -23,8 +23,8 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.wrappers.MathOperation;
 
 /**
@@ -37,7 +37,7 @@ public class MathOperationArgument extends SafeOverrideableArgument<MathOperatio
 	 * @param nodeName the name of the node for this argument
 	 */
 	public MathOperationArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMathOperation(), MathOperation::toString);
+		super(nodeName, BukkitPlatform.get()._ArgumentMathOperation(), MathOperation::toString);
 	}
 	
 	@Override
@@ -51,8 +51,8 @@ public class MathOperationArgument extends SafeOverrideableArgument<MathOperatio
 	}
 	
 	@Override
-	public <CommandListenerWrapper> MathOperation parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return nms.getMathOperation(cmdCtx, key);
+	public <CommandSourceStack> MathOperation parseArgument(AbstractPlatform<CommandSourceStack> platform,
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return ((BukkitPlatform<CommandSourceStack>) platform).getMathOperation(cmdCtx, key);
 	}
 }

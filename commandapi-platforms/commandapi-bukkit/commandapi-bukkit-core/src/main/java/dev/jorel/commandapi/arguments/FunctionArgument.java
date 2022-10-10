@@ -26,7 +26,8 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 
 /**
@@ -41,7 +42,7 @@ public class FunctionArgument extends SafeOverrideableArgument<FunctionWrapper[]
 	 * @param nodeName the name of the node for this argument
 	 */
 	public FunctionArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentTag(), fromKey(n -> n));
+		super(nodeName, BukkitPlatform.get()._ArgumentTag(), fromKey(n -> n));
 	}
 
 	@Override
@@ -60,8 +61,8 @@ public class FunctionArgument extends SafeOverrideableArgument<FunctionWrapper[]
 	}
 	
 	@Override
-	public <CommandListenerWrapper> FunctionWrapper[] parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return nms.getFunction(cmdCtx, key);
+	public <CommandSourceStack> FunctionWrapper[] parseArgument(AbstractPlatform<CommandSourceStack> platform,
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return ((BukkitPlatform<CommandSourceStack>) platform).getFunction(cmdCtx, key);
 	}
 }

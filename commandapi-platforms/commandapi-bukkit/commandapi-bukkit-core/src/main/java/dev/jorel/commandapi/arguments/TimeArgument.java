@@ -23,8 +23,8 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.wrappers.Time;
 
 /**
@@ -37,7 +37,7 @@ public class TimeArgument extends SafeOverrideableArgument<Integer, Time> {
 	 * @param nodeName the name of the node for this argument 
 	 */
 	public TimeArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentTime(), Time::toString);
+		super(nodeName, BukkitPlatform.get()._ArgumentTime(), Time::toString);
 	}
 
 	@Override
@@ -51,8 +51,8 @@ public class TimeArgument extends SafeOverrideableArgument<Integer, Time> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Integer parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return nms.getTime(cmdCtx, key);
+	public <CommandSourceStack> Integer parseArgument(AbstractPlatform<CommandSourceStack> platform,
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return ((BukkitPlatform<CommandSourceStack>) platform).getTime(cmdCtx, key);
 	}
 }

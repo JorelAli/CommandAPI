@@ -25,8 +25,8 @@ import java.util.Collection;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
 /**
  * An argument that represents a scoreholder's name, or a collection of scoreholder names
@@ -50,7 +50,7 @@ public class ScoreHolderArgument<T> extends Argument<T> {
 	 * @param type whether this argument represents a single score holder or a collection of score holders
 	 */
 	public ScoreHolderArgument(String nodeName, ScoreHolderType type) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentScoreholder(type == ScoreHolderType.SINGLE));
+		super(nodeName, BukkitPlatform.get()._ArgumentScoreholder(type == ScoreHolderType.SINGLE));
 		single = (type == ScoreHolderType.SINGLE);
 	}
 	
@@ -75,9 +75,9 @@ public class ScoreHolderArgument<T> extends Argument<T> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public <CommandListenerWrapper> T parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return (T) (single ? nms.getScoreHolderSingle(cmdCtx, key) : nms.getScoreHolderMultiple(cmdCtx, key));
+	public <CommandSourceStack> T parseArgument(AbstractPlatform<CommandSourceStack> platform,
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return (T) (single ? ((BukkitPlatform<CommandSourceStack>) platform).getScoreHolderSingle(cmdCtx, key) : ((BukkitPlatform<CommandSourceStack>) platform).getScoreHolderMultiple(cmdCtx, key));
 	}
 
 	/**

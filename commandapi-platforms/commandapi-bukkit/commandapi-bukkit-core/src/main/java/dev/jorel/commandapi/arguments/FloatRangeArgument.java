@@ -23,8 +23,8 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.wrappers.FloatRange;
 
 /**
@@ -37,7 +37,7 @@ public class FloatRangeArgument extends SafeOverrideableArgument<FloatRange, Flo
 	 * @param nodeName the name of the node for this argument
 	 */
 	public FloatRangeArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentFloatRange(), FloatRange::toString);
+		super(nodeName, BukkitPlatform.get()._ArgumentFloatRange(), FloatRange::toString);
 	}
 
 	@Override
@@ -51,8 +51,8 @@ public class FloatRangeArgument extends SafeOverrideableArgument<FloatRange, Flo
 	}
 	
 	@Override
-	public <CommandListenerWrapper> FloatRange parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return nms.getFloatRange(cmdCtx, key);
+	public <CommandSourceStack> FloatRange parseArgument(AbstractPlatform<CommandSourceStack> platform,
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return ((BukkitPlatform<CommandSourceStack>) platform).getFloatRange(cmdCtx, key);
 	}
 }

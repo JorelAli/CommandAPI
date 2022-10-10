@@ -143,6 +143,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 * 
 	 * @return the Singleton instance of the CommandAPI's internal handler
 	 */
+	@Deprecated
 	public static CommandAPIHandler<?> getInstance() {
 		if (instance == null) {
 			instance = new CommandAPIHandler<>();

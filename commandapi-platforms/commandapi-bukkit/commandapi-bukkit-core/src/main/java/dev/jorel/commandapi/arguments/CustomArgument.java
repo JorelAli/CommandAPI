@@ -30,7 +30,8 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
 /**
  * An argument that represents any custom object
@@ -81,7 +82,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 	@Deprecated(forRemoval = true)
 	public CustomArgument(String nodeName, CustomArgumentInfoParser<T, String> parser, boolean keyed) {
 		super(nodeName, keyed ? StringArgumentType.string()
-				: CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered());
+				: BukkitPlatform.get()._ArgumentMinecraftKeyRegistered());
 		this.base = (Argument<B>) new DummyArgument(nodeName, keyed);
 		this.infoParser = (CustomArgumentInfoParser<T, B>) parser;
 		CommandAPI.logWarning(
@@ -129,15 +130,15 @@ public class CustomArgument<T, B> extends Argument<T> {
 	}
 
 	@Override
-	public <CommandListenerWrapper> T parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
+	public <CommandSourceStack> T parseArgument(AbstractPlatform<CommandSourceStack> platform,
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
 		// Get the raw input and parsed input
 		final String customresult = CommandAPIHandler.getRawArgumentInput(cmdCtx, key);
 		final B parsedInput = base.parseArgument(nms, cmdCtx, key, previousArgs);
 
 		try {
-			return infoParser.apply(new CustomArgumentInfo<B>(nms.getCommandSenderFromCSS(cmdCtx.getSource()),
+			return infoParser.apply(new CustomArgumentInfo<B>(((BukkitPlatform<CommandSourceStack>) platform).getCommandSenderFromCSS(cmdCtx.getSource()),
 					previousArgs, customresult, parsedInput));
 		} catch (CustomArgumentException e) {
 			throw e.toCommandSyntax(customresult, cmdCtx);
@@ -365,7 +366,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 
 		private DummyArgument(String nodeName, boolean keyed) {
 			super(nodeName, keyed ? StringArgumentType.string()
-					: CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered());
+					: BukkitPlatform.get()._ArgumentMinecraftKeyRegistered());
 			this.keyed = keyed;
 		}
 
@@ -383,7 +384,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 		public <CommandSourceStack> String parseArgument(NMS<CommandSourceStack> nms,
 				CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 				throws CommandSyntaxException {
-			return keyed ? nms.getMinecraftKey(cmdCtx, key).toString() : cmdCtx.getArgument(key, String.class);
+			return keyed ? ((BukkitPlatform<CommandSourceStack>) platform).getMinecraftKey(cmdCtx, key).toString() : cmdCtx.getArgument(key, String.class);
 		}
 	}
 }

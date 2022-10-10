@@ -25,8 +25,8 @@ import java.util.UUID;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
 /**
  * An argument that represents a UUID
@@ -38,7 +38,7 @@ public class UUIDArgument extends SafeOverrideableArgument<UUID, UUID> {
 	 * @param nodeName the name of the node for this argument 
 	 */
 	public UUIDArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentUUID(), UUID::toString);
+		super(nodeName, BukkitPlatform.get()._ArgumentUUID(), UUID::toString);
 	}
 
 	@Override
@@ -52,8 +52,8 @@ public class UUIDArgument extends SafeOverrideableArgument<UUID, UUID> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> UUID parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return nms.getUUID(cmdCtx, key);
+	public <CommandSourceStack> UUID parseArgument(AbstractPlatform<CommandSourceStack> platform,
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return ((BukkitPlatform<CommandSourceStack>) platform).getUUID(cmdCtx, key);
 	}
 }

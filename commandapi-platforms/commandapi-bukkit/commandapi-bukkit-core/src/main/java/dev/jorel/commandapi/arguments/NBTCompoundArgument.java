@@ -23,9 +23,9 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
 /**
  * An argument that represents an NBTContainer from the NBT API
@@ -39,7 +39,7 @@ public class NBTCompoundArgument<NBTContainer> extends SafeOverrideableArgument<
 	 * @param nodeName the name of the node for this argument
 	 */
 	public NBTCompoundArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentNBTCompound(), NBTContainer::toString);
+		super(nodeName, BukkitPlatform.get()._ArgumentNBTCompound(), NBTContainer::toString);
 		if (CommandAPI.getConfiguration().getNBTContainerClass() == null || CommandAPI.getConfiguration().getNBTContainerConstructor() == null) {
 			throw new NullPointerException(
 					"The NBTCompoundArgument hasn't been initialized properly! Use CommandAPIConfig.initializeNBTAPI() in your onLoad() method");
@@ -59,9 +59,9 @@ public class NBTCompoundArgument<NBTContainer> extends SafeOverrideableArgument<
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <CommandListenerWrapper> NBTContainer parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
+	public <CommandSourceStack> NBTContainer parseArgument(AbstractPlatform<CommandSourceStack> platform,
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
-		return (NBTContainer) nms.getNBTCompound(cmdCtx, key, CommandAPI.getConfiguration().getNBTContainerConstructor());
+		return (NBTContainer) ((BukkitPlatform<CommandSourceStack>) platform).getNBTCompound(cmdCtx, key, CommandAPI.getConfiguration().getNBTContainerConstructor());
 	}
 }

@@ -30,8 +30,8 @@ import org.bukkit.entity.Player;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
 /**
  * An argument that represents a selection of entities
@@ -59,7 +59,7 @@ public class EntitySelectorArgument<T> extends Argument<T> {
 	 * @param selector the entity selector for this argument
 	 */
 	public EntitySelectorArgument(String nodeName, EntitySelector selector) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentEntity(selector));
+		super(nodeName, BukkitPlatform.get()._ArgumentEntity(selector));
 		this.selector = selector;
 	}
 
@@ -90,10 +90,10 @@ public class EntitySelectorArgument<T> extends Argument<T> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <CommandListenerWrapper> T parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
+	public <CommandSourceStack> T parseArgument(AbstractPlatform<CommandSourceStack> platform,
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
-		return (T) nms.getEntitySelector(cmdCtx, key, selector);
+		return (T) ((BukkitPlatform<CommandSourceStack>) platform).getEntitySelector(cmdCtx, key, selector);
 	}
 
 	@Override

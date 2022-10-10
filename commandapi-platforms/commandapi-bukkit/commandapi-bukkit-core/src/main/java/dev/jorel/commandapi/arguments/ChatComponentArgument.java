@@ -23,9 +23,9 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.exceptions.SpigotNotFoundException;
-import dev.jorel.commandapi.nms.NMS;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 /**
@@ -44,7 +44,7 @@ public class ChatComponentArgument extends Argument<BaseComponent[]> {
 	 * @param nodeName the name of the node for argument
 	 */
 	public ChatComponentArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentChatComponent());
+		super(nodeName, BukkitPlatform.get()._ArgumentChatComponent());
 
 		try {
 			Class.forName("org.spigotmc.SpigotConfig");
@@ -64,9 +64,9 @@ public class ChatComponentArgument extends Argument<BaseComponent[]> {
 	}
 
 	@Override
-	public <CommandListenerWrapper> BaseComponent[] parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
+	public <CommandSourceStack> BaseComponent[] parseArgument(AbstractPlatform<CommandSourceStack> platform,
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
-		return nms.getChatComponent(cmdCtx, key);
+		return ((BukkitPlatform<CommandSourceStack>) platform).getChatComponent(cmdCtx, key);
 	}
 }
