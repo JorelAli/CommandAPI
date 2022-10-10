@@ -10,9 +10,13 @@ import com.velocitypowered.api.command.BrigadierCommand;
 import com.velocitypowered.api.command.CommandManager;
 import com.velocitypowered.api.command.CommandSource;
 
+import com.velocitypowered.api.proxy.ConsoleCommandSource;
+import com.velocitypowered.api.proxy.Player;
 import dev.jorel.commandapi.abstractions.AbstractCommandSender;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
+import dev.jorel.commandapi.commandsenders.VelocityConsoleCommandSender;
+import dev.jorel.commandapi.commandsenders.VelocityPlayer;
 
 public class VelocityPlatform extends AbstractPlatform<CommandSource> {
 	
@@ -39,7 +43,7 @@ public class VelocityPlatform extends AbstractPlatform<CommandSource> {
 	}
 
 	@Override
-	public AbstractCommandSender<CommandSource> getSenderForCommand(CommandContext<CommandSource> cmdCtx,
+	public AbstractCommandSender<? extends CommandSource> getSenderForCommand(CommandContext<CommandSource> cmdCtx,
 			boolean forceNative) {
 		// TODO: This method MAY be completely identical to getCommandSenderFromCommandSource.
 		// In Bukkit, this is NOT the case - we have to apply certain changes based
@@ -52,12 +56,14 @@ public class VelocityPlatform extends AbstractPlatform<CommandSource> {
 	}
 
 	@Override
-	public AbstractCommandSender<CommandSource> getCommandSenderFromCommandSource(CommandSource cs) {
+	public AbstractCommandSender<? extends CommandSource> getCommandSenderFromCommandSource(CommandSource cs) {
 		// Given a Brigadier CommandContext source (result of CommandContext.getSource),
 		// we need to convert that to an AbstractCommandSender.
-		
-		// TODO Auto-generated method stub
-		return null;
+		if(cs instanceof ConsoleCommandSource ccs)
+			return new VelocityConsoleCommandSender(ccs);
+		if(cs instanceof Player p)
+			return new VelocityPlayer(p);
+		throw new IllegalArgumentException("Unknown CommandSource: " + cs);
 	}
 
 	@Override

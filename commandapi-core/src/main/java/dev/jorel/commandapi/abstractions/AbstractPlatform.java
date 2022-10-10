@@ -18,12 +18,12 @@ public abstract class AbstractPlatform<Source> {
 	// AbstractPlatform implementation. The only things in here are going
 	// to be supppppppppper low-level stuff
 
-	public abstract AbstractCommandSender<Source> getSenderForCommand(CommandContext<Source> cmdCtx, boolean forceNative);
+	public abstract AbstractCommandSender<? extends Source> getSenderForCommand(CommandContext<Source> cmdCtx, boolean forceNative);
 
 	// Converts a command source into its source. For Bukkit, this 
 	// is implemented in NMS. TODO: For Velocity, I have no idea what
 	// a command source is or consists of
-	public abstract AbstractCommandSender<Source> getCommandSenderFromCommandSource(Source cs);
+	public abstract AbstractCommandSender<? extends Source> getCommandSenderFromCommandSource(Source cs);
 
 	// Registers a permission. Bukkit's permission system requires permissions to be "registered"
 	// before they can be used.
