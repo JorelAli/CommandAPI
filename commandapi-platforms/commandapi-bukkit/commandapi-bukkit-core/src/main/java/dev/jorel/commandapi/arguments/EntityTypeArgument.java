@@ -25,7 +25,6 @@ import org.bukkit.entity.EntityType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
@@ -39,7 +38,7 @@ public class EntityTypeArgument extends SafeOverrideableArgument<EntityType, Ent
 	 * @param nodeName the name of the node for this argument
 	 */
 	public EntityTypeArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentEntitySummon(), fromKey(EntityType::getKey));
+		super(nodeName, BukkitPlatform.get()._ArgumentEntitySummon(), BukkitPlatform.fromKey(EntityType::getKey));
 	}
 
 	@Override

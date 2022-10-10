@@ -1,6 +1,9 @@
 package dev.jorel.commandapi;
 
 import java.util.List;
+import java.util.function.Function;
+
+import org.bukkit.NamespacedKey;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -70,6 +73,24 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Source> im
 	public void unregister(String commandName) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	/**
+	 * TODO: There's probably a much better place to put this, but I don't
+	 * really fancy subclassing SafeOverrideableArgument for Bukkit specifically,
+	 * so I'll dump it here and hope nobody cares because the CommandAPI doesn't
+	 * really have a centralized "utils" class or anything
+	 * 
+	 * Composes a <code>S</code> to a <code>NamespacedKey</code> mapping function to
+	 * convert <code>S</code> to a <code>String</code>
+	 * 
+	 * @param mapper the mapping function from <code>S</code> to
+	 *               <code>NamespacedKey</code>
+	 * @return a composed function that converts <code>S</code> to
+	 *         <code>String</code>
+	 */
+	public static <S> Function<S, String> fromKey(Function<S, NamespacedKey> mapper) {
+		return mapper.andThen(NamespacedKey::toString);
 	}
 
 }

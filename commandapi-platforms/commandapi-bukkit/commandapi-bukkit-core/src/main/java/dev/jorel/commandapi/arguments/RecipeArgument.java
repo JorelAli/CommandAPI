@@ -26,7 +26,6 @@ import org.bukkit.inventory.Recipe;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
@@ -40,7 +39,7 @@ public class RecipeArgument extends SafeOverrideableArgument<Recipe, Recipe> imp
 	 * @param nodeName the name of the node for this argument
 	 */
 	public RecipeArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentMinecraftKeyRegistered(), fromKey((Recipe r) -> ((Keyed) r).getKey()));
+		super(nodeName, BukkitPlatform.get()._ArgumentMinecraftKeyRegistered(), BukkitPlatform.fromKey((Recipe r) -> ((Keyed) r).getKey()));
 	}
 
 	@Override

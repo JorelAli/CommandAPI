@@ -135,7 +135,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 			throws CommandSyntaxException {
 		// Get the raw input and parsed input
 		final String customresult = CommandAPIHandler.getRawArgumentInput(cmdCtx, key);
-		final B parsedInput = base.parseArgument(nms, cmdCtx, key, previousArgs);
+		final B parsedInput = base.parseArgument(platform, cmdCtx, key, previousArgs);
 
 		try {
 			return infoParser.apply(new CustomArgumentInfo<B>(((BukkitPlatform<CommandSourceStack>) platform).getCommandSenderFromCSS(cmdCtx.getSource()),
@@ -381,10 +381,10 @@ public class CustomArgument<T, B> extends Argument<T> {
 		}
 
 		@Override
-		public <CommandSourceStack> String parseArgument(NMS<CommandSourceStack> nms,
-				CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
+		public <Source> String parseArgument(AbstractPlatform<Source> platform,
+				CommandContext<Source> cmdCtx, String key, Object[] previousArgs)
 				throws CommandSyntaxException {
-			return keyed ? ((BukkitPlatform<CommandSourceStack>) platform).getMinecraftKey(cmdCtx, key).toString() : cmdCtx.getArgument(key, String.class);
+			return keyed ? ((BukkitPlatform<Source>) platform).getMinecraftKey(cmdCtx, key).toString() : cmdCtx.getArgument(key, String.class);
 		}
 	}
 }

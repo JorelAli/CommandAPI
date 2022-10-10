@@ -26,7 +26,6 @@ import org.bukkit.loot.LootTable;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
@@ -40,7 +39,7 @@ public class LootTableArgument extends SafeOverrideableArgument<LootTable, LootT
 	 * @param nodeName the name of the node for this argument
 	 */
 	public LootTableArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentMinecraftKeyRegistered(), fromKey(Keyed::getKey));
+		super(nodeName, BukkitPlatform.get()._ArgumentMinecraftKeyRegistered(), BukkitPlatform.fromKey(Keyed::getKey));
 	}
 	
 	@Override

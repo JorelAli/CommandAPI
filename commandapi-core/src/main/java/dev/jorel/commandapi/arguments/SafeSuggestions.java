@@ -1,14 +1,14 @@
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.IStringTooltip;
-import dev.jorel.commandapi.SuggestionInfo;
-import dev.jorel.commandapi.Tooltip;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.stream.Stream;
+
+import dev.jorel.commandapi.IStringTooltip;
+import dev.jorel.commandapi.SuggestionInfo;
+import dev.jorel.commandapi.abstractions.AbstractTooltip;
 
 /**
  * This class represents safe suggestions. These are parameterized suggestions which can be converted
@@ -126,7 +126,7 @@ public interface SafeSuggestions<S> {
 	 * @return a SafeSuggestion object suggesting the hardcoded values
 	 */
 	@SafeVarargs
-	static <T> SafeSuggestions<T> tooltips(Tooltip<T>... suggestions) {
+	static <T> SafeSuggestions<T> tooltips(AbstractTooltip<T>... suggestions) {
 		return (mapper) -> ArgumentSuggestions.stringsWithTooltips(toStringsWithTooltips(mapper, suggestions));
 	}
 
@@ -138,7 +138,7 @@ public interface SafeSuggestions<S> {
 	 *
 	 * @return a SafeSuggestion object suggesting the hardcoded values
 	 */
-	static <T> SafeSuggestions<T> tooltips(Collection<Tooltip<T>> suggestions) {
+	static <T> SafeSuggestions<T> tooltips(Collection<AbstractTooltip<T>> suggestions) {
 		return (mapper) -> ArgumentSuggestions.stringsWithTooltips(toStringsWithTooltips(mapper, suggestions));
 	}
 
@@ -150,7 +150,7 @@ public interface SafeSuggestions<S> {
 	 *
 	 * @return a SafeSuggestion object suggesting the result of the function
 	 */
-	static <T> SafeSuggestions<T> tooltips(Function<SuggestionInfo, Tooltip<T>[]> suggestions) {
+	static <T> SafeSuggestions<T> tooltips(Function<SuggestionInfo, AbstractTooltip<T>[]> suggestions) {
 		return (mapper) -> ArgumentSuggestions.stringsWithTooltipsCollection(info -> toStringsWithTooltips(mapper,
 			suggestions.apply(info)
 		));
@@ -164,7 +164,7 @@ public interface SafeSuggestions<S> {
 	 *
 	 * @return a SafeSuggestion object suggesting the result of the function
 	 */
-	static <T> SafeSuggestions<T> tooltipCollection(Function<SuggestionInfo, Collection<Tooltip<T>>> suggestions) {
+	static <T> SafeSuggestions<T> tooltipCollection(Function<SuggestionInfo, Collection<AbstractTooltip<T>>> suggestions) {
 		return (mapper) -> ArgumentSuggestions.stringsWithTooltipsCollection(info -> toStringsWithTooltips(mapper,
 			suggestions.apply(info)
 		));
@@ -178,7 +178,7 @@ public interface SafeSuggestions<S> {
 	 *
 	 * @return a SafeSuggestion suggesting the result of the asynchronous function
 	 */
-	static <T> SafeSuggestions<T> tooltipsAsync(Function<SuggestionInfo, CompletableFuture<Tooltip<T>[]>> suggestions) {
+	static <T> SafeSuggestions<T> tooltipsAsync(Function<SuggestionInfo, CompletableFuture<AbstractTooltip<T>[]>> suggestions) {
 		return (mapper) -> ArgumentSuggestions.stringsWithTooltipsCollectionAsync(info -> suggestions
 			.apply(info)
 			.thenApply(items -> toStringsWithTooltips(mapper, items)));
@@ -192,7 +192,7 @@ public interface SafeSuggestions<S> {
 	 *
 	 * @return a SafeSuggestion suggesting the result of the asynchronous function
 	 */
-	static <T> SafeSuggestions<T> tooltipCollectionAsync(Function<SuggestionInfo, CompletableFuture<Collection<Tooltip<T>>>> suggestions) {
+	static <T> SafeSuggestions<T> tooltipCollectionAsync(Function<SuggestionInfo, CompletableFuture<Collection<AbstractTooltip<T>>>> suggestions) {
 		return (mapper) -> ArgumentSuggestions.stringsWithTooltipsCollectionAsync(info -> suggestions
 			.apply(info)
 			.thenApply(items -> toStringsWithTooltips(mapper, items)));
@@ -236,7 +236,7 @@ public interface SafeSuggestions<S> {
 	 * @return array of strings with tooltips representing the array of values with tooltips under the mapping function
 	 */
 	@SafeVarargs
-	private static <T> Collection<IStringTooltip> toStringsWithTooltips(Function<T, String> mapper, Tooltip<T>... suggestions) {
+	private static <T> Collection<IStringTooltip> toStringsWithTooltips(Function<T, String> mapper, AbstractTooltip<T>... suggestions) {
 		return toStringsWithTooltips(mapper, Arrays.stream(suggestions));
 	}
 
@@ -250,7 +250,7 @@ public interface SafeSuggestions<S> {
 	 * @return collection of strings with tooltips representing the collection of values with tooltips under the mapping function
 	 */
 
-	private static <T> Collection<IStringTooltip> toStringsWithTooltips(Function<T, String> mapper, Collection<Tooltip<T>> suggestions) {
+	private static <T> Collection<IStringTooltip> toStringsWithTooltips(Function<T, String> mapper, Collection<AbstractTooltip<T>> suggestions) {
 		return toStringsWithTooltips(mapper, suggestions.stream());
 	}
 
@@ -264,9 +264,9 @@ public interface SafeSuggestions<S> {
 	 * @return collection of strings with tooltips representing the collection of values with tooltips under the mapping function
 	 */
 
-	private static <T> Collection<IStringTooltip> toStringsWithTooltips(Function<T, String> mapper, Stream<Tooltip<T>> suggestions) {
+	private static <T> Collection<IStringTooltip> toStringsWithTooltips(Function<T, String> mapper, Stream<AbstractTooltip<T>> suggestions) {
 		//Note the ::apply is required to allow the return type to be IStringTooltip instead of StringTooltip
-		Function<Tooltip<T>, IStringTooltip> builder = Tooltip.build(mapper)::apply;
+		Function<AbstractTooltip<T>, IStringTooltip> builder = AbstractTooltip.build(mapper)::apply;
 		return suggestions.map(builder).toList();
 	}
 

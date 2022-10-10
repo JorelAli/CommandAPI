@@ -25,7 +25,6 @@ import org.bukkit.enchantments.Enchantment;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
@@ -41,7 +40,7 @@ public class EnchantmentArgument extends SafeOverrideableArgument<Enchantment, E
 	 * @param nodeName the name of the node for this argument 
 	 */
 	public EnchantmentArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentEnchantment(), fromKey(Enchantment::getKey));
+		super(nodeName, BukkitPlatform.get()._ArgumentEnchantment(), BukkitPlatform.fromKey(Enchantment::getKey));
 	}
 
 	@Override

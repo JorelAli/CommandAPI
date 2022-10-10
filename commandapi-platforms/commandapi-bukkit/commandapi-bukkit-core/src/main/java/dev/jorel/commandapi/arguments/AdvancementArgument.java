@@ -25,8 +25,6 @@ import org.bukkit.advancement.Advancement;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.attributes.KeyedObject;
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
@@ -34,19 +32,19 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
  * An argument that represents the Bukkit Advancement object
  * @apiNote Returns an {@link Advancement} object
  */
-public class AdvancementArgument extends SafeOverrideableArgument<KeyedObject, KeyedObject> implements ICustomProvidedArgument {
+public class AdvancementArgument extends SafeOverrideableArgument<Advancement, Advancement> implements ICustomProvidedArgument {
 	
 	/**
 	 * Constructs an AdvancementArgument with a given node name
 	 * @param nodeName the name of the node for argument
 	 */
 	public AdvancementArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentMinecraftKeyRegistered(), fromKey(KeyedObject::getKey));
+		super(nodeName, BukkitPlatform.get()._ArgumentMinecraftKeyRegistered(), BukkitPlatform.fromKey(Advancement::getKey));
 	}
 
 	@Override
-	public Class<KeyedObject> getPrimitiveType() {
-		return KeyedObject.class;
+	public Class<Advancement> getPrimitiveType() {
+		return Advancement.class;
 	}
 	
 	@Override
@@ -60,7 +58,7 @@ public class AdvancementArgument extends SafeOverrideableArgument<KeyedObject, K
 	}
 
 	@Override
-	public <CommandSourceStack> KeyedObject parseArgument(AbstractPlatform<CommandSourceStack> platform,
+	public <CommandSourceStack> Advancement parseArgument(AbstractPlatform<CommandSourceStack> platform,
 			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getAdvancement(cmdCtx, key);
 	}

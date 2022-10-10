@@ -25,8 +25,7 @@ import java.util.function.Function;
 import com.mojang.brigadier.arguments.ArgumentType;
 
 import dev.jorel.commandapi.SuggestionInfo;
-import dev.jorel.commandapi.Tooltip;
-import dev.jorel.commandapi.attributes.KeyedObject;
+import dev.jorel.commandapi.abstractions.AbstractTooltip;
 
 /**
  * An interface declaring methods required to override argument suggestions
@@ -89,7 +88,7 @@ public abstract class SafeOverrideableArgument<T, S> extends Argument<T> {
 	 * @deprecated use {@link #replaceSafeSuggestions(SafeSuggestions)}
 	 */
 	@Deprecated(forRemoval = true)
-	public final Argument<T> replaceWithSafeSuggestionsT(Function<SuggestionInfo, Tooltip<S>[]> suggestions) {
+	public final Argument<T> replaceWithSafeSuggestionsT(Function<SuggestionInfo, AbstractTooltip<S>[]> suggestions) {
 		return replaceSafeSuggestions(SafeSuggestions.tooltips(suggestions));
 	}
 
@@ -135,21 +134,8 @@ public abstract class SafeOverrideableArgument<T, S> extends Argument<T> {
 	 * 
 	 */
 	@Deprecated(forRemoval = true)
-	public final Argument<T> includeWithSafeSuggestionsT(Function<SuggestionInfo, Tooltip<S>[]> suggestions) {
+	public final Argument<T> includeWithSafeSuggestionsT(Function<SuggestionInfo, AbstractTooltip<S>[]> suggestions) {
 		return includeSafeSuggestions(SafeSuggestions.tooltips(suggestions));
-	}
-
-	/**
-	 * Composes a <code>S</code> to a <code>NamespacedKey</code> mapping function to
-	 * convert <code>S</code> to a <code>String</code>
-	 * 
-	 * @param mapper the mapping function from <code>S</code> to
-	 *               <code>NamespacedKey</code>
-	 * @return a composed function that converts <code>S</code> to
-	 *         <code>String</code>
-	 */
-	static <S> Function<S, String> fromKey(Function<S, KeyedObject> mapper) {
-		return mapper.andThen(KeyedObject::toString);
 	}
 
 }
