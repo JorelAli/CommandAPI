@@ -108,7 +108,7 @@ public abstract class Argument<T> extends ArgumentTree {
 	 * @return the parsed object represented by this argument
 	 * @throws CommandSyntaxException if parsing fails
 	 */
-	public abstract <CommandSourceStack> T parseArgument(AbstractPlatform platform,
+	public abstract <CommandSourceStack> T parseArgument(AbstractPlatform<CommandSourceStack> platform,
 			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException;
 
 	/////////////////

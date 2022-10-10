@@ -318,7 +318,7 @@ public interface NMS<CommandListenerWrapper> {
 	 * @return A CommandSender instance (such as a ProxiedNativeCommandSender or
 	 *         Player)
 	 */
-	CommandSender getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean forceNative);
+	// CommandSender getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean forceNative);
 
 	/**
 	 * Returns the Server's internal (OBC) CommandMap

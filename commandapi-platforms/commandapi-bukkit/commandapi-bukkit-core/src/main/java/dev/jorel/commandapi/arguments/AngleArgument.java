@@ -23,8 +23,9 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
 /**
  * An argument that represents a yaw angle, measured in degrees with float
@@ -57,9 +58,8 @@ public class AngleArgument extends SafeOverrideableArgument<Float, Float> {
 	}
 
 	@Override
-	public <CommandListenerWrapper> Float parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
-			throws CommandSyntaxException {
-		return nms.getAngle(cmdCtx, key);
+	public <CommandSourceStack> Float parseArgument(AbstractPlatform<CommandSourceStack> platform, CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
+		throws CommandSyntaxException {
+		return ((BukkitPlatform<CommandSourceStack>) platform).getAngle(cmdCtx, key);
 	}
 }
