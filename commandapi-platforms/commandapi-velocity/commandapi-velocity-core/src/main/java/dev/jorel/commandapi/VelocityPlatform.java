@@ -14,7 +14,7 @@ import dev.jorel.commandapi.abstractions.AbstractCommandSender;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 
-public class VelocityPlatform extends AbstractPlatform {
+public class VelocityPlatform extends AbstractPlatform<CommandSource> {
 	
 	private final CommandManager commandManager;
 	
@@ -39,7 +39,7 @@ public class VelocityPlatform extends AbstractPlatform {
 	}
 
 	@Override
-	public <Source> AbstractCommandSender<Source> getSenderForCommand(CommandContext<Source> cmdCtx,
+	public AbstractCommandSender<CommandSource> getSenderForCommand(CommandContext<CommandSource> cmdCtx,
 			boolean forceNative) {
 		// TODO: This method MAY be completely identical to getCommandSenderFromCommandSource.
 		// In Bukkit, this is NOT the case - we have to apply certain changes based
@@ -52,7 +52,7 @@ public class VelocityPlatform extends AbstractPlatform {
 	}
 
 	@Override
-	public <Source> AbstractCommandSender<Source> getCommandSenderFromCommandSource(Source cs) {
+	public AbstractCommandSender<CommandSource> getCommandSenderFromCommandSource(CommandSource cs) {
 		// Given a Brigadier CommandContext source (result of CommandContext.getSource),
 		// we need to convert that to an AbstractCommandSender.
 		
@@ -61,22 +61,23 @@ public class VelocityPlatform extends AbstractPlatform {
 	}
 
 	@Override
-	public <Source> SuggestionProvider<Source> getSuggestionProvider(SuggestionProviders suggestionProvider) {
+	public SuggestionProvider<CommandSource> getSuggestionProvider(SuggestionProviders suggestionProvider) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <Source> void postCommandRegistration(LiteralCommandNode<Source> resultantNode,
-			List<LiteralCommandNode<Source>> aliasNodes) {
+	public void postCommandRegistration(LiteralCommandNode<CommandSource> resultantNode,
+			List<LiteralCommandNode<CommandSource>> aliasNodes) {
 		return; // Nothing left to do
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <Source> LiteralCommandNode<Source> registerCommandNode(LiteralArgumentBuilder<Source> node) {
-		commandManager.register(new BrigadierCommand((LiteralArgumentBuilder<CommandSource>) node));
-		return null; // TODO: Uhhhhhhhhhhhhhhhh how do we get this?
+	public LiteralCommandNode<CommandSource> registerCommandNode(LiteralArgumentBuilder<CommandSource> node) {
+		BrigadierCommand command = new BrigadierCommand(node);
+		commandManager.register(command);
+		return command.getNode();
 	}
 
 }

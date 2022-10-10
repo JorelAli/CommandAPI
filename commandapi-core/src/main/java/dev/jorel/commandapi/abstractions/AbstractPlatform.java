@@ -9,8 +9,7 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 
-// TODO: Not entirely sure if this needs to be parameterized here or not
-public abstract class AbstractPlatform {
+public abstract class AbstractPlatform<Source> {
 	// TODO: Add methods that need platform-specific implementations
 	// All methods in bukkit NMS will probably also need to be here
 	
@@ -19,12 +18,12 @@ public abstract class AbstractPlatform {
 	// AbstractPlatform implementation. The only things in here are going
 	// to be supppppppppper low-level stuff
 
-	public abstract <Source> AbstractCommandSender<Source> getSenderForCommand(CommandContext<Source> cmdCtx, boolean forceNative);
+	public abstract AbstractCommandSender<Source> getSenderForCommand(CommandContext<Source> cmdCtx, boolean forceNative);
 
 	// Converts a command source into its source. For Bukkit, this 
 	// is implemented in NMS. TODO: For Velocity, I have no idea what
 	// a command source is or consists of
-	public abstract <Source> AbstractCommandSender<Source> getCommandSenderFromCommandSource(Source cs);
+	public abstract AbstractCommandSender<Source> getCommandSenderFromCommandSource(Source cs);
 
 	// Registers a permission. Bukkit's permission system requires permissions to be "registered"
 	// before they can be used.
@@ -33,7 +32,7 @@ public abstract class AbstractPlatform {
 	// Some commands have existing suggestion providers. TODO: We can PROBABLY avoid this by
 	// implementing the relevant NMS SuggestionProviders implementation on the platform-specific
 	// argument, but I CBA to think about that now so I'll dump it here
-	public abstract <Source> SuggestionProvider<Source> getSuggestionProvider(SuggestionProviders suggestionProvider);
+	public abstract SuggestionProvider<Source> getSuggestionProvider(SuggestionProviders suggestionProvider);
 	
 
 	
@@ -45,14 +44,14 @@ public abstract class AbstractPlatform {
 	 * @param aliasNodes any alias nodes that were also registered as a part of this registration process
 	 * @param resultantNode the node that was registered
 	 */
-	public abstract <Source> void postCommandRegistration(LiteralCommandNode<Source> resultantNode , List<LiteralCommandNode<Source>> aliasNodes);
+	public abstract void postCommandRegistration(LiteralCommandNode<Source> resultantNode , List<LiteralCommandNode<Source>> aliasNodes);
 
 	/**
 	 * Registers a Brigadier command node. For Bukkit, this requires using reflection to
 	 * access the CommandDispatcher (DISPATCHER), then registering it directly using
 	 * DISPATCHER.register. For Velocity, this is as simple as commandManager.register(new BrigadierCommand( node ))
 	 */
-	public abstract <Source> LiteralCommandNode<Source>  registerCommandNode(LiteralArgumentBuilder<Source> node);
+	public abstract LiteralCommandNode<Source>  registerCommandNode(LiteralArgumentBuilder<Source> node);
 
 	// We probabbbbbbbbly need to register some form of help for commands? I'm not
 	// sure if 
