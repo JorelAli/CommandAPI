@@ -20,8 +20,8 @@
  *******************************************************************************/
 package dev.jorel.commandapi.nms;
 
+import dev.jorel.commandapi.BaseHandler;
 import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import net.minecraft.Util;
 import net.minecraft.server.ServerFunctionLibrary;
@@ -60,7 +60,7 @@ public class NMS_1_17_R1 extends NMS_1_17_Common {
 
 		// Update the ServerFunctionLibrary's command dispatcher with the new one
 		try {
-			CommandAPIHandler.getInstance().getField(ServerFunctionLibrary.class, "i")
+			BaseHandler.getInstance().getField(ServerFunctionLibrary.class, "i")
 				.set(serverResources.getFunctionLibrary(), getBrigadierDispatcher());
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();

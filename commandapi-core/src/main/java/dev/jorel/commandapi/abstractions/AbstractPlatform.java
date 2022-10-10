@@ -18,7 +18,13 @@ public abstract class AbstractPlatform<Source> {
 	// AbstractPlatform implementation. The only things in here are going
 	// to be supppppppppper low-level stuff
 
-	public abstract AbstractCommandSender<? extends Source> getSenderForCommand(CommandContext<Source> cmdCtx, boolean forceNative);
+	// "Source" in this case (for CommandContext<Source>) is something like a
+	// CommandListenerWrapper (Spigot mappings) or CommandSourceStack (Mojang mappings).
+	// 
+	// This method returns AbstractCommandSender<? extends Source>, except what we actually want to return
+	// is just a plain ol' AbstractCommandSender<?> - we don't care what the abstract command sender is parameterized
+	// over
+	public abstract AbstractCommandSender<?> getSenderForCommand(CommandContext<Source> cmdCtx, boolean forceNative);
 
 	// Converts a command source into its source. For Bukkit, this 
 	// is implemented in NMS. TODO: For Velocity, I have no idea what

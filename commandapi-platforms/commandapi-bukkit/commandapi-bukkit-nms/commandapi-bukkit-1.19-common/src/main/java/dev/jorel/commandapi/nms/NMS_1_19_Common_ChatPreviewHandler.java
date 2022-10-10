@@ -3,8 +3,9 @@ package dev.jorel.commandapi.nms;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.context.ParsedCommandNode;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
+import dev.jorel.commandapi.BaseHandler;
 import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.PreviewInfo;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.wrappers.PreviewableFunction;
@@ -81,7 +82,7 @@ public abstract class NMS_1_19_Common_ChatPreviewHandler extends ChannelDuplexHa
 		Object component;
 		try {
 			@SuppressWarnings("rawtypes") final PreviewInfo previewInfo;
-			if (CommandAPIHandler.getInstance().lookupPreviewableLegacyStatus(path)) {
+			if (BaseHandler.getInstance().lookupPreviewableLegacyStatus(path)) {
 				BaseComponent[] parsedInput;
 				try {
 					parsedInput = nms.getChat(results.getContext().build(fullInput), path.get(path.size() - 1));
@@ -107,7 +108,7 @@ public abstract class NMS_1_19_Common_ChatPreviewHandler extends ChannelDuplexHa
 		if (component != null) {
 			if (component instanceof BaseComponent[] baseComponent) {
 				jsonToSend = ComponentSerializer.toString(baseComponent);
-			} else if (CommandAPIHandler.getInstance().getPaper().isPresent()) {
+			} else if (BaseHandler.getInstance().getPaper().isPresent()) {
 				if (component instanceof Component adventureComponent) {
 					jsonToSend = GsonComponentSerializer.gson().serialize(adventureComponent);
 				} else {
@@ -138,7 +139,7 @@ public abstract class NMS_1_19_Common_ChatPreviewHandler extends ChannelDuplexHa
 			for (ParsedCommandNode<CommandSourceStack> commandNode : results.getContext().getNodes()) {
 				path.add(commandNode.getNode().getName());
 			}
-			Optional<PreviewableFunction<?>> preview = CommandAPIHandler.getInstance().lookupPreviewable(path);
+			Optional<PreviewableFunction<?>> preview = BaseHandler.getInstance().lookupPreviewable(path);
 
 			cachedResult = new InitialParse(fullInput, results, path, preview);
 			return cachedResult;

@@ -28,8 +28,8 @@ import org.bukkit.entity.Player;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import dev.jorel.commandapi.BaseHandler;
 import dev.jorel.commandapi.BukkitPlatform;
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.commandsenders.BukkitPlayer;
 import dev.jorel.commandapi.exceptions.SpigotNotFoundException;
@@ -82,7 +82,7 @@ public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyAr
 		if (getPreview().isPresent() && sender instanceof Player player) {
 			try {
 				BaseComponent[] previewComponent = getPreview().get()
-					.generatePreview(new PreviewInfo<BaseComponent[]>(new BukkitPlayer(player), CommandAPIHandler.getRawArgumentInput(cmdCtx, key), cmdCtx.getInput(), component));
+					.generatePreview(new PreviewInfo<BaseComponent[]>(new BukkitPlayer(player), BaseHandler.getRawArgumentInput(cmdCtx, key), cmdCtx.getInput(), component));
 
 				if (this.usePreview) {
 					component = previewComponent;

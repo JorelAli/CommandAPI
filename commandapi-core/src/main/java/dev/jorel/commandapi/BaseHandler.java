@@ -1,5 +1,6 @@
 package dev.jorel.commandapi;
 
+import java.awt.Component;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
@@ -15,9 +16,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
-
-import org.bukkit.Bukkit;
-import org.bukkit.command.PluginCommand;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.ArgumentBuilder;
@@ -53,7 +51,7 @@ import dev.jorel.commandapi.wrappers.PreviewableFunction;
 // and I'm not sure if we can use the Adventure API on Fabric, so let's
 // assume we can't until we figure that out.
 
-public class CommandAPIHandler<CommandSource> {
+public class BaseHandler<Source> {
 	// TODO: Figure out what here gets moved to the common implementation and what
 	// is platform-specific
 
@@ -90,20 +88,24 @@ public class CommandAPIHandler<CommandSource> {
 		return cmdCtx.getInput().substring(range.getStart(), range.getEnd());
 	}
 
-	final Map<ClassCache, Field> FIELDS = new HashMap<>();
+	// TODO: Need to ensure this can be safely "disposed of" when we're done (e.g. on reloads).
+	// I hiiiiiiighly doubt we're storing class caches of classes that can be unloaded at runtime,
+	// but this IS a generic class caching system and we don't want derpy memory leaks
+	private static final Map<ClassCache, Field> FIELDS = new HashMap<>();
+
 	final TreeMap<String, CommandPermission> PERMISSIONS_TO_FIX = new TreeMap<>();
-	final AbstractPlatform platform;
+	final AbstractPlatform<Source> platform; // Access strictly via getPlatform() method which can be overridden
 	final List<RegisteredCommand> registeredCommands; // Keep track of what has been registered for type checking
 	final Map<List<String>, IPreviewable<? extends Argument<?>, ?>> previewableArguments; // Arguments with previewable chat
 
 	// TODO: Wait, how do we instantiate this?
-	private CommandAPIHandler(AbstractPlatform platform) {
+	protected BaseHandler(AbstractPlatform<Source> platform) {
 		this.platform = platform;
 		this.registeredCommands = new ArrayList<>();
 		this.previewableArguments = new HashMap<>();
 	}
 
-	public AbstractPlatform getPlatform() {
+	public AbstractPlatform<Source> getPlatform() {
 		return this.platform;
 	}
 
@@ -117,12 +119,12 @@ public class CommandAPIHandler<CommandSource> {
 	 * @return a brigadier command which is registered internally
 	 * @throws CommandSyntaxException if an error occurs when the command is ran
 	 */
-	Command<CommandSource> generateCommand(Argument<?>[] args,
-			CustomCommandExecutor<? extends AbstractCommandSender<CommandSource>> executor, boolean converted) throws CommandSyntaxException {
+	Command<Source> generateCommand(Argument<?>[] args,
+			CustomCommandExecutor<? extends AbstractCommandSender<Source>> executor, boolean converted) throws CommandSyntaxException {
 
 		// Generate our command from executor
 		return (cmdCtx) -> {
-			AbstractCommandSender<CommandSource> sender = platform.getSenderForCommand(cmdCtx, executor.isForceNative());
+			AbstractCommandSender<Source> sender = platform.getSenderForCommand(cmdCtx, executor.isForceNative());
 			if (converted) {
 				Object[] argObjs = argsToObjectArr(cmdCtx, args);
 				int resultValue = 0;
@@ -169,7 +171,7 @@ public class CommandAPIHandler<CommandSource> {
 	 * @return an Object[] which can be used in (sender, args) ->
 	 * @throws CommandSyntaxException
 	 */
-	Object[] argsToObjectArr(CommandContext<CommandSource> cmdCtx, Argument<?>[] args)
+	Object[] argsToObjectArr(CommandContext<Source> cmdCtx, Argument<?>[] args)
 			throws CommandSyntaxException {
 		// Array for arguments for executor
 		List<Object> argList = new ArrayList<>();
@@ -196,7 +198,7 @@ public class CommandAPIHandler<CommandSource> {
 	 * @return the standard Bukkit type
 	 * @throws CommandSyntaxException
 	 */
-	Object parseArgument(CommandContext<CommandSource> cmdCtx, String key, Argument<?> value,
+	Object parseArgument(CommandContext<Source> cmdCtx, String key, Argument<?> value,
 			Object[] previousArgs) throws CommandSyntaxException {
 		if (value.isListed()) {
 			// TODO: Specify platform
@@ -229,7 +231,7 @@ public class CommandAPIHandler<CommandSource> {
 	 * 
 	 * @param requirements
 	 */
-	Predicate<CommandSource> generatePermissions(String commandName, CommandPermission permission,
+	Predicate<Source> generatePermissions(String commandName, CommandPermission permission,
 			Predicate<AbstractCommandSender<?>> requirements) {
 		// If we've already registered a permission, set it to the "parent" permission.
 		if (PERMISSIONS_TO_FIX.containsKey(commandName.toLowerCase())) {
@@ -248,7 +250,7 @@ public class CommandAPIHandler<CommandSource> {
 			platform.registerPermission(finalPermission.getPermission().get());
 		}
 
-		return (CommandSource css) -> permissionCheck(platform.getCommandSenderFromCommandSource(css), finalPermission,
+		return (Source css) -> permissionCheck(platform.getCommandSenderFromCommandSource(css), finalPermission,
 				requirements);
 	}
 
@@ -288,7 +290,7 @@ public class CommandAPIHandler<CommandSource> {
 	 * multiliteral arguments were not present.
 	 */
 	private boolean expandMultiLiterals(CommandMetaData meta, final Argument<?>[] args,
-			CustomCommandExecutor<? extends AbstractCommandSender<CommandSource>> executor, boolean converted)
+			CustomCommandExecutor<? extends AbstractCommandSender<Source>> executor, boolean converted)
 			throws CommandSyntaxException, IOException {
 
 		// "Expands" our MultiLiterals into Literals
@@ -367,7 +369,7 @@ public class CommandAPIHandler<CommandSource> {
 	}
 
 	// Links arg -> Executor
-	private ArgumentBuilder<CommandSource, ?> generateInnerArgument(Command<CommandSource> command,
+	private ArgumentBuilder<Source, ?> generateInnerArgument(Command<Source> command,
 			Argument<?>[] args) {
 		Argument<?> innerArg = args[args.length - 1];
 
@@ -391,9 +393,9 @@ public class CommandAPIHandler<CommandSource> {
 	}
 
 	// Links arg1 -> arg2 -> ... argN -> innermostArgument
-	private ArgumentBuilder<CommandSource, ?> generateOuterArguments(
-			ArgumentBuilder<CommandSource, ?> innermostArgument, Argument<?>[] args) {
-		ArgumentBuilder<CommandSource, ?> outer = innermostArgument;
+	private ArgumentBuilder<Source, ?> generateOuterArguments(
+			ArgumentBuilder<Source, ?> innermostArgument, Argument<?>[] args) {
+		ArgumentBuilder<Source, ?> outer = innermostArgument;
 		for (int i = args.length - 2; i >= 0; i--) {
 			Argument<?> outerArg = args[i];
 
@@ -420,7 +422,7 @@ public class CommandAPIHandler<CommandSource> {
 
 	/**
 	 * Handles previewable arguments. This stores the path to previewable arguments
-	 * in {@link CommandAPIHandler#previewableArguments} for runtime resolving
+	 * in {@link BaseHandler#previewableArguments} for runtime resolving
 	 * 
 	 * @param commandName the name of the command
 	 * @param args        the declared arguments
@@ -447,7 +449,7 @@ public class CommandAPIHandler<CommandSource> {
 	// Builds our platform command using the given arguments for this method, then
 	// registers it
 	void register(CommandMetaData meta, final Argument<?>[] args,
-			CustomCommandExecutor<? extends AbstractCommandSender<CommandSource>> executor, boolean converted)
+			CustomCommandExecutor<? extends AbstractCommandSender<Source>> executor, boolean converted)
 			throws CommandSyntaxException, IOException {
 
 		// "Expands" our MultiLiterals into Literals
@@ -520,19 +522,20 @@ public class CommandAPIHandler<CommandSource> {
 
 		// Warn if the command we're registering already exists in this plugin's
 		// plugin.yml file
-		{
-			final PluginCommand pluginCommand = Bukkit.getPluginCommand(commandName);
-			if (pluginCommand != null) {
-//				CommandAPI.logWarning(
-//						"Plugin command /%s is registered by Bukkit (%s). Did you forget to remove this from your plugin.yml file?"
-//								.formatted(commandName, pluginCommand.getPlugin().getName()));
-			}
-		}
+		// TODO: We might need a "pre-register" method call for something like this?
+//		{
+//			final PluginCommand pluginCommand = Bukkit.getPluginCommand(commandName);
+//			if (pluginCommand != null) {
+////				CommandAPI.logWarning(
+////						"Plugin command /%s is registered by Bukkit (%s). Did you forget to remove this from your plugin.yml file?"
+////								.formatted(commandName, pluginCommand.getPlugin().getName()));
+//			}
+//		}
 
 //		CommandAPI.logInfo("Registering command /" + commandName + " " + humanReadableCommandArgSyntax);
 
 		// Generate the actual command
-		Command<CommandSource> command = generateCommand(args, executor, converted);
+		Command<Source> command = generateCommand(args, executor, converted);
 
 		/*
 		 * The innermost argument needs to be connected to the executor. Then that
@@ -540,8 +543,8 @@ public class CommandAPIHandler<CommandSource> {
 		 * argument needs to be connected to the command name, so we get: CommandName ->
 		 * Args1 -> Args2 -> ... -> ArgsN -> Executor
 		 */
-		LiteralCommandNode<CommandSource> resultantNode;
-		List<LiteralCommandNode<CommandSource>> aliasNodes = new ArrayList<>();
+		LiteralCommandNode<Source> resultantNode;
+		List<LiteralCommandNode<Source>> aliasNodes = new ArrayList<>();
 		if (args.length == 0) {
 			// Link command name to the executor
 			resultantNode = platform.registerCommandNode(getLiteralArgumentBuilder(commandName)
@@ -557,7 +560,7 @@ public class CommandAPIHandler<CommandSource> {
 
 			// Generate all of the arguments, following each other and finally linking to
 			// the executor
-			ArgumentBuilder<CommandSource, ?> commandArguments = generateOuterArguments(
+			ArgumentBuilder<Source, ?> commandArguments = generateOuterArguments(
 					generateInnerArgument(command, args), args);
 
 			// Link command name to first argument and register
@@ -588,7 +591,7 @@ public class CommandAPIHandler<CommandSource> {
 	 * @param commandName the name of the literal to create
 	 * @return a brigadier LiteralArgumentBuilder representing a literal
 	 */
-	LiteralArgumentBuilder<CommandSource> getLiteralArgumentBuilder(String commandName) {
+	LiteralArgumentBuilder<Source> getLiteralArgumentBuilder(String commandName) {
 		return LiteralArgumentBuilder.literal(commandName);
 	}
 
@@ -599,18 +602,18 @@ public class CommandAPIHandler<CommandSource> {
 	 * @param permission  the permission required to use this literal
 	 * @return a brigadier LiteralArgumentBuilder representing a literal
 	 */
-	LiteralArgumentBuilder<CommandSource> getLiteralArgumentBuilderArgument(String commandName,
+	LiteralArgumentBuilder<Source> getLiteralArgumentBuilderArgument(String commandName,
 			CommandPermission permission, Predicate<AbstractCommandSender<?>> requirements) {
-		LiteralArgumentBuilder<CommandSource> builder = LiteralArgumentBuilder.literal(commandName);
-		return builder.requires((CommandSource css) -> permissionCheck(platform.getCommandSenderFromCommandSource(css),
+		LiteralArgumentBuilder<Source> builder = LiteralArgumentBuilder.literal(commandName);
+		return builder.requires((Source css) -> permissionCheck(platform.getCommandSenderFromCommandSource(css),
 				permission, requirements));
 	}
 
 	// Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
-	RequiredArgumentBuilder<CommandSource, ?> getRequiredArgumentBuilderDynamic(final Argument<?>[] args,
+	RequiredArgumentBuilder<Source, ?> getRequiredArgumentBuilderDynamic(final Argument<?>[] args,
 			Argument<?> argument) {
 
-		final SuggestionProvider<CommandSource> suggestions;
+		final SuggestionProvider<Source> suggestions;
 
 		if (argument.getOverriddenSuggestions().isPresent()) {
 			suggestions = toSuggestions(argument, args, true);
@@ -625,13 +628,13 @@ public class CommandAPIHandler<CommandSource> {
 	}
 
 	// Gets a RequiredArgumentBuilder for an argument, given a SuggestionProvider
-	RequiredArgumentBuilder<CommandSource, ?> getRequiredArgumentBuilderWithProvider(Argument<?> argument,
-			Argument<?>[] args, SuggestionProvider<CommandSource> provider) {
-		SuggestionProvider<CommandSource> newSuggestionsProvider = provider;
+	RequiredArgumentBuilder<Source, ?> getRequiredArgumentBuilderWithProvider(Argument<?> argument,
+			Argument<?>[] args, SuggestionProvider<Source> provider) {
+		SuggestionProvider<Source> newSuggestionsProvider = provider;
 
 		// If we have suggestions to add, combine provider with the suggestions
 		if (argument.getIncludedSuggestions().isPresent() && argument.getOverriddenSuggestions().isEmpty()) {
-			SuggestionProvider<CommandSource> addedSuggestions = toSuggestions(argument, args, false);
+			SuggestionProvider<Source> addedSuggestions = toSuggestions(argument, args, false);
 
 			newSuggestionsProvider = (cmdCtx, builder) -> {
 				// Heavily inspired by CommandDispatcher#listSuggestions, with combining
@@ -651,14 +654,14 @@ public class CommandAPIHandler<CommandSource> {
 			};
 		}
 
-		RequiredArgumentBuilder<CommandSource, ?> requiredArgumentBuilder = RequiredArgumentBuilder
+		RequiredArgumentBuilder<Source, ?> requiredArgumentBuilder = RequiredArgumentBuilder
 				.argument(argument.getNodeName(), argument.getRawType());
 
 		return requiredArgumentBuilder.requires(css -> permissionCheck(platform.getCommandSenderFromCommandSource(css),
 				argument.getArgumentPermission(), argument.getRequirements())).suggests(newSuggestionsProvider);
 	}
 
-	Object[] generatePreviousArguments(CommandContext<CommandSource> context, Argument<?>[] args, String nodeName)
+	Object[] generatePreviousArguments(CommandContext<Source> context, Argument<?>[] args, String nodeName)
 			throws CommandSyntaxException {
 		// Populate Object[], which is our previously filled arguments
 		List<Object> previousArguments = new ArrayList<>();
@@ -689,9 +692,9 @@ public class CommandAPIHandler<CommandSource> {
 		return previousArguments.toArray();
 	}
 
-	SuggestionProvider<CommandSource> toSuggestions(Argument<?> theArgument, Argument<?>[] args,
+	SuggestionProvider<Source> toSuggestions(Argument<?> theArgument, Argument<?>[] args,
 			boolean overrideSuggestions) {
-		return (CommandContext<CommandSource> context, SuggestionsBuilder builder) -> {
+		return (CommandContext<Source> context, SuggestionsBuilder builder) -> {
 			// Construct the suggestion info
 			SuggestionInfo suggestionInfo = new SuggestionInfo(platform.getCommandSenderFromCommandSource(context.getSource()),
 					generatePreviousArguments(context, args, theArgument.getNodeName()), builder.getInput(),
@@ -756,7 +759,7 @@ public class CommandAPIHandler<CommandSource> {
 	 * @param name  the name of the field
 	 * @return a Field reference
 	 */
-	public final Field getField(Class<?> clazz, String name) {
+	public static final Field getField(Class<?> clazz, String name) {
 		ClassCache key = new ClassCache(clazz, name);
 		if (FIELDS.containsKey(key)) {
 			return FIELDS.get(key);

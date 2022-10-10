@@ -15,6 +15,9 @@ public interface AbstractCommandSender<Source> {
 	
 	public boolean isOp();
 	
-	// Need to be able to get the underlying command sender!
+	// Need to be able to get the underlying command sender, NOT the underlying
+	// NMS command source (CLW/CSS). If we want to access that, we can do so by
+	// adding a second parameter if we so desire, but I don't think we need to
+	// go that far
 	public Source getSource();
 }

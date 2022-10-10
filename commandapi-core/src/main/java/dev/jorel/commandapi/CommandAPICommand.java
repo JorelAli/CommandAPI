@@ -228,7 +228,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 			}
 
 			if (executor.hasAnyExecutors()) {
-				CommandAPIHandler.getInstance().register(meta, argumentsArr, executor, isConverted);
+				BaseHandler.getInstance().register(meta, argumentsArr, executor, isConverted);
 			}
 
 			// Convert subcommands into multiliteral arguments

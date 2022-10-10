@@ -29,7 +29,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
 import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.BaseHandler;
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
@@ -134,7 +134,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
 		// Get the raw input and parsed input
-		final String customresult = CommandAPIHandler.getRawArgumentInput(cmdCtx, key);
+		final String customresult = BaseHandler.getRawArgumentInput(cmdCtx, key);
 		final B parsedInput = base.parseArgument(platform, cmdCtx, key, previousArgs);
 
 		try {

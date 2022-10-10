@@ -69,7 +69,9 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 
-import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.BaseHandler;
+import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.abstractions.AbstractCommandSender;
 import dev.jorel.commandapi.arguments.EntitySelector;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.preprocessor.Differs;
@@ -142,7 +144,7 @@ import net.minecraft.world.phys.Vec2;
  * Any of these that do not work should be removed or implemented otherwise
  * (introducing another NMS_Common module perhaps?
  */
-public abstract class NMS_Common implements NMS<CommandSourceStack> {
+public abstract class NMS_Common extends BukkitPlatform<CommandSourceStack> {
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
 		return NamespacedKey.fromString(key.getNamespace() + ":" + key.getPath());
@@ -537,7 +539,7 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	public final MathOperation getMathOperation(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		// We run this to ensure the argument exists/parses properly
 		OperationArgument.getOperation(cmdCtx, key);
-		return MathOperation.fromString(CommandAPIHandler.getRawArgumentInput(cmdCtx, key));
+		return MathOperation.fromString(BaseHandler.getRawArgumentInput(cmdCtx, key));
 	}
 
 	@Override
@@ -634,7 +636,7 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	@Unimplemented(because = NAME_CHANGED, info = "i (1.17)            -> getRotation (1.18) -> l (1.19)")
 	@Unimplemented(because = NAME_CHANGED, info = "getEntity (1.17)    -> getEntity (1.18)   -> g (1.19)")
 	@Unimplemented(because = NAME_CHANGED, info = "getWorld (1.17)     -> getLevel (1.18)    -> f (1.19)")
-	public abstract CommandSender getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean isNative);
+	public abstract AbstractCommandSender<?> getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean isNative);
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftServer")

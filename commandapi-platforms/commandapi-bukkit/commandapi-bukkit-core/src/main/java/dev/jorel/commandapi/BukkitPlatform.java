@@ -28,7 +28,7 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Source> im
 	}
 
 	@Override
-	public AbstractCommandSender<? extends Source> getSenderForCommand(CommandContext<Source> cmdCtx, boolean forceNative) {
+	public AbstractCommandSender<?> getSenderForCommand(CommandContext<Source> cmdCtx, boolean forceNative) {
 		// TODO Auto-generated method stub
 		return null;
 	}

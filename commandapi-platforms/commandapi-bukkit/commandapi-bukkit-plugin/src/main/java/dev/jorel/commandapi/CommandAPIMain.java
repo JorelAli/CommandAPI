@@ -45,7 +45,7 @@ public class CommandAPIMain extends JavaPlugin {
 		CommandAPI.config = new InternalConfig(getConfig(), NBTContainer.class, NBTContainer::new, new File(getDataFolder(), "command_registration.json"));
 
 		// Check dependencies for CommandAPI
-		CommandAPIHandler.getInstance().checkDependencies();
+		BaseHandler.getInstance().checkDependencies();
 
 		// Convert all plugins to be converted
 		for (Entry<JavaPlugin, String[]> pluginToConvert : CommandAPI.config.getPluginsToConvert()) {

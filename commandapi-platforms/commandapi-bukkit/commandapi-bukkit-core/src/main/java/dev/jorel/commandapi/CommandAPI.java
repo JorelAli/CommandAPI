@@ -108,7 +108,7 @@ public final class CommandAPI {
 		CommandAPI.logger = null;
 		CommandAPI.loaded = false;
 
-		CommandAPIHandler.onDisable();
+		BaseHandler.onDisable();
 	}
 
 	/**
@@ -178,7 +178,7 @@ public final class CommandAPI {
 	public static void onLoad(CommandAPIConfig config) {
 		if (!loaded) {
 			CommandAPI.config = new InternalConfig(config);
-			CommandAPIHandler.getInstance().checkDependencies();
+			BaseHandler.getInstance().checkDependencies();
 			loaded = true;
 		} else {
 			getLogger().severe("You've tried to call the CommandAPI's onLoad() method more than once!");
@@ -197,9 +197,9 @@ public final class CommandAPI {
 			canRegister = false;
 
 			// Sort out permissions after the server has finished registering them all
-			CommandAPIHandler.getInstance().fixPermissions();
-			CommandAPIHandler.getInstance().getNMS().reloadDataPacks();
-			CommandAPIHandler.getInstance().updateHelpForCommands();
+			BaseHandler.getInstance().fixPermissions();
+			BaseHandler.getInstance().getNMS().reloadDataPacks();
+			BaseHandler.getInstance().updateHelpForCommands();
 		}, 0L);
 
 		// (Re)send command graph packet to players when they join
@@ -208,26 +208,26 @@ public final class CommandAPI {
 			// For some reason, any other priority doesn't work
 			@EventHandler(priority = EventPriority.MONITOR)
 			public void onPlayerJoin(PlayerJoinEvent e) {
-				CommandAPIHandler.getInstance().getNMS().resendPackets(e.getPlayer());
+				BaseHandler.getInstance().getNMS().resendPackets(e.getPlayer());
 			}
 
 		}, plugin);
 
 		// On 1.19+, enable chat preview if the server allows it
-		if(CommandAPIHandler.getInstance().getNMS().canUseChatPreview()) {
+		if(BaseHandler.getInstance().getNMS().canUseChatPreview()) {
 			Bukkit.getServer().getPluginManager().registerEvents(new Listener() {
 	
 				@EventHandler
 				public void onPlayerJoin(PlayerJoinEvent e) {
 					if(Bukkit.shouldSendChatPreviews()) {
-						CommandAPIHandler.getInstance().getNMS().hookChatPreview(plugin, e.getPlayer());
+						BaseHandler.getInstance().getNMS().hookChatPreview(plugin, e.getPlayer());
 					}
 				}
 				
 				@EventHandler
 				public void onPlayerQuit(PlayerQuitEvent e) {
 					if(Bukkit.shouldSendChatPreviews()) {
-						CommandAPIHandler.getInstance().getNMS().unhookChatPreview(e.getPlayer());
+						BaseHandler.getInstance().getNMS().unhookChatPreview(e.getPlayer());
 					}
 				}
 	
@@ -237,7 +237,7 @@ public final class CommandAPI {
 			logNormal("Chat preview is not available");
 		}
 
-		CommandAPIHandler.getInstance().getPaper().registerReloadHandler(plugin);
+		BaseHandler.getInstance().getPaper().registerReloadHandler(plugin);
 	}
 
 	/**
@@ -246,7 +246,7 @@ public final class CommandAPI {
 	 * @param player the player whos requirements to update
 	 */
 	public static void updateRequirements(Player player) {
-		CommandAPIHandler.getInstance().getNMS().resendPackets(player);
+		BaseHandler.getInstance().getNMS().resendPackets(player);
 	}
 
 	/**
@@ -255,7 +255,7 @@ public final class CommandAPI {
 	 * running /minecraft:reload, NOT before.
 	 */
 	public static void reloadDatapacks() {
-		CommandAPIHandler.getInstance().getNMS().reloadDataPacks();
+		BaseHandler.getInstance().getNMS().reloadDataPacks();
 	}
 
 	/**
@@ -331,7 +331,7 @@ public final class CommandAPI {
 	 * @param command the name of the command to unregister
 	 */
 	public static void unregister(String command) {
-		CommandAPIHandler.getInstance().unregister(command, false);
+		BaseHandler.getInstance().unregister(command, false);
 	}
 
 	/**
@@ -346,7 +346,7 @@ public final class CommandAPI {
 			getLogger().warning("Unexpected unregistering of /" + command
 					+ ", as server is loaded! Unregistering anyway, but this can lead to unstable results!");
 		}
-		CommandAPIHandler.getInstance().unregister(command, force);
+		BaseHandler.getInstance().unregister(command, force);
 	}
 
 	/**
@@ -367,6 +367,6 @@ public final class CommandAPI {
 	 *         registered by the CommandAPI so far. The returned list is immutable.
 	 */
 	public static List<RegisteredCommand> getRegisteredCommands() {
-		return Collections.unmodifiableList(CommandAPIHandler.getInstance().registeredCommands);
+		return Collections.unmodifiableList(BaseHandler.getInstance().registeredCommands);
 	}
 }

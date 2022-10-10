@@ -58,7 +58,7 @@ public final class Brigadier {
 	 * @return The CommandAPI's internal CommandDispatcher instance
 	 */
 	public static CommandDispatcher getCommandDispatcher() {
-		return CommandAPIHandler.getInstance().DISPATCHER;
+		return BaseHandler.getInstance().DISPATCHER;
 	}
 
 	/**
@@ -82,7 +82,7 @@ public final class Brigadier {
 	 * @return a LiteralArgumentBuilder that represents the literal
 	 */
 	public static LiteralArgumentBuilder fromLiteralArgument(LiteralArgument literalArgument) {
-		return CommandAPIHandler.getInstance().getLiteralArgumentBuilderArgument(literalArgument.getLiteral(),
+		return BaseHandler.getInstance().getLiteralArgumentBuilderArgument(literalArgument.getLiteral(),
 				literalArgument.getArgumentPermission(), literalArgument.getRequirements());
 	}
 
@@ -120,7 +120,7 @@ public final class Brigadier {
 	 */
 	public static Command fromCommand(CommandAPICommand command) {
 		try {
-			return CommandAPIHandler.getInstance().generateCommand(command.getArguments().toArray(new Argument[0]),
+			return BaseHandler.getInstance().generateCommand(command.getArguments().toArray(new Argument[0]),
 					command.getExecutor(), command.isConverted());
 		} catch (CommandSyntaxException e) {
 			e.printStackTrace();
@@ -147,7 +147,7 @@ public final class Brigadier {
 	 * @return a RequiredArgumentBuilder that represents the provided argument
 	 */
 	public static RequiredArgumentBuilder fromArgument(List<Argument> args, Argument<?> argument) {
-		return CommandAPIHandler.getInstance().getRequiredArgumentBuilderDynamic(args.toArray(new Argument[0]), argument);
+		return BaseHandler.getInstance().getRequiredArgumentBuilderDynamic(args.toArray(new Argument[0]), argument);
 	}
 
 	/**
@@ -157,7 +157,7 @@ public final class Brigadier {
 	 * @return a RequiredArgumentBuilder that represents the provided argument
 	 */
 	public static RequiredArgumentBuilder fromArgument(Argument argument) {
-		return CommandAPIHandler.getInstance().getRequiredArgumentBuilderDynamic(new Argument[] { argument }, argument);
+		return BaseHandler.getInstance().getRequiredArgumentBuilderDynamic(new Argument[] { argument }, argument);
 	}
 
 	/**
@@ -170,7 +170,7 @@ public final class Brigadier {
 	 *         specified argument
 	 */
 	public static SuggestionProvider toSuggestions(Argument<?> argument, List<Argument> args) {
-		return CommandAPIHandler.getInstance().toSuggestions(argument, args.toArray(new Argument[0]), true);
+		return BaseHandler.getInstance().toSuggestions(argument, args.toArray(new Argument[0]), true);
 	}
 
 	/**
@@ -186,7 +186,7 @@ public final class Brigadier {
 	 * @throws CommandSyntaxException if there was an error during parsing
 	 */
 	public static Object[] parseArguments(CommandContext cmdCtx, List<Argument> args) throws CommandSyntaxException {
-		return CommandAPIHandler.getInstance().argsToObjectArr(cmdCtx, args.toArray(new Argument[0]));
+		return BaseHandler.getInstance().argsToObjectArr(cmdCtx, args.toArray(new Argument[0]));
 	}
 
 	/**
@@ -200,7 +200,7 @@ public final class Brigadier {
 	 *         CommandSender
 	 */
 	public static Object getBrigadierSourceFromCommandSender(AbstractCommandSender sender) {
-		return CommandAPIHandler.getInstance().getNMS().getCLWFromCommandSender(sender);
+		return BaseHandler.getInstance().getNMS().getCLWFromCommandSender(sender);
 	}
 
 	
@@ -211,6 +211,6 @@ public final class Brigadier {
 	 * @return a Bukkit CommandSender from the provided Brigadier CommandContext
 	 */
 	public static AbstractCommandSender getCommandSenderFromContext(CommandContext cmdCtx) {
-		return CommandAPIHandler.getInstance().getNMS().getSenderForCommand(cmdCtx, false);
+		return BaseHandler.getInstance().getNMS().getSenderForCommand(cmdCtx, false);
 	}
 }
