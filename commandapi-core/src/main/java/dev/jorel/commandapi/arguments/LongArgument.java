@@ -73,8 +73,8 @@ public class LongArgument extends SafeOverrideableArgument<Long, Long> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Long parseArgument(AbstractPlatform platform,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <Source> Long parseArgument(AbstractPlatform<Source> platform,
+			CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 	

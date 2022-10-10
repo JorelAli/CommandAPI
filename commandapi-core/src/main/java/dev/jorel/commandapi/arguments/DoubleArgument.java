@@ -78,8 +78,8 @@ public class DoubleArgument extends SafeOverrideableArgument<Double, Double> {
 	}
 
 	@Override
-	public <CommandListenerWrapper> Double parseArgument(AbstractPlatform platform,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
+	public <Source> Double parseArgument(AbstractPlatform<Source> platform,
+			CommandContext<Source> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}

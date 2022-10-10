@@ -50,8 +50,8 @@ public class StringArgument extends Argument<String> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> String parseArgument(AbstractPlatform platform,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <Source> String parseArgument(AbstractPlatform<Source> platform,
+			CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 }

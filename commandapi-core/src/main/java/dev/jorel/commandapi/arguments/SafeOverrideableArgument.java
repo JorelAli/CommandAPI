@@ -20,12 +20,13 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import java.util.function.Function;
+
 import com.mojang.brigadier.arguments.ArgumentType;
+
 import dev.jorel.commandapi.SuggestionInfo;
 import dev.jorel.commandapi.Tooltip;
 import dev.jorel.commandapi.attributes.KeyedObject;
-
-import java.util.function.Function;
 
 /**
  * An interface declaring methods required to override argument suggestions

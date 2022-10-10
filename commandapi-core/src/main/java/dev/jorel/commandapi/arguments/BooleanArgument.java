@@ -53,9 +53,8 @@ public class BooleanArgument extends SafeOverrideableArgument<Boolean, Boolean> 
 	}
 
 	@Override
-	public <CommandListenerWrapper> Boolean parseArgument(AbstractPlatform platform,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
-			throws CommandSyntaxException {
+	public <Source> Boolean parseArgument(AbstractPlatform<Source> platform, CommandContext<Source> cmdCtx, String key, Object[] previousArgs)
+		throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 

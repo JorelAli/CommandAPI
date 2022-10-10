@@ -129,7 +129,7 @@ public final class Converter {
 
 		// No arguments
 		new CommandAPICommand(commandName).withPermission(CommandPermission.NONE).executesNative((sender, args) -> {
-			Bukkit.dispatchCommand(mergeProxySender(sender), commandName);
+			Bukkit.dispatchCommand(mergeProxySender((NativeProxyCommandSender) sender.getSource()), commandName);
 		}).register();
 
 		// Multiple arguments
@@ -137,7 +137,7 @@ public final class Converter {
 				.withArguments(arguments).executesNative((sender, args) -> {
 					// We know the args are a String[] because that's how converted things are
 					// handled in generateCommand()
-					CommandSender proxiedSender = mergeProxySender(sender);
+					CommandSender proxiedSender = mergeProxySender((NativeProxyCommandSender) sender.getSource());
 					Bukkit.dispatchCommand(proxiedSender, commandName + " " + String.join(" ", (String[]) args));
 				});
 
@@ -189,11 +189,12 @@ public final class Converter {
 			permissionNode = CommandPermission.fromString(permission);
 		}
 		
-		NativeCommandExecutor executor = (sender, args) -> {
+		NativeCommandExecutor executor = (abstractSender, args) -> {
+			NativeProxyCommandSender sender = (NativeProxyCommandSender) abstractSender.getSource();
 			org.bukkit.command.Command command = plugin.getCommand(commandName);
 			
 			if (command == null) {
-				command = CommandAPIHandler.getInstance().getNMS().getSimpleCommandMap()
+				command = BukkitPlatform.get().getSimpleCommandMap()
 						.getCommand(commandName);
 			}
 			

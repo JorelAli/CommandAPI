@@ -73,8 +73,8 @@ public class IntegerArgument extends SafeOverrideableArgument<Integer, Integer> 
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Integer parseArgument(AbstractPlatform platform,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <Source> Integer parseArgument(AbstractPlatform<Source> platform,
+			CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 	

@@ -73,8 +73,8 @@ public class FloatArgument extends SafeOverrideableArgument<Float, Float> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Float parseArgument(AbstractPlatform platform,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <Source> Float parseArgument(AbstractPlatform<Source> platform,
+			CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 }
