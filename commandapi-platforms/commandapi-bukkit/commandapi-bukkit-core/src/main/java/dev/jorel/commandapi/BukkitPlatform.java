@@ -3,7 +3,9 @@ package dev.jorel.commandapi;
 import java.util.List;
 import java.util.function.Function;
 
+import dev.jorel.commandapi.commandsenders.*;
 import dev.jorel.commandapi.preprocessor.Unimplemented;
+import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import org.bukkit.NamespacedKey;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -15,7 +17,11 @@ import dev.jorel.commandapi.abstractions.AbstractCommandSender;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.nms.NMS;
+import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.ProxiedCommandSender;
+import org.bukkit.entity.Player;
 
 // BukkitPlatform is an AbstractPlatform, but also needs all of the methods from
 // NMS, so it implements NMS. Our implementation of BukkitPlatform is now derived
@@ -36,6 +42,22 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Source> im
 	@Override
 	@Unimplemented(because = Unimplemented.REASON.REQUIRES_CSS)
 	public abstract AbstractCommandSender<?> getCommandSenderFromCommandSource(Source cs);
+
+	public AbstractCommandSender<?> wrapCommandSender(CommandSender sender) {
+		if (sender instanceof BlockCommandSender block)
+			return new BukkitBlockCommandSender(block);
+		if (sender instanceof ConsoleCommandSender console)
+			return new BukkitConsoleCommandSender(console);
+		if (sender instanceof Player player)
+			return new BukkitPlayer(player);
+		if (sender instanceof org.bukkit.entity.Entity entity)
+			return new BukkitEntity(entity);
+		if (sender instanceof NativeProxyCommandSender nativeProxy)
+			return new BukkitNativeProxyCommandSender(nativeProxy);
+		if (sender instanceof ProxiedCommandSender proxy)
+			return new BukkitProxiedCommandSender(proxy);
+		return null;
+	}
 
 	@Override
 	public void registerPermission(String string) {

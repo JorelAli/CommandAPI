@@ -551,22 +551,10 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 	@Override
 	public AbstractCommandSender<?> getCommandSenderFromCommandSource(CommandListenerWrapper clw) {
 		try {
-			CommandSender sender = clw.getBukkitSender();
-			if (sender instanceof BlockCommandSender block)
-				return new BukkitBlockCommandSender(block);
-			if (sender instanceof ConsoleCommandSender console)
-				return new BukkitConsoleCommandSender(console);
-			if (sender instanceof Player player)
-				return new BukkitPlayer(player);
-			if (sender instanceof org.bukkit.entity.Entity entity)
-				return new BukkitEntity(entity);
-			if (sender instanceof NativeProxyCommandSender nativeProxy)
-				return new BukkitNativeProxyCommandSender(nativeProxy);
-			if (sender instanceof ProxiedCommandSender proxy)
-				return new BukkitProxiedCommandSender(proxy);
+			return wrapCommandSender(clw.getBukkitSender());
 		} catch (UnsupportedOperationException ignored) {
+			return null;
 		}
-		return null;
 	}
 
 	@Differs(from = "1.13", by = "Implements getDimension for EnvironmentArgument")
@@ -865,7 +853,7 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 		if (isNative || (proxy != null && !sender.equals(proxy))) {
 			return new BukkitNativeProxyCommandSender(new NativeProxyCommandSender(sender, proxy, location, world));
 		} else {
-			return getCommandSenderFromCommandSource(clw);
+			return wrapCommandSender(sender);
 		}
 	}
 

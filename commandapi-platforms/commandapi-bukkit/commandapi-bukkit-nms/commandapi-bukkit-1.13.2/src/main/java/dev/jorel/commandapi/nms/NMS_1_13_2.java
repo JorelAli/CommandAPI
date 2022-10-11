@@ -92,7 +92,7 @@ public class NMS_1_13_2 extends NMS_1_13_1 {
 		if (isNative || (proxy != null && !sender.equals(proxy))) {
 			return new BukkitNativeProxyCommandSender(new NativeProxyCommandSender(sender, proxy, location, world));
 		} else {
-			return getCommandSenderFromCommandSource(clw);
+			return wrapCommandSender(sender);
 		}
 	}
 }
