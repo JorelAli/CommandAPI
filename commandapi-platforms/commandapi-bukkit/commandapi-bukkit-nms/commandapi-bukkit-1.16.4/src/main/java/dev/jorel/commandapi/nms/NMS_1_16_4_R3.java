@@ -595,7 +595,7 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 					throws CommandSyntaxException {
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
 		try {
-			BaseHandler.getInstance().getField(EntitySelector.class, "checkPermissions").set(argument, false);
+			BaseHandler.getField(EntitySelector.class, "checkPermissions").set(argument, false);
 		} catch (IllegalArgumentException | IllegalAccessException e1) {
 			e1.printStackTrace();
 		}
@@ -968,7 +968,7 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 		// Update the CustomFunctionManager for the datapackResources which now has the
 		// new commandDispatcher
 		try {
-			BaseHandler.getInstance().getField(CustomFunctionManager.class, "h").set(datapackResources.a(),
+			BaseHandler.getField(CustomFunctionManager.class, "h").set(datapackResources.a(),
 					getBrigadierDispatcher());
 		} catch (IllegalArgumentException | IllegalAccessException e1) {
 			e1.printStackTrace();

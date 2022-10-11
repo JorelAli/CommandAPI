@@ -580,7 +580,7 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 			throws CommandSyntaxException {
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
 		try {
-			BaseHandler.getInstance().getField(EntitySelector.class, "m").set(argument, false);
+			BaseHandler.getField(EntitySelector.class, "m").set(argument, false);
 		} catch (IllegalArgumentException | IllegalAccessException e1) {
 			e1.printStackTrace();
 		}
@@ -867,7 +867,7 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.c(cmdCtx, key);
 		for (CraftSound sound : CraftSound.values()) {
 			try {
-				if (BaseHandler.getInstance().getField(CraftSound.class, "minecraftKey").get(sound)
+				if (BaseHandler.getField(CraftSound.class, "minecraftKey").get(sound)
 						.equals(minecraftKey.getKey())) {
 					return Sound.valueOf(sound.name());
 				}

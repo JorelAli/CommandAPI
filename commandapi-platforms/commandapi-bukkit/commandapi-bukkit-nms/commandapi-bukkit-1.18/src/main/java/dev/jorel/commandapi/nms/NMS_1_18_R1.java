@@ -316,7 +316,7 @@ public class NMS_1_18_R1 extends NMS_Common {
 		// to be used by anyone that registers a command via the CommandAPI.
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
 		try {
-			BaseHandler.getInstance().getField(EntitySelector.class, "o").set(argument, false);
+			BaseHandler.getField(EntitySelector.class, "o").set(argument, false);
 		} catch (IllegalArgumentException | IllegalAccessException e1) {
 			e1.printStackTrace();
 		}
@@ -533,7 +533,7 @@ public class NMS_1_18_R1 extends NMS_Common {
 
 		// Update the ServerFunctionLibrary's command dispatcher with the new one
 		try {
-			BaseHandler.getInstance().getField(ServerFunctionLibrary.class, "i")
+			BaseHandler.getField(ServerFunctionLibrary.class, "i")
 					.set(serverResources.getFunctionLibrary(), getBrigadierDispatcher());
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
