@@ -114,8 +114,8 @@ public class BaseHandler<Source> {
 	 * 
 	 * @param args       set of ordered argument pairs which contain the prompt text
 	 *                   and their argument types
-	 * @param actualArgs
 	 * @param executor   code to be ran when the command is executed
+	 * @param converted  True if this command is being converted from another plugin, and false otherwise
 	 * @return a brigadier command which is registered internally
 	 * @throws CommandSyntaxException if an error occurs when the command is ran
 	 */
@@ -124,7 +124,7 @@ public class BaseHandler<Source> {
 
 		// Generate our command from executor
 		return (cmdCtx) -> {
-			AbstractCommandSender<Source> sender = platform.getSenderForCommand(cmdCtx, executor.isForceNative());
+			AbstractCommandSender<?> sender = platform.getSenderForCommand(cmdCtx, executor.isForceNative());
 			if (converted) {
 				Object[] argObjs = argsToObjectArr(cmdCtx, args);
 				int resultValue = 0;
@@ -169,7 +169,7 @@ public class BaseHandler<Source> {
 	 * @param cmdCtx the command context that will execute this command
 	 * @param args   the map of strings to arguments
 	 * @return an Object[] which can be used in (sender, args) ->
-	 * @throws CommandSyntaxException
+	 * @throws CommandSyntaxException when an argument isn't formatted correctly
 	 */
 	Object[] argsToObjectArr(CommandContext<Source> cmdCtx, Argument<?>[] args)
 			throws CommandSyntaxException {
@@ -187,22 +187,18 @@ public class BaseHandler<Source> {
 	}
 
 	/**
-	 * Parses an argument and converts it into its standard Bukkit type (as defined
-	 * in platform.java)
-	 * 
-	 * @param type   the argument type
+	 * Parses an argument and converts it into its object (as defined in platform.java)
+	 *
 	 * @param cmdCtx the command context
 	 * @param key    the key (declared in arguments)
 	 * @param value  the value (the argument declared in arguments)
-	 * @param sender the command sender
 	 * @return the standard Bukkit type
-	 * @throws CommandSyntaxException
+	 * @throws CommandSyntaxException when an argument isn't formatted correctly
 	 */
 	Object parseArgument(CommandContext<Source> cmdCtx, String key, Argument<?> value,
 			Object[] previousArgs) throws CommandSyntaxException {
 		if (value.isListed()) {
-			// TODO: Specify platform
-			return value.parseArgument(null, cmdCtx, key, previousArgs);
+			return value.parseArgument(platform, cmdCtx, key, previousArgs);
 		} else {
 			return null;
 		}
@@ -229,7 +225,8 @@ public class BaseHandler<Source> {
 	 * used for suggestions for said argument</li>
 	 * </ul>
 	 * 
-	 * @param requirements
+	 * @param requirements An arbitrary additional check to perform on the CommandSender
+	 *                        after the permissions check
 	 */
 	Predicate<Source> generatePermissions(String commandName, CommandPermission permission,
 			Predicate<AbstractCommandSender<?>> requirements) {
@@ -271,7 +268,7 @@ public class BaseHandler<Source> {
 			} else if (permission.equals(CommandPermission.OP)) {
 				satisfiesPermissions = sender.isOp();
 			} else {
-				satisfiesPermissions = sender.hasPermission(permission.getPermission().get());
+				satisfiesPermissions = permission.getPermission().isEmpty() || sender.hasPermission(permission.getPermission().get());
 			}
 		}
 		if (permission.isNegated()) {
@@ -381,7 +378,7 @@ public class BaseHandler<Source> {
 
 		// Handle arguments with built-in suggestion providers
 		else if (innerArg instanceof ICustomProvidedArgument customProvidedArg
-				&& !innerArg.getOverriddenSuggestions().isPresent()) {
+				&& innerArg.getOverriddenSuggestions().isEmpty()) {
 			return getRequiredArgumentBuilderWithProvider(innerArg, args,
 					platform.getSuggestionProvider(customProvidedArg.getSuggestionProvider())).executes(command);
 		}
@@ -407,7 +404,7 @@ public class BaseHandler<Source> {
 
 			// Handle arguments with built-in suggestion providers
 			else if (outerArg instanceof ICustomProvidedArgument customProvidedArg
-					&& !outerArg.getOverriddenSuggestions().isPresent()) {
+					&& outerArg.getOverriddenSuggestions().isEmpty()) {
 				outer = getRequiredArgumentBuilderWithProvider(outerArg, args,
 						platform.getSuggestionProvider(customProvidedArg.getSuggestionProvider())).then(outer);
 			}
@@ -759,16 +756,17 @@ public class BaseHandler<Source> {
 	 * @param name  the name of the field
 	 * @return a Field reference
 	 */
-	public static final Field getField(Class<?> clazz, String name) {
+	public static Field getField(Class<?> clazz, String name) {
 		ClassCache key = new ClassCache(clazz, name);
 		if (FIELDS.containsKey(key)) {
 			return FIELDS.get(key);
 		} else {
-			Field result = null;
+			Field result;
 			try {
 				result = clazz.getDeclaredField(name);
 			} catch (ReflectiveOperationException e) {
 				e.printStackTrace();
+				return null;
 			}
 			result.setAccessible(true);
 			FIELDS.put(key, result);
@@ -793,7 +791,7 @@ public class BaseHandler<Source> {
 	 * A class to compute the Cartesian product of a number of lists. Source:
 	 * https://www.programmersought.com/article/86195393650/
 	 */
-	private final class CartesianProduct {
+	private static final class CartesianProduct {
 
 		// Shouldn't be instantiated
 		private CartesianProduct() {
@@ -807,7 +805,7 @@ public class BaseHandler<Source> {
 		 * @return a List of lists which represents the Cartesian product of all
 		 *         elements of the input
 		 */
-		public static final <T> List<List<T>> getDescartes(List<List<T>> list) {
+		public static <T> List<List<T>> getDescartes(List<List<T>> list) {
 			List<List<T>> returnList = new ArrayList<>();
 			descartesRecursive(list, 0, returnList, new ArrayList<T>());
 			return returnList;
@@ -824,7 +822,7 @@ public class BaseHandler<Source> {
 		 * @param returnList   return result
 		 * @param cacheList    temporarily saved list
 		 */
-		private static final <T> void descartesRecursive(List<List<T>> originalList, int position,
+		private static <T> void descartesRecursive(List<List<T>> originalList, int position,
 				List<List<T>> returnList, List<T> cacheList) {
 			List<T> originalItemList = originalList.get(position);
 			for (int i = 0; i < originalItemList.size(); i++) {
