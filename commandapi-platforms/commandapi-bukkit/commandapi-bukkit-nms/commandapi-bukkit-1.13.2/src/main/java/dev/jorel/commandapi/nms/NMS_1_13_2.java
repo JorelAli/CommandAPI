@@ -2,6 +2,8 @@ package dev.jorel.commandapi.nms;
 
 import java.util.Map;
 
+import dev.jorel.commandapi.abstractions.AbstractCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -76,7 +78,7 @@ public class NMS_1_13_2 extends NMS_1_13_1 {
 
 	@Differs(from = "1.13.1", by = "clw.f() -> clw.getEntity()")
 	@Override
-	public CommandSender getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean isNative) {
+	public AbstractCommandSender<?> getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean isNative) {
 		CommandListenerWrapper clw = cmdCtx.getSource();
 
 		CommandSender sender = clw.getBukkitSender();
@@ -88,9 +90,9 @@ public class NMS_1_13_2 extends NMS_1_13_1 {
 		Entity proxyEntity = clw.getEntity();
 		CommandSender proxy = proxyEntity == null ? null : proxyEntity.getBukkitEntity();
 		if (isNative || (proxy != null && !sender.equals(proxy))) {
-			return new NativeProxyCommandSender(sender, proxy, location, world);
+			return new BukkitNativeProxyCommandSender(new NativeProxyCommandSender(sender, proxy, location, world));
 		} else {
-			return sender;
+			return getCommandSenderFromCommandSource(clw);
 		}
 	}
 }

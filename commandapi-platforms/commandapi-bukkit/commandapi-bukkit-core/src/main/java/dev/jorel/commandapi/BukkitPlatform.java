@@ -3,6 +3,7 @@ package dev.jorel.commandapi;
 import java.util.List;
 import java.util.function.Function;
 
+import dev.jorel.commandapi.preprocessor.Unimplemented;
 import org.bukkit.NamespacedKey;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -14,6 +15,7 @@ import dev.jorel.commandapi.abstractions.AbstractCommandSender;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.nms.NMS;
+import org.bukkit.command.CommandSender;
 
 // BukkitPlatform is an AbstractPlatform, but also needs all of the methods from
 // NMS, so it implements NMS. Our implementation of BukkitPlatform is now derived
@@ -28,16 +30,12 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Source> im
 	}
 
 	@Override
-	public AbstractCommandSender<?> getSenderForCommand(CommandContext<Source> cmdCtx, boolean forceNative) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	@Unimplemented(because = Unimplemented.REASON.REQUIRES_CSS)
+	public abstract AbstractCommandSender<?> getSenderForCommand(CommandContext<Source> cmdCtx, boolean forceNative);
 
 	@Override
-	public AbstractCommandSender<? extends Source> getCommandSenderFromCommandSource(Source cs) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	@Unimplemented(because = Unimplemented.REASON.REQUIRES_CSS)
+	public abstract AbstractCommandSender<?> getCommandSenderFromCommandSource(Source cs);
 
 	@Override
 	public void registerPermission(String string) {

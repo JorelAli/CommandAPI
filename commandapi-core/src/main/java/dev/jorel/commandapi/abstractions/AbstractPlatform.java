@@ -29,7 +29,7 @@ public abstract class AbstractPlatform<Source> {
 	// Converts a command source into its source. For Bukkit, this 
 	// is implemented in NMS. TODO: For Velocity, I have no idea what
 	// a command source is or consists of
-	public abstract AbstractCommandSender<? extends Source> getCommandSenderFromCommandSource(Source cs);
+	public abstract AbstractCommandSender<?> getCommandSenderFromCommandSource(Source cs);
 
 	// Registers a permission. Bukkit's permission system requires permissions to be "registered"
 	// before they can be used.

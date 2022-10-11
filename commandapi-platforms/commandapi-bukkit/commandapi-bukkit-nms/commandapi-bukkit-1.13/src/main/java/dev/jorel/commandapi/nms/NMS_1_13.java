@@ -17,6 +17,8 @@ import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
 import com.mojang.brigadier.Message;
+import dev.jorel.commandapi.abstractions.AbstractCommandSender;
+import dev.jorel.commandapi.commandsenders.*;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -32,11 +34,7 @@ import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.command.RemoteConsoleCommandSender;
-import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.command.*;
 import org.bukkit.craftbukkit.v1_13_R1.CraftLootTable;
 import org.bukkit.craftbukkit.v1_13_R1.CraftParticle;
 import org.bukkit.craftbukkit.v1_13_R1.CraftServer;
@@ -543,12 +541,24 @@ public class NMS_1_13 extends NMSWrapper_1_13 {
 	}
 
 	@Override
-	public CommandSender getCommandSenderFromCSS(CommandListenerWrapper clw) {
+	public AbstractCommandSender<?> getCommandSenderFromCommandSource(CommandListenerWrapper clw) {
 		try {
-			return clw.getBukkitSender();
-		} catch (UnsupportedOperationException e) {
-			return null;
+			CommandSender sender = clw.getBukkitSender();
+			if (sender instanceof BlockCommandSender block)
+				return new BukkitBlockCommandSender(block);
+			if (sender instanceof ConsoleCommandSender console)
+				return new BukkitConsoleCommandSender(console);
+			if (sender instanceof Player player)
+				return new BukkitPlayer(player);
+			if (sender instanceof org.bukkit.entity.Entity entity)
+				return new BukkitEntity(entity);
+			if (sender instanceof NativeProxyCommandSender nativeProxy)
+				return new BukkitNativeProxyCommandSender(nativeProxy);
+			if (sender instanceof ProxiedCommandSender proxy)
+				return new BukkitProxiedCommandSender(proxy);
+		} catch (UnsupportedOperationException ignored) {
 		}
+		return null;
 	}
 
 	@Override
@@ -823,7 +833,7 @@ public class NMS_1_13 extends NMSWrapper_1_13 {
 	}
 
 	@Override
-	public CommandSender getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean isNative) {
+	public AbstractCommandSender<?> getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean isNative) {
 		CommandListenerWrapper clw = cmdCtx.getSource();
 
 		CommandSender sender = clw.getBukkitSender();
@@ -835,9 +845,9 @@ public class NMS_1_13 extends NMSWrapper_1_13 {
 		Entity proxyEntity = clw.f();
 		CommandSender proxy = proxyEntity == null ? null : proxyEntity.getBukkitEntity();
 		if (isNative || (proxy != null && !sender.equals(proxy))) {
-			return new NativeProxyCommandSender(sender, proxy, location, world);
+			return new BukkitNativeProxyCommandSender(new NativeProxyCommandSender(sender, proxy, location, world));
 		} else {
-			return sender;
+			return getCommandSenderFromCommandSource(clw);
 		}
 	}
 
