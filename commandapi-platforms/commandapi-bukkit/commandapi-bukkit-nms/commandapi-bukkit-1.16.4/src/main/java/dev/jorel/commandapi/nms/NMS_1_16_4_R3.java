@@ -43,6 +43,8 @@ import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
 import com.mojang.brigadier.Message;
+import dev.jorel.commandapi.abstractions.AbstractCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -568,9 +570,9 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 	}
 
 	@Override
-	public CommandSender getCommandSenderFromCSS(CommandListenerWrapper clw) {
+	public AbstractCommandSender<?> getCommandSenderFromCommandSource(CommandListenerWrapper clw) {
 		try {
-			return clw.getBukkitSender();
+			return wrapCommandSender(clw.getBukkitSender());
 		} catch (UnsupportedOperationException e) {
 			return null;
 		}
@@ -853,7 +855,7 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 	}
 
 	@Override
-	public CommandSender getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean isNative) {
+	public AbstractCommandSender<?> getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean isNative) {
 		CommandListenerWrapper clw = cmdCtx.getSource();
 
 		CommandSender sender = clw.getBukkitSender();
@@ -865,9 +867,9 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 		Entity proxyEntity = clw.getEntity();
 		CommandSender proxy = proxyEntity == null ? null : proxyEntity.getBukkitEntity();
 		if (isNative || (proxy != null && !sender.equals(proxy))) {
-			return new NativeProxyCommandSender(sender, proxy, location, world);
+			return new BukkitNativeProxyCommandSender(new NativeProxyCommandSender(sender, proxy, location, world));
 		} else {
-			return sender;
+			return wrapCommandSender(sender);
 		}
 	}
 

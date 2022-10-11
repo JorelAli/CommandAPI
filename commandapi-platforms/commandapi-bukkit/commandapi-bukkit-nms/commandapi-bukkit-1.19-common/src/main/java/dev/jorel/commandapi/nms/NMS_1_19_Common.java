@@ -90,7 +90,6 @@ import com.mojang.logging.LogUtils;
 import dev.jorel.commandapi.BaseHandler;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.abstractions.AbstractCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.RequireField;
@@ -593,7 +592,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		if (isNative || (proxy != null && !sender.equals(proxy))) {
 			return new BukkitNativeProxyCommandSender(new NativeProxyCommandSender(sender, proxy, location, world));
 		} else {
-			return new BukkitCommandSender(sender);
+			return wrapCommandSender(sender);
 		}
 	}
 

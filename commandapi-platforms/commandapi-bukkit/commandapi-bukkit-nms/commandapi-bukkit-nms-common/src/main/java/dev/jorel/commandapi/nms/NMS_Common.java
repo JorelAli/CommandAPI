@@ -442,9 +442,9 @@ public abstract class NMS_Common extends BukkitPlatform<CommandSourceStack> {
 	public abstract CommandSourceStack getCLWFromCommandSender(CommandSender sender);
 
 	@Override
-	public final CommandSender getCommandSenderFromCSS(CommandSourceStack css) {
+	public final AbstractCommandSender<?> getCommandSenderFromCommandSource(CommandSourceStack css) {
 		try {
-			return css.getBukkitSender();
+			return wrapCommandSender(css.getBukkitSender());
 		} catch (UnsupportedOperationException e) {
 			return null;
 		}
