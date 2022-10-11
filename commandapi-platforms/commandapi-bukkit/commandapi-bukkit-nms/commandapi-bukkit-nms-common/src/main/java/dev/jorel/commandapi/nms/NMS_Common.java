@@ -442,7 +442,7 @@ public abstract class NMS_Common extends BukkitPlatform<CommandSourceStack> {
 	public abstract CommandSourceStack getCLWFromCommandSender(CommandSender sender);
 
 	@Override
-	public final AbstractCommandSender<?> getCommandSenderFromCommandSource(CommandSourceStack css) {
+	public final AbstractCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(CommandSourceStack css) {
 		try {
 			return wrapCommandSender(css.getBukkitSender());
 		} catch (UnsupportedOperationException e) {
@@ -636,7 +636,7 @@ public abstract class NMS_Common extends BukkitPlatform<CommandSourceStack> {
 	@Unimplemented(because = NAME_CHANGED, info = "i (1.17)            -> getRotation (1.18) -> l (1.19)")
 	@Unimplemented(because = NAME_CHANGED, info = "getEntity (1.17)    -> getEntity (1.18)   -> g (1.19)")
 	@Unimplemented(because = NAME_CHANGED, info = "getWorld (1.17)     -> getLevel (1.18)    -> f (1.19)")
-	public abstract AbstractCommandSender<?> getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean isNative);
+	public abstract AbstractCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean isNative);
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftServer")

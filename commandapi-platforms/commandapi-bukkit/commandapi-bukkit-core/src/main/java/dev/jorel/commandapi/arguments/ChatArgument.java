@@ -76,7 +76,7 @@ public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyAr
 	@Override
 	public <CommandSourceStack> BaseComponent[] parseArgument(AbstractPlatform<CommandSourceStack> platform,
 		CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		final CommandSender sender = ((BukkitPlatform<CommandSourceStack>) platform).getCommandSenderFromCSS(cmdCtx.getSource());
+		final CommandSender sender = ((BukkitPlatform<CommandSourceStack>) platform).getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource();
 		BaseComponent[] component = ((BukkitPlatform<CommandSourceStack>) platform).getChat(cmdCtx, key);
 
 		if (getPreview().isPresent() && sender instanceof Player player) {

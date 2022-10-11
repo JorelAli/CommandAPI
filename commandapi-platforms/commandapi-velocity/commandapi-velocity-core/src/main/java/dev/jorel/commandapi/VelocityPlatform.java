@@ -43,7 +43,7 @@ public class VelocityPlatform extends AbstractPlatform<CommandSource> {
 	}
 
 	@Override
-	public AbstractCommandSender<?> getSenderForCommand(CommandContext<CommandSource> cmdCtx,
+	public AbstractCommandSender<? extends CommandSource> getSenderForCommand(CommandContext<CommandSource> cmdCtx,
 			boolean forceNative) {
 		// TODO: This method MAY be completely identical to getCommandSenderFromCommandSource.
 		// In Bukkit, this is NOT the case - we have to apply certain changes based
@@ -56,7 +56,7 @@ public class VelocityPlatform extends AbstractPlatform<CommandSource> {
 	}
 
 	@Override
-	public AbstractCommandSender<?> getCommandSenderFromCommandSource(CommandSource cs) {
+	public AbstractCommandSender<? extends CommandSource> getCommandSenderFromCommandSource(CommandSource cs) {
 		// Given a Brigadier CommandContext source (result of CommandContext.getSource),
 		// we need to convert that to an AbstractCommandSender.
 		if(cs instanceof ConsoleCommandSource ccs)

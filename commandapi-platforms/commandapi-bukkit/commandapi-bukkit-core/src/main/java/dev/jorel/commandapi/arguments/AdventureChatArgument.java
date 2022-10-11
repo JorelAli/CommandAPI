@@ -76,7 +76,7 @@ public class AdventureChatArgument extends Argument<Component> implements IGreed
 	@Override
 	public <CommandSourceStack> Component parseArgument(AbstractPlatform<CommandSourceStack> platform,
 		CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		final CommandSender sender = ((BukkitPlatform<CommandSourceStack>) platform).getCommandSenderFromCSS(cmdCtx.getSource());
+		final CommandSender sender = ((BukkitPlatform<CommandSourceStack>) platform).getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource();
 		Component component = ((BukkitPlatform<CommandSourceStack>) platform).getAdventureChat(cmdCtx, key);
 
 		if (this.usePreview && getPreview().isPresent() && sender instanceof Player player) {

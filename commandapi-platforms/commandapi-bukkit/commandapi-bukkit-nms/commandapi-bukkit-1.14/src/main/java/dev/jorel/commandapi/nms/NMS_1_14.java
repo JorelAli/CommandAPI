@@ -529,7 +529,7 @@ public class NMS_1_14 extends NMSWrapper_1_14 {
 	}
 
 	@Override
-	public AbstractCommandSender<?> getCommandSenderFromCommandSource(CommandListenerWrapper clw) {
+	public AbstractCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(CommandListenerWrapper clw) {
 		try {
 			return wrapCommandSender(clw.getBukkitSender());
 		} catch (UnsupportedOperationException e) {
@@ -820,7 +820,7 @@ public class NMS_1_14 extends NMSWrapper_1_14 {
 
 	@Differs(from = "1.13.2", by = "Vec3D accessor methods for x -> getX(), y -> getY(), z -> getZ()")
 	@Override
-	public AbstractCommandSender<?> getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean isNative) {
+	public AbstractCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean isNative) {
 		CommandListenerWrapper clw = cmdCtx.getSource();
 
 		CommandSender sender = clw.getBukkitSender();

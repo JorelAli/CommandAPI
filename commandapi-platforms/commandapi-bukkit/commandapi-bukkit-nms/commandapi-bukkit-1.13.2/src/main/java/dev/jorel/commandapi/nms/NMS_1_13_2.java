@@ -78,7 +78,7 @@ public class NMS_1_13_2 extends NMS_1_13_1 {
 
 	@Differs(from = "1.13.1", by = "clw.f() -> clw.getEntity()")
 	@Override
-	public AbstractCommandSender<?> getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean isNative) {
+	public AbstractCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean isNative) {
 		CommandListenerWrapper clw = cmdCtx.getSource();
 
 		CommandSender sender = clw.getBukkitSender();

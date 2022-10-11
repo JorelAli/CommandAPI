@@ -37,13 +37,13 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Source> im
 
 	@Override
 	@Unimplemented(because = Unimplemented.REASON.REQUIRES_CSS)
-	public abstract AbstractCommandSender<?> getSenderForCommand(CommandContext<Source> cmdCtx, boolean forceNative);
+	public abstract AbstractCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<Source> cmdCtx, boolean forceNative);
 
 	@Override
 	@Unimplemented(because = Unimplemented.REASON.REQUIRES_CSS)
-	public abstract AbstractCommandSender<?> getCommandSenderFromCommandSource(Source cs);
+	public abstract AbstractCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(Source cs);
 
-	public AbstractCommandSender<?> wrapCommandSender(CommandSender sender) {
+	public AbstractCommandSender<? extends CommandSender> wrapCommandSender(CommandSender sender) {
 		if (sender instanceof BlockCommandSender block)
 			return new BukkitBlockCommandSender(block);
 		if (sender instanceof ConsoleCommandSender console)

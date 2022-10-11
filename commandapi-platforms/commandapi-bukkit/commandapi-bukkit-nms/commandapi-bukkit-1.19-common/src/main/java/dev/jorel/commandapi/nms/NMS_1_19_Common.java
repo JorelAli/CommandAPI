@@ -578,7 +578,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 	}
 
 	@Override
-	public AbstractCommandSender<?> getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean isNative) {
+	public AbstractCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean isNative) {
 		CommandSourceStack css = cmdCtx.getSource();
 
 		CommandSender sender = css.getBukkitSender();
