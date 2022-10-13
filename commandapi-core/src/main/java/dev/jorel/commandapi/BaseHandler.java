@@ -48,12 +48,12 @@ import dev.jorel.commandapi.wrappers.PreviewableFunction;
 // Brigadier's API (definitely the case for Spigot/Paper and Velocity).
 //
 // TODO: We can use the Adventure API on Paper and Velocity (NOT SPIGOT)
-// and I'm not sure if we can use the Adventure API on Fabric, so let's
-// assume we can't until we figure that out.
+//  and I'm not sure if we can use the Adventure API on Fabric, so let's
+//  assume we can't until we figure that out.
 
 public class BaseHandler<Source> {
 	// TODO: Figure out what here gets moved to the common implementation and what
-	// is platform-specific
+	//  is platform-specific
 
 	private final static VarHandle COMMANDCONTEXT_ARGUMENTS;
 
@@ -94,15 +94,56 @@ public class BaseHandler<Source> {
 	private static final Map<ClassCache, Field> FIELDS = new HashMap<>();
 
 	final TreeMap<String, CommandPermission> PERMISSIONS_TO_FIX = new TreeMap<>();
-	final AbstractPlatform<Source> platform; // Access strictly via getPlatform() method which can be overridden
+	protected final AbstractPlatform<Source> platform; // Access strictly via getPlatform() method which can be overridden
 	final List<RegisteredCommand> registeredCommands; // Keep track of what has been registered for type checking
 	final Map<List<String>, IPreviewable<? extends Argument<?>, ?>> previewableArguments; // Arguments with previewable chat
+
+	private static BaseHandler<?> instance;
 
 	// TODO: Wait, how do we instantiate this?
 	protected BaseHandler(AbstractPlatform<Source> platform) {
 		this.platform = platform;
 		this.registeredCommands = new ArrayList<>();
 		this.previewableArguments = new HashMap<>();
+
+		instance = this;
+	}
+
+	public void onLoad() {
+		checkDependencies();
+		platform.onLoad();
+	}
+
+	private void checkDependencies() {
+		// Check for common dependencies
+		try {
+			Class.forName("com.mojang.brigadier.CommandDispatcher");
+		} catch (ClassNotFoundException e) {
+			new ClassNotFoundException("Could not hook into Brigadier (Are you running Minecraft 1.13 or above?)")
+				.printStackTrace();
+		}
+
+		Class<?> nbtContainerClass = CommandAPI.getConfiguration().getNBTContainerClass();
+		if (nbtContainerClass != null && CommandAPI.getConfiguration().getNBTContainerConstructor() != null) {
+			CommandAPI.logNormal("Hooked into an NBT API with class " + nbtContainerClass.getName());
+		} else {
+			if (CommandAPI.getConfiguration().hasVerboseOutput()) {
+				CommandAPI.logWarning(
+					"Could not hook into the NBT API for NBT support. Download it from https://www.spigotmc.org/resources/nbt-api.7939/");
+			}
+		}
+	}
+
+	public void onEnable(Object plugin) {
+		platform.onEnable(plugin);
+	}
+
+	public void onDisable() {
+		platform.onDisable();
+	}
+
+	public static BaseHandler<?> getInstance() {
+		return instance;
 	}
 
 	public AbstractPlatform<Source> getPlatform() {
@@ -349,15 +390,15 @@ public class BaseHandler<Source> {
 						builder2.append(arg[0]).append("<").append(arg[1]).append("> ");
 					}
 
-//					CommandAPI.logError("""
-//							Failed to register command:
-//
-//							  %s %s
-//
-//							Because it conflicts with this previously registered command:
-//
-//							  %s %s
-//							""".formatted(commandName, argumentsAsString, commandName, builder2.toString()));
+					CommandAPI.logError("""
+							Failed to register command:
+
+							  %s %s
+
+							Because it conflicts with this previously registered command:
+
+							  %s %s
+							""".formatted(commandName, argumentsAsString, commandName, builder2.toString()));
 					return true;
 				}
 			}
@@ -473,15 +514,15 @@ public class BaseHandler<Source> {
 				// LiteralArguments
 				if (!(arg instanceof LiteralArgument)) {
 					if (argumentNames.contains(arg.getNodeName())) {
-//						CommandAPI.logError("""
-//								Failed to register command:
-//
-//								  %s %s
-//
-//								Because the following argument shares the same node name as another argument:
-//
-//								  %s
-//								""".formatted(meta.commandName, humanReadableCommandArgSyntax, arg.toString()));
+						CommandAPI.logError("""
+								Failed to register command:
+
+								  %s %s
+
+								Because the following argument shares the same node name as another argument:
+
+								  %s
+								""".formatted(meta.commandName, humanReadableCommandArgSyntax, arg.toString()));
 						return;
 					} else {
 						argumentNames.add(arg.getNodeName());
@@ -529,7 +570,7 @@ public class BaseHandler<Source> {
 //			}
 //		}
 
-//		CommandAPI.logInfo("Registering command /" + commandName + " " + humanReadableCommandArgSyntax);
+		CommandAPI.logInfo("Registering command /" + commandName + " " + humanReadableCommandArgSyntax);
 
 		// Generate the actual command
 		Command<Source> command = generateCommand(args, executor, converted);
@@ -549,7 +590,7 @@ public class BaseHandler<Source> {
 
 			// Register aliases
 			for (String alias : aliases) {
-//				CommandAPI.logInfo("Registering alias /" + alias + " -> " + resultantNode.getName());
+				CommandAPI.logInfo("Registering alias /" + alias + " -> " + resultantNode.getName());
 				aliasNodes.add(platform.registerCommandNode(getLiteralArgumentBuilder(alias)
 						.requires(generatePermissions(alias, permission, requirements)).executes(command)));
 			}
@@ -566,9 +607,9 @@ public class BaseHandler<Source> {
 
 			// Register aliases
 			for (String alias : aliases) {
-//				if (CommandAPI.getConfiguration().hasVerboseOutput()) {
-//					CommandAPI.logInfo("Registering alias /" + alias + " -> " + resultantNode.getName());
-//				}
+				if (CommandAPI.getConfiguration().hasVerboseOutput()) {
+					CommandAPI.logInfo("Registering alias /" + alias + " -> " + resultantNode.getName());
+				}
 
 				aliasNodes.add(platform.registerCommandNode(getLiteralArgumentBuilder(alias)
 						.requires(generatePermissions(alias, permission, requirements)).then(commandArguments)));

@@ -18,6 +18,13 @@ public abstract class AbstractPlatform<Source> {
 	// AbstractPlatform implementation. The only things in here are going
 	// to be supppppppppper low-level stuff
 
+	public abstract void onLoad();
+
+	public abstract void onEnable(Object plugin);
+
+	public abstract void onDisable();
+
+
 	// "Source" in this case (for CommandContext<Source>) is something like a
 	// CommandListenerWrapper (Spigot mappings) or CommandSourceStack (Mojang mappings).
 	// 

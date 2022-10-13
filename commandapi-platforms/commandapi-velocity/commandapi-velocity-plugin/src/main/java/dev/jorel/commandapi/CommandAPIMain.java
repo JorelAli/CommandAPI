@@ -1,5 +1,6 @@
 package dev.jorel.commandapi;
 
+import java.nio.file.Path;
 import java.util.logging.Logger;
 
 import com.google.inject.Inject;
@@ -8,6 +9,7 @@ import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.proxy.ProxyReloadEvent;
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
+import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 
 @Plugin(
@@ -24,14 +26,25 @@ public class CommandAPIMain {
 	private final Logger logger;
 
 	@Inject
-	public CommandAPIMain(ProxyServer server, Logger logger) {
+	public CommandAPIMain(ProxyServer server, Logger logger, @DataDirectory Path dataDirectory) {
 		this.server = server;
 		this.logger = logger;
+
+		// TODO: Save default and load config file from dataDirectory
+		//  does Velocity have an API for this?
+		CommandAPIConfig config = new CommandAPIConfig()
+			.verboseOutput()
+			.silentLogs()
+			.missingExecutorImplementationMessage()
+			.dispatcherFile()
+			.initializeNBTAPI();
+
+		CommandAPI.onLoad(config, new VelocityLogger(logger));
 	}
 
 	@Subscribe
 	public void onProxyInitialization(ProxyInitializeEvent event) {
-		new VelocityPlatform(server.getCommandManager()); // We probably want to do stuff with this...
+		CommandAPI.onEnable(this);
 		
 		// Command can be registered using the following:
 		//
@@ -44,6 +57,7 @@ public class CommandAPIMain {
 	@Subscribe
 	public void onProxyShutdown(ProxyShutdownEvent event) {
 		// Shut down
+		CommandAPI.onDisable();
 	}
 	
 	// On /velocity reload

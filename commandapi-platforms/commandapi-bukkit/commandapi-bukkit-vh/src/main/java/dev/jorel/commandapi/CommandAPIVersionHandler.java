@@ -20,8 +20,8 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.exceptions.UnsupportedVersionException;
-import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.nms.NMS_1_13;
 import dev.jorel.commandapi.nms.NMS_1_13_1;
 import dev.jorel.commandapi.nms.NMS_1_13_2;
@@ -39,6 +39,7 @@ import dev.jorel.commandapi.nms.NMS_1_18_R1;
 import dev.jorel.commandapi.nms.NMS_1_18_R2;
 import dev.jorel.commandapi.nms.NMS_1_19_1_R1;
 import dev.jorel.commandapi.nms.NMS_1_19_R1;
+import org.bukkit.Bukkit;
 
 /**
  * This file handles the NMS version to be loaded. The CommandAPIVersionHandler
@@ -60,15 +61,16 @@ import dev.jorel.commandapi.nms.NMS_1_19_R1;
 public interface CommandAPIVersionHandler {
 
 	/**
-	 * Returns an instance of the version's implementation of NMS.
-	 * 
-	 * @param version the string of the Minecraft version (e.g. 1.16.5 or 1.17)
+	 * Returns an instance of the current running version's implementation of the Bukkit NMS.
+	 *
 	 * @return an instance of NMS which can run on the specified Minecraft version
 	 */
-	public static NMS<?> getNMS(String version) {
+	static AbstractPlatform<?> getPlatform() {
 		if (CommandAPI.getConfiguration().shouldUseLatestNMSVersion()) {
 			return new NMS_1_19_1_R1();
 		} else {
+			String bukkit = Bukkit.getServer().toString();
+			String version = bukkit.substring(bukkit.indexOf("minecraftVersion") + 17, bukkit.length() - 1);
 			return switch (version) {
 				case "1.13" -> new NMS_1_13();
 				case "1.13.1" -> new NMS_1_13_1();

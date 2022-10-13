@@ -23,8 +23,6 @@ package dev.jorel.commandapi;
 import java.io.File;
 import java.util.function.Function;
 
-import dev.jorel.commandapi.nms.NMS;
-
 /**
  * A class to contain information about how to configure the CommandAPI during
  * its loading step.
@@ -43,7 +41,6 @@ public class CommandAPIConfig {
 	Function<Object, ?> nbtContainerConstructor = null;
 
 	File dispatcherFile = null;
-	NMS<?> customNMS;
 
 	/**
 	 * Sets verbose output logging for the CommandAPI if true.
@@ -133,16 +130,6 @@ public class CommandAPIConfig {
 	 */
 	public CommandAPIConfig dispatcherFile(File file) {
 		this.dispatcherFile = file;
-		return this;
-	}
-	
-	/**
-	 * Internal. Do not use.
-	 * @param customNMS the NMS implementation to use instead of any existing implementations
-	 * @return this CommandAPIConfig
-	 */
-	public CommandAPIConfig setCustomNMS(NMS<?> customNMS) {
-		this.customNMS = customNMS;
 		return this;
 	}
 

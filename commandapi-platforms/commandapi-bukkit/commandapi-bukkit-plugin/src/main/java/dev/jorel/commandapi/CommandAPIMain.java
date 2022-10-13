@@ -23,6 +23,7 @@ package dev.jorel.commandapi;
 import java.io.File;
 import java.util.Map.Entry;
 
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.tr7zw.changeme.nbtapi.NBTContainer;
@@ -32,6 +33,20 @@ public class CommandAPIMain extends JavaPlugin {
 
 	@Override
 	public void onLoad() {
+		// Read config file
+		saveDefaultConfig();
+		FileConfiguration fileConfig = getConfig();
+		CommandAPIConfig config = new CommandAPIConfig()
+			.verboseOutput(fileConfig.getBoolean("verbose-outputs"))
+			.silentLogs(fileConfig.getBoolean("silent-logs"))
+			.useLatestNMSVersion(fileConfig.getBoolean("use-latest-nms-version"))
+			.missingExecutorImplementationMessage(fileConfig.getString("messages.missing-executor-implementation"))
+			.dispatcherFile(fileConfig.getBoolean("create-dispatcher-json") ? new File(getDataFolder(), "command_registration.json") : null)
+			.initializeNBTAPI(NBTContainer.class, NBTContainer::new);
+
+		// Main CommandAPI loading
+		CommandAPI.onLoad(config, new BukkitLogger(getLogger()));
+
 		// Configure the NBT API - we're not allowing tracking at all, according
 		// to the CommandAPI's design principles. The CommandAPI isn't used very
 		// much, so this tiny proportion of servers makes very little impact to
@@ -39,16 +54,8 @@ public class CommandAPIMain extends JavaPlugin {
 		MinecraftVersion.disableBStats();
 		MinecraftVersion.disableUpdateCheck();
 
-		// Config loading
-		CommandAPI.logger = getLogger();
-		saveDefaultConfig();
-		CommandAPI.config = new InternalConfig(getConfig(), NBTContainer.class, NBTContainer::new, new File(getDataFolder(), "command_registration.json"));
-
-		// Check dependencies for CommandAPI
-		BaseHandler.getInstance().checkDependencies();
-
 		// Convert all plugins to be converted
-		for (Entry<JavaPlugin, String[]> pluginToConvert : CommandAPI.config.getPluginsToConvert()) {
+		for (Entry<JavaPlugin, String[]> pluginToConvert : CommandAPI.getConfiguration().getPluginsToConvert()) {
 			if (pluginToConvert.getValue().length == 0) {
 				Converter.convert(pluginToConvert.getKey());
 			} else {
@@ -59,7 +66,7 @@ public class CommandAPIMain extends JavaPlugin {
 		}
 
 		// Convert all arbitrary commands
-		for (String commandName : CommandAPI.config.getCommandsToConvert()) {
+		for (String commandName : CommandAPI.getConfiguration().getCommandsToConvert()) {
 			new AdvancedConverter(commandName).convertCommand();
 		}
 	}

@@ -19,11 +19,22 @@ import dev.jorel.commandapi.commandsenders.VelocityConsoleCommandSender;
 import dev.jorel.commandapi.commandsenders.VelocityPlayer;
 
 public class VelocityPlatform extends AbstractPlatform<CommandSource> {
-	
-	private final CommandManager commandManager;
-	
-	public VelocityPlatform(CommandManager commandManager) {
-		this.commandManager = commandManager;
+	private CommandManager commandManager;
+
+	@Override
+	public void onLoad() {
+
+	}
+
+	@Override
+	public void onEnable(Object plugin) {
+		// TODO: Velocity doesn't have a class for plugins?
+		//  How should we send needed information like the commandManager over from the plugin?
+	}
+
+	@Override
+	public void onDisable() {
+
 	}
 
 	@Override

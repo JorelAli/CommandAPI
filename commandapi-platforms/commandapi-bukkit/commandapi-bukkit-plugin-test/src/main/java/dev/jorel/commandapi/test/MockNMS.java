@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import dev.jorel.commandapi.abstractions.AbstractCommandSender;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -339,18 +340,17 @@ public class MockNMS extends ArgumentNMS {
 	}
 
 	@Override
-	public CommandSender getCommandSenderFromCSS(CommandListenerWrapper clw) {
+	public AbstractCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(CommandListenerWrapper clw) {
 		try {
-			return clw.getBukkitSender();
+			return wrapCommandSender(clw.getBukkitSender());
 		} catch (UnsupportedOperationException e) {
 			return null;
 		}
 	}
 
 	@Override
-	public CommandSender getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean forceNative) {
-		CommandListenerWrapper css = cmdCtx.getSource();
-		return css.getBukkitSender();
+	public AbstractCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean forceNative) {
+		return getCommandSenderFromCommandSource(cmdCtx.getSource());
 	}
 
 	@Override

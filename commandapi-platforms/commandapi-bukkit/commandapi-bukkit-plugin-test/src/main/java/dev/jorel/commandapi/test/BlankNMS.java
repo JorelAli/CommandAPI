@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import dev.jorel.commandapi.BukkitPlatform;
 import org.bukkit.Axis;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
@@ -35,7 +36,7 @@ import net.minecraft.commands.CommandListenerWrapper;
 import net.minecraft.commands.arguments.ArgumentChatComponent;
 import net.minecraft.network.chat.IChatBaseComponent;
 
-public abstract class BlankNMS implements NMS<CommandListenerWrapper> {
+public abstract class BlankNMS extends BukkitPlatform<CommandListenerWrapper> {
 
 	public final NMS<?> BASE_NMS;
 

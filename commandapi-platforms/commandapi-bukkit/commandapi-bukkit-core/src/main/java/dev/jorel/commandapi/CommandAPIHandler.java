@@ -195,69 +195,7 @@ public class CommandAPIHandler<Source> extends BaseHandler<Source> {
 		this.paper = new PaperImplementations(false, getPlatform());
 	}
 
-	void checkDependencies() {
-		try {
-			Class.forName("com.mojang.brigadier.CommandDispatcher");
-		} catch (ClassNotFoundException e) {
-			new ClassNotFoundException("Could not hook into Brigadier (Are you running Minecraft 1.13 or above?)")
-					.printStackTrace();
-		}
 
-		// Log successful hooks
-		final String nmsClassHierarchy;
-		{
-			List<String> nmsClassHierarchyList = new ArrayList<>();
-			Class<?> nmsClass = NMS.getClass();
-			while(nmsClass.getSuperclass() != null) {
-				nmsClassHierarchyList.add(nmsClass.getSimpleName());
-				nmsClass = nmsClass.getSuperclass();
-			}
-			nmsClassHierarchy = String.join(" > ", nmsClassHierarchyList);
-		}
-		
-		CommandAPI.logInfo("Hooked into NMS " + nmsClassHierarchy + " (compatible with "
-				+ String.join(", ", NMS.compatibleVersions()) + ")");
-
-		// Checks other dependencies
-		Class<?> nbtContainerClass = CommandAPI.getConfiguration().getNBTContainerClass();
-		if (nbtContainerClass != null && CommandAPI.getConfiguration().getNBTContainerConstructor() != null) {
-			CommandAPI.logNormal("Hooked into an NBT API with class " + nbtContainerClass.getName());
-		} else {
-			if (CommandAPI.getConfiguration().hasVerboseOutput()) {
-				CommandAPI.logWarning(
-						"Could not hook into the NBT API for NBT support. Download it from https://www.spigotmc.org/resources/nbt-api.7939/");
-			}
-		}
-
-		try {
-			Class.forName("org.spigotmc.SpigotConfig");
-			CommandAPI.logNormal("Hooked into Spigot successfully for Chat/ChatComponents");
-		} catch (ClassNotFoundException e) {
-			if (CommandAPI.getConfiguration().hasVerboseOutput()) {
-				CommandAPI.logWarning("Could not hook into Spigot for Chat/ChatComponents");
-			}
-		}
-
-		try {
-			Class.forName("net.kyori.adventure.text.Component");
-			CommandAPI.logNormal("Hooked into Adventure for AdventureChat/AdventureChatComponents");
-		} catch (ClassNotFoundException e) {
-			if (CommandAPI.getConfiguration().hasVerboseOutput()) {
-				CommandAPI.logWarning("Could not hook into Adventure for AdventureChat/AdventureChatComponents");
-			}
-		}
-
-		try {
-			Class.forName("io.papermc.paper.event.server.ServerResourcesReloadedEvent");
-			paper = new PaperImplementations(true, NMS);
-			CommandAPI.logNormal("Hooked into Paper for paper-specific API implementations");
-		} catch (ClassNotFoundException e) {
-			if (CommandAPI.getConfiguration().hasVerboseOutput()) {
-				CommandAPI.logWarning(
-						"Could not hook into Paper for /minecraft:reload. Consider upgrading to Paper: https://papermc.io/");
-			}
-		}
-	}
 
 	/**
 	 * Returns an instance of NMS

@@ -19,7 +19,6 @@ public class Main extends JavaPlugin {
 			.silentLogs(true)
 			.dispatcherFile(new File("command_registration.json"))
 			.initializeNBTAPI(NBTContainer.class, NBTContainer::new)
-			.setCustomNMS(new MockNMS(new NMS_1_19_1_R1()))
 		);
 	}
 
