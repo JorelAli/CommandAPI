@@ -151,16 +151,6 @@ public class CommandAPIHandler<Source> extends BaseHandler<Source> {
 		}
 		return instance;
 	}
-	
-	public static void onDisable() {
-		if(instance != null) {
-			for(Player player : Bukkit.getOnlinePlayers()) {
-				instance.NMS.unhookChatPreview(player);
-			}
-		}
-		
-		instance = null;
-	}
 
 	final Map<ClassCache, Field> FIELDS = new HashMap<>();
 	final TreeMap<String, CommandPermission> PERMISSIONS_TO_FIX = new TreeMap<>();

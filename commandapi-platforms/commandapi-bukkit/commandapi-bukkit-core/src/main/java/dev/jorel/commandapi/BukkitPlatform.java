@@ -159,7 +159,9 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Source> im
 
 	@Override
 	public void onDisable() {
-
+		for(Player player : Bukkit.getOnlinePlayers()) {
+			unhookChatPreview(player);
+		}
 	}
 
 	@Override
