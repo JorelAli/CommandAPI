@@ -128,7 +128,7 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 		CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		// Get the list of values which this can take
 		Map<IStringTooltip, T> values = new HashMap<>();
-		for (T object : supplier.apply(((BukkitPlatform<CommandSourceStack>) platform).getCommandSenderFromCSS(cmdCtx.getSource()))) {
+		for (T object : supplier.apply(((BukkitPlatform<CommandSourceStack>) platform).getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource())) {
 			values.put(mapper.apply(object), object);
 		}
 

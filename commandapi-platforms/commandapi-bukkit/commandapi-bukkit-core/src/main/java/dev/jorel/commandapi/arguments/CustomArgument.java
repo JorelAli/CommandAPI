@@ -138,7 +138,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 		final B parsedInput = base.parseArgument(platform, cmdCtx, key, previousArgs);
 
 		try {
-			return infoParser.apply(new CustomArgumentInfo<B>(((BukkitPlatform<CommandSourceStack>) platform).getCommandSenderFromCSS(cmdCtx.getSource()),
+			return infoParser.apply(new CustomArgumentInfo<B>(((BukkitPlatform<CommandSourceStack>) platform).getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource(),
 					previousArgs, customresult, parsedInput));
 		} catch (CustomArgumentException e) {
 			throw e.toCommandSyntax(customresult, cmdCtx);
