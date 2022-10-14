@@ -20,7 +20,7 @@ import com.velocitypowered.api.proxy.ProxyServer;
 	description = "An API to use Minecraft 1.13s new command UI",
 	authors = {"Skepter"}
 )
-public class CommandAPIMain {
+public class CommandAPIMain implements CommandAPIVelocityPluginWrapper {
 
 	private final ProxyServer server;
 	private final Logger logger;
@@ -39,7 +39,12 @@ public class CommandAPIMain {
 			.dispatcherFile()
 			.initializeNBTAPI();
 
-		CommandAPI.onLoad(config, new VelocityLogger(logger));
+		CommandAPI.onLoad(config, new VelocityLogger(this.logger));
+	}
+
+	@Override
+	public ProxyServer getServer() {
+		return server;
 	}
 
 	@Subscribe
@@ -65,5 +70,4 @@ public class CommandAPIMain {
 	public void onProxyReload(ProxyReloadEvent event) {
 		// Handle quirky stuff
 	}
-	
 }

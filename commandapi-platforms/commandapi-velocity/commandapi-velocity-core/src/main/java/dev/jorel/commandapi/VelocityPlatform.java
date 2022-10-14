@@ -27,9 +27,10 @@ public class VelocityPlatform extends AbstractPlatform<CommandSource> {
 	}
 
 	@Override
-	public void onEnable(Object plugin) {
-		// TODO: Velocity doesn't have a class for plugins?
-		//  How should we send needed information like the commandManager over from the plugin?
+	public void onEnable(Object pluginObject) {
+		CommandAPIVelocityPluginWrapper plugin = (CommandAPIVelocityPluginWrapper) pluginObject;
+
+		commandManager = plugin.getServer().getCommandManager();
 	}
 
 	@Override
