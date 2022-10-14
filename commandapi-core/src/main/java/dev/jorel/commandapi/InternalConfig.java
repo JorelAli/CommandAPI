@@ -20,12 +20,9 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import java.io.File;
-import java.util.*;
-import java.util.Map.Entry;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -52,7 +49,7 @@ public class InternalConfig {
 
 	// List of plugins to convert
 	// TODO: Can we support command conversion on multiple platforms, or should this be removed from the general config?
-	private final Map<JavaPlugin, String[]> pluginsToConvert;
+//	private final Map<JavaPlugin, String[]> pluginsToConvert;
 
 	// List of plugins which should ignore proxied senders
 	private final List<String> skipSenderProxy;
@@ -84,7 +81,7 @@ public class InternalConfig {
 		this.useLatestNMSVersion = config.useLatestNMSVersion;
 		this.message_missingExecutorImplementation = config.missingExecutorImplementationMessage;
 		this.dispatcherFile = config.dispatcherFile;
-		this.pluginsToConvert = new HashMap<>();
+//		this.pluginsToConvert = new HashMap<>();
 		this.skipSenderProxy = new ArrayList<>();
 		this.commandsToConvert = new ArrayList<>();
 		this.nbtContainerClass = config.nbtContainerClass;
@@ -128,20 +125,20 @@ public class InternalConfig {
 		return this.dispatcherFile;
 	}
 
-	/**
-	 * @return A set of plugins and a list of commands to convert
-	 */
-	public Set<Entry<JavaPlugin, String[]>> getPluginsToConvert() {
-		return this.pluginsToConvert.entrySet();
-	}
+//	/**
+//	 * @return A set of plugins and a list of commands to convert
+//	 */
+//	public Set<Entry<JavaPlugin, String[]>> getPluginsToConvert() {
+//		return this.pluginsToConvert.entrySet();
+//	}
 
-	/**
-	 * @param plugin A plugin where sender proxying should be skipped
-	 * @return Whether sender proxying should be skipped for a given plugin
-	 */
-	public boolean shouldSkipSenderProxy(Plugin plugin) {
-		return this.skipSenderProxy.contains(plugin.getName());
-	}
+//	/**
+//	 * @param plugin A plugin where sender proxying should be skipped
+//	 * @return Whether sender proxying should be skipped for a given plugin
+//	 */
+//	public boolean shouldSkipSenderProxy(Plugin plugin) {
+//		return this.skipSenderProxy.contains(plugin.getName());
+//	}
 
 	/**
 	 * @param commandName A command where sender proxying should be skipped
