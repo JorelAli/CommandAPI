@@ -50,7 +50,7 @@ public class VelocityPlatform extends AbstractPlatform<CommandSource> {
 	}
 
 	@Override
-	public void unregister(String commandName) {
+	public void unregister(String commandName, boolean force) {
 		commandManager.unregister(commandName);
 	}
 

@@ -250,7 +250,6 @@ public class CommandAPI {
 	 * @param command the name of the command to unregister
 	 */
 	public static void unregister(String command) {
-		// TODO: Uhhh, the platform unregister doesn't have force?
 		BaseHandler.getInstance().getPlatform().unregister(command, false);
 	}
 

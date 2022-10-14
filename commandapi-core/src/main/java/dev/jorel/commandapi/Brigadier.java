@@ -58,7 +58,7 @@ public final class Brigadier {
 	 * @return The CommandAPI's internal CommandDispatcher instance
 	 */
 	public static CommandDispatcher getCommandDispatcher() {
-		return BaseHandler.getInstance().DISPATCHER;
+		return BaseHandler.getInstance().getPlatform().getCommandDispatcher();
 	}
 
 	/**
@@ -200,7 +200,7 @@ public final class Brigadier {
 	 *         CommandSender
 	 */
 	public static Object getBrigadierSourceFromCommandSender(AbstractCommandSender sender) {
-		return BaseHandler.getInstance().getNMS().getCLWFromCommandSender(sender);
+		return BaseHandler.getInstance().getPlatform().getBrigadierSourceFromCommandSender(sender);
 	}
 
 	
@@ -211,6 +211,6 @@ public final class Brigadier {
 	 * @return a Bukkit CommandSender from the provided Brigadier CommandContext
 	 */
 	public static AbstractCommandSender getCommandSenderFromContext(CommandContext cmdCtx) {
-		return BaseHandler.getInstance().getNMS().getSenderForCommand(cmdCtx, false);
+		return BaseHandler.getInstance().getPlatform().getSenderForCommand(cmdCtx, false);
 	}
 }

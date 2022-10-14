@@ -2,6 +2,7 @@ package dev.jorel.commandapi.abstractions;
 
 import java.util.List;
 
+import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
@@ -37,6 +38,9 @@ public abstract class AbstractPlatform<Source> {
 	// is implemented in NMS. TODO: For Velocity, I have no idea what
 	// a command source is or consists of
 	public abstract AbstractCommandSender<?> getCommandSenderFromCommandSource(Source cs);
+
+	// Converts a CommandSender to a Brigadier Source
+	public abstract Source getBrigadierSourceFromCommandSender(AbstractCommandSender sender);
 
 	// Registers a permission. Bukkit's permission system requires permissions to be "registered"
 	// before they can be used.
@@ -76,8 +80,9 @@ public abstract class AbstractPlatform<Source> {
 	 * Unregisters a command. For Bukkit, this is as complex as unregistering it from
 	 * the CommandDispatcher. For Velocity, this is as simple as commandManager.unregister(commandName)
 	 */
-	public abstract void unregister(String commandName);
-	
+	public abstract void unregister(String commandName, boolean force);
+
+	public abstract CommandDispatcher getCommandDispatcher();
 
 
 	// For Bukkit, chat preview has to be unhooked

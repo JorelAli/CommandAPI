@@ -160,8 +160,7 @@ public class BaseHandler<Source> {
 	 * @return a brigadier command which is registered internally
 	 * @throws CommandSyntaxException if an error occurs when the command is ran
 	 */
-	Command<Source> generateCommand(Argument<?>[] args,
-			CustomCommandExecutor<? extends AbstractCommandSender<Source>> executor, boolean converted) throws CommandSyntaxException {
+	Command<Source> generateCommand(Argument<?>[] args, CustomCommandExecutor<?> executor, boolean converted) throws CommandSyntaxException {
 
 		// Generate our command from executor
 		return (cmdCtx) -> {
@@ -327,8 +326,7 @@ public class BaseHandler<Source> {
 	 * multiliteral arguments were present (and expanded) and returns false if
 	 * multiliteral arguments were not present.
 	 */
-	private boolean expandMultiLiterals(CommandMetaData meta, final Argument<?>[] args,
-			CustomCommandExecutor<? extends AbstractCommandSender<Source>> executor, boolean converted)
+	private boolean expandMultiLiterals(CommandMetaData meta, final Argument<?>[] args, CustomCommandExecutor<?> executor, boolean converted)
 			throws CommandSyntaxException, IOException {
 
 		// "Expands" our MultiLiterals into Literals
@@ -486,8 +484,7 @@ public class BaseHandler<Source> {
 
 	// Builds our platform command using the given arguments for this method, then
 	// registers it
-	void register(CommandMetaData meta, final Argument<?>[] args,
-			CustomCommandExecutor<? extends AbstractCommandSender<Source>> executor, boolean converted)
+	void register(CommandMetaData meta, final Argument<?>[] args, CustomCommandExecutor<?> executor, boolean converted)
 			throws CommandSyntaxException, IOException {
 
 		// "Expands" our MultiLiterals into Literals

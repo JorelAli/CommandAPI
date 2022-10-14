@@ -219,7 +219,7 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Source> im
 	}
 
 	@Override
-	public void unregister(String commandName) {
+	public void unregister(String commandName, boolean force) {
 		// TODO Auto-generated method stub
 
 	}

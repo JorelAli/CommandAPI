@@ -140,7 +140,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	 * Returns the requirements that must be satisfied to run this command
 	 * @return the requirements that must be satisfied to run this command
 	 */
-	public Predicate<AbstractCommandSender> getRequirements() {
+	public Predicate<AbstractCommandSender<?>> getRequirements() {
 		return this.meta.requirements;
 	}
 
@@ -148,7 +148,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	 * Sets the requirements that must be satisfied to run this command
 	 * @param requirements the requirements that must be satisfied to run this command
 	 */
-	public void setRequirements(Predicate<AbstractCommandSender> requirements) {
+	public void setRequirements(Predicate<AbstractCommandSender<?>> requirements) {
 		this.meta.requirements = requirements;
 	}
 	
