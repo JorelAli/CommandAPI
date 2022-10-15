@@ -5,7 +5,6 @@ import com.mojang.brigadier.context.ParsedCommandNode;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.BaseHandler;
-import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.arguments.PreviewInfo;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.wrappers.PreviewableFunction;
@@ -132,7 +131,7 @@ public abstract class NMS_1_19_Common_ChatPreviewHandler extends ChannelDuplexHa
 
 			if(cachedResult != null && cachedResult.fullInput.equals(fullInput)) return cachedResult;
 
-			ParseResults<CommandSourceStack> results = nms.getBrigadierDispatcher().parse(fullInput, nms.getCLWFromCommandSender(player));
+			ParseResults<CommandSourceStack> results = nms.getBrigadierDispatcher().parse(fullInput, nms.getBrigadierSourceFromCommandSender(player));
 
 			// Generate the path for lookup
 			List<String> path = new ArrayList<>();

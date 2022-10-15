@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+import com.mojang.brigadier.CommandDispatcher;
 import dev.jorel.commandapi.commandsenders.*;
 import dev.jorel.commandapi.preprocessor.Unimplemented;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
@@ -172,6 +173,10 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Source> im
 	@Unimplemented(because = Unimplemented.REASON.REQUIRES_CSS)
 	public abstract AbstractCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(Source cs);
 
+	@Override
+	@Unimplemented(because = Unimplemented.REASON.REQUIRES_CRAFTBUKKIT)
+	public abstract Source getBrigadierSourceFromCommandSender(AbstractCommandSender<?> sender);
+
 	public AbstractCommandSender<? extends CommandSender> wrapCommandSender(CommandSender sender) {
 		if (sender instanceof BlockCommandSender block)
 			return new BukkitBlockCommandSender(block);
@@ -187,6 +192,10 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Source> im
 			return new BukkitProxiedCommandSender(proxy);
 		return null;
 	}
+
+	@Override
+	@Unimplemented(because = Unimplemented.REASON.REQUIRES_MINECRAFT_SERVER)
+	public abstract CommandDispatcher<Source> getBrigadierDispatcher();
 
 	@Override
 	public void registerPermission(String string) {

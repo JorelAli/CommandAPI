@@ -524,7 +524,8 @@ public class NMS_1_14 extends NMSWrapper_1_14 {
 	}
 
 	@Override
-	public CommandListenerWrapper getCLWFromCommandSender(CommandSender sender) {
+	public CommandListenerWrapper getBrigadierSourceFromCommandSender(AbstractCommandSender<?> senderWrapper) {
+		CommandSender sender = (CommandSender) senderWrapper.getSource();
 		return VanillaCommandWrapper.getListener(sender);
 	}
 

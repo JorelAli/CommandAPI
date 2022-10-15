@@ -53,7 +53,8 @@ public class NMS_1_13_2 extends NMS_1_13_1 {
 
 	@Differs(from = "1.13.1", by = "using VanillaCommandWrapper.getListener")
 	@Override
-	public CommandListenerWrapper getCLWFromCommandSender(CommandSender sender) {
+	public CommandListenerWrapper getBrigadierSourceFromCommandSender(AbstractCommandSender<?> senderWrapper) {
+		CommandSender sender = (CommandSender) senderWrapper.getSource();
 		return VanillaCommandWrapper.getListener(sender);
 	}
 

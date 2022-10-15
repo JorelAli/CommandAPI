@@ -97,7 +97,9 @@ public class SimpleFunctionWrapper implements Keyed {
 	 * @return the result of running this command
 	 */
 	public int run(CommandSender sender) {
-		return runInternal(BukkitPlatform.get().getCLWFromCommandSender(sender));
+		// TODO: Is is better to wrap a CommandSender or input an AbstractCommandSender?
+		BukkitPlatform<?> platform = BukkitPlatform.get();
+		return runInternal(platform.getBrigadierSourceFromCommandSender(platform.wrapCommandSender(sender)));
 	}
 	
 	/**

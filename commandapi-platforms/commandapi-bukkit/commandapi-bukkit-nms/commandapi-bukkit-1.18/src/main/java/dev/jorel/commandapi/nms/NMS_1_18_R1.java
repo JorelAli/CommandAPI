@@ -39,8 +39,6 @@ import java.util.function.ToIntFunction;
 import com.mojang.brigadier.Message;
 import dev.jorel.commandapi.abstractions.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Keyed;
@@ -300,7 +298,8 @@ public class NMS_1_18_R1 extends NMS_Common {
 	}
 
 	@Override
-	public CommandSourceStack getCLWFromCommandSender(CommandSender sender) {
+	public CommandSourceStack getBrigadierSourceFromCommandSender(AbstractCommandSender<?> senderWrapper) {
+		CommandSender sender = (CommandSender) senderWrapper.getSource();
 		return VanillaCommandWrapper.getListener(sender);
 	}
 

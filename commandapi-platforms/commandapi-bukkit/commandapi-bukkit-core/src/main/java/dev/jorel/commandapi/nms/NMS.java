@@ -44,7 +44,6 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
@@ -216,13 +215,14 @@ public interface NMS<CommandListenerWrapper> {
 
 	BaseComponent[] getChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
-	/**
-	 * Converts a CommandSender into a CLW
-	 * 
-	 * @param sender the command sender to convert
-	 * @return a CLW.
-	 */
-	CommandListenerWrapper getCLWFromCommandSender(CommandSender sender);
+//	Replaced by AbstractPlatform#getBrigadierSourceFromCommandSender
+//	/**
+//	 * Converts a CommandSender into a CLW
+//	 *
+//	 * @param sender the command sender to convert
+//	 * @return a CLW.
+//	 */
+//	CommandListenerWrapper getCLWFromCommandSender(CommandSender sender);
 
 //	Replaced by AbstractPlatform#getCommandSenderFromCommandSource
 //	/**

@@ -2,6 +2,7 @@ package dev.jorel.commandapi;
 
 import java.util.List;
 
+import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
@@ -55,6 +56,12 @@ public class VelocityPlatform extends AbstractPlatform<CommandSource> {
 	}
 
 	@Override
+	public CommandDispatcher<CommandSource> getBrigadierDispatcher() {
+		// TODO: How do we get this? Do we need access to velocity internals?
+		return null;
+	}
+
+	@Override
 	public AbstractCommandSender<? extends CommandSource> getSenderForCommand(CommandContext<CommandSource> cmdCtx,
 			boolean forceNative) {
 		// TODO: This method MAY be completely identical to getCommandSenderFromCommandSource.
@@ -76,6 +83,11 @@ public class VelocityPlatform extends AbstractPlatform<CommandSource> {
 		if(cs instanceof Player p)
 			return new VelocityPlayer(p);
 		throw new IllegalArgumentException("Unknown CommandSource: " + cs);
+	}
+
+	@Override
+	public CommandSource getBrigadierSourceFromCommandSender(AbstractCommandSender<?> sender) {
+		return (CommandSource) sender.getSource();
 	}
 
 	@Override

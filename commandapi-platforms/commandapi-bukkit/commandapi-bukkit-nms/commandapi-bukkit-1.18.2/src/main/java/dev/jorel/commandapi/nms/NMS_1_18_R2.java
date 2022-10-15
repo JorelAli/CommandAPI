@@ -348,7 +348,8 @@ public class NMS_1_18_R2 extends NMS_Common {
 	}
 
 	@Override
-	public CommandSourceStack getCLWFromCommandSender(CommandSender sender) {
+	public CommandSourceStack getBrigadierSourceFromCommandSender(AbstractCommandSender<?> senderWrapper) {
+		CommandSender sender = (CommandSender) senderWrapper.getSource();
 		return VanillaCommandWrapper.getListener(sender);
 	}
 

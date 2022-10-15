@@ -58,7 +58,7 @@ public final class Brigadier {
 	 * @return The CommandAPI's internal CommandDispatcher instance
 	 */
 	public static CommandDispatcher getCommandDispatcher() {
-		return BaseHandler.getInstance().getPlatform().getCommandDispatcher();
+		return BaseHandler.getInstance().getPlatform().getBrigadierDispatcher();
 	}
 
 	/**
