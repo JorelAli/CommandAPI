@@ -1,5 +1,6 @@
 package dev.jorel.commandapi.nms;
 
+import dev.jorel.commandapi.BukkitPlatform;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.protocol.game.ClientboundChatPreviewPacket;
 import net.minecraft.network.protocol.game.ServerboundChatPreviewPacket;
@@ -9,8 +10,8 @@ import org.bukkit.plugin.Plugin;
 
 public class NMS_1_19_R1_ChatPreviewHandler extends NMS_1_19_Common_ChatPreviewHandler {
 
-	public NMS_1_19_R1_ChatPreviewHandler(NMS<CommandSourceStack> nms, Plugin plugin, Player player) {
-		super(nms, plugin, player);
+	public NMS_1_19_R1_ChatPreviewHandler(BukkitPlatform<CommandSourceStack> platform, Plugin plugin, Player player) {
+		super(platform, plugin, player);
 	}
 
 	@Override

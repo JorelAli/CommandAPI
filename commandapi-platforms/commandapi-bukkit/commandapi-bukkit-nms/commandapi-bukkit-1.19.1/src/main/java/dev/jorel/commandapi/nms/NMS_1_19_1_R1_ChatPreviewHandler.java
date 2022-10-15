@@ -1,5 +1,6 @@
 package dev.jorel.commandapi.nms;
 
+import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.PacketSendListener;
@@ -21,8 +22,8 @@ import java.util.concurrent.CompletableFuture;
 public class NMS_1_19_1_R1_ChatPreviewHandler extends NMS_1_19_Common_ChatPreviewHandler {
 	ChatPreviewThrottler throttler;
 
-	public NMS_1_19_1_R1_ChatPreviewHandler(NMS<CommandSourceStack> nms, Plugin plugin, Player player) {
-		super(nms, plugin, player);
+	public NMS_1_19_1_R1_ChatPreviewHandler(BukkitPlatform<CommandSourceStack> platform, Plugin plugin, Player player) {
+		super(platform, plugin, player);
 
 		try {
 			Field f = ServerGamePacketListenerImpl.class.getDeclaredField("M");

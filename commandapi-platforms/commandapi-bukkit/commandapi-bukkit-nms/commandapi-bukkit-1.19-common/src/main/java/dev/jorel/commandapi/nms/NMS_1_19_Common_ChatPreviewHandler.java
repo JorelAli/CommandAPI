@@ -5,7 +5,9 @@ import com.mojang.brigadier.context.ParsedCommandNode;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.BaseHandler;
+import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.arguments.PreviewInfo;
+import dev.jorel.commandapi.commandsenders.BukkitPlayer;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.wrappers.PreviewableFunction;
 import io.netty.channel.ChannelDuplexHandler;
@@ -30,13 +32,13 @@ import java.util.Optional;
 
 public abstract class NMS_1_19_Common_ChatPreviewHandler extends ChannelDuplexHandler {
 
-	protected final NMS<CommandSourceStack> nms;
+	protected final BukkitPlatform<CommandSourceStack> platform;
 	protected final Plugin plugin;
 	protected final Player player;
 	protected final Connection connection;
 
-	public NMS_1_19_Common_ChatPreviewHandler(NMS<CommandSourceStack> nms, Plugin plugin, Player player) {
-		this.nms = nms;
+	public NMS_1_19_Common_ChatPreviewHandler(BukkitPlatform<CommandSourceStack> platform, Plugin plugin, Player player) {
+		this.platform = platform;
 		this.plugin = plugin;
 		this.player = player;
 		this.connection = ((CraftPlayer) player).getHandle().connection.connection;
@@ -49,7 +51,7 @@ public abstract class NMS_1_19_Common_ChatPreviewHandler extends ChannelDuplexHa
 			// Is command
 			if (!chatPreview.query().isEmpty() && chatPreview.query().charAt(0) == '/') {
 				// Is previewable argument
-				if(InitialParse.processChatPreviewQuery(chatPreview.query(), nms, player).preview.isPresent()){
+				if(InitialParse.processChatPreviewQuery(chatPreview.query(), platform, player).preview.isPresent()){
 					handleChatPreviewPacket(chatPreview);
 					return;
 				}
@@ -63,7 +65,7 @@ public abstract class NMS_1_19_Common_ChatPreviewHandler extends ChannelDuplexHa
 	protected abstract void handleChatPreviewPacket(ServerboundChatPreviewPacket chatPreview);
 
 	public MutableComponent parseChatPreviewQuery(String chatPreviewQuery) {
-		final InitialParse ip = InitialParse.processChatPreviewQuery(chatPreviewQuery, nms, player);
+		final InitialParse ip = InitialParse.processChatPreviewQuery(chatPreviewQuery, platform, player);
 		final Optional<PreviewableFunction<?>> preview = ip.preview;
 		if (preview.isEmpty()) {
 			return null;
@@ -84,19 +86,19 @@ public abstract class NMS_1_19_Common_ChatPreviewHandler extends ChannelDuplexHa
 			if (BaseHandler.getInstance().lookupPreviewableLegacyStatus(path)) {
 				BaseComponent[] parsedInput;
 				try {
-					parsedInput = nms.getChat(results.getContext().build(fullInput), path.get(path.size() - 1));
+					parsedInput = platform.getChat(results.getContext().build(fullInput), path.get(path.size() - 1));
 				} catch (CommandSyntaxException e) {
 					throw new WrapperCommandSyntaxException(e);
 				}
-				previewInfo = new PreviewInfo<>(this.player, input, chatPreviewQuery, parsedInput);
+				previewInfo = new PreviewInfo<>(new BukkitPlayer(player), input, chatPreviewQuery, parsedInput);
 			} else {
 				Component parsedInput;
 				try {
-					parsedInput = nms.getAdventureChat(results.getContext().build(fullInput), path.get(path.size() - 1));
+					parsedInput = platform.getAdventureChat(results.getContext().build(fullInput), path.get(path.size() - 1));
 				} catch (CommandSyntaxException e) {
 					throw new WrapperCommandSyntaxException(e);
 				}
-				previewInfo = new PreviewInfo<>(this.player, input, chatPreviewQuery, parsedInput);
+				previewInfo = new PreviewInfo<>(new BukkitPlayer(player), input, chatPreviewQuery, parsedInput);
 			}
 
 			component = preview.get().generatePreview(previewInfo);
@@ -107,7 +109,7 @@ public abstract class NMS_1_19_Common_ChatPreviewHandler extends ChannelDuplexHa
 		if (component != null) {
 			if (component instanceof BaseComponent[] baseComponent) {
 				jsonToSend = ComponentSerializer.toString(baseComponent);
-			} else if (BaseHandler.getInstance().getPaper().isPresent()) {
+			} else if (platform.getPaper().isPresent()) {
 				if (component instanceof Component adventureComponent) {
 					jsonToSend = GsonComponentSerializer.gson().serialize(adventureComponent);
 				} else {
@@ -125,13 +127,14 @@ public abstract class NMS_1_19_Common_ChatPreviewHandler extends ChannelDuplexHa
 
 	private record InitialParse(String fullInput, ParseResults<CommandSourceStack> results, List<String> path, Optional<PreviewableFunction<?>> preview){
 		private static InitialParse cachedResult = null;
-		public static InitialParse processChatPreviewQuery(String chatPreviewQuery, NMS<CommandSourceStack> nms, Player player){
+		public static InitialParse processChatPreviewQuery(String chatPreviewQuery, BukkitPlatform<CommandSourceStack> platform, Player player){
 			// Substring 1 to get rid of the leading /
 			final String fullInput = chatPreviewQuery.substring(1);
 
 			if(cachedResult != null && cachedResult.fullInput.equals(fullInput)) return cachedResult;
 
-			ParseResults<CommandSourceStack> results = nms.getBrigadierDispatcher().parse(fullInput, nms.getBrigadierSourceFromCommandSender(player));
+			ParseResults<CommandSourceStack> results = platform.getBrigadierDispatcher()
+				.parse(fullInput, platform.getBrigadierSourceFromCommandSender(new BukkitPlayer(player)));
 
 			// Generate the path for lookup
 			List<String> path = new ArrayList<>();
