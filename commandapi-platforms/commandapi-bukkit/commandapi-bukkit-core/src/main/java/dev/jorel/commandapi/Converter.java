@@ -197,8 +197,12 @@ public final class Converter {
 				command = BukkitPlatform.get().getSimpleCommandMap()
 						.getCommand(commandName);
 			}
-			
-			CommandSender proxiedSender = CommandAPI.getConfiguration().shouldSkipSenderProxy(plugin)
+
+			// TODO: The shouldSkipSenderProxy(Plugin) was removed since Plugin can't be accessed in InternalConfig,
+			//  but just passing in plugin.getName() here is equivalent. However, this is related to figuring out
+			//  how to configure command conversion with the new system, so I figured I should mark this for review
+			//  once that gets figured out.
+			CommandSender proxiedSender = CommandAPI.getConfiguration().shouldSkipSenderProxy(plugin.getName())
 					? sender.getCallee()
 					: mergeProxySender(sender);
 			
