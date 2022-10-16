@@ -66,7 +66,10 @@
 
 		<!-- Outputs -->
 		<module>commandapi-annotations</module>
-	</modules>
+
+		<!-- Documentation examples -->
+        <module>commandapi-examples</module>
+    </modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
