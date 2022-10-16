@@ -39,6 +39,7 @@ import dev.jorel.commandapi.arguments.IPreviewable;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.PreviewInfo;
+import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.wrappers.PreviewableFunction;
 
 // The "brains" behind the CommandAPI.
@@ -51,6 +52,7 @@ import dev.jorel.commandapi.wrappers.PreviewableFunction;
 //  and I'm not sure if we can use the Adventure API on Fabric, so let's
 //  assume we can't until we figure that out.
 
+@RequireField(in = CommandContext.class, name = "arguments", ofType = Map.class)
 public class BaseHandler<Source> {
 	// TODO: Figure out what here gets moved to the common implementation and what
 	//  is platform-specific
@@ -283,9 +285,8 @@ public class BaseHandler<Source> {
 		final CommandPermission finalPermission = permission;
 
 		// Register it to the Bukkit permissions registry
-		if (finalPermission.getPermission().isPresent()) {
-			platform.registerPermission(finalPermission.getPermission().get());
-		}
+		Optional<String> permissionString = finalPermission.getPermission();
+		permissionString.ifPresent(platform::registerPermission);
 
 		return (Source css) -> permissionCheck(platform.getCommandSenderFromCommandSource(css), finalPermission,
 				requirements);
@@ -316,6 +317,7 @@ public class BaseHandler<Source> {
 		}
 		return satisfiesPermissions && requirements.test(sender);
 	}
+
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	// SECTION: Registration //
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -818,7 +820,7 @@ public class BaseHandler<Source> {
 
 	/**
 	 * Class to store cached methods and fields
-	 * 
+	 * <p>
 	 * This is required because each key is made up of a class and a field or method
 	 * name
 	 */
@@ -876,5 +878,4 @@ public class BaseHandler<Source> {
 		}
 
 	}
-
 }
