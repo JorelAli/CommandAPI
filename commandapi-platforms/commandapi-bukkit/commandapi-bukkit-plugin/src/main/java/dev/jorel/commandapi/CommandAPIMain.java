@@ -54,21 +54,22 @@ public class CommandAPIMain extends JavaPlugin {
 		MinecraftVersion.disableBStats();
 		MinecraftVersion.disableUpdateCheck();
 
-		// Convert all plugins to be converted
-		for (Entry<JavaPlugin, String[]> pluginToConvert : CommandAPI.getConfiguration().getPluginsToConvert()) {
-			if (pluginToConvert.getValue().length == 0) {
-				Converter.convert(pluginToConvert.getKey());
-			} else {
-				for (String command : pluginToConvert.getValue()) {
-					new AdvancedConverter(pluginToConvert.getKey(), command).convert();
-				}
-			}
-		}
-
-		// Convert all arbitrary commands
-		for (String commandName : CommandAPI.getConfiguration().getCommandsToConvert()) {
-			new AdvancedConverter(commandName).convertCommand();
-		}
+		// TODO: Figure out how command conversion is configured
+//		// Convert all plugins to be converted
+//		for (Entry<JavaPlugin, String[]> pluginToConvert : CommandAPI.getConfiguration().getPluginsToConvert()) {
+//			if (pluginToConvert.getValue().length == 0) {
+//				Converter.convert(pluginToConvert.getKey());
+//			} else {
+//				for (String command : pluginToConvert.getValue()) {
+//					new AdvancedConverter(pluginToConvert.getKey(), command).convert();
+//				}
+//			}
+//		}
+//
+//		// Convert all arbitrary commands
+//		for (String commandName : CommandAPI.getConfiguration().getCommandsToConvert()) {
+//			new AdvancedConverter(commandName).convertCommand();
+//		}
 	}
 
 	@Override
