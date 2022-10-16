@@ -8,11 +8,16 @@ import java.util.*;
 import java.util.function.Function;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
+import dev.jorel.commandapi.abstractions.AbstractPlayer;
 import dev.jorel.commandapi.commandsenders.*;
+import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.preprocessor.Unimplemented;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
+import net.kyori.adventure.text.Component;
+import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
@@ -456,11 +461,20 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Source> im
 		((Map<String, CommandNode<?>>) COMMANDNODE_ARGUMENTS.get(getBrigadierDispatcher().getRoot())).remove(commandName);
 	}
 
+	@Override
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION)
+	public abstract void reloadDataPacks();
+
+	@Override
+	public void updateRequirements(AbstractPlayer<?> player) {
+		resendPackets((Player) player.getSource());
+	}
+
+	// TODO: There's probably a much better place to put this, but I don't
+	//  really fancy subclassing SafeOverrideableArgument for Bukkit specifically,
+	//  so I'll dump it here and hope nobody cares because the CommandAPI doesn't
+	//  really have a centralized "utils" class or anything
 	/**
-	 * TODO: There's probably a much better place to put this, but I don't
-	 *  really fancy subclassing SafeOverrideableArgument for Bukkit specifically,
-	 *  so I'll dump it here and hope nobody cares because the CommandAPI doesn't
-	 *  really have a centralized "utils" class or anything
 	 * <p>
 	 * Composes a <code>S</code> to a <code>NamespacedKey</code> mapping function to
 	 * convert <code>S</code> to a <code>String</code>
@@ -472,5 +486,30 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Source> im
 	 */
 	public static <S> Function<S, String> fromKey(Function<S, NamespacedKey> mapper) {
 		return mapper.andThen(NamespacedKey::toString);
+	}
+
+	// TODO: Same as above, not really sure where else these Bukkit-specific methods could go. Also, it sounds like
+	//  everything supports Adventure Components, so that isn't truly Bukkit-specific. Also, backwards compatibility:
+	//  these methods are expected to be called as CommandAPI.failWith...
+	/**
+	 * Forces a command to return a success value of 0
+	 *
+	 * @param message Description of the error message, formatted as an array of base components
+	 * @return a {@link WrapperCommandSyntaxException} that wraps Brigadier's
+	 *         {@link CommandSyntaxException}
+	 */
+	public static WrapperCommandSyntaxException failWithBaseComponents(BaseComponent... message) {
+		return CommandAPI.failWithMessage(Tooltip.messageFromBaseComponents(message));
+	}
+
+	/**
+	 * Forces a command to return a success value of 0
+	 *
+	 * @param message Description of the error message, formatted as an adventure chat component
+	 * @return a {@link WrapperCommandSyntaxException} that wraps Brigadier's
+	 *         {@link CommandSyntaxException}
+	 */
+	public static WrapperCommandSyntaxException failWithAdventureComponent(Component message) {
+		return CommandAPI.failWithMessage(Tooltip.messageFromAdventureComponent(message));
 	}
 }

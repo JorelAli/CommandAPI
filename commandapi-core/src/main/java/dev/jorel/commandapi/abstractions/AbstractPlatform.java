@@ -87,4 +87,8 @@ public abstract class AbstractPlatform<Source> {
 	public abstract void unregister(String commandName, boolean force);
 
 	public abstract CommandDispatcher<Source> getBrigadierDispatcher();
+
+	public abstract void reloadDataPacks();
+
+	public abstract void updateRequirements(AbstractPlayer<?> player);
 }
