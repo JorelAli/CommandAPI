@@ -100,21 +100,6 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Source> im
 
 	private void checkDependencies() {
 		// Log successful hooks
-		final String nmsClassHierarchy;
-		{
-			List<String> nmsClassHierarchyList = new ArrayList<>();
-			Class<?> nmsClass = getClass();
-			while (nmsClass != BukkitPlatform.class) {
-				nmsClassHierarchyList.add(nmsClass.getSimpleName());
-				nmsClass = nmsClass.getSuperclass();
-			}
-			nmsClassHierarchyList.add("NMS");
-			nmsClassHierarchy = String.join(" > ", nmsClassHierarchyList);
-		}
-
-		CommandAPI.logInfo("Hooked into NMS " + nmsClassHierarchy + " (compatible with "
-			+ String.join(", ", compatibleVersions()) + ")");
-
 		try {
 			Class.forName("org.spigotmc.SpigotConfig");
 			CommandAPI.logNormal("Hooked into Spigot successfully for Chat/ChatComponents");

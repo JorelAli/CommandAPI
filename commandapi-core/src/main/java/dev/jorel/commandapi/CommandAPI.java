@@ -8,6 +8,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlayer;
 import dev.jorel.commandapi.abstractions.AbstractTooltip;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
@@ -125,6 +126,19 @@ public class CommandAPI {
 
 			// Initialize handlers
 			AbstractPlatform<?> platform = CommandAPIVersionHandler.getPlatform();
+
+			final String platformClassHierarchy;
+			{
+				List<String> platformClassHierarchyList = new ArrayList<>();
+				Class<?> platformClass = platform.getClass();
+				while (platformClass != AbstractPlatform.class) {
+					platformClassHierarchyList.add(platformClass.getSimpleName());
+					platformClass = platformClass.getSuperclass();
+				}
+				platformClassHierarchy = String.join(" > ", platformClassHierarchyList);
+			}
+			logNormal("Loaded platform " + platformClassHierarchy);
+
 			new BaseHandler<>(platform);
 			BaseHandler.getInstance().onLoad();
 
