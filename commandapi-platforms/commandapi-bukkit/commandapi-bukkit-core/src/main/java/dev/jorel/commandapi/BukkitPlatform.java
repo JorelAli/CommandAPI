@@ -123,6 +123,7 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Source> im
 			paper = new PaperImplementations(true, this);
 			CommandAPI.logNormal("Hooked into Paper for paper-specific API implementations");
 		} catch (ClassNotFoundException e) {
+			paper = new PaperImplementations(false, this);
 			if (CommandAPI.getConfiguration().hasVerboseOutput()) {
 				CommandAPI.logWarning("Could not hook into Paper for /minecraft:reload. Consider upgrading to Paper: https://papermc.io/");
 			}
