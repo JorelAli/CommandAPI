@@ -155,7 +155,10 @@ public class CommandAPI {
 		CommandAPI.logger = null;
 		CommandAPI.loaded = false;
 
-		BaseHandler.getInstance().onDisable();
+		// This method is called automatically when the class loads to set up variables, in which case
+		// BaseHandler will not have been initialized
+		BaseHandler<?> handler = BaseHandler.getInstance();
+		if(handler != null) handler.onDisable();
 	}
 
 	// Logging

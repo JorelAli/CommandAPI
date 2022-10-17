@@ -142,6 +142,7 @@ public class BaseHandler<Source> {
 
 	public void onDisable() {
 		platform.onDisable();
+		instance = null;
 	}
 
 	public static BaseHandler<?> getInstance() {
