@@ -311,8 +311,8 @@ public abstract class Argument<T> extends ArgumentTree {
 	
 	/**
 	 * Gets a list of entity names for the current provided argument. This is
-	 * expected to be implemented by EntitySelectorArgument, see
-	 * {@link EntitySelectorArgument#getEntityNames(Object)}
+	 * expected to be implemented by {@code EntitySelectorArgument} in Bukkit, see
+	 * {@code EntitySelectorArgument#getEntityNames(Object)}
 	 * 
 	 * @param argument a parsed (Bukkit) object representing the entity selector
 	 *                 type. This is either a List, an Entity or a Player

@@ -283,8 +283,7 @@ public class AbstractTooltip<S> {
 	/**
 	 * Converts an unformatted string to an unformatted tooltip by wrapping as with a {@link LiteralMessage}.
 	 *
-	 * If formatting is required, please see {@link #messageFromBaseComponents(BaseComponent...)},
-	 * or consider using the more modern adventure text api.
+	 * If formatting is required, please see the various other {@code messageFromXXX} methods.
 	 *
 	 * @param string unformatted string tooltip
 	 * @return wrapped tooltip as a {@link LiteralMessage}

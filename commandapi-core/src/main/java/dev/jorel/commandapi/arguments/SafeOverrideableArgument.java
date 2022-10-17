@@ -32,8 +32,8 @@ import dev.jorel.commandapi.abstractions.AbstractTooltip;
  * 
  * @param <T> The type of the underlying object that this argument casts to
  * @param <S> A custom type which is represented by this argument. For example,
- *            a {@link LocationArgument} will have a custom type
- *            <code>Location</code>
+ *            a {@link StringArgument} will have a custom type
+ *            <code>String</code>
  */
 public abstract class SafeOverrideableArgument<T, S> extends Argument<T> {
 
@@ -82,7 +82,7 @@ public abstract class SafeOverrideableArgument<T, S> extends Argument<T> {
 	 * Replaces the suggestions of this argument with an array of suggestions.
 	 * 
 	 * @param suggestions a function that takes in {@link SuggestionInfo} and
-	 *                    returns a {@link Tooltip} array of suggestions,
+	 *                    returns an {@link AbstractTooltip} array of suggestions,
 	 *                    parameterized over {@link S} where S is your custom type
 	 * @return the current argument
 	 * @deprecated use {@link #replaceSafeSuggestions(SafeSuggestions)}
@@ -126,7 +126,7 @@ public abstract class SafeOverrideableArgument<T, S> extends Argument<T> {
 	 * 
 	 * @param suggestions a function that takes in {@link SuggestionInfo} which
 	 *                    includes information about the current state at the time
-	 *                    the suggestions are run and returns a {@link Tooltip}
+	 *                    the suggestions are run and returns an {@link AbstractTooltip}
 	 *                    array of suggestions to add, parameterized over {@link S}
 	 *                    where S is your custom type
 	 * @return the current argument
