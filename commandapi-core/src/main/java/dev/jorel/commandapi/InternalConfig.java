@@ -21,7 +21,6 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -47,15 +46,8 @@ public class InternalConfig {
 	// Create a command_registration.json file
 	private final File dispatcherFile;
 
-	// List of plugins to convert
-	// TODO: Can we support command conversion on multiple platforms, or should this be removed from the general config?
-//	private final Map<JavaPlugin, String[]> pluginsToConvert;
-
 	// List of plugins which should ignore proxied senders
 	private final List<String> skipSenderProxy;
-
-	// List of arbitrary commands to convert
-	private final List<String> commandsToConvert;
 
 	private final Class<?> nbtContainerClass;
 	private final Function<Object, ?> nbtContainerConstructor;
@@ -81,9 +73,7 @@ public class InternalConfig {
 		this.useLatestNMSVersion = config.useLatestNMSVersion;
 		this.message_missingExecutorImplementation = config.missingExecutorImplementationMessage;
 		this.dispatcherFile = config.dispatcherFile;
-//		this.pluginsToConvert = new HashMap<>();
-		this.skipSenderProxy = new ArrayList<>();
-		this.commandsToConvert = new ArrayList<>();
+		this.skipSenderProxy = config.skipSenderProxy;
 		this.nbtContainerClass = config.nbtContainerClass;
 		this.nbtContainerConstructor = config.nbtContainerConstructor;
 	}
@@ -125,34 +115,12 @@ public class InternalConfig {
 		return this.dispatcherFile;
 	}
 
-//	/**
-//	 * @return A set of plugins and a list of commands to convert
-//	 */
-//	public Set<Entry<JavaPlugin, String[]>> getPluginsToConvert() {
-//		return this.pluginsToConvert.entrySet();
-//	}
-
-//	/**
-//	 * @param plugin A plugin where sender proxying should be skipped
-//	 * @return Whether sender proxying should be skipped for a given plugin
-//	 */
-//	public boolean shouldSkipSenderProxy(Plugin plugin) {
-//		return this.skipSenderProxy.contains(plugin.getName());
-//	}
-
 	/**
 	 * @param commandName A command where sender proxying should be skipped
 	 * @return Whether sender proxying should be skipped for a given command
 	 */
 	public boolean shouldSkipSenderProxy(String commandName) {
 		return this.skipSenderProxy.contains(commandName);
-	}
-
-	/**
-	 * @return A list of commands to convert to Vanilla-compatible commands
-	 */
-	public List<String> getCommandsToConvert() {
-		return this.commandsToConvert;
 	}
 
 	/**

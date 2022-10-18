@@ -21,9 +21,15 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.InvalidPluginException;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.tr7zw.changeme.nbtapi.NBTContainer;
@@ -44,6 +50,15 @@ public class CommandAPIMain extends JavaPlugin {
 			.dispatcherFile(fileConfig.getBoolean("create-dispatcher-json") ? new File(getDataFolder(), "command_registration.json") : null)
 			.initializeNBTAPI(NBTContainer.class, NBTContainer::new);
 
+		for (String pluginName : fileConfig.getStringList("skip-sender-proxy")) {
+			if (Bukkit.getPluginManager().getPlugin(pluginName) != null) {
+				config.addSkipSenderProxy(pluginName);
+			} else {
+				new InvalidPluginException("Could not find a plugin " + pluginName + "! Has it been loaded properly?")
+					.printStackTrace();
+			}
+		}
+
 		// Main CommandAPI loading
 		CommandAPI.onLoad(config, new BukkitLogger(getLogger()));
 
@@ -54,22 +69,52 @@ public class CommandAPIMain extends JavaPlugin {
 		MinecraftVersion.disableBStats();
 		MinecraftVersion.disableUpdateCheck();
 
-		// TODO: Figure out how command conversion is configured
-//		// Convert all plugins to be converted
-//		for (Entry<JavaPlugin, String[]> pluginToConvert : CommandAPI.getConfiguration().getPluginsToConvert()) {
-//			if (pluginToConvert.getValue().length == 0) {
-//				Converter.convert(pluginToConvert.getKey());
-//			} else {
-//				for (String command : pluginToConvert.getValue()) {
-//					new AdvancedConverter(pluginToConvert.getKey(), command).convert();
-//				}
-//			}
-//		}
-//
-//		// Convert all arbitrary commands
-//		for (String commandName : CommandAPI.getConfiguration().getCommandsToConvert()) {
-//			new AdvancedConverter(commandName).convertCommand();
-//		}
+		// Convert all plugins to be converted
+		if (!fileConfig.getList("plugins-to-convert").isEmpty()
+			&& fileConfig.getMapList("plugins-to-convert").isEmpty()) {
+			CommandAPI.logError("plugins-to-convert has an invalid type. Did you miss a colon (:) after a plugin name?");
+		}
+
+		// Load all plugins at the same time
+		Map<JavaPlugin, String[]> pluginsToConvert = new HashMap<>();
+		for (Map<?, ?> map : fileConfig.getMapList("plugins-to-convert")) {
+			String[] pluginCommands;
+			if (map.values().size() == 1 && map.values().iterator().next() == null) {
+				pluginCommands = new String[0];
+			} else {
+				@SuppressWarnings("unchecked")
+				List<String> commands = (List<String>) map.values().iterator().next();
+				pluginCommands = commands.toArray(new String[0]);
+			}
+
+			String pluginName = (String) map.keySet().iterator().next();
+			Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
+			if (plugin != null) {
+				if (plugin instanceof JavaPlugin javaPlugin) {
+					pluginsToConvert.put(javaPlugin, pluginCommands);
+				} else {
+					new InvalidPluginException("Plugin " + pluginName + " is not a JavaPlugin!").printStackTrace();
+				}
+			} else {
+				new InvalidPluginException("Could not find a plugin " + pluginName + "! Has it been loaded properly?")
+					.printStackTrace();
+			}
+		}
+		// Convert plugin commands
+		for (Entry<JavaPlugin, String[]> pluginToConvert : pluginsToConvert.entrySet()) {
+			if (pluginToConvert.getValue().length == 0) {
+				Converter.convert(pluginToConvert.getKey());
+			} else {
+				for (String command : pluginToConvert.getValue()) {
+					new AdvancedConverter(pluginToConvert.getKey(), command).convert();
+				}
+			}
+		}
+
+		// Convert all arbitrary commands
+		for (String commandName : fileConfig.getStringList("other-commands-to-convert")) {
+			new AdvancedConverter(commandName).convertCommand();
+		}
 	}
 
 	@Override

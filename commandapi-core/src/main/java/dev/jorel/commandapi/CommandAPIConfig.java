@@ -21,6 +21,8 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -36,11 +38,13 @@ public class CommandAPIConfig {
 	boolean useLatestNMSVersion = false;
 	String missingExecutorImplementationMessage = "This command has no implementations for %s";
 
+	File dispatcherFile = null;
+
+	List<String> skipSenderProxy = new ArrayList<>();
+
 	// NBT API
 	Class<?> nbtContainerClass = null;
 	Function<Object, ?> nbtContainerConstructor = null;
-
-	File dispatcherFile = null;
 
 	/**
 	 * Sets verbose output logging for the CommandAPI if true.
@@ -98,6 +102,31 @@ public class CommandAPIConfig {
 	}
 
 	/**
+	 * Specifies the location for the CommandAPI to store the internal
+	 * representation of Brigadier's command tree.
+	 *
+	 * @param file a file pointing to where to store Brigadier's JSON command
+	 *             dispatcher, for example
+	 *             {@code new File(getDataFolder(), "command_registration.json")}.
+	 *             If this argument is {@code null}, this file will not be created.
+	 * @return this CommandAPIConfig
+	 */
+	public CommandAPIConfig dispatcherFile(File file) {
+		this.dispatcherFile = file;
+		return this;
+	}
+
+	public CommandAPIConfig addSkipSenderProxy(String... names) {
+		this.skipSenderProxy.addAll(List.of(names));
+		return this;
+	}
+
+	public CommandAPIConfig addSkipSenderProxy(List<String> names) {
+		this.skipSenderProxy.addAll(names);
+		return this;
+	}
+
+	/**
 	 * Initializes the CommandAPI's implementation of an NBT API.
 	 * 
 	 * @param <T>                     the type that the NBT compound container class
@@ -117,20 +146,4 @@ public class CommandAPIConfig {
 		this.nbtContainerConstructor = nbtContainerConstructor;
 		return this;
 	}
-
-	/**
-	 * Specifies the location for the CommandAPI to store the internal
-	 * representation of Brigadier's command tree.
-	 * 
-	 * @param file a file pointing to where to store Brigadier's JSON command
-	 *             dispatcher, for example
-	 *             {@code new File(getDataFolder(), "command_registration.json")}.
-	 *             If this argument is {@code null}, this file will not be created.
-	 * @return this CommandAPIConfig
-	 */
-	public CommandAPIConfig dispatcherFile(File file) {
-		this.dispatcherFile = file;
-		return this;
-	}
-
 }
