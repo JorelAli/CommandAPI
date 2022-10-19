@@ -20,14 +20,16 @@
  *******************************************************************************/
 package dev.jorel.commandapi.executors;
 
-import dev.jorel.commandapi.abstractions.AbstractPlayer;
+import org.bukkit.entity.Player;
+
+import dev.jorel.commandapi.commandsenders.BukkitPlayer;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
 /**
  * A resulting command executor for a Player
  */
 @FunctionalInterface
-public interface PlayerResultingCommandExecutor extends IExecutorResulting<AbstractPlayer<?>> {
+public interface PlayerResultingCommandExecutor extends IExecutorResulting<Player, BukkitPlayer> {
 
 	/**
 	 * The code to run when this command is performed
@@ -40,7 +42,7 @@ public interface PlayerResultingCommandExecutor extends IExecutorResulting<Abstr
 	 *            insertion into the hashmap
 	 * @return the result of this command
 	 */
-	int run(AbstractPlayer<?> sender, Object[] args) throws WrapperCommandSyntaxException;
+	int run(Player sender, Object[] args) throws WrapperCommandSyntaxException;
 
 	/**
 	 * Returns the type of the sender of the current executor.

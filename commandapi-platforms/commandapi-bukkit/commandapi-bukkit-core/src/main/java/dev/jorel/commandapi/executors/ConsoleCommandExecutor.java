@@ -20,14 +20,16 @@
  *******************************************************************************/
 package dev.jorel.commandapi.executors;
 
-import dev.jorel.commandapi.abstractions.AbstractConsoleCommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+
+import dev.jorel.commandapi.commandsenders.BukkitConsoleCommandSender;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
 /**
- * A resulting command executor for a ConsoleCommandSender
+ * A normal command executor for a ConsoleCommandSender
  */
 @FunctionalInterface
-public interface ConsoleResultingCommandExecutor extends IExecutorResulting<AbstractConsoleCommandSender<?>> {
+public interface ConsoleCommandExecutor extends IExecutorNormal<ConsoleCommandSender, BukkitConsoleCommandSender> {
 
 	/**
 	 * The code to run when this command is performed
@@ -38,9 +40,8 @@ public interface ConsoleResultingCommandExecutor extends IExecutorResulting<Abst
 	 *            The arguments given to this command. The objects are
 	 *            determined by the hashmap of arguments IN THE ORDER of
 	 *            insertion into the hashmap
-	 * @return the result of this command
 	 */
-	int run(AbstractConsoleCommandSender<?> sender, Object[] args) throws WrapperCommandSyntaxException;
+	void run(ConsoleCommandSender sender, Object[] args) throws WrapperCommandSyntaxException;
 
 	/**
 	 * Returns the type of the sender of the current executor.

@@ -20,15 +20,15 @@
  *******************************************************************************/
 package dev.jorel.commandapi.executors;
 
-import dev.jorel.commandapi.abstractions.AbstractBlockCommandSender;
-
+import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
+import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 
 /**
- * A resulting command executor for a BlockCommandSender
+ * A resulting command executor for a NativeProxyCommandSender
  */
 @FunctionalInterface
-public interface CommandBlockResultingCommandExecutor extends IExecutorResulting<AbstractBlockCommandSender<?>> {
+public interface NativeResultingCommandExecutor extends IExecutorResulting<NativeProxyCommandSender, BukkitNativeProxyCommandSender> {
 
 	/**
 	 * The code to run when this command is performed
@@ -39,10 +39,9 @@ public interface CommandBlockResultingCommandExecutor extends IExecutorResulting
 	 *            The arguments given to this command. The objects are
 	 *            determined by the hashmap of arguments IN THE ORDER of
 	 *            insertion into the hashmap
-	 *            
 	 * @return the result of this command
 	 */
-	int run(AbstractBlockCommandSender<?> sender, Object[] args) throws WrapperCommandSyntaxException;
+	int run(NativeProxyCommandSender sender, Object[] args) throws WrapperCommandSyntaxException;
 
 	/**
 	 * Returns the type of the sender of the current executor.
@@ -50,7 +49,6 @@ public interface CommandBlockResultingCommandExecutor extends IExecutorResulting
 	 */
 	@Override
 	default ExecutorType getType() {
-		return ExecutorType.BLOCK;
+		return ExecutorType.NATIVE;
 	}
-	
 }

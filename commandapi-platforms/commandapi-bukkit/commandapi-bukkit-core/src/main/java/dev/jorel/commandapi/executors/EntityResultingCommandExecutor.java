@@ -20,14 +20,16 @@
  *******************************************************************************/
 package dev.jorel.commandapi.executors;
 
-import dev.jorel.commandapi.abstractions.AbstractNativeProxyCommandSender;
+import org.bukkit.entity.Entity;
+
+import dev.jorel.commandapi.commandsenders.BukkitEntity;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
 /**
- * A normal command executor for a NativeProxyCommandSender
+ * A resulting command executor for an Entity
  */
 @FunctionalInterface
-public interface NativeCommandExecutor extends IExecutorNormal<AbstractNativeProxyCommandSender<?>> {
+public interface EntityResultingCommandExecutor extends IExecutorResulting<Entity, BukkitEntity> {
 
 	/**
 	 * The code to run when this command is performed
@@ -38,8 +40,9 @@ public interface NativeCommandExecutor extends IExecutorNormal<AbstractNativePro
 	 *            The arguments given to this command. The objects are
 	 *            determined by the hashmap of arguments IN THE ORDER of
 	 *            insertion into the hashmap
+	 * @return the result of this command
 	 */
-	void run(AbstractNativeProxyCommandSender<?> sender, Object[] args) throws WrapperCommandSyntaxException;
+	int run(Entity sender, Object[] args) throws WrapperCommandSyntaxException;
 
 	/**
 	 * Returns the type of the sender of the current executor.
@@ -47,6 +50,6 @@ public interface NativeCommandExecutor extends IExecutorNormal<AbstractNativePro
 	 */
 	@Override
 	default ExecutorType getType() {
-		return ExecutorType.NATIVE;
+		return ExecutorType.ENTITY;
 	}
 }

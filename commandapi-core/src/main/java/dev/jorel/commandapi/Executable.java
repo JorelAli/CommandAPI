@@ -33,66 +33,6 @@ abstract class Executable<T extends Executable<T>> {
 	 */
 	protected CustomCommandExecutor<?> executor = new CustomCommandExecutor<>();
 
-	// Regular command executor
-
-	/**
-	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(CommandSender, Object[]) -&gt; ()</code> that will be executed when the command is run
-	 * @param types A list of executor types to use this executes method for.
-	 * @return this command builder
-	 */
-	@SuppressWarnings("unchecked")
-	public T executes(CommandExecutor executor, ExecutorType... types) {
-		if(types == null || types.length == 0) {
-			this.executor.addNormalExecutor(executor);
-		} else {
-			for(ExecutorType type : types) {
-				this.executor.addNormalExecutor(new CommandExecutor() {
-
-					@Override
-					public void run(AbstractCommandSender<?> sender, Object[] args) throws WrapperCommandSyntaxException {
-						executor.executeWith(sender, args);
-					}
-					
-					@Override
-					public ExecutorType getType() {
-						return type;
-					}
-				});
-			}
-		}
-		return (T) this;
-	}
-
-	/**
-	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(CommandSender, Object[]) -&gt; int</code> that will be executed when the command is run
-	 * @param types A list of executor types to use this executes method for.
-	 * @return this command builder
-	 */
-	@SuppressWarnings("unchecked")
-	public T executes(ResultingCommandExecutor executor, ExecutorType... types) {
-		if(types == null || types.length == 0) {
-			this.executor.addResultingExecutor(executor);
-		} else {
-			for(ExecutorType type : types) {
-				this.executor.addResultingExecutor(new ResultingCommandExecutor() {
-
-					@Override
-					public int run(AbstractCommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
-						return executor.executeWith(sender, args);
-					}
-					
-					@Override
-					public ExecutorType getType() {
-						return type;
-					}
-				});
-			}
-		}
-		return (T) this;
-	}
-
 	/**
 	 * Returns the executors that this command has
 	 * @return the executors that this command has

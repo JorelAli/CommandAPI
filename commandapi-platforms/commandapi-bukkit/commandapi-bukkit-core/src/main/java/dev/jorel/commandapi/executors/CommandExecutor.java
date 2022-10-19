@@ -20,15 +20,16 @@
  *******************************************************************************/
 package dev.jorel.commandapi.executors;
 
-import dev.jorel.commandapi.abstractions.AbstractCommandSender;
+import org.bukkit.command.CommandSender;
 
+import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
 /**
  * A normal command executor for a CommandSender
  */
 @FunctionalInterface
-public interface CommandExecutor extends IExecutorNormal<AbstractCommandSender<?>> {
+public interface CommandExecutor extends IExecutorNormal<CommandSender, BukkitCommandSender<CommandSender>> {
 
 	/**
 	 * The code to run when this command is performed
@@ -40,7 +41,7 @@ public interface CommandExecutor extends IExecutorNormal<AbstractCommandSender<?
 	 *            determined by the hashmap of arguments IN THE ORDER of
 	 *            insertion into the hashmap
 	 */
-	void run(AbstractCommandSender<?> sender, Object[] args) throws WrapperCommandSyntaxException;
+	void run(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException;
 
 	/**
 	 * Returns the type of the sender of the current executor.

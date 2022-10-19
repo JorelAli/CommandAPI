@@ -20,15 +20,16 @@
  *******************************************************************************/
 package dev.jorel.commandapi.executors;
 
-import dev.jorel.commandapi.abstractions.AbstractCommandSender;
+import org.bukkit.command.BlockCommandSender;
 
+import dev.jorel.commandapi.commandsenders.BukkitBlockCommandSender;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
 /**
- * A resulting command executor for a CommandSender
+ * A normal command executor for a BlockCommandSender
  */
 @FunctionalInterface
-public interface ResultingCommandExecutor extends IExecutorResulting<AbstractCommandSender<?>> {
+public interface CommandBlockCommandExecutor extends IExecutorNormal<BlockCommandSender, BukkitBlockCommandSender> {
 
 	/**
 	 * The code to run when this command is performed
@@ -39,9 +40,8 @@ public interface ResultingCommandExecutor extends IExecutorResulting<AbstractCom
 	 *            The arguments given to this command. The objects are
 	 *            determined by the hashmap of arguments IN THE ORDER of
 	 *            insertion into the hashmap
-	 * @return the result of this command
 	 */
-	int run(AbstractCommandSender<?> sender, Object[] args) throws WrapperCommandSyntaxException;
+	void run(BlockCommandSender sender, Object[] args) throws WrapperCommandSyntaxException;
 
 	/**
 	 * Returns the type of the sender of the current executor.
@@ -49,6 +49,6 @@ public interface ResultingCommandExecutor extends IExecutorResulting<AbstractCom
 	 */
 	@Override
 	default ExecutorType getType() {
-		return ExecutorType.ALL;
+		return ExecutorType.BLOCK;
 	}
 }
