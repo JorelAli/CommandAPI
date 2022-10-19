@@ -1,9 +1,9 @@
 package dev.jorel.commandapi.commandsenders;
-import org.bukkit.entity.Entity;
 
 import dev.jorel.commandapi.abstractions.AbstractEntity;
+import org.bukkit.entity.Entity;
 
-public class BukkitEntity extends AbstractEntity<Entity> {
+public class BukkitEntity extends AbstractEntity<Entity> implements BukkitCommandSender<Entity> {
 
 	private final Entity entity;
 	

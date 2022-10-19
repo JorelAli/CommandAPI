@@ -3,7 +3,7 @@ import com.velocitypowered.api.proxy.Player;
 
 import dev.jorel.commandapi.abstractions.AbstractPlayer;
 
-public class VelocityPlayer extends AbstractPlayer<Player> {
+public class VelocityPlayer extends AbstractPlayer<Player> implements VelocityCommandSender<Player> {
 
 	private final Player player;
 	

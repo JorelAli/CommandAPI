@@ -2,7 +2,7 @@ package dev.jorel.commandapi.commandsenders;
 import dev.jorel.commandapi.abstractions.AbstractPlayer;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 
-public class BukkitNativeProxyCommandSender extends AbstractPlayer<NativeProxyCommandSender> {
+public class BukkitNativeProxyCommandSender extends AbstractPlayer<NativeProxyCommandSender> implements BukkitCommandSender<NativeProxyCommandSender> {
 
 	private final NativeProxyCommandSender proxySender;
 	

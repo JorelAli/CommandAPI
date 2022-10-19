@@ -3,7 +3,7 @@ import org.bukkit.command.ProxiedCommandSender;
 
 import dev.jorel.commandapi.abstractions.AbstractPlayer;
 
-public class BukkitProxiedCommandSender extends AbstractPlayer<ProxiedCommandSender> {
+public class BukkitProxiedCommandSender extends AbstractPlayer<ProxiedCommandSender> implements BukkitCommandSender<ProxiedCommandSender> {
 
 	private final ProxiedCommandSender proxySender;
 	

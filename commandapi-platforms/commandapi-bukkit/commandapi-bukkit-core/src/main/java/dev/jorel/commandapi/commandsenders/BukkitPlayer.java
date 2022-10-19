@@ -3,7 +3,7 @@ import org.bukkit.entity.Player;
 
 import dev.jorel.commandapi.abstractions.AbstractPlayer;
 
-public class BukkitPlayer extends AbstractPlayer<Player> {
+public class BukkitPlayer extends AbstractPlayer<Player> implements BukkitCommandSender<Player> {
 
 	private final Player player;
 	
