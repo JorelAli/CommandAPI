@@ -45,6 +45,6 @@ public interface IExecutorTyped {
 	 * @return the value returned by this command if the command succeeds, 0 if the command fails
 	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
 	 */
-	int executeWith(AbstractCommandSender sender, Object[] args) throws WrapperCommandSyntaxException;
+	int executeWith(AbstractCommandSender<?> sender, Object[] args) throws WrapperCommandSyntaxException;
 
 }

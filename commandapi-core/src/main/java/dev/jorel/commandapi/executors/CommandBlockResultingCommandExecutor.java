@@ -28,7 +28,7 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
  * A resulting command executor for a BlockCommandSender
  */
 @FunctionalInterface
-public interface CommandBlockResultingCommandExecutor extends IExecutorResulting<AbstractBlockCommandSender> {
+public interface CommandBlockResultingCommandExecutor extends IExecutorResulting<AbstractBlockCommandSender<?>> {
 
 	/**
 	 * The code to run when this command is performed
@@ -42,7 +42,7 @@ public interface CommandBlockResultingCommandExecutor extends IExecutorResulting
 	 *            
 	 * @return the result of this command
 	 */
-	int run(AbstractBlockCommandSender sender, Object[] args) throws WrapperCommandSyntaxException;
+	int run(AbstractBlockCommandSender<?> sender, Object[] args) throws WrapperCommandSyntaxException;
 
 	/**
 	 * Returns the type of the sender of the current executor.

@@ -44,7 +44,7 @@ import dev.jorel.commandapi.executors.IExecutorTyped;
  *
  * @param <T> a command sender
  */
-public class CustomCommandExecutor<T extends AbstractCommandSender> {
+public class CustomCommandExecutor<T extends AbstractCommandSender<?>> {
 
 	private List<IExecutorNormal<T>> normalExecutors;
 	private List<IExecutorResulting<T>> resultingExecutors;
@@ -64,7 +64,7 @@ public class CustomCommandExecutor<T extends AbstractCommandSender> {
 		this.resultingExecutors.add((IExecutorResulting<T>) executor);
 	}
 
-	public int execute(AbstractCommandSender sender, Object[] arguments) throws CommandSyntaxException {
+	public int execute(AbstractCommandSender<?> sender, Object[] arguments) throws CommandSyntaxException {
 
 		// Parse executor type
 		if (!resultingExecutors.isEmpty()) {
@@ -90,7 +90,7 @@ public class CustomCommandExecutor<T extends AbstractCommandSender> {
 		}
 	}
 
-	private int execute(List<? extends IExecutorTyped> executors, AbstractCommandSender sender, Object[] args)
+	private int execute(List<? extends IExecutorTyped> executors, AbstractCommandSender<?> sender, Object[] args)
 			throws WrapperCommandSyntaxException {
 		if (isForceNative()) {
 			return execute(executors, sender, args, ExecutorType.NATIVE);
@@ -114,7 +114,7 @@ public class CustomCommandExecutor<T extends AbstractCommandSender> {
 		}
 	}
 
-	private int execute(List<? extends IExecutorTyped> executors, AbstractCommandSender sender, Object[] args,
+	private int execute(List<? extends IExecutorTyped> executors, AbstractCommandSender<?> sender, Object[] args,
 			ExecutorType type) throws WrapperCommandSyntaxException {
 		for (IExecutorTyped executor : executors) {
 			if (executor.getType() == type) {

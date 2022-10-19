@@ -28,7 +28,7 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
  * A normal command executor for a ConsoleCommandSender
  */
 @FunctionalInterface
-public interface ConsoleCommandExecutor extends IExecutorNormal<AbstractConsoleCommandSender> {
+public interface ConsoleCommandExecutor extends IExecutorNormal<AbstractConsoleCommandSender<?>> {
 
 	/**
 	 * The code to run when this command is performed
@@ -40,7 +40,7 @@ public interface ConsoleCommandExecutor extends IExecutorNormal<AbstractConsoleC
 	 *            determined by the hashmap of arguments IN THE ORDER of
 	 *            insertion into the hashmap
 	 */
-	void run(AbstractConsoleCommandSender sender, Object[] args) throws WrapperCommandSyntaxException;
+	void run(AbstractConsoleCommandSender<?> sender, Object[] args) throws WrapperCommandSyntaxException;
 
 	/**
 	 * Returns the type of the sender of the current executor.

@@ -28,7 +28,7 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
  * The interface for resulting command executors
  * @param <T> the commandsender
  */
-public interface IExecutorResulting<T extends AbstractCommandSender> extends IExecutorTyped {
+public interface IExecutorResulting<T extends AbstractCommandSender<?>> extends IExecutorTyped {
 	
 	/**
 	 * Executes the command executor with the provided command sender and the provided arguments.
@@ -39,7 +39,7 @@ public interface IExecutorResulting<T extends AbstractCommandSender> extends IEx
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	default int executeWith(AbstractCommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
+	default int executeWith(AbstractCommandSender<?> sender, Object[] args) throws WrapperCommandSyntaxException {
 		return this.run((T) sender, args);
 	}
 

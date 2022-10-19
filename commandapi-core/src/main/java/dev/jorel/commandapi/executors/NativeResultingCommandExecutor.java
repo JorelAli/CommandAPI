@@ -27,7 +27,7 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
  * A resulting command executor for a NativeProxyCommandSender
  */
 @FunctionalInterface
-public interface NativeResultingCommandExecutor extends IExecutorResulting<AbstractNativeProxyCommandSender> {
+public interface NativeResultingCommandExecutor extends IExecutorResulting<AbstractNativeProxyCommandSender<?>> {
 
 	/**
 	 * The code to run when this command is performed
@@ -40,7 +40,7 @@ public interface NativeResultingCommandExecutor extends IExecutorResulting<Abstr
 	 *            insertion into the hashmap
 	 * @return the result of this command
 	 */
-	int run(AbstractNativeProxyCommandSender sender, Object[] args) throws WrapperCommandSyntaxException;
+	int run(AbstractNativeProxyCommandSender<?> sender, Object[] args) throws WrapperCommandSyntaxException;
 
 	/**
 	 * Returns the type of the sender of the current executor.

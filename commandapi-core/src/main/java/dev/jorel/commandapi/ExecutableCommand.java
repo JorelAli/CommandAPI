@@ -86,7 +86,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
-	public T withRequirement(Predicate<AbstractCommandSender> requirement) {
+	public T withRequirement(Predicate<AbstractCommandSender<?>> requirement) {
 		this.meta.requirements = this.meta.requirements.and(requirement);
 		return (T) this;
 	}
@@ -157,7 +157,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	 * @return the short description for this command
 	 */
 	public String getShortDescription() {
-		return this.meta.shortDescription.isPresent() ? this.meta.shortDescription.get() : null;
+		return this.meta.shortDescription.orElse(null);
 	}
 
 	/**
@@ -177,7 +177,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	 * @return the full description for this command
 	 */
 	public String getFullDescription() {
-		return this.meta.fullDescription.isPresent() ? this.meta.fullDescription.get() : null;
+		return this.meta.fullDescription.orElse(null);
 	}
 
 	/**

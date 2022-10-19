@@ -50,7 +50,7 @@ abstract class Executable<T extends Executable<T>> {
 				this.executor.addNormalExecutor(new CommandExecutor() {
 
 					@Override
-					public void run(AbstractCommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
+					public void run(AbstractCommandSender<?> sender, Object[] args) throws WrapperCommandSyntaxException {
 						executor.executeWith(sender, args);
 					}
 					

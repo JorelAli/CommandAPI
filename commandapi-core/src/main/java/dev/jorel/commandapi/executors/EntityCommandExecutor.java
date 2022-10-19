@@ -27,7 +27,7 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
  * A normal command executor for an Entity
  */
 @FunctionalInterface
-public interface EntityCommandExecutor extends IExecutorNormal<AbstractEntity> {
+public interface EntityCommandExecutor extends IExecutorNormal<AbstractEntity<?>> {
 
 	/**
 	 * The code to run when this command is performed
@@ -39,7 +39,7 @@ public interface EntityCommandExecutor extends IExecutorNormal<AbstractEntity> {
 	 *            determined by the hashmap of arguments IN THE ORDER of
 	 *            insertion into the hashmap
 	 */
-	void run(AbstractEntity sender, Object[] args) throws WrapperCommandSyntaxException;
+	void run(AbstractEntity<?> sender, Object[] args) throws WrapperCommandSyntaxException;
 
 	/**
 	 * Returns the type of the sender of the current executor.
