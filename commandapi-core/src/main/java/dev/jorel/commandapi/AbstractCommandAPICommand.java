@@ -35,10 +35,10 @@ import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 /**
  * A builder used to create commands to be registered by the CommandAPI.
  */
-public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
+public class AbstractCommandAPICommand extends ExecutableCommand<AbstractCommandAPICommand> {
 
 	private List<Argument<?>> args = new ArrayList<>();
-	private List<CommandAPICommand> subcommands = new ArrayList<>();
+	private List<AbstractCommandAPICommand> subcommands = new ArrayList<>();
 	private boolean isConverted;
 
 	/**
@@ -46,7 +46,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 	 * 
 	 * @param commandName The name of the command to create
 	 */
-	public CommandAPICommand(String commandName) {
+	public AbstractCommandAPICommand(String commandName) {
 		super(commandName);
 		this.isConverted = false;
 	}
@@ -56,7 +56,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 	 * 
 	 * @param metaData The metadata of the command to create
 	 */
-	protected CommandAPICommand(CommandMetaData metaData) {
+	protected AbstractCommandAPICommand(CommandMetaData metaData) {
 		super(metaData);
 		this.isConverted = false;
 	}
@@ -68,7 +68,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 	 *             command can accept
 	 * @return this command builder
 	 */
-	public CommandAPICommand withArguments(List<Argument<?>> args) {
+	public AbstractCommandAPICommand withArguments(List<Argument<?>> args) {
 		this.args.addAll(args);
 		return this;
 	}
@@ -79,7 +79,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 	 * @param args Arguments that this command can accept
 	 * @return this command builder
 	 */
-	public CommandAPICommand withArguments(Argument<?>... args) {
+	public AbstractCommandAPICommand withArguments(Argument<?>... args) {
 		this.args.addAll(Arrays.asList(args));
 		return this;
 	}
@@ -90,7 +90,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 	 * @param subcommand the subcommand to add as a child of this command
 	 * @return this command builder
 	 */
-	public CommandAPICommand withSubcommand(CommandAPICommand subcommand) {
+	public AbstractCommandAPICommand withSubcommand(AbstractCommandAPICommand subcommand) {
 		this.subcommands.add(subcommand);
 		return this;
 	}
@@ -101,7 +101,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 	 * @param subcommands the subcommands to add as children of this command
 	 * @return this command builder
 	 */
-	public CommandAPICommand withSubcommands(CommandAPICommand... subcommands) {
+	public AbstractCommandAPICommand withSubcommands(AbstractCommandAPICommand... subcommands) {
 		this.subcommands.addAll(Arrays.asList(subcommands));
 		return this;
 	}
@@ -129,7 +129,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 	 * 
 	 * @return the list of subcommands that this command has
 	 */
-	public List<CommandAPICommand> getSubcommands() {
+	public List<AbstractCommandAPICommand> getSubcommands() {
 		return subcommands;
 	}
 
@@ -138,7 +138,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 	 * 
 	 * @param subcommands the list of subcommands that this command has
 	 */
-	public void setSubcommands(List<CommandAPICommand> subcommands) {
+	public void setSubcommands(List<AbstractCommandAPICommand> subcommands) {
 		this.subcommands = subcommands;
 	}
 
@@ -159,7 +159,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 	 * @param isConverted whether this command is converted or not
 	 * @return this command builder
 	 */
-	CommandAPICommand setConverted(boolean isConverted) {
+	AbstractCommandAPICommand setConverted(boolean isConverted) {
 		this.isConverted = isConverted;
 		return this;
 	}
@@ -167,7 +167,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 	// Expands subcommands into arguments. This method should be static (it
 	// shouldn't
 	// be accessing/depending on any of the contents of the current class instance)
-	private static void flatten(CommandAPICommand rootCommand, List<Argument<?>> prevArguments, CommandAPICommand subcommand) {
+	private static void flatten(AbstractCommandAPICommand rootCommand, List<Argument<?>> prevArguments, AbstractCommandAPICommand subcommand) {
 		// Get the list of literals represented by the current subcommand. This
 		// includes the subcommand's name and any aliases for this subcommand
 		String[] literals = new String[subcommand.meta.aliases.length + 1];
@@ -197,7 +197,7 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 			rootCommand.register();
 		}
 
-		for (CommandAPICommand subsubcommand : new ArrayList<>(subcommand.subcommands)) {
+		for (AbstractCommandAPICommand subsubcommand : new ArrayList<>(subcommand.subcommands)) {
 			flatten(rootCommand, new ArrayList<>(prevArguments), subsubcommand);
 		}
 	}
@@ -232,15 +232,15 @@ public class CommandAPICommand extends ExecutableCommand<CommandAPICommand> {
 			}
 
 			// Convert subcommands into multiliteral arguments
-			for (CommandAPICommand subcommand : new ArrayList<>(this.subcommands)) {
-				flatten(new CommandAPICommand(this), new ArrayList<>(), subcommand);
+			for (AbstractCommandAPICommand subcommand : new ArrayList<>(this.subcommands)) {
+				flatten(new AbstractCommandAPICommand(this), new ArrayList<>(), subcommand);
 			}
 		} catch (CommandSyntaxException | IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public CommandAPICommand(CommandAPICommand original) {
+	public AbstractCommandAPICommand(AbstractCommandAPICommand original) {
 		this(new CommandMetaData(original.meta));
 		this.args = new ArrayList<>(original.args);
 		this.subcommands = new ArrayList<>(original.subcommands);

@@ -16,7 +16,7 @@ record Execution(List<Argument<?>> arguments, CustomCommandExecutor<? extends Ab
 	 * @param meta The metadata to register the command with
 	 */
 	public void register(CommandMetaData meta) {
-		CommandAPICommand command = new CommandAPICommand(meta).withArguments(arguments);
+		AbstractCommandAPICommand command = new AbstractCommandAPICommand(meta).withArguments(arguments);
 		command.setExecutor(executor);
 		command.register();
 	}
