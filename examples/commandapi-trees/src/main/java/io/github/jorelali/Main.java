@@ -6,7 +6,7 @@ public class Main extends JavaPlugin {
 	
 	@Override
 	public void onEnable() {
-		BetterBossBarsCommand.registerBetterBossBarCommand();
+		new BetterBossBarsCommand().registerBetterBossBarCommand();
 	}
 
 }

@@ -1,16 +1,26 @@
 package io.github.jorelali;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
+import org.bukkit.boss.KeyedBossBar;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.BooleanArgument;
+import dev.jorel.commandapi.arguments.ChatComponentArgument;
 import dev.jorel.commandapi.arguments.EntitySelector;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.IntegerArgument;
@@ -18,6 +28,8 @@ import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.NamespacedKeyArgument;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
 
 public class BetterBossBarsCommand {
 	
@@ -37,120 +49,171 @@ public class BetterBossBarsCommand {
 	
 	// /betterbossbar list
 	
-	private BetterBossBarsCommand() {}
+	private Map<NamespacedKey, Integer> maxValues;
+	
+	public BetterBossBarsCommand() {
+		this.maxValues = new HashMap<>();
+	}
 
-	public static void registerBetterBossBarCommand() {
+	public void registerBetterBossBarCommand() {
 		new CommandTree("betterbossbar")
+			.withPermission(CommandPermission.OP)
 			.then(new LiteralArgument("set")
 				.then(new NamespacedKeyArgument("id")
 					.then(new LiteralArgument("players")
 						.then(new EntitySelectorArgument<Collection<Player>>("targets", EntitySelector.MANY_PLAYERS)
-							.executes(BetterBossBarsCommand::setPlayers)
+							.executes(this::setPlayers)
 						)
 					)
 					.then(new LiteralArgument("style")
 						.then(new MultiLiteralArgument("notched_6", "notched_10", "notched_12", "notched_20", "progress")
-							.executes(BetterBossBarsCommand::setStyle)
+							.executes(this::setStyle)
 						)
 					)
 					.then(new LiteralArgument("value")
 						.then(new IntegerArgument("value")
-							.executes(BetterBossBarsCommand::setValue)
+							.executes(this::setValue)
 						)
 					)
 					.then(new LiteralArgument("visible")
 						.then(new BooleanArgument("visible")
-							.executes(BetterBossBarsCommand::setVisible)
+							.executes(this::setVisible)
 						)
 					)
 				)
 			)
 			.then(new LiteralArgument("remove")
 				.then(new NamespacedKeyArgument("id")
-					.executes(BetterBossBarsCommand::removeBossbar)
+					.executes(this::removeBossbar)
 				)
 			)
 			.then(new LiteralArgument("get")
 				.then(new NamespacedKeyArgument("id")
 					.then(new LiteralArgument("players")
-						.executes(BetterBossBarsCommand::getPlayers)
+						.executes(this::getPlayers)
 					)
 					.then(new LiteralArgument("visible")
-						.executes(BetterBossBarsCommand::getVisible)
+						.executes(this::getVisible)
 					)
 					.then(new LiteralArgument("max")
-						.executes(BetterBossBarsCommand::getMax)
+						.executes(this::getMax)
 					)
 					.then(new LiteralArgument("value")
-						.executes(BetterBossBarsCommand::getValue)
+						.executes(this::getValue)
+					)
+				)
+			)
+			.then(new LiteralArgument("add")
+				.then(new NamespacedKeyArgument("id")
+					.then(new ChatComponentArgument("name")
+						.executes(this::addBossbar)
 					)
 				)
 			)
 			.then(new LiteralArgument("list")
-				.executes(BetterBossBarsCommand::list)
+				.executes(this::list)
 			)
 			.register();
 	}
 
-	private static void setPlayers(CommandSender sender, Object[] args) {
+	private void setPlayers(CommandSender sender, Object[] args) {
 		NamespacedKey id = (NamespacedKey) args[0];
+
+		@SuppressWarnings("unchecked")
 		Collection<Player> targets = (Collection<Player>) args[1];
-		
+
 		Bukkit.getBossBar(id).removeAll();
-		for(Player player : targets) {
+		for (Player player : targets) {
 			Bukkit.getBossBar(id).addPlayer(player);
 		}
 	}
-	
-	private static void setStyle(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
+
+	private void setStyle(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
 		NamespacedKey id = (NamespacedKey) args[0];
 		String style = (String) args[1];
-		
+
 		Bukkit.getBossBar(id).setStyle(
-			switch(style) {
+			switch (style) {
 				case "notched_6" -> BarStyle.SEGMENTED_6;
 				case "notched_10" -> BarStyle.SEGMENTED_10;
 				case "notched_12" -> BarStyle.SEGMENTED_12;
 				case "notched_20" -> BarStyle.SEGMENTED_20;
 				case "progress" -> BarStyle.SOLID;
 				default -> throw CommandAPI.fail(style + " is an invalid bossbar style");
-			}
-		);
+			});
 	}
-	
-	private static void setValue(CommandSender sender, Object[] args) {
+
+	private void setValue(CommandSender sender, Object[] args) {
 		NamespacedKey id = (NamespacedKey) args[0];
 		int value = (int) args[1];
-		
-		// TODO
+
+		if (this.maxValues.containsKey(id)) {
+			Bukkit.getBossBar(id).setProgress((double) value / (double) this.maxValues.get(id));
+		} else {
+			this.maxValues.put(id, value);
+			Bukkit.getBossBar(id).setProgress(1.0D);
+		}
 	}
-	
-	private static void setVisible(CommandSender sender, Object[] args) {
-		
+
+	private void setVisible(CommandSender sender, Object[] args) {
+		NamespacedKey id = (NamespacedKey) args[0];
+		boolean visible = (boolean) args[1];
+
+		Bukkit.getBossBar(id).setVisible(visible);
 	}
-	
-	private static void removeBossbar(CommandSender sender, Object[] args) {
-		
+
+	private void removeBossbar(CommandSender sender, Object[] args) {
+		NamespacedKey id = (NamespacedKey) args[0];
+
+		sender.sendMessage("Removed custom bossbar [" + Bukkit.getBossBar(id).getTitle() + "]");
+		Bukkit.getBossBar(id).removeAll();
+		Bukkit.removeBossBar(id);
 	}
-	
-	private static void getPlayers(CommandSender sender, Object[] args) {
-		
+
+	private void getPlayers(CommandSender sender, Object[] args) {
+		NamespacedKey id = (NamespacedKey) args[0];
+		List<Player> bossBarPlayers = Bukkit.getBossBar(id).getPlayers();
+		String players = bossBarPlayers.stream().map(Player::getName).collect(Collectors.joining(", "));
+		sender.sendMessage("Custom bossbar [" + Bukkit.getBossBar(id).getTitle() + "] has " + bossBarPlayers.size() + " players currently online: " + players);
 	}
-	
-	private static void getVisible(CommandSender sender, Object[] args) {
-		
+
+	private void getVisible(CommandSender sender, Object[] args) {
+		NamespacedKey id = (NamespacedKey) args[0];
+		BossBar bossBar = Bukkit.getBossBar(id);
+		sender.sendMessage("Custom bossbar [" + bossBar.getTitle() + "] is currently " + (bossBar.isVisible() ? "shown" : "hidden"));
 	}
-	
-	private static void getMax(CommandSender sender, Object[] args) {
-		
+
+	private void getMax(CommandSender sender, Object[] args) {
+		NamespacedKey id = (NamespacedKey) args[0];
+		sender.sendMessage("Custom bossbar [" + Bukkit.getBossBar(id).getTitle() + "] has a maximum of " + this.maxValues.getOrDefault(id, 100));
 	}
-	
-	private static void getValue(CommandSender sender, Object[] args) {
+
+	private void getValue(CommandSender sender, Object[] args) {
+		NamespacedKey id = (NamespacedKey) args[0];
+		BossBar bossBar = Bukkit.getBossBar(id);
 		
+		int value = (int) (bossBar.getProgress() * this.maxValues.getOrDefault(id, 100));
+		sender.sendMessage("Custom bossbar [" + Bukkit.getBossBar(id).getTitle() + "] has a value of " + value);
 	}
-	
-	private static void list(CommandSender sender, Object[] args) {
-		
+
+	private void addBossbar(CommandSender sender, Object[] args) {
+		NamespacedKey id = (NamespacedKey) args[0];
+		BaseComponent[] name = (BaseComponent[]) args[1];
+
+		Bukkit.createBossBar(id, BaseComponent.toLegacyText(name), BarColor.WHITE, BarStyle.SOLID);
+		this.maxValues.put(id, 100);
+		sender.sendMessage("Created custom bossbar [" + BaseComponent.toLegacyText(name) + ChatColor.WHITE + "]");
+	}
+
+	private void list(CommandSender sender, Object[] args) {
+		Iterable<KeyedBossBar> bossBars = () -> Bukkit.getBossBars();
+		sender.sendMessage("List of custom bossbars: " +
+			StreamSupport
+				.stream(bossBars.spliterator(), false)
+				.map(KeyedBossBar::getKey)
+				.map(NamespacedKey::toString)
+				.collect(Collectors.joining(", "))
+		);
 	}
 
 }
