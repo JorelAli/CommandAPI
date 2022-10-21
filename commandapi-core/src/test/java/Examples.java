@@ -915,7 +915,7 @@ public void onLoad() {
     );
 }
 /* ANCHOR_END: nbtcompoundargumentonload */
-	
+    
 }
 
 @SuppressWarnings("unused")
@@ -972,25 +972,25 @@ for(String key : gamemodes.keySet()) {
 
 @SuppressWarnings("unused")
 void d(){
-	/* ANCHOR: literalarguments3 */
-	new CommandAPICommand("mycommand")
-		.withArguments(LiteralArgument.of("hello"))
-		.withArguments(new TextArgument("text"))
-		.executes((sender, args) -> {
-			// This gives the variable "text" the contents of the TextArgument, and not the literal "hello"
-			String text = (String) args[0];
-		})
-		.register();
+/* ANCHOR: literalarguments3 */
+new CommandAPICommand("mycommand")
+    .withArguments(LiteralArgument.of("hello"))
+    .withArguments(new TextArgument("text"))
+    .executes((sender, args) -> {
+        // This gives the variable "text" the contents of the TextArgument, and not the literal "hello"
+        String text = (String) args[0];
+    })
+    .register();
 
-	new CommandAPICommand("mycommand")
-		.withArguments(LiteralArgument.literal("hello"))
-		.withArguments(new TextArgument("text"))
-		.executes((sender, args) -> {
-			// This gives the variable "text" the contents of the TextArgument, and not the literal "hello"
-			String text = (String) args[0];
-		})
-		.register();
-	/* ANCHOR_END: literalarguments3 */
+new CommandAPICommand("mycommand")
+    .withArguments(LiteralArgument.literal("hello"))
+    .withArguments(new TextArgument("text"))
+    .executes((sender, args) -> {
+        // This gives the variable "text" the contents of the TextArgument, and not the literal "hello"
+        String text = (String) args[0];
+    })
+    .register();
+/* ANCHOR_END: literalarguments3 */
 }
 
 {
@@ -1973,18 +1973,18 @@ new CommandAPICommand("removeeffect")
 
 {
     // A really simple example showing how you can use the new suggestion system
-	final String[] fruits = new String[] { "Apple", "Apricot", "Artichoke", "Asparagus", "Atemoya", "Avocado",
-			"Bamboo Shoots", "Banana", "Bean Sprouts", "Beans", "Beets", "Blackberries", "Blueberries", "Boniato",
-			"Boysenberries", "Broccoflower", "Broccoli", "Cabbage", "Cactus Pear", "Cantaloupe", "Carambola", "Carrots",
-			"Cauliflower", "Celery", "Chayote", "Cherimoya", "Cherries", "Coconuts", "Corn", "Cranberries", "Cucumber",
-			"Dates", "Eggplant", "Endive", "Escarole", "Feijoa", "Fennel", "Figs", "Garlic", "Gooseberries",
-			"Grapefruit", "Grapes", "Greens", "Guava", "Hominy", "Jicama", "Kale", "Kiwifruit", "Kohlrabi", "Kumquat",
-			"Leeks", "Lemons", "Lettuce", "Lima Beans", "Limes", "Longan", "Loquat", "Lychee", "Madarins", "Malanga",
-			"Mangos", "Mulberries", "Mushrooms", "Napa", "Nectarines", "Okra", "Onion", "Oranges", "Papayas", "Parsnip",
-			"Peaches", "Pears", "Peas", "Peppers", "Persimmons", "Pineapple", "Plantains", "Plums", "Pomegranate",
-			"Potatoes", "Prunes", "Pummelo", "Pumpkin", "Quince", "Radicchio", "Radishes", "Raisins", "Raspberries",
-			"Rhubarb", "Rutabaga", "Shallots", "Spinach", "Sprouts", "Squash", "Strawberries", "Tangelo", "Tangerines",
-			"Tomatillo", "Tomato", "Turnip", "Watercress", "Watermelon", "Yams", "Zucchini" };
+    final String[] fruits = new String[] { "Apple", "Apricot", "Artichoke", "Asparagus", "Atemoya", "Avocado",
+            "Bamboo Shoots", "Banana", "Bean Sprouts", "Beans", "Beets", "Blackberries", "Blueberries", "Boniato",
+            "Boysenberries", "Broccoflower", "Broccoli", "Cabbage", "Cactus Pear", "Cantaloupe", "Carambola", "Carrots",
+            "Cauliflower", "Celery", "Chayote", "Cherimoya", "Cherries", "Coconuts", "Corn", "Cranberries", "Cucumber",
+            "Dates", "Eggplant", "Endive", "Escarole", "Feijoa", "Fennel", "Figs", "Garlic", "Gooseberries",
+            "Grapefruit", "Grapes", "Greens", "Guava", "Hominy", "Jicama", "Kale", "Kiwifruit", "Kohlrabi", "Kumquat",
+            "Leeks", "Lemons", "Lettuce", "Lima Beans", "Limes", "Longan", "Loquat", "Lychee", "Madarins", "Malanga",
+            "Mangos", "Mulberries", "Mushrooms", "Napa", "Nectarines", "Okra", "Onion", "Oranges", "Papayas", "Parsnip",
+            "Peaches", "Pears", "Peas", "Peppers", "Persimmons", "Pineapple", "Plantains", "Plums", "Pomegranate",
+            "Potatoes", "Prunes", "Pummelo", "Pumpkin", "Quince", "Radicchio", "Radishes", "Raisins", "Raspberries",
+            "Rhubarb", "Rutabaga", "Shallots", "Spinach", "Sprouts", "Squash", "Strawberries", "Tangelo", "Tangerines",
+            "Tomatillo", "Tomato", "Turnip", "Watercress", "Watermelon", "Yams", "Zucchini" };
     
     new CommandAPICommand("concept")
         .withArguments(new StringArgument("text"))
@@ -2024,7 +2024,7 @@ new CommandAPICommand("setconfig")
     })
     .register();
 /* ANCHOR_END: asyncreadfile */
-	
+    
 }
 
 @SuppressWarnings("unchecked")
@@ -2107,38 +2107,38 @@ new CommandAPICommand("commandargument")
 
 {
 new CommandTree("treeexample")
-	// Set the aliases as you normally would 
-	.withAliases("treealias")
-	// Set an executor on the command itself
-	.executes((sender, args) -> {
-		sender.sendMessage("Root with no arguments");
-	})
-	// Create a new branch starting with a the literal 'integer'
-	.then(new LiteralArgument("integer")
-		// Execute on the literal itself
-		.executes((sender, args) -> {
-			sender.sendMessage("Integer Branch with no arguments");
-		})
-		// Create a further branch starting with an integer argument, which executes a command
-		.then(new IntegerArgument("integer").executes((sender, args) -> {
-			sender.sendMessage("Integer Branch with integer argument: " + args[0]);
-		})))
-	.then(new LiteralArgument("biome")
-		.executes((sender, args) -> {
-			sender.sendMessage("Biome Branch with no arguments");
-		})
-		.then(new BiomeArgument("biome").executes((sender, args) -> {
-			sender.sendMessage("Biome Branch with biome argument: " + args[0]);
-		})))
-	.then(new LiteralArgument("string")
-		.executes((sender, args) -> {
-			sender.sendMessage("String Branch with no arguments");
-		})
-		.then(new StringArgument("string").executes((sender, args) -> {
-			sender.sendMessage("String Branch with string argument: " + args[0]);
-		})))
-	// Call register to finish as you normally would
-	.register();
+    // Set the aliases as you normally would 
+    .withAliases("treealias")
+    // Set an executor on the command itself
+    .executes((sender, args) -> {
+        sender.sendMessage("Root with no arguments");
+    })
+    // Create a new branch starting with a the literal 'integer'
+    .then(new LiteralArgument("integer")
+        // Execute on the literal itself
+        .executes((sender, args) -> {
+            sender.sendMessage("Integer Branch with no arguments");
+        })
+        // Create a further branch starting with an integer argument, which executes a command
+        .then(new IntegerArgument("integer").executes((sender, args) -> {
+            sender.sendMessage("Integer Branch with integer argument: " + args[0]);
+        })))
+    .then(new LiteralArgument("biome")
+        .executes((sender, args) -> {
+            sender.sendMessage("Biome Branch with no arguments");
+        })
+        .then(new BiomeArgument("biome").executes((sender, args) -> {
+            sender.sendMessage("Biome Branch with biome argument: " + args[0]);
+        })))
+    .then(new LiteralArgument("string")
+        .executes((sender, args) -> {
+            sender.sendMessage("String Branch with no arguments");
+        })
+        .then(new StringArgument("string").executes((sender, args) -> {
+            sender.sendMessage("String Branch with string argument: " + args[0]);
+        })))
+    // Call register to finish as you normally would
+    .register();
 
 /* ANCHOR: CommandTree_sayhi1 */
 new CommandTree("sayhi")
@@ -2201,12 +2201,12 @@ new CommandTree("signedit")
 }
 
 public Sign getTargetSign(Player player) throws WrapperCommandSyntaxException {
-	Block block = player.getTargetBlock(null, 256);
-	if(block != null && block.getState() instanceof Sign sign) {
-		return sign;
-	} else {
-		throw CommandAPI.fail("You're not looking at a sign!");
-	}
+    Block block = player.getTargetBlock(null, 256);
+    if(block != null && block.getState() instanceof Sign sign) {
+        return sign;
+    } else {
+        throw CommandAPI.fail("You're not looking at a sign!");
+    }
 }
 
 
@@ -2236,7 +2236,7 @@ class CustomItem implements IStringTooltip {
     private ItemStack itemstack;
     private String name;
     
-	public CustomItem(ItemStack itemstack, String name, String lore) {
+    public CustomItem(ItemStack itemstack, String name, String lore) {
         ItemMeta meta = itemstack.getItemMeta();
         meta.setDisplayName(name);
         meta.setLore(Arrays.asList(lore));

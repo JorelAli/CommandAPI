@@ -937,20 +937,20 @@ for ((key, _) in gamemodes) {
 fun literalArguments3() {
 /* ANCHOR: literalarguments3 */
 CommandAPICommand("mycommand")
-	.withArguments(LiteralArgument.of("hello"))
-	.withArguments(TextArgument("text"))
-	.executes(CommandExecutor { _, args ->
-		val text = args[0] as String
-	})
-	.register()
+    .withArguments(LiteralArgument.of("hello"))
+    .withArguments(TextArgument("text"))
+    .executes(CommandExecutor { _, args ->
+        val text = args[0] as String
+    })
+    .register()
 
 CommandAPICommand("mycommand")
-	.withArguments(LiteralArgument.literal("hello"))
-	.withArguments(TextArgument("text"))
-	.executes(CommandExecutor { _, args ->
-		val text = args[0] as String
-	})
-	.register()
+    .withArguments(LiteralArgument.literal("hello"))
+    .withArguments(TextArgument("text"))
+    .executes(CommandExecutor { _, args ->
+        val text = args[0] as String
+    })
+    .register()
 /* ANCHOR_END: literalarguments3 */
 }
 
