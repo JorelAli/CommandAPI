@@ -54,6 +54,16 @@ As an example, let's declare the literal "hello" as a valid literal for this com
 {{#include ../../commandapi-core/src/test/kotlin/Examples.kt:literalarguments}}
 ```
 
+The `LiteralArgument` class also provides the `LiteralArgument.of()` and `LiteralArgument.literal()` helper methods which can be used as an alternative way to declare literal arguments:
+
+```java,Java
+{{#include ../../commandapi-core/src/test/java/Examples.java:literalarguments3}}
+```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:literalarguments3}}
+```
+
 </div>
 
 If I were to run the following command:

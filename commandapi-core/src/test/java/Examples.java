@@ -970,6 +970,29 @@ for(String key : gamemodes.keySet()) {
 /* ANCHOR_END: literalarguments2 */
 }
 
+@SuppressWarnings("unused")
+void d(){
+	/* ANCHOR: literalarguments3 */
+	new CommandAPICommand("mycommand")
+		.withArguments(LiteralArgument.of("hello"))
+		.withArguments(new TextArgument("text"))
+		.executes((sender, args) -> {
+			// This gives the variable "text" the contents of the TextArgument, and not the literal "hello"
+			String text = (String) args[0];
+		})
+		.register();
+
+	new CommandAPICommand("mycommand")
+		.withArguments(LiteralArgument.literal("hello"))
+		.withArguments(new TextArgument("text"))
+		.executes((sender, args) -> {
+			// This gives the variable "text" the contents of the TextArgument, and not the literal "hello"
+			String text = (String) args[0];
+		})
+		.register();
+	/* ANCHOR_END: literalarguments3 */
+}
+
 {
 /* ANCHOR: multiliteralarguments */
 new CommandAPICommand("gamemode")
