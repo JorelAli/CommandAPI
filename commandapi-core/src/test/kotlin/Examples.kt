@@ -942,6 +942,7 @@ CommandAPICommand("mycommand")
 	.executes(CommandExecutor { _, args ->
 		val text = args[0] as String
 	})
+	.register()
 
 CommandAPICommand("mycommand")
 	.withArguments(LiteralArgument.literal("hello"))
@@ -949,6 +950,7 @@ CommandAPICommand("mycommand")
 	.executes(CommandExecutor { _, args ->
 		val text = args[0] as String
 	})
+	.register()
 /* ANCHOR_END: literalarguments3 */
 }
 
