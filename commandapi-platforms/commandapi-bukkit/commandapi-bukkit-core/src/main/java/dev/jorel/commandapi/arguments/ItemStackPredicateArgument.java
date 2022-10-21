@@ -22,6 +22,7 @@ package dev.jorel.commandapi.arguments;
 
 import java.util.function.Predicate;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -34,7 +35,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
  * An argument that represents a <code>Predicate&lt;ItemStack&gt;</code>
  */
 @SuppressWarnings("rawtypes")
-public class ItemStackPredicateArgument extends Argument<Predicate> {
+public class ItemStackPredicateArgument extends Argument<Predicate, CommandSender> {
 	
 	/**
 	 * A ItemStack Predicate argument. Represents a predicate for itemstacks
@@ -55,7 +56,7 @@ public class ItemStackPredicateArgument extends Argument<Predicate> {
 	}
 	
 	@Override
-	public <CommandSourceStack> Predicate<ItemStack> parseArgument(AbstractPlatform<CommandSourceStack> platform,
+	public <CommandSourceStack> Predicate<ItemStack> parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
 			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getItemStackPredicate(cmdCtx, key);
 	}

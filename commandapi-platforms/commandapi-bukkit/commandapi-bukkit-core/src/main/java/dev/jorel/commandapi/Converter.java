@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -49,7 +50,7 @@ public final class Converter {
 	private Converter() {
 	}
 
-	private static final List<Argument<?>> PLAIN_ARGUMENTS = Arrays.asList(new GreedyStringArgument("args"));
+	private static final List<Argument<?, CommandSender>> PLAIN_ARGUMENTS = List.of(new GreedyStringArgument("args"));
 	private static final Set<String> CALLER_METHODS = Set.of("isPermissionSet", "hasPermission",
 			"addAttachment", "removeAttachment", "recalculatePermissions", "getEffectivePermissions", "isOp", "setOp");
 
@@ -85,7 +86,7 @@ public final class Converter {
 	 * @param cmdName   The command to convert
 	 * @param arguments The arguments that should be used to parse this command
 	 */
-	public static void convert(JavaPlugin plugin, String cmdName, Argument<?>... arguments) {
+	public static void convert(JavaPlugin plugin, String cmdName, Argument<?, CommandSender>... arguments) {
 		convertPluginCommand(plugin, cmdName, Arrays.asList(arguments));
 	}
 
@@ -97,7 +98,7 @@ public final class Converter {
 	 * @param cmdName   The command to convert
 	 * @param arguments The arguments that should be used to parse this command
 	 */
-	public static void convert(JavaPlugin plugin, String cmdName, List<Argument<?>> arguments) {
+	public static void convert(JavaPlugin plugin, String cmdName, List<Argument<?, CommandSender>> arguments) {
 		convertPluginCommand(plugin, cmdName, arguments);
 	}
 
@@ -120,16 +121,16 @@ public final class Converter {
 	 *                  be "/set"
 	 * @param arguments The arguments that should be used to parse this command
 	 */
-	public static void convert(String cmdName, List<Argument<?>> arguments) {
+	public static void convert(String cmdName, List<Argument<?, CommandSender>> arguments) {
 		convertCommand(cmdName, arguments);
 	}
 
-	private static void convertCommand(String commandName, List<Argument<?>> arguments) {
+	private static void convertCommand(String commandName, List<Argument<?, CommandSender>> arguments) {
 		CommandAPI.logInfo("Converting command /" + commandName);
 
 		// No arguments
 		new CommandAPICommand(commandName).withPermission(CommandPermission.NONE).executesNative((sender, args) -> {
-			Bukkit.dispatchCommand(mergeProxySender((NativeProxyCommandSender) sender.getSource()), commandName);
+			Bukkit.dispatchCommand(mergeProxySender(sender), commandName);
 		}).register();
 
 		// Multiple arguments
@@ -137,7 +138,7 @@ public final class Converter {
 				.withArguments(arguments).executesNative((sender, args) -> {
 					// We know the args are a String[] because that's how converted things are
 					// handled in generateCommand()
-					CommandSender proxiedSender = mergeProxySender((NativeProxyCommandSender) sender.getSource());
+					CommandSender proxiedSender = mergeProxySender(sender);
 					Bukkit.dispatchCommand(proxiedSender, commandName + " " + String.join(" ", (String[]) args));
 				});
 
@@ -145,7 +146,7 @@ public final class Converter {
 		multiArgs.register();
 	}
 
-	private static void convertPluginCommand(JavaPlugin plugin, String commandName, List<Argument<?>> arguments) {
+	private static void convertPluginCommand(JavaPlugin plugin, String commandName, List<Argument<?, CommandSender>> arguments) {
 		CommandAPI.logInfo("Converting " + plugin.getName() + " command /" + commandName);
 		/* Parse the commands */
 		Map<String, Object> cmdData = plugin.getDescription().getCommands().get(commandName);
@@ -189,8 +190,7 @@ public final class Converter {
 			permissionNode = CommandPermission.fromString(permission);
 		}
 		
-		NativeCommandExecutor executor = (abstractSender, args) -> {
-			NativeProxyCommandSender sender = (NativeProxyCommandSender) abstractSender.getSource();
+		NativeCommandExecutor executor = (sender, args) -> {
 			org.bukkit.command.Command command = plugin.getCommand(commandName);
 			
 			if (command == null) {
@@ -215,7 +215,7 @@ public final class Converter {
 			.withAliases(aliases)
 			.withFullDescription(fullDescription)
 			.executesNative((sender, args) -> {
-				executor.executeWith(sender, new String[0]);
+				executor.executeWith(new BukkitNativeProxyCommandSender(sender), new String[0]);
 			})
 			.register();
 

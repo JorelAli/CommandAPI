@@ -27,11 +27,12 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents a UUID
  */
-public class UUIDArgument extends SafeOverrideableArgument<UUID, UUID> {
+public class UUIDArgument extends SafeOverrideableArgument<UUID, UUID, CommandSender> {
 	
 	/**
 	 * A UUID argument. Represents an in-game entity UUID
@@ -52,7 +53,7 @@ public class UUIDArgument extends SafeOverrideableArgument<UUID, UUID> {
 	}
 	
 	@Override
-	public <CommandSourceStack> UUID parseArgument(AbstractPlatform<CommandSourceStack> platform,
+	public <CommandSourceStack> UUID parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
 			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getUUID(cmdCtx, key);
 	}

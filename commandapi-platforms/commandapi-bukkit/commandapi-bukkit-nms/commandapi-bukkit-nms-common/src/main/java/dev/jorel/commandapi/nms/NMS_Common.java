@@ -439,7 +439,7 @@ public abstract class NMS_Common extends BukkitPlatform<CommandSourceStack> {
 	}
 
 	@Override
-	public abstract CommandSourceStack getBrigadierSourceFromCommandSender(AbstractCommandSender<?> sender);
+	public abstract CommandSourceStack getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> sender);
 
 	@Override
 	public final AbstractCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(CommandSourceStack css) {

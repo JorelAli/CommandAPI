@@ -26,11 +26,12 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.wrappers.IntegerRange;
+import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents a range of integer values
  */
-public class IntegerRangeArgument extends SafeOverrideableArgument<IntegerRange, IntegerRange> {
+public class IntegerRangeArgument extends SafeOverrideableArgument<IntegerRange, IntegerRange, CommandSender> {
 
 	/**
 	 * An IntegerRange argument. Represents a range of whole numbers
@@ -51,7 +52,7 @@ public class IntegerRangeArgument extends SafeOverrideableArgument<IntegerRange,
 	}
 	
 	@Override
-	public <CommandSourceStack> IntegerRange parseArgument(AbstractPlatform<CommandSourceStack> platform,
+	public <CommandSourceStack> IntegerRange parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
 			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getIntRange(cmdCtx, key);
 	}

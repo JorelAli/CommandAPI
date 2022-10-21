@@ -20,14 +20,8 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import java.util.Optional;
-
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import dev.jorel.commandapi.BaseHandler;
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
@@ -36,13 +30,17 @@ import dev.jorel.commandapi.exceptions.PaperAdventureNotFoundException;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.wrappers.PreviewableFunction;
 import net.kyori.adventure.text.Component;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import java.util.Optional;
 
 /**
  * An argument that represents chat with entity selectors
  * 
  * @apiNote Returns a {@link Component} object
  */
-public class AdventureChatArgument extends Argument<Component> implements IGreedyArgument, IPreviewable<AdventureChatArgument, Component> {
+public class AdventureChatArgument extends Argument<Component, CommandSender> implements IGreedyArgument, IPreviewable<AdventureChatArgument, Component> {
 
 	private PreviewableFunction<Component> preview;
 	private boolean usePreview;
@@ -74,7 +72,7 @@ public class AdventureChatArgument extends Argument<Component> implements IGreed
 	}
 
 	@Override
-	public <CommandSourceStack> Component parseArgument(AbstractPlatform<CommandSourceStack> platform,
+	public <CommandSourceStack> Component parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
 		CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		final CommandSender sender = ((BukkitPlatform<CommandSourceStack>) platform).getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource();
 		Component component = ((BukkitPlatform<CommandSourceStack>) platform).getAdventureChat(cmdCtx, key);
@@ -114,5 +112,4 @@ public class AdventureChatArgument extends Argument<Component> implements IGreed
 		this.usePreview = usePreview;
 		return this;
 	}
-
 }

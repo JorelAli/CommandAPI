@@ -125,7 +125,7 @@ public class CommandAPI {
 			CommandAPI.logger = logger;
 
 			// Initialize handlers
-			AbstractPlatform<?> platform = CommandAPIVersionHandler.getPlatform();
+			AbstractPlatform<?, ?> platform = CommandAPIVersionHandler.getPlatform();
 
 			final String platformClassHierarchy;
 			{
@@ -171,7 +171,7 @@ public class CommandAPI {
 
 		// This method is called automatically when the class loads to set up variables, in which case
 		// BaseHandler will not have been initialized
-		BaseHandler<?> handler = BaseHandler.getInstance();
+		BaseHandler<?, ?> handler = BaseHandler.getInstance();
 		if(handler != null) handler.onDisable();
 	}
 

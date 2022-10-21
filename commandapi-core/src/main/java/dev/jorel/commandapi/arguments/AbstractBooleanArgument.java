@@ -20,55 +20,42 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.exceptions.BadLiteralException;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
 /**
- * An argument that represents multiple LiteralArguments
+ * An argument that represents primitive Java booleans
+ * 
+ * @apiNote Returns a {@link boolean}
  */
-public class MultiLiteralArgument extends Argument<String> {
+public abstract class AbstractBooleanArgument<CommandSender> extends SafeOverrideableArgument<Boolean, Boolean, CommandSender> {
 
-	private String[] literals;
-	
 	/**
-	 * A multiliteral argument. Takes in string literals which cannot be modified 
-	 * @param literals the literals that this argument represents
+	 * Constructs a Boolean argument with a given node name
+	 * 
+	 * @param nodeName the name of the node for argument
 	 */
-	public MultiLiteralArgument(final String... literals) {
-		super(null, null);
-		if(literals == null) {
-			throw new BadLiteralException(true);
-		}
-		if(literals.length == 0) {
-			throw new BadLiteralException(false);
-		}
-		this.literals = literals;
+	public AbstractBooleanArgument(String nodeName) {
+		super(nodeName, BoolArgumentType.bool(), String::valueOf);
 	}
 
 	@Override
-	public Class<String> getPrimitiveType() {
-		return String.class;
+	public Class<Boolean> getPrimitiveType() {
+		return boolean.class;
 	}
 
-	/**
-	 * Returns the literals that are present in this argument
-	 * @return the literals that are present in this argument
-	 */
-	public String[] getLiterals() {
-		return literals;
-	}
-	
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.MULTI_LITERAL;
+		return CommandAPIArgumentType.PRIMITIVE_BOOLEAN;
 	}
-	
+
 	@Override
-	public <Source> String parseArgument(AbstractPlatform<Source> platform,
-			CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		throw new IllegalStateException("Cannot parse MultiLiteralArgument");
+	public <Source> Boolean parseArgument(AbstractPlatform<CommandSender, Source> platform, CommandContext<Source> cmdCtx, String key, Object[] previousArgs)
+		throws CommandSyntaxException {
+		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
+
 }

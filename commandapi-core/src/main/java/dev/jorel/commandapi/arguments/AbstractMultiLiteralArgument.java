@@ -27,35 +27,26 @@ import dev.jorel.commandapi.exceptions.BadLiteralException;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
 /**
- * A pseudo-argument representing a single literal string
+ * An argument that represents multiple LiteralArguments
  */
-public class LiteralArgument extends Argument<String> {
+public abstract class AbstractMultiLiteralArgument<CommandSender> extends Argument<String, CommandSender> {
 
-	private String literal;
+	private String[] literals;
 	
 	/**
-	 * A literal argument. Only takes one string value which cannot be modified 
-	 * @param literal the string literal that this argument will represent
+	 * A multiliteral argument. Takes in string literals which cannot be modified 
+	 * @param literals the literals that this argument represents
 	 */
-	public LiteralArgument(final String literal) {
-		/*
-		 * The literal argument builder is NOT technically an argument.
-		 * Therefore, it doesn't have an ArgumentType.
-		 * 
-		 * This is a wrapper for the object "LiteralArgumentBuilder<>"
-		 */
-		super(literal, null);
-		
-		if(literal == null) {
+	public AbstractMultiLiteralArgument(final String... literals) {
+		super(null, null);
+		if(literals == null) {
 			throw new BadLiteralException(true);
 		}
-		if(literal.isEmpty()) {
+		if(literals.length == 0) {
 			throw new BadLiteralException(false);
 		}
-		this.literal = literal;
-		this.setListed(false);
+		this.literals = literals;
 	}
-	
 
 	@Override
 	public Class<String> getPrimitiveType() {
@@ -63,21 +54,21 @@ public class LiteralArgument extends Argument<String> {
 	}
 
 	/**
-	 * Returns the literal string represented by this argument
-	 * @return the literal string represented by this argument
+	 * Returns the literals that are present in this argument
+	 * @return the literals that are present in this argument
 	 */
-	public String getLiteral() {
-		return literal;
+	public String[] getLiterals() {
+		return literals;
 	}
 	
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.LITERAL;
+		return CommandAPIArgumentType.MULTI_LITERAL;
 	}
 	
 	@Override
-	public <Source> String parseArgument(AbstractPlatform<Source> platform,
+	public <Source> String parseArgument(AbstractPlatform<CommandSender, Source> platform,
 			CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return literal;
+		throw new IllegalStateException("Cannot parse MultiLiteralArgument");
 	}
 }

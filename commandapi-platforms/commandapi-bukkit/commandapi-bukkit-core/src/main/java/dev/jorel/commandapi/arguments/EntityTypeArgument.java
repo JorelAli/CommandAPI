@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -31,7 +32,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
 /**
  * An argument that represents the Bukkit EntityType object
  */
-public class EntityTypeArgument extends SafeOverrideableArgument<EntityType, EntityType> implements ICustomProvidedArgument {
+public class EntityTypeArgument extends SafeOverrideableArgument<EntityType, EntityType, CommandSender> implements ICustomProvidedArgument {
 
 	/**
 	 * An EntityType argument. Represents the type of an Entity
@@ -57,7 +58,7 @@ public class EntityTypeArgument extends SafeOverrideableArgument<EntityType, Ent
 	}
 	
 	@Override
-	public <CommandSourceStack> EntityType parseArgument(AbstractPlatform<CommandSourceStack> platform,
+	public <CommandSourceStack> EntityType parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
 			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getEntityType(cmdCtx, key);
 	}

@@ -20,62 +20,38 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.exceptions.InvalidRangeException;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
 /**
- * An argument that represents primitive Java ints
+ * An argument that represents text, encased in quotes
  */
-public class IntegerArgument extends SafeOverrideableArgument<Integer, Integer> {
+public abstract class AbstractTextArgument<CommandSender> extends Argument<String, CommandSender> {
 
 	/**
-	 * An integer argument
+	 * A string argument for one word, or multiple words encased in quotes
 	 * @param nodeName the name of the node for this argument
 	 */
-	public IntegerArgument(String nodeName) {
-		super(nodeName, IntegerArgumentType.integer(), String::valueOf);
+	public AbstractTextArgument(String nodeName) {
+		super(nodeName, StringArgumentType.string());
 	}
-	
-	/**
-	 * An integer argument with a minimum value
-	 * @param nodeName the name of the node for this argument
-	 * @param min The minimum value this argument can take (inclusive)
-	 */
-	public IntegerArgument(String nodeName, int min) {
-		super(nodeName, IntegerArgumentType.integer(min), String::valueOf);
-	}
-	
-	/**
-	 * An integer argument with a minimum and maximum value
-	 * @param nodeName the name of the node for this argument
-	 * @param min The minimum value this argument can take (inclusive)
-	 * @param max The maximum value this argument can take (inclusive)
-	 */
-	public IntegerArgument(String nodeName, int min, int max) {
-		super(nodeName, IntegerArgumentType.integer(min, max), String::valueOf);
-		if(max < min) {
-			throw new InvalidRangeException();
-		}
-	}
-	
+
 	@Override
-	public Class<Integer> getPrimitiveType() {
-		return int.class;
+	public Class<String> getPrimitiveType() {
+		return String.class;
 	}
 	
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.PRIMITIVE_INTEGER;
+		return CommandAPIArgumentType.PRIMITIVE_TEXT;
 	}
 	
 	@Override
-	public <Source> Integer parseArgument(AbstractPlatform<Source> platform,
+	public <Source> String parseArgument(AbstractPlatform<CommandSender, Source> platform,
 			CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
-	
 }

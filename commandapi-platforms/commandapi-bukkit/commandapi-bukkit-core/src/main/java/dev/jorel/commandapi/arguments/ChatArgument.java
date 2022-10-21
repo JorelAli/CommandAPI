@@ -42,7 +42,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
  * 
  * @apiNote Returns a {@link BaseComponent}{@code []} object
  */
-public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyArgument, IPreviewable<ChatArgument, BaseComponent[]> {
+public class ChatArgument extends Argument<BaseComponent[], CommandSender> implements IGreedyArgument, IPreviewable<ChatArgument, BaseComponent[]> {
 
 	private PreviewableFunction<BaseComponent[]> preview;
 	private boolean usePreview;
@@ -74,7 +74,7 @@ public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyAr
 	}
 
 	@Override
-	public <CommandSourceStack> BaseComponent[] parseArgument(AbstractPlatform<CommandSourceStack> platform,
+	public <CommandSourceStack> BaseComponent[] parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
 		CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		final CommandSender sender = ((BukkitPlatform<CommandSourceStack>) platform).getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource();
 		BaseComponent[] component = ((BukkitPlatform<CommandSourceStack>) platform).getChat(cmdCtx, key);

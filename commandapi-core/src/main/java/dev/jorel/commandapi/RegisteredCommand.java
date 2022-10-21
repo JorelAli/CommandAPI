@@ -3,8 +3,6 @@ package dev.jorel.commandapi;
 import java.util.List;
 import java.util.Optional;
 
-import dev.jorel.commandapi.arguments.IntegerArgument;
-
 /**
  * Class to store a registered command which has its command name and a list of
  * arguments as a string. The arguments are expected to be of the form

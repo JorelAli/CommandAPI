@@ -20,38 +20,18 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import org.bukkit.command.CommandSender;
 
 /**
- * An argument that represents arbitrary strings
+ * An argument that represents a simple String
  */
-public class GreedyStringArgument extends SafeOverrideableArgument<String, String> implements IGreedyArgument {
-	
+public class StringArgument extends AbstractStringArgument<CommandSender> {
 	/**
-	 * A string argument for a string of any length
+	 * A string argument for one word
+	 *
 	 * @param nodeName the name of the node for this argument
 	 */
-	public GreedyStringArgument(String nodeName) {
-		super(nodeName, StringArgumentType.greedyString(), s -> s);
-	}
-
-	@Override
-	public Class<String> getPrimitiveType() {
-		return String.class;
-	}
-
-	@Override
-	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.PRIMITIVE_GREEDY_STRING;
-	}
-	
-	@Override
-	public <Source> String parseArgument(AbstractPlatform<Source> platform,
-			CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return cmdCtx.getArgument(key, getPrimitiveType());
+	public StringArgument(String nodeName) {
+		super(nodeName);
 	}
 }

@@ -42,10 +42,10 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
  *            {@link IntegerArgument}
  * @apiNote Returns a {@link T} object
  */
-public class CustomArgument<T, B> extends Argument<T> {
+public class CustomArgument<T, B> extends Argument<T, CommandSender> {
 
 	private final CustomArgumentInfoParser<T, B> infoParser;
-	private final Argument<B> base;
+	private final Argument<B, CommandSender> base;
 
 	/**
 	 * Creates a CustomArgument with a valid parser, defaults to non-keyed argument
@@ -83,7 +83,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 	public CustomArgument(String nodeName, CustomArgumentInfoParser<T, String> parser, boolean keyed) {
 		super(nodeName, keyed ? StringArgumentType.string()
 				: BukkitPlatform.get()._ArgumentMinecraftKeyRegistered());
-		this.base = (Argument<B>) new DummyArgument(nodeName, keyed);
+		this.base = (Argument<B, CommandSender>) new DummyArgument(nodeName, keyed);
 		this.infoParser = (CustomArgumentInfoParser<T, B>) parser;
 		CommandAPI.logWarning(
 				"Registering CustomArgument " + nodeName + " with legacy registeration method. This may not work!\n"
@@ -110,7 +110,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 	 *               {@code Integer} for an {@link IntegerArgument}
 	 *               </p>
 	 */
-	public CustomArgument(Argument<B> base, CustomArgumentInfoParser<T, B> parser) {
+	public CustomArgument(Argument<B, CommandSender> base, CustomArgumentInfoParser<T, B> parser) {
 		super(base.getNodeName(), base.getRawType());
 		if (base instanceof LiteralArgument || base instanceof MultiLiteralArgument) {
 			throw new IllegalArgumentException(base.getClass().getSimpleName() + " is not a suitable base argument type for a CustomArgument");
@@ -130,7 +130,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 	}
 
 	@Override
-	public <CommandSourceStack> T parseArgument(AbstractPlatform<CommandSourceStack> platform,
+	public <CommandSourceStack> T parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
 			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
 		// Get the raw input and parsed input
@@ -138,7 +138,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 		final B parsedInput = base.parseArgument(platform, cmdCtx, key, previousArgs);
 
 		try {
-			return infoParser.apply(new CustomArgumentInfo<B>(((BukkitPlatform<CommandSourceStack>) platform).getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource(),
+			return infoParser.apply(new CustomArgumentInfo<B>(platform.getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource(),
 					previousArgs, customresult, parsedInput));
 		} catch (CustomArgumentException e) {
 			throw e.toCommandSyntax(customresult, cmdCtx);
@@ -146,9 +146,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 			String errorMsg = new MessageBuilder("Error in executing command ").appendFullInput().append(" - ")
 					.appendArgInput().appendHere().toString().replace("%input%", customresult)
 					.replace("%finput%", cmdCtx.getInput());
-			throw new SimpleCommandExceptionType(() -> {
-				return errorMsg;
-			}).create();
+			throw new SimpleCommandExceptionType(() -> errorMsg).create();
 		}
 	}
 
@@ -360,7 +358,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 	}
 
 	@Deprecated
-	private static class DummyArgument extends Argument<String> {
+	private static class DummyArgument extends Argument<String, CommandSender> {
 
 		private final boolean keyed;
 
@@ -381,7 +379,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 		}
 
 		@Override
-		public <Source> String parseArgument(AbstractPlatform<Source> platform,
+		public <Source> String parseArgument(AbstractPlatform<CommandSender, Source> platform,
 				CommandContext<Source> cmdCtx, String key, Object[] previousArgs)
 				throws CommandSyntaxException {
 			return keyed ? ((BukkitPlatform<Source>) platform).getMinecraftKey(cmdCtx, key).toString() : cmdCtx.getArgument(key, String.class);

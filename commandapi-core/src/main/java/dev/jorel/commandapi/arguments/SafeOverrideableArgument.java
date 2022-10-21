@@ -35,7 +35,7 @@ import dev.jorel.commandapi.abstractions.AbstractTooltip;
  *            a {@link StringArgument} will have a custom type
  *            <code>String</code>
  */
-public abstract class SafeOverrideableArgument<T, S> extends Argument<T> {
+public abstract class SafeOverrideableArgument<T, S, CommandSender> extends Argument<T, CommandSender> {
 
 	private final Function<S, String> mapper;
 
@@ -59,7 +59,7 @@ public abstract class SafeOverrideableArgument<T, S> extends Argument<T> {
 	 * @param suggestions The safe suggestions to use
 	 * @return the current argument
 	 */
-	public final Argument<T> replaceSafeSuggestions(SafeSuggestions<S> suggestions) {
+	public final Argument<T, CommandSender> replaceSafeSuggestions(SafeSuggestions<S> suggestions) {
 		replaceSuggestions(suggestions.toSuggestions(mapper));
 		return this;
 	}
@@ -74,7 +74,7 @@ public abstract class SafeOverrideableArgument<T, S> extends Argument<T> {
 	 * @deprecated use {@link #replaceSafeSuggestions(SafeSuggestions)}
 	 */
 	@Deprecated(forRemoval = true)
-	public final Argument<T> replaceWithSafeSuggestions(Function<SuggestionInfo, S[]> suggestions) {
+	public final Argument<T, CommandSender> replaceWithSafeSuggestions(Function<SuggestionInfo, S[]> suggestions) {
 		return replaceSafeSuggestions(SafeSuggestions.suggest(suggestions));
 	}
 
@@ -88,7 +88,7 @@ public abstract class SafeOverrideableArgument<T, S> extends Argument<T> {
 	 * @deprecated use {@link #replaceSafeSuggestions(SafeSuggestions)}
 	 */
 	@Deprecated(forRemoval = true)
-	public final Argument<T> replaceWithSafeSuggestionsT(Function<SuggestionInfo, AbstractTooltip<S>[]> suggestions) {
+	public final Argument<T, CommandSender> replaceWithSafeSuggestionsT(Function<SuggestionInfo, AbstractTooltip<S>[]> suggestions) {
 		return replaceSafeSuggestions(SafeSuggestions.tooltips(suggestions));
 	}
 
@@ -100,7 +100,7 @@ public abstract class SafeOverrideableArgument<T, S> extends Argument<T> {
 	 * @param suggestions The safe suggestions to use
 	 * @return the current argument
 	 */
-	public final Argument<T> includeSafeSuggestions(SafeSuggestions<S> suggestions) {
+	public final Argument<T, CommandSender> includeSafeSuggestions(SafeSuggestions<S> suggestions) {
 		return this.includeSuggestions(suggestions.toSuggestions(mapper));
 	}
 
@@ -116,7 +116,7 @@ public abstract class SafeOverrideableArgument<T, S> extends Argument<T> {
 	 * @deprecated use {@link #includeSafeSuggestions(SafeSuggestions)}
 	 */
 	@Deprecated(forRemoval = true)
-	public final Argument<T> includeWithSafeSuggestions(Function<SuggestionInfo, S[]> suggestions) {
+	public final Argument<T, CommandSender> includeWithSafeSuggestions(Function<SuggestionInfo, S[]> suggestions) {
 		return includeSafeSuggestions(SafeSuggestions.suggest(suggestions));
 	}
 
@@ -134,7 +134,7 @@ public abstract class SafeOverrideableArgument<T, S> extends Argument<T> {
 	 * 
 	 */
 	@Deprecated(forRemoval = true)
-	public final Argument<T> includeWithSafeSuggestionsT(Function<SuggestionInfo, AbstractTooltip<S>[]> suggestions) {
+	public final Argument<T, CommandSender> includeWithSafeSuggestionsT(Function<SuggestionInfo, AbstractTooltip<S>[]> suggestions) {
 		return includeSafeSuggestions(SafeSuggestions.tooltips(suggestions));
 	}
 

@@ -23,58 +23,41 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import dev.jorel.commandapi.exceptions.InvalidRangeException;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import dev.jorel.commandapi.exceptions.InvalidRangeException;
+import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents primitive Java floats
  */
-public class FloatArgument extends SafeOverrideableArgument<Float, Float> {
-
+public class FloatArgument extends AbstractFloatArgument<CommandSender> {
 	/**
 	 * A float argument
+	 *
 	 * @param nodeName the name of the node for this argument
 	 */
 	public FloatArgument(String nodeName) {
-		super(nodeName, FloatArgumentType.floatArg(), String::valueOf);
-	}
-	
-	/**
-	 * A float argument with a minimum value
-	 * @param nodeName the name of the node for this argument
-	 * @param min The minimum value this argument can take (inclusive)
-	 */
-	public FloatArgument(String nodeName, float min) {
-		super(nodeName, FloatArgumentType.floatArg(min), String::valueOf);
-	}
-	
-	/**
-	 * A float argument with a minimum and maximum value
-	 * @param nodeName the name of the node for this argument
-	 * @param min The minimum value this argument can take (inclusive)
-	 * @param max The maximum value this argument can take (inclusive)
-	 */
-	public FloatArgument(String nodeName, float min, float max) {
-		super(nodeName, FloatArgumentType.floatArg(min, max), String::valueOf);
-		if(max < min) {
-			throw new InvalidRangeException();
-		}
+		super(nodeName);
 	}
 
-	@Override
-	public Class<Float> getPrimitiveType() {
-		return float.class;
+	/**
+	 * A float argument with a minimum value
+	 *
+	 * @param nodeName the name of the node for this argument
+	 * @param min      The minimum value this argument can take (inclusive)
+	 */
+	public FloatArgument(String nodeName, float min) {
+		super(nodeName, min);
 	}
-	
-	@Override
-	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.PRIMITIVE_FLOAT;
-	}
-	
-	@Override
-	public <Source> Float parseArgument(AbstractPlatform<Source> platform,
-			CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return cmdCtx.getArgument(key, getPrimitiveType());
+
+	/**
+	 * A float argument with a minimum and maximum value
+	 *
+	 * @param nodeName the name of the node for this argument
+	 * @param min      The minimum value this argument can take (inclusive)
+	 * @param max      The maximum value this argument can take (inclusive)
+	 */
+	public FloatArgument(String nodeName, float min, float max) {
+		super(nodeName, min, max);
 	}
 }

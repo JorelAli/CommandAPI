@@ -29,6 +29,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents a <code>Predicate&lt;Block&gt;</code>
@@ -36,7 +37,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
  * @apiNote Returns a {@link Predicate}{@code <}{@link Block}{@code >} object
  */
 @SuppressWarnings("rawtypes")
-public class BlockPredicateArgument extends Argument<Predicate> {
+public class BlockPredicateArgument extends Argument<Predicate, CommandSender> {
 
 	/**
 	 * Constructs a BlockPredicateArgument with a given node name. Represents a
@@ -59,7 +60,7 @@ public class BlockPredicateArgument extends Argument<Predicate> {
 	}
 
 	@Override
-	public <CommandSourceStack> Predicate<?> parseArgument(AbstractPlatform<CommandSourceStack> platform,
+	public <CommandSourceStack> Predicate<?> parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
 			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getBlockPredicate(cmdCtx, key);

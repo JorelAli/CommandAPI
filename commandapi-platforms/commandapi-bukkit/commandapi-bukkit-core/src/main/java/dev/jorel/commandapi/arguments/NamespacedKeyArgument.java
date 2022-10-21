@@ -27,6 +27,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents a Minecraft resource location (or namespaced key)
@@ -35,7 +36,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
  * {@code .} (dot). The key can also contain {@code /} (forward slash)
  * @apiNote Returns a {@link NamespacedKey} object
  */
-public class NamespacedKeyArgument extends SafeOverrideableArgument<NamespacedKey, NamespacedKey> {
+public class NamespacedKeyArgument extends SafeOverrideableArgument<NamespacedKey, NamespacedKey, CommandSender> {
 
 	/**
 	 * Constructs a MinecraftKeyArgument with a given node name.
@@ -58,7 +59,7 @@ public class NamespacedKeyArgument extends SafeOverrideableArgument<NamespacedKe
 	}
 
 	@Override
-	public <CommandSourceStack> NamespacedKey parseArgument(AbstractPlatform<CommandSourceStack> platform,
+	public <CommandSourceStack> NamespacedKey parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
 			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getMinecraftKey(cmdCtx, key);

@@ -20,38 +20,18 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents text, encased in quotes
  */
-public class TextArgument extends Argument<String> {
-
+public class TextArgument extends AbstractTextArgument<CommandSender> {
 	/**
 	 * A string argument for one word, or multiple words encased in quotes
+	 *
 	 * @param nodeName the name of the node for this argument
 	 */
 	public TextArgument(String nodeName) {
-		super(nodeName, StringArgumentType.string());
-	}
-
-	@Override
-	public Class<String> getPrimitiveType() {
-		return String.class;
-	}
-	
-	@Override
-	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.PRIMITIVE_TEXT;
-	}
-	
-	@Override
-	public <Source> String parseArgument(AbstractPlatform<Source> platform,
-			CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return cmdCtx.getArgument(key, getPrimitiveType());
+		super(nodeName);
 	}
 }

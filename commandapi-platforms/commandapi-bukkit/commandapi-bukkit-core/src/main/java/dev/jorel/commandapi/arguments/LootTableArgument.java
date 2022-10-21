@@ -21,6 +21,7 @@
 package dev.jorel.commandapi.arguments;
 
 import org.bukkit.Keyed;
+import org.bukkit.command.CommandSender;
 import org.bukkit.loot.LootTable;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -32,7 +33,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
 /**
  * An argument that represents the Bukkit LootTable object
  */
-public class LootTableArgument extends SafeOverrideableArgument<LootTable, LootTable> implements ICustomProvidedArgument {
+public class LootTableArgument extends SafeOverrideableArgument<LootTable, LootTable, CommandSender> implements ICustomProvidedArgument {
 	
 	/**
 	 * A LootTable argument that represents a Bukkit LootTable.
@@ -58,7 +59,7 @@ public class LootTableArgument extends SafeOverrideableArgument<LootTable, LootT
 	}
 	
 	@Override
-	public <CommandSourceStack> LootTable parseArgument(AbstractPlatform<CommandSourceStack> platform,
+	public <CommandSourceStack> LootTable parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
 			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getLootTable(cmdCtx, key);
 	}

@@ -26,7 +26,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import dev.jorel.commandapi.ArgumentTree;
+import dev.jorel.commandapi.AbstractArgumentTree;
 import dev.jorel.commandapi.abstractions.AbstractCommandSender;
 
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -43,7 +43,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
  * 
  * @param <T> The type of the underlying object that this argument casts to
  */
-public abstract class Argument<T> extends ArgumentTree {
+public abstract class Argument<T, CommandSender> extends AbstractArgumentTree<CommandSender> {
 
 	/**
 	 * Returns the primitive type of the current Argument. After executing a
@@ -100,7 +100,7 @@ public abstract class Argument<T> extends ArgumentTree {
 	 * represents. This is intended for use by the internals of the CommandAPI and
 	 * isn't expected to be used outside the CommandAPI
 	 * 
-	 * @param <CommandSourceStack> the command source type
+	 * @param <Source> the command source type
 	 * @param platform             a reference to the platform
 	 * @param cmdCtx               the context which ran this command
 	 * @param key                  the name of the argument node
@@ -108,8 +108,8 @@ public abstract class Argument<T> extends ArgumentTree {
 	 * @return the parsed object represented by this argument
 	 * @throws CommandSyntaxException if parsing fails
 	 */
-	public abstract <CommandSourceStack> T parseArgument(AbstractPlatform<CommandSourceStack> platform,
-			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException;
+	public abstract <Source> T parseArgument(AbstractPlatform<CommandSender, Source> platform,
+			CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException;
 
 	/////////////////
 	// Suggestions //
@@ -126,7 +126,7 @@ public abstract class Argument<T> extends ArgumentTree {
 	 *
 	 * @return the current argument
 	 */
-	public Argument<T> includeSuggestions(ArgumentSuggestions suggestions) {
+	public Argument<T, CommandSender> includeSuggestions(ArgumentSuggestions suggestions) {
 		this.addedSuggestions = Optional.of(suggestions);
 		return this;
 	}
@@ -143,7 +143,7 @@ public abstract class Argument<T> extends ArgumentTree {
 	 * @deprecated use {@link #includeSuggestions(ArgumentSuggestions)} instead
 	 */
 	@Deprecated(forRemoval = true)
-	public Argument<T> includeSuggestions(Function<SuggestionInfo, String[]> suggestions) {
+	public Argument<T, CommandSender> includeSuggestions(Function<SuggestionInfo, String[]> suggestions) {
 		return includeSuggestions(ArgumentSuggestions.strings(suggestions));
 	}
 
@@ -159,7 +159,7 @@ public abstract class Argument<T> extends ArgumentTree {
 	 * @deprecated use {@link #includeSuggestions(ArgumentSuggestions)} instead
 	 */
 	@Deprecated(forRemoval = true)
-	public Argument<T> includeSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
+	public Argument<T, CommandSender> includeSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
 		return includeSuggestions(ArgumentSuggestions.stringsWithTooltips(suggestions));
 	}
 
@@ -180,7 +180,7 @@ public abstract class Argument<T> extends ArgumentTree {
 	 * @return the current argument
 	 */
   
-	public Argument<T> replaceSuggestions(ArgumentSuggestions suggestions) {
+	public Argument<T, CommandSender> replaceSuggestions(ArgumentSuggestions suggestions) {
 		this.suggestions = Optional.of(suggestions);
 		return this;
 	}
@@ -192,7 +192,7 @@ public abstract class Argument<T> extends ArgumentTree {
 	 * @deprecated use {@link #replaceSuggestions(ArgumentSuggestions)} instead
 	 */
 	@Deprecated(forRemoval = true)
-	public Argument<T> replaceSuggestions(Function<SuggestionInfo, String[]> suggestions) {
+	public Argument<T, CommandSender> replaceSuggestions(Function<SuggestionInfo, String[]> suggestions) {
 		return replaceSuggestions(ArgumentSuggestions.strings(suggestions));
 	}
 
@@ -203,7 +203,7 @@ public abstract class Argument<T> extends ArgumentTree {
 	 * @deprecated use {@link #replaceSuggestions(ArgumentSuggestions)} instead
 	 */
 	@Deprecated(forRemoval = true)
-	public Argument<T> replaceSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
+	public Argument<T, CommandSender> replaceSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
 		return replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(suggestions));
 	}
 
@@ -230,7 +230,7 @@ public abstract class Argument<T> extends ArgumentTree {
 	 * @param permission the permission required to execute this command
 	 * @return this current argument
 	 */
-	public final Argument<T> withPermission(CommandPermission permission) {
+	public final Argument<T, CommandSender> withPermission(CommandPermission permission) {
 		this.permission = permission;
 		return this;
 	}
@@ -241,7 +241,7 @@ public abstract class Argument<T> extends ArgumentTree {
 	 * @param permission the permission required to execute this command
 	 * @return this current argument
 	 */
-	public final Argument<T> withPermission(String permission) {
+	public final Argument<T, CommandSender> withPermission(String permission) {
 		this.permission = CommandPermission.fromString(permission);
 		return this;
 	}
@@ -276,7 +276,7 @@ public abstract class Argument<T> extends ArgumentTree {
 	 * @param requirement the predicate that must be satisfied to use this argument
 	 * @return this current argument
 	 */
-	public final Argument<T> withRequirement(Predicate<AbstractCommandSender<?>> requirement) {
+	public final Argument<T, CommandSender> withRequirement(Predicate<AbstractCommandSender<?>> requirement) {
 		this.requirements = this.requirements.and(requirement);
 		return this;
 	}
@@ -300,7 +300,7 @@ public abstract class Argument<T> extends ArgumentTree {
 	 * @param listed if true, this argument will be included in the Object args[] of the command executor
 	 * @return this current argument
 	 */
-	public Argument<T> setListed(boolean listed) {
+	public Argument<T, CommandSender> setListed(boolean listed) {
 		this.isListed = listed;
 		return this;
 	}

@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
- * This is a base class for {@link AbstractCommandAPICommand} and {@link CommandTree} command definitions
+ * This is a base class for {@link AbstractCommandAPICommand} and {@link AbstractCommandTree} command definitions
  *
  * @param <Impl> The class extending this class, used as the return type for chain calls
  * @param <CommandSender> The CommandSender class used by the class extending this class

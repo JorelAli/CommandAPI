@@ -26,12 +26,13 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.wrappers.ParticleData;
+import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents the Bukkit Particle object
  */
 @SuppressWarnings("rawtypes")
-public class ParticleArgument extends SafeOverrideableArgument<ParticleData, ParticleData<?>> {
+public class ParticleArgument extends SafeOverrideableArgument<ParticleData, ParticleData<?>, CommandSender> {
 
 	/**
 	 * A Particle argument. Represents Minecraft particles
@@ -52,7 +53,7 @@ public class ParticleArgument extends SafeOverrideableArgument<ParticleData, Par
 	}
 	
 	@Override
-	public <CommandSourceStack> ParticleData<?> parseArgument(AbstractPlatform<CommandSourceStack> platform,
+	public <CommandSourceStack> ParticleData<?> parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
 			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getParticle(cmdCtx, key);
 	}

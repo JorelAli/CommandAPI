@@ -259,8 +259,8 @@ public class MockNMS extends ArgumentNMS {
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public CommandListenerWrapper getBrigadierSourceFromCommandSender(AbstractCommandSender<?> senderWrapper) {
-		CommandSender sender = (CommandSender) senderWrapper.getSource();
+	public CommandListenerWrapper getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> senderWrapper) {
+		CommandSender sender = senderWrapper.getSource();
 		CommandListenerWrapper clw = Mockito.mock(CommandListenerWrapper.class);
 		Mockito.when(clw.getBukkitSender()).thenReturn(sender);
 

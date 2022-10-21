@@ -29,6 +29,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents x, y and z axes as an EnumSet of Axis
@@ -36,7 +37,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
  * @apiNote Returns a {@link EnumSet}{@code <}{@link Axis}{@code >} object
  */
 @SuppressWarnings("rawtypes")
-public class AxisArgument extends SafeOverrideableArgument<EnumSet, EnumSet<Axis>> {
+public class AxisArgument extends SafeOverrideableArgument<EnumSet, EnumSet<Axis>, CommandSender> {
 
 	/**
 	 * Constructs an AxisArgument with a given node name. Represents the axes x, y
@@ -60,7 +61,7 @@ public class AxisArgument extends SafeOverrideableArgument<EnumSet, EnumSet<Axis
 	}
 
 	@Override
-	public <CommandSourceStack> EnumSet<Axis> parseArgument(AbstractPlatform<CommandSourceStack> platform, CommandContext<CommandSourceStack> cmdCtx, String key,
+	public <CommandSourceStack> EnumSet<Axis> parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform, CommandContext<CommandSourceStack> cmdCtx, String key,
 		Object[] previousArgs)
 		throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getAxis(cmdCtx, key);

@@ -27,9 +27,9 @@ import java.util.List;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import dev.jorel.commandapi.arguments.AbstractMultiLiteralArgument;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.IGreedyArgument;
-import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 
 /**
@@ -39,7 +39,7 @@ import dev.jorel.commandapi.exceptions.GreedyArgumentException;
  */
 public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPICommand<Impl, CommandSender>, CommandSender> extends ExecutableCommand<Impl, CommandSender> {
 
-	protected List<Argument<?>> args = new ArrayList<>();
+	protected List<Argument<?, CommandSender>> args = new ArrayList<>();
 	protected List<Impl> subcommands = new ArrayList<>();
 	protected boolean isConverted;
 
@@ -70,7 +70,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 	 *             command can accept
 	 * @return this command builder
 	 */
-	public Impl withArguments(List<Argument<?>> args) {
+	public Impl withArguments(List<Argument<?, CommandSender>> args) {
 		this.args.addAll(args);
 		return (Impl) this;
 	}
@@ -81,7 +81,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 	 * @param args Arguments that this command can accept
 	 * @return this command builder
 	 */
-	public Impl withArguments(Argument<?>... args) {
+	public Impl withArguments(Argument<?, CommandSender>... args) {
 		this.args.addAll(Arrays.asList(args));
 		return (Impl) this;
 	}
@@ -113,7 +113,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 	 * 
 	 * @return the list of arguments that this command has
 	 */
-	public List<Argument<?>> getArguments() {
+	public List<Argument<?, CommandSender>> getArguments() {
 		return args;
 	}
 
@@ -122,7 +122,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 	 * 
 	 * @param args the arguments that this command has
 	 */
-	public void setArguments(List<Argument<?>> args) {
+	public void setArguments(List<Argument<?, CommandSender>> args) {
 		this.args = args;
 	}
 
@@ -170,7 +170,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 	// shouldn't
 	// be accessing/depending on any of the contents of the current class instance)
 	private static <Impl extends AbstractCommandAPICommand<Impl, CommandSender>, CommandSender>
-		void flatten(Impl rootCommand, List<Argument<?>> prevArguments, Impl subcommand) {
+		void flatten(Impl rootCommand, List<Argument<?, CommandSender>> prevArguments, Impl subcommand) {
 		// Get the list of literals represented by the current subcommand. This
 		// includes the subcommand's name and any aliases for this subcommand
 		String[] literals = new String[subcommand.meta.aliases.length + 1];
@@ -178,12 +178,13 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 		System.arraycopy(subcommand.meta.aliases, 0, literals, 1, subcommand.meta.aliases.length);
 
 		// Create a MultiLiteralArgument using the subcommand information
-		MultiLiteralArgument literal = (MultiLiteralArgument) new MultiLiteralArgument(literals)
-			.withPermission(subcommand.meta.permission)
+		AbstractMultiLiteralArgument<?> literal = BaseHandler.getInstance().getPlatform().newConcreteMultiLiteralArgument(literals);
+
+		literal.withPermission(subcommand.meta.permission)
 			.withRequirement(subcommand.meta.requirements)
 			.setListed(false);
 
-		prevArguments.add(literal);
+		prevArguments.add((Argument<?, CommandSender>) literal);
 
 		if (subcommand.executor.hasAnyExecutors()) {
 			// Create the new command. The new command:
@@ -211,7 +212,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 			CommandAPI.logWarning("Command /" + meta.commandName + " is being registered after the server had loaded. Undefined behavior ahead!");
 		}
 		try {
-			Argument<?>[] argumentsArr = args == null ? new Argument<?>[0] : args.toArray(new Argument<?>[0]);
+			Argument<?, CommandSender>[] argumentsArr = args == null ? new Argument[0] : args.toArray(Argument[]::new);
 
 			// Check IGreedyArgument constraints
 			for (int i = 0, numGreedyArgs = 0; i < argumentsArr.length; i++) {
@@ -224,14 +225,16 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 
 			// Assign the command's permissions to arguments if the arguments don't already
 			// have one
-			for (Argument<?> argument : argumentsArr) {
+			for (Argument<?, ?> argument : argumentsArr) {
 				if (argument.getArgumentPermission() == null) {
 					argument.withPermission(meta.permission);
 				}
 			}
 
 			if (executor.hasAnyExecutors()) {
-				BaseHandler.getInstance().register(meta, argumentsArr, executor, isConverted);
+				// Need to cast handler to the right CommandSender type so that argumentsArr and executor are accepted
+				BaseHandler<CommandSender, ?> handler = (BaseHandler<CommandSender, ?>) BaseHandler.getInstance();
+				handler.register(meta, argumentsArr, executor, isConverted);
 			}
 
 			// Convert subcommands into multiliteral arguments

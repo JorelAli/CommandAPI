@@ -22,17 +22,17 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.exceptions.PaperAdventureNotFoundException;
 import net.kyori.adventure.text.Component;
+import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents raw JSON text
  * @apiNote Returns a {@link Component} object
  */
-public class AdventureChatComponentArgument extends Argument<Component> {
+public class AdventureChatComponentArgument extends Argument<Component, CommandSender> {
 
 	/**
 	 * Constructs a ChatComponnent argument with a given node name. Represents raw JSON text, used in Book MetaData, Chat and other various areas of Minecraft
@@ -60,7 +60,7 @@ public class AdventureChatComponentArgument extends Argument<Component> {
 	}
 	
 	@Override
-	public <CommandSourceStack> Component parseArgument(AbstractPlatform<CommandSourceStack> platform,
+	public <CommandSourceStack> Component parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
 			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getAdventureChatComponent(cmdCtx, key);
 	}

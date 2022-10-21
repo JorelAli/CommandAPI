@@ -29,13 +29,14 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents the Bukkit Biome object
  * 
  * @apiNote Returns a {@link Biome} object
  */
-public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome> implements ICustomProvidedArgument {
+public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome, CommandSender> implements ICustomProvidedArgument {
 
 	/**
 	 * Constructs a BiomeArgument with a given node name.
@@ -63,7 +64,7 @@ public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome> implem
 	}
 
 	@Override
-	public <CommandSourceStack> Biome parseArgument(AbstractPlatform<CommandSourceStack> platform,
+	public <CommandSourceStack> Biome parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
 			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getBiome(cmdCtx, key);

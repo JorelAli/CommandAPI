@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -33,7 +34,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
  * 
  * @apiNote Returns an {@link Enchantment} object
  */
-public class EnchantmentArgument extends SafeOverrideableArgument<Enchantment, Enchantment> {
+public class EnchantmentArgument extends SafeOverrideableArgument<Enchantment, Enchantment, CommandSender> {
 	
 	/**
 	 * An Enchantment argument. Represents an enchantment for items
@@ -54,7 +55,7 @@ public class EnchantmentArgument extends SafeOverrideableArgument<Enchantment, E
 	}
 	
 	@Override
-	public <CommandSourceStack> Enchantment parseArgument(AbstractPlatform<CommandSourceStack> platform,
+	public <CommandSourceStack> Enchantment parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
 			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getEnchantment(cmdCtx, key);
 	}

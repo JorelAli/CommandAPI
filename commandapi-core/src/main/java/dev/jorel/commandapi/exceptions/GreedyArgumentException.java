@@ -22,6 +22,8 @@ package dev.jorel.commandapi.exceptions;
 
 import dev.jorel.commandapi.arguments.Argument;
 
+import java.util.List;
+
 /**
  * An exception caused when a greedy argument is not declared at the end of a
  * List
@@ -35,14 +37,14 @@ public class GreedyArgumentException extends RuntimeException {
 	 * @param arguments the list of arguments that have been used for this command
 	 *                  (including the greedy string argument)
 	 */
-	public GreedyArgumentException(Argument<?>[] arguments) {
+	public GreedyArgumentException(Argument<?, ?>[] arguments) {
 		super("Only one GreedyStringArgument or ChatArgument can be declared, at the end of a List. Found arguments: "
 				+ buildArgsStr(arguments));
 	}
 
-	private static String buildArgsStr(Argument<?>[] arguments) {
+	private static String buildArgsStr(Argument<?, ?>[] arguments) {
 		StringBuilder builder = new StringBuilder();
-		for (Argument<?> arg : arguments) {
+		for (Argument<?, ?> arg : arguments) {
 			builder.append(arg.getNodeName()).append("<").append(arg.getClass().getSimpleName()).append("> ");
 		}
 		return builder.toString();

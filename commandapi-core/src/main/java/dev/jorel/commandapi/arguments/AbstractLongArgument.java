@@ -20,7 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import com.mojang.brigadier.arguments.DoubleArgumentType;
+import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
@@ -28,60 +28,54 @@ import dev.jorel.commandapi.exceptions.InvalidRangeException;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
 /**
- * An argument that represents primitive Java doubles
- * 
- * @apiNote Returns a {@link double}
+ * An argument that represents primitive Java longs
  */
-public class DoubleArgument extends SafeOverrideableArgument<Double, Double> {
+public abstract class AbstractLongArgument<CommandSender> extends SafeOverrideableArgument<Long, Long, CommandSender> {
 
 	/**
-	 * A double argument
-	 * 
+	 * A long argument
 	 * @param nodeName the name of the node for this argument
 	 */
-	public DoubleArgument(String nodeName) {
-		super(nodeName, DoubleArgumentType.doubleArg(), String::valueOf);
+	public AbstractLongArgument(String nodeName) {
+		super(nodeName, LongArgumentType.longArg(), String::valueOf);
 	}
-
+	
 	/**
-	 * A double argument with a minimum value
-	 * 
+	 * A long argument with a minimum value
 	 * @param nodeName the name of the node for this argument
-	 * @param min      The minimum value this argument can take (inclusive)
+	 * @param value The minimum value this argument can take (inclusive)
 	 */
-	public DoubleArgument(String nodeName, double min) {
-		super(nodeName, DoubleArgumentType.doubleArg(min), String::valueOf);
+	public AbstractLongArgument(String nodeName, long value) {
+		super(nodeName, LongArgumentType.longArg(value), String::valueOf);
 	}
-
+	
 	/**
-	 * A double argument with a minimum and maximum value
-	 * 
+	 * A long argument with a minimum and maximum value
 	 * @param nodeName the name of the node for this argument
-	 * @param min      The minimum value this argument can take (inclusive)
-	 * @param max      The maximum value this argument can take (inclusive)
+	 * @param min The minimum value this argument can take (inclusive)
+	 * @param max The maximum value this argument can take (inclusive)
 	 */
-	public DoubleArgument(String nodeName, double min, double max) {
-		super(nodeName, DoubleArgumentType.doubleArg(min, max), String::valueOf);
-		if (max < min) {
+	public AbstractLongArgument(String nodeName, long min, long max) {
+		super(nodeName, LongArgumentType.longArg(min, max), String::valueOf);
+		if(max < min) {
 			throw new InvalidRangeException();
 		}
 	}
-
+	
 	@Override
-	public Class<Double> getPrimitiveType() {
-		return double.class;
+	public Class<Long> getPrimitiveType() {
+		return long.class;
 	}
-
+	
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.PRIMITIVE_DOUBLE;
+		return CommandAPIArgumentType.PRIMITIVE_LONG;
 	}
-
+	
 	@Override
-	public <Source> Double parseArgument(AbstractPlatform<Source> platform,
-			CommandContext<Source> cmdCtx, String key, Object[] previousArgs)
-			throws CommandSyntaxException {
+	public <Source> Long parseArgument(AbstractPlatform<CommandSender, Source> platform,
+			CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
-
+	
 }

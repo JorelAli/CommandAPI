@@ -4,7 +4,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlayer;
 
 public record PreviewInfo<T> (
 	/** @param player the Player typing this command */
-	AbstractPlayer player,
+	AbstractPlayer<?> player,
 
 	/**
 	 * @param input the current partially typed argument. For example "/mycmd tes"

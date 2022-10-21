@@ -27,11 +27,12 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents the Bukkit Sound object
  */
-public class SoundArgument extends SafeOverrideableArgument<Sound, Sound> implements ICustomProvidedArgument {
+public class SoundArgument extends SafeOverrideableArgument<Sound, Sound, CommandSender> implements ICustomProvidedArgument {
 	
 	/**
 	 * A Sound argument. Represents Bukkit's Sound object
@@ -57,7 +58,7 @@ public class SoundArgument extends SafeOverrideableArgument<Sound, Sound> implem
 	}
 	
 	@Override
-	public <CommandSourceStack> Sound parseArgument(AbstractPlatform<CommandSourceStack> platform,
+	public <CommandSourceStack> Sound parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
 			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getSound(cmdCtx, key);
 	}

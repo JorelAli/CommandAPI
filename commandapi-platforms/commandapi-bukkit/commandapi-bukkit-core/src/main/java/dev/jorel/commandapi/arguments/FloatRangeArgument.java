@@ -26,11 +26,12 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.wrappers.FloatRange;
+import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents a range of float values
  */
-public class FloatRangeArgument extends SafeOverrideableArgument<FloatRange, FloatRange> {
+public class FloatRangeArgument extends SafeOverrideableArgument<FloatRange, FloatRange, CommandSender> {
 
 	/**
 	 * A FloatRange argument that represents a range of floating-point values
@@ -51,7 +52,7 @@ public class FloatRangeArgument extends SafeOverrideableArgument<FloatRange, Flo
 	}
 	
 	@Override
-	public <CommandSourceStack> FloatRange parseArgument(AbstractPlatform<CommandSourceStack> platform,
+	public <CommandSourceStack> FloatRange parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
 			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getFloatRange(cmdCtx, key);
 	}

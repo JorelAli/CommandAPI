@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import dev.jorel.commandapi.BukkitPlatform;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -30,7 +31,7 @@ public class CustomServerMock extends ServerMock {
 			AsyncCatcher.catchOp("command dispatch");
 			@SuppressWarnings("rawtypes")
 			CommandDispatcher dispatcher = Brigadier.getCommandDispatcher();
-			Object css = Brigadier.getBrigadierSourceFromCommandSender(sender);
+			Object css = Brigadier.getBrigadierSourceFromCommandSender(BukkitPlatform.get().wrapCommandSender(sender));
 			return dispatcher.execute(commandLine, css) != 0;
 		}
 	}
@@ -48,7 +49,7 @@ public class CustomServerMock extends ServerMock {
 	public List<String> getSuggestions(CommandSender sender, String commandLine) {
 		AsyncCatcher.catchOp("command tabcomplete");
 		CommandDispatcher dispatcher = Brigadier.getCommandDispatcher();
-		Object css = Brigadier.getBrigadierSourceFromCommandSender(sender);
+		Object css = Brigadier.getBrigadierSourceFromCommandSender(BukkitPlatform.get().wrapCommandSender(sender));
 		ParseResults parseResults = dispatcher.parse(commandLine, css);
 		Suggestions suggestions = null;
 		try {

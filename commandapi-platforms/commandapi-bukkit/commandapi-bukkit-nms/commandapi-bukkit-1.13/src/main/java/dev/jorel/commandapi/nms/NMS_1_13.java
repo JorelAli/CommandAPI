@@ -522,8 +522,8 @@ public class NMS_1_13 extends NMSWrapper_1_13 {
 	}
 
 	@Override
-	public CommandListenerWrapper getBrigadierSourceFromCommandSender(AbstractCommandSender<?> senderWrapper) {
-		CommandSender sender = (CommandSender) senderWrapper.getSource();
+	public CommandListenerWrapper getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> senderWrapper) {
+		CommandSender sender = senderWrapper.getSource();
 		if (sender instanceof CraftPlayer player) {
 			return player.getHandle().getCommandListener();
 		} else if (sender instanceof CraftBlockCommandSender blockCommandSender) {

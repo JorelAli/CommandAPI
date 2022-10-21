@@ -26,11 +26,12 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.wrappers.Time;
+import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents a duration of time in ticks
  */
-public class TimeArgument extends SafeOverrideableArgument<Integer, Time> {
+public class TimeArgument extends SafeOverrideableArgument<Integer, Time, CommandSender> {
 	
 	/**
 	 * A Time argument. Represents the number of in game ticks
@@ -51,7 +52,7 @@ public class TimeArgument extends SafeOverrideableArgument<Integer, Time> {
 	}
 	
 	@Override
-	public <CommandSourceStack> Integer parseArgument(AbstractPlatform<CommandSourceStack> platform,
+	public <CommandSourceStack> Integer parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
 			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getTime(cmdCtx, key);
 	}
