@@ -346,7 +346,7 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Source> im
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT)
 	public abstract Source getBrigadierSourceFromCommandSender(AbstractCommandSender<?> sender);
 
-	public AbstractCommandSender<? extends CommandSender> wrapCommandSender(CommandSender sender) {
+	public BukkitCommandSender<? extends CommandSender> wrapCommandSender(CommandSender sender) {
 		if (sender instanceof BlockCommandSender block)
 			return new BukkitBlockCommandSender(block);
 		if (sender instanceof ConsoleCommandSender console)

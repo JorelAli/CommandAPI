@@ -29,7 +29,7 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
  * A resulting command executor for a CommandSender
  */
 @FunctionalInterface
-public interface ResultingCommandExecutor extends IExecutorResulting<CommandSender, BukkitCommandSender<CommandSender>> {
+public interface ResultingCommandExecutor extends IExecutorResulting<CommandSender, BukkitCommandSender<? extends CommandSender>> {
 
 	/**
 	 * The code to run when this command is performed

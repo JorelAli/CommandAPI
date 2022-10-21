@@ -34,12 +34,14 @@ import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 
 /**
  * A builder used to create commands to be registered by the CommandAPI.
+ * @param <Impl> The class extending this class, used as the return type for chain calls
+ * @param <CommandSender> The CommandSender class used by the class extending this class
  */
-public class AbstractCommandAPICommand<Impl extends AbstractCommandAPICommand<Impl>> extends ExecutableCommand<AbstractCommandAPICommand<Impl>> {
+public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPICommand<Impl, CommandSender>, CommandSender> extends ExecutableCommand<Impl, CommandSender> {
 
-	private List<Argument<?>> args = new ArrayList<>();
-	private List<AbstractCommandAPICommand<Impl>> subcommands = new ArrayList<>();
-	private boolean isConverted;
+	protected List<Argument<?>> args = new ArrayList<>();
+	protected List<Impl> subcommands = new ArrayList<>();
+	protected boolean isConverted;
 
 	/**
 	 * Creates a new command builder
@@ -90,7 +92,7 @@ public class AbstractCommandAPICommand<Impl extends AbstractCommandAPICommand<Im
 	 * @param subcommand the subcommand to add as a child of this command
 	 * @return this command builder
 	 */
-	public Impl withSubcommand(AbstractCommandAPICommand<Impl> subcommand) {
+	public Impl withSubcommand(Impl subcommand) {
 		this.subcommands.add(subcommand);
 		return (Impl) this;
 	}
@@ -101,7 +103,7 @@ public class AbstractCommandAPICommand<Impl extends AbstractCommandAPICommand<Im
 	 * @param subcommands the subcommands to add as children of this command
 	 * @return this command builder
 	 */
-	public Impl withSubcommands(AbstractCommandAPICommand<Impl>... subcommands) {
+	public Impl withSubcommands(Impl... subcommands) {
 		this.subcommands.addAll(Arrays.asList(subcommands));
 		return (Impl) this;
 	}
@@ -129,7 +131,7 @@ public class AbstractCommandAPICommand<Impl extends AbstractCommandAPICommand<Im
 	 * 
 	 * @return the list of subcommands that this command has
 	 */
-	public List<AbstractCommandAPICommand<Impl>> getSubcommands() {
+	public List<Impl> getSubcommands() {
 		return subcommands;
 	}
 
@@ -138,7 +140,7 @@ public class AbstractCommandAPICommand<Impl extends AbstractCommandAPICommand<Im
 	 * 
 	 * @param subcommands the list of subcommands that this command has
 	 */
-	public void setSubcommands(List<AbstractCommandAPICommand<Impl>> subcommands) {
+	public void setSubcommands(List<Impl> subcommands) {
 		this.subcommands = subcommands;
 	}
 
@@ -159,15 +161,16 @@ public class AbstractCommandAPICommand<Impl extends AbstractCommandAPICommand<Im
 	 * @param isConverted whether this command is converted or not
 	 * @return this command builder
 	 */
-	AbstractCommandAPICommand setConverted(boolean isConverted) {
+	Impl setConverted(boolean isConverted) {
 		this.isConverted = isConverted;
-		return this;
+		return (Impl) this;
 	}
 
 	// Expands subcommands into arguments. This method should be static (it
 	// shouldn't
 	// be accessing/depending on any of the contents of the current class instance)
-	private static <Impl extends AbstractCommandAPICommand<Impl>> void flatten(AbstractCommandAPICommand rootCommand, List<Argument<?>> prevArguments, AbstractCommandAPICommand subcommand) {
+	private static <Impl extends AbstractCommandAPICommand<Impl, CommandSender>, CommandSender>
+		void flatten(Impl rootCommand, List<Argument<?>> prevArguments, Impl subcommand) {
 		// Get the list of literals represented by the current subcommand. This
 		// includes the subcommand's name and any aliases for this subcommand
 		String[] literals = new String[subcommand.meta.aliases.length + 1];
@@ -197,9 +200,8 @@ public class AbstractCommandAPICommand<Impl extends AbstractCommandAPICommand<Im
 			rootCommand.register();
 		}
 
-		// TODO: Sneaky cast. Might need checking
-		for (Object subsubcommand : new ArrayList<>(subcommand.getSubcommands())) {
-			flatten(rootCommand, new ArrayList<>(prevArguments), (AbstractCommandAPICommand) subsubcommand);
+		for (Impl subsubcommand : subcommand.getSubcommands()) {
+			flatten(rootCommand, new ArrayList<>(prevArguments), subsubcommand);
 		}
 	}
 
@@ -233,19 +235,13 @@ public class AbstractCommandAPICommand<Impl extends AbstractCommandAPICommand<Im
 			}
 
 			// Convert subcommands into multiliteral arguments
-			for (AbstractCommandAPICommand subcommand : new ArrayList<>(this.subcommands)) {
-				flatten(new AbstractCommandAPICommand(this), new ArrayList<>(), subcommand);
+			for (Impl subcommand : this.subcommands) {
+				flatten(this.copy(), new ArrayList<>(), subcommand);
 			}
 		} catch (CommandSyntaxException | IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public AbstractCommandAPICommand(AbstractCommandAPICommand original) {
-		this(new CommandMetaData(original.meta));
-		this.args = new ArrayList<>(original.args);
-		this.subcommands = new ArrayList<>(original.subcommands);
-		this.isConverted = original.isConverted;
-	}
-
+	public abstract Impl copy();
 }

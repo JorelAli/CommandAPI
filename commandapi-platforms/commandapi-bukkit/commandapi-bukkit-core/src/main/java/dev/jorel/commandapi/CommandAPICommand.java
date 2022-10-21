@@ -19,11 +19,9 @@ import dev.jorel.commandapi.executors.ProxyCommandExecutor;
 import dev.jorel.commandapi.executors.ProxyResultingCommandExecutor;
 import dev.jorel.commandapi.executors.ResultingCommandExecutor;
 
-public class CommandAPICommand extends AbstractCommandAPICommand {
+import java.util.ArrayList;
 
-	public CommandAPICommand(CommandAPICommand original) {
-		super(original);
-	}
+public class CommandAPICommand extends AbstractCommandAPICommand<CommandAPICommand, CommandSender> {
 	
 	public CommandAPICommand(CommandMetaData meta) {
 		super(meta);
@@ -32,8 +30,15 @@ public class CommandAPICommand extends AbstractCommandAPICommand {
 	public CommandAPICommand(String commandName) {
 		super(commandName);
 	}
-	
 
+	@Override
+	public CommandAPICommand copy() {
+		CommandAPICommand command = new CommandAPICommand(new CommandMetaData(this.meta));
+		command.args = new ArrayList<>(this.args);
+		command.subcommands = new ArrayList<>(this.subcommands);
+		command.isConverted = this.isConverted;
+		return command;
+	}
 
 	// Regular command executor
 
@@ -43,7 +48,6 @@ public class CommandAPICommand extends AbstractCommandAPICommand {
 	 * @param types A list of executor types to use this executes method for.
 	 * @return this command builder
 	 */
-	@SuppressWarnings("unchecked")
 	public CommandAPICommand executes(CommandExecutor executor, ExecutorType... types) {
 		if(types == null || types.length == 0) {
 			this.executor.addNormalExecutor(executor);
@@ -53,7 +57,7 @@ public class CommandAPICommand extends AbstractCommandAPICommand {
 
 					@Override
 					public void run(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
-						executor.executeWith(sender, args);
+						executor.executeWith(BukkitPlatform.get().wrapCommandSender(sender), args);
 					}
 					
 					@Override
@@ -72,7 +76,6 @@ public class CommandAPICommand extends AbstractCommandAPICommand {
 	 * @param types A list of executor types to use this executes method for.
 	 * @return this command builder
 	 */
-	@SuppressWarnings("unchecked")
 	public CommandAPICommand executes(ResultingCommandExecutor executor, ExecutorType... types) {
 		if(types == null || types.length == 0) {
 			this.executor.addResultingExecutor(executor);
@@ -82,7 +85,7 @@ public class CommandAPICommand extends AbstractCommandAPICommand {
 
 					@Override
 					public int run(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
-						return executor.executeWith(sender, args);
+						return executor.executeWith(BukkitPlatform.get().wrapCommandSender(sender), args);
 					}
 					
 					@Override
