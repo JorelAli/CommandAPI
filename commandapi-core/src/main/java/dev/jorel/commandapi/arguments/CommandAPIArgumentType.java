@@ -139,6 +139,11 @@ public enum CommandAPIArgumentType {
 	LIST,
 
 	/**
+	 * The ListTextArgument
+	 */
+	LIST_TEXT,
+
+	/**
 	 * The LiteralArgument
 	 */
 	LITERAL,
