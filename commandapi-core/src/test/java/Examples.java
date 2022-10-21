@@ -972,7 +972,7 @@ for(String key : gamemodes.keySet()) {
 
 @SuppressWarnings("unused")
 void d(){
-	/* ANCHOR: literalarguments */
+	/* ANCHOR: literalarguments3 */
 	new CommandAPICommand("mycommand")
 		.withArguments(LiteralArgument.of("hello"))
 		.withArguments(new TextArgument("text"))
@@ -990,7 +990,7 @@ void d(){
 			String text = (String) args[0];
 		})
 		.register();
-	/* ANCHOR_END: literalarguments */
+	/* ANCHOR_END: literalarguments3 */
 }
 
 {
