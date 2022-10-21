@@ -965,7 +965,6 @@ CommandAPICommand("gamemode")
             "creative" -> player.setGameMode(GameMode.CREATIVE)
             "spectator" -> player.setGameMode(GameMode.SPECTATOR)
             "survival" -> player.setGameMode(GameMode.SURVIVAL)
-            else -> throw CommandAPI.fail("Invalid gamemode ${args[0]}")
         }
     })
     .register()
