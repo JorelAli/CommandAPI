@@ -54,6 +54,16 @@ As an example, let's declare the literal "hello" as a valid literal for this com
 {{#include ../../commandapi-core/src/test/kotlin/Examples.kt:literalarguments}}
 ```
 
+There is also an alternative way of declaring literal arguments to commands which ends up working exactly the same as the above code:
+
+```java,Java
+{{#include ../../commandapi-core/src/test/java/Examples.java:literalarguments3}}
+```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:literalarguments3}}
+```
+
 </div>
 
 If I were to run the following command:

@@ -934,6 +934,24 @@ for ((key, _) in gamemodes) {
 /* ANCHOR_END: literalarguments2 */
 }
 
+fun literalArguments3() {
+/* ANCHOR: literalarguments3 */
+CommandAPICommand("mycommand")
+	.withArguments(LiteralArgument.of("hello"))
+	.withArguments(TextArgument("text"))
+	.executes(CommandExecutor { _, args ->
+		val text = args[0] as String
+	})
+
+CommandAPICommand("mycommand")
+	.withArguments(LiteralArgument.literal("hello"))
+	.withArguments(TextArgument("text"))
+	.executes(CommandExecutor { _, args ->
+		val text = args[0] as String
+	})
+/* ANCHOR_END: literalarguments3 */
+}
+
 fun multiliteralarguments() {
 /* ANCHOR: multiliteralarguments */
 CommandAPICommand("gamemode")
