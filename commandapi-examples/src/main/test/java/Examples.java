@@ -2040,7 +2040,7 @@ ArgumentSuggestions<CommandSender> commandSuggestions = (info, builder) -> {
     
     // Parse command using brigadier
     ParseResults<?> parseResults = Brigadier.getCommandDispatcher()
-        .parse(info.currentArg(), BukkitPlatform.get().getBrigadierSourceFromCommandSender(BukkitPlatform.get().wrapCommandSender(info.sender())));
+        .parse(info.currentArg(), Brigadier.getBrigadierSourceFromCommandSender(info.sender()));
     
     // Intercept any parsing errors indicating an invalid command
     for(CommandSyntaxException exception : parseResults.getExceptions().values()) {

@@ -20,10 +20,6 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.function.BiPredicate;
-
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.RedirectModifier;
@@ -33,10 +29,14 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.RootCommandNode;
-
 import dev.jorel.commandapi.abstractions.AbstractCommandSender;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.arguments.AbstractLiteralArgument;
 import dev.jorel.commandapi.arguments.Argument;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.function.BiPredicate;
 
 /**
  * The Brigadier class is used to access some of the internals of the CommandAPI
@@ -102,7 +102,7 @@ public final class Brigadier {
 	 * @param args      the arguments that the sender has filled in
 	 * @return a RedirectModifier that encapsulates the provided predicate
 	 */
-	public static RedirectModifier fromPredicate(BiPredicate<AbstractCommandSender, Object[]> predicate, List<Argument> args) {
+	public static <CommandSender> RedirectModifier fromPredicate(BiPredicate<CommandSender, Object[]> predicate, List<Argument> args) {
 		return cmdCtx -> {
 			if (predicate.test(getCommandSenderFromContext(cmdCtx), parseArguments(cmdCtx, args))) {
 				return Collections.singleton(cmdCtx.getSource());
@@ -200,8 +200,9 @@ public final class Brigadier {
 	 * @return a Brigadier source object representing the provided Bukkit
 	 *         CommandSender
 	 */
-	public static Object getBrigadierSourceFromCommandSender(AbstractCommandSender sender) {
-		return BaseHandler.getInstance().getPlatform().getBrigadierSourceFromCommandSender(sender);
+	public static <CommandSender> Object getBrigadierSourceFromCommandSender(CommandSender sender) {
+		AbstractPlatform<CommandSender, ?> platform = (AbstractPlatform<CommandSender, ?>) BaseHandler.getInstance().getPlatform();
+		return platform.getBrigadierSourceFromCommandSender(platform.wrapCommandSender(sender));
 	}
 
 	
@@ -211,7 +212,10 @@ public final class Brigadier {
 	 * @param cmdCtx the command context to get the CommandSender from
 	 * @return a Bukkit CommandSender from the provided Brigadier CommandContext
 	 */
-	public static AbstractCommandSender getCommandSenderFromContext(CommandContext cmdCtx) {
-		return BaseHandler.getInstance().getPlatform().getSenderForCommand(cmdCtx, false);
+	public static <CommandSender> CommandSender getCommandSenderFromContext(CommandContext cmdCtx) {
+		AbstractPlatform<CommandSender, ?> platform = (AbstractPlatform<CommandSender, ?>) BaseHandler.getInstance().getPlatform();
+		// For some reason putting this on one line doesn't work - very weird
+		AbstractCommandSender<CommandSender> abstractSender = platform.getSenderForCommand(cmdCtx, false);
+		return abstractSender.getSource();
 	}
 }

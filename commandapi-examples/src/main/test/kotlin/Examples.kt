@@ -1977,7 +1977,7 @@ val commandSuggestions: ArgumentSuggestions<CommandSender> = ArgumentSuggestions
 
     // Parse command using brigadier
     val parseResults: ParseResults<*> = Brigadier.getCommandDispatcher()
-        .parse(info.currentArg(), BukkitPlatform.get().getBrigadierSourceFromCommandSender(BukkitPlatform.get().wrapCommandSender(info.sender())))
+        .parse(info.currentArg(), Brigadier.getBrigadierSourceFromCommandSender(info.sender))
 
     // Intercept any parsing errors indicating an invalid command
     for ((_, exception) in parseResults.exceptions) {
