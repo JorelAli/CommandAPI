@@ -81,9 +81,9 @@ public final class Brigadier {
 	 * @param literalArgument the LiteralArgument to convert from
 	 * @return a LiteralArgumentBuilder that represents the literal
 	 */
-	public static LiteralArgumentBuilder fromLiteralArgument(AbstractLiteralArgument<?, ?> literalArgument) {
-		return BaseHandler.getInstance().getLiteralArgumentBuilderArgument(literalArgument.getLiteral(),
-				literalArgument.getArgumentPermission(), literalArgument.getRequirements());
+	public static <CommandSender> LiteralArgumentBuilder fromLiteralArgument(AbstractLiteralArgument<?, CommandSender> literalArgument) {
+		BaseHandler<CommandSender, ?> handler = (BaseHandler<CommandSender, ?>) BaseHandler.getInstance();
+		return handler.getLiteralArgumentBuilderArgument(literalArgument.getLiteral(), literalArgument.getArgumentPermission(), literalArgument.getRequirements());
 	}
 
 	/**

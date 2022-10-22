@@ -16,13 +16,13 @@ abstract class ExecutableCommand<Impl extends ExecutableCommand<Impl, CommandSen
 	/**
 	 * The Command's meta-data for this executable command
 	 */
-	protected final CommandMetaData meta;
+	protected final CommandMetaData<CommandSender> meta;
 
 	ExecutableCommand(final String commandName) {
-		this.meta = new CommandMetaData(commandName);
+		this.meta = new CommandMetaData<>(commandName);
 	}
 
-	protected ExecutableCommand(final CommandMetaData meta) {
+	protected ExecutableCommand(final CommandMetaData<CommandSender> meta) {
 		this.meta = meta;
 	}
 
@@ -82,7 +82,7 @@ abstract class ExecutableCommand<Impl extends ExecutableCommand<Impl, CommandSen
 	 * @param requirement the predicate that must be satisfied to use this command
 	 * @return this command builder
 	 */
-	public Impl withRequirement(Predicate<AbstractCommandSender<?>> requirement) {
+	public Impl withRequirement(Predicate<CommandSender> requirement) {
 		this.meta.requirements = this.meta.requirements.and(requirement);
 		return instance();
 	}
@@ -135,7 +135,7 @@ abstract class ExecutableCommand<Impl extends ExecutableCommand<Impl, CommandSen
 	 * Returns the requirements that must be satisfied to run this command
 	 * @return the requirements that must be satisfied to run this command
 	 */
-	public Predicate<AbstractCommandSender<?>> getRequirements() {
+	public Predicate<CommandSender> getRequirements() {
 		return this.meta.requirements;
 	}
 
@@ -143,7 +143,7 @@ abstract class ExecutableCommand<Impl extends ExecutableCommand<Impl, CommandSen
 	 * Sets the requirements that must be satisfied to run this command
 	 * @param requirements the requirements that must be satisfied to run this command
 	 */
-	public void setRequirements(Predicate<AbstractCommandSender<?>> requirements) {
+	public void setRequirements(Predicate<CommandSender> requirements) {
 		this.meta.requirements = requirements;
 	}
 	

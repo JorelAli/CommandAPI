@@ -20,23 +20,20 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.jorel.commandapi.AbstractArgumentTree;
+import dev.jorel.commandapi.CommandPermission;
+import dev.jorel.commandapi.IStringTooltip;
+import dev.jorel.commandapi.SuggestionInfo;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
-
-import dev.jorel.commandapi.AbstractArgumentTree;
-import dev.jorel.commandapi.abstractions.AbstractCommandSender;
-
-import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import dev.jorel.commandapi.CommandPermission;
-import dev.jorel.commandapi.IStringTooltip;
-import dev.jorel.commandapi.SuggestionInfo;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
 /**
  * The core abstract class for Command API arguments
@@ -265,14 +262,14 @@ public abstract class Argument<T, Impl extends Argument<T, Impl, CommandSender>,
 	// Requirements //
 	//////////////////
 
-	private Predicate<AbstractCommandSender<?>> requirements = s -> true;
+	private Predicate<CommandSender> requirements = s -> true;
 
 	/**
 	 * Returns the requirements required to run this command
 	 *
 	 * @return the requirements required to run this command
 	 */
-	public final Predicate<AbstractCommandSender<?>> getRequirements() {
+	public final Predicate<CommandSender> getRequirements() {
 		return this.requirements;
 	}
 
@@ -284,7 +281,7 @@ public abstract class Argument<T, Impl extends Argument<T, Impl, CommandSender>,
 	 * @param requirement the predicate that must be satisfied to use this argument
 	 * @return this current argument
 	 */
-	public final Impl withRequirement(Predicate<AbstractCommandSender<?>> requirement) {
+	public final Impl withRequirement(Predicate<CommandSender> requirement) {
 		this.requirements = this.requirements.and(requirement);
 		return instance();
 	}

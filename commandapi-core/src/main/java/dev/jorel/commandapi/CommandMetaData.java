@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 /**
  * This class stores metadata about a command
  */
-final class CommandMetaData {
+final class CommandMetaData<CommandSender> {
 
 	/**
 	 * The command's name
@@ -30,7 +30,7 @@ final class CommandMetaData {
 	/**
 	 * A predicate that a {@link AbstractCommandSender} must pass in order to execute the command
 	 */
-	Predicate<AbstractCommandSender<?>> requirements = s -> true;
+	Predicate<CommandSender> requirements = s -> true;
 	
 	/**
 	 * An optional short description for the command
@@ -56,7 +56,7 @@ final class CommandMetaData {
 		this.commandName = commandName;
 	}
 	
-	public CommandMetaData(CommandMetaData original) {
+	public CommandMetaData(CommandMetaData<CommandSender> original) {
 		this(original.commandName);
 		this.permission = original.permission;
 		this.aliases = Arrays.copyOf(original.aliases, original.aliases.length);

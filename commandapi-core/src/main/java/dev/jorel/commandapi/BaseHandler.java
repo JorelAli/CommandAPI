@@ -271,7 +271,7 @@ public class BaseHandler<CommandSender, Source> {
 	 *                        after the permissions check
 	 */
 	Predicate<Source> generatePermissions(String commandName, CommandPermission permission,
-			Predicate<AbstractCommandSender<?>> requirements) {
+			Predicate<CommandSender> requirements) {
 		// If we've already registered a permission, set it to the "parent" permission.
 		if (PERMISSIONS_TO_FIX.containsKey(commandName.toLowerCase())) {
 			if (!PERMISSIONS_TO_FIX.get(commandName.toLowerCase()).equals(permission)) {
@@ -299,7 +299,7 @@ public class BaseHandler<CommandSender, Source> {
 	 * @param permission the CommandAPI CommandPermission permission to check
 	 * @return true if the sender satisfies the provided permission
 	 */
-	static boolean permissionCheck(AbstractCommandSender<?> sender, CommandPermission permission, Predicate<AbstractCommandSender<?>> requirements) {
+	static <CommandSender> boolean permissionCheck(AbstractCommandSender<? extends CommandSender> sender, CommandPermission permission, Predicate<CommandSender> requirements) {
 		boolean satisfiesPermissions;
 		if (sender == null) {
 			satisfiesPermissions = true;
@@ -315,7 +315,7 @@ public class BaseHandler<CommandSender, Source> {
 		if (permission.isNegated()) {
 			satisfiesPermissions = !satisfiesPermissions;
 		}
-		return satisfiesPermissions && requirements.test(sender);
+		return satisfiesPermissions && requirements.test(sender.getSource());
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -328,17 +328,18 @@ public class BaseHandler<CommandSender, Source> {
 	 * multiliteral arguments were present (and expanded) and returns false if
 	 * multiliteral arguments were not present.
 	 */
-	private boolean expandMultiLiterals(CommandMetaData meta, final Argument<?, ?, CommandSender>[] args, CustomCommandExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor, boolean converted)
+	private boolean expandMultiLiterals(CommandMetaData<CommandSender> meta, final Argument<?, ?, CommandSender>[] args, CustomCommandExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor, boolean converted)
 			throws CommandSyntaxException, IOException {
 
 		// "Expands" our MultiLiterals into Literals
 		for (int index = 0; index < args.length; index++) {
 			// Find the first multiLiteral in the for loop
-			if (args[index] instanceof AbstractMultiLiteralArgument<?, ?> superArg) {
+			if (args[index] instanceof AbstractMultiLiteralArgument<?, ?>) {
+				AbstractMultiLiteralArgument<?, CommandSender> superArg = (AbstractMultiLiteralArgument<?, CommandSender>) args[index];
 
 				// Add all of its entries
 				for (int i = 0; i < superArg.getLiterals().length; i++) {
-					AbstractLiteralArgument<?, ?> litArg = BaseHandler.getInstance().getPlatform().newConcreteLiteralArgument(superArg.getLiterals()[i]);
+					AbstractLiteralArgument<?, CommandSender> litArg = (AbstractLiteralArgument<?, CommandSender>) BaseHandler.getInstance().getPlatform().newConcreteLiteralArgument(superArg.getLiterals()[i]);
 					litArg.setListed(superArg.isListed())
 						.withPermission(superArg.getArgumentPermission())
 						.withRequirement(superArg.getRequirements());
@@ -413,7 +414,8 @@ public class BaseHandler<CommandSender, Source> {
 		Argument<?, ?, CommandSender> innerArg = args[args.length - 1];
 
 		// Handle Literal arguments
-		if (innerArg instanceof AbstractLiteralArgument<?, ?> literalArgument) {
+		if (innerArg instanceof AbstractLiteralArgument<?, ?>) {
+			AbstractLiteralArgument<?, CommandSender> literalArgument = (AbstractLiteralArgument<?, CommandSender>) innerArg;
 			return getLiteralArgumentBuilderArgument(literalArgument.getLiteral(), innerArg.getArgumentPermission(),
 					innerArg.getRequirements()).executes(command);
 		}
@@ -486,7 +488,7 @@ public class BaseHandler<CommandSender, Source> {
 
 	// Builds our platform command using the given arguments for this method, then
 	// registers it
-	void register(CommandMetaData meta, final Argument<?, ?, CommandSender>[] args, CustomCommandExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor, boolean converted)
+	void register(CommandMetaData<CommandSender> meta, final Argument<?, ?, CommandSender>[] args, CustomCommandExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor, boolean converted)
 			throws CommandSyntaxException, IOException {
 
 		// "Expands" our MultiLiterals into Literals
@@ -533,7 +535,7 @@ public class BaseHandler<CommandSender, Source> {
 		String commandName = meta.commandName;
 		CommandPermission permission = meta.permission;
 		String[] aliases = meta.aliases;
-		Predicate<AbstractCommandSender<?>> requirements = meta.requirements;
+		Predicate<CommandSender> requirements = meta.requirements;
 		Optional<String> shortDescription = meta.shortDescription;
 		Optional<String> fullDescription = meta.fullDescription;
 
@@ -639,7 +641,7 @@ public class BaseHandler<CommandSender, Source> {
 	 * @return a brigadier LiteralArgumentBuilder representing a literal
 	 */
 	LiteralArgumentBuilder<Source> getLiteralArgumentBuilderArgument(String commandName,
-			CommandPermission permission, Predicate<AbstractCommandSender<?>> requirements) {
+			CommandPermission permission, Predicate<CommandSender> requirements) {
 		LiteralArgumentBuilder<Source> builder = LiteralArgumentBuilder.literal(commandName);
 		return builder.requires((Source css) -> permissionCheck(platform.getCommandSenderFromCommandSource(css),
 				permission, requirements));

@@ -58,7 +58,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 	 *
 	 * @param metaData The metadata of the command to create
 	 */
-	protected AbstractCommandAPICommand(CommandMetaData metaData) {
+	protected AbstractCommandAPICommand(CommandMetaData<CommandSender> metaData) {
 		super(metaData);
 		this.isConverted = false;
 	}
@@ -179,13 +179,13 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 		System.arraycopy(subcommand.meta.aliases, 0, literals, 1, subcommand.meta.aliases.length);
 
 		// Create a MultiLiteralArgument using the subcommand information
-		AbstractMultiLiteralArgument<?, ?> literal = BaseHandler.getInstance().getPlatform().newConcreteMultiLiteralArgument(literals);
+		AbstractMultiLiteralArgument<?, CommandSender> literal = (AbstractMultiLiteralArgument<?, CommandSender>) BaseHandler.getInstance().getPlatform().newConcreteMultiLiteralArgument(literals);
 
 		literal.withPermission(subcommand.meta.permission)
 			.withRequirement(subcommand.meta.requirements)
 			.setListed(false);
 
-		prevArguments.add((Argument<?, ?, CommandSender>) literal);
+		prevArguments.add(literal);
 
 		if (subcommand.executor.hasAnyExecutors()) {
 			// Create the new command. The new command:
