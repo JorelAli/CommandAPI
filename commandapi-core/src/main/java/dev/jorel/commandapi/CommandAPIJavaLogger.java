@@ -2,12 +2,10 @@ package dev.jorel.commandapi;
 
 import java.util.logging.Logger;
 
-// TODO: Since Bukkit and Velocity use Java's builtin logger, this and BukkitLogger are essentially the same
-//  Should these classes be combined to reduce code repetition?
-public class VelocityLogger implements CommandAPILogger{
+public class CommandAPIJavaLogger implements CommandAPILogger {
 	private final Logger parent;
 
-	public VelocityLogger(Logger parent) {
+	public CommandAPIJavaLogger(Logger parent) {
 		this.parent = parent;
 	}
 
@@ -26,3 +24,4 @@ public class VelocityLogger implements CommandAPILogger{
 		parent.severe(message);
 	}
 }
+

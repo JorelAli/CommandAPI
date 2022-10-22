@@ -1,6 +1,7 @@
 package dev.jorel.commandapi.test;
 import java.io.File;
 
+import dev.jorel.commandapi.CommandAPIJavaLogger;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
@@ -8,7 +9,6 @@ import org.bukkit.plugin.java.JavaPluginLoader;
 import de.tr7zw.changeme.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIConfig;
-import dev.jorel.commandapi.nms.NMS_1_19_1_R1;
 
 public class Main extends JavaPlugin {
 	
@@ -18,7 +18,9 @@ public class Main extends JavaPlugin {
 			.useLatestNMSVersion(true)
 			.silentLogs(true)
 			.dispatcherFile(new File("command_registration.json"))
-			.initializeNBTAPI(NBTContainer.class, NBTContainer::new)
+			.initializeNBTAPI(NBTContainer.class, NBTContainer::new),
+
+			new CommandAPIJavaLogger(getLogger())
 		);
 	}
 

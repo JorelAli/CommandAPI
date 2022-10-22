@@ -60,7 +60,7 @@ public class CommandAPIMain extends JavaPlugin {
 		}
 
 		// Main CommandAPI loading
-		CommandAPI.onLoad(config, new BukkitLogger(getLogger()));
+		CommandAPI.onLoad(config, new CommandAPIJavaLogger(getLogger()));
 
 		// Configure the NBT API - we're not allowing tracking at all, according
 		// to the CommandAPI's design principles. The CommandAPI isn't used very
