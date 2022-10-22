@@ -115,8 +115,8 @@ public abstract class Argument<T, Impl extends Argument<T, Impl, CommandSender>,
 	// Suggestions //
 	/////////////////
 
-	private Optional<ArgumentSuggestions> suggestions = Optional.empty();
-	private Optional<ArgumentSuggestions> addedSuggestions = Optional.empty();
+	private Optional<ArgumentSuggestions<CommandSender>> suggestions = Optional.empty();
+	private Optional<ArgumentSuggestions<CommandSender>> addedSuggestions = Optional.empty();
 
 	/**
 	 * Include suggestions to add to the list of default suggestions represented by this argument.
@@ -125,7 +125,7 @@ public abstract class Argument<T, Impl extends Argument<T, Impl, CommandSender>,
 	 *                    Static methods on ArgumentSuggestions to create these.
 	 * @return the current argument
 	 */
-	public Impl includeSuggestions(ArgumentSuggestions suggestions) {
+	public Impl includeSuggestions(ArgumentSuggestions<CommandSender> suggestions) {
 		this.addedSuggestions = Optional.of(suggestions);
 		return instance();
 	}
@@ -142,7 +142,7 @@ public abstract class Argument<T, Impl extends Argument<T, Impl, CommandSender>,
 	 * @deprecated use {@link #includeSuggestions(ArgumentSuggestions)} instead
 	 */
 	@Deprecated(forRemoval = true)
-	public Impl includeSuggestions(Function<SuggestionInfo, String[]> suggestions) {
+	public Impl includeSuggestions(Function<SuggestionInfo<CommandSender>, String[]> suggestions) {
 		return includeSuggestions(ArgumentSuggestions.strings(suggestions));
 	}
 
@@ -158,7 +158,7 @@ public abstract class Argument<T, Impl extends Argument<T, Impl, CommandSender>,
 	 * @deprecated use {@link #includeSuggestions(ArgumentSuggestions)} instead
 	 */
 	@Deprecated(forRemoval = true)
-	public Impl includeSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
+	public Impl includeSuggestionsT(Function<SuggestionInfo<CommandSender>, IStringTooltip[]> suggestions) {
 		return includeSuggestions(ArgumentSuggestions.stringsWithTooltips(suggestions));
 	}
 
@@ -168,7 +168,7 @@ public abstract class Argument<T, Impl extends Argument<T, Impl, CommandSender>,
 	 *
 	 * @return An Optional containing a function which generates suggestions
 	 */
-	public Optional<ArgumentSuggestions> getIncludedSuggestions() {
+	public Optional<ArgumentSuggestions<CommandSender>> getIncludedSuggestions() {
 		return addedSuggestions;
 	}
 
@@ -181,7 +181,7 @@ public abstract class Argument<T, Impl extends Argument<T, Impl, CommandSender>,
 	 * @return the current argument
 	 */
 
-	public Impl replaceSuggestions(ArgumentSuggestions suggestions) {
+	public Impl replaceSuggestions(ArgumentSuggestions<CommandSender> suggestions) {
 		this.suggestions = Optional.of(suggestions);
 		return instance();
 	}
@@ -194,7 +194,7 @@ public abstract class Argument<T, Impl extends Argument<T, Impl, CommandSender>,
 	 * @deprecated use {@link #replaceSuggestions(ArgumentSuggestions)} instead
 	 */
 	@Deprecated(forRemoval = true)
-	public Impl replaceSuggestions(Function<SuggestionInfo, String[]> suggestions) {
+	public Impl replaceSuggestions(Function<SuggestionInfo<CommandSender>, String[]> suggestions) {
 		return replaceSuggestions(ArgumentSuggestions.strings(suggestions));
 	}
 
@@ -206,7 +206,7 @@ public abstract class Argument<T, Impl extends Argument<T, Impl, CommandSender>,
 	 * @deprecated use {@link #replaceSuggestions(ArgumentSuggestions)} instead
 	 */
 	@Deprecated(forRemoval = true)
-	public Impl replaceSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
+	public Impl replaceSuggestionsT(Function<SuggestionInfo<CommandSender>, IStringTooltip[]> suggestions) {
 		return replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(suggestions));
 	}
 
@@ -217,7 +217,7 @@ public abstract class Argument<T, Impl extends Argument<T, Impl, CommandSender>,
 	 * @return a function that provides suggestions, or <code>Optional.empty()</code> if there
 	 * are no overridden suggestions.
 	 */
-	public final Optional<ArgumentSuggestions> getOverriddenSuggestions() {
+	public final Optional<ArgumentSuggestions<CommandSender>> getOverriddenSuggestions() {
 		return suggestions;
 	}
 

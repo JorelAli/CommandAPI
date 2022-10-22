@@ -33,9 +33,9 @@ import dev.jorel.commandapi.abstractions.AbstractCommandSender;
  * @param currentArg   - the current partially typed argument. For example
  *                     "/mycmd tes" will return "tes"
  */
-public record SuggestionInfo(
+public record SuggestionInfo<CommandSender>(
 		/** @param sender - the CommandSender typing this command */
-		AbstractCommandSender sender,
+		CommandSender sender,
 
 		/**
 		 * @param previousArgs - the list of previously declared (and parsed) arguments

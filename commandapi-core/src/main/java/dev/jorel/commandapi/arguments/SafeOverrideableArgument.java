@@ -61,7 +61,7 @@ public abstract class SafeOverrideableArgument<T, S, Impl extends SafeOverrideab
 	 * @param suggestions The safe suggestions to use
 	 * @return the current argument
 	 */
-	public final Impl replaceSafeSuggestions(SafeSuggestions<S> suggestions) {
+	public final Impl replaceSafeSuggestions(SafeSuggestions<S, CommandSender> suggestions) {
 		replaceSuggestions(suggestions.toSuggestions(mapper));
 		return instance();
 	}
@@ -76,7 +76,7 @@ public abstract class SafeOverrideableArgument<T, S, Impl extends SafeOverrideab
 	 * @deprecated use {@link #replaceSafeSuggestions(SafeSuggestions)}
 	 */
 	@Deprecated(forRemoval = true)
-	public final Impl replaceWithSafeSuggestions(Function<SuggestionInfo, S[]> suggestions) {
+	public final Impl replaceWithSafeSuggestions(Function<SuggestionInfo<CommandSender>, S[]> suggestions) {
 		return replaceSafeSuggestions(SafeSuggestions.suggest(suggestions));
 	}
 
@@ -90,7 +90,7 @@ public abstract class SafeOverrideableArgument<T, S, Impl extends SafeOverrideab
 	 * @deprecated use {@link #replaceSafeSuggestions(SafeSuggestions)}
 	 */
 	@Deprecated(forRemoval = true)
-	public final Impl replaceWithSafeSuggestionsT(Function<SuggestionInfo, AbstractTooltip<S>[]> suggestions) {
+	public final Impl replaceWithSafeSuggestionsT(Function<SuggestionInfo<CommandSender>, AbstractTooltip<S>[]> suggestions) {
 		return replaceSafeSuggestions(SafeSuggestions.tooltips(suggestions));
 	}
 
@@ -102,7 +102,7 @@ public abstract class SafeOverrideableArgument<T, S, Impl extends SafeOverrideab
 	 * @param suggestions The safe suggestions to use
 	 * @return the current argument
 	 */
-	public final Impl includeSafeSuggestions(SafeSuggestions<S> suggestions) {
+	public final Impl includeSafeSuggestions(SafeSuggestions<S, CommandSender> suggestions) {
 		return this.includeSuggestions(suggestions.toSuggestions(mapper));
 	}
 
@@ -118,7 +118,7 @@ public abstract class SafeOverrideableArgument<T, S, Impl extends SafeOverrideab
 	 * @deprecated use {@link #includeSafeSuggestions(SafeSuggestions)}
 	 */
 	@Deprecated(forRemoval = true)
-	public final Impl includeWithSafeSuggestions(Function<SuggestionInfo, S[]> suggestions) {
+	public final Impl includeWithSafeSuggestions(Function<SuggestionInfo<CommandSender>, S[]> suggestions) {
 		return includeSafeSuggestions(SafeSuggestions.suggest(suggestions));
 	}
 
@@ -135,7 +135,7 @@ public abstract class SafeOverrideableArgument<T, S, Impl extends SafeOverrideab
 	 * @deprecated use {@link #includeSafeSuggestions(SafeSuggestions)}
 	 */
 	@Deprecated(forRemoval = true)
-	public final Impl includeWithSafeSuggestionsT(Function<SuggestionInfo, AbstractTooltip<S>[]> suggestions) {
+	public final Impl includeWithSafeSuggestionsT(Function<SuggestionInfo<CommandSender>, AbstractTooltip<S>[]> suggestions) {
 		return includeSafeSuggestions(SafeSuggestions.tooltips(suggestions));
 	}
 }

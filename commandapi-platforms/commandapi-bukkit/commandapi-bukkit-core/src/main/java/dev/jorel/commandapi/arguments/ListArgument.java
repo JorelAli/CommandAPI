@@ -66,7 +66,7 @@ public class ListArgument<T> extends Argument<List, ListArgument<T>, CommandSend
 			// This need not be a sorted map because entries in suggestions are
 			// automatically sorted anyway
 			Set<IStringTooltip> values = new HashSet<>();
-			for (T object : supplier.apply((CommandSender) info.sender().getSource())) {
+			for (T object : supplier.apply(info.sender())) {
 				values.add(mapper.apply(object));
 			}
 

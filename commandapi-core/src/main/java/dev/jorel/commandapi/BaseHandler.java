@@ -734,12 +734,11 @@ public class BaseHandler<CommandSender, Source> {
 			boolean overrideSuggestions) {
 		return (CommandContext<Source> context, SuggestionsBuilder builder) -> {
 			// Construct the suggestion info
-			SuggestionInfo suggestionInfo = new SuggestionInfo(platform.getCommandSenderFromCommandSource(context.getSource()),
-					generatePreviousArguments(context, args, theArgument.getNodeName()), builder.getInput(),
-					builder.getRemaining());
+			SuggestionInfo<CommandSender> suggestionInfo = new SuggestionInfo<>(platform.getCommandSenderFromCommandSource(context.getSource()).getSource(),
+					generatePreviousArguments(context, args, theArgument.getNodeName()), builder.getInput(), builder.getRemaining());
 
 			// Get the suggestions
-			Optional<ArgumentSuggestions> suggestionsToAddOrOverride = overrideSuggestions
+			Optional<ArgumentSuggestions<CommandSender>> suggestionsToAddOrOverride = overrideSuggestions
 					? theArgument.getOverriddenSuggestions()
 					: theArgument.getIncludedSuggestions();
 			return suggestionsToAddOrOverride.orElse(ArgumentSuggestions.empty()).suggest(suggestionInfo, builder);
