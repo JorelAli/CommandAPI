@@ -61,17 +61,7 @@ import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.tree.LiteralCommandNode
 
 import de.tr7zw.changeme.nbtapi.NBTContainer
-import dev.jorel.commandapi.Brigadier
-import dev.jorel.commandapi.CommandAPI
-import dev.jorel.commandapi.CommandAPICommand
-import dev.jorel.commandapi.CommandAPIConfig
-import dev.jorel.commandapi.CommandPermission
-import dev.jorel.commandapi.CommandTree
-import dev.jorel.commandapi.Converter
-import dev.jorel.commandapi.IStringTooltip
-import dev.jorel.commandapi.StringTooltip
-import dev.jorel.commandapi.SuggestionInfo
-import dev.jorel.commandapi.Tooltip
+import dev.jorel.commandapi.*
 import dev.jorel.commandapi.arguments.AdvancementArgument
 import dev.jorel.commandapi.arguments.AdventureChatArgument
 import dev.jorel.commandapi.arguments.AdventureChatComponentArgument
@@ -123,6 +113,7 @@ import dev.jorel.commandapi.arguments.StringArgument
 import dev.jorel.commandapi.arguments.TeamArgument
 import dev.jorel.commandapi.arguments.TextArgument
 import dev.jorel.commandapi.arguments.TimeArgument
+import dev.jorel.commandapi.commandsenders.BukkitPlayer
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException
 import dev.jorel.commandapi.executors.CommandBlockCommandExecutor
 import dev.jorel.commandapi.executors.CommandExecutor
@@ -810,7 +801,7 @@ CommandAPICommand("bigmsg")
 
 fun blockpredicatearguments() {
 /* ANCHOR: blockpredicatearguments */
-val arguments = arrayOf<Argument<*>>(
+val arguments = arrayOf<Argument<*, *, CommandSender>>(
     IntegerArgument("radius"),
     BlockPredicateArgument("fromBlock"),
     BlockStateArgument("toBlock"),
@@ -965,7 +956,7 @@ CommandAPICommand("tpworld")
 
 /* ANCHOR: customarguments2 */
 // Function that returns our custom argument
-fun worldArgument(nodeName: String): Argument<World> {
+fun worldArgument(nodeName: String): CustomArgument<World, String> {
 
     // Construct our CustomArgument that takes in a String input and returns a World object
     return CustomArgument<World, String>(StringArgument(nodeName), { info ->
@@ -1324,7 +1315,7 @@ val partyMembers = mutableMapOf<UUID, String>()
 /* ANCHOR_END: requirementsmap */
 
 /* ANCHOR: requirements2 */
-var arguments = mutableListOf<Argument<*>>()
+var arguments = mutableListOf<Argument<*, *, CommandSender>>()
 
 // The "create" literal, with a requirement that a player must have a party
 arguments.add(LiteralArgument("create")
@@ -1349,14 +1340,14 @@ CommandAPICommand("party")
 
 /* ANCHOR: requirementstp */
 /* ANCHOR: requirements4 */
-arguments = mutableListOf<Argument<*>>()
+arguments = mutableListOf<Argument<*, *, CommandSender>>()
 arguments.add(LiteralArgument("tp")
     .withRequirement({ partyMembers.containsKey((it as Player).uniqueId) })
 )
 /* ANCHOR_END: requirementstp */
 
 arguments.add(PlayerArgument("player")
-    .replaceSafeSuggestions(SafeSuggestions.suggest<Player>( { info ->
+    .replaceSafeSuggestions(SafeSuggestions.suggest( { info ->
 
         // Store the list of party members to teleport to
         val playersToTeleportTo = mutableListOf<Player>()
@@ -1405,7 +1396,7 @@ CommandAPICommand("party")
 
         partyMembers.put(player.uniqueId, partyName)
 
-        CommandAPI.updateRequirements(player)
+        CommandAPI.updateRequirements(BukkitPlayer(player))
     })
     .register()
 /* ANCHOR_END: updatingrequirements */
@@ -1433,7 +1424,7 @@ val testIfPlayerHasParty = Predicate { sender: CommandSender ->
 /* ANCHOR_END: predicatetips */
 
 /* ANCHOR: predicatetips2 */
-var arguments = listOf<Argument<*>>(
+var arguments = listOf<Argument<*, *, CommandSender>>(
     LiteralArgument("create").withRequirement(testIfPlayerHasParty.negate()),
     StringArgument("partyName")
 )
@@ -1441,7 +1432,7 @@ var arguments = listOf<Argument<*>>(
 
 @Suppress("unused")
 /* ANCHOR: predicatetips3 */
-arguments = listOf<Argument<*>>(LiteralArgument("tp").withRequirement(testIfPlayerHasParty))
+arguments = listOf<Argument<*, *, CommandSender>>(LiteralArgument("tp").withRequirement(testIfPlayerHasParty))
 /* ANCHOR_END: predicatetips3 */
 }
 
@@ -1482,7 +1473,7 @@ val randomChance: LiteralCommandNode<Any> = Brigadier.fromLiteralArgument(Litera
 val numeratorArgument = IntegerArgument("numerator", 0)
 val denominatorArgument = IntegerArgument("denominator", 1)
 
-val arguments = listOf<Argument<*>>(numeratorArgument, denominatorArgument)
+val arguments = listOf<Argument<*, *, CommandSender>>(numeratorArgument, denominatorArgument)
 /* ANCHOR_END: declarearguments */
 
 // Get brigadier argument objects
@@ -1634,7 +1625,7 @@ CommandAPICommand("mycommand")
 
 fun tooltips1() {
 /* ANCHOR: Tooltips1 */
-val arguments = mutableListOf<Argument<*>>()
+val arguments = mutableListOf<Argument<*, *, CommandSender>>()
 arguments.add(StringArgument("emote")
     .replaceSuggestions(ArgumentSuggestions.stringsWithTooltips { info ->
         arrayOf<IStringTooltip>(
@@ -1689,7 +1680,7 @@ CommandAPICommand("giveitem")
 
 fun safetooltips() {
 /* ANCHOR: SafeTooltips */
-val arguments = listOf<Argument<*>>(
+val arguments = listOf<Argument<*, *, CommandSender>>(
     LocationArgument("location")
         .replaceSafeSuggestions(SafeSuggestions.tooltips( { info ->
             // We know the sender is a player if we use .executesPlayer()
@@ -1715,13 +1706,13 @@ CommandAPICommand("warp")
 fun argumentsuggestionsprevious() {
 /* ANCHOR: ArgumentSuggestionsPrevious */
 // Declare our arguments as normal
-val arguments = mutableListOf<Argument<*>>()
+val arguments = mutableListOf<Argument<*, *, CommandSender>>()
 arguments.add(IntegerArgument("radius"))
 
 // Replace the suggestions for the PlayerArgument.
 // info.sender() refers to the command sender that is running this command
 // info.previousArgs() refers to the Object[] of previously declared arguments (in this case, the IntegerArgument radius)
-arguments.add(PlayerArgument("target").replaceSuggestions(ArgumentSuggestions.strings { info: SuggestionInfo ->
+arguments.add(PlayerArgument("target").replaceSuggestions(ArgumentSuggestions.strings { info: SuggestionInfo<CommandSender> ->
 
     // Cast the first argument (radius, which is an IntegerArgument) to get its value
     val radius = (info.previousArgs()[0] as Int).toDouble()
@@ -1752,7 +1743,7 @@ CommandAPICommand("localmsg")
 
 fun argumentsuggestions2_2() {
 /* ANCHOR: ArgumentSuggestions2_2 */
-val arguments = listOf<Argument<*>>(
+val arguments = listOf<Argument<*, *, CommandSender>>(
     PlayerArgument("friend").replaceSuggestions(ArgumentSuggestions.strings({ info ->
         Friends.getFriends(info.sender())
     }))
@@ -1771,7 +1762,7 @@ CommandAPICommand("friendtp")
 fun argumentsuggestions1() {
 val warps = mutableMapOf<String, Location>()
 /* ANCHOR: ArgumentSuggestions1 */
-val arguments = listOf<Argument<*>>(
+val arguments = listOf<Argument<*, *, CommandSender>>(
     StringArgument("world").replaceSuggestions(ArgumentSuggestions.strings(
         "northland", "eastland", "southland", "westland"
     ))
@@ -1814,7 +1805,7 @@ getServer().addRecipe(emeraldSwordRecipe)
 
 /* ANCHOR: SafeRecipeArguments_2 */
 // Safely override with the recipe we've defined
-val arguments = listOf<Argument<*>>(
+val arguments = listOf<Argument<*, *, CommandSender>>(
     RecipeArgument("recipe").replaceSafeSuggestions(SafeSuggestions.suggest {
         arrayOf(emeraldSwordRecipe, /* Other recipes here */)
     })
@@ -1839,7 +1830,7 @@ allowedMobs.removeAll(forbiddenMobs) // Now contains everything except enderdrag
 /* ANCHOR_END: SafeMobSpawnArguments */
 
 /* ANCHOR: SafeMobSpawnArguments_2 */
-val arguments = listOf<Argument<*>>(
+val arguments = listOf<Argument<*, *, CommandSender>>(
     EntityTypeArgument("mob").replaceSafeSuggestions(SafeSuggestions.suggest {
         info ->
             if (info.sender().isOp()) {
@@ -1867,7 +1858,7 @@ CommandAPICommand("spawnmob")
 
 fun safepotionarguments() {
 /* ANCHOR: SafePotionArguments */
-val arguments = mutableListOf<Argument<*>>()
+val arguments = mutableListOf<Argument<*, *, CommandSender>>()
 arguments.add(EntitySelectorArgument<Player>("target", EntitySelector.ONE_PLAYER))
 arguments.add(PotionEffectArgument("potioneffect").replaceSafeSuggestions(SafeSuggestions.suggest {
     info ->
@@ -1971,7 +1962,7 @@ CommandAPICommand("multigive")
 fun brigadierargs() {
 
 /* ANCHOR: BrigadierSuggestions1 */
-val commandSuggestions: ArgumentSuggestions = ArgumentSuggestions { info, builder ->
+val commandSuggestions: ArgumentSuggestions<CommandSender> = ArgumentSuggestions { info, builder ->
     // The current argument, which is a full command
     val arg: String = info.currentArg()
 
@@ -1986,7 +1977,7 @@ val commandSuggestions: ArgumentSuggestions = ArgumentSuggestions { info, builde
 
     // Parse command using brigadier
     val parseResults: ParseResults<*> = Brigadier.getCommandDispatcher()
-        .parse(info.currentArg(), Brigadier.getBrigadierSourceFromCommandSender(info.sender()))
+        .parse(info.currentArg(), BukkitPlatform.get().getBrigadierSourceFromCommandSender(BukkitPlatform.get().wrapCommandSender(info.sender())))
 
     // Intercept any parsing errors indicating an invalid command
     for ((_, exception) in parseResults.exceptions) {
