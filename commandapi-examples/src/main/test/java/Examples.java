@@ -32,6 +32,8 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 
 import com.mojang.brigadier.Message;
+import dev.jorel.commandapi.*;
+import dev.jorel.commandapi.commandsenders.BukkitPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -88,16 +90,6 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import de.tr7zw.changeme.nbtapi.NBTContainer;
-import dev.jorel.commandapi.Brigadier;
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.CommandAPIConfig;
-import dev.jorel.commandapi.CommandPermission;
-import dev.jorel.commandapi.CommandTree;
-import dev.jorel.commandapi.Converter;
-import dev.jorel.commandapi.IStringTooltip;
-import dev.jorel.commandapi.StringTooltip;
-import dev.jorel.commandapi.Tooltip;
 import dev.jorel.commandapi.arguments.AdvancementArgument;
 import dev.jorel.commandapi.arguments.AdventureChatArgument;
 import dev.jorel.commandapi.arguments.AdventureChatComponentArgument;
@@ -843,7 +835,7 @@ new CommandAPICommand("bigmsg")
 
 {
 /* ANCHOR: blockpredicatearguments */
-Argument<?>[] arguments = new Argument<?>[] {
+Argument<?, ?, CommandSender>[] arguments = new Argument[] {
     new IntegerArgument("radius"),
     new BlockPredicateArgument("fromBlock"),
     new BlockStateArgument("toBlock"),
@@ -911,7 +903,8 @@ class NBTTest extends JavaPlugin {
 @Override
 public void onLoad() {
     CommandAPI.onLoad(new CommandAPIConfig()
-        .initializeNBTAPI(NBTContainer.class, NBTContainer::new)
+        .initializeNBTAPI(NBTContainer.class, NBTContainer::new),
+		new CommandAPIJavaLogger(getLogger())
     );
 }
 /* ANCHOR_END: nbtcompoundargumentonload */
@@ -1008,7 +1001,7 @@ new CommandAPICommand("tpworld")
 
 /* ANCHOR: customarguments2 */
 // Function that returns our custom argument
-public Argument<World> worldArgument(String nodeName) {
+public CustomArgument<World, String> worldArgument(String nodeName) {
     
     // Construct our CustomArgument that takes in a String input and returns a World object
     return new CustomArgument<World, String>(new StringArgument(nodeName), info -> {
@@ -1300,7 +1293,7 @@ new CommandAPICommand("mycommand")
     ;
 
 /* ANCHOR: argumentsyntax3 */
-List<Argument<?>> arguments = new ArrayList<>();
+List<Argument<?, ?, CommandSender>> arguments = new ArrayList<>();
 arguments.add(new StringArgument("arg0"));
 arguments.add(new StringArgument("arg1"));
 arguments.add(new StringArgument("arg2"));
@@ -1335,7 +1328,7 @@ new CommandAPICommand("kill")
 @SuppressWarnings("unused")
 public void argumentCasting() {
 /* ANCHOR: argumentcasting */
-List<Argument<?>> arguments = new ArrayList<>();
+List<Argument<?, ?, CommandSender>> arguments = new ArrayList<>();
 arguments.add(new StringArgument("arg0"));
 arguments.add(new PotionEffectArgument("arg1"));
 arguments.add(new LocationArgument("arg2"));
@@ -1378,7 +1371,7 @@ Map<UUID, String> partyMembers = new HashMap<>();
 /* ANCHOR_END: requirementsmap */
 
 /* ANCHOR: requirements2 */
-List<Argument<?>> arguments = new ArrayList<>();
+List<Argument<?, ?, CommandSender>> arguments = new ArrayList<>();
 
 // The "create" literal, with a requirement that a player must have a party
 arguments.add(new LiteralArgument("create")
@@ -1459,7 +1452,7 @@ new CommandAPICommand("party")
         
         partyMembers.put(player.getUniqueId(), partyName);
         
-        CommandAPI.updateRequirements(player);
+        CommandAPI.updateRequirements(new BukkitPlayer(player));
     })
     .register();
 /* ANCHOR_END: updatingrequirements */
@@ -1487,7 +1480,7 @@ Predicate<CommandSender> testIfPlayerHasParty = sender -> {
 /* ANCHOR_END: predicatetips */
 
 /* ANCHOR: predicatetips2 */
-List<Argument<?>> arguments = new ArrayList<>();
+List<Argument<?, ?, CommandSender>> arguments = new ArrayList<>();
 arguments.add(new LiteralArgument("create").withRequirement(testIfPlayerHasParty.negate()));
 arguments.add(new StringArgument("partyName"));
 /* ANCHOR_END: predicatetips2 */
@@ -1533,8 +1526,8 @@ LiteralCommandNode randomChance = Brigadier.fromLiteralArgument(new LiteralArgum
 
 /* ANCHOR: declarearguments */
 // Declare arguments like normal
-Argument<Integer> numeratorArgument = new IntegerArgument("numerator", 0);
-Argument<Integer> denominatorArgument = new IntegerArgument("denominator", 1);
+IntegerArgument numeratorArgument = new IntegerArgument("numerator", 0);
+IntegerArgument denominatorArgument = new IntegerArgument("denominator", 1);
 
 List<Argument> arguments = new ArrayList<>();
 arguments.add(numeratorArgument);
@@ -1689,7 +1682,7 @@ new CommandAPICommand("mycommand")
 
 {
 /* ANCHOR: Tooltips1 */
-List<Argument<?>> arguments = new ArrayList<>();
+List<Argument<?, ?, CommandSender>> arguments = new ArrayList<>();
 arguments.add(new StringArgument("emote")
     .replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(info -> new IStringTooltip[] {
             StringTooltip.ofString("wave", "Waves at a player"),
@@ -1749,7 +1742,7 @@ new CommandAPICommand("giveitem")
 
 {
 /* ANCHOR: SafeTooltips */
-List<Argument<?>> arguments = new ArrayList<>();
+List<Argument<?, ?, CommandSender>> arguments = new ArrayList<>();
 arguments.add(new LocationArgument("location")
     .replaceSafeSuggestions(SafeSuggestions.tooltips(info -> {
         // We know the sender is a player if we use .executesPlayer()
@@ -1774,7 +1767,7 @@ new CommandAPICommand("warp")
 {
 /* ANCHOR: ArgumentSuggestionsPrevious */
 // Declare our arguments as normal
-List<Argument<?>> arguments = new ArrayList<>();
+List<Argument<?, ?, CommandSender>> arguments = new ArrayList<>();
 arguments.add(new IntegerArgument("radius"));
 
 // Replace the suggestions for the PlayerArgument.
@@ -1811,7 +1804,7 @@ new CommandAPICommand("localmsg")
 
 {
 /* ANCHOR: ArgumentSuggestions2_2 */
-List<Argument<?>> arguments = new ArrayList<>();
+List<Argument<?, ?, CommandSender>> arguments = new ArrayList<>();
 arguments.add(new PlayerArgument("friend").replaceSuggestions(ArgumentSuggestions.strings(info ->
     Friends.getFriends(info.sender())
 )));
@@ -1829,7 +1822,7 @@ new CommandAPICommand("friendtp")
 {
 Map<String, Location> warps = new HashMap<>();
 /* ANCHOR: ArgumentSuggestions1 */
-List<Argument<?>> arguments = new ArrayList<>();
+List<Argument<?, ?, CommandSender>> arguments = new ArrayList<>();
 arguments.add(new StringArgument("world").replaceSuggestions(ArgumentSuggestions.strings( 
     "northland", "eastland", "southland", "westland"
 )));
@@ -1871,7 +1864,7 @@ getServer().addRecipe(emeraldSwordRecipe);
 
 /* ANCHOR: SafeRecipeArguments_2 */
 // Safely override with the recipe we've defined
-List<Argument<?>> arguments = new ArrayList<>();
+List<Argument<?, ?, CommandSender>> arguments = new ArrayList<>();
 arguments.add(new RecipeArgument("recipe").replaceSafeSuggestions(SafeSuggestions.suggest(info -> 
     new Recipe[] { emeraldSwordRecipe, /* Other recipes here */ }
 )));
@@ -1895,7 +1888,7 @@ allowedMobs.removeAll(Arrays.asList(forbiddenMobs)); // Now contains everything 
 /* ANCHOR_END: SafeMobSpawnArguments */
 
 /* ANCHOR: SafeMobSpawnArguments_2 */
-List<Argument<?>> arguments = new ArrayList<>();
+List<Argument<?, ?, CommandSender>> arguments = new ArrayList<>();
 arguments.add(new EntityTypeArgument("mob").replaceSafeSuggestions(SafeSuggestions.suggest(
     info -> {
         if(info.sender().isOp()) {
@@ -1922,7 +1915,7 @@ new CommandAPICommand("spawnmob")
 
 {
 /* ANCHOR: SafePotionArguments */
-List<Argument<?>> arguments = new ArrayList<>();
+List<Argument<?, ?, CommandSender>> arguments = new ArrayList<>();
 arguments.add(new EntitySelectorArgument<Player>("target", EntitySelector.ONE_PLAYER));
 arguments.add(new PotionEffectArgument("potioneffect").replaceSafeSuggestions(SafeSuggestions.suggest(
     info -> {
@@ -1979,7 +1972,7 @@ new CommandAPICommand("removeeffect")
 
 {
 /* ANCHOR: CommandAPIConfigSilent */
-CommandAPI.onLoad(new CommandAPIConfig().silentLogs(true));
+CommandAPI.onLoad(new CommandAPIConfig().silentLogs(true), new CommandAPIJavaLogger(getLogger()));
 /* ANCHOR_END: CommandAPIConfigSilent */
 }
 
@@ -2031,7 +2024,7 @@ new CommandAPICommand("multigive")
 void brigadierargs() {
 
 /* ANCHOR: BrigadierSuggestions1 */
-ArgumentSuggestions commandSuggestions = (info, builder) -> {
+ArgumentSuggestions<CommandSender> commandSuggestions = (info, builder) -> {
     // The current argument, which is a full command
     String arg = info.currentArg();
 
@@ -2047,7 +2040,7 @@ ArgumentSuggestions commandSuggestions = (info, builder) -> {
     
     // Parse command using brigadier
     ParseResults<?> parseResults = Brigadier.getCommandDispatcher()
-        .parse(info.currentArg(), Brigadier.getBrigadierSourceFromCommandSender(info.sender()));
+        .parse(info.currentArg(), BukkitPlatform.get().getBrigadierSourceFromCommandSender(BukkitPlatform.get().wrapCommandSender(info.sender())));
     
     // Intercept any parsing errors indicating an invalid command
     for(CommandSyntaxException exception : parseResults.getExceptions().values()) {
