@@ -4,7 +4,7 @@ import com.velocitypowered.api.command.CommandSource;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.*;
 
-public interface VelocityExecutable<Impl extends VelocityExecutable<Impl>> extends IPlatformExecutable<CommandSource> {
+public interface VelocityExecutable<Impl extends VelocityExecutable<Impl>> extends IPlatformExecutable<Impl, CommandSource> {
 	// Regular command executor
 
 	/**
@@ -33,7 +33,7 @@ public interface VelocityExecutable<Impl extends VelocityExecutable<Impl>> exten
 				});
 			}
 		}
-		return (Impl) this;
+		return instance();
 	}
 
 	/**
@@ -62,7 +62,7 @@ public interface VelocityExecutable<Impl extends VelocityExecutable<Impl>> exten
 				});
 			}
 		}
-		return (Impl) this;
+		return instance();
 	}
 
 	// Player command executor
@@ -75,7 +75,7 @@ public interface VelocityExecutable<Impl extends VelocityExecutable<Impl>> exten
 	 */
 	default Impl executesPlayer(PlayerCommandExecutor executor) {
 		getExecutor().addNormalExecutor(executor);
-		return (Impl) this;
+		return instance();
 	}
 
 	/**
@@ -86,7 +86,7 @@ public interface VelocityExecutable<Impl extends VelocityExecutable<Impl>> exten
 	 */
 	default Impl executesPlayer(PlayerResultingCommandExecutor executor) {
 		getExecutor().addResultingExecutor(executor);
-		return (Impl) this;
+		return instance();
 	}
 
 	// Console command sender
@@ -99,7 +99,7 @@ public interface VelocityExecutable<Impl extends VelocityExecutable<Impl>> exten
 	 */
 	default Impl executesConsole(ConsoleCommandExecutor executor) {
 		getExecutor().addNormalExecutor(executor);
-		return (Impl) this;
+		return instance();
 	}
 
 	/**
@@ -110,6 +110,6 @@ public interface VelocityExecutable<Impl extends VelocityExecutable<Impl>> exten
 	 */
 	default Impl executesConsole(ConsoleResultingCommandExecutor executor) {
 		getExecutor().addResultingExecutor(executor);
-		return (Impl) this;
+		return instance();
 	}
 }

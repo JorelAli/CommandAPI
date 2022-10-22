@@ -16,7 +16,7 @@ public abstract class AbstractCommandTree<Impl extends AbstractCommandTree<Impl,
 
 	/**
 	 * Creates a main root node for a command tree with a given command name
-	 * 
+	 *
 	 * @param commandName The name of the command to create
 	 */
 	public AbstractCommandTree(final String commandName) {
@@ -25,13 +25,13 @@ public abstract class AbstractCommandTree<Impl extends AbstractCommandTree<Impl,
 
 	/**
 	 * Create a child branch on the tree
-	 * 
+	 *
 	 * @param tree the child node
 	 * @return this root node
 	 */
 	public Impl then(final AbstractArgumentTree<?, CommandSender> tree) {
 		this.arguments.add(tree);
-		return (Impl) this;
+		return instance();
 	}
 
 	/**

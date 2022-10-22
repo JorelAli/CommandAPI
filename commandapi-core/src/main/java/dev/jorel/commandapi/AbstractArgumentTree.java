@@ -48,7 +48,7 @@ public abstract class AbstractArgumentTree<Impl extends AbstractArgumentTree<Imp
 	 */
 	public Impl then(final AbstractArgumentTree<?, CommandSender> tree) {
 		this.arguments.add(tree);
-		return (Impl) this;
+		return instance();
 	}
 
 	List<Execution<CommandSender>> getExecutions() {

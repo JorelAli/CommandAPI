@@ -45,7 +45,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 
 	/**
 	 * Creates a new command builder
-	 * 
+	 *
 	 * @param commandName The name of the command to create
 	 */
 	public AbstractCommandAPICommand(String commandName) {
@@ -55,7 +55,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 
 	/**
 	 * Creates a new Command builder
-	 * 
+	 *
 	 * @param metaData The metadata of the command to create
 	 */
 	protected AbstractCommandAPICommand(CommandMetaData metaData) {
@@ -65,53 +65,53 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 
 	/**
 	 * Appends the arguments to the current command builder
-	 * 
+	 *
 	 * @param args A <code>List</code> that represents the arguments that this
 	 *             command can accept
 	 * @return this command builder
 	 */
 	public Impl withArguments(List<Argument<?, ?, CommandSender>> args) {
 		this.args.addAll(args);
-		return (Impl) this;
+		return instance();
 	}
 
 	/**
 	 * Appends the argument(s) to the current command builder
-	 * 
+	 *
 	 * @param args Arguments that this command can accept
 	 * @return this command builder
 	 */
 	@SafeVarargs
 	public final Impl withArguments(Argument<?, ?, CommandSender>... args) {
 		this.args.addAll(Arrays.asList(args));
-		return (Impl) this;
+		return instance();
 	}
 
 	/**
 	 * Adds a subcommand to this command builder
-	 * 
+	 *
 	 * @param subcommand the subcommand to add as a child of this command
 	 * @return this command builder
 	 */
 	public Impl withSubcommand(Impl subcommand) {
 		this.subcommands.add(subcommand);
-		return (Impl) this;
+		return instance();
 	}
 
 	/**
 	 * Adds subcommands to this command builder
-	 * 
+	 *
 	 * @param subcommands the subcommands to add as children of this command
 	 * @return this command builder
 	 */
 	public Impl withSubcommands(Impl... subcommands) {
 		this.subcommands.addAll(Arrays.asList(subcommands));
-		return (Impl) this;
+		return instance();
 	}
 
 	/**
 	 * Returns the list of arguments that this command has
-	 * 
+	 *
 	 * @return the list of arguments that this command has
 	 */
 	public List<Argument<?, ?, CommandSender>> getArguments() {
@@ -120,7 +120,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 
 	/**
 	 * Sets the arguments that this command has
-	 * 
+	 *
 	 * @param args the arguments that this command has
 	 */
 	public void setArguments(List<Argument<?, ?, CommandSender>> args) {
@@ -129,7 +129,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 
 	/**
 	 * Returns the list of subcommands that this command has
-	 * 
+	 *
 	 * @return the list of subcommands that this command has
 	 */
 	public List<Impl> getSubcommands() {
@@ -138,7 +138,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 
 	/**
 	 * Sets the list of subcommands that this command has
-	 * 
+	 *
 	 * @param subcommands the list of subcommands that this command has
 	 */
 	public void setSubcommands(List<Impl> subcommands) {
@@ -147,7 +147,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 
 	/**
 	 * Returns whether this command is an automatically converted command
-	 * 
+	 *
 	 * @return whether this command is an automatically converted command
 	 */
 	public boolean isConverted() {
@@ -158,20 +158,20 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 	 * Sets a command as "converted". This tells the CommandAPI that this command
 	 * was converted by the CommandAPI's Converter. This should not be used outside
 	 * of the CommandAPI's internal API
-	 * 
+	 *
 	 * @param isConverted whether this command is converted or not
 	 * @return this command builder
 	 */
 	Impl setConverted(boolean isConverted) {
 		this.isConverted = isConverted;
-		return (Impl) this;
+		return instance();
 	}
 
 	// Expands subcommands into arguments. This method should be static (it
 	// shouldn't
 	// be accessing/depending on any of the contents of the current class instance)
 	private static <Impl extends AbstractCommandAPICommand<Impl, CommandSender>, CommandSender>
-		void flatten(Impl rootCommand, List<Argument<?, ?, CommandSender>> prevArguments, Impl subcommand) {
+	void flatten(Impl rootCommand, List<Argument<?, ?, CommandSender>> prevArguments, Impl subcommand) {
 		// Get the list of literals represented by the current subcommand. This
 		// includes the subcommand's name and any aliases for this subcommand
 		String[] literals = new String[subcommand.meta.aliases.length + 1];

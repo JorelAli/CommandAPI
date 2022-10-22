@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * @param <Impl> The class extending this class, used as the return type for chain calls
  * @param <CommandSender> The CommandSender class used by the class extending this class
  */
-abstract class Executable<Impl extends Executable<Impl, CommandSender>, CommandSender> {
+abstract class Executable<Impl extends Executable<Impl, CommandSender>, CommandSender> implements IChainableBuilder<Impl> {
 
 	/**
 	 * The CustomCommandExecutor for this executable implementation
@@ -38,11 +38,10 @@ abstract class Executable<Impl extends Executable<Impl, CommandSender>, CommandS
 	 * Clear all executors from the current command builder
 	 * @return this command builder
 	 */
-	@SuppressWarnings("unchecked")
 	public Impl clearExecutors() {
 		this.executor.setNormalExecutors(new ArrayList<>());
 		this.executor.setResultingExecutors(new ArrayList<>());
-		return (Impl) this;
+		return instance();
 	}
 
 }

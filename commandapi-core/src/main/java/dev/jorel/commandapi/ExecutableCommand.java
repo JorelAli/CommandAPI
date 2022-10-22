@@ -39,10 +39,9 @@ abstract class ExecutableCommand<Impl extends ExecutableCommand<Impl, CommandSen
 	 * @param permission The permission node required to execute this command
 	 * @return this command builder
 	 */
-	@SuppressWarnings("unchecked")
 	public Impl withPermission(CommandPermission permission) {
 		this.meta.permission = permission;
-		return (Impl) this;
+		return instance();
 	}
 
 	/**
@@ -50,10 +49,9 @@ abstract class ExecutableCommand<Impl extends ExecutableCommand<Impl, CommandSen
 	 * @param permission The permission node required to execute this command
 	 * @return this command builder
 	 */
-	@SuppressWarnings("unchecked")
 	public Impl withPermission(String permission) {
 		this.meta.permission = CommandPermission.fromString(permission);
-		return (Impl) this;
+		return instance();
 	}
 
 	/**
@@ -61,10 +59,9 @@ abstract class ExecutableCommand<Impl extends ExecutableCommand<Impl, CommandSen
 	 * @param permission The permission node required to execute this command
 	 * @return this command builder
 	 */
-	@SuppressWarnings("unchecked")
 	public Impl withoutPermission(CommandPermission permission) {
 		this.meta.permission = permission.negate();
-		return (Impl) this;
+		return instance();
 	}
 
 	/**
@@ -72,10 +69,9 @@ abstract class ExecutableCommand<Impl extends ExecutableCommand<Impl, CommandSen
 	 * @param permission The permission node required to execute this command
 	 * @return this command builder
 	 */
-	@SuppressWarnings("unchecked")
 	public Impl withoutPermission(String permission) {
 		this.meta.permission = CommandPermission.fromString(permission).negate();
-		return (Impl) this;
+		return instance();
 	}
 
 	/**
@@ -86,10 +82,9 @@ abstract class ExecutableCommand<Impl extends ExecutableCommand<Impl, CommandSen
 	 * @param requirement the predicate that must be satisfied to use this command
 	 * @return this command builder
 	 */
-	@SuppressWarnings("unchecked")
 	public Impl withRequirement(Predicate<AbstractCommandSender<?>> requirement) {
 		this.meta.requirements = this.meta.requirements.and(requirement);
-		return (Impl) this;
+		return instance();
 	}
 
 	/**
@@ -97,10 +92,9 @@ abstract class ExecutableCommand<Impl extends ExecutableCommand<Impl, CommandSen
 	 * @param aliases An array of aliases which can be used to execute this command
 	 * @return this command builder
 	 */
-	@SuppressWarnings("unchecked")
 	public Impl withAliases(String... aliases) {
 		this.meta.aliases = aliases;
-		return (Impl) this;
+		return instance();
 	}
 
 
@@ -167,10 +161,9 @@ abstract class ExecutableCommand<Impl extends ExecutableCommand<Impl, CommandSen
 	 * @param description the short description for this command
 	 * @return this command builder
 	 */
-	@SuppressWarnings("unchecked")
 	public Impl withShortDescription(String description) {
 		this.meta.shortDescription = Optional.ofNullable(description);
-		return (Impl) this;
+		return instance();
 	}
 	
 	/**
@@ -187,10 +180,9 @@ abstract class ExecutableCommand<Impl extends ExecutableCommand<Impl, CommandSen
 	 * @param description the full description for this command
 	 * @return this command builder
 	 */
-	@SuppressWarnings("unchecked")
 	public Impl withFullDescription(String description) {
 		this.meta.fullDescription = Optional.ofNullable(description);
-		return (Impl) this;
+		return instance();
 	}
 
 	/**
@@ -201,11 +193,10 @@ abstract class ExecutableCommand<Impl extends ExecutableCommand<Impl, CommandSen
 	 * @param fullDescription the full description for this command
 	 * @return this command builder
 	 */
-	@SuppressWarnings("unchecked")
 	public Impl withHelp(String shortDescription, String fullDescription) {
 		this.meta.shortDescription = Optional.ofNullable(shortDescription);
 		this.meta.fullDescription = Optional.ofNullable(fullDescription);
-		return (Impl) this;
+		return instance();
 	}
 
 	/**
@@ -221,5 +212,4 @@ abstract class ExecutableCommand<Impl extends ExecutableCommand<Impl, CommandSen
 	 * Registers this command
 	 */
 	public abstract void register();
-	
 }

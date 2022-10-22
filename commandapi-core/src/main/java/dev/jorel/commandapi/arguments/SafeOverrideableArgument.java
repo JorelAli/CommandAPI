@@ -32,7 +32,7 @@ import dev.jorel.commandapi.abstractions.AbstractTooltip;
  * 
  * @param <T> The type of the underlying object that this argument casts to
  * @param <S> A custom type which is represented by this argument. For example,
- *            a {@link StringArgument} will have a custom type
+ *            a {@link AbstractStringArgument} will have a custom type
  *            <code>String</code>
  * @param <Impl> The class extending this class, used as the return type for chain calls
  * @param <CommandSender> The CommandSender class used by the class extending this class
@@ -43,7 +43,7 @@ public abstract class SafeOverrideableArgument<T, S, Impl extends SafeOverrideab
 
 	/**
 	 * Instantiates this argument and assigns the mapper to the provided mapper
-	 * 
+	 *
 	 * @param nodeName the node name of this argument
 	 * @param rawType  the NMS raw argument type of this argument
 	 * @param mapper   the mapping function that maps this argument type to a string
@@ -57,18 +57,18 @@ public abstract class SafeOverrideableArgument<T, S, Impl extends SafeOverrideab
 	/**
 	 * Replaces the suggestions with a safe {@link SafeSuggestions} object. Use the
 	 * static methods in {@link SafeSuggestions} to create safe suggestions.
-	 * 
+	 *
 	 * @param suggestions The safe suggestions to use
 	 * @return the current argument
 	 */
 	public final Impl replaceSafeSuggestions(SafeSuggestions<S> suggestions) {
 		replaceSuggestions(suggestions.toSuggestions(mapper));
-		return (Impl) this;
+		return instance();
 	}
 
 	/**
 	 * Replaces the suggestions of this argument with an array of suggestions.
-	 * 
+	 *
 	 * @param suggestions a function that takes in {@link SuggestionInfo} and
 	 *                    returns a {@link S} array of suggestions, where S is your
 	 *                    custom type
@@ -82,7 +82,7 @@ public abstract class SafeOverrideableArgument<T, S, Impl extends SafeOverrideab
 
 	/**
 	 * Replaces the suggestions of this argument with an array of suggestions.
-	 * 
+	 *
 	 * @param suggestions a function that takes in {@link SuggestionInfo} and
 	 *                    returns an {@link AbstractTooltip} array of suggestions,
 	 *                    parameterized over {@link S} where S is your custom type
@@ -98,7 +98,7 @@ public abstract class SafeOverrideableArgument<T, S, Impl extends SafeOverrideab
 	 * Includes the suggestions provided with the existing suggestions for this
 	 * argument. Use the static methods in {@link SafeSuggestions} to create safe
 	 * suggestions.
-	 * 
+	 *
 	 * @param suggestions The safe suggestions to use
 	 * @return the current argument
 	 */
@@ -109,7 +109,7 @@ public abstract class SafeOverrideableArgument<T, S, Impl extends SafeOverrideab
 	/**
 	 * Include suggestions to add to the list of default suggestions represented by
 	 * this argument.
-	 * 
+	 *
 	 * @param suggestions a function that takes in {@link SuggestionInfo} which
 	 *                    includes information about the current state at the time
 	 *                    the suggestions are run and returns a {@link S} array of
@@ -125,7 +125,7 @@ public abstract class SafeOverrideableArgument<T, S, Impl extends SafeOverrideab
 	/**
 	 * Include suggestions to add to the list of default suggestions represented by
 	 * this argument.
-	 * 
+	 *
 	 * @param suggestions a function that takes in {@link SuggestionInfo} which
 	 *                    includes information about the current state at the time
 	 *                    the suggestions are run and returns an {@link AbstractTooltip}
@@ -133,11 +133,9 @@ public abstract class SafeOverrideableArgument<T, S, Impl extends SafeOverrideab
 	 *                    where S is your custom type
 	 * @return the current argument
 	 * @deprecated use {@link #includeSafeSuggestions(SafeSuggestions)}
-	 * 
 	 */
 	@Deprecated(forRemoval = true)
 	public final Impl includeWithSafeSuggestionsT(Function<SuggestionInfo, AbstractTooltip<S>[]> suggestions) {
 		return includeSafeSuggestions(SafeSuggestions.tooltips(suggestions));
 	}
-
 }
