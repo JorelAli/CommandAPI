@@ -20,18 +20,21 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.BukkitExecutable;
-import org.bukkit.command.CommandSender;
+import com.velocitypowered.api.command.CommandSource;
+import dev.jorel.commandapi.VelocityExecutable;
 
 /**
- * An argument that represents multiple LiteralArguments
+ * An argument that represents primitive Java booleans
+ * 
+ * @apiNote Returns a {@link boolean}
  */
-public class MultiLiteralArgument extends AbstractMultiLiteralArgument<MultiLiteralArgument, CommandSender> implements BukkitExecutable<MultiLiteralArgument> {
+public class BooleanArgument extends AbstractBooleanArgument<BooleanArgument, CommandSource> implements VelocityExecutable<BooleanArgument> {
 	/**
-	 * A multiliteral argument. Takes in string literals which cannot be modified
-	 * @param literals the literals that this argument represents
+	 * Constructs a Boolean argument with a given node name
+	 *
+	 * @param nodeName the name of the node for argument
 	 */
-	public MultiLiteralArgument(String... literals) {
-		super(literals);
+	public BooleanArgument(String nodeName) {
+		super(nodeName);
 	}
 }

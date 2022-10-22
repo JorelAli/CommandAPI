@@ -247,5 +247,13 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 		}
 	}
 
-	public abstract Impl copy();
+	public Impl copy() {
+		Impl command = newConcreteCommandAPICommand(new CommandMetaData(this.meta));
+		command.args = new ArrayList<>(this.args);
+		command.subcommands = new ArrayList<>(this.subcommands);
+		command.isConverted = this.isConverted;
+		return command;
+	}
+
+	protected abstract Impl newConcreteCommandAPICommand(CommandMetaData metaData);
 }

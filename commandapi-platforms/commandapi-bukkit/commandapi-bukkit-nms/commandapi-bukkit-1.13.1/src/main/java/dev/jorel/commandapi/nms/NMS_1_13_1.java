@@ -550,7 +550,7 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 	}
 
 	@Override
-	public AbstractCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(CommandListenerWrapper clw) {
+	public BukkitCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(CommandListenerWrapper clw) {
 		try {
 			return wrapCommandSender(clw.getBukkitSender());
 		} catch (UnsupportedOperationException ignored) {
@@ -840,7 +840,7 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 	}
 
 	@Override
-	public AbstractCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean isNative) {
+	public BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean isNative) {
 		CommandListenerWrapper clw = cmdCtx.getSource();
 
 		CommandSender sender = clw.getBukkitSender();

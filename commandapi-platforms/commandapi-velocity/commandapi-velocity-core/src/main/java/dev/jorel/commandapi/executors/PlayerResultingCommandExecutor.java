@@ -18,20 +18,37 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package dev.jorel.commandapi.arguments;
+package dev.jorel.commandapi.executors;
 
-import dev.jorel.commandapi.BukkitExecutable;
-import org.bukkit.command.CommandSender;
+import com.velocitypowered.api.proxy.Player;
+import dev.jorel.commandapi.commandsenders.VelocityPlayer;
+import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
 /**
- * An argument that represents multiple LiteralArguments
+ * A resulting command executor for a Player
  */
-public class MultiLiteralArgument extends AbstractMultiLiteralArgument<MultiLiteralArgument, CommandSender> implements BukkitExecutable<MultiLiteralArgument> {
+@FunctionalInterface
+public interface PlayerResultingCommandExecutor extends IExecutorResulting<Player, VelocityPlayer> {
+
 	/**
-	 * A multiliteral argument. Takes in string literals which cannot be modified
-	 * @param literals the literals that this argument represents
+	 * The code to run when this command is performed
+	 * 
+	 * @param sender
+	 *            The sender of this command (a player, the console etc.)
+	 * @param args
+	 *            The arguments given to this command. The objects are
+	 *            determined by the hashmap of arguments IN THE ORDER of
+	 *            insertion into the hashmap
+	 * @return the result of this command
 	 */
-	public MultiLiteralArgument(String... literals) {
-		super(literals);
+	int run(Player sender, Object[] args) throws WrapperCommandSyntaxException;
+
+	/**
+	 * Returns the type of the sender of the current executor.
+	 * @return the type of the sender of the current executor
+	 */
+	@Override
+	default ExecutorType getType() {
+		return ExecutorType.PLAYER;
 	}
 }

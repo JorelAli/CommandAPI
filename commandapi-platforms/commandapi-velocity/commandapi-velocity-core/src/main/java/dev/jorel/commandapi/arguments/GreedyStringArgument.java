@@ -20,18 +20,19 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.BukkitExecutable;
-import org.bukkit.command.CommandSender;
+import com.velocitypowered.api.command.CommandSource;
+import dev.jorel.commandapi.VelocityExecutable;
 
 /**
- * An argument that represents multiple LiteralArguments
+ * An argument that represents arbitrary strings
  */
-public class MultiLiteralArgument extends AbstractMultiLiteralArgument<MultiLiteralArgument, CommandSender> implements BukkitExecutable<MultiLiteralArgument> {
+public class GreedyStringArgument extends AbstractGreedyStringArgument<GreedyStringArgument, CommandSource> implements VelocityExecutable<GreedyStringArgument> {
 	/**
-	 * A multiliteral argument. Takes in string literals which cannot be modified
-	 * @param literals the literals that this argument represents
+	 * A string argument for a string of any length
+	 *
+	 * @param nodeName the name of the node for this argument
 	 */
-	public MultiLiteralArgument(String... literals) {
-		super(literals);
+	public GreedyStringArgument(String nodeName) {
+		super(nodeName);
 	}
 }

@@ -1,15 +1,12 @@
 package dev.jorel.commandapi;
 
-import dev.jorel.commandapi.abstractions.AbstractCommandSender;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.*;
 import org.bukkit.command.CommandSender;
 
-public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> {
-	CustomCommandExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> getExecutor();
+public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends IPlatformExecutable<CommandSender> {
 
 	// Regular command executor
-
 	/**
 	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(CommandSender, Object[]) -&gt; ()</code> that will be executed when the command is run
@@ -114,7 +111,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(Entity, Object[]) -&gt; ()</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(NativeProxyCommandSender, Object[]) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	default Impl executesProxy(ProxyCommandExecutor executor) {
@@ -124,7 +121,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(Entity, Object[]) -&gt; int</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(NativeProxyCommandSender, Object[]) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	default Impl executesProxy(ProxyResultingCommandExecutor executor) {
@@ -158,7 +155,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -&gt; ()</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(ConsoleCommandSender, Object[]) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	default Impl executesConsole(ConsoleCommandExecutor executor) {
@@ -168,7 +165,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -&gt; int</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(ConsoleCommandSender, Object[]) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	default Impl executesConsole(ConsoleResultingCommandExecutor executor) {
@@ -178,7 +175,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(NativeCommandExecutor, Object[]) -&gt; ()</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(NativeProxyCommandSender, Object[]) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	default Impl executesNative(NativeCommandExecutor executor) {
@@ -188,7 +185,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(NativeCommandExecutor, Object[]) -&gt; int</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(NativeProxyCommandSender, Object[]) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	default Impl executesNative(NativeResultingCommandExecutor executor) {

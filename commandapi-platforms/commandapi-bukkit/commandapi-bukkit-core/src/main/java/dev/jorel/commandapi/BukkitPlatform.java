@@ -336,11 +336,11 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<CommandSen
 
 	@Override
 	@Unimplemented(because = REQUIRES_CSS)
-	public abstract AbstractCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<Source> cmdCtx, boolean forceNative);
+	public abstract BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<Source> cmdCtx, boolean forceNative);
 
 	@Override
 	@Unimplemented(because = REQUIRES_CSS)
-	public abstract AbstractCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(Source cs);
+	public abstract BukkitCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(Source cs);
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT)

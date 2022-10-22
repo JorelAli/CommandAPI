@@ -1,8 +1,8 @@
 package dev.jorel.commandapi;
 
-import org.bukkit.command.CommandSender;
+import com.velocitypowered.api.command.CommandSource;
 
-public class CommandTree extends AbstractCommandTree<CommandTree, CommandSender> implements BukkitExecutable<CommandTree> {
+public class CommandTree extends AbstractCommandTree<CommandTree, CommandSource> implements VelocityExecutable<CommandTree> {
 	/**
 	 * Creates a main root node for a command tree with a given command name
 	 *

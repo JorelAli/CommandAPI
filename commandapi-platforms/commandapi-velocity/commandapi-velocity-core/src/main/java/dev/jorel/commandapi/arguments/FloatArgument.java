@@ -20,18 +20,40 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.BukkitExecutable;
-import org.bukkit.command.CommandSender;
+import com.velocitypowered.api.command.CommandSource;
+import dev.jorel.commandapi.VelocityExecutable;
 
 /**
- * An argument that represents multiple LiteralArguments
+ * An argument that represents primitive Java floats
  */
-public class MultiLiteralArgument extends AbstractMultiLiteralArgument<MultiLiteralArgument, CommandSender> implements BukkitExecutable<MultiLiteralArgument> {
+public class FloatArgument extends AbstractFloatArgument<FloatArgument, CommandSource> implements VelocityExecutable<FloatArgument> {
 	/**
-	 * A multiliteral argument. Takes in string literals which cannot be modified
-	 * @param literals the literals that this argument represents
+	 * A float argument
+	 *
+	 * @param nodeName the name of the node for this argument
 	 */
-	public MultiLiteralArgument(String... literals) {
-		super(literals);
+	public FloatArgument(String nodeName) {
+		super(nodeName);
+	}
+
+	/**
+	 * A float argument with a minimum value
+	 *
+	 * @param nodeName the name of the node for this argument
+	 * @param min      The minimum value this argument can take (inclusive)
+	 */
+	public FloatArgument(String nodeName, float min) {
+		super(nodeName, min);
+	}
+
+	/**
+	 * A float argument with a minimum and maximum value
+	 *
+	 * @param nodeName the name of the node for this argument
+	 * @param min      The minimum value this argument can take (inclusive)
+	 * @param max      The maximum value this argument can take (inclusive)
+	 */
+	public FloatArgument(String nodeName, float min, float max) {
+		super(nodeName, min, max);
 	}
 }

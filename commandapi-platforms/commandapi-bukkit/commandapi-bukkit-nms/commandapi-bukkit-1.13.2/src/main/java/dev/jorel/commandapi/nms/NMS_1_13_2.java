@@ -3,6 +3,7 @@ package dev.jorel.commandapi.nms;
 import java.util.Map;
 
 import dev.jorel.commandapi.abstractions.AbstractCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -78,7 +79,7 @@ public class NMS_1_13_2 extends NMS_1_13_1 {
 
 	@Differs(from = "1.13.1", by = "clw.f() -> clw.getEntity()")
 	@Override
-	public AbstractCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean isNative) {
+	public BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean isNative) {
 		CommandListenerWrapper clw = cmdCtx.getSource();
 
 		CommandSender sender = clw.getBukkitSender();

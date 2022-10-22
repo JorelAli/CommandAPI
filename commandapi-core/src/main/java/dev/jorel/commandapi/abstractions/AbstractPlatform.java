@@ -1,20 +1,19 @@
 package dev.jorel.commandapi.abstractions;
 
-import java.io.IOException;
-import java.util.List;
-
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-
 import dev.jorel.commandapi.CustomCommandExecutor;
 import dev.jorel.commandapi.Execution;
 import dev.jorel.commandapi.arguments.AbstractLiteralArgument;
 import dev.jorel.commandapi.arguments.AbstractMultiLiteralArgument;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * @param <CommandSender> The class for running platforms commands
@@ -37,7 +36,6 @@ public abstract class AbstractPlatform<CommandSender, Source> {
 
 	public abstract void onDisable();
 
-
 	// "Source" in this case (for CommandContext<Source>) is something like a
 	// CommandListenerWrapper (Spigot mappings) or CommandSourceStack (Mojang mappings).
 	// over
@@ -48,6 +46,8 @@ public abstract class AbstractPlatform<CommandSender, Source> {
 
 	// Converts a CommandSender to a Brigadier Source
 	public abstract Source getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> sender);
+
+	public abstract AbstractCommandSender<? extends CommandSender> wrapCommandSender(CommandSender sender);
 
 	// Registers a permission. Bukkit's permission system requires permissions to be "registered"
 	// before they can be used.

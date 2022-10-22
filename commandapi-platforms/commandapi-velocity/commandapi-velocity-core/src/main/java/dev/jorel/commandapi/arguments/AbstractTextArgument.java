@@ -20,18 +20,37 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.BukkitExecutable;
-import org.bukkit.command.CommandSender;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.jorel.commandapi.abstractions.AbstractPlatform;
 
 /**
- * An argument that represents multiple LiteralArguments
+ * An argument that represents text, encased in quotes
  */
-public class MultiLiteralArgument extends AbstractMultiLiteralArgument<MultiLiteralArgument, CommandSender> implements BukkitExecutable<MultiLiteralArgument> {
+public abstract class AbstractTextArgument<Impl extends AbstractTextArgument<Impl, CommandSender>,CommandSender> extends Argument<String, Impl, CommandSender> {
+
 	/**
-	 * A multiliteral argument. Takes in string literals which cannot be modified
-	 * @param literals the literals that this argument represents
+	 * A string argument for one word, or multiple words encased in quotes
+	 * @param nodeName the name of the node for this argument
 	 */
-	public MultiLiteralArgument(String... literals) {
-		super(literals);
+	public AbstractTextArgument(String nodeName) {
+		super(nodeName, StringArgumentType.string());
+	}
+
+	@Override
+	public Class<String> getPrimitiveType() {
+		return String.class;
+	}
+	
+	@Override
+	public CommandAPIArgumentType getArgumentType() {
+		return CommandAPIArgumentType.PRIMITIVE_TEXT;
+	}
+	
+	@Override
+	public <Source> String parseArgument(AbstractPlatform<CommandSender, Source> platform,
+			CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 }

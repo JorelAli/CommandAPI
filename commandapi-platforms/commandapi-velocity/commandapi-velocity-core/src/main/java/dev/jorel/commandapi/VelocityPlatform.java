@@ -15,12 +15,23 @@ import com.velocitypowered.api.proxy.ConsoleCommandSource;
 import com.velocitypowered.api.proxy.Player;
 import dev.jorel.commandapi.abstractions.AbstractCommandSender;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
-import dev.jorel.commandapi.arguments.SuggestionProviders;
+import dev.jorel.commandapi.abstractions.AbstractPlayer;
+import dev.jorel.commandapi.arguments.*;
+import dev.jorel.commandapi.commandsenders.VelocityCommandSender;
 import dev.jorel.commandapi.commandsenders.VelocityConsoleCommandSender;
 import dev.jorel.commandapi.commandsenders.VelocityPlayer;
 
-public class VelocityPlatform extends AbstractPlatform<CommandSource> {
+public class VelocityPlatform extends AbstractPlatform<CommandSource, CommandSource> {
 	private CommandManager commandManager;
+	private static VelocityPlatform instance;
+
+	public VelocityPlatform() {
+		instance = this;
+	}
+
+	public static VelocityPlatform get() {
+		return instance;
+	}
 
 	@Override
 	public void onLoad() {
@@ -62,8 +73,7 @@ public class VelocityPlatform extends AbstractPlatform<CommandSource> {
 	}
 
 	@Override
-	public AbstractCommandSender<? extends CommandSource> getSenderForCommand(CommandContext<CommandSource> cmdCtx,
-			boolean forceNative) {
+	public VelocityCommandSender<? extends CommandSource> getSenderForCommand(CommandContext<CommandSource> cmdCtx, boolean forceNative) {
 		// TODO: This method MAY be completely identical to getCommandSenderFromCommandSource.
 		// In Bukkit, this is NOT the case - we have to apply certain changes based
 		// on the command context - for example, if we're proxying another entity or
@@ -75,7 +85,7 @@ public class VelocityPlatform extends AbstractPlatform<CommandSource> {
 	}
 
 	@Override
-	public AbstractCommandSender<? extends CommandSource> getCommandSenderFromCommandSource(CommandSource cs) {
+	public VelocityCommandSender<? extends CommandSource> getCommandSenderFromCommandSource(CommandSource cs) {
 		// Given a Brigadier CommandContext source (result of CommandContext.getSource),
 		// we need to convert that to an AbstractCommandSender.
 		if(cs instanceof ConsoleCommandSource ccs)
@@ -86,8 +96,13 @@ public class VelocityPlatform extends AbstractPlatform<CommandSource> {
 	}
 
 	@Override
-	public CommandSource getBrigadierSourceFromCommandSender(AbstractCommandSender<?> sender) {
-		return (CommandSource) sender.getSource();
+	public VelocityCommandSender<? extends CommandSource> wrapCommandSender(CommandSource commandSource) {
+		return getCommandSenderFromCommandSource(commandSource);
+	}
+
+	@Override
+	public CommandSource getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSource> sender) {
+		return sender.getSource();
 	}
 
 	@Override
@@ -110,4 +125,30 @@ public class VelocityPlatform extends AbstractPlatform<CommandSource> {
 		return command.getNode();
 	}
 
+	@Override
+	public void reloadDataPacks() {
+		// TODO Auto-generated method stub
+		//  See note for CommandAPI#reloadDatapacks
+	}
+
+	@Override
+	public void updateRequirements(AbstractPlayer<?> player) {
+		// TODO Auto-generated method stub
+		//  See note for CommandAPI#updateRequirements
+	}
+
+	@Override
+	public Execution<CommandSource> newConcreteExecution(List<Argument<?, ?, CommandSource>> argument, CustomCommandExecutor<CommandSource, AbstractCommandSender<? extends CommandSource>> executor) {
+		return new VelocityExecution(argument, executor);
+	}
+
+	@Override
+	public AbstractMultiLiteralArgument<?, CommandSource> newConcreteMultiLiteralArgument(String[] literals) {
+		return new MultiLiteralArgument(literals);
+	}
+
+	@Override
+	public AbstractLiteralArgument<?, CommandSource> newConcreteLiteralArgument(String literal) {
+		return new LiteralArgument(literal);
+	}
 }

@@ -20,18 +20,42 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.BukkitExecutable;
-import org.bukkit.command.CommandSender;
+import com.velocitypowered.api.command.CommandSource;
+import dev.jorel.commandapi.VelocityExecutable;
 
 /**
- * An argument that represents multiple LiteralArguments
+ * An argument that represents primitive Java doubles
+ * 
+ * @apiNote Returns a {@link double}
  */
-public class MultiLiteralArgument extends AbstractMultiLiteralArgument<MultiLiteralArgument, CommandSender> implements BukkitExecutable<MultiLiteralArgument> {
+public class DoubleArgument extends AbstractDoubleArgument<DoubleArgument, CommandSource> implements VelocityExecutable<DoubleArgument> {
 	/**
-	 * A multiliteral argument. Takes in string literals which cannot be modified
-	 * @param literals the literals that this argument represents
+	 * A double argument
+	 *
+	 * @param nodeName the name of the node for this argument
 	 */
-	public MultiLiteralArgument(String... literals) {
-		super(literals);
+	public DoubleArgument(String nodeName) {
+		super(nodeName);
+	}
+
+	/**
+	 * A double argument with a minimum value
+	 *
+	 * @param nodeName the name of the node for this argument
+	 * @param min      The minimum value this argument can take (inclusive)
+	 */
+	public DoubleArgument(String nodeName, double min) {
+		super(nodeName, min);
+	}
+
+	/**
+	 * A double argument with a minimum and maximum value
+	 *
+	 * @param nodeName the name of the node for this argument
+	 * @param min      The minimum value this argument can take (inclusive)
+	 * @param max      The maximum value this argument can take (inclusive)
+	 */
+	public DoubleArgument(String nodeName, double min, double max) {
+		super(nodeName, min, max);
 	}
 }

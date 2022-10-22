@@ -20,13 +20,13 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.BukkitExecutable;
-import org.bukkit.command.CommandSender;
+import com.velocitypowered.api.command.CommandSource;
+import dev.jorel.commandapi.VelocityExecutable;
 
 /**
  * An argument that represents multiple LiteralArguments
  */
-public class MultiLiteralArgument extends AbstractMultiLiteralArgument<MultiLiteralArgument, CommandSender> implements BukkitExecutable<MultiLiteralArgument> {
+public class MultiLiteralArgument extends AbstractMultiLiteralArgument<MultiLiteralArgument, CommandSource> implements VelocityExecutable<MultiLiteralArgument> {
 	/**
 	 * A multiliteral argument. Takes in string literals which cannot be modified
 	 * @param literals the literals that this argument represents

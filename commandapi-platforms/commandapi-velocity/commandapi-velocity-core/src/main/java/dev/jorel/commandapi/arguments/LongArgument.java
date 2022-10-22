@@ -20,18 +20,40 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.BukkitExecutable;
-import org.bukkit.command.CommandSender;
+import com.velocitypowered.api.command.CommandSource;
+import dev.jorel.commandapi.VelocityExecutable;
 
 /**
- * An argument that represents multiple LiteralArguments
+ * An argument that represents primitive Java longs
  */
-public class MultiLiteralArgument extends AbstractMultiLiteralArgument<MultiLiteralArgument, CommandSender> implements BukkitExecutable<MultiLiteralArgument> {
+public class LongArgument extends AbstractLongArgument<LongArgument, CommandSource> implements VelocityExecutable<LongArgument> {
 	/**
-	 * A multiliteral argument. Takes in string literals which cannot be modified
-	 * @param literals the literals that this argument represents
+	 * A long argument
+	 *
+	 * @param nodeName the name of the node for this argument
 	 */
-	public MultiLiteralArgument(String... literals) {
-		super(literals);
+	public LongArgument(String nodeName) {
+		super(nodeName);
+	}
+
+	/**
+	 * A long argument with a minimum value
+	 *
+	 * @param nodeName the name of the node for this argument
+	 * @param value    The minimum value this argument can take (inclusive)
+	 */
+	public LongArgument(String nodeName, long value) {
+		super(nodeName, value);
+	}
+
+	/**
+	 * A long argument with a minimum and maximum value
+	 *
+	 * @param nodeName the name of the node for this argument
+	 * @param min      The minimum value this argument can take (inclusive)
+	 * @param max      The maximum value this argument can take (inclusive)
+	 */
+	public LongArgument(String nodeName, long min, long max) {
+		super(nodeName, min, max);
 	}
 }

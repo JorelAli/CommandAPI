@@ -38,6 +38,7 @@ import java.util.function.ToIntFunction;
 
 import com.mojang.brigadier.Message;
 import dev.jorel.commandapi.abstractions.AbstractCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -469,7 +470,7 @@ public class NMS_1_18_R1 extends NMS_Common {
 	}
 
 	@Override
-	public AbstractCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean isNative) {
+	public BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean isNative) {
 		CommandSourceStack css = cmdCtx.getSource();
 
 		CommandSender sender = css.getBukkitSender();

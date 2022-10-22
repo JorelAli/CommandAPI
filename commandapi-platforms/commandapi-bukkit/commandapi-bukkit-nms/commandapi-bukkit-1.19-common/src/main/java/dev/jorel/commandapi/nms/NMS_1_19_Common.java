@@ -38,6 +38,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Keyed;
@@ -578,7 +579,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 	}
 
 	@Override
-	public AbstractCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean isNative) {
+	public BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean isNative) {
 		CommandSourceStack css = cmdCtx.getSource();
 
 		CommandSender sender = css.getBukkitSender();

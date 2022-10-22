@@ -24,6 +24,7 @@ import java.util.function.ToIntFunction;
 
 import com.mojang.brigadier.Message;
 import dev.jorel.commandapi.abstractions.AbstractCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
@@ -548,7 +549,7 @@ public class NMS_1_16_R1 extends NMSWrapper_1_16_R1 {
 	}
 
 	@Override
-	public AbstractCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(CommandListenerWrapper clw) {
+	public BukkitCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(CommandListenerWrapper clw) {
 		try {
 			return wrapCommandSender(clw.getBukkitSender());
 		} catch (UnsupportedOperationException e) {
@@ -836,7 +837,7 @@ public class NMS_1_16_R1 extends NMSWrapper_1_16_R1 {
 	}
 
 	@Override
-	public AbstractCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean isNative) {
+	public BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean isNative) {
 		CommandListenerWrapper clw = cmdCtx.getSource();
 
 		CommandSender sender = clw.getBukkitSender();

@@ -38,6 +38,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -442,7 +443,7 @@ public abstract class NMS_Common extends BukkitPlatform<CommandSourceStack> {
 	public abstract CommandSourceStack getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> sender);
 
 	@Override
-	public final AbstractCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(CommandSourceStack css) {
+	public final BukkitCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(CommandSourceStack css) {
 		try {
 			return wrapCommandSender(css.getBukkitSender());
 		} catch (UnsupportedOperationException e) {
@@ -636,7 +637,7 @@ public abstract class NMS_Common extends BukkitPlatform<CommandSourceStack> {
 	@Unimplemented(because = NAME_CHANGED, info = "i (1.17)            -> getRotation (1.18) -> l (1.19)")
 	@Unimplemented(because = NAME_CHANGED, info = "getEntity (1.17)    -> getEntity (1.18)   -> g (1.19)")
 	@Unimplemented(because = NAME_CHANGED, info = "getWorld (1.17)     -> getLevel (1.18)    -> f (1.19)")
-	public abstract AbstractCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean isNative);
+	public abstract BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean isNative);
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftServer")
