@@ -1,3 +1,5 @@
+package dev.jorel.commandapi.example.kotlin
+
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
 import java.util.function.Predicate
@@ -7,7 +9,6 @@ import kotlin.random.Random
 import com.mojang.brigadier.Message
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
-import org.bukkit.Chunk
 import org.bukkit.GameMode
 import org.bukkit.Location
 import org.bukkit.Material
@@ -18,10 +19,8 @@ import org.bukkit.World
 import org.bukkit.World.Environment
 import org.bukkit.WorldCreator
 import org.bukkit.advancement.Advancement
-import org.bukkit.advancement.AdvancementProgress
 import org.bukkit.block.Biome
 import org.bukkit.block.Block
-import org.bukkit.block.BlockState
 import org.bukkit.block.Chest
 import org.bukkit.block.Container
 import org.bukkit.block.Sign
@@ -40,7 +39,6 @@ import org.bukkit.inventory.Recipe
 import org.bukkit.inventory.ShapedRecipe
 import org.bukkit.inventory.meta.BookMeta
 import org.bukkit.inventory.meta.Damageable
-import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.loot.LootTable
 import org.bukkit.loot.Lootable
 import org.bukkit.metadata.FixedMetadataValue
@@ -48,13 +46,9 @@ import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scoreboard.DisplaySlot
-import org.bukkit.scoreboard.Objective
-import org.bukkit.scoreboard.Scoreboard
-import org.bukkit.scoreboard.Team
 import org.bukkit.util.EulerAngle
 
 import com.mojang.brigadier.ParseResults
-import com.mojang.brigadier.builder.ArgumentBuilder
 import com.mojang.brigadier.context.StringRange
 import com.mojang.brigadier.exceptions.CommandSyntaxException
 import com.mojang.brigadier.suggestion.Suggestions
@@ -127,7 +121,6 @@ import dev.jorel.commandapi.wrappers.FunctionWrapper
 import dev.jorel.commandapi.wrappers.IntegerRange
 import dev.jorel.commandapi.wrappers.MathOperation
 import dev.jorel.commandapi.wrappers.ParticleData
-import dev.jorel.commandapi.wrappers.PreviewableFunction
 import dev.jorel.commandapi.wrappers.Rotation
 import dev.jorel.commandapi.wrappers.ScoreboardSlot
 import net.kyori.adventure.inventory.Book
@@ -1483,7 +1476,7 @@ val numerator = Brigadier.fromArgument(numeratorArgument)
 val denominator = Brigadier.fromArgument(denominatorArgument)
 /* ANCHOR_END: declareargumentbuilders */
     // Fork redirecting to "execute" and state our predicate
-    .fork(Brigadier.getRootNode().getChild("execute"), Brigadier.fromPredicate( { _, args ->
+    .fork(Brigadier.getRootNode().getChild("execute"), Brigadier.fromPredicate( { _: CommandSender, args ->
         // Parse arguments like normal
         val num = (args[0] as Int).toDouble()
         val denom = (args[1] as Int).toDouble()
@@ -1745,7 +1738,7 @@ fun argumentsuggestions2_2() {
 /* ANCHOR: ArgumentSuggestions2_2 */
 val arguments = listOf<Argument<*, *, CommandSender>>(
     PlayerArgument("friend").replaceSuggestions(ArgumentSuggestions.strings({ info ->
-        Friends.getFriends(info.sender())
+		Friends.getFriends(info.sender())
     }))
 )
 

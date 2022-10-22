@@ -1,3 +1,4 @@
+package dev.jorel.commandapi.example.java;
 /*******************************************************************************
  * Copyright 2018, 2021 Jorel Ali (Skepter) - MIT License
  *
