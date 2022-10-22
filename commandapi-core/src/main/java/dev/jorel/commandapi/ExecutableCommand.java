@@ -6,14 +6,15 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
- * This is a base class for {@link CommandAPICommand} and {@link CommandTree} command definitions
+ * This is a base class for {@link AbstractCommandAPICommand} and {@link AbstractCommandTree} command definitions
  *
- * @param <T> return type for chain calls
+ * @param <Impl> The class extending this class, used as the return type for chain calls
+ * @param <CommandSender> The CommandSender class used by the class extending this class
  */
-abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executable<T> {
+abstract class ExecutableCommand<Impl extends ExecutableCommand<Impl, CommandSender>, CommandSender> extends Executable<Impl, CommandSender> {
 
 	/**
-	 * The Command's meta data for this executable command
+	 * The Command's meta-data for this executable command
 	 */
 	protected final CommandMetaData meta;
 
@@ -39,9 +40,9 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
-	public T withPermission(CommandPermission permission) {
+	public Impl withPermission(CommandPermission permission) {
 		this.meta.permission = permission;
-		return (T) this;
+		return (Impl) this;
 	}
 
 	/**
@@ -50,9 +51,9 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
-	public T withPermission(String permission) {
+	public Impl withPermission(String permission) {
 		this.meta.permission = CommandPermission.fromString(permission);
-		return (T) this;
+		return (Impl) this;
 	}
 
 	/**
@@ -61,9 +62,9 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
-	public T withoutPermission(CommandPermission permission) {
+	public Impl withoutPermission(CommandPermission permission) {
 		this.meta.permission = permission.negate();
-		return (T) this;
+		return (Impl) this;
 	}
 
 	/**
@@ -72,9 +73,9 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
-	public T withoutPermission(String permission) {
+	public Impl withoutPermission(String permission) {
 		this.meta.permission = CommandPermission.fromString(permission).negate();
-		return (T) this;
+		return (Impl) this;
 	}
 
 	/**
@@ -86,9 +87,9 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
-	public T withRequirement(Predicate<AbstractCommandSender<?>> requirement) {
+	public Impl withRequirement(Predicate<AbstractCommandSender<?>> requirement) {
 		this.meta.requirements = this.meta.requirements.and(requirement);
-		return (T) this;
+		return (Impl) this;
 	}
 
 	/**
@@ -97,9 +98,9 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
-	public T withAliases(String... aliases) {
+	public Impl withAliases(String... aliases) {
 		this.meta.aliases = aliases;
-		return (T) this;
+		return (Impl) this;
 	}
 
 
@@ -167,9 +168,9 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
-	public T withShortDescription(String description) {
+	public Impl withShortDescription(String description) {
 		this.meta.shortDescription = Optional.ofNullable(description);
-		return (T) this;
+		return (Impl) this;
 	}
 	
 	/**
@@ -187,9 +188,9 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
-	public T withFullDescription(String description) {
+	public Impl withFullDescription(String description) {
 		this.meta.fullDescription = Optional.ofNullable(description);
-		return (T) this;
+		return (Impl) this;
 	}
 
 	/**
@@ -201,10 +202,10 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
-	public T withHelp(String shortDescription, String fullDescription) {
+	public Impl withHelp(String shortDescription, String fullDescription) {
 		this.meta.shortDescription = Optional.ofNullable(shortDescription);
 		this.meta.fullDescription = Optional.ofNullable(fullDescription);
-		return (T) this;
+		return (Impl) this;
 	}
 
 	/**

@@ -9,9 +9,18 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
+import dev.jorel.commandapi.CustomCommandExecutor;
+import dev.jorel.commandapi.Execution;
+import dev.jorel.commandapi.arguments.AbstractLiteralArgument;
+import dev.jorel.commandapi.arguments.AbstractMultiLiteralArgument;
+import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 
-public abstract class AbstractPlatform<Source> {
+/**
+ * @param <CommandSender> The class for running platforms commands
+ * @param <Source> The class for running Brigadier commands
+ */
+public abstract class AbstractPlatform<CommandSender, Source> {
 	// TODO: Add methods that need platform-specific implementations
 	// All methods in bukkit NMS will probably also need to be here
 
@@ -32,13 +41,13 @@ public abstract class AbstractPlatform<Source> {
 	// "Source" in this case (for CommandContext<Source>) is something like a
 	// CommandListenerWrapper (Spigot mappings) or CommandSourceStack (Mojang mappings).
 	// over
-	public abstract AbstractCommandSender<?> getSenderForCommand(CommandContext<Source> cmdCtx, boolean forceNative);
+	public abstract AbstractCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<Source> cmdCtx, boolean forceNative);
 
 	// Converts a command source into its source.
-	public abstract AbstractCommandSender<?> getCommandSenderFromCommandSource(Source cs);
+	public abstract AbstractCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(Source cs);
 
 	// Converts a CommandSender to a Brigadier Source
-	public abstract Source getBrigadierSourceFromCommandSender(AbstractCommandSender<?> sender);
+	public abstract Source getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> sender);
 
 	// Registers a permission. Bukkit's permission system requires permissions to be "registered"
 	// before they can be used.
@@ -91,4 +100,10 @@ public abstract class AbstractPlatform<Source> {
 	public abstract void reloadDataPacks();
 
 	public abstract void updateRequirements(AbstractPlayer<?> player);
+
+	public abstract Execution<CommandSender> newConcreteExecution(List<Argument<?, ?, CommandSender>> argument, CustomCommandExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor);
+
+	public abstract AbstractMultiLiteralArgument<?, CommandSender> newConcreteMultiLiteralArgument(String[] literals);
+
+	public abstract AbstractLiteralArgument<?, CommandSender> newConcreteLiteralArgument(String literal);
 }

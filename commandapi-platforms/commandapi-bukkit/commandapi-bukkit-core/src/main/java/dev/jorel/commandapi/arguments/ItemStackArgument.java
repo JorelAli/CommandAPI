@@ -20,6 +20,8 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -31,7 +33,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
 /**
  * An argument that represents the Bukkit ItemStack object
  */
-public class ItemStackArgument extends SafeOverrideableArgument<ItemStack, ItemStack> {
+public class ItemStackArgument extends SafeOverrideableArgument<ItemStack, ItemStack, ItemStackArgument, CommandSender> implements BukkitExecutable<ItemStackArgument> {
 
 	/**
 	 * An ItemStack argument. Always returns an itemstack of size 1
@@ -52,7 +54,7 @@ public class ItemStackArgument extends SafeOverrideableArgument<ItemStack, ItemS
 	}
 	
 	@Override
-	public <CommandSourceStack> ItemStack parseArgument(AbstractPlatform<CommandSourceStack> platform,
+	public <CommandSourceStack> ItemStack parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
 			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getItemStack(cmdCtx, key);
 	}

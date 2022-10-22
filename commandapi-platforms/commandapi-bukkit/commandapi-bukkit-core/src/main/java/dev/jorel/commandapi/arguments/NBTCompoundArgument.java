@@ -23,14 +23,16 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents an NBTContainer from the NBT API
  */
-public class NBTCompoundArgument<NBTContainer> extends SafeOverrideableArgument<NBTContainer, NBTContainer> {
+public class NBTCompoundArgument<NBTContainer> extends SafeOverrideableArgument<NBTContainer, NBTContainer, NBTCompoundArgument<NBTContainer>, CommandSender> implements BukkitExecutable<NBTCompoundArgument<NBTContainer>> {
 
 	/**
 	 * An NBT Compound Argument. Represents Minecraft's NBT Compound Tag using the
@@ -59,7 +61,7 @@ public class NBTCompoundArgument<NBTContainer> extends SafeOverrideableArgument<
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <CommandSourceStack> NBTContainer parseArgument(AbstractPlatform<CommandSourceStack> platform,
+	public <CommandSourceStack> NBTContainer parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
 			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
 		return (NBTContainer) ((BukkitPlatform<CommandSourceStack>) platform).getNBTCompound(cmdCtx, key, CommandAPI.getConfiguration().getNBTContainerConstructor());

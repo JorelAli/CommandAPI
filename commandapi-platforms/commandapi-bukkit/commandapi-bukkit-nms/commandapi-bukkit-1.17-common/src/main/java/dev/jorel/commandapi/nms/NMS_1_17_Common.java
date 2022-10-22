@@ -286,9 +286,8 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	}
 
 	@Override
-	public CommandSourceStack getBrigadierSourceFromCommandSender(AbstractCommandSender<?> senderWrapper) {
-		CommandSender sender = (CommandSender) senderWrapper.getSource();
-		return VanillaCommandWrapper.getListener(sender);
+	public CommandSourceStack getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> senderWrapper) {
+		return VanillaCommandWrapper.getListener(senderWrapper.getSource());
 	}
 
 	@Override

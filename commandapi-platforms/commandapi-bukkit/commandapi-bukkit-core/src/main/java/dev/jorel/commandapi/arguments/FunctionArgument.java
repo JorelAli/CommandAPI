@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.NamespacedKey;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -28,11 +29,12 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
+import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents Minecraft functions and tags
  */
-public class FunctionArgument extends SafeOverrideableArgument<FunctionWrapper[], NamespacedKey> implements ICustomProvidedArgument {
+public class FunctionArgument extends SafeOverrideableArgument<FunctionWrapper[], NamespacedKey, FunctionArgument, CommandSender> implements ICustomProvidedArgument, BukkitExecutable<FunctionArgument> {
 
 	/**
 	 * A Minecraft function. Plugin commands which plan to be used INSIDE a Minecraft
@@ -60,7 +62,7 @@ public class FunctionArgument extends SafeOverrideableArgument<FunctionWrapper[]
 	}
 	
 	@Override
-	public <CommandSourceStack> FunctionWrapper[] parseArgument(AbstractPlatform<CommandSourceStack> platform,
+	public <CommandSourceStack> FunctionWrapper[] parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
 			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getFunction(cmdCtx, key);
 	}

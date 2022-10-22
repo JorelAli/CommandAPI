@@ -14,7 +14,7 @@ public interface CommandAPIVersionHandler {
 	 * @param <Source> the command source type
 	 * @return an instance of AbstractPlatform which can run on the specified server version
 	 */
-	static <Source> AbstractPlatform<Source> getPlatform() {
+	static <CommandSender, Source> AbstractPlatform<CommandSender, Source> getPlatform() {
 		throw new RuntimeException("You have the wrong copy of the CommandAPI! If you're shading, did you use commandapi-core instead of commandapi-{platform}-shade?");
 	}
 }

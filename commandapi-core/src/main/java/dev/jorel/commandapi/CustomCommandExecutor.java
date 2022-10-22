@@ -42,12 +42,13 @@ import dev.jorel.commandapi.executors.IExecutorTyped;
  * executors) and switches its execution implementation based on the provided
  * command executor types.
  *
- * @param <T> a command sender
+ * @param <CommandSender> The CommandSender for this executor
+ * @param <WrapperType> The AbstractCommandSender that wraps the CommandSender
  */
-public class CustomCommandExecutor<T extends AbstractCommandSender<?>> {
+public class CustomCommandExecutor<CommandSender, WrapperType extends AbstractCommandSender<? extends CommandSender>> {
 
-	private List<IExecutorNormal<T>> normalExecutors;
-	private List<IExecutorResulting<T>> resultingExecutors;
+	private List<IExecutorNormal<CommandSender, WrapperType>> normalExecutors;
+	private List<IExecutorResulting<CommandSender, WrapperType>> resultingExecutors;
 
 	public CustomCommandExecutor() {
 		normalExecutors = new ArrayList<>();
@@ -55,16 +56,16 @@ public class CustomCommandExecutor<T extends AbstractCommandSender<?>> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <S extends IExecutorNormal<?>> void addNormalExecutor(S executor) {
-		this.normalExecutors.add((IExecutorNormal<T>) executor);
+	public void addNormalExecutor(IExecutorNormal<?, ?> executor) {
+		this.normalExecutors.add((IExecutorNormal<CommandSender, WrapperType>) executor);
 	}
 
 	@SuppressWarnings("unchecked")
-	public <S extends IExecutorResulting<?>> void addResultingExecutor(S executor) {
-		this.resultingExecutors.add((IExecutorResulting<T>) executor);
+	public void addResultingExecutor(IExecutorResulting<?, ?> executor) {
+		this.resultingExecutors.add((IExecutorResulting<CommandSender, WrapperType>) executor);
 	}
 
-	public int execute(AbstractCommandSender<?> sender, Object[] arguments) throws CommandSyntaxException {
+	public int execute(WrapperType sender, Object[] arguments) throws CommandSyntaxException {
 
 		// Parse executor type
 		if (!resultingExecutors.isEmpty()) {
@@ -90,7 +91,7 @@ public class CustomCommandExecutor<T extends AbstractCommandSender<?>> {
 		}
 	}
 
-	private int execute(List<? extends IExecutorTyped> executors, AbstractCommandSender<?> sender, Object[] args)
+	private int execute(List<? extends IExecutorTyped<WrapperType>> executors, WrapperType sender, Object[] args)
 			throws WrapperCommandSyntaxException {
 		if (isForceNative()) {
 			return execute(executors, sender, args, ExecutorType.NATIVE);
@@ -114,9 +115,9 @@ public class CustomCommandExecutor<T extends AbstractCommandSender<?>> {
 		}
 	}
 
-	private int execute(List<? extends IExecutorTyped> executors, AbstractCommandSender<?> sender, Object[] args,
+	private int execute(List<? extends IExecutorTyped<WrapperType>> executors, WrapperType sender, Object[] args,
 			ExecutorType type) throws WrapperCommandSyntaxException {
-		for (IExecutorTyped executor : executors) {
+		for (IExecutorTyped<WrapperType> executor : executors) {
 			if (executor.getType() == type) {
 				return executor.executeWith(sender, args);
 			}
@@ -124,11 +125,11 @@ public class CustomCommandExecutor<T extends AbstractCommandSender<?>> {
 		throw new NoSuchElementException("Executor had no valid executors for type " + type.toString());
 	}
 
-	public List<IExecutorNormal<T>> getNormalExecutors() {
+	public List<IExecutorNormal<CommandSender, WrapperType>> getNormalExecutors() {
 		return normalExecutors;
 	}
 
-	public List<IExecutorResulting<T>> getResultingExecutors() {
+	public List<IExecutorResulting<CommandSender, WrapperType>> getResultingExecutors() {
 		return resultingExecutors;
 	}
 
@@ -140,8 +141,8 @@ public class CustomCommandExecutor<T extends AbstractCommandSender<?>> {
 		return matches(normalExecutors, ExecutorType.NATIVE) || matches(resultingExecutors, ExecutorType.NATIVE);
 	}
 
-	private boolean matches(List<? extends IExecutorTyped> executors, ExecutorType type) {
-		for (IExecutorTyped executor : executors) {
+	private boolean matches(List<? extends IExecutorTyped<?>> executors, ExecutorType type) {
+		for (IExecutorTyped<?> executor : executors) {
 			if (executor.getType() == type) {
 				return true;
 			}
@@ -149,8 +150,8 @@ public class CustomCommandExecutor<T extends AbstractCommandSender<?>> {
 		return false;
 	}
 
-	CustomCommandExecutor<T> mergeExecutor(CustomCommandExecutor<T> executor) {
-		CustomCommandExecutor<T> result = new CustomCommandExecutor<>();
+	CustomCommandExecutor<CommandSender, WrapperType> mergeExecutor(CustomCommandExecutor<CommandSender, WrapperType> executor) {
+		CustomCommandExecutor<CommandSender, WrapperType> result = new CustomCommandExecutor<>();
 		result.normalExecutors = new ArrayList<>(normalExecutors);
 		result.resultingExecutors = new ArrayList<>(resultingExecutors);
 		result.normalExecutors.addAll(executor.normalExecutors);
@@ -158,11 +159,11 @@ public class CustomCommandExecutor<T extends AbstractCommandSender<?>> {
 		return result;
 	}
 
-	public void setNormalExecutors(List<IExecutorNormal<T>> normalExecutors) {
+	public void setNormalExecutors(List<IExecutorNormal<CommandSender, WrapperType>> normalExecutors) {
 		this.normalExecutors = normalExecutors;
 	}
 
-	public void setResultingExecutors(List<IExecutorResulting<T>> resultingExecutors) {
+	public void setResultingExecutors(List<IExecutorResulting<CommandSender, WrapperType>> resultingExecutors) {
 		this.resultingExecutors = resultingExecutors;
 	}
 }

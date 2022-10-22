@@ -23,17 +23,19 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.exceptions.SpigotNotFoundException;
 import net.md_5.bungee.api.chat.BaseComponent;
+import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents raw JSON text
  * 
  * @apiNote Returns a {@link BaseComponent}{@code []} object
  */
-public class ChatComponentArgument extends Argument<BaseComponent[]> {
+public class ChatComponentArgument extends Argument<BaseComponent[], ChatComponentArgument, CommandSender> implements BukkitExecutable<ChatComponentArgument> {
 
 	/**
 	 * Constructs a ChatComponnent argument with a given node name. Represents raw
@@ -64,7 +66,7 @@ public class ChatComponentArgument extends Argument<BaseComponent[]> {
 	}
 
 	@Override
-	public <CommandSourceStack> BaseComponent[] parseArgument(AbstractPlatform<CommandSourceStack> platform,
+	public <CommandSourceStack> BaseComponent[] parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
 			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getChatComponent(cmdCtx, key);

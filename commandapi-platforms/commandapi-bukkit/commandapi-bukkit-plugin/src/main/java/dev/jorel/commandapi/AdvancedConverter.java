@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -130,7 +131,7 @@ public class AdvancedConverter {
 
 	public void convert() {
 		String commandName = command.split(" ")[0];
-		List<Argument<?>> arguments;
+		List<Argument<?, ?, CommandSender>> arguments;
 		try {
 			arguments = parseArguments(command);
 		} catch (UnknownArgumentException | InvalidNumberException e) {
@@ -147,7 +148,7 @@ public class AdvancedConverter {
 
 	public void convertCommand() {
 		String commandName = command.split(" ")[0];
-		List<Argument<?>> arguments;
+		List<Argument<?, ?, CommandSender>> arguments;
 		try {
 			arguments = parseArguments(command);
 		} catch (UnknownArgumentException | InvalidNumberException e) {
@@ -171,11 +172,11 @@ public class AdvancedConverter {
 	 *     - speed (walk|fly) <speed>[0..10] <target>[minecraft:game_profile]
 	 * </pre>
 	 */
-	private List<Argument<?>> parseArguments(String command) throws UnknownArgumentException, InvalidNumberException {
-		List<Argument<?>> arguments = new ArrayList<>();
+	private List<Argument<?, ?, CommandSender>> parseArguments(String command) throws UnknownArgumentException, InvalidNumberException {
+		List<Argument<?, ?, CommandSender>> arguments = new ArrayList<>();
 		String[] parts = command.split(" ");
 		for (argumentIndex = 1; argumentIndex < parts.length; argumentIndex++) {
-			Argument<?> argument = parseArgument(parts[argumentIndex]);
+			Argument<?, ?, CommandSender> argument = parseArgument(parts[argumentIndex]);
 			if (argument != null) {
 				arguments.add(argument);
 			}
@@ -195,7 +196,7 @@ public class AdvancedConverter {
 		}
 	}
 
-	private Argument<?> parseRange(String nodeName, String[] bounds) throws InvalidNumberException {
+	private Argument<?, ?, CommandSender> parseRange(String nodeName, String[] bounds) throws InvalidNumberException {
 		if (bounds.length == 1) {
 			// x..
 			double value = parseValue(bounds[0]);
@@ -226,7 +227,7 @@ public class AdvancedConverter {
 
 	/*
 	 * CodeFactor will always complain about this method because it's really bulky
-	 * and adding a generator (i.e. Function<String, Argument<?>>) inside the
+	 * and adding a generator (i.e. Function<String, Argument<?, ?, CommandSender>>) inside the
 	 * CommandAPIArgumentType class would be better, EXCEPT in practice, this is
 	 * worse because then CommandAPIArgumentType would have to depend on every
 	 * argument and every argument depends on CommandAPIArgumentType, so that would
@@ -236,7 +237,7 @@ public class AdvancedConverter {
 	 * Additionally, we only need this for the plugin version of the CommandAPI, not
 	 * the main API.
 	 */
-	private Argument<?> parseDefinedArgumentType(String argumentType, String nodeName) throws UnknownArgumentException {
+	private Argument<?, ?, CommandSender> parseDefinedArgumentType(String argumentType, String nodeName) throws UnknownArgumentException {
 		return switch (CommandAPIArgumentType.fromInternal(argumentType)) {
 			case ADVANCEMENT -> new AdvancementArgument(nodeName);
 			case ADVENTURE_CHAT -> new AdventureChatArgument(nodeName);
@@ -291,7 +292,7 @@ public class AdvancedConverter {
 		};
 	}
 
-	private Argument<?> parseArgument(String argument) throws UnknownArgumentException, InvalidNumberException {
+	private Argument<?, ?, CommandSender> parseArgument(String argument) throws UnknownArgumentException, InvalidNumberException {
 		Matcher literalMatcher = LITERAL_PATTERN.matcher(argument);
 		Matcher argumentMatcher = ARGUMENT_PATTERN.matcher(argument);
 		if (literalMatcher.matches()) {

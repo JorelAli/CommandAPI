@@ -22,6 +22,7 @@ package dev.jorel.commandapi.arguments;
 
 import java.util.function.Function;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.ChatColor;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -29,13 +30,14 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents the Bukkit ChatColor object
  * 
  * @apiNote Returns a {@link ChatColor} object
  */
-public class ChatColorArgument extends SafeOverrideableArgument<ChatColor, ChatColor> {
+public class ChatColorArgument extends SafeOverrideableArgument<ChatColor, ChatColor, ChatColorArgument, CommandSender> implements BukkitExecutable<ChatColorArgument> {
 
 	/**
 	 * Constructs a ChatColor argument with a given node name. Represents a color or
@@ -58,7 +60,7 @@ public class ChatColorArgument extends SafeOverrideableArgument<ChatColor, ChatC
 	}
 	
 	@Override
-	public <CommandSourceStack> ChatColor parseArgument(AbstractPlatform<CommandSourceStack> platform,
+	public <CommandSourceStack> ChatColor parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
 			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getChatColor(cmdCtx, key);
 	}

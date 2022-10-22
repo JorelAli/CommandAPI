@@ -65,7 +65,7 @@ public interface CommandAPIVersionHandler {
 	 *
 	 * @return an instance of NMS which can run on the specified Minecraft version
 	 */
-	static AbstractPlatform<?> getPlatform() {
+	static AbstractPlatform<?, ?> getPlatform() {
 		if (CommandAPI.getConfiguration().shouldUseLatestNMSVersion()) {
 			return new NMS_1_19_1_R1();
 		} else {

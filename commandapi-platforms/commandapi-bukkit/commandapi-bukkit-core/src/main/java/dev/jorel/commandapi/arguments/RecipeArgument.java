@@ -20,7 +20,9 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.Keyed;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.Recipe;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -32,7 +34,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
 /**
  * An argument that represents the Bukkit Recipe object
  */
-public class RecipeArgument extends SafeOverrideableArgument<Recipe, Recipe> implements ICustomProvidedArgument {
+public class RecipeArgument extends SafeOverrideableArgument<Recipe, Recipe, RecipeArgument, CommandSender> implements ICustomProvidedArgument, BukkitExecutable<RecipeArgument> {
 
 	/**
 	 * A Recipe argument. Represents a Bukkit Recipe or ComplexRecipe
@@ -58,7 +60,7 @@ public class RecipeArgument extends SafeOverrideableArgument<Recipe, Recipe> imp
 	}	
 	
 	@Override
-	public <CommandSourceStack> Recipe parseArgument(AbstractPlatform<CommandSourceStack> platform,
+	public <CommandSourceStack> Recipe parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
 			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getRecipe(cmdCtx, key);
 	}

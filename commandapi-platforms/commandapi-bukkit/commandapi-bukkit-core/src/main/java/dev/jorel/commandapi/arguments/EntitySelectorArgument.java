@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import dev.jorel.commandapi.BukkitExecutable;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -38,7 +40,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
  * 
  * @apiNote The return type depends on the provided {@link EntitySelector}
  */
-public class EntitySelectorArgument<T> extends Argument<T> {
+public class EntitySelectorArgument<T> extends Argument<T, EntitySelectorArgument<T>, CommandSender> implements BukkitExecutable<EntitySelectorArgument<T>> {
 
 	private final EntitySelector selector;
 
@@ -90,7 +92,7 @@ public class EntitySelectorArgument<T> extends Argument<T> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <CommandSourceStack> T parseArgument(AbstractPlatform<CommandSourceStack> platform,
+	public <CommandSourceStack> T parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
 			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
 		return (T) ((BukkitPlatform<CommandSourceStack>) platform).getEntitySelector(cmdCtx, key, selector);

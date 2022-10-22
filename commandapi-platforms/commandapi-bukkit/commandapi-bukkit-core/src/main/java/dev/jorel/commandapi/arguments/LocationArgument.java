@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.Location;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -27,12 +28,13 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents the Bukkit {@link Location} object
  * @apiNote Returns a {@link Location} object
  */
-public class LocationArgument extends SafeOverrideableArgument<Location, Location> {
+public class LocationArgument extends SafeOverrideableArgument<Location, Location, LocationArgument, CommandSender> implements BukkitExecutable<LocationArgument> {
 	
 	/**
 	 * A Location argument. Represents Minecraft locations. Defaults to {@link LocationType#PRECISE_POSITION}
@@ -77,7 +79,7 @@ public class LocationArgument extends SafeOverrideableArgument<Location, Locatio
 	}
 	
 	@Override
-	public <CommandSourceStack> Location parseArgument(AbstractPlatform<CommandSourceStack> platform,
+	public <CommandSourceStack> Location parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
 			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return isPrecise ? ((BukkitPlatform<CommandSourceStack>) platform).getLocationPrecise(cmdCtx, key) : ((BukkitPlatform<CommandSourceStack>) platform).getLocationBlock(cmdCtx, key);
 	}

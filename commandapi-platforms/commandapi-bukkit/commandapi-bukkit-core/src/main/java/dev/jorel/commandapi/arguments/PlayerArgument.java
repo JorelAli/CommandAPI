@@ -20,6 +20,8 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -31,7 +33,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
 /**
  * An argument that represents the Bukkit Player object
  */
-public class PlayerArgument extends SafeOverrideableArgument<Player, Player> {
+public class PlayerArgument extends SafeOverrideableArgument<Player, Player, PlayerArgument, CommandSender> implements BukkitExecutable<PlayerArgument> {
 
 	/**
 	 * A Player argument. Produces a single player, regardless of whether
@@ -54,7 +56,7 @@ public class PlayerArgument extends SafeOverrideableArgument<Player, Player> {
 	}
 	
 	@Override
-	public <CommandSourceStack> Player parseArgument(AbstractPlatform<CommandSourceStack> platform,
+	public <CommandSourceStack> Player parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
 			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getPlayer(cmdCtx, key);
 	}

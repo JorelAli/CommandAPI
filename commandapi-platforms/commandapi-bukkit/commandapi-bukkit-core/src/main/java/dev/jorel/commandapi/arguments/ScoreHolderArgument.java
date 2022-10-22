@@ -25,13 +25,15 @@ import java.util.Collection;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents a scoreholder's name, or a collection of scoreholder names
  */
-public class ScoreHolderArgument<T> extends Argument<T> {
+public class ScoreHolderArgument<T> extends Argument<T, ScoreHolderArgument<T>, CommandSender> implements BukkitExecutable<ScoreHolderArgument<T>> {
 		
 	private final boolean single;
 	
@@ -75,7 +77,7 @@ public class ScoreHolderArgument<T> extends Argument<T> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public <CommandSourceStack> T parseArgument(AbstractPlatform<CommandSourceStack> platform,
+	public <CommandSourceStack> T parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
 			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return (T) (single ? ((BukkitPlatform<CommandSourceStack>) platform).getScoreHolderSingle(cmdCtx, key) : ((BukkitPlatform<CommandSourceStack>) platform).getScoreHolderMultiple(cmdCtx, key));
 	}

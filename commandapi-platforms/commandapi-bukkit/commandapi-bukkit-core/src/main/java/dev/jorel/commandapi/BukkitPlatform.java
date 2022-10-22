@@ -11,6 +11,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
 import dev.jorel.commandapi.abstractions.AbstractPlayer;
+import dev.jorel.commandapi.arguments.*;
 import dev.jorel.commandapi.commandsenders.*;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.preprocessor.RequireField;
@@ -29,7 +30,6 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import dev.jorel.commandapi.abstractions.AbstractCommandSender;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
-import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.nms.NMS;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
@@ -51,7 +51,7 @@ import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.*;
 @RequireField(in = CommandNode.class, name = "children", ofType = Map.class)
 @RequireField(in = CommandNode.class, name = "literals", ofType = Map.class)
 @RequireField(in = CommandNode.class, name = "arguments", ofType = Map.class)
-public abstract class BukkitPlatform<Source> extends AbstractPlatform<Source> implements NMS<Source> {
+public abstract class BukkitPlatform<Source> extends AbstractPlatform<CommandSender, Source> implements NMS<Source> {
 	// References to utility classes
 	private static BukkitPlatform<?> instance;
 	private PaperImplementations paper;
@@ -344,9 +344,9 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Source> im
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT)
-	public abstract Source getBrigadierSourceFromCommandSender(AbstractCommandSender<?> sender);
+	public abstract Source getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> sender);
 
-	public AbstractCommandSender<? extends CommandSender> wrapCommandSender(CommandSender sender) {
+	public BukkitCommandSender<? extends CommandSender> wrapCommandSender(CommandSender sender) {
 		if (sender instanceof BlockCommandSender block)
 			return new BukkitBlockCommandSender(block);
 		if (sender instanceof ConsoleCommandSender console)
@@ -454,6 +454,21 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Source> im
 	@Override
 	public void updateRequirements(AbstractPlayer<?> player) {
 		resendPackets((Player) player.getSource());
+	}
+
+	@Override
+	public Execution<CommandSender> newConcreteExecution(List<Argument<?, ?, CommandSender>> argument, CustomCommandExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor) {
+		return new BukkitExecution(argument, executor);
+	}
+
+	@Override
+	public AbstractMultiLiteralArgument<?, CommandSender> newConcreteMultiLiteralArgument(String[] literals) {
+		return new MultiLiteralArgument(literals);
+	}
+
+	@Override
+	public AbstractLiteralArgument<?, CommandSender> newConcreteLiteralArgument(String literal) {
+		return new LiteralArgument(literal);
 	}
 
 	// TODO: There's probably a much better place to put this, but I don't

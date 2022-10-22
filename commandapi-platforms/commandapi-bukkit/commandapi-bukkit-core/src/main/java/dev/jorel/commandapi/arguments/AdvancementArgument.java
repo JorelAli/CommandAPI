@@ -20,19 +20,19 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import org.bukkit.advancement.Advancement;
-
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
+import dev.jorel.commandapi.BukkitExecutable;
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import org.bukkit.advancement.Advancement;
+import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents the Bukkit Advancement object
  * @apiNote Returns an {@link Advancement} object
  */
-public class AdvancementArgument extends SafeOverrideableArgument<Advancement, Advancement> implements ICustomProvidedArgument {
+public class AdvancementArgument extends SafeOverrideableArgument<Advancement, Advancement, AdvancementArgument, CommandSender> implements ICustomProvidedArgument, BukkitExecutable<AdvancementArgument> {
 	
 	/**
 	 * Constructs an AdvancementArgument with a given node name
@@ -58,9 +58,8 @@ public class AdvancementArgument extends SafeOverrideableArgument<Advancement, A
 	}
 
 	@Override
-	public <CommandSourceStack> Advancement parseArgument(AbstractPlatform<CommandSourceStack> platform,
+	public <CommandSourceStack> Advancement parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
 			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getAdvancement(cmdCtx, key);
 	}
-
 }
