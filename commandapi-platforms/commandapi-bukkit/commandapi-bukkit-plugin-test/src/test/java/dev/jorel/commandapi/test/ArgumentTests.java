@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
+import dev.jorel.commandapi.CommandTree;
+import dev.jorel.commandapi.arguments.*;
+import dev.jorel.commandapi.executors.CommandExecutor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.advancement.Advancement;
@@ -25,22 +28,6 @@ import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.arguments.AdvancementArgument;
-import dev.jorel.commandapi.arguments.AdventureChatComponentArgument;
-import dev.jorel.commandapi.arguments.BooleanArgument;
-import dev.jorel.commandapi.arguments.ChatComponentArgument;
-import dev.jorel.commandapi.arguments.EntitySelector;
-import dev.jorel.commandapi.arguments.EntitySelectorArgument;
-import dev.jorel.commandapi.arguments.GreedyStringArgument;
-import dev.jorel.commandapi.arguments.IntegerArgument;
-import dev.jorel.commandapi.arguments.ListArgumentBuilder;
-import dev.jorel.commandapi.arguments.Location2DArgument;
-import dev.jorel.commandapi.arguments.LocationArgument;
-import dev.jorel.commandapi.arguments.LocationType;
-import dev.jorel.commandapi.arguments.PlayerArgument;
-import dev.jorel.commandapi.arguments.PotionEffectArgument;
-import dev.jorel.commandapi.arguments.StringArgument;
-import dev.jorel.commandapi.test.Main;
 import dev.jorel.commandapi.wrappers.Location2D;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
@@ -147,6 +134,151 @@ public class ArgumentTests {
 		// Negative tests from the documentation
 		assertInvalidSyntax(player, "test hello@email.com");
 		assertInvalidSyntax(player, "test yesn't");
+	}
+
+	@Test
+	public void executionTestWithCommandTree() {
+		Mut<String> result = Mut.of();
+		new CommandTree("test").executes(givePosition("", result))
+			.then(new LiteralArgument("1").executes(givePosition("1", result))
+				.then(new LiteralArgument("1").executes(givePosition("11", result))
+					.then(new LiteralArgument("1").executes(givePosition("111", result)))
+					.then(new LiteralArgument("2").executes(givePosition("112", result)))
+				)
+				.then(new LiteralArgument("2").executes(givePosition("12", result))
+					.then(new LiteralArgument("1").executes(givePosition("121", result)))
+					.then(new LiteralArgument("2").executes(givePosition("122", result)))
+				)
+			)
+			.then(new LiteralArgument("2").executes(givePosition("2", result))
+				.then(new LiteralArgument("1").executes(givePosition("21", result))
+					.then(new LiteralArgument("1").executes(givePosition("211", result)))
+					.then(new LiteralArgument("2").executes(givePosition("212", result)))
+				)
+				.then(new LiteralArgument("2").executes(givePosition("22", result))
+					.then(new LiteralArgument("1").executes(givePosition("221", result)))
+					.then(new LiteralArgument("2").executes(givePosition("222", result)))
+				)
+			).register();
+
+		assertEquals(getDispatcherString(), """
+			{
+			  "type": "root",
+			  "children": {
+			    "test": {
+			      "type": "literal",
+			      "children": {
+			        "1": {
+			          "type": "literal",
+			          "children": {
+			            "1": {
+			              "type": "literal",
+			              "children": {
+			                "1": {
+			                  "type": "literal",
+			                  "executable": true
+			                },
+			                "2": {
+			                  "type": "literal",
+			                  "executable": true
+			                }
+			              },
+			              "executable": true
+			            },
+			            "2": {
+			              "type": "literal",
+			              "children": {
+			                "1": {
+			                  "type": "literal",
+			                  "executable": true
+			                },
+			                "2": {
+			                  "type": "literal",
+			                  "executable": true
+			                }
+			              },
+			              "executable": true
+			            }
+			          },
+			          "executable": true
+			        },
+			        "2": {
+			          "type": "literal",
+			          "children": {
+			            "1": {
+			              "type": "literal",
+			              "children": {
+			                "1": {
+			                  "type": "literal",
+			                  "executable": true
+			                },
+			                "2": {
+			                  "type": "literal",
+			                  "executable": true
+			                }
+			              },
+			              "executable": true
+			            },
+			            "2": {
+			              "type": "literal",
+			              "children": {
+			                "1": {
+			                  "type": "literal",
+			                  "executable": true
+			                },
+			                "2": {
+			                  "type": "literal",
+			                  "executable": true
+			                }
+			              },
+			              "executable": true
+			            }
+			          },
+			          "executable": true
+			        }
+			      },
+			      "executable": true
+			    }
+			  }
+			}""");
+
+		PlayerMock sender = server.addPlayer("APlayer");
+
+		server.dispatchCommand(sender, "test");
+		server.dispatchCommand(sender, "test 1");
+		server.dispatchCommand(sender, "test 1 1");
+		server.dispatchCommand(sender, "test 1 1 1");
+		server.dispatchCommand(sender, "test 1 1 2");
+		server.dispatchCommand(sender, "test 1 2");
+		server.dispatchCommand(sender, "test 1 2 1");
+		server.dispatchCommand(sender, "test 1 2 2");
+		server.dispatchCommand(sender, "test 2");
+		server.dispatchCommand(sender, "test 2 1");
+		server.dispatchCommand(sender, "test 2 1 1");
+		server.dispatchCommand(sender, "test 2 1 2");
+		server.dispatchCommand(sender, "test 2 2");
+		server.dispatchCommand(sender, "test 2 2 1");
+		server.dispatchCommand(sender, "test 2 2 2");
+
+		assertEquals("", result.get());
+		assertEquals("1", result.get());
+		assertEquals("11", result.get());
+		assertEquals("111", result.get());
+		assertEquals("112", result.get());
+		assertEquals("12", result.get());
+		assertEquals("121", result.get());
+		assertEquals("122", result.get());
+		assertEquals("2", result.get());
+		assertEquals("21", result.get());
+		assertEquals("211", result.get());
+		assertEquals("212", result.get());
+		assertEquals("22", result.get());
+		assertEquals("221", result.get());
+		assertEquals("222", result.get());
+	}
+
+	private CommandExecutor givePosition(String pos, Mut<String> result) {
+		return (sender, args) -> result.set(pos);
 	}
 
 	@Test

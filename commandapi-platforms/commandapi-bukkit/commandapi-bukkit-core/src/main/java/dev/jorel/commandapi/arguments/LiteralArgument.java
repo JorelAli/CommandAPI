@@ -20,12 +20,13 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.command.CommandSender;
 
 /**
  * A pseudo-argument representing a single literal string
  */
-public class LiteralArgument extends AbstractLiteralArgument<CommandSender> {
+public class LiteralArgument extends AbstractLiteralArgument<LiteralArgument, CommandSender> implements BukkitExecutable<LiteralArgument> {
 	/**
 	 * A literal argument. Only takes one string value which cannot be modified
 	 *

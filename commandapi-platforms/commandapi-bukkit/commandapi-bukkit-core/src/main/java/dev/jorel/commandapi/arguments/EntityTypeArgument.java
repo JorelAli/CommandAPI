@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 
@@ -32,7 +33,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
 /**
  * An argument that represents the Bukkit EntityType object
  */
-public class EntityTypeArgument extends SafeOverrideableArgument<EntityType, EntityType, CommandSender> implements ICustomProvidedArgument {
+public class EntityTypeArgument extends SafeOverrideableArgument<EntityType, EntityType, EntityTypeArgument, CommandSender> implements ICustomProvidedArgument, BukkitExecutable<EntityTypeArgument> {
 
 	/**
 	 * An EntityType argument. Represents the type of an Entity

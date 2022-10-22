@@ -22,6 +22,7 @@ package dev.jorel.commandapi.arguments;
 
 import java.util.function.Function;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.World.Environment;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -34,7 +35,7 @@ import org.bukkit.command.CommandSender;
 /**
  * An argument that represents the Bukkit Environment object
  */
-public class EnvironmentArgument extends SafeOverrideableArgument<Environment, Environment, CommandSender> {
+public class EnvironmentArgument extends SafeOverrideableArgument<Environment, Environment, EnvironmentArgument, CommandSender> implements BukkitExecutable<EnvironmentArgument> {
 	
 	/**
 	 * An Environment argument. Represents Bukkit's Environment object

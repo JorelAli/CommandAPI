@@ -1,14 +1,12 @@
 package dev.jorel.commandapi;
 
-import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
+import dev.jorel.commandapi.abstractions.AbstractCommandSender;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.*;
 import org.bukkit.command.CommandSender;
 
-public interface BukkitExecutor<Impl extends BukkitExecutor<Impl>> {
-	void addNormalExecutor(IExecutorNormal<? extends CommandSender, ? extends BukkitCommandSender<? extends CommandSender>> executor);
-
-	void addResultingExecutor(IExecutorResulting<? extends CommandSender, ? extends BukkitCommandSender<? extends CommandSender>> executor);
+public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> {
+	CustomCommandExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> getExecutor();
 
 	// Regular command executor
 
@@ -20,10 +18,10 @@ public interface BukkitExecutor<Impl extends BukkitExecutor<Impl>> {
 	 */
 	default Impl executes(CommandExecutor executor, ExecutorType... types) {
 		if(types == null || types.length == 0) {
-			addNormalExecutor(executor);
+			getExecutor().addNormalExecutor(executor);
 		} else {
 			for(ExecutorType type : types) {
-				addNormalExecutor(new CommandExecutor() {
+				getExecutor().addNormalExecutor(new CommandExecutor() {
 
 					@Override
 					public void run(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
@@ -48,10 +46,10 @@ public interface BukkitExecutor<Impl extends BukkitExecutor<Impl>> {
 	 */
 	default Impl executes(ResultingCommandExecutor executor, ExecutorType... types) {
 		if(types == null || types.length == 0) {
-			addResultingExecutor(executor);
+			getExecutor().addResultingExecutor(executor);
 		} else {
 			for(ExecutorType type : types) {
-				addResultingExecutor(new ResultingCommandExecutor() {
+				getExecutor().addResultingExecutor(new ResultingCommandExecutor() {
 
 					@Override
 					public int run(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
@@ -76,7 +74,7 @@ public interface BukkitExecutor<Impl extends BukkitExecutor<Impl>> {
 	 * @return this command builder
 	 */
 	default Impl executesPlayer(PlayerCommandExecutor executor) {
-		addNormalExecutor(executor);
+		getExecutor().addNormalExecutor(executor);
 		return (Impl) this;
 	}
 
@@ -86,7 +84,7 @@ public interface BukkitExecutor<Impl extends BukkitExecutor<Impl>> {
 	 * @return this command builder
 	 */
 	default Impl executesPlayer(PlayerResultingCommandExecutor executor) {
-		addResultingExecutor(executor);
+		getExecutor().addResultingExecutor(executor);
 		return (Impl) this;
 	}
 
@@ -98,7 +96,7 @@ public interface BukkitExecutor<Impl extends BukkitExecutor<Impl>> {
 	 * @return this command builder
 	 */
 	default Impl executesEntity(EntityCommandExecutor executor) {
-		addNormalExecutor(executor);
+		getExecutor().addNormalExecutor(executor);
 		return (Impl) this;
 	}
 
@@ -108,7 +106,7 @@ public interface BukkitExecutor<Impl extends BukkitExecutor<Impl>> {
 	 * @return this command builder
 	 */
 	default Impl executesEntity(EntityResultingCommandExecutor executor) {
-		addResultingExecutor(executor);
+		getExecutor().addResultingExecutor(executor);
 		return (Impl) this;
 	}
 
@@ -120,7 +118,7 @@ public interface BukkitExecutor<Impl extends BukkitExecutor<Impl>> {
 	 * @return this command builder
 	 */
 	default Impl executesProxy(ProxyCommandExecutor executor) {
-		addNormalExecutor(executor);
+		getExecutor().addNormalExecutor(executor);
 		return (Impl) this;
 	}
 
@@ -130,7 +128,7 @@ public interface BukkitExecutor<Impl extends BukkitExecutor<Impl>> {
 	 * @return this command builder
 	 */
 	default Impl executesProxy(ProxyResultingCommandExecutor executor) {
-		addResultingExecutor(executor);
+		getExecutor().addResultingExecutor(executor);
 		return (Impl) this;
 	}
 
@@ -142,7 +140,7 @@ public interface BukkitExecutor<Impl extends BukkitExecutor<Impl>> {
 	 * @return this command builder
 	 */
 	default Impl executesCommandBlock(CommandBlockCommandExecutor executor) {
-		addNormalExecutor(executor);
+		getExecutor().addNormalExecutor(executor);
 		return (Impl) this;
 	}
 
@@ -152,7 +150,7 @@ public interface BukkitExecutor<Impl extends BukkitExecutor<Impl>> {
 	 * @return this command builder
 	 */
 	default Impl executesCommandBlock(CommandBlockResultingCommandExecutor executor) {
-		addResultingExecutor(executor);
+		getExecutor().addResultingExecutor(executor);
 		return (Impl) this;
 	}
 
@@ -164,7 +162,7 @@ public interface BukkitExecutor<Impl extends BukkitExecutor<Impl>> {
 	 * @return this command builder
 	 */
 	default Impl executesConsole(ConsoleCommandExecutor executor) {
-		addNormalExecutor(executor);
+		getExecutor().addNormalExecutor(executor);
 		return (Impl) this;
 	}
 
@@ -174,7 +172,7 @@ public interface BukkitExecutor<Impl extends BukkitExecutor<Impl>> {
 	 * @return this command builder
 	 */
 	default Impl executesConsole(ConsoleResultingCommandExecutor executor) {
-		addResultingExecutor(executor);
+		getExecutor().addResultingExecutor(executor);
 		return (Impl) this;
 	}
 
@@ -184,7 +182,7 @@ public interface BukkitExecutor<Impl extends BukkitExecutor<Impl>> {
 	 * @return this command builder
 	 */
 	default Impl executesNative(NativeCommandExecutor executor) {
-		addNormalExecutor(executor);
+		getExecutor().addNormalExecutor(executor);
 		return (Impl) this;
 	}
 
@@ -194,7 +192,7 @@ public interface BukkitExecutor<Impl extends BukkitExecutor<Impl>> {
 	 * @return this command builder
 	 */
 	default Impl executesNative(NativeResultingCommandExecutor executor) {
-		addResultingExecutor(executor);
+		getExecutor().addResultingExecutor(executor);
 		return (Impl) this;
 	}
 

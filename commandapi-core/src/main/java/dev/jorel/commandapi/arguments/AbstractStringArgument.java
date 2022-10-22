@@ -29,7 +29,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
 /**
  * An argument that represents a simple String
  */
-public abstract class AbstractStringArgument<CommandSender> extends Argument<String, CommandSender> {
+public abstract class AbstractStringArgument<Impl extends AbstractStringArgument<Impl, CommandSender>,CommandSender> extends Argument<String, Impl, CommandSender> {
 
 	/**
 	 * A string argument for one word

@@ -30,7 +30,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
 /**
  * An argument that represents primitive Java ints
  */
-public abstract class AbstractIntegerArgument<CommandSender> extends SafeOverrideableArgument<Integer, Integer, CommandSender> {
+public abstract class AbstractIntegerArgument<Impl extends AbstractIntegerArgument<Impl, CommandSender>,CommandSender> extends SafeOverrideableArgument<Integer, Integer, Impl, CommandSender> {
 
 	/**
 	 * An integer argument

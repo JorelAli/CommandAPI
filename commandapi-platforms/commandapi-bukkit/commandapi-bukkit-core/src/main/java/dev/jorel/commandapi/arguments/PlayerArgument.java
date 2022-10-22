@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -32,7 +33,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
 /**
  * An argument that represents the Bukkit Player object
  */
-public class PlayerArgument extends SafeOverrideableArgument<Player, Player, CommandSender> {
+public class PlayerArgument extends SafeOverrideableArgument<Player, Player, PlayerArgument, CommandSender> implements BukkitExecutable<PlayerArgument> {
 
 	/**
 	 * A Player argument. Produces a single player, regardless of whether

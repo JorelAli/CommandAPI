@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.command.CommandSender;
 import org.bukkit.scoreboard.Team;
 
@@ -32,7 +33,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
 /**
  * An argument that represents the name of a scoreboard Team
  */
-public class TeamArgument extends SafeOverrideableArgument<String, Team, CommandSender> {
+public class TeamArgument extends SafeOverrideableArgument<String, Team, TeamArgument, CommandSender> implements BukkitExecutable<TeamArgument> {
 
 	/**
 	 * A Team argument. Represents a scoreboard Team

@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.NamespacedKey;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -33,7 +34,7 @@ import org.bukkit.command.CommandSender;
 /**
  * An argument that represents Minecraft functions and tags
  */
-public class FunctionArgument extends SafeOverrideableArgument<FunctionWrapper[], NamespacedKey, CommandSender> implements ICustomProvidedArgument {
+public class FunctionArgument extends SafeOverrideableArgument<FunctionWrapper[], NamespacedKey, FunctionArgument, CommandSender> implements ICustomProvidedArgument, BukkitExecutable<FunctionArgument> {
 
 	/**
 	 * A Minecraft function. Plugin commands which plan to be used INSIDE a Minecraft

@@ -23,6 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.exceptions.SpigotNotFoundException;
@@ -34,7 +35,7 @@ import org.bukkit.command.CommandSender;
  * 
  * @apiNote Returns a {@link BaseComponent}{@code []} object
  */
-public class ChatComponentArgument extends Argument<BaseComponent[], CommandSender> {
+public class ChatComponentArgument extends Argument<BaseComponent[], ChatComponentArgument, CommandSender> implements BukkitExecutable<ChatComponentArgument> {
 
 	/**
 	 * Constructs a ChatComponnent argument with a given node name. Represents raw

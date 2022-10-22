@@ -22,6 +22,7 @@ package dev.jorel.commandapi.arguments;
 
 import java.util.function.Function;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.ChatColor;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -36,7 +37,7 @@ import org.bukkit.command.CommandSender;
  * 
  * @apiNote Returns a {@link ChatColor} object
  */
-public class ChatColorArgument extends SafeOverrideableArgument<ChatColor, ChatColor, CommandSender> {
+public class ChatColorArgument extends SafeOverrideableArgument<ChatColor, ChatColor, ChatColorArgument, CommandSender> implements BukkitExecutable<ChatColorArgument> {
 
 	/**
 	 * Constructs a ChatColor argument with a given node name. Represents a color or

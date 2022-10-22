@@ -457,17 +457,17 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<CommandSen
 	}
 
 	@Override
-	public Execution<CommandSender> newConcreteExecution(List<Argument<?, CommandSender>> argument, CustomCommandExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor) {
+	public Execution<CommandSender> newConcreteExecution(List<Argument<?, ?, CommandSender>> argument, CustomCommandExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor) {
 		return new BukkitExecution(argument, executor);
 	}
 
 	@Override
-	public AbstractMultiLiteralArgument<CommandSender> newConcreteMultiLiteralArgument(String[] literals) {
+	public AbstractMultiLiteralArgument<?, CommandSender> newConcreteMultiLiteralArgument(String[] literals) {
 		return new MultiLiteralArgument(literals);
 	}
 
 	@Override
-	public AbstractLiteralArgument<CommandSender> newConcreteLiteralArgument(String literal) {
+	public AbstractLiteralArgument<?, CommandSender> newConcreteLiteralArgument(String literal) {
 		return new LiteralArgument(literal);
 	}
 

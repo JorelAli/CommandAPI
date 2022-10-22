@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.Keyed;
 import org.bukkit.command.CommandSender;
 import org.bukkit.loot.LootTable;
@@ -33,7 +34,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
 /**
  * An argument that represents the Bukkit LootTable object
  */
-public class LootTableArgument extends SafeOverrideableArgument<LootTable, LootTable, CommandSender> implements ICustomProvidedArgument {
+public class LootTableArgument extends SafeOverrideableArgument<LootTable, LootTable, LootTableArgument, CommandSender> implements ICustomProvidedArgument, BukkitExecutable<LootTableArgument> {
 	
 	/**
 	 * A LootTable argument that represents a Bukkit LootTable.

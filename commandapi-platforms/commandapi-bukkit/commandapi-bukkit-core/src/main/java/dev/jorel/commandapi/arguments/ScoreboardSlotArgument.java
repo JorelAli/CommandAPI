@@ -23,6 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
@@ -31,7 +32,7 @@ import org.bukkit.command.CommandSender;
 /**
  * An argument that represents the Bukkit ScoreboardSlot object
  */
-public class ScoreboardSlotArgument extends SafeOverrideableArgument<ScoreboardSlot, ScoreboardSlot, CommandSender> {
+public class ScoreboardSlotArgument extends SafeOverrideableArgument<ScoreboardSlot, ScoreboardSlot, ScoreboardSlotArgument, CommandSender> implements BukkitExecutable<ScoreboardSlotArgument> {
 
 	/**
 	 * A Display slot argument. Represents scoreboard slots

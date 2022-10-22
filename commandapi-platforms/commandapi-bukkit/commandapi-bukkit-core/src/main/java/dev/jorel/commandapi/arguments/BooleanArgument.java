@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.command.CommandSender;
 
 /**
@@ -27,7 +28,7 @@ import org.bukkit.command.CommandSender;
  * 
  * @apiNote Returns a {@link boolean}
  */
-public class BooleanArgument extends AbstractBooleanArgument<CommandSender> {
+public class BooleanArgument extends AbstractBooleanArgument<BooleanArgument, CommandSender> implements BukkitExecutable<BooleanArgument> {
 	/**
 	 * Constructs a Boolean argument with a given node name
 	 *

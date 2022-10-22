@@ -30,7 +30,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
 /**
  * An argument that represents primitive Java floats
  */
-public abstract class AbstractFloatArgument<CommandSender> extends SafeOverrideableArgument<Float, Float, CommandSender> {
+public abstract class AbstractFloatArgument<Impl extends AbstractFloatArgument<Impl, CommandSender>, CommandSender> extends SafeOverrideableArgument<Float, Float, Impl, CommandSender> {
 
 	/**
 	 * A float argument

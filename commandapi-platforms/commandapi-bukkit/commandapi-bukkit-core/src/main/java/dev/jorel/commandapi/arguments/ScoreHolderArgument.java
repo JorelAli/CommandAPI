@@ -25,6 +25,7 @@ import java.util.Collection;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import org.bukkit.command.CommandSender;
@@ -32,7 +33,7 @@ import org.bukkit.command.CommandSender;
 /**
  * An argument that represents a scoreholder's name, or a collection of scoreholder names
  */
-public class ScoreHolderArgument<T> extends Argument<T, CommandSender> {
+public class ScoreHolderArgument<T> extends Argument<T, ScoreHolderArgument<T>, CommandSender> implements BukkitExecutable<ScoreHolderArgument<T>> {
 		
 	private final boolean single;
 	

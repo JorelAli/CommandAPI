@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.NamespacedKey;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -36,7 +37,7 @@ import org.bukkit.command.CommandSender;
  * {@code .} (dot). The key can also contain {@code /} (forward slash)
  * @apiNote Returns a {@link NamespacedKey} object
  */
-public class NamespacedKeyArgument extends SafeOverrideableArgument<NamespacedKey, NamespacedKey, CommandSender> {
+public class NamespacedKeyArgument extends SafeOverrideableArgument<NamespacedKey, NamespacedKey, NamespacedKeyArgument, CommandSender> implements BukkitExecutable<NamespacedKeyArgument> {
 
 	/**
 	 * Constructs a MinecraftKeyArgument with a given node name.

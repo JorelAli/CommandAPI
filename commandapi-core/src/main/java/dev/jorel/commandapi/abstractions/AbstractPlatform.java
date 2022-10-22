@@ -101,9 +101,9 @@ public abstract class AbstractPlatform<CommandSender, Source> {
 
 	public abstract void updateRequirements(AbstractPlayer<?> player);
 
-	public abstract Execution<CommandSender> newConcreteExecution(List<Argument<?, CommandSender>> argument, CustomCommandExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor);
+	public abstract Execution<CommandSender> newConcreteExecution(List<Argument<?, ?, CommandSender>> argument, CustomCommandExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor);
 
-	public abstract AbstractMultiLiteralArgument<CommandSender> newConcreteMultiLiteralArgument(String[] literals);
+	public abstract AbstractMultiLiteralArgument<?, CommandSender> newConcreteMultiLiteralArgument(String[] literals);
 
-	public abstract AbstractLiteralArgument<CommandSender> newConcreteLiteralArgument(String literal);
+	public abstract AbstractLiteralArgument<?, CommandSender> newConcreteLiteralArgument(String literal);
 }

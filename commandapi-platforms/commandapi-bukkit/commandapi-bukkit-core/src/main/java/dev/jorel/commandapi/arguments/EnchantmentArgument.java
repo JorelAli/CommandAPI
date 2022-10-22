@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 
@@ -34,7 +35,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
  * 
  * @apiNote Returns an {@link Enchantment} object
  */
-public class EnchantmentArgument extends SafeOverrideableArgument<Enchantment, Enchantment, CommandSender> {
+public class EnchantmentArgument extends SafeOverrideableArgument<Enchantment, Enchantment, EnchantmentArgument, CommandSender> implements BukkitExecutable<EnchantmentArgument> {
 	
 	/**
 	 * An Enchantment argument. Represents an enchantment for items

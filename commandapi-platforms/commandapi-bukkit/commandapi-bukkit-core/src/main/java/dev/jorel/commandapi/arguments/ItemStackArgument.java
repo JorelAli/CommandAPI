@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
@@ -32,7 +33,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
 /**
  * An argument that represents the Bukkit ItemStack object
  */
-public class ItemStackArgument extends SafeOverrideableArgument<ItemStack, ItemStack, CommandSender> {
+public class ItemStackArgument extends SafeOverrideableArgument<ItemStack, ItemStack, ItemStackArgument, CommandSender> implements BukkitExecutable<ItemStackArgument> {
 
 	/**
 	 * An ItemStack argument. Always returns an itemstack of size 1

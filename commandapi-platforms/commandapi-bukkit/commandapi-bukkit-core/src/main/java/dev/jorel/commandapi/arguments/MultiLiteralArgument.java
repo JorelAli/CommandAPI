@@ -20,12 +20,13 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents multiple LiteralArguments
  */
-public class MultiLiteralArgument extends AbstractMultiLiteralArgument<CommandSender> {
+public class MultiLiteralArgument extends AbstractMultiLiteralArgument<MultiLiteralArgument, CommandSender> implements BukkitExecutable<MultiLiteralArgument> {
 	public MultiLiteralArgument(String... literals) {
 		super(literals);
 	}

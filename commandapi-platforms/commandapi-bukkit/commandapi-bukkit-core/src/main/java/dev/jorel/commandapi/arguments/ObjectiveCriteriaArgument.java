@@ -23,6 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import org.bukkit.command.CommandSender;
@@ -30,7 +31,7 @@ import org.bukkit.command.CommandSender;
 /**
  * An argument that represents the name of an objective criteria
  */
-public class ObjectiveCriteriaArgument extends Argument<String, CommandSender> {
+public class ObjectiveCriteriaArgument extends Argument<String, ObjectiveCriteriaArgument, CommandSender> implements BukkitExecutable<ObjectiveCriteriaArgument> {
 
 	/**
 	 * An Objective criteria argument. Represents an objective criteria

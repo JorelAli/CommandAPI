@@ -20,12 +20,13 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents primitive Java longs
  */
-public class LongArgument extends AbstractLongArgument<CommandSender> {
+public class LongArgument extends AbstractLongArgument<LongArgument, CommandSender> implements BukkitExecutable<LongArgument> {
 	/**
 	 * A long argument
 	 *

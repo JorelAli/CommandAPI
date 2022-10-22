@@ -22,6 +22,7 @@ package dev.jorel.commandapi.arguments;
 
 import java.util.function.Function;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.block.Biome;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -36,7 +37,7 @@ import org.bukkit.command.CommandSender;
  * 
  * @apiNote Returns a {@link Biome} object
  */
-public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome, CommandSender> implements ICustomProvidedArgument {
+public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome, BiomeArgument, CommandSender> implements ICustomProvidedArgument, BukkitExecutable<BiomeArgument> {
 
 	/**
 	 * Constructs a BiomeArgument with a given node name.

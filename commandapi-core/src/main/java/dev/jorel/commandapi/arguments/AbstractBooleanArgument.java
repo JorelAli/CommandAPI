@@ -31,7 +31,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
  * 
  * @apiNote Returns a {@link boolean}
  */
-public abstract class AbstractBooleanArgument<CommandSender> extends SafeOverrideableArgument<Boolean, Boolean, CommandSender> {
+public abstract class AbstractBooleanArgument<Impl extends AbstractBooleanArgument<Impl, CommandSender>, CommandSender> extends SafeOverrideableArgument<Boolean, Boolean, Impl, CommandSender> {
 
 	/**
 	 * Constructs a Boolean argument with a given node name

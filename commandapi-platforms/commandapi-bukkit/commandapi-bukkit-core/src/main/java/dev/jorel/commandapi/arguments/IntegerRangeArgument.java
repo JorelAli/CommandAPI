@@ -23,6 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.wrappers.IntegerRange;
@@ -31,7 +32,7 @@ import org.bukkit.command.CommandSender;
 /**
  * An argument that represents a range of integer values
  */
-public class IntegerRangeArgument extends SafeOverrideableArgument<IntegerRange, IntegerRange, CommandSender> {
+public class IntegerRangeArgument extends SafeOverrideableArgument<IntegerRange, IntegerRange, IntegerRangeArgument, CommandSender> implements BukkitExecutable<IntegerRangeArgument> {
 
 	/**
 	 * An IntegerRange argument. Represents a range of whole numbers

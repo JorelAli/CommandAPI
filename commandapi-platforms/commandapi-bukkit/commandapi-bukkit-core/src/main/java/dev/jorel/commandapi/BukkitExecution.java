@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 import java.util.List;
 
 public class BukkitExecution extends Execution<CommandSender> {
-	public BukkitExecution(List<Argument<?, CommandSender>> arguments, CustomCommandExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor) {
+	public BukkitExecution(List<Argument<?, ?, CommandSender>> arguments, CustomCommandExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor) {
 		super(arguments, executor);
 	}
 
@@ -17,7 +17,7 @@ public class BukkitExecution extends Execution<CommandSender> {
 	}
 
 	@Override
-	protected Execution<CommandSender> newConcreteExecution(List<Argument<?, CommandSender>> arguments, CustomCommandExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor) {
+	protected Execution<CommandSender> newConcreteExecution(List<Argument<?, ?, CommandSender>> arguments, CustomCommandExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor) {
 		return new BukkitExecution(arguments, executor);
 	}
 }

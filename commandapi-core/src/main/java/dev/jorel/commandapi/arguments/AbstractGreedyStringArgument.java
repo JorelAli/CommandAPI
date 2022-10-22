@@ -29,7 +29,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
 /**
  * An argument that represents arbitrary strings
  */
-public abstract class AbstractGreedyStringArgument<CommandSender> extends SafeOverrideableArgument<String, String, CommandSender> implements IGreedyArgument {
+public abstract class AbstractGreedyStringArgument<Impl extends AbstractGreedyStringArgument<Impl, CommandSender>, CommandSender> extends SafeOverrideableArgument<String, String, Impl, CommandSender> implements IGreedyArgument {
 	
 	/**
 	 * A string argument for a string of any length

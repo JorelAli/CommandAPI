@@ -50,7 +50,7 @@ public final class Converter {
 	private Converter() {
 	}
 
-	private static final List<Argument<?, CommandSender>> PLAIN_ARGUMENTS = List.of(new GreedyStringArgument("args"));
+	private static final List<Argument<?, ?, CommandSender>> PLAIN_ARGUMENTS = List.of(new GreedyStringArgument("args"));
 	private static final Set<String> CALLER_METHODS = Set.of("isPermissionSet", "hasPermission",
 			"addAttachment", "removeAttachment", "recalculatePermissions", "getEffectivePermissions", "isOp", "setOp");
 
@@ -86,7 +86,8 @@ public final class Converter {
 	 * @param cmdName   The command to convert
 	 * @param arguments The arguments that should be used to parse this command
 	 */
-	public static void convert(JavaPlugin plugin, String cmdName, Argument<?, CommandSender>... arguments) {
+	@SafeVarargs
+	public static void convert(JavaPlugin plugin, String cmdName, Argument<?, ?, CommandSender>... arguments) {
 		convertPluginCommand(plugin, cmdName, Arrays.asList(arguments));
 	}
 
@@ -98,7 +99,7 @@ public final class Converter {
 	 * @param cmdName   The command to convert
 	 * @param arguments The arguments that should be used to parse this command
 	 */
-	public static void convert(JavaPlugin plugin, String cmdName, List<Argument<?, CommandSender>> arguments) {
+	public static void convert(JavaPlugin plugin, String cmdName, List<Argument<?, ?, CommandSender>> arguments) {
 		convertPluginCommand(plugin, cmdName, arguments);
 	}
 
@@ -121,11 +122,11 @@ public final class Converter {
 	 *                  be "/set"
 	 * @param arguments The arguments that should be used to parse this command
 	 */
-	public static void convert(String cmdName, List<Argument<?, CommandSender>> arguments) {
+	public static void convert(String cmdName, List<Argument<?, ?, CommandSender>> arguments) {
 		convertCommand(cmdName, arguments);
 	}
 
-	private static void convertCommand(String commandName, List<Argument<?, CommandSender>> arguments) {
+	private static void convertCommand(String commandName, List<Argument<?, ?, CommandSender>> arguments) {
 		CommandAPI.logInfo("Converting command /" + commandName);
 
 		// No arguments
@@ -146,7 +147,7 @@ public final class Converter {
 		multiArgs.register();
 	}
 
-	private static void convertPluginCommand(JavaPlugin plugin, String commandName, List<Argument<?, CommandSender>> arguments) {
+	private static void convertPluginCommand(JavaPlugin plugin, String commandName, List<Argument<?, ?, CommandSender>> arguments) {
 		CommandAPI.logInfo("Converting " + plugin.getName() + " command /" + commandName);
 		/* Parse the commands */
 		Map<String, Object> cmdData = plugin.getDescription().getCommands().get(commandName);

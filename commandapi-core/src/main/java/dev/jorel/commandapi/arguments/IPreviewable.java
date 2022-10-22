@@ -9,7 +9,7 @@ import dev.jorel.commandapi.wrappers.PreviewableFunction;
  * Minecraft's chat preview feature. To use this, the server must have
  * {@code previews-chat=true} set in its {@code server.properties} file
  */
-public interface IPreviewable<T extends Argument<?, ?>, A> {
+public interface IPreviewable<T extends Argument<?, ?, ?>, A> {
 
 	/**
 	 * Sets the {@link PreviewableFunction} for this argument. This function will

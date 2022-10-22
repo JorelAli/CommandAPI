@@ -29,7 +29,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
 /**
  * A pseudo-argument representing a single literal string
  */
-public abstract class AbstractLiteralArgument<CommandSender> extends Argument<String, CommandSender> {
+public abstract class AbstractLiteralArgument<Impl extends AbstractLiteralArgument<Impl, CommandSender>,CommandSender> extends Argument<String, Impl, CommandSender> {
 
 	private String literal;
 	

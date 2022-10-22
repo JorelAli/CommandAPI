@@ -22,6 +22,7 @@ package dev.jorel.commandapi.arguments;
 
 import java.util.function.Predicate;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
@@ -35,7 +36,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
  * An argument that represents a <code>Predicate&lt;ItemStack&gt;</code>
  */
 @SuppressWarnings("rawtypes")
-public class ItemStackPredicateArgument extends Argument<Predicate, CommandSender> {
+public class ItemStackPredicateArgument extends Argument<Predicate, ItemStackPredicateArgument, CommandSender> implements BukkitExecutable<ItemStackPredicateArgument> {
 	
 	/**
 	 * A ItemStack Predicate argument. Represents a predicate for itemstacks

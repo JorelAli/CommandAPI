@@ -22,6 +22,7 @@ package dev.jorel.commandapi.arguments;
 
 import java.util.function.Predicate;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.block.Block;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -37,7 +38,7 @@ import org.bukkit.command.CommandSender;
  * @apiNote Returns a {@link Predicate}{@code <}{@link Block}{@code >} object
  */
 @SuppressWarnings("rawtypes")
-public class BlockPredicateArgument extends Argument<Predicate, CommandSender> {
+public class BlockPredicateArgument extends Argument<Predicate, BlockPredicateArgument, CommandSender> implements BukkitExecutable<BlockPredicateArgument> {
 
 	/**
 	 * Constructs a BlockPredicateArgument with a given node name. Represents a

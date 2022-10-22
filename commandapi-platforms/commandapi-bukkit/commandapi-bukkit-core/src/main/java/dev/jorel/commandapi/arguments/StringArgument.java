@@ -20,12 +20,13 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents a simple String
  */
-public class StringArgument extends AbstractStringArgument<CommandSender> {
+public class StringArgument extends AbstractStringArgument<StringArgument, CommandSender> implements BukkitExecutable<StringArgument> {
 	/**
 	 * A string argument for one word
 	 *

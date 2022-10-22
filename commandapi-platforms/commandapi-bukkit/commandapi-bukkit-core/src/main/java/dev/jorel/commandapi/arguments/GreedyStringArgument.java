@@ -20,12 +20,13 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents arbitrary strings
  */
-public class GreedyStringArgument extends AbstractGreedyStringArgument<CommandSender> {
+public class GreedyStringArgument extends AbstractGreedyStringArgument<GreedyStringArgument, CommandSender> implements BukkitExecutable<GreedyStringArgument> {
 	/**
 	 * A string argument for a string of any length
 	 *

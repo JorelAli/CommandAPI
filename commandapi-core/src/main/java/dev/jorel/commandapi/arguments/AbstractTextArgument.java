@@ -29,7 +29,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
 /**
  * An argument that represents text, encased in quotes
  */
-public abstract class AbstractTextArgument<CommandSender> extends Argument<String, CommandSender> {
+public abstract class AbstractTextArgument<Impl extends AbstractTextArgument<Impl, CommandSender>,CommandSender> extends Argument<String, Impl, CommandSender> {
 
 	/**
 	 * A string argument for one word, or multiple words encased in quotes

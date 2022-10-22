@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.command.CommandSender;
 import org.bukkit.scoreboard.Objective;
 
@@ -32,7 +33,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
 /**
  * An argument that represents the name of a scoreboard objective
  */
-public class ObjectiveArgument extends SafeOverrideableArgument<String, Objective, CommandSender> {
+public class ObjectiveArgument extends SafeOverrideableArgument<String, Objective, ObjectiveArgument, CommandSender> implements BukkitExecutable<ObjectiveArgument> {
 
 	/**
 	 * An Objective argument. Represents a scoreboard objective

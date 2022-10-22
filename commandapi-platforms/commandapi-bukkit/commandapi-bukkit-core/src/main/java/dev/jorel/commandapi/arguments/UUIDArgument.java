@@ -25,6 +25,7 @@ import java.util.UUID;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import org.bukkit.command.CommandSender;
@@ -32,7 +33,7 @@ import org.bukkit.command.CommandSender;
 /**
  * An argument that represents a UUID
  */
-public class UUIDArgument extends SafeOverrideableArgument<UUID, UUID, CommandSender> {
+public class UUIDArgument extends SafeOverrideableArgument<UUID, UUID, UUIDArgument, CommandSender> implements BukkitExecutable<UUIDArgument> {
 	
 	/**
 	 * A UUID argument. Represents an in-game entity UUID

@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.command.CommandSender;
 
 import com.mojang.brigadier.LiteralMessage;
@@ -42,10 +43,10 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
  *            {@link IntegerArgument}
  * @apiNote Returns a {@link T} object
  */
-public class CustomArgument<T, B> extends Argument<T, CommandSender> {
+public class CustomArgument<T, B> extends Argument<T, CustomArgument<T, B>, CommandSender> implements BukkitExecutable<CustomArgument<T, B>> {
 
 	private final CustomArgumentInfoParser<T, B> infoParser;
-	private final Argument<B, CommandSender> base;
+	private final Argument<B, ?, CommandSender> base;
 
 	/**
 	 * Creates a CustomArgument with a valid parser, defaults to non-keyed argument
@@ -83,7 +84,7 @@ public class CustomArgument<T, B> extends Argument<T, CommandSender> {
 	public CustomArgument(String nodeName, CustomArgumentInfoParser<T, String> parser, boolean keyed) {
 		super(nodeName, keyed ? StringArgumentType.string()
 				: BukkitPlatform.get()._ArgumentMinecraftKeyRegistered());
-		this.base = (Argument<B, CommandSender>) new DummyArgument(nodeName, keyed);
+		this.base = (Argument<B, ?, CommandSender>) new DummyArgument(nodeName, keyed);
 		this.infoParser = (CustomArgumentInfoParser<T, B>) parser;
 		CommandAPI.logWarning(
 				"Registering CustomArgument " + nodeName + " with legacy registeration method. This may not work!\n"
@@ -110,7 +111,7 @@ public class CustomArgument<T, B> extends Argument<T, CommandSender> {
 	 *               {@code Integer} for an {@link IntegerArgument}
 	 *               </p>
 	 */
-	public CustomArgument(Argument<B, CommandSender> base, CustomArgumentInfoParser<T, B> parser) {
+	public CustomArgument(Argument<B, ?, CommandSender> base, CustomArgumentInfoParser<T, B> parser) {
 		super(base.getNodeName(), base.getRawType());
 		if (base instanceof LiteralArgument || base instanceof MultiLiteralArgument) {
 			throw new IllegalArgumentException(base.getClass().getSimpleName() + " is not a suitable base argument type for a CustomArgument");
@@ -358,7 +359,7 @@ public class CustomArgument<T, B> extends Argument<T, CommandSender> {
 	}
 
 	@Deprecated
-	private static class DummyArgument extends Argument<String, CommandSender> {
+	private static class DummyArgument extends Argument<String, DummyArgument, CommandSender> {
 
 		private final boolean keyed;
 

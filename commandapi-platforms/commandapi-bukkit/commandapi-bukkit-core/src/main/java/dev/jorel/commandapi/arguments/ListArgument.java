@@ -26,9 +26,9 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import dev.jorel.commandapi.BukkitExecutable;
 import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.StringTooltip;
-import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import org.bukkit.command.CommandSender;
 
@@ -42,7 +42,7 @@ import java.util.regex.Pattern;
  * @param <T> the type that this list argument generates a list of.
  */
 @SuppressWarnings("rawtypes")
-public class ListArgument<T> extends Argument<List, CommandSender> implements IGreedyArgument {
+public class ListArgument<T> extends Argument<List, ListArgument<T>, CommandSender> implements IGreedyArgument, BukkitExecutable<ListArgument<T>> {
 
 	private final String delimiter;
 	private final boolean allowDuplicates;

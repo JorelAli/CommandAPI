@@ -22,6 +22,7 @@ package dev.jorel.commandapi.arguments;
 
 import java.util.Optional;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -42,7 +43,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
  * 
  * @apiNote Returns a {@link BaseComponent}{@code []} object
  */
-public class ChatArgument extends Argument<BaseComponent[], CommandSender> implements IGreedyArgument, IPreviewable<ChatArgument, BaseComponent[]> {
+public class ChatArgument extends Argument<BaseComponent[], ChatArgument, CommandSender> implements IGreedyArgument, IPreviewable<ChatArgument, BaseComponent[]>, BukkitExecutable<ChatArgument> {
 
 	private PreviewableFunction<BaseComponent[]> preview;
 	private boolean usePreview;

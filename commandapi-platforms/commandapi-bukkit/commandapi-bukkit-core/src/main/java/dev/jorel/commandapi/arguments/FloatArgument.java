@@ -20,17 +20,13 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import com.mojang.brigadier.arguments.FloatArgumentType;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
-import dev.jorel.commandapi.exceptions.InvalidRangeException;
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents primitive Java floats
  */
-public class FloatArgument extends AbstractFloatArgument<CommandSender> {
+public class FloatArgument extends AbstractFloatArgument<FloatArgument, CommandSender> implements BukkitExecutable<FloatArgument> {
 	/**
 	 * A float argument
 	 *

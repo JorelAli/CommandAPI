@@ -20,12 +20,13 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents text, encased in quotes
  */
-public class TextArgument extends AbstractTextArgument<CommandSender> {
+public class TextArgument extends AbstractTextArgument<TextArgument, CommandSender> implements BukkitExecutable<TextArgument> {
 	/**
 	 * A string argument for one word, or multiple words encased in quotes
 	 *

@@ -42,8 +42,10 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
  * The core abstract class for Command API arguments
  * 
  * @param <T> The type of the underlying object that this argument casts to
+ * @param <Impl> The class extending this class, used as the return type for chain calls
+ * @param <CommandSender> The CommandSender class used by the class extending this class
  */
-public abstract class Argument<T, CommandSender> extends AbstractArgumentTree<CommandSender> {
+public abstract class Argument<T, Impl extends Argument<T, Impl, CommandSender>, CommandSender> extends AbstractArgumentTree<Impl, CommandSender> {
 
 	/**
 	 * Returns the primitive type of the current Argument. After executing a
@@ -126,9 +128,9 @@ public abstract class Argument<T, CommandSender> extends AbstractArgumentTree<Co
 	 *
 	 * @return the current argument
 	 */
-	public Argument<T, CommandSender> includeSuggestions(ArgumentSuggestions suggestions) {
+	public Impl includeSuggestions(ArgumentSuggestions suggestions) {
 		this.addedSuggestions = Optional.of(suggestions);
-		return this;
+		return (Impl) this;
 	}
 
 	/**
@@ -143,7 +145,7 @@ public abstract class Argument<T, CommandSender> extends AbstractArgumentTree<Co
 	 * @deprecated use {@link #includeSuggestions(ArgumentSuggestions)} instead
 	 */
 	@Deprecated(forRemoval = true)
-	public Argument<T, CommandSender> includeSuggestions(Function<SuggestionInfo, String[]> suggestions) {
+	public Impl includeSuggestions(Function<SuggestionInfo, String[]> suggestions) {
 		return includeSuggestions(ArgumentSuggestions.strings(suggestions));
 	}
 
@@ -159,7 +161,7 @@ public abstract class Argument<T, CommandSender> extends AbstractArgumentTree<Co
 	 * @deprecated use {@link #includeSuggestions(ArgumentSuggestions)} instead
 	 */
 	@Deprecated(forRemoval = true)
-	public Argument<T, CommandSender> includeSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
+	public Impl includeSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
 		return includeSuggestions(ArgumentSuggestions.stringsWithTooltips(suggestions));
 	}
 
@@ -180,9 +182,9 @@ public abstract class Argument<T, CommandSender> extends AbstractArgumentTree<Co
 	 * @return the current argument
 	 */
   
-	public Argument<T, CommandSender> replaceSuggestions(ArgumentSuggestions suggestions) {
+	public Impl replaceSuggestions(ArgumentSuggestions suggestions) {
 		this.suggestions = Optional.of(suggestions);
-		return this;
+		return (Impl) this;
 	}
 
 	/**
@@ -192,7 +194,7 @@ public abstract class Argument<T, CommandSender> extends AbstractArgumentTree<Co
 	 * @deprecated use {@link #replaceSuggestions(ArgumentSuggestions)} instead
 	 */
 	@Deprecated(forRemoval = true)
-	public Argument<T, CommandSender> replaceSuggestions(Function<SuggestionInfo, String[]> suggestions) {
+	public Impl replaceSuggestions(Function<SuggestionInfo, String[]> suggestions) {
 		return replaceSuggestions(ArgumentSuggestions.strings(suggestions));
 	}
 
@@ -203,7 +205,7 @@ public abstract class Argument<T, CommandSender> extends AbstractArgumentTree<Co
 	 * @deprecated use {@link #replaceSuggestions(ArgumentSuggestions)} instead
 	 */
 	@Deprecated(forRemoval = true)
-	public Argument<T, CommandSender> replaceSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
+	public Impl replaceSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
 		return replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(suggestions));
 	}
 
@@ -230,9 +232,9 @@ public abstract class Argument<T, CommandSender> extends AbstractArgumentTree<Co
 	 * @param permission the permission required to execute this command
 	 * @return this current argument
 	 */
-	public final Argument<T, CommandSender> withPermission(CommandPermission permission) {
+	public final Impl withPermission(CommandPermission permission) {
 		this.permission = permission;
-		return this;
+		return (Impl) this;
 	}
 	
 	/**
@@ -241,9 +243,9 @@ public abstract class Argument<T, CommandSender> extends AbstractArgumentTree<Co
 	 * @param permission the permission required to execute this command
 	 * @return this current argument
 	 */
-	public final Argument<T, CommandSender> withPermission(String permission) {
+	public final Impl withPermission(String permission) {
 		this.permission = CommandPermission.fromString(permission);
-		return this;
+		return (Impl) this;
 	}
 
 	/**
@@ -276,9 +278,9 @@ public abstract class Argument<T, CommandSender> extends AbstractArgumentTree<Co
 	 * @param requirement the predicate that must be satisfied to use this argument
 	 * @return this current argument
 	 */
-	public final Argument<T, CommandSender> withRequirement(Predicate<AbstractCommandSender<?>> requirement) {
+	public final Impl withRequirement(Predicate<AbstractCommandSender<?>> requirement) {
 		this.requirements = this.requirements.and(requirement);
-		return this;
+		return (Impl) this;
 	}
 	
 	/////////////////
@@ -300,9 +302,9 @@ public abstract class Argument<T, CommandSender> extends AbstractArgumentTree<Co
 	 * @param listed if true, this argument will be included in the Object args[] of the command executor
 	 * @return this current argument
 	 */
-	public Argument<T, CommandSender> setListed(boolean listed) {
+	public Impl setListed(boolean listed) {
 		this.isListed = listed;
-		return this;
+		return (Impl) this;
 	}
 	
 	///////////

@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.Sound;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -32,7 +33,7 @@ import org.bukkit.command.CommandSender;
 /**
  * An argument that represents the Bukkit Sound object
  */
-public class SoundArgument extends SafeOverrideableArgument<Sound, Sound, CommandSender> implements ICustomProvidedArgument {
+public class SoundArgument extends SafeOverrideableArgument<Sound, Sound, SoundArgument, CommandSender> implements ICustomProvidedArgument, BukkitExecutable<SoundArgument> {
 	
 	/**
 	 * A Sound argument. Represents Bukkit's Sound object

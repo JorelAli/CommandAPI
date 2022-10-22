@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.OfflinePlayer;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -32,7 +33,7 @@ import org.bukkit.command.CommandSender;
 /**
  * An argument that represents the Bukkit Player object
  */
-public class OfflinePlayerArgument extends SafeOverrideableArgument<OfflinePlayer, OfflinePlayer, CommandSender> {
+public class OfflinePlayerArgument extends SafeOverrideableArgument<OfflinePlayer, OfflinePlayer, OfflinePlayerArgument, CommandSender> implements BukkitExecutable<OfflinePlayerArgument> {
 
 	/**
 	 * A Player argument. Produces a single player, regardless of whether

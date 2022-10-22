@@ -12,7 +12,7 @@ import java.util.List;
  */
 public abstract class AbstractCommandTree<Impl extends AbstractCommandTree<Impl, CommandSender>, CommandSender> extends ExecutableCommand<Impl, CommandSender> {
 
-	private final List<AbstractArgumentTree<CommandSender>> arguments = new ArrayList<>();
+	private final List<AbstractArgumentTree<?, CommandSender>> arguments = new ArrayList<>();
 
 	/**
 	 * Creates a main root node for a command tree with a given command name
@@ -29,7 +29,7 @@ public abstract class AbstractCommandTree<Impl extends AbstractCommandTree<Impl,
 	 * @param tree the child node
 	 * @return this root node
 	 */
-	public Impl then(final AbstractArgumentTree<CommandSender> tree) {
+	public Impl then(final AbstractArgumentTree<?, CommandSender> tree) {
 		this.arguments.add(tree);
 		return (Impl) this;
 	}
@@ -44,7 +44,7 @@ public abstract class AbstractCommandTree<Impl extends AbstractCommandTree<Impl,
 			AbstractPlatform<CommandSender, ?> platform = (AbstractPlatform<CommandSender, ?>) BaseHandler.getInstance().getPlatform();
 			executions.add(platform.newConcreteExecution(new ArrayList<>(), this.executor));
 		}
-		for (AbstractArgumentTree<CommandSender> tree : arguments) {
+		for (AbstractArgumentTree<?, CommandSender> tree : arguments) {
 			executions.addAll(tree.getExecutions());
 		}
 		for (Execution<CommandSender> execution : executions) {

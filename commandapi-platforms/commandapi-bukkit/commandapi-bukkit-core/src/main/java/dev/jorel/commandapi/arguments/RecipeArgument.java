@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.Keyed;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.Recipe;
@@ -33,7 +34,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
 /**
  * An argument that represents the Bukkit Recipe object
  */
-public class RecipeArgument extends SafeOverrideableArgument<Recipe, Recipe, CommandSender> implements ICustomProvidedArgument {
+public class RecipeArgument extends SafeOverrideableArgument<Recipe, Recipe, RecipeArgument, CommandSender> implements ICustomProvidedArgument, BukkitExecutable<RecipeArgument> {
 
 	/**
 	 * A Recipe argument. Represents a Bukkit Recipe or ComplexRecipe

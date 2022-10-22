@@ -22,6 +22,7 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.jorel.commandapi.BukkitExecutable;
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.exceptions.PaperAdventureNotFoundException;
@@ -32,7 +33,7 @@ import org.bukkit.command.CommandSender;
  * An argument that represents raw JSON text
  * @apiNote Returns a {@link Component} object
  */
-public class AdventureChatComponentArgument extends Argument<Component, CommandSender> {
+public class AdventureChatComponentArgument extends Argument<Component, AdventureChatComponentArgument, CommandSender> implements BukkitExecutable<AdventureChatComponentArgument> {
 
 	/**
 	 * Constructs a ChatComponnent argument with a given node name. Represents raw JSON text, used in Book MetaData, Chat and other various areas of Minecraft

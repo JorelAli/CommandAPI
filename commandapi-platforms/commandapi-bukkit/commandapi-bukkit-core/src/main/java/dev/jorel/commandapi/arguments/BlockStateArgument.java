@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.block.data.BlockData;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -35,7 +36,7 @@ import org.bukkit.command.CommandSender;
  * @apiNote Returns a {@link BlockData} object
  * 
  */
-public class BlockStateArgument extends Argument<BlockData, CommandSender> {
+public class BlockStateArgument extends Argument<BlockData, BlockStateArgument, CommandSender> implements BukkitExecutable<BlockStateArgument> {
 
 	/**
 	 * Constructs a BlockStateArgument with a given node name.

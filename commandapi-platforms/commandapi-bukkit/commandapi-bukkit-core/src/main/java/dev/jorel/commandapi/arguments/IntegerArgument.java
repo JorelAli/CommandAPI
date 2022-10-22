@@ -20,12 +20,13 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents primitive Java ints
  */
-public class IntegerArgument extends AbstractIntegerArgument<CommandSender> {
+public class IntegerArgument extends AbstractIntegerArgument<IntegerArgument, CommandSender> implements BukkitExecutable<IntegerArgument> {
 
 	/**
 	 * An integer argument

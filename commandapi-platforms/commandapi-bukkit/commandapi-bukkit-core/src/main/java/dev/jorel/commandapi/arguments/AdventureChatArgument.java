@@ -23,6 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.BaseHandler;
+import dev.jorel.commandapi.BukkitExecutable;
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.commandsenders.BukkitPlayer;
@@ -40,7 +41,7 @@ import java.util.Optional;
  * 
  * @apiNote Returns a {@link Component} object
  */
-public class AdventureChatArgument extends Argument<Component, CommandSender> implements IGreedyArgument, IPreviewable<AdventureChatArgument, Component> {
+public class AdventureChatArgument extends Argument<Component, AdventureChatArgument, CommandSender> implements IGreedyArgument, IPreviewable<AdventureChatArgument, Component>, BukkitExecutable<AdventureChatArgument> {
 
 	private PreviewableFunction<Component> preview;
 	private boolean usePreview;

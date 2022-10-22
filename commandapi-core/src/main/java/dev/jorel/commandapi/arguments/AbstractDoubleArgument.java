@@ -32,7 +32,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
  * 
  * @apiNote Returns a {@link double}
  */
-public abstract class AbstractDoubleArgument<CommandSender> extends SafeOverrideableArgument<Double, Double, CommandSender> {
+public abstract class AbstractDoubleArgument<Impl extends AbstractDoubleArgument<Impl, CommandSender>, CommandSender> extends SafeOverrideableArgument<Double, Double, Impl, CommandSender> {
 
 	/**
 	 * A double argument

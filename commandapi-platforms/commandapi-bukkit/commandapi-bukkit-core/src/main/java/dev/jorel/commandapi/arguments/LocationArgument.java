@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.Location;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -33,7 +34,7 @@ import org.bukkit.command.CommandSender;
  * An argument that represents the Bukkit {@link Location} object
  * @apiNote Returns a {@link Location} object
  */
-public class LocationArgument extends SafeOverrideableArgument<Location, Location, CommandSender> {
+public class LocationArgument extends SafeOverrideableArgument<Location, Location, LocationArgument, CommandSender> implements BukkitExecutable<LocationArgument> {
 	
 	/**
 	 * A Location argument. Represents Minecraft locations. Defaults to {@link LocationType#PRECISE_POSITION}

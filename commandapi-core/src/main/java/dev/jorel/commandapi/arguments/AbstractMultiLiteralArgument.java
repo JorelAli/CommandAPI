@@ -29,7 +29,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
 /**
  * An argument that represents multiple LiteralArguments
  */
-public abstract class AbstractMultiLiteralArgument<CommandSender> extends Argument<String, CommandSender> {
+public abstract class AbstractMultiLiteralArgument<Impl extends AbstractMultiLiteralArgument<Impl, CommandSender>,CommandSender> extends Argument<String, Impl, CommandSender> {
 
 	private String[] literals;
 	

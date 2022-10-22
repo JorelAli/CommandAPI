@@ -23,6 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.wrappers.FloatRange;
@@ -31,7 +32,7 @@ import org.bukkit.command.CommandSender;
 /**
  * An argument that represents a range of float values
  */
-public class FloatRangeArgument extends SafeOverrideableArgument<FloatRange, FloatRange, CommandSender> {
+public class FloatRangeArgument extends SafeOverrideableArgument<FloatRange, FloatRange, FloatRangeArgument, CommandSender> implements BukkitExecutable<FloatRangeArgument> {
 
 	/**
 	 * A FloatRange argument that represents a range of floating-point values

@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.command.CommandSender;
 import org.bukkit.potion.PotionEffectType;
 
@@ -32,7 +33,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
 /**
  * An argument that represents the Bukkit PotionEffectType object
  */
-public class PotionEffectArgument extends SafeOverrideableArgument<PotionEffectType, PotionEffectType, CommandSender> {
+public class PotionEffectArgument extends SafeOverrideableArgument<PotionEffectType, PotionEffectType, PotionEffectArgument, CommandSender> implements BukkitExecutable<PotionEffectArgument> {
 
 	/**
 	 * A PotionEffect argument. Represents status/potion effects

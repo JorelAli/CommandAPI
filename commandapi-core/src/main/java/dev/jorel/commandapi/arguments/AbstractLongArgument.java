@@ -30,7 +30,7 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
 /**
  * An argument that represents primitive Java longs
  */
-public abstract class AbstractLongArgument<CommandSender> extends SafeOverrideableArgument<Long, Long, CommandSender> {
+public abstract class AbstractLongArgument<Impl extends AbstractLongArgument<Impl, CommandSender>,CommandSender> extends SafeOverrideableArgument<Long, Long, Impl, CommandSender> {
 
 	/**
 	 * A long argument

@@ -22,6 +22,7 @@ package dev.jorel.commandapi.arguments;
 
 import java.util.EnumSet;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.Axis;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -37,7 +38,7 @@ import org.bukkit.command.CommandSender;
  * @apiNote Returns a {@link EnumSet}{@code <}{@link Axis}{@code >} object
  */
 @SuppressWarnings("rawtypes")
-public class AxisArgument extends SafeOverrideableArgument<EnumSet, EnumSet<Axis>, CommandSender> {
+public class AxisArgument extends SafeOverrideableArgument<EnumSet, EnumSet<Axis>, AxisArgument, CommandSender> implements BukkitExecutable<AxisArgument> {
 
 	/**
 	 * Constructs an AxisArgument with a given node name. Represents the axes x, y

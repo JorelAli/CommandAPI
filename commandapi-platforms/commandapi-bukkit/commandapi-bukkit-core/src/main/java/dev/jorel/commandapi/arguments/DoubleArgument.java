@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import org.bukkit.command.CommandSender;
 
 /**
@@ -27,7 +28,7 @@ import org.bukkit.command.CommandSender;
  * 
  * @apiNote Returns a {@link double}
  */
-public class DoubleArgument extends AbstractDoubleArgument<CommandSender> {
+public class DoubleArgument extends AbstractDoubleArgument<DoubleArgument, CommandSender> implements BukkitExecutable<DoubleArgument> {
 
 	/**
 	 * A double argument

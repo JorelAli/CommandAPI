@@ -23,6 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import dev.jorel.commandapi.BukkitExecutable;
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import org.bukkit.command.CommandSender;
@@ -36,7 +37,7 @@ import org.bukkit.command.CommandSender;
  * 
  * @apiNote Returns a {@link float}
  */
-public class AngleArgument extends SafeOverrideableArgument<Float, Float, CommandSender> {
+public class AngleArgument extends SafeOverrideableArgument<Float, Float, AngleArgument, CommandSender> implements BukkitExecutable<AngleArgument> {
 
 	/**
 	 * Constructs an AngleArgument with a given node name
