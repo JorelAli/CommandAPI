@@ -19,11 +19,11 @@ Since most enchantment levels range between 1 and 5, we will also make use of th
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:enchantmentarguments}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/java/Examples.java:enchantmentarguments}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:enchantmentarguments}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:enchantmentarguments}}
 ```
 
 </div>

@@ -38,11 +38,11 @@ We want to put a requirement on this command that the player needs to have at le
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:requirements}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/java/Examples.java:requirements}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:requirements}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirements}}
 ```
 
 </div>
@@ -75,11 +75,11 @@ To represent our party in code, we'll use a simple `Map` called `partyMembers` w
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:requirementsmap}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/java/Examples.java:requirementsmap}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:requirementsmap}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirementsmap}}
 ```
 
 </div>
@@ -89,11 +89,11 @@ To begin with, let's create the `/party create <partyName>` command. First, we m
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:requirements2}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/java/Examples.java:requirements2}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:requirements2}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirements2}}
 ```
 
 </div>
@@ -105,11 +105,11 @@ Now that we've declared our arguments, we can now declare our main command `/par
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:requirements3}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/java/Examples.java:requirements3}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:requirements3}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirements3}}
 ```
 
 </div>
@@ -121,11 +121,11 @@ So now we've added the ability to create a party if we're not already in it. Now
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:requirements4}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/java/Examples.java:requirements4}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:requirements4}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirements4}}
 ```
 
 </div>
@@ -137,11 +137,11 @@ Once the arguments have been declared, we can now implement our party teleportat
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:requirements5}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/java/Examples.java:requirements5}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:requirements5}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirements5}}
 ```
 
 </div>
@@ -222,11 +222,11 @@ When a player creates a new party, we need to ensure that their requirements are
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:updatingrequirements}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/java/Examples.java:updatingrequirements}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:updatingrequirements}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:updatingrequirements}}
 ```
 
 </div>
@@ -250,11 +250,11 @@ For example, you can apply multiple requirements for a command by calling the `w
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:multiplerequirements}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/java/Examples.java:multiplerequirements}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:multiplerequirements}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:multiplerequirements}}
 ```
 
 </div>

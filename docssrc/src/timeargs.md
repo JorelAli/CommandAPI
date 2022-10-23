@@ -23,11 +23,11 @@ Say we have a command `bigmsg` that displays a title message to all players for 
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:timearguments}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/java/Examples.java:timearguments}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:timearguments}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:timearguments}}
 ```
 
 </div>

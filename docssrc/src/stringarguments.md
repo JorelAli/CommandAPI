@@ -93,11 +93,11 @@ This would be ideal for a greedy string, since it can consume all text after the
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:greedystringarguments}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/java/Examples.java:greedystringarguments}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:greedystringarguments}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:greedystringarguments}}
 ```
 
 </div>

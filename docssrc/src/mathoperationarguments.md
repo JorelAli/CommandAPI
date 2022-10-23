@@ -63,11 +63,11 @@ As with any command, we declare our arguments, cast them properly and then we wr
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:mathoperationarguments}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/java/Examples.java:mathoperationarguments}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:mathoperationarguments}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:mathoperationarguments}}
 ```
 
 </div>

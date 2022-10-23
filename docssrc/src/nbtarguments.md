@@ -40,11 +40,11 @@ Now, we can configure the CommandAPI using the `CommandAPI.onLoad()` method to u
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:nbtcompoundargumentonload}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/java/Examples.java:nbtcompoundargumentonload}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:nbtcompoundargumentonload}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:nbtcompoundargumentonload}}
 ```
 
 </div>
@@ -66,11 +66,11 @@ Since the underlying implementation of the `NBTCompoundArgument` can change (e.g
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:nbtcompoundarguments}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/java/Examples.java:nbtcompoundarguments}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:nbtcompoundarguments}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:nbtcompoundarguments}}
 ```
 
 </div>

@@ -29,11 +29,11 @@ We can construct a book using the Adventure API's `Book.book(Component, Componen
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:ArgumentAdventureChatComponent}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/java/Examples.java:ArgumentAdventureChatComponent}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:ArgumentAdventureChatComponent}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:ArgumentAdventureChatComponent}}
 ```
 
 </div>
@@ -61,11 +61,11 @@ In order to broadcast an Adventure `Component` to all players on the server, we 
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:ArgumentAdventureChat}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/java/Examples.java:ArgumentAdventureChat}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:ArgumentAdventureChat}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:ArgumentAdventureChat}}
 ```
 
 </div>

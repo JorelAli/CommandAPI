@@ -1,4 +1,4 @@
-package dev.jorel.commandapi.example.kotlin
+package dev.jorel.commandapi.examples.kotlin
 
 import java.util.UUID
 import java.util.concurrent.CompletableFuture

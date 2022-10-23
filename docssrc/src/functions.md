@@ -31,11 +31,11 @@ Say we have a command `/killall` that simply kills all entities in all worlds on
 <div class="multi-pre">
 
 ```java,Java
-public {{#include ../../commandapi-core/src/test/java/Examples.java:functionregistration}}
+public {{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/java/Examples.java:functionregistration}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:functionregistration}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:functionregistration}}
 ```
 
 </div>

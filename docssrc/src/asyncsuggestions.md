@@ -66,11 +66,11 @@ We make use of the `ArgumentSuggestions.stringsAsync` method to provide asynchro
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:asyncreadfile}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/java/Examples.java:asyncreadfile}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:asyncreadfile}}
+{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:asyncreadfile}}
 ```
 
 </div>

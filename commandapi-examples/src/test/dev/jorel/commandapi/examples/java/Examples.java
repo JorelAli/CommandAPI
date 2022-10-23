@@ -1,4 +1,4 @@
-package dev.jorel.commandapi.example.java;
+package dev.jorel.commandapi.examples.java;
 /*******************************************************************************
  * Copyright 2018, 2021 Jorel Ali (Skepter) - MIT License
  *
