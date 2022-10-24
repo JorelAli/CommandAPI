@@ -17,12 +17,12 @@ public class CommandAPICommand extends AbstractCommandAPICommand<CommandAPIComma
 	 *
 	 * @param metaData The metadata of the command to create
 	 */
-	protected CommandAPICommand(CommandMetaData metaData) {
+	protected CommandAPICommand(CommandMetaData<CommandSource> metaData) {
 		super(metaData);
 	}
 
 	@Override
-	protected CommandAPICommand newConcreteCommandAPICommand(CommandMetaData metaData) {
+	protected CommandAPICommand newConcreteCommandAPICommand(CommandMetaData<CommandSource> metaData) {
 		return new CommandAPICommand(metaData);
 	}
 }

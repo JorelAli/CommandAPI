@@ -4,7 +4,7 @@ import org.bukkit.command.CommandSender;
 
 public class CommandAPICommand extends AbstractCommandAPICommand<CommandAPICommand, CommandSender> implements BukkitExecutable<CommandAPICommand> {
 	
-	public CommandAPICommand(CommandMetaData meta) {
+	public CommandAPICommand(CommandMetaData<CommandSender> meta) {
 		super(meta);
 	}
 	
@@ -13,7 +13,7 @@ public class CommandAPICommand extends AbstractCommandAPICommand<CommandAPIComma
 	}
 
 	@Override
-	protected CommandAPICommand newConcreteCommandAPICommand(CommandMetaData metaData) {
+	protected CommandAPICommand newConcreteCommandAPICommand(CommandMetaData<CommandSender> metaData) {
 		return new CommandAPICommand(metaData);
 	}
 }
