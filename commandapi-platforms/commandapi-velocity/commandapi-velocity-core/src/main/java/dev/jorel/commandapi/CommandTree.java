@@ -12,4 +12,9 @@ public class CommandTree extends AbstractCommandTree<CommandTree, Argument<?>, C
 	public CommandTree(String commandName) {
 		super(commandName);
 	}
+
+	@Override
+	public CommandTree instance() {
+		return this;
+	}
 }

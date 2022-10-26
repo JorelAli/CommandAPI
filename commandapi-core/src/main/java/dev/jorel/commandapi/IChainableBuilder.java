@@ -8,8 +8,5 @@ public interface IChainableBuilder<Impl> {
 	/**
 	 * Returns the instance of this class with the class Impl. Used for chaining builder methods.
 	 */
-	@SuppressWarnings("unchecked")
-	default Impl instance() {
-		return (Impl) this;
-	}
+	Impl instance();
 }

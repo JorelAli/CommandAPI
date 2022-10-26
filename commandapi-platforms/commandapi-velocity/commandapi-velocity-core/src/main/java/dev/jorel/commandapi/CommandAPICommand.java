@@ -26,4 +26,9 @@ public class CommandAPICommand extends AbstractCommandAPICommand<CommandAPIComma
 	protected CommandAPICommand newConcreteCommandAPICommand(CommandMetaData<CommandSource> metaData) {
 		return new CommandAPICommand(metaData);
 	}
+
+	@Override
+	public CommandAPICommand instance() {
+		return this;
+	}
 }

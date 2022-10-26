@@ -19,4 +19,9 @@ public abstract class Argument<T> extends AbstractArgument<T, Argument<T>, Argum
 	protected Argument(String nodeName, ArgumentType<?> rawType) {
 		super(nodeName, rawType);
 	}
+
+	@Override
+	public Argument<T> instance() {
+		return this;
+	}
 }
